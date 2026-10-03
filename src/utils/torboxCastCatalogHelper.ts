@@ -1,6 +1,7 @@
 import { repository as db } from '@/services/repository';
 import { getTorrentList, getUsenetList, getWebDownloadList } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxUsenetDownload, TorBoxWebDownload } from '@/services/types';
+import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 import { parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 
 export const PAGE_SIZE = 12;
@@ -101,14 +102,14 @@ export async function getTorBoxDMMLibrary(userid: string, page: number) {
 		torrents = asList(results.data);
 	}
 
-	const metas = [
-		...sideSlice,
+	// Only torrents carry an info hash, so only they can be identified.
+	const metas = await withLibraryArt([
+		...sideSlice.map((meta) => ({ meta })),
 		...torrents.map((torrent) => ({
-			id: `dmm-tb:${torrent.id}`,
-			name: torrent.name,
-			type: 'other',
+			meta: { id: `dmm-tb:${torrent.id}`, name: torrent.name, type: 'other' },
+			hash: torrent.hash,
 		})),
-	];
+	]);
 
 	// TorBox reports no total, so a full page is the only signal that more exist.
 	return {
@@ -178,6 +179,9 @@ export async function getTorBoxDMMTorrent(userid: string, entryId: string) {
 				type: 'other',
 				name: `DMM TB: ${item.name} - ${(totalSize / 1024 / 1024 / 1024).toFixed(2)} GB`,
 				videos,
+				...(target.kind === 'torrent'
+					? await libraryArtFor((item as TorBoxTorrentInfo).hash)
+					: {}),
 			},
 			cacheMaxAge: 0,
 		},

@@ -1,0 +1,4185 @@
+{
+	"_about": [
+		"Real inputs behind Fizzy card 48 / debrid-media-manager#153: the DMM Cast for Real-Debrid",
+		"library catalog rendered in Stremio as 'DMM RD Library - Other' with no covers.",
+		"Account: the Real-Debrid test 2 account's DMM Cast profile, captured 2026-10-03T19:01:56Z.",
+		"rdTorrentsPage: GET app.real-debrid.com/rest/1.0/torrents?page=1&limit=12, the exact call",
+		"getDMMLibrary makes for catalog page 1. productionCatalog: what debridmediamanager.com served",
+		"for that page at the same moment. productionManifest: the manifest Stremio installed.",
+		"rdTorrents: the first 100 entries of the same library (GET /torrents?limit=100&page=1).",
+		"db: the rows dmmdb returned for those 100 hashes from the tables the catalog now reads -",
+		"HashImdb, Available and AvailableAd by hash, ScrapedVerdict for the candidate (imdbId, hash)",
+		"pairs, imdb_title_basics for the candidate ids. reference.keepVerdicts is every keep verdict",
+		"on those hashes (a full scan, too slow to run per request) and is used only to grade picks.",
+		"rdTorrentInfo: GET /rest/1.0/torrents/info/X2ILDQNYFYOHM and productionMeta: the meta",
+		"debridmediamanager.com served for it, both at 2026-10-03T19:05:02Z.",
+		"RD download links were removed or replaced with REDACTEDLINK0001, and the cast user id in",
+		"productionMeta with USERID: both are capabilities, and the catalog never reads the list's links."
+	],
+	"capturedAt": "2026-10-03T19:01:56Z",
+	"db": {
+		"hashImdb": [
+			{
+				"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+				"imdbId": "tt1375666"
+			}
+		],
+		"available": [
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0099674"
+			},
+			{
+				"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "37c689776f28a165f02cb0cf5482966f2c9308b6",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+				"imdbId": "tt7456310"
+			},
+			{
+				"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+				"imdbId": "tt0120863"
+			},
+			{
+				"hash": "4986ace2ee7a564508e0d5cfdde2d9018b8af942",
+				"imdbId": "tt0120689"
+			},
+			{
+				"hash": "4d7c2313243bd3e3e724f5bd771e2999d6bede8f",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+				"imdbId": "tt0432021"
+			},
+			{
+				"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "72809a85f76227b01ea5110a57d0225114bc53c5",
+				"imdbId": "tt0409459"
+			},
+			{
+				"hash": "7c5cef3523ad7f7a03ba9d0a51b44b6437d597dc",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "7d7e9c9e2f5176c04f559dcbdaa6fe95bbe6b5ca",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt38731975"
+			},
+			{
+				"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "828865198ece61a8e4669ee39b7c3ee9c5fdc0c7",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+				"imdbId": "tt4881806"
+			},
+			{
+				"hash": "8c47f58ec8246479c3a56046593426d5b3a30c2b",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "a1c12ba5899e4800732fd199ef52db2d7487aaee",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "a2b384339f3dcdd9f18fc299311853ce6570ca4a",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "ad673340ce445582dbdf967c4ee2eaa7f59896de",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt2592614"
+			},
+			{
+				"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+				"imdbId": "tt13210838"
+			},
+			{
+				"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "f29a41d1991dd16b08a194f6877a7931464bdb7a",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+				"imdbId": "tt0407887"
+			},
+			{
+				"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+				"imdbId": "tt4154796"
+			}
+		],
+		"availableAd": [
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0071562"
+			},
+			{
+				"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+				"imdbId": "tt1496025"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0092099"
+			},
+			{
+				"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+				"imdbId": "tt0113627"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+				"imdbId": "tt1798709"
+			},
+			{
+				"hash": "8902af48af37540965349487fd0919356a22112d",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "8c47f58ec8246479c3a56046593426d5b3a30c2b",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "9351bcf9e7437f706549f8b60314c39259c420b4",
+				"imdbId": "tt0076759"
+			},
+			{
+				"hash": "9b5f7bdf3acc168f5c60ae57e8e026a48d56cb01",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0411267"
+			},
+			{
+				"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "c5816fc4e30e9b0a27f4e5a13135d2560e8a800f",
+				"imdbId": "tt0365513"
+			},
+			{
+				"hash": "d5a93f80927fa99ad7f8ce6f573d12b8c65fbc3b",
+				"imdbId": "tt0079073"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+				"imdbId": "tt13210838"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+				"imdbId": "tt0480249"
+			},
+			{
+				"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+				"imdbId": "tt4154796"
+			}
+		],
+		"scrapedVerdict": [
+			{
+				"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+				"imdbId": "tt0120791",
+				"verdict": "keep"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+				"imdbId": "tt0120791",
+				"verdict": "keep"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791",
+				"verdict": "keep"
+			},
+			{
+				"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+				"imdbId": "tt0468569",
+				"verdict": "trash"
+			},
+			{
+				"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569",
+				"verdict": "keep"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+				"imdbId": "tt0068646",
+				"verdict": "trash"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+				"imdbId": "tt15791034",
+				"verdict": "keep"
+			},
+			{
+				"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+				"imdbId": "tt15791034",
+				"verdict": "keep"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034",
+				"verdict": "keep"
+			},
+			{
+				"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+				"imdbId": "tt15791034",
+				"verdict": "keep"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034",
+				"verdict": "keep"
+			},
+			{
+				"hash": "47f0ceffb792c4d46853dec6acc41449368c7fdd",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "7c5cef3523ad7f7a03ba9d0a51b44b6437d597dc",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "56a27e24ed14746c8e6ac1a9b50bd5de559fba08",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+				"imdbId": "tt1375666",
+				"verdict": "trash"
+			},
+			{
+				"hash": "a2b384339f3dcdd9f18fc299311853ce6570ca4a",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "828865198ece61a8e4669ee39b7c3ee9c5fdc0c7",
+				"imdbId": "tt1375666",
+				"verdict": "trash"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666",
+				"verdict": "keep"
+			},
+			{
+				"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+				"imdbId": "tt0071562",
+				"verdict": "trash"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0071562",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0071562",
+				"verdict": "keep"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0071562",
+				"verdict": "trash"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0071562",
+				"verdict": "keep"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0071562",
+				"verdict": "trash"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0071562",
+				"verdict": "trash"
+			},
+			{
+				"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+				"imdbId": "tt0816692",
+				"verdict": "trash"
+			},
+			{
+				"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+				"imdbId": "tt0407887",
+				"verdict": "trash"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+				"imdbId": "tt8367814",
+				"verdict": "trash"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8902af48af37540965349487fd0919356a22112d",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "9b5f7bdf3acc168f5c60ae57e8e026a48d56cb01",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt8367814",
+				"verdict": "keep"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt5177120",
+				"verdict": "keep"
+			},
+			{
+				"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+				"imdbId": "tt0120804",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt0120804",
+				"verdict": "keep"
+			},
+			{
+				"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+				"imdbId": "tt0120804",
+				"verdict": "trash"
+			},
+			{
+				"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+				"imdbId": "tt0120804",
+				"verdict": "trash"
+			},
+			{
+				"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+				"imdbId": "tt0120804",
+				"verdict": "keep"
+			},
+			{
+				"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+				"imdbId": "tt0120804",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+				"imdbId": "tt27543632",
+				"verdict": "keep"
+			},
+			{
+				"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "ad673340ce445582dbdf967c4ee2eaa7f59896de",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "f29a41d1991dd16b08a194f6877a7931464bdb7a",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+				"imdbId": "tt5950044",
+				"verdict": "keep"
+			},
+			{
+				"hash": "4d7c2313243bd3e3e724f5bd771e2999d6bede8f",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "7db00ceaf4f744d56ce79f75e05a3ff8976d0506",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a1c12ba5899e4800732fd199ef52db2d7487aaee",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "37c689776f28a165f02cb0cf5482966f2c9308b6",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "7d7e9c9e2f5176c04f559dcbdaa6fe95bbe6b5ca",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+				"imdbId": "tt26581740",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "85509819d8e15ca2586e1515a8a017d791f9c9b3",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+				"imdbId": "tt0111161",
+				"verdict": "trash"
+			},
+			{
+				"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0092099",
+				"verdict": "keep"
+			},
+			{
+				"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+				"imdbId": "tt1798709",
+				"verdict": "trash"
+			},
+			{
+				"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+				"imdbId": "tt0480249",
+				"verdict": "trash"
+			},
+			{
+				"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+				"imdbId": "tt7456310",
+				"verdict": "trash"
+			},
+			{
+				"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+				"imdbId": "tt0816692",
+				"verdict": "keep"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0068646",
+				"verdict": "keep"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0099674",
+				"verdict": "keep"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0099674",
+				"verdict": "keep"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0099674",
+				"verdict": "trash"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0099674",
+				"verdict": "keep"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0099674",
+				"verdict": "trash"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0099674",
+				"verdict": "trash"
+			},
+			{
+				"hash": "124648814a84119084f4a8c7e7db3c29f1b23f94",
+				"imdbId": "tt4154796",
+				"verdict": "keep"
+			},
+			{
+				"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+				"imdbId": "tt0409459",
+				"verdict": "trash"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt0432021",
+				"verdict": "keep"
+			},
+			{
+				"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+				"imdbId": "tt0432021",
+				"verdict": "trash"
+			},
+			{
+				"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+				"imdbId": "tt4881806",
+				"verdict": "trash"
+			}
+		],
+		"imdbTitleBasics": [
+			{
+				"tconst": "tt0068646",
+				"primaryTitle": "The Godfather",
+				"startYear": 1972
+			},
+			{
+				"tconst": "tt0071562",
+				"primaryTitle": "The Godfather Part II",
+				"startYear": 1974
+			},
+			{
+				"tconst": "tt0076759",
+				"primaryTitle": "Star Wars: Episode IV - A New Hope",
+				"startYear": 1977
+			},
+			{
+				"tconst": "tt0079073",
+				"primaryTitle": "Dracula",
+				"startYear": 1979
+			},
+			{
+				"tconst": "tt0092099",
+				"primaryTitle": "Top Gun",
+				"startYear": 1986
+			},
+			{
+				"tconst": "tt0099674",
+				"primaryTitle": "The Godfather Part III",
+				"startYear": 1990
+			},
+			{
+				"tconst": "tt0111161",
+				"primaryTitle": "The Shawshank Redemption",
+				"startYear": 1994
+			},
+			{
+				"tconst": "tt0113627",
+				"primaryTitle": "Leaving Las Vegas",
+				"startYear": 1995
+			},
+			{
+				"tconst": "tt0120689",
+				"primaryTitle": "The Green Mile",
+				"startYear": 1999
+			},
+			{
+				"tconst": "tt0120791",
+				"primaryTitle": "Practical Magic",
+				"startYear": 1998
+			},
+			{
+				"tconst": "tt0120804",
+				"primaryTitle": "Resident Evil",
+				"startYear": 2002
+			},
+			{
+				"tconst": "tt0120863",
+				"primaryTitle": "The Thin Red Line",
+				"startYear": 1998
+			},
+			{
+				"tconst": "tt0365513",
+				"primaryTitle": "Monster Man",
+				"startYear": 2003
+			},
+			{
+				"tconst": "tt0407887",
+				"primaryTitle": "The Departed",
+				"startYear": 2006
+			},
+			{
+				"tconst": "tt0409459",
+				"primaryTitle": "Watchmen",
+				"startYear": 2009
+			},
+			{
+				"tconst": "tt0411267",
+				"primaryTitle": "The Dark",
+				"startYear": 2005
+			},
+			{
+				"tconst": "tt0432021",
+				"primaryTitle": "Resident Evil: Extinction",
+				"startYear": 2007
+			},
+			{
+				"tconst": "tt0468569",
+				"primaryTitle": "The Dark Knight",
+				"startYear": 2008
+			},
+			{
+				"tconst": "tt0480249",
+				"primaryTitle": "I Am Legend",
+				"startYear": 2007
+			},
+			{
+				"tconst": "tt0816692",
+				"primaryTitle": "Interstellar",
+				"startYear": 2014
+			},
+			{
+				"tconst": "tt13210838",
+				"primaryTitle": "The Gentlemen",
+				"startYear": 2024
+			},
+			{
+				"tconst": "tt1375666",
+				"primaryTitle": "Inception",
+				"startYear": 2010
+			},
+			{
+				"tconst": "tt1496025",
+				"primaryTitle": "Underworld: Awakening",
+				"startYear": 2012
+			},
+			{
+				"tconst": "tt15791034",
+				"primaryTitle": "Barbarian",
+				"startYear": 2022
+			},
+			{
+				"tconst": "tt1798709",
+				"primaryTitle": "Her",
+				"startYear": 2013
+			},
+			{
+				"tconst": "tt2592614",
+				"primaryTitle": "Resident Evil: The Final Chapter",
+				"startYear": 2016
+			},
+			{
+				"tconst": "tt26581740",
+				"primaryTitle": "Weapons",
+				"startYear": 2025
+			},
+			{
+				"tconst": "tt27543632",
+				"primaryTitle": "The Housemaid",
+				"startYear": 2025
+			},
+			{
+				"tconst": "tt38731975",
+				"primaryTitle": "Al Sada Al Afadel",
+				"startYear": 2025
+			},
+			{
+				"tconst": "tt4154796",
+				"primaryTitle": "Avengers: Endgame",
+				"startYear": 2019
+			},
+			{
+				"tconst": "tt4881806",
+				"primaryTitle": "Jurassic World: Fallen Kingdom",
+				"startYear": 2018
+			},
+			{
+				"tconst": "tt5177120",
+				"primaryTitle": "The Ministry of Ungentlemanly Warfare",
+				"startYear": 2024
+			},
+			{
+				"tconst": "tt5950044",
+				"primaryTitle": "Superman",
+				"startYear": 2025
+			},
+			{
+				"tconst": "tt7456310",
+				"primaryTitle": "Anna",
+				"startYear": 2019
+			},
+			{
+				"tconst": "tt8367814",
+				"primaryTitle": "The Gentlemen",
+				"startYear": 2019
+			}
+		]
+	},
+	"productionCatalog": {
+		"metas": [
+			{
+				"id": "dmm:BBNXE2XV5GV6S",
+				"name": "Inception.2010.2160p.BluRay.HEVC.DTS-HD.MA.5.1-COASTER",
+				"type": "other"
+			},
+			{
+				"id": "dmm:IS3GJBY3Q57QE",
+				"name": "The Housemaid 2025 1080p BluRay x264-OFT.mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:X2ILDQNYFYOHM",
+				"name": "Interstellar (2014).mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:PN3LSTL4KHSZ2",
+				"name": "The.Housemaid.2025.MULTi.VFQ.1080p.WEBrip.10.bits.EAC3.5.1.x265-TyHD.mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:Q5DSFFW26PYA6",
+				"name": "Fanedit Collection",
+				"type": "other"
+			},
+			{
+				"id": "dmm:AUUIRWO663Y6Q",
+				"name": "Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:66U5KUQMLHB3M",
+				"name": "The Shawshank Redemption (1994)  [2160p x265 10bit Joy]",
+				"type": "other"
+			},
+			{
+				"id": "dmm:FO4AGGIBZRVWE",
+				"name": "The Godfather (1972) RM4K REPACK (1080p BluRay x265 HEVC 10bit AAC 5.1 Tigole)",
+				"type": "other"
+			},
+			{
+				"id": "dmm:HRQDMPC46ZKT2",
+				"name": "The-Shawshank-Redemption_1994_AI_1080p.BluRay.10b.HEVC.DTS-MA.5.1_BLUDUAINE",
+				"type": "other"
+			},
+			{
+				"id": "dmm:JVNRKR5CGE3FK",
+				"name": "The.Gentlemen.2019.2160p.UHD.BDRemux.RuTracker.mreskenses.mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:R2PGHKOYWZ7OM",
+				"name": "Interstellar (2014) BR-Rip - x264 - [Tamil Dub] - (AAC 2.0) - 650MB - ESub.mkv",
+				"type": "other"
+			},
+			{
+				"id": "dmm:OGFIBP3UXFU6I",
+				"name": "Avengers.Endgame.2019.1080p.BluRay.AVC.DTS-HD.MA.7.1-FGT",
+				"type": "other"
+			}
+		],
+		"hasMore": true,
+		"cacheMaxAge": 0
+	},
+	"productionManifest": {
+		"id": "com.debridmediamanager.cast",
+		"name": "DMM Cast for Real-Debrid",
+		"description": "Cast your preferred Debrid Media Manager streams to your Stremio device using Real-Debrid; supports Anime, TV shows and Movies!",
+		"logo": "https://static.debridmediamanager.com/greenlogo.jpeg",
+		"background": "https://static.debridmediamanager.com/background.png",
+		"version": "0.0.7",
+		"resources": [
+			"catalog",
+			{
+				"name": "stream",
+				"types": ["movie", "series", "anime"],
+				"idPrefixes": ["tt", "kitsu", "mal", "anidb"]
+			},
+			{
+				"name": "meta",
+				"types": ["other"],
+				"idPrefixes": ["dmm"]
+			}
+		],
+		"types": ["movie", "series", "anime", "other"],
+		"catalogs": [
+			{
+				"id": "casted-movies",
+				"name": "DMM RD Movies",
+				"type": "movie",
+				"extra": [
+					{
+						"name": "skip"
+					}
+				]
+			},
+			{
+				"id": "casted-shows",
+				"name": "DMM RD TV Shows",
+				"type": "series",
+				"extra": [
+					{
+						"name": "skip"
+					}
+				]
+			},
+			{
+				"id": "casted-other",
+				"name": "DMM RD Library",
+				"type": "other",
+				"extra": [
+					{
+						"name": "skip"
+					}
+				]
+			}
+		],
+		"behaviorHints": {
+			"adult": false,
+			"p2p": false
+		}
+	},
+	"productionMeta": {
+		"meta": {
+			"id": "dmm:X2ILDQNYFYOHM",
+			"type": "other",
+			"name": "DMM RD: Interstellar (2014).mkv - 39.32 GB",
+			"videos": [
+				{
+					"id": "dmm:X2ILDQNYFYOHM:1",
+					"title": "Interstellar (2014).mkv - 39.32 GB",
+					"streams": [
+						{
+							"url": "https://debridmediamanager.com/api/stremio/USERID/play/REDACTEDLINK0001",
+							"behaviorHints": {
+								"bingeGroup": "dmm:X2ILDQNYFYOHM"
+							}
+						}
+					]
+				}
+			]
+		},
+		"cacheMaxAge": 0
+	},
+	"rdTorrentInfo": {
+		"id": "X2ILDQNYFYOHM",
+		"filename": "Interstellar (2014).mkv",
+		"original_filename": "Interstellar (2014).mkv",
+		"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+		"bytes": 42217644554,
+		"original_bytes": 42217644554,
+		"host": "real-debrid.com",
+		"split": 2000,
+		"progress": 100,
+		"status": "downloaded",
+		"added": "2026-10-03T21:00:06.000Z",
+		"files": [
+			{
+				"id": 1,
+				"path": "/Interstellar (2014).mkv",
+				"bytes": 42217644554,
+				"selected": 1
+			}
+		],
+		"links": ["https://real-debrid.com/d/REDACTEDLINK0001"],
+		"ended": "2025-04-15T09:25:56.000Z"
+	},
+	"rdTorrents": [
+		{
+			"id": "BBNXE2XV5GV6S",
+			"filename": "Inception.2010.2160p.BluRay.HEVC.DTS-HD.MA.5.1-COASTER",
+			"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+			"bytes": 92466334224,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:13.000Z",
+			"ended": "2026-02-07T17:57:20.000Z"
+		},
+		{
+			"id": "IS3GJBY3Q57QE",
+			"filename": "The Housemaid 2025 1080p BluRay x264-OFT.mkv",
+			"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+			"bytes": 6307304158,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:12.000Z",
+			"ended": "2026-05-23T12:29:24.000Z"
+		},
+		{
+			"id": "X2ILDQNYFYOHM",
+			"filename": "Interstellar (2014).mkv",
+			"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+			"bytes": 42217644554,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:06.000Z",
+			"ended": "2025-04-15T09:25:56.000Z"
+		},
+		{
+			"id": "PN3LSTL4KHSZ2",
+			"filename": "The.Housemaid.2025.MULTi.VFQ.1080p.WEBrip.10.bits.EAC3.5.1.x265-TyHD.mkv",
+			"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+			"bytes": 2474470948,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:55:05.000Z",
+			"ended": "2026-09-25T12:02:07.000Z"
+		},
+		{
+			"id": "Q5DSFFW26PYA6",
+			"filename": "Fanedit Collection",
+			"hash": "72809a85f76227b01ea5110a57d0225114bc53c5",
+			"bytes": 126712736111,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 61.85,
+			"status": "downloading",
+			"added": "2026-10-03T20:55:03.000Z",
+			"speed": 0,
+			"seeders": 1
+		},
+		{
+			"id": "AUUIRWO663Y6Q",
+			"filename": "Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+			"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+			"bytes": 92504722961,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:50:04.000Z",
+			"ended": "2024-07-14T21:07:56.000Z"
+		},
+		{
+			"id": "66U5KUQMLHB3M",
+			"filename": "The Shawshank Redemption (1994)  [2160p x265 10bit Joy]",
+			"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+			"bytes": 8312543823,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:45:05.000Z",
+			"ended": "2025-06-11T09:15:29.000Z"
+		},
+		{
+			"id": "FO4AGGIBZRVWE",
+			"filename": "The Godfather (1972) RM4K REPACK (1080p BluRay x265 HEVC 10bit AAC 5.1 Tigole)",
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"bytes": 13072048885,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:45:04.000Z",
+			"ended": "2025-10-14T12:29:39.000Z"
+		},
+		{
+			"id": "HRQDMPC46ZKT2",
+			"filename": "The-Shawshank-Redemption_1994_AI_1080p.BluRay.10b.HEVC.DTS-MA.5.1_BLUDUAINE",
+			"hash": "85509819d8e15ca2586e1515a8a017d791f9c9b3",
+			"bytes": 15380512768,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:40:06.000Z",
+			"ended": "2026-09-06T11:44:47.000Z"
+		},
+		{
+			"id": "JVNRKR5CGE3FK",
+			"filename": "The.Gentlemen.2019.2160p.UHD.BDRemux.RuTracker.mreskenses.mkv",
+			"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+			"bytes": 70371191667,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:40:05.000Z",
+			"ended": "2026-07-01T02:35:21.000Z"
+		},
+		{
+			"id": "R2PGHKOYWZ7OM",
+			"filename": "Interstellar (2014) BR-Rip - x264 - [Tamil Dub] - (AAC 2.0) - 650MB - ESub.mkv",
+			"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+			"bytes": 694304690,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:35:10.000Z",
+			"ended": "2026-08-19T06:37:48.000Z"
+		},
+		{
+			"id": "OGFIBP3UXFU6I",
+			"filename": "Avengers.Endgame.2019.1080p.BluRay.AVC.DTS-HD.MA.7.1-FGT",
+			"hash": "47f0ceffb792c4d46853dec6acc41449368c7fdd",
+			"bytes": 45585486096,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:35:08.000Z",
+			"ended": "2026-08-26T12:01:13.000Z"
+		},
+		{
+			"id": "BS2UIGNC3NMFC",
+			"filename": "Resident.Evil.2002.4K.HDR.DV.2160p.BDRemux Ita Eng x265-NAHOM",
+			"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+			"bytes": 39108540777,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:35:04.000Z",
+			"ended": "2025-11-08T02:33:48.000Z"
+		},
+		{
+			"id": "GV3AABQD5TCPC",
+			"filename": "The Island of Dr. Moreau (1996) Director's Cut RiffTrax dual audio 720p.10bit.BluRay.x265-budgetbits.mkv",
+			"hash": "828865198ece61a8e4669ee39b7c3ee9c5fdc0c7",
+			"bytes": 685648769,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:25:03.000Z",
+			"ended": "2026-01-23T04:07:01.000Z"
+		},
+		{
+			"id": "KNPX2YKF3ZEK2",
+			"filename": "Amazing Films 8 Mp4 1080p",
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"bytes": 268647852693,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:20:04.000Z",
+			"ended": "2026-02-16T14:11:26.000Z"
+		},
+		{
+			"id": "44RO2X6RD4SFW",
+			"filename": "Avengers - Endgame (2019) 2160p H265 10 bit DV HDR10+ ita eng AC3 5.1 sub ita eng NUeng-Licdom.mkv",
+			"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+			"bytes": 5749785895,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:15:08.000Z",
+			"ended": "2025-10-14T17:13:26.000Z"
+		},
+		{
+			"id": "NIGWNPI7P3V4K",
+			"filename": "The Shawshank Redemption (1994).avi",
+			"hash": "4986ace2ee7a564508e0d5cfdde2d9018b8af942",
+			"bytes": 222121274740,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:15:06.000Z",
+			"ended": "2026-02-03T21:18:49.000Z"
+		},
+		{
+			"id": "CODSXE6QY7FX4",
+			"filename": "TOP 250 6.17.2011",
+			"hash": "4986ace2ee7a564508e0d5cfdde2d9018b8af942",
+			"bytes": 222121274740,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:15:05.000Z",
+			"ended": "2026-06-03T04:21:36.000Z"
+		},
+		{
+			"id": "JYQRF3QBURU6O",
+			"filename": "The Shawshank Redemption (1994) RM4K (1080p BluRay x265 HEVC 10bit AAC 5.1 afm72)",
+			"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+			"bytes": 9256855604,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:10:09.000Z",
+			"ended": "2026-05-23T21:43:30.000Z"
+		},
+		{
+			"id": "GJ26IPPZYVPZE",
+			"filename": "The.Gentlemen.2019.BDRip.AVC.Rip.by.HardwareMining.R.G.Generalfilm.mkv",
+			"hash": "8902af48af37540965349487fd0919356a22112d",
+			"bytes": 1822354871,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:10:07.000Z",
+			"ended": "2026-09-26T04:56:39.000Z"
+		},
+		{
+			"id": "ZNNU3MG2PBADU",
+			"filename": "Barbarian.2022.2160p.WEBRip.DD5.1.HDR.X.265-EVO.mkv",
+			"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+			"bytes": 3652149798,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:10:05.000Z",
+			"ended": "2026-09-25T15:44:10.000Z"
+		},
+		{
+			"id": "SS5YONK4CG2I4",
+			"filename": "The.Dark.Knight.2008.2160p.BluRay.x264.8bit.SDR.DTS-HD.MA.5.1-SWTYBLZ",
+			"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+			"bytes": 43196190982,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 0.14,
+			"status": "downloading",
+			"added": "2026-10-03T20:05:06.000Z",
+			"speed": 40960,
+			"seeders": 1
+		},
+		{
+			"id": "OGRWFUTZTVXVQ",
+			"filename": "Essential Films 2 Mp4 1080p",
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"bytes": 136296095497,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 0.02,
+			"status": "downloading",
+			"added": "2026-10-03T20:05:05.000Z",
+			"speed": 0,
+			"seeders": 1
+		},
+		{
+			"id": "RSJN5BQNKWALI",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 UHD BDRemux 2160p HEVC Atmos TrueHD7.1 NNMClub.mkv",
+			"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+			"bytes": 77768189235,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:00:06.000Z",
+			"ended": "2024-06-20T16:56:39.000Z"
+		},
+		{
+			"id": "H4R3WHP3W2TNW",
+			"filename": "The Ministry Of Ungentlemanly Warfare (2024) [2160p] [4K] [WEB] [5.1] [YTS.MX]",
+			"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+			"bytes": 5765492589,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:55:02.000Z",
+			"ended": "2024-05-11T14:59:09.000Z"
+		},
+		{
+			"id": "N2ENC46RHCFIM",
+			"filename": "The Godfather Trilogy Al Pacino 2160p 4K SDR ENG-ITA 16GB (moviesbyrizzo)",
+			"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+			"bytes": 17597130384,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:50:09.000Z",
+			"ended": "2025-07-31T18:02:59.000Z"
+		},
+		{
+			"id": "POMOJ3TYGWEVS",
+			"filename": "The.Shawshank.Redemption.1994.1080p.x264.YIFY.mp4",
+			"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+			"bytes": 1722274049,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:50:07.000Z",
+			"ended": "2020-04-16T09:13:19.000Z"
+		},
+		{
+			"id": "KEVUCQWECF4LE",
+			"filename": "The Shawshank Redemption (1994) [1080p]",
+			"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+			"bytes": 1722274049,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:50:06.000Z",
+			"ended": "2026-07-15T21:35:50.000Z"
+		},
+		{
+			"id": "4WSJNH6TEKKBG",
+			"filename": "[ OxTorrent.com ] The.Gentlemen.2020.TRUEFRENCH.BDRip.XviD-EXTREME.avi",
+			"hash": "9b5f7bdf3acc168f5c60ae57e8e026a48d56cb01",
+			"bytes": 727622568,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:45:05.000Z",
+			"ended": "2026-09-28T02:27:47.000Z"
+		},
+		{
+			"id": "JSECIZ7LM6WWC",
+			"filename": "The.Dark.Knight.Trilogy.2005-2012.1080p.BluRay.DD5.1.x265-POIASD",
+			"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+			"bytes": 21700687079,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:40:05.000Z",
+			"ended": "2026-07-03T18:25:06.000Z"
+		},
+		{
+			"id": "OFCQ2O34SXMT6",
+			"filename": "Weapons.2025.1080p.HDTS.x264.ENG YG.mkv",
+			"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+			"bytes": 7949389720,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:40:04.000Z",
+			"ended": "2025-08-13T04:42:05.000Z"
+		},
+		{
+			"id": "RSFPIIFX4SHXC",
+			"filename": "Superman (2025) En 1080p X265 HEVC 10 bit Dolby Digital Plus[Multi-Sub].mkv",
+			"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+			"bytes": 3490841480,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:35:06.000Z",
+			"ended": "2025-12-28T11:31:04.000Z"
+		},
+		{
+			"id": "MVHY75SUNMKT4",
+			"filename": "The.Housemaid.2025.BDRip.720p.x264_New-Team_il68k.mkv",
+			"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+			"bytes": 6054592234,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:35:03.000Z",
+			"ended": "2026-09-25T14:17:37.000Z"
+		},
+		{
+			"id": "A7G4T2ESQGBPS",
+			"filename": "Inception.2010.1080p.Bluray.AV1.Opus.Multi4-dAV1nci.mkv",
+			"hash": "a2b384339f3dcdd9f18fc299311853ce6570ca4a",
+			"bytes": 3126332303,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:30:09.000Z",
+			"ended": "2022-01-19T21:40:09.000Z"
+		},
+		{
+			"id": "3WSUG2UAALTVK",
+			"filename": "Avengers.Endgame.2019.1080p.BluRay.DDP5.1.x265.10bit-GalaxyRG265[TGx]",
+			"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+			"bytes": 3205712165,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:30:06.000Z",
+			"ended": "2024-04-23T19:43:03.000Z"
+		},
+		{
+			"id": "HVSYWAKZB37J4",
+			"filename": "101 Horror Movies Mega Pack Vol 9 Mixed x264 [i_c]",
+			"hash": "d5a93f80927fa99ad7f8ce6f573d12b8c65fbc3b",
+			"bytes": 187913696573,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 56.82,
+			"status": "downloading",
+			"added": "2026-10-03T19:30:04.000Z",
+			"speed": 16384000,
+			"seeders": 2
+		},
+		{
+			"id": "AGBSAA5SEPWNY",
+			"filename": "Interstellar (2014) [1080p H264 Eng Ita EAC3 Sub Eng Ita].mkv",
+			"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+			"bytes": 4927733696,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:25:07.000Z",
+			"ended": "2025-01-18T16:37:23.000Z"
+		},
+		{
+			"id": "ZKPEOIHYK2EP2",
+			"filename": "moviesbyrizzo 500 top all-time movies collection 1080p H.264 500GB",
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"bytes": 518614599088,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:25:05.000Z",
+			"ended": "2026-08-27T07:43:36.000Z"
+		},
+		{
+			"id": "SS7D4G43PE7D6",
+			"filename": "Superman.2025.iTA-ENG.Bluray.1080p.x264-CYBER.mkv",
+			"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+			"bytes": 11763229430,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:20:05.000Z",
+			"ended": "2025-09-24T00:27:30.000Z"
+		},
+		{
+			"id": "NX2HHFBO4J4DO",
+			"filename": "Avengers.Endgame.2019.2160p.10bit.HDR.BluRay.8CH.x265.HEVC-PSA",
+			"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+			"bytes": 3990220998,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:20:04.000Z",
+			"ended": "2026-08-18T20:10:57.000Z"
+		},
+		{
+			"id": "WF36PW3O6GUDO",
+			"filename": "Weapons (2025) 4320p HDR Ai Upscale -Mesc.mkv",
+			"hash": "7db00ceaf4f744d56ce79f75e05a3ff8976d0506",
+			"bytes": 26139775565,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:15:10.000Z",
+			"ended": "2026-06-12T00:54:11.000Z"
+		},
+		{
+			"id": "FQI475VYVUVRG",
+			"filename": "Inception.2010.1080p.BluRay.x264-REFiNED",
+			"hash": "7c5cef3523ad7f7a03ba9d0a51b44b6437d597dc",
+			"bytes": 11819910114,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:15:07.000Z",
+			"ended": "2026-10-03T20:06:16.000Z"
+		},
+		{
+			"id": "CRSA27SG2LRPW",
+			"filename": "The.Godfather.1972.2160p.UHD.BluRay.x265.10bit.HDR.DTS-HD.MA.TrueHD.5.1-SWTYBLZ",
+			"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+			"bytes": 60928776412,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:15:05.000Z",
+			"ended": "2025-08-01T19:16:54.000Z"
+		},
+		{
+			"id": "6NMW7VJJH55L2",
+			"filename": "The.Dark.Knight.2008.1080p.BluRay.H264.AAC-LAMA.mp4",
+			"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+			"bytes": 3116668154,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:10:07.000Z",
+			"ended": "2024-07-14T19:56:15.000Z"
+		},
+		{
+			"id": "KAE36RT6PGYWO",
+			"filename": "Superman (2025) (1080p BluRay AV1 Opus 7.1) - Edlyn.mkv",
+			"hash": "ad673340ce445582dbdf967c4ee2eaa7f59896de",
+			"bytes": 3336321619,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:10:05.000Z",
+			"ended": "2026-07-28T17:04:07.000Z"
+		},
+		{
+			"id": "4QB4MBHJLHCIM",
+			"filename": "Epic Films 5",
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"bytes": 228528963200,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:00:07.000Z",
+			"ended": "2026-07-27T01:13:08.000Z"
+		},
+		{
+			"id": "65DHJK3ZACUYK",
+			"filename": "Inception.2010.UHD.BluRay.2160p.DTS-HD.MA.5.1.DV.HEVC.HYBRID.REMUX-FraMeSToR.mkv",
+			"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+			"bytes": 71140086723,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T19:00:05.000Z",
+			"ended": "2025-10-29T16:54:43.000Z"
+		},
+		{
+			"id": "O3E6FSGKXJV2Q",
+			"filename": "The.Shawshank.Redemption.1994.4K.HDR.2160p.BDRemux Ita Eng x265-NAHOM.mkv",
+			"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+			"bytes": 58282365780,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:55:11.000Z",
+			"ended": "2026-09-27T04:49:59.000Z"
+		},
+		{
+			"id": "HJ77JBFFORPEQ",
+			"filename": "Interstellar 2014 IMAX 1080p 10bit BluRay 6CH x265 HEVC-PSA.mkv",
+			"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+			"bytes": 4067313588,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:55:07.000Z",
+			"ended": "2026-08-12T02:23:18.000Z"
+		},
+		{
+			"id": "C4HXOHPJ6E4GW",
+			"filename": "Les evades (1994) - 1080p FR EN x264 ac3 mHDgz..mkv",
+			"hash": "8c47f58ec8246479c3a56046593426d5b3a30c2b",
+			"bytes": 3792316726,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 0,
+			"status": "waiting_files_selection",
+			"added": "2026-10-03T18:50:09.000Z"
+		},
+		{
+			"id": "ZASNP3ZGNMXHU",
+			"filename": "Les evades (1994) - 1080p FR EN x264 ac3 mHDgz..mkv",
+			"hash": "8c47f58ec8246479c3a56046593426d5b3a30c2b",
+			"bytes": 3792316726,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 0,
+			"status": "waiting_files_selection",
+			"added": "2026-10-03T18:50:09.000Z"
+		},
+		{
+			"id": "KDK5XPUNKLANC",
+			"filename": "The.Housemaid.2025.1080p.WEBRip.x265-KONTRAST.mkv",
+			"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+			"bytes": 3250757723,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:40:04.000Z",
+			"ended": "2026-09-26T18:12:24.000Z"
+		},
+		{
+			"id": "4HH7OGYVROEVW",
+			"filename": "Inception 2010 BDRip ITA ENG 1080p x265 Paso77.mkv",
+			"hash": "56a27e24ed14746c8e6ac1a9b50bd5de559fba08",
+			"bytes": 9260707858,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:40:03.000Z",
+			"ended": "2026-09-25T22:03:11.000Z"
+		},
+		{
+			"id": "LGIJU4EJWURYS",
+			"filename": "The.Shawshank.Redemption.1994.REMASTERED.1080p.BluRay.x265-RARBG",
+			"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+			"bytes": 2385811240,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:35:07.000Z",
+			"ended": "2021-12-14T18:07:25.000Z"
+		},
+		{
+			"id": "QALOW3R6AXHBM",
+			"filename": "【更多蓝光电影访问 www.BBQDDQ.com】IMDB电影合集.TOP001-050.简繁英字幕.大部分国语音轨",
+			"hash": "9351bcf9e7437f706549f8b60314c39259c420b4",
+			"bytes": 447075094551,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:35:05.000Z",
+			"ended": "2026-09-15T11:10:06.000Z"
+		},
+		{
+			"id": "PHP5PFSYXFW3Q",
+			"filename": "The.Godfather.1972.REMASTERED.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv",
+			"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+			"bytes": 3369977389,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:30:06.000Z",
+			"ended": "2024-07-14T19:08:59.000Z"
+		},
+		{
+			"id": "ZXLOSXKJU5TEA",
+			"filename": "The.Shawshank.Redemption.1994.Complete.UHD.BluRay-REDANDY",
+			"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+			"bytes": 65276624862,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:30:04.000Z",
+			"ended": "2025-12-18T23:22:40.000Z"
+		},
+		{
+			"id": "LXBN67UAJGDOM",
+			"filename": "Počátek (2010) UHDRDV cz en.mkv",
+			"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+			"bytes": 6858144228,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:25:06.000Z",
+			"ended": "2025-08-11T15:42:29.000Z"
+		},
+		{
+			"id": "TXVINF2IJ7TUS",
+			"filename": "Weapons.2025.1080p.WEBRip.x265.10bit.AAC5.1-[YTS.MX].mp4",
+			"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+			"bytes": 2305420040,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:25:05.000Z",
+			"ended": "2026-09-25T11:18:21.000Z"
+		},
+		{
+			"id": "24LXKCZILHEZE",
+			"filename": "Interstellar IMAX (2014) 2160p H265 10 bit ita eng AC3 5.1 sub ita eng Licdom.mkv",
+			"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+			"bytes": 8141439565,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:25:03.000Z",
+			"ended": "2023-03-10T10:36:28.000Z"
+		},
+		{
+			"id": "ZEOEMON64G244",
+			"filename": "Barbarian.2022.2160p.WEBRip.3500MB.DDP5.1.x264-GalaxyRG.mkv",
+			"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+			"bytes": 3762907568,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:20:06.000Z",
+			"ended": "2026-09-25T22:41:11.000Z"
+		},
+		{
+			"id": "TDVULW4DFFF7U",
+			"filename": "The.Gentlemen.2019.BDRip.1080p.11xRus.Ukr.Eng.ExKinoRay.mkv",
+			"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+			"bytes": 26829417995,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:20:05.000Z",
+			"ended": "2026-09-27T00:46:27.000Z"
+		},
+		{
+			"id": "TAHJXGSVCSMCG",
+			"filename": "The.Gentlemen.2019.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT",
+			"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+			"bytes": 60063167593,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:15:08.000Z",
+			"ended": "2020-04-15T08:18:12.000Z"
+		},
+		{
+			"id": "JEXS5NJAG4T5S",
+			"filename": "The.Housemaid.2025.1080p.BluRay.x264-ZoroSenpai_EniaHD.mkv",
+			"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+			"bytes": 18748362776,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:15:05.000Z",
+			"ended": "2026-09-25T14:08:45.000Z"
+		},
+		{
+			"id": "432IUP3RIRHGM",
+			"filename": "Inception.2010.1080p.10bit.BluRay.6CH.x265.HEVC-PSA",
+			"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+			"bytes": 2388399371,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:15:04.000Z",
+			"ended": "2026-07-04T17:14:04.000Z"
+		},
+		{
+			"id": "SWMEOEOK7A5WE",
+			"filename": "The Housemaid (2025) 1080p WEBRip x265 Multi DDP 5.1 ESub.mkv",
+			"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+			"bytes": 2622761716,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:10:06.000Z",
+			"ended": "2026-09-26T13:29:50.000Z"
+		},
+		{
+			"id": "56RLGTMOZO3QA",
+			"filename": "Weapons.2025.UHD.2160p.10bit.iTunes.WEBRip.AV1.English.DDP5.1.ESubs-DaddyCooL.mkv",
+			"hash": "a1c12ba5899e4800732fd199ef52db2d7487aaee",
+			"bytes": 5273528825,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:10:03.000Z",
+			"ended": "2026-09-25T09:35:06.000Z"
+		},
+		{
+			"id": "EOWXYAENKJYKC",
+			"filename": "The.Dark.Knight.2008.2160p.UHD.BluRay.X265-IAMABLE",
+			"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+			"bytes": 23742416377,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:05:08.000Z",
+			"ended": "2024-07-14T20:34:02.000Z"
+		},
+		{
+			"id": "6HULPHNJZAXTW",
+			"filename": "Weapons.2025.1080p.HD.x264.ENG.YG.iso",
+			"hash": "7d7e9c9e2f5176c04f559dcbdaa6fe95bbe6b5ca",
+			"bytes": 671608499,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:05:04.000Z",
+			"ended": "2025-08-24T07:30:49.000Z"
+		},
+		{
+			"id": "G6J4UQ5O2S3PI",
+			"filename": "Practical.magic.1998.720p.BluRay.x264.[MoviesFD].mkv",
+			"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+			"bytes": 843864160,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:00:23.000Z",
+			"ended": "2026-09-25T12:31:41.000Z"
+		},
+		{
+			"id": "2YUPS5OZ3XCN2",
+			"filename": "The Gentlemen [4K UHDremux][2160p][HDR][AC3 5.1-Castellano-True HD 7.1-Ingles+Subs][ES-EN]",
+			"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+			"bytes": 57171211866,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:00:17.000Z",
+			"ended": "2023-07-18T05:23:28.000Z"
+		},
+		{
+			"id": "QBQB5ZFD2O3UG",
+			"filename": "Monster (2003) (1080p BluRay x265 HEVC 10bit AAC 5.1 Silence)",
+			"hash": "c5816fc4e30e9b0a27f4e5a13135d2560e8a800f",
+			"bytes": 4421161950,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T18:00:06.000Z",
+			"ended": "2025-06-21T16:05:44.000Z"
+		},
+		{
+			"id": "OECIBKNZCVVGK",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.HDR.2160p.WEB.H265-WhisperingCobraOfTotalStrength[TGx]",
+			"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+			"bytes": 13581220955,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:55:07.000Z",
+			"ended": "2024-05-10T15:04:11.000Z"
+		},
+		{
+			"id": "OSGBE2II2PE4G",
+			"filename": "The Dark Knight 2008 IMAX 1080p AV1 10Bit DKong.mkv",
+			"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+			"bytes": 1306656466,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:55:04.000Z",
+			"ended": "2026-07-27T10:49:48.000Z"
+		},
+		{
+			"id": "CYTIAO7F7VS7Y",
+			"filename": "Practical.Magic.1998.2160p.UHD.BluRay.DD+.5.1.Atmos.DV.HDR.x265-TRB",
+			"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+			"bytes": 15026928216,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:50:05.000Z",
+			"ended": "2026-08-22T01:43:42.000Z"
+		},
+		{
+			"id": "KMPZLGO4RLLAE",
+			"filename": "The.Gentlemen.2019.1080p.BluRay.x264.AAC5.1-[YTS.MX].mp4",
+			"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+			"bytes": 2249762135,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:50:03.000Z",
+			"ended": "2026-09-03T20:36:29.000Z"
+		},
+		{
+			"id": "P5NVOAPJZ3B4S",
+			"filename": "Avengers.Endgame.2019.Open.Matte.2160P.Ai Upscaled.WEBRip.60FPS.H265.SDR.AC3 5.1.EngSubs_Marjenbo  .mkv",
+			"hash": "124648814a84119084f4a8c7e7db3c29f1b23f94",
+			"bytes": 60979098444,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:40:04.000Z",
+			"ended": "2026-10-03T10:22:18.000Z"
+		},
+		{
+			"id": "OKC5LHY6AX2BQ",
+			"filename": "Interstellar (2014) BluRay - 720p - x264 - [Tamil + Eng] - (AAC 2.0) - 1.2GB - ESub.mkv",
+			"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+			"bytes": 1335632003,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:35:08.000Z",
+			"ended": "2026-08-24T11:30:41.000Z"
+		},
+		{
+			"id": "363PJBILBXGVW",
+			"filename": "Weapons.2025.1080p.Blu-ray.Remux.AVC.TrueHD.Atmos.7.1-CiNEPHiLES.mkv",
+			"hash": "4d7c2313243bd3e3e724f5bd771e2999d6bede8f",
+			"bytes": 32091658393,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:35:05.000Z",
+			"ended": "2026-02-08T05:20:21.000Z"
+		},
+		{
+			"id": "7EQQWRY64BERY",
+			"filename": "the.housemaid.2025.1080p.bluray.x264-knives.mkv",
+			"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+			"bytes": 20481821972,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:30:08.000Z",
+			"ended": "2026-09-25T14:03:57.000Z"
+		},
+		{
+			"id": "L4A6N6L6TT6CA",
+			"filename": "Fanedit Collection",
+			"hash": "72809a85f76227b01ea5110a57d0225114bc53c5",
+			"bytes": 126712736111,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 61.85,
+			"status": "downloading",
+			"added": "2026-10-03T17:30:04.000Z",
+			"speed": 0,
+			"seeders": 1
+		},
+		{
+			"id": "VL44SCJ6CWZ4C",
+			"filename": "Monster 2003 1080p BluRay x265-YAWNTiC.mkv",
+			"hash": "e62c7595e5a2fab90c61f407a6dc198aee62fa0a",
+			"bytes": 7815709556,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:25:05.000Z",
+			"ended": "2026-09-17T07:26:17.000Z"
+		},
+		{
+			"id": "N3UPO7CGLMSOQ",
+			"filename": "Amazing Films 9 Mp4 1080p",
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"bytes": 268470620988,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:25:02.000Z",
+			"ended": "2025-10-28T11:53:07.000Z"
+		},
+		{
+			"id": "JDEOXIRXSDEQG",
+			"filename": "The Gentlemen (2019) [2160p] [4K] [BluRay] [5.1] [YTS.MX]",
+			"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+			"bytes": 5546025392,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:20:09.000Z",
+			"ended": "2020-04-30T00:36:11.000Z"
+		},
+		{
+			"id": "UOEWFRLLET3EO",
+			"filename": "Great Films 3 Mp4 1080p",
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"bytes": 214857229979,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:15:14.000Z",
+			"ended": "2026-05-24T11:30:30.000Z"
+		},
+		{
+			"id": "Y5CYXSABHH6XC",
+			"filename": "Practical Magic (1998) (1080p BluRay x265 MONOLITH).mkv",
+			"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+			"bytes": 4347167714,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:15:10.000Z",
+			"ended": "2020-05-16T22:04:35.000Z"
+		},
+		{
+			"id": "QYBRXQ3I3N4ZE",
+			"filename": "Pentalogia - Resident Evil (2002-2012) BDRip 1080p 5.1 Dual Áudio - Douglasvip",
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"bytes": 7685250427,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:10:05.000Z",
+			"ended": "2026-09-25T18:29:22.000Z"
+		},
+		{
+			"id": "ZSRHYCH3GELTG",
+			"filename": "Superman.2025.1080p.AMZN.WEBRip.1400MB.DD5.1.x264.mkv",
+			"hash": "f29a41d1991dd16b08a194f6877a7931464bdb7a",
+			"bytes": 1501041940,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:10:03.000Z",
+			"ended": "2026-09-29T03:45:28.000Z"
+		},
+		{
+			"id": "JAOUNLOBJN5ES",
+			"filename": "Superman (2025) English HQ HDRip - 1080p - x264 - (DD+5.1 ATMOS - 768Kbps & AAC) - 2.7GB - ESub.mkv",
+			"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+			"bytes": 2941051774,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:05:48.000Z",
+			"ended": "2026-09-27T19:15:48.000Z"
+		},
+		{
+			"id": "S5BNH6SI4XFOA",
+			"filename": "Amazing Films 11 Mp4 1080p",
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"bytes": 268838679745,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:00:17.000Z",
+			"ended": "2026-09-14T16:08:39.000Z"
+		},
+		{
+			"id": "MO7HNTRH7YIRA",
+			"filename": "The.Ministry.Of.Ungentlemanly.Warfare.2024.720p.BluRay.x264.AAC-[YTS.MX].mp4",
+			"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+			"bytes": 1160820550,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:00:14.000Z",
+			"ended": "2026-09-14T20:02:19.000Z"
+		},
+		{
+			"id": "IP2J3SNLCR3VG",
+			"filename": "Barbarian.2022.2160p.UHD.BluRay.Remux.DV.P7.HDR.TORRNADO.mkv",
+			"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+			"bytes": 53019160711,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T17:00:07.000Z",
+			"ended": "2026-08-13T00:03:52.000Z"
+		},
+		{
+			"id": "JQLDZOCWRP37Y",
+			"filename": "Resident.Evil.2002.720p.BluRay.999MB.HQ.x265.10bit-GalaxyRG[TGx]",
+			"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+			"bytes": 1043567695,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:55:05.000Z",
+			"ended": "2020-09-26T22:03:32.000Z"
+		},
+		{
+			"id": "6KINBEKKD3V4C",
+			"filename": "Barbarian.2022.4K.HDR.DV.2160p.BDRemux Ita Eng x265-NAHOM.mkv",
+			"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+			"bytes": 52931008592,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:50:03.000Z",
+			"ended": "2026-08-14T07:05:19.000Z"
+		},
+		{
+			"id": "MZRSSDO7GBQPA",
+			"filename": "Al.Pacino.Movies.Pack.MiXeD-SCENEXPRESS",
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"bytes": 75759484642,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 0,
+			"status": "error",
+			"added": "2026-10-03T16:45:06.000Z",
+			"ended": "2026-10-03T17:15:20.000Z"
+		},
+		{
+			"id": "NACFEHPWCHYAM",
+			"filename": "Monster.2003.1080p.BluRay.x264-[YTS.AM].mp4",
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"bytes": 1852674214,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:45:05.000Z",
+			"ended": "2026-09-25T23:10:01.000Z"
+		},
+		{
+			"id": "XLQNJE4AYVXU2",
+			"filename": "The.Housemaid.2025.DUB.BDRip.720p.x264.seleZen.mkv",
+			"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+			"bytes": 5161443963,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:45:04.000Z",
+			"ended": "2026-09-25T18:53:41.000Z"
+		},
+		{
+			"id": "CBDDPTRJ3FR6W",
+			"filename": "Resident Evil Collection (2002 - 2016) + Extras 4k UHD HDR BDRip H265 ENG FLAC 7.1",
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"bytes": 126703214947,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:40:06.000Z",
+			"ended": "2026-09-25T18:03:26.000Z"
+		},
+		{
+			"id": "XPZQLBPWPXKI2",
+			"filename": "Weapons.2025.1080p.BluRay.AV1.Opus.7.1-AV1Core.mkv",
+			"hash": "37c689776f28a165f02cb0cf5482966f2c9308b6",
+			"bytes": 2909785345,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:40:04.000Z",
+			"ended": "2025-10-12T13:31:22.000Z"
+		},
+		{
+			"id": "TQUGN5ZKESTNE",
+			"filename": "The.Dark.Knight.2008.bluray.hdr.2160p.av1.5.1.opus.subs-Dust",
+			"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+			"bytes": 10511081740,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T16:35:04.000Z",
+			"ended": "2026-01-16T21:55:42.000Z"
+		}
+	],
+	"rdTorrentsPage": [
+		{
+			"id": "BBNXE2XV5GV6S",
+			"filename": "Inception.2010.2160p.BluRay.HEVC.DTS-HD.MA.5.1-COASTER",
+			"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+			"bytes": 92466334224,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:13.000Z",
+			"ended": "2026-02-07T17:57:20.000Z"
+		},
+		{
+			"id": "IS3GJBY3Q57QE",
+			"filename": "The Housemaid 2025 1080p BluRay x264-OFT.mkv",
+			"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+			"bytes": 6307304158,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:12.000Z",
+			"ended": "2026-05-23T12:29:24.000Z"
+		},
+		{
+			"id": "X2ILDQNYFYOHM",
+			"filename": "Interstellar (2014).mkv",
+			"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+			"bytes": 42217644554,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T21:00:06.000Z",
+			"ended": "2025-04-15T09:25:56.000Z"
+		},
+		{
+			"id": "PN3LSTL4KHSZ2",
+			"filename": "The.Housemaid.2025.MULTi.VFQ.1080p.WEBrip.10.bits.EAC3.5.1.x265-TyHD.mkv",
+			"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+			"bytes": 2474470948,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:55:05.000Z",
+			"ended": "2026-09-25T12:02:07.000Z"
+		},
+		{
+			"id": "Q5DSFFW26PYA6",
+			"filename": "Fanedit Collection",
+			"hash": "72809a85f76227b01ea5110a57d0225114bc53c5",
+			"bytes": 126712736111,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 61.85,
+			"status": "downloading",
+			"added": "2026-10-03T20:55:03.000Z",
+			"speed": 0,
+			"seeders": 1
+		},
+		{
+			"id": "AUUIRWO663Y6Q",
+			"filename": "Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+			"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+			"bytes": 92504722961,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:50:04.000Z",
+			"ended": "2024-07-14T21:07:56.000Z"
+		},
+		{
+			"id": "66U5KUQMLHB3M",
+			"filename": "The Shawshank Redemption (1994)  [2160p x265 10bit Joy]",
+			"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+			"bytes": 8312543823,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:45:05.000Z",
+			"ended": "2025-06-11T09:15:29.000Z"
+		},
+		{
+			"id": "FO4AGGIBZRVWE",
+			"filename": "The Godfather (1972) RM4K REPACK (1080p BluRay x265 HEVC 10bit AAC 5.1 Tigole)",
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"bytes": 13072048885,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:45:04.000Z",
+			"ended": "2025-10-14T12:29:39.000Z"
+		},
+		{
+			"id": "HRQDMPC46ZKT2",
+			"filename": "The-Shawshank-Redemption_1994_AI_1080p.BluRay.10b.HEVC.DTS-MA.5.1_BLUDUAINE",
+			"hash": "85509819d8e15ca2586e1515a8a017d791f9c9b3",
+			"bytes": 15380512768,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:40:06.000Z",
+			"ended": "2026-09-06T11:44:47.000Z"
+		},
+		{
+			"id": "JVNRKR5CGE3FK",
+			"filename": "The.Gentlemen.2019.2160p.UHD.BDRemux.RuTracker.mreskenses.mkv",
+			"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+			"bytes": 70371191667,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:40:05.000Z",
+			"ended": "2026-07-01T02:35:21.000Z"
+		},
+		{
+			"id": "R2PGHKOYWZ7OM",
+			"filename": "Interstellar (2014) BR-Rip - x264 - [Tamil Dub] - (AAC 2.0) - 650MB - ESub.mkv",
+			"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+			"bytes": 694304690,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:35:10.000Z",
+			"ended": "2026-08-19T06:37:48.000Z"
+		},
+		{
+			"id": "OGFIBP3UXFU6I",
+			"filename": "Avengers.Endgame.2019.1080p.BluRay.AVC.DTS-HD.MA.7.1-FGT",
+			"hash": "47f0ceffb792c4d46853dec6acc41449368c7fdd",
+			"bytes": 45585486096,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-03T20:35:08.000Z",
+			"ended": "2026-08-26T12:01:13.000Z"
+		}
+	],
+	"reference": {
+		"keepVerdicts": [
+			{
+				"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+				"imdbId": "tt0120791"
+			},
+			{
+				"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+				"imdbId": "tt0468569"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0096463"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0091251"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0488478"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt10199640"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1832382"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt5186714"
+			},
+			{
+				"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1074638"
+			},
+			{
+				"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+				"imdbId": "tt15791034"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0098635"
+			},
+			{
+				"hash": "47f0ceffb792c4d46853dec6acc41449368c7fdd",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "7c5cef3523ad7f7a03ba9d0a51b44b6437d597dc",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "56a27e24ed14746c8e6ac1a9b50bd5de559fba08",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "a2b384339f3dcdd9f18fc299311853ce6570ca4a",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+				"imdbId": "tt1375666"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt2379713"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0036775"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0055928"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0039689"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0099423"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0066921"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0150377"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0071562"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0071562"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0071562"
+			},
+			{
+				"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0099685"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0372784"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0058461"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0108052"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "8902af48af37540965349487fd0919356a22112d",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "9b5f7bdf3acc168f5c60ae57e8e026a48d56cb01",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+				"imdbId": "tt8367814"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0081547"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0119008"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0119008"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0038890"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0069768"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0258463"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt3300542"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0085244"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0090329"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0405094"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1149362"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0217505"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0455590"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0093640"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0497465"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0100150"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt5177120"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt1345836"
+			},
+			{
+				"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+				"imdbId": "tt0120804"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0070666"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0070666"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0050083"
+			},
+			{
+				"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+				"imdbId": "tt27543632"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0078788"
+			},
+			{
+				"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "ad673340ce445582dbdf967c4ee2eaa7f59896de",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "f29a41d1991dd16b08a194f6877a7931464bdb7a",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+				"imdbId": "tt5950044"
+			},
+			{
+				"hash": "4d7c2313243bd3e3e724f5bd771e2999d6bede8f",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "7db00ceaf4f744d56ce79f75e05a3ff8976d0506",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "a1c12ba5899e4800732fd199ef52db2d7487aaee",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "37c689776f28a165f02cb0cf5482966f2c9308b6",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "7d7e9c9e2f5176c04f559dcbdaa6fe95bbe6b5ca",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+				"imdbId": "tt26581740"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0094291"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0083922"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0118799"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0053604"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0038650"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "85509819d8e15ca2586e1515a8a017d791f9c9b3",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+				"imdbId": "tt0111161"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0092099"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0075148"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0070047"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt2446042"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0062765"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0087332"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0120660"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0095647"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0076752"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0056172"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0050212"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0060196"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0086960"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0098273"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0098273"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0089360"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0361748"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0053946"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0077416"
+			},
+			{
+				"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+				"imdbId": "tt0435625"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0119558"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0071910"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0120338"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0073486"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0070355"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0066999"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0074483"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0086383"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0094963"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0095016"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0086250"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0118655"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0112641"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0082096"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0246460"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0083944"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0058331"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0118971"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0365737"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0074958"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0034583"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0187078"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0052357"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0053125"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0112573"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1024648"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0112864"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0337978"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0066995"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0086465"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt4196776"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0830515"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt3841424"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0085859"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0106519"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0073195"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0087843"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt5208252"
+			},
+			{
+				"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+				"imdbId": "tt0816692"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0068646"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0099674"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0099674"
+			},
+			{
+				"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+				"imdbId": "tt0099674"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0052618"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0052561"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0079574"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0408306"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0363163"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0936501"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1397280"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0033870"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0054847"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0039302"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0090555"
+			},
+			{
+				"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+				"imdbId": "tt31434639"
+			},
+			{
+				"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+				"imdbId": "tt31434639"
+			},
+			{
+				"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+				"imdbId": "tt31434639"
+			},
+			{
+				"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+				"imdbId": "tt31434639"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0091042"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0054953"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0080339"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0089841"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0088847"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0099810"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0227445"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0031381"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0059742"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0072890"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0104952"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0040522"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0094226"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0032551"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt2402157"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0313443"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0092978"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0144214"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0106489"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0095031"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0093010"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0063442"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0065462"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0067065"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0068408"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0215750"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt0278504"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0038787"
+			},
+			{
+				"hash": "e62c7595e5a2fab90c61f407a6dc198aee62fa0a",
+				"imdbId": "tt0340855"
+			},
+			{
+				"hash": "c5816fc4e30e9b0a27f4e5a13135d2560e8a800f",
+				"imdbId": "tt0340855"
+			},
+			{
+				"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+				"imdbId": "tt0340855"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0122690"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0061735"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0087233"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0060665"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0113189"
+			},
+			{
+				"hash": "124648814a84119084f4a8c7e7db3c29f1b23f94",
+				"imdbId": "tt4154796"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt0318627"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0369441"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0070511"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0118571"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0109444"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0057076"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt0432021"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0058150"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0093428"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0120347"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0083987"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0265086"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0092890"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0280707"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1194173"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0076095"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1164999"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0087803"
+			},
+			{
+				"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+				"imdbId": "tt1855325"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0083806"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0064757"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0093409"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0097733"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0083511"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0071807"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0159273"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0097742"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt0049833"
+			},
+			{
+				"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+				"imdbId": "tt1389096"
+			},
+			{
+				"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+				"imdbId": "tt1389096"
+			}
+		]
+	}
+}

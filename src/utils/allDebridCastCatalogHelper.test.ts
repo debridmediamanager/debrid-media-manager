@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	mockGetMagnetFiles,
@@ -6,12 +6,18 @@ const {
 	mockGetMagnetStatus,
 	mockGetSavedLinks,
 	mockUnlockLink,
+	mockIdentifyLibraryHashes,
 } = vi.hoisted(() => ({
 	mockGetMagnetFiles: vi.fn(),
 	mockGetMagnetStatusAd: vi.fn(),
 	mockGetMagnetStatus: vi.fn(),
 	mockGetSavedLinks: vi.fn(),
 	mockUnlockLink: vi.fn(),
+	mockIdentifyLibraryHashes: vi.fn(async () => new Map()),
+}));
+
+vi.mock('@/services/repository', () => ({
+	repository: { identifyLibraryHashes: mockIdentifyLibraryHashes },
 }));
 
 vi.mock('@/services/allDebrid', async () => {
@@ -194,5 +200,62 @@ describe('AllDebrid saved links', () => {
 		expect(await getAllDebridSavedLink('ad-key', savedLinkMetaId(LINK), 'user1')).toMatchObject(
 			{ status: 500 }
 		);
+	});
+});
+
+// A saved hoster link has no info hash, so only magnets can be matched to a
+// title.
+describe('AllDebrid library art', () => {
+	const HASH = '0570516261fb339abb9dec9809fbf5c8951e166d';
+	const LINK = 'https://1fichier.com/?lemotqxaz1mytbbh93i5';
+	const art = {
+		poster: 'https://images.metahub.space/poster/small/tt0816692/img',
+		background: 'https://images.metahub.space/background/medium/tt0816692/img',
+		description: 'Interstellar',
+		releaseInfo: '2014',
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		process.env.DMM_ORIGIN = 'https://dmm.test';
+		mockIdentifyLibraryHashes.mockResolvedValue(
+			new Map([[HASH, { imdbId: 'tt0816692', title: 'Interstellar', year: 2014 }]])
+		);
+	});
+
+	it('puts a cover on a magnet DMM knows by hash and leaves a saved link bare', async () => {
+		mockGetSavedLinks.mockResolvedValue([
+			{ link: LINK, filename: 'ztest-rar5.rar', size: 1, date: 1, host: '1fichier' },
+		]);
+		mockGetMagnetStatus.mockResolvedValue({
+			data: {
+				magnets: [
+					{ id: 7, filename: 'Interstellar (2014).mkv', hash: HASH, statusCode: 4 },
+				],
+			},
+		});
+
+		const result = await getAllDebridDMMLibrary('ad-key', 1);
+
+		expect(mockIdentifyLibraryHashes).toHaveBeenCalledWith([HASH]);
+		expect(result.metas).toEqual([
+			{ id: `dmm-ad:${savedLinkMetaId(LINK)}`, name: 'ztest-rar5.rar', type: 'other' },
+			{ id: 'dmm-ad:7', name: 'Interstellar (2014).mkv', type: 'other', ...art },
+		]);
+	});
+
+	it('gives an opened magnet the same art', async () => {
+		mockGetMagnetFiles.mockResolvedValue({
+			magnets: [{ files: [{ n: 'Interstellar (2014).mkv', s: 1024, l: 'l-1' }] }],
+		});
+		mockGetMagnetStatusAd.mockResolvedValue({
+			filename: 'Interstellar (2014).mkv',
+			hash: HASH,
+		});
+
+		const result = await getAllDebridDMMTorrent('ad-key', '7', 'user1');
+		if ('error' in result) throw new Error(result.error);
+
+		expect(result.data!.meta).toMatchObject(art);
 	});
 });

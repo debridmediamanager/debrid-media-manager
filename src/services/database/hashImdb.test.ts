@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { HashImdbService } from './hashImdb';
+import { HashImdbService, pickHashImdbIds } from './hashImdb';
 
 const prismaMock = vi.hoisted(() => ({
 	hashImdb: {
@@ -130,5 +130,66 @@ describe('HashImdbService', () => {
 				orderBy: { createdAt: 'asc' },
 			});
 		});
+	});
+
+	describe('identifyHashes', () => {
+		it('reads nothing for input that is not an info hash', async () => {
+			const result = await service.identifyHashes(['', 'abc123', 'not-a-hash']);
+
+			expect(result.size).toBe(0);
+			expect(prismaMock.hashImdb.findMany).not.toHaveBeenCalled();
+		});
+	});
+});
+
+describe('pickHashImdbIds', () => {
+	const A = 'a'.repeat(40);
+
+	it('takes the most trusted source when nothing was judged', () => {
+		const picks = pickHashImdbIds(
+			[[{ hash: A, imdbId: 'tt0000001' }], [{ hash: A, imdbId: 'tt0000002' }]],
+			[]
+		);
+		expect(picks.get(A)).toBe('tt0000001');
+	});
+
+	it('lets a kept pair beat source order', () => {
+		const picks = pickHashImdbIds(
+			[[{ hash: A, imdbId: 'tt0000001' }], [{ hash: A, imdbId: 'tt0000002' }]],
+			[{ hash: A, imdbId: 'tt0000002', verdict: 'keep' }]
+		);
+		expect(picks.get(A)).toBe('tt0000002');
+	});
+
+	it('drops a pair that was trashed and never kept', () => {
+		const picks = pickHashImdbIds(
+			[[{ hash: A, imdbId: 'tt0000001' }]],
+			[{ hash: A, imdbId: 'tt0000001', verdict: 'trash' }]
+		);
+		expect(picks.has(A)).toBe(false);
+	});
+
+	// The verdict is per filename, so one hash can be trashed under one name
+	// and kept under another.
+	it('keeps a pair that was kept under some name', () => {
+		const picks = pickHashImdbIds(
+			[[{ hash: A, imdbId: 'tt0000001' }]],
+			[
+				{ hash: A, imdbId: 'tt0000001', verdict: 'trash' },
+				{ hash: A, imdbId: 'tt0000001', verdict: 'keep' },
+			]
+		);
+		expect(picks.get(A)).toBe('tt0000001');
+	});
+
+	it('ignores ids metahub cannot draw', () => {
+		const picks = pickHashImdbIds(
+			[
+				[{ hash: A.toUpperCase(), imdbId: 'kitsu:46474' }],
+				[{ hash: A, imdbId: 'tt0000002' }],
+			],
+			[]
+		);
+		expect(picks.get(A)).toBe('tt0000002');
 	});
 });

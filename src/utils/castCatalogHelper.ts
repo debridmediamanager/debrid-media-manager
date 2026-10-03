@@ -1,5 +1,6 @@
 import { RdTokenExpiredError, getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { libraryArtFor, withLibraryArt } from './castLibraryArt';
 import { castAccessToken } from './castRdToken';
 
 export const PAGE_SIZE = 12;
@@ -47,13 +48,16 @@ export async function getDMMLibrary(userid: string, page: number) {
 		hasMore = skip + PAGE_SIZE < results.totalCount;
 	}
 
+	const metas = await withLibraryArt(
+		results.data.map((torrent) => ({
+			meta: { id: `dmm:${torrent.id}`, name: torrent.filename, type: 'other' },
+			hash: torrent.hash,
+		}))
+	);
+
 	return {
 		data: {
-			metas: results.data.map((torrent) => ({
-				id: `dmm:${torrent.id}`,
-				name: torrent.filename,
-				type: 'other',
-			})),
+			metas,
 			hasMore,
 			cacheMaxAge: 0,
 		},
@@ -96,6 +100,7 @@ export async function getDMMTorrent(userid: string, torrentID: string, token: st
 				type: 'other',
 				name: `DMM RD: ${info.original_filename} - ${(info.original_bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
 				videos,
+				...(await libraryArtFor(info.hash)),
 			},
 			cacheMaxAge: 0,
 		},

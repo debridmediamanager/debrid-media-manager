@@ -7,6 +7,7 @@ import {
 	type OffcloudHistoryItem,
 } from '@/services/offcloud';
 import { repository as db } from '@/services/repository';
+import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 import { offcloudVideoFiles } from '@/utils/offcloudCastFiles';
 
 export const PAGE_SIZE = 12;
@@ -63,13 +64,20 @@ export async function getOffcloudDMMLibrary(userid: string, page: number) {
 	const skip = (page - 1) * PAGE_SIZE;
 	const pageEntries = entries.slice(skip, skip + PAGE_SIZE);
 
-	return {
-		data: {
-			metas: pageEntries.map((entry) => ({
+	const metas = await withLibraryArt(
+		pageEntries.map((entry) => ({
+			meta: {
 				id: offcloudMetaId(entry.requestId),
 				name: entry.fileName || entry.requestId,
 				type: 'other',
-			})),
+			},
+			hash: entry.originalLink ? extractBtih(entry.originalLink) : null,
+		}))
+	);
+
+	return {
+		data: {
+			metas,
 			hasMore: skip + PAGE_SIZE < entries.length,
 			cacheMaxAge: 0,
 		},
@@ -157,6 +165,7 @@ export async function getOffcloudDMMItem(userid: string, requestId: string) {
 				type: 'other',
 				name: `DMM OC: ${entry?.fileName ?? files[0].filename} - ${gb(totalSize)} GB`,
 				videos,
+				...(await libraryArtFor(hash)),
 			},
 			cacheMaxAge: 0,
 		},

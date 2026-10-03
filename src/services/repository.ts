@@ -1253,6 +1253,10 @@ export class Repository {
 		return this.hashImdbService.getByHashes(hashes);
 	}
 
+	public identifyLibraryHashes(hashes: string[]) {
+		return this.hashImdbService.identifyHashes(hashes);
+	}
+
 	// Report Service Methods
 	public reportContent(
 		hash: string,

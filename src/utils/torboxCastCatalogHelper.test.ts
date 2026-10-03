@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/repository', () => ({
 	repository: {
 		getTorBoxCastProfile: vi.fn(),
+		identifyLibraryHashes: vi.fn(async () => new Map()),
 	},
 }));
 
@@ -451,5 +452,79 @@ describe('torboxCastCatalogHelper usenet downloads', () => {
 		const result = await getTorBoxDMMLibrary('user1', 1);
 		if ('error' in result) throw new Error(result.error);
 		expect(result.data.metas.map((m) => m.id)).toEqual(['dmm-tb:9']);
+	});
+});
+
+// TorBox web and usenet downloads carry no info hash, so only torrents can be
+// matched to a title.
+describe('torboxCastCatalogHelper library art', () => {
+	const HASH = '0570516261fb339abb9dec9809fbf5c8951e166d';
+	const art = {
+		poster: 'https://images.metahub.space/poster/small/tt0816692/img',
+		background: 'https://images.metahub.space/background/medium/tt0816692/img',
+		description: 'Interstellar',
+		releaseInfo: '2014',
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		process.env.DMM_ORIGIN = 'https://debridmediamanager.com';
+		vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
+		vi.mocked(db.identifyLibraryHashes).mockResolvedValue(
+			new Map([[HASH, { imdbId: 'tt0816692', title: 'Interstellar', year: 2014 }]])
+		);
+		vi.mocked(getUsenetList).mockResolvedValue({ success: true, data: [] } as any);
+	});
+
+	it('puts a cover on a torrent DMM knows by hash and leaves a web download bare', async () => {
+		vi.mocked(getWebDownloadList).mockResolvedValue({
+			success: true,
+			data: [{ id: 7, name: 'archive.7z' }],
+		} as any);
+		vi.mocked(getTorrentList).mockResolvedValue({
+			success: true,
+			data: [{ id: 1, name: 'Interstellar (2014).mkv', hash: HASH }],
+		} as any);
+
+		const result = await getTorBoxDMMLibrary('user1', 1);
+		if ('error' in result) throw new Error(result.error);
+
+		expect(db.identifyLibraryHashes).toHaveBeenCalledWith([HASH]);
+		expect(result.data.metas).toEqual([
+			{ id: 'dmm-tb:w7', name: 'archive.7z', type: 'other' },
+			{ id: 'dmm-tb:1', name: 'Interstellar (2014).mkv', type: 'other', ...art },
+		]);
+	});
+
+	it('gives an opened torrent the same art', async () => {
+		vi.mocked(getTorrentList).mockResolvedValue({
+			success: true,
+			data: [
+				{
+					id: 1,
+					name: 'Interstellar (2014).mkv',
+					hash: HASH,
+					files: [{ id: 0, name: 'Interstellar (2014).mkv', size: 1024 }],
+				},
+			],
+		} as any);
+
+		const result = await getTorBoxDMMTorrent('user1', '1');
+		if ('error' in result) throw new Error(result.error);
+
+		expect(result.data.meta).toMatchObject(art);
+	});
+
+	it('looks nothing up for an opened web download', async () => {
+		vi.mocked(getWebDownloadList).mockResolvedValue({
+			success: true,
+			data: [{ id: 7, name: 'archive.7z', files: [] }],
+		} as any);
+
+		const result = await getTorBoxDMMTorrent('user1', 'w7');
+		if ('error' in result) throw new Error(result.error);
+
+		expect(db.identifyLibraryHashes).not.toHaveBeenCalled();
+		expect(result.data.meta).not.toHaveProperty('poster');
 	});
 });

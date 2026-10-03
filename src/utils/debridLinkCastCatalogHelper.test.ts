@@ -36,6 +36,7 @@ describe('debridLinkCastCatalogHelper', () => {
 		vi.clearAllMocks();
 		process.env.DMM_ORIGIN = 'https://dmm.test';
 		mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue({ apiKey: 'dl-token' });
+		mockRepository.identifyLibraryHashes = vi.fn().mockResolvedValue(new Map());
 		mockList.mockResolvedValue({ torrents: [], pagination: null });
 		mockById.mockResolvedValue(null);
 	});
@@ -135,6 +136,57 @@ describe('debridLinkCastCatalogHelper', () => {
 
 			const result = (await getDebridLinkDMMLibrary('u', 1)) as any;
 			expect(result.data.hasMore).toBe(false);
+		});
+	});
+
+	// Debrid-Link names the info hash `hashString`.
+	describe('library art', () => {
+		const HASH = '0570516261fb339abb9dec9809fbf5c8951e166d';
+		const art = {
+			poster: 'https://images.metahub.space/poster/small/tt0816692/img',
+			background: 'https://images.metahub.space/background/medium/tt0816692/img',
+			description: 'Interstellar',
+			releaseInfo: '2014',
+		};
+
+		beforeEach(() => {
+			mockRepository.identifyLibraryHashes = vi
+				.fn()
+				.mockResolvedValue(
+					new Map([[HASH, { imdbId: 'tt0816692', title: 'Interstellar', year: 2014 }]])
+				);
+		});
+
+		it('puts a cover on a torrent DMM knows by hash', async () => {
+			mockList.mockResolvedValue({
+				torrents: [{ ...torrent('t1', 'Interstellar (2014).mkv'), hashString: HASH }],
+				pagination: null,
+			});
+
+			const result = (await getDebridLinkDMMLibrary('u', 1)) as any;
+
+			expect(mockRepository.identifyLibraryHashes).toHaveBeenCalledWith([HASH]);
+			expect(result.data.metas).toEqual([
+				{ id: 'dmm-dl:t1', name: 'Interstellar (2014).mkv', type: 'other', ...art },
+			]);
+		});
+
+		it('gives the opened torrent the same art', async () => {
+			mockById.mockResolvedValue({
+				...torrent('t1', 'Interstellar (2014).mkv', 100, [
+					{
+						id: 'f0',
+						name: 'Interstellar (2014).mkv',
+						size: 5,
+						downloadUrl: `${SEED}/t1-0/Interstellar (2014).mkv`,
+					},
+				]),
+				hashString: HASH,
+			});
+
+			const result = (await getDebridLinkDMMItem('u', 't1')) as any;
+
+			expect(result.data.meta).toMatchObject(art);
 		});
 	});
 

@@ -47,6 +47,7 @@ describe('offcloudCastCatalogHelper', () => {
 		vi.clearAllMocks();
 		process.env.DMM_ORIGIN = 'https://dmm.test';
 		mockRepository.getOffcloudCastProfile = vi.fn().mockResolvedValue({ apiKey: 'oc-key' });
+		mockRepository.identifyLibraryHashes = vi.fn().mockResolvedValue(new Map());
 		mockHistory.mockResolvedValue([]);
 		mockCacheInfo.mockResolvedValue([]);
 		mockExplore.mockResolvedValue([]);
@@ -111,6 +112,47 @@ describe('offcloudCastCatalogHelper', () => {
 			expect(first.data.hasMore).toBe(true);
 			expect(third.data.metas).toHaveLength(1);
 			expect(third.data.hasMore).toBe(false);
+		});
+	});
+
+	// A history row names no title, only the magnet it came from, so the hash
+	// in originalLink is the only thing DMM can identify the release by.
+	describe('library art', () => {
+		const identified = new Map([
+			[HASH, { imdbId: 'tt0816692', title: 'Interstellar', year: 2014 }],
+		]);
+
+		it('puts a cover on an entry DMM knows by its magnet hash', async () => {
+			mockRepository.identifyLibraryHashes = vi.fn().mockResolvedValue(identified);
+			mockHistory.mockResolvedValue([historyItem('r1', 'Interstellar.2014.mkv')] as any);
+
+			const result = (await getOffcloudDMMLibrary('u', 1)) as any;
+
+			expect(mockRepository.identifyLibraryHashes).toHaveBeenCalledWith([HASH]);
+			expect(result.data.metas).toEqual([
+				{
+					id: 'dmm-oc:r1',
+					name: 'Interstellar.2014.mkv',
+					type: 'other',
+					poster: 'https://images.metahub.space/poster/small/tt0816692/img',
+					background: 'https://images.metahub.space/background/medium/tt0816692/img',
+					description: 'Interstellar',
+					releaseInfo: '2014',
+				},
+			]);
+		});
+
+		it('gives the opened item the same art', async () => {
+			mockRepository.identifyLibraryHashes = vi.fn().mockResolvedValue(identified);
+			mockExplore.mockResolvedValue([`${CDN}/Interstellar.2014.mkv`]);
+			mockHistory.mockResolvedValue([historyItem('r1', 'Interstellar.2014.mkv')] as any);
+
+			const result = (await getOffcloudDMMItem('u', 'r1')) as any;
+
+			expect(result.data.meta).toMatchObject({
+				poster: 'https://images.metahub.space/poster/small/tt0816692/img',
+				description: 'Interstellar',
+			});
 		});
 	});
 

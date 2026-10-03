@@ -5,6 +5,7 @@ import {
 	type DebridLinkTorrent,
 } from '@/services/debridLink';
 import { repository as db } from '@/services/repository';
+import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 import { resolveDebridLinkTorrentById } from '@/utils/debridLinkCastApiHelpers';
 
 /** How many library entries one Stremio catalog page carries. */
@@ -74,13 +75,20 @@ export async function getDebridLinkDMMLibrary(userid: string, page: number) {
 	const finished = torrents.filter((torrent: DebridLinkTorrent) => isDlFinished(torrent.status));
 	const pageEntries = finished.slice(windowStart, windowStart + PAGE_SIZE);
 
-	return {
-		data: {
-			metas: pageEntries.map((torrent) => ({
+	const metas = await withLibraryArt(
+		pageEntries.map((torrent) => ({
+			meta: {
 				id: debridLinkMetaId(torrent.id),
 				name: torrent.name || torrent.id,
 				type: 'other',
-			})),
+			},
+			hash: torrent.hashString,
+		}))
+	);
+
+	return {
+		data: {
+			metas,
 			hasMore:
 				windowStart + PAGE_SIZE < finished.length ||
 				(typeof pagination?.next === 'number' && pagination.next >= 0),
@@ -154,6 +162,7 @@ export async function getDebridLinkDMMItem(userid: string, torrentId: string) {
 				type: 'other',
 				name: `DMM DL: ${resolved.torrent.name || files[0].filename} - ${gb(totalSize)} GB`,
 				videos,
+				...(await libraryArtFor(resolved.torrent.hashString)),
 			},
 			cacheMaxAge: 0,
 		},

@@ -7,6 +7,7 @@ import {
 	MagnetFile,
 	unlockLink,
 } from '@/services/allDebrid';
+import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 
 export const PAGE_SIZE = 12;
 
@@ -153,11 +154,10 @@ export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 		// magnets. They come first: the list is short and the whole of it is
 		// known, so paging stays a slice over one concatenated array.
 		const entries = [
-			...(await fetchSavedLinkMetas(apiKey)),
+			...(await fetchSavedLinkMetas(apiKey)).map((meta) => ({ meta, hash: undefined })),
 			...readyMagnets.map((magnet) => ({
-				id: `dmm-ad:${magnet.id}`,
-				name: magnet.filename,
-				type: 'other',
+				meta: { id: `dmm-ad:${magnet.id}`, name: magnet.filename, type: 'other' },
+				hash: magnet.hash,
 			})),
 		];
 
@@ -165,7 +165,7 @@ export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 		const offset = (page - 1) * PAGE_SIZE;
 
 		return {
-			metas: entries.slice(offset, offset + PAGE_SIZE),
+			metas: await withLibraryArt(entries.slice(offset, offset + PAGE_SIZE)),
 			hasMore: offset + PAGE_SIZE < entries.length,
 		};
 	} catch (error) {
@@ -239,6 +239,7 @@ export async function getAllDebridDMMTorrent(apiKey: string, magnetID: string, u
 					type: 'other',
 					name: `DMM AD: ${magnet.filename} - ${(totalSize / 1024 / 1024 / 1024).toFixed(2)} GB`,
 					videos,
+					...(await libraryArtFor(magnet.hash)),
 				},
 				cacheMaxAge: 0,
 			},

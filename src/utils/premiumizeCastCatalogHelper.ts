@@ -54,6 +54,10 @@ async function getProfile(userid: string) {
  * stray `.nzb` or `.txt` sitting in the root renders as a library entry that
  * plays nothing. Folders are always kept; what is inside them is only known
  * once the meta is opened.
+ *
+ * Unlike the other library catalogs these entries get no cover art: neither
+ * `folder/list` nor `transfer/list` reports an info hash, and `job/src` would
+ * cost one request per entry to find one.
  */
 export async function getPremiumizeDMMLibrary(userid: string, page: number) {
 	const profile = await getProfile(userid);
