@@ -68,16 +68,13 @@ export const renderTorrentInfo = (
 						imdbId &&
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
+						// Bound by `bindCastFileButtons`, which sends the key as a
+						// bearer token. This used to be a GET form carrying it as
+						// `?token=`, which put it in dmm-01's access log.
 						actions.push(
 							renderButton('cast', {
-								link: `/api/stremio/cast/${imdbId}`,
-								linkParams: [
-									{ name: 'token', value: serviceKey },
-									{ name: 'hash', value: info.hash },
-									{ name: 'fileId', value: String(file.id) },
-									{ name: 'mediaType', value: mediaType },
-								],
 								text: 'Cast',
+								data: { 'cast-file-id': String(file.id) },
 							})
 						);
 					}

@@ -33,6 +33,7 @@ import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
 import Modal from '../modals/modal';
 import { bindCastAllButton } from './castAll';
+import { bindCastFileButtons } from './castFile';
 import { renderButton, renderInfoTable } from './components';
 import type { PremiumizeFileRow } from './render';
 import {
@@ -266,6 +267,9 @@ export const showInfoForRD = async (
 				player: app ?? '',
 				keys: { rdKey },
 			});
+			if (rdKey && imdbId) {
+				bindCastFileButtons({ imdbId, hash: info.hash, mediaType, apiKey: rdKey });
+			}
 			// Selection helpers
 			const checkboxes = () =>
 				Array.from(document.querySelectorAll<HTMLInputElement>('.file-selector'));

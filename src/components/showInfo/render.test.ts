@@ -45,8 +45,49 @@ describe('renderTorrentInfo', () => {
 		expect(html).toContain('data-watch-file-id="1"');
 		// The watch form - and the key it carried in its query string - is gone.
 		expect(html).not.toContain('action="/api/watch');
-		expect(html).toContain('action="/api/stremio/cast/tt1234567"');
-		expect(html).toContain('name="mediaType" value="movie"');
+	});
+
+	// Card 210: the per-file Cast was a `<form method="get">` with the key as a
+	// hidden `token` input, so every click put the Real-Debrid key in the URL -
+	// and from there into dmm-01's access log, the new tab's history and the
+	// Referer of that tab's favicon request. It is a bound button now, like
+	// Watch, and the key is sent as a bearer header by `bindCastFileButtons`.
+	it('keeps the Real-Debrid key out of the per-file Cast markup', () => {
+		const html = renderTorrentInfo(
+			{ ...rdInfo },
+			true,
+			'RDKEYSHOULDNEVERREACHTHEMARKUP',
+			'mac2',
+			'tt1234567',
+			'movie'
+		);
+
+		expect(html).not.toContain('RDKEYSHOULDNEVERREACHTHEMARKUP');
+		expect(html).not.toContain('name="token"');
+		expect(html).not.toContain('action="/api/stremio/cast/');
+		expect(html).toContain('data-cast-file-id="1"');
+	});
+
+	it('offers the per-file Cast only on a TV row that names an episode', () => {
+		const episode = renderTorrentInfo(
+			{ ...rdInfo, files: [{ ...baseFile, path: 'Show.S01E02.mkv' }] },
+			true,
+			'rd-token',
+			'mac2',
+			'tt1234567',
+			'tv'
+		);
+		const extra = renderTorrentInfo(
+			{ ...rdInfo, files: [{ ...baseFile, path: 'Show.Featurette.mkv' }] },
+			true,
+			'rd-token',
+			'mac2',
+			'tt1234567',
+			'tv'
+		);
+
+		expect(episode).toContain('data-cast-file-id="1"');
+		expect(extra).not.toContain('data-cast-file-id');
 	});
 
 	it('carries only the hash details on a fake torrent row', () => {

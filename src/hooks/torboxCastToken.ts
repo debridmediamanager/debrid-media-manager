@@ -42,7 +42,11 @@ export function useTorBoxCastToken() {
 
 				// Fetch token if we don't have one
 				if (!dmmCastToken) {
-					const res = await fetch('/api/stremio-tb/id?apiKey=' + apiKey);
+					// Header, not `?apiKey=`: a query parameter is written
+					// verbatim into every access log on the way.
+					const res = await fetch('/api/stremio-tb/id', {
+						headers: { Authorization: `Bearer ${apiKey}` },
+					});
 					const data = await res.json();
 					if (data.status !== 'error' && data.id) {
 						setDmmCastToken(data.id);

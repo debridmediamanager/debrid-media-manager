@@ -47,10 +47,32 @@ describe('torboxCastApiHelpers', () => {
 	});
 
 	describe('validateApiKey', () => {
-		it('returns apiKey from query', () => {
-			const req = createMockRequest({ query: { apiKey: 'tb-key' } });
+		it('returns apiKey from the Authorization header', () => {
+			const req = createMockRequest({ headers: { authorization: 'Bearer tb-key' } });
 			const res = createMockResponse();
 			expect(validateApiKey(req, res)).toBe('tb-key');
+		});
+
+		// Card 210: useTorBoxCastToken sent `/api/stremio-tb/id?apiKey=<key>`, and
+		// dmm-01's access log held 8,496 such lines carrying 5,546 TorBox keys
+		// between 2026-08-30 and 2026-10-03. Only that hook ever called the
+		// route, so a key in the query string is refused rather than honoured.
+		it('refuses a key in the query string without using it', () => {
+			const req = createMockRequest({ query: { apiKey: 'tb-key' } });
+			const res = createMockResponse();
+			expect(validateApiKey(req, res)).toBeNull();
+			expect(res._getStatusCode()).toBe(400);
+			expect(JSON.stringify(res._getData())).not.toContain('tb-key');
+		});
+
+		it('refuses a query key even alongside the header', () => {
+			const req = createMockRequest({
+				query: { apiKey: 'tb-key' },
+				headers: { authorization: 'Bearer tb-key' },
+			});
+			const res = createMockResponse();
+			expect(validateApiKey(req, res)).toBeNull();
+			expect(res._getStatusCode()).toBe(400);
 		});
 
 		it('returns apiKey from body', () => {

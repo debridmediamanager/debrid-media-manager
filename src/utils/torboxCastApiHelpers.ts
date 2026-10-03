@@ -1,6 +1,7 @@
 import { getUserData } from '@/services/torbox';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { readBearerKey, refuseQueryKey } from './providerKeyHeader';
 
 export const validateMethod = (
 	req: NextApiRequest,
@@ -15,8 +16,16 @@ export const validateMethod = (
 	return true;
 };
 
+/**
+ * The caller's TorBox key, from the Authorization header (or a POST body).
+ *
+ * `useTorBoxCastToken` used to send it as `?apiKey=`, which wrote thousands of
+ * TorBox keys into dmm-01's access log. That hook was the only caller, so a key
+ * in the query string is refused now rather than honoured.
+ */
 export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): string | null => {
-	const apiKey = req.query.apiKey || req.body.apiKey;
+	if (refuseQueryKey(req, res, ['apiKey'])) return null;
+	const apiKey = readBearerKey(req) ?? req.body?.apiKey;
 	if (!apiKey || typeof apiKey !== 'string') {
 		res.status(401).json({ error: 'Invalid or missing API key' });
 		return null;

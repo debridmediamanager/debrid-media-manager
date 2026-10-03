@@ -133,7 +133,14 @@ describe('useTorBoxCastToken', () => {
 			await new Promise((resolve) => setTimeout(resolve, 0));
 		});
 
-		expect(global.fetch).toHaveBeenCalledWith('/api/stremio-tb/id?apiKey=test-key');
+		// Card 210: the key used to ride in `?apiKey=`, which put thousands of
+		// TorBox keys into dmm-01's access log. It travels as a bearer token now.
+		expect(global.fetch).toHaveBeenCalledWith('/api/stremio-tb/id', {
+			headers: { Authorization: 'Bearer test-key' },
+		});
+		const [url] = vi.mocked(global.fetch).mock.calls[0];
+		expect(String(url)).not.toContain('test-key');
+		expect(setToken).toHaveBeenCalledWith('tb-token-456');
 	});
 
 	it('does not set token on error response', async () => {

@@ -1,21 +1,37 @@
 import { repository as db } from '@/services/repository';
-import { extractToken, generateUserId } from '@/utils/castApiHelpers';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
+import { readBearerKey, refuseQueryKey } from '@/utils/providerKeyHeader';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// cast: unrestricts a selected link and saves it to the database
-// called in the showInfo component
+// cast: unrestricts one selected file and saves it to the database. Called by
+// the per-file Cast button in the info window (showInfo/castFile.ts), which
+// sends the Real-Debrid key as a bearer token and follows `redirectUrl`.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store');
+
+	// That button used to be a GET form with the key as `?token=`, which wrote
+	// it into dmm-01's access log, the new tab's history and the Referer of the
+	// tab's favicon request. Nothing else ever called this route, so a key in
+	// the URL is refused rather than honoured.
+	if (refuseQueryKey(req, res, ['token'])) return;
 
 	const { imdbid, hash, fileId, mediaType } = req.query;
-	const token = extractToken(req);
-	if (!token || !hash || !fileId || !mediaType) {
+	const token = readBearerKey(req);
+	if (!token) {
+		res.status(401).json({
+			status: 'error',
+			errorMessage: 'Missing Real-Debrid key in the Authorization header',
+		});
+		return;
+	}
+	if (!hash || !fileId || !mediaType) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
+			errorMessage: 'Missing "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
@@ -27,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" parameter',
+			errorMessage: 'Invalid "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
@@ -70,19 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 
-			// send an html
-			res.setHeader('Content-Type', 'text/html');
-			res.status(200).send(`
-				<!doctype html>
-				<html>
-					<head>
-						<meta http-equiv="refresh" content="1;url=${redirectUrl}" />
-					</head>
-					<body>
-						${message}
-					</body>
-				</html>
-			`);
+			res.status(200).json({ status: 'success', redirectUrl, message });
 			return;
 		}
 
