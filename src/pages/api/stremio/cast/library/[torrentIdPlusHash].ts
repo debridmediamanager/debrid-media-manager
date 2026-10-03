@@ -10,7 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	res.setHeader('access-control-allow-origin', '*');
 
 	const { torrentIdPlusHash, imdbId: userProvidedImdbId } = req.query;
-	const rdToken = readProviderKey(req, ['rdToken', 'token']);
+	// Header only: `?rdToken=` wrote the key into the access log (card 210).
+	const rdToken = readProviderKey(req, []);
 
 	if (!rdToken) {
 		res.status(400).json({

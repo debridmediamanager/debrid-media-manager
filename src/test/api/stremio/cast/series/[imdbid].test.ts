@@ -34,7 +34,10 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 	});
 
 	it('validates required query params', async () => {
-		const req = createMockRequest({ query: { imdbid: 'tt123', token: 'abc' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer abc' },
+			query: { imdbid: 'tt123' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -55,8 +58,8 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 			700,
 		]);
 		const req = createMockRequest({
-			query: { imdbid: 'tt999', token: 'token', hash: 'hash', fileIds: '101' },
-			headers: { 'x-real-ip': '1.1.1.1' },
+			query: { imdbid: 'tt999', hash: 'hash', fileIds: '101' },
+			headers: { authorization: 'Bearer token', 'x-real-ip': '1.1.1.1' },
 		});
 		const res = createMockResponse();
 
@@ -86,8 +89,8 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 			700,
 		]);
 		const req = createMockRequest({
-			query: { imdbid: 'tt999', token: 'token', hash: 'hash', fileIds: '101' },
-			headers: { 'x-real-ip': '1.1.1.1' },
+			query: { imdbid: 'tt999', hash: 'hash', fileIds: '101' },
+			headers: { authorization: 'Bearer token', 'x-real-ip': '1.1.1.1' },
 		});
 		const res = createMockResponse();
 
@@ -153,11 +156,10 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		const req = createMockRequest({
 			query: {
 				imdbid: 'tt777',
-				token: 'token',
 				hash: 'hash',
 				fileIds: ['201', '202'],
 			},
-			headers: { 'x-real-ip': '9.9.9.9' },
+			headers: { authorization: 'Bearer token', 'x-real-ip': '9.9.9.9' },
 		});
 		const res = createMockResponse();
 

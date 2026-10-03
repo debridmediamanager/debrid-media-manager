@@ -15,8 +15,15 @@ export const validateMethod = (
 	return true;
 };
 
+/**
+ * The Real-Debrid key from `Authorization: Bearer`, or from a POST body.
+ *
+ * Never from the query string: a key there is written into dmm-01's access log
+ * before any handler runs (card 210). Every dmm client sends the header or a
+ * body; the few query-string callers left in the logs were stale tabs and one
+ * script, last seen 2026-10-02.
+ */
 export const extractToken = (req: NextApiRequest): string | null => {
-	// Check Authorization: Bearer header first
 	const authHeader = req.headers.authorization;
 	if (typeof authHeader === 'string') {
 		const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
@@ -25,10 +32,6 @@ export const extractToken = (req: NextApiRequest): string | null => {
 			if (token) return token;
 		}
 	}
-	// Fall back to query param
-	const queryToken = req.query.token;
-	if (queryToken && typeof queryToken === 'string') return queryToken;
-	// Fall back to request body
 	const bodyToken = req.body?.token;
 	if (bodyToken && typeof bodyToken === 'string') return bodyToken;
 	return null;

@@ -46,8 +46,8 @@ async function cast(anidbid: string, filename: string) {
 	const res = createMockResponse();
 	await handler(
 		createMockRequest({
-			query: { anidbid, token: 'tok', hash, fileIds: '1' },
-			headers: { 'x-real-ip': '203.0.113.7' },
+			query: { anidbid, hash, fileIds: '1' },
+			headers: { authorization: 'Bearer tok', 'x-real-ip': '203.0.113.7' },
 		}),
 		res
 	);

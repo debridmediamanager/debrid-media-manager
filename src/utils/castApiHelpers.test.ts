@@ -90,9 +90,13 @@ describe('extractToken', () => {
 		expect(extractToken(req)).toBe('mytoken123');
 	});
 
-	it('falls back to query param when no header', () => {
+	// Card 210: a key in the query string is written into dmm-01's access log
+	// before any handler runs. Every dmm client sends the header (or a POST
+	// body); the few query-string callers left in five weeks of logs were stale
+	// tabs and one script, so the query is no longer read.
+	it('ignores a key in the query string', () => {
 		const req = mockReq({ query: { token: 'querytoken' } });
-		expect(extractToken(req)).toBe('querytoken');
+		expect(extractToken(req)).toBeNull();
 	});
 
 	it('falls back to body token when no header or query', () => {

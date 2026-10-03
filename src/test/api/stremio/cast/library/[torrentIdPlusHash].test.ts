@@ -67,8 +67,25 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		});
 	});
 
+	// Card 210: LibraryTorrentRow has sent the key as a bearer header since
+	// 2026-08-24; the last `?rdToken=` in dmm-01's access log was a stale tab on
+	// 2026-09-24. A key in the URL is no longer read.
+	it('ignores a key in the query string', async () => {
+		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Missing or invalid RD token',
+		});
+		expect(mockGetTorrentInfo).not.toHaveBeenCalled();
+	});
+
 	it('validates torrentIdPlusHash', async () => {
-		const req = createMockRequest({ query: { rdToken: 'token' } });
+		const req = createMockRequest({ headers: { authorization: 'Bearer token' }, query: {} });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -88,7 +105,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			})
 		);
 
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -101,7 +121,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 	});
 
 	it('saves casts when imdb id exists in the database', async () => {
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -141,7 +164,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			})
 		);
 
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -177,7 +203,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			})
 		);
 
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -195,7 +224,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 	it('returns need_imdb_id when imdb id is not in database and not provided', async () => {
 		mockDbGetIMDBIdByHash.mockResolvedValue(null);
 
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -219,7 +251,8 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		mockDbGetIMDBIdByHash.mockResolvedValue(null);
 
 		const req = createMockRequest({
-			query: { rdToken: 'token', torrentIdPlusHash: '1:hash', imdbId: 'tt7654321' },
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash', imdbId: 'tt7654321' },
 		});
 		const res = createMockResponse();
 
@@ -250,7 +283,8 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		mockDbGetIMDBIdByHash.mockResolvedValue(null);
 
 		const req = createMockRequest({
-			query: { rdToken: 'token', torrentIdPlusHash: '1:hash', imdbId: 'invalid' },
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash', imdbId: 'invalid' },
 		});
 		const res = createMockResponse();
 
@@ -265,7 +299,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 
 	it('returns 500 when generateUserId fails', async () => {
 		mockGenerateUserId.mockRejectedValue(new Error('Invalid token'));
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -281,7 +318,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 
 	it('returns 500 when database lookup fails', async () => {
 		mockDbGetIMDBIdByHash.mockRejectedValue(new Error('Database connection error'));
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -296,7 +336,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 
 	it('returns 500 when database save fails', async () => {
 		mockDbSaveCast.mockRejectedValue(new Error('db down'));
-		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);

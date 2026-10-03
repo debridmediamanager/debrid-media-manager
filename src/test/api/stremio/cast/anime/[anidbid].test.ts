@@ -41,7 +41,10 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 	});
 
 	it('validates required query params', async () => {
-		const req = createMockRequest({ query: { anidbid: 'anidb1', token: 'tok' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer tok' },
+			query: { anidbid: 'anidb1' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -55,7 +58,8 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 
 	it('validates query param types', async () => {
 		const req = createMockRequest({
-			query: { anidbid: ['anidb1'] as any, token: 'tok', hash: 'hash', fileIds: '1' },
+			headers: { authorization: 'Bearer tok' },
+			query: { anidbid: ['anidb1'] as any, hash: 'hash', fileIds: '1' },
 		});
 		const res = createMockResponse();
 
@@ -70,8 +74,8 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 
 	it('saves casted anime streams for each requested file id', async () => {
 		const req = createMockRequest({
-			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['101'] },
-			headers: { 'x-real-ip': '127.0.0.1' },
+			query: { anidbid: 'anidb1', hash: 'hash', fileIds: ['101'] },
+			headers: { authorization: 'Bearer tok', 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -96,8 +100,8 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		'files an episode cast from %s under anidb-17617',
 		async (anidbid) => {
 			const req = createMockRequest({
-				query: { anidbid, token: 'tok', hash: 'hash', fileIds: ['101'] },
-				headers: { 'x-real-ip': '127.0.0.1' },
+				query: { anidbid, hash: 'hash', fileIds: ['101'] },
+				headers: { authorization: 'Bearer tok', 'x-real-ip': '127.0.0.1' },
 			});
 			await handler(req, createMockResponse());
 
@@ -117,8 +121,8 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 			700,
 		]);
 		const req = createMockRequest({
-			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['101'] },
-			headers: { 'x-real-ip': '127.0.0.1' },
+			query: { anidbid: 'anidb1', hash: 'hash', fileIds: ['101'] },
+			headers: { authorization: 'Bearer tok', 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -172,8 +176,8 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 	it('records failed episodes when stream acquisition errors occur', async () => {
 		mockGetStreamUrl.mockRejectedValueOnce(new Error('rd down'));
 		const req = createMockRequest({
-			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['201'] },
-			headers: { 'x-real-ip': '10.0.0.5' },
+			query: { anidbid: 'anidb1', hash: 'hash', fileIds: ['201'] },
+			headers: { authorization: 'Bearer tok', 'x-real-ip': '10.0.0.5' },
 		});
 		const res = createMockResponse();
 

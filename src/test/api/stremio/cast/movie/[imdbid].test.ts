@@ -33,7 +33,10 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 	});
 
 	it('validates required query parameters', async () => {
-		const req = createMockRequest({ query: { imdbid: 'tt123', token: 'abc' } });
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer abc' },
+			query: { imdbid: 'tt123' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -54,8 +57,8 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 		]);
 
 		const req = createMockRequest({
-			query: { imdbid: 'tt1234567', token: 'token-abc', hash: 'hashabc' },
-			headers: { 'x-real-ip': '127.0.0.1' },
+			query: { imdbid: 'tt1234567', hash: 'hashabc' },
+			headers: { authorization: 'Bearer token-abc', 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -87,8 +90,8 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 		mockGetBiggestFileStreamUrl.mockRejectedValue(new Error('rd offline'));
 
 		const req = createMockRequest({
-			query: { imdbid: 'tt7654321', token: 'token-abc', hash: 'hashabc' },
-			headers: { 'x-real-ip': '10.0.0.2' },
+			query: { imdbid: 'tt7654321', hash: 'hashabc' },
+			headers: { authorization: 'Bearer token-abc', 'x-real-ip': '10.0.0.2' },
 		});
 		const res = createMockResponse();
 
@@ -109,8 +112,8 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 		mockGetBiggestFileStreamUrl.mockResolvedValue(['', '', 0]);
 
 		const req = createMockRequest({
-			query: { imdbid: 'tt123', token: 'token', hash: 'hash' },
-			headers: { 'x-real-ip': '1.1.1.1' },
+			query: { imdbid: 'tt123', hash: 'hash' },
+			headers: { authorization: 'Bearer token', 'x-real-ip': '1.1.1.1' },
 		});
 		const res = createMockResponse();
 
