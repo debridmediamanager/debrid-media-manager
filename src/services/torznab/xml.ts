@@ -14,15 +14,28 @@ import { escapeXml, newznabErrorXml } from '../newznab/xml';
 export const torznabErrorXml = newznabErrorXml;
 
 /**
- * Matches `capsXml`'s `<limits max=…>`, which is what a client pages against.
+ * The largest page a client may ask for: `capsXml`'s `<limits max=…>`, which is
+ * what an *arr pages against.
  *
- * Ten rather than a full hundred: a page is cut out of the whole matching set,
- * which for a popular title runs to the better part of a thousand releases, and
- * a client that only ever reads page one was being handed ten times what it
- * would look at. What a client cannot see on one page it reaches with `offset`
- * — `total` still reports the whole set.
+ * Sonarr and Radarr page at the larger of `default` and `max`, never above 100,
+ * read every page until one comes back short, and give up at thirty pages or a
+ * thousand releases; `total` is never read. Every page is a request against the
+ * sponsor's search budget, and a 429 partway through throws away the pages
+ * already read. At ten a page any title over 200 releases could not be searched
+ * at all: on 2026-09-17 a Sonarr episode search read twenty pages of a season
+ * that now holds 1,503 releases and was refused on the twenty-first, and between
+ * 2026-09-06 and 2026-10-03 one *arr search in eleven was refused before it
+ * finished. At a hundred, the deepest search Sonarr will make is ten requests.
  */
-export const MAX_LIMIT = 10;
+export const MAX_LIMIT = 100;
+
+/**
+ * The page a client that names no `limit` gets: `<limits default=…>`.
+ *
+ * Kept at ten: a client that never pages is handed what it will look at, and
+ * one that does pages at `max` anyway.
+ */
+export const DEFAULT_LIMIT = 10;
 
 /**
  * The static capabilities document.
@@ -40,7 +53,7 @@ export function capsXml(): string {
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <caps>
 	<server title="DMM"/>
-	<limits max="${MAX_LIMIT}" default="${MAX_LIMIT}"/>
+	<limits max="${MAX_LIMIT}" default="${DEFAULT_LIMIT}"/>
 	<searching>
 		<search available="yes" supportedParams="q,imdbid"/>
 		<tv-search available="yes" supportedParams="q,imdbid,tvdbid,season,ep"/>

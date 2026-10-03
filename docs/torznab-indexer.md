@@ -93,12 +93,27 @@ No grab bucket exists, because a grab never comes back to DMM. Keying on `shortI
 than the key string means a gatekeeper key reset does not reset the budget and one
 sponsor's whole \*arr farm shares one budget.
 
-The same budget as the Newznab endpoint, though a search here costs DMM considerably
+Tighter than the Newznab endpoint's 30, because a search here costs DMM considerably
 more: it reads whole library pages out of the database and classifies every hash in them
 against the debrid caches, where a Newznab query is fanned out to upstream indexers.
-Twenty a minute is a sustained search every three seconds across a whole \*arr
-fleet; what it refuses is a burst, and a client that gets the 429 backs off on
-`Retry-After` rather than treating the indexer as broken.
+
+The budget counts **requests, not searches**, and an \*arr spends one per page (see
+**Ordering and paging**). A 429 partway through a search is not a pause: Sonarr and
+Radarr throw out every page that search had already read, show the search as empty and
+bench the indexer for `Retry-After` or longer. So the page size and this budget have to
+be sized together. dmm-01's proxy log for 2026-09-06 to 2026-10-03 holds 566,489 \*arr
+requests, about 73,000 searches. Replayed against this limiter (the replay refuses
+22,295 requests where the log recorded 21,561), with each search re-paged at 100:
+
+| Page size | Budget   | \*arr searches refused before they finished |
+| --------- | -------- | ------------------------------------------- |
+| 10        | 20 / min | 8.8%, as logged                             |
+| 100       | 20 / min | 0.2%                                        |
+| 100       | 25 / min | 0.02%                                       |
+
+At a hundred a page a search no longer spends the budget on its own; what is left is
+almost entirely three or more searches from one key inside a minute, which is the burst
+this budget exists to pace.
 
 ## Where the results come from
 
@@ -228,12 +243,28 @@ those releases were found.
 
 ## Ordering and paging
 
-A page holds **10 items** — `MAX_LIMIT` in `src/services/torznab/xml.ts`, which is the
-same constant `caps` advertises as `<limits max="10" default="10"/>`. A larger `limit` is
-clamped, not refused. `total` is the size of the whole matching set, not of the page, so
-a client pages with `offset` until it reaches it; nothing is unreachable, it just takes
-more requests. Note that each of those requests costs a full search — there is no
-response cache on this path, and the per-sponsor budget is in **Rate limits** above.
+`caps` advertises `<limits max="100" default="10"/>`: `MAX_LIMIT` and `DEFAULT_LIMIT` in
+`src/services/torznab/xml.ts`. A larger `limit` is clamped, not refused, and a client
+that names none gets ten. `total` is the size of the whole matching set, not of the page.
+
+**How an \*arr pages**, from Sonarr's and Radarr's source (`HttpIndexerBase.FetchReleases`,
+`NewznabRequestGenerator.GetPagedRequests`, `Torznab.GetProviderPageSize`): the page size
+is the larger of `default` and `max`, never above 100; pages are asked for by offset two
+seconds apart; paging stops at a page shorter than that size, at 30 pages or at 1,000
+releases. `total` is never read. Prowlarr does no paging of its own: it forwards the
+app's `offset` and `limit` as one request, and passes DMM's `default` and `max` through
+to the app's caps, so an app behind Prowlarr pages the same way. The apps and Prowlarr
+each cache caps for up to seven days, so a change here reaches a running \*arr after that
+or on its restart.
+
+Every page is a full search on DMM's side — there is no response cache on this path —
+and a request against the budget in **Rate limits** above. That is why `max` is 100. From
+2026-09-08 to 2026-10-03 it was 10, and every title with more than 200 matching releases
+was unsearchable from an \*arr: twenty pages two seconds apart spend the whole budget in
+40 seconds, and the twenty-first is refused. The reported case (2026-09-17) was a Sonarr
+episode search refused on `offset=200&limit=10`, on a season page that held 1,503 releases
+by 2026-10-03; at 100 a page the same search is ten requests. `default` stays at ten so that a client which reads only
+page one, and names no limit, is not handed what it will not look at.
 
 **Cached releases come first.** Measured against the live library, a plain movie search's
 first hundred results were almost entirely 24-terabyte "Top 5000 Movies Pack" style
@@ -276,6 +307,9 @@ and cleanly does nothing when they are unset.
 `src/test/api/torznabApi.test.ts` (endpoint behavior end to end; its Real-Debrid name cases
 run on `src/test/fixtures/torznab/rd-refused-names-2026-10-03.json`, two whole production
 library pages with their RD rows, and on RD's recorded probe answers in
-`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`),
+`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`; its paging cases run a model
+of Sonarr's paging through the route and the real limiter against
+`src/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json`, the reported search as
+the proxy log recorded it plus the production library page it paged through),
 `src/test/services/torznab{Resolve,Categories,Xml}.test.ts`,
 `src/test/pages/torznab.test.tsx`.

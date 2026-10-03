@@ -9,16 +9,17 @@ import {
 	runSearch,
 	UNCACHED_SEEDERS,
 } from '@/services/torznab/search';
-import { MAX_LIMIT, TorznabRssItem } from '@/services/torznab/xml';
+import { DEFAULT_LIMIT, MAX_LIMIT, TorznabRssItem } from '@/services/torznab/xml';
 import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
 import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
+import sonarrEpisodeSearch from '@/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
 } from '@/utils/debridioBackfill';
 import { isRdBlockedName } from '@/utils/deInfringe';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // setup.ts stubs the whole rate limit module out, which would take
 // `checkRateLimitFor` with it — and that function is what the 429 path is made
@@ -423,7 +424,7 @@ describe('paging and filtering', () => {
 	});
 
 	it('caps limit at what the caps document promises', async () => {
-		stockLibraryWith(25);
+		stockLibraryWith(MAX_LIMIT + 5);
 
 		const res = await run({
 			t: 'movie',
@@ -434,15 +435,15 @@ describe('paging and filtering', () => {
 
 		expect(titles(res)).toHaveLength(MAX_LIMIT);
 		// The whole set is still named, so a client knows to keep paging.
-		expect(body(res)).toContain('total="25"');
+		expect(body(res)).toContain(`total="${MAX_LIMIT + 5}"`);
 	});
 
-	it('caps an unasked-for limit at the same ceiling', async () => {
+	it('serves the default page to a client that names no limit', async () => {
 		stockLibraryWith(25);
 
 		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
 
-		expect(titles(res)).toHaveLength(MAX_LIMIT);
+		expect(titles(res)).toHaveLength(DEFAULT_LIMIT);
 		expect(body(res)).toContain('total="25"');
 	});
 
@@ -457,7 +458,7 @@ describe('paging and filtering', () => {
 			await run({ t: 'movie', imdbid: MOVIE_ID, offset: '20', apikey: SPONSOR_KEY })
 		);
 
-		expect(second).toHaveLength(MAX_LIMIT);
+		expect(second).toHaveLength(DEFAULT_LIMIT);
 		expect(third).toHaveLength(5);
 		// Three pages, no overlap, and between them the whole set.
 		expect(new Set([...first, ...second, ...third]).size).toBe(25);
@@ -787,6 +788,121 @@ function res429IsXml(res: MockResponse): boolean {
 	return res._getHeaders()['Content-Type'] === 'application/xml; charset=utf-8';
 }
 
+describe('an *arr search pages to its end inside the budget', () => {
+	// Reported in dmm-support on 2026-09-17: Sonarr found nothing on DMM and
+	// logged a 429 on `offset=200&limit=10`. The fixture is that search as
+	// dmm-01's proxy log recorded it, every request at its second, and the
+	// library page it was paging through as production held it on 2026-10-03.
+	const reported = sonarrEpisodeSearch.reported;
+	const { page } = sonarrEpisodeSearch;
+	const route = reported.path.split('/').slice(3);
+
+	/** What Sonarr and Radarr give up at, whatever the indexer's total says. */
+	const ARR_MAX_PAGES = 30;
+	const ARR_MAX_RESULTS = 1000;
+	/** `HttpIndexerBase.RateLimit`: one request per indexer every two seconds. */
+	const ARR_SPACING_MS = 2_000;
+
+	interface ArrRequest {
+		at: number;
+		offset: number;
+		limit: number;
+		status: number;
+	}
+
+	/** Sonarr's and Radarr's `GetProviderPageSize`, read off a caps document. */
+	function arrPageSize(caps: string): number {
+		const limits = /<limits\b([^>]*)\/>/.exec(caps)?.[1] ?? '';
+		const read = (name: string) => Number(new RegExp(`${name}="(\\d+)"`).exec(limits)?.[1]);
+		return Math.min(100, Math.max(read('default'), read('max')));
+	}
+
+	const start = new Date(reported.started).getTime();
+
+	/**
+	 * One search the way Sonarr and Radarr run it, from their source:
+	 * `NewznabRequestGenerator.GetPagedRequests` asks for page after page by
+	 * offset, and `HttpIndexerBase.FetchReleases` stops at a short page, at
+	 * thirty pages or at a thousand releases, never reading `total`. A 429
+	 * throws out of that loop, so every page already read is discarded with it
+	 * and the search comes back empty.
+	 */
+	async function arrSearch(caps: string): Promise<{ requests: ArrRequest[]; found: string[] }> {
+		const pageSize = arrPageSize(caps);
+		const requests: ArrRequest[] = [];
+		const found: string[] = [];
+		for (let index = 0; index < ARR_MAX_PAGES; index++) {
+			vi.setSystemTime(start + index * ARR_SPACING_MS);
+			const offset = index * pageSize;
+			const res = await run(
+				{
+					...reported.query,
+					offset: String(offset),
+					limit: String(pageSize),
+					apikey: SPONSOR_KEY,
+				},
+				{ route }
+			);
+			requests.push({
+				at: (index * ARR_SPACING_MS) / 1000,
+				offset,
+				limit: pageSize,
+				status: res._getStatusCode(),
+			});
+			if (res._getStatusCode() !== 200) return { requests, found: [] };
+
+			const items = [...body(res).matchAll(/<guid isPermaLink="false">([^<]+)<\/guid>/g)];
+			found.push(...items.map((match) => match[1]));
+			if (found.length >= ARR_MAX_RESULTS || items.length < pageSize) break;
+		}
+		return { requests, found };
+	}
+
+	beforeEach(() => {
+		vi.useFakeTimers({ toFake: ['Date'] });
+		library = new Map([
+			[page.key, { results: page.results, updatedAt: new Date(page.updatedAt) }],
+		]);
+		rdCached = new Set();
+		adCached = new Set();
+		providerCached = new Set();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
+	it('reproduces the recorded search from the caps the reporter’s Sonarr held', async () => {
+		// The paging model and the fixture checked against each other: a Sonarr
+		// still holding a caps document that offered ten a page sends exactly
+		// what the log recorded, and is refused exactly where it was.
+		const { requests } = await arrSearch('<caps><limits max="10" default="10"/></caps>');
+
+		expect(requests).toEqual(reported.requests);
+	});
+
+	it('answers every page of the reported search, reading what DMM advertises', async () => {
+		// An *arr holds caps for days, so they are read well before the search.
+		vi.setSystemTime(start - 3_600_000);
+		const caps = body(await run({ t: 'caps' }, { route }));
+
+		const { requests, found } = await arrSearch(caps);
+
+		const refused = requests
+			.filter((request) => request.status !== 200)
+			.map(
+				({ status, offset, limit, at }) =>
+					`${status} on offset=${offset}&limit=${limit} at ${at}s`
+			);
+		expect(refused).toEqual([]);
+		expect(found).toHaveLength(Math.min(ARR_MAX_RESULTS, page.results.length));
+		expect(new Set(found).size).toBe(found.length);
+		// One sponsor's fleet shares the budget, so a search that needed all of
+		// it would still fail the moment a second one ran beside it.
+		expect(requests.length).toBeLessThanOrEqual(RATE_LIMIT_CONFIGS.torznabSearch.rateLimit / 2);
+	});
+});
+
 describe('a size the library cannot mean', () => {
 	// Library rows record megabytes, and some scrapers write bytes or kilobytes
 	// there instead. The feed publishes biggest-first, so one of those rows does
@@ -865,18 +981,21 @@ describe('releases Real-Debrid refuses by name', () => {
 			.find((result) => result.hash === torrentHash)?.title;
 
 	/**
-	 * Every item a feed serves for a title, paged the way a client pages the
-	 * route. Through `runSearch` rather than the route, whose per-sponsor budget
-	 * a 300-release title would spend before reaching the end.
+	 * Every item a feed serves for a title, paged at the largest page a client
+	 * may ask for. Through `runSearch` rather than the route: these are about
+	 * what the feed holds, not about how a client reaches it.
 	 */
 	async function wholeFeed(segments: string[], imdbid: string): Promise<TorznabRssItem[]> {
 		const options = parseFeedOptions(segments);
 		if (!options) throw new Error(`not a feed: ${segments.join('/')}`);
 		const items: TorznabRssItem[] = [];
 		for (let offset = 0; ; offset += MAX_LIMIT) {
-			const page = await runSearch('movie', { imdbid, offset: String(offset) }, options, {
-				shortId,
-			});
+			const page = await runSearch(
+				'movie',
+				{ imdbid, offset: String(offset), limit: String(MAX_LIMIT) },
+				options,
+				{ shortId }
+			);
 			items.push(...page.items);
 			if (page.items.length === 0 || items.length >= page.total) return items;
 		}

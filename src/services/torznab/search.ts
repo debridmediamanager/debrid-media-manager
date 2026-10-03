@@ -38,7 +38,7 @@ import {
 	type ProviderCacheAnswer,
 } from './providerCache';
 import { resolveTargets, SearchType, TorznabTarget } from './resolve';
-import { MAX_LIMIT, TorznabRssItem } from './xml';
+import { DEFAULT_LIMIT, MAX_LIMIT, TorznabRssItem } from './xml';
 
 /** Library sizes are MiB — the unit `saveScrapedTrueResults` stores. */
 const BYTES_PER_MB = 1024 * 1024;
@@ -164,7 +164,7 @@ export function normalizeSearchQuery(query: NextApiRequest['query']): Normalized
 		tvdbid,
 		season: integer(firstValue(query.season), 0, 9999),
 		categories: parseCategoryFilter(firstValue(query.cat)),
-		limit: integer(firstValue(query.limit), 1, MAX_LIMIT) ?? MAX_LIMIT,
+		limit: integer(firstValue(query.limit), 1, MAX_LIMIT) ?? DEFAULT_LIMIT,
 		offset: integer(firstValue(query.offset), 0, Number.MAX_SAFE_INTEGER) ?? 0,
 		targeted: Boolean(q || imdbid || tvdbid !== undefined),
 	};

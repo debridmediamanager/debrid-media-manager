@@ -108,6 +108,13 @@ export const RATE_LIMIT_CONFIGS = {
 	// to upstream indexers costs DMM. It has no grab budget — a Torznab item's
 	// download is a magnet the client resolves against its own debrid account, so
 	// a grab never comes back to DMM at all.
+	//
+	// It counts pages, not searches: an *arr spends one request per page and a
+	// 429 partway through discards the whole search. Sized together with the
+	// page `MAX_LIMIT` in services/torznab/xml.ts, which keeps Sonarr's deepest
+	// search to ten requests. Replaying 2026-09-06..10-03's proxy log at a page of
+	// a hundred, 20 refuses 0.2% of *arr searches, nearly all of them three or
+	// more searches from one key inside a minute; 25 would refuse 0.02%.
 	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60 },
 	torznabIp: { name: 'torznabIp', rateLimit: 20, windowSeconds: 10 },
 	// /api/info/anime and /api/search/anime answer by asking the community

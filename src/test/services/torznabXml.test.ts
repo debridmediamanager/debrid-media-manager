@@ -36,8 +36,11 @@ describe('capsXml', () => {
 		expect(xml).toContain('<movie-search available="yes" supportedParams="q,imdbid"/>');
 	});
 
-	it('states the paging limit the search handler enforces', () => {
-		expect(capsXml()).toContain('<limits max="10" default="10"/>');
+	it('states the paging limits the search handler enforces', () => {
+		// Sonarr and Radarr page at the larger of the two, so `max` is the page
+		// an *arr searches with and `default` only what a client naming no
+		// limit gets.
+		expect(capsXml()).toContain('<limits max="100" default="10"/>');
 	});
 });
 
