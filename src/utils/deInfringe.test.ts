@@ -9,7 +9,7 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.720p.HDTV.x264-GROUP',
 		'Show.S01E01.HDTV.XviD-AFG',
 		'Show.S01E01.1080p.WEB.x264-GROUP',
-		'Show.S01E01.1080p.WEB.h264-GROUP',
+		'Show.S01E01.1080p.WEB.H264-GROUP',
 	])('flags %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(true);
 	});
@@ -34,6 +34,10 @@ describe('isRdBlockedName', () => {
 		'Movie.2015.1080p.BluRay.DD5.1.x264-GROUP',
 		'Movie.2015.1080p.Blu-Ray.DTS.x264-GROUP',
 		'Movie.2015.1080p.BluRay-DTS.x264-GROUP',
+		// RD matches case-sensitively since 2026-10-03.
+		'Show.S01E01.1080p.WEB.h264-GROUP',
+		'Show.S01E01.1080p.web-dl.x265-GROUP',
+		'Show.S01E01.720p.hdtv.x264-GROUP',
 		// RD refused these until September and took every one by 2026-10-03:
 		// the rip family, `BluRay.x264`, and `BluRay.DTS` (refused 2026-08-25).
 		'Show.S01E01.1080p.WEBRip.x265-RARBG',
@@ -47,11 +51,19 @@ describe('isRdBlockedName', () => {
 		expect(isRdBlockedName(name)).toBe(false);
 	});
 
-	// RD's own answers from a recorded probe: a fresh .torrent per name, so the
-	// name alone decided each one.
-	it.each(rdNameFilterProbe.results)("gives RD's answer for $name", ({ name, status }) => {
+	// RD's own answers from a recorded probe: a fresh webseed torrent per name,
+	// so the names alone decided each one. An add is judged on the root name
+	// alone, which the multi-file entries prove by carrying file names RD took
+	// anyway; an unrestrict is judged on the file's own name.
+	it.each(rdNameFilterProbe.add)("gives RD's add answer for $name", ({ name, status }) => {
 		expect(isRdBlockedName(name)).toBe(status === 451);
 	});
+	it.each(rdNameFilterProbe.unrestrict)(
+		"gives RD's unrestrict answer for $name",
+		({ name, status }) => {
+			expect(isRdBlockedName(name)).toBe(status === 451);
+		}
+	);
 
 	// Measured 2026-08-23: RD downloaded both `HDTV.H264-FTP` releases of
 	// Would.I.Lie.To.You.S19E10 to 100%, so this pair is not on its blocklist —
@@ -63,8 +75,9 @@ describe('isRdBlockedName', () => {
 		expect(deInfringe(name)).not.toBe(name);
 	});
 
-	it('matches case-insensitively and mid-name', () => {
-		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(true);
+	it('matches case-sensitively and mid-name', () => {
+		expect(isRdBlockedName('pack/Movie.2019.1080p.WEB-DL.x265/file.mkv')).toBe(true);
+		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(false);
 		expect(isRdBlockedName('')).toBe(false);
 	});
 
@@ -84,8 +97,11 @@ describe('isRdBlockedName', () => {
 			expect(isRdBlockedName(title)).toBe(false);
 		});
 
+		// RD stopped refusing lowercase `WEB.h264` by 2026-10-03, so this exact
+		// release now passes; the same shape with `WEB.H264` is still refused.
 		it('flags it once the filenames are supplied', () => {
-			expect(isRdBlockedName(title, [path])).toBe(true);
+			expect(isRdBlockedName(title, [path])).toBe(false);
+			expect(isRdBlockedName(title, [path.replaceAll('WEB.h264', 'WEB.H264')])).toBe(true);
 		});
 
 		// The uploader's rewrite of this very release is in RD and downloaded to

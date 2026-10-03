@@ -204,120 +204,98 @@ summary::marker { color: #3b82f6; }
 
 <div class="hero">
 <p>I tested several thousand scene releases against Real-Debrid's torrent upload filter to map exactly which filename patterns trigger the <code>infringing_file</code> rejection (error_code 35). RD checks only the filename inside the .torrent metadata, it never downloads or inspects the actual file content.</p>
-<p><strong>Updated 3 October 2026.</strong> RD has relaxed the filter. Re-tested with a fresh .torrent per name, it now accepts <code>WEBRip</code>, <code>BDRip</code>, <code>HDRip</code>, <code>DVDRip</code>, <code>BluRay.x264</code> and <code>BluRay.DTS</code>, which it used to refuse. <code>WEB-DL</code>, <code>HDTV.x264</code>, <code>HDTV.XviD</code>, <code>WEB.x264</code> and <code>WEB.H264</code> are still refused. The lists below reflect the current behavior.</p>
+<p><strong>Updated 3 October 2026.</strong> RD has changed the filter. I re-tested it with 121 fresh torrents and 12 file links, each torrent built over new data so only its name could decide. RD now refuses just five exact strings, and it now cares about upper and lower case. It also checks two different names: the torrent's own name when you add it, and each file's name when you open its download link. Everything below reflects the current behavior.</p>
 </div>
 
 <div class="tldr">
-<h3>TL;DR: Two Pattern Types</h3>
+<h3>TL;DR: Five Exact Strings, Case-Sensitive</h3>
 
-<p><strong>Type 1: 1 substring match</strong> (case-insensitive, anywhere in filename):</p>
-<p style="font-size:1.15em;letter-spacing:1px"><code>web-dl</code></p>
-<p>No longer blocked since October 2026: <code>webrip</code>, <code>bdrip</code>, <code>hdrip</code>, <code>dvdrip</code>.</p>
-
-<p><strong>Type 2: Source.Codec dot-adjacency matches</strong> (case-insensitive):</p>
 <p style="font-size:1.15em;letter-spacing:1px">
-<code>HDTV.x264</code> &nbsp; <code>HDTV.XviD</code> &nbsp;
-<code>WEB.x264</code> &nbsp; <code>WEB.h264</code> &nbsp; <code>WEB.H264</code>
+<code>WEB-DL</code> &nbsp; <code>WEB.x264</code> &nbsp; <code>WEB.H264</code> &nbsp;
+<code>HDTV.x264</code> &nbsp; <code>HDTV.XviD</code>
 </p>
-<p>No longer blocked since October 2026: <code>BluRay.x264</code>.</p>
+
+<p>A name is refused if it contains one of these exactly as written, anywhere in the name. Upper and lower case must match: <code>WEB.H264</code> is refused but <code>WEB.h264</code>, <code>web.H264</code> and <code>WEB.X264</code> pass. <code>WEB-DL</code> is refused but <code>web-dl</code>, <code>Web-Dl</code>, <code>WEB.DL</code>, <code>WEBDL</code> and <code>WEB DL</code> pass.</p>
+
+<p><strong>No longer blocked since October 2026:</strong> <code>WEBRip</code>, <code>BDRip</code>, <code>HDRip</code>, <code>DVDRip</code>, <code>BluRay.x264</code>, <code>BluRay.DTS</code>, lowercase <code>WEB.h264</code>, and every lower or mixed case spelling of the five.</p>
+
+<div class="impact">
+<h4>Where RD looks</h4>
+<ul>
+<li><strong>Adding a torrent:</strong> only the torrent's own name counts. A season pack named cleanly is accepted even when the episodes inside are called <code>WEB-DL</code>.</li>
+<li><strong>Opening a file's download link:</strong> each file's own name counts. Those <code>WEB-DL</code> episodes download fine but their links are refused with the same <code>infringing_file</code> error, while clean siblings in the same pack play normally.</li>
+</ul>
+</div>
 
 <div class="impact">
 <h4>Real-World Impact</h4>
-<p>The most impacted formats:</p>
 <ul>
-<li><strong>All <code>WEB-DL</code> releases</strong>: AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DLs all blocked</li>
-<li><strong>All <code>.WEB.h264</code> scene releases</strong>: GRACE, ETHEL, EDITH groups all blocked</li>
-<li><strong>All <code>.WEB.H264</code> releases</strong>: HiggsBoson, SYLiX groups blocked</li>
-<li><strong>All <code>.HDTV.x264</code> releases</strong>: SYNCOPY group blocked</li>
+<li><strong>All <code>WEB-DL</code> releases</strong>: AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DLs</li>
+<li><strong><code>.WEB.H264</code> releases</strong>: HiggsBoson, SYLiX</li>
+<li><strong><code>.HDTV.x264</code> releases</strong>: SYNCOPY</li>
 </ul>
-<p><strong>Safe formats:</strong> <code>WEBRip</code>, <code>BDRip</code>, <code>BluRay.x264</code>, <code>.WEB.h265</code>, <code>BluRay.x265</code>, <code>HEVC x265</code>, <code>TELESYNC</code>, <code>HDTS</code>, <code>DCP</code></p>
+<p><strong>Now safe:</strong> <code>WEBRip</code>, <code>BDRip</code>, <code>DVDRip</code>, <code>BluRay.x264</code>, <code>.WEB.h264</code> scene releases (GRACE, ETHEL, EDITH), <code>.WEB.h265</code>, <code>BluRay.x265</code>, <code>HEVC x265</code>, <code>TELESYNC</code>, <code>HDTS</code>, <code>DCP</code></p>
 </div>
 </div>
 
-<h2>Rule 1: Substring Matches</h2>
+<h2>Rule 1: WEB-DL</h2>
 <div class="rule">
-<p>If the filename contains this string (case-insensitive), the torrent is rejected immediately. Extension doesn't matter. Works in both dot-separated and space-separated names, and inside brackets.</p>
+<p>If the name contains <code>WEB-DL</code>, written exactly like that, it is refused. The file extension doesn't matter, and neither do brackets or spaces around it.</p>
 <table>
-<tr><th>Pattern</th><th>Blocked Real-World Examples</th></tr>
-<tr><td><code>web-dl</code></td><td><code>Euphoria.US.S03E05...AMZN.WEB-DL...H.264-FLUX</code><br>
-<code>From.S03.COMPLETE.1080p.AMZN.WEB-DL...H.264-FLUX[TGx]</code><br>
-<code>Apex.2026.2160p.NF.WEB-DL...H.265-APEX</code><br>
-<code>Taskmaster Australia S05E02 1080p TEN WEB-DL AAC2 0 H 264-RAWR</code></td></tr>
+<tr><th>Name</th><th>Result</th></tr>
+<tr><td><code>Show.S01E01.1080p.AMZN.WEB-DL.DDP5.1-GRP</code></td><td>refused</td></tr>
+<tr><td><code>[GRP] Show S01E01 [WEB-DL 1080p].mkv</code></td><td>refused</td></tr>
+<tr><td><code>Movie.2025.WEB-DLRip.AVC-GRP</code></td><td>refused (contains WEB-DL)</td></tr>
+<tr><td><code>Show.S01E01.1080p.WEB-DL.x265-GRP.txt</code></td><td>refused (any extension)</td></tr>
+<tr><td><code>web-dl</code>, <code>Web-Dl</code>, <code>WEB-dl</code></td><td>pass</td></tr>
+<tr><td><code>WEB.DL</code>, <code>WEBDL</code>, <code>WEB DL</code>, <code>WEB_DL</code></td><td>pass</td></tr>
 </table>
-
-<p><strong>Properties:</strong></p>
-<ul>
-<li>Case-insensitive: <code>WEB-DL</code>, <code>web-dl</code>, <code>WeB-dL</code> all blocked</li>
-<li>Substring: <code>WEB-DLRip</code> blocked (contains the pattern)</li>
-<li>Only the hyphen form: <code>WEB.DL</code> and <code>WEBDL</code> pass</li>
-<li>Extension-independent: <code>.mp4</code>, <code>.mkv</code>, <code>.avi</code> all checked</li>
-<li>Works with spaces: <code>1080p TEN WEB-DL AAC2 0</code> blocked</li>
-<li>Works in brackets: <code>[WEB-DL]</code> blocked</li>
-<li>Dropped in October 2026: <code>webrip</code>, <code>bdrip</code>, <code>hdrip</code> and <code>dvdrip</code> used to block the same way. <code>[WEBRip]</code>, <code>[BDRip]</code> and <code>DVDRip</code> releases now pass.</li>
-</ul>
 </div>
 
-<h2>Rule 2: Source.Codec Dot-Adjacency Matches</h2>
+<h2>Rule 2: Four Source.Codec Pairs</h2>
 <div class="rule">
-<p>When certain source tags appear <strong>immediately before</strong> certain codec tags with a <strong>dot separator</strong>, the torrent is blocked. Case-insensitive on both source and codec.</p>
+<p>These four pairs are refused when the source is followed by a <strong>dot</strong> and then the codec, with exactly this capitalization:</p>
+<p style="font-size:1.15em;letter-spacing:1px"><code>WEB.x264</code> &nbsp; <code>WEB.H264</code> &nbsp; <code>HDTV.x264</code> &nbsp; <code>HDTV.XviD</code></p>
 
-<h3>Complete Matrix (168 combos tested across 21 sources × 8 codecs)</h3>
-<table class="combo-table">
-<tr><th style="text-align:left">Source \ Codec</th><th>x264</th><th>x265</th><th>h264</th><th>h265</th><th>HEVC</th><th>AV1</th><th>XviD</th><th>AVC</th></tr>
-<tr><td style="text-align:left"><strong>BluRay / BLURAY / bluray</strong></td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left"><strong>HDTV / hdtv / Hdtv</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left"><strong>WEB / web / Web</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left;color:#3fb950">Blu-Ray / BD</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left;color:#3fb950">HDTS / Telesync / TELESYNC</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left;color:#3fb950">PDTV / CAM / TS / REMUX / DCP</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
-<tr><td style="text-align:left;color:#3fb950">CR / BILI / NF / AMZN / HIDIVE / FUNI</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<table>
+<tr><th>Tested, passes</th><th>Why</th></tr>
+<tr><td><code>WEB.h264</code>, <code>web.H264</code>, <code>wEB.H264</code>, <code>web.x264</code>, <code>WEB.X264</code></td><td>different case</td></tr>
+<tr><td><code>hdtv.x264</code>, <code>HDTV.X264</code>, <code>HDTV.XVID</code>, <code>HDTV.xvid</code></td><td>different case</td></tr>
+<tr><td><code>WEB-x264</code>, <code>WEB H264</code>, <code>WEB_H264</code>, <code>HDTV x264</code></td><td>not a dot</td></tr>
+<tr><td><code>WEB.H.264</code>, <code>HDTV.H.264</code>, <code>HDTV.h264</code></td><td>different codec spelling</td></tr>
+<tr><td><code>WEB.x265</code>, <code>WEB.XviD</code>, <code>WEB.AVC</code>, <code>WEB.DivX</code>, <code>HDTV.x265</code></td><td>not one of the four pairs</td></tr>
+<tr><td><code>BluRay.x264</code>, <code>BluRay.h264</code>, <code>BluRay.XviD</code>, <code>BluRay.AVC</code>, <code>BluRay.DTS</code></td><td>BluRay is no longer filtered</td></tr>
+<tr><td><code>WEBRip.x264</code>, <code>BDRip.x264</code>, <code>DVDRip.XviD</code>, <code>HDRip.XviD</code>, <code>BRRip.x264</code>, <code>PDTV.x264</code>, <code>HDTVRip.x264</code>, <code>Blu-Ray.x264</code>, <code>BD.x264</code>, <code>DVDScr.XviD</code>, <code>CAM.x264</code>, <code>HDCAM.x264</code>, <code>TS.XviD</code>, <code>TELESYNC.x264</code>, <code>HDTS.x264</code>, <code>AMZN.x264</code></td><td>other sources pass</td></tr>
 </table>
-
-<div class="impact">
-<h4>Key: <code>WEB.H264</code> is blocked (capital H)</h4>
-<p>This was confirmed in run 4 with real releases: <code>For.All.Mankind.S05E08.MULTI.1080p.WEB.H264-HiggsBoson</code> and <code>Chicago.Fire.S14E21.720p.WEB.H264-SYLiX</code> both blocked. The match is case-insensitive on both source and codec.</p>
-</div>
-
-<div class="impact">
-<h4>Key: <code>HDTV.h264</code> is NOT blocked</h4>
-<p>Despite <code>HDTV.x264</code> and <code>HDTV.XviD</code> being blocked, <code>HDTV.h264</code> and <code>HDTV.H264</code> both pass. The HDTV rule only matches <code>x264</code> and <code>XviD</code>, not <code>h264</code>.</p>
-</div>
-
-<p><strong>Properties:</strong></p>
-<ul>
-<li><strong>Only <code>.</code> (dot) triggers:</strong> <code>WEB-x264</code> ✅, <code>WEB-h264</code> ✅, <code>HDTV_x264</code> ✅</li>
-<li><strong><code>BluRay.x264</code> passes since October 2026.</strong> It was blocked before.</li>
-<li><strong>Must be adjacent:</strong> <code>WEB.Line.H264</code> ✅ (Line breaks adjacency)</li>
-<li><strong>Order matters:</strong> <code>x264.WEB</code> ✅</li>
-<li><strong>h265 / x265 / HEVC / AV1 never blocked</strong> in any source combo</li>
-</ul>
-
-
 </div>
 
 <h2>Real-World Release Validation</h2>
 <div class="rule">
-<p>I tested 165 actual release names from PirateBay listings. Here's how they break down under the current rules. The 21 <code>WEBRip</code> names that were blocked before October 2026 are listed with the safe ones.</p>
+<p>I tested 165 actual release names from PirateBay listings. Here's how they break down under the current rules. The <code>WEBRip</code> and lowercase <code>WEB.h264</code> names that were blocked before October 2026 are listed with the safe ones.</p>
 
 <details open><summary>Blocked Real-World Releases: why each is blocked</summary>
 <div class="example">
-<p><strong>Blocked by <code>web-dl</code> substring (24):</strong></p>
+<p><strong>Blocked by <code>WEB-DL</code>:</strong></p>
 <p class="b">All AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DL releases</p>
 <p>Examples: <code>Euphoria.US...AMZN.WEB-DL...H.264-FLUX</code>, <code>Superman 2025 1080p WEB-DL HEVC x265 5.1 BONE</code></p>
 </div>
 <div class="example">
-<p><strong>Blocked by <code>WEB.h264</code> / <code>WEB.H264</code> adjacency (10):</strong></p>
-<p class="b">Modern scene format used by GRACE, ETHEL, EDITH, HiggsBoson, SYLiX groups</p>
-<p>Examples: <code>From.S04E04.1080p.WEB.h264-GRACE</code>, <code>For.All.Mankind.S05E08.MULTI.1080p.WEB.H264-HiggsBoson</code></p>
+<p><strong>Blocked by <code>WEB.H264</code>:</strong></p>
+<p class="b">HiggsBoson, SYLiX</p>
+<p>Example: <code>For.All.Mankind.S05E08.MULTI.1080p.WEB.H264-HiggsBoson</code></p>
 </div>
 <div class="example">
-<p><strong>Blocked by <code>HDTV.x264</code> adjacency (4):</strong></p>
+<p><strong>Blocked by <code>HDTV.x264</code>:</strong></p>
 <p class="b">SYNCOPY group releases</p>
 <p>Examples: <code>Ghosts.2021.S05E20.720p.HDTV.x264-SYNCOPY</code>, <code>Law.and.Order.S25E21.720p.HDTV.x264-SYNCOPY</code></p>
 </div>
 </details>
 
 <details><summary>Safe Real-World Releases: formats that pass</summary>
+<div class="example">
+<p><strong><code>.WEB.h264</code> scene releases ✅ (since October 2026)</strong></p>
+<p class="o"><code>From.S04E04.1080p.WEB.h264-GRACE</code> (GRACE, ETHEL, EDITH)</p>
+</div>
 <div class="example">
 <p><strong><code>WEBRip</code> releases ✅ (since October 2026)</strong></p>
 <p class="o"><code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code>, <code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265</code></p>

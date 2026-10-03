@@ -22,21 +22,19 @@ export function deInfringe(name: string): string {
 }
 
 /**
- * The patterns RD has actually been measured to reject, matched anywhere in a
- * name, case-insensitively: the substring `web-dl` and exactly four
- * source-dot-codec pairs. Verified to pass untouched: `WEB.DL`, `WEBDL`,
- * `WEB-Rip`, `BluRay-x264`, `Blu-Ray.x264`, `BluRay.x265`, `WEB.x265` and —
- * measured 2026-08-23 on a name RD downloaded to 100% — `HDTV.H264`, which
- * `deInfringe` rewrites but RD does not block.
+ * The five literal strings RD refuses, matched anywhere in a name and
+ * **case-sensitively**: `WEB.H264` is refused, `WEB.h264`, `web.H264` and
+ * `WEB-dl` are taken. Only the dot or hyphen shown counts, so `WEB.DL`,
+ * `WEBDL`, `WEB DL` and `WEB-x264` pass, while `WEB-DLRip` contains `WEB-DL`.
  *
- * Re-measured 2026-10-03 with a fresh `.torrent` per name
- * (`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`): RD took
- * `WEBRip`, `BDRip`, `HDRip`, `DVDRip`, `BluRay.x264` and `BluRay.DTS`, all of
- * which it had refused until September, and still refused `WEB-DL`,
- * `HDTV.x264`, `HDTV.XviD`, `WEB.x264` and `WEB.H264`. `deInfringe` still
- * rewrites the dropped ones, which costs nothing.
+ * Re-measured 2026-10-03 over 121 adds and 12 unrestricts, each a fresh
+ * webseed torrent so only the names decided
+ * (`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`). RD had
+ * dropped `WEBRip`, `BDRip`, `HDRip`, `DVDRip`, `BluRay.x264` and `BluRay.DTS`,
+ * all refused until September, and stopped ignoring case. `deInfringe` still
+ * rewrites every older pattern, which costs nothing.
  */
-const RD_BLOCKED_NAME = /web-dl|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
+const RD_BLOCKED_NAME = /WEB-DL|WEB\.x264|WEB\.H264|HDTV\.x264|HDTV\.XviD/;
 
 /**
  * Whether RD blocks this torrent outright, judged on its display title *and*
@@ -49,18 +47,15 @@ const RD_BLOCKED_NAME = /web-dl|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
  * first request, every time — so when the name is clean, a 451 means slow down
  * and retry, not that the content is gone.
  *
- * **RD reads the paths inside the torrent, not just its root name, and a
- * display title can lose the very dots the block needs.** Measured 2026-09-03
- * on `25f9ffaf…`: the title everything here had to work with was `Soul Power
- * The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE`
- * — space-separated, so clean by this test — while the actual path in the
- * torrent was `Soul.Power.….1080p.WEB.h264-GRACE[EZTVx.to]/….mkv`, which is a
- * `web.h264` hit. RD refused it on request #1 between two accepted controls, so
- * it was a real block, and reading only the title called it a throttle and sat
- * through two 20-second backoffs before giving up with the wrong message.
- * Widening the *pattern* to treat a space as a separator would be wrong in the
- * other direction — the uploader's rewrite of that same release, named with
- * spaces, is in RD and downloaded fine.
+ * **RD applies the rule to two different names.** An add is judged on the
+ * torrent's root name alone: on 2026-10-03 it took packs whose files were named
+ * `WEB-DL` and `HDTV.x264`, then refused `/unrestrict/link` on exactly those
+ * files with the same 451. So a filename hit means files that will never
+ * stream, which is what the season-pack filter needs, while an add refusal is
+ * the root name's. That root name is not always the display title: on
+ * 2026-09-03 `25f9ffaf…`, titled `… 1080p WEB h264-GRACE` with spaces, was
+ * refused for its root folder `….WEB.h264-GRACE[EZTVx.to]/`, a name only the
+ * file paths reveal. (Lowercase `h264` passes now.)
  *
  * Unlike `deInfringe`, this matches only the measured patterns. It gates a
  * destructive, shared-state deletion, so a false positive is far more expensive
