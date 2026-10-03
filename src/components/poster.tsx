@@ -146,13 +146,18 @@ const Poster = memo(
 			[imdbId, title, show]
 		);
 
+		// With no IMDb id there is nothing to look up (an anime entry nothing has
+		// identified), so the chain starts and ends on the placeholder rather than
+		// on "Loading..." for good.
+		const src = imdbId ? posterUrl : getPlaceholderUrl(title || 'No Poster');
+
 		return (
 			<div className="relative aspect-[2/3] w-full overflow-hidden rounded bg-gray-800">
-				{posterUrl ? (
+				{src ? (
 					<Image
 						fill
 						sizes="80px"
-						src={posterUrl}
+						src={src}
 						alt={`Poster for ${title || imdbId || 'unknown'}`}
 						loading="lazy"
 						onError={handleImageError}

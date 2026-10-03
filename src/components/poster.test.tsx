@@ -1,3 +1,4 @@
+import unknownFranchise from '@/test/fixtures/anime/api-anime-franchise-anidb-19795.json';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -137,6 +138,25 @@ describe('Poster component', () => {
 		fireEvent.error(img); // the API's URL is dead too
 
 		await waitFor(() => expect(img.getAttribute('src')).toMatch(/^data:image\/svg\+xml/));
+	});
+
+	// Fizzy #200. What the anime page held for AniDB 19795 on 2026-10-04: the
+	// franchise route knows the entry only by its id, with no poster and no IMDb
+	// id, and /api/info/anime answered Unknown. The header handed this component
+	// an empty IMDb id, and with nothing to look up it showed "Loading..." for
+	// good. The placeholder is what every other chain ends on.
+	it('shows the title placeholder when there is no IMDb id to look up', () => {
+		const self = unknownFranchise.entries.find((e) => e.anidbId === unknownFranchise.anidbId)!;
+		const imdbId = unknownFranchise.imdbIds[0] ?? '';
+		expect(self.poster).toBe('');
+
+		render(<Poster imdbId={imdbId} title={self.title} />);
+
+		expect(screen.queryByText('Loading...')).toBeNull();
+		const img = screen.getByTestId('poster-img');
+		expect(img.getAttribute('src')).toMatch(/^data:image\/svg\+xml/);
+		expect(decodeURIComponent(img.getAttribute('src') || '')).toContain('AniDB 19795');
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
 	it('uses an inline SVG placeholder when every remote source fails', async () => {

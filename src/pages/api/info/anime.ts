@@ -26,7 +26,9 @@ interface AnimeInfoResponse {
 const UNKNOWN: AnimeInfoResponse = {
 	title: 'Unknown',
 	description: 'Unknown',
-	poster: 'https://picsum.photos/200/300',
+	// No art: say so, as /api/info/show and /api/info/movie do, and let the page
+	// draw its own. picsum.photos/200/300 was a random stock photo on every load.
+	poster: '',
 	backdrop: '',
 	imdbid: '',
 	imdbRating: 0,

@@ -1,3 +1,4 @@
+import productionUnknown from '@/test/fixtures/anime/api-info-anime-anidb-19795.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -143,13 +144,30 @@ describe('/api/info/anime', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			title: 'Unknown',
 			description: 'Unknown',
-			poster: 'https://picsum.photos/200/300',
+			poster: '',
 			backdrop: '',
 			imdbid: '',
 			imdbRating: 0,
 			type: '',
 			episodeCount: 0,
 		});
+	});
+
+	// Fizzy #200. AniDB 19795 has releases stored and nothing else: no row, no
+	// Kitsu id in the dataset, no IMDb id. Production answered it with
+	// picsum.photos/200/300, a random stock photo that changes on every load,
+	// for a poster. The route now says it has none, as /api/info/show and
+	// /api/info/movie do, and the page draws a placeholder of its own.
+	it('answers no poster, not a stock photo, for an entry no source knows', async () => {
+		const handler = await loadHandler();
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { animeid: 'anidb-19795' } }), res);
+
+		expect(mockGetAnimeByExternalId).toHaveBeenCalledWith('anidb', 19795);
+		const body = vi.mocked(res.json).mock.calls[0][0];
+		expect(productionUnknown.poster).toContain('picsum.photos');
+		expect(body).toEqual({ ...productionUnknown, poster: '' });
 	});
 
 	it('serves Kitsu metadata when the addon is down', async () => {

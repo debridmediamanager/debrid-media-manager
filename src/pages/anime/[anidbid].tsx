@@ -84,7 +84,6 @@ type AnimeTorrentsResponse = {
 
 /** The route's placeholder for an id no source resolved. */
 const UNKNOWN_TITLE = 'Unknown';
-const PLACEHOLDER_POSTER = 'https://picsum.photos/200/300';
 /** What a season is assumed to hold when nothing says; the show page's default too. */
 const FALLBACK_EPISODE_COUNT = 13;
 /** `/api/torrents/anime` pages 50 at a time; a shorter page is the last one. */
@@ -583,8 +582,7 @@ const AnimePage: FunctionComponent = () => {
 	const self = franchise?.entries.find((e) => e.anidbId === anidbId);
 	const idLabel = pageId.source === 'anidb' ? `AniDB ${pageId.id}` : `MAL ${pageId.id}`;
 	const title = metadataKnown ? info!.title : (self?.title ?? idLabel);
-	const poster =
-		metadataKnown && info!.poster !== PLACEHOLDER_POSTER ? info!.poster : (self?.poster ?? '');
+	const poster = metadataKnown ? info!.poster : (self?.poster ?? '');
 	const type = animeTypeLabel(info?.type || self?.type);
 	const isKnown = metadataKnown || Boolean(franchise?.known);
 	const anidbUrl =
