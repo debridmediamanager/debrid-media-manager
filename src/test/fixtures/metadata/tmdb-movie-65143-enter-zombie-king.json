@@ -1,0 +1,77 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [{ "iso_3166_1": "US", "title": "Zombie Beach Party", "type": "" }]
+	},
+	"backdrop_path": null,
+	"belongs_to_collection": null,
+	"budget": 0,
+	"external_ids": {
+		"imdb_id": "tt0376355",
+		"wikidata_id": "Q219187",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"genres": [{ "id": 27, "name": "Horror" }],
+	"homepage": "",
+	"id": 65143,
+	"imdb_id": "tt0376355",
+	"origin_country": ["US", "CA"],
+	"original_language": "en",
+	"original_title": "Enter... Zombie King!",
+	"overview": "Ulysses, a professional wrestler, is going to watch another fight in which a wrestler is up against a horde of zombies. One of the zombies kills a waitress and Ulysses and his friends decide to take matters into their own hands and track down the origins of the creatures.",
+	"popularity": 1.0953,
+	"poster_path": "/e2DEm5Q3F8LYj50lxJSSeNmtPKh.jpg",
+	"production_companies": [
+		{
+			"id": 16852,
+			"logo_path": null,
+			"name": "El Zorrero Productions Inc.",
+			"origin_country": ""
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "CA", "name": "Canada" }],
+	"release_date": "2003-07-07",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "CA",
+				"release_dates": [
+					{
+						"certification": "18A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-07-07T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2004-11-23T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 0,
+	"runtime": 76,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Released",
+	"tagline": "",
+	"title": "Enter... Zombie King!",
+	"video": false,
+	"videos": { "results": [] },
+	"vote_average": 3.8,
+	"vote_count": 16
+}

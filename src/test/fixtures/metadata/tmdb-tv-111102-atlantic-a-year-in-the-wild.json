@@ -1,0 +1,80 @@
+{
+	"adult": false,
+	"alternative_titles": { "results": [] },
+	"backdrop_path": "/y2SRE3aJEjBd8AAVk6aCa9dNj7k.jpg",
+	"created_by": [],
+	"episode_run_time": [60],
+	"external_ids": {
+		"imdb_id": "tt31968471",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 388286,
+		"tvrage_id": null,
+		"wikidata_id": null,
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"first_air_date": "2020-09-11",
+	"genres": [{ "id": 99, "name": "Documentary" }],
+	"homepage": "",
+	"id": 111102,
+	"in_production": false,
+	"languages": ["en"],
+	"last_air_date": "2020-10-02",
+	"last_episode_to_air": {
+		"id": 3441700,
+		"name": "Autumn",
+		"overview": "In the Atlantic's far north, autumn is the season of gales, cooling temperatures and driving rain. This is the season when the wildlife must make the final preparations for winter or migrate to warmer climes. For some autumn is also the season to battle for a mate.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2020-10-02",
+		"episode_number": 4,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": null,
+		"season_number": 1,
+		"show_id": 111102,
+		"still_path": "/38d0HtZl7hm1AvtYuVhC9Q230bC.jpg"
+	},
+	"name": "Atlantic: A Year in the Wild",
+	"networks": [
+		{
+			"id": 99,
+			"logo_path": "/tAOMutfVve2or2LTYQfIa42sc33.png",
+			"name": "5",
+			"origin_country": "GB"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 4,
+	"number_of_seasons": 1,
+	"origin_country": ["GB"],
+	"original_language": "en",
+	"original_name": "Atlantic: A Year in the Wild",
+	"overview": "Stretching from the Antarctic in the south to the Arctic in the north, the Atlantic Ocean is vast, wild and unforgiving and each season brings new challenges for its indigenous creatures.",
+	"popularity": 0.6673,
+	"poster_path": "/cH2yNwUA4Pde54qJ1gqEkh8tgQj.jpg",
+	"production_companies": [],
+	"production_countries": [],
+	"seasons": [
+		{
+			"air_date": "2020-09-11",
+			"episode_count": 4,
+			"id": 164855,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": null,
+			"season_number": 1,
+			"vote_average": 0.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Ended",
+	"tagline": "",
+	"type": "Miniseries",
+	"videos": { "results": [] },
+	"vote_average": 10.0,
+	"vote_count": 1
+}

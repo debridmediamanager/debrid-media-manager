@@ -1,0 +1,31 @@
+{
+	"Actors": "Christian Bale, Heath Ledger, Aaron Eckhart",
+	"Awards": "Won 2 Oscars. 163 wins & 165 nominations total",
+	"BoxOffice": "$534,987,076",
+	"Country": "United States, United Kingdom",
+	"DVD": "N/A",
+	"Director": "Christopher Nolan",
+	"Genre": "Action, Crime, Drama",
+	"Language": "English, Mandarin",
+	"Metascore": "85",
+	"Plot": "When a menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman, James Gordon and Harvey Dent must work together to put an end to the madness.",
+	"Poster": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_QL75_UX380_CR0,0,380,562_.jpg",
+	"Production": "N/A",
+	"Rated": "PG-13",
+	"Ratings": [
+		{ "Source": "Internet Movie Database", "Value": "9.1/10" },
+		{ "Source": "Rotten Tomatoes", "Value": "94%" },
+		{ "Source": "Metacritic", "Value": "85/100" }
+	],
+	"Released": "18 Jul 2008",
+	"Response": "True",
+	"Runtime": "152 min",
+	"Title": "The Dark Knight",
+	"Type": "movie",
+	"Website": "N/A",
+	"Writer": "Jonathan Nolan, Christopher Nolan, David S. Goyer",
+	"Year": "2008",
+	"imdbID": "tt0468569",
+	"imdbRating": "9.1",
+	"imdbVotes": "3,161,907"
+}

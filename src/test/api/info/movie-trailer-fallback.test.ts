@@ -63,6 +63,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 			getInfoByImdbId: vi.fn().mockResolvedValue({
 				title: 'Test Movie',
 				description: 'Test description',
+				type: 'movie',
 				tmdbid: 278,
 				ratings: [],
 			}),
@@ -135,6 +136,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 				title: 'Test Movie',
 				description: 'Test description',
 				trailer: 'https://youtube.com/watch?v=MDB111',
+				type: 'movie',
 				tmdbid: 278,
 				ratings: [],
 			}),

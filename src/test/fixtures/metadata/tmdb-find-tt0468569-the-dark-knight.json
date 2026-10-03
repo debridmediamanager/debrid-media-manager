@@ -1,0 +1,26 @@
+{
+	"movie_results": [
+		{
+			"adult": false,
+			"backdrop_path": "/9FE5eD92WfVCiivM9Pq9GVSrlWk.jpg",
+			"id": 155,
+			"title": "The Dark Knight",
+			"original_title": "The Dark Knight",
+			"overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.",
+			"poster_path": "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+			"media_type": "movie",
+			"original_language": "en",
+			"genre_ids": [28, 53, 80],
+			"popularity": 51.8926,
+			"release_date": "2008-07-16",
+			"softcore": false,
+			"video": false,
+			"vote_average": 8.536,
+			"vote_count": 36867
+		}
+	],
+	"person_results": [],
+	"tv_episode_results": [],
+	"tv_results": [],
+	"tv_season_results": []
+}

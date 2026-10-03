@@ -54,6 +54,20 @@ const mdblistAnswer = (value: any) =>
 		? value
 		: null;
 
+/**
+ * mdblist's TMDB id, when mdblist says it is one of `kind`.
+ *
+ * TMDB numbers movies and shows separately, and mdblist's `tmdbid` is whichever
+ * its `type` says. Movie 155 is The Dark Knight and TV 155 is 3rd Rock from the
+ * Sun, and the show route, asked for The Dark Knight, offered that sitcom's six
+ * seasons. Trakt is asked per kind (`/movies/`, `/shows/`), so its id needs no
+ * such check; an id whose kind mdblist does not state is left to TMDB's own
+ * lookup by IMDb id.
+ */
+function mdblistTmdbId(mdblist: any, kind: 'movie' | 'tv'): unknown {
+	return mdblist?.type === (kind === 'movie' ? 'movie' : 'show') ? mdblist.tmdbid : undefined;
+}
+
 async function tmdbIdFor(
 	imdbId: string,
 	known: unknown,
@@ -84,7 +98,11 @@ export async function fetchMovieSources(
 	const trakt = await traktPromise;
 	const tmdb = await settle(async () => {
 		if (!getTmdbAuth()) return null;
-		const id = await tmdbIdFor(imdbId, trakt?.ids?.tmdb ?? mdblist?.tmdbid, 'movie');
+		const id = await tmdbIdFor(
+			imdbId,
+			trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'movie'),
+			'movie'
+		);
 		return id ? cache.getTmdbMovieInfo(id, TMDB_MOVIE_APPEND) : null;
 	});
 
@@ -116,7 +134,7 @@ export async function fetchShowSources(
 	const trakt = await traktPromise;
 	const tmdb = await settle(async () => {
 		if (!getTmdbAuth()) return null;
-		const id = await tmdbIdFor(imdbId, trakt?.ids?.tmdb ?? mdblist?.tmdbid, 'tv');
+		const id = await tmdbIdFor(imdbId, trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'tv'), 'tv');
 		return id ? cache.getTmdbTvInfo(id, TMDB_TV_APPEND) : null;
 	});
 	const cinemeta = await cinemetaPromise;

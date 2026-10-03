@@ -1,0 +1,179 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "FR", "title": "Troisième planète après le Soleil", "type": "" },
+			{ "iso_3166_1": "US", "title": "3rd Rock", "type": "" }
+		]
+	},
+	"backdrop_path": "/adsc78pBssCRr3iTgzxgdCPI1v2.jpg",
+	"created_by": [
+		{
+			"id": 56157,
+			"credit_id": "52533f8519c295794008ee80",
+			"name": "Terry Turner",
+			"original_name": "Terry Turner",
+			"gender": 2,
+			"profile_path": "/jYqOIc1tYVuhRcWOchW9yxW1qPr.jpg"
+		},
+		{
+			"id": 56156,
+			"credit_id": "52533f8519c295794008ee86",
+			"name": "Bonnie Turner",
+			"original_name": "Bonnie Turner",
+			"gender": 1,
+			"profile_path": "/vK10wcF9gfbOH8dhLrfkAxxDttw.jpg"
+		}
+	],
+	"episode_run_time": [22],
+	"external_ids": {
+		"imdb_id": "tt0115082",
+		"freebase_mid": "/m/01lv85",
+		"freebase_id": "/en/3rd_rock_from_the_sun",
+		"tvdb_id": 72389,
+		"tvrage_id": 2454,
+		"wikidata_id": "Q870490",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"first_air_date": "1996-01-09",
+	"genres": [
+		{ "id": 10751, "name": "Family" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" },
+		{ "id": 35, "name": "Comedy" },
+		{ "id": 18, "name": "Drama" }
+	],
+	"homepage": "http://www.3rdrock.com/",
+	"id": 155,
+	"in_production": false,
+	"languages": ["en"],
+	"last_air_date": "2001-05-22",
+	"last_episode_to_air": {
+		"id": 953160,
+		"name": "The Thing That Wouldn't Die (2)",
+		"overview": "The Solomons are struggling to take in the news - they have been ordered back home due to Dick's transgression with Liam. Dick's first instinct is to ask Mary to come, so he takes her to the planetarium before breaking the news to her that they are leaving, and asking her if she will join them. Meanwhile, since admitting his fear to Sally, Don has decided to quit the police force and open a muffin store, but Sally is disgusted by this career choice and decides to whip Don into shape - and turn him into a hardy police officer. At home, Harry and Tommy are attempting to organize a farewell party for the aliens, but have no money, so they decide to max out their credit cards and not worry about paying the bill, since they'll be halfway across the galaxy - they even hire Elvis Costello to sing Fly Me to the Moon.",
+		"vote_average": 8.0,
+		"vote_count": 2,
+		"air_date": "2001-05-22",
+		"episode_number": 20,
+		"episode_type": "finale",
+		"production_code": "620",
+		"runtime": 22,
+		"season_number": 6,
+		"show_id": 155,
+		"still_path": "/6IxfZYYaMko7JN0JuDrfSg9mCBB.jpg"
+	},
+	"name": "3rd Rock from the Sun",
+	"networks": [
+		{
+			"id": 6,
+			"logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+			"name": "NBC",
+			"origin_country": "US"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 139,
+	"number_of_seasons": 6,
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_name": "3rd Rock from the Sun",
+	"overview": "The high commander of an alien expedition lands on Earth -- what he considers to be the least-important planet -- in human form as Dick Solomon. Along for the ride are his alien compatriots Harry, Sally and Tommy -- who is the eldest of the group but is now angrily trapped in a teen's body.",
+	"popularity": 68.8591,
+	"poster_path": "/sUB4lZghNnwQywKqgjIfJsyBqI2.jpg",
+	"production_companies": [
+		{
+			"id": 3215,
+			"logo_path": "/1eDyeAkLR41PjyharYL7V3dcuiG.png",
+			"name": "Carsey-Werner Company",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "US", "name": "United States of America" }],
+	"seasons": [
+		{
+			"air_date": "1996-01-09",
+			"episode_count": 20,
+			"id": 59490,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/AaRurIqr9PnFbmDRzFzEY0awfO8.jpg",
+			"season_number": 1,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "1996-09-22",
+			"episode_count": 26,
+			"id": 59493,
+			"name": "Season 2",
+			"overview": "",
+			"poster_path": "/r7eU3pDJjiKkCgP5GtJ8iBNbPZn.jpg",
+			"season_number": 2,
+			"vote_average": 7.9
+		},
+		{
+			"air_date": "1997-09-24",
+			"episode_count": 27,
+			"id": 59494,
+			"name": "Season 3",
+			"overview": "",
+			"poster_path": "/4WhzwBeeIqgdyeC4IIrWjQu8C9r.jpg",
+			"season_number": 3,
+			"vote_average": 7.8
+		},
+		{
+			"air_date": "1998-09-23",
+			"episode_count": 24,
+			"id": 59514,
+			"name": "Season 4",
+			"overview": "",
+			"poster_path": "/7cR8EpXpIIqDDdj0YglsgNEW5qa.jpg",
+			"season_number": 4,
+			"vote_average": 8.0
+		},
+		{
+			"air_date": "1999-09-21",
+			"episode_count": 22,
+			"id": 59515,
+			"name": "Season 5",
+			"overview": "",
+			"poster_path": "/wDf0YOBYwFXcBKXf61Ee1OJeidD.jpg",
+			"season_number": 5,
+			"vote_average": 8.2
+		},
+		{
+			"air_date": "2000-10-24",
+			"episode_count": 20,
+			"id": 59516,
+			"name": "Season 6",
+			"overview": "",
+			"poster_path": "/q4ht0A3ztJCQK0CRXKdNuRAVSul.jpg",
+			"season_number": 6,
+			"vote_average": 8.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Ended",
+	"tagline": "There's a new family in town. They're not from another city... They're from another planet.",
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "3rd Rock from the Sun trailer",
+				"key": "EsEKp5ba0Dg",
+				"site": "YouTube",
+				"size": 360,
+				"type": "Trailer",
+				"official": false,
+				"id": "5ad5ac48c3a3680bfc011774",
+				"published_at": "2009-05-21T22:27:41.000Z"
+			}
+		]
+	},
+	"vote_average": 7.519,
+	"vote_count": 587
+}

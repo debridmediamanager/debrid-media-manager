@@ -66,6 +66,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 			getInfoByImdbId: vi.fn().mockResolvedValue({
 				title: 'Test Show',
 				description: 'Test description',
+				type: 'show',
 				tmdbid: 1396,
 				seasons: [{ season_number: 1, name: 'Season 1', episode_count: 10 }],
 				ratings: [],
@@ -138,6 +139,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 				title: 'Test Show',
 				description: 'Test description',
 				trailer: 'https://youtube.com/watch?v=MDB_SHOW111',
+				type: 'show',
 				tmdbid: 1396,
 				seasons: [{ season_number: 1, name: 'Season 1', episode_count: 10 }],
 				ratings: [],

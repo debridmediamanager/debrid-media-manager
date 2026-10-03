@@ -1,10 +1,20 @@
 import handler from '@/pages/api/info/show';
+import darkKnightCinemeta from '@/test/fixtures/metadata/cinemeta-tt0468569-the-dark-knight.json';
+import filthCinemeta from '@/test/fixtures/metadata/cinemeta-tt1046922-filth-the-mary-whitehouse-story.json';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
 import accursedCinemeta from '@/test/fixtures/metadata/cinemeta-tt4182368-the-accursed.json';
+import darkKnightMdblist from '@/test/fixtures/metadata/mdblist-tt0468569-the-dark-knight.json';
+import filthMdblist from '@/test/fixtures/metadata/mdblist-tt1046922-filth-the-mary-whitehouse-story.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import accursedMdblist from '@/test/fixtures/metadata/mdblist-tt4182368-the-accursed.json';
+import darkKnightOmdb from '@/test/fixtures/metadata/omdb-tt0468569-the-dark-knight.json';
+import filthOmdb from '@/test/fixtures/metadata/omdb-tt1046922-filth-the-mary-whitehouse-story.json';
 import accursedOmdb from '@/test/fixtures/metadata/omdb-tt4182368-the-accursed.json';
+import darkKnightTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt0468569-the-dark-knight.json';
+import filthTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt1046922-filth-the-mary-whitehouse-story.json';
 import accursedTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt4182368-the-accursed.json';
+import atlanticTmdbTv from '@/test/fixtures/metadata/tmdb-tv-111102-atlantic-a-year-in-the-wild.json';
+import thirdRockTmdbTv from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -399,7 +409,11 @@ describe('/api/info/show', () => {
 		// The TMDB detail object is already fetched for status and the trailer, so
 		// its art was a source the route paid for and then discarded.
 		it('uses the art from the TMDB response it already fetched', async () => {
-			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 1396 });
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({
+				title: 'Arty',
+				type: 'show',
+				tmdbid: 1396,
+			});
 			mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
 			mockMetadataCache.getTmdbTvInfo.mockResolvedValue({
 				status: 'Ended',
@@ -423,6 +437,7 @@ describe('/api/info/show', () => {
 		it('still prefers mdblist and cinemeta art over TMDB', async () => {
 			mockMdbClient.getInfoByImdbId.mockResolvedValue({
 				title: 'Arty',
+				type: 'show',
 				tmdbid: 1396,
 				poster: 'mdb-poster',
 			});
@@ -442,6 +457,66 @@ describe('/api/info/show', () => {
 			expect(res.json).toHaveBeenCalledWith(
 				expect.objectContaining({ poster: 'mdb-poster', backdrop: 'cine-bg' })
 			);
+		});
+
+		// Fizzy #200. mdblist's `tmdbid` is a movie's id or a show's, as its `type`
+		// says, and TMDB numbers movies and shows separately. Of the 3,013 ids
+		// production served on this route in early October 2026, 48 are filed by
+		// TMDB only as movies, and for 13 of them the route asked TMDB for the TV
+		// show that happens to share the movie's number.
+		describe("a movie's TMDB id", () => {
+			const tmdbTvById: Record<number, unknown> = {
+				111102: atlanticTmdbTv,
+				155: thirdRockTmdbTv,
+			};
+
+			beforeEach(() => {
+				mockMetadataCache.getTmdbTvInfo.mockImplementation(
+					async (id: number) => tmdbTvById[id] ?? null
+				);
+			});
+
+			const answer = async (imdbid: string) => {
+				const res = createMockResponse();
+				await handler(createMockRequest({ method: 'GET', query: { imdbid } }), res);
+				expect(res.status).toHaveBeenCalledWith(200);
+				return vi.mocked(res.json).mock.calls[0][0];
+			};
+
+			// TV show 111102 is Atlantic: A Year in the Wild, and production served its
+			// backdrop as this film's on 2026-10-04. No provider has a backdrop for the
+			// film itself; mdblist, its only art, has a poster.
+			it("draws no other title's backdrop for a TV film mdblist types as a movie", async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(filthMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(filthCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(filthOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(filthTmdbFind);
+
+				const body = await answer('tt1046922');
+
+				expect(body.title).toBe('Filth: The Mary Whitehouse Story');
+				expect(body.backdrop).not.toContain(atlanticTmdbTv.backdrop_path);
+				expect(body.backdrop).toBe('');
+				expect(body.poster).toBe(filthMdblist.poster);
+				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
+			});
+
+			// TV show 155 is 3rd Rock from the Sun, so production offered The Dark
+			// Knight its six seasons and its "Ended".
+			it("takes no seasons from the show that shares a movie's TMDB number", async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(darkKnightMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(darkKnightCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(darkKnightOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(darkKnightTmdbFind);
+
+				const body = await answer('tt0468569');
+
+				expect(body.title).toBe('The Dark Knight');
+				expect(thirdRockTmdbTv.number_of_seasons).toBe(6);
+				expect(body.season_count).toBe(1);
+				expect(body.status).toBeUndefined();
+				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
+			});
 		});
 
 		// Trakt keys on the IMDb id alone. Waiting for mdblist — and now for the

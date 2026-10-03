@@ -2,12 +2,17 @@ import handler from '@/pages/api/info/movie';
 import caskCinemeta from '@/test/fixtures/metadata/cinemeta-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicCinemeta from '@/test/fixtures/metadata/cinemeta-tt32588798-practical-magic-2.json';
 import thundermansCinemeta from '@/test/fixtures/metadata/cinemeta-tt37752275-clash-of-the-thundermans.json';
+import descendantsCinemeta from '@/test/fixtures/metadata/cinemeta-tt4925000-descendants-of-the-sun.json';
 import caskMdblist from '@/test/fixtures/metadata/mdblist-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicMdblist from '@/test/fixtures/metadata/mdblist-tt32588798-practical-magic-2.json';
 import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
+import descendantsMdblist from '@/test/fixtures/metadata/mdblist-tt4925000-descendants-of-the-sun.json';
 import caskOmdb from '@/test/fixtures/metadata/omdb-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicOmdb from '@/test/fixtures/metadata/omdb-tt32588798-practical-magic-2.json';
+import descendantsOmdb from '@/test/fixtures/metadata/omdb-tt4925000-descendants-of-the-sun.json';
 import caskTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt2249097-the-cask-of-amontillado.json';
+import descendantsTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt4925000-descendants-of-the-sun.json';
+import zombieKingTmdbMovie from '@/test/fixtures/metadata/tmdb-movie-65143-enter-zombie-king.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -305,7 +310,11 @@ describe('/api/info/movie', () => {
 		// The same TMDB response already supplies the release dates and trailer,
 		// so its art cost nothing extra and was being thrown away.
 		it('uses the art from the TMDB response it already fetched', async () => {
-			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 27205 });
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({
+				title: 'Arty',
+				type: 'movie',
+				tmdbid: 27205,
+			});
 			mockMetadataCache.getCinemetaMovie.mockResolvedValue({});
 			mockMetadataCache.getTmdbMovieInfo.mockResolvedValue({
 				poster_path: '/tmdb-poster.jpg',
@@ -329,6 +338,7 @@ describe('/api/info/movie', () => {
 		it('still prefers mdblist and cinemeta art over TMDB', async () => {
 			mockMdbClient.getInfoByImdbId.mockResolvedValue({
 				title: 'Arty',
+				type: 'movie',
 				tmdbid: 27205,
 				poster: 'mdb-poster',
 			});
@@ -370,6 +380,36 @@ describe('/api/info/movie', () => {
 			expect(body.title).toBe('The Cask of Amontillado');
 			expect(body.poster).toBe(caskOmdb.Poster);
 			expect(body.backdrop).toBe('');
+			expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
+		});
+
+		// Fizzy #200. mdblist's `tmdbid` is a show's id when its `type` is `show`,
+		// and TMDB numbers movies and shows separately. Descendants of the Sun
+		// (tt4925000) is a series, TV 65143 to mdblist; this route asked TMDB for
+		// movie 65143, Enter... Zombie King!, and production titled the page after
+		// it on 2026-10-04. TMDB's title leads the merged record, so a wrong TMDB
+		// answer renames the page, not just its art. 5 of the 13 series production
+		// served on this route that week were renamed this way.
+		it("does not read a show's TMDB id as a movie's", async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue(descendantsMdblist);
+			mockMetadataCache.getCinemetaMovie.mockResolvedValue(descendantsCinemeta);
+			mockMetadataCache.getOmdbInfo.mockResolvedValue(descendantsOmdb);
+			mockMetadataCache.searchTmdbByImdb.mockResolvedValue(descendantsTmdbFind);
+			mockMetadataCache.getTmdbMovieInfo.mockImplementation(async (id: number) =>
+				id === 65143 ? zombieKingTmdbMovie : null
+			);
+
+			const res = createMockResponse();
+			await handler(
+				createMockRequest({ method: 'GET', query: { imdbid: 'tt4925000' } }),
+				res
+			);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+			const body = vi.mocked(res.json).mock.calls[0][0];
+			expect(zombieKingTmdbMovie.title).toBe('Enter... Zombie King!');
+			expect(body.title).toBe('Descendants of the Sun');
+			expect(body.year).toBe(2016);
 			expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
 		});
 	});
