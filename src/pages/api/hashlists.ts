@@ -36,14 +36,24 @@ function isHashlistData(data: unknown): data is string {
 	}
 }
 
+// The list an old-form `url` carries in its #fragment, when it is DMM's own
+// hash list page. A list shared from another instance keeps its iframe.
+function listInUrl(url: unknown): string | undefined {
+	if (typeof url !== 'string' || !url.startsWith(`${HASHLIST_APP_URL}#`)) return undefined;
+	const fragment = url.slice(HASHLIST_APP_URL.length + 1);
+	return isHashlistData(fragment) ? fragment : undefined;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		res.status(405).json({ message: 'Method not allowed' });
 		return;
 	}
 	// `data` is the list itself, stored beside its page (see hashlistSource).
-	// `url` is the old form, the whole list in the iframe URL, still accepted
-	// from pages loaded before that change.
+	// `url` is the old form, the whole list in the iframe URL, which clients
+	// still send. A list it carries is stored the same way as `data`: left in
+	// the URL, a list past 1 MiB is a white page in Firefox and past 2 MiB in
+	// Chrome.
 	const { url, data } = req.body ?? {};
 
 	if (data !== undefined && !isHashlistData(data)) {
@@ -55,9 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
+	const list: string | undefined = data ?? listInUrl(url);
 	const uuid = uuidv4();
 	const iframeSrc =
-		data === undefined ? url : `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
+		list === undefined ? url : `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
 
 	const token = process.env.GH_PAT;
 
@@ -74,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const files: { path: string; content: string }[] = [
 			{ path: `${uuid}.html`, content: hashlistPageHtml(iframeSrc) },
 		];
-		if (data !== undefined) files.push({ path: hashlistDataPath(uuid), content: data });
+		if (list !== undefined) files.push({ path: hashlistDataPath(uuid), content: list });
 
 		// Create the blobs, then one tree and one commit holding all of them
 		const blobs = await Promise.all(

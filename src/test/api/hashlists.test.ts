@@ -11,6 +11,10 @@ const FRAGMENT = readFileSync(
 	'utf8'
 );
 
+// The longest URL Firefox 157 accepts, measured with `new URL()` and an iframe:
+// one character more and the iframe stays at about:blank.
+const FIREFOX_MAX_URL_LENGTH = 1_048_572;
+
 // Mock the UUID module
 vi.mock('uuid', () => ({
 	v4: () => 'test-uuid-123',
@@ -201,7 +205,7 @@ describe('/api/hashlists', () => {
 			expect(created.tree).toHaveLength(2);
 		});
 
-		// Pages loaded before the change still send the whole list as a URL.
+		// A url that carries no list is still published as it is.
 		it('still writes the old single-file page for a url', async () => {
 			const { created, api } = git();
 			await install(api);
@@ -212,6 +216,54 @@ describe('/api/hashlists', () => {
 			expect(created.blobs[0]).toContain(
 				'<iframe src="https://debridmediamanager.com/hashlist#abc"></iframe>'
 			);
+		});
+
+		// Firefox refuses a URL longer than 1,048,572 characters (Firefox 157;
+		// Chrome's cap is 2 MiB) and leaves the iframe at about:blank, a white
+		// page, with nothing in the console. Aster's list is 1.98 MB: blank in
+		// Firefox, fine in Chrome, as reported. Clients still send the old `url`
+		// form, 16 of the 31 lists shared in the four days after `data` was
+		// deployed, and that form put the list back in the iframe URL.
+		it('stores a list sent inside an old url beside its page, so Firefox opens it', async () => {
+			const { created, api } = git();
+			await install(api);
+			mockReq.method = 'POST';
+			const url = `https://debridmediamanager.com/hashlist#${FRAGMENT}`;
+			expect(url.length).toBeGreaterThan(FIREFOX_MAX_URL_LENGTH);
+			mockReq.body = { url };
+
+			await handler(mockReq, mockRes);
+
+			expect(mockRes.status).toHaveBeenCalledWith(200);
+			expect(mockRes.json).toHaveBeenCalledWith({
+				shortUrl: 'https://hashlists.debridmediamanager.com/test-uuid-123.html',
+			});
+			const iframeSrc = blobAt(created, 'test-uuid-123.html').match(
+				/<iframe src="([^"]+)"/
+			)?.[1];
+			expect(iframeSrc?.length).toBeLessThanOrEqual(FIREFOX_MAX_URL_LENGTH);
+			expect(iframeSrc).toBe('https://debridmediamanager.com/hashlist#id=test-uuid-123');
+			expect(created.tree.map((e) => e.path)).toEqual([
+				'test-uuid-123.html',
+				'lists/test-uuid-123.txt',
+			]);
+			expect(api.createCommit).toHaveBeenCalledTimes(1);
+			expect(blobAt(created, 'lists/test-uuid-123.txt')).toBe(FRAGMENT);
+		});
+
+		// Only DMM's own hash list page is rewritten to point at the stored copy;
+		// a list shared from another instance keeps its iframe.
+		it('leaves a list carried to another host in its url', async () => {
+			const { created, api } = git();
+			await install(api);
+			mockReq.method = 'POST';
+			const url = `http://localhost:3000/hashlist#${lzString.compressToEncodedURIComponent(
+				JSON.stringify([{ filename: 'a', hash: 'b'.repeat(40), bytes: 1 }])
+			)}`;
+			mockReq.body = { url };
+			await handler(mockReq, mockRes);
+			expect(created.tree.map((e) => e.path)).toEqual(['test-uuid-123.html']);
+			expect(created.blobs[0]).toContain(`<iframe src="${url}"></iframe>`);
 		});
 	});
 });

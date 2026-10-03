@@ -6,11 +6,14 @@ import lzString from 'lz-string';
  * A shared list used to travel whole in the iframe URL's #fragment. Chrome
  * refuses a URL over 2 MB and leaves the iframe at `about:blank#blocked`, a
  * white page: on 2026-09-30, 149 of the 14,930 lists in the hashlists repo
- * were over it, the largest at 11.6 MB. A list is now stored beside its page
- * as `lists/<id>.txt` (the same lz-string text the fragment carried) and the
- * fragment carries `id=<id>`. `=` is outside lz-string's URI-safe alphabet,
- * so the two forms cannot be mistaken for each other, and old links keep
- * working unchanged.
+ * were over it, the largest at 11.6 MB. Firefox's cap is half that, 1,048,572
+ * characters, past which the iframe stays at `about:blank` with nothing in
+ * the console, so lists that opened in Chrome were blank in Firefox. A list
+ * for this app, whatever its size and whether it arrives as `data` or inside
+ * an old-form `url`, is now stored beside its page as `lists/<id>.txt` (the
+ * same lz-string text the fragment carried) and the fragment carries
+ * `id=<id>`. `=` is outside lz-string's URI-safe alphabet, so the two forms
+ * cannot be mistaken for each other, and old links keep working unchanged.
  *
  * A list published before this was moved there whole: its old page, iframe
  * and all, became `lists/<id>.txt` unchanged, so the move added no copy of the
