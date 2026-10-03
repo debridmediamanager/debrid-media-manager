@@ -15,12 +15,14 @@
 //     title nothing has scraped yet is filled on this very request rather than
 //     answered empty — the same trade `/api/torrents/movie` makes for the site.
 
+import type { RdCachedNames } from '@/services/database/availability';
 import { flattenAndRemoveDuplicates, ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
 import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
 } from '@/utils/debridioBackfill';
+import { isRdBlockedName } from '@/utils/deInfringe';
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { isTorznabLiveService, type TorznabLiveService } from '@/utils/sponsorProviders';
 import type { NextApiRequest } from 'next';
@@ -375,30 +377,101 @@ async function recentReleases(): Promise<LibraryRelease[]> {
  */
 const CACHE_LOOKUP_CHUNK = 500;
 
-async function lookupCached(hashes: string[], scope: 'any' | 'rd' | 'ad'): Promise<Set<string>> {
-	if (scope === 'rd') return db.filterCachedHashes(hashes);
-	if (scope === 'ad') return db.filterCachedHashesAd(hashes);
-
-	const [rd, ad] = await Promise.all([
-		db.filterCachedHashes(hashes),
-		db.filterCachedHashesAd(hashes),
-	]);
-	for (const hash of ad) rd.add(hash);
-	return rd;
+/** What DMM's own tables hold for a set of hashes. */
+interface DbCacheRows {
+	/** Hashes Real-Debrid holds, with the names its row records. */
+	rd: Map<string, RdCachedNames>;
+	/** Hashes AllDebrid holds. */
+	ad: Set<string>;
 }
 
-async function cachedHashesFromDb(
+async function lookupCached(hashes: string[], scope: 'any' | 'rd' | 'ad'): Promise<DbCacheRows> {
+	const [rd, ad] = await Promise.all([
+		scope === 'ad' ? new Map<string, RdCachedNames>() : db.getCachedRdNames(hashes),
+		scope === 'rd' ? new Set<string>() : db.filterCachedHashesAd(hashes),
+	]);
+	return { rd, ad };
+}
+
+async function cachedRowsFromDb(
 	hashes: string[],
 	scope: 'any' | 'rd' | 'ad'
-): Promise<Set<string>> {
+): Promise<DbCacheRows> {
 	if (hashes.length <= CACHE_LOOKUP_CHUNK) return lookupCached(hashes, scope);
 
-	const found = new Set<string>();
+	const found: DbCacheRows = { rd: new Map(), ad: new Set() };
 	for (let start = 0; start < hashes.length; start += CACHE_LOOKUP_CHUNK) {
 		const chunk = await lookupCached(hashes.slice(start, start + CACHE_LOOKUP_CHUNK), scope);
-		for (const hash of chunk) found.add(hash);
+		for (const [hash, names] of chunk.rd) found.rd.set(hash, names);
+		for (const hash of chunk.ad) found.ad.add(hash);
 	}
 	return found;
+}
+
+/**
+ * Whether Real-Debrid refuses this release by name, so that no RD account can
+ * be handed it, held or not.
+ *
+ * RD judges an add on the torrent's own name and an unrestrict on each file's
+ * name. The rule itself, and its 2026-10-03 measurement, is
+ * `isRdBlockedName`'s. What this decides is which names to give it.
+ *
+ * The library title is what a scraper read off a listing, which is neither of
+ * RD's names. On 2026-10-03, across the 7,497 RD-held hashes on the 300 most
+ * recently refreshed library pages, 224 had a name on their RD row that RD
+ * refuses under a title that does not show it, mostly a site writing `WEB-DL`
+ * as `WEB DL`. So the names on RD's row are judged wherever there is one.
+ *
+ * The title is judged too, though 33 of those hashes had a refused title over
+ * names RD takes. A title can be the name of one file inside a pack, which RD
+ * then refuses to unrestrict, and a row filed from debridio holds a file name
+ * rather than the torrent's. Leaving out one release RD would have taken costs
+ * an entry in a long list; offering one it refuses costs the grab, which an
+ * *arr then records as a failed download.
+ */
+function isRefusedByRd(release: LibraryRelease, rdNames?: RdCachedNames): boolean {
+	const names = rdNames ? [rdNames.originalFilename, rdNames.filename] : [];
+	return isRdBlockedName(release.title, names);
+}
+
+interface CacheAnswer extends ProviderCacheAnswer {
+	/**
+	 * Releases Real-Debrid refuses by name. Filled on the feeds that read RD's
+	 * cache, empty on the rest.
+	 */
+	refusedByRd: Set<string>;
+}
+
+/**
+ * The database's cache answer: exhaustive, so `unresolved` is always zero.
+ *
+ * A hash RD holds counts as cached on RD only when RD would hand it over. The
+ * 2026-09-08 report was exactly this: `/rd/cached` served
+ * `Dead.Of.Winter.2025.2160p.AMZN.WEB-DL.DDP5.1.H.265-FLUX`, which DMM's RD
+ * table marked downloaded, and RD refused it on its name. The same discount
+ * applies to the combined feed, where AllDebrid holding a release still counts.
+ */
+async function cacheFromDb(
+	releases: LibraryRelease[],
+	scope: 'any' | 'rd' | 'ad'
+): Promise<CacheAnswer> {
+	const rows = await cachedRowsFromDb(
+		releases.map((release) => release.hash),
+		scope
+	);
+
+	const refused = new Set<string>();
+	if (scope !== 'ad') {
+		for (const release of releases) {
+			if (isRefusedByRd(release, rows.rd.get(release.hash))) refused.add(release.hash);
+		}
+	}
+
+	const cached = new Set(rows.ad);
+	for (const hash of rows.rd.keys()) {
+		if (!refused.has(hash)) cached.add(hash);
+	}
+	return { cached, unresolved: 0, refusedByRd: refused };
 }
 
 /**
@@ -411,13 +484,13 @@ async function cachedHashesFromDb(
  * converges over the searches that follow.
  */
 async function resolveCache(
-	hashes: string[],
+	releases: LibraryRelease[],
 	options: TorznabFeedOptions,
 	context?: TorznabSearchContext
-): Promise<ProviderCacheAnswer> {
+): Promise<CacheAnswer> {
 	const scope = options.cache;
 	if (scope === 'any' || scope === 'rd' || scope === 'ad') {
-		return { cached: await cachedHashesFromDb(hashes, scope), unresolved: 0 };
+		return cacheFromDb(releases, scope);
 	}
 
 	// A feed that names a provider is unusable without that provider's key, and
@@ -428,7 +501,12 @@ async function resolveCache(
 	const apiKey = await db.getSponsorProviderKey(context.shortId, scope);
 	if (!apiKey) throw new MissingProviderKeyError(scope);
 
-	return probeProviderCache(scope, apiKey, hashes);
+	const answer = await probeProviderCache(
+		scope,
+		apiKey,
+		releases.map((release) => release.hash)
+	);
+	return { ...answer, refusedByRd: new Set() };
 }
 
 function magnetUri(hash: string, title: string): string {
@@ -492,15 +570,18 @@ export async function runSearch(
 	const matching = releases.filter((release) =>
 		matchesCategoryFilter(release.categories, params.categories)
 	);
-	const { cached, unresolved } = await resolveCache(
-		matching.map((release) => release.hash),
-		options,
-		context
-	);
+	const { cached, unresolved, refusedByRd } = await resolveCache(matching, options, context);
 
+	// An `rd` feed is read by a Real-Debrid account, which can never take what RD
+	// refuses by name, so those are left out rather than ranked low. The other
+	// feeds keep them: AllDebrid and the rest apply no such rule.
+	const offered =
+		options.cache === 'rd'
+			? matching.filter((release) => !refusedByRd.has(release.hash))
+			: matching;
 	const kept = options.cachedOnly
-		? matching.filter((release) => cached.has(release.hash))
-		: matching;
+		? offered.filter((release) => cached.has(release.hash))
+		: offered;
 	kept.sort((a, b) => Number(cached.has(b.hash)) - Number(cached.has(a.hash)));
 
 	const page = kept.slice(params.offset, params.offset + params.limit);

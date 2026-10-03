@@ -23,7 +23,10 @@ const build = () => {
 	};
 	const availability = {
 		checkAvailabilityByHashes: vi.fn(async (hashes: string[]) => hashes),
-		filterCachedHashes: vi.fn(async (hashes: string[]) => new Set(hashes)),
+		getCachedRdNames: vi.fn(
+			async (hashes: string[]) =>
+				new Map(hashes.map((hash) => [hash, { filename: hash, originalFilename: hash }]))
+		),
 		filterPlayableCachedHashes: vi.fn(async (hashes: string[]) => new Set(hashes)),
 		filterPlayableCachedHashesAd: vi.fn(async (hashes: string[]) => new Set(hashes)),
 		upsertAvailability: vi.fn(),
@@ -64,7 +67,7 @@ describe('Repository takedown enforcement', () => {
 	it('never reports a blocked hash as cached', async () => {
 		const { repo } = build();
 		expect(await repo.checkAvailabilityByHashes([BLOCKED, KEPT])).toEqual([KEPT]);
-		expect(await repo.filterCachedHashes([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
+		expect([...(await repo.getCachedRdNames([BLOCKED, KEPT])).keys()]).toEqual([KEPT]);
 		expect(await repo.filterPlayableCachedHashes([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
 		expect(await repo.filterPlayableCachedHashesAd([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
 	});

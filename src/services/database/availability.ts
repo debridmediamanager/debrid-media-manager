@@ -5,6 +5,12 @@ import { DatabaseClient } from './client';
 const playableHashes = (rows: { hash: string; files: { path: string }[] }[]) =>
 	new Set(rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase()));
 
+/** The two names an `Available` row records for a torrent; see `getCachedRdNames`. */
+export interface RdCachedNames {
+	filename: string;
+	originalFilename: string;
+}
+
 type ParsedEpisodeInfo = {
 	season?: number;
 	episode?: number;
@@ -511,29 +517,44 @@ export class AvailabilityService extends DatabaseClient {
 	}
 
 	/**
-	 * Which of these hashes Real-Debrid already holds — the set, nothing else.
+	 * Which of these hashes Real-Debrid already holds, with the two names its
+	 * row records for each, and no file rows.
 	 *
 	 * `checkAvailability` pulls every file row of every match, which is what a
 	 * page rendering a file list needs and pure weight for a caller that only
 	 * wants to know whether a grab would be instant. The Torznab feed asks this
 	 * of a whole title's hash list at once, so the file rows would dominate it.
 	 *
-	 * Answered in lower case: the hash column collates case-insensitively, so a
+	 * The names are here because RD refuses some releases by name whether it
+	 * holds them or not, so "held" alone does not answer "would a grab land".
+	 * On a row written from RD's own torrent info, `originalFilename` is RD's
+	 * `original_filename`, the torrent's own name, which RD judges an add on, and
+	 * `filename` is the name of what was selected, the file's own name when that
+	 * is one file, which RD judges an unrestrict on. Rows filed from debridio or
+	 * by the uploader carry a file name or the rewritten name in both.
+	 *
+	 * Keyed in lower case: the hash column collates case-insensitively, so a
 	 * row can come back in a different case from the hash that was asked for,
 	 * and a caller comparing sets would silently miss it.
 	 */
-	public async filterCachedHashes(hashes: string[]): Promise<Set<string>> {
-		if (hashes.length === 0) return new Set();
+	public async getCachedRdNames(hashes: string[]): Promise<Map<string, RdCachedNames>> {
+		if (hashes.length === 0) return new Map();
 		const rows = await this.prisma.available.findMany({
 			where: { hash: { in: hashes }, status: 'downloaded' },
-			select: { hash: true },
+			select: { hash: true, filename: true, originalFilename: true },
 		});
-		return new Set(rows.map((row) => row.hash.toLowerCase()));
+		return new Map(
+			rows.map((row) => [
+				row.hash.toLowerCase(),
+				{ filename: row.filename, originalFilename: row.originalFilename },
+			])
+		);
 	}
 
 	/**
-	 * The AllDebrid counterpart of `filterCachedHashes`. Its rows carry AD's own
-	 * ready state, not RD's — same pair of conditions `checkAvailabilityAd` uses.
+	 * Which of these hashes AllDebrid already holds, for the same callers as
+	 * `getCachedRdNames`. Its rows carry AD's own ready state, not RD's — same
+	 * pair of conditions `checkAvailabilityAd` uses.
 	 */
 	public async filterCachedHashesAd(hashes: string[]): Promise<Set<string>> {
 		if (hashes.length === 0) return new Set();
@@ -554,7 +575,7 @@ export class AvailabilityService extends DatabaseClient {
 	 * more. `checkAvailabilityByHashes` answers the same question but ships
 	 * every file row to the browser to decide it there; a 28k-item list made
 	 * that 278 requests of 100 hashes. Only `path` is read, since `isVideo`
-	 * needs nothing else. Answered in lower case, like `filterCachedHashes`.
+	 * needs nothing else. Answered in lower case, like `getCachedRdNames`.
 	 */
 	public async filterPlayableCachedHashes(hashes: string[]): Promise<Set<string>> {
 		if (hashes.length === 0) return new Set();

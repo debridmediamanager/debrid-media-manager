@@ -487,8 +487,8 @@ export class Repository {
 		);
 	}
 
-	public async filterCachedHashes(hashes: string[]) {
-		return this.availabilityService.filterCachedHashes(await withoutBlockedHashList(hashes));
+	public async getCachedRdNames(hashes: string[]) {
+		return this.availabilityService.getCachedRdNames(await withoutBlockedHashList(hashes));
 	}
 
 	public async filterCachedHashesAd(hashes: string[]) {

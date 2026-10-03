@@ -44,14 +44,14 @@ the clear.
 An \*arr appends `/api` to whatever URL it is given, so anything between `/api/torznab`
 and that `/api` is ours to use:
 
-| URL a sponsor pastes     | Feed                                                 |
-| ------------------------ | ---------------------------------------------------- |
-| `/api/torznab`           | Everything in the library, cached or not             |
-| `/api/torznab/cached`    | Only releases cached on Real-Debrid **or** AllDebrid |
-| `/api/torznab/rd`        | Cache signal read from Real-Debrid only              |
-| `/api/torznab/ad`        | Cache signal read from AllDebrid only                |
-| `/api/torznab/rd/cached` | Only what Real-Debrid already holds                  |
-| `/api/torznab/ad/cached` | Only what AllDebrid already holds                    |
+| URL a sponsor pastes     | Feed                                                                   |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `/api/torznab`           | Everything in the library, cached or not                               |
+| `/api/torznab/cached`    | Only releases cached on Real-Debrid **or** AllDebrid                   |
+| `/api/torznab/rd`        | Cache signal read from Real-Debrid only, minus what RD refuses by name |
+| `/api/torznab/ad`        | Cache signal read from AllDebrid only                                  |
+| `/api/torznab/rd/cached` | Only what Real-Debrid already holds and will hand over                 |
+| `/api/torznab/ad/cached` | Only what AllDebrid already holds                                      |
 
 A query parameter would have been simpler and does not work: Prowlarr builds the query
 string itself from the caps document and drops whatever a person put in the URL field.
@@ -180,6 +180,28 @@ Which cache is consulted follows the URL variant. The default reads both, so a s
 using only AllDebrid sees a Real-Debrid-cached release reported at 100; `/api/torznab/ad`
 scopes the signal to their own provider.
 
+### Releases Real-Debrid refuses by name
+
+Real-Debrid refuses some releases by name whether or not it already holds them: an add is
+judged on the torrent's own name and an unrestrict on each file's name. The rule is
+`isRdBlockedName` in `src/utils/deInfringe.ts` (five case-sensitive literals, measured
+2026-10-03); the feed only decides which names to give it. Reported 2026-09-08:
+`/api/torznab/rd/cached` listed `Dead.Of.Winter.2025.2160p.AMZN.WEB-DL.DDP5.1.H.265-FLUX`,
+which DMM's RD table marked downloaded, and RD refused it.
+
+- A release is judged on its library title **and** on the two names its `Available` row
+  records (`originalFilename`, the torrent's own name, and `filename`, the selected file's
+  when one file was selected). The title alone is not enough: across the 7,497 RD-held
+  hashes on the 300 most recently refreshed pages on 2026-10-03, 224 carried a refused
+  name on their RD row under a title that hid it, mostly a listing writing `WEB-DL` as
+  `WEB DL`.
+- `/api/torznab/rd` and `/api/torznab/rd/cached` leave such a release out, held or not:
+  an RD account can never take it.
+- `/api/torznab` and `/api/torznab/cached` keep it, but RD holding it no longer counts as
+  cached; AllDebrid holding it still does.
+- The AllDebrid and provider-probed feeds are unchanged; those services apply no such
+  rule.
+
 ## Categories
 
 Derived, because a stored release is `{hash, title, fileSize}` and nothing more. The
@@ -251,6 +273,9 @@ and cleanly does nothing when they are unset.
 
 ## Tests
 
-`src/test/api/torznabApi.test.ts` (endpoint behavior end to end),
+`src/test/api/torznabApi.test.ts` (endpoint behavior end to end; its Real-Debrid name cases
+run on `src/test/fixtures/torznab/rd-refused-names-2026-10-03.json`, two whole production
+library pages with their RD rows, and on RD's recorded probe answers in
+`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`),
 `src/test/services/torznab{Resolve,Categories,Xml}.test.ts`,
 `src/test/pages/torznab.test.tsx`.

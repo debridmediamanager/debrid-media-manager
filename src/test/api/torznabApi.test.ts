@@ -1,14 +1,23 @@
 import handler from '@/pages/api/torznab/[...route]';
+import type { RdCachedNames } from '@/services/database/availability';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { ProviderProbeError } from '@/services/torznab/providerCache';
-import { CACHED_SEEDERS, UNCACHED_SEEDERS } from '@/services/torznab/search';
-import { MAX_LIMIT } from '@/services/torznab/xml';
+import {
+	CACHED_SEEDERS,
+	parseFeedOptions,
+	runSearch,
+	UNCACHED_SEEDERS,
+} from '@/services/torznab/search';
+import { MAX_LIMIT, TorznabRssItem } from '@/services/torznab/xml';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
+import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
 } from '@/utils/debridioBackfill';
+import { isRdBlockedName } from '@/utils/deInfringe';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // setup.ts stubs the whole rate limit module out, which would take
@@ -54,6 +63,8 @@ const PAGE_UPDATED_AT = new Date('2026-02-01T10:00:00Z');
 
 let library: Map<string, { results: unknown[]; updatedAt: Date }>;
 let rdCached: Set<string>;
+/** The names RD's row records for a held hash, where a test cares what they are. */
+let rdNames: Map<string, RdCachedNames>;
 let adCached: Set<string>;
 let reported: string[];
 let providerKey: string | null;
@@ -152,6 +163,7 @@ beforeEach(() => {
 		],
 	]);
 	rdCached = new Set([BIG]);
+	rdNames = new Map();
 	adCached = new Set([CACHED_ON_AD]);
 	reported = [];
 	providerKey = 'provider-key';
@@ -175,8 +187,15 @@ beforeEach(() => {
 	mockRepo.getImdbTitleById = vi.fn().mockResolvedValue(null);
 	mockRepo.searchImdbTitles = vi.fn().mockResolvedValue([]);
 	mockRepo.getReportedHashes = vi.fn(async (_imdbId: string) => reported);
-	mockRepo.filterCachedHashes = vi.fn(
-		async (hashes: string[]) => new Set(hashes.filter((h) => rdCached.has(h)))
+	// A held hash with no entry in `rdNames` is held under its own hash, a name
+	// RD has no reason to refuse.
+	mockRepo.getCachedRdNames = vi.fn(
+		async (hashes: string[]) =>
+			new Map(
+				hashes
+					.filter((h) => rdCached.has(h))
+					.map((h) => [h, rdNames.get(h) ?? { filename: h, originalFilename: h }])
+			)
 	);
 	mockRepo.filterCachedHashesAd = vi.fn(
 		async (hashes: string[]) => new Set(hashes.filter((h) => adCached.has(h)))
@@ -824,5 +843,208 @@ describe('a size the library cannot mean', () => {
 		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
 
 		expect(attrValue(body(res), 'size')).toEqual([String(500 * 1024 * 1024 * 1024)]);
+	});
+});
+
+describe('releases Real-Debrid refuses by name', () => {
+	// Reported in Discord #sponsors on 2026-09-08: on `/api/torznab/rd/cached`,
+	// zurg's qBittorrent endpoint was handed
+	// `Dead.Of.Winter.2025.2160p.AMZN.WEB-DL.DDP5.1.H.265-FLUX` and logged
+	// "realdebrid it refuses this release on its filename". DMM's RD table had
+	// the hash as downloaded, so the feed listed it as cached. The fixture is
+	// that title's whole library page and The Crow (2024)'s as production held
+	// them on 2026-10-03, with the RD row of every hash on them that DMM marks
+	// cached, so these run against the names the feed really serves.
+	const DEAD_OF_WINTER = 'tt7574556';
+	const THE_CROW = 'tt1340094';
+	const REPORTED = rdRefusedNames.reported.hash;
+
+	const titleOf = (torrentHash: string) =>
+		rdRefusedNames.pages
+			.flatMap((page) => page.results)
+			.find((result) => result.hash === torrentHash)?.title;
+
+	/**
+	 * Every item a feed serves for a title, paged the way a client pages the
+	 * route. Through `runSearch` rather than the route, whose per-sponsor budget
+	 * a 300-release title would spend before reaching the end.
+	 */
+	async function wholeFeed(segments: string[], imdbid: string): Promise<TorznabRssItem[]> {
+		const options = parseFeedOptions(segments);
+		if (!options) throw new Error(`not a feed: ${segments.join('/')}`);
+		const items: TorznabRssItem[] = [];
+		for (let offset = 0; ; offset += MAX_LIMIT) {
+			const page = await runSearch('movie', { imdbid, offset: String(offset) }, options, {
+				shortId,
+			});
+			items.push(...page.items);
+			if (page.items.length === 0 || items.length >= page.total) return items;
+		}
+	}
+
+	const hashesOf = (items: TorznabRssItem[]) => items.map((item) => item.infoHash);
+
+	/** Whether RD refuses a served item by its title or by its RD row's names. */
+	const refusedByRd = (item: TorznabRssItem) => {
+		const names = rdNames.get(item.infoHash);
+		return isRdBlockedName(item.title, names ? [names.originalFilename, names.filename] : []);
+	};
+
+	beforeEach(() => {
+		library = new Map(
+			rdRefusedNames.pages.map((page) => [
+				page.key,
+				{ results: page.results, updatedAt: new Date(page.updatedAt) },
+			])
+		);
+		rdCached = new Set(rdRefusedNames.rdCached.map((row) => row.hash));
+		rdNames = new Map(
+			rdRefusedNames.rdCached.map((row) => [
+				row.hash,
+				{ filename: row.filename, originalFilename: row.originalFilename },
+			])
+		);
+		adCached = new Set();
+	});
+
+	it('answers the reported request without the release RD refused', async () => {
+		const res = await run(
+			{ t: 'movie', imdbid: DEAD_OF_WINTER, apikey: SPONSOR_KEY },
+			{ route: ['rd', 'cached', 'api'] }
+		);
+
+		// 76 of the page's releases are held on RD; RD refuses 29 of them by name.
+		expect(body(res)).toContain('total="47"');
+		expect(attrValue(body(res), 'infohash')).not.toContain(REPORTED);
+	});
+
+	it('serves only what an RD account can take on /rd/cached', async () => {
+		const deadOfWinter = await wholeFeed(['rd', 'cached'], DEAD_OF_WINTER);
+		const theCrow = await wholeFeed(['rd', 'cached'], THE_CROW);
+
+		expect(deadOfWinter).toHaveLength(47);
+		// 79 held once the Cyrillic titles the site also hides are gone; 20 refused.
+		expect(theCrow).toHaveLength(59);
+		expect(hashesOf(deadOfWinter)).not.toContain(REPORTED);
+		expect([...deadOfWinter, ...theCrow].filter(refusedByRd)).toEqual([]);
+		expect([...deadOfWinter, ...theCrow].every((item) => item.seeders === CACHED_SEEDERS)).toBe(
+			true
+		);
+	});
+
+	it('keeps the releases RD has taken since dropping the rip family and BluRay.x264', async () => {
+		const served = hashesOf([
+			...(await wholeFeed(['rd', 'cached'], DEAD_OF_WINTER)),
+			...(await wholeFeed(['rd', 'cached'], THE_CROW)),
+		]);
+
+		for (const control of [
+			'c2fdb63df75dc80570b6fe4250f521cbb66c88e1', // Dead.of.Winter.2025.720p.BluRay.x264-PiGNUS
+			'9b7f7e2f52470681222a00cd5a4f82252de411bc', // Dead.of.Winter.2025.1080p.WEBRip.x265-KONTRAST
+			'c06e262ee527b9c7b923f913341018fe2cb4b8d8', // The.Crow.2024.1080p.BluRay.x264-ATELiER_EniaHD.mkv
+		]) {
+			expect(rdCached.has(control), control).toBe(true);
+			expect(served, titleOf(control)).toContain(control);
+		}
+	});
+
+	it("judges the names on RD's row, not only the scraped title", async () => {
+		// A listing that wrote `WEB-DL` as `WEB DL` hides the refused name from
+		// the title; RD's row still carries the torrent's own name.
+		const spacedTitles = rdRefusedNames.rdCached.filter((row) => {
+			const title = titleOf(row.hash) ?? '';
+			return (
+				title.startsWith('The Crow') &&
+				!isRdBlockedName(title) &&
+				isRdBlockedName(row.originalFilename, [row.filename])
+			);
+		});
+		expect(spacedTitles).toHaveLength(9);
+
+		const served = hashesOf(await wholeFeed(['rd', 'cached'], THE_CROW));
+		for (const row of spacedTitles) {
+			expect(served, titleOf(row.hash)).not.toContain(row.hash);
+		}
+	});
+
+	it('leaves refused releases out of /rd too, held or not', async () => {
+		const deadOfWinter = await wholeFeed(['rd'], DEAD_OF_WINTER);
+		const theCrow = await wholeFeed(['rd'], THE_CROW);
+
+		expect(deadOfWinter).toHaveLength(227 - 74);
+		expect(theCrow).toHaveLength(411 - 99);
+		expect(hashesOf(deadOfWinter)).not.toContain(REPORTED);
+		expect([...deadOfWinter, ...theCrow].filter(refusedByRd)).toEqual([]);
+	});
+
+	it("stops counting RD's copy as cached on the combined feed, and keeps AllDebrid's", async () => {
+		expect(hashesOf(await wholeFeed(['cached'], DEAD_OF_WINTER))).not.toContain(REPORTED);
+
+		// Still in the plain feed, which AllDebrid users read, just not as cached.
+		const plain = await wholeFeed([], DEAD_OF_WINTER);
+		expect(plain.find((item) => item.infoHash === REPORTED)?.seeders).toBe(UNCACHED_SEEDERS);
+
+		adCached = new Set([REPORTED]);
+		expect(hashesOf(await wholeFeed(['cached'], DEAD_OF_WINTER))).toContain(REPORTED);
+		expect(hashesOf(await wholeFeed(['ad', 'cached'], DEAD_OF_WINTER))).toContain(REPORTED);
+	});
+
+	// RD's own answers from the recorded probe of 2026-10-03, each a fresh
+	// webseed torrent so only the names decided. An add is judged on the root
+	// name, and multi-file entries whose files RD later refused to unrestrict
+	// were still taken; an unrestrict is judged on the file's own name, which
+	// is what RD's row records as `filename` when one file was selected.
+	it('lists exactly the names RD took when they were added', async () => {
+		const probes = rdNameFilterProbe.add.map((probe, index) => ({
+			...probe,
+			hash: `c${index.toString(16).padStart(39, '0')}`,
+		}));
+		library.set(`movie:${MOVIE_ID}`, {
+			results: probes.map((probe) => release(probe.name, 1_000, probe.hash)),
+			updatedAt: PAGE_UPDATED_AT,
+		});
+		rdCached = new Set(probes.map((probe) => probe.hash));
+		rdNames = new Map(
+			probes.map((probe) => [
+				probe.hash,
+				{ filename: probe.name, originalFilename: probe.name },
+			])
+		);
+
+		const served = new Set(hashesOf(await wholeFeed(['rd', 'cached'], MOVIE_ID)));
+
+		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(20);
+		for (const probe of probes) {
+			expect(served.has(probe.hash), `${probe.name} answered ${probe.status}`).toBe(
+				probe.status === 201
+			);
+		}
+	});
+
+	it('leaves out a held file RD refused to unrestrict, under a clean pack name', async () => {
+		const probes = rdNameFilterProbe.unrestrict.map((probe, index) => ({
+			...probe,
+			hash: `d${index.toString(16).padStart(39, '0')}`,
+			pack: `Probe.Pack${index}.2026.1080p.x265-PRB`,
+		}));
+		library.set(`movie:${MOVIE_ID}`, {
+			results: probes.map((probe) => release(probe.pack, 1_000, probe.hash)),
+			updatedAt: PAGE_UPDATED_AT,
+		});
+		rdCached = new Set(probes.map((probe) => probe.hash));
+		rdNames = new Map(
+			probes.map((probe) => [
+				probe.hash,
+				{ filename: probe.name, originalFilename: probe.pack },
+			])
+		);
+
+		const served = new Set(hashesOf(await wholeFeed(['rd', 'cached'], MOVIE_ID)));
+
+		for (const probe of probes) {
+			expect(served.has(probe.hash), `${probe.name} answered ${probe.status}`).toBe(
+				probe.status === 200
+			);
+		}
 	});
 });
