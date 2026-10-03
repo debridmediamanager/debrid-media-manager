@@ -22,8 +22,6 @@ vi.mock('@/utils/selectable', () => ({
 }));
 
 import {
-	buildInstantWatchUrl,
-	buildLinkWatchUrl,
 	getBiggestVideoFile,
 	openWatch,
 	pickInfoService,
@@ -101,55 +99,6 @@ describe('getBiggestVideoFile', () => {
 
 	it('returns undefined when there are no files', () => {
 		expect(getBiggestVideoFile({ files: [] } as any)).toBeUndefined();
-	});
-});
-
-describe('buildInstantWatchUrl', () => {
-	// `player` is itself a two-segment path, so it belongs in the path and must
-	// not be percent-encoded the way the query values are.
-	it('keeps the player in the path and encodes the query', () => {
-		const url = buildInstantWatchUrl({
-			service: 'tb',
-			player: 'android/com.brouken.player',
-			token: 'tok en',
-			hash: 'abc',
-			fileName: 'A Movie.mkv',
-			fileId: 3,
-		});
-
-		expect(url.startsWith('/api/watch/instant/android/com.brouken.player?')).toBe(true);
-		const params = new URLSearchParams(url.split('?')[1]);
-		expect(params.get('service')).toBe('tb');
-		expect(params.get('token')).toBe('tok en');
-		expect(params.get('fileName')).toBe('A Movie.mkv');
-		expect(params.get('fileId')).toBe('3');
-	});
-
-	it('omits absent optional params', () => {
-		const url = buildInstantWatchUrl({
-			service: 'rd',
-			player: 'windows/vlc',
-			token: 't',
-			hash: 'abc',
-		});
-
-		expect(url).not.toContain('fileName');
-		expect(url).not.toContain('fileId');
-	});
-});
-
-describe('buildLinkWatchUrl', () => {
-	it('encodes the service link', () => {
-		const url = buildLinkWatchUrl({
-			service: 'ad',
-			player: 'ios/infuse',
-			token: 'k',
-			link: 'https://alldebrid.com/f/a+b',
-		});
-
-		const params = new URLSearchParams(url.split('?')[1]);
-		expect(url.startsWith('/api/watch/ios/infuse?')).toBe(true);
-		expect(params.get('link')).toBe('https://alldebrid.com/f/a+b');
 	});
 });
 

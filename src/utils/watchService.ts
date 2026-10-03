@@ -123,50 +123,14 @@ export const getBiggestVideoFile = (result: Pick<SearchResult, 'files'>): FileDa
 		.sort((a, b) => b.filesize - a.filesize)[0];
 };
 
-const withQuery = (path: string, params: Record<string, string | undefined>) => {
-	const search = new URLSearchParams();
-	for (const [name, value] of Object.entries(params)) {
-		if (value !== undefined && value !== '') search.set(name, value);
-	}
-	return `${path}?${search.toString()}`;
-};
-
-// `player` is a two-segment path ("android/com.brouken.player"), so it is
-// interpolated into the path and must not be query-encoded.
-export const buildInstantWatchUrl = (params: {
-	service: WatchService;
-	player: string;
-	token: string;
-	hash: string;
-	fileName?: string;
-	fileId?: number | string;
-}) =>
-	withQuery(`/api/watch/instant/${params.player}`, {
-		service: params.service,
-		token: params.token,
-		hash: params.hash,
-		fileName: params.fileName,
-		fileId: params.fileId === undefined ? undefined : String(params.fileId),
-	});
-
-export const buildLinkWatchUrl = (params: {
-	service: WatchService;
-	player: string;
-	token: string;
-	link: string;
-}) =>
-	withQuery(`/api/watch/${params.player}`, {
-		service: params.service,
-		token: params.token,
-		link: params.link,
-	});
-
 /**
  * Asks the server for the player intent.
  *
  * The two GET routes take the debrid key in the query string, which puts it in
  * the address bar of the tab that opens and in every access log on the way. This
  * posts it in a body instead and navigates to the intent the server hands back.
+ * Nothing in dmm builds those GET URLs any more; the routes still answer
+ * callers outside it.
  */
 export const resolveWatchIntent = async (params: {
 	service: WatchService;
