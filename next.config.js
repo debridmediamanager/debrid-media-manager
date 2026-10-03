@@ -58,6 +58,13 @@ const nextConfig = {
 				destination: '/music/:path*',
 				permanent: false,
 			},
+			{
+				// Removed 2026-10-03: the Patreon post is the one complete copy.
+				source: '/rd-filename-filters.html',
+				destination:
+					'https://www.patreon.com/debridmediamanager/posts/complete-list-of-158388927',
+				permanent: true,
+			},
 		];
 	},
 	images: {
