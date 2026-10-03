@@ -1,3 +1,5 @@
+import allDebridTopic from '@/test/fixtures/alldebrid-encoded-topic.json';
+import encodedMagnet from '@/test/fixtures/urlsearchparams-magnet.json';
 import { describe, expect, it } from 'vitest';
 import {
 	SHA1_REGEX,
@@ -73,6 +75,27 @@ describe('extractHashes utils', () => {
 			{ kind: 'magnet', source: magnet, hash: magnetHash },
 			{ kind: 'hash', source: bareHash, hash: bareHash },
 		]);
+	});
+
+	it('accepts percent-encoded exact topics without rewriting the supplied magnet', () => {
+		expect(extractTorrentInputs(encodedMagnet.source)).toEqual([
+			{ kind: 'magnet', source: encodedMagnet.source, hash: encodedMagnet.hash },
+		]);
+	});
+
+	it.each([
+		['percent-encoded', allDebridTopic.source],
+		['base32 with uppercase scheme', allDebridTopic.base32Source],
+	])('makes a %s topic interoperable without losing magnet metadata', (_name, source) => {
+		const [magnet] = extractMagnets(source);
+		const accepted = allDebridTopic.canonicalResponse.magnets[0];
+		// AllDebrid rejected the encoded URI but accepted the same literal exact topic.
+		expect(magnet).toMatch(new RegExp(`^magnet:\\?xt=urn:btih:${accepted.hash}(?:&|$)`));
+		expect(
+			Array.from(new URL(magnet).searchParams).filter(([key]) => key.toLowerCase() !== 'xt')
+		).toEqual(
+			Array.from(new URL(source).searchParams).filter(([key]) => key.toLowerCase() !== 'xt')
+		);
 	});
 
 	describe('extractDownloadLinks', () => {

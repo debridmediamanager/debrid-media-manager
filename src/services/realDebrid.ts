@@ -1,5 +1,6 @@
 import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
+import { extractTorrentInputs, toMagnetUri } from '@/utils/extractHashes';
 import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
@@ -722,14 +723,12 @@ export const addHashAsMagnet = async (
 	bare: boolean = false
 ): Promise<string> => {
 	const source = hashOrMagnet.trim();
-	const isMagnet = source.startsWith('magnet:');
-	const magnetHash = isMagnet
-		? /(?:^|[?&])xt=urn:btih:([a-fA-F0-9]{40}|[A-Za-z2-7]{32})(?:&|$)/i.exec(source)?.[1]
-		: null;
+	const isMagnet = /^magnet:\?/i.test(source);
+	const magnetHash = isMagnet ? extractTorrentInputs(source)[0]?.hash : null;
 	if ((!isMagnet && !isValidSHA40Hash(source)) || (isMagnet && !magnetHash)) {
 		throw new Error(`Invalid SHA40 hash or v1 magnet: ${hashOrMagnet}`);
 	}
-	const magnet = isMagnet ? source : `magnet:?xt=urn:btih:${source}`;
+	const magnet = toMagnetUri(source);
 
 	// Counted before the call, and counted whatever comes back: RD's budget is
 	// spent by refused requests too, so a burst that is already being turned away

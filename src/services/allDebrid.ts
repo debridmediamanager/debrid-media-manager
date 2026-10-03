@@ -1,4 +1,5 @@
 import { delay as delayWithMessageChannel } from '@/utils/delay';
+import { toMagnetUri } from '@/utils/extractHashes';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 
@@ -364,9 +365,7 @@ export const uploadMagnet = async (apikey: string, hashes: string[]): Promise<Ma
 		const endpoint = `${config.allDebridHostname}/v4.1/magnet/upload`;
 
 		// Convert hashes to magnets (handles both formats)
-		const magnets = hashes
-			.map((h) => (h.startsWith('magnet:?') ? h : `magnet:?xt=urn:btih:${h}`))
-			.filter((m) => m.startsWith('magnet:?'));
+		const magnets = hashes.map(toMagnetUri).filter((magnet) => magnet.startsWith('magnet:?'));
 
 		if (!magnets.length) {
 			throw new Error('No valid magnets to upload');
@@ -409,12 +408,24 @@ export const uploadTorrentFile = async (
 	const response = await allDebridAxios.post<ApiResponse<MagnetFileUploadData>>(endpoint, form, {
 		headers: { Authorization: `Bearer ${apikey}` },
 	});
-	if (response.data.status === 'error') {
-		throw new Error(response.data.error?.message || 'Unknown error');
+	if (response.data?.status !== 'success') {
+		throw Object.assign(
+			new Error(
+				response.data?.error?.message || 'AllDebrid returned an invalid upload response'
+			),
+			{ code: response.data?.error?.code }
+		);
 	}
-	const data = response.data.data!;
-	const refused = data.files?.find((uploaded) => uploaded.error);
-	if (refused?.error) throw new Error(refused.error.message || refused.error.code);
+	const data = response.data.data;
+	if (!data || !Array.isArray(data.files) || data.files.length === 0) {
+		throw new Error('AllDebrid returned no uploaded torrent files');
+	}
+	const refused = data.files.find((uploaded) => uploaded.error);
+	if (refused?.error) {
+		throw Object.assign(new Error(refused.error.message || refused.error.code), {
+			code: refused.error.code,
+		});
+	}
 	return data;
 };
 
@@ -663,7 +674,7 @@ export const uploadMagnetAd = async (apiKey: string, hash: string): Promise<Magn
 
 	const endpoint = `${config.allDebridHostname}/v4.1/magnet/upload`;
 	const params = new URLSearchParams();
-	params.append('magnets[]', `magnet:?xt=urn:btih:${hash}`);
+	params.append('magnets[]', toMagnetUri(hash));
 
 	try {
 		const response = await allDebridAxios.post<ApiResponse<MagnetUploadData>>(

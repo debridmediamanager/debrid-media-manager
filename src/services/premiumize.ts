@@ -1,3 +1,5 @@
+import { toMagnetUri } from '@/utils/extractHashes';
+
 /**
  * Premiumize API client.
  *
@@ -261,10 +263,6 @@ export async function pmRequest<T = PremiumizeEnvelope>(
 	return body as T;
 }
 
-/** `transfer/directdl` and `transfer/create` reject a bare hash; only `cache/check` takes one. */
-export const toMagnetUri = (hashOrMagnet: string): string =>
-	hashOrMagnet.startsWith('magnet:') ? hashOrMagnet : `magnet:?xt=urn:btih:${hashOrMagnet}`;
-
 /**
  * An unrecognised URL comes back from `transfer/directdl` as a `success` whose
  * `link` is the input verbatim, with a null size. The host is the only reliable
@@ -361,7 +359,9 @@ export const createPremiumizeTransfer = (
 	apiKey: string,
 	src: string
 ): Promise<PremiumizeEnvelope & { id: string; name: string; type?: string }> =>
-	pmRequest(apiKey, 'transfer/create', { src });
+	pmRequest(apiKey, 'transfer/create', {
+		src: /^magnet:/i.test(src) ? toMagnetUri(src) : src,
+	});
 
 /** Uploads a .torrent file through DMM's same-origin multipart proxy. */
 export async function uploadPremiumizeTorrentFile(
@@ -381,10 +381,10 @@ export async function uploadPremiumizeTorrentFile(
 		code: 'non_json_response',
 		message: `Proxy answered ${response.status}`,
 	}))) as PremiumizeEnvelope & { id: string; name: string; type?: string };
-	if (response.status >= 400 || body.status !== 'success') {
+	if (response.status >= 400 || body?.status !== 'success') {
 		throw new PremiumizeError(
-			body.message || 'Premiumize torrent upload failed',
-			body.code || `http_${response.status}`
+			body?.message || 'Premiumize torrent upload failed',
+			body?.code || (response.status >= 400 ? `http_${response.status}` : 'unknown_error')
 		);
 	}
 	return body;

@@ -459,6 +459,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 	const handleConfirm = async () => {
 		if (preConfirm) {
 			const result = await preConfirm();
+			if (result === false) return;
 			onClose({ isConfirmed: true, value: result });
 		} else {
 			onClose({ isConfirmed: true });

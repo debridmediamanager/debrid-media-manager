@@ -1,3 +1,5 @@
+import type * as DebridLinkModule from '@/services/debridLink';
+import type * as OffcloudModule from '@/services/offcloud';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
@@ -26,7 +28,8 @@ vi.mock('@/services/premiumize', () => ({
 // `isValidBtih` and `joinExploreWithCacheInfo` are pure and are the behaviour
 // under test here, so only the four network calls are replaced.
 vi.mock('@/services/offcloud', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/services/offcloud')>();
+	// This loading boundary must bypass the mock to retain the real classifiers.
+	const actual = await importOriginal<typeof OffcloudModule>();
 	return {
 		...actual,
 		addOffcloudCloud: mocks.addOffcloudCloud,
@@ -35,11 +38,10 @@ vi.mock('@/services/offcloud', async (importOriginal) => {
 		getOffcloudCacheInfo: mocks.getOffcloudCacheInfo,
 	};
 });
-// `toMagnetUri` and `isDlFinished` are pure and are the behaviour under test
-// here - the magnet form and the `>=` threshold are the two things that decide
-// what the user gets - so only the one network call is replaced.
+// Retain the real completion threshold; replace only the network operation.
 vi.mock('@/services/debridLink', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/services/debridLink')>();
+	// A static value import would resolve this mock rather than the original module.
+	const actual = await importOriginal<typeof DebridLinkModule>();
 	return { ...actual, addSeedboxTorrent: mocks.addSeedboxTorrent };
 });
 vi.mock('@/services/realDebrid', () => ({

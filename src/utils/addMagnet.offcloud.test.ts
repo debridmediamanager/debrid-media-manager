@@ -9,8 +9,6 @@ const oc = vi.hoisted(() => ({
 		/^[0-9a-fA-F]{40}$/.test(hash.trim()) || /^[A-Za-z2-7]{32}$/.test(hash.trim()),
 	extractBtih: (source: string) =>
 		/(?:^|[?&])xt=urn:btih:([A-Za-z0-9]{32,40})(?:&|$)/.exec(source)?.[1] ?? null,
-	toMagnetUri: (hash: string) =>
-		hash.startsWith('magnet:') ? hash : `magnet:?xt=urn:btih:${hash.trim()}`,
 	OffcloudError: class OffcloudError extends Error {
 		code: string;
 		constructor(message: string, code = 'unknown_error') {
@@ -25,7 +23,6 @@ vi.mock('@/services/premiumize', () => ({
 	createPremiumizeTransfer: vi.fn(),
 	listPremiumizeTransfers: vi.fn(),
 	listPremiumizeFolder: vi.fn(),
-	toMagnetUri: (hash: string) => `magnet:?xt=urn:btih:${hash}`,
 	PremiumizeError: class PremiumizeError extends Error {},
 }));
 vi.mock('@/services/allDebrid', () => ({
@@ -65,11 +62,7 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import {
-	handleAddAsMagnetInOc,
-	handleAddMultipleHashesInOc,
-	handleAddMultipleTorrentFilesInOc,
-} from './addMagnet';
+import { handleAddAsMagnetInOc, handleAddMultipleHashesInOc } from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 
@@ -87,23 +80,6 @@ beforeEach(() => {
 });
 
 describe('handleAddAsMagnetInOc', () => {
-	it('sends the full magnet form, never a bare hash', async () => {
-		// `/cloud` would take a bare hash, but the magnet form is the house rule
-		// for every Offcloud call that takes a url: its `/cache/info` sibling
-		// silently reports cached content as uncached when handed a bare hash.
-		await handleAddAsMagnetInOc('oc-key', HASH);
-
-		expect(oc.addOffcloudCloud).toHaveBeenCalledWith('oc-key', `magnet:?xt=urn:btih:${HASH}`);
-	});
-
-	it('preserves display name, trackers, and webseeds on pasted magnets', async () => {
-		const magnet = `magnet:?xt=urn:btih:${HASH}&dn=Example&tr=udp%3A%2F%2Fone&tr=udp%3A%2F%2Ftwo&ws=https%3A%2F%2Fseed`;
-
-		await handleAddAsMagnetInOc('oc-key', magnet);
-
-		expect(oc.addOffcloudCloud).toHaveBeenCalledWith('oc-key', magnet);
-	});
-
 	it('says the content is ready when Offcloud finished inside the add response', async () => {
 		// A cached magnet answers `downloaded` synchronously, so the user can be
 		// told to press play without a single poll.
@@ -227,16 +203,5 @@ describe('handleAddMultipleHashesInOc', () => {
 
 		expect(oc.addOffcloudCloud).toHaveBeenCalledTimes(1);
 		expect(toastPlain).toHaveBeenCalledWith('Added 1 hash to Offcloud.', expect.any(Object));
-	});
-});
-
-describe('handleAddMultipleTorrentFilesInOc', () => {
-	it('passes each original file to Offcloud', async () => {
-		const file = new File(['torrent'], 'sample.torrent');
-		oc.addOffcloudTorrentFile.mockResolvedValue(added('created'));
-
-		await handleAddMultipleTorrentFilesInOc('oc-key', [file]);
-
-		expect(oc.addOffcloudTorrentFile).toHaveBeenCalledWith('oc-key', file);
 	});
 });

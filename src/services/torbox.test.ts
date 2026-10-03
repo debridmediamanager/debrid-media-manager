@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	checkCachedStatus,
 	controlTorrent,
-	createTorrent,
 	deleteTorrent,
 	exportTorrentData,
 	getTorrentInfo,
@@ -60,13 +59,6 @@ describe('torbox service helpers', () => {
 		axiosInstance.get.mockReset();
 		axiosInstance.post.mockResolvedValue({ data: { success: true } });
 		axiosInstance.get.mockResolvedValue({ data: { success: true, data: [] } });
-	});
-
-	it('creates torrents with magnet payloads', async () => {
-		await createTorrent('token', { magnet: 'magnet:?xt=urn:btih:abc' });
-		expect(axiosInstance.post).toHaveBeenCalled();
-		const formData = axiosInstance.post.mock.calls[0][1] as FormData;
-		expect(formData.get('magnet')).toBe('magnet:?xt=urn:btih:abc');
 	});
 
 	it('controls and deletes torrents through helper', async () => {

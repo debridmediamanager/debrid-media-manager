@@ -20,6 +20,12 @@ This builds on top of the amazing service brought by [Real-Debrid](https://real-
 
 See all your torrents in one page, sort them by name, size, status, or date added. It groups torrents by title and helps you delete duplicates. It can show you failed or slow downloads and delete them.
 
+The library's **Add** buttons accept full magnet links, standalone v1 info hashes, and native `.torrent` files for Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, and Debrid-Link. Pasted magnets retain their names, duplicate trackers, webseeds, and other parameters. Hexadecimal and base32 exact topics are recognized, including percent-encoded query parameters, and normalized to literal hexadecimal `urn:btih:` topics at provider boundaries for compatibility. Files are uploaded as-is rather than reduced to a hash, and mixed submissions run their file and magnet batches sequentially.
+
+On Debrid-Link, standalone hash lists remain **cached-only**; full magnets and `.torrent` files explicitly request a download and may consume the account's quota. TorBox also accepts direct HTTP(S) download links in its Add dialog.
+
+Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
+
 ### Torrent search
 
 Add content to your library by searching for torrents. It detects what you already have downloaded and currently downloading in your library.

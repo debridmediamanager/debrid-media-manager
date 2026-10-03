@@ -1,4 +1,4 @@
-import { type PremiumizeEnvelope } from './premiumize';
+import type { PremiumizeEnvelope } from './premiumize';
 
 const PM_UPLOAD_URL = 'https://www.premiumize.me/api/transfer/create';
 
@@ -7,11 +7,11 @@ export interface PremiumizeUploadProxyResult {
 	body: PremiumizeEnvelope;
 }
 
-/** Forwards an already-encoded multipart body byte-for-byte to Premiumize. */
+/** Streams an already-encoded multipart body to Premiumize without re-encoding it. */
 export async function forwardPremiumizeTorrentUpload(
 	apiKey: string,
 	contentType: string,
-	body: Uint8Array
+	body: AsyncIterable<Uint8Array>
 ): Promise<PremiumizeUploadProxyResult> {
 	if (!apiKey) {
 		return {
@@ -19,23 +19,31 @@ export async function forwardPremiumizeTorrentUpload(
 			body: { status: 'error', code: 'authentication_failed', message: 'Missing API key.' },
 		};
 	}
-	if (!contentType.toLowerCase().startsWith('multipart/form-data;')) {
+	if (
+		!/^multipart\/form-data\s*;/i.test(contentType) ||
+		!/;\s*boundary=(?:"[^"\r\n]+"|[^";\s]+)\s*(?:;|$)/i.test(contentType)
+	) {
 		return {
 			httpStatus: 415,
 			body: {
 				status: 'error',
 				code: 'unsupported_media_type',
-				message: 'Expected multipart data.',
+				message: 'Expected multipart data with a boundary.',
 			},
 		};
 	}
 
 	try {
-		const response = await fetch(PM_UPLOAD_URL, {
+		// Node fetch requires duplex for streamed request bodies. Never follow a
+		// redirect: the only permitted upload target is this fixed API endpoint.
+		const request: RequestInit & { duplex: 'half' } = {
 			method: 'POST',
 			headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': contentType },
-			body: body as BodyInit,
-		});
+			body: body as unknown as BodyInit,
+			duplex: 'half',
+			redirect: 'error',
+		};
+		const response = await fetch(PM_UPLOAD_URL, request);
 		const responseType = (response.headers.get('content-type') || '').toLowerCase();
 		if (!responseType.includes('application/json')) {
 			return {

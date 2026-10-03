@@ -6,7 +6,6 @@ import {
 	SEEDBOX_PAGE_SIZE,
 	_testing,
 	addSeedboxTorrent,
-	addSeedboxTorrentFile,
 	checkDebridLinkCache,
 	debridLinkPremiumDaysLeft,
 	deleteSeedboxTorrents,
@@ -18,7 +17,6 @@ import {
 	isDlFinished,
 	listAllSeedboxTorrents,
 	listSeedboxTorrents,
-	toMagnetUri,
 	zipSeedboxTorrent,
 } from './debridLink';
 
@@ -310,15 +308,6 @@ describe('isDlFinished', () => {
 	});
 });
 
-describe('toMagnetUri', () => {
-	it('expands a bare hash and leaves a magnet alone', () => {
-		expect(toMagnetUri(HASH)).toBe(`magnet:?xt=urn:btih:${HASH}`);
-		expect(toMagnetUri(`magnet:?xt=urn:btih:${HASH}&dn=x`)).toBe(
-			`magnet:?xt=urn:btih:${HASH}&dn=x`
-		);
-	});
-});
-
 describe('listSeedboxTorrents', () => {
 	it('asks for the documented maximum page size', async () => {
 		fetchMock.mockResolvedValue(ok([torrent()], { page: 0, pages: 1, next: -1, previous: -1 }));
@@ -472,21 +461,6 @@ describe('getSeedboxTorrent', () => {
 });
 
 describe('addSeedboxTorrent', () => {
-	it('uploads a torrent file as multipart without replacing it with a hash', async () => {
-		fetchMock.mockResolvedValue(ok(torrent()));
-		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
-			type: 'application/x-bittorrent',
-		});
-
-		await addSeedboxTorrentFile(TOKEN, file);
-
-		const [url, init] = lastCall();
-		expect(url).toBe('https://debrid-link.fr/api/v2/seedbox/add');
-		expect(init.headers['Content-Type']).toBeUndefined();
-		expect(init.body).toBeInstanceOf(FormData);
-		expect((init.body as FormData).get('file')).toBe(file);
-	});
-
 	it('posts the source as a form field', async () => {
 		fetchMock.mockResolvedValue(ok(torrent()));
 

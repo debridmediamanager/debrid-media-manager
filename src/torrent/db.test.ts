@@ -396,11 +396,6 @@ describe('UserTorrentDB', () => {
 			const all = await db.all();
 			expect(all.length).toBe(0);
 		});
-
-		it.skip('should handle deleteDatabase when blocked', async () => {
-			// Skipping this test as it's difficult to simulate the blocked state with fake-indexeddb
-			// The onblocked handler is still in the code but harder to test
-		});
 	});
 
 	describe('Backup Table Operations', () => {

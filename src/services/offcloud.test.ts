@@ -1,3 +1,4 @@
+import encodedMagnet from '@/test/fixtures/urlsearchparams-magnet.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	CACHE_CHECK_CHUNK_SIZE,
@@ -15,7 +16,6 @@ import {
 	isValidBtih,
 	joinExploreWithCacheInfo,
 	removeOffcloudCloud,
-	toMagnetUri,
 } from './offcloud';
 
 const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
@@ -156,9 +156,13 @@ describe('isValidBtih', () => {
 	});
 });
 
-describe('extractBtih / toMagnetUri', () => {
+describe('extractBtih', () => {
 	it('pulls a lowercase hash out of a magnet', () => {
 		expect(extractBtih(`magnet:?xt=urn:btih:${HASH.toUpperCase()}&dn=x`)).toBe(HASH);
+	});
+
+	it('recovers the canonical hash from a percent-encoded exact topic', () => {
+		expect(extractBtih(encodedMagnet.source)).toBe(encodedMagnet.hash);
 	});
 
 	it('returns null when the magnet carries no usable hash', () => {
@@ -180,11 +184,6 @@ describe('extractBtih / toMagnetUri', () => {
 		expect(extractBtih('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.torrent')).toBeNull();
 		// 40 hex characters that are not the whole basename
 		expect(extractBtih(`prefix${HASH}.torrent`)).toBeNull();
-	});
-
-	it('expands a bare hash and leaves a magnet alone', () => {
-		expect(toMagnetUri(HASH)).toBe(MAGNET);
-		expect(toMagnetUri(MAGNET)).toBe(MAGNET);
 	});
 });
 
@@ -355,19 +354,30 @@ describe('getOffcloudCacheInfo', () => {
 });
 
 describe('addOffcloudCloud', () => {
-	it('uploads a torrent file as multipart without reducing it to a hash', async () => {
-		fetchMock.mockResolvedValue(jsonResponse({ requestId: 'r-file', status: 'created' }));
-		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
-			type: 'application/x-bittorrent',
-		});
+	it.each(['magnet', 'torrent'] as const)(
+		'rejects an upgrade refusal rather than reporting %s submission success',
+		async (source) => {
+			fetchMock.mockResolvedValue(jsonResponse({ not_available: 'cloud' }));
+			const added =
+				source === 'torrent'
+					? addOffcloudTorrentFile('key', new File(['bad'], 'bad.torrent'))
+					: addOffcloudCloud('key', HASH);
+			await expect(added).rejects.toMatchObject({
+				code: 'not_available',
+				message: 'Offcloud cloud submission is unavailable (cloud).',
+			});
+		}
+	);
 
-		await addOffcloudTorrentFile('key', file);
-
-		const [, init] = lastCall();
-		expect(init.headers['Content-Type']).toBeUndefined();
-		expect(init.body).toBeInstanceOf(FormData);
-		expect((init.body as FormData).get('file')).toBe(file);
-	});
+	it.each([null, {}, 'Unexpected response'])(
+		'rejects a cloud submission without a request ID: %j',
+		async (body) => {
+			fetchMock.mockResolvedValue(jsonResponse(body));
+			await expect(
+				addOffcloudTorrentFile('key', new File(['bad'], 'bad.torrent'))
+			).rejects.toMatchObject({ code: 'invalid_response' });
+		}
+	);
 
 	it('reports a cached magnet as downloaded from the add response alone', async () => {
 		fetchMock.mockResolvedValue(

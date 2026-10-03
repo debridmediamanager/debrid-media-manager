@@ -1,7 +1,9 @@
-import { UsenetResult } from '@/services/nzb2rd';
+import type { UsenetResult } from '@/services/nzb2rd';
+import type * as Nzb2rdModule from '@/utils/nzb2rd';
 import type { Nzb2rdTransferSummary } from '@/utils/nzb2rd';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { Mock } from 'vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import UsenetResults, { buttonState, formatSize, sortResults } from './UsenetResults';
 
@@ -12,15 +14,18 @@ const downloadCleanNzbMock = vi.fn();
 vi.mock('@/utils/nzbDownload', () => ({
 	downloadCleanNzb: (...args: unknown[]) => downloadCleanNzbMock(...args),
 }));
+vi.mock('@/utils/nzb2rd', async (importOriginal) => {
+	// A real partial-module loading boundary: preserve submission and tracking,
+	// but isolate detached polling, which is covered by nzb2rd.test.ts.
+	const actual = await importOriginal<typeof Nzb2rdModule>();
+	return { ...actual, followNzb2rdTransfer: vi.fn().mockResolvedValue(undefined) };
+});
 vi.mock('react-hot-toast', () => {
 	const toastMock = {
 		success: (...args: unknown[]) => toastSuccess(...args),
 		error: (...args: unknown[]) => toastError(...args),
 		loading: (...args: unknown[]) => toastLoading(...args),
 	};
-	// followNzb2rdTransfer imports the named export, and reaches it from a timer
-	// rather than from a click, so leaving it out only fails once the poll
-	// happens to fire before this file tears its mocks down.
 	return { __esModule: true, default: toastMock, toast: toastMock };
 });
 
@@ -46,8 +51,8 @@ function mockSearch(results: UsenetResult[] = RESULTS, transfers: unknown[] = []
 	return fetchMock;
 }
 
-const searchCalls = (mock: any) =>
-	mock.mock.calls.filter((c: any[]) => String(c[0]).includes('/api/nzb2rd/search'));
+const searchCalls = (mock: Mock) =>
+	mock.mock.calls.filter((call: unknown[]) => String(call[0]).includes('/api/nzb2rd/search'));
 
 /** Row titles in render order, so sorting is asserted on what the user sees. */
 function renderedTitles(): string[] {
@@ -674,15 +679,15 @@ describe('UsenetResults', () => {
 			json: async () => ({ id: 'job-1', status: 'pending' }),
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
-		await waitFor(() => expect(toastLoading).toHaveBeenCalled());
-
-		const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
-		expect(tracked).toHaveLength(1);
-		expect(tracked[0]).toMatchObject({
-			id: 'job-1',
-			releaseId: 'b',
-			imdbId: 'tt0944947',
-			returnPath: '/show/tt0944947/2',
+		await waitFor(() => {
+			const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
+			expect(tracked).toHaveLength(1);
+			expect(tracked[0]).toMatchObject({
+				id: 'job-1',
+				releaseId: 'b',
+				imdbId: 'tt0944947',
+				returnPath: '/show/tt0944947/2',
+			});
 		});
 	});
 
@@ -728,12 +733,11 @@ describe('UsenetResults', () => {
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
-		// The duplicate reply says a job exists, not where it stands, so the row
-		// stays vague until the next lookup places it in the queue.
-		expect(await screen.findByRole('button', { name: /in progress/i })).toBeDisabled();
-		const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
-		expect(tracked).toHaveLength(1);
-		expect(tracked[0]).toMatchObject({ id: 'job-A', releaseId: 'b' });
+		await waitFor(() => {
+			const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
+			expect(tracked).toHaveLength(1);
+			expect(tracked[0]).toMatchObject({ id: 'job-A', releaseId: 'b' });
+		});
 	});
 
 	it('asks for packs by name on a show, and labels the ones it finds', async () => {

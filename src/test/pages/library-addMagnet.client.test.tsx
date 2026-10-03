@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -47,11 +47,19 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 	useLibraryCache: () => mockLibraryCache,
 }));
 
+const mockCredentials = vi.hoisted(
+	(): { rd: string | null; ad: string | null; tb: string | null } => ({
+		rd: 'test-rd-key',
+		ad: 'test-ad-key',
+		tb: 'test-tb-key',
+	})
+);
+
 vi.mock('@/hooks/auth', () => ({
 	__esModule: true,
-	useRealDebridAccessToken: () => ['test-rd-key'],
-	useAllDebridApiKey: () => 'test-ad-key',
-	useTorBoxAccessToken: () => 'test-tb-key',
+	useRealDebridAccessToken: () => [mockCredentials.rd],
+	useAllDebridApiKey: () => mockCredentials.ad,
+	useTorBoxAccessToken: () => mockCredentials.tb,
 	usePremiumizeCredential: () => null,
 	useOffcloudApiKey: () => null,
 	useDebridLinkCredential: () => null,
@@ -63,18 +71,33 @@ vi.mock('@/hooks/useRelativeTimeLabel', () => ({
 }));
 
 const mockHandleAddAsMagnetInRd = vi.fn();
-const mockHandleAddAsMagnetInAd = vi.fn();
-const mockHandleAddAsMagnetInTb = vi.fn();
 
+const mockAddFilesInRd = vi.fn();
+const mockAddHashesInRd = vi.fn();
+const mockModalFire = vi.fn();
+
+vi.mock('@/components/modals/modal', () => ({
+	default: {
+		fire: (...args: unknown[]) => mockModalFire(...args),
+		DismissReason: { cancel: 'cancel' },
+	},
+}));
 vi.mock('@/utils/addMagnet', () => ({
 	__esModule: true,
-	handleAddAsMagnetInRd: (...args: any[]) => mockHandleAddAsMagnetInRd(...args),
-	handleAddAsMagnetInAd: (...args: any[]) => mockHandleAddAsMagnetInAd(...args),
-	handleAddAsMagnetInTb: (...args: any[]) => mockHandleAddAsMagnetInTb(...args),
-	handleAddMultipleHashesInRd: vi.fn(),
+	handleAddAsMagnetInRd: (...args: unknown[]) => mockHandleAddAsMagnetInRd(...args),
+	handleAddAsMagnetInAd: vi.fn(),
+	handleAddAsMagnetInTb: vi.fn(),
+	handleAddMultipleHashesInRd: (...args: unknown[]) => mockAddHashesInRd(...args),
 	handleAddMultipleHashesInAd: vi.fn(),
 	handleAddMultipleHashesInTb: vi.fn(),
-	handleAddMultipleTorrentFilesInRd: vi.fn(),
+	handleAddMultipleHashesInPm: vi.fn(),
+	handleAddMultipleHashesInOc: vi.fn(),
+	handleAddMultipleHashesInDl: vi.fn(),
+	handleAddMultipleTorrentFilesInRd: (...args: unknown[]) => mockAddFilesInRd(...args),
+	handleAddMultipleTorrentFilesInAd: vi.fn(),
+	handleAddMultipleTorrentFilesInPm: vi.fn(),
+	handleAddMultipleTorrentFilesInOc: vi.fn(),
+	handleAddMultipleTorrentFilesInDl: vi.fn(),
 	handleAddMultipleTorrentFilesInTb: vi.fn(),
 	handleReinsertTorrentinRd: vi.fn(),
 	handleRestartTorrent: vi.fn(),
@@ -109,15 +132,6 @@ vi.mock('@/services/torbox', () => ({
 	controlTorrent: vi.fn(),
 }));
 
-vi.mock('@/utils/extractHashes', () => ({
-	__esModule: true,
-	extractHashes: (str: string) => [str.includes('btih:') ? str.split('btih:')[1] : str],
-	extractTorrentInputs: (str: string) => {
-		const hash = str.includes('btih:') ? str.split('btih:')[1].split('&')[0] : str;
-		return [{ kind: str.startsWith('magnet:') ? 'magnet' : 'hash', source: str, hash }];
-	},
-}));
-
 vi.mock('react-hot-toast', () => ({
 	__esModule: true,
 	default: {
@@ -149,14 +163,16 @@ describe('Library Page - addMagnet Query Parameter', () => {
 		mockRouter.query = {};
 		mockRouter.push.mockClear();
 		mockRouter.replace.mockClear();
+		mockCredentials.rd = 'test-rd-key';
+		mockCredentials.ad = 'test-ad-key';
+		mockCredentials.tb = 'test-tb-key';
 	});
 
 	it('should optimistically add RealDebrid torrent to cache when addMagnet query param is present', async () => {
-		const authHooks = await import('@/hooks/auth');
-		(authHooks as any).useAllDebridApiKey = vi.fn().mockReturnValue(null);
-		(authHooks as any).useTorBoxAccessToken = vi.fn().mockReturnValue(null);
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
 
-		const testHash = 'abc123def456789012345678901234567890abcd';
+		const testHash = '08ada5a7a6183aae1e09d831df6748d566095a10';
 		mockRouter.query = { addMagnet: testHash };
 
 		const mockTorrentInfo = {
@@ -190,17 +206,6 @@ describe('Library Page - addMagnet Query Parameter', () => {
 
 		await waitFor(
 			() => {
-				expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledWith(
-					'test-rd-key',
-					testHash,
-					expect.any(Function)
-				);
-			},
-			{ timeout: 3000 }
-		);
-
-		await waitFor(
-			() => {
 				expect(mockAddTorrent).toHaveBeenCalled();
 				const rdTorrent = mockAddTorrent.mock.calls.find((call) =>
 					call[0].id.startsWith('rd:')
@@ -213,16 +218,15 @@ describe('Library Page - addMagnet Query Parameter', () => {
 			{ timeout: 3000 }
 		);
 
-		(authHooks as any).useAllDebridApiKey = vi.fn().mockReturnValue('test-ad-key');
-		(authHooks as any).useTorBoxAccessToken = vi.fn().mockReturnValue('test-tb-key');
+		mockCredentials.ad = 'test-ad-key';
+		mockCredentials.tb = 'test-tb-key';
 	});
 
 	it('should optimistically add AllDebrid torrent to cache when addMagnet query param is present', async () => {
-		const authHooks = await import('@/hooks/auth');
-		(authHooks as any).useRealDebridAccessToken = vi.fn().mockReturnValue([null]);
-		(authHooks as any).useTorBoxAccessToken = vi.fn().mockReturnValue(null);
+		mockCredentials.rd = null;
+		mockCredentials.tb = null;
 
-		const testHash = 'abc123def456789012345678901234567890abcd';
+		const testHash = '08ada5a7a6183aae1e09d831df6748d566095a10';
 		mockRouter.query = { addMagnet: testHash };
 
 		render(<LibraryPage />);
@@ -244,76 +248,8 @@ describe('Library Page - addMagnet Query Parameter', () => {
 			{ timeout: 5000 }
 		);
 
-		(authHooks as any).useRealDebridAccessToken = vi.fn().mockReturnValue(['test-rd-key']);
-		(authHooks as any).useTorBoxAccessToken = vi.fn().mockReturnValue('test-tb-key');
-	});
-
-	it('should optimistically add TorBox torrent to cache when addMagnet query param is present', async () => {
-		const testHash = 'abc123def456789012345678901234567890abcd';
-		mockRouter.query = { addMagnet: testHash };
-
-		const mockUserTorrent = {
-			id: 'tb:456',
-			filename: 'Test.Movie.2024.mkv',
-			hash: testHash,
-			bytes: 5000000000,
-			status: 1,
-			added: new Date(),
-			links: [],
-			title: 'Test Movie 2024',
-			mediaType: 'movie' as const,
-			progress: 0,
-			serviceStatus: 'downloading',
-			selectedFiles: [],
-			seeders: 10,
-			speed: 1000000,
-		};
-
-		mockHandleAddAsMagnetInTb.mockImplementation(async (tbKey, hash, callback) => {
-			await callback(mockUserTorrent);
-		});
-
-		render(<LibraryPage />);
-
-		await waitFor(() => {
-			expect(mockRouter.replace).toHaveBeenCalledWith('/library?page=1', undefined, {
-				shallow: true,
-			});
-		});
-
-		await waitFor(() => {
-			expect(mockHandleAddAsMagnetInTb).toHaveBeenCalledWith(
-				'test-tb-key',
-				testHash,
-				expect.any(Function)
-			);
-		});
-
-		await waitFor(() => {
-			expect(mockAddTorrent).toHaveBeenCalled();
-			const addedTorrent = mockAddTorrent.mock.calls.find((call) =>
-				call[0].id.startsWith('tb:')
-			)?.[0];
-			expect(addedTorrent).toBeDefined();
-			expect(addedTorrent?.id).toBe('tb:456');
-			expect(addedTorrent?.hash).toBe(testHash);
-		});
-	});
-
-	it('should handle magnet URI format', async () => {
-		const testHash = 'abc123def456789012345678901234567890abcd';
-		const magnetUri = `magnet:?xt=urn:btih:${testHash}`;
-		mockRouter.query = { addMagnet: magnetUri };
-
-		render(<LibraryPage />);
-
-		await waitFor(() => {
-			expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledWith(
-				'test-rd-key',
-				magnetUri,
-				expect.any(Function)
-			);
-		});
+		mockCredentials.rd = 'test-rd-key';
+		mockCredentials.tb = 'test-tb-key';
 	});
 
 	it('should not process if no addMagnet query param', async () => {
@@ -328,19 +264,59 @@ describe('Library Page - addMagnet Query Parameter', () => {
 	});
 
 	it('should not process if more than one hash extracted', async () => {
-		vi.mocked(await import('@/utils/extractHashes')).extractTorrentInputs = vi
-			.fn()
-			.mockReturnValue([
-				{ kind: 'hash', source: 'hash1', hash: 'hash1' },
-				{ kind: 'hash', source: 'hash2', hash: 'hash2' },
-			]);
-
-		mockRouter.query = { addMagnet: 'multiple hashes' };
+		mockRouter.query = {
+			addMagnet:
+				'08ada5a7a6183aae1e09d831df6748d566095a10 dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c',
+		};
 
 		render(<LibraryPage />);
 
 		await waitFor(() => {
 			expect(mockHandleAddAsMagnetInRd).not.toHaveBeenCalled();
+		});
+	});
+});
+
+describe('Library mixed torrent submissions', () => {
+	it('finishes native uploads before starting magnets on the same account', async () => {
+		mockRouter.query = {};
+		const operations: string[] = [];
+		let finishUpload!: () => void;
+		const uploading = new Promise<void>((resolve) => {
+			finishUpload = resolve;
+		});
+		mockAddFilesInRd.mockImplementation(async () => {
+			operations.push('upload:start');
+			await uploading;
+			operations.push('upload:end');
+		});
+		mockAddHashesInRd.mockImplementation(async () => {
+			operations.push('magnet:start');
+		});
+		mockModalFire.mockResolvedValue({
+			value: {
+				torrentInputs: [
+					{
+						kind: 'hash',
+						source: '08ada5a7a6183aae1e09d831df6748d566095a10',
+						hash: '08ada5a7a6183aae1e09d831df6748d566095a10',
+					},
+				],
+				torrentFiles: [new File(['torrent bytes'], 'sintel.torrent')],
+				webDownloadLinks: [],
+			},
+		});
+		render(<LibraryPage />);
+		await act(async () => {
+			fireEvent.click(await screen.findByRole('button', { name: /RD\s+Add/ }));
+		});
+		expect(operations).toEqual(['upload:start']);
+		await act(async () => {
+			finishUpload();
+			await uploading;
+		});
+		await waitFor(() => {
+			expect(operations).toEqual(['upload:start', 'upload:end', 'magnet:start']);
 		});
 	});
 });

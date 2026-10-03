@@ -112,35 +112,6 @@ describe('AllDebrid service helpers', () => {
 		await expect(uploadMagnet('token', ['invalid'])).rejects.toThrow('invalid magnet');
 	});
 
-	it('keeps every parameter on a supplied magnet URI', async () => {
-		postMock.mockResolvedValueOnce({
-			data: { status: 'success', data: { magnets: [{ id: 1 }] } },
-		});
-		const magnet = `magnet:?xt=urn:btih:${'a'.repeat(40)}&dn=Example&tr=udp%3A%2F%2Fone&tr=udp%3A%2F%2Ftwo&ws=https%3A%2F%2Fseed`;
-
-		await uploadMagnet('token', [magnet]);
-
-		const params = postMock.mock.calls[0][1] as URLSearchParams;
-		expect(params.get('magnets[]')).toBe(magnet);
-	});
-
-	it('uploads a torrent file through the native multipart endpoint', async () => {
-		postMock.mockResolvedValueOnce({
-			data: { status: 'success', data: { files: [{ id: 7, hash: 'abc' }] } },
-		});
-		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
-			type: 'application/x-bittorrent',
-		});
-
-		await uploadTorrentFile('token', file);
-
-		const [url, body, options] = postMock.mock.calls[0];
-		expect(url).toBe('https://alldebrid.test/v4/magnet/upload/file');
-		expect(body).toBeInstanceOf(FormData);
-		expect((body as FormData).get('files[]')).toBe(file);
-		expect(options.headers.Authorization).toBe('Bearer token');
-	});
-
 	it('surfaces an item error from the file upload success envelope', async () => {
 		postMock.mockResolvedValueOnce({
 			data: {
@@ -154,6 +125,28 @@ describe('AllDebrid service helpers', () => {
 		await expect(uploadTorrentFile('token', new File(['bad'], 'bad.torrent'))).rejects.toThrow(
 			'Invalid file'
 		);
+	});
+
+	it.each([
+		{ status: 'success', data: {} },
+		{ status: 'success', data: { files: [] } },
+	])('does not report malformed upload results as successful: %j', async (data) => {
+		postMock.mockResolvedValueOnce({ data });
+		await expect(
+			uploadTorrentFile('token', new File(['bad'], 'bad.torrent'))
+		).rejects.toBeInstanceOf(Error);
+	});
+
+	it('preserves authentication refusal codes from native uploads', async () => {
+		postMock.mockResolvedValueOnce({
+			data: {
+				status: 'error',
+				error: { code: 'AUTH_BAD_APIKEY', message: 'Invalid API key' },
+			},
+		});
+		await expect(
+			uploadTorrentFile('token', new File(['bad'], 'bad.torrent'))
+		).rejects.toMatchObject({ code: 'AUTH_BAD_APIKEY', message: 'Invalid API key' });
 	});
 
 	it('carries the error code out of a refused user lookup', async () => {

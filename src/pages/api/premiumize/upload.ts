@@ -17,14 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			.json({ status: 'error', code: 'authentication_failed', message: 'Missing API key.' });
 	}
 	const contentType = req.headers['content-type'] || '';
-	const chunks: Buffer[] = [];
-	for await (const chunk of req) {
-		chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : Buffer.from(chunk));
-	}
-	const result = await forwardPremiumizeTorrentUpload(
-		apiKey,
-		contentType,
-		new Uint8Array(Buffer.concat(chunks))
-	);
+	const result = await forwardPremiumizeTorrentUpload(apiKey, contentType, req);
 	return res.status(result.httpStatus).json(result.body);
 }

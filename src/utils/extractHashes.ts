@@ -19,7 +19,7 @@ export interface TorrentInput {
 }
 
 const MAGNET_REGEX = /magnet:\?[^\s"'<>]*/gi;
-const BTIH_REGEX = /(?:^|[?&])xt=urn:btih:([a-fA-F0-9]{40}|[A-Za-z2-7]{32})(?:&|$)/i;
+const BTIH_REGEX = /^urn:btih:([a-fA-F0-9]{40}|[A-Za-z2-7]{32})$/i;
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
 function base32BtihToHex(value: string): string | null {
@@ -43,7 +43,30 @@ function base32BtihToHex(value: string): string | null {
 
 function normalizeBtih(value: string): string | null {
 	if (SHA1_REGEX.test(value)) return value.toLowerCase();
+	if (value.length !== 32) return null;
 	return base32BtihToHex(value);
+}
+
+/**
+ * Builds a provider-compatible magnet while retaining every other query parameter.
+ * Some providers reject encoded or base32 exact topics despite accepting the same
+ * hash in literal hexadecimal BTIH form.
+ */
+export function toMagnetUri(hashOrMagnet: string): string {
+	const source = hashOrMagnet.trim();
+	if (!/^magnet:/i.test(source)) {
+		return `magnet:?xt=urn:btih:${normalizeBtih(source) ?? source}`;
+	}
+	return source
+		.replace(/^magnet:/i, 'magnet:')
+		.replace(/([?&])([^&]*)/g, (pair: string, separator: string, query: string) => {
+			for (const [key, value] of new URLSearchParams(query)) {
+				if (key.toLowerCase() !== 'xt') continue;
+				const topic = BTIH_REGEX.exec(value);
+				if (topic) return `${separator}xt=urn:btih:${normalizeBtih(topic[1])}`;
+			}
+			return pair;
+		});
 }
 
 /**
@@ -57,8 +80,15 @@ export function extractTorrentInputs(input: string): TorrentInput[] {
 	const results: TorrentInput[] = [];
 	const seen = new Set<string>();
 	const withoutMagnets = input.replace(MAGNET_REGEX, (source) => {
-		const match = BTIH_REGEX.exec(source);
-		const hash = match ? normalizeBtih(match[1]) : null;
+		let hash: string | null = null;
+		for (const [key, value] of new URLSearchParams(source.slice('magnet:?'.length))) {
+			if (key.toLowerCase() !== 'xt') continue;
+			const match = BTIH_REGEX.exec(value);
+			if (match) {
+				hash = normalizeBtih(match[1]);
+				break;
+			}
+		}
 		if (hash && !seen.has(hash)) {
 			seen.add(hash);
 			results.push({ kind: 'magnet', source, hash });
@@ -93,7 +123,5 @@ export function extractDownloadLinks(linksStr: string): string[] {
 }
 
 export function extractMagnets(hashesStr: string): string[] {
-	return extractTorrentInputs(hashesStr).map(({ kind, source }) =>
-		kind === 'magnet' ? source : `magnet:?xt=urn:btih:${source}`
-	);
+	return extractTorrentInputs(hashesStr).map(({ source }) => toMagnetUri(source));
 }

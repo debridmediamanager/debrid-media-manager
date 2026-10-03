@@ -1,3 +1,5 @@
+import { extractTorrentInputs, toMagnetUri } from '@/utils/extractHashes';
+
 /**
  * Offcloud API client.
  *
@@ -248,22 +250,15 @@ export const isValidBtih = (hash: string): boolean => {
  * ordinary 32-character release name, and guessing wrong would invent a hash.
  */
 export const extractBtih = (source: string): string | null => {
-	const magnet = /urn:btih:([a-zA-Z0-9]{32,40})/.exec(source);
-	if (magnet) return isValidBtih(magnet[1]) ? magnet[1].toLowerCase() : null;
+	if (/^magnet:\?/i.test(source)) return extractTorrentInputs(source)[0]?.hash ?? null;
 
 	const torrentFile = /(?:^|[/\\])([0-9a-fA-F]{40})\.torrent(?:$|[?#])/.exec(source);
 	return torrentFile ? torrentFile[1].toLowerCase() : null;
 };
 
-/** `/cache/info` and `/cloud` want a magnet; only `/cache` takes a bare hash. */
-export const toMagnetUri = (hashOrMagnet: string): string =>
-	hashOrMagnet.startsWith('magnet:')
-		? hashOrMagnet
-		: `magnet:?xt=urn:btih:${hashOrMagnet.trim()}`;
-
 /** The reverse: what `/cache` wants, from either form. */
 const toBareHash = (hashOrMagnet: string): string =>
-	(hashOrMagnet.startsWith('magnet:')
+	(/^magnet:/i.test(hashOrMagnet)
 		? (extractBtih(hashOrMagnet) ?? '')
 		: hashOrMagnet.trim()
 	).toLowerCase();
@@ -369,7 +364,7 @@ export async function getOffcloudCacheInfo(
 ): Promise<OffcloudCacheInfoResult[]> {
 	const urls = hashesOrMagnets.map((source) => {
 		const trimmed = source.trim();
-		if (!trimmed.startsWith('magnet:') && !isValidBtih(trimmed)) {
+		if (!/^magnet:/i.test(trimmed) && !isValidBtih(trimmed)) {
 			throw new OffcloudError(
 				`cache/info needs a magnet or an info hash, got "${trimmed}"`,
 				'invalid_info_hash'
@@ -411,6 +406,27 @@ export async function getOffcloudCacheInfo(
 	});
 }
 
+async function submitOffcloudCloud(
+	apiKey: string,
+	body: Record<string, unknown> | FormData
+): Promise<OffcloudAddResult> {
+	const result = await ocRequest<OffcloudAddResult & { not_available?: string }>(
+		apiKey,
+		'cloud',
+		body
+	);
+	if (result?.not_available) {
+		throw new OffcloudError(
+			`Offcloud cloud submission is unavailable (${result.not_available}).`,
+			'not_available'
+		);
+	}
+	if (!result || typeof result.requestId !== 'string' || !result.requestId) {
+		throw new OffcloudError('Offcloud returned no cloud request ID.', 'invalid_response');
+	}
+	return result;
+}
+
 /**
  * Submits a magnet, a torrent-file URL or a plain HTTP URL to the cloud.
  *
@@ -425,7 +441,7 @@ export function addOffcloudCloud(apiKey: string, source: string): Promise<Offclo
 	const looksLikeUrl = /^https?:\/\//i.test(trimmed);
 	if (!looksLikeUrl) {
 		// Magnet or bare hash: validate before spending a requestId on a zombie.
-		const hash = trimmed.startsWith('magnet:') ? extractBtih(trimmed) : trimmed;
+		const hash = /^magnet:/i.test(trimmed) ? extractBtih(trimmed) : trimmed;
 		if (!hash || !isValidBtih(hash)) {
 			throw new OffcloudError(
 				`"${trimmed}" is not a valid info hash or magnet.`,
@@ -433,7 +449,7 @@ export function addOffcloudCloud(apiKey: string, source: string): Promise<Offclo
 			);
 		}
 	}
-	return ocRequest<OffcloudAddResult>(apiKey, 'cloud', {
+	return submitOffcloudCloud(apiKey, {
 		url: looksLikeUrl ? trimmed : toMagnetUri(trimmed),
 	});
 }
@@ -442,7 +458,7 @@ export function addOffcloudCloud(apiKey: string, source: string): Promise<Offclo
 export function addOffcloudTorrentFile(apiKey: string, file: File): Promise<OffcloudAddResult> {
 	const formData = new FormData();
 	formData.append('file', file);
-	return ocRequest<OffcloudAddResult>(apiKey, 'cloud', formData);
+	return submitOffcloudCloud(apiKey, formData);
 }
 
 /**

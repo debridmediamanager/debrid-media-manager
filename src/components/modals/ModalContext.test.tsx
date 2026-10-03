@@ -70,4 +70,30 @@ describe('ModalContext', () => {
 		await userEvent.click(confirmButton);
 		await expect(resultPromise).resolves.toEqual({ isConfirmed: true, value: 'done' });
 	});
+
+	it('keeps rejected custom input editable until validation succeeds', async () => {
+		const modal = await renderWithProvider();
+		const result = modal.fire({
+			title: 'Add a torrent',
+			html: '<input aria-label="Torrent source" />',
+			preConfirm: () => {
+				const input = document.querySelector<HTMLInputElement>(
+					'input[aria-label="Torrent source"]'
+				);
+				return input?.value.startsWith('magnet:') ? input.value : false;
+			},
+		});
+		const input = await screen.findByRole('textbox', { name: 'Torrent source' });
+		await userEvent.type(input, 'invalid source');
+		await userEvent.click(screen.getByRole('button', { name: 'OK' }));
+		expect(input).toBeInTheDocument();
+		expect(input).toHaveValue('invalid source');
+
+		const source = 'magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10';
+		await userEvent.clear(input);
+		await userEvent.type(input, source);
+		await userEvent.click(screen.getByRole('button', { name: 'OK' }));
+		await expect(result).resolves.toEqual({ isConfirmed: true, value: source });
+		expect(input).not.toBeInTheDocument();
+	});
 });

@@ -1,11 +1,14 @@
+import type { TorBoxOperation } from '@/lib/observability/torboxOperationalStats';
 import {
 	recordTorBoxOperationEvent,
 	resolveTorBoxOperation,
 } from '@/lib/observability/torboxOperationalStats';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import { toMagnetUri } from '@/utils/extractHashes';
+import type { InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import getConfig from 'next/config';
-import {
+import type {
 	TorBoxCachedItem,
 	TorBoxCachedResponse,
 	TorBoxCreateTorrentResponse,
@@ -195,7 +198,7 @@ function getTorBoxBaseUrl(): string {
 function resolveOperationFromConfig(cfg: {
 	method?: string;
 	url?: string;
-}): ReturnType<typeof resolveTorBoxOperation> {
+}): TorBoxOperation | null {
 	if (!cfg.url) return null;
 	try {
 		const parsed = new URL(cfg.url, BASE_URL);
@@ -366,7 +369,7 @@ export const createTorrent = async (
 	const formData = new FormData();
 
 	if (params.file) formData.append('file', params.file);
-	if (params.magnet) formData.append('magnet', params.magnet);
+	if (params.magnet) formData.append('magnet', toMagnetUri(params.magnet));
 	if (params.seed) formData.append('seed', params.seed);
 	if (params.allow_zip !== undefined) formData.append('allow_zip', params.allow_zip.toString());
 	if (params.name) formData.append('name', params.name);
@@ -543,7 +546,7 @@ export const getTorrentInfo = async (params: {
 		} else {
 			// Use POST method for magnet or file
 			const formData = new FormData();
-			if (params.magnet) formData.append('magnet', params.magnet);
+			if (params.magnet) formData.append('magnet', toMagnetUri(params.magnet));
 			if (params.file) formData.append('file', params.file);
 			if (params.hash) formData.append('hash', params.hash);
 			if (params.timeout) formData.append('timeout', params.timeout.toString());

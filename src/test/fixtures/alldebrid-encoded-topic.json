@@ -1,0 +1,37 @@
+{
+	"base32Generator": "Python standard-library base64.b32encode applied to the captured hexadecimal info hash",
+	"base32Source": "MAGNET:?xt=urn:btih:BCW2LJ5GDA5K4HQJ3AY56Z2I2VTASWQQ&dn=Sintel&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2FSintel%2FSintel.mp4",
+	"canonicalResponse": {
+		"name": "canonical",
+		"status": "success",
+		"error": null,
+		"magnets": [
+			{
+				"magnet": "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2FSintel%2FSintel.mp4",
+				"hash": "08ada5a7a6183aae1e09d831df6748d566095a10",
+				"name": "Sintel",
+				"filename_original": "",
+				"size": 129302391,
+				"ready": true,
+				"id": 782672498
+			}
+		]
+	},
+	"captureDate": "2026-10-02",
+	"encodedResponse": {
+		"name": "encoded",
+		"status": "success",
+		"error": null,
+		"magnets": [
+			{
+				"magnet": "magnet:?xt=urn%3Abtih%3A08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2FSintel%2FSintel.mp4",
+				"error": {
+					"code": "MAGNET_INVALID_URI",
+					"message": "Magnet is not valid"
+				}
+			}
+		]
+	},
+	"endpoint": "https://api.alldebrid.com/v4.1/magnet/upload",
+	"source": "magnet:?xt=urn%3Abtih%3A08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2FSintel%2FSintel.mp4"
+}

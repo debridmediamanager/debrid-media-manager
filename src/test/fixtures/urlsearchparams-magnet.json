@@ -1,0 +1,5 @@
+{
+	"generator": "Node URLSearchParams; info hash from public https://webtorrent.io/torrents/sintel.torrent (bencode + node:crypto)",
+	"hash": "08ada5a7a6183aae1e09d831df6748d566095a10",
+	"source": "magnet:?xt=urn%3Abtih%3A08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2FSintel%2FSintel.mp4"
+}

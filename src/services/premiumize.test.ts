@@ -3,7 +3,6 @@ import {
 	CACHE_CHECK_CHUNK_SIZE,
 	PremiumizeError,
 	checkPremiumizeCache,
-	createPremiumizeTransfer,
 	deletePremiumizeTransfer,
 	directDownloadPremiumize,
 	getPremiumizeAccountInfo,
@@ -14,7 +13,6 @@ import {
 	listPremiumizeTransfers,
 	resolvePremiumizeTransferHash,
 	resolvePremiumizeTransferHashes,
-	toMagnetUri,
 	uploadPremiumizeTorrentFile,
 } from './premiumize';
 
@@ -42,19 +40,42 @@ afterEach(() => {
 const lastCall = () => fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
 
 describe('premiumize transport', () => {
-	it('uploads torrent files through the same-origin multipart proxy', async () => {
-		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', id: 'transfer-1' }));
-		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
-			type: 'application/x-bittorrent',
+	it('reports a torrent upload business error even when the provider answers HTTP 200', async () => {
+		fetchMock.mockResolvedValue(
+			jsonResponse({
+				status: 'error',
+				code: 'authentication_failed',
+				message: 'Not logged in.',
+			})
+		);
+
+		await expect(
+			uploadPremiumizeTorrentFile('badkey', new File(['bad'], 'sample.torrent'))
+		).rejects.toMatchObject({
+			name: 'PremiumizeError',
+			code: 'authentication_failed',
+			message: 'Not logged in.',
 		});
+	});
 
-		await uploadPremiumizeTorrentFile('secretkey', file);
+	it('keeps an uncoded upload error distinct from HTTP success', async () => {
+		fetchMock.mockResolvedValue(jsonResponse({ status: 'error', message: 'Upload rejected.' }));
 
-		const [url, init] = lastCall();
-		expect(url).toBe('/api/premiumize/upload');
-		expect(init.headers.Authorization).toBe('Bearer secretkey');
-		expect(init.body).toBeInstanceOf(FormData);
-		expect((init.body as FormData).get('src')).toBe(file);
+		await expect(
+			uploadPremiumizeTorrentFile('key', new File(['bad'], 'sample.torrent'))
+		).rejects.toMatchObject({
+			name: 'PremiumizeError',
+			code: 'unknown_error',
+			message: 'Upload rejected.',
+		});
+	});
+
+	it('reports a malformed null upload response as a provider error', async () => {
+		fetchMock.mockResolvedValue(jsonResponse(null));
+
+		await expect(
+			uploadPremiumizeTorrentFile('key', new File(['bad'], 'sample.torrent'))
+		).rejects.toMatchObject({ name: 'PremiumizeError', code: 'unknown_error' });
 	});
 
 	it('posts through the same-origin proxy with the key in a header, never the URL', async () => {
@@ -119,14 +140,7 @@ describe('isPremiumizePremium', () => {
 	});
 });
 
-describe('toMagnetUri / isEnergyCdnLink', () => {
-	it('expands a bare hash, because only cache/check accepts one', () => {
-		expect(toMagnetUri('dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c')).toBe(
-			'magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c'
-		);
-		expect(toMagnetUri('magnet:?xt=urn:btih:abc')).toBe('magnet:?xt=urn:btih:abc');
-	});
-
+describe('isEnergyCdnLink', () => {
 	it('recognises only energycdn hosts', () => {
 		expect(isEnergyCdnLink(`${CDN}/file.mp4`)).toBe(true);
 		expect(isEnergyCdnLink('https://littlemouse-sto.energycdn.com/dl/a/b/c/d/file.mp4')).toBe(
@@ -283,14 +297,6 @@ describe('transfers', () => {
 	it('lists transfers, tolerating a missing array', async () => {
 		fetchMock.mockResolvedValue(jsonResponse({ status: 'success' }));
 		expect(await listPremiumizeTransfers('key')).toEqual([]);
-	});
-
-	it('creates a transfer from a bare hash as a magnet URI', async () => {
-		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', id: 'abc', name: 'X' }));
-
-		await createPremiumizeTransfer('key', toMagnetUri('dd8255ec'));
-
-		expect(JSON.parse(lastCall()[1].body).src).toBe('magnet:?xt=urn:btih:dd8255ec');
 	});
 
 	it('deletes by transfer id', async () => {

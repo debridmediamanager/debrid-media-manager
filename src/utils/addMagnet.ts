@@ -15,21 +15,18 @@ import {
 	addSeedboxTorrentFile,
 	DebridLinkError,
 	isDlFinished,
-	toMagnetUri as toDlMagnetUri,
 } from '@/services/debridLink';
 import {
 	addOffcloudCloud,
 	addOffcloudTorrentFile,
 	isValidBtih,
 	OffcloudError,
-	toMagnetUri as toOffcloudMagnetUri,
 } from '@/services/offcloud';
 import {
 	createPremiumizeTransfer,
 	listPremiumizeFolder,
 	listPremiumizeTransfers,
 	PremiumizeError,
-	toMagnetUri,
 	uploadPremiumizeTorrentFile,
 } from '@/services/premiumize';
 import {
@@ -56,7 +53,7 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { isRdBlockedName } from './deInfringe';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { extractTorrentInputs } from './extractHashes';
+import { extractTorrentInputs, toMagnetUri } from './extractHashes';
 import {
 	buildPremiumizeRowSources,
 	convertToDlUserTorrent,
@@ -588,7 +585,10 @@ export const handleAddMultipleTorrentFilesInAd = async (
 			await uploadTorrentFile(adKey, file);
 			success++;
 		} catch (error) {
-			console.error('Error uploading torrent file to AllDebrid:', error);
+			console.error(
+				'Error uploading torrent file to AllDebrid:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 		}
 	}
 	if (callback) await callback();
@@ -650,7 +650,7 @@ export const handleAddAsMagnetInTb = async (
 ) => {
 	try {
 		// TorBox requires a full magnet URI, not a bare info hash
-		const magnet = hash.startsWith('magnet:') ? hash : `magnet:?xt=urn:btih:${hash}`;
+		const magnet = /^magnet:/i.test(hash) ? hash : `magnet:?xt=urn:btih:${hash}`;
 		const response = await createTorrent(tbKey, {
 			magnet,
 		});
@@ -964,7 +964,10 @@ export const handleAddMultipleTorrentFilesInPm = async (
 			await uploadPremiumizeTorrentFile(pmKey, files[i]);
 			success++;
 		} catch (error) {
-			console.error('Error uploading torrent file to Premiumize:', error);
+			console.error(
+				'Error uploading torrent file to Premiumize:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 		}
 	}
 	if (callback) await callback();
@@ -1012,7 +1015,7 @@ export const handleAddAsMagnetInOc = async (
 		// because we build the magnet here; its `/cache/info` sibling silently
 		// reports cached content as uncached when handed a bare hash, so the
 		// magnet form is the house rule for every Offcloud call that takes a url.
-		const added = await addOffcloudCloud(ocKey, toOffcloudMagnetUri(hash));
+		const added = await addOffcloudCloud(ocKey, toMagnetUri(hash));
 		if (!added.requestId) {
 			if (!silent) toast.error('Offcloud added it without an ID.', magnetToastOptions);
 			return;
@@ -1081,7 +1084,10 @@ export const handleAddMultipleTorrentFilesInOc = async (
 			await addOffcloudTorrentFile(ocKey, files[i]);
 			success++;
 		} catch (error) {
-			console.error('Error uploading torrent file to Offcloud:', error);
+			console.error(
+				'Error uploading torrent file to Offcloud:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 		}
 	}
 	if (callback) await callback();
@@ -1160,7 +1166,7 @@ export const handleAddAsMagnetInDl = async (
 ) => {
 	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? hash.toLowerCase();
 	try {
-		const torrent = await addSeedboxTorrent(dlKey, toDlMagnetUri(hash));
+		const torrent = await addSeedboxTorrent(dlKey, toMagnetUri(hash));
 		if (!torrent?.id) {
 			if (!silent) toast.error('Debrid-Link added it without an ID.', magnetToastOptions);
 			return;
@@ -1272,7 +1278,10 @@ export const handleAddMultipleMagnetsInDl = async (
 			await handleAddAsMagnetInDl(dlKey, magnets[i], undefined, true);
 			success++;
 		} catch (error) {
-			console.error('Error adding magnet in Debrid-Link:', error);
+			console.error(
+				'Error adding magnet in Debrid-Link:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 		}
 	}
 	if (callback) await callback();
@@ -1291,7 +1300,10 @@ export const handleAddMultipleTorrentFilesInDl = async (
 			await addSeedboxTorrentFile(dlKey, files[i]);
 			success++;
 		} catch (error) {
-			console.error('Error uploading torrent file to Debrid-Link:', error);
+			console.error(
+				'Error uploading torrent file to Debrid-Link:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 		}
 	}
 	if (callback) await callback();

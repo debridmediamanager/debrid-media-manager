@@ -1,9 +1,5 @@
 import { unlockLink } from '@/services/allDebrid';
-import {
-	addSeedboxTorrent,
-	isDlFinished,
-	toMagnetUri as toDlMagnetUri,
-} from '@/services/debridLink';
+import { addSeedboxTorrent, isDlFinished } from '@/services/debridLink';
 import {
 	addOffcloudCloud,
 	exploreOffcloudCloud,
@@ -20,6 +16,7 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import { handleSelectFilesInRd } from './addMagnet';
+import { toMagnetUri } from './extractHashes';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
@@ -359,7 +356,7 @@ const getDlInstantIntent = async (
 	fileName?: string
 ): Promise<{ intent?: string; error?: string }> => {
 	try {
-		const torrent = await addSeedboxTorrent(dlKey, toDlMagnetUri(hash));
+		const torrent = await addSeedboxTorrent(dlKey, toMagnetUri(hash));
 
 		// `>=`, never `=== 100`: the lower states are flags that combine and the
 		// vendor's own sample carries `status: 6`.

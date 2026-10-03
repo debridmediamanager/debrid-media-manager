@@ -1,10 +1,12 @@
 import type { TraktSearchResult } from '@/services/trakt';
 import { resetAnimeSuggestions } from '@/utils/animeSuggestions';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import type { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 import { readFileSync } from 'fs';
 import path from 'path';
+import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SearchBar } from './SearchBar';
 
@@ -23,7 +25,7 @@ vi.mock('axios', () => ({
 	__esModule: true,
 	default: { get: vi.fn() },
 }));
-const mockedGet = axios.get as ReturnType<typeof vi.fn>;
+const mockedGet = axios.get as Mock;
 
 vi.mock('./poster', () => ({
 	__esModule: true,
@@ -38,11 +40,11 @@ const callsTo = (match: (url: unknown) => boolean) =>
 describe('SearchBar', () => {
 	beforeEach(() => {
 		push.mockReset();
-		mockedGet.mockReset();
+		mockedGet.mockReset().mockResolvedValue({ data: [] });
 		resetAnimeSuggestions();
 	});
 
-	const typeQuery = async (user: ReturnType<typeof userEvent.setup>, value: string) => {
+	const typeQuery = async (user: UserEvent, value: string) => {
 		const input = screen.getByPlaceholderText('Search movies & shows...');
 		await user.clear(input);
 		await user.type(input, value);
@@ -101,6 +103,7 @@ describe('SearchBar', () => {
 		const user = userEvent.setup();
 
 		await typeQuery(user, 'tt7654321');
+		await waitFor(() => expect(mockedGet).toHaveBeenCalled());
 		await user.click(screen.getByRole('button', { name: /Search/i }));
 		await waitFor(() => expect(push).toHaveBeenCalledWith('/x/tt7654321/'));
 

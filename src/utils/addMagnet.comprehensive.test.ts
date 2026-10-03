@@ -17,7 +17,7 @@ import {
 import { createTorrent, getTorrentList } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorrentInfoResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosHeaders } from 'axios';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -911,14 +911,19 @@ describe('addMagnet utilities', () => {
 	});
 
 	describe('handleAddMultipleTorrentFilesInAd', () => {
-		it('passes the original files to the native upload helper', async () => {
-			const files = [new File(['one'], 'one.torrent'), new File(['two'], 'two.torrent')];
-			vi.mocked(uploadTorrentFile).mockResolvedValue({ files: [{ id: 1 }] } as any);
+		it('logs the failure without exposing Axios request credentials', async () => {
+			const key = 'private-upload-key';
+			const error = new AxiosError('Upload refused', 'ERR_BAD_REQUEST', {
+				headers: new AxiosHeaders({ Authorization: `Bearer ${key}` }),
+			});
+			vi.mocked(uploadTorrentFile).mockRejectedValue(error);
+			const log = vi.spyOn(console, 'error');
 
-			await handleAddMultipleTorrentFilesInAd('test-ad-key', files);
+			await handleAddMultipleTorrentFilesInAd(key, [new File(['torrent'], 'sintel.torrent')]);
 
-			expect(uploadTorrentFile).toHaveBeenNthCalledWith(1, 'test-ad-key', files[0]);
-			expect(uploadTorrentFile).toHaveBeenNthCalledWith(2, 'test-ad-key', files[1]);
+			const logged = JSON.stringify(log.mock.calls);
+			expect(logged).toContain('Upload refused');
+			expect(logged).not.toContain(key);
 		});
 	});
 

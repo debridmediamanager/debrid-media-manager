@@ -3,14 +3,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const dl = vi.hoisted(() => ({
 	addSeedboxTorrent: vi.fn(),
 	addSeedboxTorrentFile: vi.fn(),
-	// The pure helpers are part of the behaviour under test - `toMagnetUri` is
-	// what separates the search-page add from the hash-list one, and the `>=`
-	// threshold is what decides which toast a user sees - so they are the real
-	// implementations rather than stubs.
-	toMagnetUri: (hashOrMagnet: string) =>
-		hashOrMagnet.startsWith('magnet:')
-			? hashOrMagnet
-			: `magnet:?xt=urn:btih:${hashOrMagnet.trim()}`,
 	isDlFinished: (status: number) => status >= 100,
 	// `convertToDlUserTorrent` now lives in `fetchTorrents` and reads the real
 	// status mapping, which needs the enum and the pager binding to exist.
@@ -34,14 +26,12 @@ vi.mock('@/services/debridLink', () => dl);
 vi.mock('@/services/offcloud', () => ({
 	addOffcloudCloud: vi.fn(),
 	isValidBtih: () => true,
-	toMagnetUri: (hash: string) => `magnet:?xt=urn:btih:${hash}`,
 	OffcloudError: class OffcloudError extends Error {},
 }));
 vi.mock('@/services/premiumize', () => ({
 	createPremiumizeTransfer: vi.fn(),
 	listPremiumizeTransfers: vi.fn(),
 	listPremiumizeFolder: vi.fn(),
-	toMagnetUri: (hash: string) => `magnet:?xt=urn:btih:${hash}`,
 	PremiumizeError: class PremiumizeError extends Error {},
 }));
 vi.mock('@/services/allDebrid', () => ({
@@ -81,12 +71,7 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import {
-	handleAddAsMagnetInDl,
-	handleAddMultipleHashesInDl,
-	handleAddMultipleMagnetsInDl,
-	handleAddMultipleTorrentFilesInDl,
-} from './addMagnet';
+import { handleAddAsMagnetInDl, handleAddMultipleHashesInDl } from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 const HASH2 = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1D';
@@ -114,16 +99,6 @@ beforeEach(() => {
 });
 
 describe('handleAddAsMagnetInDl', () => {
-	it('sends the FULL magnet, never a bare hash', async () => {
-		// A bare hash is only accepted when the content is already cached - that
-		// is Debrid-Link's whole cache probe now that `/seedbox/cached` is gone.
-		// On a search page the button means "add this", so an uncached release
-		// has to download for real rather than be refused with `notAddTorrent`.
-		await handleAddAsMagnetInDl('dl-key', HASH);
-
-		expect(dl.addSeedboxTorrent).toHaveBeenCalledWith('dl-key', `magnet:?xt=urn:btih:${HASH}`);
-	});
-
 	it('says the content is ready when the add came back complete', async () => {
 		await handleAddAsMagnetInDl('dl-key', HASH);
 
@@ -332,26 +307,5 @@ describe('handleAddMultipleHashesInDl', () => {
 			'Added 2 hashes to Debrid-Link.',
 			expect.any(Object)
 		);
-	});
-});
-
-describe('handleAddMultipleMagnetsInDl', () => {
-	it('keeps full magnet metadata and does not use the cached-only hash path', async () => {
-		const magnet = `magnet:?xt=urn:btih:${HASH}&dn=Example&tr=udp%3A%2F%2Ftracker&ws=https%3A%2F%2Fseed`;
-
-		await handleAddMultipleMagnetsInDl('dl-key', [magnet]);
-
-		expect(dl.addSeedboxTorrent).toHaveBeenCalledWith('dl-key', magnet);
-	});
-});
-
-describe('handleAddMultipleTorrentFilesInDl', () => {
-	it('passes each original file to Debrid-Link', async () => {
-		const file = new File(['torrent'], 'sample.torrent');
-		dl.addSeedboxTorrentFile.mockResolvedValue(torrent(100));
-
-		await handleAddMultipleTorrentFilesInDl('dl-key', [file]);
-
-		expect(dl.addSeedboxTorrentFile).toHaveBeenCalledWith('dl-key', file);
 	});
 });

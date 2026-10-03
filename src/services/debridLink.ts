@@ -1,3 +1,5 @@
+import { toMagnetUri } from '@/utils/extractHashes';
+
 /**
  * Debrid-Link API client.
  *
@@ -374,17 +376,6 @@ async function dlRequest<T>(
 }
 
 /**
- * `/seedbox/add` takes a magnet, a public torrent URL **or a bare hash** - and
- * a bare hash is only accepted when the content is already cached, which is the
- * closest thing Debrid-Link has to a cache probe now that `/seedbox/cached` is
- * disabled. Send the full magnet when the intent is "download this".
- */
-export const toMagnetUri = (hashOrMagnet: string): string =>
-	hashOrMagnet.startsWith('magnet:')
-		? hashOrMagnet
-		: `magnet:?xt=urn:btih:${hashOrMagnet.trim()}`;
-
-/**
  * Whether a torrent is done.
  *
  * **`>=`, never `===`.** The lower states are flags that combine - the vendor's
@@ -493,6 +484,7 @@ export async function getSeedboxTorrent(
 /**
  * Adds a magnet, a public torrent URL or a bare hash.
  *
+ * A bare hash is cached-only; a full magnet deliberately requests a download.
  * Idempotent by hash **and the id is stable**: a bare-hash add, a magnet add, a
  * duplicate add and even a re-add after removal all return the same torrent id.
  * A double click therefore costs one wasted request and changes nothing, so
@@ -513,7 +505,7 @@ export async function addSeedboxTorrent(
 	const { value } = await dlRequest<DebridLinkTorrent>(token, 'seedbox/add', {
 		method: 'POST',
 		body: {
-			url,
+			url: /^magnet:/i.test(url) ? toMagnetUri(url) : url,
 			wait: options.wait,
 			structureType: options.structureType,
 			ip: options.ip,

@@ -1,13 +1,14 @@
+import type { DebridLinkTorrent } from '@/services/debridLink';
 import {
 	addSeedboxTorrent,
 	DebridLinkError,
 	getDebridLinkAccountInfo,
 	getSeedboxTorrent,
 	isDlFinished,
-	toMagnetUri,
-	type DebridLinkTorrent,
 } from '@/services/debridLink';
-import { debridLinkVideoFiles, type DebridLinkVideoFile } from '@/utils/debridLinkCastFiles';
+import type { DebridLinkVideoFile } from '@/utils/debridLinkCastFiles';
+import { debridLinkVideoFiles } from '@/utils/debridLinkCastFiles';
+import { toMagnetUri } from '@/utils/extractHashes';
 import crypto from 'crypto';
 
 const deriveUserId = (accountIdentity: string): string => {
