@@ -8,6 +8,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (Offcloud version)
@@ -145,7 +146,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const push = (
 			item: (typeof playableUserItems)[number],
 			isOwn: boolean,
-			bingeGroup: string
+			bingeGroup: string | undefined
 		) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
@@ -166,10 +167,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		};
 
 		for (const item of playableUserItems) {
-			push(item, true, `dmm-oc:${imdbidStr}:yours`);
+			push(item, true, releaseBingeGroup('dmm-oc', item.hash));
 		}
 		for (let i = 0; i < playableOtherItems.length; i++) {
-			push(playableOtherItems[i], false, `dmm-oc:${imdbidStr}:other:${i + 1}`);
+			push(
+				playableOtherItems[i],
+				false,
+				releaseBingeGroup('dmm-oc', playableOtherItems[i].hash)
+			);
 		}
 		// Cached scraped releases fill whatever the cast pool left open, in the
 		// same "other streams" budget the size-limits setting describes. No
@@ -184,7 +189,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				name: generateStreamName(item.sizeMb, metadata),
 				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'OC'),
 				url: `${process.env.DMM_ORIGIN}/api/stremio-oc/${userid}/play/${item.hash}`,
-				behaviorHints: { bingeGroup: `dmm-oc:${imdbidStr}:trove:${i + 1}` },
+				behaviorHints: { bingeGroup: releaseBingeGroup('dmm-oc', item.hash) },
 			} as any);
 		}
 

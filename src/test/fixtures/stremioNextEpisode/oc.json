@@ -1,0 +1,30 @@
+{
+	"_source": "dmmdb on 2026-10-03: repository.getOffcloudOtherStreams(<episode id>, <a viewer with no rows>, 5), i.e. what any viewer of this addon was offered for these two consecutive episodes. Scrubbed: nothing: rows hold only hashes, sizes, filenames and in-release paths.",
+	"episodes": [
+		{
+			"id": "tt28013708:1:2",
+			"otherStreams": [
+				{
+					"url": "Task.S01E02.Family.Statements.2160p.WEB-DL.DV.HDR.H.265.mkv",
+					"size": 9534,
+					"filename": "Task.S01E02.Family.Statements.2160p.WEB-DL.DV.HDR.H.265.mkv",
+					"hash": "e880746835b233cfe7ee6e65f67c7943c63358ae",
+					"path": "Task S01 2025 WEB-DL 2160p DV HDR/Task.S01E02.Family.Statements.2160p.WEB-DL.DV.HDR.H.265.mkv"
+				}
+			]
+		},
+		{
+			"id": "tt28013708:1:3",
+			"otherStreams": [
+				{
+					"url": "Task.S01E03.Nobodys.Stronger.Than.Forgiveness.2160p.WEB-DL.DV.HDR.H.265.mkv",
+					"size": 9850,
+					"filename": "Task.S01E03.Nobodys.Stronger.Than.Forgiveness.2160p.WEB-DL.DV.HDR.H.265.mkv",
+					"hash": "e880746835b233cfe7ee6e65f67c7943c63358ae",
+					"path": "Task S01 2025 WEB-DL 2160p DV HDR/Task.S01E03.Nobodys.Stronger.Than.Forgiveness.2160p.WEB-DL.DV.HDR.H.265.mkv"
+				}
+			]
+		}
+	],
+	"provider": "oc"
+}

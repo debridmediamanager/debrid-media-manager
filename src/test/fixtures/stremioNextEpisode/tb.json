@@ -1,0 +1,34 @@
+{
+	"_source": "dmmdb on 2026-10-03: repository.getTorBoxOtherStreams(<episode id>, <a viewer with no rows>, 5), i.e. what any viewer of this addon was offered for these two consecutive episodes. Scrubbed: TorBox CDN download URLs (they carry credentials) replaced; torrent ids renumbered, file ids kept.",
+	"episodes": [
+		{
+			"id": "tt33049767:1:6",
+			"otherStreams": [
+				{
+					"url": "Adults.S01E06.Pollo.arrosto.2160p.DSNP.WEB-DL.DDP5.1.DV.HDR.H.265-G66.mkv",
+					"link": "https://tb-cdn.invalid/dld/redacted-1",
+					"size": 2401,
+					"filename": "Adults.S01E06.Pollo.arrosto.2160p.DSNP.WEB-DL.DDP5.1.DV.HDR.H.265-G66.mkv",
+					"hash": "84b29bf44cbb04cf2ebaf74315b7fed992636c8e",
+					"torrentId": 100000001,
+					"fileId": 1
+				}
+			]
+		},
+		{
+			"id": "tt33049767:1:7",
+			"otherStreams": [
+				{
+					"url": "Adults.S01E07.Annabelle.2160p.DSNP.WEB-DL.DDP5.1.DV.HDR.H.265-G66.mkv",
+					"link": "https://tb-cdn.invalid/dld/redacted-2",
+					"size": 2473,
+					"filename": "Adults.S01E07.Annabelle.2160p.DSNP.WEB-DL.DDP5.1.DV.HDR.H.265-G66.mkv",
+					"hash": "84b29bf44cbb04cf2ebaf74315b7fed992636c8e",
+					"torrentId": 100000001,
+					"fileId": 4
+				}
+			]
+		}
+	],
+	"provider": "tb"
+}

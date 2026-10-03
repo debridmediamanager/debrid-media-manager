@@ -9,6 +9,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { isWebDownloadHash } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -202,7 +203,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				title,
 				url: buildPlayUrl(userid, item, true),
 				behaviorHints: {
-					bingeGroup: `dmm-tb:${imdbidStr}:yours`,
+					bingeGroup: releaseBingeGroup('dmm-tb', item.hash),
 				},
 			} as any);
 		}
@@ -226,7 +227,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				title,
 				url: buildPlayUrl(userid, item, false),
 				behaviorHints: {
-					bingeGroup: `dmm-tb:${imdbidStr}:other:${i + 1}`,
+					bingeGroup: releaseBingeGroup('dmm-tb', item.hash),
 				},
 			} as any);
 		}
@@ -246,7 +247,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'TB'),
 				url: `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.hash}`,
 				behaviorHints: {
-					bingeGroup: `dmm-tb:${imdbidStr}:trove:${i + 1}`,
+					bingeGroup: releaseBingeGroup('dmm-tb', item.hash),
 				},
 			} as any);
 		}

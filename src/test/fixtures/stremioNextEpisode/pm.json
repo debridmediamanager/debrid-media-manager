@@ -1,0 +1,30 @@
+{
+	"_source": "dmmdb on 2026-10-03: repository.getPremiumizeOtherStreams(<episode id>, <a viewer with no rows>, 5), i.e. what any viewer of this addon was offered for these two consecutive episodes. Scrubbed: nothing: rows hold only hashes, sizes, filenames and in-release paths.",
+	"episodes": [
+		{
+			"id": "tt6905686:1:7",
+			"otherStreams": [
+				{
+					"url": "Lovecraft.Country.S01E07.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv",
+					"size": 8976,
+					"filename": "Lovecraft.Country.S01E07.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv",
+					"hash": "23e2a14ea58c5c0aba8ceb82c1ea388b7f4d04f3",
+					"path": "Lovecraft.Country.S01.2160p.MAX.WEB-DL.x265.10bit.HDR.DTS-HD.MA.5.1-NTb[rartv]/Lovecraft.Country.S01E07.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv"
+				}
+			]
+		},
+		{
+			"id": "tt6905686:1:8",
+			"otherStreams": [
+				{
+					"url": "Lovecraft.Country.S01E08.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv",
+					"size": 9702,
+					"filename": "Lovecraft.Country.S01E08.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv",
+					"hash": "23e2a14ea58c5c0aba8ceb82c1ea388b7f4d04f3",
+					"path": "Lovecraft.Country.S01.2160p.MAX.WEB-DL.x265.10bit.HDR.DTS-HD.MA.5.1-NTb[rartv]/Lovecraft.Country.S01E08.2160p.MAX.WEB-DL.DTS-HD.MA.5.1.HDR.DV.HEVC-NTb.mkv"
+				}
+			]
+		}
+	],
+	"provider": "pm"
+}

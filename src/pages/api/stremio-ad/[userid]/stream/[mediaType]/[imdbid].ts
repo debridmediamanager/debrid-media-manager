@@ -7,6 +7,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (AllDebrid version)
@@ -126,7 +127,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				title,
 				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${item.magnetId}:${item.fileIndex}`,
 				behaviorHints: {
-					bingeGroup: `dmm-ad:${imdbidStr}:yours`,
+					bingeGroup: releaseBingeGroup('dmm-ad', item.hash),
 				},
 			} as any);
 		}
@@ -155,7 +156,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				title,
 				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${item.magnetId}:${item.fileIndex}`,
 				behaviorHints: {
-					bingeGroup: `dmm-ad:${imdbidStr}:other:${i + 1}`,
+					bingeGroup: releaseBingeGroup('dmm-ad', item.hash),
 				},
 			} as any);
 		}

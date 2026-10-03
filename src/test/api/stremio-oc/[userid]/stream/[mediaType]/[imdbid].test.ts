@@ -152,7 +152,8 @@ describe('/api/stremio-oc/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(playStreams).toHaveLength(1);
 			// No ?file=: the play route resolves the release and picks the feature.
 			expect(playStreams[0].url).toBe(`https://dmm.test/api/stremio-oc/oc-user/play/${T1}`);
-			expect(playStreams[0].behaviorHints.bingeGroup).toBe('dmm-oc:tt12042730:trove:1');
+			// The release, not the slot: Stremio's next-episode match is on this string.
+			expect(playStreams[0].behaviorHints.bingeGroup).toBe(`dmm-oc:${T1}`);
 		});
 
 		it('withholds trove releases when the cache probe fails, while casts stay unfiltered', async () => {

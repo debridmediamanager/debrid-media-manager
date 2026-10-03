@@ -7,6 +7,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (Debrid-Link version)
@@ -118,7 +119,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			snapshotsFound: snapshots.length,
 		});
 
-		const push = (item: (typeof userCastItems)[number], isOwn: boolean, bingeGroup: string) => {
+		const push = (
+			item: (typeof userCastItems)[number],
+			isOwn: boolean,
+			bingeGroup: string | undefined
+		) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			streams.push({
@@ -139,10 +144,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		};
 
 		for (const item of userCastItems) {
-			push(item, true, `dmm-dl:${imdbidStr}:yours`);
+			push(item, true, releaseBingeGroup('dmm-dl', item.hash));
 		}
 		for (let i = 0; i < otherItems.length; i++) {
-			push(otherItems[i], false, `dmm-dl:${imdbidStr}:other:${i + 1}`);
+			push(otherItems[i], false, releaseBingeGroup('dmm-dl', otherItems[i].hash));
 		}
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });

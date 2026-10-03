@@ -9,6 +9,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show
@@ -145,7 +146,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
 					: item.url,
 				behaviorHints: {
-					bingeGroup: `dmm:${imdbidStr}:yours`,
+					bingeGroup: releaseBingeGroup('dmm', item.hash),
 				},
 			} as any);
 		}
@@ -169,7 +170,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
 					: item.url,
 				behaviorHints: {
-					bingeGroup: `dmm:${imdbidStr}:other:${i + 1}`,
+					bingeGroup: releaseBingeGroup('dmm', item.hash),
 				},
 			} as any);
 		}

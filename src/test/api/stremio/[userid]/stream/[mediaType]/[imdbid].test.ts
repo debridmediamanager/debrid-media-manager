@@ -718,13 +718,16 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(payload.streams).toHaveLength(3);
 
 			const yourStream = payload.streams.find((s: any) =>
-				s.behaviorHints?.bingeGroup?.includes(':yours')
+				s.title?.includes('DMM Cast RD (Yours)')
 			);
 			const otherResultStream = payload.streams.find((s: any) =>
-				s.behaviorHints?.bingeGroup?.includes(':other:')
+				s.url?.endsWith('zyxwvutsrqpon')
 			);
 			expect(yourStream).toBeDefined();
 			expect(otherResultStream).toBeDefined();
+			// Each names its release, so Stremio can continue it into the next episode.
+			expect(yourStream.behaviorHints.bingeGroup).toBe('dmm:userhash1234');
+			expect(otherResultStream.behaviorHints.bingeGroup).toBe('dmm:otherhash5678');
 		});
 	});
 

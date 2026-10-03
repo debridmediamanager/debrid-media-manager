@@ -1,0 +1,34 @@
+{
+	"_source": "dmmdb on 2026-10-03: repository.getAllDebridOtherStreams(<episode id>, <a viewer with no rows>, 5), i.e. what any viewer of this addon was offered for these two consecutive episodes. Scrubbed: AllDebrid /f/ links replaced; magnet ids renumbered, file indexes kept.",
+	"episodes": [
+		{
+			"id": "tt34119820:1:10",
+			"otherStreams": [
+				{
+					"url": "The Beginning After the End Season 1 - 10 [WEB-DL 1080p].mkv",
+					"link": "https://alldebrid.com/f/REDACTED0001",
+					"size": 1434,
+					"filename": "The Beginning After the End Season 1 - 10 [WEB-DL 1080p].mkv",
+					"hash": "1ccdc166eb397bbaca57a3b871db30ef8c7da66a",
+					"magnetId": 100000001,
+					"fileIndex": 9
+				}
+			]
+		},
+		{
+			"id": "tt34119820:1:11",
+			"otherStreams": [
+				{
+					"url": "The Beginning After the End Season 1 - 11 [WEB-DL 1080p].mkv",
+					"link": "https://alldebrid.com/f/REDACTED0002",
+					"size": 1432,
+					"filename": "The Beginning After the End Season 1 - 11 [WEB-DL 1080p].mkv",
+					"hash": "1ccdc166eb397bbaca57a3b871db30ef8c7da66a",
+					"magnetId": 100000001,
+					"fileIndex": 10
+				}
+			]
+		}
+	],
+	"provider": "ad"
+}

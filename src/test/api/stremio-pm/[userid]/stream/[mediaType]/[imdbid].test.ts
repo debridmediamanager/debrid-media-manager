@@ -163,7 +163,8 @@ describe('/api/stremio-pm/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(playStreams).toHaveLength(1);
 			// No ?file=: the play route resolves the release and picks the feature.
 			expect(playStreams[0].url).toBe(`https://dmm.test/api/stremio-pm/pm-user/play/${T1}`);
-			expect(playStreams[0].behaviorHints.bingeGroup).toBe('dmm-pm:tt12042730:trove:1');
+			// The release, not the slot: Stremio's next-episode match is on this string.
+			expect(playStreams[0].behaviorHints.bingeGroup).toBe(`dmm-pm:${T1}`);
 			expect(mockRepository.getAllScrapedTrueResults).toHaveBeenCalledWith(
 				'movie:tt12042730'
 			);
