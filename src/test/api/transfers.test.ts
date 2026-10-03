@@ -55,7 +55,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepo.getTransferMeta = vi.fn().mockResolvedValue(new Map());
 	mockRepo.getDebridJobServer = vi.fn().mockResolvedValue('http://debrid02:3100');
-	mockList.mockResolvedValue({ transfers: [row()], raw: new Map(), degraded: [] });
+	mockList.mockResolvedValue({ transfers: [row()], raw: new Map(), degraded: [], next: null });
 });
 
 describe('GET /api/transfers', () => {
@@ -66,6 +66,7 @@ describe('GET /api/transfers', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			transfers: [row()],
 			degraded: [],
+			next: null,
 		});
 	});
 
@@ -83,23 +84,53 @@ describe('GET /api/transfers', () => {
 		expect(res.status).toHaveBeenCalledWith(405);
 	});
 
-	it('clamps the page bounds', async () => {
-		await run({ query: { limit: '999999', offset: '-3' } });
-		expect(mockList).toHaveBeenCalledWith('rd-key', 200, 0);
+	it('clamps the page size', async () => {
+		await run({ query: { limit: '999999' } });
+		expect(mockList).toHaveBeenCalledWith('rd-key', 200, undefined);
 
 		mockList.mockClear();
-		await run({ query: { limit: '', offset: '' } });
+		await run({ query: { limit: '', cursor: '' } });
 		// `Number('')` is 0, so an empty param must fall back rather than clamp to
 		// the minimum and return a single row.
-		expect(mockList).toHaveBeenCalledWith('rd-key', 100, 0);
+		expect(mockList).toHaveBeenCalledWith('rd-key', 100, undefined);
+	});
+
+	it('reads the page after the one whose cursor it was given, and links the next', async () => {
+		mockList.mockResolvedValue({
+			transfers: [row()],
+			raw: new Map(),
+			degraded: [],
+			next: 'nzb2rd.200',
+		});
+
+		const res = await run({ query: { cursor: 'nzb2rd.100_debrid-1a2b3c4d.3' } });
+
+		expect(mockList).toHaveBeenCalledWith('rd-key', 100, {
+			nzb2rd: 100,
+			'debrid-1a2b3c4d': 3,
+		});
+		expect(bodyOf(res).next).toBe('nzb2rd.200');
+	});
+
+	it('refuses a damaged cursor rather than answering with the newest page', async () => {
+		for (const cursor of ['garbage', ['nzb2rd.1', 'nzb2rd.2']]) {
+			const res = await run({ query: { cursor } });
+			expect(res.status).toHaveBeenCalledWith(400);
+		}
+		expect(mockList).not.toHaveBeenCalled();
 	});
 
 	it('passes the services through when one is unreachable', async () => {
-		mockList.mockResolvedValue({ transfers: [], raw: new Map(), degraded: ['nzb2rd'] });
+		mockList.mockResolvedValue({
+			transfers: [],
+			raw: new Map(),
+			degraded: ['nzb2rd'],
+			next: null,
+		});
 
 		const res = await run();
 
-		expect(res.json).toHaveBeenCalledWith({ transfers: [], degraded: ['nzb2rd'] });
+		expect(res.json).toHaveBeenCalledWith({ transfers: [], degraded: ['nzb2rd'], next: null });
 	});
 
 	it('overlays the stored page context onto the rows', async () => {
@@ -151,6 +182,7 @@ describe('registration from the list poll', () => {
 			transfers: [row({ status: 'completed' })],
 			raw: new Map([['debrid:job-1', { id: 'job-1', info_hash: 'a'.repeat(40) }]]),
 			degraded: [],
+			next: null,
 		});
 		mockRepo.getTransferMeta = vi
 			.fn()
@@ -179,6 +211,7 @@ describe('registration from the list poll', () => {
 			transfers: [row({ source: 'nzb2rd', id: 'n1', status: 'completed' })],
 			raw: new Map([['nzb2rd:n1', { id: 'n1' }]]),
 			degraded: [],
+			next: null,
 		});
 		mockRepo.getTransferMeta = vi.fn().mockResolvedValue(
 			new Map([
@@ -212,6 +245,7 @@ describe('registration from the list poll', () => {
 			transfers: [row({ status: 'completed' })],
 			raw: new Map([['debrid:job-1', { id: 'job-1' }]]),
 			degraded: [],
+			next: null,
 		});
 
 		await run();
@@ -246,6 +280,7 @@ describe('registration from the list poll', () => {
 			transfers: [row({ status: 'completed' })],
 			raw: new Map([['debrid:job-1', { id: 'job-1' }]]),
 			degraded: [],
+			next: null,
 		});
 		mockRepo.getTransferMeta = vi
 			.fn()
@@ -297,6 +332,7 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 			],
 			raw: new Map(),
 			degraded: [],
+			next: null,
 		});
 
 		await run();
@@ -317,6 +353,7 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 			transfers: [nzbRow({ status: 'fetching' })],
 			raw: new Map(),
 			degraded: [],
+			next: null,
 		});
 
 		await run();
@@ -330,6 +367,7 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 			transfers: [row({ status: 'failed' })],
 			raw: new Map(),
 			degraded: [],
+			next: null,
 		});
 
 		await run();
@@ -348,6 +386,7 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 			transfers: [completed],
 			raw: new Map([[keyOf(completed as any), job]]),
 			degraded: [],
+			next: null,
 		});
 
 		await run();

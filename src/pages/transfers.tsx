@@ -8,11 +8,21 @@ import {
 } from '@/utils/debridUploader';
 import { deleteNzb2rdJob } from '@/utils/nzb2rd';
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
-import { isTerminal, ORIGIN_LABELS, ORIGIN_STYLES, originOf, TransferRow } from '@/utils/transfers';
+import {
+	isTerminal,
+	ORIGIN_LABELS,
+	ORIGIN_STYLES,
+	originOf,
+	TransferRow,
+	TransfersResponse,
+} from '@/utils/transfers';
 import { fetchTransfers } from '@/utils/transfersApi';
 import {
 	AlertTriangle,
 	CheckCircle2,
+	ChevronLeft,
+	ChevronRight,
+	ChevronsLeft,
 	Home,
 	Loader2,
 	RefreshCw,
@@ -28,6 +38,21 @@ import { toast, Toaster } from 'react-hot-toast';
 
 const POLL_MS = 5000;
 
+/**
+ * One page of the list: the cursor it is fetched with, and how many rows the
+ * pages before it showed, for the "Showing 101–200" line.
+ *
+ * The list is paged rather than grown because every refresh files completed
+ * transfers into DMM's index and records failed Usenet ones, row by row. A
+ * list that grew to an account's 648 transfers would repeat all of that every
+ * five seconds; a page keeps it to one page's worth however deep the reader is.
+ */
+type PageRef = { cursor: string | null; start: number };
+const FIRST_PAGE: PageRef = { cursor: null, start: 0 };
+
+const PAGER_BUTTON =
+	'haptic-sm inline-flex items-center gap-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs font-medium text-indigo-100 transition-colors hover:bg-indigo-800/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-900/30';
+
 export default function TransfersPage() {
 	const [transfers, setTransfers] = useState<TransferRow[]>([]);
 	const [degraded, setDegraded] = useState<string[]>([]);
@@ -36,6 +61,17 @@ export default function TransfersPage() {
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [rdKey] = useRealDebridAccessToken();
 	const tbKey = useTorBoxAccessToken();
+	// The pages turned through so far, newest first; the last is the one shown.
+	// Kept as a stack so Newer returns to the exact page that was left.
+	const [pages, setPages] = useState<PageRef[]>([FIRST_PAGE]);
+	const page = pages[pages.length - 1];
+	// What the shown page's latest refresh said comes after it. Older always
+	// turns to this, never to a cursor saved earlier, so the page turned to
+	// starts where the page on screen ends.
+	const [next, setNext] = useState<string | null>(null);
+	const cursorRef = useRef(page.cursor);
+	cursorRef.current = page.cursor;
+	const topRef = useRef<HTMLDivElement>(null);
 	// failed rows whose retry is being submitted, so a double click sends one job
 	const [retrying, setRetrying] = useState<Set<string>>(() => new Set());
 	// jobs whose RD handoff is running, so the 5s poll can't start a second one
@@ -76,21 +112,31 @@ export default function TransfersPage() {
 	const refresh = useCallback(async () => {
 		const key = rdKeyRef.current;
 		if (!key) return;
+		const cursor = cursorRef.current;
+		let result: TransfersResponse;
 		try {
-			const { transfers: rows, degraded: down } = await fetchTransfers(key);
-			setTransfers(rows);
-			setDegraded(down);
-			setErrorText(null);
-			// not awaited: a row's status shouldn't wait on RD
-			for (const row of rows) void handOffToRd(row);
+			result = await fetchTransfers(key, cursor);
 		} catch (error) {
+			if (cursorRef.current !== cursor) return;
 			setErrorText(error instanceof Error ? error.message : 'unreachable');
-		} finally {
 			setLoaded(true);
+			return;
 		}
+		// A tick sent before the page was turned answers for the page that was
+		// left. Showing it would put that page back under the new one's range.
+		if (cursorRef.current !== cursor) return;
+		setTransfers(result.transfers);
+		setDegraded(result.degraded);
+		setNext(result.next);
+		setErrorText(null);
+		setLoaded(true);
+		// not awaited: a row's status shouldn't wait on RD
+		for (const row of result.transfers) void handOffToRd(row);
 	}, [handOffToRd]);
 
-	// One request per tick for the whole list, rather than one per tracked job.
+	// One request per tick for the page on screen, rather than one per tracked
+	// job. Turning the page changes `page.cursor`, which fetches the new page at
+	// once and restarts the timer on it.
 	useEffect(() => {
 		// `loaded` is what every branch below keys on, so it has to become true
 		// even with no key — otherwise a signed-out visitor sits on the spinner
@@ -102,7 +148,66 @@ export default function TransfersPage() {
 		refresh();
 		const interval = setInterval(refresh, POLL_MS);
 		return () => clearInterval(interval);
-	}, [rdKey, refresh]);
+	}, [rdKey, refresh, page.cursor]);
+
+	const turnPage = (stack: PageRef[]) => {
+		setPages(stack);
+		setTransfers([]);
+		setNext(null);
+		setErrorText(null);
+		setLoaded(false);
+		topRef.current?.scrollIntoView?.({ block: 'start' });
+	};
+	const showOlder = () => {
+		if (next) turnPage([...pages, { cursor: next, start: page.start + transfers.length }]);
+	};
+	const showNewer = () => turnPage(pages.slice(0, -1));
+	const showNewest = () => turnPage([FIRST_PAGE]);
+	const paged = pages.length > 1 || next !== null;
+
+	const pager = (where: 'top' | 'bottom') => (
+		<nav
+			aria-label={where === 'top' ? 'Transfer pages' : 'Transfer pages, bottom'}
+			className={`flex items-center justify-between gap-2 ${where === 'top' ? 'mb-3' : 'mt-3'}`}
+		>
+			<div className="flex items-center gap-1">
+				{pages.length > 2 && (
+					<button
+						onClick={showNewest}
+						disabled={!loaded}
+						className={PAGER_BUTTON}
+						title="Newest transfers"
+						aria-label="Newest transfers"
+					>
+						<ChevronsLeft className="h-4 w-4" />
+					</button>
+				)}
+				<button
+					onClick={showNewer}
+					disabled={pages.length < 2 || !loaded}
+					className={PAGER_BUTTON}
+					title="Newer transfers"
+				>
+					<ChevronLeft className="h-4 w-4" />
+					Newer
+				</button>
+			</div>
+			{loaded && transfers.length > 0 && (
+				<span className="text-xs tabular-nums text-gray-400">
+					Showing {page.start + 1}–{page.start + transfers.length}
+				</span>
+			)}
+			<button
+				onClick={showOlder}
+				disabled={!next || !loaded}
+				className={PAGER_BUTTON}
+				title="Older transfers"
+			>
+				Older
+				<ChevronRight className="h-4 w-4" />
+			</button>
+		</nav>
+	);
 
 	const handleRefreshAll = async () => {
 		if (isRefreshing) return;
@@ -173,6 +278,9 @@ export default function TransfersPage() {
 
 	// A failed row is retryable until a newer transfer of the same release shows
 	// up in the list, which is what a retry (from here or anywhere) produces.
+	// Only this page is known, so a retry listed on a newer page leaves the
+	// button up; pressing it joins that transfer rather than starting another,
+	// because the send flow joins any transfer of the release already running.
 	const canRetry = (row: TransferRow): boolean =>
 		row.source === 'debrid' &&
 		row.status === 'failed' &&
@@ -193,7 +301,7 @@ export default function TransfersPage() {
 			</Head>
 			<Toaster position="bottom-right" />
 
-			<div className="w-full max-w-3xl">
+			<div ref={topRef} className="w-full max-w-3xl">
 				<div className="mb-4 flex items-center justify-between">
 					<h1 className="flex items-center text-xl font-bold text-white">
 						<Send className="mr-2 h-5 w-5 text-indigo-400" />
@@ -227,8 +335,8 @@ export default function TransfersPage() {
 					<span className="text-amber-300">Usenet</span>. The first tag on each row is
 					where its bytes came from — a TorBox/AllDebrid transfer shows{' '}
 					<span className="text-slate-300">Cache</span> until the service settles on one.
-					Every transfer on your Real-Debrid account is listed here, whichever device
-					started it. Active jobs refresh every {POLL_MS / 1000}s.
+					Every transfer on your Real-Debrid account is listed here, newest first,
+					whichever device started it. Active jobs refresh every {POLL_MS / 1000}s.
 				</p>
 
 				{degraded.length > 0 && (
@@ -250,6 +358,8 @@ export default function TransfersPage() {
 					</div>
 				)}
 
+				{rdKey && paged && pager('top')}
+
 				{/*
 				 * `loaded` is tested **before** `rdKey`, and the order is load-bearing.
 				 * The server cannot read localStorage, so it always renders with no
@@ -267,6 +377,10 @@ export default function TransfersPage() {
 				) : !rdKey ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
 						Sign in with Real-Debrid to see your transfers.
+					</div>
+				) : transfers.length === 0 && pages.length > 1 ? (
+					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
+						No older transfers.
 					</div>
 				) : transfers.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
@@ -415,6 +529,8 @@ export default function TransfersPage() {
 						})}
 					</div>
 				)}
+
+				{rdKey && paged && loaded && transfers.length > 0 && pager('bottom')}
 			</div>
 		</div>
 	);

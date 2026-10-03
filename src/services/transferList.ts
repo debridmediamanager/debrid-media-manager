@@ -3,6 +3,7 @@ import { originalHashFromInput } from '@/services/debridUploaderRegistration';
 import { getDebridUploaderServers } from '@/services/debridUploaderServers';
 import { getNzb2rdUrl } from '@/services/nzb2rd';
 import type { TransferRow } from '@/utils/transfers';
+import { createHash } from 'crypto';
 
 /**
  * Gathering every transfer on one Real-Debrid account into a single list.
@@ -20,15 +21,6 @@ import type { TransferRow } from '@/utils/transfers';
 
 /** How the caller's key reaches the services, and why it is never a query param. */
 export const RD_KEY_HEADER = 'x-rd-api-key';
-
-/**
- * Per-source ceiling on how much is asked for.
- *
- * Both services cap a page at 500 of their own accord, so this is the same
- * number restated rather than an independent limit — asking for more just gets
- * silently clamped there.
- */
-export const MAX_SOURCE_ROWS = 500;
 
 const FETCH_TIMEOUT_MS = 15000;
 
@@ -108,47 +100,149 @@ export function withMeta(row: TransferRow, meta: TransferMetaRecord | undefined)
 }
 
 /**
- * Merge every source's rows into one page, newest first.
+ * Where the next page starts: how far into each service's own newest-first list
+ * the pages so far have read.
  *
- * Each source is asked for `offset + limit` and the slice happens here, because
- * a global ordering cannot be paged per-source: taking rows 20-40 from each
- * service and concatenating them is not rows 20-40 of the merged list.
+ * Paging the merged list by a single offset meant asking every service for
+ * `offset + limit` rows and slicing after the merge, because rows 200-300 of
+ * the merged list are not rows 200-300 of each service. Each page then cost
+ * more than the one before, and the services' own 500-row cap ended the list
+ * outright: on 2026-10-03 one account held 648 nzb2rd jobs, and everything past
+ * the 500th was unreachable. Carrying a read position per service instead
+ * makes every page one bounded read from each, at any depth.
+ *
+ * A position is an offset into the service's list, so it is exact at the
+ * moment the page is turned and drifts as that list changes. A transfer
+ * started meanwhile pushes everything down one place, and the next page repeats
+ * a row of the one before it rather than skipping one. The Transfers page
+ * always turns from the cursor its latest refresh returned, so the page it
+ * shows and the page it turns to stay adjacent.
  */
-export function mergeRows(rows: TransferRow[], limit: number, offset: number): TransferRow[] {
-	return [...rows].sort((a, b) => b.createdAt - a.createdAt).slice(offset, offset + limit);
+export type TransferCursor = Record<string, number>;
+
+/**
+ * A service's name in a cursor.
+ *
+ * Not its URL: the cursor travels in a query string, which every proxy in
+ * front of DMM logs. A hash of the URL stays the same across restarts and
+ * across the four DMM instances, which an index into the configured list would
+ * not if a host were added or removed.
+ */
+export function sourceIdOf(url: string): string {
+	return `debrid-${createHash('sha256').update(url).digest('hex').slice(0, 8)}`;
 }
 
-type SourceResult = { rows: TransferRow[]; raw: [string, any][]; degraded?: string };
+const NZB2RD_SOURCE_ID = 'nzb2rd';
+const CURSOR_PART = /^([a-z0-9-]{1,40})\.(\d{1,15})$/;
+
+/** `nzb2rd.300_debrid-1a2b3c4d.12`: URL-safe without escaping, and readable in a log line. */
+export function encodeCursor(cursor: TransferCursor): string {
+	return Object.entries(cursor)
+		.map(([id, position]) => `${id}.${position}`)
+		.join('_');
+}
+
+/** The cursor `encodeCursor` wrote, or null for anything else. */
+export function decodeCursor(raw: string): TransferCursor | null {
+	if (!raw || raw.length > 1000) return null;
+	const cursor: TransferCursor = {};
+	for (const part of raw.split('_')) {
+		const match = CURSOR_PART.exec(part);
+		if (!match) return null;
+		const position = Number(match[2]);
+		if (!Number.isSafeInteger(position)) return null;
+		cursor[match[1]] = position;
+	}
+	return cursor;
+}
+
+/**
+ * One window per service, merged newest first, `limit` rows at most.
+ *
+ * A k-way merge rather than a sort of the concatenation, because the cursor
+ * depends on what it guarantees: whatever is taken from a service is a prefix
+ * of that service's window, so its position can simply advance by the count.
+ * A tie goes to the service listed first, which keeps the order the same from
+ * one refresh to the next.
+ */
+export function mergePage(
+	windows: TransferRow[][],
+	limit: number
+): { rows: TransferRow[]; taken: number[] } {
+	const taken = windows.map(() => 0);
+	const rows: TransferRow[] = [];
+	while (rows.length < limit) {
+		let pick = -1;
+		for (let i = 0; i < windows.length; i++) {
+			const head = windows[i][taken[i]];
+			if (!head) continue;
+			if (pick === -1 || head.createdAt > windows[pick][taken[pick]].createdAt) pick = i;
+		}
+		if (pick === -1) break;
+		rows.push(windows[pick][taken[pick]]);
+		taken[pick]++;
+	}
+	return { rows, taken };
+}
+
+type SourceResult = {
+	rows: TransferRow[];
+	/** Each usable row's index in what the service sent, which is what an offset counts. */
+	at: number[];
+	/** How many entries the service sent, usable or not. */
+	received: number;
+	raw: [string, any][];
+	degraded?: string;
+};
 
 async function fetchSource(
 	url: string,
 	rdKey: string,
 	take: number,
+	offset: number,
 	map: (job: any) => TransferRow,
 	label: string
 ): Promise<SourceResult> {
+	const failed = { rows: [], at: [], received: 0, raw: [], degraded: label };
 	try {
-		const response = await fetch(`${url}/jobs/mine?limit=${take}`, {
+		const response = await fetch(`${url}/jobs/mine?limit=${take}&offset=${offset}`, {
 			headers: { Accept: 'application/json', [RD_KEY_HEADER]: rdKey },
 			signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
 		});
 		if (!response.ok) {
 			console.error(`Transfer listing from ${label} answered ${response.status}`);
-			return { rows: [], raw: [], degraded: label };
+			return failed;
 		}
 		const data = await response.json();
-		if (!Array.isArray(data)) return { rows: [], raw: [], degraded: label };
-		const usable = data.filter((job) => job?.id && job?.status);
+		if (!Array.isArray(data)) return failed;
+		const at: number[] = [];
+		const usable: any[] = [];
+		data.forEach((job, i) => {
+			if (!job?.id || !job?.status) return;
+			at.push(i);
+			usable.push(job);
+		});
 		const rows = usable.map(map);
-		return { rows, raw: rows.map((row, i) => [keyOf(row), usable[i]] as [string, any]) };
+		return {
+			rows,
+			at,
+			received: data.length,
+			raw: rows.map((row, i) => [keyOf(row), usable[i]] as [string, any]),
+		};
 	} catch (error) {
 		console.error(`Transfer listing from ${label} failed:`, error);
-		return { rows: [], raw: [], degraded: label };
+		return failed;
 	}
 }
 
 /**
- * Every transfer on the account behind `rdKey`, from every configured service.
+ * One page of the transfers on the account behind `rdKey`, from every
+ * configured service, newest first, with the cursor of the page after it.
+ *
+ * Each service is asked for `limit + 1` rows at its own position. That is only
+ * a page's worth because both services serve up to 500 rows a request; were
+ * either to cap below what is asked, its rows past the cap would be passed over
+ * as though its list had ended.
  *
  * The key is forwarded, never interpreted: each service resolves it to an RD
  * account id itself and filters on that. DMM deliberately does not resolve it —
@@ -163,33 +257,51 @@ async function fetchSource(
 export async function listTransfers(
 	rdKey: string,
 	limit: number,
-	offset: number
-): Promise<{ transfers: TransferRow[]; raw: Map<string, any>; degraded: string[] }> {
-	const take = Math.min(offset + limit, MAX_SOURCE_ROWS);
+	cursor?: TransferCursor
+): Promise<{
+	transfers: TransferRow[];
+	raw: Map<string, any>;
+	degraded: string[];
+	next: string | null;
+}> {
 	const sources = [
 		...getDebridUploaderServers().map((server) => ({
+			id: sourceIdOf(server),
 			url: server,
 			map: debridRowOf,
 			label: server,
 		})),
-		{ url: getNzb2rdUrl(), map: nzb2rdRowOf, label: 'nzb2rd' },
+		{ id: NZB2RD_SOURCE_ID, url: getNzb2rdUrl(), map: nzb2rdRowOf, label: 'nzb2rd' },
 	];
+	const from = sources.map((s) => cursor?.[s.id] ?? 0);
 
+	// One row past the page, so a page that ends exactly where a service's list
+	// does is known to be the last instead of linking to an empty one.
 	const results = await Promise.all(
-		sources.map((s) => fetchSource(s.url, rdKey, take, s.map, s.label))
+		sources.map((s, i) => fetchSource(s.url, rdKey, limit + 1, from[i], s.map, s.label))
+	);
+	const { rows, taken } = mergePage(
+		results.map((r) => r.rows),
+		limit
 	);
 
+	// A position counts what the service sent, so a row skipped here as
+	// malformed still moves it on. A service that did not answer stays where it
+	// was, and its rows come back on a later page rather than being stepped over.
+	const read = results.map((r, i) => (taken[i] > 0 ? r.at[taken[i] - 1] + 1 : 0));
+	const more = results.some((r, i) => r.received > read[i]);
+	const next = more
+		? encodeCursor(Object.fromEntries(sources.map((s, i) => [s.id, from[i] + read[i]])))
+		: null;
+
 	return {
-		transfers: mergeRows(
-			results.flatMap((r) => r.rows),
-			limit,
-			offset
-		),
+		transfers: rows,
 		// The service's own job object, kept beside the flattened row rather than
 		// on it. Registering a completed transfer needs fields the UI never shows
 		// — `input`, `files`, `completed_at` — and putting them on the row would
 		// serve every one of them to the browser for no reason.
 		raw: new Map(results.flatMap((r) => r.raw)),
 		degraded: results.flatMap((r) => (r.degraded ? [r.degraded] : [])),
+		next,
 	};
 }

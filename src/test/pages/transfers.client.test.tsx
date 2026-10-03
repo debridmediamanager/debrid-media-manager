@@ -387,3 +387,110 @@ describe('Transfers page — retrying a failed TorBox transfer', () => {
 		expect(screen.queryByTitle('Retry transfer')).not.toBeInTheDocument();
 	});
 });
+
+// Card 110: the page showed the newest 100 transfers and nothing older, so an
+// account that had queued hundreds of single episodes could not see whether the
+// earlier ones had failed.
+describe('Transfers page — older pages', () => {
+	const page = (prefix: string, count: number) =>
+		Array.from({ length: count }, (_, i) =>
+			row({ id: `${prefix}-${i}`, name: `${prefix} ${i}`, createdAt: 1700000000000 - i })
+		);
+
+	const pagedResponse = (transfers: unknown[], next: string | null) => ({
+		ok: true,
+		status: 200,
+		json: async () => ({ transfers, degraded: [], next }),
+	});
+
+	/** The first page links to a second, which is the last. */
+	const serveTwoPages = () =>
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string) =>
+				url === '/api/transfers?cursor=nzb2rd.100'
+					? pagedResponse(page('Older', 3), null)
+					: pagedResponse(page('Newest', 100), 'nzb2rd.100')
+			)
+		);
+
+	it('offers the next page and shows it in place of the first', async () => {
+		serveTwoPages();
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Newest 99')).toBeInTheDocument());
+
+		fireEvent.click(screen.getAllByTitle('Older transfers')[0]);
+
+		await waitFor(() => expect(screen.getByText('Older 0')).toBeInTheDocument());
+		expect(fetch).toHaveBeenCalledWith('/api/transfers?cursor=nzb2rd.100', {
+			headers: { 'x-rd-api-key': 'test-rd-key' },
+		});
+		expect(screen.queryByText('Newest 0')).not.toBeInTheDocument();
+		expect(screen.getAllByText('Showing 101–103')[0]).toBeInTheDocument();
+		// The last page has nothing older to offer.
+		for (const button of screen.getAllByTitle('Older transfers')) {
+			expect(button).toBeDisabled();
+		}
+	});
+
+	it('keeps refreshing the page being read, not the first one', async () => {
+		serveTwoPages();
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Newest 99')).toBeInTheDocument());
+		fireEvent.click(screen.getAllByTitle('Older transfers')[0]);
+		await waitFor(() => expect(screen.getByText('Older 0')).toBeInTheDocument());
+		vi.mocked(fetch as any).mockClear();
+
+		fireEvent.click(screen.getByTitle('Refresh all'));
+
+		await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
+		expect((fetch as any).mock.calls[0][0]).toBe('/api/transfers?cursor=nzb2rd.100');
+		expect(screen.getByText('Older 0')).toBeInTheDocument();
+	});
+
+	it('goes back to the newer page', async () => {
+		serveTwoPages();
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Newest 99')).toBeInTheDocument());
+		fireEvent.click(screen.getAllByTitle('Older transfers')[0]);
+		await waitFor(() => expect(screen.getByText('Older 0')).toBeInTheDocument());
+
+		fireEvent.click(screen.getAllByTitle('Newer transfers')[0]);
+
+		await waitFor(() => expect(screen.getByText('Newest 0')).toBeInTheDocument());
+		expect(screen.queryByText('Older 0')).not.toBeInTheDocument();
+		expect(screen.getAllByText('Showing 1–100')[0]).toBeInTheDocument();
+	});
+
+	it('does not let a late answer for the page just left replace the one now shown', async () => {
+		// A 5s tick that left before the page was turned answers for the old page.
+		let answerLate: (value: unknown) => void = () => {};
+		serveTwoPages();
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Newest 99')).toBeInTheDocument());
+		fireEvent.click(screen.getAllByTitle('Older transfers')[0]);
+		await waitFor(() => expect(screen.getByText('Older 0')).toBeInTheDocument());
+
+		vi.mocked(fetch as any).mockImplementationOnce(
+			() => new Promise((resolve) => (answerLate = resolve))
+		);
+		fireEvent.click(screen.getByTitle('Refresh all'));
+		fireEvent.click(screen.getAllByTitle('Newer transfers')[0]);
+		await waitFor(() => expect(screen.getByText('Newest 0')).toBeInTheDocument());
+
+		answerLate(pagedResponse(page('Older', 3), null));
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		expect(screen.getByText('Newest 0')).toBeInTheDocument();
+		expect(screen.queryByText('Older 0')).not.toBeInTheDocument();
+	});
+
+	it('shows no page controls when everything fits on one page', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(pagedResponse(page('Only', 3), null)));
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Only 2')).toBeInTheDocument());
+
+		expect(screen.queryByTitle('Older transfers')).not.toBeInTheDocument();
+		expect(screen.queryByTitle('Newer transfers')).not.toBeInTheDocument();
+	});
+});

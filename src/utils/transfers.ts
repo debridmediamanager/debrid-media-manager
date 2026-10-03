@@ -101,6 +101,12 @@ export interface TransfersResponse {
 	 * gone" — the single most alarming thing this page can say by accident.
 	 */
 	degraded: string[];
+	/**
+	 * Where the page of older transfers starts, passed back as `?cursor=`; null
+	 * on the last page. Opaque to the browser: it is the server's read position
+	 * in each service's list.
+	 */
+	next: string | null;
 }
 
 /** One row of the list, whichever service produced it. */

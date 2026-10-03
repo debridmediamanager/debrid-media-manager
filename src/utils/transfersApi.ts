@@ -21,8 +21,17 @@ import type { TransferRow, TransfersResponse } from './transfers';
  */
 export const RD_KEY_HEADER = 'x-rd-api-key';
 
-export async function fetchTransfers(rdKey: string): Promise<TransfersResponse> {
-	const response = await fetch('/api/transfers', {
+/**
+ * One page of the list: the newest, or with `cursor` the one after the page whose
+ * response carried it as `next`. The cursor is safe in the URL — it holds read
+ * positions, nothing that identifies the account.
+ */
+export async function fetchTransfers(
+	rdKey: string,
+	cursor?: string | null
+): Promise<TransfersResponse> {
+	const url = cursor ? `/api/transfers?cursor=${encodeURIComponent(cursor)}` : '/api/transfers';
+	const response = await fetch(url, {
 		headers: { [RD_KEY_HEADER]: rdKey },
 	});
 	const data = await response.json().catch(() => null);
@@ -32,5 +41,6 @@ export async function fetchTransfers(rdKey: string): Promise<TransfersResponse> 
 	return {
 		transfers: Array.isArray(data?.transfers) ? (data.transfers as TransferRow[]) : [],
 		degraded: Array.isArray(data?.degraded) ? (data.degraded as string[]) : [],
+		next: typeof data?.next === 'string' && data.next ? data.next : null,
 	};
 }

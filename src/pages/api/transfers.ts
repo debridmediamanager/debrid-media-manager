@@ -1,7 +1,14 @@
 import { resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { keyOf, listTransfers, RD_KEY_HEADER, withMeta } from '@/services/transferList';
+import {
+	decodeCursor,
+	keyOf,
+	listTransfers,
+	RD_KEY_HEADER,
+	type TransferCursor,
+	withMeta,
+} from '@/services/transferList';
 import {
 	registerCompletedDebridJob,
 	registerCompletedNzb2rdJob,
@@ -10,7 +17,7 @@ import { transferContextFromPath } from '@/utils/transferContext';
 import type { TransferRow, TransfersResponse } from '@/utils/transfers';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// Every transfer on the caller's Real-Debrid account, in one request.
+// Every transfer on the caller's Real-Debrid account, a page per request.
 //
 // This replaces a list read from `localStorage` plus one status request per
 // tracked job per 5s tick. Keying on the RD account instead of the browser is
@@ -23,8 +30,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // a query param: nginx in front of DMM logs query strings, and this route is
 // polled every 5 seconds, so a key in the URL is a key written to disk hundreds
 // of times a day.
+//
+// A page is the newest `limit` rows, or with `?cursor=` the rows after the page
+// whose response carried it as `next`. The cursor is a read position in each
+// service's list (see `TransferCursor`), never a key or an account id.
 
 const DEFAULT_LIMIT = 100;
+// Each service is asked for one more than this, and both cap a request at 500.
 const MAX_LIMIT = 200;
 
 function clampInt(raw: unknown, fallback: number, min: number, max: number): number {
@@ -122,10 +134,20 @@ async function handler(
 	}
 
 	const limit = clampInt(req.query.limit, DEFAULT_LIMIT, 1, MAX_LIMIT);
-	const offset = clampInt(req.query.offset, 0, 0, Number.MAX_SAFE_INTEGER);
+
+	// Refused rather than read as the first page. Only a response of this route
+	// mints a cursor, so one that does not parse is a damaged link, and quietly
+	// answering with the newest page would show it under an older page's range.
+	let cursor: TransferCursor | undefined;
+	if (req.query.cursor !== undefined && req.query.cursor !== '') {
+		const decoded =
+			typeof req.query.cursor === 'string' ? decodeCursor(req.query.cursor) : null;
+		if (!decoded) return res.status(400).json({ error: 'Invalid cursor' });
+		cursor = decoded;
+	}
 
 	try {
-		const { transfers, raw, degraded } = await listTransfers(rdKey, limit, offset);
+		const { transfers, raw, degraded, next } = await listTransfers(rdKey, limit, cursor);
 
 		// One query for the whole page, not one per row: this is polled every 5
 		// seconds and a page holds up to 200 rows.
@@ -152,7 +174,7 @@ async function handler(
 			);
 		}
 
-		return res.status(200).json({ transfers: enriched, degraded });
+		return res.status(200).json({ transfers: enriched, degraded, next });
 	} catch (error) {
 		console.error('Listing transfers failed:', error);
 		return res.status(502).json({ error: 'Could not reach the transfer services' });

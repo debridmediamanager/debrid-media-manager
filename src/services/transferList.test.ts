@@ -13,10 +13,13 @@ vi.mock('@/services/nzb2rd', () => ({
 
 import {
 	debridRowOf,
+	decodeCursor,
+	encodeCursor,
 	listTransfers,
-	mergeRows,
+	mergePage,
 	nzb2rdRowOf,
 	parseServiceTime,
+	sourceIdOf,
 	withMeta,
 } from './transferList';
 
@@ -117,23 +120,61 @@ describe('withMeta', () => {
 	});
 });
 
-describe('mergeRows', () => {
+describe('mergePage', () => {
 	const at = (id: string, createdAt: number) => ({
 		...debridRowOf({ id, status: 'completed' }),
 		createdAt,
 	});
 
 	it('orders newest first across every service', () => {
-		const rows = [at('old', 1000), at('new', 3000), at('mid', 2000)];
-		expect(mergeRows(rows, 10, 0).map((r) => r.id)).toEqual(['new', 'mid', 'old']);
+		const { rows } = mergePage([[at('new', 3000), at('old', 1000)], [at('mid', 2000)]], 10);
+		expect(rows.map((r) => r.id)).toEqual(['new', 'mid', 'old']);
 	});
 
-	it('pages the merged order, not each service separately', () => {
-		// Taking rows 1-2 from each service and concatenating them is not rows 1-2
-		// of the merged list, which is why the slice happens here.
-		const rows = [at('a', 4000), at('b', 3000), at('c', 2000), at('d', 1000)];
-		expect(mergeRows(rows, 2, 0).map((r) => r.id)).toEqual(['a', 'b']);
-		expect(mergeRows(rows, 2, 2).map((r) => r.id)).toEqual(['c', 'd']);
+	it('says how much of each window the page used, which is what the cursor advances by', () => {
+		const windows = [
+			[at('a', 4000), at('c', 2000)],
+			[at('b', 3000), at('d', 1000)],
+		];
+		const { rows, taken } = mergePage(windows, 3);
+		expect(rows.map((r) => r.id)).toEqual(['a', 'b', 'c']);
+		expect(taken).toEqual([2, 1]);
+	});
+
+	it('breaks a same-second tie the same way every time', () => {
+		// Service timestamps are whole seconds, and ties are real: six pairs in
+		// one account's 648 Usenet jobs. The service listed first wins.
+		const { rows } = mergePage([[at('debrid', 1000)], [at('usenet', 1000)]], 2);
+		expect(rows.map((r) => r.id)).toEqual(['debrid', 'usenet']);
+	});
+});
+
+describe('cursor', () => {
+	it('round-trips', () => {
+		const cursor = { 'debrid-1a2b3c4d': 12, nzb2rd: 300 };
+		expect(decodeCursor(encodeCursor(cursor))).toEqual(cursor);
+	});
+
+	it('names a debrid host by a hash, never its address', () => {
+		// The cursor rides in a query string, which every proxy in front of DMM logs.
+		const id = sourceIdOf('http://100.122.58.7:3100');
+		expect(id).toMatch(/^debrid-[0-9a-f]{8}$/);
+		expect(id).toBe(sourceIdOf('http://100.122.58.7:3100'));
+		expect(id).not.toBe(sourceIdOf('http://100.110.215.49:3100'));
+	});
+
+	it('refuses anything it did not write', () => {
+		for (const raw of [
+			'',
+			'nzb2rd',
+			'nzb2rd.-1',
+			'nzb2rd.1e3',
+			'NZB2RD.1',
+			'nzb2rd.1_',
+			'x'.repeat(2000),
+		]) {
+			expect(decodeCursor(raw)).toBeNull();
+		}
 	});
 });
 
@@ -160,7 +201,7 @@ describe('listTransfers', () => {
 	it('fans out to every service and merges newest first', async () => {
 		vi.stubGlobal('fetch', okFetch());
 
-		const { transfers, degraded } = await listTransfers('rd-key', 10, 0);
+		const { transfers, degraded } = await listTransfers('rd-key', 10);
 
 		expect(transfers.map((t) => t.id)).toEqual(['d1', 'n1', 'd2']);
 		expect(degraded).toEqual([]);
@@ -171,7 +212,7 @@ describe('listTransfers', () => {
 		const spy = okFetch();
 		vi.stubGlobal('fetch', spy);
 
-		await listTransfers('rd-secret-key', 10, 0);
+		await listTransfers('rd-secret-key', 10);
 
 		for (const [url, init] of spy.mock.calls as any[]) {
 			expect(url).not.toContain('rd-secret-key');
@@ -188,7 +229,7 @@ describe('listTransfers', () => {
 			})
 		);
 
-		const { transfers, degraded } = await listTransfers('rd-key', 10, 0);
+		const { transfers, degraded } = await listTransfers('rd-key', 10);
 
 		expect(transfers.map((t) => t.id)).toEqual(['d1', 'd2']);
 		expect(degraded).toEqual(['nzb2rd']);
@@ -200,21 +241,102 @@ describe('listTransfers', () => {
 			vi.fn(async () => ({ ok: false, status: 401, json: async () => ({}) }))
 		);
 
-		const { transfers, degraded } = await listTransfers('rd-key', 10, 0);
+		const { transfers, degraded } = await listTransfers('rd-key', 10);
 
 		expect(transfers).toEqual([]);
 		expect(degraded).toHaveLength(3);
 	});
 
-	it('asks each service for enough rows to satisfy the offset', async () => {
-		// A global ordering cannot be paged per-source, so every service is asked
-		// for offset+limit and the slice happens after the merge.
+	it('asks each service for one row past the page, from the start', async () => {
+		// The extra row is what tells the last page from one that merely ends
+		// where a service's list does.
 		const spy = okFetch();
 		vi.stubGlobal('fetch', spy);
 
-		await listTransfers('rd-key', 20, 40);
+		await listTransfers('rd-key', 20);
 
-		for (const [url] of spy.mock.calls as any[]) expect(url).toContain('limit=60');
+		for (const [url] of spy.mock.calls as any[]) expect(url).toMatch(/\?limit=21&offset=0$/);
+	});
+
+	it("reads each service from the cursor's position for it", async () => {
+		const spy = okFetch();
+		vi.stubGlobal('fetch', spy);
+
+		await listTransfers('rd-key', 20, {
+			[sourceIdOf('http://debrid01:3100')]: 7,
+			nzb2rd: 40,
+		});
+
+		const asked = Object.fromEntries(
+			(spy.mock.calls as any[]).map(([url]) => [new URL(url).host, new URL(url).search])
+		);
+		expect(asked).toEqual({
+			'debrid01:3100': '?limit=21&offset=7',
+			// A host the cursor does not name starts at the top.
+			'debrid02:3100': '?limit=21&offset=0',
+			'nzb2rd:3200': '?limit=21&offset=40',
+		});
+	});
+
+	it('links to no further page once every service has run out', async () => {
+		vi.stubGlobal('fetch', okFetch());
+
+		const { next } = await listTransfers('rd-key', 10);
+
+		expect(next).toBeNull();
+	});
+
+	it('moves each service on by what the page took from it', async () => {
+		vi.stubGlobal('fetch', okFetch());
+
+		const { transfers, next } = await listTransfers('rd-key', 2);
+
+		expect(transfers.map((t) => t.id)).toEqual(['d1', 'n1']);
+		expect(decodeCursor(next!)).toEqual({
+			[sourceIdOf('http://debrid01:3100')]: 1,
+			[sourceIdOf('http://debrid02:3100')]: 0,
+			nzb2rd: 1,
+		});
+	});
+
+	it('keeps an unreachable service where it was, so its rows are not stepped over', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string) => {
+				if (url.startsWith('http://nzb2rd')) throw new Error('unreachable');
+				return { ok: true, status: 200, json: async () => jobsFor(url) };
+			})
+		);
+
+		const { next } = await listTransfers('rd-key', 1, { nzb2rd: 30 });
+
+		expect(decodeCursor(next!)).toMatchObject({ nzb2rd: 30 });
+	});
+
+	it('counts a malformed row it skipped when moving a service on', async () => {
+		// The service's offset counts every row it sent. Advancing by usable rows
+		// only would read the same row again on the next page.
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string) => ({
+				ok: true,
+				status: 200,
+				json: async () =>
+					url.startsWith('http://nzb2rd')
+						? [
+								{ id: 'n1', status: 'failed', created_at: '2026-08-19 12:00:09' },
+								{ id: 'broken' },
+								{ id: 'n2', status: 'failed', created_at: '2026-08-19 12:00:08' },
+								{ id: 'n3', status: 'failed', created_at: '2026-08-19 12:00:07' },
+							]
+						: [],
+			}))
+		);
+
+		const { transfers, next } = await listTransfers('rd-key', 2);
+
+		expect(transfers.map((t) => t.id)).toEqual(['n1', 'n2']);
+		expect(decodeCursor(next!)).toMatchObject({ nzb2rd: 3 });
 	});
 
 	it('keeps the raw service job beside the row, not on it', async () => {
@@ -222,7 +344,7 @@ describe('listTransfers', () => {
 		// none of them and must not be sent them.
 		vi.stubGlobal('fetch', okFetch());
 
-		const { transfers, raw } = await listTransfers('rd-key', 10, 0);
+		const { transfers, raw } = await listTransfers('rd-key', 10);
 
 		expect(raw.get('debrid:d1')).toMatchObject({ id: 'd1' });
 		expect(transfers[0]).not.toHaveProperty('input');
@@ -238,7 +360,7 @@ describe('listTransfers', () => {
 			}))
 		);
 
-		const { transfers } = await listTransfers('rd-key', 10, 0);
+		const { transfers } = await listTransfers('rd-key', 10);
 
 		expect(transfers.every((t) => t.id === 'ok')).toBe(true);
 	});
