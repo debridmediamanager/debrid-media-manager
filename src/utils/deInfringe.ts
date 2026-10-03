@@ -1,5 +1,8 @@
 /**
- * Strip the filename patterns Real-Debrid rejects with `451 infringing_file`.
+ * Strip the filename patterns Real-Debrid rejects with `451 infringing_file`,
+ * and the ones it rejected until September 2026 (the rip family, `BluRay.x264`,
+ * `BluRay.DTS`), matched case-insensitively although RD now matches its five
+ * case-sensitively. Every extra rewrite is deliberate: see below.
  * Same rewrite the debrid uploader service applies before building a torrent
  * (see debrid/src/naming.ts), so a title produced here matches what actually
  * lands in the RD account: `WEB-DL` -> `WEB.DL`, `BluRay.x264` -> `BluRay-x264`,
@@ -8,7 +11,7 @@
  *
  * The source/codec pair here is a deliberate over-match: it rewrites all nine
  * `(bluray|hdtv|web).(x264|xvid|h264)` combinations, while RD only blocks four
- * of them (see `RD_BLOCKED_NAME`). Breaking a pattern RD would have accepted
+ * of them, and only in one capitalization (see `RD_BLOCKED_NAME`). Breaking a pattern RD would have accepted
  * costs nothing but a cosmetic change to the name, and keeping the expression
  * identical to debrid's is what guarantees the title computed here matches the
  * torrent that service creates. Do not narrow it without narrowing that one.

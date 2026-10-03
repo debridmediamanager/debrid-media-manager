@@ -694,7 +694,7 @@ export const SettingsSection = () => {
 									</div>
 									<p className="mt-1 text-xs text-gray-400">
 										Hide torrents with filenames that Real-Debrid blocks (e.g.
-										WEB-DL, WEBRip, BluRay.x264).{' '}
+										WEB-DL, WEB.H264, HDTV.x264).{' '}
 										<a
 											href="/rd-filename-filters.html"
 											target="_blank"

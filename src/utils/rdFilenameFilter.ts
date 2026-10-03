@@ -1,23 +1,12 @@
-const BLOCKED_SUBSTRINGS = ['web-dl', 'webrip', 'bdrip', 'hdrip', 'dvdrip'];
+import { isRdBlockedName } from './deInfringe';
 
-const BLOCKED_DOT_PAIRS: [string, string][] = [
-	['bluray', 'x264'],
-	['hdtv', 'x264'],
-	['hdtv', 'xvid'],
-	['web', 'x264'],
-	['web', 'h264'],
-];
-
+/**
+ * Whether Real-Debrid refuses this name: the torrent's own name when it is
+ * added, a file's name when its link is unrestricted. One rule, measured
+ * against the live service and kept in `deInfringe.ts`; this used to carry its
+ * own case-insensitive copy of the pre-October-2026 list, which hid WEBRip,
+ * BDRip, BluRay.x264 and `WEB.h264` releases RD takes.
+ */
 export function isRdBlockedFilename(filename: string): boolean {
-	const lower = filename.toLowerCase();
-
-	for (const substr of BLOCKED_SUBSTRINGS) {
-		if (lower.includes(substr)) return true;
-	}
-
-	for (const [source, codec] of BLOCKED_DOT_PAIRS) {
-		if (lower.includes(`.${source}.${codec}`)) return true;
-	}
-
-	return false;
+	return isRdBlockedName(filename);
 }

@@ -134,12 +134,14 @@ export function useTorrentManagement(
 			const wasMarkedAvailable = torrentResult?.rdAvailable || false;
 			let torrentInfo: TorrentInfoResponse | null = null;
 
-			// Every path DMM has heard of for this torrent. RD blocks on the names
-			// inside it, not only on the row title, and the title is often the
-			// space-separated display form that has lost the dots the block keys
-			// on — so reading the title alone calls a real block a throttle and
-			// waits out two 20-second backoffs for nothing. The lists disagree only
-			// on `fileId`, never on filenames, so all three are worth reading.
+			// Every path DMM has heard of for this torrent. RD judges an add on the
+			// torrent's root name, and the row title is often the space-separated
+			// display form that has lost the dots the block keys on, while a path's
+			// leading folder still carries the real root name. RD also refuses to
+			// stream a file whose own name matches. Reading the title alone calls
+			// a real block a throttle and waits out two 20-second backoffs for
+			// nothing. The lists disagree only on `fileId`, never on filenames, so
+			// all three are worth reading.
 			const knownFilenames = [
 				...(torrentResult?.files ?? []),
 				...(torrentResult?.tbFiles ?? []),
