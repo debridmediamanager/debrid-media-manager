@@ -70,9 +70,8 @@ question is worse than an obvious failure.
 
 There is no `t=get`. A Torznab item's download is its magnet.
 
-`ep` is accepted and deliberately not acted on. Sonarr parses release titles itself and a
-season pack is a correct answer to an episode search, so filtering the feed down to
-titles that name the episode would hide every pack that contains it.
+With `season` and `ep` together, a TV search answers for that one episode — see
+**Episode searches** below.
 
 ## Errors — Torznab XML, HTTP 200
 
@@ -127,10 +126,11 @@ this budget exists to pace.
    which also answers with the title's type — so a generic `t=search` for a show name
    reads season pages rather than a movie page.
 2. Each page is read with `getScrapedTrueRow`, one row per key.
-3. Reported hashes are dropped, exactly as the site does before rendering a title. A
+3. Nothing found → debridio backfill (below).
+4. An episode search keeps the releases that name that episode (below).
+5. Reported hashes are dropped, exactly as the site does before rendering a title. A
    failure there serves the unfiltered set rather than failing the search.
-4. Nothing found → debridio backfill (below).
-5. Category filter, then the cache lookup, then paging (order matters — see below).
+6. Category filter, then the cache lookup, then paging (order matters — see below).
 
 **Only `ScrapedTrue` is served.** The `Scraped` table has been measured carrying
 fabricated titles filed against real hashes. A person browsing can see through that; an
@@ -151,6 +151,44 @@ not moved in nine months. Ordering by season number answered a Breaking Bad sear
 A show with no pages at all resolves to season 1 — the one season every show has, and the
 thing that gives the debridio backfill something to ask about rather than answering
 empty.
+
+### Episode searches
+
+A `tvsearch` naming `season` and `ep` is answered with the releases whose title names that
+episode of that season: alone (`S03E10`, `3x10`) or in a multi-episode release that covers
+it (`S03E09E10`, `S03E01-E10`). Season packs, other episodes and other seasons are left out.
+`episodeFilter` in `search.ts` does this before the cache lookup, so `total` names the
+episode's set and the cache is only asked about it.
+
+Season packs are left out because Sonarr refuses them there. From Sonarr's source
+(v4.0.20.3012), `SingleEpisodeSearchMatchSpecification` rejects, on a search for one
+episode, a release from another season (`Wrong season`), one that names no episode
+(`Full season pack`), and one whose episodes leave the searched one out (`Wrong episode`).
+A multi-episode release that includes it passes. Packs are still served where Sonarr takes
+them: its season search sends `season` without `ep`, and that request is unfiltered.
+
+Until 2026-10-03 `ep` was accepted and ignored, so an episode search returned the whole
+season and Sonarr's thousand-release cutoff applied to the season instead of the episode.
+The reported Sonarr search for Silo S03E10 read a season page DMM served as 1,432
+releases. 105 named episode 10, and 33 of those came after the thousandth release, so
+Sonarr never saw them. The other 1,327 named another episode, a pack or another season,
+all of which Sonarr refuses. Now the same search is 105 releases in two requests. Episode
+searches were 17,786 of the 72,883 \*arr searches in dmm-01's proxy log from 2026-09-06 to
+2026-10-03.
+
+The title is read by the season page's own reader (`parseTvEpisode` in
+`src/utils/tvEpisodes.ts`, built on `seasonNaming`), not by `ptt`, which reads episode 2
+out of `2xRus` and called 42% of a 4,498-title corpus's season packs single episodes. The
+reader has no episode counts here, so `S03E01-E10` stays a range covering episode 10 rather
+than becoming a pack. Sonarr reads it the same way. Three cases are answered as before:
+
+- **Season 0.** Sonarr also maps a release to a special by the episode's title
+  (`ParseSpecialEpisodeTitle`), and that title need not name `S00E05`.
+- **A daily show.** Its `ep` is a date (`ep=10/03`), which is not an episode number.
+- **Anime by absolute number.** Sonarr's anime episode search also asks with `q=46` and
+  no `season` or `ep`. That request reads the show's recent season pages whole, so a fansub
+  release numbered across the whole run (`Show - 46`) still reaches it. Only the
+  standard-format request that names `season` and `ep` is filtered.
 
 ### The untargeted feed (an \*arr's RSS sync)
 
@@ -263,8 +301,10 @@ and a request against the budget in **Rate limits** above. That is why `max` is 
 was unsearchable from an \*arr: twenty pages two seconds apart spend the whole budget in
 40 seconds, and the twenty-first is refused. The reported case (2026-09-17) was a Sonarr
 episode search refused on `offset=200&limit=10`, on a season page that held 1,503 releases
-by 2026-10-03; at 100 a page the same search is ten requests. `default` stays at ten so that a client which reads only
-page one, and names no limit, is not handed what it will not look at.
+by 2026-10-03; at 100 a page a search of that whole season is ten requests. The episode
+search itself is now two requests, because `ep` is read (see **Episode searches**).
+`default` stays at ten so that a client which reads only page one, and names no limit, is
+not handed what it will not look at.
 
 **Cached releases come first.** Measured against the live library, a plain movie search's
 first hundred results were almost entirely 24-terabyte "Top 5000 Movies Pack" style
@@ -310,6 +350,8 @@ library pages with their RD rows, and on RD's recorded probe answers in
 `src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`; its paging cases run a model
 of Sonarr's paging through the route and the real limiter against
 `src/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json`, the reported search as
-the proxy log recorded it plus the production library page it paged through),
+the proxy log recorded it plus the production library page it paged through, and the same
+fixture checks that the reported S03E10 search returns every release naming that episode
+inside Sonarr's reach),
 `src/test/services/torznab{Resolve,Categories,Xml}.test.ts`,
 `src/test/pages/torznab.test.tsx`.

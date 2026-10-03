@@ -360,23 +360,77 @@ describe('search', () => {
 		expect(titles(res)).toEqual(['Show.S02E01.1080p.WEB']);
 	});
 
-	it('keeps a season pack in an episode search', async () => {
-		// Sonarr parses release titles itself, so filtering the feed down to
-		// titles that name the episode would hide every pack that contains it.
-		library.set(`tv:${SHOW_ID}:2`, {
-			results: [release('Show.S02.COMPLETE.1080p.WEB', 20_000, BIG)],
-			updatedAt: PAGE_UPDATED_AT,
+	describe('an episode search', () => {
+		// Sonarr's `SingleEpisodeSearchMatchSpecification` rejects, on a search
+		// for one episode, a release from another season, a season pack and a
+		// release whose episodes leave the searched one out. These are the shapes
+		// of each, plus what it accepts.
+		const season2 = [
+			release('Show.S02.COMPLETE.1080p.WEB', 20_000, hash('a')),
+			release('Show.S02E07.1080p.WEB', 1_500, hash('b')),
+			release('Show 2x07 720p', 700, hash('c')),
+			release('Show.S02E06-E08.1080p.WEB', 4_500, hash('d')),
+			release('Show.S02E06E07.720p.HDTV', 1_400, hash('e')),
+			release('Show.S02E08.1080p.WEB', 1_500, hash('f')),
+			release('Show.S01E07.1080p.WEB', 1_500, hash('7')),
+			release('Show.S01-S05.1080p.BluRay', 90_000, hash('8')),
+		];
+
+		beforeEach(() => {
+			library.set(`tv:${SHOW_ID}:2`, { results: season2, updatedAt: PAGE_UPDATED_AT });
 		});
 
-		const res = await run({
-			t: 'tvsearch',
-			imdbid: SHOW_ID,
-			season: '2',
-			ep: '7',
-			apikey: SPONSOR_KEY,
+		const search = (extra: Record<string, string>) =>
+			run({ t: 'tvsearch', imdbid: SHOW_ID, season: '2', apikey: SPONSOR_KEY, ...extra });
+
+		it('answers with the releases that hold that episode, ranges included', async () => {
+			expect(titles(await search({ ep: '7' }))).toEqual([
+				'Show.S02E06-E08.1080p.WEB',
+				'Show.S02E07.1080p.WEB',
+				'Show.S02E06E07.720p.HDTV',
+				'Show 2x07 720p',
+			]);
 		});
 
-		expect(titles(res)).toEqual(['Show.S02.COMPLETE.1080p.WEB']);
+		it('leaves season packs to the season search, which still has them', async () => {
+			expect(titles(await search({ ep: '7' }))).not.toContain('Show.S02.COMPLETE.1080p.WEB');
+
+			const season = titles(await search({}));
+			expect(season).toContain('Show.S02.COMPLETE.1080p.WEB');
+			expect(season).toContain('Show.S01-S05.1080p.BluRay');
+			expect(season).toHaveLength(season2.length);
+		});
+
+		it('names the filtered set as the total, so a client stops paging there', async () => {
+			const xml = body(await search({ ep: '7', limit: '2' }));
+
+			expect(xml).toContain('<torznab:response offset="0" total="4"/>');
+		});
+
+		it('does not take an episode out of a pack name the way ptt does', async () => {
+			// From seasonNaming's corpus: `ptt` reads episode 2 out of `2xRus`.
+			library.set(`tv:${SHOW_ID}:2`, {
+				results: [release('The.Wire.S02.720p.WEB-DL.2xRus.Eng.HDCLUB', 30_000, BIG)],
+				updatedAt: PAGE_UPDATED_AT,
+			});
+
+			expect(titles(await search({ ep: '2' }))).toEqual([]);
+		});
+
+		it('reads specials and a daily show’s date the way it always did', async () => {
+			// Sonarr also matches a special by its episode title, which need not
+			// carry `S00E03`, and a daily show's `ep` is a date.
+			library.set(`tv:${SHOW_ID}:0`, {
+				results: [release('Show.Behind.The.Scenes.1080p.WEB', 900, BIG)],
+				updatedAt: PAGE_UPDATED_AT,
+			});
+
+			expect(titles(await search({ season: '00', ep: '3' }))).toEqual([
+				'Show.Behind.The.Scenes.1080p.WEB',
+			]);
+			expect(titles(await search({ ep: '10/03' }))).toHaveLength(season2.length);
+			expect(titles(await search({ ep: '0' }))).toHaveLength(season2.length);
+		});
 	});
 
 	it('drops what the community reported as wrong content', async () => {
@@ -797,6 +851,13 @@ describe('an *arr search pages to its end inside the budget', () => {
 	const { page } = sonarrEpisodeSearch;
 	const route = reported.path.split('/').slice(3);
 
+	/**
+	 * The same search for the whole season, which is what Sonarr sends for a
+	 * season and what DMM answered the episode search with while it left `ep`
+	 * unread: the paging cases below need a search that runs deep.
+	 */
+	const { ep: _searchedEpisode, ...seasonQuery } = reported.query;
+
 	/** What Sonarr and Radarr give up at, whatever the indexer's total says. */
 	const ARR_MAX_PAGES = 30;
 	const ARR_MAX_RESULTS = 1000;
@@ -819,6 +880,12 @@ describe('an *arr search pages to its end inside the budget', () => {
 
 	const start = new Date(reported.started).getTime();
 
+	/** The caps DMM advertises, read the way an *arr holds them: well before the search. */
+	async function dmmCaps(): Promise<string> {
+		vi.setSystemTime(start - 3_600_000);
+		return body(await run({ t: 'caps' }, { route }));
+	}
+
 	/**
 	 * One search the way Sonarr and Radarr run it, from their source:
 	 * `NewznabRequestGenerator.GetPagedRequests` asks for page after page by
@@ -827,7 +894,10 @@ describe('an *arr search pages to its end inside the budget', () => {
 	 * throws out of that loop, so every page already read is discarded with it
 	 * and the search comes back empty.
 	 */
-	async function arrSearch(caps: string): Promise<{ requests: ArrRequest[]; found: string[] }> {
+	async function arrSearch(
+		caps: string,
+		query: Record<string, string> = reported.query
+	): Promise<{ requests: ArrRequest[]; found: string[] }> {
 		const pageSize = arrPageSize(caps);
 		const requests: ArrRequest[] = [];
 		const found: string[] = [];
@@ -836,7 +906,7 @@ describe('an *arr search pages to its end inside the budget', () => {
 			const offset = index * pageSize;
 			const res = await run(
 				{
-					...reported.query,
+					...query,
 					offset: String(offset),
 					limit: String(pageSize),
 					apikey: SPONSOR_KEY,
@@ -858,6 +928,15 @@ describe('an *arr search pages to its end inside the budget', () => {
 		return { requests, found };
 	}
 
+	function refusals(requests: ArrRequest[]): string[] {
+		return requests
+			.filter((request) => request.status !== 200)
+			.map(
+				({ status, offset, limit, at }) =>
+					`${status} on offset=${offset}&limit=${limit} at ${at}s`
+			);
+	}
+
 	beforeEach(() => {
 		vi.useFakeTimers({ toFake: ['Date'] });
 		library = new Map([
@@ -875,31 +954,71 @@ describe('an *arr search pages to its end inside the budget', () => {
 	it('reproduces the recorded search from the caps the reporter’s Sonarr held', async () => {
 		// The paging model and the fixture checked against each other: a Sonarr
 		// still holding a caps document that offered ten a page sends exactly
-		// what the log recorded, and is refused exactly where it was.
-		const { requests } = await arrSearch('<caps><limits max="10" default="10"/></caps>');
+		// what the log recorded, and is refused exactly where it was. DMM read
+		// no `ep` then, so the pages it served were the season search's.
+		const { requests } = await arrSearch(
+			'<caps><limits max="10" default="10"/></caps>',
+			seasonQuery
+		);
 
 		expect(requests).toEqual(reported.requests);
 	});
 
-	it('answers every page of the reported search, reading what DMM advertises', async () => {
-		// An *arr holds caps for days, so they are read well before the search.
-		vi.setSystemTime(start - 3_600_000);
-		const caps = body(await run({ t: 'caps' }, { route }));
+	it('answers every page of a season search, reading what DMM advertises', async () => {
+		const { requests, found } = await arrSearch(await dmmCaps(), seasonQuery);
 
-		const { requests, found } = await arrSearch(caps);
-
-		const refused = requests
-			.filter((request) => request.status !== 200)
-			.map(
-				({ status, offset, limit, at }) =>
-					`${status} on offset=${offset}&limit=${limit} at ${at}s`
-			);
-		expect(refused).toEqual([]);
+		expect(refusals(requests)).toEqual([]);
 		expect(found).toHaveLength(Math.min(ARR_MAX_RESULTS, page.results.length));
 		expect(new Set(found).size).toBe(found.length);
 		// One sponsor's fleet shares the budget, so a search that needed all of
 		// it would still fail the moment a second one ran beside it.
 		expect(requests.length).toBeLessThanOrEqual(RATE_LIMIT_CONFIGS.torznabSearch.rateLimit / 2);
+	});
+
+	describe('the reported search, which asked for episode 10', () => {
+		// Sonarr accepts a release on an episode search only when its title
+		// names that season and an episode list holding the one searched, and
+		// gives up at the thousandth release. Read here with a plain pattern
+		// rather than with DMM's own reader, which is what is under test. The
+		// page holds no multi-episode release reaching episode 10, so the
+		// pattern is exact for it.
+		const NAMES_S03E10 = /(?:^|[^a-z0-9])s0?3[ ._-]*e10(?![0-9])/i;
+		const NAMES_3X10 = /(?:^|[^a-z0-9])3x10(?![0-9])/i;
+		const namesEpisode = (title: string) => NAMES_S03E10.test(title) || NAMES_3X10.test(title);
+
+		const titleOf = new Map(page.results.map((result) => [result.hash, result.title]));
+		const wanted = page.results.filter((result) => namesEpisode(result.title));
+
+		it('holds the shapes this is measured against', () => {
+			expect(wanted.filter((result) => NAMES_S03E10.test(result.title))).toHaveLength(103);
+			expect(wanted.filter((result) => NAMES_3X10.test(result.title))).toHaveLength(2);
+		});
+
+		it('returns every release naming S03E10 inside Sonarr’s thousand', async () => {
+			const { requests, found } = await arrSearch(await dmmCaps());
+
+			expect(refusals(requests)).toEqual([]);
+			const reached = new Set(found);
+			const unseen = wanted.filter((result) => !reached.has(result.hash));
+			expect(unseen.map((result) => result.title)).toEqual([]);
+			const rejectedBySonarr = found.filter((hash) => !namesEpisode(titleOf.get(hash) ?? ''));
+			expect(rejectedBySonarr).toHaveLength(0);
+			expect(found).toHaveLength(wanted.length);
+			expect(requests).toHaveLength(2);
+		});
+
+		it('finishes on the caps the reporter’s Sonarr held too', async () => {
+			// An *arr keeps caps for up to seven days, so a Sonarr still paging at
+			// ten is served the same set in eleven requests rather than refused on
+			// the twenty-first.
+			const { requests, found } = await arrSearch(
+				'<caps><limits max="10" default="10"/></caps>'
+			);
+
+			expect(refusals(requests)).toEqual([]);
+			expect(new Set(found)).toEqual(new Set(wanted.map((result) => result.hash)));
+			expect(requests).toHaveLength(Math.ceil(wanted.length / 10));
+		});
 	});
 });
 

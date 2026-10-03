@@ -25,6 +25,7 @@ import {
 import { isRdBlockedName } from '@/utils/deInfringe';
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { isTorznabLiveService, type TorznabLiveService } from '@/utils/sponsorProviders';
+import { createTvEpisodeReader, matchesTvEpisodeFilter } from '@/utils/tvEpisodes';
 import type { NextApiRequest } from 'next';
 import {
 	categoriesFor,
@@ -125,6 +126,11 @@ export interface NormalizedQuery {
 	imdbid?: string;
 	tvdbid?: number;
 	season?: number;
+	/**
+	 * `ep`, when it is an episode number. A daily show's `ep` is a date
+	 * (`10/03`) and is left unread, as is a zero.
+	 */
+	episode?: number;
 	categories: number[];
 	limit: number;
 	offset: number;
@@ -147,22 +153,21 @@ function integer(raw: string, min: number, max: number): number | undefined {
 /**
  * Reads a client's query into the parameters this endpoint acts on, dropping
  * anything malformed rather than half-honouring it.
- *
- * `ep` is read by the caller's client and deliberately not acted on here. Sonarr
- * parses release titles itself and a season pack is a correct answer to an
- * episode search, so filtering the feed down to titles that name the episode
- * would hide every pack that contains it.
  */
 export function normalizeSearchQuery(query: NextApiRequest['query']): NormalizedQuery {
 	const q = firstValue(query.q);
 	const imdbid = firstValue(query.imdbid);
 	const tvdbid = integer(firstValue(query.tvdbid), 1, Number.MAX_SAFE_INTEGER);
+	// Read from zero rather than clamped up from it, so `ep=0` is no episode
+	// rather than episode one.
+	const episode = integer(firstValue(query.ep), 0, Number.MAX_SAFE_INTEGER);
 
 	return {
 		q: q || undefined,
 		imdbid: imdbid || undefined,
 		tvdbid,
 		season: integer(firstValue(query.season), 0, 9999),
+		episode: episode !== undefined && episode >= 1 ? episode : undefined,
 		categories: parseCategoryFilter(firstValue(query.cat)),
 		limit: integer(firstValue(query.limit), 1, MAX_LIMIT) ?? DEFAULT_LIMIT,
 		offset: integer(firstValue(query.offset), 0, Number.MAX_SAFE_INTEGER) ?? 0,
@@ -315,6 +320,47 @@ function refreshAvailability(targets: TorznabTarget[]): void {
 	});
 }
 
+/**
+ * What an episode search is answered with: the releases whose own title names
+ * that episode of that season, alone (`S03E10`, `3x10`) or inside a range
+ * (`S03E09E10`, `S03E01-E10`). Null when the query asks for no one episode.
+ *
+ * DMM keys TV by season, so without this every episode search was answered
+ * with the whole season. Sonarr takes almost none of that:
+ * `SingleEpisodeSearchMatchSpecification` (Sonarr 4.0.20.3012) rejects a
+ * release from another season ("Wrong season"), one that names no episode
+ * ("Full season pack") and one whose episodes do not include the one searched
+ * ("Wrong episode"), and a multi-episode release covering it passes. It also
+ * stops reading at a thousand releases. On 2026-10-03 this feed served Silo's
+ * season 3 as 1,432 releases, and 105 named episode 10. 33 of those came after
+ * the thousandth, where Sonarr never saw them. Packs stay on the season search,
+ * which Sonarr sends without `ep` and which this leaves alone.
+ *
+ * The reading is the season page's own (`parseTvEpisode`), not `ptt`'s, which
+ * calls season packs single episodes; see `seasonNaming`. With no episode
+ * counts to hand, a range spanning the whole season stays a range, which is
+ * how Sonarr reads `S03E01-E10` too.
+ *
+ * Season 0 is left whole: Sonarr maps a release to a special by the episode's
+ * title as well as by its number (`ParseSpecialEpisodeTitle`), and such a
+ * title need not name `S00E05` at all. A daily show's date-shaped `ep` is not
+ * read either. An anime episode search also asks by absolute number with no
+ * `season` or `ep`, and that request reads the show's recent season pages
+ * unfiltered, so a fansub release numbered by the whole run (`Show - 46`)
+ * still reaches it there.
+ */
+function episodeFilter(
+	targets: TorznabTarget[],
+	params: NormalizedQuery
+): ((release: LibraryRelease) => boolean) | null {
+	const { season, episode } = params;
+	if (season === undefined || season < 1 || episode === undefined) return null;
+	if (!targets.every((target) => target.kind === 'tv' && target.season === season)) return null;
+
+	const read = createTvEpisodeReader({ season, episodeCounts: {}, seasonCount: 0, anime: false });
+	return (release) => matchesTvEpisodeFilter(read(release.title), episode);
+}
+
 async function targetedReleases(t: SearchType, params: NormalizedQuery): Promise<LibraryRelease[]> {
 	const targets = await resolveTargets(t, params);
 	if (targets.length === 0) return [];
@@ -324,7 +370,9 @@ async function targetedReleases(t: SearchType, params: NormalizedQuery): Promise
 	const releases = found.length > 0 ? found : await backfill(targets);
 	if (found.length > 0) refreshAvailability(targets);
 
-	const filtered = await withoutReported(targets[0].imdbId, releases);
+	const namesEpisode = episodeFilter(targets, params);
+	const wanted = namesEpisode ? releases.filter(namesEpisode) : releases;
+	const filtered = await withoutReported(targets[0].imdbId, wanted);
 	// Biggest first, the order the library itself is stored in and the site
 	// serves. A client re-ranks by its own quality rules regardless.
 	return filtered.sort((a, b) => b.size - a.size);
