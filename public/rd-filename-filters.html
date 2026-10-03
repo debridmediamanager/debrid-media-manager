@@ -204,60 +204,56 @@ summary::marker { color: #3b82f6; }
 
 <div class="hero">
 <p>I tested several thousand scene releases against Real-Debrid's torrent upload filter to map exactly which filename patterns trigger the <code>infringing_file</code> rejection (error_code 35). RD checks only the filename inside the .torrent metadata, it never downloads or inspects the actual file content.</p>
+<p><strong>Updated 3 October 2026.</strong> RD has relaxed the filter. Re-tested with a fresh .torrent per name, it now accepts <code>WEBRip</code>, <code>BDRip</code>, <code>HDRip</code>, <code>DVDRip</code>, <code>BluRay.x264</code> and <code>BluRay.DTS</code>, which it used to refuse. <code>WEB-DL</code>, <code>HDTV.x264</code>, <code>HDTV.XviD</code>, <code>WEB.x264</code> and <code>WEB.H264</code> are still refused. The lists below reflect the current behavior.</p>
 </div>
 
 <div class="tldr">
-<h3>TL;DR: Two Pattern Types, Every Current Release Format Affected</h3>
+<h3>TL;DR: Two Pattern Types</h3>
 
-<p><strong>Type 1: 5 substring matches</strong> (case-insensitive, anywhere in filename):</p>
-<p style="font-size:1.15em;letter-spacing:1px"><code>web-dl</code> &nbsp; <code>webrip</code> &nbsp; <code>bdrip</code> &nbsp; <code>hdrip</code> &nbsp; <code>dvdrip</code></p>
+<p><strong>Type 1: 1 substring match</strong> (case-insensitive, anywhere in filename):</p>
+<p style="font-size:1.15em;letter-spacing:1px"><code>web-dl</code></p>
+<p>No longer blocked since October 2026: <code>webrip</code>, <code>bdrip</code>, <code>hdrip</code>, <code>dvdrip</code>.</p>
 
 <p><strong>Type 2: Source.Codec dot-adjacency matches</strong> (case-insensitive):</p>
 <p style="font-size:1.15em;letter-spacing:1px">
-<code>BluRay.x264</code> &nbsp;
 <code>HDTV.x264</code> &nbsp; <code>HDTV.XviD</code> &nbsp;
 <code>WEB.x264</code> &nbsp; <code>WEB.h264</code> &nbsp; <code>WEB.H264</code>
 </p>
+<p>No longer blocked since October 2026: <code>BluRay.x264</code>.</p>
 
 <div class="impact">
 <h4>Real-World Impact</h4>
-<p>From current PirateBay releases tested: <strong>56 out of 165 filenames are blocked</strong> (~34%). The most impacted formats:</p>
+<p>The most impacted formats:</p>
 <ul>
-<li><strong>All <code>[WEBRip]</code> bracket releases</strong>, every single one blocked (Zootopia 2, Hoppers, Faces of Death, etc.)</li>
 <li><strong>All <code>WEB-DL</code> releases</strong>: AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DLs all blocked</li>
 <li><strong>All <code>.WEB.h264</code> scene releases</strong>: GRACE, ETHEL, EDITH groups all blocked</li>
 <li><strong>All <code>.WEB.H264</code> releases</strong>: HiggsBoson, SYLiX groups blocked</li>
 <li><strong>All <code>.HDTV.x264</code> releases</strong>: SYNCOPY group blocked</li>
 </ul>
-<p><strong>Safe formats:</strong> <code>.WEB.h265</code>, <code>BluRay.x265</code>, <code>HEVC x265</code>, <code>TELESYNC</code>, <code>HDTS</code>, <code>DCP</code></p>
+<p><strong>Safe formats:</strong> <code>WEBRip</code>, <code>BDRip</code>, <code>BluRay.x264</code>, <code>.WEB.h265</code>, <code>BluRay.x265</code>, <code>HEVC x265</code>, <code>TELESYNC</code>, <code>HDTS</code>, <code>DCP</code></p>
 </div>
 </div>
 
 <h2>Rule 1: Substring Matches</h2>
 <div class="rule">
-<p>If the filename contains any of these strings (case-insensitive), the torrent is rejected immediately. Extension doesn't matter. Works in both dot-separated and space-separated names, and inside brackets.</p>
+<p>If the filename contains this string (case-insensitive), the torrent is rejected immediately. Extension doesn't matter. Works in both dot-separated and space-separated names, and inside brackets.</p>
 <table>
 <tr><th>Pattern</th><th>Blocked Real-World Examples</th></tr>
 <tr><td><code>web-dl</code></td><td><code>Euphoria.US.S03E05...AMZN.WEB-DL...H.264-FLUX</code><br>
 <code>From.S03.COMPLETE.1080p.AMZN.WEB-DL...H.264-FLUX[TGx]</code><br>
 <code>Apex.2026.2160p.NF.WEB-DL...H.265-APEX</code><br>
 <code>Taskmaster Australia S05E02 1080p TEN WEB-DL AAC2 0 H 264-RAWR</code></td></tr>
-<tr><td><code>webrip</code></td><td><code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code><br>
-<code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265.6CH-SupaCvnt</code><br>
-<code>Euphoria.US.S01.REPACK.1080p.AMZN.WEBRip.DDP5.1.x264-KiNGS</code><br>
-<code>The.Super.Mario.Galaxy.Movie.2026.1080p.Webrip.MULTi.Line.Audio.x264-SyncUP</code></td></tr>
-<tr><td><code>bdrip</code></td><td><code>[Group] Show [BDRip][1080p]</code></td></tr>
-<tr><td><code>hdrip</code></td><td><code>[Group] Show [HDRip][720p]</code></td></tr>
-<tr><td><code>dvdrip</code></td><td><code>[Group] Show [DVDRip][480p]</code></td></tr>
 </table>
 
 <p><strong>Properties:</strong></p>
 <ul>
-<li>Case-insensitive: <code>WEBrip</code>, <code>Webrip</code>, <code>WEBRIP</code>, <code>WeB-dL</code> all blocked</li>
-<li>Substring: <code>WEB-DLRip</code>, <code>PreDVDRip</code> blocked (contain the pattern)</li>
+<li>Case-insensitive: <code>WEB-DL</code>, <code>web-dl</code>, <code>WeB-dL</code> all blocked</li>
+<li>Substring: <code>WEB-DLRip</code> blocked (contains the pattern)</li>
+<li>Only the hyphen form: <code>WEB.DL</code> and <code>WEBDL</code> pass</li>
 <li>Extension-independent: <code>.mp4</code>, <code>.mkv</code>, <code>.avi</code> all checked</li>
-<li>Works with spaces: <code>1080p WEBRip DDP5 1 x264</code> blocked</li>
-<li>Works in brackets: <code>[WEBRip]</code>, <code>[BDRip]</code> blocked</li>
+<li>Works with spaces: <code>1080p TEN WEB-DL AAC2 0</code> blocked</li>
+<li>Works in brackets: <code>[WEB-DL]</code> blocked</li>
+<li>Dropped in October 2026: <code>webrip</code>, <code>bdrip</code>, <code>hdrip</code> and <code>dvdrip</code> used to block the same way. <code>[WEBRip]</code>, <code>[BDRip]</code> and <code>DVDRip</code> releases now pass.</li>
 </ul>
 </div>
 
@@ -268,7 +264,7 @@ summary::marker { color: #3b82f6; }
 <h3>Complete Matrix (168 combos tested across 21 sources × 8 codecs)</h3>
 <table class="combo-table">
 <tr><th style="text-align:left">Source \ Codec</th><th>x264</th><th>x265</th><th>h264</th><th>h265</th><th>HEVC</th><th>AV1</th><th>XviD</th><th>AVC</th></tr>
-<tr><td style="text-align:left"><strong>BluRay / BLURAY / bluray</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left"><strong>BluRay / BLURAY / bluray</strong></td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
 <tr><td style="text-align:left"><strong>HDTV / hdtv / Hdtv</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td></tr>
 <tr><td style="text-align:left"><strong>WEB / web / Web</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
 <tr><td style="text-align:left;color:#3fb950">Blu-Ray / BD</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
@@ -289,9 +285,10 @@ summary::marker { color: #3b82f6; }
 
 <p><strong>Properties:</strong></p>
 <ul>
-<li><strong>Only <code>.</code> (dot) triggers:</strong> <code>BluRay-x264</code> ✅, <code>WEB-h264</code> ✅, <code>HDTV_x264</code> ✅</li>
+<li><strong>Only <code>.</code> (dot) triggers:</strong> <code>WEB-x264</code> ✅, <code>WEB-h264</code> ✅, <code>HDTV_x264</code> ✅</li>
+<li><strong><code>BluRay.x264</code> passes since October 2026.</strong> It was blocked before.</li>
 <li><strong>Must be adjacent:</strong> <code>WEB.Line.H264</code> ✅ (Line breaks adjacency)</li>
-<li><strong>Order matters:</strong> <code>x264.BluRay</code> ✅</li>
+<li><strong>Order matters:</strong> <code>x264.WEB</code> ✅</li>
 <li><strong>h265 / x265 / HEVC / AV1 never blocked</strong> in any source combo</li>
 </ul>
 
@@ -300,18 +297,13 @@ summary::marker { color: #3b82f6; }
 
 <h2>Real-World Release Validation</h2>
 <div class="rule">
-<p>I tested 165 actual release names from current PirateBay listings. Here's how they break down:</p>
+<p>I tested 165 actual release names from PirateBay listings. Here's how they break down under the current rules. The 21 <code>WEBRip</code> names that were blocked before October 2026 are listed with the safe ones.</p>
 
-<details open><summary>Blocked Real-World Releases (56): why each is blocked</summary>
+<details open><summary>Blocked Real-World Releases: why each is blocked</summary>
 <div class="example">
 <p><strong>Blocked by <code>web-dl</code> substring (24):</strong></p>
 <p class="b">All AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DL releases</p>
 <p>Examples: <code>Euphoria.US...AMZN.WEB-DL...H.264-FLUX</code>, <code>Superman 2025 1080p WEB-DL HEVC x265 5.1 BONE</code></p>
-</div>
-<div class="example">
-<p><strong>Blocked by <code>webrip</code> substring (21):</strong></p>
-<p class="b">All [WEBRip] bracket releases + all .WEBRip. dot releases + WEBrip/Webrip variants</p>
-<p>Examples: <code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code>, <code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265</code></p>
 </div>
 <div class="example">
 <p><strong>Blocked by <code>WEB.h264</code> / <code>WEB.H264</code> adjacency (10):</strong></p>
@@ -325,7 +317,11 @@ summary::marker { color: #3b82f6; }
 </div>
 </details>
 
-<details><summary>Safe Real-World Releases (109): formats that pass</summary>
+<details><summary>Safe Real-World Releases: formats that pass</summary>
+<div class="example">
+<p><strong><code>WEBRip</code> releases ✅ (since October 2026)</strong></p>
+<p class="o"><code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code>, <code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265</code></p>
+</div>
 <div class="example">
 <p><strong><code>.WEB.h265</code> scene releases ✅</strong></p>
 <p class="o"><code>Project.Hail.Mary.2026.PROPER.HDR.2160p.WEB.h265-GRACE</code></p>

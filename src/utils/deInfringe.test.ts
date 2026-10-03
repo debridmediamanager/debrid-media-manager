@@ -1,3 +1,4 @@
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
 import { describe, expect, it } from 'vitest';
 import { deInfringe, isRdBlockedName } from './deInfringe';
 
@@ -5,23 +6,10 @@ describe('isRdBlockedName', () => {
 	// Names RD refuses on the first request, every time.
 	it.each([
 		'Show.S01E01.1080p.WEB-DL.DDP5.1.H.265-NTb',
-		'Show.S01E01.1080p.WEBRip.x265-RARBG',
-		'Movie.2019.720p.BDRip.x264-GROUP',
-		'Movie.2019.720p.HDRip.XviD-GROUP',
-		'Movie.1999.DVDRip.XviD-GROUP',
-		'Movie.2015.1080p.BluRay.x264-GROUP',
 		'Show.S01E01.720p.HDTV.x264-GROUP',
 		'Show.S01E01.HDTV.XviD-AFG',
 		'Show.S01E01.1080p.WEB.x264-GROUP',
 		'Show.S01E01.1080p.WEB.h264-GROUP',
-		// Measured 2026-08-25 with webseed torrents over a text file, each a fresh
-		// infohash so only the name could decide it: RD refuses `BluRay.DTS`
-		// whatever follows it, and the audio tag puts it out of reach of the
-		// source/codec pair above.
-		'Beautiful.Creatures.2013.1080p.BluRay.DTS.x264-EbP',
-		'Movie.2015.1080p.BluRay.DTS.x265-GROUP',
-		'Movie.2015.1080p.BLURAY.DTS.AC3-GROUP',
-		'Movie.2015.1080p.BluRay.DTS-HD.MA.5.1.x264-GROUP',
 	])('flags %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(true);
 	});
@@ -46,8 +34,23 @@ describe('isRdBlockedName', () => {
 		'Movie.2015.1080p.BluRay.DD5.1.x264-GROUP',
 		'Movie.2015.1080p.Blu-Ray.DTS.x264-GROUP',
 		'Movie.2015.1080p.BluRay-DTS.x264-GROUP',
+		// RD refused these until September and took every one by 2026-10-03:
+		// the rip family, `BluRay.x264`, and `BluRay.DTS` (refused 2026-08-25).
+		'Show.S01E01.1080p.WEBRip.x265-RARBG',
+		'Movie.2019.720p.BDRip.x264-GROUP',
+		'Movie.2019.720p.HDRip.XviD-GROUP',
+		'Movie.1999.DVDRip.XviD-GROUP',
+		'Movie.2015.1080p.BluRay.x264-GROUP',
+		'Beautiful.Creatures.2013.1080p.BluRay.DTS.x264-EbP',
+		'Movie.2015.1080p.BluRay.DTS.x265-GROUP',
 	])('passes %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(false);
+	});
+
+	// RD's own answers from a recorded probe: a fresh .torrent per name, so the
+	// name alone decided each one.
+	it.each(rdNameFilterProbe.results)("gives RD's answer for $name", ({ name, status }) => {
+		expect(isRdBlockedName(name)).toBe(status === 451);
 	});
 
 	// Measured 2026-08-23: RD downloaded both `HDTV.H264-FTP` releases of
