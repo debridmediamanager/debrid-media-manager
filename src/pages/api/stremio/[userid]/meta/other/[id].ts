@@ -1,5 +1,12 @@
-import { RdTokenExpiredError } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import {
+	castFailureFromStatus,
+	castNoticeMeta,
+	sendForeignMeta,
+	sendMetaError,
+	sendMetaFailure,
+	sendNoticeMeta,
+} from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { getDMMTorrent } from '@/utils/castCatalogHelper';
 import { castAccessToken } from '@/utils/castRdToken';
@@ -52,29 +59,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		// Clean up the ID - remove prefix and .json suffix
 		const cleanId = id.replaceAll(/\.json$/g, '');
 
-		// Skip if this is an AllDebrid, TorBox, Premiumize, Offcloud or
-		// Debrid-Link ID - let those addons handle it. They all share the `dmm`
-		// meta prefix, so Stremio asks every installed DMM Cast addon for every
-		// library id.
-		if (
-			cleanId.startsWith('dmm-ad:') ||
-			cleanId.startsWith('dmm-tb:') ||
-			cleanId.startsWith('dmm-pm:') ||
-			cleanId.startsWith('dmm-oc:') ||
-			cleanId.startsWith('dmm-dl:')
-		) {
-			console.log('[meta/other/id] Skipping non-RD ID:', cleanId);
-			res.status(200).json({ meta: null });
+		const notice = castNoticeMeta('rd', cleanId);
+		if (notice) {
+			sendNoticeMeta(res, notice);
 			return;
 		}
 
-		const torrentID = cleanId.replaceAll(/^dmm:/g, '');
+		// Only `dmm:<torrent id>` is ours. The `dmm` prefix this addon declares
+		// also covers every sibling DMM Cast addon's ids, and some clients ask
+		// every addon for every `other` id whatever its prefix - `cnc:`,
+		// `realdebrid:`, `torbox:` from other addons made up 59% of this route's
+		// 500s in the week to 2026-10-03, each one a Real-Debrid lookup of an id
+		// Real-Debrid never issued.
+		const torrentID = /^dmm:([A-Za-z0-9]+)$/.exec(cleanId)?.[1];
+		if (!torrentID) {
+			console.log('[meta/other/id] Not a Real-Debrid library id:', cleanId);
+			sendForeignMeta(res);
+			return;
+		}
 		console.log('[meta/other/id] Torrent ID:', torrentID);
 
 		const profile = await db.getCastProfile(userid);
 		if (!profile) {
 			console.log('[meta/other/id] No profile found for user:', userid);
-			res.status(500).json({ error: `Failed to get Real-Debrid profile for user ${userid}` });
+			sendMetaFailure(res, 'rd', 'not-connected', cleanId);
 			return;
 		}
 		console.log('[meta/other/id] Profile found for user:', userid);
@@ -83,45 +91,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		try {
 			console.log('[meta/other/id] Getting token for user:', userid);
 			accessToken = await castAccessToken(profile);
-			if (!accessToken) {
-				throw new Error(`no token found for user ${userid}`);
-			}
-			console.log('[meta/other/id] Token obtained successfully');
 		} catch (error) {
-			if (error instanceof RdTokenExpiredError) {
-				res.status(200).json({
-					meta: {
-						id: cleanId,
-						name: '⚠️ RD Auth Expired',
-						type: 'other',
-						description:
-							'Your Real-Debrid authorization has expired. Please re-authenticate at https://debridmediamanager.com/stremio',
-					},
-				});
-				return;
-			}
-			console.error('[meta/other/id] Token error:', error);
-			res.status(500).json({ error: `Failed to get Real-Debrid token for user ${userid}` });
+			sendMetaError(res, 'rd', error, cleanId);
 			return;
 		}
+		if (!accessToken) {
+			sendMetaFailure(res, 'rd', 'not-connected', cleanId);
+			return;
+		}
+		console.log('[meta/other/id] Token obtained successfully');
 
 		console.log('[meta/other/id] Fetching torrent:', torrentID);
-		const result = await getDMMTorrent(userid as string, torrentID, accessToken);
+		const result = await getDMMTorrent(userid, torrentID, accessToken);
 		if ('error' in result) {
 			console.log('[meta/other/id] Torrent fetch error:', result);
-			res.status(result.status).json({ error: result.error });
+			sendMetaFailure(res, 'rd', castFailureFromStatus(result.status), cleanId);
 			return;
 		}
 
 		console.log('[meta/other/id] Success:', { status: result.status });
 		res.status(result.status).json(result.data);
 	} catch (error) {
-		console.error('[meta/other/id] Exception caught:', error);
-		res.status(500).json({
-			// No stack: this is an addon endpoint any Stremio client can reach.
-			error: 'Internal server error',
-			message: error instanceof Error ? error.message : 'Unknown error',
-		});
+		const cleanId = typeof req.query.id === 'string' ? req.query.id.replace(/\.json$/, '') : '';
+		sendMetaError(res, 'rd', error, cleanId);
 		return;
 	}
 }

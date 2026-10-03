@@ -1,6 +1,7 @@
 import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
 	extractStreamMetadata,
@@ -56,15 +57,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	let profile;
 	try {
 		profile = await db.getDebridLinkCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
 	} catch (error) {
-		console.error(
-			'Failed to get Debrid-Link profile:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: `Failed to get Debrid-Link profile for user ${userid}` });
+		sendStreamError(res, 'dl', error);
+		return;
+	}
+	if (!profile) {
+		// An install whose profile is gone: say so on the stream list, where
+		// the member is looking, instead of a 500 on every title they open.
+		sendStreamFailure(res, 'dl', 'not-connected');
 		return;
 	}
 
@@ -152,11 +152,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });
 	} catch (error) {
-		console.error(
-			'Failed to get Debrid-Link casted URLs:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Debrid-Link casted URLs' });
+		sendStreamError(res, 'dl', error);
+		return;
 	}
 }
 

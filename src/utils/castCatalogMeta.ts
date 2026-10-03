@@ -1,5 +1,6 @@
 import { getMdblistCacheService } from '@/services/database/mdblistCache';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { CastProvider, sendCatalogError } from './castAddonResponses';
 import { isLegacyToken } from './castApiHelpers';
 
 export type CastCatalogType = 'movie' | 'series';
@@ -68,11 +69,11 @@ export function skipFromExtra(extra: Record<string, string>): number {
  * are asking for; once it runs out they get an empty page and stop.
  */
 export function createCastCatalogPageHandler(options: {
+	provider: CastProvider;
 	type: CastCatalogType;
 	fetchIds: (userid: string) => Promise<string[]>;
-	errorLabel: string;
 }) {
-	const { type, fetchIds, errorLabel } = options;
+	const { provider, type, fetchIds } = options;
 
 	return async function handler(req: NextApiRequest, res: NextApiResponse) {
 		res.setHeader('access-control-allow-origin', '*');
@@ -103,11 +104,7 @@ export function createCastCatalogPageHandler(options: {
 				cacheMaxAge: 0,
 			});
 		} catch (error) {
-			console.error(
-				`Failed to get ${errorLabel}:`,
-				error instanceof Error ? error.message : 'Unknown error'
-			);
-			res.status(500).json({ error: `Failed to get ${errorLabel}` });
+			sendCatalogError(res, provider, error, { firstPage: false });
 		}
 	};
 }

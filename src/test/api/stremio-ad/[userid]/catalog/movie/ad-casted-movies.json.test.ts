@@ -65,12 +65,14 @@ describe('/api/stremio-ad/[userid]/catalog/movie/ad-casted-movies.json', () => {
 		expect(data.cacheMaxAge).toBe(0);
 	});
 
-	it('returns 500 on error', async () => {
+	it('answers a database error with an uncached empty page', async () => {
 		mockRepository.fetchAllDebridCastedMovies = vi
 			.fn()
 			.mockRejectedValue(new Error('DB error'));
 		const req = createMockRequest({ query: { userid: 'user1' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([]);
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
 	});
 });

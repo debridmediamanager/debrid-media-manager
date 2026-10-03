@@ -258,9 +258,9 @@ describe('debridLinkCastCatalogHelper', () => {
 			expect(await getDebridLinkDMMItem('u', 't1')).toMatchObject({ status: 404 });
 		});
 
-		it('500s when the listing itself fails', async () => {
+		it('lets a listing failure propagate for the route to classify', async () => {
 			mockById.mockRejectedValue(new Error('floodDetected'));
-			expect(await getDebridLinkDMMItem('u', 't1')).toMatchObject({ status: 500 });
+			await expect(getDebridLinkDMMItem('u', 't1')).rejects.toThrow('floodDetected');
 		});
 	});
 });

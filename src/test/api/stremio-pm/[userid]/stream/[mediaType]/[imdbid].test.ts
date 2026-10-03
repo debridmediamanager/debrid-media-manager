@@ -50,10 +50,15 @@ describe('/api/stremio-pm/[userid]/stream/[mediaType]/[imdbid]', () => {
 		process.env.DMM_ORIGIN = originalOrigin;
 	});
 
-	it('returns 500 without a profile', async () => {
+	it('answers a missing profile with one stream that opens the setup page', async () => {
 		mockRepository.getPremiumizeCastProfile = vi.fn().mockResolvedValue(null);
 		await handler(request(), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).streams).toEqual([
+			expect.objectContaining({
+				externalUrl: expect.stringMatching(/\/stremio-premiumize$/),
+			}),
+		]);
 	});
 
 	// Premiumize is the one provider that can answer "will this actually play?"

@@ -144,6 +144,14 @@ interface ApiResponse<T> {
 	};
 }
 
+/**
+ * An `{status: 'error'}` envelope as a thrown Error that keeps the vendor code.
+ * AllDebrid answers a refused key with HTTP 200, so `AUTH_BAD_APIKEY` in the
+ * code is the only thing that separates "sign in again" from "try later".
+ */
+const allDebridEnvelopeError = (error: ApiResponse<unknown>['error'], fallback: string) =>
+	Object.assign(new Error(error?.message || fallback), { code: error?.code });
+
 // Pin interfaces
 interface PinData {
 	pin: string;
@@ -505,7 +513,7 @@ export const getMagnetStatus = async (
 		);
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Unknown error');
+			throw allDebridEnvelopeError(response.data.error, 'Unknown error');
 		}
 
 		// The list form of /v4.1/magnet/status carries NO files — measured 0 of 44 magnets
@@ -580,7 +588,7 @@ export const getMagnetFiles = async (
 		});
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Unknown error');
+			throw allDebridEnvelopeError(response.data.error, 'Unknown error');
 		}
 
 		return response.data.data!;
@@ -725,7 +733,7 @@ export const getMagnetStatusAd = async (
 		);
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Status check failed');
+			throw allDebridEnvelopeError(response.data.error, 'Status check failed');
 		}
 
 		// Note: Status endpoint returns magnets as OBJECT (not array) when querying by ID
@@ -844,7 +852,7 @@ export const getSavedLinks = async (apiKey: string): Promise<AllDebridSavedLink[
 	);
 
 	if (response.data.status === 'error') {
-		throw new Error(response.data.error?.message || 'Failed to list saved links');
+		throw allDebridEnvelopeError(response.data.error, 'Failed to list saved links');
 	}
 	return response.data.data?.links ?? [];
 };

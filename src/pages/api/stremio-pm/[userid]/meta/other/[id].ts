@@ -1,3 +1,11 @@
+import {
+	castFailureFromStatus,
+	castNoticeMeta,
+	sendForeignMeta,
+	sendMetaError,
+	sendMetaFailure,
+	sendNoticeMeta,
+} from '@/utils/castAddonResponses';
 import { getPremiumizeDMMItem, parsePremiumizeMetaId } from '@/utils/premiumizeCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,27 +27,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const cleanId = id.replace(/\.json$/, '');
 
+	const notice = castNoticeMeta('pm', cleanId);
+	if (notice) {
+		sendNoticeMeta(res, notice);
+		return;
+	}
+
 	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio asks all of
 	// them for every library id. Anything that is not ours belongs to a sibling
 	// addon and must answer with a null meta rather than an error.
 	const parsed = parsePremiumizeMetaId(cleanId);
 	if (!parsed) {
-		res.status(200).json({ meta: null });
+		sendForeignMeta(res);
 		return;
 	}
 
 	try {
 		const result = await getPremiumizeDMMItem(userid, parsed.kind, parsed.id);
 		if ('error' in result) {
-			res.status(result.status).json({ error: result.error });
+			sendMetaFailure(res, 'pm', castFailureFromStatus(result.status), cleanId);
 			return;
 		}
 		res.status(result.status).json(result.data);
 	} catch (error) {
-		console.error(
-			'Failed to get Premiumize item meta:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Premiumize item meta' });
+		sendMetaError(res, 'pm', error, cleanId);
 	}
 }

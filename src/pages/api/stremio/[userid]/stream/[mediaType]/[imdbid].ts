@@ -1,6 +1,7 @@
 import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { rdCastPlayId } from '@/utils/rdCastLink';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
@@ -50,15 +51,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	let profile;
 	try {
 		profile = await db.getCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
 	} catch (error) {
-		console.error(
-			'Failed to get Real-Debrid profile:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: `Failed to get Real-Debrid profile for user ${userid}` });
+		sendStreamError(res, 'rd', error);
+		return;
+	}
+	if (!profile) {
+		// An install whose profile is gone: say so on the stream list, where
+		// the member is looking, instead of a 500 on every title they open.
+		sendStreamFailure(res, 'rd', 'not-connected');
 		return;
 	}
 
@@ -184,11 +184,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			cacheMaxAge: 0,
 		});
 	} catch (error) {
-		console.error(
-			'Failed to get casted URLs:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get casted URLs' });
+		sendStreamError(res, 'rd', error);
 		return;
 	}
 }

@@ -46,10 +46,13 @@ describe('/api/stremio-tb/[userid]/catalog/other/tb-casted-other.json', () => {
 		expect(data).toEqual(mockData);
 	});
 
-	it('returns error status from helper', async () => {
+	it('turns a missing profile into a set-up-again notice', async () => {
 		mockGetTorBoxDMMLibrary.mockResolvedValue({ error: 'No profile', status: 401 } as any);
 		const req = createMockRequest({ query: { userid: 'user1' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(401);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([
+			expect.objectContaining({ id: 'dmm-tb:notice:not-connected' }),
+		]);
 	});
 });

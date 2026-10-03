@@ -1,3 +1,4 @@
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { getOffcloudDMMLibrary } from '@/utils/offcloudCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -17,17 +18,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	try {
-		const result = await getOffcloudDMMLibrary(userid, 1);
-		if ('error' in result) {
-			return res.status(result.status).json({ error: result.error });
-		}
-		res.status(result.status).json(result.data);
-	} catch (error) {
-		console.error(
-			'Failed to get Offcloud library:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Offcloud library' });
-	}
+	return sendLibraryPage(res, 'oc', 1, () => getOffcloudDMMLibrary(userid, 1));
 }

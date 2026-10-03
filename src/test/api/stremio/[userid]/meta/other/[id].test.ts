@@ -47,11 +47,11 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 	// them for every library id. A sibling addon's id must come back as a null
 	// meta - answering it here sends a Premiumize folder id to Real-Debrid.
 	it.each(['dmm-ad:456', 'dmm-tb:123', 'dmm-pm:folder:f1', 'dmm-oc:r1', 'dmm-dl:t1'])(
-		'returns a null meta for %s',
+		'answers %s with a 404 null meta',
 		async (id) => {
 			const res = createMockResponse();
 			await handler(createMockRequest({ query: { userid: 'user1', id } }), res);
-			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res.status).toHaveBeenCalledWith(404);
 			expect(res._getData()).toEqual({ meta: null });
 			expect(mockGetDMMTorrent).not.toHaveBeenCalled();
 		}
@@ -153,30 +153,29 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 		);
 	});
 
-	it('returns 500 when cast profile is missing', async () => {
+	it('answers a missing profile with a set-up-again notice meta', async () => {
 		mockGetCastProfile.mockResolvedValue(null);
 		const req = createMockRequest({ query: { userid: 'user', id: 'dmm:1' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Failed to get Real-Debrid profile for user user',
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).meta).toMatchObject({
+			id: 'dmm:1',
+			name: expect.stringContaining('Set up DMM Cast for Real-Debrid again'),
 		});
 	});
 
-	it('returns 500 when token acquisition fails', async () => {
+	it('answers an unexplained token failure with a 503, not a 500', async () => {
 		mockGetToken.mockRejectedValue(new Error('oauth'));
 		const req = createMockRequest({ query: { userid: 'user', id: 'dmm:1' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Failed to get Real-Debrid token for user user',
-		});
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.json).toHaveBeenCalledWith({ meta: null, error: 'Temporarily unavailable' });
 	});
 
 	it('proxies DMM torrent metadata on success', async () => {
@@ -190,7 +189,7 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 		expect(res.json).toHaveBeenCalledWith({ meta: { id: 'dmm:1' } });
 	});
 
-	it('surfaces downstream errors from getDMMTorrent', async () => {
+	it('answers a torrent the account no longer holds with a 404 null meta', async () => {
 		mockGetDMMTorrent.mockResolvedValue({ status: 404, error: 'missing' });
 		const req = createMockRequest({ query: { userid: 'user', id: 'dmm:1' } });
 		const res = createMockResponse();
@@ -198,6 +197,6 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(404);
-		expect(res.json).toHaveBeenCalledWith({ error: 'missing' });
+		expect(res.json).toHaveBeenCalledWith({ meta: null });
 	});
 });

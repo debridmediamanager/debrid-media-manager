@@ -33,10 +33,10 @@ describe('/api/stremio-dl/[userid]/meta/other/[id]', () => {
 	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio fans a
 	// library id out to all of them. A sibling's id must come back null, not 500.
 	it.each(['dmm:RDTORRENT', 'dmm-tb:123', 'dmm-ad:456', 'dmm-pm:folder:f1', 'dmm-oc:r1'])(
-		'returns a null meta for %s',
+		'answers %s, which is not ours, with a 404 null meta',
 		async (id) => {
 			await handler(createMockRequest({ query: { userid: 'user1', id } }), res);
-			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res.status).toHaveBeenCalledWith(404);
 			expect(res._getData()).toEqual({ meta: null });
 			expect(mockItem).not.toHaveBeenCalled();
 		}
@@ -53,9 +53,9 @@ describe('/api/stremio-dl/[userid]/meta/other/[id]', () => {
 		expect(res.status).toHaveBeenCalledWith(404);
 	});
 
-	it('returns 500 when the helper throws', async () => {
+	it('answers an unexplained failure with a 503, not a 500', async () => {
 		mockItem.mockRejectedValue(new Error('boom'));
 		await handler(createMockRequest({ query: { userid: 'user1', id: 'dmm-dl:t1' } }), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 });

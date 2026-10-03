@@ -99,12 +99,8 @@ export async function getAllDebridSavedLink(apiKey: string, idPart: string, user
 		return { error: 'Invalid saved link id', status: 400 };
 	}
 
-	let unlocked;
-	try {
-		unlocked = await unlockLink(apiKey, link);
-	} catch (error) {
-		return { error: 'Failed to unlock saved link', status: 500 };
-	}
+	// Errors propagate: the route tells a refused key from a hoster outage.
+	const unlocked = await unlockLink(apiKey, link);
 
 	const metaId = `dmm-ad:${idPart}`;
 	const size = unlocked.filesize ?? 0;
@@ -134,44 +130,42 @@ export async function getAllDebridSavedLink(apiKey: string, idPart: string, user
 }
 
 export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
-	try {
-		// Get all magnets (don't use status=active filter - it means "downloading", not "ready")
-		console.log('[AD Library] Fetching magnets, page:', page);
-		const result = await getMagnetStatus(apiKey);
+	// Errors propagate. Swallowing them here is what made a revoked key read
+	// as an empty library, with nothing telling the member why.
 
-		if (!result.data?.magnets) {
-			console.log('[AD Library] No magnets data in response');
-			return { metas: [], hasMore: false };
-		}
+	// Get all magnets (don't use status=active filter - it means "downloading", not "ready")
+	console.log('[AD Library] Fetching magnets, page:', page);
+	const result = await getMagnetStatus(apiKey);
 
-		console.log('[AD Library] Total magnets:', result.data.magnets.length);
-
-		// Filter for ready magnets (statusCode 4 = Ready)
-		const readyMagnets = result.data.magnets.filter((m) => m.statusCode === 4);
-		console.log('[AD Library] Ready magnets:', readyMagnets.length);
-
-		// Saved hoster links are a second library AllDebrid keeps apart from
-		// magnets. They come first: the list is short and the whole of it is
-		// known, so paging stays a slice over one concatenated array.
-		const entries = [
-			...(await fetchSavedLinkMetas(apiKey)).map((meta) => ({ meta, hash: undefined })),
-			...readyMagnets.map((magnet) => ({
-				meta: { id: `dmm-ad:${magnet.id}`, name: magnet.filename, type: 'other' },
-				hash: magnet.hash,
-			})),
-		];
-
-		// Paginate
-		const offset = (page - 1) * PAGE_SIZE;
-
-		return {
-			metas: await withLibraryArt(entries.slice(offset, offset + PAGE_SIZE)),
-			hasMore: offset + PAGE_SIZE < entries.length,
-		};
-	} catch (error) {
-		console.error('[AD Library] Error getting AllDebrid library:', error);
+	if (!result.data?.magnets) {
+		console.log('[AD Library] No magnets data in response');
 		return { metas: [], hasMore: false };
 	}
+
+	console.log('[AD Library] Total magnets:', result.data.magnets.length);
+
+	// Filter for ready magnets (statusCode 4 = Ready)
+	const readyMagnets = result.data.magnets.filter((m) => m.statusCode === 4);
+	console.log('[AD Library] Ready magnets:', readyMagnets.length);
+
+	// Saved hoster links are a second library AllDebrid keeps apart from
+	// magnets. They come first: the list is short and the whole of it is
+	// known, so paging stays a slice over one concatenated array.
+	const entries = [
+		...(await fetchSavedLinkMetas(apiKey)).map((meta) => ({ meta, hash: undefined })),
+		...readyMagnets.map((magnet) => ({
+			meta: { id: `dmm-ad:${magnet.id}`, name: magnet.filename, type: 'other' },
+			hash: magnet.hash,
+		})),
+	];
+
+	// Paginate
+	const offset = (page - 1) * PAGE_SIZE;
+
+	return {
+		metas: await withLibraryArt(entries.slice(offset, offset + PAGE_SIZE)),
+		hasMore: offset + PAGE_SIZE < entries.length,
+	};
 }
 
 export async function getAllDebridDMMTorrent(apiKey: string, magnetID: string, userid: string) {
@@ -180,73 +174,73 @@ export async function getAllDebridDMMTorrent(apiKey: string, magnetID: string, u
 		return { error: 'Invalid magnet ID', status: 400 };
 	}
 
-	try {
-		// Get magnet files with download links
-		const filesResult = await getMagnetFiles(apiKey, [magnetIdNum]);
-		const magnetFiles = filesResult.magnets?.[0];
+	// Get magnet files with download links
+	const filesResult = await getMagnetFiles(apiKey, [magnetIdNum]);
+	const magnetFiles = filesResult.magnets?.[0];
 
-		if (!magnetFiles) {
-			return { error: 'Magnet files not found', status: 404 };
-		}
-
-		if (magnetFiles.error) {
-			return { error: magnetFiles.error.message, status: 500 };
-		}
-
-		// Also get magnet info for the name (use getMagnetStatusAd for single ID - returns object not array)
-		const magnet = await getMagnetStatusAd(apiKey, magnetIdNum);
-
-		if (!magnet) {
-			return { error: 'Magnet not found', status: 404 };
-		}
-
-		// Flatten files
-		const flatFiles = flattenFiles(magnetFiles.files || []);
-
-		// Filter for video files, then sort by filename so the index assigned here
-		// matches the index that /play/[hash].ts resolves (it sorts by filename too).
-		const videoExtensions = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
-		const videoFiles = flatFiles
-			.filter((f) => {
-				const filename = f.path.split('/').pop()?.toLowerCase() || '';
-				return videoExtensions.some((ext) => filename.endsWith(ext));
-			})
-			.sort((a, b) => {
-				const aName = a.path.split('/').pop() || '';
-				const bName = b.path.split('/').pop() || '';
-				return aName.localeCompare(bName);
-			});
-
-		const videos = videoFiles.map((file, index) => ({
-			id: `dmm-ad:${magnetID}:${index}`,
-			title: `${file.path.split('/').pop()} - ${(file.size / 1024 / 1024 / 1024).toFixed(2)} GB`,
-			streams: [
-				{
-					url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${magnetID}:${index}`,
-					behaviorHints: {
-						bingeGroup: `dmm-ad:${magnetID}`,
-					},
-				},
-			],
-		}));
-
-		const totalSize = flatFiles.reduce((sum, f) => sum + f.size, 0);
-
-		return {
-			data: {
-				meta: {
-					id: `dmm-ad:${magnetID}`,
-					type: 'other',
-					name: `DMM AD: ${magnet.filename} - ${(totalSize / 1024 / 1024 / 1024).toFixed(2)} GB`,
-					videos,
-					...(await libraryArtFor(magnet.hash)),
-				},
-				cacheMaxAge: 0,
-			},
-			status: 200,
-		};
-	} catch (error) {
-		console.error('Error getting AllDebrid torrent:', error);
-		return { error: 'Failed to get torrent info', status: 500 };
+	if (!magnetFiles) {
+		return { error: 'Magnet files not found', status: 404 };
 	}
+
+	if (magnetFiles.error) {
+		if (magnetFiles.error.code === 'MAGNET_INVALID_ID') {
+			return { error: magnetFiles.error.message, status: 404 };
+		}
+		throw Object.assign(new Error(magnetFiles.error.message), {
+			code: magnetFiles.error.code,
+		});
+	}
+
+	// Also get magnet info for the name (use getMagnetStatusAd for single ID - returns object not array)
+	const magnet = await getMagnetStatusAd(apiKey, magnetIdNum);
+
+	if (!magnet) {
+		return { error: 'Magnet not found', status: 404 };
+	}
+
+	// Flatten files
+	const flatFiles = flattenFiles(magnetFiles.files || []);
+
+	// Filter for video files, then sort by filename so the index assigned here
+	// matches the index that /play/[hash].ts resolves (it sorts by filename too).
+	const videoExtensions = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
+	const videoFiles = flatFiles
+		.filter((f) => {
+			const filename = f.path.split('/').pop()?.toLowerCase() || '';
+			return videoExtensions.some((ext) => filename.endsWith(ext));
+		})
+		.sort((a, b) => {
+			const aName = a.path.split('/').pop() || '';
+			const bName = b.path.split('/').pop() || '';
+			return aName.localeCompare(bName);
+		});
+
+	const videos = videoFiles.map((file, index) => ({
+		id: `dmm-ad:${magnetID}:${index}`,
+		title: `${file.path.split('/').pop()} - ${(file.size / 1024 / 1024 / 1024).toFixed(2)} GB`,
+		streams: [
+			{
+				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${magnetID}:${index}`,
+				behaviorHints: {
+					bingeGroup: `dmm-ad:${magnetID}`,
+				},
+			},
+		],
+	}));
+
+	const totalSize = flatFiles.reduce((sum, f) => sum + f.size, 0);
+
+	return {
+		data: {
+			meta: {
+				id: `dmm-ad:${magnetID}`,
+				type: 'other',
+				name: `DMM AD: ${magnet.filename} - ${(totalSize / 1024 / 1024 / 1024).toFixed(2)} GB`,
+				videos,
+				...(await libraryArtFor(magnet.hash)),
+			},
+			cacheMaxAge: 0,
+		},
+		status: 200,
+	};
 }

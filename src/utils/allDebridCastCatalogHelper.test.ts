@@ -122,9 +122,10 @@ describe('getAllDebridDMMLibrary', () => {
 		expect(result.hasMore).toBe(false);
 	});
 
-	it('returns an empty page rather than throwing when AllDebrid errors', async () => {
+	// Swallowed, a revoked key read as an empty library with nothing saying why.
+	it('lets an AllDebrid error propagate for the route to classify', async () => {
 		mockGetMagnetStatus.mockRejectedValue(new Error('AD down'));
-		expect(await getAllDebridDMMLibrary('ad-key', 1)).toEqual({ metas: [], hasMore: false });
+		await expect(getAllDebridDMMLibrary('ad-key', 1)).rejects.toThrow('AD down');
 	});
 });
 
@@ -195,11 +196,11 @@ describe('AllDebrid saved links', () => {
 		});
 	});
 
-	it('500s when the link will not unlock', async () => {
+	it('lets an unlock failure propagate for the route to classify', async () => {
 		mockUnlockLink.mockRejectedValue(new Error('LINK_DOWN'));
-		expect(await getAllDebridSavedLink('ad-key', savedLinkMetaId(LINK), 'user1')).toMatchObject(
-			{ status: 500 }
-		);
+		await expect(
+			getAllDebridSavedLink('ad-key', savedLinkMetaId(LINK), 'user1')
+		).rejects.toThrow('LINK_DOWN');
 	});
 });
 

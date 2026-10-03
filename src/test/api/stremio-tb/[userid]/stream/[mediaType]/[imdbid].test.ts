@@ -36,7 +36,7 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns 500 when no profile exists', async () => {
+	it('answers a missing profile with one stream that opens the setup page', async () => {
 		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
@@ -45,7 +45,10 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).streams).toEqual([
+			expect.objectContaining({ externalUrl: expect.stringMatching(/\/stremio-torbox$/) }),
+		]);
 	});
 
 	describe('settings behavior', () => {

@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { sendCatalogError } from '@/utils/castAddonResponses';
 import { buildCatalogMetas } from '@/utils/castCatalogMeta';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -22,10 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			cacheMaxAge: 0,
 		});
 	} catch (error) {
-		console.error(
-			'Failed to get Offcloud casted movies:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Offcloud casted movies' });
+		sendCatalogError(res, 'oc', error, { firstPage: true });
 	}
 }

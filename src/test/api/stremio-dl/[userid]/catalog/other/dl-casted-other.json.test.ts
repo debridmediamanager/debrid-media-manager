@@ -36,16 +36,21 @@ describe('/api/stremio-dl/[userid]/catalog/other/dl-casted-other.json', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('passes the helper error status through', async () => {
+	it('turns a missing profile into a set-up-again notice', async () => {
 		mockLibrary.mockResolvedValue({ error: 'no profile', status: 401 } as any);
 		await handler(createMockRequest({ query: { userid: 'user1' } }), res);
-		expect(res.status).toHaveBeenCalledWith(401);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([
+			expect.objectContaining({ id: 'dmm-dl:notice:not-connected' }),
+		]);
 	});
 
-	it('returns 500 when the helper throws', async () => {
+	it('answers a provider failure with an uncached empty page, not a 500', async () => {
 		mockLibrary.mockRejectedValue(new Error('boom'));
 		await handler(createMockRequest({ query: { userid: 'user1' } }), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([]);
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
 	});
 
 	it('answers OPTIONS with 200', async () => {

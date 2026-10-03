@@ -1,0 +1,141 @@
+{
+	"capturedAt": "2026-10-04",
+	"networkErrors": {
+		"rd-token-socket-hang-up": {
+			"provider": "rd",
+			"request": "POST https://app.real-debrid.com/oauth/v2/token",
+			"observed": "dmm-01 container logs 2026-10-03T21:29:21Z, 21:30:00Z and 21:50:49Z; the first reached the client as a 500 from catalog/other/casted-other.json",
+			"code": "ECONNRESET",
+			"message": "socket hang up"
+		}
+	},
+	"note": "Real provider answers to the calls the DMM Cast library catalog and meta routes make, recorded with curl. Bad-key rows used a made-up key of the provider's shape; the not-in-account rows used a test account and an id that account does not hold. No credential appears below.",
+	"responses": {
+		"ad-magnet-files-id-not-in-account": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/magnet/files id[]=999999999",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "success",
+				"data": {
+					"magnets": [
+						{
+							"id": "999999999",
+							"error": {
+								"code": "MAGNET_INVALID_ID",
+								"message": "This magnet ID does not exists or is invalid"
+							}
+						}
+					]
+				}
+			}
+		},
+		"ad-magnet-status-bad-key": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/magnet/status",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"error": { "code": "AUTH_BAD_APIKEY", "message": "The auth apikey is invalid" }
+			}
+		},
+		"dl-seedbox-list-bad-key": {
+			"provider": "dl",
+			"request": "GET https://debrid-link.com/api/v2/seedbox/list?page=0&perPage=100",
+			"status": 401,
+			"contentType": "application/json",
+			"body": {
+				"success": false,
+				"error": "badToken",
+				"error_description": "This request require authentification, please log in."
+			}
+		},
+		"oc-cloud-explore-id-not-in-account": {
+			"provider": "oc",
+			"request": "GET https://offcloud.com/api/cloud/explore/000000000000000000000000",
+			"status": 404,
+			"contentType": "application/json",
+			"body": { "error": "Request not found." }
+		},
+		"oc-cloud-history-bad-key": {
+			"provider": "oc",
+			"request": "GET https://offcloud.com/api/cloud/history",
+			"status": 401,
+			"contentType": "application/json",
+			"body": { "error": "NOAUTH" }
+		},
+		"pm-folder-list-bad-key": {
+			"provider": "pm",
+			"request": "POST https://www.premiumize.me/api/folder/list",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"message": "Not logged in",
+				"code": "authentication_failed"
+			}
+		},
+		"pm-folder-list-id-not-in-account": {
+			"provider": "pm",
+			"request": "POST https://www.premiumize.me/api/folder/list id=AAAAAAAAAAAAAAAAAAAAAA",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"message": "Folder not found or not owned by user.",
+				"code": "transient_error"
+			}
+		},
+		"pm-item-details-id-not-in-account": {
+			"provider": "pm",
+			"request": "POST https://www.premiumize.me/api/item/details id=AAAAAAAAAAAAAAAAAAAAAA",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"message": "File not found or not your file",
+				"code": "transient_error"
+			}
+		},
+		"rd-torrent-info-foreign-id": {
+			"provider": "rd",
+			"request": "GET https://api.real-debrid.com/rest/1.0/torrents/info/realdebrid:OJ55SVQXH4ARI",
+			"status": 404,
+			"contentType": "application/json",
+			"body": { "error": "unknown_method", "error_code": 3 }
+		},
+		"rd-torrents-bad-token": {
+			"provider": "rd",
+			"request": "GET https://api.real-debrid.com/rest/1.0/torrents?page=1&limit=12",
+			"status": 401,
+			"contentType": "application/json",
+			"body": { "error": "bad_token", "error_code": 8 }
+		},
+		"tb-mylist-bad-token": {
+			"provider": "tb",
+			"request": "GET https://api.torbox.app/v1/api/torrents/mylist?bypass_cache=true",
+			"status": 403,
+			"contentType": "application/json",
+			"body": {
+				"success": false,
+				"error": "AUTH_ERROR",
+				"detail": "An error occurred while verifying your token. Please try again.",
+				"data": null
+			}
+		},
+		"tb-mylist-id-not-in-account": {
+			"provider": "tb",
+			"request": "GET https://api.torbox.app/v1/api/torrents/mylist?id=1&bypass_cache=true",
+			"status": 404,
+			"contentType": "application/json",
+			"body": {
+				"success": true,
+				"error": "ITEM_NOT_FOUND",
+				"detail": "No torrents found for this user.",
+				"data": {}
+			}
+		}
+	}
+}

@@ -87,14 +87,31 @@ describe('/api/stremio/[userid]/catalog/other/casted-other.json', () => {
 		});
 	});
 
-	it('returns upstream errors when library fetch fails', async () => {
+	it('answers a failed library read with an uncached empty page', async () => {
 		mockGetDMMLibrary.mockResolvedValue({ status: 500, error: 'bad' });
 		const req = createMockRequest({ query: { userid: 'user123' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'bad' });
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ metas: [], hasMore: false, cacheMaxAge: 0 });
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
+	});
+
+	it('answers an expired Real-Debrid sign-in with a sign-in-again tile', async () => {
+		mockGetDMMLibrary.mockResolvedValue({ status: 403, error: 'expired' });
+		const req = createMockRequest({ query: { userid: 'user123' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([
+			expect.objectContaining({
+				id: 'dmm:notice:credential',
+				name: expect.stringContaining('Sign in to Real-Debrid again'),
+			}),
+		]);
 	});
 });

@@ -34,16 +34,13 @@ export const parsePremiumizeMetaId = (
 
 const gb = (bytes: number) => (bytes / 1024 / 1024 / 1024).toFixed(2);
 
+/**
+ * The cast profile, or null when there is none. A database error propagates:
+ * read as "no profile", it would tell the member to set up an addon that is
+ * fine, over an outage that is ours.
+ */
 async function getProfile(userid: string) {
-	try {
-		const profile = await db.getPremiumizeCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
-		return profile;
-	} catch (error) {
-		return null;
-	}
+	return db.getPremiumizeCastProfile(userid);
 }
 
 /**
@@ -113,7 +110,10 @@ async function collectVideoFiles(
 		try {
 			listing = await listPremiumizeFolder(apiKey, current.id);
 		} catch (error) {
-			// A folder that will not list is not a reason to lose the ones that did.
+			// The release itself not listing is the answer - a refused key, a
+			// folder that is gone - and the route has to see it. A subfolder
+			// that will not list is not a reason to lose the ones that did.
+			if (current.depth === 0) throw error;
 			continue;
 		}
 
@@ -178,12 +178,8 @@ export async function getPremiumizeDMMItem(
 	const metaId = premiumizeMetaId(kind, entryId);
 
 	if (kind === 'file') {
-		let details;
-		try {
-			details = await getPremiumizeItemDetails(profile.apiKey, entryId);
-		} catch (error) {
-			return { error: 'Failed to get item info', status: 500 };
-		}
+		// Errors propagate: the route tells a refused key from a missing file.
+		const details = await getPremiumizeItemDetails(profile.apiKey, entryId);
 		const size = details.size ?? 0;
 		return {
 			data: {
@@ -199,12 +195,7 @@ export async function getPremiumizeDMMItem(
 		};
 	}
 
-	let folder;
-	try {
-		folder = await collectVideoFiles(profile.apiKey, entryId);
-	} catch (error) {
-		return { error: 'Failed to get folder info', status: 500 };
-	}
+	const folder = await collectVideoFiles(profile.apiKey, entryId);
 
 	if (folder.files.length === 0) {
 		return { error: 'No video files in this folder', status: 404 };

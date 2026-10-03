@@ -1,3 +1,4 @@
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { getPremiumizeDMMLibrary } from '@/utils/premiumizeCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -17,17 +18,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	try {
-		const result = await getPremiumizeDMMLibrary(userid, 1);
-		if ('error' in result) {
-			return res.status(result.status).json({ error: result.error });
-		}
-		res.status(result.status).json(result.data);
-	} catch (error) {
-		console.error(
-			'Failed to get Premiumize library:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Premiumize library' });
-	}
+	return sendLibraryPage(res, 'pm', 1, () => getPremiumizeDMMLibrary(userid, 1));
 }

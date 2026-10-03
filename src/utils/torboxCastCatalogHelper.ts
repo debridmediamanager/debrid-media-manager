@@ -9,16 +9,13 @@ export const PAGE_SIZE = 12;
 const asList = <T>(data: T[] | T | null | undefined): T[] =>
 	!data ? [] : Array.isArray(data) ? data : [data];
 
+/**
+ * The cast profile, or null when there is none. A database error propagates:
+ * read as "no profile", it would tell the member to set up an addon that is
+ * fine, over an outage that is ours.
+ */
 async function getProfile(userid: string) {
-	try {
-		const profile = await db.getTorBoxCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
-		return profile;
-	} catch (error) {
-		return null;
-	}
+	return db.getTorBoxCastProfile(userid);
 }
 
 /**

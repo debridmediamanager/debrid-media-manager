@@ -4,6 +4,14 @@ import {
 	getAllDebridSavedLink,
 	parseSavedLinkMetaId,
 } from '@/utils/allDebridCastCatalogHelper';
+import {
+	castFailureFromStatus,
+	castNoticeMeta,
+	sendForeignMeta,
+	sendMetaError,
+	sendMetaFailure,
+	sendNoticeMeta,
+} from '@/utils/castAddonResponses';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,9 +30,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	// Parse the id - format is "dmm-ad:magnetId" or "dmm-ad:magnetId.json"
 	const cleanId = id.replace(/\.json$/, '');
 
+	const notice = castNoticeMeta('ad', cleanId);
+	if (notice) {
+		sendNoticeMeta(res, notice);
+		return;
+	}
+
 	// Skip if this is not an AllDebrid ID - let other addons handle it
 	if (!cleanId.startsWith('dmm-ad:')) {
-		res.status(200).json({ meta: null });
+		sendForeignMeta(res);
 		return;
 	}
 
@@ -42,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		const profile = await db.getAllDebridCastProfile(userid);
 		if (!profile) {
-			res.status(401).json({ error: 'Go to DMM and connect your AllDebrid account' });
+			sendMetaFailure(res, 'ad', 'not-connected', cleanId);
 			return;
 		}
 
@@ -52,16 +66,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			: await getAllDebridDMMTorrent(profile.apiKey, magnetId, userid);
 
 		if ('error' in result) {
-			res.status(result.status).json({ error: result.error });
+			sendMetaFailure(res, 'ad', castFailureFromStatus(result.status), cleanId);
 			return;
 		}
 
 		res.status(200).json(result.data);
 	} catch (error) {
-		console.error(
-			'Failed to get AllDebrid torrent meta:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get AllDebrid torrent meta' });
+		sendMetaError(res, 'ad', error, cleanId);
 	}
 }

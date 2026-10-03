@@ -44,15 +44,12 @@ describe('torboxCastCatalogHelper', () => {
 			});
 		});
 
-		it('returns 401 when profile lookup throws', async () => {
+		// Read as "no profile", a database blip would tell the member to set up
+		// an addon that is fine.
+		it('lets a profile lookup error propagate', async () => {
 			vi.mocked(db.getTorBoxCastProfile).mockRejectedValue(new Error('DB error'));
 
-			const result = await getTorBoxDMMLibrary('user1', 1);
-
-			expect(result).toEqual({
-				error: 'Go to DMM and connect your TorBox account',
-				status: 401,
-			});
+			await expect(getTorBoxDMMLibrary('user1', 1)).rejects.toThrow('DB error');
 		});
 
 		it('returns 500 when torrent list fails', async () => {

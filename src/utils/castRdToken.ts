@@ -1,4 +1,5 @@
 import { getToken } from '@/services/realDebrid';
+import { retryDroppedConnection } from './castAddonFailure';
 
 /**
  * The Real-Debrid half of a cast profile: either the OAuth triple or a pasted
@@ -24,15 +25,18 @@ export interface RdCastCredentials {
  * with empty strings and reading Real-Debrid's 400 as an expired grant.
  * `RdTokenExpiredError` from the refresh is left to propagate: callers turn it
  * into their own "re-authenticate" response.
+ *
+ * Real-Debrid's token endpoint drops connections now and then ("socket hang
+ * up", repeatedly in dmm-01's logs on 2026-10-03), and nothing below this
+ * retries a request that got no answer at all. Minting a token is safe
+ * to repeat, so one dropped connection costs a second try, not the request.
  */
 export async function castAccessToken(profile: RdCastCredentials): Promise<string | null> {
 	if (profile.apiKey) return profile.apiKey;
-	if (!profile.clientId || !profile.clientSecret || !profile.refreshToken) return null;
-	const token = await getToken(
-		profile.clientId,
-		profile.clientSecret,
-		profile.refreshToken,
-		true
+	const { clientId, clientSecret, refreshToken } = profile;
+	if (!clientId || !clientSecret || !refreshToken) return null;
+	const token = await retryDroppedConnection(() =>
+		getToken(clientId, clientSecret, refreshToken, true)
 	);
 	return token?.access_token ?? null;
 }

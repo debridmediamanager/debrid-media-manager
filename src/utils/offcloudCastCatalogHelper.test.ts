@@ -213,9 +213,9 @@ describe('offcloudCastCatalogHelper', () => {
 			expect(await getOffcloudDMMItem('u', 'r1')).toMatchObject({ status: 404 });
 		});
 
-		it('500s when explore itself fails', async () => {
+		it('lets an explore failure propagate for the route to classify', async () => {
 			mockExplore.mockRejectedValue(new Error('Request not found.'));
-			expect(await getOffcloudDMMItem('u', 'r1')).toMatchObject({ status: 500 });
+			await expect(getOffcloudDMMItem('u', 'r1')).rejects.toThrow('Request not found.');
 		});
 	});
 });

@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { sendCatalogError } from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { buildCatalogMetas } from '@/utils/castCatalogMeta';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -46,10 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			cacheMaxAge: 0,
 		});
 	} catch (error) {
-		console.error(
-			'Failed to get RD casted shows:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get RD casted shows' });
+		sendCatalogError(res, 'rd', error, { firstPage: true });
 	}
 }

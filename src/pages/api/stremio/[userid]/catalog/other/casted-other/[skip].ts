@@ -1,3 +1,8 @@
+import {
+	castFailureFromStatus,
+	sendCatalogError,
+	sendCatalogFailure,
+} from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { getDMMLibrary, PAGE_SIZE } from '@/utils/castCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -5,6 +10,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
+	let page = 1;
 	try {
 		console.log('[casted-other/skip] Request received:', {
 			userid: req.query.userid,
@@ -19,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		const skipNum = skip.replaceAll(/^skip=/g, '').replaceAll(/\.json$/g, '');
-		const page = Math.floor(Number(skipNum) / PAGE_SIZE) + 1;
+		page = Math.floor(Number(skipNum) / PAGE_SIZE) + 1;
 		console.log('[casted-other/skip] Calculated page:', { skipNum, page });
 
 		// Check for legacy 5-character token
@@ -44,7 +50,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		if ('error' in result) {
 			console.log('[casted-other/skip] Library fetch error:', result);
-			return res.status(result.status).json({ error: result.error });
+			return sendCatalogFailure(res, 'rd', castFailureFromStatus(result.status), {
+				firstPage: page === 1,
+			});
 		}
 
 		console.log('[casted-other/skip] Success:', {
@@ -53,11 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 		res.status(result.status).json(result.data);
 	} catch (error) {
-		console.error('[casted-other/skip] Exception caught:', error);
-		return res.status(500).json({
-			// No stack: this is an addon endpoint any Stremio client can reach.
-			error: 'Internal server error',
-			message: error instanceof Error ? error.message : 'Unknown error',
-		});
+		return sendCatalogError(res, 'rd', error, { firstPage: page === 1 });
 	}
 }

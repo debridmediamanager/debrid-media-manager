@@ -33,10 +33,10 @@ describe('/api/stremio-ad/[userid]/meta/other/[id]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns null meta when id does not start with dmm-ad:', async () => {
+	it('answers a foreign id with a 404 null meta', async () => {
 		const req = createMockRequest({ query: { userid: 'user1', id: 'tt1234567' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(404);
 		const data = res._getData() as any;
 		expect(data.meta).toBeNull();
 	});
@@ -49,11 +49,15 @@ describe('/api/stremio-ad/[userid]/meta/other/[id]', () => {
 		expect(mockGetAllDebridDMMTorrent).toHaveBeenCalledWith('key', '123', 'user1');
 	});
 
-	it('returns 401 when no profile exists', async () => {
+	it('answers a missing profile with a set-up-again notice meta', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({ query: { userid: 'user1', id: 'dmm-ad:123' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(401);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).meta).toMatchObject({
+			id: 'dmm-ad:123',
+			name: expect.stringContaining('Set up DMM Cast for AllDebrid again'),
+		});
 	});
 
 	it('returns torrent meta on success', async () => {
@@ -75,11 +79,11 @@ describe('/api/stremio-ad/[userid]/meta/other/[id]', () => {
 		expect(res.status).toHaveBeenCalledWith(404);
 	});
 
-	it('returns 500 on exception', async () => {
+	it('answers an unexplained failure with a 503, not a 500', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
 		mockGetAllDebridDMMTorrent.mockRejectedValue(new Error('Unexpected'));
 		const req = createMockRequest({ query: { userid: 'user1', id: 'dmm-ad:123' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 });

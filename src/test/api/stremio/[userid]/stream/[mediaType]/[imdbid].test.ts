@@ -121,7 +121,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		);
 	});
 
-	it('returns 500 when no cast profile exists', async () => {
+	it('answers a missing profile with one stream that opens the setup page', async () => {
 		mockRepository.getCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user123', mediaType: 'movie', imdbid: 'tt123' },
@@ -130,10 +130,10 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Failed to get Real-Debrid profile for user user123',
-		});
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).streams).toEqual([
+			expect.objectContaining({ externalUrl: expect.stringMatching(/\/stremio$/) }),
+		]);
 	});
 
 	it('serves cast streams for shows', async () => {
@@ -191,7 +191,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		);
 	});
 
-	it('returns 500 when cast URLs retrieval fails', async () => {
+	it('answers a cast lookup failure with a 503, not a 500', async () => {
 		mockRepository.getCastProfile = vi.fn().mockResolvedValue({
 			clientId: 'id',
 			clientSecret: 'secret',
@@ -213,8 +213,8 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to get casted URLs' });
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.json).toHaveBeenCalledWith({ streams: [], error: 'Temporarily unavailable' });
 	});
 
 	it('generates stream names based on resolution, codec and size', async () => {

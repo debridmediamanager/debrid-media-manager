@@ -1,3 +1,11 @@
+import {
+	castFailureFromStatus,
+	castNoticeMeta,
+	sendForeignMeta,
+	sendMetaError,
+	sendMetaFailure,
+	sendNoticeMeta,
+} from '@/utils/castAddonResponses';
 import { getDebridLinkDMMItem, parseDebridLinkMetaId } from '@/utils/debridLinkCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,27 +27,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const cleanId = id.replace(/\.json$/, '');
 
+	const notice = castNoticeMeta('dl', cleanId);
+	if (notice) {
+		sendNoticeMeta(res, notice);
+		return;
+	}
+
 	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio asks all of
 	// them for every library id. Anything that is not ours belongs to a sibling
 	// addon and must answer with a null meta rather than an error.
 	const torrentId = parseDebridLinkMetaId(cleanId);
 	if (!torrentId) {
-		res.status(200).json({ meta: null });
+		sendForeignMeta(res);
 		return;
 	}
 
 	try {
 		const result = await getDebridLinkDMMItem(userid, torrentId);
 		if ('error' in result) {
-			res.status(result.status).json({ error: result.error });
+			sendMetaFailure(res, 'dl', castFailureFromStatus(result.status), cleanId);
 			return;
 		}
 		res.status(result.status).json(result.data);
 	} catch (error) {
-		console.error(
-			'Failed to get Debrid-Link item meta:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Debrid-Link item meta' });
+		sendMetaError(res, 'dl', error, cleanId);
 	}
 }

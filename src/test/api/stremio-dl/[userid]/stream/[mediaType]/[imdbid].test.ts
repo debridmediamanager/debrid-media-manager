@@ -54,10 +54,15 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		process.env.DMM_ORIGIN = originalOrigin;
 	});
 
-	it('returns 500 without a profile', async () => {
+	it('answers a missing profile with one stream that opens the setup page', async () => {
 		mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue(null);
 		await handler(request(), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).streams).toEqual([
+			expect.objectContaining({
+				externalUrl: expect.stringMatching(/\/stremio-debridlink$/),
+			}),
+		]);
 	});
 
 	// Debrid-Link retired `/seedbox/cached` and put nothing in its place, so the
@@ -143,9 +148,9 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns 500 when the cast lookup throws', async () => {
+	it('answers a cast lookup failure with a 503, not a 500', async () => {
 		mockRepository.getDebridLinkUserCastStreams = vi.fn().mockRejectedValue(new Error('boom'));
 		await handler(request(), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 });

@@ -1,3 +1,4 @@
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { getTorBoxDMMLibrary } from '@/utils/torboxCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -17,11 +18,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(200).end();
 	}
 
-	const result = await getTorBoxDMMLibrary(userid as string, 1);
-
-	if ('error' in result) {
-		return res.status(result.status).json({ error: result.error });
-	}
-
-	res.status(result.status).json(result.data);
+	return sendLibraryPage(res, 'tb', 1, () => getTorBoxDMMLibrary(userid, 1));
 }

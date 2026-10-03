@@ -1,3 +1,4 @@
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { getDebridLinkDMMLibrary } from '@/utils/debridLinkCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -17,17 +18,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	try {
-		const result = await getDebridLinkDMMLibrary(userid, 1);
-		if ('error' in result) {
-			return res.status(result.status).json({ error: result.error });
-		}
-		res.status(result.status).json(result.data);
-	} catch (error) {
-		console.error(
-			'Failed to get Debrid-Link library:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get Debrid-Link library' });
-	}
+	return sendLibraryPage(res, 'dl', 1, () => getDebridLinkDMMLibrary(userid, 1));
 }

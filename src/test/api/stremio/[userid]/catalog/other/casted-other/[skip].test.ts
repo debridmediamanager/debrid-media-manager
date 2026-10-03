@@ -106,14 +106,25 @@ describe('/api/stremio/[userid]/catalog/other/casted-other/[skip].ts', () => {
 		expect(res.json).toHaveBeenCalledWith({ metas: [], hasMore: false, cacheMaxAge: 0 });
 	});
 
-	it('returns upstream errors', async () => {
+	it('answers an upstream failure with an uncached empty page', async () => {
 		mockGetDMMLibrary.mockResolvedValue({ status: 502, error: 'upstream' });
 		const req = createMockRequest({ query: { userid: 'user123', skip: 'skip=0.json' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(502);
-		expect(res.json).toHaveBeenCalledWith({ error: 'upstream' });
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ metas: [], hasMore: false, cacheMaxAge: 0 });
+	});
+
+	it('does not repeat a notice past the first page', async () => {
+		mockGetDMMLibrary.mockResolvedValue({ status: 403, error: 'expired' });
+		const req = createMockRequest({ query: { userid: 'user123', skip: 'skip=12.json' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([]);
 	});
 });

@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { PAGE_SIZE, getAllDebridDMMLibrary } from '@/utils/allDebridCastCatalogHelper';
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -25,25 +26,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const page =
 		Number.isSafeInteger(offset) && offset > 0 ? Math.floor(offset / PAGE_SIZE) + 1 : 1;
 
-	try {
+	return sendLibraryPage(res, 'ad', page, async () => {
 		const profile = await db.getAllDebridCastProfile(userid);
 		if (!profile) {
-			res.status(200).json({ metas: [], hasMore: false, cacheMaxAge: 0 });
-			return;
+			return { error: 'Go to DMM and connect your AllDebrid account', status: 401 };
 		}
-
 		const { metas, hasMore } = await getAllDebridDMMLibrary(profile.apiKey, page);
-
-		res.status(200).json({
-			metas,
-			hasMore,
-			cacheMaxAge: 0,
-		});
-	} catch (error) {
-		console.error(
-			'Failed to get AllDebrid library:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: 'Failed to get AllDebrid library' });
-	}
+		return { data: { metas, hasMore, cacheMaxAge: 0 }, status: 200 };
+	});
 }

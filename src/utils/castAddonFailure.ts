@@ -1,0 +1,123 @@
+/**
+ * Why a DMM Cast addon request could not be answered from the provider.
+ *
+ * - `not-connected`: no cast profile stands behind this install's user id.
+ * - `credential`: the provider refused the stored key or token. A retry cannot
+ *   clear it; the member has to sign in again on DMM.
+ * - `gone`: the provider answered, and the item is not in the account.
+ * - `unplayable`: the item is there but has nothing a client can stream.
+ * - `unavailable`: the provider did not answer usefully - a reset connection,
+ *   a timeout, a 5xx, a rate limit, or our own database. The next request may
+ *   well succeed.
+ */
+export type CastFailure = 'not-connected' | 'credential' | 'gone' | 'unplayable' | 'unavailable';
+
+/**
+ * Error codes each provider uses for a key it will not accept, measured against
+ * the live APIs 2026-10-04 (src/test/fixtures/castAddonFailures). Premiumize
+ * and AllDebrid send theirs inside an HTTP 200, so the code is the only signal.
+ */
+const CREDENTIAL_CODES = new Set([
+	// Premiumize: missing, wrong and revoked keys all answer this.
+	'authentication_failed',
+	// Offcloud
+	'NOAUTH',
+	// Debrid-Link
+	'badToken',
+	// AllDebrid. AUTH_BLOCKED is deliberately absent: it refuses DMM's server
+	// address, which no amount of signing in on the member's side changes.
+	'AUTH_BAD_APIKEY',
+	'AUTH_MISSING_APIKEY',
+	'AUTH_USER_BANNED',
+]);
+
+/** 403 bodies that are about the credential rather than the request. */
+const FORBIDDEN_CREDENTIAL_ERRORS = new Set([
+	// TorBox
+	'AUTH_ERROR',
+	'BAD_TOKEN',
+	'NO_AUTH',
+	// Real-Debrid: a locked or lapsed account.
+	'permission_denied',
+	'account_locked',
+]);
+
+/**
+ * Premiumize and Offcloud say "not in this account" only in prose. Premiumize
+ * files it under `transient_error`, the code it uses for nearly everything, so
+ * the message is the one thing that tells a deleted folder from an outage.
+ */
+const NOT_IN_ACCOUNT = /not found|not owned|not your/i;
+const PROSE_ERRORS = new Set(['PremiumizeError', 'OffcloudError']);
+
+type ErrorShape = {
+	name?: unknown;
+	code?: unknown;
+	message?: unknown;
+	response?: { status?: unknown; data?: { error?: unknown } | null };
+};
+
+/**
+ * A connection the far end dropped before answering. `socket hang up` is
+ * Node's ECONNRESET on a request that never got a response; undici's `fetch`
+ * reports the same thing as `fetch failed` with the code on its cause.
+ */
+const DROPPED_CONNECTION_CODES = new Set(['ECONNRESET', 'EPIPE', 'UND_ERR_SOCKET']);
+
+export function isDroppedConnection(error: unknown): boolean {
+	if (!error || typeof error !== 'object') return false;
+	const { code, response } = error as ErrorShape;
+	if (response) return false;
+	const causeCode = ((error as { cause?: { code?: unknown } }).cause ?? {}).code;
+	return (
+		(typeof code === 'string' && DROPPED_CONNECTION_CODES.has(code)) ||
+		(typeof causeCode === 'string' && DROPPED_CONNECTION_CODES.has(causeCode))
+	);
+}
+
+/**
+ * Runs a read once more when the first attempt's connection was dropped.
+ *
+ * Only for calls that are safe to repeat, and only for a dropped connection:
+ * a timeout already spent the caller's patience, and an HTTP error answer is
+ * the provider's considered reply, not a blip.
+ */
+export async function retryDroppedConnection<T>(call: () => Promise<T>, delayMs = 250): Promise<T> {
+	try {
+		return await call();
+	} catch (error) {
+		if (!isDroppedConnection(error)) throw error;
+		await new Promise((resolve) => setTimeout(resolve, delayMs));
+		return call();
+	}
+}
+
+/**
+ * Sorts a provider call's failure into what the addon can tell a client.
+ *
+ * Duck-typed rather than `instanceof`, so this module does not pull six
+ * provider clients into every route that imports it.
+ */
+export function classifyCastError(error: unknown): CastFailure {
+	if (!error || typeof error !== 'object') return 'unavailable';
+	const { name, code, message, response } = error as ErrorShape;
+
+	if (name === 'RdTokenExpiredError') return 'credential';
+	if (typeof code === 'string' && CREDENTIAL_CODES.has(code)) return 'credential';
+	if (typeof name === 'string' && PROSE_ERRORS.has(name) && typeof message === 'string') {
+		if (NOT_IN_ACCOUNT.test(message)) return 'gone';
+	}
+	// AllDebrid's per-magnet answer for an id the account does not hold.
+	if (code === 'MAGNET_INVALID_ID') return 'gone';
+
+	const status = typeof response?.status === 'number' ? response.status : undefined;
+	const vendorError = response?.data?.error;
+	if (status === 401) return 'credential';
+	if (status === 403 && typeof vendorError === 'string') {
+		if (FORBIDDEN_CREDENTIAL_ERRORS.has(vendorError)) return 'credential';
+	}
+	// Real-Debrid `unknown_method` / `unknown_ressource`, TorBox `ITEM_NOT_FOUND`.
+	if (status === 404) return 'gone';
+
+	return 'unavailable';
+}

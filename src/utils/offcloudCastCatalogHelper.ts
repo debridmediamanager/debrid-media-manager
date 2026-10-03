@@ -29,16 +29,13 @@ export const parseOffcloudMetaId = (metaId: string): string | null => {
 
 const gb = (bytes: number) => (bytes / 1024 / 1024 / 1024).toFixed(2);
 
+/**
+ * The cast profile, or null when there is none. A database error propagates:
+ * read as "no profile", it would tell the member to set up an addon that is
+ * fine, over an outage that is ours.
+ */
 async function getProfile(userid: string) {
-	try {
-		const profile = await db.getOffcloudCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
-		return profile;
-	} catch (error) {
-		return null;
-	}
+	return db.getOffcloudCastProfile(userid);
 }
 
 /**
@@ -109,12 +106,8 @@ export async function getOffcloudDMMItem(userid: string, requestId: string) {
 
 	const metaId = offcloudMetaId(requestId);
 
-	let links: string[];
-	try {
-		links = await exploreOffcloudCloud(profile.apiKey, requestId);
-	} catch (error) {
-		return { error: 'Failed to get item info', status: 500 };
-	}
+	// Errors propagate: the route tells a refused key from a missing item.
+	const links = await exploreOffcloudCloud(profile.apiKey, requestId);
 
 	let entry: OffcloudHistoryItem | undefined;
 	try {

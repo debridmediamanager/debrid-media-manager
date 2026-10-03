@@ -29,16 +29,13 @@ export const parseDebridLinkMetaId = (metaId: string): string | null => {
 
 const gb = (bytes: number) => (bytes / 1024 / 1024 / 1024).toFixed(2);
 
+/**
+ * The cast profile, or null when there is none. A database error propagates:
+ * read as "no profile", it would tell the member to set up an addon that is
+ * fine, over an outage that is ours.
+ */
 async function getProfile(userid: string) {
-	try {
-		const profile = await db.getDebridLinkCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
-		return profile;
-	} catch (error) {
-		return null;
-	}
+	return db.getDebridLinkCastProfile(userid);
 }
 
 /**
@@ -122,12 +119,8 @@ export async function getDebridLinkDMMItem(userid: string, torrentId: string) {
 
 	const metaId = debridLinkMetaId(torrentId);
 
-	let resolved;
-	try {
-		resolved = await resolveDebridLinkTorrentById(profile.apiKey, torrentId);
-	} catch (error) {
-		return { error: 'Failed to get item info', status: 500 };
-	}
+	// Errors propagate: the route tells a refused token from an outage.
+	const resolved = await resolveDebridLinkTorrentById(profile.apiKey, torrentId);
 
 	if (!resolved) {
 		return { error: 'No such Debrid-Link torrent', status: 404 };

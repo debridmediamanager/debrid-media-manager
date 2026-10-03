@@ -96,9 +96,9 @@ describe('skipFromExtra', () => {
 describe('createCastCatalogPageHandler', () => {
 	const fetchIds = vi.fn();
 	const handler = createCastCatalogPageHandler({
+		provider: 'rd',
 		type: 'movie',
 		fetchIds,
-		errorLabel: 'test casted movies',
 	});
 
 	beforeEach(() => {
@@ -185,14 +185,17 @@ describe('createCastCatalogPageHandler', () => {
 		expect(fetchIds).not.toHaveBeenCalled();
 	});
 
-	it('reports a lookup failure as a 500', async () => {
+	// Stremio web prints a failing catalog's raw status as a Board row and hides
+	// an empty one; nothing else tells the two apart.
+	it('answers a lookup failure with an uncached empty page, not a 500', async () => {
 		fetchIds.mockRejectedValue(new Error('db down'));
 		const req = createMockRequest({ query: { userid: 'user123', extra: ['skip=0.json'] } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to get test casted movies' });
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ metas: [], hasMore: false, cacheMaxAge: 0 });
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
 	});
 });

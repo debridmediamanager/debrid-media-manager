@@ -38,12 +38,14 @@ describe('/api/stremio-ad/[userid]/catalog/other/ad-casted-other/[skip]', () => 
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns empty metas when no profile found', async () => {
+	it('answers a missing profile with a set-up-again tile on the first page', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({ query: { userid: 'user1', skip: 'skip=0.json' } });
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect((res._getData() as any).metas).toEqual([]);
+		expect((res._getData() as any).metas).toEqual([
+			expect.objectContaining({ id: 'dmm-ad:notice:not-connected', type: 'other' }),
+		]);
 	});
 
 	// Regression: the skip extra arrives as the path segment `skip=12.json`, and
@@ -83,11 +85,13 @@ describe('/api/stremio-ad/[userid]/catalog/other/ad-casted-other/[skip]', () => 
 		expect(mockGetAllDebridDMMLibrary).toHaveBeenCalledWith('test-key', 1);
 	});
 
-	it('returns 500 on error', async () => {
+	it('answers an AllDebrid failure with an uncached empty page, not a 500', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'test-key' });
 		mockGetAllDebridDMMLibrary.mockRejectedValue(new Error('API error'));
 		const req = createMockRequest({ query: { userid: 'user1', skip: 'skip=0.json' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([]);
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
 	});
 });

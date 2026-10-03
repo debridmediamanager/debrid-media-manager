@@ -38,10 +38,10 @@ describe('/api/stremio-tb/[userid]/meta/other/[id]', () => {
 		expect(res.end).toHaveBeenCalled();
 	});
 
-	it('returns null meta when id does not start with dmm-tb:', async () => {
+	it('answers a foreign id with a 404 null meta', async () => {
 		const req = createMockRequest({ query: { userid: 'user1', id: 'tt1234567' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(404);
 		const data = res._getData() as any;
 		expect(data.meta).toBeNull();
 	});
@@ -53,10 +53,10 @@ describe('/api/stremio-tb/[userid]/meta/other/[id]', () => {
 		expect(mockGetTorBoxDMMTorrent).toHaveBeenCalledWith('user1', '123');
 	});
 
-	it('returns 400 for invalid id format', async () => {
+	it('answers a bare prefix as a foreign id', async () => {
 		const req = createMockRequest({ query: { userid: 'user1', id: 'dmm-tb' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(404);
 		const data = res._getData() as any;
 		expect(data.meta).toBeNull();
 	});

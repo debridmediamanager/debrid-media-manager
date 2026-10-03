@@ -32,13 +32,14 @@ describe('/api/stremio-ad/[userid]/catalog/other/ad-casted-other.json', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns empty metas when no profile found', async () => {
+	it('answers a missing profile with a set-up-again tile on the first page', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({ query: { userid: 'user1' } });
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(200);
-		const data = res._getData() as any;
-		expect(data.metas).toEqual([]);
+		expect((res._getData() as any).metas).toEqual([
+			expect.objectContaining({ id: 'dmm-ad:notice:not-connected', type: 'other' }),
+		]);
 	});
 
 	it('returns the first page of the library with hasMore', async () => {
@@ -56,11 +57,13 @@ describe('/api/stremio-ad/[userid]/catalog/other/ad-casted-other.json', () => {
 		expect(data.cacheMaxAge).toBe(0);
 	});
 
-	it('returns 500 on error', async () => {
+	it('answers an AllDebrid failure with an uncached empty page, not a 500', async () => {
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'test-key' });
 		mockGetAllDebridDMMLibrary.mockRejectedValue(new Error('API error'));
 		const req = createMockRequest({ query: { userid: 'user1' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).metas).toEqual([]);
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store');
 	});
 });

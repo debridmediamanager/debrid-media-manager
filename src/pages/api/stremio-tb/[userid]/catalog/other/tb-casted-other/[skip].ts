@@ -1,3 +1,4 @@
+import { sendLibraryPage } from '@/utils/castAddonResponses';
 import { getTorBoxDMMLibrary, PAGE_SIZE } from '@/utils/torboxCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -30,11 +31,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	// Convert skip to page number
 	const page = Math.floor(skipValue / PAGE_SIZE) + 1;
 
-	const result = await getTorBoxDMMLibrary(userid as string, page);
-
-	if ('error' in result) {
-		return res.status(result.status).json({ error: result.error });
-	}
-
-	res.status(result.status).json(result.data);
+	return sendLibraryPage(res, 'tb', page, () => getTorBoxDMMLibrary(userid, page));
 }

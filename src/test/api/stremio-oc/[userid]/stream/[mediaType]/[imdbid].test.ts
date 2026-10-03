@@ -51,10 +51,13 @@ describe('/api/stremio-oc/[userid]/stream/[mediaType]/[imdbid]', () => {
 		process.env.DMM_ORIGIN = originalOrigin;
 	});
 
-	it('returns 500 without a profile', async () => {
+	it('answers a missing profile with one stream that opens the setup page', async () => {
 		mockRepository.getOffcloudCastProfile = vi.fn().mockResolvedValue(null);
 		await handler(request(), res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect((res._getData() as any).streams).toEqual([
+			expect.objectContaining({ externalUrl: expect.stringMatching(/\/stremio-offcloud$/) }),
+		]);
 	});
 
 	// `POST /api/cache` is free, non-destructive and batched, so a hash that has

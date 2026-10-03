@@ -1,3 +1,8 @@
+import {
+	castFailureFromStatus,
+	sendCatalogError,
+	sendCatalogFailure,
+} from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { getDMMLibrary } from '@/utils/castCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -34,11 +39,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 	}
 
-	const result = await getDMMLibrary(userid as string, 1);
-
-	if ('error' in result) {
-		return res.status(result.status).json({ error: result.error });
+	try {
+		const result = await getDMMLibrary(userid, 1);
+		if ('error' in result) {
+			return sendCatalogFailure(res, 'rd', castFailureFromStatus(result.status), {
+				firstPage: true,
+			});
+		}
+		res.status(result.status).json(result.data);
+	} catch (error) {
+		// Nothing here may escape as Next's bare 500: a Real-Debrid connection
+		// reset reached Stremio that way on 2026-10-03.
+		return sendCatalogError(res, 'rd', error, { firstPage: true });
 	}
-
-	res.status(result.status).json(result.data);
 }
