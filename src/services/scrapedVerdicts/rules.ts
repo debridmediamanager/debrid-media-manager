@@ -111,21 +111,26 @@ const YEAR_RANGE = /((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)/;
 const CJK = /[぀-ヿ㐀-鿿가-힯฀-๿]/;
 const LEADING_ARTICLE = /^ (the|a|an|le|la|les|el|los|las|il|der|die|das) /;
 
+function normalized(value: string): string {
+	return value
+		.toLowerCase()
+		.normalize('NFKD')
+		.replace(/\p{M}/gu, '')
+		.replace(/&#x27;/g, "'")
+		.replace(/&#215;/g, 'x')
+		.replace(/\s*&\s*/g, ' and ')
+		.replace(/'/g, '');
+}
+
 /**
  * Lower-cases, strips diacritics and punctuation, and pads with spaces so a
  * title can be matched as a whole-word run: " barbarian " is not found inside
  * " barbarians ".
  */
 export function fold(value: string): string {
-	const text = value
-		.toLowerCase()
-		.normalize('NFKD')
-		.replace(/\p{M}/gu, '')
-		.replace(/&#x27;/g, "'")
-		.replace(/&#215;/g, 'x')
-		.replace(/&/g, ' and ')
-		.replace(/'/g, '');
-	const words = text.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+	const words = normalized(value)
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter(Boolean);
 	return ` ${words.join(' ')} `;
 }
 
@@ -157,6 +162,113 @@ export function foundTitles(filename: string, titles: string[]): string[] {
 		}
 	}
 	return found;
+}
+
+/**
+ * Where one title ends and the next begins in a release name: "Local / Original",
+ * "[Group] Title", "Site - Title", "Title (Original)", and a run of spaces where
+ * a separator was stripped. A dash counts only with spaces round it, so
+ * "x264-GROUP" and "Spider-Man" do not. A colon does not count: after "Pán
+ * prstenů:" comes the subtitle Válka Rohirů, not a title of its own.
+ */
+const STARTS_TITLE = /[/|\\([\]{}【】「」『』《》+]|\s[-–—]+\s/u;
+/** As above, plus what can only end a title: "Title) " and "Title, ". */
+const ENDS_TITLE = /[/|\\()[\]{},【】「」『』《》+]|\s[-–—]+\s/u;
+const YEAR_WORD = /^(?:19|20)\d\d$/;
+/**
+ * Quality, source and codec tags. Once one follows the year, the rest is never
+ * the title: "John Carter (2012) 720p HDDRiP AC3 - SiNiSTER" ends with a group.
+ * Before the year they are a prefix ("[1080p] Atlas (2024)").
+ */
+const TECH_TAG =
+	/^(?:\d{3,4}[pi]|[48]k|uhd|hdr\d*|bluray|bdrip|brrip|bdremux|remux|webrip|webdl|hdrip|dvdrip|dvdscr|hdtv|hdcam|camrip|x26[456]|h26[456]|hevc|avc|av1|xvid|divx|aac\d*|ac3|dts|ddp\d*|eac3|truehd|atmos)$/;
+/** Words a release appends to its title: the tags above plus edition, language and container. */
+const RELEASE_TAG =
+	/^(?:hd|fhd|sd|dv|sdr|10bit|8bit|blu|bd|web|dl|dvd\d?|scr|screener|cam|ts|tc|r5|dd\d*|mp3|flac|opus|mkv|mp4|avi|iso|multi|dual|dub|dubbed|sub|subs|subbed|extended|unrated|uncut|remastered|restored|proper|repack|limited|internal|imax|3d|ita|eng|english|spanish|castellano|latino|french|truefrench|vff|vostfr|german|hindi|rus|ukr|pl|cz)$/;
+
+function scriptOf(word: string): string | null {
+	const letter = word.match(/\p{L}/u)?.[0];
+	if (!letter) return null;
+	if (/\p{Script=Latin}/u.test(letter)) return 'Latin';
+	if (/\p{Script=Cyrillic}/u.test(letter)) return 'Cyrillic';
+	if (/\p{Script=Greek}/u.test(letter)) return 'Greek';
+	if (CJK.test(letter)) return 'CJK';
+	return 'other';
+}
+
+type Word = {
+	text: string;
+	/** A title can begin at this word. */
+	starts: boolean;
+	/** A title running up to this word has ended before it. */
+	ends: boolean;
+};
+
+/** The filename as `fold` words, each marked with where titles can begin and end. */
+function releaseWords(filename: string): Word[] {
+	const text = normalized(filename);
+	const words: Word[] = [];
+	let last = 0;
+	let tagged = false;
+	let dated = false;
+	for (const match of text.matchAll(/[\p{L}\p{N}]+/gu)) {
+		const word = match[0];
+		const gap = text.slice(last, match.index);
+		const spaced = gap.replace(/[._]/g, ' ');
+		const prev = words.at(-1)?.text;
+		const script = scriptOf(word);
+		const prevScript = prev ? scriptOf(prev) : null;
+		const newScript = !!script && !!prevScript && script !== prevScript;
+		const tag = TECH_TAG.test(word);
+		words.push({
+			text: word,
+			starts:
+				!tagged &&
+				(!prev ||
+					STARTS_TITLE.test(spaced) ||
+					/\s\s/.test(gap) ||
+					newScript ||
+					YEAR_WORD.test(prev) ||
+					prev === 'aka'),
+			ends:
+				ENDS_TITLE.test(spaced) ||
+				/\s\s/.test(gap) ||
+				newScript ||
+				YEAR_WORD.test(word) ||
+				tag ||
+				RELEASE_TAG.test(word) ||
+				word === 'aka',
+		});
+		tagged ||= tag && dated;
+		dated ||= YEAR_WORD.test(word);
+		last = match.index + word.length;
+	}
+	return words;
+}
+
+/**
+ * Whether `title` is the release's title, not words inside a longer one:
+ * "Warfare" is a whole-word run in The Ministry of Ungentlemanly Warfare,
+ * "Killers" in Lesbian Vampire Killers and "Baba" in Baba Yaga.
+ */
+export function namesRelease(filename: string, title: string): boolean {
+	const words = releaseWords(filename);
+	const needle = fold(title);
+	const forms = [needle];
+	if (title.includes('&')) forms.push(fold(title.replace(/&/g, ' ')));
+	const bare = needle.replace(LEADING_ARTICLE, ' ');
+	if (bare !== needle && bare.trim().length >= 4) forms.push(bare);
+
+	for (const form of forms) {
+		const run = form.trim().split(' ');
+		for (let i = 0; i + run.length <= words.length; i++) {
+			if (!words[i].starts) continue;
+			if (!run.every((word, k) => words[i + k].text === word)) continue;
+			const next = words[i + run.length];
+			if (!next || next.ends) return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -215,9 +327,16 @@ export function decide(
 		// films' own years) are left out of `ambiguous` instead.
 		if (toOther <= toMovie) return 'trash';
 	}
-	if (found.length > 0 && nearYear) return 'keep';
-	if (found.length === 0 && titleMatch !== 'SAME_TITLE') return 'trash';
-	return titleMatch === 'SAME_TITLE' ? 'keep' : 'trash';
+	if (titleMatch === 'SAME_TITLE') return 'keep';
+	if (titleMatch === 'NO_TITLE') {
+		// A title found in code overrules the model only when it is the
+		// release's title ("Lost Found" for Lost & Found). Warfare (2025) found
+		// inside The Ministry of Ungentlemanly Warfare (2024), a year one off,
+		// kept that film on the Warfare page.
+		const named = found.some((t) => namesRelease(filename, t));
+		return named && nearYear ? 'keep' : 'trash';
+	}
+	return found.length > 0 && nearYear ? 'keep' : 'trash';
 }
 
 const MEDIA_KEYS = Object.keys(MEDIA_CHOICES) as Media[];

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './__fixtures__/labelled-filenames.json';
+import substringKeeps from './__fixtures__/substring-keeps.json';
 import {
 	decide,
 	decideWithoutModel,
@@ -337,5 +338,94 @@ describe('verdicts that production got wrong on day one', () => {
 				'DIFFERENT_TITLE'
 			)
 		).toBe('trash');
+	});
+});
+
+type KeepItem = {
+	set: 'random' | 'trashed' | 'no-title' | 'warfare';
+	imdbId: string;
+	filename: string;
+	media: Media;
+	titleMatch: TitleMatch;
+	humanLabel: 'MOVIE' | 'PACK' | 'OTHER' | 'EITHER';
+};
+
+/**
+ * Real keep verdicts read from production on 2026-10-04, each one a title of
+ * the movie found as whole words somewhere in the filename overruling Jev's
+ * NO_TITLE or DIFFERENT_TITLE. The fixture's `_about` says how each set was
+ * drawn and labelled; every item was a keep in production.
+ */
+describe('a movie title found inside another title', () => {
+	const keepItems = substringKeeps.items as KeepItem[];
+	const pages = substringKeeps.movies as Record<
+		string,
+		{ name: string; year: number; titles: string[] }
+	>;
+	const pageOf = (imdbId: string): MovieContext => ({ imdbId, ambiguous: {}, ...pages[imdbId] });
+	const kept = (items: KeepItem[]) =>
+		items
+			.filter(
+				(item) =>
+					decide(pageOf(item.imdbId), item.filename, item.media, item.titleMatch) ===
+					'keep'
+			)
+			.map((item) => item.filename);
+	const isTheMovie = (item: KeepItem) =>
+		item.humanLabel === 'MOVIE' || item.humanLabel === 'PACK';
+
+	it('no longer files The Ministry of Ungentlemanly Warfare under Warfare (2025) when Jev saw no title', () => {
+		const ministry = keepItems.filter(
+			(item) =>
+				item.set === 'warfare' &&
+				item.titleMatch === 'NO_TITLE' &&
+				/ministry/i.test(item.filename)
+		);
+		expect(ministry).toHaveLength(72);
+		expect(kept(ministry)).toEqual([]);
+	});
+
+	it('trashes every NO_TITLE release on 400 random pages that carries a title only inside its own', () => {
+		const noTitle = keepItems.filter((item) => item.set === 'no-title');
+		expect(noTitle).toHaveLength(97);
+		expect(kept(noTitle)).toEqual([]);
+	});
+
+	it('keeps every release in a random sample of these keeps that is the movie or a pack holding it', () => {
+		const movies = keepItems.filter((item) => item.set === 'random' && isTheMovie(item));
+		expect(movies).toHaveLength(59);
+		expect(kept(movies)).toHaveLength(59);
+	});
+
+	it.each([
+		['tt0094961', 'Smrtelné horko / Dead Heat (1988)(CZ/EN)[1080p] = CSFD 59%'],
+		['tt1620981', 'COMANDO.TO - A Família Addams 2020 [1080p-FULL] [DUAL]'],
+		[
+			'tt14948432',
+			'【高清影视之家发布 www.HDBTHD.com】红色一号：冬日行动[简繁英字幕].Red.One.2024.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H265-ParkHD',
+		],
+		[
+			'tt0096969',
+			'Urodzony czwartego lipca   Born on the Fourth of July (1989) PL.1080p.BRRip.x264-wasik   Lektor PL.mkv.ts',
+		],
+	])(
+		'still overrules NO_TITLE when the title it found is the release title: %s %s',
+		(imdbId, filename) => {
+			expect(decide(pageOf(imdbId), filename, 'FILM', 'NO_TITLE')).toBe('keep');
+		}
+	);
+
+	it('reads a quality tag before the year as a prefix, not the end of the name', () => {
+		// Real, on the Atlas (2024) page.
+		const atlas: MovieContext = {
+			imdbId: 'tt14856980',
+			name: 'Atlas',
+			year: 2024,
+			titles: ['Atlas'],
+			ambiguous: {},
+		};
+		expect(decide(atlas, '[1080p] Atlas (2024) ล่าข้ามจักรวาล', 'FILM', 'NO_TITLE')).toBe(
+			'keep'
+		);
 	});
 });

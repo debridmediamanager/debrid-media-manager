@@ -1,0 +1,6467 @@
+{
+	"_about": [
+		"Real keep verdicts from production ScrapedVerdict, read 2026-10-04, that the rules gave although Jev answered NO_TITLE or DIFFERENT_TITLE: a title of the movie was found as whole words in the filename and the year was within one.",
+		"media and titleMatch are the answers Jev recorded for the row. movies holds each page's IMDb titles built as getMovieContext builds them; ambiguous is left out because every item already passed that check in production.",
+		"random: 160 (page, filename) pairs drawn at random from the 2,222 such keeps on 400 randomly drawn movie pages. trashed: 150 drawn at random from the DIFFERENT_TITLE keeps a draft of the anchored rule trashed. no-title: every NO_TITLE keep of that kind on the same 400 pages. warfare: every such keep on the Warfare (2025) page, where The Ministry of Ungentlemanly Warfare (2024) was filed.",
+		"humanLabel: MOVIE is the movie, PACK holds it, OTHER is another work, EITHER could not be decided from the name. Labelled by reading the filename against the page."
+	],
+	"capturedAt": "2026-10-04",
+	"items": [
+		{
+			"set": "random",
+			"imdbId": "tt0059578",
+			"filename": "2 For a Few Dollars More.1965 [m1080p.x264-LTN][PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0068767",
+			"filename": "Bruce Lee: Fist Of Fury 1973 Multi 1080p Blu-ray X264 DTS-HDMA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The Exorcist 1973 Director's Cut 2160p UHD Blu-ray HDR10 HEVC TrueHD 7.1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The Exorcist 1973 Directors Cut 2160p UHDRip 2160p DDP 5 1 DV HDR+ x265-KIRA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The Exorcist Directors Cut (1973) [1080P][Latino][VerPeliculasOnline.org].mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The Exorcist Extended Directors Cut [1973] 720p MKV Dellefs0",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The.Exorcist.1973.40th.Anniversary.Edition.Extended.Directors.Cut.1080p.BluRay.REMUX.VC-1.DTS-HD.MA.5.1-LAZY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The.Exorcist.40th.Ann.Ed.Ext.Directors.Cut.1973.1080p.BRRip.16.9.WS.AC3",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The.Exorcist.Extended.DC.1973+_HDRip_[scarabey.org].avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The.Exorcist.Extended.DC.1973.x264.DTS-WAF",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "The.Exorcist.Extended.Directors.Cut.1973.BDRip.x265-WAR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0070047",
+			"filename": "Изгоняющий дьявола - Режисерская версия (1973) BDRip-AVC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0082694",
+			"filename": "Mad Max 2 A Caada Continua: (1981) BluRay 1080p Dual Udio",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0087344",
+			"filename": "Godzilla 1985 Red Menace Reconstruction v1 0 NWP Eng Edit 1080p AVC DD 2 0",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0092067",
+			"filename": "La Puta El Castillo En El Cielo (1986) [anime][spanish][www zonatorrent com] avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0094683",
+			"filename": "Assa AKA Acca 1987 1080p Blu-ray AVC DTS-HD MA 2.0",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0094961",
+			"filename": "Smrtelné horko / Dead Heat (1988)(CZ/EN)[1080p] = CSFD 59%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0094961",
+			"filename": "Stiahni si Filmy CZ/SK dabing Smrtelné horko / Dead Heat (1988)(CZ/EN)[1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0103950",
+			"filename": "城市女猎人.Madam.City.Hunter.1993.WEB-1080P..x264.AAC.Cantonese&Mandarin.CHS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0116629",
+			"filename": "Independence Day - Extended (1996) 2160p H265 BluRay Rip 10 bit DV HDR10+ ita eng AC3 5.1 sub ita eng NUeng Licdom",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0116629",
+			"filename": "Independence Day Extended (1996) AC3 5.1 ITA.ENG 1080p H265 sub ita.eng Sp33dy94 MIRCrew",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0116629",
+			"filename": "Independence Day Versao Estendida 1996 [1080p] WWW BLUDV COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0119250",
+			"filename": "This World Then the Fireworks 1997 BRRip XviD MP3 XVID",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0119250",
+			"filename": "This.World.Then.the.Fireworks.1997.1080p.BluRay.x265-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0119250",
+			"filename": "This.World.Then.the.Fireworks.1997.HD.DTS.(V2).mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0183649",
+			"filename": "Phone.Game.2002.MULTI.VFF.1080p.BluRay.EAC3.5.1.x265-iLYNX",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0195714",
+			"filename": "Final.Destination.1-5.Pentalogy.2000-2011.BluRay.720p.x264.acc.jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0195714",
+			"filename": "The.Final.Destination.2000.BDRip.All.Films.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0289879",
+			"filename": "The Butterfly Effect (Director\\'s Cut) (2004) NTSC DVD9 [ISO]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0289879",
+			"filename": "The Butterfly Effect [Director&#039;s Cut] (2004) BDRip by HQ-ViDEO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0312843",
+			"filename": "Карта Смерти. Клуб Самоубийц. Death Card, The. Suicide Club, The (2000) DVD5",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0376994",
+			"filename": "X-Men : The Last Stand - Extended Cut (2006) BDrip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill 1, 2 (2003, 2004) BDRip 1080p multi HighCode-PublicHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Duology (2003 2004) 720p BRRip x264 AC3   SiNDK8",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 (2003) [2160p x265 10bit Joy]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 2003 1080p BluRay AVC DTS HD MA 5 1 FGT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 2003 2160p UHD Blu ray HDR DV HEVC DTS HDMA 5 1 x",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 2003 720p BluRay x264-x0r",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 2003 BDRemux [iP27]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 2003 English DVDRip.AC3 WBZ",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol 1 And 2 2003 2004 1080p BluRay HEVC x265 5.1 BONE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol.1 (2003) 720p BluRay x264 [Dual Audio] [Hindi DD 5.1 - English DD ..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Vol.1 [2003] - BRRip - 720p - x264 - AC3 - [Dual-Audio] - [Hindi+Engli..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Volume 1 2003 720p BluRay H264 AAC RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Volume 1 2003 BRRip XviD MP3 XVID",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill Volume 1 2003 DVD SCREENER (NOT) SVCD-TCF",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill: Vol 1 & Vol 2 *2003 2004* [ac3 dvdrip xvid]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill: Vol. 1 (2003) BDRip-AVC от leonardo 59",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Kill Bill: Volume 1.2003.2160p.HDR10.WEB-DL.Atmos.x265.BluBit",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Убить Билла / Kill Bill: Vol. 1 (Квентин Тарантино / Quentin Tarantino) [2003, боевик, триллер, криминал, драма, AC3] MVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Убить Билла. Фильм первый и Фильм второй. / Kill Bill vol.1 & vol.2 (2003, 2004) [H.264] BDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Убить Билла. Часть 1, 2 / Kill Bill: Vol. 1, 2 (Квентин Тарантино / Quentin Tarantino) [2003-2004 г., Боевик, Триллер, HDRip]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "Убить Билла: Фильм 1 / Kill Bill: Vol. 1 [2003, США, Триллер, Драма, Детектив, Боевик, BDRip] DVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0378194",
+			"filename": "��������������������� ��������������������� / Kill Bill: Vol. 1 (2003) BDRip-AVC..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen - ศึกซูเปอร์ฮีโร่พันธุ์มหากาฬ [2009] [1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen Director's Cut (2009) [1080p] {5.1} High Quality - HDD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen Directors Cut 2009 10bit dts hevc-d3g.",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen The Ultimate Cut (2009) 1080p.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen The Ultimate Cut 2009 1080p BluRay AC3 x264-CtrlHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen The Ultimate Cut 2009 720p Msub BluRay Dual Audio English Hindi GOPISAHI",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Watchmen The Ultimate Cut 2009 BRRip x264 AAC - VYTO [P2PDL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Хранители огня / Под горой / Under the Mountain [2009, Новая Зеландия, фэнтези, драма, приключения, HDRip] MVO + Sub rus + Original eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "Хранители: Под маской / Watchmen: Under the Hood [2009, США, короткометражка, приключения, DVDRip] MVO + Sub Rus",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0409459",
+			"filename": "【www.gaoqing.tv】守望者 [终极剪辑版] Watchmen.The.Ultimate.Cut.2009.BluRay.1080p.DTS.x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0455326",
+			"filename": "VA - Aqua Teen Hunger Force Colon Movie Film For Theaters Colon (2007, 2018)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0460791",
+			"filename": "Journey From The Fall (2006) [1080p] [BluRay] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0460791",
+			"filename": "Journey.From.The.Fall.2006.DVDRip.XviD-FRAGMENT.[www.UsaBit.com]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt0491775",
+			"filename": "HAPPY BE HAPPY [2006] (MALAYALAM) ^^LTM^^",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1028528",
+			"filename": "Death Proof Planet Terror (Double Feature) 2007 720p x264 AC3 SiNDK8",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1028528",
+			"filename": "Grindhouse Double Feature Planet Terror & Death Proof (2007).1080p.DTS.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later (2026) The Bone Temple.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later The Bone Temple (2026) 1080p BluRay 5 1 LAMA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later The Bone Temple 2026 1080p BluRay x265 YAWNTiC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later The Bone Temple 2026 1080p WEBRip AAC5 1 10bits x265 Rapta",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later The Bone Temple 2026 720p BluRay x264 KNiVES",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later: The Bone Temple (2026) (1080p MA WEB-DL x265 10bit EAC3 Atmos 5.1 Ghost) [QxR]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later: The Bone Temple (2026) BDRip 720p от DoMiNo &amp; селезень",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 Years Later: The Bone Temple (2026) UHD WEB-DL-HEVC 2160p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 anni dopo - Il tempio delle ossa (2026) ITA-ENG.iso",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28 lat później Część 2 Świątynia kości - 28 Years Later The Bone Temple 2026 [1080p.WEB-DL.H264.EAC3-AS76-FT] [ENG-Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt10548174",
+			"filename": "28.Years.Later.The.Bone.Temple.2026.2160p.UHD.Bluray.Remux.DV.HDR.HEVC.TrueHD.At",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1099212",
+			"filename": "Crepúsculo.Luna.Nueva.2009.1080p-dual-lat",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1099212",
+			"filename": "DRAGONLANCE-DRAGOS.OF.AUTUMN.TWILIGHT.2008.StV.DVDrip.Swesub.XviD.AC3-Mr_KeFF",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1103153",
+			"filename": "Contract Killers (2009) HDRip-AVC от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1103153",
+			"filename": "Killers Anonymous 2010 SPANISH DVDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1103153",
+			"filename": "Zabijaci lesbickych upirek / Lesbian Vampire Killers (2009)(CZ/EN)[720p] = CSFD 45%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1103153",
+			"filename": "[EX-TORRENTY.ORG] Lesbian.Vampire.Killers.2009.PL.720p.BDRip.XviD.AC3-ELiTE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1103153",
+			"filename": "Маньяки любят убивать / Murder Loves Killers Too (Дрю Барнхардт) [2009, ужасы, триллер, DVDRip] DVO *Грайндхаус*",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1114740",
+			"filename": "Paul Blart Mall Cop Duology [2009-2015]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1352824",
+			"filename": "Chloe Limited (2009) PAL Retail Multisub 3x NLUPPER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt14948432",
+			"filename": "【高清影视之家发布 www.HDBTHD.com】红色一号：冬日行动[简繁英字幕].Red.One.2024.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H265-ParkHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt14948432",
+			"filename": "【高清影视之家发布 www.SSDSSE.com】红色一号：冬日行动[简繁字幕].Red.One.2024.BluRay.1080p.x265.10bit.DDP7.1-SSDSSE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1620981",
+			"filename": "COMANDO.TO - A Família Addams 2020 [1080p-FULL] [DUAL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1647476",
+			"filename": "Madeas.Big.Happy.Family.The.Play.2010.1080p.BluRay.H264.AAC-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt17279496",
+			"filename": "4-29-2024 Monday Live Deep State Preparing to Trigger Communist Uprisings In America to Trigger Civil War.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt17279496",
+			"filename": "Civil War (2024) วิบัติสมรภูมิเมืองเดือด [tmdbid=929590]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt17279496",
+			"filename": "Taking Sides Britain And The Civil War (2023) [1080p] [BluRay] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.TS.READNFO.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "John Carter (2012)  720p HDDRiP AC3  - SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "Musallat 2 Lanet 2011 DvDRip XviD BTRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "Safe.House.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "Sinister 2 2012 SPANISH BDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "The Girl with the Dragon Tatoo 2011 R5DvDSCR XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "The Guard 2011 DVDSCR Xvid AC3 SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "The Ides of March 2011 R5 READNFO XViD AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "The Ides of March 2011 R5 READNFO x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "The Muppets (2011) BRRip 720p x264 AAC 5.1ch-Ameet6233(SiNiSTER) ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt1922777",
+			"filename": "[FILEKING.PL] Gabinet Sinister.2012.PL [AgusiQ]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2105044",
+			"filename": "З/Л/О 2 / V/H/S/2 (2013) HDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2105044",
+			"filename": "ЗЛО 2 / V/H/S/2 (Саймон Баррет / Simon Barret, Джейсон Айзенер / Jason Ayzener, Гарет Эванс / Gareth Evan) [2013, США, Канада, Индонезия, Ужасы,Триллер, HDRip] Dub",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2105044",
+			"filename": "ЗЛО 2 / V/H/S/2 (Саймон Баррет, Джейсон Айзенер, Гарет Эванс) [2013, ужасы, триллер, HDRip] [Лицензия]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "London.Rampage.2018.1080p.AMZN.WEBRip.AAC2.0.x264-CM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "London.Rampage.2018.P.WEB-DLRip.14OOMB.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "Proxys Road Trip Rampage (2018) [Split Scenes]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "Rampage - Furia Animale 3D 2018 ITA ENG Half SBS 1080p BluRay x264-BLUWORLD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "Rampage - แรมเพจ ใหญ่ชนยักษ์  2018 720p พากย์ไทย MP3+12db.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2231461",
+			"filename": "[GkTorrent.org] Last.Rampage.The.Escape.of.Gary.Tison.2017.FRENCH.HDRip.XViD-NORRiS.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2271563",
+			"filename": "Forsaken - Das Böse kennt kein Erbarmen (2016) 720p.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt25399154",
+			"filename": "18th Rose 2026 720p NF WEB DL DD 5 1 H 264 playWEB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt25399154",
+			"filename": "LANewGirl  Rose Carter (10 03 2026)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt25399154",
+			"filename": "【高清影视之家发布 www.BBEBBB.com】第18朵玫瑰[简繁英字幕].18th.Rose.2026.2160p.NF.WEB-DL.DDP5.1.H.265-PandaQT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt2617828",
+			"filename": "프리폴게이트 Free.Fall.2014.1080p.BluRay.x264-TOPCAT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt27621210",
+			"filename": "Ice Road Vengeance 2025 BDRip x264-PiGNUS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt27621210",
+			"filename": "【高清影视之家发布 www.ZXVAC.com】Frankenstein’s.Patchwork.Monste[简繁英字幕].Ice.Road.Vengeance.2025.2160p.AMZN.WEB-DL.DDP.5.1.H.265-DreamHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt27766440",
+			"filename": "The Salt Path Scandal 2025 1080p SKST WEB DL DD 5 1 H 264 playWEB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3300542",
+			"filename": "Objetivo Londres (2016) [BluRay 720p X264 MKV][AC3 5.1 Castellano][www.nucleo.com]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3300542",
+			"filename": "Objetivo Londres 2016 [BRrip X264 MKV][Castellano]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3300542",
+			"filename": "Objetivo Londres 2016 [BluRay Screener x264 MKV][Castellano LiNE]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3716530",
+			"filename": "[FamilyStrokes] 2016-02-25 - Nina Elle [mp4][1920x1080]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3716530",
+			"filename": "Алена Апина. А любовь она и есть (2015) SATRip от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt3756788",
+			"filename": "Barbie Og Hendes Søstre I Det Store Hvalpeeventyr 2015 [NeonDanish]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt4430212",
+			"filename": "Microsoft Visual Studio 2015 Professional",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt4430212",
+			"filename": "RESEED - ADDENDUM - INTRODUCTORY OPEN SIGHT - THE MAN-WOMAN MASTERY (PT.2) - 8th. MAY 2015",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt4430212",
+			"filename": "Visual Studio 2015 A First Look at the IDE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt5116302",
+			"filename": "Sveta s togo sveta 2018 HDTV (1080i) Nikolspup",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt5116302",
+			"filename": "The Great Alaskan Race (2019) Balto e Togo BluRay 1080p.H264 Ita Eng AC3 5.1 Sub Ita Eng   ODS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt5116302",
+			"filename": "Бывшая с того света / Blithe Spirit [2020, Великобритания, комедия, фэнтези, мелодрама, WEB-DL] [Локализованный видеоряд] Dub (iTunes)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt5144174",
+			"filename": "Sucho / The Dry (2020)(CZ) = CSFD 68%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt6988136",
+			"filename": "RestrainedElegance-2018-06-16-The-Nude-In-Metal-Society-Travelling-Disciplinaria..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7133686",
+			"filename": "NIEWIDZIALNY CHLOPAK- NOWA GENERACJA  [2018]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Alone.Wolf.2020.720p.WEBRip.800MB.x264-GalaxyRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Alone.Wolf.2020.720p.WEBRip.X264.AAC.2.0-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Alone.Wolf.2020.[TopNow.se]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Evangelion 1.11: You Are (Not) Alone (2020) BDRip-HEVC 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "I.Live.Alone.2021.HDRip.XviD.AC3-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Not.Alone.2021.1080p.WEBRip.1400MB.DD2.0.x264-GalaxyRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Pups.Alone.2021.PL.720p.WEB-DL.XviD.AC3-ELiTE.avi.ts",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "You are Not Alone 2020_HD.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "You're Not Alone (2020) [Bolly4u.org] WEB-DL Dual Audio 720p 990MB.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTG.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.1080p.AMZN.WEBRip.DD5.1.X.264-EVO[EtHD]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.1080p.AMZN.WEBRip.DDP5.1.x264-NTG[TGx]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.HDRip.XviD.AC3-EVO[TGx]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "[h5h4.com]老爹特烦恼.Leave.Me.Alone.2020.1080P.WEB-DL.H264.AAC-Vampire",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt7711170",
+			"filename": "老爹特烦恼.Leave.Me.Alone.2020.1080P.WEB-DL.H265.AAC.115WiKi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt8772262",
+			"filename": "Midsommar (2019) DC.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt8772262",
+			"filename": "Midsommar 2019 Directors Cut 1080p BluRay x264-OFT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt8959820",
+			"filename": "www.TamilRockers.ws - Naan Petta Makan (2019) Malayalam 1080p HD AVC DD 5.1 X264 2.5GB ESubs.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt8959820",
+			"filename": "www.TamilRockers.ws - Naan Petta Makan (2019) Malayalam 720p HDRip X264 DD 5.1 1.4GB ESubs.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "random",
+			"imdbId": "tt9052870",
+			"filename": "[微信公众号：匆匆电影]最初的梦想.Chhichhore 2019.1080P.WEBHD.x264.AC3.印度语中文字幕.Hindi.CHS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0068646",
+			"filename": "1972 Os Trapalhoes Ali Baba e Os 40 Ladroes   JRDownload com",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0068646",
+			"filename": "Il figlioccio del padrino (1973) [SD].avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0068646",
+			"filename": "[Shiniori-Raws]-Ali-Baba-and-the-Forty-Thieves-1971-(Toei-Channel-1280x544-x264-..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0068646",
+			"filename": "arabseed.-the.-godfather.-1972.1080p.-blu-ray",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0070047",
+			"filename": "Kolekcja Egzorcysta 1973-2023 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0070047",
+			"filename": "Lorna The Exorcist (1974)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0070047",
+			"filename": "Lorna The Exorcist (1974) DVDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0091474",
+			"filename": "Hannibal Manhunter.1986.mp4.SKRAPY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0096969",
+			"filename": "Urodzony czwartego lipca   Born on the Fourth of July (1989) PL.1080p.BRRip.x264-wasik   Lektor PL.mkv.ts",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0103950",
+			"filename": "Jackie Chan s City Hunter .1993. DVDRip x264 SmartGuy Silver RG NOSUB.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0103950",
+			"filename": "城市女猎人.Madam.City.Hunter.1993.R3.HK.DVDRip.x264.2Audio.AC3.iNT-NowYS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0104771",
+			"filename": "II Royal Tramp II 1992 BluRay 1080p DD5.1 2Audio X264-MTeam",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0104771",
+			"filename": "II Royal Tramp II 1992 BluRay Remux 1080p AVC TrueHD 7 1-MTeam",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0112641",
+			"filename": "Casa Casino 1995 SPANISH BDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0112641",
+			"filename": "Casa Casino 1995 SPANISH BluRay 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0119250",
+			"filename": "This.World.Then.the.Fireworks.1997.BDRemux.1080p.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0119250",
+			"filename": "Гори все огнем / This World, Then the Fireworks (1997) DVDRip [H.264] [AVO]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0378194",
+			"filename": "Stuntgirl Vol 2 2004 DVDRip x264 worldmkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0378194",
+			"filename": "���������������������������1-Kill-Bill-Vol-1-2003-1080p-BluRay-H265-10bit-AAC-5-..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0393109",
+			"filename": "Big Gold Brick 2006 SPANISH DVDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "Journey from the Fall 2006 DVDRip XviD AC3 5.1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "Journey.from.the.Fall.2006.VIETNAMESE.1080p.BluRay.x264.DD2.0-HDS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "Journey.from.the.Fall.2006.VIETNAMESE.720p.BluRay.H264.AAC-VXT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "Journey.from.the.Fall.2006.VIETNAMESE.BRRip.x264-VXT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "The Pixar Story 2007 BluRay Pad 1080p AAC 2Audio x265-10bit-HDSPad",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "[P] Journey From The Fall 2006 DVDRip XviD FRAGMENT[",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0460791",
+			"filename": "Падение ангела / Meleğin Düşüşü / Angel&#039;s fall [2005, Турция, Греция, Драма, DVDRip] VO (STARBIT) + Original Tur + Sub (Eng, Rus)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0491775",
+			"filename": "I Wanna Be Happy (2006) Xvid NoSubs [Buhaypirata]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt0929425",
+			"filename": "SODOM_AND_GOMORRAH.2008.DVD-5",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt10540298",
+			"filename": "La Mia Famiglia A Soqquadro 2017 ITALIAN AC3 DVDrip XviD-Bymonello78",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt10540298",
+			"filename": "La Notte Che Mia Madre Ammazzò Mio Padre 2017 iTALiAN BDRiP XviD-PRiME[MT]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt10540298",
+			"filename": "La.mia.famiglia.a.soqquadro-2017-[DVD5-1-1]-KX",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Dragonlance.Dragons.Of.Autumn.Twilight.2008.DVDRip.XviD.V.O.Sub.Spanish.[www.SubEstrenos.com]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Dragonlance: Draci podzimniho soumraku / Dragonlance: Dragons of Autumn Twilight (2008)(CZ) = CSFD 53%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Dragonlance: Dragons of Autumn Twilight (2008) DVDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Vampire Twilight 2008.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Virtual.Trip.Tokyo.Twilight.From.The.Air.2008.720p.BluRay.x264-D",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1099212",
+			"filename": "Дрэгонлэнс: Драконы осенних сумерек / Dragonlance: Dragons of Autumn Twilight (Уилл Меньот / Will Meugniot) [2008, мультфильм, AC3] DVO + Original + Sub eng",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "300 Killers (2010) DVDRiP StV XViD.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Absolutní zabijáci / Absolute Killers (2011)(CZ)[WebRip][1080p] = CSFD 61%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Contract Killers 2010 SPANISH BDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Happy Killers (2010) NTSC Retail DD5.1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Happy.Killers.2010.DVDRip._kinonavse100",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers (2009) BDRip 1080p [Ukr.Eng] [Цікава Ідея].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers (2009) [720p] [BluRay] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers 2009 1080p BluRay HEVC x265 5.1 BONE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Natural Born Killers 2010 DVDSCR NL Subs DivXNL-Team[Kasta]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "Убийцы вампирш-лесбиянок / Lesbian Vampire Killers (2009) HDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1103153",
+			"filename": "뱀파이어 킬러 Lesbian.Vampire.Killers.2009.1080p.BluRay.x264-HD1080",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1255953",
+			"filename": "7sins-incendies.2010.720p.bluray.x264.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt15005868",
+			"filename": "South Park South Park Post COVID (2021) [1080p] [BluRay] [5.1] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1663662",
+			"filename": "Audios For Pacific Rim 2013 1080p 3D BluRay Half-OU DTS x264-HDMaNiAcS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt17279496",
+			"filename": "4-28-2024 BREAKING Globalists Planning Massive Civil War To Stop Trump.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt17279496",
+			"filename": "5-03-2024 EMERGENCY! Alex Jones Has Confirmed That the Globalist Deep State Has Already Set In Motion Civil Unrest Leading to Civil War & Martial Law - We Can Stop This!.mp4",
+			"media": "UNCLEAR",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "21.Jump.Street.2012.BDRip.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "American.Reunion.2012.R5.READNFO.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Answers to Nothing 2011 DVDSCR Xvid AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Evil.Dead.2013.BluRay.1080p.x264.DTS-Sinister",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Katy Perry Part of Me 2012 DVDSCR x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Killer Elite.2011.XviD.DVDRip.SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Lincoln (2012) BRRIP x264 AAC -SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "ParaNorman 2012 LiMiTED BRRIP XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Premium Rush 2012 R5 XViD AC3 SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Project.X.2012.DVDSCR.XViD.AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Project.X.2012.R5.READNFO.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Tomb Raider 2012 Leaked Footage DVDRip XviD AC3 ADTRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt1922777",
+			"filename": "Tomb Raider 2012 Leaked Footage DVDRip XviD AC3 ADTRG Jaybob",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2034800",
+			"filename": "Making.of.The.Great.Wall.2016.GERMAN.WS.HDTV.x264-aWake",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2034800",
+			"filename": "【高清影视之家发布 www.HDBTHD.com】鸟瞰万里长城[中文字幕].Flying.the.Great.Wall.2016.1080p.WEB-DL.H264.AAC-SONYHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "De Pere En Flic 2 2017 1080p WEB DL DD5 1 AC3 AVC mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Drole De Pere (2017) (1080p) [WEBRip] [YTS MX]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Drole De Pere 2017 FRENCH HDRip XviD PREUMS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last Rampage The Escape of Gary Tison 2017 MULTi 1080p BluRay x264 AC3-EXTREME",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last Rampage. The Escape of Gary Tison (2017) BDRip-AVC [Ukr.Eng] [Hurtom].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last Rampage: The Escape of Gary Tison 2018 FRENCH WEBRIP ",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last.Rampage.2017.P.WEB-DL.72Op_KOSHARA.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last.Rampage.2017.P.WEB-DLRip.7OOMB_KOSHARA.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last.Rampage.The.Escape.of.Gary.Tison.2017.720p.WEB-DL.2CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last.Rampage.The.Escape.of.Gary.Tison.2017.FRENCH.HDRip-www.lien-torrent.com.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Last.Rampage.The.Escape.of.Gary.Tison.2017.WEB.H264-OUTFLATE [TGx]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "London Rampage (2018) [WEBRip] [720p] [YTS] [YIFY]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "London Rampage 2018 1080p WEBRip x264 [YTS LT]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "London.Rampage.2018.HDRip.AC3.x264 CMRG[TGx] ⭐",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "London.Rampage.2018.HDRip.AC3.x264-CMRG[EtMovies]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "London.Rampage.2018.WEBRip.x264-ION10",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Последняя ярость / Last Rampage: The Escape of Gary Tison (2017) BDRip 1080p от ELEKTRI4KA-iTunes",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2231461",
+			"filename": "Последняя ярость / Last Rampage: The Escape of Gary Tison (2017) HDRip от ELEKTRI4KA-iTunes",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "18th Rose (2026) 1080p WEBRip 5 1 WORLD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "18th Rose 2026 1080p NF WEB DL DUAL DDP5 1 H 264 FLUX",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "18th Rose 2026 1080p WEB HEVC x265-RMTeam",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "DFXtraOriginals  Chloe Rose  Gets The Deal Done (17 02 2026)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "TonightsGirlfriend  Gypsy Rose (09 01 2026)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt25399154",
+			"filename": "[EMBER] The Rose of Versailles (2025) (Movie) [1080p] [Dual Audio HEVC WEBRip DDP] (Versailles no Bara)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt2737304",
+			"filename": "Akilina (Akilina na pas froid aux yeux! / 01.05.17) [2017",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Couch Survivor 2015 1080p WEBRip x265 RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Couch Survivor 2015 WEBRip XviD MP3 XVID",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Oak Tree Natures Greatest Survivor (2015) [1080p] [WEBRip] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Primal survivor. Cannibal Legend (2015) DVB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Primal survivor. Killer Climb (2015) DVB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Primal survivor. Savage Jungle (2015) DVB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Primal survivor. Scorched Earth (2015) DVB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3247714",
+			"filename": "Primal survivor. Thin Air (2015) DVB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3716530",
+			"filename": "425 Nina Elle [2016 Omen_25 HD 720p].mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3716530",
+			"filename": "Nina Elle   Eating In The Meeting   07 06 2016   } NEW June 07 2016",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt3716530",
+			"filename": "Владимир Гостюхин. Она его за муки полюбила.2016_Nataleksa.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt4430212",
+			"filename": "BEGINNING VISUAL BASIC 2015",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt4430212",
+			"filename": "C# Fundamentals with Visual Studio 2015",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt4430212",
+			"filename": "INTRODUCTORY OPEN SIGHT - THE MAN-WOMAN MASTERY - 26th  APRIL 2015",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Balto e Togo - La leggenda (2019) The Great Alaskan Race [1080p H264 Ita EAC3].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Balto e Togo La leggenda 2020 BDRip AC3 ITA CB01",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Balto.E.Togo.La.Leggenda.2019.iTALiAN.MD.1080p.WEBDL.x264-ODS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Byivshaya s togo sveta 2020 WEB DL 1080p ELEKTRI4KA UNIONGANG mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Byvshaja s Togo Sveta 2020 D BDRip 1400Mb",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt5116302",
+			"filename": "Sveta s togo sveta 2018 HDTV 1080p R G Generalfilm",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt6323306",
+			"filename": "PovLife - Alex Grey (Reluctant Nude Audition - 28.03.2017)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7133686",
+			"filename": "Deixados Para Tras A Nova Geracao 2017 720p BluRay x264 DUAL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7451284",
+			"filename": "Batman kontra Wojownicze Żółwie Ninja   Batman vs Teenage Mutant Ninja Turtles (2019) SD.avi.mts",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home Alone With Cherie 1080p (09.04.2020).mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home Sweet Home Alone (2021) 1080p WEBRip 5.1 x264 -YTS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home Sweet Home Alone (2021) 720p WEBRip x264 -YTS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home Sweet Home Alone (2021) WEB-DLRip-AVC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home Sweet Home Alone 2021 ITA ENG 2160p WEB DL DDP5 1 DV HEVC gattopollo mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home.Sweet.Home.Alone.2021.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home.Sweet.Home.Alone.2021.1080p.DSNP.WEBRip.DD5.1.X.264-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home.Sweet.Home.Alone.2021.720p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Home.Sweet.Home.Alone.2021.720p.DSNP.WEBRip.800MB.x264-GalaxyRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "I.Think.Were.Alone.Now.2020.P.WEB-DL.72Op.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Never Alone Movie (2021) 1080p WEBRip 5.1 x264 -YTS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Not Alone 2021 1080p WEB DL DDP2 0 H 264 EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Not Alone 2021 HDRip XviD AC3 EVO TGx",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Not.Alone.2021.1080p.WEBRip.x264-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Not.Alone.2021.720p.WEBRip.800MB.x264-GalaxyRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Pups.Alone.2021.PROPER.1080p.WEBRip.x264-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "You're Not Alone 2020 720p WEB-DL x264 ESubs - MkvHub.Com.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "You're.not.alone.2020.1080p-dual-lat-cinecalidad.mx.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre Not Alone 2020 720p WEBRip LAT DUB mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre Not Alone 2020 WEBRip x264-ION10",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.720p.AMZN.WEBRip.DDP5.1.x264-NTG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.720p.HDRip.Hindi-Dub.Dual-Audio.x264-1XBET.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.HDRip.XviD.AC3-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Youre.Not.Alone.2020.WEB-DL.AVC.1080p_Mallorn.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "www.Torrenting.org - Youre.Not.Alone.2020.720p.AMZN.WEBRip.AAC2.0.X.264-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Один дома / Home Sweet Home Alone (2021) WEBRip [MVO] [AD]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Одни дома / Pups Alone (2021) WEB-DL [MVO] [AD]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "Одни дома / Pups Alone (2021) WEB-DL | D-iTunes",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt7711170",
+			"filename": "홈 스위트 홈 얼론 Home Sweet Home Alone 2021.720p.KOR.HDRip.H264.AAC-JTC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt8959820",
+			"filename": "www.3MovieRulz.vc - Naan Petta Makan (2019) 720p Malayalam Proper HDRip x264 DD5.1 (192kbps) 1.4GB ESub.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt8959820",
+			"filename": "www.TamilRockers.ws - Naan Petta Makan (2019) Malayalam 1080p HD AVC DD 5.1 X264 3.5GB ESubs.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt8959820",
+			"filename": "www.TamilRockers.ws - Naan Petta Makan (2019) Malayalam v2 HDRip X264 700MB ESubs.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "trashed",
+			"imdbId": "tt9586294",
+			"filename": "[teamskeetxfuckingawesome.com] - 2019.10.22 - Honey Gold - Dreaming Of Better Days (1080p).mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Подарок для ненавистника / Подарок для того, кого ненавидишь / A Gift For Whom You Hate / A Gift To The People You Hate [10/10] [Таиланд, 2019, триллер, мистика, ужасы, драма, WEBRip] [RAW] [720p] DVO (Asian Miracle Group)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Голоса с того света.2019.BDRip-AVC msltel.mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "После того как она просыпается / After She Wakes / When She Wakes [2019, США, ужасы, триллер, HDRip-AVC] MVO + Original Eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Голоса с того света (2019) WEB-DLRip_ivanes.avi",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "После того как она просыпается.2019.BDRemux.1080p.R.G. Goldenshara.mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Бывшая с того света / Blithe Spirit [2020, Великобритания, комедия, фэнтези, мелодрама, WEB-DL] [Локализованный видеоряд] Dub (iTunes)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Голоса с того света.2019.BDRip 720p msltel.mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "После того как она просыпается / After She Wakes [2019, США, ужасы, триллер, BDRemux 1080p] MVO + Sub Eng + Original Eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt5116302",
+			"filename": "Бывшая с того света (2020) WEB-DLRip-AVC [-=DoMiNo=-]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Ali-Baba-and-the-Forty-Thieves-(Ali-Baba-to-Yonjuppiki-no-Touzoku -Toei -1971)-(..",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga (1973) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga (1973) BDRip 720p от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga 1973.720p BluRay x264 PHOBOS [PublicHD]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba.Yaga.1973.1080p.BluRay.x264 PHOBOS [PublicHD]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga 1973 1080p BluRay x264-OFT",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga Devil Witch (1973)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "ALI BABA E I 40 LADRONI 1971 ita jap x265 1080p Mkv UpScaled ZEI",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0068646",
+			"filename": "Baba Yaga 1973 UHD BluRay 1080p DUAL DDP 2 0 HDR10 x265-SM737",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0119051",
+			"filename": "Godzilla: City on the Edge of Battle 1997 SPANISH BluRay 720p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0119051",
+			"filename": "Godzilla: City on the Edge of Battle 1997 SPANISH BDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "The Descent  / Pád do tmy (2005)(CZ  / EN)[2160p][Remux][HDR/DV][HEVC] = CSFD 72%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Going to Pieces, The Rise and Fall Of the Slasher Films_2006_Dvd",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "На куски: рассвет и закат слэшеров / Going to Pieces: The Rise and Fall of the Slasher Film (Джефф МакКвин /Jeff McQueen) [2006, Ужасы, Документальный, DVDRip]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Jane Doe.The Harder They Fall (2006) HDTVRip 1080p.mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Going to Pieces: The Rise and Fall of the Slasher Film (2006) (48...",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Going.To.Pieces.The.Rise.And.Fall.Of.The.Slasher.Film.2006.DVDRi",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Pád do tmy / The Descent (2005)(CZ/EN)[2160p][HDR10/DV][HEVC] = CSFD 72%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0460791",
+			"filename": "Джейн Доу: Всё ниже, а не падает / Джейн Доу: Чем больнее падать / Джейн Доу: Чем выше залезешь, тем больнее падать / Jane Doe: The Harder They Fall [2006, США, криминал, детектив, семейный, WEB-DL-AVC] MVO (AMC) + MVO",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt2231461",
+			"filename": "La secretaire de mon pere [2017] mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt7711170",
+			"filename": "Ты не будешь в одиночестве / You Won't Be Alone (Горан Столевски) [2021, Ужасы, драма, WEB-DL-AVC] DUB [iTunes] от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The.Vow.2012.LiMiTED.DVDSCR.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Ides of March 2011 R5 READNFO XViD AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The.Campaign.2012.DVDRip.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "2012 A Skyscraper Odyssey + Source Footage",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "This.Means.War.2012.R5.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.R5.READNFO.x264.AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.LiMiTED.R5.x264.AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Safe.House.2012.R5.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave 2012 LiMiTED R5 XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Contraband.2012.LiMiTED.R5.x264.AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Cars 2 2011 DVDRip x264 AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Joyful.Noise.2012.TS.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Underworld.Awakening.2012.DVDRip.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Hope.Springs.2012.LiMiTED.DVDRip.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Joyful.Noise.2012.TS.READNFO.XviD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "John.Carter.2012.DVDRip.x264.AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Underworld.Awakening.2012.WORKPRiNT.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Melancholia.2011.720p.BRRip.Xvid.AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Project.X.2012.TS.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Savages.2012.PPVRip.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The.Three.Stooges.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "A.Thousand.Words.2012.CaM.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.BRRIP.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Safe.House.2012.BDRip.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Ted.2012.WORKPRINT.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "American.Reunion.2012.DVDRip.READNFO.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Dark.Shadows.2012.DVDSCR.READNFO.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Skin I Live In.2011.R5.NO AUDIO.HC SUBS.Xvid-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Odd Life of Timothy Green 2012 TS x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Savages.2012.LiMiTED.DVDSCR.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Brave.2012.TS.READNFO.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Total.Recall.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Moonrise Kingdom 2012 LiMiTED DVDRip x264 AAC-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Act.of.Valor.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Safe.House.2012.TS.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Like Crazy.2011.DVDSCR.Xvid.AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Girl with the Dragon Tatoo 2011 R5DvDSCR XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Safe.House.2012.CaM.READNFO.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Moonrise.Kingdom.2012.PPVRip.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Devils Double 2011 720p BRRip Xvid AC3-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "Savages.2012.CaM.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "21.Jump.Street.2012.DVDRip.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "John.Carter.2012.LiMiTED.DVDRip.XViD-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The.Dictator.2012.TS.x264-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "When_a_City_Falls_NZ_docu_Feb2012_Actual_Footage_Main_Quakes_&amp;am ...",
+			"media": "UNCLEAR",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1922777",
+			"filename": "The Devil Inside (2012) 720p.Cam.Xvid-SiNiSTER",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt3716530",
+			"filename": "Алена Апина. А любовь она и есть (2015) SATRip от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt3716530",
+			"filename": "Она испекла убийство: Загадка персикового пирога / Murder, She Baked: A Peach Cobbler Mystery [2016, Канада, драма, криминал, детектив, WEB-DL] MVO",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt11858890",
+			"filename": "The Real ChatGPT Creator Or Terminator 2024 1080p AMZN WEB-DL DD",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0378194",
+			"filename": "David Cohen  Play Blues Piano Vol.2 [2004, instructional videos,",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0378194",
+			"filename": "Looney Tunes Zlata kolekce: To nejlepsi z kralika Bugse - 2.cast / Best of Bugs Bunny vol.2 (2004)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0409459",
+			"filename": "Хранители огня / Под горой / Under the Mountain [2009, Новая Зеландия, фэнтези, приключения, BDRip 1080p] MVO + DVO + 2x VO + Sub Rus + Original Eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0409459",
+			"filename": "Хранители огня / Под горой / Under the Mountain [2009, Новая Зеландия, фэнтези, приключения, DVDRip]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0409459",
+			"filename": "Хранители огня / Под горой / Under the Mountain [2009, Новая Зеландия, фэнтези, драма, приключения, HDRip] MVO + Sub rus + Original eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers, czyli noc krwawej żądzy   Lesbian Vampire Killers (2009).avi.ts",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "FACELESS KILLERS [2010] DVD Rip Xvid [StB]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers (2009) BDRip 720p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "Zabijaci lesbickych upirek / Lesbian Vampire Killers (2009)(CZ) = CSFD 45%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "Zabijaci lesbickych upirek / Lesbian Vampire Killers (2009)(CZ/EN)[720p] = CSFD 45%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt1103153",
+			"filename": "Lesbian Vampire Killers 2010 SPANISH DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt17279496",
+			"filename": "Taking Sides Britain And The Civil War (2023) [1080p] [BluRay] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt2737304",
+			"filename": "V pasti vasne / Infidelity in Suburbia (2017)(CZ)[1080p] = CSFD 45%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt2737304",
+			"filename": "V pasti casu / A Wrinkle in Time (2018)(CZ)[720p] = CSFD 36%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt4430212",
+			"filename": "The VVitch: A New-England Folktale / The Witch [2015, UHD BDRemux 2160p, HDR10, Dolby Vision] [Second Sight] Dub + VO + Sub Rus, Ukr, Eng + Original Eng",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt4430212",
+			"filename": "XAML i MVVM w Visual Studio 2015",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "no-title",
+			"imdbId": "tt0268126",
+			"filename": "Alive (2002 Ryuhei Kitamura) [manga film adaptation] [JAP( Eng srt) DVDrip RARE]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [4K UHD 2160p Blu-ray]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.720p.AMZN.WEBRip.800M",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry Of Ungentlemanly Warfare 2024 Bluray 2160p AV1 HDR10 EN/ES OPUS.7.1",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DL 2160p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip 1080p от MegaPeer",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.HDCAM.c1nem4.x264-SUN",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) UHD WEB-DL 2160p от Scarabey",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Jan Kotouc - Tristanská obcanská válka (2024) ED",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan: Ghost War (2026)[2160p][WEB-DL][HDR/DV] = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DL 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Poštmistr / The Ministry of Ungentlemanly Warfare (2024)(CZ)[WEB-DL][1080p] = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tactical_Warfare_v23.05.2025",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 576p WEBRip x265-SSN",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip 1080p от Generalfilm",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Válka a povstání / Uprising (2024)(CZ/EN/KOR)[WEB-DL][1080p] = CSFD 73%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [1080p] [BluRay] [5.1]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.AMZN.WEBRip.DDP",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)[WEB-DL][1080p] = CSFD 75%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ/EN)[1080p][WEB-DL][HDR10][HEVC] = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan Ghost War (2026)[1080p](CZ)[x265] = CSFD 46%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wojna o przetrwanie  Primitive War (2025) [MULTi] [1080p] [WEB-DL] [H.264] [DDP2.0-FOX] [Lektor PL i Napisy PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(EN) [MPEGH/ISO/HEVC][1080p] = CSFD 73%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tactical Warfare (2025) [SKIDROW]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [1080p] [WEBRip]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) UHD BDRemux 2160p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.BluRay.x264-ROEN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan: Ghost War (2026)[1080p][WEB-DL] = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Братья под огнём / Brothers Under Fire [2026, Колумбия, США, Великобритания, боевик, триллер, драма, детектив, WEB-DL 720p] MVO + Sub Eng + Original Eng",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(CZ/EN)[2160p][HDR/DV][HEVC] = CSFD 66%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [720p] [BluRay]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Freeman_Guerrilla_Warfare_v25.08.2025",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)[1080p][TS] = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Guerra Sem Regras 2024 The Ministry of Ungentlemanly Warfare 1080 DUAL AlienVolt",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "www.1TamilMV.moda - Sangarsha Ghadana - The Art of Warfare (2025) Malayalam HQ HDRip - 1080p - HEVC - x265 - (DD 5.1 - 192Kbps &amp; AAC 2.0).mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(CZ/EN)[2160p][HDR10/DV][HEVC] = CSFD 66%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan: Ghost War (2026)(CZ/EN)[1080p][WEB-DL] = CSFD 46%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip 720p от DoMiNo &amp; селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Poštmistr / The Ministry of Ungentlemanly Warfare (CZ/EN)(2024)[1080p][Remux] = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 1080p BluRay x265-YAWNTiC",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Vasilij Mahaněnko - Cesta šamana 07 - Válka klanů (2025)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) UHD WEB-DL 2160p от селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip-AVC от DoMiNo &amp; селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.BluRay.DDP5.1.x",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.Of.Ungentlemanly.Warfare.2024.2160p.BluRay.HDR.Atmos.7.1.H265-BTM",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024) ENG = CSFD 71%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) 1080p BluRay H264 DD 5.1 + nickarad",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024, edited)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [720p] [WEBRip]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.HDR.2160p.WEB.H265-Wh",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Válka a povstání / Uprising (2024)(KOR/EN) [MPEGH/ISO/HEVC][1080p] = CSFD 71%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [2160p]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare [24-bit Hi-Res] (2024) FLAC",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wladca Pierscieni Wojna Rohirrimow  The Lord of the Rings The War of the Rohirrim (2024) PLDUB [480p] [WEB-DL] [XviD] [AC3-OzW] [Dubbing PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Jan Kotouc - Tristanská obcanská válka (2024)",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DL-HEVC 2160p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ/SK/EN)[2160p][Remux][HDR10/DV][HEVC] = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.720p.HDCAM-C1NEM4",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 720p AMZN WE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Další válka policajtů / Bastion 36 (2025)(CZ/FR)[WEB-DL][1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan: Ghost War (2026)(CZ/EN)[2160p][HDR10/DV][HEVC] = CSFD 46%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "www.1TamilMV.moda - Sangarsha Ghadana - The Art of Warfare (2025) Malayalam HQ HDRip - x264 - AAC - 600MB - ESub.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Válka a povstání / Uprising (2024)(CZ)[WEB-DL][1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.BluRay.x264-ROE",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip 1080p от селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DL 1080p от Scarabey",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.10bit.BluRay.8CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wyatt Earp a válka kovbojů / Wyatt Earp and the Cowboy War (HEVC)[1080p](2024)(CZ)   = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(EN) [MPEGH/ISO/HEVC][2160p] = CSFD 73%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ/SK/EN)[1080p][Remux]  = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip-AVC от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry Of Ungentlemanly Warfare 2024 Bluray 1080p AV1 EN/ES OPUS 7.1-DH",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 2160p WEB-DL DDP5 1 Atmos SDR H265-AO",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip от MegaPeer",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Poštmistr / The Ministry of Ungentlemanly Warfare (2024)(CZ)[WEBrip][1080p] = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)[2160p][WEB-DL][HDR10/DV][HEVC] = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Láska + válka / Love+War (2025)(CZ/EN)[1080p][WEB-DL] = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Stellar Warfare v2025v2",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Tom Clancy's Jack Ryan: Válka duchů / Tom Clancy's Jack Ryan: Ghost War (2026)[1080p][WEBrip] = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry of.Ungentlemanly.Warfare.2024.1080p.WEB-DL.H.264.ENG.YG⭐",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) UHD WEB-DL-HEVC 2160p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [1080p] [WEBRip] [x265] [10bit] [5.",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Válka světů / War of the Worlds: Revival (2025)[1080p][WebRip] = CSFD 29%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.2160p.HDR10Plus.WEBRip.6CH.x265.HEVC-",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024)[WEBRip][1080p] = CSFD 64%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip от DoMiNo &amp; селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.AMZN.WEBRip.140",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) HDRip-AVC от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip 720p от DoMiNo &amp; селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(CZ)[1080p] = CSFD 69%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.WEBRip.AAC5.1.10bits.x265-Rapta",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ/EN)[2160p][WEB-DL][HDR10/DV][HEVC] = CSFD 62%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wojna o przetrwanie  Primitive War (2025) [PL] [720p] [WEB-DL] [XviD] [AC3-OzW] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Postmistr / The Ministry of Ungentlemanly Warfare (2024)(CZ/EN)(2160p 4K BDRip)(HDR10) = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024)[WEBRip][HEVC][HDR][2160p] = CSFD 64%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip-HEVC 1080p от RIPS CLUB",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [2160p] [WEBRip] [x265] [10bit] [5.",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DL 1080p от EniaHD",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip 2160p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip 1080p от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(CZ/EN) = CSFD 69%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 1080p ATVP STZ WEB-DL DD 5 1 H 2",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) BDRip 1080p от селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.2160p.WEB.H265-Whispe",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wojna o przetrwanie - Primitive War 2025 [10Bit SDR] [2160p.WEB-DL.H265.EAC3.5.1-AS76-FT] [ENG-Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.WEB.H264-Whispe",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) WEB-DLRip-AVC от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)[1080p] = CSFD 64%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Občanská válka / Civil War (2024)(CZ,EN)[HDR,DV][2160p] = CSFD 69%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 1080p 10bit BluRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.2160p.HDR10Plus.BluRay.8CH.x265.HEVC-",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) HDRip-AVC",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.Of.Ungentlemanly.Warfare.2024.1080p.BluRay.TrueHD.Atmos7.1.H264-BTM",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Wojna o przetrwanie  Primitive War (2025) [PL] [WEB-DL] [XviD-OzW] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry Of Ungentlemanly Warfare (2024) 720p BluRa",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "www.1TamilMV.moda - Sangarsha Ghadana - The Art of Warfare (2025) Malayalam WEB-DL - 1080p - AVC - (DD 5.1 - 192Kbps &amp; AAC 2.0).mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Postmistr / The Ministry of Ungentlemanly Warfare (2024)(CZ/EN)(2160p 4K BDRemux)(HDR10) = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024)[1080p] = CSFD 64%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The.Ministry.Of.Ungentlemanly.Warfare.2024.2160p.DV.HDR.Atmos.H265.MP4-BTM",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry Of Ungentlemanly Warfare (2024) 720p WEBRip-L",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Operace Poštmistr / The Ministry of Ungentlemanly Warfare (CZ/EN)(2024)[2160p][Remux][HDR10][HEVC] = CSFD 67%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 1080p AMZN PCOK WEB-DL DDP 5 1 H",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ)[1080p] = CSFD 63%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "warfare",
+			"imdbId": "tt31434639",
+			"filename": "Válka podsvětí: Filadelfie versus Mafie / Mob War: Philadelphia vs. The Mafia (2025)(EN)[1080p]  = CSFD 50%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		}
+	],
+	"movies": {
+		"tt0059578": {
+			"name": "For a Few Dollars More",
+			"year": 1965,
+			"titles": [
+				"...en voor enkele dollars meer...",
+				"...et pour quelques dollars de plus",
+				"A Few Dollars More",
+				"Be Khater e Yek Mosht Dollar",
+				"Bir nechta dollar ko'proq",
+				"Bir neçə dollar daha",
+				"Birkaç Dolar İçin",
+				"Due stranieri magnifici",
+				"For a Few Dollars More",
+				"For en neve dollar mer",
+				"Fyrir Nokkra Fleiri",
+				"För några få dollar mer",
+				"Für ein paar Dollar mehr",
+				"Huang hun da biao ke",
+				"Hævn for dollars",
+				"Keliais doleriais daugiau",
+				"La muerte tenía un precio",
+				"Ladrão Que Rouba Ladrão",
+				"Mõne dollari pärast",
+				"Mõne dollari pärast veel",
+				"Par dažiem dolāriem vairāk",
+				"Pentru câțiva dolari în plus",
+				"Per qualche dollaro in più",
+				"Por Mais Alguns Dólares",
+				"Por Uns Dólares a Mais",
+				"Por unos dólares más",
+				"Pour quelques dollars de plus",
+				"Pre hrsť dolárov navyše",
+				"Pre pár dolárov naviac",
+				"Pro pár dolarů navíc",
+				"Pár dollárral többért",
+				"The Man with No Name 2: For a Few Dollars More",
+				"Thêm Vài Đồng Xu Lẻ",
+				"Vain muutaman dollarin tähden",
+				"Yuuhi no ganman",
+				"Za dolar več",
+				"Za dolar više",
+				"Za kilka dolarów więcej",
+				"Μονομαχία στο El Paso",
+				"Μονομαχία στο Ελ Πάσο",
+				"Бірнеше долларға артық",
+				"За долар више",
+				"За няколко долара повече",
+				"На декілька доларів більше",
+				"На некалькі даляраў больш",
+				"На несколько долларов больше",
+				"夕陽のガンマン",
+				"獨行俠江湖伏霸",
+				"黃昏雙鏢客",
+				"黄昏双镖客"
+			]
+		},
+		"tt0068646": {
+			"name": "The Godfather",
+			"year": 1972,
+			"titles": [
+				"A keresztapa",
+				"Al aab Alrohy",
+				"Al-arraab",
+				"Baba",
+				"Boter",
+				"Bố Già",
+				"Cho'qintirgan ota",
+				"Daeboo",
+				"De peetvader",
+				"Der Pate",
+				"El Padrino",
+				"El padrí",
+				"Goddofâzâ",
+				"Godfather",
+				"Gudfadern",
+				"Gudfaren",
+				"Guðfaðirinn",
+				"Hasandak",
+				"Il padrino",
+				"Kmotr",
+				"Krikštatėvis",
+				"Krstný Otec",
+				"Krusttēvs",
+				"Kum",
+				"Kumbari",
+				"Kummisetä",
+				"Le Parrain",
+				"Mario Puzo's The Godfather",
+				"Natlimama",
+				"Nașul",
+				"O Padrinho",
+				"O Poderoso Chefão",
+				"O nonos",
+				"Ojciec chrzestny",
+				"Pedar khandeh",
+				"Ristiisa",
+				"The Godfather",
+				"Xaç atası",
+				"Ο νονός",
+				"Крестный отец",
+				"Кръстникът",
+				"Кум",
+				"Хрещений батько",
+				"Өкіл әке",
+				"ゴッドファーザー",
+				"教父"
+			]
+		},
+		"tt0068767": {
+			"name": "Fist of Fury",
+			"year": 1972,
+			"titles": [
+				"A Fúria do Dragão",
+				"Bruce Lee - Die Faust des Rächers",
+				"Bruce Lee - Todesgrüße aus Shanghai",
+				"China Connection",
+				"Ching Wu School",
+				"Cinco dedos de furia",
+				"Conexión en China",
+				"Dalla Cina con furore",
+				"De la China con furor",
+				"Dragens knytnæve",
+				"Een vuistvol karate",
+				"Fist of Fury",
+				"Fist of Fury Noongar Daa",
+				"Fists of Fury",
+				"Fruktans nävar",
+				"Furia oriental",
+				"Jeklena pest",
+				"Jing Wu Men",
+				"Jing mo mun",
+				"Khashm-e Ezhdeha",
+				"Kral Benim",
+				"La Fureur de vaincre",
+				"Laugh Track: Chinese Connection",
+				"O Invencível",
+				"Oi matomenes grothies tou Bruce Lee",
+				"Oi matomenes grothies tou karate",
+				"Pobesnele pesti",
+				"Pumnul de fier",
+				"Puño de furia",
+				"Puños de furia",
+				"Päsť plná hnevu",
+				"Pěst plná hněvu",
+				"Raevu rusikas",
+				"School for Chivalry",
+				"Tekken",
+				"The Chinese Connection",
+				"The Iron Hand",
+				"Todesgrüsse aus Shanghai",
+				"Todesgrüße aus Shanghai",
+				"Tomboló ököl",
+				"Vihan nyrkki",
+				"Wściekłe pięści",
+				"Zmajeva šaka",
+				"Öldüren Karateci Bruce Lee'nin İntikamı",
+				"Öldüren Karatecinin İntikamı",
+				"Įniršio kumštis",
+				"Οι ματωμένες γροθιές του καράτε",
+				"Кулак ярости",
+				"Песница беса",
+				"Песница гнева",
+				"Шалений кулак",
+				"Юмрук на гнева",
+				"ドラゴン怒りの鉄拳",
+				"精武門",
+				"精武门"
+			]
+		},
+		"tt0070047": {
+			"name": "The Exorcist",
+			"year": 1973,
+			"titles": [
+				"Az ördögűző",
+				"Der Exorzist",
+				"Der Exorzist - Die längere Fassung",
+				"Der Exorzist - Director's Cut",
+				"Der Exorzist - die neue Fassung",
+				"Egzorcistas",
+				"Egzorcistas. Versija, kurios dar nematete",
+				"Egzorcysta",
+				"Eksorcisten",
+				"El Exorcista",
+				"Exorcist",
+				"Exorcista",
+				"Exorcisten",
+				"Exorcistul",
+				"Exorsisten",
+				"Isterivač djavola",
+				"Istjerivač đavla",
+				"Jengir",
+				"L'Exorciste",
+				"L'Exorciste : Version intégrale",
+				"L'esorcista",
+				"L'esorcista - Versione integrale",
+				"L'exorcista",
+				"L'exorciste: Montage prolongé du réalisateur",
+				"Manaaja",
+				"Manaaja - Ennennäkemätön versio",
+				"O Exorcista",
+				"Quỷ Ám",
+				"Shayton haydovchi",
+				"Shoitan Raat",
+				"Særingarmaðurinn",
+				"Sātana izdzinējs",
+				"The Exorcist",
+				"The Exorcist: The Version You Haven't Seen Yet",
+				"The Exorcist: The Version You've Never Seen",
+				"Vaimude väljaajaja",
+				"Vyháňač diabla",
+				"Vymítač ďábla",
+				"Vymýtac dábla",
+				"William Peter Blatty's The Exorcist",
+				"Şeytan",
+				"Şeytan qovucu",
+				"Ο εξορκιστής",
+				"Заклинателят",
+				"Изгоняющий дьявола",
+				"Истеривач ђавола",
+				"Той, що виганяє диявола",
+				"Шайтанды қуушы",
+				"द एक्सॉर्सिस्ट",
+				"エクソシスト",
+				"大法師",
+				"驱魔人",
+				"엑소시스트: 디렉터스 컷"
+			]
+		},
+		"tt0082694": {
+			"name": "The Road Warrior",
+			"year": 1981,
+			"titles": [
+				"Asfaltkrigaren",
+				"Asfalttisoturi",
+				"Guerrero de la carretera",
+				"Interceptor - Il guerriero della strada",
+				"Mad Max 2",
+				"Mad Max 2 - Der Vollstrecker",
+				"Mad Max 2 - asfalttisoturi",
+				"Mad Max 2 : Le Défi",
+				"Mad Max 2, el guerrer de la carretera",
+				"Mad Max 2, el guerrero de la carretera",
+				"Mad Max 2, guerrero de la carretera",
+				"Mad Max 2. - Az országúti harcos",
+				"Mad Max 2: A Caçada Continua",
+				"Mad Max 2: Landeveiens krigere",
+				"Mad Max 2: Maanteesõdalane",
+				"Mad Max 2: O Guerreiro da Estrada",
+				"Mad Max 2: Războinicul şoselelor",
+				"Mad Max 2: The Road Warrior",
+				"Mad Max 2: Wojownik szos",
+				"Mad Max II - Der Vollstrecker",
+				"Mad Max II - asfalttisoturi",
+				"Mad Max II: el guerrero de la carretera",
+				"Mad Max: Der Vollstrecker",
+				"Mad Max: The Road Warrior",
+				"Mad Max: Wojownik szos",
+				"Max Điên 2: Hung Thần Xa Lộ",
+				"Pašelęs Maksas 2: Keliaujantis karys",
+				"Pobesneli Max 2 - Cestni bojevnik",
+				"Pobješnjeli Max 2",
+				"The Road Warrior",
+				"Trakais Makss 2",
+				"Çılgın Max 2: Savaşçı",
+				"Šialený Max 2: Bojovník ciest",
+				"Šílený Max 2: Bojovník silnic",
+				"Μαντ Μαξ 2: Εκδικητής πέρα απ' το νόμο",
+				"Безумный Макс 2: Воин дороги",
+				"Лудият Макс 2",
+				"Побеснели Макс 2",
+				"Скажений Макс: Воїн Дороги",
+				"मैड मैक्स २",
+				"マッドマックス2",
+				"疯狂的麦克斯2",
+				"衝鋒飛車隊"
+			]
+		},
+		"tt0087344": {
+			"name": "Godzilla 1985",
+			"year": 1985,
+			"titles": [
+				"El regreso de Godzilla",
+				"El retorno de Godzilla",
+				"Godzila 1985 t'",
+				"Godzila 1985 ts'",
+				"Godzilla",
+				"Godzilla '85",
+				"Godzilla - Die Rückkehr des Monsters",
+				"Godzilla 1985",
+				"Godzilla tagasitulek",
+				"Godzilla'nın Dönüşü",
+				"Godzillas återkomst",
+				"Gojira 1985",
+				"Judazila 1985",
+				"Le retour de Godzilla",
+				"Návrat Godzilly",
+				"Rückkehr von Godzilla",
+				"Vrátiť sa Godzilly",
+				"Γκοτζίλα 1985",
+				"Гадзіла 1985",
+				"Годзила 1985",
+				"Годзилла 1985",
+				"Годзилла 1985 ж",
+				"Ґодзілла 1985",
+				"ゴジラ 1985"
+			]
+		},
+		"tt0091474": {
+			"name": "Manhunter",
+			"year": 1986,
+			"titles": [
+				"1987大懸案",
+				"Az embervadász",
+				"Blutmond",
+				"Cacería humana",
+				"Cazador de hombres",
+				"Caçada ao Amanhecer",
+				"Caçador de Assassinos",
+				"Cervený drak",
+				"Czerwony smok",
+				"Dragão Vermelho",
+				"El sabueso",
+				"Hunter",
+				"Keiji Gurahamu Kôri tsuita Yokubô",
+				"Le Sixième Sens",
+				"Lovac na ljude",
+				"Lovec lidí",
+				"Lovec ľudí",
+				"Manhunter",
+				"Manhunter - Caçador de Assassinos",
+				"Manhunter - Frammenti di un omicidio",
+				"Manhunter - Roter Drache",
+				"Manhunter: The Pursuit of Hannibal Lecter",
+				"O anthropokynigos",
+				"Odam ovchisi",
+				"Psykopaatin jäljillä",
+				"Psykopaten",
+				"Red Dragon",
+				"Red Dragon/Rekutâ Hakase no Chinmoku",
+				"Red Dragon: The Curse of Hannibal Lecter",
+				"Red Dragon: The Pursuit of Hannibal Lecter",
+				"Roter Drache",
+				"Röda draken",
+				"Sabueso",
+				"Tuzak",
+				"İnsan Avcısı",
+				"İnsan ovçusu",
+				"Łowca",
+				"Žmoniu medžiotojas",
+				"Ο ανθρωποκυνηγός",
+				"Адам аулаушы",
+				"Ловац на људе",
+				"Мисливець на людей",
+				"Охотник на людей",
+				"Преследвачът",
+				"मैनहंटर",
+				"一九八七大懸案",
+				"刑事グラハム　凍りついた欲望"
+			]
+		},
+		"tt0092067": {
+			"name": "Castle in the Sky",
+			"year": 1986,
+			"titles": [
+				"Castle in the Sky",
+				"Castle in the Sky - Laputa - Castello nel cielo",
+				"Castle in the Sky Laputa",
+				"Dangaus pilis Laputa",
+				"Das Schloss im Himmel",
+				"El castell al cel",
+				"El castillo en el cielo",
+				"Ghaleyi dar Aseman",
+				"Gökteki Kale",
+				"Il castello nel cielo",
+				"Laputa",
+				"Laputa - Az égi palota",
+				"Laputa - Himmelslottet",
+				"Laputa - Slottet i himlen",
+				"Laputa - linna taivaalla",
+				"Laputa - podniebny zamek",
+				"Laputa lendav kindlus",
+				"Laputa: Castle in the Sky",
+				"Laputa: Debesu pils",
+				"Laputa: Lâu Đài Trên Không",
+				"Laputa: Nebeský zámek",
+				"Laputa: The Castle in the Sky",
+				"Laputa: Zámok v oblakoch",
+				"Le Château dans le ciel",
+				"O Castelo no Céu",
+				"Tenkuu no Shiro Laputa",
+				"Tenkû no shiro Laputa",
+				"Tenkû no shiro Rapyuta",
+				"To kastro ston ourano",
+				"Zamak na nebu",
+				"Το κάστρο στον ουρανό",
+				"Лапута: Замъкът в небето",
+				"Небесний замок Лапута",
+				"Небесный замок Лапута",
+				"टेनकु नो शिरो लपयुटा",
+				"हावई किला",
+				"天空の城ラピュタ",
+				"天空之城"
+			]
+		},
+		"tt0094683": {
+			"name": "Assa",
+			"year": 1987,
+			"titles": ["Assa", "Assza", "Асса", "アッサ"]
+		},
+		"tt0094961": {
+			"name": "Dead Heat",
+			"year": 1988,
+			"titles": [
+				"Cosmar in L.A.",
+				"Dead Heat",
+				"Dos veces muerto",
+				"Död eller levande",
+				"Dödlig hetta",
+				"Estamos muertos... ¿o qué?",
+				"Flic ou zombie",
+				"Gorączka śmierci",
+				"Iron Cops",
+				"Martwy bieg",
+				"Nyugodjak békében",
+				"Policiais em Apuros",
+				"Resurreccion",
+				"Revancha policial",
+				"Sbirri oltre la vita",
+				"Sem Tempo para Viver",
+				"Smrtonosna vrelina",
+				"Surmaga rinnutsi",
+				"Um Tira de Outro Mundo",
+				"Um Tira do Outro Mundo",
+				"W martwym punkcie",
+				"Zombi detektiv",
+				"Zombie Cop",
+				"Смертельная ярость",
+				"Смъртоносна жега",
+				"ゾンビ・コップ"
+			]
+		},
+		"tt0096969": {
+			"name": "Born on the Fourth of July",
+			"year": 1989,
+			"titles": [
+				"7月4日に生まれて",
+				"Born on the Fourth of July",
+				"Doğum Günü Dört Temmuz",
+				"Född den fjärde juli",
+				"Född fjärde juli",
+				"Født 4. juli",
+				"Født den 4. juli",
+				"Geboren am 4. Juli",
+				"Gennimenos tin 4i Iouliou",
+				"Gimęs liepos 4-ąją",
+				"Motevaled-e chaharom-e July",
+				"Nacido el 4 de julio",
+				"Nacido el cuatro de julio",
+				"Narodený 4. júla",
+				"Narozen 4. července",
+				"Nascido a 4 de Julho",
+				"Nascido em 4 de Julho",
+				"Nascut el 4 de juliol",
+				"Nato il quattro luglio",
+				"Né un 4 juillet",
+				"Né un quatre juillet",
+				"Născut pe 4 iulie",
+				"Născut pe patru iulie",
+				"Rojen četrtega julija",
+				"Rođen 4. srpnja",
+				"Sinh Ngày 4 Tháng 7",
+				"Syntynyt 4. Heinäkuuta",
+				"Született július 4-én",
+				"Született július negyedikén",
+				"Sündinud neljandal juulil",
+				"Urodzony 4 lipca",
+				"Voleda fi alrabe' men July",
+				"Γεννημένος την 4η Ιουλίου",
+				"Народжений четвертого липня",
+				"Роден на четвърти юли",
+				"Рожденный четвертого июля",
+				"Рођен четвртог јула",
+				"七月四日誕生",
+				"生于七月四日"
+			]
+		},
+		"tt0103950": {
+			"name": "City Hunter",
+			"year": 1993,
+			"titles": [
+				"Cazador citadino",
+				"Cheng shi lie ren",
+				"City Hunter",
+				"City Hunter - O Caçador de Encrencas",
+				"City hunter - Il film",
+				"Gradski lovac",
+				"Jackie Chan - Detective Privado",
+				"Linnakütt",
+				"Miejski łowca",
+				"Niki Larson",
+				"O kynigos tis polis",
+				"O kynigos ton poleon",
+				"Shiti Hanta",
+				"Sing si lip yan",
+				"Un detectiv afemeiat",
+				"Városi vadász",
+				"Şehir Avcısı",
+				"Городской охотник",
+				"Градски ловец",
+				"Міський мисливець",
+				"シティーハンター",
+				"城市獵人"
+			]
+		},
+		"tt0104771": {
+			"name": "Royal Tramp II",
+			"year": 1992,
+			"titles": [
+				"Kuninglik hulkur 2",
+				"Lu ding ji II: Shen long jiao",
+				"Lu ding ji II: Zhi shen long jiao",
+				"Luk ding gei II: San lung gaau",
+				"Luk ting kei II: San lung gau",
+				"Royal Tramp II",
+				"Tale of the Deer and the Cauldron II: The Mystic Dragon Cult",
+				"The New Duke of Mount Deer II",
+				"Королевский бродяга 2",
+				"鹿鼎記II神龍教"
+			]
+		},
+		"tt0112641": {
+			"name": "Casino",
+			"year": 1995,
+			"titles": [
+				"Casino",
+				"Casino, de Scorsese",
+				"Cassino",
+				"Kasiino",
+				"Kasino",
+				"Kasyno",
+				"Kazino",
+				"Sòng Bạc",
+				"Καζίνο",
+				"Казино",
+				"カジノ",
+				"賭國風雲",
+				"賭城風雲",
+				"赌城风云",
+				"카지노"
+			]
+		},
+		"tt0116629": {
+			"name": "Independence Day",
+			"year": 1996,
+			"titles": [
+				"A függetlenség napja",
+				"Dan neodvisnosti",
+				"Dan nezavisnosti",
+				"De dag dat we terugvechten",
+				"Den nezávislosti",
+				"Dia da Independência",
+				"Dia de la independencia",
+				"Dzień Niepodległości",
+				"Ha-Yom Ha-Shlishi",
+				"ID4",
+				"ID4星際終結者",
+				"Independence Day",
+				"Independence Day - Maailmojen sota",
+				"Independence Day 3D",
+				"Independence Day : Le Jour de la riposte",
+				"Independence day - världarnas krig",
+				"Iseseisvuspäev",
+				"Kurtuluş Günü",
+				"Le jour de l'indépendance",
+				"Mera anexartisias",
+				"Mustaqillik kuni",
+				"Müstəqillik günü",
+				"Neatkarības diena",
+				"Nepriklausomybės diena",
+				"Ngày Độc Lập",
+				"Rooz-e esteghlal",
+				"Ziua independentei",
+				"Ημέρα ανεξαρτησίας",
+				"Μέρα ανεξαρτησίας",
+				"Дан независности",
+				"День независимости",
+				"День незалежності",
+				"Денят на независимостта",
+				"Тәуелсіздік күні",
+				"अंतिम युद्ध",
+				"インデペンデンス・デイ",
+				"地球捍卫战",
+				"天煞-地球反擊戰",
+				"独立日"
+			]
+		},
+		"tt0119051": {
+			"name": "The Edge",
+			"year": 1997,
+			"titles": [
+				"1997勢不兩立",
+				"A vadon foglyai",
+				"Al filo del peligro",
+				"Au bord du désastre",
+				"Auf Messers Schneide - Rivalen am Abgrund",
+				"Bookworm",
+				"El desafío",
+				"Giới Hạn Cuộc Sống",
+				"Ivica",
+				"L'urlo dell'odio",
+				"Lekcja przetrwania",
+				"Na ostrie noža",
+				"Na ostří nože",
+				"Na rubu divljine",
+				"No Limite",
+				"Prezivetje - Na robu divjine",
+				"På gränsen",
+				"Reunalla",
+				"Riba",
+				"Rivalene",
+				"Rivalerne",
+				"The Edge",
+				"The Edge - rivalerne",
+				"The Edge: Reunalla",
+				"The Wild",
+				"Viimane piir",
+				"Za wairudo",
+				"À couteaux tirés",
+				"Înfruntarea",
+				"İhanet",
+				"Παιχνίδια επιβίωσης",
+				"Τέρμα θεού",
+				"На грани",
+				"На межі",
+				"Острието",
+				"ザ・ワイルド",
+				"势不两立",
+				"杀与捕",
+				"边缘"
+			]
+		},
+		"tt0119250": {
+			"name": "Fireworks",
+			"year": 1997,
+			"titles": [
+				"Blomster og ild",
+				"Feux d'artifice",
+				"Fireworks",
+				"Flores de fuego",
+				"Fogo de Artifício",
+				"Fogos de Artifício",
+				"HANA-BI",
+				"Hana-Bi - Tulikukkia",
+				"Hana-Bi: Fogos de Artifício",
+				"Hana-bi - Feuerblume",
+				"Hana-bi - Fiori di fuoco",
+				"Hana-bi - eldblommor",
+				"Hana-bi - feux d'artifice",
+				"Hana-bi. Flores de fuego",
+				"Havai Fişekler",
+				"Ognjemet",
+				"Tűzvirágok",
+				"Vatromet",
+				"Πυροτεχνήματα",
+				"Фейерверк",
+				"Феєрверк",
+				"Фойерверки",
+				"花火"
+			]
+		},
+		"tt0183649": {
+			"name": "Phone Booth",
+			"year": 2002,
+			"titles": [
+				"A fülke",
+				"Bốt Điện Thoại",
+				"Cabina telefonică",
+				"Cabine Telefónica",
+				"Enlace mortal",
+				"In linea con l'assassino",
+				"La cabine",
+				"Nicht auflegen!",
+				"Phone Booth",
+				"Phone Game",
+				"Phonebooth",
+				"Por um Fio",
+				"Taikinys telefono tinkle",
+				"Telefon",
+				"Telefon Budkasi",
+				"Telefon Kulübesi",
+				"Telefon Köshkü",
+				"Telefona būda",
+				"Telefoniputka",
+				"Telefonní budka",
+				"Telefonska govorilnica",
+				"Telefonska govornica",
+				"Telefónna búdka",
+				"Tile-fonikos thalamos",
+				"Última llamada",
+				"Τηλεφωνικός θάλαμος",
+				"Телефонна будка",
+				"Телефонна клопка",
+				"Телефонная будка",
+				"Телефонска говорница",
+				"फोन बूथ",
+				"フォーン・ブース",
+				"狙击电话亭",
+				"絕命鈴聲"
+			]
+		},
+		"tt0195714": {
+			"name": "Final Destination",
+			"year": 2000,
+			"titles": [
+				"7 Must Die: Cheating Death",
+				"7 ต้องตาย โกงความตาย",
+				"Ajal rejasi",
+				"Brez povratka",
+				"Ceļa gals",
+				"Destinatie finala",
+				"Destination finale",
+				"Destination ultime",
+				"Destino final",
+				"Destino final 2",
+				"Fainaru desutinêshon",
+				"Final Destination",
+				"Final Destination - viimeinen määränpää",
+				"Flight 180",
+				"Galutinis tikslas",
+				"Lõpp-punkt",
+				"Lưỡi Hái Tử Thần",
+				"Nezvratný osud",
+				"O Último Destino",
+				"Oszukać przeznaczenie",
+				"Premonição",
+				"Put bez povratka",
+				"Son Durak",
+				"Təyinat nöqtəsi",
+				"Ultimate Destination",
+				"Vlepo to thanato sou",
+				"Végső állomás",
+				"Βλέπω το θάνατό σου",
+				"Последен изход",
+				"Последња екскурзија",
+				"Пункт назначения",
+				"Пункт призначення",
+				"ファイナル・デスティネーション",
+				"死神來了",
+				"死神来了",
+				"絕命終結站",
+				"终点",
+				"데스티네이션"
+			]
+		},
+		"tt0268126": {
+			"name": "Adaptation.",
+			"year": 2002,
+			"titles": [
+				"Adaptacija",
+				"Adaptacja",
+				"Adaptasi.",
+				"Adaptasiya",
+				"Adaptation",
+				"Adaptation (El ladrón de orquídeas)",
+				"Adaptation - min version",
+				"Adaptation - minun versioni",
+				"Adaptation: El lladre d'orquídies",
+				"Adaptação",
+				"Adaption - Der Orchideen-Dieb",
+				"Adaption - Der Orchideendieb",
+				"Adaption.",
+				"Adaptáció",
+				"El ladrón de orquideas",
+				"Hoțul de orhidee",
+				"Il ladro di orchidee",
+				"Il ladro di orchidee - Adaptation.",
+				"Inadaptado",
+				"Kuidas kirjutada kassafilmi",
+				"Orkidé-tyven",
+				"Prilagajanje",
+				"Tersyüz",
+				"The Orchid Thief",
+				"Адаптация",
+				"Адаптація",
+				"アダプテーション",
+				"蘭花賊"
+			]
+		},
+		"tt0289879": {
+			"name": "The Butterfly Effect",
+			"year": 2004,
+			"titles": [
+				"Batafurai efekuto",
+				"Butterfly Effect",
+				"Domino efekt",
+				"Drugio efektas",
+				"Efect de fluture",
+				"Efeito Borboleta",
+				"Efekt motyla",
+				"Efekt motýlích krídiel",
+				"El efecto mariposa",
+				"Fiðrilda áhrifin",
+				"Hiệu Ứng Cánh Bướm",
+				"Kelebek Etkisi",
+				"L'effet papillon",
+				"Liblikaefekt",
+				"Nabi hyogwa",
+				"Osudový dotek",
+				"Osudový dotyk",
+				"Peplis Efeqti",
+				"Perhosvaikutus",
+				"Pillangó-hatás",
+				"Tauriņa efekts",
+				"The Butterfly Effect",
+				"To fainomeno tis petaloudas",
+				"Ucinek metulja",
+				"Zbor de fluture",
+				"Το φαινόμενο της πεταλούδας",
+				"Ефекат лептира",
+				"Ефект метелика",
+				"Ефектът на пеперудата",
+				"Эффект бабочки",
+				"バタフライ・エフェクト",
+				"蝴蝶效应",
+				"蝴蝶效應"
+			]
+		},
+		"tt0312843": {
+			"name": "Suicide Club",
+			"year": 2001,
+			"titles": [
+				"Club aftoktonias",
+				"Clubul sinucigaselor",
+				"El club de los suicidas",
+				"El club del suicidio",
+				"Jisatsu sâkuru",
+				"Klub samobójców",
+				"Klub samoubica",
+				"Klub sebevrahov",
+				"O Pacto",
+				"Suicide Circle",
+				"Suicide Club",
+				"Suicide Club (El club del suicidio)",
+				"Клуб самогубців",
+				"Клуб самоубийц",
+				"自殺サークル",
+				"自殺俱樂部"
+			]
+		},
+		"tt0376994": {
+			"name": "X-Men: The Last Stand",
+			"year": 2006,
+			"titles": [
+				"G'aroyib odamlar 3",
+				"G'aroyib odamlar: So'nggi intiqom",
+				"Iksmenai: žūtbūtinis mūšis",
+				"Mozje X: Zadnji spopad",
+				"X III: The Last Stand",
+				"X III: Viimeinen kohtaaminen",
+				"X-Cilvēki: Pēdējā sadursme",
+				"X-MEN：ファイナル・ディシジョン",
+				"X-Men 3",
+				"X-Men 3 - La batalla final",
+				"X-Men 3 - Viimeinen kohtaaminen",
+				"X-Men 3: Hamiflat Ha'acharon",
+				"X-Men 3: The Last Stand",
+				"X-Men : L'Affrontement final",
+				"X-Men III: La batalla final",
+				"X-Men III: The Last Stand",
+				"X-Men: Az ellenállás vége",
+				"X-Men: Conflitto finale",
+				"X-Men: Der letzte Widerstand",
+				"X-Men: Final Decision",
+				"X-Men: La batalla final",
+				"X-Men: La decisión final",
+				"X-Men: O Confronto Final",
+				"X-Men: Ostatni bastion",
+				"X-Men: Phán Xét Cuối Cùng",
+				"X-Men: Poslední vzdor",
+				"X-Men: Posledný vzdor",
+				"X-Men: Posljednja fronta",
+				"X-Men: Son Direniş",
+				"X-Men: The Last Stand",
+				"X-Men: Ultima înfruntare",
+				"X-Men: Viimeinen kohtaaminen",
+				"X-Men: Η τελική αναμέτρηση",
+				"X-mehed: viimane vastuhakk",
+				"X-men - I teliki anametrisi",
+				"X-men: L'engagement ultime",
+				"X-men: La decisió final",
+				"X-में: द लास्ट स्टैंड",
+				"X3",
+				"X3: La batalla final",
+				"X战警3：背水一战",
+				"X戰警：最後戰役",
+				"İks-adamlar: Son müqavimət",
+				"Икс-мен: Последње упориште",
+				"Люди Ікс: Остання битва",
+				"Люди Икс: Последняя битва",
+				"Х-Мен: Последният сблъсък"
+			]
+		},
+		"tt0378194": {
+			"name": "Kill Bill: Vol. 2",
+			"year": 2004,
+			"titles": [
+				"Bil ra bekosh 2",
+				"Bili Öldürmek: Bölüm 2",
+				"Bill'i Öldür: Bölüm 2",
+				"Billning qotili 2",
+				"Cô Dâu Báo Thù 2",
+				"Kill Bill",
+				"Kill Bill - A Vingança (vol. 2)",
+				"Kill Bill - Volume 2",
+				"Kill Bill - pruudi kättemaks, vol 2",
+				"Kill Bill 2",
+				"Kill Bill Part 2",
+				"Kill Bill Vol. 2: The Love Story",
+				"Kill Bill Vol.2",
+				"Kill Bill Volumen 2",
+				"Kill Bill, la venganza. Volumen 2",
+				"Kill Bill, la venganza: Volumen II",
+				"Kill Bill: Volum 2",
+				"Kill Bill: Volume II",
+				"Kill Bill: Volumul 2",
+				"Mokali Billi ori",
+				"Nogalināt Bilu 2",
+				"Nužudyti Bilą 2",
+				"Tuer Bill: Volume 2",
+				"Ubila bom Billa 2",
+				"Vol. 2",
+				"Η εκδίκηση, μέρος 2ο",
+				"Убий Бил 2",
+				"Убити Била, други део",
+				"Убити Білла 2",
+				"Убить Билла 2",
+				"Убить Билла. Фильм 2",
+				"Убиј го Бил 2",
+				"להרוג את ביל חלק 2",
+				"किल बिल: भाग-२",
+				"นางฟ้าซามูไร ภาค 2",
+				"キル・ビル Vol.2",
+				"標殺令2",
+				"追殺比爾2：愛的大逃殺"
+			]
+		},
+		"tt0393109": {
+			"name": "Brick",
+			"year": 2005,
+			"titles": [
+				"A Ponta de um Crime",
+				"Asi Gençlik",
+				"BRICK ブリック",
+				"Beépülve",
+				"Brick",
+				"Brick - Dose mortale",
+				"Brick - Heiße Ware",
+				"Brick - À la recherche d'Emily",
+				"Bánh Heroin",
+				"Cigla",
+				"Codul mortii",
+				"Cărămida",
+				"Eglima sto kolegio",
+				"G'isht",
+				"Kto ją zabił?",
+				"Kərpic",
+				"Plyta",
+				"Zadetek",
+				"Εγκλημα στο κολέγιο",
+				"Кирпич",
+				"Кірпіш",
+				"Пакетът",
+				"Цеглина",
+				"追兇"
+			]
+		},
+		"tt0409459": {
+			"name": "Watchmen",
+			"year": 2009,
+			"titles": [
+				"Cei ce veghează",
+				"Gözətçilər",
+				"Ha'shomrim",
+				"Les gardiens",
+				"Los vigilantes",
+				"Người Hùng Báo Thù",
+				"Qo'riqchilar",
+				"Sargi",
+				"Stebėtojų lyga",
+				"Strážci - Watchmen",
+				"Strážcovia",
+				"Valvurid",
+				"Varuhi",
+				"Watchmen",
+				"Watchmen : Les Gardiens",
+				"Watchmen. Los vigilantes",
+				"Watchmen. Strażnicy",
+				"Watchmen: Az őrzők",
+				"Watchmen: Die Wächter",
+				"Watchmen: O Filme",
+				"Watchmen: Os Guardiões",
+				"Watchmen: The IMAX Experience",
+				"Čuvari",
+				"Вартові",
+				"Надзирачи",
+				"Пазителите",
+				"Хранители",
+				"Хранителі",
+				"वॉचमेन",
+				"वॉचमेन: मौत के रखवाले",
+				"ウォッチメン",
+				"守望者",
+				"守護者",
+				"왓치맨"
+			]
+		},
+		"tt0455326": {
+			"name": "Aqua Teen Hunger Force Colon Movie Film for Theaters",
+			"year": 2007,
+			"titles": [
+				"Aqua Teen - O Esquadrão Força Total - O Filme",
+				"Aqua Teen Hunger Force Colon Movie Film for Theaters",
+				"Aqua Teen Hunger Force Colon Movie Film for Theaters and Television",
+				"Aqua Teen Hunger Force Colon Movie Film for Theaters for DVD",
+				"Aqua Teen Hunger Force: La Película",
+				"Aqua Teen Hunger Force: Movie Film for Theaters",
+				"Aqua Teen Hunger Force: The Movie",
+				"Команда Фастфуд"
+			]
+		},
+		"tt0460791": {
+			"name": "The Fall",
+			"year": 2006,
+			"titles": [
+				"Bekraštė istorija",
+				"Cú Ngã",
+				"Dublê de Anjo",
+				"Düşüş",
+				"Exopragmatikotita",
+				"Iztēles valstība",
+				"Legende pentru viata",
+				"Magia uczuć",
+				"Pad",
+				"The Fall",
+				"The Fall. El sueño de Alexandria",
+				"The Fall: Im Reich der Fantasie",
+				"The Fall: Le voyage imaginaire",
+				"Um Sonho Encantado",
+				"Zuhanás",
+				"Запределье",
+				"Пад",
+				"Падането",
+				"Позамежжя",
+				"坠入",
+				"坠落",
+				"墜落天使",
+				"落下の王国",
+				"落下的国王",
+				"魔幻旅程"
+			]
+		},
+		"tt0491775": {
+			"name": "Happy",
+			"year": 2006,
+			"titles": ["Dum", "Happy", "Счастье"]
+		},
+		"tt0929425": {
+			"name": "Gomorrah",
+			"year": 2008,
+			"titles": [
+				"Giữa Muôn Trùng Tội Ác",
+				"Gomora",
+				"Gomorra",
+				"Gomorrah",
+				"Gomorrha - Reise in das Reich der Camorra",
+				"Sei storie brevi",
+				"Γόμορρα",
+				"Гомор",
+				"Гоморра",
+				"ゴモラ",
+				"娥摩拉罪惡之城"
+			]
+		},
+		"tt1028528": {
+			"name": "Death Proof",
+			"year": 2007,
+			"titles": [
+				"A prueba de muerte",
+				"Boulevard de la mort",
+				"Death Proof",
+				"Death Proof - Todsicher",
+				"Desu Purûfu in Guraindohausu",
+				"Dòng Máu Sát Thủ",
+				"Grindhouse - A prova di morte",
+				"Grindhouse - Halálbiztos",
+				"Grindhouse Presents: Quentin Tarantino's Death Proof",
+				"Grindhouse présente Quentin Tarantino's à l'épreuve de la mort",
+				"Grindhouse: Auto zabijak",
+				"Grindhouse: Death Proof",
+				"Grindhouse: Surmakindel",
+				"Hassin mav'et",
+				"Mașina Morții",
+				"Mirties įrodymas",
+				"Nāves Pierādījums",
+				"Olovbardosh",
+				"Otporan na smrt",
+				"Quentin Tarantino's Death Proof",
+				"Quentin Tarantino's Thunder Bolt",
+				"Quentin Tarantinon 'Death Proof'",
+				"Sikvdil-Gaumtari",
+				"Sikvdilis Mtkitsebuleba",
+				"Smrtno varen",
+				"Thunder Bolt",
+				"Zed-e Marg",
+				"À Prova de Morte",
+				"À l'épreuve de la mort",
+				"Ölüm Geçirmez",
+				"Ölümcül Sübut",
+				"Η λεωφόρος του θανάτου",
+				"Бибрутално 1: Разходкa Смърт",
+				"Доказательство смерти",
+				"Невбиваний",
+				"Отпоран на смрт",
+				"デス・プルーフ in グラインドハウス",
+				"不死殺陣",
+				"極速刑房",
+				"死亡證據",
+				"玩命·飛車·殺人狂"
+			]
+		},
+		"tt10540298": {
+			"name": "Mia",
+			"year": 2017,
+			"titles": ["Mia", "Мия"]
+		},
+		"tt10548174": {
+			"name": "28 Years Later",
+			"year": 2025,
+			"titles": [
+				"28 Anos Depois",
+				"28 Năm Sau: Hậu Tận Thế",
+				"28 Shana 'Akha'rei",
+				"28 Years Later",
+				"28 Yıl Sonra",
+				"28 aastat hiljem",
+				"28 anni dopo",
+				"28 ans plus tard",
+				"28 años después",
+				"28 gadus vēlāk",
+				"28 godina kasnije",
+				"28 il sonra",
+				"28 lat później",
+				"28 let poté",
+				"28 metai po",
+				"28 vuotta myöhemmin",
+				"28 yildan so'ng",
+				"28 évvel később",
+				"28 χρόνια μετά",
+				"28 година касније",
+				"28 жылдан кейін",
+				"28 лет спустя",
+				"28 років по тому",
+				"28年後",
+				"28年毀滅倒數",
+				"După 28 de ani",
+				"Exterminio: La Evolución",
+				"Extermínio: A Evolução"
+			]
+		},
+		"tt1099212": {
+			"name": "Twilight",
+			"year": 2008,
+			"titles": [
+				"Alacakaranlık Efsanesi",
+				"Alatoran",
+				"Alkonyat",
+				"Amurg",
+				"Bindi",
+				"Chạng Vạng",
+				"Crepuscle",
+				"Crepusculo",
+				"Dimdoumim",
+				"Gorgomish",
+				"Krēsla",
+				"Lykofos",
+				"Muzgu",
+				"Oqshom",
+				"Saulėlydis",
+				"Somrak",
+				"Stmívání",
+				"Sumrak",
+				"Towairaito - Hatsukoi",
+				"Twilight",
+				"Twilight - Biss zum Morgengrauen",
+				"Twilight - Evighetens kyss",
+				"Twilight - Houkutus",
+				"Twilight: Chapitre 1 - Fascination",
+				"Twilight: La fascination",
+				"Videvik",
+				"Zmierzch",
+				"Λυκόφως",
+				"Здрач",
+				"Змярканне",
+				"Күүгүм",
+				"Сумерки",
+				"Сумрак",
+				"Сутінки",
+				"Ымырт",
+				"แวมไพร์ ทไวไลท์",
+				"トワイライト　初恋",
+				"吸血新世紀",
+				"晨光",
+				"暮光",
+				"暮光之城",
+				"暮光之城：無懼的愛",
+				"暮色"
+			]
+		},
+		"tt1103153": {
+			"name": "Killers",
+			"year": 2010,
+			"titles": [
+				"5 Killers",
+				"Amame o muérete",
+				"Asesinos con estilo",
+				"Bérgyilkosék",
+				"Five Killers",
+				"Friends & Neighbors",
+				"Katherine Heigl/Ashton Kutcher Untitled Action Comedy",
+				"Killerid",
+				"Killerim",
+				"Killerlar",
+				"Killers",
+				"Killers: Γάμος να σου... πετύχει",
+				"Kiminle Evlendim",
+				"Kiss & Kill",
+				"Kiss & Kill - Beijos & Balas",
+				"Morilci",
+				"Pan i pani Kiler",
+				"Par Perfeito",
+				"Pareja perfecta",
+				"Ponas ir ponia gangsteriai",
+				"Slatkiš i ubica",
+				"Slepkavu pārītis",
+				"Tuer pour aimer",
+				"Ubojice",
+				"Un cuplu mortal",
+				"Vrahouni",
+				"Vrahúni",
+				"Yêu Nhầm Sát Thủ",
+				"Киллеры",
+				"Кілери",
+				"Убийци",
+				"キス＆キル",
+				"整编特工"
+			]
+		},
+		"tt1114740": {
+			"name": "Paul Blart: Mall Cop",
+			"year": 2009,
+			"titles": [
+				"A pláza ásza",
+				"Centervagten",
+				"Cảnh Sát Paul Blart",
+				"Der Kaufhaus Cop",
+				"Héroe de centro comercial",
+				"Il superpoliziotto del supermercato",
+				"Mall Cop",
+				"Misija: Lielveikals",
+				"O Segurança do Shopping",
+				"O batsos tou mall",
+				"Oficer Blart",
+				"Ostarikyttä",
+				"Paul Blart - Der Kaufhaus Cop",
+				"Paul Blart, super vigile",
+				"Paul Blart: Dukaan Cop",
+				"Paul Blart: El superpoli del centre comercial",
+				"Paul Blart: Flic du mail",
+				"Paul Blart: Kaubanduskeskuse kangelane",
+				"Paul Blart: Mall Cop",
+				"Paul, mare politist la mall",
+				"Pol Blart: Gombul Mühafizəçi",
+				"Pol Blart: Policajac iz tržnog centra",
+				"Policaj iz trgovskega centra",
+				"Policajac iz shopping centra",
+				"Policajt ze sámošky",
+				"Prekybos centro kietuolis",
+				"Sakar Polis",
+				"Segurança de Shopping",
+				"Snuten i varuhuset",
+				"Superpoli de centro comercial",
+				"Uddaburon Pol",
+				"Untitled Kevin James Comedy",
+				"Ο μπάτσος του mall",
+				"Пол Бларт: Ченгето на мола",
+				"Шопо-коп",
+				"पॉल ब्लर्ट: मॉल पुलिस",
+				"モール★コップ",
+				"百貨戰警"
+			]
+		},
+		"tt11858890": {
+			"name": "The Creator",
+			"year": 2023,
+			"titles": [
+				"A.I. 創世者",
+				"AI创世者",
+				"Az Alkotó",
+				"Creatorul",
+				"Ha'Yotzer",
+				"Kreator",
+				"Kūrėjas",
+				"Kẻ Kiến Tạo",
+				"Le créateur",
+				"Looja",
+				"O Criador",
+				"Radītājs",
+				"Resistencia",
+				"The Creator",
+				"True Love",
+				"Twórca",
+				"Yaratıcı",
+				"Ο δημιουργός",
+				"Создатель",
+				"Създателят",
+				"Творац",
+				"Творецот",
+				"Творець",
+				"ザ・クリエイター／創造者",
+				"真爱",
+				"造物主"
+			]
+		},
+		"tt1255953": {
+			"name": "Incendies",
+			"year": 2010,
+			"titles": [
+				"Die Frau die singt - Incendies",
+				"Felperzselt föld",
+				"Incendies",
+				"Incendies - A Mulher Que Canta",
+				"Incendii",
+				"Incendios",
+				"Incendis",
+				"La donna che canta",
+				"La mujer que cantaba",
+				"Moteris, kuri dainuoja",
+				"Nawalin salaisuus",
+				"Nawals hemlighet",
+				"Nawals hemmelighed",
+				"Nawals hemmelighet - Incendies",
+				"Naša majka",
+				"Pogorzelisko",
+				"Požiare",
+				"Požáry",
+				"Sookhtegan",
+				"Tsetskhlis Tsamkidebelni",
+				"Tìm Tung Tích Mẹ",
+				"Ugunsgrēki",
+				"Yanğınlar",
+				"Yong'inlar",
+				"Örtter",
+				"İçimdeki Yangın",
+				"Žena, ktorá spieva",
+				"Ženska, ki poje",
+				"Μέσα από τις φλόγες",
+				"Згаришта",
+				"Изпепелени",
+				"Пожары",
+				"Пожежі",
+				"Өрттер",
+				"灼熱の魂",
+				"烈火焚身",
+				"焦土之城",
+				"그을린 사랑"
+			]
+		},
+		"tt1352824": {
+			"name": "Chloe",
+			"year": 2009,
+			"titles": [
+				"Büyük Hata",
+				"Chloe",
+				"Chloe - A kísértés iskolája",
+				"Chloe - Tra seduzione e inganno",
+				"Dục Vọng Thầm Kín",
+				"El precio de la traición",
+				"Hloi",
+				"Hloja",
+				"Kloja",
+				"O Preço da Traição",
+				"Una propuesta atrevida",
+				"Ypopsia",
+				"Υποψία",
+				"Хлоя",
+				"クロエ",
+				"色。誘"
+			]
+		},
+		"tt14948432": {
+			"name": "Red One",
+			"year": 2024,
+			"titles": [
+				"A hullahó-akció",
+				"Crveni",
+				"Czerwona Jedynka",
+				"Código Traje Rojo",
+				"Kod Adı: Kırmızı",
+				"Kodas Raudonas",
+				"Koodnimi Punane",
+				"Misiunea Red One",
+				"Missiya: Qizil",
+				"Missiya: Qırmızı",
+				"Mivtza Santa",
+				"Nom de code: Rouge",
+				"Operação Natal",
+				"RED ONE 拯救隊",
+				"Rdeči",
+				"Red One",
+				"Red One - Alarmstufe Weihnachten",
+				"Red One: Missão Secreta",
+				"Red One: Mật Mã Đỏ",
+				"Sarkanais",
+				"Uno Rosso",
+				"Код Червено",
+				"Кодове ім'я «Червоний»",
+				"Миссия «Красный»",
+				"Црвени",
+				"レッド・ワン",
+				"紅色一號"
+			]
+		},
+		"tt15005868": {
+			"name": "South Park: Post COVID",
+			"year": 2021,
+			"titles": [
+				"Post COVID",
+				"South Park: Después del COVID",
+				"South Park: Pokoronowirusowolandia",
+				"South Park: Post COVID",
+				"South Park: Poszt-COVID különkiadás",
+				"South Park: Pärast koroonat",
+				"South Park: Pós-COVID",
+				"Південний Парк: Постковід",
+				"Саус Парк: Постковід",
+				"Южный Парк: После COVID'а"
+			]
+		},
+		"tt1620981": {
+			"name": "The Addams Family",
+			"year": 2019,
+			"titles": [
+				"A Família Addams",
+				"Adamsebis Ojakhi",
+				"Adamsu ģimene",
+				"Adamsų šeimynėlė",
+				"Addams Ailesi",
+				"Addams Family - A galád család",
+				"Addamsite suguvõsa",
+				"Addamsova rodina",
+				"Die Addams Family",
+				"Familia Addams",
+				"Familien Addams",
+				"Familjen Addams",
+				"Gia Đình Addams",
+				"La Famille Addams",
+				"La famiglia Addams",
+				"La familia Addams",
+				"Los locos Addams",
+				"Mishpakhat Addams",
+				"Perhe Addams",
+				"Rodina Adamsovcov",
+				"Rodzina Addamsów",
+				"The Addams Family",
+				"Η οικογένεια Άνταμς",
+				"Породица Адамс",
+				"Родина Адамсів",
+				"Семейка Аддамс",
+				"Семейство Адамс",
+				"アダムス・ファミリー",
+				"愛登士家庭",
+				"阿達一族"
+			]
+		},
+		"tt1647476": {
+			"name": "Madea's Big Happy Family",
+			"year": 2010,
+			"titles": [
+				"Madea's Big Happy Family",
+				"Большая счастливая семья Мэдеи",
+				"黑瘋婆子的快樂大家庭"
+			]
+		},
+		"tt1663662": {
+			"name": "Pacific Rim",
+			"year": 2013,
+			"titles": [
+				"Batalha do Pacífico",
+				"Bitka za Pacifik",
+				"Cercul de foc",
+				"Círculo de Fogo",
+				"Gigantes del Pacifico",
+				"Huan Tai Ping Yang",
+				"Ognjeni obroc",
+				"Ohnivý kruh",
+				"Pacific Rim",
+				"Pacific Rim - Hyökkäys Maahan",
+				"Pacific Rim - Útok na Zemi",
+				"Pacific Rim: Siêu Đại Chiến",
+				"Pacific Rim: Uzbrukums Zemei",
+				"Pacifický kruh",
+				"Pacifický kruh - Útok na Zem",
+				"Pacifički prsten",
+				"Pashifikku Rimu",
+				"Pasifik Savaşı",
+				"Rives du Pacifique",
+				"Rudra Nagaram",
+				"Sakit okean sərhədi",
+				"Still Seas",
+				"Tinch okeani dahshatlari",
+				"Titanes del Pacífico",
+				"To dahtylidi tis fotias",
+				"Tűzgyűrű",
+				"Ugnies žiedas",
+				"Vaikse ookeani võitlus",
+				"Το δαχτυλίδι της φωτιάς",
+				"Битка за Пацифик",
+				"Огненият пръстен",
+				"Тихоокеанский рубеж",
+				"Тихоокеанський рубіж",
+				"Тынықмұхиттық шекара",
+				"पेसिफिक रिम: एक फौलांदी जंग",
+				"パシフィック・リム",
+				"悍戰太平洋",
+				"环太平洋",
+				"環太平洋",
+				"퍼시픽 림"
+			]
+		},
+		"tt17279496": {
+			"name": "Civil War",
+			"year": 2024,
+			"titles": [
+				"Civil War",
+				"Građanski rat: Svakom carstvu dođe kraj",
+				"Guerra Civil",
+				"Guerre civile",
+				"Ha'Krav al America",
+				"Kodusõda",
+				"Kolaps",
+				"Ngày Tàn Của Đế Quốc",
+				"Občanská válka",
+				"Pilietinis karas",
+				"Pilsoņu karš",
+				"Polgárháború",
+				"Război civil",
+				"İmperiyanın Süqutu",
+				"İç Savaş",
+				"Εμφύλιος πόλεμος",
+				"Азамат соғысы",
+				"Гражданска война",
+				"Грађански рат: Сваком царству дође крај",
+				"Граѓанска војна: На секое царство му доаѓа крајот",
+				"Империяның құлауы",
+				"Падение империи",
+				"Повстання Штатів",
+				"सिविल वॉर",
+				"シビル・ウォー アメリカ最後の日",
+				"内战",
+				"帝國浩劫：美國內戰",
+				"美国内战",
+				"美國內戰",
+				"美帝崩裂",
+				"시빌 워: 분열의 시대"
+			]
+		},
+		"tt1922777": {
+			"name": "Sinister",
+			"year": 2012,
+			"titles": [
+				"A Entidade",
+				"Footage",
+				"Found Footage",
+				"Gresmingas",
+				"Grešnik",
+				"Lanet",
+				"Pahaendeline",
+				"Poguba",
+				"Siniestro",
+				"Sinister",
+				"Sinister - A Entidade",
+				"Sinister - Wenn Du ihn siehst, bist Du schon verloren",
+				"Sinister 1",
+				"Sinisters",
+				"Sinistre",
+				"Untitled Scott Derrickson Project",
+				"Zla kob",
+				"Zlokoban",
+				"Zlověstný",
+				"Złowrogi",
+				"Điềm Gở",
+				"Греховен",
+				"Злокобан",
+				"Синистер",
+				"Сіністер",
+				"フッテージ",
+				"凶兆",
+				"险恶"
+			]
+		},
+		"tt2034800": {
+			"name": "The Great Wall",
+			"year": 2016,
+			"titles": [
+				"A Grande Muralha",
+				"A Nagy Fal",
+				"Buyuk devor",
+				"Didžioji siena",
+				"Ha'khoma ha'gdola",
+				"Kineski zid",
+				"Kitajski zid",
+				"La Gran Muralla",
+				"La Grande Muraille",
+				"Lielais Ķīnas mūris",
+				"Marele Zid",
+				"Suur Hiina müür",
+				"The Great Wall",
+				"Tử Chiến Tường Thành",
+				"Veliki kineski zid",
+				"Velká čínská zeď",
+				"Veľký čínsky múr",
+				"Wielki Mur",
+				"Çin Seddi",
+				"Το Σινικό Τείχος",
+				"Велика стіна",
+				"Великата стена",
+				"Великая стена",
+				"グレートウォール",
+				"万里长城",
+				"長城",
+				"长城"
+			]
+		},
+		"tt2105044": {
+			"name": "V/H/S",
+			"year": 2012,
+			"titles": [
+				"10/31/98",
+				"Amateur Night",
+				"As Crônicas do Medo",
+				"Dehşet Kaseti",
+				"Las crónicas del miedo",
+				"Las crónicas del miedo (V/H/S)",
+				"Second Honeymoon",
+				"Tape 56",
+				"The Sick Thing That Happened to Emily When She Was Younger",
+				"Tuesday the 17th",
+				"V/H/S",
+				"V/H/S - Eine mörderische Sammlung",
+				"V/H/S シンドローム",
+				"V/H/S: Syndrome",
+				"VHS",
+				"VHS: Las crónicas del miedo",
+				"Video/Kaseta",
+				"Đoạn Băng Kinh Hoàng",
+				"З/Л/О",
+				"索命影帶",
+				"致命录像带"
+			]
+		},
+		"tt2231461": {
+			"name": "Rampage",
+			"year": 2018,
+			"titles": [
+				"Besnenie",
+				"Dzika furia",
+				"Griaunantys viska",
+				"Pere",
+				"Postītāji",
+				"Proyecto Rampage",
+				"Rampage",
+				"Rampage - Big meets Bigger",
+				"Rampage - Destruição Total",
+				"Rampage - Fora de Controlo",
+				"Rampage : Hors de contrôle",
+				"Rampage Out of Control",
+				"Rampage: Büyük Yıkım",
+				"Rampage: Devastación",
+				"Rampage: Dzika furia",
+				"Rampage: Furia animale",
+				"Rampage: Iso kohtaa isomman",
+				"Rampage: Kyojû dairantô",
+				"Rampage: Ničitelé",
+				"Rampage: Purustajad IMAX 3D",
+				"Rampage: Scapati de sub control",
+				"Rampage: Tombolás",
+				"Rampage: Totalni kaos",
+				"Rampage: Το απόλυτο χάος",
+				"Rampage: Унищожителите",
+				"Ravages",
+				"Razjarenost",
+				"Rempeyc",
+				"Rempeyj",
+				"Siêu Thú Cuồng Nộ",
+				"Ремпейдж",
+				"Рэмпейдж",
+				"रैम्पेज: एक खतरनाक मुकाबला",
+				"ランペイジ　巨獣大乱闘",
+				"毀滅大作戰",
+				"狂暴巨兽"
+			]
+		},
+		"tt2271563": {
+			"name": "Forsaken",
+			"year": 2015,
+			"titles": [
+				"Forsaken",
+				"Forsaken, retour à Fowler City",
+				"Il fuoco della giustizia",
+				"O Retorno de John Henry",
+				"Redemption",
+				"Redenção",
+				"Regresando a casa",
+				"Terk Edilmiş",
+				"Πολιορκημένοι",
+				"Забравен от бога",
+				"Заброшенный",
+				"ワイルドガン",
+				"落日孤影"
+			]
+		},
+		"tt25399154": {
+			"name": "Rose",
+			"year": 2026,
+			"titles": ["Rose", "Roze", "Róża", "Роза", "雙面蘿絲"]
+		},
+		"tt2617828": {
+			"name": "Free Fall",
+			"year": 2013,
+			"titles": [
+				"Cadere libera",
+				"Caída libre",
+				"Em Queda Livre",
+				"Free Fall",
+				"Freier Fall",
+				"Laisvas kritimas",
+				"Queda Livre",
+				"Rơi Tự Do",
+				"Serbest Düşüş",
+				"Siła przyciągania",
+				"Szabadesés",
+				"Свободное падение",
+				"Слободан пад",
+				"フリー・フォール",
+				"自由坠落",
+				"警校禁戀"
+			]
+		},
+		"tt2737304": {
+			"name": "Bird Box",
+			"year": 2018,
+			"titles": [
+				"Bird Box",
+				"Bird Box. A ciegas",
+				"Bird Box: Orbeste",
+				"Bird Box: Schließe deine Augen",
+				"Caixa de Pássaros",
+				"Froid aux yeux",
+				"Kućica za ptice",
+				"Linnud karbis",
+				"Lồng Chim",
+				"Madarak a dobozban",
+				"Neotváraj oči",
+				"Nie otwieraj oczu",
+				"Paukščio narvelis",
+				"Qush qutisi",
+				"V pasti",
+				"Às Cegas",
+				"Με τα μάτια κλειστά",
+				"Кутия за птици",
+				"Кућица за птице",
+				"Пташиний короб",
+				"Птичий короб",
+				"バード・ボックス",
+				"蒙上你的眼"
+			]
+		},
+		"tt27621210": {
+			"name": "Ice Road: Vengeance",
+			"year": 2025,
+			"titles": [
+				"Buz Yolu: İntikam",
+				"Drumul terorii: Răzbunarea",
+				"Ice Road 2: Road to the Sky",
+				"Ice Road 2: Vengeance",
+				"Ice Road: La vendetta",
+				"Ice Road: Venganza",
+				"Ice Road: Vengeance",
+				"Jeges pokol: Bosszú",
+				"Jäätee 2",
+				"Lodowy szlak: Zemsta",
+				"Missão Resgate: Vingança",
+				"Riesgo bajo cero: Venganza",
+				"Ледяной драйв 2: Возмездие",
+				"Льодовий дрифт: Помста",
+				"疾凍救援：復仇"
+			]
+		},
+		"tt27766440": {
+			"name": "The Salt Path",
+			"year": 2024,
+			"titles": [
+				"A tenger útja",
+				"Bi'Shvil Ha'Kha'yim",
+				"Cesta života",
+				"Der Salzpfad",
+				"El sendero de la sal",
+				"Saltstien",
+				"Saltstigen",
+				"Stezka života",
+				"The Salt Path",
+				"The Salt Path - O Caminho do Amor",
+				"The Salt Path - Yhteinen matka",
+				"Ścieżki życia",
+				"Το μονοπάτι του αλατιού",
+				"Соленая тропа",
+				"鹽路上有你"
+			]
+		},
+		"tt31434639": {
+			"name": "Warfare",
+			"year": 2025,
+			"titles": [
+				"Hadviselés",
+				"Histoire de guerre",
+				"Sõjapidamine",
+				"Tempo de Guerra",
+				"Válka",
+				"Warfare",
+				"Warfare: Tempo di guerra",
+				"Warfare: Tiempo de guerra",
+				"Wojna",
+				"Yekhidat Ha'Illit",
+				"Çatışma",
+				"Εχθροπραξίες",
+				"Бойові дії",
+				"Под огнём",
+				"ウォーフェア　戦地最前線",
+				"戰役"
+			]
+		},
+		"tt3247714": {
+			"name": "Survivor",
+			"year": 2015,
+			"titles": [
+				"A túlélő",
+				"Ellujääja",
+				"Fugitive",
+				"Išlikimas",
+				"Jagd durch London",
+				"Meta",
+				"Ocalona",
+				"Perseguindo Abbott",
+				"Phản Sát",
+				"Poslední přežije",
+				"Prenasledovaná",
+				"Sobrevivente",
+				"Sokhenet Takhat Esh",
+				"Supervivent",
+				"Supravietuitoarea",
+				"Survivor",
+				"Survivor, persiguiendo a Abbott",
+				"Ölümcül Takip",
+				"Καταδίωξη σε δύο ηπείρους",
+				"Вціліла",
+				"Оцеляване",
+				"Преживео",
+				"Уцелевшая",
+				"सरवाईवर",
+				"サバイバー",
+				"幸存者"
+			]
+		},
+		"tt3300542": {
+			"name": "London Has Fallen",
+			"year": 2016,
+			"titles": [
+				"Assalto a Londres",
+				"Assaut sur Londres",
+				"Attacco al potere 2",
+				"Attacco al potere 2 - London Has Fallen",
+				"Cod rosu la Londra",
+				"End of Kingdom",
+				"Ha'matara: London",
+				"Invasão a Londres",
+				"Kod Adı: Londra",
+				"La Chute de Londres",
+				"London Has Fallen",
+				"London je padel",
+				"London on langenud",
+				"Londonas krišana",
+				"Londonning qulashi",
+				"Londono apgultis",
+				"Londres bajo Fuego",
+				"Londyn w ogniu",
+				"Londýn v plameňoch",
+				"Luân Đôn Thất Thủ",
+				"Objectiu: Londres",
+				"Objetivo: Londres",
+				"Olympus Has Fallen 2",
+				"Pad Londona",
+				"Pád Londýna",
+				"Támadás a Fehér Ház ellen 2. - London ostroma",
+				"Untitled Has Fallen Sequel",
+				"Το Λονδίνο έπεσε",
+				"Код: Лондон",
+				"Пад Лондона",
+				"Падение Лондона",
+				"Падот на Лондон",
+				"Падіння Лондону",
+				"エンド・オブ・キングダム",
+				"伦敦陷落",
+				"全面攻佔2：倫敦救援"
+			]
+		},
+		"tt3716530": {
+			"name": "Elle",
+			"year": 2016,
+			"titles": [
+				"Ela",
+				"Elle",
+				"Elle: Abuso y seducción",
+				"Hee",
+				"Ji",
+				"O Kadın",
+				"Oh!",
+				"Áldozat?",
+				"Εκείνη",
+				"Вона",
+				"Она",
+				"Тя",
+				"एली",
+				"エル ELLE",
+				"她",
+				"她的危險遊戲",
+				"烈女本色"
+			]
+		},
+		"tt3756788": {
+			"name": "Our Little Sister",
+			"year": 2015,
+			"titles": [
+				"A Nossa Irmã Mais Nova",
+				"A kishúgunk",
+				"Akhotenou ha'ktana",
+				"Kamakura Diary",
+				"Küçük Kız Kardeşim",
+				"Little Sister",
+				"Nasza młodsza siostra",
+				"Naša mala sestra",
+				"Nossa Irmã Mais Nova",
+				"Notre petite soeur",
+				"Nuestra hermana menor",
+				"Nuestra hermana pequeña",
+				"Nuestra pequeña hermana",
+				"Our Little Sister",
+				"Siskokset",
+				"Systrarna",
+				"Søstre",
+				"Umimachi Diary",
+				"Umimachi daiarī",
+				"Unsere kleine Schwester",
+				"Η κόρη του πατέρα μας",
+				"Η μικρή μας αδελφή",
+				"Дневник Умимати",
+				"海街diary",
+				"海街女孩日記",
+				"海街日記",
+				"海街日记"
+			]
+		},
+		"tt4430212": {
+			"name": "Drishyam",
+			"year": 2015,
+			"titles": [
+				"A Chantagem",
+				"Drishyam",
+				"Drishyam: pozory mylą",
+				"Görünürlük",
+				"Isbotlanmagan jinoyat",
+				"Látszat",
+				"Nhân Danh Công Lý",
+				"Noo'rin shubha",
+				"Noo'rin shubxa",
+				"Partea întunecată a legii",
+				"The Sight",
+				"Visual",
+				"Visuals",
+				"Видимость",
+				"Видимість",
+				"Видљивост",
+				"Көрінімділік",
+				"ビジョン",
+				"誤殺瞞天記",
+				"误杀瞒天记"
+			]
+		},
+		"tt5116302": {
+			"name": "Togo",
+			"year": 2019,
+			"titles": [
+				"Togo",
+				"Togo - Una grande amicizia",
+				"Τόγκο",
+				"Того",
+				"Тоґо",
+				"多哥",
+				"雪橇犬多哥"
+			]
+		},
+		"tt5144174": {
+			"name": "The Dry",
+			"year": 2020,
+			"titles": [
+				"Aaron Falk",
+				"Aszály",
+				"Años de sequía",
+				"Canicule",
+				"Chi è senza peccato - The Dry",
+				"Secretos del pasado",
+				"Segredos do Passado",
+				"Susza",
+				"The Dry",
+				"The Dry - Die Lügen der Vergangenheit",
+				"Η ξηρασία",
+				"Город тайн",
+				"Засуха",
+				"渇きと偽り",
+				"드라이"
+			]
+		},
+		"tt6323306": {
+			"name": "Nude",
+			"year": 2017,
+			"titles": ["Nu", "Nude", "Çıplak", "Нагота", "ヌード", "裸"]
+		},
+		"tt6988136": {
+			"name": "The Nude",
+			"year": 2018,
+			"titles": ["The Nude"]
+		},
+		"tt7133686": {
+			"name": "Next Gen",
+			"year": 2018,
+			"titles": [
+				"A Nova Geração",
+				"Az új generáció",
+				"Biệt Đội Giải Cứu Thế Giới",
+				"Das Mädchen und ihr Roboter - Die nächste Generation",
+				"Gelecek Jenerasyon",
+				"La nueva generación",
+				"Next Gen",
+				"Nouvelle génération",
+				"Nowa generacja",
+				"Robot 7723",
+				"Wei lai ji qi cheng",
+				"Wei lai ji xie cheng",
+				"Ήρωες νέας γενιάς",
+				"Друзья нового поколения",
+				"Наступне покоління",
+				"ネクスト ロボ",
+				"新世代小英雄",
+				"未來世代"
+			]
+		},
+		"tt7451284": {
+			"name": "Batman Ninja",
+			"year": 2018,
+			"titles": [
+				"Batman Ninja",
+				"Ninja Batman",
+				"Μπάτμαν: Νίντζα Ιαπωνίας",
+				"Бетмен-ніндзя",
+				"Бэтмен-ниндзя",
+				"ニンジャバットマン",
+				"忍者蝙蝠俠"
+			]
+		},
+		"tt7711170": {
+			"name": "Alone",
+			"year": 2020,
+			"titles": [
+				"Alone",
+				"Alone - Du kannst nicht entkommen",
+				"Psychol",
+				"Sola",
+				"Sozinha",
+				"Tek Başına",
+				"Μόνη",
+				"Пропавшая",
+				"Сама",
+				"ストーカー ３日目の逆襲",
+				"孤野獵逃"
+			]
+		},
+		"tt8772262": {
+			"name": "Midsommar",
+			"year": 2019,
+			"titles": [
+				"Fehér éjszakák",
+				"Festival straha",
+				"Jaanipäev",
+				"Letný slnovrat",
+				"Lễ Hội Đẫm Máu",
+				"Midsommar",
+				"Midsommar - Il villaggio dei dannati",
+				"Midsommar - O Ritual",
+				"Midsommar - loputon yö",
+				"Midsommar. El terror no espera la noche",
+				"Midsommar. W biały dzień",
+				"Midsommar: O Mal Não Espera a Noite",
+				"Midsommar: Solstice d'été",
+				"Midsommar: The Director's Cut",
+				"Midsommer",
+				"Midsummer",
+				"Ritüel",
+				"Saulgriežu kults",
+				"Saulės kultas",
+				"Slnovrat",
+				"Slunovrat",
+				"Sredina leta",
+				"Thetsakan Sayong",
+				"Μεσοκαλόκαιρο",
+				"Мидсоммар",
+				"Солнцестояние",
+				"Сонцестояння",
+				"Средата на лятото",
+				"Средина лета",
+				"ミッドサマー",
+				"仲夏",
+				"仲夏噩梦",
+				"仲夏夜惊魂",
+				"仲夏节",
+				"仲夏魘",
+				"미드소마"
+			]
+		},
+		"tt8959820": {
+			"name": "Petta",
+			"year": 2019,
+			"titles": ["O Administrador da Faculdade", "Petta", "ペッタ!", "終極舍監"]
+		},
+		"tt9052870": {
+			"name": "Chhichhore",
+			"year": 2019,
+			"titles": [
+				"Chhichhore",
+				"Flippant",
+				"Gubitnici",
+				"Irreverentes",
+				"Налегке",
+				"きっと、またあえる",
+				"萬萬沒想到"
+			]
+		},
+		"tt9586294": {
+			"name": "Better Days",
+			"year": 2019,
+			"titles": [
+				"Beskyddaren",
+				"Beskytteren",
+				"Better Days",
+				"Better Days - Suojelija",
+				"Daha İyi Günler",
+				"Dias Melhores",
+				"Em Của Thời Niên Thiếu",
+				"Eng yaxshi kunlar",
+				"Giorni migliori",
+				"Lepsze dni",
+				"Mejores días",
+				"Paremad päevad",
+				"Shaonian de ni",
+				"The Youthful You",
+				"Zile mai bune",
+				"Лучшие дни",
+				"Найкращі дні",
+				"少年の君",
+				"少年的你"
+			]
+		}
+	}
+}
