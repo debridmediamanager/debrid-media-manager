@@ -125,8 +125,14 @@ const applyProviderFiles = <T extends SearchResult | EnrichedHashlistTorrent>(
 		backfillMissingFileSize(torrent, files);
 	}
 	Object.assign(torrent, calculateFileStats(videoFiles));
-	torrent.noVideos = videoFiles.length === 0;
-	return !torrent.noVideos;
+	// `noVideos` claims the torrent itself holds no video, and Premiumize and
+	// Offcloud, which list no files, skip such rows. An archive listing cannot
+	// make that claim: TorBox packs disc torrents into one .zip (122 of 283
+	// BDMV torrents it held on 2026-10-03, every one listed unpacked on RD, 79
+	// cached on Premiumize). It leaves an earlier verdict as it was.
+	if (videoFiles.length > 0) torrent.noVideos = false;
+	else if (!archiveOnly[service]) torrent.noVideos = true;
+	return videoFiles.length > 0;
 };
 
 // Rate limiter for RD requests - 10 requests per 10 seconds
