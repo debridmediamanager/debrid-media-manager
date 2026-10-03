@@ -1,0 +1,277 @@
+{
+	"_about": [
+		"Read-only GET /api/v2/seedbox/list?page=0&perPage=100&ids=... answers from the main Debrid-Link",
+		"account, recorded 2026-10-03 while it held the seven torrents in `account`. Each capture keeps",
+		"the requested ids in order, the pagination object verbatim and the ids returned in order.",
+		"Real torrent ids are replaced; names, files and URLs are dropped. See README.md."
+	],
+	"account": [
+		{
+			"id": "s07a5ec4301062f270f53131",
+			"created": 1791011939,
+			"hashString": "08ada5a7a6183aae1e09d831df6748d566095a10",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s7a59143e00374dacb43fd39",
+			"created": 1790534602,
+			"hashString": "85c5467fe1eb47834460dfd8bd75a7f4a6f6e33a",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s86ee5b544e2d8c1a1ac6414",
+			"created": 1789674940,
+			"hashString": "83ca4cd1f6d9b3d5c9f9d0a891b8be8860ba78bc",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s6ef6e8a9f2682b2ee680a3e",
+			"created": 1789245024,
+			"hashString": "188723ecf54d53fe6ad320ba4f46cd5aab3b042b",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s866d775575bdaf168f3eece",
+			"created": 1789245022,
+			"hashString": "2f3d1de9dc516ddffebbf6b228c2c843991790b5",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "sa467ed40c92f077f64115ea",
+			"created": 1788677229,
+			"hashString": "4346c45917643b941f04c6b97bf4a3bdab2359c7",
+			"status": 100,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s62ce7e3f4a4a8543133385c",
+			"created": 1788677216,
+			"hashString": "156fdbe283e71a698f6acb62d9c949e4642b85d2",
+			"status": 100,
+			"downloadPercent": 100
+		}
+	],
+	"captures": [
+		{
+			"name": "a present id and a removed torrent's id",
+			"requestedIds": ["s62ce7e3f4a4a8543133385c", "s0f7f27a103df0b6df118795"],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": ["s62ce7e3f4a4a8543133385c"]
+			}
+		},
+		{
+			"name": "a removed torrent's id alone",
+			"requestedIds": ["s0f7f27a103df0b6df118795"],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": []
+			}
+		},
+		{
+			"name": "100 ids: two present, 97 never-seen well-formed ids and a removed torrent's id",
+			"requestedIds": [
+				"s62ce7e3f4a4a8543133385c",
+				"sujzde8gxd6ncf10epf91dho",
+				"sdzdoc9is0j8ht9lgmxg9edn",
+				"s581u33xtplpft75v2seh60k",
+				"svj50ce9uvw53efr4edt2syw",
+				"sb3wkh5dnsipzz5fk2z9ri19",
+				"sr0wyojfljooa5lqsaj08xui",
+				"s6d39zzzzg4zdmen2khvdgaj",
+				"s8gxbenyjqwx4hh5344tfjgv",
+				"sq4k7bn7xj8b7tfq7xkwo886",
+				"svompzom75wbbr4qmw2wxfog",
+				"so4mvn4a4wfhym4l1vfz3zfk",
+				"skibj3j4wj99ibag7i1mnbqn",
+				"ss6puq80idw3706i8j76b2la",
+				"sjlj4h9du7794g9dpmrcg629",
+				"sbe2u66mr26846p7q9m2i0hz",
+				"s2uep1enthjxjqi3ogz5kok1",
+				"s6zv0mwufxbv932byv7s6eho",
+				"sgfqrclri1qzj865ufrdl1er",
+				"sbfqfoeqh3av90ric7phkqdl",
+				"smtt7ns26lrwbqcab69m64p2",
+				"sg158z6tnovmizwdiaeq1kdf",
+				"sy6spsc3lkr2aqxv9upctnwl",
+				"savyf4r6mp6afqfjzczbttof",
+				"s7jyu5jsjc616i76bofbcixg",
+				"sy29db8p5qa3e68f7e4qeqpn",
+				"so35ye4scmejvqtia4d5rgn5",
+				"ss7s333h9mtf4bs3e62rynne",
+				"sfj7qxi6rhxo55zbka52ztj0",
+				"swyuhvauvzhmasqxezyex1rd",
+				"srgdsjpr16umx1bz99nfd02i",
+				"ss5d9ik40vstqqzpt49zhkke",
+				"sn659o2v21i9mpflv9fupxqm",
+				"sb0y07nyrvd5rxi67nfrpyz2",
+				"s1tbic145aez732pgojj7g3f",
+				"s9caioctiq71hget7myqoaa8",
+				"st3rup47p9pb0tdbm50fqo1x",
+				"so5cv0xzmas6en5mtmo3oqsg",
+				"s5lo50djzdnbj0ddlz2uhfkv",
+				"sml73ctyxv2kgafrfw0h9nyw",
+				"st1fd4mx82mux4b0pzcyc3ed",
+				"sqmevxrvcqurtaebog43yq15",
+				"si5latjpuu3xf6mzkp0ec498",
+				"suk1geqfng052loi03p8hssr",
+				"srxqqm2plppjsmuezqp67og3",
+				"scga4o2xcsohdmmex6l2qagw",
+				"sncxvjcnqcnau0xltenc594e",
+				"s0gz9j8fkzr0st0dtw00bxmz",
+				"szna1k1hfzx3kiad9jzfx6kj",
+				"swsk7kegy5mtic4udyfkozm4",
+				"slncz7kywhjpmc9cuhy39t0t",
+				"sp1yx262lba53p23l4zgeiw1",
+				"sxf266ccifu6fd6yibehmi5s",
+				"skoewqkur3jq64nq6puxcmlz",
+				"skruykqh7dx297gq8zxqyxjx",
+				"svf2olds7qtuacojs106xdi5",
+				"socbdawtg7w8o0tinx4kiapj",
+				"s2gejrzqad9w275pkacd8bzl",
+				"spkdga9mj0m760l6tetd48ay",
+				"s13f2logqochvqdr917qsnf6",
+				"sakqpmkumyvpy8447ab1otnz",
+				"sekjcbhgkwjbbcicecexm8ey",
+				"sgpnnhccfs4gignsuv1qbwqs",
+				"sdxu64sb0b17gw4d8nfsk1a7",
+				"smsdaw5g5l5w6qksno5khf59",
+				"sguwgzzf1bxntq186kyo3i8c",
+				"swu7j29uk32qoiv3p6mrtjjp",
+				"su7wkpumqgkgmyjjtt1rmggr",
+				"sny3caz1o6s3bjqzap10oolh",
+				"s31uqg0pzkq143b07luay5gc",
+				"sq8nkm7wg38n46bx7v03nlz6",
+				"shwdqryzdae00wqgotz7oz3n",
+				"skiem49ojw03s9i4woryq1l4",
+				"sarwptu451fxjtydfui7waan",
+				"sesqgjol2wjnz8kf9tm5n7f2",
+				"sh9hq0oi459d43j5p5k8aku3",
+				"s5s3x10elxbbcvg645jcn0iv",
+				"sgxv479ns1v1q9dssw5zv6r6",
+				"swn5hvmutifcz9z8dztgacm4",
+				"sd68yjfnc3lglc0gaxit9qtl",
+				"s0cub1d57ch0z2eayj409gf4",
+				"snja1aahfnhi4brp2ldxjfs9",
+				"s53qdcadafyttk5dux24kjhx",
+				"sk04y2rvsrdvajt1pyyyo2sa",
+				"suqr1kcsjjr95w8f895ymotd",
+				"sz3nqay38f8weoz7q7u46mmn",
+				"smflsxwz7jpc5xgx3fjubwr7",
+				"sbgcn5nqr1g2iqcvmlyfbdc9",
+				"sx35ezhfquof6zl2kxpolcqw",
+				"sd9bdq64dgjuamt2g4uxqyhx",
+				"s4yk2pja3mckoexi2gybe2vu",
+				"so4hxjvodl29j2jr00pjbrsv",
+				"skq5gu34hj6dn94shqmx1qpp",
+				"sgys0kdsjb26v6i2a7slx1c0",
+				"snrlil7olmff5rlnimtmae70",
+				"sd7wvs5fa04irplxckxaw727",
+				"sehwpuydsg526b78ibpfolkg",
+				"stq9bbgmqb37p2gwglcrh356",
+				"s0f7f27a103df0b6df118795",
+				"sa467ed40c92f077f64115ea"
+			],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": ["s62ce7e3f4a4a8543133385c", "sa467ed40c92f077f64115ea"]
+			}
+		},
+		{
+			"name": "a well-formed id this account never held",
+			"requestedIds": ["s0k3fz9q2m7xw1v8n4c6b5t0"],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": []
+			}
+		},
+		{
+			"name": "a malformed id",
+			"requestedIds": ["notarealid"],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": [
+					"s07a5ec4301062f270f53131",
+					"s7a59143e00374dacb43fd39",
+					"s86ee5b544e2d8c1a1ac6414",
+					"s6ef6e8a9f2682b2ee680a3e",
+					"s866d775575bdaf168f3eece",
+					"sa467ed40c92f077f64115ea",
+					"s62ce7e3f4a4a8543133385c"
+				]
+			}
+		},
+		{
+			"name": "two absent well-formed ids",
+			"requestedIds": ["s0f7f27a103df0b6df118795", "s0k3fz9q2m7xw1v8n4c6b5t0"],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": []
+			}
+		},
+		{
+			"name": "three present ids, neither newest-first nor oldest-first",
+			"requestedIds": [
+				"sa467ed40c92f077f64115ea",
+				"s62ce7e3f4a4a8543133385c",
+				"s07a5ec4301062f270f53131"
+			],
+			"response": {
+				"success": true,
+				"pagination": {
+					"page": 0,
+					"pages": 1,
+					"next": -1,
+					"previous": -1
+				},
+				"ids": [
+					"sa467ed40c92f077f64115ea",
+					"s62ce7e3f4a4a8543133385c",
+					"s07a5ec4301062f270f53131"
+				]
+			}
+		}
+	],
+	"recordedAt": "2026-10-03"
+}

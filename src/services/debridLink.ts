@@ -438,30 +438,211 @@ export async function listSeedboxTorrents(
 }
 
 /**
+ * How long a complete reading of the seedbox may stand in for a fresh one when
+ * the cache check decides which torrents it created and may therefore remove.
+ *
+ * The check needs to know everything the account holds before it probes,
+ * because a bare-hash add of a hash the user already has answers with *their*
+ * torrent, and the clean-up would then delete it. Reading that from scratch
+ * for every check cost a 52,685-torrent library 527 requests before each probe
+ * and 527 more after it. So a complete reading is kept and reused, but never on
+ * trust: before every probe run a library of more than one page is checked
+ * against a current page 0 (`revalidateAgainstPageZero`), and anything this tab
+ * adds or removes outside the check throws the reading away.
+ *
+ * This age is the backstop for what page 0 cannot see. It is counted from when
+ * the reading *began*, matches the five minutes the library view already
+ * treats a Debrid-Link listing as current for, and a page-0 check never
+ * extends it - only a new full reading does.
+ */
+export const LIBRARY_SNAPSHOT_MAX_AGE_MS = 5 * 60 * 1000;
+
+/** What the cache check needs to remember about a torrent the account holds. */
+interface HeldTorrent {
+	id: string;
+	status: number;
+	downloadPercent: number;
+	totalSize: number;
+}
+
+/** A complete reading of one account's seedbox. */
+interface LibrarySnapshot {
+	/** `Date.now()` when the walk that produced it began. */
+	takenAt: number;
+	/** Pages that walk read. One page is cheaper to re-read than to revalidate. */
+	pages: number;
+	/** The newest `created` (server seconds) among the torrents it holds. */
+	newestCreated: number;
+	ids: Set<string>;
+	byHash: Map<string, HeldTorrent>;
+	/**
+	 * A couple of ids from the oldest end of the listing, which a filtered read
+	 * carries alongside the ids it is asking about - see `confirmRemoved`.
+	 */
+	anchorIds: string[];
+	/** `libraryGeneration` when the walk began. */
+	generation: number;
+}
+
+/** Keyed by token. Module-level for the same reason the flood lockouts are. */
+const librarySnapshots = new Map<string, LibrarySnapshot>();
+
+/**
+ * Bumped whenever this module changes a library outside the cache check. A
+ * walk that began before the change cannot have seen it, so its reading is
+ * never kept - it may lack the very torrent the change added.
+ *
+ * One counter for every account rather than one per token: a browser tab holds
+ * one Debrid-Link token, and the server - whose Cast routes add torrents for
+ * any number of users but never walk a library - must not accumulate a map
+ * entry per user it has ever added for.
+ */
+let libraryGenerationCounter = 0;
+
+const libraryGeneration = () => libraryGenerationCounter;
+
+/** Something outside the cache check added to or removed from this library. */
+const libraryChanged = (token: string) => {
+	libraryGenerationCounter++;
+	librarySnapshots.delete(token);
+};
+
+const resetLibrarySnapshots = () => {
+	librarySnapshots.clear();
+	libraryGenerationCounter = 0;
+};
+
+const normalizeHash = (hash: string) => hash.trim().toLowerCase();
+
+const heldTorrent = (torrent: DebridLinkTorrent): HeldTorrent => ({
+	id: torrent.id,
+	status: torrent.status,
+	downloadPercent: torrent.downloadPercent,
+	totalSize: torrent.totalSize,
+});
+
+const rememberHeld = (snapshot: LibrarySnapshot, torrent: DebridLinkTorrent) => {
+	if (!torrent.id) return;
+	snapshot.ids.add(torrent.id);
+	const hash = normalizeHash(torrent.hashString || '');
+	if (hash && !snapshot.byHash.has(hash)) snapshot.byHash.set(hash, heldTorrent(torrent));
+	if (typeof torrent.created === 'number' && torrent.created > snapshot.newestCreated) {
+		snapshot.newestCreated = torrent.created;
+	}
+};
+
+/** How many ids `anchorIds` keeps. One is enough; two survive a deletion. */
+const VERIFY_ANCHORS = 2;
+
+const buildSnapshot = (
+	torrents: DebridLinkTorrent[],
+	pages: number,
+	takenAt: number,
+	generation: number
+): LibrarySnapshot => {
+	const snapshot: LibrarySnapshot = {
+		takenAt,
+		pages,
+		newestCreated: 0,
+		ids: new Set(),
+		byHash: new Map(),
+		anchorIds: [],
+		generation,
+	};
+	for (const torrent of torrents) rememberHeld(snapshot, torrent);
+	snapshot.anchorIds = torrents
+		.map((torrent) => torrent.id)
+		.filter(Boolean)
+		.slice(-VERIFY_ANCHORS);
+	return snapshot;
+};
+
+/** Keeps a reading unless a change since its walk began could be missing from it. */
+const storeSnapshot = (token: string, snapshot: LibrarySnapshot) => {
+	const now = Date.now();
+	for (const [key, held] of librarySnapshots) {
+		if (now - held.takenAt > LIBRARY_SNAPSHOT_MAX_AGE_MS) librarySnapshots.delete(key);
+	}
+	if (snapshot.generation !== libraryGeneration()) return;
+	const current = librarySnapshots.get(token);
+	if (current && current.takenAt > snapshot.takenAt) return;
+	librarySnapshots.set(token, snapshot);
+};
+
+/**
+ * A kept reading young enough to reuse. A change made through this module has
+ * already removed the token's reading (`libraryChanged`).
+ */
+const usableSnapshot = (token: string): LibrarySnapshot | null => {
+	const snapshot = librarySnapshots.get(token);
+	if (!snapshot) return null;
+	if (Date.now() - snapshot.takenAt > LIBRARY_SNAPSHOT_MAX_AGE_MS) {
+		librarySnapshots.delete(token);
+		return null;
+	}
+	return snapshot;
+};
+
+interface SeedboxWalk {
+	torrents: DebridLinkTorrent[];
+	/**
+	 * True only when the last page read said `next: -1`. A walk that stopped
+	 * for any other reason - no pagination, a cursor that did not advance, the
+	 * page cap - read part of the library, and absence from part of a library
+	 * proves nothing.
+	 */
+	complete: boolean;
+	snapshot: LibrarySnapshot;
+}
+
+/** Reads every page, and keeps the reading when it is complete. */
+async function walkSeedbox(
+	token: string,
+	perPage: number = SEEDBOX_PAGE_SIZE
+): Promise<SeedboxWalk> {
+	const takenAt = Date.now();
+	const generation = libraryGeneration();
+	const all: DebridLinkTorrent[] = [];
+	let page = 0;
+	let pages = 0;
+	let complete = false;
+
+	for (let fetched = 0; fetched < MAX_PAGES; fetched++) {
+		const { torrents, pagination } = await listSeedboxTorrents(token, { page, perPage });
+		pages++;
+		all.push(...torrents);
+
+		const next = pagination?.next;
+		if (next === -1) {
+			complete = true;
+			break;
+		}
+		if (typeof next !== 'number' || next <= page) break;
+		page = next;
+	}
+
+	const snapshot = buildSnapshot(all, pages, takenAt, generation);
+	if (complete) storeSnapshot(token, snapshot);
+	return { torrents: all, complete, snapshot };
+}
+
+/**
  * Every torrent in the account, paged at the documented maximum.
  *
  * The list ends when `pagination.next` comes back as **-1**. A cursor that
  * fails to advance also ends it: without that guard a server repeating page 0
  * would spin forever, and Debrid-Link's punishment for a request loop is an
  * hour without the endpoint.
+ *
+ * A walk that reaches the end is also kept as the library reading the cache
+ * check starts from, so a check soon after the library view loads does not
+ * read all of it again.
  */
 export async function listAllSeedboxTorrents(
 	token: string,
 	perPage: number = SEEDBOX_PAGE_SIZE
 ): Promise<DebridLinkTorrent[]> {
-	const all: DebridLinkTorrent[] = [];
-	let page = 0;
-
-	for (let fetched = 0; fetched < MAX_PAGES; fetched++) {
-		const { torrents, pagination } = await listSeedboxTorrents(token, { page, perPage });
-		all.push(...torrents);
-
-		const next = pagination?.next;
-		if (typeof next !== 'number' || next < 0 || next <= page) break;
-		page = next;
-	}
-
-	return all;
+	return (await walkSeedbox(token, perPage)).torrents;
 }
 
 /**
@@ -499,6 +680,22 @@ export async function addSeedboxTorrent(
 	source: string,
 	options: { wait?: boolean; structureType?: 'list' | 'tree'; ip?: string } = {}
 ): Promise<DebridLinkTorrent> {
+	try {
+		return await postSeedboxAdd(token, source, options);
+	} finally {
+		// Even a failed add may have landed - a timeout says nothing about
+		// what the server did - so any add outside the cache check retires
+		// the library reading the check would otherwise trust.
+		libraryChanged(token);
+	}
+}
+
+/** The add itself, without retiring the library reading. The cache check probes with this. */
+async function postSeedboxAdd(
+	token: string,
+	source: string,
+	options: { wait?: boolean; structureType?: 'list' | 'tree'; ip?: string } = {}
+): Promise<DebridLinkTorrent> {
 	const url = source.trim();
 	if (!url) throw new DebridLinkError('Nothing to add to Debrid-Link.', 'badArguments');
 
@@ -518,11 +715,15 @@ export async function addSeedboxTorrent(
 export async function addSeedboxTorrentFile(token: string, file: File): Promise<DebridLinkTorrent> {
 	const formData = new FormData();
 	formData.append('file', file);
-	const { value } = await dlRequest<DebridLinkTorrent>(token, 'seedbox/add', {
-		method: 'POST',
-		formData,
-	});
-	return value;
+	try {
+		const { value } = await dlRequest<DebridLinkTorrent>(token, 'seedbox/add', {
+			method: 'POST',
+			formData,
+		});
+		return value;
+	} finally {
+		libraryChanged(token);
+	}
 }
 
 /**
@@ -562,6 +763,18 @@ export async function getSeedboxActivity(
  * as "asked", and re-list if the answer matters.
  */
 export async function deleteSeedboxTorrents(token: string, ids: string[]): Promise<string[]> {
+	try {
+		return await removeSeedboxTorrents(token, ids);
+	} finally {
+		// The library reading would still list what was just removed. That
+		// errs safe - the check would only skip a probe - but it would also
+		// answer from a torrent that is gone.
+		if (ids.some((id) => id.trim())) libraryChanged(token);
+	}
+}
+
+/** The removal itself, without retiring the library reading. The cache check cleans up with this. */
+async function removeSeedboxTorrents(token: string, ids: string[]): Promise<string[]> {
 	const wanted = ids.map((id) => id.trim()).filter((id) => id.length > 0);
 	// `seedbox//remove` is not a delete-nothing, it is an unknown route - and
 	// there is no reason to find out what the server makes of it.
@@ -620,6 +833,11 @@ export interface DebridLinkCacheResult {
 	torrentId?: string;
 	/** Total bytes, for a hit. Useful for repairing a scraped row's missing size. */
 	filesize?: number;
+	/**
+	 * The file list a probe answered with. A hash answered from the library
+	 * reading has none: that reading is reused across checks, and keeping every
+	 * file of a 50,000-torrent library alive for it is not worth the memory.
+	 */
 	files?: DebridLinkFile[];
 	/** True when this hash was already in the account before the sweep started. */
 	alreadyInLibrary?: boolean;
@@ -634,8 +852,9 @@ export interface DebridLinkCacheSweep {
 	removedIds: string[];
 	/**
 	 * Ids the sweep created, asked to remove, and still found in the account
-	 * afterwards. Debrid-Link's delete answers success for anything, so this is
-	 * the only way to know - it is read back off a fresh listing.
+	 * afterwards - or could not confirm gone. Debrid-Link's delete answers
+	 * success for anything, so this is read back off the account itself (see
+	 * `confirmRemoved`).
 	 */
 	leftBehindIds: string[];
 	/** True when the sweep stopped early because the endpoint got locked out. */
@@ -695,7 +914,134 @@ const recordProbes = (count: number, now = Date.now()) => {
 	for (let i = 0; i < count; i++) probeSpend.push(now);
 };
 
-const normalizeHash = (hash: string) => hash.trim().toLowerCase();
+/**
+ * Checks a kept library reading against a current page 0, folding in anything
+ * added since. Returns null when page 0 cannot vouch for the reading.
+ *
+ * Every way a torrent enters the list puts it at the top: Debrid-Link lists
+ * newest `created` first, and a new add, a re-add after removal (2026-09-12)
+ * and a duplicate add of a torrent already held (2026-09-17) all came back
+ * with a fresh `created` - 306-, 5- and 7-torrent listings recorded 2026-09-06,
+ * -09-12 and -10-03. So once page 0 reaches back past the newest torrent the
+ * reading holds, everything added since the reading is on it, and folding
+ * those rows in makes the reading current again. Page 0 is never used to
+ * conclude that something is *absent* - only the complete reading does that.
+ *
+ * If page 0 is all newer than the reading - a hundred adds since, or a burst in
+ * the same second - it cannot say what lies beyond it, and the caller walks the
+ * library again.
+ */
+function revalidateAgainstPageZero(
+	snapshot: LibrarySnapshot,
+	pageZero: DebridLinkTorrent[]
+): LibrarySnapshot | null {
+	const reachesBack = pageZero.some(
+		(torrent) => typeof torrent.created === 'number' && torrent.created < snapshot.newestCreated
+	);
+	if (!reachesBack) return null;
+	for (const torrent of pageZero) {
+		if (torrent.id && !snapshot.ids.has(torrent.id)) rememberHeld(snapshot, torrent);
+	}
+	return snapshot;
+}
+
+/**
+ * Everything the account holds, as the cache check needs it before probing.
+ *
+ * Reuses a kept reading when one is young enough and nothing in this tab has
+ * changed the library since, and otherwise walks the library once. Either way
+ * a library of more than one page is checked against a current page 0 last:
+ * a walk of 527 pages takes minutes, and an add made meanwhile lands on the
+ * page the walk read first. A one-page library is simply read again - that is
+ * one request, the same as checking it.
+ *
+ * Returns null when the library could not be read to its end. Absence from a
+ * partial listing proves nothing, and a probe of a hash the user holds answers
+ * with their torrent, which the clean-up would then remove.
+ */
+async function libraryBeforeProbing(token: string): Promise<LibrarySnapshot | null> {
+	let snapshot = usableSnapshot(token);
+	if (!snapshot || snapshot.pages <= 1) {
+		const walk = await walkSeedbox(token);
+		if (!walk.complete) return null;
+		snapshot = walk.snapshot;
+		if (snapshot.pages <= 1) return snapshot;
+	}
+
+	const generation = libraryGeneration();
+	const takenAt = Date.now();
+	const { torrents, pagination } = await listSeedboxTorrents(token, { page: 0 });
+	if (pagination?.next === -1) {
+		// The whole library fits on page 0 now: that is a complete reading.
+		const fresh = buildSnapshot(torrents, 1, takenAt, generation);
+		storeSnapshot(token, fresh);
+		return fresh;
+	}
+	const current = revalidateAgainstPageZero(snapshot, torrents);
+	if (current) return current;
+
+	const walk = await walkSeedbox(token);
+	return walk.complete ? walk.snapshot : null;
+}
+
+/** The documented `ids=` maximum. */
+const IDS_PER_FILTERED_READ = 100;
+
+/**
+ * Which of the torrents this sweep created are still in the account, read
+ * without walking the library.
+ *
+ * Removal cannot be trusted from its own response (`DELETE` on a nonexistent id
+ * answers `success: true` echoing it back), so this asks the account by id. A
+ * filtered read is only an answer when the API says it is the only page -
+ * `next: -1` on page 0. Then it is complete for what was asked: either the
+ * filter held and every requested torrent that exists is on it, or the filter
+ * was dropped and the whole account is on it. A dropped filter on a library
+ * bigger than a page is page 0 of everything, which proves nothing about the
+ * rest, so that falls back to one full walk.
+ *
+ * Each read also carries a couple of ids the account is known to hold. On
+ * 2026-10-03 the filter held for ids that were well-formed but absent -
+ * a removed torrent's id answered an empty list - and was dropped only for a
+ * malformed one (`ids=notarealid` answered all seven torrents), while the
+ * 2026-09-02 notes read it as dropped for any unknown id. The anchors keep the
+ * filter in force under either reading, and a read that does not return one of
+ * them is not taken as an answer either: something changed under it.
+ *
+ * Returns null when nothing could confirm the removal.
+ */
+async function confirmRemoved(
+	token: string,
+	createdIds: string[],
+	snapshot: LibrarySnapshot
+): Promise<Set<string> | null> {
+	const created = new Set(createdIds);
+	const anchors = snapshot.anchorIds.filter((id) => !created.has(id)).slice(0, VERIFY_ANCHORS);
+	const anchorSet = new Set(anchors);
+	const room = IDS_PER_FILTERED_READ - anchors.length;
+	const remaining = new Set<string>();
+
+	for (let i = 0; i < createdIds.length; i += room) {
+		const chunk = createdIds.slice(i, i + room);
+		const { torrents, pagination } = await listSeedboxTorrents(token, {
+			page: 0,
+			ids: [...anchors, ...chunk],
+		});
+		const answered =
+			pagination?.next === -1 &&
+			(anchors.length === 0 || torrents.some((torrent) => anchorSet.has(torrent.id)));
+		if (!answered) {
+			const walk = await walkSeedbox(token);
+			if (!walk.complete) return null;
+			const present = new Set(walk.torrents.map((torrent) => torrent.id));
+			return new Set(createdIds.filter((id) => present.has(id)));
+		}
+		for (const torrent of torrents) {
+			if (created.has(torrent.id)) remaining.add(torrent.id);
+		}
+	}
+	return remaining;
+}
 
 /**
  * Whether Debrid-Link can serve these hashes right now.
@@ -717,17 +1063,20 @@ const normalizeHash = (hash: string) => hash.trim().toLowerCase();
  *
  * **The catch is that a hit mutates.** The torrent lands in the user's library,
  * because being added is exactly what "it was cached" means here. So the sweep
- * reads the library first and removes only what it created - anything the user
- * already had is left alone, and never probed in the first place.
+ * knows the library first and removes only what it created - anything the user
+ * already had is left alone, and never probed in the first place. Knowing the
+ * library used to mean walking all of it before every check and again after
+ * (`libraryBeforeProbing` and `confirmRemoved` say what replaced that), which
+ * on a 52,685-torrent library was 1,054 listing requests for one hit.
  *
  * Removal cannot be trusted from its own response (`DELETE` on a nonexistent id
- * answers `success: true` echoing that id back), so the sweep re-lists
+ * answers `success: true` echoing that id back), so the sweep reads the account
  * afterwards and reports anything still there as `leftBehindIds` rather than
  * claiming a clean-up it cannot see.
  *
- * Three ways a hash comes back `checked: false`, and none of them mean "not
- * cached": the hour-long lockout fired, the probe budget ran out, or the caller
- * aborted.
+ * Four ways a hash comes back `checked: false`, and none of them mean "not
+ * cached": the hour-long lockout fired, the probe budget ran out, the caller
+ * aborted, or the library could not be read to its end.
  */
 export async function checkDebridLinkCache(
 	token: string,
@@ -748,25 +1097,27 @@ export async function checkDebridLinkCache(
 		seen.add(hash);
 		wanted.push(hash);
 	}
-	if (wanted.length === 0) {
-		return { results: [], removedIds: [], leftBehindIds: [], floodLockedOut: false };
-	}
+	const unanswered = (): DebridLinkCacheSweep => ({
+		results: wanted.map((hash) => ({ hash, cached: false, checked: false })),
+		removedIds: [],
+		leftBehindIds: [],
+		floodLockedOut: false,
+	});
+	if (wanted.length === 0) return unanswered();
 
 	// What the user already has. A torrent already in the library is an answer
 	// on its own - and probing it would be worse than pointless, because the
 	// clean-up afterwards could not tell its torrent apart from ours.
-	const existing = new Map<string, DebridLinkTorrent>();
-	for (const torrent of await listAllSeedboxTorrents(token)) {
-		const hash = normalizeHash(torrent.hashString || '');
-		if (hash) existing.set(hash, torrent);
-	}
+	const library = await libraryBeforeProbing(token);
+	if (!library) return unanswered();
 
 	const results = new Map<string, DebridLinkCacheResult>();
 	const createdIds: string[] = [];
+	const createdHashes = new Map<string, string>();
 	const toProbe: string[] = [];
 
 	for (const hash of wanted) {
-		const held = existing.get(hash);
+		const held = library.byHash.get(hash);
 		if (!held) {
 			toProbe.push(hash);
 			continue;
@@ -777,7 +1128,6 @@ export async function checkDebridLinkCache(
 			checked: true,
 			torrentId: held.id,
 			filesize: held.totalSize,
-			files: held.files,
 			alreadyInLibrary: true,
 		});
 	}
@@ -802,18 +1152,28 @@ export async function checkDebridLinkCache(
 			const hash = budgeted[index];
 
 			try {
-				const torrent = await addSeedboxTorrent(token, hash);
-				createdIds.push(torrent.id);
+				const torrent = await postSeedboxAdd(token, hash);
+				// Admission is not completion: a bare-hash add has been seen
+				// admitted at 97%. Only a torrent the account reports whole is
+				// something the user can play now.
+				const cached = isDlFinished(torrent.status) || torrent.downloadPercent >= 100;
+				// Ids are a stable function of the account and the hash, so an
+				// add answering with an id the library already held answered
+				// with the user's own torrent - one whose listing row did not
+				// carry this hash. It is theirs, and it stays.
+				const alreadyInLibrary = library.ids.has(torrent.id);
+				if (!alreadyInLibrary) {
+					createdIds.push(torrent.id);
+					createdHashes.set(torrent.id, hash);
+				}
 				results.set(hash, {
 					hash,
-					// Admission is not completion: a bare-hash add has been seen
-					// admitted at 97%. Only a torrent the account reports whole
-					// is something the user can play now.
-					cached: isDlFinished(torrent.status) || torrent.downloadPercent >= 100,
+					cached,
 					checked: true,
 					torrentId: torrent.id,
 					filesize: torrent.totalSize,
 					files: torrent.files,
+					...(alreadyInLibrary ? { alreadyInLibrary } : {}),
 				});
 			} catch (error) {
 				const code = error instanceof DebridLinkError ? error.code : '';
@@ -848,21 +1208,37 @@ export async function checkDebridLinkCache(
 	let leftBehindIds: string[] = [];
 	if (createdIds.length > 0) {
 		try {
-			await deleteSeedboxTorrents(token, createdIds);
-			// The delete response is "attempted", never "found", so the only
-			// honest check is a fresh listing.
-			const remaining = new Set(
-				(await listAllSeedboxTorrents(token)).map((torrent) => torrent.id)
-			);
-			leftBehindIds = createdIds.filter((id) => remaining.has(id));
+			await removeSeedboxTorrents(token, createdIds);
+			// The delete response is "attempted", never "found", so the
+			// account itself is asked what is still there.
+			const remaining = await confirmRemoved(token, createdIds, library);
+			// A removal nothing could confirm is reported as left behind.
+			leftBehindIds = remaining
+				? createdIds.filter((id) => remaining.has(id))
+				: [...createdIds];
 		} catch {
 			// A clean-up that could not run is reported, not swallowed: these
 			// are torrents this sweep put in someone's library.
 			leftBehindIds = [...createdIds];
 		}
 		for (const result of results.values()) {
-			if (result.torrentId && createdIds.includes(result.torrentId)) {
+			if (result.torrentId && createdHashes.has(result.torrentId)) {
 				result.removed = !leftBehindIds.includes(result.torrentId);
+			}
+		}
+
+		// A concurrent check may have folded one of these probe torrents into
+		// the kept reading off page 0 while it existed. What is confirmed gone
+		// comes back out, so the next check probes it rather than answering
+		// from a torrent that is not there. What stayed behind needs nothing:
+		// it sits at the top of page 0, where the next check folds it in.
+		const kept = librarySnapshots.get(token);
+		if (kept) {
+			for (const id of createdIds) {
+				if (leftBehindIds.includes(id)) continue;
+				const hash = createdHashes.get(id)!;
+				kept.ids.delete(id);
+				if (kept.byHash.get(hash)?.id === id) kept.byHash.delete(hash);
 			}
 		}
 	}
@@ -877,6 +1253,7 @@ export async function checkDebridLinkCache(
 
 export const _testing = {
 	resetFloodLockouts,
+	resetLibrarySnapshots,
 	resetProbeBudget: () => {
 		probeSpend = [];
 	},

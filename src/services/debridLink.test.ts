@@ -88,6 +88,7 @@ beforeEach(() => {
 	vi.stubGlobal('fetch', fetchMock);
 	_testing.resetFloodLockouts();
 	_testing.resetProbeBudget();
+	_testing.resetLibrarySnapshots();
 });
 
 afterEach(() => {
