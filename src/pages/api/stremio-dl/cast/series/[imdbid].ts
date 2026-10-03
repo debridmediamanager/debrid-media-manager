@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import {
 	describeDebridLinkError,
 	generateDebridLinkUserId,
@@ -69,7 +70,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const files = release.files;
 		const userid = await generateDebridLinkUserId(apiKey);
 
-		const targets: (DebridLinkVideoFile | string)[] = wholeRelease ? files : requested;
+		// A release can hold one episode twice - an Internet Archive torrent carries
+		// every upload beside the .mp4 the Archive derives from it - and both land on
+		// the episode's row, so the later save would replace the earlier. Named files
+		// are cast as asked: that is a choice, not a whole release.
+		const targets: (DebridLinkVideoFile | string)[] = wholeRelease
+			? oneFilePerEpisode(files, (file) => ({ filename: file.filename, size: file.size }))
+			: requested;
 
 		for (const target of targets) {
 			const file = typeof target === 'string' ? matchDebridLinkFile(files, target) : target;

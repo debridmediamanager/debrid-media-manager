@@ -1,6 +1,11 @@
 import handler from '@/pages/api/stremio-oc/cast/series/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import {
+	OUTER_LIMITS,
+	outerLimitsVideosBiggestFirst,
+	survivingCastRows,
+} from '@/test/utils/internetArchiveFixtures';
 import { generateOffcloudUserId, resolveCachedOffcloudFiles } from '@/utils/offcloudCastApiHelpers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -134,6 +139,29 @@ describe('/api/stremio-oc/cast/series/[imdbid]', () => {
 
 		expect(mockRepository.saveOffcloudCast).not.toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(404);
+	});
+
+	// Regression: an Internet Archive torrent holds every episode twice, the
+	// uploaded .mkv and the compressed .mp4 the Archive derives from it. The file
+	// list comes back largest first, so the derivative was saved second and
+	// replaced the source on the episode's row. The listing is the real torrent.
+	it('casts the source of each episode, not the Archive copy derived from it', async () => {
+		const outlimits = outerLimitsVideosBiggestFirst();
+		mockResolve.mockResolvedValue(
+			outlimits.map((f) => ({
+				path: `${OUTER_LIMITS.name}/${f.path}`,
+				filename: f.path,
+				size: f.bytes,
+				link: null,
+			}))
+		);
+
+		await handler(post({ hash: OUTER_LIMITS.hash }), res);
+
+		const rows = survivingCastRows(vi.mocked(mockRepository.saveOffcloudCast).mock.calls);
+		expect(rows.size).toBe(17);
+		for (const filename of rows.values()) expect(filename).toMatch(/\.mkv$/);
+		expect(mockRepository.saveOffcloudCast).toHaveBeenCalledTimes(17);
 	});
 
 	it('validates the request body', async () => {

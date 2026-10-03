@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import { generateOffcloudUserId, resolveCachedOffcloudFiles } from '@/utils/offcloudCastApiHelpers';
 import { matchOffcloudFile, type OffcloudVideoFile } from '@/utils/offcloudCastFiles';
 import { readProviderKey } from '@/utils/providerKeyHeader';
@@ -51,7 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const files = await resolveCachedOffcloudFiles(apiKey, hash);
 		const userid = await generateOffcloudUserId(apiKey);
 
-		const targets: (OffcloudVideoFile | string)[] = wholeRelease ? files : requested;
+		// A release can hold one episode twice - an Internet Archive torrent carries
+		// every upload beside the .mp4 the Archive derives from it - and both land on
+		// the episode's row, so the later save would replace the earlier. Named files
+		// are cast as asked: that is a choice, not a whole release.
+		const targets: (OffcloudVideoFile | string)[] = wholeRelease
+			? oneFilePerEpisode(files, (file) => ({ filename: file.filename, size: file.size }))
+			: requested;
 
 		for (const target of targets) {
 			const file = typeof target === 'string' ? matchOffcloudFile(files, target) : target;

@@ -1,5 +1,6 @@
 import { directDownloadPremiumize } from '@/services/premiumize';
 import { repository as db } from '@/services/repository';
+import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import { generatePremiumizeUserId } from '@/utils/premiumizeCastApiHelpers';
 import {
 	matchPremiumizeFile,
@@ -56,7 +57,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const files = premiumizeVideoFiles(await directDownloadPremiumize(apiKey, hash));
 		const userid = await generatePremiumizeUserId(apiKey);
 
-		const targets: (PremiumizeVideoFile | string)[] = wholeRelease ? files : requested;
+		// A release can hold one episode twice - an Internet Archive torrent carries
+		// every upload beside the .mp4 the Archive derives from it - and both land on
+		// the episode's row, so the later save would replace the earlier. Named files
+		// are cast as asked: that is a choice, not a whole release.
+		const targets: (PremiumizeVideoFile | string)[] = wholeRelease
+			? oneFilePerEpisode(files, (file) => ({ filename: file.filename, size: file.size }))
+			: requested;
 
 		for (const target of targets) {
 			const file = typeof target === 'string' ? matchPremiumizeFile(files, target) : target;

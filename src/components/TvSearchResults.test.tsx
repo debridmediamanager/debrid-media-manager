@@ -1,4 +1,5 @@
 import type { SearchResult } from '@/services/mediasearch';
+import { OUTER_LIMITS, outerLimitsVideos } from '@/test/utils/internetArchiveFixtures';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -144,6 +145,66 @@ describe('TvSearchResults', () => {
 
 		await userEvent.click(await screen.findByRole('button', { name: /Cast \(TB\)/i }));
 		await waitFor(() => expect(handleCastTorBox).toHaveBeenCalledWith('tv-hash', ['8']));
+	});
+
+	// Regression: an Internet Archive torrent carries every episode twice, the
+	// uploaded .mkv and the compressed .mp4 the Archive derives from it. Both ids
+	// went to the cast endpoint, which files them under the same episode key, so
+	// the derivative - later in the torrent - replaced the source. The listing is
+	// the real torrent of an Archive season upload.
+	describe('on an Internet Archive season', () => {
+		const archiveFiles = outerLimitsVideos().map((f) => ({
+			fileId: f.id,
+			filename: f.path,
+			filesize: f.bytes / 1024 / 1024,
+		}));
+		const sourceIds = outerLimitsVideos()
+			.filter((f) => f.iaSource === 'original')
+			.map((f) => `${f.id}`);
+		const archive: SearchResult = {
+			...baseTvResult,
+			hash: OUTER_LIMITS.hash,
+			tbAvailable: true,
+			adAvailable: true,
+			files: archiveFiles,
+			rdFiles: archiveFiles,
+			tbFiles: archiveFiles,
+			medianFileSize: 350,
+			videoCount: archiveFiles.length,
+		};
+
+		it('casts RD the source file of each episode', async () => {
+			const { props } = renderTv({ filteredResults: [archive] });
+
+			await userEvent.click(await screen.findByRole('button', { name: /Cast \(RD\)/i }));
+
+			await waitFor(() => expect(props.handleCast).toHaveBeenCalledTimes(1));
+			expect(sourceIds).toHaveLength(17);
+			expect(props.handleCast).toHaveBeenCalledWith(OUTER_LIMITS.hash, sourceIds);
+		});
+
+		it('casts TorBox the source file of each episode', async () => {
+			const handleCastTorBox = vi.fn().mockResolvedValue(undefined);
+			renderTv({ filteredResults: [archive], torboxKey: 'tb', handleCastTorBox });
+
+			await userEvent.click(await screen.findByRole('button', { name: /Cast \(TB\)/i }));
+
+			await waitFor(() =>
+				expect(handleCastTorBox).toHaveBeenCalledWith(OUTER_LIMITS.hash, sourceIds)
+			);
+		});
+
+		it('casts AllDebrid the source file of each episode', async () => {
+			const handleCastAllDebrid = vi.fn().mockResolvedValue(undefined);
+			renderTv({ filteredResults: [archive], adKey: 'ad', handleCastAllDebrid });
+
+			await userEvent.click(await screen.findByRole('button', { name: /Cast \(AD\)/i }));
+
+			await waitFor(() => expect(handleCastAllDebrid).toHaveBeenCalledTimes(1));
+			const files = handleCastAllDebrid.mock.calls[0][1] as { filename: string }[];
+			expect(files).toHaveLength(17);
+			for (const { filename } of files) expect(filename).toMatch(/\.mkv$/);
+		});
 	});
 
 	// No trustworthy ids means no cast button - offering one would cast a guess.

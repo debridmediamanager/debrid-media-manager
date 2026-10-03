@@ -3,6 +3,11 @@ import { DebridLinkError } from '@/services/debridLink';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import {
+	OUTER_LIMITS,
+	outerLimitsVideosBiggestFirst,
+	survivingCastRows,
+} from '@/test/utils/internetArchiveFixtures';
+import {
 	generateDebridLinkUserId,
 	resolveDebridLinkRelease,
 } from '@/utils/debridLinkCastApiHelpers';
@@ -201,6 +206,32 @@ describe('/api/stremio-dl/cast/series/[imdbid]', () => {
 
 		expect(res.status).toHaveBeenCalledWith(500);
 		expect(String((res._getData() as any).errorMessage)).toContain('20 active transfers');
+	});
+
+	// Regression: an Internet Archive torrent holds every episode twice, the
+	// uploaded .mkv and the compressed .mp4 the Archive derives from it. The file
+	// list comes back largest first, so the derivative was saved second and
+	// replaced the source on the episode's row. The listing is the real torrent.
+	it('casts the source of each episode, not the Archive copy derived from it', async () => {
+		const outlimits = outerLimitsVideosBiggestFirst();
+		mockResolve.mockResolvedValue(
+			release(
+				outlimits.map((f) => ({
+					path: `${OUTER_LIMITS.name}/${f.path}`,
+					filename: f.path,
+					size: f.bytes,
+					link: `${SEED}/tor-1-0/${f.path}`,
+					percent: 100,
+				}))
+			)
+		);
+
+		await handler(post({ hash: OUTER_LIMITS.hash }), res);
+
+		const rows = survivingCastRows(vi.mocked(mockRepository.saveDebridLinkCast).mock.calls);
+		expect(rows.size).toBe(17);
+		for (const filename of rows.values()) expect(filename).toMatch(/\.mkv$/);
+		expect(mockRepository.saveDebridLinkCast).toHaveBeenCalledTimes(17);
 	});
 
 	it('validates the request body', async () => {

@@ -1,0 +1,449 @@
+{
+	"_source": "https://archive.org/download/the-outer-limits-s-2e-3-1964-colorized-576p-sd/the-outer-limits-s-2e-3-1964-colorized-576p-sd_archive.torrent, captured 2026-10-03; iaSource from https://archive.org/metadata/the-outer-limits-s-2e-3-1964-colorized-576p-sd. Files in torrent order; id is the 1-based position, which is the file id Real-Debrid lists for a torrent.",
+	"files": [
+		{
+			"id": 1,
+			"path": "IMG_20251109_121211.jpg",
+			"bytes": 64171,
+			"iaSource": "original"
+		},
+		{
+			"id": 2,
+			"path": ".____padding_file/39",
+			"bytes": 2032981
+		},
+		{
+			"id": 3,
+			"path": "IMG_20251109_121211_thumb.jpg",
+			"bytes": 8425,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 4,
+			"path": ".____padding_file/41",
+			"bytes": 2088727
+		},
+		{
+			"id": 5,
+			"path": "__ia_thumb.jpg",
+			"bytes": 12956,
+			"iaSource": "original"
+		},
+		{
+			"id": 6,
+			"path": ".____padding_file/43",
+			"bytes": 2084196
+		},
+		{
+			"id": 7,
+			"path": "__ia_thumb_thumb.jpg",
+			"bytes": 5107,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 8,
+			"path": ".____padding_file/42",
+			"bytes": 2092045
+		},
+		{
+			"id": 9,
+			"path": "the outer limits-s2e1-1964-colorized-576p-sd.mkv",
+			"bytes": 399137667,
+			"iaSource": "original"
+		},
+		{
+			"id": 10,
+			"path": ".____padding_file/1",
+			"bytes": 1418365
+		},
+		{
+			"id": 11,
+			"path": "the outer limits-s2e1-1964-colorized-576p-sd.mp4",
+			"bytes": 301976309,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 12,
+			"path": ".____padding_file/2",
+			"bytes": 13579
+		},
+		{
+			"id": 13,
+			"path": "the outer limits-s2e10-1964-colorized-576p-sd.mkv",
+			"bytes": 402166520,
+			"iaSource": "original"
+		},
+		{
+			"id": 14,
+			"path": ".____padding_file/16",
+			"bytes": 486664
+		},
+		{
+			"id": 15,
+			"path": "the outer limits-s2e10-1964-colorized-576p-sd.mp4",
+			"bytes": 305354850,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 16,
+			"path": ".____padding_file/27",
+			"bytes": 829342
+		},
+		{
+			"id": 17,
+			"path": "the outer limits-s2e11-1964-colorized-576p-sd.mkv",
+			"bytes": 438955876,
+			"iaSource": "original"
+		},
+		{
+			"id": 18,
+			"path": ".____padding_file/17",
+			"bytes": 1446044
+		},
+		{
+			"id": 19,
+			"path": "the outer limits-s2e11-1964-colorized-576p-sd.mp4",
+			"bytes": 304434358,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 20,
+			"path": ".____padding_file/28",
+			"bytes": 1749834
+		},
+		{
+			"id": 21,
+			"path": "the outer limits-s2e12-1964-colorized-576p-sd.mkv",
+			"bytes": 425401447,
+			"iaSource": "original"
+		},
+		{
+			"id": 22,
+			"path": ".____padding_file/18",
+			"bytes": 320409
+		},
+		{
+			"id": 23,
+			"path": "the outer limits-s2e12-1964-colorized-576p-sd.mp4",
+			"bytes": 297927023,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 24,
+			"path": ".____padding_file/29",
+			"bytes": 1965713
+		},
+		{
+			"id": 25,
+			"path": "the outer limits-s2e13-1964-colorized-576p-sd.mkv",
+			"bytes": 400562412,
+			"iaSource": "original"
+		},
+		{
+			"id": 26,
+			"path": ".____padding_file/20",
+			"bytes": 2090772
+		},
+		{
+			"id": 27,
+			"path": "the outer limits-s2e13-1964-colorized-576p-sd.mp4",
+			"bytes": 304008376,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 28,
+			"path": ".____padding_file/30",
+			"bytes": 78664
+		},
+		{
+			"id": 29,
+			"path": "the outer limits-s2e14-1964-colorized-576p-sd.mkv",
+			"bytes": 393031396,
+			"iaSource": "original"
+		},
+		{
+			"id": 30,
+			"path": ".____padding_file/21",
+			"bytes": 1233180
+		},
+		{
+			"id": 31,
+			"path": "the outer limits-s2e14-1964-colorized-576p-sd.mp4",
+			"bytes": 298171062,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 32,
+			"path": ".____padding_file/31",
+			"bytes": 1721674
+		},
+		{
+			"id": 33,
+			"path": "the outer limits-s2e15-1964-colorized-576p-sd.mkv",
+			"bytes": 392073874,
+			"iaSource": "original"
+		},
+		{
+			"id": 34,
+			"path": ".____padding_file/22",
+			"bytes": 93550
+		},
+		{
+			"id": 35,
+			"path": "the outer limits-s2e15-1964-colorized-576p-sd.mp4",
+			"bytes": 296081347,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 36,
+			"path": ".____padding_file/32",
+			"bytes": 1714237
+		},
+		{
+			"id": 37,
+			"path": "the outer limits-s2e16-1964-colorized-576p-sd.mkv",
+			"bytes": 393975841,
+			"iaSource": "original"
+		},
+		{
+			"id": 38,
+			"path": ".____padding_file/23",
+			"bytes": 288735
+		},
+		{
+			"id": 39,
+			"path": "the outer limits-s2e16-1964-colorized-576p-sd.mp4",
+			"bytes": 298743601,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 40,
+			"path": ".____padding_file/33",
+			"bytes": 1149135
+		},
+		{
+			"id": 41,
+			"path": "the outer limits-s2e17-1964-colorized-576p-sd.mkv",
+			"bytes": 400941690,
+			"iaSource": "original"
+		},
+		{
+			"id": 42,
+			"path": ".____padding_file/24",
+			"bytes": 1711494
+		},
+		{
+			"id": 43,
+			"path": "the outer limits-s2e17-1964-colorized-576p-sd.mp4",
+			"bytes": 303091236,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 44,
+			"path": ".____padding_file/34",
+			"bytes": 995804
+		},
+		{
+			"id": 45,
+			"path": "the outer limits-s2e2-1964-colorized-576p-sd.mkv",
+			"bytes": 399530769,
+			"iaSource": "original"
+		},
+		{
+			"id": 46,
+			"path": ".____padding_file/3",
+			"bytes": 1025263
+		},
+		{
+			"id": 47,
+			"path": "the outer limits-s2e2-1964-colorized-576p-sd.mp4",
+			"bytes": 301968882,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 48,
+			"path": ".____padding_file/9",
+			"bytes": 21006
+		},
+		{
+			"id": 49,
+			"path": "the outer limits-s2e3-1964-colorized-576p-sd.mkv",
+			"bytes": 401671250,
+			"iaSource": "original"
+		},
+		{
+			"id": 50,
+			"path": ".____padding_file/4",
+			"bytes": 981934
+		},
+		{
+			"id": 51,
+			"path": "the outer limits-s2e3-1964-colorized-576p-sd.mp4",
+			"bytes": 304561707,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 52,
+			"path": ".____padding_file/10",
+			"bytes": 1622485
+		},
+		{
+			"id": 53,
+			"path": "the outer limits-s2e4-1964-colorized-576p-sd.mkv",
+			"bytes": 399987165,
+			"iaSource": "original"
+		},
+		{
+			"id": 54,
+			"path": ".____padding_file/5",
+			"bytes": 568867
+		},
+		{
+			"id": 55,
+			"path": "the outer limits-s2e4-1964-colorized-576p-sd.mp4",
+			"bytes": 303190020,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 56,
+			"path": ".____padding_file/11",
+			"bytes": 897020
+		},
+		{
+			"id": 57,
+			"path": "the outer limits-s2e5-1964-colorized-576p-sd.mkv",
+			"bytes": 399450192,
+			"iaSource": "original"
+		},
+		{
+			"id": 58,
+			"path": ".____padding_file/6",
+			"bytes": 1105840
+		},
+		{
+			"id": 59,
+			"path": "the outer limits-s2e5-1964-colorized-576p-sd.mp4",
+			"bytes": 302216499,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 60,
+			"path": ".____padding_file/12",
+			"bytes": 1870541
+		},
+		{
+			"id": 61,
+			"path": "the outer limits-s2e6-1964-colorized-576p-sd.mkv",
+			"bytes": 398218517,
+			"iaSource": "original"
+		},
+		{
+			"id": 62,
+			"path": ".____padding_file/13",
+			"bytes": 240363
+		},
+		{
+			"id": 63,
+			"path": "the outer limits-s2e6-1964-colorized-576p-sd.mp4",
+			"bytes": 302022462,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 64,
+			"path": ".____padding_file/19",
+			"bytes": 2064578
+		},
+		{
+			"id": 65,
+			"path": "the outer limits-s2e7-1964-colorized-576p-sd.mkv",
+			"bytes": 397296785,
+			"iaSource": "original"
+		},
+		{
+			"id": 66,
+			"path": ".____padding_file/14",
+			"bytes": 1162095
+		},
+		{
+			"id": 67,
+			"path": "the outer limits-s2e7-1964-colorized-576p-sd.mp4",
+			"bytes": 301240612,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 68,
+			"path": ".____padding_file/35",
+			"bytes": 749276
+		},
+		{
+			"id": 69,
+			"path": "the outer limits-s2e8-1964-colorized-576p-sd.mkv",
+			"bytes": 390560054,
+			"iaSource": "original"
+		},
+		{
+			"id": 70,
+			"path": ".____padding_file/15",
+			"bytes": 1607370
+		},
+		{
+			"id": 71,
+			"path": "the outer limits-s2e8-1964-colorized-576p-sd.mp4",
+			"bytes": 296657932,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 72,
+			"path": ".____padding_file/36",
+			"bytes": 1137652
+		},
+		{
+			"id": 73,
+			"path": "the outer limits-s2e9-1964-colorized-576p-sd.mkv",
+			"bytes": 400632752,
+			"iaSource": "original"
+		},
+		{
+			"id": 74,
+			"path": ".____padding_file/25",
+			"bytes": 2020432
+		},
+		{
+			"id": 75,
+			"path": "the outer limits-s2e9-1964-colorized-576p-sd.mp4",
+			"bytes": 303054741,
+			"iaSource": "derivative"
+		},
+		{
+			"id": 76,
+			"path": ".____padding_file/37",
+			"bytes": 1032299
+		},
+		{
+			"id": 77,
+			"path": "the-outer-limits-s-2e-3-1964-colorized-576p-sd_meta.sqlite",
+			"bytes": 65536,
+			"iaSource": "original"
+		},
+		{
+			"id": 78,
+			"path": ".____padding_file/40",
+			"bytes": 2031616
+		},
+		{
+			"id": 79,
+			"path": "the-outer-limits-s-2e-3-1964-colorized-576p-sd_meta.xml",
+			"bytes": 3474,
+			"iaSource": "original"
+		},
+		{
+			"id": 80,
+			"path": ".____padding_file/44",
+			"bytes": 2093678
+		}
+	],
+	"hash": "51dc352544af255777817698bd5121d13c018001",
+	"identifier": "the-outer-limits-s-2e-3-1964-colorized-576p-sd",
+	"imdbId": "tt0056777",
+	"name": "the-outer-limits-s-2e-3-1964-colorized-576p-sd"
+}

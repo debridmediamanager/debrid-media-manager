@@ -1,5 +1,7 @@
+import outerLimits from '@/test/fixtures/internetArchive/outer-limits-s2-archive-torrent.json';
+import { isVideo } from '@/utils/selectable';
 import { describe, expect, it } from 'vitest';
-import { planLibraryCast } from './castLibraryPlan';
+import { oneFilePerEpisode, planLibraryCast } from './castLibraryPlan';
 
 type F = { name: string; size: number };
 const describeFile = (f: F) => ({ filename: f.name, size: f.size });
@@ -53,5 +55,61 @@ describe('planLibraryCast', () => {
 		expect(plan([{ name: 'Show.S02.1080p/Show.S02E07.mkv', size: 10 }])[0].stremioKey).toBe(
 			'tt123:2:7'
 		);
+	});
+
+	// Regression: an Internet Archive torrent carries every uploaded episode next
+	// to the compressed .mp4 the Archive derives from it, under the same name. Both
+	// parse to the same episode, so both were written to the same key and the
+	// second write - the derivative, which sorts after the .mkv - replaced the
+	// source. The release is the real torrent of an Archive season upload.
+	it('casts the source episode, not the compressed copy the Archive derives from it', () => {
+		const videos = outerLimits.files.filter((f) => isVideo({ path: f.path }));
+		const result = planLibraryCast(outerLimits.imdbId, videos, (f) => ({
+			filename: f.path,
+			size: f.bytes,
+		}));
+
+		expect(result).toHaveLength(17);
+		expect(new Set(result.map((p) => p.stremioKey)).size).toBe(17);
+		for (const { file } of result) {
+			expect(file.iaSource).toBe('original');
+			expect(file.path).toMatch(/\.mkv$/);
+		}
+		expect(result.find((p) => p.stremioKey === 'tt0056777:2:1')?.file.id).toBe(9);
+	});
+});
+
+describe('oneFilePerEpisode', () => {
+	const describeFile = (f: F) => ({ filename: f.name, size: f.size });
+
+	it('keeps the biggest file of each episode, wherever it sits in the list', () => {
+		const kept = oneFilePerEpisode(
+			[
+				{ name: 'Show.S01E01.mp4', size: 300 },
+				{ name: 'Show.S01E01.mkv', size: 400 },
+				{ name: 'Show.S01E02.mkv', size: 410 },
+				{ name: 'Show.S01E02.mp4', size: 290 },
+			],
+			describeFile
+		);
+
+		expect(kept.map((f) => f.name)).toEqual(['Show.S01E01.mkv', 'Show.S01E02.mkv']);
+	});
+
+	it('passes files with no episode through for the caller to decide', () => {
+		const kept = oneFilePerEpisode(
+			[
+				{ name: 'Show.S01E01.mkv', size: 400 },
+				{ name: 'Trailer.mkv', size: 10 },
+				{ name: 'Featurette.mkv', size: 20 },
+			],
+			describeFile
+		);
+
+		expect(kept.map((f) => f.name)).toEqual([
+			'Show.S01E01.mkv',
+			'Trailer.mkv',
+			'Featurette.mkv',
+		]);
 	});
 });

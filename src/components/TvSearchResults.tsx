@@ -1,5 +1,6 @@
 import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { FileData, SearchResult } from '@/services/mediasearch';
+import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
 import { reporterIdFor } from '@/utils/reporterId';
@@ -479,17 +480,21 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							(files ?? []).filter(
 								(f) => f.filename.match(epRegex1) || f.filename.match(epRegex2)
 							);
-						const castableFiles = episodeFilesOf(r.files);
+						// One file per episode, the biggest: an Internet Archive torrent
+						// holds every episode twice, the upload and the .mp4 the Archive
+						// derives from it, and both would land on the episode's cast row.
+						const castFilesOf = (files: FileData[] | undefined) =>
+							oneFilePerEpisode(episodeFilesOf(files), (f) => ({
+								filename: f.filename,
+								size: f.filesize,
+							}));
+						const castableFiles = castFilesOf(r.files);
 						// `r.files` holds whichever availability check answered last, and
 						// the four run concurrently. RD file ids and TorBox file ids are
 						// different numbering systems, so each cast button reads its own
 						// provider's array - see the same reasoning in `pickRdLink`.
-						const castableRdFileIds = episodeFilesOf(r.rdFiles).map(
-							(f) => `${f.fileId}`
-						);
-						const castableTbFileIds = episodeFilesOf(r.tbFiles).map(
-							(f) => `${f.fileId}`
-						);
+						const castableRdFileIds = castFilesOf(r.rdFiles).map((f) => `${f.fileId}`);
+						const castableTbFileIds = castFilesOf(r.tbFiles).map((f) => `${f.fileId}`);
 						// AllDebrid casts by filename, so it is unaffected by the above.
 						const castableAdFiles = castableFiles.map((f) => ({
 							filename: f.filename.split('/').pop() || f.filename,
