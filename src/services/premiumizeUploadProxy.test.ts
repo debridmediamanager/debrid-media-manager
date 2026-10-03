@@ -1,3 +1,7 @@
+// @vitest-environment node
+// The fake upstream decodes multipart with Node's own Request.formData(), whose
+// parser asserts on Node's File class. jsdom replaces the global File, so under
+// jsdom every upload reads as an invalid body.
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
