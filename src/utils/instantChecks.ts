@@ -74,6 +74,61 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 	}
 };
 
+// A torrent a provider holds packed as an archive lists no video, but it is not
+// the same answer as a torrent of samples and NFOs: another provider may list
+// the same hash unpacked, and the row says which provider only has the archive.
+const isArchive = (filename: string) => /\.(zip|rar|7z|r\d{2})$/i.test(filename);
+
+/**
+ * Records one provider's file listing for a row and reports whether it holds a
+ * playable video.
+ *
+ * RD, AD and TorBox run concurrently and can list the same hash differently -
+ * a UHD disc unpacked as BDMV on RD is one 80 GB .zip on TorBox (Fizzy card
+ * 169). The provider's own array always lands in `rdFiles`/`tbFiles`; the shared
+ * `files`, the video stats and `noVideos` only take a listing without videos
+ * when no other provider has already listed some. Otherwise whichever answered
+ * last decided the row: an archive arriving second hid the file list, and one
+ * arriving first set `noVideos`, which every later check skipped.
+ */
+const applyProviderFiles = <T extends SearchResult | EnrichedHashlistTorrent>(
+	torrent: T,
+	service: 'rd' | 'ad' | 'tb',
+	files: FileData[],
+	shouldUpdateTitleAndSize = false
+): boolean => {
+	if (service === 'rd') torrent.rdFiles = files;
+	if (service === 'tb') torrent.tbFiles = files;
+
+	const videoFiles = files.filter((f) => isVideo({ path: f.filename }));
+	const archiveOnly = { ...torrent.archiveOnly };
+	if (videoFiles.length === 0 && files.some((f) => isArchive(f.filename))) {
+		archiveOnly[service] = true;
+	} else {
+		delete archiveOnly[service];
+	}
+	torrent.archiveOnly = Object.keys(archiveOnly).length ? archiveOnly : undefined;
+
+	if (
+		videoFiles.length === 0 &&
+		(torrent.files ?? []).some((f) => isVideo({ path: f.filename }))
+	) {
+		return false;
+	}
+
+	torrent.files = files;
+	if (shouldUpdateTitleAndSize) {
+		updateTorrentTitle(torrent as SearchResult, files);
+		(torrent as SearchResult).fileSize =
+			files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
+	} else {
+		backfillMissingFileSize(torrent, files);
+	}
+	Object.assign(torrent, calculateFileStats(videoFiles));
+	torrent.noVideos = videoFiles.length === 0;
+	return !torrent.noVideos;
+};
+
 // Rate limiter for RD requests - 10 requests per 10 seconds
 const rdRequestTimestamps: number[] = [];
 const MAX_REQUESTS = 10;
@@ -136,38 +191,21 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	setTorrentList((prevSearchResults) => {
 		const newSearchResults = [...prevSearchResults];
 		for (const torrent of newSearchResults) {
-			if (torrent.noVideos) continue;
 			const availableTorrent = availableMap.get(torrent.hash);
 			if (!availableTorrent) continue;
 
-			torrent.files = availableTorrent.files.map((file) => ({
+			const files = availableTorrent.files.map((file) => ({
 				fileId: file.file_id,
 				filename: file.path,
 				filesize: file.bytes,
 			}));
-			// RD's own file ids, kept apart from `files` so a later TorBox check
-			// overwriting `files` cannot make us cast with TorBox numbering.
-			torrent.rdFiles = torrent.files;
-
-			if (shouldUpdateTitleAndSize) {
-				updateTorrentTitle(torrent as SearchResult, torrent.files);
-				(torrent as SearchResult).fileSize =
-					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
-			} else {
-				backfillMissingFileSize(torrent, torrent.files);
-			}
-
-			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-			const stats = calculateFileStats(videoFiles);
-			Object.assign(torrent, stats);
-
-			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
-			if (!torrent.noVideos) {
-				torrent.rdAvailable = true;
-				instantCount += 1;
-			} else {
-				torrent.rdAvailable = false;
-			}
+			torrent.rdAvailable = applyProviderFiles(
+				torrent,
+				'rd',
+				files,
+				shouldUpdateTitleAndSize
+			);
+			if (torrent.rdAvailable) instantCount += 1;
 		}
 		return sortFn ? sortFn(newSearchResults) : newSearchResults;
 	});
@@ -234,37 +272,23 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 	setTorrentList((prevSearchResults) => {
 		const newSearchResults = [...prevSearchResults];
 		for (const torrent of newSearchResults) {
-			if (torrent.noVideos) continue;
 			const availableTorrent = availableMap.get(torrent.hash);
 			if (!availableTorrent) continue;
 
-			torrent.files = availableTorrent.files.map(
+			const files = availableTorrent.files.map(
 				(file: { file_id: number; path: string; bytes: number }) => ({
 					fileId: file.file_id,
 					filename: file.path,
 					filesize: file.bytes,
 				})
 			);
-
-			if (shouldUpdateTitleAndSize) {
-				updateTorrentTitle(torrent as SearchResult, torrent.files);
-				(torrent as SearchResult).fileSize =
-					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
-			} else {
-				backfillMissingFileSize(torrent, torrent.files);
-			}
-
-			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-			const stats = calculateFileStats(videoFiles);
-			Object.assign(torrent, stats);
-
-			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
-			if (!torrent.noVideos) {
-				torrent.adAvailable = true;
-				instantCount += 1;
-			} else {
-				torrent.adAvailable = false;
-			}
+			torrent.adAvailable = applyProviderFiles(
+				torrent,
+				'ad',
+				files,
+				shouldUpdateTitleAndSize
+			);
+			if (torrent.adAvailable) instantCount += 1;
 		}
 		return sortFn ? sortFn(newSearchResults) : newSearchResults;
 	});
@@ -306,8 +330,6 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	setTorrentList((prevSearchResults) => {
 		const newSearchResults = [...prevSearchResults];
 		for (const torrent of newSearchResults) {
-			if (torrent.noVideos) continue;
-
 			const availableTorrent = allCachedData[torrent.hash];
 			if (!availableTorrent) continue;
 
@@ -317,25 +339,13 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 				// across four season packs resolved to a different file when the
 				// array position was sent as the id. Only fall back to the
 				// position if TorBox omits the id entirely.
-				torrent.files = availableTorrent.files.map((file: any, index: number) => ({
+				const files = availableTorrent.files.map((file: any, index: number) => ({
 					fileId: typeof file.id === 'number' ? file.id : index,
 					filename: file.name,
 					filesize: file.size,
 				}));
-				torrent.tbFiles = torrent.files;
-
-				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-				const stats = calculateFileStats(videoFiles);
-				Object.assign(torrent, stats);
-				backfillMissingFileSize(torrent, torrent.files);
-
-				torrent.noVideos = videoFiles.length === 0;
-				if (!torrent.noVideos) {
-					torrent.tbAvailable = true;
-					instantCount += 1;
-				} else {
-					torrent.tbAvailable = false;
-				}
+				torrent.tbAvailable = applyProviderFiles(torrent, 'tb', files);
+				if (torrent.tbAvailable) instantCount += 1;
 			}
 		}
 		return sortFn ? sortFn(newSearchResults) : newSearchResults;

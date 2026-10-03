@@ -470,8 +470,9 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						)
 							return null;
 
-						const rdColor = btnColor(r.rdAvailable, r.noVideos);
-						const adColor = btnColor(r.adAvailable, r.noVideos);
+						const rdColor = btnColor(r.rdAvailable, r.noVideos || !!r.archiveOnly?.rd);
+						const adColor = btnColor(r.adAvailable, r.noVideos || !!r.archiveOnly?.ad);
+						const tbColor = btnColor(r.tbAvailable, r.noVideos || !!r.archiveOnly?.tb);
 						let epRegex1 = /S(\d+)\s?E(\d+)/i;
 						let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
 						const episodeFilesOf = (files: FileData[] | undefined) =>
@@ -616,7 +617,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 												{isLoading
 													? 'Adding...'
-													: btnLabel(r.rdAvailable, 'RD')}
+													: btnLabel(
+															r.rdAvailable,
+															'RD',
+															r.archiveOnly?.rd
+														)}
 											</button>
 										)}
 										{rdKey &&
@@ -730,7 +735,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 												{isLoading
 													? 'Adding...'
-													: btnLabel(r.adAvailable, 'AD')}
+													: btnLabel(
+															r.adAvailable,
+															'AD',
+															r.archiveOnly?.ad
+														)}
 											</button>
 										)}
 										{adKey &&
@@ -803,7 +812,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										)}
 										{torboxKey && notInLibrary('tb', r.hash) && (
 											<button
-												className={`border-2 border-${btnColor(r.tbAvailable, r.noVideos)}-500 bg-${btnColor(r.tbAvailable, r.noVideos)}-900/30 text-${btnColor(r.tbAvailable, r.noVideos)}-100 hover:bg-${btnColor(r.tbAvailable, r.noVideos)}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												className={`border-2 border-${tbColor}-500 bg-${tbColor}-900/30 text-${tbColor}-100 hover:bg-${tbColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
 												onClick={() => addTb(r.hash)}
 												disabled={isLoading}
 											>
@@ -816,7 +825,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 												{isLoading
 													? 'Adding...'
-													: btnLabel(r.tbAvailable, 'TB')}
+													: btnLabel(
+															r.tbAvailable,
+															'TB',
+															r.archiveOnly?.tb
+														)}
 											</button>
 										)}
 										{rdKey &&

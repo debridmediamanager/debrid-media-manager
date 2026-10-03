@@ -22,13 +22,18 @@ export type SearchResult = {
 	ocAvailable: boolean; // Offcloud
 	dlAvailable: boolean; // Debrid-Link
 	files: FileData[];
-	// `files` is whichever availability check answered last - the four run
-	// concurrently and each overwrites it. Filenames and sizes agree across
-	// services, but `fileId` does not: RD numbers files per torrent, TorBox has
-	// its own ids that are not in listing order. Anything that sends an id back
-	// to a provider (casting an episode) must read that provider's own array.
+	// `files` is the last listing to answer that holds a video, or the only
+	// listing if none does (see applyProviderFiles). The checks run concurrently
+	// and providers can disagree: one may hold a disc unpacked and another the
+	// same hash as one archive. `fileId` never agrees: RD numbers files per
+	// torrent, TorBox has its own ids that are not in listing order. Anything
+	// that sends an id back to a provider (casting an episode) must read that
+	// provider's own array.
 	rdFiles?: FileData[];
 	tbFiles?: FileData[];
+	// The providers whose listing of this hash is only an archive (.zip/.rar)
+	// with no video in it; another provider may still list it unpacked.
+	archiveOnly?: ArchiveOnly;
 	noVideos: boolean;
 	// for cached results in RD
 	medianFileSize: number;
@@ -79,7 +84,10 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 	files: FileData[];
 	rdFiles?: FileData[];
 	tbFiles?: FileData[];
+	archiveOnly?: ArchiveOnly;
 }
+
+export type ArchiveOnly = Partial<Record<'rd' | 'ad' | 'tb', true>>;
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
 

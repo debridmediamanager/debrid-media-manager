@@ -565,9 +565,9 @@ const MovieSearchResults = ({
 				)
 					return null;
 
-				const rdColor = btnColor(r.rdAvailable, r.noVideos);
-				const adColor = btnColor(r.adAvailable, r.noVideos);
-				const tbColor = btnColor(r.tbAvailable, r.noVideos);
+				const rdColor = btnColor(r.rdAvailable, r.noVideos || !!r.archiveOnly?.rd);
+				const adColor = btnColor(r.adAvailable, r.noVideos || !!r.archiveOnly?.ad);
+				const tbColor = btnColor(r.tbAvailable, r.noVideos || !!r.archiveOnly?.tb);
 				const pmColor = btnColor(r.pmAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
 				// A completed TB → RD transfer lives under its own hash, so its
@@ -705,7 +705,9 @@ const MovieSearchResults = ({
 										) : (
 											btnIcon(r.rdAvailable)
 										)}
-										{isLoading ? 'Adding...' : btnLabel(r.rdAvailable, 'RD')}
+										{isLoading
+											? 'Adding...'
+											: btnLabel(r.rdAvailable, 'RD', r.archiveOnly?.rd)}
 									</button>
 								)}
 								{rdKey &&
@@ -805,7 +807,9 @@ const MovieSearchResults = ({
 										) : (
 											btnIcon(r.adAvailable)
 										)}
-										{isLoading ? 'Adding...' : btnLabel(r.adAvailable, 'AD')}
+										{isLoading
+											? 'Adding...'
+											: btnLabel(r.adAvailable, 'AD', r.archiveOnly?.ad)}
 									</button>
 								)}
 								{adKey && handleCastAllDebrid && r.adAvailable && (
@@ -877,7 +881,9 @@ const MovieSearchResults = ({
 										) : (
 											btnIcon(r.tbAvailable)
 										)}
-										{isLoading ? 'Adding...' : btnLabel(r.tbAvailable, 'TB')}
+										{isLoading
+											? 'Adding...'
+											: btnLabel(r.tbAvailable, 'TB', r.archiveOnly?.tb)}
 									</button>
 								)}
 								{rdKey &&

@@ -47,8 +47,16 @@ export const btnIcon = (avail: boolean) =>
 		<Download className="mr-2 inline h-3 w-3" />
 	);
 
-export const btnLabel = (avail: boolean, debridService: string) =>
-	avail ? <b>Instant {debridService}</b> : `DL with ${debridService}`;
+// `archiveOnly`: the provider lists this hash as a .zip/.rar with no video in
+// it, so adding it there yields an archive to unpack rather than a playable file.
+export const btnLabel = (avail: boolean, debridService: string, archiveOnly = false) =>
+	avail ? (
+		<b>Instant {debridService}</b>
+	) : archiveOnly ? (
+		`DL with ${debridService} (archive)`
+	) : (
+		`DL with ${debridService}`
+	);
 
 /**
  * Whether any service the user holds can play this row right now.

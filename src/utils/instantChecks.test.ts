@@ -450,7 +450,9 @@ describe('instantChecks utilities', () => {
 			expect(getState()[0].files).toHaveLength(0);
 		});
 
-		it('skips torrents with noVideos: true', async () => {
+		// `noVideos` only ever comes from another provider's check, which may hold
+		// the same hash as an archive; it must not hide RD's own listing.
+		it('takes a video listing for a row another provider marked noVideos', async () => {
 			mockCheckAvailability.mockResolvedValue({
 				available: [
 					{
@@ -477,9 +479,10 @@ describe('instantChecks utilities', () => {
 				identity
 			);
 
-			expect(hits).toBe(0);
-			expect(getState()[0].rdAvailable).toBe(false);
-			expect(getState()[0].files).toHaveLength(0);
+			expect(hits).toBe(1);
+			expect(getState()[0].rdAvailable).toBe(true);
+			expect(getState()[0].noVideos).toBe(false);
+			expect(getState()[0].files).toHaveLength(1);
 		});
 	});
 

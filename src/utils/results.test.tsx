@@ -181,6 +181,10 @@ describe('results utils', () => {
 			expect(result).toBe('DL with RD');
 		});
 
+		it('says when the provider only holds an archive', () => {
+			expect(btnLabel(false, 'TB', true)).toBe('DL with TB (archive)');
+		});
+
 		it('handles different service names', () => {
 			const result = btnLabel(true, 'TorBox');
 			expect(result).not.toBe('string');
