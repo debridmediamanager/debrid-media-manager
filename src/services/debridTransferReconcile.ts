@@ -1,6 +1,7 @@
 import { resolveJobServer } from '@/services/debridUploaderServers';
 import { repository as db } from '@/services/repository';
 import { registerCompletedDebridJob } from '@/services/transferRegistration';
+import { settleCancelledDebridJob } from '@/utils/debridJobOutcome';
 
 /**
  * Catching up on TB → RD transfers that finished while nobody was watching.
@@ -81,7 +82,7 @@ export async function lookupJob(server: string, jobId: string): Promise<Uploader
 		});
 		if (res.status === 404) return { gone: true, unreachable: false };
 		if (!res.ok) return { gone: false, unreachable: true };
-		return { job: await res.json(), gone: false, unreachable: false };
+		return { job: settleCancelledDebridJob(await res.json()), gone: false, unreachable: false };
 	} catch {
 		return { gone: false, unreachable: true };
 	}

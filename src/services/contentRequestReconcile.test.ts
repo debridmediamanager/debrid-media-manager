@@ -2,6 +2,8 @@ import { ORPHANED_CLAIM_MS, reconcileContentRequests } from '@/services/contentR
 import { repository as db } from '@/services/repository';
 import completedJob from '@/test/fixtures/contentRequests/job-completed.json';
 import uncachedJob from '@/test/fixtures/contentRequests/job-failed-uncached.json';
+import claimedOnCancelledJob from '@/test/fixtures/debridUploader/claimed-request-cancelled-job.json';
+import cancelledJob from '@/test/fixtures/debridUploader/job-cancelled-claimed-request.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -77,6 +79,31 @@ describe('reconcileContentRequests', () => {
 		expect(mockDb.settleContentRequestDelivered).toHaveBeenCalledWith('req-1', completedJob.id);
 		expect(mockDb.releaseContentRequest).not.toHaveBeenCalled();
 		expect(result.delivered).toBe(1);
+	});
+
+	// Card 109. The fulfiller cancelled this job on 2026-09-21; the uploader
+	// kept answering `pending` (with `deleted: 1`), so the request sat claimed
+	// and off the board for twelve days. All four claims open on 2026-10-03
+	// were waiting on a cancelled job.
+	it('puts a request whose job was cancelled back on the board', async () => {
+		mockDb.listClaimedContentRequests = vi.fn().mockResolvedValue([
+			{
+				...claimedOnCancelledJob,
+				createdAt: new Date(claimedOnCancelledJob.createdAt),
+				updatedAt: new Date(claimedOnCancelledJob.updatedAt),
+			},
+		]);
+		uploaderSays({ [cancelledJob.id]: { body: cancelledJob } });
+
+		const result = await reconcileContentRequests(20, NOW);
+
+		expect(mockDb.releaseContentRequest).toHaveBeenCalledWith(
+			claimedOnCancelledJob.id,
+			'cancelled',
+			cancelledJob.id
+		);
+		expect(mockDb.touchClaimedContentRequest).not.toHaveBeenCalled();
+		expect(result).toMatchObject({ reopened: 1, inFlight: 0 });
 	});
 
 	it('leaves a job still running alone and re-queues it', async () => {

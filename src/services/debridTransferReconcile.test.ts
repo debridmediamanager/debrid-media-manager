@@ -1,6 +1,10 @@
 import { reconcileDebridTransfers } from '@/services/debridTransferReconcile';
 import { repository as db } from '@/services/repository';
 import { registerCompletedDebridJob } from '@/services/transferRegistration';
+import cancelledDownloading from '@/test/fixtures/debridUploader/job-cancelled-downloading.json';
+import cancelledPending from '@/test/fixtures/debridUploader/job-cancelled-pending.json';
+import cancelledUploading from '@/test/fixtures/debridUploader/job-cancelled-uploading.json';
+import cancelledMappings from '@/test/fixtures/debridUploader/tbrd-cancelled-mappings.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -92,6 +96,26 @@ describe('reconcileDebridTransfers', () => {
 
 		expect(mockDb.removeDebridTransfer).toHaveBeenCalledWith('c'.repeat(40));
 		expect(result).toMatchObject({ pruned: 1 });
+	});
+
+	// Card 109. A cancel sets `deleted` on the uploader's row and leaves the
+	// status where it was, so these three answered `uploading`, `pending` and
+	// `downloading` a day after their submitters cancelled them. Read that way the
+	// sweep kept every one as "in flight" for good: 222 of the 224 pending
+	// mappings on production, 2026-10-03, and each refused any later send of its
+	// release. Captured bodies and the mappings DMM held for them.
+	it('prunes the mapping for a job its submitter cancelled', async () => {
+		const jobs = [cancelledUploading, cancelledPending, cancelledDownloading];
+		mockDb.listPendingDebridTransfers = vi.fn().mockResolvedValue(cancelledMappings);
+		uploaderSays(Object.fromEntries(jobs.map((job) => [job.id, { body: job }])));
+
+		const result = await reconcileDebridTransfers();
+
+		for (const mapping of cancelledMappings) {
+			expect(mockDb.removeDebridTransfer).toHaveBeenCalledWith(mapping.originalHash);
+		}
+		expect(mockDb.touchDebridTransfer).not.toHaveBeenCalled();
+		expect(result).toMatchObject({ checked: 3, pruned: 3, inFlight: 0 });
 	});
 
 	it('leaves a job that is still running', async () => {

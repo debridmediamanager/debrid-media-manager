@@ -1,0 +1,17 @@
+{
+	"createdAt": "2026-09-02T10:06:10.799Z",
+	"error": null,
+	"fulfillerId": "helper",
+	"hash": "df2ad1b15e26d1d9c191b5c212d1d043af78e949",
+	"id": "a280ac8f-5d7a-4e73-99af-390073745dbe",
+	"imdbId": "tt1838618",
+	"jobHost": "http://100.122.58.7:3100",
+	"jobId": "699379c6-8bd1-4c96-94ec-32c79c4186f3",
+	"mediaType": "movie",
+	"requesterId": "asker",
+	"returnPath": null,
+	"sizeBytes": null,
+	"status": "claimed",
+	"title": "Paranormal Xperience 3D 2011 1080p Blu-ray AVC DTS-HD MA 5 1-HDChina",
+	"updatedAt": "2026-10-03T16:40:07.354Z"
+}

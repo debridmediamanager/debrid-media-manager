@@ -1,5 +1,7 @@
 import handler from '@/pages/api/debrid-uploader/jobs';
 import { repository } from '@/services/repository';
+import cancelledUploading from '@/test/fixtures/debridUploader/job-cancelled-uploading.json';
+import cancelledMappings from '@/test/fixtures/debridUploader/tbrd-cancelled-mappings.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -159,5 +161,37 @@ describe('POST /api/debrid-uploader/jobs — takedown', () => {
 		expect(res._getStatusCode()).toBe(451);
 		expect(global.fetch).not.toHaveBeenCalled();
 		expect(mockRepo.recordDebridTransferPending).not.toHaveBeenCalled();
+	});
+});
+
+// Card 109: "if the transfer fails or gets cancelled, it doesn't get cleared so
+// it's impossible to retry it as it stays 'in progress' permanently." The
+// mapping and the uploader's answer for its job are production's, 2026-10-03:
+// the job was cancelled at RD 0% and still read `uploading`, so every send of
+// this release came back as a duplicate of a transfer that would never finish.
+describe('POST /api/debrid-uploader/jobs — a release whose last transfer was cancelled', () => {
+	const mapping = cancelledMappings[0];
+
+	it('starts a new transfer instead of joining the cancelled one', async () => {
+		mockRepo.getDebridTransfer = vi.fn().mockResolvedValue(mapping);
+		global.fetch = vi.fn(async (url: string, init?: RequestInit) =>
+			init?.method === 'POST'
+				? { ok: true, status: 201, json: async () => ({ id: 'job-retry' }) }
+				: { ok: true, status: 200, json: async () => cancelledUploading }
+		) as any;
+
+		const res = await post(validBody({ hash: mapping.originalHash, imdbId: mapping.imdbId }));
+
+		expect(res._getStatusCode()).toBe(201);
+		expect(res._getData()).toEqual({ id: 'job-retry' });
+		expect(vi.mocked(global.fetch)).toHaveBeenCalledWith(
+			`http://uploader:3100/jobs/${mapping.jobId}`,
+			expect.anything()
+		);
+		expect(mockRepo.recordDebridTransferPending).toHaveBeenCalledWith(
+			mapping.originalHash,
+			'job-retry',
+			mapping.imdbId
+		);
 	});
 });

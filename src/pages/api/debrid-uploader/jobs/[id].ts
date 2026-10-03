@@ -2,6 +2,7 @@ import { resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { registerCompletedDebridJob } from '@/services/transferRegistration';
+import { settleCancelledDebridJob } from '@/utils/debridJobOutcome';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -26,7 +27,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			headers: { Accept: 'application/json' },
 			signal: AbortSignal.timeout(15000),
 		});
-		const data = await response.json();
+		const body = await response.json();
+		// A cancelled job has to read as over here too: this is what a send asks
+		// before joining a transfer it tracks, and what it polls while waiting.
+		const data = req.method === 'GET' ? settleCancelledDebridJob(body) : body;
 
 		if (req.method === 'GET' && response.ok && data?.status === 'completed') {
 			try {

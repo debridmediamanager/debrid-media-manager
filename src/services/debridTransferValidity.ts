@@ -1,5 +1,6 @@
 import { resolveJobServer } from '@/services/debridUploaderServers';
 import { repository as db } from '@/services/repository';
+import { settleCancelledDebridJob } from '@/utils/debridJobOutcome';
 
 // Is a mapped transfer still worth blocking a fresh submission? A completed one
 // counts only while its rewritten torrent is still RD-cached (a pruned one
@@ -14,7 +15,8 @@ export async function isTransferStillValid(record: {
 		const available = await db.checkAvailabilityByHashes([record.rewrittenHash]);
 		return available.length > 0;
 	}
-	// pending: alive unless the referenced job has failed or vanished
+	// pending: alive unless the referenced job has failed, been cancelled or
+	// vanished
 	try {
 		const server = await resolveJobServer(record.jobId, (j) => db.getDebridJobServer(j));
 		if (!server) return false;
@@ -23,7 +25,7 @@ export async function isTransferStillValid(record: {
 			signal: AbortSignal.timeout(10000),
 		});
 		if (res.status === 404) return false;
-		const job = await res.json();
+		const job = settleCancelledDebridJob(await res.json());
 		return job?.status !== 'failed';
 	} catch {
 		return false; // can't confirm it's alive — let the resubmit through
