@@ -2,6 +2,7 @@ import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
+import { rdCastPlayId } from '@/utils/rdCastLink';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
@@ -104,10 +105,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			),
 		]);
 
-		const filteredUserCastItems = userCastItems.filter(
-			(item) => !isRdBlockedFilename(item.filename)
-		);
-		const filteredOtherItems = otherItems.filter((item) => !isRdBlockedFilename(item.filename));
+		// A stream is played by unrestricting its Real-Debrid link, so a row
+		// without one - a `debridio:{hash}` availability marker - has nothing to
+		// offer, and cutting it at character 26 made a play URL out of a slice of
+		// the infohash. Its `url` is no fallback: on a marker row it is the marker.
+		const playable = (item: { filename: string; link: string | null }) =>
+			!isRdBlockedFilename(item.filename) && rdCastPlayId(item.link) !== null;
+		const playUrl = (link: string) =>
+			`${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${rdCastPlayId(link)}`;
+
+		const filteredUserCastItems = userCastItems.filter(playable);
+		const filteredOtherItems = otherItems.filter(playable);
 
 		const allHashes = [
 			...filteredUserCastItems.map((item) => item.hash),
@@ -142,9 +150,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			streams.push({
 				name,
 				title,
-				url: item.link
-					? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
-					: item.url,
+				url: playUrl(item.link),
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm', item.hash),
 				},
@@ -166,9 +172,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			streams.push({
 				name,
 				title,
-				url: item.link
-					? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
-					: item.url,
+				url: playUrl(item.link),
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm', item.hash),
 				},

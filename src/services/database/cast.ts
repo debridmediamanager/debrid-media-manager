@@ -1,4 +1,5 @@
 import type { RdCastCredentials } from '@/utils/castRdToken';
+import { RD_DOWNLOAD_LINK_PREFIX } from '@/utils/rdCastLink';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { DatabaseClient } from './client';
 
@@ -507,6 +508,14 @@ export class CastService extends DatabaseClient {
 		// prefers the biggest file, which is often the stalest un-refreshed remux.
 		const linkCutoff = rdLinkCutoff();
 
+		// Only rows with a Real-Debrid link can be played by unrestricting it.
+		// Availability learned from Debridio sits in the same table under a
+		// `debridio:{hash}` marker - nobody holds that torrent, so there is no
+		// link - and the stream route cut the marker into a play URL made of a
+		// slice of the infohash. Asking for links here, rather than dropping the
+		// markers afterwards, lets a real link take the slot.
+		const rdLinkOnly = { startsWith: RD_DOWNLOAD_LINK_PREFIX };
+
 		const availableFileResults = await this.prisma.availableFile.findMany({
 			where: {
 				available: {
@@ -514,6 +523,7 @@ export class CastService extends DatabaseClient {
 					status: 'downloaded',
 					updatedAt: { gt: linkCutoff },
 				},
+				link: rdLinkOnly,
 				...(maxSizeBytes !== undefined && { bytes: { lte: maxSizeBytes } }),
 				...(seasonFilter !== undefined && { season: seasonFilter }),
 				...(episodeFilter !== undefined && { episode: episodeFilter }),
@@ -560,6 +570,7 @@ export class CastService extends DatabaseClient {
 				hash: true,
 				filename: true,
 				files: {
+					where: { link: rdLinkOnly },
 					select: {
 						link: true,
 						path: true,

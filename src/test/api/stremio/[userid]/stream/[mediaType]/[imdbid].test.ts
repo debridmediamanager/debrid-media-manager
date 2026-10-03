@@ -148,7 +148,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/My%20Show%20S01E01.mkv',
-				link: 'https://app.real-debrid.com/d/abcdefghijklmnopqrstuvwxyz',
+				link: 'https://real-debrid.com/d/ABCDEFGHIJKLMNOP',
 				size: 2048,
 				filename: 'My Show S01E01.mkv',
 				hash: 'abc123',
@@ -157,7 +157,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getOtherStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/Other.mkv',
-				link: 'https://app.real-debrid.com/d/abcdefghijklmnopqrstuvwxyz123',
+				link: 'https://real-debrid.com/d/QRSTUVWXYZ123456',
 				size: 512,
 				filename: 'Other.mkv',
 				hash: 'def456',
@@ -229,7 +229,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/Movie.2024.2160p.mkv',
-				link: 'https://app.real-debrid.com/d/abcdefghijklmnopqrstuvwxyz',
+				link: 'https://real-debrid.com/d/ABCDEFGHIJKLMNOP',
 				size: 20480,
 				filename: 'Movie.2024.2160p.mkv',
 				hash: 'abcdef1234567890abcdef1234567890abcdef12',
@@ -291,7 +291,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/Movie.2024.2160p.mkv',
-				link: 'https://app.real-debrid.com/d/abcdefghijklmnopqrstuvwxyz',
+				link: 'https://real-debrid.com/d/ABCDEFGHIJKLMNOP',
 				size: 20480,
 				filename: 'Movie.2024.2160p.mkv',
 				hash: 'abcdef1234567890abcdef1234567890abcdef12',
@@ -369,7 +369,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/Movie.mkv',
-				link: 'https://app.real-debrid.com/d/abcdefghijklmnopqrstuvwxyz',
+				link: 'https://real-debrid.com/d/ABCDEFGHIJKLMNOP',
 				size: 2048,
 				filename: 'Movie.mkv',
 				hash: 'unknownhash1234567890unknownhash12345678',
@@ -415,7 +415,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 		const userStream = {
 			url: 'https://files.dmm.test/MyMovie.mkv',
-			link: 'https://app.real-debrid.com/d/abcdefghijklm',
+			link: 'https://real-debrid.com/d/ABCDEFGHIJKLM',
 			size: 5120,
 			filename: 'MyMovie.mkv',
 			hash: 'userhash1234',
@@ -423,7 +423,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 		const otherStream = {
 			url: 'https://files.dmm.test/OtherMovie.mkv',
-			link: 'https://app.real-debrid.com/d/zyxwvutsrqpon',
+			link: 'https://real-debrid.com/d/ZYXWVUTSRQPON',
 			size: 3072,
 			filename: 'OtherMovie.mkv',
 			hash: 'otherhash5678',
@@ -721,7 +721,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 				s.title?.includes('DMM Cast RD (Yours)')
 			);
 			const otherResultStream = payload.streams.find((s: any) =>
-				s.url?.endsWith('zyxwvutsrqpon')
+				s.url?.endsWith('/play/ZYXWVUTSRQPON')
 			);
 			expect(yourStream).toBeDefined();
 			expect(otherResultStream).toBeDefined();
@@ -743,14 +743,14 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/File1.mkv',
-				link: 'https://app.real-debrid.com/d/link1',
+				link: 'https://real-debrid.com/d/LINK000000001',
 				size: 1024,
 				filename: 'File1.mkv',
 				hash: 'samehash12345678901234567890samehash1234',
 			},
 			{
 				url: 'https://files.dmm.test/File2.mkv',
-				link: 'https://app.real-debrid.com/d/link2',
+				link: 'https://real-debrid.com/d/LINK000000002',
 				size: 1024,
 				filename: 'File2.mkv',
 				hash: 'samehash12345678901234567890samehash1234',
@@ -759,7 +759,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getOtherStreams = vi.fn().mockResolvedValue([
 			{
 				url: 'https://files.dmm.test/File3.mkv',
-				link: 'https://app.real-debrid.com/d/link3',
+				link: 'https://real-debrid.com/d/LINK000000003',
 				size: 1024,
 				filename: 'File3.mkv',
 				hash: 'differenthash90123456789differenthash901',

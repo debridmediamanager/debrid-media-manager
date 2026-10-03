@@ -1,0 +1,380 @@
+{
+	"_source": "dmmdb on 2026-10-03 (read-only): for each Stremio id, the AvailableFile rows joined to their Available row (status 'downloaded', updatedAt inside RD_LINK_MAX_AGE) ordered by bytes desc - what CastService.getOtherStreams reads for that id, before any link filter. tt0903747:1:1 and tt0396269 hold the top 11 and 12 rows, enough for take: limit * 2 after the markers drop out; tt0110364 holds its only row. Scrubbed: RD /d/ ids replaced with same-length FIXTURE placeholders; debridio: markers, hashes and names kept verbatim.",
+	"titles": [
+		{
+			"id": "tt0903747:1:1",
+			"files": [
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00001",
+					"file_id": 1,
+					"hash": "8ab3f915df256706696f9479eb4d72d094745fac",
+					"path": "/Breaking Bad (2008) S01E01 (2160p).mkv",
+					"bytes": 23816520757,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad S01 2160p",
+						"bytes": 138262133621,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00002",
+					"file_id": 2,
+					"hash": "6cb44e28b6bf9868e1deacb5a0f431c10c967c52",
+					"path": "/Breaking Bad (2008) Season 01. Full HD BD-Remux by Wild_Cat/Breaking Bad (2008) Season 01. Episode 01. Full HD BD-Remux by Wild_Cat.mkv",
+					"bytes": 20987353952,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad. Full HD BD-Remux by Wild_Cat",
+						"bytes": 823849537804,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "debridio:d836f3e53f48e76d54541931934ff9693e83f686",
+					"file_id": 0,
+					"hash": "d836f3e53f48e76d54541931934ff9693e83f686",
+					"path": "Breaking.Bad.S01E01.Pilot.1080p.DTS-HD.MA.5.1.AVC.REMUX.mkv",
+					"bytes": 19187766395,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking.Bad.S01E01.Pilot.1080p.DTS-HD.MA.5.1.AVC.REMUX.mkv",
+						"bytes": 19187766395,
+						"season": 1,
+						"episode": 1
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00003",
+					"file_id": 1,
+					"hash": "f3f8be8d24da8b6adc30dde4201cd69187e245c2",
+					"path": "/Breaking Bad.S01E01.Pilot.1080p.mkv",
+					"bytes": 17480116733,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad.S01.1080p.BDRemux.HDClub.lostrator.ShaKh",
+						"bytes": 106623185442,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00004",
+					"file_id": 1,
+					"hash": "e2b01ba1df534cb007869cfb7e121a8e18e573ea",
+					"path": "/Breaking.Bad.S01E01.Pilot.2160p.AMZN.WEB-DL.DTS-HD.MA.5.1.SDR.HEVC.mkv",
+					"bytes": 13339467135,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad S01 AMZN 2160p",
+						"bytes": 75164660752,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00005",
+					"file_id": 1,
+					"hash": "8f412ed09e86ce42c99ffb235187cd9c4ba1536b",
+					"path": "/Breaking Bad S01/Breaking Bad S01E01 1080p BluRay REMUX Multi-Multi AVC-PiR8.mkv",
+					"bytes": 13322854643,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad S01-S05 BR REMUX-PiR8",
+						"bytes": 578800183243,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00006",
+					"file_id": 1,
+					"hash": "906291615216936158ab63624d176a667c8a9dfe",
+					"path": "/Breaking Bad S01/Breaking Bad S01E01 1080p BluRay REMUX Multi-Multi AVC-PiR8.mkv",
+					"bytes": 13322854643,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking.Bad.S01-S05.1080p.BluRay.REMUX.Multi.AVC-PiR8",
+						"bytes": 578800183243,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00007",
+					"file_id": 1,
+					"hash": "c6589171d7eed8d09891cb8a231d0717089d4e9f",
+					"path": "/Breaking Bad S01/Breaking Bad S01E01 1080p BluRay REMUX Multi-Multi AVC-PiR8.mkv",
+					"bytes": 13322854643,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking Bad S01-S05 BR REMUX-PiR8",
+						"bytes": 578800183243,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00008",
+					"file_id": 1,
+					"hash": "093e34af4dca4360b231a0bb013848a9ffdaee8a",
+					"path": "/Breaking.Bad.Season.1.Episode.01.Pilot.REMUX-b1P0LAR.mkv",
+					"bytes": 12606182629,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking.Bad.Season.1.2008.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-b1P0LAR",
+						"bytes": 80207037324,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00009",
+					"file_id": 1,
+					"hash": "cf5219b8872a29619b46a6553d452a008d747f37",
+					"path": "/Breaking.Bad.S01E01.Pilot.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+					"bytes": 12599751990,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking.Bad.S01.REPACK.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+						"bytes": 79474727077,
+						"season": 1,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00010",
+					"file_id": 1,
+					"hash": "7b800ab42bf4f870904587484747b229e6c0b035",
+					"path": "/Breaking.Bad.S01E01.Pilot.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+					"bytes": 12599751990,
+					"season": 1,
+					"episode": 1,
+					"available": {
+						"filename": "Breaking.Bad.S01.REPACK.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+						"bytes": 79474727077,
+						"season": 1,
+						"episode": null
+					}
+				}
+			]
+		},
+		{
+			"id": "tt0396269",
+			"files": [
+				{
+					"link": "debridio:1ac6a8bbb67664a8c33c798101af0649775e2ecd",
+					"file_id": 0,
+					"hash": "1ac6a8bbb67664a8c33c798101af0649775e2ecd",
+					"path": "Wedding Crashers 2005 Unrated Upscaled BluRay 2160p HDR10 HEVC Do...",
+					"bytes": 24266565222,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding Crashers 2005 Unrated Upscaled BluRay 2160p HDR10 HEVC Do...",
+						"bytes": 24266565222,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00011",
+					"file_id": 103,
+					"hash": "94f4ebecf15d96d9fdfa644db870138a645d50e1",
+					"path": "/BDMV/STREAM/00000.m2ts",
+					"bytes": 18600019968,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding Crashers",
+						"bytes": 39302522880,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00012",
+					"file_id": 104,
+					"hash": "94f4ebecf15d96d9fdfa644db870138a645d50e1",
+					"path": "/BDMV/STREAM/00029.m2ts",
+					"bytes": 18420160512,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding Crashers",
+						"bytes": 39302522880,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "debridio:ae7824222de23cb52dac27ffbeb58d9a8554164e",
+					"file_id": 0,
+					"hash": "ae7824222de23cb52dac27ffbeb58d9a8554164e",
+					"path": "Незваные гости / Wedding Crashers (Дэвид Добкин / David Dobkin) [2005, США, мелодрама, комедия, BDRemux 1080p] [Театральная Версия / Theatrical Cut]",
+					"bytes": 18403934863,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Незваные гости / Wedding Crashers (Дэвид Добкин / David Dobkin) [2005, США, мелодрама, комедия, BDRemux 1080p] [Театральная Версия / Theatrical Cut]",
+						"bytes": 18403934863,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00013",
+					"file_id": 1,
+					"hash": "00747716896cba8e7df7b482973c84ce8e8b8b6c",
+					"path": "/Wedding.Crashers.2005.Theatrical.Cut.BluRay.1080p.TrueHD.5.1.VC-1.REMUX-FraMeSToR.mkv",
+					"bytes": 16279891333,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding.Crashers.2005.Theatrical.Cut.BluRay.1080p.TrueHD.5.1.VC-1.REMUX-FraMeSToR.mkv",
+						"bytes": 16279891333,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00014",
+					"file_id": 1,
+					"hash": "ee9bb8b6626d4968a37d2374bcd2aa51e750dfa3",
+					"path": "/Wedding.Crashers.2005.Unrated.1080p.BluRay.REMUX.VC-1.TrueHD.5.1-EPSiLON.mkv",
+					"bytes": 15970860804,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding.Crashers.2005.Unrated.1080p.BluRay.REMUX.VC-1.TrueHD.5.1-EPSiLON",
+						"bytes": 15970860804,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00015",
+					"file_id": 1,
+					"hash": "4316bed0b31acdee738ecca8b487bad083d1b587",
+					"path": "/Wedding.Crashers.2005.1080p.BluRay.Remux.TrueHD.5.1.mkv",
+					"bytes": 15888521969,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding.Crashers.2005.1080p.BluRay.Remux.TrueHD.5.1.mkv",
+						"bytes": 15888521969,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00016",
+					"file_id": 1,
+					"hash": "ebe806a4d1b095f00c4e5d5198599144c288488c",
+					"path": "/Wedding Crashers Uncorked Edition (2005) 2160p HDR Ai Upscale -Mesc.mkv",
+					"bytes": 10777632240,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding Crashers Uncorked Edition (2005) 2160p HDR Ai Upscale -Mesc",
+						"bytes": 10777632240,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00017",
+					"file_id": 1,
+					"hash": "c78f7c0fd8dcf5f0c97217e480fbd1ba21cb2729",
+					"path": "/Wedding.Crashers.2005.Uncorked.Edition.1080p.BluRay.DDP.5.1.x265-edge2020.mkv",
+					"bytes": 6057425111,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding.Crashers.2005.Uncorked.Edition.1080p.BluRay.DDP.5.1.x265-edge2020.mkv",
+						"bytes": 6057425111,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00018",
+					"file_id": 1,
+					"hash": "ccb549e43c43d4e5bf2a78039ae0ab656744ee7b",
+					"path": "/2 Single a Nozze - Wedding Crashers (2005) UpScaled 2160p H265 10 bit DV HDR10+ ita eng AC3 5.1 sub ita eng Licdom.mkv",
+					"bytes": 5452582262,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "2 Single a Nozze - Wedding Crashers (2005) UpScaled 2160p H265 10 bit DV HDR10+ ita eng AC3 5.1 sub ita eng Licdom.mkv",
+						"bytes": 5452582262,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00019",
+					"file_id": 6,
+					"hash": "2c082b5d53650486f01a70cdcdf50c17efd25fc8",
+					"path": "/Wedding Crashers (2005) (1080p x265 10bit Tigole).mkv",
+					"bytes": 4708916143,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding Crashers (2005) (1080p BluRay x265 HEVC 10bit AAC 5.1 Tigole)",
+						"bytes": 4984225914,
+						"season": null,
+						"episode": null
+					}
+				},
+				{
+					"link": "https://real-debrid.com/d/FIXTURELINK00020",
+					"file_id": 2,
+					"hash": "7a2705937a58d0c196102b95aa63440178e87885",
+					"path": "/Wedding.Crashers.2005.TC.1080p.BluRay.x265-DiN.mkv",
+					"bytes": 4432723207,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Wedding.Crashers.2005.TC.1080p.BluRay.x265-DiN.mkv",
+						"bytes": 4432723207,
+						"season": null,
+						"episode": null
+					}
+				}
+			]
+		},
+		{
+			"id": "tt0110364",
+			"files": [
+				{
+					"link": "debridio:87d0b04f3b103b399a2afe24055425af28f4f7c4",
+					"file_id": 0,
+					"hash": "87d0b04f3b103b399a2afe24055425af28f4f7c4",
+					"path": "Little Giants (1994) [1080p]",
+					"bytes": 2093796557,
+					"season": null,
+					"episode": null,
+					"available": {
+						"filename": "Little Giants (1994) [1080p]",
+						"bytes": 2093796557,
+						"season": null,
+						"episode": null
+					}
+				}
+			]
+		}
+	]
+}

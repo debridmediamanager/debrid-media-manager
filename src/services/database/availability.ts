@@ -297,6 +297,8 @@ export class AvailabilityService extends DatabaseClient {
 	 * synthetic file. Its link is the `debridio:{hash}` marker: unique, never an
 	 * RD URL, and it identifies the row as instant-only - real rows (transfer
 	 * registrations, user downloads) keep their genuine file lists untouched.
+	 * Anything that plays a row's link has to ask for Real-Debrid links only, as
+	 * the RD Cast stream pool (`CastService.getOtherStreams`) does.
 	 * Rows already present are skipped entirely rather than refreshed; like real
 	 * rows, an instant row is trusted until something deletes it.
 	 */
