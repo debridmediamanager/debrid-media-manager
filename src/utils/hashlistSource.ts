@@ -69,7 +69,23 @@ export async function readHashlistFragment(fragment: string): Promise<string> {
 	return lzString.decompressFromEncodedURIComponent(storedListText(await response.text())) ?? '';
 }
 
-/** The page hashlists.debridmediamanager.com serves for a list. */
+const ATTRIBUTE_ESCAPES: Record<string, string> = {
+	'&': '&amp;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'<': '&lt;',
+	'>': '&gt;',
+};
+
+/** `value` as the text of a quoted HTML attribute: it cannot end the attribute or open a tag. */
+const escapeAttribute = (value: string) =>
+	value.replace(/[&"'<>]/g, (character) => ATTRIBUTE_ESCAPES[character]);
+
+/**
+ * The page hashlists.debridmediamanager.com serves for a list. The URL is
+ * escaped whatever it holds; the app only ever writes its own `#id=` link,
+ * which escaping leaves as it is.
+ */
 export const hashlistPageHtml = (iframeSrc: string) => `<!doctype html>
 <html>
 <head>
@@ -78,6 +94,6 @@ export const hashlistPageHtml = (iframeSrc: string) => `<!doctype html>
 <style>iframe{border:none;position:absolute;top:0;left:0;width:100%;height:100%}</style>
 </head>
 <body>
-<iframe src="${iframeSrc}"></iframe>
+<iframe src="${escapeAttribute(iframeSrc)}"></iframe>
 </body>
 </html>`;

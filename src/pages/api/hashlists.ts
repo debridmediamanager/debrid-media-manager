@@ -36,11 +36,29 @@ function isHashlistData(data: unknown): data is string {
 	}
 }
 
-// The list an old-form `url` carries in its #fragment, when it is DMM's own
-// hash list page. A list shared from another instance keeps its iframe.
+const APP_PAGE = new URL(HASHLIST_APP_URL);
+
+// The list an old-form `url` carries, when the url is the one shape clients
+// have sent: DMM's hash list page over https, nothing but the list after the
+// `#`. Any other url is refused, so nothing the caller sends is ever written
+// into the page's markup; the page's iframe is always the app's own link.
 function listInUrl(url: unknown): string | undefined {
-	if (typeof url !== 'string' || !url.startsWith(`${HASHLIST_APP_URL}#`)) return undefined;
-	const fragment = url.slice(HASHLIST_APP_URL.length + 1);
+	if (typeof url !== 'string') return undefined;
+	let parsed: URL;
+	try {
+		parsed = new URL(url);
+	} catch {
+		return undefined;
+	}
+	const isAppPage =
+		parsed.protocol === 'https:' &&
+		parsed.host === APP_PAGE.host &&
+		parsed.pathname === APP_PAGE.pathname &&
+		!parsed.username &&
+		!parsed.password &&
+		!parsed.search;
+	if (!isAppPage) return undefined;
+	const fragment = parsed.hash.slice(1);
 	return isHashlistData(fragment) ? fragment : undefined;
 }
 
@@ -66,9 +84,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const list: string | undefined = data ?? listInUrl(url);
+	if (list === undefined) {
+		res.status(400).json({
+			message: `url must be ${HASHLIST_APP_URL}#<lz-string encoded hash list>`,
+		});
+		return;
+	}
 	const uuid = uuidv4();
-	const iframeSrc =
-		list === undefined ? url : `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
+	const iframeSrc = `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
 
 	const token = process.env.GH_PAT;
 
@@ -84,8 +107,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const files: { path: string; content: string }[] = [
 			{ path: `${uuid}.html`, content: hashlistPageHtml(iframeSrc) },
+			{ path: hashlistDataPath(uuid), content: list },
 		];
-		if (list !== undefined) files.push({ path: hashlistDataPath(uuid), content: list });
 
 		// Create the blobs, then one tree and one commit holding all of them
 		const blobs = await Promise.all(

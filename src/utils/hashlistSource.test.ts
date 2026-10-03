@@ -57,6 +57,29 @@ describe('hashlistSource', () => {
 		expect(storedListText('<html>no iframe</html>')).toBe('');
 	});
 
+	// Whatever reaches the page stays one attribute value: no tag, no other
+	// attribute, and the browser reads back exactly the string written.
+	it('writes the iframe URL as an inert attribute value', () => {
+		for (const src of [
+			'"><script>alert(1)</script>',
+			'"></iframe><script>alert(1)</script>',
+			'https://debridmediamanager.com/hashlist#abc" onload="alert(1)',
+			"https://debridmediamanager.com/hashlist#abc' onload='alert(1)",
+			'a&quot;b<c>d',
+		]) {
+			const doc = new DOMParser().parseFromString(hashlistPageHtml(src), 'text/html');
+			expect(doc.querySelectorAll('script')).toHaveLength(0);
+			expect(doc.body.children).toHaveLength(1);
+			const iframe = doc.querySelector('iframe')!;
+			expect(iframe.getAttributeNames()).toEqual(['src']);
+			expect(iframe.getAttribute('src')).toBe(src);
+		}
+		// The forms the app writes are unchanged by it.
+		expect(hashlistPageHtml('https://debridmediamanager.com/hashlist#id=' + ID)).toContain(
+			`<iframe src="https://debridmediamanager.com/hashlist#id=${ID}"></iframe>`
+		);
+	});
+
 	// GitHub Pages publishes a new file a minute or two after its commit.
 	it('says so when the stored list is not published yet', async () => {
 		vi.stubGlobal(
