@@ -42,4 +42,12 @@ anywhere):
 | `{mdblist,cinemeta,omdb,tmdb-find}-tt4182368-the-accursed.json`            | `https://mdblist.com/api/?i=tt4182368`, `https://v3-cinemeta.strem.io/meta/series/tt4182368.json`, `https://www.omdbapi.com/?i=tt4182368`, TMDB `/3/find/tt4182368?external_source=imdb_id` | The Accursed, a show production viewed that day. mdblist answers Not Found, Cinemeta has no `background`, TMDB finds nothing; only OMDb has a poster. `/api/info/show` served a picsum.photos stock photo as its backdrop. |
 | `{mdblist,cinemeta,omdb,tmdb-find}-tt2249097-the-cask-of-amontillado.json` | the same four, with Cinemeta's `/meta/movie/`                                                                                                                                               | The same shape for a movie. `/api/info/movie` served a picsum.photos stock photo.                                                                                                                                          |
 
+The files below were captured 2026-10-03 and 2026-10-04 for Fizzy #200 (header art
+that is dead or belongs to another title):
+
+| File                                                    | Request                                                          | Why it is here                                                                                                             |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `api-info-show-tt0166030-airwolf.json`                  | `https://debridmediamanager.com/api/info/show?imdbid=tt0166030`  | Production's answer for Airwolf. Its poster, Cinemeta's metahub URL, answers 404, and the header drew a broken-image icon. |
+| `api-info-movie-tt2249097-the-cask-of-amontillado.json` | `https://debridmediamanager.com/api/info/movie?imdbid=tt2249097` | The same for a movie: OMDb's m.media-amazon.com poster answers 404.                                                        |
+
 API keys are query parameters and appear in no response body; these files carry none.

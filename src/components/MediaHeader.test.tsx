@@ -1,4 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import caskInfo from '@/test/fixtures/metadata/api-info-movie-tt2249097-the-cask-of-amontillado.json';
+import airwolfInfo from '@/test/fixtures/metadata/api-info-show-tt0166030-airwolf.json';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ComponentProps, ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -20,11 +22,12 @@ const { relatedMediaMock, posterMock } = vi.hoisted(() => ({
 	)),
 }));
 
+// A real <img>, so an error event reaches the component's handler as it does in
+// a browser; React listens for `error` on media elements only.
 vi.mock('next/image', () => ({
 	__esModule: true,
-	default: ({ alt, ...props }: any) => (
-		<span role="img" aria-label={alt} data-testid="next-image-mock" {...props} />
-	),
+	// eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+	default: ({ fill: _fill, ...props }: any) => <img data-testid="next-image-mock" {...props} />,
 }));
 
 vi.mock('@/components/RelatedMedia', () => ({
@@ -106,6 +109,59 @@ describe('MediaHeader', () => {
 		expect(screen.getByTestId('poster-fallback')).toHaveTextContent(props.title);
 		const [posterProps] = posterMock.mock.calls.at(-1)!;
 		expect(posterProps).toMatchObject({ imdbId: props.imdbId, title: props.title });
+	});
+
+	// Fizzy #200. These are what production answered on 2026-10-03, and both
+	// poster URLs answer 404: Cinemeta's metahub URL for Airwolf (tt0166030) and
+	// OMDb's m.media-amazon.com URL for The Cask of Amontillado (tt2249097). In a
+	// 400 show + 400 movie sample, 8 show and 13 movie posters were dead like
+	// this, and the header drew a broken-image icon for each. The Poster
+	// component has a chain for exactly this; the header only used it for an
+	// empty URL.
+	it.each([
+		['tv' as const, 'tt0166030', airwolfInfo],
+		['movie' as const, 'tt2249097', caskInfo],
+	])(
+		'falls back to the Poster component when the %s poster for %s fails to load',
+		(mediaType, imdbId, info) => {
+			render(
+				<MediaHeader
+					{...createProps({
+						mediaType,
+						imdbId,
+						title: info.title,
+						poster: info.poster,
+						backdrop: info.backdrop,
+					})}
+				/>
+			);
+
+			const img = screen.getByRole('img', { name: /poster/i });
+			expect(img).toHaveAttribute('src', info.poster);
+			fireEvent.error(img);
+
+			expect(screen.queryByRole('img', { name: /poster/i })).toBeNull();
+			expect(screen.getByTestId('poster-fallback')).toHaveTextContent(info.title);
+			const [posterProps] = posterMock.mock.calls.at(-1)!;
+			expect(posterProps).toMatchObject({ imdbId, title: info.title });
+		}
+	);
+
+	// The season and movie pages keep the header mounted when they move to
+	// another title, so a URL that failed must not stop the next one being tried.
+	it('tries a new poster URL after an earlier one failed', () => {
+		const props = createProps({ poster: caskInfo.poster });
+		const { rerender } = render(<MediaHeader {...props} />);
+		fireEvent.error(screen.getByRole('img', { name: /Movie poster/i }));
+		expect(screen.getByTestId('poster-fallback')).toBeInTheDocument();
+
+		rerender(<MediaHeader {...props} poster="https://example.com/next-title.jpg" />);
+
+		expect(screen.getByRole('img', { name: /Movie poster/i })).toHaveAttribute(
+			'src',
+			'https://example.com/next-title.jpg'
+		);
+		expect(screen.queryByTestId('poster-fallback')).toBeNull();
 	});
 
 	it('labels seasons for shows and surfaces additional content', () => {

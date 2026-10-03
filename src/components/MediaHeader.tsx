@@ -75,6 +75,12 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 }) => {
 	const isAnime = mediaType === 'anime';
 	const [showTrailer, setShowTrailer] = useState(false);
+	// A poster URL is no promise of an image: Cinemeta's metahub URLs and OMDb's
+	// m.media-amazon.com ones can answer 404, which drew a broken-image icon. The
+	// URL that failed hands over to the Poster component's own chain, which ends
+	// on a placeholder; a different URL, as on moving to another title, is tried.
+	const [failedPoster, setFailedPoster] = useState<string | null>(null);
+	const posterUrl = poster && poster !== failedPoster ? poster : '';
 	const backdropStyle = headerBackgroundStyle(backdrop);
 
 	const displayTitle =
@@ -98,15 +104,18 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 				style={backdropStyle}
 			>
 				<div className="relative col-start-1 row-start-1 aspect-[2/3] w-[200px] max-w-[50vw] shrink-0 self-start shadow-lg sm:row-span-3">
-					{(poster && (
+					{posterUrl ? (
 						<Image
 							fill
 							sizes="(max-width: 640px) 50vw, 200px"
-							src={poster}
+							src={posterUrl}
 							alt={`${mediaType === 'movie' ? 'Movie' : isAnime ? 'Anime' : 'Show'} poster`}
 							className="object-cover"
+							onError={() => setFailedPoster(posterUrl)}
 						/>
-					)) || <Poster imdbId={imdbId} title={title} />}
+					) : (
+						<Poster imdbId={imdbId} title={title} />
+					)}
 				</div>
 
 				<div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-2">
