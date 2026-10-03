@@ -11,6 +11,7 @@ vi.mock('@/utils/selectable', () => ({
 	isVideo: ({ path }: { path: string }) => /\.(mkv|mp4)$/i.test(path),
 }));
 
+import uindexAdSize from '@/test/fixtures/torbox/checkcached-uindex-29tb-ad-size.json';
 import { showInfoForSearchResult } from './searchResultInfo';
 
 const result = (over: Partial<Record<string, any>> = {}) =>
@@ -130,5 +131,55 @@ describe('showInfoForSearchResult', () => {
 		vi.clearAllMocks();
 		open({ tbAvailable: true }, { torboxKey: 'tb' });
 		expect(mocks.showInfoForTB.mock.calls[0][2].fake).toBe(true);
+	});
+
+	// Real input: the uindex spider stored a "29 TB" banner ad as this release's
+	// size, and TorBox lists its real files. The modal printed 28320.31 GB above
+	// a file list that added up to 7.36 GB.
+	describe('a stored size the library cannot mean', () => {
+		const torbox = uindexAdSize.torboxCheckcached.data[0];
+		const realBytes = torbox.size;
+		const bogus = () =>
+			result({
+				...uindexAdSize.scrapedTrue,
+				// The shape the TorBox instant check gives search results.
+				files: torbox.files.map((file) => ({
+					fileId: file.id,
+					filename: file.name,
+					filesize: file.size,
+				})),
+			});
+		const openBogus = (flags: Record<string, boolean>, keys: Record<string, string>) =>
+			showInfoForSearchResult({
+				result: { ...bogus(), ...flags },
+				keys,
+				player: 'windows/vlc',
+				imdbId: 'tt5325452',
+				mediaType: 'movie',
+			});
+
+		it('takes the size from the files TorBox lists', () => {
+			openBogus({ tbAvailable: true }, { torboxKey: 'tb' });
+			expect(mocks.showInfoForTB.mock.calls[0][2].size).toBe(realBytes);
+		});
+
+		it('does the same for Real-Debrid and AllDebrid', () => {
+			openBogus({ rdAvailable: true }, { rdKey: 'rd' });
+			expect(mocks.showInfoForRD.mock.calls[0][2].bytes).toBe(realBytes);
+
+			openBogus({ adAvailable: true }, { adKey: 'ad' });
+			expect(mocks.showInfoForAD.mock.calls[0][2].size).toBe(realBytes);
+		});
+
+		it('also covers a size the page reports as unknown', () => {
+			showInfoForSearchResult({
+				result: { ...bogus(), fileSize: 0, tbAvailable: true },
+				keys: { torboxKey: 'tb' },
+				player: 'windows/vlc',
+				imdbId: 'tt5325452',
+				mediaType: 'movie',
+			});
+			expect(mocks.showInfoForTB.mock.calls[0][2].size).toBe(realBytes);
+		});
 	});
 });

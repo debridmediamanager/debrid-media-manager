@@ -1,6 +1,7 @@
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
+import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { isVideo } from '@/utils/selectable';
 import { WatchKeys, pickInfoService } from '@/utils/watchService';
 
@@ -20,14 +21,27 @@ import { WatchKeys, pickInfoService } from '@/utils/watchService';
 const videoFiles = (result: SearchResult) =>
 	result.files.filter((file) => isVideo({ path: file.filename }));
 
+/**
+ * The release's size in bytes. The stored size is megabytes and is used when it
+ * is believable; otherwise the cached file list, which comes from the debrid
+ * service itself, is the size. The uindex spider stored a "29 TB" banner ad as
+ * the size of thousands of releases, and the modal printed it as 28,320 GB above
+ * a file list that added up to 7.36 GB.
+ */
+const releaseBytes = (result: SearchResult): number => {
+	const mb = result.fileSize;
+	if (mb > 0 && mb <= MAX_SIZE_MB) return mb * 1024 * 1024;
+	return result.files.reduce((sum, file) => sum + (file.filesize || 0), 0);
+};
+
 const buildRdInfo = (result: SearchResult): TorrentInfoResponse =>
 	({
 		id: '',
 		filename: result.title,
 		original_filename: result.title,
 		hash: result.hash,
-		bytes: result.fileSize * 1024 * 1024,
-		original_bytes: result.fileSize,
+		bytes: releaseBytes(result),
+		original_bytes: releaseBytes(result),
 		progress: 100,
 		files: videoFiles(result).map((file) => ({
 			id: file.fileId,
@@ -57,7 +71,7 @@ const buildAdInfo = (result: SearchResult, adInLibrary: boolean) => ({
 	id: '',
 	hash: result.hash,
 	filename: result.title,
-	size: result.fileSize * 1024 * 1024,
+	size: releaseBytes(result),
 	status: 'Ready',
 	statusCode: 4,
 	uploadDate: Math.floor(Date.now() / 1000),
@@ -79,7 +93,7 @@ const buildTbInfo = (result: SearchResult) => ({
 	created_at: '',
 	updated_at: '',
 	magnet: '',
-	size: result.fileSize * 1024 * 1024,
+	size: releaseBytes(result),
 	active: false,
 	auth_id: '',
 	download_state: 'downloaded',

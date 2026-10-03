@@ -455,6 +455,30 @@ describe('watch button binding', () => {
 		expect(html).not.toContain('Invalid Date');
 	});
 
+	// The search result modal from the 2026-10-02 report: TorBox's modal ignored
+	// `fake`, so it printed the placeholder id 0, `Invalid Date` and a Delete
+	// button for a release that was never in the user's TorBox list.
+	it('leaves the library actions out of a fake TorBox modal', async () => {
+		const bound = await openModal(() =>
+			showInfoForTB(
+				'windows/vlc',
+				'tb-key',
+				{ ...tbInfo, id: 0, created_at: '', updated_at: '', fake: true },
+				false
+			)
+		);
+
+		const html = mocks.modalFireMock.mock.calls[0][0].html as string;
+		expect(html).not.toContain('btn-delete-tb');
+		expect(html).not.toContain('btn-cast-all');
+		expect(html).not.toContain('btn-export-links');
+		expect(html).not.toContain('Invalid Date');
+		expect(html).not.toMatch(/>ID</);
+		expect(html).toContain('Size');
+		// The Watch rows are what the modal is for, so they stay.
+		expect(bound).toMatchObject({ service: 'tb', keys: { torboxKey: 'tb-key' } });
+	});
+
 	it('binds a TorBox torrent to the torrent namespace', async () => {
 		const bound = await openModal(() => showInfoForTB('windows/vlc', 'tb-key', tbInfo, false));
 

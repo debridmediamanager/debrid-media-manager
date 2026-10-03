@@ -940,7 +940,9 @@ export const showInfoForAD = async (
 export const showInfoForTB = async (
 	app: string,
 	tbKey: string,
-	info: TorBoxTorrentInfo,
+	// `fake` marks an object assembled from a search result rather than read
+	// from the user's TorBox list (see searchResultInfo).
+	info: TorBoxTorrentInfo & { fake?: boolean },
 	shouldDownloadMagnets?: boolean,
 	handlers: {
 		onDeleteTb?: (tbKey: string, id: string) => Promise<void>;
@@ -961,7 +963,11 @@ export const showInfoForTB = async (
 		mediaType: 'other' as const,
 	};
 
-	const libraryActions = `
+	// A search result has no TorBox id: nothing to delete, cast from the library
+	// or export, and its id of 0 and empty date are placeholders, not facts.
+	const libraryActions = info.fake
+		? ''
+		: `
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${isWebDownload ? '' : renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-tb' })}
@@ -976,24 +982,32 @@ export const showInfoForTB = async (
 		? 'Downloaded'
 		: info.download_state.charAt(0).toUpperCase() + info.download_state.slice(1);
 
-	const infoRows = [
-		{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
-		{ label: 'ID', value: info.id },
-		...(isWebDownload ? [{ label: 'Source', value: 'Web download' }] : []),
-		{ label: 'Status', value: statusLabel },
-		...(info.download_state === 'downloading'
-			? [
-					{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
-					{ label: 'Speed', value: (info.download_speed / 1024).toFixed(2) + ' KB/s' },
-					...(isWebDownload ? [] : [{ label: 'Seeds', value: info.seeds }]),
-				]
-			: []),
-		{
-			label: 'Added',
-			value: new Date(info.created_at).toLocaleString(undefined, { timeZone: 'UTC' }),
-		},
-		...getStreamInfo(mediaInfo),
-	];
+	const infoRows = info.fake
+		? [
+				{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+				...getStreamInfo(mediaInfo),
+			]
+		: [
+				{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+				{ label: 'ID', value: info.id },
+				...(isWebDownload ? [{ label: 'Source', value: 'Web download' }] : []),
+				{ label: 'Status', value: statusLabel },
+				...(info.download_state === 'downloading'
+					? [
+							{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
+							{
+								label: 'Speed',
+								value: (info.download_speed / 1024).toFixed(2) + ' KB/s',
+							},
+							...(isWebDownload ? [] : [{ label: 'Seeds', value: info.seeds }]),
+						]
+					: []),
+				{
+					label: 'Added',
+					value: new Date(info.created_at).toLocaleString(undefined, { timeZone: 'UTC' }),
+				},
+				...getStreamInfo(mediaInfo),
+			];
 
 	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.name}</h1>
     ${libraryActions}

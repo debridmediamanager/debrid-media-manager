@@ -1,0 +1,46 @@
+{
+	"_source": "Captured 2026-10-03. `scrapedTrue` is the live entry from ScrapedTrue key movie:tt5325452, written by the uindex spider, which read a '29 TB' banner ad as the size. `torboxCheckcached` is TorBox /v1/api/torrents/checkcached?format=list&list_files=true for the same hash.",
+	"scrapedTrue": {
+		"hash": "e211a5f0b8ba638c280cfaa83b88ac13d4c83d3a",
+		"title": "Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS",
+		"fileSize": 29000000
+	},
+	"torboxCheckcached": {
+		"success": true,
+		"error": null,
+		"detail": "Torrent cache status retrieved successfully.",
+		"data": [
+			{
+				"name": "Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS",
+				"size": 7901666085,
+				"hash": "e211a5f0b8ba638c280cfaa83b88ac13d4c83d3a",
+				"files": [
+					{
+						"id": 2,
+						"name": "www.UIndex.org    -    Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS/Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS.mkv",
+						"size": 7901665138,
+						"opensubtitles_hash": "e1d2fb5091f85be3",
+						"short_name": "Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS.mkv",
+						"mimetype": "video/x-matroska"
+					},
+					{
+						"id": 0,
+						"name": "www.UIndex.org    -    Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS/Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS.mkv.nfo",
+						"size": 818,
+						"opensubtitles_hash": null,
+						"short_name": "Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS.mkv.nfo",
+						"mimetype": "text/plain"
+					},
+					{
+						"id": 1,
+						"name": "www.UIndex.org    -    Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5 1 H 264-GPRS/Torrent Downloaded From     UIndex.org      .txt",
+						"size": 129,
+						"opensubtitles_hash": null,
+						"short_name": "Torrent Downloaded From     UIndex.org      .txt",
+						"mimetype": "text/plain"
+					}
+				]
+			}
+		]
+	}
+}
