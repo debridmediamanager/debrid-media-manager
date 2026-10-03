@@ -391,10 +391,84 @@ describe('a movie title found inside another title', () => {
 		expect(kept(noTitle)).toEqual([]);
 	});
 
-	it('keeps every release in a random sample of these keeps that is the movie or a pack holding it', () => {
-		const movies = keepItems.filter((item) => item.set === 'random' && isTheMovie(item));
-		expect(movies).toHaveLength(59);
-		expect(kept(movies)).toHaveLength(59);
+	it('no longer files The Ministry of Ungentlemanly Warfare under Warfare (2025) when Jev read another title', () => {
+		const ministry = keepItems.filter(
+			(item) =>
+				item.set === 'warfare' &&
+				item.titleMatch === 'DIFFERENT_TITLE' &&
+				/ministry/i.test(item.filename)
+		);
+		expect(ministry).toHaveLength(7);
+		expect(kept(ministry)).toEqual([]);
+	});
+
+	// Measured both ways on 160 of the 2,222 such keeps on 400 random pages: 95
+	// were another work, 59 the movie or a pack holding it.
+	it('trashes over half the other works in a random sample of these keeps and keeps 90% of the movie', () => {
+		const sample = keepItems.filter((item) => item.set === 'random');
+		const others = sample.filter((item) => item.humanLabel === 'OTHER');
+		const movies = sample.filter(isTheMovie);
+		expect([others.length, movies.length]).toEqual([95, 59]);
+		expect(1 - kept(others).length / others.length).toBeGreaterThan(0.5);
+		expect(kept(movies).length / movies.length).toBeGreaterThanOrEqual(0.9);
+	});
+
+	it('is right about at least 90% of the DIFFERENT_TITLE keeps it trashes', () => {
+		const sample = keepItems.filter(
+			(item) => item.set === 'trashed' && item.humanLabel !== 'EITHER'
+		);
+		const keptNow = new Set(kept(sample));
+		const trashed = sample.filter((item) => !keptNow.has(item.filename));
+		const others = sample.filter((item) => item.humanLabel === 'OTHER');
+		expect(kept(others)).toEqual([]);
+		expect(others.length / trashed.length).toBeGreaterThanOrEqual(0.9);
+	});
+
+	it.each([
+		['tt0070047', 'The Exorcist Extended Directors Cut [1973] 720p MKV Dellefs0'],
+		[
+			'tt3300542',
+			'Objetivo Londres (2016) [BluRay 720p X264 MKV][AC3 5.1 Castellano][www.nucleo.com]',
+		],
+		['tt0409459', 'Watchmen - ศึกซูเปอร์ฮีโร่พันธุ์มหากาฬ [2009] [1080p]'],
+		['tt5144174', 'Sucho / The Dry (2020)(CZ) = CSFD 68%'],
+	])(
+		'keeps DIFFERENT_TITLE when one of its titles starts the release: %s %s',
+		(imdbId, filename) => {
+			expect(decide(pageOf(imdbId), filename, 'FILM', 'DIFFERENT_TITLE')).toBe('keep');
+		}
+	);
+
+	it.each([
+		['tt2231461', 'London.Rampage.2018.WEBRip.x264-ION10'],
+		['tt1103153', 'Lesbian Vampire Killers 2009 1080p BluRay HEVC x265 5.1 BONE'],
+		// The release group, after the year and the tags, not a title.
+		['tt1922777', 'John Carter (2012)  720p HDDRiP AC3  - SiNiSTER'],
+		// After a colon comes a subtitle, not a second title.
+		[
+			'tt31434639',
+			'Pán prstenů: Válka Rohirů / The Lord of the Rings: The War of the Rohirrim (2024)(CZ/EN)[1080p][WEB-DL][HDR10][HEVC] = CSFD 62%',
+		],
+	])(
+		'trashes DIFFERENT_TITLE when its title only sits inside the release title: %s %s',
+		(imdbId, filename) => {
+			expect(decide(pageOf(imdbId), filename, 'FILM', 'DIFFERENT_TITLE')).toBe('trash');
+		}
+	);
+
+	it.each([
+		// Real, each with its page's title; tags before the year are a prefix.
+		[
+			{ imdbId: 'tt0112442', name: 'Bad Boys', year: 1995 },
+			'[BDRM Remux] Bad Boys 1-2 (1995-2003)',
+		],
+		[
+			{ imdbId: 'tt8093700', name: 'The Woman King', year: 2022 },
+			'【高清影视之家发布 www.HDBTHD.com】达荷美女战士[HDR+杜比视界双版本][简繁英字幕].The.Woman.King.2022.2160p.UHD.BluRay.x265.10bit.DV.TrueHD.7.1.Atmos-SONYHD',
+		],
+	])('keeps DIFFERENT_TITLE behind a bracketed prefix of tags: %s %s', (page, filename) => {
+		const movie: MovieContext = { ...page, titles: [page.name], ambiguous: {} };
+		expect(decide(movie, filename, 'FILM', 'DIFFERENT_TITLE')).toBe('keep');
 	});
 
 	it.each([

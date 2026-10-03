@@ -3723,7 +3723,7 @@
 			"filename": "The.Demon.Suppressors.West.Barbarian.Beast.2021.1080p.WEBRip.Dublado.mkv",
 			"media": "FILM",
 			"titleMatch": "DIFFERENT_TITLE",
-			"expected": "KEEP",
+			"expected": "DELETE",
 			"humanLabel": "OTHER"
 		},
 		{

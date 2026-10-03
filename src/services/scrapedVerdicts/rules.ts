@@ -247,11 +247,13 @@ function releaseWords(filename: string): Word[] {
 }
 
 /**
- * Whether `title` is the release's title, not words inside a longer one:
- * "Warfare" is a whole-word run in The Ministry of Ungentlemanly Warfare,
- * "Killers" in Lesbian Vampire Killers and "Baba" in Baba Yaga.
+ * Whether the release is named `title`, not merely carrying its words inside a
+ * longer one: "Warfare" is a whole-word run in The Ministry of Ungentlemanly
+ * Warfare, and "Killers" in Lesbian Vampire Killers. `whole` also wants the
+ * title to end where the release's does, so Baba Yaga is not Baba; without it,
+ * words may follow, as in "The Exorcist Extended Directors Cut".
  */
-export function namesRelease(filename: string, title: string): boolean {
+export function namesRelease(filename: string, title: string, whole: boolean): boolean {
 	const words = releaseWords(filename);
 	const needle = fold(title);
 	const forms = [needle];
@@ -265,7 +267,7 @@ export function namesRelease(filename: string, title: string): boolean {
 			if (!words[i].starts) continue;
 			if (!run.every((word, k) => words[i + k].text === word)) continue;
 			const next = words[i + run.length];
-			if (!next || next.ends) return true;
+			if (!whole || !next || next.ends) return true;
 		}
 	}
 	return false;
@@ -328,15 +330,14 @@ export function decide(
 		if (toOther <= toMovie) return 'trash';
 	}
 	if (titleMatch === 'SAME_TITLE') return 'keep';
-	if (titleMatch === 'NO_TITLE') {
-		// A title found in code overrules the model only when it is the
-		// release's title ("Lost Found" for Lost & Found). Warfare (2025) found
-		// inside The Ministry of Ungentlemanly Warfare (2024), a year one off,
-		// kept that film on the Warfare page.
-		const named = found.some((t) => namesRelease(filename, t));
-		return named && nearYear ? 'keep' : 'trash';
-	}
-	return found.length > 0 && nearYear ? 'keep' : 'trash';
+	// The model read another title, or none. A title found in code overrules it
+	// only when the release is named by it: Warfare (2025) found inside The
+	// Ministry of Ungentlemanly Warfare (2024), a year one off, kept that film on
+	// the Warfare page. With NO_TITLE the title must also end where the
+	// release's does ("Lost Found" for Lost & Found); with DIFFERENT_TITLE an
+	// edition or a subtitle may follow it.
+	const named = found.some((t) => namesRelease(filename, t, titleMatch === 'NO_TITLE'));
+	return named && nearYear ? 'keep' : 'trash';
 }
 
 const MEDIA_KEYS = Object.keys(MEDIA_CHOICES) as Media[];
