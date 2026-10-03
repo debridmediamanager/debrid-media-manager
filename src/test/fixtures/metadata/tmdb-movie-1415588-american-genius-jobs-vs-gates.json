@@ -1,0 +1,65 @@
+{
+	"adult": false,
+	"alternative_titles": { "titles": [] },
+	"backdrop_path": "/u5pA4xV3nBl12aDR4M7rENH1BYk.jpg",
+	"belongs_to_collection": null,
+	"budget": 0,
+	"external_ids": {
+		"imdb_id": "tt4262306",
+		"wikidata_id": null,
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"genres": [
+		{ "id": 99, "name": "Documentary" },
+		{ "id": 36, "name": "History" }
+	],
+	"homepage": "",
+	"id": 1415588,
+	"imdb_id": "tt4262306",
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_title": "American Genius: Jobs vs Gates",
+	"overview": "The war between two visionaries with different theories about how approach the coming computer revolution. One thinking that controlling the hardware and the operating system is the way to go. And the other who thinks controlling the operating system is the way to go.",
+	"popularity": 0.8819,
+	"poster_path": "/8FUkmVrKTYIwzZOqby7FT9MH0y6.jpg",
+	"production_companies": [
+		{
+			"id": 29106,
+			"logo_path": "/3DlspKk1tzMoKjqmHyz66lSwzvt.png",
+			"name": "Stephen David Entertainment",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [],
+	"release_date": "2015-06-01",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "en",
+						"note": "",
+						"release_date": "2015-06-01T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			}
+		]
+	},
+	"revenue": 0,
+	"runtime": 43,
+	"softcore": false,
+	"spoken_languages": [],
+	"status": "Released",
+	"tagline": "Bill Gates vs. Steve Jobs.",
+	"title": "American Genius: Jobs vs Gates",
+	"video": false,
+	"videos": { "results": [] },
+	"vote_average": 0.0,
+	"vote_count": 0
+}

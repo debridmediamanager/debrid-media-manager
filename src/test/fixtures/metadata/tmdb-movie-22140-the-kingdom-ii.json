@@ -1,0 +1,257 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [
+			{ "iso_3166_1": "DK", "title": "Lars von Triers Riget II", "type": "DVD Box Title" },
+			{ "iso_3166_1": "DE", "title": "Hospital der Geister - Teil 2", "type": "video title" }
+		]
+	},
+	"backdrop_path": "/cVovUpU6O2HtKFfg60QUK0mFa7Z.jpg",
+	"belongs_to_collection": {
+		"id": 205977,
+		"name": "The Kingdom",
+		"poster_path": "/n6M8PoBGUcyo0p7esl4JGV1MQTw.jpg",
+		"backdrop_path": null
+	},
+	"budget": 0,
+	"external_ids": {
+		"imdb_id": "tt0108906",
+		"wikidata_id": "Q1621638",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"genres": [
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 14, "name": "Fantasy" },
+		{ "id": 27, "name": "Horror" },
+		{ "id": 35, "name": "Comedy" },
+		{ "id": 18, "name": "Drama" }
+	],
+	"homepage": "",
+	"id": 22140,
+	"imdb_id": "tt0108906",
+	"origin_country": ["DK"],
+	"original_language": "da",
+	"original_title": "Riget II",
+	"overview": "The mutant fetus is born. Dr. Helmer comes under heavy scrutiny for a botched operation that left a patient braindead, and begins to dabble in the dark arts in order to ward off those seeking an end to his career. Hypochondriac Mrs. Drusse finally does have something bad happen to her medically when an ambulance hits her.",
+	"popularity": 1.4945,
+	"poster_path": "/giq4mcpAeBduy6cPE6V1tvS6SuT.jpg",
+	"production_companies": [
+		{
+			"id": 119,
+			"logo_path": "/1di2gITGUZr730AMuMKiCrP90Vl.png",
+			"name": "DR",
+			"origin_country": "DK"
+		},
+		{ "id": 123980, "logo_path": null, "name": "Greco", "origin_country": "" },
+		{
+			"id": 11332,
+			"logo_path": "/jL4OTBHDF4M6ZoG5ab4MPaXn3EW.png",
+			"name": "La Sept-Arte",
+			"origin_country": "FR"
+		},
+		{
+			"id": 76,
+			"logo_path": "/nebkQYtQKhZyHJfh5v0oGpNbPzu.png",
+			"name": "Zentropa Entertainments",
+			"origin_country": "DK"
+		},
+		{
+			"id": 201,
+			"logo_path": "/6UIpEURdjnmcJPwgTDRzVRuwADr.png",
+			"name": "ARTE",
+			"origin_country": "FR"
+		},
+		{
+			"id": 6505,
+			"logo_path": "/tjpzIYXGAh8DXoMIzYtuuUpiqb3.png",
+			"name": "Coproduction Office",
+			"origin_country": "DK"
+		},
+		{
+			"id": 118,
+			"logo_path": "/AiBorgNTCS1lT1FdFPYheax9jfF.png",
+			"name": "Det Danske Filminstitut",
+			"origin_country": "DK"
+		},
+		{
+			"id": 2801,
+			"logo_path": "/bswb1PLLsKDUXMLgy42bZtCtIde.png",
+			"name": "Film i Väst",
+			"origin_country": "SE"
+		},
+		{ "id": 11239, "logo_path": null, "name": "Liberator Productions", "origin_country": "FR" },
+		{
+			"id": 851,
+			"logo_path": "/kieSA3GFVysJcAUXNRer06u6e5x.png",
+			"name": "MEDIA Programme of the European Union",
+			"origin_country": "BE"
+		},
+		{
+			"id": 54900,
+			"logo_path": "/yCYeqZosRZFwBNJK4clARa3E4la.png",
+			"name": "Nederlandse Omroepstichting (NOS)",
+			"origin_country": "NL"
+		},
+		{
+			"id": 5403,
+			"logo_path": "/fAz2WhTpoMxutBA92JqlfeHEGuz.png",
+			"name": "Nordisk Film & TV Fond",
+			"origin_country": "NO"
+		},
+		{
+			"id": 109843,
+			"logo_path": "/iwkwIEXWIPApzedElW5sY8LFZSx.png",
+			"name": "NRK",
+			"origin_country": "NO"
+		},
+		{
+			"id": 1583,
+			"logo_path": "/gKP4egMJOi5rksdnplfPV1wa0sd.png",
+			"name": "RAI",
+			"origin_country": "IT"
+		},
+		{
+			"id": 2999,
+			"logo_path": "/zGSqFee9aDgDuLD6vcs2mcJUem4.png",
+			"name": "SVT",
+			"origin_country": "SE"
+		},
+		{ "id": 97156, "logo_path": null, "name": "SVT Malmö", "origin_country": "SE" },
+		{ "id": 221825, "logo_path": null, "name": "TV Collaboration Fund", "origin_country": "" },
+		{
+			"id": 46,
+			"logo_path": "/3xFdKHLXPGHEbrAkmsepGE8974Y.png",
+			"name": "WDR",
+			"origin_country": "DE"
+		}
+	],
+	"production_countries": [
+		{ "iso_3166_1": "BE", "name": "Belgium" },
+		{ "iso_3166_1": "DK", "name": "Denmark" },
+		{ "iso_3166_1": "FR", "name": "France" },
+		{ "iso_3166_1": "DE", "name": "Germany" },
+		{ "iso_3166_1": "IT", "name": "Italy" },
+		{ "iso_3166_1": "NL", "name": "Netherlands" },
+		{ "iso_3166_1": "NO", "name": "Norway" },
+		{ "iso_3166_1": "SE", "name": "Sweden" }
+	],
+	"release_date": "1998-07-17",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "DK",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Episode 1",
+						"release_date": "1997-11-01T00:00:00.000Z",
+						"type": 6
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Episode 2",
+						"release_date": "1997-11-08T00:00:00.000Z",
+						"type": 6
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Episode 4",
+						"release_date": "1997-11-22T00:00:00.000Z",
+						"type": 6
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Episode 3",
+						"release_date": "1997-11-15T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IT",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Venice Film Festival",
+						"release_date": "1997-09-01T00:00:00.000Z",
+						"type": 1
+					}
+				]
+			},
+			{
+				"iso_3166_1": "KR",
+				"release_dates": [
+					{
+						"certification": "19",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "1998-07-17T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "19",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-release",
+						"release_date": "2024-01-31T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 0,
+	"runtime": 280,
+	"softcore": false,
+	"spoken_languages": [
+		{ "english_name": "Danish", "iso_639_1": "da", "name": "Dansk" },
+		{ "english_name": "Swedish", "iso_639_1": "sv", "name": "svenska" }
+	],
+	"status": "Released",
+	"tagline": "",
+	"title": "The Kingdom II",
+	"video": false,
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Lars von Trier's THE KINGDOM II | Official Trailer | All episodes now streaming",
+				"key": "aj1QRcr8Cds",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "663f9a707f4cec90b7fb29db",
+				"published_at": "2022-11-17T14:17:32.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Lars von Trier's \"The Kingdom\" Original Trailer",
+				"key": "5McczZo-u4o",
+				"site": "YouTube",
+				"size": 360,
+				"type": "Trailer",
+				"official": true,
+				"id": "5cb0c046c3a3680891a99b0b",
+				"published_at": "2010-10-18T14:04:10.000Z"
+			}
+		]
+	},
+	"vote_average": 7.6,
+	"vote_count": 66
+}

@@ -153,6 +153,30 @@ export async function fetchShowSources(
 }
 
 /**
+ * TMDB's movie for an IMDb id the show route has no TMDB show for, so its art
+ * can stand in: TMDB files some ids only as a movie (tt4262306, an episode, is
+ * movie 1415588). Null whenever the movie might be another title:
+ *
+ * - TMDB also files the id as a show. It tags The Kingdom II (movie 22140, the
+ *   1998 cut) with The Kingdom's id, tt0108906, so a show whose TMDB entry
+ *   failed to load would otherwise wear its sequel's art.
+ * - The movie's own record names another IMDb id, as a month-old find row can
+ *   once TMDB re-tags a movie.
+ */
+export async function fetchTmdbMovieForShow(imdbId: string): Promise<any | null> {
+	if (!getTmdbAuth()) return null;
+	return settle(async () => {
+		const cache = getMetadataCache();
+		const found = await cache.searchTmdbByImdb(imdbId);
+		if (found?.tv_results?.length) return null;
+		const id = found?.movie_results?.[0]?.id;
+		if (typeof id !== 'number') return null;
+		const movie = blank(await cache.getTmdbMovieInfo(id, TMDB_MOVIE_APPEND));
+		return movie?.imdb_id === imdbId ? movie : null;
+	});
+}
+
+/**
  * Movie, show or episode, by the providers that know IMDb's own record first.
  * OMDb reads IMDb; mdblist and TMDB's find are the fallbacks.
  */

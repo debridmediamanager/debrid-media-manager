@@ -1,0 +1,43 @@
+{
+	"movie_results": [
+		{
+			"adult": false,
+			"backdrop_path": "/u5pA4xV3nBl12aDR4M7rENH1BYk.jpg",
+			"id": 1415588,
+			"title": "American Genius: Jobs vs Gates",
+			"original_title": "American Genius: Jobs vs Gates",
+			"overview": "The war between two visionaries with different theories about how approach the coming computer revolution. One thinking that controlling the hardware and the operating system is the way to go. And the other who thinks controlling the operating system is the way to go.",
+			"poster_path": "/8FUkmVrKTYIwzZOqby7FT9MH0y6.jpg",
+			"media_type": "movie",
+			"original_language": "en",
+			"genre_ids": [99, 36],
+			"popularity": 0.8819,
+			"release_date": "2015-06-01",
+			"softcore": false,
+			"video": false,
+			"vote_average": 0.0,
+			"vote_count": 0
+		}
+	],
+	"person_results": [],
+	"tv_episode_results": [
+		{
+			"id": 1067625,
+			"name": "Jobs vs. Gates",
+			"overview": "In the 1980s, Bill Gates and Steve Jobs break out in a heated battle to bring the personal computer to the masses.",
+			"media_type": "tv_episode",
+			"vote_average": 10.0,
+			"vote_count": 1,
+			"air_date": "2015-06-01",
+			"episode_number": 1,
+			"episode_type": "standard",
+			"production_code": "",
+			"runtime": 45,
+			"season_number": 1,
+			"show_id": 62795,
+			"still_path": "/4XH8f5ycku0NVkb4RiYvleQ4byF.jpg"
+		}
+	],
+	"tv_results": [],
+	"tv_season_results": []
+}

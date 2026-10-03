@@ -1,5 +1,5 @@
 import { MRating, MShow } from '@/services/mdblist';
-import { fetchShowSources } from '@/services/metadata';
+import { fetchShowSources, fetchTmdbMovieForShow } from '@/services/metadata';
 import { getOmdbParentSeries, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
 import {
 	mergeShowViews,
@@ -117,19 +117,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 		}
 
+		// tmdbData is already fetched above for status and the trailer, so its
+		// art is a free extra source rather than another round trip.
+		let poster: string | null = resolvedPoster ?? tmdbImageUrl(tmdbData?.poster_path, 'w500');
+		let backdrop: string | null =
+			mdbResponse?.backdrop ??
+			cinemetaResponse?.meta?.background ??
+			tmdbImageUrl(tmdbData?.backdrop_path, 'w1280');
+		// An id TMDB files only as a movie has no TMDB show to take art from; the
+		// movie is the same title and stands in. Asked only when art is missing.
+		if (!tmdbData && (!poster || !backdrop)) {
+			const tmdbMovie = await fetchTmdbMovieForShow(imdbid);
+			poster = poster || tmdbImageUrl(tmdbMovie?.poster_path, 'w500');
+			backdrop = backdrop || tmdbImageUrl(tmdbMovie?.backdrop_path, 'w1280');
+		}
+
 		const responseData = {
 			title,
 			description: resolvedDescription ?? 'n/a',
-			// tmdbData is already fetched above for status and the trailer, so its
-			// art is a free extra source rather than another round trip.
-			poster: resolvedPoster ?? tmdbImageUrl(tmdbData?.poster_path, 'w500') ?? '',
-			backdrop:
-				mdbResponse?.backdrop ??
-				cinemetaResponse?.meta?.background ??
-				tmdbImageUrl(tmdbData?.backdrop_path, 'w1280') ??
-				// No art anywhere: say so, as poster does, and let the page draw its own.
-				// A stock photo seeded by the title is a picture of something else.
-				'',
+			poster: poster ?? '',
+			// No art anywhere: say so, as poster does, and let the page draw its own.
+			// A stock photo seeded by the title is a picture of something else.
+			backdrop: backdrop ?? '',
 			season_count,
 			season_names,
 			has_specials: merged.has_specials,

@@ -1,0 +1,45 @@
+{
+	"movie_results": [
+		{
+			"adult": false,
+			"backdrop_path": "/cVovUpU6O2HtKFfg60QUK0mFa7Z.jpg",
+			"id": 22140,
+			"title": "The Kingdom II",
+			"original_title": "Riget II",
+			"overview": "The mutant fetus is born. Dr. Helmer comes under heavy scrutiny for a botched operation that left a patient braindead, and begins to dabble in the dark arts in order to ward off those seeking an end to his career. Hypochondriac Mrs. Drusse finally does have something bad happen to her medically when an ambulance hits her.",
+			"poster_path": "/giq4mcpAeBduy6cPE6V1tvS6SuT.jpg",
+			"media_type": "movie",
+			"original_language": "da",
+			"genre_ids": [9648, 14, 27, 35, 18],
+			"popularity": 1.4945,
+			"release_date": "1998-07-17",
+			"softcore": false,
+			"video": false,
+			"vote_average": 7.6,
+			"vote_count": 66
+		}
+	],
+	"person_results": [],
+	"tv_episode_results": [],
+	"tv_results": [
+		{
+			"adult": false,
+			"backdrop_path": "/seybe1nVuV1cut9yXgFN8R5MdWz.jpg",
+			"id": 4267,
+			"name": "The Kingdom",
+			"original_name": "Riget",
+			"overview": "The Kingdom is the most technologically advanced hospital in Denmark, a gleaming bastion of medical science. A rash of uncanny occurrences, however, begins to weaken the staff's faith in science – a phantom ambulance pulls in every night, but disappears; voices echo in the elevator shaft; and a pregnant doctor's fetus seems to be developing much faster than is natural.",
+			"poster_path": "/6Z0Hc9o6HIydmGOHok2e4FoWhXD.jpg",
+			"media_type": "tv",
+			"original_language": "da",
+			"genre_ids": [35, 18, 9648],
+			"popularity": 16.3178,
+			"first_air_date": "1994-11-24",
+			"softcore": false,
+			"vote_average": 7.6,
+			"vote_count": 84,
+			"origin_country": ["DK"]
+		}
+	],
+	"tv_season_results": []
+}

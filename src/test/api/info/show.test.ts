@@ -3,18 +3,27 @@ import darkKnightCinemeta from '@/test/fixtures/metadata/cinemeta-tt0468569-the-
 import filthCinemeta from '@/test/fixtures/metadata/cinemeta-tt1046922-filth-the-mary-whitehouse-story.json';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
 import accursedCinemeta from '@/test/fixtures/metadata/cinemeta-tt4182368-the-accursed.json';
+import jobsVsGatesCinemeta from '@/test/fixtures/metadata/cinemeta-tt4262306-jobs-vs-gates.json';
 import darkKnightMdblist from '@/test/fixtures/metadata/mdblist-tt0468569-the-dark-knight.json';
 import filthMdblist from '@/test/fixtures/metadata/mdblist-tt1046922-filth-the-mary-whitehouse-story.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import accursedMdblist from '@/test/fixtures/metadata/mdblist-tt4182368-the-accursed.json';
+import jobsVsGatesMdblist from '@/test/fixtures/metadata/mdblist-tt4262306-jobs-vs-gates.json';
+import kingdomOmdb from '@/test/fixtures/metadata/omdb-tt0108906-the-kingdom.json';
 import darkKnightOmdb from '@/test/fixtures/metadata/omdb-tt0468569-the-dark-knight.json';
 import filthOmdb from '@/test/fixtures/metadata/omdb-tt1046922-filth-the-mary-whitehouse-story.json';
 import accursedOmdb from '@/test/fixtures/metadata/omdb-tt4182368-the-accursed.json';
+import jobsVsGatesOmdb from '@/test/fixtures/metadata/omdb-tt4262306-jobs-vs-gates.json';
+import kingdomTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt0108906-the-kingdom.json';
 import darkKnightTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt0468569-the-dark-knight.json';
 import filthTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt1046922-filth-the-mary-whitehouse-story.json';
 import accursedTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt4182368-the-accursed.json';
+import jobsVsGatesTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt4262306-jobs-vs-gates.json';
+import jobsVsGatesTmdbMovie from '@/test/fixtures/metadata/tmdb-movie-1415588-american-genius-jobs-vs-gates.json';
+import kingdomIiTmdbMovie from '@/test/fixtures/metadata/tmdb-movie-22140-the-kingdom-ii.json';
 import atlanticTmdbTv from '@/test/fixtures/metadata/tmdb-tv-111102-atlantic-a-year-in-the-wild.json';
 import thirdRockTmdbTv from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
+import kingdomTraktShow from '@/test/fixtures/metadata/trakt-show-tt0108906-the-kingdom.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -45,6 +54,8 @@ describe('/api/info/show', () => {
 		getTraktShowSeasons: vi.fn().mockResolvedValue(null),
 		getTvmazeShow: vi.fn().mockResolvedValue(null),
 		getTmdbTvInfo: vi.fn().mockResolvedValue(null),
+		getTmdbMovieInfo: vi.fn().mockResolvedValue(null),
+		getTraktSummary: vi.fn().mockResolvedValue(null),
 		searchTmdbByImdb: vi.fn().mockResolvedValue(null),
 		getOmdbInfo: vi.fn().mockResolvedValue(null),
 	};
@@ -59,6 +70,8 @@ describe('/api/info/show', () => {
 		mockMetadataCache.getTraktShowSeasons.mockResolvedValue(null);
 		mockMetadataCache.getTvmazeShow.mockResolvedValue(null);
 		mockMetadataCache.getTmdbTvInfo.mockResolvedValue(null);
+		mockMetadataCache.getTmdbMovieInfo.mockResolvedValue(null);
+		mockMetadataCache.getTraktSummary.mockResolvedValue(null);
 		mockMetadataCache.searchTmdbByImdb.mockResolvedValue(null);
 		mockMetadataCache.getOmdbInfo.mockResolvedValue(null);
 		// Fixtures carry a real tmdbid; without a credential the route skips the
@@ -462,7 +475,7 @@ describe('/api/info/show', () => {
 		// Fizzy #200. mdblist's `tmdbid` is a movie's id or a show's, as its `type`
 		// says, and TMDB numbers movies and shows separately. Of the 3,013 ids
 		// production served on this route in early October 2026, 48 are filed by
-		// TMDB only as movies, and for 13 of them the route asked TMDB for the TV
+		// TMDB only as movies, and for 12 of them the route asked TMDB for the TV
 		// show that happens to share the movie's number.
 		describe("a movie's TMDB id", () => {
 			const tmdbTvById: Record<number, unknown> = {
@@ -516,6 +529,109 @@ describe('/api/info/show', () => {
 				expect(body.season_count).toBe(1);
 				expect(body.status).toBeUndefined();
 				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
+			});
+		});
+
+		// Fizzy #200. TMDB files some ids only as a movie, and the route asked TMDB
+		// for shows only, so their art was lost.
+		describe('TMDB movie art', () => {
+			const answer = async (imdbid: string) => {
+				const res = createMockResponse();
+				await handler(createMockRequest({ method: 'GET', query: { imdbid } }), res);
+				expect(res.status).toHaveBeenCalledWith(200);
+				return vi.mocked(res.json).mock.calls[0][0];
+			};
+
+			// tt4262306 is an IMDb episode (American Genius S1E1) that TMDB also
+			// files as the movie 1415588. mdblist does not know it and Cinemeta
+			// answers `{}`, so the route answered no backdrop. The season page moves
+			// on to the series, tt4079214, which has art of its own.
+			it('uses the art of the movie TMDB files the id as', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(jobsVsGatesMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(jobsVsGatesCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(jobsVsGatesOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(jobsVsGatesTmdbFind);
+				mockMetadataCache.getTmdbMovieInfo.mockImplementation(async (id: number) =>
+					id === 1415588 ? jobsVsGatesTmdbMovie : null
+				);
+
+				const body = await answer('tt4262306');
+
+				expect(body.backdrop).toBe(
+					`https://image.tmdb.org/t/p/w1280${jobsVsGatesTmdbMovie.backdrop_path}`
+				);
+				// OMDb's poster is IMDb's own and is asked first.
+				expect(body.poster).toBe(jobsVsGatesOmdb.Poster);
+				expect(body.series_imdbid).toBe('tt4079214');
+				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
+			});
+
+			// TMDB gives The Kingdom (tt0108906) its show, 4267, and also tags
+			// The Kingdom II, the 1998 film cut of the second series, with the
+			// same IMDb id; its own record says so, so checking the movie's IMDb id
+			// cannot catch it. With mdblist, Cinemeta and TMDB's show all down, the
+			// header has to draw its own backdrop rather than the sequel's.
+			it("never takes a movie's art for an id TMDB also files as a show", async () => {
+				const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+				vi.spyOn(console, 'error').mockImplementation(() => {});
+				mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('mdblist down'));
+				mockMetadataCache.getCinemetaSeries.mockRejectedValue(new Error('cinemeta down'));
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(kingdomOmdb);
+				mockMetadataCache.getTraktSummary.mockResolvedValue(kingdomTraktShow);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(kingdomTmdbFind);
+				mockMetadataCache.getTmdbTvInfo.mockRejectedValue(new Error('tmdb down'));
+				mockMetadataCache.getTmdbMovieInfo.mockImplementation(async (id: number) =>
+					id === 22140 ? kingdomIiTmdbMovie : null
+				);
+				expect(kingdomIiTmdbMovie.imdb_id).toBe('tt0108906');
+
+				const body = await answer('tt0108906');
+
+				expect(body.title).toBe('The Kingdom');
+				expect(body.backdrop).not.toContain(kingdomIiTmdbMovie.backdrop_path);
+				expect(body.backdrop).toBe('');
+				expect(body.poster).toBe(kingdomOmdb.Poster);
+				expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
+				warn.mockRestore();
+			});
+
+			// The find row is cached for a month and the movie's own record apart
+			// from it, so the two can disagree once TMDB re-tags a movie. Modelled
+			// with two real answers: find's for tt4262306, and a movie record that
+			// names another IMDb id.
+			it('refuses a movie whose own record names another IMDb id', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(jobsVsGatesMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(jobsVsGatesCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(jobsVsGatesOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(jobsVsGatesTmdbFind);
+				mockMetadataCache.getTmdbMovieInfo.mockResolvedValue(kingdomIiTmdbMovie);
+
+				const body = await answer('tt4262306');
+
+				expect(mockMetadataCache.getTmdbMovieInfo).toHaveBeenCalledWith(
+					1415588,
+					expect.any(String)
+				);
+				expect(body.backdrop).toBe('');
+			});
+
+			// The movie is asked only when no show source had art.
+			it('does not ask TMDB for a movie when a show source has art', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue({
+					title: 'Arty',
+					type: 'show',
+					poster: 'mdb-poster',
+					backdrop: 'mdb-backdrop',
+				});
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(jobsVsGatesTmdbFind);
+
+				const body = await answer('tt4262306');
+
+				expect(body).toMatchObject({ poster: 'mdb-poster', backdrop: 'mdb-backdrop' });
+				// Once, for the show lookup.
+				expect(mockMetadataCache.searchTmdbByImdb).toHaveBeenCalledTimes(1);
+				expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
 			});
 		});
 
