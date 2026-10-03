@@ -673,7 +673,7 @@ export function useTorrentManagement(
 					}
 				}
 
-				await followTransferToRd({
+				const outcome = await followTransferToRd({
 					jobId,
 					rdKey,
 					label,
@@ -681,6 +681,19 @@ export function useTorrentManagement(
 					rdHandoff,
 					context: transferContext,
 				});
+				// Joining marks the row transferred before the outcome is known, which
+				// swaps the TB → RD button for an "In RD" badge. A transfer that then
+				// fails delivered nothing, and leaving the badge took away the one
+				// way to send the release again until a reload (card 109).
+				if (outcome === 'failed') {
+					setSearchResults((prev) =>
+						prev.map((r) =>
+							r.hash === hash
+								? { ...r, tbTransferred: false, tbTransferredHash: undefined }
+								: r
+						)
+					);
+				}
 			} catch (error) {
 				toast.error(
 					`${label}: ${error instanceof Error ? error.message : 'failed to submit'}`,

@@ -1,4 +1,5 @@
 import { UserTorrentStatus } from '@/torrent/userTorrent';
+import { findJoinableTransfer, followTransferToRd } from '@/utils/debridUploader';
 import { act, renderHook } from '@testing-library/react';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -100,6 +101,17 @@ vi.mock('@/utils/deleteTorrent', () => ({
 	handleDeleteOcTorrent: mockHandleDeleteOcTorrent,
 	handleDeleteDlTorrent: mockHandleDeleteDlTorrent,
 }));
+
+// Pass-through by default; the card 109 tests below steer the send flow's two
+// network-bound steps without reimplementing them.
+vi.mock('@/utils/debridUploader', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/utils/debridUploader')>();
+	return {
+		...actual,
+		findJoinableTransfer: vi.fn(actual.findJoinableTransfer),
+		followTransferToRd: vi.fn(actual.followTransferToRd),
+	};
+});
 
 vi.mock('react-hot-toast', () => ({
 	default: {
@@ -680,6 +692,53 @@ describe('useTorrentManagement', () => {
 			);
 		});
 	});
+	// Card 109. Joining a transfer this browser already tracks marks the row as
+	// transferred straight away, which swaps the TB → RD button for an "In RD"
+	// badge. When that transfer then fails, the content is in nobody's RD and
+	// the badge was the only thing left on the row: no way to send it again
+	// short of reloading the page.
+	describe('a joined TB → RD transfer that fails', () => {
+		const joined = {
+			tracked: {
+				id: 'job-joined',
+				hash: 'hash-1',
+				imdbId: 'tt123',
+				createdAt: 1,
+				adopted: false,
+			},
+			job: { id: 'job-joined', status: 'uploading' as const },
+		};
+
+		it('gives the row its TB → RD button back', async () => {
+			currentResults = [createSearchResult({ tbAvailable: true })];
+			vi.mocked(findJoinableTransfer).mockResolvedValueOnce(joined);
+			vi.mocked(followTransferToRd).mockResolvedValueOnce('failed');
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.sendTbToRd('hash-1');
+			});
+
+			expect(followTransferToRd).toHaveBeenCalledWith(
+				expect.objectContaining({ jobId: 'job-joined' })
+			);
+			expect((currentResults[0] as { tbTransferred?: boolean }).tbTransferred).toBe(false);
+		});
+
+		it('keeps the row marked while the transfer is still going', async () => {
+			currentResults = [createSearchResult({ tbAvailable: true })];
+			vi.mocked(findJoinableTransfer).mockResolvedValueOnce(joined);
+			vi.mocked(followTransferToRd).mockResolvedValueOnce('started');
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.sendTbToRd('hash-1');
+			});
+
+			expect((currentResults[0] as { tbTransferred?: boolean }).tbTransferred).toBe(true);
+		});
+	});
+
 	describe('Offcloud', () => {
 		it('stores the row the add handler builds and records its progress', async () => {
 			const row = makeUserTorrent({
