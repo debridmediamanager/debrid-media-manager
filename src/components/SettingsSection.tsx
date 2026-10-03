@@ -696,8 +696,9 @@ export const SettingsSection = () => {
 										Hide torrents with filenames that Real-Debrid blocks (e.g.
 										WEB-DL, WEB.H264, HDTV.x264).{' '}
 										<a
-											href="/rd-filename-filters.html"
+											href="https://www.patreon.com/debridmediamanager/posts/complete-list-of-158388927"
 											target="_blank"
+											rel="noopener noreferrer"
 											className="text-blue-400 hover:underline"
 										>
 											Learn more
