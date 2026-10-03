@@ -1,0 +1,14 @@
+{
+	"meta": {
+		"id": "tt2249097",
+		"type": "movie",
+		"name": "The Cask of Amontillado",
+		"releaseInfo": "2008",
+		"runtime": "30 min",
+		"description": "Deep beneath the streets of Italy lie the catacombs of the Montresors, filled with barrels of wine and the bones of the dead. One evening, friends Fortunado and Montresor venture below the city with promises of the rare vintage wi...",
+		"language": "English",
+		"country": "United States",
+		"slug": "movie/the-cask-of-amontillado-2249097",
+		"behaviorHints": { "hasScheduledVideos": false }
+	}
+}

@@ -145,7 +145,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				mdbResponse.backdrop ??
 				cinemetaResponse.meta?.background ??
 				tmdbImageUrl(tmdbBackdropPath, 'w1280') ??
-				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
+				// No art anywhere: say so, as poster does, and let the page draw its own.
+				// A stock photo seeded by the title is a picture of something else.
+				'',
 			year: resolvedYear ?? '????',
 			imdb_score: imdb_score ?? 0,
 			trailer,
@@ -160,7 +162,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title: 'Unknown',
 			description: 'n/a',
 			poster: '',
-			backdrop: 'https://picsum.photos/seed/movie/1800/300',
+			backdrop: '',
 			year: '????',
 			imdb_score: 0,
 			trailer: '',

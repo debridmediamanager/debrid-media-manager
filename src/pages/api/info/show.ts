@@ -127,7 +127,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				mdbResponse?.backdrop ??
 				cinemetaResponse?.meta?.background ??
 				tmdbImageUrl(tmdbData?.backdrop_path, 'w1280') ??
-				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
+				// No art anywhere: say so, as poster does, and let the page draw its own.
+				// A stock photo seeded by the title is a picture of something else.
+				'',
 			season_count,
 			season_names,
 			has_specials: merged.has_specials,

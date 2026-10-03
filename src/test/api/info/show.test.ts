@@ -1,6 +1,10 @@
 import handler from '@/pages/api/info/show';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
+import accursedCinemeta from '@/test/fixtures/metadata/cinemeta-tt4182368-the-accursed.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
+import accursedMdblist from '@/test/fixtures/metadata/mdblist-tt4182368-the-accursed.json';
+import accursedOmdb from '@/test/fixtures/metadata/omdb-tt4182368-the-accursed.json';
+import accursedTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt4182368-the-accursed.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -324,24 +328,30 @@ describe('/api/info/show', () => {
 		);
 	});
 
-	// https://github.com/debridmediamanager/debrid-media-manager/issues/235 —
-	// source.unsplash.com/random was deprecated mid-2024 and answers 503, so the
-	// backdrop fallback rendered a broken image on every show without one.
-	it('falls back to a backdrop host that still serves images', async () => {
-		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Breaking Bad' });
-		mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+	// https://github.com/debridmediamanager/debrid-media-manager/issues/235 and
+	// Fizzy #37. The fallback was source.unsplash.com/random, which answers 503,
+	// and then a picsum.photos stock photo seeded by the title: for The Accursed,
+	// a desk with an iPod magazine on it. 14 of 400 shows production served on
+	// 2026-10-03 ended there. No provider has art for this one, so the route says
+	// so and the page draws its own.
+	it('answers no backdrop, not a stock photo, when no provider has one', async () => {
+		mockMdbClient.getInfoByImdbId.mockResolvedValue(accursedMdblist);
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue(accursedCinemeta);
+		mockMetadataCache.getOmdbInfo.mockResolvedValue(accursedOmdb);
+		mockMetadataCache.searchTmdbByImdb.mockResolvedValue(accursedTmdbFind);
+		process.env.TMDB_KEY = 'test-key';
 
-		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt4182368' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		const { backdrop } = vi.mocked(res.json).mock.calls[0][0];
-		expect(backdrop).not.toContain('source.unsplash.com');
-		// Same host and shape as /api/info/movie's fallback, and the title is
-		// encoded rather than pasted in raw.
-		expect(backdrop).toBe('https://picsum.photos/seed/Breaking%20Bad/1800/300');
-		expect(new URL(backdrop).hostname).toBe('picsum.photos');
+		expect(res.status).toHaveBeenCalledWith(200);
+		const body = vi.mocked(res.json).mock.calls[0][0];
+		expect(body.title).toBe('The Accursed');
+		expect(body.poster).toBe(accursedOmdb.Poster);
+		expect(body.backdrop).toBe('');
+		expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
 	});
 
 	// meta.videos was dereferenced without a guard eight lines after the same

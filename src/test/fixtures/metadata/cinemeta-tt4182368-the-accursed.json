@@ -1,0 +1,68 @@
+{
+	"meta": {
+		"status": "Ended",
+		"videos": [
+			{
+				"name": "Pinchas Sadeh",
+				"season": 1,
+				"number": 1,
+				"firstAired": "2014-01-15T00:00:00.000Z",
+				"rating": "0",
+				"id": "tt4182368:1:1",
+				"overview": "",
+				"imdb_id": "tt4238680"
+			},
+			{
+				"name": "Yona Wallach",
+				"season": 1,
+				"number": 2,
+				"firstAired": "2014-01-20T00:00:00.000Z",
+				"rating": "0",
+				"id": "tt4182368:1:2",
+				"overview": "",
+				"imdb_id": "tt4238708"
+			},
+			{
+				"name": "Moshe Kroy",
+				"season": 1,
+				"number": 3,
+				"firstAired": "2014-01-27T00:00:00.000Z",
+				"rating": "0",
+				"id": "tt4182368:1:3",
+				"overview": "",
+				"imdb_id": "tt4238712"
+			},
+			{
+				"name": "Aviva Uri",
+				"season": 1,
+				"number": 4,
+				"firstAired": "2014-02-03T00:00:00.000Z",
+				"rating": "0",
+				"id": "tt4182368:1:4",
+				"overview": "",
+				"imdb_id": "tt4238720"
+			},
+			{
+				"name": "Epiloge",
+				"season": 1,
+				"number": 5,
+				"firstAired": "2014-02-09T00:00:00.000Z",
+				"rating": "0",
+				"id": "tt4182368:1:5",
+				"overview": "",
+				"imdb_id": "tt4238736"
+			}
+		],
+		"id": "tt4182368",
+		"type": "series",
+		"imdbRating": "8.2",
+		"name": "The Accursed",
+		"releaseInfo": "2014",
+		"description": "Through a combination of documentary footage and reenactments, the series follows four Israeli iconic artists: Author Pinchas Sadeh, philosopher Moshe Kroy, poet Yona Wallach, and artist Aviva Uri.",
+		"language": "Hebrew",
+		"country": "Israel",
+		"awards": "1 win & 4 nominations",
+		"slug": "series/the-accursed-4182368",
+		"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+	}
+}

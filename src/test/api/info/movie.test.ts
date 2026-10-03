@@ -1,9 +1,13 @@
 import handler from '@/pages/api/info/movie';
+import caskCinemeta from '@/test/fixtures/metadata/cinemeta-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicCinemeta from '@/test/fixtures/metadata/cinemeta-tt32588798-practical-magic-2.json';
 import thundermansCinemeta from '@/test/fixtures/metadata/cinemeta-tt37752275-clash-of-the-thundermans.json';
+import caskMdblist from '@/test/fixtures/metadata/mdblist-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicMdblist from '@/test/fixtures/metadata/mdblist-tt32588798-practical-magic-2.json';
 import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
+import caskOmdb from '@/test/fixtures/metadata/omdb-tt2249097-the-cask-of-amontillado.json';
 import practicalMagicOmdb from '@/test/fixtures/metadata/omdb-tt32588798-practical-magic-2.json';
+import caskTmdbFind from '@/test/fixtures/metadata/tmdb-find-tt2249097-the-cask-of-amontillado.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -345,6 +349,29 @@ describe('/api/info/movie', () => {
 				expect.objectContaining({ poster: 'mdb-poster', backdrop: 'cine-bg' })
 			);
 		});
+
+		// Fizzy #37. With no art anywhere the route used to answer a picsum.photos
+		// stock photo seeded by the title, a picture of something else. 20 of 400
+		// movies production served on 2026-10-03 ended there. The route now says
+		// there is no backdrop, as it does for the poster, and the page draws its own.
+		it('answers no backdrop, not a stock photo, when no provider has one', async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue(caskMdblist);
+			mockMetadataCache.getCinemetaMovie.mockResolvedValue(caskCinemeta);
+			mockMetadataCache.getOmdbInfo.mockResolvedValue(caskOmdb);
+			mockMetadataCache.searchTmdbByImdb.mockResolvedValue(caskTmdbFind);
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt2249097' } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+			const body = vi.mocked(res.json).mock.calls[0][0];
+			expect(body.title).toBe('The Cask of Amontillado');
+			expect(body.poster).toBe(caskOmdb.Poster);
+			expect(body.backdrop).toBe('');
+			expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
+		});
 	});
 
 	it('still answers from Cinemeta when mdblist fails', async () => {
@@ -381,7 +408,7 @@ describe('/api/info/movie', () => {
 			title: 'Unknown',
 			description: 'n/a',
 			poster: '',
-			backdrop: 'https://picsum.photos/seed/movie/1800/300',
+			backdrop: '',
 			year: '????',
 			imdb_score: 0,
 			trailer: '',
