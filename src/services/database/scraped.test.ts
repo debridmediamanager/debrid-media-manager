@@ -1,3 +1,5 @@
+import { MAX_SIZE_MB } from '@/utils/releaseSize';
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { FAN_OUT_PAGE_LIMIT, ScrapedService } from './scraped';
 
@@ -70,6 +72,30 @@ describe('ScrapedService', () => {
 		const results = await service.getScrapedTrueResults('key');
 		expect(prismaMock.$queryRaw).toHaveBeenCalled();
 		expect(results).toEqual(rows[0].value);
+	});
+
+	// Live row movie:tt5325452 on 2026-10-03: the uindex spider stored a "29 TB"
+	// banner ad as the size of `Boo A Madea Halloween 2016 1080p AMZN WEB-DL DDP5
+	// 1 H 264-GPRS` (e211a5f0…, really 7535.6 MB), so it led the page at
+	// 28,320 GB. Run against production, the query below reports it as 0 and the
+	// 36,792 MB Blu-rays lead instead.
+	it.each([
+		['getScrapedTrueResults', 'ScrapedTrue'],
+		['getScrapedResults', 'Scraped'],
+	] as const)('%s reports a size above the noise ceiling as unknown', async (method, table) => {
+		prismaMock.$queryRaw.mockResolvedValue([{ value: [] }]);
+
+		await service[method]('movie:tt5325452', 30);
+
+		const query = (prismaMock.$queryRaw as Mock).mock.calls[0][0] as Prisma.Sql;
+		const sql = query.sql.replace(/\s+/g, ' ');
+		const capped = 'CASE WHEN jt.fileSize > ? THEN 0 ELSE jt.fileSize END';
+		expect(sql).toContain(`FROM ${table} s`);
+		expect(sql).toContain(`${capped} AS fileSize`);
+		expect(sql).toContain(`ORDER BY ${capped} DESC`);
+		expect(sql).toContain(`AND ${capped} <= ?`);
+		expect(sql).not.toMatch(/ORDER BY jt\.fileSize/);
+		expect(query.values).toContain(MAX_SIZE_MB);
 	});
 
 	it('validates inputs in query helpers', async () => {

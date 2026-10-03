@@ -1,3 +1,4 @@
+import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { Prisma, Scraped } from '@prisma/client';
 import {
 	ScrapeSearchResult,
@@ -7,6 +8,20 @@ import {
 	sortByFileSize,
 } from '../mediasearch';
 import { DatabaseClient } from './client';
+
+/**
+ * A stored size the library cannot mean, read as unknown. Scrapers have written
+ * sizes in the wrong unit, and the uindex spider read a "29 TB" banner ad as the
+ * size of thousands of releases, so `Boo A Madea Halloween 2016 1080p AMZN
+ * WEB-DL DDP5 1 H 264-GPRS` (really 7.36 GB) was stored as 29,000,000 MB. The
+ * pages sort biggest-first, so a row like that took the top of every page it was
+ * on. Zero is what the page already treats as "size not known": the debrid
+ * availability check fills it in from the real file list.
+ */
+// A function rather than a constant: building SQL at module load crashes every
+// page in the browser bundle (see prisma-module-load.test.ts).
+const plausibleFileSize = () =>
+	Prisma.sql`CASE WHEN jt.fileSize > ${MAX_SIZE_MB} THEN 0 ELSE jt.fileSize END`;
 
 /**
  * The append branch below launders results through flattenAndRemoveDuplicates,
@@ -172,7 +187,7 @@ export class ScrapedService extends DatabaseClient {
         SELECT
           jt.hash,
           jt.title,
-          jt.fileSize
+          ${plausibleFileSize()} AS fileSize
         FROM
           ScrapedTrue s
         JOIN
@@ -187,9 +202,9 @@ export class ScrapedService extends DatabaseClient {
           ) AS jt
         WHERE
           s.key = ${key}
-        ${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+        ${maxSizeMB ? Prisma.sql`AND ${plausibleFileSize()} <= ${maxSizeMB}` : Prisma.empty}
         AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
-        ORDER BY jt.fileSize DESC
+        ORDER BY ${plausibleFileSize()} DESC
         LIMIT 50
         OFFSET ${offset}
       ) AS jt`;
@@ -235,7 +250,7 @@ export class ScrapedService extends DatabaseClient {
         SELECT
           jt.hash,
           jt.title,
-          jt.fileSize
+          ${plausibleFileSize()} AS fileSize
         FROM
           Scraped s
         JOIN
@@ -250,9 +265,9 @@ export class ScrapedService extends DatabaseClient {
           ) AS jt
         WHERE
           s.key = ${key}
-        ${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+        ${maxSizeMB ? Prisma.sql`AND ${plausibleFileSize()} <= ${maxSizeMB}` : Prisma.empty}
         AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
-        ORDER BY jt.fileSize DESC
+        ORDER BY ${plausibleFileSize()} DESC
         LIMIT 50
         OFFSET ${offset}
       ) AS jt`;
