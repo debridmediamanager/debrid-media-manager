@@ -1,8 +1,13 @@
 import { repository as db } from '@/services/repository';
 import {
+	fileCompletedDebridJob,
+	fileCompletedNzb2rdJob,
+	planDebridFiling,
+	planNzb2rdFiling,
 	registerCompletedDebridJob,
 	registerCompletedNzb2rdJob,
 } from '@/services/transferRegistration';
+import { recorded } from '@/test/utils/transferFilingWorld';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -328,5 +333,101 @@ describe('registerCompletedDebridJob — filing a TB → RD transfer into search
 			REWRITTEN
 		);
 		expect(mockDb.saveScrapedTrueResults).not.toHaveBeenCalled();
+	});
+});
+
+// The backfill's dry run counts what a real run would file by calling only the
+// plan half, so the plan half must write nothing whatever it decides. Driven by
+// jobs nzb2rd and debrid02 recorded on 2026-10-03.
+describe('planning a filing', () => {
+	const nzb2rdJob = (id: string) => (recorded.nzb2rd.jobs as Record<string, any>)[id];
+	const debridJob = (id: string) => recorded.debrid.listing.find((j) => j.id === id)!;
+	const SERVER = 'http://debrid02.test:3100';
+
+	const writes = () => [
+		mockDb.saveScrapedTrueResults,
+		mockDb.upsertAvailability,
+		mockDb.recordNzb2rdTransferCompleted,
+		mockDb.takeNzb2rdWaiters,
+		mockDb.recordDebridTransferCompleted,
+	];
+
+	beforeEach(() => {
+		mockDb.recordDebridTransferCompleted = vi.fn().mockResolvedValue(undefined);
+		mockDb.getImdbTitleType = vi
+			.fn()
+			.mockImplementation(
+				async (id: string) =>
+					(recorded.dmm.imdbTitleTypes as Record<string, string>)[id] ?? null
+			);
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string) => {
+				const id = url.match(/\/jobs\/([^/]+)\/files$/)?.[1];
+				const files = id && (recorded.debrid.files as Record<string, unknown[]>)[id];
+				return files
+					? { ok: true, status: 200, json: async () => files }
+					: { ok: false, status: 404, json: async () => ({}) };
+			})
+		);
+	});
+
+	it('plans a Usenet season episode under its season, and writes nothing', async () => {
+		const plan = await planNzb2rdFiling(nzb2rdJob('nzb2rd-B1'), undefined, undefined);
+
+		expect(plan).toMatchObject({
+			outcome: 'file',
+			registration: { scrapedKey: 'tv:tt11363282:1' },
+		});
+		for (const write of writes()) expect(write).not.toHaveBeenCalled();
+	});
+
+	it('plans a TB → RD season pack under its season, and writes nothing', async () => {
+		const plan = await planDebridFiling(debridJob('debrid-D2'), undefined, undefined, SERVER);
+
+		expect(plan).toMatchObject({
+			outcome: 'file',
+			registration: { scrapedKey: 'tv:tt5555260:1' },
+		});
+		for (const write of writes()) expect(write).not.toHaveBeenCalled();
+	});
+
+	// A DVD image: five VOB files, none of which DMM lists as a video.
+	it('says why it refuses, so the sweep can tell a refusal from a filed release', async () => {
+		const result = await fileCompletedNzb2rdJob(
+			nzb2rdJob('nzb2rd-E'),
+			undefined,
+			undefined,
+			undefined
+		);
+
+		expect(result).toEqual({ outcome: 'refused', reason: 'no-video' });
+		expect(mockDb.upsertAvailability).not.toHaveBeenCalled();
+	});
+
+	it('answers already for a release search has, rather than refused', async () => {
+		mockDb.checkAvailabilityByHashes = vi
+			.fn()
+			.mockResolvedValue([{ hash: debridJob('debrid-D1').info_hash, files: [] }]);
+
+		const result = await fileCompletedDebridJob(
+			debridJob('debrid-D1'),
+			undefined,
+			undefined,
+			SERVER
+		);
+
+		expect(result).toEqual({ outcome: 'already' });
+	});
+
+	it('refuses a TB → RD job whose file list the uploader will not serve', async () => {
+		const result = await fileCompletedDebridJob(
+			{ ...debridJob('debrid-D1'), id: 'debrid-gone' },
+			undefined,
+			undefined,
+			SERVER
+		);
+
+		expect(result).toEqual({ outcome: 'refused', reason: 'no-files' });
 	});
 });

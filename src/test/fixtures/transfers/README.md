@@ -19,3 +19,32 @@ in `heavyUsenet`) are as recorded.
 The same day nzb2rd's offset pages were checked against one full listing for
 its 15 largest accounts, 2420 `limit`/`offset` pairs, with no difference. A
 page boundary inside a same-second tie lands on the same row every time.
+
+`completed-unfiled-2026-10-03.json` holds what DMM and its two transfer services
+said on 2026-10-03 about eleven jobs, chosen to cover what filing a completed
+transfer has to decide. `nzb2rd.listing` and `debrid.listing` are rows of each
+service's `GET /jobs`, `nzb2rd.jobs` the same jobs' `GET /jobs/:id` (which adds
+`files`), and `debrid.files` debrid02's `GET /jobs/:id/files`. `dmm` is what the
+database held for them, read with a read-only session: which info hashes
+`Available` had, the `xfer:` page context, the `nzbrd:` markers and the IMDb
+title types.
+
+- `nzb2rd-A1`, `nzb2rd-A2`: DMM submissions (a film and a show season) whose
+  marker still read `pending` hours after the job completed. Not in search.
+- `nzb2rd-B1`: an episode nobody submitted through DMM, so no page context and
+  no marker. Not in search; IMDb calls the title a series.
+- `nzb2rd-F`: a completed DMM submission that was filed.
+- `nzb2rd-E`: completed, a DVD image of five VOB files, which no filing accepts.
+  Its release's marker belongs to an earlier completed job of the same release.
+- `nzb2rd-G`: completed and not in search, a week before the others.
+- `nzb2rd-H`: failed. `nzb2rd-I`: completed with no IMDb id.
+- `debrid-D1`, `debrid-D2`: TB → RD jobs DMM submitted without a page, with no
+  `tbrd:` mapping left pointing at them. Not in search. `debrid-DF`: failed.
+
+At the time 2862 of 7656 completed nzb2rd jobs with an IMDb id and 95 of 932
+debrid02 jobs had never reached `Available`.
+
+Job ids are replaced by the labels above, indexer release ids by `ix:release-N`,
+and each RD download link by a `FIXTURE` placeholder of the same shape. Account
+fields (`owner_hash`, `rd_user_id`), internal URLs and paths are dropped. Names,
+sizes, hashes, statuses and timestamps are as recorded.

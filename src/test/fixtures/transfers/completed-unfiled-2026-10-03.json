@@ -1,0 +1,800 @@
+{
+	"debrid": {
+		"listing": [
+			{
+				"id": "debrid-DF",
+				"type": "magnet",
+				"input": "magnet:?xt=urn:btih:4248d056b518b037aa5f7103df1b24bea4b0bdd3",
+				"imdb_id": "tt5665418",
+				"status": "failed",
+				"status_message": "Fetching original torrent...",
+				"error": "All torrent sources failed for 4248d056b518b037aa5f7103df1b24bea4b0bdd3: https://itorrents.org/torrent/4248D056B518B037AA5F7103DF1B24BEA4B0BDD3.torrent failed: 404; http://itorrents.net/torrent/4248D056B518B037AA5F7103DF1B24BEA4B0BDD3.torrent failed: 404; https://btcache.me/torrent/4248D056B518B037AA5F7103DF1B24BEA4B0BDD3 returned invalid torrent for 4248D056B518B037AA5F7103DF1B24BEA4B0BDD3; https://torrage.info/torrent/4248D056B518B037AA5F7103DF1B24BEA4B0BDD3 timed out after 10000ms; swarm fallback also failed: no peer offered metadata for 4248d056b518b037aa5f7103df1b24bea4b0bdd3 within 300s",
+				"info_hash": null,
+				"name": null,
+				"source": null,
+				"destination": "rd",
+				"created_at": "2026-09-23 23:26:59",
+				"updated_at": "2026-09-23 23:42:38",
+				"completed_at": "2026-09-23 23:42:38",
+				"retry_count": 3,
+				"duration_seconds": 939
+			},
+			{
+				"id": "debrid-D2",
+				"type": "magnet",
+				"input": "magnet:?xt=urn:btih:bf603d0512345ca7a3f128385edd17b080251d50",
+				"imdb_id": "tt5555260",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "03c48d52d55b85ed53bece58bfa196c66941ec84",
+				"name": "[Bitsearch.to] This.Is.Us.S01.1080p.AMZN.WEBRip.DDP5.1.x264-KiNGS[rartv]",
+				"source": "torbox",
+				"destination": "rd",
+				"created_at": "2026-09-23 17:57:01",
+				"updated_at": "2026-09-23 21:34:20",
+				"completed_at": "2026-09-23 21:34:20",
+				"retry_count": 0,
+				"duration_seconds": 13039
+			},
+			{
+				"id": "debrid-D1",
+				"type": "magnet",
+				"input": "magnet:?xt=urn:btih:fef65deec88a06d2dbca5bfb099d39be7185907b",
+				"imdb_id": "tt13210838",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "ad81874fb12d9f07acd14bd039908d440475862b",
+				"name": "The Gentlemen 2024 S02E04 1080p WEB H264-CAKES [ UIndex.org ]",
+				"source": "torbox",
+				"destination": "rd",
+				"created_at": "2026-09-23 17:56:09",
+				"updated_at": "2026-09-23 19:02:03",
+				"completed_at": "2026-09-23 19:02:03",
+				"retry_count": 0,
+				"duration_seconds": 3954
+			}
+		],
+		"files": {
+			"debrid-D2": [
+				{
+					"name": "This.Is.Us.S01E13.PROPER.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 5293498492,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000027"
+				},
+				{
+					"name": "This.Is.Us.S01E14.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 5199405401,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000028"
+				},
+				{
+					"name": "This.Is.Us.S01E12.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 5186193773,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000029"
+				},
+				{
+					"name": "This.Is.Us.S01E17.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 5167416970,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000030"
+				},
+				{
+					"name": "This.Is.Us.S01E15.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 5146718882,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000031"
+				},
+				{
+					"name": "This.Is.Us.S01E11.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4940684603,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000032"
+				},
+				{
+					"name": "This.Is.Us.S01E16.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4927392471,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000033"
+				},
+				{
+					"name": "This.Is.Us.S01E18.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4754306663,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000034"
+				},
+				{
+					"name": "This.Is.Us.S01E08.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4700400941,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000035"
+				},
+				{
+					"name": "This.Is.Us.S01E09.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4527817753,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000036"
+				},
+				{
+					"name": "This.Is.Us.S01E07.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4527766209,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000037"
+				},
+				{
+					"name": "This.Is.Us.S01E02.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4454084675,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000038"
+				},
+				{
+					"name": "This.Is.Us.S01E10.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4134762085,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000039"
+				},
+				{
+					"name": "This.Is.Us.S01E04.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4127071642,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000040"
+				},
+				{
+					"name": "This.Is.Us.S01E03.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4109139039,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000041"
+				},
+				{
+					"name": "This.Is.Us.S01E05.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 4043214413,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000042"
+				},
+				{
+					"name": "This.Is.Us.S01E06.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 3938290265,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000043"
+				},
+				{
+					"name": "This.Is.Us.S01E01.1080p.AMZN.WEB-Rip.DD5.1.x264-KiNGS.mkv",
+					"size": 3576858045,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000044"
+				},
+				{
+					"name": "RARBG.txt",
+					"size": 31,
+					"rd_link": null
+				}
+			],
+			"debrid-D1": [
+				{
+					"name": "the.gentlemen.2024.s02e04.1080p.web-h264-cakes.mkv",
+					"size": 3106179839,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000045"
+				},
+				{
+					"name": "screen0001.jpg",
+					"size": 296876,
+					"rd_link": null
+				},
+				{
+					"name": "screen0003.jpg",
+					"size": 233276,
+					"rd_link": null
+				},
+				{
+					"name": "screen0004.jpg",
+					"size": 221108,
+					"rd_link": null
+				},
+				{
+					"name": "screen0002.jpg",
+					"size": 189529,
+					"rd_link": null
+				},
+				{
+					"name": "the.gentlemen.2024.s02e04.1080p.web-h264-cakes.nfo",
+					"size": 2715,
+					"rd_link": null
+				},
+				{
+					"name": "Torrent Downloaded From     UIndex.org      .txt",
+					"size": 127,
+					"rd_link": null
+				}
+			]
+		}
+	},
+	"dmm": {
+		"available": ["83f7336f1ce9de032e6c5ac5a513345bdeaa6bb1"],
+		"transferMeta": [
+			{
+				"source": "debrid",
+				"jobId": "debrid-DF",
+				"imdbId": "tt5665418"
+			},
+			{
+				"source": "debrid",
+				"jobId": "debrid-D1",
+				"imdbId": "tt13210838",
+				"title": "The Gentlemen 2024 S02E04 1080p WEB H264-CAKES"
+			},
+			{
+				"source": "debrid",
+				"jobId": "debrid-D2",
+				"imdbId": "tt5555260",
+				"title": "This.Is.Us.S01.1080p.AMZN.WEBRip.DDP5.1.x264-KiNGS[rartv]"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-E",
+				"imdbId": "tt33764258",
+				"title": "BMX.Bande.1983.German.DL.PAL.HD2DVD.DVDR-Balu",
+				"returnPath": "/movie/tt33764258",
+				"releaseId": "ix:release-1"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-F",
+				"imdbId": "tt0117108",
+				"title": "Multiplicity.1996.1080p.BluRay.x264-OFT",
+				"returnPath": "/movie/tt0117108",
+				"releaseId": "ix:release-2"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-A2",
+				"imdbId": "tt37063558",
+				"title": "R.J.Decker.S02E02.1080p.HDTV.x264-SYNCOPY",
+				"returnPath": "/show/tt37063558/2",
+				"releaseId": "ix:release-3"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-H",
+				"imdbId": "tt0083156",
+				"title": "Bloody.Moon.1981.1080p.BluRay.x264-BARC0DE",
+				"returnPath": "/movie/tt0083156",
+				"releaseId": "ix:release-4"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-G",
+				"imdbId": "tt21047514",
+				"title": "Make.Some.Noise.S03.1080p.DRPO.WEB-DL.AAC2.0.x264-BFM",
+				"returnPath": "/show/tt21047514/3",
+				"releaseId": "ix:release-5"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-A1",
+				"imdbId": "tt0117108",
+				"title": "Multiplicity.1996.1080p.AMZN.WEB-DL.H264-PiRaTeS",
+				"returnPath": "/movie/tt0117108",
+				"releaseId": "ix:release-6"
+			}
+		],
+		"nzbrdMarkers": [
+			{
+				"releaseId": "ix:release-4",
+				"jobId": "nzb2rd-H-later",
+				"imdbId": "tt0083156",
+				"status": "failed",
+				"error": "The release cannot be read from the news servers"
+			},
+			{
+				"releaseId": "ix:release-2",
+				"jobId": "nzb2rd-F",
+				"imdbId": "tt0117108",
+				"status": "completed",
+				"infoHash": "83f7336f1ce9de032e6c5ac5a513345bdeaa6bb1"
+			},
+			{
+				"releaseId": "ix:release-3",
+				"jobId": "nzb2rd-A2",
+				"imdbId": "tt37063558",
+				"status": "pending"
+			},
+			{
+				"releaseId": "ix:release-5",
+				"jobId": "nzb2rd-G",
+				"imdbId": "tt21047514",
+				"status": "pending"
+			},
+			{
+				"releaseId": "ix:release-1",
+				"jobId": "nzb2rd-E-earlier",
+				"imdbId": "tt33764258",
+				"status": "completed",
+				"infoHash": "01abd216994f62bee3bb0fc10e4f31c62184e3d9"
+			},
+			{
+				"releaseId": "ix:release-6",
+				"jobId": "nzb2rd-A1",
+				"imdbId": "tt0117108",
+				"status": "pending"
+			}
+		],
+		"imdbTitleTypes": {
+			"tt0083156": "movie",
+			"tt0117108": "movie",
+			"tt11363282": "tvSeries",
+			"tt13210838": "tvSeries",
+			"tt21047514": "tvSeries",
+			"tt33764258": "movie",
+			"tt37063558": "tvSeries",
+			"tt5555260": "tvSeries",
+			"tt5665418": "tvSeries"
+		}
+	},
+	"nzb2rd": {
+		"listing": [
+			{
+				"id": "nzb2rd-B1",
+				"nzb_name": "The.Real.Housewives.of.Salt.Lake.City.S01E02.A.Snow.Mountain.of.Trouble.1080p.NF.WEB-DL.DDP2.0.H.264-PrimeFix.nzb",
+				"imdb_id": "tt11363282",
+				"category": null,
+				"total_bytes": 1740654173,
+				"done_bytes": 1740654173,
+				"started_at": "2026-10-03 21:24:29",
+				"status": "completed",
+				"status_message": null,
+				"error": "RD getTorrentInfo failed: 404 {\n\t\"error\": \"unknown_ressource\",\n\t\"error_code\": 7\n}",
+				"info_hash": "d8a8df732291588cd6b024dd1fde8c4c5ac4cd99",
+				"name": "The.Real.Housewives.of.Salt.Lake.City.S01E02.A.Snow.Mountain.of.Trouble.1080p.NF.WEB.DL.DDP2.0.H.264-PrimeFix {imdb-tt11363282}",
+				"created_at": "2026-10-03 04:32:05",
+				"updated_at": "2026-10-03 21:29:58",
+				"completed_at": "2026-10-03 21:29:58",
+				"retry_count": 0,
+				"duration_seconds": 61073
+			},
+			{
+				"id": "nzb2rd-H",
+				"nzb_name": "Bloody.Moon.1981.1080p.BluRay.x264-BARC0DE.nzb",
+				"imdb_id": "tt0083156",
+				"category": null,
+				"total_bytes": 6737683914,
+				"done_bytes": 4245159936,
+				"started_at": "2026-10-03 20:21:50",
+				"status": "failed",
+				"status_message": "Waiting for zurg to read the NZB... (96)",
+				"error": "The release cannot be read from the news servers: 139 article(s) missing from every configured news server, across 27 file(s): BARC0DE1080pBMOON.r00, BARC0DE1080pBMOON.r01, BARC0DE1080pBMOON.r02, BARC0DE1080pBMOON.r03, BARC0DE1080pBMOON.r04 and 22 more",
+				"info_hash": null,
+				"name": "Bloody.Moon.1981.1080p.BluRay-x264-BARC0DE {imdb-tt0083156}",
+				"created_at": "2026-10-03 03:58:55",
+				"updated_at": "2026-10-03 20:35:31",
+				"completed_at": "2026-10-03 20:35:31",
+				"retry_count": 1,
+				"duration_seconds": 59796
+			},
+			{
+				"id": "nzb2rd-A1",
+				"nzb_name": "Multiplicity.1996.1080p.AMZN.WEB-DL.H264-PiRaTeS.nzb",
+				"imdb_id": "tt0117108",
+				"category": null,
+				"total_bytes": 11589047661,
+				"done_bytes": 11589047661,
+				"started_at": "2026-10-03 18:56:46",
+				"status": "completed",
+				"status_message": null,
+				"error": "zurg took this release back into its queue while it was being hashed",
+				"info_hash": "8ef1c8ec695cf424c120e32f33fe4f32dafa4cf4",
+				"name": "Multiplicity.1996.1080p.AMZN.WEB.DL.H264-PiRaTeS {imdb-tt0117108}",
+				"created_at": "2026-10-03 00:17:59",
+				"updated_at": "2026-10-03 20:29:40",
+				"completed_at": "2026-10-03 20:29:40",
+				"retry_count": 0,
+				"duration_seconds": 72701
+			},
+			{
+				"id": "nzb2rd-F",
+				"nzb_name": "Multiplicity.1996.1080p.BluRay.x264-OFT.nzb",
+				"imdb_id": "tt0117108",
+				"category": null,
+				"total_bytes": 5454587383,
+				"done_bytes": 5454587383,
+				"started_at": "2026-10-03 18:54:09",
+				"status": "completed",
+				"status_message": null,
+				"error": "zurg took this release back into its queue while it was being hashed",
+				"info_hash": "83f7336f1ce9de032e6c5ac5a513345bdeaa6bb1",
+				"name": "Multiplicity.1996.1080p.BluRay-x264-OFT {imdb-tt0117108}",
+				"created_at": "2026-10-03 00:17:47",
+				"updated_at": "2026-10-03 19:54:40",
+				"completed_at": "2026-10-03 19:54:40",
+				"retry_count": 0,
+				"duration_seconds": 70613
+			},
+			{
+				"id": "nzb2rd-A2",
+				"nzb_name": "R.J.Decker.S02E02.1080p.HDTV.x264-SYNCOPY.nzb",
+				"imdb_id": "tt37063558",
+				"category": null,
+				"total_bytes": 3445798947,
+				"done_bytes": 3445798947,
+				"started_at": "2026-10-03 18:38:18",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "00541f91ddc13a3ec6dc3a129e59fb27df0ac894",
+				"name": "R.J.Decker.S02E02.1080p.HDTV-x264-SYNCOPY {imdb-tt37063558}",
+				"created_at": "2026-10-02 23:38:46",
+				"updated_at": "2026-10-03 19:48:25",
+				"completed_at": "2026-10-03 19:48:25",
+				"retry_count": 0,
+				"duration_seconds": 72579
+			},
+			{
+				"id": "nzb2rd-I",
+				"nzb_name": "Scary.Movie.3.2003.Unrated.BluRay.Remux.1080p.AVC.DTS-HD.MA.5.1-HiFi-AsRequested.nzb",
+				"imdb_id": null,
+				"category": "movies",
+				"total_bytes": 15830078583,
+				"done_bytes": 15830078583,
+				"started_at": "2026-10-03 07:25:37",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "c92712e1d22489912181b722df27ad0b460218bb",
+				"name": "Scary.Movie.3.2003.Unrated.BluRay.Remux.1080p.AVC.DTS-HD.MA.5.1-HiFi-AsRequested {imdb-tt0306047}",
+				"created_at": "2026-10-02 16:17:19",
+				"updated_at": "2026-10-03 09:32:07",
+				"completed_at": "2026-10-03 09:32:07",
+				"retry_count": 0,
+				"duration_seconds": 62088
+			},
+			{
+				"id": "nzb2rd-E",
+				"nzb_name": "BMX.Bande.1983.German.DL.PAL.HD2DVD.DVDR-Balu.nzb",
+				"imdb_id": "tt33764258",
+				"category": null,
+				"total_bytes": 4602089472,
+				"done_bytes": 4602089472,
+				"started_at": "2026-10-01 03:34:13",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "ba9c913b87c26f9ff3e49f8c756d73b67c6af001",
+				"name": "BMX.Bande.1983.German.DL.PAL.HD2DVD.DVDR-Balu {imdb-tt33764258}",
+				"created_at": "2026-09-28 05:26:19",
+				"updated_at": "2026-10-01 04:07:38",
+				"completed_at": "2026-10-01 04:07:38",
+				"retry_count": 0,
+				"duration_seconds": 254479
+			},
+			{
+				"id": "nzb2rd-G",
+				"nzb_name": "Make.Some.Noise.S03.1080p.DRPO.WEB-DL.AAC2.0.x264-BFM.nzb",
+				"imdb_id": "tt21047514",
+				"category": null,
+				"total_bytes": 25113154509,
+				"done_bytes": 25113154509,
+				"started_at": "2026-09-26 18:10:29",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "6565ba8b3ada280d799d8a330a948213d3a5a27e",
+				"name": "Make.Some.Noise.S03.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM {imdb-tt21047514}",
+				"created_at": "2026-09-22 18:32:58",
+				"updated_at": "2026-09-26 19:08:02",
+				"completed_at": "2026-09-26 19:08:02",
+				"retry_count": 0,
+				"duration_seconds": 347704
+			}
+		],
+		"jobs": {
+			"nzb2rd-B1": {
+				"id": "nzb2rd-B1",
+				"nzb_name": "The.Real.Housewives.of.Salt.Lake.City.S01E02.A.Snow.Mountain.of.Trouble.1080p.NF.WEB-DL.DDP2.0.H.264-PrimeFix.nzb",
+				"imdb_id": "tt11363282",
+				"category": null,
+				"total_bytes": 1740654173,
+				"done_bytes": 1740654173,
+				"started_at": "2026-10-03 21:24:29",
+				"status": "completed",
+				"status_message": null,
+				"error": "RD getTorrentInfo failed: 404 {\n\t\"error\": \"unknown_ressource\",\n\t\"error_code\": 7\n}",
+				"info_hash": "d8a8df732291588cd6b024dd1fde8c4c5ac4cd99",
+				"name": "The.Real.Housewives.of.Salt.Lake.City.S01E02.A.Snow.Mountain.of.Trouble.1080p.NF.WEB.DL.DDP2.0.H.264-PrimeFix {imdb-tt11363282}",
+				"created_at": "2026-10-03 04:32:05",
+				"updated_at": "2026-10-03 21:29:58",
+				"completed_at": "2026-10-03 21:29:58",
+				"retry_count": 0,
+				"duration_seconds": 61073,
+				"files": [
+					{
+						"name": "The.Real.Housewives.of.Salt.Lake.City.S01E02.A.Snow.Mountain.of.Trouble.1080p.NF.WEB.DL.DDP2.0.H.264-PrimeFix.mkv",
+						"size": 1740654173,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000001"
+					}
+				]
+			},
+			"nzb2rd-A1": {
+				"id": "nzb2rd-A1",
+				"nzb_name": "Multiplicity.1996.1080p.AMZN.WEB-DL.H264-PiRaTeS.nzb",
+				"imdb_id": "tt0117108",
+				"category": null,
+				"total_bytes": 11589047661,
+				"done_bytes": 11589047661,
+				"started_at": "2026-10-03 18:56:46",
+				"status": "completed",
+				"status_message": null,
+				"error": "zurg took this release back into its queue while it was being hashed",
+				"info_hash": "8ef1c8ec695cf424c120e32f33fe4f32dafa4cf4",
+				"name": "Multiplicity.1996.1080p.AMZN.WEB.DL.H264-PiRaTeS {imdb-tt0117108}",
+				"created_at": "2026-10-03 00:17:59",
+				"updated_at": "2026-10-03 20:29:40",
+				"completed_at": "2026-10-03 20:29:40",
+				"retry_count": 0,
+				"duration_seconds": 72701,
+				"files": [
+					{
+						"name": "Multiplicity.1996.1080p.AMZN.WEB.DL.H264-PiRaTeS.mkv",
+						"size": 11589047661,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000002"
+					}
+				]
+			},
+			"nzb2rd-F": {
+				"id": "nzb2rd-F",
+				"nzb_name": "Multiplicity.1996.1080p.BluRay.x264-OFT.nzb",
+				"imdb_id": "tt0117108",
+				"category": null,
+				"total_bytes": 5454587383,
+				"done_bytes": 5454587383,
+				"started_at": "2026-10-03 18:54:09",
+				"status": "completed",
+				"status_message": null,
+				"error": "zurg took this release back into its queue while it was being hashed",
+				"info_hash": "83f7336f1ce9de032e6c5ac5a513345bdeaa6bb1",
+				"name": "Multiplicity.1996.1080p.BluRay-x264-OFT {imdb-tt0117108}",
+				"created_at": "2026-10-03 00:17:47",
+				"updated_at": "2026-10-03 19:54:40",
+				"completed_at": "2026-10-03 19:54:40",
+				"retry_count": 0,
+				"duration_seconds": 70613,
+				"files": [
+					{
+						"name": "Multiplicity.1996.1080p.BluRay-x264-OFT.mkv",
+						"size": 5454587383,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000003"
+					}
+				]
+			},
+			"nzb2rd-A2": {
+				"id": "nzb2rd-A2",
+				"nzb_name": "R.J.Decker.S02E02.1080p.HDTV.x264-SYNCOPY.nzb",
+				"imdb_id": "tt37063558",
+				"category": null,
+				"total_bytes": 3445798947,
+				"done_bytes": 3445798947,
+				"started_at": "2026-10-03 18:38:18",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "00541f91ddc13a3ec6dc3a129e59fb27df0ac894",
+				"name": "R.J.Decker.S02E02.1080p.HDTV-x264-SYNCOPY {imdb-tt37063558}",
+				"created_at": "2026-10-02 23:38:46",
+				"updated_at": "2026-10-03 19:48:25",
+				"completed_at": "2026-10-03 19:48:25",
+				"retry_count": 0,
+				"duration_seconds": 72579,
+				"files": [
+					{
+						"name": "R.J.Decker.S02E02.1080p.HDTV-x264-SYNCOPY.mkv",
+						"size": 3445798947,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000004"
+					}
+				]
+			},
+			"nzb2rd-H": {
+				"id": "nzb2rd-H",
+				"nzb_name": "Bloody.Moon.1981.1080p.BluRay.x264-BARC0DE.nzb",
+				"imdb_id": "tt0083156",
+				"category": null,
+				"total_bytes": 6737683914,
+				"done_bytes": 4245159936,
+				"started_at": "2026-10-03 20:21:50",
+				"status": "failed",
+				"status_message": "Waiting for zurg to read the NZB... (96)",
+				"error": "The release cannot be read from the news servers: 139 article(s) missing from every configured news server, across 27 file(s): BARC0DE1080pBMOON.r00, BARC0DE1080pBMOON.r01, BARC0DE1080pBMOON.r02, BARC0DE1080pBMOON.r03, BARC0DE1080pBMOON.r04 and 22 more",
+				"info_hash": null,
+				"name": "Bloody.Moon.1981.1080p.BluRay-x264-BARC0DE {imdb-tt0083156}",
+				"created_at": "2026-10-03 03:58:55",
+				"updated_at": "2026-10-03 20:35:31",
+				"completed_at": "2026-10-03 20:35:31",
+				"retry_count": 1,
+				"duration_seconds": 59796,
+				"files": [
+					{
+						"name": "Bloody.Moon.1981.1080p.BluRay-x264-BARC0DE.mkv",
+						"size": 6737683914,
+						"rd_link": null
+					}
+				]
+			},
+			"nzb2rd-I": {
+				"id": "nzb2rd-I",
+				"nzb_name": "Scary.Movie.3.2003.Unrated.BluRay.Remux.1080p.AVC.DTS-HD.MA.5.1-HiFi-AsRequested.nzb",
+				"imdb_id": null,
+				"category": "movies",
+				"total_bytes": 15830078583,
+				"done_bytes": 15830078583,
+				"started_at": "2026-10-03 07:25:37",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "c92712e1d22489912181b722df27ad0b460218bb",
+				"name": "Scary.Movie.3.2003.Unrated.BluRay.Remux.1080p.AVC.DTS-HD.MA.5.1-HiFi-AsRequested {imdb-tt0306047}",
+				"created_at": "2026-10-02 16:17:19",
+				"updated_at": "2026-10-03 09:32:07",
+				"completed_at": "2026-10-03 09:32:07",
+				"retry_count": 0,
+				"duration_seconds": 62088,
+				"files": [
+					{
+						"name": "LWu20aabcdk8.mkv",
+						"size": 15830078583,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000005"
+					}
+				]
+			},
+			"nzb2rd-E": {
+				"id": "nzb2rd-E",
+				"nzb_name": "BMX.Bande.1983.German.DL.PAL.HD2DVD.DVDR-Balu.nzb",
+				"imdb_id": "tt33764258",
+				"category": null,
+				"total_bytes": 4602089472,
+				"done_bytes": 4602089472,
+				"started_at": "2026-10-01 03:34:13",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "ba9c913b87c26f9ff3e49f8c756d73b67c6af001",
+				"name": "BMX.Bande.1983.German.DL.PAL.HD2DVD.DVDR-Balu {imdb-tt33764258}",
+				"created_at": "2026-09-28 05:26:19",
+				"updated_at": "2026-10-01 04:07:38",
+				"completed_at": "2026-10-01 04:07:38",
+				"retry_count": 0,
+				"duration_seconds": 254479,
+				"files": [
+					{
+						"name": "VTS_01_1.VOB",
+						"size": 1073739776,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000006"
+					},
+					{
+						"name": "VTS_01_2.VOB",
+						"size": 1073739776,
+						"rd_link": null
+					},
+					{
+						"name": "VTS_01_3.VOB",
+						"size": 1073739776,
+						"rd_link": null
+					},
+					{
+						"name": "VTS_01_4.VOB",
+						"size": 1073739776,
+						"rd_link": null
+					},
+					{
+						"name": "VTS_01_5.VOB",
+						"size": 307130368,
+						"rd_link": null
+					}
+				]
+			},
+			"nzb2rd-G": {
+				"id": "nzb2rd-G",
+				"nzb_name": "Make.Some.Noise.S03.1080p.DRPO.WEB-DL.AAC2.0.x264-BFM.nzb",
+				"imdb_id": "tt21047514",
+				"category": null,
+				"total_bytes": 25113154509,
+				"done_bytes": 25113154509,
+				"started_at": "2026-09-26 18:10:29",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "6565ba8b3ada280d799d8a330a948213d3a5a27e",
+				"name": "Make.Some.Noise.S03.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM {imdb-tt21047514}",
+				"created_at": "2026-09-22 18:32:58",
+				"updated_at": "2026-09-26 19:08:02",
+				"completed_at": "2026-09-26 19:08:02",
+				"retry_count": 0,
+				"duration_seconds": 347704,
+				"files": [
+					{
+						"name": "Make.Some.Noise.S03E19.A.Takedown.of.Billionaires.Rihanna.Beyoncé.and.Oprah.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1568223591,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000007"
+					},
+					{
+						"name": "Make.Some.Noise.S03E01.A.Cutscene.in.a.Video.Game.Thats.Glitching.Out.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1501160496,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000008"
+					},
+					{
+						"name": "Make.Some.Noise.S03E12.A.Basketball.Players.Far.Too.Elaborate.Free.Throw.Routine.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1464586939,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000009"
+					},
+					{
+						"name": "Make.Some.Noise.S03E03.Uber.but.on.Horseback.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1457614351,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000010"
+					},
+					{
+						"name": "Make.Some.Noise.S03E18.A.Date.That.Is.Only.Red.Flags.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1450741457,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000011"
+					},
+					{
+						"name": "Make.Some.Noise.S03E17.A.Singing.Telegram.Serving.You.for.Property.Encroachment.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1339521740,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000012"
+					},
+					{
+						"name": "Make.Some.Noise.S03E09.A.Kid.Whos.Definitely.the.Reason.Their.Parents.Got.Divorced.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1308386403,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000013"
+					},
+					{
+						"name": "Make.Some.Noise.S03E15.This.Dream.is.Too.Messed.Up.Even.For.Freddy.Krueger.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1278735002,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000014"
+					},
+					{
+						"name": "Make.Some.Noise.S03E11.The.One.Toxic.Person.in.Every.Improv.101.Class.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1234555782,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000015"
+					},
+					{
+						"name": "Make.Some.Noise.S03E02.An.Open-Heart.Surgeon.With.the.Attitude.of.a.Cool.Hairdresser.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1227077047,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000016"
+					},
+					{
+						"name": "Make.Some.Noise.S03E20.Cut.For.Time.Season.3.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1223264918,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000017"
+					},
+					{
+						"name": "Make.Some.Noise.S03E07.A.Bear.Who.Just.Hibernated.Through.Like.250.Commitments.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1197021739,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000018"
+					},
+					{
+						"name": "Make.Some.Noise.S03E16.The.Black.Version.of.Romeo..Juliet.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1173287920,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000019"
+					},
+					{
+						"name": "Make.Some.Noise.S03E05.A.Celebritys.Unflattering.Wax.Figure.Reveal.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1155706562,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000020"
+					},
+					{
+						"name": "Make.Some.Noise.S03E14.Two.Wife.Guys.Try.to.Out.Wife.Guy.Each.Other.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1147075773,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000021"
+					},
+					{
+						"name": "Make.Some.Noise.S03E13.An.Obituary.For.Someone.Who.Definitely.Faked.Their.Own.Death.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1142149308,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000022"
+					},
+					{
+						"name": "Make.Some.Noise.S03E08.A.Horny.Chain.Text.Message.For.Arbor.Day.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1138287123,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000023"
+					},
+					{
+						"name": "Make.Some.Noise.S03E04.Willy.Wonkas.Lawyers.Opening.Statement.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1101802478,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000024"
+					},
+					{
+						"name": "Make.Some.Noise.S03E10.A.Couple.Calls.For.the.Check.But.Doesnt.Know.the.Hand.Motion.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 1032968844,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000025"
+					},
+					{
+						"name": "Make.Some.Noise.S03E06.Sober.You.Discusses.Last.Nights.Receipts.With.Drunk.You.1080p.DRPO.WEB.DL.AAC2.0.x264-BFM.mkv",
+						"size": 970987036,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000026"
+					}
+				]
+			}
+		}
+	},
+	"recordedAt": "2026-10-03T22:45:00Z"
+}

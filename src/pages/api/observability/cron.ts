@@ -9,6 +9,7 @@ import {
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
+import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
 
 interface CronResponse {
 	success: boolean;
@@ -30,6 +31,7 @@ interface CronResponse {
 		torboxCdnDailyRolled: boolean;
 	};
 	debridTransfers?: ReconcileResult;
+	transferFilings?: FilingSweepResult;
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
 	error?: string;
@@ -92,6 +94,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Debrid transfer reconciliation failed:', e);
 		}
 
+		// A finished transfer is useful to anyone but its submitter only once it
+		// is filed into search, and this is the one path that does not wait for
+		// somebody to open a page listing it.
+		let transferFilings: FilingSweepResult | undefined;
+		try {
+			transferFilings = await fileCompletedTransfers();
+		} catch (e) {
+			console.error('[Cron] Filing completed transfers failed:', e);
+		}
+
 		// Requests are only settled once their transfer has ended, and nothing
 		// else is watching them: a fulfiller moves on the moment they click.
 		let contentRequests: RequestReconcileResult | undefined;
@@ -126,6 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			},
 			dailyRollup,
 			debridTransfers,
+			transferFilings,
 			contentRequests,
 			freeRequestDeliveries,
 		});

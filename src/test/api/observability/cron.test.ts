@@ -16,9 +16,16 @@ const repositoryMocks = vi.hoisted(() => ({
 	},
 }));
 
+// The sweep lists the transfer services over the network, which no unit test
+// may reach; `cron.filing.test.ts` drives the real one from recorded answers.
+const filingMocks = vi.hoisted(() => ({
+	fileCompletedTransfers: vi.fn(),
+}));
+
 vi.mock('@/lib/observability/streamServersHealth', () => healthMocks);
 vi.mock('@/lib/observability/torrentioHealth', () => torrentioMocks);
 vi.mock('@/services/repository', () => repositoryMocks);
+vi.mock('@/services/transferFilingSweep', () => filingMocks);
 
 import handler from '@/pages/api/observability/cron';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -28,6 +35,7 @@ const originalEnv = { ...process.env };
 beforeEach(() => {
 	vi.clearAllMocks();
 	process.env = { ...originalEnv };
+	filingMocks.fileCompletedTransfers.mockResolvedValue(undefined);
 });
 
 describe('API /api/observability/cron', () => {
@@ -256,5 +264,32 @@ describe('API /api/observability/cron', () => {
 			success: false,
 			error: 'Unknown error',
 		});
+	});
+
+	it('files completed transfers on every tick and reports what it did', async () => {
+		delete process.env.CRON_SECRET;
+		healthMocks.runHealthCheckNow.mockResolvedValue(null);
+		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
+		const sweep = { completed: 12, due: 2, filed: 2, refused: 0 };
+		filingMocks.fileCompletedTransfers.mockResolvedValue(sweep);
+
+		const res = createMockResponse();
+		await handler(createMockRequest({ method: 'POST' }), res);
+
+		expect(filingMocks.fileCompletedTransfers).toHaveBeenCalledTimes(1);
+		expect(res._getData()).toMatchObject({ success: true, transferFilings: sweep });
+	});
+
+	it('keeps the tick when filing completed transfers throws', async () => {
+		delete process.env.CRON_SECRET;
+		healthMocks.runHealthCheckNow.mockResolvedValue(null);
+		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
+		filingMocks.fileCompletedTransfers.mockRejectedValue(new Error('nzb2rd down'));
+
+		const res = createMockResponse();
+		await handler(createMockRequest({ method: 'POST' }), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res._getData()).toMatchObject({ success: true, transferFilings: undefined });
 	});
 });

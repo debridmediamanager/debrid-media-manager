@@ -31,6 +31,7 @@ import {
 	TorBoxCdnService,
 	TorBoxOperationalService,
 	TorrentSnapshotService,
+	TransferFilingService,
 	type TransferMetaRecord,
 	TransferMetaService,
 	type TransferMetaSource,
@@ -74,6 +75,7 @@ export type RepositoryDependencies = Partial<{
 	nzbSearchCacheService: NzbSearchCacheService;
 	newznabApiCacheService: NewznabApiCacheService;
 	transferMetaService: TransferMetaService;
+	transferFilingService: TransferFilingService;
 	contentRequestService: ContentRequestService;
 }>;
 
@@ -106,6 +108,7 @@ export class Repository {
 	private nzbSearchCacheService: NzbSearchCacheService;
 	private newznabApiCacheService: NewznabApiCacheService;
 	private transferMetaService: TransferMetaService;
+	private transferFilingService: TransferFilingService;
 	private contentRequestService: ContentRequestService;
 
 	constructor({
@@ -137,6 +140,7 @@ export class Repository {
 		nzbSearchCacheService,
 		newznabApiCacheService,
 		transferMetaService,
+		transferFilingService,
 		contentRequestService,
 	}: RepositoryDependencies = {}) {
 		this.availabilityService = availabilityService ?? new AvailabilityService();
@@ -169,6 +173,7 @@ export class Repository {
 		this.nzbSearchCacheService = nzbSearchCacheService ?? new NzbSearchCacheService();
 		this.newznabApiCacheService = newznabApiCacheService ?? new NewznabApiCacheService();
 		this.transferMetaService = transferMetaService ?? new TransferMetaService();
+		this.transferFilingService = transferFilingService ?? new TransferFilingService();
 		this.contentRequestService = contentRequestService ?? new ContentRequestService();
 	}
 
@@ -199,6 +204,7 @@ export class Repository {
 			this.nzbSearchCacheService.disconnect(),
 			this.newznabApiCacheService.disconnect(),
 			this.transferMetaService.disconnect(),
+			this.transferFilingService.disconnect(),
 			this.contentRequestService.disconnect(),
 		]);
 	}
@@ -381,6 +387,23 @@ export class Repository {
 
 	public getTransferMeta(jobs: { source: TransferMetaSource; jobId: string }[]) {
 		return this.transferMetaService.getMany(jobs);
+	}
+
+	// What the completion sweep already did with a finished transfer, so it
+	// neither re-asks about a refusal nor undoes an eviction from search.
+	public getTransferFilings(jobs: { source: TransferMetaSource; jobId: string }[]) {
+		return this.transferFilingService.getMany(jobs);
+	}
+
+	public recordTransferFiling(
+		record: Parameters<TransferFilingService['record']>[0],
+		at?: number
+	) {
+		return this.transferFilingService.record(record, at);
+	}
+
+	public pruneTransferFilings(cutoff: Date) {
+		return this.transferFilingService.pruneBefore(cutoff);
 	}
 
 	// Newznab search cache, so one indexer call serves a title for a whole TTL

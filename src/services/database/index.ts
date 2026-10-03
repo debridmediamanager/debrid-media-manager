@@ -25,6 +25,7 @@ import { TorBoxCastService } from './torboxCast';
 import { TorBoxCdnService } from './torboxCdn';
 import { TorBoxOperationalService } from './torboxOperational';
 import { TorrentSnapshotService } from './torrentSnapshot';
+import { TransferFilingService } from './transferFiling';
 import { TransferMetaService } from './transferMeta';
 import { ZurgKeysService } from './zurgKeys';
 
@@ -56,6 +57,7 @@ export {
 	TorBoxCdnService,
 	TorBoxOperationalService,
 	TorrentSnapshotService,
+	TransferFilingService,
 	TransferMetaService,
 	ZurgKeysService,
 };
@@ -63,4 +65,5 @@ export {
 export type { CachedNewznabApiSearch, CachedUsenetResult } from './newznabApiCache';
 export type { Nzb2rdWaiter } from './nzb2rdMap';
 export type { SponsorLookup } from './sponsors';
+export type { TransferFilingOutcome, TransferFilingRecord } from './transferFiling';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';
