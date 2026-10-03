@@ -1,4 +1,5 @@
 import type { TransferMetaRecord } from '@/services/database';
+import { originalHashFromInput } from '@/services/debridUploaderRegistration';
 import { getDebridUploaderServers } from '@/services/debridUploaderServers';
 import { getNzb2rdUrl } from '@/services/nzb2rd';
 import type { TransferRow } from '@/utils/transfers';
@@ -67,6 +68,9 @@ export function debridRowOf(job: any): TransferRow {
 		// shape already means "which service ran the job". Two different questions
 		// sharing one field name is how a TorBox transfer ends up labelled Usenet.
 		jobSource: job.source ?? null,
+		// Only the hash out of `input`, never the input itself: it is what a
+		// Retry on a failed row resubmits, and the uploader takes the bare hash.
+		hash: originalHashFromInput(job.input),
 		imdbId: typeof job.imdb_id === 'string' ? job.imdb_id : undefined,
 	};
 }

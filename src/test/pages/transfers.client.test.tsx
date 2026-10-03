@@ -19,9 +19,11 @@ vi.mock('next/router', () => ({
 // Mutable so one test can render the page the way the *server* sees it — with no
 // key, because localStorage does not exist there.
 let currentRdKey: string | null = 'test-rd-key';
+let currentTbKey: string | null = 'test-tb-key';
 vi.mock('@/hooks/auth', () => ({
 	__esModule: true,
 	useRealDebridAccessToken: () => [currentRdKey, false, false],
+	useTorBoxAccessToken: () => currentTbKey,
 }));
 
 const mockAddHashAsMagnet = vi.fn().mockResolvedValue('rd-torrent-id');
@@ -33,6 +35,7 @@ vi.mock('@/services/realDebrid', () => ({
 }));
 
 import TransfersPage from '@/pages/transfers';
+import uncachedJob from '@/test/fixtures/contentRequests/job-failed-uncached.json';
 import { getTrackedDebridUploaderJobs, trackDebridUploaderJob } from '@/utils/debridUploader';
 
 const HASH = 'a'.repeat(40);
@@ -58,6 +61,7 @@ beforeEach(() => {
 	localStorage.clear();
 	vi.clearAllMocks();
 	currentRdKey = 'test-rd-key';
+	currentTbKey = 'test-tb-key';
 	vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([row()])));
 });
 
@@ -280,5 +284,106 @@ describe('Transfers page — clearing a terminal row', () => {
 			expect.stringContaining('/api/nzb2rd/jobs/'),
 			expect.anything()
 		);
+	});
+});
+
+// Card 109: a failed or cancelled TB → RD send stayed "in progress" for good and
+// could not be sent again from anywhere. A failed row is where the user sees the
+// failure, so it is where the retry lives. The job is a real failed one from
+// debrid02, as `/api/transfers` maps it.
+describe('Transfers page — retrying a failed TorBox transfer', () => {
+	const failedTb = {
+		source: 'debrid',
+		id: uncachedJob.id,
+		status: 'failed',
+		error: uncachedJob.error,
+		createdAt: Date.parse(`${uncachedJob.created_at}Z`),
+		hash: 'abb28cb1dc25c1e2fa27aac9d1fe70d4c02be8f2',
+		imdbId: uncachedJob.imdb_id,
+		title: 'The Failed Release',
+		returnPath: '/movie/tt1228322',
+	};
+
+	/** The list, and the uploader's answer to a resubmission of the release. */
+	const serve = (transfers: unknown[]) =>
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string) =>
+				url === '/api/debrid-uploader/jobs'
+					? {
+							ok: true,
+							status: 200,
+							json: async () => ({
+								duplicate: 'completed',
+								rewrittenHash: REWRITTEN,
+								jobId: 'job-retry',
+								addedToRd: true,
+							}),
+						}
+					: listResponse(transfers)
+			)
+		);
+
+	it('sends the release again with this browser’s keys', async () => {
+		serve([failedTb]);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('The Failed Release')).toBeInTheDocument());
+
+		fireEvent.click(screen.getByTitle('Retry transfer'));
+
+		await waitFor(() =>
+			expect(fetch).toHaveBeenCalledWith(
+				'/api/debrid-uploader/jobs',
+				expect.objectContaining({ method: 'POST' })
+			)
+		);
+		const submit = vi
+			.mocked(fetch as any)
+			.mock.calls.find(([url]: [string]) => url === '/api/debrid-uploader/jobs');
+		expect(JSON.parse(submit[1].body)).toMatchObject({
+			hash: failedTb.hash,
+			imdbId: 'tt1228322',
+			rdKey: 'test-rd-key',
+			tbKey: 'test-tb-key',
+			title: 'The Failed Release',
+			returnPath: '/movie/tt1228322',
+		});
+	});
+
+	it('is not offered without a TorBox key to source it from', async () => {
+		currentTbKey = null;
+		serve([failedTb]);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('The Failed Release')).toBeInTheDocument());
+
+		expect(screen.queryByTitle('Retry transfer')).not.toBeInTheDocument();
+	});
+
+	it('is not offered once a newer transfer of the release is listed', async () => {
+		serve([
+			{
+				...failedTb,
+				id: 'job-new',
+				status: 'downloading',
+				createdAt: failedTb.createdAt + 1,
+			},
+			failedTb,
+		]);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getAllByText('The Failed Release')).toHaveLength(2));
+
+		expect(screen.queryByTitle('Retry transfer')).not.toBeInTheDocument();
+	});
+
+	it('is not offered on a running, completed or Usenet row', async () => {
+		serve([
+			{ ...failedTb, id: 'a', hash: 'c'.repeat(40), status: 'uploading', title: 'Running' },
+			{ ...failedTb, id: 'b', hash: 'd'.repeat(40), status: 'completed', title: 'Done' },
+			{ ...failedTb, id: 'c', source: 'nzb2rd', hash: undefined, title: 'Usenet' },
+		]);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Usenet')).toBeInTheDocument());
+
+		expect(screen.queryByTitle('Retry transfer')).not.toBeInTheDocument();
 	});
 });

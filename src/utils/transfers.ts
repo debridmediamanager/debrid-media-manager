@@ -78,6 +78,11 @@ export interface TransferRow {
 	queue?: QueuePlace | null;
 	/** `debrid` only: which cached provider served it — torbox, alldebrid, qbit. */
 	jobSource?: string | null;
+	/**
+	 * `debrid` only: the release's own info hash, parsed from the job's input.
+	 * What a Retry sends again; `info_hash` is the rewritten torrent's.
+	 */
+	hash?: string | null;
 
 	/** From DMM's own record of where the transfer was started. */
 	imdbId?: string;

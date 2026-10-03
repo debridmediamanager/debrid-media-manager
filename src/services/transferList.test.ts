@@ -1,3 +1,4 @@
+import uncachedJob from '@/test/fixtures/contentRequests/job-failed-uncached.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/debridUploaderServers', () => ({
@@ -50,6 +51,16 @@ describe('row mapping', () => {
 		const row = debridRowOf({ id: 'j1', status: 'uploading', source: 'torbox' });
 		expect(row.source).toBe('debrid');
 		expect(row.jobSource).toBe('torbox');
+	});
+
+	// What a Retry on a failed row sends again. The body is a real failed job
+	// from debrid02; `info_hash` would be the rewritten torrent's, never the
+	// release's, and the full `input` is not the browser's business.
+	it('carries the release hash out of a failed debrid job, and not its input', () => {
+		const row = debridRowOf(uncachedJob);
+		expect(row.hash).toBe('abb28cb1dc25c1e2fa27aac9d1fe70d4c02be8f2');
+		expect(row).toMatchObject({ status: 'failed', error: 'uncached', imdbId: 'tt1228322' });
+		expect(row).not.toHaveProperty('input');
 	});
 
 	it('falls back to the NZB name when nzb2rd has not settled a clean one', () => {

@@ -1,9 +1,10 @@
-import { useRealDebridAccessToken } from '@/hooks/auth';
+import { useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import {
 	addTransferToRd,
 	deleteDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
 	needsRdHandoff,
+	runDebridTransferToRd,
 } from '@/utils/debridUploader';
 import { deleteNzb2rdJob } from '@/utils/nzb2rd';
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
@@ -15,6 +16,7 @@ import {
 	Home,
 	Loader2,
 	RefreshCw,
+	RotateCcw,
 	Send,
 	Trash2,
 	XCircle,
@@ -33,6 +35,9 @@ export default function TransfersPage() {
 	const [loaded, setLoaded] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [rdKey] = useRealDebridAccessToken();
+	const tbKey = useTorBoxAccessToken();
+	// failed rows whose retry is being submitted, so a double click sends one job
+	const [retrying, setRetrying] = useState<Set<string>>(() => new Set());
 	// jobs whose RD handoff is running, so the 5s poll can't start a second one
 	const handingOffRef = useRef(new Set<string>());
 	const rdKeyRef = useRef(rdKey);
@@ -138,6 +143,48 @@ export default function TransfersPage() {
 			);
 		}
 	};
+
+	// A failed TorBox → RD transfer can be sent again from its own row. Before
+	// this, the only way back was the title page's TB → RD button, and for a
+	// cancelled job that button joined the dead transfer and waited 30 minutes,
+	// every time (card 109). It runs the same flow as the library's Send to RD:
+	// the same dedup, the same TorBox source, the same toasts.
+	const handleRetry = async (row: TransferRow) => {
+		if (!rdKey || !tbKey || !row.hash || !row.imdbId || retrying.has(row.id)) return;
+		setRetrying((prev) => new Set(prev).add(row.id));
+		try {
+			await runDebridTransferToRd({
+				hash: row.hash,
+				imdbId: row.imdbId,
+				rdKey,
+				tbKey,
+				title: row.title || row.name || undefined,
+				returnPath: row.returnPath,
+			});
+		} finally {
+			setRetrying((prev) => {
+				const next = new Set(prev);
+				next.delete(row.id);
+				return next;
+			});
+			void refresh();
+		}
+	};
+
+	// A failed row is retryable until a newer transfer of the same release shows
+	// up in the list, which is what a retry (from here or anywhere) produces.
+	const canRetry = (row: TransferRow): boolean =>
+		row.source === 'debrid' &&
+		row.status === 'failed' &&
+		!!row.hash &&
+		!!row.imdbId &&
+		!!tbKey &&
+		!transfers.some(
+			(other) =>
+				other.source === 'debrid' &&
+				other.hash === row.hash &&
+				other.createdAt > row.createdAt
+		);
 
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
@@ -333,6 +380,21 @@ export default function TransfersPage() {
 											)}
 										</div>
 										<div className="flex shrink-0 items-center gap-1">
+											{canRetry(t) && (
+												<button
+													onClick={() => handleRetry(t)}
+													disabled={retrying.has(t.id)}
+													className={`haptic-sm rounded border-2 border-indigo-500 bg-indigo-900/30 p-1.5 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${retrying.has(t.id) ? 'cursor-not-allowed opacity-50' : ''}`}
+													title="Retry transfer"
+													aria-label="Retry transfer"
+												>
+													{retrying.has(t.id) ? (
+														<Loader2 className="h-4 w-4 animate-spin" />
+													) : (
+														<RotateCcw className="h-4 w-4" />
+													)}
+												</button>
+											)}
 											<button
 												onClick={() => handleRemove(t, terminal)}
 												className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
