@@ -45,3 +45,24 @@ describe('production web service', () => {
 		expect(seconds(timeout)).toBeGreaterThanOrEqual(5);
 	});
 });
+
+// The same day dmm-01's disk reached 98%: each deploy leaves the previous
+// 1.17GB dmm-prod image untagged, and the cleanup step only removed images
+// and build cache older than 24 hours, so a busy deploy day kept ~20 old
+// builds plus ~24GB of cache.
+describe('deploy workflow cleanup', () => {
+	const workflow = readFileSync(join(root, '.github/workflows/build-and-push.yml'), 'utf8');
+	const cleanup = workflow.match(/- name: Cleanup Docker\n((?: {8,}.*\n?)*)/)?.[1] ?? '';
+
+	it('runs even when an earlier step fails', () => {
+		expect(cleanup).toMatch(/^\s+if: always\(\)$/m);
+	});
+
+	it('removes every superseded untagged image regardless of age', () => {
+		expect(cleanup).toMatch(/^\s+docker image prune -f$/m);
+	});
+
+	it('caps the build cache by size rather than age alone', () => {
+		expect(cleanup).toMatch(/docker builder prune -f --keep-storage \d+GB/);
+	});
+});

@@ -37,6 +37,8 @@ jobs:
           --data '{"purge_everything":true}'
 
       - name: Cleanup Docker
+        if: always()
         run: |
+          docker image prune -f
           docker image prune -af --filter "until=24h"
-          docker builder prune -af --filter "until=24h"
+          docker builder prune -f --keep-storage 8GB
