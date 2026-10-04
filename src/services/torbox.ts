@@ -51,11 +51,12 @@ const ENDPOINT_LIMITS: Record<string, number> = {
 	default: 250,
 };
 
+// Calls in flight at once for one key. In the browser that is the member's
+// own key; on the server every member's key gets its own (see KeyBudget).
 const MAX_GLOBAL_CONCURRENT = 15;
 const DEFAULT_RETRY_AFTER_MS = 300_000; // 5 minutes
 
 // Rate limiting state
-let globalConcurrent = 0;
 let globalPausedUntil = 0;
 
 // In the browser this client serves one member's key, and a 429 pauses
@@ -100,6 +101,55 @@ function recordLockout(key: string, retryAfterMs: number): void {
 const endpointTimestamps: Record<string, number[]> = {};
 const concurrencyWaiters: Array<() => void> = [];
 
+/**
+ * One key's share of this process's TorBox budget: calls in flight, callers
+ * waiting for one to finish, and each endpoint's calls in the last minute.
+ *
+ * TorBox limits each API key on its own (docs: per key, not per IP). In the
+ * browser this client holds one key, so one budget is that key's. On the
+ * server it holds every member's, and one budget for all of them meant one
+ * member's burst spent everyone's: dmm-01's access log for 2026-09-27..10-04
+ * has one install loading 32 library catalogs in a second (96 TorBox calls)
+ * and another playing 182 times in a minute, against 15 slots and 80
+ * requestdl a minute per replica - with no limit on the wait for a slot.
+ */
+interface KeyBudget {
+	inFlight: number;
+	waiters: Array<() => void>;
+	stamps: Record<string, number[]>;
+}
+
+const browserBudget: KeyBudget = {
+	inFlight: 0,
+	waiters: concurrencyWaiters,
+	stamps: endpointTimestamps,
+};
+const serverBudgets = new Map<string, KeyBudget>();
+let lastBudgetSweep = 0;
+
+function budgetFor(key: string): KeyBudget {
+	if (!isServer()) return browserBudget;
+	let budget = serverBudgets.get(key);
+	if (!budget) {
+		budget = { inFlight: 0, waiters: [], stamps: {} };
+		serverBudgets.set(key, budget);
+	}
+	return budget;
+}
+
+/** Forgets the budgets of keys with nothing in flight and no call this minute. */
+function sweepIdleBudgets(now: number): void {
+	if (now - lastBudgetSweep < 60_000) return;
+	lastBudgetSweep = now;
+	for (const [key, budget] of serverBudgets) {
+		if (budget.inFlight > 0 || budget.waiters.length > 0) continue;
+		const active = Object.values(budget.stamps).some(
+			(stamps) => stamps.length > 0 && stamps[stamps.length - 1] > now - 60_000
+		);
+		if (!active) serverBudgets.delete(key);
+	}
+}
+
 // Custom error class for rate limiting
 export class TorBoxRateLimitError extends Error {
 	/**
@@ -122,16 +172,50 @@ function getEndpointKey(url?: string): string {
 	return 'default';
 }
 
-async function acquireConcurrencySlot(): Promise<void> {
-	while (globalConcurrent >= MAX_GLOBAL_CONCURRENT) {
-		await new Promise<void>((resolve) => concurrencyWaiters.push(resolve));
-	}
-	globalConcurrent++;
+/** Waits up to `ms` for a slot to free up; false if none did. */
+function waitForSlot(budget: KeyBudget, ms: number): Promise<boolean> {
+	return new Promise((resolve) => {
+		const wake = () => {
+			clearTimeout(timer);
+			resolve(true);
+		};
+		const timer = setTimeout(() => {
+			const index = budget.waiters.indexOf(wake);
+			if (index !== -1) budget.waiters.splice(index, 1);
+			resolve(false);
+		}, ms);
+		budget.waiters.push(wake);
+	});
 }
 
-function releaseConcurrencySlot(): void {
-	globalConcurrent = Math.max(0, globalConcurrent - 1);
-	const waiter = concurrencyWaiters.shift();
+async function acquireConcurrencySlot(key: string = ''): Promise<void> {
+	const budget = budgetFor(key);
+	if (!isServer()) {
+		while (budget.inFlight >= MAX_GLOBAL_CONCURRENT) {
+			await new Promise<void>((resolve) => budget.waiters.push(resolve));
+		}
+		budget.inFlight++;
+		return;
+	}
+	// A server-side caller is an HTTP request that a player gives up on in
+	// seconds, so it waits for a slot no longer than for anything else.
+	sweepIdleBudgets(Date.now());
+	const deadline = Date.now() + SERVER_MAX_WAIT_MS;
+	while (budget.inFlight >= MAX_GLOBAL_CONCURRENT) {
+		const remaining = deadline - Date.now();
+		if (remaining <= 0 || !(await waitForSlot(budget, remaining))) {
+			throw new TorBoxRateLimitError(
+				`${MAX_GLOBAL_CONCURRENT} TorBox calls for this key are already in flight. Please try again.`
+			);
+		}
+	}
+	budget.inFlight++;
+}
+
+function releaseConcurrencySlot(key: string = ''): void {
+	const budget = budgetFor(key);
+	budget.inFlight = Math.max(0, budget.inFlight - 1);
+	const waiter = budget.waiters.shift();
 	if (waiter) waiter();
 }
 
@@ -149,8 +233,9 @@ async function enforceEndpointLimit(endpointKey: string, key: string = ''): Prom
 	}
 
 	const limit = ENDPOINT_LIMITS[endpointKey] ?? ENDPOINT_LIMITS.default;
-	if (!endpointTimestamps[endpointKey]) endpointTimestamps[endpointKey] = [];
-	const timestamps = endpointTimestamps[endpointKey];
+	const stamps = budgetFor(key).stamps;
+	if (!stamps[endpointKey]) stamps[endpointKey] = [];
+	const timestamps = stamps[endpointKey];
 
 	const now = Date.now();
 	const windowStart = now - 60_000;
@@ -187,6 +272,8 @@ interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__skipRetry?: boolean;
 	__endpointKey?: string;
 	__slotAcquired?: boolean;
+	/** The key whose budget holds this call's slot. */
+	__budgetKey?: string;
 }
 
 function calculateRetryDelay(retryCount: number, retryAfterMs?: number): number {
@@ -275,11 +362,13 @@ const torBoxAxios = axios.create({
 torBoxAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
 	const endpointKey = getEndpointKey(config.url);
 	config.__endpointKey = endpointKey;
+	const budgetKey = keyOf(config);
+	config.__budgetKey = budgetKey;
 
-	await enforceEndpointLimit(endpointKey, keyOf(config));
+	await enforceEndpointLimit(endpointKey, budgetKey);
 
 	if (!config.__slotAcquired) {
-		await acquireConcurrencySlot();
+		await acquireConcurrencySlot(budgetKey);
 		config.__slotAcquired = true;
 	}
 
@@ -296,7 +385,7 @@ torBoxAxios.interceptors.response.use(
 	(response) => {
 		const cfg = response.config as ExtendedAxiosRequestConfig;
 		if (cfg.__slotAcquired) {
-			releaseConcurrencySlot();
+			releaseConcurrencySlot(cfg.__budgetKey);
 			cfg.__slotAcquired = false;
 		}
 		recordOutcome(cfg, response.status);
@@ -311,7 +400,7 @@ torBoxAxios.interceptors.response.use(
 
 		const releaseSlot = () => {
 			if (originalConfig.__slotAcquired) {
-				releaseConcurrencySlot();
+				releaseConcurrencySlot(originalConfig.__budgetKey);
 				originalConfig.__slotAcquired = false;
 			}
 		};
@@ -863,10 +952,10 @@ export const _testing = {
 	releaseConcurrencySlot,
 	enforceEndpointLimit,
 	get globalConcurrent() {
-		return globalConcurrent;
+		return browserBudget.inFlight;
 	},
 	set globalConcurrent(v: number) {
-		globalConcurrent = v;
+		browserBudget.inFlight = v;
 	},
 	get globalPausedUntil() {
 		return globalPausedUntil;
@@ -881,10 +970,13 @@ export const _testing = {
 	DEFAULT_RETRY_AFTER_MS,
 	SERVER_MAX_WAIT_MS,
 	serverLockedUntil,
+	serverBudgets,
 	resetState() {
-		globalConcurrent = 0;
+		browserBudget.inFlight = 0;
 		globalPausedUntil = 0;
 		serverLockedUntil.clear();
+		serverBudgets.clear();
+		lastBudgetSweep = 0;
 		for (const key of Object.keys(endpointTimestamps)) delete endpointTimestamps[key];
 		concurrencyWaiters.length = 0;
 	},

@@ -1,0 +1,26 @@
+{
+	"appLogs": "No '[TorBox] ... rate limit' or 'Global rate limit pause' line in any of the 20 dmm_web containers dmm-01 still held on 2026-10-04 (logs from 2026-10-03 23:22 UTC on). The wait for a slot was never logged.",
+	"bursts": {
+		"catalogSecond": {
+			"at": "2026-10-01T04:11:35Z",
+			"installs": 1,
+			"catalogRequests": 32,
+			"torboxCalls": 96
+		},
+		"playMinute": {
+			"at": "2026-10-01T13:54Z",
+			"plays": 194,
+			"fromOneInstall": 182
+		}
+	},
+	"capturedAt": "2026-10-04",
+	"rates": {
+		"torboxCallsPerSecond": { "median": 1, "p99": 12, "p999": 29, "max": 97 },
+		"torboxCallsPerMinute": { "median": 38, "p99": 233, "p999": 415, "max": 511 },
+		"playsPerMinute": { "median": 6, "p99": 36, "p999": 125, "max": 194 },
+		"activeSeconds": 205320,
+		"secondsWith15OrMoreCalls": 1148,
+		"secondsWith60OrMoreCalls": 13
+	},
+	"source": "Nginx Proxy Manager's access log on dmm-01 for 2026-09-27 18:43 to 2026-10-04 03:16 UTC: 399,355 requests to the DMM Cast TorBox play, stream, catalog and meta routes and the TorBox Torznab feed. A catalog request counts as three TorBox calls (mylist for torrents, web downloads and usenet), every other request as one. Install ids are left out."
+}
