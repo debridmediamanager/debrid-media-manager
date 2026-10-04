@@ -251,6 +251,34 @@ describe('TV show page header', () => {
 		).toBe(false);
 	});
 
+	// Fizzy #221. tt1046922 is a TV film; production's show page for it listed
+	// another programme's episodes from `tv:tt1046922:1`. The API now says it is
+	// a movie (see /api/info/show's test on the captured answers).
+	it("moves a film's id to the movie page without loading the show's releases", async () => {
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show')) {
+				return Promise.resolve({
+					status: 200,
+					data: {
+						title: 'Filth: The Mary Whitehouse Story',
+						season_count: 1,
+						season_names: ['Season 1'],
+						season_episode_counts: {},
+						is_movie: true,
+					},
+				});
+			}
+			return Promise.resolve({ status: 200, headers: {}, data: { results: [] } });
+		});
+
+		render(<ShowSeasonPage />);
+
+		await waitFor(() => expect(routerMock.replace).toHaveBeenCalledWith('/movie/tt1234567'));
+		expect(
+			axiosGetMock.mock.calls.some(([url]) => String(url).startsWith('/api/torrents/tv'))
+		).toBe(false);
+	});
+
 	it('delegates header rendering to MediaHeader with show context', async () => {
 		axiosGetMock.mockImplementation((url: string) => {
 			if (url.startsWith('/api/info/show')) {

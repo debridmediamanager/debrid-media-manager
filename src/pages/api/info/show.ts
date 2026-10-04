@@ -1,5 +1,6 @@
 import { MRating, MShow } from '@/services/mdblist';
 import { fetchShowSources, fetchTmdbMovieForShow } from '@/services/metadata';
+import type { ShowSources } from '@/utils/metadataRecord';
 import { getOmdbParentSeries, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
 import {
 	mergeShowViews,
@@ -16,6 +17,32 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const isShowType = (response: any): response is MShow =>
 	!!response && typeof response === 'object' && Array.isArray(response.seasons);
+
+/**
+ * The id is a film's, opened on the show route: no show provider knows it, and
+ * IMDb's own record (OMDb), or mdblist when OMDb has no answer, calls it a movie.
+ *
+ * Search results, Stremio and old links reach the show route with movie ids:
+ * TMDB files 48 of the 3,013 ids production served it in early October 2026
+ * only as movies. Such a page offered one invented season and whatever a
+ * scraper had once filed under `tv:{id}:1`; for Filth: The Mary Whitehouse
+ * Story, that was another programme's episodes. Any show provider answering
+ * keeps the page, so an outage of OMDb or mdblist alone cannot send a real
+ * show away. An episode's id (OMDb `episode`) moves to its series instead.
+ */
+function isMovieId(sources: ShowSources): boolean {
+	const traktSeasons = sources.traktSeasons;
+	const showAnswered =
+		Boolean(sources.tmdb) ||
+		Boolean(sources.tvmaze) ||
+		Boolean(sources.trakt) ||
+		Boolean(sources.cinemeta) ||
+		(Array.isArray(traktSeasons) && traktSeasons.length > 0);
+	if (showAnswered) return false;
+	const omdbType = omdbField(sources.omdb?.Type);
+	if (omdbType) return omdbType === 'movie';
+	return sources.mdblist?.type === 'movie';
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { imdbid } = req.query;
@@ -150,6 +177,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			last_episode_to_air: merged.last_episode_to_air,
 			// Set when the id is an episode's; the season page moves to the series.
 			series_imdbid: getOmdbParentSeries(omdbResponse, imdbid) ?? undefined,
+			// Set when the id is a film's; the season page moves to the movie page.
+			is_movie: isMovieId(sources) || undefined,
 		};
 
 		console.log(`[show.ts] Final response for ${imdbid}:`, {

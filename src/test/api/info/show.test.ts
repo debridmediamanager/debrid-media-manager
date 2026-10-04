@@ -514,6 +514,42 @@ describe('/api/info/show', () => {
 				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
 			});
 
+			// Fizzy #221. Production's Filth page listed two episodes of Banned! The
+			// Mary Whitehouse Story (tt19394374), filed under `tv:tt1046922:1` by a
+			// scraper in May 2025. The id is a TV film: the page belongs on /movie.
+			it('says a TV film opened on the show route is a movie', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(filthMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(filthCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(filthOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(filthTmdbFind);
+
+				const body = await answer('tt1046922');
+
+				expect(body.is_movie).toBe(true);
+				expect(body.series_imdbid).toBeUndefined();
+			});
+
+			it('says The Dark Knight, opened on the show route, is a movie', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(darkKnightMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(darkKnightCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(darkKnightOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(darkKnightTmdbFind);
+
+				expect((await answer('tt0468569')).is_movie).toBe(true);
+			});
+
+			it('keeps a film on the show route when a show provider knows the id', async () => {
+				mockMdbClient.getInfoByImdbId.mockResolvedValue(filthMdblist);
+				mockMetadataCache.getCinemetaSeries.mockResolvedValue(filthCinemeta);
+				mockMetadataCache.getOmdbInfo.mockResolvedValue(filthOmdb);
+				mockMetadataCache.searchTmdbByImdb.mockResolvedValue(filthTmdbFind);
+				mockMetadataCache.getTraktShowSeasons.mockResolvedValue([
+					{ number: 1, episode_count: 2 },
+				]);
+
+				expect((await answer('tt1046922')).is_movie).toBeUndefined();
+			});
+
 			// TV show 155 is 3rd Rock from the Sun, so production offered The Dark
 			// Knight its six seasons and its "Ended".
 			it("takes no seasons from the show that shares a movie's TMDB number", async () => {
@@ -563,6 +599,8 @@ describe('/api/info/show', () => {
 				// OMDb's poster is IMDb's own and is asked first.
 				expect(body.poster).toBe(jobsVsGatesOmdb.Poster);
 				expect(body.series_imdbid).toBe('tt4079214');
+				// An episode, which TMDB also files as a movie, moves to its series.
+				expect(body.is_movie).toBeUndefined();
 				expect(mockMetadataCache.getTmdbTvInfo).not.toHaveBeenCalled();
 			});
 
@@ -592,6 +630,8 @@ describe('/api/info/show', () => {
 				expect(body.backdrop).toBe('');
 				expect(body.poster).toBe(kingdomOmdb.Poster);
 				expect(mockMetadataCache.getTmdbMovieInfo).not.toHaveBeenCalled();
+				// A show TMDB also tags a film with stays a show.
+				expect(body.is_movie).toBeUndefined();
 				warn.mockRestore();
 			});
 

@@ -195,6 +195,8 @@ type ShowInfo = {
 	next_episode_to_air?: EpisodeAirInfo;
 	last_episode_to_air?: EpisodeAirInfo;
 	series_imdbid?: string;
+	/** Set when the id is a film's. */
+	is_movie?: boolean;
 };
 
 const torrentDB = new UserTorrentDB();
@@ -603,7 +605,7 @@ const TvSearch: FunctionComponent = () => {
 		[seasonNum, showInfo]
 	);
 
-	const [seriesRedirect, setSeriesRedirect] = useState<string | null>(null);
+	const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
 	// Fetch show info - keyed on the show alone so switching seasons reuses it
 	useEffect(() => {
@@ -614,7 +616,7 @@ const TvSearch: FunctionComponent = () => {
 		// it belonged to this one
 		setShowInfo(null);
 		setInfoImdbId(null);
-		setSeriesRedirect(null);
+		setRedirectPath(null);
 		setIsLoading(true);
 		setErrorMessage('');
 
@@ -625,7 +627,12 @@ const TvSearch: FunctionComponent = () => {
 				// has every season, this id only the ones its providers agree on.
 				const seriesImdbId = response.data?.series_imdbid;
 				if (typeof seriesImdbId === 'string' && seriesImdbId !== id) {
-					setSeriesRedirect(seriesImdbId);
+					setRedirectPath(`/show/${seriesImdbId}/1`);
+					return;
+				}
+				// A film's id: its releases and its page are the movie route's.
+				if (response.data?.is_movie === true) {
+					setRedirectPath(`/movie/${id}`);
 					return;
 				}
 				setShowInfo(response.data);
@@ -642,8 +649,8 @@ const TvSearch: FunctionComponent = () => {
 	}, [imdbid]);
 
 	useEffect(() => {
-		if (seriesRedirect) router.replace(`/show/${seriesRedirect}/1`);
-	}, [seriesRedirect, router]);
+		if (redirectPath) router.replace(redirectPath);
+	}, [redirectPath, router]);
 
 	// Redirect away from seasons this show doesn't have
 	useEffect(() => {
