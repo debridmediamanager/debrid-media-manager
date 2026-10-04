@@ -33,5 +33,5 @@ ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
 
 # Healthcheck
-HEALTHCHECK --interval=30s --timeout=1s --start-period=3s --retries=1 \
-  CMD curl -s http://localhost:3000/api/healthz | grep -qm1 ok
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD curl -sf -m 5 http://localhost:3000/api/healthz | grep -qm1 ok

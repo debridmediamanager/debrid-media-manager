@@ -27,10 +27,18 @@ services:
     depends_on:
       - tor
       - redis
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -sf -m 5 http://localhost:3000/api/healthz | grep -qm1 ok']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     deploy:
       replicas: 4
       restart_policy:
-        condition: on-failure
+        # A health kill ends in SIGTERM and a clean exit 0, which on-failure
+        # never restarts.
+        condition: any
 
 volumes:
   redis_data:
