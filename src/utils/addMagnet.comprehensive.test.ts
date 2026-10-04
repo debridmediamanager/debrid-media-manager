@@ -186,13 +186,31 @@ describe('addMagnet utilities', () => {
 				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
 				expect(toast.error).toHaveBeenCalledWith(
-					'Real-Debrid will not accept this release. Try a different one.',
+					'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.',
 					expect.any(Object)
 				);
 				expect(toast.error).not.toHaveBeenCalledWith(
 					expect.stringContaining('throttling'),
 					expect.any(Object)
 				);
+			});
+
+			// r/debridmediamanager 2026-10-04: "every time I press Instant RD it
+			// says Real-Debrid will not accept this release". The same day RD
+			// answered this exact 451 for Big Buck Bunny at three adds a minute and
+			// accepted it again two minutes later, from adds the session could not
+			// see. dmm cannot tell that penalty from a real block, so it must not
+			// claim the release is the problem, and it must tell the user to wait.
+			it('does not blame the release for a 451 that may be an account penalty', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(false);
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
+
+				const messages = vi.mocked(toast.error).mock.calls.map(([m]) => String(m));
+				expect(messages).toHaveLength(1);
+				expect(messages[0]).not.toMatch(/will not accept/i);
+				expect(messages[0]).toMatch(/wait a few minutes/i);
 			});
 
 			// A refusal is not a rate limit, and recording one as such made every

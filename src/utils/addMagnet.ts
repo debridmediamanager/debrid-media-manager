@@ -200,11 +200,17 @@ export const handleAddAsMagnetInRd = async (
 		// twenty-second backoffs before telling them to try again in a minute.
 		if (rdError === 'infringing_file' && !isRdBlockedName(title, filenames)) {
 			if (!isRdThrottling()) {
-				// Nothing points at a throttle, so this is RD refusing the
-				// release. Say that, and let the caller treat it as an answer.
+				// Nothing this session can see points at a throttle, but that
+				// does not make it a verdict on the release. Measured 2026-10-04:
+				// at about three adds a minute RD refused 10 of 12 real hashes and
+				// then Big Buck Bunny itself; two minutes later half of those ten
+				// went through on the same account. The penalty can come from
+				// adds this session never saw (zurg, another tab, another app on
+				// the same key), so tell the user what to try rather than which
+				// case it was. Still returned as a refusal: no replay.
 				if (!silent)
 					toast.error(
-						'Real-Debrid will not accept this release. Try a different one.',
+						'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.',
 						magnetToastOptions
 					);
 				return 'infringing_file';
