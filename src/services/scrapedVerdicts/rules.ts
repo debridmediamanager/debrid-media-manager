@@ -76,6 +76,7 @@ const PACK = new RegExp(
 		'collection',
 		'saga\\b',
 		'antholog',
+		'antolog',
 		'hexalog',
 		'quadrilog',
 		'tetralog',
@@ -93,6 +94,35 @@ const PACK = new RegExp(
 		'\\b(?!(?:19|20)\\d\\d\\b)\\d+\\s*(?:movies|films)\\b',
 		'nominees',
 		'\\bphases\\b',
+		// The Polish for a collection, not for a collector ("Kolekcjoner kości",
+		// the Bone Collector) or a collector's edition ("kolekcjonerskie"), and
+		// "All Movies" spaced: "[All.Films][RG]" is a release group.
+		'kolekcj[aei]\\b',
+		'\\ball (?:the )?(?:films|movies)\\b',
+	].join('|'),
+	'iu'
+);
+
+/**
+ * Words for a set of one series' films. Unlike the words above they name the
+ * series, so they count only when the model read a title of the movie in the
+ * name: Brat's and Khmel's "Дилогия" sat on Men in Black, Jackie Brown and Boyz
+ * n the Hood, and the model saw no title of those films in any of them.
+ */
+const SERIES_PACK = new RegExp(
+	[
+		'duolog',
+		'дилог',
+		'pentalog',
+		'pentolog',
+		'пенталог',
+		'quadrolog',
+		'квадролог',
+		'tetrolog',
+		'тетралог',
+		'heptalog',
+		'octalog',
+		'(?:double|triple)[ ._-]*feature',
 	].join('|'),
 	'iu'
 );
@@ -300,7 +330,8 @@ export function decide(
 
 	if (ADULT_TAG.test(filename)) return 'trash';
 
-	if (PACK.test(filename) && filmLike) {
+	const pack = PACK.test(filename) || (titleMatch !== 'NO_TITLE' && SERIES_PACK.test(filename));
+	if (pack && filmLike) {
 		const range = YEAR_RANGE.exec(filename);
 		if (range) {
 			return Number(range[1]) <= movie.year && movie.year <= Number(range[2])

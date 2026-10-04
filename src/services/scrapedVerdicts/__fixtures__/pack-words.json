@@ -1,0 +1,6425 @@
+{
+	"_about": [
+		"Real verdicts read from production ScrapedVerdict on 2026-10-04 (read-only), on four random draws of judged movie pages (600, 600, 500 and 500 pages, none in substring-keeps.json's draws).",
+		"kept: every distinct (page, filename) whose stored trash verdict the new pack words turn into a keep, given the Jev answers recorded for it. refused: wrong keeps an earlier draft of the words made and the final words do not: another series' Дилогия the model saw no title of the movie in, Kolekcjoner (a collector), kolekcjonerskie (a collector's edition) and the Czech Kolekce.",
+		"humanLabel: PACK holds the movie, MOVIE is the movie, OTHER is not the movie, EITHER could not be decided from the name. Labelled by reading the filename against the page.",
+		"movies holds each page's IMDb titles built as getMovieContext builds them; ambiguous is left out, because the pack branch is decided before it."
+	],
+	"capturedAt": "2026-10-04",
+	"items": [
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 720p BluRay QEBS5 AAC20 MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 1080p BluRay QEBS5 AAC51 PS3 MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 540p BluRay QEBS5  IPAD MP4- ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Kolekcja Piraci z Karaibów 2003-2017 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Пираты Карибского моря (Пенталогия) BDRip 1080p HE..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 540p BluRay QEBS5 IPAD MP4-",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates Of The Caribbean Quadrology 1080p BluRay Q EBS5 AAC51 PS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 720p BluRay QEBS5 AAC20 MP4-",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "Pirates of the Caribbean Quadrology 720p BRRip [Release-Lounge]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0325980",
+			"filename": "The Pirates Of The Caribbean Quadrology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2015381",
+			"filename": "Guardians.of.the.Galaxy.DUOLOGY.NORDIC.1080p.BluRay.x264-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2015381",
+			"filename": "Guardians of the Galaxy Double Feature 10bit dts hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2015381",
+			"filename": "Guardians.of.the.Galaxy.DUOLOGY.NORDIC.REMUX.1080p.BluRay.AVC.DTS-HD.MA.7.1-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2015381",
+			"filename": "GUARDIANS OF THE GALAXY DUOLOGY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2015381",
+			"filename": "Guardians of the Galaxy Triple Feature br 10bit hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0091203",
+			"filename": "Highlander All Movies",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1179056",
+			"filename": "A Nightmare on Elm Street Pentalogie MULTi Bluray 1080p HDLight x264 AC3 [Bill]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1179056",
+			"filename": "+18 A Nightmare On Elm Street Heptalogy x264 720p Esub BluRay Dual Audio English Hindi GOPISAHI",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt5164214",
+			"filename": "Kolekcja Oceans Eleven 2001-2018 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0449088",
+			"filename": "Pirates Of The Caribbean Quadrology 720p BRRip [Release-Lounge]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0449088",
+			"filename": "Пираты Карибского моря (Пенталогия) BDRip 1080p HE..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0449088",
+			"filename": "Pirates Of The Caribbean Quadrology 1080p BluRay Q EBS5 AAC51 PS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0447854",
+			"filename": "Bambi.Duology.HUN.BDRip.Xvid-LaWLeSS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0447854",
+			"filename": "Bambi.Duologie.FRENCH.1080p.BluRay.x264-SSL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0790724",
+			"filename": "Jack Reacher Duology 2160p 10bit Bluray AV1 Dual Audio [Hindi+English] AAC 7 1 Msub [-=DUS=-]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0101272",
+			"filename": "The Addams Family Duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0101272",
+			"filename": "The Addams Family/Addams Family Values Double Feature DVD9 RETAI",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0173886",
+			"filename": "Halloweentown Duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National.Treasure.Duology.720p.BRRip.X264.AAC-REsuRRecTioN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National Treasure Duology - 720p BDRip X264 (Tamil + Hindi + Eng)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National.Treasure.Duology.720p.BRRip.XviD.MP3-VoXHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National.Treasure.Duology.1080p.H264.AC3.DD5.1.Will1869",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National Treasure Duology BRRip [A Release Lounge H264]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "National Treasure Double Feature br 10bit dts hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0368891",
+			"filename": "(Sha 007) National Treasure Duology 400MB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0435625",
+			"filename": "The Descent Duology BRRip H264 AAC-SecretMyth (Kingdom-Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0435625",
+			"filename": "Спуск (Дилогия)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0435625",
+			"filename": "Спуск. Дилогия",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0435625",
+			"filename": "Duologie The Descent DVDRip FRENCH",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0452608",
+			"filename": "Death Race Duology Unrated 720p BRRip Hindi-Eng SDR [.Dude.]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0452608",
+			"filename": "Death Race Duology BRRip 720p X264 AAC - ( Kingdom Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0452608",
+			"filename": "Death Race Duology 720p BRRip Hindi-Eng SDR-Release",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology (2008 2011) 720p BrRip x264 Multi subs",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda  1-2 Duology 2008-2011 - 1080p  X264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology 1-2 2008-2011 BluRay 720p X264 Aac Jbr D",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology 1 2 2008 2011 BluRay 720p x264 aac jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology 2008: 2011 3D Half SBS 1080p BDRip X264 AC3: KiNGDOM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology(2008 2011)BRRiP x264 AC3[Team Nanban]tmrg",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "kung Fu Panda Duology(2008 2011)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Duologia Kung Fu Panda [BluRay 1080 px][AC3 5.1-Castellano-Ingles+Subs]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1302011",
+			"filename": "Kung Fu Panda Duology 720p BRRip x264 Aac Dual Audio{Eng-Hindi}",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt5433140",
+			"filename": "Fast and Furious 1-10  Heptalogy 2001-2023 BluRay 1080p DTS x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt5433140",
+			"filename": "THE FAST AND FURIOUS Pentalogy BluRay 1080p QEBS5 AAC51 PS3 MP4- ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0085382",
+			"filename": "Cujo - Mans Beast Friend _ Drive-in Double Feature",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0295297",
+			"filename": "Harry Potter Octalogy 2001-2011 BluRay Dual Audio Hindi English 720p x264 AAC ESub - mkvCi...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0295297",
+			"filename": "Harry.Potter.Octalogy.2001-2011.COMPLETE.720p.10bit.BluRay.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0295297",
+			"filename": "Harry Potter Octalogie (2001-2011) MULTi VFF-VFQ-VOA [1080p] HDLight x264 AC3-GHT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0848228",
+			"filename": "The Avengers (Quadrology) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0848228",
+			"filename": "Avengers Double Feature HEVC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0848228",
+			"filename": "OS VINGADORES - DUOLOGIA DVDR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt18069420",
+			"filename": "Duologia Los Pitufos [MicroHD][1080 px][AC3 5 1-Castellano-AC3 5 1-Ingles+Subs]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Men In Black  Duology (iPod Zune PSP)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Men In Black Duology (iPod.Zune.PSP)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Men In Black Duology 720p Dual Audio [Hindi-Eng]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Men In Black Duology (x2 UKB-KvCD's By BINGOWINGZ)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt6467266",
+			"filename": "Kolekcja Sing (2016-2021) [MULTi] [1080p] [BluRay] [x264] [DD.5.1-MR] [Dubbing i Napisy PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt20215968",
+			"filename": "Hitman Kolekcja Klasyki-R69",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt9669176",
+			"filename": "Accident Man Duology [2018-2022] 720p x264 AC3 ENG SUB (UKBandit)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0082509",
+			"filename": "Heavy Metal 1 · 2 - Animation Duology Fantasy Eng [H264-mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0082509",
+			"filename": "(Дилогия) Тяжелый металл",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0082509",
+			"filename": "Heavy Metal 1, 2   Animation Duology Fantasy Eng [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0108147",
+			"filename": "Sister Act Duology DVDRip H264 (BINGOWINGZ UKB RG)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0108147",
+			"filename": "Kolekcja Zakonnica w przebraniu 1992-1993 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0108147",
+			"filename": "Sister Act Duology 720p BluRay x264 CiNEFiLE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0108147",
+			"filename": "Sister.Act.Double.Feature.BluRay.(1992-93.10Bit.1080p.DD5.1.H265-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0108147",
+			"filename": "Sister Act 1, 2   Whoopi Goldberg Duology Eng [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0324941",
+			"filename": "101 Dalmatians 1, 2   Duology Animation Eng 720p [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1625856",
+			"filename": "Allu Arjun All Movies In Hindi Dubbed [SC]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1745960",
+			"filename": "Top Gun Duology 2160p 10bit Bluray AV1 Dual Audio [Hindi+English] AAC 7 1 Msub [-=DUS=-]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0988982",
+			"filename": "Naruto+Shippuuden all movies 720p English",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1411697",
+			"filename": "Hangover the Duology 1 2 2009 2011 BluRay 720p x264 aac jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt1411697",
+			"filename": "The Hangover Duology (2009 2011) BDRemux AVC DTS HighCode  PHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0097576",
+			"filename": "- Indiana Jones Duology (1989 to 2008)[720p - BDRip's - [Tamil + Telugu (1) + Hi..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0097576",
+			"filename": "Indiana Jones Duology (1989 - 2008) - [BD-Rip's - 720p - x264 - Multi Audio (Tam..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0097576",
+			"filename": "Indiana-Jones-Duology-(1989--2008)--[BD-Rip  039 s--720p--x264--Multi-Audio-(Tam..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0317705",
+			"filename": "The Incredibles Duology 1080p Bluray HEVC Omikron",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt2103281",
+			"filename": "Planet of the Apes: Antology (1968-2014) BDRip 1080p 60 fps Dual ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0057076",
+			"filename": "James Bond: All Movies (1962-2012) [1080p]: Kesma",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0057076",
+			"filename": "James Bond 007 Kolekcja Filmów 1080p (1962-2015) PL",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s3",
+			"imdbId": "tt0357413",
+			"filename": "Ron.Burgundy.DUOLOGY.2004.720p.BluRay.x264-PublicHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120347",
+			"filename": "Kolekcja James Bond [720p] [BDRip] [XviD] [AC3-ELiTE] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0936501",
+			"filename": "Taken.Duology.1080p.BRRip.x264.AAC-m2g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.Quadrology.BluRay.720p.H264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Extinction Resident Evil Pentalogy HDPSP by undertank",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "RESIDENT EVIL PENTALOGY BluRay 1080p QEBS AAC PS3 MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Apocalypse Resident Evil Pentalogy",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "RESIDENT EVIL PENTALOGY BluRay 540p QEBS AAC MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.PENTALOGY.NORDIC.1080p.BluRay.DTS.x264-Danishbits",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Pentalogy 1080p BluRay x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Quadrology 720p BDRip",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil HEPTALOGY NORDIC 1080p BluRay REMUX AVC DTS-HD MA 5 1-DTS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil_Pentalogy_1080p_HEVC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.Quadrology.BluRay.480p.H264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "RESIDENT EVIL PENTALOGY BluRay 1080p QEBS AAC PS3 MP4-FASM.IPT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil - Pentalogy 720p BRRip Nl-ENG subs DRT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.Pentalogy.1080p.BluRay.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0120804",
+			"filename": "RESIDENT EVIL PENTALOGY BluRay 720p QEBS AAC XBOX WDTV MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1855325",
+			"filename": "Resident.Evil.Pentalogy.2002-2012.720p.BDRip.x264.AC3-nesmeured",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1855325",
+			"filename": "Обитель зла: Пенталогия / Resident Evil: Pentalogy (2002-2012) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1855325",
+			"filename": "Resident Evil Duology (2008-2012) BDRip 1080p English DD 5.1 AC3 x264 Hindi Sub ~TITAN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1855325",
+			"filename": "Pentalogia: Resident Evil (2002/2012) 1080p 5.1 Dual Áudi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt4630562",
+			"filename": "Fast and Furious Octalogy 2001-2017 BluRay Dual Audio [Hindi 5.1 + English] 720p x264 AAC ESub - mkvCinemas [Telly]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt4630562",
+			"filename": "Szybcy i Wściekli Kolekcja 1-8",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0102510",
+			"filename": "Kolekcja Naga broń 1988-1991 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0213149",
+			"filename": "Pearl Harbor Duology - Gingrich-Fortschen",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0274166",
+			"filename": "Johnny English Duology [MissouriMike]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0274166",
+			"filename": "Johnny English- Duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0274166",
+			"filename": "Johnny.English.Duology.720p.BluRay.x264-IPT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0274166",
+			"filename": "Johnny.English.Duology.NORDiC.1080p.BluRay.x264.DTS-TWA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0274166",
+			"filename": "Johnny English DUOLOGY 720p Bluray [pureghoul]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0844479",
+			"filename": "Коллекционер Дилогия BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1856101",
+			"filename": "Duologia Blade Runner 1982 e 2017 [BluRay] (1080p) WWW.BLUDV.COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0246460",
+			"filename": "JAMES BOND - KOLEKCJA Pierce Brosnan (1995-2002) m720p.BRrip.x264.MP4.AC3-5.1 PL [StarLord]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0246460",
+			"filename": "JAMES BOND - KOLEKCJA Pierce Brosnan (1995-2002) m1080p.BRrip.x264.MP4.AC3-5.1 PL [StarLord]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10665338",
+			"filename": "Kolekcja Halloween (1978-2022) [720p] [BRRip] [XviD] [AC3-ELiTE] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10665338",
+			"filename": "Kolekcja Filmów - Halloween 1978-2021 [REKONSTRUKCJA] [1080p.BluRay.H264.AC3.5.1-NoNaNo-NitroTeam] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0478970",
+			"filename": "Marvel Cinematic Universe (2008-2016) All Movies 720p Bluray x264 Dual Audio [Hindi-English] - KartiKing",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0478970",
+			"filename": "Ant-Man.DUOLOGY.NORDiC.1080p.BluRay.x264-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "The.Silence.of.the.Lambs.PENTALOGY.1080p.BluRay.x264.iNTERNAL-TL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "Hannibal Lecter Pentalogy Box Set HD-BRRip H264 5.1 ch-SecretMyth (Kingdom-Release) reencoder",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "Hannibal Lecter Pentalogy Box Set HD-BRRip H264 5.1 ch-SecretMyth (Kingdom-Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "Hannibal - Pentalogy",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "Pentalogia Hannibal",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0212985",
+			"filename": "Hannibal Lecter Pentalogy Box Set",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0458525",
+			"filename": "X-Men.Quadrology.720p.BRRips.XviD.AC3-FLAWL3SS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt5052474",
+			"filename": "Sicario Duology [2015-2018] 720p BluRay x264 AC3 (UKB-RG)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt5052474",
+			"filename": "Sicario Duology 2015-2018 BluRay 720p [Hindi 2.0 English 5.1] AAC x264 ESub - mkvCinemas [Telly]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0112281",
+			"filename": "Ace.Ventura.Duology.1994-1995.1080p.BluRay.H264.AC3.BADASSMEDIA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0112281",
+			"filename": "Kolekcja Ace Ventura *1994-1995* [10Bit SDR UPSCALING] [2160p.WEB-DL.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0112281",
+			"filename": "Duologia Ace Ventura [MicroHD][1080 px][AC3 5.1-Castellano-AC3 5.1 Ingles+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0416449",
+			"filename": "300 Duology.720p.BRRip.AC3.DiVERSiTY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0416449",
+			"filename": "300 DUOLOGY [x265]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0416449",
+			"filename": "300, 300 Rise of an Empire - Duology Action Eng 720p [H264-mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0416449",
+			"filename": "300 duology 300 and 300 rise of an empire (in hindi) (UNRATED AND UNCUT)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0416449",
+			"filename": "300 Double Feature BRRip 1080p Original Audio H265-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt2294629",
+			"filename": "Frozen Duology 1080p BluRay x265 HEVC 10bit AAC 7.1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt9603212",
+			"filename": "Kolekcja Mission Impossible (1996-2023) [720p] [BDRip] [XviD] [AC3-ELiTE] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt9603212",
+			"filename": "Kolekcja Mission Impossible 1996-2023 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt9603212",
+			"filename": "Mission Impossible Heptalogy (1996-2023) BluRay 1080p x264 Tam+Tel+Hin+Eng ESub",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099088",
+			"filename": "Kolekcja Powrót do przyszłości 1985-1990 [10Bit HDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099088",
+			"filename": "Back to the Future (1985-1990) [KOLEKCJA] [MULTi] [1080p] [AMZN] [WEB-DL] [DDP5.1] [H264-Ralf] [Lektor i Napisy PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0328880",
+			"filename": "Duologia Hermano Oso [MicroHD][1080 px][DTS 5 1 Castellano Ingles+Subs]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "Jump.Street.Duology.BRRip.x264.AC3-GLY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "Jump.Street.Duology.720p.BluRay.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "Jump Street Duology 21 &amp; 22 [2012   2014] 1080p BluRay x264 anoXmous",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "Jump Street Duology BluRay 720p DTS x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "Jump.Street.Duology.BluRay.720p.DTS.x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1232829",
+			"filename": "21.And.22.Jump.Street.DUOLOGY.NORDIC.1080p.BluRay.DTS.x264-Danishbits",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes 1 2 Duology 2009 2011 BluRay 720p x264 ac3 jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology 2009 · 2011.720p.BRRip.LATiNO.ENG.XviD.AC3",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Шерлок Холмс: Дилогия / Sherlock Holmes: Duology (2009-2011) BDRemux 1080p | D",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes duology 2009 2011 US BDRip 1080p DTS extras HighCode",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology-(2009-2011) HDrip-x264-Dual Audio (Eng-Hindi-2.0)-1.4gb   &#x3D; &#x3D;Movie Den&#x3D; &#x3D;",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology 2009 2011 1080p BluRay x264 anoXmous",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology (2000 2011) BluRay 720p   DEEPSEA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology 2009 2011 2160p BluRay REMUX HEVC DTS HD MA 5 1 ArenaBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock.Holmes.Duology.2009-2011.1080p.BluRay.x264.AAC.5.1-POOP ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes 1-2 Duology 2009-2011 720p Blu-ray Hindi DD 2.1Ch BY (AIWAN SINGH RATHORE)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock.Holmes.DUOLOGY.2009-2011.1080p.BluRay.x264-PublicHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1515091",
+			"filename": "Sherlock Holmes Duology 2009-2011 US BDRip 1080p DTS Extras-High",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0160127",
+			"filename": "Charlies.Angels.Duology.1080p.Bluray.X264-BARC0DE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "The Boondock Saints Duology BRRIP da9l",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "Boondock Saints the 1-2 Duology 1999-2009 BluRay 720p x264 ac3 jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "The Boondock Saints Duology [1999 2010]480p.BRRip.H264(BINGOWINGZ UKB RG)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "The Boondock Saints Duology (G1, PSP, iPod, iPod Touch, iPhone,",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "The Boondock Saints Duology 720p BRRip XviD AC3 LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt1300851",
+			"filename": "The Boondock Saints duology (ghalib23)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0075005",
+			"filename": "The Omen Pentology DVDRips x264 AAC - MaryJane",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0075005",
+			"filename": "The Omen Pentology [All Movies 1 - 5]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0097443",
+			"filename": "The Gods Must Be Crazy 1 2 [1981-1989] Duology BluRay 480P Dual",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Duologia solo en Casa [MicroHD][1080 px][AC3 5.1-Castellano-AC3 5.1 Ingles+Subs]..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Home Alone Duology 720p BRRip A Cryptik Visions H264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Home Alone 1 & 2 (Double Feature)xvids by The_Stig@Torrent F",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Duologia solo en Casa [MicroHD][1080 px][AC3 5.1-Castellano-AC3 5.1 Ingles+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Home Alone & Home Alone 2 Duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0099785",
+			"filename": "Один дома. Дилогия",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0102926",
+			"filename": "Silence Of The Lambs Pentology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt0220506",
+			"filename": "Kolekcja Halloween 1978-2002 [10Bit SDR- 5x UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10366206",
+			"filename": "Джон Уик: Квадрология / John Wick: Quadrology (2014-2023) UHD BDRip 2160p | 4K | HDR | Dolby Vision TV | D P P2 A",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10366206",
+			"filename": "Джон Уик: Квадрология / John Wick: Quadrology (2014 - 2023) BDRip 1080p от Generalfilm | D",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10366206",
+			"filename": "Kolekcja John Wick (2014-2023) [MULTi] [10Bit] [HDR10] [4K.2160p.BluRay.H265.AC3-Spedboy] [Napisy ENG-PL] [ENG-Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10366206",
+			"filename": "Kolekcja John Wick 2014-2023 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [ENG-Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt10366206",
+			"filename": "John Wick - Quadrology_2014,2017,2019, 2023_4 x BD-DVD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt5664636",
+			"filename": "Goosebumps (2015 2018) Duology 1080p BluRay x264 ESubs By Hammer",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s4",
+			"imdbId": "tt5664636",
+			"filename": "Kolekcja Gęsia skórka 2015-2018 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi.Duology.1080p.BluRay.x264-LT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi.Duology.HUN.BDRip.Xvid-LaWLeSS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi.Duology.1080p.RoSubbed.BluRay.x264-LT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi.Duology.720p.RoSubbed.BluRay.x264-LT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi.Duologie.FRENCH.1080p.BluRay.x264-SSL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0034492",
+			"filename": "Bambi Duology BRRip 720p Dual Audio [Hin-Eng] [.Dude.]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0055254",
+			"filename": "101 Dalmatians 1, 2   Duology Animation Eng 720p [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0055254",
+			"filename": "101 Dalmatians 1 2 - Duology Animation Eng 720p [H264-mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0247638",
+			"filename": "The Princess Diaries Duology 720p BRrip NL x264 By Jeffrey",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0247638",
+			"filename": "The.Princess.Diaries.Duology.1080p.BRRip.x264.AC3.MutzNutz",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0247638",
+			"filename": "The.Princess.Diaries.Duology.720p.BluRay.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0247638",
+			"filename": "- The Princess Diaries Duology 720p BRRip x264 AC3 DiVERSiTY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2184339",
+			"filename": "The Purge - Квадрология",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt27729779",
+			"filename": "Kolekcja Platforma 2019-2024 [10Bit SDR UPSCALING] [2160p.WEB-DL.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt4919268",
+			"filename": "Kolekcja Bad Boys 1995-2024 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt5034838",
+			"filename": ".Godzilla.v.Kong.Double.Features.2021.BRRip.-.2024.WEBRip.1080p..HDR10.10Bit.DDP5.1.HEVC-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0079944",
+			"filename": "STALKER Antology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0114194",
+			"filename": "The Prophecy Pentology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0114194",
+			"filename": "The Prophecy Pentology.[DvDRip]-Syolaar",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "Ring the 1 2 2002 2005 Duology 720p x264 aac jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "The Ring Duology 2002 2005 DVDR R4 NTSC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "Ring the 1-2 2002-2005 Duology 720p x264 aac jbr r1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "- The Ring Duology (2002 to 2005)[720p - BDRip's - [Tamil + Telugu (1) + Hindi +..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "The Ring 2002 2005 Duology HDDVD 720p x264 MgB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0377109",
+			"filename": "The Ring [Duology] 720p HDTV x264 - YIFY",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt11762114",
+			"filename": "Mean Girls Duology DVDR DD5 1 (Eng, NL, FR, Subs) DRT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "Коллекционер: Дилогия / The Collector (2009-2012) BDRip 1080p от NoLimits-Team",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "Duologia O Colecionador de Corpos (2009-2012) Bluray 720p Dublad ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission.Impossible.Pentalogy1996-2015.Multi.2160p.UHD.BluRay.x26",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission: Impossible Pentalogy (1996-2015) 1080p 10bit BluRay x265 HEVC-MRN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission Impossible Pentalogy 1996-2015 BluRay Dual Audio Hindi English 5.1 2.0 720p x264 AAC ESub - mkvCinemas [Telly]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission.Impossible.Pentalogy.1080p.BluRay-TL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission.Impossible.Pentalogy.1996-2015.1080p.BluRay.x264.AAC.5.1 ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "Mission Impossible Pentalogy1996-2015 Multi 2160p UHD BluRay x265 HDR-DTOne",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2381249",
+			"filename": "- Mission Impossible Pentalogy (1996 - 2015) BluRay - 720p - [Telugu (4) + Tam +..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt3758172",
+			"filename": "The.Jungle.Book.DUOLOGY.PLDUB.720p.BDRip.XviD.AC3-ELiTE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0075148",
+			"filename": "Rocky - Antology [TNC-HD&HQ-Video R.G]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0455944",
+			"filename": "The.Equalizer.DUOLOGY.NORDiC.1080p.BluRay.x264-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0455944",
+			"filename": "The Equalizer Double Feature 1080p hdr10 10bit dts hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0088247",
+			"filename": "TERMINATOR QUADROLOGY 720p BluRay QEBS 5 AAC20 MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0088247",
+			"filename": "TERMINATOR QUADROLOGY 540p BluRay QEBS 5 ANDROID IPAD MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0088247",
+			"filename": "TERMINATOR QUADROLOGY 720p BluRay QEBS 5 AAC20 FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0088247",
+			"filename": "TERMINATOR QUADROLOGY 1080p BluRay 5 AAC51 PS3 MP4-FASM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1228705",
+			"filename": "IRON MAN duology (2008, 2010) 1080p multisub [mkvonly]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1228705",
+			"filename": "Iron Man Duology 1 2 2008 2010 BluRay 720p x264 aac multisub jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1253864",
+			"filename": "Kolekcja Starcie tytanów 2010-2012 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Duologia Thor 2011-2013 WWW.BLUDV.COM 720P",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor.Duology.2011-2013.1080p.10bit.BluRay.5.1.x265.HEVC-MZABI",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor.Duology.2011-2013.720p.BRRip.XviD.AC3-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor Duology 1080p BluRay x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor.Duology.HQ.BluRay.1080p.x264.Hindi.Eng.AC3-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor duology 2011-2013 BDRip 1080p DTS-HD MA 5.1 extras-HighCode ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Duologia Thor 2011-2013 [1080p] WWW.BLUDV.COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor Duology BRrip 1080P x264 MP4-Ofek",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Thor duology 2011-2013 BDRip 1080p DTS-HD MA 5.1 extras-HighCode",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0800369",
+			"filename": "Thor Duology HQ BluRay 1080p x264 Hindi Eng AC3-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0800369",
+			"filename": "Thor Duology HQ HDef hevc-d3g (1)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0800369",
+			"filename": "Thor Triple Feature UHD hdr10-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0800369",
+			"filename": "Thor duology - Munkman(1)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1397280",
+			"filename": "Taken.1-2.Duology.2008-2012.1080p.BluRay.x264.anoXmous",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1397280",
+			"filename": "Taken 1-2 Duology 2008-2012 BluRay 720p X264 Aac Jbr P",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1397280",
+			"filename": "Taken 1-2 Duology 2008-2012 BluRay 720p x264 aac jbr p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1397280",
+			"filename": "Taken Duology 2008-2012 BRRip-H264 (UKB-RG)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1431045",
+			"filename": "Deadpool.DUOLOGY.NORDiC.REMUX.1080p.BluRay.AVC.DTS-HD.MA.7.1-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1431045",
+			"filename": "Deadpool.DUOLOGY.NORDiC.1080p.BluRay.x264-CDB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0097366",
+			"filename": "Fletch.Duology.DVDRip.x265.AC3-2.0.MultiAUDIO.MultiSUB-HuskyPeter-IPT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0120685",
+			"filename": "original-godzilla-duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0120685",
+			"filename": "Godzilla.Duology.NORDiC.1080p.BluRay.x264.DTS-TWA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0120685",
+			"filename": "Godzilla. Kolekcja 2[Blu-Ray 4K]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider Duology 2007 2011 EXTENDED 1080p 10bit 60FPS BluR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider Duology 1080p BrRip x264 Spa Latino = Pitu",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider 1-2 Duology 2007-2011 BluRay 720p X264 Ac3 Jbr P",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "www-TamilRockers-cl--Ghost-Rider-Duology-(2007-to-2011)[BDRip s--[Tamil- -Telugu..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost.Rider.1-2.Duology.2007-2011.BluRay.720p.x264.ac3.jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider 1 2 Duology 2007 2011 BluRay 720p x264 ac3 jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "www-TamilRockers-cl--Ghost-Rider-Duology-(2007-to-2011)[720p--BDRip s--[Tamil- -..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider Duology (2007-2011) EXTENDED 1080p 10bit [60FPS] BluRay x265 HEVC [Org Hindi DD 5.1 English DD 5.1] ESubs ~ MrStrange",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider 1, 2   Duology Nicolas Cage Action Eng 720p [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider 1-2 Duology 2007-2011 BluRay 720p x264 greek sub",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost-Rider-DuoLogy-(2007-2011)-1080p-BluRay-x264-Dual-Audio-[Hindi-English]-DD5..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1071875",
+			"filename": "Ghost Rider Duology (2007 to 2011)[720p - BDRip's - [Tamil Telugu Hindi Eng] - x264 - 2.6GB - ESubs] TEAMTR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "[Fortissimo] Kara no Kyoukai/The Garden of Sinners v2 (all movies, HEVC FLAC 2.0 & 5.1)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "[Trix] Kara no Kyoukai (All Movies) [Eng subs - VOSTFR] (BD 1080p AV1) - The Garden of Sinners",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "Kara no Kyoukai - The Garden of Sinners [1080p] [ALL MOVIES]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "[Fortissimo] Kara no Kyoukai/The Garden of Sinners (all movies, HEVC FLAC 2.0 &amp; 5.1)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "[Trix] Kara no Kyoukai (All Movies) [Eng subs - VOSTFR] (BD 720p AV1) - The Garden of Sinners",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt31193180",
+			"filename": "Kara No Kyoukai | (Garden of Sinners) All Movies + TV + Specials   - (BD 1080p x265/720p x264 10-bit AAC) Official Eng sub.",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt2631186",
+			"filename": "Prabhas All Movies In Hindi Dubbed [SC]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0085407",
+			"filename": "Dragon Ball Z All Movies 1-13 Jap-Eng-Spa Latino 1080p = Pitu",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0112864",
+			"filename": "Die Hard Pentalogy 720p BluRay EsubS Dual Audio English Hindi 1988 1990 1995 200..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0112864",
+			"filename": "Pentalogia.Duro.de.Matar.BluRay.1080p.Dual.Audio.D4V1.WWW.BLUDV.COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0112864",
+			"filename": "Крепкий орешек: Квадрология / Die Hard: Quadrology [1080p] [1988/1990/1995/2007 г. Боевик BDRemux] Dub (CEE) MVO (Киномания + ОРТ) AVO (Гаврилов) Original (HD-MA) Sub",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0112864",
+			"filename": "Die Hard Pentalogy 720p BluRay EsubS Dual Audio English Hindi 1988 1990 1995 2007 2013 GOPI SAHI PDR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0116225",
+			"filename": "Побег из Нью-Йорка и Лос-Анджелеса: Дилогия / Escape from New York & L.A. (1981-1996) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0116225",
+			"filename": "Побег из Нью-Йорка и Лос-Анджелеса: Дилогия / Escape from New York & L.A. (1981/1996) BDRip 720p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0116225",
+			"filename": "Побег из Нью-Йорка и Лос-Анджелеса: Дилогия / Escape from New York & L.A. (1981-1996) BDRip 1080p | D P A",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0363771",
+			"filename": "The Chronicles Of Narnia Duology 720p BRRip XviD AC3 LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0363771",
+			"filename": "Kolekcja.Opowiesci.z.Narnii.(2005-2010).Pl.1080p.BRRip.H264-wasik",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0363771",
+			"filename": "The.Chronicles.Of.Narnia.Duology.DVRip.XviD-TPB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0363771",
+			"filename": "The.Chronicles.Of.Narnia.Duology.720p.BRRip.XviD.AC3-LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt0101452",
+			"filename": "Bill And Teds Most Excellent Double Feature 1989-1991 720p BluRa",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1082868",
+			"filename": "Duologia Quarentena Torrent – BluRay 720p/1080p Dual Áudio",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt12263384",
+			"filename": "Kolekcja Tyler Rake 2020-2023 [10Bit SDR] [2160p.WEB-DL.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1436562",
+			"filename": "Rio.Duology.BluRay.1080p.DTS.x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1436562",
+			"filename": "Rio.Duology.BluRay.720p.DTS.x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1436562",
+			"filename": "Rio Duology BluRay 720p DTS x264-CHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1436562",
+			"filename": "Rio.Duology.1080p.BluRay.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1438176",
+			"filename": "Fright.Night.Duology.720p.Bluray.x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s5",
+			"imdbId": "tt1438176",
+			"filename": "Fright.Night.DUOLOGY.NORDIC.1080p.BluRay.DTS.x264-Danishbits",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0090605",
+			"filename": "morespacealiensattacksatthebijoudoublefeature",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0090605",
+			"filename": "Antologia Alien SE 1080p BluRay x264-Belex Dual Audio",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1324999",
+			"filename": "Twilight Pentalogy 2008-2012 720p BRRiP DTS x264-SilverTorrentHD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1324999",
+			"filename": "Crepusculo Pentalogia BDRip 720p Dual Audio",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1375670",
+			"filename": "Kolekcja Starcie tytanów 2010-2012 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1375670",
+			"filename": "Grown Ups Duology 720p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1638355",
+			"filename": "Agente 007 James Bond All Films iTALiAN BRRip XviD BLUWORLD",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid Duology 720p BRRip AC3 X264-LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid Duology 2011-2014 US Unrated BDRip 720p DTS Extras &",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid Duology (2011 to 2014)[720p - BDRip's - [Tamil Telugu Hindi Eng] - x264 - 2.5GB - ESubs. TEAMTR]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid Redemption Duology [2011-2014] 1080p BluRay HEVC x265 10Bit AC3 ENG SUB (UKBandit)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid duology 2011 2014 US Unrated BDRip 720p DTS extras &amp; score HighCode",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The.Raid.Duology.2011 2014.720p.BRRip.AC3.x264 LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The-Raid-Redemption-Duology-2011-2014-1080p-BluRay-HEVC-x265-10Bit-AC3-ENG-SUB-(..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The.Raid.Duology.2011-2014.720p.BRRip.AC3.x264-LEGi0N",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "The Raid Duology (2011, 2014) Bluray, with eng subs",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2265171",
+			"filename": "- The Raid Duology (2011 - 2014) - [BD-Rip's - 720p - x264 - Mp3 - 2GB - E-Subs]..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt4196776",
+			"filename": "Jason Bourne Pentalogie",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt4196776",
+			"filename": "Kolekcja Tożsamość Bourne'a 1988-2016 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt4196776",
+			"filename": "The.Bourne.Pentalogy.2002-2016.1080p.10bit.BluRay.8CH.x265-PSA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt4196776",
+			"filename": "The Bourne Pentalogy 2002-2016 BluRay Dual Audio Hindi English 5.1 720p x264 ESub - mkvCin...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2637276",
+			"filename": "Ted.Unrated.Duology.2012-2015.BluRay.720p.DTS.x264-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2637276",
+			"filename": "Ted UNRATED Duology 2012-2015 1080p BluRay AC3 X264 Kbabe",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0800320",
+			"filename": "Titans.Double.Feature.BluRay.10Bit.1080p.Dts.H265-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0800320",
+			"filename": "Clash of the Titans  Duology",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0800320",
+			"filename": "Clash.n.Wrath.Of.The.Titans.Duology.2010-2012.BluRay.1080p.HEVC.DTS-HD.MA 5.1-x265-SDC-",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0905372",
+			"filename": "The Thing Double Feature HEVC-d3g",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1073105",
+			"filename": "The Descent Duology BRRip H264 AAC-SecretMyth (Kingdom-Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1073105",
+			"filename": "The Descent Duology BRRip H264 AAC SecretMyth (Kingdom Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1298650",
+			"filename": "Pirates of the Caribbean 2003 2011 Quadrology BDRip x264 Rus Eng HDT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1298650",
+			"filename": "Pirates Of The Caribbean Quadrology 720p BRRip [Release-Lounge]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1298650",
+			"filename": "Pirates of the Caribbean Quadrology 540p BluRay QEBS5  IPAD MP4- ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1298650",
+			"filename": "Пираты Карибского моря (Пенталогия) BDRip 1080p HE..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1298650",
+			"filename": "Pirates Of The Caribbean Quadrology 1080p BluRay Q EBS5 AAC51 PS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games.2012-2023.Pentalogy.1-5.720p.AV1-Zero00",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games duology 2012-2013 1080p DTS-HD MA 5.1-HighCode",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "Igrzyska Śmierci (2012-2015) [KOLEKCJA] [1080P] [BLURAY] [H264] [AC3-E1973] [LE..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "Kolekcja Igrzyska śmierci 2012-2023 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games 2012 2023 Pentalogy 1 5 720p AV1 Zero00",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games Duology 2012-2013 720p BRRip XviD AC3-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games Duology (2012-2013) - 720p - MovieGuru",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games Duology 1080p BluRay x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1951264",
+			"filename": "The Hunger Games Duology 2012-2013 1080p DTS-HD MA 5.1-HighCode",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2226417",
+			"filename": "Insidious Duology (2010   2013) 720p 5 1 BRRiP x264 AAC (pimprg)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2226417",
+			"filename": "Insidious Duology (2010 - 2013) 720p 5.1 BRRiP x264 AAC [Team Na",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0362120",
+			"filename": "Scary Movie Pentalogy BluRay 1080p DTS-HD MA 5 1 REMUX-FraMeSToR",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0362120",
+			"filename": "Pentologia - Todo Mundo em Panico",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0362120",
+			"filename": "Очень страшное кино: Квадрология / Scary Movie: Quadrology (2000-2006) BDRip HDTVRip 720p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1051904",
+			"filename": "Goosebumps.Duology.BRRip.XviD-BLiTZKRiEG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt11655566",
+			"filename": "Duologia Lilo y Stitch [MicroHD][1080 px][DTS-AC3 5 1-Castellano DTS-AC3 5 1-Ing..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1155076",
+			"filename": "The Karate Kid Duology YIFY [1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1699231",
+			"filename": "Duologia Quarentena 2008 E 2011 (720p)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1699231",
+			"filename": "Duologia Quarentena 2008 E 2011 (720p) DUBLADO WWW.BLUDV.COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1132620",
+			"filename": "Kolekcja Millennium 2009 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1132620",
+			"filename": "Kolekcja Filmów - Millennium 2009-2018 [EXTENDED] [1080p.BluRay.H265.AC3.5.1-NoNaNo-NitroTeam] [Napisy ENG-PL] [SWE-Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1132620",
+			"filename": "Millennium Quadrology (2009-2011) rosubbed",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0120812",
+			"filename": "Rush.Hour.-.Triple.Feature.BluRay.1080p.Dts.H264-PiR8",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt30459064",
+			"filename": "Решала Дилогия",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt5090568",
+			"filename": "Transformers.Duology.BluRay.720p.DTS.x264-HDLiTE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt5090568",
+			"filename": "Kolekcja Transformers 2007-2023 [10Bit SDR] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0110857",
+			"filename": "Police Academy   Antology (1984 1994) BDRip 1080p H 265 [UKR_ENG] [Hurtom]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0110857",
+			"filename": "Kolekcja Akademia Policyjna 1984-1994 [10Bit SDR UPSCALING] [2160p.BluRay.H265.AC3-AS76-FT] [Lektor PL] [Alusia]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0259324",
+			"filename": "Ghost Rider Duology 1080p BrRip x264 Spa Latino = Pitu",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0259324",
+			"filename": "Ghost.Rider.Duology.NORDiC.1080p.BluRay.x264.DTS.HD.MA.5.1-TWA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0259324",
+			"filename": "Ghost Rider 1, 2   Duology Nicolas Cage Action Eng 720p [H264 mp4]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0259324",
+			"filename": "Ghost.Rider.DUOLOGY.720p.BDRip.x264.AAC-WiNTeaM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0259324",
+			"filename": "Ghost.Rider.DUOLOGY.NORDIC.1080p.BluRay.REMUX.AVC.TrueHD.7.1.and.DTS-Danishbits",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1502712",
+			"filename": "Fantastic Four Duology 720P BRRip, [Release-Lounge H264]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1502712",
+			"filename": "Фантастическая четверка. Дилогия",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1502712",
+			"filename": "Фантастическая Четвёрка (Дилогия)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1634122",
+			"filename": "Johnny English Duology 2003 2011 BluRay 720p x264 ac3 jbr",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1634122",
+			"filename": "Johnny English DUOLOGY 720p Bluray [pureghoul]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1634122",
+			"filename": "Johnny English Duology 2003-2011 1080p Blu-ray Remux VC-1 DTS-HD MA 5.1 - KRaLiMaRKo",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt1634122",
+			"filename": "Johnny English Duology (2003+2011) BluRay Rip 720p Dual Audio",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0372784",
+			"filename": "Batman Begins & The Dark Knight Duology BRRip 1080p x264 AAC - M3M3K4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0372784",
+			"filename": "Batman Begins & The Dark Knight Duologia BRRip 1080p - M3M3K4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt0372784",
+			"filename": "Batman Begins & The Dark Knight Duology BRRip 1080p x264 AAC - HoncHo (Kingdom Release)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2510894",
+			"filename": "Hotel Transylvania Duology 2015 1080p BluRay x264 DTS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2510894",
+			"filename": "Hotel.Transylvania.Duology.2012-2015.1080p.BluRay.x264.AAC.5.1-P ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "kept",
+			"sample": "s6",
+			"imdbId": "tt2510894",
+			"filename": "www.TamilRockers.cl - Hotel Transylvania Duology (2012 - 2015)  720p - BDRip - [ Tamil (1) + Hindi + English]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0103178",
+			"filename": "Хмель: Дилогия (1991) DVDRip-AVC от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0432283",
+			"filename": "Обитаемый остров: Дилогия (2008-2009) BDRip-AVC  от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt12589360",
+			"filename": "Майор Гром: Квадрология (2017-2024) WEB-DLRip-AVC от Files-x",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt1067106",
+			"filename": "Обитаемый остров: Дилогия (2008-2009) BDRip-AVC  от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0330373",
+			"filename": "Ночной дозор + Дневной дозор: Дилогия (2004-2005) HDRip-AVC от DoMiNo",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0063819",
+			"filename": "Малыш и Карлсон [Дилогия] (1968-1970) BDRip от MediaClub",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0063350",
+			"filename": "Малыш и Карлсон [Дилогия] (1968-1970) BDRip от MediaClub",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Брат. Дилогия (1997-2000) WEB-DL 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0119654",
+			"filename": "Брат: Дилогия (1997-2000) WEB-DLRip 720p от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt1185616",
+			"filename": "Обитаемый остров: Дилогия (2008-2009) BDRip-AVC  от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0220099",
+			"filename": "Брат: Дилогия (1997-2000) WEB-DLRip 720p от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0101507",
+			"filename": "Хмель: Дилогия (1991) DVDRip-AVC от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0361748",
+			"filename": "Обитаемый остров: Дилогия (2008-2009) BDRip-AVC  от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0119396",
+			"filename": "Брат. Дилогия (1997-2000) WEB-DL 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s3",
+			"imdbId": "tt0119396",
+			"filename": "Брат: Дилогия (1997-2000) WEB-DLRip 720p от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s4",
+			"imdbId": "tt0120347",
+			"filename": "Avatar (Rozszerzone wydanie kolekcjonerskie) - Avatar Extended Collectors Cut *2..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt0113118",
+			"filename": "Pátek třináctého / Friday the 13th (Kolekce 12 filmu)(CZ)[BDRip][1080p] = CSFD 61%",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "Kolekcjoner_kosci.iso",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "[ZODIAC-TORRENT.PL] Kolekcjoner kości",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "Deaver Jeffery - Kolekcjoner kości.rar",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt1748227",
+			"filename": "Kolekcjoner KoÅ›ci BRRip XViD Gipsy",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s5",
+			"imdbId": "tt1981115",
+			"filename": "Texasky masakr motorovou pilou / Texas Chainsaw Massacre - Kolekce (2003 - 2013)(CZ) = CSFD 56%",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s6",
+			"imdbId": "tt0299977",
+			"filename": "WŁADCA POGODY LEGENDARNY BOHATER. EDYCJA KOLEKCJONERSKA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "refused",
+			"sample": "s6",
+			"imdbId": "tt0387898",
+			"filename": "Hidden and Dangerous - Kolekce klasiky CZ",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"humanLabel": "OTHER"
+		}
+	],
+	"movies": {
+		"tt0325980": {
+			"name": "Pirates of the Caribbean: The Curse of the Black Pearl",
+			"year": 2003,
+			"titles": [
+				"La maledizione della prima luna - Pirates of the Caribbean",
+				"Peirates tis Karaivikis: I katara tou mavrou margaritariou",
+				"Piraci z Karaibów: Klątwa Czarnej Perły",
+				"Pirates des Caraïbes : La Malédiction du Black Pearl",
+				"Pirates des Caraïbes : La malédiction de la Perle Noire",
+				"Pirates of the Caribbean",
+				"Pirates of the Caribbean - Mustan helmen kirous",
+				"Pirates of the Caribbean: Den sorte forbandelse",
+				"Pirates of the Caribbean: Svarta Pärlans förbannelse",
+				"Pirates of the Caribbean: The Curse of the Black Pearl",
+				"Piráti z Karibiku - Prokletí Černé perly",
+				"Пираты Карибского моря: Проклятие Чёрной жемчужины",
+				"Пірати Карибського моря: Прокляття Чорної перлини"
+			]
+		},
+		"tt2015381": {
+			"name": "Guardians of the Galaxy",
+			"year": 2014,
+			"titles": ["Guardians of the Galaxy", "Guardians of the Galaxy Vol. 1"]
+		},
+		"tt0091203": {
+			"name": "Highlander",
+			"year": 1986,
+			"titles": [
+				"Highlander",
+				"Highlander - Bara en överlever",
+				"Highlander - Borba nesmrtnikov",
+				"Highlander - El inmortal",
+				"Highlander - Es kann nur einen geben",
+				"Highlander - L'ultimo immortale",
+				"Highlander - O Guerreiro Imortal",
+				"Highlander - den udødelige",
+				"Highlander - kuolematon",
+				"Highlander, o athanatos",
+				"Highlander: Akuma no senshi",
+				"Highlander: El último inmortal"
+			]
+		},
+		"tt1179056": {
+			"name": "A Nightmare on Elm Street",
+			"year": 2010,
+			"titles": [
+				"A Hora do Pesadelo",
+				"A Nightmare on Elm Street",
+				"A Nightmare on Elm Street 9",
+				"Coșmar pe Elm Street",
+				"Elm Sokağı Kabusu",
+				"Elm Sokağında Kabus",
+				"Elm Streeti luupainaja",
+				"Ha'siyut birhov Elm",
+				"Malson a Elm Street: L'origen",
+				"Mardrömmen på Elm Street",
+				"Mora v ulici brestov",
+				"Nightmare",
+				"Nočná mora z Elm Street",
+				"Noční můra v Elm Street",
+				"Painajainen Elm Streetillä",
+				"Pesadelo em Elm Street",
+				"Pesadilla en Elm Street",
+				"Pesadilla en Elm Street. El origen",
+				"Pesadilla en la calle Elm",
+				"Rémálom az Elm utcában",
+				"Terror på Elm Street",
+				"Ác Mộng Phố Elm"
+			]
+		},
+		"tt5164214": {
+			"name": "Ocean's Eight",
+			"year": 2018,
+			"titles": [
+				"8 подруг Оушена",
+				"Debbie Ocean 8",
+				"Debbina 8",
+				"Ocean 8",
+				"Ocean's 8",
+				"Ocean's 8: Az évszázad átverése",
+				"Ocean's 8: Jaf cu clasa",
+				"Ocean's 8: Las estafadoras",
+				"Ocean's Eight",
+				"Oceani 8",
+				"Oceanovih 8",
+				"Okeaninih 8",
+				"Okeanovih 8",
+				"Oushenning 8 dugonasi",
+				"Oušenas 8",
+				"Oušeno 8",
+				"Η συμμορία των 8",
+				"Оушнових 8"
+			]
+		},
+		"tt0449088": {
+			"name": "Pirates of the Caribbean: At World's End",
+			"year": 2007,
+			"titles": [
+				"Cướp Biển Vùng Caribê: Nơi Tận Cùng Thế Giới",
+				"Karib dengizi qaroqchilari 3",
+				"Kariibi mere piraadid 3: Maailma lõpus",
+				"P.O.T.C. 3",
+				"Pirates 3",
+				"Pirates des Caraïbes : Jusqu'au bout du monde",
+				"Pirates of Caribbean: World End",
+				"Pirates of the Caribbean - Am Ende der Welt",
+				"Pirates of the Caribbean - Ved verdens ende",
+				"Pirates of the Caribbean 3",
+				"Pirates of the Caribbean: At World's End",
+				"Pirates of the Caribbean: Maailman laidalla",
+				"Pirates of the Caribbean: Vid världens ände",
+				"Пираты Карибского моря: На краю света",
+				"Пірати Карибського моря: На краю світу"
+			]
+		},
+		"tt0447854": {
+			"name": "Bambi II",
+			"year": 2006,
+			"titles": [
+				"Bambi 2",
+				"Bambi 2 - Bambi e il grande principe della foresta",
+				"Bambi 2 - Der Herr der Wälder",
+				"Bambi 2 - El gran príncipe del bosque",
+				"Bambi 2 - O Grande Príncipe da Floresta",
+				"Bambi 2 : Le Grand Prince de la Forêt",
+				"Bambi 2 : Le Prince de la forêt",
+				"Bambi 2: Bambi és az erdő hercege",
+				"Bambi 2: El príncipe del bosque",
+				"Bambi 2: Marele Prinț al Pădurii",
+				"Bambi 2: O pringipas tou dasous",
+				"Bambi 2: The Great Prince of the Forest",
+				"Bambi 2: en de prins van het bos",
+				"Bambi II",
+				"Bambi and the Great Prince",
+				"Bambi and the Great Prince of the Forest",
+				"Banbi 2: The Great Prince of the Forest",
+				"Chú Nai Bambi 2",
+				"Μπάμπι 2: Ο πρίγκιπας του δάσους",
+				"Бамби 2",
+				"Бембі 2",
+				"Бэмби 2"
+			]
+		},
+		"tt0790724": {
+			"name": "Jack Reacher",
+			"year": 2012,
+			"titles": [
+				"Jack Reacher",
+				"Jack Reacher - La prova decisiva",
+				"Jack Reacher - Tappajan jäljillä",
+				"Jack Reacher. Un glont la tinta",
+				"Jack Reacher: Bajo la mira",
+				"Jack Reacher: Jednym strzałem",
+				"Jack Reacher: O Último Tiro",
+				"Jack Reacher: Phát Súng Cuối Cùng",
+				"Jack Reacher: Poslední výstřel",
+				"Jack Reacher: Posledný výstrel"
+			]
+		},
+		"tt0101272": {
+			"name": "The Addams Family",
+			"year": 1991,
+			"titles": [
+				"A Família Addams",
+				"Addams Ailesi",
+				"Addams Family - A galád család",
+				"Addams Fjölskyldan",
+				"Addams ailəsi",
+				"Addams oilasi",
+				"Az Addams family",
+				"Die Addams Family",
+				"Familien Addams",
+				"Familjen Addams",
+				"Gia Đình Addams",
+				"I oikogeneia Addams",
+				"La Famille Addams",
+				"La famiglia Addams",
+				"La familia Addams",
+				"Los Locos Addams",
+				"Obitelj Addams",
+				"The Addams Family",
+				"The Addams Family - Perhe Addams"
+			]
+		},
+		"tt0173886": {
+			"name": "Halloweentown",
+			"year": 1998,
+			"titles": [
+				"Halloweentown",
+				"Halloweentown - Meine Oma ist 'ne Hexe!",
+				"Halloweentown - taikuuden kaupunki",
+				"Halloweentown: Um Lugar Mágico",
+				"Halloweentown: ¡Qué familia la mía!",
+				"Häxor är vi allihopa"
+			]
+		},
+		"tt0368891": {
+			"name": "National Treasure",
+			"year": 2004,
+			"titles": [
+				"A Lenda do Tesouro Perdido",
+				"A nemzet aranya",
+				"La búsqueda (National Treasure)",
+				"National Treasure",
+				"National Treasure - Kansallisaarre",
+				"Trésor national"
+			]
+		},
+		"tt0435625": {
+			"name": "The Descent",
+			"year": 2005,
+			"titles": [
+				"Descent",
+				"I kathodos",
+				"The Dark",
+				"The Descent",
+				"The Descent - Abgrund des Grauens",
+				"The Descent - Discesa nelle tenebre",
+				"The Descent - Nedstigning til helvede",
+				"The Descent - loukussa",
+				"The Descent: Nedstigningen",
+				"Спуск"
+			]
+		},
+		"tt0452608": {
+			"name": "Death Race",
+			"year": 2008,
+			"titles": [
+				"Death Race",
+				"Death Race - Dött lopp",
+				"Death Race - Kuolonajot",
+				"Death Race 3000",
+				"Death Race: La carrera de la muerte",
+				"Death race - course à la mort"
+			]
+		},
+		"tt1302011": {
+			"name": "Kung Fu Panda 2",
+			"year": 2011,
+			"titles": [
+				"Kong Fu Panda 2",
+				"Kung Fu Panda 2",
+				"Kung Fu Panda 2 (3D)",
+				"Kung Fu Panda: The Kaboom of Doom",
+				"Kungfu panda 2",
+				"Kungpupaendeo 2",
+				"Kunq-Fu Panda 2",
+				"O Panda do Kung Fu 2",
+				"Panday-e Kung Fu-kar 2",
+				"Κουνγκ φου πάντα 2",
+				"Кунг Фу Панда 2",
+				"Панда Кунг-Фу 2"
+			]
+		},
+		"tt5433140": {
+			"name": "Fast X",
+			"year": 2023,
+			"titles": [
+				"Brzi i žestoki 10",
+				"Fast & Furious 10",
+				"Fast & Furious X",
+				"Fast X",
+				"Fast and the Furious 10",
+				"Forsaj 10",
+				"Forsaji X",
+				"Furios și iute 10",
+				"Furios și iute X",
+				"Greiti ir įsiutę 10",
+				"Halálos iramban 10.",
+				"Hızlı ve Öfkeli 10",
+				"Kiired ja vihased X",
+				"Quá Nhanh Quá Nguy Hiểm 10",
+				"Rapides X",
+				"Rychle a zběsile 10",
+				"Rápidos y furiosos 10",
+				"Rápidos y furiosos X",
+				"Rýchlo a zbesilo 10",
+				"Szybcy i wsciekli X",
+				"Szybcy i wściekli 10",
+				"Velocidade Furiosa X",
+				"Velozes & Furiosos 10",
+				"Ātrs un bez žēlastības 10",
+				"Бързи и яростни 10",
+				"Паклене улице 10",
+				"Форсаж 10",
+				"Форсаж X",
+				"מהיר ועצבני 10",
+				"फास्ट X",
+				"เร็ว..แรงทะลุนรก 10"
+			]
+		},
+		"tt0085382": {
+			"name": "Cujo",
+			"year": 1983,
+			"titles": [
+				"Chó Điên Cujo",
+				"Cujo",
+				"Cujo - O Novo Símbolo do Terror",
+				"Cujo - en hund efter blod",
+				"Cujo - et nytt navn for terror",
+				"Cujo -Kauhun silmät",
+				"Cujo, el perro asesino",
+				"Cujo, vzteklý pes",
+				"Cujo: El perro maldito",
+				"Cujo: tres días de terror"
+			]
+		},
+		"tt0295297": {
+			"name": "Harry Potter and the Chamber of Secrets",
+			"year": 2002,
+			"titles": [
+				"Garri Potter va maxfiy hujra",
+				"Hari Poter i dvorana tajni",
+				"Harri Potter və sirlər otağı",
+				"Harry Potter a tajemná komnata",
+				"Harry Potter a tajomná komnata",
+				"Harry Potter and the Chamber of Secrets",
+				"Harry Potter dhe Dhoma e të Fshehtave",
+				"Harry Potter e a Câmara Secreta",
+				"Harry Potter e a Câmara dos Segredos",
+				"Harry Potter e la camera dei segreti",
+				"Harry Potter en de geheime kamer",
+				"Harry Potter et la Chambre des secrets",
+				"Harry Potter i Komnata Tajemnic",
+				"Harry Potter i Odaja tajni",
+				"Harry Potter i la cambra secreta",
+				"Harry Potter in dvorana skrivnosti",
+				"Harry Potter ja saladuste kamber",
+				"Harry Potter ja salaisuuksien kammio",
+				"Harry Potter och Hemligheternas kammare",
+				"Harry Potter og hemmelighedernes kammer",
+				"Harry Potter og leyniklefinn",
+				"Harry Potter og mysteriekammeret",
+				"Harry Potter und die Kammer des Schreckens",
+				"Harry Potter va Talar e Asrar",
+				"Harry Potter ve Sırlar Odası",
+				"Harry Potter ve'Khadar Ha'Sodot",
+				"Harry Potter và Phòng Chứa Bí Mật",
+				"Harry Potter y la Cámara Secreta",
+				"Harry Potter y la cámara de los secretos",
+				"Harry Potter és a titkok kamrája",
+				"Harry Potter și Camera Secretelor",
+				"O Harry Potter kai i kamara me ta mystika"
+			]
+		},
+		"tt0848228": {
+			"name": "The Avengers",
+			"year": 2012,
+			"titles": [
+				"Avengers",
+				"Avengers Assemble",
+				"Avengers: Biệt Đội Siêu Anh Hùng",
+				"Avengers: Pomstitelia",
+				"Les Avengers: le film",
+				"Marvel Avengers Assemble",
+				"Marvel's Avengers Assemble",
+				"Marvel's The Avengers",
+				"Os Vingadores",
+				"Os Vingadores - The Avengers",
+				"The Avengers",
+				"The Avengers. Los Vengadores",
+				"The Avengers: An IMAX 3D Experience"
+			]
+		},
+		"tt18069420": {
+			"name": "Smurfs",
+			"year": 2025,
+			"titles": ["I Puffi: Il film", "Phim Xì Trum", "Pitufos"]
+		},
+		"tt0119654": {
+			"name": "Men in Black",
+			"year": 1997,
+			"titles": [
+				"Barbati în negru",
+				"Men in Black",
+				"Men in Black (Hombres de negro)",
+				"Men in Black - Miehet mustissa",
+				"Men in Black - Sötét zsaruk",
+				"Menn í Svörtu",
+				"Mozje v crnem",
+				"Muži v černém",
+				"Muži v čiernom"
+			]
+		},
+		"tt6467266": {
+			"name": "Sing 2",
+			"year": 2021,
+			"titles": [
+				"Cantar! 2",
+				"Chantez! 2",
+				"Dainuok 2",
+				"Dziedi! 2",
+				"Kuyla 2",
+				"Laula 2",
+				"Pjevajte s nama 2",
+				"SING／シング：ネクストステージ",
+				"Sing - Die Show deines Lebens",
+				"Sing 2",
+				"Sing 2 - Sempre più forte",
+				"Sing 2: Come Sing Again!",
+				"Sing 2: Ven y canta de nuevo",
+				"Spievaj 2",
+				"Syng 2",
+				"Tous en scène 2",
+				"Zapoj 2",
+				"Zpívej 2",
+				"¡Canta! 2",
+				"Énekelj! 2.",
+				"Đấu Trường Âm Nhạc 2",
+				"Şarkını Söyle 2",
+				"Τραγούδα! 2",
+				"Ела, изпей! 2",
+				"Зверопой 2",
+				"Певајмо 2",
+				"Спявай 2",
+				"Співай 2",
+				"सिंग 2"
+			]
+		},
+		"tt20215968": {
+			"name": "Hit Man",
+			"year": 2023,
+			"titles": []
+		},
+		"tt9669176": {
+			"name": "Accident Man: Hitman's Holiday",
+			"year": 2022,
+			"titles": [
+				"Accident Man - Hitman's Holiday",
+				"Accident Man - La vacanza del sicario",
+				"Accident Man 2",
+				"Accident Man: de vacaciones",
+				"O Carma de um Assassino 2",
+				"Profession tueur 2",
+				"Õnnetuse mees 2",
+				"Нещасний випадок 2",
+				"액시던트 맨 2"
+			]
+		},
+		"tt0082509": {
+			"name": "Heavy Metal",
+			"year": 1981,
+			"titles": [
+				"Heavy Metal",
+				"Heavy Metal - Universo em Fantasia",
+				"Hevi Metal",
+				"Métal hurlant",
+				"Тяжелый метал"
+			]
+		},
+		"tt0108147": {
+			"name": "Sister Act 2: Back in the Habit",
+			"year": 1993,
+			"titles": [
+				"Apáca show 2. - Újra virul a fityula",
+				"Cambio de hábito 2",
+				"Cambio de hábito 2: Más locuras en el convento",
+				"Do Cabaré para o Convento 2",
+				"En värsting till syster 2",
+				"En värsting till syster 2 - Redo att synda igen",
+				"Halløj i klostret 2: Nonnernes hus",
+				"Mudança de Hábito 2: Mais Confusões no Convento",
+				"Mudança de Hábito 2: Mais Loucuras no Convento",
+				"Netikra vienuolė 2",
+				"Nune pojejo 2",
+				"Nunnad hoos 2",
+				"Nunnia ja konnia 2 -Lisää säpinää",
+				"Redovnice nastupaju 2",
+				"Rock 'n nonne 2: De retour au couvent",
+				"Rol de calugarita 2",
+				"Sestre u akciji 2",
+				"Sister Act 2",
+				"Sister Act 2 - In göttlicher Mission",
+				"Sister Act 2 - Più svitata che mai",
+				"Sister Act 2: Back in the Habit",
+				"Sister Act 2: De vuelta al convento",
+				"Sister Act, acte 2",
+				"Treles aderfes 2",
+				"Yırtık Rahibe 2: Can Çıkar, Huy Çıkmaz",
+				"Zakonnica w przebraniu 2",
+				"Zakonnica w przebraniu 2: Powrót do habitu",
+				"Τρελές αδελφές 2",
+				"Давай сестро 2: Знову за старе",
+				"Монахини в действие 2: Отново в играта",
+				"Сестричка, действуй 2"
+			]
+		},
+		"tt0324941": {
+			"name": "101 Dalmatians 2: Patch's London Adventure",
+			"year": 2002,
+			"titles": [
+				"101 Chú Chó Đốm 2: Cuộc Phiêu Lưu Của Patch Ở London",
+				"101 Dalmatialaista II - Pikku Kikero Lontoossa",
+				"101 Dalmatians 2: Patch's London Adventure",
+				"101 Dalmatians II - Het Avontuur van Vlek in Londen",
+				"101 Dalmatians II: Patch's London Adventure",
+				"101 Dalmatians Part 2: A Pop's Tale",
+				"101 Dalmatians: The Animated Sequel",
+				"101 Dalmatiens 2 : Sur la trace des héros",
+				"101 Dalmatiers II: Het Avontuur van Vlek in Londen",
+				"101 Dalmatiner 2 - Auf kleinen Pfoten zum großen Star!",
+				"101 Dalmatinere 2 - Flekkens London-eventyr",
+				"101 Dalmatinere 2: Kvik på eventyr i London",
+				"101 Dalmatiërs 2: Het Londen Avontuur van Patch",
+				"101 Dalmatët II - Aventurë në Londër",
+				"101 Dalmaçyalı 2: Patch'in Londra Macerası",
+				"101 Dalmaţieni 2: Aventura lui Patch la Londra",
+				"101 Dálmatas II: A Aventura de Patch em Londres",
+				"101 Sage Khaaldaar 2: Maajaraaye London Patch",
+				"101 dalmaatsia koera 2",
+				"101 dalmatialaista 2",
+				"101 dalmatin 2: Patchning Londondagi sarguzashti",
+				"101 dalmatinac 2",
+				"101 dalmatinac 2: Patchova avantura",
+				"101 dalmatinec 2: Dogodivščina v Londonu",
+				"101 dalmatinů II: Flíčkova londýnská dobrodružství",
+				"101 dalmatyńczyków II: Londyńska przygoda",
+				"101 dalmatíncov 2: Patchove londýnske dobrodružstvá",
+				"101 dálmatas 2",
+				"101 dálmatas II: Una nueva aventura en Londres",
+				"101 kiskutya 2: Paca és Agyar",
+				"101 далматинец 2",
+				"101 далматинец 2: Приключения Патча в Лондоне",
+				"101 далматинець 2: Пригоди Патча в Лондоні",
+				"101 далматинци II: Приключението на Пач в Лондон",
+				"De 101 dalmatinerna II - Tuffs äventyr i London",
+				"La carica dei 101 II: Macchia, un eroe a Londra",
+				"Les 101 Dalmatiens 2 : L'aventure londonienne de Patch",
+				"Os 101 Dálmatas II: A Aventura de Patch em Londres",
+				"Τα 101 σκυλιά της Δαλματίας II: Η περιπέτεια του Πάτσα"
+			]
+		},
+		"tt1625856": {
+			"name": "Badrinath",
+			"year": 2011,
+			"titles": []
+		},
+		"tt1745960": {
+			"name": "Top Gun: Maverick",
+			"year": 2022,
+			"titles": [
+				"Tippkutt 2: Maverick",
+				"Top Gan: Meverik",
+				"Top Gun",
+				"Top Gun 2",
+				"Top Gun 2: Maverick",
+				"Top Gun: Maverick",
+				"Top Gun: Maveriks",
+				"Top Qan. Maverik"
+			]
+		},
+		"tt0988982": {
+			"name": "Naruto Shippûden: The Movie",
+			"year": 2007,
+			"titles": [
+				"Gekijô-ban Naruto shippûden",
+				"Naruto Shippuden - The Movie",
+				"Naruto Shippuden, le film : Un funeste présage",
+				"Naruto Shippuden: Cái Chết Tiên Đoán",
+				"Naruto Shippuden: L'esercito fantasma",
+				"Naruto Shippuden: La Disparition de Naruto",
+				"Naruto Shippuden: O Filme",
+				"Naruto Shippûden: La película",
+				"Naruto Šipuden: Film",
+				"Naruto: Šippuden kino filmas",
+				"Наруто 4"
+			]
+		},
+		"tt1411697": {
+			"name": "The Hangover Part II",
+			"year": 2011,
+			"titles": [
+				"A Ressaca - Parte II",
+				"Ba Chàng Ngự Lâm 2",
+				"Baksmällan del II",
+				"Bo'ydoqlik bazmi 2: Vegasdan Bangkokka",
+				"Felekten Bir Gece 2",
+				"Hangover 2",
+				"Kac Vegas 2",
+				"Kauhea kankkunen 2",
+				"Kauhea kankkunen II",
+				"Lendemain de veille 2",
+				"Mamurluk 2",
+				"Marea mahmureala 2",
+				"Másnaposok 2.",
+				"Paģiras 2",
+				"Pařba v Bangkoku",
+				"Pohmakas 2",
+				"Prekrokana noc 2",
+				"Resacón 2: ¡Ahora en Tailandia!",
+				"Ressaca 2. Ara a Tailàndia!",
+				"Se Beber, Não Case! 2",
+				"Se Beber, Não Case! Parte II",
+				"Subaylıq qonaqlığı 2: Veqasdan Banqkoka",
+				"The Hangover II",
+				"The Hangover Part II",
+				"Tømmermænd i Thailand",
+				"Una notte da leoni 2",
+				"Very Bad Trip 2",
+				"Vo štvorici po opici 2",
+				"¿Qué pasó ayer? 2",
+				"¿Qué pasó ayer? Parte 2",
+				"¿Qué pasó ayer? Parte II",
+				"Το χανγκόβερ μέρος 2",
+				"Бойдақтар кеші 2: Вегастан Бангкокқа",
+				"Мальчишник 2: Из Вегаса в Бангкок",
+				"Похмілля 2",
+				"Похмілля-2: з Вегаса до Бангкока"
+			]
+		},
+		"tt0097576": {
+			"name": "Indiana Jones and the Last Crusade",
+			"year": 1989,
+			"titles": [
+				"Indiana Džonss un pēdējais krusta karš",
+				"Indiana Džounsas ir paskutinis kryžiaus žygis",
+				"Indiana Jones 3",
+				"Indiana Jones 3: Viimane ristiretk",
+				"Indiana Jones III",
+				"Indiana Jones Và Cuộc Thập Tự Chinh Cuối Cùng",
+				"Indiana Jones a posledná kriziacka výprava",
+				"Indiana Jones a posledná krížová výprava",
+				"Indiana Jones a poslední krízová výprava",
+				"Indiana Jones and the Last Crusade",
+				"Indiana Jones e a Grande Cruzada",
+				"Indiana Jones e a Última Cruzada",
+				"Indiana Jones e l'ultima crociata",
+				"Indiana Jones en de laatste kruistocht",
+				"Indiana Jones et la Dernière Croisade",
+				"Indiana Jones i l'última croada",
+				"Indiana Jones i ostatnia krucjata",
+				"Indiana Jones i posljednji krizarski pohod",
+				"Indiana Jones in Zadnji križarski pohod",
+				"Indiana Jones ja viimeinen ristiretki",
+				"Indiana Jones och det sista korståget",
+				"Indiana Jones og det sidste korstog",
+				"Indiana Jones og det siste korstog",
+				"Indiana Jones und der letzte Kreuzzug",
+				"Indiana Jones y la última cruzada",
+				"Indiana Jones és az utolsó kereszteslovag",
+				"Indiana Jones și ultima cruciadă",
+				"Indiana Jones: Son Macera",
+				"Indiana Jons va oxirgi salib yurishi",
+				"O Indiana Jones kai i teleftaia stavroforia",
+				"İndiana Cons və son səlib yürüşü",
+				"Ο Indiana Jones και η τελευταία σταυροφορία",
+				"Індіана Джонс 3"
+			]
+		},
+		"tt0317705": {
+			"name": "The Incredibles",
+			"year": 2004,
+			"titles": [
+				"Die Unglaublichen: The Incredibles",
+				"The Fantastics",
+				"The Incredibles",
+				"The Incredibles 3-D",
+				"The Incredibles 3D",
+				"The Incredibles: Os Super-Heróis",
+				"The Invincibles"
+			]
+		},
+		"tt2103281": {
+			"name": "Dawn of the Planet of the Apes",
+			"year": 2014,
+			"titles": [
+				"Abernes planet: Revolutionen",
+				"Apes Revolution - Il pianeta delle scimmie",
+				"Apornas planet: Uppgörelsen",
+				"Dawn of the Planet of the Apes",
+				"Maymunlar sayyorasi 2",
+				"O planitis ton pithikon: I avgi",
+				"Planet der Affen: Revolution",
+				"Planet majmuna: Revolucija",
+				"Planet of the Apes: Rising",
+				"Untitled Rise of the Planet of the Apes Sequel"
+			]
+		},
+		"tt0057076": {
+			"name": "From Russia with Love",
+			"year": 1963,
+			"titles": [
+				"007 - Ordem para Matar",
+				"007/Roshia yori ai o komete",
+				"007/危機一発",
+				"007: Armastusega Venemaalt",
+				"007: Desde Rusia con amor",
+				"007: From Russia with Love",
+				"007: З Росії з любов'ю",
+				"007：第七號情報員續集",
+				"A 007, dalla Russia con amore",
+				"Agent 007 ... ser rött",
+				"Agent 007 jages",
+				"Den hemliga agenten 007 i Istanbul",
+				"Den hemliga agenten i Istanbul",
+				"El regreso del Agente 007",
+				"James Bond - Oroszországból szeretettel",
+				"James Bond 007 - Liebesgrüße aus Moskau",
+				"James Bond: Srdečné pozdravy z Ruska",
+				"Moscou Contra 007",
+				"Salainen agentti 007 Istanbulissa",
+				"Τζέιμς Μποντ, πράκτωρ 007 σε παγίδα",
+				"Τζέιμς Μποντ, πράκτωρ 007: Από τη Ρωσία με αγάπη"
+			]
+		},
+		"tt0357413": {
+			"name": "Anchorman: The Legend of Ron Burgundy",
+			"year": 2004,
+			"titles": [
+				"A híres Ron Burgundy legendája",
+				"Action News! With Ron Burgundy",
+				"Anchorman - Die Legende von Ron Burgundy",
+				"Anchorman - La leggenda di Ron Burgundy",
+				"Anchorman - Legenden om Ron Burgundy",
+				"Anchorman: The Legend of Ron Burgundy",
+				"El periodista: la leyenda de Ron Burgundy",
+				"El reportero: La leyenda de Ron Burgundy",
+				"Huyền Thoại Ron Burgundy",
+				"O Repórter: A Lenda de Ron Burgundy",
+				"O parousiastis - O thrylos tou Ron Burgundy",
+				"O Âncora: A Lenda de Ron Burgundy",
+				"Présentateur vedette: La légende de Ron Burgundy",
+				"Teleaparıcı: Ron Burqundi əfsanəsi",
+				"Teleboshlovchi: Ron Burgundi afsonasi",
+				"Uudisteankur: Legend Ron Burgundyst",
+				"Uutisankkuri: Ron Burgundyn legenda",
+				"Ο παρουσιαστής: Ο θρύλος του Ron Burgundy"
+			]
+		},
+		"tt0120347": {
+			"name": "Tomorrow Never Dies",
+			"year": 1997,
+			"titles": [
+				"Avatar",
+				"Bond 18",
+				"Bond XVIII",
+				"James Bond - Jutri nikoli ne umre",
+				"James Bond 007 - Der Morgen stirbt nie",
+				"James Bond: Zajtrajšok nikdy nezomiera"
+			]
+		},
+		"tt0936501": {
+			"name": "Taken",
+			"year": 2008,
+			"titles": [
+				"96 Hodin",
+				"96 Hours",
+				"96 Hours - Taken",
+				"96 sati",
+				"96 сати",
+				"96-jikan",
+				"I arpagi",
+				"Io vi troverò",
+				"Taken",
+				"Taken - Io vi troverò",
+				"Takip: 96 Saat"
+			]
+		},
+		"tt0120804": {
+			"name": "Resident Evil",
+			"year": 2002,
+			"titles": [
+				"Resident Evil",
+				"Resident Evil - Genesis",
+				"Resident Evil the Movie",
+				"Resident Evil: Domena zła",
+				"Resident Evil: El huésped maldito",
+				"Resident Evil: Ground Zero",
+				"Resident Evil: O Hóspede Maldito",
+				"Resident Evil: ผีชีวะ",
+				"Resident evil: Experiment fatal",
+				"Resident evil: Les créatures maléfiques",
+				"Resident evil: Les esprits maléfiques",
+				"Unbeatable Evil"
+			]
+		},
+		"tt1855325": {
+			"name": "Resident Evil: Retribution",
+			"year": 2012,
+			"titles": [
+				"Baiohazado V: ritoribyushon",
+				"Ha'oyev she'bifnim 5: ha'gmul",
+				"Re5ident Evil: Retribution",
+				"Resident Evil 5",
+				"Resident Evil 5: Karistus",
+				"Resident Evil 5: La Venganza",
+				"Resident Evil 5: Odveta",
+				"Resident Evil 5: Retribuição",
+				"Resident Evil 5: Retribution",
+				"Resident Evil 5: Venganza",
+				"Resident Evil 5: İntikam",
+				"Resident Evil V: Retribution",
+				"Resident Evil: I timoria",
+				"Resident Evil: Le châtiment",
+				"Resident Evil: Odveta",
+				"Resident Evil: Osveta",
+				"Resident Evil: Rasplata",
+				"Resident Evil: Retaliação",
+				"Resident Evil: Retribution",
+				"Resident Evil: Retrybucja",
+				"Resident Evil: Venganza",
+				"Resident Evil: Η τιμωρία",
+				"Resident evil: Venjança",
+				"Обитель зла: Возмездие",
+				"Оселя зла: Відплата"
+			]
+		},
+		"tt4630562": {
+			"name": "The Fate of the Furious",
+			"year": 2017,
+			"titles": [
+				"A todo gas 8",
+				"Brzi i žestoki 8",
+				"Fast & Furious 8",
+				"Fast & Furious 8 (A todo gas 8)",
+				"Fast 8",
+				"Fast Eight",
+				"Forsaj 8",
+				"Furios si iute 8",
+				"Furious 8",
+				"Furious Eight",
+				"Greiti ir isiute 8",
+				"Halálos iramban 8",
+				"Hitri in drzni 8",
+				"Hızlı ve Öfkeli 8",
+				"Kiired ja vihased 8",
+				"Paklene ulice 8: Sudbina paklenih",
+				"Rychle a zběsile 8",
+				"Rápidos y furiosos 8",
+				"Rýchlo a Zbesilo 8",
+				"Sari' va khashen 8",
+				"Szybcy i wsciekli VIII",
+				"Szybcy i wściekli 8",
+				"The Fast and the Furious 8",
+				"The Fate of the Furious",
+				"Velocidade Furiosa 8",
+				"Velozes & Furiosos 8",
+				"Velozes e Furiosos 8",
+				"Ātrs un bez žēlastības 8",
+				"Μαχητές των δρόμων 8",
+				"Бързи и яростни 8",
+				"Форсаж 8",
+				"מהיר ועצבני 8",
+				"फास्ट एंड फ्यूरियस 8",
+				"เร็ว..แรงทะลุนรก 8"
+			]
+		},
+		"tt0102510": {
+			"name": "The Naked Gun 2½: The Smell of Fear",
+			"year": 1991,
+			"titles": [
+				"Agafa-ho com puguis 2 1/2",
+				"Agárralo como puedas 2 1/2: El aroma del miedo",
+				"Alaston ase 2½",
+				"Aonde É Que Pára a Polícia? Parte 2 1/2: O Aroma do Medo",
+				"Beint á ská 2½ - Lyktin af óttanum",
+				"Bláznivá strela 2 1/2: Vôňa strachu",
+				"Bláznivá střela 2 a 1/2: Vůně strachu",
+				"Corra que a Polícia vem Aí 2½",
+				"Csupasz pisztoly 2 1/2",
+				"Den nakna pistolen 2 ½. Doften av rädsla",
+				"Den nakna pistolen 2½",
+				"Die nackte Kanone 2 1/2",
+				"Gola pistola 2 1/2",
+				"Goli pištolj 2",
+				"Høj pistolføring 2 1/2: Lovens lange næse",
+				"Họng Súng Vô Hình 2: Nếm Trải Nỗi Sợ",
+				"Kailais ierocis 2 ½: Baiļu smarža",
+				"L'agent fait la farce 2 1/2: L'odeur de la peur",
+				"La pistola desnuda 2 1/2: El aroma del miedo",
+				"Mannen med den nakne pistol 2½ - Lukten av frykt",
+				"Mies ja alaston ase 2 1/2",
+				"Mies ja alaston ase 2½",
+				"Naga broń 2½: Kto obroni prezydenta?",
+				"Nuogas ginklas 2½. Baimes kvapas",
+				"Palja relvaga 2",
+				"The Naked Gun 2 1/2",
+				"The Naked Gun 2 1/2: The Smell of Fear",
+				"The Naked Gun 2½: The Smell of Fear",
+				"Trelles sfaires 2½",
+				"Un poliţist cu explozie întârziată 2 1/2",
+				"Una pallottola spuntata 2½ - L'odore della paura",
+				"Y... ¿Dónde está el policía? Parte 2 1/2",
+				"¿Y dónde está el policía? 2 1/2",
+				"¿Y dónde está el policía? 2 1/2: El Aroma del miedo",
+				"¿Y dónde está el policía? 2 1/2: el olor del miedo",
+				"¿Y dónde está el policía? Parte 2 y medio",
+				"Çıplak Silah 2½",
+				"Τρελές σφαίρες 2½",
+				"Голи пиштољ 2",
+				"Голий пістолет 2 1/2",
+				"Голий пістолет 2 1/2. Запах страху",
+				"Голият пищов 2 1/2",
+				"Голый пистолет 2 1/2: Запах страха",
+				"द नेकेड गन 2 1/2: द स्मेल ऑफ़ फियर",
+				"白头神探2½：恐怖的气味",
+				"裸の銃を持つ男 PART2 1/2"
+			]
+		},
+		"tt0213149": {
+			"name": "Pearl Harbor",
+			"year": 2001,
+			"titles": [
+				"Pearl Harbor",
+				"Pearl Harbor - Égi háború",
+				"Pearl Harbor, entre el fuego y la pasión",
+				"Pearl Harbour"
+			]
+		},
+		"tt0274166": {
+			"name": "Johnny English",
+			"year": 2003,
+			"titles": [
+				"Johnny English",
+				"Johnny English - Der Spion, der es versiebte",
+				"Johnny English: Rogue Male",
+				"Johnny English: Điệp Viên Không Không Thấy"
+			]
+		},
+		"tt0844479": {
+			"name": "The Collector",
+			"year": 2009,
+			"titles": ["Коллекционер"]
+		},
+		"tt1856101": {
+			"name": "Blade Runner 2049",
+			"year": 2017,
+			"titles": [
+				"Blade Runner 2",
+				"Blade Runner 2049",
+				"Blade Runner 2049: Bıçak Sırtı",
+				"Blade Runner: Androids Dream",
+				"Истребљивач 2"
+			]
+		},
+		"tt0246460": {
+			"name": "Die Another Day",
+			"year": 2002,
+			"titles": [
+				"James Bond 007 - Stirb an einem anderen Tag",
+				"James Bond 20",
+				"James Bond XX",
+				"James Bond: Dnes neumieraj"
+			]
+		},
+		"tt10665338": {
+			"name": "Halloween Kills",
+			"year": 2021,
+			"titles": [
+				"Gyilkos Halloween",
+				"Halloween 2: Ha'Nekama",
+				"Halloween Giết Chóc",
+				"Halloween Kills",
+				"Halloween Kills. La noche aún no termina",
+				"Halloween Kills: O Terror Continua",
+				"Halloween Mata",
+				"Halloween tapab",
+				"Halloween tue",
+				"Halloween zabija",
+				"Halloween zabíjí",
+				"Η νύχτα με τις μάσκες 2"
+			]
+		},
+		"tt0478970": {
+			"name": "Ant-Man",
+			"year": 2015,
+			"titles": ["Ant Man", "Ant-Man 3D", "Ant-Man. El Hombre Hormiga"]
+		},
+		"tt0212985": {
+			"name": "Hannibal",
+			"year": 2001,
+			"titles": ["Hannibal", "Hannibal: Kẻ Ăn Thịt Người", "The Silence of the Lambs 2"]
+		},
+		"tt0458525": {
+			"name": "X-Men Origins: Wolverine",
+			"year": 2009,
+			"titles": [
+				"Mozje X na zacetku: Wolverine",
+				"Uruvarin: X-Men Zero",
+				"Wolverine: X-Men Zero",
+				"X-Meeste algus: Wolverine",
+				"X-Men - I arhi: Wolverine",
+				"X-Men Geneza: Wolverine",
+				"X-Men Origenes: Wolverine",
+				"X-Men Origens: Wolverine",
+				"X-Men Origins: Wolverine",
+				"X-Men de la Origini: Wolverine",
+				"X-Men kezdetek: Farkas",
+				"X-Men orígenes: Lobezno",
+				"X-Men početak: Wolverine",
+				"X-Men η αρχή: Γούλβεριν",
+				"X-Men, les origines: Wolverine",
+				"X-Men: Başlangıç Wolverine",
+				"X-Men: Wolverine",
+				"X-Men: le origini - Wolverine",
+				"X-cilvēki: sākums. Vilknadzis",
+				"ウルヴァリン：X-MEN ZERO"
+			]
+		},
+		"tt5052474": {
+			"name": "Sicario: Day of the Soldado",
+			"year": 2018,
+			"titles": [
+				"Sicario 2",
+				"Sicario 2: A zsoldos",
+				"Sicario 2: Chiến Binh Mexico",
+				"Sicario 2: Day of the Soldado",
+				"Sicario 2: Deň vojaka",
+				"Sicario 2: Kartelių karai",
+				"Sicario 2: Karteļu karš",
+				"Sicario 2: Rat bez pravila",
+				"Sicario 2: Soldado",
+				"Sicario 2: Soldado päev",
+				"Sicario 2: Η μάχη των εκτελεστών",
+				"Sicario : La Guerre des cartels",
+				"Sicario: Day of the Soldado",
+				"Sicario: Dìa del soldado",
+				"Sicario: El día del soldado",
+				"Sicario: Guerra de Cartéis",
+				"Sicario: Le jour du soldat",
+				"Sicario: ha'nekama",
+				"Sicário: Dia do Soldado",
+				"Сикарио 2: Ратник",
+				"Сикарио 2: Солдадо",
+				"Сікаріо 2",
+				"Убийца 2. Против всех"
+			]
+		},
+		"tt0112281": {
+			"name": "Ace Ventura: When Nature Calls",
+			"year": 1995,
+			"titles": [
+				"Ace Ventura - Den galopperande detektiven rider igen",
+				"Ace Ventura - Jetzt wird's wild",
+				"Ace Ventura - Luonto kutsuu",
+				"Ace Ventura - Missione Africa",
+				"Ace Ventura - Un nebun în Africa",
+				"Ace Ventura - naturen kallar",
+				"Ace Ventura - når naturen kalder",
+				"Ace Ventura 2",
+				"Ace Ventura 2 - Klic narave",
+				"Ace Ventura 2 - Naturen kaller",
+				"Ace Ventura 2: Um Maluco na África",
+				"Ace Ventura 2: Uma Aventura na Africa",
+				"Ace Ventura 2: Volání divočiny",
+				"Ace Ventura Goes to Africa",
+				"Ace Ventura em África",
+				"Ace Ventura en Afrique",
+				"Ace Ventura, Pet Detective: The Curse of the Wakiki",
+				"Ace Ventura: Hív a természet",
+				"Ace Ventura: Kad priroda zove",
+				"Ace Ventura: L'appel de la nature",
+				"Ace Ventura: Looduse kutse",
+				"Ace Ventura: Operació Àfrica",
+				"Ace Ventura: Operación África",
+				"Ace Ventura: Un loco en África",
+				"Ace Ventura: Vaghti Tabiat Fara Mikhanad",
+				"Ace Ventura: Volanie prírody",
+				"Ace Ventura: When Nature Calls",
+				"Ace Ventura: Zew natury",
+				"Ace Ventura: Điệp Vụ Dơi Trắng",
+				"Eisas Ventura: kai gamta šaukia",
+				"Eiss Ventura: Dabas aicinājums",
+				"Eys Ventura 2: Tabiat chaqirganda",
+				"Eys Ventura: Təbiət çağıranda",
+				"Ντετέκτιβ ζώων 2: Χαμός στη ζούγκλα",
+				"Эйс Вентура 2: Когда зовёт природа",
+				"Эйс Вентура 2: Табиғат шақырғанда"
+			]
+		},
+		"tt0416449": {
+			"name": "300",
+			"year": 2006,
+			"titles": [
+				"300",
+				"300 - Bitka kod Termopila",
+				"300 Chiến Binh",
+				"300 Paruthi Veerargal",
+				"300 Spartalı",
+				"300 спартандық",
+				"300 спартанцев",
+				"300 спартанців",
+				"300 ＜スリーハンドレッド＞",
+				"300: Battle of Thermopylae",
+				"300: Bitva u Thermopyl",
+				"300: Eroii de la Termopile",
+				"300: Termopilu kauja",
+				"300: The IMAX Experience",
+				"300: Битка код Термопила"
+			]
+		},
+		"tt2294629": {
+			"name": "Frozen",
+			"year": 2013,
+			"titles": [
+				"Frozen",
+				"Frozen - Il regno di ghiaccio",
+				"Frozen - O Reino do Gelo",
+				"Frozen - huurteinen seikkailu",
+				"Frozen 3D",
+				"Frozen: Anna dan Permaisuri Salji",
+				"Frozen: El regne del gel",
+				"Frozen: El reino del hielo",
+				"Frozen: Uma Aventura Congelante",
+				"Frozen: Una aventura congelada"
+			]
+		},
+		"tt9603212": {
+			"name": "Mission: Impossible - Dead Reckoning Part One",
+			"year": 2023,
+			"titles": [
+				"Misión Imposible: Sentencia Mortal Parte 1",
+				"Mission : Impossible - Dead Reckoning, partie 1",
+				"Mission: Impossible - Bilan Mortel, Première Partie",
+				"Mission: Impossible - Dead Reckoning",
+				"Mission: Impossible - Dead Reckoning - Parte uno",
+				"Mission: Impossible - Dead Reckoning Part One",
+				"Mission: Impossible - Dead Reckoning Teil 1",
+				"Mission: Impossible - Dead Reckoning Teil Eins",
+				"Mission: Impossible - Odplata",
+				"Mission: Impossible - Ölümcül Hesaplaşma Birinci Bölüm",
+				"Mission: Impossible 7",
+				"Mission: Impossible Odplata - Prvá časť",
+				"Mission: Impossible: Leszámolás - Első rész",
+				"Misssion Impossible: Dead Reckoning Part One",
+				"Mümkünsüz missiya. Ölümcül haqq hesab. Hissə 1",
+				"Nhiệm Vụ Bất Khả Thi 7",
+				"Uddalab bo'lmas topshiriq 7: O'limga teng to'lov. 1-qism",
+				"Võimatu missioon 7: Surmav otsus - osa I"
+			]
+		},
+		"tt0099088": {
+			"name": "Back to the Future Part III",
+			"year": 1990,
+			"titles": [
+				"Atgal i ateiti III",
+				"Atpakaļ nākotnē 3",
+				"Back to the Future Part III",
+				"Back to the future, deel 3",
+				"Behazara La'Ateed 3",
+				"De Volta para o Futuro: Parte III",
+				"Epistrofi sto mellon 3",
+				"Epistrofi sto mellon: Meros 3",
+				"Geleceğe Dönüş 3",
+				"Gələcəyə qayıdış 3",
+				"Kelajakka qaytib 3",
+				"Návrat do budoucnosti 3",
+				"Návrat do budoucnosti III",
+				"Návrat do budúcnosti 3",
+				"Paluu tulevaisuuteen 3",
+				"Paluu tulevaisuuteen III",
+				"Paluu tulevaisuuteen osa III",
+				"Povratak u buducnost III",
+				"Powrót do przyszłości 3",
+				"Powrót do przyszłości III",
+				"Powrót do przyszłości: Część III",
+				"Regreso al futuro 3",
+				"Regreso al futuro III",
+				"Regreso al futuro Parte III",
+				"Regresso ao Futuro III",
+				"Retorn al futur 3",
+				"Retour vers le futur 3",
+				"Retour vers le futur III",
+				"Ritorno al futuro - Parte III",
+				"Tagasi tulevikku 3",
+				"Tilbage til fremtiden del III",
+				"Tilbake til fremtiden III",
+				"Tillbaka till framtiden del III",
+				"Trở Về Tương Lai Phần 3",
+				"Vissza a jövőbe III.",
+				"Volver al futuro III",
+				"Volver al futuro parte III",
+				"Vrnitev v prihodnost 3",
+				"Zurück in die Zukunft III",
+				"Înapoi în viitor 3",
+				"Επιστροφή στο μέλλον 3",
+				"Болашаққа оралу 3",
+				"Завръщане в бъдещето III",
+				"Назад в будущее 3",
+				"Назад в будущее III",
+				"Назад у майбутнє 3",
+				"Повратак у будућност 3",
+				"बैक टू द फ़्यूचर: पार्ट III",
+				"เจาะเวลาหาอดีต ภาค 3",
+				"백 투 더 퓨처 3"
+			]
+		},
+		"tt0328880": {
+			"name": "Brother Bear",
+			"year": 2003,
+			"titles": ["Hermano oso"]
+		},
+		"tt1232829": {
+			"name": "21 Jump Street",
+			"year": 2012,
+			"titles": [
+				"21 Jump Street",
+				"21 Jump Street - A kopasz osztag",
+				"21 Jump Street - O adresa de pomina",
+				"21 Jump Street: Mladenic v modrem",
+				"Džampstrīta 21",
+				"Rehov Jump 21"
+			]
+		},
+		"tt1515091": {
+			"name": "Sherlock Holmes: A Game of Shadows",
+			"year": 2011,
+			"titles": [
+				"Sherlock Holmes - Gioco di ombre",
+				"Sherlock Holmes - Spiel im Schatten",
+				"Sherlock Holmes 2",
+				"Sherlock Holmes 2 - mis'hak ha'tzlalim",
+				"Sherlock Holmes 2: Hra tieňov",
+				"Sherlock Holmes 2: Skyggespillet",
+				"Sherlock Holmes 2: Το παιχνίδι των σκιών",
+				"Sherlock Holmes : Jeu d'ombres",
+				"Sherlock Holmes: A Game of Shadows",
+				"Sherlock Holmes: Gra cieni",
+				"Sherlock Holmes: Gölge Oyunları",
+				"Sherlock Holmes: Hra stínů",
+				"Sherlock Holmes: Igra senc",
+				"Sherlock Holmes: Igra sjena",
+				"Sherlock Holmes: Jocul Umbrelor",
+				"Sherlock Holmes: Jogo de Sombras",
+				"Sherlock Holmes: Juego de sombras",
+				"Sherlock Holmes: Le jeu des ombres",
+				"Sherlock Holmes: O Jogo de Sombras",
+				"Sherlock Holmes: Un joc d'ombres",
+				"Sherlock Holmes: Varjude mäng",
+				"Sherlock Holmes: Árnyjáték",
+				"Sherlok Xolms 2",
+				"Thám Tử Sherlock Holmes 2: Trò Chơi Bóng Tối",
+				"Σέρλοκ Χολμς 2: Το παιχνίδι των σκιών",
+				"Шерлок Голмс: Гра тіней",
+				"Шерлок Холмс: Гра тіней",
+				"Шерлок Холмс: Игра на сенки",
+				"Шерлок Холмс: Игра сенки",
+				"Шерлок Холмс: Игра теней"
+			]
+		},
+		"tt0160127": {
+			"name": "Charlie's Angels",
+			"year": 2000,
+			"titles": [
+				"3 Engel für Charlie",
+				"Charlie's Angels",
+				"Charlie's Angels: The Movie",
+				"Charlies änglar",
+				"Els àngels de Charlie"
+			]
+		},
+		"tt1300851": {
+			"name": "The Boondock Saints II: All Saints Day",
+			"year": 2009,
+			"titles": [
+				"Boondock Saints 2",
+				"Boondocki pühakud 2",
+				"Bundoko šventieji 2. Visu šventuju diena",
+				"Der blutige Pfad Gottes 2",
+				"El quinto infierno 2",
+				"El quinto infierno II",
+				"Les anges de Boston 2",
+				"Los elegidos: The Boondock Saints II",
+				"Mission des dieux 2: Jour des saints",
+				"O Próximo a Abater II",
+				"Santos Justiceiros II - O Retorno",
+				"Santos justiceiros 2 - O retorno",
+				"Sveci protiv mafije 2",
+				"Sveci protiv mafije 2 - Svi sveti",
+				"Súng Thần 2: Ngày Lễ Thánh",
+				"Testvérbosszú 2.",
+				"The Boondock Saints 2 - Il giorno di Ognissanti",
+				"The Boondock Saints II: All Saints Day",
+				"Święci z Bostonu II - Dzień Wszystkich Świętych",
+				"Άγγελοι τιμωροί 2: Η εκδίκηση αρχίζει",
+				"Святые из Бундока II: День всех святых",
+				"Святі з нетрів 2: День усіх святих"
+			]
+		},
+		"tt0075005": {
+			"name": "The Omen",
+			"year": 1976,
+			"titles": [
+				"Das Omen",
+				"Omen",
+				"Omen - Il presagio",
+				"Omen I",
+				"Omen I: The Antichrist",
+				"Omen I: The Birthmark",
+				"The Antichrist",
+				"The Birthmark",
+				"The Omen"
+			]
+		},
+		"tt0097443": {
+			"name": "The Gods Must Be Crazy II",
+			"year": 1989,
+			"titles": [
+				"Az istenek a fejükre estek 2.",
+				"Bogovi su pali na tjeme 2",
+				"Bogowie muszą być szaleni II",
+				"Bohovia sa museli zblázniť 2",
+				"Bohové musejí být šílení 2",
+				"Bohové musí být šílení 2",
+				"Die Götter müssen verrückt sein II",
+				"Gudarna måste vara tokiga II",
+				"Gudene må være gale II",
+				"Hassut jumalat 2",
+				"Kai oi theoi trelathikan no 2",
+				"Les dieux sont tombés sur la tête II",
+				"Los dioses deben estar locos II",
+				"Nebunia zeilor II",
+				"Os Deuses Devem Estar Loucos 2",
+				"Os Deuses Devem Estar Loucos II",
+				"Tanrılar Çıldırmış Olmalı II",
+				"The Gods Must Be Crazy 2",
+				"The Gods Must Be Crazy II",
+				"Đến Thượng Đế Cũng Phải Cười 2",
+				"Боги, наверное, сошли с ума 2",
+				"Боговете сигурно са полудели II",
+				"Богови су пали на теме 2",
+				"Мабуть Боги з'їхали з глузду 2"
+			]
+		},
+		"tt0099785": {
+			"name": "Home Alone",
+			"year": 1990,
+			"titles": [
+				"Alone at Home",
+				"Alone in the House",
+				"Home Alone",
+				"I vetëm në shtëpi",
+				"I'm Alone in the House",
+				"I'm Home Alone",
+				"I'm in the House",
+				"Kevin - Alone at Home",
+				"Lonely at Home",
+				"Mom, I Missed the Plane",
+				"One at Home",
+				"Sol a casa",
+				"Sol en casa",
+				"Solo en casa",
+				"Sozinho em Casa",
+				"Stay Home Alone",
+				"The Little Devil is in Charge",
+				"Адзін дома",
+				"Один дома",
+				"Один удома",
+				"Сам дома"
+			]
+		},
+		"tt0102926": {
+			"name": "The Silence of the Lambs",
+			"year": 1991,
+			"titles": [
+				"I siopi ton amnon",
+				"Le silence des agneaux",
+				"Silence of the Lambs",
+				"The Silence of the Lambs"
+			]
+		},
+		"tt0220506": {
+			"name": "Halloween: Resurrection",
+			"year": 2002,
+			"titles": [
+				"Halloween - A Ressurreição",
+				"Halloween - La resurrezione",
+				"Halloween 8",
+				"Halloween H2K",
+				"Halloween H2K: Evil Never Dies",
+				"Halloween resurrection",
+				"Halloween: Evil Never Dies",
+				"Halloween: Feltámadás",
+				"Halloween: Homecoming",
+				"Halloween: La résurrection",
+				"Halloween: MichaelMyers.com",
+				"Halloween: Powrót",
+				"Halloween: Ressurreição",
+				"Halloween: Resurrección",
+				"Halloween: The Homecoming",
+				"Halloween: Vzkriesenie",
+				"Halloween: Zmrtvýchvstání",
+				"Halloween: la resurrección",
+				"Korku Bayramı 2"
+			]
+		},
+		"tt10366206": {
+			"name": "John Wick: Chapter 4",
+			"year": 2023,
+			"titles": [
+				"Con Uik 4",
+				"Džon Vik 4",
+				"Džonas Vikas 4",
+				"Džons Viks 4",
+				"John Wick 4",
+				"John Wick 4: Baba Yaga",
+				"John Wick : Chapitre 4",
+				"John Wick: 4. felvonás",
+				"John Wick: Caibidil 4",
+				"John Wick: Capitolul 4",
+				"John Wick: Capítulo 4",
+				"John Wick: Chapter 4",
+				"John Wick: Consequences",
+				"John Wick: Kapitel 4",
+				"John Wick: Kapitola 4",
+				"John Wick: Kapitulli 4",
+				"John Wick: Κεφάλαιο 4",
+				"Jon Uik 4",
+				"Sát Thủ John Wick: Chương 4",
+				"Џон Вик 4",
+				"Джон Вік 4",
+				"Джон Уик 4",
+				"Джон Уік 4",
+				"殺神John Wick 4"
+			]
+		},
+		"tt5664636": {
+			"name": "Goosebumps 2: Haunted Halloween",
+			"year": 2018,
+			"titles": [
+				"Chair de poule 2 : Les Fantômes d'Halloween",
+				"Chair de poule 2: L'Halloween hantée",
+				"Câu Chuyện Lúc Nửa Đêm 2: Halloween Quỷ Ám",
+				"Escalofrios 2: Una noche embrujada",
+				"Goosebumps 2",
+				"Goosebumps 2: Arrepios no Halloween",
+				"Goosebumps 2: Halloween Assombrado",
+				"Goosebumps 2: Halloween bântuit",
+				"Goosebumps 2: Haunted Halloween",
+				"Goosebumps 2: Perili Cadılar Bayramı",
+				"Goosebumps 2: Призрачен Хелоуин",
+				"Goosebumps: Haunted Halloween",
+				"Grozomora 2: Ukleta Noć veštica",
+				"Gänsehaut 2",
+				"Gänsehaut 2: Gruseliges Halloween",
+				"Gåsehud 2: Monsterkvelden",
+				"Gęsia skórka 2: Nawiedzone Halloween",
+				"Hirmujudinad 2: Kummituslik Halloween",
+				"Husia koža 2: Strašidelný Halloween",
+				"Husí kůže 2: Ukradený Halloween",
+				"Libabör 2. - Hullajó Halloween",
+				"Pesadillas 2: Noche de Halloween",
+				"Piccoli Brividi 2 - I fantasmi di Halloween",
+				"Zosāda 2: Nolādētais Helovīns",
+				"Čudovišta iz susjedstva 2",
+				"Šiurpuliukai 2: Prakeiktas Helovynas",
+				"Ανατριχίλες 2: Στοιχειωμένο Χάλοουιν",
+				"Страшилки 2",
+				"Ужастики 2: Беспокойный Хеллоуин"
+			]
+		},
+		"tt0034492": {
+			"name": "Bambi",
+			"year": 1942,
+			"titles": ["Bambi", "Bambi - Juhlajulkaisu", "Chú Nai Bambi", "Walt Disney's Bambi"]
+		},
+		"tt0055254": {
+			"name": "One Hundred and One Dalmatians",
+			"year": 1961,
+			"titles": [
+				"101 Chú Chó Đốm",
+				"101 Dalmatians",
+				"101 Dalmatiner",
+				"101 Dalmatiner - Abenteuer einer Hundefamilie",
+				"101 Dalmatiërs",
+				"101 Dalmatët",
+				"101 Dalmaçyalı",
+				"101 Dalmațieni",
+				"101 Dálmatas",
+				"101 Dálmatas - La noche de las narices frías",
+				"101 Sag-e khaldar",
+				"101 dalmatialaista",
+				"101 dalmatialaista - lupsakkaat luppakorvat",
+				"101 dalmatin",
+				"101 dalmatinac",
+				"101 dalmatinec",
+				"101 dalmatinere - En sjarmør i pels",
+				"101 dalmatinere - Hund og hund imellem",
+				"101 dalmatinů",
+				"101 dalmatiyalı",
+				"101 dalmatyńczyków",
+				"101 dalmatíncov",
+				"101 dàlmates",
+				"101 kiskutya",
+				"101 дaлматинци",
+				"101 далматинeц",
+				"101 далматинац",
+				"101 далматинец",
+				"101 далматинець",
+				"101 далматиялық",
+				"De 101 dalmatiërs",
+				"La carica dei 101",
+				"Les 101 Dalmatiens",
+				"One Hundred and One Dalmatians",
+				"Os 101 Dálmatas",
+				"Pongo och de 101 dalmatinerna",
+				"Ta 101 skylia tis Dalmatias",
+				"Walt Disney's 101 Dalmatians",
+				"Τα 101 σκυλιά της Δαλματίας"
+			]
+		},
+		"tt0247638": {
+			"name": "The Princess Diaries",
+			"year": 2001,
+			"titles": ["Ditari i Princeshës", "Pretty Princess", "The Princess Diaries"]
+		},
+		"tt2184339": {
+			"name": "The Purge",
+			"year": 2013,
+			"titles": [
+				"I katharsi",
+				"La purge",
+				"The Purge",
+				"The Purge - Die Säuberung",
+				"The Purge - Noaptea judecății",
+				"The Purge: La noche de las bestias"
+			]
+		},
+		"tt27729779": {
+			"name": "The Platform 2",
+			"year": 2024,
+			"titles": [
+				"A Plataforma 2",
+				"A platform 2.",
+				"Der Schacht 2",
+				"Díra 2",
+				"El hoyo 2",
+				"Hullet 2",
+				"Hålet 2",
+				"Hố Sâu Đói Khát 2",
+				"Il buco: Capitolo 2",
+				"La Plateforme 2",
+				"O Poço 2",
+				"Platforma 2",
+				"Platformen 2",
+				"Platvorm 2",
+				"The Platform 2",
+				"Платформа 2",
+				"饑餓鬥室 2"
+			]
+		},
+		"tt4919268": {
+			"name": "Bad Boys: Ride or Die",
+			"year": 2024,
+			"titles": [
+				"Bad Boys 4",
+				"Bad Boys 4: Ride or Die",
+				"Bad Boys Hasta La Muerte",
+				"Bad Boys: Até o Fim",
+				"Bad Boys: Mindent vagy többet",
+				"Bad Boys: Ride or Die",
+				"Bad Boys: Tudo ou Nada",
+				"Bad Boys: Tunggang atau Mati",
+				"Bad Boys: Ya Hep Ya Hiç",
+				"Pis oğlanlar 4"
+			]
+		},
+		"tt5034838": {
+			"name": "Godzilla vs. Kong",
+			"year": 2021,
+			"titles": [
+				"Godzilla Kong ellen",
+				"Godzilla Kongga qarshi",
+				"Godzilla Vs. Kong",
+				"Godzilla kontra Kong",
+				"Godzilla pret Kongu",
+				"Godzilla Đại Chiến Kong"
+			]
+		},
+		"tt0079944": {
+			"name": "Stalker",
+			"year": 1979,
+			"titles": ["Stalker", "Stalker. La zona"]
+		},
+		"tt0114194": {
+			"name": "The Prophecy",
+			"year": 1995,
+			"titles": ["The Prophecy"]
+		},
+		"tt0377109": {
+			"name": "The Ring Two",
+			"year": 2005,
+			"titles": [
+				"A kör 2.",
+				"Aplis 2",
+				"El Aro 2",
+				"Halka 2",
+				"Krog 2",
+				"Krug 2",
+				"Kruh 2",
+				"La llamada 2",
+				"Le Cercle : The Ring 2",
+				"Le cercle 2",
+				"O Chamado 2",
+				"Qo'ng'iroq 2",
+				"Ring 2",
+				"Samara: Ring 2",
+				"Samara: The Ring Two",
+				"Sima kindynou 2",
+				"Skambutis 2",
+				"Telefonihelin 2",
+				"The Ring 2",
+				"The Ring 2 (La señal 2)",
+				"The Ring 2 - Das Grauen kehrt zurück",
+				"The Ring 2 - O Aviso",
+				"The Ring Two",
+				"Vòng Tròn Định Mệnh 2",
+				"Za ringu 2",
+				"Σήμα κινδύνου 2",
+				"Дзвінок 2",
+				"Звонок 2",
+				"Круг 2",
+				"Предизвестена смърт 2"
+			]
+		},
+		"tt11762114": {
+			"name": "Mean Girls",
+			"year": 2024,
+			"titles": [
+				"Mean Girls",
+				"Mean Girls - Der Girls Club",
+				"Mean Girls Musical",
+				"Mean Girls the Musical",
+				"Mean Girls, lolita malgré moi"
+			]
+		},
+		"tt1748227": {
+			"name": "The Collection",
+			"year": 2012,
+			"titles": [
+				"Juegos de la muerte",
+				"Juegos de muerte",
+				"Koguja 2",
+				"Kolekcjoner",
+				"Koleksiyoncu 2",
+				"O Colecionador de Corpos 2",
+				"The Collection",
+				"The Collection - The Collector 2",
+				"The Collector 2",
+				"Колекціонер 2",
+				"Коллекционер 2"
+			]
+		},
+		"tt2381249": {
+			"name": "Mission: Impossible - Rogue Nation",
+			"year": 2015,
+			"titles": [
+				"M:I 5",
+				"Misión Imposible 5: Nación Secreta",
+				"Mission Impossible 5: Národ grázlov",
+				"Mission: Impossible - Durmarga Desam",
+				"Mission: Impossible - Murattu Desam",
+				"Mission: Impossible - Národ grázlů",
+				"Mission: Impossible - Rogue Nation",
+				"Mission: Impossible - Titkos nemzet",
+				"Mission: Impossible 5",
+				"Mission: Impossible 5 - La nation Rogue",
+				"Mission: Impossible Pa-Ti-Bat-Kan-Rat-Am-Phrang",
+				"Uddalab bo'lmas topshiriq 5",
+				"Võimatu missioon 5: Salajane rahvas"
+			]
+		},
+		"tt3758172": {
+			"name": "Jungle",
+			"year": 2017,
+			"titles": ["Jungle", "Piégé dans la jungle", "Stratený v džungli", "Ztracen v džungli"]
+		},
+		"tt0075148": {
+			"name": "Rocky",
+			"year": 1976,
+			"titles": ["Rocky", "Rocky - Um Lutador"]
+		},
+		"tt0455944": {
+			"name": "The Equalizer",
+			"year": 2014,
+			"titles": [
+				"Equalizer",
+				"The Equalizer",
+				"The Equalizer (El protector)",
+				"The Equalizer - Il vendicatore",
+				"The Equalizer - Sem Misericórdia",
+				"The Equalizer - oikeuden puolustaja"
+			]
+		},
+		"tt0088247": {
+			"name": "The Terminator",
+			"year": 1984,
+			"titles": [
+				"Terminator",
+				"Terminator - förstöraren",
+				"Terminator - tuhoaja",
+				"Terminator: El exterminador",
+				"Terminatör: Yok Edici",
+				"Terminátor: A Halálosztó",
+				"The Terminator"
+			]
+		},
+		"tt1228705": {
+			"name": "Iron Man 2",
+			"year": 2010,
+			"titles": [
+				"Aian Man 2",
+				"Demir Adam 2",
+				"Dzelzs vīrs 2",
+				"Geležinis žmogus 2",
+				"Homem de Ferro 2",
+				"Iron 2 Man",
+				"Iron Man 2",
+				"Iron Man 2: The IMAX Experience",
+				"Iron Man II",
+				"Iron Man: Omul de oțel 2",
+				"Người Sắt 2",
+				"Raudmees 2",
+				"Rkinis katsi 2",
+				"Temir odam 2",
+				"Vasember 2",
+				"Železný Muž 2",
+				"Ο ατσαλένιος άνθρωπος 2",
+				"Ајрон Мен 2",
+				"Гвоздени Човек 2",
+				"Железният човек 2",
+				"Железный человек 2",
+				"Залізна людина 2"
+			]
+		},
+		"tt1253864": {
+			"name": "Immortals",
+			"year": 2011,
+			"titles": ["Immortals. Bogowie i herosi"]
+		},
+		"tt1981115": {
+			"name": "Thor: The Dark World",
+			"year": 2013,
+			"titles": [
+				"Marvel Thor: The Dark World",
+				"Mighty Thor: Dark World",
+				"Thor - Il mondo delle tenebre",
+				"Thor 2",
+				"Thor 2: Thế Giới Bóng Tối",
+				"Thor 2: Σκοτεινός κόσμος",
+				"Thor : Le Monde des ténèbres",
+				"Thor: El mundo oscuro",
+				"Thor: Karanlık Dünya",
+				"Thor: Mroczny świat",
+				"Thor: O Mundo Sombrio",
+				"Thor: O Mundo das Trevas",
+				"Thor: Pimeduse maailm",
+				"Thor: Svet teme",
+				"Thor: Svijet tame",
+				"Thor: Sötét világ",
+				"Thor: Temný svet",
+				"Thor: The Dark Kingdom",
+				"Thor: The Dark World",
+				"Thor: Un monde obscur",
+				"Thor: Un mundo oscuro",
+				"Thor: ha'olam ha'affel",
+				"Thor: Întunericul",
+				"Tor 2",
+				"Θορ 2: Σκοτεινός κόσμος",
+				"Тор 2: Царство темряви",
+				"Тор 2: Царство тьмы",
+				"थॉर 2: अंधकार का सर्वनाश"
+			]
+		},
+		"tt0800369": {
+			"name": "Thor",
+			"year": 2011,
+			"titles": [
+				"Mighty Thor",
+				"The Mighty Thor",
+				"Thor",
+				"Thor 3D",
+				"Thor des Monats",
+				"Thor, God of Thunder",
+				"Thần Sấm Thor"
+			]
+		},
+		"tt1397280": {
+			"name": "Taken 2",
+			"year": 2012,
+			"titles": [
+				"96 Hours - Taken 2",
+				"96 Jikan - Revenge",
+				"96 hodin: Odplata",
+				"96 sati: Istanbul",
+				"96 сати: Истанбул",
+				"Busca Implacável 2",
+				"Búsqueda Implacable 2",
+				"Cưỡng Đoạt 2",
+				"Elrabolva 2",
+				"Hatufa 2",
+				"I arpagi 2",
+				"Io vi salverò",
+				"L'Enlèvement 2",
+				"Nolaupītā 2",
+				"Pagrobimas 2: Neisvengiamas kerstas",
+				"Röövitud 2",
+				"Taken - A Vingança",
+				"Taken - La vendetta",
+				"Taken 2",
+				"Taken 2: Teroare in Istanbul",
+				"Takip 2: İstanbul",
+				"Ugrabljena 2",
+				"Uprowadzona 2",
+				"Η αρπαγή 2",
+				"Викрадена 2",
+				"Заложница 2",
+				"Заручниця 2",
+				"Твърде лично 2"
+			]
+		},
+		"tt1431045": {
+			"name": "Deadpool",
+			"year": 2016,
+			"titles": ["Deadpool", "X-Men Origins: Deadpool", "X-Men: Deadpool"]
+		},
+		"tt0097366": {
+			"name": "Fletch Lives",
+			"year": 1989,
+			"titles": [
+				"Autant en emporte Fletch!",
+				"Fletch - Cronista d'assalto",
+				"Fletch - Der Tausendsassa",
+				"Fletch - han lever",
+				"Fletch - hän elää",
+				"Fletch 2 - Der Troublemaker kehrt zurück",
+				"Fletch 2. - Szenzációs ajánlat",
+				"Fletch Lives",
+				"Fletch Saken Mishavad",
+				"Fletch Saved",
+				"Fletch Vive",
+				"Fletch lever",
+				"Fletch revive",
+				"Fletch trăieşte",
+				"Fletch vender tilbage",
+				"Fletch är tillbaka",
+				"Fletch żyje",
+				"Fletch, el extraordinario 2",
+				"Fletch, o Herdeiro",
+				"Les vies de Fletch",
+				"Mạng Sống Của Fletch"
+			]
+		},
+		"tt0120685": {
+			"name": "Godzilla",
+			"year": 1998,
+			"titles": ["GODZILLA ゴジラ（1998）", "Godzilla", "Quái Vật Godzilla"]
+		},
+		"tt1071875": {
+			"name": "Ghost Rider: Spirit of Vengeance",
+			"year": 2011,
+			"titles": [
+				"Arvoh poygachi 2",
+				"Arvoh poygachi 2: Qasos ruhi",
+				"El vengador fantasma 2: Espíritu de venganza",
+				"Ghost Rider - Spirito di vendetta",
+				"Ghost Rider 2",
+				"Ghost Rider 2 - Spirit of Vengeance",
+				"Ghost Rider 2 : L'Esprit de vengeance",
+				"Ghost Rider 2: Duch Zemsty",
+				"Ghost Rider 2: Duch pomsty",
+				"Ghost Rider II: Spirit of Vengeance",
+				"Ghost Rider: Demonul razbunarii",
+				"Ghost Rider: Demonul razbunarii 3D",
+				"Ghost Rider: Duch Zemsty",
+				"Ghost Rider: Duh osvete",
+				"Ghost Rider: Esprit de vengeance",
+				"Ghost Rider: Espírito de Vingança",
+				"Ghost Rider: Espíritu de venganza",
+				"Ghost Rider: Koston henki",
+				"Ghost Rider: Spirit of Vengeance",
+				"Ghost Rider: To pnevma tis ekdikisis",
+				"Ghost Rider: Το πνεύμα της εκδίκησης",
+				"Ghost rider: Esperit de venjança",
+				"Ghost rider: ruah shel nekama",
+				"Hayalet Sürücü 2: İntikam Ateşi",
+				"Kabus yarışçı 2",
+				"Põrguline 2: kättemaksu hing",
+				"Призрачен ездач 2: Духът на отмъщението",
+				"Призрачный гонщик 2",
+				"Примарний вершник 2"
+			]
+		},
+		"tt31193180": {
+			"name": "Sinners",
+			"year": 2025,
+			"titles": ["Blood & Sinners", "I peccatori", "Sinners"]
+		},
+		"tt2631186": {
+			"name": "Baahubali: The Beginning",
+			"year": 2015,
+			"titles": []
+		},
+		"tt0085407": {
+			"name": "The Dead Zone",
+			"year": 1983,
+			"titles": []
+		},
+		"tt0112864": {
+			"name": "Die Hard with a Vengeance",
+			"year": 1995,
+			"titles": [
+				"Cietais rieksts 3",
+				"Dai hado 3",
+				"Die Hard - Az élet mindig drága",
+				"Die Hard - Duri a morire",
+				"Die Hard - Hämndens ängel",
+				"Die Hard - Hämningslöst",
+				"Die Hard - Koston enkeli",
+				"Die Hard - Mega Hard",
+				"Die Hard 3",
+				"Die Hard III - koston enkeli",
+				"Die Hard with a Vengeance",
+				"Die Hard: A Vingança",
+				"Die hard i New York",
+				"Duro de Matar 3, La Venganza",
+				"Duro de Matar 3: A Vingança",
+				"Duro de matar - La venganza",
+				"Greu de ucis 3",
+				"Jaan sakht 3",
+				"Jungla de cristal: La venganza",
+				"Möhkəm qoz 3",
+				"O'tda yonmas 3",
+				"Poly skliros gia na pethanei: I ekdikisi",
+				"Smrtonosná pasca 3",
+				"Smrtonosná past 3",
+				"Szklana pułapka 3",
+				"Umri muški 3",
+				"Visa hing 3",
+				"Zor Ölüm 3: Zeka Öcünü Alıyor",
+				"Đương Đầu Với Thử Thách 3",
+				"Крепкий орешек 3",
+				"Крепкий орешек 3: Возмездие",
+				"Мықты жаңғақ 3",
+				"Міцний горішок 3: Помирати з піснею",
+				"Умирай трудно 3"
+			]
+		},
+		"tt0116225": {
+			"name": "Escape from L.A.",
+			"year": 1996,
+			"titles": [
+				"2013: Rescate en L.A.",
+				"Escape de Los Angeles",
+				"Escape from L.A.",
+				"Evadare din L.A.",
+				"Flucht aus L.A.",
+				"Flykten från L.A.",
+				"Haēk Dān Narok L.A.",
+				"John Carpenter's Escape from L.A.",
+				"John Carpenter's Flucht aus L.A.",
+				"John Carpenter's Pako L.A.:sta",
+				"Pako L.A.:sta",
+				"Útek z L.A.",
+				"Бекство из Лос Анђелеса",
+				"Втеча з Лос-Анджелесу",
+				"Побег из Лос-Анджелеса",
+				"エスケープ・フロム・L.A."
+			]
+		},
+		"tt0363771": {
+			"name": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+			"year": 2005,
+			"titles": [
+				"As Crónicas de Nárnia: O Leão, a Feiticeira e o Guarda-Roupa",
+				"Berättelsen om Narnia: Häxan och lejonet",
+				"Biên Niên Sử Narnia: Sư Tử, Phù Thủy và Cái Tủ Áo",
+				"Cronicile din Narnia - Leul, Vrajitoarea si Dulapul",
+				"De kronieken van Narnia - De leeuw, de heks en de kleerkast",
+				"Die Chroniken von Narnia - Der König von Narnia",
+				"Kronike iz Narnije: Lav, vještica i ormar",
+				"Las crónicas de Narnia: El león, la bruja y el armario",
+				"Las crónicas de Narnia: El león, la bruja y el ropero",
+				"Le Monde de Narnia : Le Lion, la Sorcière blanche et l'Armoire magique",
+				"Le cronache di Narnia - Il leone, la strega e l'armadio",
+				"Legenden om Narnia - Løven, heksa og klesskapet",
+				"Les chroniques de Narnia - L'armoire magique",
+				"Narnia",
+				"Narnia Günlükleri: Aslan, Cadı ve Dolap",
+				"Narnia krónikái: Az oroszlán, a boszorkány és a ruhásszekrény",
+				"Narnia lood: lõvi, nõid ja riidekapp",
+				"Narnia: Lev, šatník a čarodejnica",
+				"Narnia: Løven, heksen og garderobeskabet",
+				"Opowieści z Narnii: Lew, czarownica i stara szafa",
+				"The Chronicles of Narnia",
+				"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+				"To hroniko tis Narnia: To liontari, i magissa kai i doulapa",
+				"Töfralandið Narnía: Ljónið, nornin og skápurinn"
+			]
+		},
+		"tt0101452": {
+			"name": "Bill & Ted's Bogus Journey",
+			"year": 1991,
+			"titles": [
+				"Bill & Ted Go to Hell",
+				"Bill & Ted's Bogus Journey",
+				"Bill & Ted's Excellent Adventure II",
+				"Bill & Ted: Dois Loucos no Tempo",
+				"Bill & Teds galna mardrömsresa",
+				"Bill & Teds verrückte Reise in die Zukunft",
+				"Bill and Ted II",
+				"Bill e Ted - Dois Loucos no Tempo",
+				"Bill e Ted no outro Mundo",
+				"Bill og Ted drar til helvete",
+				"Bill og Teds uovertrufne eventyr",
+				"Bill si Ted ajung în iad",
+				"Bill si Ted merg in iad",
+				"Bill ve Ted'in Maceraları 2",
+				"Bill és Ted haláli túrája",
+				"Bills och Teds värld",
+				"El alucinante viaje de Bill y Ted",
+				"L'al·lucinant viatge de Bill i Ted",
+				"Le prétendu voyage de Bill et Ted",
+				"Les aventures de Bill et Ted",
+				"Les folles aventures de Bill et Ted",
+				"O Bill o Ted kai to palavo taxidi",
+				"Szalona wyprawa Billa i Teda",
+				"बिल & टेड'स बोगस जरनी"
+			]
+		},
+		"tt1082868": {
+			"name": "Quarantine",
+			"year": 2008,
+			"titles": ["Quarentena"]
+		},
+		"tt12263384": {
+			"name": "Extraction II",
+			"year": 2023,
+			"titles": [
+				"Cijena spasa 2",
+				"Evakuacija 2",
+				"Extraction 2",
+				"Extraction II",
+				"Misión de rescate 2",
+				"Operațiunea de recuperare 2",
+				"Päästeoperatsioon 2",
+				"Qutqaruv operatsiyasi 2",
+				"Resgate 2",
+				"Tyler Rake 2",
+				"Tyler Rake: A kimenekítés 2.",
+				"Tyler Rake: Extraction 2",
+				"Tyler Rake: Nhiệm Vụ Giải Cứu 2",
+				"Vyproštění 2",
+				"Τάιλερ Ρέικ: Η φυγάδευση 2",
+				"Евакуація 2",
+				"Тайлер Рейк. Операция по спасению 2",
+				"Цена спаса 2",
+				"タイラー・レイク －命の奪還－2"
+			]
+		},
+		"tt1436562": {
+			"name": "Rio",
+			"year": 2011,
+			"titles": ["Chú Vẹt Rio", "Rio", "Rio 3D", "Rio the Movie"]
+		},
+		"tt1438176": {
+			"name": "Fright Night",
+			"year": 2011,
+			"titles": [
+				"Fright Night",
+				"Fright Night - Il vampiro della porta accanto",
+				"Noche de miedo (Fright Night)"
+			]
+		},
+		"tt0090605": {
+			"name": "Aliens",
+			"year": 1986,
+			"titles": [
+				"Alien 2",
+				"Alien 2 - De nieuwe gruwel",
+				"Alien 2 - Die Rückkehr",
+				"Alien 2 - Misiune de pedeapsă",
+				"Alien 2 : Le Retour",
+				"Alien 2, i epistrofi",
+				"Alien 2: El regreso",
+				"Alien II",
+				"Aliens",
+				"Begona 2",
+				"Biganeha 2",
+				"Chuzhoy 2",
+				"Eirian 2",
+				"Fazaei 2",
+				"Obcy 2 - decydujące starcie",
+				"Osmi potnik 2",
+				"Quái Vật Không Gian 2",
+				"Svetimas 2",
+				"Svešie 2",
+				"Tulnukas 2",
+				"Yad 2",
+				"Άλιενς 2: Η επιστροφή",
+				"Бөтен 2",
+				"Осми путник 2",
+				"Чужой 2",
+				"विदेशी 2"
+			]
+		},
+		"tt1324999": {
+			"name": "The Twilight Saga: Breaking Dawn - Part 1",
+			"year": 2011,
+			"titles": [
+				"A Saga Crepúsculo: Amanhecer - Parte 1",
+				"A Saga Twilight: Amanhecer Parte 1",
+				"Alacakaranlık Efsanesi: Şafak Vakti Bölüm 1",
+				"Alkonyat: Hajnalhasadás - 1. rész",
+				"Amanhecer - Parte 1",
+				"Breaking Dawn - Bis(s) zum Ende der Nacht: Teil 1",
+				"Breaking Dawn - del 1",
+				"Brėkštanti aušra. 1 dalis",
+				"Chạng Vạng: Hừng Đông - Phần 1",
+				"Crepúsculo, la saga: Amanecer (parte 1)",
+				"Dimdumim 4 - shahar maftzia, helek 1",
+				"Haravgi - Meros 1",
+				"La saga Crepúsculo: Amanecer (parte 1)",
+				"La saga Twilight: Révélation partie 1",
+				"Rītausma. 1.daļa",
+				"Saga 'Zmierzch': Przed świtem. Część 1",
+				"Saga Amurg: Zori de zi - partea I",
+				"Somrak saga: Jutranja zarja - 1. del",
+				"Sumrak saga: Praskozorje - 1. dio",
+				"The Twilight Saga: Breaking Dawn - Part 1",
+				"The Twilight Saga: Breaking Dawn - Parte 1",
+				"The twilight saga: Χαραυγή - Μέρος 1",
+				"Twilight - Aamunkoi Osa 1",
+				"Twilight 4",
+				"Twilight sága: Rozbřesk - 1. část",
+				"Twilight sága: Úsvit - 1. časť",
+				"Twilight: Chapitre 4 - Révélation, 1ère partie",
+				"Twilight: Χαραυγή - Μέρος 1",
+				"Videviku saaga: Koidukuma - Osa I",
+				"Χαραυγή - Μέρος 1",
+				"Здрач: Зазоряване - част 1",
+				"Сумерки. Сага. Рассвет: Часть 1",
+				"Сумрак сага: Праскозорје, 1. део",
+				"Сутінки. Сага: Світанок - Частина 1",
+				"Ымырт. Арайлы таң: 1-бөлім",
+				"แวมไพร์ ทไวไลท์ 4 เบรกกิ้งดอน ภาค 1",
+				"トワイライト・サーガ　ブレイキング・ドーン Part 1"
+			]
+		},
+		"tt1375670": {
+			"name": "Grown Ups",
+			"year": 2010,
+			"titles": ["Grown Ups", "Starci"]
+		},
+		"tt1638355": {
+			"name": "The Man from U.N.C.L.E.",
+			"year": 2015,
+			"titles": ["Agente C.I.P.O.L.", "El Agente de C.I.P.O.L.", "O Agente da U.N.C.L.E."]
+		},
+		"tt2265171": {
+			"name": "The Raid 2",
+			"year": 2014,
+			"titles": [
+				"A rajtaütés 2.",
+				"Baskın 2: Holigan",
+				"Epiheirisi: Haos 2",
+				"Haarang 2",
+				"La redada 2",
+				"Le raid 2 : La vengeance",
+				"Operação Invasão 2",
+				"Prepadovka 2",
+				"Racija 2: Berandal",
+				"Raid 2: Infiltracja",
+				"Raidul 2",
+				"Redada asesina 2",
+				"Reidas 2",
+				"Reids 2: Asinspirts",
+				"Reyd 2",
+				"Serbuan Maut 2",
+				"Serbuan Maut 2: Berandal",
+				"Serbuan Maut II",
+				"Serbuan Maut II: Berandal",
+				"The Key",
+				"The Raid - Redenção",
+				"The Raid 2",
+				"The Raid 2 - Berandal",
+				"The Raid 2: Infiltracja",
+				"The Raid 2: Retaliation",
+				"The Raid 2: Thug",
+				"The Raid II",
+				"The Raid II: Infiltracja",
+				"The Raid: Gokudo",
+				"The Raid: Retaliation",
+				"Zátah 2",
+				"Đột kích 2: Kẻ sát nhân",
+				"Επιχείρηση: Χάος 2",
+				"Операцията 2: Отплата",
+				"Рација 2",
+				"Рейд 2"
+			]
+		},
+		"tt4196776": {
+			"name": "Jason Bourne",
+			"year": 2016,
+			"titles": [
+				"Jason Bourne",
+				"Siêu Điệp Viên Jason Bourne",
+				"Untitled Matt Damon/Bourne Sequel"
+			]
+		},
+		"tt2637276": {
+			"name": "Ted 2",
+			"year": 2015,
+			"titles": [
+				"Ayı Teddy 2",
+				"Gấu Bựa Ted 2",
+				"Macík 2",
+				"Méďa 2",
+				"Ted 2",
+				"Ted kommer - igjen!",
+				"Tedis 2",
+				"Teds 2",
+				"Uchinchisi ortiqcha 2",
+				"Ücüncü Artiqdir 2",
+				"Τεντ 2",
+				"Меда 2",
+				"Приятелю, Тед 2",
+				"Тед 2",
+				"Третий лишний 2",
+				"Третій зайвий 2",
+				"टेड 2"
+			]
+		},
+		"tt0800320": {
+			"name": "Clash of the Titans",
+			"year": 2010,
+			"titles": [
+				"Clash of the Titans",
+				"Clash of the Titans - Titanernes kamp",
+				"Cuộc Chiến Giữa Các Vị Thần",
+				"I titanomahia",
+				"Le Choc des Titans",
+				"Lluita de titans"
+			]
+		},
+		"tt0905372": {
+			"name": "The Thing",
+			"year": 2011,
+			"titles": ["I apeili", "La cosa (The Thing)", "The Thing", "The Thing: The Beginning"]
+		},
+		"tt1073105": {
+			"name": "The Descent: Part 2",
+			"year": 2009,
+			"titles": [
+				"A Descida - Parte 2",
+				"A barlang 2.",
+				"Abismo do Medo 2",
+				"Cehenneme 2 Adım",
+				"Coborare întunecata 2",
+				"Descent 2",
+				"El descenso 2",
+				"El descenso: parte 2",
+				"I kathodos 2",
+				"Instängd 2",
+				"La descente 2",
+				"Laskumine 2",
+				"Nedstigningen 2",
+				"Nolaišanās 2",
+				"Nusileidimas 2",
+				"Pád do tmy 2",
+				"Silazak: Deo 2",
+				"The De2cent",
+				"The Descent 2",
+				"The Descent 2 - Die Jagd geht weiter",
+				"The Descent: Part 2",
+				"The descent - Loukussa 2",
+				"Užas iz dubine 2",
+				"Zejście 2",
+				"Η κάθοδος 2",
+				"Спуск 2",
+				"Спуск: Частина 2",
+				"जानी दुश्मन 2"
+			]
+		},
+		"tt1298650": {
+			"name": "Pirates of the Caribbean: On Stranger Tides",
+			"year": 2011,
+			"titles": [
+				"Kadal Kollaiyargal 4",
+				"Karib dengizi qaroqchilari 4",
+				"Kariibi mere piraadid 4: Võõrastel vetel",
+				"P.O.T.C. 4",
+				"Piraci z Karaibów 4: Na nieznanych wodach",
+				"Piratas del Caribe 4 (3D)",
+				"Pirates 4",
+				"Pirates des Caraïbes: La Fontaine de jouvence",
+				"Pirates of the Caribbean - Fremde Gezeiten",
+				"Pirates of the Caribbean: Fountain of Life",
+				"Pirates of the Caribbean: I främmande farvatten",
+				"Pirates of the Caribbean: I ukendt farvand",
+				"Pirates of the Caribbean: On Stranger Tides",
+				"Pirates of the Caribbean: Vierailla vesillä",
+				"Pirati dei Caraibi - Oltre i confini del mare",
+				"Piráti Karibiku 4: V neznámych vodách",
+				"Пираты Карибского моря: На странных берегах",
+				"Пірати Карибського моря: На дивних берегах"
+			]
+		},
+		"tt1951264": {
+			"name": "The Hunger Games: Catching Fire",
+			"year": 2013,
+			"titles": [
+				"Hangâ Gêmu 2",
+				"Hunger Games : L'Embrasement",
+				"Hunger Games: La ragazza di fuoco",
+				"Hunger Games: Vražedná pomsta",
+				"Igrzyska śmierci 2",
+				"Igrzyska śmierci 2: Pierścień ognia",
+				"Igrzyska śmierci: W kręgu ognia",
+				"Igrzyska śmierci: W pierścieniu ognia",
+				"Shimshilis tamashebi 2",
+				"The Hunger Games 2",
+				"The Hunger Games II",
+				"The Hunger Games: Catching Fire",
+				"The Hunger Games: Em Chamas",
+				"The Hunger Games: Fotia",
+				"The Hunger Games: Φωτιά",
+				"The Idiom",
+				"Đấu Trường Sinh Tử 2: Bắt Lửa"
+			]
+		},
+		"tt2226417": {
+			"name": "Insidious: Chapter 2",
+			"year": 2013,
+			"titles": [
+				"Astraal 2",
+				"Astral 2",
+				"Astrali 2",
+				"Astralna podmuklost: Poglavlje 2",
+				"Astrāls: 2.nodaļa",
+				"Insidieux: Chapitre 2",
+				"Insidios: Capitolul 2",
+				"Insidious (capítulo 2)",
+				"Insidious 2",
+				"Insidious : Chapitre 2",
+				"Insidious Chapter 2",
+				"Insidious: A gonosz háza",
+				"Insidious: Kapitola 2",
+				"Insidiós: Capítol 2",
+				"La noche del demonio (capítulo 2)",
+				"La noche del demonio 2",
+				"Naznaczony: Rozdział 2",
+				"Oltre i confini del male - Insidious 2",
+				"Pagidevmeni psyhi: Kefalaio 2",
+				"Podmuklo: 2. poglavlje",
+				"Quy Quyet 2",
+				"Riivattu 2",
+				"Ruhlar Bölgesi Bölüm 2",
+				"Sobrenatural: Capítulo 2",
+				"Παγιδευμένη ψυχή: Κεφάλαιο 2",
+				"Астрал: Глава 2",
+				"Астрал: Частина 2",
+				"Астрална подмуклост: Поглавље 2",
+				"Коварен капан: част 2",
+				"इंसिडियस: चैप्टर 2",
+				"इन्सिडीअसः चैप्टर 2 कपटी आत्मा"
+			]
+		},
+		"tt0362120": {
+			"name": "Scary Movie 4",
+			"year": 2006,
+			"titles": [
+				"Comedie de groaza 4",
+				"Film de peur 4",
+				"Final Screaming Plan 4",
+				"Horrorra akadva 4.",
+				"Korkunç Bir Film 4",
+				"Met litz'ok 4",
+				"Mrak film 4",
+				"Pats baisiausias filmas 4",
+				"Phim Kinh Dị 4",
+				"Scary Movie 4",
+				"Scary Movie 4 - Que Susto de Filme!",
+				"Scary movie 4 - Descuartizados de miedo",
+				"Straszny film 4",
+				"Todo Mundo em Pânico 4",
+				"Õudne film 4",
+				"Šausmenīte 4",
+				"Дуже страшне кіно 4",
+				"Мрак филм 4",
+				"Очень страшное кино 4",
+				"Страшен филм 4",
+				"स्केरी मूवी 4"
+			]
+		},
+		"tt1051904": {
+			"name": "Goosebumps",
+			"year": 2015,
+			"titles": [
+				"Goosebumps",
+				"Goosebumps: Arrepios",
+				"Goosebumps: Canavarlar Firarda",
+				"Goosebumps: Iti facem parul maciuca",
+				"Goosebumps: Monstros e Arrepios",
+				"Goosebumps: Страховити истории"
+			]
+		},
+		"tt11655566": {
+			"name": "Lilo & Stitch",
+			"year": 2025,
+			"titles": [
+				"Lilo & Stitch",
+				"Lilo e Stitch",
+				"Lilo et Stitch",
+				"Lilo i Stitch",
+				"Lilo ir Stičas",
+				"Lilo un Stičs",
+				"Lilo va Stich",
+				"Lilo və Stiç",
+				"Lilo y Stitch",
+				"Lilo és Stitch - A csillagkutya"
+			]
+		},
+		"tt1155076": {
+			"name": "The Karate Kid",
+			"year": 2010,
+			"titles": [
+				"A karate kölyök",
+				"Best Kid",
+				"Karate Kid",
+				"Karate vaikis",
+				"Karatē puika",
+				"Kung Fu Kid",
+				"Le Karaté Kid",
+				"New Karate Kid",
+				"Novi karate kid",
+				"Siêu Nhí Karate",
+				"The Karate Kid",
+				"The Karate Kid - La leggenda continua",
+				"The Kung Fu Kid",
+				"Untitled Karate Kid Remake"
+			]
+		},
+		"tt1699231": {
+			"name": "Quarantine 2: Terminal",
+			"year": 2011,
+			"titles": [
+				"Carantina 2: Terminalul",
+				"Cuarentena 2: Terminal",
+				"Cách Ly 2",
+				"En quarantaine 2",
+				"Karantiin 2",
+				"Karantin 2 - Terminal",
+				"Karantina 2: Terminal",
+				"Karantén 2.",
+				"Kwarantanna 2: Terminal",
+				"Quarantena 2",
+				"Quarantine 2: Terminal",
+				"Quarantine II",
+				"Quarantäne 2 - Terminal",
+				"Quarentena 2",
+				"Quarentena 2: O Terminal",
+				"Καραντίνα 2: Τρόμος στο αεροδρόμιο",
+				"Карантин 2: Терминал",
+				"Карантин 2: Термінал"
+			]
+		},
+		"tt1132620": {
+			"name": "The Girl with the Dragon Tattoo",
+			"year": 2009,
+			"titles": [
+				"Milenyum Serisi 1: Ejderha Dövmeli Kız",
+				"Millennium 1 - Os Homens que Odeiam as Mulheres",
+				"Millennium 1. Els homes que no estimaven les dones",
+				"Millennium 1: Los hombres que no amaban a las mujeres",
+				"Millennium 1: Mannen die Vrouwen Haten",
+				"Millennium: Mężczyźni, którzy nienawidzą kobiet"
+			]
+		},
+		"tt0120812": {
+			"name": "Rush Hour",
+			"year": 1998,
+			"titles": [
+				"A Hora do Rush",
+				"Rush Hour",
+				"Rush Hour - Due mine vaganti",
+				"Rush Hour - Rankka pari"
+			]
+		},
+		"tt30459064": {
+			"name": "Trouble Man",
+			"year": 2025,
+			"titles": ["Решала"]
+		},
+		"tt5090568": {
+			"name": "Transformers: Rise of the Beasts",
+			"year": 2023,
+			"titles": [
+				"E-77",
+				"Transformerid 6: Elukate tõus",
+				"Transformers - Il risveglio",
+				"Transformers. El despertar de las bestias",
+				"Transformers: A fenevadak kora",
+				"Transformers: Ascensiunea bestiilor",
+				"Transformers: Aufstieg der Bestien",
+				"Transformers: Canavarların Yükselişi",
+				"Transformers: Monštrá sa prebúdzajú",
+				"Transformers: O Despertar das Feras",
+				"Transformers: Probuzení monster",
+				"Transformers: Przebudzenie bestii",
+				"Transformers: Rise of the Beasts",
+				"Transformers: Uspon zvijeri",
+				"Transformers: le réveil des bêtes",
+				"Transformers: Η εξέγερση των θηρίων"
+			]
+		},
+		"tt0110857": {
+			"name": "Police Academy: Mission to Moscow",
+			"year": 1994,
+			"titles": [
+				"Academia de Politie 7: Misiune la Moscova",
+				"Academia de Polícia VII: Missão em Moscovo",
+				"Académie de police 7: Mission à Moscou",
+				"Akademia policyjna 7: Misja w Moskwie",
+				"Akademia policyjna 7: Moskiewska misja",
+				"Akademia policyjna VII: Misja w Moskwie",
+				"Akademia policyjna: Misja do Moskwy",
+				"Akademia policyjna: Moskiewska misja",
+				"Học Viện Cảnh Sát 7",
+				"I megali ton batson sholi: Apostoli sti Mosha",
+				"Loucademia de Polícia 7 - Missão Moscou",
+				"Policajná akadémia: Moskovská misia",
+				"Police Academy 7 - Mission in Moskau",
+				"Police Academy 7 Mission to Moscow",
+				"Police Academy 7: Operation Scotland Yard",
+				"Police Academy : Mission à Moscou",
+				"Police Academy: Mission to Moscow",
+				"Policejní akademie 7: Moskevská mise",
+				"Policijos akademija 7. Misija Maskvoje",
+				"Policijska akademija 7",
+				"Policijska akademija 7: Zadatak u Moskvi",
+				"Poliisiopisto 7: Moskovan keikka",
+				"Polis Akademisi 7: Moskova Görevi",
+				"Polisskolan 7",
+				"Polisskolan 7 - Uppdrag i Moskva",
+				"Politiskolen 7: Oppdrag Moskva",
+				"Politiskolen i Moskva",
+				"Politseiakadeemia 7: Operatsioon Moskva",
+				"Rendőrakadémia 7.: Moszkvai küldetés",
+				"Η μεγάλη των μπάτσων σχολή Νο 7",
+				"Поліцейська академія 7: У Москві"
+			]
+		},
+		"tt0259324": {
+			"name": "Ghost Rider",
+			"year": 2007,
+			"titles": [
+				"Ghost Rider",
+				"Ghost Rider - aaveajaja",
+				"Ghost Rider: El motorista fantasma",
+				"Ghost Rider: El vengador fantasma",
+				"Ma Tốc Độ"
+			]
+		},
+		"tt1502712": {
+			"name": "Fantastic Four",
+			"year": 2015,
+			"titles": [
+				"4 Fantásticos",
+				"Fantastic 4",
+				"Fantastic 4 - I fantastici quattro",
+				"Fantastic Four",
+				"Les 4 Fantastiques",
+				"Los 4 Fantásticos",
+				"The Fantastic Four",
+				"Untitled Fantastic Four Reboot",
+				"Фантастическая четвёрка"
+			]
+		},
+		"tt1634122": {
+			"name": "Johnny English Reborn",
+			"year": 2011,
+			"titles": [
+				"Johnny English - Født på ny",
+				"Johnny English - Jetzt erst recht!",
+				"Johnny English - La rinascita",
+				"Johnny English - uudestisyntynyt",
+				"Johnny English 2",
+				"Johnny English 2: taassünd",
+				"Johnny English Reborn",
+				"Johnny English Recargado",
+				"Johnny English Returns",
+				"Johnny English hozer",
+				"Johnny English ponovno jaše",
+				"Johnny English renaix",
+				"Johnny English renaît",
+				"Johnny English sa vracia",
+				"Johnny English se vrací",
+				"Johnny English újratöltve",
+				"Johnny English'in Dönüşü",
+				"Johnny English, le retour",
+				"Johnny English: Reaktywacja",
+				"Johnny English: Điệp Viên Không Không Thấy Tái Xuất",
+				"Johnny English: Η επιστροφή",
+				"O Regresso de Johnny English",
+				"O Retorno de Johnny English"
+			]
+		},
+		"tt0372784": {
+			"name": "Batman Begins",
+			"year": 2005,
+			"titles": [
+				"Batman - El inicio",
+				"Batman - O Início",
+				"Batman - Początek",
+				"Batman - Începuturi",
+				"Batman 5",
+				"Batman Başlıyor",
+				"Batman Begins",
+				"Batman Begins: The IMAX Experience",
+				"Batman Inicia",
+				"Batman alustab",
+				"Batman comienza",
+				"Batman začína",
+				"Batman: El comienzo",
+				"Batman: Intimidation",
+				"Batman: Kezdődik!",
+				"Batman: Le commencement",
+				"Batman: Početak",
+				"Batman: na začetku",
+				"The Intimidation Game"
+			]
+		},
+		"tt2510894": {
+			"name": "Hotel Transylvania 2",
+			"year": 2015,
+			"titles": [
+				"Hotel Transilvania 2",
+				"Hotel Transilvanija 2",
+				"Hotel Transsilvanien 2",
+				"Hotel Transsilvània 2",
+				"Hotel Transylvania 2",
+				"Hotel Transylvania 2 3D",
+				"Hotel Transylvania 2. - Ahol még mindig szörnyen jó",
+				"Hotel Transylvánie 2",
+				"Hotel Transylwania 2",
+				"Hotel Transylwania 2 3D",
+				"Hotell Transilvaania 2",
+				"Hotell Transylvanien 2",
+				"Khách Sạn Huyền Bí 2",
+				"Mifletzet shel malon 2",
+				"Monsters Hotel 2",
+				"Monstru viesbutis 2",
+				"Otel Transilvanya 2",
+				"Viesnīca 'Transilvānija' 2",
+				"Ξενοδοχείο για τέρατα 2",
+				"Монстри на канікулах 2",
+				"Монстры на каникулах 2",
+				"Хотел Трансилвания 2",
+				"Хотел Трансилванија 2"
+			]
+		},
+		"tt0103178": {
+			"name": "Urusei Yatsura 6: Always My Darling",
+			"year": 1991,
+			"titles": [
+				"Urusei Yatsura 6: Always My Darling",
+				"Urusei Yatsura 6: Forever My Darling",
+				"Urusei Yatsura 6: Itsudatte, mai dârin"
+			]
+		},
+		"tt0432283": {
+			"name": "Fantastic Mr. Fox",
+			"year": 2009,
+			"titles": []
+		},
+		"tt12589360": {
+			"name": "Fate/Grand Order: Moonlight/Lostroom",
+			"year": 2017,
+			"titles": []
+		},
+		"tt1067106": {
+			"name": "A Christmas Carol",
+			"year": 2009,
+			"titles": []
+		},
+		"tt0330373": {
+			"name": "Harry Potter and the Goblet of Fire",
+			"year": 2005,
+			"titles": [
+				"Harry Potter i Czara Ognia",
+				"Harry Potter i Plameni pehar",
+				"Harry Potter i el calze de foc",
+				"Хәрри Поттер мен от сауыт"
+			]
+		},
+		"tt0063819": {
+			"name": "Winnie the Pooh and the Blustery Day",
+			"year": 1968,
+			"titles": ["Peter Plys i blæsevejr", "Винни Пух и ненастный день"]
+		},
+		"tt0063350": {
+			"name": "Night of the Living Dead",
+			"year": 1968,
+			"titles": ["Noaptea mortilor vii"]
+		},
+		"tt1185616": {
+			"name": "Waltz with Bashir",
+			"year": 2008,
+			"titles": []
+		},
+		"tt0220099": {
+			"name": "The Tigger Movie",
+			"year": 2000,
+			"titles": [
+				"La pel·lícula d'en Tigger: Les noves aventures de Winnie the Pooh i els seus amics",
+				"O Tigris, o Winnie kai i parea tous",
+				"Tygrys i przyjaciele"
+			]
+		},
+		"tt0101507": {
+			"name": "Boyz n the Hood",
+			"year": 1991,
+			"titles": ["Момчета от квартала"]
+		},
+		"tt0361748": {
+			"name": "Inglourious Basterds",
+			"year": 2009,
+			"titles": []
+		},
+		"tt0119396": {
+			"name": "Jackie Brown",
+			"year": 1997,
+			"titles": []
+		},
+		"tt0113118": {
+			"name": "Friday",
+			"year": 1995,
+			"titles": ["Friday", "Pátek"]
+		},
+		"tt0299977": {
+			"name": "Hero",
+			"year": 2002,
+			"titles": ["Bohater"]
+		},
+		"tt0387898": {
+			"name": "Caché",
+			"year": 2005,
+			"titles": ["Caché (Hidden)", "Hidden", "Hidden (Caché)"]
+		}
+	}
+}

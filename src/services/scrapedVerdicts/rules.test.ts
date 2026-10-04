@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './__fixtures__/labelled-filenames.json';
+import packWords from './__fixtures__/pack-words.json';
 import substringKeeps from './__fixtures__/substring-keeps.json';
 import {
 	decide,
@@ -501,5 +502,77 @@ describe('a movie title found inside another title', () => {
 		expect(decide(atlas, '[1080p] Atlas (2024) ล่าข้ามจักรวาล', 'FILM', 'NO_TITLE')).toBe(
 			'keep'
 		);
+	});
+});
+
+type PackItem = {
+	set: 'kept' | 'refused';
+	sample: string;
+	imdbId: string;
+	filename: string;
+	media: Media;
+	titleMatch: TitleMatch;
+	humanLabel: 'MOVIE' | 'PACK' | 'OTHER' | 'EITHER';
+};
+
+/**
+ * Real trash verdicts read from production on 2026-10-04, on four random draws
+ * of judged movie pages: every one the new words turn into a keep, labelled,
+ * and the wrong keeps an earlier draft of the words made. The fixture's
+ * `_about` says how each was drawn.
+ */
+describe('sets of a series named by words the rules did not know', () => {
+	const packItems = packWords.items as PackItem[];
+	const pages = packWords.movies as Record<
+		string,
+		{ name: string; year: number; titles: string[] }
+	>;
+	const verdictOf = (item: PackItem) =>
+		decide(
+			{ imdbId: item.imdbId, ambiguous: {}, ...pages[item.imdbId] },
+			item.filename,
+			item.media,
+			item.titleMatch
+		);
+	const sets = packItems.filter(
+		(item) => item.set === 'kept' && (item.humanLabel === 'PACK' || item.humanLabel === 'MOVIE')
+	);
+
+	it('keeps the duologies, pentalogies, double features, Kolekcja and All Movies sets that hold the movie', () => {
+		expect(sets).toHaveLength(349);
+		expect(
+			sets.filter((item) => verdictOf(item) === 'trash').map((item) => item.filename)
+		).toEqual([]);
+	});
+
+	// Measured on the same draws: 28 of the 377 labelled keeps are another
+	// series' set, mostly a set of the same title's other films.
+	it('keeps at most one wrong set for every ten right ones', () => {
+		const kept = packItems.filter(
+			(item) =>
+				item.set === 'kept' && item.humanLabel !== 'EITHER' && verdictOf(item) === 'keep'
+		);
+		const wrong = kept.filter((item) => item.humanLabel === 'OTHER');
+		expect(kept.length).toBeGreaterThan(0);
+		expect(wrong.length / kept.length).toBeLessThanOrEqual(0.1);
+	});
+
+	it.each([
+		'Хмель: Дилогия (1991) DVDRip-AVC от KORSAR',
+		'Брат: Дилогия (1997-2000) WEB-DLRip 720p от KORSAR',
+		'[ZODIAC-TORRENT.PL] Kolekcjoner kości',
+		'Avatar (Rozszerzone wydanie kolekcjonerskie) - Avatar Extended Collectors Cut *2..',
+	])('does not read another series or a collector as a set: %s', (filename) => {
+		const refused = packItems.filter((item) => item.filename === filename);
+		expect(refused.length).toBeGreaterThan(0);
+		for (const item of refused) expect(verdictOf(item)).toBe('trash');
+	});
+
+	it('leaves every refused wrong keep trashed', () => {
+		const refused = packItems.filter((item) => item.set === 'refused');
+		expect(refused).toHaveLength(24);
+		expect(
+			refused.filter((item) => verdictOf(item) === 'keep').map((item) => item.filename)
+		).toEqual([]);
 	});
 });
