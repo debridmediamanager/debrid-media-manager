@@ -8,7 +8,7 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: on-failure
+        condition: any
 
   tor:
     image: debridmediamanager/tor

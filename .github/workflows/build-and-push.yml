@@ -29,6 +29,11 @@ jobs:
           cd /home/ben/dmm && docker stack deploy -c docker-compose.yml dmm --resolve-image always
           docker service update --image dmm-prod:latest --force dmm_web
 
+      - name: Install watchdog
+        run: |
+          install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh
+          (crontab -l 2>/dev/null | grep -v dmm-watchdog.sh; echo '* * * * * /home/ben/dmm/dmm-watchdog.sh') | crontab -
+
       - name: Purge Cloudflare Cache
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \

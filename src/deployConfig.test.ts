@@ -10,12 +10,14 @@ import { describe, expect, it } from 'vitest';
 
 const root = join(__dirname, '..');
 
-function webServiceBlock(): string {
+function serviceBlock(name: string): string {
 	const compose = readFileSync(join(root, 'docker-compose.yml'), 'utf8');
-	const match = compose.match(/^ {2}web:\n((?: {4,}.*\n|\n)*)/m);
-	if (!match) throw new Error('docker-compose.yml has no web service');
+	const match = compose.match(new RegExp(`^ {2}${name}:\\n((?: {4,}.*\\n|\\n)*)`, 'm'));
+	if (!match) throw new Error(`docker-compose.yml has no ${name} service`);
 	return match[1];
 }
+
+const webServiceBlock = () => serviceBlock('web');
 
 function seconds(value: string): number {
 	const match = value.match(/^(\d+)(s|m)$/);
@@ -26,6 +28,13 @@ function seconds(value: string): number {
 describe('production web service', () => {
 	it('restarts replicas that exit cleanly after a health kill', () => {
 		expect(webServiceBlock()).toMatch(/restart_policy:\n(?:\s*#.*\n)*\s+condition: any\n/);
+	});
+
+	it.each(['web', 'redis'])('restarts %s after any exit, clean or not', (name) => {
+		const restart = serviceBlock(name).match(
+			/restart_policy:\n(?:\s*#.*\n)*\s+condition: (\S+)/
+		);
+		expect(restart?.[1] ?? 'any').toBe('any');
 	});
 
 	it('tolerates a single slow health probe', () => {
@@ -64,5 +73,16 @@ describe('deploy workflow cleanup', () => {
 
 	it('caps the build cache by size rather than age alone', () => {
 		expect(cleanup).toMatch(/docker builder prune -f --keep-storage \d+GB/);
+	});
+});
+
+describe('deploy workflow watchdog', () => {
+	const workflow = readFileSync(join(root, '.github/workflows/build-and-push.yml'), 'utf8');
+
+	it('installs the watchdog script and its every-minute cron entry', () => {
+		expect(workflow).toContain(
+			'install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh'
+		);
+		expect(workflow).toContain('* * * * * /home/ben/dmm/dmm-watchdog.sh');
 	});
 });
