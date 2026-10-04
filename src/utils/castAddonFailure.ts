@@ -163,13 +163,17 @@ export function classifyCastError(error: unknown): CastFailure {
 /**
  * Why a play link could not be sent on to the file. A play is answered to a
  * video player rather than to an addon client, and the member reads the
- * answer from the screen, so it separates two refusals the catalog and meta
+ * answer from the screen, so it separates refusals the catalog and meta
  * routes have no use for:
  *
  * - `network`: Real-Debrid will not make a link for the player's address.
  * - `refused`: the provider will not serve this one file.
+ * - `confirm`: the provider holds the sign-in until its owner confirms it.
+ *   AllDebrid does this the first time a key is used from an address it has
+ *   not seen for the account, which for a play is DMM's server, and emails
+ *   the owner a link to confirm.
  */
-export type CastPlayFailure = CastFailure | 'network' | 'refused';
+export type CastPlayFailure = CastFailure | 'network' | 'refused' | 'confirm';
 
 type ProviderErrorShape = ErrorShape & {
 	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };
@@ -217,6 +221,38 @@ export function classifyRdPlayError(error: unknown): CastPlayFailure {
  * which {@link classifyCastError} reads for every route.
  */
 export function classifyTorBoxPlayError(error: unknown): CastPlayFailure {
+	return classifyCastError(error);
+}
+
+/** AllDebrid codes for an account that cannot unlock anything right now. */
+const ALLDEBRID_ACCOUNT_CODES = new Set([
+	'MUST_BE_PREMIUM',
+	'MAGNET_MUST_BE_PREMIUM',
+	'FREE_TRIAL_LIMIT_REACHED',
+]);
+
+/**
+ * AllDebrid codes for a link it will not unlock. A premium key draws
+ * LINK_HOST_NOT_SUPPORTED for a `/f/` token that does not unlock, and so does
+ * a key without premium for every link - the play route asks which it is.
+ */
+const ALLDEBRID_LINK_REFUSED_CODES = new Set([
+	'LINK_HOST_NOT_SUPPORTED',
+	'LINK_NOT_SUPPORTED',
+	'LINK_DOWN',
+	'LINK_PASS_PROTECTED',
+	'BAD_LINK',
+]);
+
+/**
+ * Sorts a failed AllDebrid play. AllDebrid sends its refusals inside an HTTP
+ * 200 and only the code tells them apart; a throttle is a bare 503.
+ */
+export function classifyAllDebridPlayError(error: unknown): CastPlayFailure {
+	const code = (error as { code?: unknown } | null)?.code;
+	if (code === 'AUTH_BLOCKED') return 'confirm';
+	if (typeof code === 'string' && ALLDEBRID_ACCOUNT_CODES.has(code)) return 'account';
+	if (typeof code === 'string' && ALLDEBRID_LINK_REFUSED_CODES.has(code)) return 'gone';
 	return classifyCastError(error);
 }
 

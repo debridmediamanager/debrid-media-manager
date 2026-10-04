@@ -24,7 +24,8 @@ export type CastPlayVideo =
 	| 'set-up-again'
 	| 'account-refused'
 	| 'network-refused'
-	| 'file-unavailable';
+	| 'file-unavailable'
+	| 'confirm-sign-in';
 
 export const CAST_PLAY_VIDEO_DIR = 'noprecache/cast-play';
 
@@ -81,6 +82,17 @@ export const CAST_PLAY_VIDEOS: Record<CastPlayVideo, { title: string; lines: str
 			'Your debrid service can no longer serve this file.',
 			'',
 			'Go back and pick another stream.',
+		],
+	},
+	'confirm-sign-in': {
+		title: 'Confirm the new sign-in',
+		lines: [
+			'Your debrid service has emailed you about a new',
+			'sign-in from DMM Cast. It holds every stream',
+			'until you confirm it.',
+			'',
+			'Open that email and confirm the sign-in.',
+			'Then play this again.',
 		],
 	},
 };

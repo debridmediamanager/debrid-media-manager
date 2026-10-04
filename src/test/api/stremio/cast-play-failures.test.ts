@@ -1,10 +1,12 @@
 // @vitest-environment node
+import adPlay from '@/pages/api/stremio-ad/[userid]/play/[hash]';
 import tbPlay from '@/pages/api/stremio-tb/[userid]/play/[hash]';
 import rdPlay from '@/pages/api/stremio/[userid]/play/[link]';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
 import { _testing as torboxTesting } from '@/services/torbox';
 import recorded from '@/test/fixtures/castAddonFailures/play-failures-2026-10-04.json';
+import providerRecorded from '@/test/fixtures/castAddonFailures/provider-failures-2026-10-04.json';
 import tbPlanRestricted from '@/test/fixtures/torbox/createtorrent-plan-restricted-2026-09-23.json';
 import tbBadToken from '@/test/fixtures/torbox/user-me-bad-token-2026-09-24.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -98,6 +100,7 @@ vi.mock('next/config', () => ({
 	default: () => ({
 		publicRuntimeConfig: {
 			realDebridHostname: 'https://app.real-debrid.com',
+			allDebridHostname: 'https://api.alldebrid.com',
 			torboxHostname: 'https://api.torbox.app',
 		},
 	}),
@@ -107,6 +110,8 @@ vi.mock('@/services/repository', () => ({
 	repository: {
 		getCastProfile: vi.fn(),
 		getTorBoxCastProfile: vi.fn(),
+		getAllDebridCastProfile: vi.fn(),
+		getAllDebridCastLink: vi.fn(),
 		getHashByLink: vi.fn(async () => null),
 		removeAvailableFileByLinkPrefix: vi.fn(async () => 0),
 		deleteCastsByLinkPrefix: vi.fn(async () => 0),
@@ -416,5 +421,133 @@ describe('TorBox play', () => {
 
 		expect(res).toBeDefined();
 		expect(res!.status).toHaveBeenCalledWith(503);
+	});
+});
+
+/**
+ * Card 224: the AllDebrid play route still answered every failure with a 500 -
+ * 139 in the week to 2026-10-04, 121 of them from two installs on 2026-10-03
+ * that never played anything, while another member played one of the same
+ * files fine. AllDebrid sends its refusals inside an HTTP 200, and the client
+ * kept only the message, so the route could not tell them apart.
+ */
+describe('AllDebrid play', () => {
+	const UNLOCK = /api\.alldebrid\.com\/v4\.1\/link\/unlock/;
+	const FILES = /api\.alldebrid\.com\/v4\.1\/magnet\/files/;
+	const USER = /api\.alldebrid\.com\/v4\.1\/user/;
+	const STORED = 'https://alldebrid.com/f/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+	const magnetNotInAccount = () =>
+		tbReply(providerRecorded.responses['ad-magnet-files-id-not-in-account']);
+
+	const playAd = async (hash = '709355080:0') => {
+		const req = createMockRequest({ query: { userid: 'ad-user', hash } });
+		const res = createMockResponse();
+		await adPlay(req, res);
+		return res;
+	};
+
+	beforeEach(() => {
+		db.getAllDebridCastProfile.mockResolvedValue({ apiKey: 'ad-key' } as never);
+		db.getAllDebridCastLink.mockResolvedValue(STORED as never);
+	});
+
+	it('redirects to the unlocked file', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-success'));
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(
+			'https://example.debrid.it/dl/0abcdefghij/Example.Movie.2025.mkv'
+		);
+	});
+
+	it('plays the set-up notice when the install has no profile', async () => {
+		db.getAllDebridCastProfile.mockResolvedValue(null as never);
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('set-up-again'));
+		expect(res.status).not.toHaveBeenCalledWith(500);
+	});
+
+	it('answers 503, not a notice, when our own database fails', async () => {
+		db.getAllDebridCastProfile.mockRejectedValue(new Error('Too many connections'));
+
+		const res = await playAd();
+
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.redirect).not.toHaveBeenCalled();
+	});
+
+	// AllDebrid holds a key used from an address it has not seen for the
+	// account - DMM's server, for a play - until the owner confirms the email
+	// it sent. Nothing else fixes it, and the magnet is refused the same way.
+	it('plays the confirm notice when AllDebrid holds the sign-in for a new location', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-auth-blocked'));
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('confirm-sign-in'));
+		expect(net.calls.some((call) => FILES.test(call))).toBe(false);
+	});
+
+	it('plays the sign-in notice for a key AllDebrid no longer accepts', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-bad-key'));
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('sign-in-again'));
+	});
+
+	// Someone else's cast: the magnet id is not this account's, so only the
+	// stored link's answer says anything, and AllDebrid says it cannot unlock it.
+	it('plays the file notice when a premium account cannot unlock the stored link', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-link-not-supported'));
+		on('POST', FILES, magnetNotInAccount());
+		on('GET', USER, fixture('ad-user-premium'));
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('file-unavailable'));
+	});
+
+	// The same refusal to an account without premium is the account's, and a
+	// file notice would send the member hunting through every stream.
+	it('plays the account notice when the account has no premium', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-link-not-supported'));
+		on('POST', FILES, magnetNotInAccount());
+		on('GET', USER, fixture('ad-user-free'));
+
+		const res = await playAd();
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('account-refused'));
+	});
+
+	it('plays the file notice for a saved link AllDebrid will not unlock', async () => {
+		on('POST', UNLOCK, fixture('ad-unlock-link-not-supported'));
+		on('GET', USER, fixture('ad-user-premium'));
+		const savedLink = `l${Buffer.from('https://1fichier.com/?example', 'utf8').toString('base64url')}`;
+
+		const res = await playAd(`${savedLink}:0`);
+
+		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('file-unavailable'));
+	});
+
+	// AllDebrid throttles with an empty 503, and the client retries that for
+	// up to two minutes - past the proxy's 60 s, after which nobody hears it.
+	it('answers 503 before the proxy gives up when AllDebrid keeps throttling', async () => {
+		on('POST', UNLOCK, fixture('ad-throttled'));
+
+		vi.useFakeTimers();
+		const pending = playAd();
+		let res: Awaited<typeof pending> | undefined;
+		void pending.then((value) => {
+			res = value;
+		});
+		await vi.advanceTimersByTimeAsync(30_000);
+
+		expect(res).toBeDefined();
+		expect(res!.status).toHaveBeenCalledWith(503);
+		expect(res!.redirect).not.toHaveBeenCalled();
 	});
 });

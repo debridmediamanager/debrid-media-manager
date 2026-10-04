@@ -357,6 +357,7 @@ const PLAY_NOTICES: Partial<Record<CastPlayFailure, CastPlayVideo>> = {
 	credential: 'sign-in-again',
 	account: 'account-refused',
 	network: 'network-refused',
+	confirm: 'confirm-sign-in',
 	gone: 'file-unavailable',
 	unplayable: 'file-unavailable',
 	refused: 'file-unavailable',

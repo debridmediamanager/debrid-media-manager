@@ -1,7 +1,32 @@
-import { getMagnetFiles, MagnetFile, unlockLink } from '@/services/allDebrid';
+import { getAllDebridUser, getMagnetFiles, MagnetFile, unlockLink } from '@/services/allDebrid';
 import { repository as db } from '@/services/repository';
 import { parseSavedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
+import {
+	CastItemGoneError,
+	CastPlayFailure,
+	classifyAllDebridPlayError,
+	settleWithin,
+} from '@/utils/castAddonFailure';
+import { sendPlayFailure } from '@/utils/castAddonResponses';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+/**
+ * How long a play may take before it answers "try again". The AllDebrid client
+ * retries a throttled call for up to two minutes, and Nginx Proxy Manager cuts
+ * the request at 60 s, after which an answer reaches nobody.
+ */
+const ALLDEBRID_PLAY_DEADLINE_MS = 25_000;
+
+/** How long the premium check after a refused link may take. */
+const PREMIUM_CHECK_MS = 5_000;
+
+/** What AllDebrid said, for the log: its error code when it sent one. */
+const describeAdError = (error: unknown) => {
+	const { code, response } = (error ?? {}) as { code?: unknown; response?: { status?: unknown } };
+	if (typeof response?.status === 'number') return `HTTP ${response.status}`;
+	if (typeof code === 'string') return code;
+	return error instanceof Error ? error.message : 'Unknown error';
+};
 
 interface FlatFile {
 	path: string;
@@ -44,11 +69,14 @@ async function linkFromMagnet(
 	const magnetFiles = filesResult.magnets?.[0];
 
 	if (!magnetFiles) {
-		throw new Error('Magnet not found');
+		throw new CastItemGoneError('Magnet not found');
 	}
 
 	if (magnetFiles.error) {
-		throw new Error(magnetFiles.error.message);
+		// MAGNET_INVALID_ID for a magnet this account does not hold.
+		throw Object.assign(new Error(magnetFiles.error.message), {
+			code: magnetFiles.error.code,
+		});
 	}
 
 	// Flatten files and filter for video files (same as catalog helper)
@@ -67,10 +95,22 @@ async function linkFromMagnet(
 	});
 
 	if (fileIndex < 0 || fileIndex >= videoFiles.length) {
-		throw new Error(`File index ${fileIndex} out of range (0-${videoFiles.length - 1})`);
+		throw new CastItemGoneError(
+			`File index ${fileIndex} out of range (0-${videoFiles.length - 1})`
+		);
 	}
 
 	return videoFiles[fileIndex].link;
+}
+
+/**
+ * Whether AllDebrid says the account has no premium. Only asked once a link
+ * has been refused: a free key is refused every link with the same codes a
+ * dead link draws, and the account is the thing the member can fix.
+ */
+async function lacksPremium(apiKey: string): Promise<boolean> {
+	const check = await settleWithin(getAllDebridUser(apiKey), PREMIUM_CHECK_MS).catch(() => null);
+	return !!check && !check.timedOut && check.value?.isPremium === false;
 }
 
 // Play an AllDebrid file from an existing magnet
@@ -111,70 +151,78 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	// Get user's AllDebrid profile with API key
-	let profile: { apiKey: string } | null = null;
+	let profile: { apiKey: string } | null;
 	try {
 		profile = await db.getAllDebridCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
 	} catch (error) {
-		console.error(
-			'Failed to get AllDebrid profile:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: `Failed to get AllDebrid profile for user ${userid}` });
-		return;
+		return sendPlayFailure(res, 'ad', 'unavailable', describeAdError(error));
+	}
+	if (!profile) {
+		return sendPlayFailure(res, 'ad', 'not-connected', 'no cast profile');
 	}
 
 	const apiKey = profile.apiKey;
 
-	if (savedLink) {
+	const resolveStreamUrl = async (): Promise<string> => {
 		// A saved link is already the source; there is no magnet to fall back to.
-		try {
-			res.redirect((await unlockLink(apiKey, savedLink)).link);
-		} catch (error) {
-			console.error(
-				'Failed to unlock AllDebrid saved link:',
-				error instanceof Error ? error.message : 'Unknown error'
-			);
-			res.status(500).json({ error: 'Failed to play link' });
-		}
-		return;
-	}
+		if (savedLink) return (await unlockLink(apiKey, savedLink)).link;
 
-	try {
 		// The stored `/f/` link first: any premium key can unlock it and it
 		// outlives the magnet it came from, so it is the only form that works
 		// for a stream cast by someone else - which is every "other" stream the
 		// catalog offers. Resolving through the magnet id instead answers
 		// MAGNET_INVALID_ID for anyone but the caster.
-		let link = await db.getAllDebridCastLink(magnetId, fileIndex);
+		const link = await db.getAllDebridCastLink(magnetId, fileIndex);
 		if (!link) {
-			link = await linkFromMagnet(apiKey, magnetId, fileIndex);
+			return (await unlockLink(apiKey, await linkFromMagnet(apiKey, magnetId, fileIndex)))
+				.link;
 		}
 
-		let streamUrl: string;
 		try {
-			streamUrl = (await unlockLink(apiKey, link)).link;
+			return (await unlockLink(apiKey, link)).link;
 		} catch (unlockError) {
-			// A stored link can rot (the content was removed upstream). Fall back
-			// to the magnet, which still works when the caster is the viewer.
+			// Only a refusal of the link itself is worth the magnet, which still
+			// works when the caster is the viewer. A refused key or account, or
+			// a provider having a bad minute, refuses the magnet just the same.
+			if (classifyAllDebridPlayError(unlockError) !== 'gone') throw unlockError;
 			console.log(
-				'[AllDebrid Play] Stored link failed, trying the magnet:',
-				unlockError instanceof Error ? unlockError.message : 'Unknown error'
+				'[AllDebrid Play] Stored link refused, trying the magnet:',
+				describeAdError(unlockError)
 			);
-			const fresh = await linkFromMagnet(apiKey, magnetId, fileIndex);
-			streamUrl = (await unlockLink(apiKey, fresh)).link;
+			try {
+				const fresh = await linkFromMagnet(apiKey, magnetId, fileIndex);
+				return (await unlockLink(apiKey, fresh)).link;
+			} catch {
+				// For anyone but the caster the magnet id means nothing, so its
+				// refusal says nothing about the stream; the stored link's does.
+				throw unlockError;
+			}
 		}
+	};
 
-		// Redirect to the download URL
-		res.redirect(streamUrl);
-	} catch (error: any) {
-		console.error(
-			'Failed to play AllDebrid link:',
-			error instanceof Error ? error.message : 'Unknown error'
+	const play = async (): Promise<
+		{ url: string } | { failure: CastPlayFailure; detail: string }
+	> => {
+		try {
+			return { url: await resolveStreamUrl() };
+		} catch (error) {
+			let failure = classifyAllDebridPlayError(error);
+			if (failure === 'gone' && (await lacksPremium(apiKey))) failure = 'account';
+			return { failure, detail: describeAdError(error) };
+		}
+	};
+
+	const outcome = await settleWithin(play(), ALLDEBRID_PLAY_DEADLINE_MS);
+	if (outcome.timedOut) {
+		return sendPlayFailure(
+			res,
+			'ad',
+			'unavailable',
+			`no answer within ${ALLDEBRID_PLAY_DEADLINE_MS / 1000}s`
 		);
-		res.status(500).json({ error: 'Failed to play link' });
 	}
+	if ('failure' in outcome.value) {
+		return sendPlayFailure(res, 'ad', outcome.value.failure, outcome.value.detail);
+	}
+	res.redirect(outcome.value.url);
 }

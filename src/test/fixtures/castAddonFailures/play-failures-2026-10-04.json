@@ -2,6 +2,136 @@
 	"capturedAt": "2026-10-04",
 	"note": "Provider answers to the calls the DMM Cast play routes make. Each entry says where it comes from. No credential, member link or member address appears below.",
 	"responses": {
+		"ad-throttled": {
+			"provider": "ad",
+			"request": "GET https://api.alldebrid.com/v4/user, 40 at once",
+			"source": "AllDebrid's throttle, measured 2026-08-02: authenticated endpoints answer an empty HTTP 503 from Cloudflare with an HTML content type and no Retry-After. A 429 was never seen.",
+			"status": 503,
+			"contentType": "text/html",
+			"body": ""
+		},
+		"ad-unlock-auth-blocked": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/link/unlock",
+			"source": "dmm-01 logged this message for nine unlocks from DMM's server between 2026-10-04 00:06 and 00:14 UTC ('Error unlocking AllDebrid link: ...'), with three magnet and user calls refused the same way. The log keeps only the message; the code is AllDebrid's for it, recorded in full when debrid01 and debrid02 first used a key on 2026-08-06, minus the verification token that body carried.",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"error": {
+					"code": "AUTH_BLOCKED",
+					"message": "You are logging from a new location, device or app.. An <b>email has been sent</b> to"
+				}
+			}
+		},
+		"ad-unlock-bad-key": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/link/unlock",
+			"source": "Recorded 2026-10-04 from zen with a made-up 20-character key and a real /f/ link.",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "error",
+				"error": {
+					"code": "AUTH_BAD_APIKEY",
+					"message": "The auth apikey is invalid"
+				}
+			}
+		},
+		"ad-unlock-link-not-supported": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/link/unlock",
+			"source": "Recorded 2026-10-04 from zen with a premium test key and a well-formed /f/ token AllDebrid never issued; a truncated real token drew the same. AllDebrid's static demo keys, free and premium alike, answer this for every real /f/ link too.",
+			"status": 200,
+			"contentType": "application/json; charset=utf-8",
+			"body": {
+				"status": "error",
+				"error": {
+					"code": "LINK_HOST_NOT_SUPPORTED",
+					"message": "This host or link is not supported"
+				}
+			}
+		},
+		"ad-unlock-success": {
+			"provider": "ad",
+			"request": "POST https://api.alldebrid.com/v4.1/link/unlock",
+			"source": "Recorded 2026-10-04 from zen with a test key on its own /f/ link. The link, id, file name and path are replaced; the rest is as sent.",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "success",
+				"data": {
+					"link": "https://example.debrid.it/dl/0abcdefghij/Example.Movie.2025.mkv",
+					"host": "magnet",
+					"filename": "Example.Movie.2025.mkv",
+					"streaming": [],
+					"paws": false,
+					"filesize": 11066931716,
+					"id": "0abcdefghij",
+					"path": []
+				}
+			}
+		},
+		"ad-user-free": {
+			"provider": "ad",
+			"request": "GET https://api.alldebrid.com/v4.1/user",
+			"source": "Recorded 2026-10-04 with AllDebrid's static free demo key (staticDemoApikeyFree), whose answers match a real account's in shape.",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "success",
+				"demo": true,
+				"data": {
+					"user": {
+						"username": "demoUserFree",
+						"email": "demo@example.com",
+						"isPremium": false,
+						"isTrial": false,
+						"isSubscribed": false,
+						"premiumUntil": 0,
+						"lang": "en",
+						"preferedDomain": "com",
+						"fidelityPoints": 0,
+						"limitedHostersQuotas": {
+							"ddl": 2000,
+							"dropgalaxy": 145,
+							"filefactory": 3000
+						},
+						"notifications": []
+					}
+				}
+			}
+		},
+		"ad-user-premium": {
+			"provider": "ad",
+			"request": "GET https://api.alldebrid.com/v4.1/user",
+			"source": "Recorded 2026-10-04 with AllDebrid's static premium demo key (staticDemoApikeyPrem).",
+			"status": 200,
+			"contentType": "application/json",
+			"body": {
+				"status": "success",
+				"demo": true,
+				"data": {
+					"user": {
+						"username": "demoUserPremium",
+						"email": "demo@example.com",
+						"isPremium": true,
+						"isTrial": false,
+						"isSubscribed": false,
+						"premiumUntil": 1791950009,
+						"lang": "en",
+						"preferedDomain": "com",
+						"fidelityPoints": 130,
+						"limitedHostersQuotas": {
+							"ddl": 2000,
+							"dropgalaxy": 145,
+							"filefactory": 3000
+						},
+						"notifications": []
+					}
+				}
+			}
+		},
 		"rd-permission-denied": {
 			"provider": "rd",
 			"request": "A Real-Debrid torrent call made by DMM's uploader for a member (endpoint not recorded)",

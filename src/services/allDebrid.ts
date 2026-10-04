@@ -878,7 +878,9 @@ export const unlockLink = async (apiKey: string, link: string): Promise<UnlockLi
 		});
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Failed to unlock link');
+			// The code is the whole answer: AUTH_BLOCKED (confirm the email
+			// AllDebrid sent), AUTH_BAD_APIKEY, LINK_HOST_NOT_SUPPORTED.
+			throw allDebridEnvelopeError(response.data.error, 'Failed to unlock link');
 		}
 
 		return response.data.data!;
