@@ -1,5 +1,5 @@
 import { Logo } from '@/components/Logo';
-import { needsUsernameSlot, sabUrlBase } from '@/services/sabnzbdProxy';
+import { magicMountRoot, needsUsernameSlot, sabUrlBase } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { AlertTriangle, Check, Copy, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Head from 'next/head';
@@ -139,6 +139,7 @@ export default function SabnzbdSetupPage() {
 	useEffect(() => setOrigin(window.location.origin), []);
 
 	const viaUsername = needsUsernameSlot(mountRoot);
+	const magicRoot = magicMountRoot(mountRoot);
 	const urlBase = sabUrlBase(mountRoot);
 	const host = useMemo(() => (origin ? new URL(origin).hostname : ''), [origin]);
 	const port = useMemo(() => {
@@ -308,6 +309,59 @@ export default function SabnzbdSetupPage() {
 							Leave it blank if you only want *arr to track progress. Everything still
 							works; there is just nothing for it to import.
 						</p>
+					)}
+
+					{magicRoot && (
+						<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
+							<AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
+							<div>
+								<div className="mb-1 font-semibold text-gray-200">
+									On a zurg nightly? Import from __magic__ instead.
+								</div>
+								<p>
+									Use{' '}
+									<code className="rounded bg-gray-800 px-1.5 py-0.5 font-mono text-cyan-300">
+										{magicRoot}
+									</code>{' '}
+									here and put your Radarr and Sonarr root folders in{' '}
+									<code className="rounded bg-gray-800 px-1.5 py-0.5 font-mono text-cyan-300">
+										__magic__
+									</code>{' '}
+									next to it, like{' '}
+									<code className="rounded bg-gray-800 px-1.5 py-0.5 font-mono text-cyan-300">
+										__magic__/movies
+									</code>
+									. Every import is then instant and downloads nothing.
+								</p>
+								<p className="mt-2">
+									Importing straight from __all__ is risky. After each import,
+									Radarr and Sonarr delete the download folder there. On a zurg
+									nightly older than 2026.10.04.2240 that deletes the release from
+									your Real-Debrid account, along with what was just imported.
+								</p>
+								<p className="mt-2">
+									In Docker, give Radarr and Sonarr one volume that holds the
+									whole mount, so this folder and the root folders are on the same
+									volume.{' '}
+									<a
+										href="https://notes.debridmediamanager.com/guides/sonarr-radarr/#one-volume-for-the-download-folder-and-the-root-folders"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="underline decoration-dotted"
+									>
+										Why
+									</a>
+									. zurg-public has no __magic__, so keep __all__ there.
+								</p>
+								<button
+									type="button"
+									onClick={() => setMountRoot(magicRoot)}
+									className="mt-2 rounded border-2 border-yellow-500/50 bg-yellow-900/30 px-2 py-1 text-yellow-100 transition-colors hover:bg-yellow-800/50"
+								>
+									Use {magicRoot}
+								</button>
+							</div>
+						</div>
 					)}
 
 					<div className="mt-4 rounded border-2 border-gray-600/50 p-3 text-xs text-gray-300">

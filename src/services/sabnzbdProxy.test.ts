@@ -1,4 +1,5 @@
 import {
+	magicMountRoot,
 	needsUsernameSlot,
 	SAB_PREFIX,
 	sabError,
@@ -109,5 +110,27 @@ describe('needsUsernameSlot', () => {
 
 	it.each([['/mnt/zurg/__all__'], ['/data/media'], ['']])('leaves %s in the path', (value) => {
 		expect(needsUsernameSlot(value)).toBe(false);
+	});
+});
+
+describe('magicMountRoot', () => {
+	it.each([
+		['/mnt/zurg/__all__', '/mnt/zurg/__magic__/__all__'],
+		['/mnt/zurg/__all__/', '/mnt/zurg/__magic__/__all__'],
+		['  /data/zurg/__all__ ', '/data/zurg/__magic__/__all__'],
+		['Z:\\__all__', 'Z:\\__magic__\\__all__'],
+		['/__all__', '/__magic__/__all__'],
+	])('suggests __magic__/__all__ for %s', (root, want) => {
+		expect(magicMountRoot(root)).toBe(want);
+	});
+
+	it.each([
+		['already __magic__', '/mnt/zurg/__magic__/__all__'],
+		['a Windows __magic__', 'Z:\\__magic__\\__all__'],
+		['a plain rclone mount', '/mnt/rd/torrents'],
+		['a name that only ends in __all__', '/mnt/zurg/my__all__'],
+		['empty', ''],
+	])('suggests nothing for %s', (_name, root) => {
+		expect(magicMountRoot(root)).toBeNull();
 	});
 });

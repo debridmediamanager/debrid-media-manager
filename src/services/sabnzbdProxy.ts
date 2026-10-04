@@ -111,3 +111,24 @@ export function sabUrlBase(mountRoot: string): string {
 	const cleaned = value.replace(/^\/+/, '').replace(/\/+$/, '');
 	return cleaned ? `${base}/${cleaned}` : base;
 }
+
+/**
+ * The `__magic__` form of a zurg mount root that names `__all__`, or null when
+ * there is nothing to suggest.
+ *
+ * zurg nightlies serve `__magic__`, where an import out of `__magic__/__all__`
+ * into a root folder under `__magic__` is a rename that touches nothing on the
+ * account. Out of plain `__all__` the import is still a rename, but *arr then
+ * deletes its download folder there, and a delete in `__all__` deletes the
+ * release from Real-Debrid. Measured on 2026-10-04 with Sonarr 4.0.20: the
+ * release went 0.6 s after the import, taking the imported episode with it.
+ * zurg a51d2fc1 refuses that delete; older builds do not.
+ */
+export function magicMountRoot(mountRoot: string): string | null {
+	const value = mountRoot.trim();
+	const match = /^(.*?)([\\/])__all__[\\/]?$/.exec(value);
+	if (!match) return null;
+	const [, parent, sep] = match;
+	if (/[\\/]__magic__$/.test(parent) || parent === '__magic__') return null;
+	return `${parent}${sep}__magic__${sep}__all__`;
+}
