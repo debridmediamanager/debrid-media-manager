@@ -352,4 +352,56 @@ describe('ScrapedVerdictService', () => {
 			);
 		});
 	});
+
+	describe('the written-back trash sweep', () => {
+		it('reads movie pages changed after the cursor, oldest first, ties broken by key', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([
+				{ key: 'movie:tt1', updatedAt: new Date('2026-10-02T00:00:00Z') },
+			]);
+			const after = { key: 'movie:tt0', at: new Date('2026-10-01T00:00:00Z') };
+			const settled = new Date('2026-10-04T00:00:00Z');
+
+			await expect(
+				service.getChangedMoviePages('ScrapedTrue', after, settled, 200)
+			).resolves.toEqual([{ key: 'movie:tt1', at: new Date('2026-10-02T00:00:00Z') }]);
+
+			const query = prismaMock.$queryRaw.mock.calls[0][0] as Prisma.Sql;
+			const sql = sqlText(query).replace(/\s+/g, ' ');
+			expect(sql).toContain('FROM `ScrapedTrue`');
+			expect(sql).toContain("`key` LIKE 'movie:tt%'");
+			expect(sql).toContain('(updatedAt > ? OR (updatedAt = ? AND `key` > ?))');
+			expect(sql).toContain('updatedAt <= ?');
+			expect(sql).toContain('ORDER BY updatedAt, `key` LIMIT ?');
+			expect(query.values).toEqual([after.at, after.at, after.key, settled, 200]);
+		});
+
+		it('asks which movies have verdicts from the index alone', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([{ imdbId: 'tt1' }]);
+			await expect(service.getJudgedImdbIds(['tt1', 'tt2'])).resolves.toEqual(
+				new Set(['tt1'])
+			);
+			const query = prismaMock.$queryRaw.mock.calls[0][0] as Prisma.Sql;
+			expect(sqlText(query).replace(/\s+/g, ' ')).toContain('GROUP BY imdbId');
+			expect(query.values).toEqual(['tt1', 'tt2']);
+
+			prismaMock.$queryRaw.mockClear();
+			await expect(service.getJudgedImdbIds([])).resolves.toEqual(new Set());
+			expect(prismaMock.$queryRaw).not.toHaveBeenCalled();
+		});
+
+		it('keeps its cursor in the Cache table and ignores one it cannot read', async () => {
+			const cursor = { key: 'movie:tt1', at: new Date('2026-10-02T12:33:05.655Z') };
+			await service.setSweepCursor('Scraped', cursor);
+			const { where, create } = prismaMock.cache.upsert.mock.calls[0][0];
+			expect(where.key).toBe('verdicts:sweep:Scraped');
+			expect(create.value).toEqual({ key: 'movie:tt1', at: '2026-10-02T12:33:05.655Z' });
+
+			prismaMock.cache.findUnique.mockResolvedValueOnce({ value: create.value });
+			await expect(service.getSweepCursor('Scraped')).resolves.toEqual(cursor);
+			prismaMock.cache.findUnique.mockResolvedValueOnce({ value: { at: 7 } });
+			await expect(service.getSweepCursor('Scraped')).resolves.toBeNull();
+			prismaMock.cache.findUnique.mockResolvedValueOnce(null);
+			await expect(service.getSweepCursor('Scraped')).resolves.toBeNull();
+		});
+	});
 });

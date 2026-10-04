@@ -9,6 +9,7 @@ import {
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
+import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
 import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
 
 interface CronResponse {
@@ -32,6 +33,7 @@ interface CronResponse {
 	};
 	debridTransfers?: ReconcileResult;
 	transferFilings?: FilingSweepResult;
+	writtenBackTrash?: SweepResult;
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
 	error?: string;
@@ -104,6 +106,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Filing completed transfers failed:', e);
 		}
 
+		// A scraper merges a release back into a movie page after the verdict
+		// pass moved it to ScrapedTrash, and only a page view used to move it
+		// again; every reader of the page served it until then.
+		let writtenBackTrash: SweepResult | undefined;
+		try {
+			writtenBackTrash = await sweepWrittenBackTrash();
+		} catch (e) {
+			console.error('[Cron] Moving written-back trash failed:', e);
+		}
+
 		// Requests are only settled once their transfer has ended, and nothing
 		// else is watching them: a fulfiller moves on the moment they click.
 		let contentRequests: RequestReconcileResult | undefined;
@@ -139,6 +151,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			dailyRollup,
 			debridTransfers,
 			transferFilings,
+			writtenBackTrash,
 			contentRequests,
 			freeRequestDeliveries,
 		});

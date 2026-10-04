@@ -43,6 +43,10 @@ export const pairKeyOf = (hash: string, title: string): string =>
 const LOCK_PREFIX = 'verdicts:lock:';
 const CHECKPOINT_PREFIX = 'verdicts:checked:';
 const TOKENS_PREFIX = 'verdicts:tokens:';
+const SWEEP_PREFIX = 'verdicts:sweep:';
+
+/** A page and when it last changed: a position in a table read oldest change first. */
+export type PageChange = { key: string; at: Date };
 
 function entriesOf(value: Prisma.JsonValue | undefined): StoredEntry[] {
 	return Array.isArray(value) ? (value as StoredEntry[]) : [];
@@ -319,6 +323,66 @@ export class ScrapedVerdictService extends DatabaseClient {
 			select: { hash: true, titleKey: true },
 		});
 		return new Set(rows.map((r) => `${r.hash.toLowerCase()}:${r.titleKey}`));
+	}
+
+	/**
+	 * Movie pages of one table that changed after `after`, oldest change first,
+	 * leaving out any that changed after `settledBefore`. Ties on the timestamp
+	 * are broken by key, so a batch that ends inside a tie resumes inside it.
+	 * The table has no index on `updatedAt`; on 2026-10-04 this read took about
+	 * a second, as the Torznab feed's own read of the newest pages does.
+	 */
+	public async getChangedMoviePages(
+		source: ScrapedSource,
+		after: PageChange,
+		settledBefore: Date,
+		limit: number
+	): Promise<PageChange[]> {
+		const table = Prisma.raw(`\`${source}\``);
+		const rows = await this.prisma.$queryRaw<{ key: string; updatedAt: Date }[]>(Prisma.sql`
+			SELECT \`key\`, updatedAt FROM ${table}
+			WHERE \`key\` LIKE 'movie:tt%'
+			  AND (updatedAt > ${after.at} OR (updatedAt = ${after.at} AND \`key\` > ${after.key}))
+			  AND updatedAt <= ${settledBefore}
+			ORDER BY updatedAt, \`key\`
+			LIMIT ${limit}`);
+		return rows.map((row) => ({ key: row.key, at: row.updatedAt }));
+	}
+
+	/** Which of these movies have any verdict at all. Reads the index only. */
+	public async getJudgedImdbIds(imdbIds: string[]): Promise<Set<string>> {
+		if (imdbIds.length === 0) return new Set();
+		const rows = await this.prisma.$queryRaw<{ imdbId: string }[]>(Prisma.sql`
+			SELECT imdbId FROM ScrapedVerdict
+			WHERE imdbId IN (${Prisma.join(imdbIds)})
+			GROUP BY imdbId`);
+		return new Set(rows.map((row) => row.imdbId));
+	}
+
+	/** IMDb's primary title, which a trash record names the movie by. */
+	public async getMovieName(imdbId: string): Promise<string | null> {
+		const basics = await this.prisma.imdbTitleBasics.findUnique({
+			where: { tconst: imdbId },
+			select: { primaryTitle: true },
+		});
+		return basics?.primaryTitle ?? null;
+	}
+
+	/** Where the written-back trash sweep stopped in one table. */
+	public async getSweepCursor(source: ScrapedSource): Promise<PageChange | null> {
+		const row = await this.prisma.cache.findUnique({ where: { key: SWEEP_PREFIX + source } });
+		const value = row?.value as { key?: unknown; at?: unknown } | undefined;
+		if (typeof value?.key !== 'string' || typeof value.at !== 'string') return null;
+		return { key: value.key, at: new Date(value.at) };
+	}
+
+	public async setSweepCursor(source: ScrapedSource, cursor: PageChange): Promise<void> {
+		const value = { key: cursor.key, at: cursor.at.toISOString() };
+		await this.prisma.cache.upsert({
+			where: { key: SWEEP_PREFIX + source },
+			update: { value },
+			create: { key: SWEEP_PREFIX + source, value },
+		});
 	}
 
 	/** Model input tokens spent on `day` (YYYY-MM-DD, UTC) across every instance. */

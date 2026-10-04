@@ -1,0 +1,2694 @@
+{
+	"_about": [
+		"Four movie pages read from production on 2026-10-04 in a read-only session: each page's ScrapedTrue and Scraped arrays as stored, with the verdict ScrapedVerdict holds for each (hash, title) pair (null: not judged yet) and, for a trash verdict, when ScrapedTrash first recorded that pair being moved off this table's page.",
+		"Drawn from 400 randomly chosen judged movie pages: 27 of the 393 with a ScrapedTrue row still carried 137 results with a trash verdict, these four among them. Every one of those 33 results here had been moved to ScrapedTrash before and written back by a scraper since: the page's updatedAt is later than its checkpoint.",
+		"checkpoint is the verdict pass's Cache record for the page (verdicts:checked:movie:<id>)."
+	],
+	"capturedAt": "2026-10-04",
+	"pages": [
+		{
+			"key": "movie:tt0235679",
+			"imdbId": "tt0235679",
+			"movieTitle": "Pokémon 3 the Movie: Spell of the Unown",
+			"year": 2000,
+			"checkpoint": {
+				"engine": "rules-v6.5+jev",
+				"checkedAt": "2026-09-30T06:45:58.120Z"
+			},
+			"ScrapedTrue": {
+				"updatedAt": "2026-09-30T16:44:05.553Z",
+				"entries": [
+					{
+						"hash": "19a1323c0e98d3ddf2d7fc70fc4a5dea4c2ad45c",
+						"title": "Pokémon Movies 1-23 (BD 1080p 5.1) (Japanese Audio Only with Matching Subs)",
+						"fileSize": 147701.76,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "334c016aef3765ad3c044eed05ffbb8e7290cd99",
+						"title": "[ColdFusion] Pokemon Movies 1-23 + Shorts + Specials (ENGLISH DUB ONLY)",
+						"fileSize": 137891.84,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "dcbf6675dce83c8dfe4095a814bd71dc0e27ba66",
+						"title": "[zerocool] Pokemon the movie 2000 nostalgia whore edition",
+						"fileSize": 23470.08,
+						"verdict": null,
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "60b142b3a18222c81f46ce5e009b68eb190868ed",
+						"title": "Pokemon 3: the Movie 2000 1080p Blu-ray AVC TrueHD 5.1",
+						"fileSize": 21606.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c8eda5d11fc129184ae1e140593cb1931b8dd5e8",
+						"title": "Pokémon 3: The Movie: Entei - Spell of the Unown 2000 1080p Blu-ray AVC DTS-HD MA 5.1",
+						"fileSize": 17674.24,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9fb73e8a7d95d6646ffb98cfb0a2426ea6a3ae75",
+						"title": "Pokemon.3.-.The.Movie.2000.1080p.Blu-ray.AVC.LPCM.2.0",
+						"fileSize": 16838.03132629395,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ac10f28943ff4c39051ecdb81670f049c33958c5",
+						"title": "Pokemon Spell of the Unown 2000 1080p BluRay REMUX AVC DTS-HD MA 2.0-Mx",
+						"fileSize": 16588.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7c02734d15a9258da805d22bb1e61f10c6517f12",
+						"title": "Stiahni si HD Filmy Pokemon 3: Podlehnete kouzlu Unowna / Pokemon 3: The Movie (2000)(CZ/EN)[WebRip][1080p][AVC]",
+						"fileSize": 15974.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a9747ea0dfb7bd507347edc653d7568e1bc25a10",
+						"title": "Pokemon.3.The.Movie.2000.DUBBED.1080p.BluRay.REMUX-DDB",
+						"fileSize": 15820.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "92c8ba8664e51a400631d1d5f686ec637423a791",
+						"title": "Pokémon Movies 12-21[HEVC BDrip 1080p][Multi-Audio][Multi-Subs]",
+						"fileSize": 15298.56,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "57186ce79264426ee1019ec05cf7ae141ab3a81a",
+						"title": "Pokémon 3: The Movie (Kesshoutou no Teiou Entei/Pokemon Movie 3/Pokémon: Spell Of The Unown) [BDRip 1080p x264] [English Dub].mkv",
+						"fileSize": 13168.64,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c957505bb765baac94e3dc03430c21711ba7e990",
+						"title": "Pokemon 3 The Movie Spell of the Unown (2000).mkv",
+						"fileSize": 6871.04,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7b82c566cffb488ff549ea00e914cd2595fdf9ad",
+						"title": "[P-N] Gekijouban Pocket Monsters 03 'Kesshoutou no Teiou' v3 RAW+DUB BD [NO SUBS]",
+						"fileSize": 5632,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "26e39339d49459bfc3dae3d3d06c34698f758047",
+						"title": "[P-N] Gekijouban Pocket Monsters 03 'Kesshoutou no Teiou' v2 RAW+DUB BD [NO SUBS]",
+						"fileSize": 5632,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "50a6bffe3c914e90f595c116761f1a2a2f20e2c6",
+						"title": "Pokemon The Movie 2000 'Pikachu's Rescue Adventure' and 'The Power of One' [WEBDL-720p-FMA1394 P-O] [3F21BC07].mkv",
+						"fileSize": 5427.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "100e69b10cdbb5435fb3d31c5e55a64071515cbc",
+						"title": "Pokemon.3.the.Movie.Spell.of.the.Unown.(2000).(1080p.BDRip.x265.10bit.DTS-HD.MA.5.1.-.r0b0t).[TAoE].mkv",
+						"fileSize": 5393.41856098175,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "85115d67076623df3ad3ce87e7a0315d0b46ee5a",
+						"title": "[Daman] Pokemon Movie 03: Spell of The Unown [1280x688_Blu_Ray_Dual_Audio]",
+						"fileSize": 4884.48,
+						"verdict": null,
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6d525d2dc787d755246e3707b56196d0725aa00b",
+						"title": "Pokemon Movie 03 - L'incantesimo degli Unown [1080p x264 - Ita Jap AC3 - Sub Ita Eng] - Gianplasma97",
+						"fileSize": 4751.36,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8a37de77763f4d59c61f4966f834bedd4e19dd9d",
+						"title": "Pokemon.3.the.Movie.Spell.of.the.Unown.(2000).(1080p.BDRip.x265.10bit.AC3.5.1.-.r0b0t).[TAoE].mkv",
+						"fileSize": 4626.380114555359,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "fde36ac73a9abf9842aa3b441e748fb3977e2746",
+						"title": "Pokemon.3.The.Movie.2000.DUBBED.1080p.BluRay.x264-HAiKU",
+						"fileSize": 4548.970043182373,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0211aac1edb0d840a92fe0b7ffb7afe671733a56",
+						"title": "[bxyh]_Pokemon_The_Movie_Spell_of_the_Unown_[Web_720p_AAC_Dual][EA5E2E08].mkv",
+						"fileSize": 4382.72,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f0e27802b6cebe31fddfa942d0cb72c1b842c4dc",
+						"title": "Pokémon Movie 03: Spell of the Unown 2000 720p Bluray x264 AC3 - BluDragon",
+						"fileSize": 4372.48,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0a3b9bb87a9b1e54a5e65159bd2e25dc1e0bd46f",
+						"title": "Pokémon 3: The Movie AKA Gekijôban Poketto Monsutâ Kesshôtô no Teiô Entei 2000 NOR PAL DVD5 DD 5.1-D7",
+						"fileSize": 4147.2,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "285a8ca6cf1cb8ef246608022155c445133c3704",
+						"title": "Pokemon Movie 03 DVD5 ISO ENG-RUS-HUN",
+						"fileSize": 4024.32,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "19f87ddf68a7556505a766dbf19eeb9161ad28a7",
+						"title": "Pokemon.The.Movie.3.The.Spell.of.the.Unown.2000.BluRay.1080p.DTSHD-MA.x265.REMASTER-PRAGMA",
+						"fileSize": 3935.307455062866,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5756999d9d09dd0b29d748127bcf1860221f1a67",
+						"title": "[zerocool] Pokémon 3 The Movie Spell of the Unown Nostalgia Whore edition V3 OPEN MATTE",
+						"fileSize": 3717.12,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f858329006cb9ca1efb493053719946e9d74fac0",
+						"title": "[coldhell] Pokemon 3: Spell of the Unown [1080p 10bit h.264 @crf19 + 5.1 Jap FLAC + 5.1 EN AC-3]",
+						"fileSize": 3706.88,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e42900f4977be67666fee58fc1e776a64cc47fd5",
+						"title": "Pok&eacute;mon 3 El Hechizo de los Unown [HD 1080] [Castellano]",
+						"fileSize": 3621.308268547058,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2fd30dacb1ec2a3d9767a72417a9738a1ddc0dd1",
+						"title": "Pokemon The Movie 3 2000 720p WEB-DL.mkv",
+						"fileSize": 3505.72922706604,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f1fdc3d363d915febffa5741038ce13c267b5924",
+						"title": "Pokémon.O.Filme.3.O.Feitiço.dos.Unown.2000.FULLSCREEN.1080p.BluRay.H264.AC3.2.0-5.1.DUAL-MLD-BLUDV",
+						"fileSize": 3461.12,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "d36d8532103463447c2737516ca9ffe3f84620be",
+						"title": "Pokemon.the.Movie.2000.1080p.WEB-DL.AAC2.0.H264-YE.mkv",
+						"fileSize": 3123.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "1e3ed17648a4be7e734da4d7d4a104a0b735c111",
+						"title": "Pokémon 3: The Movie - Spell of the Unown (2000) (1080p iT WEB-DL Upscale x265 HEVC 10bit AC3 5.1 Bluespots) [QxR]",
+						"fileSize": 2990.08,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "40783f80a426baa5cad940e788ddb46fb7b0df87",
+						"title": "Pokemon.3.Le.Sort.Des.Zarbi.2000.VFF.1080p.WEB.AC3.5.1.H264-MaitreAnonyme",
+						"fileSize": 2969.6,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8b243bc4a25dd7d7eaf36131c73cb7af9432fabd",
+						"title": "Pokemon.3.Le.Sort.Des.Zarbi.2000.MULTI.VF2.1080p.WEBRip.AAC.2.0.x265-NOTAG",
+						"fileSize": 2785.28,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8c9512d4abf2f6c1ab19a1ae5635b7072666d280",
+						"title": "Pokemon The Movie 3 (High Quality)(Quad Audio) MKV [720p] Blu-Ray Rip",
+						"fileSize": 2150.4,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "19f9a946eeb39e4b9111ea31e666d61d2618df4a",
+						"title": "Pokemon 3 (2001) [BluRay 720p X264 MKV][AC3 5.1 Castellano][www.PCTRELOAD.COM]",
+						"fileSize": 1679.36,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "97c18f235268fa4f5af3b63686701a65027a7ded",
+						"title": "Pokémon.The.Movie.2000.Power.of.One.NORDiC.DVDRip.x264-POLiTiCAL",
+						"fileSize": 1617.92,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "e0e0aa5732f843d2e41bc3ee01d91202f83f0b59",
+						"title": "Pokémon 3 the Movie: Spell of the Unown 2000 1080p BluRay",
+						"fileSize": 1249.28,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a28b79f7b36d22d44390bb3f59d4f41af8d09906",
+						"title": "Pokemon 3 The Movie Spell Of The Unown (2000) 1080p BluRay-WORLD",
+						"fileSize": 1249.28,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8beb7a83d1c450571309f3e37edc7b154a9214d2",
+						"title": "Pokémon_3_The_Movie_1080p_WEB-DL_AAC_x264 - [CUK]",
+						"fileSize": 1228.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0b7b6c8b26a068c76e76ed70910927e3c57ca63f",
+						"title": "Pokémon 3 El hechizo de los Unown (2000) (Children's_movies)",
+						"fileSize": 1187.84,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f4ad8203ab48adf3a2f2a9c75ce13b099bba23c0",
+						"title": "Pokemon The Movie 2000",
+						"fileSize": 1075.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "aba84ab7e6a6d479452747695f353133f6167ab2",
+						"title": "[Hakata Ramen] Pokemon Movie 03 + OST [1080p][HEVC][x265][10bit][Dual-Audio][Eng-Sub] HR-J",
+						"fileSize": 1002.89,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "ec1b257d2b3b543567758bc52a6b55c784d424f6",
+						"title": "Pokemon 3 The Movie 2000 EngDub 720p BluRay x264 AAC-ALiB3LLY",
+						"fileSize": 902.42,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b9e814bf54220720eba9d78c3d59394ff1f36fac",
+						"title": "Pokemon.25.Movie.Collection.720p.H264.AC3.MadWatchDog.Will1869",
+						"fileSize": 896.69,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "662cabb26e54fd0e9773feed5ec942b4c8347798",
+						"title": "POKEMON THE MOVIE 2000.avi",
+						"fileSize": 751.43,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "79188bf9bbf710a540cc7fbb10074553b337762f",
+						"title": "Pokemon The Movie 2000 (1999) (1999) 720p BluRay-WORLD",
+						"fileSize": 737.86,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "84d50e9fe5f1a0ebb9b8cd1c8f5157a0b08e8a10",
+						"title": "Pokemon the movie 2000 - The Power Of The One.avi",
+						"fileSize": 701.97,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "a3367a08f8237f3c9d91332998f91e7a9a167c91",
+						"title": "Pokemon.3.2001.SWEDISH.DVDRip.XViD-andreaspetersson",
+						"fileSize": 701.29,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "50c9ccf4c7a6dddb69d96b34522b082537a7b7a3",
+						"title": "Pokemon 3 - Zaklęcie Unown 2000 [Lucky]",
+						"fileSize": 700.02,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1abb2348eed34c5cd8ccf3e46013df02be263937",
+						"title": "Pokemon 3 The Movie Spell Of The Unown (2000) 720p BluRay-WORLD",
+						"fileSize": 674.91,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "57f9bca27064a892b1ca1abc7bd485a4c45511ba",
+						"title": "Pokémon 3 the Movie: Spell of the Unown 2000 720p BluRay",
+						"fileSize": 674.9,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e91e573454140b79ba6ac309ff47c57194502b84",
+						"title": "Pokemon_-_The_Movie_2000(Svenskt Tal).avi",
+						"fileSize": 666.17,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "9d1b1e42a7c581b7621b694bbc9fa2f6b0f85321",
+						"title": "[metahades] Pokémon the Movie 2000 (Ash Cawm Tau Lub Ntiaj Teb) - Hmong Dub (Lost Media Found) - CAMrip X Facebook.mp4",
+						"fileSize": 519.91,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					},
+					{
+						"hash": "10a6d6d5aff99d0c927abebb2452179c703897b6",
+						"title": "Pocket Monsters Movie 14 Trailers SUB",
+						"fileSize": 313.55,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-30T06:46:04.997Z"
+					}
+				]
+			},
+			"Scraped": {
+				"updatedAt": "2026-06-05T11:57:16.606Z",
+				"entries": [
+					{
+						"hash": "71b90ab802d7fdcc80f4ce5ee1588f25e3a30c8d",
+						"title": "[zerocool] pokemon 3 the movie.nostalgiaWhoreEditoin",
+						"fileSize": 20972,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "09addff373bab7b900389107e20528c95ef1e0a1",
+						"title": "[zerocool] pokemon 3 the movie.nostalgiaWhoreEditoin",
+						"fileSize": 20050,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7c02734d15a9258da805d22bb1e61f10c6517f12",
+						"title": "Pokemon 3: Podlehnete kouzlu Unowna / Pokemon 3: The Movie (2000)(CZ/EN)[WebRip][1080p][AVC] = CSFD 27%",
+						"fileSize": 15974.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a9747ea0dfb7bd507347edc653d7568e1bc25a10",
+						"title": "Pokemon.3.The.Movie.2000.DUBBED.1080p.BluRay.REMUX-DDB",
+						"fileSize": 15821,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "57186ce79264426ee1019ec05cf7ae141ab3a81a",
+						"title": "Pokémon 3 The Movie (Kesshoutou no Teiou Entei) [BDRip 1080p x264] [English Dub].mkv",
+						"fileSize": 13169,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c957505bb765baac94e3dc03430c21711ba7e990",
+						"title": "Pokemon 3 The Movie Spell of the Unown (2000).mkv",
+						"fileSize": 6871.04,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c0d1891963bdafab7fe2f1c91b89523edd90006f",
+						"title": "Pokemon.Film.03.Le.sort.des.Zarbi.2000.FRENCH.DVDISO.576p.MPEG.FranceTV-MaitreAnonyme.iso",
+						"fileSize": 5734.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "26e39339d49459bfc3dae3d3d06c34698f758047",
+						"title": "[P-N] Gekijouban Pocket Monsters 03 'Kesshoutou no Teiou' v2 RAW+DUB BD [NO SUBS]",
+						"fileSize": 5632.247233390808,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7b82c566cffb488ff549ea00e914cd2595fdf9ad",
+						"title": "[P-N] Gekijouban Pocket Monsters 03 'Kesshoutou no Teiou' v3 RAW+DUB BD [NO SUBS]",
+						"fileSize": 5631.968532562256,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "375cd88d466c91b6a76d7c0d46d5cbbc0835ff86",
+						"title": "Pokemon.Film.03.Le.sort.des.Zarbi.2000.FRENCH.DVDISO.576p.MPEG.FranceTV-MaitreAnonyme.iso",
+						"fileSize": 5427.2,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8951d111c58db18a377278daaa1a3cbbeb39bfec",
+						"title": "Pokemon 3 the Movie Spell of the Unown (2000) (1080p BDRip x265 10bit DTS-HD MA 5.1 - r0b0t) [TAoE].mkv",
+						"fileSize": 5396,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "85115d67076623df3ad3ce87e7a0315d0b46ee5a",
+						"title": "[Daman] Pokemon Movie 03: Spell Of The Unown BDRip [720p Dual Audio]",
+						"fileSize": 4884.48,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "83993c4d1d0b1582b604030570fe8f7a87fbfc5d",
+						"title": "Pokemon 3 - The Movie (2000) FullHD LAT - ZeiZ",
+						"fileSize": 4761.6,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0211aac1edb0d840a92fe0b7ffb7afe671733a56",
+						"title": "[bxyh]_Pokemon_The_3_Movie_Spell_of_the_Unown_[Web_720p_AAC_Dual][EA5E2E08] (200..",
+						"fileSize": 4382.72,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "185d69fa66e3b98fa65a00cb65d7b70cc0253f67",
+						"title": "pokemon-3-the-movie-t-1",
+						"fileSize": 4177.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2cad40601fc83bac3e460703b87be597e42450c9",
+						"title": "Pokemon.Film.03.Le.sort.des.Zarbi.2000.MULTI.FR.EN.NL.DVDISO.576p.MPEG.WarnerBros-MaitreAnonyme.iso",
+						"fileSize": 4096,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8f4b0774a2af36c8fdb6d19f0fff9b042712dc1d",
+						"title": "Покемон: Заклятие Аноунов (Фильм 3) / Pokemon 3: The Movie - Spell of the Unown (Кунихико Юяма) [Movie] [RUS(int), ENG+Sub] [2000, кодомо, комедия, фэнтези, DVD5] [Американская версия]",
+						"fileSize": 3891.86328125,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3caed93ee8776f7221febcbaec66d8d8f07ee5e5",
+						"title": "Pokemon.Film.03.Le.sort.des.Zarbi.2000.FRENCH.DVDISO.576p.MPEG.FranceTV-MaitreAnonyme.iso",
+						"fileSize": 3891.86328125,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2b84e3561a2b339db452d4c27362867a50550b56",
+						"title": "Pokemon The Movie 3 &#x27;Spell of the Unown&#x27; [WEBDL-720p-FMA1394 P-O].mkv",
+						"fileSize": 3758.08,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "73e046dd593428247c8319c87ed5f59dd7ec4a0b",
+						"title": "Pokemon The Movie 3 &#x27;Spell of the Unown&#x27;.mkv",
+						"fileSize": 3758.08,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5c39b1fb05c76e15beb208938fe40928a9cd9acd",
+						"title": "Покемон: Чары Аноунов + Пикачу и Пичу (фильм 3) / Pokemon 3: The Movie - Spell of the Unown / Pikachu &amp; Pichu (Кунихико Юяма) [Movie] [RUS(int), ENG+Sub] [2000, кодомо, приключения, фэнтези, WEBRip] [720p] [Американская версия]",
+						"fileSize": 3755.35595703125,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5756999d9d09dd0b29d748127bcf1860221f1a67",
+						"title": "[zerocool] Pokémon 3 The Movie Spell of the Unown Nostalgia Whore edition V3 OPEN MATTE",
+						"fileSize": 3718.538452148438,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8965bba512d5c93c7ffdaefb16a08440a93ac374",
+						"title": "03. Pokemon 3 The Movie [BDRip-1080p]",
+						"fileSize": 3656,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4e8fcef4e8b7786589fba28448d210a8feb3512c",
+						"title": "03.Pokemon 3 The Movie - The Spell of Unown [BDRip-1080p][LightEssence].mkv",
+						"fileSize": 3656,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7067875f25c48338d3bdaf7bcffa0a1bf6e34848",
+						"title": "03.Pokemon 3 The Movie - The Spell of Unown [BDRip-1080p][LightEssence].mkv",
+						"fileSize": 3656,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "209f255d4e1a2061498d86f9435b28e8651f9b5f",
+						"title": "Pokemon.film.3.Zaklytie.anouna.2000.BDRip.mkv",
+						"fileSize": 3655.68,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2fd30dacb1ec2a3d9767a72417a9738a1ddc0dd1",
+						"title": "Pokemon The Movie 3 2000 720p WEB DL",
+						"fileSize": 3502.08,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f1fdc3d363d915febffa5741038ce13c267b5924",
+						"title": "Pokémon.O.Filme.3.O.Feitiço.dos.Unown.2000.FULLSCREEN.1080p.BluRay.H264.AC3.2.0-5.1.DUAL-MLD-BLUDV",
+						"fileSize": 3461.12,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b493a8b340ee6c51bca5efe81ea7e0e642ea0ca0",
+						"title": "[SMC] Pokémon 3 The Movie - Lord of the Unknown Tower",
+						"fileSize": 3195,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1e3ed17648a4be7e734da4d7d4a104a0b735c111",
+						"title": "Pokemon 3 - The Movie - Spell of the Unown (2000) (1080p WEB Upscale x265 HEVC 10bit AC3 5.1 Bluespots)",
+						"fileSize": 3133.44,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e0f4e1340a35534867acb0d06fa41afdb0dc9b44",
+						"title": "[bxyh]_Pokemon_The_Movie_3_Spell_of_the_Unown_[DVD_576p_AAC_Dual][6DFE1C76].mkv",
+						"fileSize": 2969.60009765625,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "d4eddb4edfd20714b555f970321230be602f7369",
+						"title": "Pokémon Film 03 - Le sort des Zarbi (2001) [TRUEFRENCH WEB-DL 1080p AVC] - MaîtreAnonyme",
+						"fileSize": 2969.60009765625,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "18d849798f5ecc9edb99b5a14bc1bbfea62cdee0",
+						"title": "宠物小精灵.结晶塔的帝王.Pocket.Monsters.Lord.of.the.UNKNOWN.Tower.2000.BD1080P.X264.AC3.Japanese.CHS.Adans",
+						"fileSize": 2897.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8c9512d4abf2f6c1ab19a1ae5635b7072666d280",
+						"title": "Pokemon The Movie 3 (High Quality)(Quad Audio) MKV [720p] Blu Ray Rip",
+						"fileSize": 2150.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "627d46e475c106106edfc4c1a04af348d401c75e",
+						"title": "[BluDragon] Pokemon The Movie 3 - Spell of the Unown [R2, x264, Dual Audio]",
+						"fileSize": 2150.39990234375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "615bd93a368a3a64f5fd81bc34373060783e6470",
+						"title": "03. Pokemon 3 The Movie - The Spell of Unown [BDRip-720p][LightEssence].mkv",
+						"fileSize": 1976,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "84f6f48782c49db332b7ef56ce6aa763a105b4c7",
+						"title": "[tilla13] Pokemon Movie 03  The Movie (1024x576 x264 AC3)",
+						"fileSize": 1720.32,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "130ca2116b89c913ee2849500bcf92ccd4450506",
+						"title": "Pokemon the Movie Lord of the Unknown Tower 2000 1080p",
+						"fileSize": 1710.08,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "728f22412e7b56066cdb42d3446aae9e5bda3545",
+						"title": "Shiniori Raws Pokemon The Movie 03 2000 BD 1280x720 x264 AAC mp4",
+						"fileSize": 1679.359985351562,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "631e967f1d03c92a3d181ea227cfe682f12f1d30",
+						"title": "宠物小精灵.结晶塔的帝王.Pocket.Monsters.Lord.of.the.UNKNOWN.Tower.2000.BD1080P.X264-中文字幕.mkv",
+						"fileSize": 1658.88,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9dce7a0bd9e0616541f34c0eaa7b77dfbff5597c",
+						"title": "Покемон: Чары Аноунов + Пикачу и Пичу (Фильм 3) / Pokemon 3: The Movie - Spell of the Unown / Pikachu and Pichu (Кунихико Юяма) [Movie] [RUS(int)] [2000, кодомо, комедия, фэнтези, DVDRip] [Американская версия]",
+						"fileSize": 1484.8671875,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a614acf053d2c4f65fa71b7a74b2a58eaccaad11",
+						"title": "[M-F] Pocket Monsters (Pokémon) Film 3 Kesshou tou no teiou Entei Vostfr [Blu-ray 1080p].mp4",
+						"fileSize": 1443.84,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a7a6a21f9e851c1475c76d29054a996d1754291e",
+						"title": "Pokemon Movie 03 Spell of the Unown",
+						"fileSize": 1372.16,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8d27e56479fcc12a0e66b25eac80f848aa4b8c3c",
+						"title": "Pokemon/PokÃ©mon 3: The Movie: Spell of the Unown (2001) NORDiC DVDRip x264-PO..",
+						"fileSize": 1259.52,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e0e0aa5732f843d2e41bc3ee01d91202f83f0b59",
+						"title": "Pokemon 3 The Movie Spell Of The Unown (2000) [1080p] [BluRay] [YTS.MX]",
+						"fileSize": 1249,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f2a78f509e0c8f48652488aaeda737a57117a215",
+						"title": "PokemonS01M03Pokemon3TheMovieSpellOfTheUnown",
+						"fileSize": 1239,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6de5b3157522f834b4c0d71d09e4302f1c9293e1",
+						"title": "PokemonS01M03Pokemon3TheMovieSpellOfTheUnown",
+						"fileSize": 1239,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8beb7a83d1c450571309f3e37edc7b154a9214d2",
+						"title": "Pokémon_3_The_Movie_1080p_WEB DL_AAC_x264 CUK",
+						"fileSize": 1228.799999237061,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f7c5c6242ad07a4671fae3c50398ac60c868f6a8",
+						"title": "[C2Club][Pocket_Monsters_Movie_3][Lord_of_the_UNKNOWN_Tower][X264_AC3]",
+						"fileSize": 1136.64,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "d931cf91810c7db78aed3b7890b185250d18af27",
+						"title": "pokemon-3-the-movie-t-2",
+						"fileSize": 1004.64,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2f1a0cab9db9ce066c7e8c1143a7bd7a278bed82",
+						"title": "Pokemon 3 The Movie",
+						"fileSize": 1000,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ec1b257d2b3b543567758bc52a6b55c784d424f6",
+						"title": "Pokemon 3 The Movie 2000 EngDub 720p BluRay x264 AAC ALiB3LLY",
+						"fileSize": 902.4199829101562,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "970b97eb81e074e61dcb0d68e09404bf4796584d",
+						"title": "Pocket Monsters - Movie 3 - ENTEI Lord of the Unknown Tower [Puto][BC5F8A13].mkv",
+						"fileSize": 899.0432386398315,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "69a7d44889d8781d5aec9cfe65ad7e022cf37dcd",
+						"title": "Pokemon 3 - El hechizo de los Unown [DVDRip] [Spanish] [www.divxatope.com]",
+						"fileSize": 827.24,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5e9f1e321faf177c4424d1f50359af3b1788d8bd",
+						"title": "Pokemon 3 In de greep van unown 2001 (NL) TBS",
+						"fileSize": 729.64,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a3367a08f8237f3c9d91332998f91e7a9a167c91",
+						"title": "Pokemon.3.2001.SWEDISH.DVDRip.XViD-andreaspetersson",
+						"fileSize": 701.289999961853,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "50c9ccf4c7a6dddb69d96b34522b082537a7b7a3",
+						"title": "Pokemon 3 - Zaklęcie Unown 2000 [Lucky]",
+						"fileSize": 700.02,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "198de86585114d3fcea5dd9d1b416c5e86723d13",
+						"title": "Pokémon.the.Movie.3.Lord.of.the.Unknown.Tower.SWESUB.DVDrip-Fula",
+						"fileSize": 699.9899997711182,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ed9396874f5fe753b9f8df32b7805542d8b84227",
+						"title": "Pokémon 3 Im Bann der Icognito (2000).mkv",
+						"fileSize": 698.2099990844727,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0d3382fce5c2d293261a27f0db1ba09242ac8cd5",
+						"title": "Pokémon 3 Spell of the Unknown (2000).avi",
+						"fileSize": 693.32,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "043ef5885ddd9b05f79e4e9e620eff555d3f2d80",
+						"title": "Pokemon 3 DVDRip_DivX",
+						"fileSize": 693.3199996948242,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e42900f4977be67666fee58fc1e776a64cc47fd5",
+						"title": "Pokémon 3 El Hechizo de los Unown [HD 1080] [Castellano]",
+						"fileSize": 683.5,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "57f9bca27064a892b1ca1abc7bd485a4c45511ba",
+						"title": "Pokemon 3 The Movie Spell Of The Unown (2000) [720p] [BluRay] [YTS.MX]",
+						"fileSize": 675,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9c7c2bf8e09ab79082c7bca233ccc74aa19b327b",
+						"title": "[M-F] Pocket Monsters (Pokémon) Film 3 Kesshou tou no teiou Entei Vostfr [Blu-ray 1080p].mp4",
+						"fileSize": 641.2,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "121b3a0abe5f8ed92bd2f645ebd61cd1a3585f34",
+						"title": "Покемон 3 - Заклятие Аноунов / Покемон: Повелитель кристальной башни / Pokemon 3: The Movie - Spell of the Unown [Movie] [RUS(int)] [2000, детский, комедия, приключения, фэнтези, DVDRip] [HWP] [Американская версия] VO (Леонид Векшин)",
+						"fileSize": 628.927734375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "481248f0ee85ba76e5b1f05c913b686ac26c2da9",
+						"title": "Pokemon.Film.03.Le.sort.des.Zarbi.2000.MULTI.FR.EN.NL.DVDISO.576p.MPEG.WarnerBros-MaitreAnonyme.iso",
+						"fileSize": 628.927734375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "aa3ebb89b52fe109e16def941319a775bb35956d",
+						"title": "Pokemon 3   The Movie [DVDrip ITA] TNT Village",
+						"fileSize": 617.719970703125,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c8eaaadf974c3375635d5c9d27abf1c600bb4958",
+						"title": "Pokémon.3.Le.Sort.Des.Zarbi.FRENCH.DVDRiP.XviD.K13.avi",
+						"fileSize": 542.26,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			}
+		},
+		{
+			"key": "movie:tt0313990",
+			"imdbId": "tt0313990",
+			"movieTitle": "Doraemon: Nobita's Little Star Wars",
+			"year": 1985,
+			"checkpoint": {
+				"engine": "rules-v6.5+jev",
+				"checkedAt": "2026-09-29T06:06:58.029Z"
+			},
+			"ScrapedTrue": {
+				"updatedAt": "2026-10-02T12:33:05.655Z",
+				"entries": [
+					{
+						"hash": "4bb7b91ca7918d667a40ddfbb2db7041458b5488",
+						"title": "Doraemon Nobita's Little Star Wars 2021 (2022) (BD Remux 1080p AVC TrueHD Atmos) [21098B45] [RaptoR].mkv",
+						"fileSize": 29470.72,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:59.440Z"
+					},
+					{
+						"hash": "5bd381a1f44b67a1ee8b9b55d089d70657479569",
+						"title": "Doraemon Nobita's Little Space Wars 1985 HDTV 1080i MPEG-2 3Audio-doraemon.ts",
+						"fileSize": 14489.6,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:59.440Z"
+					},
+					{
+						"hash": "cd6d58670266a3d1a006cf784dadcdd182b73f68",
+						"title": "Doraemon: Nobita's Little Star Wars 1985 dvd",
+						"fileSize": 4300.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1aa9754e62281ec37eab37fde5535a7db1343114",
+						"title": "[RIPP RAWS] Doraemon Nobita's Little Star Wars 2021 [ドラえもん のび太 の 宇宙小戦争リトル スター ウォーズ 2021] Amzn WEB DL1080p.mkv",
+						"fileSize": 4096,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:59.440Z"
+					},
+					{
+						"hash": "a3f32a3cd1d887415128abf4c849a8598d8decdd",
+						"title": "[RIPP RAWS] Doraemon Nobita's Little Star Wars 2021 [ドラえもん のび太 の 宇宙小戦争リトル スター ウォーズ 2021] Amzn WEB DL 720p.mkv",
+						"fileSize": 2355.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:59.440Z"
+					},
+					{
+						"hash": "2930c65301760f1fd8b5a55cbeb005379c7c204e",
+						"title": "Doraemon Movie 6 - Nobita's Little Star Wars",
+						"fileSize": 896.54,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3f0ee7589b18c223889d6186011a6d8428d65e65",
+						"title": "Doraemon Movie 6 - Nobita's Little Star Wars",
+						"fileSize": 683.11,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			},
+			"Scraped": {
+				"updatedAt": "2026-04-09T09:25:48.361Z",
+				"entries": [
+					{
+						"hash": "b1b8dffb2583ca33d75493def1e246179648f7a8",
+						"title": "[wakajbr] Doraemon 6th (Nobita's Little Space War) (Nobita's Little Star Wars) (1985) [Jap-Hindi].mkv",
+						"fileSize": 4116,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3f0ee7589b18c223889d6186011a6d8428d65e65",
+						"title": "Doraemon Movie 6   Nobita's Little Star Wars",
+						"fileSize": 683.11,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			}
+		},
+		{
+			"key": "movie:tt1147514",
+			"imdbId": "tt1147514",
+			"movieTitle": "Doraemon: Nobita Drifts in the Universe",
+			"year": 1999,
+			"checkpoint": {
+				"engine": "rules-v6.5+jev",
+				"checkedAt": "2026-09-29T06:06:13.577Z"
+			},
+			"ScrapedTrue": {
+				"updatedAt": "2026-10-02T12:32:23.686Z",
+				"entries": [
+					{
+						"hash": "627a122d6f44a4970f19bc02a8061225e15bbb9c",
+						"title": "Doraemon Nobita Drifts in the Universe 1999 HDTV 1080i MPEG-2 AAC 5.1 & DD 2.0 6Audio-doraemon.ts",
+						"fileSize": 14490.86822509766,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "592e2d89e8fdb018634092d723a142de4255555b",
+						"title": "Doraemon: Nobita Drifts in the Universe 1999 dvd",
+						"fileSize": 4300.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4889b480441a3c320d50258df33d030edb05fd69",
+						"title": "Doraemon (1999) - Nobita's Night Before Wedding [Orange-Flash]",
+						"fileSize": 536.4,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:14.578Z"
+					},
+					{
+						"hash": "b27642e5a912d04608cddc6e9cb88af6d5e5f136",
+						"title": "【アニメ】 ドラえもん 1999.[同時上映].ザ☆ドラえもんズ おかしなお菓子なオカシナナ？【enc by FDH】.avi",
+						"fileSize": 140.8,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-29T06:06:14.578Z"
+					}
+				]
+			},
+			"Scraped": {
+				"updatedAt": "2026-04-11T10:58:49.630Z",
+				"entries": [
+					{
+						"hash": "627a122d6f44a4970f19bc02a8061225e15bbb9c",
+						"title": "Doraemon Nobita Drifts in the Universe 1999 HDTV 1080i MPEG-2 AAC 5.1 & DD 2.0 6Audio-doraemon.ts",
+						"fileSize": 14490,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "95725965007897a52167b7444eb6ef58ddbcfd20",
+						"title": "Doraemon: Odisea en el espacio.",
+						"fileSize": 1392.64,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			}
+		},
+		{
+			"key": "movie:tt32627540",
+			"imdbId": "tt32627540",
+			"movieTitle": "Watchmen: Chapter I",
+			"year": 2024,
+			"checkpoint": {
+				"engine": "rules-v6.1+jev",
+				"checkedAt": "2026-09-27T01:39:20.312Z"
+			},
+			"ScrapedTrue": {
+				"updatedAt": "2026-09-28T19:16:30.777Z",
+				"entries": [
+					{
+						"hash": "211058b788ca35a61cf41dc00e15d390e9dbbdf1",
+						"title": "Watchmen Chapter I 2024 2160p UHD Blu-ray HEVC DTS-HD MA 5 1-4KDVS",
+						"fileSize": 35694.77754402161,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "151517ffe7c2f660aadd6e3b8b579c009f3a806e",
+						"title": "Watchmen.Chapter.I.2024.2160p.COMPLETE.UHD.BLURAY-SILVEIRATeam.iso",
+						"fileSize": 35568.375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6dbccf8af80803cb022425a47d33c71240335a29",
+						"title": "Watchmen Chapter I 2024 REPACK COMPLETE BLURAY-PFa",
+						"fileSize": 33055.375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "16a37f68207215e466b3400b974b2cb8911fe4e2",
+						"title": "Watchmen Chapter I 2024 iNTERNAL UHD BluRay 2160p DTS-HD MA 5 1 HDR10 HEVC REMUX-seedpool",
+						"fileSize": 32718.05689620972,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c45d88fea24a1e46eeebaa5bf31bedf44c0e2d73",
+						"title": "DC Watchmen Chapter 1 2024 2160p UHD BluRay REMUX HDR10 HEVC DTS-HD-MA 5 1-UnKn0wn",
+						"fileSize": 32333.75220680237,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "82caa3662c2307f0a64089a1164ffce845bcd906",
+						"title": "Watchmen- Chapter I (2024) 2160p 4K UHD HDR10 DV Blu-ray REMUX Dual Audio [Hindi + English] ESub ~ RemuxDoc",
+						"fileSize": 32153.5999994278,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2b54f0bad667be4df8915aeef1024dc33f58f6fd",
+						"title": "Watchmen Chapter I 2024 2160p UHD BluRay H265-WOU",
+						"fileSize": 31797.29218959808,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b0c17219d55c9b2031c0f55dfbd8acbe064624bb",
+						"title": "Watchmen Chapter I (2024) BDRemux 2160p HDR Ukr Eng [Hurtom].mkv",
+						"fileSize": 31485.1512966156,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c75d4195254a72a45639eac8df885ee87725800c",
+						"title": "Watchmen Chapter I 2024 UHD BluRay 2160p DTS-HD MA 5 1 DV HEVC HYBRID REMUX-FraMeSToR",
+						"fileSize": 31453.83759975433,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4d5e5ef91fa414711d035843e3f32c395e546327",
+						"title": "Watchmen Chapter I 2024 BluRay 2160p UHD REMUX HEVC (10bit) HDR DTS-HD MA 5 1-Aisha@RFX",
+						"fileSize": 31428.28736400604,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b98449d06e98ae008ff7399a99eaddcd2a8fdcfd",
+						"title": "Watchmen.Chapter.I.2024.UHD.BluRay.2160p.Remux.HDR.HEVC.DTS-HD.MA.5.1",
+						"fileSize": 31428.23557186127,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9aeda2bf9a1bf571e65686c90df98980cd0740d2",
+						"title": "Watchmen: Chapter I 2024 2160p UHD BluRay REMUX HDR HEVC DTS-HD MA 5.1",
+						"fileSize": 31426.56,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "68d72dc1c9371e7e7d874242ad2dfd20646f0be3",
+						"title": "Watchmen Chapter I 2024 UHD BluRay 2160p Remux HDR HEVC DTS HD MA 5 1 mkv",
+						"fileSize": 31426.55999946594,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "85dd3a189dffa3100177253731be0da615663034",
+						"title": "Watchmen Chapter I 2024 2160p UHD BluRay x265-4KDVS",
+						"fileSize": 21369.97739601135,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b7436f264888a35ff3cc7e4cc9bb80d94f130474",
+						"title": "Watchmen Chapter 1 2024 UHD BluRay HDR10 10Bit 2160p Dts-HDMa5 1 + DUAL HEVC-d3g",
+						"fileSize": 20404.25853729248,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1f49941dfae0a521454e2aafcee0d3bfb31d891e",
+						"title": "Watchmen.Chapter.2.2024.Hybrid.2160p.WEB-DL.DV.HDR.DDP5.1.H265.mkv",
+						"fileSize": 17223.68,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "c49f89a268f1c46f52eacac01d3ccdd78eb6d9d2",
+						"title": "Watchmen: Chapter I 2024 2160p MAX WEB-DL DTS-HD MA 5.1 DV HDR H.265-FLUX",
+						"fileSize": 14530.56,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "07e2d15e748f817fd582e2d48db0aef88bee7354",
+						"title": "Watchmen Chapter I 2024 1080p BluRay x264-PFaNiME",
+						"fileSize": 14038.81983375549,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "98fac920167b083e4d5ca2e38695626581788d0a",
+						"title": "Watchmen. Chapter I (2024) BDRemux 1080p Bobropandavar.mkv",
+						"fileSize": 12100.13428211212,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3346bd46347f76b9b272b074e8abccfb0d79e3bb",
+						"title": "Watchmen Chapter I 2024 2160p BluRay x265 HEVC 10bit HDR DTS",
+						"fileSize": 11776,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "94a7a28bfcd47036b51d67c74fcb6c36f85c394b",
+						"title": "Watchmen Chapter I 2024 2160p MAX WEB-DL DDP 5 1 H 265-PiRaTeS",
+						"fileSize": 11483.15324687958,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8993123bbef70701977959d809cd9f843997cf65",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.2160p.BluRay.HDR10.DTS.HD.MA.5.1.x265-r00t",
+						"fileSize": 11008,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e94ac4154498d3b2f3d1f0135c98194204623c88",
+						"title": "Watchmen Chapter I 2024 BluRay 1080p REMUX AVC DTS-HD MA 5 1-Aisha",
+						"fileSize": 10579.34515094757,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0e7bd81ab5359146e026a9ad79f1b36dfa816959",
+						"title": "Watchmen Chapter I 2024 1080p Blu-ray Remux AVC DTS-HD MA 5 1-HDT",
+						"fileSize": 10577.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "98f5f49168bcda2c85fba030ada6ce367a15e382",
+						"title": "Watchmen Chapter I 2024 1080p Blu-ray Remux AVC DTS-HD MA 5.1-HDT",
+						"fileSize": 10577.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "78fa60c072b9f1e2caa874e4c95c7ca960a92e72",
+						"title": "Watchmen: Chapter I 2024 1080p BluRay REMUX AVC DTS-HD MA 5.1-E.N.D",
+						"fileSize": 10577.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1e0972a88d08f8b906fd4cb2e6bf76d239147ba2",
+						"title": "Watchmen Chapter I 2024 UHD BluRay 2160p DD 5 1 DV HDR x265-BHDStudio",
+						"fileSize": 10010.16671276092,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "dc3ce12aaecc6b01e15500c53483c20b6184c408",
+						"title": "Watchmen.Chapter.2.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 10004.48,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "8f60df978367866f6467a0881e60c46d3f419f84",
+						"title": "Watchmen.Chapter.I..2024.2160p.WEB-DL.HDR.H265.Master5.mkv",
+						"fileSize": 9724.158140182495,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5da245913e63d53f4890111b75027d920ce8f48b",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I (2024) BDRip 1080p от MegaPeer | P",
+						"fileSize": 9420.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8d341feff3c952b507a19a433603f8d45ca601cf",
+						"title": "Watchmen.Chapter.I.2024.2160p.AMZN.WEB-DL.DDP5.1.H.265-GRABBED",
+						"fileSize": 9361.855285644531,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ea4142e620304f8e09750d4c0952041fe6a1238e",
+						"title": "Watchmen.Chapter.I.2024.2160p.AMZN.WEB-DL.DDP5.1.H.265-GRABBED.mkv",
+						"fileSize": 9361.855285644531,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "51d8f9be1900c87b8719bec5aef820db550aba07",
+						"title": "Watchmen: Chapter I 2024 2160p AMZN WEB-DL DD+ 5.1 H.265-GRABBED",
+						"fileSize": 9359.36,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ed584ba87421b751c310e4e34eb8aedb31a9befb",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 9339.952587127686,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "deb4e5b0560c90bb166c858ff8eb3ece7367d1dc",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 9339.946962356567,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f0132abb9feead2ffdaaa9262ee17ee8afc4f870",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 9339.946962356567,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "1fc01dfd316683ba208246250a8250267887e5fd",
+						"title": "Watchmen.Chapter.I.2024.2160p.PMTP.WEB-DL.DDP5.1.DV.HDR.H.265.DUAL-OLYMPUS.mkv",
+						"fileSize": 8814.432354927063,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "463ee7775262bf65c4131a6003d7ea91dff7e581",
+						"title": "Watchmen Chapter I 2024 UHD BluRay 2160p DDP 5 1 DV HDR x265-hallowed",
+						"fileSize": 8800.33121395111,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0bb2b3d66fe795173efe2cdb70cd3a51e843afc4",
+						"title": "Watchmen.Chapter.2.2024.1080p.AMZN.WEB-DLRip.ExKinoRay.mkv",
+						"fileSize": 7731.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "f2f0869ad0d2e46c4a1e4bbec0bdbab6d75ea327",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DD+5.1 x264-HiP",
+						"fileSize": 7578.014681816101,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e00395195af7007f2c88974997ae207d5cf6375e",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DD 5 1 x264-HiP",
+						"fileSize": 7577.6,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3caf54055195eae49c877637ba852783ab3fdff6",
+						"title": "Watchmen.Chapter.2.2024.1080p.WEB.H264.mkv",
+						"fileSize": 7505.92,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "a683c7aad7267e04dde4ee0c7d6cd14cf0340264",
+						"title": "Watchmen.Chapter.I.2024.2160p.UHD.BluRay.x265.mkv",
+						"fileSize": 7429.833905220032,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6481450dc1d161ad9dcfedc62e0842efa0777048",
+						"title": "Watchmen Chapter 2 2024 1080p AMZN от New-Team.mkv",
+						"fileSize": 7260.16,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "79dd4873f58f8f3e6316159abc0747afef01caa9",
+						"title": "Watchmen.Chapter.2.2024.1080p.WEB.H264.mkv",
+						"fileSize": 6850.56,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "ac4ffe245368a0226822caf5a74710a57c3d92a9",
+						"title": "Watchmen.Chapter.2.2024.1080p.WEB.H264-CinnamonDalmatianOfAstonishingMight",
+						"fileSize": 6696.96,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "cd093812f9fd9fdf8eb25d2e403cf63ce6c805b7",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.ExKinoRay.mkv",
+						"fileSize": 6579.699614524841,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a7d648b73f374101a3d1d5623fa556b94d5d91f1",
+						"title": "Watchmen.Chapter.I.2024.1080p.MVOx2.mkv",
+						"fileSize": 6579.560077667236,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "077a3bb207e1d14d0720fb2ef4870a6bbc423378",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264.MVO-BYNDR-RGB.mkv",
+						"fileSize": 6464.167288780212,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "10523c5fc9a59f9cd6bd80a3e9c4ffe513f2e3e6",
+						"title": "Watchmen. Chapter I (2024) AMZN WEB-DL 1080p [UKR_ENG] [Hurtom].mkv",
+						"fileSize": 6313.559743881226,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "73041f704270920e1e0fbb1c2266b104a620043d",
+						"title": "Watchmen.Chapter.I.2024.WEB-DL.1080p.Ukr.Eng-MAZEPA.mkv",
+						"fileSize": 6311.60938167572,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4e1535051fa69bd59459d1634e5b64c0e0dd21e3",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN_от New-Team.mkv",
+						"fileSize": 6310.911445617676,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "941492ace6a7fe5fe92cb6b650c700869243d894",
+						"title": "Watchmen Chapter I 2024 720p BluRay x264-PFaNiME",
+						"fileSize": 6265.310908317566,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4e4bade8902f2844f79532f38e0b0b97cd8c3322",
+						"title": "Watchmen.Chapter.I.2024.720p.BluRay.x264-PFaNiME",
+						"fileSize": 6199.667043685913,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3589a62031a14029cb15ef2400653ea0e9d69360",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR[TGx]",
+						"fileSize": 6195.593665122986,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "64d2bec58ccffe8dadc2c2aa522939369391acc4",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR",
+						"fileSize": 6195.593140602112,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "702d383d6d540279a1929055be3e1e3155e41e9a",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.mkv",
+						"fileSize": 6195.593140602112,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4b3d79e270c875b0ec04e55989b0d843caa9b719",
+						"title": "Watchmen: Chapter I 2024 1080p AMZN WEB-DL DD+ 5.1 H.264-BYNDR",
+						"fileSize": 6195.2,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2836b56eb5746641077747f8d85f6bc0a43ef55d",
+						"title": "Watchmen Chapter I 2024 1080p AMZN WEB-DL DDP 5 1 H 264-PiRaTeS",
+						"fileSize": 6184.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2a30ae1acac4e7144f16e74a0be0f3410d10e989",
+						"title": "Watchmen Chapter I 2024 1080p AMZN WEB-DL DDP 5 1 H 264-PiRaTeS",
+						"fileSize": 6184.519104957581,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "87382e79cf2a05e63aadd43add844e12558fbe3d",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP2.0.H.264.DUAL-OLYMPUS.mkv",
+						"fileSize": 6183.677000045776,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9c1c58965c409854c1c117c0a3d886dd80ed3efa",
+						"title": "Watchmen Chapter I (2024) FullHD 1080p ENG DTS Sub ITA.mkv",
+						"fileSize": 6113.28,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "416e9666b8c4ff014364f1464c6be3a6674fcd59",
+						"title": "Watchmen Chapter I 2024 1080p WEB DL H 264 Dual YG",
+						"fileSize": 6103.039999961853,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7b011d55bae77be4a98b47630716443c152bddc5",
+						"title": "Watchmen Chapter I 2024 1080p BluRay DD+5 1 x264-fullstop",
+						"fileSize": 5232.700263023376,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4a1441cb64b007c851ccec770da3e6d0eb39fe66",
+						"title": "Watchmen Chapter I 2024 BluRay 1080p DDP 5 1 x264-hallowed",
+						"fileSize": 5207.03018283844,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ca5a628f61783b6ef8c8fb03edc8dba42adac5f1",
+						"title": "Watchmen Chapter I 2024 BluRay 1080p DDP 5 1 x264-hallowed",
+						"fileSize": 5201.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e7be4439cafb7d48c51d3131b0fcdc0bb0459e38",
+						"title": "Watchmen.Chapter.2.2024.P.WEB-DL.1O8Op.mkv",
+						"fileSize": 5171.2,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "e275cb2fc9a43a9d5d3134cb1731310f2706622f",
+						"title": "Watchmen Chapter I 2024 BluRay 1080p DTS x264-PRoDJi",
+						"fileSize": 5130,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2c00790b83e795b9d71abb80db3ced31a86893f3",
+						"title": "Watchmen Chapter I (2024) (1080p BDRip DDP5 1 x265) - Vialle",
+						"fileSize": 4960.633030891418,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b23403e4f5b53f9fb4df57164a99a0e770105748",
+						"title": "Watchmen Chapter I 2024 1080p 10bit DS4K AMZN WEB Rip DDP5 1 HEVC NmCT",
+						"fileSize": 4464.639999389648,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "125b70e25c160622a79fdc719f7587d5b68b635c",
+						"title": "Watchmen Chapter I 2024 1080p BluRay x265 HEVC 10bit EAC3 5",
+						"fileSize": 4096,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "de156ae4e9d120cf379819cd0e24347e2211c938",
+						"title": "왓치맨 챕터 Watchmen.Chapter.I.2024.1080p.KORSUB.WEBRip.H264.AAC",
+						"fileSize": 3983.36,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b79543aae54a3128a33ed37ca1a75342ae39f79d",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I (2024) BDRip 720p от MegaPeer | P",
+						"fileSize": 3942.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "882c7f6556e7079b45c74e9b905df3c0c6f6cab5",
+						"title": "Watchmen Chapter I (2024) [2160p] [BluRay] [x265] [10bit] [5.1]",
+						"fileSize": 3921.92,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "88fa7f5959a19907dd6770f397b9472977535c92",
+						"title": "Watchmen.Chapter.I.2024.1080p.mkv",
+						"fileSize": 3336.755104064941,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "77d60dd53fbd4c4f1711e7c4dfe73df13acccfe3",
+						"title": "Watchmen.Chapter.I.2024.1080p.1WinStudio.mkv",
+						"fileSize": 3336.755104064941,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2332c3fe3dd76fd7e5cf61f6c0f998fa6599e958",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I (2024) WEB-DL 720p от селезень | L | RGB",
+						"fileSize": 3235.84,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3449bc85c26bdc78f824a399a3a4e8a612045938",
+						"title": "Watchmen: Chapter I.2024.2160p.HDR10.BRRip.OPUS5.1.AV1.BluBit",
+						"fileSize": 3174.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a809aa7e7b185c9865e101a050ac0cb69f652c0d",
+						"title": "Watchmen Chapter I 2024 720p AMZN WEB-DL DDP5 1 H 264-BYNDR",
+						"fileSize": 2970.960765838623,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "cab84ddce3d4981aa8013da812a9f06942051dd8",
+						"title": "Watchmen.Chapter.I.2024.720p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR",
+						"fileSize": 2970.623143196106,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ce8271ce7a1fc4f82f303d8e7b7f9d55cd35ded7",
+						"title": "Watchmen.Chapter.I.2024.720p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.mkv",
+						"fileSize": 2970.623143196106,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f89fdca80cc0098d5eb3fd6fa27ed453e7b41fc7",
+						"title": "Watchmen Chapter I 2024 1080p AMZN WEB-DL DDP5 1 HEVC-Saon",
+						"fileSize": 2918.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "83a749c2ee967af948f586e0f1f96dbcb7c1f4ad",
+						"title": "Watchmen Chapter 1 2024 1080p WEB H264-SKYFiRE",
+						"fileSize": 2553.422353744507,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3a26dc7006c1fea4a3eda971cc7e721d82175488",
+						"title": "Watchmen.Chapter.1.2024.1080p.WEB.H264-SKYFiRE",
+						"fileSize": 2527.688777923584,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2851cd77edf77bc3c945de72fe6f59e0a5105578",
+						"title": "Watchmen Chapter I 2024 1080p MAX WEB-DL DDP 5 1 H 265-PiRaTeS",
+						"fileSize": 2256.437507629395,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6ba93dbc0e22d772b805d2a82b9a325a0aac7961",
+						"title": "Watchmen Chapter I 2024 1080p MAX WEB-DL DDP 5 1 H 265-PiRaTeS",
+						"fileSize": 2252.8,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "36c8693353cbdd8afe1579b0923842f6b37cc4f7",
+						"title": "Watchmen - Capítulo I 2024 WEB-DL 1080p x264 DUAL 2.0",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "26dbd0487546719d121730b36d9032346b640dca",
+						"title": "Watchmen.Capítulo.I.2024.1080p.WEB-DL.DUAL.2.0",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4be2f1f51ce9b7e7904860fe65622ed5464d1855",
+						"title": "Watchmen.Capítulo.I.2024.WEB-DL.1080p.x264.DUAL.2.0-SF",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9303d2fa03b265225fc48f749cc7b4c1e8d718dd",
+						"title": "Watchmen.Chapter.2.2024.P.WEB-DLRip.14OOMB.avi",
+						"fileSize": 2088.96,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "c7f6b7358bf2023ab2c4236e793435848b1645aa",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.DDP5.1.x265.10bit-GalaxyRG265[TGx]",
+						"fileSize": 2082.043461799622,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7269c2a5098bf19811c949f1b1a5ac45b8b9cdb1",
+						"title": "Watchmen: Chapter I 2024 1080p BluRay Opus 5 1 x265-Lootera",
+						"fileSize": 1977.915761947632,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e386045eaa1e0ec3ac75b47dcb2f90b6e924a312",
+						"title": "Watchmen Chapter I (2024) lat.mp4",
+						"fileSize": 1903.248202323914,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5299ce7e92817c9579fd6aa82769ec5a5ea37f5a",
+						"title": "Watchmen Chapter I (2024) sub.mp4",
+						"fileSize": 1902.674612045288,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4c4ac91ba1a11f36420ecc44fd00dfd10d28ddf3",
+						"title": "Watchmen Chapter I And II 2024 1080p BluRay AAC5 1 HEVC x265",
+						"fileSize": 1887.579364776611,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0409c1f4204ff21b9c0dbb4002553a95c1e3b50f",
+						"title": "Watchmen Chapter I And II 2024 1080p BluRay AAC5.1 HEVC x265 RMTeam",
+						"fileSize": 1887.579306602478,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9a798a32b43270a84db9fc14b52f9ca52870b04a",
+						"title": "Watchmen Chapter I 2024 1080p WebRip EAC3 5 1 x265-Lootera",
+						"fileSize": 1813.364967346191,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "371320737f6c523c08548131e8194315f8bb2141",
+						"title": "Watchmen Chapter I 2024 1080p WebRip EAC3 5 1 x265-Lootera",
+						"fileSize": 1812.48,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c57f6c1136a62365f8006558c9e6b3ec7fc87b6d",
+						"title": "Watchmen.Chapter.I.2024.WEB.MVO-RGB.mkv",
+						"fileSize": 1725.511625289917,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "49e7ae8466e22cfa2bcdd0244c48f7d3e2be11b0",
+						"title": "Watchmen: Chapter I 2024 1080p BluRay DD+ 5 1 x265-iVy",
+						"fileSize": 1677.91844367981,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3825831601114f7544428e153ce9519bc9c9656c",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.Dublado.mkv",
+						"fileSize": 1676.547039985657,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5d82f16f634a2b42e2b3f3de490dbf0149056ea9",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.Legendado.mkv",
+						"fileSize": 1676.532579421997,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "92c426e3c047f0bf04591f0ef09db9882423db98",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip x265 KONTRAST",
+						"fileSize": 1658.879999160767,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ddac29e4c532b3b00a7edc471145b9b70b697db6",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEB-DL.x264.6CH-BH",
+						"fileSize": 1597.44,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4d1b74aed5c9c9968e35715f7ee17d76dca46ce9",
+						"title": "Watchmen Chapter I (2024) [1080p] [WEBRip] [5.1] [YTS.MX]",
+						"fileSize": 1583.088919639587,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b72b3ddba5400497f7ae790bdff148aa96fa6e1c",
+						"title": "Watchmen Chapter I (2024) 1080p WEBRip 5.1-LAMA",
+						"fileSize": 1583.066819190979,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5c5facdec77057d8f08cd4505a80f08cdf58093b",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.chs.eng.mp4",
+						"fileSize": 1546.24,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b6beae8ebfaa959c11a5d37ec334ea887b1acbae",
+						"title": "Watchmen.chapter.1.2024.1080p-dual-lat-cinecalidad.re.mp4",
+						"fileSize": 1535.302350997925,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2803a8f2795378fd36eab998fe69f989963c80fe",
+						"title": "Watchmen.Chapter.I.2024.WEB-DLRip.AR-Team",
+						"fileSize": 1498.574375152588,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b9649fda0cf02a2f6a93ffadfc21626629d9da11",
+						"title": "Watchmen.Chapter.I.2024.MVO.BDRip.1.46Gb.MegaPeer",
+						"fileSize": 1496.924741744995,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6dd47d9538f8e368924617bf8a0568865830e6c8",
+						"title": "Watchmen Chapter 2 (2024) [1080p][Latino][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1484.8,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "9fbb8592de3eaddd0047217be4dc7727eaae05e8",
+						"title": "Watchmen Chapter 2 (2024) [1080p][Subtitulada][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1464.32,
+						"verdict": "trash",
+						"previouslyTrashedAt": "2026-09-27T01:39:22.503Z"
+					},
+					{
+						"hash": "b787e74ceb97249cb9f492d150be6330c06987a9",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.1400MB.DD5.1.x264-GalaxyRG[TGx]",
+						"fileSize": 1437.148208618164,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "d5fa0af7847340ea28a6e4505f59dbe8124df62f",
+						"title": "Watchmen.Chapter.I.2024.MVO.AMZN.WEB-DLRip.1.37Gb.MegaPeer",
+						"fileSize": 1404.56515789032,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c11a609034bfdf71474c20f0dff5d043220aa0b2",
+						"title": "Watchmen.Chapter.I.2024.MVO.AMZN.WEB-DLRip.1.37Gb.MegaPeer",
+						"fileSize": 1404.56515789032,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "660b43bd0344ee7e90cc59fe7754eff6180600e0",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I (Брэндон Виетти / Brandon Vietti) [2024 · США · Мультфильм · фантастика · боевик · WEB-DLRip] MVO (HDRezka Studio) + Sub Rus + Original Eng",
+						"fileSize": 1402.88,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6ce0ce72c22acbfba5853c8f9d302f5729126793",
+						"title": "Watchmen Chapter I (2024) [1080p][Subtitulada][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1392.845058441162,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3f115aab2b9a0a372bf0a3d4894ba53f0199873e",
+						"title": "Watchmen Chapter I (2024) [1080p][Latino][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1388.52229309082,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2eb709773e35261c04450d0675e0b6db4b018043",
+						"title": "Watchmen. Chapter I (2024) [Ukr,Eng] WEBDLRip-AVC [Hurtom].mkv",
+						"fileSize": 1310.968563079834,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c4704595bb55cefd84c768df4fadf275b25ebd96",
+						"title": "Watchmen.Chapter.I.2024.[Bolly4u.org] WEB-DL Dual Audio ORG 1080p 1.2GB.mkv",
+						"fileSize": 1238.553853988648,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b2efac11bd12908ecf7e95ae404fec75244c2a73",
+						"title": "Watchmen Chapter I 2024 1080p 10bit WEBRip 6CH x265 HEVC PSA",
+						"fileSize": 1228.799999237061,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "346cce6a58a723497e8ad71f76538fe0c3b115bd",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DDP 5 1 10bit H 265-iVy",
+						"fileSize": 1197.21192741394,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "614522984e48a55aa919b20ae5adb6e659dea85b",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.DDP.5.1.10bit.H.265-iVy",
+						"fileSize": 1197.204887390137,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2bb00e9fd9a8c8105e7f654205347d731ae5af19",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.1080p.WEB.EAC3.5.1.H265-FW",
+						"fileSize": 1126.4,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "72e2c25832619537061d425ac3a135d90d841159",
+						"title": "Watchmen Chapter I 2024 720p WEBRip x265 AAC-SSN",
+						"fileSize": 1078.557512283325,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "86d0d6c1bcca0e72be1575e451ad48129ea32d1b",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.x265-DH",
+						"fileSize": 990.5761337280272,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "71b7d77a4c147c5da1b295d0d4e069d77f4ef16f",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.x264.AAC5.1.mp4",
+						"fileSize": 947.9635667800904,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4a7a0b5d07f36e7e596512f1e0e57c586859134c",
+						"title": "Watchmen Chapter I 2024 720p WEBRip x265 PROTON",
+						"fileSize": 864.6299991607666,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "87f29de8910015f20d202d1dee58adf694c5815b",
+						"title": "Watchmen.Chapter.I.2024.720p.AMZN.WEBRip.800MB.x264-GalaxyRG[TGx]",
+						"fileSize": 796.6627721786499,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ab1619eb29cbe7c6776f0dd58dc290ddea422bd3",
+						"title": "Watchmen: Chapter I (2024) [720p] [YTS.MX]",
+						"fileSize": 771.66,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "32f7748cf0d35e10e3ae2fed6c7baeb5f2556d64",
+						"title": "Watchmen.Chapter.I.2024.[Bolly4u.org] WEB-DL Dual Audio ORG 720p 650MB.mkv",
+						"fileSize": 678.686053276062,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "329838c657ecde334622f4ec102ace2f1900a457",
+						"title": "Watchmen Chapter I 2024 DiRFiX BDRip x264-WaLMaRT",
+						"fileSize": 552.7543363571167,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ff801f0723501659d8fe8352c320084e73633159",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.AAC5.1.10bits.AV1-Rapta.mkv",
+						"fileSize": 546.5713081359863,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "69e9888f4a3f84b33386822b47961fbfe6807163",
+						"title": "Watchmen.Chapter.I.2024.[Bolly4u.org] WEB-DL Dual Audio ORG 480p 300MB.mkv",
+						"fileSize": 302.8579254150391,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "adeacc38ad795e4cbcd62358f64d6f29bfb687e6",
+						"title": "WatchmenCapítulo1.2024.1080p-dual-lat.mkv",
+						"fileSize": 0,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			},
+			"Scraped": {
+				"updatedAt": "2026-06-14T00:22:30.449Z",
+				"entries": [
+					{
+						"hash": "a37e10ca806ada68f566f9232f3742f444f63ffd",
+						"title": "[4ksj.com]守望者(上).Watchmen.Chapter.I.2024.2160p.UHD.Blu-ray.HEVC.DTS-HD.MA.5.1-4K世界",
+						"fileSize": 35748,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "151517ffe7c2f660aadd6e3b8b579c009f3a806e",
+						"title": "Watchmen.Chapter.I.2024.2160p.COMPLETE.UHD.BLURAY-SILVEIRATeam.iso",
+						"fileSize": 35564,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "acba1e27b6d5b1664113c6c53588cce9471ed69a",
+						"title": "Watchmen.Chapter.I.2024.COMPLETE.BLURAY-NOGRP",
+						"fileSize": 33454,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b0c17219d55c9b2031c0f55dfbd8acbe064624bb",
+						"title": "Watchmen Chapter I (2024) BDRemux 2160p HDR Ukr Eng [Hurtom].mkv",
+						"fileSize": 31488,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "68d72dc1c9371e7e7d874242ad2dfd20646f0be3",
+						"title": "Watchmen.Chapter.I.2024.UHD.BluRay.2160p.Remux.HDR.HEVC.DTS-HD.MA.5.1.mkv",
+						"fileSize": 31427,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e572c4978f60fc4f321adb0e25c2ab0a2f911a55",
+						"title": "【高清影视之家发布 www.SSDSSE.com】守望者(上)[HDR+杜比视界双版本][无字片源].Watchmen.Chapter.I.2024.2160p.Max.WEB-DL.DDP5.1.H265.HDR.DV-ParkHD",
+						"fileSize": 13271,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "541e937b287908f9600c1f9de6d9e5775daea56e",
+						"title": "【高清影视之家发布 www.SSDSSE.com】守望者(上)[杜比视界版本][无字片源].Watchmen.Chapter.I.2024.2160p.Max.WEB-DL.DDP5.1.H265.DV-ParkHD",
+						"fileSize": 13230,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "98fac920167b083e4d5ca2e38695626581788d0a",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I [2024, США, мультфильм, боевик, фантастика, BDRemux 1080p] 6 MVO + Original Eng + Sub (Rus, Eng)",
+						"fileSize": 12100.134765625,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3346bd46347f76b9b272b074e8abccfb0d79e3bb",
+						"title": "Watchmen - Chapter I (2024) (2160p BluRay x265 HEVC 10bit HDR DTS-HD MA 5.1 r00t)",
+						"fileSize": 11796,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0e7bd81ab5359146e026a9ad79f1b36dfa816959",
+						"title": "Watchmen Chapter I 2024 1080p Blu-ray Remux AVC DTS-HD MA 5 1-HDT",
+						"fileSize": 10579.82193183899,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "98f5f49168bcda2c85fba030ada6ce367a15e382",
+						"title": "Watchmen Chapter I 2024 1080p Blu-ray Remux AVC DTS-HD MA 5.1-HDT",
+						"fileSize": 10579.81883335114,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "8f60df978367866f6467a0881e60c46d3f419f84",
+						"title": "Watchmen.Chapter.I..2024.2160p.WEB-DL.HDR.H265.Master5.mkv",
+						"fileSize": 9728,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5da245913e63d53f4890111b75027d920ce8f48b",
+						"title": "Watchmen.Chapter.I.2024.1080p.BluRay.DD.5.1.x264-MegaPeer.mkv",
+						"fileSize": 9421,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ea4142e620304f8e09750d4c0952041fe6a1238e",
+						"title": "Watchmen.Chapter.I.2024.2160p.AMZN.WEB-DL.DDP5.1.H.265-GRABBED.mkv",
+						"fileSize": 9359,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f0132abb9feead2ffdaaa9262ee17ee8afc4f870",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 9339,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ed584ba87421b751c310e4e34eb8aedb31a9befb",
+						"title": "Watchmen.Chapter.I.2024.VOSTFR.HDR.2160p.WEB.H265-FW",
+						"fileSize": 9339,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6228ae78d95d64f958ebf2af278eed9137c6611a",
+						"title": "Watchmen.Chapter.I.2024.2160p.PMTP.WEB-DL.DDP5.1.HDR.HEVC.DUAL-Lucano22",
+						"fileSize": 8786,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e00395195af7007f2c88974997ae207d5cf6375e",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DD 5 1 x264-HiP",
+						"fileSize": 7578.25207901001,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "f2f0869ad0d2e46c4a1e4bbec0bdbab6d75ea327",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DD+5.1 x264-HiP",
+						"fileSize": 7578,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a683c7aad7267e04dde4ee0c7d6cd14cf0340264",
+						"title": "Watchmen.Chapter.I.2024.2160p.UHD.BluRay.x265.mkv",
+						"fileSize": 7434,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a7d648b73f374101a3d1d5623fa556b94d5d91f1",
+						"title": "Watchmen.Chapter.I.2024.1080p.MVOx2.mkv",
+						"fileSize": 6584,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "cd093812f9fd9fdf8eb25d2e403cf63ce6c805b7",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.ExKinoRay.mkv",
+						"fileSize": 6584,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "077a3bb207e1d14d0720fb2ef4870a6bbc423378",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264.MVO-BYNDR-RGB.mkv",
+						"fileSize": 6461,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "46b6fe34e84afb4f9b94254729526de82c986211",
+						"title": "Watchmen.Chapter.I.2024.1080p.GoLTFilm.WEB-DL.DDP5.1.mkv",
+						"fileSize": 6451,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "10523c5fc9a59f9cd6bd80a3e9c4ffe513f2e3e6",
+						"title": "Watchmen. Chapter I (2024) AMZN WEB-DL 1080p [UKR_ENG] [Hurtom].mkv",
+						"fileSize": 6318,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4e1535051fa69bd59459d1634e5b64c0e0dd21e3",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN_от New-Team.mkv",
+						"fileSize": 6308,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "9c4cca372f7c7da0e10f44792415734cd4bfb8d0",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN_от New-Team.mkv",
+						"fileSize": 6308,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "73041f704270920e1e0fbb1c2266b104a620043d",
+						"title": "Watchmen.Chapter.I.2024.WEB-DL.1080p.Ukr.Eng-MAZEPA.mkv",
+						"fileSize": 6308,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4e4bade8902f2844f79532f38e0b0b97cd8c3322",
+						"title": "Watchmen.Chapter.I.2024.720p.BluRay.x264-PFaNiME",
+						"fileSize": 6199.667043685913,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3589a62031a14029cb15ef2400653ea0e9d69360",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR[TGx",
+						"fileSize": 6195.593665122986,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "64d2bec58ccffe8dadc2c2aa522939369391acc4",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.mkv",
+						"fileSize": 6195,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "702d383d6d540279a1929055be3e1e3155e41e9a",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.mkv",
+						"fileSize": 6195,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "60a5c9faffbcbabe9daff786c8c7d6220b0a7d9b",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR",
+						"fileSize": 6195,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "87382e79cf2a05e63aadd43add844e12558fbe3d",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP2.0.H.264.DUAL-OLYMPUS.mkv",
+						"fileSize": 6185,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2836b56eb5746641077747f8d85f6bc0a43ef55d",
+						"title": "Watchmen Chapter I 2024 1080p AMZN WEB-DL DDP 5 1 H 264-PiRaTeS",
+						"fileSize": 6184.522243499756,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7c45fef4af17bf42e0a79df9e17a8cbb6e44df23",
+						"title": "Watchmen Motion Comic - Chapter 1",
+						"fileSize": 6103.039999961853,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "416e9666b8c4ff014364f1464c6be3a6674fcd59",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEB-DL.H.264.Dual.YG⭐",
+						"fileSize": 6102.476957321167,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e275cb2fc9a43a9d5d3134cb1731310f2706622f",
+						"title": "Watchmen.Chapter.I.2024.BluRay.1080p.DTS.x264-PRoDJi",
+						"fileSize": 5249.146484375,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ca5a628f61783b6ef8c8fb03edc8dba42adac5f1",
+						"title": "Watchmen Chapter I 2024 BluRay 1080p DDP 5 1 x264-hallowed",
+						"fileSize": 5207.373068809509,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3f79b22ae48199a32a24f4cea0eafa23eac50b4d",
+						"title": "Watchmen.Chapter.I.1080p.rus.LostFilm.TV.mkv",
+						"fileSize": 4751,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6ac4e8b03237e5c0220bc91fbe11586016f46fd1",
+						"title": "Watchmen.Chapter.I.1080p.rus.LostFilm.TV.mkv",
+						"fileSize": 4751,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b23403e4f5b53f9fb4df57164a99a0e770105748",
+						"title": "Watchmen.Chapter.I.2024.1080p.10bit.DS4K.AMZN.WEB-Rip.DDP5.1.HEVC-NmCT.mkv",
+						"fileSize": 4465,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "125b70e25c160622a79fdc719f7587d5b68b635c",
+						"title": "Watchmen - Chapter I (2024) (1080p BluRay x265 HEVC 10bit EAC3 5.1 Silence)",
+						"fileSize": 4045,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "de156ae4e9d120cf379819cd0e24347e2211c938",
+						"title": "왓치맨 챕터 Watchmen.Chapter.I.2024.1080p.KORSUB.WEBRip.H264.AAC",
+						"fileSize": 3983,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b79543aae54a3128a33ed37ca1a75342ae39f79d",
+						"title": "Watchmen.Chapter.I.2024.720p.BluRay.DD.5.1.x264-MegaPeer.mkv",
+						"fileSize": 3942,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "882c7f6556e7079b45c74e9b905df3c0c6f6cab5",
+						"title": "Watchmen Chapter I (2024) [2160p] [BluRay] [x265] [10bit] [5.1]",
+						"fileSize": 3922.493194580078,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "77d60dd53fbd4c4f1711e7c4dfe73df13acccfe3",
+						"title": "Watchmen.Chapter.I.2024.1080p.1WinStudio.mkv",
+						"fileSize": 3338,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "fa31c5d488658a819eb0f8a195b1e8bab1503fb1",
+						"title": "Watchmen.Chapter.I.2024.1080p.1WinStudio.mkv",
+						"fileSize": 3338,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "88fa7f5959a19907dd6770f397b9472977535c92",
+						"title": "Watchmen.Chapter.I.2024.1080p.mkv",
+						"fileSize": 3338,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2332c3fe3dd76fd7e5cf61f6c0f998fa6599e958",
+						"title": "Watchmen.Chapter.I.2024.AMZN.WEB-DL.720p.x264.seleZen.mkv",
+						"fileSize": 3236,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "82a57baffe305625eec8e94c3fab1a5aa0c81b24",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEB-DLRip.x264.AAC.Uaflix.mp4",
+						"fileSize": 3031,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "a809aa7e7b185c9865e101a050ac0cb69f652c0d",
+						"title": "Watchmen Chapter I 2024 720p AMZN WEB-DL DDP5 1 H 264-BYNDR",
+						"fileSize": 2970,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ce8271ce7a1fc4f82f303d8e7b7f9d55cd35ded7",
+						"title": "Watchmen.Chapter.I.2024.720p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.mkv",
+						"fileSize": 2970,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "16ec0ce405fecd3c7e52a4ff058f1e1e724b4220",
+						"title": "Watchmen.Chapter.I.720p.rus.LostFilm.TV.mp4",
+						"fileSize": 2693,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "7d791b7c8aeec22085ac4b1f1c57f6780435b81a",
+						"title": "Watchmen.Chapter.I.720p.rus.LostFilm.TV.mp4",
+						"fileSize": 2673,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3a26dc7006c1fea4a3eda971cc7e721d82175488",
+						"title": "Watchmen.Chapter.1.2024.1080p.WEB.H264-SKYFiRE",
+						"fileSize": 2527.688777923584,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0cd656acbe6f39ee7a74e1e9c5c05fd86b2b9640",
+						"title": "【高清影视之家发布 www.SSDSSE.com】守望者(上)[无字片源].Watchmen.Chapter.I.2024.1080p.Max.WEB-DL.DDP5.1.H264-ParkHD",
+						"fileSize": 2499,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6ba93dbc0e22d772b805d2a82b9a325a0aac7961",
+						"title": "Watchmen Chapter I 2024 1080p MAX WEB-DL DDP 5 1 H 265-PiRaTeS",
+						"fileSize": 2256.442894935608,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4be2f1f51ce9b7e7904860fe65622ed5464d1855",
+						"title": "Watchmen.Capítulo.I.2024.WEB-DL.1080p.x264.DUAL.2.0-SF",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "36c8693353cbdd8afe1579b0923842f6b37cc4f7",
+						"title": "Watchmen - Capítulo I 2024 WEB-DL 1080p x264 DUAL 2.0",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "26dbd0487546719d121730b36d9032346b640dca",
+						"title": "Watchmen.Capítulo.I.2024.1080p.WEB-DL.DUAL.2.0",
+						"fileSize": 2088.96,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c7f6b7358bf2023ab2c4236e793435848b1645aa",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.DDP5.1.x265.10bit-Gala",
+						"fileSize": 2082.043461799622,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "573b5b95411230ed891eeb49dac39645e0dd6b4e",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.DDP5.1.x265.10bit-GalaxyRG265.mkv",
+						"fileSize": 2079,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "e386045eaa1e0ec3ac75b47dcb2f90b6e924a312",
+						"title": "Watchmen Chapter I (2024) lat.mp4",
+						"fileSize": 1905,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5299ce7e92817c9579fd6aa82769ec5a5ea37f5a",
+						"title": "Watchmen Chapter I (2024) sub.mp4",
+						"fileSize": 1905,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "0409c1f4204ff21b9c0dbb4002553a95c1e3b50f",
+						"title": "Watchmen Chapter I And II 2024 1080p BluRay AAC5.1 HEVC x265 RMTeam",
+						"fileSize": 1887.579306602478,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "371320737f6c523c08548131e8194315f8bb2141",
+						"title": "Watchmen Chapter I 2024 1080p WebRip EAC3 5 1 x265-Lootera",
+						"fileSize": 1813.368608474731,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c57f6c1136a62365f8006558c9e6b3ec7fc87b6d",
+						"title": "Watchmen: Chapter I (2024) WEBRip-AVC",
+						"fileSize": 1730.56,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3825831601114f7544428e153ce9519bc9c9656c",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.Dublado.mkv",
+						"fileSize": 1679,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5d82f16f634a2b42e2b3f3de490dbf0149056ea9",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.Legendado.mkv",
+						"fileSize": 1679,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "92c426e3c047f0bf04591f0ef09db9882423db98",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.x265-KONTRAST",
+						"fileSize": 1659,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "917d05c68736edc9976054b5a240a45f80414e5e",
+						"title": "MkvHub.Com - Watchmen Chapter I 2024 English [ORG 5.1] 1080p WEB-DL x264 6CH ESubs.mkv",
+						"fileSize": 1638,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ddac29e4c532b3b00a7edc471145b9b70b697db6",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEB-DL.x264.6CH-BH",
+						"fileSize": 1598.91988658905,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4d1b74aed5c9c9968e35715f7ee17d76dca46ce9",
+						"title": "Watchmen Chapter I (2024) [1080p] [WEBRip] [5.1] [YTS.MX]",
+						"fileSize": 1587,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b72b3ddba5400497f7ae790bdff148aa96fa6e1c",
+						"title": "Watchmen Chapter I (2024) 1080p WEBRip 5.1-LAMA",
+						"fileSize": 1587,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "5c5facdec77057d8f08cd4505a80f08cdf58093b",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEB-DL.DDP5.1.H.264-BYNDR.chs.eng.mp4",
+						"fileSize": 1546,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b6beae8ebfaa959c11a5d37ec334ea887b1acbae",
+						"title": "Watchmen.chapter.1.2024.1080p-dual-lat-cinecalidad.re.mp4",
+						"fileSize": 1536,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2803a8f2795378fd36eab998fe69f989963c80fe",
+						"title": "Watchmen.Chapter.I.2024.WEB-DLRip.AR-Team",
+						"fileSize": 1495,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b9649fda0cf02a2f6a93ffadfc21626629d9da11",
+						"title": "Watchmen.Chapter.I.2024.MVO.BDRip.1.46Gb.MegaPeer",
+						"fileSize": 1495,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ee12d96b1706e9e13d7f884c1f0c3a80fd93d67e",
+						"title": "守望者(上) Watchmen Chapter I.2024.HD1080P.人工英语中字",
+						"fileSize": 1464,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b787e74ceb97249cb9f492d150be6330c06987a9",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.1400MB.DD5.1.x264-Gala",
+						"fileSize": 1437.148208618164,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "660b43bd0344ee7e90cc59fe7754eff6180600e0",
+						"title": "Хранители: Часть 1 / Watchmen: Chapter I [2024, США, Мультфильм, фантастика, боевик, WEB-DL] MVO (HDRezka Studio) + Sub Rus + Original Eng",
+						"fileSize": 1404.391479492188,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c11a609034bfdf71474c20f0dff5d043220aa0b2",
+						"title": "Watchmen.Chapter.I.2024.MVO.AMZN.WEB-DLRip.1.37Gb.MegaPeer",
+						"fileSize": 1403,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "d5fa0af7847340ea28a6e4505f59dbe8124df62f",
+						"title": "Watchmen.Chapter.I.2024.MVO.AMZN.WEB-DLRip.1.37Gb.MegaPeer",
+						"fileSize": 1403,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "3f115aab2b9a0a372bf0a3d4894ba53f0199873e",
+						"title": "Watchmen Chapter I (2024) [1080p][Latino][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1393,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "6ce0ce72c22acbfba5853c8f9d302f5729126793",
+						"title": "Watchmen Chapter I (2024) [1080p][Subtitulada][Ver-Peliculas-Online.org].mp4",
+						"fileSize": 1393,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "2eb709773e35261c04450d0675e0b6db4b018043",
+						"title": "Watchmen. Chapter I (2024) [Ukr,Eng] WEBDLRip-AVC [Hurtom].mkv",
+						"fileSize": 1311,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "c4704595bb55cefd84c768df4fadf275b25ebd96",
+						"title": "Watchmen.Chapter.I.2024.[Bolly4u.org] WEB-DL Dual Audio ORG 1080p 1.2GB.mkv",
+						"fileSize": 1239.04,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "b2efac11bd12908ecf7e95ae404fec75244c2a73",
+						"title": "Watchmen.Chapter.I.2024.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+						"fileSize": 1239,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "346cce6a58a723497e8ad71f76538fe0c3b115bd",
+						"title": "Watchmen Chapter I 2024 1080p WEBRip DDP 5 1 10bit H 265-iVy",
+						"fileSize": 1198,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "72e2c25832619537061d425ac3a135d90d841159",
+						"title": "Watchmen Chapter I 2024 720p WEBRip x265 AAC-SSN",
+						"fileSize": 1078.557512283325,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "71b7d77a4c147c5da1b295d0d4e069d77f4ef16f",
+						"title": "Watchmen.Chapter.I.2024.1080p.WEBRip.x264.AAC5.1.mp4",
+						"fileSize": 948,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "4a7a0b5d07f36e7e596512f1e0e57c586859134c",
+						"title": "Watchmen.Chapter.I.2024.720p.WEBRip.x265-PROTON",
+						"fileSize": 865,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "87f29de8910015f20d202d1dee58adf694c5815b",
+						"title": "Watchmen.Chapter.I.2024.720p.AMZN.WEBRip.800MB.x264-GalaxyRG",
+						"fileSize": 796.6627721786499,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "fc41a4645d2e9db0301d0e4ec2ea4eb003707358",
+						"title": "MkvHub.Com - Watchmen Chapter I 2024 English [ORG 5.1] 720p WEB-DL x264 6CH ESubs.mkv",
+						"fileSize": 780,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ab1619eb29cbe7c6776f0dd58dc290ddea422bd3",
+						"title": "Watchmen Chapter I (2024) [720p] [WEBRip] [YTS.MX]",
+						"fileSize": 772,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "32f7748cf0d35e10e3ae2fed6c7baeb5f2556d64",
+						"title": "Watchmen.Chapter.I.2024.[Bolly4u.org] WEB-DL Dual Audio ORG 720p 650MB.mkv",
+						"fileSize": 678.69,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "21da2dc7ecb97b0cec4774405690380228c9d7c4",
+						"title": "Watchmen.Chapter.I.2024.720p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+						"fileSize": 548,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					},
+					{
+						"hash": "ff801f0723501659d8fe8352c320084e73633159",
+						"title": "Watchmen.Chapter.I.2024.1080p.AMZN.WEBRip.AAC5.1.10bits.AV1-Rapta",
+						"fileSize": 546.5713081359863,
+						"verdict": "keep",
+						"previouslyTrashedAt": null
+					}
+				]
+			}
+		}
+	]
+}
