@@ -1,0 +1,23 @@
+{
+	"data": {
+		"Media": {
+			"id": 166444,
+			"idMal": 61634,
+			"isAdult": false,
+			"format": "ONA",
+			"episodes": 16,
+			"averageScore": null,
+			"title": {
+				"romaji": "Cheng Ye Xiao He",
+				"english": "To Be Winner",
+				"native": "成也萧河"
+			},
+			"description": "In the game, the server's top swordsman, Xiao Wujin, and the most wanted female outlaw, Tao Zhiyaoyao, first crossed paths as rivals. In real life, campus heartthrob Xiao He of Dongchuan University and freshman Shen Xin met through a collegiate esports tournament and quickly grew close. Together with their friend Yang Yao, they formed a team and fought their way through every challenge, determined to claim the championship. Along the way, Xiao He and Shen Xin healed and inspired one another, moving forward hand in hand in pursuit of their dreams. With a little help from their friends Yang Yao and Xiang Nan, what kind of romance will blossom between them?\n<br><br>\n(Source: iQ)",
+			"coverImage": {
+				"extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx166444-SCdIFI22yD0O.jpg",
+				"large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166444-SCdIFI22yD0O.jpg"
+			},
+			"bannerImage": null
+		}
+	}
+}

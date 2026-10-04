@@ -24,6 +24,8 @@ export interface FranchiseEntry {
 	imdbIds: string[];
 	kitsuId: number | null;
 	malId: number | null;
+	/** AniList's id, which reaches the entries Kitsu has never mapped. */
+	anilistId: number | null;
 }
 
 export interface FranchiseIndex {
@@ -69,6 +71,7 @@ export function buildFranchiseIndex(raw: readonly FribbAnimeEntry[]): FranchiseI
 			imdbIds,
 			kitsuId: positiveInt(item.kitsu_id),
 			malId: positiveInt(item.mal_id),
+			anilistId: positiveInt(item.anilist_id),
 		});
 		for (const imdbId of imdbIds) {
 			const bucket = byImdb.get(imdbId);

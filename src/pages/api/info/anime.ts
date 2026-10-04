@@ -1,3 +1,4 @@
+import { fetchAniListAnime } from '@/services/anime/anilist';
 import { getFranchiseIndex } from '@/services/anime/animeFranchise';
 import { fetchKitsuAnime } from '@/services/anime/kitsu';
 import { resolveImdbIdFromSimkl } from '@/services/anime/simkl';
@@ -116,6 +117,31 @@ async function fromKitsu(kitsuId: number): Promise<AnimeInfoResponse | null> {
 }
 
 /**
+ * AniList, for an entry Kitsu has no record of: Kitsu maps a new season late or
+ * never, and 19795, 19847, 19889, 20245 and 18897 all had stored releases and
+ * no Kitsu id on 2026-10-04. AniList is asked by its own id when the dataset
+ * names one, otherwise by MAL's.
+ */
+async function fromAniList(
+	anilistId: number | null,
+	malId: number | null
+): Promise<AnimeInfoResponse | null> {
+	const meta = await fetchAniListAnime({ anilistId, malId });
+	if (!meta) return null;
+
+	return {
+		title: meta.title,
+		description: meta.description,
+		poster: meta.poster,
+		backdrop: meta.backdrop,
+		imdbid: '',
+		imdbRating: meta.rating,
+		type: meta.type,
+		episodeCount: meta.episodeCount,
+	};
+}
+
+/**
  * The row already holds everything a page needs, so a Kitsu outage costs the
  * freshness of the metadata rather than the page. `rating` is the row's own
  * score on the same 0-10 scale, standing in exactly as Kitsu's does.
@@ -184,6 +210,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	let info: AnimeInfoResponse | null = null;
 	if (kitsuId !== null) {
 		info = (await fromStremioAddon(kitsuId)) ?? (await fromKitsu(kitsuId));
+	}
+	// A row missing its title or poster is one the daily import could not fill
+	// from Kitsu either; AniList may still have the entry.
+	if (!info && row?.title && row.poster_url) info = fromRow(row);
+	if (!info) {
+		const malId =
+			row?.mal_id ?? datasetEntry?.malId ?? (animeId.source === 'mal' ? animeId.id : null);
+		info = await fromAniList(datasetEntry?.anilistId ?? null, malId);
 	}
 	if (!info && row) info = fromRow(row);
 	if (!info) return res.status(200).json(UNKNOWN);

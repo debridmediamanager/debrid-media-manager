@@ -1,0 +1,23 @@
+{
+	"data": {
+		"Media": {
+			"id": 204650,
+			"idMal": 63181,
+			"isAdult": false,
+			"format": "TV",
+			"episodes": 24,
+			"averageScore": 69,
+			"title": {
+				"romaji": "Tougen Anki: Nikko・Kegon no Taki-hen",
+				"english": "TOUGEN ANKI: Nikko Kegon Falls Arc",
+				"native": "桃源暗鬼 日光・華厳の滝編"
+			},
+			"description": "After battling in Kyoto and Nerima, the Rasetsu Academy students have grown stronger. But Yaoroshi leaves the academy to join the Oni Brigade for their \"the total eradication of the Momotaro.\"\n<br><br>\nWhen Shiki realizes that they also target noncombatants, he sets out after Yaoroshi to bring him back. Meanwhile in Nikko, there's a research facility for horrific experiments atop the old Kegon Falls…\n<br><br>\n(Source: REMOW)",
+			"coverImage": {
+				"extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204650-nvK5CuG60WGY.jpg",
+				"large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204650-nvK5CuG60WGY.jpg"
+			},
+			"bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/204650-MpownoVlYv69.jpg"
+		}
+	}
+}

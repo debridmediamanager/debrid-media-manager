@@ -1,0 +1,44 @@
+[
+	{
+		"type": "TV",
+		"anidb_id": 19795,
+		"anilist_id": 204650,
+		"animecountdown_id": 2977040,
+		"animenewsnetwork_id": 38194,
+		"anime-planet_id": "tougen-anki-nikko-kegon-falls-arc",
+		"anisearch_id": 21138,
+		"livechart_id": 13454,
+		"mal_id": 63181,
+		"simkl_id": 2977040
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19847,
+		"anilist_id": 206401,
+		"animecountdown_id": 2997994,
+		"animenewsnetwork_id": 38330,
+		"anime-planet_id": "fx-senshi-kurumi-chan",
+		"anisearch_id": 21172,
+		"imdb_id": ["tt43119470"],
+		"livechart_id": 13490,
+		"mal_id": 63337,
+		"simkl_id": 2997994,
+		"themoviedb_id": {
+			"tv": 311842
+		},
+		"tvdb_id": 472962,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "ONA",
+		"anidb_id": 20245,
+		"anilist_id": 166444,
+		"animecountdown_id": 3204406,
+		"anime-planet_id": "cheng-ye-xiao-he",
+		"mal_id": 61634,
+		"simkl_id": 3204406
+	}
+]
