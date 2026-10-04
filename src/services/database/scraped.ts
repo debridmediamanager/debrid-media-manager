@@ -1,5 +1,5 @@
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
-import { Prisma, Scraped } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
 	ScrapeSearchResult,
 	decodeTitle,
@@ -51,6 +51,47 @@ const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
  * 25 leaves ordinary packs, double features and long-running shows well clear.
  */
 export const FAN_OUT_PAGE_LIMIT = 25;
+
+type PageTable = 'ScrapedTrue' | 'Scraped';
+
+/**
+ * Errors that mean another writer got to the page first, so the save runs
+ * again and reads what that writer left. Raw queries report MySQL's code in
+ * `meta` under P2010: a deadlock (1213), a lock wait timeout (1205), and the
+ * duplicate key (1062) when two writers create the same new page. Prisma's own
+ * operations call the first and last P2034 and P2002.
+ */
+const RETRIED_MYSQL_ERRORS = new Set(['1213', '1205', '1062']);
+export const PAGE_SAVE_ATTEMPTS = 5;
+
+export function isPageWriteConflict(error: unknown): boolean {
+	if (!(error instanceof Prisma.PrismaClientKnownRequestError)) return false;
+	if (error.code === 'P2034' || error.code === 'P2002') return true;
+	const mysqlCode = (error.meta as { code?: unknown } | undefined)?.code;
+	return error.code === 'P2010' && RETRIED_MYSQL_ERRORS.has(String(mysqlCode));
+}
+
+/**
+ * This process's saves to one page, one after another.
+ *
+ * The row lock is what keeps two writers from losing each other's releases;
+ * this only stops one replica parking a pooled connection per release on that
+ * lock. A Transfers poll files every completed row of a page at once, which on
+ * 2026-09-07 was 25 episodes of one season.
+ */
+const pageQueues = new Map<string, Promise<void>>();
+function onePageAtATime<T>(page: string, task: () => Promise<T>): Promise<T> {
+	const run = (pageQueues.get(page) ?? Promise.resolve()).then(task);
+	const settled = run.then(
+		() => undefined,
+		() => undefined
+	);
+	pageQueues.set(page, settled);
+	void settled.then(() => {
+		if (pageQueues.get(page) === settled) pageQueues.delete(page);
+	});
+	return run;
+}
 
 export class ScrapedService extends DatabaseClient {
 	/**
@@ -290,44 +331,7 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
-		value = await this.withoutFannedOutHashes(usableResults(value));
-		// Fetch the existing record
-		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
-			where: { key },
-		});
-
-		if (existingRecord && !replaceOldScrape) {
-			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
-			// If record exists, append the new values to it
-			let updatedValue = flattenAndRemoveDuplicates([
-				existingRecord.value as ScrapeSearchResult[],
-				value,
-			]);
-			updatedValue = sortByFileSize(updatedValue);
-			const newLength = updatedValue.length;
-			// Log update count without exposing the key
-			console.log(`📝 Updated: +${newLength - origLength} results`);
-
-			await this.prisma.scrapedTrue.update({
-				where: { key },
-				data: {
-					value: updatedValue,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else if (existingRecord && replaceOldScrape) {
-			await this.prisma.scrapedTrue.update({
-				where: { key },
-				data: {
-					value,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else {
-			await this.prisma.scrapedTrue.create({
-				data: { key, value },
-			});
-		}
+		await this.savePage('ScrapedTrue', key, value, updateUpdatedAt, replaceOldScrape);
 	}
 
 	public async saveScrapedResults(
@@ -336,44 +340,91 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
+		await this.savePage('Scraped', key, value, updateUpdatedAt, replaceOldScrape);
+	}
+
+	/**
+	 * Adds results to a page, or replaces them, as one transaction holding the
+	 * page's row lock.
+	 *
+	 * A page is one JSON array in one row, so adding a release means reading the
+	 * array and writing it back with the release in it. Done as a plain read and
+	 * a later write, two writers on one page each wrote an array without the
+	 * other's release: measured 2026-10-04, 1,167 of 4,835 filed nzb2rd releases
+	 * and 31 of 838 debrid02 ones were in `Available` and on no page of their
+	 * title, so search never showed them. Viva Pinata's first season lost 21 of
+	 * 25 episodes to one Transfers poll that filed them all at once.
+	 *
+	 * `SELECT … FOR UPDATE` reads the latest committed array, not the
+	 * transaction's snapshot, and makes every other locking writer wait until
+	 * this one commits. scraps' `locked_merge` and the verdict job's trash and
+	 * restore lock the same row the same way. A page with no row yet has nothing
+	 * to lock, so two first writers can both insert: one then fails on the
+	 * duplicate key or as a deadlock victim, and runs again to find the row.
+	 */
+	private async savePage(
+		table: PageTable,
+		key: string,
+		value: ScrapeSearchResult[],
+		updateUpdatedAt: boolean,
+		replaceOldScrape: boolean
+	) {
 		value = await this.withoutFannedOutHashes(usableResults(value));
-		// Fetch the existing record
-		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
-			where: { key },
+		await onePageAtATime(`${table}|${key}`, async () => {
+			for (let attempt = 1; ; attempt++) {
+				try {
+					return await this.mergeIntoPage(
+						table,
+						key,
+						value,
+						updateUpdatedAt,
+						replaceOldScrape
+					);
+				} catch (error) {
+					if (attempt >= PAGE_SAVE_ATTEMPTS || !isPageWriteConflict(error)) throw error;
+				}
+			}
 		});
+	}
 
-		if (existingRecord && !replaceOldScrape) {
-			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
-			// If record exists, append the new values to it
-			let updatedValue = flattenAndRemoveDuplicates([
-				existingRecord.value as ScrapeSearchResult[],
-				value,
-			]);
-			updatedValue = sortByFileSize(updatedValue);
-			const newLength = updatedValue.length;
-			// Log update count without exposing the key
-			console.log(`📝 Updated: +${newLength - origLength} results`);
+	private mergeIntoPage(
+		table: PageTable,
+		key: string,
+		value: ScrapeSearchResult[],
+		updateUpdatedAt: boolean,
+		replaceOldScrape: boolean
+	) {
+		const page = Prisma.raw(`\`${table}\``);
+		return this.prisma.$transaction(
+			async (tx) => {
+				const [row] = await tx.$queryRaw<{ value: Prisma.JsonValue; updatedAt: Date }[]>(
+					Prisma.sql`SELECT value, updatedAt FROM ${page} WHERE \`key\` = ${key} FOR UPDATE`
+				);
+				if (!row) {
+					await tx.$executeRaw(
+						Prisma.sql`INSERT INTO ${page} (\`key\`, value, updatedAt) VALUES (${key}, ${JSON.stringify(value)}, ${new Date()})`
+					);
+					return;
+				}
 
-			await this.prisma.scraped.update({
-				where: { key },
-				data: {
-					value: updatedValue,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else if (existingRecord && replaceOldScrape) {
-			await this.prisma.scraped.update({
-				where: { key },
-				data: {
-					value,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else {
-			await this.prisma.scraped.create({
-				data: { key, value },
-			});
-		}
+				let next = value;
+				if (!replaceOldScrape) {
+					const stored = Array.isArray(row.value)
+						? (row.value as unknown as ScrapeSearchResult[])
+						: [];
+					next = sortByFileSize(flattenAndRemoveDuplicates([stored, value]));
+					// Log update count without exposing the key
+					console.log(`📝 Updated: +${next.length - stored.length} results`);
+				}
+				const updatedAt = updateUpdatedAt ? new Date() : row.updatedAt;
+				await tx.$executeRaw(
+					Prisma.sql`UPDATE ${page} SET value = ${JSON.stringify(next)}, updatedAt = ${updatedAt} WHERE \`key\` = ${key}`
+				);
+			},
+			// Waiting on another writer's lock counts against the timeout. A
+			// connection may take as long as the pool's own 10s to come free.
+			{ maxWait: 10_000, timeout: 30_000 }
+		);
 	}
 
 	public async keyExists(key: string): Promise<boolean> {

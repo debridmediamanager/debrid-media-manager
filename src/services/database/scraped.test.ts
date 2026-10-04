@@ -1,7 +1,12 @@
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { FAN_OUT_PAGE_LIMIT, ScrapedService } from './scraped';
+import {
+	FAN_OUT_PAGE_LIMIT,
+	isPageWriteConflict,
+	PAGE_SAVE_ATTEMPTS,
+	ScrapedService,
+} from './scraped';
 
 const prismaMock = vi.hoisted(() => ({
 	scrapedTrue: {
@@ -22,6 +27,13 @@ const prismaMock = vi.hoisted(() => ({
 		findMany: vi.fn(),
 	},
 	$queryRaw: vi.fn(),
+	$transaction: vi.fn(),
+}));
+
+// What a save sees inside its transaction: the locked read and the write.
+const txMock = vi.hoisted(() => ({
+	$queryRaw: vi.fn(),
+	$executeRaw: vi.fn(),
 }));
 
 const { flattenAndRemoveDuplicatesMock, sortByFileSizeMock } = vi.hoisted(() => ({
@@ -50,6 +62,30 @@ const HASH_ONE = 'a'.repeat(40);
 const HASH_TWO = 'b'.repeat(40);
 const HASH_NEW = 'c'.repeat(40);
 
+const STORED_AT = new Date('2024-01-01');
+
+/** The page row the locked read finds, or none. */
+const storedPage = (value: unknown[] | null) =>
+	txMock.$queryRaw.mockResolvedValue(value ? [{ value, updatedAt: STORED_AT }] : []);
+
+/** The last write a save made: its statement and the array it stored. */
+const lastWrite = () => {
+	const query = txMock.$executeRaw.mock.calls.at(-1)![0] as Prisma.Sql;
+	const json = query.values.find((v) => typeof v === 'string' && v.startsWith('['));
+	return {
+		sql: query.sql.replace(/\s+/g, ' '),
+		values: query.values,
+		value: JSON.parse(json as string),
+	};
+};
+
+const mysqlError = (code: string) =>
+	new Prisma.PrismaClientKnownRequestError(`Raw query failed. Code: \`${code}\``, {
+		code: 'P2010',
+		clientVersion: 'test',
+		meta: { code, message: 'recorded shape' },
+	});
+
 describe('ScrapedService', () => {
 	let service: ScrapedService;
 
@@ -61,6 +97,9 @@ describe('ScrapedService', () => {
 		(prismaMock.hashPageCount.findMany as Mock).mockReset();
 		// Default: nothing is known to be over-shared, so saves pass through.
 		(prismaMock.hashPageCount.findMany as Mock).mockResolvedValue([]);
+		txMock.$queryRaw.mockReset();
+		txMock.$executeRaw.mockReset().mockResolvedValue(1);
+		prismaMock.$transaction.mockReset().mockImplementation(async (fn: any) => fn(txMock));
 		flattenAndRemoveDuplicatesMock.mockClear();
 		sortByFileSizeMock.mockClear();
 	});
@@ -106,54 +145,91 @@ describe('ScrapedService', () => {
 	});
 
 	it('merges and sorts scrapedTrue results when updating without replacement', async () => {
-		const existing = {
-			value: [{ hash: HASH_ONE }],
-			updatedAt: new Date('2024-01-01'),
-		};
-		prismaMock.scrapedTrue.findUnique.mockResolvedValue(existing);
+		storedPage([{ hash: HASH_ONE }]);
 		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: HASH_ONE }, { hash: HASH_TWO }]]);
 		sortByFileSizeMock.mockReturnValue([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
 
 		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any);
 
-		expect(prismaMock.scrapedTrue.update).toHaveBeenCalled();
-		const updateArgs = prismaMock.scrapedTrue.update.mock.calls[0][0];
-		expect(updateArgs.data.value).toEqual([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
+		expect(flattenAndRemoveDuplicatesMock).toHaveBeenCalledWith([
+			[{ hash: HASH_ONE }],
+			[{ hash: HASH_TWO }],
+		]);
+		expect(lastWrite().sql).toContain('UPDATE `ScrapedTrue` SET value = ?, updatedAt = ?');
+		expect(lastWrite().value).toEqual([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
+	});
+
+	// 1,167 of 4,835 filed nzb2rd releases were on no page of their title on
+	// 2026-10-04: two writers read the same array and each wrote it back with
+	// only its own release. The read has to lock the row, inside the
+	// transaction that writes it.
+	it.each([
+		['saveScrapedTrueResults', 'ScrapedTrue'],
+		['saveScrapedResults', 'Scraped'],
+	] as const)(
+		'%s reads the page under its row lock and writes it in that transaction',
+		async (method, table) => {
+			storedPage([{ hash: HASH_ONE }]);
+
+			await service[method]('tv:tt0837069:1', [{ hash: HASH_TWO }] as any);
+
+			expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+			const read = txMock.$queryRaw.mock.calls[0][0] as Prisma.Sql;
+			expect(read.sql).toBe(
+				`SELECT value, updatedAt FROM \`${table}\` WHERE \`key\` = ? FOR UPDATE`
+			);
+			expect(read.values).toEqual(['tv:tt0837069:1']);
+			expect(lastWrite().sql).toContain(`UPDATE \`${table}\``);
+			expect(lastWrite().values.at(-1)).toBe('tv:tt0837069:1');
+			// Nothing outside the transaction reads or writes the page.
+			expect(prismaMock.scrapedTrue.findUnique).not.toHaveBeenCalled();
+			expect(prismaMock.scraped.findUnique).not.toHaveBeenCalled();
+			expect(prismaMock.scrapedTrue.update).not.toHaveBeenCalled();
+			expect(prismaMock.scraped.update).not.toHaveBeenCalled();
+		}
+	);
+
+	it('keeps the page date when told not to touch it, and dates it now otherwise', async () => {
+		storedPage([{ hash: HASH_ONE }]);
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any, false);
+		expect(lastWrite().values).toContain(STORED_AT);
+
+		const before = Date.now();
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any, true);
+		const date = lastWrite().values.find((v) => v instanceof Date) as Date;
+		expect(date).not.toBe(STORED_AT);
+		expect(date.getTime()).toBeGreaterThanOrEqual(before);
 	});
 
 	it('replaces scrapedTrue values when flag is set', async () => {
-		prismaMock.scrapedTrue.findUnique.mockResolvedValue({
-			value: [{ hash: HASH_ONE }],
-			updatedAt: new Date('2024-01-01'),
-		});
+		storedPage([{ hash: HASH_ONE }]);
 
 		await service.saveScrapedTrueResults('key', [{ hash: HASH_NEW }] as any, true, true);
 
-		expect(prismaMock.scrapedTrue.update).toHaveBeenCalledWith({
-			where: { key: 'key' },
-			data: expect.objectContaining({ value: [{ hash: HASH_NEW }] }),
-		});
+		expect(flattenAndRemoveDuplicatesMock).not.toHaveBeenCalled();
+		expect(lastWrite().sql).toContain('UPDATE `ScrapedTrue`');
+		expect(lastWrite().value).toEqual([{ hash: HASH_NEW }]);
 	});
 
 	it('creates scrapedTrue rows when none exist', async () => {
-		prismaMock.scrapedTrue.findUnique.mockResolvedValue(null);
+		storedPage(null);
 
 		await service.saveScrapedTrueResults('key', [{ hash: HASH_ONE }] as any);
-		expect(prismaMock.scrapedTrue.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: HASH_ONE }] },
-		});
+
+		expect(lastWrite().sql).toBe(
+			'INSERT INTO `ScrapedTrue` (`key`, value, updatedAt) VALUES (?, ?, ?)'
+		);
+		expect(lastWrite().values[0]).toBe('key');
+		expect(lastWrite().value).toEqual([{ hash: HASH_ONE }]);
 	});
 
 	it('persists scraped results using the same flows', async () => {
-		prismaMock.scraped.findUnique.mockResolvedValue({
-			value: [{ hash: HASH_ONE }],
-			updatedAt: new Date('2024-01-01'),
-		});
-		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: HASH_ONE }]]);
-		sortByFileSizeMock.mockReturnValue([{ hash: HASH_ONE }]);
+		storedPage([{ hash: HASH_ONE }]);
 
 		await service.saveScrapedResults('key', [{ hash: HASH_ONE }] as any, false, true);
-		expect(prismaMock.scraped.update).toHaveBeenCalled();
+
+		expect(lastWrite().sql).toContain('UPDATE `Scraped` SET');
+		expect(lastWrite().value).toEqual([{ hash: HASH_ONE }]);
 	});
 
 	it('drops unusable hashes on the replace and create paths', async () => {
@@ -162,26 +238,19 @@ describe('ScrapedService', () => {
 		// table on 2110 pages.
 		const emptySha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
 
-		prismaMock.scrapedTrue.findUnique.mockResolvedValue({
-			value: [{ hash: HASH_ONE }],
-			updatedAt: new Date('2024-01-01'),
-		});
+		storedPage([{ hash: HASH_ONE }]);
 		await service.saveScrapedTrueResults(
 			'key',
 			[{ hash: HASH_NEW }, { hash: emptySha1 }, { hash: 'not-a-hash' }] as any,
 			true,
 			true
 		);
-		expect(prismaMock.scrapedTrue.update).toHaveBeenCalledWith({
-			where: { key: 'key' },
-			data: expect.objectContaining({ value: [{ hash: HASH_NEW }] }),
-		});
+		expect(lastWrite().value).toEqual([{ hash: HASH_NEW }]);
 
-		prismaMock.scraped.findUnique.mockResolvedValue(null);
+		storedPage(null);
 		await service.saveScrapedResults('key', [{ hash: emptySha1 }, { hash: HASH_TWO }] as any);
-		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: HASH_TWO }] },
-		});
+		expect(lastWrite().sql).toContain('INSERT INTO `Scraped`');
+		expect(lastWrite().value).toEqual([{ hash: HASH_TWO }]);
 	});
 
 	it('drops hashes already spread across too many pages', async () => {
@@ -190,7 +259,7 @@ describe('ScrapedService', () => {
 			{ hash: fannedOut, pageCount: FAN_OUT_PAGE_LIMIT + 1 },
 			{ hash: HASH_ONE, pageCount: FAN_OUT_PAGE_LIMIT },
 		]);
-		prismaMock.scrapedTrue.findUnique.mockResolvedValue(null);
+		storedPage(null);
 
 		await service.saveScrapedTrueResults('key', [
 			{ hash: HASH_ONE },
@@ -200,9 +269,7 @@ describe('ScrapedService', () => {
 
 		// HASH_ONE sits exactly at the limit and HASH_TWO is unknown to the
 		// table, so only the one past the limit is dropped.
-		expect(prismaMock.scrapedTrue.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: HASH_ONE }, { hash: HASH_TWO }] },
-		});
+		expect(lastWrite().value).toEqual([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
 	});
 
 	it('matches over-shared hashes regardless of case', async () => {
@@ -211,27 +278,107 @@ describe('ScrapedService', () => {
 		(prismaMock.hashPageCount.findMany as Mock).mockResolvedValue([
 			{ hash: 'C'.repeat(40), pageCount: 900 },
 		]);
-		prismaMock.scraped.findUnique.mockResolvedValue(null);
+		storedPage(null);
 
 		await service.saveScrapedResults('key', [{ hash: HASH_NEW }, { hash: HASH_TWO }] as any);
 
-		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: HASH_TWO }] },
-		});
+		expect(lastWrite().value).toEqual([{ hash: HASH_TWO }]);
 	});
 
 	it('decodes entity-encoded titles on the direct write paths', async () => {
 		// The create and replace branches skip flattenAndRemoveDuplicates, so
 		// without this they would keep storing raw entities.
-		prismaMock.scraped.findUnique.mockResolvedValue(null);
+		storedPage(null);
 
 		await service.saveScrapedResults('key', [
 			{ hash: HASH_ONE, title: 'Grandma&#039;s Boy', fileSize: 1 },
 		] as any);
 
-		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: HASH_ONE, title: "Grandma's Boy", fileSize: 1 }] },
+		expect(lastWrite().value).toEqual([
+			{ hash: HASH_ONE, title: "Grandma's Boy", fileSize: 1 },
+		]);
+	});
+
+	// The shapes Prisma 6 gave on MySQL 8.0.36 for a raw query in an interactive
+	// transaction, measured 2026-10-04.
+	it('tells another writer winning the page apart from other failures', () => {
+		expect(isPageWriteConflict(mysqlError('1213'))).toBe(true); // deadlock victim
+		expect(isPageWriteConflict(mysqlError('1062'))).toBe(true); // both created the page
+		expect(isPageWriteConflict(mysqlError('1205'))).toBe(true); // lock wait timeout
+		expect(isPageWriteConflict(mysqlError('1406'))).toBe(false);
+		expect(
+			isPageWriteConflict(
+				new Prisma.PrismaClientKnownRequestError('expired', {
+					code: 'P2028',
+					clientVersion: 'test',
+				})
+			)
+		).toBe(false);
+		expect(isPageWriteConflict(new Error('Deadlock found'))).toBe(false);
+	});
+
+	it('runs the save again when another writer wins the page', async () => {
+		storedPage([{ hash: HASH_ONE }]);
+		prismaMock.$transaction
+			.mockRejectedValueOnce(mysqlError('1213'))
+			.mockRejectedValueOnce(mysqlError('1062'));
+
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any);
+
+		expect(prismaMock.$transaction).toHaveBeenCalledTimes(3);
+		expect(lastWrite().sql).toContain('UPDATE `ScrapedTrue`');
+	});
+
+	it('gives up after its attempts, and at once on anything else', async () => {
+		prismaMock.$transaction.mockRejectedValue(mysqlError('1213'));
+		await expect(
+			service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any)
+		).rejects.toThrow('1213');
+		expect(prismaMock.$transaction).toHaveBeenCalledTimes(PAGE_SAVE_ATTEMPTS);
+
+		prismaMock.$transaction.mockReset().mockRejectedValue(new Error('connection lost'));
+		await expect(
+			service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any)
+		).rejects.toThrow('connection lost');
+		expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+
+		// A failed save does not hold up the next one on that page.
+		prismaMock.$transaction.mockReset().mockImplementation(async (fn: any) => fn(txMock));
+		storedPage(null);
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any);
+		expect(lastWrite().sql).toContain('INSERT INTO `ScrapedTrue`');
+	});
+
+	// A Transfers poll files every completed row of a page at once: 25 episodes
+	// of one season on 2026-09-07. Each locked save holds a pooled connection
+	// while it waits, so one process queues its own saves to a page instead.
+	it('runs this process’s saves to one page one at a time, and other pages alongside', async () => {
+		storedPage([{ hash: HASH_ONE }]);
+		const events: string[] = [];
+		const releases: Array<() => void> = [];
+		prismaMock.$transaction.mockImplementation(async (fn: any) => {
+			const n = events.filter((e) => e.startsWith('start')).length;
+			events.push(`start ${n}`);
+			await new Promise<void>((resolve) => releases.push(resolve));
+			await fn(txMock);
+			events.push(`end ${n}`);
 		});
+
+		const saves = [
+			service.saveScrapedTrueResults('tv:tt0837069:1', [{ hash: HASH_TWO }] as any),
+			service.saveScrapedTrueResults('tv:tt0837069:1', [{ hash: HASH_NEW }] as any),
+			service.saveScrapedTrueResults('tv:tt0074049:1', [{ hash: HASH_NEW }] as any),
+		];
+		await vi.waitFor(() => expect(releases).toHaveLength(2));
+		// The first save to each page started; the second to the same page waits.
+		expect(events).toEqual(['start 0', 'start 1']);
+
+		releases[0]();
+		await vi.waitFor(() => expect(releases).toHaveLength(3));
+		expect(events).toEqual(['start 0', 'start 1', 'end 0', 'start 2']);
+		releases[1]();
+		releases[2]();
+		await Promise.all(saves);
 	});
 
 	it('checks key existence and age computations', async () => {

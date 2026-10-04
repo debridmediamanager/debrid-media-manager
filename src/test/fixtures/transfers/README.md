@@ -48,3 +48,22 @@ Job ids are replaced by the labels above, indexer release ids by `ix:release-N`,
 and each RD download link by a `FIXTURE` placeholder of the same shape. Account
 fields (`owner_hash`, `rd_user_id`), internal URLs and paths are dropped. Names,
 sizes, hashes, statuses and timestamps are as recorded.
+
+`lost-filings-2026-10-04.json` holds two library pages that lost filed releases
+to concurrent saves, read on 2026-10-04 with a read-only session. Each page is
+the `ScrapedTrue` row as it stood (`page`), and `filings` are the completed
+nzb2rd jobs of that season that reached `Available`, in the order filing wrote
+their `Available` rows (`filedAt` is that row's `updatedAt`, `availableBytes`
+its `bytes`, `completedAt` the job's own completion time). `inPage` says whether
+the page still held the release.
+
+- `tv:tt0837069:1`, Viva Pinata season 1: 25 episodes completed over nine hours
+  on 2026-09-06 and were all filed within five seconds of 06:27:26 on
+  2026-09-07, when a Transfers page listing them was opened. The page holds 4.
+- `tv:tt0074049:1`, Rock Follies season 1: three episodes filed within 90 ms on
+  2026-10-02. The page holds 2.
+
+That day 1,167 of 4,835 filed nzb2rd releases and 31 of 838 debrid02 ones were
+in `Available` and on no page of their title. 1,096 of those 1,198 had a sibling
+of the same title filed within two seconds, against 579 of the 4,475 that
+survived. Hashes, titles, sizes and timestamps are as recorded.

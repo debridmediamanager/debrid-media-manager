@@ -1,0 +1,307 @@
+{
+	"captured": "2026-10-04",
+	"pages": [
+		{
+			"key": "tv:tt0074049:1",
+			"page": {
+				"updatedAt": "2026-10-02T02:44:53.959Z",
+				"results": [
+					{
+						"hash": "604fa4c19e2004049acfe9b3d8d5bcd3e0bbbbcc",
+						"title": "Rock.Follies.S01E01.DVD-Rip.x264-DEiMOS {imdb-tt0074049}",
+						"fileSize": 617.82
+					},
+					{
+						"hash": "43e2280191864109ca5ba773fca300a4ba9f1601",
+						"title": "Rock.Follies.S01E05.DVD-Rip.x264-DEiMOS {imdb-tt0074049}",
+						"fileSize": 613.34
+					}
+				]
+			},
+			"filings": [
+				{
+					"hash": "604fa4c19e2004049acfe9b3d8d5bcd3e0bbbbcc",
+					"title": "Rock.Follies.S01E01.DVD-Rip.x264-DEiMOS {imdb-tt0074049}",
+					"fileSize": 617.82,
+					"availableBytes": 647829565,
+					"completedAt": "2026-10-01T08:36:13Z",
+					"filedAt": "2026-10-02T02:44:53.934Z",
+					"inPage": true
+				},
+				{
+					"hash": "bb12a1fbcda7459e82580509d701a35f6f915acc",
+					"title": "Rock.Follies.S01E02.DVD-Rip.x264-DEiMOS {imdb-tt0074049}",
+					"fileSize": 628.39,
+					"availableBytes": 658916439,
+					"completedAt": "2026-10-01T08:22:49Z",
+					"filedAt": "2026-10-02T02:44:53.996Z",
+					"inPage": false
+				},
+				{
+					"hash": "43e2280191864109ca5ba773fca300a4ba9f1601",
+					"title": "Rock.Follies.S01E05.DVD-Rip.x264-DEiMOS {imdb-tt0074049}",
+					"fileSize": 613.34,
+					"availableBytes": 643129831,
+					"completedAt": "2026-10-01T08:27:31Z",
+					"filedAt": "2026-10-02T02:44:54.022Z",
+					"inPage": true
+				}
+			]
+		},
+		{
+			"key": "tv:tt0837069:1",
+			"page": {
+				"updatedAt": "2026-09-07T06:27:30.840Z",
+				"results": [
+					{
+						"hash": "ce7b1529c16a748867c94314f67c553276087925",
+						"title": "Viva.Pinata.S01E10.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+						"fileSize": 433.49
+					},
+					{
+						"hash": "11116d8879b01640d16f3e75b5108b77aa365adb",
+						"title": "Viva.Pinata.S01E18.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+						"fileSize": 432.52
+					},
+					{
+						"hash": "db9905cac98b10fed3c738dfaca586cd4f9fe9ed",
+						"title": "Viva.Pinata.S01E11.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+						"fileSize": 425.78
+					},
+					{
+						"hash": "2641e2f51f09927d4c5dc8a3d1741a67a21ec6ba",
+						"title": "Viva.Pinata.S01E16.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+						"fileSize": 415.9
+					}
+				]
+			},
+			"filings": [
+				{
+					"hash": "11116d8879b01640d16f3e75b5108b77aa365adb",
+					"title": "Viva.Pinata.S01E18.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 432.52,
+					"availableBytes": 453532797,
+					"completedAt": "2026-09-07T01:56:56Z",
+					"filedAt": "2026-09-07T06:27:25.865Z",
+					"inPage": true
+				},
+				{
+					"hash": "ce7b1529c16a748867c94314f67c553276087925",
+					"title": "Viva.Pinata.S01E10.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 433.49,
+					"availableBytes": 454542454,
+					"completedAt": "2026-09-06T16:57:31Z",
+					"filedAt": "2026-09-07T06:27:26.113Z",
+					"inPage": true
+				},
+				{
+					"hash": "fc71594f1ef191fff4de505e830cfadb45e3226e",
+					"title": "Viva.Pinata.S01E12.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 457.55,
+					"availableBytes": 479772103,
+					"completedAt": "2026-09-06T17:12:13Z",
+					"filedAt": "2026-09-07T06:27:26.140Z",
+					"inPage": false
+				},
+				{
+					"hash": "199723849f3f22250aed1298fb9231d36d855966",
+					"title": "Viva.Pinata.S01E19.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 428.33,
+					"availableBytes": 449137940,
+					"completedAt": "2026-09-06T21:30:18Z",
+					"filedAt": "2026-09-07T06:27:26.165Z",
+					"inPage": false
+				},
+				{
+					"hash": "658775a388903ba5383125b19d7c084479222352",
+					"title": "Viva.Pinata.S01E02.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 421.67,
+					"availableBytes": 442157484,
+					"completedAt": "2026-09-06T16:48:03Z",
+					"filedAt": "2026-09-07T06:27:26.190Z",
+					"inPage": false
+				},
+				{
+					"hash": "0b5574d5255d40c575060f6ff8c26f63292fa643",
+					"title": "Viva.Pinata.S01E04.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 408.61,
+					"availableBytes": 428458298,
+					"completedAt": "2026-09-06T16:51:42Z",
+					"filedAt": "2026-09-07T06:27:26.219Z",
+					"inPage": false
+				},
+				{
+					"hash": "96c7f0c684dc56e744880a7beee45768749705c1",
+					"title": "Viva.Pinata.S01E06.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 417.16,
+					"availableBytes": 437419787,
+					"completedAt": "2026-09-06T16:55:04Z",
+					"filedAt": "2026-09-07T06:27:26.465Z",
+					"inPage": false
+				},
+				{
+					"hash": "bc16a23f3495e00ff37afd508d1ca1c9cb0f43a1",
+					"title": "Viva.Pinata.S01E21.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 398.07,
+					"availableBytes": 417409943,
+					"completedAt": "2026-09-06T21:36:52Z",
+					"filedAt": "2026-09-07T06:27:26.495Z",
+					"inPage": false
+				},
+				{
+					"hash": "7ae8df3ff73710a64928b024f64f4e60a2f228ab",
+					"title": "Viva.Pinata.S01E09.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 424.6,
+					"availableBytes": 445226629,
+					"completedAt": "2026-09-06T16:58:18Z",
+					"filedAt": "2026-09-07T06:27:26.527Z",
+					"inPage": false
+				},
+				{
+					"hash": "38ea97cacaa9d0be77d1405de6627bcdbcacb268",
+					"title": "Viva.Pinata.S01E08.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 388.24,
+					"availableBytes": 407101478,
+					"completedAt": "2026-09-06T16:56:42Z",
+					"filedAt": "2026-09-07T06:27:26.556Z",
+					"inPage": false
+				},
+				{
+					"hash": "d0728805c670ba203db65bcead37add14b37621f",
+					"title": "Viva.Pinata.S01E17.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 425.72,
+					"availableBytes": 446400729,
+					"completedAt": "2026-09-06T21:29:45Z",
+					"filedAt": "2026-09-07T06:27:26.588Z",
+					"inPage": false
+				},
+				{
+					"hash": "604088a766c2f6ab877a1668885bf69c00024ece",
+					"title": "Viva.Pinata.S01E05.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 393.61,
+					"availableBytes": 412735170,
+					"completedAt": "2026-09-06T16:53:40Z",
+					"filedAt": "2026-09-07T06:27:26.619Z",
+					"inPage": false
+				},
+				{
+					"hash": "35365a48a7c4e4a50b7f0baed99aad82bf668e02",
+					"title": "Viva.Pinata.S01E20.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 429.63,
+					"availableBytes": 450501516,
+					"completedAt": "2026-09-06T21:26:59Z",
+					"filedAt": "2026-09-07T06:27:26.659Z",
+					"inPage": false
+				},
+				{
+					"hash": "67688c5d68aca936670e620f3225a5aca755bfa0",
+					"title": "Viva.Pinata.S01E03.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 363.43,
+					"availableBytes": 381078791,
+					"completedAt": "2026-09-06T16:47:38Z",
+					"filedAt": "2026-09-07T06:27:26.693Z",
+					"inPage": false
+				},
+				{
+					"hash": "8e922dc2771b80bcfe1b6c3dccbbe03a42c8695b",
+					"title": "Viva.Pinata.S01E01.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 355.16,
+					"availableBytes": 372410371,
+					"completedAt": "2026-09-06T16:47:06Z",
+					"filedAt": "2026-09-07T06:27:26.727Z",
+					"inPage": false
+				},
+				{
+					"hash": "f1fbdcbc420071d3a1b8dc9ffacf69a80d694c18",
+					"title": "Viva.Pinata.S01E07.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 385.89,
+					"availableBytes": 404640146,
+					"completedAt": "2026-09-06T16:55:10Z",
+					"filedAt": "2026-09-07T06:27:26.759Z",
+					"inPage": false
+				},
+				{
+					"hash": "db9905cac98b10fed3c738dfaca586cd4f9fe9ed",
+					"title": "Viva.Pinata.S01E11.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 425.78,
+					"availableBytes": 446465580,
+					"completedAt": "2026-09-06T16:58:35Z",
+					"filedAt": "2026-09-07T06:27:26.788Z",
+					"inPage": true
+				},
+				{
+					"hash": "adfd538186b59380f1bfa194d341d68c4008a3ea",
+					"title": "Viva.Pinata.S01E23.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 349.77,
+					"availableBytes": 366761966,
+					"completedAt": "2026-09-06T21:51:43Z",
+					"filedAt": "2026-09-07T06:27:30.881Z",
+					"inPage": false
+				},
+				{
+					"hash": "dd21db5bcaadcf7e8cfce6cb2d0d9abe66f348bc",
+					"title": "Viva.Pinata.S01E15.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 355.27,
+					"availableBytes": 372530748,
+					"completedAt": "2026-09-06T21:49:15Z",
+					"filedAt": "2026-09-07T06:27:30.907Z",
+					"inPage": false
+				},
+				{
+					"hash": "cc12acec773a0679d75c1a068977cc61f9a3edfd",
+					"title": "Viva.Pinata.S01E22.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 422.46,
+					"availableBytes": 442977179,
+					"completedAt": "2026-09-06T21:32:38Z",
+					"filedAt": "2026-09-07T06:27:30.935Z",
+					"inPage": false
+				},
+				{
+					"hash": "9f066a33c812c8f73b2ba7da39e8345198c6a1bb",
+					"title": "Viva.Pinata.S01E24.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 472.61,
+					"availableBytes": 495567861,
+					"completedAt": "2026-09-06T21:26:52Z",
+					"filedAt": "2026-09-07T06:27:30.963Z",
+					"inPage": false
+				},
+				{
+					"hash": "5dd64c3505e9663a47057c5c9073db9e91098c9c",
+					"title": "Viva.Pinata.S01E25.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 406.4,
+					"availableBytes": 426138380,
+					"completedAt": "2026-09-06T21:32:42Z",
+					"filedAt": "2026-09-07T06:27:30.999Z",
+					"inPage": false
+				},
+				{
+					"hash": "bd6f92e55b3251093b50fc70256c8cd04fa8991d",
+					"title": "Viva.Pinata.S01E14.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 398.22,
+					"availableBytes": 417560231,
+					"completedAt": "2026-09-06T21:33:00Z",
+					"filedAt": "2026-09-07T06:27:31.031Z",
+					"inPage": false
+				},
+				{
+					"hash": "f9e3f2752d36623a2a27a47cf511c299a24b1c7e",
+					"title": "Viva.Pinata.S01E26.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 393.02,
+					"availableBytes": 412114922,
+					"completedAt": "2026-09-06T21:49:56Z",
+					"filedAt": "2026-09-07T06:27:31.059Z",
+					"inPage": false
+				},
+				{
+					"hash": "2641e2f51f09927d4c5dc8a3d1741a67a21ec6ba",
+					"title": "Viva.Pinata.S01E16.720p.HULU.WEB-Rip.H.264-JiTB {imdb-tt0837069}",
+					"fileSize": 415.9,
+					"availableBytes": 436101877,
+					"completedAt": "2026-09-06T21:32:15Z",
+					"filedAt": "2026-09-07T06:27:31.085Z",
+					"inPage": true
+				}
+			]
+		}
+	]
+}
