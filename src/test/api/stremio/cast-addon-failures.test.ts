@@ -13,6 +13,8 @@ import rdCatalog from '@/pages/api/stremio/[userid]/catalog/other/casted-other.j
 import rdMeta from '@/pages/api/stremio/[userid]/meta/other/[id]';
 import rdStream from '@/pages/api/stremio/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
+import accountRefusals from '@/test/fixtures/castAddonFailures/account-refusals-2026-10-04.json';
+import playRecorded from '@/test/fixtures/castAddonFailures/play-failures-2026-10-04.json';
 import recorded from '@/test/fixtures/castAddonFailures/provider-failures-2026-10-04.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import http from 'node:http';
@@ -121,6 +123,9 @@ vi.mock('@/lib/observability/torboxOperationalStats', () => ({
 const db = vi.mocked(repository);
 
 const fixture = (key: keyof typeof recorded.responses): Reply => recorded.responses[key];
+/** Real-Debrid's 403 for a locked or lapsed account (card 220's recording). */
+const rdPermissionDenied: Reply = playRecorded.responses['rd-permission-denied'];
+const tbPlanRestricted: Reply = accountRefusals.responses['tb-mylist-plan-restricted'];
 
 const on = (method: string, match: RegExp, ...replies: Array<Reply | 'hang-up'>) =>
 	net.routes.push({ method, match, replies });
@@ -228,6 +233,43 @@ describe('Real-Debrid', () => {
 		]);
 	});
 
+	// Card 224: Real-Debrid documents 403 permission_denied as "account
+	// locked, not premium". A fresh sign-in mints a token for the same
+	// account, so "sign in again" sent the member round in a circle.
+	it('answers an account Real-Debrid refuses with an account tile, not sign-in-again', async () => {
+		db.getCastProfile.mockResolvedValue({ apiKey: 'LAPSEDKEY' } as any);
+		on('GET', /app\.real-debrid\.com\/rest\/1\.0\/torrents\?/, rdPermissionDenied);
+
+		const res = await call(rdCatalog, { userid: 'rduser000007' });
+		expect(net.calls).toEqual([expect.stringContaining('/rest/1.0/torrents?')]);
+
+		expect(res._getStatusCode()).toBe(200);
+		expect(noticeOf(res)).toEqual([
+			expect.objectContaining({
+				id: 'dmm:notice:account',
+				name: expect.stringContaining('Real-Debrid refused your account'),
+				description: expect.stringContaining('https://real-debrid.com/account'),
+			}),
+		]);
+		expect(JSON.stringify(res._getData())).not.toMatch(/sign in/i);
+		expect(res._getHeaders()['Cache-Control']).toBe('max-age=300');
+	});
+
+	it('answers a library meta under a refused account with the account notice', async () => {
+		db.getCastProfile.mockResolvedValue({ apiKey: 'LAPSEDKEY' } as any);
+		on('GET', /app\.real-debrid\.com\/rest\/1\.0\/torrents\/info\//, rdPermissionDenied);
+
+		const res = await call(rdMeta, { userid: 'rduser000008', id: 'dmm:UK2VUCC2TZGAU.json' });
+
+		expect(res._getStatusCode()).toBe(200);
+		const meta = (res._getData() as any).meta;
+		expect(meta).toMatchObject({
+			id: 'dmm:UK2VUCC2TZGAU',
+			name: expect.stringContaining('Real-Debrid refused your account'),
+		});
+		expect(meta.videos[0].streams[0].externalUrl).toBe('https://real-debrid.com/account');
+	});
+
 	// 59% of the RD meta route's 500s in the week to 2026-10-03 were ids like
 	// these, sent by clients that ignore idPrefixes.
 	it.each([
@@ -287,6 +329,23 @@ describe('TorBox', () => {
 		expect(res._getStatusCode()).toBe(200);
 		expect(noticeOf(res)).toEqual([
 			expect.objectContaining({ id: 'dmm-tb:notice:credential' }),
+		]);
+	});
+
+	// Card 224: a free-plan key's library answered an empty catalog with no
+	// word of why, the same as a TorBox outage would.
+	it('answers a plan without API access with an account tile', async () => {
+		db.getTorBoxCastProfile.mockResolvedValue({ apiKey: 'FREEPLAN' } as any);
+		on('GET', /api\.torbox\.app\/v1\/api\/(torrents|webdl|usenet)\/mylist/, tbPlanRestricted);
+
+		const res = await call(tbCatalog, { userid: 'tbuser000003' });
+
+		expect(res._getStatusCode()).toBe(200);
+		expect(noticeOf(res)).toEqual([
+			expect.objectContaining({
+				id: 'dmm-tb:notice:account',
+				name: expect.stringContaining('TorBox refused your account'),
+			}),
 		]);
 	});
 
@@ -445,6 +504,8 @@ describe('AllDebrid', () => {
 // Stremio asks every addon whose prefix matches for a tile's meta, so each
 // addon has to answer its own notice ids itself, with no profile and no call.
 describe.each([
+	['dmm:notice:account', rdMeta, 'https://real-debrid.com/account'],
+	['dmm-tb:notice:account', tbMeta, 'https://torbox.app/settings'],
 	['dmm:notice:credential', rdMeta, '/stremio'],
 	['dmm-ad:notice:credential', adMeta, '/stremio-alldebrid'],
 	['dmm-tb:notice:credential', tbMeta, '/stremio-torbox'],
@@ -458,7 +519,9 @@ describe.each([
 		expect(res._getStatusCode()).toBe(200);
 		const meta = (res._getData() as any).meta;
 		expect(meta).toMatchObject({ id, type: 'other', name: expect.stringContaining('⚠️') });
-		expect(meta.videos[0].streams[0].externalUrl).toBe(`https://debridmediamanager.com${page}`);
+		expect(meta.videos[0].streams[0].externalUrl).toBe(
+			page.startsWith('https://') ? page : `https://debridmediamanager.com${page}`
+		);
 		expect(res._getHeaders()['Cache-Control']).toBe('max-age=300');
 		expect(net.calls).toEqual([]);
 		for (const lookup of [

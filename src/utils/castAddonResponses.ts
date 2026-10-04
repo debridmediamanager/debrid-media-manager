@@ -22,20 +22,59 @@ import { CastPlayVideo, castPlayVideoUrl } from './castPlayVideos';
  *   when the refresh errors, and a 200 would overwrite that copy, so those
  *   two answer 503 - which Stremio web drops silently from a stream list.
  * - A problem only the member can fix gets a notice they can see and tap: a
- *   tile in the catalog, a meta, or a stream that opens DMM. It is cached for
- *   five minutes at most - without a header NuvioTV keeps a meta six hours,
- *   long after the member has signed in again.
+ *   tile in the catalog, a meta, or a stream that opens the page that fixes
+ *   it: DMM for a sign-in, the provider's own account page for an account the
+ *   provider refuses. It is cached for five minutes at most - without a
+ *   header NuvioTV keeps a meta six hours, long after the member has signed
+ *   in again.
  */
 
 export type CastProvider = 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
 
-const PROVIDERS: Record<CastProvider, { name: string; idPrefix: string; page: string }> = {
-	rd: { name: 'Real-Debrid', idPrefix: 'dmm', page: '/stremio' },
-	ad: { name: 'AllDebrid', idPrefix: 'dmm-ad', page: '/stremio-alldebrid' },
-	tb: { name: 'TorBox', idPrefix: 'dmm-tb', page: '/stremio-torbox' },
-	pm: { name: 'Premiumize', idPrefix: 'dmm-pm', page: '/stremio-premiumize' },
-	oc: { name: 'Offcloud', idPrefix: 'dmm-oc', page: '/stremio-offcloud' },
-	dl: { name: 'Debrid-Link', idPrefix: 'dmm-dl', page: '/stremio-debridlink' },
+/**
+ * `account` is where a member sees their plan on the provider's own site; a
+ * signed-out visitor is sent to its sign-in first.
+ */
+const PROVIDERS: Record<
+	CastProvider,
+	{ name: string; idPrefix: string; page: string; account: string }
+> = {
+	rd: {
+		name: 'Real-Debrid',
+		idPrefix: 'dmm',
+		page: '/stremio',
+		account: 'https://real-debrid.com/account',
+	},
+	ad: {
+		name: 'AllDebrid',
+		idPrefix: 'dmm-ad',
+		page: '/stremio-alldebrid',
+		account: 'https://alldebrid.com/account/',
+	},
+	tb: {
+		name: 'TorBox',
+		idPrefix: 'dmm-tb',
+		page: '/stremio-torbox',
+		account: 'https://torbox.app/settings',
+	},
+	pm: {
+		name: 'Premiumize',
+		idPrefix: 'dmm-pm',
+		page: '/stremio-premiumize',
+		account: 'https://www.premiumize.me/account',
+	},
+	oc: {
+		name: 'Offcloud',
+		idPrefix: 'dmm-oc',
+		page: '/stremio-offcloud',
+		account: 'https://offcloud.com/',
+	},
+	dl: {
+		name: 'Debrid-Link',
+		idPrefix: 'dmm-dl',
+		page: '/stremio-debridlink',
+		account: 'https://debrid-link.com/webapp/account',
+	},
 };
 
 const POSTER = 'https://static.debridmediamanager.com/dmmcast.png';
@@ -48,14 +87,26 @@ const setupUrl = (provider: CastProvider) =>
 	`${process.env.DMM_ORIGIN || 'https://debridmediamanager.com'}${PROVIDERS[provider].page}`;
 
 /** The failures a member can fix, and therefore the ones worth a notice. */
-type NoticeFailure = Extract<CastFailure, 'not-connected' | 'credential'>;
+type NoticeFailure = Extract<CastFailure, 'not-connected' | 'credential' | 'account'>;
 
-const isNoticeFailure = (failure: CastFailure): failure is NoticeFailure =>
-	failure === 'not-connected' || failure === 'credential';
+const NOTICE_FAILURES: readonly string[] = ['not-connected', 'credential', 'account'];
+
+const isNoticeFailure = (failure: string): failure is NoticeFailure =>
+	NOTICE_FAILURES.includes(failure);
+
+/** The page a notice opens: the provider's site for its own refusal, else DMM. */
+const noticeUrl = (provider: CastProvider, failure: NoticeFailure) =>
+	failure === 'account' ? PROVIDERS[provider].account : setupUrl(provider);
 
 const noticeText = (provider: CastProvider, failure: NoticeFailure) => {
 	const { name } = PROVIDERS[provider];
 	const url = setupUrl(provider);
+	if (failure === 'account') {
+		return {
+			title: `${name} refused your account`,
+			description: `${name} accepts this addon's sign-in but will not serve the account behind it. The premium plan may have run out or the account may be locked. Check your account at ${PROVIDERS[provider].account}. Nothing needs to change on Debrid Media Manager. This addon works again as soon as the account does.`,
+		};
+	}
 	if (failure === 'credential') {
 		return {
 			title: `Sign in to ${name} again`,
@@ -103,12 +154,15 @@ const noticeMeta = (provider: CastProvider, failure: NoticeFailure, id?: string)
 		videos: [
 			{
 				id: `${metaId}:open`,
-				title: `Open ${setupUrl(provider)}`,
+				title: `Open ${noticeUrl(provider, failure)}`,
 				streams: [
 					{
 						name: 'DMM Cast',
-						title: `Open ${PROVIDERS[provider].name} setup on Debrid Media Manager`,
-						externalUrl: setupUrl(provider),
+						title:
+							failure === 'account'
+								? `Open your ${PROVIDERS[provider].name} account`
+								: `Open ${PROVIDERS[provider].name} setup on Debrid Media Manager`,
+						externalUrl: noticeUrl(provider, failure),
 					},
 				],
 			},
@@ -125,7 +179,7 @@ export function castNoticeMeta(provider: CastProvider, metaId: string) {
 	const prefix = `${PROVIDERS[provider].idPrefix}:notice:`;
 	if (!metaId.startsWith(prefix)) return null;
 	const failure = metaId.slice(prefix.length);
-	if (failure !== 'credential' && failure !== 'not-connected') return null;
+	if (!isNoticeFailure(failure)) return null;
 	return { meta: noticeMeta(provider, failure), cacheMaxAge: 0 };
 }
 
@@ -278,7 +332,7 @@ export function sendStreamFailure(
 				{
 					name: '⚠️ DMM Cast',
 					title,
-					externalUrl: setupUrl(provider),
+					externalUrl: noticeUrl(provider, failure),
 				},
 			],
 			cacheMaxAge: 0,

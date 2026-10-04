@@ -1,0 +1,19 @@
+{
+	"capturedAt": "2026-10-04",
+	"note": "Provider answers that refuse an account rather than its sign-in. Real-Debrid's 403 permission_denied is in play-failures-2026-10-04.json. No credential appears below.",
+	"responses": {
+		"tb-mylist-plan-restricted": {
+			"provider": "tb",
+			"request": "GET https://api.torbox.app/v1/api/torrents/mylist?bypass_cache=true",
+			"source": "Recorded 2026-10-04 03:25 UTC with the trial TorBox account, whose /user/me read plan 0 (free) after its trial ran out on 2026-09-25. requestdl answered the same body.",
+			"status": 403,
+			"contentType": "application/json",
+			"body": {
+				"success": false,
+				"error": "PLAN_RESTRICTED_FEATURE",
+				"detail": "API feature not available on your plan. Please upgrade to a paid plan to access the API.",
+				"data": null
+			}
+		}
+	}
+}

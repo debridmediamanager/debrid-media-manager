@@ -4,13 +4,23 @@
  * - `not-connected`: no cast profile stands behind this install's user id.
  * - `credential`: the provider refused the stored key or token. A retry cannot
  *   clear it; the member has to sign in again on DMM.
+ * - `account`: the provider accepted the sign-in and refused the account
+ *   itself - premium ran out, the account is locked or banned, or the plan
+ *   has no API access. Signing in again changes nothing; the member has to
+ *   sort it out on the provider's own site.
  * - `gone`: the provider answered, and the item is not in the account.
  * - `unplayable`: the item is there but has nothing a client can stream.
  * - `unavailable`: the provider did not answer usefully - a reset connection,
  *   a timeout, a 5xx, a rate limit, or our own database. The next request may
  *   well succeed.
  */
-export type CastFailure = 'not-connected' | 'credential' | 'gone' | 'unplayable' | 'unavailable';
+export type CastFailure =
+	| 'not-connected'
+	| 'credential'
+	| 'account'
+	| 'gone'
+	| 'unplayable'
+	| 'unavailable';
 
 /**
  * Error codes each provider uses for a key it will not accept, measured against
@@ -28,6 +38,11 @@ const CREDENTIAL_CODES = new Set([
 	// address, which no amount of signing in on the member's side changes.
 	'AUTH_BAD_APIKEY',
 	'AUTH_MISSING_APIKEY',
+]);
+
+/** Codes for an account the provider refuses whatever the sign-in. */
+const ACCOUNT_CODES = new Set([
+	// AllDebrid: "This account is banned".
 	'AUTH_USER_BANNED',
 ]);
 
@@ -37,9 +52,18 @@ const FORBIDDEN_CREDENTIAL_ERRORS = new Set([
 	'AUTH_ERROR',
 	'BAD_TOKEN',
 	'NO_AUTH',
-	// Real-Debrid: a locked or lapsed account.
+]);
+
+/**
+ * 403 bodies that are about the account. Real-Debrid documents its 403 as
+ * "permission denied (account locked, not premium)", and a fresh sign-in
+ * mints a token for the same locked or lapsed account. TorBox answers a plan
+ * without API access with PLAN_RESTRICTED_FEATURE.
+ */
+const FORBIDDEN_ACCOUNT_ERRORS = new Set([
 	'permission_denied',
 	'account_locked',
+	'PLAN_RESTRICTED_FEATURE',
 ]);
 
 /**
@@ -116,6 +140,7 @@ export function classifyCastError(error: unknown): CastFailure {
 	if (name === 'RdTokenExpiredError') return 'credential';
 	if (name === 'CastItemGoneError') return 'gone';
 	if (typeof code === 'string' && CREDENTIAL_CODES.has(code)) return 'credential';
+	if (typeof code === 'string' && ACCOUNT_CODES.has(code)) return 'account';
 	if (typeof name === 'string' && PROSE_ERRORS.has(name) && typeof message === 'string') {
 		if (NOT_IN_ACCOUNT.test(message)) return 'gone';
 	}
@@ -127,6 +152,7 @@ export function classifyCastError(error: unknown): CastFailure {
 	if (status === 401) return 'credential';
 	if (status === 403 && typeof vendorError === 'string') {
 		if (FORBIDDEN_CREDENTIAL_ERRORS.has(vendorError)) return 'credential';
+		if (FORBIDDEN_ACCOUNT_ERRORS.has(vendorError)) return 'account';
 	}
 	// Real-Debrid `unknown_method` / `unknown_ressource`, TorBox `ITEM_NOT_FOUND`.
 	if (status === 404) return 'gone';
@@ -137,16 +163,13 @@ export function classifyCastError(error: unknown): CastFailure {
 /**
  * Why a play link could not be sent on to the file. A play is answered to a
  * video player rather than to an addon client, and the member reads the
- * answer from the screen, so it separates three refusals the catalog and meta
+ * answer from the screen, so it separates two refusals the catalog and meta
  * routes have no use for:
  *
- * - `account`: the account cannot make links at all right now - Real-Debrid's
- *   403 (documented as "account locked, not premium"), TorBox's plan without
- *   API access. Signing in again does not help.
  * - `network`: Real-Debrid will not make a link for the player's address.
  * - `refused`: the provider will not serve this one file.
  */
-export type CastPlayFailure = CastFailure | 'account' | 'network' | 'refused';
+export type CastPlayFailure = CastFailure | 'network' | 'refused';
 
 type ProviderErrorShape = ErrorShape & {
 	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };
@@ -190,11 +213,10 @@ export function classifyRdPlayError(error: unknown): CastPlayFailure {
 
 /**
  * Sorts a failed TorBox play. TorBox answers a plan without API access with
- * the same 403 it uses for a bad key, and only the body tells them apart.
+ * the same 403 it uses for a bad key, and only the body tells them apart -
+ * which {@link classifyCastError} reads for every route.
  */
 export function classifyTorBoxPlayError(error: unknown): CastPlayFailure {
-	const { error: tbError } = providerErrorDetail(error);
-	if (httpStatusOf(error) === 403 && tbError === 'PLAN_RESTRICTED_FEATURE') return 'account';
 	return classifyCastError(error);
 }
 
