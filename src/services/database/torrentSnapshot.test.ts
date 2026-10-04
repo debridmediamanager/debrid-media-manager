@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TorrentSnapshotService } from './torrentSnapshot';
 
@@ -171,6 +172,56 @@ describe('TorrentSnapshotService', () => {
 			});
 
 			expect(result).toEqual(snapshotData);
+		});
+
+		// The race itself, on a real MySQL, is in torrentSnapshot.integration.test.ts.
+		describe('when another post of the release created the row first', () => {
+			const snapshotData = {
+				id: 'hash1:2024-01-01',
+				hash: 'hash1',
+				addedDate: new Date('2024-01-01'),
+				payload: { data: 'test' },
+			};
+			const keyTaken = () =>
+				new Prisma.PrismaClientKnownRequestError(
+					'Unique constraint failed on the constraint: `PRIMARY`',
+					{ code: 'P2002', clientVersion: '6.16.1', meta: { target: 'PRIMARY' } }
+				);
+
+			it('writes once more, which updates that row', async () => {
+				mockPrisma.torrentSnapshot.upsert
+					.mockRejectedValueOnce(keyTaken())
+					.mockResolvedValueOnce(snapshotData);
+
+				await expect(service.upsertSnapshot(snapshotData)).resolves.toEqual(snapshotData);
+				expect(mockPrisma.torrentSnapshot.upsert).toHaveBeenCalledTimes(2);
+				expect(mockPrisma.torrentSnapshot.upsert.mock.calls[1]).toEqual(
+					mockPrisma.torrentSnapshot.upsert.mock.calls[0]
+				);
+			});
+
+			it('writes only once more', async () => {
+				mockPrisma.torrentSnapshot.upsert.mockRejectedValue(keyTaken());
+
+				await expect(service.upsertSnapshot(snapshotData)).rejects.toMatchObject({
+					code: 'P2002',
+				});
+				expect(mockPrisma.torrentSnapshot.upsert).toHaveBeenCalledTimes(2);
+			});
+
+			it('does not write again after any other failure', async () => {
+				const down = new Prisma.PrismaClientKnownRequestError(
+					"Can't reach database server",
+					{
+						code: 'P1001',
+						clientVersion: '6.16.1',
+					}
+				);
+				mockPrisma.torrentSnapshot.upsert.mockRejectedValue(down);
+
+				await expect(service.upsertSnapshot(snapshotData)).rejects.toBe(down);
+				expect(mockPrisma.torrentSnapshot.upsert).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 });

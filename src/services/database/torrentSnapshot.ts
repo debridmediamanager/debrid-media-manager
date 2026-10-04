@@ -8,8 +8,27 @@ export interface SnapshotPayload {
 	payload: Prisma.InputJsonValue;
 }
 
+const isUniqueKeyConflict = (error: unknown) =>
+	error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
+
 export class TorrentSnapshotService extends DatabaseClient {
-	public async upsertSnapshot({ id, hash, addedDate, payload }: SnapshotPayload) {
+	/**
+	 * Prisma's upsert on MySQL reads the row and then creates or updates it, so
+	 * two posts of one release that both read before either has created the row
+	 * both create it, and the second fails on the key. The row is there by then,
+	 * so writing once more updates it. Over 2026-09-21..10-04 that collision
+	 * answered 179 zurg posts with a 500.
+	 */
+	public async upsertSnapshot(snapshot: SnapshotPayload) {
+		try {
+			return await this.writeSnapshot(snapshot);
+		} catch (error) {
+			if (!isUniqueKeyConflict(error)) throw error;
+			return this.writeSnapshot(snapshot);
+		}
+	}
+
+	private writeSnapshot({ id, hash, addedDate, payload }: SnapshotPayload) {
 		return this.prisma.torrentSnapshot.upsert({
 			where: { id },
 			update: {
