@@ -18,6 +18,7 @@
 import type { RdCachedNames } from '@/services/database/availability';
 import { flattenAndRemoveDuplicates, ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
+import { withoutTrashedResults } from '@/services/scrapedVerdicts/job';
 import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
@@ -249,7 +250,27 @@ function merge(pages: LibraryRelease[][]): LibraryRelease[] {
 async function readTarget(target: TorznabTarget): Promise<LibraryRelease[]> {
 	const row = await db.getScrapedTrueRow(target.key);
 	if (!row) return [];
-	return toReleases(row.results, target.kind, row.updatedAt);
+	return toReleases(await withoutJudgedTrash(target, row.results), target.kind, row.updatedAt);
+}
+
+/**
+ * Leaves out a movie page's releases the scraped-result verdicts judged not to
+ * be that movie, as the movie page does before it renders them.
+ *
+ * The verdict pass moves those releases off the page into ScrapedTrash, but a
+ * scraper that finds one again merges it back, and until the pass or the cron's
+ * sweep reaches the page again this feed served it: on 2026-10-04, 27 of 393
+ * randomly drawn judged movie pages held 137 such releases, and every one
+ * checked had been trashed once already. The filter reads the titles as stored, before
+ * `toReleases` decodes them, because a verdict is keyed by the stored title. A
+ * failure serves the page unfiltered, as the report filter does.
+ */
+function withoutJudgedTrash(
+	target: TorznabTarget,
+	results: ScrapeSearchResult[]
+): Promise<ScrapeSearchResult[]> {
+	if (target.kind !== 'movie') return Promise.resolve(results);
+	return withoutTrashedResults(target.imdbId, results);
 }
 
 /**
@@ -410,7 +431,8 @@ async function recentReleases(): Promise<LibraryRelease[]> {
 			// client syncs, so the slice happens in SQL rather than after
 			// transferring the lot.
 			const rows = (await db.getScrapedTrueResults<ScrapeSearchResult[]>(key, 0, 0)) ?? [];
-			const releases = toReleases(rows, target.kind, updatedAt).slice(0, RECENT_PER_KEY);
+			const kept = await withoutJudgedTrash(target, rows);
+			const releases = toReleases(kept, target.kind, updatedAt).slice(0, RECENT_PER_KEY);
 			return withoutReported(target.imdbId, releases);
 		})
 	);

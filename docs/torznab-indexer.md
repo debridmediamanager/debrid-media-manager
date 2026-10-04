@@ -130,11 +130,34 @@ this budget exists to pace.
 4. An episode search keeps the releases that name that episode (below).
 5. Reported hashes are dropped, exactly as the site does before rendering a title. A
    failure there serves the unfiltered set rather than failing the search.
-6. Category filter, then the cache lookup, then paging (order matters — see below).
+6. On a movie page, releases the scraped-result verdicts judged not to be that movie are
+   dropped, as the movie page does (see below).
+7. Category filter, then the cache lookup, then paging (order matters — see below).
 
 **Only `ScrapedTrue` is served.** The `Scraped` table has been measured carrying
 fabricated titles filed against real hashes. A person browsing can see through that; an
 \*arr cannot, because it matches on the release name and would import the wrong film.
+
+### Releases judged not to be the movie
+
+A movie page view runs the scraped-result verdict pass (`src/services/scrapedVerdicts/`),
+which moves releases that are not the movie off the page into `ScrapedTrash`. A scraper
+that finds one of them again merges it back into `ScrapedTrue`, and until something moves
+it again every reader of the page serves it. On 2026-10-04, 27 of 393 randomly drawn
+judged movie pages held 137 such releases. Two things now cover that window:
+
+- The feed drops every release on a movie page that already carries a trash verdict,
+  through the same `withoutTrashedResults` the movie page uses, on searches and on the
+  RSS sync. The verdicts are keyed by the title as stored, so the filter runs before the
+  titles are decoded. It follows the verdicts' own switch: with no `TYPESAFE_API_KEY` it
+  passes everything through, and a failed lookup serves the page unfiltered.
+- The cron's sweep (`sweep.ts`) moves those releases off the pages a scraper changed,
+  without a page view and without asking the model.
+
+A Torznab search does not start a verdict pass. The pass spends the model budget, which
+page views alone used up on every day from 2026-09-28 to 2026-10-03, so a feed read
+would only move that budget from the pages people open to the ones an \*arr asks about.
+Releases nobody has judged yet are served as before.
 
 ### TV searches that name no season
 
@@ -340,7 +363,8 @@ Supporting additions elsewhere: `getScrapedTrueRow` / `getScrapedTrueSeasonKeys`
 None. The endpoint needs no new configuration — no token secret, no public base, no
 store — which also means there is no deploy step that can half-enable it. Debridio
 backfill uses the `DEBRIDIO_ADDON_URL` / `DEBRIDIO_ALLDEBRID_URL` the site already sets,
-and cleanly does nothing when they are unset.
+and cleanly does nothing when they are unset. The verdict filter follows the verdicts'
+existing switch, `TYPESAFE_API_KEY`, and passes everything through without it.
 
 ## Tests
 
@@ -352,6 +376,7 @@ of Sonarr's paging through the route and the real limiter against
 `src/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json`, the reported search as
 the proxy log recorded it plus the production library page it paged through, and the same
 fixture checks that the reported S03E10 search returns every release naming that episode
-inside Sonarr's reach),
+inside Sonarr's reach; its verdict cases serve a recorded movie page whose trashed releases
+a scraper wrote back, `src/services/scrapedVerdicts/__fixtures__/written-back-trash.json`),
 `src/test/services/torznab{Resolve,Categories,Xml}.test.ts`,
 `src/test/pages/torznab.test.tsx`.

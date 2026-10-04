@@ -1,7 +1,9 @@
 import handler from '@/pages/api/torznab/[...route]';
 import type { RdCachedNames } from '@/services/database/availability';
+import { pairKeyOf } from '@/services/database/scrapedVerdict';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
+import writtenBack from '@/services/scrapedVerdicts/__fixtures__/written-back-trash.json';
 import { ProviderProbeError } from '@/services/torznab/providerCache';
 import {
 	CACHED_SEEDERS,
@@ -45,6 +47,19 @@ vi.mock('@/utils/debridioBackfill', () => ({
 	backfillFromDebridioNow: vi.fn(async () => []),
 	refreshDebridioAvailabilityInBackground: vi.fn(async () => {}),
 }));
+
+// The verdicts' own lookup, answered from a recorded page; everything else in
+// the module is the real one, so the filter under test is the movie page's.
+const { trashedPairKeys } = vi.hoisted(() => ({ trashedPairKeys: vi.fn() }));
+vi.mock('@/services/database/scrapedVerdict', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/services/database/scrapedVerdict')>();
+	return {
+		...actual,
+		ScrapedVerdictService: class {
+			getTrashedPairKeys = (...args: unknown[]) => trashedPairKeys(...args);
+		},
+	};
+});
 
 const mockRepo = vi.mocked(repository);
 const mockBackfill = vi.mocked(backfillFromDebridioNow);
@@ -448,6 +463,77 @@ describe('search', () => {
 		expect(
 			titles(await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY }))
 		).toHaveLength(3);
+	});
+});
+
+// Recorded 2026-10-04: Doraemon: Nobita's Little Star Wars, four of whose seven
+// ScrapedTrue releases carry a trash verdict. The verdict pass had moved all four
+// to ScrapedTrash on 2026-09-29, and a scraper wrote them back on 2026-10-02.
+describe('releases the verdicts judged not to be the movie', () => {
+	const page = writtenBack.pages.find((p) => p.imdbId === 'tt0313990')!;
+	const entries = page.ScrapedTrue!.entries;
+	const trashed = entries.filter((e) => e.verdict === 'trash').map((e) => e.hash);
+	const others = entries.filter((e) => e.verdict !== 'trash').map((e) => e.hash);
+	const search = () => run({ t: 'movie', imdbid: page.imdbId, apikey: SPONSOR_KEY });
+	const served = async (res?: MockResponse) =>
+		attrValue(body(res ?? (await search())), 'infohash').sort();
+
+	beforeEach(() => {
+		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		library.set(page.key, {
+			results: entries.map(({ hash, title, fileSize }) => ({ hash, title, fileSize })),
+			updatedAt: new Date(page.ScrapedTrue!.updatedAt),
+		});
+		// What ScrapedVerdict holds for the page: a trash verdict per (hash, title).
+		trashedPairKeys.mockReset().mockImplementation(async (imdbId: string, hashes: string[]) => {
+			if (imdbId !== page.imdbId) return new Set();
+			return new Set(
+				entries
+					.filter((e) => e.verdict === 'trash' && hashes.includes(e.hash))
+					.map((e) => pairKeyOf(e.hash, e.title))
+			);
+		});
+	});
+	afterEach(() => vi.unstubAllEnvs());
+
+	it('leaves out the trashed releases a scraper wrote back to the page', async () => {
+		expect(trashed).toHaveLength(4);
+		expect(await served()).toEqual([...others].sort());
+		expect(trashedPairKeys).toHaveBeenCalledWith(page.imdbId, expect.any(Array));
+	});
+
+	it('leaves them out of the RSS sync too', async () => {
+		mockRepo.getRecentScrapedTrueKeys = vi
+			.fn()
+			.mockResolvedValue([
+				{ key: page.key, updatedAt: new Date(page.ScrapedTrue!.updatedAt) },
+			]);
+
+		const res = await run({ t: 'search', apikey: SPONSOR_KEY });
+
+		expect(attrValue(body(res), 'infohash').sort()).toEqual([...others].sort());
+	});
+
+	it('serves the page whole when the verdicts are switched off or cannot be read', async () => {
+		vi.stubEnv('TYPESAFE_API_KEY', '');
+		expect(await served()).toEqual(entries.map((e) => e.hash).sort());
+
+		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		trashedPairKeys.mockRejectedValue(new Error('table is gone'));
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
+		expect(await served()).toEqual(entries.map((e) => e.hash).sort());
+	});
+
+	it('does not ask about a season page', async () => {
+		library.set(`tv:${SHOW_ID}:1`, {
+			results: [release('Show.S01E01.1080p.WEB', 900, hash('7'))],
+			updatedAt: PAGE_UPDATED_AT,
+		});
+
+		const res = await run({ t: 'tvsearch', imdbid: SHOW_ID, season: '1', apikey: SPONSOR_KEY });
+
+		expect(attrValue(body(res), 'infohash')).toEqual([hash('7')]);
+		expect(trashedPairKeys).not.toHaveBeenCalled();
 	});
 });
 
