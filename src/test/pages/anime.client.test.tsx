@@ -362,6 +362,17 @@ describe('/anime/[anidbid]', () => {
 		expect(screen.getByTestId('anime-franchise')).toBeInTheDocument();
 	});
 
+	// Fizzy #221: with no description to show, the header read a lone '..'.
+	it("shows no description, not '..', for an entry production had no metadata for", async () => {
+		await openEntry('18886');
+
+		expect(
+			await screen.findByRole('heading', { name: 'Sousou no Frieren 2nd Season' })
+		).toBeInTheDocument();
+		expect(fixture('api-info-anime-anidb-18886.json').title).toBe('Unknown');
+		expect(screen.queryByText('..')).not.toBeInTheDocument();
+	});
+
 	// The Stremio handlers link a row with no AniDB id here by its MAL id.
 	it('serves an entry the table knows only by its MAL id', async () => {
 		await openEntry('mal-26395');

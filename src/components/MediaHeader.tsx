@@ -158,8 +158,16 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 						)}
 					</div>
 
-					<div className="h-fit w-fit bg-slate-900/75" onClick={onDescToggle}>
-						{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
+					<div
+						className="h-fit w-fit bg-slate-900/75"
+						onClick={onDescToggle}
+						data-testid="media-description"
+					>
+						{/* Only a description the limit cuts is marked as cut. An anime entry
+						    with no metadata has none, and its header read a lone '..'. */}
+						{descLimit > 0 && description.length > descLimit
+							? description.substring(0, descLimit) + '..'
+							: description}{' '}
 						{imdbScore > 0 && isAnime && (
 							<div className="inline text-yellow-100">
 								{ratingHref ? (

@@ -101,6 +101,29 @@ describe('MediaHeader', () => {
 		expect(relatedProps).toMatchObject({ imdbId: props.imdbId, mediaType: 'movie' });
 	});
 
+	// Fizzy #221. The anime page hands the header an empty description for an
+	// entry with no metadata, and the header read a lone '..'; a description
+	// shorter than the limit gained '..' after its last word.
+	it('marks a description as cut only when the limit cuts it', () => {
+		// No score, so the description block holds the description alone.
+		const header = (description: string, descLimit: number) => (
+			<MediaHeader {...createProps({ description, descLimit, imdbScore: 0 })} />
+		);
+		const shown = () => screen.getByTestId('media-description').textContent?.trim();
+
+		const { rerender } = render(header('', 100));
+		expect(shown()).toBe('');
+
+		rerender(header('n/a', 100));
+		expect(shown()).toBe('n/a');
+
+		rerender(header('A dream within a dream', 12));
+		expect(shown()).toBe('A dream with..');
+
+		rerender(header('A dream within a dream', 0));
+		expect(shown()).toBe('A dream within a dream');
+	});
+
 	it('falls back to the Poster component when no poster URL is provided', () => {
 		const props = createProps({ poster: '', backdrop: undefined });
 		render(<MediaHeader {...props} />);
