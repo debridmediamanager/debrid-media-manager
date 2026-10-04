@@ -3,6 +3,7 @@ import {
 	buildTransferRegistration,
 	originalHashFromInput,
 	parseTransferContext,
+	scrapedKeyFor,
 	TransferJobFile,
 	type TransferRegistration,
 } from '@/services/debridUploaderRegistration';
@@ -223,6 +224,22 @@ async function resolveDebridContext(
 			`it will not appear in search results`
 	);
 	return null;
+}
+
+/**
+ * The library page a completed transfer is filed under, worked out now the way
+ * filing it works it out. Reads only; null when it has no page.
+ *
+ * For a transfer already in `Available` whose entry a concurrent save dropped
+ * (`scripts/repair-lost-filings.ts`): `plan…Filing` stops at `Available`, so it
+ * cannot answer for one.
+ */
+export async function filingPageOf(source: 'nzb2rd' | 'debrid', job: any): Promise<string | null> {
+	const context =
+		source === 'nzb2rd'
+			? await resolveNzb2rdContext(job, undefined, undefined)
+			: await resolveDebridContext(job, undefined, undefined);
+	return context ? scrapedKeyFor(job.imdb_id, context) : null;
 }
 
 /**

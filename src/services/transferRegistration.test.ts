@@ -2,6 +2,7 @@ import { repository as db } from '@/services/repository';
 import {
 	fileCompletedDebridJob,
 	fileCompletedNzb2rdJob,
+	filingPageOf,
 	planDebridFiling,
 	planNzb2rdFiling,
 	registerCompletedDebridJob,
@@ -418,6 +419,28 @@ describe('planning a filing', () => {
 		);
 
 		expect(result).toEqual({ outcome: 'already' });
+	});
+
+	// A release a concurrent save dropped from its page is already in
+	// `Available`, so planning answers `already` for it. The repair still has to
+	// know which page filing would put it on.
+	it('names the page filing would choose for a release already in Available', async () => {
+		mockDb.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: HASH, files: [] }]);
+		const usenet = nzb2rdJob('nzb2rd-B1');
+		const debrid = debridJob('debrid-D2');
+
+		expect(await planNzb2rdFiling(usenet, undefined, undefined)).toEqual({
+			outcome: 'already',
+		});
+		expect(await filingPageOf('nzb2rd', usenet)).toBe('tv:tt11363282:1');
+		expect(await filingPageOf('debrid', debrid)).toBe('tv:tt5555260:1');
+		for (const write of writes()) expect(write).not.toHaveBeenCalled();
+	});
+
+	it('names no page for a release filing could not place', async () => {
+		expect(
+			await filingPageOf('nzb2rd', { ...nzb2rdJob('nzb2rd-B1'), imdb_id: 'tt0000001' })
+		).toBeNull();
 	});
 
 	it('refuses a TB → RD job whose file list the uploader will not serve', async () => {

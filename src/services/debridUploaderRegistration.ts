@@ -58,6 +58,26 @@ export function parseTransferContext(
 	return null;
 }
 
+/** The library page a transfer is filed under. */
+export function scrapedKeyFor(imdbId: string, context: TransferContext): string {
+	return context.mediaType === 'movie' ? `movie:${imdbId}` : `tv:${imdbId}:${context.seasonNum}`;
+}
+
+/**
+ * A filed transfer's library entry, rebuilt from the `Available` row filed with
+ * it: filing stores the same title as that row's `filename` and the size of its
+ * `bytes` in MiB.
+ */
+export function scrapeEntryFromAvailable(row: {
+	hash: string;
+	filename: string;
+	bytes: number | bigint;
+}): ScrapeSearchResult {
+	return { hash: row.hash.toLowerCase(), title: row.filename, fileSize: mibOf(row.bytes) };
+}
+
+const mibOf = (bytes: number | bigint) => Math.round((Number(bytes) / 1024 / 1024) * 100) / 100;
+
 export function buildTransferRegistration(args: {
 	infoHash: string | null | undefined;
 	imdbId: string | null | undefined;
@@ -86,12 +106,10 @@ export function buildTransferRegistration(args: {
 	if (!title) return null;
 
 	const totalBytes = linked.reduce((sum, f) => sum + f.size, 0);
-	const fileSizeMb = Math.round((totalBytes / 1024 / 1024) * 100) / 100;
 
 	return {
-		scrapedKey:
-			context.mediaType === 'movie' ? `movie:${imdbId}` : `tv:${imdbId}:${context.seasonNum}`,
-		scrapeEntry: { hash, title, fileSize: fileSizeMb },
+		scrapedKey: scrapedKeyFor(imdbId, context),
+		scrapeEntry: { hash, title, fileSize: mibOf(totalBytes) },
 		availability: {
 			hash,
 			imdbId,

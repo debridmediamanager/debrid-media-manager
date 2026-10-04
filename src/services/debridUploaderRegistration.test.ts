@@ -1,10 +1,49 @@
+import lostFilings from '@/test/fixtures/transfers/lost-filings-2026-10-04.json';
 import { describe, expect, it } from 'vitest';
 import {
 	buildTransferRegistration,
 	originalHashFromInput,
 	parseTransferContext,
+	scrapedKeyFor,
+	scrapeEntryFromAvailable,
 	TransferJobFile,
 } from './debridUploaderRegistration';
+
+// The repair for card 219 rebuilds a dropped entry from its `Available` row, so
+// that has to give back exactly what filing stored. These are the entries the
+// recorded pages still hold, against the `Available` rows filed with them.
+describe('scrapeEntryFromAvailable', () => {
+	const kept = lostFilings.pages.flatMap((page) =>
+		page.filings
+			.filter((f) => f.inPage)
+			.map((f) => ({ f, stored: page.page.results.find((r) => r.hash === f.hash)! }))
+	);
+
+	it.each(kept.map(({ f, stored }) => [f.title, f, stored]))(
+		'rebuilds the entry filing stored for %s',
+		(_title, f, stored) => {
+			expect(
+				scrapeEntryFromAvailable({
+					hash: f.hash,
+					filename: f.title,
+					bytes: BigInt(f.availableBytes),
+				})
+			).toEqual(stored);
+		}
+	);
+
+	it('covers every entry the recorded pages hold', () => {
+		expect(kept).toHaveLength(6);
+	});
+
+	it('files under the same page key as a registration', () => {
+		expect(scrapedKeyFor('tt0837069', { mediaType: 'tv', seasonNum: 1 })).toBe(
+			'tv:tt0837069:1'
+		);
+		expect(scrapedKeyFor('tt1234567', { mediaType: 'movie' })).toBe('movie:tt1234567');
+		expect(build()?.scrapedKey).toBe('movie:tt1234567');
+	});
+});
 
 const HASH = 'a'.repeat(40);
 
