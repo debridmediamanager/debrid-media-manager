@@ -127,6 +127,23 @@ const SERIES_PACK = new RegExp(
 	'iu'
 );
 
+/**
+ * Whether the filename carries one of `words` that is not a word of the
+ * movie's own titles. "Saga" in "Horizon: An American Saga - Chapter 1" names
+ * the series, not a set: that release on the Chapter 2 page is the other film.
+ */
+function packWordIn(filename: string, words: RegExp, titles: string[]): boolean {
+	const all = new RegExp(words.source, `${words.flags}g`);
+	const own = titles.map(fold).join('|');
+	for (const match of filename.matchAll(all)) {
+		// The whole word the match sits in: "Collection" is not inside the
+		// title Le Collectionneur.
+		const rest = filename.slice(match.index + match[0].length).match(/^[\p{L}\p{N}]*/u)![0];
+		if (!own.includes(fold(match[0] + rest))) return true;
+	}
+	return false;
+}
+
 const ADULT_TAG = /\bxxx\b/i;
 /**
  * Four digits that read as a year but are not one: the BT.2020 / Rec.2020 HDR
@@ -196,14 +213,14 @@ export function foundTitles(filename: string, titles: string[]): string[] {
 
 /**
  * Where one title ends and the next begins in a release name: "Local / Original",
- * "[Group] Title", "Site - Title", "Title (Original)", and a run of spaces where
- * a separator was stripped. A dash counts only with spaces round it, so
- * "x264-GROUP" and "Spider-Man" do not. A colon does not count: after "Pán
- * prstenů:" comes the subtitle Válka Rohirů, not a title of its own.
+ * "[Group] Title", "Site - Title", "Title (Original)", "死侍。Tagline", and a run
+ * of spaces where a separator was stripped. A dash counts only with spaces round
+ * it, so "x264-GROUP" and "Spider-Man" do not. A colon does not count: after
+ * "Pán prstenů:" comes the subtitle Válka Rohirů, not a title of its own.
  */
-const STARTS_TITLE = /[/|\\([\]{}【】「」『』《》+]|\s[-–—]+\s/u;
+const STARTS_TITLE = /[/|\\([\]{}【】「」『』《》+。]|\s[-–—]+\s/u;
 /** As above, plus what can only end a title: "Title) " and "Title, ". */
-const ENDS_TITLE = /[/|\\()[\]{},【】「」『』《》+]|\s[-–—]+\s/u;
+const ENDS_TITLE = /[/|\\()[\]{},【】「」『』《》+。]|\s[-–—]+\s/u;
 const YEAR_WORD = /^(?:19|20)\d\d$/;
 /**
  * Quality, source and codec tags. Once one follows the year, the rest is never
@@ -241,14 +258,17 @@ function releaseWords(filename: string): Word[] {
 	let last = 0;
 	let tagged = false;
 	let dated = false;
+	// The script of the last word that had letters: "Iron Man 2 มหาประลัย"
+	// changes script after the 2.
+	let prevScript: string | null = null;
 	for (const match of text.matchAll(/[\p{L}\p{N}]+/gu)) {
 		const word = match[0];
 		const gap = text.slice(last, match.index);
 		const spaced = gap.replace(/[._]/g, ' ');
 		const prev = words.at(-1)?.text;
 		const script = scriptOf(word);
-		const prevScript = prev ? scriptOf(prev) : null;
 		const newScript = !!script && !!prevScript && script !== prevScript;
+		prevScript = script ?? prevScript;
 		const tag = TECH_TAG.test(word);
 		words.push({
 			text: word,
@@ -277,27 +297,151 @@ function releaseWords(filename: string): Word[] {
 }
 
 /**
+ * A number that tells one film of a series from another: 1 to 99, or I to XX.
+ * Never 0: "v1 0" is a version.
+ */
+const NUMBER = /^(?:0?[1-9]\d?|i{1,3}|iv|vi{0,3}|ix|xi{0,3}|xiv|xvi{0,3}|xix|xx)$/;
+/** The first film's number, which it is often released under: "Rocky 1", "Saw I". */
+const FIRST = /^(?:0?1|i|one)$/;
+/**
+ * Words that put a number on a film of a series, or on a set of them: "Vol 1",
+ * "Parts I & II", "1 and 2 Films".
+ */
+const INSTALMENT =
+	/^(?:parts?|pt|vols?|volumes?|chapters?|capitulo|parte|partie|teil|czesc|часть|фильм|films?|movies?|filmu)$/u;
+/**
+ * Words that make what follows a title an edition of the film rather than
+ * another title: "Skynet Edition", "Coppola Restoration", "Directors Cut",
+ * "Colorized Version", "Red Menace Reconstruction", "Расширенная версия".
+ */
+const EDITION_NOUN =
+	/^(?:edition|editon|edicion|edizione|edicao|cut|version|versao|versione|версия|издание|restoration|reconstruction|remaster|redux|edit|recut|workprint)$/u;
+/**
+ * Other words an edition or a release adds after a title without making it a
+ * different one: "The Ultimate Cut", "40th Ann Ed Ext", "Versao Estendida",
+ * "в 3Д", "Live Action", a revision ("V2"), and the genres and languages a
+ * release writes before its year ("Election Comedy Romance (1999)").
+ */
+const EDITION_WORD =
+	/^(?:extended|ext|directors?|diretor|dc|final|theatrical|special|ultimate|definitive|collectors?|criterion|anniversary|ann|ed|uncut|unrated|uncensored|remastered|restored|colou?rized|open|matte|imax|3d|3д|estendida|extendida|estesa|integrale|langfassung|kinofassung|hybrid|fan|live|action|v\d+|расширенная|режиссерская|театральная|comedy|romance|romantic|drama|horror|thriller|adventure|animation|animated|fantasy|documentary|musical|western|crime|mystery|\d+(?:st|nd|rd|th)|nordic|dublado|legendado|audio|tamil|telugu|malayalam|kannada|bengali|korean|japanese|chinese|italian|polish|lektor|napisy|dabing|swedish|danish|norwegian|finnish|dutch|portuguese|brazilian|russian|turkish|arabic|thai)$/u;
+/** Words that join title words without being one: "of", "and", "de", "и". */
+const LINKING =
+	/^(?:the|a|an|of|and|amp|in|on|em|en|y|e|et|und|i|de|da|do|du|des|del|la|le|les|el|il|lo|der|die|das|в|во|и|на|z|w)$/u;
+
+/** One letter added, dropped or changed: "Judgement" for Judgment, "Caada" for Caçada. */
+function oneEditApart(a: string, b: string): boolean {
+	if (Math.abs(a.length - b.length) > 1) return false;
+	let i = 0;
+	while (i < a.length && i < b.length && a[i] === b[i]) i++;
+	return (
+		a.slice(i + 1) === b.slice(i + 1) ||
+		a.slice(i + 1) === b.slice(i) ||
+		a.slice(i) === b.slice(i + 1)
+	);
+}
+
+/**
+ * Whether a word belongs to one of the movie's titles, allowing for a dropped
+ * possessive ("Dead Man Chest") and one misspelt letter.
+ */
+function inTitles(word: string, titleWords: Set<string>): boolean {
+	if (titleWords.has(word) || titleWords.has(`${word}s`)) return true;
+	if (word.endsWith('s') && titleWords.has(word.slice(0, -1))) return true;
+	if (word.length < 5 || /\d/.test(word)) return false;
+	for (const t of titleWords) if (t.length >= 5 && oneEditApart(word, t)) return true;
+	return false;
+}
+
+/**
+ * Whether the words between a title of the movie and the end of the release's
+ * title leave the release named by that title. Of 560 DIFFERENT_TITLE releases
+ * kept this way on four random draws on 2026-10-04, 220 were another work,
+ * often another film of the series: Kill Bill Vol 1 on the Vol. 2 page, Scream
+ * VI on Scream (2022), 28 Years Later The Bone Temple on 28 Years Later. So a
+ * number the movie's own titles do not carry is another film, and so is any
+ * word that is not the movie's, an edition's or a joining word: that trashes
+ * 192 of the 220 and keeps 320 of the 328 that are the movie or a set holding
+ * it. Two numbers are a set holding the movie ("Kill
+ * Bill Vol 1 And 2", "Kill Bill 1, 2", "Ben-Hur 50th Anniversary Part 1-2"),
+ * and an edition may be named anything ("Skynet Edition").
+ */
+function leavesItNamed(
+	tail: string[],
+	series: string[],
+	titleWords: Set<string>,
+	last: string
+): boolean {
+	if (tail.length === 0) return true;
+	// A title word the release split: "Step Up 3-D" for Step Up 3D.
+	tail = tail.filter((w, i) => !titleWords.has((i === 0 ? last : tail[i - 1]) + w));
+	const isNumber = (w: string) => NUMBER.test(w) || w === 'one';
+	const numbers = tail.filter(isNumber);
+	const distinct = new Set(
+		[...series, ...numbers].filter(isNumber).map((n) => (FIRST.test(n) ? '1' : n))
+	);
+	if (distinct.size >= 2) return true;
+	const numbered = [...titleWords].some((w) => NUMBER.test(w) && !FIRST.test(w));
+	for (const n of numbers) {
+		if (titleWords.has(n)) continue;
+		if (FIRST.test(n) && !numbered) continue;
+		return false;
+	}
+	if (tail.some((w) => EDITION_NOUN.test(w))) return true;
+	return tail.every(
+		(w) =>
+			NUMBER.test(w) ||
+			w === 'one' ||
+			inTitles(w, titleWords) ||
+			INSTALMENT.test(w) ||
+			EDITION_WORD.test(w) ||
+			LINKING.test(w)
+	);
+}
+
+/**
  * Whether the release is named `title`, not merely carrying its words inside a
  * longer one: "Warfare" is a whole-word run in The Ministry of Ungentlemanly
  * Warfare, and "Killers" in Lesbian Vampire Killers. `whole` also wants the
- * title to end where the release's does, so Baba Yaga is not Baba; without it,
- * words may follow, as in "The Exorcist Extended Directors Cut".
+ * title to end where the release's does, so Baba Yaga is not Baba. Otherwise
+ * what may follow is what `leavesItNamed` allows, given every title of the
+ * movie (`titles`): an edition, as in "The Exorcist Extended Directors Cut",
+ * but not another film of the series.
  */
-export function namesRelease(filename: string, title: string, whole: boolean): boolean {
+export function namesRelease(
+	filename: string,
+	title: string,
+	whole: boolean,
+	titles: string[] = [title]
+): boolean {
 	const words = releaseWords(filename);
 	const needle = fold(title);
 	const forms = [needle];
 	if (title.includes('&')) forms.push(fold(title.replace(/&/g, ' ')));
 	const bare = needle.replace(LEADING_ARTICLE, ' ');
 	if (bare !== needle && bare.trim().length >= 4) forms.push(bare);
+	const titleWords = new Set(titles.flatMap((t) => fold(t).trim().split(' ')));
 
 	for (const form of forms) {
 		const run = form.trim().split(' ');
 		for (let i = 0; i + run.length <= words.length; i++) {
 			if (!words[i].starts) continue;
 			if (!run.every((word, k) => words[i + k].text === word)) continue;
-			const next = words[i + run.length];
-			if (!whole || !next || next.ends) return true;
+			let end = i + run.length;
+			if (whole) {
+				if (end === words.length || words[end].ends) return true;
+				continue;
+			}
+			// The numbers of a set run on past a separator: "Kill Bill 1, 2".
+			const series: string[] = [];
+			for (let k = end; k < words.length; k++) {
+				const w = words[k].text;
+				if (!(NUMBER.test(w) || w === 'one' || INSTALMENT.test(w) || LINKING.test(w)))
+					break;
+				series.push(w);
+			}
+			const tail: string[] = [];
+			while (end < words.length && !words[end].ends) tail.push(words[end++].text);
+			if (leavesItNamed(tail, series, titleWords, run[run.length - 1])) return true;
 		}
 	}
 	return false;
@@ -330,7 +474,9 @@ export function decide(
 
 	if (ADULT_TAG.test(filename)) return 'trash';
 
-	const pack = PACK.test(filename) || (titleMatch !== 'NO_TITLE' && SERIES_PACK.test(filename));
+	const pack =
+		packWordIn(filename, PACK, movie.titles) ||
+		(titleMatch !== 'NO_TITLE' && packWordIn(filename, SERIES_PACK, movie.titles));
 	if (pack && filmLike) {
 		const range = YEAR_RANGE.exec(filename);
 		if (range) {
@@ -366,8 +512,10 @@ export function decide(
 	// Ministry of Ungentlemanly Warfare (2024), a year one off, kept that film on
 	// the Warfare page. With NO_TITLE the title must also end where the
 	// release's does ("Lost Found" for Lost & Found); with DIFFERENT_TITLE an
-	// edition or a subtitle may follow it.
-	const named = found.some((t) => namesRelease(filename, t, titleMatch === 'NO_TITLE'));
+	// edition may follow it, but not another film's number or subtitle.
+	const named = found.some((t) =>
+		namesRelease(filename, t, titleMatch === 'NO_TITLE', movie.titles)
+	);
 	return named && nearYear ? 'keep' : 'trash';
 }
 

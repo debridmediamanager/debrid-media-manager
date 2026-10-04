@@ -1041,7 +1041,7 @@
 			"filename": "Уральские Пельмени - Джентльмены без сдачи (2018) WEBRip 1080p",
 			"media": "FILM",
 			"titleMatch": "DIFFERENT_TITLE",
-			"expected": "KEEP",
+			"expected": "DELETE",
 			"humanLabel": "OTHER"
 		},
 		{
@@ -3147,7 +3147,7 @@
 			"filename": "【www.GeeHD.com】生化危机六部曲.Resident.Evil.Six.Pieces.2002-2016.2010.BluRay.1080p.DTS-HD.MA.5.1.2Audio.x264-EPiC",
 			"media": "FILM",
 			"titleMatch": "DIFFERENT_TITLE",
-			"expected": "KEEP",
+			"expected": "DELETE",
 			"humanLabel": "PACK"
 		},
 		{
@@ -5046,7 +5046,7 @@
 			"filename": "Resident Evil: Death Island 2002 SPANISH BDRip x264",
 			"media": "FILM",
 			"titleMatch": "DIFFERENT_TITLE",
-			"expected": "KEEP",
+			"expected": "DELETE",
 			"humanLabel": "OTHER"
 		},
 		{

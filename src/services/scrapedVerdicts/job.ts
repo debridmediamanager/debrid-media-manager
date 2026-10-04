@@ -17,7 +17,7 @@ import { decide, decideWithoutModel, type Verdict } from './rules';
  * matches and each page is revisited, though existing verdicts are kept and only
  * unjudged results are sent to the model.
  */
-export const ENGINE = 'rules-v6.8+jev';
+export const ENGINE = 'rules-v6.9+jev';
 
 /** Jobs a single instance runs at once; the rest wait for a later visit. */
 const MAX_CONCURRENT_JOBS = 2;

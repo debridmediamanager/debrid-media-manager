@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './__fixtures__/labelled-filenames.json';
 import packWords from './__fixtures__/pack-words.json';
+import seriesKeeps from './__fixtures__/series-keeps.json';
 import substringKeeps from './__fixtures__/substring-keeps.json';
 import {
 	decide,
@@ -490,6 +491,27 @@ describe('a movie title found inside another title', () => {
 		}
 	);
 
+	it.each([
+		'Kill Bill Vol 1 2003 1080p BluRay AVC DTS HD MA 5 1 FGT',
+		'Kill Bill: Vol. 1 (2003) BDRip-AVC от leonardo 59',
+		'28 Years Later The Bone Temple 2026 1080p BluRay x265 YAWNTiC',
+		'28 Years Later: The Bone Temple (2026) UHD WEB-DL-HEVC 2160p',
+	])('trashes the volume or sequel after the title it found: %s', (filename) => {
+		const item = keepItems.find((i) => i.filename === filename)!;
+		expect(item.humanLabel).toBe('OTHER');
+		expect(decide(pageOf(item.imdbId), filename, item.media, item.titleMatch)).toBe('trash');
+	});
+
+	it.each([
+		'Kill Bill Vol 1 And 2 2003 2004 1080p BluRay HEVC x265 5.1 BONE',
+		'Kill Bill 1, 2 (2003, 2004) BDRip 1080p multi HighCode-PublicHD',
+		'Watchmen The Ultimate Cut 2009 1080p BluRay AC3 x264-CtrlHD',
+	])('still keeps a set holding the movie and an edition of it: %s', (filename) => {
+		const item = keepItems.find((i) => i.filename === filename)!;
+		expect(['MOVIE', 'PACK']).toContain(item.humanLabel);
+		expect(decide(pageOf(item.imdbId), filename, item.media, item.titleMatch)).toBe('keep');
+	});
+
 	it('reads a quality tag before the year as a prefix, not the end of the name', () => {
 		// Real, on the Atlas (2024) page.
 		const atlas: MovieContext = {
@@ -574,5 +596,117 @@ describe('sets of a series named by words the rules did not know', () => {
 		expect(
 			refused.filter((item) => verdictOf(item) === 'keep').map((item) => item.filename)
 		).toEqual([]);
+	});
+});
+
+type SeriesItem = {
+	sample: 's3' | 's4' | 's5' | 's6' | 'c206';
+	imdbId: string;
+	filename: string;
+	media: Media;
+	titleMatch: TitleMatch;
+	humanLabel: 'MOVIE' | 'PACK' | 'OTHER' | 'EITHER';
+};
+
+/**
+ * Random DIFFERENT_TITLE keeps read from production on 2026-10-04, labelled
+ * before the new verdicts were looked at: the rules kept each because a title of
+ * the movie starts the name, and about half of the wrong ones were another film
+ * of the series. The fixture's `_about` says which draws shaped the rule and
+ * which were drawn after it was frozen.
+ */
+describe('another film of the series named by a title of the movie', () => {
+	const seriesItems = seriesKeeps.items as SeriesItem[];
+	const pages = seriesKeeps.movies as Record<
+		string,
+		{ name: string; year: number; titles: string[] }
+	>;
+	const verdictOf = (item: SeriesItem) =>
+		decide(
+			{ imdbId: item.imdbId, ambiguous: {}, ...pages[item.imdbId] },
+			item.filename,
+			item.media,
+			item.titleMatch
+		);
+	const drawn = seriesItems.filter((item) => item.sample !== 'c206');
+	const others = drawn.filter((item) => item.humanLabel === 'OTHER');
+	const movies = drawn.filter(
+		(item) => item.humanLabel === 'MOVIE' || item.humanLabel === 'PACK'
+	);
+	const share = (items: SeriesItem[], verdict: 'keep' | 'trash') =>
+		items.filter((item) => verdictOf(item) === verdict).length / items.length;
+
+	// Measured on four draws: 192 of the 220 other works trashed, 320 of the 328
+	// releases of the movie or a set holding it kept.
+	it('trashes 85% of the other works and keeps 97% of the movie', () => {
+		expect([others.length, movies.length]).toEqual([220, 328]);
+		expect(share(others, 'trash')).toBeGreaterThanOrEqual(0.85);
+		expect(share(movies, 'keep')).toBeGreaterThanOrEqual(0.97);
+	});
+
+	it.each(['s3', 's4', 's5', 's6'] as const)(
+		'trashes three in four other works and keeps 95%% of the movie on draw %s',
+		(sample) => {
+			const inDraw = (items: SeriesItem[]) => items.filter((item) => item.sample === sample);
+			expect(share(inDraw(others), 'trash')).toBeGreaterThanOrEqual(0.75);
+			expect(share(inDraw(movies), 'keep')).toBeGreaterThanOrEqual(0.95);
+		}
+	);
+
+	const itemNamed = (filename: string) => {
+		const item = seriesItems.find((i) => i.filename === filename);
+		if (!item) throw new Error(`not in the fixture: ${filename}`);
+		return item;
+	};
+
+	it.each([
+		'Scream.VI.2023.WEBRip.x264-ION10',
+		'Harry.Potter.and.the.Chamber.of.Secrets.2002.1080p.BluRay.x264.DTS-X.7.1-SWTYBLZ',
+		'Horizon An American Saga - Chapter 1 (2024) [1080p] [BluRay]',
+		'The Twilight Saga Breaking Dawn Part 2 2012 HD DVDRip XviD aXXo',
+		'Attack on Titan: Part 2 (2015) 720p WEB-DL 650MB   MkvCage',
+		'Grave Encounters 2 (2012) 720p BrRip x264 - 800MB - YIFY',
+		'Infernal Affairs 3 2003 SWESUB DVDRip XviD - d_S',
+	])('trashes another film of the series: %s', (filename) => {
+		const item = itemNamed(filename);
+		expect(item.humanLabel).toBe('OTHER');
+		expect(verdictOf(item)).toBe('trash');
+	});
+
+	it.each([
+		'It&#x27;s A Wonderful Life Colorized Version 1946 1080p MULTiSUBS Blu-ray AVC DD 2.0-SLO4U',
+		'Ben-Hur 50th Anniversary part 1-2 (1959) 1080p H265 AC3 5.1 ITA.ENG multisub Sp33dy94-MIRCrew',
+		'Step Up 3-D 2010 DVDRIP FRENCH',
+		'Attack On Titan Live Action 2015 DVDScr ENG SUB-FANTA',
+		'Аватар.Расширенная версия.(2009).BDRip.1080p.DVD9.NOLIMITS-TEAM.mkv',
+		'Iron Man 2 มหาประลัย คนเกราะเหล็ก 2 (2010).mkv',
+		'死侍。史上最强嘴炮超级英雄。2016。【十万度Q裙 319940383】.mp4',
+		'Election Comedy Romance (1999)-Alegerile',
+		'Captain Marvel V2 (2019) WEB-DL 2160p x264 Atmos KK650 Regraded',
+	])('keeps the movie under an edition, a set or a local subtitle: %s', (filename) => {
+		const item = itemNamed(filename);
+		expect(['MOVIE', 'PACK']).toContain(item.humanLabel);
+		expect(verdictOf(item)).toBe('keep');
+	});
+
+	// Real, from the card 206 draws on the same page; IMDb lists these titles.
+	const t2: MovieContext = {
+		imdbId: 'tt0103064',
+		name: 'Terminator 2: Judgment Day',
+		year: 1991,
+		titles: [
+			'Terminator 2',
+			'Terminator 2 - Judgment Day',
+			'Terminator 2: Extreme Edition',
+			'Terminator 2: Judgment Day',
+			'Terminator 2: Ultimate Edition',
+		],
+		ambiguous: {},
+	};
+	it.each([
+		'Terminator.2.Judgement.Day.1991.EXTENDED.REMASTERED.1080p.BluRay.x265-RARBG',
+		'Terminator.2.Judgment.Day.Skynet.Edition.1991.Blu-ray.Remux.1080p.VC-1.DTS-HD.MA5.1-HDRemuX',
+	])('keeps a misspelt title and a named edition: %s', (filename) => {
+		expect(decide(t2, filename, 'FILM', 'DIFFERENT_TITLE')).toBe('keep');
 	});
 });
