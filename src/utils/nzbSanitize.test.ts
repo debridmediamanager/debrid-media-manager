@@ -4,6 +4,7 @@ import {
 	NzbSanitizeError,
 	quoteFilenameInSubject,
 	sanitizeNzb,
+	sanitizeNzbAsync,
 	SMALL_FILE_THRESHOLD,
 } from './nzbSanitize';
 
@@ -596,5 +597,28 @@ describe('sanitizeNzb per-download watermarks', () => {
 				`<nzb><head><meta type="password">40682s15d3d0S71d6s2E8r5r29140</meta></head>${file}</nzb>`
 			).xml
 		).not.toContain('type="password"');
+	});
+});
+
+describe('sanitizeNzbAsync', () => {
+	// Big enough to cross several yield points: a 2,500-segment file.
+	const LONG = DRUNKENSLUG.replace(
+		/(<segment bytes="512000" number="2">[^<]*<\/segment>)/,
+		Array.from(
+			{ length: 2500 },
+			(_, i) => `<segment bytes="739000" number="${i + 3}">s${i}@nyuu</segment>`
+		).join('')
+	);
+
+	it.each([
+		['DrunkenSlug', DRUNKENSLUG],
+		['altHUB', ALTHUB],
+		['a long post', LONG],
+	])('cleans %s exactly as the synchronous pass does', async (_name, xml) => {
+		expect(await sanitizeNzbAsync(xml, {}, 0)).toEqual(sanitizeNzb(xml));
+	});
+
+	it('rejects what the synchronous pass rejects', async () => {
+		await expect(sanitizeNzbAsync('<nzb></nzb>')).rejects.toBeInstanceOf(NzbSanitizeError);
 	});
 });

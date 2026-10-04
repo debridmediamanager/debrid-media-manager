@@ -283,13 +283,24 @@ export function quoteFilenameInSubject(subject: string): string {
 	return `${subject.slice(0, bare.index)}"${bare[1]}"${subject.slice(bare.index + bare[1].length)}`;
 }
 
-function parseFiles(xml: string): { files: ParsedFile[]; droppedSegments: number } {
+/**
+ * How many segments are handled between two chances to yield. A single-file
+ * post of a large video holds tens of thousands of segments, so yielding per
+ * file alone would still hold the loop for most of the document.
+ */
+const SEGMENTS_PER_STEP = 1000;
+
+function* parseFiles(
+	xml: string
+): Generator<void, { files: ParsedFile[]; droppedSegments: number }> {
 	const files: ParsedFile[] = [];
 	let droppedSegments = 0;
 
 	for (const file of scanElements(xml, 'file')) {
 		const segments: ParsedSegment[] = [];
+		let scanned = 0;
 		for (const segment of scanElements(file.body, 'segment')) {
+			if (++scanned % SEGMENTS_PER_STEP === 0) yield;
 			const messageId = decodeEntities(segment.body)
 				.trim()
 				.replace(/^<+/, '')
@@ -324,6 +335,7 @@ function parseFiles(xml: string): { files: ParsedFile[]; droppedSegments: number
 				.filter(Boolean),
 			segments,
 		});
+		yield;
 	}
 
 	return { files, droppedSegments };
@@ -375,8 +387,43 @@ function describeStripped(
  * Throws `NzbSanitizeError` rather than returning an unusable document: both
  * readers reject an NZB with no file or no segment, and handing someone a file
  * that fails inside SABnzbd is worse than telling them here.
+ *
+ * Server code calls `sanitizeNzbAsync` instead: this runs in one go, and a
+ * 70 MB NZB takes over a second, which is a second no other request is served.
  */
 export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): SanitizedNzb {
+	const steps = sanitizeSteps(xml, options);
+	let step = steps.next();
+	while (!step.done) step = steps.next();
+	return step.value;
+}
+
+/**
+ * `sanitizeNzb` that hands the event loop back every `sliceMs`.
+ *
+ * On 2026-10-04 dmm_web replicas failed their health probe and were shut down
+ * while cleaning large NZBs: the work is linear in the document, about 15 ms
+ * per MB, all of it synchronous. Same result, in slices.
+ */
+export async function sanitizeNzbAsync(
+	xml: string,
+	options: SanitizeOptions = {},
+	sliceMs = 15
+): Promise<SanitizedNzb> {
+	const steps = sanitizeSteps(xml, options);
+	let sliceStart = performance.now();
+	let step = steps.next();
+	while (!step.done) {
+		if (performance.now() - sliceStart >= sliceMs) {
+			await new Promise((resolve) => setImmediate(resolve));
+			sliceStart = performance.now();
+		}
+		step = steps.next();
+	}
+	return step.value;
+}
+
+function* sanitizeSteps(xml: string, options: SanitizeOptions): Generator<void, SanitizedNzb> {
 	const { keepPassword = true } = options;
 
 	const metas: Record<string, string> = {};
@@ -399,7 +446,7 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 	const category = release(metas.category);
 	const password = keepPassword ? release(metas.password) : undefined;
 
-	const { files: parsed, droppedSegments } = parseFiles(xml);
+	const { files: parsed, droppedSegments } = yield* parseFiles(xml);
 	const usable = parsed.filter((file) => file.segments.length > 0);
 	if (usable.length === 0) {
 		throw new NzbSanitizeError(
@@ -432,7 +479,7 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 		lines.push('\t\t<groups>', `\t\t\t<group>${FALLBACK_GROUP}</group>`, '\t\t</groups>');
 		lines.push('\t\t<segments>');
 		for (const segment of file.segments) {
-			segments++;
+			if (++segments % SEGMENTS_PER_STEP === 0) yield;
 			const valid =
 				segment.bytes !== null && segment.bytes > 0 && segment.bytes < MAX_SEGMENT_BYTES;
 			if (!valid) suspectBytes++;
@@ -443,6 +490,7 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 		}
 		lines.push('\t\t</segments>');
 		lines.push('\t</file>');
+		yield;
 	}
 
 	lines.push('</nzb>');

@@ -2,7 +2,7 @@ import { fetchNzb } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
-import { NzbSanitizeError, sanitizeNzb } from '@/utils/nzbSanitize';
+import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -40,7 +40,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	let cleaned;
 	try {
-		cleaned = sanitizeNzb(raw);
+		cleaned = await sanitizeNzbAsync(raw);
 	} catch (error) {
 		// A release the indexer still lists but can no longer serve articles for
 		// comes back as a document with nothing in it. Saying which of the two

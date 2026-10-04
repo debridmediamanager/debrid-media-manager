@@ -8,6 +8,20 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	return { ...actual, fetchNzb: vi.fn() };
 });
 
+// Passed through, and recorded: it is the first thing the route does once the
+// NZB has been cleaned.
+const blocklistCheck = vi.hoisted(() => ({ onCall: () => {} }));
+vi.mock('@/services/takedown/blocklist', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/services/takedown/blocklist')>();
+	return {
+		...actual,
+		isNzbBlocked: (...args: Parameters<typeof actual.isNzbBlocked>) => {
+			blocklistCheck.onCall();
+			return actual.isNzbBlocked(...args);
+		},
+	};
+});
+
 const mockFetchNzb = vi.mocked(fetchNzb);
 
 /** As DrunkenSlug serves it: watermarked head, DOCTYPE, poster and date. */
@@ -118,5 +132,50 @@ describe('GET /api/nzb2rd/download', () => {
 
 		expect(res.status).toHaveBeenCalledWith(502);
 		expect(String((res._getData() as { error: string }).error)).toContain('not an NZB');
+	});
+
+	it('lets other requests run while it cleans a large NZB', async () => {
+		// On 2026-10-04 dmm_web replicas missed their health probe and were shut
+		// down while cleaning big NZBs: a 70 MB one held the event loop for over a
+		// second. This one is RAW's shape at ~12 MB: 40 rar volumes and one
+		// single-file post of a large video.
+		const segment = (n: number) =>
+			`<segment bytes="739000" number="${n}">${n}.JWPKEi710Ds54@9WtdHEzo.2h0</segment>`;
+		const file = (subject: string, count: number) =>
+			`<file poster="JWPKEi710Ds54@9WtdHEzo.2h0" date="1788097954" subject="${subject}">
+		<groups><group>alt.binaries.test</group></groups>
+		<segments>${Array.from({ length: count }, (_, i) => segment(i + 1)).join('')}</segments>
+	</file>`;
+		const files = Array.from({ length: 40 }, (_, i) =>
+			file(`[${i + 1}/41] - &quot;Big.Release.part${i + 1}.rar&quot; yEnc (1/1000)`, 1000)
+		);
+		files.push(file('[41/41] - &quot;Big.Release.mkv&quot; yEnc (1/60000)', 60000));
+		const big = RAW.replace(/<file[\s\S]*<\/file>/, files.join('\n'));
+
+		let turns = 0;
+		let ticking = true;
+		const tick = () => {
+			turns++;
+			if (ticking) setImmediate(tick);
+		};
+		let turnsWhileCleaning = -1;
+		let turnsAtFetch = 0;
+		mockFetchNzb.mockImplementation(async () => {
+			turnsAtFetch = turns;
+			return big;
+		});
+		blocklistCheck.onCall = () => {
+			turnsWhileCleaning = turns - turnsAtFetch;
+		};
+		setImmediate(tick);
+		try {
+			const res = await run({ id: 'ds:abc123', title: 'Big.Release' });
+			expect(res.status).toHaveBeenCalledWith(200);
+		} finally {
+			ticking = false;
+			blocklistCheck.onCall = () => {};
+		}
+
+		expect(turnsWhileCleaning).toBeGreaterThan(1);
 	});
 });

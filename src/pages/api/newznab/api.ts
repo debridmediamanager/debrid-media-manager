@@ -14,7 +14,7 @@ import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { isNzbBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
-import { NzbSanitizeError, sanitizeNzb } from '@/utils/nzbSanitize';
+import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -142,7 +142,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	if (stored) {
 		let recleaned;
 		try {
-			recleaned = sanitizeNzb(stored);
+			recleaned = await sanitizeNzbAsync(stored);
 		} catch (error) {
 			// Worth a line: the store only ever held cleaned documents, so a copy
 			// that today's rules reject is either corrupt at rest or a rule that
@@ -200,7 +200,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 
 	let cleaned;
 	try {
-		cleaned = sanitizeNzb(raw);
+		cleaned = await sanitizeNzbAsync(raw);
 	} catch (error) {
 		if (error instanceof NzbSanitizeError) {
 			// Describes the NZB, never the server it came from — safe to pass on,
