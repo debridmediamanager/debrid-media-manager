@@ -1,0 +1,55 @@
+{
+	"capturedAt": "2026-10-04",
+	"note": "Provider answers to the calls the DMM Cast play routes make. Each entry says where it comes from. No credential, member link or member address appears below.",
+	"responses": {
+		"rd-permission-denied": {
+			"provider": "rd",
+			"request": "A Real-Debrid torrent call made by DMM's uploader for a member (endpoint not recorded)",
+			"source": "Real-Debrid's answer to a member's key, as DMM's uploader stored it (src/test/fixtures/contentRequests/stored-errors.json). Real-Debrid documents HTTP 403 as 'Permission denied (account locked, not premium)' for every endpoint, unrestrict included. The play route's own log keeps only the status: 29 of the 39 unrestrict failures in dmm-01's logs 2026-10-03 22:21-23:38 UTC were 403, from 5 installs, 4 of which had not played anything all week.",
+			"status": 403,
+			"contentType": "application/json",
+			"body": { "error": "permission_denied", "error_code": 9 }
+		},
+		"rd-unrestrict-bad-token": {
+			"provider": "rd",
+			"request": "POST https://api.real-debrid.com/rest/1.0/unrestrict/link",
+			"source": "Recorded 2026-10-04 with a made-up token.",
+			"status": 401,
+			"contentType": "application/json",
+			"body": { "error": "bad_token", "error_code": 8 }
+		},
+		"rd-unrestrict-hoster-unavailable": {
+			"provider": "rd",
+			"request": "POST https://api.real-debrid.com/rest/1.0/unrestrict/link",
+			"source": "A stored link that had aged out, measured 2026-08-29: the same answer on every retry over four minutes.",
+			"status": 503,
+			"contentType": "application/json",
+			"body": { "error": "hoster_unavailable", "error_code": 19 }
+		},
+		"rd-unrestrict-infringing-file": {
+			"provider": "rd",
+			"request": "POST https://api.real-debrid.com/rest/1.0/unrestrict/link",
+			"source": "Recorded 2026-10-04: a 13-character link stored in Cast on 2024-11-23, unrestricted once with a test account.",
+			"status": 451,
+			"contentType": "application/json",
+			"body": { "error": "infringing_file", "error_code": 35 }
+		},
+		"rd-unrestrict-ip-not-allowed": {
+			"provider": "rd",
+			"request": "POST https://api.real-debrid.com/rest/1.0/unrestrict/link",
+			"source": "The body Real-Debrid sent a hosting-provider address when it refused to make a link, with that address replaced by a documentation one. zurg logged the same refusal as 'ip_not_allowed (status code: 403)'.",
+			"status": 403,
+			"contentType": "application/json",
+			"body": { "error": "ip_not_allowed_203.0.113.7", "error_code": 22, "remote": 0 }
+		},
+		"tb-rate-limited": {
+			"provider": "tb",
+			"request": "GET https://api.torbox.app/v1/api/torrents/mylist",
+			"source": "TorBox's lockout answer, measured 2026-08-02: a bare string, and the whole key is refused for the Retry-After window. Requests made during it do not extend it.",
+			"status": 429,
+			"contentType": "text/plain",
+			"headers": { "retry-after": "300" },
+			"body": "rate limit exceeded"
+		}
+	}
+}

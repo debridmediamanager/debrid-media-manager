@@ -57,6 +57,46 @@ const DEFAULT_RETRY_AFTER_MS = 300_000; // 5 minutes
 // Rate limiting state
 let globalConcurrent = 0;
 let globalPausedUntil = 0;
+
+// In the browser this client serves one member's key, and a 429 pauses
+// everything. On the server it serves every member at once, and TorBox's 429
+// is a lockout of one key for its Retry-After (measured 2026-08-02: 300 s, and
+// requests made during it do not extend it). So there a lockout is kept per
+// key, and a caller - always an HTTP request, cut at 60 s by the proxy and
+// given up on far sooner by a player - never sits one out: it is refused at
+// once, without asking TorBox. Before this, one member's 429 held every
+// member's stream list and play in that process for five minutes.
+const isServer = () => typeof window === 'undefined';
+const serverLockedUntil = new Map<string, number>();
+/** The longest a server-side call waits on this process's limiter. */
+const SERVER_MAX_WAIT_MS = 5_000;
+
+function keyOf(config: { headers?: unknown } | undefined): string {
+	const headers = config?.headers as
+		| { get?: (name: string) => unknown; Authorization?: unknown }
+		| undefined;
+	const value =
+		typeof headers?.get === 'function' ? headers.get('Authorization') : headers?.Authorization;
+	return typeof value === 'string' ? value.replace(/^Bearer\s+/i, '') : '';
+}
+
+function pausedUntilFor(key: string): number {
+	return isServer() ? (serverLockedUntil.get(key) ?? 0) : globalPausedUntil;
+}
+
+function recordLockout(key: string, retryAfterMs: number): void {
+	const until = Date.now() + retryAfterMs;
+	if (!isServer()) {
+		globalPausedUntil = until;
+		return;
+	}
+	const now = Date.now();
+	for (const [lockedKey, lockedUntil] of serverLockedUntil) {
+		if (lockedUntil <= now) serverLockedUntil.delete(lockedKey);
+	}
+	serverLockedUntil.set(key, until);
+}
+
 const endpointTimestamps: Record<string, number[]> = {};
 const concurrencyWaiters: Array<() => void> = [];
 
@@ -95,9 +135,12 @@ function releaseConcurrencySlot(): void {
 	if (waiter) waiter();
 }
 
-async function enforceEndpointLimit(endpointKey: string): Promise<void> {
-	// Global pause from 429
-	const pauseRemaining = globalPausedUntil - Date.now();
+async function enforceEndpointLimit(endpointKey: string, key: string = ''): Promise<void> {
+	// Pause from a 429: the whole client in the browser, this key on the server
+	const pauseRemaining = pausedUntilFor(key) - Date.now();
+	if (pauseRemaining > SERVER_MAX_WAIT_MS && isServer()) {
+		throw new TorBoxRateLimitError();
+	}
 	if (pauseRemaining > 0) {
 		console.log(
 			`[TorBox] Global rate limit pause, waiting ${Math.round(pauseRemaining / 1000)}s`
@@ -116,6 +159,9 @@ async function enforceEndpointLimit(endpointKey: string): Promise<void> {
 
 	if (timestamps.length >= limit) {
 		const waitMs = timestamps[0] + 60_000 - now + Math.random() * 500;
+		if (waitMs > SERVER_MAX_WAIT_MS && isServer()) {
+			throw new TorBoxRateLimitError();
+		}
 		console.log(
 			`[TorBox] ${endpointKey} rate limit (${timestamps.length}/${limit}/min), waiting ${Math.round(waitMs)}ms`
 		);
@@ -230,7 +276,7 @@ torBoxAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) 
 	const endpointKey = getEndpointKey(config.url);
 	config.__endpointKey = endpointKey;
 
-	await enforceEndpointLimit(endpointKey);
+	await enforceEndpointLimit(endpointKey, keyOf(config));
 
 	if (!config.__slotAcquired) {
 		await acquireConcurrencySlot();
@@ -269,6 +315,13 @@ torBoxAxios.interceptors.response.use(
 				originalConfig.__slotAcquired = false;
 			}
 		};
+
+		if (error.response?.status === 429 && isServer()) {
+			recordLockout(
+				keyOf(originalConfig),
+				parseRetryAfterMs(error) ?? DEFAULT_RETRY_AFTER_MS
+			);
+		}
 
 		if (originalConfig.__skipRetry) {
 			releaseSlot();
@@ -324,10 +377,18 @@ torBoxAxios.interceptors.response.use(
 		let retryAfterMs: number | undefined;
 		if (is429) {
 			retryAfterMs = parseRetryAfterMs(error) ?? DEFAULT_RETRY_AFTER_MS;
-			globalPausedUntil = Date.now() + retryAfterMs;
+			if (!isServer()) recordLockout(keyOf(originalConfig), retryAfterMs);
 		}
 
 		const retryDelay = calculateRetryDelay(originalConfig.__retryCount, retryAfterMs);
+		// A server-side caller is an HTTP request: it gets this answer now
+		// rather than a better one after the client has gone.
+		if (retryDelay > SERVER_MAX_WAIT_MS && isServer()) {
+			releaseSlot();
+			recordOutcome(originalConfig, status);
+			if (is429) return Promise.reject(new TorBoxRateLimitError());
+			return Promise.reject(error);
+		}
 		const errorType = is429 ? 'rate limit' : 'server';
 		console.log(
 			`[TorBox] ${originalConfig.__endpointKey} ${status} ${errorType}. Retry ${originalConfig.__retryCount}/${maxRetries} after ${Math.round(retryDelay / 1000)}s`
@@ -818,9 +879,12 @@ export const _testing = {
 	ENDPOINT_LIMITS,
 	MAX_GLOBAL_CONCURRENT,
 	DEFAULT_RETRY_AFTER_MS,
+	SERVER_MAX_WAIT_MS,
+	serverLockedUntil,
 	resetState() {
 		globalConcurrent = 0;
 		globalPausedUntil = 0;
+		serverLockedUntil.clear();
 		for (const key of Object.keys(endpointTimestamps)) delete endpointTimestamps[key];
 		concurrencyWaiters.length = 0;
 	},
