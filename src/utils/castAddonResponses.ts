@@ -1,5 +1,6 @@
 import type { NextApiResponse } from 'next';
-import { CastFailure, classifyCastError } from './castAddonFailure';
+import { CastFailure, CastPlayFailure, classifyCastError } from './castAddonFailure';
+import { CastPlayVideo, castPlayVideoUrl } from './castPlayVideos';
 
 /**
  * How every DMM Cast addon answers when it cannot serve a catalog, meta or
@@ -291,4 +292,39 @@ export function sendStreamFailure(
 export function sendStreamError(res: NextApiResponse, provider: CastProvider, error: unknown) {
 	logFailure(provider, 'stream list', error);
 	return sendStreamFailure(res, provider, classifyCastError(error));
+}
+
+/**
+ * The notice each play failure redirects to. A temporary failure has none: the
+ * player's own retries may well get through, and a notice would end them.
+ */
+const PLAY_NOTICES: Partial<Record<CastPlayFailure, CastPlayVideo>> = {
+	'not-connected': 'set-up-again',
+	credential: 'sign-in-again',
+	account: 'account-refused',
+	network: 'network-refused',
+	gone: 'file-unavailable',
+	unplayable: 'file-unavailable',
+	refused: 'file-unavailable',
+};
+
+/**
+ * A play link that cannot reach its file.
+ *
+ * The player fetches this URL itself and never shows a response body, so a
+ * failure the member has to know about redirects to a short video that says
+ * what happened and what to do, the way a working play redirects to the file.
+ * A temporary one answers 503. `detail` is what the provider said, for our log.
+ */
+export function sendPlayFailure(
+	res: NextApiResponse,
+	provider: CastProvider,
+	failure: CastPlayFailure,
+	detail: string
+) {
+	console.error(`[DMM Cast ${PROVIDERS[provider].name}] play failed: ${failure} (${detail})`);
+	res.setHeader('Cache-Control', NO_STORE);
+	const video = PLAY_NOTICES[failure];
+	if (video) return res.redirect(307, castPlayVideoUrl(video));
+	return res.status(503).json({ error: 'Temporarily unavailable' });
 }

@@ -8,6 +8,7 @@ import {
 	requestWebDownloadLink,
 } from '@/services/torbox';
 import { TorBoxFile, TorBoxTorrentInfo } from '@/services/types';
+import { CastItemGoneError } from '@/utils/castAddonFailure';
 import { delay } from '@/utils/delay';
 import ptt from 'parse-torrent-title';
 
@@ -120,7 +121,7 @@ export const getTorBoxStreamUrl = async (
 
 		const cachedData = cachedStatus.data as Record<string, any>;
 		if (!cachedData[hash]) {
-			throw new Error('Torrent not cached on TorBox');
+			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
 		const existing = await findUserTorrentByHash(apiKey, hash);
@@ -159,7 +160,7 @@ export const getTorBoxStreamUrl = async (
 			// Find the file
 			const file = torrent.files?.find((f) => f.id === fileId);
 			if (!file) {
-				throw new Error(`File with ID ${fileId} not found in torrent`);
+				throw new CastItemGoneError(`File with ID ${fileId} not found in torrent`);
 			}
 
 			// Get download link
@@ -221,7 +222,7 @@ export const getFileByNameTorBoxStreamUrl = async (
 
 		const cachedData = cachedStatus.data as Record<string, any>;
 		if (!cachedData[hash]) {
-			throw new Error('Torrent not cached on TorBox');
+			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
 		const existing = await findUserTorrentByHash(apiKey, hash);
@@ -259,7 +260,7 @@ export const getFileByNameTorBoxStreamUrl = async (
 
 			// Find file matching the target filename
 			if (!torrent.files || torrent.files.length === 0) {
-				throw new Error('No files in torrent');
+				throw new CastItemGoneError('No files in torrent');
 			}
 
 			// Try exact match first, then partial match on the filename part
@@ -283,7 +284,7 @@ export const getFileByNameTorBoxStreamUrl = async (
 			}
 
 			if (!matchedFile) {
-				throw new Error(`File "${targetFilename}" not found in torrent`);
+				throw new CastItemGoneError(`File "${targetFilename}" not found in torrent`);
 			}
 
 			fileId = matchedFile.id;
@@ -337,7 +338,7 @@ export const getBiggestFileTorBoxStreamUrl = async (
 
 		const cachedData = cachedStatus.data as Record<string, any>;
 		if (!cachedData[hash]) {
-			throw new Error('Torrent not cached on TorBox');
+			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
 		const existing = await findUserTorrentByHash(apiKey, hash);
@@ -375,7 +376,7 @@ export const getBiggestFileTorBoxStreamUrl = async (
 
 			// Find the biggest file
 			if (!torrent.files || torrent.files.length === 0) {
-				throw new Error('No files in torrent');
+				throw new CastItemGoneError('No files in torrent');
 			}
 
 			const biggestFile = torrent.files.reduce((prev, current) => {
@@ -436,7 +437,7 @@ export const getTorBoxStreamUrlKeepTorrent = async (
 
 		const cachedData = cachedStatus.data as Record<string, any>;
 		if (!cachedData[hash]) {
-			throw new Error('Torrent not cached on TorBox');
+			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
 		const existing = await findUserTorrentByHash(apiKey, hash);
@@ -473,7 +474,7 @@ export const getTorBoxStreamUrlKeepTorrent = async (
 		// Find the file
 		const file = torrent.files?.find((f) => f.id === fileId);
 		if (!file) {
-			throw new Error(`File with ID ${fileId} not found in torrent`);
+			throw new CastItemGoneError(`File with ID ${fileId} not found in torrent`);
 		}
 
 		filename = file.name || file.short_name || '';
@@ -539,12 +540,12 @@ export const getWebDownloadStreamUrlByHash = async (
 	const items = Array.isArray(list.data) ? list.data : [list.data];
 	const item = items.find((w) => w.hash?.toLowerCase() === hash.toLowerCase());
 	if (!item) {
-		throw new Error('Web download not found on TorBox');
+		throw new CastItemGoneError('Web download not found on TorBox');
 	}
 
 	const files = item.files ?? [];
 	if (files.length === 0) {
-		throw new Error('No files in web download');
+		throw new CastItemGoneError('No files in web download');
 	}
 
 	const file =

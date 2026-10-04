@@ -93,6 +93,17 @@ export async function retryDroppedConnection<T>(call: () => Promise<T>, delayMs 
 }
 
 /**
+ * Thrown by a provider helper that looked and found the item is not there to
+ * play: the provider no longer has it, or the file is missing from it.
+ */
+export class CastItemGoneError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'CastItemGoneError';
+	}
+}
+
+/**
  * Sorts a provider call's failure into what the addon can tell a client.
  *
  * Duck-typed rather than `instanceof`, so this module does not pull six
@@ -103,6 +114,7 @@ export function classifyCastError(error: unknown): CastFailure {
 	const { name, code, message, response } = error as ErrorShape;
 
 	if (name === 'RdTokenExpiredError') return 'credential';
+	if (name === 'CastItemGoneError') return 'gone';
 	if (typeof code === 'string' && CREDENTIAL_CODES.has(code)) return 'credential';
 	if (typeof name === 'string' && PROSE_ERRORS.has(name) && typeof message === 'string') {
 		if (NOT_IN_ACCOUNT.test(message)) return 'gone';
@@ -120,4 +132,92 @@ export function classifyCastError(error: unknown): CastFailure {
 	if (status === 404) return 'gone';
 
 	return 'unavailable';
+}
+
+/**
+ * Why a play link could not be sent on to the file. A play is answered to a
+ * video player rather than to an addon client, and the member reads the
+ * answer from the screen, so it separates three refusals the catalog and meta
+ * routes have no use for:
+ *
+ * - `account`: the account cannot make links at all right now - Real-Debrid's
+ *   403 (documented as "account locked, not premium"), TorBox's plan without
+ *   API access. Signing in again does not help.
+ * - `network`: Real-Debrid will not make a link for the player's address.
+ * - `refused`: the provider will not serve this one file.
+ */
+export type CastPlayFailure = CastFailure | 'account' | 'network' | 'refused';
+
+type ProviderErrorShape = ErrorShape & {
+	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };
+};
+
+const httpStatusOf = (error: unknown): number | undefined => {
+	const status = (error as ProviderErrorShape | null)?.response?.status;
+	return typeof status === 'number' ? status : undefined;
+};
+
+/** The provider's own error name and number from a failed call, when it sent them. */
+export function providerErrorDetail(error: unknown): { error?: string; code?: number } {
+	const data = (error as ProviderErrorShape | null)?.response?.data;
+	if (!data || typeof data !== 'object') return {};
+	return {
+		error: typeof data.error === 'string' ? data.error : undefined,
+		code: typeof data.error_code === 'number' ? data.error_code : undefined,
+	};
+}
+
+/**
+ * Sorts a failed Real-Debrid play.
+ *
+ * Every 403 is the account's, whatever its body names: Real-Debrid documents
+ * 403 as "permission denied (account locked, not premium)", and its refusal of
+ * an address (`ip_not_allowed`, error 22) arrives as a 403 too. Neither says
+ * anything about the link, which is why only `gone` may ever delete one.
+ */
+export function classifyRdPlayError(error: unknown): CastPlayFailure {
+	const status = httpStatusOf(error);
+	const { error: rdError, code } = providerErrorDetail(error);
+	if (status === 403) {
+		if (code === 22 || rdError?.startsWith('ip_not_allowed')) return 'network';
+		return 'account';
+	}
+	if (status === 401) return 'credential';
+	if (rdError === 'hoster_unavailable' || rdError === 'unavailable_file') return 'gone';
+	if (status === 451 || rdError === 'infringing_file') return 'refused';
+	return classifyCastError(error);
+}
+
+/**
+ * Sorts a failed TorBox play. TorBox answers a plan without API access with
+ * the same 403 it uses for a bad key, and only the body tells them apart.
+ */
+export function classifyTorBoxPlayError(error: unknown): CastPlayFailure {
+	const { error: tbError } = providerErrorDetail(error);
+	if (httpStatusOf(error) === 403 && tbError === 'PLAN_RESTRICTED_FEATURE') return 'account';
+	return classifyCastError(error);
+}
+
+/**
+ * The outcome of `work` if it settles within `ms`, or `timedOut` if not. The
+ * work is left running, and a late failure is swallowed rather than reported
+ * as an unhandled rejection.
+ */
+export async function settleWithin<T>(
+	work: Promise<T>,
+	ms: number
+): Promise<{ timedOut: true } | { timedOut: false; value: T }> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const deadline = new Promise<{ timedOut: true }>((resolve) => {
+		timer = setTimeout(() => resolve({ timedOut: true }), ms);
+	});
+	try {
+		return await Promise.race([
+			work.then((value) => ({ timedOut: false as const, value })),
+			deadline,
+		]);
+	} finally {
+		clearTimeout(timer);
+		work.catch(() => undefined);
+	}
 }

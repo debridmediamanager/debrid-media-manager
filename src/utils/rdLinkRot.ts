@@ -13,8 +13,14 @@ import { AxiosError } from 'axios';
  * (error 34) after only a handful of calls seconds apart - exactly the shape of
  * Stremio resolving several streams at once - and a 5xx is just a bad minute.
  * Deleting a row on either would throw away content that is perfectly alive.
+ *
+ * A 401 or 403 is never rot, whatever its body names. Real-Debrid documents 403
+ * as "account locked, not premium" and sends its refusal of an address the
+ * same way, so both are about the caller. The cleanup deletes the link for
+ * every member, and one member's lapsed account must not do that.
  */
 const PERMANENT_LINK_ERRORS = new Set(['hoster_unavailable', 'unavailable_file']);
+const CALLER_STATUSES = new Set([401, 403]);
 
 export const rdErrorOf = (error: unknown): string | null => {
 	if (error instanceof AxiosError) {
@@ -25,6 +31,8 @@ export const rdErrorOf = (error: unknown): string | null => {
 };
 
 export const isDeadRdLink = (error: unknown): boolean => {
+	if (!(error instanceof AxiosError)) return false;
+	if (CALLER_STATUSES.has(error.response?.status ?? 0)) return false;
 	const code = rdErrorOf(error);
 	return code !== null && PERMANENT_LINK_ERRORS.has(code);
 };

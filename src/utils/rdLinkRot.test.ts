@@ -31,6 +31,13 @@ describe('isDeadRdLink', () => {
 		expect(isDeadRdLink(rdError('infringing_file', 451))).toBe(false);
 	});
 
+	// Real-Debrid's 403 is about the account (locked, not premium) or the
+	// caller's address. Reading one as rot deleted the link for every member.
+	it.each([401, 403])('never treats a %i as dead, whatever the body names', (status) => {
+		expect(isDeadRdLink(rdError('unavailable_file', status))).toBe(false);
+		expect(isDeadRdLink(rdError('hoster_unavailable', status))).toBe(false);
+	});
+
 	it('does not treat a server error or a non-Axios failure as dead', () => {
 		expect(isDeadRdLink(rdError('internal_error', 500))).toBe(false);
 		expect(isDeadRdLink(new Error('socket hang up'))).toBe(false);

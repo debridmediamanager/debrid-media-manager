@@ -1,12 +1,34 @@
 import { repository as db } from '@/services/repository';
 import { requestDownloadLink, requestUsenetLink, requestWebDownloadLink } from '@/services/torbox';
 import {
+	classifyTorBoxPlayError,
+	providerErrorDetail,
+	settleWithin,
+} from '@/utils/castAddonFailure';
+import { sendPlayFailure } from '@/utils/castAddonResponses';
+import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
 	getWebDownloadStreamUrlByHash,
 } from '@/utils/getTorBoxStreamUrl';
 import { isWebDownloadHash, parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+/**
+ * How long a play may take before it answers "try again". Nginx Proxy Manager
+ * cuts the request at 60 s - 108 TorBox plays ran into that in the week to
+ * 2026-10-03 - and an answer after that reaches nobody. Resolving a cached
+ * release takes a few seconds; this leaves room for a slow add.
+ */
+const TORBOX_PLAY_DEADLINE_MS = 25_000;
+
+/** What TorBox said, for the log: `403 PLAN_RESTRICTED_FEATURE`. */
+const describeTorBoxError = (error: unknown) => {
+	const status = (error as { response?: { status?: unknown } } | null)?.response?.status;
+	const { error: tbError } = providerErrorDetail(error);
+	const message = error instanceof Error ? error.message : 'Unknown error';
+	return typeof status === 'number' ? `${status} ${tbError ?? message}` : message;
+};
 
 // Play a TorBox file from an existing torrent
 // Supports two formats:
@@ -32,19 +54,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	// Get user's TorBox profile with API key
-	let profile: { apiKey: string } | null = null;
+	let profile: { apiKey: string } | null;
 	try {
 		profile = await db.getTorBoxCastProfile(userid);
-		if (!profile) {
-			throw new Error(`no profile found for user ${userid}`);
-		}
 	} catch (error) {
-		console.error(
-			'Failed to get TorBox profile:',
-			error instanceof Error ? error.message : 'Unknown error'
-		);
-		res.status(500).json({ error: `Failed to get TorBox profile for user ${userid}` });
-		return;
+		return sendPlayFailure(res, 'tb', 'unavailable', describeTorBoxError(error));
+	}
+	if (!profile) {
+		return sendPlayFailure(res, 'tb', 'not-connected', 'no cast profile');
 	}
 
 	const apiKey = profile.apiKey;
@@ -57,32 +74,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		typeof fallbackHash === 'string' && fallbackHash ? fallbackHash : hash
 	);
 
-	try {
-		let streamUrl: string | undefined;
+	let target: ReturnType<typeof parseTorBoxCastTarget> = null;
+	let fileId = NaN;
+	if (hash.includes(':')) {
+		const parts = hash.split(':');
+		if (parts.length !== 2) {
+			res.status(400).json({
+				status: 'error',
+				errorMessage: 'Invalid format. Expected torrentId:fileId',
+			});
+			return;
+		}
+		target = parseTorBoxCastTarget(parts[0]);
+		fileId = parseInt(parts[1], 10);
+		if (!target || isNaN(fileId)) {
+			res.status(400).json({
+				status: 'error',
+				errorMessage: 'Invalid torrentId or fileId',
+			});
+			return;
+		}
+	}
 
-		// Check if it's torrentId:fileId format or a torrent hash
-		if (hash.includes(':')) {
-			// Format: torrentId:fileId
-			const parts = hash.split(':');
-			if (parts.length !== 2) {
-				res.status(400).json({
-					status: 'error',
-					errorMessage: 'Invalid format. Expected torrentId:fileId',
-				});
-				return;
-			}
-
-			const target = parseTorBoxCastTarget(parts[0]);
-			const fileId = parseInt(parts[1], 10);
-
-			if (!target || isNaN(fileId)) {
-				res.status(400).json({
-					status: 'error',
-					errorMessage: 'Invalid torrentId or fileId',
-				});
-				return;
-			}
-
+	const resolveStreamUrl = async (): Promise<string> => {
+		if (target) {
 			const torrentId = target.id;
 			// The id itself settles it for a library entry; a cast has no prefix and
 			// is identified by its hash instead.
@@ -105,6 +120,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				resolveAsWebDownload ||
 				resolveAsUsenet ||
 				typeof fallbackHash !== 'string';
+			let streamUrl: string | undefined;
+			let directError: unknown;
 			try {
 				if (!canResolveDirectly) {
 					throw new Error("not this account's torrent id");
@@ -130,10 +147,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				if (downloadResult.success && downloadResult.data) {
 					streamUrl = downloadResult.data;
 				}
-			} catch (directError) {
+			} catch (error) {
+				// The fallback spends the same key on a cache check and an add, so
+				// a key TorBox has just refused goes no further.
+				const failure = classifyTorBoxPlayError(error);
+				if (failure === 'credential' || failure === 'account') throw error;
+				directError = error;
 				console.log(
 					'[TorBox Play] Direct lookup failed, trying hash fallback:',
-					directError instanceof Error ? directError.message : 'Unknown error'
+					error instanceof Error ? error.message : 'Unknown error'
 				);
 			}
 
@@ -166,45 +188,61 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (!streamUrl) {
+				if (directError && typeof fallbackHash !== 'string') throw directError;
 				throw new Error('Failed to get download link');
 			}
-		} else if (isWebDownload) {
+			return streamUrl;
+		}
+
+		if (isWebDownload) {
 			// Legacy format: web download hash
-			streamUrl = await getWebDownloadStreamUrlByHash(apiKey, hash, filename);
+			const streamUrl = await getWebDownloadStreamUrlByHash(apiKey, hash, filename);
 			if (!streamUrl) {
 				throw new Error('Failed to get stream URL for web download');
 			}
-		} else {
-			// Legacy format: torrent hash. Same reasoning as the fallback above -
-			// this is a play, so anything added to serve it is handed back.
-			if (filename) {
-				// Match by filename (for TV episodes from season packs)
-				const [url] = await getFileByNameTorBoxStreamUrl(apiKey, hash, filename, {
-					releaseIfAdded: true,
-				});
-				if (!url) {
-					throw new Error(`Failed to find file "${filename}" in torrent`);
-				}
-				streamUrl = url;
-			} else {
-				// No filename provided - use biggest file (for movies)
-				const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, hash, {
-					releaseIfAdded: true,
-				});
-				if (!url) {
-					throw new Error('Failed to get stream URL for torrent');
-				}
-				streamUrl = url;
-			}
+			return streamUrl;
 		}
 
+		// Legacy format: torrent hash. Same reasoning as the fallback above -
+		// this is a play, so anything added to serve it is handed back.
+		if (filename) {
+			// Match by filename (for TV episodes from season packs)
+			const [url] = await getFileByNameTorBoxStreamUrl(apiKey, hash, filename, {
+				releaseIfAdded: true,
+			});
+			if (!url) {
+				throw new Error(`Failed to find file "${filename}" in torrent`);
+			}
+			return url;
+		}
+		// No filename provided - use biggest file (for movies)
+		const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, hash, {
+			releaseIfAdded: true,
+		});
+		if (!url) {
+			throw new Error('Failed to get stream URL for torrent');
+		}
+		return url;
+	};
+
+	try {
+		const outcome = await settleWithin(resolveStreamUrl(), TORBOX_PLAY_DEADLINE_MS);
+		if (outcome.timedOut) {
+			return sendPlayFailure(
+				res,
+				'tb',
+				'unavailable',
+				`no answer within ${TORBOX_PLAY_DEADLINE_MS / 1000}s`
+			);
+		}
 		// Redirect to the download URL
-		res.redirect(streamUrl);
-	} catch (error: any) {
-		console.error(
-			'Failed to play TorBox link:',
-			error instanceof Error ? error.message : 'Unknown error'
+		res.redirect(outcome.value);
+	} catch (error) {
+		return sendPlayFailure(
+			res,
+			'tb',
+			classifyTorBoxPlayError(error),
+			describeTorBoxError(error)
 		);
-		res.status(500).json({ error: 'Failed to play link' });
 	}
 }

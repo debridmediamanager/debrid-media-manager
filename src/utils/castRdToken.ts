@@ -1,4 +1,4 @@
-import { getToken } from '@/services/realDebrid';
+import { forgetAccessToken, getToken } from '@/services/realDebrid';
 import { retryDroppedConnection } from './castAddonFailure';
 
 /**
@@ -39,4 +39,14 @@ export async function castAccessToken(profile: RdCastCredentials): Promise<strin
 		getToken(clientId, clientSecret, refreshToken, true)
 	);
 	return token?.access_token ?? null;
+}
+
+/**
+ * Forgets the access token minted for this profile, and says whether there was
+ * one to forget. A pasted API key has nothing to renew: a 401 on it is final.
+ */
+export function forgetCastAccessToken(profile: RdCastCredentials): boolean {
+	if (profile.apiKey || !profile.clientId) return false;
+	forgetAccessToken(profile.clientId);
+	return true;
 }

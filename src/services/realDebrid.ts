@@ -518,6 +518,16 @@ const accessTokenCache = new Map<
 // Dedup concurrent token requests for the same user
 const inflightTokenRequests = new Map<string, Promise<AccessTokenResponse>>();
 
+/**
+ * Drops the access token cached for a client, so the next `getToken` mints a
+ * fresh one. For a token Real-Debrid has just refused with a 401 while the
+ * cache still holds it as good.
+ */
+export function forgetAccessToken(clientId: string): void {
+	const cached = accessTokenCache.get(clientId);
+	if (cached && !('dead' in cached)) accessTokenCache.delete(clientId);
+}
+
 export class RdTokenExpiredError extends Error {
 	constructor(clientId: string) {
 		super(

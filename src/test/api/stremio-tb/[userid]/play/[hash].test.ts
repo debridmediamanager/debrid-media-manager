@@ -56,11 +56,14 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns 500 when no profile found', async () => {
+	it('plays the set-up notice when no profile is found', async () => {
 		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue(null);
 		const req = createMockRequest({ query: { userid: 'user1', hash: '123:456' } });
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.redirect).toHaveBeenCalledWith(
+			307,
+			'https://debridmediamanager.com/noprecache/cast-play/set-up-again.mp4'
+		);
 	});
 
 	it('redirects on success with torrentId:fileId format', async () => {
@@ -218,24 +221,24 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/ep01.mkv');
 	});
 
-	it('returns 500 when legacy hash stream URL is not found', async () => {
+	it('answers 503 when the legacy hash stream URL is not found', async () => {
 		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
 		mockGetBiggestFile.mockResolvedValue([undefined] as any);
 		const req = createMockRequest({
 			query: { userid: 'user1', hash: 'fbadffe5476df0674dbec75e81426895e40b6427' },
 		});
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 
-	it('returns 500 on error', async () => {
+	it('answers 503 on an unexpected error', async () => {
 		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
 		mockGetBiggestFile.mockRejectedValue(new Error('API error'));
 		const req = createMockRequest({
 			query: { userid: 'user1', hash: 'fbadffe5476df0674dbec75e81426895e40b6427' },
 		});
 		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 
 	describe('web downloads', () => {
@@ -296,14 +299,14 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 			expect(res.redirect).toHaveBeenCalledWith('https://stream.test/webdl-legacy.mkv');
 		});
 
-		it('returns 500 when the web download cannot be resolved', async () => {
+		it('answers 503 when the web download cannot be resolved', async () => {
 			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
 			mockGetWebDownloadByHash.mockRejectedValue(new Error('Web download not found'));
 			const req = createMockRequest({
 				query: { userid: 'user1', hash: WEB_DOWNLOAD_HASH },
 			});
 			await handler(req, res);
-			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.status).toHaveBeenCalledWith(503);
 		});
 	});
 

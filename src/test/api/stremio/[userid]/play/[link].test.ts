@@ -36,6 +36,8 @@ vi.mock('@/services/repository', () => ({
 	repository: mockRepository,
 }));
 
+const notice = (name: string) => `https://debridmediamanager.com/noprecache/cast-play/${name}.mp4`;
+
 describe('/api/stremio/[userid]/play/[link]', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -85,7 +87,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 		expect(res.redirect).toHaveBeenCalledWith('https://rd/download');
 	});
 
-	it('returns 500 when cast profile not found', async () => {
+	it('plays the set-up notice when the cast profile is not found', async () => {
 		mockRepository.getCastProfile.mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
@@ -95,13 +97,10 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Failed to get Cast profile for user user',
-		});
+		expect(res.redirect).toHaveBeenCalledWith(307, notice('set-up-again'));
 	});
 
-	it('returns 500 when token generation fails', async () => {
+	it('plays the set-up notice when the profile yields no token', async () => {
 		mockGetToken.mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
@@ -111,13 +110,10 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Failed to get Real-Debrid token for user user',
-		});
+		expect(res.redirect).toHaveBeenCalledWith(307, notice('set-up-again'));
 	});
 
-	it('returns 500 when the link cannot be unrestricted', async () => {
+	it('answers 503 when the link cannot be unrestricted', async () => {
 		mockUnrestrictLink.mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
@@ -127,11 +123,11 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to unrestrict link' });
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.json).toHaveBeenCalledWith({ error: 'Temporarily unavailable' });
 	});
 
-	it('handles unexpected errors', async () => {
+	it('answers 503 on an unexpected error', async () => {
 		mockUnrestrictLink.mockRejectedValue(new Error('rd down'));
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
@@ -141,8 +137,8 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to play link' });
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.json).toHaveBeenCalledWith({ error: 'Temporarily unavailable' });
 	});
 
 	it('reports an error when unrestrict returns null, without deleting anything', async () => {
@@ -157,8 +153,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		expect(mockRepository.removeAvailableFileByLinkPrefix).not.toHaveBeenCalled();
 		expect(mockRepository.deleteCastsByLinkPrefix).not.toHaveBeenCalled();
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to unrestrict link' });
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 
 	// Regression: the cleanup used to key on the 13-char link while the table
@@ -184,7 +179,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 				'https://real-debrid.com/d/abcdef1234567'
 			);
 			expect(mockRepository.removeAvailability).not.toHaveBeenCalled();
-			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.redirect).toHaveBeenCalledWith(307, notice('file-unavailable'));
 		}
 	);
 
@@ -207,7 +202,11 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 
 		expect(mockRepository.removeAvailableFileByLinkPrefix).not.toHaveBeenCalled();
 		expect(mockRepository.deleteCastsByLinkPrefix).not.toHaveBeenCalled();
-		expect(res.status).toHaveBeenCalledWith(500);
+		if (status === 451) {
+			expect(res.redirect).toHaveBeenCalledWith(307, notice('file-unavailable'));
+		} else {
+			expect(res.status).toHaveBeenCalledWith(503);
+		}
 	});
 
 	// Stream lists handed out before the fix offered the tail of a Debridio
@@ -251,6 +250,6 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 		await handler(req, res);
 
 		expect(mockRepository.removeAvailableFileByLinkPrefix).not.toHaveBeenCalled();
-		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.status).toHaveBeenCalledWith(503);
 	});
 });
