@@ -1,6 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
+import { countFiles, TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -56,15 +56,27 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 	if (!result.ok) {
 		// Every failing path, not just the first: "(+ 2 other issues)" hid whether
 		// a refused release was half-analyzed or only carried an unprobed sidecar.
+		// The file counts say whether the refusal threw a probe away.
+		const files = countFiles(req.body);
 		console.warn('Rejected torrent snapshot', {
 			issues: result.issues
 				.slice(0, 5)
 				.map((issue) => `${issue.code} at .${issue.path.join('.')}`),
+			...(files ? { files } : {}),
 		});
 		return res.status(400).json({ message: 'Invalid torrent snapshot', issue: result.message });
 	}
 
 	const snapshot = toStoredSnapshot(result.value);
+	const files = countFiles(result.value);
+	if (files) {
+		const { analyzed, sidecar, ...skipped } = files;
+		if (Object.values(skipped).some((count) => count > 0)) {
+			// Counts only, so how many releases arrive partly analyzed can be read
+			// back without logging anyone's library.
+			console.info('Stored part of a torrent snapshot', { files });
+		}
+	}
 	try {
 		const { id, date } = deriveSnapshotId(snapshot.Hash, snapshot.Added);
 		await repository.upsertTorrentSnapshot({

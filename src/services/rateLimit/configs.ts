@@ -21,6 +21,12 @@ export const RATE_LIMIT_CONFIGS = {
 	// seconds, so on the `torrents` budget two posts in three were refused - and
 	// their hash-imdb calls shared that counter. Sized to fit every burst seen
 	// while still holding an address to 10 a second.
+	// Rechecked over 2026-09-21..10-04: no zurg that was never refused sent more
+	// than 61 in ten seconds. All 83,792 refusals came from five zurgs, in runs of
+	// 104 to 12,066 posts at 4-52 a second. Of the 9,253 posts let through during
+	// those runs 5 were stored, and 95% of the rest carried no probe at all or
+	// came in the same second as the post before, too soon for zurg to have run
+	// ffprobe. Raising it would let in more of those, not more track data.
 	snapshot: { name: 'snapshot', rateLimit: 100, windowSeconds: 10 },
 	// zurg posts hash-imdb pairs in 100-pair chunks back to back. Over
 	// 2026-09-27..10-03 one address sent 82 inside two seconds and 95 inside ten,

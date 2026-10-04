@@ -1,6 +1,8 @@
 import handler from '@/pages/api/torrents/snapshot';
 import { repository } from '@/services/repository';
 import legacyWorkerSnapshot from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
+import zurgDeletedEpisodeSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-deleted-episode.json';
+import zurgPartialPackSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-partial-pack.json';
 import zurgDirectWithNfoSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-with-nfo.json';
 import zurgDirectSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -17,10 +19,22 @@ const mockRepository = vi.mocked(repository);
 // as zurg serializes it: zurg selects sidecars but only probes media, and on
 // 2026-09-10 DMM refused live releases for exactly that
 // ("invalid_type at .SelectedFiles.<name>.nfo.MediaInfo (expected object)").
+//
+// The two season packs were written by zurg itself: its own analysis pass and
+// sender (ApplyMediaInfoDetails, sendTorrentToAPI at zurg 7963b245) posting to
+// a capture server, with only the account calls stubbed and the probe being
+// the real one above. zurg posts after every pass whatever the pass managed,
+// so a pack arrives with an episode whose probe failed this pass, one still in
+// its day of cooldown from an earlier failure, or one the user deleted through
+// the mount. Over 2026-09-21..10-04 DMM refused 58,972 posts as "A media file
+// was not analyzed" and 8,026 over a file's state, and a pack among them lost
+// every probe it did carry. The hash is made up; nothing reads it.
 const fixtures = [
-	['as zurgtorrent-worker forwards it', legacyWorkerSnapshot],
-	['as zurg posts it directly', zurgDirectSnapshot],
-	['with a sidecar zurg never probes', zurgDirectWithNfoSnapshot],
+	['as zurgtorrent-worker forwards it', legacyWorkerSnapshot, 1],
+	['as zurg posts it directly', zurgDirectSnapshot, 1],
+	['with a sidecar zurg never probes', zurgDirectWithNfoSnapshot, 1],
+	['of a pack zurg analyzed only in part', zurgPartialPackSnapshot, 2],
+	['of a pack with an episode the user deleted', zurgDeletedEpisodeSnapshot, 1],
 ] as const;
 
 function post(body: unknown, headers: Record<string, string> = {}) {
@@ -33,6 +47,12 @@ function storedPayload(): Record<string, any> {
 
 function withChange(change: (snapshot: Record<string, any>) => void) {
 	const snapshot = structuredClone(zurgDirectSnapshot) as Record<string, any>;
+	change(snapshot);
+	return snapshot;
+}
+
+function withPackChange(change: (snapshot: Record<string, any>) => void) {
+	const snapshot = structuredClone(zurgPartialPackSnapshot) as Record<string, any>;
 	change(snapshot);
 	return snapshot;
 }
@@ -88,7 +108,7 @@ describe('/api/torrents/snapshot', () => {
 
 		it.each(fixtures)(
 			'stores media details and nothing of the account, %s',
-			async (_, snapshot) => {
+			async (_, snapshot, analyzed) => {
 				await handler(post(snapshot), createMockResponse());
 
 				const payload = storedPayload();
@@ -110,13 +130,53 @@ describe('/api/torrents/snapshot', () => {
 					kept.filter((key) => key !== 'IMDBID' || Boolean(snapshot.IMDBID))
 				);
 				const files = Object.values(payload.SelectedFiles) as Record<string, any>[];
-				expect(files).toHaveLength(1);
-				expect(Object.keys(files[0]).sort()).toEqual(['MediaInfo', 'bytes', 'path']);
-				expect(files[0].MediaInfo.streams.length).toBeGreaterThan(0);
-				expect(files[0].MediaInfo.format).not.toHaveProperty('filename');
-				expect(files[0].MediaInfo.format.duration).toEqual(expect.any(String));
+				expect(files).toHaveLength(analyzed);
+				for (const file of files) {
+					expect(Object.keys(file).sort()).toEqual(['MediaInfo', 'bytes', 'path']);
+					expect(file.MediaInfo.streams.length).toBeGreaterThan(0);
+					expect(file.MediaInfo.format).not.toHaveProperty('filename');
+					expect(file.MediaInfo.format.duration).toEqual(expect.any(String));
+				}
 			}
 		);
+
+		it('stores the episodes zurg analyzed and skips the rest', async () => {
+			await handler(post(zurgPartialPackSnapshot), createMockResponse());
+
+			// E02 sits in its cooldown, E03 failed this pass, the .nfo is never probed.
+			expect(Object.keys(storedPayload().SelectedFiles).sort()).toEqual([
+				'Ghosts.US.S04E01.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv',
+				'Ghosts.US.S04E04.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv',
+			]);
+		});
+
+		it('stores no file the user deleted', async () => {
+			await handler(post(zurgDeletedEpisodeSnapshot), createMockResponse());
+
+			expect(Object.keys(storedPayload().SelectedFiles)).toEqual([
+				'Ghosts.US.S04E02.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv',
+			]);
+		});
+
+		it('says what it skipped from a pack it stored', async () => {
+			const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			await handler(post(zurgPartialPackSnapshot), createMockResponse());
+
+			expect(infoSpy).toHaveBeenCalledWith('Stored part of a torrent snapshot', {
+				files: { analyzed: 2, not_analyzed: 2, sidecar: 1 },
+			});
+			infoSpy.mockRestore();
+		});
+
+		it('says nothing extra for a release stored whole', async () => {
+			const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			await handler(post(zurgDirectWithNfoSnapshot), createMockResponse());
+
+			expect(infoSpy).not.toHaveBeenCalled();
+			infoSpy.mockRestore();
+		});
 
 		it.each(fixtures)('keeps what the Stremio addons read, %s', async (_, snapshot) => {
 			await handler(post(snapshot), createMockResponse());
@@ -132,6 +192,23 @@ describe('/api/torrents/snapshot', () => {
 				'a file that was never analyzed',
 				withChange((s) => {
 					Object.values<Record<string, any>>(s.SelectedFiles)[0].MediaInfo = null;
+				}),
+			],
+			[
+				'a pack in which no episode was analyzed',
+				withPackChange((s) => {
+					for (const file of Object.values<Record<string, any>>(s.SelectedFiles)) {
+						file.MediaInfo = null;
+					}
+				}),
+			],
+			[
+				// zurg probes only ok files, so a probe on any other is not one it sent.
+				'a pack whose only probe belongs to a file that is not ok',
+				withPackChange((s) => {
+					for (const file of Object.values<Record<string, any>>(s.SelectedFiles)) {
+						if (file.MediaInfo) file.State = 'broken_file';
+					}
 				}),
 			],
 			['a release zurg holds as broken', withChange((s) => (s.State = 'broken_torrent'))],
@@ -154,6 +231,25 @@ describe('/api/torrents/snapshot', () => {
 				expect.objectContaining({ message: 'Invalid torrent snapshot' })
 			);
 			expect(mockRepository.upsertTorrentSnapshot).not.toHaveBeenCalled();
+			warnSpy.mockRestore();
+		});
+
+		it('says what each file of a refused pack carried', async () => {
+			// The refusal log names the failing paths but not whether the pack
+			// held any probe, which is what decides if a refusal lost data.
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const refused = withPackChange((s) => {
+				s.State = 'broken_torrent';
+				s.SelectedFiles['Ghosts.US.S04E02.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv'].State =
+					'deleted_file';
+			});
+
+			await handler(post(refused), createMockResponse());
+
+			expect(warnSpy).toHaveBeenCalledWith('Rejected torrent snapshot', {
+				issues: ['invalid_literal at .State'],
+				files: { analyzed: 2, not_analyzed: 1, sidecar: 1, deleted_file: 1 },
+			});
 			warnSpy.mockRestore();
 		});
 
