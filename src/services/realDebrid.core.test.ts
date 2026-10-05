@@ -15,6 +15,7 @@ vi.mock('@/lib/observability/rdOperationalStats', () => ({
 	recordRdOperationEvent: vi.fn(),
 }));
 
+import { RD_ADD_PAUSE_MS } from '@/utils/rdAddPause';
 import {
 	__testing,
 	addHashAsMagnet,
@@ -28,10 +29,14 @@ import {
 	getTorrentInfo,
 	getUserTorrentsList,
 	hasRecentRdAddBurst,
+	hasRecentRdRateLimits,
 	isRdThrottling,
 	proxyUnrestrictLink,
 	RD_ADD_MIN_SPACING_MS,
 	RD_ADDS_PER_MINUTE,
+	rdAddPauseRemainingMs,
+	recordRdAddAttempt,
+	recordRdAddPause,
 	recordRdRateLimit,
 	resetRdThrottleTracking,
 	selectFiles,
@@ -223,15 +228,15 @@ describe('RealDebrid add budget', () => {
 	it('counts every add attempt, refusals included', async () => {
 		realAxios.post = vi.fn().mockRejectedValue(new Error('refused'));
 
-		expect(hasRecentRdAddBurst()).toBe(false);
+		expect(hasRecentRdAddBurst('token')).toBe(false);
 		for (let i = 0; i < RD_ADDS_PER_MINUTE - 1; i++) {
 			await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
 		}
 		// One short of the budget is not yet a burst.
-		expect(hasRecentRdAddBurst()).toBe(false);
+		expect(hasRecentRdAddBurst('token')).toBe(false);
 
 		await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
-		expect(hasRecentRdAddBurst()).toBe(true);
+		expect(hasRecentRdAddBurst('token')).toBe(true);
 	});
 
 	it('forgets adds older than the window', async () => {
@@ -241,26 +246,138 @@ describe('RealDebrid add budget', () => {
 			for (let i = 0; i < RD_ADDS_PER_MINUTE; i++) {
 				await addHashAsMagnet('token', hash);
 			}
-			expect(hasRecentRdAddBurst()).toBe(true);
+			expect(hasRecentRdAddBurst('token')).toBe(true);
 
 			vi.advanceTimersByTime(60_001);
-			expect(hasRecentRdAddBurst()).toBe(false);
+			expect(hasRecentRdAddBurst('token')).toBe(false);
 		} finally {
 			vi.useRealTimers();
 		}
 	});
 
-	// The whole point: a single add that RD refuses must not read as throttling.
+	// A single add that fails for some other reason must not read as throttling.
 	it('is not throttling after one quiet add', async () => {
 		realAxios.post = vi.fn().mockRejectedValue(new Error('refused'));
 
 		await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
 
-		expect(isRdThrottling()).toBe(false);
+		expect(isRdThrottling('token')).toBe(false);
 	});
 
 	it('is throttling once RD has actually said so', () => {
-		recordRdRateLimit();
-		expect(isRdThrottling()).toBe(true);
+		recordRdRateLimit('token');
+		expect(isRdThrottling('token')).toBe(true);
+	});
+
+	// On the server this module serves every user at once.
+	it("keeps each account's state to that account", async () => {
+		recordRdRateLimit('token');
+		for (let i = 0; i < RD_ADDS_PER_MINUTE; i++) recordRdAddAttempt('token');
+		recordRdAddPause('token');
+
+		expect(isRdThrottling('token')).toBe(true);
+		expect(isRdThrottling('other')).toBe(false);
+		expect(hasRecentRdAddBurst('other')).toBe(false);
+		expect(rdAddPauseRemainingMs('other')).toBe(0);
+	});
+
+	it('keys a 429 to the token that drew it', async () => {
+		vi.useFakeTimers();
+		try {
+			const adapter = vi.fn(async (config: any) => {
+				const error: any = new Error('Request failed with status code 429');
+				error.config = config;
+				error.response = { status: 429, data: {}, headers: {}, config };
+				error.isAxiosError = true;
+				throw error;
+			});
+			// The response interceptor retries a 429 with backoff; the first one
+			// is all this needs, so the rest are left to the fake clock.
+			void realAxios
+				.request({
+					url: 'https://rd.test/rest/1.0/torrents',
+					method: 'get',
+					headers: { Authorization: 'Bearer limited-token' },
+					adapter,
+				})
+				.catch(() => undefined);
+			await vi.advanceTimersByTimeAsync(500);
+
+			expect(adapter).toHaveBeenCalled();
+			expect(hasRecentRdRateLimits('limited-token')).toBe(true);
+			expect(hasRecentRdRateLimits('token')).toBe(false);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+});
+
+// RD answers an add with `451 infringing_file` while it refuses every add on
+// the account for a while (21 s to about five minutes, measured 2026-10-04/05;
+// see src/utils/rdAddPause.ts). An add fired into that pause is refused too,
+// so the account's adds wait it out instead.
+describe('RealDebrid account pause', () => {
+	const hash = 'b'.repeat(40);
+	const refusal = () => {
+		const error: any = new Error('Request failed with status code 451');
+		error.isAxiosError = true;
+		error.response = { status: 451, data: { error: 'infringing_file', error_code: 35 } };
+		return error;
+	};
+
+	it('puts the account on pause after a 451 and holds its next add', async () => {
+		vi.useFakeTimers();
+		try {
+			const sentAt: number[] = [];
+			realAxios.post = vi.fn(async () => {
+				sentAt.push(Date.now());
+				if (sentAt.length === 1) throw refusal();
+				return { status: 201, data: { id: 'x' } };
+			});
+			const start = Date.now();
+
+			await expect(addHashAsMagnet('token', hash)).rejects.toMatchObject({
+				response: { status: 451 },
+			});
+			expect(rdAddPauseRemainingMs('token')).toBe(RD_ADD_PAUSE_MS);
+
+			const next = addHashAsMagnet('token', hash);
+			await vi.advanceTimersByTimeAsync(RD_ADD_PAUSE_MS - 1);
+			expect(sentAt).toHaveLength(1);
+			await vi.advanceTimersByTimeAsync(1);
+			await expect(next).resolves.toBe('x');
+			expect(sentAt[1] - start).toBeGreaterThanOrEqual(RD_ADD_PAUSE_MS);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it('does not hold anything for a 451 on a name RD blocks', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(refusal());
+
+		await expect(
+			addHashAsMagnet('token', hash, false, { nameIsBlocked: true })
+		).rejects.toThrow();
+
+		expect(rdAddPauseRemainingMs('token')).toBe(0);
+	});
+
+	it('holds .torrent uploads too', async () => {
+		realAxios.put = vi.fn().mockRejectedValue(refusal());
+		const file = { arrayBuffer: vi.fn(async () => new ArrayBuffer(1)) } as unknown as File;
+
+		await expect(addTorrentFile('token', file)).rejects.toMatchObject({
+			response: { status: 451 },
+		});
+
+		expect(rdAddPauseRemainingMs('token')).toBeGreaterThan(RD_ADD_PAUSE_MS - 1000);
+	});
+
+	it('does not put the account on pause for other failures', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(new Error('network'));
+
+		await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
+
+		expect(rdAddPauseRemainingMs('token')).toBe(0);
 	});
 });

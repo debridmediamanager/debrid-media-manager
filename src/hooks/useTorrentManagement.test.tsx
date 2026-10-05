@@ -1,3 +1,4 @@
+import { recordRdAddPause, resetRdThrottleTracking } from '@/services/realDebrid';
 import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { findJoinableTransfer, followTransferToRd } from '@/utils/debridUploader';
 import { act, renderHook } from '@testing-library/react';
@@ -514,6 +515,78 @@ describe('useTorrentManagement', () => {
 			});
 
 			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+		});
+	});
+
+	// A 451 on a name RD does not block is far more often the whole account
+	// being refused for a while than the release (measured 2026-10-04/05, see
+	// rdAddPause.ts). Such an add comes back 'paused' and must never cost the
+	// shared availability row anything.
+	describe('RD 451 the name does not explain', () => {
+		beforeEach(() => {
+			resetRdThrottleTracking();
+			mockHandleAddAsMagnetInRd.mockResolvedValue('paused');
+		});
+
+		it('keeps availability on a bulk add, where deleteIfNotInstant is set', async () => {
+			currentResults = [
+				createSearchResult({
+					rdAvailable: true,
+					title: 'Would.I.Lie.To.You.S19E10.1080p.HEVC.x265-MeGusta',
+				}),
+			];
+			const { result } = renderManagementHook();
+
+			let added: unknown;
+			await act(async () => {
+				added = await result.current.addRd('hash-1', false, true);
+			});
+
+			// Never added, so never shown not to be instant either.
+			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+			expect(added).toBe(false);
+			expect(currentResults[0].rdAvailable).toBe(true);
+		});
+
+		it('keeps availability even for a name RD blocks', async () => {
+			currentResults = [
+				createSearchResult({
+					rdAvailable: true,
+					title: 'Movie.2019.1080p.WEB-DL.DDP5.1.H.264-GROUP',
+				}),
+			];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1', false, true);
+			});
+
+			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+		});
+
+		it('tells a bulk caller, so it can try again after the pause', async () => {
+			const onPaused = vi.fn();
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1', false, true, { silent: true, onPaused });
+			});
+
+			expect(onPaused).toHaveBeenCalledTimes(1);
+		});
+
+		it('leaves an availability check unanswered while the account is paused', async () => {
+			recordRdAddPause('rd-key');
+			const { result } = renderManagementHook();
+
+			let probe: unknown;
+			await act(async () => {
+				probe = await result.current.addRd('hash-1', true);
+			});
+
+			// Not fired into the pause, and null: "RD did not say".
+			expect(probe).toBeNull();
+			expect(mockHandleAddAsMagnetInRd).not.toHaveBeenCalled();
 		});
 	});
 

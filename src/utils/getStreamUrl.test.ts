@@ -26,8 +26,10 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import type { TorrentInfoResponse, UnrestrictResponse } from '@/services/types';
+import { rdRefusalError } from '@/test/realdebrid/rdAddPauseReplay';
 import ptt from 'parse-torrent-title';
 import { handleSelectFilesInRd } from './addMagnet';
+import { RdAddPausedError } from './rdAddPause';
 
 const createTorrentInfo = (overrides: Partial<TorrentInfoResponse>): TorrentInfoResponse => ({
 	id: 'torrent-id',
@@ -513,5 +515,45 @@ describe('getBiggestFileStreamUrl', () => {
 		await getBiggestFileStreamUrl(mockRdKey, mockHash, mockIpAddress);
 
 		expect(unrestrictLink).toHaveBeenCalledWith(mockRdKey, 'link-movie', mockIpAddress, false);
+	});
+});
+
+// A cast request has a client waiting on it, so a 451 from RD's add gets one
+// more try (which the account's pause holds inside `addHashAsMagnet`) and then
+// a temporary error, never a final answer about the release. The 451 body is
+// the one RD sent the test account on 2026-10-04/05.
+describe('getStreamUrl when RD answers the add with a 451', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		vi.mocked(console.error).mockImplementation(() => {});
+		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
+		vi.mocked(getTorrentInfo).mockResolvedValue(
+			createTorrentInfo({
+				id: 'rd123',
+				files: [{ id: 1, path: '/Movie.mkv', bytes: 1, selected: 1 }],
+				links: ['https://real-debrid.com/d/ABC'],
+			})
+		);
+		vi.mocked(unrestrictLink).mockResolvedValue(createUnrestrictResponse({ filesize: 1 }));
+	});
+
+	it('tries the add once more and casts when the pause is over', async () => {
+		vi.mocked(addHashAsMagnet)
+			.mockRejectedValueOnce(rdRefusalError())
+			.mockResolvedValueOnce('rd123');
+
+		const [streamUrl] = await getStreamUrl('key', 'abc', 1, '1.2.3.4', 'movie');
+
+		expect(streamUrl).toBe('https://stream.example.com/file.mp4');
+		expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+	});
+
+	it('gives up after the second 451 with a temporary error', async () => {
+		vi.mocked(addHashAsMagnet).mockRejectedValue(rdRefusalError());
+
+		await expect(getBiggestFileStreamUrl('key', 'abc', '1.2.3.4')).rejects.toBeInstanceOf(
+			RdAddPausedError
+		);
+		expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
 	});
 });

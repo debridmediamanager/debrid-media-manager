@@ -1,5 +1,6 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { SearchResult } from '@/services/mediasearch';
+import { rdAddPauseRemainingMs } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -78,6 +79,13 @@ export type AddRdOptions = {
 	row?: SearchResult;
 	/** Suppress the per-add toasts; the caller is reporting progress itself. */
 	silent?: boolean;
+	/**
+	 * Called when RD answered the add with a 451 its name does not explain:
+	 * most likely the whole account is paused, not this release refused (see
+	 * `rdAddPause.ts`). A bulk run uses it to try the same release again once
+	 * the pause is over, instead of reporting it missing. Only RD calls it.
+	 */
+	onPaused?: () => void;
 };
 
 export type AddAdOptions = AddRdOptions & {
@@ -126,10 +134,17 @@ export function useTorrentManagement(
 		): Promise<any> => {
 			if (!rdKey) return;
 
+			// An availability check never waits for the account's pause: it is a
+			// probe, and a probe fired into the pause is refused whatever the
+			// answer would have been. Unanswered (null) is what it is; the caller
+			// reads it as "RD did not say" through `isRdThrottling`.
+			if (isCheckingAvailability && rdAddPauseRemainingMs(rdKey) > 0) return null;
+
 			// Read searchResults at call time via closure - no need for dependency.
 			// A bulk run over seasons the page never rendered has no row to find,
 			// so it passes the one it is working from: without it the blocked-name
-			// test below reads an empty title and calls every 451 a throttle.
+			// test below reads an empty title and takes a blocked name's 451 for
+			// the account's pause.
 			const torrentResult = opts?.row ?? searchResults.find((r) => r.hash === hash);
 			const wasMarkedAvailable = torrentResult?.rdAvailable || false;
 			let torrentInfo: TorrentInfoResponse | null = null;
@@ -138,10 +153,10 @@ export function useTorrentManagement(
 			// torrent's root name, and the row title is often the space-separated
 			// display form that has lost the dots the block keys on, while a path's
 			// leading folder still carries the real root name. RD also refuses to
-			// stream a file whose own name matches. Reading the title alone calls
-			// a real block a throttle and waits out two 20-second backoffs for
-			// nothing. The lists disagree only on `fileId`, never on filenames, so
-			// all three are worth reading.
+			// stream a file whose own name matches. Reading the title alone takes
+			// a real block for the account's pause and waits it out for nothing.
+			// The lists disagree only on `fileId`, never on filenames, so all
+			// three are worth reading.
 			const knownFilenames = [
 				...(torrentResult?.files ?? []),
 				...(torrentResult?.tbFiles ?? []),
@@ -221,27 +236,30 @@ export function useTorrentManagement(
 				knownFilenames
 			);
 
+			if (addResult === 'paused') opts?.onPaused?.();
+
 			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)
 			// or when RD rejected it as infringing, remove from availability database.
 			//
 			// A 451 `infringing_file` only counts as a rejection when the name is
-			// one RD actually blocks. RD returns that same status as a throttle
-			// penalty mid-burst — before it ever escalates to an honest 429 — and
-			// a single "Check RD" sweep over a season page is exactly the burst
-			// that triggers it. Since a row here only exists because RD once
-			// served the torrent at 100%, and the row is shared by every user,
-			// trusting the raw status evicted 285 working hashes in one day. The
-			// name stays the test that gates the eviction, even though
-			// `handleAddAsMagnetInRd` now reports an off-burst 451 as a refusal:
-			// telling one user "RD will not accept this" costs them a click,
-			// while evicting the row costs everybody the release.
+			// one RD actually blocks. RD answers that same status whenever it is
+			// refusing every add on the account for a while — Big Buck Bunny
+			// included, measured 2026-10-04/05 — and a single "Check RD" sweep
+			// over a season page is exactly the run of adds that brings one on.
+			// Since a row here only exists because RD once served the torrent at
+			// 100%, and the row is shared by every user, trusting the raw status
+			// evicted 285 working hashes in one day. So the name gates the
+			// eviction, and a `paused` add — a 451 the name did not explain —
+			// never evicts at all, not even through the not-instant branch: it was
+			// never added, so it was never shown not to be instant. Telling one
+			// user "try again in a few minutes" costs them a click; evicting the
+			// row costs everybody the release.
 			const shouldRemoveAvailability =
-				addResult !== 'error' &&
+				torrentInfo === null &&
+				wasMarkedAvailable &&
 				(addResult === 'infringing_file'
 					? isRdBlockedName(torrentResult?.title ?? '', knownFilenames)
-					: deleteIfNotInstant) &&
-				torrentInfo === null &&
-				wasMarkedAvailable;
+					: addResult !== 'error' && addResult !== 'paused' && deleteIfNotInstant);
 			if (shouldRemoveAvailability) {
 				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 				await removeAvailability(

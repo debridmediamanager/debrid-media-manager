@@ -44,11 +44,11 @@ const RD_BLOCKED_NAME = /WEB-DL|WEB\.x264|WEB\.H264|HDTV\.x264|HDTV\.XviD/;
  * whatever filenames the caller knows.
  *
  * This is the only reliable way to read a `451 infringing_file`: RD returns
- * that status both for a genuinely blocked name and as a throttle penalty
- * during a burst of adds, and the throttle form arrives well before RD ever
- * escalates to an honest 429. A blocked name is deterministic — refused on the
- * first request, every time — so when the name is clean, a 451 means slow down
- * and retry, not that the content is gone.
+ * that status both for a genuinely blocked name and, far more often, while it
+ * refuses every add on the account for a while (21 s to about five minutes,
+ * measured 2026-10-04/05; see `rdAddPause.ts`), with no 429 anywhere. A blocked
+ * name is deterministic — refused on the first request, every time — so when
+ * the name is clean, a 451 means wait and retry, not that the content is gone.
  *
  * **RD applies the rule to two different names.** An add is judged on the
  * torrent's root name alone: on 2026-10-03 it took packs whose files were named

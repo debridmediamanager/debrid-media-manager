@@ -3,6 +3,7 @@ import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
+import { RD_ADD_REFUSED_MESSAGE, RdAddPausedError } from '@/utils/rdAddPause';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -198,5 +199,26 @@ describe('/api/stremio/cast/[imdbid]', () => {
 			expect(res.status).toHaveBeenCalledWith(400);
 			expect(mockGetStreamUrl).not.toHaveBeenCalled();
 		});
+	});
+
+	// Refused twice, a pause apart, is most likely the account for a few
+	// minutes: a temporary 503 with the reason, not a 500 dumping an error.
+	it('answers a paused Real-Debrid add with a temporary 503', async () => {
+		mockGetStreamUrl.mockRejectedValue(new RdAddPausedError());
+		const req = createMockRequest({
+			query: { imdbid: 'tt1', hash: HASH, fileId: '1', mediaType: 'movie' },
+			headers: { ...bearer('token'), 'x-real-ip': '1.1.1.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.setHeader).toHaveBeenCalledWith('Retry-After', '120');
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: RD_ADD_REFUSED_MESSAGE,
+		});
+		expect(mockRepository.saveCast).not.toHaveBeenCalled();
 	});
 });

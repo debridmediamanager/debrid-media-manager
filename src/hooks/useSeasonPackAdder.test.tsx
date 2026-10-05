@@ -1,4 +1,6 @@
+import { ms, recordedAnswer, sequence } from '@/test/realdebrid/rdAddPauseReplay';
 import { UserTorrentStatus, type UserTorrent } from '@/torrent/userTorrent';
+import { RD_ADD_PAUSE_GIVE_UP_MS, RD_ADD_PAUSE_MS } from '@/utils/rdAddPause';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -369,31 +371,115 @@ describe('useSeasonPackAdder', () => {
 		expect(addCached).toHaveBeenCalledTimes(1);
 	});
 
-	it('gives up once Real-Debrid is throttling rather than grinding', async () => {
+	// The run stops on time, not on a count: RD's pauses last 21 s to about
+	// five minutes, so only refusing everything for longer than that ends it.
+	it('gives up once Real-Debrid has refused every add for longer than any pause', async () => {
+		const packs = (season: number, markers: string[]) =>
+			markers.map((m, i) => candidate(hash(m), `The.Wire.S0${season}.v${i}.1080p`, 10));
 		respondWith({
 			packs: {
-				1: [candidate(hash('a'), 'The.Wire.S01.1080p', 10)],
-				2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
-				3: [candidate(hash('c'), 'The.Wire.S03.1080p', 10)],
+				1: packs(1, ['a', 'b', 'c', 'd']),
+				2: packs(2, ['e', 'f', 'g', 'h']),
+				3: packs(3, ['i', 'j', 'k', 'l']),
 			},
 		});
-		addCached.mockResolvedValue(false);
-		mockIsRdThrottling.mockReturnValue(true);
-		const { result } = render();
+		vi.useFakeTimers();
+		try {
+			// Every add refused, each one after a 30 s hold, for ever.
+			addCached.mockImplementation(async (_s: string, _h: string, opts: any) => {
+				await new Promise((resolve) => setTimeout(resolve, RD_ADD_PAUSE_MS));
+				opts?.onPaused?.();
+				return false;
+			});
+			const { result } = render();
 
-		let plan: SeasonAdderPlan | null = null;
-		await act(async () => {
-			plan = await result.current.discover('rd');
-		});
-		let outcome: any;
-		await act(async () => {
-			outcome = await result.current.run(plan!);
-		});
+			let plan: SeasonAdderPlan | null = null;
+			await act(async () => {
+				plan = await result.current.discover('rd');
+			});
+			let outcome: any;
+			await act(async () => {
+				const running = result.current.run(plan!);
+				await vi.advanceTimersByTimeAsync(RD_ADD_PAUSE_GIVE_UP_MS + 4 * RD_ADD_PAUSE_MS);
+				outcome = await running;
+			});
 
-		// Each attempt has already spent up to two twenty-second backoffs inside
-		// the add itself, so a run that kept going would cost minutes.
-		expect(outcome.abortedByThrottle).toBe(true);
-		expect(addCached.mock.calls.length).toBeLessThanOrEqual(2);
+			expect(outcome.abortedByThrottle).toBe(true);
+			// Two tries per release, a minute a release, and the run ends once
+			// the refusals have outlasted RD_ADD_PAUSE_GIVE_UP_MS: well past
+			// two 451s, well short of all twelve releases.
+			const tried = addCached.mock.calls.map((c) => c[1]);
+			const releases = tried.filter((_, i) => i % 2 === 0);
+			expect(tried).toEqual(releases.flatMap((h) => [h, h]));
+			expect(releases.length).toBe(RD_ADD_PAUSE_GIVE_UP_MS / (2 * RD_ADD_PAUSE_MS) + 1);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	// Replays the 183 s pause the test account went into at 23:33:02
+	// (src/test/fixtures/realdebrid/rd-add-account-pause-2026-10-05.json): a run
+	// that meets it must sit it out and keep adding, not stop after two 451s or
+	// report seasons RD holds as missing.
+	it('waits out a recorded Real-Debrid pause and keeps adding (f1, 23:33)', async () => {
+		const probes = sequence('f1').filter((a) => a.role === 'probe');
+		const control = sequence('f1').find((a) => a.role === 'control' && a.status === 451)!;
+		respondWith({
+			packs: {
+				1: [
+					candidate(control.hash, 'The.Wire.S01.1080p', 10),
+					candidate(probes[0].hash, 'The.Wire.S01.720p', 10),
+				],
+				2: [candidate(probes[1].hash, 'The.Wire.S02.1080p', 10)],
+				3: [candidate(probes[2].hash, 'The.Wire.S03.1080p', 10)],
+			},
+		});
+		vi.useFakeTimers();
+		vi.setSystemTime(ms(control.at));
+		try {
+			// The account as recorded, behind the hold `addHashAsMagnet` keeps:
+			// after a 451, the next add waits RD_ADD_PAUSE_MS.
+			let heldUntil = 0;
+			const answered: { hash: string; status: number }[] = [];
+			mockIsRdThrottling.mockImplementation(
+				() => recordedAnswer(probes[0].hash, Date.now()) === 451
+			);
+			addCached.mockImplementation(async (_s: string, h: string, opts: any) => {
+				const wait = heldUntil - Date.now();
+				if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+				const status = recordedAnswer(h, Date.now());
+				answered.push({ hash: h, status });
+				if (status === 451) {
+					heldUntil = Date.now() + RD_ADD_PAUSE_MS;
+					opts?.onPaused?.();
+					return false;
+				}
+				return true;
+			});
+			const { result } = render();
+
+			let plan: SeasonAdderPlan | null = null;
+			await act(async () => {
+				plan = await result.current.discover('rd');
+			});
+			let outcome: any;
+			await act(async () => {
+				const running = result.current.run(plan!);
+				await vi.advanceTimersByTimeAsync(10 * RD_ADD_PAUSE_MS);
+				outcome = await running;
+			});
+
+			expect(outcome.abortedByThrottle).toBe(false);
+			// The pause ended at 23:36:10; everything tried after it landed.
+			expect(answered.filter((a) => a.status === 201).length).toBeGreaterThan(0);
+			expect(outcome.added + outcome.refused.length).toBe(3);
+			expect(outcome.gaps).toEqual([]);
+			// A refused pack got its second try before the run moved on.
+			expect(answered[0].hash).toBe(control.hash);
+			expect(answered[1].hash).toBe(control.hash);
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	it('keeps going when an add simply fails without a throttle', async () => {

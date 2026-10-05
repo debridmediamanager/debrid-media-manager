@@ -435,4 +435,45 @@ describe('Instant RD (Every Episode) pacing', () => {
 			)
 		);
 	});
+
+	// RD answers a 451 while it refuses every add on the account for a while
+	// (measured 2026-10-04/05, src/utils/rdAddPause.ts). An episode it refused
+	// that way is tried again once the pause is over, and if still refused is
+	// counted as refused for now, never as "not cached".
+	it('tries an episode Real-Debrid paused once more instead of calling it not cached', async () => {
+		const tries: Record<string, number> = {};
+		addCachedMock.mockImplementation(
+			async (_service: string, hash: string, opts?: { onPaused?: () => void }) => {
+				callLog.push('add');
+				tries[hash] = (tries[hash] ?? 0) + 1;
+				// hash-2 lands on its second try; hash-3 is refused both times.
+				if ((hash === 'hash-2' && tries[hash] === 1) || hash === 'hash-3') {
+					opts?.onPaused?.();
+					return false;
+				}
+				return true;
+			}
+		);
+		const button = await mountSeason();
+
+		await userEvent.click(button);
+
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(5));
+		expect(addCachedMock.mock.calls.map((call) => call[1])).toEqual([
+			'hash-1',
+			'hash-2',
+			'hash-2',
+			'hash-3',
+			'hash-3',
+		]);
+		await waitFor(() =>
+			expect(toastMock.success).toHaveBeenCalledWith(
+				expect.stringContaining('2 added, 1 refused by Real-Debrid for now'),
+				expect.anything()
+			)
+		);
+		expect(toastMock.error.mock.calls.some((call) => /Not cached/.test(String(call[0])))).toBe(
+			false
+		);
+	});
 });

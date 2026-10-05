@@ -1,6 +1,7 @@
 import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
 import { extractTorrentInputs, toMagnetUri } from '@/utils/extractHashes';
+import { isRdAddRefusal, RD_ADD_PAUSE_MS } from '@/utils/rdAddPause';
 import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
@@ -48,18 +49,69 @@ const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cach
 let globalRequestQueue: Promise<void> = Promise.resolve();
 let globalLastRequestTime = 0;
 
-// Track recent rate-limit responses (HTTP 429 or RD error_code 34) to detect
-// when RD is throttling. During active throttling, error_code 35 (infringing_file)
-// may be a penalty escalation rather than a genuine content block.
-const RATE_LIMIT_WINDOW_MS = 30_000; // 30s — bucket resets in ~10s
-let lastRdRateLimitTimestamp = 0;
+// Everything dmm knows about how hard RD is pushing back on one account's adds,
+// keyed by the access token the requests carry. RD scopes all of it to the
+// account (see `RD_ADDS_PER_MINUTE` below), and on the server this module is
+// shared by every user's requests, so none of it may be global: one user's
+// pause must never hold, or excuse, another user's add.
+type RdAddAccountState = {
+	/** Last HTTP 429 or RD `error_code` 34 on a request with this token. */
+	rateLimitedAt: number;
+	/** Adds attempted with this token in the last minute. */
+	addAttempts: number[];
+	/** Adds on this token wait until then; see `recordRdAddPause`. */
+	pausedUntil: number;
+};
 
-export function recordRdRateLimit(): void {
-	lastRdRateLimitTimestamp = Date.now();
+const rdAddAccounts = new Map<string, RdAddAccountState>();
+// A server sees many tokens; keep only those with something still live.
+const MAX_TRACKED_RD_ACCOUNTS = 256;
+
+// A 429 resets in ~10s; 30s covers it with room to spare.
+const RATE_LIMIT_WINDOW_MS = 30_000;
+
+function rdAddAccount(token: string): RdAddAccountState {
+	let state = rdAddAccounts.get(token);
+	if (!state) {
+		if (rdAddAccounts.size >= MAX_TRACKED_RD_ACCOUNTS) pruneRdAddAccounts();
+		state = { rateLimitedAt: 0, addAttempts: [], pausedUntil: 0 };
+		rdAddAccounts.set(token, state);
+	}
+	return state;
 }
 
-export function hasRecentRdRateLimits(): boolean {
-	return Date.now() - lastRdRateLimitTimestamp < RATE_LIMIT_WINDOW_MS;
+function pruneRdAddAccounts(): void {
+	const now = Date.now();
+	for (const [token, state] of rdAddAccounts) {
+		const live =
+			now - state.rateLimitedAt < RATE_LIMIT_WINDOW_MS ||
+			state.pausedUntil > now ||
+			state.addAttempts.some((at) => now - at < ADD_RATE_WINDOW_MS);
+		if (!live) rdAddAccounts.delete(token);
+	}
+}
+
+/** The token a request was sent with, for keying what its answer says. */
+function bearerTokenOf(config?: { headers?: unknown }): string {
+	const headers = config?.headers as
+		| { get?: (name: string) => unknown; Authorization?: unknown; authorization?: unknown }
+		| undefined;
+	const value =
+		typeof headers?.get === 'function'
+			? headers.get('Authorization')
+			: (headers?.Authorization ?? headers?.authorization);
+	return typeof value === 'string' ? value.replace(/^Bearer\s+/i, '') : '';
+}
+
+/** RD answered a request on this token with a rate limit (429 or `error_code` 34). */
+export function recordRdRateLimit(token: string): void {
+	if (!token) return;
+	rdAddAccount(token).rateLimitedAt = Date.now();
+}
+
+export function hasRecentRdRateLimits(token: string): boolean {
+	const state = rdAddAccounts.get(token);
+	return !!state && Date.now() - state.rateLimitedAt < RATE_LIMIT_WINDOW_MS;
 }
 
 // `addMagnet` has a budget of its own, far tighter than the 250 requests a
@@ -75,47 +127,83 @@ export const RD_ADDS_PER_MINUTE = 30;
 /** Spacing that keeps a bulk add inside `RD_ADDS_PER_MINUTE`. */
 export const RD_ADD_MIN_SPACING_MS = 60_000 / RD_ADDS_PER_MINUTE;
 const ADD_RATE_WINDOW_MS = 60_000;
-let recentAddAttempts: number[] = [];
 
-/** One attempted `addMagnet`, whatever it answered: RD counts refusals too. */
-export function recordRdAddAttempt(): void {
+/** One attempted add on this token, whatever it answered: RD counts refusals too. */
+export function recordRdAddAttempt(token: string): void {
+	if (!token) return;
+	const state = rdAddAccount(token);
 	const now = Date.now();
-	recentAddAttempts = recentAddAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
-	recentAddAttempts.push(now);
+	state.addAttempts = state.addAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
+	state.addAttempts.push(now);
 }
 
 /**
- * Whether this session has added fast enough in the last minute to have
+ * Whether this token has added fast enough in the last minute to have
  * plausibly earned RD's add penalty.
  */
-export function hasRecentRdAddBurst(): boolean {
+export function hasRecentRdAddBurst(token: string): boolean {
+	const state = rdAddAccounts.get(token);
+	if (!state) return false;
 	const now = Date.now();
-	recentAddAttempts = recentAddAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
-	return recentAddAttempts.length >= RD_ADDS_PER_MINUTE;
+	state.addAttempts = state.addAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
+	return state.addAttempts.length >= RD_ADDS_PER_MINUTE;
 }
 
 /**
- * Whether RD is throttling this account's adds right now, on evidence rather
- * than on a guess.
+ * Hold this account's adds for `RD_ADD_PAUSE_MS`, after a 451 its name does
+ * not explain.
  *
- * Two things count: a real rate-limit answer (HTTP 429, or `error_code` 34),
- * and dmm having just burst past the add budget itself. A bare
- * `451 infringing_file` counts as neither. RD does answer 451 as a throttle
- * penalty mid-burst, which is why the burst half of this test exists — but
- * measured 2026-09-17, 37 of 48 real search-result hashes were refused 451 on a
- * quiet account at 30s spacing, and 22 of 23 re-tested were refused again from
- * a different account on a different host. Off a burst, a 451 is RD refusing
- * that release, and saying "throttling" sends the user off to wait for
- * something that is never going to clear.
+ * RD answers such a 451 when it refuses every add on the account for a while
+ * (21 s to about 5 minutes, measured 2026-10-04/05; see `rdAddPause.ts`), and
+ * an add fired into that pause is refused too, whatever it is. Holding them is
+ * the difference between one refused add and a row of them. A refused add
+ * during a pause was not seen to lengthen it, so a later 451 only ever extends
+ * the hold to 30 s from then.
  */
-export function isRdThrottling(): boolean {
-	return hasRecentRdRateLimits() || hasRecentRdAddBurst();
+export function recordRdAddPause(token: string, ms: number = RD_ADD_PAUSE_MS): void {
+	if (!token) return;
+	const state = rdAddAccount(token);
+	state.pausedUntil = Math.max(state.pausedUntil, Date.now() + ms);
 }
 
-/** Test seam: forget both halves of the throttle evidence between cases. */
+/** How long adds on this token still have to wait, 0 when they need not. */
+export function rdAddPauseRemainingMs(token: string): number {
+	const state = rdAddAccounts.get(token);
+	return state ? Math.max(0, state.pausedUntil - Date.now()) : 0;
+}
+
+/**
+ * Waits until adds on this token are no longer held. Loops because another
+ * 451 can extend the hold while this one waits. Resolves with how long it
+ * waited.
+ */
+export async function waitOutRdAddPause(token: string): Promise<number> {
+	const started = Date.now();
+	for (let remaining = rdAddPauseRemainingMs(token); remaining > 0; ) {
+		await delayWithMessageChannel(remaining);
+		remaining = rdAddPauseRemainingMs(token);
+	}
+	return Date.now() - started;
+}
+
+/**
+ * Whether RD is refusing this account's adds right now, on evidence rather
+ * than on a guess: a real rate-limit answer (HTTP 429, or `error_code` 34),
+ * this token having just burst past the add budget, or a 451 its name did not
+ * explain within the last `RD_ADD_PAUSE_MS`. A probe that failed while this is
+ * true was not answered; it must not read as "not cached".
+ */
+export function isRdThrottling(token: string): boolean {
+	return (
+		hasRecentRdRateLimits(token) ||
+		hasRecentRdAddBurst(token) ||
+		rdAddPauseRemainingMs(token) > 0
+	);
+}
+
+/** Test seam: forget every account's add state between cases. */
 export function resetRdThrottleTracking(): void {
-	recentAddAttempts = [];
-	lastRdRateLimitTimestamp = 0;
+	rdAddAccounts.clear();
 }
 
 // Shared rate limiting function that serializes all requests
@@ -303,7 +391,7 @@ realDebridAxios.interceptors.response.use(
 
 		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
 		if (error.response?.status === 429) {
-			lastRdRateLimitTimestamp = Date.now();
+			recordRdRateLimit(bearerTokenOf(originalConfig));
 		}
 		console.log(
 			`RealDebrid API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
@@ -727,10 +815,44 @@ export const getTorrentInfo = async (
 	}
 };
 
+/** What the caller knows about an add that RD cannot be asked. */
+export type RdAddOptions = {
+	/**
+	 * The release carries a name RD blocks (`isRdBlockedName`), so a 451 on it
+	 * is RD refusing that release and says nothing about the account: it must
+	 * not hold the account's other adds.
+	 */
+	nameIsBlocked?: boolean;
+};
+
+/**
+ * Bookkeeping every RD add shares, whichever endpoint it uses: wait out a
+ * pause the account is in, count the attempt, and put the account on pause
+ * when RD answers with a 451 the name does not explain.
+ */
+async function sendRdAdd<T>(
+	accessToken: string,
+	options: RdAddOptions,
+	send: () => Promise<T>
+): Promise<T> {
+	await waitOutRdAddPause(accessToken);
+	// Counted before the call, and counted whatever comes back: RD's budget is
+	// spent by refused requests too, so a burst that is already being turned away
+	// still has to read as a burst.
+	recordRdAddAttempt(accessToken);
+	try {
+		return await send();
+	} catch (error) {
+		if (isRdAddRefusal(error) && !options.nameIsBlocked) recordRdAddPause(accessToken);
+		throw error;
+	}
+}
+
 export const addHashAsMagnet = async (
 	accessToken: string,
 	hashOrMagnet: string,
-	bare: boolean = false
+	bare: boolean = false,
+	options: RdAddOptions = {}
 ): Promise<string> => {
 	const source = hashOrMagnet.trim();
 	const isMagnet = /^magnet:\?/i.test(source);
@@ -740,33 +862,30 @@ export const addHashAsMagnet = async (
 	}
 	const magnet = toMagnetUri(source);
 
-	// Counted before the call, and counted whatever comes back: RD's budget is
-	// spent by refused requests too, so a burst that is already being turned away
-	// still has to read as a burst.
-	recordRdAddAttempt();
-
-	try {
-		const response = await realDebridAxios.post(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
-			qs.stringify({ magnet }),
-			{
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization: `Bearer ${accessToken}`,
-				},
+	return sendRdAdd(accessToken, options, async () => {
+		try {
+			const response = await realDebridAxios.post(
+				`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
+				qs.stringify({ magnet }),
+				{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			if (response.status !== 201) {
+				recordRdOperationEvent('POST /torrents/addMagnet', response.status);
+				throw new Error('Failed to add magnet, status: ' + response.status);
 			}
-		);
-		if (response.status !== 201) {
 			recordRdOperationEvent('POST /torrents/addMagnet', response.status);
-			throw new Error('Failed to add magnet, status: ' + response.status);
+			return response.data.id;
+		} catch (error: any) {
+			const status = axios.isAxiosError(error) ? (error.response?.status ?? 500) : 500;
+			recordRdOperationEvent('POST /torrents/addMagnet', status);
+			throw error;
 		}
-		recordRdOperationEvent('POST /torrents/addMagnet', response.status);
-		return response.data.id;
-	} catch (error: any) {
-		const status = axios.isAxiosError(error) ? (error.response?.status ?? 500) : 500;
-		recordRdOperationEvent('POST /torrents/addMagnet', status);
-		throw error;
-	}
+	});
 };
 
 export const addTorrentFile = async (
@@ -775,20 +894,22 @@ export const addTorrentFile = async (
 	bare: boolean = false // Use proxy by default
 ): Promise<string> => {
 	const arrayBuffer = await file.arrayBuffer();
-	const response = await realDebridAxios.put(
-		`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addTorrent`,
-		arrayBuffer,
-		{
-			headers: {
-				'Content-Type': 'application/octet-stream',
-				Authorization: `Bearer ${accessToken}`,
-			},
+	return sendRdAdd(accessToken, {}, async () => {
+		const response = await realDebridAxios.put(
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addTorrent`,
+			arrayBuffer,
+			{
+				headers: {
+					'Content-Type': 'application/octet-stream',
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		);
+		if (response.status !== 201) {
+			throw new Error('Failed to add torrent file, status: ' + response.status);
 		}
-	);
-	if (response.status !== 201) {
-		throw new Error('Failed to add torrent file, status: ' + response.status);
-	}
-	return response.data.id;
+		return response.data.id;
+	});
 };
 
 export const selectFiles = async (

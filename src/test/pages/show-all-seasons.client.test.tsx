@@ -317,6 +317,7 @@ describe('All Seasons buttons', () => {
 			added: 2,
 			failed: 0,
 			gaps: [],
+			refused: [],
 			abortedByThrottle: false,
 			stopped: false,
 		});
@@ -435,13 +436,14 @@ describe('All Seasons buttons', () => {
 		expect(modalFireMock.mock.calls[0][0].text).toMatch(/S3/);
 	});
 
-	it('reports a throttled run as unfinished rather than as a success', async () => {
+	it('reports a run RD refused for too long as unfinished rather than as a success', async () => {
 		discoverMock.mockResolvedValue(planFor());
 		modalFireMock.mockResolvedValue({ isConfirmed: true });
 		runMock.mockResolvedValue({
 			added: 1,
-			failed: 0,
+			failed: 1,
 			gaps: [],
+			refused: [2],
 			abortedByThrottle: true,
 			stopped: false,
 		});
@@ -450,9 +452,32 @@ describe('All Seasons buttons', () => {
 		await userEvent.click(actions.getByRole('button', { name: /Instant RD \(All Seasons\)/i }));
 
 		await waitFor(() => expect(toastMock.error).toHaveBeenCalled());
-		expect(toastMock.error.mock.calls.some((call) => /throttling/i.test(String(call[0])))).toBe(
-			true
-		);
+		const message = String(toastMock.error.mock.calls[0][0]);
+		expect(message).toMatch(/refused every add for over 6 minutes/i);
+		expect(message).toMatch(/1 refused by Real-Debrid for now \(S2\)/);
+	});
+
+	// A season RD refused with a 451 its names did not explain is not one with
+	// nothing cached: the pause may well lift, so it is named apart.
+	it('names the seasons Real-Debrid refused apart from the empty ones', async () => {
+		discoverMock.mockResolvedValue(planFor());
+		modalFireMock.mockResolvedValue({ isConfirmed: true });
+		runMock.mockResolvedValue({
+			added: 1,
+			failed: 2,
+			gaps: [3],
+			refused: [2],
+			abortedByThrottle: false,
+			stopped: false,
+		});
+		const actions = await mountPage();
+
+		await userEvent.click(actions.getByRole('button', { name: /Instant RD \(All Seasons\)/i }));
+
+		await waitFor(() => expect(toastMock.success).toHaveBeenCalled());
+		const message = String(toastMock.success.mock.calls.at(-1)?.[0]);
+		expect(message).toMatch(/1 with nothing cached \(S3\)/);
+		expect(message).toMatch(/1 refused by Real-Debrid for now \(S2\)/);
 	});
 
 	it('marks each season on the nav with what happened to it', async () => {

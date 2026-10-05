@@ -3,6 +3,7 @@ import { repository as db } from '@/services/repository';
 import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
+import { RdAddPausedError } from '@/utils/rdAddPause';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -35,7 +36,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const userid = await generateUserId(token);
 
-	for (const fileId of fileIdsArr) {
+	// Set when Real-Debrid refused an add twice, a pause apart. Every file here
+	// is the same torrent added again, so the rest would only be refused too:
+	// they are reported unsent with the reason instead of each waiting out a
+	// pause of its own.
+	let pausedMessage: string | undefined;
+	for (const [index, fileId] of fileIdsArr.entries()) {
 		try {
 			const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
 				token,
@@ -66,6 +72,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				errorEpisodes.push(`fileId:${fileId}`);
 			}
 		} catch (e) {
+			if (e instanceof RdAddPausedError) {
+				pausedMessage = e.message;
+				errorEpisodes.push(...fileIdsArr.slice(index).map((id) => `fileId:${id}`));
+				break;
+			}
 			console.error(e);
 			errorEpisodes.push(`fileId:${fileId}`);
 		}
@@ -73,5 +84,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	res.status(200).json({
 		errorEpisodes,
+		...(pausedMessage ? { errorMessage: pausedMessage } : {}),
 	});
 }

@@ -37,7 +37,10 @@ export const handleCastTvShow = async (
 				{ headers: { Authorization: `Bearer ${rdKey}` } }
 			);
 			const errorEpisodes = resp.data.errorEpisodes;
-			if (errorEpisodes.length) {
+			if (resp.data.errorMessage) {
+				// Real-Debrid refused the add twice: the reason, not a file id.
+				toast.error(resp.data.errorMessage, castToastOptions);
+			} else if (errorEpisodes.length) {
 				toast.error(
 					`Cast failed for ${errorEpisodes[0]}${
 						errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''

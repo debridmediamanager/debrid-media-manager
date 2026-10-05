@@ -58,6 +58,7 @@ vi.mock('./getTorBoxStreamUrl', () => ({
 	getWebDownloadStreamUrlByHash: mocks.getWebDownloadStreamUrlByHash,
 }));
 
+import { rdRefusalError } from '@/test/realdebrid/rdAddPauseReplay';
 import {
 	buildPlayerIntent,
 	getInstantIntent,
@@ -65,6 +66,7 @@ import {
 	isWatchService,
 	pickRdLink,
 } from './intent';
+import { RD_ADD_REFUSED_MESSAGE } from './rdAddPause';
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -242,6 +244,32 @@ describe('getInstantIntent', () => {
 		);
 		expect(result.intent).toBe('vlc://https://dl/feature.mkv');
 		expect(mocks.deleteTorrent).toHaveBeenCalledWith('rd-key', 'rd-1', false);
+	});
+
+	// The player is waiting on this request. A 451 on the add is far more
+	// often RD pausing the whole account (measured 2026-10-04/05) than refusing
+	// the release, so it gets one more try and then a temporary error.
+	it('tries a 451 once more, then answers with a temporary error', async () => {
+		mocks.addHashAsMagnet.mockRejectedValue(rdRefusalError());
+
+		const result = await getInstantIntent('rd-key', 'hash', 1, '1.2.3.4', 'windows', 'vlc');
+
+		expect(mocks.addHashAsMagnet).toHaveBeenCalledTimes(2);
+		expect(result).toEqual({ error: RD_ADD_REFUSED_MESSAGE, temporary: true });
+	});
+
+	it('plays once the second try lands', async () => {
+		mocks.addHashAsMagnet.mockRejectedValueOnce(rdRefusalError()).mockResolvedValue('rd-3');
+		mocks.getTorrentInfo.mockResolvedValue({
+			status: 'downloaded',
+			files: [{ id: 1, path: '/Feature.mkv', selected: 1 }],
+			links: ['https://rd/feature'],
+		});
+		mocks.unrestrictLink.mockResolvedValue({ download: 'https://dl/feature.mkv', id: 'x1' });
+
+		const result = await getInstantIntent('rd-key', 'hash', 1, '1.2.3.4', 'windows', 'vlc');
+
+		expect(result.intent).toBe('vlc://https://dl/feature.mkv');
 	});
 
 	it('deletes the torrent and reports the status when RD has not finished', async () => {

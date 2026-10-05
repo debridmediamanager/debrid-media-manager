@@ -79,7 +79,9 @@ describe('addMagnet utilities', () => {
 			const callback = vi.fn();
 			await handleAddAsMagnetInRd(rdKey, hash, callback);
 
-			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash);
+			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
+				nameIsBlocked: false,
+			});
 			expect(getTorrentInfo).toHaveBeenCalledWith(rdKey, mockId, false);
 			expect(callback).toHaveBeenCalledWith(mockTorrentInfo);
 			expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.any(Object));
@@ -128,25 +130,16 @@ describe('addMagnet utilities', () => {
 			);
 		});
 
-		// RD returns `451 infringing_file` for a name it blocks AND as a throttle
-		// penalty during a burst of adds — and the throttle form arrives instead
-		// of a 429, so nothing else in the stack sees it as rate limiting.
-		// Measured 2026-08-28 on a season page's own hashes: eight consecutive
-		// adds all answered 451 with no 429 anywhere, and every one of them was
-		// accepted 201 after the account went quiet.
-		//
-		// The burst is the whole of that story, though, and treating every clean
-		// name as one is what produced the 2026-09-16 bug report. Measured
-		// 2026-09-17: 37 of 48 real search-result hashes were refused 451 on a
-		// quiet account at 30s spacing, 22 of the 23 re-tested were refused again
-		// from another account on another host, and `isRdBlockedName` recognised
-		// only 15 of the 37 because RD reads the paths inside the torrent and a
-		// search row usually carries no file list at all. In production that day
-		// 28.6% of first-attempt browser adds came back 451 against 7.5% 429, and
-		// the 515 users who added once or twice all day took 51 of those 451s and
-		// not a single 429. So the throttle branch needs evidence of a throttle,
-		// not merely the absence of evidence of a block.
-		describe('451 infringing_file: throttle vs blocked name', () => {
+		// RD answers `451 infringing_file` for a name it blocks, and — far more
+		// often — while it refuses every add on the account for a while.
+		// Measured 2026-10-04/05 on a test account: during such a pause Big Buck
+		// Bunny and hashes the account had just accepted were refused too; it
+		// lasted 21 s to about five minutes; and E.T., refused twice that
+		// evening, was accepted at 01:00:23. So a 451 on a clean name is tried
+		// once more after the pause (which `addHashAsMagnet` holds; it is mocked
+		// here) and is never reported as a verdict on the release. The recorded
+		// sequences drive src/utils/addMagnet.rdAccountPause.test.ts.
+		describe('451 infringing_file: account pause vs blocked name', () => {
 			const infringing = () => {
 				const error = new AxiosError('Infringing content');
 				error.response = {
@@ -164,69 +157,12 @@ describe('addMagnet utilities', () => {
 				links: [],
 			} as any;
 
-			// The reported bug. One add, nothing else going on, and RD refuses it:
-			// dmm used to answer "RD is throttling adds", sit through two
-			// twenty-second backoffs and then tell the user to come back in a
-			// minute. Coming back never helped — the release is refused, every
-			// time, from any account.
-			it('refuses a lone 451 outright instead of blaming a throttle', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+			const PAUSE_RETRY =
+				'Real-Debrid is pausing adds on your account. Trying again in 30 seconds...';
+			const REFUSED =
+				'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.';
 
-				const result = await handleAddAsMagnetInRd(
-					rdKey,
-					hash,
-					undefined,
-					false,
-					0,
-					false,
-					CLEAN_TITLE
-				);
-
-				expect(result).toBe('infringing_file');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
-				expect(toast.error).toHaveBeenCalledWith(
-					'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.',
-					expect.any(Object)
-				);
-				expect(toast.error).not.toHaveBeenCalledWith(
-					expect.stringContaining('throttling'),
-					expect.any(Object)
-				);
-			});
-
-			// r/debridmediamanager 2026-10-04: "every time I press Instant RD it
-			// says Real-Debrid will not accept this release". The same day RD
-			// answered this exact 451 for Big Buck Bunny at three adds a minute and
-			// accepted it again two minutes later, from adds the session could not
-			// see. dmm cannot tell that penalty from a real block, so it must not
-			// claim the release is the problem, and it must tell the user to wait.
-			it('does not blame the release for a 451 that may be an account penalty', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
-
-				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
-
-				const messages = vi.mocked(toast.error).mock.calls.map(([m]) => String(m));
-				expect(messages).toHaveLength(1);
-				expect(messages[0]).not.toMatch(/will not accept/i);
-				expect(messages[0]).toMatch(/wait a few minutes/i);
-			});
-
-			// A refusal is not a rate limit, and recording one as such made every
-			// other row in the next 30 seconds report a throttle that was not
-			// happening — and ended an All Seasons run after two of them.
-			it('does not record a rate limit for a release RD simply refuses', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
-
-				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
-
-				expect(recordRdRateLimit).not.toHaveBeenCalled();
-			});
-
-			it('still replays a 451 while RD really is throttling', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(true);
+			it('tries a lone 451 once more, and lands it when the pause is over', async () => {
 				vi.mocked(addHashAsMagnet)
 					.mockRejectedValueOnce(infringing())
 					.mockResolvedValueOnce('torrent-456');
@@ -245,18 +181,14 @@ describe('addMagnet utilities', () => {
 
 				expect(result).toBe('success');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
-				expect(toast.error).toHaveBeenCalledWith(
-					'RD is throttling adds. Retrying in 20s... (1/2)',
-					expect.any(Object)
-				);
-				expect(toast.error).not.toHaveBeenCalledWith(
-					'RD error: infringing_file',
-					expect.any(Object)
-				);
+				expect(toast).toHaveBeenCalledWith(PAUSE_RETRY, expect.any(Object));
+				expect(toast.error).not.toHaveBeenCalled();
 			});
 
-			it('gives up a throttled add as an error, never as infringing_file', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(true);
+			// r/debridmediamanager 2026-10-04: "every time I press Instant RD it
+			// says Real-Debrid will not accept this release". The message must
+			// not claim the release is the problem, and must tell the user to wait.
+			it('says what to try, not that RD will never take it, after the retry', async () => {
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -269,30 +201,35 @@ describe('addMagnet utilities', () => {
 					CLEAN_TITLE
 				);
 
-				// 'error' keeps the shared availability row: the caller evicts it
-				// on 'infringing_file', and a throttled add is no evidence at all.
-				expect(result).toBe('error');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
-				expect(toast.error).toHaveBeenLastCalledWith(
-					'RD is throttling adds — wait a minute and try again.',
-					expect.any(Object)
-				);
+				expect(result).toBe('paused');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+				const messages = vi.mocked(toast.error).mock.calls.map(([m]) => String(m));
+				expect(messages).toEqual([REFUSED]);
+				expect(messages[0]).not.toMatch(/will not accept/i);
+			});
+
+			// The pause is RD's, not a rate limit: recording one would make
+			// every other row report a 429 that never came.
+			it('does not record a rate limit for it', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
+
+				expect(recordRdRateLimit).not.toHaveBeenCalled();
 			});
 
 			it('takes the same branch when the caller knows no title', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(rdKey, hash);
 
-				expect(result).toBe('error');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
+				expect(result).toBe('paused');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
 			});
 
-			// An availability sweep is itself the burst that earns the penalty,
-			// so stalling 20s a row would slow it down without helping.
-			it('does not replay during a silent availability check', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(true);
+			// A silent caller (an availability probe, a bulk run with its own
+			// progress) gets the answer at once and decides for itself.
+			it('answers a silent caller at once, without waiting or a toast', async () => {
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -305,33 +242,24 @@ describe('addMagnet utilities', () => {
 					CLEAN_TITLE
 				);
 
-				expect(result).toBe('error');
+				expect(result).toBe('paused');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				expect(toast).not.toHaveBeenCalled();
 				expect(toast.error).not.toHaveBeenCalled();
 			});
 
-			// Off a burst the same silent probe has an answer rather than a
-			// missing one, and says so without a toast of its own.
-			it('reports a refusal from a silent probe that was not bursting', async () => {
+			it('tells the add a clean name, so the account is held', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, true, CLEAN_TITLE);
+
+				expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
+					nameIsBlocked: false,
+				});
+			});
+
+			it('reports a blocked name straight away, without retrying', async () => {
 				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
-
-				const result = await handleAddAsMagnetInRd(
-					rdKey,
-					hash,
-					undefined,
-					false,
-					0,
-					true,
-					CLEAN_TITLE
-				);
-
-				expect(result).toBe('infringing_file');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
-				expect(toast.error).not.toHaveBeenCalled();
-			});
-
-			it('reports a blocked name straight away, without replaying', async () => {
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -346,18 +274,41 @@ describe('addMagnet utilities', () => {
 
 				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				// And a blocked name's 451 says nothing about the account.
+				expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
+					nameIsBlocked: true,
+				});
 			});
 
-			// Measured 2026-09-03 on `25f9ffaf…`: RD refused it on request #1
-			// between two accepted controls, so it is a real block — but the only
-			// title DMM held was the space-separated display form, which reads
-			// clean, and the dots survive only in the path inside the torrent.
-			// Judged on the title alone this burnt two 20-second backoffs and then
-			// blamed a throttle that was not happening.
+			// While RD is refusing everything on the account even a blocked
+			// name's 451 is not trusted as a verdict.
+			it('does not call a blocked name a verdict while the account is throttled', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					BLOCKED_TITLE
+				);
+
+				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+			});
+
+			// Shaped on `25f9ffaf…` (2026-09-03): the only title DMM held was the
+			// space-separated display form, which reads clean, and the dots
+			// survive only in the path inside the torrent. RD has since stopped
+			// refusing lowercase `h264`, so the blocked token here is `H264`.
 			it('reads a block that lives only in the filenames', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(false);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 				const title =
-					'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE';
+					'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB H264-GRACE';
 
 				const result = await handleAddAsMagnetInRd(
 					rdKey,
@@ -369,7 +320,7 @@ describe('addMagnet utilities', () => {
 					title,
 					0,
 					[
-						'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to].mkv',
+						'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.H264-GRACE[EZTVx.to].mkv',
 					]
 				);
 
@@ -377,8 +328,7 @@ describe('addMagnet utilities', () => {
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
 			});
 
-			it('still replays when the filenames are as clean as the title', async () => {
-				vi.mocked(isRdThrottling).mockReturnValue(true);
+			it('still retries when the filenames are as clean as the title', async () => {
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -393,8 +343,8 @@ describe('addMagnet utilities', () => {
 					['Some.Movie.2019.1080p.BluRay.x265-GRP.mkv']
 				);
 
-				expect(result).toBe('error');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
+				expect(result).toBe('paused');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
 			});
 		});
 
@@ -532,10 +482,25 @@ describe('addMagnet utilities', () => {
 
 			await handleAddTorrentFileInRd(rdKey, file);
 
+			// The torrent's name is not read here, so RD's refusal gets the one
+			// retry an account pause is owed before it is reported.
+			expect(addTorrentFile).toHaveBeenCalledTimes(2);
 			expect(toast.error).toHaveBeenCalledWith(
-				'RD error: infringing_file',
+				'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.',
 				expect.any(Object)
 			);
+		});
+
+		it('should show other RD API errors as they come', async () => {
+			const error = new AxiosError('Bad request');
+			error.response = { status: 400, data: { error: 'bad_torrent' } } as any;
+
+			vi.mocked(addTorrentFile).mockRejectedValue(error);
+
+			await handleAddTorrentFileInRd(rdKey, file);
+
+			expect(addTorrentFile).toHaveBeenCalledTimes(1);
+			expect(toast.error).toHaveBeenCalledWith('RD error: bad_torrent', expect.any(Object));
 		});
 	});
 

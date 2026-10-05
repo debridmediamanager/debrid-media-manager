@@ -3,6 +3,7 @@ import { generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { readBearerKey, refuseQueryKey } from '@/utils/providerKeyHeader';
+import { RdAddPausedError } from '@/utils/rdAddPause';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -95,6 +96,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			errorMessage: 'Failed to cast, no streamUrl',
 		});
 	} catch (error) {
+		if (error instanceof RdAddPausedError) {
+			// Refused twice, a pause apart: most likely the account, briefly.
+			res.setHeader('Retry-After', '120');
+			res.status(503).json({ status: 'error', errorMessage: error.message });
+			return;
+		}
 		console.error(error);
 		res.status(500).json({
 			status: 'error',

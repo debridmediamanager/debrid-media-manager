@@ -1,13 +1,14 @@
 import type { FileData, SearchResult } from '@/services/mediasearch';
 import { checkOffcloudCache } from '@/services/offcloud';
 import { checkPremiumizeCache } from '@/services/premiumize';
-import { isRdThrottling, RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
+import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay } from '@/utils/delay';
 import { groupBy } from '@/utils/groupBy';
+import { addThroughRdPause, RdPauseStreak, type BulkRdAddOutcome } from '@/utils/rdAddPause';
 import {
 	airedEpisodeCount,
 	getSeasonCoverage,
@@ -51,17 +52,14 @@ export type SeasonRunState = 'pending' | 'running' | 'added' | 'held' | 'gap' | 
  */
 
 /**
- * Between adds. RD answers a burst of adds with 451, its throttle wearing a
- * content-block status, and its `addMagnet` budget is about 30 a minute per
- * account rather than the 250/min it publishes for the API as a whole.
+ * Between adds. RD's `addMagnet` budget is about 30 a minute per account
+ * rather than the 250/min it publishes for the API as a whole. A run of adds
+ * can still bring on RD's account pause (every add refused with 451 for 21 s
+ * to about five minutes); the adds wait that out themselves, inside
+ * `addHashAsMagnet`, and the run stops only once the pause has outlasted any
+ * RD was seen to hold — see `RdPauseStreak`.
  */
 const ADD_SPACING_MS = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
-/**
- * Two throttled adds in a row ends the run. Each one has already spent up to
- * two twenty-second backoffs inside `handleAddAsMagnetInRd`, so grinding on
- * costs minutes and returns answers that are wrong anyway.
- */
-const THROTTLE_ABORT_AFTER = 2;
 /** TorBox swallows a hundred hashes per cache probe; two in flight is its measured comfort. */
 const TB_PROBE_BATCH = 100;
 
@@ -389,20 +387,28 @@ export function useSeasonPackAdder({
 	 * Walks the plan one add at a time.
 	 *
 	 * Serial and spaced on purpose: an RD add is three to seven Real-Debrid calls
-	 * and a burst of them is what earns the 451 throttle. The run gives up
-	 * rather than grind through a penalty that is not clearing, and stops the
-	 * moment the page moves to another show.
+	 * and a run of them is what brings on RD's account pause. A release RD
+	 * answers with an unexplained 451 is tried once more after the pause rather
+	 * than reported missing; the run gives up only when RD has refused every
+	 * add for longer than it was ever seen to pause, and stops the moment the
+	 * page moves to another show.
+	 *
+	 * `onRdPause` hears when the run is waiting on such a pause, so the page can
+	 * say why nothing seems to happen for half a minute.
 	 */
 	const run = useCallback(
-		async (plan: SeasonAdderPlan) => {
+		async (plan: SeasonAdderPlan, onRdPause?: (paused: boolean) => void) => {
 			stopped.current = false;
 			setRunning(true);
 
 			let added = 0;
 			let failed = 0;
-			let consecutiveThrottles = 0;
+			const pauseStreak = new RdPauseStreak();
+			let waitingOnPause = false;
 			let abortedByThrottle = false;
 			const gaps: number[] = [];
+			/** Seasons Real-Debrid refused with a 451 its names did not explain. */
+			const refused: number[] = [];
 			/**
 			 * Hashes this run has already put in the account. A complete-series
 			 * release is the best candidate for every season it covers, so
@@ -414,29 +420,33 @@ export function useSeasonPackAdder({
 			const markSeason = (season: number, state: SeasonRunState) =>
 				setSeasonState((prev) => ({ ...prev, [season]: state }));
 
-			const tryAdd = async (candidate: ApiCandidate): Promise<boolean> => {
-				if (addedHashes.has(candidate.hash.toLowerCase())) return true;
+			const tryAdd = async (candidate: ApiCandidate): Promise<BulkRdAddOutcome> => {
+				if (addedHashes.has(candidate.hash.toLowerCase())) return 'added';
 				const row = asSearchResult(candidate, plan.service);
 				// Cached only: a release the tables or a probe still believe in but
 				// the service no longer serves is removed again rather than left
-				// downloading in the user's account.
-				const added = await addCached(plan.service, candidate.hash, {
-					row,
-					silent: true,
-				});
-				if (added) {
-					addedHashes.add(candidate.hash.toLowerCase());
-					consecutiveThrottles = 0;
-					return true;
+				// downloading in the user's account. A paused RD add gets its
+				// second try here; the account's pause holds it until RD is quiet.
+				const outcome = await addThroughRdPause((onPaused) =>
+					addCached(plan.service, candidate.hash, {
+						row,
+						silent: true,
+						onPaused: () => {
+							waitingOnPause = true;
+							onRdPause?.(true);
+							onPaused();
+						},
+					})
+				);
+				pauseStreak.note(outcome);
+				if (waitingOnPause && outcome !== 'paused') {
+					waitingOnPause = false;
+					onRdPause?.(false);
 				}
-				// The add answers only yes or no, so the reason is gone by now;
-				// `isRdThrottling` is what separates RD refusing everything from
-				// RD refusing this release. Only the first ends a run — two
-				// releases RD will not accept are a reason to try the next
-				// candidate, not to stop adding seasons.
-				if (plan.service === 'rd' && isRdThrottling()) consecutiveThrottles++;
-				return false;
+				if (outcome === 'added') addedHashes.add(candidate.hash.toLowerCase());
+				return outcome;
 			};
+			const pausedTooLong = () => pauseStreak.exhausted;
 
 			try {
 				for (const entry of plan.entries) {
@@ -447,22 +457,31 @@ export function useSeasonPackAdder({
 
 					if (entry.status === 'pack') {
 						let done = false;
+						let sawPause = false;
 						for (const candidate of entry.packCandidates as ApiCandidate[]) {
 							if (stopped.current) break;
-							if (await tryAdd(candidate)) {
+							const outcome = await tryAdd(candidate);
+							if (outcome === 'added') {
 								done = true;
 								break;
 							}
-							if (consecutiveThrottles >= THROTTLE_ABORT_AFTER) break;
+							if (outcome === 'paused') sawPause = true;
+							if (pausedTooLong()) break;
 							await delay(ADD_SPACING_MS);
 						}
 						if (done) {
 							added++;
 							markSeason(entry.season, 'added');
-						} else if (consecutiveThrottles >= THROTTLE_ABORT_AFTER) {
+						} else if (pausedTooLong()) {
 							markSeason(entry.season, 'failed');
 							abortedByThrottle = true;
 							break;
+						} else if (sawPause) {
+							// Real-Debrid refused it rather than lacking it, so it is
+							// not a gap: trying again later may well land it.
+							failed++;
+							refused.push(entry.season);
+							markSeason(entry.season, 'failed');
 						} else {
 							failed++;
 							gaps.push(entry.season);
@@ -477,6 +496,7 @@ export function useSeasonPackAdder({
 					const covered = new Set<number>();
 					let addedHere = 0;
 					let missedHere = 0;
+					let pausedHere = false;
 					for (const episode of [...entry.episodeCandidates.keys()].sort(
 						(a, b) => a - b
 					)) {
@@ -485,21 +505,23 @@ export function useSeasonPackAdder({
 						const bucket = entry.episodeCandidates.get(episode) as ApiCandidate[];
 						let got = false;
 						for (const candidate of bucket) {
-							if (await tryAdd(candidate)) {
+							const outcome = await tryAdd(candidate);
+							if (outcome === 'added') {
 								for (const e of candidate.episodes ?? [episode]) covered.add(e);
 								got = true;
 								break;
 							}
-							if (consecutiveThrottles >= THROTTLE_ABORT_AFTER) break;
+							if (outcome === 'paused') pausedHere = true;
+							if (pausedTooLong()) break;
 							await delay(ADD_SPACING_MS);
 						}
 						if (got) addedHere++;
 						else missedHere++;
-						if (consecutiveThrottles >= THROTTLE_ABORT_AFTER) break;
+						if (pausedTooLong()) break;
 						await delay(ADD_SPACING_MS);
 					}
 
-					if (consecutiveThrottles >= THROTTLE_ABORT_AFTER) {
+					if (pausedTooLong()) {
 						markSeason(entry.season, 'failed');
 						abortedByThrottle = true;
 						break;
@@ -507,6 +529,11 @@ export function useSeasonPackAdder({
 					if (addedHere > 0) {
 						added++;
 						markSeason(entry.season, missedHere > 0 ? 'failed' : 'added');
+						if (missedHere > 0 && pausedHere) refused.push(entry.season);
+					} else if (pausedHere) {
+						failed++;
+						refused.push(entry.season);
+						markSeason(entry.season, 'failed');
 					} else {
 						failed++;
 						gaps.push(entry.season);
@@ -521,6 +548,7 @@ export function useSeasonPackAdder({
 				added,
 				failed,
 				gaps,
+				refused,
 				abortedByThrottle,
 				stopped: stopped.current,
 			};

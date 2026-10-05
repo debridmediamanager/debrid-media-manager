@@ -58,6 +58,7 @@ import {
 import { handleCastTvShowOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastTvShowPremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
+import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/utils/rdAddPause';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
 import { sortByMean } from '@/utils/results';
@@ -551,7 +552,14 @@ const TvSearch: FunctionComponent = () => {
 			// a crash.
 			const runToast = toast.loading(`Adding seasons to ${label}...`);
 			try {
-				const outcome = await runSeasons(plan);
+				const outcome = await runSeasons(plan, (paused) =>
+					toast.loading(
+						paused
+							? `${label} is pausing adds on your account. Waiting for it to lift, then trying again...`
+							: `Adding seasons to ${label}...`,
+						{ id: runToast }
+					)
+				);
 				toast.dismiss(runToast);
 
 				const parts: string[] = [];
@@ -564,11 +572,18 @@ const TvSearch: FunctionComponent = () => {
 							.join(', ')})`
 					);
 				}
+				if (outcome.refused.length > 0) {
+					parts.push(
+						`${outcome.refused.length} refused by ${label} for now (${outcome.refused
+							.map((season) => `S${season}`)
+							.join(', ')})`
+					);
+				}
 				const summaryText = parts.length > 0 ? parts.join(', ') : 'nothing to do';
 
 				if (outcome.abortedByThrottle) {
 					toast.error(
-						`${label} is throttling adds, so the run stopped early: ${summaryText}. Try the rest in a few minutes.`,
+						`${label} refused every add for over ${RD_ADD_PAUSE_GIVE_UP_MS / 60_000} minutes, so the run stopped early: ${summaryText}. Try the rest later.`,
 						{ duration: 10000 }
 					);
 				} else if (outcome.stopped) {
@@ -1429,6 +1444,7 @@ const TvSearch: FunctionComponent = () => {
 		}
 
 		let attempted = 0;
+		let sawPause = false;
 		for (const candidate of candidates) {
 			// Skip if already in library
 			if (`${service}:${candidate.hash}` in hashAndProgress) {
@@ -1441,15 +1457,25 @@ const TvSearch: FunctionComponent = () => {
 			attempted++;
 			// Cached only: a release the service does not serve at once is
 			// removed again (and, on RD, cleaned out of the availability table).
-			const wasInstant = await addCached(service, candidate.hash);
+			// An RD add refused with a 451 its name does not explain has already
+			// had its second try, and was not shown to be uncached.
+			const wasInstant = await addCached(service, candidate.hash, {
+				onPaused: () => {
+					sawPause = true;
+				},
+			});
 			if (wasInstant) return;
 		}
 
-		toast.error('No truly instant season torrents found. False positives were cleaned up.');
+		toast.error(
+			sawPause
+				? `${label} refused these releases. If other releases get refused too, wait a few minutes and try again.`
+				: 'No truly instant season torrents found. False positives were cleaned up.'
+		);
 	}
 
 	async function handleInstantEveryEpisode(entry: (typeof INSTANT_SERVICES)[number]) {
-		const { service } = entry;
+		const { service, label } = entry;
 		const individualEpisodes = getIndividualEpisodeTorrents(entry);
 		if (individualEpisodes.length === 0) {
 			toast.error('No individual episode torrents found.');
@@ -1519,7 +1545,9 @@ const TvSearch: FunctionComponent = () => {
 		let skippedCount = 0;
 		let notFoundCount = 0;
 		let uncachedCount = 0;
+		let refusedCount = 0;
 		const notFoundEpisodes: number[] = [];
+		const pauseStreak = new RdPauseStreak();
 
 		try {
 			// Process episodes sequentially from 1 to max
@@ -1550,12 +1578,38 @@ const TvSearch: FunctionComponent = () => {
 				// account, and this loop used to run flat out, so a season of
 				// any length spent the user's whole add budget partway through
 				// and then failed every episode after that.
-				if (addedCount + uncachedCount > 0) await delay(RD_ADD_MIN_SPACING_MS);
+				if (addedCount + uncachedCount + refusedCount > 0) {
+					await delay(RD_ADD_MIN_SPACING_MS);
+				}
 				// Cached only, like the button says: a miss is removed again
-				// rather than left downloading.
-				if (await addCached(service, episode.hash, { silent: true })) {
+				// rather than left downloading. An RD add refused with a 451 its
+				// name does not explain is the account's pause far more often
+				// than the release, so it is tried again once the pause is over
+				// (the add itself waits) instead of being called "not cached".
+				const outcome = await addThroughRdPause((onPaused) =>
+					addCached(service, episode.hash, {
+						silent: true,
+						onPaused: () => {
+							toast.loading(
+								`Episode ${epNum}: ${label} is pausing adds on your account. Trying again when it lifts...`,
+								{ id: toastId }
+							);
+							onPaused();
+						},
+					})
+				);
+				pauseStreak.note(outcome);
+				if (outcome === 'added') {
 					addedCount++;
 					toast.success(`Episode ${epNum}: Added`, { duration: 2000 });
+				} else if (outcome === 'paused') {
+					refusedCount++;
+					toast.error(`Episode ${epNum}: Refused by ${label} for now`, {
+						duration: 2000,
+					});
+					// RD has refused everything for longer than it was ever
+					// seen to pause; the rest is better left for later.
+					if (pauseStreak.exhausted) break;
 				} else {
 					uncachedCount++;
 					toast.error(`Episode ${epNum}: Not cached`, { duration: 2000 });
@@ -1569,6 +1623,11 @@ const TvSearch: FunctionComponent = () => {
 			if (addedCount > 0) summaryParts.push(`${addedCount} added`);
 			if (skippedCount > 0) summaryParts.push(`${skippedCount} already in library`);
 			if (uncachedCount > 0) summaryParts.push(`${uncachedCount} not cached`);
+			if (refusedCount > 0) {
+				summaryParts.push(
+					`${refusedCount} refused by ${label} for now (try again in a few minutes)`
+				);
+			}
 			if (notFoundCount > 0) {
 				summaryParts.push(`${notFoundCount} not found`);
 				if (notFoundEpisodes.length <= 5) {
@@ -1578,7 +1637,7 @@ const TvSearch: FunctionComponent = () => {
 
 			const summaryMessage = `Episodes 1-${maxEpisode}: ${summaryParts.join(', ')}`;
 
-			if (notFoundCount === 0 && uncachedCount === 0) {
+			if (notFoundCount === 0 && uncachedCount === 0 && refusedCount === 0) {
 				toast.success(summaryMessage, { duration: 5000 });
 			} else if (addedCount > 0) {
 				toast.success(summaryMessage, { duration: 5000 });

@@ -1,5 +1,6 @@
 import handler from '@/pages/api/stremio/cast/series/[imdbid]';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { RD_ADD_REFUSED_MESSAGE, RdAddPausedError } from '@/utils/rdAddPause';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockSaveCast, mockGenerateUserId, mockGetStreamUrl } = vi.hoisted(() => ({
@@ -168,5 +169,29 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		expect(mockSaveCast).toHaveBeenCalledTimes(1);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: ['fileId:202'] });
+	});
+
+	// Every file is the same torrent added again, so once RD has refused the
+	// add twice the rest would only be refused too: report them unsent with the
+	// reason rather than make each one wait out a pause of its own.
+	it('stops at a paused Real-Debrid add and says why', async () => {
+		mockGetStreamUrl
+			.mockResolvedValueOnce(['https://stream/1', 'https://rd/1', 1, 1, 100])
+			.mockRejectedValueOnce(new RdAddPausedError());
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer abc', 'x-real-ip': '1.1.1.1' },
+			query: { imdbid: 'tt123', hash: 'h', fileIds: ['1', '2', '3', '4'] },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockGetStreamUrl).toHaveBeenCalledTimes(2);
+		expect(mockSaveCast).toHaveBeenCalledTimes(1);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({
+			errorEpisodes: ['fileId:2', 'fileId:3', 'fileId:4'],
+			errorMessage: RD_ADD_REFUSED_MESSAGE,
+		});
 	});
 });

@@ -1,0 +1,273 @@
+{
+	"names": {
+		"dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c": "Big Buck Bunny",
+		"65d1bb05a8064b21ff4359980564ef0691ae84ff": "E.T. the Extra-Terrestrial"
+	},
+	"refusal": {
+		"status": 451,
+		"body": { "error": "infringing_file", "error_code": 35 }
+	},
+	"sequences": {
+		"et": {
+			"note": "A known-good hash (Big Buck Bunny) and a hash the account accepted at 22:38:59 were refused alongside E.T., so the whole account was refusing adds. The next add, 17 s after E.T., was accepted.",
+			"adds": [
+				{
+					"at": "2026-10-04T22:52:40.400Z",
+					"role": "warm",
+					"hash": "67118aee50e6eead2b7df2ffc3bbdb7de949b350",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T22:53:00.500Z",
+					"role": "warm",
+					"hash": "dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T22:53:20.600Z",
+					"role": "warm",
+					"hash": "c525953a36fc2f11dd9798e3d1ed090c5d3b2b3f",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T22:53:40.800Z",
+					"role": "refused",
+					"hash": "65d1bb05a8064b21ff4359980564ef0691ae84ff",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T22:53:57.200Z",
+					"role": "probe",
+					"hash": "131772474646867c14c4bf7d42599f71f91f11ba",
+					"status": 201
+				}
+			]
+		},
+		"extend": {
+			"note": "A warm hash refused, the next two warm hashes accepted, then E.T. refused again 14 minutes after the first time. A hash refused earlier that evening was refused again two minutes later, and the add after it was accepted.",
+			"adds": [
+				{
+					"at": "2026-10-04T23:06:43.400Z",
+					"role": "warm",
+					"hash": "77891f6c62de29d01a7779bde6205be34c2885d9",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:07:04.700Z",
+					"role": "warm",
+					"hash": "eadf80cb5f3761798a9614e24e145dc8fc592096",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:07:26.100Z",
+					"role": "warm",
+					"hash": "11e44bccd5bac214e1f864d9872e412dc5d16c42",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:07:46.300Z",
+					"role": "refused",
+					"hash": "65d1bb05a8064b21ff4359980564ef0691ae84ff",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:09:46.500Z",
+					"role": "refused_again",
+					"hash": "e1cd73a97416101d30e100bdfd31ae26292916d3",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:10:02.900Z",
+					"role": "probe",
+					"hash": "56643662008888e525ae965d9a6cbb2d8aa82f40",
+					"status": 201
+				}
+			]
+		},
+		"f1": {
+			"note": "Hashes new to the account, 20 s apart, with a known-good control after every refusal. The first four refusals were each followed by an accepted control, so RD was refusing those releases at that moment. After the fifth refusal the control was refused too, and so was every add for 183 s, known-good probes included, until 23:36:10.",
+			"adds": [
+				{
+					"at": "2026-10-04T23:30:02.400Z",
+					"role": "precheck",
+					"hash": "c525953a36fc2f11dd9798e3d1ed090c5d3b2b3f",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:30:23.800Z",
+					"role": "fresh",
+					"hash": "666f46047a0e57bb8eab5aa86932b9aed6e8c49c",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:30:43.700Z",
+					"role": "fresh",
+					"hash": "353fbf7421031565537ee08d8ccebe8aa1da5848",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:31:02.600Z",
+					"role": "fresh",
+					"hash": "1f0313cced4f79eef74532258041206f1e9a1ed4",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:31:09.100Z",
+					"role": "control",
+					"hash": "131772474646867c14c4bf7d42599f71f91f11ba",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:31:22.500Z",
+					"role": "fresh",
+					"hash": "46835a8f83fa9878bfc96d161eed203e7a259da4",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:31:28.900Z",
+					"role": "control",
+					"hash": "0fbef7bb210d24f2af7a5a75a0f22ee04ac6e4e7",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:31:42.500Z",
+					"role": "fresh",
+					"hash": "cb0da342d35afbd3d9678ba5bfaa97d317b18f9e",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:31:48.900Z",
+					"role": "control",
+					"hash": "c4680df4f1fc799b3357bab554570952ffad9d6f",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:32:04.300Z",
+					"role": "fresh",
+					"hash": "497f531ea34bf97e25bac5ed23f3afc49f06c4e9",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:32:23.900Z",
+					"role": "fresh",
+					"hash": "719627fd4d0dd7774f1bfe3a085b3e791c1f8ec7",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:32:42.600Z",
+					"role": "fresh",
+					"hash": "4c01361a74da83f322cfe4793d69380a245d08b3",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:32:49.000Z",
+					"role": "control",
+					"hash": "1e7cef091547f8b1a709c3db84e23426cdac8b13",
+					"status": 201
+				},
+				{
+					"at": "2026-10-04T23:33:02.700Z",
+					"role": "fresh",
+					"hash": "28c6795228d624c68bc86704c6bd94db495d73dd",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:33:07.900Z",
+					"role": "control",
+					"hash": "a8508e0cc1f574b771485ccbfca37ba7aa656cf4",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:33:28.000Z",
+					"role": "probe",
+					"hash": "3c175a2a2ebcfb391ef22ccdb81e889a02baae55",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:33:48.200Z",
+					"role": "probe",
+					"hash": "9c65e6e614716fb89b8043e0e4fdb1c6f199e049",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:34:08.300Z",
+					"role": "probe",
+					"hash": "17f8111d3ac3433650ac3ecd51a8c49d83c917c4",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:34:28.500Z",
+					"role": "probe",
+					"hash": "e4448bc22063b046addee90f5d06f38fdd422de7",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:34:48.600Z",
+					"role": "probe",
+					"hash": "15946fc97a8809ac7fcf3454c0ffb0212ab3114d",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:35:08.800Z",
+					"role": "probe",
+					"hash": "33a3da0390fd636aa341279ead0cd37d9b7ca48a",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:35:28.900Z",
+					"role": "probe",
+					"hash": "ededd01e1b752094cfc6bb6168800a0bb7b652be",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:35:49.100Z",
+					"role": "probe",
+					"hash": "5cd71d7b73eacdcbdb7fb53b6ae62456bda119ae",
+					"status": 451
+				},
+				{
+					"at": "2026-10-04T23:36:10.500Z",
+					"role": "probe",
+					"hash": "c9c4ec24a1acc22506a01bb99489b41b457f6335",
+					"status": 201
+				}
+			]
+		},
+		"r2": {
+			"note": "E.T., refused twice the evening before, accepted. Nineteen seconds later the account refused a new hash and then a known-good control; the next known-good add, 21 s after that, was accepted.",
+			"adds": [
+				{
+					"at": "2026-10-05T01:00:01.800Z",
+					"role": "precheck",
+					"hash": "c4680df4f1fc799b3357bab554570952ffad9d6f",
+					"status": 201
+				},
+				{
+					"at": "2026-10-05T01:00:23.200Z",
+					"role": "fresh",
+					"hash": "65d1bb05a8064b21ff4359980564ef0691ae84ff",
+					"status": 201
+				},
+				{
+					"at": "2026-10-05T01:00:42.000Z",
+					"role": "fresh",
+					"hash": "c5c19c1c8c8ddaa6f3094987cf71f96330025025",
+					"status": 451
+				},
+				{
+					"at": "2026-10-05T01:00:47.200Z",
+					"role": "control",
+					"hash": "1e7cef091547f8b1a709c3db84e23426cdac8b13",
+					"status": 451
+				},
+				{
+					"at": "2026-10-05T01:01:08.600Z",
+					"role": "probe",
+					"hash": "a8508e0cc1f574b771485ccbfca37ba7aa656cf4",
+					"status": 201
+				}
+			]
+		}
+	},
+	"source": "POST /rest/1.0/torrents/addMagnet on a Real-Debrid test account, 2026-10-04 22:38 to 2026-10-05 01:01 UTC. Every accepted add was deleted again at once. Hashes are cached public releases; 'warm', 'control' and 'probe' hashes are ones the same account accepted earlier that evening."
+}

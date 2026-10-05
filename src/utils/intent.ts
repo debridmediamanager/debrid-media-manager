@@ -23,6 +23,10 @@ import {
 	getOwnedTorBoxStreamUrl,
 	getWebDownloadStreamUrlByHash,
 } from './getTorBoxStreamUrl';
+import { RdAddPausedError, retryRdAddThroughPause } from './rdAddPause';
+
+/** `temporary` marks a failure worth retrying in a few minutes, not a verdict. */
+export type IntentResult = { intent?: string; error?: string; temporary?: boolean };
 
 // 'tbw' is a TorBox web download, which lives in its own namespace with its own
 // list and its own download-link endpoint — it cannot be resolved as a torrent.
@@ -400,9 +404,12 @@ const getRdInstantIntent = async (
 	os: string,
 	player: string,
 	fileName?: string
-): Promise<{ intent?: string; error?: string }> => {
+): Promise<IntentResult> => {
 	try {
-		const id = await addHashAsMagnet(rdKey, hash, false);
+		// The player is waiting on this request: a 451 gets one more try after
+		// the account's pause, then a temporary error rather than a verdict on
+		// the release (see `rdAddPause.ts`).
+		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false));
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
@@ -429,6 +436,7 @@ const getRdInstantIntent = async (
 			return { error: `Failed to process torrent: ${e.message || e}` };
 		}
 	} catch (e: any) {
+		if (e instanceof RdAddPausedError) return { error: e.message, temporary: true };
 		return { error: `Failed to add magnet: ${e.message || e}` };
 	}
 };
@@ -449,7 +457,7 @@ export const getInstantIntent = async (
 	player: string,
 	service: WatchService = 'rd',
 	fileName?: string
-): Promise<{ intent?: string; error?: string }> => {
+): Promise<IntentResult> => {
 	if (service === 'tb') {
 		return getTbInstantIntent(key, hash, os, player, fileName);
 	}

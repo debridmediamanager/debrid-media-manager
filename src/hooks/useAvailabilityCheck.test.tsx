@@ -558,7 +558,9 @@ describe('useAvailabilityCheck', () => {
 
 			expect(addRd).toHaveBeenCalledTimes(5);
 			expect(mockToast.error).toHaveBeenCalledWith(
-				expect.stringContaining('RD is throttling adds — stopped after 5 of 9'),
+				expect.stringContaining(
+					'Real-Debrid is pausing adds on your account — stopped after 5 of 9'
+				),
 				expect.any(Object)
 			);
 		});
@@ -607,10 +609,24 @@ describe('useAvailabilityCheck', () => {
 			});
 
 			expect(mockToast.error).toHaveBeenCalledWith(
-				'RD is throttling adds — try this row again in a minute.',
+				'Real-Debrid is pausing adds on your account — try this row again in a few minutes.',
 				expect.objectContaining({ id: 'toast-id' })
 			);
 			expect(mockToast.success).not.toHaveBeenCalled();
+		});
+
+		// The throttle is the account's, so it is read for the key that probed.
+		it("reads the throttle for the probing account's key", async () => {
+			searchResults = [createSearchResult()];
+			addRd.mockResolvedValue(null);
+			mockIsRdThrottling.mockReturnValue(true);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['RD']);
+			});
+
+			expect(mockIsRdThrottling).toHaveBeenCalledWith('rd-key');
 		});
 	});
 

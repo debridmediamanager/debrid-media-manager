@@ -53,6 +53,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 	if (result.intent) {
 		res.status(200).json({ intent: result.intent });
+	} else if ('temporary' in result && result.temporary) {
+		// Real-Debrid refused the add twice, a pause apart: try again later.
+		res.setHeader('Retry-After', '120');
+		res.status(503).json({ error: result.error });
 	} else {
 		res.status(500).json({ error: result.error || `No intent found for ${hash ?? link}` });
 	}

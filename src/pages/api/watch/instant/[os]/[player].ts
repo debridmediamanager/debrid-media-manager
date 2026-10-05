@@ -19,6 +19,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	);
 	if (result.intent) {
 		res.redirect(307, result.intent);
+	} else if (result.temporary) {
+		// Real-Debrid refused the add twice, a pause apart: try again later.
+		res.setHeader('Retry-After', '120');
+		res.status(503).json({ error: result.error });
 	} else {
 		res.status(500).json({ error: result.error || `No intent found for ${hash}` });
 	}

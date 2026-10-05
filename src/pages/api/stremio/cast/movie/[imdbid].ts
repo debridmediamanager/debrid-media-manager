@@ -2,6 +2,7 @@ import { repository as db } from '@/services/repository';
 import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
+import { RdAddPausedError } from '@/utils/rdAddPause';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // MOVIE cast: unrestricts a selected link and saves it to the database
@@ -54,6 +55,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			errorMessage: 'Failed to cast, no streamUrl',
 		});
 	} catch (e) {
+		if (e instanceof RdAddPausedError) {
+			// Refused twice, a pause apart: most likely the account, briefly.
+			res.setHeader('Retry-After', '120');
+			res.status(503).json({ status: 'error', errorMessage: e.message });
+			return;
+		}
 		console.error(e);
 		const message = e instanceof Error ? e.message : String(e);
 		res.status(500).json({

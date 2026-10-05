@@ -6,6 +6,7 @@ import {
 } from '@/services/realDebrid';
 import ptt from 'parse-torrent-title';
 import { handleSelectFilesInRd } from './addMagnet';
+import { retryRdAddThroughPause } from './rdAddPause';
 
 // `torrentInfo.links` covers the *selected* files only, one link per selected
 // file in the same order, while `torrentInfo.files` lists every file in the
@@ -48,7 +49,10 @@ export const getStreamUrl = async (
 	let episodeNumber = -1;
 	let fileSize = 0;
 	try {
-		const id = await addHashAsMagnet(rdKey, hash, false);
+		// A caller is waiting on this request, so a 451 gets one more try after
+		// the account's pause and then a temporary `RdAddPausedError`, never a
+		// verdict on the release; see `rdAddPause.ts`.
+		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false));
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
@@ -99,7 +103,7 @@ export const getBiggestFileStreamUrl = async (
 	let rdLink = '';
 	let fileSize = 0;
 	try {
-		const id = await addHashAsMagnet(rdKey, hash, false);
+		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false));
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrent = await getTorrentInfo(rdKey, id, false);

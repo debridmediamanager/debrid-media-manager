@@ -11,7 +11,7 @@ import { getPremiumizeItemDetails } from '@/services/premiumize';
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
-import { handleRestartTorrent } from '@/utils/addMagnet';
+import { announceRdPauseRetry, handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { getDebridLinkServiceStatus, getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import {
@@ -25,6 +25,7 @@ import {
 import { parseOffcloudRowId } from '@/utils/offcloudRow';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
+import { retryRdAddThroughPause } from '@/utils/rdAddPause';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import { toWebDownloadRowId } from '@/utils/torboxWebDownload';
 import { AxiosError } from 'axios';
@@ -403,7 +404,12 @@ export const showInfoForRD = async (
 						);
 					} else {
 						const oldId = `rd:${info.id}`;
-						const newId = await addHashAsMagnet(rdKey, info.hash);
+						// Already in the account, so a 451 is its pause far more
+						// often than a verdict: one more try after it.
+						const newId = await retryRdAddThroughPause(
+							() => addHashAsMagnet(rdKey, info.hash),
+							announceRdPauseRetry
+						);
 						await selectFiles(rdKey, newId, selectedIds);
 						await handleDeleteRdTorrent(rdKey, oldId, true);
 						toast.success('Selection saved and reinserted.', magnetToastOptions);
@@ -508,7 +514,12 @@ export const showInfoForRD = async (
 						);
 					} else {
 						const oldId = `rd:${info.id}`;
-						const newId = await addHashAsMagnet(rdKey, info.hash);
+						// Already in the account, so a 451 is its pause far more
+						// often than a verdict: one more try after it.
+						const newId = await retryRdAddThroughPause(
+							() => addHashAsMagnet(rdKey, info.hash),
+							announceRdPauseRetry
+						);
 						await selectFiles(rdKey, newId, selectedIds);
 						await handleDeleteRdTorrent(rdKey, oldId, true);
 						toast.success('Selection saved and reinserted.', magnetToastOptions);

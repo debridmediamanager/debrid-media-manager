@@ -23,8 +23,9 @@ export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC' | 'DL';
 
 // RD retired /instantAvailability, so the only way to ask whether it holds a
 // hash is to add the torrent and delete it again — which means a sweep of a
-// season page is a burst of adds, and RD punishes a burst of adds with
-// `451 infringing_file`, the throttle wearing its content-block status.
+// season page is a run of adds, and RD answers a run of adds by refusing every
+// add on the account for a while with `451 infringing_file`, the pause wearing
+// its content-block status (see `rdAddPause.ts`).
 // Measured 2026-08-28: this sweep's old shape (concurrency 3, no pacing) got 2
 // usable answers out of 15 hashes, reported the other 13 cached torrents as
 // uncached, and left the account refusing the user's own adds for minutes
@@ -43,13 +44,14 @@ const RD_THROTTLE_ABORT_AFTER = 5;
  *
  * `addRd` returns null for any failure, so the reason is gone by the time it
  * gets here — `isRdThrottling` is what says whether RD was refusing everything
- * at that moment, on the evidence of a real rate-limit answer or of this sweep
- * having just burst past the add budget. A row classified this way must not be
- * treated as "RD says no": it is "RD did not say". A release RD simply refuses
- * no longer lands here, which is the point: it *is* an answer, and reporting it
- * as a throttle told the user to retry something that never clears.
+ * on this account at that moment: a real rate-limit answer, this sweep having
+ * burst past the add budget, or a 451 the release's name does not explain,
+ * which is far more often the account's pause than a refusal of the release.
+ * A row classified this way must not be treated as "RD says no": it is "RD did
+ * not say". Only a 451 on a name RD blocks is an answer.
  */
-const wasThrottled = (addRdResponse: unknown) => addRdResponse === null && isRdThrottling();
+const wasThrottled = (addRdResponse: unknown, rdKey: string | null) =>
+	addRdResponse === null && !!rdKey && isRdThrottling(rdKey);
 
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
@@ -388,10 +390,10 @@ export function useAvailabilityCheck(
 				let rdThrottled = false;
 				if (rdCheckResult.status === 'fulfilled') {
 					isCachedInRD = rdCheckResult.value.isCachedInRD;
-					rdThrottled = wasThrottled(rdCheckResult.value.addRdResponse);
+					rdThrottled = wasThrottled(rdCheckResult.value.addRdResponse, rdKey);
 					// Only a probe RD actually answered can retire a transfer
 					// badge. `addRdResponse === null` means the add threw — and
-					// the usual reason is RD's 451 throttle penalty, which a
+					// the usual reason is RD's 451 account pause, which a
 					// sweep like this one earns for itself. `removeDebridTransfer`
 					// is keyed by hash alone, so one throttled user unregisters a
 					// working transfer for everybody.
@@ -513,10 +515,10 @@ export function useAvailabilityCheck(
 
 				if (rdThrottled) {
 					// RD refused to answer rather than answering "not cached".
-					toast.error('RD is throttling adds — try this row again in a minute.', {
-						id: toastId,
-						duration: 6000,
-					});
+					toast.error(
+						'Real-Debrid is pausing adds on your account — try this row again in a few minutes.',
+						{ id: toastId, duration: 6000 }
+					);
 				} else {
 					toast.success(`Service check done (${formatServicesLabel(services)}).`, {
 						id: toastId,
@@ -762,7 +764,7 @@ export function useAvailabilityCheck(
 
 										// A throttled probe is not an answer, so
 										// back off; a real one earns the gap back.
-										const throttled = wasThrottled(addRdResponse);
+										const throttled = wasThrottled(addRdResponse, rdKey);
 										if (throttled) {
 											rdConsecutiveThrottled++;
 											rdProbeSpacing = Math.min(
@@ -1200,7 +1202,7 @@ export function useAvailabilityCheck(
 
 					// Clear stale transfer badges for hashes RD says are not cached
 					// `addRdResponse === null` means RD never answered the probe
-					// (its 451 throttle, most often, which this sweep earns for
+					// (its 451 account pause, most often, which this sweep earns for
 					// itself) — that is not RD saying the content is gone, and
 					// `removeDebridTransfer` is keyed by hash alone, so acting on
 					// it retires a working transfer for every user.
@@ -1312,7 +1314,7 @@ export function useAvailabilityCheck(
 				// content is gone when RD is only refusing to be asked.
 				if (rdAbandoned) {
 					toast.error(
-						`RD is throttling adds — stopped after ${rdProbesStarted} of ${rdTargets.length}. ${rdUnprobed} left unchecked; try again in a minute.`,
+						`Real-Debrid is pausing adds on your account — stopped after ${rdProbesStarted} of ${rdTargets.length}. ${rdUnprobed} left unchecked; try again in a few minutes.`,
 						{ duration: 8000 }
 					);
 				}

@@ -7,6 +7,7 @@ import {
 } from '@/services/realDebrid';
 import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { getClientIpFromRequest } from '@/utils/clientIp';
+import { RdAddPausedError, retryRdAddThroughPause } from '@/utils/rdAddPause';
 import { isVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -129,7 +130,9 @@ export default async function handler(
 	let torrentId: string | undefined;
 
 	try {
-		torrentId = await addHashAsMagnet(accessToken, hash, false);
+		// The player is waiting: a 451 gets one more try after the account's
+		// pause, then a temporary 503 rather than a verdict on the release.
+		torrentId = await retryRdAddThroughPause(() => addHashAsMagnet(accessToken, hash, false));
 
 		// Wait for magnet conversion to complete (files become available)
 		const initialInfo = await waitForFiles(accessToken, torrentId);
@@ -167,6 +170,10 @@ export default async function handler(
 			mimeType: getMimeType(unrestricted.filename),
 		});
 	} catch (error: unknown) {
+		if (error instanceof RdAddPausedError) {
+			res.setHeader('Retry-After', '120');
+			return res.status(503).json({ error: error.message });
+		}
 		if (torrentId) {
 			try {
 				await deleteTorrent(accessToken, torrentId, false);
