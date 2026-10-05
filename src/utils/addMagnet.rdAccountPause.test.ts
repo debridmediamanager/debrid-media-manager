@@ -45,7 +45,7 @@ import {
 	resetRdThrottleTracking,
 } from '@/services/realDebrid';
 import { handleAddAsMagnetInRd } from './addMagnet';
-import { RD_ADD_PAUSE_MS, RD_ADD_PAUSE_RETRY_MESSAGE, RD_ADD_REFUSED_MESSAGE } from './rdAddPause';
+import { RD_ADD_PAUSE_MS, rdAddPauseRetryMessage, rdAddRefusedMessage } from './rdAddPause';
 
 const TOKEN = 'rd-token-of-the-recorded-account';
 const OTHER_TOKEN = 'rd-token-of-someone-else';
@@ -144,7 +144,7 @@ describe('an add RD answers with a 451 its name does not explain', () => {
 		await expect(result).resolves.toBe('success');
 		expect(sent.map((s) => s.status)).toEqual([451, 201]);
 		expect(sent[1].at - sent[0].at).toBeGreaterThanOrEqual(RD_ADD_PAUSE_MS);
-		expect(toast).toHaveBeenCalledWith(RD_ADD_PAUSE_RETRY_MESSAGE, expect.anything());
+		expect(toast).toHaveBeenCalledWith(rdAddPauseRetryMessage(), expect.anything());
 		expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.anything());
 		expect(toast.error).not.toHaveBeenCalled();
 	});
@@ -173,7 +173,35 @@ describe('an add RD answers with a 451 its name does not explain', () => {
 		expect(sent.every((s) => s.at === ms(fresh.at) || s.at >= pause.until)).toBe(true);
 	});
 
-	it('says RD refused it, and still no verdict, when the retry is refused too (f1)', async () => {
+	it('keeps trying through the three-minute pause of 23:33 and lands (f1)', async () => {
+		// A hash new to the account, refused at 23:33:02 as the account began
+		// refusing every add, known-good probes included, until 23:36:10. One
+		// try 30 s later fell inside that pause too, and the user was told RD
+		// refused the release while it was refusing everything.
+		const fresh = at('f1', 'fresh', '28c6795228d624c68bc86704c6bd94db495d73dd');
+		const pause = pauseWindows().find((w) => w.from === ms(fresh.at))!;
+		expect((pause.until - pause.from) / 1000).toBeGreaterThan(180);
+		vi.setSystemTime(ms(fresh.at));
+
+		const result = handleAddAsMagnetInRd(
+			TOKEN,
+			fresh.hash,
+			undefined,
+			false,
+			0,
+			false,
+			CLEAN_TITLE
+		);
+		await vi.advanceTimersByTimeAsync(6 * 60_000);
+
+		await expect(result).resolves.toBe('success');
+		expect(sent.at(-1)!.status).toBe(201);
+		expect(sent.at(-1)!.at).toBeGreaterThanOrEqual(pause.until);
+		expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.anything());
+		expect(toast.error).not.toHaveBeenCalled();
+	});
+
+	it('says the account is still refusing, and no verdict, after five minutes of 451s (f1)', async () => {
 		// Refused at 23:31:02 while the account accepted a control six seconds
 		// later: RD refusing that release, as far as the recording can tell.
 		const refused = at('f1', 'fresh', '1f0313cced4f79eef74532258041206f1e9a1ed4');
@@ -188,12 +216,24 @@ describe('an add RD answers with a 451 its name does not explain', () => {
 			false,
 			CLEAN_TITLE
 		);
-		await vi.advanceTimersByTimeAsync(RD_ADD_PAUSE_MS + 1000);
+		await vi.advanceTimersByTimeAsync(6 * 60_000);
 
 		// 'paused', not 'infringing_file': only a blocked name is a verdict.
 		await expect(result).resolves.toBe('paused');
-		expect(sent.map((s) => s.status)).toEqual([451, 451]);
-		expect(toast.error).toHaveBeenCalledWith(RD_ADD_REFUSED_MESSAGE, expect.anything());
+		expect(sent.map((s) => s.status)).toEqual([451, 451, 451, 451]);
+		// Tried after holds of 30 s, 90 s and 3 minutes, each announced.
+		const gaps = sent.slice(1).map((s, i) => s.at - sent[i].at);
+		expect(gaps.map((g) => Math.round(g / 1000))).toEqual([30, 90, 180]);
+		for (const hold of ['30 seconds', '90 seconds', '3 minutes']) {
+			expect(toast).toHaveBeenCalledWith(expect.stringContaining(hold), expect.anything());
+		}
+		expect(toast.error).toHaveBeenCalledTimes(1);
+		expect(toast.error).toHaveBeenCalledWith(
+			rdAddRefusedMessage(5 * 60_000),
+			expect.objectContaining({ duration: 15_000 })
+		);
+		expect(rdAddRefusedMessage(5 * 60_000)).toContain('after 5 minutes');
+		expect(rdAddRefusedMessage(5 * 60_000)).toContain('not about this release');
 	});
 
 	it('answers a silent probe at once, as unanswered, without waiting (et)', async () => {
@@ -263,6 +303,6 @@ describe('a 451 on a name RD blocks', () => {
 		expect(result).toBe('infringing_file');
 		expect(sent).toHaveLength(1);
 		expect(rdAddPauseRemainingMs(TOKEN)).toBe(0);
-		expect(toast).not.toHaveBeenCalledWith(RD_ADD_PAUSE_RETRY_MESSAGE, expect.anything());
+		expect(toast).not.toHaveBeenCalledWith(rdAddPauseRetryMessage(), expect.anything());
 	});
 });

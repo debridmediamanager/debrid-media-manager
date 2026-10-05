@@ -11,7 +11,7 @@ import { getPremiumizeItemDetails } from '@/services/premiumize';
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
-import { announceRdPauseRetry, handleRestartTorrent } from '@/utils/addMagnet';
+import { handleRestartTorrent, interactiveRdPauseRetries } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { getDebridLinkServiceStatus, getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import {
@@ -405,10 +405,10 @@ export const showInfoForRD = async (
 					} else {
 						const oldId = `rd:${info.id}`;
 						// Already in the account, so a 451 is its pause far more
-						// often than a verdict: one more try after it.
+						// often than a verdict: try again through it.
 						const newId = await retryRdAddThroughPause(
 							() => addHashAsMagnet(rdKey, info.hash),
-							announceRdPauseRetry
+							interactiveRdPauseRetries(rdKey)
 						);
 						await selectFiles(rdKey, newId, selectedIds);
 						await handleDeleteRdTorrent(rdKey, oldId, true);
@@ -515,10 +515,10 @@ export const showInfoForRD = async (
 					} else {
 						const oldId = `rd:${info.id}`;
 						// Already in the account, so a 451 is its pause far more
-						// often than a verdict: one more try after it.
+						// often than a verdict: try again through it.
 						const newId = await retryRdAddThroughPause(
 							() => addHashAsMagnet(rdKey, info.hash),
-							announceRdPauseRetry
+							interactiveRdPauseRetries(rdKey)
 						);
 						await selectFiles(rdKey, newId, selectedIds);
 						await handleDeleteRdTorrent(rdKey, oldId, true);

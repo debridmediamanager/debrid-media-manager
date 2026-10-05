@@ -66,7 +66,7 @@ import {
 	isWatchService,
 	pickRdLink,
 } from './intent';
-import { RD_ADD_REFUSED_MESSAGE } from './rdAddPause';
+import { rdAddRefusedMessage } from './rdAddPause';
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -255,7 +255,7 @@ describe('getInstantIntent', () => {
 		const result = await getInstantIntent('rd-key', 'hash', 1, '1.2.3.4', 'windows', 'vlc');
 
 		expect(mocks.addHashAsMagnet).toHaveBeenCalledTimes(2);
-		expect(result).toEqual({ error: RD_ADD_REFUSED_MESSAGE, temporary: true });
+		expect(result).toEqual({ error: rdAddRefusedMessage(), temporary: true });
 	});
 
 	it('plays once the second try lands', async () => {

@@ -3,7 +3,7 @@ import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
-import { RD_ADD_REFUSED_MESSAGE, RdAddPausedError } from '@/utils/rdAddPause';
+import { RdAddPausedError, rdAddRefusedMessage } from '@/utils/rdAddPause';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -217,7 +217,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		expect(res.setHeader).toHaveBeenCalledWith('Retry-After', '120');
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: RD_ADD_REFUSED_MESSAGE,
+			errorMessage: rdAddRefusedMessage(),
 		});
 		expect(mockRepository.saveCast).not.toHaveBeenCalled();
 	});

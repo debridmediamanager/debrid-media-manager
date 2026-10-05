@@ -1,6 +1,6 @@
 import handler from '@/pages/api/stremio/cast/series/[imdbid]';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { RD_ADD_REFUSED_MESSAGE, RdAddPausedError } from '@/utils/rdAddPause';
+import { RdAddPausedError, rdAddRefusedMessage } from '@/utils/rdAddPause';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockSaveCast, mockGenerateUserId, mockGetStreamUrl } = vi.hoisted(() => ({
@@ -191,7 +191,7 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			errorEpisodes: ['fileId:2', 'fileId:3', 'fileId:4'],
-			errorMessage: RD_ADD_REFUSED_MESSAGE,
+			errorMessage: rdAddRefusedMessage(),
 		});
 	});
 });

@@ -158,7 +158,8 @@ export function hasRecentRdAddBurst(token: string): boolean {
  * an add fired into that pause is refused too, whatever it is. Holding them is
  * the difference between one refused add and a row of them. A refused add
  * during a pause was not seen to lengthen it, so a later 451 only ever extends
- * the hold to 30 s from then.
+ * the hold to 30 s from then; an add a user is watching asks for longer holds
+ * as it keeps being refused (`RD_ADD_INTERACTIVE_HOLDS_MS`).
  */
 export function recordRdAddPause(token: string, ms: number = RD_ADD_PAUSE_MS): void {
 	if (!token) return;

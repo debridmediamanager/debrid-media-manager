@@ -36,6 +36,7 @@ import {
 	isRdThrottling,
 	RD_ADD_MIN_SPACING_MS,
 	rdAddPauseRemainingMs,
+	recordRdAddPause,
 	recordRdRateLimit,
 	selectFiles,
 } from '@/services/realDebrid';
@@ -65,12 +66,14 @@ import {
 } from './fetchTorrents';
 import {
 	isRdAddRefusal,
+	RD_ADD_INTERACTIVE_HOLDS_MS,
 	RD_ADD_PAUSE_MS,
-	RD_ADD_PAUSE_RETRY_MESSAGE,
-	RD_ADD_REFUSED_MESSAGE,
 	RdAddPausedError,
+	rdAddPauseRetryMessage,
+	rdAddRefusedMessage,
 	rdAddWaitMessage,
 	retryRdAddThroughPause,
+	type RdPauseRetryOptions,
 } from './rdAddPause';
 import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
@@ -92,8 +95,32 @@ const getRdError = (error: unknown, rdKey: string): string | null => {
 };
 
 /** Tells a user watching an RD add that it will be tried again after the pause. */
-export const announceRdPauseRetry = () =>
-	toast(RD_ADD_PAUSE_RETRY_MESSAGE, { ...magnetToastOptions, duration: RD_ADD_PAUSE_MS });
+export const announceRdPauseRetry = (holdMs: number = RD_ADD_PAUSE_MS) =>
+	toast(rdAddPauseRetryMessage(holdMs), { ...magnetToastOptions, duration: holdMs });
+
+/**
+ * Retries for an RD add one user is watching: hold the account's adds and try
+ * again for up to five minutes (`RD_ADD_INTERACTIVE_HOLDS_MS`), saying each
+ * time how long the wait is. Holding the account, not just this add, keeps the
+ * user's other clicks from being refused for nothing in the meantime.
+ */
+export const interactiveRdPauseRetries = (rdKey: string): RdPauseRetryOptions => ({
+	holdsMs: RD_ADD_INTERACTIVE_HOLDS_MS,
+	onPause: (holdMs) => {
+		recordRdAddPause(rdKey, holdMs);
+		announceRdPauseRetry(holdMs);
+	},
+});
+
+/**
+ * The refusal after a user waited through every hold is long and arrives
+ * minutes after the click, when they may have looked away; the 4 s an error
+ * toast gets by default is not enough to read it.
+ */
+const rdAddRefusedToastOptions = { ...magnetToastOptions, duration: 15_000 };
+
+/** One retry after 30 s, for a run of adds that reports its own progress. */
+const bulkRdPauseRetries: RdPauseRetryOptions = { onPause: announceRdPauseRetry };
 
 const getTbError = (error: unknown): string | null => {
 	if (error instanceof AxiosError) {
@@ -112,9 +139,10 @@ const MAX_509_RETRIES = 5;
 // allowance in the first fifteen seconds and then failed the rest of the run.
 const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
 const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
-// A 451 the name does not explain is tried once more, after the account's
-// pause (`RD_ADD_PAUSE_MS`) — see `rdAddPause.ts` for the measurements.
-const MAX_PAUSE_RETRIES = 1;
+// A 451 the name does not explain is tried again after each of the
+// account's holds (`RD_ADD_INTERACTIVE_HOLDS_MS`) — see `rdAddPause.ts` for
+// the measurements.
+const MAX_PAUSE_RETRIES = RD_ADD_INTERACTIVE_HOLDS_MS.length;
 
 /**
  * - `infringing_file`: RD refused a release whose name it blocks.
@@ -221,13 +249,16 @@ export const handleAddAsMagnetInRd = async (
 		// very shape that trips a pause.
 		//
 		// `addHashAsMagnet` has already put the account on pause, so every other
-		// add on it waits instead of being refused too. A user watching gets one
-		// more try once that pause is over; a silent caller (an availability
+		// add on it waits instead of being refused too. A user watching gets
+		// another try after each longer hold, five minutes in all, since one try
+		// after 30 s missed most measured pauses; a silent caller (an availability
 		// check, a bulk run reporting its own progress) gets the answer at once
 		// and decides for itself.
 		if (isRdAddRefusal(error) && !nameIsBlocked) {
 			if (!silent && pauseRetryCount < MAX_PAUSE_RETRIES) {
-				announceRdPauseRetry();
+				const holdMs = RD_ADD_INTERACTIVE_HOLDS_MS[pauseRetryCount];
+				recordRdAddPause(rdKey, holdMs);
+				announceRdPauseRetry(holdMs);
 				return handleAddAsMagnetInRd(
 					rdKey,
 					hash,
@@ -240,10 +271,16 @@ export const handleAddAsMagnetInRd = async (
 					filenames
 				);
 			}
-			// Twice refused, a pause apart, and still not a verdict: the pause
-			// can outlast 30 s, so tell the user what to try rather than which
-			// case it was.
-			if (!silent) toast.error(RD_ADD_REFUSED_MESSAGE, magnetToastOptions);
+			// Refused on every try for five minutes, the longest pause measured,
+			// and still not a verdict: tell the user what it most likely is and
+			// what to try.
+			if (!silent)
+				toast.error(
+					rdAddRefusedMessage(
+						RD_ADD_INTERACTIVE_HOLDS_MS.reduce((sum, ms) => sum + ms, 0)
+					),
+					rdAddRefusedToastOptions
+				);
 			return 'paused';
 		}
 		if (!silent)
@@ -267,7 +304,7 @@ export const handleAddTorrentFileInRd = async (
 		// try a paused account is owed.
 		const id = await retryRdAddThroughPause(
 			() => addTorrentFile(rdKey, file),
-			announceRdPauseRetry
+			interactiveRdPauseRetries(rdKey)
 		);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		const response = await getTorrentInfo(rdKey, id);
@@ -295,7 +332,7 @@ export const handleAddTorrentFileInRd = async (
 			return;
 		}
 		if (error instanceof RdAddPausedError) {
-			toast.error(RD_ADD_REFUSED_MESSAGE, magnetToastOptions);
+			toast.error(error.message, rdAddRefusedToastOptions);
 			return;
 		}
 		const rdError = getRdError(error, rdKey);
@@ -330,7 +367,7 @@ export const handleAddMultipleTorrentFilesInRd = async (
 			// earns this file one more try once the pause is over.
 			const id = await retryRdAddThroughPause(
 				() => addTorrentFile(rdKey, files[i]),
-				announceRdPauseRetry
+				bulkRdPauseRetries
 			);
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		} catch (error) {
@@ -359,7 +396,7 @@ export const handleAddMultipleHashesInRd = async (
 			// earns this hash one more try once the pause is over.
 			const id = await retryRdAddThroughPause(
 				() => addHashAsMagnet(rdKey, hashes[i]),
-				announceRdPauseRetry
+				bulkRdPauseRetries
 			);
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		} catch (error) {
@@ -425,10 +462,10 @@ export const handleReinsertTorrentinRd = async (
 		}
 
 		// The hash is already in the account, so a 451 here is the account's
-		// pause far more often than a verdict: try once more after it.
+		// pause far more often than a verdict: try again through it.
 		const newId = await retryRdAddThroughPause(
 			() => addHashAsMagnet(rdKey, torrent.hash),
-			announceRdPauseRetry
+			interactiveRdPauseRetries(rdKey)
 		);
 		console.log('[rdReinsert] added magnet', {
 			oldId,

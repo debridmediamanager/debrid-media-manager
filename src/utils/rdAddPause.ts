@@ -14,9 +14,9 @@
  * time.
  *
  * So a 451 on a name RD is not known to block is not a verdict on the release:
- * hold the account's other adds for a while, try the same add once more, and
- * only then say RD refused it, as something to retry later rather than as a
- * fact about the release.
+ * hold the account's other adds for a while, try the same add again (once,
+ * or for up to five minutes when a user is watching it), and only then say
+ * RD refused it, as the account's state rather than a fact about the release.
  */
 
 /**
@@ -34,21 +34,40 @@ export const RD_ADD_PAUSE_MS = 30_000;
  */
 export const RD_ADD_PAUSE_GIVE_UP_MS = 6 * 60_000;
 
-/** Shown while an interactive add waits to be tried again. */
-export const RD_ADD_PAUSE_RETRY_MESSAGE = `Real-Debrid is pausing adds on your account. Trying again in ${
-	RD_ADD_PAUSE_MS / 1000
-} seconds...`;
+/**
+ * How long an add someone is watching holds the account's adds before each
+ * further try: 30 s, then 90 s, then 3 minutes, five minutes in all. One try
+ * after 30 s covered only the shortest pauses measured; the others (82 s,
+ * 183 s, about five minutes) outlasted it, and the user was told RD refused
+ * the release while RD was still refusing everything on the account.
+ */
+export const RD_ADD_INTERACTIVE_HOLDS_MS: readonly number[] = [30_000, 90_000, 180_000];
 
-/** Shown when the second try was refused as well. */
-export const RD_ADD_REFUSED_MESSAGE =
-	'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.';
+/** "30 seconds", "90 seconds", "3 minutes". */
+export const formatRdAddWait = (ms: number): string => {
+	const seconds = Math.max(1, Math.ceil(ms / 1000));
+	if (seconds < 120) return `${seconds} second${seconds === 1 ? '' : 's'}`;
+	return `${Math.round(seconds / 60)} minutes`;
+};
+
+/** Shown while an interactive add waits `holdMs` to be tried again. */
+export const rdAddPauseRetryMessage = (holdMs: number = RD_ADD_PAUSE_MS) =>
+	`Real-Debrid is pausing adds on your account. Trying again in ${formatRdAddWait(holdMs)}...`;
+
+/**
+ * Shown when every try was refused, `waitedMs` of holds apart. Says what it
+ * most likely is: the account, which other apps on the same key also add to.
+ */
+export const rdAddRefusedMessage = (waitedMs: number = RD_ADD_PAUSE_MS) =>
+	`Real-Debrid is still refusing adds on your account after ${formatRdAddWait(
+		waitedMs
+	)}, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.`;
 
 /** Shown when an add has to wait for a pause another add ran into. */
 export const rdAddWaitMessage = (waitMs: number) =>
-	`Real-Debrid is pausing adds on your account. This add will go through in ${Math.max(
-		1,
-		Math.ceil(waitMs / 1000)
-	)} seconds.`;
+	`Real-Debrid is pausing adds on your account. This add will go through in ${formatRdAddWait(
+		waitMs
+	)}.`;
 
 type RefusalShape = {
 	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };
@@ -65,46 +84,59 @@ export function isRdAddRefusal(error: unknown): boolean {
 }
 
 /**
- * An add RD refused twice, a pause apart. Temporary by construction: it says
- * RD did not take the add now, not that it never will.
+ * An add RD refused on every try, holds apart. Temporary by construction: it
+ * says RD did not take the add now, not that it never will.
  */
 export class RdAddPausedError extends Error {
 	readonly temporary = true;
-	/** The second refusal, as RD sent it. */
+	/** The last refusal, as RD sent it. */
 	readonly refusal: unknown;
 
-	constructor(refusal?: unknown) {
-		super(RD_ADD_REFUSED_MESSAGE);
+	constructor(refusal?: unknown, waitedMs: number = RD_ADD_PAUSE_MS) {
+		super(rdAddRefusedMessage(waitedMs));
 		this.name = 'RdAddPausedError';
 		this.refusal = refusal;
 	}
 }
 
+export type RdPauseRetryOptions = {
+	/**
+	 * The hold before each further try. The default, one 30 s hold, suits a
+	 * caller that cannot keep someone waiting for minutes (a Stremio request, a
+	 * bulk run); `RD_ADD_INTERACTIVE_HOLDS_MS` suits one a user is watching.
+	 */
+	holdsMs?: readonly number[];
+	/**
+	 * Runs on each 451 that earns another try, before the hold. A hold longer
+	 * than `RD_ADD_PAUSE_MS` is the caller's to put on the account
+	 * (`recordRdAddPause`), as is telling the user.
+	 */
+	onPause?: (holdMs: number) => void;
+};
+
 /**
- * Runs an RD add, and once more if RD answers it with a 451.
+ * Runs an RD add, and again after each hold while RD answers it with a 451.
  *
  * The wait is not here: `addHashAsMagnet` and `addTorrentFile` record the
- * pause on the account and hold every later add on it, this second try
- * included, until the pause is over. `onPause` runs before that wait, so a
- * caller with a user watching can say what is happening.
+ * pause on the account and hold every later add on it, these tries included,
+ * until the pause is over.
  *
- * A second 451 becomes `RdAddPausedError`, a temporary failure.
+ * A 451 on the last try becomes `RdAddPausedError`, a temporary failure.
  */
 export async function retryRdAddThroughPause<T>(
 	add: () => Promise<T>,
-	onPause?: () => void
+	{ holdsMs = [RD_ADD_PAUSE_MS], onPause }: RdPauseRetryOptions = {}
 ): Promise<T> {
-	try {
-		return await add();
-	} catch (error) {
-		if (!isRdAddRefusal(error)) throw error;
-		onPause?.();
-	}
-	try {
-		return await add();
-	} catch (error) {
-		if (isRdAddRefusal(error)) throw new RdAddPausedError(error);
-		throw error;
+	let waitedMs = 0;
+	for (let attempt = 0; ; attempt++) {
+		try {
+			return await add();
+		} catch (error) {
+			if (!isRdAddRefusal(error)) throw error;
+			if (attempt >= holdsMs.length) throw new RdAddPausedError(error, waitedMs);
+			onPause?.(holdsMs[attempt]);
+			waitedMs += holdsMs[attempt];
+		}
 	}
 }
 

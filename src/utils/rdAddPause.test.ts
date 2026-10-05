@@ -2,9 +2,13 @@ import { rdRefusalError } from '@/test/realdebrid/rdAddPauseReplay';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
 	addThroughRdPause,
+	formatRdAddWait,
 	isRdAddRefusal,
+	RD_ADD_INTERACTIVE_HOLDS_MS,
 	RD_ADD_PAUSE_GIVE_UP_MS,
+	RD_ADD_PAUSE_MS,
 	RdAddPausedError,
+	rdAddRefusedMessage,
 	RdPauseStreak,
 	retryRdAddThroughPause,
 } from './rdAddPause';
@@ -39,9 +43,38 @@ describe('retryRdAddThroughPause', () => {
 		const add = vi.fn().mockRejectedValueOnce(rdRefusalError()).mockResolvedValueOnce('id');
 		const onPause = vi.fn();
 
-		await expect(retryRdAddThroughPause(add, onPause)).resolves.toBe('id');
+		await expect(retryRdAddThroughPause(add, { onPause })).resolves.toBe('id');
 		expect(add).toHaveBeenCalledTimes(2);
 		expect(onPause).toHaveBeenCalledTimes(1);
+		expect(onPause).toHaveBeenCalledWith(RD_ADD_PAUSE_MS);
+	});
+
+	it('keeps trying through each hold it is given, and says how long it waited', async () => {
+		const add = vi.fn().mockRejectedValue(rdRefusalError());
+		const onPause = vi.fn();
+
+		const error = (await retryRdAddThroughPause(add, {
+			holdsMs: RD_ADD_INTERACTIVE_HOLDS_MS,
+			onPause,
+		}).catch((e) => e)) as RdAddPausedError;
+
+		expect(error).toBeInstanceOf(RdAddPausedError);
+		expect(add).toHaveBeenCalledTimes(4);
+		expect(onPause.mock.calls.map(([ms]) => ms)).toEqual([30_000, 90_000, 180_000]);
+		expect(error.message).toBe(rdAddRefusedMessage(5 * 60_000));
+	});
+
+	it('stops at the first try RD accepts', async () => {
+		const add = vi
+			.fn()
+			.mockRejectedValueOnce(rdRefusalError())
+			.mockRejectedValueOnce(rdRefusalError())
+			.mockResolvedValueOnce('id');
+
+		await expect(
+			retryRdAddThroughPause(add, { holdsMs: RD_ADD_INTERACTIVE_HOLDS_MS })
+		).resolves.toBe('id');
+		expect(add).toHaveBeenCalledTimes(3);
 	});
 
 	it('turns a second 451 into a temporary error', async () => {
@@ -59,6 +92,16 @@ describe('retryRdAddThroughPause', () => {
 
 		await expect(retryRdAddThroughPause(add)).rejects.toThrow('network');
 		expect(add).toHaveBeenCalledTimes(1);
+	});
+});
+
+describe('formatRdAddWait', () => {
+	it('says seconds under two minutes and minutes past them', () => {
+		expect(formatRdAddWait(1_000)).toBe('1 second');
+		expect(formatRdAddWait(30_000)).toBe('30 seconds');
+		expect(formatRdAddWait(90_000)).toBe('90 seconds');
+		expect(formatRdAddWait(180_000)).toBe('3 minutes');
+		expect(formatRdAddWait(300_000)).toBe('5 minutes');
 	});
 });
 

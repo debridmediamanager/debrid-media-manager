@@ -160,7 +160,7 @@ describe('addMagnet utilities', () => {
 			const PAUSE_RETRY =
 				'Real-Debrid is pausing adds on your account. Trying again in 30 seconds...';
 			const REFUSED =
-				'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.';
+				'Real-Debrid is still refusing adds on your account after 5 minutes, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.';
 
 			it('tries a lone 451 once more, and lands it when the pause is over', async () => {
 				vi.mocked(addHashAsMagnet)
@@ -202,7 +202,7 @@ describe('addMagnet utilities', () => {
 				);
 
 				expect(result).toBe('paused');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(4);
 				const messages = vi.mocked(toast.error).mock.calls.map(([m]) => String(m));
 				expect(messages).toEqual([REFUSED]);
 				expect(messages[0]).not.toMatch(/will not accept/i);
@@ -224,7 +224,7 @@ describe('addMagnet utilities', () => {
 				const result = await handleAddAsMagnetInRd(rdKey, hash);
 
 				expect(result).toBe('paused');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(4);
 			});
 
 			// A silent caller (an availability probe, a bulk run with its own
@@ -344,7 +344,7 @@ describe('addMagnet utilities', () => {
 				);
 
 				expect(result).toBe('paused');
-				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(4);
 			});
 		});
 
@@ -482,11 +482,11 @@ describe('addMagnet utilities', () => {
 
 			await handleAddTorrentFileInRd(rdKey, file);
 
-			// The torrent's name is not read here, so RD's refusal gets the one
-			// retry an account pause is owed before it is reported.
-			expect(addTorrentFile).toHaveBeenCalledTimes(2);
+			// The torrent's name is not read here, so RD's refusal gets the
+			// retries an account pause is owed before it is reported.
+			expect(addTorrentFile).toHaveBeenCalledTimes(4);
 			expect(toast.error).toHaveBeenCalledWith(
-				'Real-Debrid refused this release. If other releases get refused too, wait a few minutes and try again.',
+				'Real-Debrid is still refusing adds on your account after 5 minutes, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.',
 				expect.any(Object)
 			);
 		});
