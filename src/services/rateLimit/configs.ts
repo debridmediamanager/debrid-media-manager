@@ -39,6 +39,8 @@ export const RATE_LIMIT_CONFIGS = {
 	// 2026-09-27..10-03 one address sent 82 inside two seconds and 95 inside ten,
 	// and 15,343 of 20,035 posts were refused 429 on `torrents`.
 	hashImdb: { name: 'hashImdb', rateLimit: 100, windowSeconds: 10 },
+	// plexsim's catalog builder: one library in a handful of 500-hash calls.
+	identifyHashes: { name: 'identifyHashes', rateLimit: 20, windowSeconds: 60 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
 	// rows in one request precisely so the browser does not walk `torrents` once
 	// per season at 1-per-2s, which for a twenty-season show is forty seconds of
