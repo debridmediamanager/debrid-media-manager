@@ -67,3 +67,24 @@ That day 1,167 of 4,835 filed nzb2rd releases and 31 of 838 debrid02 ones were
 in `Available` and on no page of their title. 1,096 of those 1,198 had a sibling
 of the same title filed within two seconds, against 579 of the 4,475 that
 survived. Hashes, titles, sizes and timestamps are as recorded.
+
+`half-filed-2026-10-06.json` holds three completed jobs whose names run past
+191 characters, as their services served them on 2026-10-06: nzb2rd's
+`GET /jobs/:id` for `nzb2rd-judas` (218 characters), and debrid02's `GET /jobs`
+row and `GET /jobs/:id/files` for `debrid-gsh` (249) and `debrid-tanya` (199).
+Filing cut the title to 255 characters and left the raw name whole, but
+`Available.filename` and `.originalFilename` are varchar(191), so each one's page
+entry was written and its `Available` insert then failed. `dmm.pages` is that
+entry as its `ScrapedTrue` page held it, read with a read-only session; none of
+the three had an `Available` row or a filing record. `dmm.transferMeta` is each
+job's `xfer:` record and `dmm.imdbTitleTypes` the titles' IMDb types.
+
+That day none of the 11 completed jobs across both services with a name past 191
+characters was in `Available`; 7 sat on their page and 4 had no page to be filed
+under. debrid02's `debrid-gsh` was inside the cron sweep's window and failed
+every tick from 01:35 UTC, 223 of them by 20:10, rewriting its page each time.
+
+Job ids are replaced by the labels above, the indexer release id by
+`ix:release-1`, and each RD download link by a `FIXTURE` placeholder of the same
+shape. Account fields, internal URLs and paths are dropped. Names, sizes,
+hashes, statuses and timestamps are as recorded.

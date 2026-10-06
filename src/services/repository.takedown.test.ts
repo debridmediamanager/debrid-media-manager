@@ -20,6 +20,10 @@ const build = () => {
 		})),
 		saveScrapedResults: vi.fn(),
 		saveScrapedTrueResults: vi.fn(),
+		saveScrapedTrueResultsWith: vi.fn(
+			async (_key: string, _value: unknown[], alongside: (tx: unknown) => Promise<unknown>) =>
+				alongside('page transaction')
+		),
 	};
 	const availability = {
 		checkAvailabilityByHashes: vi.fn(async (hashes: string[]) => hashes),
@@ -78,6 +82,22 @@ describe('Repository takedown enforcement', () => {
 		await repo.saveInstantAvailability('tt1', [{ hash: BLOCKED, filename: 'x', bytes: 1 }]);
 		expect(availability.upsertAvailability).not.toHaveBeenCalled();
 		expect(availability.saveInstantAvailability).toHaveBeenCalledWith('tt1', []);
+	});
+
+	it('files a finished transfer only if its hash is not blocked', async () => {
+		const { repo, scraped, availability } = build();
+		await repo.fileTransferRelease('movie:tt1', row(BLOCKED), { hash: BLOCKED } as any);
+		await repo.fileTransferRelease('movie:tt1', row(KEPT), { hash: KEPT } as any);
+		expect(scraped.saveScrapedTrueResultsWith.mock.calls.map((c) => c[1])).toEqual([
+			[],
+			[row(KEPT)],
+		]);
+		// In the page save's own transaction, so neither write lands without the other.
+		expect(availability.upsertAvailability).toHaveBeenCalledTimes(1);
+		expect(availability.upsertAvailability).toHaveBeenCalledWith(
+			{ hash: KEPT },
+			'page transaction'
+		);
 	});
 
 	it("drops blocked hashes from other users' streams and zurg's hash search", async () => {

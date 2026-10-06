@@ -1,6 +1,7 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { deInfringe } from '@/utils/deInfringe';
 import { isVideo } from '@/utils/selectable';
+import { clipToVarchar } from '@/utils/varchar';
 
 // Registers a completed TB → RD transfer in DMM's own database so the rewritten
 // torrent — which exists nowhere but Real-Debrid (no announce, no DHT) — shows
@@ -101,8 +102,12 @@ export function buildTransferRegistration(args: {
 	const biggest = [...linked].sort((a, b) => b.size - a.size)[0];
 	const rawTitle = name?.trim() || biggest.name;
 	// De-infringe so the stored title matches the RD record and passes the
-	// hideRdBlockedTorrents client filter; JSON_TABLE truncates at 255 anyway.
-	const title = deInfringe(rawTitle).slice(0, 255);
+	// hideRdBlockedTorrents client filter. The page entry and `Available.filename`
+	// carry the same title, so it is cut to that column, `varchar(191)`. Cut at
+	// 255 instead, a 192-255 character name filed to the page and then failed
+	// the `Available` insert, on every retry: debrid02's 249-character "[GSH]"
+	// release failed every 5-minute cron tick from 01:35 UTC on 2026-10-06.
+	const title = clipToVarchar(deInfringe(rawTitle));
 	if (!title) return null;
 
 	const totalBytes = linked.reduce((sum, f) => sum + f.size, 0);
@@ -114,7 +119,7 @@ export function buildTransferRegistration(args: {
 			hash,
 			imdbId,
 			filename: title,
-			originalFilename: rawTitle,
+			originalFilename: clipToVarchar(rawTitle),
 			bytes: totalBytes,
 			originalBytes: totalBytes,
 			host: 'real-debrid.com',

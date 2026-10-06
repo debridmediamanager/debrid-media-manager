@@ -334,6 +334,24 @@ export class ScrapedService extends DatabaseClient {
 		await this.savePage('ScrapedTrue', key, value, updateUpdatedAt, replaceOldScrape);
 	}
 
+	/**
+	 * Adds results to a `ScrapedTrue` page and runs `alongside` in the same
+	 * transaction, so the page keeps them only if `alongside` succeeds too.
+	 *
+	 * For a write that must not happen without the page's: filing a finished
+	 * transfer saved the page entry and then the `Available` row as two
+	 * transactions, and a failed second one left the release on the page and out
+	 * of `Available`, which every later run took for a false-positive eviction.
+	 * `alongside` runs again if the page save is retried after a conflict.
+	 */
+	public async saveScrapedTrueResultsWith(
+		key: string,
+		value: ScrapeSearchResult[],
+		alongside: (tx: Prisma.TransactionClient) => Promise<unknown>
+	) {
+		await this.savePage('ScrapedTrue', key, value, true, false, alongside);
+	}
+
 	public async saveScrapedResults(
 		key: string,
 		value: ScrapeSearchResult[],
@@ -367,7 +385,8 @@ export class ScrapedService extends DatabaseClient {
 		key: string,
 		value: ScrapeSearchResult[],
 		updateUpdatedAt: boolean,
-		replaceOldScrape: boolean
+		replaceOldScrape: boolean,
+		alongside?: (tx: Prisma.TransactionClient) => Promise<unknown>
 	) {
 		value = await this.withoutFannedOutHashes(usableResults(value));
 		await onePageAtATime(`${table}|${key}`, async () => {
@@ -378,7 +397,8 @@ export class ScrapedService extends DatabaseClient {
 						key,
 						value,
 						updateUpdatedAt,
-						replaceOldScrape
+						replaceOldScrape,
+						alongside
 					);
 				} catch (error) {
 					if (attempt >= PAGE_SAVE_ATTEMPTS || !isPageWriteConflict(error)) throw error;
@@ -392,7 +412,8 @@ export class ScrapedService extends DatabaseClient {
 		key: string,
 		value: ScrapeSearchResult[],
 		updateUpdatedAt: boolean,
-		replaceOldScrape: boolean
+		replaceOldScrape: boolean,
+		alongside?: (tx: Prisma.TransactionClient) => Promise<unknown>
 	) {
 		const page = Prisma.raw(`\`${table}\``);
 		return this.prisma.$transaction(
@@ -404,6 +425,7 @@ export class ScrapedService extends DatabaseClient {
 					await tx.$executeRaw(
 						Prisma.sql`INSERT INTO ${page} (\`key\`, value, updatedAt) VALUES (${key}, ${JSON.stringify(value)}, ${new Date()})`
 					);
+					await alongside?.(tx);
 					return;
 				}
 
@@ -420,6 +442,7 @@ export class ScrapedService extends DatabaseClient {
 				await tx.$executeRaw(
 					Prisma.sql`UPDATE ${page} SET value = ${JSON.stringify(next)}, updatedAt = ${updatedAt} WHERE \`key\` = ${key}`
 				);
+				await alongside?.(tx);
 			},
 			// Waiting on another writer's lock counts against the timeout. A
 			// connection may take as long as the pool's own 10s to come free.

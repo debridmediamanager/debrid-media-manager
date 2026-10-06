@@ -116,6 +116,59 @@ describe('AvailabilityService', () => {
 		expect(upsertMock).toHaveBeenCalled();
 	});
 
+	// Both columns are varchar(191): a longer name failed the whole insert with
+	// "The provided value for the column is too long for the column's type".
+	it('cuts both names to their columns and still reads the episode past the cut', async () => {
+		const name = `${'Show.Name.'.repeat(20)}S01E02.1080p.WEB.mkv`;
+		const row = {
+			hash: 'hash',
+			imdbId: 'tt1',
+			filename: name,
+			originalFilename: `${name}.original`,
+			bytes: 100,
+			originalBytes: 200,
+			host: 'real-debrid.com',
+			progress: 100,
+			status: 'downloaded',
+			ended: '2024-01-01T00:00:00Z',
+			selectedFiles: [{ id: 1, path: 'path', bytes: 50, selected: 1 }],
+			links: ['https://rd/link'],
+		};
+
+		await service.upsertAvailability(row);
+
+		const args = upsertMock.mock.calls[0][0];
+		expect(args.create.filename).toBe(name.slice(0, 191));
+		expect(args.create.originalFilename).toBe(name.slice(0, 191));
+		expect(args.update.originalFilename).toBe(name.slice(0, 191));
+		expect(args.create).toMatchObject({ season: 1, episode: 2 });
+	});
+
+	it('writes through the transaction it is handed', async () => {
+		const tx = { available: { upsert: vi.fn() } };
+
+		await service.upsertAvailability(
+			{
+				hash: 'hash',
+				imdbId: 'tt1',
+				filename: 'file.mkv',
+				originalFilename: 'orig.mkv',
+				bytes: 100,
+				originalBytes: 200,
+				host: 'real-debrid.com',
+				progress: 100,
+				status: 'downloaded',
+				ended: '2024-01-01T00:00:00Z',
+				selectedFiles: [{ id: 1, path: 'path', bytes: 50, selected: 1 }],
+				links: ['https://rd/link'],
+			},
+			tx as any
+		);
+
+		expect(tx.available.upsert).toHaveBeenCalledTimes(1);
+		expect(upsertMock).not.toHaveBeenCalled();
+	});
+
 	it('checks availability by imdb id and hashes', async () => {
 		findManyMock.mockResolvedValue([
 			{

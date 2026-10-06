@@ -54,8 +54,7 @@ beforeEach(() => {
 	mockDb.recordNzb2rdTransferCompleted = vi.fn().mockResolvedValue(undefined);
 	mockDb.takeNzb2rdWaiters = vi.fn().mockResolvedValue([]);
 	mockDb.checkAvailabilityByHashes = vi.fn().mockResolvedValue([]);
-	mockDb.saveScrapedTrueResults = vi.fn().mockResolvedValue(undefined);
-	mockDb.upsertAvailability = vi.fn().mockResolvedValue(undefined);
+	mockDb.fileTransferRelease = vi.fn().mockResolvedValue(undefined);
 	mockDb.getImdbTitleType = vi.fn().mockResolvedValue(null);
 	metaSays(undefined);
 });
@@ -72,12 +71,9 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			true
 		);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'movie:tt0190641',
-			[expect.objectContaining({ hash: HASH })],
-			true
-		);
-		expect(mockDb.upsertAvailability).toHaveBeenCalledWith(
+			expect.objectContaining({ hash: HASH }),
 			expect.objectContaining({ hash: HASH, imdbId: 'tt0190641', status: 'downloaded' })
 		);
 	});
@@ -92,10 +88,10 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 		).toBe(true);
 
 		expect(mockDb.getTransferMeta).toHaveBeenCalledWith([{ source: 'nzb2rd', jobId: 'job-1' }]);
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'movie:tt0190641',
-			[expect.objectContaining({ hash: HASH })],
-			true
+			expect.objectContaining({ hash: HASH }),
+			expect.anything()
 		);
 	});
 
@@ -106,10 +102,10 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			await registerCompletedNzb2rdJob(completedJob(), undefined, undefined, 'rel-1')
 		).toBe(true);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'tv:tt0190641:3',
 			expect.anything(),
-			true
+			expect.anything()
 		);
 	});
 
@@ -123,10 +119,10 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			await registerCompletedNzb2rdJob(completedJob(), undefined, undefined, 'rel-1')
 		).toBe(true);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'movie:tt0190641',
 			expect.anything(),
-			true
+			expect.anything()
 		);
 	});
 
@@ -142,10 +138,10 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			)
 		).toBe(true);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'tv:tt0190641:3',
 			expect.anything(),
-			true
+			expect.anything()
 		);
 	});
 
@@ -164,10 +160,10 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			'rel-1'
 		);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'tv:tt0190641:3',
 			expect.anything(),
-			true
+			expect.anything()
 		);
 		expect(mockDb.getImdbTitleType).not.toHaveBeenCalled();
 	});
@@ -188,7 +184,7 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			HASH,
 			expect.any(String)
 		);
-		expect(mockDb.saveScrapedTrueResults).not.toHaveBeenCalled();
+		expect(mockDb.fileTransferRelease).not.toHaveBeenCalled();
 	});
 
 	it('does not re-file a hash that is already available', async () => {
@@ -199,7 +195,7 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 			await registerCompletedNzb2rdJob(completedJob(), undefined, undefined, 'rel-1')
 		).toBe(false);
 
-		expect(mockDb.saveScrapedTrueResults).not.toHaveBeenCalled();
+		expect(mockDb.fileTransferRelease).not.toHaveBeenCalled();
 	});
 
 	// Resolution costs two lookups; neither is worth doing for a job that cannot
@@ -275,10 +271,10 @@ describe('registerCompletedDebridJob — filing a TB → RD transfer into search
 			true
 		);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'movie:tt0190641',
-			[expect.objectContaining({ hash: REWRITTEN })],
-			true
+			expect.objectContaining({ hash: REWRITTEN }),
+			expect.anything()
 		);
 	});
 
@@ -291,10 +287,10 @@ describe('registerCompletedDebridJob — filing a TB → RD transfer into search
 			true
 		);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'tv:tt0190641:2',
-			[expect.objectContaining({ hash: REWRITTEN })],
-			true
+			expect.objectContaining({ hash: REWRITTEN }),
+			expect.anything()
 		);
 	});
 
@@ -312,10 +308,10 @@ describe('registerCompletedDebridJob — filing a TB → RD transfer into search
 			)
 		).toBe(true);
 
-		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+		expect(mockDb.fileTransferRelease).toHaveBeenCalledWith(
 			'tv:tt0190641:3',
-			[expect.objectContaining({ hash: REWRITTEN })],
-			true
+			expect.objectContaining({ hash: REWRITTEN }),
+			expect.anything()
 		);
 	});
 
@@ -333,7 +329,7 @@ describe('registerCompletedDebridJob — filing a TB → RD transfer into search
 			'tt0190641',
 			REWRITTEN
 		);
-		expect(mockDb.saveScrapedTrueResults).not.toHaveBeenCalled();
+		expect(mockDb.fileTransferRelease).not.toHaveBeenCalled();
 	});
 });
 
@@ -346,6 +342,7 @@ describe('planning a filing', () => {
 	const SERVER = 'http://debrid02.test:3100';
 
 	const writes = () => [
+		mockDb.fileTransferRelease,
 		mockDb.saveScrapedTrueResults,
 		mockDb.upsertAvailability,
 		mockDb.recordNzb2rdTransferCompleted,
@@ -403,7 +400,7 @@ describe('planning a filing', () => {
 		);
 
 		expect(result).toEqual({ outcome: 'refused', reason: 'no-video' });
-		expect(mockDb.upsertAvailability).not.toHaveBeenCalled();
+		expect(mockDb.fileTransferRelease).not.toHaveBeenCalled();
 	});
 
 	it('answers already for a release search has, rather than refused', async () => {

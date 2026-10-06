@@ -52,7 +52,7 @@ describe('fileCompletedTransfers', () => {
 
 		expect(second).toMatchObject({ due: 0, filed: 0, refused: 0 });
 		expect(detailFetches()).toEqual([]);
-		expect(world.repo.upsertAvailability).not.toHaveBeenCalled();
+		expect(world.repo.fileTransferRelease).not.toHaveBeenCalled();
 		expect(world.repo.recordNzb2rdTransferCompleted).not.toHaveBeenCalled();
 	});
 
@@ -65,7 +65,7 @@ describe('fileCompletedTransfers', () => {
 
 		await fileCompletedTransfers({ now: at(NZB2RD_TICK, HOUR) });
 
-		expect(world.repo.upsertAvailability).not.toHaveBeenCalled();
+		expect(world.repo.fileTransferRelease).not.toHaveBeenCalled();
 		expect(world.available.has(hashOf('nzb2rd-A1'))).toBe(false);
 	});
 

@@ -48,8 +48,7 @@ beforeEach(() => {
 	mockRepo.recordNzb2rdTransferCompleted = vi.fn().mockResolvedValue(undefined);
 	mockRepo.takeNzb2rdWaiters = vi.fn().mockResolvedValue([]);
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([]);
-	mockRepo.saveScrapedTrueResults = vi.fn().mockResolvedValue(undefined);
-	mockRepo.upsertAvailability = vi.fn().mockResolvedValue(undefined);
+	mockRepo.fileTransferRelease = vi.fn().mockResolvedValue(undefined);
 	mockAddToRd.mockResolvedValue('rd-torrent-1');
 });
 
@@ -146,7 +145,7 @@ describe('GET /api/nzb2rd/jobs/[id] — delivering a finished transfer', () => {
 		await run({ releaseId: 'release-1' });
 
 		expect(mockAddToRd).toHaveBeenCalledWith('rd-key-b', HASH);
-		expect(mockRepo.saveScrapedTrueResults).not.toHaveBeenCalled();
+		expect(mockRepo.fileTransferRelease).not.toHaveBeenCalled();
 	});
 
 	it('does nothing for a job that has not finished', async () => {
@@ -163,7 +162,7 @@ describe('GET /api/nzb2rd/jobs/[id] — delivering a finished transfer', () => {
 		await run({ mediaType: 'movie', releaseId: 'release-1' });
 
 		expect(mockAddToRd).not.toHaveBeenCalled();
-		expect(mockRepo.upsertAvailability).toHaveBeenCalled();
+		expect(mockRepo.fileTransferRelease).toHaveBeenCalled();
 	});
 });
 

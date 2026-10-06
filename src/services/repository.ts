@@ -1,4 +1,5 @@
 import type { AnimeIdSource } from '@/services/database/anime';
+import type { AvailabilityUpsert } from '@/services/database/availability';
 import type { RdCastCredentials } from '@/utils/castRdToken';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
@@ -451,22 +452,35 @@ export class Repository {
 		return this.availabilityService.handleDownloadedTorrent(torrentInfo, hash, imdbId);
 	}
 
-	public async upsertAvailability(data: {
-		hash: string;
-		imdbId: string;
-		filename: string;
-		originalFilename: string;
-		bytes: number;
-		originalBytes: number;
-		host: string;
-		progress: number;
-		status: string;
-		ended: string;
-		selectedFiles: Array<{ id: number; path: string; bytes: number; selected: number }>;
-		links: string[];
-	}) {
+	public async upsertAvailability(data: AvailabilityUpsert) {
 		if (await isHashBlocked(data.hash)) return;
 		return this.availabilityService.upsertAvailability(data);
+	}
+
+	/**
+	 * Files a finished transfer into search: its entry on the library page and
+	 * its `Available` row, in one transaction, so a failure leaves neither.
+	 *
+	 * Written one after the other, a failed `Available` insert left the entry on
+	 * the page: search listed the release without knowing it was cached, every
+	 * retry rewrote the page and failed again, and the backfill took the
+	 * leftover entry for a false-positive eviction and skipped it for good.
+	 * Measured 2026-10-06: seven releases with 199-260 character names were on
+	 * their page and not in `Available`, one of them failing every cron tick.
+	 */
+	public async fileTransferRelease(
+		scrapedKey: string,
+		entry: ScrapeSearchResult,
+		availability: AvailabilityUpsert
+	) {
+		const blocked = await isHashBlocked(availability.hash);
+		await this.scrapedService.saveScrapedTrueResultsWith(
+			scrapedKey,
+			await withoutBlockedHashes([entry]),
+			async (tx) => {
+				if (!blocked) await this.availabilityService.upsertAvailability(availability, tx);
+			}
+		);
 	}
 
 	public async saveInstantAvailability(

@@ -66,12 +66,22 @@ export type FilingResult =
 
 const refused = (reason: FilingRefusal) => ({ outcome: 'refused' as const, reason });
 
-/** Write a plan, or pass on why there was nothing to write. */
+/**
+ * Write a plan, or pass on why there was nothing to write.
+ *
+ * The page entry and the `Available` row go in one transaction. Written one
+ * after the other, a failed `Available` insert left the release on its page and
+ * out of `Available`, which the sweep then retried every tick and the backfill
+ * took for an eviction.
+ */
 async function commit(plan: FilingPlan): Promise<FilingResult> {
 	if (plan.outcome !== 'file') return plan;
 	const { registration } = plan;
-	await db.saveScrapedTrueResults(registration.scrapedKey, [registration.scrapeEntry], true);
-	await db.upsertAvailability(registration.availability);
+	await db.fileTransferRelease(
+		registration.scrapedKey,
+		registration.scrapeEntry,
+		registration.availability
+	);
 	return { outcome: 'filed' };
 }
 

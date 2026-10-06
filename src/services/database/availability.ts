@@ -1,9 +1,27 @@
+import type { Prisma } from '@prisma/client';
 import { isVideo } from '../../utils/selectable';
+import { clipToVarchar } from '../../utils/varchar';
 import { TorrentInfoResponse } from '../types';
 import { DatabaseClient } from './client';
 
 const playableHashes = (rows: { hash: string; files: { path: string }[] }[]) =>
 	new Set(rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase()));
+
+/** A torrent cached on Real-Debrid, as `upsertAvailability` records it. */
+export interface AvailabilityUpsert {
+	hash: string;
+	imdbId: string;
+	filename: string;
+	originalFilename: string;
+	bytes: number;
+	originalBytes: number;
+	host: string;
+	progress: number;
+	status: string;
+	ended: string;
+	selectedFiles: Array<{ id: number; path: string; bytes: number; selected: number }>;
+	links: string[];
+}
 
 /** The two names an `Available` row records for a torrent; see `getCachedRdNames`. */
 export interface RdCachedNames {
@@ -189,34 +207,33 @@ export class AvailabilityService extends DatabaseClient {
 		});
 	}
 
-	public async upsertAvailability({
-		hash,
-		imdbId,
-		filename,
-		originalFilename,
-		bytes,
-		originalBytes,
-		host,
-		progress,
-		status,
-		ended,
-		selectedFiles,
-		links,
-	}: {
-		hash: string;
-		imdbId: string;
-		filename: string;
-		originalFilename: string;
-		bytes: number;
-		originalBytes: number;
-		host: string;
-		progress: number;
-		status: string;
-		ended: string;
-		selectedFiles: Array<{ id: number; path: string; bytes: number; selected: number }>;
-		links: string[];
-	}) {
-		const candidates = [filename, originalFilename];
+	/**
+	 * Records a torrent as cached on Real-Debrid, with its files.
+	 *
+	 * Both names are cut to their `varchar(191)` columns here rather than left to
+	 * every caller: a longer one fails the whole insert. Pass `client` to write
+	 * inside a transaction the caller holds (see `Repository.fileTransferRelease`).
+	 */
+	public async upsertAvailability(
+		{
+			hash,
+			imdbId,
+			filename: fullFilename,
+			originalFilename: fullOriginalFilename,
+			bytes,
+			originalBytes,
+			host,
+			progress,
+			status,
+			ended,
+			selectedFiles,
+			links,
+		}: AvailabilityUpsert,
+		client: Prisma.TransactionClient = this.prisma
+	) {
+		const filename = clipToVarchar(fullFilename);
+		const originalFilename = clipToVarchar(fullOriginalFilename);
+		const candidates = [fullFilename, fullOriginalFilename];
 		if (selectedFiles.length > 0) {
 			candidates.push(selectedFiles[0].path);
 		}
@@ -231,7 +248,7 @@ export class AvailabilityService extends DatabaseClient {
 			}
 		}
 
-		return this.prisma.available.upsert({
+		return client.available.upsert({
 			where: {
 				hash: hash,
 			},

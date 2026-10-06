@@ -1,0 +1,242 @@
+{
+	"debrid": {
+		"listing": [
+			{
+				"id": "debrid-gsh",
+				"type": "magnet",
+				"input": "magnet:?xt=urn:btih:18c083e5354bf735b286a2dcf4578025ab484073",
+				"imdb_id": "tt39255171",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "089ee3ad14cd08495a0e9bd48eb5031e179d2830",
+				"name": "[GSH] Does It Count If You Lose Your Innocence to an Android (2026) S01 (UNCENSORED) (WEB 1080p HEVC AAC) [RoSub] | OVA | Does it Count if You Lose Your Virginity to an Android | Android wa Keiken Ninzuu ni Hairimasu ka {TagsOTL;L3;V8;C2;A=ja;F=ro;}",
+				"source": "torbox",
+				"destination": "rd",
+				"created_at": "2026-10-06 00:35:41",
+				"updated_at": "2026-10-06 01:30:40",
+				"completed_at": "2026-10-06 01:30:40",
+				"retry_count": 0,
+				"duration_seconds": 3299
+			},
+			{
+				"id": "debrid-tanya",
+				"type": "magnet",
+				"input": "magnet:?xt=urn:btih:807e1388841738564b21bea9d20f0784f7dbf96a",
+				"imdb_id": "tt6455986",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "4beb06f904c4f0c1fbc1b3199a512175236ec449",
+				"name": "Saga of Tanya the Evil S01 MULTi 1080p CR WEB-DL AAC2.0 x264-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, Youjo Senki, The Military Chronicles of a Little Girl, Saga of Tanya the Evil (Youjo Senki))",
+				"source": "torbox",
+				"destination": "rd",
+				"created_at": "2026-10-01 14:22:03",
+				"updated_at": "2026-10-01 15:20:43",
+				"completed_at": "2026-10-01 15:20:43",
+				"retry_count": 0,
+				"duration_seconds": 3520
+			}
+		],
+		"files": {
+			"debrid-gsh": [
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S00E01 (BD 1080p HEVC AAC) [80615CD9] [GSH].mkv",
+					"size": 392553818,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000003"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E01 (BD 1080p HEVC AAC) [F5B36DCE] [GSH].mkv",
+					"size": 366467022,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000004"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E07 (BD 1080p HEVC AAC) [B11188A7] [GSH].mkv",
+					"size": 340953690,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000005"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E04 (BD 1080p HEVC AAC) [D6D8AB34] [GSH].mkv",
+					"size": 309564433,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000006"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E08 (BD 1080p HEVC AAC) [A23670FC] [GSH].mkv",
+					"size": 284360685,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000007"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E06 (BD 1080p HEVC AAC) [2F4AE28C] [GSH].mkv",
+					"size": 282713284,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000008"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E02 (BD 1080p HEVC AAC) [D28DB547] [GSH].mkv",
+					"size": 282526411,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000009"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E05 (BD 1080p HEVC AAC) [EA9F1690] [GSH].mkv",
+					"size": 279700173,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000010"
+				},
+				{
+					"name": "Does It Count If You Lose Your Innocence to an Android (2026) - S01E03 (BD 1080p HEVC AAC) [0AEA37DF] [GSH].mkv",
+					"size": 263499441,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000011"
+				}
+			],
+			"debrid-tanya": [
+				{
+					"name": "Saga of Tanya the Evil S01E06 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1488236253,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000012"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E01 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1486874551,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000013"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E03 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1486444175,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000014"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E04 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1486151622,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000015"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E11 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1486135693,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000016"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E05 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1486024292,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000017"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E09 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1485312494,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000018"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E07 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1485063459,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000019"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E02 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1484741216,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000020"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E08 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1484727528,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000021"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E10 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1483856467,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000022"
+				},
+				{
+					"name": "Saga of Tanya the Evil S01E12 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws.mkv",
+					"size": 1483701957,
+					"rd_link": "https://real-debrid.com/d/FIXTURE000023"
+				}
+			]
+		}
+	},
+	"dmm": {
+		"available": [],
+		"pages": [
+			{
+				"key": "tv:tt31860621:1",
+				"entry": {
+					"hash": "1adcdff4cf3b7b71c7deb4d37815d1daa483fb82",
+					"title": "[Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [BD 1080p][HEVC x265 10bit][Dual-Audio][Eng-Subs] (Batch) [15] - [Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [ {imdb-tt31860621}",
+					"fileSize": 91.19
+				}
+			},
+			{
+				"key": "tv:tt39255171:1",
+				"entry": {
+					"hash": "089ee3ad14cd08495a0e9bd48eb5031e179d2830",
+					"title": "[GSH] Does It Count If You Lose Your Innocence to an Android (2026) S01 (UNCENSORED) (WEB 1080p HEVC AAC) [RoSub] | OVA | Does it Count if You Lose Your Virginity to an Android | Android wa Keiken Ninzuu ni Hairimasu ka {TagsOTL;L3;V8;C2;A=ja;F=ro;}",
+					"fileSize": 2672.52
+				}
+			},
+			{
+				"key": "tv:tt6455986:1",
+				"entry": {
+					"hash": "4beb06f904c4f0c1fbc1b3199a512175236ec449",
+					"title": "Saga of Tanya the Evil S01 MULTi 1080p CR WEB.DL AAC2.0 x264-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, Youjo Senki, The Military Chronicles of a Little Girl, Saga of Tanya the Evil (Youjo Senki))",
+					"fileSize": 17001.41
+				}
+			}
+		],
+		"transferMeta": [
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-judas",
+				"imdbId": "tt31860621",
+				"releaseId": "ix:release-1",
+				"returnPath": "/show/tt31860621/1"
+			},
+			{
+				"source": "debrid",
+				"jobId": "debrid-gsh",
+				"imdbId": "tt39255171"
+			},
+			{
+				"source": "debrid",
+				"jobId": "debrid-tanya",
+				"imdbId": "tt6455986"
+			}
+		],
+		"imdbTitleTypes": {
+			"tt31860621": "tvMiniSeries",
+			"tt39255171": "tvSeries",
+			"tt6455986": "tvMiniSeries"
+		}
+	},
+	"nzb2rd": {
+		"jobs": {
+			"nzb2rd-judas": {
+				"id": "nzb2rd-judas",
+				"nzb_name": "[Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [BD 1080p][HEVC x265 10bit][Dual-Audio][Eng-Subs] (Batch) [15] - [Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [.nzb",
+				"name": "[Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [BD 1080p][HEVC x265 10bit][Dual-Audio][Eng-Subs] (Batch) [15] - [Judas] Kami wa Game ni Uete Iru (Gods` Games We Play) (Season 01) [ {imdb-tt31860621}",
+				"imdb_id": "tt31860621",
+				"status": "completed",
+				"status_message": null,
+				"error": null,
+				"info_hash": "1adcdff4cf3b7b71c7deb4d37815d1daa483fb82",
+				"category": null,
+				"total_bytes": 95618890,
+				"done_bytes": 95618890,
+				"retry_count": 0,
+				"created_at": "2026-08-30 01:29:59",
+				"started_at": "2026-08-31 06:14:38",
+				"updated_at": "2026-08-31 06:15:20",
+				"completed_at": "2026-08-31 06:15:20",
+				"duration_seconds": 103521,
+				"files": [
+					{
+						"name": "[Judas] Kamiue - NCOP.mkv",
+						"size": 73691904,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000001"
+					},
+					{
+						"name": "[Judas] Kamiue - NCED.mkv",
+						"size": 21926986,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000002"
+					}
+				]
+			}
+		}
+	},
+	"recordedAt": "2026-10-06T20:25:00Z"
+}

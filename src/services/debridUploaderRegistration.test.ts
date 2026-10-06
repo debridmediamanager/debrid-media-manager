@@ -1,3 +1,4 @@
+import halfFiled from '@/test/fixtures/transfers/half-filed-2026-10-06.json';
 import lostFilings from '@/test/fixtures/transfers/lost-filings-2026-10-04.json';
 import { describe, expect, it } from 'vitest';
 import {
@@ -154,5 +155,65 @@ describe('buildTransferRegistration', () => {
 		const reg = build({ infoHash: HASH.toUpperCase() });
 		expect(reg!.scrapeEntry.hash).toBe(HASH);
 		expect(reg!.availability.hash).toBe(HASH);
+	});
+});
+
+// `Available.filename` and `.originalFilename` are varchar(191). The title used
+// to be cut at 255 and the raw name not at all, so a release named past 191
+// characters filed its page entry and then failed the `Available` insert, on
+// every retry. These are three of the seven such releases production held on
+// 2026-10-06, as their services served them.
+describe('buildTransferRegistration with names past varchar(191)', () => {
+	const chars = (value: string) => Array.from(value).length;
+	const jobs = [
+		...Object.values(halfFiled.nzb2rd.jobs).map((job) => ({ job, files: job.files })),
+		...halfFiled.debrid.listing.map((job) => ({
+			job,
+			files: (halfFiled.debrid.files as Record<string, TransferJobFile[]>)[job.id],
+		})),
+	];
+
+	it.each(jobs.map(({ job, files }) => [job.id, job, files] as const))(
+		'fits %s into its columns with one title on the page and in Available',
+		(_id, job, files) => {
+			expect(chars(job.name)).toBeGreaterThan(191);
+			const stored = halfFiled.dmm.pages.find((p) => p.entry.hash === job.info_hash)!;
+
+			const reg = buildTransferRegistration({
+				infoHash: job.info_hash,
+				imdbId: job.imdb_id,
+				name: job.name,
+				files,
+				context: { mediaType: 'tv', seasonNum: 1 },
+				endedAt: job.completed_at,
+			})!;
+
+			expect(reg.scrapedKey).toBe(stored.key);
+			expect(chars(reg.availability.filename)).toBe(191);
+			expect(chars(reg.availability.originalFilename)).toBe(191);
+			expect(job.name.startsWith(reg.availability.originalFilename)).toBe(true);
+			expect(reg.scrapeEntry.title).toBe(reg.availability.filename);
+			// What production filed to the page, cut to the column.
+			expect(reg.scrapeEntry.title).toBe(
+				Array.from(stored.entry.title).slice(0, 191).join('')
+			);
+			expect(reg.scrapeEntry.fileSize).toBe(stored.entry.fileSize);
+		}
+	);
+
+	it('counts the column in characters, the way MySQL does', () => {
+		const name = `${'Ш'.repeat(100)} ${'🎬'.repeat(100)}.mkv`;
+		const reg = build({ name })!;
+		expect(chars(reg.availability.filename)).toBe(191);
+		expect(chars(reg.availability.originalFilename)).toBe(191);
+		// Cut on a character, never inside a surrogate pair.
+		expect(reg.availability.originalFilename.endsWith('🎬')).toBe(true);
+	});
+
+	it('leaves a name that fits as it was', () => {
+		const name = 'N'.repeat(191);
+		const reg = build({ name })!;
+		expect(reg.availability.filename).toBe(name);
+		expect(reg.availability.originalFilename).toBe(name);
 	});
 });

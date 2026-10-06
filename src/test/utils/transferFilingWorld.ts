@@ -134,10 +134,11 @@ export function transferWorld() {
 		}),
 		pruneTransferFilings: vi.fn(async () => 0),
 
-		saveScrapedTrueResults: vi.fn(async (key: string, entries: Json[]) => {
-			scraped.set(key, [...(scraped.get(key) ?? []), ...entries]);
+		// The page entry and the `Available` row, which filing writes together.
+		fileTransferRelease: vi.fn(async (key: string, entry: Json, row: Json) => {
+			scraped.set(key, [...(scraped.get(key) ?? []), entry]);
+			available.set(row.hash, row);
 		}),
-		upsertAvailability: vi.fn(async (row: Json) => void available.set(row.hash, row)),
 		recordNzb2rdTransferCompleted: vi.fn(
 			async (releaseId: string, jobId: string, imdbId: string, infoHash: string) =>
 				void markers.set(releaseId, {
@@ -162,7 +163,7 @@ export function transferWorld() {
 		/** What `/api/availability/remove` does on a user's false-positive report. */
 		evict: (hash: string) => available.delete(hash),
 		filedHashes: () =>
-			repo.upsertAvailability.mock.calls.map(([row]) => (row as Json).hash as string),
+			repo.fileTransferRelease.mock.calls.map(([, , row]) => (row as Json).hash as string),
 	};
 }
 
