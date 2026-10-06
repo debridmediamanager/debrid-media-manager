@@ -343,18 +343,59 @@ export function meetsTitleConditions(
 		return false;
 	}
 
-	const ratio =
-		1 -
-		levenshtein(targetTitle, information.title) /
-			(targetTitle.length + information.title.length);
-	if (ratio >= 0.85) return true;
+	if (isSameTitleBarTypos(targetTitle, information.title)) return true;
 
-	const targetTitleNoSpecial = targetTitle.replace(/[^a-z0-9\s]/gi, '');
-	const testTitleNoSpecial = information.title.replace(/[^a-z0-9\s]/gi, '');
-	if (testTitleNoSpecial.length > 0 && targetTitleNoSpecial.includes(testTitleNoSpecial))
-		return true;
+	// A release titled in another script (Большой Ух, 目中无人2) cannot be compared
+	// by spelling. Stripped to Latin letters and digits only its digits and
+	// spaces remain, and checking those against the target's kept the local-title
+	// releases of the page's own film. Letter case never entered into it, so it
+	// stays as it was. For Latin titles the same shortcut fired only on lowercase
+	// names and is gone (see isSameTitleBarTypos).
+	if (!/[a-z]/i.test(information.title)) {
+		const digitsAndSpaces = information.title.replace(/[^a-z0-9\s]/gi, '');
+		if (
+			digitsAndSpaces.length > 0 &&
+			targetTitle.replace(/[^a-z0-9\s]/gi, '').includes(digitsAndSpaces)
+		)
+			return true;
+	}
 
 	return matchesTitle(targetTitle, years, testTitle);
+}
+
+// Letter case, accents and punctuation are not part of a title, so the answer
+// must not depend on them. Callers pass lowercase target titles while release
+// names usually keep their capitals, and comparing the raw strings made every
+// capital cost an edit: "banned.the.mary.whitehouse.story" passed on the
+// "Filth: The Mary Whitehouse Story" page and "Banned.The.Mary..." did not.
+function titleWords(title: string): string[] {
+	return removeDiacritics(title.toLowerCase())
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter(Boolean);
+}
+
+// The release names the page's own title, spelled the same or with a typo.
+// Every word has to line up with a word of the target and differ by at most a
+// typo, so a substituted word is a different title however long the shared
+// rest is. A character ratio over the whole string let "filth" for "banned"
+// through because "the mary whitehouse story" outweighed it, and the old
+// substring shortcut accepted any lowercase release whose title sat inside the
+// target's: "shanghai" on Shanghai Calling, "jag" on Du å jag, "va 2015" music
+// on Vanish.
+function isSameTitleBarTypos(targetTitle: string, testTitle: string): boolean {
+	const targetWords = titleWords(targetTitle);
+	const testWords = titleWords(testTitle);
+	if (!targetWords.length || !testWords.length) return false;
+	if (targetWords.join('') === testWords.join('')) return true;
+	if (targetWords.length !== testWords.length) return false;
+	// One typo per five letters: "Cammando", "Centry", "Bolshoy" still match,
+	// while a word of four letters or fewer must be exact, because one letter
+	// there is usually another word (Apex and Alex).
+	return targetWords.every((word, i) => {
+		const other = testWords[i];
+		const typos = Math.floor(Math.min(word.length, other.length) / 5);
+		return levenshtein(word, other) <= typos;
+	});
 }
 
 export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {

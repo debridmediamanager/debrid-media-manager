@@ -1,0 +1,1398 @@
+{
+	"_about": [
+		"Real (page, release) pairs read from production ScrapedTrue on 2026-10-06 (read-only): five consecutive movie: or tv: pages from each of 80 random key positions, 5,770 pairs, titles from imdb_title_basics. The two Filth rows are the whole of tv:tt1046922:1 (card 221).",
+		"Kept here: every pair whose verdict from meetsTitleConditions depended on letter case (the release name as stored against the same name lowercased), every pair the case-independent matcher rejects that the old one accepted with the stored case, the non-Latin and typo pairs it keeps, and random pairs it kept and rejected both before and after.",
+		"label: keep is the page's own work, reject is another work, null could not be told from the name or is the right work under a page id the matcher cannot know (an episode id, a translated title). Labelled by reading the release against the page title."
+	],
+	"pairs": [
+		{
+			"page": "tv:tt1046922:1",
+			"titleType": "tvMovie",
+			"primaryTitle": "Filth: The Mary Whitehouse Story",
+			"originalTitle": "Filth: The Mary Whitehouse Story",
+			"year": "2008",
+			"release": "Banned.The.Mary.Whitehouse.Story.S01E02.1080p.HDTV.H264-DARKFLiX",
+			"label": "reject",
+			"note": "Banned! The Mary Whitehouse Story (tt19394374, 2022), a different work"
+		},
+		{
+			"page": "tv:tt1046922:1",
+			"titleType": "tvMovie",
+			"primaryTitle": "Filth: The Mary Whitehouse Story",
+			"originalTitle": "Filth: The Mary Whitehouse Story",
+			"year": "2008",
+			"release": "Banned The Mary Whitehouse Story S01E02 1080p HDTV H264-DARKFLiX",
+			"label": "reject",
+			"note": "Banned! The Mary Whitehouse Story (tt19394374, 2022), a different work"
+		},
+		{
+			"page": "movie:tt7656446",
+			"titleType": "movie",
+			"primaryTitle": "Neon Days",
+			"originalTitle": "Neon Days",
+			"year": "2019",
+			"release": "日子.Days.2020.HD1080P.X264.AAC.mp4",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 Solitude Productions - X Years Of Doom & Solitude (Web)",
+			"label": "reject",
+			"note": "2015 music compilation, not the film"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Jazz From America on Disques Vogue (Disques Vogue) [CD FLAC]",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Fashion Channel Music, Vol. 1-9 (50 Chill Moods)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 The Greatest Switch Box (La Musique Fait La Force, LMFLF317CD) [mp3 320]",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) A Chill House Affair, Vol. 1-4 (60 Fantastic Summer Tunes)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 MITRA Music For Nepal (Web, Sub Culture Records, SUBCULTURE 187)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Sky Lounge (FLAC)",
+			"label": "reject",
+			"note": "2015 music compilation"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 Sky Lounge (Absinth Beats)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 Ultimate 90s (Sony Music, 88875085592)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Relapse Records 25 Years of Contamination",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Buddha Deluxe Lounge Vol. 10",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Orange Sunset Lounge, Vol. 1-5 (30 Sundowners)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 Clubbed To Death (Universal Music)",
+			"label": "reject",
+			"note": "2015 music compilation"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Lemongrassmusic Episode 200 (FLAC)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 The Many Faces Of Daft Punk (Music Brokers, MBB7200)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "Van S05E05 1080p WEB H264-CAKES EZTV",
+			"label": "reject",
+			"note": "the TV series Van"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 FG. Chill Out #1 (The Deep House & Lounge Music Must Have Selection) (Wagram Music, 3324842)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Power Rock Duos",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Erotic Masquerade Intimate Lounge, Vol. 1-4 (Secret and Sexy Chill Out Affairs)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Doomed & Stoned in Mexico Una Retrospectiva",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Charming Bourgeois, Vol. 1-5",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) White Chill-Out, Vol. 1-3",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 Unforgotten Rhymes - A Tribute To Psyche (Web, Psyche Enterprises)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - The Oontzcast Files",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Deep House Pool Party, Vol. 1-5",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Зачетный хит Русский",
+			"label": "reject",
+			"note": "2015 music compilation"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA 2015 The 30th Anniversary Super Mario Bros. Music (NIPPON COLUMBIA, COCX-39270~1)",
+			"label": "reject",
+			"note": "2015 music compilation"
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Come and Chill With Me",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Chilling Love Lounge Music",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Valentine's Day Private Lounge Selection",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA (2015) Chillax, Vol. 1-4 (Intense Rhythms for Cocktails and Aperitif)",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - 60 from the 60s - Ride the Wild Surf",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - 100 Greatest Australian Singles Of The '60s",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Dust On The Nettles",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Die Hit-Giganten - Best of Keltica",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Now Thats What I Call Power Ballads",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Synth Pop",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Rough & Dirty",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "VA - 2015 - Синдром Анархии Vol.3",
+			"label": null
+		},
+		{
+			"page": "movie:tt3058674",
+			"titleType": "movie",
+			"primaryTitle": "VANish",
+			"originalTitle": "Vanish",
+			"year": "2015",
+			"release": "Van S05E05 1080p HEVC x265-MeGusta EZTV",
+			"label": null
+		},
+		{
+			"page": "movie:tt2070597",
+			"titleType": "movie",
+			"primaryTitle": "Shanghai Calling",
+			"originalTitle": "Shanghai Calling",
+			"year": "2012",
+			"release": "Shanghai (2012) (1080p BluRay x265 10bit EAC3 5.1 Hindi - timesuck)",
+			"label": "reject",
+			"note": "Shanghai (2012), a different Hindi film"
+		},
+		{
+			"page": "movie:tt2070597",
+			"titleType": "movie",
+			"primaryTitle": "Shanghai Calling",
+			"originalTitle": "Shanghai Calling",
+			"year": "2012",
+			"release": "Shanghai (2012) Hindi 720p WEB-DL x264 AAC 5 1 900MB-1337xHD",
+			"label": "reject",
+			"note": "Shanghai (2012), a different Hindi film"
+		},
+		{
+			"page": "movie:tt5824926",
+			"titleType": "movie",
+			"primaryTitle": "Curtain Call",
+			"originalTitle": "Keoteunkol",
+			"year": "2016",
+			"release": "Curtain (2016) DVDRip.avi",
+			"label": null
+		},
+		{
+			"page": "movie:tt26820882",
+			"titleType": "movie",
+			"primaryTitle": "¡Asu Mare! Los amigos",
+			"originalTitle": "¡Asu Mare! Los amigos",
+			"year": "2023",
+			"release": "Amigos (2023) 1080p WEBRip 5.1-WORLD",
+			"label": null
+		},
+		{
+			"page": "movie:tt9500372",
+			"titleType": "movie",
+			"primaryTitle": "Pocket Hercules: Naim Süleymanoglu",
+			"originalTitle": "Cep Herkülü: Naim Süleymanoglu",
+			"year": "2019",
+			"release": "Naim Suleymanoglu 1080p NF WEB-DL H264 AC3 - HdT [TGx]",
+			"label": null
+		},
+		{
+			"page": "movie:tt2790302",
+			"titleType": "movie",
+			"primaryTitle": "Club Utopia",
+			"originalTitle": "Club Utopia",
+			"year": "2013",
+			"release": "Utopia 2014 Week 2 B [Fox] HDTV H.264 720",
+			"label": "reject",
+			"note": "the TV series Utopia"
+		},
+		{
+			"page": "movie:tt2790302",
+			"titleType": "movie",
+			"primaryTitle": "Club Utopia",
+			"originalTitle": "Club Utopia",
+			"year": "2013",
+			"release": "Utopia.2013.HD.1080p.WEB-DL-x264",
+			"label": "reject",
+			"note": "Utopia (2013), not Club Utopia"
+		},
+		{
+			"page": "movie:tt2790302",
+			"titleType": "movie",
+			"primaryTitle": "Club Utopia",
+			"originalTitle": "Club Utopia",
+			"year": "2013",
+			"release": "Utopia 2014 Week 6 [Fox] HDTV H.264 720",
+			"label": null
+		},
+		{
+			"page": "movie:tt2496262",
+			"titleType": "video",
+			"primaryTitle": "Soccer Moms",
+			"originalTitle": "Soccer Moms",
+			"year": "2012",
+			"release": "Soccer 2012 - Australia v Saudi Arabia WCQ Feb 29th x264-VB",
+			"label": "reject",
+			"note": "a football match"
+		},
+		{
+			"page": "movie:tt1444307",
+			"titleType": "movie",
+			"primaryTitle": "Episode 3: 'Enjoy Poverty'",
+			"originalTitle": "Episode 3: 'Enjoy Poverty'",
+			"year": "2009",
+			"release": "Enjoy Poverty 2009 DVDRip DD2.0 x264-latotale",
+			"label": null
+		},
+		{
+			"page": "tv:tt2468756:8",
+			"titleType": "tvSeries",
+			"primaryTitle": "Beverly Hills Pawn",
+			"originalTitle": "Beverly Hills Pawn",
+			"year": "2013",
+			"release": "Beverly Hills s8",
+			"label": null
+		},
+		{
+			"page": "tv:tt0391691:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "T-Bag Strikes Again",
+			"originalTitle": "T-Bag Strikes Again",
+			"year": "1986",
+			"release": "T-Bag S01 PAL DVD9-WaLMaRT",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166384:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking for $220/Hour",
+			"originalTitle": "Looking for $220/Hour",
+			"year": "2014",
+			"release": "Looking S01E04 HDTV x264-2HD",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166388:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking in the Mirror",
+			"originalTitle": "Looking in the Mirror",
+			"year": "2014",
+			"release": "Looking S01E06 HDTV x264-2HD",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166388:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking in the Mirror",
+			"originalTitle": "Looking in the Mirror",
+			"year": "2014",
+			"release": "Looking S01E06 720p HDTV x264-2HD",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166390:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking for a Plus-One",
+			"originalTitle": "Looking for a Plus-One",
+			"year": "2014",
+			"release": "Looking S01E07 720p HDTV x264-KILLERS",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166390:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking for a Plus-One",
+			"originalTitle": "Looking for a Plus-One",
+			"year": "2014",
+			"release": "Looking S01E07 HDTV x264-KILLERS",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166394:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking Glass",
+			"originalTitle": "Looking Glass",
+			"year": "2014",
+			"release": "Looking S01E08 HDTV x264-2HD",
+			"label": null
+		},
+		{
+			"page": "tv:tt3166394:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Looking Glass",
+			"originalTitle": "Looking Glass",
+			"year": "2014",
+			"release": "Looking S01E08 720p HDTV x264-2HD",
+			"label": null
+		},
+		{
+			"page": "tv:tt29370857:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Ron Kamonohashi's Forbidden Deductions",
+			"originalTitle": "Kamonohashi Ron no Kindan Suiri",
+			"year": "2023",
+			"release": "[Judas] Kamonohashi Ron - S01E01.mkv",
+			"label": null
+		},
+		{
+			"page": "tv:tt29866166:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG.s01.DVD9.Jetsam",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "[Ex-torrenty.org]JAG.S01.MULTi.1080p.WEB-DL.DDP2.0.H265-DReaM",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG.S10E03.480p.x264-mSD[eztv.io].mkv",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG.S10.1080p.WEB-DL.H.264.Rus.Eng-@EniaHD",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG.S10E10.720p.HEVC.x265-MeGusta[eztv.io].mkv",
+			"label": null
+		},
+		{
+			"page": "tv:tt29866166:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG.S10.DVDRip.XviD-P0W4DVD",
+			"label": null
+		},
+		{
+			"page": "tv:tt29866166:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG S02e01-08",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "JAG - Season 02",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "[Ex-torrenty.org]JAG.S02.MULTi.1080p.WEB-DL.DDP2.0.H265-DReaM",
+			"label": null
+		},
+		{
+			"page": "tv:tt30888139:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "CoComelon JJ's Animal Time",
+			"originalTitle": "CoComelon JJ's Animal Time",
+			"year": "2022",
+			"release": "[Ex-torrenty.org]CoComelon.Animal.Time.S01.PLDUB.1080p.WEB-DL.AAC2.0.H.264-B89",
+			"label": null
+		},
+		{
+			"page": "tv:tt30888139:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "CoComelon JJ's Animal Time",
+			"originalTitle": "CoComelon JJ's Animal Time",
+			"year": "2022",
+			"release": "[Ex-torrenty.org]CoComelon.Animal.Time.S02.PLDUB.1080p.WEB-DL.AAC2.0.H.264-B89",
+			"label": null
+		},
+		{
+			"page": "tv:tt1813857:11",
+			"titleType": "tvSeries",
+			"primaryTitle": "Buccaneers and Bones",
+			"originalTitle": "Buccaneers and Bones",
+			"year": "2010",
+			"release": "Bones S11E02 The Brother in the Basement 1080p AMZN REMUX DDP5 1 HEVC-NTb[EZTVx.to].mkv",
+			"label": "reject",
+			"note": "the TV series Bones"
+		},
+		{
+			"page": "tv:tt16087966:1",
+			"titleType": "tvMiniSeries",
+			"primaryTitle": "Journey Through Albania",
+			"originalTitle": "Journey Through Albania",
+			"year": "2021",
+			"release": "Journey.Through.Armenia.S01E05.1080p.HDTV.H264-CBFM",
+			"label": "reject",
+			"note": "Journey Through Armenia, not Albania"
+		},
+		{
+			"page": "tv:tt16087966:1",
+			"titleType": "tvMiniSeries",
+			"primaryTitle": "Journey Through Albania",
+			"originalTitle": "Journey Through Albania",
+			"year": "2021",
+			"release": "Journey Through Armenia S01E01 720p HDTV x264-CBFM",
+			"label": "reject",
+			"note": "Journey Through Armenia, not Albania"
+		},
+		{
+			"page": "tv:tt29866166:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "jag.s10e22.720p.hdtv.x264-regret[eztv].mkv",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt29866166:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "jag.s02.dvdrip.xvid-saints",
+			"label": "reject",
+			"note": "JAG, not Du & jag"
+		},
+		{
+			"page": "tv:tt18135286:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Summer & Todd - L'allegra fattoria",
+			"originalTitle": "Summer & Todd - L'allegra fattoria",
+			"year": "2021",
+			"release": "_summer.S01E02.1078p.OV.WEB-DL.JPN.AAC2.0.H.264.ESub-ToonsHub.mkv",
+			"label": null
+		},
+		{
+			"page": "movie:tt1796414",
+			"titleType": "short",
+			"primaryTitle": "Big Ukh",
+			"originalTitle": "Bolshoj Uh",
+			"year": "1989",
+			"release": "Большой Ух (1989).mkv",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "movie:tt1796414",
+			"titleType": "short",
+			"primaryTitle": "Big Ukh",
+			"originalTitle": "Bolshoj Uh",
+			"year": "1989",
+			"release": "Большой Ух. 1989.mp4",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "movie:tt1796414",
+			"titleType": "short",
+			"primaryTitle": "Big Ukh",
+			"originalTitle": "Bolshoj Uh",
+			"year": "1989",
+			"release": "Большой Ух.1989.DVDRip.x264.640x.rip by Frost O.S.mp4",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "movie:tt1796414",
+			"titleType": "short",
+			"primaryTitle": "Big Ukh",
+			"originalTitle": "Bolshoj Uh",
+			"year": "1989",
+			"release": "Большой Ух (1989) (Upscale AI) DVDRip 1080p.mkv",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "movie:tt30972810",
+			"titleType": "movie",
+			"primaryTitle": "Eye for an Eye 2",
+			"originalTitle": "Mu zhong wu ren 2",
+			"year": "2024",
+			"release": "目中无人2.2024.HD2160P.AAC.H265.CHS",
+			"label": "keep",
+			"note": "Chinese title of the film"
+		},
+		{
+			"page": "movie:tt30972810",
+			"titleType": "movie",
+			"primaryTitle": "Eye for an Eye 2",
+			"originalTitle": "Mu zhong wu ren 2",
+			"year": "2024",
+			"release": "目中无人2.2024.BD1080P.AAC.H264.CHS.BTSJ6",
+			"label": "keep",
+			"note": "Chinese title of the film"
+		},
+		{
+			"page": "movie:tt30972810",
+			"titleType": "movie",
+			"primaryTitle": "Eye for an Eye 2",
+			"originalTitle": "Mu zhong wu ren 2",
+			"year": "2024",
+			"release": "目中无人2.2024.杨秉佳.谢苗.杨恩又.黄涛.高清2K中字",
+			"label": "keep",
+			"note": "Chinese title of the film"
+		},
+		{
+			"page": "movie:tt30972810",
+			"titleType": "movie",
+			"primaryTitle": "Eye for an Eye 2",
+			"originalTitle": "Mu zhong wu ren 2",
+			"year": "2024",
+			"release": "目中无人2：以眼还眼.2024.HD1080p.国语中字",
+			"label": "keep",
+			"note": "Chinese title of the film"
+		},
+		{
+			"page": "movie:tt30972810",
+			"titleType": "movie",
+			"primaryTitle": "Eye for an Eye 2",
+			"originalTitle": "Mu zhong wu ren 2",
+			"year": "2024",
+			"release": "目中无人2.2024.BD.1080P.国语中字.mkv",
+			"label": "keep",
+			"note": "Chinese title of the film"
+		},
+		{
+			"page": "movie:tt3068960",
+			"titleType": "movie",
+			"primaryTitle": "Ded 005",
+			"originalTitle": "Ded 005",
+			"year": "2013",
+			"release": "Дед 005. 2013г. DVDRip. 480x. - kontarik81.mp4",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "movie:tt3068960",
+			"titleType": "movie",
+			"primaryTitle": "Ded 005",
+			"originalTitle": "Ded 005",
+			"year": "2013",
+			"release": "Дед 005 (2013) dxp.avi",
+			"label": "keep",
+			"note": "Russian title of the film"
+		},
+		{
+			"page": "tv:tt0391683:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Rubí",
+			"originalTitle": "Rubí",
+			"year": "2004",
+			"release": "Руби (Краткая версия) (1-18 серии из 18 + доп. материалы) / Rubi / 2004 / ЛО, СТ / DVDRip",
+			"label": "keep",
+			"note": "Russian title with the Latin one after it"
+		},
+		{
+			"page": "tv:tt2901828:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Never Ever Do This at Home",
+			"originalTitle": "Never Ever Do This at Home",
+			"year": "2013",
+			"release": "[ www.Torrenting.com ] - Never.Ever.Do.This.at.Home.S01E14.720p.HDTV.x264-INNOCENCE",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt2706570",
+			"titleType": "movie",
+			"primaryTitle": "Two Shots Fired",
+			"originalTitle": "Dos disparos",
+			"year": "2014",
+			"release": "Two Shots Fired (2014) Ensubbed (1080p MUBI WEB-DL H264 SDR AAC 2.0 Spanish - bluegreeen).mkv",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt15822846:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "The Reluctant Traveler",
+			"originalTitle": "The Reluctant Traveler with Eugene Levy",
+			"year": "2023",
+			"release": "The Reluctant Traveler With Eugene Levy S02E03 XviD-AFG",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt9010738",
+			"titleType": "movie",
+			"primaryTitle": "Miss Fisher & the Crypt of Tears",
+			"originalTitle": "Miss Fisher and the Crypt of Tears",
+			"year": "2020",
+			"release": "Miss Fisher and the Crypt of Tears (2020) BDRip (1920x960) HEVC.mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt28240284",
+			"titleType": "movie",
+			"primaryTitle": "To End All War: Oppenheimer & the Atomic Bomb",
+			"originalTitle": "To End All War: Oppenheimer & the Atomic Bomb",
+			"year": "2023",
+			"release": "To.End.All.War.Oppenheimer.and.the.Atomic.Bomb.2023.720p.WEB.h264-EDITH",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt16088380:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Fanfare of Adolescence",
+			"originalTitle": "Gunjou no Fanfare",
+			"year": "2022",
+			"release": "Gunjou no Fanfare - 08 - 1080p WEB HEVC -NanDesuKa (B-Global).mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt5824826",
+			"titleType": "movie",
+			"primaryTitle": "Pelli Choopulu",
+			"originalTitle": "Pelli Choopulu",
+			"year": "2016",
+			"release": "Pelli Choopulu (2016) - Telugu - WebRip - X264 - 1CD [Team Jaffa]",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt15822846:2",
+			"titleType": "tvSeries",
+			"primaryTitle": "The Reluctant Traveler",
+			"originalTitle": "The Reluctant Traveler with Eugene Levy",
+			"year": "2023",
+			"release": "The.Reluctant.Traveler.With.Eugene.Levy.S02E02.2160p.ATVP.WEB-DL.DDPA5.1.HDR.HEVC-NTb",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt18935036:11",
+			"titleType": "tvSeries",
+			"primaryTitle": "Taskmaster",
+			"originalTitle": "Taskmaster",
+			"year": "2022",
+			"release": "Taskmaster.S11E01.XviD-AFG[EZTVx.to].avi",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt9010802",
+			"titleType": "movie",
+			"primaryTitle": "If I Were Rich Man",
+			"originalTitle": "Si yo fuera rico",
+			"year": "2019",
+			"release": "If I Were Rich Man (2019) 720p BluRay-WORLD",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt29371814:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Migi & Dali",
+			"originalTitle": "Migi to Dali",
+			"year": "2023",
+			"release": "[CameEsp] Migi to Dali - 11 [720p][ESP-ENG][mkv].mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt26581740",
+			"titleType": "movie",
+			"primaryTitle": "Weapons",
+			"originalTitle": "Weapons",
+			"year": "2025",
+			"release": "Weapons 2025 iNTERNAL UHD BluRay 2160p TrueHD Atmos 7 1 DV HDR10 x265-SPx",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt26787296",
+			"titleType": "movie",
+			"primaryTitle": "Burning Betrayal",
+			"originalTitle": "O Lado Bom de ser Traída",
+			"year": "2023",
+			"release": "Burning Betrayal (2023) (1080p NF WEB-DL H265 SDR DDP Atmos 5.1 Portuguese - HONE).mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt2070597",
+			"titleType": "movie",
+			"primaryTitle": "Shanghai Calling",
+			"originalTitle": "Shanghai Calling",
+			"year": "2012",
+			"release": "Shanghai Calling 2012 720p WEB-DL HEVC x265-RMTeam",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt12679084:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "The Rise of the Murdoch Dynasty",
+			"originalTitle": "The Rise of the Murdoch Dynasty",
+			"year": "2020",
+			"release": "The Rise Of The Murdoch Dynasty S01E01 WEBRip x264 XEN0N",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt15822846:3",
+			"titleType": "tvSeries",
+			"primaryTitle": "The Reluctant Traveler",
+			"originalTitle": "The Reluctant Traveler with Eugene Levy",
+			"year": "2023",
+			"release": "The Reluctant Traveler with Eugene Levy S03E02 720p HEVC x265-MeGusta",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt26581740",
+			"titleType": "movie",
+			"primaryTitle": "Weapons",
+			"originalTitle": "Weapons",
+			"year": "2025",
+			"release": "Weapons.2025.D.RU.UA.TS.1O8Op.mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt2070604",
+			"titleType": "movie",
+			"primaryTitle": "April Apocalypse",
+			"originalTitle": "April Apocalypse",
+			"year": "2013",
+			"release": "April.Apocalypse.2013.BRRip.x264.AAC-WAR",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt1891974:2",
+			"titleType": "movie",
+			"primaryTitle": "Ace Attorney",
+			"originalTitle": "Gyakuten saiban",
+			"year": "2012",
+			"release": "Ace Attorney S02E18 720p WEB x264-WaLMaRT",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt3002170:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Love Your Garden",
+			"originalTitle": "Love Your Garden",
+			"year": "2011",
+			"release": "Love Your Garden S10E03 480p x264-mSD EZTV",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt18935036:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Taskmaster",
+			"originalTitle": "Taskmaster",
+			"year": "2022",
+			"release": "Taskmaster.S01E04.720p.HDTV.x264-CBFM[TGx]",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt1668039",
+			"titleType": "short",
+			"primaryTitle": "April",
+			"originalTitle": "April",
+			"year": "2011",
+			"release": "APRIL 2010",
+			"label": null
+		},
+		{
+			"page": "movie:tt26581740",
+			"titleType": "movie",
+			"primaryTitle": "Weapons",
+			"originalTitle": "Weapons",
+			"year": "2025",
+			"release": "Weapons.2025.Hybrid.1080p.BluRay.DDP7.1.x264-ZoroSenpai.mkv",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt1735674:20",
+			"titleType": "tvSeries",
+			"primaryTitle": "MasterChef Greece",
+			"originalTitle": "MasterChef",
+			"year": "2010",
+			"release": "MasterChef.S20E03.XviD-AFG[EZTVx.to].avi",
+			"label": null
+		},
+		{
+			"page": "tv:tt1735674:20",
+			"titleType": "tvSeries",
+			"primaryTitle": "MasterChef Greece",
+			"originalTitle": "MasterChef",
+			"year": "2010",
+			"release": "MasterChef.S20E01.1080p.HEVC.x265-MeGusta",
+			"label": null
+		},
+		{
+			"page": "movie:tt27802226",
+			"titleType": "movie",
+			"primaryTitle": "Virginia Woolf's Night & Day",
+			"originalTitle": "Virginia Woolf's Night & Day",
+			"year": "2026",
+			"release": "Virginia Woolfs Night and Day 2026 1080p WEB-DL H264-PlayfulDarkness",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt18935036:10",
+			"titleType": "tvSeries",
+			"primaryTitle": "Taskmaster",
+			"originalTitle": "Taskmaster",
+			"year": "2022",
+			"release": "Taskmaster.S10E03.Point.Of.Swivel.1080p.HEVC.x265-MeGusta[eztv.io].mkv",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt18935036:11",
+			"titleType": "tvSeries",
+			"primaryTitle": "Taskmaster",
+			"originalTitle": "Taskmaster",
+			"year": "2022",
+			"release": "Taskmaster.S11E03.AAC.MP4-Mobile",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt9010738",
+			"titleType": "movie",
+			"primaryTitle": "Miss Fisher & the Crypt of Tears",
+			"originalTitle": "Miss Fisher and the Crypt of Tears",
+			"year": "2020",
+			"release": "Miss.Fisher.And.The.Crypt.Of.Tears.2020.1080p.WEB.x264.CZ-DFW.mkv",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt26581740",
+			"titleType": "movie",
+			"primaryTitle": "Weapons",
+			"originalTitle": "Weapons",
+			"year": "2025",
+			"release": "[DEVIL-TORRENTS.PL] Weapons.2025.PL.HDR.AI.UP.2160p.HDTS.AC3-ChrisVPS",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt26224072:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "United",
+			"originalTitle": "United",
+			"year": "2022",
+			"release": "United S01E02 1080p WEB H264-CBFM",
+			"label": null
+		},
+		{
+			"page": "movie:tt10022726",
+			"titleType": "movie",
+			"primaryTitle": "Sweet Face",
+			"originalTitle": "Sweet Face",
+			"year": "2020",
+			"release": "Sweet.Face.2020.WEBRip.XviD.MP3-XVID",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt0685628",
+			"titleType": "tvMovie",
+			"primaryTitle": "The Sign of Four",
+			"originalTitle": "The Sign of Four",
+			"year": "1987",
+			"release": "The.Sign.of.Four.1987.720p.BluRay.x264-UNVEiL",
+			"label": "keep"
+		},
+		{
+			"page": "movie:tt26843513",
+			"titleType": "movie",
+			"primaryTitle": "Sovereign",
+			"originalTitle": "Sovereign",
+			"year": "2025",
+			"release": "Sovereign.2025.VOSTFR.1080p.WEBrip.x265-TyHD.mkv",
+			"label": "keep"
+		},
+		{
+			"page": "tv:tt23875268:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "YA slezhu za toboy",
+			"originalTitle": "YA slezhu za toboy",
+			"year": "2022",
+			"release": "Watching.You.S01E05.1080p.WEB.h264-EDITH[EZTVx.to].mkv",
+			"label": null
+		},
+		{
+			"page": "movie:tt2070597",
+			"titleType": "movie",
+			"primaryTitle": "Shanghai Calling",
+			"originalTitle": "Shanghai Calling",
+			"year": "2012",
+			"release": "O Chamado de Xangai (2014) 720p Dublado",
+			"label": null
+		},
+		{
+			"page": "tv:tt29866166:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "you.and.me.2023.s01e01.1080p.web.h264-ggez[eztv.re].mkv",
+			"label": null
+		},
+		{
+			"page": "movie:tt26581740",
+			"titleType": "movie",
+			"primaryTitle": "Weapons",
+			"originalTitle": "Weapons",
+			"year": "2025",
+			"release": "Hodina zmizení (2025) UHDR+DV cz en.mkv",
+			"label": null
+		},
+		{
+			"page": "tv:tt29866166:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Du å jag",
+			"originalTitle": "Du å jag",
+			"year": "2023",
+			"release": "You.and.Me.2023.S01.1080p.WEBRip.AAC2.0.x264-GGEZ[eztv.re]",
+			"label": null
+		},
+		{
+			"page": "tv:tt4165986:6",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Episode #6.9",
+			"originalTitle": "Episode #6.9",
+			"year": "2014",
+			"release": "Shark Tank S06E09 HDTV x264-BATV",
+			"label": null
+		},
+		{
+			"page": "movie:tt26843513",
+			"titleType": "movie",
+			"primaryTitle": "Sovereign",
+			"originalTitle": "Sovereign",
+			"year": "2025",
+			"release": "Свободные люди (2025) WEB-DL 1080p.mkv",
+			"label": null
+		},
+		{
+			"page": "movie:tt28240284",
+			"titleType": "movie",
+			"primaryTitle": "To End All War: Oppenheimer & the Atomic Bomb",
+			"originalTitle": "To End All War: Oppenheimer & the Atomic Bomb",
+			"year": "2023",
+			"release": "Oppenheimer.L.Homme.Et.La.Bombe.2023.DOC.MULTi.VFF.1080p.WEB.EAC3.2.0.x264-TFA",
+			"label": null
+		},
+		{
+			"page": "tv:tt2622330:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Warts 'n' All",
+			"originalTitle": "Warts 'n' All",
+			"year": "2012",
+			"release": "Treasures Of Ancient Greece S01E01 HDTV x264-BARGE",
+			"label": "reject",
+			"note": "a different documentary series"
+		},
+		{
+			"page": "tv:tt2294953:1",
+			"titleType": "video",
+			"primaryTitle": "Twisted Twins",
+			"originalTitle": "Twisted Twins",
+			"year": "2012",
+			"release": "Twisted.Twin.2020.720p.HDTV.x264-CRiMSON",
+			"label": "reject",
+			"note": "Twisted Twin (2020), not Twisted Twins"
+		},
+		{
+			"page": "movie:tt26843513",
+			"titleType": "movie",
+			"primaryTitle": "Sovereign",
+			"originalTitle": "Sovereign",
+			"year": "2025",
+			"release": "Soberano.2025.2025.WEB-DL.1080p.x264.DUAL.5.1-SF",
+			"label": null
+		},
+		{
+			"page": "movie:tt14443260",
+			"titleType": "movie",
+			"primaryTitle": "Alimañas",
+			"originalTitle": "Alimañas",
+			"year": "2023",
+			"release": "Vermin.2023.iTA-FRE.Bluray.1080p.x264-CYBER.mkv",
+			"label": null
+		},
+		{
+			"page": "movie:tt2780222",
+			"titleType": "video",
+			"primaryTitle": "Ufo Chronicles Files",
+			"originalTitle": "Ufo Chronicles Files",
+			"year": "2013",
+			"release": "Ufo Chronicles Alien Arrivals 2016 DVDRip x264-GHOULS",
+			"label": "reject",
+			"note": "UFO Chronicles: Alien Arrivals, a different film"
+		},
+		{
+			"page": "tv:tt29368639:2025",
+			"titleType": "tvSeries",
+			"primaryTitle": "Adult Swim Smalls",
+			"originalTitle": "Adult Swim Smalls",
+			"year": "2018",
+			"release": "Smalls S2025E05 Lil Daddy 1080p HDTV DD 2.0 x264-ViETNAM",
+			"label": null
+		},
+		{
+			"page": "tv:tt13981460:1",
+			"titleType": "tvEpisode",
+			"primaryTitle": "Episode 8",
+			"originalTitle": "Episode 8",
+			"year": "2021",
+			"release": "Death.in.Paradise.Season.10.Episode.8.H265.720p.WEBRip.EzzRips",
+			"label": "reject",
+			"note": "Death in Paradise, not this page"
+		},
+		{
+			"page": "movie:tt1796414",
+			"titleType": "short",
+			"primaryTitle": "Big Ukh",
+			"originalTitle": "Bolshoj Uh",
+			"year": "1989",
+			"release": "Bolshoy_Uh_1989.avi",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "movie:tt2658126",
+			"titleType": "movie",
+			"primaryTitle": "Commando",
+			"originalTitle": "Commando",
+			"year": "2013",
+			"release": "Cammando (2013)900MB DVDSCR DDH~RG",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "movie:tt2658126",
+			"titleType": "movie",
+			"primaryTitle": "Commando",
+			"originalTitle": "Commando",
+			"year": "2013",
+			"release": "Cammando (2013) 1CD DVDScrRip 720P DDH~RG",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "tv:tt2057872:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "Uklad warszawski",
+			"originalTitle": "Uklad warszawski",
+			"year": "2011",
+			"release": "Układ warszawski (2011) [S01-E01-13 komplet] [WEB-DL] [x264] [PL] [H-1]",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "tv:tt13981398:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "21st Century Serial Killer",
+			"originalTitle": "21st Century Serial Killer",
+			"year": "2018",
+			"release": "21st Centry Serial Killer S01 1080p AMZN WEBRip DDP2 0 x264 NTb rartv ORARBG",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "tv:tt13981398:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "21st Century Serial Killer",
+			"originalTitle": "21st Century Serial Killer",
+			"year": "2018",
+			"release": "21st Centry Serial Killer S01 1080p AMZN WEB-DL DDP2 0 H 264-NTb",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "tv:tt13981398:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "21st Century Serial Killer",
+			"originalTitle": "21st Century Serial Killer",
+			"year": "2018",
+			"release": "21st Centry Serial Killer S01 720p AMZN WEBRip DDP2 0 x264 NTb rartv ORARBG",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		},
+		{
+			"page": "tv:tt13981398:1",
+			"titleType": "tvSeries",
+			"primaryTitle": "21st Century Serial Killer",
+			"originalTitle": "21st Century Serial Killer",
+			"year": "2018",
+			"release": "21st Centry Serial Killer S01 WEBRip x264 ION10 ORARBG",
+			"label": "keep",
+			"note": "the page's own title with a typo or a letter outside a-z"
+		}
+	]
+}
