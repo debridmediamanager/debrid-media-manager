@@ -16,6 +16,7 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import { handleSelectFilesInRd } from './addMagnet';
+import { classifyAllDebridPlayError } from './castAddonFailure';
 import { toMagnetUri } from './extractHashes';
 import {
 	getBiggestFileTorBoxStreamUrl,
@@ -25,8 +26,25 @@ import {
 } from './getTorBoxStreamUrl';
 import { RdAddPausedError, retryRdAddThroughPause } from './rdAddPause';
 
-/** `temporary` marks a failure worth retrying in a few minutes, not a verdict. */
-export type IntentResult = { intent?: string; error?: string; temporary?: boolean };
+/**
+ * `temporary` marks a failure worth retrying in a few minutes, not a verdict.
+ * `refusal: 'confirm'` is a provider holding the sign-in until its owner
+ * confirms an email: neither a retry nor DMM can clear it.
+ */
+export type IntentResult = {
+	intent?: string;
+	error?: string;
+	temporary?: boolean;
+	refusal?: 'confirm';
+};
+
+/**
+ * What the member reads when AllDebrid holds the unlock. AllDebrid's own
+ * message is a fragment of HTML that stops mid-sentence ("An <b>email has been
+ * sent</b> to").
+ */
+export const AD_CONFIRM_SIGN_IN_ERROR =
+	"AllDebrid is holding this request until you confirm a new sign-in. It emailed the address on your AllDebrid account when Debrid Media Manager's server first used your key. Open that email, confirm the sign-in, then try again.";
 
 // 'tbw' is a TorBox web download, which lives in its own namespace with its own
 // list and its own download-link endpoint — it cannot be resolved as a torrent.
@@ -496,7 +514,7 @@ export const getIntent = async (
 	os: string,
 	player: string,
 	service: WatchService = 'rd'
-): Promise<{ intent?: string; error?: string }> => {
+): Promise<IntentResult> => {
 	if (service === 'tb' || service === 'tbw') {
 		return { error: 'TorBox links are resolved by hash; call /api/watch/instant instead' };
 	}
@@ -518,6 +536,12 @@ export const getIntent = async (
 			}
 			return { intent: buildPlayerIntent(os, player, unlocked.link, unlocked.link) };
 		} catch (e: any) {
+			// The unlock runs from DMM's server, an address AllDebrid has not
+			// seen for most accounts, so it holds the key until the owner
+			// confirms the email it sends (AUTH_BLOCKED).
+			if (classifyAllDebridPlayError(e) === 'confirm') {
+				return { error: AD_CONFIRM_SIGN_IN_ERROR, refusal: 'confirm' };
+			}
 			return { error: `Failed to unlock link: ${e.message || e}` };
 		}
 	}

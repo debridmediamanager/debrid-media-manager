@@ -57,6 +57,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		// Real-Debrid refused the add twice, a pause apart: try again later.
 		res.setHeader('Retry-After', '120');
 		res.status(503).json({ error: result.error });
+	} else if ('refusal' in result && result.refusal) {
+		// The provider refuses until its owner acts on its email. Not a DMM
+		// fault, so not a 500, and not worth a retry either.
+		res.status(403).json({ error: result.error, reason: result.refusal });
 	} else {
 		res.status(500).json({ error: result.error || `No intent found for ${hash ?? link}` });
 	}
