@@ -1,4 +1,5 @@
 import fixture from '@/test/fixtures/stremioStreamRateLimit/npm-access-log.json';
+import torznabTraffic from '@/test/fixtures/torznabRateLimit/zurg-acquisition-2026-10-06.json';
 import { castStreamRequest, parseNpmAccessLine } from '@/test/utils/npmAccessLog';
 import Redis from 'ioredis';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
@@ -343,6 +344,57 @@ describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => 
 
 			await limiter.disconnect();
 		});
+	});
+
+	// One sponsor's zurg acquisition queue and Prowlarr on 2026-10-06, 13:00-15:00
+	// UTC. The key sent about 21 searches a minute against a budget of 20, and
+	// zurg asks a refused search again once Retry-After has passed. While the
+	// refusals held slots in the window, every retry kept the key at the limit
+	// and only 1,597 of the 2,495 arrivals were served, about 13 a minute.
+	describe('Torznab search budget, replayed from the access log', () => {
+		const requests = torznabTraffic.requests as [string, number][];
+		const { rateLimit, windowSeconds } = RATE_LIMIT_CONFIGS.torznabSearch;
+
+		// What a sliding window that holds only served requests admits, worked
+		// out here rather than by the limiter under test.
+		function servedByBudget(): number[] {
+			const served: number[] = [];
+			for (const [at] of requests) {
+				const now = Date.parse(at) / 1000;
+				const held = served.filter((t) => t > now - windowSeconds).length;
+				if (held < rateLimit) served.push(now);
+			}
+			return served;
+		}
+
+		it('serves a key that retries refused searches its whole budget', async () => {
+			const limiter = new RedisRateLimiter(redis);
+			vi.useFakeTimers({ toFake: ['Date'] });
+			const served: number[] = [];
+			try {
+				for (const [at] of requests) {
+					vi.setSystemTime(new Date(at));
+					const { success } = await limiter.check(
+						'sponsor:replay',
+						RATE_LIMIT_CONFIGS.torznabSearch
+					);
+					if (success) served.push(Date.parse(at) / 1000);
+				}
+			} finally {
+				vi.useRealTimers();
+			}
+
+			expect(served).toEqual(servedByBudget());
+			// Still a budget: no window of a minute served more than it allows.
+			for (const t of served) {
+				expect(
+					served.filter((u) => u > t - windowSeconds && u <= t).length
+				).toBeLessThanOrEqual(rateLimit);
+			}
+			expect(served.length).toBeGreaterThan(
+				requests.filter(([, status]) => status === 200).length
+			);
+		}, 120000);
 	});
 
 	// Card 203 on the backend production runs: the sliding window that also

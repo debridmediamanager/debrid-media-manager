@@ -130,7 +130,13 @@ export const RATE_LIMIT_CONFIGS = {
 	// search to ten requests. Replaying 2026-09-06..10-03's proxy log at a page of
 	// a hundred, 20 refuses 0.2% of *arr searches, nearly all of them three or
 	// more searches from one key inside a minute; 25 would refuse 0.02%.
-	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60 },
+	//
+	// A refused search holds no slot. zurg's acquisition queue asks a refused
+	// search again once Retry-After has passed, and while refusals counted, a
+	// key sending 21 a minute was held at the limit by its own retries and
+	// served about 13 a minute (2026-10-06). torznabIp, which does count them,
+	// is what still stops one address from hammering.
+	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60, countRefused: false },
 	torznabIp: { name: 'torznabIp', rateLimit: 20, windowSeconds: 10 },
 	// /api/info/anime and /api/search/anime answer by asking the community
 	// Stremio addon and kitsu.io, so an unlimited client could drive both
