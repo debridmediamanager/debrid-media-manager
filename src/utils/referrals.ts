@@ -22,8 +22,32 @@ export const DEBRID_LINK_REFERRAL_URL = 'https://debrid-link.com/id/diG1t';
 
 /**
  * Real-Debrid credits the referral from `?id=` on any page; `/premium?id=` sets an
- * `aff` cookie and lands on the plans page.
+ * `aff` cookie and lands on the plans page. The referral id is the account's own
+ * user id.
+ *
+ * Credit is spread evenly across a pool of accounts (each credited sign-up is worth
+ * 5 premium days + 50 fidelity points) by picking one at random per call. A random
+ * pick is statistically even and needs no shared state, which suits `/start` and the
+ * premium prompts since both render client-side.
  */
-export const REAL_DEBRID_REFERRAL_ID = '20474106';
-export const REAL_DEBRID_REFERRAL_URL = `http://real-debrid.com/?id=${REAL_DEBRID_REFERRAL_ID}`;
-export const REAL_DEBRID_PREMIUM_REFERRAL_URL = `https://real-debrid.com/premium?id=${REAL_DEBRID_REFERRAL_ID}`;
+export const REAL_DEBRID_REFERRAL_IDS = [
+	'20475782',
+	'20475870',
+	'20475970',
+	'20476026',
+	'20476150',
+	'20476198',
+	'20476266',
+	'20476302',
+	'20476354',
+	'20476410',
+] as const;
+
+export const pickRealDebridReferralId = (): string =>
+	REAL_DEBRID_REFERRAL_IDS[Math.floor(Math.random() * REAL_DEBRID_REFERRAL_IDS.length)];
+
+export const realDebridReferralUrl = (): string =>
+	`http://real-debrid.com/?id=${pickRealDebridReferralId()}`;
+
+export const realDebridPremiumReferralUrl = (): string =>
+	`https://real-debrid.com/premium?id=${pickRealDebridReferralId()}`;

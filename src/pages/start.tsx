@@ -12,7 +12,7 @@ import { enableGuestMode } from '@/utils/guestMode';
 import {
 	ALLDEBRID_REFERRAL_URL,
 	DEBRID_LINK_REFERRAL_URL,
-	REAL_DEBRID_REFERRAL_URL,
+	realDebridReferralUrl,
 	TORBOX_REFERRAL_URL,
 } from '@/utils/referrals';
 import Head from 'next/head';
@@ -108,7 +108,7 @@ export default function StartPage() {
 					</button>
 					<a
 						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
-						href={REAL_DEBRID_REFERRAL_URL}
+						href={realDebridReferralUrl()}
 						target="_blank"
 						rel="noopener noreferrer"
 					>

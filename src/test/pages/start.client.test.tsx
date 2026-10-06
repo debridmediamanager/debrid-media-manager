@@ -9,6 +9,7 @@ import {
 } from '@/hooks/auth';
 import StartPage from '@/pages/start';
 import { GUEST_MODE_KEY, isGuestMode } from '@/utils/guestMode';
+import { REAL_DEBRID_REFERRAL_IDS } from '@/utils/referrals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
@@ -260,7 +261,10 @@ describe('StartPage', () => {
 		const rdLink = screen.getByText('Create an account with RealDebrid');
 		expect(rdLink).toHaveAttribute('target', '_blank');
 		expect(rdLink).toHaveAttribute('rel', 'noopener noreferrer');
-		expect(rdLink).toHaveAttribute('href', 'http://real-debrid.com/?id=20474106');
+		const rdHref = rdLink.getAttribute('href') ?? '';
+		const rdMatch = /^http:\/\/real-debrid\.com\/\?id=(\d+)$/.exec(rdHref);
+		expect(rdMatch).not.toBeNull();
+		expect(REAL_DEBRID_REFERRAL_IDS).toContain(rdMatch![1]);
 
 		const adLink = screen.getByText('Create an account with AllDebrid');
 		expect(adLink).toHaveAttribute('target', '_blank');

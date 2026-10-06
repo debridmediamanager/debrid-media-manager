@@ -1,6 +1,6 @@
 import { RealDebridUser } from '@/hooks/auth';
 import Modal from '../components/modals/modal';
-import { REAL_DEBRID_PREMIUM_REFERRAL_URL } from './referrals';
+import { realDebridPremiumReferralUrl } from './referrals';
 
 export async function checkPremiumStatus(rdUser: RealDebridUser) {
 	// Calculate days remaining either from premium seconds or expiration date
@@ -19,7 +19,7 @@ export async function checkPremiumStatus(rdUser: RealDebridUser) {
 		});
 
 		if (result.isConfirmed) {
-			window.open(REAL_DEBRID_PREMIUM_REFERRAL_URL, '_blank');
+			window.open(realDebridPremiumReferralUrl(), '_blank');
 		}
 		return { shouldLogout: true };
 	}
@@ -39,7 +39,7 @@ export async function checkPremiumStatus(rdUser: RealDebridUser) {
 			});
 
 			if (result.isConfirmed) {
-				window.open(REAL_DEBRID_PREMIUM_REFERRAL_URL, '_blank');
+				window.open(realDebridPremiumReferralUrl(), '_blank');
 			}
 			localStorage.setItem('rd_premium_warning', now.toString());
 		}

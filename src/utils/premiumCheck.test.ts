@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { REAL_DEBRID_REFERRAL_IDS } from './referrals';
 
 const modalFireMock = vi.fn();
 const openMock = vi.fn();
@@ -30,10 +31,12 @@ describe('checkPremiumStatus', () => {
 		expect(modalFireMock).toHaveBeenCalledWith(
 			expect.objectContaining({ title: 'Premium Required' })
 		);
-		expect(openMock).toHaveBeenCalledWith(
-			'https://real-debrid.com/premium?id=20474106',
-			'_blank'
-		);
+		expect(openMock).toHaveBeenCalledTimes(1);
+		const [premiumUrl, target] = openMock.mock.calls[0];
+		expect(target).toBe('_blank');
+		const premiumMatch = /^https:\/\/real-debrid\.com\/premium\?id=(\d+)$/.exec(premiumUrl);
+		expect(premiumMatch).not.toBeNull();
+		expect(REAL_DEBRID_REFERRAL_IDS).toContain(premiumMatch![1]);
 		expect(result).toEqual({ shouldLogout: true });
 	});
 
