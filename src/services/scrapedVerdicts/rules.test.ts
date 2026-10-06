@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './__fixtures__/labelled-filenames.json';
+import packSets from './__fixtures__/pack-sets-2026-10-06.json';
 import packWords from './__fixtures__/pack-words.json';
 import seriesKeeps from './__fixtures__/series-keeps.json';
 import substringKeeps from './__fixtures__/substring-keeps.json';
@@ -708,5 +709,100 @@ describe('another film of the series named by a title of the movie', () => {
 		'Terminator.2.Judgment.Day.Skynet.Edition.1991.Blu-ray.Remux.1080p.VC-1.DTS-HD.MA5.1-HDRemuX',
 	])('keeps a misspelt title and a named edition: %s', (filename) => {
 		expect(decide(t2, filename, 'FILM', 'DIFFERENT_TITLE')).toBe('keep');
+	});
+});
+
+type SetItem = {
+	imdbId: string;
+	filename: string;
+	media: Media;
+	titleMatch: TitleMatch;
+	humanLabel: 'PACK' | 'OTHER' | 'EITHER';
+};
+
+/**
+ * Card 229. A pack word kept a set on any page whose year it fitted, so a set
+ * named after another work that merely holds one of the movie's titles stayed:
+ * The Lord of the Rings Trilogy on Rings (2017), and every Twilight Saga sequel
+ * on Twilight (2008), where "Saga" read as a set. A set must now be named by a
+ * title of the movie or its series; one whose name holds no title of the movie
+ * is left as it was.
+ */
+describe('a set named after another work', () => {
+	const seriesPages = seriesKeeps.movies as Record<
+		string,
+		{ name: string; year: number; titles: string[] }
+	>;
+
+	it.each([
+		'The.Lord.of.the.Rings-The.Motion.Picture.Trilogy.720p.BluRay.HDCLUB',
+		'The Lord Of The Rings Trilogy [Hindi-DVDRip]',
+		'The Lord of the Rings Extended Trilogy DVDRIP VO',
+		'The Lord Of The Rings Trilogy Extended Version 1080p BluRay X264',
+		'The Lord of the Rings. Trilogy (Extended Edition)',
+		'The.Lord.Of.The.Rings.Trilogy.Special.Extended.Edition',
+	])('trashes it on Rings (2017): %s', (filename) => {
+		const item = (seriesKeeps.items as SeriesItem[]).find((i) => i.filename === filename)!;
+		expect(seriesPages[item.imdbId].name).toBe('Rings');
+		expect(item.humanLabel).toBe('OTHER');
+		expect(
+			decide(
+				{ imdbId: item.imdbId, ambiguous: {}, ...seriesPages[item.imdbId] },
+				filename,
+				item.media,
+				item.titleMatch
+			)
+		).toBe('trash');
+	});
+
+	const setPages = packSets.movies as Record<
+		string,
+		{ name: string; year: number; titles: string[] }
+	>;
+	const setItems = packSets.items as SetItem[];
+	const verdictOf = (item: SetItem) =>
+		decide(
+			{ imdbId: item.imdbId, ambiguous: {}, ...setPages[item.imdbId] },
+			item.filename,
+			item.media,
+			item.titleMatch
+		);
+	const trashed = setItems.filter((item) => verdictOf(item) === 'trash');
+
+	// A random draw of production keeps that carry a set word, labelled by hand.
+	// 138 of the 153 it trashes there are another work, against 14 sets of the
+	// movie - mostly lists ("Friday, Friday after Next, Next Friday") and names
+	// behind a site prefix - and one that could not be told.
+	it('trashes the other works and few sets of the movie on a production draw', () => {
+		expect(trashed.length).toBeGreaterThanOrEqual(140);
+		const other = trashed.filter((item) => item.humanLabel === 'OTHER').length;
+		expect(other / trashed.length).toBeGreaterThanOrEqual(0.88);
+	});
+
+	it.each([
+		'2011.12.04.Mission.Impossible.Trilogy.1996-2006.BluRay.1080p.x264.DTS.AC3.DualAudio-MySilu',
+		"Marvel's Iron Man Trilogy 10bit multi-deg",
+		'The Ultimate Mad Max Trilogy',
+		'The Essential Hannibal Collection',
+		'Disney The Santa Clause Trilogy Pack SAL714',
+		'Kolekcja Filmów Resident Evil 2002-2021 [10Bit] [1080p.BluRay.H265.AC3.5.1-NitroTeam] [Napisy ENG-PL] [ENG]',
+		'La Saga Crepusculo completa [DVDR.ISO][Eng Spa]',
+		'La Saga Rambo FRENCH DVDRIP',
+		'Movies: The Lion King 1 2 3 (Dubbed) PT-PT',
+	])('keeps a set of the movie that names it after a qualifier or a set word: %s', (filename) => {
+		const item = setItems.find((i) => i.filename.startsWith(filename.slice(0, 60)))!;
+		expect(item.humanLabel).toBe('PACK');
+		expect(verdictOf(item)).toBe('keep');
+	});
+
+	it.each([
+		'The Twilight Saga New Moon',
+		'A Saga Crepusculo Amanhecer Parte 2 BDRip XviD Dual Audio-3LT0N',
+		'Spider.Man.Trilogy.HUN.BRRip.Xvid-LaWLeSS',
+		'[Cleo] Psycho-Pass: Sinners of the System [Movie Pack][10bit BD1080p][HEVC-x265]',
+	])('trashes another work named around a title of the movie: %s', (filename) => {
+		const item = setItems.find((i) => i.filename.includes(filename))!;
+		expect(item.humanLabel).toBe('OTHER');
+		expect(verdictOf(item)).toBe('trash');
 	});
 });

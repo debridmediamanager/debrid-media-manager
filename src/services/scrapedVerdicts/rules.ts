@@ -447,6 +447,97 @@ export function namesRelease(
 	return false;
 }
 
+/** Words a set puts before or after the title it is named by: "Trilogia Mad Max", "Saga completa El Padrino". */
+const SET_WORD =
+	/^(?:complete|completa|completo|complet|full|box|boxset|set|mega|ultimate|filmow|filmy)$/u;
+/** Words that make the title after them the end of a longer one: The Lord of the Rings. */
+const OF_WORD = /^(?:of|de|del|des|du|di|da|do|von|van)$/u;
+
+const isPackWord = (word: string) =>
+	PACK.test(word) || SERIES_PACK.test(word) || SET_WORD.test(word) || INSTALMENT.test(word);
+
+/** "Saga" is as often part of a title as a set: The Twilight Saga: New Moon. */
+const SAGA = /^sagas?$/;
+
+/** Whether only set words, numbers and edition words run from `from` to the end of the name. */
+function onlySetWordsFrom(words: Word[], from: number): boolean {
+	let m = from;
+	while (
+		m < words.length &&
+		!words[m].ends &&
+		(isPackWord(words[m].text) ||
+			NUMBER.test(words[m].text) ||
+			EDITION_WORD.test(words[m].text) ||
+			EDITION_NOUN.test(words[m].text))
+	)
+		m++;
+	return m >= words.length || words[m].ends;
+}
+
+/**
+ * Whether a set is named after the movie or its series, rather than after
+ * some other work whose title holds one of the movie's. A pack word used to
+ * keep any set on any page its years fitted: The Lord of the Rings Trilogy on
+ * Rings (2017), and every Twilight Saga sequel on Twilight (2008), where
+ * "Saga" read as a set. A set whose name carries no title of the movie at all
+ * is left as it was - "Christopher Nolan Collection", "Best Picture
+ * Nominees" - since nothing in the name says whether it holds the movie.
+ */
+function setNamedByMovie(filename: string, found: string[]): boolean {
+	if (found.length === 0) return true;
+	const words = releaseWords(filename);
+	for (const title of found) {
+		const needle = fold(title);
+		const forms = new Set([needle.trim(), needle.replace(LEADING_ARTICLE, ' ').trim()]);
+		for (const form of forms) {
+			if (!form) continue;
+			const run = form.split(' ');
+			for (let i = 0; i + run.length <= words.length; i++) {
+				if (!run.every((w, k) => words[i + k].text === w)) continue;
+				// The title begins a name, or only set words and an article come
+				// before it: "Trilogia Mad Max", "La Saga Completa Crepusculo". After
+				// a saga, nothing but set words may follow the title: "A Saga
+				// Crepusculo Amanhecer Parte 2" is one film of it.
+				let j = i;
+				let saga = false;
+				while (
+					j > 0 &&
+					!words[j].starts &&
+					(isPackWord(words[j - 1].text) ||
+						LEADING_ARTICLE.test(` ${words[j - 1].text} `))
+				) {
+					saga ||= SAGA.test(words[j - 1].text);
+					j--;
+				}
+				if (words[j].starts && (!saga || onlySetWordsFrom(words, i + run.length)))
+					return true;
+				// A qualifier then the title then the set word: "Marvel's Iron Man
+				// Trilogy", "The Essential Hannibal Collection" - unless the title
+				// ends a longer one, as Rings does The Lord of the Rings.
+				let before = i - 1;
+				if (before >= 0 && LEADING_ARTICLE.test(` ${words[before].text} `)) before--;
+				if (before >= 0 && OF_WORD.test(words[before].text)) continue;
+				let k = i + run.length;
+				while (
+					k < words.length &&
+					!words[k].ends &&
+					(NUMBER.test(words[k].text) ||
+						INSTALMENT.test(words[k].text) ||
+						EDITION_WORD.test(words[k].text) ||
+						EDITION_NOUN.test(words[k].text))
+				)
+					k++;
+				if (k >= words.length || words[k].ends || !isPackWord(words[k].text)) continue;
+				// After a saga only set words may follow ("The Twilight Saga New Moon"
+				// is one film of it); after a trilogy anything may ("National Treasure
+				// Duology 400MB").
+				if (!SAGA.test(words[k].text) || onlySetWordsFrom(words, k + 1)) return true;
+			}
+		}
+	}
+	return false;
+}
+
 /**
  * Combines the code rules with Jev's two answers. Order matters: every early
  * return is a rule that code judges better than the model does.
@@ -477,7 +568,8 @@ export function decide(
 	const pack =
 		packWordIn(filename, PACK, movie.titles) ||
 		(titleMatch !== 'NO_TITLE' && packWordIn(filename, SERIES_PACK, movie.titles));
-	if (pack && filmLike) {
+	// A set named after another work is judged below like any other release.
+	if (pack && filmLike && setNamedByMovie(filename, found)) {
 		const range = YEAR_RANGE.exec(filename);
 		if (range) {
 			return Number(range[1]) <= movie.year && movie.year <= Number(range[2])
