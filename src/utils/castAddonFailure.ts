@@ -8,6 +8,11 @@
  *   itself - premium ran out, the account is locked or banned, or the plan
  *   has no API access. Signing in again changes nothing; the member has to
  *   sort it out on the provider's own site.
+ * - `confirm`: the provider holds the sign-in until its owner confirms it.
+ *   AllDebrid does this the first time a key is used from an address it has
+ *   not seen for the account, which for every addon request is DMM's server,
+ *   and emails the owner a link to confirm. Nothing on DMM's side clears it,
+ *   and neither does waiting.
  * - `gone`: the provider answered, and the item is not in the account.
  * - `unplayable`: the item is there but has nothing a client can stream.
  * - `unavailable`: the provider did not answer usefully - a reset connection,
@@ -18,6 +23,7 @@ export type CastFailure =
 	| 'not-connected'
 	| 'credential'
 	| 'account'
+	| 'confirm'
 	| 'gone'
 	| 'unplayable'
 	| 'unavailable';
@@ -34,8 +40,8 @@ const CREDENTIAL_CODES = new Set([
 	'NOAUTH',
 	// Debrid-Link
 	'badToken',
-	// AllDebrid. AUTH_BLOCKED is deliberately absent: it refuses DMM's server
-	// address, which no amount of signing in on the member's side changes.
+	// AllDebrid. AUTH_BLOCKED is deliberately absent: signing in again on DMM
+	// mints a key AllDebrid holds the same way. It is `confirm`.
 	'AUTH_BAD_APIKEY',
 	'AUTH_MISSING_APIKEY',
 ]);
@@ -139,6 +145,9 @@ export function classifyCastError(error: unknown): CastFailure {
 
 	if (name === 'RdTokenExpiredError') return 'credential';
 	if (name === 'CastItemGoneError') return 'gone';
+	// AllDebrid holding the key for an email confirmation. Read as a temporary
+	// failure, it gave the member an empty library and no reason.
+	if (code === 'AUTH_BLOCKED') return 'confirm';
 	if (typeof code === 'string' && CREDENTIAL_CODES.has(code)) return 'credential';
 	if (typeof code === 'string' && ACCOUNT_CODES.has(code)) return 'account';
 	if (typeof name === 'string' && PROSE_ERRORS.has(name) && typeof message === 'string') {
@@ -168,12 +177,8 @@ export function classifyCastError(error: unknown): CastFailure {
  *
  * - `network`: Real-Debrid will not make a link for the player's address.
  * - `refused`: the provider will not serve this one file.
- * - `confirm`: the provider holds the sign-in until its owner confirms it.
- *   AllDebrid does this the first time a key is used from an address it has
- *   not seen for the account, which for a play is DMM's server, and emails
- *   the owner a link to confirm.
  */
-export type CastPlayFailure = CastFailure | 'network' | 'refused' | 'confirm';
+export type CastPlayFailure = CastFailure | 'network' | 'refused';
 
 type ProviderErrorShape = ErrorShape & {
 	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };

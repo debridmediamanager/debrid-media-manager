@@ -87,16 +87,22 @@ const setupUrl = (provider: CastProvider) =>
 	`${process.env.DMM_ORIGIN || 'https://debridmediamanager.com'}${PROVIDERS[provider].page}`;
 
 /** The failures a member can fix, and therefore the ones worth a notice. */
-type NoticeFailure = Extract<CastFailure, 'not-connected' | 'credential' | 'account'>;
+type NoticeFailure = Extract<CastFailure, 'not-connected' | 'credential' | 'account' | 'confirm'>;
 
-const NOTICE_FAILURES: readonly string[] = ['not-connected', 'credential', 'account'];
+const NOTICE_FAILURES: readonly string[] = ['not-connected', 'credential', 'account', 'confirm'];
 
 const isNoticeFailure = (failure: string): failure is NoticeFailure =>
 	NOTICE_FAILURES.includes(failure);
 
-/** The page a notice opens: the provider's site for its own refusal, else DMM. */
+/**
+ * The page a notice opens: the provider's site for its own refusal, else DMM.
+ * A held sign-in is cleared only by the link in the provider's email, which
+ * DMM never sees, so its notice opens the account the email was sent for.
+ */
+const onProviderSite = (failure: NoticeFailure) => failure === 'account' || failure === 'confirm';
+
 const noticeUrl = (provider: CastProvider, failure: NoticeFailure) =>
-	failure === 'account' ? PROVIDERS[provider].account : setupUrl(provider);
+	onProviderSite(failure) ? PROVIDERS[provider].account : setupUrl(provider);
 
 const noticeText = (provider: CastProvider, failure: NoticeFailure) => {
 	const { name } = PROVIDERS[provider];
@@ -105,6 +111,12 @@ const noticeText = (provider: CastProvider, failure: NoticeFailure) => {
 		return {
 			title: `${name} refused your account`,
 			description: `${name} accepts this addon's sign-in but will not serve the account behind it. The premium plan may have run out or the account may be locked. Check your account at ${PROVIDERS[provider].account}. Nothing needs to change on Debrid Media Manager. This addon works again as soon as the account does.`,
+		};
+	}
+	if (failure === 'confirm') {
+		return {
+			title: `Confirm the new ${name} sign-in`,
+			description: `${name} holds this addon's requests until you confirm a new sign-in. It emailed the address on your ${name} account when DMM Cast's server first used your key. Open that email and confirm the sign-in, then come back here. Nothing needs to change on Debrid Media Manager, and there is nothing to reinstall.`,
 		};
 	}
 	if (failure === 'credential') {
@@ -158,10 +170,9 @@ const noticeMeta = (provider: CastProvider, failure: NoticeFailure, id?: string)
 				streams: [
 					{
 						name: 'DMM Cast',
-						title:
-							failure === 'account'
-								? `Open your ${PROVIDERS[provider].name} account`
-								: `Open ${PROVIDERS[provider].name} setup on Debrid Media Manager`,
+						title: onProviderSite(failure)
+							? `Open your ${PROVIDERS[provider].name} account`
+							: `Open ${PROVIDERS[provider].name} setup on Debrid Media Manager`,
 						externalUrl: noticeUrl(provider, failure),
 					},
 				],

@@ -485,6 +485,46 @@ describe('AllDebrid', () => {
 		]);
 	});
 
+	// Card 229. AllDebrid holds a key used from an address it has not seen for
+	// the account until the owner confirms the email it sent, and DMM's server
+	// is such an address. dmm-01 logged magnet, user and unlock calls refused
+	// this way on 2026-10-04; the catalog read that as an outage and answered an
+	// empty library, telling the member nothing.
+	const adAuthBlocked: Reply = playRecorded.responses['ad-unlock-auth-blocked'];
+
+	it('answers a sign-in AllDebrid holds for confirmation with a confirm-the-email tile', async () => {
+		db.getAllDebridCastProfile.mockResolvedValue({ apiKey: 'KEY' } as any);
+		on('POST', /api\.alldebrid\.com\/v4\.1\/magnet\/status/, adAuthBlocked);
+
+		const res = await call(adCatalog, { userid: 'aduser000003' });
+		expect(net.calls).toEqual([expect.stringContaining('/v4.1/magnet/status')]);
+
+		expect(res._getStatusCode()).toBe(200);
+		expect(noticeOf(res)).toEqual([
+			expect.objectContaining({
+				id: 'dmm-ad:notice:confirm',
+				name: expect.stringContaining('Confirm'),
+				description: expect.stringContaining('email'),
+			}),
+		]);
+		expect(res._getHeaders()['Cache-Control']).toBe('max-age=300');
+	});
+
+	it('answers a library meta under a held sign-in with the same notice', async () => {
+		db.getAllDebridCastProfile.mockResolvedValue({ apiKey: 'KEY' } as any);
+		on('POST', /api\.alldebrid\.com\/v4\.1\/magnet\/files/, adAuthBlocked);
+
+		const res = await call(adMeta, { userid: 'aduser000004', id: 'dmm-ad:123456.json' });
+
+		expect(res._getStatusCode()).toBe(200);
+		const meta = (res._getData() as any).meta;
+		expect(meta).toMatchObject({
+			id: 'dmm-ad:123456',
+			name: expect.stringContaining('Confirm'),
+		});
+		expect(meta.videos[0].streams[0].externalUrl).toBe('https://alldebrid.com/account/');
+	});
+
 	it('answers a magnet the account no longer holds with a 404', async () => {
 		db.getAllDebridCastProfile.mockResolvedValue({ apiKey: 'KEY' } as any);
 		on(
@@ -508,6 +548,7 @@ describe.each([
 	['dmm-tb:notice:account', tbMeta, 'https://torbox.app/settings'],
 	['dmm:notice:credential', rdMeta, '/stremio'],
 	['dmm-ad:notice:credential', adMeta, '/stremio-alldebrid'],
+	['dmm-ad:notice:confirm', adMeta, 'https://alldebrid.com/account/'],
 	['dmm-tb:notice:credential', tbMeta, '/stremio-torbox'],
 	['dmm-pm:notice:credential', pmMeta, '/stremio-premiumize'],
 	['dmm-oc:notice:not-connected', ocMeta, '/stremio-offcloud'],
