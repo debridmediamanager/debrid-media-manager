@@ -9,10 +9,13 @@ import {
 	tvmazeReleaseSignals,
 	type ReleaseSignals,
 } from '@/utils/metadataFreshness';
+import { redactUrl, scrubRequestError } from '@/utils/requestRedaction';
 import { getTmdbAuth, tmdbRequestConfig, tmdbUrl, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios, { AxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import { getMdblistCacheService } from './database/mdblistCache';
+
+export { redactUrl };
 
 /**
  * A fixed lifetime, or one derived from the row already in the cache — which is
@@ -23,56 +26,6 @@ export type MaxAge = number | ((cached: unknown) => number);
 
 const resolveMaxAge = (maxAge: MaxAge, cached: unknown): number =>
 	typeof maxAge === 'function' ? maxAge(cached) : maxAge;
-
-/** OMDb's `apikey` and TMDB's v3 `api_key`: the credentials this service puts in a URL. */
-const CREDENTIAL_PARAM = /([?&](?:apikey|api_key)=)[^&#\s]*/gi;
-
-/**
- * A request URL fit for a log line. Every fetch is logged, and production wrote
- * DMM's OMDb and TMDB keys into its container logs that way.
- */
-export function redactUrl(url: string): string {
-	return url.replace(CREDENTIAL_PARAM, '$1REDACTED');
-}
-
-function scrubConfig(config: unknown): void {
-	if (!config || typeof config !== 'object') return;
-	const record = config as { url?: unknown; params?: unknown; headers?: unknown };
-	if (typeof record.url === 'string') record.url = redactUrl(record.url);
-	if (record.params && typeof record.params === 'object') {
-		const params = record.params as Record<string, unknown>;
-		for (const key of Object.keys(params)) {
-			if (/^api_?key$/i.test(key)) params[key] = 'REDACTED';
-		}
-	}
-	if (record.headers && typeof record.headers === 'object') {
-		const headers = record.headers as Record<string, unknown>;
-		for (const key of Object.keys(headers)) {
-			if (/^authorization$/i.test(key)) headers[key] = 'REDACTED';
-		}
-	}
-}
-
-/**
- * Takes the credentials out of a failed request's error, in place.
- *
- * An Axios error repeats the URL in `config.url` and in the path and raw header
- * of `request` (which `response.request` shares), and a bearer token in
- * `config.headers`. Callers log these errors whole — `settle`, `getOmdbMetadata`
- * and the info routes all do — so each copy is scrubbed and the request objects
- * dropped. The error keeps its class and `response`, which callers branch on.
- */
-function scrubRequestError(error: unknown): void {
-	if (!error || typeof error !== 'object') return;
-	const record = error as { config?: unknown; request?: unknown; response?: unknown };
-	scrubConfig(record.config);
-	if ('request' in record) record.request = undefined;
-	if (record.response && typeof record.response === 'object') {
-		const response = record.response as { config?: unknown; request?: unknown };
-		scrubConfig(response.config);
-		if ('request' in response) response.request = undefined;
-	}
-}
 
 export class MetadataCacheService {
 	private cache = getMdblistCacheService();

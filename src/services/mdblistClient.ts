@@ -1,4 +1,5 @@
 import { mdblistReleaseSignals, metadataMaxAge } from '@/utils/metadataFreshness';
+import { scrubRequestError } from '@/utils/requestRedaction';
 import axios from 'axios';
 import { getMdblistCacheService } from './database/mdblistCache';
 import { MList, MMovie, MSearchResponse, MShow } from './mdblist';
@@ -44,6 +45,22 @@ export class MDBListClient {
 	}
 
 	/**
+	 * Every request goes through here. The key rides in the query string, and a
+	 * failed request's Axios error repeats the URL in `config.url` and in the raw
+	 * request line. mdblist answers a bad key or a rate limit with a 503, which
+	 * axios throws, so the error is scrubbed before anything can log it: the
+	 * stale-cache fallbacks below log it, and callers log what is rethrown.
+	 */
+	private async get(url: URL): Promise<any> {
+		try {
+			return (await axios.get(url.toString())).data;
+		} catch (error) {
+			scrubRequestError(error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Search for movies and shows by keyword
 	 */
 	async search(keyword: string, year?: number, mediaType?: string): Promise<MSearchResponse> {
@@ -69,7 +86,7 @@ export class MDBListClient {
 			url.searchParams.append('m', mediaType);
 		}
 
-		const response = (await axios.get(url.toString())).data;
+		const response = await this.get(url);
 
 		// Cache the response
 		await this.cache.cacheSearch(cacheKey, response);
@@ -111,7 +128,7 @@ export class MDBListClient {
 
 		let response;
 		try {
-			response = (await axios.get(url.toString())).data;
+			response = await this.get(url);
 		} catch (error) {
 			// An expired row is still better than none — callers render a failed
 			// lookup as "Unknown", which is a worse page than slightly old metadata.
@@ -174,7 +191,7 @@ export class MDBListClient {
 
 		let response;
 		try {
-			response = (await axios.get(url.toString())).data;
+			response = await this.get(url);
 		} catch (error) {
 			if (cached) {
 				console.error(
@@ -238,7 +255,7 @@ export class MDBListClient {
 
 		let response;
 		try {
-			response = (await axios.get(url.toString())).data;
+			response = await this.get(url);
 		} catch (error) {
 			if (cached) {
 				console.error(
@@ -295,7 +312,7 @@ export class MDBListClient {
 
 		let response;
 		try {
-			response = (await axios.get(url.toString())).data;
+			response = await this.get(url);
 		} catch (error) {
 			if (cached) {
 				console.error(
@@ -332,7 +349,7 @@ export class MDBListClient {
 
 		let response;
 		try {
-			response = (await axios.get(url.toString())).data;
+			response = await this.get(url);
 		} catch (error) {
 			if (cached) {
 				console.error(`[MDBList] Refetch failed for list ${listId}, serving stale`, error);
@@ -364,7 +381,7 @@ export class MDBListClient {
 		const url = new URL(`${this.baseUrl}/lists/top`);
 		url.searchParams.append('apikey', this.apiKey);
 
-		const response = (await axios.get(url.toString())).data;
+		const response = await this.get(url);
 
 		// Cache the response
 		await this.cache.cacheList(cacheKey, response);
