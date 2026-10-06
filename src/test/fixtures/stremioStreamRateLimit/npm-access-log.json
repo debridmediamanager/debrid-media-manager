@@ -1,0 +1,140 @@
+{
+	"expectations": "`expect` lists, for each /stream/ line in order, what the decided policy does with it: one request per 5 s per userid and requested item. Play lines are context only; the play route is not rate limited.",
+	"sequences": [
+		{
+			"name": "rd-prefetch-stremio-desktop",
+			"provider": "Real-Debrid",
+			"note": "Stremio desktop: list for 24x3, playback starts in libmpv a second later, and the next-episode prefetch for 24x4 follows two seconds after the list. Recorded 429.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[30/Sep/2026:19:21:26 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio/anonviewer01/stream/series/tt0437005%3A24%3A3.json\" [Client 203.0.113.1] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0\" \"https://web.stremio.com/\"",
+				"[30/Sep/2026:19:21:27 +0000] - 307 307 - GET https debridmediamanager.com \"/api/stremio/anonviewer01/play/REDACTED\" [Client 203.0.113.1] [Length 168] [Gzip -] [Sent-to 172.17.0.1] \"libmpv\" \"-\"",
+				"[30/Sep/2026:19:21:28 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio/anonviewer01/stream/series/tt0437005%3A24%3A4.json\" [Client 203.0.113.1] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0\" \"https://web.stremio.com/\""
+			]
+		},
+		{
+			"name": "rd-prefetch-stremio-android",
+			"provider": "Real-Debrid",
+			"note": "Stremio for Android: list for 1x7, three play redirects while the player opens, next-episode prefetch for 1x8 four seconds after the list. Recorded 429.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[06/Oct/2026:12:49:02 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio/anonviewer02/stream/series/tt19231492%3A1%3A7.json\" [Client 203.0.113.2] [Length 1791] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[06/Oct/2026:12:49:03 +0000] - 307 307 - GET https debridmediamanager.com \"/api/stremio/anonviewer02/play/REDACTED\" [Client 203.0.113.2] [Length 80] [Gzip -] [Sent-to 172.17.0.1] \"Dalvik/2.1.0 (Linux; U; Android 13; RMX3370 Build/TP1A.220905.001)\" \"-\"",
+				"[06/Oct/2026:12:49:03 +0000] - 307 307 - GET https debridmediamanager.com \"/api/stremio/anonviewer02/play/REDACTED\" [Client 203.0.113.2] [Length 80] [Gzip -] [Sent-to 172.17.0.1] \"Dalvik/2.1.0 (Linux; U; Android 13; RMX3370 Build/TP1A.220905.001)\" \"-\"",
+				"[06/Oct/2026:12:49:05 +0000] - 307 307 - GET https debridmediamanager.com \"/api/stremio/anonviewer02/play/REDACTED\" [Client 203.0.113.2] [Length 80] [Gzip -] [Sent-to 172.17.0.1] \"Dalvik/2.1.0 (Linux; U; Android 13; RMX3370 Build/TP1A.220905.001)\" \"-\"",
+				"[06/Oct/2026:12:49:06 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio/anonviewer02/stream/series/tt19231492%3A1%3A8.json\" [Client 203.0.113.2] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "tb-prefetch",
+			"provider": "TorBox",
+			"note": "Next episode asked three seconds after the current one. Recorded 429.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[28/Sep/2026:05:19:59 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-tb/anonviewer03/stream/series/tt0096697%3A5%3A11.json\" [Client 203.0.113.3] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[28/Sep/2026:05:20:02 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio-tb/anonviewer03/stream/series/tt0096697%3A5%3A12.json\" [Client 203.0.113.3] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "ad-prefetch",
+			"provider": "AllDebrid",
+			"note": "Next episode asked in the same second as the current one. Recorded 429.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[27/Sep/2026:19:09:17 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-ad/anonviewer04/stream/series/tt13207736%3A4%3A2.json\" [Client 203.0.113.4] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[27/Sep/2026:19:09:17 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio-ad/anonviewer04/stream/series/tt13207736%3A4%3A3.json\" [Client 203.0.113.4] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "pm-next-episode",
+			"provider": "Premiumize",
+			"note": "Next episode four seconds later. Served: this route was never on the stream budget.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[27/Sep/2026:19:33:30 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-pm/anonviewer05/stream/series/tt6151526%3A1%3A2.json\" [Client 203.0.113.5] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[27/Sep/2026:19:33:34 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-pm/anonviewer05/stream/series/tt6151526%3A1%3A3.json\" [Client 203.0.113.5] [Length 1674] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "oc-next-episode",
+			"provider": "Offcloud",
+			"note": "Next episode one second later. Served: this route was never on the stream budget.",
+			"expect": ["served", "served"],
+			"lines": [
+				"[28/Sep/2026:22:02:09 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-oc/anonviewer06/stream/series/tt37063558%3A2%3A1.json\" [Client 203.0.113.6] [Length 1627] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[28/Sep/2026:22:02:10 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-oc/anonviewer06/stream/series/tt37063558%3A2%3A2.json\" [Client 203.0.113.6] [Length 1778] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "rd-same-episode",
+			"provider": "Real-Debrid",
+			"note": "The same episode asked again one second later. Recorded 429, and must stay refused.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[27/Sep/2026:22:45:54 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio/anonviewer07/stream/series/tt1442437%3A4%3A5.json\" [Client 203.0.113.7] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[27/Sep/2026:22:45:55 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio/anonviewer07/stream/series/tt1442437%3A4%3A5.json\" [Client 203.0.113.7] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "tb-same-episode",
+			"provider": "TorBox",
+			"note": "The same episode asked again three seconds later. Recorded 429, and must stay refused.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[28/Sep/2026:03:54:58 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-tb/anonviewer08/stream/series/tt0455275%3A1%3A20.json\" [Client 203.0.113.8] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[28/Sep/2026:03:55:01 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio-tb/anonviewer08/stream/series/tt0455275%3A1%3A20.json\" [Client 203.0.113.8] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "ad-same-episode",
+			"provider": "AllDebrid",
+			"note": "The same episode asked again four seconds later from web.stremio.com. Recorded 429, and must stay refused.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[28/Sep/2026:13:44:45 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-ad/anonviewer09/stream/series/tt26545992%3A1%3A7.json\" [Client 203.0.113.9] [Length 455] [Gzip -] [Sent-to 172.17.0.1] \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0\" \"https://web.stremio.com/\"",
+				"[28/Sep/2026:13:44:49 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio-ad/anonviewer09/stream/series/tt26545992%3A1%3A7.json\" [Client 203.0.113.9] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0\" \"https://web.stremio.com/\""
+			]
+		},
+		{
+			"name": "pm-same-episode",
+			"provider": "Premiumize",
+			"note": "The same episode asked twice in one second. Recorded 200 twice because Premiumize fell through to the 5-per-second default keyed on the client address.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[03/Oct/2026:21:01:38 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-pm/anonviewer10/stream/series/tt36064406%3A1%3A2.json\" [Client 203.0.113.10] [Length 1652] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[03/Oct/2026:21:01:38 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-pm/anonviewer10/stream/series/tt36064406%3A1%3A2.json\" [Client 203.0.113.10] [Length 1652] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "oc-same-episode",
+			"provider": "Offcloud",
+			"note": "The same episode asked again three seconds later. Recorded 200 twice, on the default budget.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[28/Sep/2026:22:05:07 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-oc/anonviewer11/stream/series/tt0088509%3A1%3A1.json\" [Client 203.0.113.11] [Length 673] [Gzip -] [Sent-to 172.17.0.1] \"okhttp/5.3.2\" \"-\"",
+				"[28/Sep/2026:22:05:10 +0000] - 200 200 - GET https debridmediamanager.com \"/api/stremio-oc/anonviewer11/stream/series/tt0088509%3A1%3A1.json\" [Client 203.0.113.11] [Length 673] [Gzip -] [Sent-to 172.17.0.1] \"okhttp/5.3.2\" \"-\""
+			]
+		},
+		{
+			"name": "dl-same-episode",
+			"provider": "Debrid-Link",
+			"note": "The same episode asked again two seconds later. Recorded 304 twice, on the default budget.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[02/Oct/2026:13:55:41 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-dl/anonviewer12/stream/series/tt26545992%3A1%3A3.json\" [Client 203.0.113.12] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\"",
+				"[02/Oct/2026:13:55:43 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio-dl/anonviewer12/stream/series/tt26545992%3A1%3A3.json\" [Client 203.0.113.12] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"-\" \"-\""
+			]
+		},
+		{
+			"name": "rd-same-episode-two-spellings",
+			"provider": "Real-Debrid",
+			"note": "One episode in the same second under two spellings: a raw colon from a browser and %3A from a node client. Recorded 429; one episode is one budget however it is spelled.",
+			"expect": ["served", "refused"],
+			"lines": [
+				"[27/Sep/2026:20:03:09 +0000] - 304 304 - GET https debridmediamanager.com \"/api/stremio/anonviewer13/stream/series/tt8634332:4:1.json\" [Client 203.0.113.13] [Length 0] [Gzip -] [Sent-to 172.17.0.1] \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36\" \"-\"",
+				"[27/Sep/2026:20:03:09 +0000] - 429 429 - GET https debridmediamanager.com \"/api/stremio/anonviewer13/stream/series/tt8634332%3A4%3A1.json\" [Client 203.0.113.13] [Length 31] [Gzip -] [Sent-to 172.17.0.1] \"node\" \"-\""
+			]
+		}
+	],
+	"source": "Nginx Proxy Manager access log for debridmediamanager.com on dmm-01 (proxy-host-3_access.log), 2026-09-27 to 2026-10-06. Lines are as recorded except that each userid is replaced by a placeholder, the client address by a documentation address (RFC 5737) and Real-Debrid play ids by REDACTED."
+}

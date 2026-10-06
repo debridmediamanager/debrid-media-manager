@@ -41,12 +41,51 @@ export function rateLimitBucket(config: RateLimitConfig): string {
 	return config.name ?? `${config.rateLimit}p${config.windowSeconds}`;
 }
 
+// Every DMM Cast addon's path prefix; Real-Debrid's has no suffix. The
+// Premiumize, Offcloud and Debrid-Link stream routes wrapped the limiter from the
+// start but were missing here, so they ran on `default` keyed on the client
+// address instead of the stream budget.
+const CAST_ADDON = String.raw`^\/api\/stremio(?:-(?:tb|ad|pm|dl|oc))?\/`;
+const CAST_STREAM_PATH = new RegExp(`${CAST_ADDON}[A-Za-z0-9]+\\/stream\\/`);
+const CAST_USERID = new RegExp(`${CAST_ADDON}([A-Za-z0-9]{10,})`);
+const CAST_STREAM_ITEM = new RegExp(`${CAST_ADDON}[A-Za-z0-9]{10,}\\/stream\\/[^/]+\\/([^/]+)$`);
+
+// Longer than any real item id (`kitsu:12345:678`, `tt12345678:12:345`); only
+// keeps a junk path segment from becoming a junk-sized limiter key.
+const MAX_STREAM_ITEM_KEY = 64;
+
+/**
+ * The item a stream request asks for, spelled one way however it arrived.
+ *
+ * Clients send the same episode as `tt0437005%3A24%3A4.json` and as
+ * `tt0437005:24:4.json`, and nothing stops `TT0437005:024:04.json`. Each spelling
+ * would otherwise be a fresh budget for the same work, so decoding, the `.json`
+ * suffix, case and leading zeros are all folded away. Folding can only merge two
+ * spellings into one budget, never split one item into two. The media type is
+ * left out on purpose for the same reason.
+ */
+export function streamItemKey(segment: string): string {
+	let id = segment;
+	try {
+		id = decodeURIComponent(segment);
+	} catch {
+		// A malformed escape is its own spelling; keep it as sent.
+	}
+	return id
+		.trim()
+		.replace(/\.json$/i, '')
+		.trim()
+		.toLowerCase()
+		.replace(/\d+/g, (digits) => digits.replace(/^0+(?=\d)/, ''))
+		.slice(0, MAX_STREAM_ITEM_KEY);
+}
+
 /**
  * Determine which rate limit config to use based on the path
  */
 export function getRateLimitConfig(pathname: string): RateLimitConfig {
-	// Stream endpoints: /api/stremio[-tb|-ad]/USERID/stream/...
-	if (/^\/api\/stremio(?:-tb|-ad)?\/[A-Za-z0-9]+\/stream\//.test(pathname)) {
+	// Stream endpoints: /api/stremio[-tb|-ad|-pm|-dl|-oc]/USERID/stream/...
+	if (CAST_STREAM_PATH.test(pathname)) {
 		return RATE_LIMIT_CONFIGS.stream;
 	}
 	// Torrents API endpoints
@@ -279,8 +318,10 @@ export function getClientIp(
 
 /**
  * Extract identifier for rate limiting
- * - For Stremio endpoints: use user ID from path, fallback to IP
+ * - For DMM Cast stream endpoints: the user ID and the requested item
+ * - For other DMM Cast endpoints: the user ID from the path
  * - For Torrents endpoints: always use IP
+ * - Anything else falls back to the IP
  */
 export function extractIdentifier(
 	pathname: string,
@@ -294,10 +335,15 @@ export function extractIdentifier(
 	}
 
 	// For Stremio API, try to extract user ID from path
-	const match = pathname.match(/^\/api\/stremio(?:-tb|-ad)?\/([A-Za-z0-9]{10,})/);
-	const userId = match?.[1];
+	const userId = pathname.match(CAST_USERID)?.[1];
 	if (userId) {
-		return userId;
+		// The stream budget is per item, not per viewer. When playback starts,
+		// Stremio asks for the next episode's streams so it can autoplay into
+		// it; keyed on the viewer alone, that ask was refused whenever play was
+		// pressed within the window of opening the list, and autoplay with it.
+		// Asking for the same item again inside the window is still refused.
+		const item = pathname.match(CAST_STREAM_ITEM)?.[1];
+		return item === undefined ? userId : `${userId}:${streamItemKey(item)}`;
 	}
 
 	// Fallback to IP

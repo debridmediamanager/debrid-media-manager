@@ -1,8 +1,16 @@
+import fixture from '@/test/fixtures/stremioStreamRateLimit/npm-access-log.json';
+import { castStreamRequest, parseNpmAccessLine } from '@/test/utils/npmAccessLog';
 import Redis from 'ioredis';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { HybridRateLimiter, RATE_LIMIT_CONFIGS, RedisRateLimiter } from './middlewareRateLimiter';
+import {
+	extractIdentifier,
+	getRateLimitConfig,
+	HybridRateLimiter,
+	RATE_LIMIT_CONFIGS,
+	RedisRateLimiter,
+} from './middlewareRateLimiter';
 
 let dockerAvailable = false;
 try {
@@ -335,5 +343,33 @@ describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => 
 
 			await limiter.disconnect();
 		});
+	});
+
+	// Card 203 on the backend production runs: the sliding window that also
+	// counts refusals. Same recordings as src/test/api/stremioStreamRateLimit.test.ts.
+	describe('DMM Cast stream budget, replayed from the access log', () => {
+		it.each(fixture.sequences.map((s) => [s.name, s] as const))(
+			'%s',
+			async (_name, sequence) => {
+				const limiter = new RedisRateLimiter(redis);
+				vi.useFakeTimers({ toFake: ['Date'] });
+				try {
+					const outcomes: string[] = [];
+					for (const line of sequence.lines) {
+						const logged = parseNpmAccessLine(line);
+						if (!castStreamRequest(logged.path)) continue;
+						vi.setSystemTime(logged.at);
+						const { success } = await limiter.check(
+							extractIdentifier(logged.path, logged.clientIp, null, null),
+							getRateLimitConfig(logged.path)
+						);
+						outcomes.push(success ? 'served' : 'refused');
+					}
+					expect(outcomes).toEqual(sequence.expect);
+				} finally {
+					vi.useRealTimers();
+				}
+			}
+		);
 	});
 });

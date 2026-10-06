@@ -14,7 +14,14 @@
 // with default, so an /api/challenge call drained the budget /api/proxy/stream
 // was about to spend.
 export const RATE_LIMIT_CONFIGS = {
-	stream: { name: 'stream', rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
+	// The DMM Cast stream lists, per viewer *and requested item* (see
+	// extractIdentifier). Keyed on the viewer alone it refused Stremio's
+	// next-episode prefetch whenever play was pressed within five seconds of
+	// opening the list, which stops autoplay. Replaying 2026-09-27..10-06's proxy
+	// log, the per-item key serves 28,844 of the 73,415 Real-Debrid stream
+	// requests that were refused. The rest asked again for an item already asked
+	// for inside the window, most of them scripted clients retrying a refusal.
+	stream: { name: 'stream', rateLimit: 1, windowSeconds: 5 },
 	torrents: { name: 'torrents', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
 	// zurg posts a snapshot after each analysis pass and does not pace itself. Over
 	// 2026-09-07..10 one zurg averaged 13 a minute and another sent 82 inside two

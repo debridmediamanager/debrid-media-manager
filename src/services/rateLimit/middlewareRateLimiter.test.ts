@@ -8,6 +8,7 @@ import {
 	RATE_LIMIT_CONFIGS,
 	rateLimitBucket,
 	shouldRateLimit,
+	streamItemKey,
 } from './middlewareRateLimiter';
 
 describe('middlewareRateLimiter', () => {
@@ -335,6 +336,115 @@ describe('middlewareRateLimiter', () => {
 		});
 	});
 
+	// Card 203: the stream budget is per viewer and requested item, on every
+	// DMM Cast addon, so Stremio's next-episode prefetch is not refused.
+	describe('DMM Cast stream budget key', () => {
+		const prefixes = [
+			'stremio',
+			'stremio-tb',
+			'stremio-ad',
+			'stremio-pm',
+			'stremio-dl',
+			'stremio-oc',
+		];
+
+		it.each(prefixes)('puts /api/%s stream lists on the stream budget', (prefix) => {
+			expect(
+				getRateLimitConfig(
+					`/api/${prefix}/abcdef123456/stream/series/tt0437005%3A24%3A4.json`
+				)
+			).toBe(RATE_LIMIT_CONFIGS.stream);
+		});
+
+		it.each(prefixes)('keys /api/%s stream lists on the userid and the item', (prefix) => {
+			const key = (item: string) =>
+				extractIdentifier(
+					`/api/${prefix}/abcdef123456/stream/series/${item}`,
+					'198.51.100.1',
+					null,
+					null
+				);
+			expect(key('tt0437005%3A24%3A3.json')).toBe('abcdef123456:tt437005:24:3');
+			expect(key('tt0437005%3A24%3A4.json')).not.toBe(key('tt0437005%3A24%3A3.json'));
+		});
+
+		it.each(prefixes)('keeps the other /api/%s routes keyed on the userid alone', (prefix) => {
+			expect(
+				extractIdentifier(
+					`/api/${prefix}/abcdef123456/catalog/movie`,
+					'198.51.100.1',
+					null,
+					null
+				)
+			).toBe('abcdef123456');
+		});
+
+		it('is one budget per item across media types', () => {
+			expect(
+				extractIdentifier(
+					'/api/stremio/abcdef123456/stream/movie/tt1234567.json',
+					null,
+					null,
+					null
+				)
+			).toBe(
+				extractIdentifier(
+					'/api/stremio/abcdef123456/stream/series/tt1234567.json',
+					null,
+					null,
+					null
+				)
+			);
+		});
+
+		it('does not touch addon-looking paths that are not a DMM Cast addon', () => {
+			expect(
+				getRateLimitConfig('/api/stremio-versions/abcdef123456/stream/series/tt1.json')
+			).toBe(RATE_LIMIT_CONFIGS.default);
+			expect(
+				extractIdentifier(
+					'/api/stremio-versions/abcdef123456/stream/series/tt1.json',
+					'198.51.100.1',
+					null,
+					null
+				)
+			).toBe('198.51.100.1');
+		});
+	});
+
+	describe('streamItemKey', () => {
+		it.each([
+			'tt0437005%3A24%3A4.json',
+			'tt0437005:24:4.json',
+			'tt0437005%3a24%3a4.json',
+			'TT0437005:24:4.JSON',
+			'tt0437005:024:04.json',
+			'tt437005:24:4',
+			' tt0437005:24:4.json ',
+		])('spells %s as one item', (segment) => {
+			expect(streamItemKey(segment)).toBe('tt437005:24:4');
+		});
+
+		it('keeps different episodes and ids apart', () => {
+			expect(streamItemKey('tt0437005%3A24%3A4.json')).not.toBe(
+				streamItemKey('tt0437005%3A24%3A5.json')
+			);
+			expect(streamItemKey('tt0437005%3A2%3A44.json')).not.toBe(
+				streamItemKey('tt0437005%3A24%3A4.json')
+			);
+			expect(streamItemKey('kitsu%3A46474%3A5.json')).toBe('kitsu:46474:5');
+			expect(streamItemKey('tt0437005:10:0.json')).toBe('tt437005:10:0');
+		});
+
+		it('keeps a malformed escape as sent', () => {
+			expect(streamItemKey('tt1%E0%A4%A.json')).toBe('tt1%e0%a4%a');
+		});
+
+		it('caps a junk segment at a bounded key', () => {
+			expect(streamItemKey(`tt${'1'.repeat(5000)}.json`)).toHaveLength(64);
+		});
+	});
+
 	describe('Edge Cases', () => {
 		describe('extractIdentifier edge cases', () => {
 			it('should handle paths with special characters after user ID', () => {
@@ -345,7 +455,7 @@ describe('middlewareRateLimiter', () => {
 						null,
 						null
 					)
-				).toBe('abcdef123456');
+				).toBe('abcdef123456:tt:1234567');
 			});
 
 			it('should handle very long user IDs', () => {
