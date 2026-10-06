@@ -1,0 +1,110 @@
+{
+	"_about": [
+		"Pages dmm's own Debridio backfill wrote into production ScrapedTrue under an IMDb id of the other kind, read 2026-10-06 (read-only). Each page was last written within 0.3 s of its debridio:refresh marker, so a Debridio answer wrote it; torrents is the page as stored, which the tests serve back as that answer.",
+		"The tv: routes asked Debridio for season 1 of a film (Ma, Gone Girl) or of an episode id (Chernobyl's first episode, tt8162428), and the movie route for a film of a series (Cupertino). Debridio answered with another title's releases (All That, a 1936 Flash Gordon serial) or with releases that belong on the series page, and the backfill stored them under the key it was asked about.",
+		"titleType is imdb_title_basics.title_type for the id."
+	],
+	"pages": [
+		{
+			"key": "tv:tt7958736:1",
+			"kind": "series",
+			"imdbId": "tt7958736",
+			"season": 1,
+			"titleType": "movie",
+			"primaryTitle": "Ma",
+			"startYear": 2019,
+			"pageWritten": "2026-10-01 20:44:46.687",
+			"debridioMarker": "2026-10-01 20:44:46.713",
+			"torrents": [
+				{
+					"hash": "a47bcc4a147ecc3ba4c930caf04b9bbdae3e0eea",
+					"title": "All That 2019 S01E01 720p HDTV x264-CRiMSON",
+					"fileSize": 549.0230445861816
+				},
+				{
+					"hash": "6a244ced3a693bdc89fc3d43765fbc193cbce9b3",
+					"title": "All That 2019 S01E01 HDTV x264-CRiMSON",
+					"fileSize": 202.85
+				},
+				{
+					"hash": "9898f257485930fa7d23889fe60defc7f51bca64",
+					"title": "All That 2019 S01E01 HDTV x264-CRiMSON EZTV",
+					"fileSize": 202.6
+				},
+				{
+					"hash": "dfc4cf6efef1557b835fa18d081984f53c113a84",
+					"title": "All That 2019 S01E01 480p x264-mSD EZTV",
+					"fileSize": 142
+				}
+			]
+		},
+		{
+			"key": "tv:tt2267998:1",
+			"kind": "series",
+			"imdbId": "tt2267998",
+			"season": 1,
+			"titleType": "movie",
+			"primaryTitle": "Gone Girl",
+			"startYear": 2014,
+			"pageWritten": "2026-10-01 19:55:01.002",
+			"debridioMarker": "2026-10-01 19:55:01.103",
+			"torrents": [
+				{
+					"hash": "900cc432661e9a46a1ab3ef56caf6b3f32e593fc",
+					"title": "Flash Gordon - Spaceship to the Unknown The Movie (1936) S01e01-",
+					"fileSize": 3911.68
+				}
+			]
+		},
+		{
+			"key": "tv:tt8162428:1",
+			"kind": "series",
+			"imdbId": "tt8162428",
+			"season": 1,
+			"titleType": "tvEpisode",
+			"primaryTitle": "1:23:45",
+			"startYear": 2019,
+			"pageWritten": "2026-10-04 18:43:06.573",
+			"debridioMarker": "2026-10-04 18:43:06.594",
+			"torrents": [
+				{
+					"hash": "0655de9dda1df46353f57ce5004df54c74324d3d",
+					"title": "Chernobyl S01 COMPLETE Hybrid 1080p BluRay REMUX AVC DTS-HD MA 5.1-EPSiLON",
+					"fileSize": 67687.2532339096
+				},
+				{
+					"hash": "c5f1139ff672b8dd10068c5f83ed1ed6c531c590",
+					"title": "Chernobyl S01E01 iNTERNAL 1080p WEB H264-MEMENTO",
+					"fileSize": 4409.90793800354
+				},
+				{
+					"hash": "35b247a241e135b22e25fbe4af5a6a59081984d4",
+					"title": "Chernobyl S01E01 MULTi 1080p HDTV x264-HYBRiS",
+					"fileSize": 3234.346287727356
+				},
+				{
+					"hash": "7f6abb71f1f730ea0439bf046ace34ff54e69841",
+					"title": "Chernobyl S01E01 iNTERNAL 1080p WEB H264-EDHD",
+					"fileSize": 1510.964596748352
+				}
+			]
+		},
+		{
+			"key": "movie:tt33270224",
+			"kind": "movie",
+			"imdbId": "tt33270224",
+			"titleType": "tvSeries",
+			"primaryTitle": "Cupertino",
+			"startYear": 2026,
+			"pageWritten": "2026-10-04 00:51:31.405",
+			"debridioMarker": "2026-10-04 00:51:31.427",
+			"torrents": [
+				{
+					"hash": "90998a8c85f6a6d9744e502d19269ccc13992e2c",
+					"title": "Cupertino S01E01 1080p CBS WEB H264-KRAFT",
+					"fileSize": 1126.4
+				}
+			]
+		}
+	]
+}

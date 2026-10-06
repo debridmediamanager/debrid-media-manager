@@ -9,6 +9,7 @@ import {
 import { ScrapeSearchResult, flattenAndRemoveDuplicates } from '@/services/mediasearch';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository as db } from '@/services/repository';
+import { isMovieTitleType, isShowTitleType } from '@/utils/imdbTitleTypes';
 
 export type DebridioTarget = {
 	imdbId: string;
@@ -108,6 +109,40 @@ async function persist(target: DebridioTarget, scrapes: ProviderScrapes): Promis
 	}
 }
 
+/**
+ * Whether IMDb files the id as the kind of title the page is for.
+ *
+ * The routes backfill whatever id a page asks about, and pages get asked about
+ * ids of the other kind: a film opened on the show route, an episode's own id.
+ * Debridio answers those with some other title's releases - season 1 of Ma
+ * (2019) came back as All That S01E01, of Gone Girl as a 1936 Flash Gordon
+ * serial - and they were stored under the key, in the trusted table. An id the
+ * IMDb dump does not have yet is let through: it is usually just newer than the
+ * dump. A lookup that fails is not, since a page left to the request queue is
+ * better than one filled with another title.
+ */
+async function idIsKind(target: DebridioTarget): Promise<boolean> {
+	let titleType: string | null;
+	try {
+		titleType = await db.getImdbTitleType(target.imdbId);
+	} catch (error) {
+		console.warn(
+			`[debridio] title type lookup failed for ${target.imdbId}:`,
+			error instanceof Error ? error.message : error
+		);
+		return false;
+	}
+	if (titleType === null) return true;
+	const matches =
+		target.kind === 'movie' ? isMovieTitleType(titleType) : isShowTitleType(titleType);
+	if (!matches) {
+		console.log(
+			`[debridio] skipping ${target.key}: IMDb files ${target.imdbId} as ${titleType}`
+		);
+	}
+	return matches;
+}
+
 async function refreshedRecently(key: string): Promise<boolean> {
 	const refreshedAt = await db.getDebridioRefreshedAt(key);
 	return !!refreshedAt && Date.now() - refreshedAt.getTime() < AVAILABILITY_TTL_MS;
@@ -125,6 +160,7 @@ export async function backfillFromDebridioNow(
 ): Promise<ScrapeSearchResult[]> {
 	if (!isDebridioEnabled()) return [];
 	if (await refreshedRecently(target.key)) return [];
+	if (!(await idIsKind(target))) return [];
 
 	const processingKey = `processing:${target.imdbId}`;
 	if (await db.keyExists(processingKey)) return [];
@@ -171,6 +207,7 @@ export async function refreshDebridioAvailabilityInBackground(
 ): Promise<void> {
 	if (!isDebridioEnabled()) return;
 	if (await refreshedRecently(target.key)) return;
+	if (!(await idIsKind(target))) return;
 
 	try {
 		const scrapes = await scrapeAllProviders(target);

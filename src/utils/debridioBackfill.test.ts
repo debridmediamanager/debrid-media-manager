@@ -1,3 +1,4 @@
+import misfiled from '@/test/fixtures/debridio/misfiled-pages-2026-10-06.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	backfillFromDebridioNow,
@@ -18,6 +19,7 @@ const {
 	scrapeMovieMock,
 	scrapeSeasonMock,
 	cinemetaMock,
+	titleTypeMock,
 } = vi.hoisted(() => ({
 	keyExistsMock: vi.fn(),
 	saveScrapedResultsMock: vi.fn(),
@@ -32,6 +34,7 @@ const {
 	scrapeMovieMock: vi.fn(),
 	scrapeSeasonMock: vi.fn(),
 	cinemetaMock: vi.fn(),
+	titleTypeMock: vi.fn(),
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -44,8 +47,16 @@ vi.mock('@/services/repository', () => ({
 		saveInstantAvailabilityAd: saveInstantAvailabilityAdMock,
 		getDebridioRefreshedAt: getDebridioRefreshedAtMock,
 		markDebridioRefreshed: markDebridioRefreshedMock,
+		getImdbTitleType: titleTypeMock,
 	},
 }));
+
+// What imdb_title_basics says each id used in these tests is.
+const TITLE_TYPES: Record<string, string> = {
+	tt0111161: 'movie',
+	tt0903747: 'tvSeries',
+	...Object.fromEntries(misfiled.pages.map((page) => [page.imdbId, page.titleType])),
+};
 
 vi.mock('@/services/debridio', () => ({
 	isDebridioEnabled: enabledMock,
@@ -93,6 +104,7 @@ describe('backfillFromDebridioNow', () => {
 		saveInstantAvailabilityAdMock.mockResolvedValue(1);
 		getDebridioRefreshedAtMock.mockResolvedValue(null);
 		markDebridioRefreshedMock.mockResolvedValue(undefined);
+		titleTypeMock.mockImplementation(async (id: string) => TITLE_TYPES[id] ?? null);
 	});
 
 	it('returns nothing and touches nothing when debridio is disabled', async () => {
@@ -286,5 +298,98 @@ describe('refreshDebridioAvailabilityInBackground', () => {
 		await expect(
 			refreshDebridioAvailabilityInBackground(MOVIE_TARGET)
 		).resolves.toBeUndefined();
+	});
+});
+
+// Card 229. The tv: and movie: routes backfilled whatever id the page asked
+// about, and Debridio answered a series question about a film, or a movie
+// question about a series, with some other title's releases. The backfill
+// stored them in ScrapedTrue under the key it was asked about, where every
+// later visitor saw them. These are real pages it wrote, served back as
+// Debridio's answer.
+describe('Debridio backfill keeps to the kind of title IMDb says the id is', () => {
+	const asTarget = (page: (typeof misfiled.pages)[number]) =>
+		page.kind === 'movie'
+			? ({ imdbId: page.imdbId, key: page.key, kind: 'movie' } as const)
+			: ({
+					imdbId: page.imdbId,
+					key: page.key,
+					kind: 'series',
+					season: page.season,
+				} as const);
+
+	const answerWith = (page: (typeof misfiled.pages)[number]) => {
+		const answer = { torrents: page.torrents, available: [] };
+		scrapeMovieMock.mockResolvedValue(answer);
+		scrapeSeasonMock.mockResolvedValue(answer);
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		enabledMock.mockReturnValue(true);
+		providersMock.mockReturnValue(['realdebrid']);
+		keyExistsMock.mockResolvedValue(false);
+		saveScrapedResultsMock.mockResolvedValue(undefined);
+		saveScrapedTrueResultsMock.mockResolvedValue(undefined);
+		markAsDoneMock.mockResolvedValue(undefined);
+		getDebridioRefreshedAtMock.mockResolvedValue(null);
+		markDebridioRefreshedMock.mockResolvedValue(undefined);
+		cinemetaMock.mockResolvedValue({ meta: { videos: [] } });
+		titleTypeMock.mockImplementation(async (id: string) => TITLE_TYPES[id] ?? null);
+	});
+
+	it.each(misfiled.pages.map((page) => [page.key, page.titleType, page] as const))(
+		'does not fill %s, a %s, on first view',
+		async (_key, _type, page) => {
+			answerWith(page);
+
+			expect(await backfillFromDebridioNow(asTarget(page))).toEqual([]);
+			expect(saveScrapedTrueResultsMock).not.toHaveBeenCalled();
+			expect(scrapeMovieMock).not.toHaveBeenCalled();
+			expect(scrapeSeasonMock).not.toHaveBeenCalled();
+		}
+	);
+
+	it.each(misfiled.pages.map((page) => [page.key, page.titleType, page] as const))(
+		'does not refresh %s, a %s, in the background',
+		async (_key, _type, page) => {
+			answerWith(page);
+
+			await refreshDebridioAvailabilityInBackground(asTarget(page));
+			expect(saveScrapedTrueResultsMock).not.toHaveBeenCalled();
+			expect(scrapeMovieMock).not.toHaveBeenCalled();
+			expect(scrapeSeasonMock).not.toHaveBeenCalled();
+		}
+	);
+
+	it('still fills a series page for a series id', async () => {
+		answerWith(misfiled.pages[0]);
+
+		await backfillFromDebridioNow(SEASON_TARGET);
+
+		expect(saveScrapedTrueResultsMock).toHaveBeenCalledWith(
+			'tv:tt0903747:1',
+			expect.any(Array),
+			true
+		);
+	});
+
+	// 266 ids the backfill ran for were newer than the IMDb dump; their pages
+	// must not wait for the next import.
+	it('still fills a page for an id the IMDb dump does not have yet', async () => {
+		titleTypeMock.mockResolvedValue(null);
+		answerWith(misfiled.pages[0]);
+
+		await backfillFromDebridioNow({
+			...SEASON_TARGET,
+			imdbId: 'tt99999999',
+			key: 'tv:tt99999999:1',
+		});
+
+		expect(saveScrapedTrueResultsMock).toHaveBeenCalledWith(
+			'tv:tt99999999:1',
+			expect.any(Array),
+			true
+		);
 	});
 });
