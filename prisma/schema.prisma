@@ -46,6 +46,8 @@ model ScrapedVerdict {
 
   @@unique([imdbId, hash, titleKey])
   @@index([imdbId, titleKey])
+  /// Which titles a release was judged for: the DMM Cast cover lookup reads by hash alone
+  @@index([hash])
 }
 
 /// Results moved off a movie page by a trash verdict, kept for review and

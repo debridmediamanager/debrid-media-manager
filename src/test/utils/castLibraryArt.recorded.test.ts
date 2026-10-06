@@ -1,6 +1,7 @@
 // @vitest-environment node
 import rdManifest from '@/pages/api/stremio/[userid]/manifest.json';
 import recorded from '@/test/fixtures/castLibrary/rd-library-2026-10-03.json';
+import verdictsByHash from '@/test/fixtures/castLibrary/rd-library-verdicts-by-hash-2026-10-06.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,9 +15,10 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
  *
  * Everything here is recorded: the Real-Debrid test 2 account's library as RD
  * listed it, what debridmediamanager.com served for it at the same moment, and
- * the dmmdb rows for those hashes. Only the database client is faked, by a
- * stand-in that answers from those rows, so the real repository and services
- * run end to end.
+ * the dmmdb rows for those hashes. The verdicts are every ScrapedVerdict row
+ * on those hashes, read by hash on 2026-10-06 as the catalog now reads them.
+ * Only the database client is faked, by a stand-in that answers from those
+ * rows, so the real repository and services run end to end.
  */
 
 type Row = Record<string, unknown>;
@@ -91,8 +93,11 @@ function installRecordedDatabase() {
 		hashImdb: table('hashImdb', db.hashImdb),
 		available: table('available', db.available),
 		availableAd: table('availableAd', db.availableAd),
-		scrapedVerdict: table('scrapedVerdict', db.scrapedVerdict),
-		imdbTitleBasics: table('imdbTitleBasics', db.imdbTitleBasics),
+		scrapedVerdict: table('scrapedVerdict', verdictsByHash.scrapedVerdict),
+		imdbTitleBasics: table('imdbTitleBasics', [
+			...db.imdbTitleBasics,
+			...verdictsByHash.imdbTitleBasics,
+		]),
 	});
 }
 
@@ -173,22 +178,33 @@ describe('DMM Cast library art, from a recorded Real-Debrid library', () => {
 	});
 
 	/**
-	 * Both are known only to a ScrapedVerdict keep, and ScrapedVerdict has no
-	 * index that starts with the hash. They keep the bare preview rather than
-	 * cost every catalog page a scan of four million rows.
+	 * Fizzy card 216. Both are known only to a ScrapedVerdict keep. Every
+	 * verdict index used to start with imdbId, so the catalog read verdicts only
+	 * for titles another table proposed and left these two bare. With
+	 * ScrapedVerdict_hash_idx it reads verdicts by hash alone, an indexed read.
 	 */
-	it('leaves a release it cannot identify by an indexed read bare', async () => {
+	it('identifies a release only a keep verdict knows, reading verdicts by hash', async () => {
+		const expected: Record<string, { imdbId: string; title: string; year: string }> = {
+			// The-Shawshank-Redemption_1994_AI_1080p.BluRay.10b.HEVC.DTS-MA.5.1_BLUD
+			HRQDMPC46ZKT2: { imdbId: 'tt0111161', title: 'The Shawshank Redemption', year: '1994' },
+			// Avengers.Endgame.2019.1080p.BluRay.AVC.DTS-HD.MA.7.1-FGT
+			OGFIBP3UXFU6I: { imdbId: 'tt4154796', title: 'Avengers: Endgame', year: '2019' },
+		};
+
 		const result = await getDMMLibrary(CAST_USER, 1);
 		const metas = (result as any).data.metas as Array<Record<string, string>>;
 
-		for (const torrentId of ['HRQDMPC46ZKT2', 'OGFIBP3UXFU6I']) {
+		for (const [torrentId, { imdbId, title, year }] of Object.entries(expected)) {
 			const meta = metas.find((m) => m.id === `dmm:${torrentId}`);
-			expect(meta).toBeDefined();
-			expect(meta).not.toHaveProperty('poster');
+			expect(meta, torrentId).toMatchObject({
+				poster: poster(imdbId),
+				description: title,
+				releaseInfo: year,
+			});
 		}
-		for (const { model, where } of fake.queries) {
-			if (model === 'scrapedVerdict') expect(where).toHaveProperty('imdbId');
-		}
+		const reads = fake.queries.filter(({ model }) => model === 'scrapedVerdict');
+		expect(reads.length).toBeGreaterThan(0);
+		for (const { where } of reads) expect(Object.keys(where)).toEqual(['hash']);
 	});
 
 	it('hands Stremio values its meta preview parses', async () => {
@@ -265,7 +281,7 @@ describe('library identification over 100 recorded releases', () => {
 		const identities = await repository.identifyLibraryHashes(hashes);
 
 		const verdicts = new Map<string, Set<string>>();
-		for (const { hash, imdbId, verdict } of recorded.db.scrapedVerdict) {
+		for (const { hash, imdbId, verdict } of verdictsByHash.scrapedVerdict) {
 			const key = `${hash}|${imdbId}`;
 			verdicts.set(key, (verdicts.get(key) ?? new Set()).add(verdict));
 		}
@@ -290,5 +306,53 @@ describe('library identification over 100 recorded releases', () => {
 		expect(identities.size / unique).toBeGreaterThan(0.75);
 		expect(graded).toBeGreaterThan(50);
 		expect(agreed / graded).toBeGreaterThan(0.95);
+	});
+});
+
+/**
+ * Fizzy card 216. Of the 96 recorded hashes, 13 are in no mapping table. Read
+ * by hash, the verdicts name 11 of them: each was kept on one title only. The
+ * other two stay bare - a set kept on the page of every film it holds, and a
+ * release no verdict kept.
+ */
+describe('releases only a verdict knows, over 100 recorded releases', () => {
+	beforeEach(() => {
+		installRecordedDatabase();
+	});
+
+	it('names a release after the one title it was kept on, and leaves a set bare', async () => {
+		const { repository } = await import('@/services/repository');
+		const byId = new Map(recorded.rdTorrents.map((t) => [t.id, t.hash.toLowerCase()]));
+
+		const identities = await repository.identifyLibraryHashes(
+			recorded.rdTorrents.map((torrent) => torrent.hash)
+		);
+
+		const expected: Record<string, string> = {
+			HRQDMPC46ZKT2: 'tt0111161',
+			OGFIBP3UXFU6I: 'tt4154796',
+			P5NVOAPJZ3B4S: 'tt4154796',
+			AGBSAA5SEPWNY: 'tt0816692',
+			HJ77JBFFORPEQ: 'tt0816692',
+			OKC5LHY6AX2BQ: 'tt0816692',
+			'4HH7OGYVROEVW': 'tt1375666',
+			WF36PW3O6GUDO: 'tt26581740',
+			JQLDZOCWRP37Y: 'tt0120804',
+			// Monster 2003 1080p BluRay x265-YAWNTiC.mkv and the YTS release
+			VL44SCJ6CWZ4C: 'tt0340855',
+			NACFEHPWCHYAM: 'tt0340855',
+		};
+		for (const [torrentId, imdbId] of Object.entries(expected)) {
+			expect(identities.get(byId.get(torrentId)!)?.imdbId, torrentId).toBe(imdbId);
+		}
+		expect(identities.get(byId.get('VL44SCJ6CWZ4C')!)).toEqual({
+			imdbId: 'tt0340855',
+			title: 'Monster',
+			year: 2003,
+		});
+		// Al.Pacino.Movies.Pack.MiXeD-SCENEXPRESS, kept on eleven of its films
+		expect(identities.has(byId.get('MZRSSDO7GBQPA')!)).toBe(false);
+		// Essential Films 2 Mp4 1080p, never kept anywhere
+		expect(identities.has(byId.get('OGRWFUTZTVXVQ')!)).toBe(false);
 	});
 });

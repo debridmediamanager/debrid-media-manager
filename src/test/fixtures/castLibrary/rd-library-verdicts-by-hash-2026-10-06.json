@@ -1,0 +1,3725 @@
+{
+	"_about": [
+		"Fizzy card 216: the DMM Cast cover lookup reads ScrapedVerdict by hash alone through",
+		"ScrapedVerdict_hash_idx. scrapedVerdict is what that read returned for the 96 distinct hashes of",
+		"rdTorrents in rd-library-2026-10-03.json - SELECT hash, imdbId, verdict FROM ScrapedVerdict WHERE",
+		"hash IN (...) ORDER BY id, read in a read-only session at capturedAt, after card 216 re-judged the",
+		"keeps card 206's rules got wrong - one element per row (rows differ by filename, not selected).",
+		"imdbTitleBasics holds the titles those verdicts add to the ones rd-library-2026-10-03.json has."
+	],
+	"capturedAt": "2026-10-06T19:41:18Z",
+	"imdbTitleBasics": [
+		{
+			"tconst": "tt0340855",
+			"primaryTitle": "Monster",
+			"startYear": 2003
+		},
+		{
+			"tconst": "tt0387564",
+			"primaryTitle": "Saw",
+			"startYear": 2004
+		}
+	],
+	"scrapedVerdict": [
+		{
+			"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+			"imdbId": "tt0120791",
+			"verdict": "keep"
+		},
+		{
+			"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+			"imdbId": "tt0120791",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+			"imdbId": "tt0120791",
+			"verdict": "keep"
+		},
+		{
+			"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+			"imdbId": "tt0120791",
+			"verdict": "keep"
+		},
+		{
+			"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0468569",
+			"verdict": "trash"
+		},
+		{
+			"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "713a88d0586a0fdb9cd49dd9861116a411c4b238",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+			"imdbId": "tt0468569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0096463",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0172495",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0091251",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0119488",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0488478",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt10199640",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0120903",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0468492",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0139654",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1832382",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt5186714",
+			"verdict": "keep"
+		},
+		{
+			"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0068646",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1074638",
+			"verdict": "keep"
+		},
+		{
+			"hash": "af42a7159a530b7ac03df97e843cbee9e3ba338b",
+			"imdbId": "tt15791034",
+			"verdict": "keep"
+		},
+		{
+			"hash": "156c51e37cdfa59e5c905b7b3d80467be1cde9a6",
+			"imdbId": "tt15791034",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+			"imdbId": "tt15791034",
+			"verdict": "keep"
+		},
+		{
+			"hash": "65c625488d32527cafe239b0f22d92bfaea39239",
+			"imdbId": "tt15791034",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d5e0b9e8d6d83fb5ad423b7cb9f19cddf5dcf7ed",
+			"imdbId": "tt15791034",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0098635",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0098635",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0499549",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0325980",
+			"verdict": "trash"
+		},
+		{
+			"hash": "47f0ceffb792c4d46853dec6acc41449368c7fdd",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "664d6995877d7ff35e008fd5fdcfd30edcdcfc53",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "db095ff29426d5c63bc8fec8840c0aab24702751",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2015381",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0103064",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0455944",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3766354",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt17024450",
+			"verdict": "trash"
+		},
+		{
+			"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a75b82ad8477187109f80e7d3fee845923b78d7c",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "11f7c6833b905c21985a4ba0912d72a175f505b1",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "7c5cef3523ad7f7a03ba9d0a51b44b6437d597dc",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "56a27e24ed14746c8e6ac1a9b50bd5de559fba08",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt1375666",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a2b384339f3dcdd9f18fc299311853ce6570ca4a",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "5500f6ee5ca29f04913dd69fc9fb45e6caefea08",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "828865198ece61a8e4669ee39b7c3ee9c5fdc0c7",
+			"imdbId": "tt1375666",
+			"verdict": "trash"
+		},
+		{
+			"hash": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "6c8d49683ddaac279d1a96eb1390b108db3c0f2b",
+			"imdbId": "tt1375666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2379713",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt2379713",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt10810424",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt6649108",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt15523010",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0251654",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0036775",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0424934",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt10872600",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0055928",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt2250912",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt6320628",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0780504",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0039689",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0097165",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt4154664",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0099423",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0099423",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1392170",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0066921",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0066921",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0150377",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0071562",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0071562",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0071562",
+			"verdict": "keep"
+		},
+		{
+			"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+			"imdbId": "tt0071562",
+			"verdict": "trash"
+		},
+		{
+			"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+			"imdbId": "tt0071562",
+			"verdict": "keep"
+		},
+		{
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"imdbId": "tt0071562",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+			"imdbId": "tt0071562",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3397884",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt3397884",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3748528",
+			"verdict": "trash"
+		},
+		{
+			"hash": "0570516261fb339abb9dec9809fbf5c8951e166d",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0816692",
+			"verdict": "trash"
+		},
+		{
+			"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b72fb7df020dc0c93b76c297abf1addbd0e4fdfa",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e4634727ced0b106268a010a1e22883ffbc6ec15",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1764234",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0119654",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0099685",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0075314",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1631867",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1825683",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1677720",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0234215",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+			"imdbId": "tt0372784",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0372784",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0242653",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0058461",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1392190",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0407887",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0108052",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0108052",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d860687f47b5dd1c6e4140682df84aa7fe4d5306",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt8367814",
+			"verdict": "trash"
+		},
+		{
+			"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8902af48af37540965349487fd0919356a22112d",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "9b5f7bdf3acc168f5c60ae57e8e026a48d56cb01",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1a9dd2f9bb74dbd92e7571b28ccf156bbf1e472c",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "54cd37bd1641d47f4fea4abed43747f6314c0859",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "275ce58399ed45a8c2c04162952f3933d95ed2ec",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "925d989331a0b4ab626554f94ad958a439c62510",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+			"imdbId": "tt8367814",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0081547",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1895587",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0119008",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0119008",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0102926",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt9603212",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1170358",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0343818",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0903624",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0133093",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5052474",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0038890",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0106912",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0369610",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0107290",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2084970",
+			"verdict": "trash"
+		},
+		{
+			"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+			"imdbId": "tt6920084",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0069768",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0094721",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1974419",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt9114286",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0258463",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0258463",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt3300542",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0085244",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0090329",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0088247",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0088247",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0335266",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0405094",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1149362",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0217505",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0455590",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0093640",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0181865",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0497465",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0100150",
+			"verdict": "keep"
+		},
+		{
+			"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+			"imdbId": "tt5177120",
+			"verdict": "keep"
+		},
+		{
+			"hash": "ffb32813478a2f7124e0b5401b87d59eed41f6e7",
+			"imdbId": "tt0848228",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0368891",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+			"imdbId": "tt1345836",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1345836",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1638355",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt6791350",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1517268",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fab00abc382a8861112f8e4b702b2192f8a4ce8c",
+			"imdbId": "tt0120804",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt0120804",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0120804",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0120804",
+			"verdict": "trash"
+		},
+		{
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"imdbId": "tt0120804",
+			"verdict": "keep"
+		},
+		{
+			"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+			"imdbId": "tt0120804",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0070666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070666",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0050083",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2310332",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+			"imdbId": "tt27543632",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0078788",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0206634",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt7349662",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2704998",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0096256",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3774114",
+			"verdict": "trash"
+		},
+		{
+			"hash": "10f82bcc231fc8ed19abcab48831c4c83844ab67",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "ad673340ce445582dbdf967c4ee2eaa7f59896de",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "f29a41d1991dd16b08a194f6877a7931464bdb7a",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+			"imdbId": "tt5950044",
+			"verdict": "keep"
+		},
+		{
+			"hash": "4d7c2313243bd3e3e724f5bd771e2999d6bede8f",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "7db00ceaf4f744d56ce79f75e05a3ff8976d0506",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a1c12ba5899e4800732fd199ef52db2d7487aaee",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37c689776f28a165f02cb0cf5482966f2c9308b6",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "7d7e9c9e2f5176c04f559dcbdaa6fe95bbe6b5ca",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "54ff47b6718436e23864443b601dfb63f06ff02f",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "8221966ca422ec1d7a91bc8e2430d77ddd799403",
+			"imdbId": "tt26581740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1023114",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0094291",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0094291",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+			"imdbId": "tt0770828",
+			"verdict": "trash"
+		},
+		{
+			"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+			"imdbId": "tt0770828",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0083922",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0343737",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0167404",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0470752",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0118799",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0088763",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0088763",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0053604",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0816711",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0038650",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "85509819d8e15ca2586e1515a8a017d791f9c9b3",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0111161",
+			"verdict": "trash"
+		},
+		{
+			"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a795c82e58a5f8f95f60f4911317e7082e19d505",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0120382",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt11564570",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0110912",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0092099",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0075148",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070047",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt2446042",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0062765",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0435705",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0435705",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0099850",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt6394270",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0087332",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0144084",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0360486",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0120660",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1731141",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0095647",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0076752",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0382625",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0056172",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0050212",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0060196",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086960",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt0437086",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0098273",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0098273",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0089360",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3896198",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt7286456",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt3315342",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0434409",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0361748",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0053946",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0077416",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0363771",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a581e22f402ad6ebc47481a4503865fd0468f784",
+			"imdbId": "tt0435625",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0119558",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0071910",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1877832",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt4425200",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1856101",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0083658",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0083658",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0499448",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2382320",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0120338",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0980970",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0073486",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070355",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0066999",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0074483",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086383",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0094963",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt6266538",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0100994",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0268978",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0095016",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0095016",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086250",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3659388",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0118655",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0112641",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0119081",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0078346",
+			"verdict": "trash"
+		},
+		{
+			"hash": "1b05f86064bc896522b3deb1504cb07710860a93",
+			"imdbId": "tt0078346",
+			"verdict": "trash"
+		},
+		{
+			"hash": "af0baeea8ab17f3a28d44d2920059850fa46dfc2",
+			"imdbId": "tt0078346",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1727824",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2406566",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0082096",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt7807000",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt21242930",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0246460",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0181852",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0083944",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0093870",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0058331",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0118971",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0118971",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1951264",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0365737",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0365737",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1371111",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt10366206",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt2911666",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2911666",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt6146586",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1798709",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0120611",
+			"verdict": "trash"
+		},
+		{
+			"hash": "8151e1b2a164d661faae736f012ba5f45f8c33d4",
+			"imdbId": "tt7958736",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0074958",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0448011",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1343092",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0113243",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0034583",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5688068",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt6644200",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0187078",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt8332922",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0286106",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0480249",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt4062536",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt7798634",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0052357",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0053125",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0112573",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0112573",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0112573",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1483013",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2316204",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0110413",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1024648",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1560220",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0112864",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0112864",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0337978",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0066995",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086465",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt6803046",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0250494",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0104257",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1972571",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0102820",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt4196776",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1979320",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt13521006",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt3385516",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt8946378",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0830515",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0105236",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt3841424",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0120815",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0085859",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0106519",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0073195",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt7456310",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0993842",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0087843",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5208252",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt5208252",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2763304",
+			"verdict": "trash"
+		},
+		{
+			"hash": "8e893d9fc0b1f574c995f33c46733b9d649fcc91",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "c02842d9282e0063a8833438eccf7b4b8844c61a",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "4bde022c72cf8aecb172652a0af33b833af0bf9c",
+			"imdbId": "tt0816692",
+			"verdict": "keep"
+		},
+		{
+			"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+			"imdbId": "tt0068646",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0099674",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0099674",
+			"verdict": "keep"
+		},
+		{
+			"hash": "5d80bfab032d758b4ddb9e832315c033c5ce93c5",
+			"imdbId": "tt0099674",
+			"verdict": "trash"
+		},
+		{
+			"hash": "0561021fad34adcd2e4fe8921589767dce8835bb",
+			"imdbId": "tt0099674",
+			"verdict": "keep"
+		},
+		{
+			"hash": "20edd4cd63eb1833827c8e35011fb8792e4d77d2",
+			"imdbId": "tt0099674",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a1d6889827983a1d99ab72a5946a34abaffd12ee",
+			"imdbId": "tt0099674",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0052618",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0052561",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0079574",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0408306",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0408306",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0363163",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0936501",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0181689",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0181689",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1213641",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1397280",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2873282",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0251160",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0033870",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0054847",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0332452",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0039302",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1489887",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1570728",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2798920",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt4463816",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0090555",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0290334",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0290334",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0376994",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0458525",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1270798",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt12579470",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt6565702",
+			"verdict": "trash"
+		},
+		{
+			"hash": "6eba7fc5caa4a13175a85975de125bd7643421f5",
+			"imdbId": "tt31434639",
+			"verdict": "trash"
+		},
+		{
+			"hash": "60e21dc1cb300fd2c516f31a2ed3ca95dc1d9c2e",
+			"imdbId": "tt31434639",
+			"verdict": "trash"
+		},
+		{
+			"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+			"imdbId": "tt31434639",
+			"verdict": "trash"
+		},
+		{
+			"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+			"imdbId": "tt31434639",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0091042",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0091042",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0054953",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0080339",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0089841",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt4651520",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0088847",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0088847",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0401855",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0320691",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0110950",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0099810",
+			"verdict": "keep"
+		},
+		{
+			"hash": "a5fc2e0ac62e290c9c62fbd47a2462e96a84f52c",
+			"imdbId": "tt0091203",
+			"verdict": "trash"
+		},
+		{
+			"hash": "8cefabb6ec1d3915c49788057c126e4b15a3a867",
+			"imdbId": "tt0091203",
+			"verdict": "trash"
+		},
+		{
+			"hash": "ac9ab8a121da2d108932832437b0d6c9ba932126",
+			"imdbId": "tt0091203",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0227445",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0031381",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0238380",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0059742",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0072890",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt6966692",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0104952",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0040522",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0399295",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0094226",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2872732",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0160484",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1862079",
+			"verdict": "trash"
+		},
+		{
+			"hash": "866345f40cd83f265f0972d50129095e5f65ecb8",
+			"imdbId": "tt27425164",
+			"verdict": "trash"
+		},
+		{
+			"hash": "e52328dcf49226f5740ba833c51763030ed2beaf",
+			"imdbId": "tt27425164",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3296908",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2283336",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0032551",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0212720",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt2402157",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0313443",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0104573",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0102526",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0472062",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0808151",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0096895",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0092978",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0199753",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0144214",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0106489",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0095031",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2239822",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0093010",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0063442",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0111282",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0111282",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0065462",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0067065",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0068408",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1318514",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt2103281",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt3450958",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1446714",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3682448",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt0330829",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0758774",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt8041270",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0119177",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0215750",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0106856",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt3062096",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0278504",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0038787",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1302006",
+			"verdict": "trash"
+		},
+		{
+			"hash": "e62c7595e5a2fab90c61f407a6dc198aee62fa0a",
+			"imdbId": "tt0340855",
+			"verdict": "keep"
+		},
+		{
+			"hash": "c5816fc4e30e9b0a27f4e5a13135d2560e8a800f",
+			"imdbId": "tt0340855",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0340855",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0465234",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2066051",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0082971",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0122690",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0122690",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0401729",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0367882",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0061735",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0087233",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt4925292",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0146882",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0060665",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt8772262",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0113189",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1951265",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1951266",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0086837",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0453467",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0453467",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0228333",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt4495098",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0346491",
+			"verdict": "trash"
+		},
+		{
+			"hash": "124648814a84119084f4a8c7e7db3c29f1b23f94",
+			"imdbId": "tt4154796",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt0318627",
+			"verdict": "keep"
+		},
+		{
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"imdbId": "tt0318627",
+			"verdict": "trash"
+		},
+		{
+			"hash": "58dd96523dcaa82b8d3cf05e010233986c53bda5",
+			"imdbId": "tt0318627",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0369441",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt5027774",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070511",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0118571",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0109444",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0313911",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0409459",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2584384",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0126886",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3464902",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0057076",
+			"verdict": "keep"
+		},
+		{
+			"hash": "f3ffbeda4038957ea80e8138c48e0be9b051e710",
+			"imdbId": "tt32588798",
+			"verdict": "trash"
+		},
+		{
+			"hash": "0bf9f469049694da9fef79163cde924b93637b9d",
+			"imdbId": "tt32588798",
+			"verdict": "trash"
+		},
+		{
+			"hash": "e4529cd222da718a57bd41ac779c3b763c091c84",
+			"imdbId": "tt32588798",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1441395",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt0432021",
+			"verdict": "keep"
+		},
+		{
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"imdbId": "tt0432021",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0058150",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0093428",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0120347",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0083987",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0307479",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5649144",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0265086",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0092890",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0280707",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1194173",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1817273",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2381941",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0076095",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1164999",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0087803",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5827916",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt1855325",
+			"verdict": "keep"
+		},
+		{
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"imdbId": "tt1855325",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0083806",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0064757",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0093409",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0093409",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0097733",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0097733",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0104714",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0122151",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0083511",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b7560d21e8ffc7d83686cf004c43b31113c1680b",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "18ad75db668540b8210851f5a24b6044bcf8ddac",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "0c6a4b1e24df4c78704b5f0aa9c28b2f43227415",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a5dbaa744cdedd985d38f1f6d3d427527cba4284",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "a97e0ad9a473fed3a9c83add05ba658a66da6d65",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "9e0131331e461f4245c3bcb6ef6920990c01517a",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3dfa87526846fe702b3ce6666275861838b0e95e",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3d9186e147f6cc896b5402c24c7fd144d2531dba",
+			"imdbId": "tt15887102",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt3799694",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1070874",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0346156",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0346156",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3402236",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt10121372",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0071807",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0409847",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1617661",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0159273",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0097742",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0066993",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1517451",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1045658",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0049833",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt4881806",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt1389096",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1389096",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0349683",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0297284",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0065207",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0107798",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5742374",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt0080569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0080569",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt1220634",
+			"verdict": "keep"
+		},
+		{
+			"hash": "62c5b79130a8c2287b49f259a847af646a919c99",
+			"imdbId": "tt1220634",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0061578",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt7599146",
+			"verdict": "trash"
+		},
+		{
+			"hash": "9d03cb643f0a22c2aa7cf5479da2b81d19300362",
+			"imdbId": "tt0111495",
+			"verdict": "trash"
+		},
+		{
+			"hash": "1b111948d6d63659b56d0b372a6b94d0b1e96551",
+			"imdbId": "tt0111495",
+			"verdict": "trash"
+		},
+		{
+			"hash": "7d73b5ea9cc30e880f0b9acccc357b0ac00aaf71",
+			"imdbId": "tt0111495",
+			"verdict": "trash"
+		},
+		{
+			"hash": "e0d00667650aba9ee05aacbbbd8b55ea8a51f534",
+			"imdbId": "tt0111495",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0221027",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt9620292",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2194499",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0105690",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt5466186",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt5360952",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt9071322",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0047396",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0114287",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d94d910a8b8aacaebe064d51eb0473ce4d2c2b2c",
+			"imdbId": "tt1345836",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0057115",
+			"verdict": "keep"
+		},
+		{
+			"hash": "d5a93f80927fa99ad7f8ce6f573d12b8c65fbc3b",
+			"imdbId": "tt0387564",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0093822",
+			"verdict": "trash"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0106918",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0081974",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0112740",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0105435",
+			"verdict": "trash"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt0945513",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070735",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0253474",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0253474",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0253474",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0079417",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0084805",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0372183",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0372183",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0089346",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt15428940",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0834001",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt3717252",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1496025",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b6cf2b3706c9c12b4c93e3a41d30a26d7da9593c",
+			"imdbId": "tt2592614",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0090060",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0099871",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt9770150",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3a32b0940f305d24dfb8a5df040603079042c98b",
+			"imdbId": "tt0257076",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt1860357",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0047437",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0082089",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2333804",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt2304933",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt7983894",
+			"verdict": "keep"
+		},
+		{
+			"hash": "b34f2891a4e8a72a293464beedf6a49efd8ec614",
+			"imdbId": "tt0111161",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0107206",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1430132",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0069947",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0266987",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0266987",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0082351",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0062512",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0070510",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0080491",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0078841",
+			"verdict": "keep"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3640424",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0120866",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0100404",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt14230388",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt4287320",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0095159",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0115571",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt21867434",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0077631",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt4190530",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0080474",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0096487",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0096487",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0065938",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0055031",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0079522",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0107211",
+			"verdict": "keep"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0071315",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0328107",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1385826",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0061722",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt8739752",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0389557",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt0129290",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0078718",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0104797",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0104797",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0146316",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0026029",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0048728",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0058329",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0080319",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt2057392",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0047296",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt1504320",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1092026",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086993",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0085615",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0191754",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0094924",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt1964418",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0055798",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0088146",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0434409",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0089155",
+			"verdict": "keep"
+		},
+		{
+			"hash": "86cdbd9f120d27ddd1af7a9ce497555046fb6678",
+			"imdbId": "tt5610554",
+			"verdict": "trash"
+		},
+		{
+			"hash": "bd15ea182a436a82cc37d2365b9cd5ac66fbf858",
+			"imdbId": "tt0117039",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0117039",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt1020072",
+			"verdict": "trash"
+		},
+		{
+			"hash": "b8a253a401c2cce83defc968ec90d8beeb43b98c",
+			"imdbId": "tt1535612",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt2397535",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0119173",
+			"verdict": "keep"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0440963",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0440963",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0081070",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0103874",
+			"verdict": "trash"
+		},
+		{
+			"hash": "37f048a1d5cc62f11fbac81185168eeb9d9101bf",
+			"imdbId": "tt3778644",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3ef7e04f3c6e00e2621ea2ad9ad19440f2891c10",
+			"imdbId": "tt3297330",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0404203",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt2059255",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0046912",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0038355",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0040746",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0028950",
+			"verdict": "keep"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0977855",
+			"verdict": "keep"
+		},
+		{
+			"hash": "40f15e970e6f21466402a1ec4fbd059097ad587a",
+			"imdbId": "tt0101921",
+			"verdict": "trash"
+		},
+		{
+			"hash": "fa35bde078b04070bc2cdc3223f68d8c7da71559",
+			"imdbId": "tt0356618",
+			"verdict": "trash"
+		},
+		{
+			"hash": "3facf8e9f4f7c506a2330ac2ba33645aa6f12b81",
+			"imdbId": "tt0086006",
+			"verdict": "keep"
+		}
+	]
+}

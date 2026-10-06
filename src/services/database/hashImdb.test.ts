@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { HashImdbService, pickHashImdbIds } from './hashImdb';
+import { HashImdbService, pickHashImdbIds, soleKeeps } from './hashImdb';
 
 const prismaMock = vi.hoisted(() => ({
 	hashImdb: {
@@ -191,5 +191,44 @@ describe('pickHashImdbIds', () => {
 			[]
 		);
 		expect(picks.get(A)).toBe('tt0000002');
+	});
+});
+
+describe('soleKeeps', () => {
+	const A = 'a'.repeat(40);
+	const B = 'b'.repeat(40);
+
+	it('names a hash after the one title its keeps sit on', () => {
+		expect(
+			soleKeeps([
+				{ hash: A.toUpperCase(), imdbId: 'tt0000001', verdict: 'keep' },
+				{ hash: A, imdbId: 'tt0000001', verdict: 'keep' },
+				{ hash: A, imdbId: 'tt0000002', verdict: 'trash' },
+			])
+		).toEqual([{ hash: A, imdbId: 'tt0000001' }]);
+	});
+
+	it('names nothing for a set kept on several titles, or a hash only ever trashed', () => {
+		expect(
+			soleKeeps([
+				{ hash: A, imdbId: 'tt0000001', verdict: 'keep' },
+				{ hash: A, imdbId: 'tt0000002', verdict: 'keep' },
+				{ hash: B, imdbId: 'tt0000003', verdict: 'trash' },
+			])
+		).toEqual([]);
+	});
+
+	it('comes after every mapping table, so a kept mapping still wins', () => {
+		const verdicts = [
+			{ hash: A, imdbId: 'tt0000001', verdict: 'keep' },
+			{ hash: A, imdbId: 'tt0000002', verdict: 'keep' },
+			{ hash: B, imdbId: 'tt0000003', verdict: 'keep' },
+		];
+		const picks = pickHashImdbIds(
+			[[{ hash: A, imdbId: 'tt0000002' }], soleKeeps(verdicts)],
+			verdicts
+		);
+		expect(picks.get(A)).toBe('tt0000002');
+		expect(picks.get(B)).toBe('tt0000003');
 	});
 });

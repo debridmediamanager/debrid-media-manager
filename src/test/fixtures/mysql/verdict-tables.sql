@@ -1,4 +1,5 @@
--- SHOW CREATE TABLE on dmmdb (MySQL 8.0.36), read 2026-10-04 in a read-only session:
+-- SHOW CREATE TABLE on dmmdb (MySQL 8.0.36), read 2026-10-04 in a read-only session
+-- (ScrapedVerdict re-read 2026-10-06, after ScrapedVerdict_hash_idx was added):
 -- the tables the scraped-result verdicts read and write besides the library pages
 -- in scraped-tables.sql. AUTO_INCREMENT counters are left out. Statements are
 -- separated by a line holding only ";".
@@ -16,7 +17,8 @@ CREATE TABLE `ScrapedVerdict` (
   `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ScrapedVerdict_imdbId_hash_titleKey_key` (`imdbId`,`hash`,`titleKey`),
-  KEY `ScrapedVerdict_imdbId_titleKey_idx` (`imdbId`,`titleKey`)
+  KEY `ScrapedVerdict_imdbId_titleKey_idx` (`imdbId`,`titleKey`),
+  KEY `ScrapedVerdict_hash_idx` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ;
 CREATE TABLE `ScrapedTrash` (

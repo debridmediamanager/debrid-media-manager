@@ -64,15 +64,36 @@ export function pickHashImdbIds(
 	return picks;
 }
 
+/**
+ * Keep verdicts as a source of their own, for releases no mapping table knows:
+ * a hash whose keeps all sit on one title is that title. A set is kept on the
+ * page of every film it holds - "Al.Pacino.Movies.Pack" on nine - and nothing
+ * in the verdicts says which one it is, so a hash kept on several titles adds
+ * no candidate here.
+ */
+export function soleKeeps(verdicts: ScrapedVerdictRow[]): HashImdbPair[] {
+	const kept = new Map<string, Set<string>>();
+	for (const { hash, imdbId, verdict } of verdicts) {
+		if (verdict !== 'keep') continue;
+		const key = hash.toLowerCase();
+		kept.set(key, (kept.get(key) ?? new Set<string>()).add(imdbId));
+	}
+	const pairs: HashImdbPair[] = [];
+	for (const [hash, imdbIds] of kept) {
+		if (imdbIds.size === 1) pairs.push({ hash, imdbId: [...imdbIds][0] });
+	}
+	return pairs;
+}
+
 export class HashImdbService extends DatabaseClient {
 	/**
 	 * What each release in a DMM Cast library is, keyed by lowercase hash.
 	 *
 	 * This runs on every library catalog page a Stremio client scrolls, so every
-	 * read is an indexed lookup: by hash for the three mapping tables, by
-	 * (imdbId, hash) for verdicts, by tconst for titles. ScrapedVerdict has no
-	 * index that starts with the hash, so a release only a verdict knows about
-	 * stays unidentified rather than costing a scan of the whole table.
+	 * read is an indexed lookup: by hash for the three mapping tables and for
+	 * verdicts (ScrapedVerdict_hash_idx), by tconst for titles. Reading verdicts
+	 * by hash alone also finds releases only a verdict knows about, which
+	 * `soleKeeps` turns into a last source.
 	 */
 	public async identifyHashes(hashes: string[]): Promise<Map<string, HashIdentity>> {
 		const identities = new Map<string, HashIdentity>();
@@ -82,7 +103,7 @@ export class HashImdbService extends DatabaseClient {
 		if (wanted.length === 0) return identities;
 
 		const select = { hash: true, imdbId: true } as const;
-		const sources = await Promise.all([
+		const [hashImdb, available, availableAd, verdicts] = await Promise.all([
 			this.prisma.hashImdb.findMany({
 				where: { hash: { in: wanted } },
 				select,
@@ -90,23 +111,22 @@ export class HashImdbService extends DatabaseClient {
 			}),
 			this.prisma.available.findMany({ where: { hash: { in: wanted } }, select }),
 			this.prisma.availableAd.findMany({ where: { hash: { in: wanted } }, select }),
+			this.prisma.scrapedVerdict.findMany({
+				where: { hash: { in: wanted } },
+				select: { hash: true, imdbId: true, verdict: true },
+			}),
 		]);
+		const sources = [hashImdb, available, availableAd, soleKeeps(verdicts)];
 
 		const imdbIds = [...new Set(sources.flat().map((row) => row.imdbId))].filter((imdbId) =>
 			IMDB_ID.test(imdbId)
 		);
 		if (imdbIds.length === 0) return identities;
 
-		const [verdicts, basics] = await Promise.all([
-			this.prisma.scrapedVerdict.findMany({
-				where: { imdbId: { in: imdbIds }, hash: { in: wanted } },
-				select: { hash: true, imdbId: true, verdict: true },
-			}),
-			this.prisma.imdbTitleBasics.findMany({
-				where: { tconst: { in: imdbIds } },
-				select: { tconst: true, primaryTitle: true, startYear: true },
-			}),
-		]);
+		const basics = await this.prisma.imdbTitleBasics.findMany({
+			where: { tconst: { in: imdbIds } },
+			select: { tconst: true, primaryTitle: true, startYear: true },
+		});
 
 		const titles = new Map(basics.map((basic) => [basic.tconst, basic]));
 		for (const [hash, imdbId] of pickHashImdbIds(sources, verdicts)) {
