@@ -940,6 +940,1643 @@
 					"fileSize": 393.67
 				}
 			]
+		},
+		{
+			"table": "ScrapedTrue",
+			"key": "tv:tt0804503:2",
+			"work": "Mad Men (2007), season 2 of 13 episodes",
+			"note": "LostFilm's Russian Blu-ray remux packs are among the largest RD-cached releases. rdFiles maps each hash with an Available row in status downloaded to its AvailableFile count.",
+			"rdFiles": {
+				"07c3f889c91d63db2364e71487df8905ee7d6fee": 137,
+				"08290cd42a36267dfbeaa0b043d0d583569a012d": 13,
+				"099bc7b90ec8fad61d9c06e47c225558d56ce0ba": 1,
+				"1dfe2a49124a3f9145a8ba82b08bcf0da30bea5f": 11,
+				"21c3a53b686bbe4d0dba425e1a4379dfdda579bc": 13,
+				"323f2513b9a4670d63d383225f7e0858f2170790": 1,
+				"35857e5ea6cb21571c71ecbaed37496d1b70c84a": 13,
+				"3aac7b8ebcaf3231f446b7a8fda6cfcb05016433": 1,
+				"3fd0f9b83bc786aa47fc8c5f459e00df9a8b5c63": 92,
+				"4036533231a42e32898b9f91b2852220a17e9683": 1,
+				"4bd88f96226ce9fdea768279a9e96da711c40555": 13,
+				"4d7f102429eace57aef65d8d7378c85d2b0dc968": 13,
+				"4e3cccbec181c618db92112aa3665e2f56ba7d72": 12,
+				"4e93614ebefd2b549d5286a8d18ac0a488445b42": 13,
+				"4fda2ad4907374165b4b667a35c1ef64da6263ff": 1,
+				"5145256ae7a0bf9373c6f7fc3343f96e63a83841": 92,
+				"5bcff2dc8e0696d2b09ff16f4b19b1686c70c7ad": 13,
+				"5c4e2848e241dbaf718d5dc852ff12770367b4a5": 112,
+				"6119b29ef873f9d4601c12108a6e968e125d54cf": 3,
+				"61d2414d451dbe9246bc24f135ea6ec66470706d": 1,
+				"63969cf35b9a52210ee6f185003dc1bb570e3659": 1,
+				"6f521ca702cc9b27a694aed828397ee5fa2365ed": 13,
+				"75892ca97eb884d5189aec41105cb9fbfafd281f": 13,
+				"790c85dcb66c28b27d2b8652f6cef58e2ab9f75e": 90,
+				"80cfa22ebe77cf4b250e33ab6d4d8edfd9981019": 13,
+				"8530c41629a99bc1141179b4408cacc411d7bca9": 13,
+				"9391f9a352d4e96d8ae2ccd6760897e4edb5b32f": 13,
+				"9e0476e1f832f4f09a235d46a8925b1969225e4f": 1,
+				"9fb0bf1b6cd522a81300040cca6217509f910f5e": 13,
+				"a01834f7143bc0ce813c746960b7549ea51c2b2b": 1,
+				"ac049fc99c07e4e8b2fb842c758064782cb6084a": 90,
+				"ad1a4f06a45e984c694fac6325275253159ce4f6": 2,
+				"ad5278f77b0a738d473d400594e4c7cbeaf84669": 13,
+				"b310fc12fee59ac9b23571e54bdffd81c8730f76": 1,
+				"bc93d9b3cc4b24a88298d3594c839111782d40e7": 90,
+				"c1f49f415d0d2d085bbce838e1485deadcb005be": 2,
+				"c6a6b6f23f201e90f5d788a738d4f7967cc93108": 90,
+				"c8cb18feaa7778d74b07aa17aa2680bc81e6f9d9": 13,
+				"c8e30e5dcf8181afacbff2483da5c8cc7cc6e164": 13,
+				"c9a12dab333abd78499e3758cbecebf4ea727a99": 13,
+				"ce1c9a0467e25c43f797e0a2edcf8fb313400142": 90,
+				"cf06c665bfb1e1cf446783d6e72dc612af5f60fb": 1,
+				"d21cfde2b9e329950a01ac63ed4c0c7a7c4b9749": 76,
+				"d3aca24eb8285bb87008a0837701458a56827497": 1,
+				"d6873c5287e562eb1c1bb92d4666860b43479082": 1,
+				"d81c0865ec808f594969568a4064e7ed7f1cfd26": 1,
+				"e1397130ed54b7eabd5cd6d8f90fa0bf714bfe1b": 1,
+				"e56b05c41e9b3b4fcb8aa765ab9cd75b21105e67": 14,
+				"e6bb0e8d0a9d2b318e5c2d4aae2decb764816f19": 1,
+				"ee98f2e0723e216fbefcc3ac6285f1d6990805bd": 90,
+				"f3336d43237fd123e0970d2156b3681128aa6855": 1,
+				"f3f1c80198eda852f054b144351aa4cbb5480d4d": 1,
+				"f57440bb9a510b8246c3b9f896a82b1ad9d96445": 1,
+				"f72d1f35759d152466b357c144ce646c44267578": 13,
+				"f97118042c992e59abe01fd9b0a5e97edb9a6423": 1,
+				"f983ff9e90ebba299be22ba3a56a57139cf72d01": 90,
+				"ff32ccee694c6afe7699f155796507ca71f40a47": 1
+			},
+			"value": [
+				{
+					"hash": "2ddf6a7f54447bbbd3d60e03ff0f97f1e5168aae",
+					"title": "Mad.Men.S01-S06.720p.BluRay.x264-BalooUA",
+					"fileSize": 174499.84
+				},
+				{
+					"hash": "669331e0eedd4ace304054233e0f876f11bb4e47",
+					"title": "Mad Men S02 Blu-ray 1080p AVC DTS-HD MA 5.1-CtrlHD",
+					"fileSize": 137707.52
+				},
+				{
+					"hash": "a8160e345319cb66e8dc68220d2bbabc0e84ccbf",
+					"title": "Mad Men S02 1080p Blu-ray AVC DTS-HD MA 5.1",
+					"fileSize": 137707.52
+				},
+				{
+					"hash": "e093ca0fe4bdc13915b084281214e19351197da4",
+					"title": "Mad.Men.S01-S07.REPACK.COMPLETE.SERIES.1080p.Bluray.x265-HiQVE",
+					"fileSize": 128983.04
+				},
+				{
+					"hash": "c0180c2a41b27c9eb3852bdac85743f8fcadf4a8",
+					"title": "Mad Men S02 1080p BluRay H264-RMX",
+					"fileSize": 109501.6646289825
+				},
+				{
+					"hash": "c8e30e5dcf8181afacbff2483da5c8cc7cc6e164",
+					"title": "Безумцы (2 сезон: 1-13 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 108650
+				},
+				{
+					"hash": "ba7e2d51bfde84f0502634148a308e36d69fcd46",
+					"title": "Mad Men S02 1080p BluRay REMUX AVC DTS-HD MA 5.1-EPSiLON",
+					"fileSize": 107852.6431751251
+				},
+				{
+					"hash": "3ea8250143e4dcd65a4a56439ba403c03512ae7a",
+					"title": "Mad Men S02 1080p BluRay REMUX AVC DTS-HD MA 5.1-EPSiLON",
+					"fileSize": 107847.68
+				},
+				{
+					"hash": "75892ca97eb884d5189aec41105cb9fbfafd281f",
+					"title": "Mad.Men.S02.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-NOGRP[rartv]",
+					"fileSize": 107496.5583534241
+				},
+				{
+					"hash": "bbda80ec14446017c18f388865fe6c82bb7a0047",
+					"title": "Mad.Men.S02E01.2008.1080p.BluRay.Remux.AVC.DTS-HD.MA.5.1-ADE.mkv",
+					"fileSize": 105779.2
+				},
+				{
+					"hash": "0fa5077088f2bdcb013c2aa93b2e879cf65f9737",
+					"title": "Mad Men S02 2008 BluRay 1080p DTSHD-MA h264 Remux-decibeL",
+					"fileSize": 105584.64
+				},
+				{
+					"hash": "665b4124cd55ce83bcba84e29c0ce1ff63f5602f",
+					"title": "Mad Men S02 1080p Blu-ray Remux AVC DTS HD-MA 5.1 - decibeL",
+					"fileSize": 105584.64
+				},
+				{
+					"hash": "4e3cccbec181c618db92112aa3665e2f56ba7d72",
+					"title": "Безумцы (2 сезон: 1-12 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 101420
+				},
+				{
+					"hash": "1dfe2a49124a3f9145a8ba82b08bcf0da30bea5f",
+					"title": "Безумцы (2 сезон: 1-11 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 94210
+				},
+				{
+					"hash": "954f736a0019263fbc42031edd6d42f648644b12",
+					"title": "Безумцы (2 сезон: 1-9 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 79810
+				},
+				{
+					"hash": "a13842a0ab884081f93af68a7c6d4194934bf543",
+					"title": "Mad.Men.S02.1080p.BluRay.DD5.1.x264-SA89",
+					"fileSize": 79503.36
+				},
+				{
+					"hash": "6da0b2a63a7162162b3c9d4ae48deeb56159a5a1",
+					"title": "Mad Men S02 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 79503.36
+				},
+				{
+					"hash": "30c9072da80aa5f9b0ac280832d85fe1441a1c2a",
+					"title": "Mad Men S02 1080p BluRay DD 5.1 x264-SA89",
+					"fileSize": 79503.36
+				},
+				{
+					"hash": "6e483fb4c239ab52a501120eece2a9c62297c6a2",
+					"title": "Mad.Men.S02.1080p.BluRay.DD5.1.x264-SA89",
+					"fileSize": 79501.58845233917
+				},
+				{
+					"hash": "bd2eff21f82e97735481a0f6bee9c4a8503bfd9c",
+					"title": "Безумцы (2 сезон: 1-8 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 70470
+				},
+				{
+					"hash": "806ac33b68ddd810bd4612366dd85409f4eeebe0",
+					"title": ".Mad.Men.S02.BluRay.1080p.Dts-HDMa5.1.AVC-PiR8",
+					"fileSize": 68629.69864749908
+				},
+				{
+					"hash": "f2fc618f1e37a905777e8a3dd1ccbdb7532676f4",
+					"title": "Mad.Men.(2007).S02.(1080p.BDRip.x265.10bit.DTS-HD.MA.5.1.-.WEM)[TAoE]",
+					"fileSize": 61584.67565059662
+				},
+				{
+					"hash": "87804f94fbf86b54a4f471bb66cbe33c0e772820",
+					"title": "Безумцы (2 сезон: 1-7 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 61130
+				},
+				{
+					"hash": "d07198d596f7d1ff434cdaf8ab198cdb478f592b",
+					"title": "Mad.Men.S02.MULTi.1080p.BluRay.x264-MeToO",
+					"fileSize": 59222.51399040222
+				},
+				{
+					"hash": "2a8605b08915b43ac35b3cfb8da4a3d623baf89c",
+					"title": "Mad.Men.S02.MULTI.VFF.1080p.BluRay.DTS.5.1.x264-MeToO",
+					"fileSize": 59217.92
+				},
+				{
+					"hash": "925ea5948439014d1cd915d129d4cf9a8f307bc8",
+					"title": "Mad Men S02 br 10bit dts hevc-d3g",
+					"fileSize": 54241.28
+				},
+				{
+					"hash": "4d7f102429eace57aef65d8d7378c85d2b0dc968",
+					"title": "Mad.Men.S02.1080p.BluRay.x264.HAM[rartv]",
+					"fileSize": 52443.30397510529
+				},
+				{
+					"hash": "a30c5e42506feef3c89b4e005cb529f782b94a48",
+					"title": "Mad Men S02 1080p BluRay DTS x264-H@M",
+					"fileSize": 52439.04
+				},
+				{
+					"hash": "8b06309f97f46673bff356f6f4d2b651a532776b",
+					"title": "Mad Men S02 1080p BluRay DTS 5.1 x264-H@M",
+					"fileSize": 52439.04
+				},
+				{
+					"hash": "f72d1f35759d152466b357c144ce646c44267578",
+					"title": "Mad.Men.(2007).S02.(1080p.BDRip.x265.10bit.AC3.5.1.-.WEM)[TAoE]",
+					"fileSize": 49962.02529811859
+				},
+				{
+					"hash": "4d5ab515cf18c52eec1a31a5f83989333cb5623f",
+					"title": "[Ex-torrenty.org]Mad.Men.S02.PL.1080p.BluRay.x264-Mixio",
+					"fileSize": 46553.08589553833
+				},
+				{
+					"hash": "c8cb18feaa7778d74b07aa17aa2680bc81e6f9d9",
+					"title": "Mad.Men.S02.1080p.AMZN.WEB.DL.DDP.5.1.H.264-SLiGNOME {imdb-tt0804503}",
+					"fileSize": 46091.73
+				},
+				{
+					"hash": "d7bafe19b48db5face4572edf578340a71df9f12",
+					"title": "Mad Men S02 1080p AMZN WEB-DL DD+ 5.1 H.264-SLiGNOME",
+					"fileSize": 46090.24
+				},
+				{
+					"hash": "a53efae8a00316e44f51f81f2977f0da3feaf47a",
+					"title": "Mad Men S02 1080p AMZN WEB-DL DD+5 1 H 264-playWEB",
+					"fileSize": 46020.60599040985
+				},
+				{
+					"hash": "ff99cb60fadf9ebd28f4295b643a1564b00b21d6",
+					"title": "Безумцы (2 сезон: 1-5 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 42560
+				},
+				{
+					"hash": "ab29b21944f2693a9d156c53b681a32f7592d4e0",
+					"title": "Безумцы (2 сезон: 1-5 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 42560
+				},
+				{
+					"hash": "9dbe2987d421015db65ce956c8dd4ecf452ec41b",
+					"title": "Mad Men (2007) S02E01 (1080p AMZN WEB-DL H265 SDR DDP 5.1 English - HONE).mkv",
+					"fileSize": 42199.04
+				},
+				{
+					"hash": "86a5544020dd13a4e073a07ddf1ab07c3a20cfa0",
+					"title": "Mad.Men.S01-07.ITA.WEBRIP.x264-mkeagle3",
+					"fileSize": 39679.15735721588
+				},
+				{
+					"hash": "1b3f6dc2d29d47ed3416330664196b35041e18e0",
+					"title": "Безумцы (2 сезон: 1-4 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 33980
+				},
+				{
+					"hash": "1a7899fe235e22222c9a69841f60f2562fa748a0",
+					"title": "Mad Men Season 1-7 COMPLETE 720p BrRip x264 350MB PAHE.in",
+					"fileSize": 32346.50893592834
+				},
+				{
+					"hash": "fd2e22431cd5bca5f3884a9e5924aad96af14e9e",
+					"title": "Mad Men Season 1-7 COMPLETE 720p BrRip x264 350MB PAHE.in",
+					"fileSize": 32346.50893592834
+				},
+				{
+					"hash": "ac049fc99c07e4e8b2fb842c758064782cb6084a",
+					"title": "Mad Men Season 1-7 COMPLETE 720p BrRip x264 350MB PAHE.in",
+					"fileSize": 32346.50893592834
+				},
+				{
+					"hash": "7a7d5f5023b0205bb0d81c3335108f5291a18d9b",
+					"title": "Mad Men. Season 1-6 (2007-2013)",
+					"fileSize": 32186.43787288666
+				},
+				{
+					"hash": "c64a92b15f1ab5f3c1e14e1f29600437cb2f6003",
+					"title": "Mad Men S02 720p BluRay DTS x264-CtrlHD",
+					"fileSize": 30851.25656604767
+				},
+				{
+					"hash": "9fb0bf1b6cd522a81300040cca6217509f910f5e",
+					"title": "Mad.Men.S02.1080p.BluRay.x264-OFT",
+					"fileSize": 29540.36632728577
+				},
+				{
+					"hash": "f3862479258fbfb4380d14cd623a21105d295003",
+					"title": "Mad.Men.S02.720p.BluRay.DTS.x264-CtrlHD",
+					"fileSize": 29132.8
+				},
+				{
+					"hash": "f64bb31e87170788e1a9586ddbca4185f2b2a448",
+					"title": "Mad Men S02 720p BluRay DTS x264 CtrlHD",
+					"fileSize": 29132.8
+				},
+				{
+					"hash": "b53f30397f4b18cba136c347f6d0d9d1b8768e4d",
+					"title": "Mad Men Season 2 Blueray Rip 720p DTS Audio Complete",
+					"fileSize": 29130.69439411163
+				},
+				{
+					"hash": "6e2417f93c4d1f2e383919ca8f8dc57680fdf298",
+					"title": "Mad.Men.S02.720p.BluRay.x264-CtrlHD[rartv]",
+					"fileSize": 29130.69437980652
+				},
+				{
+					"hash": "4bd88f96226ce9fdea768279a9e96da711c40555",
+					"title": "[Ex-torrenty.org]Mad.Men.S02.MULTi.1080p.WEB-DL.DDP2.0.H264-Ralf",
+					"fileSize": 25720.16054344177
+				},
+				{
+					"hash": "c9a12dab333abd78499e3758cbecebf4ea727a99",
+					"title": "Mad Men S02E01-13.1080p.WEBDL.ITA.ENG.G66",
+					"fileSize": 25570.56450366974
+				},
+				{
+					"hash": "a43603e6c9f13b9dcd0f53ba56151a2a3f4c23e9",
+					"title": "Mad.Men.S02.1080p.DSNP.WEB-DL.DUAL.DDP5.1.H.264-TURG",
+					"fileSize": 25569.21811676026
+				},
+				{
+					"hash": "6119b29ef873f9d4601c12108a6e968e125d54cf",
+					"title": "Безумцы (2 сезон: 1-3 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 25500
+				},
+				{
+					"hash": "8504754af22575996dfd83bebcfcd7b4fadb4dcd",
+					"title": "Mad Men (2007) - S02E01 - For Those Who Think Young (1080p BluRay x265 Silence).mkv",
+					"fileSize": 22773.76
+				},
+				{
+					"hash": "21c3a53b686bbe4d0dba425e1a4379dfdda579bc",
+					"title": "Mad_men_S02_hdtv",
+					"fileSize": 20246.64289283752
+				},
+				{
+					"hash": "bb3a73cbc9e1055434e618cda876f977f6d1f322",
+					"title": "Mad.Men.S02.Multi.VFF.1080p.BluRay.HDlight.AC3.5.1.x265-LSCO",
+					"fileSize": 19507.2
+				},
+				{
+					"hash": "dd1af21a8c637090e796226e81b3076686fb3833",
+					"title": "Mad Men Season 1 - 5",
+					"fileSize": 18875.94778156281
+				},
+				{
+					"hash": "4af1847a3264026fc63d21e874142c5f1da98f04",
+					"title": "MAD MEN COMPLETE-Seasons 1-4",
+					"fileSize": 18196.48
+				},
+				{
+					"hash": "a4ee09503e1211958914867842c7706817664e2a",
+					"title": "Безумцы (2 сезон: 1-2 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 17210
+				},
+				{
+					"hash": "e769a7f6a4253b384f614cd7a6a51cc8f33ce3cc",
+					"title": "Mad Men (S02)(2008)(Complete)(HD)(720p)(x264)(WebDL)(Multi 6 Lang)(MultiSUB) PHDTeam",
+					"fileSize": 15543.34371566772
+				},
+				{
+					"hash": "7df520278a6e6025463fddf8516f9a1eff3b83d3",
+					"title": "Mad Men - Season 1-6 - iPhone, iPod",
+					"fileSize": 15423.3117275238
+				},
+				{
+					"hash": "e56b05c41e9b3b4fcb8aa765ab9cd75b21105e67",
+					"title": "Mad Men 2ª Temporada Torrent – WEB-DL 720p Dual Áudio",
+					"fileSize": 15300
+				},
+				{
+					"hash": "450806508e26327ae6e577ba82a30f7a2ab77b66",
+					"title": "Mad Men Seasons 1-4 | 720p mkc compression [mkvGOD]",
+					"fileSize": 14725.12
+				},
+				{
+					"hash": "864dc063d0a0c4ffe0e2afbc00ffef213a854804",
+					"title": "Mad Men (Season 1-4) 720p BRip - ZiXicoR",
+					"fileSize": 14725.12
+				},
+				{
+					"hash": "b3a15abc7b9d8153d30ba36d4821dc1682a3753d",
+					"title": "Mad Men Season 2 Complete 720p [PS3 Compatible]",
+					"fileSize": 14295.04
+				},
+				{
+					"hash": "6a05544bd781e0da5592802813f84800d19740c2",
+					"title": "Mad.Men.S02E11-13.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 14058.8992433548
+				},
+				{
+					"hash": "42528dbfd8444d95cb52af547e487429e275b277",
+					"title": "Mad.Men.Season 2.720p.HDTV.x264",
+					"fileSize": 13429.41656589508
+				},
+				{
+					"hash": "fde457c19f8030ab1bb5198469478e3c1979eff8",
+					"title": "Mad_Men_s2e07-13",
+					"fileSize": 12343.94937419891
+				},
+				{
+					"hash": "1dc942cfa4927fbf2963f969a2e1e855832dbe8f",
+					"title": "Mad.Men.S02.German.AC3D.DL.1080p.BDRip.x265-FuN",
+					"fileSize": 11118.68898010254
+				},
+				{
+					"hash": "9f2a4887ee291b00e8f6024b84c6e6a772faf179",
+					"title": "Mad_Man_s2e01-06_720p",
+					"fileSize": 10568.20530414581
+				},
+				{
+					"hash": "ad1a4f06a45e984c694fac6325275253159ce4f6",
+					"title": "Mad.Men.S02E07-08.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 10455.60953998566
+				},
+				{
+					"hash": "f14e49abc8c37a53f9fffefb27e33f0690b8ea90",
+					"title": "Mad.Men.S02E05-06.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 10364.23005867004
+				},
+				{
+					"hash": "1d27b574600a8e319268558a3e9c75ad68a8a307",
+					"title": "Mad.Men.S02E01-02.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 10304.65856361389
+				},
+				{
+					"hash": "80cfa22ebe77cf4b250e33ab6d4d8edfd9981019",
+					"title": "Mad.Men.S02.1080p.BluRay.x265-RARBG",
+					"fileSize": 9998.01529788971
+				},
+				{
+					"hash": "ad5278f77b0a738d473d400594e4c7cbeaf84669",
+					"title": "Mad.Men.S02.1080p.BluRay.x265-RARBG",
+					"fileSize": 9998.01488018036
+				},
+				{
+					"hash": "28d7a8345d556388658d7fb27544824647413ccf",
+					"title": "Mad.Men.S02E03-04.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 9957.76259803772
+				},
+				{
+					"hash": "c1f49f415d0d2d085bbce838e1485deadcb005be",
+					"title": "Mad.Men.S02E09-10.1080p.BDMux.ITA.ENG.AC3.FLAC.x264-BlackBit",
+					"fileSize": 9902.7578125
+				},
+				{
+					"hash": "93078867332ce67aef8ce3a9957fee1259173853",
+					"title": "Mad.Men.S02E01.For.Those.Who.Think.Young.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-NOGRP.mkv",
+					"fileSize": 9564.16
+				},
+				{
+					"hash": "9ffe725e091e9777231d3a3e034308974909c6d4",
+					"title": "Безумцы (2 сезон: 1 серии из 13) / Mad Men / 2008 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+					"fileSize": 8670
+				},
+				{
+					"hash": "5dbca9d0bb1eb499c7e5586a09ecd3b1a9b8d524",
+					"title": "Mad Men Season 1,2,3,4 BluRay 480p x264-BoB",
+					"fileSize": 8631.323771476746
+				},
+				{
+					"hash": "d591454eb71a879b6ce594dd976c209c881bd798",
+					"title": "mad.men.s02.bdrip.1channel",
+					"fileSize": 8195.12109375
+				},
+				{
+					"hash": "d48dd4a7148dd16db90c3a8086971345651ddd4f",
+					"title": "Безумцы / Mad Men / Сезон: 2 / Серии: 1-13 из 13 (Фил Абрахам · Джон Слэттери) [2008 · США · Детектив · HDRip] Первый канал",
+					"fileSize": 8192
+				},
+				{
+					"hash": "feb5b38e3b0eadbc35f53fe9f52fa8c2775a977b",
+					"title": "Mad.Men.S02.DUAL.AZTORRENTS.ORG",
+					"fileSize": 8039.498545646667
+				},
+				{
+					"hash": "8530c41629a99bc1141179b4408cacc411d7bca9",
+					"title": "Mad.Men.s02.BDRip.Ukr.Eng",
+					"fileSize": 7138.751953125
+				},
+				{
+					"hash": "c614e89cb7728ce56a8679705a7f1ec80cbe9673",
+					"title": "Mad.Men.S02.DVDRip.HQ.SWE.SUB.JOE",
+					"fileSize": 7038.294193267822
+				},
+				{
+					"hash": "93a719e9fd0020b77bf862195b9e590466e99aa0",
+					"title": "Mad.Men.S02.NORDiC.720p.WEB-DL.H.265.DD5.1-CiNEMiX",
+					"fileSize": 6764.580141067505
+				},
+				{
+					"hash": "b310fc12fee59ac9b23571e54bdffd81c8730f76",
+					"title": "Mad Men S02E13 Meditations in an Emergency 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6620
+				},
+				{
+					"hash": "ff32ccee694c6afe7699f155796507ca71f40a47",
+					"title": "Mad Men S02E06 Maidenform 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6610
+				},
+				{
+					"hash": "e1397130ed54b7eabd5cd6d8f90fa0bf714bfe1b",
+					"title": "Mad Men S02E07 The Gold Violin 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6580
+				},
+				{
+					"hash": "e6bb0e8d0a9d2b318e5c2d4aae2decb764816f19",
+					"title": "Mad Men S02E12 The Mountain King 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6280
+				},
+				{
+					"hash": "19e9bc646a81ae556f8d7f6bc25338654bc6af65",
+					"title": "Mad Men Season 2 - COMPLETE 720p BRRip x264 [MKV,AC3,5.1] Ehhhh",
+					"fileSize": 6179.323802947998
+				},
+				{
+					"hash": "f3f1c80198eda852f054b144351aa4cbb5480d4d",
+					"title": "Mad Men S02E03 The Benefactor 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6140
+				},
+				{
+					"hash": "f97118042c992e59abe01fd9b0a5e97edb9a6423",
+					"title": "Mad Men S02E10 The Inheritance 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 6129.76
+				},
+				{
+					"hash": "4e93614ebefd2b549d5286a8d18ac0a488445b42",
+					"title": "Mad.Men.S02.BRRip.x264-ION10",
+					"fileSize": 6024.094983100891
+				},
+				{
+					"hash": "f3336d43237fd123e0970d2156b3681128aa6855",
+					"title": "Mad Men S02E11 The Jet Set 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5980
+				},
+				{
+					"hash": "4fda2ad4907374165b4b667a35c1ef64da6263ff",
+					"title": "Mad Men S02E05 The New Girl 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5910
+				},
+				{
+					"hash": "0c24f6b49d994532893970bd28b5ceaa0fe1215c",
+					"title": "Безумцы / Mad Men / Сезон: 2 / Серии: 1-13 (13) (Фил Абрахам · Джон Слэттери) [2008 · США · Детектив · HDRip] Fox Life",
+					"fileSize": 5867.52
+				},
+				{
+					"hash": "dddb24b7e8ef65c1fbb3008e02346507d06d70c9",
+					"title": "Безумцы / Mad Men [S02] (2008) HDTVRip | Fox Life",
+					"fileSize": 5857.28
+				},
+				{
+					"hash": "08bf98009c122ce79295df1eeb96975e67967bad",
+					"title": "Mad Men [Season 02] (www.kinokopilka.ru)",
+					"fileSize": 5856.675193786621
+				},
+				{
+					"hash": "3aac7b8ebcaf3231f446b7a8fda6cfcb05016433",
+					"title": "Mad Men S02E09 Six Month Leave 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5790
+				},
+				{
+					"hash": "d3aca24eb8285bb87008a0837701458a56827497",
+					"title": "Mad Men S02E02 Flight 1 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5550
+				},
+				{
+					"hash": "97d07d72f3462bfd59e8768663e380590f64b28b",
+					"title": "Mad.Men.S02E01-13.BDMux.ITA.ENG.AAC.x264-BlackBit",
+					"fileSize": 5546.07329082489
+				},
+				{
+					"hash": "63969cf35b9a52210ee6f185003dc1bb570e3659",
+					"title": "Mad Men S02E04 Three Sundays 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5540
+				},
+				{
+					"hash": "a01834f7143bc0ce813c746960b7549ea51c2b2b",
+					"title": "Mad Men S02E08 A Night to Remember 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5460
+				},
+				{
+					"hash": "6bd96d4fa2d23fcabd1767892efd41a537ab21e9",
+					"title": "Mad Men S02E01 For Those Who Think Young BluRay 1080p DTSHD-MA AVC-PiR8.mkv",
+					"fileSize": 5396.48
+				},
+				{
+					"hash": "cf06c665bfb1e1cf446783d6e72dc612af5f60fb",
+					"title": "Mad Men S02E01 For Those Who Think Young 1080p BluRay DD5 1 x264-SA89",
+					"fileSize": 5200
+				},
+				{
+					"hash": "d652bf5651d41afb870722031e12ce4f9dbb75ce",
+					"title": "\"Mad Men Season 2 Complete 720p BRRip 5GB - MkvCage\"",
+					"fileSize": 5191.68
+				},
+				{
+					"hash": "35857e5ea6cb21571c71ecbaed37496d1b70c84a",
+					"title": "Mad.Men.S02.Season.2.720p.5.1Ch.BluRay.ReEnc-DeeJayAhmed",
+					"fileSize": 4930.086784362793
+				},
+				{
+					"hash": "35c71d33a265482cca17da968bd3e78dde753bb4",
+					"title": "Mad Men 2008 Seizoen 2 HDTV NL Subs - BBT",
+					"fileSize": 4792.32
+				},
+				{
+					"hash": "8a856c11c48d30954437b6dbac45a4f428596de6",
+					"title": "Mad.Men.S02.DVDRip.XviD-REWARD",
+					"fileSize": 4659.2
+				},
+				{
+					"hash": "87b96bcac779d3494ba495b55df3d773e146a3f9",
+					"title": "[ Torrent9.cz ] Mad Men S02",
+					"fileSize": 4642.361555099487
+				},
+				{
+					"hash": "d86f821dc79527ad5ac9ca0f1c6479b052ec6a47",
+					"title": "Mad Men Season 2 - DAVENET-((InfamousFlip-RapidTreggy.com))",
+					"fileSize": 4556.8
+				},
+				{
+					"hash": "36eba5e71dc97c0dbf8fffe72cd878d67af69085",
+					"title": "Mad Men - Season 2 - Complete",
+					"fileSize": 4555.363375663757
+				},
+				{
+					"hash": "5bcff2dc8e0696d2b09ff16f4b19b1686c70c7ad",
+					"title": "Mad Men Season 2 Complete",
+					"fileSize": 4555.328174591064
+				},
+				{
+					"hash": "167eb656329a7192efa72353c9508df09a754252",
+					"title": "Mad Men Season 2",
+					"fileSize": 4555.328174591064
+				},
+				{
+					"hash": "33f576c98edc39501d25cb00a886e939cf48b7dc",
+					"title": "Mad.Men.S02.SLOSubs.DVDRip.XviD-REWARD",
+					"fileSize": 4549.828707695007
+				},
+				{
+					"hash": "aa22181614649cde7029b8ce51e39458fc8f0405",
+					"title": "Mad Men Season 2 DVDRip (Greek Subs)",
+					"fileSize": 4510.781025886536
+				},
+				{
+					"hash": "93a89cb570989b7fda2295d0b4c1f9678a5e1248",
+					"title": "Mad Men Season 2 DVDRIP MPEG-4 AVC 856x480 AAC",
+					"fileSize": 4510.162326812744
+				},
+				{
+					"hash": "138df4546071fd5656bd71ed6014a3984c71287f",
+					"title": "Mad.Men.S02.BDRip.x265-ION265",
+					"fileSize": 4195.099543571472
+				},
+				{
+					"hash": "d21cfde2b9e329950a01ac63ed4c0c7a7c4b9749",
+					"title": "Mad.Men.S02E01.BluRay.1080p.x264.H@M.mkv",
+					"fileSize": 4106.24
+				},
+				{
+					"hash": "4990e398a4fcef9099ec5326a88f396ea1c5379e",
+					"title": "MAD Season 2",
+					"fileSize": 3085.212099075317
+				},
+				{
+					"hash": "07a536ce9f5f1236567e14eaa20079175c3246a9",
+					"title": "Mad.Men.S02E01.1080p.WEBRip.x264-HEAT",
+					"fileSize": 2867.2
+				},
+				{
+					"hash": "2ff3cfe39b068800ed0d88f42a7c30e1e5099406",
+					"title": "Mad.Men.S02E01.1080p.WEBRip.x264-HEAT[rarbg]",
+					"fileSize": 2857.282969474792
+				},
+				{
+					"hash": "c9783ee3b739b8ddb2d94a7677cede502a200078",
+					"title": "Mad.Men.S02E01.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2729.411693572998
+				},
+				{
+					"hash": "ea34e2eb8dd5af6665f3b814b0253573ac2fb3c0",
+					"title": "Mad.Men.S02E05.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2725.063349723816
+				},
+				{
+					"hash": "6298163b935d07449c2a15c177a4ef4d09c2fc90",
+					"title": "Mad.Men.S02E09.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2723.84
+				},
+				{
+					"hash": "2dad46993bdf4b14bd25db799d4138459e7ed389",
+					"title": "Mad.Men.S02E04.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2713.6
+				},
+				{
+					"hash": "52f19436da93a411f1f7b0b5afaff996da0d6bd3",
+					"title": "Mad.Men.S02E08.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2713.6
+				},
+				{
+					"hash": "9391f9a352d4e96d8ae2ccd6760897e4edb5b32f",
+					"title": "Mad Men 2007 Season 2 Complete TVRip x264 [i_c]",
+					"fileSize": 2710.085865974426
+				},
+				{
+					"hash": "bac157f30424f857382f548df4c817f8ac6f0665",
+					"title": "Mad.Men.S02E02.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2707.311185836792
+				},
+				{
+					"hash": "8b302ee149fa8260ceec6a19b022e4b43f23ddcd",
+					"title": "Mad.Men.S02E11.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2696.323965072632
+				},
+				{
+					"hash": "71ad6aeefa167045284835faff5e62ff2fd6fea6",
+					"title": "Mad.Men.S02E06.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2692.963344573975
+				},
+				{
+					"hash": "0449f561d25e8905288c57571311d99f792b9ff0",
+					"title": "Mad.Men.S02E12.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2689.09302520752
+				},
+				{
+					"hash": "b0cc932fb2212f09407f9ead325ba0c5db9151f1",
+					"title": "Mad.Men.S02E10.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2662.4
+				},
+				{
+					"hash": "fd3c708382025501fa5558bf472ed58dbd205b26",
+					"title": "Mad.Men.S02E10.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2662.4
+				},
+				{
+					"hash": "e33915bf8e4c78556294ef0ac7f20fc71785793c",
+					"title": "Mad.Men.S02E07.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2656.775443077087
+				},
+				{
+					"hash": "c820cc6549b2a1fde8da66aa1a5141518a3ee8ae",
+					"title": "Mad.Men.S02E13.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2614.771528244019
+				},
+				{
+					"hash": "7e8158ce7797488ecc3b25bd6774b01ad586738c",
+					"title": "Mad.Men.S02E03.1080p.rus.LostFilm.TV.mkv",
+					"fileSize": 2608.591190338135
+				},
+				{
+					"hash": "d6873c5287e562eb1c1bb92d4666860b43479082",
+					"title": "Mad.Men.S02E01.Que.jeunesse.se.passe.MULTi.1080p.WEB.AAC.AV1-BTT.mkv",
+					"fileSize": 2467.84
+				},
+				{
+					"hash": "8d993fd3534e36a14bad44d4783ede70f4af56bf",
+					"title": "Mad Men S02 EXTRAS 1080p BluRay H264-RMXTRAS",
+					"fileSize": 2443.384262084961
+				},
+				{
+					"hash": "1249aa9c2a6fd15cb3cdd01c14f7ece0f0a2c9ae",
+					"title": "Mad.Men.S02.EXTRAS.1080p.BluRay.H264-RMXTRAS",
+					"fileSize": 2368.992946624756
+				},
+				{
+					"hash": "08290cd42a36267dfbeaa0b043d0d583569a012d",
+					"title": "Mad.Men.S02E01.720p.BluRay.Rus.Eng.0day.mkv",
+					"fileSize": 2304
+				},
+				{
+					"hash": "2bb30d5d84a1d07dc2e0cc0190573123f906f018",
+					"title": "Mad.Men.S02E01.720p.BluRay.Rus.Eng.mkv",
+					"fileSize": 2304
+				},
+				{
+					"hash": "bc93d9b3cc4b24a88298d3594c839111782d40e7",
+					"title": "Mad.Men.S02E01.For.Those.Who.Think.Young.1080p.10bit.BluRay.AAC5.1.HEVC-Vyndros.mkv",
+					"fileSize": 2283.52
+				},
+				{
+					"hash": "6520f38a220387824a554fed0fb9f2a789a453a6",
+					"title": "Mad Men S02E01-04 SWESUB DVDRip XviD-OEric",
+					"fileSize": 2170.88
+				},
+				{
+					"hash": "07c3f889c91d63db2364e71487df8905ee7d6fee",
+					"title": "Mad Men (2007) - S02E01 - For Those Who Think Young (1080p BluRay x265 Silence).mkv",
+					"fileSize": 1792
+				},
+				{
+					"hash": "bc5e27a7f1be319c29ff2764781445567ec4748b",
+					"title": "Mad.Men.S02E01.mkv",
+					"fileSize": 1740.8
+				},
+				{
+					"hash": "87e1f9cfc723fd126b61de6e4acdde3dac06521b",
+					"title": "Mad.Men.S02E01.1080p.Bluray.x265-HiQVE.mkv",
+					"fileSize": 1628.16
+				},
+				{
+					"hash": "f043b93ce164eb7e1d9611fc32870426a1b3f1ae",
+					"title": "Mad Men S02E05-07 SWESUB DVDRip XviD-OEric",
+					"fileSize": 1628.16
+				},
+				{
+					"hash": "3e3611bfba8fb4f0732d6dcd117caff44114774c",
+					"title": "Mad.Men.S02E11-13.SWESUB.DVDRip.XviD-OEric",
+					"fileSize": 1626.027366638184
+				},
+				{
+					"hash": "8f17c8df10004a818b673fe5358ec1d23c779b45",
+					"title": "Mad.Men.S02E01.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1544.057725906372
+				},
+				{
+					"hash": "99bfb8423d9e157a03d79c245b35e4080654e22a",
+					"title": "Mad Men Season2 (XviD asd) EnglishV+NapisyPL - www.xvidasd.com",
+					"fileSize": 1537.156198501587
+				},
+				{
+					"hash": "9f8332c8a13ff517d7da9b44b9569e1c5ad23d8e",
+					"title": "Mad.Men.S02E05.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1536
+				},
+				{
+					"hash": "6dea1c1282b37a7af2ce0b908f758f33ba988db9",
+					"title": "Mad.Men.S02E08.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1536
+				},
+				{
+					"hash": "c84bf029ddd2b903291aabe18270735a31054301",
+					"title": "Mad.Men.S02E09.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1536
+				},
+				{
+					"hash": "3f24e770da55747255a4d0a797668b1a15d9ceb2",
+					"title": "Mad.Men.S02E04.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1530.992926597595
+				},
+				{
+					"hash": "41229bb0a0ea959cd0bdd8549e62fdd6da38dda2",
+					"title": "Mad.Men.S02E02.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1525.76
+				},
+				{
+					"hash": "42dc244a44fc4846fdf699381aabf073d62e2bc3",
+					"title": "Mad.Men.S02E06.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1525.76
+				},
+				{
+					"hash": "c7a9a6457a5771b629103d237d652086b941764d",
+					"title": "Mad.Men.S02E11.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1525.76
+				},
+				{
+					"hash": "e1136c79bad26854e91c9430bb1057a0ffbe2197",
+					"title": "Mad.Men.S02E12.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1522.246747970581
+				},
+				{
+					"hash": "973a18111fcca4a64904aaa0a0eea18b4315a0db",
+					"title": "Mad.Men.S02E07.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1505.28
+				},
+				{
+					"hash": "6173d367eeca8ddbdfb7572c614bda006bafd7d3",
+					"title": "Mad.Men.S02E10.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1505.28
+				},
+				{
+					"hash": "7fe0a8b346f00bf584dd27d39d2095528f6620e9",
+					"title": "Mad.Men.S02E10.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1505.28
+				},
+				{
+					"hash": "b4d8309a65178490d9a074d00cc09bc021b1d562",
+					"title": "Mad.Men.S02E03.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1474.56
+				},
+				{
+					"hash": "94db2f72fee82f48af76d043e7b8d831caec7dd8",
+					"title": "Mad.Men.S02E13.720p.rus.LostFilm.TV.mp4",
+					"fileSize": 1474.56
+				},
+				{
+					"hash": "790c85dcb66c28b27d2b8652f6cef58e2ab9f75e",
+					"title": "Mad.Men.S02E01.BluRay.1080p.x265.HEVC-LION[UTR].mkv",
+					"fileSize": 1218.56
+				},
+				{
+					"hash": "f983ff9e90ebba299be22ba3a56a57139cf72d01",
+					"title": "Mad Men (2007) - S02E01 - For Those Who Think Young (1080p BluRay x265 LION).mkv",
+					"fileSize": 1218.56
+				},
+				{
+					"hash": "cc899a5cd6b70300c0c61e54006948dbf87b18c5",
+					"title": "Mad.Men.S02E01.BluRay.1080p.x265.HEVC-LION[UTR].mkv",
+					"fileSize": 1218.56
+				},
+				{
+					"hash": "f215e0901b541e00266943f1f68e54929e458976",
+					"title": "Mad.Men.S02E08.720P.HDTV.X264-hV",
+					"fileSize": 1146.88
+				},
+				{
+					"hash": "28f024e01d11234902e96044a615d697eef3a592",
+					"title": "Mad.Men.S02E10.720P.HDTV.x264-hV",
+					"fileSize": 1146.88
+				},
+				{
+					"hash": "67a7658974210a1abd24f840096682f5bbb44e55",
+					"title": "Mad.Men.S02E07.720P.HDTV.X264-hV",
+					"fileSize": 1136.64
+				},
+				{
+					"hash": "439e033fbdb4dda3911cfd3bb6faf6a32cdd2e0e",
+					"title": "Mad.Men.S02E11.720P.HDTV.x264-hV",
+					"fileSize": 1136.64
+				},
+				{
+					"hash": "fdaad2fb7472a137ea47383d37ff74f48fb3d424",
+					"title": "Mad.Men.S02E09.720P.HDTV.x264-hV",
+					"fileSize": 1119.784563064575
+				},
+				{
+					"hash": "b07f7d5c3096b39d78dd01148c4de52cd31ee7e5",
+					"title": "mad.men.s02e12.720p.hdtv.x264-hv.mkv",
+					"fileSize": 1119.664150238037
+				},
+				{
+					"hash": "8a845625af16c45feed94335a501f5aef027464d",
+					"title": "Mad.Men.S02E05.HDTV.720P.X264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "ab900eebbe0bb3d705f4fd58b18bf298948b3c41",
+					"title": "Mad Men S02E07 720P HDTV X264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "adb68894fd26e220a9bdda0a40e322e6cd4f97de",
+					"title": "Mad.Men.S02E07.720P.HDTV.X264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "6605098cfcc6be8518408e40c4c1b40d28b0fdeb",
+					"title": "Mad.Men.S02E08.720P.HDTV.X264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "d661c8e014eba3b6e0fca5eb73d590e0fd1f8741",
+					"title": "Mad Men S02E08 720P HDTV X264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "4f40f5e22418baba53d1363f88ac025e3ab8de3e",
+					"title": "Mad Men S02E09 720P HDTV x264-hV",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "e2246d01c3fb545e07a743f5004887ac772f243d",
+					"title": "Mad.Men.S02E13.720p.HDTV.x264-DOT",
+					"fileSize": 1116.16
+				},
+				{
+					"hash": "88fc2ead8714bdbb70752b3c527a5ee06fedd321",
+					"title": "Mad Men Season 2 episodes 1-3",
+					"fileSize": 1054.72
+				},
+				{
+					"hash": "22ca8b1807cf0dc0faf045e6082dbd24e96769ef",
+					"title": "Mad men s2e9-10-11",
+					"fileSize": 1050.6390209198
+				},
+				{
+					"hash": "8ad6fcc90d7434e3280d080a3be681f11efdb7f4",
+					"title": "Mad men s2e6-7-8",
+					"fileSize": 1050.556089401245
+				},
+				{
+					"hash": "099bc7b90ec8fad61d9c06e47c225558d56ce0ba",
+					"title": "Mad Men S02E09 Six Month Leave 720p DSNP WEB-DL DD 5 1 H 264-playWEB",
+					"fileSize": 960.19
+				},
+				{
+					"hash": "3e0afbc8a91a64d26d139e4aa98ea23d4e421f67",
+					"title": "Mad.Men.2x05.Dual.720p-lat",
+					"fileSize": 949.149125099182
+				},
+				{
+					"hash": "4036533231a42e32898b9f91b2852220a17e9683",
+					"title": "Mad Men S02E10 The Inheritance 720p DSNP WEB-DL DD 5 1 H 264-playWEB",
+					"fileSize": 946.44
+				},
+				{
+					"hash": "d48d5f37860bf9f2e715e685cde37cc65d676fbb",
+					"title": "Mad.Men.2x13.Dual.720p-lat",
+					"fileSize": 926.3228750228882
+				},
+				{
+					"hash": "323f2513b9a4670d63d383225f7e0858f2170790",
+					"title": "Mad Men S02E05 The New Girl 720p DSNP WEB-DL DD 5 1 H 264-playWEB",
+					"fileSize": 914.13
+				},
+				{
+					"hash": "a3f3215887666c98762808ec6beca519e56c1211",
+					"title": "Mad.Men.2x07.Dual.720p-lat",
+					"fileSize": 910.1104707717896
+				},
+				{
+					"hash": "11e3429a03ade3d8547bfe4f20fa9365532ce501",
+					"title": "Mad.Men.2x08.Dual.720p-lat",
+					"fileSize": 852.5843849182129
+				},
+				{
+					"hash": "5cb9fac20bdc29f9f082f8dd4982d8ffbc394a34",
+					"title": "Mad.Men.S02E01.1080p.HEVC.x265-MeGusta",
+					"fileSize": 849.03
+				},
+				{
+					"hash": "3fd0f9b83bc786aa47fc8c5f459e00df9a8b5c63",
+					"title": "Mad Men_S02E01 [10Bit] [1080p.WEB-DL.H265-AS76-FT] [ENG-Lektor PL] [Alusia].mkv",
+					"fileSize": 772.44
+				},
+				{
+					"hash": "e6413af2945cffab5f14a88549c7c25f75c9e558",
+					"title": "Mad.Men.2x10.Dual.720p-lat",
+					"fileSize": 746.3626651763916
+				},
+				{
+					"hash": "964a132d56826c166ab197b8ecdeed6d8e08ce38",
+					"title": "Mad.Men.S02E01.rus.LostFilm.TV.avi",
+					"fileSize": 726.77734375
+				},
+				{
+					"hash": "874e22003069aed3d056f49167b829d5f01cfdd8",
+					"title": "Mad.Men.2x01.Dual.720p-lat",
+					"fileSize": 725.9339351654053
+				},
+				{
+					"hash": "48d0617a7760965c50662ac3e546f2bdd5c4a4f9",
+					"title": "Mad.Men.S02E05.rus.LostFilm.TV.avi",
+					"fileSize": 723.26
+				},
+				{
+					"hash": "3dad7eda9c3329d8a6e281c5b40e4b3b42c3b214",
+					"title": "Mad.Men.S02E08.rus.LostFilm.TV.avi",
+					"fileSize": 721.9609375
+				},
+				{
+					"hash": "f59605c6dee43b6ee1d5467d271f1d23448d63d6",
+					"title": "Mad.Men.S02E09.rus.LostFilm.TV.avi",
+					"fileSize": 719.802734375
+				},
+				{
+					"hash": "b5339a4c6ecb59aec363c326ea292338b39ddf45",
+					"title": "Mad.Men.S02E02.rus.LostFilm.TV.avi",
+					"fileSize": 716.85
+				},
+				{
+					"hash": "6f23b820c7ace35a1c08f0475f755c80f2b5ee02",
+					"title": "Mad.Men.S02E06.rus.LostFilm.TV.avi",
+					"fileSize": 715.15625
+				},
+				{
+					"hash": "fef5ccfbc06e0811045a812a9a886c399ce9e7eb",
+					"title": "Mad.Men.S02E04.rus.LostFilm.TV.avi",
+					"fileSize": 714.56
+				},
+				{
+					"hash": "3e33db4d1678d29095325956facd2d8ce8b1cb44",
+					"title": "Mad.Men.S02E01E02.FRENCH.LD.HDTV.XviD-JMT[up by sahokyu.free.fr]",
+					"fileSize": 713.79
+				},
+				{
+					"hash": "3d4108069054ca84b382c0ac6fb1befb67b67a2e",
+					"title": "Mad.Men.S02E13.rus.LostFilm.TV.avi",
+					"fileSize": 712.43
+				},
+				{
+					"hash": "3156db7b9149bd7cd604fe2ab4caec88f8e84548",
+					"title": "Mad.Men.S02E11.rus.LostFilm.TV.avi",
+					"fileSize": 710.91
+				},
+				{
+					"hash": "266b9514bbd5613d8e6555596272765ed1fb8cc0",
+					"title": "Mad.Men.S02E07.rus.LostFilm.TV.avi",
+					"fileSize": 709.91
+				},
+				{
+					"hash": "5eaaa170bb0d82d4ff5addd66f51112fab574a75",
+					"title": "Mad.Men.S02E12.rus.LostFilm.TV.avi",
+					"fileSize": 709.25
+				},
+				{
+					"hash": "630063fa0e1db1f194d4f4428aad92f2fa2ed0e2",
+					"title": "Mad.Men.S02E10.rus.LostFilm.TV.avi",
+					"fileSize": 705.416015625
+				},
+				{
+					"hash": "0a3011491e4cda5b5fa2bd3b702e3ed640735b25",
+					"title": "Mad.Men.S02E10.rus.LostFilm.TV.avi",
+					"fileSize": 705.38
+				},
+				{
+					"hash": "6727794dc1a06172e42fb03b1b509b844497ba41",
+					"title": "Mad.Men.S02E10-11.HDTV.XviD",
+					"fileSize": 701.4548330307007
+				},
+				{
+					"hash": "60100594fc12f25b1b457c674acee6138d0f253b",
+					"title": "Mad Men Season 2 Episodes 2-3",
+					"fileSize": 700.7
+				},
+				{
+					"hash": "cec5fdc9e3714536b89a02ec1959d7cdefeef3e0",
+					"title": "Mad men s2e1-2",
+					"fileSize": 700.6456527709961
+				},
+				{
+					"hash": "c156dc486662c5ff7cb80c00976968bf57049b7f",
+					"title": "Mad.Men.S02E03.rus.LostFilm.TV.avi",
+					"fileSize": 697.1875
+				},
+				{
+					"hash": "2c1a2fabf81c418b888f018952a6ba120abbeff5",
+					"title": "Mad.Men.2x11.Dual.720p-lat",
+					"fileSize": 654.7835350036621
+				},
+				{
+					"hash": "f46f82ad54a496bec9d5b5520528f2ba511c5b78",
+					"title": "Mad Men s02e03 HDTV version",
+					"fileSize": 611
+				},
+				{
+					"hash": "511750f0e2b00c704b77d2086ab94889b0f035f4",
+					"title": "Mad.Men.2x03.Dual.720p-lat",
+					"fileSize": 610.1847581863403
+				},
+				{
+					"hash": "208a5a43c98d60aa83a8bef964a1773e860a38b1",
+					"title": "Mad.Men.2x09.Dual.720p-lat",
+					"fileSize": 583.5544424057007
+				},
+				{
+					"hash": "e32389c8aeb5f6efa5a38d66ba5667ddb5cc7700",
+					"title": "Mad.Men.2x06.Dual.720p-lat",
+					"fileSize": 582.9646577835083
+				},
+				{
+					"hash": "50962ade851f78aba5f1d3db85f08dca3c527321",
+					"title": "Mad.Men.2x04.Dual.720p-lat",
+					"fileSize": 555.2146577835083
+				},
+				{
+					"hash": "f07375ee444d37d9aca146519c3ddaf83f6d0c19",
+					"title": "Mad.Men.s02e09.BDRip.Ukr.Eng.avi",
+					"fileSize": 550.17
+				},
+				{
+					"hash": "842f46b96a8e17df82dd5fef754d2d9f656d71e2",
+					"title": "Mad.Men.s02e08.BDRip.Ukr.Eng.avi",
+					"fileSize": 550.16
+				},
+				{
+					"hash": "a62fdaa4170eeead5b28b1fd52d64acf43c76790",
+					"title": "Mad.Men.s02e05.BDRip.Ukr.Eng.avi",
+					"fileSize": 550.1
+				},
+				{
+					"hash": "01b9cc8a9539973c3b9c4b27b5c44abb4c7521cc",
+					"title": "Mad.Men.s02e07.BDRip.Ukr.Eng.avi",
+					"fileSize": 549.92
+				},
+				{
+					"hash": "8c5b1eafda3ac236933331ce4152363f188383d2",
+					"title": "Mad.Men.s02e02.BDRip.Ukr.Eng.avi",
+					"fileSize": 546.64
+				},
+				{
+					"hash": "03d3c6af198300241d8eb602cc25a00dc4c764cb",
+					"title": "Mad.Men.s02e06.BDRip.Ukr.Eng.avi",
+					"fileSize": 542.66
+				},
+				{
+					"hash": "6f521ca702cc9b27a694aed828397ee5fa2365ed",
+					"title": "S0201 - For Those Who Think Young - Ehhhh.mkv",
+					"fileSize": 483.51
+				},
+				{
+					"hash": "5145256ae7a0bf9373c6f7fc3343f96e63a83841",
+					"title": "Mad.Men.s02e01.avi",
+					"fileSize": 452.33
+				},
+				{
+					"hash": "7000064143747909574782fbf632503092417c2c",
+					"title": "Mad.Men.2x02.Dual.720p-lat",
+					"fileSize": 449.1064195632935
+				},
+				{
+					"hash": "80b4506d80cae3c1e2b5913e9f30d2a44a0984c8",
+					"title": "Mad.Men.S02E07.HDTV.XviD-NoTV",
+					"fileSize": 363.53
+				},
+				{
+					"hash": "e2612829e4ff6618a906dc14f30dce180d1a2429",
+					"title": "Mad.Men.S02E10.HDTV.XviD-DOT",
+					"fileSize": 362.67
+				},
+				{
+					"hash": "e03ba99b99ebbaa876ba570015a68011902a5204",
+					"title": "Mad Men S02E12 HDTV XviD- www supreme-speeds com",
+					"fileSize": 360.96
+				},
+				{
+					"hash": "0b13e642f2a40e96201de2fc3c581b5ff1e11fea",
+					"title": "Mad.Men.S02E08.HDTV.XviD-DOT",
+					"fileSize": 358.92
+				},
+				{
+					"hash": "b037da5a8cdaa5f4b5b924819c11dede3d64e54d",
+					"title": "Mad.Men.S02E08.HDTV.XviD-DOT",
+					"fileSize": 358.92
+				},
+				{
+					"hash": "eabd0c60fc4dc26c46aa2c510a0c5bc567852991",
+					"title": "Mad.Men.S02E01.FRENCH.avi",
+					"fileSize": 358.7
+				},
+				{
+					"hash": "9bbe2a9a886197251fd4a74493a9fc5bb414afa4",
+					"title": "Mad Men S02E03 FRENCH LD HDTV XviD-JMT[press-play fr]",
+					"fileSize": 358.7
+				},
+				{
+					"hash": "361d97d8367ae41bc711b6741c043afd5a3b7d16",
+					"title": "Mad Men S02E13 HDTV XviD-DOT [www.thepeerhub.com]",
+					"fileSize": 357.21
+				},
+				{
+					"hash": "63520d59e411016caa346bf99a67d863336dda1f",
+					"title": "mad.men.s02e01-jmt.avi",
+					"fileSize": 357
+				},
+				{
+					"hash": "9da214f89113a614518f251d822720792e8a9e9d",
+					"title": "Mad Men S02E02 HDTV XviD-LOL(www.scenepirates.com)",
+					"fileSize": 356.23
+				},
+				{
+					"hash": "b2c6b902cd483d1e75e49a6dd48d501c7c080dbe",
+					"title": "Mad.Men.S02E05.The.New.Girl.HDTV.XviD-FQM",
+					"fileSize": 355.21
+				},
+				{
+					"hash": "80845255ce5c77bdf28783488112251875923c27",
+					"title": "Mad.Men.S02E05.The.New.Girl.HDTV.XviD-FQM",
+					"fileSize": 355.21
+				},
+				{
+					"hash": "806d7380d466b808421c680c84baead6e4c1bd4a",
+					"title": "Mad.Men.s02e10.SweSub.Olle",
+					"fileSize": 351.2876844406128
+				},
+				{
+					"hash": "8551ecc7d9f2e00403a35260b1428f84fc4bb8a2",
+					"title": "Mad Men 2x13HDTV[divxtotal]by lithos.avi",
+					"fileSize": 351.15625
+				},
+				{
+					"hash": "305b795f75ee98baed4790c56e45d89fddc6ffed",
+					"title": "Mad.Men.S02E10.HDTV.XviD-DOT.avi",
+					"fileSize": 351.138671875
+				},
+				{
+					"hash": "27078f024e1c22526176732400456406aff021cb",
+					"title": "Mad Men S02E08 HDTV XviD-DOT",
+					"fileSize": 351.1
+				},
+				{
+					"hash": "aa461abfb309f6b8d5bb672f74b2b71f1dfd9f36",
+					"title": "Mad Men S02E08 HDTV XviD-DOT",
+					"fileSize": 351.1
+				},
+				{
+					"hash": "ffa15ee1b960184b4053686e1cb2dabb7758c958",
+					"title": "Mad.Men.S02E08.HDTV.XviD-DOT.avi",
+					"fileSize": 351.09765625
+				},
+				{
+					"hash": "c6d8c39712a67f415ffded6e85b817fedbf657eb",
+					"title": "Mad Men S02E13 HDTV XviD-DOT-[seedmore org]",
+					"fileSize": 351.04
+				},
+				{
+					"hash": "469515af76ef621a2b9601f328787bd0cd334ea8",
+					"title": "Mad.Men.S02E13.HDTV.XviD-DOT",
+					"fileSize": 351.03
+				},
+				{
+					"hash": "640ba0541908262ff05c6d999fc2ad6f6038ba95",
+					"title": "Mad.Men.S02E13.HDTV.XviD-DOT.avi",
+					"fileSize": 351.02734375
+				},
+				{
+					"hash": "8cc114a44e4124e35dfd069e8fa510b01699a6b2",
+					"title": "Mad Men S02E05 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 350.97
+				},
+				{
+					"hash": "392afff7d0962d41f45a88df2878a50778b370ab",
+					"title": "Mad.Men.2x06.Maidenform.HDTV.XviD-FoV.avi",
+					"fileSize": 350.65625
+				},
+				{
+					"hash": "07a8e8a653ffd9334f80f6c86107d80acd898b89",
+					"title": "Mad.Men.2x04.Three.Sundays.REPACK.HDTV.XviD-FoV.avi",
+					"fileSize": 350.654296875
+				},
+				{
+					"hash": "c9864f7eacdd5e476917b25b1548f673c48fb5fc",
+					"title": "Mad.Men.2x03.The.Benefactor.HDTV.XviD-FoV.avi",
+					"fileSize": 350.640625
+				},
+				{
+					"hash": "d500a86c76ad993963aa466790d0e703aee1fcfd",
+					"title": "Mad.Men.S02E09.HDTV.XviD-NoTV.avi",
+					"fileSize": 350.4847831726074
+				},
+				{
+					"hash": "4d5bf85094a75b6285deab566df9a87d27074f73",
+					"title": "Mad Men s02e10 HDTV subtitulado Esp SC avi",
+					"fileSize": 350.18
+				},
+				{
+					"hash": "b98ac096e4232f6f30a94b5d82960ece2d299c82",
+					"title": "Mad.Men.S02E11.HDTV.XviD-NoTV.avi",
+					"fileSize": 350.1030387878418
+				},
+				{
+					"hash": "1198b9f7444ed81b90a18668ade6254ca98bdff1",
+					"title": "Mad Men S02E05 The New Girl HDTV XviD-FQM [TorrentVault DOT ORG]",
+					"fileSize": 350.09
+				},
+				{
+					"hash": "9e0476e1f832f4f09a235d46a8925b1969225e4f",
+					"title": "Mad.Men.S02E05.The.New.Girl.HDTV.XviD-FQM.avi",
+					"fileSize": 350.0803394317627
+				},
+				{
+					"hash": "907789cfeefea93cbb9e186fcb838c658f8cb9ea",
+					"title": "Mad Men S02E05 The New Girl HDTV XviD-FQM-",
+					"fileSize": 350.08
+				},
+				{
+					"hash": "471c4b4bd7d60ab96a89f48bfd8a07ed6fc60c16",
+					"title": "Mad.Men.S02E01.HDTV.XviD-LOL.avi",
+					"fileSize": 350.0703125
+				},
+				{
+					"hash": "8cbabb1b8cb29541ffe5d16de10cf76a3cad1e40",
+					"title": "Mad.Men.S02E02.HDTV.XviD-LOL.avi",
+					"fileSize": 350.05859375
+				},
+				{
+					"hash": "1a4fbc8d8f6565755241ba338d006ef2a4314ac9",
+					"title": "Mad.Men.S02E12.HDTV.XviD-NoTV.avi",
+					"fileSize": 350.0291538238525
+				},
+				{
+					"hash": "5c4e2848e241dbaf718d5dc852ff12770367b4a5",
+					"title": "Mad Men Season 2 Episode 01 - For Those Who Think Young.avi",
+					"fileSize": 350.01
+				},
+				{
+					"hash": "968715d8c6823bf0e630b6bc087423eb27f123f4",
+					"title": "Mad Men Season 2 Episode 01 - For Those Who Think Young.avi",
+					"fileSize": 350.01
+				},
+				{
+					"hash": "47cb306d86172b0b4fdfeafb407934c3d6416b72",
+					"title": "Mad Men-2x09 HDTV[Divxtotal]by.lithos.avi",
+					"fileSize": 349.98828125
+				},
+				{
+					"hash": "f57440bb9a510b8246c3b9f896a82b1ad9d96445",
+					"title": "Mad Men-HDTV.2x05[Divxtotal]by.lithos.avi",
+					"fileSize": 349.97
+				},
+				{
+					"hash": "6acebafd33c500203788da1f802ecfa3e3a42153",
+					"title": "Mad Men-HDTV.2x06[Divxtotal]by.lithos.avi",
+					"fileSize": 349.97
+				},
+				{
+					"hash": "64026a8fc6b261b59d86d29f9a31c19bbcf7fc15",
+					"title": "Mad Men-2x10 HDTV[divxtotal]by.lithos.avi",
+					"fileSize": 349.962890625
+				},
+				{
+					"hash": "9a07652d4ad9c711a44653db00ad8506ebe20483",
+					"title": "Mad Men s02e13 HDTV subtitulado Esp SC avi",
+					"fileSize": 349.94
+				},
+				{
+					"hash": "2a8c8a79412ec782449cdcfa986ad318902ea77c",
+					"title": "Mad.Men.S02E04.HDTV.subtitulado.Esp.SC.avi",
+					"fileSize": 349.6484375
+				},
+				{
+					"hash": "9e4aa97b6b967dc8adb37ac6a2677f057c782157",
+					"title": "Mad Men S02E05 HDTV Subtitulado Esp SC avi",
+					"fileSize": 349.58
+				},
+				{
+					"hash": "370889e816eb3936be9f7d0b80b1c6a8d058bc74",
+					"title": "Mad Men S02E07 The Gold Violin HDTV VOstFR DivX-BaLLanTeAm avi",
+					"fileSize": 349.38
+				},
+				{
+					"hash": "c2327472cce1cc9d4b36a8913fc78424c082f724",
+					"title": "Mad Men S02E02 HDTV subtitulado Esp SC avi",
+					"fileSize": 349.36
+				},
+				{
+					"hash": "9a02dc28630627331b674d8b1db9a7ae875a544c",
+					"title": "Mad.Men.S02E07.HDTV.XviD-NoTV.avi",
+					"fileSize": 349.322265625
+				},
+				{
+					"hash": "765f41729bc9039c693b53f796da933c7cbc239d",
+					"title": "Mad.Men.S02E06.HDTV.subtitulado.Esp.SC.avi",
+					"fileSize": 349.1015625
+				},
+				{
+					"hash": "b83f50ed917aa9f41d89e9f6a64a9cdae0c529ad",
+					"title": "Mad Men S02E08 HDTV Subtitulado Esp SC avi",
+					"fileSize": 348.53
+				},
+				{
+					"hash": "d89efcd1cd085ef10709a8f3f4493452ea8c14ea",
+					"title": "Mad Men-HDTV · 2x04[Divxtotal]by.lithos.avi",
+					"fileSize": 348.34
+				},
+				{
+					"hash": "4943d298fa9040f93a14094ac8f9bebf62667a29",
+					"title": "Mad Men S02E06 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 348.33
+				},
+				{
+					"hash": "b83d5f1a66421d6d5478870ce9bf1d75b594dd8d",
+					"title": "Mad Men HDTV.2x01[divxtotal]by.lithos.avi",
+					"fileSize": 347.87
+				},
+				{
+					"hash": "c394e70ee02eeae96aa2422f6da014fefb50c829",
+					"title": "Mad.Men.S02E01.HDTV.subtitulado.Esp.SC.avi",
+					"fileSize": 347.71484375
+				},
+				{
+					"hash": "910b600e3525aa2283e8044b7894ef69152f8056",
+					"title": "Mad Men-HDTV.2x03[Divxtotal]by.lithos.avi",
+					"fileSize": 347.67
+				},
+				{
+					"hash": "61d2414d451dbe9246bc24f135ea6ec66470706d",
+					"title": "Mad Men-2x11HDTV[divxtotal]by.lithos.avi",
+					"fileSize": 347.61328125
+				},
+				{
+					"hash": "e26d3d2ea490ced6f77c8ab7de12a9e0580dc67c",
+					"title": "Mad Men s02e12 HDTV subtitulado Esp SC avi",
+					"fileSize": 347.58
+				},
+				{
+					"hash": "a3199930bf0f532df6d5d92f5fa2674eda3e3103",
+					"title": "Mad Men s02e09 HDTV subtitulado Esp SC avi",
+					"fileSize": 347.54
+				},
+				{
+					"hash": "11f34915eedf28722346fee86c6b3399c0d5dd54",
+					"title": "Mad Men s02e11 HDTV subtitulado Esp SC avi",
+					"fileSize": 347.46
+				},
+				{
+					"hash": "e506218d51b62d0c718d4dd3e12ff27c456e1d6d",
+					"title": "Mad Men S02E09 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 346.92
+				},
+				{
+					"hash": "18266eeefce16428ac175efbbee882a71cd96253",
+					"title": "Mad.Men.S02E03.HDTV.subtitulado.Esp.SC.avi",
+					"fileSize": 346.80859375
+				},
+				{
+					"hash": "445e2a2094e900cfd679f700e57eeb202a748da0",
+					"title": "Mad Men S02E07 HDTV Subtitulado Esp SC avi",
+					"fileSize": 346.75
+				},
+				{
+					"hash": "15810c5e145fd18d7131c8049d4a39c8302c25e0",
+					"title": "Mad Men S02E10 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 346.3
+				},
+				{
+					"hash": "d81c0865ec808f594969568a4064e7ed7f1cfd26",
+					"title": "Mad Men-HDTV.2x02[Divxtotal]by.lithos.avi",
+					"fileSize": 345.65
+				},
+				{
+					"hash": "f70f775552b46c90cb4179ef1a11aafe12cf8c0f",
+					"title": "Mad Men S02E12 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 345.32
+				},
+				{
+					"hash": "3b554d3276bfa278fb4bec22422ccc69483edd2e",
+					"title": "Mad Men S02E07 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 345
+				},
+				{
+					"hash": "5aad07392fb37b808fc257efa232ffdd964afb20",
+					"title": "Mad Men S02E03 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 343.17
+				},
+				{
+					"hash": "3508d8b2c6321819fdea9c6cb0c8f00a6e229d02",
+					"title": "Mad Men S02E11 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 342.62
+				},
+				{
+					"hash": "7f2205212c100c2ef14e2c10af41803e0efac53c",
+					"title": "Mad Men S02E02 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 337.59
+				},
+				{
+					"hash": "3f6e4afb6dae9cac7fe9e2efe50a5ae1e569c823",
+					"title": "Mad Men S02E01 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 336.93
+				},
+				{
+					"hash": "cd8c74946f2d88de8a565a2fadfedc72fc7da8da",
+					"title": "Mad Men S02E04 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 332.32
+				},
+				{
+					"hash": "ec5dea14f3e41c2da340fc108a1ab21da29ab4d4",
+					"title": "Mad Men S02E04 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 330.56
+				},
+				{
+					"hash": "227e9e972778e2c03dd09864f8059397801103e8",
+					"title": "Mad Men S02E08 HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 319.02
+				},
+				{
+					"hash": "c6a6b6f23f201e90f5d788a738d4f7967cc93108",
+					"title": "Mad.Men.S02E01.1080p.BluRay.x265-PGW.mkv",
+					"fileSize": 310.41
+				},
+				{
+					"hash": "61dbf10cb0ad9a6d98c187d173ee189b92fbfc39",
+					"title": "Mad.Men.S02.EXTRAS.1080p.HEVC.x265-MeGusta",
+					"fileSize": 308.65
+				},
+				{
+					"hash": "cbd00d969a6dddbfa116fbee9d0a9ee30bae1c76",
+					"title": "Mad Men S02E13 FINAL HDTV XviD VOSTFR --Antoine 4011--",
+					"fileSize": 305.68
+				},
+				{
+					"hash": "9715f5e81a559cd6ad222b1ddeb1eb1b90e4e7c5",
+					"title": "Mad.Men.S02E01.480p.BluRay.x264-Sticky83.mkv",
+					"fileSize": 303.62
+				},
+				{
+					"hash": "7fd2f11448a271b90eba6a9efca51cb4f77e222c",
+					"title": "MAD.S02E08.X-Games.First.Class_Criminal.Minecraft.720p.WEB-DL.AAC2.0.H264-PhoenixRG",
+					"fileSize": 287.3260831832886
+				},
+				{
+					"hash": "4e2726402ae40f214b9e988de3f3b4a3bc59d101",
+					"title": "Mad.Men.S02E12.HDTV.XviD-hV.avi",
+					"fileSize": 219.78
+				},
+				{
+					"hash": "63450365ec5af6f03db2b3174b66944e5aa81011",
+					"title": "Mad.Men.S02E01.PL.DVDRip.mp4",
+					"fileSize": 197.9
+				},
+				{
+					"hash": "ce1c9a0467e25c43f797e0a2edcf8fb313400142",
+					"title": "Mad.Men.S02E01.720p.BluRay.x265-HETeam.mkv",
+					"fileSize": 187.13
+				},
+				{
+					"hash": "3b97c974464a524dfca6f2dea52dd1798e37b3fb",
+					"title": "S02E01.-.For.those.who.think.Young.mkv",
+					"fileSize": 187.13
+				},
+				{
+					"hash": "ee98f2e0723e216fbefcc3ac6285f1d6990805bd",
+					"title": "Mad Men S02E01 For Those Who Think Young.mp4",
+					"fileSize": 151.32
+				},
+				{
+					"hash": "10345c56537cce38138fcc25089d3e1f480b2685",
+					"title": "Mad.Men.2x12.Dual.720p-lat",
+					"fileSize": 136.8219547271729
+				},
+				{
+					"hash": "01b691548dee60087f790b6b3f73c62f7eb2856e",
+					"title": "Mad.S02E26.Hulk.Smash.iChronicle.TVRip.x264-UNPOPULAR",
+					"fileSize": 104.1928033828735
+				},
+				{
+					"hash": "efdad8dc161bcfed06ee0cba857d120f7f6eb46d",
+					"title": "Mad.S02E21.Real.Veal.Celebrity.Wife.Swamp.TVRip.XviD-UNPOPULAR",
+					"fileSize": 100.0365858078003
+				},
+				{
+					"hash": "3bda2c9352841f735ac3f1f4f7135be03e346bf4",
+					"title": "Mad.Men.S02.EXTRAS.1080p.AV1.10bit-MeGusta",
+					"fileSize": 0
+				},
+				{
+					"hash": "dae107ab7ea23d6235813c59c062580df14be660",
+					"title": "Mad.Men.S02.EXTRAS.720p.HEVC.x265-MeGusta",
+					"fileSize": 0
+				}
+			]
 		}
 	],
 	"source": "dmmdb, read in a read-only session. Each value is the stored JSON array as read, except where `slice` says which entries were kept."

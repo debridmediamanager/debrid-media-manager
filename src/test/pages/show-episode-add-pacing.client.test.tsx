@@ -2,7 +2,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	axiosGetMock,
@@ -18,6 +18,8 @@ const {
 	addCachedMock,
 	delayMock,
 	callLog,
+	tvResultsProps,
+	sortByMeanMock,
 } = vi.hoisted(() => {
 	class AxiosError extends Error {
 		response?: { status?: number };
@@ -48,6 +50,9 @@ const {
 		addCachedMock: vi.fn(),
 		delayMock: vi.fn(),
 		callLog: [] as string[],
+		tvResultsProps: { current: null as any },
+		// The page's own sort, swapped in where the order on screen is the point
+		sortByMeanMock: vi.fn((results: any[]) => results),
 	};
 });
 
@@ -70,7 +75,10 @@ vi.mock('@/components/SearchTokens', () => ({
 
 vi.mock('@/components/TvSearchResults', () => ({
 	__esModule: true,
-	default: () => <div data-testid="tv-search-results" />,
+	default: (props: any) => {
+		tvResultsProps.current = props;
+		return <div data-testid="tv-search-results" />;
+	},
 }));
 
 vi.mock('@/components/showInfo', () => ({
@@ -213,7 +221,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByMean: (results: any[]) => results,
+	sortByMean: (results: any[]) => sortByMeanMock(results),
 }));
 
 vi.mock('@/utils/quickSearch', () => ({
@@ -499,7 +507,7 @@ describe('Instant RD (Whole Season) next to a release named in Russian', () => {
 		keys.tb = null;
 		// What the RD lookup answers: the recorded cached hashes, each with the
 		// file count its Available row lists.
-		const files = timecop.rdFiles as Record<string, number>;
+		const files = timecop.rdFiles as unknown as Record<string, number>;
 		vi.mocked(checkDatabaseAvailabilityRd).mockImplementationOnce(
 			async (_token, _solution, _imdbId, hashes, setSearchResults) => {
 				setSearchResults((prev) =>
@@ -536,5 +544,87 @@ describe('Instant RD (Whole Season) next to a release named in Russian', () => {
 		await waitFor(() => expect(addCachedMock).toHaveBeenCalled());
 		expect(addCachedMock.mock.calls[0].slice(0, 2)).toEqual(['rd', ENGLISH_TVRIP]);
 		expect(addCachedMock.mock.calls.map((call) => call[1])).not.toContain(RUSSIAN_SATRIP);
+	});
+});
+
+// Card 248: cached first, then the biggest average episode, put LostFilm's
+// Russian Blu-ray remux packs at the top of Mad Men season 2 once the page
+// listed them. The Cyrillic-led releases now follow the rest, each group in the
+// page's own order. Mad Men season 2 as production held it on 2026-10-07.
+describe('Season list next to releases named in Russian', () => {
+	const madMen = recorded.pages.find((p) => p.key === 'tv:tt0804503:2')!;
+	const files = madMen.rdFiles as unknown as Record<string, number>;
+	type Row = { hash: string; title: string; fileSize: number };
+	// Restored after each test: the other suites here mark every hash cached.
+	const defaultRdCheck = vi.mocked(checkDatabaseAvailabilityRd).getMockImplementation()!;
+
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+		sortByMeanMock.mockImplementation(actual.sortByMean);
+		axiosGetMock.mockReset();
+		keys.rd = 'rd-token';
+		keys.ad = null;
+		keys.tb = null;
+		tvResultsProps.current = null;
+		// What the RD lookup answers: the recorded cached hashes, each with the
+		// file count its Available row lists, and the page re-sorts with it.
+		vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(
+			async (_token, _solution, _imdbId, hashes, setSearchResults, sortFn) => {
+				setSearchResults((prev) =>
+					sortFn(
+						prev.map((r) =>
+							files[r.hash]
+								? { ...r, rdAvailable: true, videoCount: files[r.hash] }
+								: r
+						)
+					)
+				);
+				return hashes.filter((h) => files[h]).length;
+			}
+		);
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show')) {
+				return Promise.resolve({
+					status: 200,
+					data: { ...SHOW, title: 'Mad Men', season_episode_counts: { 1: 13, 2: 13 } },
+				});
+			}
+			if (url.startsWith('/api/torrents/tv')) {
+				const rows = [...(madMen.value as Row[])]
+					.sort((a, b) => b.fileSize - a.fileSize)
+					.map((r) => ({ ...r, files: [], videoCount: 0 }));
+				return Promise.resolve({ status: 200, headers: {}, data: { results: rows } });
+			}
+			return Promise.resolve({ status: 200, data: {} });
+		});
+	});
+
+	afterEach(() => {
+		sortByMeanMock.mockImplementation((results: any[]) => results);
+		vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(defaultRdCheck);
+	});
+
+	it('lists the releases named in Russian after the rest', async () => {
+		const actual = await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+		render(<ShowSeasonPage />);
+		await screen.findByRole('button', { name: /Instant RD \(Whole Season\)/i });
+		await waitFor(() =>
+			expect(tvResultsProps.current.filteredResults.some((r: any) => r.rdAvailable)).toBe(
+				true
+			)
+		);
+		const listed: (Row & { rdAvailable?: boolean })[] = tvResultsProps.current.filteredResults;
+		const russian = (r: Row) => /^[А-Яа-яЁё]/.test(r.title);
+
+		// The page's own order puts a Russian pack first.
+		expect(russian(actual.sortByMean([...listed] as any)[0])).toBe(true);
+		expect(listed).toHaveLength(madMen.value.length);
+		expect(listed.map((r) => r.hash)).toEqual(
+			[
+				...actual.sortByMean(listed.filter((r) => !russian(r)) as any),
+				...actual.sortByMean(listed.filter(russian) as any),
+			].map((r) => r.hash)
+		);
+		expect(listed.findIndex(russian)).toBe(listed.length - 15);
 	});
 });

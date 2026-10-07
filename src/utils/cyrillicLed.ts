@@ -15,3 +15,16 @@
 export const CYRILLIC_LED = /^[А-Яа-яЁё]/;
 
 export const isCyrillicLed = (title: string): boolean => CYRILLIC_LED.test(title);
+
+/**
+ * The listed results with Cyrillic-led releases moved after the rest, each group
+ * keeping the order it had. A page sorts cached and biggest first, which put the
+ * Russian-dub BDRemux at the top of The Vexxer and LostFilm's remux at the top of
+ * Mad Men season 2 once the pages listed them.
+ */
+export function cyrillicLedLast<T extends { title: string }>(results: T[]): T[] {
+	const rest: T[] = [];
+	const cyrillicLed: T[] = [];
+	for (const result of results) (isCyrillicLed(result.title) ? cyrillicLed : rest).push(result);
+	return cyrillicLed.length === 0 ? results : [...rest, ...cyrillicLed];
+}

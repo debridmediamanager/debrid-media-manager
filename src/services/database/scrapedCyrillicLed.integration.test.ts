@@ -132,7 +132,11 @@ describe.skipIf(!dockerAvailable)('Cyrillic-led releases on MySQL 8.0.36 (Integr
 	// other automated pickers use, must name the same releases.
 	it.each(
 		recorded.pages
-			.filter((p) => p.table === 'ScrapedTrue' && !p.key.startsWith('anime:'))
+			// One page of the paged read holds 50.
+			.filter(
+				(p) =>
+					p.table === 'ScrapedTrue' && !p.key.startsWith('anime:') && p.value.length <= 50
+			)
 			.map((p) => p.key)
 	)('leaves out of %s exactly what isCyrillicLed names, unless asked', async (key) => {
 		const stored = pageOf('ScrapedTrue', key);

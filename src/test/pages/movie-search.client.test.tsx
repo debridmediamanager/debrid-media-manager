@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	axiosGetMock,
@@ -12,6 +12,7 @@ const {
 	authKeys,
 	torrentResults,
 	searchResultsProps,
+	sortByBiggestMock,
 } = vi.hoisted(() => {
 	const toast = Object.assign(vi.fn(), {
 		success: vi.fn(),
@@ -34,6 +35,8 @@ const {
 		},
 		torrentResults: [] as any[],
 		searchResultsProps: { current: null as any },
+		// The page's own sort, swapped in where the order on screen is the point
+		sortByBiggestMock: vi.fn((results: any[]) => results),
 		// Stable identities - the real hook memoizes these, and fresh ones per
 		// render would retrigger effects that key off them
 		torrentManagement: {
@@ -155,7 +158,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByBiggest: (results: any[]) => results,
+	sortByBiggest: (results: any[]) => sortByBiggestMock(results),
 }));
 
 vi.mock('@/utils/quickSearch', () => ({
@@ -413,14 +416,58 @@ describe('Movie search page across client-side navigation', () => {
 				)
 			);
 			const cached = new Set(vexxer.rdCached);
+			// As the RD lookup answers: each cached release is one video file, and
+			// the page re-sorts with what it learned.
 			vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(
-				async (_key, _solution, _imdbId, hashes, setTorrentList) => {
+				async (_key, _solution, _imdbId, hashes, setTorrentList, sortFn) => {
 					setTorrentList((prev) =>
-						prev.map((r) => (cached.has(r.hash) ? { ...r, rdAvailable: true } : r))
+						sortFn(
+							prev.map((r) =>
+								cached.has(r.hash)
+									? { ...r, rdAvailable: true, biggestFileSize: r.fileSize }
+									: r
+							)
+						)
 					);
 					return hashes.filter((h) => cached.has(h)).length;
 				}
 			);
+		});
+
+		afterEach(() => {
+			sortByBiggestMock.mockImplementation((results: any[]) => results);
+		});
+
+		// Cached first, then biggest, put the Russian-dub BDRemux at the top of the
+		// list. The Cyrillic-led releases now follow the rest, each group in the
+		// page's own order.
+		it('lists the releases named in Russian after the rest', async () => {
+			const actual =
+				await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+			sortByBiggestMock.mockImplementation(actual.sortByBiggest);
+
+			render(<MovieSearchPage />);
+			await screen.findByRole('button', { name: /Instant RD/i });
+
+			expect(
+				searchResultsProps.current.filteredResults.map((r: { hash: string }) =>
+					r.hash.slice(0, 8)
+				)
+			).toEqual([
+				// cached, then uncached, biggest first
+				'453bb1ca',
+				'fb1d2b7a',
+				'3e00e70c',
+				'9e3a5ffc',
+				'99ff6a2d',
+				'c847f15e',
+				'51cda441',
+				'7688ea77',
+				// named in Russian: the cached BDRemux, then the two DVDRips
+				'75197031',
+				'8c997e30',
+				'e61e15e5',
+			]);
 		});
 
 		it('lists the Russian-dub release and leaves it out of Instant RD and Cast (RD)', async () => {

@@ -40,7 +40,7 @@ import {
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { isCyrillicLed } from '@/utils/cyrillicLed';
+import { cyrillicLedLast, isCyrillicLed } from '@/utils/cyrillicLed';
 import { handleCastTvShowDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import { delay } from '@/utils/delay';
@@ -1149,7 +1149,7 @@ const TvSearch: FunctionComponent = () => {
 		}
 		results = quickSearch(query, results);
 		if (hideRdBlockedTorrents) results = results.filter(shownBySettings);
-		return results;
+		return cyrillicLedLast(results);
 	}, [
 		query,
 		searchResults,

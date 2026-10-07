@@ -30,7 +30,7 @@ import {
 import { handleCastMovie } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { isCyrillicLed } from '@/utils/cyrillicLed';
+import { cyrillicLedLast, isCyrillicLed } from '@/utils/cyrillicLed';
 import { handleCastMovieDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import {
@@ -755,7 +755,7 @@ const MovieSearch: FunctionComponent = () => {
 				((!!torboxKey && r.tbAvailable) || (!!adKey && r.adAvailable) || !!r.tbTransferred);
 			results = results.filter((r) => !isRdBlockedFilename(r.title) || transferableToRd(r));
 		}
-		return results;
+		return cyrillicLedLast(results);
 	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
 
 	const totalUncachedCount = useMemo(() => {

@@ -27,6 +27,7 @@ import {
 import axiosWithRetry from '@/utils/axiosWithRetry';
 import { getLocalStorageItemOrDefault, hideRdBlockedTorrentsDefault } from '@/utils/browserStorage';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { cyrillicLedLast } from '@/utils/cyrillicLed';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import { getColorScale, getQueryForEpisodeCount } from '@/utils/episodeUtils';
 import {
@@ -528,7 +529,7 @@ const AnimePage: FunctionComponent = () => {
 				((!!torboxKey && r.tbAvailable) || (!!adKey && r.adAvailable) || !!r.tbTransferred);
 			results = results.filter((r) => !isRdBlockedFilename(r.title) || transferableToRd(r));
 		}
-		return results;
+		return cyrillicLedLast(results);
 	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
 
 	const expectedEpisodeCount = useMemo(() => {
