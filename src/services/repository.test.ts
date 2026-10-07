@@ -181,7 +181,7 @@ describe('Repository', () => {
 				method: 'getScrapedTrueResults',
 				service: 'scraped',
 				serviceMethod: 'getScrapedTrueResults',
-				args: ['key', 10, 1],
+				args: ['key', 10, 1, { showCyrillicLed: true }],
 				value: [],
 			},
 			{

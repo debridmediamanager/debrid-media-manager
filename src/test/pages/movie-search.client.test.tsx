@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -57,7 +57,12 @@ const {
 
 vi.mock('@/components/MediaHeader', () => ({
 	__esModule: true,
-	default: ({ title }: { title: string }) => <div data-testid="media-header">{title}</div>,
+	default: ({ title, actionButtons }: { title: string; actionButtons?: ReactNode }) => (
+		<>
+			<div data-testid="media-header">{title}</div>
+			{actionButtons}
+		</>
+	),
 }));
 
 vi.mock('@/components/MovieSearchResults', () => ({
@@ -203,10 +208,14 @@ vi.mock('react-hot-toast', () => ({
 
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import MovieSearchPage from '@/pages/movie/[imdbid]/index';
+import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
+import { handleCastMovie } from '@/utils/castApiClient';
+import { checkDatabaseAvailabilityRd } from '@/utils/instantChecks';
 
 const movieInfo: Record<string, { title: string; year: string }> = {
 	tt1111111: { title: 'First Movie', year: '2019' },
 	tt2222222: { title: 'Second Movie', year: '1998' },
+	tt0446009: { title: 'The Vexxer', year: '2007' },
 };
 
 describe('Movie search page across client-side navigation', () => {
@@ -384,5 +393,52 @@ describe('Movie search page across client-side navigation', () => {
 		expect(torrentUrls).toHaveLength(0);
 
 		consoleError.mockRestore();
+	});
+
+	// Card 248: the page lists trusted releases named in Russian, but its one-click
+	// buttons pick for the viewer. The Vexxer as production held it on 2026-10-07:
+	// its largest RD-cached release is the Russian-dub BDRemux, and before the page
+	// listed it Instant RD took the German x265 encode.
+	describe('one-click picks next to a release named in Russian', () => {
+		const vexxer = recorded.pages.find((p) => p.key === 'movie:tt0446009')!;
+		const RUSSIAN_DUB = '751970318000a45e5d8e2b49ce49ae8bcd72d101';
+		const GERMAN_X265 = 'fb1d2b7ada72260ac12502523b828bcae3090d6c';
+
+		beforeEach(() => {
+			routerQuery.imdbid = 'tt0446009';
+			// The route's order: biggest first.
+			torrentResults.push(
+				...[...(vexxer.value as { hash: string; title: string; fileSize: number }[])].sort(
+					(a, b) => b.fileSize - a.fileSize
+				)
+			);
+			const cached = new Set(vexxer.rdCached);
+			vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(
+				async (_key, _solution, _imdbId, hashes, setTorrentList) => {
+					setTorrentList((prev) =>
+						prev.map((r) => (cached.has(r.hash) ? { ...r, rdAvailable: true } : r))
+					);
+					return hashes.filter((h) => cached.has(h)).length;
+				}
+			);
+		});
+
+		it('lists the Russian-dub release and leaves it out of Instant RD and Cast (RD)', async () => {
+			render(<MovieSearchPage />);
+
+			const instant = await screen.findByRole('button', { name: /Instant RD/i });
+			const listed = searchResultsProps.current.filteredResults;
+			expect(listed.map((r: { hash: string }) => r.hash)).toContain(RUSSIAN_DUB);
+			expect(listed.find((r: { hash: string }) => r.hash === RUSSIAN_DUB).rdAvailable).toBe(
+				true
+			);
+
+			fireEvent.click(instant);
+			expect(torrentManagement.addRd).toHaveBeenCalledWith(GERMAN_X265);
+			expect(torrentManagement.addRd).not.toHaveBeenCalledWith(RUSSIAN_DUB);
+
+			fireEvent.click(screen.getByRole('button', { name: /Cast \(RD\)/i }));
+			expect(handleCastMovie).toHaveBeenCalledWith('tt0446009', 'rd-token', GERMAN_X265);
+		});
 	});
 });

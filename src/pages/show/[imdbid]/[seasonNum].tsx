@@ -40,6 +40,7 @@ import {
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { handleCastTvShowDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import { delay } from '@/utils/delay';
@@ -1421,19 +1422,24 @@ const TvSearch: FunctionComponent = () => {
 	}
 
 	// Complete season torrents the service holds: its own availability, and a
-	// video count within two of the season's episode count.
+	// video count within two of the season's episode count. The instant actions
+	// pick for the viewer, so they pass over a release named in Russian, which
+	// the list still shows (see isCyrillicLed).
 	const getCompleteSeasonTorrents = (entry: (typeof INSTANT_SERVICES)[number]) => {
 		const minEpisodes = Math.max(1, expectedEpisodeCount - 2);
 		const maxEpisodes = expectedEpisodeCount + 2;
 		return filteredResults.filter((result) => {
-			if (!result[entry.available]) return false;
+			if (!result[entry.available] || isCyrillicLed(result.title)) return false;
 			return result.videoCount >= minEpisodes && result.videoCount <= maxEpisodes;
 		});
 	};
 
 	// Single-episode torrents (exactly one video) the service holds.
 	const getIndividualEpisodeTorrents = (entry: (typeof INSTANT_SERVICES)[number]) =>
-		filteredResults.filter((result) => result[entry.available] && result.videoCount === 1);
+		filteredResults.filter(
+			(result) =>
+				result[entry.available] && result.videoCount === 1 && !isCyrillicLed(result.title)
+		);
 
 	async function handleInstantWholeSeason(entry: (typeof INSTANT_SERVICES)[number]) {
 		const { service, label } = entry;

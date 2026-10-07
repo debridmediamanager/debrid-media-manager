@@ -30,6 +30,7 @@ import {
 import { handleCastMovie } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { handleCastMovieDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import {
@@ -946,8 +947,11 @@ const MovieSearch: FunctionComponent = () => {
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
+	// The one-click buttons pick for the viewer, so they pass over a release named
+	// in Russian, which the list still shows (see isCyrillicLed). On The Vexxer
+	// the largest cached release is a Russian-dub BDRemux.
 	const getFirstAvailableRdTorrent = () => {
-		return filteredResults.find((r) => r.rdAvailable && !r.noVideos);
+		return filteredResults.find((r) => r.rdAvailable && !r.noVideos && !isCyrillicLed(r.title));
 	};
 
 	// Unlike "Instant RD" and "Cast (RD)", Watch works with whichever service has
@@ -972,7 +976,9 @@ const MovieSearch: FunctionComponent = () => {
 	};
 
 	const getFirstWatchableTorrent = () =>
-		filteredResults.find((r) => !r.noVideos && pickWatchService(r, watchKeys) !== null);
+		filteredResults.find(
+			(r) => !r.noVideos && !isCyrillicLed(r.title) && pickWatchService(r, watchKeys) !== null
+		);
 
 	const handleWatchFirst = async () => {
 		const result = getFirstWatchableTorrent();

@@ -170,9 +170,9 @@ export async function backfillFromDebridioNow(
 		const scrapes = await scrapeAllProviders(target);
 		await persist(target, scrapes);
 		// Tombstone the answer itself - including an empty one, so a title whose
-		// stored results are all filtered out at read time (Cyrillic-only) or
-		// that debridio simply does not know does not re-trigger a scrape on
-		// every page view for the TTL window.
+		// stored results are all filtered out at read time or that debridio
+		// simply does not know does not re-trigger a scrape on every page view
+		// for the TTL window.
 		await db.markDebridioRefreshed(target.key);
 		const torrents = flattenAndRemoveDuplicates(
 			Object.values(scrapes).map((scrape) => scrape?.torrents ?? [])

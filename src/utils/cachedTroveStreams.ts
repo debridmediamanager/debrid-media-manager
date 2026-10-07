@@ -1,5 +1,6 @@
 import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { repository } from '@/services/repository';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { MAX_SIZE_MB, MIN_SIZE_MB } from '@/utils/releaseSize';
 import {
 	episodesNamedForSeason,
@@ -24,11 +25,6 @@ export interface TroveCandidateOptions {
 	maxCount?: number;
 }
 
-/**
- * Titles the detail page hides - its SQL drops Cyrillic-leading names, so the
- * addon must too or it offers releases the page never shows.
- */
-const HIDDEN_TITLE_LEAD = /^[А-Яа-яЁё]/;
 /** Enough size-ranked releases to fill a 5-stream list many times over on any populated title. */
 const DEFAULT_MAX_COUNT = 200;
 
@@ -38,8 +34,8 @@ const isFinitePositive = (value: unknown): value is number =>
 /**
  * The row checks every reader of the scraped pool applies before it looks at
  * what the title names: a usable hash and title, a size that is neither junk
- * nor scraper unit noise, no Cyrillic lead (the detail page's SQL drops those),
- * and the caller's ceiling.
+ * nor scraper unit noise, no Cyrillic lead (see `isCyrillicLed`: the detail
+ * pages list those, the addon does not pick them), and the caller's ceiling.
  */
 const passesRowHygiene = (
 	row: ScrapeSearchResult | undefined,
@@ -49,7 +45,7 @@ const passesRowHygiene = (
 	const sizeMb = row.fileSize;
 	if (!isFinitePositive(sizeMb) || sizeMb <= MIN_SIZE_MB) return false;
 	if (sizeMb > MAX_SIZE_MB) return false;
-	if (HIDDEN_TITLE_LEAD.test(row.title)) return false;
+	if (isCyrillicLed(row.title)) return false;
 	if (ceilingMb !== undefined && sizeMb > ceilingMb) return false;
 	return true;
 };

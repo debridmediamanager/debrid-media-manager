@@ -18,9 +18,6 @@ import { NextApiHandler } from 'next';
 /** Matches the page size of `getScrapedTrueResults`, which the other routes use. */
 const PAGE_SIZE = 50;
 
-/** The same exclusion `getScrapedTrueResults` applies to every other page. */
-const LEADING_CYRILLIC = /^[А-Яа-яЁё]/;
-
 /**
  * One stored release, in either shape an `anime:*` row holds.
  *
@@ -45,7 +42,10 @@ function toSearchResult(entry: StoredRelease): ScrapeSearchResult | null {
 			: typeof entry.filename === 'string'
 				? entry.filename
 				: '';
-	if (title.trim() === '' || LEADING_CYRILLIC.test(title)) return null;
+	// A Cyrillic-led name stays, as on the movie and season pages: these rows are
+	// trusted, and "Письмо для Момо / Momo e no Tegami / A Letter to Momo" is that
+	// film's own release.
+	if (title.trim() === '') return null;
 	const size = Number(entry.fileSize ?? entry.size_bytes);
 	return { hash: entry.hash, title, fileSize: Number.isFinite(size) ? size : 0 };
 }

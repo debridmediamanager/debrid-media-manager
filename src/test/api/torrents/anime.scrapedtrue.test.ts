@@ -1,6 +1,7 @@
 import handler from '@/pages/api/torrents/anime';
 import storedRow from '@/test/fixtures/anime/scrapedtrue-anime-anidb-17617.json';
 import page0 from '@/test/fixtures/anime/scrapedtrue-page0-anime-anidb-17617.json';
+import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -83,6 +84,39 @@ describe('/api/torrents/anime reads the rows the scrapers stored', () => {
 		expect(pages.flat()).toHaveLength(unique.size);
 		expect(new Set(pages.flat()).size).toBe(unique.size);
 		expect(pages.slice(0, -1).every((p) => p.length === 50)).toBe(true);
+	});
+
+	// Card 248: 15 of A Letter to Momo's 86 releases are named in Russian first,
+	// the two largest among them, and the page dropped all 15 as the movie and
+	// season pages did.
+	it("serves A Letter to Momo's releases named in Russian", async () => {
+		const momo = recorded.pages.find(
+			(p) => p.table === 'ScrapedTrue' && p.key === 'anime:anidb-8270'
+		)!.value as Legacy[];
+		mockGetAllScrapedTrueResults.mockImplementation(async (key: string) =>
+			key === 'anime:anidb-8270' ? structuredClone(momo) : null
+		);
+		const served: Served[] = [];
+		for (let page = 0; ; page++) {
+			const res = createMockResponse();
+			await handler(
+				createMockRequest({
+					query: { ...query, animeId: 'anidb-8270', page: String(page) },
+				}),
+				res
+			);
+			if (results(res).length === 0) break;
+			served.push(...results(res));
+		}
+
+		expect(served.map((r) => r.hash).sort()).toEqual(momo.map((r) => r.hash).sort());
+		const russian = momo.filter((r) => /^[А-Яа-яЁё]/.test(r.filename));
+		expect(russian).toHaveLength(15);
+		expect(served[0]).toEqual({
+			hash: 'e215072314e15c9c1957433b6f7270f73cf75d5f',
+			title: 'Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP+Sub] [2011 · повседневность · комедия · Blu-ray] [1080p]',
+			fileSize: 45352.96,
+		});
 	});
 
 	// The scrapers' shared pipeline appends `{hash, title, fileSize}` to an

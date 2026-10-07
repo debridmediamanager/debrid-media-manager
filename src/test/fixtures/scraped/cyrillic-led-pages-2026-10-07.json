@@ -1,0 +1,946 @@
+{
+	"capturedAt": "2026-10-07",
+	"pages": [
+		{
+			"table": "ScrapedTrue",
+			"key": "movie:tt1613031",
+			"work": "Doraemon: Nobita's Great Battle of the Mermaid King (2010)",
+			"note": "Card 248: the debrid job ec01c0d0 filing (hash 3c2ff41c...) is the one Cyrillic-led release; the paged query returned 10 of the 11.",
+			"value": [
+				{
+					"hash": "883efc2adc32bc391d670963516a866e81992471",
+					"title": "Doraemon.the.Movie.Nobita's.Mermaid.Legend.2010.1080p.BluRay.x264.TrueHD.6.1-RvE@HQC",
+					"fileSize": 9564.16
+				},
+				{
+					"hash": "2771ab80bad6d6e531873e334d99a15c28fb9c50",
+					"title": "Doraemon Nobita's Great Battle of the Mermaid King 2010 BluRay DTS x264-CHD",
+					"fileSize": 6195.2
+				},
+				{
+					"hash": "4fb0a63063e229866a80c6abcd2f696f8e572e43",
+					"title": "Nobita's.Great.Battle.of.the.Mermaid.King.2010.BluRay.DTS.x264-C",
+					"fileSize": 6195.2
+				},
+				{
+					"hash": "e26ef9eba7822c0d55db898bded8db4897648df9",
+					"title": "Doraemon: Nobita's Great Battle of the Mermaid King 2010 1080p HMAX WEB-DL DD 5.1 H.264-SiGLA",
+					"fileSize": 6082.56
+				},
+				{
+					"hash": "bcb281241a5580bc68944a8d5043efa8ce2108f3",
+					"title": "[Pandoratv-raws] Doraemon Movie 2010 [30th] (Nobita no Ningyodai",
+					"fileSize": 5345.28
+				},
+				{
+					"hash": "2d99046b83b5ff68115cfea5e9d9b5b3f7db41be",
+					"title": "Doraemon.Nobita's.Great.Battle.of.the.Mermaid.King.2010.720p.DTS.x264-CHD",
+					"fileSize": 3117.19504070282
+				},
+				{
+					"hash": "289dd3a8f984c417f2895ac10aeb50028c76f5e7",
+					"title": "Doraemon.Nobita's.Great.Battle.of.the.Mermaid.King.2010.x264.DTS-WAF",
+					"fileSize": 2107.77033996582
+				},
+				{
+					"hash": "29416888cbabbb7c45546787250dce828537254f",
+					"title": "哆啦A梦：大雄的人鱼大海战.Doraemon the Movie Nobita's Mermaid Legend 2010 BD1080p x264 AAC-DoraFans&MoeVC",
+					"fileSize": 1802.24
+				},
+				{
+					"hash": "3c2ff41cd8bf7188e229238d4e114d5b5ac7dc52",
+					"title": "Дораэмон Битва против Короля Русалок Eiga Doraemon Nobita no Ningyo Daikaisen Doraemon Nobita's Great Battle of the Mermaid King Doraemon Movie 30 Nobita no Ningyo Daikaisen Новый Дораэмон (фильм пятый) [Movie] [JAP+Sub] [2010, приключения, кодомо, DV",
+					"fileSize": 1182.54
+				},
+				{
+					"hash": "9b2df052dee0731aeebfc2900111c3d37b3bc4f6",
+					"title": "哆啦A梦：大雄的人鱼大海战.Doraemon the Movie Nobita's Mermaid Legend 2010 480p DVDRip x264 AAC-YGSUB.mp4",
+					"fileSize": 1010.36
+				},
+				{
+					"hash": "fca7608e7bdaabc60817ef1299c0997ced6950c9",
+					"title": "Doraemon Movie 2010 720p BD [Nobita's Great Battle of the Mermai",
+					"fileSize": 569.59
+				}
+			]
+		},
+		{
+			"table": "Scraped",
+			"key": "movie:tt1613031",
+			"work": "Doraemon: Nobita's Great Battle of the Mermaid King (2010)",
+			"value": [
+				{
+					"hash": "2f38ad420a0ac0e0ebef6df724fc2e1d8d37147d",
+					"title": "[BDMV]DORAEMON THE MOVIE BOX　2006-2010 (DISC5 「のび太の人魚大海戦」＋特典DISC)",
+					"fileSize": 36249.6015625
+				},
+				{
+					"hash": "1b8767666a85dc944b3aaf36c00e629ec1232d90",
+					"title": "[BDMV]Doraemon the Movie: Nobita&#039;s Mermaid Legend 2010 1080p Blu-ray AVC TrueHD 6.1",
+					"fileSize": 34816
+				},
+				{
+					"hash": "883efc2adc32bc391d670963516a866e81992471",
+					"title": "Doraemon.the.Movie.Nobita&#039;s.Mermaid.Legend.2010.1080p.BluRay.x264.TrueHD.6.1-HQC",
+					"fileSize": 9523.2001953125
+				},
+				{
+					"hash": "4e717f449573ee2c6ff78c555f672f63ea1dde6a",
+					"title": "[EMTP-Raws]映画ドラえもん のび太の人魚大海戦[BDrip][x264_FLAC][Hi10P].mkv",
+					"fileSize": 6605
+				},
+				{
+					"hash": "6f8fe746cc2123fad435c311c7c5b6c7e9990b71",
+					"title": "[Mini-hidef-Anime] Doraemon The Movie (Nobita's Great Battle of the Mermaid King) 1080p 2010 1080p HQ-CtHts.mkv",
+					"fileSize": 3738
+				},
+				{
+					"hash": "0d1df5e0794d1770fb6e18ab5dd5c9ae2865a0c9",
+					"title": "34.Doraemon The Movie - Nobita's Great Battle of the Mermaid King [2010] [720p]",
+					"fileSize": 3348
+				},
+				{
+					"hash": "0101a20177e17b80e833044d5977e5c60b6171f4",
+					"title": "Doraemon.The.Movie.Nobita's.Great.Battle.of.the.Mermaid.King.2010.720p.BluRay.DTS.x264-CHD [N-Rap].mkv",
+					"fileSize": 3348
+				},
+				{
+					"hash": "2d99046b83b5ff68115cfea5e9d9b5b3f7db41be",
+					"title": "Doraemon.Nobita's.Great.Battle.of.the.Mermaid.King.2010.720p.DTS.x264-CHD",
+					"fileSize": 3113
+				},
+				{
+					"hash": "289dd3a8f984c417f2895ac10aeb50028c76f5e7",
+					"title": "Doraemon.Nobita's.Great.Battle.of.the.Mermaid.King.2010.x264.DTS-WAF",
+					"fileSize": 2109
+				},
+				{
+					"hash": "29416888cbabbb7c45546787250dce828537254f",
+					"title": "哆啦A梦：大雄的人鱼大海战.Doraemon the Movie Nobita&#039;s Mermaid Legend 2010 BD1080p x264 AAC-DoraFans&amp;MoeVC",
+					"fileSize": 1843.199951171875
+				},
+				{
+					"hash": "1f5da0f276f9af5f0405c8b9eb8edc5688b09d65",
+					"title": "Doraemon ( La Leyenda De Las Sirenas )[dvdrip][spanish]",
+					"fileSize": 1361.92
+				},
+				{
+					"hash": "c5b9afd412d067c55a272ed8965b1e659424af0b",
+					"title": "Eiga Doraemon: Nobita no Ningyo Daikaisen / Doraemon: Nobita&#039;s Great Battle of the Mermaid King / Doraemon Movie 30: Nobita no Ningyo Daikaisen / [Movie] [JAP+Sub] [2010, DVDRip]",
+					"fileSize": 1182.755737304688
+				},
+				{
+					"hash": "2b34bf0a44be28f00fcb1b18309378f659c5f5b1",
+					"title": "Doraemon Movie 2010 - Nobita's Great Battle of the Mermaid King.mkv",
+					"fileSize": 1178
+				},
+				{
+					"hash": "9b2df052dee0731aeebfc2900111c3d37b3bc4f6",
+					"title": "哆啦A梦：大雄的人鱼大海战.Doraemon the Movie Nobita&#039;s Mermaid Legend 2010 480p DVDRip x264 AAC-YGSUB",
+					"fileSize": 1010.400024414062
+				},
+				{
+					"hash": "4d0179f5d9e217d027258bd75e64456e9b30280c",
+					"title": "[Doraemon-FC] Eiga Doraemon - Nobita no Ningyo Daikaisen (2010) [DVD][H264-AA...",
+					"fileSize": 729.64
+				},
+				{
+					"hash": "fca7608e7bdaabc60817ef1299c0997ced6950c9",
+					"title": "Doraemon Movie 2010 720p BD [Nobita's Great Battle of the Mermaid King].mkv",
+					"fileSize": 570
+				}
+			]
+		},
+		{
+			"table": "ScrapedTrue",
+			"key": "tv:tt32059200:10",
+			"work": "Mosgaz. Metronom (2024), a Russian series",
+			"note": "Every trusted release is Cyrillic-led, so the season page showed none of them.",
+			"value": [
+				{
+					"hash": "be49e42f08031c3a7ee20ec98b4615968826ec4e",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 5148.727769851685
+				},
+				{
+					"hash": "c0261b031e2745908251db328acc037af5226710",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 5148.720977783203
+				},
+				{
+					"hash": "091b18cc78945683e0a478c85329730039b478ce",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 5118.009670257568
+				},
+				{
+					"hash": "d4a3e291615ccccd5692a8853cc784de36dc4723",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 5117.881974220276
+				},
+				{
+					"hash": "95e75798ed497308e6e0a0737e6f49e8c718fe7a",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 4518.795609474182
+				},
+				{
+					"hash": "5638ade6089be70119225d7c48c851c3707ac0d5",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 3879.881134033203
+				},
+				{
+					"hash": "0fcee9c4c1068666ba087108aa663b5713566455",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 3848.64567565918
+				},
+				{
+					"hash": "22f483ee8546fa0e5b4240bf7e24615d267903bf",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 3243.781242370605
+				},
+				{
+					"hash": "fa8bf657816eff1f3a7179932d6ff5d6daa701cf",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 3211.98046875
+				},
+				{
+					"hash": "0ee9fdb563f942de6899d82cef43ca52f516fdde",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 2601.303609848022
+				},
+				{
+					"hash": "56f54d56d0d3c1e4fc0cd087a38928a25c0142b1",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 1958.912909507751
+				},
+				{
+					"hash": "7638cd0156b10110ba2cef6cf5c39999a404a328",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 1925.494140625
+				},
+				{
+					"hash": "56410e3b19e5fafb85409b71ee36a46f5c4f2c6c",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 1293.301106452942
+				},
+				{
+					"hash": "a523cf5c608c1be29541537c753634471c3293b6",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 1259.28515625
+				},
+				{
+					"hash": "0c4c9d77e42db328cb5a22a46e975043f6d8fa7b",
+					"title": "Мосгаз. Дело №10. Метроном.S10.2024.WEB-DLRip.Files-x",
+					"fileSize": 648.45703125
+				},
+				{
+					"hash": "86ac272d6b2a8eff0a03de9bc5dea5132474c127",
+					"title": "Мосгаз. Дело №10. Метроном.S10.(2024).WEBRip.(AVC).Files-x",
+					"fileSize": 647.1099510192871
+				}
+			]
+		},
+		{
+			"table": "Scraped",
+			"key": "movie:tt37740754",
+			"work": "Joto Kando Kolkatatei (2025), a Bengali film",
+			"slice": "The first 30 of 919 stored entries, then the page's only release of the film (stored index 914). 909 of the 919 are Cyrillic-led and none of those is this film.",
+			"value": [
+				{
+					"hash": "e35cb3bfc1cae5ea0eb74d708247f3af6157a17f",
+					"title": "Охта [06х01-73 из 100] (2025) IPTV 1080p от ivandubskoj",
+					"fileSize": 146718.72
+				},
+				{
+					"hash": "d50744259933826be2fe022d0ff2009f9b18cbec",
+					"title": "Золотое дно [02х01-09 из 10] (2025)  WEB-DL-HEVC 2160p от ExKinoRay",
+					"fileSize": 74158.08
+				},
+				{
+					"hash": "6dd34d69493b7d2f9e73d25426a95fa101778fe3",
+					"title": "Маска [07x01-11 из 12] (2025) WEBRip 720p от  Files-x",
+					"fileSize": 57159.68
+				},
+				{
+					"hash": "719e5ea6846ce99d17948016ae678e722361e67c",
+					"title": "Маска [07x01-10 из 12] (2025) WEBRip 720p от  Files-x",
+					"fileSize": 54476.8
+				},
+				{
+					"hash": "1dcd4e43615a4ce2962f340b201aaa216f656e9e",
+					"title": "Вампиры средней полосы [03х01-09 из 10] (2025) WEBRip 2160p от ExKinoRay",
+					"fileSize": 52613.12
+				},
+				{
+					"hash": "2db3056e12caedc9dd3e50e14484e4234687d559",
+					"title": "Шальной отдел [01x01-24 из 34] (2025) HDTV 1080p от Files-x",
+					"fileSize": 48957.44
+				},
+				{
+					"hash": "0b190f5c8753eb8d2322b836c541fd734c133911",
+					"title": "Вампиры средней полосы [03х01-08 из 10] (2025) WEBRip 2160p от ExKinoRay",
+					"fileSize": 47626.24
+				},
+				{
+					"hash": "3475015d7a7dea284867342fa94caa9e5930acc1",
+					"title": "Маска [07x01-08 из 12] (2025) WEBRip 720p от  Files-x",
+					"fileSize": 44462.08
+				},
+				{
+					"hash": "7e4350a0f4c5ca31f8522768d9abca2db0015cc4",
+					"title": "Охта [06х01-73 из 100] (2024-2025) IPTV от ivandubskoj",
+					"fileSize": 41267.2
+				},
+				{
+					"hash": "47b2acbfc4a9b78608fd414a9d4416dd1e40bd5a",
+					"title": "Моделист-конструктор [741 номер] (1962-2025) DJVU, PDF",
+					"fileSize": 32184.32
+				},
+				{
+					"hash": "127814acc6bf394d907b11720eb255bbf4095879",
+					"title": "Моделист-конструктор [740 номеров] (1962-2025) DJVU, PDF",
+					"fileSize": 32143.36
+				},
+				{
+					"hash": "53a3d76a9d5fdc684e5540c67fc621cf1fb7a16f",
+					"title": "Шальной отдел [01x01-24 из 34] (2025) WEB-DL 1080p от ExKinoRay",
+					"fileSize": 30689.28
+				},
+				{
+					"hash": "20bd42e9506a16be2f01abb04775021953a1f78c",
+					"title": "Маска [07x01-05 из 12] (2025) WEBRip 720p от  Files-x",
+					"fileSize": 29921.28
+				},
+				{
+					"hash": "7b3633731ad342fc64966556857d1cb8facba729",
+					"title": "Мир на грани [01х01-06 из 08] (2025) WEB-DL-HEVC 2160p от ExKinoRay",
+					"fileSize": 26705.92
+				},
+				{
+					"hash": "5f90e69ba2aba16fa3babbf8c4ce239ea477a637",
+					"title": "Настоящий детектив [29 выпусков] (2025) WEBRip 1080p",
+					"fileSize": 25589.76
+				},
+				{
+					"hash": "fc9d6ef756f8cd4fd86e8050050040992f0c149b",
+					"title": "Маска [07x01-11 из 12] (2025) WEBRip от  Files-x",
+					"fileSize": 23552
+				},
+				{
+					"hash": "d97f09639dc39b1a254016a1037b8462dd145da5",
+					"title": "Женский стендап [07х01-16] (2025) WEB-DL 1080p от Files-x",
+					"fileSize": 23080.96
+				},
+				{
+					"hash": "cf9ef419f6e03aefcb9709ef13e7a99eb7330c19",
+					"title": "Мир на грани [01х01-05 из 08] (2025) WEB-DL-HEVC 2160p от ExKinoRay",
+					"fileSize": 22425.6
+				},
+				{
+					"hash": "d179694dbd36abe2982f25774d4f4d62fd83ce6d",
+					"title": "Земский Собор [v 1.1.1] (2025) PC",
+					"fileSize": 22220.8
+				},
+				{
+					"hash": "50d5c2617a6dbd50777a0bd99b4b6a37003083ff",
+					"title": "Кракен (2025) BDRemux 1080p",
+					"fileSize": 22149.12
+				},
+				{
+					"hash": "1342d8a4d1f562f752814547223da38f74862fa3",
+					"title": "Женский стендап [07х01-15] (2025) WEB-DL 1080p от Files-x",
+					"fileSize": 21616.64
+				},
+				{
+					"hash": "43043bb412974d927c9c33c14d2955277866b82f",
+					"title": "Маска [07x01-10 из 12] (2025) WEBRip от  Files-x",
+					"fileSize": 21329.92
+				},
+				{
+					"hash": "64b9ea11f8590c1c931f89a0481f5cd6dfeba9d5",
+					"title": "Алла-Такси [02x01-10 из 16] (2025) WEBRip 1080p от Files-x",
+					"fileSize": 18903.04
+				},
+				{
+					"hash": "cb4769bedb769d7bc085aca4201fdbd511939921",
+					"title": "Мир на грани [01х01-04 из 08] (2025) WEB-DL-HEVC 2160p от ExKinoRay",
+					"fileSize": 17950.72
+				},
+				{
+					"hash": "187309c0f40b10422a9b7df853772a4c2831c479",
+					"title": "Женский стендап [07х01-12] (2025) WEB-DL 1080p от Files-x",
+					"fileSize": 17356.8
+				},
+				{
+					"hash": "0ad283ae1cbbbba6531703862e73b6d0deee34d4",
+					"title": "Простые истины [01x01-36 из 40] (2025) WEBRip 1080p",
+					"fileSize": 17346.56
+				},
+				{
+					"hash": "2a79ff2b2cc2db2f1b0a4aeee3875ae75eeab7e1",
+					"title": "Маска [07x01-08 из 12] (2025) WEBRip от  Files-x",
+					"fileSize": 17152
+				},
+				{
+					"hash": "95b46b405d689488bfb2ca6a712f2d3c5f377557",
+					"title": "Райский   [02x01-24 из 50] (2025) WEBRip 720p   от  Files-x",
+					"fileSize": 15974.4
+				},
+				{
+					"hash": "7ee86cfdbfc5a9fbcfbb3f6e12e71827d7f5be5a",
+					"title": "Женский стендап [07х01-11] (2025) WEB-DL 1080p от Files-x",
+					"fileSize": 15943.68
+				},
+				{
+					"hash": "a5b8ac7699aa38959372de1068d4c3151f56dd01",
+					"title": "Восьмой участок  [02x01-08 из 16] (2025) WEBRip 1080p от  Files-x",
+					"fileSize": 15482.88
+				},
+				{
+					"hash": "cbf25ebf89456b84ce5d3f4d10504a00491b737d",
+					"title": "Joto Kando Kolkatatei (2025) 1080p ZEE5 WEB-DL DDP5 1 H 264-D3BP4A mkv",
+					"fileSize": 729.64
+				}
+			]
+		},
+		{
+			"table": "ScrapedTrue",
+			"key": "anime:anidb-8270",
+			"work": "Momo e no Tegami / A Letter to Momo (2011)",
+			"note": "15 of the 86 releases are Cyrillic-led, the two largest among them.",
+			"value": [
+				{
+					"hash": "f78ec0ad06300c7d84273d3cb448f7b48ed5dcf3",
+					"filename": "[Anime Land] Momo e no Tegami (BDRip 1080p HEVC QAAC) [76D4067E].mkv",
+					"size_bytes": 7590.896159172058
+				},
+				{
+					"hash": "57cf46fc2525e12a2f3ed2436118ff6aa8549878",
+					"filename": "(SKMD) A Letter To Momo BDRemux",
+					"size_bytes": 32943.26288795471
+				},
+				{
+					"hash": "3fb832790c94f4ef7f117e13197893c4ae0b8f10",
+					"filename": "[Trix] A Letter to Momo (2011) - [Dual Audio] [Multi Subs] (BD 720p AV1 Opus) - Momo e no Tegami - Lettre à Momo VOSTFR",
+					"size_bytes": 727.7578239440918
+				},
+				{
+					"hash": "0188cc1c32586a0ea6783445b1432e0e01bfae12",
+					"filename": "[LYS1TH3A] A Letter to Momo (2012) | Momo e no Tegami (BD Remux 1080p x264 8-bit FLAC) [Dual-Audio]",
+					"size_bytes": 32650.41642189026
+				},
+				{
+					"hash": "063c56c10a332b3d0d81c54a2eaeca21a1392aaf",
+					"filename": "[Arid] A Letter to Momo [Dual-Audio][BDRip 1920x1080 x264 FLAC]",
+					"size_bytes": 10872.89668273926
+				},
+				{
+					"hash": "2e0a2d9cf5b9e991e44df068ec3e0552d62290c9",
+					"filename": "[Arid] A Letter to Momo [Dual-Audio][BDRip 1920x1080 x264 FLAC]",
+					"size_bytes": 13997.52844142914
+				},
+				{
+					"hash": "d8a2625a63c0b5e78f040e4452f307bad8dc5435",
+					"filename": "A Letter to Momo (2011) BD 1080p.x265.Tri-Audio.Ita.Eng.Jap [Rady].mkv",
+					"size_bytes": 1940.474683761597
+				},
+				{
+					"hash": "06b09555eecae5832ed5860cac1945e4ab246468",
+					"filename": "[Fussoir]Momo e no Tegami | A Letter to Momo [BD][1080p][Commie/8thsin]",
+					"size_bytes": 4979.121139526367
+				},
+				{
+					"hash": "98220b2eaf499ec0f0f65fa7ef403ec0dc8be49f",
+					"filename": "[Fansubber] [2011] [BD-720p] Una Lettera per Momo (A letter to Momo) - Versione Internazionale",
+					"size_bytes": 7504.273610115051
+				},
+				{
+					"hash": "718e16fe0c09247dc865336ca622571098af0dc5",
+					"filename": "[bonkai77] A Letter to Momo (2011) [1080p] [DUAL-AUDIO] [x265] [HEVC] [10bit]",
+					"size_bytes": 1554.442200660706
+				},
+				{
+					"hash": "6c62024ebee56f60d55920666cce7163923a9cd4",
+					"filename": "[JacobSwaggedUp] Momo e no Tegami | A Letter to Momo (BD 1280x720) [MP4 Movie]",
+					"size_bytes": 989.9058265686036
+				},
+				{
+					"hash": "23180726271e25a58650a0a6442c1622430b1a07",
+					"filename": "[deanzel] A Letter to Momo [BD 1080p Hi10p Dual Audio FLAC][00cb0d50].mkv",
+					"size_bytes": 10223.2590713501
+				},
+				{
+					"hash": "065ed2f9c69621ede0a09eed89adb03d51a90097",
+					"filename": "[deanzel] A Letter to Momo [BD 1080p Hi10p Dual Audio AC3][d1d1f800].mkv",
+					"size_bytes": 5671.798727035522
+				},
+				{
+					"hash": "139de82473621a071030c2e891d8a77f7efc3ae5",
+					"filename": "[Commie] A Letter to Momo [BD 720p AAC] [1A383C30].mkv",
+					"size_bytes": 1949.496359825134
+				},
+				{
+					"hash": "61d8d6c75a627b2df16f1df6c1c7ddebb668380e",
+					"filename": "[Commie] A Letter to Momo [BD 1080p 5.1 AAC] [5E0CBE93].mkv",
+					"size_bytes": 3369.826190948486
+				},
+				{
+					"hash": "ad257df860eb4984b549c707c21c101db6a02ed0",
+					"filename": "[DeadFish] Momo e no Tegami [BD][720p][AAC].mp4",
+					"size_bytes": 1224.334107398987
+				},
+				{
+					"hash": "6c3d3ec61387637585748224d47bb512a6b94e33",
+					"filename": "[DeadFish] Momo e no Tegami [BD][1080p][AAC].mp4",
+					"size_bytes": 1940.146552085876
+				},
+				{
+					"hash": "01b9fafed89db3eb9985290d4f292c0c16676590",
+					"filename": "A Letter to Momo (2011) (1080p BDRip x265 10bit EAC3 5.1 - Balthallion) [TAoE]",
+					"size_bytes": 2846.72
+				},
+				{
+					"hash": "067c0ea106c66cfb5a8f37cf0fb2157c9fa1fed4",
+					"filename": "A Letter to Momo AKA Momo e no tegami 2011 1080p BluRay DD 5.1 x264-CtrlHD",
+					"size_bytes": 10301.44
+				},
+				{
+					"hash": "082beb0476cef6521703fd2631f82e4b11288456",
+					"filename": "Momo e no Tegami (2011) BDRip 1080p H.265 [2xUKR_JPN] [Hurtom].mkv",
+					"size_bytes": 6010.88
+				},
+				{
+					"hash": "09f681a93f41453f69879c180f21bffefe270eb9",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) BDRip 720p | D",
+					"size_bytes": 2979.84
+				},
+				{
+					"hash": "0b251a24cbbf8591a91925ec13d26ecc4e6993b2",
+					"filename": "A.Letter.to.Momo.2011.576p.P.m4v",
+					"size_bytes": 2172.609791755676
+				},
+				{
+					"hash": "0c51ee8ecaddb2c6aa5ea499ee023bb21d97ef66",
+					"filename": "Lettre.A.Momo.2012.MULTI.VFF.360p.BluRay.AAC.2.0.x264-SASHiMi",
+					"size_bytes": 1116.16
+				},
+				{
+					"hash": "13e81920c7074d197bafe4b7899d99447ce3d600",
+					"filename": "A.Letter.to.Momo.给桃子的信.2011.WEB.720P.X264.AAC.Mandarin.CHS-PM7.mp4",
+					"size_bytes": 944.93
+				},
+				{
+					"hash": "192eb3949035e814a1298cbc903c2ad7e7d61ab9",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP+Sub] [2011 · приключения · драма · BDRip] [720p]",
+					"size_bytes": 2754.56
+				},
+				{
+					"hash": "1dd2809b22decc8379f3fdc41159bfeb0da23301",
+					"filename": "Momo e no Tegami aka A Letter To Momo 2011 1080p Blu-ray Remux AVC DTS-HD MA 5.1-E.N.D",
+					"size_bytes": 33648.64
+				},
+				{
+					"hash": "223f4d8f4c572a96efb3f6edbd9974653f20310d",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264.Multi.FLAC-inT",
+					"size_bytes": 10223.26088905334
+				},
+				{
+					"hash": "2265f8c3213d3cb53871aca1932fecbb22e9b786",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo (Окиура Хироюки) [Movie] [RUS(ext) · JAP+Sub] [2011 · приключения · BDRemux] [1080p]",
+					"size_bytes": 31846.4
+				},
+				{
+					"hash": "23a925ef2edf9a3a369cae53a8e7e0d31b8336f3",
+					"filename": "Lettre.A.Momo.2011.MULTI.VFF.1080p.BluRay.HDLight.AAC.5.1.x265-Punisher694",
+					"size_bytes": 4526.08
+				},
+				{
+					"hash": "28d3d4e253fcbbc3c01d9684a55ff207afdf37d3",
+					"filename": "A Letter to Momo - 720p x264 10bit ac3 ITA aac JAP sub ITA ENG BDrip [salvotnt]",
+					"size_bytes": 2334.72
+				},
+				{
+					"hash": "2925fe9411851460c7bb41c54c861824ddcbeef2",
+					"filename": "A.Letter.To.Momo.2011.BDRip.1080p.mkv",
+					"size_bytes": 9930.066324234009
+				},
+				{
+					"hash": "295566cf2f3275b427cf508883c66e4c4205b35a",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo (2011) BDRemux 1080p | AVC",
+					"size_bytes": 30771.2
+				},
+				{
+					"hash": "2bfe377f630647a89403b37f7d5ec13a05d45963",
+					"filename": "A.Letter.to.Momo.2011.720p.BluRay.x264.DTS-WiKi [PublicHD]",
+					"size_bytes": 5611.52
+				},
+				{
+					"hash": "2fd89fd056055420543c88d557016cf552042963",
+					"filename": "A.Letter.to.Momo.2011.BDRip.x264-WaLMaRT",
+					"size_bytes": 766.25
+				},
+				{
+					"hash": "359d77f1b7de9e9883bf75235a0e7d9f8097bae9",
+					"filename": "A.Letter.To.Momo.2012.KORDUB.HDRip.H264-PREGM.avi",
+					"size_bytes": 1550.503583908081
+				},
+				{
+					"hash": "384c74a5bf431a8186a3196383b96042f6a004d9",
+					"filename": "A Letter to Momo",
+					"size_bytes": 4420.037109375
+				},
+				{
+					"hash": "38ef1a0b632339fed379eaef64412891c3ecd37e",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264-WaLMaRT",
+					"size_bytes": 6758.4
+				},
+				{
+					"hash": "3ec45283ed32c52a2a4df556ebe36c824430c69d",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP] [2011 · приключения · драма · BDRip] [720p]",
+					"size_bytes": 2590.72
+				},
+				{
+					"hash": "45affb407515b901e491dc40f42da78a2dfbfdac",
+					"filename": "Una carta para Momo [DVDrip][Español Castellano][2012]",
+					"size_bytes": 1300.48
+				},
+				{
+					"hash": "5380d6266a91cc5ab9e5b11594409cc47ff8296a",
+					"filename": "A.Letter.to.Momo.e.no.Tegami.2012.DVDRip.x264.AC3-8thSin.mkv",
+					"size_bytes": 1150.318281173706
+				},
+				{
+					"hash": "55909f38282f2e9416253e8ed0468e8a12010374",
+					"filename": "A.Letter.to.Momo.2011.JAPANESE.1080p.BluRay.H264.AAC-VXT",
+					"size_bytes": 2355.2
+				},
+				{
+					"hash": "5bae4939e5d922b9d67d6b9502d84ee1493dc84d",
+					"filename": "A.Letter.To.Momo.2012.KORSUB.HDRip.AVC1.720p-PREGM.avi",
+					"size_bytes": 2741.482971191406
+				},
+				{
+					"hash": "5ecf3d6738aa18c6f27d03c5c31cf6e1b5c40a3b",
+					"filename": "[AnimokuSubs]_A_Letter_to_Momo_(2011)_[BD_720p_x264-10bit_AAC]",
+					"size_bytes": 2202.267045021057
+				},
+				{
+					"hash": "5eea90395eb9853960c230d6a22ee6c17ac04a11",
+					"filename": "Stiahni si Filmy Kreslené Dopis pro Momo / Momo e no tegami (2011)(CZ)[720p]",
+					"size_bytes": 2252.8
+				},
+				{
+					"hash": "667f9f871a95df7fb6386882afff8985d948de22",
+					"filename": "A.Letter.to.Momo.2011.JAPANESE.BRRip.XviD.MP3-VXT",
+					"size_bytes": 1278
+				},
+				{
+					"hash": "680cf62727e5a7e6c6c27db4712b22947600b63d",
+					"filename": "Momo e no tegami 2011 1080p BluRay x264-CtrlHD",
+					"size_bytes": 10301.44
+				},
+				{
+					"hash": "6a515ca3d1eb4edb7707a3ec1882fb0b77a82f8b",
+					"filename": "A.Letter.to.Momo.2011.BDRip.x264-WaLMaRT",
+					"size_bytes": 770.5836238861084
+				},
+				{
+					"hash": "6bc05f4aa3c2fa25ec987532b7a451ba045616c6",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS · JAP+Sub] [2011 · повседневность · комедия · DVD9]",
+					"size_bytes": 7956.48
+				},
+				{
+					"hash": "705590fe25c527cf780996ecdc9f27797f423941",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264-WaLMaRT",
+					"size_bytes": 6756.884215354919
+				},
+				{
+					"hash": "722f2ceabab14c5a67c2b3284eb2908a592f3996",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264-WaLMaRT",
+					"size_bytes": 6756.883732795715
+				},
+				{
+					"hash": "75fbd1b0b22cdcb218e33d3c379c53d71a8684d1",
+					"filename": "Momo e no tegami 2011 1080p GBR Blu-ray AVC DTS-HD MA 5.1",
+					"size_bytes": 43560.96
+				},
+				{
+					"hash": "7b59b7986abf656e14b06394ac65416f50fe9bd0",
+					"filename": "Momo e no Tegami aka A Letter to Momo 2011 1080p USA Blu-ray AVC DTS-HD MA 5.1-ADC",
+					"size_bytes": 44605.44
+				},
+				{
+					"hash": "7c37664e6170421578452a1bd2d693695531df4d",
+					"filename": "A.Letter.To.Momo.2012.TW.BluRay.1080p.AVC.DTS-HD.MA.5.1-TTG",
+					"size_bytes": 42600.10362243652
+				},
+				{
+					"hash": "88e78d64438ea4ff6084e58046e759bbe91e8c55",
+					"filename": "A.Letter.to.Momo.2011.BluRay.1080p.DTS-HD.MA.5.1.AVC.HYBRID.REMUX-FraMeSToR.mkv",
+					"size_bytes": 33669.12
+				},
+				{
+					"hash": "8c101d2ae6da7eddcdcbec187ab64a7d62ecb048",
+					"filename": "A.Letter.to.Momo.2011.576p.BluRay.x264.AC3.5.1.mkv",
+					"size_bytes": 3093.359842300415
+				},
+				{
+					"hash": "8d4093ba3760dcf7f2054efb67ec3f1422608eaf",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP+Sub] [2011 · приключения · драма · BDRip] [HWP]",
+					"size_bytes": 1413.12
+				},
+				{
+					"hash": "8f788973152feeacac1d63b995d864d6f112fab5",
+					"filename": "A.Letter.To.Momo.2011.BluRay.1080p.x264.DTS-MySiLU [PublicHD]",
+					"size_bytes": 8959.262406349182
+				},
+				{
+					"hash": "9440b25dd5a097820abcf7f666b0e98c5a17990e",
+					"filename": "A.Letter.to.Momo.2011.JAPANESE.720p.BluRay.H264.AAC-VXT",
+					"size_bytes": 1494
+				},
+				{
+					"hash": "94a3ce8b71244499f1f6570b7e4b163f52de44c2",
+					"filename": "A Letter to Momo (2011) [1080p] [BluRay] [5.1] [YTS] [YIFY]",
+					"size_bytes": 2283.52
+				},
+				{
+					"hash": "95692fc523f9b15aa557604fe7a3256629856aa6",
+					"filename": "A Letter to Momo (2011) 1920x1080.mp4",
+					"size_bytes": 1968.431436538696
+				},
+				{
+					"hash": "96db06895fa820e332810ebc5b8cee8f623a2e3a",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264-WaLMaRT",
+					"size_bytes": 6758.4
+				},
+				{
+					"hash": "a147541e5c207675dc98af0cbd697a2b914a761c",
+					"filename": "Momo e no Tegami (BD 480p x264 Hi10p Vorbis).mkv",
+					"size_bytes": 1136.64
+				},
+				{
+					"hash": "a77f69e06be4de908d1fab95ee248636cdfe8357",
+					"filename": "A Letter to Momo (2011) (1080p BDRip x265 10bit DTS-HD MA 5.1 - Balthallion) [TAoE]",
+					"size_bytes": 8704
+				},
+				{
+					"hash": "b02112670ef46ce8badd7ef9320a35e46d1694bb",
+					"filename": "A Letter to Momo (Dual Audio) (1920x1080) [Phr0stY].mkv",
+					"size_bytes": 4782.08
+				},
+				{
+					"hash": "b765de82113da48bc453f4a0dc0052705ed015cd",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo (Окиура Хироюки) [Movie] [RUS(ext) · JAP+Sub] [2011 · приключения · драма · мистика · BDRip] [1080p]",
+					"size_bytes": 14807.04
+				},
+				{
+					"hash": "b7e92097e5057c18d37e7e0dda65641b460c3488",
+					"filename": "[Anime Land] Momo e no Tegami (2011) Bluray HD Hi10P RAW [DB6CBA4A].mkv",
+					"size_bytes": 3010.56
+				},
+				{
+					"hash": "c57939b34c046787b35d11322f7367e88ef1c0f4",
+					"filename": "Momo e no Tegami [BD-rip 1920x1080 x264 TRUE HD].mkv",
+					"size_bytes": 10106.88
+				},
+				{
+					"hash": "c5f7f8fc9afadb74574c5e0b22fa17c58afab490",
+					"filename": "A Letter to Momo (2011) [720p] [BluRay] [YTS] [YIFY]",
+					"size_bytes": 1105.92
+				},
+				{
+					"hash": "c86f7562ab460eda8f1aace0a8017cf8bdfd965a",
+					"filename": "A Letter To Momo 2011 1080p TWN Blu-ray AVC DTS-HD MA 5.1-TTG",
+					"size_bytes": 37386.24
+				},
+				{
+					"hash": "cdeee0597885f526f2838d288d536ff275cacdd3",
+					"filename": "[deanzel] A Letter to Momo [BD 720p Hi10p Dual Audio AC3-AAC][92d20ca9].mkv",
+					"size_bytes": 2754.56
+				},
+				{
+					"hash": "d1509a5e9acb327e4c9667dfa4828dd15ffebe0d",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) HDRip от Generalfilm | КПК | Лицензия",
+					"size_bytes": 457.99
+				},
+				{
+					"hash": "d1d8aecac2d4d834ff3b3e5d5ca2456353e550f9",
+					"filename": "A.Letter.to.Momo.2011.1080p.BluRay.x264.DTS-WiKi",
+					"size_bytes": 9540.878375053406
+				},
+				{
+					"hash": "d32fcbae87d60930d732b3eca05d06869e7bedc9",
+					"filename": "A.Letter.to.Momo.2011.BDRip.DeathN2",
+					"size_bytes": 1960.707130432129
+				},
+				{
+					"hash": "d3f1af8c4db579b7ca30a5faf4fe4b51e88e0dd7",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) HDRip-AVC | P",
+					"size_bytes": 744.85
+				},
+				{
+					"hash": "db5c6df7a2c61b54132210123b529bd51026d1c4",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) BDRip 1080p от NNNB",
+					"size_bytes": 5898.24
+				},
+				{
+					"hash": "dd5d627b38a57a574f3ce838d4b64fdff5e47c5e",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) BDRip 1080p",
+					"size_bytes": 14950.4
+				},
+				{
+					"hash": "ddec8f998fbe60c15d375729a221686dc00b01c0",
+					"filename": "Lettre à Momo (2011) MULTi-FRENCH/VOSTFR 1080p 10bits BluRay x265 AAC 5.1 -Punisher694 (A Letter to Momo / Momo e no Tegami)",
+					"size_bytes": 4526.08
+				},
+				{
+					"hash": "e12e03b4a4ae71c7b6080562741765a71fd5bd9c",
+					"filename": "A.Letter.to.Momo.e.no.Tegami.2012.BDRip.x264.FLAC-8thSin.mkv",
+					"size_bytes": 5999.989454269409
+				},
+				{
+					"hash": "e215072314e15c9c1957433b6f7270f73cf75d5f",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP+Sub] [2011 · повседневность · комедия · Blu-ray] [1080p]",
+					"size_bytes": 45352.96
+				},
+				{
+					"hash": "eb78766618dff5d9708143d968addb66bf047db9",
+					"filename": "Momo e no Tegami (2011) BDRip.avi",
+					"size_bytes": 1945.6
+				},
+				{
+					"hash": "ed267dda08dbdb75ea3c5a2aa4e1c0e7832555a2",
+					"filename": "[DB] Momo e no Tegami | A Letter to Momo [Dual Audio 10bit BD1080p][HEVC-x265]",
+					"size_bytes": 3532.8
+				},
+				{
+					"hash": "efcc9bc2e8e2ba2eb526c1f4b02785259f875ae8",
+					"filename": "A Letter to Momo aka Momo e no tegami 2011 1080p BluRay DD5.1 x264-CtrlHD",
+					"size_bytes": 10301.44
+				},
+				{
+					"hash": "f680ca29dd8b4973c2e7a4f0d1358705eb1707a1",
+					"filename": "A.Letter.to.Momo.2011.720p.BluRay.x264-WaLMaRT",
+					"size_bytes": 4466.866099357605
+				},
+				{
+					"hash": "f6b97309d0bc6c4a41aaf7a7047982a781c34ea6",
+					"filename": "Письмо для Момо / Momo e no Tegami / A Letter to Momo [Movie] [RUS(int) · JAP+Sub] [2012 · драма · BDRip] [720p] [HD]",
+					"size_bytes": 4341.76
+				},
+				{
+					"hash": "fbcf1d77d0e85c093bdc2106acca8aac21650888",
+					"filename": "A Letter to Momo 2011 720p BluRay DD5.1 x264-CtrlHD",
+					"size_bytes": 4321.28
+				},
+				{
+					"hash": "fceca24abcda11c181cce243bb4402379188cca9",
+					"filename": "Письмо для Момо / Momo e no tegami (2011) BDRip 720p от HDClub",
+					"size_bytes": 6522.88
+				}
+			]
+		},
+		{
+			"table": "ScrapedTrue",
+			"key": "movie:tt0446009",
+			"work": "The Vexxer / Neues vom Wixxer (2007)",
+			"note": "The largest RD-cached release is a Russian-dub BDRemux. One of 5,455 movie pages where the largest RD-cached trusted release was Cyrillic-led on 2026-10-07. rdCached lists the page's hashes with an Available row in status downloaded.",
+			"rdCached": [
+				"453bb1ca92f4211b653ac0bd3f815e0d57c76f8c",
+				"751970318000a45e5d8e2b49ce49ae8bcd72d101",
+				"fb1d2b7ada72260ac12502523b828bcae3090d6c"
+			],
+			"value": [
+				{
+					"hash": "3e00e70c8b3e5088cf578835e7a4e69abfd3b0b2",
+					"title": "The Vexxer AKA Neues vom Wixxer 2007 1080p GER Blu-ray VC-1 DTS-HD HRA 5.1-TRexHD",
+					"fileSize": 20060.16
+				},
+				{
+					"hash": "751970318000a45e5d8e2b49ce49ae8bcd72d101",
+					"title": "Безумцы из Скотланд-ярда / The Vexxer / Neues vom Wixxer [2007 BDRemux 1080p] Dub (DVD) + AVO (Ю.Сербин) + Original (Deu) + Sub (Rus Deu)",
+					"fileSize": 18053.12
+				},
+				{
+					"hash": "9e3a5ffc75ce84de32d48f3fb2d846d766afaa7d",
+					"title": "Neues.vom.Wixxer.2007.720p.BluRay.2xRus.3xGer.HDCLUB.mkv",
+					"fileSize": 6663.645566940308
+				},
+				{
+					"hash": "99ff6a2d8f928fbe143af31979fe672be9c852f8",
+					"title": "Neues.vom.Wixxer (2007).BDRip-AVC.kep-001.mkv",
+					"fileSize": 2233.236218452454
+				},
+				{
+					"hash": "c847f15e1bc2192a6a33425411700b3e639585f0",
+					"title": "Neues.vom.Wixxer.2007.BDRip.2xRus.Ger.avi",
+					"fileSize": 2113.630859375
+				},
+				{
+					"hash": "fb1d2b7ada72260ac12502523b828bcae3090d6c",
+					"title": "Neues.vom.Wixxer--2007-German-1080p-w.subs-x265.mkv",
+					"fileSize": 1556.48
+				},
+				{
+					"hash": "453bb1ca92f4211b653ac0bd3f815e0d57c76f8c",
+					"title": "Neues vom Wixxer (2007) [1080p] [5.1] [ger] [Vio]",
+					"fileSize": 1556.48
+				},
+				{
+					"hash": "8c997e30de68d223ec3ac84b0bbdb3f517e049cc",
+					"title": "Безумцы из Скотланд-Ярда / Neues vom Wixxer (2007) DVDRip от ExKinoRay",
+					"fileSize": 1505.28
+				},
+				{
+					"hash": "e61e15e5e5beec65217767de2cf4cc9710308a0d",
+					"title": "Безумцы из Скотланд-Ярда / Neues vom Wixxer (Сирилл Босс / Cyrill Boss · Филипп Штеннет / Philipp Stennert) [2007 · Германия · криминал · комедия · DVDRip]",
+					"fileSize": 1495.04
+				},
+				{
+					"hash": "51cda4411b294527750faa4ae552054385477464",
+					"title": "Neues.vom.Wixxer.2007.HDRip.avi",
+					"fileSize": 1485.6640625
+				},
+				{
+					"hash": "7688ea7713432392e25a67d5c1080c1add861e84",
+					"title": "Neues.vom.Wixxer--2007-HD-w.subs-x265-HEVC.mp4",
+					"fileSize": 637.6225118637085
+				}
+			]
+		},
+		{
+			"table": "ScrapedTrue",
+			"key": "tv:tt0118492:1",
+			"work": "Timecop (1997), season 1 of 9 episodes",
+			"note": "The largest RD-cached season pack is Cyrillic-led. One of 350 season pages where the largest RD-cached trusted release was Cyrillic-led on 2026-10-07. rdFiles maps each hash with an Available row in status downloaded to its AvailableFile count.",
+			"rdFiles": {
+				"e3436e032eb4979f86c086394a3003340c8bb6a3": 9,
+				"201f55a65d6604564d64be005f91d0b2004c38eb": 9,
+				"41ddf51c6121e189243bad3a57a12d99dbb91bd7": 9
+			},
+			"value": [
+				{
+					"hash": "e3436e032eb4979f86c086394a3003340c8bb6a3",
+					"title": "Полиция времени (Полицейский во времени / Патруль времени / Таймкоп) / Timecop / Сезон: 1 / Серии: 1-9 (9) (Peter Hyams · Allan Arkush · Jim Charleston) [1997 · США · Фантастика · приключения · SATRip] AVO (Визгунов · RoxMarty) + MVO (СТС) + Original",
+					"fileSize": 6144
+				},
+				{
+					"hash": "201f55a65d6604564d64be005f91d0b2004c38eb",
+					"title": "Timecop 1997 Season 1 Complete TVRip x264 [i_c]",
+					"fileSize": 1836.457987785339
+				},
+				{
+					"hash": "41ddf51c6121e189243bad3a57a12d99dbb91bd7",
+					"title": "Patrulj.vremeni.(1.seria.iz.9).1997.XviD.SATRip.avi",
+					"fileSize": 689.47
+				},
+				{
+					"hash": "30830b6bfd4bb85a67b33a6158e470cffc8002b5",
+					"title": "TimeCop.S01E01.A.Rip.In.Time.avi",
+					"fileSize": 393.67
+				}
+			]
+		}
+	],
+	"source": "dmmdb, read in a read-only session. Each value is the stored JSON array as read, except where `slice` says which entries were kept."
+}

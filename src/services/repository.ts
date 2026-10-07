@@ -1,5 +1,6 @@
 import type { AnimeIdSource } from '@/services/database/anime';
 import type { AvailabilityUpsert } from '@/services/database/availability';
+import type { ScrapedTrueReadOptions } from '@/services/database/scraped';
 import type { RdCastCredentials } from '@/utils/castRdToken';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
@@ -599,9 +600,14 @@ export class Repository {
 	// Scraped Service Methods
 	// Every read of a scraped page drops what a takedown blocked, and every
 	// save below refuses it, so a crawl cannot put it back either.
-	public async getScrapedTrueResults<T>(key: string, maxSizeGB?: number, page?: number) {
+	public async getScrapedTrueResults<T>(
+		key: string,
+		maxSizeGB?: number,
+		page?: number,
+		options?: ScrapedTrueReadOptions
+	) {
 		return withoutBlockedHashes(
-			await this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page)
+			await this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page, options)
 		);
 	}
 

@@ -78,11 +78,11 @@ describe('/api/torrents/anime', () => {
 		});
 	});
 
-	it('drops the same releases the paged query drops', async () => {
+	// A Cyrillic-led name is served (card 248, anime.scrapedtrue.test.ts).
+	it('drops releases with no hash, no title or a repeated hash', async () => {
 		mockGetAllScrapedTrueResults.mockResolvedValue([
 			{ filename: 'Anime.EP01', size_bytes: 1234, hash: HASH },
 			{ filename: 'Anime.EP01 again', size_bytes: 1, hash: HASH },
-			{ filename: 'Аниме 01', size_bytes: 9, hash: 'b'.repeat(40) },
 			{ filename: '', size_bytes: 9, hash: 'c'.repeat(40) },
 			{ filename: 'no hash', size_bytes: 9 },
 		]);

@@ -51,10 +51,13 @@ const handler: NextApiHandler = async (req, res) => {
 		const pageNum = page ? parseInt(page.toString()) : 0;
 
 		const promises = [
+			// A trusted release under its Russian title is this title's own, so the
+			// page shows it. The untrusted read below keeps dropping them.
 			db.getScrapedTrueResults<any[]>(
 				`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`,
 				maxSizeInGB,
-				pageNum
+				pageNum,
+				{ showCyrillicLed: true }
 			),
 		];
 		if (onlyTrusted !== 'true') {

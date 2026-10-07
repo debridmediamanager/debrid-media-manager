@@ -32,6 +32,8 @@ async function searchTorrentsForKey(
 	limit: number,
 	quality: Quality
 ): Promise<ScrapeSearchResult[]> {
+	// The default trusted read: zurg takes the biggest available release without
+	// anyone reading its name, so Cyrillic-led ones stay out as before.
 	const [trustedResults, untrustedResults] = await Promise.all([
 		db.getScrapedTrueResults<ScrapeSearchResult[]>(key, maxSizeGB),
 		db.getScrapedResults<ScrapeSearchResult[]>(key, maxSizeGB),

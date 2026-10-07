@@ -299,6 +299,8 @@ vi.mock('@/utils/delay', () => ({
 
 import ShowSeasonPage from '@/pages/show/[imdbid]/[seasonNum]';
 import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
+import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
+import { checkDatabaseAvailabilityRd } from '@/utils/instantChecks';
 
 const SHOW = {
 	title: 'Example Show',
@@ -475,5 +477,64 @@ describe('Instant RD (Every Episode) pacing', () => {
 		expect(toastMock.error.mock.calls.some((call) => /Not cached/.test(String(call[0])))).toBe(
 			false
 		);
+	});
+});
+
+// Card 248: the season page lists trusted releases named in Russian, but Whole
+// Season picks for the viewer. Timecop season 1 as production held it on
+// 2026-10-07: three RD-cached nine-file packs, the largest of them the Russian
+// SATRip. Before the page listed it, Whole Season tried the TVRip first.
+describe('Instant RD (Whole Season) next to a release named in Russian', () => {
+	const timecop = recorded.pages.find((p) => p.key === 'tv:tt0118492:1')!;
+	const RUSSIAN_SATRIP = 'e3436e032eb4979f86c086394a3003340c8bb6a3';
+	const ENGLISH_TVRIP = '201f55a65d6604564d64be005f91d0b2004c38eb';
+
+	beforeEach(() => {
+		axiosGetMock.mockReset();
+		addCachedMock.mockReset();
+		addCachedMock.mockResolvedValue(true);
+		delayMock.mockReset();
+		keys.rd = 'rd-token';
+		keys.ad = null;
+		keys.tb = null;
+		// What the RD lookup answers: the recorded cached hashes, each with the
+		// file count its Available row lists.
+		const files = timecop.rdFiles as Record<string, number>;
+		vi.mocked(checkDatabaseAvailabilityRd).mockImplementationOnce(
+			async (_token, _solution, _imdbId, hashes, setSearchResults) => {
+				setSearchResults((prev) =>
+					prev.map((r) =>
+						files[r.hash] ? { ...r, rdAvailable: true, videoCount: files[r.hash] } : r
+					)
+				);
+				return hashes.filter((h) => files[h]).length;
+			}
+		);
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show')) {
+				return Promise.resolve({
+					status: 200,
+					data: { ...SHOW, title: 'Timecop', season_episode_counts: { 1: 9 } },
+				});
+			}
+			if (url.startsWith('/api/torrents/tv')) {
+				const rows = [...(timecop.value as { hash: string; fileSize: number }[])]
+					.sort((a, b) => b.fileSize - a.fileSize)
+					.map((r) => ({ ...r, files: [], videoCount: 0 }));
+				return Promise.resolve({ status: 200, headers: {}, data: { results: rows } });
+			}
+			return Promise.resolve({ status: 200, data: {} });
+		});
+	});
+
+	it('adds the English pack, not the larger Russian one', async () => {
+		render(<ShowSeasonPage />);
+		const button = await screen.findByRole('button', { name: /Instant RD \(Whole Season\)/i });
+
+		await userEvent.click(button);
+
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalled());
+		expect(addCachedMock.mock.calls[0].slice(0, 2)).toEqual(['rd', ENGLISH_TVRIP]);
+		expect(addCachedMock.mock.calls.map((call) => call[1])).not.toContain(RUSSIAN_SATRIP);
 	});
 });

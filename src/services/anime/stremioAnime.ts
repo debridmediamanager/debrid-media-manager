@@ -19,6 +19,7 @@ import type { AnimeIdSource } from '@/services/database/anime';
 import { repository } from '@/services/repository';
 import { parseAnimeEpisode } from '@/utils/animeEpisodes';
 import { getTroveCandidates, type TroveStreamCandidate } from '@/utils/cachedTroveStreams';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { MAX_SIZE_MB, MIN_SIZE_MB } from '@/utils/releaseSize';
 import { namedSeasons } from '@/utils/seasonNaming';
 import { parseStremioAnimeId, type StremioAnimeId } from './stremioAnimeIds';
@@ -114,7 +115,6 @@ interface StoredRelease {
 	size_bytes?: unknown;
 }
 
-const HIDDEN_TITLE_LEAD = /^[А-Яа-яЁё]/;
 const DEFAULT_MAX_COUNT = 200;
 
 /**
@@ -144,7 +144,7 @@ export function filterAnimeTroveCandidates(
 					? raw.filename
 					: '';
 		const sizeMb = Number(raw.fileSize ?? raw.size_bytes);
-		if (title.trim() === '' || HIDDEN_TITLE_LEAD.test(title)) continue;
+		if (title.trim() === '' || isCyrillicLed(title)) continue;
 		if (!Number.isFinite(sizeMb) || sizeMb <= MIN_SIZE_MB || sizeMb > MAX_SIZE_MB) continue;
 		if (ceilingMb !== undefined && sizeMb > ceilingMb) continue;
 		releases.push({ hash: raw.hash, title, sizeMb });

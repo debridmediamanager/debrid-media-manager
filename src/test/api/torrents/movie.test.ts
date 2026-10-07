@@ -1,4 +1,5 @@
 import handler from '@/pages/api/torrents/movie';
+import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -122,6 +123,42 @@ describe('/api/torrents/movie', () => {
 		expect(mockFlatten).toHaveBeenCalledWith([{ title: 'Trusted', hash: 'hash-1' }]);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ results: [{ title: 'Trusted', hash: 'hash-1' }] });
+	});
+
+	// Card 248: debrid job ec01c0d0 filed "Дораэмон ... Doraemon Nobita's Great
+	// Battle of the Mermaid King ... [2010" on this film's page and the page showed
+	// 10 of its 11 releases. The repository answers as MySQL does for the recorded
+	// page (scrapedCyrillicLed.integration.test.ts).
+	it('serves the film its trusted release filed under a Russian title', async () => {
+		const stored = recorded.pages.find(
+			(p) => p.table === 'ScrapedTrue' && p.key === 'movie:tt1613031'
+		)!.value as { hash: string; title: string; fileSize: number }[];
+		mockGetScrapedTrueResults.mockImplementation(
+			async (
+				_key: string,
+				_max: number,
+				_page: number,
+				options?: { showCyrillicLed?: boolean }
+			) =>
+				options?.showCyrillicLed
+					? stored
+					: stored.filter((r) => !/^[А-Яа-яЁё]/.test(r.title))
+		);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockGetReportedHashes.mockResolvedValue([]);
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { ...baseQuery, imdbId: 'tt1613031' } }), res);
+
+		expect(mockGetScrapedTrueResults).toHaveBeenCalledWith('movie:tt1613031', 0, 0, {
+			showCyrillicLed: true,
+		});
+		expect(mockGetScrapedResults).toHaveBeenCalledWith('movie:tt1613031', 0, 0);
+		const served = vi.mocked(res.json).mock.calls[0][0].results;
+		expect(served).toHaveLength(11);
+		expect(served.map((r: { hash: string }) => r.hash)).toContain(
+			'3c2ff41cd8bf7188e229238d4e114d5b5ac7dc52'
+		);
 	});
 
 	it('falls back to unfiltered results when reporting lookup fails', async () => {

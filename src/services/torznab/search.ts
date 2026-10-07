@@ -19,6 +19,7 @@ import type { RdCachedNames } from '@/services/database/availability';
 import { flattenAndRemoveDuplicates, ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
 import { withoutTrashedResults } from '@/services/scrapedVerdicts/job';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
@@ -71,9 +72,6 @@ export const RECENT_PER_KEY = 5;
  */
 export const CACHED_SEEDERS = 100;
 export const UNCACHED_SEEDERS = 1;
-
-/** The same rule the library's own SQL applies on the site's read path. */
-const CYRILLIC_TITLE = /^[А-Яа-яЁё]/;
 
 /**
  * Which debrid cache the ⚡ signal is read from, and whether it filters.
@@ -190,8 +188,9 @@ interface LibraryRelease {
  *
  * `flattenAndRemoveDuplicates` is what the site's own read path runs them
  * through — it decodes the entity-encoded titles still in the table and drops
- * the degenerate hashes — and the Cyrillic rule mirrors the `NOT REGEXP` the
- * paged SQL applies, so the feed and the website answer with the same set.
+ * the degenerate hashes. Cyrillic-led names stay out, which is the one way the
+ * feed's set differs from the website's: an *arr grabs without anyone reading
+ * the name (see `isCyrillicLed`).
  */
 function toReleases(
 	results: ScrapeSearchResult[],
@@ -200,7 +199,7 @@ function toReleases(
 ): LibraryRelease[] {
 	const pubDate = updatedAt.toUTCString();
 	return flattenAndRemoveDuplicates([results])
-		.filter((result) => !CYRILLIC_TITLE.test(result.title))
+		.filter((result) => !isCyrillicLed(result.title))
 		.map((result) => ({
 			title: result.title,
 			hash: result.hash,

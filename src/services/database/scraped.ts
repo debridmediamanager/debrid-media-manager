@@ -24,6 +24,32 @@ const plausibleFileSize = () =>
 	Prisma.sql`CASE WHEN jt.fileSize > ${MAX_SIZE_MB} THEN 0 ELSE jt.fileSize END`;
 
 /**
+ * Drops releases whose name starts with a Cyrillic letter.
+ *
+ * It was added for the untrusted `Scraped` table (d813320e), where scrapers filed
+ * unrelated Russian releases on other titles' pages, and it still holds there. On
+ * 2026-10-07 15% of that table's movie entries and 28% of its TV entries were
+ * Cyrillic-led, the verdict pass had already moved 786,881 of them off movie pages
+ * as other works, and of 300 sampled movie entries about one in five named the
+ * page's film. Most of the rest were Russian series, football and games of the
+ * page's year.
+ *
+ * In `ScrapedTrue` the same names are the page's own releases under their Russian
+ * title ("Дораэмон ... / Doraemon Nobita's Great Battle of the Mermaid King ...
+ * [2010"). 385 of 400 sampled movie entries named the page's film, and its year
+ * where they gave one. The verdict pass kept 109,258 and trashed 4,287, and on
+ * 4,097 movie and 1,054 season pages they were the only trusted releases. The
+ * title pages show them, and whatever picks a release for the viewer skips them
+ * (`isCyrillicLed`).
+ */
+const cyrillicLedDropped = () => Prisma.sql`AND jt.title NOT REGEXP '^[А-Яа-яЁё]'`;
+
+export type ScrapedTrueReadOptions = {
+	/** Keep Cyrillic-led releases. The title pages do, zurg's search does not. */
+	showCyrillicLed?: boolean;
+};
+
+/**
  * The append branch below launders results through flattenAndRemoveDuplicates,
  * but the replace and create branches write what they are handed. Both save
  * paths sanitise up front so no branch can be the one that lets a bad hash or an
@@ -205,7 +231,8 @@ export class ScrapedService extends DatabaseClient {
 	public async getScrapedTrueResults<T>(
 		key: string,
 		maxSizeGB?: number,
-		page: number = 0
+		page: number = 0,
+		{ showCyrillicLed = false }: ScrapedTrueReadOptions = {}
 	): Promise<T | undefined> {
 		// Input Validation
 		if (!key || typeof key !== 'string') {
@@ -244,7 +271,7 @@ export class ScrapedService extends DatabaseClient {
         WHERE
           s.key = ${key}
         ${maxSizeMB ? Prisma.sql`AND ${plausibleFileSize()} <= ${maxSizeMB}` : Prisma.empty}
-        AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
+        ${showCyrillicLed ? Prisma.empty : cyrillicLedDropped()}
         ORDER BY ${plausibleFileSize()} DESC
         LIMIT 50
         OFFSET ${offset}
@@ -307,7 +334,7 @@ export class ScrapedService extends DatabaseClient {
         WHERE
           s.key = ${key}
         ${maxSizeMB ? Prisma.sql`AND ${plausibleFileSize()} <= ${maxSizeMB}` : Prisma.empty}
-        AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
+        ${cyrillicLedDropped()}
         ORDER BY ${plausibleFileSize()} DESC
         LIMIT 50
         OFFSET ${offset}

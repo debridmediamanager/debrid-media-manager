@@ -1,4 +1,5 @@
 import handler from '@/pages/api/torrents/tv';
+import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -114,11 +115,48 @@ describe('/api/torrents/tv', () => {
 
 		await handler(req, res);
 
-		expect(mockGetScrapedTrueResults).toHaveBeenCalledWith('tv:tt7654321:2', 0, 0);
+		expect(mockGetScrapedTrueResults).toHaveBeenCalledWith('tv:tt7654321:2', 0, 0, {
+			showCyrillicLed: true,
+		});
+		expect(mockGetScrapedResults).toHaveBeenCalledWith('tv:tt7654321:2', 0, 0);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			results: [{ title: 'Season Pack', hash: 'hash-1' }],
 		});
+	});
+
+	// Card 248: every trusted release of Mosgaz. Metronom season 10 is named in
+	// Russian, so the season page read as never scraped and queued a request on
+	// each view. The repository answers as MySQL does for the recorded page
+	// (scrapedCyrillicLed.integration.test.ts).
+	it("serves a Russian series' season its own Cyrillic-led releases", async () => {
+		const stored = recorded.pages.find(
+			(p) => p.table === 'ScrapedTrue' && p.key === 'tv:tt32059200:10'
+		)!.value as { hash: string; title: string; fileSize: number }[];
+		mockGetScrapedTrueResults.mockImplementation(
+			async (
+				_key: string,
+				_max: number,
+				_page: number,
+				options?: { showCyrillicLed?: boolean }
+			) =>
+				options?.showCyrillicLed
+					? stored
+					: stored.filter((r) => !/^[А-Яа-яЁё]/.test(r.title))
+		);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockGetReportedHashes.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(false);
+		const res = createMockResponse();
+
+		await handler(
+			createMockRequest({ query: { ...baseQuery, imdbId: 'tt32059200', seasonNum: '10' } }),
+			res
+		);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(vi.mocked(res.json).mock.calls[0][0].results).toEqual(stored);
 	});
 
 	it('handles filtering errors by falling back to unfiltered results', async () => {
