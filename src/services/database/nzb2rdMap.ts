@@ -236,10 +236,18 @@ export class Nzb2rdMapService extends DatabaseClient {
 	/**
 	 * Read the waiters and drop them in one step, so a second poll landing at the
 	 * same moment cannot add the same torrent to the same account twice.
+	 *
+	 * The delete is the claim. Two polls of a finished job can both read the list
+	 * before either drops it; both used to deliver, because the second delete's
+	 * P2025 was swallowed. Only the poll whose delete removed the row hands the
+	 * list out now.
 	 */
 	async takeWaiters(releaseId: string): Promise<Nzb2rdWaiter[]> {
 		const waiters = await this.getWaiters(releaseId);
-		if (waiters.length > 0) await this.clearWaiters(releaseId);
-		return waiters;
+		if (waiters.length === 0) return [];
+		const { count } = await this.prisma.cache.deleteMany({
+			where: { key: waitKeyFor(releaseId) },
+		});
+		return count > 0 ? waiters : [];
 	}
 }

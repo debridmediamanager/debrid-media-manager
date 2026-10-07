@@ -64,6 +64,7 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 	let url: string;
 	let monitor: PrismaClient;
 	let repository: typeof import('../repository').repository;
+	let Nzb2rdMapService: typeof import('./nzb2rdMap').Nzb2rdMapService;
 
 	// What Prisma prints through `log: ['warn', 'error']`, which is the app's
 	// client configuration: `console.log('prisma:error', message)`.
@@ -86,6 +87,7 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 		// it is first imported.
 		process.env.DATABASE_URL = url;
 		({ repository } = await import('../repository'));
+		({ Nzb2rdMapService } = await import('./nzb2rdMap'));
 	}, 240_000);
 
 	afterAll(async () => {
@@ -230,5 +232,36 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 		} finally {
 			await monitor.$executeRawUnsafe('RENAME TABLE `CacheAway` TO `Cache`');
 		}
+	});
+
+	// Delivery has to be once-only. Two polls of a completed job can read the
+	// same waiter list before either clears it; only the one whose delete removed
+	// the row may hand the torrent out, or each account gets it added twice.
+	it('hands a waiter list to only one of two polls that read it together', async () => {
+		const [marker] = recorded.markers;
+		await repository.addNzb2rdWaiter(marker.releaseId, 'rd-key-b', marker.imdbId);
+		await repository.addNzb2rdWaiter(marker.releaseId, 'rd-key-c', marker.imdbId);
+
+		const service = new Nzb2rdMapService();
+		const read = service.getWaiters.bind(service);
+		let reads = 0;
+		let bothRead!: () => void;
+		const barrier = new Promise<void>((resolve) => (bothRead = resolve));
+		service.getWaiters = async (releaseId: string) => {
+			const waiters = await read(releaseId);
+			if (++reads === 2) bothRead();
+			await barrier;
+			return waiters;
+		};
+
+		const [first, second] = await Promise.all([
+			service.takeWaiters(marker.releaseId),
+			service.takeWaiters(marker.releaseId),
+		]);
+
+		const delivered = [...first, ...second].map((w) => w.rdKey).sort();
+		expect(delivered).toEqual(['rd-key-b', 'rd-key-c']);
+		expect(await keys()).toEqual([]);
+		expect(prismaErrors()).toEqual([]);
 	});
 });

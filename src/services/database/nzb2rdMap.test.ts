@@ -258,6 +258,17 @@ describe('Nzb2rdMapService waiters', () => {
 		});
 	});
 
+	// Another poll read the same list and dropped it first, so it is the one
+	// delivering; handing the list out here too would add each torrent twice.
+	it('takeWaiters hands out nothing when another poll already took the list', async () => {
+		prisma.cache.findUnique.mockResolvedValue(
+			withWaiters([{ rdKey: 'rd-key-b', imdbId: 'tt1', queuedAt: 1 }])
+		);
+		prisma.cache.deleteMany.mockResolvedValue({ count: 0 });
+
+		expect(await service.takeWaiters(RELEASE)).toEqual([]);
+	});
+
 	it('takeWaiters does not delete when there was nothing queued', async () => {
 		prisma.cache.findUnique.mockResolvedValue(null);
 
