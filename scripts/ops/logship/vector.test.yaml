@@ -279,6 +279,90 @@ tests:
               assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out GET /api/stremio-tb/~677ba188/catalog/other/casted-other/skip=0.json")
               assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
 
+  - name: "fingerprints the sponsor key in a plugin download URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API response for /api/plugins/9d907d1908ca978725211ec8943848586c5484b000b1df705f3f014670a05758/rd-zurg_1.0.2.0.zip exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API response for /api/plugins/~53b34aac/rd-zurg_1.0.2.0.zip exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the sponsor key in a percent-encoded plugin URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"redirecting to /login?next=%2Fapi%2Fplugins%2F9d907d1908ca978725211ec8943848586c5484b000b1df705f3f014670a05758%2Fjellyfin-zurg_1.0.5.0.zip\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out redirecting to /login?next=%2Fapi%2Fplugins%2F~53b34aac%2Fjellyfin-zurg_1.0.5.0.zip")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints a zurg NZB share token"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"GET https://share.nzbs.example/nzb-share/c253c253c253c253c253c253c253c253/5313d1b0ef782c93.nzb.gz 404\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out GET https://share.nzbs.example/nzb-share/~749ff457/5313d1b0ef782c93.nzb.gz 404")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints a sponsor key as any path segment"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API resolved without sending a response for /9d907d1908ca978725211ec8943848586c5484b000b1df705f3f014670a05758/plugin, this may result in stalled requests.\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API resolved without sending a response for /~53b34aac/plugin, this may result in stalled requests.")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a code behind a percent-encoded question mark"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"redirecting to /login?next=%2Ftrakt%2Fcallback%3Fcode=c262fakecode0123456789\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out redirecting to /login?next=%2Ftrakt%2Fcallback%3Fcode=REDACTED")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a key in a twice-encoded URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"redirecting to /login?next=%252Fapi%252Fsabnzbd%253Fmode%253Dqueue%2526apikey%253Dsabkey123456\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out redirecting to /login?next=%252Fapi%252Fsabnzbd%253Fmode%253Dqueue%2526apikey%253DREDACTED")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
   - name: "keeps [sabnzbd] mode=queue"
     inputs:
       - insert_at: web
@@ -445,4 +529,46 @@ tests:
           - type: vrl
             source: |
               assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [meta/other/id] Token obtained successfully")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps the plugin repository manifest route"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API response for /api/plugins/manifest.json?apikey=0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c4b5a69788796a5b4c3d2e1f0 exceeds 4MB.\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API response for /api/plugins/manifest.json?apikey=REDACTED exceeds 4MB.")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps API resolved without sending a response for /api/plugins/publish"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API resolved without sending a response for /api/plugins/publish, this may result in stalled requests.\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API resolved without sending a response for /api/plugins/publish, this may result in stalled requests.")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps API response for /api/stremio-dl/cast/library/849761aaf0821ed18d"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API response for /api/stremio-dl/cast/library/849761aaf0821ed18d5be45a754e2dfd88bc08cd exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API response for /api/stremio-dl/cast/library/849761aaf0821ed18d5be45a754e2dfd88bc08cd exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit")
               assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')

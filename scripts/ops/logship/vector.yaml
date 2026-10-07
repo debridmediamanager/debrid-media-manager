@@ -44,9 +44,11 @@ transforms:
       entry = object(parse_json(to_string(.message) ?? "") ?? {}) ?? {}
       msg = replace(to_string(entry.log) ?? "", r'\r?\n$', "")
 
-      # Query and form values, under the names the proxy logs redact (card 215).
-      msg = replace(msg, r'(?i)(^|[?&;\s"\x27(\[{,])(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)=[^&\s"\x27<>#]+', "${1}${2}=REDACTED")
-      msg = replace(msg, r'(?i)(%3F|%26)(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)%3D[^&%\s"\x27<>#]+', "${1}${2}%3DREDACTED")
+      # Query and form values, under the names the proxy logs redact (card 215),
+      # also behind a separator encoded once or twice (/trakt/callback%3Fcode=,
+      # %2526apikey%253D).
+      msg = replace(msg, r'(?i)(^|[?&;\s"\x27(\[{,]|%3F|%26|%253F|%2526)(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)=[^&\s"\x27<>#]+', "${1}${2}=REDACTED")
+      msg = replace(msg, r'(?i)(%3F|%26|%253F|%2526)(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)(%3D|%253D)[^&%\s"\x27<>#]+', "${1}${2}${3}REDACTED")
 
       # Logged objects and JSON: any quoted value under a credential-like key.
       msg = replace(msg, r'(?i)([A-Za-z0-9_-]*(?:token|secret|password|apikey|api_key|api-key|authorization|cookie|session_id|device_code)["\x27]?\s*[:=]\s*)"[^"]*"', "${1}\"REDACTED\"")
@@ -63,6 +65,25 @@ transforms:
         string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8) + string!(m.captures[2])
       }
       msg = replace_with(msg, r'(?i)(\buserid["\x27]?\s*[:=]\s*["\x27]?|\bfor user:? |\btoken detected:? )([A-Za-z0-9_-]{5,})') -> |m| {
+        string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8)
+      }
+
+      # The other path credentials the proxy logs fingerprint (cards 253, 262),
+      # plain or with %2F slashes: a sponsor's key in a Jellyfin plugin download
+      # (/api/plugins/<key>/<file>; manifest.json and publish are routes), a zurg
+      # NZB share's token (/nzb-share/<32 hex>/, the share's whole authorization),
+      # and a sponsor key (64 hex) as any path segment, from broken plugin URLs.
+      msg = replace_with(msg, r'(?i)((?:/|%2F)api(?:/|%2F)/*plugins(?:/|%2F)/*)([A-Za-z0-9._-]+)') -> |m| {
+        if match(string!(m.captures[1]), r'(?i)^(?:manifest\.json|publish)$') {
+          m.string
+        } else {
+          string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8)
+        }
+      }
+      msg = replace_with(msg, r'(?i)((?:/|%2F)nzb-share(?:/|%2F)/*)([0-9a-f]{32})\b') -> |m| {
+        string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8)
+      }
+      msg = replace_with(msg, r'(?i)(/|%2F)([0-9a-f]{64})\b') -> |m| {
         string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8)
       }
 
