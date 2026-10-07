@@ -381,6 +381,24 @@ export class Repository {
 		return this.nzb2rdMapService.getWaiters(releaseId);
 	}
 
+	public clearNzb2rdWaiters(releaseId: string) {
+		return this.nzb2rdMapService.clearWaiters(releaseId);
+	}
+
+	// The cron's view of the same rows: every waiter list, and a sample of the
+	// markers still reading `pending`, to settle against nzb2rd.
+	public listNzb2rdWaiterLists(limit: number) {
+		return this.nzb2rdMapService.listWaiterLists(limit);
+	}
+
+	public pruneNzb2rdWaiters(releaseId: string, keep: Nzb2rdWaiter[], seen: Date) {
+		return this.nzb2rdMapService.pruneWaiters(releaseId, keep, seen);
+	}
+
+	public sampleNzb2rdPendingMarkers(limit: number) {
+		return this.nzb2rdMapService.samplePendingMarkers(limit);
+	}
+
 	// Page context for a transfer — the DMM title and the content page it started
 	// from — which neither uploader service stores and localStorage used to hold.
 	public recordTransferMeta(meta: Omit<TransferMetaRecord, 'updatedAt'>) {

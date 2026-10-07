@@ -150,6 +150,9 @@ export function transferWorld() {
 				})
 		),
 		takeNzb2rdWaiters: vi.fn(async () => []),
+		// The marker pass the same tick runs, with nothing stored for it.
+		listNzb2rdWaiterLists: vi.fn(async () => []),
+		sampleNzb2rdPendingMarkers: vi.fn(async () => []),
 	};
 
 	return {

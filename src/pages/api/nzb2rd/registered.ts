@@ -1,8 +1,7 @@
 import type { Nzb2rdTransferRecord } from '@/services/database/nzb2rdMap';
-import { getNzb2rdUrl, nzb2rdJobOutcome } from '@/services/nzb2rd';
+import { settleNzb2rdMarker } from '@/services/nzb2rdMarkers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
 import type { ProgressFields } from '@/utils/transferPhase';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -78,7 +77,8 @@ const RECONCILE_TIMEOUT_MS = 4000;
  * Both stale cases are worth fixing here rather than only at the source, and
  * the completed one is worth more than the failed one: it turns a release that
  * cannot be sent into one that is added to the caller's account instantly from
- * RD's cache.
+ * RD's cache. The cron settles the same markers through the same function
+ * (`reconcileNzb2rdMarkers`), for releases nobody opens a page of.
  *
  * **Fails open.** Anything short of nzb2rd giving a definite answer leaves the
  * marker exactly as it was — a blocked release is bad, but dropping a marker
@@ -86,57 +86,27 @@ const RECONCILE_TIMEOUT_MS = 4000;
  * which is the cost this whole mechanism exists to avoid.
  */
 async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary | null> {
-	let job: any;
-	try {
-		const response = await fetch(`${getNzb2rdUrl()}/jobs/${encodeURIComponent(record.jobId)}`, {
-			headers: { Accept: 'application/json' },
-			signal: AbortSignal.timeout(RECONCILE_TIMEOUT_MS),
-		});
-		// A job nzb2rd no longer has cannot be fetching anything.
-		if (response.status === 404) {
-			await db.removeNzb2rdTransfer(record.releaseId);
+	const settled = await settleNzb2rdMarker(record, RECONCILE_TIMEOUT_MS);
+	switch (settled.outcome) {
+		case 'removed':
 			return null;
+		case 'failed':
+			// Kept, not dropped: the row shows an enabled Retry carrying the reason
+			// rather than a bare Send, and a `failed` marker vetoes nothing — the
+			// dedup check re-reads the job and lets a resubmit through.
+			return { ...summaryOf(record), status: 'failed', error: settled.error ?? null };
+		case 'completed': {
+			const { job } = settled;
+			const infoHash = typeof job.info_hash === 'string' ? job.info_hash.toLowerCase() : null;
+			return { ...summaryOf(record), status: 'completed', infoHash };
 		}
-		if (!response.ok) return summaryOf(record);
-		job = await response.json();
-	} catch {
-		return summaryOf(record);
+		case 'live':
+			// Still running: hand back where it actually is, so the row can say
+			// "Queued, 479th of 670 in line" instead of a flat "Running".
+			return { ...summaryOf(record), progress: progressOf(settled.job) };
+		default:
+			return summaryOf(record);
 	}
-
-	// Deleted before it finished: nzb2rd keeps serving it at its last stage and
-	// never resumes it, so it is no more alive than a job it has forgotten.
-	if (nzb2rdJobOutcome(job) === 'gone') {
-		await db.removeNzb2rdTransfer(record.releaseId);
-		return null;
-	}
-
-	if (job?.status === 'failed') {
-		const error = typeof job.error === 'string' ? job.error : undefined;
-		await db.recordNzb2rdTransferFailed(
-			record.releaseId,
-			record.jobId,
-			record.imdbId,
-			error,
-			record.title
-		);
-		// Kept, not dropped: the row shows an enabled Retry carrying the reason
-		// rather than a bare Send, and a `failed` marker vetoes nothing — the
-		// dedup check re-reads the job and lets a resubmit through.
-		return { ...summaryOf(record), status: 'failed', error: error ?? null };
-	}
-	if (job?.status === 'completed') {
-		// Nothing to pass: this runs on a page load with no transfer context of
-		// its own. `registerCompletedNzb2rdJob` resolves film-vs-season itself
-		// from the stored `returnPath` and the IMDb title type, which is what
-		// makes the release show up in search results rather than only flipping
-		// the marker to a disabled "In RD" pointing at nothing.
-		await registerCompletedNzb2rdJob(job, undefined, undefined, record.releaseId);
-		const infoHash = typeof job.info_hash === 'string' ? job.info_hash.toLowerCase() : null;
-		return { ...summaryOf(record), status: 'completed', infoHash };
-	}
-	// Still running: hand back where it actually is, so the row can say "Queued,
-	// 479th of 670 in line" instead of a flat "Running".
-	return { ...summaryOf(record), progress: progressOf(job) };
 }
 
 // Given the release ids shown in the Usenet section of a movie/show page, report

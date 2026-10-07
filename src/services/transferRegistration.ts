@@ -403,30 +403,42 @@ export async function fileCompletedNzb2rdJob(
 			.catch((e) => console.error('Recording completed nzb2rd transfer failed:', e));
 	}
 
-	// Hand the finished torrent to everyone who asked for this release while it
-	// was still being fetched. Their submission was deduped into this one job, so
-	// without this they would have paid the wait and received nothing. RD has the
-	// content cached by now, so each add resolves instantly.
-	if (releaseId) {
-		const waiters = await db.takeNzb2rdWaiters(releaseId).catch((e) => {
-			console.error('Reading nzb2rd waiters failed:', e);
-			return [];
-		});
-		for (const waiter of waiters) {
-			try {
-				await addHashToRdAccount(await deliveryKeyFor(waiter), infoHash);
-			} catch (error) {
-				// One account failing must not deny the rest; the key is spent either
-				// way, so never log it.
-				console.error(`Adding nzb2rd result to a waiting RD account failed:`, error);
-			}
-		}
-		if (waiters.length > 0) {
-			console.log(`[nzb2rd] job=${job.id} delivered to ${waiters.length} waiting account(s)`);
-		}
-	}
+	if (releaseId) await deliverNzb2rdWaiters(releaseId, infoHash, job.id);
 
 	return commit(await planNzb2rdFiling(job, mediaType, seasonNum));
+}
+
+/**
+ * Hand a finished torrent to everyone who asked for its release while it was
+ * still being fetched. Their submission was deduped into this one job, so
+ * without this they would have paid the wait and received nothing. RD has the
+ * content cached by now, so each add resolves instantly.
+ *
+ * Answers how many accounts the list held. Taking the list is what spends
+ * their stored credentials, delivered or not.
+ */
+export async function deliverNzb2rdWaiters(
+	releaseId: string,
+	infoHash: string,
+	jobId: string
+): Promise<number> {
+	const waiters = await db.takeNzb2rdWaiters(releaseId).catch((e) => {
+		console.error('Reading nzb2rd waiters failed:', e);
+		return [];
+	});
+	for (const waiter of waiters) {
+		try {
+			await addHashToRdAccount(await deliveryKeyFor(waiter), infoHash);
+		} catch (error) {
+			// One account failing must not deny the rest; the key is spent either
+			// way, so never log it.
+			console.error(`Adding nzb2rd result to a waiting RD account failed:`, error);
+		}
+	}
+	if (waiters.length > 0) {
+		console.log(`[nzb2rd] job=${jobId} delivered to ${waiters.length} waiting account(s)`);
+	}
+	return waiters.length;
 }
 
 /** `fileCompletedNzb2rdJob`, answering only whether this call filed it. */

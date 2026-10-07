@@ -7,6 +7,7 @@ import {
 	type RequestReconcileResult,
 } from '@/services/contentRequestReconcile';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
+import { reconcileNzb2rdMarkers, type MarkerReconcileResult } from '@/services/nzb2rdMarkers';
 import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
 import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
@@ -33,6 +34,7 @@ interface CronResponse {
 	};
 	debridTransfers?: ReconcileResult;
 	transferFilings?: FilingSweepResult;
+	usenetMarkers?: MarkerReconcileResult;
 	writtenBackTrash?: SweepResult;
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
@@ -106,6 +108,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Filing completed transfers failed:', e);
 		}
 
+		// A Usenet release's marker, and the credentials of every account waiting
+		// on its job, otherwise stay until somebody opens a page that asks nzb2rd
+		// about it, which for most releases is never.
+		let usenetMarkers: MarkerReconcileResult | undefined;
+		try {
+			usenetMarkers = await reconcileNzb2rdMarkers();
+		} catch (e) {
+			console.error('[Cron] Settling Usenet markers failed:', e);
+		}
+
 		// A scraper merges a release back into a movie page after the verdict
 		// pass moved it to ScrapedTrash, and only a page view used to move it
 		// again; every reader of the page served it until then.
@@ -151,6 +163,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			dailyRollup,
 			debridTransfers,
 			transferFilings,
+			usenetMarkers,
 			writtenBackTrash,
 			contentRequests,
 			freeRequestDeliveries,

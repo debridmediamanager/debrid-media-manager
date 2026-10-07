@@ -27,6 +27,11 @@ vi.mock('@/lib/observability/torrentioHealth', () => torrentioMocks);
 vi.mock('@/services/repository', () => repositoryMocks);
 vi.mock('@/services/transferFilingSweep', () => filingMocks);
 
+// Asks nzb2rd about each job; `nzb2rdMarkers.test.ts` drives the real one from
+// recorded answers.
+const markerMocks = vi.hoisted(() => ({ reconcileNzb2rdMarkers: vi.fn() }));
+vi.mock('@/services/nzb2rdMarkers', () => markerMocks);
+
 // The sweep reads the library tables; `sweep.test.ts` drives the real one from
 // recorded pages.
 const trashSweepMocks = vi.hoisted(() => ({ sweepWrittenBackTrash: vi.fn() }));
@@ -42,6 +47,7 @@ beforeEach(() => {
 	process.env = { ...originalEnv };
 	filingMocks.fileCompletedTransfers.mockResolvedValue(undefined);
 	trashSweepMocks.sweepWrittenBackTrash.mockResolvedValue(undefined);
+	markerMocks.reconcileNzb2rdMarkers.mockResolvedValue(undefined);
 });
 
 describe('API /api/observability/cron', () => {
@@ -297,6 +303,33 @@ describe('API /api/observability/cron', () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res._getData()).toMatchObject({ success: true, transferFilings: undefined });
+	});
+
+	it('settles Usenet markers and waiter lists on every tick and reports what it did', async () => {
+		delete process.env.CRON_SECRET;
+		healthMocks.runHealthCheckNow.mockResolvedValue(null);
+		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
+		const pass = { waiterLists: 3, expiredWaiters: 0, checked: 5, removed: 3, live: 1 };
+		markerMocks.reconcileNzb2rdMarkers.mockResolvedValue(pass);
+
+		const res = createMockResponse();
+		await handler(createMockRequest({ method: 'POST' }), res);
+
+		expect(markerMocks.reconcileNzb2rdMarkers).toHaveBeenCalledTimes(1);
+		expect(res._getData()).toMatchObject({ success: true, usenetMarkers: pass });
+	});
+
+	it('keeps the tick when settling Usenet markers throws', async () => {
+		delete process.env.CRON_SECRET;
+		healthMocks.runHealthCheckNow.mockResolvedValue(null);
+		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
+		markerMocks.reconcileNzb2rdMarkers.mockRejectedValue(new Error('Cache unreachable'));
+
+		const res = createMockResponse();
+		await handler(createMockRequest({ method: 'POST' }), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res._getData()).toMatchObject({ success: true, usenetMarkers: undefined });
 	});
 
 	it('moves written-back trash off movie pages on every tick and reports what it did', async () => {

@@ -234,6 +234,72 @@ export class Nzb2rdMapService extends DatabaseClient {
 	}
 
 	/**
+	 * Every waiter list, longest untouched first, for the cron to settle.
+	 *
+	 * There are only ever a handful (3 on 2026-10-07, against 8000 markers),
+	 * because a list exists only while a second account waits on a job in flight.
+	 * `updatedAt` is carried so a prune can tell whether someone joined since.
+	 */
+	async listWaiterLists(
+		limit: number
+	): Promise<{ releaseId: string; waiters: Nzb2rdWaiter[]; updatedAt: Date }[]> {
+		const rows = await this.prisma.cache.findMany({
+			where: { key: { startsWith: WAIT_PREFIX } },
+			orderBy: { updatedAt: 'asc' },
+			take: limit,
+		});
+		return rows.map((row) => {
+			const value = row.value as unknown as { waiters?: unknown } | null;
+			return {
+				releaseId: row.key.slice(WAIT_PREFIX.length),
+				waiters: Array.isArray(value?.waiters) ? (value!.waiters as Nzb2rdWaiter[]) : [],
+				updatedAt: row.updatedAt,
+			};
+		});
+	}
+
+	/**
+	 * Keep only `keep` of a release's waiters, if the list is still the one read
+	 * at `seen`. Answers false, changing nothing, when someone joined in between:
+	 * rewriting the list then would drop them, so the next tick decides instead.
+	 */
+	async pruneWaiters(releaseId: string, keep: Nzb2rdWaiter[], seen: Date): Promise<boolean> {
+		const where = { key: waitKeyFor(releaseId), updatedAt: seen };
+		const { count } =
+			keep.length === 0
+				? await this.prisma.cache.deleteMany({ where })
+				: await this.prisma.cache.updateMany({
+						where,
+						data: { value: { waiters: keep } as unknown as object },
+					});
+		return count > 0;
+	}
+
+	/**
+	 * A random handful of `pending` markers, for the cron to check against nzb2rd.
+	 *
+	 * Random rather than oldest-first: a marker whose job is still in line is left
+	 * exactly as it was, so an ordered read would hand the same live jobs to every
+	 * tick and never reach the stale ones behind them. On 2026-10-07 nzb2rd's
+	 * queue was 23 days deep and 450 of 942 `pending` markers were still live.
+	 */
+	async samplePendingMarkers(limit: number): Promise<Nzb2rdTransferRecord[]> {
+		const rows = await this.prisma.$queryRaw<{ key: string }[]>`
+			SELECT \`key\` FROM Cache
+			WHERE \`key\` LIKE 'nzbrd:%'
+			  AND JSON_UNQUOTE(JSON_EXTRACT(value, '$.status')) = 'pending'
+			ORDER BY RAND()
+			LIMIT ${limit}`;
+		if (rows.length === 0) return [];
+		const markers = await this.prisma.cache.findMany({
+			where: { key: { in: rows.map((row) => row.key) } },
+		});
+		return markers
+			.map((row) => row.value as unknown as Nzb2rdTransferRecord)
+			.filter((record) => record?.status === 'pending');
+	}
+
+	/**
 	 * Read the waiters and drop them in one step, so a second poll landing at the
 	 * same moment cannot add the same torrent to the same account twice.
 	 *
