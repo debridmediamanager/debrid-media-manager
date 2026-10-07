@@ -73,6 +73,33 @@ export class Nzb2rdMapService extends DatabaseClient {
 		return rows.map((r) => r.value as unknown as Nzb2rdTransferRecord);
 	}
 
+	/**
+	 * Whether writing `next` would change what `existing` already says. Only
+	 * `updatedAt` is left out, since every write moves it.
+	 *
+	 * The transfers page is polled every 5 seconds and re-reports every failed
+	 * and completed Usenet row on the account each time, and the two recorders
+	 * used to write all of them back unchanged: 10,168 marker writes in ten
+	 * minutes on 2026-10-07, about 1,000 a minute, spread over 201 markers whose
+	 * status never moved.
+	 */
+	private static unchanged(
+		existing: Nzb2rdTransferRecord | null,
+		next: Nzb2rdTransferRecord
+	): boolean {
+		if (!existing) return false;
+		const fields: (keyof Nzb2rdTransferRecord)[] = [
+			'releaseId',
+			'jobId',
+			'imdbId',
+			'status',
+			'infoHash',
+			'error',
+			'title',
+		];
+		return fields.every((field) => (existing[field] ?? null) === (next[field] ?? null));
+	}
+
 	private async put(record: Nzb2rdTransferRecord): Promise<void> {
 		const value = { ...record, updatedAt: Date.now() } as unknown as object;
 		await this.prisma.cache.upsert({
@@ -108,7 +135,7 @@ export class Nzb2rdMapService extends DatabaseClient {
 		infoHash: string,
 		title?: string
 	): Promise<void> {
-		await this.put({
+		const next: Nzb2rdTransferRecord = {
 			releaseId: releaseId.toLowerCase(),
 			jobId,
 			imdbId,
@@ -116,7 +143,10 @@ export class Nzb2rdMapService extends DatabaseClient {
 			infoHash: infoHash.toLowerCase(),
 			title,
 			updatedAt: Date.now(),
-		});
+		};
+		// Every poll of a completed row lands here again.
+		if (Nzb2rdMapService.unchanged(await this.getTransfer(releaseId), next)) return;
+		await this.put(next);
 	}
 
 	/**
@@ -133,6 +163,15 @@ export class Nzb2rdMapService extends DatabaseClient {
 	 * The waiter list still goes, exactly as `removeTransfer` drops it: those
 	 * accounts queued behind a job that will never deliver, and their stored
 	 * Real-Debrid credentials must not outlive it.
+	 *
+	 * Only a change is written. The transfers page re-reports a failed row every
+	 * 5 seconds for as long as it is listed, so an unchanged failure is the
+	 * common case, and so is a failure of a job the marker no longer follows: a
+	 * Retry records its new job here while the old failed row stays on the page.
+	 * Writing that one put the old failure back over the retry's `pending`
+	 * marker on every poll and dropped the retry's waiters with it. On
+	 * 2026-10-07, 11 releases read `failed` for an old job while their newest
+	 * job was still in nzb2rd's queue.
 	 */
 	async recordFailed(
 		releaseId: string,
@@ -145,7 +184,8 @@ export class Nzb2rdMapService extends DatabaseClient {
 		// what a later job for the same release did.
 		const existing = await this.getTransfer(releaseId);
 		if (existing?.status === 'completed') return;
-		await this.put({
+		if (existing && existing.jobId !== jobId) return;
+		const next: Nzb2rdTransferRecord = {
 			releaseId: releaseId.toLowerCase(),
 			jobId,
 			// Callers that only ever handled the job (the poll route) know the id
@@ -155,7 +195,9 @@ export class Nzb2rdMapService extends DatabaseClient {
 			error,
 			title: title ?? existing?.title,
 			updatedAt: Date.now(),
-		});
+		};
+		if (Nzb2rdMapService.unchanged(existing, next)) return;
+		await this.put(next);
 		await this.clearWaiters(releaseId);
 	}
 

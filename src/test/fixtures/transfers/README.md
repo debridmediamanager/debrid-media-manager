@@ -123,3 +123,22 @@ Job ids are replaced by the labels above, release ids by `ix:release-N`, and
 each stored credential by a `FIXTURE` placeholder of the same length. Account
 fields, internal URLs and paths, the RD torrent id and C1's 24 files are dropped.
 Names, statuses, timestamps, IMDb ids and the queue place are as recorded.
+
+`marker-polls-2026-10-07.json` holds what the Transfers page's 5-second poll kept
+rewriting on 2026-10-07, read with a read-only session. `baseline` is the count:
+sampling `Cache` every 4 seconds from 16:47 to 16:57 UTC saw 10,168 writes to
+`nzbrd:` markers (8,454 completed, 1,714 failed) over 201 markers, each up to 117
+times.
+
+- `completed`: three of the most-rewritten completed markers as stored, each with
+  its job as nzb2rd's `GET /jobs/:id` served it and its `xfer:` record. All three
+  were already in `Available`.
+- `retry`: a release whose marker read `failed` for an older job (`nzb2rd-R1`)
+  while a newer DMM submission of it (`nzb2rd-R2`) sat 27th in nzb2rd's queue.
+  The newer submit had recorded R2 as `pending`; the old failed row's poll put
+  R1's failure back over it. That day 11 releases were in this state.
+
+Job ids are replaced by the labels above, release ids by `ix:release-N`, and each
+RD download link by a `FIXTURE` placeholder of the same shape. Account fields,
+internal URLs and paths are dropped. Names, sizes, hashes, statuses, errors and
+timestamps are as recorded.

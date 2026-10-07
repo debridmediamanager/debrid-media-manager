@@ -1,0 +1,257 @@
+{
+	"baseline": {
+		"window": "2026-10-07T16:47Z..16:57Z",
+		"markerWrites": 10168,
+		"markersRewritten": 201,
+		"byStatus": {
+			"completed": 8454,
+			"failed": 1714
+		}
+	},
+	"completed": [
+		{
+			"job": {
+				"category": null,
+				"completed_at": "2026-09-28 15:42:23",
+				"created_at": "2026-09-17 00:37:26",
+				"done_bytes": 3838873801,
+				"duration_seconds": 1004697,
+				"error": null,
+				"files": [
+					{
+						"name": "Taskmaster.AU.S05E01.Where.the.war.happened.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune.mkv",
+						"size": 3838873801,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000001"
+					}
+				],
+				"id": "nzb2rd-K1",
+				"imdb_id": "tt25523050",
+				"info_hash": "b21c8cb34c7f3a06fcda43bfc8e6d9351d4fb776",
+				"name": "Taskmaster.AU.S05E01.Where.the.war.happened.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune {imdb-tt25523050}",
+				"nzb_name": "Taskmaster.AU.S05E01.Where.the.war.happened.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune.nzb",
+				"retry_count": 0,
+				"started_at": "2026-09-28 15:21:29",
+				"status": "completed",
+				"status_message": null,
+				"total_bytes": 3838873801,
+				"updated_at": "2026-09-28 15:42:23",
+				"deleted": 0
+			},
+			"marker": {
+				"releaseId": "ix:release-11",
+				"jobId": "nzb2rd-K1",
+				"title": "Taskmaster.AU.S05E01.Where.the.war.happened.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune {imdb-tt25523050}",
+				"imdbId": "tt25523050",
+				"status": "completed",
+				"infoHash": "b21c8cb34c7f3a06fcda43bfc8e6d9351d4fb776",
+				"updatedAt": 1791393505675
+			},
+			"transferMeta": {
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-K1",
+				"releaseId": "ix:release-11",
+				"title": "Taskmaster.AU.S05E01.Where.the.war.happened.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune",
+				"imdbId": "tt25523050",
+				"updatedAt": 1789605446383,
+				"returnPath": "/show/tt25523050/5"
+			}
+		},
+		{
+			"job": {
+				"category": null,
+				"completed_at": "2026-09-28 16:09:54",
+				"created_at": "2026-09-17 00:37:44",
+				"done_bytes": 3577465737,
+				"duration_seconds": 1006330,
+				"error": null,
+				"files": [
+					{
+						"name": "Taskmaster.AU.S05E10.Give.it.to.daddy.to.pop.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune.mkv",
+						"size": 3577465737,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000002"
+					}
+				],
+				"id": "nzb2rd-K2",
+				"imdb_id": "tt25523050",
+				"info_hash": "4e429f045e174a5fb918a442571de268188a714c",
+				"name": "Taskmaster.AU.S05E10.Give.it.to.daddy.to.pop.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune {imdb-tt25523050}",
+				"nzb_name": "Taskmaster.AU.S05E10.Give.it.to.daddy.to.pop.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune.nzb",
+				"retry_count": 0,
+				"started_at": "2026-09-28 15:46:29",
+				"status": "completed",
+				"status_message": null,
+				"total_bytes": 3577465737,
+				"updated_at": "2026-09-28 16:09:54",
+				"deleted": 0
+			},
+			"marker": {
+				"releaseId": "ix:release-12",
+				"jobId": "nzb2rd-K2",
+				"title": "Taskmaster.AU.S05E10.Give.it.to.daddy.to.pop.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune {imdb-tt25523050}",
+				"imdbId": "tt25523050",
+				"status": "completed",
+				"infoHash": "4e429f045e174a5fb918a442571de268188a714c",
+				"updatedAt": 1791393505675
+			},
+			"transferMeta": {
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-K2",
+				"releaseId": "ix:release-12",
+				"title": "Taskmaster.AU.S05E10.Give.it.to.daddy.to.pop.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune",
+				"imdbId": "tt25523050",
+				"updatedAt": 1789605464578,
+				"returnPath": "/show/tt25523050/5"
+			}
+		},
+		{
+			"job": {
+				"category": null,
+				"completed_at": "2026-08-29 04:18:28",
+				"created_at": "2026-08-26 19:44:02",
+				"done_bytes": 13825224260,
+				"duration_seconds": 203666,
+				"error": null,
+				"files": [
+					{
+						"name": "Taboo.IL.S03E04.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2440732779,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000003"
+					},
+					{
+						"name": "Taboo.IL.S03E02.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2403522665,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000004"
+					},
+					{
+						"name": "Taboo.IL.S03E01.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2353602267,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000005"
+					},
+					{
+						"name": "Taboo.IL.S03E06.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2231593664,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000006"
+					},
+					{
+						"name": "Taboo.IL.S03E05.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2219655940,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000007"
+					},
+					{
+						"name": "Taboo.IL.S03E03.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM.mkv",
+						"size": 2176116945,
+						"rd_link": "https://real-debrid.com/d/FIXTURE000008"
+					}
+				],
+				"id": "nzb2rd-K3",
+				"imdb_id": "tt0330958",
+				"info_hash": "91776dba860f15504d49f18e9159ce8d7f6eb51a",
+				"name": "Taboo.IL.S03.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM {imdb-tt0330958}",
+				"nzb_name": "Taboo.IL.S03.1080p.KAN.WEB-DL.AAC2.0.H.264-ILSTREAM.nzb",
+				"retry_count": 0,
+				"started_at": "2026-08-29 03:49:10",
+				"status": "completed",
+				"status_message": null,
+				"total_bytes": 13825224260,
+				"updated_at": "2026-08-29 04:18:28",
+				"deleted": 0
+			},
+			"marker": {
+				"releaseId": "ix:release-13",
+				"jobId": "nzb2rd-K3",
+				"title": "Taboo.IL.S03.1080p.KAN.WEB.DL.AAC2.0.H.264-ILSTREAM {imdb-tt0330958}",
+				"imdbId": "tt0330958",
+				"status": "completed",
+				"infoHash": "91776dba860f15504d49f18e9159ce8d7f6eb51a",
+				"updatedAt": 1791393502784
+			},
+			"transferMeta": {
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-K3",
+				"releaseId": "ix:release-13",
+				"title": "Taboo.IL.S03.1080p.KAN.WEB-DL.AAC2.0.H.264-ILSTREAM",
+				"imdbId": "tt0330958",
+				"updatedAt": 1787773442877,
+				"returnPath": "/show/tt0330958/3"
+			}
+		}
+	],
+	"recordedAt": "2026-10-07T17:20:00.000Z",
+	"retry": {
+		"oldJob": {
+			"category": null,
+			"completed_at": "2026-09-24 08:57:58",
+			"created_at": "2026-09-24 06:25:37",
+			"done_bytes": null,
+			"duration_seconds": 9141,
+			"error": "zurg did not finish reading this NZB within 120 minutes",
+			"files": [],
+			"id": "nzb2rd-R1",
+			"imdb_id": "tt3569374",
+			"info_hash": null,
+			"name": null,
+			"nzb_name": "The.Midnight.Swim.2014.1080p.BluRay.x264-VALUE.nzb",
+			"retry_count": 0,
+			"started_at": "2026-09-24 06:57:56",
+			"status": "failed",
+			"status_message": "Waiting for zurg to read the NZB... (1382)",
+			"total_bytes": null,
+			"updated_at": "2026-09-24 08:57:58",
+			"deleted": 0
+		},
+		"newJob": {
+			"category": null,
+			"completed_at": null,
+			"created_at": "2026-09-26 05:10:38",
+			"done_bytes": null,
+			"duration_seconds": null,
+			"error": null,
+			"files": [],
+			"id": "nzb2rd-R2",
+			"imdb_id": "tt3569374",
+			"info_hash": null,
+			"name": null,
+			"nzb_name": "The.Midnight.Swim.2014.1080p.BluRay.x264-VALUE.nzb",
+			"retry_count": 0,
+			"started_at": null,
+			"status": "pending",
+			"status_message": null,
+			"total_bytes": null,
+			"updated_at": "2026-09-26 05:10:38",
+			"deleted": 0,
+			"queue": {
+				"position": 27,
+				"waiting": 1173
+			}
+		},
+		"marker": {
+			"releaseId": "ix:release-21",
+			"jobId": "nzb2rd-R1",
+			"imdbId": "tt3569374",
+			"status": "failed",
+			"error": "zurg did not finish reading this NZB within 120 minutes",
+			"title": "The.Midnight.Swim.2014.1080p.BluRay.x264-VALUE",
+			"updatedAt": 1791249741259
+		},
+		"transferMeta": [
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-R1",
+				"releaseId": "ix:release-21",
+				"title": "The.Midnight.Swim.2014.1080p.BluRay.x264-VALUE",
+				"imdbId": "tt3569374",
+				"updatedAt": 1790231137030,
+				"returnPath": "/movie/tt3569374"
+			},
+			{
+				"source": "nzb2rd",
+				"jobId": "nzb2rd-R2",
+				"releaseId": "ix:release-21",
+				"title": "The.Midnight.Swim.2014.1080p.BluRay.x264-VALUE",
+				"imdbId": "tt3569374",
+				"updatedAt": 1790399438921,
+				"returnPath": "/movie/tt3569374"
+			}
+		]
+	}
+}

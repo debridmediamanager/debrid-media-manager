@@ -86,7 +86,7 @@ describe('Nzb2rdMapService', () => {
 				key: 'nzbrd:abc123def',
 				value: {
 					releaseId: 'abc123def',
-					jobId: 'j',
+					jobId: 'job-9',
 					imdbId: 'tt1418646',
 					title: 'Some.Release.2160p',
 					status: 'pending',
@@ -105,6 +105,88 @@ describe('Nzb2rdMapService', () => {
 					}),
 				})
 			);
+		});
+	});
+
+	// The transfers page re-reports every failed and completed row every 5
+	// seconds. Only a change may reach the table.
+	describe('writing only a change', () => {
+		const failed = {
+			releaseId: 'abc123def',
+			jobId: 'job-9',
+			imdbId: 'tt1418646',
+			status: 'failed',
+			error: 'zurg did not finish reading this NZB within 120 minutes',
+			title: 'Some.Release.2160p',
+			updatedAt: 1,
+		};
+		const completed = {
+			releaseId: 'abc123def',
+			jobId: 'job-9',
+			imdbId: 'tt1418646',
+			status: 'completed',
+			infoHash: HASH.toLowerCase(),
+			title: 'Some.Release.2160p {imdb-tt1418646}',
+			updatedAt: 1,
+		};
+
+		it('leaves a failure that is already recorded alone, waiters and all', async () => {
+			prisma.cache.findUnique.mockResolvedValue({ key: 'nzbrd:abc123def', value: failed });
+
+			await service.recordFailed(RELEASE, 'job-9', 'tt1418646', failed.error, failed.title);
+
+			expect(prisma.cache.upsert).not.toHaveBeenCalled();
+			expect(prisma.cache.deleteMany).not.toHaveBeenCalled();
+		});
+
+		it('records a new reason for the same job', async () => {
+			prisma.cache.findUnique.mockResolvedValue({ key: 'nzbrd:abc123def', value: failed });
+
+			await service.recordFailed(
+				RELEASE,
+				'job-9',
+				'tt1418646',
+				'par2 exited 2',
+				failed.title
+			);
+
+			expect(prisma.cache.upsert).toHaveBeenCalledTimes(1);
+		});
+
+		// A Retry records its new job on the marker while the old failed row stays
+		// listed; that row's failure says nothing about the retry.
+		it('leaves a marker that follows a different job alone', async () => {
+			prisma.cache.findUnique.mockResolvedValue({
+				key: 'nzbrd:abc123def',
+				value: { ...failed, jobId: 'job-10', status: 'pending', error: undefined },
+			});
+
+			await service.recordFailed(RELEASE, 'job-9', 'tt1418646', failed.error, failed.title);
+
+			expect(prisma.cache.upsert).not.toHaveBeenCalled();
+			expect(prisma.cache.deleteMany).not.toHaveBeenCalled();
+		});
+
+		it('leaves a completion that is already recorded alone', async () => {
+			prisma.cache.findUnique.mockResolvedValue({ key: 'nzbrd:abc123def', value: completed });
+
+			await service.recordCompleted(RELEASE, 'job-9', 'tt1418646', HASH, completed.title);
+
+			expect(prisma.cache.upsert).not.toHaveBeenCalled();
+		});
+
+		it('records a completion over a pending or failed marker', async () => {
+			for (const before of [{ ...failed, status: 'pending', error: undefined }, failed]) {
+				prisma.cache.upsert.mockClear();
+				prisma.cache.findUnique.mockResolvedValue({
+					key: 'nzbrd:abc123def',
+					value: before,
+				});
+
+				await service.recordCompleted(RELEASE, 'job-9', 'tt1418646', HASH, completed.title);
+
+				expect(prisma.cache.upsert).toHaveBeenCalledTimes(1);
+			}
 		});
 	});
 
