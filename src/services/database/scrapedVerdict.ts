@@ -442,11 +442,15 @@ export class ScrapedVerdictService extends DatabaseClient {
 			skipDuplicates: true,
 		});
 		if (count === 1) return true;
-		const takeover = await this.prisma.cache.updateMany({
-			where: { key: lockKey, updatedAt: { lt: new Date(Date.now() - staleMs) } },
-			data: { value: {} },
-		});
-		return takeover.count === 1;
+		// One statement, so the staleness is re-checked under the row lock and only
+		// the first caller matches. `updateMany` cannot do this: Prisma runs it as
+		// a SELECT of the matching keys, then an UPDATE by key alone, so every
+		// caller that read the stale row before the first UPDATE took the lock too.
+		const now = new Date();
+		const taken = await this.prisma.$executeRaw(Prisma.sql`
+			UPDATE Cache SET value = JSON_OBJECT(), updatedAt = ${now}
+			WHERE \`key\` = ${lockKey} AND updatedAt < ${new Date(now.getTime() - staleMs)}`);
+		return taken === 1;
 	}
 
 	public async releaseLock(key: string): Promise<void> {

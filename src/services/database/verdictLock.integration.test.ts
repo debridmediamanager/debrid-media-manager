@@ -151,11 +151,17 @@ describe.skipIf(!dockerAvailable)('The verdict lock on MySQL 8.0.36 (Integration
 		expect(prismaLines()).toEqual([]);
 	});
 
-	it('takes over a stale lock', async () => {
+	// Prisma runs `updateMany` as a SELECT of the matching keys and then an UPDATE
+	// by key alone, so all eight of these used to take the lock.
+	it('lets exactly one caller take over a stale lock', async () => {
 		await service.acquireLock('sweep', STALE_MS);
 		await monitor.$executeRaw`UPDATE Cache SET updatedAt = ${new Date(Date.now() - STALE_MS - 60_000)} WHERE \`key\` = 'verdicts:lock:sweep'`;
 
-		await expect(service.acquireLock('sweep', STALE_MS)).resolves.toBe(true);
+		const won = await Promise.all(
+			Array.from({ length: 8 }, () => service.acquireLock('sweep', STALE_MS))
+		);
+
+		expect(won.filter(Boolean)).toHaveLength(1);
 		// The takeover refreshed the row, so it is live again.
 		await expect(service.acquireLock('sweep', STALE_MS)).resolves.toBe(false);
 		expect(prismaLines()).toEqual([]);

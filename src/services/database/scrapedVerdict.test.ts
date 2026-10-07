@@ -338,19 +338,23 @@ describe('ScrapedVerdictService', () => {
 				data: [{ key: 'verdicts:lock:movie:tt1', value: {} }],
 				skipDuplicates: true,
 			});
-			expect(prismaMock.cache.updateMany).not.toHaveBeenCalled();
+			expect(prismaMock.$executeRaw).not.toHaveBeenCalled();
 		});
 
-		// A held lock comes back as an insert of nothing, not as an error.
+		// A held lock comes back as an insert of nothing, not as an error, and the
+		// takeover is one conditional UPDATE so only one caller can match it.
 		it('refuses a live lock and takes over a stale one', async () => {
 			prismaMock.cache.createMany.mockResolvedValue({ count: 0 });
-			prismaMock.cache.updateMany.mockResolvedValueOnce({ count: 0 });
+			prismaMock.$executeRaw.mockResolvedValueOnce(0);
 			await expect(service.acquireLock('movie:tt1', 1000)).resolves.toBe(false);
-			prismaMock.cache.updateMany.mockResolvedValueOnce({ count: 1 });
+			prismaMock.$executeRaw.mockResolvedValueOnce(1);
 			await expect(service.acquireLock('movie:tt1', 1000)).resolves.toBe(true);
-			expect(prismaMock.cache.updateMany.mock.calls[0][0].where.key).toBe(
-				'verdicts:lock:movie:tt1'
+			const takeover = prismaMock.$executeRaw.mock.calls[0][0] as Prisma.Sql;
+			expect(sqlText(takeover)).toMatch(
+				/^\s*UPDATE Cache SET .*\sWHERE `key` = \? AND updatedAt < \?$/s
 			);
+			expect(takeover.values[1]).toBe('verdicts:lock:movie:tt1');
+			expect(prismaMock.cache.updateMany).not.toHaveBeenCalled();
 		});
 
 		it('passes a database error on', async () => {
