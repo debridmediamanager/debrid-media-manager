@@ -1,3 +1,5 @@
+import { rdLongRefusal, type RdLongRefusal } from '@/services/rdAddOutcomes';
+
 /**
  * Real-Debrid's `451 infringing_file` on an add, read as what it usually is.
  *
@@ -50,18 +52,48 @@ export const formatRdAddWait = (ms: number): string => {
 	return `${Math.round(seconds / 60)} minutes`;
 };
 
-/** Shown while an interactive add waits `holdMs` to be tried again. */
-export const rdAddPauseRetryMessage = (holdMs: number = RD_ADD_PAUSE_MS) =>
-	`Real-Debrid is pausing adds on your account. Trying again in ${formatRdAddWait(holdMs)}...`;
+/** "40 minutes", "2 hours", "12 hours". */
+const formatRefusalSpan = (ms: number): string => {
+	const minutes = Math.max(1, Math.round(ms / 60_000));
+	if (minutes < 120) return `${minutes} minute${minutes === 1 ? '' : 's'}`;
+	return `${Math.round(minutes / 60)} hours`;
+};
+
+/** What RD has done to this account's adds, said with its own numbers. */
+const describeLongRefusal = ({ refused, tries, forMs }: RdLongRefusal) =>
+	`Real-Debrid has refused ${refused} of the last ${tries} adds on your account over ${formatRefusalSpan(
+		forMs
+	)}`;
+
+/**
+ * Shown while an interactive add waits `holdMs` to be tried again. When RD has
+ * been refusing the account for longer than a pause (`rdLongRefusal`), says so
+ * rather than promising a short wait.
+ */
+export const rdAddPauseRetryMessage = (
+	holdMs: number = RD_ADD_PAUSE_MS,
+	longRefusal: RdLongRefusal | null = null
+) =>
+	longRefusal
+		? `${describeLongRefusal(longRefusal)}. Trying again in ${formatRdAddWait(holdMs)}...`
+		: `Real-Debrid is pausing adds on your account. Trying again in ${formatRdAddWait(holdMs)}...`;
 
 /**
  * Shown when every try was refused, `waitedMs` of holds apart. Says what it
  * most likely is: the account, which other apps on the same key also add to.
+ * When the refusals have lasted far longer than any pause measured, waiting a
+ * few minutes is no advice: send the user to RD, which can tell a blocked
+ * account from a busy one where DMM cannot.
  */
-export const rdAddRefusedMessage = (waitedMs: number = RD_ADD_PAUSE_MS) =>
-	`Real-Debrid is still refusing adds on your account after ${formatRdAddWait(
-		waitedMs
-	)}, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.`;
+export const rdAddRefusedMessage = (
+	waitedMs: number = RD_ADD_PAUSE_MS,
+	longRefusal: RdLongRefusal | null = null
+) =>
+	longRefusal
+		? `${describeLongRefusal(longRefusal)}, which is longer than a short pause. Try adding any torrent on real-debrid.com: if it is refused there too, the block is on your Real-Debrid account and Real-Debrid support is who can lift it. If it goes through there, check what else adds on this account (zurg, Sonarr, Radarr).`
+		: `Real-Debrid is still refusing adds on your account after ${formatRdAddWait(
+				waitedMs
+			)}, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.`;
 
 /** Shown when an add has to wait for a pause another add ran into. */
 export const rdAddWaitMessage = (waitMs: number) =>
@@ -92,8 +124,12 @@ export class RdAddPausedError extends Error {
 	/** The last refusal, as RD sent it. */
 	readonly refusal: unknown;
 
-	constructor(refusal?: unknown, waitedMs: number = RD_ADD_PAUSE_MS) {
-		super(rdAddRefusedMessage(waitedMs));
+	constructor(
+		refusal?: unknown,
+		waitedMs: number = RD_ADD_PAUSE_MS,
+		longRefusal: RdLongRefusal | null = null
+	) {
+		super(rdAddRefusedMessage(waitedMs, longRefusal));
 		this.name = 'RdAddPausedError';
 		this.refusal = refusal;
 	}
@@ -112,6 +148,11 @@ export type RdPauseRetryOptions = {
 	 * (`recordRdAddPause`), as is telling the user.
 	 */
 	onPause?: (holdMs: number) => void;
+	/**
+	 * The token the add is sent with, so the final refusal can say how long RD
+	 * has been refusing this account (`rdLongRefusal`).
+	 */
+	token?: string;
 };
 
 /**
@@ -125,7 +166,7 @@ export type RdPauseRetryOptions = {
  */
 export async function retryRdAddThroughPause<T>(
 	add: () => Promise<T>,
-	{ holdsMs = [RD_ADD_PAUSE_MS], onPause }: RdPauseRetryOptions = {}
+	{ holdsMs = [RD_ADD_PAUSE_MS], onPause, token }: RdPauseRetryOptions = {}
 ): Promise<T> {
 	let waitedMs = 0;
 	for (let attempt = 0; ; attempt++) {
@@ -133,7 +174,8 @@ export async function retryRdAddThroughPause<T>(
 			return await add();
 		} catch (error) {
 			if (!isRdAddRefusal(error)) throw error;
-			if (attempt >= holdsMs.length) throw new RdAddPausedError(error, waitedMs);
+			if (attempt >= holdsMs.length)
+				throw new RdAddPausedError(error, waitedMs, token ? rdLongRefusal(token) : null);
 			onPause?.(holdsMs[attempt]);
 			waitedMs += holdsMs[attempt];
 		}

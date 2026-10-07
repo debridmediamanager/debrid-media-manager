@@ -132,7 +132,9 @@ export default async function handler(
 	try {
 		// The player is waiting: a 451 gets one more try after the account's
 		// pause, then a temporary 503 rather than a verdict on the release.
-		torrentId = await retryRdAddThroughPause(() => addHashAsMagnet(accessToken, hash, false));
+		torrentId = await retryRdAddThroughPause(() => addHashAsMagnet(accessToken, hash, false), {
+			token: accessToken,
+		});
 
 		// Wait for magnet conversion to complete (files become available)
 		const initialInfo = await waitForFiles(accessToken, torrentId);

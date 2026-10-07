@@ -29,6 +29,7 @@ import {
 	PremiumizeError,
 	uploadPremiumizeTorrentFile,
 } from '@/services/premiumize';
+import { rdLongRefusal } from '@/services/rdAddOutcomes';
 import {
 	addHashAsMagnet,
 	addTorrentFile,
@@ -94,9 +95,15 @@ const getRdError = (error: unknown, rdKey: string): string | null => {
 	return null;
 };
 
-/** Tells a user watching an RD add that it will be tried again after the pause. */
-export const announceRdPauseRetry = (holdMs: number = RD_ADD_PAUSE_MS) =>
-	toast(rdAddPauseRetryMessage(holdMs), { ...magnetToastOptions, duration: holdMs });
+/**
+ * Tells a user watching an RD add that it will be tried again after the pause,
+ * or, given the account's token, that RD has been refusing it for hours.
+ */
+export const announceRdPauseRetry = (holdMs: number = RD_ADD_PAUSE_MS, rdKey?: string) =>
+	toast(rdAddPauseRetryMessage(holdMs, rdKey ? rdLongRefusal(rdKey) : null), {
+		...magnetToastOptions,
+		duration: holdMs,
+	});
 
 /**
  * Retries for an RD add one user is watching: hold the account's adds and try
@@ -108,8 +115,9 @@ export const interactiveRdPauseRetries = (rdKey: string): RdPauseRetryOptions =>
 	holdsMs: RD_ADD_INTERACTIVE_HOLDS_MS,
 	onPause: (holdMs) => {
 		recordRdAddPause(rdKey, holdMs);
-		announceRdPauseRetry(holdMs);
+		announceRdPauseRetry(holdMs, rdKey);
 	},
+	token: rdKey,
 });
 
 /**
@@ -258,7 +266,7 @@ export const handleAddAsMagnetInRd = async (
 			if (!silent && pauseRetryCount < MAX_PAUSE_RETRIES) {
 				const holdMs = RD_ADD_INTERACTIVE_HOLDS_MS[pauseRetryCount];
 				recordRdAddPause(rdKey, holdMs);
-				announceRdPauseRetry(holdMs);
+				announceRdPauseRetry(holdMs, rdKey);
 				return handleAddAsMagnetInRd(
 					rdKey,
 					hash,
@@ -277,7 +285,8 @@ export const handleAddAsMagnetInRd = async (
 			if (!silent)
 				toast.error(
 					rdAddRefusedMessage(
-						RD_ADD_INTERACTIVE_HOLDS_MS.reduce((sum, ms) => sum + ms, 0)
+						RD_ADD_INTERACTIVE_HOLDS_MS.reduce((sum, ms) => sum + ms, 0),
+						rdLongRefusal(rdKey)
 					),
 					rdAddRefusedToastOptions
 				);

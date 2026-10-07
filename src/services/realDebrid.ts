@@ -6,6 +6,7 @@ import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
+import { recordRdAddOutcome } from './rdAddOutcomes';
 import {
 	AccessTokenResponse,
 	CredentialsResponse,
@@ -828,8 +829,9 @@ export type RdAddOptions = {
 
 /**
  * Bookkeeping every RD add shares, whichever endpoint it uses: wait out a
- * pause the account is in, count the attempt, and put the account on pause
- * when RD answers with a 451 the name does not explain.
+ * pause the account is in, count the attempt, put the account on pause when
+ * RD answers with a 451 the name does not explain, and log the answer so a
+ * refusal that has lasted hours is not called a pause (`rdAddOutcomes.ts`).
  */
 async function sendRdAdd<T>(
 	accessToken: string,
@@ -841,12 +843,18 @@ async function sendRdAdd<T>(
 	// spent by refused requests too, so a burst that is already being turned away
 	// still has to read as a burst.
 	recordRdAddAttempt(accessToken);
+	let result: T;
 	try {
-		return await send();
+		result = await send();
 	} catch (error) {
-		if (isRdAddRefusal(error) && !options.nameIsBlocked) recordRdAddPause(accessToken);
+		if (isRdAddRefusal(error) && !options.nameIsBlocked) {
+			recordRdAddPause(accessToken);
+			recordRdAddOutcome(accessToken, false);
+		}
 		throw error;
 	}
+	recordRdAddOutcome(accessToken, true);
+	return result;
 }
 
 export const addHashAsMagnet = async (
