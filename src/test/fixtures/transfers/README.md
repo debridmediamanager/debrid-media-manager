@@ -99,3 +99,27 @@ and found none to drop. That day 3 releases had a waiter list against 852
 
 Release ids are replaced by `ix:release-N` and job ids by `nzb2rd-PN`. Titles,
 IMDb ids, nzb2rd's error text and the timestamp are as recorded.
+
+`waiter-markers-2026-10-07.json` holds five `nzbrd:` markers that still read
+`pending` on 2026-10-07, what nzb2rd's `GET /jobs/:id` answered for each one's
+job that day, and the three `nzbwait:` waiter lists then stored, which were all
+there were. Everything was read with a read-only session.
+
+- `nzb2rd-W1`, `nzb2rd-W2`: deleted on 2026-09-22 while `hashing`, so nzb2rd
+  serves them as `hashing` with `deleted: 1` for good and never resumes them.
+  Each had one account waiting since 09-22, with an access token and no OAuth
+  credentials.
+- `nzb2rd-W3`: really queued since 2026-09-17, 24th of 1188 in line. One account
+  waiting since 09-24, with OAuth credentials.
+- `nzb2rd-D1`: deleted on 2026-09-22 while still `pending`.
+- `nzb2rd-C1`: completed on 2026-08-28 and deleted on 08-30, its marker still
+  `pending`.
+
+That day 942 markers read `pending`: 469 behind failed jobs, 14 behind completed
+ones, 9 behind deleted ones (8 deleted before finishing), and 450 behind jobs
+still in line or running. nzb2rd's queue was 23 days deep.
+
+Job ids are replaced by the labels above, release ids by `ix:release-N`, and
+each stored credential by a `FIXTURE` placeholder of the same length. Account
+fields, internal URLs and paths, the RD torrent id and C1's 24 files are dropped.
+Names, statuses, timestamps, IMDb ids and the queue place are as recorded.

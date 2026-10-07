@@ -1,6 +1,7 @@
 import handler from '@/pages/api/nzb2rd/jobs';
 import { addHashToRdAccount, fetchNzb, promoteJob, submitNzb } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
+import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -104,6 +105,52 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 	it('does not charge B an RD add while the job is still running', async () => {
 		await run();
 		expect(mockAddToRd).not.toHaveBeenCalled();
+	});
+});
+
+// A job deleted before it finished stays at its last stage in nzb2rd for good
+// (`deleted: 1`) and is never resumed. Taken for a live one, every later caller
+// was parked behind it, with their credentials, for a delivery that could not
+// come. Two of production's three waiter lists on 2026-10-07 were exactly that.
+describe('POST /api/nzb2rd/jobs — the job in flight was deleted', () => {
+	it.each(['nzb2rd-W1', 'nzb2rd-D1'])(
+		'starts a fresh fetch rather than parking the caller behind %s',
+		async (label) => {
+			const marker = recordedWaiters.markers.find((m) => m.jobId === label)!;
+			const job = (recordedWaiters.jobs as Record<string, any>)[label];
+			mockRepo.getNzb2rdTransfer = vi.fn().mockResolvedValue(marker);
+			global.fetch = vi.fn().mockResolvedValue({
+				ok: true,
+				status: 200,
+				json: async () => job,
+			}) as any;
+
+			await run({ id: marker.releaseId, imdbId: marker.imdbId, title: marker.title });
+
+			expect(mockRepo.addNzb2rdWaiter).not.toHaveBeenCalled();
+			expect(mockSubmit).toHaveBeenCalledTimes(1);
+			expect(mockRepo.recordNzb2rdTransferPending).toHaveBeenCalledWith(
+				marker.releaseId,
+				'job-1',
+				marker.imdbId,
+				marker.title
+			);
+		}
+	);
+
+	it('still parks the caller behind a queued job nobody deleted', async () => {
+		const marker = recordedWaiters.markers.find((m) => m.jobId === 'nzb2rd-W3')!;
+		mockRepo.getNzb2rdTransfer = vi.fn().mockResolvedValue(marker);
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			json: async () => recordedWaiters.jobs['nzb2rd-W3'],
+		}) as any;
+
+		await run({ id: marker.releaseId, imdbId: marker.imdbId });
+
+		expect(mockRepo.addNzb2rdWaiter).toHaveBeenCalledTimes(1);
+		expect(mockSubmit).not.toHaveBeenCalled();
 	});
 });
 

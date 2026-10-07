@@ -4,6 +4,7 @@ import {
 	getNzb2rdUrl,
 	isCompleteOAuth,
 	isValidImdbId,
+	nzb2rdJobOutcome,
 	promoteJob,
 	submitNzb,
 } from '@/services/nzb2rd';
@@ -34,8 +35,12 @@ async function isTransferStillValid(record: {
 			signal: AbortSignal.timeout(10000),
 		});
 		if (res.status === 404) return false;
-		const job = await res.json();
-		return job?.status !== 'failed';
+		// A job deleted before it finished reads its last stage forever and never
+		// resumes, so it is as dead as a failed one. Taken for live, it parked
+		// every later caller behind it as a waiter: their credentials held for a
+		// delivery that could not come, and the release never fetched again.
+		const outcome = nzb2rdJobOutcome(await res.json());
+		return outcome !== 'failed' && outcome !== 'gone';
 	} catch {
 		return false; // can't confirm it's alive — let the resubmit through
 	}

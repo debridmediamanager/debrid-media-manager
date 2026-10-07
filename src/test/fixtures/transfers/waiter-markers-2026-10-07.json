@@ -1,0 +1,201 @@
+{
+	"jobs": {
+		"nzb2rd-W1": {
+			"id": "nzb2rd-W1",
+			"nzb_name": "Snowfall.2017.S05E01.Comets.2160p.HULU.WEB-DL.DDP5.1.H.265-NTb.nzb",
+			"imdb_id": "tt6439752",
+			"status": "hashing",
+			"error": null,
+			"name": null,
+			"status_message": "Waiting for zurg to read the NZB... (1296)",
+			"info_hash": null,
+			"retry_count": 0,
+			"deleted": 1,
+			"completed_at": null,
+			"created_at": "2026-09-22 17:15:22",
+			"updated_at": "2026-09-22 20:52:36",
+			"category": null,
+			"total_bytes": null,
+			"done_bytes": null,
+			"speed_bps": null,
+			"started_at": "2026-09-22 18:52:38",
+			"priority": 1,
+			"priority_at": "2026-09-22 17:15:22",
+			"duration_seconds": null,
+			"files": []
+		},
+		"nzb2rd-W2": {
+			"id": "nzb2rd-W2",
+			"nzb_name": "White.House.Plumbers.S01.2160p.MAX.WEB-DL.DDP5.1.HDR.DoVi.H.265-NTb (NL subs) seizoen 1.nzb",
+			"imdb_id": "tt11468254",
+			"status": "hashing",
+			"error": null,
+			"name": null,
+			"status_message": "Waiting for zurg to read the NZB... (1340)",
+			"info_hash": null,
+			"retry_count": 0,
+			"deleted": 1,
+			"completed_at": null,
+			"created_at": "2026-09-21 20:56:08",
+			"updated_at": "2026-09-22 01:47:28",
+			"category": null,
+			"total_bytes": null,
+			"done_bytes": null,
+			"speed_bps": null,
+			"started_at": "2026-09-21 23:47:35",
+			"priority": 1,
+			"priority_at": "2026-09-21 20:56:08",
+			"duration_seconds": null,
+			"files": []
+		},
+		"nzb2rd-W3": {
+			"id": "nzb2rd-W3",
+			"nzb_name": "Made.2001.2160p.UHD.Blu-ray.Remux.DV.HDR.HEVC.TrueHD.Atmos.7.1-CiNEPHiLES.nzb",
+			"imdb_id": "tt0227005",
+			"status": "pending",
+			"error": null,
+			"name": null,
+			"status_message": null,
+			"info_hash": null,
+			"retry_count": 0,
+			"deleted": 0,
+			"completed_at": null,
+			"created_at": "2026-09-17 22:37:33",
+			"updated_at": "2026-09-17 22:37:33",
+			"category": null,
+			"total_bytes": null,
+			"done_bytes": null,
+			"speed_bps": null,
+			"started_at": null,
+			"priority": 0,
+			"priority_at": null,
+			"duration_seconds": null,
+			"queue": {
+				"position": 24,
+				"waiting": 1188
+			},
+			"files": []
+		},
+		"nzb2rd-D1": {
+			"id": "nzb2rd-D1",
+			"nzb_name": "Dollface.S01E05.Beauty.Queen.2160p.DSNP.WEB-DL.DDP5.1.DV.HEVC-NOSiViD.nzb",
+			"imdb_id": "tt7661046",
+			"status": "pending",
+			"error": null,
+			"name": null,
+			"status_message": null,
+			"info_hash": null,
+			"retry_count": 0,
+			"deleted": 1,
+			"completed_at": null,
+			"created_at": "2026-09-22 02:20:04",
+			"updated_at": "2026-09-22 02:24:49",
+			"category": null,
+			"total_bytes": null,
+			"done_bytes": null,
+			"speed_bps": null,
+			"started_at": null,
+			"priority": 0,
+			"priority_at": null,
+			"duration_seconds": null,
+			"files": []
+		},
+		"nzb2rd-C1": {
+			"id": "nzb2rd-C1",
+			"nzb_name": "My.Journey.to.You.2023.S01.2160p.WEB-DL.H.265.DDP5.1-YingWEB.nzb",
+			"imdb_id": "tt28131745",
+			"status": "completed",
+			"error": null,
+			"name": "My.Journey.to.You.2023.S01.2160p.WEB.DL.H.265.DDP5.1-YingWEB {imdb-tt28131745}",
+			"status_message": null,
+			"info_hash": "7fc728c53753ab8971402450842c9af8e8419823",
+			"retry_count": 0,
+			"deleted": 1,
+			"completed_at": "2026-08-28 22:01:10",
+			"created_at": "2026-08-19 12:44:20",
+			"updated_at": "2026-08-30 03:28:45",
+			"category": null,
+			"total_bytes": 53350182274,
+			"done_bytes": 53350182274,
+			"speed_bps": null,
+			"started_at": "2026-08-28 19:33:51",
+			"priority": 0,
+			"priority_at": null,
+			"duration_seconds": 811010,
+			"files": []
+		}
+	},
+	"markers": [
+		{
+			"releaseId": "ix:release-1",
+			"jobId": "nzb2rd-W1",
+			"imdbId": "tt6439752",
+			"status": "pending",
+			"title": "Snowfall.2017.S05E01.Comets.2160p.HULU.WEB-DL.DDP5.1.H.265-NTb",
+			"updatedAt": 1790097322215
+		},
+		{
+			"releaseId": "ix:release-2",
+			"jobId": "nzb2rd-W2",
+			"imdbId": "tt11468254",
+			"status": "pending",
+			"title": "White.House.Plumbers.S01.2160p.MAX.WEB-DL.DDP5.1.HDR.DoVi.H.265-NTb (NL subs) seizoen 1",
+			"updatedAt": 1790024168926
+		},
+		{
+			"releaseId": "ix:release-3",
+			"jobId": "nzb2rd-W3",
+			"imdbId": "tt0227005",
+			"status": "pending",
+			"title": "Made.2001.2160p.UHD.Blu-ray.Remux.DV.HDR.HEVC.TrueHD.Atmos.7.1-CiNEPHiLES",
+			"updatedAt": 1789684653147
+		},
+		{
+			"releaseId": "ix:release-4",
+			"jobId": "nzb2rd-D1",
+			"imdbId": "tt7661046",
+			"status": "pending",
+			"title": "Dollface.S01E05.Beauty.Queen.2160p.DSNP.WEB-DL.DDP5.1.DV.HEVC-NOSiViD",
+			"updatedAt": 1790043604176
+		},
+		{
+			"releaseId": "ix:release-5",
+			"jobId": "nzb2rd-C1",
+			"imdbId": "tt28131745",
+			"status": "pending",
+			"title": "My.Journey.to.You.2023.S01.2160p.WEB-DL.H.265.DDP5.1-YingWEB",
+			"updatedAt": 1787143460466
+		}
+	],
+	"recordedAt": "2026-10-07T16:45:00.000Z",
+	"waiters": {
+		"ix:release-1": [
+			{
+				"rdKey": "FIXTUREXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+				"oauth": null,
+				"imdbId": "tt6439752",
+				"queuedAt": 1790105749802
+			}
+		],
+		"ix:release-2": [
+			{
+				"rdKey": "FIXTUREXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+				"oauth": null,
+				"imdbId": "tt11468254",
+				"queuedAt": 1790038110205
+			}
+		],
+		"ix:release-3": [
+			{
+				"rdKey": "FIXTUREXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+				"oauth": {
+					"clientId": "FIXTUREXXXXXX",
+					"clientSecret": "FIXTUREXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+					"refreshToken": "FIXTUREXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+				},
+				"imdbId": "tt0227005",
+				"queuedAt": 1790261278469
+			}
+		]
+	}
+}

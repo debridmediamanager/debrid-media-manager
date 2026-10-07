@@ -549,6 +549,32 @@ export interface Nzb2rdJob {
 	error?: string | null;
 }
 
+/** How a job nzb2rd still has a record of ended, or `live` while it has not. */
+export type Nzb2rdJobOutcome = 'completed' | 'failed' | 'gone' | 'live';
+
+/**
+ * How a job ended, from nzb2rd's own record of it (`GET /jobs/:id`).
+ *
+ * `deleted` decides as much as `status` does. A cancel, whether the owner's, an
+ * *arr's through the SABnzbd API or the operator dashboard's, sets `deleted = 1`
+ * and leaves `status` at whatever stage the job had reached, and boot resume
+ * never takes a deleted job back. So a job deleted mid-flight reads `hashing` or
+ * `pending` for good, while `GET /jobs/:id` keeps serving it (only the listings
+ * leave it out). Reading the status alone took it for a job still in line:
+ * measured 2026-10-07, 8 `pending` markers sat behind deleted jobs, two of them
+ * holding a waiting account's Real-Debrid credentials since 2026-09-22.
+ *
+ * A finished status outranks the flag. Clearing a finished row deletes its job
+ * too, and the torrent a completed job built is in Real-Debrid regardless.
+ */
+export function nzb2rdJobOutcome(job: unknown): Nzb2rdJobOutcome {
+	const record = job as { status?: unknown; deleted?: unknown } | null | undefined;
+	if (record?.status === 'completed') return 'completed';
+	if (record?.status === 'failed') return 'failed';
+	if (record?.deleted === 1 || record?.deleted === true) return 'gone';
+	return 'live';
+}
+
 /**
  * Put an already-built torrent into someone's Real-Debrid account by hash.
  *

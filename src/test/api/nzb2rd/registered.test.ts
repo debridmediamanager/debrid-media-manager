@@ -1,6 +1,7 @@
 import handler from '@/pages/api/nzb2rd/registered';
 import { repository } from '@/services/repository';
 import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
+import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -297,5 +298,66 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 
 		expect(global.fetch).toHaveBeenCalledTimes(8);
 		expect((res.json as any).mock.calls[0][0].transfers).toHaveLength(20);
+	});
+});
+
+// nzb2rd serves a job deleted before it finished at its last stage for good:
+// `deleted: 1`, `status` frozen, never resumed. Reading only `status` took those
+// for jobs still in line, so their markers read `pending` forever, and so did
+// the waiter lists behind them. These are production's answers on 2026-10-07
+// (`fixtures/transfers/waiter-markers-2026-10-07.json`).
+describe('POST /api/nzb2rd/registered — jobs nzb2rd deleted', () => {
+	const recorded = (label: string) => ({
+		marker: recordedWaiters.markers.find((m) => m.jobId === label)!,
+		job: (recordedWaiters.jobs as Record<string, any>)[label],
+	});
+
+	it.each(['nzb2rd-W1', 'nzb2rd-W2', 'nzb2rd-D1'])(
+		'drops the marker of %s, deleted before it finished',
+		async (label) => {
+			const { marker, job } = recorded(label);
+			mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([marker]);
+			nzb2rdAnswers(job);
+
+			const res = await run([marker.releaseId]);
+
+			expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(marker.releaseId);
+			expect(res.json).toHaveBeenCalledWith({ transfers: [] });
+		}
+	);
+
+	it('still reports a queued job that nobody deleted', async () => {
+		const { marker, job } = recorded('nzb2rd-W3');
+		mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([marker]);
+		nzb2rdAnswers(job);
+
+		const res = await run([marker.releaseId]);
+
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+		expect((res.json as any).mock.calls[0][0].transfers[0]).toMatchObject({
+			status: 'pending',
+			progress: { status: 'pending', queue: { position: 24, waiting: 1188 } },
+		});
+	});
+
+	// Clearing a finished row deletes its job too, and the torrent is in RD.
+	it('promotes a completed job even though it was deleted afterwards', async () => {
+		const { marker, job } = recorded('nzb2rd-C1');
+		mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([marker]);
+		nzb2rdAnswers(job);
+
+		const res = await run([marker.releaseId]);
+
+		expect(mockRegister).toHaveBeenCalledWith(
+			expect.objectContaining({ id: 'nzb2rd-C1' }),
+			undefined,
+			undefined,
+			marker.releaseId
+		);
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+		expect((res.json as any).mock.calls[0][0].transfers[0]).toMatchObject({
+			status: 'completed',
+			infoHash: job.info_hash,
+		});
 	});
 });

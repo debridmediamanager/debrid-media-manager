@@ -1,5 +1,5 @@
 import type { Nzb2rdTransferRecord } from '@/services/database/nzb2rdMap';
-import { getNzb2rdUrl } from '@/services/nzb2rd';
+import { getNzb2rdUrl, nzb2rdJobOutcome } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
@@ -101,6 +101,13 @@ async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary 
 		job = await response.json();
 	} catch {
 		return summaryOf(record);
+	}
+
+	// Deleted before it finished: nzb2rd keeps serving it at its last stage and
+	// never resumes it, so it is no more alive than a job it has forgotten.
+	if (nzb2rdJobOutcome(job) === 'gone') {
+		await db.removeNzb2rdTransfer(record.releaseId);
+		return null;
 	}
 
 	if (job?.status === 'failed') {
