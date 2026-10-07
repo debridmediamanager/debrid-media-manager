@@ -1,0 +1,56 @@
+{
+	"printed": [
+		"prisma:error ",
+		"Invalid `prisma.cache.create()` invocation:",
+		"",
+		"",
+		"Unique constraint failed on the constraint: `PRIMARY`"
+	],
+	"seen": [
+		{
+			"at": "2026-10-07T15:28:29.229Z",
+			"replica": "web.4"
+		},
+		{
+			"at": "2026-10-07T15:28:32.233Z",
+			"replica": "web.3"
+		},
+		{
+			"at": "2026-10-07T15:40:06.045Z",
+			"replica": "web.2"
+		},
+		{
+			"at": "2026-10-07T15:40:12.129Z",
+			"replica": "web.2"
+		},
+		{
+			"at": "2026-10-07T15:40:15.349Z",
+			"replica": "web.4"
+		},
+		{
+			"at": "2026-10-07T16:08:34.411Z",
+			"replica": "web.1"
+		},
+		{
+			"at": "2026-10-07T16:08:37.048Z",
+			"replica": "web.1"
+		},
+		{
+			"at": "2026-10-07T16:08:39.689Z",
+			"replica": "web.4"
+		},
+		{
+			"at": "2026-10-07T16:08:42.255Z",
+			"replica": "web.1"
+		},
+		{
+			"at": "2026-10-07T16:08:44.986Z",
+			"replica": "web.4"
+		},
+		{
+			"at": "2026-10-07T16:08:47.607Z",
+			"replica": "web.4"
+		}
+	],
+	"source": "dmm_web replicas on dmm-01, /var/log/dmm-web/web-2026-10-07.log, 13:35 to 16:44 UTC"
+}

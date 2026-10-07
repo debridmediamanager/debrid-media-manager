@@ -423,19 +423,25 @@ export class ScrapedVerdictService extends DatabaseClient {
 	 * A cross-instance lock so four Swarm replicas serving the same page do not
 	 * judge it four times. A lock older than `staleMs` belonged to a job that
 	 * died and is taken over.
+	 *
+	 * The lock row is written with `createMany` and `skipDuplicates`, which is
+	 * MySQL's `INSERT IGNORE`: a held lock answers a count of 0 rather than a
+	 * unique-key error. A plain `create` that caught P2002 behaved the same, but
+	 * Prisma prints every failed query from its own error log before the caller
+	 * sees it, so each contended lock printed an "Invalid `prisma.cache.create()`
+	 * invocation" block (11 between 13:35 and 16:44 UTC on 2026-10-07).
 	 */
 	public async acquireLock(key: string, staleMs: number): Promise<boolean> {
 		const lockKey = LOCK_PREFIX + key;
-		try {
-			await this.prisma.cache.create({ data: { key: lockKey, value: {} } });
-			return true;
-		} catch (error) {
-			if (
-				!(error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002')
-			) {
-				throw error;
-			}
-		}
+		// `IGNORE` also turns an over-long key into a truncated insert instead of
+		// an error, which would take a lock nobody could release by name. `key` is
+		// varchar(191).
+		if (lockKey.length > 191) throw new Error(`Lock key too long: ${lockKey.length} chars`);
+		const { count } = await this.prisma.cache.createMany({
+			data: [{ key: lockKey, value: {} }],
+			skipDuplicates: true,
+		});
+		if (count === 1) return true;
 		const takeover = await this.prisma.cache.updateMany({
 			where: { key: lockKey, updatedAt: { lt: new Date(Date.now() - staleMs) } },
 			data: { value: {} },

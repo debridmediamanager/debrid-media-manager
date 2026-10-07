@@ -19,7 +19,7 @@ const prismaMock = vi.hoisted(() => ({
 	cache: {
 		findUnique: vi.fn(),
 		upsert: vi.fn(),
-		create: vi.fn(),
+		createMany: vi.fn(),
 		updateMany: vi.fn(),
 		deleteMany: vi.fn(),
 	},
@@ -331,18 +331,19 @@ describe('ScrapedVerdictService', () => {
 	});
 
 	describe('acquireLock', () => {
-		const taken = new Prisma.PrismaClientKnownRequestError('dup', {
-			code: 'P2002',
-			clientVersion: 'test',
-		});
-
 		it('takes a free lock', async () => {
-			prismaMock.cache.create.mockResolvedValue({});
+			prismaMock.cache.createMany.mockResolvedValue({ count: 1 });
 			await expect(service.acquireLock('movie:tt1', 1000)).resolves.toBe(true);
+			expect(prismaMock.cache.createMany).toHaveBeenCalledWith({
+				data: [{ key: 'verdicts:lock:movie:tt1', value: {} }],
+				skipDuplicates: true,
+			});
+			expect(prismaMock.cache.updateMany).not.toHaveBeenCalled();
 		});
 
+		// A held lock comes back as an insert of nothing, not as an error.
 		it('refuses a live lock and takes over a stale one', async () => {
-			prismaMock.cache.create.mockRejectedValue(taken);
+			prismaMock.cache.createMany.mockResolvedValue({ count: 0 });
 			prismaMock.cache.updateMany.mockResolvedValueOnce({ count: 0 });
 			await expect(service.acquireLock('movie:tt1', 1000)).resolves.toBe(false);
 			prismaMock.cache.updateMany.mockResolvedValueOnce({ count: 1 });
@@ -350,6 +351,16 @@ describe('ScrapedVerdictService', () => {
 			expect(prismaMock.cache.updateMany.mock.calls[0][0].where.key).toBe(
 				'verdicts:lock:movie:tt1'
 			);
+		});
+
+		it('passes a database error on', async () => {
+			prismaMock.cache.createMany.mockRejectedValue(new Error('Connection lost'));
+			await expect(service.acquireLock('movie:tt1', 1000)).rejects.toThrow('Connection lost');
+		});
+
+		it('refuses a key the column would truncate rather than lock a shorter one', async () => {
+			await expect(service.acquireLock('x'.repeat(178), 1000)).rejects.toThrow(/too long/);
+			expect(prismaMock.cache.createMany).not.toHaveBeenCalled();
 		});
 	});
 
