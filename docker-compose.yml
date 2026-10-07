@@ -64,6 +64,9 @@ services:
         exec vector --config /etc/vector/vector.yaml --watch-config
     environment:
       - VECTOR_LOG=warn
+      # One worker thread per host core (16 on dmm-01) took the first start's
+      # read of every existing container log past 256M and an OOM kill.
+      - VECTOR_THREADS=2
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /home/ben/dmm/logship:/etc/vector:ro

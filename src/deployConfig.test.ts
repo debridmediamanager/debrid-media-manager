@@ -136,7 +136,17 @@ describe('dmm_web log retention', () => {
 	it('restarts after any exit and runs on every node', () => {
 		expect(logship()).toMatch(/restart_policy:\n\s+condition: any\n/);
 		expect(logship()).toMatch(/^\s+mode: global$/m);
-		expect(logship()).toMatch(/^\s+memory: \d+M$/m);
+	});
+
+	// On 2026-10-07 the first start on dmm-01 read every existing container log
+	// with 16 worker threads, one per core, and went past its 256M limit.
+	// Sixteen threads on a test host did the same; two peaked under 80M.
+	it('sizes its worker threads to its CPU share, not the host', () => {
+		const memory = Number(logship().match(/^\s+memory: (\d+)M$/m)?.[1]);
+		const threads = Number(logship().match(/^\s+- VECTOR_THREADS=(\d+)$/m)?.[1]);
+		expect(memory).toBeGreaterThan(0);
+		expect(threads).toBeGreaterThan(0);
+		expect(threads).toBeLessThanOrEqual(2);
 	});
 
 	it('loads the installed config and reloads it when CI replaces it', () => {
