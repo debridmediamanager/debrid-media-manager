@@ -88,3 +88,14 @@ Job ids are replaced by the labels above, the indexer release id by
 `ix:release-1`, and each RD download link by a `FIXTURE` placeholder of the same
 shape. Account fields, internal URLs and paths are dropped. Names, sizes,
 hashes, statuses and timestamps are as recorded.
+
+`failed-marker-polls-2026-10-07.json` holds three `nzbrd:` markers that one poll
+of a production Transfers page rewrote together on 2026-10-07, read with a
+read-only session: they share the poll's `updatedAt`, and that account's polls
+rewrote about twenty failed markers every five seconds. `printed` is the block
+dmm_web logged each time one of those rewrites dropped the release's waiter list
+and found none to drop. That day 3 releases had a waiter list against 852
+`failed` markers, and the block was about half of every line dmm_web logged.
+
+Release ids are replaced by `ix:release-N` and job ids by `nzb2rd-PN`. Titles,
+IMDb ids, nzb2rd's error text and the timestamp are as recorded.

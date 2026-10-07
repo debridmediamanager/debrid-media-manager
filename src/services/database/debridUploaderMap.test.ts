@@ -7,7 +7,7 @@ vi.mock('@prisma/client', () => ({
 			upsert: vi.fn(),
 			findUnique: vi.fn(),
 			findMany: vi.fn(),
-			delete: vi.fn(),
+			deleteMany: vi.fn(),
 		},
 		$disconnect: vi.fn(),
 	})),
@@ -85,9 +85,19 @@ describe('DebridUploaderMapService', () => {
 		expect(call.create.value.originalHash).toBe('a'.repeat(40));
 	});
 
-	it('swallows a delete miss', async () => {
-		prisma.cache.delete.mockRejectedValue(new Error('not found'));
+	// `deleteMany` answers a missing row with a count of 0 rather than P2025,
+	// which Prisma would print from its error log even though it is caught.
+	it('removes a mapping that is already gone without an error', async () => {
+		prisma.cache.deleteMany.mockResolvedValue({ count: 0 });
 		await expect(service.removeTransfer(HASH)).resolves.toBeUndefined();
+		expect(prisma.cache.deleteMany).toHaveBeenCalledWith({
+			where: { key: `tbrd:${'a'.repeat(40)}` },
+		});
+	});
+
+	it('lets a real database error through', async () => {
+		prisma.cache.deleteMany.mockRejectedValue(new Error('connection lost'));
+		await expect(service.removeTransfer(HASH)).rejects.toThrow('connection lost');
 	});
 
 	it('records and reads a job → server mapping under a tbjob: key', async () => {

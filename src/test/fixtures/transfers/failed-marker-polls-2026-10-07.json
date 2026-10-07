@@ -1,0 +1,39 @@
+{
+	"markers": [
+		{
+			"releaseId": "ix:release-1",
+			"jobId": "nzb2rd-P1",
+			"imdbId": "tt0460654",
+			"status": "failed",
+			"error": "RD addTorrent failed: 401 {\n\t\"error\": \"bad_token\",\n\t\"error_code\": 8\n}",
+			"title": "Kitchen.Confidential.S01.E05.You.Lose.I.Win.DVDRip.x264.AC3-DEEP",
+			"updatedAt": 1791385432325
+		},
+		{
+			"releaseId": "ix:release-2",
+			"jobId": "nzb2rd-P2",
+			"imdbId": "tt3444312",
+			"status": "failed",
+			"error": "zurg did not finish reading this NZB within 120 minutes",
+			"title": "Abducted.in.Plain.Sight.2018.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb",
+			"updatedAt": 1791385432325
+		},
+		{
+			"releaseId": "ix:release-3",
+			"jobId": "nzb2rd-P3",
+			"imdbId": "tt2235759",
+			"status": "failed",
+			"error": "The release cannot be read from the news servers: 1 article(s) missing from every configured news server, across 1 file(s): The.Great.S03E05.NORDiC.1080p.MAX.WEB-DL.H.265-NORViNE.mkv",
+			"title": "The.Great.S03E05.NORDiC.1080p.MAX.WEB-DL.H.265-NORViNE",
+			"updatedAt": 1791385432325
+		}
+	],
+	"printed": [
+		"prisma:error ",
+		"Invalid `prisma.cache.delete()` invocation:",
+		"",
+		"",
+		"An operation failed because it depends on one or more records that were required but not found. No record was found for a delete."
+	],
+	"recordedAt": "2026-10-07T15:03:52.327Z"
+}

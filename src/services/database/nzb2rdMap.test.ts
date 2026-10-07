@@ -7,7 +7,7 @@ vi.mock('@prisma/client', () => ({
 			upsert: vi.fn(),
 			findUnique: vi.fn(),
 			findMany: vi.fn(),
-			delete: vi.fn(),
+			deleteMany: vi.fn(),
 		},
 		$disconnect: vi.fn(),
 	})),
@@ -24,9 +24,8 @@ describe('Nzb2rdMapService', () => {
 		vi.clearAllMocks();
 		service = new Nzb2rdMapService();
 		prisma = (service as any).prisma;
-		// Every delete in this service is fire-and-forget with a .catch, so the
-		// mock has to hand back a promise or the call throws before the assertion.
-		prisma.cache.delete.mockResolvedValue(undefined);
+		// Nothing queued behind the release, as for nearly every one of them.
+		prisma.cache.deleteMany.mockResolvedValue({ count: 0 });
 	});
 
 	it('keys reads by a lowercased nzbrd: prefix', async () => {
@@ -61,7 +60,7 @@ describe('Nzb2rdMapService', () => {
 			);
 			// The parked accounts queued behind a job that will never deliver, and
 			// their stored Real-Debrid credentials must not outlive it.
-			expect(prisma.cache.delete).toHaveBeenCalledWith({
+			expect(prisma.cache.deleteMany).toHaveBeenCalledWith({
 				where: { key: 'nzbwait:abc123def' },
 			});
 		});
@@ -161,9 +160,18 @@ describe('Nzb2rdMapService', () => {
 		});
 	});
 
-	it('swallows a delete for a mapping that is not there', async () => {
-		prisma.cache.delete.mockRejectedValue(new Error('not found'));
+	// `deleteMany` answers a missing row with a count of 0 rather than P2025,
+	// which Prisma would print from its error log even though it is caught.
+	it('removes a mapping that is not there without an error', async () => {
 		await expect(service.removeTransfer(RELEASE)).resolves.toBeUndefined();
+		expect(prisma.cache.deleteMany).toHaveBeenCalledWith({
+			where: { key: 'nzbrd:abc123def' },
+		});
+	});
+
+	it('lets a real database error through', async () => {
+		prisma.cache.deleteMany.mockRejectedValue(new Error('connection lost'));
+		await expect(service.removeTransfer(RELEASE)).rejects.toThrow('connection lost');
 	});
 });
 
@@ -240,24 +248,29 @@ describe('Nzb2rdMapService waiters', () => {
 			withWaiters([{ rdKey: 'rd-key-b', imdbId: 'tt1', queuedAt: 1 }])
 		);
 
+		prisma.cache.deleteMany.mockResolvedValue({ count: 1 });
+
 		const taken = await service.takeWaiters(RELEASE);
 
 		expect(taken).toHaveLength(1);
-		expect(prisma.cache.delete).toHaveBeenCalledWith({ where: { key: 'nzbwait:abc123def' } });
+		expect(prisma.cache.deleteMany).toHaveBeenCalledWith({
+			where: { key: 'nzbwait:abc123def' },
+		});
 	});
 
 	it('takeWaiters does not delete when there was nothing queued', async () => {
 		prisma.cache.findUnique.mockResolvedValue(null);
 
 		expect(await service.takeWaiters(RELEASE)).toEqual([]);
-		expect(prisma.cache.delete).not.toHaveBeenCalled();
+		expect(prisma.cache.deleteMany).not.toHaveBeenCalled();
 	});
 
 	it('cancelling a transfer also drops anyone waiting on it', async () => {
 		prisma.cache.findUnique.mockResolvedValue(null);
+		prisma.cache.deleteMany.mockResolvedValue({ count: 1 });
 		await service.removeTransfer(RELEASE);
 
-		const keys = prisma.cache.delete.mock.calls.map((c: any[]) => c[0].where.key);
+		const keys = prisma.cache.deleteMany.mock.calls.map((c: any[]) => c[0].where.key);
 		expect(keys).toEqual(['nzbrd:abc123def', 'nzbwait:abc123def']);
 	});
 });

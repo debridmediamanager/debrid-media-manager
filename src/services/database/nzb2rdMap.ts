@@ -159,10 +159,19 @@ export class Nzb2rdMapService extends DatabaseClient {
 		await this.clearWaiters(releaseId);
 	}
 
+	/**
+	 * Drop a release's marker and anyone waiting on it.
+	 *
+	 * `deleteMany`, not `delete`, here and in `clearWaiters`: finding nothing to
+	 * remove is the ordinary case (a cancel for a release that was never
+	 * recorded, a waiter list nobody joined), and `delete` answers that with
+	 * P2025, which Prisma prints from its own error log even when the caller
+	 * catches it. Re-recording failed rows on every 5-second transfers poll made
+	 * that about half of everything dmm_web logged on 2026-10-07. A real
+	 * database error still throws.
+	 */
 	async removeTransfer(releaseId: string): Promise<void> {
-		await this.prisma.cache
-			.delete({ where: { key: keyFor(releaseId) } })
-			.catch(() => undefined);
+		await this.prisma.cache.deleteMany({ where: { key: keyFor(releaseId) } });
 		await this.clearWaiters(releaseId);
 	}
 
@@ -221,9 +230,7 @@ export class Nzb2rdMapService extends DatabaseClient {
 	}
 
 	async clearWaiters(releaseId: string): Promise<void> {
-		await this.prisma.cache
-			.delete({ where: { key: waitKeyFor(releaseId) } })
-			.catch(() => undefined);
+		await this.prisma.cache.deleteMany({ where: { key: waitKeyFor(releaseId) } });
 	}
 
 	/**

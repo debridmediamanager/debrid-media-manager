@@ -159,10 +159,15 @@ export class DebridUploaderMapService extends DatabaseClient {
 		await this.put(record);
 	}
 
+	/**
+	 * `deleteMany`, so a mapping that is already gone is not an error: `delete`
+	 * answers that with P2025, which Prisma prints from its own error log even
+	 * when the caller catches it. A real database error still throws, where the
+	 * old catch-all let the unregister route answer `removed: true` without
+	 * having reached the table.
+	 */
 	async removeTransfer(originalHash: string): Promise<void> {
-		await this.prisma.cache
-			.delete({ where: { key: keyFor(originalHash) } })
-			.catch(() => undefined);
+		await this.prisma.cache.deleteMany({ where: { key: keyFor(originalHash) } });
 	}
 
 	// job → owning server, so polls/deletes/file-fetches reach the right host.
