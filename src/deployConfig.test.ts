@@ -30,7 +30,7 @@ describe('production web service', () => {
 		expect(webServiceBlock()).toMatch(/restart_policy:\n(?:\s*#.*\n)*\s+condition: any\n/);
 	});
 
-	it.each(['web', 'redis'])('restarts %s after any exit, clean or not', (name) => {
+	it.each(['web', 'redis', 'logship'])('restarts %s after any exit, clean or not', (name) => {
 		const restart = serviceBlock(name).match(
 			/restart_policy:\n(?:\s*#.*\n)*\s+condition: (\S+)/
 		);
@@ -84,5 +84,106 @@ describe('deploy workflow watchdog', () => {
 			'install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh'
 		);
 		expect(workflow).toContain('* * * * * /home/ben/dmm/dmm-watchdog.sh');
+	});
+});
+
+// Swarm deletes a container's log with its task and keeps five tasks per
+// replica, so on 2026-10-03, with 27 deploys, dmm_web's logs reached back about
+// four hours. logship copies them, credentials redacted, into one gzip file per
+// day on the host. Its Vector unit tests (scripts/ops/logship/vector.test.yaml)
+// cover the filtering and redaction and gate the deploy.
+describe('dmm_web log retention', () => {
+	const logship = () => serviceBlock('logship');
+	const vector = () => readFileSync(join(root, 'scripts/ops/logship/vector.yaml'), 'utf8');
+	const workflow = readFileSync(join(root, '.github/workflows/build-and-push.yml'), 'utf8');
+	const step = (name: string) => workflow.indexOf(`- name: ${name}\n`);
+	const section = (name: string) => {
+		const config = vector();
+		const start = config.indexOf(`\n${name}:\n`);
+		const next = config.slice(start + 1).search(/\n\S/);
+		return next < 0 ? config.slice(start) : config.slice(start, start + 1 + next);
+	};
+
+	it('runs a pinned Vector, never a moving tag', () => {
+		expect(logship()).toMatch(/^\s+image: timberio\/vector:\d+\.\d+\.\d+-alpine$/m);
+	});
+
+	// The docker_logs source skips a line stamped earlier than the one before
+	// it, and stdout and stderr interleave out of order: in a test swarm it
+	// lost 8% of the lines of a container writing both. The files lose none.
+	it("reads Docker's json-file logs read-only instead of the Docker API", () => {
+		expect(logship()).toContain('- /var/lib/docker/containers:/var/lib/docker/containers:ro');
+		expect(logship()).not.toContain('docker.sock');
+		expect(section('sources')).toMatch(/type: file\n/);
+		expect(section('sources')).not.toMatch(/type: docker_logs/);
+		expect(section('sources')).toContain(
+			"include: ['/var/lib/docker/containers/*/*-json.log']"
+		);
+	});
+
+	it('labels every web log entry with its Swarm task', () => {
+		expect(webServiceBlock()).toMatch(
+			/logging:\n\s+driver: json-file\n\s+options:\n\s+max-size: '\d+m'\n\s+max-file: '\d+'\n\s+labels: 'com\.docker\.swarm\.task\.name'\n/
+		);
+	});
+
+	it('keeps read positions across restarts, advancing them only past written lines', () => {
+		expect(vector()).toMatch(/^data_dir: \/var\/lib\/vector$/m);
+		expect(section('sinks')).toMatch(/acknowledgements:\n\s+enabled: true\n/);
+		expect(logship()).toContain('- logship_state:/var/lib/vector');
+	});
+
+	it('restarts after any exit and runs on every node', () => {
+		expect(logship()).toMatch(/restart_policy:\n\s+condition: any\n/);
+		expect(logship()).toMatch(/^\s+mode: global$/m);
+		expect(logship()).toMatch(/^\s+memory: \d+M$/m);
+	});
+
+	it('loads the installed config and reloads it when CI replaces it', () => {
+		expect(logship()).toContain('- /home/ben/dmm/logship:/etc/vector:ro');
+		expect(logship()).toMatch(
+			/exec vector --config \/etc\/vector\/vector\.yaml --watch-config/
+		);
+	});
+
+	it('writes owner-only files and runs the hourly compression and retention', () => {
+		expect(logship()).toContain('- /var/log/dmm-web:/var/log/dmm-web');
+		expect(logship()).toMatch(/umask 077;/);
+		expect(logship()).toContain(
+			'while true; do sh /etc/vector/maintain.sh; sleep 3600; done &'
+		);
+	});
+
+	it('writes only web lines that went through the redaction', () => {
+		const transforms = section('transforms');
+		expect(transforms).toContain(
+			'contains(to_string(.message) ?? "", "\\"com.docker.swarm.task.name\\":\\"dmm_web.")'
+		);
+		expect(transforms).toMatch(/redact:\n\s+type: remap\n\s+inputs: \[web\]\n/);
+		expect(transforms).toMatch(/^\s+drop_on_error: true$/m);
+		expect(transforms).toMatch(/^\s+drop_on_abort: true$/m);
+		const sinks = section('sinks');
+		expect(sinks.match(/inputs: \[[^\]]*\]/g)).toEqual(['inputs: [redact]']);
+		expect(sinks).toContain('path: /var/log/dmm-web/web-%Y-%m-%d.log\n');
+		// A killed Vector leaves an unfinished gzip member that hides every
+		// later line of the day from zcat; maintain.sh compresses instead.
+		expect(sinks).not.toContain('compression:');
+	});
+
+	it('tests the config and creates the bind sources before the stack deploys', () => {
+		const install = workflow.slice(
+			step('Install log shipping'),
+			step('Deploy to Docker Swarm')
+		);
+		expect(step('Install log shipping')).toBeGreaterThan(-1);
+		expect(step('Install log shipping')).toBeLessThan(step('Deploy to Docker Swarm'));
+		expect(install).toContain(
+			"image=$(grep -o -m1 'timberio/vector:[^ ]*' docker-compose.yml)"
+		);
+		expect(install).toContain('test /etc/vector/vector.yaml /etc/vector/vector.test.yaml');
+		expect(install).toContain('sudo -n install -d -m 700 /var/log/dmm-web');
+		expect(install).toContain(
+			'cp scripts/ops/logship/vector.yaml scripts/ops/logship/maintain.sh /home/ben/dmm/logship/'
+		);
 	});
 });

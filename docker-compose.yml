@@ -33,6 +33,14 @@ services:
       timeout: 5s
       retries: 3
       start_period: 60s
+    # Bounds each container's own log on disk; logship keeps the history and
+    # finds web's lines by the Swarm task name json-file adds to each entry.
+    logging:
+      driver: json-file
+      options:
+        max-size: '50m'
+        max-file: '3'
+        labels: 'com.docker.swarm.task.name'
     deploy:
       replicas: 4
       restart_policy:
@@ -40,5 +48,41 @@ services:
         # never restarts.
         condition: any
 
+  # Swarm deletes a container's log with its task, five tasks per replica, so
+  # a busy deploy day left about four hours of history. This copies every
+  # dmm_web line, credentials redacted, into one file per UTC day under
+  # /var/log/dmm-web, compressed once the day is over and deleted after 14.
+  # CI tests and installs scripts/ops/logship/ into /home/ben/dmm/logship and
+  # creates the log directory before deploying.
+  logship:
+    image: timberio/vector:0.58.0-alpine
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - >-
+        umask 077;
+        while true; do sh /etc/vector/maintain.sh; sleep 3600; done &
+        exec vector --config /etc/vector/vector.yaml --watch-config
+    environment:
+      - VECTOR_LOG=warn
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /home/ben/dmm/logship:/etc/vector:ro
+      - /var/log/dmm-web:/var/log/dmm-web
+      - logship_state:/var/lib/vector
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '2'
+    deploy:
+      mode: global
+      restart_policy:
+        condition: any
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
 volumes:
   redis_data:
+  logship_state:

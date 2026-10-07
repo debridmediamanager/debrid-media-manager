@@ -1,0 +1,86 @@
+# Keeps dmm_web's output after Swarm deletes it. A container's log lives only
+# as long as its task, and Swarm keeps five per replica, so a busy deploy day
+# (27 on 2026-10-03) left about four hours of history. The logship service in
+# docker-compose.yml runs this and writes one file per UTC day; its hourly
+# maintain.sh compresses finished days and deletes them after 14:
+#
+#   sudo grep TorboxAPI /var/log/dmm-web/web-2026-10-07.log
+#   sudo zgrep TorboxAPI /var/log/dmm-web/web-2026-10-06.log.gz
+#
+# Each line is "<UTC time> <replica> <out|err> <message>".
+#
+# Credentials are redacted before anything reaches the disk:
+# vector.test.yaml holds the line shapes this must handle, and CI runs it
+# before every deploy.
+
+# Checkpoints, so a restart resumes where it stopped instead of losing lines.
+data_dir: /var/lib/vector
+
+sources:
+  # Docker's json-file logs, read directly. The docker_logs source skips any
+  # line stamped earlier than the one before it, and a container's stdout and
+  # stderr interleave out of order: it lost 8% of a test container's lines
+  # (2026-10-07). web's logging options add the Swarm task name to every
+  # entry as attrs.
+  containers:
+    type: file
+    include: ['/var/lib/docker/containers/*/*-json.log']
+    read_from: beginning
+
+transforms:
+  web:
+    type: filter
+    inputs: [containers]
+    condition: |
+      contains(to_string(.message) ?? "", "\"com.docker.swarm.task.name\":\"dmm_web.")
+
+  redact:
+    type: remap
+    inputs: [web]
+    # A line that fails to map is dropped, never written unredacted.
+    drop_on_error: true
+    drop_on_abort: true
+    source: |
+      entry = object(parse_json(to_string(.message) ?? "") ?? {}) ?? {}
+      msg = replace(to_string(entry.log) ?? "", r'\r?\n$', "")
+
+      # Query and form values, under the names the proxy logs redact (card 215).
+      msg = replace(msg, r'(?i)(^|[?&;\s"\x27(\[{,])(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)=[^&\s"\x27<>#]+', "${1}${2}=REDACTED")
+      msg = replace(msg, r'(?i)(%3F|%26)(apikey|api_key|token|access_token|refresh_token|code|device_code|password|secret|client_secret|session_id|key)%3D[^&%\s"\x27<>#]+', "${1}${2}%3DREDACTED")
+
+      # Logged objects and JSON: any quoted value under a credential-like key.
+      msg = replace(msg, r'(?i)([A-Za-z0-9_-]*(?:token|secret|password|apikey|api_key|api-key|authorization|cookie|session_id|device_code)["\x27]?\s*[:=]\s*)"[^"]*"', "${1}\"REDACTED\"")
+      msg = replace(msg, r'(?i)([A-Za-z0-9_-]*(?:token|secret|password|apikey|api_key|api-key|authorization|cookie|session_id|device_code)["\x27]?\s*[:=]\s*)\x27[^\x27]*\x27', "${1}'REDACTED'")
+
+      # Bearer tokens anywhere, and Real-Debrid style 52-character API keys.
+      msg = replace(msg, r'(?i)\b(bearer)\s+[A-Za-z0-9._~+/=-]{8,}', "${1} REDACTED")
+      msg = replace(msg, r'\b[A-Z0-9]{52}\b', "REDACTED")
+
+      # A DMM Cast addon id is the whole credential for that addon URL, so it
+      # becomes a fingerprint: still one user across lines, no longer usable.
+      # Find someone's with: printf %s <id> | sha256sum | cut -c1-8
+      msg = replace_with(msg, r'(/api/stremio(?:-[a-z]+)?/)([A-Za-z0-9_-]{5,})(/)') -> |m| {
+        string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8) + string!(m.captures[2])
+      }
+      msg = replace_with(msg, r'(?i)(\buserid["\x27]?\s*[:=]\s*["\x27]?|\bfor user:? |\btoken detected:? )([A-Za-z0-9_-]{5,})') -> |m| {
+        string!(m.captures[0]) + "~" + slice!(sha2(string!(m.captures[1]), variant: "SHA-256"), 0, 8)
+      }
+
+      name = string(get(entry, ["attrs", "com.docker.swarm.task.name"]) ?? null) ?? "?"
+      replica = replace(name, r'^dmm_(\w+\.\d+\.\w{6})\w*$', "${1}")
+      stream = if entry.stream == "stderr" { "err" } else { "out" }
+      at = parse_timestamp(to_string(entry.time) ?? "", "%+") ?? now()
+      ts = format_timestamp(at, "%Y-%m-%dT%H:%M:%S%.3fZ", timezone: "UTC") ?? ""
+      . = { "timestamp": at, "message": ts + " " + replica + " " + stream + " " + msg }
+
+sinks:
+  daily:
+    type: file
+    inputs: [redact]
+    path: /var/log/dmm-web/web-%Y-%m-%d.log
+    # The source checkpoints a line only once it is written, so a killed
+    # Vector re-reads at most a few seconds instead of losing them.
+    acknowledgements:
+      enabled: true
+    encoding:
+      codec: text

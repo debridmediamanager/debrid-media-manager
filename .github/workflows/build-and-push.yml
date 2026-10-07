@@ -23,6 +23,18 @@ jobs:
         run: |
           docker build -t dmm-prod:latest .
 
+      # The logship service (docker-compose.yml) bind-mounts both paths, and a
+      # Swarm task cannot start while a bind source is missing. Its redaction
+      # tests gate the deploy: a config that leaks a credential never ships.
+      # The running Vector reloads the config when this replaces it.
+      - name: Install log shipping
+        run: |
+          image=$(grep -o -m1 'timberio/vector:[^ ]*' docker-compose.yml)
+          docker run --rm -v "$PWD/scripts/ops/logship:/etc/vector:ro" "$image" test /etc/vector/vector.yaml /etc/vector/vector.test.yaml
+          sudo -n install -d -m 700 /var/log/dmm-web
+          mkdir -p /home/ben/dmm/logship
+          cp scripts/ops/logship/vector.yaml scripts/ops/logship/maintain.sh /home/ben/dmm/logship/
+
       - name: Deploy to Docker Swarm
         run: |
           cp docker-compose.yml /home/ben/dmm/docker-compose.yml

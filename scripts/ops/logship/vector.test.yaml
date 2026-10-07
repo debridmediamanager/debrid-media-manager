@@ -1,0 +1,448 @@
+# Unit tests for vector.yaml, run by CI before each deploy:
+#
+#   docker run --rm -v "$PWD/scripts/ops/logship:/etc/vector:ro" \
+#     <the logship image in docker-compose.yml> \
+#     test /etc/vector/vector.yaml /etc/vector/vector.test.yaml
+#
+# Each input is a json-file entry as Docker writes it for a dmm_web container,
+# and each message the shape of a line dmm_web wrote on dmm-01, with the
+# credential swapped for a fake of the same form. One input per test: a test
+# with several inputs passes as soon as any one of its events passes.
+
+tests:
+
+  - name: "formats stderr as err"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"prisma:error \n","stream":"stderr","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq err prisma:error ")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps lines of other containers out"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[notice] redis ready\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_redis.1.ievn8mn1jcliusi5jl3qhhx6d"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    no_outputs_from: [redact]
+
+  - name: "keeps lines without Swarm attrs out"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"zrok frontend listening\n","stream":"stdout","time":"2026-10-07T12:34:56.789012345Z"}'
+    no_outputs_from: [redact]
+
+  - name: "redacts the Newznab key Next.js prints in its response size warning"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API response for /api/newznab/api?t=get&id=b3BhcXVlLXJlbGVhc2UtaWQ&apikey=0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c4b5a69788796a5b4c3d2e1f0 exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API response for /api/newznab/api?t=get&id=b3BhcXVlLXJlbGVhc2UtaWQ&apikey=REDACTED exceeds 4MB. API Routes are meant to respond quickly. https://nextjs.org/docs/messages/api-routes-response-size-limit")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts an upstream key the app failed to mask"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[MetadataCache] Fetching omdb_info data from: https://www.omdbapi.com/?i=tt17677144&apikey=a1b2c3d4\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [MetadataCache] Fetching omdb_info data from: https://www.omdbapi.com/?i=tt17677144&apikey=REDACTED")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a TorBox download token"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"GET https://api.torbox.app/v1/api/torrents/requestdl?token=7a6b5c4d-1111-2222-3333-444455556666&torrent_id=1&file_id=2\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out GET https://api.torbox.app/v1/api/torrents/requestdl?token=REDACTED&torrent_id=1&file_id=2")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a percent-encoded key inside another URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"redirecting to /login?next=%2Fapi%2Fsabnzbd%3Fmode%3Dqueue%26apikey%3Dsabkey123456\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out redirecting to /login?next=%2Fapi%2Fsabnzbd%3Fmode%3Dqueue%26apikey%3DREDACTED")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts an OAuth form body in a logged request"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"    data: ''client_id=X245A4XAIBGVM&client_secret=fakeclientsecret0123&code=FAKEDEVICECODE0123&grant_type=http%3A%2F%2Foauth.net%2Fgrant_type%2Fdevice%2F1.0'',\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out     data: 'client_id=X245A4XAIBGVM&client_secret=REDACTED&code=REDACTED&grant_type=http%3A%2F%2Foauth.net%2Fgrant_type%2Fdevice%2F1.0',")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a token response body"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"{\"access_token\":\"FAKEACCESSTOKEN0123\",\"expires_in\":3600,\"refresh_token\":\"FAKEREFRESHTOKEN0123\",\"token_type\":\"Bearer\"}\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out {\"access_token\":\"REDACTED\",\"expires_in\":3600,\"refresh_token\":\"REDACTED\",\"token_type\":\"Bearer\"}")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts credential fields of a logged object"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"  { accessToken: ''FAKEACCESSTOKEN4567'', clientSecret: ''fakeclientsecret4567'', ''x-api-key'': ''fakeapikey4567'' }\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out   { accessToken: 'REDACTED', clientSecret: 'REDACTED', 'x-api-key': 'REDACTED' }")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts an Authorization header of a logged request"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"      Authorization: ''Bearer ABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRST'',\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out       Authorization: 'REDACTED',")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a bearer token in free text"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"upstream refused Authorization header Bearer FAKEtoken0123456789\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out upstream refused Authorization header Bearer REDACTED")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "redacts a Real-Debrid style API key"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"rd request failed for key ABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRST: 401\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out rd request failed for key REDACTED: 401")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id a Cast token lookup logs"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[meta/other/id] Getting token for user: Fk3x_9QzT-aB\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [meta/other/id] Getting token for user: ~677ba188")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id in a logged Cast request URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"  url: ''/api/stremio/Fk3x_9QzT-aB/meta/other/cnc%3AeyJ0IjoxfQ%3D%3D.json'',\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out   url: '/api/stremio/~677ba188/meta/other/cnc%3AeyJ0IjoxfQ%3D%3D.json',")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id in a logged Cast request object"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"  userid: ''Fk3x_9QzT-aB'',\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out   userid: '~677ba188',")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id in an inline Cast parameter object"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[meta/other/id] Invalid parameters: { userid: ''Fk3x_9QzT-aB'', id: ''dmm:123'' }\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [meta/other/id] Invalid parameters: { userid: '~677ba188', id: 'dmm:123' }")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id a Cast catalog page logs"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[casted-other/skip] Fetching library for user: Fk3x_9QzT-aB page: 2\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [casted-other/skip] Fetching library for user: ~677ba188 page: 2")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints a legacy five-character Cast id"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[casted-other/skip] Legacy token detected: Fk3x9\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [casted-other/skip] Legacy token detected: ~192811d9")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "fingerprints the id in another provider's Cast URL"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"GET /api/stremio-tb/Fk3x_9QzT-aB/catalog/other/casted-other/skip=0.json\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out GET /api/stremio-tb/~677ba188/catalog/other/casted-other/skip=0.json")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [sabnzbd] mode=queue"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[sabnzbd] mode=queue\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [sabnzbd] mode=queue")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps   code: 'ECONNRESET',"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"  code: ''ECONNRESET'',\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out   code: 'ECONNRESET',")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps No torrent snapshot available for media info { hash: '012345"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"No torrent snapshot available for media info { hash: ''0123456789abcdef0123456789abcdef01234567'' }\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out No torrent snapshot available for media info { hash: '0123456789abcdef0123456789abcdef01234567' }")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [verdicts] tt0092373: judged 3 (2 filenames by model), trash"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[verdicts] tt0092373: judged 3 (2 filenames by model), trashed 0, 512 tokens\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [verdicts] tt0092373: judged 3 (2 filenames by model), trashed 0, 512 tokens")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps Dropped 1 available file(s) and 0 cast(s) for https://real-d"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"Dropped 1 available file(s) and 0 cast(s) for https://real-debrid.com/d/ABCDEFGHIJKLM: hoster_unavailable\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out Dropped 1 available file(s) and 0 cast(s) for https://real-debrid.com/d/ABCDEFGHIJKLM: hoster_unavailable")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [MetadataCache] Using cached tmdb_movie data for: tmdb_movie"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[MetadataCache] Using cached tmdb_movie data for: tmdb_movie_1644912_videos, key: tmdb_movie_1644912\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [MetadataCache] Using cached tmdb_movie data for: tmdb_movie_1644912_videos, key: tmdb_movie_1644912")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [MetadataCache] Fetching tmdb_movie data from: https://api.t"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[MetadataCache] Fetching tmdb_movie data from: https://api.themoviedb.org/3/movie/1644912?api_key=REDACTED&append_to_response=videos%2Crelease_dates%2Cexternal_ids\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [MetadataCache] Fetching tmdb_movie data from: https://api.themoviedb.org/3/movie/1644912?api_key=REDACTED&append_to_response=videos%2Crelease_dates%2Cexternal_ids")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps RD token expired/revoked for client: AB12CD"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"RD token expired/revoked for client: AB12CD\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out RD token expired/revoked for client: AB12CD")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [TorboxAPI] getTorrentList start { hasId: true, offset: 0, l"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[TorboxAPI] getTorrentList start { hasId: true, offset: 0, limit: ''default'' }\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [TorboxAPI] getTorrentList start { hasId: true, offset: 0, limit: 'default' }")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [MDBList] Using cached data for title: Basic Instinct"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[MDBList] Using cached data for title: Basic Instinct\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [MDBList] Using cached data for title: Basic Instinct")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps API response for /api/torrents/tv-seasons?imdbId=tt0096697&s"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"API response for /api/torrents/tv-seasons?imdbId=tt0096697&seasons=1%2C2&mode=packs&maxSize=0&dmmProblemKey=abc123&solution=def456 exceeds 4MB.\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out API response for /api/torrents/tv-seasons?imdbId=tt0096697&seasons=1%2C2&mode=packs&maxSize=0&dmmProblemKey=abc123&solution=def456 exceeds 4MB.")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
+
+  - name: "keeps [meta/other/id] Token obtained successfully"
+    inputs:
+      - insert_at: web
+        type: log
+        log_fields:
+          message: '{"log":"[meta/other/id] Token obtained successfully\n","stream":"stdout","attrs":{"com.docker.swarm.task.name":"dmm_web.1.kyd0oq9l9vfi0xbn8nqlrvxpm"},"time":"2026-10-07T12:34:56.789012345Z"}'
+    outputs:
+      - extract_from: redact
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(.message, "2026-10-07T12:34:56.789Z web.1.kyd0oq out [meta/other/id] Token obtained successfully")
+              assert_eq!(.timestamp, t'2026-10-07T12:34:56.789012345Z')
