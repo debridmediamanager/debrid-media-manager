@@ -1,4 +1,5 @@
 import { getMetadataCache } from '@/services/metadataCache';
+import { trackProviderGaps } from '@/services/providerCooldown';
 import type { MetadataRecord } from '@/utils/metadataRecord';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
 import { getMetadata, settle } from './index';
@@ -198,8 +199,30 @@ export function pickResolution(
 	return decide(candidates, 'title') ?? { match: null, confidence: 'none', candidates: all };
 }
 
+/**
+ * A resolve that went without a provider's search or record because the
+ * provider is rate-limiting DMM. Its answer would rest on part of the evidence,
+ * and callers keep the answer (zurg writes a match into the torrent and
+ * remembers a miss for days), so there is none: ask again after `retryAfterMs`.
+ */
+export class ResolveIncompleteError extends Error {
+	constructor(readonly retryAfterMs: number) {
+		super(
+			`a metadata provider is rate-limiting DMM; retry in ${Math.ceil(retryAfterMs / 1000)}s`
+		);
+		this.name = 'ResolveIncompleteError';
+		this.stack = `${this.name}: ${this.message}`;
+	}
+}
+
 /** Resolves a parsed release name; see the module comment. */
 export async function resolveTitle(query: ResolveQuery): Promise<ResolveResult> {
+	const { result, retryAfterMs } = await trackProviderGaps(() => resolveFromProviders(query));
+	if (retryAfterMs > 0) throw new ResolveIncompleteError(retryAfterMs);
+	return result;
+}
+
+async function resolveFromProviders(query: ResolveQuery): Promise<ResolveResult> {
 	const votes = await gatherCandidateIds(query);
 	const ranked = [...votes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
 

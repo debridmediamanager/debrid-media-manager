@@ -1,5 +1,6 @@
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
+import { describeProviderError, ProviderCooldownError } from '@/services/providerCooldown';
 import {
 	episodeRecordFromOmdb,
 	mergeMovieRecord,
@@ -19,12 +20,20 @@ import UserAgent from 'user-agents';
 export const TMDB_MOVIE_APPEND = 'videos,release_dates,external_ids,alternative_titles';
 export const TMDB_TV_APPEND = 'videos,external_ids,alternative_titles';
 
-/** A provider's answer, or null when it failed — including a synchronous throw. */
+/**
+ * A provider's answer, or null when it failed — including a synchronous throw.
+ * A failed request is one log line; a provider that is cooling down after a
+ * 429 is not logged again (its refusal was, once, in `metadataCache`).
+ */
 export async function settle<T>(call: () => Promise<T> | T): Promise<Awaited<T> | null> {
 	try {
 		return (await call()) ?? null;
 	} catch (error) {
-		console.warn('[metadata] provider failed', error);
+		if (!(error instanceof ProviderCooldownError)) {
+			const line = describeProviderError(error);
+			if (line) console.warn(`[metadata] provider failed: ${line}`);
+			else console.warn('[metadata] provider failed', error);
+		}
 		return null;
 	}
 }

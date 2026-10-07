@@ -50,3 +50,10 @@ beforeEach(async () => {
 	const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
 	setBlocklistForTests([]);
 });
+
+// A provider's 429 cools that host down for the whole process; one test's
+// refusal must not skip the next test's requests.
+beforeEach(async () => {
+	const { resetProviderCooldowns } = await import('@/services/providerCooldown');
+	resetProviderCooldowns();
+});

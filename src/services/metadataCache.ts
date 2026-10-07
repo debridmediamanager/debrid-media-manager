@@ -11,9 +11,18 @@ import {
 } from '@/utils/metadataFreshness';
 import { redactUrl, scrubRequestError } from '@/utils/requestRedaction';
 import { getTmdbAuth, tmdbRequestConfig, tmdbUrl, type TmdbAuth } from '@/utils/tmdbAuth';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import getConfig from 'next/config';
 import { getMdblistCacheService } from './database/mdblistCache';
+import {
+	cooldownRemainingMs,
+	describeProviderError,
+	noteProviderGap,
+	ProviderCooldownError,
+	providerHost,
+	startCooldown,
+	trackProviderGaps,
+} from './providerCooldown';
 
 export { redactUrl };
 
@@ -26,6 +35,18 @@ export type MaxAge = number | ((cached: unknown) => number);
 
 const resolveMaxAge = (maxAge: MaxAge, cached: unknown): number =>
 	typeof maxAge === 'function' ? maxAge(cached) : maxAge;
+
+/**
+ * Logs a failed provider call in one line. A cooldown refusal is not logged at
+ * all: the 429 that started it was, once. Anything that is not a request
+ * failure keeps its stack.
+ */
+function logProviderFailure(prefix: string, error: unknown): void {
+	if (error instanceof ProviderCooldownError) return;
+	const line = describeProviderError(error);
+	if (line) console.error(`${prefix}: ${line}`);
+	else console.error(prefix, error);
+}
 
 export class MetadataCacheService {
 	private cache = getMdblistCacheService();
@@ -135,6 +156,40 @@ export class MetadataCacheService {
 	}
 
 	/**
+	 * Every provider request goes through here. A host that answered 429 is not
+	 * asked again until its Retry-After has passed (`./providerCooldown`); the
+	 * refusal is logged once, as one line, and every call in between fails fast
+	 * with a `ProviderCooldownError`. Credentials are scrubbed off any failure.
+	 */
+	private async upstreamGet(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
+		const host = providerHost(url);
+		const waiting = cooldownRemainingMs(host);
+		if (waiting > 0) throw new ProviderCooldownError(host, waiting);
+		try {
+			return await axios.get(url, {
+				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
+				...config,
+			});
+		} catch (error) {
+			scrubRequestError(error);
+			const response = (error as { response?: { status?: unknown; headers?: any } })
+				?.response;
+			if (response?.status !== 429) throw error;
+			const retryAfter =
+				typeof response.headers?.get === 'function'
+					? response.headers.get('retry-after')
+					: response.headers?.['retry-after'];
+			const { ms, started } = startCooldown(host, retryAfter);
+			if (started) {
+				console.warn(
+					`[MetadataCache] ${host} answered 429; sending it nothing for ${Math.round(ms / 1000)}s`
+				);
+			}
+			throw new ProviderCooldownError(host, cooldownRemainingMs(host) || ms);
+		}
+	}
+
+	/**
 	 * Fetch data from URL with caching and optional expiration
 	 */
 	async fetchWithCache<T = any>(
@@ -152,26 +207,25 @@ export class MetadataCacheService {
 		}
 
 		// Fetch from API
-		console.log(`[MetadataCache] Fetching ${cacheType} data from: ${redactUrl(url)}`);
 		let data: T | undefined;
 		try {
-			const response = await axios.get(url, {
-				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
-				...config,
-			});
+			if (cooldownRemainingMs(providerHost(url)) === 0) {
+				console.log(`[MetadataCache] Fetching ${cacheType} data from: ${redactUrl(url)}`);
+			}
+			const response = await this.upstreamGet(url, config);
 			data = response?.data;
 		} catch (error) {
-			scrubRequestError(error);
 			// Now that these entries expire, an upstream outage would otherwise turn a
 			// merely stale row into no row at all — and callers render that as "Unknown".
 			// Serving the expired copy is strictly better than serving nothing.
 			if (cached) {
-				console.error(
+				logProviderFailure(
 					`[MetadataCache] Refetch failed for ${cacheKey}, serving stale ${cacheType}`,
 					error
 				);
 				return cached.data as T;
 			}
+			if (error instanceof ProviderCooldownError) noteProviderGap(error.retryAfterMs);
 			throw error;
 		}
 
@@ -462,8 +516,11 @@ export class MetadataCacheService {
 			validateStatus: (status: number) => status === 200 || status === 204,
 		};
 
+		// The schedule says nothing about which title a show is, so a cooldown
+		// here does not make a resolve incomplete (no `noteProviderGap`).
+		let cached: { data: unknown; updatedAt: Date } | null = null;
 		try {
-			const cached = await this.cache.getWithMetadata(cacheKey);
+			cached = await this.cache.getWithMetadata(cacheKey);
 			if (
 				cached &&
 				!this.isCacheExpired(cached.updatedAt, this.CACHE_DURATIONS.EPISODE_SCHEDULE)
@@ -471,10 +528,7 @@ export class MetadataCacheService {
 				return cached.data;
 			}
 
-			const response = await axios.get(url, {
-				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
-				...config,
-			});
+			const response = await this.upstreamGet(url, config);
 			if (response.status === 204 || !response.data) {
 				await this.cache.set(cacheKey, `trakt_${which}`, null);
 				return null;
@@ -483,8 +537,11 @@ export class MetadataCacheService {
 			await this.cache.set(cacheKey, `trakt_${which}`, response.data);
 			return response.data;
 		} catch (error) {
-			console.error(`[MetadataCache] Failed to fetch Trakt ${which} for ${showId}`, error);
-			return null;
+			logProviderFailure(
+				`[MetadataCache] Failed to fetch Trakt ${which} for ${showId}`,
+				error
+			);
+			return cached ? (cached.data ?? null) : null;
 		}
 	}
 
@@ -499,20 +556,27 @@ export class MetadataCacheService {
 
 		const url = `https://api.trakt.tv/shows/${encodeURIComponent(showId)}/seasons?extended=full`;
 		try {
-			const data = await this.fetchWithCache<any>(
-				url,
-				`trakt_seasons_${showId}`,
-				'trakt_seasons',
-				{
-					headers: this.traktHeaders(clientId),
-					// An unknown id is an answer, not an outage, and is cached as one.
-					validateStatus: (status: number) => status === 200 || status === 404,
-				},
-				this.freshnessMaxAge(traktSeasonsReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
+			// Season counts do not say which title a show is: a cooldown gap here
+			// is kept out of any resolve this runs under.
+			const { result: data } = await trackProviderGaps(() =>
+				this.fetchWithCache<any>(
+					url,
+					`trakt_seasons_${showId}`,
+					'trakt_seasons',
+					{
+						headers: this.traktHeaders(clientId),
+						// An unknown id is an answer, not an outage, and is cached as one.
+						validateStatus: (status: number) => status === 200 || status === 404,
+					},
+					this.freshnessMaxAge(traktSeasonsReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
+				)
 			);
 			return Array.isArray(data) ? data : null;
 		} catch (error) {
-			console.error(`[MetadataCache] Failed to fetch Trakt seasons for ${showId}`, error);
+			logProviderFailure(
+				`[MetadataCache] Failed to fetch Trakt seasons for ${showId}`,
+				error
+			);
 			return null;
 		}
 	}
@@ -544,15 +608,13 @@ export class MetadataCacheService {
 			}
 
 			try {
-				const response = await axios.get(url, {
-					timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
-				});
+				const response = await this.upstreamGet(url);
 				const slim = slimTvmazeShow(response.data);
 				await this.store(cacheKey, 'tvmaze_show', slim);
 				return slim;
 			} catch (error) {
 				if (cached) {
-					console.error(
+					logProviderFailure(
 						`[MetadataCache] Refetch failed for ${cacheKey}, serving stale`,
 						error
 					);
@@ -561,7 +623,9 @@ export class MetadataCacheService {
 				throw error;
 			}
 		} catch (error) {
-			console.error(`[MetadataCache] Failed to fetch TVmaze show for ${imdbId}`, error);
+			// TVmaze votes on a show's year and names, so going without it is a gap.
+			if (error instanceof ProviderCooldownError) noteProviderGap(error.retryAfterMs);
+			logProviderFailure(`[MetadataCache] Failed to fetch TVmaze show for ${imdbId}`, error);
 			return null;
 		}
 	}
@@ -577,12 +641,9 @@ export class MetadataCacheService {
 			if (!this.isCacheExpired(cached.updatedAt, maxAge)) return id;
 		}
 
-		const response = await axios.get(
+		const response = await this.upstreamGet(
 			`${MetadataCacheService.TVMAZE_BASE}/lookup/shows?imdb=${encodeURIComponent(imdbId)}`,
-			{
-				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
-				validateStatus: (status: number) => status === 200 || status === 404,
-			}
+			{ validateStatus: (status: number) => status === 200 || status === 404 }
 		);
 		const id =
 			response.status === 200 && typeof response.data?.id === 'number'
@@ -633,7 +694,10 @@ export class MetadataCacheService {
 			);
 			return data && typeof data === 'object' && data.ids ? data : null;
 		} catch (error) {
-			console.error(`[MetadataCache] Failed to fetch Trakt ${type} summary for ${id}`, error);
+			logProviderFailure(
+				`[MetadataCache] Failed to fetch Trakt ${type} summary for ${id}`,
+				error
+			);
 			return null;
 		}
 	}

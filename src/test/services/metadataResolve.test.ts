@@ -44,6 +44,7 @@ vi.mock('@/services/metadata', async (importOriginal) => ({
 import { getMetadata } from '@/services/metadata';
 import { normalizeTitle, pickResolution, resolveTitle } from '@/services/metadata/resolve';
 import { getMetadataCache } from '@/services/metadataCache';
+import { noteProviderGap, ProviderCooldownError } from '@/services/providerCooldown';
 
 /** Every search's real answer, captured 2026-09-26, keyed the way the resolver asks. */
 const searches: Record<string, { tmdb: any; trakt: any; omdb: any }> = {
@@ -190,6 +191,39 @@ describe('resolveTitle, on searches captured 2026-09-26', () => {
 				match: expect.objectContaining({ imdbId: 'tt1877368' }),
 			})
 		);
+	});
+});
+
+// zurg keeps what the resolver answers: a match is written into the torrent and
+// a miss is remembered for days. An answer from part of the evidence must not
+// be given while a provider is refusing DMM (card 256).
+describe('resolveTitle while Trakt is rate-limiting DMM', () => {
+	it('answers without Trakt’s search when Trakt simply had nothing', async () => {
+		vi.mocked(getMetadataCache()).searchTraktTitles = vi.fn(async () => null) as any;
+		const result = await resolveTitle({ title: 'Dune', year: 2021, type: 'movie' });
+		expect(result.match?.imdbId).toBe('tt1160419');
+	});
+
+	it('gives no answer when Trakt’s search could not be asked, and says when to retry', async () => {
+		vi.mocked(getMetadataCache()).searchTraktTitles = vi.fn(async () => {
+			noteProviderGap(540_000);
+			throw new ProviderCooldownError('api.trakt.tv', 540_000);
+		}) as any;
+		await expect(resolveTitle({ title: 'Dune', year: 2021, type: 'movie' })).rejects.toEqual(
+			expect.objectContaining({ name: 'ResolveIncompleteError', retryAfterMs: 540_000 })
+		);
+	});
+
+	it('does not carry one resolve’s gap into the next', async () => {
+		vi.mocked(getMetadataCache()).searchTraktTitles = vi.fn(async () => {
+			noteProviderGap(1_000);
+			throw new ProviderCooldownError('api.trakt.tv', 1_000);
+		}) as any;
+		await expect(resolveTitle({ title: 'Dune', year: 2021, type: 'movie' })).rejects.toThrow();
+		vi.mocked(getMetadataCache()).searchTraktTitles = vi.fn(async () => null) as any;
+		await expect(
+			resolveTitle({ title: 'Dune', year: 2021, type: 'movie' })
+		).resolves.toMatchObject({ confidence: 'exact' });
 	});
 });
 

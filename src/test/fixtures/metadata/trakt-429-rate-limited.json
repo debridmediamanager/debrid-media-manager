@@ -1,0 +1,25 @@
+{
+	"_note": "A real answer from api.trakt.tv, recorded 2026-10-07 16:44 UTC (card 256): the 113th of a burst of GET /search/show requests sent 16 at a time. Trakt's edge (Cloudflare, error 1015) refuses the rest of the burst for Retry-After seconds. The request carried no valid client id, so nothing here is a credential.",
+	"body": "error code: 1015\n",
+	"headers": {
+		"Date": "Wed, 07 Oct 2026 16:44:20 GMT",
+		"Content-Type": "text/plain; charset=UTF-8",
+		"Content-Length": "17",
+		"Connection": "close",
+		"Retry-After": "600",
+		"Cache-Control": "private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0",
+		"Expires": "Thu, 01 Jan 1970 00:00:01 GMT",
+		"Referrer-Policy": "same-origin",
+		"X-Frame-Options": "SAMEORIGIN",
+		"Speculation-Rules": "\"/cdn-cgi/speculation\"",
+		"Vary": "accept-encoding",
+		"Server": "cloudflare",
+		"CF-RAY": "a46e5eb71b23fab1-TXL"
+	},
+	"recordedAt": "2026-10-07T16:44:20Z",
+	"request": {
+		"method": "GET",
+		"url": "https://api.trakt.tv/search/show?query=card256probe112x1791391460"
+	},
+	"status": 429
+}

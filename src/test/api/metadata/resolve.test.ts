@@ -1,9 +1,12 @@
 import handler from '@/pages/api/metadata/resolve';
-import { resolveTitle } from '@/services/metadata/resolve';
+import { ResolveIncompleteError, resolveTitle } from '@/services/metadata/resolve';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/services/metadata/resolve', () => ({ resolveTitle: vi.fn() }));
+vi.mock('@/services/metadata/resolve', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/metadata/resolve')>()),
+	resolveTitle: vi.fn(),
+}));
 
 const call = async (query: Record<string, string>, authorization = 'Bearer s3cret') => {
 	const res = createMockResponse();
@@ -42,5 +45,15 @@ describe('/api/metadata/resolve', () => {
 		const res = await call({ title: ' Saw IV ', year: '2007', type: 'movie' });
 		expect(resolveTitle).toHaveBeenCalledWith({ title: 'Saw IV', year: 2007, type: 'movie' });
 		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	// A bulk caller (zurg's IMDb job) pauses on this instead of asking again at
+	// once, and does not keep an answer built from part of the evidence.
+	it('answers 503 with Retry-After while a provider is rate-limiting DMM', async () => {
+		vi.mocked(resolveTitle).mockRejectedValue(new ResolveIncompleteError(539_200));
+		const res = await call({ title: 'Gintama', type: 'show' });
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(res.setHeader).toHaveBeenCalledWith('Retry-After', '540');
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ retryAfter: 540 }));
 	});
 });
