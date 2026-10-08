@@ -143,6 +143,55 @@ describe('TorrentSnapshotService', () => {
 		});
 	});
 
+	// The merge, its lock and the races it closes run on a real MySQL in
+	// torrentSnapshot.integration.test.ts; these pin which failures retry.
+	describe('mergeSnapshot', () => {
+		const post = {
+			id: 'hash1:2024-01-01',
+			hash: 'hash1',
+			addedDate: new Date('2024-01-01'),
+			payload: { SelectedFiles: {} } as any,
+		};
+		const failure = (code: string, meta?: Record<string, unknown>) =>
+			new Prisma.PrismaClientKnownRequestError('failed', {
+				code,
+				clientVersion: '6.16.1',
+				meta,
+			});
+
+		it.each([
+			['a deadlock on its own queries', failure('P2034')],
+			['a deadlock on a raw query', failure('P2010', { code: '1213' })],
+			['a key another post took', failure('P2002', { target: 'PRIMARY' })],
+		])('runs the transaction again after %s', async (_, error) => {
+			mockPrisma.$transaction = vi
+				.fn()
+				.mockRejectedValueOnce(error)
+				.mockResolvedValueOnce({ kept: 1, borrowed: 0 });
+
+			await expect(service.mergeSnapshot(post)).resolves.toEqual({ kept: 1, borrowed: 0 });
+			expect(mockPrisma.$transaction).toHaveBeenCalledTimes(2);
+		});
+
+		it('gives up after three attempts', async () => {
+			mockPrisma.$transaction = vi.fn().mockRejectedValue(failure('P2034'));
+
+			await expect(service.mergeSnapshot(post)).rejects.toMatchObject({ code: 'P2034' });
+			expect(mockPrisma.$transaction).toHaveBeenCalledTimes(3);
+		});
+
+		it.each([
+			['an unreachable database', failure('P1001')],
+			['a raw query that failed otherwise', failure('P2010', { code: '1205' })],
+			['a transaction that ran out of time', failure('P2028')],
+		])('does not run it again after %s', async (_, error) => {
+			mockPrisma.$transaction = vi.fn().mockRejectedValue(error);
+
+			await expect(service.mergeSnapshot(post)).rejects.toBe(error);
+			expect(mockPrisma.$transaction).toHaveBeenCalledTimes(1);
+		});
+	});
+
 	describe('upsertSnapshot', () => {
 		it('creates or updates a snapshot', async () => {
 			const snapshotData = {

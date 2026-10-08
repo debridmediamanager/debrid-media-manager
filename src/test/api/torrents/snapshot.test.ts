@@ -2,6 +2,9 @@ import handler from '@/pages/api/torrents/snapshot';
 import { repository } from '@/services/repository';
 import legacyWorkerSnapshot from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
 import zurgDeletedEpisodeSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-deleted-episode.json';
+import zurgMatrixFilmPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-film-pass.json';
+import zurgMatrixIntroductionPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-introduction-pass.json';
+import zurgMatrixWholePass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-whole-pass.json';
 import zurgPartialPackSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-partial-pack.json';
 import zurgDirectWithNfoSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-with-nfo.json';
 import zurgDirectSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
@@ -29,12 +32,20 @@ const mockRepository = vi.mocked(repository);
 // the mount. Over 2026-09-21..10-04 DMM refused 58,972 posts as "A media file
 // was not analyzed" and 8,026 over a file's state, and a pack among them lost
 // every probe it did carry. The hash is made up; nothing reads it.
+//
+// The Matrix posts came the same way (zurg f3bbeaa9) from the two-file release
+// in zen's library with the probes DMM stored for it: a pass that probed the
+// film, one that probed the introduction, one that probed both. Their merge is
+// in torrentSnapshot.integration.test.ts.
 const fixtures = [
 	['as zurgtorrent-worker forwards it', legacyWorkerSnapshot, 1],
 	['as zurg posts it directly', zurgDirectSnapshot, 1],
 	['with a sidecar zurg never probes', zurgDirectWithNfoSnapshot, 1],
 	['of a pack zurg analyzed only in part', zurgPartialPackSnapshot, 2],
 	['of a pack with an episode the user deleted', zurgDeletedEpisodeSnapshot, 1],
+	['of a pack whose pass probed only the film', zurgMatrixFilmPass, 1],
+	['of a pack whose pass probed only the introduction', zurgMatrixIntroductionPass, 1],
+	['of a pack whose pass probed both files', zurgMatrixWholePass, 2],
 ] as const;
 
 function post(body: unknown, headers: Record<string, string> = {}) {
@@ -42,7 +53,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 }
 
 function storedPayload(): Record<string, any> {
-	return mockRepository.upsertTorrentSnapshot.mock.calls[0][0].payload as Record<string, any>;
+	return mockRepository.mergeTorrentSnapshot.mock.calls[0][0].payload as Record<string, any>;
 }
 
 function withChange(change: (snapshot: Record<string, any>) => void) {
@@ -64,7 +75,7 @@ describe('/api/torrents/snapshot', () => {
 		vi.clearAllMocks();
 		process.env = { ...originalEnv };
 		process.env.ZURGTORRENT_SYNC_SECRET = 'sync-secret';
-		mockRepository.upsertTorrentSnapshot = vi.fn().mockResolvedValue(undefined);
+		mockRepository.mergeTorrentSnapshot = vi.fn().mockResolvedValue({ kept: 0, borrowed: 0 });
 		mockRepository.getLatestTorrentSnapshot = vi.fn();
 	});
 
@@ -92,7 +103,7 @@ describe('/api/torrents/snapshot', () => {
 			const id = `${zurgDirectSnapshot.Hash}:${zurgDirectSnapshot.Added.slice(0, 10)}`;
 			expect(res.status).toHaveBeenCalledWith(201);
 			expect(res.json).toHaveBeenCalledWith({ success: true, id });
-			expect(mockRepository.upsertTorrentSnapshot).toHaveBeenCalledWith(
+			expect(mockRepository.mergeTorrentSnapshot).toHaveBeenCalledWith(
 				expect.objectContaining({ id, hash: zurgDirectSnapshot.Hash })
 			);
 		});
@@ -103,7 +114,7 @@ describe('/api/torrents/snapshot', () => {
 			await handler(post(snapshot), res);
 
 			expect(res.status).toHaveBeenCalledWith(201);
-			expect(mockRepository.upsertTorrentSnapshot).toHaveBeenCalledTimes(1);
+			expect(mockRepository.mergeTorrentSnapshot).toHaveBeenCalledTimes(1);
 		});
 
 		it.each(fixtures)(
@@ -169,6 +180,26 @@ describe('/api/torrents/snapshot', () => {
 			infoSpy.mockRestore();
 		});
 
+		// The merge itself runs on MySQL in torrentSnapshot.integration.test.ts.
+		it('says how many stored probes it kept that the post lacked', async () => {
+			const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+			mockRepository.mergeTorrentSnapshot = vi
+				.fn()
+				.mockResolvedValue({ kept: 1, borrowed: 2 });
+
+			await handler(post(zurgDirectSnapshot), createMockResponse());
+
+			expect(infoSpy).toHaveBeenCalledWith(
+				'Kept stored probes a torrent snapshot post lacked',
+				{
+					kept: 1,
+					borrowed: 2,
+					posted: 1,
+				}
+			);
+			infoSpy.mockRestore();
+		});
+
 		it('says nothing extra for a release stored whole', async () => {
 			const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
@@ -178,14 +209,21 @@ describe('/api/torrents/snapshot', () => {
 			infoSpy.mockRestore();
 		});
 
-		it.each(fixtures)('keeps what the Stremio addons read, %s', async (_, snapshot) => {
-			await handler(post(snapshot), createMockResponse());
+		// The Matrix's written introduction has no audio, so the post that probed
+		// it alone gives the addons none: a row left holding only that file told
+		// them "4K, no audio" about a 1440p film with 7.1 AAC. The integration
+		// test checks that the row keeps the film.
+		it.each(fixtures.filter(([, snapshot]) => snapshot !== zurgMatrixIntroductionPass))(
+			'keeps what the Stremio addons read, %s',
+			async (_, snapshot) => {
+				await handler(post(snapshot), createMockResponse());
 
-			const metadata = extractStreamMetadata(storedPayload());
-			expect(metadata?.resolution).toEqual(expect.any(String));
-			expect(metadata?.videoCodec).toEqual(expect.any(String));
-			expect(metadata?.audioCodec).toEqual(expect.any(String));
-		});
+				const metadata = extractStreamMetadata(storedPayload());
+				expect(metadata?.resolution).toEqual(expect.any(String));
+				expect(metadata?.videoCodec).toEqual(expect.any(String));
+				expect(metadata?.audioCodec).toEqual(expect.any(String));
+			}
+		);
 
 		it.each([
 			[
@@ -230,7 +268,7 @@ describe('/api/torrents/snapshot', () => {
 			expect(res.json).toHaveBeenCalledWith(
 				expect.objectContaining({ message: 'Invalid torrent snapshot' })
 			);
-			expect(mockRepository.upsertTorrentSnapshot).not.toHaveBeenCalled();
+			expect(mockRepository.mergeTorrentSnapshot).not.toHaveBeenCalled();
 			warnSpy.mockRestore();
 		});
 
@@ -255,7 +293,7 @@ describe('/api/torrents/snapshot', () => {
 
 		it('returns 500 when the snapshot cannot be stored', async () => {
 			const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-			mockRepository.upsertTorrentSnapshot = vi.fn().mockRejectedValue(new Error('db down'));
+			mockRepository.mergeTorrentSnapshot = vi.fn().mockRejectedValue(new Error('db down'));
 			const res = createMockResponse();
 
 			await handler(post(zurgDirectSnapshot), res);

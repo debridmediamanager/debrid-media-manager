@@ -1,0 +1,265 @@
+{
+	"Added": "2026-04-26T22:02:33+02:00",
+	"Copies": [
+		{
+			"DownloadedIDs": "FIXTURERDID1",
+			"IDsToDelete": "",
+			"UnassignedLinks": "",
+			"DroppedLinks": "",
+			"State": "ok_torrent",
+			"StateWhen": 1777233760,
+			"Provider": "realdebrid",
+			"Name": "The Matrix (1999) (2160p BluRay x265 HEVC 10bit HDR AAC 7.1 Tigole)",
+			"OriginalName": "The Matrix (1999) (2160p BluRay x265 HEVC 10bit HDR AAC 7.1 Tigole)",
+			"Added": "2026-04-26T22:02:33+02:00",
+			"Unfixable": ""
+		}
+	],
+	"Hash": "12f8ca9709b357477612aaac7c6703503c410352",
+	"IMDBID": "tt0133093",
+	"Name": "The Matrix (1999) (2160p BluRay x265 HEVC 10bit HDR AAC 7.1 Tigole)",
+	"OriginalName": "The Matrix (1999) (2160p BluRay x265 HEVC 10bit HDR AAC 7.1 Tigole)",
+	"PlexRatingKey": "00000",
+	"SelectedFiles": {
+		"The Matrix (1999) (2160p BluRay x265 10bit HDR Tigole).mkv": {
+			"id": 2,
+			"path": "/The Matrix (1999) (2160p BluRay x265 10bit HDR Tigole).mkv",
+			"bytes": 15237850498,
+			"selected": 1,
+			"Sources": [
+				{
+					"P": "realdebrid",
+					"L": "https://real-debrid.com/d/FIXTURE0002",
+					"I": 2,
+					"S": 1,
+					"T": "ok_file"
+				}
+			],
+			"Link": "https://real-debrid.com/d/FIXTURE0002",
+			"Ended": "2024-12-07T11:30:13+01:00",
+			"Rename": "",
+			"ForceShow": false,
+			"LastMediaInfoErr": "2026-10-08T04:03:35.755424+02:00",
+			"BrokenSince": "0001-01-01T00:00:00Z",
+			"State": "ok_file",
+			"MediaInfo": null
+		},
+		"Written Introduction by The Wachowskis.mkv": {
+			"id": 1,
+			"path": "/Featurettes/Written Introduction by The Wachowskis.mkv",
+			"bytes": 7023449,
+			"selected": 1,
+			"Sources": [
+				{
+					"P": "realdebrid",
+					"L": "https://real-debrid.com/d/FIXTURE0001",
+					"I": 1,
+					"S": 1,
+					"T": "ok_file"
+				}
+			],
+			"Link": "https://real-debrid.com/d/FIXTURE0001",
+			"Ended": "2024-12-07T11:30:13+01:00",
+			"Rename": "",
+			"ForceShow": false,
+			"LastMediaInfoErr": "0001-01-01T00:00:00Z",
+			"BrokenSince": "0001-01-01T00:00:00Z",
+			"State": "ok_file",
+			"MediaInfo": {
+				"streams": [
+					{
+						"index": 0,
+						"id": "",
+						"codec_name": "hevc",
+						"codec_long_name": "H.265 / HEVC (High Efficiency Video Coding)",
+						"codec_type": "video",
+						"codec_time_base": "",
+						"codec_tag_string": "[0][0][0][0]",
+						"codec_tag": "0x0000",
+						"r_frame_rate": "1/1",
+						"avg_frame_rate": "1/1",
+						"time_base": "1/1000",
+						"start_pts": 0,
+						"start_time": "0.000000",
+						"duration_ts": 0,
+						"duration": "",
+						"bit_rate": "",
+						"bits_per_raw_sample": "",
+						"nb_frames": "",
+						"disposition": {
+							"default": 1,
+							"dub": 0,
+							"original": 0,
+							"comment": 0,
+							"lyrics": 0,
+							"karaoke": 0,
+							"forced": 0,
+							"hearing_impaired": 0,
+							"visual_impaired": 0,
+							"clean_effects": 0,
+							"attached_pic": 0
+						},
+						"tags": {
+							"BPS": "259738",
+							"BPS-eng": "259738",
+							"DURATION": "00:03:36.000000000",
+							"DURATION-eng": "00:03:36.000000000",
+							"NUMBER_OF_BYTES": "7012938",
+							"NUMBER_OF_BYTES-eng": "7012938",
+							"NUMBER_OF_FRAMES": "216",
+							"NUMBER_OF_FRAMES-eng": "216",
+							"_STATISTICS_TAGS": "BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES",
+							"_STATISTICS_TAGS-eng": "BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES",
+							"_STATISTICS_WRITING_APP": "mkvmerge v20.0.0 ('I Am The Sun') 64-bit",
+							"_STATISTICS_WRITING_APP-eng": "mkvmerge v20.0.0 ('I Am The Sun') 64-bit",
+							"_STATISTICS_WRITING_DATE_UTC": "2018-05-27 16:09:14",
+							"_STATISTICS_WRITING_DATE_UTC-eng": "2018-05-27 16:09:14"
+						},
+						"profile": "Main 10",
+						"width": 3840,
+						"height": 2160,
+						"has_b_frames": 2,
+						"sample_aspect_ratio": "1:1",
+						"display_aspect_ratio": "16:9",
+						"pix_fmt": "yuv420p10le",
+						"level": 150,
+						"color_range": "tv",
+						"color_space": "bt2020nc"
+					}
+				],
+				"format": {
+					"filename": "https://fixture.download.real-debrid.com/d/FIXTURE0001",
+					"nb_streams": 1,
+					"nb_programs": 0,
+					"format_name": "matroska,webm",
+					"format_long_name": "Matroska / WebM",
+					"start_time": "0",
+					"duration": "216",
+					"size": "7023449",
+					"bit_rate": "260127",
+					"probe_score": 100,
+					"tags": {
+						"creation_time": "2018-05-27T16:09:14.000000Z",
+						"encoder": "libebml v1.3.5 + libmatroska v1.4.8",
+						"title": "The Matrix"
+					}
+				},
+				"chapters": [
+					{
+						"id": -8491115485135992000,
+						"time_base": "1/1000000000",
+						"start_time": "0",
+						"end_time": "24",
+						"tags": {
+							"title": "Chapter 01"
+						}
+					},
+					{
+						"id": -1435521808438802400,
+						"time_base": "1/1000000000",
+						"start_time": "24",
+						"end_time": "48",
+						"tags": {
+							"title": "Chapter 02"
+						}
+					},
+					{
+						"id": 260971313131842050,
+						"time_base": "1/1000000000",
+						"start_time": "48",
+						"end_time": "72",
+						"tags": {
+							"title": "Chapter 03"
+						}
+					},
+					{
+						"id": 1687087788115172900,
+						"time_base": "1/1000000000",
+						"start_time": "72",
+						"end_time": "96",
+						"tags": {
+							"title": "Chapter 04"
+						}
+					},
+					{
+						"id": 762080044627878800,
+						"time_base": "1/1000000000",
+						"start_time": "96",
+						"end_time": "120",
+						"tags": {
+							"title": "Chapter 05"
+						}
+					},
+					{
+						"id": 2423251206781428700,
+						"time_base": "1/1000000000",
+						"start_time": "120",
+						"end_time": "144",
+						"tags": {
+							"title": "Chapter 06"
+						}
+					},
+					{
+						"id": -3106076210356291000,
+						"time_base": "1/1000000000",
+						"start_time": "144",
+						"end_time": "168",
+						"tags": {
+							"title": "Chapter 07"
+						}
+					},
+					{
+						"id": -5413391594299639000,
+						"time_base": "1/1000000000",
+						"start_time": "168",
+						"end_time": "192",
+						"tags": {
+							"title": "Chapter 08"
+						}
+					},
+					{
+						"id": -7229485067449375000,
+						"time_base": "1/1000000000",
+						"start_time": "192",
+						"end_time": "216",
+						"tags": {
+							"title": "Chapter 09"
+						}
+					}
+				]
+			}
+		}
+	},
+	"State": "ok_torrent",
+	"StateWhen": 1777233760,
+	"Tags": [
+		"zurg_hdr",
+		"zurg_4k",
+		"zurg_very_low_video_bitrate",
+		"zurg_very_low_audio_bitrate",
+		"zurg_80minsplus_duration",
+		"zurg_aud_eng",
+		"zurg_sub_kor",
+		"zurg_sub_rum",
+		"zurg_sub_swe",
+		"zurg_sub_eng",
+		"zurg_sub_ara",
+		"zurg_sub_fin",
+		"zurg_sub_por",
+		"zurg_sub_cze",
+		"zurg_sub_ita",
+		"zurg_sub_nob",
+		"zurg_sub_rus",
+		"zurg_sub_spa",
+		"zurg_sub_tha",
+		"zurg_sub_hrv",
+		"zurg_sub_dan",
+		"zurg_sub_hun",
+		"zurg_sub_pol",
+		"zurg_sub_tur",
+		"zurg_sub_chi",
+		"zurg_sub_ger",
+		"zurg_sub_gre"
+	],
+	"Version": "0.11.0"
+}

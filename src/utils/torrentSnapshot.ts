@@ -168,14 +168,13 @@ function withoutProbeSource(mediaInfo: Record<string, unknown>): Record<string, 
 	return { ...mediaInfo, format };
 }
 
+type StoredFile = { path: string; bytes: number; MediaInfo: Prisma.InputJsonObject };
+
 // toStoredSnapshot keeps the release's identity and each analyzed file's probe.
 // Links, torrent ids and Plex keys belong to the account that posted and are
 // dropped, and so are files that carry no probe or are not ok in zurg.
 export function toStoredSnapshot(snapshot: TorrentSnapshot) {
-	const files: Record<
-		string,
-		{ path: string; bytes: number; MediaInfo: Prisma.InputJsonObject }
-	> = {};
+	const files: Record<string, StoredFile> = {};
 	for (const [key, file] of Object.entries(snapshot.SelectedFiles)) {
 		if (!isStorable(file)) continue;
 		files[key] = {
@@ -194,6 +193,63 @@ export function toStoredSnapshot(snapshot: TorrentSnapshot) {
 		State: snapshot.State,
 		Version: snapshot.Version,
 		SelectedFiles: files,
+	};
+}
+
+export type StoredSnapshot = ReturnType<typeof toStoredSnapshot>;
+
+// mergeStoredSnapshot folds a post into what is stored for the release. zurg
+// sheds each probe once a pass ends, so a post carries only the files that pass
+// probed: a pack whose last pass reached one file of several, the rest waiting
+// out a failed probe, deleted by the user or the account throttled partway,
+// arrived as that one file and replaced every probe stored before it. A file's
+// probe describes the release's content, which its hash pins, so a probe the
+// post lacks is still true.
+//
+// `stored` is the row the post updates. `other` is the newest other row of the
+// same hash, one another account (or this one before a re-add) posted on
+// another day: readers take a hash's newest row, so a new row that starts from
+// a partial post would hide every probe the older rows hold. A file is taken
+// from the post, else the row, else the other row, matched by key and, should
+// zurg have keyed it differently since, by path. Stored entries are rebuilt from
+// the probe alone, so rows from before the allowlist pass on no links. `kept`
+// and `borrowed` count the files taken from the row and from the other row.
+export function mergeStoredSnapshot(
+	stored: unknown,
+	post: StoredSnapshot,
+	other?: unknown
+): { snapshot: StoredSnapshot; kept: number; borrowed: number } {
+	const files: Record<string, StoredFile> = {};
+	const paths = new Set(Object.values(post.SelectedFiles).map((file) => file.path));
+	const takeFrom = (payload: unknown) => {
+		const storedFiles = isRecord(payload)
+			? (payload.SelectedFiles ?? payload.selectedFiles)
+			: null;
+		if (!isRecord(storedFiles)) return 0;
+		let taken = 0;
+		for (const [key, entry] of Object.entries(storedFiles)) {
+			if (Object.hasOwn(post.SelectedFiles, key) || Object.hasOwn(files, key)) continue;
+			if (!isRecord(entry) || typeof entry.path !== 'string') continue;
+			const mediaInfo = entry.MediaInfo ?? entry.mediaInfo;
+			if (typeof entry.bytes !== 'number' || !isRecord(mediaInfo) || paths.has(entry.path)) {
+				continue;
+			}
+			files[key] = {
+				path: entry.path,
+				bytes: entry.bytes,
+				MediaInfo: withoutProbeSource(mediaInfo) as Prisma.InputJsonObject,
+			};
+			paths.add(entry.path);
+			taken++;
+		}
+		return taken;
+	};
+	const kept = takeFrom(stored);
+	const borrowed = takeFrom(other);
+	return {
+		snapshot: { ...post, SelectedFiles: { ...files, ...post.SelectedFiles } },
+		kept,
+		borrowed,
 	};
 }
 

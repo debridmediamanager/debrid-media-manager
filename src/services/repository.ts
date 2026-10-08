@@ -1,6 +1,7 @@
 import type { AnimeIdSource } from '@/services/database/anime';
 import type { AvailabilityUpsert } from '@/services/database/availability';
 import type { ScrapedTrueReadOptions } from '@/services/database/scraped';
+import type { SnapshotPost } from '@/services/database/torrentSnapshot';
 import type { RdCastCredentials } from '@/utils/castRdToken';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
@@ -1288,6 +1289,12 @@ export class Repository {
 			addedDate,
 			payload,
 		});
+	}
+
+	// A zurg post: merged into the stored snapshot rather than replacing it.
+	public async mergeTorrentSnapshot(post: SnapshotPost) {
+		if (await isHashBlocked(post.hash)) return null;
+		return this.torrentSnapshotService.mergeSnapshot(post);
 	}
 
 	public async getLatestTorrentSnapshot(hash: string) {

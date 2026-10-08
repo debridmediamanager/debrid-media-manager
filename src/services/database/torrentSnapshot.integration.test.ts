@@ -17,17 +17,26 @@
  * is in flight, until InnoDB shows the post under test waiting on its key; the
  * interleaving is forced rather than left to timing.
  *
+ * zurg posts a release after every analysis pass with only the probes that
+ * pass made, and the post replaced the stored snapshot, so a pack whose last
+ * pass reached one file of several kept that one (Fizzy card 263). The posts
+ * of The Matrix (1999) 2160p Tigole were made by zurg's own pass and sender:
+ * one probed the film, one the introduction, one both.
+ *
  * Needs Docker. Skipped without it, like the other integration tests.
  */
+import filmPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-film-pass.json';
+import introductionPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-introduction-pass.json';
+import wholePass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-whole-pass.json';
 import snapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
+import { publicMediaInfo, TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import { PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
 import type { NextApiHandler } from 'next';
 import path from 'path';
 import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let dockerAvailable = false;
 try {
@@ -62,6 +71,7 @@ describe.skipIf(!dockerAvailable)('Torrent snapshot saves on MySQL 8.0.36 (Integ
 	let other: PrismaClient;
 	let monitor: PrismaClient;
 	let handler: NextApiHandler;
+	let mediaInfo: NextApiHandler;
 
 	beforeAll(async () => {
 		container = await new GenericContainer('mysql:8.0.36')
@@ -83,6 +93,7 @@ describe.skipIf(!dockerAvailable)('Torrent snapshot saves on MySQL 8.0.36 (Integ
 		// DATABASE_URL when it is first imported, so it is imported only now.
 		process.env.DATABASE_URL = `${url}?connection_limit=20`;
 		({ default: handler } = await import('@/pages/api/torrents/snapshot'));
+		({ default: mediaInfo } = await import('@/pages/api/torrents/mediainfo'));
 	}, 240_000);
 
 	afterAll(async () => {
@@ -167,5 +178,134 @@ describe.skipIf(!dockerAvailable)('Torrent snapshot saves on MySQL 8.0.36 (Integ
 		const stored = await rows();
 		expect(stored.map((r) => r.id)).toEqual([ID]);
 		expect(stored[0].payload).toEqual(STORED);
+	});
+
+	describe('a pack zurg analyzed over several passes', () => {
+		const PACK_ID = `${wholePass.Hash}:${wholePass.Added.slice(0, 10)}`;
+		const stored = (body: unknown) => toStoredSnapshot(TorrentSnapshot.parse(body));
+		const FILM_ONLY = stored(filmPass);
+		const WHOLE = stored(wholePass);
+
+		const packRows = () =>
+			monitor.torrentSnapshot.findMany({ where: { hash: wholePass.Hash } });
+		const storedFiles = async () => {
+			const found = await packRows();
+			expect(found.map((r) => r.id)).toEqual([PACK_ID]);
+			return found[0].payload;
+		};
+		const publicAnswer = async () => {
+			const res = createMockResponse();
+			await mediaInfo(createMockRequest({ query: { hash: wholePass.Hash } }), res);
+			return { status: res._getStatusCode(), body: res._getData() };
+		};
+
+		it('stores both files from two passes that probed one each', async () => {
+			expect((await post(filmPass)).status).toBe(201);
+			expect((await post(introductionPass)).status).toBe(201);
+
+			expect(await storedFiles()).toEqual(WHOLE);
+			// What the public media info answers is what one whole pass gives.
+			expect(await publicAnswer()).toEqual({ status: 200, body: publicMediaInfo(WHOLE) });
+		});
+
+		it('keeps the film through a later pass that probed only the introduction', async () => {
+			await post(wholePass);
+			expect((await post(introductionPass)).status).toBe(201);
+
+			expect(await storedFiles()).toEqual(WHOLE);
+		});
+
+		// dmmdb holds this release twice: a row another account's zurg posted
+		// with both probes on 2025-12-15, and zen's add day. Readers take the
+		// newest row, so a new one that started from a partial pass hid the other.
+		it("starts a new row of the pack from the probes of the hash's newest other row", async () => {
+			const elsewhere = { ...wholePass, Added: '2025-12-15T08:02:14+01:00' };
+			await post(elsewhere);
+
+			expect((await post(introductionPass)).status).toBe(201);
+
+			const found = await packRows();
+			expect(found.map((r) => r.id).sort()).toEqual([
+				`${wholePass.Hash}:2025-12-15`,
+				PACK_ID,
+			]);
+			for (const row of found)
+				expect(row.payload).toEqual(stored(row.id === PACK_ID ? wholePass : elsewhere));
+			expect(await publicAnswer()).toEqual({ status: 200, body: publicMediaInfo(WHOLE) });
+		});
+
+		it('leaves the stored probes alone when it refuses a post of the pack', async () => {
+			const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			await post(filmPass);
+
+			const broken = { ...introductionPass, State: 'broken_torrent' };
+			expect((await post(broken)).status).toBe(400);
+			warn.mockRestore();
+
+			expect(await storedFiles()).toEqual(FILM_ONLY);
+		});
+
+		it('keeps the file of a post another replica is creating the row with', async () => {
+			let held!: () => void;
+			const holding = new Promise<void>((resolve) => (held = resolve));
+			const filmPost = other.$transaction(
+				async (tx) => {
+					await tx.$executeRaw`INSERT INTO TorrentSnapshot (id, hash, addedDate, payload, updatedAt)
+						VALUES (${PACK_ID}, ${wholePass.Hash}, ${new Date(PACK_ID.slice(41))},
+							${JSON.stringify(FILM_ONLY)}, ${new Date()})`;
+					held();
+					await untilLockWaiters(1);
+				},
+				{ timeout: 60_000 }
+			);
+			await holding;
+
+			const [first, second] = await Promise.allSettled([filmPost, post(introductionPass)]);
+
+			expect(first.status).toBe('fulfilled');
+			expect(second).toEqual({
+				status: 'fulfilled',
+				value: { status: 201, body: { success: true, id: PACK_ID } },
+			});
+			expect(await storedFiles()).toEqual(WHOLE);
+		});
+
+		// The stored film is read only once the other replica has written, so
+		// the introduction it stored is not overwritten by a merge made without it.
+		it('keeps the file another replica merged in while this post waited', async () => {
+			await post(filmPass);
+			let held!: () => void;
+			const holding = new Promise<void>((resolve) => (held = resolve));
+			const introductionMerge = other.$transaction(
+				async (tx) => {
+					await tx.$queryRaw`SELECT id FROM TorrentSnapshot WHERE id = ${PACK_ID} FOR UPDATE`;
+					await tx.$executeRaw`UPDATE TorrentSnapshot
+						SET payload = ${JSON.stringify(WHOLE)}, updatedAt = ${new Date()}
+						WHERE id = ${PACK_ID}`;
+					held();
+					await untilLockWaiters(1);
+				},
+				{ timeout: 60_000 }
+			);
+			await holding;
+
+			const [first, second] = await Promise.allSettled([introductionMerge, post(filmPass)]);
+
+			expect(first.status).toBe('fulfilled');
+			expect(second).toEqual({
+				status: 'fulfilled',
+				value: { status: 201, body: { success: true, id: PACK_ID } },
+			});
+			expect(await storedFiles()).toEqual(WHOLE);
+		});
+
+		it('answers and keeps every file of posts several replicas receive at once', async () => {
+			const answers = await Promise.all(
+				Array.from({ length: 8 }, (_, i) => post(i % 2 ? introductionPass : filmPass))
+			);
+
+			expect(answers.map((a) => a.status)).toEqual(Array(8).fill(201));
+			expect(await storedFiles()).toEqual(WHOLE);
+		});
 	});
 });

@@ -79,12 +79,21 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 	}
 	try {
 		const { id, date } = deriveSnapshotId(snapshot.Hash, snapshot.Added);
-		await repository.upsertTorrentSnapshot({
+		const merged = await repository.mergeTorrentSnapshot({
 			id,
 			hash: snapshot.Hash,
 			addedDate: date,
 			payload: snapshot,
 		});
+		if (merged && (merged.kept || merged.borrowed)) {
+			// Counts only, like the line above: how often a post would have
+			// replaced probes stored before it, or a new row hidden an older one's.
+			console.info('Kept stored probes a torrent snapshot post lacked', {
+				kept: merged.kept,
+				borrowed: merged.borrowed,
+				posted: Object.keys(snapshot.SelectedFiles).length,
+			});
+		}
 		return res.status(201).json({ success: true, id });
 	} catch (error) {
 		console.error('Failed to persist torrent snapshot', error);
