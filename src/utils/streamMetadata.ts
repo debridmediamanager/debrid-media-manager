@@ -119,15 +119,20 @@ function extractMediaInfo(payload: SnapshotPayload): MediaInfo | null {
 		return selectedFiles as MediaInfo;
 	}
 
-	const firstFile = Object.values(selectedFiles)[0];
-	if (firstFile && typeof firstFile === 'object') {
-		const mediaInfo = (firstFile as any).MediaInfo ?? (firstFile as any).mediaInfo;
-		if (mediaInfo && 'streams' in mediaInfo) {
-			return mediaInfo;
-		}
+	// A release is described by its largest probed file, the feature rather than
+	// an extra. Taking the first file took whichever MySQL lists first: it keeps
+	// a JSON object's keys shortest first, so The Matrix (1999) 2160p Tigole read
+	// as its 3-minute written introduction, "4K, no audio", not the film.
+	let largest: { mediaInfo: MediaInfo; bytes: number } | null = null;
+	for (const file of Object.values(selectedFiles)) {
+		if (!file || typeof file !== 'object') continue;
+		const mediaInfo = (file as any).MediaInfo ?? (file as any).mediaInfo;
+		if (!mediaInfo || !Array.isArray(mediaInfo.streams)) continue;
+		const bytes = Number((file as any).bytes ?? mediaInfo.format?.size) || 0;
+		if (!largest || bytes > largest.bytes) largest = { mediaInfo, bytes };
 	}
 
-	return null;
+	return largest?.mediaInfo ?? null;
 }
 
 export function extractStreamMetadata(payload: unknown): StreamMetadata | null {

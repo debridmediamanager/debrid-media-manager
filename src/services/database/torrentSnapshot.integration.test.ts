@@ -30,6 +30,7 @@ import introductionPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0
 import wholePass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-whole-pass.json';
 import snapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { extractStreamMetadata } from '@/utils/streamMetadata';
 import { publicMediaInfo, TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import { PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
@@ -203,9 +204,18 @@ describe.skipIf(!dockerAvailable)('Torrent snapshot saves on MySQL 8.0.36 (Integ
 			expect((await post(filmPass)).status).toBe(201);
 			expect((await post(introductionPass)).status).toBe(201);
 
-			expect(await storedFiles()).toEqual(WHOLE);
+			const payload = await storedFiles();
+			expect(payload).toEqual(WHOLE);
 			// What the public media info answers is what one whole pass gives.
 			expect(await publicAnswer()).toEqual({ status: 200, body: publicMediaInfo(WHOLE) });
+			// The addons describe the release by the film, not the 3-minute introduction.
+			expect(extractStreamMetadata(payload)).toEqual({
+				languages: ['eng'],
+				resolution: '1440p',
+				videoCodec: 'HEVC',
+				audioCodec: 'AAC',
+				audioChannels: '7.1',
+			});
 		});
 
 		it('keeps the film through a later pass that probed only the introduction', async () => {

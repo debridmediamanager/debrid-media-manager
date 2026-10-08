@@ -1,4 +1,5 @@
 import { languageEmojis } from '@/components/showInfo/languages';
+import matrixWholePass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-whole-pass.json';
 import { describe, expect, it } from 'vitest';
 import {
 	extractStreamMetadata,
@@ -6,6 +7,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from './streamMetadata';
+import { TorrentSnapshot, toStoredSnapshot } from './torrentSnapshot';
 
 describe('extractStreamMetadata', () => {
 	it('returns null for null payload', () => {
@@ -83,6 +85,31 @@ describe('extractStreamMetadata', () => {
 			audioCodec: 'AAC',
 			audioChannels: '2.0',
 			languages: ['ja', 'en'],
+		});
+	});
+
+	// zurg's post of The Matrix (1999) 2160p Tigole with both files probed, in the
+	// order dmmdb returned the live row's files on 2026-10-08: MySQL keeps a JSON
+	// object's keys shortest first, so the written introduction comes first.
+	it('describes a release by its largest probed file, not the one MySQL lists first', () => {
+		const stored = toStoredSnapshot(TorrentSnapshot.parse(matrixWholePass));
+		const film = 'The Matrix (1999) (2160p BluRay x265 10bit HDR Tigole).mkv';
+		const introduction = 'Written Introduction by The Wachowskis.mkv';
+		const asMySqlReturnsIt = {
+			...stored,
+			SelectedFiles: {
+				[introduction]: stored.SelectedFiles[introduction],
+				[film]: stored.SelectedFiles[film],
+			},
+		};
+
+		expect(extractStreamMetadata(asMySqlReturnsIt)).toEqual({
+			languages: ['eng'],
+			resolution: '1440p',
+			videoCodec: 'HEVC',
+			audioCodec: 'AAC',
+			audioChannels: '7.1',
+			hdr: undefined,
 		});
 	});
 
