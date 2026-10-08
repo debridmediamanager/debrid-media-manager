@@ -1,6 +1,7 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { getUserData } from '@/services/torbox';
 import { getSafeRedirectPath } from '@/utils/router';
+import { FREE_PLAN, FREE_TORBOX_PLAN_MESSAGE } from '@/utils/torboxPlan';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -23,6 +24,11 @@ export default function TorboxLoginPage() {
 			console.log('[TorboxLogin] user data received', {
 				success: userData?.success ?? false,
 			});
+			// /user/me answers a free plan, but the library and every action after it are refused
+			if (userData?.data?.plan === FREE_PLAN) {
+				setError(FREE_TORBOX_PLAN_MESSAGE);
+				return;
+			}
 
 			// If successful, save the API key
 			setApiKey(inputApiKey);

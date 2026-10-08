@@ -1,0 +1,9 @@
+{
+	"body": {
+		"success": false,
+		"error": "PLAN_RESTRICTED_FEATURE",
+		"detail": "API feature not available on your plan. Please upgrade to a paid plan to access the API.",
+		"data": null
+	},
+	"status": 403
+}

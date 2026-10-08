@@ -16,6 +16,7 @@ import {
 	fetchOffcloud,
 	fetchPremiumize,
 } from '@/utils/fetchTorrents';
+import { FREE_TORBOX_PLAN_MESSAGE, isTorBoxPlanRestricted } from '@/utils/torboxPlan';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
 
@@ -446,13 +447,20 @@ export class UnifiedLibraryFetcher {
 				iteration: ++loop,
 			});
 			const apiStart = Date.now();
-			const result = await this.rateLimiter.execute('torbox', `tb-page-${offset}`, () =>
-				getTorrentList(token, {
-					bypass_cache: true,
-					offset,
-					limit: pageSize,
-				})
-			);
+			const result = await this.rateLimiter
+				.execute('torbox', `tb-page-${offset}`, () =>
+					getTorrentList(token, {
+						bypass_cache: true,
+						offset,
+						limit: pageSize,
+					})
+				)
+				.catch((error) => {
+					// The refresh toast shows this message; a bare "status code 403" explains nothing
+					throw isTorBoxPlanRestricted(error)
+						? new Error(FREE_TORBOX_PLAN_MESSAGE)
+						: error;
+				});
 			console.log(
 				`[Fetcher] Torbox page received in ${Date.now() - apiStart}ms (success=${result.success})`
 			);

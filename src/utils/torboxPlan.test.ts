@@ -1,5 +1,6 @@
 import planRestricted from '@/test/fixtures/torbox/createtorrent-plan-restricted-2026-09-23.json';
 import badToken from '@/test/fixtures/torbox/user-me-bad-token-2026-09-24.json';
+import freePlan from '@/test/fixtures/torbox/user-me-free-plan-2026-10-09.json';
 import standardPlan from '@/test/fixtures/torbox/user-me-standard-plan-2026-09-24.json';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isFreeTorBoxPlan } from './torboxPlan';
@@ -12,13 +13,6 @@ const answer = ({ status, body }: Captured) => {
 		status,
 		json: async () => body,
 	}) as any;
-};
-
-// The same captured account, moved to the free plan. No free account was on hand
-// to capture `/user/me` from, so this is the one hand-edited shape here.
-const freePlan: Captured = {
-	status: 200,
-	body: { ...standardPlan.body, data: { ...standardPlan.body.data, plan: 0 } },
 };
 
 afterEach(() => vi.restoreAllMocks());

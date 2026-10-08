@@ -1,4 +1,6 @@
 import TorboxLoginPage from '@/pages/torbox/login';
+import freePlan from '@/test/fixtures/torbox/user-me-free-plan-2026-10-09.json';
+import { FREE_TORBOX_PLAN_MESSAGE } from '@/utils/torboxPlan';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -56,6 +58,18 @@ describe('Torbox login page', () => {
 		await waitFor(() => expect(getUserDataMock).toHaveBeenCalledWith('tb-key'));
 		expect(setApiKeyMock).toHaveBeenCalledWith('tb-key');
 		expect(replaceMock).toHaveBeenCalledWith('/library');
+	});
+
+	// /user/me answers a free plan normally; only the library and every other
+	// call after it are refused, so the key has to be turned away here.
+	it('refuses a free-plan key and says it needs a paid TorBox plan', async () => {
+		getUserDataMock.mockResolvedValue(freePlan.body);
+
+		submitApiKey('tb-key');
+
+		expect(await screen.findByText(FREE_TORBOX_PLAN_MESSAGE)).toBeInTheDocument();
+		expect(setApiKeyMock).not.toHaveBeenCalled();
+		expect(replaceMock).not.toHaveBeenCalled();
 	});
 
 	it('surfaced API errors to the user', async () => {

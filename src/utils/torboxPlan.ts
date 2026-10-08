@@ -8,11 +8,16 @@
 const USER_ME_URL = 'https://api.torbox.app/v1/api/user/me';
 const TIMEOUT_MS = 5000;
 
-/** TorBox's `plan` field: 0 Free, 1 Essential, 2 Standard, 3 Pro. */
-const FREE_PLAN = 0;
+/** TorBox's `plan` field: 0 Free, 1 Essential, 2 Pro, 3 Standard. */
+export const FREE_PLAN = 0;
 
 export const FREE_TORBOX_PLAN_MESSAGE =
-	'Your TorBox account is on the free plan, which has no API access. Transfers need a paid TorBox plan.';
+	'Your TorBox account is on the free plan, which has no API access. DMM needs a paid TorBox plan.';
+
+/** Whether a TorBox call was refused because the account's plan has no API access. */
+export const isTorBoxPlanRestricted = (error: unknown): boolean =>
+	(error as { response?: { data?: { error?: unknown } } } | null)?.response?.data?.error ===
+	'PLAN_RESTRICTED_FEATURE';
 
 /**
  * Whether this TorBox key belongs to a free account.

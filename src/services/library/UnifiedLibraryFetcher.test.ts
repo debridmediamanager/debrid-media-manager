@@ -1,12 +1,15 @@
 import { getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
+import mylistPlanRestricted from '@/test/fixtures/torbox/mylist-plan-restricted-2026-10-09.json';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { FREE_TORBOX_PLAN_MESSAGE } from '@/utils/torboxPlan';
+import { AxiosError, AxiosHeaders } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CacheManager } from '../cache/CacheManager';
 import type { UnifiedRateLimiter } from '../rateLimit/UnifiedRateLimiter';
@@ -227,6 +230,33 @@ describe('UnifiedLibraryFetcher', () => {
 		await fetcher.fetchLibrary('torbox', 'tb-token', { maxItems: 1 });
 
 		expect(mockGetWebDownloadList).not.toHaveBeenCalled();
+	});
+
+	// A free (or lapsed) TorBox plan logs in fine, then every list endpoint
+	// refuses. The refresh toast used to read "Request failed with status code 403".
+	it('says a free TorBox plan has no API access when the library is refused', async () => {
+		const { fetcher, cache } = createFetcher();
+		mockGetTorrentList.mockReset();
+		cache.get.mockResolvedValueOnce(null);
+		mockGetTorrentList.mockRejectedValueOnce(
+			new AxiosError(
+				'Request failed with status code 403',
+				AxiosError.ERR_BAD_REQUEST,
+				undefined,
+				undefined,
+				{
+					status: mylistPlanRestricted.status,
+					statusText: '',
+					headers: {},
+					config: { headers: new AxiosHeaders() },
+					data: mylistPlanRestricted.body,
+				}
+			)
+		);
+
+		await expect(fetcher.fetchLibrary('torbox', 'tb-token')).rejects.toThrow(
+			FREE_TORBOX_PLAN_MESSAGE
+		);
 	});
 
 	it('clears cache for a specific service key when provided', async () => {
