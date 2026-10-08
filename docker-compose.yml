@@ -27,6 +27,11 @@ services:
     depends_on:
       - tor
       - redis
+    # Docker's embedded DNS forwards to Hetzner's resolvers, which time out on
+    # a share of lookups and broke every RD call through /api/anticors (#276).
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     healthcheck:
       test: ['CMD-SHELL', 'curl -sf -m 5 http://localhost:3000/api/healthz | grep -qm1 ok']
       interval: 30s
