@@ -19,14 +19,12 @@
  * with a line starting `FAILED:`.
  */
 import { PrismaClient } from '@prisma/client';
-import { createReadStream, createWriteStream } from 'fs';
-import { mkdir, rename, stat } from 'fs/promises';
+import { createReadStream } from 'fs';
+import { mkdir, stat } from 'fs/promises';
 import { join } from 'path';
 import { createInterface } from 'readline';
-import { Readable } from 'stream';
-import { pipeline } from 'stream/promises';
-import type { ReadableStream as WebReadableStream } from 'stream/web';
 import { createGunzip } from 'zlib';
+import { downloadDump } from '../src/services/imdbImport/download';
 import { IMDB_TABLES, mysqlStore, syncTable } from '../src/services/imdbImport/imdbSync';
 
 const IMDB_DATASETS_URL = 'https://datasets.imdbws.com';
@@ -50,16 +48,12 @@ async function download(dataDir: string, file: string, reuseMs: number): Promise
 		log(`${file}: reusing the copy from ${existing.mtime.toISOString()}`);
 		return path;
 	}
-	const response = await fetch(`${IMDB_DATASETS_URL}/${file}`);
-	if (!response.ok || !response.body) {
-		throw new RunFailure(`${file}: download answered ${response.status}`);
-	}
-	await pipeline(
-		Readable.fromWeb(response.body as WebReadableStream),
-		createWriteStream(`${path}.part`)
-	);
-	await rename(`${path}.part`, path);
-	log(`${file}: downloaded ${((await stat(path)).size / 1e6).toFixed(0)} MB`);
+	const size = await downloadDump(`${IMDB_DATASETS_URL}/${file}`, path, {
+		log: (message) => log(`${file}: ${message}`),
+	}).catch((error: Error) => {
+		throw new RunFailure(`${file}: ${error.message}`);
+	});
+	log(`${file}: downloaded ${(size / 1e6).toFixed(0)} MB`);
 	return path;
 }
 

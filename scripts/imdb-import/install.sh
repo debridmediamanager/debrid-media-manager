@@ -37,7 +37,7 @@ trap 'rm -rf "$STAGE"' EXIT
 mkdir -p "$STAGE/app/scripts" "$STAGE/app/src/services/imdbImport" "$STAGE/app/src/services/database" \
 	"$STAGE/app/src/utils" "$STAGE/app/prisma"
 cp scripts/import-imdb.ts scripts/check-search-coverage.ts "$STAGE/app/scripts/"
-cp src/services/imdbImport/imdbSync.ts "$STAGE/app/src/services/imdbImport/"
+cp src/services/imdbImport/imdbSync.ts src/services/imdbImport/download.ts "$STAGE/app/src/services/imdbImport/"
 cp src/services/database/searchableTitles.ts "$STAGE/app/src/services/database/"
 cp src/services/searchCoverage.ts "$STAGE/app/src/services/"
 cp src/utils/imdbTitleTypes.ts "$STAGE/app/src/utils/"
