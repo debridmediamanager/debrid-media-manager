@@ -17,6 +17,7 @@ import {
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
+import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { normalize } from '@/utils/mediaId';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
@@ -70,6 +71,8 @@ interface TorrentRowProps {
 	onShowInfo: (torrent: UserTorrent) => void;
 	onTypeChange: (torrent: UserTorrent) => void;
 	onRefreshLibrary?: () => Promise<void>;
+	/** The movie content-identifier confidently named from the filename. */
+	identification?: LibraryIdentification;
 }
 
 function TorrentRow({
@@ -93,6 +96,7 @@ function TorrentRow({
 	onShowInfo,
 	onTypeChange,
 	onRefreshLibrary,
+	identification,
 }: TorrentRowProps) {
 	const router = useRouter();
 	const [showCastModal, setShowCastModal] = useState(false);
@@ -439,6 +443,17 @@ function TorrentRow({
 								}
 							</div>
 							&nbsp;<strong>{torrent.title}</strong>{' '}
+							{identification && (
+								<Link
+									href={`/movie/${identification.imdbId}`}
+									title={`Identified from the filename as ${identification.imdbId}`}
+									className="ml-1 inline-block cursor-pointer rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0 text-xs font-bold text-yellow-100 transition-colors hover:bg-yellow-800/50"
+									onClick={(e) => e.stopPropagation()}
+								>
+									{identification.title}
+									{identification.year ? ` (${identification.year})` : ''}
+								</Link>
+							)}
 							{hashFilterText ? (
 								<Link
 									href={`/library?hash=${torrent.hash}&page=1`}

@@ -41,6 +41,11 @@ export const RATE_LIMIT_CONFIGS = {
 	hashImdb: { name: 'hashImdb', rateLimit: 100, windowSeconds: 10 },
 	// plexsim's catalog builder: one library in a handful of 500-hash calls.
 	identifyHashes: { name: 'identifyHashes', rateLimit: 20, windowSeconds: 60 },
+	// The library page names its movies after it loads: one call per 500 movies,
+	// and later loads ask only about releases it has not seen. Each new filename
+	// costs the identifier about 8 ms of CPU, so this caps an address at 5,000 a
+	// minute.
+	libraryIdentify: { name: 'libraryIdentify', rateLimit: 10, windowSeconds: 60 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
 	// rows in one request precisely so the browser does not walk `torrents` once
 	// per season at 1-per-2s, which for a twenty-season show is forty seconds of

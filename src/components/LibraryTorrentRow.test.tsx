@@ -755,4 +755,29 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(container.textContent).toContain('In cloud');
 		});
 	});
+	describe('identified movie', () => {
+		const renderRow = (identification?: {
+			imdbId: string;
+			title: string;
+			year: number | null;
+		}) =>
+			render(
+				<table>
+					<tbody>
+						<LibraryTorrentRow {...defaultProps} identification={identification} />
+					</tbody>
+				</table>
+			);
+
+		it('links the movie the filename was identified as', () => {
+			renderRow({ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015 });
+			const link = screen.getByRole('link', { name: 'Mad Max: Fury Road (2015)' });
+			expect(link).toHaveAttribute('href', '/movie/tt1392190');
+		});
+
+		it('shows nothing without a confident identification', () => {
+			renderRow();
+			expect(screen.queryByTitle(/Identified from the filename/)).toBeNull();
+		});
+	});
 });

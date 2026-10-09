@@ -14,6 +14,18 @@ export interface HashIdentity {
 
 type ScrapedVerdictRow = HashImdbPair & { verdict: string };
 
+/** content-identifier's answer for one library release, as stored. */
+export interface FilenameIdentification {
+	hash: string;
+	titleKey: string;
+	filename: string;
+	imdbId: string | null;
+	title: string | null;
+	year: number | null;
+	score: number | null;
+	confident: boolean;
+}
+
 const INFO_HASH = /^[a-f0-9]{40}$/;
 const IMDB_ID = /^tt\d{7,}$/;
 
@@ -86,6 +98,39 @@ export function soleKeeps(verdicts: ScrapedVerdictRow[]): HashImdbPair[] {
 }
 
 export class HashImdbService extends DatabaseClient {
+	/** Stored answers for these hash+filename pairs; one indexed read by hash. */
+	public async getFilenameIdentifications(
+		keys: { hash: string; titleKey: string }[]
+	): Promise<FilenameIdentification[]> {
+		const hashes = [...new Set(keys.map((k) => k.hash))];
+		if (hashes.length === 0) return [];
+		const wanted = new Set(keys.map((k) => `${k.hash}|${k.titleKey}`));
+		const rows = await this.prisma.hashIdentification.findMany({
+			where: { hash: { in: hashes } },
+			select: {
+				hash: true,
+				titleKey: true,
+				filename: true,
+				imdbId: true,
+				title: true,
+				year: true,
+				score: true,
+				confident: true,
+			},
+		});
+		return rows.filter((r) => wanted.has(`${r.hash}|${r.titleKey}`));
+	}
+
+	/** Store new answers; a pair already stored keeps its first answer. */
+	public async saveFilenameIdentifications(rows: FilenameIdentification[]): Promise<number> {
+		if (rows.length === 0) return 0;
+		const { count } = await this.prisma.hashIdentification.createMany({
+			data: rows,
+			skipDuplicates: true,
+		});
+		return count;
+	}
+
 	/**
 	 * What each release in a DMM Cast library is, keyed by lowercase hash.
 	 *

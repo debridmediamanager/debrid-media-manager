@@ -64,6 +64,7 @@ import {
 } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
+import { identifiable, identifyLibrary, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
@@ -157,6 +158,25 @@ function TorrentsPage() {
 	} = useLibraryCache();
 
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
+
+	// Name the movies once every provider has finished loading. Each item is asked
+	// about once per visit; the server keeps answers per release, so later visits
+	// cost the identifier only the releases it has never seen.
+	const [identifications, setIdentifications] = useState<Record<string, LibraryIdentification>>(
+		{}
+	);
+	const askedIdentify = useRef(new Set<string>());
+	useEffect(() => {
+		if (cacheLoading || isFetching) return;
+		const todo = cachedLibraryItems.filter(
+			(t) => identifiable(t) && !askedIdentify.current.has(t.id)
+		);
+		if (todo.length === 0) return;
+		todo.forEach((t) => askedIdentify.current.add(t.id));
+		identifyLibrary(todo).then((found) => {
+			if (Object.keys(found).length) setIdentifications((prev) => ({ ...prev, ...found }));
+		});
+	}, [cacheLoading, isFetching, cachedLibraryItems]);
 
 	// loading states
 	const [grouping, setGrouping] = useState(false);
@@ -2031,6 +2051,7 @@ function TorrentsPage() {
 													});
 												}}
 												onRefreshLibrary={refreshLibrary}
+												identification={identifications[torrent.id]}
 												onShowInfo={async (t) => {
 													if (t.id.startsWith('rd:') && rdKey) {
 														const info = await getTorrentInfo(

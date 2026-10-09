@@ -351,20 +351,20 @@ model OffcloudCastProfile {
 // the content. It is never logged and never handed to a client; only the play
 // route reads it, and only to redirect.
 model DebridLinkCast {
-  id        String   @id @default(uuid())
-  imdbId    String
-  userId    String
-  hash      String
+  id          String   @id @default(uuid())
+  imdbId      String
+  userId      String
+  hash        String
   // The filename, as in every sibling table - NOT the download URL.
-  url       String   @db.Text
-  updatedAt DateTime @updatedAt
-  size      BigInt   @default(0)
+  url         String   @db.Text
+  updatedAt   DateTime @updatedAt
+  size        BigInt   @default(0)
   // The file's path inside the release, which is how play finds it again
-  path      String?  @db.Text
+  path        String?  @db.Text
   // The keyless Debrid-Link URL for this file. Nullable: a row cast before this
   // column existed, or one whose resolve produced no URL, still plays through
   // the viewer's own credential.
-  downloadUrl String? @db.Text
+  downloadUrl String?  @db.Text
 
   @@unique([imdbId, userId, hash])
   @@index([imdbId, userId, updatedAt])
@@ -568,6 +568,29 @@ model HashImdb {
   updatedAt DateTime @updatedAt
 
   @@index([hash])
+  @@index([imdbId])
+}
+
+/// What content-identifier made of a library release's filename. Keyed by hash
+/// and filename: the service names the title from the filename alone, so a
+/// made-up filename sent for a real hash never answers for the real filename.
+/// Staging only - a row reaches HashImdb, if ever, after review.
+model HashIdentification {
+  id        Int      @id @default(autoincrement())
+  hash      String   @db.VarChar(40)
+  /// sha1 of the filename
+  titleKey  String   @db.Char(40)
+  filename  String   @db.Text
+  /// null when nothing in IMDb matched
+  imdbId    String?  @db.VarChar(16)
+  title     String?  @db.VarChar(500)
+  year      Int?
+  score     Float?
+  /// about 98% precise on held-out casts; only these count as identified
+  confident Boolean
+  createdAt DateTime @default(now())
+
+  @@unique([hash, titleKey])
   @@index([imdbId])
 }
 

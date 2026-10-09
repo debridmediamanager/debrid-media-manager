@@ -40,6 +40,7 @@ import {
 	type TransferMetaSource,
 	ZurgKeysService,
 } from './database';
+import type { FilenameIdentification } from './database/hashImdb';
 import { HashSearchParams } from './database/hashSearch';
 import { RealDebridOperation } from './database/rdOperational';
 import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHealth';
@@ -1323,6 +1324,14 @@ export class Repository {
 
 	public identifyLibraryHashes(hashes: string[]) {
 		return this.hashImdbService.identifyHashes(hashes);
+	}
+
+	public getFilenameIdentifications(keys: { hash: string; titleKey: string }[]) {
+		return this.hashImdbService.getFilenameIdentifications(keys);
+	}
+
+	public async saveFilenameIdentifications(rows: FilenameIdentification[]) {
+		return this.hashImdbService.saveFilenameIdentifications(await withoutBlockedHashes(rows));
 	}
 
 	// Report Service Methods
