@@ -361,8 +361,8 @@ export class Repository {
 		return this.nzb2rdMapService.recordFailed(releaseId, jobId, imdbId, error, title);
 	}
 
-	public removeNzb2rdTransfer(releaseId: string) {
-		return this.nzb2rdMapService.removeTransfer(releaseId);
+	public removeNzb2rdTransfer(releaseId: string, jobId: string) {
+		return this.nzb2rdMapService.removeTransfer(releaseId, jobId);
 	}
 
 	// Users parked on someone else's in-flight job, to be given the content when it lands

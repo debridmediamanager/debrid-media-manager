@@ -123,7 +123,10 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 
 		const res = await run();
 
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-1');
+		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(
+			'release-1',
+			pendingRecord.jobId
+		);
 		expect(res.json).toHaveBeenCalledWith({ transfers: [] });
 	});
 
@@ -321,7 +324,10 @@ describe('POST /api/nzb2rd/registered — jobs nzb2rd deleted', () => {
 
 			const res = await run([marker.releaseId]);
 
-			expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(marker.releaseId);
+			expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(
+				marker.releaseId,
+				marker.jobId
+			);
 			expect(res.json).toHaveBeenCalledWith({ transfers: [] });
 		}
 	);

@@ -1,0 +1,99 @@
+{
+	"census": {
+		"readAt": "2026-10-10",
+		"releasesWithALiveRetryAndNoMarker": 33,
+		"clearsOfAnOlderJobAfterTheRetry": 34,
+		"secondsFromRetryToClear": {
+			"min": 3,
+			"median": 20,
+			"max": 257379
+		}
+	},
+	"clear": {
+		"method": "DELETE",
+		"path": "/api/nzb2rd/jobs/nzb2rd-C1",
+		"query": {
+			"releaseId": "ix:release-1"
+		},
+		"at": "2026-10-09T13:48:09Z",
+		"referer": "https://debridmediamanager.com/transfers",
+		"nzb2rd": {
+			"status": 200,
+			"body": {
+				"ok": true
+			}
+		}
+	},
+	"oldJob": {
+		"category": null,
+		"completed_at": "2026-10-08 18:53:11",
+		"created_at": "2026-10-05 15:33:06",
+		"deleted": 1,
+		"done_bytes": null,
+		"duration_seconds": 271205,
+		"error": "The release holds no files that can be imported",
+		"files": [],
+		"id": "nzb2rd-C1",
+		"imdb_id": "tt6821044",
+		"info_hash": null,
+		"name": null,
+		"nzb_name": "The.Loudest.Voice.S01E06.DV.2160p.WEB.H265-CRUCiFiED.nzb",
+		"priority": 0,
+		"priority_at": null,
+		"retry_count": 0,
+		"speed_bps": null,
+		"started_at": "2026-10-08 18:53:06",
+		"status": "failed",
+		"status_message": "Waiting for zurg to read the NZB... (1)",
+		"total_bytes": null,
+		"updated_at": "2026-10-09 13:48:09"
+	},
+	"retryJob": {
+		"category": null,
+		"completed_at": null,
+		"created_at": "2026-10-09 13:48:06",
+		"deleted": 0,
+		"done_bytes": null,
+		"duration_seconds": null,
+		"error": null,
+		"files": [],
+		"id": "nzb2rd-C2",
+		"imdb_id": "tt6821044",
+		"info_hash": null,
+		"name": null,
+		"nzb_name": "The.Loudest.Voice.S01E06.DV.2160p.WEB.H265-CRUCiFiED.nzb",
+		"priority": 0,
+		"priority_at": null,
+		"queue": {
+			"position": 98,
+			"waiting": 942
+		},
+		"retry_count": 0,
+		"speed_bps": null,
+		"started_at": null,
+		"status": "pending",
+		"status_message": null,
+		"total_bytes": null,
+		"updated_at": "2026-10-09 13:48:06"
+	},
+	"transferMeta": [
+		{
+			"imdbId": "tt6821044",
+			"jobId": "nzb2rd-C1",
+			"releaseId": "ix:release-1",
+			"returnPath": "/show/tt6821044/1",
+			"source": "nzb2rd",
+			"title": "The.Loudest.Voice.S01E06.DV.2160p.WEB.H265-CRUCiFiED",
+			"updatedAt": 1791214386890
+		},
+		{
+			"imdbId": "tt6821044",
+			"jobId": "nzb2rd-C2",
+			"releaseId": "ix:release-1",
+			"returnPath": "/show/tt6821044/1",
+			"source": "nzb2rd",
+			"title": "The.Loudest.Voice.S01E06.DV.2160p.WEB.H265-CRUCiFiED",
+			"updatedAt": 1791553686489
+		}
+	]
+}

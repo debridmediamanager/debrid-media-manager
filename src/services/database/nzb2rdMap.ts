@@ -202,7 +202,14 @@ export class Nzb2rdMapService extends DatabaseClient {
 	}
 
 	/**
-	 * Drop a release's marker and anyone waiting on it.
+	 * Drop a release's marker and anyone waiting on it, when the marker follows
+	 * `jobId`.
+	 *
+	 * A marker that follows another job is left alone. A Retry records its new
+	 * job here while the old failed row stays on the Transfers page, and clearing
+	 * that row, usually seconds after the retry, used to delete the retry's
+	 * marker and its waiters: on 2026-10-10, 33 releases had a retry queued in
+	 * nzb2rd and no marker, so every account was offered a second fetch of it.
 	 *
 	 * `deleteMany`, not `delete`, here and in `clearWaiters`: finding nothing to
 	 * remove is the ordinary case (a cancel for a release that was never
@@ -212,7 +219,9 @@ export class Nzb2rdMapService extends DatabaseClient {
 	 * that about half of everything dmm_web logged on 2026-10-07. A real
 	 * database error still throws.
 	 */
-	async removeTransfer(releaseId: string): Promise<void> {
+	async removeTransfer(releaseId: string, jobId: string): Promise<void> {
+		const existing = await this.getTransfer(releaseId);
+		if (existing && existing.jobId !== jobId) return;
 		await this.prisma.cache.deleteMany({ where: { key: keyFor(releaseId) } });
 		await this.clearWaiters(releaseId);
 	}

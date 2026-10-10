@@ -77,7 +77,7 @@ export async function settleNzb2rdMarker(
 		});
 		// A job nzb2rd no longer has cannot be fetching anything.
 		if (response.status === 404) {
-			await db.removeNzb2rdTransfer(record.releaseId);
+			await db.removeNzb2rdTransfer(record.releaseId, record.jobId);
 			return { outcome: 'removed' };
 		}
 		if (!response.ok) return { outcome: 'unknown' };
@@ -89,7 +89,7 @@ export async function settleNzb2rdMarker(
 	switch (nzb2rdJobOutcome(job)) {
 		case 'gone':
 			// Deleted while still in line or mid-stage: it will never move again.
-			await db.removeNzb2rdTransfer(record.releaseId);
+			await db.removeNzb2rdTransfer(record.releaseId, record.jobId);
 			return { outcome: 'removed' };
 		case 'failed': {
 			const error = typeof job.error === 'string' ? job.error : undefined;

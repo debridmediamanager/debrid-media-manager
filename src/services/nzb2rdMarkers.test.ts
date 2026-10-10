@@ -186,7 +186,10 @@ describe('reconcileNzb2rdMarkers — pending markers nobody looks at', () => {
 		const result = await reconcileNzb2rdMarkers({ now: NOW });
 
 		expect(mockRepo.sampleNzb2rdPendingMarkers).toHaveBeenCalledWith(PENDING_MARKER_BATCH);
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(markerOf('nzb2rd-D1').releaseId);
+		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(
+			markerOf('nzb2rd-D1').releaseId,
+			'nzb2rd-D1'
+		);
 		expect(mockRegister).toHaveBeenCalledWith(
 			expect.objectContaining({ id: 'nzb2rd-C1', info_hash: jobs['nzb2rd-C1'].info_hash }),
 			undefined,
@@ -221,7 +224,10 @@ describe('reconcileNzb2rdMarkers — pending markers nobody looks at', () => {
 
 		const result = await reconcileNzb2rdMarkers({ now: NOW });
 
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(marker.releaseId);
+		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith(
+			marker.releaseId,
+			'nzb2rd-purged'
+		);
 		expect(result.removed).toBe(1);
 	});
 

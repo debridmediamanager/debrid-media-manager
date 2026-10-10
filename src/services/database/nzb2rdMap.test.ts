@@ -245,15 +245,36 @@ describe('Nzb2rdMapService', () => {
 	// `deleteMany` answers a missing row with a count of 0 rather than P2025,
 	// which Prisma would print from its error log even though it is caught.
 	it('removes a mapping that is not there without an error', async () => {
-		await expect(service.removeTransfer(RELEASE)).resolves.toBeUndefined();
+		prisma.cache.findUnique.mockResolvedValue(null);
+		await expect(service.removeTransfer(RELEASE, 'job-1')).resolves.toBeUndefined();
 		expect(prisma.cache.deleteMany).toHaveBeenCalledWith({
 			where: { key: 'nzbrd:abc123def' },
 		});
 	});
 
 	it('lets a real database error through', async () => {
+		prisma.cache.findUnique.mockResolvedValue(null);
 		prisma.cache.deleteMany.mockRejectedValue(new Error('connection lost'));
-		await expect(service.removeTransfer(RELEASE)).rejects.toThrow('connection lost');
+		await expect(service.removeTransfer(RELEASE, 'job-1')).rejects.toThrow('connection lost');
+	});
+
+	// A Retry records its new job on the marker while the old failed row stays
+	// on the Transfers page, and clearing that row deleted the retry's marker:
+	// 33 releases had a retry queued in nzb2rd and no marker on 2026-10-10.
+	it('leaves the marker of a newer job when an older job of the release is cleared', async () => {
+		prisma.cache.findUnique.mockResolvedValue({
+			key: 'nzbrd:abc123def',
+			value: {
+				releaseId: 'abc123def',
+				jobId: 'job-2',
+				imdbId: 'tt1418646',
+				status: 'pending',
+			},
+		});
+
+		await service.removeTransfer(RELEASE, 'job-1');
+
+		expect(prisma.cache.deleteMany).not.toHaveBeenCalled();
 	});
 });
 
@@ -361,7 +382,7 @@ describe('Nzb2rdMapService waiters', () => {
 	it('cancelling a transfer also drops anyone waiting on it', async () => {
 		prisma.cache.findUnique.mockResolvedValue(null);
 		prisma.cache.deleteMany.mockResolvedValue({ count: 1 });
-		await service.removeTransfer(RELEASE);
+		await service.removeTransfer(RELEASE, 'job-1');
 
 		const keys = prisma.cache.deleteMany.mock.calls.map((c: any[]) => c[0].where.key);
 		expect(keys).toEqual(['nzbrd:abc123def', 'nzbwait:abc123def']);

@@ -26,11 +26,18 @@
  * Needs Docker. Skipped without it, like the other integration tests.
  */
 import recorded from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
+import clears from '@/test/fixtures/transfers/marker-clears-2026-10-09.json';
+import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
 import path from 'path';
 import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>();
+	return { ...actual, withIpRateLimit: (handler: unknown) => handler };
+});
 
 let dockerAvailable = false;
 try {
@@ -65,6 +72,7 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 	let monitor: PrismaClient;
 	let repository: typeof import('../repository').repository;
 	let Nzb2rdMapService: typeof import('./nzb2rdMap').Nzb2rdMapService;
+	let jobRoute: typeof import('@/pages/api/nzb2rd/jobs/[id]').default;
 
 	// What Prisma prints through `log: ['warn', 'error']`, which is the app's
 	// client configuration: `console.log('prisma:error', message)`.
@@ -88,6 +96,7 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 		process.env.DATABASE_URL = url;
 		({ repository } = await import('../repository'));
 		({ Nzb2rdMapService } = await import('./nzb2rdMap'));
+		jobRoute = (await import('@/pages/api/nzb2rd/jobs/[id]')).default;
 	}, 240_000);
 
 	afterAll(async () => {
@@ -191,7 +200,9 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 	});
 
 	it('cancels a release that never had a marker without printing an error', async () => {
-		await expect(repository.removeNzb2rdTransfer('ix:release-9')).resolves.toBeUndefined();
+		await expect(
+			repository.removeNzb2rdTransfer('ix:release-9', 'nzb2rd-P9')
+		).resolves.toBeUndefined();
 		expect(prismaErrors()).toEqual([]);
 	});
 
@@ -200,7 +211,7 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 		await repository.recordNzb2rdTransferPending(marker.releaseId, marker.jobId, marker.imdbId);
 		await repository.addNzb2rdWaiter(marker.releaseId, 'rd-key-b', marker.imdbId);
 
-		await repository.removeNzb2rdTransfer(marker.releaseId);
+		await repository.removeNzb2rdTransfer(marker.releaseId, marker.jobId);
 
 		expect(await keys()).toEqual([]);
 		expect(prismaErrors()).toEqual([]);
@@ -227,7 +238,9 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 	it('lets a real database error through instead of answering as if it worked', async () => {
 		await monitor.$executeRawUnsafe('RENAME TABLE `Cache` TO `CacheAway`');
 		try {
-			await expect(repository.removeNzb2rdTransfer('ix:release-1')).rejects.toThrow();
+			await expect(
+				repository.removeNzb2rdTransfer('ix:release-1', 'nzb2rd-P1')
+			).rejects.toThrow();
 			await expect(repository.removeDebridTransfer('a'.repeat(40))).rejects.toThrow();
 		} finally {
 			await monitor.$executeRawUnsafe('RENAME TABLE `CacheAway` TO `Cache`');
@@ -263,5 +276,63 @@ describe.skipIf(!dockerAvailable)('Clearing transfer markers on MySQL 8.0.36 (In
 		expect(delivered).toEqual(['rd-key-b', 'rd-key-c']);
 		expect(await keys()).toEqual([]);
 		expect(prismaErrors()).toEqual([]);
+	});
+
+	// A Retry records its new job on the release's marker while the old failed
+	// row stays on the Transfers page, and clearing that row deleted the retry's
+	// marker and everyone queued behind it. On 2026-10-10, 33 releases had a
+	// retry queued in nzb2rd and no marker, so their title pages offered every
+	// account a fresh Send, a second Usenet fetch of the same release.
+	// (`fixtures/transfers/marker-clears-2026-10-09.json`)
+	describe('clearing a Transfers row', () => {
+		const { clear, oldJob, retryJob, transferMeta } = clears;
+		const { releaseId, imdbId, title } = transferMeta[1];
+
+		/** `DELETE /api/nzb2rd/jobs/:id` as the Transfers page sends it, with nzb2rd's answer. */
+		const remove = async (jobId: string) => {
+			const fetch = vi
+				.spyOn(globalThis, 'fetch')
+				.mockResolvedValue(
+					new Response(JSON.stringify(clear.nzb2rd.body), { status: clear.nzb2rd.status })
+				);
+			try {
+				const res = createMockResponse();
+				await jobRoute(
+					createMockRequest({
+						method: clear.method,
+						headers: { 'x-rd-api-key': 'rd-key' },
+						query: { ...clear.query, id: jobId },
+					}),
+					res
+				);
+				expect(res.status).toHaveBeenCalledWith(clear.nzb2rd.status);
+			} finally {
+				fetch.mockRestore();
+			}
+		};
+
+		beforeEach(async () => {
+			// What the retry's submit recorded, and an account queued behind it.
+			await repository.recordNzb2rdTransferPending(releaseId, retryJob.id, imdbId, title);
+			await repository.addNzb2rdWaiter(releaseId, 'FIXTURE-WAITING-ACCOUNT', imdbId);
+		});
+
+		it('leaves the retry’s marker and waiters when the old failed row is cleared', async () => {
+			await remove(oldJob.id);
+
+			expect(await repository.getNzb2rdTransfer(releaseId)).toMatchObject({
+				jobId: retryJob.id,
+				status: 'pending',
+			});
+			expect((await repository.getNzb2rdWaiters(releaseId)).map((w) => w.rdKey)).toEqual([
+				'FIXTURE-WAITING-ACCOUNT',
+			]);
+		});
+
+		it('still clears both when the job the marker follows is cancelled', async () => {
+			await remove(retryJob.id);
+
+			expect(await keys()).toEqual([]);
+		});
 	});
 });

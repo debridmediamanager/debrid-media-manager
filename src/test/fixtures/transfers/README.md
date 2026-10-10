@@ -142,3 +142,21 @@ Job ids are replaced by the labels above, release ids by `ix:release-N`, and eac
 RD download link by a `FIXTURE` placeholder of the same shape. Account fields,
 internal URLs and paths are dropped. Names, sizes, hashes, statuses, errors and
 timestamps are as recorded.
+
+`marker-clears-2026-10-09.json` holds a release whose Retry lost its `nzbrd:`
+marker to the Transfers page's Clear on the failed row it replaced. `retryJob`
+(`nzb2rd-C2`) was submitted at 13:48:06 UTC on 2026-10-09 and recorded `pending`;
+`clear` is the request the page sent three seconds later for the old failed job
+(`nzb2rd-C1`), as Nginx Proxy Manager logged it, and nzb2rd's answer. Both jobs
+are nzb2rd's `GET /jobs/:id` read on 2026-10-10, so `oldJob` reads `deleted: 1`
+from that clear; `retryJob` was still 98th of 942 in line. `transferMeta` is
+each job's `xfer:` record. The release had no marker.
+
+`census`: on 2026-10-10, 33 releases had a DMM retry still queued or running in
+nzb2rd and no marker at all. Every one had an older job of the same release
+cleared from `/transfers` after the retry was submitted, 34 clears in all, a
+median of 20 seconds later, each answered `{"ok":true}`.
+
+Job ids are replaced by the labels above and the release id by `ix:release-1`.
+Account fields, internal URLs and paths, the client address and user agent are
+dropped. Names, statuses, errors, timestamps and the queue place are as recorded.

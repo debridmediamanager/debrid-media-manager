@@ -35,9 +35,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const data = await response.json().catch(() => ({}));
 
 		// A cancelled job must not keep blocking a resubmit of the same release.
+		// Only its own marker goes: one a newer job of the release recorded stays.
 		if (req.method === 'DELETE' && response.ok && release) {
 			await db
-				.removeNzb2rdTransfer(release)
+				.removeNzb2rdTransfer(release, id)
 				.catch((e) => console.error('Clearing nzb2rd transfer failed:', e));
 		}
 
