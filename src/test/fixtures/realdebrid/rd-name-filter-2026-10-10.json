@@ -430,10 +430,472 @@
 		{
 			"name": "Probe.S08.2026.1080p.Clean.x265-PRB.mkv",
 			"status": 201
+		},
+		{
+			"name": "Probe.R01.2026.1080p.BluRay.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R02.2026.1080p.Bluray.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R03.2026.1080p.BluRay.DTS-HD.MA.5.1.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R04.2026.1080p.bluray.dts.x265-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R05.2026.1080p.BluRay.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R06.2026.1080p.WEBRip.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R07.2026.1080p.AMZN.WEB-DL.DDP5.1-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.R08.2026.1080p.BluRay-DTS.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.RP1.S01.1080p.x265-PRB",
+			"status": 201,
+			"files": [
+				"Probe.RP1.S01E01.1080p.BluRay.DTS.x264-PRB.mkv",
+				"Probe.RP1.S01E02.1080p.Bluray.DTS.x264-PRB.mkv",
+				"Probe.RP1.S01E03.1080p.BluRay.x264-PRB.mkv",
+				"Probe.RP1.S01E04.1080p.WEB-DL.x265-PRB.mkv",
+				"Probe.RP1.S01E05.1080p.x265-PRB.mkv"
+			]
+		},
+		{
+			"name": "Phone.Booth.2002.BluRay.DTS-HD.MA.5.1.MPEG-2.REMUX-FraMeSToR.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.R10.2026.BluRay.DTS-HD.MA.5.1.AVC.REMUX-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.R11.2026.1080p.BluRay.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP2.2026.REMUX-PRB",
+			"status": 201,
+			"files": [
+				"Cashback.2006.BluRay.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+				"jOBS.2013.BluRay.DTS-HD.MA.5.1.VC-1.REMUX-FraMeSToR.mkv",
+				"Phone.Booth.2002.BluRay.DTS-HD.MA.5.1.MPEG-2.REMUX-FraMeSToR.mkv",
+				"Probe.RP2.2026.1080p.BluRay.DTS.x264-PRB.mkv",
+				"Probe.RP2.2026.1080p.x265-PRB.mkv"
+			]
+		},
+		{
+			"name": "Probe.T01.2026.1080p.BluRay.DTS-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T02.2026.1080p.BluRay.DTS-HD.MA.5.1-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T03.2026.1080p.BluRay.DTS.REMUX-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T04.2026.1080p.BluRay.DTS-HD.MA.5.1.AVC-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T05.2026.1080p.BluRay.DTS-HD.MA.5.1.MPEG-2-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T06.2026.1080p.BluRay.DTS.x264.REMUX-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T07.2026.1080p.BluRay.x264.REMUX-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T08.2026.1080p.WEB-DL.REMUX-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T09.2026.1080p.BluRay.DTS.AVC-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T10.2026.1080p.BluRay.DTS.x265-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.T11.2026.1080p.REMUX.BluRay.DTS.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.T12.2026.1080p.BluRay.DTS.H264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U01.2026.BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.U02.2026.BluRay.DTS.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.U03.2026.BluRay.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U04.2026.720p.BluRay.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U05.2026.2160p.BluRay.DTS-HD.MA.5.1.HEVC-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U06.2026.BluRay.1080p.DTS.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.U07.2026.1080p.REMUX.BluRay.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U08.2026.WEB-DL.DDP5.1-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U09.2026.WEBRip.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U10.2026.HDTV.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.U11.2026.1080p.BluRay.h264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.U12.2026.BluRay.DTS-HD.MA.5.1.MPEG-2.REMUX-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V01.2026.Xp.BluRay.DTS-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.V02.2026.1080.BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V03.2026.1080i.BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V04.2026.1080p BluRay DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V05.2026.1080P.bluray.dts-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.V06.2026.1080p-BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V07.2026.1080p.BluRay-DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.V08.2026.p.BluRay.DTS-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W01.xWEB-DLx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W02.EB-DL-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W03.WEB-D-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W04.xWEBRipx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W05.EBRip-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W06.WEBRi-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W07.xBDRipx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W08.DRip-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W09.BDRi-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W10.xHDRipx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W11.DRip-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W12.HDRi-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W13.xDVDRipx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W14.VDRip-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W15.DVDRi-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W16.xWEB.x264x.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W17.EB.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W18.WEB.x26-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W19.xWEB.h264x.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W20.EB.h264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W21.WEB.h26-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W22.xHDTV.x264x.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W23.DTV.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W24.HDTV.x26-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W25.xHDTV.XviDx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W26.DTV.XviD-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W27.HDTV.Xvi-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W28.xBluRay.x264x.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W29.luRay.x264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W30.BluRay.x26-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W31.xp.BluRay.DTSx.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W32..BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W33.p.BluRay.DT-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W34.2026.1080p.BluRay.AC3-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W35.2026.1080p.BluRay.AAC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W36.2026.1080p.BluRay.DD5.1-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W37.2026.1080p.BluRay.DDP5.1-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W38.2026.1080p.BluRay.TrueHD-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W39.2026.1080p.BluRay.Atmos-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W40.2026.1080p.BluRay.FLAC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W41.2026.1080p.BluRay.LPCM-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W42.2026.1080p.BluRay.DTS-X-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.W43.2026.1080p.BluRay.x265-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W44.2026.1080p.BluRay.HEVC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W45.2026.1080p.BluRay.AVC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W46.2026.1080p.BluRay.H.264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W47.2026.1080p.BluRay.REMUX-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W48.2026.1080p.BluRay.10bit-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W49.2026.1080p.BluRay.HDR-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W50.2026.1080p.BluRay.Hybrid-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W51.2026.1080p.WEB.DDP5.1-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W52.2026.1080p.WEB.AAC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W53.2026.1080p.WEB.x265-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W54.2026.1080p.WEB.H.264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W55.2026.1080p.WEB.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W56.2026.1080p.WEB.AVC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W57.2026.1080p.WEB.HEVC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W58.2026.720p.HDTV.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W59.2026.720p.HDTV.AC3-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W60.2026.720p.HDTV.h264-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W61.2026.720p.HDTV.x265-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W62.2026.720p.HDTV.AAC-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W63.2026.1080p.UHD.BluRay.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W64.2026.1080p.Blu-ray.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W65.2026.1080p.BRRip.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W66.2026.1080p.DVD.DTS-PRB.mkv",
+			"status": 201
+		},
+		{
+			"name": "Probe.W67.2026.1080p.BDRemux.DTS-PRB.mkv",
+			"status": 201
 		}
 	],
-	"measured": "2026-10-10 06:41-07:26 CEST, RD testacct123 (id 20474106, empty library, no other client on the key)",
-	"method": "Same as 2026-10-03 (docs/providers/tools/rd_name_probe.py): each torrent over fresh random bytes served as a BEP19 webseed, so every infohash was new and only names decided, 25 s apart. After every 451 a fixed known-good torrent was re-added ~21 s later; it was accepted all 63 times, so no refusal here is an account-wide block. 'add' is PUT /torrents/addTorrent; 'unrestrict' is POST /unrestrict/link on each file of a downloaded clean-rooted pack. Every refusal was 451 infringing_file (error_code 35). Run A was killed at Q15 and its Q12-Q15 re-run in run B on fresh hashes; both are kept.",
+	"measured": "2026-10-10 06:41-07:26 CEST, RD testacct123 (id 20474106, empty library, no other client on the key); afternoon session 12:35-13:41 CEST on the same account, appended after the morning entries",
+	"method": "Same as 2026-10-03 (docs/providers/tools/rd_name_probe.py): each torrent over fresh random bytes served as a BEP19 webseed, so every infohash was new and only names decided, 25 s apart. After every 451 a fixed known-good torrent was re-added ~21 s later; it was accepted all 63 times, so no refusal here is an account-wide block. 'add' is PUT /torrents/addTorrent; 'unrestrict' is POST /unrestrict/link on each file of a downloaded clean-rooted pack. Every refusal was 451 infringing_file (error_code 35). Run A was killed at Q15 and its Q12-Q15 re-run in run B on fresh hashes; both are kept. Afternoon session, same tool and account: 112 adds and 10 unrestricts; the known-good torrent was accepted all 53 times it ran, including after each of the 41 refusals. It narrowed the eleventh tag to the literal 'p.BluRay.DTS': 1080p/720p/2160p/1080P/Xp/p before 'BluRay.DTS' was refused, while no prefix, 1080, 1080i, UHD, REMUX, '..' or '1080p-' before it was accepted (Phone.Booth, Cashback and jOBS FraMeSToR remuxes also unrestricted 200). The other ten tags are exact substrings needing no context: glued 'xWEB-DLx' and the like were refused, one-character trims accepted. Its R, T, U, V and W names reuse some morning prefixes on different strings.",
 	"unrestrict": [
 		{
 			"name": "Probe.QP1.S01E01.1080p.WEB-DL.x265-PRB.mkv",
@@ -482,6 +944,46 @@
 		{
 			"name": "Probe.QP3.S01E04.DVDRip.XviD-PRB.avi",
 			"status": 451
+		},
+		{
+			"name": "Probe.RP1.S01E01.1080p.BluRay.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP1.S01E02.1080p.Bluray.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP1.S01E03.1080p.BluRay.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP1.S01E04.1080p.WEB-DL.x265-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP1.S01E05.1080p.x265-PRB.mkv",
+			"status": 200
+		},
+		{
+			"name": "Cashback.2006.BluRay.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+			"status": 200
+		},
+		{
+			"name": "jOBS.2013.BluRay.DTS-HD.MA.5.1.VC-1.REMUX-FraMeSToR.mkv",
+			"status": 200
+		},
+		{
+			"name": "Phone.Booth.2002.BluRay.DTS-HD.MA.5.1.MPEG-2.REMUX-FraMeSToR.mkv",
+			"status": 200
+		},
+		{
+			"name": "Probe.RP2.2026.1080p.BluRay.DTS.x264-PRB.mkv",
+			"status": 451
+		},
+		{
+			"name": "Probe.RP2.2026.1080p.x265-PRB.mkv",
+			"status": 200
 		}
 	]
 }

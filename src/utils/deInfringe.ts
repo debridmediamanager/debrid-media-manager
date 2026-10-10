@@ -10,10 +10,11 @@
  *
  * The source/codec pair here is a deliberate over-match: it rewrites all nine
  * `(bluray|hdtv|web).(x264|xvid|h264)` combinations, while RD only blocks five
- * of them (see `RD_BLOCKED_NAME`). Breaking a pattern RD would have accepted
- * costs nothing but a cosmetic change to the name, and keeping the expression
- * identical to debrid's is what guarantees the title computed here matches the
- * torrent that service creates. Do not narrow it without narrowing that one.
+ * of them, and every `BluRay.DTS`, while RD blocks only `p.BluRay.DTS` (see
+ * `RD_BLOCKED_NAME`). Breaking a pattern RD would have accepted costs nothing
+ * but a cosmetic change to the name, and keeping the expression identical to
+ * debrid's is what guarantees the title computed here matches the torrent that
+ * service creates. Do not narrow it without narrowing that one.
  */
 export function deInfringe(name: string): string {
 	return name
@@ -26,20 +27,22 @@ export function deInfringe(name: string): string {
 /**
  * The eleven strings RD refuses, matched anywhere in a name and in any case:
  * `WEB-DL`, `WEBRip`, `BDRip`, `HDRip`, `DVDRip`, `WEB.x264`, `WEB.h264`,
- * `HDTV.x264`, `HDTV.XviD`, `BluRay.x264` and `BluRay.DTS` (whatever follows
- * it). Only the dot or hyphen shown counts, so `WEB.DL`, `WEBDL`, `WEB-Rip`,
- * `BD-Rip`, `BluRay-x264`, `BluRay-DTS` and `WEB-x264` pass, as do
- * `HDTV.H264`, `DTS.x264` and `WEB.DTS`, while `WEB-DLRip` and `PreDVDRip`
- * contain a pattern.
+ * `HDTV.x264`, `HDTV.XviD`, `BluRay.x264` and `p.BluRay.DTS`. Only the dot or
+ * hyphen shown counts, so `WEB.DL`, `WEBDL`, `WEB-Rip`, `BD-Rip`,
+ * `BluRay-x264`, `BluRay-DTS` and `WEB-x264` pass, as do `HDTV.H264`,
+ * `DTS.x264` and `WEB.DTS`, while `WEB-DLRip` and `PreDVDRip` contain a
+ * pattern. The `p` is literal, not a resolution check: `1080p.BluRay.DTS` and
+ * `Xp.BluRay.DTS` are refused, while `BluRay.DTS` after nothing, `1080.`,
+ * `1080i.`, `UHD.`, `REMUX.` or `1080p-` passes.
  *
- * Re-measured 2026-10-10 over 102 adds and 12 unrestricts, each a fresh
+ * Re-measured 2026-10-10 over 214 adds and 22 unrestricts, each a fresh
  * webseed torrent so only the names decided
  * (`src/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json`). On
  * 2026-10-03 RD had shrunk this to five case-sensitive literals; a week later
  * it was back to the 2026-08-25 list, case-insensitive again.
  */
 const RD_BLOCKED_NAME =
-	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.(?:x264|dts)|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
+	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.x264|p\.bluray\.dts|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
 
 /**
  * Whether RD blocks this torrent outright, judged on its display title *and*

@@ -15,7 +15,7 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.1080p.web-dl.x265-GROUP',
 		'Show.S01E01.720p.hdtv.x264-GROUP',
 		// RD took these on 2026-10-03 and refused them again on 2026-10-10:
-		// the rip family, `BluRay.x264`, and `BluRay.DTS` (refused 2026-08-25).
+		// the rip family, `BluRay.x264`, and `p.BluRay.DTS` (refused 2026-08-25).
 		'Show.S01E01.1080p.WEBRip.x265-RARBG',
 		'Movie.2019.720p.BDRip.x264-GROUP',
 		'Movie.2019.720p.HDRip.XviD-GROUP',
@@ -50,6 +50,11 @@ describe('isRdBlockedName', () => {
 		// `DTS` blocks only right after `BluRay` (2026-10-10).
 		'Movie.2015.1080p.DTS.x264-GROUP',
 		'Movie.2015.1080p.WEB.DTS.x265-GROUP',
+		// And `BluRay.DTS` only right after a `p` (2026-10-10 afternoon): a user
+		// reported these FraMeSToR remuxes flagged, and RD added and unrestricted them.
+		'Phone.Booth.2002.BluRay.DTS-HD.MA.5.1.MPEG-2.REMUX-FraMeSToR.mkv',
+		'Cashback.2006.BluRay.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv',
+		'jOBS.2013.BluRay.DTS-HD.MA.5.1.VC-1.REMUX-FraMeSToR.mkv',
 	])('passes %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(false);
 	});

@@ -1339,7 +1339,7 @@ describe('releases Real-Debrid refuses by name', () => {
 
 		const served = new Set(hashesOf(await wholeFeed(['rd', 'cached'], MOVIE_ID)));
 
-		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(56);
+		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(97);
 		for (const probe of probes) {
 			expect(served.has(probe.hash), `${probe.name} answered ${probe.status}`).toBe(
 				probe.status === 201
