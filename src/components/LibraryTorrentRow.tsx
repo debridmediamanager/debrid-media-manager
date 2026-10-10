@@ -27,6 +27,7 @@ import { shortenNumber } from '@/utils/speed';
 import { getTorBoxStatusText } from '@/utils/torBoxStatus';
 import { isWebDownloadRowId } from '@/utils/torboxWebDownload';
 import {
+	BadgeCheck,
 	Cast,
 	Check,
 	Film,
@@ -442,18 +443,21 @@ function TorrentRow({
 									}[torrent.mediaType]
 								}
 							</div>
-							&nbsp;<strong>{torrent.title}</strong>{' '}
-							{identification && (
-								<Link
-									href={`/movie/${identification.imdbId}`}
-									title={`Identified from the filename as ${identification.imdbId}`}
-									className="ml-1 inline-block cursor-pointer rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0 text-xs font-bold text-yellow-100 transition-colors hover:bg-yellow-800/50"
-									onClick={(e) => e.stopPropagation()}
-								>
+							&nbsp;
+							{identification ? (
+								<strong>
 									{identification.title}
 									{identification.year ? ` (${identification.year})` : ''}
-								</Link>
-							)}
+									<BadgeCheck
+										className="ml-1 inline-block h-4 w-4 align-text-bottom text-sky-400"
+										aria-label={`Verified: identified from the filename as ${identification.imdbId}`}
+									>
+										<title>{`Verified: identified from the filename as ${identification.imdbId}`}</title>
+									</BadgeCheck>
+								</strong>
+							) : (
+								<strong>{torrent.title}</strong>
+							)}{' '}
 							{hashFilterText ? (
 								<Link
 									href={`/library?hash=${torrent.hash}&page=1`}
@@ -482,15 +486,19 @@ function TorrentRow({
 									{tvTitleFilterText}
 								</Link>
 							)}
-							{torrent.info && (
+							{(identification || torrent.info) && (
 								<Link
-									href={`/search?query=${encodeURIComponent(
-										(
-											torrent.info.title +
-											' ' +
-											(torrent.info.year || '')
-										).trim() || torrent.title
-									)}`}
+									href={
+										identification
+											? `/movie/${identification.imdbId}`
+											: `/search?query=${encodeURIComponent(
+													(
+														torrent.info!.title +
+														' ' +
+														(torrent.info!.year || '')
+													).trim() || torrent.title
+												)}`
+									}
 									target="_blank"
 									className="ml-1 mr-2 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
 									onClick={(e) => e.stopPropagation()}

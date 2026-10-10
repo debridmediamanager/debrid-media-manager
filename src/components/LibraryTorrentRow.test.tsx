@@ -764,20 +764,43 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			render(
 				<table>
 					<tbody>
-						<LibraryTorrentRow {...defaultProps} identification={identification} />
+						<LibraryTorrentRow
+							{...defaultProps}
+							torrent={{
+								...mockTorrent,
+								title: 'Spider-Man Brand New Day (2026)',
+								info: {
+									title: 'Spider-Man Brand New Day',
+									year: 2026,
+								} as unknown as UserTorrent['info'],
+							}}
+							identification={identification}
+						/>
 					</tbody>
 				</table>
 			);
 
-		it('links the movie the filename was identified as', () => {
-			renderRow({ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015 });
-			const link = screen.getByRole('link', { name: 'Mad Max: Fury Road (2015)' });
-			expect(link).toHaveAttribute('href', '/movie/tt1392190');
+		it('replaces the parsed title with the verified one and links Search again to its page', () => {
+			renderRow({ imdbId: 'tt22084616', title: 'Spider-Man: Brand New Day', year: 2026 });
+			expect(screen.getByText('Spider-Man: Brand New Day (2026)')).toBeInTheDocument();
+			expect(screen.queryByText('Spider-Man Brand New Day (2026)')).toBeNull();
+			expect(
+				screen.getByLabelText('Verified: identified from the filename as tt22084616')
+			).toBeInTheDocument();
+			expect(screen.getByRole('link', { name: 'Search again' })).toHaveAttribute(
+				'href',
+				'/movie/tt22084616'
+			);
 		});
 
-		it('shows nothing without a confident identification', () => {
+		it('keeps the parsed title and the search without a confident identification', () => {
 			renderRow();
-			expect(screen.queryByTitle(/Identified from the filename/)).toBeNull();
+			expect(screen.getByText('Spider-Man Brand New Day (2026)')).toBeInTheDocument();
+			expect(screen.queryByLabelText(/Verified/)).toBeNull();
+			expect(screen.getByRole('link', { name: 'Search again' })).toHaveAttribute(
+				'href',
+				'/search?query=Spider-Man%20Brand%20New%20Day%202026'
+			);
 		});
 	});
 });
