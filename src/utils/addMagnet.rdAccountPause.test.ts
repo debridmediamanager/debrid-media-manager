@@ -49,7 +49,7 @@ import { RD_ADD_PAUSE_MS, rdAddPauseRetryMessage, rdAddRefusedMessage } from './
 
 const TOKEN = 'rd-token-of-the-recorded-account';
 const OTHER_TOKEN = 'rd-token-of-someone-else';
-const CLEAN_TITLE = 'Some.Show.S01E01.1080p.BluRay.x264-GROUP';
+const CLEAN_TITLE = 'Some.Show.S01E01.1080p.BluRay.x265-GROUP';
 const BLOCKED_TITLE = 'Some.Show.S01E01.1080p.WEB-DL.DDP5.1.H.264-GROUP';
 
 const at = (name: SequenceName, role: string, hash?: string) => {

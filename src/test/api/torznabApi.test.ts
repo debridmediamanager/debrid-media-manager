@@ -12,7 +12,7 @@ import {
 	UNCACHED_SEEDERS,
 } from '@/services/torznab/search';
 import { DEFAULT_LIMIT, MAX_LIMIT, TorznabRssItem } from '@/services/torznab/xml';
-import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json';
 import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
 import sonarrEpisodeSearch from '@/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
@@ -1237,8 +1237,8 @@ describe('releases Real-Debrid refuses by name', () => {
 			{ route: ['rd', 'cached', 'api'] }
 		);
 
-		// 76 of the page's releases are held on RD; RD refuses 29 of them by name.
-		expect(body(res)).toContain('total="47"');
+		// 76 of the page's releases are held on RD; RD refuses 54 of them by name.
+		expect(body(res)).toContain('total="22"');
 		expect(attrValue(body(res), 'infohash')).not.toContain(REPORTED);
 	});
 
@@ -1246,9 +1246,9 @@ describe('releases Real-Debrid refuses by name', () => {
 		const deadOfWinter = await wholeFeed(['rd', 'cached'], DEAD_OF_WINTER);
 		const theCrow = await wholeFeed(['rd', 'cached'], THE_CROW);
 
-		expect(deadOfWinter).toHaveLength(47);
-		// 79 held once the Cyrillic titles the site also hides are gone; 20 refused.
-		expect(theCrow).toHaveLength(59);
+		expect(deadOfWinter).toHaveLength(22);
+		// 79 held once the Cyrillic titles the site also hides are gone; 29 refused.
+		expect(theCrow).toHaveLength(50);
 		expect(hashesOf(deadOfWinter)).not.toContain(REPORTED);
 		expect([...deadOfWinter, ...theCrow].filter(refusedByRd)).toEqual([]);
 		expect([...deadOfWinter, ...theCrow].every((item) => item.seeders === CACHED_SEEDERS)).toBe(
@@ -1256,7 +1256,9 @@ describe('releases Real-Debrid refuses by name', () => {
 		);
 	});
 
-	it('keeps the releases RD has taken since dropping the rip family and BluRay.x264', async () => {
+	// RD took these on 2026-10-03 and refused the rip family and BluRay.x264
+	// again, in any case, on 2026-10-10.
+	it('leaves out held releases RD refuses again since 2026-10-10', async () => {
 		const served = hashesOf([
 			...(await wholeFeed(['rd', 'cached'], DEAD_OF_WINTER)),
 			...(await wholeFeed(['rd', 'cached'], THE_CROW)),
@@ -1268,7 +1270,7 @@ describe('releases Real-Debrid refuses by name', () => {
 			'c06e262ee527b9c7b923f913341018fe2cb4b8d8', // The.Crow.2024.1080p.BluRay.x264-ATELiER_EniaHD.mkv
 		]) {
 			expect(rdCached.has(control), control).toBe(true);
-			expect(served, titleOf(control)).toContain(control);
+			expect(served, titleOf(control)).not.toContain(control);
 		}
 	});
 
@@ -1283,7 +1285,7 @@ describe('releases Real-Debrid refuses by name', () => {
 				isRdBlockedName(row.originalFilename, [row.filename])
 			);
 		});
-		expect(spacedTitles).toHaveLength(9);
+		expect(spacedTitles).toHaveLength(10);
 
 		const served = hashesOf(await wholeFeed(['rd', 'cached'], THE_CROW));
 		for (const row of spacedTitles) {
@@ -1295,8 +1297,8 @@ describe('releases Real-Debrid refuses by name', () => {
 		const deadOfWinter = await wholeFeed(['rd'], DEAD_OF_WINTER);
 		const theCrow = await wholeFeed(['rd'], THE_CROW);
 
-		expect(deadOfWinter).toHaveLength(227 - 74);
-		expect(theCrow).toHaveLength(411 - 99);
+		expect(deadOfWinter).toHaveLength(227 - 137);
+		expect(theCrow).toHaveLength(411 - 185);
 		expect(hashesOf(deadOfWinter)).not.toContain(REPORTED);
 		expect([...deadOfWinter, ...theCrow].filter(refusedByRd)).toEqual([]);
 	});
@@ -1313,7 +1315,7 @@ describe('releases Real-Debrid refuses by name', () => {
 		expect(hashesOf(await wholeFeed(['ad', 'cached'], DEAD_OF_WINTER))).toContain(REPORTED);
 	});
 
-	// RD's own answers from the recorded probe of 2026-10-03, each a fresh
+	// RD's own answers from the recorded probe of 2026-10-10, each a fresh
 	// webseed torrent so only the names decided. An add is judged on the root
 	// name, and multi-file entries whose files RD later refused to unrestrict
 	// were still taken; an unrestrict is judged on the file's own name, which
@@ -1337,7 +1339,7 @@ describe('releases Real-Debrid refuses by name', () => {
 
 		const served = new Set(hashesOf(await wholeFeed(['rd', 'cached'], MOVIE_ID)));
 
-		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(20);
+		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(56);
 		for (const probe of probes) {
 			expect(served.has(probe.hash), `${probe.name} answered ${probe.status}`).toBe(
 				probe.status === 201

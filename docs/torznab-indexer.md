@@ -260,8 +260,8 @@ scopes the signal to their own provider.
 
 Real-Debrid refuses some releases by name whether or not it already holds them: an add is
 judged on the torrent's own name and an unrestrict on each file's name. The rule is
-`isRdBlockedName` in `src/utils/deInfringe.ts` (five case-sensitive literals, measured
-2026-10-03); the feed only decides which names to give it. Reported 2026-09-08:
+`isRdBlockedName` in `src/utils/deInfringe.ts` (eleven strings in any case, measured
+2026-10-10); the feed only decides which names to give it. Reported 2026-09-08:
 `/api/torznab/rd/cached` listed `Dead.Of.Winter.2025.2160p.AMZN.WEB-DL.DDP5.1.H.265-FLUX`,
 which DMM's RD table marked downloaded, and RD refused it.
 
@@ -371,7 +371,7 @@ existing switch, `TYPESAFE_API_KEY`, and passes everything through without it.
 `src/test/api/torznabApi.test.ts` (endpoint behavior end to end; its Real-Debrid name cases
 run on `src/test/fixtures/torznab/rd-refused-names-2026-10-03.json`, two whole production
 library pages with their RD rows, and on RD's recorded probe answers in
-`src/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json`; its paging cases run a model
+`src/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json`; its paging cases run a model
 of Sonarr's paging through the route and the real limiter against
 `src/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json`, the reported search as
 the proxy log recorded it plus the production library page it paged through, and the same

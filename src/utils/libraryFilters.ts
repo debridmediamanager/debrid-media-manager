@@ -78,7 +78,7 @@ export const filterLibraryItems = ({
 			(torrent) => torrent.id.startsWith('rd:') && isRdBlockedFilename(torrent.filename)
 		);
 		nextHelpText =
-			"RD torrents whose names match Real-Debrid's filename filter (WEB-DL, WEB.x264, WEB.H264, HDTV.x264 or HDTV.XviD, case-sensitive). RD refuses to add these. This is a minimum count — only torrent names are checked, not the files inside, which RD refuses to stream when their own names match. Use zurg's manage page for the full count.";
+			"RD torrents whose names match Real-Debrid's filename filter (WEB-DL, WEBRip, BDRip, HDRip, DVDRip, WEB.x264, WEB.h264, HDTV.x264, HDTV.XviD, BluRay.x264 or BluRay.DTS, in any case). RD refuses to add these. This is a minimum count — only torrent names are checked, not the files inside, which RD refuses to stream when their own names match. Use zurg's manage page for the full count.";
 	}
 	if (statusValue === 'sametitle') {
 		filteredList = filteredList.filter((torrent) => sameTitle.has(normalize(torrent.title)));

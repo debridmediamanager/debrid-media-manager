@@ -45,7 +45,7 @@ const timeline = (client: Client) =>
 
 const TOKEN = 'rd-token-of-the-recorded-browser';
 const HASH = '0123456789abcdef0123456789abcdef01234567';
-const CLEAN_TITLE = 'Some.Movie.2024.1080p.BluRay.x264-GROUP';
+const CLEAN_TITLE = 'Some.Movie.2024.1080p.BluRay.x265-GROUP';
 
 const realAxios = __testing.realDebridAxios as any;
 /** What RD answers the next addMagnet: the recorded status, or 451 from then on. */

@@ -1,4 +1,4 @@
-import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json';
 import { describe, expect, it } from 'vitest';
 import { deInfringe, isRdBlockedName } from './deInfringe';
 
@@ -10,6 +10,19 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.HDTV.XviD-AFG',
 		'Show.S01E01.1080p.WEB.x264-GROUP',
 		'Show.S01E01.1080p.WEB.H264-GROUP',
+		// In any case since 2026-10-10.
+		'Show.S01E01.1080p.WEB.h264-GROUP',
+		'Show.S01E01.1080p.web-dl.x265-GROUP',
+		'Show.S01E01.720p.hdtv.x264-GROUP',
+		// RD took these on 2026-10-03 and refused them again on 2026-10-10:
+		// the rip family, `BluRay.x264`, and `BluRay.DTS` (refused 2026-08-25).
+		'Show.S01E01.1080p.WEBRip.x265-RARBG',
+		'Movie.2019.720p.BDRip.x264-GROUP',
+		'Movie.2019.720p.HDRip.XviD-GROUP',
+		'Movie.1999.DVDRip.XviD-GROUP',
+		'Movie.2015.1080p.BluRay.x264-GROUP',
+		'Beautiful.Creatures.2013.1080p.BluRay.DTS.x264-EbP',
+		'Movie.2015.1080p.BluRay.DTS.x265-GROUP',
 	])('flags %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(true);
 	});
@@ -34,19 +47,9 @@ describe('isRdBlockedName', () => {
 		'Movie.2015.1080p.BluRay.DD5.1.x264-GROUP',
 		'Movie.2015.1080p.Blu-Ray.DTS.x264-GROUP',
 		'Movie.2015.1080p.BluRay-DTS.x264-GROUP',
-		// RD matches case-sensitively since 2026-10-03.
-		'Show.S01E01.1080p.WEB.h264-GROUP',
-		'Show.S01E01.1080p.web-dl.x265-GROUP',
-		'Show.S01E01.720p.hdtv.x264-GROUP',
-		// RD refused these until September and took every one by 2026-10-03:
-		// the rip family, `BluRay.x264`, and `BluRay.DTS` (refused 2026-08-25).
-		'Show.S01E01.1080p.WEBRip.x265-RARBG',
-		'Movie.2019.720p.BDRip.x264-GROUP',
-		'Movie.2019.720p.HDRip.XviD-GROUP',
-		'Movie.1999.DVDRip.XviD-GROUP',
-		'Movie.2015.1080p.BluRay.x264-GROUP',
-		'Beautiful.Creatures.2013.1080p.BluRay.DTS.x264-EbP',
-		'Movie.2015.1080p.BluRay.DTS.x265-GROUP',
+		// `DTS` blocks only right after `BluRay` (2026-10-10).
+		'Movie.2015.1080p.DTS.x264-GROUP',
+		'Movie.2015.1080p.WEB.DTS.x265-GROUP',
 	])('passes %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(false);
 	});
@@ -75,9 +78,10 @@ describe('isRdBlockedName', () => {
 		expect(deInfringe(name)).not.toBe(name);
 	});
 
-	it('matches case-sensitively and mid-name', () => {
+	it('matches in any case and mid-name', () => {
 		expect(isRdBlockedName('pack/Movie.2019.1080p.WEB-DL.x265/file.mkv')).toBe(true);
-		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(false);
+		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(true);
+		expect(isRdBlockedName('pack/Movie.2019.1080p.WEB.DL.x265/file.mkv')).toBe(false);
 		expect(isRdBlockedName('')).toBe(false);
 	});
 
@@ -97,11 +101,8 @@ describe('isRdBlockedName', () => {
 			expect(isRdBlockedName(title)).toBe(false);
 		});
 
-		// RD stopped refusing lowercase `WEB.h264` by 2026-10-03, so this exact
-		// release now passes; the same shape with `WEB.H264` is still refused.
 		it('flags it once the filenames are supplied', () => {
-			expect(isRdBlockedName(title, [path])).toBe(false);
-			expect(isRdBlockedName(title, [path.replaceAll('WEB.h264', 'WEB.H264')])).toBe(true);
+			expect(isRdBlockedName(title, [path])).toBe(true);
 		});
 
 		// The uploader's rewrite of this very release is in RD and downloaded to
@@ -119,6 +120,15 @@ describe('isRdBlockedName', () => {
 });
 
 describe('deInfringe', () => {
+	// Every name RD refused on 2026-10-10, rewritten. The debrid and nzb2rd
+	// uploaders run this same expression before building a torrent.
+	it.each(rdNameFilterProbe.add.filter(({ status }) => status === 451))(
+		'rewrites $name into a name RD takes',
+		({ name }) => {
+			expect(isRdBlockedName(deInfringe(name))).toBe(false);
+		}
+	);
+
 	it('breaks every blocked pattern it rewrites', () => {
 		const rewritten = [
 			'Show.S01E01.1080p.WEB-DL.H265',

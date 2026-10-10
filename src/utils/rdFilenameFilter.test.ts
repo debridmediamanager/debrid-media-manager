@@ -1,4 +1,4 @@
-import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-03.json';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json';
 import { describe, expect, it } from 'vitest';
 import { isRdBlockedFilename } from './rdFilenameFilter';
 

@@ -171,9 +171,9 @@ export const handleAddAsMagnetInRd = async (
 	title: string = '',
 	pauseRetryCount: number = 0,
 	/**
-	 * The torrent's own filenames, when the caller knows them. RD blocks on the
-	 * paths inside the torrent as well as its name, and a display title can have
-	 * lost the dots the block keys on — see `isRdBlockedName`.
+	 * The torrent's own filenames, when the caller knows them. RD judges an add
+	 * on the torrent's root name, which a display title can have lost the dots
+	 * of while the paths inside still carry it — see `isRdBlockedName`.
 	 */
 	filenames: readonly string[] = []
 ): Promise<RdAddResult> => {
