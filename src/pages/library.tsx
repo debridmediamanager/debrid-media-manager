@@ -2053,6 +2053,13 @@ function TorrentsPage() {
 												onRefreshLibrary={refreshLibrary}
 												identification={identifications[torrent.id]}
 												onShowInfo={async (t) => {
+													const found = identifications[t.id];
+													const poster = found
+														? {
+																imdbId: found.imdbId,
+																title: found.title,
+															}
+														: undefined;
 													if (t.id.startsWith('rd:') && rdKey) {
 														const info = await getTorrentInfo(
 															rdKey,
@@ -2098,16 +2105,18 @@ function TorrentsPage() {
 															rdKey,
 															setUserTorrentsList,
 															torrentDB,
-															setSelectedTorrents
+															setSelectedTorrents,
+															poster
 														);
 													} else if (t.id.startsWith('ad:') && adKey) {
-														await handleShowInfoForAD(t, adKey);
+														await handleShowInfoForAD(t, adKey, poster);
 													} else if (t.id.startsWith('tb:') && tbKey) {
 														await handleShowInfoForTB(
 															t,
 															tbKey,
 															setUserTorrentsList,
-															setSelectedTorrents
+															setSelectedTorrents,
+															poster
 														);
 													} else if (t.id.startsWith('pm:') && pmKey) {
 														await handleShowInfoForPM(
@@ -2115,7 +2124,8 @@ function TorrentsPage() {
 															pmKey,
 															setUserTorrentsList,
 															setSelectedTorrents,
-															shouldDownloadMagnets
+															shouldDownloadMagnets,
+															poster
 														);
 													} else if (t.id.startsWith('oc:') && ocKey) {
 														await handleShowInfoForOC(
@@ -2123,7 +2133,8 @@ function TorrentsPage() {
 															ocKey,
 															setUserTorrentsList,
 															setSelectedTorrents,
-															shouldDownloadMagnets
+															shouldDownloadMagnets,
+															poster
 														);
 													} else if (t.id.startsWith('dl:') && dlKey) {
 														await handleShowInfoForDL(
@@ -2131,7 +2142,8 @@ function TorrentsPage() {
 															dlKey,
 															setUserTorrentsList,
 															setSelectedTorrents,
-															shouldDownloadMagnets
+															shouldDownloadMagnets,
+															poster
 														);
 													} else {
 														console.error(

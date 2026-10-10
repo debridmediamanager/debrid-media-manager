@@ -1,3 +1,9 @@
+/** A title's poster shown above a dialog's content. */
+export interface DialogPoster {
+	imdbId: string;
+	title: string;
+}
+
 export interface FireOptions {
 	title?: string;
 	text?: string;
@@ -26,6 +32,7 @@ export interface FireOptions {
 	width?: string;
 	showCloseButton?: boolean;
 	inputAutoFocus?: boolean;
+	poster?: DialogPoster;
 }
 
 export interface ModalResult {

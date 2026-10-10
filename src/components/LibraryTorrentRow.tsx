@@ -503,7 +503,7 @@ function TorrentRow({
 									className="ml-1 mr-2 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
 									onClick={(e) => e.stopPropagation()}
 								>
-									Search again
+									{identification ? 'Go to movie page' : 'Search again'}
 								</Link>
 							)}
 							<br />

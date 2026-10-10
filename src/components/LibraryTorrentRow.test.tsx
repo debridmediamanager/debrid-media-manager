@@ -780,14 +780,14 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 				</table>
 			);
 
-		it('replaces the parsed title with the verified one and links Search again to its page', () => {
+		it('replaces the parsed title with the verified one and links to its movie page', () => {
 			renderRow({ imdbId: 'tt22084616', title: 'Spider-Man: Brand New Day', year: 2026 });
 			expect(screen.getByText('Spider-Man: Brand New Day (2026)')).toBeInTheDocument();
 			expect(screen.queryByText('Spider-Man Brand New Day (2026)')).toBeNull();
 			expect(
 				screen.getByLabelText('Verified: identified from the filename as tt22084616')
 			).toBeInTheDocument();
-			expect(screen.getByRole('link', { name: 'Search again' })).toHaveAttribute(
+			expect(screen.getByRole('link', { name: 'Go to movie page' })).toHaveAttribute(
 				'href',
 				'/movie/tt22084616'
 			);

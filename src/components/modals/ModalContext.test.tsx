@@ -37,6 +37,26 @@ describe('ModalContext', () => {
 		await waitFor(() => expect((window as any).closePopup).toBeUndefined());
 	});
 
+	it('shows a poster above an html dialog when one is given', async () => {
+		const modal = await renderWithProvider();
+		void modal.fire({
+			html: '<h1>Mad.Max.Fury.Road.2015.2160p</h1>',
+			poster: { imdbId: 'tt1392190', title: 'Mad Max: Fury Road' },
+			showConfirmButton: false,
+			showCancelButton: false,
+		});
+		const poster = await screen.findByTestId('dialog-poster');
+		expect(poster.querySelector('img')?.getAttribute('src')).toContain('tt1392190');
+		expect(screen.getByText('Mad.Max.Fury.Road.2015.2160p')).toBeTruthy();
+	});
+
+	it('shows no poster without one', async () => {
+		const modal = await renderWithProvider();
+		void modal.fire({ html: '<h1>Some.Release.2020</h1>', showCancelButton: false });
+		await screen.findByText('Some.Release.2020');
+		expect(screen.queryByTestId('dialog-poster')).toBeNull();
+	});
+
 	it('renders loading modal when showLoading is called', async () => {
 		const modal = await renderWithProvider();
 		modal.showLoading();

@@ -15,6 +15,7 @@ import { filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
 import { Dispatch, SetStateAction } from 'react';
 import Modal from '../components/modals/modal';
+import type { DialogPoster } from '../components/modals/types';
 import { handleReinsertTorrentinRd } from './addMagnet';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getRdStatus } from './fetchTorrents';
@@ -27,7 +28,8 @@ export async function handleShowInfoForRD(
 	rdKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
 	torrentDB: UserTorrentDB,
-	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
+	poster?: DialogPoster
 ) {
 	Modal.showLoading();
 	let info: TorrentInfoResponse;
@@ -215,6 +217,7 @@ export async function handleShowInfoForRD(
 		'movie',
 		undefined,
 		{
+			poster,
 			onDeleteRd,
 			onReinsertRd,
 			onRefreshRd: async () => {
@@ -232,19 +235,20 @@ export async function handleShowInfoForRD(
 	);
 }
 
-export function handleShowInfoForAD(t: UserTorrent, adKey: string) {
+export function handleShowInfoForAD(t: UserTorrent, adKey: string, poster?: DialogPoster) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
 		alert('No player selected');
 	}
-	showInfoForAD(player, adKey, t.adData!);
+	showInfoForAD(player, adKey, t.adData!, '', undefined, { poster });
 }
 
 export async function handleShowInfoForTB(
 	t: UserTorrent,
 	tbKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
-	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
+	poster?: DialogPoster
 ) {
 	if (!t.tbData) {
 		alert(`No TorBox data available for: ${t.title}`);
@@ -268,7 +272,7 @@ export async function handleShowInfoForTB(
 		tbKey,
 		t.tbData,
 		undefined,
-		{ onDeleteTb },
+		{ onDeleteTb, poster },
 		isWebDownloadRowId(t.id)
 	);
 }
@@ -278,7 +282,8 @@ export async function handleShowInfoForPM(
 	pmKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
 	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
-	shouldDownloadMagnets?: boolean
+	shouldDownloadMagnets?: boolean,
+	poster?: DialogPoster
 ) {
 	const onDeletePm = async (key: string, id: string) => {
 		const { handleDeletePmTorrent } = await import('./deleteTorrent');
@@ -292,7 +297,7 @@ export async function handleShowInfoForPM(
 	};
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
-	await showInfoForPM(player, pmKey, t, shouldDownloadMagnets, { onDeletePm });
+	await showInfoForPM(player, pmKey, t, shouldDownloadMagnets, { onDeletePm, poster });
 }
 
 export async function handleShowInfoForOC(
@@ -300,7 +305,8 @@ export async function handleShowInfoForOC(
 	ocKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
 	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
-	shouldDownloadMagnets?: boolean
+	shouldDownloadMagnets?: boolean,
+	poster?: DialogPoster
 ) {
 	const onDeleteOc = async (key: string, id: string) => {
 		const { handleDeleteOcTorrent } = await import('./deleteTorrent');
@@ -314,7 +320,7 @@ export async function handleShowInfoForOC(
 	};
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
-	await showInfoForOC(player, ocKey, t, shouldDownloadMagnets, { onDeleteOc });
+	await showInfoForOC(player, ocKey, t, shouldDownloadMagnets, { onDeleteOc, poster });
 }
 
 export async function handleShowInfoForDL(
@@ -322,7 +328,8 @@ export async function handleShowInfoForDL(
 	dlKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
 	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
-	shouldDownloadMagnets?: boolean
+	shouldDownloadMagnets?: boolean,
+	poster?: DialogPoster
 ) {
 	const onDeleteDl = async (key: string, id: string) => {
 		const { handleDeleteDlTorrent } = await import('./deleteTorrent');
@@ -336,5 +343,5 @@ export async function handleShowInfoForDL(
 	};
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
-	await showInfoForDL(player, dlKey, t, shouldDownloadMagnets, { onDeleteDl });
+	await showInfoForDL(player, dlKey, t, shouldDownloadMagnets, { onDeleteDl, poster });
 }

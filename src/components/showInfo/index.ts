@@ -1,3 +1,4 @@
+import type { DialogPoster } from '@/components/modals/types';
 import { ZURG_SITE_URL } from '@/components/ZurgBanner';
 import { getSeedboxTorrent, type DebridLinkFile } from '@/services/debridLink';
 import {
@@ -77,6 +78,8 @@ type ShowInfoHandlers = {
 	onDeleteAd?: (adKey: string, id: string) => Promise<void>;
 	onRestartAd?: (adKey: string, id: string) => Promise<void>;
 	onRefreshRd?: (limit?: number) => Promise<void>; // optional refresh hook
+	/** The movie the library identified the release as, shown above the details. */
+	poster?: DialogPoster;
 };
 
 export const showInfoForRD = async (
@@ -247,6 +250,7 @@ export const showInfoForRD = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {
@@ -750,6 +754,7 @@ export const showInfoForAD = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {
@@ -961,6 +966,7 @@ export const showInfoForTB = async (
 	shouldDownloadMagnets?: boolean,
 	handlers: {
 		onDeleteTb?: (tbKey: string, id: string) => Promise<void>;
+		poster?: DialogPoster;
 	} = {},
 	// A web download has no magnet and no shareable infohash, and its links come
 	// from TorBox's separate webdl endpoint.
@@ -1045,6 +1051,7 @@ export const showInfoForTB = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {
@@ -1195,7 +1202,10 @@ export const showInfoForPM = async (
 		selectedFiles: any[];
 	},
 	shouldDownloadMagnets?: boolean,
-	handlers: { onDeletePm?: (pmKey: string, id: string) => Promise<void> } = {}
+	handlers: {
+		onDeletePm?: (pmKey: string, id: string) => Promise<void>;
+		poster?: DialogPoster;
+	} = {}
 ): Promise<void> => {
 	// A row whose transfer has been cleared has no info hash at all, so the
 	// magnet-shaped actions have nothing to act on.
@@ -1246,6 +1256,7 @@ export const showInfoForPM = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {
@@ -1393,7 +1404,10 @@ export const showInfoForOC = async (
 		added: Date;
 	},
 	shouldDownloadMagnets?: boolean,
-	handlers: { onDeleteOc?: (ocKey: string, id: string) => Promise<void> } = {}
+	handlers: {
+		onDeleteOc?: (ocKey: string, id: string) => Promise<void>;
+		poster?: DialogPoster;
+	} = {}
 ): Promise<void> => {
 	const requestId = parseOffcloudRowId(torrent.id);
 	if (!requestId) {
@@ -1505,6 +1519,7 @@ export const showInfoForOC = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {
@@ -1617,7 +1632,10 @@ export const showInfoForDL = async (
 		added: Date;
 	},
 	shouldDownloadMagnets?: boolean,
-	handlers: { onDeleteDl?: (dlKey: string, id: string) => Promise<void> } = {}
+	handlers: {
+		onDeleteDl?: (dlKey: string, id: string) => Promise<void>;
+		poster?: DialogPoster;
+	} = {}
 ): Promise<void> => {
 	// Row ids are `dl:<torrentId>`, parsed inline for the same reason the delete
 	// path parses inline: there is exactly one row shape.
@@ -1707,6 +1725,7 @@ export const showInfoForDL = async (
 
 	await Modal.fire({
 		html,
+		poster: handlers.poster,
 		showConfirmButton: false,
 		showCancelButton: false,
 		customClass: {

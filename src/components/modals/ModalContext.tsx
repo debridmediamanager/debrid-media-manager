@@ -9,6 +9,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import Poster from '../poster';
 import type { FireOptions, ModalResult } from './types';
 
 interface ModalContextType {
@@ -424,6 +425,7 @@ const InputDialog: React.FC<FireOptions & BaseModalProps> = ({
 const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 	title,
 	html,
+	poster,
 	preConfirm,
 	showCancelButton = true,
 	confirmButtonText = 'OK',
@@ -483,6 +485,11 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 			>
 				{title && (
 					<h2 className="mb-4 text-center text-xl font-bold text-gray-100">{title}</h2>
+				)}
+				{poster && (
+					<div className="mx-auto mb-3 w-32" data-testid="dialog-poster">
+						<Poster imdbId={poster.imdbId} title={poster.title} />
+					</div>
 				)}
 				{html && (
 					<div
