@@ -2,6 +2,7 @@ import type { AnimeSearchResult } from '@/services/database/anime';
 import { TraktSearchResult } from '@/services/trakt';
 import { animePagePath } from '@/utils/anidbId';
 import { fetchAnimeSuggestions } from '@/utils/animeSuggestions';
+import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -92,6 +93,7 @@ export function SearchBar({
 	const [suggestions, setSuggestions] = useState<TraktSearchResult[]>([]);
 	const [animeSuggestions, setAnimeSuggestions] = useState<AnimeSearchResult[]>([]);
 	const [showSuggestions, setShowSuggestions] = useState(false);
+	const [hideAnime] = useState(() => getLocalStorageBoolean('settings:hideAnime', false));
 	const suggestionsRef = useRef<HTMLDivElement>(null);
 	const debouncedQuery = useDebounce(typedQuery, 300);
 
@@ -133,21 +135,22 @@ export function SearchBar({
 				if (current) setSuggestions([]);
 			});
 
-		fetchAnimeSuggestions(debouncedQuery)
-			.then((rows) => {
-				if (!current) return;
-				setAnimeSuggestions(rows);
-				if (rows.length > 0) setShowSuggestions(true);
-			})
-			.catch((error) => {
-				console.error('Error fetching anime suggestions:', error);
-				if (current) setAnimeSuggestions([]);
-			});
+		if (!hideAnime)
+			fetchAnimeSuggestions(debouncedQuery)
+				.then((rows) => {
+					if (!current) return;
+					setAnimeSuggestions(rows);
+					if (rows.length > 0) setShowSuggestions(true);
+				})
+				.catch((error) => {
+					console.error('Error fetching anime suggestions:', error);
+					if (current) setAnimeSuggestions([]);
+				});
 
 		return () => {
 			current = false;
 		};
-	}, [debouncedQuery]);
+	}, [debouncedQuery, hideAnime]);
 
 	const handleSuggestionClick = (suggestion: TraktSearchResult) => {
 		const media = suggestion.movie || suggestion.show;

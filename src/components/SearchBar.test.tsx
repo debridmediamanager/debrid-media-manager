@@ -200,6 +200,24 @@ describe('SearchBar', () => {
 			]);
 		});
 
+		it('neither asks anime search nor lists anime when the user hides anime', async () => {
+			localStorage.setItem('settings:hideAnime', 'true');
+			try {
+				const user = userEvent.setup();
+				const { trakt, anime } = served('frieren');
+				serve(trakt, anime);
+
+				render(<SearchBar />);
+				await typeQuery(user, 'frieren');
+
+				await screen.findByText("Frieren: Beyond Journey's End");
+				expect(callsTo(isAnime)).toHaveLength(0);
+				expect(screen.queryByRole('group', { name: 'Anime' })).toBeNull();
+			} finally {
+				localStorage.removeItem('settings:hideAnime');
+			}
+		});
+
 		it('opens the anime page of the row clicked', async () => {
 			const user = userEvent.setup();
 			const { trakt, anime } = served('frieren');

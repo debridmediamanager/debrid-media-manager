@@ -1,7 +1,8 @@
+import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import { Clapperboard, Clock3, Drama, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 interface BrowseSectionProps {
 	terms: string[];
@@ -9,6 +10,7 @@ interface BrowseSectionProps {
 
 export function BrowseSection({ terms }: BrowseSectionProps) {
 	const router = useRouter();
+	const [hideAnime] = useState(() => getLocalStorageBoolean('settings:hideAnime', false));
 	const randomTerm = useMemo(() => terms[Math.floor(Math.random() * terms.length)], [terms]);
 
 	const handleCustomSearch = () => {
@@ -30,13 +32,15 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 				<Drama className="mr-1 inline-block h-3 w-3 text-blue-500" />
 				genres
 			</Link>
-			<Link
-				href="/anime"
-				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
-			>
-				<Clapperboard className="mr-1 inline-block h-3 w-3 text-blue-500" />
-				anime
-			</Link>
+			{!hideAnime && (
+				<Link
+					href="/anime"
+					className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+				>
+					<Clapperboard className="mr-1 inline-block h-3 w-3 text-blue-500" />
+					anime
+				</Link>
+			)}
 			<Link
 				href="/browse/recent"
 				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"

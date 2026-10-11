@@ -41,6 +41,16 @@ describe('BrowseSection', () => {
 		expect(animeLink.getAttribute('href')).toBe('/anime');
 	});
 
+	it('drops the anime link when the user hides anime', () => {
+		localStorage.setItem('settings:hideAnime', 'true');
+		try {
+			render(<BrowseSection terms={['action']} />);
+			expect(screen.queryByRole('link', { name: /anime/i })).toBeNull();
+		} finally {
+			localStorage.removeItem('settings:hideAnime');
+		}
+	});
+
 	it('routes to cleaned term when a custom search is entered', async () => {
 		const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5);
 		const promptMock = vi.spyOn(window, 'prompt').mockReturnValue('  One-Word  ');

@@ -54,6 +54,9 @@ export const SettingsSection = () => {
 	const [onlyTrustedTorrents, setOnlyTrustedTorrents] = useState(() =>
 		getLocalStorageBoolean('settings:onlyTrustedTorrents', false)
 	);
+	const [hideAnime, setHideAnime] = useState(() =>
+		getLocalStorageBoolean('settings:hideAnime', false)
+	);
 	const [movieYearFilter, setMovieYearFilter] = useState(() =>
 		getLocalStorageItemOrDefault('settings:movieYearFilter', defaultMovieYearFilter)
 	);
@@ -265,6 +268,13 @@ export const SettingsSection = () => {
 		setOnlyTrustedTorrents(checked);
 		if (typeof localStorage !== 'undefined')
 			localStorage.setItem('settings:onlyTrustedTorrents', String(checked));
+	};
+
+	const handleHideAnimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const checked = e.target.checked;
+		setHideAnime(checked);
+		if (typeof localStorage !== 'undefined')
+			localStorage.setItem('settings:hideAnime', String(checked));
 	};
 
 	const handleHideRdBlockedTorrentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -674,6 +684,19 @@ export const SettingsSection = () => {
 										onChange={handleTrustedTorrentsChange}
 									/>
 									<label className="font-semibold">Only trusted torrents</label>
+								</div>
+
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-hide-anime"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={hideAnime}
+										onChange={handleHideAnimeChange}
+									/>
+									<label htmlFor="dmm-hide-anime" className="font-semibold">
+										Hide anime in search and on the home page
+									</label>
 								</div>
 
 								<div className="flex flex-col gap-1">

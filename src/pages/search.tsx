@@ -3,6 +3,7 @@ import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
 import type { AnimeSearchResult } from '@/services/database/anime';
 import { animePagePath } from '@/utils/anidbId';
+import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -50,8 +51,9 @@ function Search() {
 	// AniDB entries matching the query, each its own anime page. A season or
 	// OVA with no IMDb id of its own is reachable only this way. A row with no
 	// AniDB id (`anime:mal-N`) has its page at `/anime/mal-N`.
+	const [hideAnime] = useState(() => getLocalStorageBoolean('settings:hideAnime', false));
 	const { data: animeData, loading: animeLoading } = useCachedList<AnimeSearchResult[]>(
-		query ? `animesearch:${query}` : null,
+		query && !hideAnime ? `animesearch:${query}` : null,
 		async () => {
 			const res = await fetch(`/api/search/anime?keyword=${encodeURIComponent(query)}`);
 			if (!res.ok) return [];
