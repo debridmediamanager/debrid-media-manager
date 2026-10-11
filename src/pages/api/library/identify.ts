@@ -1,4 +1,8 @@
-import { identifyFilenames } from '@/services/contentIdentifier';
+import {
+	identifyFilenames,
+	type IdentifierKind,
+	type IdentifierResult,
+} from '@/services/contentIdentifier';
 import type { FilenameIdentification } from '@/services/database/hashImdb';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
@@ -10,9 +14,12 @@ export const MAX_ITEMS = 500;
 const MAX_FILENAME = 512;
 const INFO_HASH = /^[a-f0-9]{40}$/;
 
+const KINDS: IdentifierKind[] = ['movie', 'tv'];
+
 interface Item {
 	hash: string | null;
 	filename: string;
+	kind: IdentifierKind;
 	titleKey: string;
 }
 
@@ -21,22 +28,31 @@ function parseItems(body: unknown): Item[] | null {
 	if (!Array.isArray(items) || items.length === 0 || items.length > MAX_ITEMS) return null;
 	const out: Item[] = [];
 	for (const item of items) {
-		const { hash, filename } = (item ?? {}) as { hash?: unknown; filename?: unknown };
+		const {
+			hash,
+			filename,
+			kind = 'movie',
+		} = (item ?? {}) as { hash?: unknown; filename?: unknown; kind?: unknown };
 		if (typeof filename !== 'string' || !filename.trim()) return null;
+		if (!KINDS.includes(kind as IdentifierKind)) return null;
 		if (hash !== undefined && hash !== null && typeof hash !== 'string') return null;
 		const name = filename.trim().slice(0, MAX_FILENAME);
 		const lower = typeof hash === 'string' ? hash.toLowerCase() : '';
 		out.push({
 			hash: INFO_HASH.test(lower) ? lower : null,
 			filename: name,
-			titleKey: createHash('sha1').update(name).digest('hex'),
+			kind: kind as IdentifierKind,
+			// a show answer is stored apart, so a release asked about as both never gets the other's
+			titleKey: createHash('sha1')
+				.update(kind === 'tv' ? `tv:${name}` : name)
+				.digest('hex'),
 		});
 	}
 	return out;
 }
 
 /**
- * Which movie each library release is, named from its filename by
+ * Which movie or show each library release is, named from its filename by
  * content-identifier. Answers already stored for a hash+filename pair are served
  * from HashIdentification; the rest are asked of the service and stored. Only
  * confident answers are returned, so a row shows a title only when it is right
@@ -51,7 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const items = parseItems(req.body);
 	if (!items) {
 		return res.status(400).json({
-			error: `Expected {"items": [{"filename": string, "hash"?: string}]} with 1-${MAX_ITEMS} items`,
+			error: `Expected {"items": [{"filename": string, "hash"?: string, "kind"?: "movie" | "tv"}]} with 1-${MAX_ITEMS} items`,
 		});
 	}
 
@@ -65,9 +81,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		);
 		const known = (i: Item) => (i.hash ? stored.get(`${i.hash}|${i.titleKey}`) : undefined);
 
-		const missing = [...new Set(items.filter((i) => !known(i)).map((i) => i.filename))];
-		const answers = missing.length ? await identifyFilenames(missing) : [];
-		const fresh = new Map(answers ? missing.map((name, n) => [name, answers[n]]) : []);
+		const fresh = new Map<string, IdentifierResult>();
+		let complete = true;
+		for (const kind of KINDS) {
+			const missing = [
+				...new Set(
+					items.filter((i) => i.kind === kind && !known(i)).map((i) => i.filename)
+				),
+			];
+			if (!missing.length) continue;
+			const answers = await identifyFilenames(missing, kind);
+			if (!answers) complete = false;
+			else missing.forEach((name, n) => fresh.set(`${kind}|${name}`, answers[n]));
+		}
 
 		const toStore: FilenameIdentification[] = [];
 		const results = items.map((item): LibraryIdentification | null => {
@@ -77,7 +103,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					? { imdbId: row.imdbId, title: row.title ?? '', year: row.year }
 					: null;
 			}
-			const answer = fresh.get(item.filename);
+			const answer = fresh.get(`${item.kind}|${item.filename}`);
 			if (!answer) return null;
 			const top = answer.matches[0];
 			if (item.hash) {
@@ -102,9 +128,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			.saveFilenameIdentifications(dedupe(toStore))
 			.catch((error) => console.error('Failed to store library identifications', error));
 
-		return res
-			.status(200)
-			.json({ results, complete: missing.length === 0 || answers !== null });
+		return res.status(200).json({ results, complete });
 	} catch (error) {
 		console.error('Failed to identify library filenames', error);
 		return res.status(500).json({ error: 'Internal server error' });

@@ -34,9 +34,25 @@ describe('identifyFilenames', () => {
 		const [url, init] = fetchMock.mock.calls[0];
 		expect(url).toBe('http://100.126.93.56:3400/identify/batch');
 		expect((init.headers as Record<string, string>)['x-identifier-token']).toBe('s3cret');
-		expect(JSON.parse(fetchMock.mock.calls[1][1].body as string).filenames[0]).toBe(
-			'Movie.1000.2020'
-		);
+		expect(JSON.parse(fetchMock.mock.calls[1][1].body as string)).toMatchObject({
+			filenames: expect.arrayContaining(['Movie.1000.2020']),
+			kind: 'movie',
+		});
+	});
+
+	it('asks the show model when told the names are shows', async () => {
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://100.126.93.56:3400');
+		const fetchMock = vi.fn(async () => new Response(JSON.stringify({ results: [result] })));
+		vi.stubGlobal('fetch', fetchMock);
+		await identifyFilenames(['Game.of.Thrones.S04.1080p'], 'tv');
+		expect(
+			JSON.parse(
+				(fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body as string
+			)
+		).toEqual({
+			filenames: ['Game.of.Thrones.S04.1080p'],
+			kind: 'tv',
+		});
 	});
 
 	it('gives up on a refusal or an unreachable service', async () => {

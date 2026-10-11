@@ -578,7 +578,7 @@ model HashImdb {
 model HashIdentification {
   id        Int      @id @default(autoincrement())
   hash      String   @db.VarChar(40)
-  /// sha1 of the filename
+  /// sha1 of the filename; of "tv:" + the filename when it was asked about as a show
   titleKey  String   @db.Char(40)
   filename  String   @db.Text
   /// null when nothing in IMDb matched

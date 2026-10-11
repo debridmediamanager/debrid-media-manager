@@ -6,9 +6,10 @@ const torrent = (id: string, filename: string, mediaType: UserTorrent['mediaType
 	({ id, filename, hash: `${id}hash`, mediaType }) as unknown as UserTorrent;
 
 describe('identifiable', () => {
-	it('takes movies with a real release name only', () => {
+	it('takes movies and shows with a real release name only', () => {
 		expect(identifiable(torrent('rd:1', 'Mad.Max.Fury.Road.2015.2160p'))).toBe(true);
-		expect(identifiable(torrent('rd:2', 'Show.S01.1080p', 'tv'))).toBe(false);
+		expect(identifiable(torrent('rd:2', 'Show.S01.1080p', 'tv'))).toBe(true);
+		expect(identifiable(torrent('rd:5', 'Some.Album.FLAC', 'other'))).toBe(false);
 		expect(identifiable(torrent('rd:3', 'Magnet'))).toBe(false);
 		const magnet = torrent('rd:4', '');
 		expect(identifiable({ ...magnet, filename: magnet.hash } as UserTorrent)).toBe(false);
@@ -41,6 +42,25 @@ describe('identifyLibrary', () => {
 		expect(post).toHaveBeenCalledTimes(2);
 		expect(found).toEqual({ 'rd:0': { imdbId: 'tt0000001', title: 'M.0.2020', year: 2020 } });
 		const firstBody = JSON.parse(post.mock.calls[0][1].body as string);
-		expect(firstBody.items[0]).toEqual({ filename: 'M.0.2020', hash: 'rd:0hash' });
+		expect(firstBody.items[0]).toEqual({
+			filename: 'M.0.2020',
+			hash: 'rd:0hash',
+			kind: 'movie',
+		});
+	});
+
+	it('tells the route which items are shows', async () => {
+		const post = vi.fn(async () => new Response(JSON.stringify({ results: [null, null] })));
+		await identifyLibrary(
+			[
+				torrent('rd:1', 'Mad.Max.Fury.Road.2015'),
+				torrent('rd:2', 'Game.of.Thrones.S04', 'tv'),
+			],
+			post as unknown as typeof fetch
+		);
+		const { items } = JSON.parse(
+			(post.mock.calls[0] as unknown as [string, RequestInit])[1].body as string
+		);
+		expect(items.map((i: { kind: string }) => i.kind)).toEqual(['movie', 'tv']);
 	});
 });

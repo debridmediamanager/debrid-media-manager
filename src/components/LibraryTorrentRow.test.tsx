@@ -802,5 +802,35 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 				'/search?query=Spider-Man%20Brand%20New%20Day%202026'
 			);
 		});
+
+		it('links an identified show to its show page', () => {
+			render(
+				<table>
+					<tbody>
+						<LibraryTorrentRow
+							{...defaultProps}
+							torrent={{
+								...mockTorrent,
+								mediaType: 'tv',
+								title: 'Game of Thrones S04',
+								info: {
+									title: 'Game of Thrones',
+								} as unknown as UserTorrent['info'],
+							}}
+							identification={{
+								imdbId: 'tt0944947',
+								title: 'Game of Thrones',
+								year: 2011,
+							}}
+						/>
+					</tbody>
+				</table>
+			);
+			expect(screen.getByText('Game of Thrones (2011)')).toBeInTheDocument();
+			expect(screen.getByRole('link', { name: 'Go to show page' })).toHaveAttribute(
+				'href',
+				'/show/tt0944947'
+			);
+		});
 	});
 });

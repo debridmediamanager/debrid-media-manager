@@ -159,7 +159,7 @@ function TorrentsPage() {
 
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 
-	// Name the movies once every provider has finished loading. Each item is asked
+	// Name the movies and shows once every provider has finished loading. Each item is asked
 	// about once per visit; the server keeps answers per release, so later visits
 	// cost the identifier only the releases it has never seen.
 	const [identifications, setIdentifications] = useState<Record<string, LibraryIdentification>>(

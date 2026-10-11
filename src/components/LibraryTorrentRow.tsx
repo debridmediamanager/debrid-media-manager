@@ -72,7 +72,7 @@ interface TorrentRowProps {
 	onShowInfo: (torrent: UserTorrent) => void;
 	onTypeChange: (torrent: UserTorrent) => void;
 	onRefreshLibrary?: () => Promise<void>;
-	/** The movie content-identifier confidently named from the filename. */
+	/** The movie or show content-identifier confidently named from the filename. */
 	identification?: LibraryIdentification;
 }
 
@@ -490,7 +490,7 @@ function TorrentRow({
 								<Link
 									href={
 										identification
-											? `/movie/${identification.imdbId}`
+											? `/${torrent.mediaType === 'tv' ? 'show' : 'movie'}/${identification.imdbId}`
 											: `/search?query=${encodeURIComponent(
 													(
 														torrent.info!.title +
@@ -503,7 +503,9 @@ function TorrentRow({
 									className="ml-1 mr-2 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
 									onClick={(e) => e.stopPropagation()}
 								>
-									{identification ? 'Go to movie page' : 'Search again'}
+									{identification
+										? `Go to ${torrent.mediaType === 'tv' ? 'show' : 'movie'} page`
+										: 'Search again'}
 								</Link>
 							)}
 							<br />

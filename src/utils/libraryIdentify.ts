@@ -1,6 +1,6 @@
 import type { UserTorrent } from '@/torrent/userTorrent';
 
-/** A movie content-identifier confidently named from a release filename. */
+/** A movie or show content-identifier confidently named from a release filename. */
 export interface LibraryIdentification {
 	imdbId: string;
 	title: string;
@@ -10,10 +10,10 @@ export interface LibraryIdentification {
 /** Items per request; the route's own ceiling. */
 export const IDENTIFY_BATCH = 500;
 
-/** Library items worth asking about: movies with a real release name. */
+/** Library items worth asking about: movies and shows with a real release name. */
 export function identifiable(torrent: UserTorrent): boolean {
 	return (
-		torrent.mediaType === 'movie' &&
+		(torrent.mediaType === 'movie' || torrent.mediaType === 'tv') &&
 		Boolean(torrent.filename) &&
 		torrent.filename !== torrent.hash &&
 		!['Invalid Magnet', 'Magnet', 'noname'].includes(torrent.filename)
@@ -36,7 +36,11 @@ export async function identifyLibrary(
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
 				body: JSON.stringify({
-					items: batch.map((t) => ({ filename: t.filename, hash: t.hash || undefined })),
+					items: batch.map((t) => ({
+						filename: t.filename,
+						hash: t.hash || undefined,
+						kind: t.mediaType,
+					})),
 				}),
 			});
 			if (!response.ok) continue;
