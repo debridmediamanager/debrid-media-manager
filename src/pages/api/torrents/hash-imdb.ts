@@ -2,17 +2,6 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// zurg sends its user's own dmm_api_key as x-zurg-token, so an active
-// sponsor's key is the normal credential here. The shared secret is optional
-// and prod has none: requiring it answered 500 to every zurg from January 2026.
-async function isAuthorized(token: string | undefined): Promise<boolean> {
-	if (!token) return false;
-	const sharedSecret = process.env.ZURGTORRENT_SYNC_SECRET;
-	if (sharedSecret && token === sharedSecret) return true;
-	const sponsor = await repository.getSponsorByDmmApiKey(token);
-	return Boolean(sponsor?.isSponsor);
-}
-
 function isValidHash(value: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(value);
 }
@@ -53,12 +42,9 @@ function validatePairs(body: unknown): HashImdbInput[] | null {
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-	const authHeader = req.headers['x-zurg-token'];
-	const token = Array.isArray(authHeader) ? authHeader[0] : authHeader;
-	if (!(await isAuthorized(token))) {
-		return res.status(401).json({ message: 'Unauthorized' });
-	}
-
+	// Any zurg may post, with or without a token, as with /api/torrents/snapshot:
+	// most zurgs set no dmm_api_key. The shape check and the per-IP rate limit
+	// are what keep junk out.
 	const pairs = validatePairs(req.body);
 	if (!pairs) {
 		return res

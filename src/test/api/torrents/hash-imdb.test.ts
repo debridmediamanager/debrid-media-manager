@@ -10,21 +10,11 @@ const mockRepository = vi.mocked(repository);
 const validHash = 'a'.repeat(40);
 const validImdbId = 'tt1234567';
 const validItem = { hash: validHash, imdbId: validImdbId };
-const sponsorKey = 'b'.repeat(64);
-const ACTIVE = {
-	isSponsor: true,
-	sources: ['github' as const],
-	shortId: 'ZP1M',
-	githubUsername: 'someone',
-	keyVersion: 1,
-};
-const LAPSED = { ...ACTIVE, isSponsor: false, sources: [] };
 
 describe('/api/torrents/hash-imdb', () => {
 	beforeEach(() => {
 		vi.stubEnv('ZURGTORRENT_SYNC_SECRET', 'test-secret');
 		mockRepository.upsertHashImdbBatch = vi.fn().mockResolvedValue({ upserted: 1 });
-		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(null);
 	});
 
 	afterEach(() => {
@@ -45,43 +35,20 @@ describe('/api/torrents/hash-imdb', () => {
 		expect(res.json).toHaveBeenCalledWith({ message: 'Method not allowed' });
 	});
 
-	// zurg sends the user's own dmm_api_key as x-zurg-token (internal/torrent/
-	// mediainfo.go). Prod has no shared secret, so before this every sponsor's
-	// zurg got 500 "Server misconfiguration" (Discord #sponsors 2026-08-09).
-	it("accepts an active sponsor's DMM API key without the shared secret", async () => {
+	// Any zurg may post, like /api/torrents/snapshot: zurg sends its user's
+	// dmm_api_key when one is set, and most zurgs have none.
+	it('accepts a post without a token', async () => {
 		delete process.env.ZURGTORRENT_SYNC_SECRET;
-		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': sponsorKey },
-			body: [validItem],
-		});
+		const req = createMockRequest({ method: 'POST', body: [validItem] });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockRepository.getSponsorByDmmApiKey).toHaveBeenCalledWith(sponsorKey);
 		expect(res.status).toHaveBeenCalledWith(201);
 		expect(mockRepository.upsertHashImdbBatch).toHaveBeenCalledWith([validItem]);
 	});
 
-	it("rejects a lapsed sponsor's key", async () => {
-		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(LAPSED);
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': sponsorKey },
-			body: [validItem],
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(401);
-		expect(mockRepository.upsertHashImdbBatch).not.toHaveBeenCalled();
-	});
-
-	it('answers 401, not 500, to an unknown token when no shared secret is set', async () => {
-		delete process.env.ZURGTORRENT_SYNC_SECRET;
+	it('accepts a post whatever token it carries', async () => {
 		const req = createMockRequest({
 			method: 'POST',
 			headers: { 'x-zurg-token': 'anything' },
@@ -91,32 +58,8 @@ describe('/api/torrents/hash-imdb', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(401);
-		expect(mockRepository.upsertHashImdbBatch).not.toHaveBeenCalled();
-	});
-
-	it('answers 401 when the token header is missing', async () => {
-		const req = createMockRequest({ method: 'POST', body: [validItem] });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(401);
-		expect(mockRepository.getSponsorByDmmApiKey).not.toHaveBeenCalled();
-	});
-
-	it('returns 401 when x-zurg-token does not match', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': 'wrong-secret' },
-			body: [validItem],
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(401);
-		expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized' });
+		expect(res.status).toHaveBeenCalledWith(201);
+		expect(mockRepository.upsertHashImdbBatch).toHaveBeenCalledWith([validItem]);
 	});
 
 	it('returns 400 for null body', async () => {
