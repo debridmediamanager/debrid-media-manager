@@ -448,6 +448,10 @@ function TorrentRow({
 								<strong>
 									{identification.title}
 									{identification.year ? ` (${identification.year})` : ''}
+									{/* a show's parsed title ends in the seasons it holds: "Title ➡️ S01" */}
+									{torrent.title.includes(' ➡️ ')
+										? torrent.title.slice(torrent.title.indexOf(' ➡️ '))
+										: ''}
 									<BadgeCheck
 										className="ml-1 inline-block h-4 w-4 align-text-bottom text-sky-400"
 										aria-label={`Verified: identified from the filename as ${identification.imdbId}`}

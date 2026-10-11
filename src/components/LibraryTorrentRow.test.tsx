@@ -803,7 +803,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			);
 		});
 
-		it('links an identified show to its show page', () => {
+		it('names an identified show, keeps its seasons and links to its show page', () => {
 			render(
 				<table>
 					<tbody>
@@ -812,7 +812,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 							torrent={{
 								...mockTorrent,
 								mediaType: 'tv',
-								title: 'Game of Thrones S04',
+								title: 'Game of Thrones ➡️ S04',
 								info: {
 									title: 'Game of Thrones',
 								} as unknown as UserTorrent['info'],
@@ -826,7 +826,8 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 					</tbody>
 				</table>
 			);
-			expect(screen.getByText('Game of Thrones (2011)')).toBeInTheDocument();
+			// the verified name keeps the seasons the release holds
+			expect(screen.getByText('Game of Thrones (2011) ➡️ S04')).toBeInTheDocument();
 			expect(screen.getByRole('link', { name: 'Go to show page' })).toHaveAttribute(
 				'href',
 				'/show/tt0944947'
