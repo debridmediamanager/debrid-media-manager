@@ -25,7 +25,7 @@ const DURACKAJA = 'Eta-durackaja-ljubov.2011.MPEG-4-AVC.BluRay-Remux(1080p).mkv'
 const DURACKAJA_HASH = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
 const H1 = 'a'.repeat(40);
 const H2 = 'B'.repeat(40);
-const key = (name: string) => createHash('sha1').update(`auto2:${name}`).digest('hex');
+const key = (name: string) => createHash('sha1').update(`auto3:${name}`).digest('hex');
 
 const confident = (
 	imdbId: string,

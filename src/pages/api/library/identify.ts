@@ -36,9 +36,10 @@ function parseItems(body: unknown): Item[] | null {
 		out.push({
 			hash: INFO_HASH.test(lower) ? lower : null,
 			filename: name,
-			// "auto2:" since the guards below: older answers ("auto:", "tv:" or the bare
-			// name) were judged without them and are never read again
-			titleKey: createHash('sha1').update(`auto2:${name}`).digest('hex'),
+			// "auto3:" since the guards below and the hash map's split rule: older answers
+			// ("auto2:", "auto:", "tv:" or the bare name) were judged without them and are
+			// never read again
+			titleKey: createHash('sha1').update(`auto3:${name}`).digest('hex'),
 		});
 	}
 	return out;

@@ -578,8 +578,8 @@ model HashImdb {
 model HashIdentification {
   id        Int      @id @default(autoincrement())
   hash      String   @db.VarChar(40)
-  /// sha1 of "auto:" + the filename (the service decides movie or show); bare or
-  /// "tv:"-prefixed keys are answers from before it did, no longer read
+  /// sha1 of "auto3:" + the filename (the service decides movie or show); older
+  /// prefixes ("auto2:", "auto:", "tv:", none) are answers judged by older rules, no longer read
   titleKey  String   @db.Char(40)
   filename  String   @db.Text
   /// "movie" or "tv"; null on rows from before the service decided

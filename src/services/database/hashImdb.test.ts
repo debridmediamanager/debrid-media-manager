@@ -1,3 +1,4 @@
+import split from '@/test/fixtures/hashMap/split-hash-map-2026-10-12.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { HashImdbService, pickHashImdbIds, soleKeeps } from './hashImdb';
 
@@ -149,8 +150,9 @@ describe('HashImdbService', () => {
 
 describe('getHashTitleIds', () => {
 	// rows dmmdb held on 2026-10-11 for two of ymsita's releases: "Eta durackaja ljubov"
-	// (Crazy, Stupid, Love.) is filed under two films, and "Yellow Mirror" is mapped to a
-	// Simpsons episode, which must count as the show
+	// (Crazy, Stupid, Love.) is filed under two films by two page-add rows, so neither
+	// counts, and "Yellow Mirror" is mapped to a Simpsons episode, which must count as
+	// the show
 	const DURACKAJA = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
 	const YELLOW_MIRROR = '58f03c741f8eb3012a2fbf3caa95c15556a255f8';
 
@@ -178,12 +180,26 @@ describe('getHashTitleIds', () => {
 			where: { hash: { in: [DURACKAJA, YELLOW_MIRROR] } },
 			select: { hash: true, imdbId: true },
 		});
-		expect(ids).toEqual(
-			new Map([
-				[YELLOW_MIRROR, new Set(['tt0096697'])],
-				[DURACKAJA, new Set(['tt1541874', 'tt1570728'])],
-			])
-		);
+		expect(ids).toEqual(new Map([[YELLOW_MIRROR, new Set(['tt0096697'])]]));
+	});
+});
+
+describe('getHashTitleIds when the hash map is split', () => {
+	// dmmdb rows of 2026-10-12: each release got a wrong library title (The Devil Wears
+	// Prada as its 2026 sequel, Beverly Hills, 90210 as 90210) because one page-add row
+	// agreed with the identifier's doubted pick while another source named another title
+	it('drops a title only a page-add row names when another source names a different one', async () => {
+		const service = new HashImdbService();
+		prismaMock.hashImdb.findMany.mockResolvedValue(split.rows.HashImdb);
+		prismaMock.available.findMany.mockResolvedValue(split.rows.Available);
+		prismaMock.availableAd.findMany.mockResolvedValue(split.rows.AvailableAd);
+		prismaMock.scrapedVerdict.findMany.mockResolvedValue(split.rows.ScrapedVerdict);
+		prismaMock.$queryRaw.mockResolvedValue(split.rows.TorrentSnapshot);
+		prismaMock.imdbTitleEpisode.findMany.mockResolvedValue([]);
+
+		const ids = await service.getHashTitleIds(split.releases.map((r) => r.hash));
+
+		expect(ids).toEqual(new Map(split.releases.map((r) => [r.hash, new Set(r.credible)])));
 	});
 });
 
@@ -219,7 +235,8 @@ describe('getHashTitleIds from zurg snapshots and kept verdicts', () => {
 		});
 		expect(ids).toEqual(
 			new Map([
-				[ONE_PIECE_LOG, new Set(['tt0388629', 'tt33992229'])],
+				// Available's One Piece is a page-add row the snapshot contradicts
+				[ONE_PIECE_LOG, new Set(['tt33992229'])],
 				[REDLINE, new Set(['tt0232500', 'tt1483797'])],
 			])
 		);

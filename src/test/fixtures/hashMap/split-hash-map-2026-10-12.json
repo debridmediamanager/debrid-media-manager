@@ -1,0 +1,128 @@
+{
+	"capturedAt": "2026-10-12",
+	"releases": [
+		{
+			"hash": "ab8b71ac89fda471a22c6c8b970b5db629b8f61f",
+			"filename": "The Devil Wears Prada",
+			"wrongTitle": "The Devil Wears Prada 2",
+			"wrongId": "tt33612209",
+			"credible": ["tt0458352"]
+		},
+		{
+			"hash": "c8fa54982093dfac4c180498c7dd8bfa87704366",
+			"filename": "The Island (2025) [Bluray 1080p][Esp](wolfmax4k.com).mkv",
+			"wrongTitle": "An t-Eilean",
+			"wrongId": "tt31921411",
+			"credible": ["tt21853596"]
+		},
+		{
+			"hash": "58d8e75aa639719fdeb0174dfad5275cdfb83c01",
+			"filename": "Beverly Hills, 90210",
+			"wrongTitle": "90210",
+			"wrongId": "tt1225901",
+			"credible": ["tt0125674"]
+		},
+		{
+			"hash": "6bec8f1cce6935a1374b50b743a3bc729a197451",
+			"filename": "Enola Holmes.avi",
+			"wrongTitle": "Enola Holmes 3",
+			"wrongId": "tt32278481",
+			"credible": ["tt7846844"]
+		},
+		{
+			"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+			"filename": "The Curse of La Llorona.2019.4K.HDR.2160p.WEBDL Ita Eng x265-NAHOM.mkv",
+			"wrongTitle": "La Llorona",
+			"wrongId": "tt10767168",
+			"credible": ["tt4913966"]
+		},
+		{
+			"hash": "2e96dc29a84fee6cdb5007b1399e93a74e1d3cc7",
+			"filename": "The.Matrix.Triology.2160p.BluRay.REMUX.HR10.HEVC-UnKn0wn",
+			"wrongTitle": "The Matrix",
+			"wrongId": "tt0133093",
+			"credible": ["tt0234215"]
+		}
+	],
+	"rows": {
+		"HashImdb": [
+			{
+				"hash": "2e96dc29a84fee6cdb5007b1399e93a74e1d3cc7",
+				"imdbId": "tt0234215"
+			},
+			{
+				"hash": "58d8e75aa639719fdeb0174dfad5275cdfb83c01",
+				"imdbId": "tt0125674"
+			},
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": "tt4913966"
+			}
+		],
+		"Available": [
+			{
+				"hash": "2e96dc29a84fee6cdb5007b1399e93a74e1d3cc7",
+				"imdbId": "tt0133093"
+			},
+			{
+				"hash": "58d8e75aa639719fdeb0174dfad5275cdfb83c01",
+				"imdbId": "tt1225901"
+			},
+			{
+				"hash": "6bec8f1cce6935a1374b50b743a3bc729a197451",
+				"imdbId": "tt32278481"
+			},
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": "tt10767168"
+			},
+			{
+				"hash": "ab8b71ac89fda471a22c6c8b970b5db629b8f61f",
+				"imdbId": "tt33612209"
+			},
+			{
+				"hash": "c8fa54982093dfac4c180498c7dd8bfa87704366",
+				"imdbId": "tt31921411"
+			}
+		],
+		"AvailableAd": [
+			{
+				"hash": "58d8e75aa639719fdeb0174dfad5275cdfb83c01",
+				"imdbId": "tt0098749"
+			},
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": "tt4913966"
+			}
+		],
+		"ScrapedVerdict": [
+			{
+				"hash": "6bec8f1cce6935a1374b50b743a3bc729a197451",
+				"imdbId": "tt7846844"
+			},
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": "tt4913966"
+			},
+			{
+				"hash": "ab8b71ac89fda471a22c6c8b970b5db629b8f61f",
+				"imdbId": "tt0458352"
+			},
+			{
+				"hash": "c8fa54982093dfac4c180498c7dd8bfa87704366",
+				"imdbId": "tt21853596"
+			}
+		],
+		"TorrentSnapshot": [
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": null
+			},
+			{
+				"hash": "6e429629cd66cfb6e17e7202b47cec6c43f15104",
+				"imdbId": "tt4913966"
+			}
+		]
+	},
+	"source": "dmmdb rows for hashes whose library title came only from a page-add row (Available/AvailableAd) while another source named a different title; each library answer was wrong"
+}

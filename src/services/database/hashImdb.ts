@@ -135,6 +135,11 @@ export class HashImdbService extends DatabaseClient {
 	 * (2026-10-12) snapshots and verdicts named 39 more of 475 unnamed releases,
 	 * about 95% of them right; Cast and the other cast tables added nothing that
 	 * would pay for a scan, as none is indexed by hash.
+	 *
+	 * Where the sources name different titles, one only a page-add row names does
+	 * not count: a mis-filed page is how The Devil Wears Prada came to be named as
+	 * its 2026 sequel. Of 151 library titles that rested on such a row (2026-10-12),
+	 * about three in four were right, short of what a confirmation must be.
 	 */
 	public async getHashTitleIds(hashes: string[]): Promise<Map<string, Set<string>>> {
 		const ids = new Map<string, Set<string>>();
@@ -143,33 +148,44 @@ export class HashImdbService extends DatabaseClient {
 		);
 		if (wanted.length === 0) return ids;
 		const select = { hash: true, imdbId: true } as const;
-		const rows = (
-			await Promise.all([
-				this.prisma.hashImdb.findMany({ where: { hash: { in: wanted } }, select }),
-				this.prisma.available.findMany({ where: { hash: { in: wanted } }, select }),
-				this.prisma.availableAd.findMany({ where: { hash: { in: wanted } }, select }),
-				this.prisma.scrapedVerdict.findMany({
-					where: { hash: { in: wanted }, verdict: 'keep' },
-					select,
-				}),
-				// payloads average 37 KB (up to 10 MB): read only the id
-				this.prisma.$queryRaw<{ hash: string; imdbId: string | null }[]>(Prisma.sql`
+		const sources = await Promise.all([
+			this.prisma.hashImdb.findMany({ where: { hash: { in: wanted } }, select }),
+			this.prisma.available.findMany({ where: { hash: { in: wanted } }, select }),
+			this.prisma.availableAd.findMany({ where: { hash: { in: wanted } }, select }),
+			this.prisma.scrapedVerdict.findMany({
+				where: { hash: { in: wanted }, verdict: 'keep' },
+				select,
+			}),
+			// payloads average 37 KB (up to 10 MB): read only the id
+			this.prisma.$queryRaw<{ hash: string; imdbId: string | null }[]>(Prisma.sql`
 					SELECT DISTINCT hash, JSON_UNQUOTE(JSON_EXTRACT(payload, '$.IMDBID')) AS imdbId
 					FROM TorrentSnapshot WHERE hash IN (${Prisma.join(wanted)})`),
-			])
-		)
-			.flat()
-			.filter((r): r is { hash: string; imdbId: string } => IMDB_ID.test(r.imdbId ?? ''));
+		]);
+		const rows = sources
+			// sources[1] and [2] are the page-add tables, Available and AvailableAd
+			.flatMap((source, n) =>
+				source.map(({ hash, imdbId }) => ({ hash, imdbId, pageAdd: n === 1 || n === 2 }))
+			)
+			.filter((r): r is { hash: string; imdbId: string; pageAdd: boolean } =>
+				IMDB_ID.test(r.imdbId ?? '')
+			);
 		if (rows.length === 0) return ids;
 		const episodes = await this.prisma.imdbTitleEpisode.findMany({
 			where: { tconst: { in: [...new Set(rows.map((r) => r.imdbId))] } },
 			select: { tconst: true, parentTconst: true },
 		});
 		const show = new Map(episodes.map((e) => [e.tconst, e.parentTconst]));
-		for (const { hash, imdbId } of rows) {
-			const set = ids.get(hash) ?? new Set<string>();
-			set.add(show.get(imdbId) ?? imdbId);
-			ids.set(hash, set);
+		// per hash, each title and whether anything but a page-add row names it
+		const named = new Map<string, Map<string, boolean>>();
+		for (const { hash, imdbId, pageAdd } of rows) {
+			const titles = named.get(hash) ?? new Map<string, boolean>();
+			const id = show.get(imdbId) ?? imdbId;
+			titles.set(id, Boolean(titles.get(id)) || !pageAdd);
+			named.set(hash, titles);
+		}
+		for (const [hash, titles] of named) {
+			const credible = [...titles].filter(([, solid]) => solid || titles.size === 1);
+			if (credible.length) ids.set(hash, new Set(credible.map(([id]) => id)));
 		}
 		return ids;
 	}
