@@ -1326,6 +1326,10 @@ export class Repository {
 		return this.hashImdbService.identifyHashes(hashes);
 	}
 
+	public getHashTitleIds(hashes: string[]) {
+		return this.hashImdbService.getHashTitleIds(hashes);
+	}
+
 	public getFilenameIdentifications(keys: { hash: string; titleKey: string }[]) {
 		return this.hashImdbService.getFilenameIdentifications(keys);
 	}

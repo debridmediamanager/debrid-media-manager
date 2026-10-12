@@ -12,6 +12,7 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
@@ -756,11 +757,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		});
 	});
 	describe('identified movie', () => {
-		const renderRow = (identification?: {
-			imdbId: string;
-			title: string;
-			year: number | null;
-		}) =>
+		const renderRow = (identification?: LibraryIdentification) =>
 			render(
 				<table>
 					<tbody>
@@ -781,7 +778,12 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			);
 
 		it('replaces the parsed title with the verified one and links to its movie page', () => {
-			renderRow({ imdbId: 'tt22084616', title: 'Spider-Man: Brand New Day', year: 2026 });
+			renderRow({
+				imdbId: 'tt22084616',
+				title: 'Spider-Man: Brand New Day',
+				year: 2026,
+				kind: 'movie',
+			});
 			expect(screen.getByText('Spider-Man: Brand New Day (2026)')).toBeInTheDocument();
 			expect(screen.queryByText('Spider-Man Brand New Day (2026)')).toBeNull();
 			expect(
@@ -821,6 +823,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 								imdbId: 'tt0944947',
 								title: 'Game of Thrones',
 								year: 2011,
+								kind: 'tv',
 							}}
 						/>
 					</tbody>
@@ -831,6 +834,15 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(screen.getByRole('link', { name: 'Go to show page' })).toHaveAttribute(
 				'href',
 				'/show/tt0944947'
+			);
+		});
+
+		// ymsita's library filed this single episode as a movie; the identifier knows better
+		it('links by what the identifier found, not by the library guess', () => {
+			renderRow({ imdbId: 'tt12057106', title: 'Tower of God', year: 2020, kind: 'tv' });
+			expect(screen.getByRole('link', { name: 'Go to show page' })).toHaveAttribute(
+				'href',
+				'/show/tt12057106'
 			);
 		});
 	});

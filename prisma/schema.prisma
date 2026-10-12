@@ -578,9 +578,12 @@ model HashImdb {
 model HashIdentification {
   id        Int      @id @default(autoincrement())
   hash      String   @db.VarChar(40)
-  /// sha1 of the filename; of "tv:" + the filename when it was asked about as a show
+  /// sha1 of "auto:" + the filename (the service decides movie or show); bare or
+  /// "tv:"-prefixed keys are answers from before it did, no longer read
   titleKey  String   @db.Char(40)
   filename  String   @db.Text
+  /// "movie" or "tv"; null on rows from before the service decided
+  kind      String?  @db.VarChar(8)
   /// null when nothing in IMDb matched
   imdbId    String?  @db.VarChar(16)
   title     String?  @db.VarChar(500)

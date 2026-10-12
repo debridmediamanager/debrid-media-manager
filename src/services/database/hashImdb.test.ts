@@ -8,6 +8,9 @@ const prismaMock = vi.hoisted(() => ({
 		update: vi.fn(),
 		create: vi.fn(),
 	},
+	available: { findMany: vi.fn() },
+	availableAd: { findMany: vi.fn() },
+	imdbTitleEpisode: { findMany: vi.fn() },
 }));
 
 vi.mock('./client', () => ({
@@ -139,6 +142,44 @@ describe('HashImdbService', () => {
 			expect(result.size).toBe(0);
 			expect(prismaMock.hashImdb.findMany).not.toHaveBeenCalled();
 		});
+	});
+});
+
+describe('getHashTitleIds', () => {
+	// rows dmmdb held on 2026-10-11 for two of ymsita's releases: "Eta durackaja ljubov"
+	// (Crazy, Stupid, Love.) is filed under two films, and "Yellow Mirror" is mapped to a
+	// Simpsons episode, which must count as the show
+	const DURACKAJA = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
+	const YELLOW_MIRROR = '58f03c741f8eb3012a2fbf3caa95c15556a255f8';
+
+	it('collects every source and names an episode by its show', async () => {
+		const service = new HashImdbService();
+		prismaMock.hashImdb.findMany.mockResolvedValue([
+			{ hash: YELLOW_MIRROR, imdbId: 'tt43141030' },
+		]);
+		prismaMock.available.findMany.mockResolvedValue([
+			{ hash: DURACKAJA, imdbId: 'tt1541874' },
+			{ hash: DURACKAJA, imdbId: 'not-an-id' },
+		]);
+		prismaMock.availableAd.findMany.mockResolvedValue([
+			{ hash: DURACKAJA, imdbId: 'tt1570728' },
+		]);
+		prismaMock.imdbTitleEpisode.findMany.mockResolvedValue([
+			{ tconst: 'tt43141030', parentTconst: 'tt0096697' },
+		]);
+
+		const ids = await service.getHashTitleIds([DURACKAJA.toUpperCase(), YELLOW_MIRROR, 'x']);
+
+		expect(prismaMock.hashImdb.findMany).toHaveBeenCalledWith({
+			where: { hash: { in: [DURACKAJA, YELLOW_MIRROR] } },
+			select: { hash: true, imdbId: true },
+		});
+		expect(ids).toEqual(
+			new Map([
+				[YELLOW_MIRROR, new Set(['tt0096697'])],
+				[DURACKAJA, new Set(['tt1541874', 'tt1570728'])],
+			])
+		);
 	});
 });
 

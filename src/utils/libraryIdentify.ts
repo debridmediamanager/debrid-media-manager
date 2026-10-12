@@ -5,10 +5,14 @@ export interface LibraryIdentification {
 	imdbId: string;
 	title: string;
 	year: number | null;
+	/** What the identifier found the release to be, whatever the library guessed. */
+	kind: 'movie' | 'tv';
 }
 
 /** Items per request; the route's own ceiling. */
 export const IDENTIFY_BATCH = 500;
+/** Refusals per batch before it is given up; the route allows ten batches a minute. */
+const MAX_REFUSALS = 5;
 
 /** Library items worth asking about: movies and shows with a real release name. */
 export function identifiable(torrent: UserTorrent): boolean {
@@ -20,39 +24,53 @@ export function identifiable(torrent: UserTorrent): boolean {
 	);
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 /**
- * Ask /api/library/identify about `torrents` in batches. Returns the confident
- * matches by library id; a failed batch is skipped, its rows simply stay unnamed.
+ * Ask /api/library/identify about `torrents` in batches, handing each batch's
+ * confident matches (by library id) to `onFound` as it lands. A batch the rate
+ * limit refuses waits out its Retry-After and is asked again, so a library past
+ * ten batches is named in full rather than cut off; any other failure skips the
+ * batch and its rows simply stay unnamed.
  */
 export async function identifyLibrary(
 	torrents: UserTorrent[],
-	post: typeof fetch = fetch
-): Promise<Record<string, LibraryIdentification>> {
-	const found: Record<string, LibraryIdentification> = {};
+	onFound: (found: Record<string, LibraryIdentification>) => void,
+	post: typeof fetch = fetch,
+	wait: (ms: number) => Promise<unknown> = sleep
+): Promise<void> {
 	for (let at = 0; at < torrents.length; at += IDENTIFY_BATCH) {
 		const batch = torrents.slice(at, at + IDENTIFY_BATCH);
-		try {
-			const response = await post('/api/library/identify', {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({
-					items: batch.map((t) => ({
-						filename: t.filename,
-						hash: t.hash || undefined,
-						kind: t.mediaType,
-					})),
-				}),
-			});
-			if (!response.ok) continue;
-			const { results } = (await response.json()) as {
-				results: (LibraryIdentification | null)[];
-			};
-			batch.forEach((t, i) => {
-				if (results[i]) found[t.id] = results[i];
-			});
-		} catch {
-			// identification is a nicety; the library works without it
+		for (let refusals = 0; refusals < MAX_REFUSALS; refusals++) {
+			try {
+				const response = await post('/api/library/identify', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({
+						items: batch.map((t) => ({
+							filename: t.filename,
+							hash: t.hash || undefined,
+						})),
+					}),
+				});
+				if (response.status === 429) {
+					const seconds = Number(response.headers.get('retry-after')) || 10;
+					await wait(Math.min(seconds, 60) * 1000);
+					continue;
+				}
+				if (!response.ok) break;
+				const { results } = (await response.json()) as {
+					results: (LibraryIdentification | null)[];
+				};
+				const found: Record<string, LibraryIdentification> = {};
+				batch.forEach((t, i) => {
+					if (results[i]) found[t.id] = results[i];
+				});
+				if (Object.keys(found).length) onFound(found);
+			} catch {
+				// identification is a nicety; the library works without it
+			}
+			break;
 		}
 	}
-	return found;
 }

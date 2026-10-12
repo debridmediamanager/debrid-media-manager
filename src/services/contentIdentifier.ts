@@ -9,25 +9,27 @@ export interface IdentifierMatch {
 	score: number;
 }
 
+/** Whether a name is a movie or a show; the service decides. */
+export type IdentifierKind = 'movie' | 'tv';
+
 export interface IdentifierResult {
-	/** The first match is right about 98% of the time; anything else needs review. */
+	kind?: IdentifierKind;
+	/** The service's probability that the first match is right. */
+	probability?: number;
+	/** The year the filename names, if any. */
+	parsedYear?: number | null;
+	/** The first match clears the service's calibrated precision bar. */
 	confident: boolean;
 	matches: IdentifierMatch[];
 }
 
-/** Which corpus and model the service matches a name against. */
-export type IdentifierKind = 'movie' | 'tv';
-
 /** The service's own batch ceiling. */
 const SERVICE_BATCH = 1000;
-/** A 1,000-name batch takes about 8 s on dmm-01. */
+/** A 1,000-name batch takes about 8 s on dmm-01 per kind, and both kinds are asked. */
 const TIMEOUT_MS = 30_000;
 
 /** One result per filename, in order, or null when the service cannot be reached. */
-export async function identifyFilenames(
-	filenames: string[],
-	kind: IdentifierKind = 'movie'
-): Promise<IdentifierResult[] | null> {
+export async function identifyFilenames(filenames: string[]): Promise<IdentifierResult[] | null> {
 	const base = process.env.CONTENT_IDENTIFIER_URL?.replace(/\/+$/, '');
 	if (!base) return null;
 	const results: IdentifierResult[] = [];
@@ -39,7 +41,10 @@ export async function identifyFilenames(
 					'content-type': 'application/json',
 					'x-identifier-token': process.env.CONTENT_IDENTIFIER_TOKEN ?? '',
 				},
-				body: JSON.stringify({ filenames: filenames.slice(at, at + SERVICE_BATCH), kind }),
+				body: JSON.stringify({
+					filenames: filenames.slice(at, at + SERVICE_BATCH),
+					kind: 'auto',
+				}),
 				signal: AbortSignal.timeout(TIMEOUT_MS),
 			});
 			if (!response.ok) {

@@ -16,13 +16,24 @@ const MAD_MAX =
 	'Mad.Max.Fury.Road.2015.2160p.BluRay.x265.10bit.SDR.DTS-HD.MA.TrueHD.7.1.Atmos-SWTYBLZ';
 const QUANTUMANIA = 'Ant-Man.and.the.Wasp.Quantumania.2023.2160p.MA.WEB-DL.DDP5.1.Atmos.DV.HDR10';
 const SAMPLE = '00000';
-// a show pack name users cast under Game of Thrones (Cast x Available, 2026-10-11)
-const GOT = 'Game.of.Thrones.S04.1080p.HMAX.WEB-DL.DDP2.0.H.264-LatTeam';
+// from ymsita's RD library (2026-10-11): an episode the library filed as a movie, and a
+// Russian title the identifier ranked right but not confidently (p 0.46), which
+// AvailableAd maps to the same film by hash
+const TOWER = '[SubsPlease] Tower of God S2 - 01 (1080p) [D0A6D666].mkv';
+const DURACKAJA = 'Eta-durackaja-ljubov.2011.MPEG-4-AVC.BluRay-Remux(1080p).mkv';
+const DURACKAJA_HASH = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
 const H1 = 'a'.repeat(40);
 const H2 = 'B'.repeat(40);
-const key = (name: string) => createHash('sha1').update(name).digest('hex');
+const key = (name: string) => createHash('sha1').update(`auto:${name}`).digest('hex');
 
-const confident = (imdbId: string, title: string, year: number) => ({
+const confident = (
+	imdbId: string,
+	title: string,
+	year: number,
+	kind: 'movie' | 'tv' = 'movie'
+) => ({
+	kind,
+	probability: 0.97,
 	confident: true,
 	matches: [{ imdbId, title, year, score: 4.2 }],
 });
@@ -34,10 +45,23 @@ async function call(body: unknown) {
 	return res;
 }
 
+const storedMadMax = {
+	hash: H1,
+	titleKey: key(MAD_MAX),
+	filename: MAD_MAX,
+	kind: 'movie',
+	imdbId: 'tt1392190',
+	title: 'Mad Max: Fury Road',
+	year: 2015,
+	score: 0.99,
+	confident: true,
+};
+
 describe('/api/library/identify', () => {
 	beforeEach(() => {
 		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([]);
 		mockRepository.saveFilenameIdentifications = vi.fn().mockResolvedValue(1);
+		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(new Map());
 	});
 
 	afterEach(() => {
@@ -48,40 +72,38 @@ describe('/api/library/identify', () => {
 		expect((await call({})).status).toHaveBeenCalledWith(400);
 		expect((await call({ items: [] })).status).toHaveBeenCalledWith(400);
 		expect((await call({ items: [{ hash: H1 }] })).status).toHaveBeenCalledWith(400);
+		expect(
+			(await call({ items: [{ filename: MAD_MAX, kind: 'music' }] })).status
+		).toHaveBeenCalledWith(400);
 		const tooMany = Array.from({ length: MAX_ITEMS + 1 }, () => ({ filename: MAD_MAX }));
 		expect((await call({ items: tooMany })).status).toHaveBeenCalledWith(400);
 		expect(mockIdentify).not.toHaveBeenCalled();
 	});
 
 	it('answers stored releases without asking the identifier', async () => {
-		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
-			{
-				hash: H1,
-				titleKey: key(MAD_MAX),
-				filename: MAD_MAX,
-				imdbId: 'tt1392190',
-				title: 'Mad Max: Fury Road',
-				year: 2015,
-				score: 4.2,
-				confident: true,
-			},
-		]);
-		const res = await call({ items: [{ hash: H1, filename: MAD_MAX }] });
+		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([storedMadMax]);
+		// an older page still sends its guess; it changes nothing
+		const res = await call({ items: [{ hash: H1, filename: MAD_MAX, kind: 'movie' }] });
 
 		expect(mockRepository.getFilenameIdentifications).toHaveBeenCalledWith([
 			{ hash: H1, titleKey: key(MAD_MAX) },
 		]);
 		expect(mockIdentify).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith({
-			results: [{ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015 }],
+			results: [
+				{ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015, kind: 'movie' },
+			],
 			complete: true,
 		});
 	});
 
-	it('asks about the rest, returns only confident answers and stores every hashed one', async () => {
+	it('asks once for movies and shows alike and returns the kind the service found', async () => {
 		mockIdentify.mockResolvedValue([
 			confident('tt10954600', 'Ant-Man and the Wasp: Quantumania', 2023),
+			confident('tt12057106', 'Tower of God', 2020, 'tv'),
 			{
+				kind: 'movie',
+				probability: 0.01,
 				confident: false,
 				matches: [{ imdbId: 'tt0000001', title: 'Le Million', year: 1931, score: 0.1 }],
 			},
@@ -89,18 +111,26 @@ describe('/api/library/identify', () => {
 		const res = await call({
 			items: [
 				{ hash: H2, filename: QUANTUMANIA },
-				{ hash: H1, filename: SAMPLE },
-				{ filename: QUANTUMANIA }, // hashless (Premiumize): answered, not stored
+				{ hash: H1, filename: TOWER },
+				{ filename: SAMPLE }, // hashless (Premiumize): answered, not stored
+				{ filename: QUANTUMANIA },
 			],
 		});
 
 		// one question per distinct filename
-		expect(mockIdentify).toHaveBeenCalledWith([QUANTUMANIA, SAMPLE], 'movie');
+		expect(mockIdentify).toHaveBeenCalledExactlyOnceWith([QUANTUMANIA, TOWER, SAMPLE]);
+		const quantumania = {
+			imdbId: 'tt10954600',
+			title: 'Ant-Man and the Wasp: Quantumania',
+			year: 2023,
+			kind: 'movie',
+		};
 		expect(res.json).toHaveBeenCalledWith({
 			results: [
-				{ imdbId: 'tt10954600', title: 'Ant-Man and the Wasp: Quantumania', year: 2023 },
+				quantumania,
+				{ imdbId: 'tt12057106', title: 'Tower of God', year: 2020, kind: 'tv' },
 				null,
-				{ imdbId: 'tt10954600', title: 'Ant-Man and the Wasp: Quantumania', year: 2023 },
+				quantumania,
 			],
 			complete: true,
 		});
@@ -108,26 +138,85 @@ describe('/api/library/identify', () => {
 			expect.objectContaining({
 				hash: H2.toLowerCase(),
 				titleKey: key(QUANTUMANIA),
+				kind: 'movie',
 				imdbId: 'tt10954600',
+				score: 0.97,
 				confident: true,
 			}),
-			expect.objectContaining({ hash: H1, imdbId: 'tt0000001', confident: false }),
+			expect.objectContaining({
+				hash: H1,
+				kind: 'tv',
+				imdbId: 'tt12057106',
+				confident: true,
+			}),
 		]);
 	});
 
-	it('still serves stored answers when the identifier is down', async () => {
-		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
+	it('names a release the service ranked first but doubted when DMM maps its hash there', async () => {
+		const doubted = (imdbId: string, title: string) => ({
+			kind: 'movie' as const,
+			probability: 0.46,
+			confident: false,
+			matches: [{ imdbId, title, year: 2011, score: -0.02 }],
+		});
+		mockIdentify.mockResolvedValue([
+			doubted('tt1570728', 'Crazy, Stupid, Love.'),
+			doubted('tt0000002', 'Someone Else'),
+		]);
+		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(
+			new Map([
+				[DURACKAJA_HASH, new Set(['tt1541874', 'tt1570728'])],
+				[H1, new Set(['tt9999999'])],
+			])
+		);
+		const res = await call({
+			items: [
+				{ hash: DURACKAJA_HASH, filename: DURACKAJA },
+				{ hash: H1, filename: 'Some.Other.2011' },
+			],
+		});
+
+		expect(mockRepository.getHashTitleIds).toHaveBeenCalledWith([DURACKAJA_HASH, H1]);
+		expect(res.json).toHaveBeenCalledWith({
+			results: [
+				{ imdbId: 'tt1570728', title: 'Crazy, Stupid, Love.', year: 2011, kind: 'movie' },
+				null,
+			],
+			complete: true,
+		});
+		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([
+			expect.objectContaining({ hash: DURACKAJA_HASH, confident: true }),
+			expect.objectContaining({ hash: H1, confident: false }),
+		]);
+	});
+
+	it('does not take an agreement the filename year contradicts', async () => {
+		// the service ranked the 1992 sequel first; a mis-filed Available row agrees with it
+		const PET =
+			'Pet.Sematary.2019.PROPER.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv';
+		const PET_HASH = '40f606ca3aa415cd4b94905012f167823274b8fe';
+		mockIdentify.mockResolvedValue([
 			{
-				hash: H1,
-				titleKey: key(MAD_MAX),
-				filename: MAD_MAX,
-				imdbId: 'tt1392190',
-				title: 'Mad Max: Fury Road',
-				year: 2015,
-				score: 4.2,
-				confident: true,
+				kind: 'movie',
+				probability: 0.04,
+				parsedYear: 2019,
+				confident: false,
+				matches: [
+					{ imdbId: 'tt0105128', title: 'Pet Sematary II', year: 1992, score: 3.44 },
+				],
 			},
 		]);
+		mockRepository.getHashTitleIds = vi
+			.fn()
+			.mockResolvedValue(
+				new Map([[PET_HASH, new Set(['tt0837563', 'tt0105128', 'tt0098084'])]])
+			);
+		const res = await call({ items: [{ hash: PET_HASH, filename: PET }] });
+		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
+	});
+
+	it('still serves stored answers when the identifier is down', async () => {
+		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([storedMadMax]);
 		mockIdentify.mockResolvedValue(null);
 		const res = await call({
 			items: [
@@ -138,61 +227,13 @@ describe('/api/library/identify', () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
-			results: [{ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015 }, null],
+			results: [
+				{ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015, kind: 'movie' },
+				null,
+			],
 			complete: false,
 		});
 		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([]);
-	});
-
-	it('asks the show model about shows and keys their answers apart from movies', async () => {
-		// a movie answer stored for the same release must not answer a show question
-		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
-			{
-				hash: H1,
-				titleKey: key(GOT),
-				filename: GOT,
-				imdbId: 'tt0000002',
-				title: 'Some Movie',
-				year: 2014,
-				score: 4.2,
-				confident: true,
-			},
-		]);
-		mockIdentify.mockImplementation(async (names, kind) =>
-			names.map(() =>
-				kind === 'tv'
-					? confident('tt0944947', 'Game of Thrones', 2011)
-					: confident('tt1392190', 'Mad Max: Fury Road', 2015)
-			)
-		);
-		const res = await call({
-			items: [
-				{ hash: H1, filename: GOT, kind: 'tv' },
-				{ hash: H2, filename: MAD_MAX },
-			],
-		});
-
-		expect(mockIdentify).toHaveBeenCalledWith([GOT], 'tv');
-		expect(mockIdentify).toHaveBeenCalledWith([MAD_MAX], 'movie');
-		expect(res.json).toHaveBeenCalledWith({
-			results: [
-				{ imdbId: 'tt0944947', title: 'Game of Thrones', year: 2011 },
-				{ imdbId: 'tt1392190', title: 'Mad Max: Fury Road', year: 2015 },
-			],
-			complete: true,
-		});
-		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith(
-			expect.arrayContaining([
-				expect.objectContaining({
-					hash: H1,
-					titleKey: key(`tv:${GOT}`),
-					imdbId: 'tt0944947',
-				}),
-			])
-		);
-		expect(
-			(await call({ items: [{ filename: GOT, kind: 'music' }] })).status
-		).toHaveBeenCalledWith(400);
 	});
 
 	it('does not fail the answer when storing fails', async () => {

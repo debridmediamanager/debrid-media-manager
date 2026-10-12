@@ -494,7 +494,7 @@ function TorrentRow({
 								<Link
 									href={
 										identification
-											? `/${torrent.mediaType === 'tv' ? 'show' : 'movie'}/${identification.imdbId}`
+											? `/${identification.kind === 'tv' ? 'show' : 'movie'}/${identification.imdbId}`
 											: `/search?query=${encodeURIComponent(
 													(
 														torrent.info!.title +
@@ -508,7 +508,7 @@ function TorrentRow({
 									onClick={(e) => e.stopPropagation()}
 								>
 									{identification
-										? `Go to ${torrent.mediaType === 'tv' ? 'show' : 'movie'} page`
+										? `Go to ${identification.kind === 'tv' ? 'show' : 'movie'} page`
 										: 'Search again'}
 								</Link>
 							)}

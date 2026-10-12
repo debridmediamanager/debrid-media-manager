@@ -19,6 +19,8 @@ export interface FilenameIdentification {
 	hash: string;
 	titleKey: string;
 	filename: string;
+	/** "movie" or "tv"; null on rows from before the service decided. */
+	kind: string | null;
 	imdbId: string | null;
 	title: string | null;
 	year: number | null;
@@ -111,6 +113,7 @@ export class HashImdbService extends DatabaseClient {
 				hash: true,
 				titleKey: true,
 				filename: true,
+				kind: true,
 				imdbId: true,
 				title: true,
 				year: true,
@@ -119,6 +122,43 @@ export class HashImdbService extends DatabaseClient {
 			},
 		});
 		return rows.filter((r) => wanted.has(`${r.hash}|${r.titleKey}`));
+	}
+
+	/**
+	 * Every title DMM maps each hash to, keyed by lowercase hash: zurg's matches
+	 * (HashImdb) and the pages users added the release from (Available,
+	 * AvailableAd). An episode's id counts as its show's. All three are read by
+	 * their hash index. Unlike `identifyHashes` nothing is picked: these only
+	 * confirm a title found another way, so any source naming it is enough.
+	 */
+	public async getHashTitleIds(hashes: string[]): Promise<Map<string, Set<string>>> {
+		const ids = new Map<string, Set<string>>();
+		const wanted = [...new Set(hashes.map((h) => h.toLowerCase()))].filter((h) =>
+			INFO_HASH.test(h)
+		);
+		if (wanted.length === 0) return ids;
+		const select = { hash: true, imdbId: true } as const;
+		const rows = (
+			await Promise.all([
+				this.prisma.hashImdb.findMany({ where: { hash: { in: wanted } }, select }),
+				this.prisma.available.findMany({ where: { hash: { in: wanted } }, select }),
+				this.prisma.availableAd.findMany({ where: { hash: { in: wanted } }, select }),
+			])
+		)
+			.flat()
+			.filter((r) => IMDB_ID.test(r.imdbId));
+		if (rows.length === 0) return ids;
+		const episodes = await this.prisma.imdbTitleEpisode.findMany({
+			where: { tconst: { in: [...new Set(rows.map((r) => r.imdbId))] } },
+			select: { tconst: true, parentTconst: true },
+		});
+		const show = new Map(episodes.map((e) => [e.tconst, e.parentTconst]));
+		for (const { hash, imdbId } of rows) {
+			const set = ids.get(hash) ?? new Set<string>();
+			set.add(show.get(imdbId) ?? imdbId);
+			ids.set(hash, set);
+		}
+		return ids;
 	}
 
 	/** Store new answers; a pair already stored keeps its first answer. */

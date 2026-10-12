@@ -173,9 +173,7 @@ function TorrentsPage() {
 		);
 		if (todo.length === 0) return;
 		todo.forEach((t) => askedIdentify.current.add(t.id));
-		identifyLibrary(todo).then((found) => {
-			if (Object.keys(found).length) setIdentifications((prev) => ({ ...prev, ...found }));
-		});
+		identifyLibrary(todo, (found) => setIdentifications((prev) => ({ ...prev, ...found })));
 	}, [cacheLoading, isFetching, cachedLibraryItems]);
 
 	// loading states
