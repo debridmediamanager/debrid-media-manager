@@ -1,11 +1,12 @@
 # Sponsor API
 
 Two endpoints for sponsors' own tools. Both take your DMM API key in the
-`x-api-key` header and stop working the moment the sponsorship lapses.
+`x-api-key` header and stop working the moment the sponsorship lapses. Each allows
+2,500 items a minute, so send full batches.
 
 ## Identify releases by filename
 
-`POST /api/sponsor/identify`, up to 500 items, 10 calls a minute per address.
+`POST /api/sponsor/identify`, up to 500 items, 5 calls a minute per address.
 
 ```bash
 curl -X POST https://debridmediamanager.com/api/sponsor/identify \
@@ -21,7 +22,7 @@ again later for the `null` rows.
 
 ## Cached availability DMM has seen
 
-`POST /api/sponsor/availability`, up to 100 hashes, 60 calls a minute per address.
+`POST /api/sponsor/availability`, up to 100 hashes, 25 calls a minute per address.
 
 ```bash
 curl -X POST https://debridmediamanager.com/api/sponsor/availability \

@@ -13,4 +13,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	return identifyHandler(req, res);
 }
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.libraryIdentify);
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.sponsorIdentify);
