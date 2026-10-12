@@ -15,6 +15,7 @@ import {
 	fetchDebridLink,
 	fetchOffcloud,
 	fetchPremiumize,
+	withOriginalRdNames,
 } from '@/utils/fetchTorrents';
 import { FREE_TORBOX_PLAN_MESSAGE, isTorBoxPlanRestricted } from '@/utils/torboxPlan';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
@@ -299,7 +300,7 @@ export class UnifiedLibraryFetcher {
 
 			let batchTorrentCount = 0;
 			for (const result of batchResults) {
-				const torrents = await this.processRealDebridTorrents(result.data);
+				const torrents = await this.processRealDebridTorrents(token, result.data);
 				allTorrents.push(...torrents);
 				batchTorrentCount += torrents.length;
 				options.onBatchComplete?.(torrents);
@@ -578,8 +579,8 @@ export class UnifiedLibraryFetcher {
 	}
 
 	// Conversion helpers (these would import from existing utils)
-	private async processRealDebridTorrents(data: any[]): Promise<UserTorrent[]> {
-		return data.map((t) => convertToUserTorrent(t));
+	private async processRealDebridTorrents(token: string, data: any[]): Promise<UserTorrent[]> {
+		return (await withOriginalRdNames(token, data)).map((t) => convertToUserTorrent(t));
 	}
 
 	private async processAllDebridMagnets(magnets: MagnetStatus[]): Promise<UserTorrent[]> {

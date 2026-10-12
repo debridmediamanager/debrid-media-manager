@@ -15,7 +15,7 @@ import {
 	type PremiumizeItem,
 	type PremiumizeTransfer,
 } from '@/services/premiumize';
-import { getUserTorrentsList } from '@/services/realDebrid';
+import { getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -117,7 +117,7 @@ export const fetchRealDebrid = async (
 
 		// Step 2: If limit input is set, convert and call callback
 		if (customLimit && customLimit <= 2) {
-			const torrents = await processTorrents(initialData);
+			const torrents = await processTorrents(rdKey, initialData);
 			await callback(torrents);
 			return;
 		}
@@ -142,7 +142,7 @@ export const fetchRealDebrid = async (
 
 		const allData = pagesOfTorrents.flatMap((pageResult) => pageResult.data);
 
-		const torrents = await processTorrents(allData);
+		const torrents = await processTorrents(rdKey, allData);
 		await callback(torrents);
 	} catch (error) {
 		await callback([]);
@@ -155,9 +155,50 @@ export const fetchRealDebrid = async (
 	}
 };
 
+// RD renames a torrent to its one selected file, and a disc clip ("00029.m2ts") names no release
+export const isBareFileName = (name: string) =>
+	!/\p{L}/u.test(name.replace(/\.[a-z0-9]{2,4}$/i, ''));
+
+// a torrent's original name never changes, so each id is asked about once per page load
+const originalRdNames = new Map<string, string>();
+
+// GET /torrents carries no original name, so ask /torrents/info for the rows RD renamed to a bare clip
+export async function withOriginalRdNames(
+	rdKey: string,
+	torrents: UserTorrentResponse[]
+): Promise<UserTorrentResponse[]> {
+	const out = [...torrents];
+	const bare = out.flatMap((t, i) =>
+		t.filename && isBareFileName(t.filename) && !(t as any).original_filename ? [i] : []
+	);
+	for (let i = 0; i < bare.length; i += 5) {
+		await Promise.all(
+			bare.slice(i, i + 5).map(async (idx) => {
+				try {
+					const id = out[idx].id;
+					if (!originalRdNames.has(id))
+						originalRdNames.set(
+							id,
+							(await getTorrentInfo(rdKey, id)).original_filename || ''
+						);
+					const original_filename = originalRdNames.get(id);
+					if (original_filename) out[idx] = { ...out[idx], original_filename } as any;
+				} catch {
+					// keep RD's bare name
+				}
+			})
+		);
+	}
+	return out;
+}
+
 export function convertToUserTorrent(torrentInfo: UserTorrentResponse): UserTorrent {
 	// Provide defensive defaults for partially shaped inputs
-	const filename = torrentInfo.filename || 'noname';
+	const original: string | undefined = (torrentInfo as any).original_filename;
+	const filename =
+		(torrentInfo.filename && isBareFileName(torrentInfo.filename) && original) ||
+		torrentInfo.filename ||
+		'noname';
 	const addedRaw =
 		typeof torrentInfo.added === 'string' ? torrentInfo.added : new Date().toISOString();
 	const serviceStatus = torrentInfo.status || 'unknown';
@@ -198,11 +239,16 @@ export function convertToUserTorrent(torrentInfo: UserTorrentResponse): UserTorr
 		seeders: (torrentInfo as any).seeders || 0,
 		speed: (torrentInfo as any).speed || 0,
 		title: getMediaId(info, mediaType, false) || filename,
+		filename,
 		selectedFiles: [],
 	};
 }
 
-async function processTorrents(torrentData: UserTorrentResponse[]): Promise<UserTorrent[]> {
+async function processTorrents(
+	rdKey: string,
+	torrentData: UserTorrentResponse[]
+): Promise<UserTorrent[]> {
+	torrentData = await withOriginalRdNames(rdKey, torrentData);
 	const results = await Promise.all(
 		torrentData.map(async (t) => {
 			try {

@@ -1,0 +1,187 @@
+{
+	"_note": "Recorded 2026-10-12 from the RD test account: GET /torrents rows and their GET /torrents/info. Download links redacted.",
+	"info": {
+		"RHYN5ZZJ6X6CI": {
+			"id": "RHYN5ZZJ6X6CI",
+			"filename": "00029.m2ts",
+			"original_filename": "The.Matrix.1999.UHD.BDRemux.2160p.4K.HEVC.HDR.Dolby.Vision.IVA(ENG.RUS).ExKinoRay",
+			"hash": "4d60b0d6b6f5a887dc98818ad19ec6e89a506a40",
+			"bytes": 59483572224,
+			"original_bytes": 59483739832,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-08-19T13:35:24.000Z",
+			"files": [
+				{
+					"id": 1,
+					"path": "/BDMV/STREAM/00029.m2ts",
+					"bytes": 59483572224,
+					"selected": 1
+				},
+				{
+					"id": 2,
+					"path": "/BDMV/BACKUP/index.bdmv",
+					"bytes": 156,
+					"selected": 0
+				},
+				{
+					"id": 3,
+					"path": "/BDMV/BACKUP/MovieObject.bdmv",
+					"bytes": 342,
+					"selected": 0
+				},
+				{
+					"id": 4,
+					"path": "/BDMV/BACKUP/PLAYLIST/00000.mpls",
+					"bytes": 866,
+					"selected": 0
+				},
+				{
+					"id": 5,
+					"path": "/BDMV/CLIPINF/00029.clpi",
+					"bytes": 82440,
+					"selected": 0
+				},
+				{
+					"id": 6,
+					"path": "/BDMV/index.bdmv",
+					"bytes": 156,
+					"selected": 0
+				},
+				{
+					"id": 7,
+					"path": "/BDMV/MovieObject.bdmv",
+					"bytes": 342,
+					"selected": 0
+				},
+				{
+					"id": 8,
+					"path": "/BDMV/PLAYLIST/00000.mpls",
+					"bytes": 866,
+					"selected": 0
+				},
+				{
+					"id": 9,
+					"path": "/BDMV/BACKUP/CLIPINF/00029.clpi",
+					"bytes": 82440,
+					"selected": 0
+				}
+			],
+			"links": ["https://real-debrid.com/d/REDACTED0"],
+			"ended": "2025-09-18T23:52:55.000Z"
+		},
+		"FM6NCCSXS3HFW": {
+			"id": "FM6NCCSXS3HFW",
+			"filename": "2160p",
+			"original_filename": "2160p",
+			"hash": "7e9fdf29be524a58d1104b5c1e602b9a8a12f43f",
+			"bytes": 13481141928,
+			"original_bytes": 13481148549,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-08-19T18:05:28.000Z",
+			"files": [
+				{
+					"id": 1,
+					"path": "/The Matrix 4K.mkv",
+					"bytes": 13384517973,
+					"selected": 1
+				},
+				{
+					"id": 2,
+					"path": "/Sample/The Matrix 4K Sample.mkv",
+					"bytes": 96623955,
+					"selected": 1
+				},
+				{
+					"id": 3,
+					"path": "/The Matrix 4K.txt",
+					"bytes": 6621,
+					"selected": 0
+				}
+			],
+			"links": ["https://real-debrid.com/d/REDACTED0", "https://real-debrid.com/d/REDACTED1"],
+			"ended": "2026-07-01T17:35:58.000Z"
+		},
+		"EIIMZMXHLMVB2": {
+			"id": "EIIMZMXHLMVB2",
+			"filename": "Lanterns 2026 S01E08 1080p x265-ELiTE.mkv",
+			"original_filename": "www.UIndex.org    -    Lanterns 2026 S01E08 1080p x265-ELiTE",
+			"hash": "1288a03fe399ec09a32b1e41159399fd26fc32dd",
+			"bytes": 498069840,
+			"original_bytes": 498070709,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-05T05:27:03.000Z",
+			"files": [
+				{
+					"id": 1,
+					"path": "/Lanterns 2026 S01E08 1080p x265-ELiTE.mkv",
+					"bytes": 498069840,
+					"selected": 1
+				},
+				{
+					"id": 2,
+					"path": "/Lanterns 2026 S01E08 1080p x265-ELiTE.mkv.nfo",
+					"bytes": 742,
+					"selected": 0
+				},
+				{
+					"id": 3,
+					"path": "/Torrent Downloaded From     UIndex.org      .txt",
+					"bytes": 127,
+					"selected": 0
+				}
+			],
+			"links": ["https://real-debrid.com/d/REDACTED0"],
+			"ended": "2026-10-05T04:34:24.000Z"
+		}
+	},
+	"list": [
+		{
+			"id": "RHYN5ZZJ6X6CI",
+			"filename": "00029.m2ts",
+			"hash": "4d60b0d6b6f5a887dc98818ad19ec6e89a506a40",
+			"bytes": 59483739832,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-08-19T13:35:24.000Z",
+			"links": [],
+			"ended": "2025-09-18T23:52:55.000Z"
+		},
+		{
+			"id": "FM6NCCSXS3HFW",
+			"filename": "2160p",
+			"hash": "7e9fdf29be524a58d1104b5c1e602b9a8a12f43f",
+			"bytes": 13481148549,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-08-19T18:05:28.000Z",
+			"links": [],
+			"ended": "2026-07-01T17:35:58.000Z"
+		},
+		{
+			"id": "EIIMZMXHLMVB2",
+			"filename": "Lanterns 2026 S01E08 1080p x265-ELiTE.mkv",
+			"hash": "1288a03fe399ec09a32b1e41159399fd26fc32dd",
+			"bytes": 498070709,
+			"host": "real-debrid.com",
+			"split": 2000,
+			"progress": 100,
+			"status": "downloaded",
+			"added": "2026-10-05T05:27:03.000Z",
+			"links": [],
+			"ended": "2026-10-05T04:34:24.000Z"
+		}
+	]
+}

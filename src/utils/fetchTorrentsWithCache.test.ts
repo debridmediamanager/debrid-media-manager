@@ -13,6 +13,7 @@ vi.mock('@/services/realDebrid', () => ({
 
 vi.mock('./fetchTorrents', () => ({
 	convertToUserTorrent: vi.fn(),
+	withOriginalRdNames: vi.fn(async (_key: string, rows: any[]) => rows),
 }));
 
 import { getUserTorrentsList } from '@/services/realDebrid';

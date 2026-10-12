@@ -1,7 +1,7 @@
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { UserTorrentResponse, UserTorrentsResult } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { convertToUserTorrent } from './fetchTorrents';
+import { convertToUserTorrent, withOriginalRdNames } from './fetchTorrents';
 
 // Cache storage for torrents (similar to Zurg's atomic.Pointer)
 let cachedTorrents: UserTorrent[] | null = null;
@@ -62,7 +62,9 @@ export async function fetchRealDebridWithCache(
 
 		// Convert first page to UserTorrent format
 		const conversionStart = Date.now();
-		let firstPageTorrents = firstPageData.map(convertToUserTorrent);
+		let firstPageTorrents = (await withOriginalRdNames(rdKey, firstPageData)).map(
+			convertToUserTorrent
+		);
 		console.log(
 			`[${new Date().toISOString()}]   First page conversion: ${Date.now() - conversionStart}ms`
 		);
@@ -201,7 +203,7 @@ export async function fetchRealDebridWithCache(
 
 		// Convert all to UserTorrent format
 		const conversionStart2 = Date.now();
-		const allTorrents = allData.map(convertToUserTorrent);
+		const allTorrents = (await withOriginalRdNames(rdKey, allData)).map(convertToUserTorrent);
 		console.log(
 			`[${new Date().toISOString()}]   Final conversion: ${Date.now() - conversionStart2}ms`
 		);
@@ -264,7 +266,9 @@ export async function fetchRealDebridIncremental(
 	}
 
 	// Convert and deliver first page immediately
-	const firstPageTorrents = firstPageData.map(convertToUserTorrent);
+	const firstPageTorrents = (await withOriginalRdNames(rdKey, firstPageData)).map(
+		convertToUserTorrent
+	);
 	allTorrents.push(...firstPageTorrents);
 	const maxPages = Math.ceil(totalCount / pageSize);
 
@@ -283,7 +287,7 @@ export async function fetchRealDebridIncremental(
 		const pageStart = Date.now();
 		try {
 			const { data } = await getUserTorrentsList(rdKey, pageSize, page);
-			const pageTorrents = data.map(convertToUserTorrent);
+			const pageTorrents = (await withOriginalRdNames(rdKey, data)).map(convertToUserTorrent);
 			allTorrents.push(...pageTorrents);
 
 			console.log(

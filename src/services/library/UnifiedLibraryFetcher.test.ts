@@ -53,6 +53,7 @@ vi.mock('@/utils/fetchTorrents', () => ({
 	convertToTbWebDownloadUserTorrent: vi.fn(
 		(data: any) => ({ id: `tb:w${data.id ?? 'unknown'}` }) as any
 	),
+	withOriginalRdNames: vi.fn(async (_key: string, rows: any[]) => rows),
 }));
 
 const mockGetUserTorrentsList = vi.mocked(getUserTorrentsList);
