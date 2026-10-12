@@ -1,6 +1,7 @@
 import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem } from '@/services/trakt';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -123,7 +124,7 @@ export const TraktBrowse: FunctionComponent = () => {
 			<Head>
 				<title>Debrid Media Manager - Trakt - {title}</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">Trakt - {title}</h1>

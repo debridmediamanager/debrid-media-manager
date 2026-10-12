@@ -2,6 +2,7 @@ import { Card, Field, maskApiKey } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import { toasterPosition } from '@/utils/toastOptions';
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -311,7 +312,7 @@ export default function JellyfinSetupPage() {
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Logo />
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
 				<Link

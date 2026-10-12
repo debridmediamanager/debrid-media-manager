@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle, HelpCircle, Info, Loader2, XCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, HelpCircle, Info, Loader2, X, XCircle } from 'lucide-react';
 import React, {
 	createContext,
 	ReactNode,
@@ -479,51 +479,69 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 			className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
 			onClick={handleBackdropClick}
 		>
-			<div
-				className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-lg bg-gray-900 p-6 shadow-xl"
-				onClick={(e) => e.stopPropagation()}
-			>
-				{title && (
-					<h2 className="mb-4 text-center text-xl font-bold text-gray-100">{title}</h2>
+			<div className="relative w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
+				{/* A dialog with no buttons otherwise closes only on the backdrop, a thin
+				    strip on a phone; outside the scroller so it stays put. */}
+				{!showConfirmButton && !showCancelButton && (
+					<button
+						type="button"
+						aria-label="Close"
+						onClick={() =>
+							onClose({ isConfirmed: false, isDismissed: true, dismiss: 'close' })
+						}
+						className="absolute right-2 top-2 z-10 rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+					>
+						<X className="h-5 w-5" />
+					</button>
 				)}
-				{poster && (
-					// Hidden on phones, where it pushes the release details below the fold.
-					<div className="mx-auto mb-3 hidden w-32 sm:block" data-testid="dialog-poster">
-						<Poster imdbId={poster.imdbId} title={poster.title} />
-					</div>
-				)}
-				{html && (
-					<div
-						className="mb-6 text-gray-100"
-						dangerouslySetInnerHTML={{ __html: html }}
-					/>
-				)}
-				{(showConfirmButton || showCancelButton) && (
-					<div className="flex justify-center space-x-3">
-						{showConfirmButton && (
-							<button
-								onClick={handleConfirm}
-								className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-							>
-								{confirmButtonText}
-							</button>
-						)}
-						{showCancelButton && (
-							<button
-								onClick={() =>
-									onClose({
-										isConfirmed: false,
-										isDismissed: true,
-										dismiss: 'cancel',
-									})
-								}
-								className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
-							>
-								{cancelButtonText}
-							</button>
-						)}
-					</div>
-				)}
+				<div className="max-h-[90vh] overflow-auto rounded-lg bg-gray-900 p-6 shadow-xl">
+					{title && (
+						<h2 className="mb-4 text-center text-xl font-bold text-gray-100">
+							{title}
+						</h2>
+					)}
+					{poster && (
+						// Hidden on phones, where it pushes the release details below the fold.
+						<div
+							className="mx-auto mb-3 hidden w-32 sm:block"
+							data-testid="dialog-poster"
+						>
+							<Poster imdbId={poster.imdbId} title={poster.title} />
+						</div>
+					)}
+					{html && (
+						<div
+							className="mb-6 text-gray-100"
+							dangerouslySetInnerHTML={{ __html: html }}
+						/>
+					)}
+					{(showConfirmButton || showCancelButton) && (
+						<div className="flex justify-center space-x-3">
+							{showConfirmButton && (
+								<button
+									onClick={handleConfirm}
+									className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+								>
+									{confirmButtonText}
+								</button>
+							)}
+							{showCancelButton && (
+								<button
+									onClick={() =>
+										onClose({
+											isConfirmed: false,
+											isDismissed: true,
+											dismiss: 'cancel',
+										})
+									}
+									className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+								>
+									{cancelButtonText}
+								</button>
+							)}
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

@@ -81,7 +81,7 @@ import {
 	defaultShowSeasonFilter,
 } from '@/utils/settings';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
-import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { castToastOptions, searchToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastTvShowTorBox } from '@/utils/torboxCastApiClient';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
@@ -2087,7 +2087,7 @@ const TvSearch: FunctionComponent = () => {
 					Debrid Media Manager - TV Show - {showInfo.title} - Season {seasonNum}
 				</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<MediaHeader
 				mediaType="tv"

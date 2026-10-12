@@ -4,6 +4,7 @@ import { useCachedList } from '@/hooks/useCachedList';
 import type { AnimeSearchResult } from '@/services/database/anime';
 import { animePagePath } from '@/utils/anidbId';
 import { getLocalStorageBoolean } from '@/utils/browserStorage';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -90,7 +91,7 @@ function Search() {
 			<Head>
 				<title>{`Debrid Media Manager - Search: ${query}`}</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			{/* Header with Go Home button */}
 			<div className="mb-4 flex w-full max-w-3xl items-center justify-between">
 				<h1 className="text-xl font-bold text-white">Search</h1>

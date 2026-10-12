@@ -53,7 +53,7 @@ import {
 	defaultTorrentsFilter as defaultFilterSetting,
 	defaultPlayer,
 } from '@/utils/settings';
-import { searchToastOptions } from '@/utils/toastOptions';
+import { searchToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
 import { withAuth } from '@/utils/withAuth';
@@ -791,7 +791,7 @@ const AnimePage: FunctionComponent = () => {
 			<Head>
 				<title>Debrid Media Manager - Anime - {title}</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<MediaHeader
 				mediaType="anime"

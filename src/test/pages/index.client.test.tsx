@@ -79,6 +79,7 @@ vi.mock('@/utils/premiumCheck', () => ({
 }));
 
 vi.mock('@/utils/toastOptions', () => ({
+	toasterPosition: () => 'bottom-right',
 	__esModule: true,
 	genericToastOptions: {},
 }));

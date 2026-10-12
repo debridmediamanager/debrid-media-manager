@@ -7,6 +7,7 @@ import {
 	getLikedLists,
 	getUsersPersonalLists,
 } from '@/services/trakt';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ function TraktMyLists() {
 					Debrid Media Manager - Trakt - {traktUserSlug} - {listName}
 				</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">

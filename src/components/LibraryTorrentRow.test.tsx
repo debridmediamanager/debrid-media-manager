@@ -127,6 +127,14 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(container.querySelector('button[title="Cast (PM)"]')).toBeInTheDocument();
 		});
 
+		// Measured at 390px: the bare 16px icons were too small to hit on a phone.
+		it('gives every row action a finger-sized target on phones', () => {
+			const { container } = render(<LibraryTorrentRow {...pmProps()} />);
+			const actions = container.querySelectorAll('td button[title]');
+			expect(actions.length).toBeGreaterThan(0);
+			actions.forEach((b) => expect(b).toHaveClass('p-3', 'sm:p-0'));
+		});
+
 		// A row whose transfer record was cleared reports no info hash, and
 		// Premiumize resolves a cast from the hash alone - so there is nothing to
 		// cast and the button must not be offered.

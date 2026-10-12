@@ -37,6 +37,26 @@ describe('ModalContext', () => {
 		await waitFor(() => expect((window as any).closePopup).toBeUndefined());
 	});
 
+	// The info popups show no buttons, so on a phone the only way out was the
+	// thin strip of backdrop around a panel that fills the screen.
+	it('gives a button-less html dialog a close button', async () => {
+		const modal = await renderWithProvider();
+		const promise = modal.fire({
+			html: '<h1>Some.Release.2020</h1>',
+			showConfirmButton: false,
+			showCancelButton: false,
+		});
+		await userEvent.click(await screen.findByRole('button', { name: 'Close' }));
+		await expect(promise).resolves.toMatchObject({ isDismissed: true, dismiss: 'close' });
+	});
+
+	it('leaves the close button off an html dialog that has its own buttons', async () => {
+		const modal = await renderWithProvider();
+		void modal.fire({ html: '<h1>Some.Release.2020</h1>', showCancelButton: false });
+		await screen.findByText('Some.Release.2020');
+		expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
+	});
+
 	it('shows a poster above an html dialog when one is given', async () => {
 		const modal = await renderWithProvider();
 		void modal.fire({

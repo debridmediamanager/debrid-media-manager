@@ -4,6 +4,7 @@ import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem, getPopularByGenre, getTrendingByGenre } from '@/services/trakt';
 import { parseBrowseKey } from '@/utils/browseKey';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -85,7 +86,7 @@ export const Genre: FunctionComponent = () => {
 			<Head>
 				<title>Debrid Media Manager - Browse {genre}</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold">Browse {genre}</h1>
 				<Link

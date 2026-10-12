@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -26,7 +27,7 @@ function RecentlyUpdated() {
 			<Head>
 				<title>Debrid Media Manager - Recently Updated</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold">Recently Updated</h1>
 				<Link

@@ -3,6 +3,7 @@ import Poster from '@/components/poster';
 import { usePremiumizeCredential } from '@/hooks/auth';
 import { usePremiumizeCastToken } from '@/hooks/premiumizeCastToken';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { Eye, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -408,7 +409,7 @@ export function PremiumizeManagePage() {
 				alt="logo"
 				className="mb-4"
 			/>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			{selectedLinks.size > 0 && (
 				<div className="fixed left-0 right-0 top-0 z-50 flex justify-center bg-gray-900/95 p-4 backdrop-blur">

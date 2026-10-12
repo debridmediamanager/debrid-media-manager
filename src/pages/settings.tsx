@@ -1,5 +1,6 @@
 import { Logo } from '@/components/Logo';
 import { SettingsSection } from '@/components/SettingsSection';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { ArrowLeft } from 'lucide-react';
 import Head from 'next/head';
@@ -14,7 +15,7 @@ function SettingsPage() {
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Logo />
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			<div className="mt-6 flex w-full max-w-md flex-col items-center gap-6">
 				<Link
 					href="/"

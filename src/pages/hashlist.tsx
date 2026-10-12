@@ -51,7 +51,7 @@ import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { fetchBlockedHashes } from '@/utils/takedownClient';
-import { genericToastOptions } from '@/utils/toastOptions';
+import { genericToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { uniqueByHash } from '@/utils/uniqueByHash';
 import { filenameParse } from '@ctrl/video-filename-parser';
@@ -1044,7 +1044,7 @@ function HashlistPage() {
 			<Head>
 				<title>{`Debrid Media Manager - Hash list (${userTorrentsList.length} files)`}</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			{/* Hashlist Navigation Bar (when browsing from /hashlists) */}
 			{mounted && navState && (

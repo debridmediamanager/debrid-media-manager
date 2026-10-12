@@ -14,7 +14,7 @@ import { getTerms } from '@/utils/browseTerms';
 import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
-import { genericToastOptions } from '@/utils/toastOptions';
+import { genericToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { Settings } from 'lucide-react';
 import Head from 'next/head';
@@ -271,7 +271,7 @@ function IndexPage() {
 				<meta name="robots" content="index, nofollow" />
 			</Head>
 			<Logo />
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			{servicesSettled || profileWaitElapsed ? (
 				<>
 					<h1 className="mb-2 flex items-center justify-center text-xl font-bold text-white">

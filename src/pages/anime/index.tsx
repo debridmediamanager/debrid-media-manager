@@ -1,6 +1,7 @@
 import { animeTypeLabel } from '@/components/AnimeEntryLinks';
 import { useCachedList } from '@/hooks/useCachedList';
 import type { AnimeEntryRow } from '@/services/database/anime';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -34,7 +35,7 @@ export function AnimeHome() {
 			<Head>
 				<title>Debrid Media Manager - Anime</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold">Anime</h1>
 				<Link

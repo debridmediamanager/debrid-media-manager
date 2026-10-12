@@ -2,6 +2,7 @@ import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktCollectionItem, getCollectionMovies, getCollectionShows } from '@/services/trakt';
+import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { Archive } from 'lucide-react';
 import Head from 'next/head';
@@ -32,7 +33,7 @@ function TraktCollection() {
 			<Head>
 				<title>Debrid Media Manager - Trakt - {traktUserSlug}&apos;s Collection</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">

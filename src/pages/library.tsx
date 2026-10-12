@@ -70,7 +70,7 @@ import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
-import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
+import { libraryToastOptions, magnetToastOptions, toasterPosition } from '@/utils/toastOptions';
 import {
 	handleShowInfoForAD,
 	handleShowInfoForDL,
@@ -1846,7 +1846,7 @@ function TorrentsPage() {
 			<Head>
 				<title>Debrid Media Manager - Library</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 			<div className="flex flex-1 flex-col">
 				<div className="sticky top-0 z-20 bg-gray-900 pb-2">
 					<div className="mb-1 flex items-center justify-between pt-2">

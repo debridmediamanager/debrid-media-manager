@@ -125,8 +125,20 @@ describe('FloatingLibraryIndicator', () => {
 			const spacer = screen.getByTestId('library-indicator-spacer');
 			expect(spacer).toHaveAttribute('aria-hidden', 'true');
 			// 5rem clears bottom-4 + the 46px pill; 6rem clears sm:bottom-6.
-			expect(spacer).toHaveClass('h-20', 'sm:h-24');
+			expect(spacer).toHaveClass('hidden', 'sm:block', 'sm:h-24');
 			expect(screen.getByLabelText('Refresh library')).toBeInTheDocument();
+		});
+
+		// Measured at 390px: the pill sat on results and buttons mid-page and on
+		// top of every dialog's backdrop.
+		it('stays off phones and under dialogs', () => {
+			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
+			(useRouter as any).mockReturnValue({ ...mockRouter, pathname: '/settings' });
+
+			render(<FloatingLibraryIndicator />);
+			const pill = screen.getByLabelText('Refresh library').closest('.fixed');
+			expect(pill).toHaveClass('hidden', 'sm:flex', 'z-40');
+			expect(pill).not.toHaveClass('z-50');
 		});
 	});
 

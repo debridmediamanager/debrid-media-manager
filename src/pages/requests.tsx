@@ -7,6 +7,7 @@ import {
 	fulfillContentRequest,
 	UncachedError,
 } from '@/utils/contentRequestsApi';
+import { toasterPosition } from '@/utils/toastOptions';
 import {
 	CheckCircle2,
 	HandHeart,
@@ -371,7 +372,7 @@ export default function RequestsPage() {
 			<Head>
 				<title>Debrid Media Manager - Requests</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="w-full max-w-3xl">
 				<div className="mb-4 flex items-center justify-between">

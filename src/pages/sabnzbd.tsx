@@ -1,6 +1,7 @@
 import { Logo } from '@/components/Logo';
 import { magicMountRoot, needsUsernameSlot, sabUrlBase } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import { toasterPosition } from '@/utils/toastOptions';
 import { AlertTriangle, Check, Copy, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
@@ -214,7 +215,7 @@ export default function SabnzbdSetupPage() {
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Logo />
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
 				<header>

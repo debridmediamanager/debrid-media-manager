@@ -27,3 +27,9 @@ export const magnetToastOptions = {
 export const castToastOptions = {
 	...globalToastOptions,
 };
+
+/** Phones get toasts at the top: along the bottom they covered result buttons. */
+export const toasterPosition = (): 'top-center' | 'bottom-right' =>
+	typeof window !== 'undefined' && window.matchMedia?.('(max-width: 639px)')?.matches
+		? 'top-center'
+		: 'bottom-right';

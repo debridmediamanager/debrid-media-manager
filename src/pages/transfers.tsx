@@ -7,6 +7,7 @@ import {
 	runDebridTransferToRd,
 } from '@/utils/debridUploader';
 import { deleteNzb2rdJob } from '@/utils/nzb2rd';
+import { toasterPosition } from '@/utils/toastOptions';
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
 import {
 	isTerminal,
@@ -299,7 +300,7 @@ export default function TransfersPage() {
 			<Head>
 				<title>Debrid Media Manager - Transfers</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div ref={topRef} className="w-full max-w-3xl">
 				<div className="mb-4 flex items-center justify-between">

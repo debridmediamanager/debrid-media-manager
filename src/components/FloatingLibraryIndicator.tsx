@@ -85,9 +85,12 @@ export default function FloatingLibraryIndicator() {
 			<div
 				aria-hidden="true"
 				data-testid="library-indicator-spacer"
-				className="h-20 sm:h-24"
+				className="hidden sm:block sm:h-24"
 			/>
-			<div className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800 px-3 py-2 shadow-lg sm:bottom-6 sm:left-6 md:px-4 md:py-2">
+			{/* Phones skip the pill: it covers results and buttons there, and the home
+			    page's Library button and the library page carry the same count. It
+			    sits under dialogs (z-50) rather than on their backdrops. */}
+			<div className="fixed bottom-4 left-4 z-40 hidden items-center gap-2 rounded-full border border-gray-700 bg-gray-800 px-3 py-2 shadow-lg sm:bottom-6 sm:left-6 sm:flex md:px-4 md:py-2">
 				<div className="flex items-center gap-2">
 					{error && (
 						<div title={error}>

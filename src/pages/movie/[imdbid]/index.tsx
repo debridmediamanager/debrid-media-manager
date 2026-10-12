@@ -63,7 +63,7 @@ import {
 	defaultPlayer,
 } from '@/utils/settings';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
-import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { castToastOptions, searchToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
@@ -1162,7 +1162,7 @@ const MovieSearch: FunctionComponent = () => {
 					Debrid Media Manager - Movie - {movieInfo.title} ({movieInfo.year})
 				</title>
 			</Head>
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<MediaHeader
 				mediaType="movie"

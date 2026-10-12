@@ -3,6 +3,7 @@ import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import { toasterPosition } from '@/utils/toastOptions';
 import { ArrowLeft, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -271,7 +272,7 @@ export default function NewznabSetupPage() {
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Logo />
-			<Toaster position="bottom-right" />
+			<Toaster position={toasterPosition()} />
 
 			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
 				<Link
