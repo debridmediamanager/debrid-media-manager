@@ -60,6 +60,14 @@ describe('/api-docs', () => {
 		).not.toBeInTheDocument();
 	});
 
+	it('tells SABnzbd users the allowance and where a sponsor key goes', () => {
+		render(<ApiDocsPage />);
+
+		const row = within(screen.getByTestId('endpoint-/api/sabnzbd/<mount root>/api'));
+		expect(row.getByText(/300 GB of Usenet per account, 2 TB/)).toBeInTheDocument();
+		expect(row.getByText(/Sponsors add their DMM API key as the Password/)).toBeInTheDocument();
+	});
+
 	it('states the limits the routes enforce', () => {
 		render(<ApiDocsPage />);
 

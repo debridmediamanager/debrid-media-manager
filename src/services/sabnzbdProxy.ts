@@ -13,6 +13,13 @@
 /** Everything under this path is proxied; the rest of DMM is untouched. */
 export const SAB_PREFIX = '/api/sabnzbd';
 
+/**
+ * nzb2rd's daily Usenet allowance per Real-Debrid account (its OWNER_DAILY_BYTES
+ * and SPONSOR_DAILY_BYTES defaults), shared by grabs from *arr and from DMM's own
+ * pages. Stated on the setup pages; change them with nzb2rd's.
+ */
+export const SAB_DAILY = { normal: '300 GB', sponsor: '2 TB' };
+
 /** Refuse a body larger than this rather than buffering it. An NZB for a big
  *  release runs to a few MB, so this is generous. */
 export const MAX_NZB_BYTES = 32 * 1024 * 1024;
@@ -65,6 +72,33 @@ export function sabTargetPath(reqUrl: string | undefined): string | null {
 	if (!/\/api\/?$/.test(path)) return null;
 
 	return query ? `${path}?${query}` : path;
+}
+
+/**
+ * The nzb2rd target with the sponsor tier decided here, never by the caller.
+ *
+ * A sponsor puts their DMM API key in *arr's SABnzbd **Password** field, which
+ * *arr sends as `ma_password` on every call. On `addfile` an active sponsor's key
+ * becomes `priority=1`, the flag DMM's web page sets on its own submissions, so a
+ * grab through *arr gets the same tier and daily allowance. The key itself never
+ * reaches nzb2rd, and a `priority` the caller sent is always dropped: nzb2rd
+ * trusts the flag from whoever reaches it.
+ */
+export async function sabForwardPath(
+	target: string,
+	isSponsorKey: (key: string) => Promise<boolean>
+): Promise<string> {
+	const [path, query] = splitQuery(target);
+	const params = new URLSearchParams(query);
+	const key = params.get('ma_password') ?? '';
+	if (!params.has('priority') && !params.has('ma_password')) return target;
+	params.delete('priority');
+	params.delete('ma_password');
+	if (params.get('mode') === 'addfile' && key && (await isSponsorKey(key).catch(() => false))) {
+		params.set('priority', '1');
+	}
+	const rest = params.toString();
+	return rest ? `${path}?${rest}` : path;
 }
 
 /**

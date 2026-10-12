@@ -1,4 +1,5 @@
 import handler from '@/pages/api/sabnzbd/[[...path]]';
+import { repository } from '@/services/repository';
 import { SAB_PREFIX } from '@/services/sabnzbdProxy';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import type { NextApiRequest } from 'next';
@@ -8,6 +9,9 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/nzb2rd')>();
 	return { ...actual, getNzb2rdUrl: () => 'http://nzb2rd.test:3200' };
 });
+
+vi.mock('@/services/repository');
+const mockRepository = vi.mocked(repository);
 
 const upstream = (body: unknown, status = 200) =>
 	vi.fn().mockResolvedValue({
@@ -86,6 +90,63 @@ describe('SABnzbd proxy', () => {
 		expect(JSON.parse(res._getData() as string)).toEqual({
 			status: true,
 			nzo_ids: ['job-1'],
+		});
+	});
+
+	describe('sponsor tier', () => {
+		const SPONSOR_KEY = 'c'.repeat(64);
+		const addfile = async (query: string) => {
+			global.fetch = upstream({ status: true, nzo_ids: ['job-1'] }) as any;
+			await handler(
+				postRequest(`${SAB_PREFIX}/mnt/zurg/__all__/api?${query}`, [
+					Buffer.from('nzb'),
+				]) as any,
+				createMockResponse() as any
+			);
+			return vi.mocked(global.fetch).mock.calls[0][0] as string;
+		};
+
+		beforeEach(() => {
+			mockRepository.getSponsorByDmmApiKey = vi
+				.fn()
+				.mockImplementation(async (key: string) =>
+					key === SPONSOR_KEY ? { isSponsor: true } : { isSponsor: false }
+				);
+		});
+
+		it("flags an active sponsor's grab, as the web page does, without forwarding the key", async () => {
+			expect(await addfile(`mode=addfile&apikey=RDKEY&ma_password=${SPONSOR_KEY}`)).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY&priority=1'
+			);
+		});
+
+		it("leaves a lapsed sponsor's grab in the normal tier", async () => {
+			expect(await addfile(`mode=addfile&apikey=RDKEY&ma_password=${'d'.repeat(64)}`)).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY'
+			);
+		});
+
+		it('drops a priority the caller sent itself', async () => {
+			expect(await addfile('mode=addfile&apikey=RDKEY&priority=1')).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY'
+			);
+			expect(mockRepository.getSponsorByDmmApiKey).not.toHaveBeenCalled();
+		});
+
+		it('keeps the key off polls and looks nothing up for them', async () => {
+			global.fetch = upstream({ queue: { slots: [] } }) as any;
+			await get(`${SAB_PREFIX}/api?mode=queue&apikey=RDKEY&ma_password=${SPONSOR_KEY}`);
+			expect(vi.mocked(global.fetch).mock.calls[0][0]).toBe(
+				'http://nzb2rd.test:3200/api?mode=queue&apikey=RDKEY'
+			);
+			expect(mockRepository.getSponsorByDmmApiKey).not.toHaveBeenCalled();
+		});
+
+		it('treats a failed lookup as a normal grab rather than failing it', async () => {
+			mockRepository.getSponsorByDmmApiKey = vi.fn().mockRejectedValue(new Error('db down'));
+			expect(await addfile(`mode=addfile&apikey=RDKEY&ma_password=${SPONSOR_KEY}`)).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY'
+			);
 		});
 	});
 

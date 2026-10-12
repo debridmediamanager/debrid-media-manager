@@ -1,6 +1,13 @@
 import { getNzb2rdUrl } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { MAX_NZB_BYTES, sabError, sabMode, sabTargetPath } from '@/services/sabnzbdProxy';
+import { repository as db } from '@/services/repository';
+import {
+	MAX_NZB_BYTES,
+	sabError,
+	sabForwardPath,
+	sabMode,
+	sabTargetPath,
+} from '@/services/sabnzbdProxy';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // A SABnzbd download client for Radarr/Sonarr, backed by nzb2rd.
@@ -54,8 +61,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json(sabError('Method not allowed'));
 	}
 
-	const target = sabTargetPath(req.url);
-	if (!target) return res.status(404).json(sabError('Not a SABnzbd API path'));
+	const sabPath = sabTargetPath(req.url);
+	if (!sabPath) return res.status(404).json(sabError('Not a SABnzbd API path'));
+	const target = await sabForwardPath(
+		sabPath,
+		async (key) => !!(await db.getSponsorByDmmApiKey(key))?.isSponsor
+	);
 
 	let body: Uint8Array<ArrayBuffer> | undefined;
 	if (req.method === 'POST') {

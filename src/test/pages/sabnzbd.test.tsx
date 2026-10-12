@@ -69,6 +69,13 @@ describe('SABnzbd setup page', () => {
 		expect(screen.getByText(/cannot travel in a URL/)).toBeTruthy();
 	});
 
+	it('states the shared daily allowance and where a sponsor puts their key', () => {
+		render(<SabnzbdSetupPage />);
+		expect(within(field('Password')).getByText(/sponsors: your DMM API key/)).toBeTruthy();
+		expect(screen.getByText(/300 GB of Usenet/)).toBeTruthy();
+		expect(screen.getByText('2 TB')).toBeTruthy();
+	});
+
 	it('leaves Username blank for a plain mount root', () => {
 		render(<SabnzbdSetupPage />);
 		expect(within(field('Username')).getByText('(leave blank)')).toBeTruthy();

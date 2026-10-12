@@ -1,6 +1,7 @@
 import { Card } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
+import { SAB_DAILY } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ArrowLeft, Lock } from 'lucide-react';
 import Head from 'next/head';
@@ -41,8 +42,8 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 			{
 				method: 'GET/POST',
 				path: '/api/sabnzbd/<mount root>/api',
-				what: 'A SABnzbd download client for Sonarr and Radarr. Grabs are rebuilt as torrents in your Real-Debrid account.',
-				auth: 'Your Real-Debrid API key as the API Key',
+				what: `A SABnzbd download client for Sonarr and Radarr. Grabs are rebuilt as torrents in your Real-Debrid account, under the same daily allowance as DMM's own pages: ${SAB_DAILY.normal} of Usenet per account, ${SAB_DAILY.sponsor} and a place ahead in the queue for sponsors.`,
+				auth: 'Your Real-Debrid API key as the API Key. Sponsors add their DMM API key as the Password',
 				guide: { href: '/sabnzbd', label: 'SABnzbd setup' },
 			},
 			{

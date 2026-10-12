@@ -1,5 +1,5 @@
 import { Logo } from '@/components/Logo';
-import { magicMountRoot, needsUsernameSlot, sabUrlBase } from '@/services/sabnzbdProxy';
+import { magicMountRoot, needsUsernameSlot, SAB_DAILY, sabUrlBase } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
 import { AlertTriangle, Check, Copy, Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -429,7 +429,11 @@ export default function SabnzbdSetupPage() {
 							value={viaUsername ? mountRoot.trim() : ''}
 							hint={viaUsername ? 'carries your mount root' : undefined}
 						/>
-						<Field label="Password" value="" />
+						<Field
+							label="Password"
+							value=""
+							hint="sponsors: your DMM API key, for the sponsor allowance below"
+						/>
 						<Field label="Category" value={category} />
 					</div>
 
@@ -533,6 +537,22 @@ export default function SabnzbdSetupPage() {
 							</Result>
 						</div>
 					) : null}
+				</Card>
+
+				<Card title="Daily allowance">
+					<p className="text-gray-300">
+						The same as sending releases from DMM&apos;s own pages, and shared with
+						them. Each Real-Debrid account can pull{' '}
+						<strong>{SAB_DAILY.normal} of Usenet</strong> in any 24 hours. Grabs past
+						that wait in the queue and start on their own as the allowance frees up, so
+						*arr shows them queued, not failed.
+					</p>
+					<p className="mt-2 text-gray-300">
+						Sponsors get <strong>{SAB_DAILY.sponsor}</strong> and a place ahead of the
+						normal queue. *arr cannot tell DMM you sponsor, so put your DMM API key in
+						the <strong>Password</strong> field above. Without it a sponsor&apos;s grab
+						counts as a normal one.
+					</p>
 				</Card>
 
 				<Card title="What to expect once it is running">
