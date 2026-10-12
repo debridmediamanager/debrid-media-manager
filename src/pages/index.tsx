@@ -395,12 +395,14 @@ function IndexPage() {
 								Clear browser data
 							</button>
 						</div>
-						<Link
-							href="/copyright"
-							className="mt-2 text-center text-xs text-gray-400 underline"
-						>
-							Report copyright infringement
-						</Link>
+						<div className="mt-2 flex justify-center gap-4 text-xs text-gray-400">
+							<Link href="/api-docs" className="underline">
+								API
+							</Link>
+							<Link href="/copyright" className="underline">
+								Report copyright infringement
+							</Link>
+						</div>
 					</div>
 				</>
 			) : (

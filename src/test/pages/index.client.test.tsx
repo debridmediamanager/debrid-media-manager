@@ -181,6 +181,14 @@ describe('IndexPage', () => {
 		expect(screen.queryByText(/Debrid Media Manager is loading/i)).not.toBeInTheDocument();
 	});
 
+	it('links the API page from the footer', () => {
+		currentUserMock.mockReturnValue(settledFixture);
+
+		render(<IndexPage />);
+
+		expect(screen.getByRole('link', { name: 'API' })).toHaveAttribute('href', '/api-docs');
+	});
+
 	// The zurg banner sits directly under the page title and above the search bar,
 	// so it reads as part of the header rather than as a bar bolted onto the top.
 	it('puts the zurg banner between the title and the search bar', () => {
