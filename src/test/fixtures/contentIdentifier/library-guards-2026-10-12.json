@@ -1,0 +1,652 @@
+{
+	"capturedAt": "2026-10-12",
+	"cases": [
+		{
+			"filename": "The Snowman (1982) [1080p] [BluRay] [YTS.MX]",
+			"titled": false,
+			"why": "year: the 2017 film",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1758810",
+						"score": 1.6163,
+						"title": "The Snowman",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "The Snowman",
+				"parsedYear": 1982,
+				"probability": 0.8465
+			}
+		},
+		{
+			"filename": "One Week (1920) [1080p] [BluRay] [YTS.MX]",
+			"titled": false,
+			"why": "year: the 2008 film",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1104806",
+						"score": 0.2795,
+						"title": "One Week",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "One Week",
+				"parsedYear": 1920,
+				"probability": 0.8361
+			}
+		},
+		{
+			"filename": "The Chronicles Of Narnia Trilogy (2005-2010)",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0980970",
+						"score": 2.0435,
+						"title": "The Chronicles of Narnia: The Voyage of the Dawn Treader",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "The Chronicles Of Narnia Trilogy",
+				"parsedYear": null,
+				"probability": 0.8784
+			}
+		},
+		{
+			"filename": "Police Story Collection 1985-2013 Blu-ray 1080p x264-HighCode",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2599716",
+						"score": 3.7755,
+						"title": "Police Story: Lockdown",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Police Story Collection 1985-2013",
+				"parsedYear": null,
+				"probability": 0.9794
+			}
+		},
+		{
+			"filename": "Sting - 1987 - ...Nothing Like The Sun (24bit-192kHz)",
+			"titled": false,
+			"why": "music, and the year",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt20112746",
+						"score": 0.748,
+						"title": "Sting",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Sting",
+				"parsedYear": 1987,
+				"probability": 0.6853
+			}
+		},
+		{
+			"filename": "Metallica - Metallica [The Black Album] [1991] [Japanese Edition] FLAC",
+			"titled": false,
+			"why": "music",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0387412",
+						"score": -0.6813,
+						"title": "Metallica: Some Kind of Monster",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "Metallica",
+				"parsedYear": 1991,
+				"probability": 0.5347
+			}
+		},
+		{
+			"filename": "In.Search.of.Darkness.1990-1994.2024.1080p.Blu-ray.AVC.DD.2.0",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt29476448",
+						"score": 4.175,
+						"title": "In Search of Darkness 1990-1994: A Journey Into Iconic '90s Horror",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "In Search of Darkness 1990-1994",
+				"parsedYear": 2024,
+				"probability": 0.9852
+			}
+		},
+		{
+			"filename": "The Dirty Harry Collection (1971-1988)",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0094963",
+						"score": 0.043,
+						"title": "The Dead Pool",
+						"year": 1988
+					}
+				],
+				"parsedTitle": "The Dirty Harry Collection",
+				"parsedYear": null,
+				"probability": 0.7038
+			}
+		},
+		{
+			"filename": "The Dark Knight Trilogy (2005-2012) IMAX Edition ~ TombDoc",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3138282",
+						"score": 1.1743,
+						"title": "The Fire Rises: The Creation and Impact of the Dark Knight Trilogy",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "The Dark Knight Trilogy",
+				"parsedYear": null,
+				"probability": 0.7578
+			}
+		},
+		{
+			"filename": "Black Sabbath - Seventh Star 1986 (2026 Remastered) FLAC (Japan)",
+			"titled": false,
+			"why": "music, and the year",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0057603",
+						"score": 0.3584,
+						"title": "Black Sabbath",
+						"year": 1963
+					}
+				],
+				"parsedTitle": "Black Sabbath",
+				"parsedYear": 2026,
+				"probability": 0.9067
+			}
+		},
+		{
+			"filename": "The.Peoples.Joker.2024.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt21651430",
+						"score": 0.8895,
+						"title": "The People's Joker",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "The Peoples Joker",
+				"parsedYear": 2024,
+				"probability": 0.9741
+			}
+		},
+		{
+			"filename": "Transformers Saga IMAX (2007-2017) 1080p H265 AC3 5.1 ITA.ENG",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3371366",
+						"score": 0.6542,
+						"title": "Transformers: The Last Knight",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Transformers Saga",
+				"parsedYear": null,
+				"probability": 0.5371
+			}
+		},
+		{
+			"filename": "Helloween - 1996 - The Time of the Oath (2024 Remaster) (24bit-96kHz) FLAC",
+			"titled": false,
+			"why": "music",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt31065246",
+						"score": 3.2745,
+						"title": "Helloween",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "Helloween",
+				"parsedYear": 2024,
+				"probability": 0.9956
+			}
+		},
+		{
+			"filename": "MUSE Simulation Theory [DELUXE] FLAC CD 2018",
+			"titled": false,
+			"why": "music",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt12874840",
+						"score": 2.0536,
+						"title": "Simulation Theory Film",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "MUSE Simulation Theory FLAC CD",
+				"parsedYear": 2018,
+				"probability": 0.9423
+			}
+		},
+		{
+			"filename": "Harry Potter Complete 8-Film Collection UHD",
+			"titled": false,
+			"why": "collection",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0241527",
+						"score": 0.1769,
+						"title": "Harry Potter and the Sorcerer's Stone",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "Harry Potter",
+				"parsedYear": null,
+				"probability": 0.5787
+			}
+		},
+		{
+			"filename": "Seven.Samurai.1954.Criterion.Collection.1080p.BluRay.x264",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0047478",
+						"score": 2.6174,
+						"title": "Seven Samurai",
+						"year": 1954
+					}
+				],
+				"parsedTitle": "Seven Samurai",
+				"parsedYear": 1954,
+				"probability": 0.9426
+			}
+		},
+		{
+			"filename": "PKPD-234.mp4",
+			"titled": false,
+			"why": "JAV code",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6906106",
+						"score": -0.7118,
+						"title": "Unit 234",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "PKPD-234",
+				"parsedYear": null,
+				"probability": 0.7319
+			}
+		},
+		{
+			"filename": "YMDD-478.mp4",
+			"titled": false,
+			"why": "JAV code",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4581576",
+						"score": -0.1762,
+						"title": "Aftermath",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "YMDD-478",
+				"parsedYear": null,
+				"probability": 0.7583
+			}
+		},
+		{
+			"filename": "Trick 'r Treat (2007) (2160p BluRay x265 10bit DV HDR DTS-HD MA 5.1 Tigole)",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0862856",
+						"score": 4.1995,
+						"title": "Trick 'r Treat",
+						"year": 2007
+					}
+				],
+				"parsedTitle": "Trick 'r Treat",
+				"parsedYear": 2007,
+				"probability": 0.9782
+			}
+		},
+		{
+			"filename": "Dark.Matter.2024.S01.Eng.Fre.Ger.Ita.Por.Spa.2160p.WEBMux.DV",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt19231492",
+						"score": 5.3267,
+						"title": "Dark Matter",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Dark Matter",
+				"parsedYear": 2024,
+				"probability": 0.9777
+			}
+		},
+		{
+			"filename": "Cannibal! The Musical (1996) RM4K (1080p BluRay x265 10bit EAC3 2.0 Tigole)",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0115819",
+						"score": 2.5701,
+						"title": "Cannibal! The Musical",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "Cannibal! The Musical",
+				"parsedYear": 1996,
+				"probability": 0.9818
+			}
+		},
+		{
+			"filename": "Hundreds.of.Beavers.2024.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt12818328",
+						"score": 2.8368,
+						"title": "Hundreds of Beavers",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "Hundreds of Beavers",
+				"parsedYear": 2024,
+				"probability": 0.9768
+			}
+		},
+		{
+			"filename": "Wifey.26.05.30.Jackie.Diary.And.Damion.Dayski.4k.mp4",
+			"titled": false,
+			"why": "adult scene, already doubted",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1619029",
+						"score": -0.1542,
+						"title": "Jackie",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Wifey 26 05 30 Jackie Diary And Damion Dayski",
+				"parsedYear": null,
+				"probability": 0.3173
+			}
+		},
+		{
+			"filename": "hhd800.com@SONE-651.mp4",
+			"titled": false,
+			"why": "JAV code, already doubted",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt7294150",
+						"score": -3.2801,
+						"title": "The Eight Hundred",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "hhd800 com@SONE-651",
+				"parsedYear": null,
+				"probability": 0.0984
+			}
+		},
+		{
+			"filename": "SONE-651",
+			"titled": false,
+			"why": "JAV code, already doubted",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1519461",
+						"score": -1.1665,
+						"title": "Area 51",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "SONE-651",
+				"parsedYear": null,
+				"probability": 0.1816
+			}
+		},
+		{
+			"filename": "xXx.2002.1080p.BluRay.x264-HDMaNiAcS",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0295701",
+						"score": 3.216,
+						"title": "xXx",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "xXx",
+				"parsedYear": 2002,
+				"probability": 0.9699
+			}
+		},
+		{
+			"filename": "THX-1138.1971.Directors.Cut.1080p.BluRay.x264",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0066434",
+						"score": 5.1406,
+						"title": "THX 1138",
+						"year": 1971
+					}
+				],
+				"parsedTitle": "THX-1138",
+				"parsedYear": 1971,
+				"probability": 0.9982
+			}
+		},
+		{
+			"filename": "Within Temptation - Mother Earth [2000] [2003] [FLAC]",
+			"titled": false,
+			"why": "music",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2494842",
+						"score": 2.4218,
+						"title": "Within Temptation: Mother Earth Tour",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "Within Temptation",
+				"parsedYear": 2003,
+				"probability": 0.8539
+			}
+		},
+		{
+			"filename": "Eagles - Hell Freezes Over 1994 1080p BluRay FLAC 5.1",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0123815",
+						"score": 5.007,
+						"title": "Eagles: Hell Freezes Over",
+						"year": 1994
+					}
+				],
+				"parsedTitle": "Eagles",
+				"parsedYear": 1994,
+				"probability": 0.99
+			}
+		},
+		{
+			"filename": "The Collection 2012 1080p BluRay x264",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1748227",
+						"score": 4.6588,
+						"title": "The Collection",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "The Collection",
+				"parsedYear": 2012,
+				"probability": 0.9737
+			}
+		},
+		{
+			"filename": "Doctor Who 2023 S00E05 Joy to the World 1080p x265-ELiTE[EZTVx.to].mkv",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt31433814",
+						"score": 5.6731,
+						"title": "Doctor Who",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Doctor Who",
+				"parsedYear": 2023,
+				"probability": 0.9465
+			}
+		},
+		{
+			"filename": "Mad.Max.Fury.Road.2015.2160p.BluRay.x265.10bit.SDR.DTS-HD.MA.TrueHD.7.1.Atmos-SWTYBLZ",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1392190",
+						"score": 4.243,
+						"title": "Mad Max: Fury Road",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "Mad Max Fury Road",
+				"parsedYear": 2015,
+				"probability": 0.9158
+			}
+		},
+		{
+			"filename": "Tom and Jerry The Golden Era Anthology 1940-1958 1080p USA Blu-ray Remux AVC FLAC 2.0-UNITED24",
+			"titled": true,
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt39246012",
+						"score": 2.4469,
+						"title": "Tom and Jerry the Golden Era Anthology",
+						"year": 1958
+					}
+				],
+				"parsedTitle": "Tom and Jerry The Golden Era Anthology 1940-1958",
+				"parsedYear": null,
+				"probability": 0.986
+			}
+		}
+	],
+	"source": "content-identifier f312f3f on dmm-01, POST /identify/batch kind auto; names from production HashIdentification rows plus controls that must stay titled"
+}

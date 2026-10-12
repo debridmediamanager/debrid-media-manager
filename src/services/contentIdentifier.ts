@@ -16,6 +16,8 @@ export interface IdentifierResult {
 	kind?: IdentifierKind;
 	/** The service's probability that the first match is right. */
 	probability?: number;
+	/** The title the service read from the filename. */
+	parsedTitle?: string;
 	/** The year the filename names, if any. */
 	parsedYear?: number | null;
 	/** The first match clears the service's calibrated precision bar. */

@@ -1,6 +1,7 @@
 import handler, { MAX_ITEMS } from '@/pages/api/library/identify';
-import { identifyFilenames } from '@/services/contentIdentifier';
+import { identifyFilenames, type IdentifierResult } from '@/services/contentIdentifier';
 import { repository } from '@/services/repository';
+import guards from '@/test/fixtures/contentIdentifier/library-guards-2026-10-12.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { createHash } from 'crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -24,7 +25,7 @@ const DURACKAJA = 'Eta-durackaja-ljubov.2011.MPEG-4-AVC.BluRay-Remux(1080p).mkv'
 const DURACKAJA_HASH = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
 const H1 = 'a'.repeat(40);
 const H2 = 'B'.repeat(40);
-const key = (name: string) => createHash('sha1').update(`auto:${name}`).digest('hex');
+const key = (name: string) => createHash('sha1').update(`auto2:${name}`).digest('hex');
 
 const confident = (
 	imdbId: string,
@@ -327,6 +328,31 @@ describe('/api/library/identify', () => {
 		expect(mockRepository.confirmFilenameIdentifications).toHaveBeenCalledWith([
 			expect.objectContaining({ titleKey: key(RD_NAME), confident: true }),
 		]);
+	});
+
+	// the service's real answers for names production stored as confident and wrong
+	// (a remake decades off the filename's year, a box set named as one of its films,
+	// an album named as the band's concert film, a JAV code), and for names that must
+	// keep their title: festival-year gaps, xXx, THX-1138, a Criterion Collection
+	it('names only the releases the guards let through, from real service answers', async () => {
+		mockIdentify.mockResolvedValue(guards.cases.map((c) => c.response as IdentifierResult));
+		const res = await call({ items: guards.cases.map((c) => ({ filename: c.filename })) });
+
+		const { results } = vi.mocked(res.json).mock.calls[0][0];
+		const titled = guards.cases.map((c, n) => [c.filename, results[n] !== null]);
+		expect(titled).toEqual(guards.cases.map((c) => [c.filename, c.titled]));
+	});
+
+	it('does not let the hash map name a box set as one of its films', async () => {
+		const DIRTY_HARRY = guards.cases.find((c) => c.filename.startsWith('The Dirty Harry'))!;
+		mockIdentify.mockResolvedValue([
+			{ ...(DIRTY_HARRY.response as IdentifierResult), confident: false },
+		]);
+		mockRepository.getHashTitleIds = vi
+			.fn()
+			.mockResolvedValue(new Map([[H1, new Set([DIRTY_HARRY.response.matches[0].imdbId])]]));
+		const res = await call({ items: [{ hash: H1, filename: DIRTY_HARRY.filename }] });
+		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
 	});
 
 	it('still serves stored answers when the identifier is down', async () => {
