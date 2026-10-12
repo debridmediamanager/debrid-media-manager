@@ -646,6 +646,26 @@
 				"parsedYear": null,
 				"probability": 0.986
 			}
+		},
+		{
+			"filename": "The.Matrix.Triology.2160p.BluRay.REMUX.HR10.HEVC-UnKn0wn",
+			"titled": false,
+			"why": "collection, misspelt; titled through a hash map agreeing on The Matrix",
+			"response": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0133093",
+						"score": -0.6288,
+						"title": "The Matrix",
+						"year": 1999
+					}
+				],
+				"parsedTitle": "The Matrix Triology",
+				"parsedYear": null,
+				"probability": 0.1365
+			}
 		}
 	],
 	"source": "content-identifier f312f3f on dmm-01, POST /identify/batch kind auto; names from production HashIdentification rows plus controls that must stay titled"

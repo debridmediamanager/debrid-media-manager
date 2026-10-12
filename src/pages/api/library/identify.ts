@@ -187,8 +187,9 @@ function agrees(answer: IdentifierResult, ids: Set<string> | undefined): boolean
 // (2026-10-12): `The Dirty Harry Collection (1971-1988)` as The Dead Pool, an album
 // (`MUSE Simulation Theory [DELUXE] FLAC CD 2018`) as the band's concert film, and
 // `PKPD-234.mp4` as Unit 234. A box set has no single year: `The Collection 2012` and
-// `Seven.Samurai.1954.Criterion.Collection` are films. Concert videos carry a video tag.
-const BOX_SET = /\b(?:collection|trilogy|quadrilogy|saga|anthology|\d+[- ]?films?)\b/i;
+// `Seven.Samurai.1954.Criterion.Collection` are films ("Triology" is how one Matrix
+// box set spells it). Concert videos carry a video tag.
+const BOX_SET = /\b(?:collection|trio?logy|quadrilogy|saga|anthology|\d+[- ]?films?)\b/i;
 const AUDIO = /\b(?:flac|mp3|alac|\d{2}[- ]?bit|\d+(?:\.\d+)?[- ]?khz|\d+[- ]?kbps|discography)\b/i;
 const VIDEO =
 	/\b(?:\d{3,4}[pi]|4k|uhd|blu-?ray|bd(?:rip|remux)?|br-?rip|web(?:-?dl|-?rip)?|hdtv|dvd\w*|remux|[xh]\.?26[45]|hevc|avc|xvid|divx|mkv|mp4|avi)\b/i;

@@ -355,6 +355,17 @@ describe('/api/library/identify', () => {
 		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
 	});
 
+	// production, 2026-10-12: a misspelt box set the hash map agreed was The Matrix
+	it('refuses a box set spelt Triology', async () => {
+		const MATRIX = guards.cases.find((c) => c.filename.startsWith('The.Matrix.Triology'))!;
+		mockIdentify.mockResolvedValue([MATRIX.response as IdentifierResult]);
+		mockRepository.getHashTitleIds = vi
+			.fn()
+			.mockResolvedValue(new Map([[H1, new Set([MATRIX.response.matches[0].imdbId])]]));
+		const res = await call({ items: [{ hash: H1, filename: MATRIX.filename }] });
+		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
+	});
+
 	it('still serves stored answers when the identifier is down', async () => {
 		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([storedMadMax]);
 		mockIdentify.mockResolvedValue(null);
