@@ -54,7 +54,7 @@ function parseItems(body: unknown): Item[] | null {
  * release's hash to: two independent sources agreeing. Hashless releases
  * (Premiumize, Offcloud URLs) are identified but not stored.
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function identifyHandler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		res.setHeader('Allow', 'POST');
 		return res.status(405).json({ error: 'Method not allowed' });
@@ -227,4 +227,4 @@ function dedupe(rows: FilenameIdentification[]): FilenameIdentification[] {
 	return [...new Map(rows.map((r) => [`${r.hash}|${r.titleKey}`, r])).values()];
 }
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.libraryIdentify);
+export default withIpRateLimit(identifyHandler, RATE_LIMIT_CONFIGS.libraryIdentify);
