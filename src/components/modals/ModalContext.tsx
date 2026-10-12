@@ -487,7 +487,8 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 					<h2 className="mb-4 text-center text-xl font-bold text-gray-100">{title}</h2>
 				)}
 				{poster && (
-					<div className="mx-auto mb-3 w-32" data-testid="dialog-poster">
+					// Hidden on phones, where it pushes the release details below the fold.
+					<div className="mx-auto mb-3 hidden w-32 sm:block" data-testid="dialog-poster">
 						<Poster imdbId={poster.imdbId} title={poster.title} />
 					</div>
 				)}
