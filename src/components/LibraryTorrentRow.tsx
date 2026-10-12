@@ -164,6 +164,15 @@ function TorrentRow({
 		null
 	);
 
+	// An id picked in the cast modal is the user's and is saved under the hash; an
+	// identified one only casts (`identified=1` keeps it out of the hash map), so a
+	// row the identifier named casts without asking
+	const castImdbQuery = (imdbId: string | undefined, separator: '?' | '&') => {
+		if (imdbId) return `${separator}imdbId=${imdbId}`;
+		if (identification) return `${separator}imdbId=${identification.imdbId}&identified=1`;
+		return '';
+	};
+
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
 		if (!rdKey || !torrent.id.startsWith('rd:')) return;
@@ -175,7 +184,7 @@ function TorrentRow({
 		setIsCasting(true);
 		try {
 			// Key in the header, not the query string - see castApiClient.
-			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}${castImdbQuery(imdbId, '?')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${rdKey}` },
 			});
@@ -207,7 +216,7 @@ function TorrentRow({
 		setCastService('ad');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio-ad/cast/library/${adId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio-ad/cast/library/${adId}:${torrent.hash}${castImdbQuery(imdbId, '?')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${adKey}` },
 			});
@@ -239,7 +248,7 @@ function TorrentRow({
 		setCastService('tb');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio-tb/cast/library/${tbId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio-tb/cast/library/${tbId}:${torrent.hash}${castImdbQuery(imdbId, '?')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${tbKey}` },
 			});
@@ -272,7 +281,7 @@ function TorrentRow({
 		setCastService('pm');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio-pm/cast/library/${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio-pm/cast/library/${torrent.hash}${castImdbQuery(imdbId, '?')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${pmKey}` },
 			});
@@ -309,7 +318,7 @@ function TorrentRow({
 			// `cloud/explore` for an item this account holds but Offcloud's
 			// shared cache does not.
 			const requestId = torrent.id.substring(3);
-			const castUrl = `/api/stremio-oc/cast/library/${torrent.hash}?requestId=${encodeURIComponent(requestId)}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio-oc/cast/library/${torrent.hash}?requestId=${encodeURIComponent(requestId)}${castImdbQuery(imdbId, '&')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${ocKey}` },
 			});
@@ -349,7 +358,7 @@ function TorrentRow({
 			// which spends one of the day's 50 torrents. Casting something the
 			// user is already looking at in their library should be free.
 			const torrentId = torrent.id.substring(3);
-			const castUrl = `/api/stremio-dl/cast/library/${torrent.hash}?torrentId=${encodeURIComponent(torrentId)}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const castUrl = `/api/stremio-dl/cast/library/${torrent.hash}?torrentId=${encodeURIComponent(torrentId)}${castImdbQuery(imdbId, '&')}`;
 			const response = await fetch(castUrl, {
 				headers: { Authorization: `Bearer ${dlKey}` },
 			});

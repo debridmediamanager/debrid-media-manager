@@ -279,6 +279,23 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		});
 	});
 
+	// an id the library identified from the filename casts, but is not filed under the
+	// hash: it would come back as a page-add row agreeing with the identifier
+	it('casts with an identified imdb id without saving the mapping', async () => {
+		mockDbGetIMDBIdByHash.mockResolvedValue(null);
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash', imdbId: 'tt7654321', identified: '1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockDbSaveIMDBIdMapping).not.toHaveBeenCalled();
+		expect(mockDbSaveCast).toHaveBeenCalledTimes(1);
+		expect(mockDbSaveCast.mock.calls[0][0]).toBe('tt7654321');
+	});
+
 	it('validates imdb id format when user provides it', async () => {
 		mockDbGetIMDBIdByHash.mockResolvedValue(null);
 

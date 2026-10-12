@@ -122,7 +122,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
-				await db.saveIMDBIdMapping(torrent.hash || hash, userProvidedImdbId);
+				// an id the library identified from the filename casts but is not filed under
+				// the hash: it would come back as a page-add row agreeing with the identifier
+				if (req.query.identified !== '1') {
+					await db.saveIMDBIdMapping(torrent.hash || hash, userProvidedImdbId);
+				}
 				imdbid = userProvidedImdbId;
 			} catch (error) {
 				console.error('Failed to save IMDB ID mapping:', error);

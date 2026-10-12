@@ -48,6 +48,34 @@ describe('/api/stremio-tb/cast/library/[torrentIdPlusHash]', () => {
 		process.env.DMM_ORIGIN = originalOrigin;
 	});
 
+	// an id the library identified from the filename casts, but is not filed under the
+	// hash: it would come back as a page-add row agreeing with the identifier
+	it('casts with an identified imdb id without saving the mapping', async () => {
+		mockRepository.getIMDBIdByHash = vi.fn().mockResolvedValue(null);
+		mockGetTorrentList.mockResolvedValue({
+			success: true,
+			data: item(123, TORRENT_HASH),
+		} as any);
+		mockRequestDownloadLink.mockResolvedValue({
+			success: true,
+			data: 'https://stream.test/torrent.mkv',
+		} as any);
+
+		const req = createMockRequest({
+			query: {
+				torrentIdPlusHash: `123:${TORRENT_HASH}`,
+				apiKey: 'key',
+				imdbId: 'tt7654321',
+				identified: '1',
+			},
+		});
+		await handler(req, res);
+
+		expect(mockRepository.saveIMDBIdMapping).not.toHaveBeenCalled();
+		expect(mockRepository.saveTorBoxCast).toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
 	it('rejects a non-numeric id', async () => {
 		const req = createMockRequest({
 			query: { torrentIdPlusHash: `abc:${TORRENT_HASH}`, apiKey: 'key' },

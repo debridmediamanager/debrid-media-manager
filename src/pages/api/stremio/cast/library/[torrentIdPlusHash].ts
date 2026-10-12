@@ -86,7 +86,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		// Save the mapping for future users (use tInfo.hash, not the URL hash parameter)
 		try {
-			await db.saveIMDBIdMapping(tInfo.hash, userProvidedImdbId);
+			// an id the library identified from the filename casts but is not filed under
+			// the hash: it would come back as a page-add row agreeing with the identifier
+			if (req.query.identified !== '1') {
+				await db.saveIMDBIdMapping(tInfo.hash, userProvidedImdbId);
+			}
 			imdbid = userProvidedImdbId;
 		} catch (error) {
 			console.error('Failed to save IMDB ID mapping:', error);

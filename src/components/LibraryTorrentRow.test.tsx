@@ -845,6 +845,28 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			);
 		});
 
+		// the hash map knew nothing for this release, so a cast used to stop at the IMDb
+		// search modal; the identified id goes along, marked so the route does not save it
+		it('casts with the identified id instead of asking for one', async () => {
+			const fetchSpy = vi.spyOn(global, 'fetch').mockResolvedValue({
+				json: () => Promise.resolve({ status: 'success', redirectUrl: 'stremio://test' }),
+			} as Response);
+			renderRow({
+				imdbId: 'tt22084616',
+				title: 'Spider-Man: Brand New Day',
+				year: 2026,
+				kind: 'movie',
+			});
+			fireEvent.click(screen.getByTitle('Cast (RD)'));
+			await waitFor(() =>
+				expect(fetchSpy).toHaveBeenCalledWith(
+					`/api/stremio/cast/library/${mockTorrent.id.substring(3)}:${mockTorrent.hash}?imdbId=tt22084616&identified=1`,
+					{ headers: { Authorization: `Bearer ${defaultProps.rdKey}` } }
+				)
+			);
+			fetchSpy.mockRestore();
+		});
+
 		// ymsita's library filed this single episode as a movie; the identifier knows better
 		it('links by what the identifier found, not by the library guess', () => {
 			renderRow({ imdbId: 'tt12057106', title: 'Tower of God', year: 2020, kind: 'tv' });

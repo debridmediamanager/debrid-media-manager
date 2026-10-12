@@ -150,6 +150,18 @@ describe('/api/stremio-dl/cast/library/[hash]', () => {
 		expect((res._getData() as any).status).toBe('success');
 	});
 
+	// an id the library identified from the filename casts, but is not filed under the
+	// hash: it would come back as a page-add row agreeing with the identifier
+	it('casts with an identified IMDB id without saving the mapping', async () => {
+		mockRepository.getIMDBIdByHash = vi.fn().mockResolvedValue(null);
+		await handler(
+			req({ hash: HASH, torrentId: 'tor-1', imdbId: 'tt7654321', identified: '1' }),
+			res
+		);
+		expect(mockRepository.saveIMDBIdMapping).not.toHaveBeenCalled();
+		expect((res._getData() as any).status).toBe('success');
+	});
+
 	it('rejects a malformed IMDB id', async () => {
 		mockRepository.getIMDBIdByHash = vi.fn().mockResolvedValue(null);
 		await handler(req({ hash: HASH, torrentId: 'tor-1', imdbId: 'not-an-id' }), res);

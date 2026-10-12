@@ -113,6 +113,31 @@ describe('/api/stremio-ad/cast/library/[magnetIdPlusHash]', () => {
 		);
 	});
 
+	// an id the library identified from the filename casts, but is not filed under the
+	// hash: it would come back as a page-add row agreeing with the identifier
+	it('casts with an identified imdb id without saving the mapping', async () => {
+		mockRepository.getIMDBIdByHashAd = vi.fn().mockResolvedValue(null);
+		mockGetMagnetFiles.mockResolvedValue(
+			magnetFiles([
+				{ n: 'Some Movie 2021.mkv', s: 90_000_000, l: 'https://alldebrid.com/f/movie' },
+			])
+		);
+
+		const req = createMockRequest({
+			query: {
+				magnetIdPlusHash: `42:${HASH}`,
+				apiKey: 'key',
+				imdbId: 'tt7654321',
+				identified: '1',
+			},
+		});
+		await handler(req, res);
+
+		expect(mockRepository.saveIMDBIdMapping).not.toHaveBeenCalled();
+		expect(mockRepository.saveAllDebridCast).toHaveBeenCalledTimes(1);
+		expect(vi.mocked(mockRepository.saveAllDebridCast).mock.calls[0][0]).toBe('tt7654321');
+	});
+
 	it('asks for an imdb id when the hash has no mapping yet', async () => {
 		mockRepository.getIMDBIdByHashAd = vi.fn().mockResolvedValue(null);
 		mockGetMagnetFiles.mockResolvedValue(
