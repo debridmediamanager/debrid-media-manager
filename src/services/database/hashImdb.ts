@@ -174,6 +174,16 @@ export class HashImdbService extends DatabaseClient {
 		return ids;
 	}
 
+	/** Overwrite stored answers that were asked again and are now confident. */
+	public async confirmFilenameIdentifications(rows: FilenameIdentification[]): Promise<void> {
+		for (const { hash, titleKey, ...answer } of rows) {
+			await this.prisma.hashIdentification.update({
+				where: { hash_titleKey: { hash, titleKey } },
+				data: answer,
+			});
+		}
+	}
+
 	/** Store new answers; a pair already stored keeps its first answer. */
 	public async saveFilenameIdentifications(rows: FilenameIdentification[]): Promise<number> {
 		if (rows.length === 0) return 0;

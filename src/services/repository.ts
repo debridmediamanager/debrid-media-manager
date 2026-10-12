@@ -1334,6 +1334,10 @@ export class Repository {
 		return this.hashImdbService.getFilenameIdentifications(keys);
 	}
 
+	public confirmFilenameIdentifications(rows: FilenameIdentification[]) {
+		return this.hashImdbService.confirmFilenameIdentifications(rows);
+	}
+
 	public async saveFilenameIdentifications(rows: FilenameIdentification[]) {
 		return this.hashImdbService.saveFilenameIdentifications(await withoutBlockedHashes(rows));
 	}

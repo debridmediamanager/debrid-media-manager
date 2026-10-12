@@ -62,6 +62,7 @@ describe('/api/library/identify', () => {
 		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([]);
 		mockRepository.saveFilenameIdentifications = vi.fn().mockResolvedValue(1);
 		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(new Map());
+		mockRepository.confirmFilenameIdentifications = vi.fn().mockResolvedValue(undefined);
 	});
 
 	afterEach(() => {
@@ -213,6 +214,74 @@ describe('/api/library/identify', () => {
 			);
 		const res = await call({ items: [{ hash: PET_HASH, filename: PET }] });
 		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
+	});
+
+	// ymsita's library, 2026-10-12: a One Piece Log episode stored as doubted the day
+	// before TorrentSnapshot joined the hash map; without a second look it stayed unnamed
+	it('asks again about a doubted stored answer the hash map has come to back', async () => {
+		const LOG = '[SubsPlease] One Piece Log - Fish-Man Island Saga - 03 (1080p) [B9C6C448].mkv';
+		const LOG_HASH = '6ca1db218506e01169db19d971dfb7b967c1182a';
+		const doubtedRow = (hash: string, filename: string, imdbId: string) => ({
+			hash,
+			titleKey: key(filename),
+			filename,
+			kind: 'tv',
+			imdbId,
+			title: 'One Piece Log: Fish-Man Island Saga',
+			year: 2024,
+			score: 0.57,
+			confident: false,
+		});
+		mockRepository.getFilenameIdentifications = vi
+			.fn()
+			.mockResolvedValue([
+				doubtedRow(LOG_HASH, LOG, 'tt33992229'),
+				doubtedRow(H1, 'Unbacked.S01', 'tt0000009'),
+			]);
+		mockRepository.getHashTitleIds = vi
+			.fn()
+			.mockResolvedValue(new Map([[LOG_HASH, new Set(['tt0388629', 'tt33992229'])]]));
+		mockIdentify.mockResolvedValue([
+			{
+				kind: 'tv',
+				probability: 0.57,
+				parsedYear: null,
+				confident: false,
+				matches: [
+					{
+						imdbId: 'tt33992229',
+						title: 'One Piece Log: Fish-Man Island Saga',
+						year: 2024,
+						score: 1,
+					},
+				],
+			},
+		]);
+
+		const res = await call({
+			items: [
+				{ hash: LOG_HASH, filename: LOG },
+				{ hash: H1, filename: 'Unbacked.S01' },
+			],
+		});
+
+		// only the backed row is asked again; the other stays a stored doubt
+		expect(mockIdentify).toHaveBeenCalledExactlyOnceWith([LOG]);
+		expect(res.json).toHaveBeenCalledWith({
+			results: [
+				{
+					imdbId: 'tt33992229',
+					title: 'One Piece Log: Fish-Man Island Saga',
+					year: 2024,
+					kind: 'tv',
+				},
+				null,
+			],
+			complete: true,
+		});
+		expect(mockRepository.confirmFilenameIdentifications).toHaveBeenCalledWith([
+			expect.objectContaining({ hash: LOG_HASH, titleKey: key(LOG), confident: true }),
+		]);
 	});
 
 	it('still serves stored answers when the identifier is down', async () => {
