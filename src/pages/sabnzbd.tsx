@@ -45,7 +45,17 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 }
 
 /** One row of *arr's Add Download Client → SABnzbd form. */
-function Field({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Field({
+	label,
+	value,
+	hint,
+	blank = '(leave blank)',
+}: {
+	label: string;
+	value: string;
+	hint?: string;
+	blank?: string;
+}) {
 	return (
 		<div
 			data-testid={`field-${label}`}
@@ -54,7 +64,7 @@ function Field({ label, value, hint }: { label: string; value: string; hint?: st
 			<div className="w-40 shrink-0 text-sm font-semibold text-gray-300">{label}</div>
 			<div className="flex min-w-0 flex-1 items-center gap-1">
 				<code className="min-w-0 flex-1 truncate rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300">
-					{value || <span className="text-gray-400">(leave blank)</span>}
+					{value || <span className="text-gray-400">{blank}</span>}
 				</code>
 				{value ? <CopyButton value={value} label={label} /> : null}
 			</div>
@@ -432,7 +442,8 @@ export default function SabnzbdSetupPage() {
 						<Field
 							label="Password"
 							value=""
-							hint="sponsors: your DMM API key, for the sponsor allowance below"
+							blank="(blank, or your DMM API key)"
+							hint="sponsors only, for the allowance below"
 						/>
 						<Field label="Category" value={category} />
 					</div>

@@ -71,7 +71,7 @@ describe('SABnzbd setup page', () => {
 
 	it('states the shared daily allowance and where a sponsor puts their key', () => {
 		render(<SabnzbdSetupPage />);
-		expect(within(field('Password')).getByText(/sponsors: your DMM API key/)).toBeTruthy();
+		expect(within(field('Password')).getByText(/or your DMM API key/)).toBeTruthy();
 		expect(screen.getByText(/300 GB of Usenet/)).toBeTruthy();
 		expect(screen.getByText('2 TB')).toBeTruthy();
 	});
