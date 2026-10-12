@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
 export interface HashImdbPair {
@@ -126,10 +127,14 @@ export class HashImdbService extends DatabaseClient {
 
 	/**
 	 * Every title DMM maps each hash to, keyed by lowercase hash: zurg's matches
-	 * (HashImdb) and the pages users added the release from (Available,
-	 * AvailableAd). An episode's id counts as its show's. All three are read by
-	 * their hash index. Unlike `identifyHashes` nothing is picked: these only
-	 * confirm a title found another way, so any source naming it is enough.
+	 * (HashImdb) and snapshots (TorrentSnapshot), the pages users added the
+	 * release from (Available, AvailableAd) and kept scrape verdicts. An episode's
+	 * id counts as its show's. All five are read by their hash index. Unlike
+	 * `identifyHashes` nothing is picked: these only confirm a title found
+	 * another way, so any source naming it is enough. On ymsita's library
+	 * (2026-10-12) snapshots and verdicts named 39 more of 475 unnamed releases,
+	 * about 95% of them right; Cast and the other cast tables added nothing that
+	 * would pay for a scan, as none is indexed by hash.
 	 */
 	public async getHashTitleIds(hashes: string[]): Promise<Map<string, Set<string>>> {
 		const ids = new Map<string, Set<string>>();
@@ -143,10 +148,18 @@ export class HashImdbService extends DatabaseClient {
 				this.prisma.hashImdb.findMany({ where: { hash: { in: wanted } }, select }),
 				this.prisma.available.findMany({ where: { hash: { in: wanted } }, select }),
 				this.prisma.availableAd.findMany({ where: { hash: { in: wanted } }, select }),
+				this.prisma.scrapedVerdict.findMany({
+					where: { hash: { in: wanted }, verdict: 'keep' },
+					select,
+				}),
+				// payloads average 37 KB (up to 10 MB): read only the id
+				this.prisma.$queryRaw<{ hash: string; imdbId: string | null }[]>(Prisma.sql`
+					SELECT DISTINCT hash, JSON_UNQUOTE(JSON_EXTRACT(payload, '$.IMDBID')) AS imdbId
+					FROM TorrentSnapshot WHERE hash IN (${Prisma.join(wanted)})`),
 			])
 		)
 			.flat()
-			.filter((r) => IMDB_ID.test(r.imdbId));
+			.filter((r): r is { hash: string; imdbId: string } => IMDB_ID.test(r.imdbId ?? ''));
 		if (rows.length === 0) return ids;
 		const episodes = await this.prisma.imdbTitleEpisode.findMany({
 			where: { tconst: { in: [...new Set(rows.map((r) => r.imdbId))] } },

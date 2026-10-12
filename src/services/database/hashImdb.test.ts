@@ -11,6 +11,8 @@ const prismaMock = vi.hoisted(() => ({
 	available: { findMany: vi.fn() },
 	availableAd: { findMany: vi.fn() },
 	imdbTitleEpisode: { findMany: vi.fn() },
+	scrapedVerdict: { findMany: vi.fn() },
+	$queryRaw: vi.fn(),
 }));
 
 vi.mock('./client', () => ({
@@ -167,6 +169,8 @@ describe('getHashTitleIds', () => {
 		prismaMock.imdbTitleEpisode.findMany.mockResolvedValue([
 			{ tconst: 'tt43141030', parentTconst: 'tt0096697' },
 		]);
+		prismaMock.scrapedVerdict.findMany.mockResolvedValue([]);
+		prismaMock.$queryRaw.mockResolvedValue([]);
 
 		const ids = await service.getHashTitleIds([DURACKAJA.toUpperCase(), YELLOW_MIRROR, 'x']);
 
@@ -178,6 +182,45 @@ describe('getHashTitleIds', () => {
 			new Map([
 				[YELLOW_MIRROR, new Set(['tt0096697'])],
 				[DURACKAJA, new Set(['tt1541874', 'tt1570728'])],
+			])
+		);
+	});
+});
+
+describe('getHashTitleIds from zurg snapshots and kept verdicts', () => {
+	// dmmdb rows of 2026-10-12 for two of ymsita's releases nothing else named: the
+	// zurg snapshot files a One Piece Log episode under the show (Available has One
+	// Piece), and a kept verdict files "Redline.mkv" under Redline (2009)
+	const ONE_PIECE_LOG = '6ca1db218506e01169db19d971dfb7b967c1182a';
+	const REDLINE = 'bf54917ffcd0eafa4b7410062ca8769cdb8b5646';
+
+	it('adds the IMDb id a snapshot carries and the titles a verdict kept', async () => {
+		const service = new HashImdbService();
+		prismaMock.hashImdb.findMany.mockResolvedValue([]);
+		prismaMock.available.findMany.mockResolvedValue([
+			{ hash: ONE_PIECE_LOG, imdbId: 'tt0388629' },
+		]);
+		prismaMock.availableAd.findMany.mockResolvedValue([]);
+		prismaMock.$queryRaw.mockResolvedValue([
+			{ hash: ONE_PIECE_LOG, imdbId: 'tt33992229' },
+			{ hash: REDLINE, imdbId: 'tt0232500' },
+			{ hash: REDLINE, imdbId: null }, // a snapshot zurg could not match
+		]);
+		prismaMock.scrapedVerdict.findMany.mockResolvedValue([
+			{ hash: REDLINE, imdbId: 'tt1483797' },
+		]);
+		prismaMock.imdbTitleEpisode.findMany.mockResolvedValue([]);
+
+		const ids = await service.getHashTitleIds([ONE_PIECE_LOG, REDLINE]);
+
+		expect(prismaMock.scrapedVerdict.findMany).toHaveBeenCalledWith({
+			where: { hash: { in: [ONE_PIECE_LOG, REDLINE] }, verdict: 'keep' },
+			select: { hash: true, imdbId: true },
+		});
+		expect(ids).toEqual(
+			new Map([
+				[ONE_PIECE_LOG, new Set(['tt0388629', 'tt33992229'])],
+				[REDLINE, new Set(['tt0232500', 'tt1483797'])],
 			])
 		);
 	});
