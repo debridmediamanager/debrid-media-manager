@@ -284,6 +284,51 @@ describe('/api/library/identify', () => {
 		]);
 	});
 
+	// a library lists one hash under two names when providers name it differently
+	// (production holds 403 such hashes); asking one again must leave the other alone
+	it('asks again only the stored name the hash map backs, not every name of its hash', async () => {
+		const RD_NAME = 'The.Hobbit.The.Desolation.of.Smaug.2013.EXTENDED.2160p.BluRay.REMUX';
+		const AD_NAME = 'Kolekcja Hobbit 2012-2014 [10Bit EXTENDED] [2160p.BluRay.H265]';
+		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
+			{
+				hash: H1,
+				titleKey: key(RD_NAME),
+				filename: RD_NAME,
+				kind: 'movie',
+				imdbId: 'tt1170358',
+				title: 'The Hobbit: The Desolation of Smaug',
+				year: 2013,
+				score: 0.6,
+				confident: false,
+			},
+		]);
+		mockRepository.getHashTitleIds = vi
+			.fn()
+			.mockResolvedValue(new Map([[H1, new Set(['tt1170358'])]]));
+		mockIdentify.mockResolvedValue([
+			{
+				...confident('tt1170358', 'The Hobbit: The Desolation of Smaug', 2013),
+				parsedYear: 2013,
+			},
+			confident('tt0903624', 'The Hobbit: An Unexpected Journey', 2012),
+		]);
+
+		await call({
+			items: [
+				{ hash: H1, filename: RD_NAME },
+				{ hash: H1, filename: AD_NAME },
+			],
+		});
+
+		// the new name is stored as new; only the stored one is overwritten
+		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([
+			expect.objectContaining({ titleKey: key(AD_NAME) }),
+		]);
+		expect(mockRepository.confirmFilenameIdentifications).toHaveBeenCalledWith([
+			expect.objectContaining({ titleKey: key(RD_NAME), confident: true }),
+		]);
+	});
+
 	it('still serves stored answers when the identifier is down', async () => {
 		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([storedMadMax]);
 		mockIdentify.mockResolvedValue(null);

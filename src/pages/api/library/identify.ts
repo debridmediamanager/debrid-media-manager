@@ -73,9 +73,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				)
 			).map((row) => [`${row.hash}|${row.titleKey}`, row])
 		);
+		// by hash and name: a library can list one hash under several names
 		const stale = new Set<string>();
 		const known = (i: Item) =>
-			i.hash && !stale.has(i.hash) ? stored.get(`${i.hash}|${i.titleKey}`) : undefined;
+			i.hash && !stale.has(`${i.hash}|${i.titleKey}`)
+				? stored.get(`${i.hash}|${i.titleKey}`)
+				: undefined;
 
 		// a doubted answer the hash map has since come to back is asked again, so a
 		// source that joins the map later reaches releases already stored
@@ -86,7 +89,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			? await repository.getHashTitleIds(doubted.map((i) => i.hash!))
 			: new Map<string, Set<string>>();
 		for (const i of doubted) {
-			if (backing.get(i.hash!)?.has(known(i)!.imdbId!)) stale.add(i.hash!);
+			if (backing.get(i.hash!)?.has(known(i)!.imdbId!)) stale.add(`${i.hash}|${i.titleKey}`);
 		}
 
 		const missing = [...new Set(items.filter((i) => !known(i)).map((i) => i.filename))];
@@ -144,9 +147,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// a failed write costs only a repeat question next time, never the answer
 		const asked = dedupe(toStore);
 		repository
-			.saveFilenameIdentifications(asked.filter((r) => !stale.has(r.hash)))
+			.saveFilenameIdentifications(asked.filter((r) => !stale.has(`${r.hash}|${r.titleKey}`)))
 			.catch((error) => console.error('Failed to store library identifications', error));
-		const confirmed = asked.filter((r) => stale.has(r.hash) && r.confident);
+		const confirmed = asked.filter((r) => stale.has(`${r.hash}|${r.titleKey}`) && r.confident);
 		if (confirmed.length) {
 			repository
 				.confirmFilenameIdentifications(confirmed)
