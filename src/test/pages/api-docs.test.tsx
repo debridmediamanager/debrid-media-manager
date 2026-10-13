@@ -96,5 +96,15 @@ describe('/api-docs', () => {
 				/25 calls per minute/
 			)
 		).toBeInTheDocument();
+		expect(
+			within(screen.getByTestId('endpoint-/api/torrents/identify')).getByText(
+				/5 calls per minute/
+			)
+		).toBeInTheDocument();
+		for (const path of ['/api/plugins/manifest.json', '/api/emby-plugins/']) {
+			expect(
+				within(screen.getByTestId(`endpoint-${path}`)).getByText(/5 requests per second/)
+			).toBeInTheDocument();
+		}
 	});
 });

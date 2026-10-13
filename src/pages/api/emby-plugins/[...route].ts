@@ -8,6 +8,7 @@ import {
 import { resolvePluginSponsor, setPluginNoStore } from '@/services/jellyfinPlugins/auth';
 import { pluginObjectKey } from '@/services/jellyfinPlugins/catalog';
 import { getStoredObject } from '@/services/newznab/store';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { createHash } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -40,7 +41,7 @@ function segments(req: NextApiRequest): string[] {
 	return Array.isArray(route) ? route : typeof route === 'string' ? [route] : [];
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	setPluginNoStore(res);
 
 	if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -106,3 +107,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	if (req.method === 'HEAD') return res.status(200).end();
 	return res.status(200).send(bytes);
 }
+
+// The per-address gate SABnzbd's ?apikey= route has, ahead of the key lookup.
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.default);

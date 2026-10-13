@@ -27,6 +27,8 @@ const perMinute = (config: { rateLimit: number; windowSeconds: number }, unit: s
 const { newznabSearch, newznabGrab, newznabGrabDay, torznabSearch, zurg, identifyHashes } =
 	RATE_LIMIT_CONFIGS;
 
+const perAddress = `${RATE_LIMIT_CONFIGS.default.rateLimit} requests per second`;
+
 const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 	{
 		title: 'Open to everyone',
@@ -44,6 +46,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				path: '/api/sabnzbd/<mount root>/api',
 				what: `A SABnzbd download client for Sonarr and Radarr. Grabs are rebuilt as torrents in your Real-Debrid account, under the same daily allowance as DMM's own pages: ${SAB_DAILY.normal} of Usenet per account, ${SAB_DAILY.sponsor} and a place ahead in the queue for sponsors.`,
 				auth: 'Your Real-Debrid API key as the API Key. Sponsors add their DMM API key as the Password',
+				limit: perAddress,
 				guide: { href: '/sabnzbd', label: 'SABnzbd setup' },
 			},
 			{
@@ -80,6 +83,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				path: '/api/plugins/manifest.json',
 				what: 'The plugin repository for the zurg Jellyfin plugins.',
 				auth: '?apikey=',
+				limit: perAddress,
 				guide: { href: '/jellyfin', label: 'Jellyfin plugins' },
 			},
 			{
@@ -87,6 +91,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				path: '/api/emby-plugins/',
 				what: 'Downloads of the zurg Emby plugins.',
 				auth: '?apikey=',
+				limit: perAddress,
 				guide: { href: '/emby', label: 'Emby plugins' },
 			},
 			{

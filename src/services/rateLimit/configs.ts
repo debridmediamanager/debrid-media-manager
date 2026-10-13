@@ -40,7 +40,8 @@ export const RATE_LIMIT_CONFIGS = {
 	// and 15,343 of 20,035 posts were refused 429 on `torrents`.
 	hashImdb: { name: 'hashImdb', rateLimit: 100, windowSeconds: 10 },
 	// plexsim's catalog builder: one library in a handful of 500-hash calls.
-	identifyHashes: { name: 'identifyHashes', rateLimit: 20, windowSeconds: 60 },
+	// Held to the sponsor API's 2,500 items a minute like its two siblings below.
+	identifyHashes: { name: 'identifyHashes', rateLimit: 5, windowSeconds: 60 },
 	// The library page names its movies after it loads: one call per 500 movies,
 	// and later loads ask only about releases it has not seen. Each new filename
 	// costs the identifier about 8 ms of CPU, so this caps an address at 5,000 a

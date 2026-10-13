@@ -6,6 +6,7 @@ import {
 	servableContentType,
 } from '@/services/jellyfinPlugins/catalog';
 import { getStoredObject } from '@/services/newznab/store';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -52,7 +53,7 @@ function segments(req: NextApiRequest): string[] {
 	return Array.isArray(route) ? route : typeof route === 'string' ? [route] : [];
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	setPluginNoStore(res);
 
 	if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -109,3 +110,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	return res.status(404).json({ error: 'No such plugin route' });
 }
+
+// The per-address gate SABnzbd's ?apikey= route has, ahead of the key lookup.
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.default);
