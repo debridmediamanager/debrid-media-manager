@@ -32,8 +32,10 @@ export interface OtherStreamsLimitChoice {
  * it again on every save, so this only decides what is on screen.
  *
  * `current` is kept in the list even when it sits above the ceiling, which is
- * what a sponsor who set 10 and then lapsed will have stored. Dropping it would
- * render the select blank and silently misreport what the profile actually holds.
+ * what a sponsor who set 10 and then lapsed will have stored (the stream routes
+ * serve 5 for it until a sponsorship saves it again, see castOtherStreamsLimit).
+ * Dropping it would render the select blank and silently misreport what the
+ * profile actually holds.
  */
 export function otherStreamsLimitChoices(
 	isSponsor: boolean,

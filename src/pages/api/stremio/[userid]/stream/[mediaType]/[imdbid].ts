@@ -3,9 +3,9 @@ import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { isLegacyToken } from '@/utils/castApiHelpers';
+import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import { rdCastPlayId } from '@/utils/rdCastLink';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
-import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -88,11 +88,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	try {
 		const maxSize = typeSlug === 'movie' ? profile.movieMaxSize : profile.episodeMaxSize;
-		const rawLimit = profile.otherStreamsLimit ?? 5;
-		// The ceiling is the sponsor one because only a verified sponsor could
-		// have stored a value above the standard limit - Stremio calls this
-		// endpoint with nothing but the userid, so there is no token to check here.
-		const otherStreamsLimit = Math.max(0, Math.min(SPONSOR_MAX_OTHER_STREAMS_LIMIT, rawLimit));
+		// Above 5 only while the sponsorship that saved it is still active.
+		const otherStreamsLimit = await effectiveOtherStreamsLimit(
+			'rd',
+			userid,
+			profile.otherStreamsLimit
+		);
 
 		// get urls from db
 		const [userCastItems, otherItems] = await Promise.all([

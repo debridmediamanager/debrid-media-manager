@@ -1,6 +1,7 @@
 import { repository as db } from '@/services/repository';
 import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
-import { isSponsorRequest } from '@/utils/requireSponsor';
+import { recordOtherStreamsGrant } from '@/utils/castOtherStreamsLimit';
+import { sponsorIdOfRequest } from '@/utils/requireSponsor';
 import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -24,9 +25,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
+	let sponsorShortId: string | null = null;
 	if (otherStreamsLimit !== undefined) {
 		// Sponsors may raise this; everyone else stays at the standard ceiling.
-		const maxLimit = maxOtherStreamsLimit(await isSponsorRequest(req));
+		sponsorShortId = await sponsorIdOfRequest(req);
+		const maxLimit = maxOtherStreamsLimit(sponsorShortId !== null);
 		const limit = Number(otherStreamsLimit);
 		if (!Number.isInteger(limit) || limit < 0 || limit > maxLimit) {
 			res.status(400).json({
@@ -56,6 +59,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			typeof episodeMaxSize === 'number' ? episodeMaxSize : undefined,
 			typeof otherStreamsLimit === 'number' ? otherStreamsLimit : undefined,
 			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
+		);
+
+		await recordOtherStreamsGrant(
+			'ad',
+			userId,
+			typeof otherStreamsLimit === 'number' ? otherStreamsLimit : undefined,
+			sponsorShortId
 		);
 
 		res.status(200).json({

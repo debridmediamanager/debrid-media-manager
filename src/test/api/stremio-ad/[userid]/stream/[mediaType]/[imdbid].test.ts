@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { activeCastGrant } from '@/test/utils/sponsor';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -125,8 +126,9 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 		});
 
-		it('clamps otherStreamsLimit above the sponsor ceiling to 10', async () => {
+		it('clamps an active sponsor’s otherStreamsLimit to 10', async () => {
 			setupProfile({ otherStreamsLimit: 99 });
+			activeCastGrant();
 			mockRepository.getAllDebridUserCastStreams = vi.fn().mockResolvedValue([]);
 			mockRepository.getAllDebridOtherStreams = vi.fn().mockResolvedValue([]);
 

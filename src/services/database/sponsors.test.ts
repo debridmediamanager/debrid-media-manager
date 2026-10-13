@@ -6,6 +6,11 @@ const prismaMock = vi.hoisted(() => ({
 		findUnique: vi.fn(),
 		findFirst: vi.fn(),
 	},
+	castSponsorGrant: {
+		findUnique: vi.fn(),
+		upsert: vi.fn(),
+		deleteMany: vi.fn(),
+	},
 }));
 
 vi.mock('./client', () => ({
@@ -166,6 +171,45 @@ describe('SponsorsService', () => {
 		it('returns null for an unknown id', async () => {
 			(prismaMock.sponsors.findUnique as Mock).mockResolvedValue(null);
 			expect(await service.getByShortId('ZZZZ')).toBeNull();
+		});
+	});
+
+	describe('cast grants', () => {
+		const key = { service_userId: { service: 'tb', userId: 'u1' } };
+
+		beforeEach(() => {
+			Object.values(prismaMock.castSponsorGrant).forEach((fn) => fn.mockReset());
+		});
+
+		it('reads the shortId on the grant, or null without one', async () => {
+			(prismaMock.castSponsorGrant.findUnique as Mock).mockResolvedValueOnce({
+				shortId: 'ZP1M',
+			});
+			expect(await service.getCastGrant('tb', 'u1')).toBe('ZP1M');
+			expect(prismaMock.castSponsorGrant.findUnique).toHaveBeenCalledWith(
+				expect.objectContaining({ where: key })
+			);
+
+			(prismaMock.castSponsorGrant.findUnique as Mock).mockResolvedValueOnce(null);
+			expect(await service.getCastGrant('tb', 'u1')).toBeNull();
+		});
+
+		it('upserts a grant for a shortId', async () => {
+			await service.setCastGrant('tb', 'u1', 'ZP1M');
+			expect(prismaMock.castSponsorGrant.upsert).toHaveBeenCalledWith({
+				where: key,
+				create: { service: 'tb', userId: 'u1', shortId: 'ZP1M' },
+				update: { shortId: 'ZP1M' },
+			});
+		});
+
+		// deleteMany, not delete: a profile that never had a grant is not an error.
+		it('removes the grant for null', async () => {
+			await service.setCastGrant('tb', 'u1', null);
+			expect(prismaMock.castSponsorGrant.deleteMany).toHaveBeenCalledWith({
+				where: { service: 'tb', userId: 'u1' },
+			});
+			expect(prismaMock.castSponsorGrant.upsert).not.toHaveBeenCalled();
 		});
 	});
 });

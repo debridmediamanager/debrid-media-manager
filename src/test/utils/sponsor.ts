@@ -53,3 +53,19 @@ export function sponsorshipLapsed(shortId = TEST_SPONSOR_SHORT_ID): void {
 		keyVersion: 1,
 	});
 }
+
+/**
+ * A cast profile whose "other streams" limit above 5 was saved by a sponsorship
+ * that is still active, which is what the stream routes need before they serve
+ * more than 5.
+ */
+export function activeCastGrant(shortId = TEST_SPONSOR_SHORT_ID): void {
+	vi.mocked(repository.getCastSponsorGrant).mockResolvedValue(shortId);
+	vi.mocked(repository.getSponsorByShortId).mockResolvedValue({
+		isSponsor: true,
+		sources: ['github'],
+		shortId,
+		githubUsername: 'someone',
+		keyVersion: 1,
+	});
+}

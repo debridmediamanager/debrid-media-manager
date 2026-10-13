@@ -1045,6 +1045,26 @@ model SponsorProviderKey {
   @@id([shortId, service])
 }
 
+/// Which sponsorship let a cast profile store an "other streams" limit above
+/// the standard 5.
+///
+/// Stremio calls the stream routes with nothing but the profile's userId, so the
+/// stored limit alone kept a lapsed sponsor's 10 forever. A save above 5 writes
+/// the sponsor's shortId here, a save at 5 or below deletes the row, and the
+/// stream routes re-read the sponsorship it names. One table for all six
+/// providers rather than a column on each `*CastProfile`, so a missing table
+/// costs sponsors their 10 instead of failing every profile read.
+model CastSponsorGrant {
+  /// `rd`, `tb`, `ad`, `pm`, `oc` or `dl`.
+  service   String   @db.VarChar(4)
+  /// The `userId` of that provider's `*CastProfile` row.
+  userId    String
+  shortId   String   @db.VarChar(16)
+  updatedAt DateTime @updatedAt
+
+  @@id([service, userId])
+}
+
 model DiscordUser {
   id              String   @id @default(cuid()) @db.VarChar(30)
   createdAt       DateTime @default(now())

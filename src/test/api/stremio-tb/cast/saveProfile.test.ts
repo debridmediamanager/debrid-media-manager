@@ -14,6 +14,7 @@ vi.mock('@/utils/torboxCastApiHelpers', () => ({
 vi.mock('@/services/repository', () => ({
 	repository: {
 		saveTorBoxCastProfile: mockSaveCastProfile,
+		setCastSponsorGrant: vi.fn(),
 	},
 }));
 

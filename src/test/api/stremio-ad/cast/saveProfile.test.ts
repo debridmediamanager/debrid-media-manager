@@ -14,6 +14,7 @@ vi.mock('@/utils/allDebridCastApiHelpers', () => ({
 vi.mock('@/services/repository', () => ({
 	repository: {
 		saveAllDebridCastProfile: mockSaveCastProfile,
+		setCastSponsorGrant: vi.fn(),
 	},
 }));
 

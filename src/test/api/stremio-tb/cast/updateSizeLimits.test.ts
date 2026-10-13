@@ -6,6 +6,7 @@ const mockHelpers = vi.hoisted(() => ({
 
 const mockDb = vi.hoisted(() => ({
 	saveTorBoxCastProfile: vi.fn(),
+	setCastSponsorGrant: vi.fn(),
 }));
 
 vi.mock('@/utils/torboxCastApiHelpers', () => mockHelpers);

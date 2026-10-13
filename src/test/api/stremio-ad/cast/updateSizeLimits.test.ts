@@ -7,6 +7,7 @@ const mockHelpers = vi.hoisted(() => ({
 const mockDb = vi.hoisted(() => ({
 	saveAllDebridCastProfile: vi.fn(),
 	updateAllDebridCastSettings: vi.fn(),
+	setCastSponsorGrant: vi.fn(),
 }));
 
 vi.mock('@/utils/allDebridCastApiHelpers', () => mockHelpers);

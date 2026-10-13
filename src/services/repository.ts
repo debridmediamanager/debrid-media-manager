@@ -1416,6 +1416,14 @@ export class Repository {
 		return this.sponsorsService.getByShortId(shortId);
 	}
 
+	public getCastSponsorGrant(service: string, userId: string) {
+		return this.sponsorsService.getCastGrant(service, userId);
+	}
+
+	public setCastSponsorGrant(service: string, userId: string, shortId: string | null) {
+		return this.sponsorsService.setCastGrant(service, userId, shortId);
+	}
+
 	/**
 	 * A sponsor's own provider key for a live Torznab availability filter.
 	 *

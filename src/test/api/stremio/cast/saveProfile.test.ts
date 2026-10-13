@@ -25,6 +25,7 @@ vi.mock('@/services/repository', () => ({
 		// The sponsor gate re-reads the row behind the token, so this endpoint
 		// reaches the repository even when it is only widening a limit.
 		getSponsorByShortId: mockGetSponsorByShortId,
+		setCastSponsorGrant: vi.fn(),
 	},
 }));
 

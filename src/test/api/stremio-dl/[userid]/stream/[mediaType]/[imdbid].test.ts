@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { activeCastGrant } from '@/test/utils/sponsor';
 import { getTroveCandidates } from '@/utils/cachedTroveStreams';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -126,10 +127,8 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect((res2._getData() as any).streams).toEqual([]);
 	});
 
-	// Stremio calls this endpoint with nothing but the userid, so there is no
-	// token to check - the stored value is clamped to the sponsor ceiling
-	// because only a sponsor could have stored one above the standard limit.
-	it('clamps a stored other-streams limit to the sponsor ceiling', async () => {
+	it('clamps an active sponsor’s stored other-streams limit to the sponsor ceiling', async () => {
+		activeCastGrant();
 		mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue({
 			apiKey: 'viewer-token',
 			movieMaxSize: 0,

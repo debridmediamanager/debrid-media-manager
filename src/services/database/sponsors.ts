@@ -112,4 +112,33 @@ export class SponsorsService extends DatabaseClient {
 
 		return sponsor ? toLookup(sponsor) : null;
 	}
+
+	/**
+	 * The Sponsorship ID that let a cast profile store an "other streams" limit
+	 * above the standard one. Unlike `Sponsors`, `CastSponsorGrant` is dmm's own.
+	 */
+	public async getCastGrant(service: string, userId: string): Promise<string | null> {
+		const grant = await this.prisma.castSponsorGrant.findUnique({
+			where: { service_userId: { service, userId } },
+			select: { shortId: true },
+		});
+		return grant?.shortId ?? null;
+	}
+
+	/** Records which sponsorship allowed the limit; null removes the grant. */
+	public async setCastGrant(
+		service: string,
+		userId: string,
+		shortId: string | null
+	): Promise<void> {
+		if (shortId) {
+			await this.prisma.castSponsorGrant.upsert({
+				where: { service_userId: { service, userId } },
+				create: { service, userId, shortId },
+				update: { shortId },
+			});
+		} else {
+			await this.prisma.castSponsorGrant.deleteMany({ where: { service, userId } });
+		}
+	}
 }

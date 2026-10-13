@@ -2,6 +2,7 @@ import { languageEmojis } from '@/components/showInfo/languages';
 import handler from '@/pages/api/stremio/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { activeCastGrant } from '@/test/utils/sponsor';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -467,6 +468,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		// to save.
 		it('honours a sponsor profile set above the standard limit', async () => {
 			setupProfile({ otherStreamsLimit: 10 });
+			activeCastGrant();
 			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
 			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
 
@@ -521,8 +523,9 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 		});
 
-		it('clamps otherStreamsLimit above the sponsor ceiling to 10', async () => {
+		it('clamps an active sponsor’s otherStreamsLimit to 10', async () => {
 			setupProfile({ otherStreamsLimit: 99 });
+			activeCastGrant();
 			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
 			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
 
