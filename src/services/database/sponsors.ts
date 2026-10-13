@@ -80,6 +80,25 @@ export class SponsorsService extends DatabaseClient {
 	}
 
 	/**
+	 * The key gatekeeper issued before `dmmApiKey`, kept in `Sponsors.zurgApiKey`, for a
+	 * sponsor who has not been issued a `dmmApiKey` since. A sponsor who has one gets no
+	 * fallback: their old key may be the very one they reset.
+	 *
+	 * The same keys sit in the `ZurgKeys` table with no expiry and no link to a sponsorship,
+	 * which is why reading that table let 292 lapsed sponsors keep `/api/zurg/hashes-by-imdb`.
+	 */
+	public async getByLegacyZurgKey(apiKey: string): Promise<SponsorLookup | null> {
+		if (!apiKey) return null;
+
+		const sponsor = await this.prisma.sponsors.findFirst({
+			where: { zurgApiKey: apiKey, dmmApiKey: null },
+			select: SELECT,
+		});
+
+		return sponsor ? toLookup(sponsor) : null;
+	}
+
+	/**
 	 * Re-checks a sponsorship by Sponsorship ID, for refreshing a token without
 	 * the client having to hand back the key itself.
 	 */

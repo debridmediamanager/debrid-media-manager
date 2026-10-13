@@ -1,3 +1,4 @@
+import { validateDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import { SizeFilters, SubstringFilters } from '@/services/database/hashSearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
@@ -25,17 +26,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	try {
 		const { imdbId, sizeFilters, substringFilters, limit } = req.body;
 
-		// Authentication validation - check for x-api-key header
-		const authHeader = req.headers['x-api-key'];
-		if (!authHeader || typeof authHeader !== 'string') {
-			return res.status(401).json({ error: 'Missing x-api-key header' });
-		}
-
-		// Validate the API key
-		const isValid = await db.validateZurgApiKey(authHeader);
-		if (!isValid) {
-			return res.status(401).json({ error: 'Invalid or expired API key' });
-		}
+		// The same live sponsorship check as the other zurg endpoints. This one used to read
+		// the ZurgKeys table, whose keys never expire, so a lapsed sponsor's key kept working.
+		if (!(await validateDmmApiKeyHeader(req, res, { acceptLegacyZurgKey: true }))) return;
 
 		// Validate IMDB ID
 		if (!imdbId || !isValidImdbId(imdbId)) {

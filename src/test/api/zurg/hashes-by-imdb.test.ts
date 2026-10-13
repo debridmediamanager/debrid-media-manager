@@ -7,6 +7,15 @@ vi.mock('@/services/repository');
 
 const mockRepository = vi.mocked(repository);
 
+const ACTIVE = {
+	isSponsor: true,
+	sources: ['github' as const],
+	shortId: 'ZP1M',
+	githubUsername: 'someone',
+	keyVersion: 1,
+};
+const LAPSED = { ...ACTIVE, isSponsor: false, sources: [] };
+
 const buildBody = (overrides: Record<string, unknown> = {}) => ({
 	imdbId: 'tt1234567',
 	...overrides,
@@ -24,7 +33,10 @@ const buildRequest = (bodyOverrides: Record<string, unknown> = {}) =>
 describe('POST /api/zurg/hashes-by-imdb', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		// What ZurgKeys says about every one of its keys: valid, forever.
 		mockRepository.validateZurgApiKey = vi.fn().mockResolvedValue(true);
+		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
+		mockRepository.getSponsorByLegacyZurgKey = vi.fn().mockResolvedValue(null);
 		mockRepository.getHashesByImdbId = vi.fn().mockResolvedValue([]);
 	});
 
@@ -53,13 +65,47 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 
 	it('rejects invalid API key', async () => {
 		mockRepository.validateZurgApiKey = vi.fn().mockResolvedValue(false);
+		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(null);
 		const req = buildRequest();
 		const res = createMockResponse();
 
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(401);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid or expired API key' });
+		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid API key' });
+	});
+
+	// 292 lapsed sponsors' keys sat in ZurgKeys with no expiry. Measured live on 2026-10-13:
+	// one lapsed key got 401 from /api/zurg/resolve-tmdb and 200 here.
+	it("refuses a lapsed sponsor's key, though ZurgKeys still holds it", async () => {
+		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(LAPSED);
+		const res = createMockResponse();
+
+		await handler(buildRequest(), res);
+
+		expect(res.status).toHaveBeenCalledWith(401);
+		expect(res.json).toHaveBeenCalledWith({ error: 'Sponsorship is no longer active' });
+		expect(mockRepository.getHashesByImdbId).not.toHaveBeenCalled();
+	});
+
+	it("still takes an active sponsor's pre-dmmApiKey key", async () => {
+		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(null);
+		mockRepository.getSponsorByLegacyZurgKey = vi.fn().mockResolvedValue(ACTIVE);
+		const res = createMockResponse();
+
+		await handler(buildRequest(), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it("refuses a lapsed sponsor's pre-dmmApiKey key", async () => {
+		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(null);
+		mockRepository.getSponsorByLegacyZurgKey = vi.fn().mockResolvedValue(LAPSED);
+		const res = createMockResponse();
+
+		await handler(buildRequest(), res);
+
+		expect(res.status).toHaveBeenCalledWith(401);
 	});
 
 	it('rejects invalid IMDB ID format', async () => {

@@ -15,7 +15,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
  */
 export async function validateDmmApiKeyHeader(
 	req: NextApiRequest,
-	res: NextApiResponse
+	res: NextApiResponse,
+	/** Also accept a sponsor's pre-`dmmApiKey` key, for routes that took those keys. */
+	options: { acceptLegacyZurgKey?: boolean } = {}
 ): Promise<boolean> {
 	const apiKey = req.headers['x-api-key'];
 	if (!apiKey || typeof apiKey !== 'string') {
@@ -23,7 +25,9 @@ export async function validateDmmApiKeyHeader(
 		return false;
 	}
 
-	const sponsor = await db.getSponsorByDmmApiKey(apiKey);
+	const sponsor =
+		(await db.getSponsorByDmmApiKey(apiKey)) ??
+		(options.acceptLegacyZurgKey ? await db.getSponsorByLegacyZurgKey(apiKey) : null);
 	if (!sponsor) {
 		res.status(401).json({ error: 'Invalid API key' });
 		return false;

@@ -1408,6 +1408,10 @@ export class Repository {
 		return this.sponsorsService.getByDmmApiKey(apiKey);
 	}
 
+	public getSponsorByLegacyZurgKey(apiKey: string) {
+		return this.sponsorsService.getByLegacyZurgKey(apiKey);
+	}
+
 	public getSponsorByShortId(shortId: string) {
 		return this.sponsorsService.getByShortId(shortId);
 	}

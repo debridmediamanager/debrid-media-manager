@@ -4,6 +4,7 @@ import { SponsorsService } from './sponsors';
 const prismaMock = vi.hoisted(() => ({
 	sponsors: {
 		findUnique: vi.fn(),
+		findFirst: vi.fn(),
 	},
 }));
 
@@ -30,6 +31,23 @@ describe('SponsorsService', () => {
 	beforeEach(() => {
 		service = new SponsorsService();
 		(prismaMock.sponsors.findUnique as Mock).mockReset();
+	});
+
+	describe('getByLegacyZurgKey', () => {
+		// A sponsor who has been issued a dmmApiKey gets no fallback: the old key may be the
+		// very one they reset because it leaked.
+		it('only matches a sponsor who has no dmmApiKey', async () => {
+			(prismaMock.sponsors.findFirst as Mock).mockResolvedValue(null);
+			await service.getByLegacyZurgKey(KEY);
+			expect(prismaMock.sponsors.findFirst).toHaveBeenCalledWith(
+				expect.objectContaining({ where: { zurgApiKey: KEY, dmmApiKey: null } })
+			);
+		});
+
+		it('reports whether that sponsorship is live', async () => {
+			(prismaMock.sponsors.findFirst as Mock).mockResolvedValue(LAPSED);
+			expect((await service.getByLegacyZurgKey(KEY))?.isSponsor).toBe(false);
+		});
 	});
 
 	describe('getByDmmApiKey', () => {
