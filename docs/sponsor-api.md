@@ -20,6 +20,10 @@ The hash is optional. With it, answers are cached and DMM's own hash map can
 confirm a title. `complete: false` means the identifier was unreachable, so ask
 again later for the `null` rows.
 
+To look up what DMM already has on record for a hash, without a filename, use
+`POST /api/torrents/identify` with `{"hashes":[...]}` instead. It answers only
+for hashes DMM has seen and leaves the rest out.
+
 ## Cached availability DMM has seen
 
 `POST /api/sponsor/availability`, up to 100 hashes, 25 calls a minute per address.

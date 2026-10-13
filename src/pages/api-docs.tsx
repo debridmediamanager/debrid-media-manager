@@ -92,7 +92,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 			{
 				method: 'POST',
 				path: '/api/sponsor/identify',
-				what: 'Names the movie or show behind each release filename, the same way your library page does. Up to 500 filenames a call.',
+				what: 'Works out the movie or show from each release filename, the same way your library page does, so it answers for releases DMM has never seen. Up to 500 filenames a call.',
 				auth: 'x-api-key header',
 				limit: perMinute(RATE_LIMIT_CONFIGS.sponsorIdentify, 'calls'),
 			},
@@ -106,7 +106,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 			{
 				method: 'POST',
 				path: '/api/torrents/identify',
-				what: 'The title DMM has on record for each release hash. Up to 500 hashes a call.',
+				what: 'Looks up the title DMM already has on record for each release hash, without reading any filename. Hashes DMM has never seen are left out, so use /api/sponsor/identify for those. Up to 500 hashes a call.',
 				auth: 'x-api-key header',
 				limit: perMinute(identifyHashes, 'calls'),
 			},

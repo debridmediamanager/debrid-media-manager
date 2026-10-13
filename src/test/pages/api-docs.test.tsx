@@ -68,6 +68,21 @@ describe('/api-docs', () => {
 		expect(row.getByText(/Sponsors add their DMM API key as the Password/)).toBeInTheDocument();
 	});
 
+	it('tells the two identify endpoints apart by what they read', () => {
+		render(<ApiDocsPage />);
+
+		expect(
+			within(screen.getByTestId('endpoint-/api/sponsor/identify')).getByText(
+				/from each release filename/
+			)
+		).toBeInTheDocument();
+		expect(
+			within(screen.getByTestId('endpoint-/api/torrents/identify')).getByText(
+				/without reading any filename/
+			)
+		).toBeInTheDocument();
+	});
+
 	it('states the limits the routes enforce', () => {
 		render(<ApiDocsPage />);
 
