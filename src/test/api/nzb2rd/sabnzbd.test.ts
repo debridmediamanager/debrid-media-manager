@@ -110,13 +110,15 @@ describe('SABnzbd proxy', () => {
 			mockRepository.getSponsorByDmmApiKey = vi
 				.fn()
 				.mockImplementation(async (key: string) =>
-					key === SPONSOR_KEY ? { isSponsor: true } : { isSponsor: false }
+					key === SPONSOR_KEY
+						? { isSponsor: true, shortId: 'ZP1M' }
+						: { isSponsor: false, shortId: 'LAPS' }
 				);
 		});
 
 		it("flags an active sponsor's grab, as the web page does, without forwarding the key", async () => {
 			expect(await addfile(`mode=addfile&apikey=RDKEY&ma_password=${SPONSOR_KEY}`)).toBe(
-				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY&priority=1'
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY&priority=1&sponsor=ZP1M'
 			);
 		});
 
@@ -131,6 +133,17 @@ describe('SABnzbd proxy', () => {
 				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY'
 			);
 			expect(mockRepository.getSponsorByDmmApiKey).not.toHaveBeenCalled();
+		});
+
+		it('drops a Sponsorship ID the caller sent itself, and names the real one', async () => {
+			expect(await addfile('mode=addfile&apikey=RDKEY&sponsor=ZP1M')).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY'
+			);
+			expect(
+				await addfile(`mode=addfile&apikey=RDKEY&sponsor=FAKE&ma_password=${SPONSOR_KEY}`)
+			).toBe(
+				'http://nzb2rd.test:3200/mnt/zurg/__all__/api?mode=addfile&apikey=RDKEY&priority=1&sponsor=ZP1M'
+			);
 		});
 
 		it('keeps the key off polls and looks nothing up for them', async () => {

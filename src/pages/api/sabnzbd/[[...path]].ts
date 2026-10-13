@@ -63,10 +63,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const sabPath = sabTargetPath(req.url);
 	if (!sabPath) return res.status(404).json(sabError('Not a SABnzbd API path'));
-	const target = await sabForwardPath(
-		sabPath,
-		async (key) => !!(await db.getSponsorByDmmApiKey(key))?.isSponsor
-	);
+	const target = await sabForwardPath(sabPath, async (key) => {
+		const sponsor = await db.getSponsorByDmmApiKey(key);
+		return sponsor?.isSponsor ? sponsor.shortId : null;
+	});
 
 	let body: Uint8Array<ArrayBuffer> | undefined;
 	if (req.method === 'POST') {

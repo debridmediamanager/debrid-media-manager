@@ -70,21 +70,30 @@ export async function requireSponsor(
 }
 
 /**
- * Whether a request carries a token for a sponsorship that is still active,
- * without writing a response.
+ * The Sponsorship ID behind a request's token when that sponsorship is still
+ * active, or null, without writing a response.
  *
  * For endpoints that stay open to everyone but widen a limit for sponsors: a
  * missing, bad or lapsed token is a non-sponsor, not an error. A failed lookup
  * is answered the same way rather than thrown, because these endpoints have to
  * keep working at the ordinary limit when the sponsorship cannot be read.
+ *
+ * The id is for a perk that outlives the request: nzb2rd holds a sponsor's job
+ * in its priority tier for days, so it is told whose sponsorship that is and
+ * asks `/api/nzb2rd/sponsor` again before the job starts.
  */
-export async function isSponsorRequest(req: NextApiRequest): Promise<boolean> {
+export async function sponsorIdOfRequest(req: NextApiRequest): Promise<string | null> {
 	const payload = verifySponsorToken(req.headers?.[SPONSOR_HEADER] as string | undefined);
-	if (!payload) return false;
+	if (!payload) return null;
 
 	try {
-		return await sponsorshipStillActive(payload);
+		return (await sponsorshipStillActive(payload)) ? payload.shortId : null;
 	} catch {
-		return false;
+		return null;
 	}
+}
+
+/** Whether a request carries a token for a sponsorship that is still active. See `sponsorIdOfRequest`. */
+export async function isSponsorRequest(req: NextApiRequest): Promise<boolean> {
+	return (await sponsorIdOfRequest(req)) !== null;
 }

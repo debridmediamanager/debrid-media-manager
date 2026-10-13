@@ -79,23 +79,31 @@ export function sabTargetPath(reqUrl: string | undefined): string | null {
  *
  * A sponsor puts their DMM API key in *arr's SABnzbd **Password** field, which
  * *arr sends as `ma_password` on every call. On `addfile` an active sponsor's key
- * becomes `priority=1`, the flag DMM's web page sets on its own submissions, so a
- * grab through *arr gets the same tier and daily allowance. The key itself never
- * reaches nzb2rd, and a `priority` the caller sent is always dropped: nzb2rd
- * trusts the flag from whoever reaches it.
+ * becomes `priority=1&sponsor=<Sponsorship ID>`, what DMM's web page sends with
+ * its own submissions, so a grab through *arr gets the same tier and daily
+ * allowance for as long as the sponsorship lasts (nzb2rd asks about the id again
+ * before the job starts). The key itself never reaches nzb2rd, and a `priority`
+ * or `sponsor` the caller sent is always dropped: nzb2rd trusts both from
+ * whoever reaches it.
+ *
+ * `sponsorOfKey` answers the Sponsorship ID of an active sponsor's key, or null.
  */
 export async function sabForwardPath(
 	target: string,
-	isSponsorKey: (key: string) => Promise<boolean>
+	sponsorOfKey: (key: string) => Promise<string | null>
 ): Promise<string> {
 	const [path, query] = splitQuery(target);
 	const params = new URLSearchParams(query);
 	const key = params.get('ma_password') ?? '';
-	if (!params.has('priority') && !params.has('ma_password')) return target;
+	if (!['priority', 'sponsor', 'ma_password'].some((name) => params.has(name))) return target;
 	params.delete('priority');
+	params.delete('sponsor');
 	params.delete('ma_password');
-	if (params.get('mode') === 'addfile' && key && (await isSponsorKey(key).catch(() => false))) {
+	const sponsor =
+		params.get('mode') === 'addfile' && key ? await sponsorOfKey(key).catch(() => null) : null;
+	if (sponsor) {
 		params.set('priority', '1');
+		params.set('sponsor', sponsor);
 	}
 	const rest = params.toString();
 	return rest ? `${path}?${rest}` : path;

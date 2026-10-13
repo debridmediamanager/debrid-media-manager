@@ -69,14 +69,16 @@ async function runNzb(headers: Record<string, string> = {}) {
 }
 
 describe('usenet→RD carries a verified sponsorship, never a claimed one', () => {
-	it('asks nzb2rd for the priority tier when the token verifies', async () => {
+	// The Sponsorship ID rides along so nzb2rd can ask again when the job finally
+	// starts: its queue is days deep, and the tier has to end with the pledge.
+	it('asks nzb2rd for the priority tier, naming the sponsorship, when the token verifies', async () => {
 		await runNzb({ 'x-dmm-sponsor': sponsorToken() });
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: true }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ sponsor: 'ZP1M' }));
 	});
 
 	it('does not when there is no token', async () => {
 		await runNzb();
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ sponsor: null }));
 	});
 
 	it('does not on a forged token', async () => {
@@ -84,7 +86,7 @@ describe('usenet→RD carries a verified sponsorship, never a claimed one', () =
 		// trusted, and only here. A tampered one must buy nothing.
 		const [payload] = sponsorToken().split('.');
 		await runNzb({ 'x-dmm-sponsor': `${payload}.not-the-real-signature` });
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ sponsor: null }));
 	});
 
 	it('does not on an expired token', async () => {
@@ -96,7 +98,7 @@ describe('usenet→RD carries a verified sponsorship, never a claimed one', () =
 			exp: Date.now() - 1,
 		});
 		await runNzb({ 'x-dmm-sponsor': expired });
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ sponsor: null }));
 	});
 
 	// The regression: the token outlives the pledge by up to a week, so a signature
@@ -106,7 +108,7 @@ describe('usenet→RD carries a verified sponsorship, never a claimed one', () =
 		sponsorshipLapsed();
 
 		await runNzb({ 'x-dmm-sponsor': token });
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ sponsor: null }));
 	});
 });
 
@@ -130,7 +132,7 @@ describe('a sponsor asking for a release someone else already queued', () => {
 	it('promotes the existing job instead of leaving them in the normal line', async () => {
 		const res = await runNzb({ 'x-dmm-sponsor': sponsorToken() });
 
-		expect(mockPromote).toHaveBeenCalledWith('job-A');
+		expect(mockPromote).toHaveBeenCalledWith('job-A', 'ZP1M');
 		// Still no second fetch of the same bytes — the dedup is the point.
 		expect(mockSubmit).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ promoted: true }));

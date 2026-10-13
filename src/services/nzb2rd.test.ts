@@ -16,6 +16,7 @@ import {
 	parseNewznabItem,
 	parseNewznabResponse,
 	parseReleaseId,
+	promoteJob,
 	releaseDedupKey,
 	searchSeasonPacks,
 	searchUsenet,
@@ -304,6 +305,37 @@ describe('submitNzb', () => {
 		expect(form.get('rd_client_id')).toBeNull();
 		expect(form.get('rd_client_secret')).toBeNull();
 		expect(form.get('rd_refresh_token')).toBeNull();
+	});
+
+	// nzb2rd re-asks dmm about this id when the job finally starts, so the tier
+	// ends with the sponsorship rather than lasting as long as the job queues.
+	it('names the sponsorship it grants the priority tier for', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ status: 201, json: async () => ({ id: 'job-1' }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await submitNzb({
+			nzbText: '<nzb></nzb>',
+			nzbName: 'release.nzb',
+			imdbId: 'tt1418646',
+			rdKey: 'user-rd-key',
+			sponsor: 'ZP1M',
+		});
+		const form = fetchMock.mock.calls[0][1].body as FormData;
+		expect(form.get('priority')).toBe('1');
+		expect(form.get('sponsor')).toBe('ZP1M');
+
+		await submitNzb({
+			nzbText: '<nzb></nzb>',
+			nzbName: 'release.nzb',
+			imdbId: 'tt1418646',
+			rdKey: 'user-rd-key',
+			sponsor: null,
+		});
+		const normal = fetchMock.mock.calls[1][1].body as FormData;
+		expect(normal.get('priority')).toBeNull();
+		expect(normal.get('sponsor')).toBeNull();
 	});
 
 	it('passes a non-2xx status through instead of throwing', async () => {
@@ -1036,5 +1068,26 @@ describe('parseNewznabItem capturing pubDate and category', () => {
 			'title',
 		]);
 		expect(JSON.stringify(results)).not.toContain('secret-key');
+	});
+});
+
+describe('promoteJob', () => {
+	it('names the sponsorship the promotion is for', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ ok: true, status: 200, json: async () => ({ promoted: true }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		expect(await promoteJob('job-A', 'ZP1M')).toBe(true);
+		const [url, init] = fetchMock.mock.calls[0];
+		expect(url).toBe('http://nzb2rd.test:3200/jobs/job-A/priority');
+		expect(init.method).toBe('POST');
+		expect(JSON.parse(init.body)).toEqual({ sponsor: 'ZP1M' });
+		expect(init.headers).toEqual({ 'Content-Type': 'application/json' });
+	});
+
+	it('answers false rather than throwing when nzb2rd cannot be reached', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('down')));
+		expect(await promoteJob('job-A', 'ZP1M')).toBe(false);
 	});
 });

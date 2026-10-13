@@ -44,7 +44,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 			{
 				method: 'GET/POST',
 				path: '/api/sabnzbd/<mount root>/api',
-				what: `A SABnzbd download client for Sonarr and Radarr. Grabs are rebuilt as torrents in your Real-Debrid account, under the same daily allowance as DMM's own pages: ${SAB_DAILY.normal} of Usenet per account, ${SAB_DAILY.sponsor} and a place ahead in the queue for sponsors.`,
+				what: `A SABnzbd download client for Sonarr and Radarr. Grabs are rebuilt as torrents in your Real-Debrid account, under the same daily allowance as DMM's own pages: ${SAB_DAILY.normal} of Usenet per account, ${SAB_DAILY.sponsor} and a place ahead in the queue for sponsors, while the sponsorship is active.`,
 				auth: 'Your Real-Debrid API key as the API Key. Sponsors add their DMM API key as the Password',
 				limit: perAddress,
 				guide: { href: '/sabnzbd', label: 'SABnzbd setup' },

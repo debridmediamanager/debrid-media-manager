@@ -637,23 +637,29 @@ export async function submitNzb(args: {
 	rdKey: string;
 	oauth?: RdOAuthCredentials | null;
 	/**
-	 * Admit the job to nzb2rd's priority tier — the sponsor perk.
+	 * The Sponsorship ID to admit the job to nzb2rd's priority tier for — the
+	 * sponsor perk, which also carries the larger daily Usenet allowance.
 	 *
-	 * Only ever set from `isSponsorRequest`, which checks the HMAC on a token
-	 * this app minted and then re-reads the sponsorship behind it, so a pledge
-	 * that ended stops buying priority on the next submission. Never from
-	 * anything the browser supplies directly: the field nzb2rd reads is a bare
-	 * boolean, so dmm vouching for it is the whole verification.
+	 * Only ever set from `sponsorIdOfRequest`, which checks the HMAC on a token
+	 * this app minted and then re-reads the sponsorship behind it. Never from
+	 * anything the browser supplies directly: nzb2rd trusts what it is sent, so
+	 * dmm vouching for it is the whole verification. nzb2rd asks
+	 * `/api/nzb2rd/sponsor` about the id again as the job is about to start, so
+	 * the tier ends with the sponsorship rather than lasting as long as the job
+	 * queues. An nzb2rd that predates that ignores the id and keeps the flag.
 	 *
 	 * It reorders the wait; it buys no extra concurrency on that host.
 	 */
-	priority?: boolean;
+	sponsor?: string | null;
 }): Promise<{ status: number; data: any }> {
 	const form = new FormData();
 	form.append('nzb', new Blob([args.nzbText], { type: 'application/x-nzb' }), args.nzbName);
 	form.append('imdb_id', args.imdbId);
 	form.append('rd_api_key', args.rdKey);
-	if (args.priority) form.append('priority', '1');
+	if (args.sponsor) {
+		form.append('priority', '1');
+		form.append('sponsor', args.sponsor);
+	}
 	if (isCompleteOAuth(args.oauth)) {
 		form.append('rd_client_id', args.oauth.clientId);
 		form.append('rd_client_secret', args.oauth.clientSecret);
@@ -683,12 +689,20 @@ export async function submitNzb(args: {
  * logged and swallowed rather than turned into an error the user sees. Returns
  * whether the tier actually changed, which is false for a job that had already
  * been promoted by an earlier sponsor.
+ *
+ * `sponsor` is the Sponsorship ID the promotion is for, so nzb2rd can end the
+ * tier with that sponsorship, as it does for one granted at submit.
  */
-export async function promoteJob(jobId: string): Promise<boolean> {
+export async function promoteJob(jobId: string, sponsor: string): Promise<boolean> {
 	try {
 		const response = await fetch(
 			`${getNzb2rdUrl()}/jobs/${encodeURIComponent(jobId)}/priority`,
-			{ method: 'POST', signal: AbortSignal.timeout(10000) }
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ sponsor }),
+				signal: AbortSignal.timeout(10000),
+			}
 		);
 		if (!response.ok) return false;
 		const data = await response.json().catch(() => ({}));

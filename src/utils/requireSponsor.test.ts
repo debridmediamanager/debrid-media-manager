@@ -1,7 +1,12 @@
 import { repository as db } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { isSponsorRequest, requireSponsor, SPONSOR_HEADER } from './requireSponsor';
+import {
+	isSponsorRequest,
+	requireSponsor,
+	SPONSOR_HEADER,
+	sponsorIdOfRequest,
+} from './requireSponsor';
 import { signSponsorToken, SPONSOR_TOKEN_TTL_SECONDS } from './sponsorToken';
 
 vi.mock('@/services/repository');
@@ -183,5 +188,28 @@ describe('a request with no headers object', () => {
 		await requireSponsor(reqWith('forged.signature'), res);
 
 		expect(db.getSponsorByShortId).not.toHaveBeenCalled();
+	});
+});
+
+describe('sponsorIdOfRequest', () => {
+	// What nzb2rd is told alongside the priority flag, so it can ask whether this
+	// sponsorship is still active when the job finally starts.
+	it('names the Sponsorship ID behind a valid token on a live sponsorship', async () => {
+		expect(await sponsorIdOfRequest(reqWith(tokenFor()))).toBe('ZP1M');
+	});
+
+	it('is null without a token, on a forged one, or once the sponsorship has lapsed', async () => {
+		expect(await sponsorIdOfRequest(reqWith())).toBeNull();
+		expect(await sponsorIdOfRequest(reqWith('bogus.signature'))).toBeNull();
+		vi.mocked(db.getSponsorByShortId).mockResolvedValue({
+			...activeLookup(),
+			isSponsor: false,
+		});
+		expect(await sponsorIdOfRequest(reqWith(tokenFor()))).toBeNull();
+	});
+
+	it('is null when the sponsorship cannot be read, rather than throwing', async () => {
+		vi.mocked(db.getSponsorByShortId).mockRejectedValue(new Error('db down'));
+		expect(await sponsorIdOfRequest(reqWith(tokenFor()))).toBeNull();
 	});
 });

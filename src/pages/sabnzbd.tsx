@@ -562,7 +562,8 @@ export default function SabnzbdSetupPage() {
 						Sponsors get <strong>{SAB_DAILY.sponsor}</strong> and a place ahead of the
 						normal queue. *arr cannot tell DMM you sponsor, so put your DMM API key in
 						the <strong>Password</strong> field above. Without it a sponsor&apos;s grab
-						counts as a normal one.
+						counts as a normal one. Both last as long as your sponsorship. A grab still
+						waiting when it ends moves back to the normal queue and allowance.
 					</p>
 				</Card>
 

@@ -12,7 +12,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { BLOCKED_MESSAGE, isNzbBlocked, isReleaseBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
-import { isSponsorRequest } from '@/utils/requireSponsor';
+import { sponsorIdOfRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -114,11 +114,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// Awaited rather than detached: the job is promoted before the caller is
 			// told they are queued, so a poll cannot read a stale place in line. It
 			// cannot fail the request — `promoteJob` swallows its own errors.
-			// Awaited: `isSponsorRequest` revalidates against the live sponsor row, and
-			// an unawaited promise is truthy — which promoted every caller.
-			const promoted = (await isSponsorRequest(req))
-				? await promoteJob(existing.jobId)
-				: false;
+			// Awaited: `sponsorIdOfRequest` revalidates against the live sponsor row,
+			// and an unawaited promise is truthy — which promoted every caller.
+			const sponsor = await sponsorIdOfRequest(req);
+			const promoted = sponsor ? await promoteJob(existing.jobId, sponsor) : false;
 			return res.status(200).json({
 				duplicate: 'in_progress',
 				infoHash: null,
@@ -155,10 +154,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// `rdKey` expires 24h after login and that queue is days deep, which is
 			// what produced the `401 bad_token` failures on the Transfers page.
 			oauth: isCompleteOAuth(oauth) ? oauth : null,
-			// Sponsor perk: a place in nzb2rd's priority tier. Verified here
-			// rather than trusted from the body — the browser only ever sends the
-			// signed token, and this is the one place that checks its signature.
-			priority: await isSponsorRequest(req),
+			// Sponsor perk: a place in nzb2rd's priority tier, for as long as this
+			// sponsorship stays active. Verified here rather than trusted from the
+			// body — the browser only ever sends the signed token, and this is the
+			// one place that checks its signature.
+			sponsor: await sponsorIdOfRequest(req),
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([
