@@ -12,7 +12,7 @@ import {
 	UNCACHED_SEEDERS,
 } from '@/services/torznab/search';
 import { DEFAULT_LIMIT, MAX_LIMIT, TorznabRssItem } from '@/services/torznab/xml';
-import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-14.json';
 import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
 import sonarrEpisodeSearch from '@/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
@@ -1315,7 +1315,7 @@ describe('releases Real-Debrid refuses by name', () => {
 		expect(hashesOf(await wholeFeed(['ad', 'cached'], DEAD_OF_WINTER))).toContain(REPORTED);
 	});
 
-	// RD's own answers from the recorded probe of 2026-10-10, each a fresh
+	// RD's own answers from the recorded probe of 2026-10-14, each a fresh
 	// webseed torrent so only the names decided. An add is judged on the root
 	// name, and multi-file entries whose files RD later refused to unrestrict
 	// were still taken; an unrestrict is judged on the file's own name, which
@@ -1339,7 +1339,7 @@ describe('releases Real-Debrid refuses by name', () => {
 
 		const served = new Set(hashesOf(await wholeFeed(['rd', 'cached'], MOVIE_ID)));
 
-		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(97);
+		expect(probes.filter((probe) => probe.status === 451)).toHaveLength(111);
 		for (const probe of probes) {
 			expect(served.has(probe.hash), `${probe.name} answered ${probe.status}`).toBe(
 				probe.status === 201

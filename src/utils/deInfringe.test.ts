@@ -1,4 +1,4 @@
-import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json';
+import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10-14.json';
 import { describe, expect, it } from 'vitest';
 import { deInfringe, isRdBlockedName } from './deInfringe';
 
@@ -10,10 +10,12 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.HDTV.XviD-AFG',
 		'Show.S01E01.1080p.WEB.x264-GROUP',
 		'Show.S01E01.1080p.WEB.H264-GROUP',
-		// In any case since 2026-10-10.
-		'Show.S01E01.1080p.WEB.h264-GROUP',
-		'Show.S01E01.1080p.web-dl.x265-GROUP',
+		// In any case, measured 2026-10-14.
 		'Show.S01E01.720p.hdtv.x264-GROUP',
+		'Show.S01E01.480p.HDTV.XVID-GROUP',
+		'Show.S01E01.1080p.webrip.x265-GROUP',
+		'Movie.2015.1080p.bluray.x264-GROUP',
+		'Movie.2015.1080P.BLURAY.DTS.x265-GROUP',
 		// RD took these on 2026-10-03 and refused them again on 2026-10-10:
 		// the rip family, `BluRay.x264`, and `p.BluRay.DTS` (refused 2026-08-25).
 		'Show.S01E01.1080p.WEBRip.x265-RARBG',
@@ -31,6 +33,14 @@ describe('isRdBlockedName', () => {
 	// substring, so `WEB.DL` passing while `WEB-DL` is refused is the whole
 	// reason `deInfringe`'s rewrite works.
 	it.each([
+		// The WEB tags count only in exactly this case since 2026-10-14; RD took
+		// both How to Train Your Dragon releases from a sponsor's retest.
+		'Show.S01E01.1080p.WEB.h264-GROUP',
+		'How.to.Train.Your.Dragon.2025.1080p.WEB.h264-ETHEL',
+		'Show.S01E01.1080p.web-dl.x265-GROUP',
+		'How To Train Your Dragon 2025 1080P Web-Dl Hybrid H265 Dv Hdr Ddp Atmos 5 1-CAPTCHA',
+		'Show.S01E01.1080p.WEB.X264-GROUP',
+		'Show.S01E01.1080p.Web.H264-GROUP',
 		'Show.S01E01.1080p.WEB.DL.DDP5.1.H.265-NTb',
 		'Show.S01E01.1080p.WEBDL.H265-NTb',
 		'Show.S01E01.1080p.WEB-Rip.x265-GROUP',
@@ -83,9 +93,10 @@ describe('isRdBlockedName', () => {
 		expect(deInfringe(name)).not.toBe(name);
 	});
 
-	it('matches in any case and mid-name', () => {
+	it('matches mid-name, and in any case only where RD does', () => {
 		expect(isRdBlockedName('pack/Movie.2019.1080p.WEB-DL.x265/file.mkv')).toBe(true);
-		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(true);
+		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(false);
+		expect(isRdBlockedName('pack/Movie.2019.1080p.webrip.x265/file.mkv')).toBe(true);
 		expect(isRdBlockedName('pack/Movie.2019.1080p.WEB.DL.x265/file.mkv')).toBe(false);
 		expect(isRdBlockedName('')).toBe(false);
 	});
@@ -94,13 +105,27 @@ describe('isRdBlockedName', () => {
 	// refused it on request #1 between two accepted controls — a real block — but
 	// the only name DMM held was the space-separated display title, which reads
 	// clean. The dots the block keys on survive only in the path inside the
-	// torrent, which TorBox's `checkcached` reports in full.
+	// torrent, which TorBox's `checkcached` reports in full. RD refused that
+	// release for `WEB.h264`, which it takes again since 2026-10-14, so the case
+	// below carries the `WEB.H264` it still refuses.
+	it('takes the GRACE release itself since 2026-10-14', () => {
+		expect(
+			isRdBlockedName(
+				'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE',
+				[
+					'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to]/' +
+						'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to].mkv',
+				]
+			)
+		).toBe(false);
+	});
+
 	describe('a torrent whose block lives in its filenames', () => {
 		const title =
-			'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE';
+			'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB H264-GRACE';
 		const path =
-			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to]/' +
-			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to].mkv';
+			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.H264-GRACE[EZTVx.to]/' +
+			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.H264-GRACE[EZTVx.to].mkv';
 
 		it('reads the title alone as clean', () => {
 			expect(isRdBlockedName(title)).toBe(false);
@@ -125,7 +150,7 @@ describe('isRdBlockedName', () => {
 });
 
 describe('deInfringe', () => {
-	// Every name RD refused on 2026-10-10, rewritten. The debrid and nzb2rd
+	// Every name RD refused on 2026-10-14, rewritten. The debrid and nzb2rd
 	// uploaders run this same expression before building a torrent.
 	it.each(rdNameFilterProbe.add.filter(({ status }) => status === 451))(
 		'rewrites $name into a name RD takes',

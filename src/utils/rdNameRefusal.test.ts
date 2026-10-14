@@ -233,12 +233,15 @@ const toastSaidNameRefusal = () =>
 describe('the recording', () => {
 	it('shows a 451 on a name RD blocks is the release, and one on a clean name mostly is not', () => {
 		expect(pass(1)).toHaveLength(76);
-		// 37 of the 46 releases with a blocked name were refused, and RD took
-		// one of those 37 when it was added again an hour later.
-		expect(pass(1).filter(tagged)).toHaveLength(46);
+		// 37 of the 44 releases with a blocked name were refused, and RD took
+		// one of those 37 when it was added again an hour later. Under the
+		// 2026-10-10 rule 46 read as blocked; the other two, How to Train Your
+		// Dragon as WEB.h264 and as Web-Dl, were taken at once, which is how the
+		// 2026-10-14 re-measurement started.
+		expect(pass(1).filter(tagged)).toHaveLength(44);
 		expect(refusedTagged).toHaveLength(37);
 		expect(refusedTagged.filter((a) => reAdd(a.hash)?.status === 201)).toHaveLength(1);
-		// 9 of the 30 clean names were refused, and 4 of those went through later:
+		// 9 of the 32 clean names were refused, and 4 of those went through later:
 		// RD's pause on the account, which the existing retry is for.
 		const refusedClean = pass(1).filter((a) => a.status === 451 && !tagged(a));
 		expect(refusedClean).toHaveLength(9);

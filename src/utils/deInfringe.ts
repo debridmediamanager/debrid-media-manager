@@ -1,6 +1,6 @@
 /**
  * Strip the filename patterns Real-Debrid rejects with `451 infringing_file`
- * (see `RD_BLOCKED_NAME`), plus the source/codec pairs it takes: every extra
+ * (see `isRdBlockedName`), plus the source/codec pairs it takes: every extra
  * rewrite is deliberate, see below.
  * Same rewrite the debrid uploader service applies before building a torrent
  * (see debrid/src/naming.ts), so a title produced here matches what actually
@@ -9,9 +9,10 @@
  * (x265/HEVC/AV1) and service tags are never blocked, so they pass untouched.
  *
  * The source/codec pair here is a deliberate over-match: it rewrites all nine
- * `(bluray|hdtv|web).(x264|xvid|h264)` combinations, while RD only blocks five
- * of them, and every `BluRay.DTS`, while RD blocks only `p.BluRay.DTS` (see
- * `RD_BLOCKED_NAME`). Breaking a pattern RD would have accepted costs nothing
+ * `(bluray|hdtv|web).(x264|xvid|h264)` combinations in any case, while RD
+ * only blocks five of them, and those on `WEB` only in one case, and every
+ * `BluRay.DTS`, while RD blocks only `p.BluRay.DTS` (see `isRdBlockedName`).
+ * It also rewrites `web-dl` in any case, which RD takes again since 2026-10-14. Breaking a pattern RD would have accepted costs nothing
  * but a cosmetic change to the name, and keeping the expression identical to
  * debrid's is what guarantees the title computed here matches the torrent that
  * service creates. Do not narrow it without narrowing that one.
@@ -25,24 +26,27 @@ export function deInfringe(name: string): string {
 }
 
 /**
- * The eleven strings RD refuses, matched anywhere in a name and in any case:
- * `WEB-DL`, `WEBRip`, `BDRip`, `HDRip`, `DVDRip`, `WEB.x264`, `WEB.h264`,
- * `HDTV.x264`, `HDTV.XviD`, `BluRay.x264` and `p.BluRay.DTS`. Only the dot or
- * hyphen shown counts, so `WEB.DL`, `WEBDL`, `WEB-Rip`, `BD-Rip`,
- * `BluRay-x264`, `BluRay-DTS` and `WEB-x264` pass, as do `HDTV.H264`,
- * `DTS.x264` and `WEB.DTS`, while `WEB-DLRip` and `PreDVDRip` contain a
- * pattern. The `p` is literal, not a resolution check: `1080p.BluRay.DTS` and
- * `Xp.BluRay.DTS` are refused, while `BluRay.DTS` after nothing, `1080.`,
- * `1080i.`, `UHD.`, `REMUX.` or `1080p-` passes.
+ * The eleven strings RD refuses, matched anywhere in a name: `WEB-DL`,
+ * `WEB.x264` and `WEB.H264` only in exactly that case, and `WEBRip`, `BDRip`,
+ * `HDRip`, `DVDRip`, `HDTV.x264`, `HDTV.XviD`, `BluRay.x264` and
+ * `p.BluRay.DTS` in any case. So `web-dl`, `Web-Dl`, `WEB.X264` and the scene
+ * `WEB.h264` pass. Only the dot or hyphen shown counts, so `WEB.DL`, `WEBDL`,
+ * `WEB-Rip`, `BD-Rip`, `BluRay-x264`, `BluRay-DTS` and `WEB-x264` pass, as do
+ * `HDTV.H264`, `DTS.x264` and `WEB.DTS`, while `WEB-DLRip` and `PreDVDRip`
+ * contain a pattern. The `p` is literal, not a resolution check:
+ * `1080p.BluRay.DTS` and `Xp.BluRay.DTS` are refused, while `BluRay.DTS` after
+ * nothing, `1080.`, `1080i.`, `UHD.`, `REMUX.` or `1080p-` passes.
  *
- * Re-measured 2026-10-10 over 214 adds and 22 unrestricts, each a fresh
- * webseed torrent so only the names decided
- * (`src/test/fixtures/realdebrid/rd-name-filter-2026-10-10.json`). On
- * 2026-10-03 RD had shrunk this to five case-sensitive literals; a week later
- * it was back to the 2026-08-25 list, case-insensitive again.
+ * Re-measured 2026-10-14, each add a fresh webseed torrent so only the names
+ * decided, with the whole 2026-10-10 corpus asked again name for name
+ * (`src/test/fixtures/realdebrid/rd-name-filter-2026-10-14.json`). RD has
+ * changed this three times in two weeks: five case-sensitive literals on
+ * 2026-10-03, all eleven in any case on 2026-10-10, and this mix on 2026-10-14.
  */
-const RD_BLOCKED_NAME =
-	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.x264|p\.bluray\.dts|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
+const RD_BLOCKED_EXACT_CASE = /WEB-DL|WEB\.(?:x264|H264)/;
+const RD_BLOCKED_ANY_CASE = /(?:web|bd|hd|dvd)rip|bluray\.x264|p\.bluray\.dts|hdtv\.(?:x264|xvid)/i;
+const isBlocked = (name: string) =>
+	RD_BLOCKED_EXACT_CASE.test(name) || RD_BLOCKED_ANY_CASE.test(name);
 
 /**
  * Whether RD blocks this torrent outright, judged on its display title *and*
@@ -72,6 +76,6 @@ const RD_BLOCKED_NAME =
  * the answer exactly as the title alone gives it.
  */
 export function isRdBlockedName(name: string, filenames: readonly string[] = []): boolean {
-	if (RD_BLOCKED_NAME.test(name)) return true;
-	return filenames.some((filename) => RD_BLOCKED_NAME.test(filename));
+	if (isBlocked(name)) return true;
+	return filenames.some(isBlocked);
 }
