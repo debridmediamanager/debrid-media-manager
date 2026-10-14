@@ -7,6 +7,7 @@ import {
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
 import { isRdThrottling, RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
+import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay } from '@/utils/delay';
 import {
 	checkDatabaseAvailabilityAd,
@@ -52,6 +53,17 @@ const RD_THROTTLE_ABORT_AFTER = 5;
  */
 const wasThrottled = (addRdResponse: unknown, rdKey: string | null) =>
 	addRdResponse === null && !!rdKey && isRdThrottling(rdKey);
+
+/**
+ * A row whose name RD blocks. Probing it would spend an add RD refuses (36 of
+ * 37 such releases refused again an hour later, measured 2026-10-13/14), after
+ * first deleting the user's own copy when they hold one, so it is not probed.
+ */
+const rdRefusesName = (result: SearchResult) =>
+	isRdBlockedName(
+		result.title,
+		(result.files ?? []).map((f) => f.filename)
+	);
 
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
@@ -242,7 +254,7 @@ export function useAvailabilityCheck(
 					trackerStatsResult,
 				] = await Promise.allSettled([
 					// RD availability check
-					rdKey && servicesNeedingCheck.includes('RD')
+					rdKey && servicesNeedingCheck.includes('RD') && !rdRefusesName(result)
 						? (async () => {
 								let addRdResponse: any;
 								if (`rd:${result.hash}` in hashAndProgress) {
@@ -740,6 +752,14 @@ export function useAvailabilityCheck(
 												isCachedInRD: false,
 												addRdResponse: null,
 												throttled: true,
+											};
+										}
+										if (rdRefusesName(result)) {
+											return {
+												result,
+												isCachedInRD: false,
+												addRdResponse: null,
+												throttled: false,
 											};
 										}
 										if (rdProbesStarted > 0) await delay(rdProbeSpacing);

@@ -1,4 +1,6 @@
 import { SearchResult } from '@/services/mediasearch';
+import retest from '@/test/fixtures/realdebrid/rd-add-name-retest-2026-10-13.json';
+import { isRdBlockedName } from '@/utils/deInfringe';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAvailabilityCheck } from './useAvailabilityCheck';
@@ -501,6 +503,53 @@ describe('useAvailabilityCheck', () => {
 			});
 
 			expect(unregisterCalls()).toHaveLength(1);
+		});
+	});
+
+	// Releases RD refused by name on 2026-10-13 and again an hour later
+	// (src/test/fixtures/realdebrid/rd-add-name-retest-2026-10-13.json). A probe
+	// of one deletes the user's own copy first, then spends an add RD refuses.
+	describe('a row whose name RD blocks', () => {
+		const refusedTwice = retest.adds.filter(
+			(a) =>
+				a.pass === 1 &&
+				a.status === 451 &&
+				isRdBlockedName(a.title) &&
+				retest.adds.some((b) => b.pass === 2 && b.hash === a.hash && b.status === 451)
+		);
+		const rows = refusedTwice.map((a) => createSearchResult({ hash: a.hash, title: a.title }));
+
+		it('is not probed on RD by a single check, and the user keeps their copy', async () => {
+			expect(refusedTwice).toHaveLength(36);
+			for (const row of rows) {
+				searchResults = [row];
+				const { result, unmount } = renderAvailabilityHook({
+					torboxKey: null,
+					hashAndProgress: { [`rd:${row.hash}`]: 100 },
+				});
+				await act(async () => {
+					await result.current.checkServiceAvailability(row);
+				});
+				unmount();
+			}
+
+			expect(addRd).not.toHaveBeenCalled();
+			expect(deleteRd).not.toHaveBeenCalled();
+			// The services that do not judge names are still asked.
+			expect(addAd).toHaveBeenCalledTimes(rows.length);
+		});
+
+		it('is left out of a sweep while the clean rows are probed', async () => {
+			searchResults = [...rows, createSearchResult({ hash: 'hash-1' })];
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(addRd.mock.calls).toEqual([['hash-1', true]]);
+			expect(deleteRd.mock.calls).toEqual([['hash-1']]);
+			expect(result.current.isAnyChecking).toBe(false);
 		});
 	});
 
