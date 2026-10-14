@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { castAccessToken } from '@/utils/castRdToken';
+import { isRdBlockedName } from '@/utils/deInfringe';
 
 /**
  * Delivering a request without a transfer.
@@ -19,14 +20,20 @@ import { castAccessToken } from '@/utils/castRdToken';
  * content sits in RD under a hash no search result carries. That one counts
  * only while it is still available, the same test `isTransferStillValid` uses,
  * so a pruned transfer is not handed out as a dead magnet.
+ *
+ * A hash whose name on RD's row is one RD blocks is left out: RD refuses its
+ * add whoever asks (36 of 37 such releases refused again an hour later,
+ * measured 2026-10-13/14), and the transfer route lands it under a name RD takes.
  */
 export async function alreadyOnRealDebrid(hashes: string[]): Promise<Map<string, string>> {
 	const wanted = [...new Set(hashes.map((h) => h.toLowerCase()))];
 	const result = new Map<string, string>();
 	if (wanted.length === 0) return result;
 
-	const direct = await db.checkAvailabilityByHashes(wanted);
-	for (const row of direct) result.set(row.hash.toLowerCase(), row.hash.toLowerCase());
+	const direct = await db.getCachedRdNames(wanted);
+	for (const [hash, names] of direct) {
+		if (!refusedByName(names)) result.set(hash, hash);
+	}
 
 	const rest = wanted.filter((h) => !result.has(h));
 	if (rest.length === 0) return result;
@@ -34,17 +41,17 @@ export async function alreadyOnRealDebrid(hashes: string[]): Promise<Map<string,
 		(t) => t.status === 'completed' && t.rewrittenHash
 	);
 	if (transfers.length === 0) return result;
-	const live = new Set(
-		(await db.checkAvailabilityByHashes(transfers.map((t) => t.rewrittenHash!))).map((row) =>
-			row.hash.toLowerCase()
-		)
-	);
+	const live = await db.getCachedRdNames(transfers.map((t) => t.rewrittenHash!));
 	for (const t of transfers) {
 		const rewritten = t.rewrittenHash!.toLowerCase();
-		if (live.has(rewritten)) result.set(t.originalHash.toLowerCase(), rewritten);
+		const names = live.get(rewritten);
+		if (names && !refusedByName(names)) result.set(t.originalHash.toLowerCase(), rewritten);
 	}
 	return result;
 }
+
+const refusedByName = (names: { filename: string; originalFilename: string }) =>
+	isRdBlockedName(names.originalFilename, [names.filename]);
 
 /**
  * Add an RD-cached hash to an account and select every file. Instant for
