@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockRouter = {
 	pathname: '/library',
@@ -132,14 +132,20 @@ vi.mock('@/services/torbox', () => ({
 	controlTorrent: vi.fn(),
 }));
 
-vi.mock('react-hot-toast', () => ({
-	__esModule: true,
-	default: {
+const mockToast = vi.hoisted(() =>
+	Object.assign(vi.fn(), {
 		success: vi.fn(),
 		error: vi.fn(),
 		loading: vi.fn(),
 		dismiss: vi.fn(),
-	},
+		promise: vi.fn(),
+	})
+);
+
+vi.mock('react-hot-toast', () => ({
+	__esModule: true,
+	default: mockToast,
+	toast: mockToast,
 	Toaster: () => null,
 }));
 
@@ -156,6 +162,9 @@ vi.mock('next/link', () => ({
 }));
 
 import LibraryPage from '@/pages/library';
+import check2 from '@/test/fixtures/realdebrid/check2-restore-2026-10-14.json';
+import { mintProblemToken, validateProblemToken } from '@/utils/problemToken';
+import { resetTokenCache } from '@/utils/token';
 
 describe('Library Page - addMagnet Query Parameter', () => {
 	beforeEach(() => {
@@ -359,5 +368,80 @@ describe('Library mixed torrent submissions', () => {
 		await waitFor(() => {
 			expect(operations).toEqual(['upload:start', 'upload:end', 'magnet:start']);
 		});
+	});
+});
+
+// Restore asked /api/availability/check2 with an empty dmmProblemKey and
+// solution, which production answers 403 (captured 2026-10-14), so every
+// backup restored as uncached and the RD add never had the names on record.
+describe('Library backup restore to Real-Debrid', () => {
+	const [SINNERS, WEAPONS] = check2.hashes;
+	const recorded = check2.withChallengeToken.body.available[0];
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		resetTokenCache();
+		mockRouter.query = {};
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
+		vi.stubEnv('DMM_PROBLEM_SECRET', 'restore-test-secret');
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string, init?: RequestInit) => {
+				if (url === '/api/challenge') {
+					const [token, hash] = mintProblemToken('restore-test-secret');
+					return { ok: true, json: async () => ({ token, hash }) };
+				}
+				if (url === '/api/availability/check2') {
+					const { dmmProblemKey, solution } = JSON.parse(String(init?.body));
+					const answer = validateProblemToken(dmmProblemKey, solution)
+						? check2.withChallengeToken
+						: check2.emptyCredentials;
+					return {
+						ok: answer.status === 200,
+						status: answer.status,
+						json: async () => answer.body,
+					};
+				}
+				return { ok: false, status: 404, json: async () => ({}) };
+			})
+		);
+		mockHandleAddAsMagnetInRd.mockResolvedValue('success');
+		mockModalFire.mockResolvedValue({
+			isConfirmed: true,
+			value: {
+				files: [
+					{ hash: SINNERS, filename: 'Sinners 2025 2160p' },
+					{ hash: WEAPONS, filename: 'Weapons.2025.MA.WEB-DL.1080p.BLUEBIRD.mkv' },
+				],
+				cachedOnly: false,
+			},
+		});
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		vi.unstubAllEnvs();
+		mockCredentials.ad = 'test-ad-key';
+		mockCredentials.tb = 'test-tb-key';
+	});
+
+	it('restores what DMM has on record first, with the names it returned', async () => {
+		render(<LibraryPage />);
+		await act(async () => {
+			fireEvent.click(await screen.findByRole('button', { name: /RD Restore/ }));
+		});
+
+		await waitFor(() => expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledTimes(2));
+		expect(mockToast.success).toHaveBeenCalledWith(
+			'1 cached torrents queued first.',
+			expect.anything()
+		);
+		const [first, second] = mockHandleAddAsMagnetInRd.mock.calls;
+		expect(first[1]).toBe(SINNERS);
+		expect(first[6]).toBe('Sinners 2025 2160p');
+		expect(first[8]).toEqual([recorded.originalFilename, recorded.filename]);
+		expect(second[1]).toBe(WEAPONS);
+		expect(second[8]).toEqual([]);
 	});
 });

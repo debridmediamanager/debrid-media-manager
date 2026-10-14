@@ -1,0 +1,32 @@
+{
+	"emptyCredentials": {
+		"status": 403,
+		"body": {
+			"errorMessage": "Authentication not provided"
+		}
+	},
+	"hashes": [
+		"4d2e9e41c6dd2d2183888b90d5393d7ae472f1b6",
+		"2f63775448bde9ff67ba9869c8f0c082dbd4b524"
+	],
+	"note": "POST /api/availability/check2 on debridmediamanager.com, 2026-10-14. The hashes are two releases from rd-add-name-retest-2026-10-13.json: Sinners, which Real-Debrid refuses by name and DMM has on record, and Weapons, which it has not. Backup restore sent empty dmmProblemKey/solution and got the 403; a token from GET /api/challenge got the 200.",
+	"withChallengeToken": {
+		"status": 200,
+		"body": {
+			"available": [
+				{
+					"hash": "4d2e9e41c6dd2d2183888b90d5393d7ae472f1b6",
+					"filename": "Sinners.2025.2160p.iT.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-BYNDR.mkv",
+					"originalFilename": "Sinners.2025.2160p.iT.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-BYNDR.mkv",
+					"files": [
+						{
+							"file_id": 1,
+							"path": "/Sinners.2025.2160p.iT.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-BYNDR.mkv",
+							"bytes": 25763166111
+						}
+					]
+				}
+			]
+		}
+	}
+}

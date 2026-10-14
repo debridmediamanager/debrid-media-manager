@@ -71,6 +71,7 @@ import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, toasterPosition } from '@/utils/toastOptions';
+import { generateTokenAndHash } from '@/utils/token';
 import {
 	handleShowInfoForAD,
 	handleShowInfoForDL,
@@ -1418,49 +1419,28 @@ function TorrentsPage() {
 								.filter((h) => !serviceHashes.has(h));
 							if (newHashes.length === 0) return;
 
-							if (
-								(debridService === 'tb' && tbKey) ||
-								(debridService === 'rd' && rdKey)
-							) {
+							// Only TorBox's dialog has a #cached-status to show a count in.
+							if (debridService === 'tb' && tbKey) {
 								const statusEl = document.getElementById('cached-status');
 								if (statusEl) statusEl.textContent = '(checking availability...)';
 
 								try {
-									let cachedCount = 0;
-									if (debridService === 'rd' && rdKey) {
-										const availableSet = new Set<string>();
-										for (let i = 0; i < newHashes.length; i += 100) {
-											const batch = newHashes.slice(i, i + 100);
-											const resp = await checkAvailabilityByHashes(
-												'',
-												'',
-												batch
+									const availableSet = new Set<string>();
+									for (let i = 0; i < newHashes.length; i += 100) {
+										const batch = newHashes.slice(i, i + 100);
+										const resp = await checkCachedStatus(
+											{ hash: batch, format: 'object' },
+											tbKey
+										);
+										if (resp?.data) {
+											Object.entries(resp.data).forEach(
+												([hash, data]: [string, any]) => {
+													if (data) availableSet.add(hash);
+												}
 											);
-											if (resp?.available) {
-												resp.available.forEach((t: { hash: string }) =>
-													availableSet.add(t.hash)
-												);
-											}
 										}
-										cachedCount = availableSet.size;
-									} else if (debridService === 'tb' && tbKey) {
-										const availableSet = new Set<string>();
-										for (let i = 0; i < newHashes.length; i += 100) {
-											const batch = newHashes.slice(i, i + 100);
-											const resp = await checkCachedStatus(
-												{ hash: batch, format: 'object' },
-												tbKey
-											);
-											if (resp?.data) {
-												Object.entries(resp.data).forEach(
-													([hash, data]: [string, any]) => {
-														if (data) availableSet.add(hash);
-													}
-												);
-											}
-										}
-										cachedCount = availableSet.size;
 									}
+									const cachedCount = availableSet.size;
 									const uncachedCount = newHashes.length - cachedCount;
 									if (statusEl)
 										statusEl.textContent = `(${cachedCount} cached, ${uncachedCount} uncached)`;
@@ -1517,6 +1497,10 @@ function TorrentsPage() {
 		};
 
 		const backupNames = new Map(files.map((f) => [f.hash, f.filename]));
+		// The names DMM's availability rows record, filled by the RD check below:
+		// RD refuses some releases by name, and only the name tells that 451 from
+		// the account's pause.
+		const recordedNames = new Map<string, string[]>();
 		const addMagnet = (hash: string) => {
 			if (rdKey && debridService === 'rd')
 				return handleAddAsMagnetInRd(
@@ -1526,7 +1510,9 @@ function TorrentsPage() {
 					false,
 					0,
 					false,
-					backupNames.get(hash) ?? ''
+					backupNames.get(hash) ?? '',
+					0,
+					recordedNames.get(hash.toLowerCase()) ?? []
 				);
 			if (adKey && debridService === 'ad')
 				return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
@@ -1564,20 +1550,29 @@ function TorrentsPage() {
 
 					try {
 						if (rdKey && debridService === 'rd') {
-							const availableSet = new Set<string>();
-
+							// check2 answers 403 without a token from /api/challenge.
+							const [dmmProblemKey, solution] = await generateTokenAndHash();
 							for (let i = 0; i < newHashes.length; i += 100) {
 								const batch = newHashes.slice(i, i + 100);
-								const resp = await checkAvailabilityByHashes('', '', batch);
-								if (resp?.available) {
-									resp.available.forEach((t: { hash: string }) =>
-										availableSet.add(t.hash)
-									);
+								const resp = await checkAvailabilityByHashes(
+									dmmProblemKey,
+									solution,
+									batch
+								);
+								for (const row of resp?.available ?? []) {
+									recordedNames.set(String(row.hash).toLowerCase(), [
+										row.originalFilename,
+										row.filename,
+									]);
 								}
 							}
 
-							availableHashes = newHashes.filter((h) => availableSet.has(h));
-							unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
+							availableHashes = newHashes.filter((h) =>
+								recordedNames.has(h.toLowerCase())
+							);
+							unavailableHashes = newHashes.filter(
+								(h) => !recordedNames.has(h.toLowerCase())
+							);
 						} else if (tbKey && debridService === 'tb') {
 							const availableSet = new Set<string>();
 
