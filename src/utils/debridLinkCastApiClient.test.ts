@@ -67,11 +67,8 @@ describe('debridLinkCastApiClient', () => {
 			},
 		});
 
-		await handleCastTvShowDebridLink('tt999', 'dl-token', HASH);
-
-		expect(toastMock.error).toHaveBeenCalledWith(
-			expect.stringContaining('50 per day'),
-			expect.anything()
+		await expect(handleCastTvShowDebridLink('tt999', 'dl-token', HASH)).rejects.toThrow(
+			'50 per day'
 		);
 		expect(toastMock.success).not.toHaveBeenCalled();
 	});

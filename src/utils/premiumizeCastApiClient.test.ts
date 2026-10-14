@@ -58,11 +58,8 @@ describe('handleCastTvShowPremiumize', () => {
 			response: { data: { errorMessage: 'No episodes in this release on Premiumize' } },
 		});
 
-		await handleCastTvShowPremiumize('tt999', 'pm-key', HASH);
-
-		expect(toastMock.error).toHaveBeenCalledWith(
-			'No episodes in this release on Premiumize',
-			expect.anything()
+		await expect(handleCastTvShowPremiumize('tt999', 'pm-key', HASH)).rejects.toThrow(
+			'No episodes in this release on Premiumize'
 		);
 		expect(toastMock.success).not.toHaveBeenCalled();
 	});

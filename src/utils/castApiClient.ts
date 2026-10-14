@@ -5,6 +5,11 @@ import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { castToastOptions } from './toastOptions';
 
+/** The server's reason for a failed cast request, else the request's own error. */
+export const castErrorText = (error: any): string =>
+	error?.response?.data?.errorMessage ||
+	(error instanceof Error ? error.message : 'Unknown error');
+
 export const handleCastMovie = async (imdbId: string, rdKey: string, hash: string) => {
 	try {
 		// The key goes in the header, not the query string: a query parameter is
@@ -15,11 +20,10 @@ export const handleCastMovie = async (imdbId: string, rdKey: string, hash: strin
 		});
 		toast(`Casted ${resp.data.filename} to Stremio.`, castToastOptions);
 	} catch (error: any) {
-		const errorMessage =
-			error?.response?.data?.errorMessage ||
-			(error instanceof Error ? error.message : 'Unknown error');
+		const errorMessage = castErrorText(error);
 		console.error('Error casting movie:', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		// Rejecting is what lets the page's toast say why instead of "started".
+		throw new Error(errorMessage);
 	}
 };
 
@@ -29,6 +33,7 @@ export const handleCastTvShow = async (
 	hash: string,
 	fileIds: string[]
 ) => {
+	const failures = new Set<string>();
 	const yetToCast = groupBy(5, fileIds).map((batch) => async () => {
 		try {
 			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
@@ -36,16 +41,15 @@ export const handleCastTvShow = async (
 				`/api/stremio/cast/series/${imdbId}?hash=${hash}&${fIdParam}`,
 				{ headers: { Authorization: `Bearer ${rdKey}` } }
 			);
-			const errorEpisodes = resp.data.errorEpisodes;
+			const errorEpisodes: string[] = resp.data.errorEpisodes ?? [];
 			if (resp.data.errorMessage) {
 				// Real-Debrid refused the add twice: the reason, not a file id.
-				toast.error(resp.data.errorMessage, castToastOptions);
+				failures.add(resp.data.errorMessage);
 			} else if (errorEpisodes.length) {
-				toast.error(
+				failures.add(
 					`Cast failed for ${errorEpisodes[0]}${
 						errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-					}.`,
-					castToastOptions
+					}.`
 				);
 			} else {
 				toast.success(
@@ -53,18 +57,20 @@ export const handleCastTvShow = async (
 					castToastOptions
 				);
 			}
+			return batch.length - errorEpisodes.length;
 		} catch (error) {
-			toast.error(
-				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'}.`,
-				castToastOptions
+			failures.add(
+				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'}: ${castErrorText(error)}`
 			);
+			return 0;
 		}
 	});
 
-	const [results] = await runConcurrentFunctions(yetToCast, 4, 0);
-	if (results.length) {
-		toast.success(`Finished casting all episodes to Stremio.`, castToastOptions);
-	}
+	const [casted] = await runConcurrentFunctions(yetToCast, 4, 0);
+	// Nothing cast is a failure, said with its reason, for the page's toast.
+	if (!casted.some((n) => n > 0)) throw new Error([...failures].join(' ') || 'Nothing was cast.');
+	failures.forEach((failure) => toast.error(failure, castToastOptions));
+	toast.success(`Finished casting all episodes to Stremio.`, castToastOptions);
 };
 
 /**

@@ -19,7 +19,8 @@ export const handleCastMovieDebridLink = async (imdbId: string, token: string, h
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting movie (Debrid-Link):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		// Rejecting is what lets the page's toast say why instead of "started".
+		throw new Error(errorMessage);
 	}
 };
 
@@ -36,15 +37,15 @@ export const handleCastTvShowDebridLink = async (imdbId: string, token: string, 
 			{ headers: { Authorization: `Bearer ${token}` } }
 		);
 		const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
-		if (errorEpisodes.length) {
-			toast.error(
-				`Cast failed for ${errorEpisodes[0]}${
+		const failed = errorEpisodes.length
+			? `Cast failed for ${errorEpisodes[0]}${
 					errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-				} (Debrid-Link).`,
-				castToastOptions
-			);
-		}
+				} (Debrid-Link).`
+			: '';
 		const casted: number = resp.data?.casted ?? 0;
+		// Nothing cast is a failure, said with its reason, for the page's toast.
+		if (!casted) throw new Error(failed || 'Nothing was cast.');
+		if (failed) toast.error(failed, castToastOptions);
 		toast.success(
 			`Casted ${casted} episode${casted === 1 ? '' : 's'} to Stremio (Debrid-Link).`,
 			castToastOptions
@@ -52,7 +53,7 @@ export const handleCastTvShowDebridLink = async (imdbId: string, token: string, 
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting series (Debrid-Link):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		throw new Error(errorMessage);
 	}
 };
 

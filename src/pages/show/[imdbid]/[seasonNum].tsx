@@ -1316,110 +1316,63 @@ const TvSearch: FunctionComponent = () => {
 		});
 	};
 
-	async function handleCast(hash: string, fileIds: string[]) {
-		await toast.promise(
-			handleCastTvShow(imdbid as string, rdKey!, hash, fileIds),
-			{
-				loading: `Casting ${fileIds.length} episodes...`,
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
-		);
-		// open stremio after casting
+	// The cast helpers reject when no episode was cast, with the reason (an RD
+	// name refusal or account pause, a provider's own error), so the toast says
+	// it and Stremio opens only on a cast that saved something.
+	async function castInStremio(loading: string, cast: Promise<void>) {
+		try {
+			await toast.promise(
+				cast,
+				{
+					loading,
+					success: 'Casting succeeded.',
+					error: (e) => (e instanceof Error && e.message) || 'Casting failed.',
+				},
+				castToastOptions
+			);
+		} catch {
+			return;
+		}
 		window.open(
 			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
 		);
 	}
 
-	async function handleCastTorBox(hash: string, fileIds: string[]) {
-		await toast.promise(
-			handleCastTvShowTorBox(imdbid as string, torboxKey!, hash, fileIds),
-			{
-				loading: `Casting ${fileIds.length} episodes (TorBox)...`,
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
+	const handleCast = (hash: string, fileIds: string[]) =>
+		castInStremio(
+			`Casting ${fileIds.length} episodes...`,
+			handleCastTvShow(imdbid as string, rdKey!, hash, fileIds)
 		);
-		// open stremio after casting
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+	const handleCastTorBox = (hash: string, fileIds: string[]) =>
+		castInStremio(
+			`Casting ${fileIds.length} episodes (TorBox)...`,
+			handleCastTvShowTorBox(imdbid as string, torboxKey!, hash, fileIds)
 		);
-	}
-
-	async function handleCastAllDebrid(hash: string, files: { filename: string }[]) {
-		await toast.promise(
-			handleCastTvShowAllDebrid(imdbid as string, adKey!, hash, files),
-			{
-				loading: `Casting ${files.length} episodes (AllDebrid)...`,
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
+	const handleCastAllDebrid = (hash: string, files: { filename: string }[]) =>
+		castInStremio(
+			`Casting ${files.length} episodes (AllDebrid)...`,
+			handleCastTvShowAllDebrid(imdbid as string, adKey!, hash, files)
 		);
-		// open stremio after casting
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+	// No file list goes over for Debrid-Link, Offcloud or Premiumize: the server
+	// resolves the release and casts every episode in it. Debrid-Link's
+	// `POST /seedbox/add` and Offcloud's `cache/info` answer with the whole
+	// listing; Premiumize's cache probe reports no files, so this browser could
+	// not have built one anyway.
+	const handleCastDebridLink = (hash: string) =>
+		castInStremio(
+			'Casting episodes (Debrid-Link)...',
+			handleCastTvShowDebridLink(imdbid as string, debridLinkKey!, hash)
 		);
-	}
-
-	async function handleCastDebridLink(hash: string) {
-		await toast.promise(
-			// No file list goes over: `POST /seedbox/add` answers with the whole
-			// release, so the server resolves the episodes and casts every one of
-			// them. Debrid-Link publishes no cache probe, so this browser could
-			// not have built that list anyway.
-			handleCastTvShowDebridLink(imdbid as string, debridLinkKey!, hash),
-			{
-				loading: 'Casting episodes (Debrid-Link)...',
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
+	const handleCastOffcloud = (hash: string) =>
+		castInStremio(
+			'Casting episodes (Offcloud)...',
+			handleCastTvShowOffcloud(imdbid as string, offcloudKey!, hash)
 		);
-		// open stremio after casting
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+	const handleCastPremiumize = (hash: string) =>
+		castInStremio(
+			'Casting episodes (Premiumize)...',
+			handleCastTvShowPremiumize(imdbid as string, premiumizeKey!, hash)
 		);
-	}
-
-	async function handleCastOffcloud(hash: string) {
-		await toast.promise(
-			// No file list goes over: Offcloud's `cache/info` returns the whole
-			// listing server-side without adding anything, so the server resolves
-			// the release and casts every episode in it.
-			handleCastTvShowOffcloud(imdbid as string, offcloudKey!, hash),
-			{
-				loading: 'Casting episodes (Offcloud)...',
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
-		);
-		// open stremio after casting
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
-		);
-	}
-
-	async function handleCastPremiumize(hash: string) {
-		await toast.promise(
-			// No file list goes over: Premiumize's cache probe reports no files,
-			// so the server resolves the release and casts every episode in it.
-			handleCastTvShowPremiumize(imdbid as string, premiumizeKey!, hash),
-			{
-				loading: 'Casting episodes (Premiumize)...',
-				success: 'Casting succeeded.',
-				error: 'Casting failed.',
-			},
-			castToastOptions
-		);
-		// open stremio after casting
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
-		);
-	}
 
 	// Complete season torrents the service holds: its own availability, and a
 	// video count within two of the season's episode count. The instant actions

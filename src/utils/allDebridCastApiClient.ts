@@ -32,7 +32,8 @@ export const handleCastMovieAllDebrid = async (imdbId: string, apiKey: string, h
 			error?.response?.data?.errorMessage ||
 			(error instanceof Error ? error.message : 'Unknown error');
 		console.error('Error casting movie (AllDebrid):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		// Rejecting is what lets the page's toast say why instead of "started".
+		throw new Error(errorMessage);
 	}
 };
 
@@ -51,24 +52,23 @@ export const handleCastTvShowAllDebrid = async (
 		videoFiles = prepared.videoFiles;
 	} catch (error: any) {
 		const message = error instanceof Error ? error.message : 'Unknown error';
-		toast.error(`AllDebrid cast prep failed: ${message}`, castToastOptions);
-		return;
+		throw new Error(`AllDebrid cast prep failed: ${message}`);
 	}
 
 	const resolved = files
 		.map((f) => findVideoByName(videoFiles, f.filename))
 		.filter((f): f is NonNullable<typeof f> => f !== null);
 
+	const failures = new Set<string>();
 	const missing = files.length - resolved.length;
 	if (missing > 0) {
-		toast.error(
-			`${missing} episode file${missing === 1 ? '' : 's'} not found in magnet (AllDebrid).`,
-			castToastOptions
+		failures.add(
+			`${missing} episode file${missing === 1 ? '' : 's'} not found in magnet (AllDebrid).`
 		);
 	}
-	if (resolved.length === 0) return;
 
-	const batches = groupBy(5, resolved).map((batch) => async () => {
+	let casted = 0;
+	for (const batch of groupBy(5, resolved)) {
 		try {
 			const resp = await axios.post(`/api/stremio-ad/cast/series/${imdbId}`, {
 				apiKey,
@@ -77,12 +77,12 @@ export const handleCastTvShowAllDebrid = async (
 				files: batch,
 			});
 			const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
+			casted += batch.length - errorEpisodes.length;
 			if (errorEpisodes.length) {
-				toast.error(
+				failures.add(
 					`Cast failed for ${errorEpisodes[0]}${
 						errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-					} (AllDebrid).`,
-					castToastOptions
+					} (AllDebrid).`
 				);
 			} else {
 				toast.success(
@@ -90,15 +90,19 @@ export const handleCastTvShowAllDebrid = async (
 					castToastOptions
 				);
 			}
-		} catch (error) {
-			toast.error(
-				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'} (AllDebrid).`,
-				castToastOptions
+		} catch (error: any) {
+			const message =
+				error?.response?.data?.errorMessage ||
+				(error instanceof Error ? error.message : 'Unknown error');
+			failures.add(
+				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'} (AllDebrid): ${message}`
 			);
 		}
-	});
+	}
 
-	for (const run of batches) await run();
+	// Nothing cast is a failure, said with its reason, for the page's toast.
+	if (casted <= 0) throw new Error([...failures].join(' ') || 'Nothing was cast.');
+	failures.forEach((failure) => toast.error(failure, castToastOptions));
 	toast.success(`Finished casting all episodes to Stremio (AllDebrid).`, castToastOptions);
 };
 

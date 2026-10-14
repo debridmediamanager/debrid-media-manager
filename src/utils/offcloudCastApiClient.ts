@@ -17,7 +17,8 @@ export const handleCastMovieOffcloud = async (imdbId: string, apiKey: string, ha
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting movie (Offcloud):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		// Rejecting is what lets the page's toast say why instead of "started".
+		throw new Error(errorMessage);
 	}
 };
 
@@ -34,15 +35,15 @@ export const handleCastTvShowOffcloud = async (imdbId: string, apiKey: string, h
 			{ headers: { Authorization: `Bearer ${apiKey}` } }
 		);
 		const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
-		if (errorEpisodes.length) {
-			toast.error(
-				`Cast failed for ${errorEpisodes[0]}${
+		const failed = errorEpisodes.length
+			? `Cast failed for ${errorEpisodes[0]}${
 					errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-				} (Offcloud).`,
-				castToastOptions
-			);
-		}
+				} (Offcloud).`
+			: '';
 		const casted: number = resp.data?.casted ?? 0;
+		// Nothing cast is a failure, said with its reason, for the page's toast.
+		if (!casted) throw new Error(failed || 'Nothing was cast.');
+		if (failed) toast.error(failed, castToastOptions);
 		toast.success(
 			`Casted ${casted} episode${casted === 1 ? '' : 's'} to Stremio (Offcloud).`,
 			castToastOptions
@@ -50,7 +51,7 @@ export const handleCastTvShowOffcloud = async (imdbId: string, apiKey: string, h
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting series (Offcloud):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		throw new Error(errorMessage);
 	}
 };
 

@@ -69,13 +69,13 @@ describe('allDebridCastApiClient', () => {
 			);
 		});
 
-		it('shows error toast on failure', async () => {
+		it('rejects with the error on failure', async () => {
 			vi.mocked(prepareMagnetForCast).mockRejectedValue(new Error('Upload failed'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await handleCastMovieAllDebrid('tt123', 'key', 'hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Upload failed', expect.any(Object));
+			await expect(handleCastMovieAllDebrid('tt123', 'key', 'hash')).rejects.toThrow(
+				'Upload failed'
+			);
 			consoleSpy.mockRestore();
 		});
 
@@ -85,9 +85,9 @@ describe('allDebridCastApiClient', () => {
 			});
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await handleCastMovieAllDebrid('tt123', 'key', 'hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Server-side error', expect.any(Object));
+			await expect(handleCastMovieAllDebrid('tt123', 'key', 'hash')).rejects.toThrow(
+				'Server-side error'
+			);
 			consoleSpy.mockRestore();
 		});
 	});
@@ -121,44 +121,27 @@ describe('allDebridCastApiClient', () => {
 			);
 		});
 
-		it('shows error when prep fails', async () => {
+		it('rejects when prep fails', async () => {
 			vi.mocked(prepareMagnetForCast).mockRejectedValue(new Error('Prep fail'));
 
-			await handleCastTvShowAllDebrid('tt123', 'key', 'hash', [{ filename: 'ep.mkv' }]);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				'AllDebrid cast prep failed: Prep fail',
-				expect.any(Object)
-			);
+			await expect(
+				handleCastTvShowAllDebrid('tt123', 'key', 'hash', [{ filename: 'ep.mkv' }])
+			).rejects.toThrow('AllDebrid cast prep failed: Prep fail');
 		});
 
-		it('shows error for missing files', async () => {
+		it('rejects naming the missing files when none is in the magnet', async () => {
 			vi.mocked(prepareMagnetForCast).mockResolvedValue({
 				magnetId: 1,
 				videoFiles: [],
 			});
 			vi.mocked(findVideoByName).mockReturnValue(null);
 
-			await handleCastTvShowAllDebrid('tt123', 'key', 'hash', [
-				{ filename: 'missing1.mkv' },
-				{ filename: 'missing2.mkv' },
-			]);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				'2 episode files not found in magnet (AllDebrid).',
-				expect.any(Object)
-			);
-		});
-
-		it('returns early when all files are missing', async () => {
-			vi.mocked(prepareMagnetForCast).mockResolvedValue({
-				magnetId: 1,
-				videoFiles: [],
-			});
-			vi.mocked(findVideoByName).mockReturnValue(null);
-
-			await handleCastTvShowAllDebrid('tt123', 'key', 'hash', [{ filename: 'x.mkv' }]);
-
+			await expect(
+				handleCastTvShowAllDebrid('tt123', 'key', 'hash', [
+					{ filename: 'missing1.mkv' },
+					{ filename: 'missing2.mkv' },
+				])
+			).rejects.toThrow('2 episode files not found in magnet (AllDebrid).');
 			expect(axios.post).not.toHaveBeenCalled();
 		});
 
@@ -177,12 +160,9 @@ describe('allDebridCastApiClient', () => {
 				data: { errorEpisodes: ['S01E01', 'S01E02'] },
 			});
 
-			await handleCastTvShowAllDebrid('tt123', 'key', 'hash', [{ filename: 'ep.mkv' }]);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('S01E01'),
-				expect.any(Object)
-			);
+			await expect(
+				handleCastTvShowAllDebrid('tt123', 'key', 'hash', [{ filename: 'ep.mkv' }])
+			).rejects.toThrow('Cast failed for S01E01 and 1 more');
 		});
 	});
 

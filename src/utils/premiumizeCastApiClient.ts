@@ -17,7 +17,8 @@ export const handleCastMoviePremiumize = async (imdbId: string, apiKey: string, 
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting movie (Premiumize):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		// Rejecting is what lets the page's toast say why instead of "started".
+		throw new Error(errorMessage);
 	}
 };
 
@@ -33,15 +34,15 @@ export const handleCastTvShowPremiumize = async (imdbId: string, apiKey: string,
 			{ headers: { Authorization: `Bearer ${apiKey}` } }
 		);
 		const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
-		if (errorEpisodes.length) {
-			toast.error(
-				`Cast failed for ${errorEpisodes[0]}${
+		const failed = errorEpisodes.length
+			? `Cast failed for ${errorEpisodes[0]}${
 					errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-				} (Premiumize).`,
-				castToastOptions
-			);
-		}
+				} (Premiumize).`
+			: '';
 		const casted: number = resp.data?.casted ?? 0;
+		// Nothing cast is a failure, said with its reason, for the page's toast.
+		if (!casted) throw new Error(failed || 'Nothing was cast.');
+		if (failed) toast.error(failed, castToastOptions);
 		toast.success(
 			`Casted ${casted} episode${casted === 1 ? '' : 's'} to Stremio (Premiumize).`,
 			castToastOptions
@@ -49,7 +50,7 @@ export const handleCastTvShowPremiumize = async (imdbId: string, apiKey: string,
 	} catch (error: any) {
 		const errorMessage = errorTextOf(error);
 		console.error('Error casting series (Premiumize):', errorMessage);
-		toast.error(errorMessage, castToastOptions);
+		throw new Error(errorMessage);
 	}
 };
 

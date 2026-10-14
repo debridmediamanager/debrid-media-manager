@@ -63,9 +63,9 @@ describe('offcloudCastApiClient', () => {
 			response: { data: { errorMessage: 'Not cached on Offcloud' } },
 		});
 
-		await handleCastTvShowOffcloud('tt999', 'oc-key', HASH);
-
-		expect(toastMock.error).toHaveBeenCalledWith('Not cached on Offcloud', expect.anything());
+		await expect(handleCastTvShowOffcloud('tt999', 'oc-key', HASH)).rejects.toThrow(
+			'Not cached on Offcloud'
+		);
 		expect(toastMock.success).not.toHaveBeenCalled();
 	});
 

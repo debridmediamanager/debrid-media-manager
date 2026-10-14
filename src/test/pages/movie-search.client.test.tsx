@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 
 const {
 	axiosGetMock,
@@ -176,6 +176,9 @@ vi.mock('@/utils/trackerStats', () => ({
 vi.mock('@/utils/castApiClient', () => ({ handleCastMovie: vi.fn() }));
 vi.mock('@/utils/allDebridCastApiClient', () => ({ handleCastMovieAllDebrid: vi.fn() }));
 vi.mock('@/utils/torboxCastApiClient', () => ({ handleCastMovieTorBox: vi.fn() }));
+vi.mock('@/utils/premiumizeCastApiClient', () => ({ handleCastMoviePremiumize: vi.fn() }));
+vi.mock('@/utils/offcloudCastApiClient', () => ({ handleCastMovieOffcloud: vi.fn() }));
+vi.mock('@/utils/debridLinkCastApiClient', () => ({ handleCastMovieDebridLink: vi.fn() }));
 vi.mock('@/utils/copyMagnet', () => ({ handleCopyOrDownloadMagnet: vi.fn() }));
 
 vi.mock('@/utils/withAuth', () => ({
@@ -211,9 +214,15 @@ vi.mock('react-hot-toast', () => ({
 
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import MovieSearchPage from '@/pages/movie/[imdbid]/index';
+import castFailures from '@/test/fixtures/castMovieFailures/production-2026-10-14.json';
 import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
+import { handleCastMovieAllDebrid } from '@/utils/allDebridCastApiClient';
 import { handleCastMovie } from '@/utils/castApiClient';
+import { handleCastMovieDebridLink } from '@/utils/debridLinkCastApiClient';
 import { checkDatabaseAvailabilityRd } from '@/utils/instantChecks';
+import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
+import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
+import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
 
 const movieInfo: Record<string, { title: string; year: string }> = {
 	tt1111111: { title: 'First Movie', year: '2019' },
@@ -374,6 +383,69 @@ describe('Movie search page across client-side navigation', () => {
 
 			expect(showInfoForAD).toHaveBeenCalledTimes(1);
 			expect(showInfoForTB).not.toHaveBeenCalled();
+		});
+	});
+
+	// Every provider's cast button showed "Cast started in Stremio" and opened
+	// Stremio after a failed cast. What production answered on 2026-10-14 is the
+	// reason the toast must show instead.
+	describe('cast buttons', () => {
+		const casts = {
+			rd: { key: 'rd', prop: 'handleCast', helper: handleCastMovie },
+			tb: { key: 'tb', prop: 'handleCastTorBox', helper: handleCastMovieTorBox },
+			ad: { key: 'ad', prop: 'handleCastAllDebrid', helper: handleCastMovieAllDebrid },
+			pm: { key: 'pm', prop: 'handleCastPremiumize', helper: handleCastMoviePremiumize },
+			oc: { key: 'oc', prop: 'handleCastOffcloud', helper: handleCastMovieOffcloud },
+			dl: { key: 'dl', prop: 'handleCastDebridLink', helper: handleCastMovieDebridLink },
+		} as const;
+		let openSpy: MockInstance<typeof window.open>;
+
+		beforeEach(() => {
+			// react-hot-toast's promise() hands back the promise it was given.
+			toastMock.promise.mockImplementation((p: Promise<unknown>) => p);
+			openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+		});
+
+		afterEach(() => openSpy.mockRestore());
+
+		const castWith = async (service: keyof typeof casts) => {
+			const { key, prop } = casts[service];
+			authKeys[key] = `${key}-token`;
+			torrentResults.push({
+				title: 'First Movie 2019 1080p',
+				fileSize: 2048,
+				hash: 'a'.repeat(40),
+				noVideos: false,
+				files: [],
+			});
+			render(<MovieSearchPage />);
+			await waitFor(() =>
+				expect(searchResultsProps.current?.[prop]).toBeInstanceOf(Function)
+			);
+			await searchResultsProps.current[prop]('a'.repeat(40));
+			return toastMock.promise.mock.calls[0][1];
+		};
+
+		it.each(Object.entries(castFailures.responses))(
+			'%s: a failed cast toasts the reason and opens nothing',
+			async (service, { body }) => {
+				const reason = new Error(body.errorMessage);
+				vi.mocked(casts[service as keyof typeof casts].helper).mockRejectedValue(reason);
+
+				const messages = await castWith(service as keyof typeof casts);
+
+				expect(messages.error(reason)).toBe(body.errorMessage);
+				expect(openSpy).not.toHaveBeenCalled();
+			}
+		);
+
+		it.each(Object.keys(casts))('%s: a cast that worked opens Stremio', async (service) => {
+			vi.mocked(casts[service as keyof typeof casts].helper).mockResolvedValue(undefined);
+
+			const messages = await castWith(service as keyof typeof casts);
+
+			expect(messages.success).toBe('Cast started in Stremio');
+			expect(openSpy).toHaveBeenCalledWith(expect.stringContaining('tt1111111'));
 		});
 	});
 

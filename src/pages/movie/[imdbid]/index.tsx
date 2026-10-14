@@ -865,87 +865,49 @@ const MovieSearch: FunctionComponent = () => {
 		});
 	};
 
-	async function handleCast(hash: string) {
-		await toast.promise(
-			handleCastMovie(imdbid as string, rdKey!, hash),
-			{
-				loading: 'Starting RD cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'RD cast failed in Stremio',
-			},
-			castToastOptions
-		);
+	// The cast helpers reject with the reason (an RD name refusal or account
+	// pause, a provider's own error), so the toast says it and Stremio opens
+	// only on a cast that was saved.
+	async function castInStremio(service: string, cast: Promise<void>) {
+		try {
+			await toast.promise(
+				cast,
+				{
+					loading: `Starting ${service} cast in Stremio...`,
+					success: 'Cast started in Stremio',
+					error: (e) =>
+						(e instanceof Error && e.message) || `${service} cast failed in Stremio`,
+				},
+				castToastOptions
+			);
+		} catch {
+			return;
+		}
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
-	async function handleCastTorBox(hash: string) {
-		await toast.promise(
-			handleCastMovieTorBox(imdbid as string, torboxKey!, hash),
-			{
-				loading: 'Starting TorBox cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'TorBox cast failed in Stremio',
-			},
-			castToastOptions
+	const handleCast = (hash: string) =>
+		castInStremio('RD', handleCastMovie(imdbid as string, rdKey!, hash));
+	const handleCastTorBox = (hash: string) =>
+		castInStremio('TorBox', handleCastMovieTorBox(imdbid as string, torboxKey!, hash));
+	const handleCastAllDebrid = (hash: string) =>
+		castInStremio('AllDebrid', handleCastMovieAllDebrid(imdbid as string, adKey!, hash));
+	const handleCastPremiumize = (hash: string) =>
+		castInStremio(
+			'Premiumize',
+			handleCastMoviePremiumize(imdbid as string, premiumizeKey!, hash)
 		);
-		window.open(getStremioDetailUrl(imdbid as string));
-	}
-
-	async function handleCastAllDebrid(hash: string) {
-		await toast.promise(
-			handleCastMovieAllDebrid(imdbid as string, adKey!, hash),
-			{
-				loading: 'Starting AllDebrid cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'AllDebrid cast failed in Stremio',
-			},
-			castToastOptions
+	// Debrid-Link has no cache probe, so the cast is the probe: the server adds
+	// the full magnet with this member's own credential, which comes back
+	// complete in one request for cached content and starts a real download -
+	// one of the day's 50 torrents - otherwise.
+	const handleCastDebridLink = (hash: string) =>
+		castInStremio(
+			'Debrid-Link',
+			handleCastMovieDebridLink(imdbid as string, debridLinkKey!, hash)
 		);
-		window.open(getStremioDetailUrl(imdbid as string));
-	}
-
-	async function handleCastPremiumize(hash: string) {
-		await toast.promise(
-			handleCastMoviePremiumize(imdbid as string, premiumizeKey!, hash),
-			{
-				loading: 'Starting Premiumize cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'Premiumize cast failed in Stremio',
-			},
-			castToastOptions
-		);
-		window.open(getStremioDetailUrl(imdbid as string));
-	}
-
-	async function handleCastDebridLink(hash: string) {
-		await toast.promise(
-			// Debrid-Link has no cache probe, so the cast is the probe: the server
-			// adds the full magnet with this member's own credential, which comes
-			// back complete in one request for cached content and starts a real
-			// download - one of the day's 50 torrents - otherwise.
-			handleCastMovieDebridLink(imdbid as string, debridLinkKey!, hash),
-			{
-				loading: 'Starting Debrid-Link cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'Debrid-Link cast failed in Stremio',
-			},
-			castToastOptions
-		);
-		window.open(getStremioDetailUrl(imdbid as string));
-	}
-
-	async function handleCastOffcloud(hash: string) {
-		await toast.promise(
-			handleCastMovieOffcloud(imdbid as string, offcloudKey!, hash),
-			{
-				loading: 'Starting Offcloud cast in Stremio...',
-				success: 'Cast started in Stremio',
-				error: 'Offcloud cast failed in Stremio',
-			},
-			castToastOptions
-		);
-		window.open(getStremioDetailUrl(imdbid as string));
-	}
+	const handleCastOffcloud = (hash: string) =>
+		castInStremio('Offcloud', handleCastMovieOffcloud(imdbid as string, offcloudKey!, hash));
 
 	// The one-click buttons pick for the viewer, so they pass over a release named
 	// in Russian, which the list still shows (see isCyrillicLed). On The Vexxer

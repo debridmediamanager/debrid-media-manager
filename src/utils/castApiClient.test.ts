@@ -32,12 +32,12 @@ describe('castApiClient', () => {
 			);
 		});
 
-		it('handles errors and shows error toast', async () => {
+		it('rejects with the error so the page can show it', async () => {
 			vi.mocked(axios.get).mockRejectedValue(new Error('Network error'));
 
-			await handleCastMovie('tt1234567', 'test-rd-key', 'test-hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Network error', expect.any(Object));
+			await expect(handleCastMovie('tt1234567', 'test-rd-key', 'test-hash')).rejects.toThrow(
+				'Network error'
+			);
 		});
 
 		it('logs error message when error is an Error instance', async () => {
@@ -45,7 +45,9 @@ describe('castApiClient', () => {
 			const error = new Error('Network error');
 			vi.mocked(axios.get).mockRejectedValue(error);
 
-			await handleCastMovie('tt1234567', 'test-rd-key', 'test-hash');
+			await expect(
+				handleCastMovie('tt1234567', 'test-rd-key', 'test-hash')
+			).rejects.toThrow();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith('Error casting movie:', 'Network error');
 			consoleErrorSpy.mockRestore();
@@ -55,7 +57,9 @@ describe('castApiClient', () => {
 			const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 			vi.mocked(axios.get).mockRejectedValue('string error');
 
-			await handleCastMovie('tt1234567', 'test-rd-key', 'test-hash');
+			await expect(
+				handleCastMovie('tt1234567', 'test-rd-key', 'test-hash')
+			).rejects.toThrow();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith('Error casting movie:', 'Unknown error');
 			consoleErrorSpy.mockRestore();
@@ -98,12 +102,9 @@ describe('castApiClient', () => {
 			};
 			vi.mocked(axios.get).mockResolvedValue(mockResponse);
 
-			await handleCastTvShow('tt1234567', 'test-rd-key', 'test-hash', ['1', '2', '3']);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('and 2 more'),
-				expect.any(Object)
-			);
+			await expect(
+				handleCastTvShow('tt1234567', 'test-rd-key', 'test-hash', ['1', '2', '3'])
+			).rejects.toThrow('and 2 more');
 		});
 
 		it('shows singular episode text for single episode', async () => {
@@ -137,12 +138,9 @@ describe('castApiClient', () => {
 		it('handles network errors during batch casting', async () => {
 			vi.mocked(axios.get).mockRejectedValue(new Error('Network error'));
 
-			await handleCastTvShow('tt1234567', 'test-rd-key', 'test-hash', ['1', '2']);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('Failed to cast'),
-				expect.any(Object)
-			);
+			await expect(
+				handleCastTvShow('tt1234567', 'test-rd-key', 'test-hash', ['1', '2'])
+			).rejects.toThrow('Failed to cast 2 episodes: Network error');
 		});
 
 		it('batches file IDs correctly into groups of 5', async () => {

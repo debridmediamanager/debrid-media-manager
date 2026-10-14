@@ -56,13 +56,13 @@ describe('torboxCastApiClient', () => {
 			);
 		});
 
-		it('shows error toast on failure', async () => {
+		it('rejects with the error on failure', async () => {
 			vi.mocked(axios.get).mockRejectedValue(new Error('Network error'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await handleCastMovieTorBox('tt123', 'key', 'hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Network error', expect.any(Object));
+			await expect(handleCastMovieTorBox('tt123', 'key', 'hash')).rejects.toThrow(
+				'Network error'
+			);
 			consoleSpy.mockRestore();
 		});
 
@@ -72,19 +72,19 @@ describe('torboxCastApiClient', () => {
 			});
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await handleCastMovieTorBox('tt123', 'key', 'hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Server error', expect.any(Object));
+			await expect(handleCastMovieTorBox('tt123', 'key', 'hash')).rejects.toThrow(
+				'Server error'
+			);
 			consoleSpy.mockRestore();
 		});
 
-		it('shows Unknown error for non-Error throws', async () => {
+		it('rejects with Unknown error for non-Error throws', async () => {
 			vi.mocked(axios.get).mockRejectedValue('string error');
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await handleCastMovieTorBox('tt123', 'key', 'hash');
-
-			expect(toast.error).toHaveBeenCalledWith('Unknown error', expect.any(Object));
+			await expect(handleCastMovieTorBox('tt123', 'key', 'hash')).rejects.toThrow(
+				'Unknown error'
+			);
 			consoleSpy.mockRestore();
 		});
 	});
@@ -104,16 +104,13 @@ describe('torboxCastApiClient', () => {
 			);
 		});
 
-		it('shows error for failed episodes', async () => {
+		it('rejects naming the failed episodes when none was cast', async () => {
 			vi.mocked(axios.get).mockResolvedValue({
 				data: { errorEpisodes: ['S01E01'] },
 			});
 
-			await handleCastTvShowTorBox('tt123', 'key', 'hash', ['1']);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('Cast failed for S01E01'),
-				expect.any(Object)
+			await expect(handleCastTvShowTorBox('tt123', 'key', 'hash', ['1'])).rejects.toThrow(
+				'Cast failed for S01E01'
 			);
 		});
 
@@ -122,12 +119,9 @@ describe('torboxCastApiClient', () => {
 				data: { errorEpisodes: ['S01E01', 'S01E02', 'S01E03'] },
 			});
 
-			await handleCastTvShowTorBox('tt123', 'key', 'hash', ['1', '2', '3']);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('and 2 more'),
-				expect.any(Object)
-			);
+			await expect(
+				handleCastTvShowTorBox('tt123', 'key', 'hash', ['1', '2', '3'])
+			).rejects.toThrow('and 2 more');
 		});
 
 		it('shows singular episode text for single episode batch', async () => {
@@ -146,11 +140,8 @@ describe('torboxCastApiClient', () => {
 		it('handles network errors during batch', async () => {
 			vi.mocked(axios.get).mockRejectedValue(new Error('Network error'));
 
-			await handleCastTvShowTorBox('tt123', 'key', 'hash', ['1']);
-
-			expect(toast.error).toHaveBeenCalledWith(
-				expect.stringContaining('Failed to cast'),
-				expect.any(Object)
+			await expect(handleCastTvShowTorBox('tt123', 'key', 'hash', ['1'])).rejects.toThrow(
+				'Failed to cast 1 episode (TorBox): Network error'
 			);
 		});
 

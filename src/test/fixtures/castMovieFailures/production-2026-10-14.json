@@ -1,0 +1,53 @@
+{
+	"note": "What each provider's movie cast endpoint answered on debridmediamanager.com on 2026-10-14 for tt31193180 with hash 4d2e9e41c6dd2d2183888b90d5393d7ae472f1b6 and a credential the provider refuses. The browser showed 'Cast started in Stremio' after every one of these.",
+	"responses": {
+		"rd": {
+			"route": "GET /api/stremio/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "Request failed with status code 401"
+			}
+		},
+		"tb": {
+			"route": "GET /api/stremio-tb/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "Request failed with status code 403"
+			}
+		},
+		"ad": {
+			"route": "POST /api/stremio-ad/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "Failed to generate AllDebrid user ID"
+			}
+		},
+		"pm": {
+			"route": "GET /api/stremio-pm/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "Not logged in"
+			}
+		},
+		"oc": {
+			"route": "GET /api/stremio-oc/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "NOAUTH"
+			}
+		},
+		"dl": {
+			"route": "GET /api/stremio-dl/cast/movie/tt31193180",
+			"status": 500,
+			"body": {
+				"status": "error",
+				"errorMessage": "The stored Debrid-Link credential is no longer valid - sign in again on DMM."
+			}
+		}
+	}
+}
