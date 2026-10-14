@@ -7,6 +7,8 @@ import { DatabaseClient } from './client';
 const playableHashes = (rows: { hash: string; files: { path: string }[] }[]) =>
 	new Set(rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase()));
 
+const EXECUTABLE = /\.(exe|scr|msi|bat|cmd|lnk|vbs|pif)$/i;
+
 /** A torrent cached on Real-Debrid, as `upsertAvailability` records it. */
 export interface AvailabilityUpsert {
 	hash: string;
@@ -603,6 +605,25 @@ export class AvailabilityService extends DatabaseClient {
 			select: { hash: true, files: { select: { path: true } } },
 		});
 		return playableHashes(rows);
+	}
+
+	/**
+	 * Hashes RD has cached whose every file is an executable. These are fake
+	 * releases: a video-looking name over a ~1 GB padded .exe.
+	 */
+	public async filterExecutableOnlyHashes(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.available.findMany({
+			where: { hash: { in: hashes.map((hash) => hash.toLowerCase()) } },
+			select: { hash: true, files: { select: { path: true } } },
+		});
+		return new Set(
+			rows
+				.filter(
+					(row) => row.files.length > 0 && row.files.every((f) => EXECUTABLE.test(f.path))
+				)
+				.map((row) => row.hash.toLowerCase())
+		);
 	}
 
 	/** The AllDebrid counterpart of `filterPlayableCachedHashes`. */

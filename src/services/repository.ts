@@ -50,6 +50,9 @@ import { ScrapeSearchResult } from './mediasearch';
 import { isHashBlocked, withoutBlockedHashList, withoutBlockedHashes } from './takedown/blocklist';
 import { TorrentInfoResponse } from './types';
 
+// Scrapers often strip the dot, so "...H264-DJT exe" counts too.
+const EXECUTABLE_TITLE = /[.\s_-]exe\s*$/i;
+
 export type RepositoryDependencies = Partial<{
 	availabilityService: AvailabilityService;
 	scrapedService: ScrapedService;
@@ -626,18 +629,52 @@ export class Repository {
 		page?: number,
 		options?: ScrapedTrueReadOptions
 	) {
-		return withoutBlockedHashes(
-			await this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page, options)
+		return this.withoutExecutables(
+			await withoutBlockedHashes(
+				await this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page, options)
+			)
 		);
 	}
 
 	public async getAllScrapedTrueResults(key: string) {
-		return withoutBlockedHashes(await this.scrapedService.getAllScrapedTrueResults(key));
+		return this.withoutExecutables(
+			await withoutBlockedHashes(await this.scrapedService.getAllScrapedTrueResults(key))
+		);
 	}
 
 	public async getScrapedTrueRow(key: string) {
 		const row = await this.scrapedService.getScrapedTrueRow(key);
-		return row && { ...row, results: await withoutBlockedHashes(row.results) };
+		return (
+			row && {
+				...row,
+				results: await this.withoutExecutables(await withoutBlockedHashes(row.results)),
+			}
+		);
+	}
+
+	/**
+	 * Drops fake releases that are an executable, not a video: by title, and by
+	 * RD's cached file list, since most of them carry a clean video-like title.
+	 */
+	private async withoutExecutables<T>(value: T): Promise<T> {
+		if (!Array.isArray(value) || value.length === 0) return value;
+		let fakes = new Set<string>();
+		try {
+			fakes = await this.availabilityService.filterExecutableOnlyHashes(
+				value.map((row) => row?.hash).filter(Boolean)
+			);
+		} catch (error) {
+			// A failed lookup must not take the search page down; the title check still runs.
+			console.warn(
+				'Executable-only lookup failed:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+		}
+		return value.filter(
+			(row) =>
+				!EXECUTABLE_TITLE.test(row?.title ?? '') &&
+				!fakes.has(String(row?.hash).toLowerCase())
+		) as T;
 	}
 
 	public getScrapedTrueSeasonKeys(imdbId: string) {
@@ -649,8 +686,10 @@ export class Repository {
 	}
 
 	public async getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
-		return withoutBlockedHashes(
-			await this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page)
+		return this.withoutExecutables(
+			await withoutBlockedHashes(
+				await this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page)
+			)
 		);
 	}
 
