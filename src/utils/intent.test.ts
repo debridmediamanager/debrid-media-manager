@@ -50,6 +50,7 @@ vi.mock('@/services/realDebrid', () => ({
 	getTorrentInfo: mocks.getTorrentInfo,
 	unrestrictLink: mocks.unrestrictLink,
 }));
+vi.mock('@/services/rdNamesOnRecord', () => ({ rdNamesOnRecord: vi.fn(async () => []) }));
 vi.mock('./addMagnet', () => ({ handleSelectFilesInRd: mocks.handleSelectFilesInRd }));
 vi.mock('./getTorBoxStreamUrl', () => ({
 	getBiggestFileTorBoxStreamUrl: mocks.getBiggestFileTorBoxStreamUrl,

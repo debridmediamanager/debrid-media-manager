@@ -2,7 +2,7 @@ import { repository as db } from '@/services/repository';
 import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
-import { RdAddPausedError } from '@/utils/rdAddPause';
+import { RdAddPausedError, RdNameRefusedError } from '@/utils/rdAddPause';
 import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -69,7 +69,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				errorEpisodes.push(`fileId:${fileId}`);
 			}
 		} catch (e) {
-			if (e instanceof RdAddPausedError) {
+			// The same torrent is added for every file: one refusal answers them all.
+			if (e instanceof RdAddPausedError || e instanceof RdNameRefusedError) {
 				pausedMessage = e.message;
 				errorEpisodes.push(...fileIdsArr.slice(index).map((id) => `fileId:${id}`));
 				break;

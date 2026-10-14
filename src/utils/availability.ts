@@ -1,5 +1,6 @@
 import { TorrentInfoResponse } from '@/services/types';
 import { isValidHash } from './extractHashes';
+import { generateTokenAndHash } from './token';
 
 export async function submitAvailability(
 	dmmProblemKey: string,
@@ -122,6 +123,36 @@ export async function checkAvailabilityByHashes(
 		console.error('Error checking availability by hashes:', error);
 		throw error;
 	}
+}
+
+/**
+ * The names DMM's Real-Debrid availability rows record for these hashes, by
+ * lower-case hash: RD's own name for the torrent, then the selected file's. For
+ * an add that has nothing but the hash (the browser extension's
+ * `?addMagnet=`, a pasted hash list), so a 451 on a name RD blocks reads as
+ * that and not as the account's pause. A lookup that fails answers nothing,
+ * which leaves the add as it was.
+ */
+export async function fetchRdNamesOnRecord(hashes: string[]): Promise<Map<string, string[]>> {
+	const names = new Map<string, string[]>();
+	try {
+		const wanted = [...new Set(hashes.filter(isValidHash).map((h) => h.toLowerCase()))];
+		if (wanted.length === 0) return names;
+		const [key, solution] = await generateTokenAndHash();
+		for (let i = 0; i < wanted.length; i += 100) {
+			const { available } = await checkAvailabilityByHashes(
+				key,
+				solution,
+				wanted.slice(i, i + 100)
+			);
+			for (const row of available ?? []) {
+				names.set(String(row.hash).toLowerCase(), [row.originalFilename, row.filename]);
+			}
+		}
+	} catch {
+		// no names: the add goes ahead as if this had never been asked
+	}
+	return names;
 }
 
 export async function removeAvailability(

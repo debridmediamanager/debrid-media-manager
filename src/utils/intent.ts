@@ -9,6 +9,7 @@ import {
 	joinExploreWithCacheInfo,
 } from '@/services/offcloud';
 import { directDownloadPremiumize } from '@/services/premiumize';
+import { rdNamesOnRecord } from '@/services/rdNamesOnRecord';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -24,7 +25,7 @@ import {
 	getOwnedTorBoxStreamUrl,
 	getWebDownloadStreamUrlByHash,
 } from './getTorBoxStreamUrl';
-import { RdAddPausedError, retryRdAddThroughPause } from './rdAddPause';
+import { RdAddPausedError, RdNameRefusedError, retryRdAddThroughPause } from './rdAddPause';
 
 /**
  * `temporary` marks a failure worth retrying in a few minutes, not a verdict.
@@ -426,8 +427,12 @@ const getRdInstantIntent = async (
 	try {
 		// The player is waiting on this request: a 451 gets one more try after
 		// the account's pause, then a temporary error rather than a verdict on
-		// the release (see `rdAddPause.ts`).
-		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false));
+		// the release (see `rdAddPause.ts`). Unless the torrent's name on record
+		// or the file asked for is one RD blocks, which no wait changes.
+		const names = [...(await rdNamesOnRecord(hash)), fileName];
+		const id = await retryRdAddThroughPause(() =>
+			addHashAsMagnet(rdKey, hash, false, { names })
+		);
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
@@ -455,6 +460,7 @@ const getRdInstantIntent = async (
 		}
 	} catch (e: any) {
 		if (e instanceof RdAddPausedError) return { error: e.message, temporary: true };
+		if (e instanceof RdNameRefusedError) return { error: e.message };
 		return { error: `Failed to add magnet: ${e.message || e}` };
 	}
 };

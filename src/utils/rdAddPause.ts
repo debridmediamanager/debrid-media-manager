@@ -135,6 +135,34 @@ export class RdAddPausedError extends Error {
 	}
 }
 
+/**
+ * Shown when RD answers a 451 to a release whose name it blocks
+ * (`isRdBlockedName`). Re-measured 2026-10-13/14 on a test account nothing else
+ * adds on (src/test/fixtures/realdebrid/rd-add-name-retest-2026-10-13.json):
+ * of 37 such releases RD refused, it accepted one when the same hash was added
+ * again an hour later, while 4 of the 9 refused releases without such a name
+ * went through. So this one is about the release, and waiting will not help.
+ */
+export const RD_NAME_REFUSED_MESSAGE =
+	'Real-Debrid refuses this release because of its name. Try another release.';
+
+/**
+ * A 451 on a release whose name RD blocks: a verdict on the release, not the
+ * account's pause, so the account is not held and the add is not tried again.
+ * Like `RdAddPausedError` it carries no `response`, so `isRdAddRefusal` does
+ * not take it for a 451 worth another try.
+ */
+export class RdNameRefusedError extends Error {
+	/** The refusal, as RD sent it. */
+	readonly refusal: unknown;
+
+	constructor(refusal?: unknown) {
+		super(RD_NAME_REFUSED_MESSAGE);
+		this.name = 'RdNameRefusedError';
+		this.refusal = refusal;
+	}
+}
+
 export type RdPauseRetryOptions = {
 	/**
 	 * The hold before each further try. The default, one 30 s hold, suits a

@@ -15,7 +15,8 @@ vi.mock('@/lib/observability/rdOperationalStats', () => ({
 	recordRdOperationEvent: vi.fn(),
 }));
 
-import { RD_ADD_PAUSE_MS } from '@/utils/rdAddPause';
+import { RD_ADD_PAUSE_MS, RdNameRefusedError } from '@/utils/rdAddPause';
+import bencode from 'bencode';
 import {
 	__testing,
 	addHashAsMagnet,
@@ -356,10 +357,60 @@ describe('RealDebrid account pause', () => {
 		realAxios.post = vi.fn().mockRejectedValue(refusal());
 
 		await expect(
-			addHashAsMagnet('token', hash, false, { nameIsBlocked: true })
-		).rejects.toThrow();
+			addHashAsMagnet('token', hash, false, {
+				names: ['Weapons.2025.1080p.MA.WEB-DL.DDP5.1.Atmos.H.264-BYNDR'],
+			})
+		).rejects.toBeInstanceOf(RdNameRefusedError);
 
 		expect(rdAddPauseRemainingMs('token')).toBe(0);
+	});
+
+	it('reads a blocked name among the file names too', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(refusal());
+
+		await expect(
+			addHashAsMagnet('token', hash, false, {
+				names: [
+					'Soul Power S01E04 1080p WEB H264-GRACE',
+					'Soul.Power.S01E04.1080p.WEB.H264-GRACE[EZTVx.to].mkv',
+				],
+			})
+		).rejects.toBeInstanceOf(RdNameRefusedError);
+		expect(rdAddPauseRemainingMs('token')).toBe(0);
+	});
+
+	it("reads a magnet's own name", async () => {
+		realAxios.post = vi.fn().mockRejectedValue(refusal());
+		const dn = encodeURIComponent('Superman 2025 1080p AMZN WEB-DL DDP5 1 Atmos H 264-BYNDR');
+
+		await expect(
+			addHashAsMagnet('token', `magnet:?xt=urn:btih:${hash}&dn=${dn}`)
+		).rejects.toBeInstanceOf(RdNameRefusedError);
+		expect(rdAddPauseRemainingMs('token')).toBe(0);
+	});
+
+	it("reads a .torrent's own name", async () => {
+		realAxios.put = vi.fn().mockRejectedValue(refusal());
+		const bytes = bencode.encode({
+			info: { name: 'Weapons.2025.BDRip.1080p.seleZen.mkv', length: 1, pieces: '' },
+		}) as Uint8Array;
+		const file = { arrayBuffer: vi.fn(async () => bytes.slice().buffer) } as unknown as File;
+
+		await expect(addTorrentFile('token', file)).rejects.toBeInstanceOf(RdNameRefusedError);
+		expect(rdAddPauseRemainingMs('token')).toBe(0);
+	});
+
+	it('still holds the account for a clean name', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(refusal());
+
+		await expect(
+			addHashAsMagnet('token', hash, false, {
+				names: [
+					'The Naked Gun 2025 FullHD 1080p.H264 HDR Ita Eng AC3 5.1 Multisub realDMDJ.mkv',
+				],
+			})
+		).rejects.toMatchObject({ response: { status: 451 } });
+		expect(rdAddPauseRemainingMs('token')).toBeGreaterThan(RD_ADD_PAUSE_MS - 1000);
 	});
 
 	it('holds .torrent uploads too', async () => {

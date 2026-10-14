@@ -503,6 +503,9 @@ export class AvailabilityService extends DatabaseClient {
 	public async checkAvailabilityByHashes(hashes: string[]): Promise<
 		Array<{
 			hash: string;
+			/** RD's names for the torrent; see `getCachedRdNames`. */
+			filename: string;
+			originalFilename: string;
 			files: Array<{
 				file_id: number;
 				path: string;
@@ -517,6 +520,8 @@ export class AvailabilityService extends DatabaseClient {
 			},
 			select: {
 				hash: true,
+				filename: true,
+				originalFilename: true,
 				files: {
 					select: {
 						file_id: true,
@@ -529,6 +534,8 @@ export class AvailabilityService extends DatabaseClient {
 
 		return availableHashes.map((record) => ({
 			hash: record.hash,
+			filename: record.filename,
+			originalFilename: record.originalFilename,
 			files: record.files.map((file) => ({
 				file_id: file.file_id,
 				path: file.path,

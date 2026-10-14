@@ -528,7 +528,7 @@ function HashlistPage() {
 	}
 
 	function wrapDownloadFilesInRdFn(t: EnrichedHashlistTorrent) {
-		return async () => await addRd(t.hash);
+		return async () => await addRd(t.hash, t.filename);
 	}
 
 	async function downloadNonDupeTorrentsInRd() {
@@ -688,7 +688,7 @@ function HashlistPage() {
 		}
 	}
 
-	async function addRd(hash: string) {
+	async function addRd(hash: string, filename: string) {
 		await handleAddAsMagnetInRd(
 			rdKey!,
 			hash,
@@ -707,7 +707,10 @@ function HashlistPage() {
 				addToCache(userTorrent);
 				await fetchHashAndProgress(hash);
 			},
-			true
+			true,
+			0,
+			false,
+			filename
 		);
 	}
 
@@ -1390,7 +1393,7 @@ function HashlistPage() {
 											notInLibrary('rd', t.hash) && (
 												<button
 													className="rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50"
-													onClick={() => addRd(t.hash)}
+													onClick={() => addRd(t.hash, t.filename)}
 												>
 													<Download className="mr-1 inline h-3 w-3" />
 													RD
@@ -1402,7 +1405,7 @@ function HashlistPage() {
 											notInLibrary('rd', t.hash) && (
 												<button
 													className="rounded border-2 border-green-500 bg-green-900/30 px-2 py-1 text-green-100 transition-colors hover:bg-green-800/50"
-													onClick={() => addRd(t.hash)}
+													onClick={() => addRd(t.hash, t.filename)}
 												>
 													<Download className="mr-1 inline h-3 w-3" />
 													RD

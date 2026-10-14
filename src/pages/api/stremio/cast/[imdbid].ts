@@ -3,7 +3,7 @@ import { generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { readBearerKey, refuseQueryKey } from '@/utils/providerKeyHeader';
-import { RdAddPausedError } from '@/utils/rdAddPause';
+import { RdAddPausedError, RdNameRefusedError } from '@/utils/rdAddPause';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -100,6 +100,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// Refused twice, a pause apart: most likely the account, briefly.
 			res.setHeader('Retry-After', '120');
 			res.status(503).json({ status: 'error', errorMessage: error.message });
+			return;
+		}
+		if (error instanceof RdNameRefusedError) {
+			res.status(451).json({ status: 'error', errorMessage: error.message });
 			return;
 		}
 		console.error(error);

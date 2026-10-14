@@ -37,3 +37,18 @@ export const getHashOfTorrent = async (torrent: Blob): Promise<string | undefine
 		return undefined;
 	}
 };
+
+/**
+ * A .torrent's own name (`info.name`, or `name.utf-8` where the file carries
+ * one), which is the name Real-Debrid judges an add on. '' when the file does
+ * not say.
+ */
+export const torrentNameOf = (data: ArrayBuffer): string => {
+	try {
+		const info = bencode.decode(new Uint8Array(data) as Buffer)?.info;
+		const name = info?.['name.utf-8'] ?? info?.name;
+		return name ? new TextDecoder().decode(name) : '';
+	} catch {
+		return '';
+	}
+};

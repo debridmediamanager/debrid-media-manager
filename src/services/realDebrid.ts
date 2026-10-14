@@ -1,8 +1,10 @@
 import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
+import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
 import { extractTorrentInputs, toMagnetUri } from '@/utils/extractHashes';
-import { isRdAddRefusal, RD_ADD_PAUSE_MS } from '@/utils/rdAddPause';
+import { isRdAddRefusal, RD_ADD_PAUSE_MS, RdNameRefusedError } from '@/utils/rdAddPause';
 import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage';
+import { torrentNameOf } from '@/utils/torrentFile';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
@@ -820,11 +822,14 @@ export const getTorrentInfo = async (
 /** What the caller knows about an add that RD cannot be asked. */
 export type RdAddOptions = {
 	/**
-	 * The release carries a name RD blocks (`isRdBlockedName`), so a 451 on it
-	 * is RD refusing that release and says nothing about the account: it must
-	 * not hold the account's other adds.
+	 * Every name the caller knows this release by: the torrent's own name, the
+	 * title DMM shows for it, its file names. When one is a name RD blocks
+	 * (`isRdBlockedName`), a 451 is RD refusing the release and says nothing
+	 * about the account: it must not hold the account's other adds or earn a
+	 * retry. A magnet's `dn` and a .torrent's own name are read here, so a
+	 * caller with nothing but the hash passes the names DMM stores for it.
 	 */
-	nameIsBlocked?: boolean;
+	names?: readonly (string | null | undefined)[];
 };
 
 /**
@@ -832,12 +837,14 @@ export type RdAddOptions = {
  * pause the account is in, count the attempt, put the account on pause when
  * RD answers with a 451 the name does not explain, and log the answer so a
  * refusal that has lasted hours is not called a pause (`rdAddOutcomes.ts`).
+ * A 451 the name does explain becomes `RdNameRefusedError`.
  */
 async function sendRdAdd<T>(
 	accessToken: string,
-	options: RdAddOptions,
+	names: readonly (string | null | undefined)[],
 	send: () => Promise<T>
 ): Promise<T> {
+	const nameIsBlocked = names.some((name) => !!name && isRdBlockedName(name));
 	await waitOutRdAddPause(accessToken);
 	// Counted before the call, and counted whatever comes back: RD's budget is
 	// spent by refused requests too, so a burst that is already being turned away
@@ -847,7 +854,8 @@ async function sendRdAdd<T>(
 	try {
 		result = await send();
 	} catch (error) {
-		if (isRdAddRefusal(error) && !options.nameIsBlocked) {
+		if (isRdAddRefusal(error)) {
+			if (nameIsBlocked) throw new RdNameRefusedError(error);
 			recordRdAddPause(accessToken);
 			recordRdAddOutcome(accessToken, false);
 		}
@@ -870,8 +878,9 @@ export const addHashAsMagnet = async (
 		throw new Error(`Invalid SHA40 hash or v1 magnet: ${hashOrMagnet}`);
 	}
 	const magnet = toMagnetUri(source);
+	const dn = isMagnet ? new URLSearchParams(source.slice('magnet:?'.length)).get('dn') : null;
 
-	return sendRdAdd(accessToken, options, async () => {
+	return sendRdAdd(accessToken, [...(options.names ?? []), dn], async () => {
 		try {
 			const response = await realDebridAxios.post(
 				`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
@@ -903,7 +912,8 @@ export const addTorrentFile = async (
 	bare: boolean = false // Use proxy by default
 ): Promise<string> => {
 	const arrayBuffer = await file.arrayBuffer();
-	return sendRdAdd(accessToken, {}, async () => {
+	// The torrent's own name is the one RD judges the add on.
+	return sendRdAdd(accessToken, [torrentNameOf(arrayBuffer)], async () => {
 		const response = await realDebridAxios.put(
 			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addTorrent`,
 			arrayBuffer,

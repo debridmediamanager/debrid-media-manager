@@ -35,6 +35,7 @@ import {
 } from './addMagnet';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { convertToTbUserTorrent } from './fetchTorrents';
+import { RD_NAME_REFUSED_MESSAGE, RdNameRefusedError } from './rdAddPause';
 
 // Mock all dependencies
 vi.mock('@/services/allDebrid');
@@ -42,6 +43,7 @@ vi.mock('@/services/realDebrid');
 vi.mock('@/services/torbox');
 vi.mock('./deleteTorrent');
 vi.mock('./fetchTorrents');
+vi.mock('./availability', () => ({ fetchRdNamesOnRecord: vi.fn(async () => new Map()) }));
 vi.mock('react-hot-toast', () => {
 	const fn: any = vi.fn((message: string) => {});
 	fn.success = vi.fn();
@@ -79,9 +81,7 @@ describe('addMagnet utilities', () => {
 			const callback = vi.fn();
 			await handleAddAsMagnetInRd(rdKey, hash, callback);
 
-			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
-				nameIsBlocked: false,
-			});
+			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, { names: [''] });
 			expect(getTorrentInfo).toHaveBeenCalledWith(rdKey, mockId, false);
 			expect(callback).toHaveBeenCalledWith(mockTorrentInfo);
 			expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.any(Object));
@@ -114,18 +114,18 @@ describe('addMagnet utilities', () => {
 		});
 
 		it('should show RD API error when present in response', async () => {
-			const error = new AxiosError('Infringing content');
+			const error = new AxiosError('Permission denied');
 			error.response = {
 				status: 403,
-				data: { error: 'infringing_file', error_code: 35 },
+				data: { error: 'permission_denied', error_code: 9 },
 			} as any;
 
 			vi.mocked(addHashAsMagnet).mockRejectedValue(error);
 
-			await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, BLOCKED_TITLE);
+			await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
 
 			expect(toast.error).toHaveBeenCalledWith(
-				'RD error: infringing_file',
+				'RD error: permission_denied',
 				expect.any(Object)
 			);
 		});
@@ -254,13 +254,15 @@ describe('addMagnet utilities', () => {
 				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, true, CLEAN_TITLE);
 
 				expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
-					nameIsBlocked: false,
+					names: [CLEAN_TITLE],
 				});
 			});
 
+			// `addHashAsMagnet` reads the names it is given and answers a 451 on a
+			// blocked one with `RdNameRefusedError` (realDebrid.core.test.ts).
 			it('reports a blocked name straight away, without retrying', async () => {
 				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+				vi.mocked(addHashAsMagnet).mockRejectedValue(new RdNameRefusedError(infringing()));
 
 				const result = await handleAddAsMagnetInRd(
 					rdKey,
@@ -274,17 +276,20 @@ describe('addMagnet utilities', () => {
 
 				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
-				// And a blocked name's 451 says nothing about the account.
 				expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
-					nameIsBlocked: true,
+					names: [BLOCKED_TITLE],
 				});
+				expect(toast.error).toHaveBeenCalledWith(
+					RD_NAME_REFUSED_MESSAGE,
+					expect.anything()
+				);
 			});
 
 			// While RD is refusing everything on the account even a blocked
 			// name's 451 is not trusted as a verdict.
 			it('does not call a blocked name a verdict while the account is throttled', async () => {
 				vi.mocked(isRdThrottling).mockReturnValue(true);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+				vi.mocked(addHashAsMagnet).mockRejectedValue(new RdNameRefusedError(infringing()));
 
 				const result = await handleAddAsMagnetInRd(
 					rdKey,
@@ -304,11 +309,13 @@ describe('addMagnet utilities', () => {
 			// space-separated display form, which reads clean, and the dots
 			// survive only in the path inside the torrent. RD has since stopped
 			// refusing lowercase `h264`, so the blocked token here is `H264`.
-			it('reads a block that lives only in the filenames', async () => {
+			it('hands the add the filenames too, where a block can live alone', async () => {
 				vi.mocked(isRdThrottling).mockReturnValue(false);
-				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+				vi.mocked(addHashAsMagnet).mockRejectedValue(new RdNameRefusedError(infringing()));
 				const title =
 					'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB H264-GRACE';
+				const filename =
+					'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.H264-GRACE[EZTVx.to].mkv';
 
 				const result = await handleAddAsMagnetInRd(
 					rdKey,
@@ -319,13 +326,14 @@ describe('addMagnet utilities', () => {
 					false,
 					title,
 					0,
-					[
-						'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.H264-GRACE[EZTVx.to].mkv',
-					]
+					[filename]
 				);
 
 				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, hash, false, {
+					names: [title, filename],
+				});
 			});
 
 			it('still retries when the filenames are as clean as the title', async () => {
@@ -716,7 +724,9 @@ describe('addMagnet utilities', () => {
 			await handleReinsertTorrentinRd(rdKey, mockTorrent, false);
 
 			expect(getTorrentInfo).toHaveBeenCalledWith(rdKey, 'old123');
-			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, 'test-hash');
+			expect(addHashAsMagnet).toHaveBeenCalledWith(rdKey, 'test-hash', false, {
+				names: ['test.mkv'],
+			});
 			expect(selectFiles).toHaveBeenCalledWith(rdKey, 'new456', ['1', '3']);
 			expect(handleDeleteRdTorrent).toHaveBeenCalledWith(rdKey, 'rd:old123', true);
 			expect(toast.success).toHaveBeenCalledWith(

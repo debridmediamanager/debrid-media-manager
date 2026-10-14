@@ -54,7 +54,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
-import { isRdBlockedName } from './deInfringe';
+import { fetchRdNamesOnRecord } from './availability';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { extractTorrentInputs, toMagnetUri } from './extractHashes';
 import {
@@ -73,6 +73,7 @@ import {
 	rdAddPauseRetryMessage,
 	rdAddRefusedMessage,
 	rdAddWaitMessage,
+	RdNameRefusedError,
 	retryRdAddThroughPause,
 	type RdPauseRetryOptions,
 } from './rdAddPause';
@@ -177,9 +178,6 @@ export const handleAddAsMagnetInRd = async (
 	 */
 	filenames: readonly string[] = []
 ): Promise<RdAddResult> => {
-	// A name RD blocks is refused every time, so its 451 is about the release
-	// and must not hold the account's other adds.
-	const nameIsBlocked = isRdBlockedName(title, filenames);
 	try {
 		if (!silent && pauseRetryCount === 0) {
 			// Another add on this account ran into a pause; this one waits it out
@@ -189,7 +187,9 @@ export const handleAddAsMagnetInRd = async (
 				toast(rdAddWaitMessage(waitMs), { ...magnetToastOptions, duration: waitMs });
 			}
 		}
-		const id = await addHashAsMagnet(rdKey, hash, false, { nameIsBlocked });
+		// A name RD blocks is refused every time, so its 451 is about the release
+		// and must not hold the account's other adds (`RdNameRefusedError`).
+		const id = await addHashAsMagnet(rdKey, hash, false, { names: [title, ...filenames] });
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		let response = await getTorrentInfo(rdKey, id);
 		if (response.status !== 'downloaded') {
@@ -239,6 +239,10 @@ export const handleAddAsMagnetInRd = async (
 				filenames
 			);
 		}
+		if (error instanceof RdNameRefusedError) {
+			if (!silent) toast.error(error.message, magnetToastOptions);
+			return isRdThrottling(rdKey) ? 'error' : 'infringing_file';
+		}
 		const rdError = getRdError(error, rdKey);
 		console.error(
 			'Error adding hash:',
@@ -262,7 +266,7 @@ export const handleAddAsMagnetInRd = async (
 		// after 30 s missed most measured pauses; a silent caller (an availability
 		// check, a bulk run reporting its own progress) gets the answer at once
 		// and decides for itself.
-		if (isRdAddRefusal(error) && !nameIsBlocked) {
+		if (isRdAddRefusal(error)) {
 			if (!silent && pauseRetryCount < MAX_PAUSE_RETRIES) {
 				const holdMs = RD_ADD_INTERACTIVE_HOLDS_MS[pauseRetryCount];
 				recordRdAddPause(rdKey, holdMs);
@@ -297,7 +301,6 @@ export const handleAddAsMagnetInRd = async (
 				rdError ? `RD error: ${rdError}` : 'Failed to add hash.',
 				magnetToastOptions
 			);
-		if (rdError === 'infringing_file' && !isRdThrottling(rdKey)) return 'infringing_file';
 		return 'error';
 	}
 };
@@ -309,8 +312,9 @@ export const handleAddTorrentFileInRd = async (
 	retryCount: number = 0
 ) => {
 	try {
-		// The torrent's own name is not read here, so every 451 gets the second
-		// try a paused account is owed.
+		// `addTorrentFile` reads the torrent's own name: a 451 on a name RD
+		// blocks is the release's, every other 451 gets the tries a paused
+		// account is owed.
 		const id = await retryRdAddThroughPause(
 			() => addTorrentFile(rdKey, file),
 			interactiveRdPauseRetries(rdKey)
@@ -340,7 +344,7 @@ export const handleAddTorrentFileInRd = async (
 			await handleAddTorrentFileInRd(rdKey, file, callback, retryCount + 1);
 			return;
 		}
-		if (error instanceof RdAddPausedError) {
+		if (error instanceof RdAddPausedError || error instanceof RdNameRefusedError) {
 			toast.error(error.message, rdAddRefusedToastOptions);
 			return;
 		}
@@ -358,7 +362,8 @@ export const handleAddTorrentFileInRd = async (
 
 /** Why a bulk RD add failed, in the words the toast uses. */
 const describeRdBulkAddError = (error: unknown, fallback: string): string => {
-	if (error instanceof RdAddPausedError) return error.message;
+	if (error instanceof RdAddPausedError || error instanceof RdNameRefusedError)
+		return error.message;
 	const rdError = error instanceof AxiosError ? error.response?.data?.error : null;
 	return rdError ? `RD error: ${rdError}` : fallback;
 };
@@ -398,13 +403,19 @@ export const handleAddMultipleHashesInRd = async (
 	callback?: () => Promise<void>
 ) => {
 	let errorCount = 0;
+	// A magnet names itself (`dn`); a bare hash goes by what DMM stores for it.
+	const namesOnRecord = await fetchRdNamesOnRecord(
+		hashes.flatMap((source) => extractTorrentInputs(source).map(({ hash }) => hash))
+	);
 	for (let i = 0; i < hashes.length; i++) {
 		if (i > 0) await delay(BATCH_MAGNET_DELAY);
 		try {
+			const names = namesOnRecord.get(extractTorrentInputs(hashes[i])[0]?.hash ?? '');
 			// A 451 holds the rest of the batch (inside `addHashAsMagnet`) and
-			// earns this hash one more try once the pause is over.
+			// earns this hash one more try once the pause is over, unless the
+			// name explains it.
 			const id = await retryRdAddThroughPause(
-				() => addHashAsMagnet(rdKey, hashes[i]),
+				() => addHashAsMagnet(rdKey, hashes[i], false, { names }),
 				bulkRdPauseRetries
 			);
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
@@ -471,9 +482,10 @@ export const handleReinsertTorrentinRd = async (
 		}
 
 		// The hash is already in the account, so a 451 here is the account's
-		// pause far more often than a verdict: try again through it.
+		// pause far more often than a verdict: try again through it. Unless its
+		// name is one RD blocks now, which no wait changes.
 		const newId = await retryRdAddThroughPause(
-			() => addHashAsMagnet(rdKey, torrent.hash),
+			() => addHashAsMagnet(rdKey, torrent.hash, false, { names: [torrent.filename] }),
 			interactiveRdPauseRetries(rdKey)
 		);
 		console.log('[rdReinsert] added magnet', {

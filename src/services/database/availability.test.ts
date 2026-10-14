@@ -187,12 +187,24 @@ describe('AvailabilityService', () => {
 		findManyMock.mockResolvedValue([
 			{
 				hash: 'hash',
+				filename: 'Sinners.2025.2160p.WEB-DL.mkv',
+				originalFilename: 'Sinners 2025 2160p iT WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR',
 				files: [{ file_id: 1, path: 'path', bytes: BigInt(200) }],
 			},
 		]);
 
 		const results = await service.checkAvailabilityByHashes(['hash']);
 		expect(results[0].files[0].bytes).toBe(200);
+		// RD's names ride along, so an add that has only the hash can tell RD
+		// refusing the release by name from the account's pause.
+		expect(results[0]).toMatchObject({
+			filename: 'Sinners.2025.2160p.WEB-DL.mkv',
+			originalFilename: 'Sinners 2025 2160p iT WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR',
+		});
+		expect(findManyMock.mock.calls[0][0].select).toMatchObject({
+			filename: true,
+			originalFilename: true,
+		});
 	});
 
 	it('removes availability entries', async () => {

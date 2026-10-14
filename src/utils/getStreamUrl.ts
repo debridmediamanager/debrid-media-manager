@@ -1,3 +1,4 @@
+import { rdNamesOnRecord } from '@/services/rdNamesOnRecord';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -51,10 +52,13 @@ export const getStreamUrl = async (
 	try {
 		// A caller is waiting on this request, so a 451 gets one more try after
 		// the account's pause and then a temporary `RdAddPausedError`, never a
-		// verdict on the release; see `rdAddPause.ts`.
-		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false), {
-			token: rdKey,
-		});
+		// verdict on the release; see `rdAddPause.ts`. Unless the name DMM has
+		// on record for the hash is one RD blocks: then it is `RdNameRefusedError`.
+		const names = await rdNamesOnRecord(hash);
+		const id = await retryRdAddThroughPause(
+			() => addHashAsMagnet(rdKey, hash, false, { names }),
+			{ token: rdKey }
+		);
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
@@ -105,9 +109,11 @@ export const getBiggestFileStreamUrl = async (
 	let rdLink = '';
 	let fileSize = 0;
 	try {
-		const id = await retryRdAddThroughPause(() => addHashAsMagnet(rdKey, hash, false), {
-			token: rdKey,
-		});
+		const names = await rdNamesOnRecord(hash);
+		const id = await retryRdAddThroughPause(
+			() => addHashAsMagnet(rdKey, hash, false, { names }),
+			{ token: rdKey }
+		);
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrent = await getTorrentInfo(rdKey, id, false);

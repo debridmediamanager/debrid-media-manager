@@ -409,9 +409,13 @@ export const showInfoForRD = async (
 					} else {
 						const oldId = `rd:${info.id}`;
 						// Already in the account, so a 451 is its pause far more
-						// often than a verdict: try again through it.
+						// often than a verdict: try again through it. Unless its name
+						// is one RD blocks now, which no wait changes.
 						const newId = await retryRdAddThroughPause(
-							() => addHashAsMagnet(rdKey, info.hash),
+							() =>
+								addHashAsMagnet(rdKey, info.hash, false, {
+									names: [info.original_filename, info.filename],
+								}),
 							interactiveRdPauseRetries(rdKey)
 						);
 						await selectFiles(rdKey, newId, selectedIds);
@@ -519,9 +523,13 @@ export const showInfoForRD = async (
 					} else {
 						const oldId = `rd:${info.id}`;
 						// Already in the account, so a 451 is its pause far more
-						// often than a verdict: try again through it.
+						// often than a verdict: try again through it. Unless its name
+						// is one RD blocks now, which no wait changes.
 						const newId = await retryRdAddThroughPause(
-							() => addHashAsMagnet(rdKey, info.hash),
+							() =>
+								addHashAsMagnet(rdKey, info.hash, false, {
+									names: [info.original_filename, info.filename],
+								}),
 							interactiveRdPauseRetries(rdKey)
 						);
 						await selectFiles(rdKey, newId, selectedIds);

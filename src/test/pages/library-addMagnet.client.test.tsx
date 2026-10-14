@@ -275,6 +275,47 @@ describe('Library Page - addMagnet Query Parameter', () => {
 			expect(mockHandleAddAsMagnetInRd).not.toHaveBeenCalled();
 		});
 	});
+
+	// The browser extension sends the bare hash. This one RD refused by name on
+	// 2026-10-13 and again an hour later (rd-add-name-retest-2026-10-13.json);
+	// without its name the add took that 451 for the account's pause and held
+	// the user for five minutes of retries.
+	it('hands the RD add the names DMM has on record for a bare hash', async () => {
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
+		const hash = '4d2e9e41c6dd2d2183888b90d5393d7ae472f1b6';
+		const name = 'Sinners 2025 2160p iT WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR';
+		mockRouter.query = { addMagnet: hash };
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (url: string, init?: RequestInit) => {
+				if (url === '/api/challenge') {
+					return { ok: true, json: async () => ({ token: 'tok', hash: 'sig' }) };
+				}
+				if (url === '/api/availability/check2') {
+					expect(JSON.parse(String(init?.body)).hashes).toEqual([hash]);
+					const available = [{ hash, filename: name, originalFilename: name, files: [] }];
+					return { ok: true, json: async () => ({ available }) };
+				}
+				return { ok: false, json: async () => ({}) };
+			})
+		);
+		mockHandleAddAsMagnetInRd.mockResolvedValue('infringing_file');
+
+		try {
+			render(<LibraryPage />);
+
+			await waitFor(() => expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledTimes(1));
+			const args = mockHandleAddAsMagnetInRd.mock.calls[0];
+			expect(args[0]).toBe('test-rd-key');
+			expect(args[1]).toBe(hash);
+			expect(args[8]).toEqual([name, name]);
+		} finally {
+			vi.unstubAllGlobals();
+			mockCredentials.ad = 'test-ad-key';
+			mockCredentials.tb = 'test-tb-key';
+		}
+	});
 });
 
 describe('Library mixed torrent submissions', () => {

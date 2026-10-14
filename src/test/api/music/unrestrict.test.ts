@@ -19,6 +19,9 @@ const selectableMocks = vi.hoisted(() => ({
 vi.mock('@/services/realDebrid', () => rdMocks);
 vi.mock('@/utils/clientIp', () => clientIpMocks);
 vi.mock('@/utils/selectable', () => selectableMocks);
+vi.mock('@/utils/prisma', () => ({
+	prisma: { availableMusic: { findUnique: vi.fn(async () => null) } },
+}));
 
 import handler from '@/pages/api/music/unrestrict';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -185,7 +188,9 @@ describe('API /api/music/unrestrict', () => {
 			filesize: 40000000,
 			mimeType: 'audio/flac',
 		});
-		expect(rdMocks.addHashAsMagnet).toHaveBeenCalledWith('token123', 'abc123', false);
+		expect(rdMocks.addHashAsMagnet).toHaveBeenCalledWith('token123', 'abc123', false, {
+			names: [],
+		});
 		expect(rdMocks.deleteTorrent).toHaveBeenCalledWith('token123', 'torrent-id-1', false);
 	});
 

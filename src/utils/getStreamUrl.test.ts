@@ -9,6 +9,7 @@ vi.mock('@/services/realDebrid', () => ({
 	unrestrictLink: vi.fn(),
 }));
 
+vi.mock('@/services/rdNamesOnRecord', () => ({ rdNamesOnRecord: vi.fn(async () => []) }));
 vi.mock('./addMagnet', () => ({
 	handleSelectFilesInRd: vi.fn(),
 }));
@@ -111,7 +112,7 @@ describe('getStreamUrl', () => {
 			-1,
 			977, // 1024000000 / 1024 / 1024 rounded
 		]);
-		expect(addHashAsMagnet).toHaveBeenCalledWith(mockRdKey, mockHash, false);
+		expect(addHashAsMagnet).toHaveBeenCalledWith(mockRdKey, mockHash, false, { names: [] });
 		expect(handleSelectFilesInRd).toHaveBeenCalledWith(mockRdKey, `rd:${mockTorrentId}`, false);
 		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});
@@ -384,7 +385,7 @@ describe('getBiggestFileStreamUrl', () => {
 			'https://download.example.com/biggest.mp4',
 			1907, // 2000000000 / 1024 / 1024 rounded
 		]);
-		expect(addHashAsMagnet).toHaveBeenCalledWith(mockRdKey, mockHash, false);
+		expect(addHashAsMagnet).toHaveBeenCalledWith(mockRdKey, mockHash, false, { names: [] });
 		expect(unrestrictLink).toHaveBeenCalledWith(mockRdKey, 'link2', mockIpAddress, false);
 		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});

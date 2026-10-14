@@ -7,6 +7,7 @@ import {
 } from '@/services/realDebrid';
 import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { getClientIpFromRequest } from '@/utils/clientIp';
+import { prisma } from '@/utils/prisma';
 import { RdAddPausedError, retryRdAddThroughPause } from '@/utils/rdAddPause';
 import { isVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -132,9 +133,15 @@ export default async function handler(
 	try {
 		// The player is waiting: a 451 gets one more try after the account's
 		// pause, then a temporary 503 rather than a verdict on the release.
-		torrentId = await retryRdAddThroughPause(() => addHashAsMagnet(accessToken, hash, false), {
-			token: accessToken,
-		});
+		// Unless the album's name on record is one RD blocks, which no wait changes.
+		const onRecord = await prisma.availableMusic
+			.findUnique({ where: { hash }, select: { filename: true, originalFilename: true } })
+			.catch(() => null);
+		const names = onRecord ? [onRecord.originalFilename, onRecord.filename] : [];
+		torrentId = await retryRdAddThroughPause(
+			() => addHashAsMagnet(accessToken, hash, false, { names }),
+			{ token: accessToken }
+		);
 
 		// Wait for magnet conversion to complete (files become available)
 		const initialInfo = await waitForFiles(accessToken, torrentId);

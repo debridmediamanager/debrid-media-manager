@@ -43,7 +43,7 @@ import {
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
 } from '@/utils/addMagnet';
-import { checkAvailabilityByHashes } from '@/utils/availability';
+import { checkAvailabilityByHashes, fetchRdNamesOnRecord } from '@/utils/availability';
 import type { AsyncFunction } from '@/utils/batch';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
@@ -318,9 +318,22 @@ function TorrentsPage() {
 			promises.push(
 				(async () => {
 					try {
-						await handleAddAsMagnetInRd(rdKey, source, async (info) => {
-							addTorrent(convertToUserTorrent(info));
-						});
+						// The extension sends the bare hash: the names DMM stores for it
+						// are what tell RD refusing the release from the account's pause.
+						const names = (await fetchRdNamesOnRecord([hash])).get(hash) ?? [];
+						await handleAddAsMagnetInRd(
+							rdKey,
+							source,
+							async (info) => {
+								addTorrent(convertToUserTorrent(info));
+							},
+							false,
+							0,
+							false,
+							'',
+							0,
+							names
+						);
 					} catch (error) {
 						console.error('Error adding magnet to RealDebrid:', error);
 					}
@@ -1503,8 +1516,18 @@ function TorrentsPage() {
 			cachedOnly: boolean;
 		};
 
+		const backupNames = new Map(files.map((f) => [f.hash, f.filename]));
 		const addMagnet = (hash: string) => {
-			if (rdKey && debridService === 'rd') return handleAddAsMagnetInRd(rdKey, hash);
+			if (rdKey && debridService === 'rd')
+				return handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					backupNames.get(hash) ?? ''
+				);
 			if (adKey && debridService === 'ad')
 				return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
 			if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
