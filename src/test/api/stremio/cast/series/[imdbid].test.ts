@@ -50,6 +50,29 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		});
 	});
 
+	// Card 428: an episode RD refuses by name is reported, not saved and hidden.
+	it('reports an episode whose name Real-Debrid refuses instead of saving it', async () => {
+		mockGetStreamUrl.mockResolvedValue([
+			'https://23-4.download.real-debrid.com/d/AAAAAAAAAAAAA/Los%20Simpsons%209x12%20Bart%20Feriante%20%5BDVDRip%20Esp-Eng-Com%20by%20jnogales2001%5D%5BTusSeries.com%5D.avi',
+			'https://real-debrid.com/d/AAAAAAAAAAAAA',
+			9,
+			12,
+			180,
+		]);
+		const req = createMockRequest({
+			query: { imdbid: 'tt0096697', hash: 'hash', fileIds: '12' },
+			headers: { authorization: 'Bearer token', 'x-real-ip': '1.1.1.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveCast).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			errorEpisodes: ['fileId:12 (Real-Debrid refuses its name)'],
+		});
+	});
+
 	it('casts each requested file id and records success', async () => {
 		mockGetStreamUrl.mockResolvedValue([
 			'https://files.example.com/Video-S01E01.mkv',

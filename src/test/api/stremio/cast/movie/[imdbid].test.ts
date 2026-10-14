@@ -48,6 +48,33 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 		});
 	});
 
+	// Card 428: test 2's cast of The Prestige was saved on 2026-10-12, then RD
+	// answered 451 infringing_file for its link and Stremio never listed it.
+	it('refuses a file whose name Real-Debrid refuses, instead of saving a cast Stremio hides', async () => {
+		mockGenerateUserId.mockResolvedValue('user-1');
+		mockGetBiggestFileStreamUrl.mockResolvedValue([
+			'https://23-4.download.real-debrid.com/d/AAAAAAAAAAAAA/The.Prestige.2006.1080p.BluRay.x264-%5BYTS.AM%5D.mp4',
+			'https://real-debrid.com/d/AAAAAAAAAAAAA',
+			1700,
+		]);
+		const req = createMockRequest({
+			query: { imdbid: 'tt0482571', hash: 'aaa47382b2e6834cd487d0858bcd502d40145f7e' },
+			headers: { authorization: 'Bearer token-abc', 'x-real-ip': '127.0.0.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveCast).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(422);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: expect.stringContaining(
+				'The.Prestige.2006.1080p.BluRay.x264-[YTS.AM].mp4'
+			),
+		});
+	});
+
 	it('unrestricts the biggest RD file and saves it to the repository', async () => {
 		mockGenerateUserId.mockResolvedValue('user-1');
 		mockGetBiggestFileStreamUrl.mockResolvedValue([

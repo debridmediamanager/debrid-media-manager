@@ -3,6 +3,7 @@ import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { RdAddPausedError } from '@/utils/rdAddPause';
+import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // TV SHOW cast: unrestricts a selected link and saves it to the database
@@ -54,7 +55,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// bare imdb id is the *movie* key, and the cast table is unique on
 			// (imdbId, userId, hash), so every unparsed episode of a pack landed
 			// on the same row and overwrote the one before it.
-			if (streamUrl && seasonNumber >= 0 && episodeNumber >= 0) {
+			if (streamUrl && rdBlockedCastMessage(streamUrl)) {
+				// Saved, it would only be dropped from Stremio without a word.
+				errorEpisodes.push(`fileId:${fileId} (Real-Debrid refuses its name)`);
+			} else if (streamUrl && seasonNumber >= 0 && episodeNumber >= 0) {
 				const castKey = `${imdbid}:${seasonNumber}:${episodeNumber}`;
 				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 			} else if (streamUrl) {

@@ -4,6 +4,7 @@ import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { RdAddPausedError } from '@/utils/rdAddPause';
+import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -59,7 +60,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			// See the same guard in cast/series: the bare id is the movie key, so
 			// an unparsed episode overwrites whatever was cast before it.
-			if (streamUrl && season >= 0 && episodeNumber >= 0) {
+			if (streamUrl && rdBlockedCastMessage(streamUrl)) {
+				// Saved, it would only be dropped from Stremio without a word.
+				errorEpisodes.push(`fileId:${fileId} (Real-Debrid refuses its name)`);
+			} else if (streamUrl && season >= 0 && episodeNumber >= 0) {
 				// The Stremio stream routes look an anime episode up as
 				// `anidb-<aid>:<season>:<episode>`, however the page spelled the id.
 				const castKey = `${canonicalAnimeCastId(anidbid)}:${season}:${episodeNumber}`;

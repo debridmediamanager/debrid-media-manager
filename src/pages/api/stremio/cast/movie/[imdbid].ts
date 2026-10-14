@@ -3,6 +3,7 @@ import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
 import { RdAddPausedError } from '@/utils/rdAddPause';
+import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // MOVIE cast: unrestricts a selected link and saves it to the database
@@ -30,6 +31,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const [streamUrl, rdLink, fileSize] = await getBiggestFileStreamUrl(token, hash, ipAddress);
+
+		const refused = streamUrl ? rdBlockedCastMessage(streamUrl) : null;
+		if (refused) {
+			res.status(422).json({ status: 'error', errorMessage: refused });
+			return;
+		}
 
 		if (streamUrl) {
 			let message = 'You can now stream the movie in Stremio';
