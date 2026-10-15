@@ -1,6 +1,6 @@
 # Sponsor API
 
-Two endpoints for sponsors' own tools. Both take your DMM API key in the
+Three endpoints for sponsors' own tools. All take your DMM API key in the
 `x-api-key` header and stop working the moment the sponsorship lapses. Each allows
 2,500 items a minute, so send full batches.
 
@@ -39,3 +39,26 @@ curl -X POST https://debridmediamanager.com/api/sponsor/availability \
 limits the answer to that title. `available` lists the hashes DMM users have found
 cached, with their files. A hash missing from it has not been seen cached, which
 does not mean it is not.
+
+## Stored media info
+
+`POST /api/sponsor/mediainfo`, up to 100 hashes, 25 calls a minute per address.
+
+```bash
+curl -X POST https://debridmediamanager.com/api/sponsor/mediainfo \
+  -H "x-api-key: $DMM_API_KEY" -H 'Content-Type: application/json' \
+  -d '{"hashes":["<info hash>"]}'
+```
+
+zurg shares what ffprobe reads from each file it analyses: streams, codecs,
+languages, HDR and duration. This answers that for each hash, so your tools do not
+have to download anything to learn it:
+
+```json
+{"releases":{"<info hash>":{"files":{"<file>":{"path":"/The.Matrix.1999.mkv","bytes":15237850498,"MediaInfo":{"streams":[...],"format":{...}}}}}}}
+```
+
+`MediaInfo` is ffprobe's own JSON (`-show_format -show_streams`), without the
+address it was read from. A probe describes the file at `path` with that exact
+size, so match on both. Hashes nobody has analysed are left out, and so are
+files inside archives and Usenet releases, which zurg does not share.
