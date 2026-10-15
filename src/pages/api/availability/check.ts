@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -15,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	try {
 		const { dmmProblemKey, solution, imdbId, hashes } = req.body;

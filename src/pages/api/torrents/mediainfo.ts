@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { publicMediaInfo } from '@/utils/torrentSnapshot';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -46,6 +47,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ message: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	return handleGet(req, res);
 }

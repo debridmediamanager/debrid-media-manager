@@ -1,0 +1,31 @@
+{
+	"_note": "Request headers as DMM's API routes receive them behind Nginx Proxy Manager, which adds x-forwarded-proto. `page` is Chrome 155 on Windows calling /api/availability/check2 from https://debridmediamanager.com/, read over CDP on 2026-10-15 (cookie dropped). `script` is python-requests 2.33.1 posting to /api/availability/check with the Referer that scripts calling the site's routes send, captured the same day; python-requests was the second largest caller of that route on 2026-10-11..15 after browsers.",
+	"page": {
+		"accept": "*/*",
+		"accept-encoding": "gzip, deflate, br, zstd",
+		"accept-language": "en-US,en;q=0.9",
+		"content-length": "90",
+		"content-type": "application/json",
+		"origin": "https://debridmediamanager.com",
+		"priority": "u=1, i",
+		"referer": "https://debridmediamanager.com/",
+		"sec-ch-ua": "\"Google Chrome\";v=\"155\", \"Chromium\";v=\"155\", \"Not(A:Brand\";v=\"24\"",
+		"sec-ch-ua-mobile": "?0",
+		"sec-ch-ua-platform": "\"Windows\"",
+		"sec-fetch-dest": "empty",
+		"sec-fetch-mode": "cors",
+		"sec-fetch-site": "same-origin",
+		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+		"x-forwarded-proto": "https"
+	},
+	"script": {
+		"user-agent": "python-requests/2.33.1",
+		"accept-encoding": "gzip, deflate, br",
+		"accept": "*/*",
+		"connection": "keep-alive",
+		"referer": "https://debridmediamanager.com/",
+		"content-length": "118",
+		"content-type": "application/json",
+		"x-forwarded-proto": "https"
+	}
+}

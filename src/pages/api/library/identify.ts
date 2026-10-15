@@ -3,6 +3,7 @@ import type { FilenameIdentification } from '@/services/database/hashImdb';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { createHash } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -227,4 +228,10 @@ function dedupe(rows: FilenameIdentification[]): FilenameIdentification[] {
 	return [...new Map(rows.map((r) => [`${r.hash}|${r.titleKey}`, r])).values()];
 }
 
-export default withIpRateLimit(identifyHandler, RATE_LIMIT_CONFIGS.libraryIdentify);
+/** The library page's own route; tools call /api/sponsor/identify with their key. */
+async function pageHandler(req: NextApiRequest, res: NextApiResponse) {
+	if (!validateOwnPageRequest(req, res)) return;
+	return identifyHandler(req, res);
+}
+
+export default withIpRateLimit(pageHandler, RATE_LIMIT_CONFIGS.libraryIdentify);
