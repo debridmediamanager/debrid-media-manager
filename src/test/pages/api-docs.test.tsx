@@ -35,7 +35,8 @@ const SPONSOR_ONLY = [
 	'/api/zurg/search-torrents',
 	'/api/zurg/show-info',
 	'/api/zurg/resolve-tmdb',
-	'/api/metadata/tmdb/<TMDB path>',
+	'/api/metadata/<id>',
+	'/api/metadata/search',
 ];
 const OPEN = [
 	'/api/stremio/<your id>/manifest.json',

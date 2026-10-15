@@ -429,9 +429,9 @@ export class MetadataCacheService {
 	}
 
 	/**
-	 * A TMDB v3 read as TMDB answers it, for the sponsor metadata API
-	 * (`/api/metadata/tmdb/...`). `path` and `params` arrive already allowlisted;
-	 * the key is DMM's own. A season's episode list gains episodes while it airs,
+	 * A TMDB v3 read as TMDB answers it, for the sponsor metadata API's season
+	 * lists, episodes and searches (`services/metadata`). `path` and `params` are
+	 * DMM's own, never a caller's. A season's episode list gains episodes while it airs,
 	 * so it lives as long as an airing show's row; a search an hour.
 	 */
 	async getTmdbPassthrough(path: string, params: Record<string, string>): Promise<any> {

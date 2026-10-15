@@ -1,0 +1,62 @@
+{
+	"_id": "5258d902760ee34661720dfb",
+	"air_date": "2010-08-17",
+	"episodes": [
+		{
+			"episode_number": 1,
+			"name": "Cake Week",
+			"season_number": 1,
+			"id": 788033,
+			"air_date": "2010-08-17"
+		},
+		{
+			"episode_number": 2,
+			"name": "Biscuits Week",
+			"season_number": 1,
+			"id": 788035,
+			"air_date": "2010-08-24"
+		},
+		{
+			"episode_number": 3,
+			"name": "Bread Week",
+			"season_number": 1,
+			"id": 788032,
+			"air_date": "2010-08-31"
+		},
+		{
+			"episode_number": 4,
+			"name": "Puddings Week",
+			"season_number": 1,
+			"id": 788031,
+			"air_date": "2010-09-07"
+		},
+		{
+			"episode_number": 5,
+			"name": "Pastry Week",
+			"season_number": 1,
+			"id": 788034,
+			"air_date": "2010-09-14"
+		},
+		{
+			"episode_number": 6,
+			"name": "Tea Party",
+			"season_number": 1,
+			"id": 788036,
+			"air_date": "2010-09-21"
+		}
+	],
+	"id": 45293,
+	"name": "Series 1",
+	"networks": [
+		{
+			"id": 332,
+			"logo_path": "/7HVPn1p2w1nC5oRKBehXVHpss7e.png",
+			"name": "BBC Two",
+			"origin_country": "GB"
+		}
+	],
+	"overview": "Series 1 of The Great British Bake Off, aired on BBC 2, saw ten home bakers take part in a bake-off to test every aspect of their baking skills as they battled to be crowned the Great British Bake Off’s best amateur baker. Each week the nationwide tour saw keen bakers put through three challenges in a particular discipline. The rounds took place in various locations across the UK following a theme, for example, the episode on puddings would take place in Bakewell, bread baking would take place near Sandwich. This first series had a voiceover by Stephen Noonan; for the subsequent series this role was taken by the on-screen presenters Mel Giedroyc and Sue Perkins.",
+	"poster_path": "/ggZf5y6RDB7FJGOqekl0c2952bz.jpg",
+	"season_number": 1,
+	"vote_average": 8
+}

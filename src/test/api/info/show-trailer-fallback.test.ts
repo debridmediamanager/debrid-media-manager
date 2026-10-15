@@ -120,7 +120,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 
 		expect(mockMetadataCache.getTmdbTvInfo).toHaveBeenCalledWith(
 			1396,
-			'videos,external_ids,alternative_titles'
+			'videos,external_ids,alternative_titles,credits,content_ratings'
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(

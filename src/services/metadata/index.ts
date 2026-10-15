@@ -17,8 +17,10 @@ import UserAgent from 'user-agents';
  * What DMM asks TMDB to append. One string per media type, so the page routes
  * and the metadata API read the same cached row.
  */
-export const TMDB_MOVIE_APPEND = 'videos,release_dates,external_ids,alternative_titles';
-export const TMDB_TV_APPEND = 'videos,external_ids,alternative_titles';
+export const TMDB_MOVIE_APPEND = 'videos,release_dates,external_ids,alternative_titles,credits';
+// `credits` and `content_ratings` for the sponsor API's callers: rex shows a title's cast and
+// rating from them, and asking once keeps one cached row per title.
+export const TMDB_TV_APPEND = 'videos,external_ids,alternative_titles,credits,content_ratings';
 
 /**
  * A provider's answer, or null when it failed — including a synchronous throw.
@@ -95,7 +97,7 @@ async function tmdbIdFor(
  */
 export async function fetchMovieSources(
 	imdbId: string,
-	known: { omdb?: Promise<any> } = {}
+	known: { omdb?: Promise<any>; tmdbId?: number } = {}
 ): Promise<MovieSources> {
 	const cache = getMetadataCache();
 	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId));
@@ -109,7 +111,7 @@ export async function fetchMovieSources(
 		if (!getTmdbAuth()) return null;
 		const id = await tmdbIdFor(
 			imdbId,
-			trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'movie'),
+			known.tmdbId ?? trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'movie'),
 			'movie'
 		);
 		return id ? cache.getTmdbMovieInfo(id, TMDB_MOVIE_APPEND) : null;
@@ -127,7 +129,7 @@ export async function fetchMovieSources(
 /** Every show provider's answer for an IMDb id; see `fetchMovieSources`. */
 export async function fetchShowSources(
 	imdbId: string,
-	known: { omdb?: Promise<any> } = {}
+	known: { omdb?: Promise<any>; tmdbId?: number } = {}
 ): Promise<ShowSources> {
 	const cache = getMetadataCache();
 	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId));
@@ -143,7 +145,11 @@ export async function fetchShowSources(
 	const trakt = await traktPromise;
 	const tmdb = await settle(async () => {
 		if (!getTmdbAuth()) return null;
-		const id = await tmdbIdFor(imdbId, trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'tv'), 'tv');
+		const id = await tmdbIdFor(
+			imdbId,
+			known.tmdbId ?? trakt?.ids?.tmdb ?? mdblistTmdbId(mdblist, 'tv'),
+			'tv'
+		);
 		return id ? cache.getTmdbTvInfo(id, TMDB_TV_APPEND) : null;
 	});
 	const cinemeta = await cinemetaPromise;
@@ -226,4 +232,158 @@ export async function getMetadata(imdbId: string): Promise<MetadataRecord | null
 		return Object.values(sources).some(Boolean) ? mergeShowRecord(imdbId, sources) : null;
 	}
 	return null;
+}
+
+/** A title as the sponsor metadata API names it: `imdb:tt0852863`, `tmdb:tv:1877`, `tmdb:movie:603`. */
+export type MetadataId =
+	| { by: 'imdb'; imdb: string }
+	| { by: 'tmdb'; kind: 'movie' | 'tv'; tmdb: number };
+
+export function parseMetadataId(raw: string): MetadataId | null {
+	const imdb = /^imdb:(tt\d{7,})$/.exec(raw);
+	if (imdb) return { by: 'imdb', imdb: imdb[1] };
+	// TMDB numbers movies and shows separately: movie 155 is The Dark Knight, show 155 3rd Rock.
+	const tmdb = /^tmdb:(movie|tv):(\d{1,9})$/.exec(raw);
+	if (tmdb) return { by: 'tmdb', kind: tmdb[1] as 'movie' | 'tv', tmdb: Number(tmdb[2]) };
+	return null;
+}
+
+export type MetadataBundle = {
+	ids: { imdb?: string; tmdb?: number; tvdb?: number };
+	type: 'movie' | 'show' | 'episode';
+	/** DMM's merged record (`getMetadata`'s), null for a title no IMDb id names. */
+	merged: MetadataRecord | null;
+	/** Each provider's own answer, null where it failed or does not know the title. */
+	sources: Record<string, unknown>;
+};
+
+/**
+ * Every source's answer for one title, beside DMM's merge of them. `season` (and
+ * `episode`) add TMDB's list of that season (and that episode, with its ids), which
+ * no merged record carries: rex places a pack's files by the names in it.
+ */
+export async function getMetadataBundle(
+	id: MetadataId,
+	extra: { season?: number; episode?: number; tmdbOnly?: boolean } = {}
+): Promise<MetadataBundle | null> {
+	const cache = getMetadataCache();
+	let imdb = id.by === 'imdb' ? id.imdb : undefined;
+	let kind = id.by === 'tmdb' ? id.kind : undefined;
+	let tmdbId = id.by === 'tmdb' ? id.tmdb : undefined;
+	let tmdb: any = null;
+	if (id.by === 'tmdb') {
+		tmdb = blank(
+			await settle(() =>
+				id.kind === 'tv'
+					? cache.getTmdbTvInfo(id.tmdb, TMDB_TV_APPEND)
+					: cache.getTmdbMovieInfo(id.tmdb, TMDB_MOVIE_APPEND)
+			)
+		);
+		if (!tmdb) return null;
+		imdb = tmdb.external_ids?.imdb_id || tmdb.imdb_id || undefined;
+	}
+
+	const sources: Record<string, unknown> = {};
+	let merged: MetadataRecord | null = null;
+	let type: MetadataBundle['type'] = kind === 'movie' ? 'movie' : 'show';
+	if (extra.tmdbOnly) {
+		// `?sources=tmdb`: TMDB's records alone, for a caller reading one season list after
+		// another (rex at start-up), without asking OMDb, mdblist and Trakt each time.
+		if (id.by === 'imdb') {
+			const found = getTmdbAuth()
+				? await settle(() => cache.searchTmdbByImdb(id.imdb))
+				: null;
+			sources.tmdbFind = found;
+			const movie = found?.movie_results?.[0]?.id;
+			const show = found?.tv_results?.[0]?.id;
+			if (typeof movie === 'number' || typeof show === 'number') {
+				type = typeof show === 'number' ? 'show' : 'movie';
+				tmdb = blank(
+					await settle(() =>
+						type === 'show'
+							? cache.getTmdbTvInfo(show, TMDB_TV_APPEND)
+							: cache.getTmdbMovieInfo(movie, TMDB_MOVIE_APPEND)
+					)
+				);
+			} else if (found?.tv_episode_results?.length) {
+				type = 'episode';
+			} else {
+				return null;
+			}
+		}
+		sources.tmdb = tmdb;
+	} else if (imdb) {
+		const omdbPromise = settle(() => getOmdbMetadata(imdb!));
+		const omdb = await omdbPromise;
+		const found = getTmdbAuth() ? await settle(() => cache.searchTmdbByImdb(imdb!)) : null;
+		sources.tmdbFind = found;
+		const detected = kind
+			? kind === 'movie'
+				? 'movie'
+				: 'show'
+			: await detectMediaType(imdb, omdb);
+		if (!detected) return null;
+		type = detected;
+		if (detected === 'episode') {
+			sources.omdb = omdb;
+			merged = episodeRecordFromOmdb(imdb, omdb);
+		} else if (detected === 'movie') {
+			const movie = await fetchMovieSources(imdb, { omdb: omdbPromise, tmdbId });
+			Object.assign(sources, movie);
+			merged = Object.values(movie).some(Boolean) ? mergeMovieRecord(imdb, movie) : null;
+			tmdb = movie.tmdb ?? tmdb;
+		} else {
+			const show = await fetchShowSources(imdb, { omdb: omdbPromise, tmdbId });
+			Object.assign(sources, show);
+			merged = Object.values(show).some(Boolean) ? mergeShowRecord(imdb, show) : null;
+			tmdb = show.tmdb ?? tmdb;
+		}
+	} else {
+		// A title TMDB has and IMDb does not (an anime cour TMDB files as its own show):
+		// only TMDB can answer for it.
+		sources.tmdb = tmdb;
+	}
+	tmdbId = typeof tmdb?.id === 'number' ? tmdb.id : tmdbId;
+
+	if (type === 'show' && tmdbId && extra.season !== undefined) {
+		sources.tmdbSeason = await settle(() =>
+			cache.getTmdbPassthrough(`tv/${tmdbId}/season/${extra.season}`, {})
+		);
+		if (extra.episode !== undefined) {
+			sources.tmdbEpisode = await settle(() =>
+				cache.getTmdbPassthrough(
+					`tv/${tmdbId}/season/${extra.season}/episode/${extra.episode}`,
+					{
+						append_to_response: 'external_ids',
+					}
+				)
+			);
+		}
+	}
+	const tvdb = tmdb?.external_ids?.tvdb_id ?? (sources.mdblist as any)?.tvdbid;
+	return {
+		ids: {
+			...(imdb ? { imdb } : {}),
+			...(tmdbId ? { tmdb: tmdbId } : {}),
+			...(typeof tvdb === 'number' ? { tvdb } : {}),
+		},
+		type,
+		merged,
+		sources,
+	};
+}
+
+/** TMDB's search for a title, for the sponsor metadata API's `search`: films by year, shows by first air year. */
+export async function searchMetadata(
+	query: string,
+	type: 'movie' | 'show',
+	year?: number
+): Promise<{ sources: Record<string, unknown> }> {
+	const kind = type === 'movie' ? 'movie' : 'tv';
+	const params: Record<string, string> = { query };
+	if (year) params[type === 'movie' ? 'year' : 'first_air_date_year'] = String(year);
+	const tmdb = getTmdbAuth()
+		? await settle(() => getMetadataCache().getTmdbPassthrough(`search/${kind}`, params))
+		: null;
+	return { sources: { tmdb } };
 }

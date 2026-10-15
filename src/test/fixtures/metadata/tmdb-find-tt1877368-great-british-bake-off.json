@@ -1,0 +1,26 @@
+{
+	"movie_results": [],
+	"person_results": [],
+	"tv_episode_results": [],
+	"tv_results": [
+		{
+			"adult": false,
+			"backdrop_path": "/7rB1VhVXtLFTnOCY1Hz7ZEIz7CO.jpg",
+			"id": 34549,
+			"name": "The Great British Bake Off",
+			"original_name": "The Great British Bake Off",
+			"overview": "This British television baking competition selects from amongst its competitors the best amateur baker. The series is credited with reinvigorating interest in baking throughout the UK, and many of its participants, including winners, have gone on to start a career based on baking.",
+			"poster_path": "/bNa02AorKSBRfWfVPmsL7SJrdfs.jpg",
+			"media_type": "tv",
+			"original_language": "en",
+			"genre_ids": [10764],
+			"popularity": 17.0596,
+			"first_air_date": "2010-08-17",
+			"softcore": false,
+			"vote_average": 7.509,
+			"vote_count": 109,
+			"origin_country": ["GB"]
+		}
+	],
+	"tv_season_results": []
+}
