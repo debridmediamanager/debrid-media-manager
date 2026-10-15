@@ -14,7 +14,7 @@ export interface NpmAccessLine {
 }
 
 const LINE =
-	/^\[(?<day>\d{2})\/(?<month>\w{3})\/(?<year>\d{4}):(?<time>\d{2}:\d{2}:\d{2}) \+0000\] - (?<status>\d{3}) \d{3} - GET https \S+ "(?<path>[^"]+)" \[Client (?<ip>[^\]]+)\]/;
+	/^\[(?<day>\d{2})\/(?<month>\w{3})\/(?<year>\d{4}):(?<time>\d{2}:\d{2}:\d{2}) \+0000\] - (?<status>\d{3}) \d{3} - (?:GET|POST) https \S+ "(?<path>[^"]+)" \[Client (?<ip>[^\]]+)\]/;
 const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
 
 export function parseNpmAccessLine(line: string): NpmAccessLine {

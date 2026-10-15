@@ -1,3 +1,4 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { MAX_PLAYABLE_HASHES } from '@/utils/availability';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
@@ -14,7 +15,7 @@ function isValidTorrentHash(hash: unknown): hash is string {
 // Which hashes are cached with a playable video, by hash alone. The hashlist
 // page needs only that bit per row; check2 and ad/check2 answer the same
 // question with every file row, 100 hashes at a time.
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
@@ -63,3 +64,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to check available hashes' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.playable);

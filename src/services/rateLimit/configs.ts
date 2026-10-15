@@ -164,5 +164,14 @@ export const RATE_LIMIT_CONFIGS = {
 	// for, at most 12 a request and cached for a day. Every show and movie page
 	// asks once, so they get a bucket of their own rather than spending `anime`'s.
 	animeEntries: { name: 'animeEntries', rateLimit: 60, windowSeconds: 60 },
+	// The site's availability lookups, per address. Pages pace Real-Debrid checks to 60 a
+	// minute per tab. Over 2026-10-11..15, leaving out the ~9,950 addresses that rotated
+	// their user agent between calls (scripts), the busiest address sent 298 check+check2
+	// calls in a minute and the 99.9th percentile sent 131; AllDebrid peaked at 282, p99.9
+	// 282, and playable at 105. At these budgets 4, 3 and 0 of ~20,000 addresses would
+	// have waited, and the page waits out Retry-After rather than dropping the batch.
+	availability: { name: 'availability', rateLimit: 180, windowSeconds: 60 },
+	availabilityAd: { name: 'availabilityAd', rateLimit: 180, windowSeconds: 60 },
+	playable: { name: 'playable', rateLimit: 120, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;

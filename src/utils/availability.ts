@@ -2,6 +2,26 @@ import { TorrentInfoResponse } from '@/services/types';
 import { isValidHash } from './extractHashes';
 import { generateTokenAndHash } from './token';
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const MAX_REFUSALS = 5;
+
+/**
+ * POSTs to an availability route, waiting out its rate limit: a refused batch is
+ * asked again after Retry-After instead of leaving its hashes looking uncached.
+ */
+export async function postAvailability(
+	url: string,
+	init: RequestInit,
+	wait: (ms: number) => Promise<unknown> = sleep
+): Promise<Response> {
+	for (let refusals = 0; ; refusals++) {
+		const response = await fetch(url, init);
+		if (response.status !== 429 || refusals === MAX_REFUSALS) return response;
+		const seconds = Number(response.headers.get('retry-after')) || 10;
+		await wait(Math.min(seconds, 60) * 1000);
+	}
+}
+
 export async function submitAvailability(
 	dmmProblemKey: string,
 	solution: string,
@@ -51,7 +71,7 @@ export async function checkAvailability(
 		if (validHashes.length === 0) {
 			return { available: [] } as any;
 		}
-		const response = await fetch('/api/availability/check', {
+		const response = await postAvailability('/api/availability/check', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -93,7 +113,7 @@ export async function checkAvailabilityByHashes(
 		if (validHashes.length === 0) {
 			return { available: [] } as any;
 		}
-		const response = await fetch('/api/availability/check2', {
+		const response = await postAvailability('/api/availability/check2', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -248,7 +268,7 @@ export async function checkAvailabilityAd(
 			return { available: [] } as any;
 		}
 
-		const response = await fetch('/api/availability/ad/check', {
+		const response = await postAvailability('/api/availability/ad/check', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -293,7 +313,7 @@ export async function checkAvailabilityAdByHashes(
 			return { available: [] } as any;
 		}
 
-		const response = await fetch('/api/availability/ad/check2', {
+		const response = await postAvailability('/api/availability/ad/check2', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -343,7 +363,7 @@ export async function checkPlayableCachedHashes(
 ): Promise<string[]> {
 	const validHashes = hashes.filter(isValidHash);
 	if (validHashes.length === 0) return [];
-	const response = await fetch('/api/availability/playable', {
+	const response = await postAvailability('/api/availability/playable', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ dmmProblemKey, solution, service, hashes: validHashes }),

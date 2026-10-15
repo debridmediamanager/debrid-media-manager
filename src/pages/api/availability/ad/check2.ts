@@ -1,3 +1,4 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -10,7 +11,7 @@ function isValidTorrentHash(hash: string): boolean {
 // AllDebrid availability by hashes, no IMDb ID constraint — mirrors
 // /api/availability/check2 for Real-Debrid. The hashlist page has no single
 // IMDb ID to scope by, so it cannot use /api/availability/ad/check.
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
@@ -60,3 +61,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to check available hashes' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.availabilityAd);
