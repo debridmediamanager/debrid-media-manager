@@ -15,6 +15,7 @@ import embyHandler from '@/pages/api/emby-plugins/[...route]';
 import pluginsHandler from '@/pages/api/plugins/[...route]';
 import sponsorAvailabilityHandler from '@/pages/api/sponsor/availability';
 import sponsorIdentifyHandler from '@/pages/api/sponsor/identify';
+import sponsorMediaInfoHandler from '@/pages/api/sponsor/mediainfo';
 import torrentsIdentifyHandler from '@/pages/api/torrents/identify';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -60,6 +61,16 @@ describe('rate limits on the documented API', () => {
 				await servedBeforeRefusal(
 					sponsorAvailabilityHandler,
 					'/api/sponsor/availability',
+					'POST'
+				),
+				100
+			)
+		).toBe(2500);
+		expect(
+			perMinute(
+				await servedBeforeRefusal(
+					sponsorMediaInfoHandler,
+					'/api/sponsor/mediainfo',
 					'POST'
 				),
 				100

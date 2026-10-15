@@ -284,3 +284,33 @@ export function publicMediaInfo(payload: unknown): MediaInfoResponse | null {
 	}
 	return null;
 }
+
+// storedProbes is each file's probe in a stored snapshot with the path and size
+// it was taken of, so a caller can match them to its own copy of the release.
+// Entries without a path or size (legacy worker rows) cannot be matched and are
+// left out.
+export function storedProbes(
+	payload: unknown
+): Record<string, { path: string; bytes: number; MediaInfo: Record<string, unknown> }> {
+	const files: Record<
+		string,
+		{ path: string; bytes: number; MediaInfo: Record<string, unknown> }
+	> = {};
+	const selectedFiles = isRecord(payload)
+		? (payload.SelectedFiles ?? payload.selectedFiles)
+		: null;
+	if (!isRecord(selectedFiles)) return files;
+	for (const [key, entry] of Object.entries(selectedFiles)) {
+		if (!isRecord(entry) || typeof entry.path !== 'string' || typeof entry.bytes !== 'number') {
+			continue;
+		}
+		const mediaInfo = entry.MediaInfo ?? entry.mediaInfo;
+		if (!isRecord(mediaInfo)) continue;
+		files[key] = {
+			path: entry.path,
+			bytes: entry.bytes,
+			MediaInfo: withoutProbeSource(mediaInfo),
+		};
+	}
+	return files;
+}

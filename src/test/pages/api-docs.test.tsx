@@ -31,6 +31,7 @@ const SPONSOR_ONLY = [
 	'/api/emby-plugins/',
 	'/api/sponsor/identify',
 	'/api/sponsor/availability',
+	'/api/sponsor/mediainfo',
 	'/api/torrents/identify',
 	'/api/zurg/search-torrents',
 	'/api/zurg/show-info',

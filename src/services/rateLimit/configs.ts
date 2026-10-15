@@ -49,9 +49,10 @@ export const RATE_LIMIT_CONFIGS = {
 	libraryIdentify: { name: 'libraryIdentify', rateLimit: 10, windowSeconds: 60 },
 	// The sponsor API caps an address at 2,500 items a minute on each endpoint. The
 	// limiter counts calls, so each budget is 2,500 over the endpoint's batch cap:
-	// 500 filenames per identify call, 100 hashes per availability call.
+	// 500 filenames per identify call, 100 hashes per availability and mediainfo call.
 	sponsorIdentify: { name: 'sponsorIdentify', rateLimit: 5, windowSeconds: 60 },
 	sponsorAvailability: { name: 'sponsorAvailability', rateLimit: 25, windowSeconds: 60 },
+	sponsorMediaInfo: { name: 'sponsorMediaInfo', rateLimit: 25, windowSeconds: 60 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
 	// rows in one request precisely so the browser does not walk `torrents` once
 	// per season at 1-per-2s, which for a twenty-season show is forty seconds of

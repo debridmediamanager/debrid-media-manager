@@ -121,6 +121,13 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 			},
 			{
 				method: 'POST',
+				path: '/api/sponsor/mediainfo',
+				what: 'The ffprobe output zurg users have already shared for each release hash: streams, codecs, languages and duration per file, with the path and size it was taken of, so your tools need not download anything to read them. Hashes nobody has probed are left out. Up to 100 hashes a call.',
+				auth: 'x-api-key header',
+				limit: perMinute(RATE_LIMIT_CONFIGS.sponsorMediaInfo, 'calls'),
+			},
+			{
+				method: 'POST',
 				path: '/api/torrents/identify',
 				what: 'Looks up the title DMM already has on record for each release hash, without reading any filename. Hashes DMM has never seen are left out, so use /api/sponsor/identify for those. Up to 500 hashes a call.',
 				auth: 'x-api-key header',
