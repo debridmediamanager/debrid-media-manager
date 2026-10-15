@@ -109,4 +109,18 @@ describe('/api-docs', () => {
 			).toBeInTheDocument();
 		}
 	});
+
+	it('links the metadata endpoints to the open spec', () => {
+		render(<ApiDocsPage />);
+		for (const path of ['/api/metadata/<id>', '/api/metadata/search']) {
+			expect(
+				within(screen.getByTestId(`endpoint-${path}`)).getByRole('link', {
+					name: 'Metadata API',
+				})
+			).toHaveAttribute(
+				'href',
+				'https://github.com/debridmediamanager/debrid-media-manager/blob/main/docs/metadata-api.md'
+			);
+		}
+	});
 });

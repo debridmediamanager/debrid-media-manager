@@ -34,6 +34,10 @@ const {
 	metadata,
 } = RATE_LIMIT_CONFIGS;
 
+// The open spec any provider can implement, DMM's endpoints among them.
+const METADATA_SPEC =
+	'https://github.com/debridmediamanager/debrid-media-manager/blob/main/docs/metadata-api.md';
+
 const perAddress = `${RATE_LIMIT_CONFIGS.default.rateLimit} requests per second`;
 
 const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
@@ -149,6 +153,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				what: "Everything DMM's metadata sources say about one title, named as imdb:tt0852863, tmdb:tv:1877 or tmdb:movie:603: each source's own answer (TMDB, Trakt, mdblist, Cinemeta, OMDb, TVmaze) beside DMM's merge of them. ?season=N adds TMDB's episode list for that season, &episode=N that episode, and ?sources=tmdb answers TMDB's records alone.",
 				auth: 'x-api-key header',
 				limit: `${perMinute(metadata, 'calls')} per key, shared with search`,
+				guide: { href: METADATA_SPEC, label: 'Metadata API' },
 			},
 			{
 				method: 'GET',
@@ -156,6 +161,7 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				what: 'Candidates for a title by name: ?query=Smallville&type=show&year=2001 (type movie or show, year optional). Read each one through /api/metadata/tmdb:{movie|tv}:N.',
 				auth: 'x-api-key header',
 				limit: `${perMinute(metadata, 'calls')} per key, shared with /api/metadata/<id>`,
+				guide: { href: METADATA_SPEC, label: 'Metadata API' },
 			},
 		].map((endpoint) => ({ ...endpoint, sponsor: true })),
 	},
