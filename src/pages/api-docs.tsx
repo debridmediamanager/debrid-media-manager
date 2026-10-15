@@ -24,8 +24,15 @@ type Endpoint = {
 const perMinute = (config: { rateLimit: number; windowSeconds: number }, unit: string) =>
 	`${config.rateLimit} ${unit} per ${config.windowSeconds === 60 ? 'minute' : `${config.windowSeconds}s`}`;
 
-const { newznabSearch, newznabGrab, newznabGrabDay, torznabSearch, zurg, identifyHashes } =
-	RATE_LIMIT_CONFIGS;
+const {
+	newznabSearch,
+	newznabGrab,
+	newznabGrabDay,
+	torznabSearch,
+	zurg,
+	identifyHashes,
+	metadata,
+} = RATE_LIMIT_CONFIGS;
 
 const perAddress = `${RATE_LIMIT_CONFIGS.default.rateLimit} requests per second`;
 
@@ -135,6 +142,13 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				what: 'The IMDb id for a TMDB movie or show id.',
 				auth: 'x-api-key header',
 				limit: perMinute(zurg, 'calls'),
+			},
+			{
+				method: 'GET',
+				path: '/api/metadata/tmdb/<TMDB path>',
+				what: "TMDB's own answers, cached by DMM and read with DMM's key: movie/{id}, tv/{id}, tv/{id}/season/{n}, tv/{id}/season/{n}/episode/{n}, {movie|tv}/{id}/external_ids, find/{id} and search/{movie|tv|multi}. The same JSON as api.themoviedb.org/3, so a TMDB client only changes its base URL.",
+				auth: 'x-api-key header',
+				limit: `${perMinute(metadata, 'calls')} per key`,
 			},
 		].map((endpoint) => ({ ...endpoint, sponsor: true })),
 	},

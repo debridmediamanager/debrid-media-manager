@@ -1,3 +1,4 @@
+import type { SponsorLookup } from '@/services/database/sponsors';
 import { repository as db } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,10 +20,22 @@ export async function validateDmmApiKeyHeader(
 	/** Also accept a sponsor's pre-`dmmApiKey` key, for routes that took those keys. */
 	options: { acceptLegacyZurgKey?: boolean } = {}
 ): Promise<boolean> {
+	return (await sponsorOfDmmApiKeyHeader(req, res, options)) !== null;
+}
+
+/**
+ * `validateDmmApiKeyHeader`, answering the sponsorship itself, for a route that
+ * budgets per sponsor rather than per address. Null once the 401 is sent.
+ */
+export async function sponsorOfDmmApiKeyHeader(
+	req: NextApiRequest,
+	res: NextApiResponse,
+	options: { acceptLegacyZurgKey?: boolean } = {}
+): Promise<SponsorLookup | null> {
 	const apiKey = req.headers['x-api-key'];
 	if (!apiKey || typeof apiKey !== 'string') {
 		res.status(401).json({ error: 'Missing x-api-key header' });
-		return false;
+		return null;
 	}
 
 	const sponsor =
@@ -30,7 +43,7 @@ export async function validateDmmApiKeyHeader(
 		(options.acceptLegacyZurgKey ? await db.getSponsorByLegacyZurgKey(apiKey) : null);
 	if (!sponsor) {
 		res.status(401).json({ error: 'Invalid API key' });
-		return false;
+		return null;
 	}
 
 	// Split from "invalid" on purpose: the key is a 64-char sha256 digest, so
@@ -39,8 +52,8 @@ export async function validateDmmApiKeyHeader(
 	// same working key forever.
 	if (!sponsor.isSponsor) {
 		res.status(401).json({ error: 'Sponsorship is no longer active' });
-		return false;
+		return null;
 	}
 
-	return true;
+	return sponsor;
 }

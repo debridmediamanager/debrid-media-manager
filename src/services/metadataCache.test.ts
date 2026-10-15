@@ -570,3 +570,38 @@ describe('MetadataCacheService show providers', () => {
 		expect(spy.mock.calls[0][1]).toBe('tmdb_movie_129_videos,release_dates');
 	});
 });
+
+describe('MetadataCacheService getTmdbPassthrough', () => {
+	// The sponsor metadata API's reads: one cache row per read whatever order the
+	// caller sent its parameters in, and an airing season's list refetched within
+	// the day, since it gains an episode a week.
+	it('keys a read by path and sorted parameters, and refetches a season list after 12 hours', async () => {
+		process.env.TMDB_KEY = 'dmm-key';
+		delete process.env.TMDB_READ_TOKEN;
+		const season = { episodes: [{ episode_number: 1, name: 'Rollercoaster' }] };
+		cacheFactory.current!.getWithMetadata.mockResolvedValue({
+			data: { stale: true },
+			updatedAt: new Date(Date.now() - 13 * 3600000),
+		});
+		axiosMocks.get.mockResolvedValue({ data: season });
+
+		const service = new MetadataCacheService();
+		const result = await service.getTmdbPassthrough('tv/1877/season/1', {
+			language: 'en-US',
+			append_to_response: 'external_ids',
+		});
+
+		expect(result).toEqual(season);
+		expect(cacheFactory.current!.getWithMetadata).toHaveBeenCalledWith(
+			'tmdb_api_tv/1877/season/1?append_to_response=external_ids&language=en-US'
+		);
+		const url = new URL(axiosMocks.get.mock.calls[0][0]);
+		expect(url.pathname).toBe('/3/tv/1877/season/1');
+		expect(url.searchParams.get('api_key')).toBe('dmm-key');
+		expect(cacheFactory.current!.set).toHaveBeenCalledWith(
+			'tmdb_api_tv/1877/season/1?append_to_response=external_ids&language=en-US',
+			'tmdb_api',
+			season
+		);
+	});
+});

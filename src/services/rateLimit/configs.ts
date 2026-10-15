@@ -77,6 +77,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// bucket with the website's own search API, so a sponsor's zurg and their
 	// browser spent one 1-per-2s counter between them.
 	zurg: { name: 'zurg', rateLimit: 20, windowSeconds: 60 },
+	// The sponsor metadata API (`/api/metadata/tmdb/...`), per sponsorship. rex's
+	// start-up pass reads one season list per season of each show it places.
+	metadata: { name: 'metadata', rateLimit: 300, windowSeconds: 60 },
 	zurgAdmin: { name: 'zurgAdmin', rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
 	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Every miss spends a grab from the one indexer account the whole site shares,

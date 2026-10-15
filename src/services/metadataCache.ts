@@ -429,6 +429,42 @@ export class MetadataCacheService {
 	}
 
 	/**
+	 * A TMDB v3 read as TMDB answers it, for the sponsor metadata API
+	 * (`/api/metadata/tmdb/...`). `path` and `params` arrive already allowlisted;
+	 * the key is DMM's own. A season's episode list gains episodes while it airs,
+	 * so it lives as long as an airing show's row; a search an hour.
+	 */
+	async getTmdbPassthrough(path: string, params: Record<string, string>): Promise<any> {
+		const auth = this.requireTmdbAuth();
+		const query = Object.keys(params)
+			.sort()
+			.map((key) => `${key}=${params[key]}`)
+			.join('&');
+		const cacheKey = `tmdb_api_${path}${query ? `?${query}` : ''}`;
+		const maxAge: MaxAge = path.startsWith('search/')
+			? this.CACHE_DURATIONS.SEARCH
+			: path.startsWith('find/')
+				? this.CACHE_DURATIONS.ID_MAPPING
+				: /^tv\/\d+\/season\//.test(path)
+					? this.CACHE_DURATIONS.EPISODE_SCHEDULE
+					: /^tv\/\d+$/.test(path)
+						? this.freshnessMaxAge(tmdbTvReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
+						: /^movie\/\d+$/.test(path)
+							? this.freshnessMaxAge(
+									tmdbMovieReleaseSignals,
+									this.CACHE_DURATIONS.MOVIE
+								)
+							: this.CACHE_DURATIONS.ID_MAPPING;
+		return this.fetchWithCache(
+			tmdbUrl(`/${path}`, params, auth),
+			cacheKey,
+			'tmdb_api',
+			tmdbRequestConfig(auth),
+			maxAge
+		);
+	}
+
+	/**
 	 * Get Trakt trending with caching (short cache for trending data)
 	 */
 	async getTraktTrending(
