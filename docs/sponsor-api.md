@@ -18,7 +18,10 @@ curl -X POST https://debridmediamanager.com/api/sponsor/identify \
 `results` lines up with `items`. Each entry is `{imdbId, title, year, kind}` with
 `kind` either `movie` or `tv`, or `null` when DMM is not sure enough to name it.
 The hash is optional. With it, answers are cached and DMM's own hash map can
-confirm a title. `complete: false` means the identifier was unreachable, so ask
+confirm a title. A file whose episode another file of the same release is titled as, and whose own title names
+nothing TMDB lists, is left unplaced rather than given that episode.
+
+`complete: false` means the identifier was unreachable, so ask
 again later for the `null` rows.
 
 To look up what DMM already has on record for a hash, without a filename, use
@@ -111,12 +114,12 @@ ask TMDB (or `/api/metadata/tmdb:tv:<tmdbId>?season=N`) for that exact episode;
 `episodeEnd` is the last episode of a multi-episode file (`S04E17E18`). Movies and files
 DMM cannot place have `season` and `episode` `null`. `how` says which rule placed a file:
 
-| `how`      | Rule                                                                                                                                                                                                                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tmdb`     | The numbers as the name gives them (`S03E04`, `3x04`, a season folder), where TMDB lists them; or the TMDB episode a file's title names, for packs TMDB numbers by segment (`102a-b - The Fast and the Phineas`) and year-numbered seasons (`MythBusters.S2004E18.Exploding.House`). |
-| `anime`    | An anime cour mapped to TMDB: `Hibike Euphonium 3 - 01` is Sound! Euphonium S3E1, a scene `Jujutsu.Kaisen.S03E03` (TVDB's numbering) is TMDB's S1E50.                                                                                                                                |
-| `imdb`     | IMDb's episode by those numbers, where TMDB has no such episode and TMDB files IMDb's episode under the same show.                                                                                                                                                                   |
-| `absolute` | A number with no season (`One Piece - 1100`), counted through TMDB's seasons.                                                                                                                                                                                                        |
+| `how`      | Rule                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tmdb`     | The TMDB episode a file's title names, when the release numbers in another order than TMDB (`Firefly.S01E01.Serenity` from a DVD-ordered pack is TMDB's S1E11; packs of shows TMDB lists by segment, `102a-b - The Fast and the Phineas`; year-numbered seasons, `MythBusters.S2004E18.Exploding.House`); otherwise the numbers as the name gives them (`S03E04`, `3x04`, a season folder), where TMDB lists them. |
+| `anime`    | An anime cour mapped to TMDB: `Hibike Euphonium 3 - 01` is Sound! Euphonium S3E1, a scene `Jujutsu.Kaisen.S03E03` (TVDB's numbering) is TMDB's S1E50.                                                                                                                                                                                                                                                              |
+| `imdb`     | IMDb's episode by those numbers, where TMDB has no such episode and files IMDb's under the same show; inside a season TMDB has, only when the file's title agrees, and never where it would put a release's files out of their order.                                                                                                                                                                              |
+| `absolute` | A number with no season (`One Piece - 1100`), counted through TMDB's seasons.                                                                                                                                                                                                                                                                                                                                      |
 
 `complete: false` means some releases could not be answered in this call: they ran past
 its time budget, or needed the identifier or TMDB while either was unreachable. Each such
