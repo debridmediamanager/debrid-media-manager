@@ -14,10 +14,13 @@ import {
 	buildAnimeIndex,
 	fansubShaped,
 	fileNumbers,
+	keepImdbOrder,
 	lookupAnime,
 	placeFile,
+	yieldToTitles,
 	type AnimeIndex,
 	type ImdbLookup,
+	type Placement,
 	type PlacementRule,
 } from '@/utils/episodePlacement';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
@@ -272,14 +275,28 @@ async function placeRelease(
 		})),
 		placement.seasons
 	);
-	const files: PlacedFile[] = [];
+	const placed: (Placement | null)[] = [];
 	for (const [at, file] of release.files.entries()) {
-		const placed = numbers[at]
-			? await placeFile(placement, anime, release.name, file.path, numbers[at]!, imdb)
-			: null;
-		files.push(placed ? { path: file.path, ...placed } : unplaced(file.path));
+		placed.push(
+			numbers[at]
+				? await placeFile(placement, anime, release.name, file.path, numbers[at]!, imdb)
+				: null
+		);
 	}
-	return answer(files);
+	return answer(
+		yieldToTitles(keepImdbOrder(numbers, placed)).map((found, at) => {
+			const path = release.files[at].path;
+			return found
+				? {
+						path,
+						season: found.season,
+						episode: found.episode,
+						episodeEnd: found.episodeEnd,
+						how: found.how,
+					}
+				: unplaced(path);
+		})
+	);
 }
 
 /** IMDb's episode by these numbers, and the TMDB episode TMDB's find names for it if it is this show's. */

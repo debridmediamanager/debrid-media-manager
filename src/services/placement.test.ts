@@ -7,6 +7,7 @@ import {
 	type PlacementSources,
 } from '@/services/placement';
 import answers from '@/test/fixtures/placement/answers.json';
+import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
@@ -41,6 +42,61 @@ const sources: PlacementSources = {
 const identify: Identify = async (list) => list.map(({ name }) => recorded.identify[name] ?? null);
 const place = (requests: PlaceRequest[], deadline = Infinity, from = sources, ask = identify) =>
 	placeReleases(requests, ask, from, deadline);
+
+/** Sources answering what a fixture recorded, nothing else. */
+const recordedSources = (r: any): PlacementSources => ({
+	find: async (id) => r.find[id] ?? null,
+	show: async (id) => r.show[id] ?? null,
+	season: async (id, n) => r.season[`${id}/${n}`] ?? null,
+	episodeShow: async (id) => r.episodeShow[id] ?? null,
+	seasonEpisodes: async (show, n) =>
+		new Map(
+			Object.entries(r.seasonEpisodes[`${show}/${n}`] ?? {}).map(([e, t]) => [
+				Number(e),
+				t as string,
+			])
+		),
+	anime: async () => anime,
+});
+
+describe('a pack numbered in another order than TMDB, named by its titles', () => {
+	// Firefly on the zen rig: DVD order, TMDB's aired order, three episodes TMDB files as specials
+	it('places each file on the TMDB episode its title names', async () => {
+		const { releases } = await place(
+			[firefly.request as PlaceRequest],
+			Infinity,
+			recordedSources(firefly.answers)
+		);
+		expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt0303461', tmdbId: 1437 });
+		expect(releases[0].files.map((f) => [f.season, f.episode])).toEqual(firefly.byTitle);
+		expect(releases[0].files.every((f) => f.how === 'tmdb')).toBe(true);
+	});
+
+	// The same files with their titles cut (`Firefly.S01E12.1080p.BRRip.AC3.x264-LESS.mkv`):
+	// IMDb's own order, read through TMDB's find, scrambles E12-E14 onto S0E3, S0E1 and S0E2
+	it("leaves files IMDb's order would scramble unplaced when no title can say which is which", async () => {
+		const untitled = {
+			...firefly.request,
+			files: firefly.request.files.map(({ path, folder }) => ({
+				path: path.replace(/(S01E\d\d)\.[\w.]+?(\.1080p)/, '$1$2'),
+				folder,
+			})),
+		};
+		expect(untitled.files[11].path).toBe('Firefly.S01E12.1080p.BRRip.AC3.x264-LESS.mkv');
+		const { releases } = await place(
+			[untitled as PlaceRequest],
+			Infinity,
+			recordedSources(firefly.answers)
+		);
+		const placed = releases[0].files.map((f) => [f.season, f.episode]);
+		expect(placed.slice(0, 11)).toEqual(Array.from({ length: 11 }, (_, n) => [1, n + 1]));
+		expect(placed.slice(11)).toEqual([
+			[null, null],
+			[null, null],
+			[null, null],
+		]);
+	});
+});
 
 describe('placeReleases over real releases', () => {
 	it.each(cases.map((c) => [c.request.files[0].path, c] as const))('%s', async (_, c) => {
@@ -128,6 +184,15 @@ describe('placeReleases over real releases', () => {
 		const second = named('[smol] Monogatari Series Second Season');
 		expect(second.request.imdbId).toBe('tt2922300');
 		expect(second.expect).toMatchObject({ kind: 'tv', imdbId: 'tt1480925', tmdbId: 46195 });
+	});
+
+	it("takes a file its title did not place off an episode another file's title names", async () => {
+		// TMDB's S6E16 is "The One with Unagi", the pack's S06E17
+		const friends = named('Friends.S06');
+		expect(friends.expect.files.map((f) => [f.season, f.episode])).toEqual([
+			[null, null],
+			[6, 16],
+		]);
 	});
 
 	it('reads an episode id as its show and a film id on a release of seasons as a name to identify', async () => {

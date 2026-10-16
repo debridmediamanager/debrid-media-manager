@@ -30,14 +30,14 @@
 					"season": 13,
 					"episode": 423,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				},
 				{
 					"path": "[Anime Time] One Piece - 0424 - Break Through the Crimson Hell! Buggy's Chaos-Inducing Plan!.mkv",
 					"season": 13,
 					"episode": 424,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -727,7 +727,7 @@
 					"season": 1,
 					"episode": 15,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -770,7 +770,7 @@
 					"season": 0,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "imdb"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -1102,50 +1102,7 @@
 					"season": 2,
 					"episode": 18,
 					"episodeEnd": null,
-					"how": "imdb"
-				}
-			]
-		}
-	},
-	{
-		"from": "rex-fun library, 2026-10-16",
-		"request": {
-			"name": "Sesame Street",
-			"hash": null,
-			"imdbId": "tt4366556",
-			"files": [
-				{
-					"path": "Sesame Street - Episode 0131 - Oscar's grandmother visits.mp4",
-					"folder": ""
-				},
-				{
-					"path": "Sesame Street - Episode 0847 - The Wicked Witch of the West loses her broomstick.mp4",
-					"folder": ""
-				}
-			]
-		},
-		"rex": [
-			[1, 131],
-			[1, 847]
-		],
-		"expect": {
-			"kind": "tv",
-			"imdbId": "tt0063951",
-			"tmdbId": 502,
-			"files": [
-				{
-					"path": "Sesame Street - Episode 0131 - Oscar's grandmother visits.mp4",
-					"season": 2,
-					"episode": 1,
-					"episodeEnd": null,
-					"how": "absolute"
-				},
-				{
-					"path": "Sesame Street - Episode 0847 - The Wicked Witch of the West loses her broomstick.mp4",
-					"season": 7,
-					"episode": 52,
-					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -1172,9 +1129,9 @@
 				{
 					"path": "Batman - 066 - Sideshow   [DarkDream].mkv",
 					"season": 2,
-					"episode": 6,
+					"episode": 7,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -1302,6 +1259,150 @@
 					"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
 					"season": 4,
 					"episode": 2,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Friends.S06.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP[rartv]",
+			"hash": null,
+			"imdbId": "tt0108778",
+			"files": [
+				{
+					"path": "Friends.S06E16.The.One.That.Could.Have.Been.Part.2.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
+					"folder": "Friends.S06.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP[rartv]"
+				},
+				{
+					"path": "Friends.S06E17.The.One.with.Unagi.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
+					"folder": "Friends.S06.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP[rartv]"
+				}
+			]
+		},
+		"rex": [
+			[6, 16],
+			[6, 17]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0108778",
+			"tmdbId": 1668,
+			"files": [
+				{
+					"path": "Friends.S06E16.The.One.That.Could.Have.Been.Part.2.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Friends.S06E17.The.One.with.Unagi.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
+					"season": 6,
+					"episode": 16,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[McBalls] Neon Genesis Evangelion (BD 1080p Hi10 FLAC)",
+			"hash": null,
+			"imdbId": "tt0781951",
+			"files": [
+				{
+					"path": "[McBalls] Neon Genesis Evangelion - S01E26 - The Beast that Shouted 'Love' at the Heart of the World (BD 1080p Hi10 FLAC) [2D25B49C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 26]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0112159",
+			"tmdbId": 890,
+			"files": [
+				{
+					"path": "[McBalls] Neon Genesis Evangelion - S01E26 - The Beast that Shouted 'Love' at the Heart of the World (BD 1080p Hi10 FLAC) [2D25B49C].mkv",
+					"season": 1,
+					"episode": 26,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Would.I.Lie.To.You.S03E09.Unseen.bits.UKTV.WEB-DL.AAC2.0.H.264-BTW",
+			"hash": null,
+			"imdbId": "tt1055238",
+			"files": [
+				{
+					"path": "Would.I.Lie.To.You.S03E09.Unseen.bits.UKTV.WEB-DL.AAC2.0.H.264-BTW.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[3, 9]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1055238",
+			"tmdbId": 4775,
+			"files": [
+				{
+					"path": "Would.I.Lie.To.You.S03E09.Unseen.bits.UKTV.WEB-DL.AAC2.0.H.264-BTW.mkv",
+					"season": 3,
+					"episode": 9,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Power Rangers Time Force (2001) Season 1 S01 (480p DVD x265 HEVC 10bit DD 2.0 EDGE2020)",
+			"hash": null,
+			"imdbId": "tt0106064",
+			"files": [
+				{
+					"path": "Power Rangers - S09E38 - The End of Time (1) (480p x265 EDGE2020).mkv",
+					"folder": "Season 9 - Time Force"
+				},
+				{
+					"path": "Power Rangers - S09E39 - The End of Time (2) (480p x265 EDGE2020).mkv",
+					"folder": "Season 9 - Time Force"
+				}
+			]
+		},
+		"rex": [
+			[9, 38],
+			[9, 39]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0106064",
+			"tmdbId": 2328,
+			"files": [
+				{
+					"path": "Power Rangers - S09E38 - The End of Time (1) (480p x265 EDGE2020).mkv",
+					"season": 9,
+					"episode": 38,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "Power Rangers - S09E39 - The End of Time (2) (480p x265 EDGE2020).mkv",
+					"season": 9,
+					"episode": 39,
 					"episodeEnd": null,
 					"how": "tmdb"
 				}
@@ -1796,7 +1897,7 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				}
 			]
 		}
@@ -1825,7 +1926,7 @@
 					"season": 1,
 					"episode": 17,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "tmdb"
 				}
 			]
 		}

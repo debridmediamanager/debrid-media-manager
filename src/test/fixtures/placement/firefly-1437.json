@@ -1,0 +1,294 @@
+{
+	"answers": {
+		"find": {
+			"tt0303461": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 1437
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0579529": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": [
+					{
+						"show_id": 1437,
+						"season_number": 0,
+						"episode_number": 3
+					}
+				]
+			},
+			"tt0579540": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": [
+					{
+						"show_id": 1437,
+						"season_number": 0,
+						"episode_number": 1
+					}
+				]
+			},
+			"tt0579538": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": [
+					{
+						"show_id": 1437,
+						"season_number": 0,
+						"episode_number": 2
+					}
+				]
+			}
+		},
+		"show": {
+			"1437": {
+				"id": 1437,
+				"name": "Firefly",
+				"original_name": "Firefly",
+				"external_ids": {
+					"imdb_id": "tt0303461"
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 12,
+						"air_date": "2003-06-28"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 11,
+						"air_date": "2002-09-20"
+					}
+				]
+			}
+		},
+		"season": {
+			"1437/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Trash",
+						"air_date": "2003-06-28"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Message",
+						"air_date": "2003-07-15"
+					},
+					{
+						"episode_number": 3,
+						"name": "Heart of Gold",
+						"air_date": "2003-08-19"
+					},
+					{
+						"episode_number": 4,
+						"name": "Here\u2019s How It Was: The Making of \"Firefly\"",
+						"air_date": "2003-12-09"
+					},
+					{
+						"episode_number": 5,
+						"name": "Done the Impossible",
+						"air_date": "2006-07-28"
+					},
+					{
+						"episode_number": 6,
+						"name": "Browncoats Unite",
+						"air_date": "2012-11-11"
+					},
+					{
+						"episode_number": 7,
+						"name": "Adam Baldwin Sings \"Hero of Canton\"",
+						"air_date": "2012-11-13"
+					},
+					{
+						"episode_number": 8,
+						"name": "Alan Tudyk's Audition",
+						"air_date": "2012-11-16"
+					},
+					{
+						"episode_number": 9,
+						"name": "Gag Reel",
+						"air_date": "2012-11-27"
+					},
+					{
+						"episode_number": 10,
+						"name": "Joss Whedon Sings the \"Firefly\" Theme",
+						"air_date": "2012-11-30"
+					},
+					{
+						"episode_number": 11,
+						"name": "Joss Tours the Set",
+						"air_date": "2012-12-02"
+					},
+					{
+						"episode_number": 12,
+						"name": "The 10th Character",
+						"air_date": null
+					}
+				]
+			},
+			"1437/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Train Job",
+						"air_date": "2002-09-20"
+					},
+					{
+						"episode_number": 2,
+						"name": "Bushwhacked",
+						"air_date": "2002-09-27"
+					},
+					{
+						"episode_number": 3,
+						"name": "Our Mrs. Reynolds",
+						"air_date": "2002-10-04"
+					},
+					{
+						"episode_number": 4,
+						"name": "Jaynestown",
+						"air_date": "2002-10-18"
+					},
+					{
+						"episode_number": 5,
+						"name": "Out of Gas",
+						"air_date": "2002-10-25"
+					},
+					{
+						"episode_number": 6,
+						"name": "Shindig",
+						"air_date": "2002-11-01"
+					},
+					{
+						"episode_number": 7,
+						"name": "Safe",
+						"air_date": "2002-11-08"
+					},
+					{
+						"episode_number": 8,
+						"name": "Ariel",
+						"air_date": "2002-11-15"
+					},
+					{
+						"episode_number": 9,
+						"name": "War Stories",
+						"air_date": "2002-12-06"
+					},
+					{
+						"episode_number": 10,
+						"name": "Objects in Space",
+						"air_date": "2002-12-13"
+					},
+					{
+						"episode_number": 11,
+						"name": "Serenity",
+						"air_date": "2002-12-20"
+					}
+				]
+			}
+		},
+		"episodeShow": {},
+		"seasonEpisodes": {
+			"tt0303461/1": {
+				"1": "tt0579539",
+				"2": "tt0579528",
+				"3": "tt0579532",
+				"4": "tt0579530",
+				"5": "tt0579533",
+				"6": "tt0579537",
+				"7": "tt0579534",
+				"8": "tt0579527",
+				"9": "tt0579541",
+				"10": "tt0579531",
+				"11": "tt0579535",
+				"12": "tt0579529",
+				"13": "tt0579540",
+				"14": "tt0579538"
+			}
+		}
+	},
+	"byTitle": [
+		[1, 11],
+		[1, 1],
+		[1, 2],
+		[1, 6],
+		[1, 7],
+		[1, 3],
+		[1, 4],
+		[1, 5],
+		[1, 8],
+		[1, 9],
+		[0, 1],
+		[0, 2],
+		[0, 3],
+		[1, 10]
+	],
+	"request": {
+		"name": "Firefly.S01.COMPLETE.REPACK.1080p.BRRip.AC3.x264-LESS",
+		"hash": null,
+		"imdbId": "tt0303461",
+		"files": [
+			{
+				"path": "Firefly.S01E01.Serenity.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E02.The.Train.Job.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E03.Bushwhacked.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E04.Shindig.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E05.Safe.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E06.Our.Mrs.Reynolds.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E07.Jaynestown.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E08.Out.of.Gas.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E09.Ariel.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E10.War.Stories.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E11.Trash.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E12.The.Message.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E13.Heart.of.Gold.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Firefly.S01E14.Objects.in.Space.1080p.BRRip.AC3.x264-LESS.mkv",
+				"folder": ""
+			}
+		]
+	},
+	"source": "Firefly.S01.COMPLETE.REPACK.1080p.BRRip.AC3.x264-LESS on the zen end-to-end rig (2026-10-16, real RD account): file names from its .zurgtorrent; TMDB show 1437 (details, seasons 0 and 1) and the finds for IMDb tt0303461 and its S1E12-E14 through DMM /api/metadata ?sources=tmdb; IMDb season 1 from dmmdb imdb_title_episode. The files are numbered in DVD order and named by title; TMDB lists aired order and files Trash, The Message and Heart of Gold as specials."
+}

@@ -1,6 +1,6 @@
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
-import { fileNumbers, normalizeTitle } from '@/utils/episodePlacement';
+import { fileNumbers, normalizeTitle, titleText } from '@/utils/episodePlacement';
 import { describe, expect, it } from 'vitest';
 
 type Case = {
@@ -84,5 +84,23 @@ describe('normalizeTitle', () => {
 	it('keeps letters and digits of any script, words split on everything else', () => {
 		expect(normalizeTitle('Hibike! Euphonium 3')).toBe('hibike euphonium 3');
 		expect(normalizeTitle('Gintama°: Aizome Kaori-hen')).toBe('gintama aizome kaori hen');
+	});
+});
+
+describe('titleText', () => {
+	// what follows the episode token of real files, from rex-fun's library and the zen rig
+	it('reads the title up to where the release tags begin, or nothing when only tags follow', () => {
+		expect(titleText('.Serenity.1080p.BRRip.AC3.x264-LESS.mkv')?.whole).toBe('serenity');
+		// `Bricks` is no BRRip
+		expect(titleText('.Barrel.of.Bricks.1080p.Rus.Eng.mkv')?.whole).toBe('barrel of bricks');
+		expect(titleText(' - The End of Time (2) (480p x265 EDGE2020).mkv')?.whole).toBe(
+			'the end of time 2'
+		);
+		expect(titleText(' - One of Us; Vanishing Act.mkv')).toEqual({
+			whole: 'one of us vanishing act',
+			first: 'one of us',
+		});
+		expect(titleText('.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv')).toBeNull();
+		expect(titleText(' END (2160p).mp4')).toBeNull();
 	});
 });

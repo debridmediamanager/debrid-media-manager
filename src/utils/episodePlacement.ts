@@ -37,6 +37,8 @@ export interface FileNumbers {
 	borrowed?: true;
 	/** The number is a pack's running code (`102a-b - …`, `14. …`), not the name's episode. */
 	coded?: true;
+	/** The release numbers this season from its start, so a number past its end is not the show's. */
+	fromStart?: true;
 }
 
 export interface TmdbSeason {
@@ -66,6 +68,8 @@ export interface Placement {
 	episode: number;
 	episodeEnd: number | null;
 	how: PlacementRule;
+	/** The file's own title named this episode (not part of the API's answer). */
+	titled?: true;
 }
 
 /** TMDB's season and episode for IMDb's episode of the show by these numbers, if TMDB files it under that show. */
@@ -563,6 +567,11 @@ export async function placeFile(
 	const file = path.split('/').pop() ?? path;
 	const mapped = anime?.byShow.has(show.tmdbId) ? anime : null;
 
+	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
+	const titledAt = await byName(show, numbers, file);
+	const byTitle = titledAt && (await placed(titledAt, 'tmdb'));
+	if (byTitle) return { ...byTitle, titled: true };
+
 	// a fansub name its title maps; otherwise the name's numbers are its own (scene) ones
 	let scene = true;
 	// whether the number may be counted through the show's seasons (`absolute`)
@@ -588,22 +597,31 @@ export async function placeFile(
 		if (found) return found;
 	}
 	if (season !== null) {
-		const titled =
-			numbers.coded || numbers.borrowed ? await byTitle(show, season, file, numbers) : null;
-		const named = await placed(titled ? [season, titled] : [season, episode], 'tmdb');
+		const named = await placed([season, episode], 'tmdb');
 		if (named) return named;
 		if (season >= 1900) {
 			const year = await ofYear(show, season, file);
 			const found = year && (await placed(year, 'tmdb'));
 			if (found) return found;
 		}
+		// A file's title must agree with the episode IMDb's numbers lead to inside a season TMDB
+		// has (`Friends.S06E24.The.One.with.the.Proposal.Part.1` is TMDB's S6E23); an untitled
+		// one is checked against its release's other files by `keepImdbOrder`.
 		if (imdb && !namesASubtitle(release, show)) {
+			const title = counts.has(season) ? titleOf(file, numbers) : null;
 			const found = await imdb(season, episode);
-			const answer = found && (await placed(found, 'imdb'));
+			const name =
+				found && title
+					? (await show.episodes(found[0]))?.find((row) => row.episode === found[1])?.name
+					: null;
+			const answer =
+				found && (!title || (name && agrees(title, name))) && (await placed(found, 'imdb'));
 			if (answer) return answer;
 		}
 	}
-	return counted ? absolute(show, season, episode, Boolean(mapped), placed) : null;
+	return counted && !numbers.fromStart
+		? absolute(show, season, episode, Boolean(mapped), placed)
+		: null;
 }
 
 /**
@@ -625,8 +643,10 @@ async function ofYear(
 		return row.season === 0 || started === year || started === year - 1;
 	});
 	const lists = await Promise.all(aired.map((row) => show.episodes(row.season)));
+	const title = titleText(file.slice(token.index + token[0].length));
+	if (!title) return null;
 	const found = titled(
-		file.slice(token.index + token[0].length),
+		title,
 		aired.flatMap((row, n) =>
 			(lists[n] ?? [])
 				.filter((item) => item.airDate?.startsWith(String(year)))
@@ -636,44 +656,196 @@ async function ofYear(
 	return found ? [found.season, found.episode] : null;
 }
 
-/** The candidate whose whole name (6 letters or more) the title starts with, the longest when several do. */
-function titled<T extends { name: string }>(title: string, candidates: T[]): T | null {
-	const text = fold(title.replace(EXTENSION, '').replace(BRACKETS, ' '));
-	const named = candidates
-		.map((item) => ({ item, name: fold(item.name) }))
-		.filter(({ name }) => name.length >= 6 && text.startsWith(name))
-		.sort((a, b) => b.name.length - a.name.length);
-	return named.length && named[0].name.length > (named[1]?.name.length ?? 0)
-		? named[0].item
-		: null;
+/** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */
+const words = (text: string) =>
+	text
+		.toLowerCase()
+		.replace(/['’`]/g, '')
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter(Boolean);
+// TMDB's placeholders name no episode: `Episode 5` is in every season of some shows
+const GENERIC = /^(?:episode|ep|part|chapter|folge|episodio|capitulo) \d+$/;
+const wordsOf = new WeakMap<object, string>();
+
+// What a release puts after the episode in place of a title, or after its title.
+const RELEASE_WORDS =
+	/^(?:proper|repack|rerip|real|internal|extended|uncut|uncensored|remastered|dubbed|subbed|multi|dual|end|fin|final)$/;
+const TAGS =
+	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
+// What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
+// Olga Gets Engaged`, `One of Us; Vanishing Act`, `Pup Pup Boogie + Pups in a Fog`, `The Magic
+// Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
+const SEGMENT = /\s+[-+]\s+|;|\.\s|__|--|[[(]/;
+const LEADING_MARKS = /^[\s._\-)\]]*(?:[[(][^\])]*[\])][\s._-]*)*/;
+
+/**
+ * A title as a file names it, the whole and its first segment, each cut where the release's
+ * tags begin (`Serenity.1080p.BRRip` is "serenity"); null when what follows the number is
+ * tags alone (`S01E05.1080p.WEB.H264-GRP`).
+ */
+export function titleText(raw: string): { whole: string; first: string } | null {
+	const cut = (text: string) => {
+		const list = words(text);
+		while (list.length && RELEASE_WORDS.test(list[0])) list.shift();
+		const end = list.findIndex((word) => TAGS.test(word));
+		return (end < 0 ? list : list.slice(0, end)).join(' ');
+	};
+	const rest = raw.replace(EXTENSION, '').replace(LEADING_MARKS, '');
+	const whole = cut(rest);
+	return whole ? { whole, first: cut(rest.split(SEGMENT)[0]) } : null;
+}
+
+/**
+ * The one candidate titled as the file is, word for word (so `The Beast that Shouted 'Love'`
+ * is no "The Beast"): by its whole title, else by its first segment. Null when none is, or
+ * two are (a "Pilot" in the specials and in season 1).
+ */
+function titled<T extends { name: string }>(
+	title: { whole: string; first: string },
+	candidates: T[]
+): T | null {
+	const keys = candidates.map((item) => {
+		if (!wordsOf.has(item)) wordsOf.set(item, words(item.name).join(' '));
+		const name = wordsOf.get(item)!;
+		const usable = name.replace(/ /g, '').length >= 3 && !GENERIC.test(name);
+		// spacing aside (`Bulletproof.Water` is "Bullet Proof Water"), and a part TMDB numbers
+		// that the file does not (`Pirate.Special` is "Pirate Special (1)")
+		return usable
+			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, '')]
+			: ['', ''];
+	});
+	for (const text of new Set([title.whole, title.first])) {
+		const key = text.replace(/ /g, '');
+		for (const form of [0, 1]) {
+			const found = candidates.filter((_, n) => keys[n][form] === key);
+			if (found.length) return found.length === 1 ? found[0] : null;
+		}
+	}
+	return null;
+}
+
+const PART = / (?:part |pt )?\d{1,2}$/;
+
+/**
+ * Whether the episode at a file's number is titled as the file is, one title holding the
+ * other: `Would.I.Lie.To.You.S03E09.Unseen.bits` is TMDB's S3E9 "The Unseen Bits (Series 3)",
+ * not S17E10 "Unseen Bits".
+ */
+function agrees(title: { whole: string; first: string }, name: string): boolean {
+	// part numbers aside: `Chuck.Versus.the.Ring.2` is "Chuck Versus the Ring: Part 2"
+	const bare = (text: string) => ` ${text.replace(PART, '')} `;
+	const named = bare(words(name).join(' '));
+	const usable = (text: string) => text.replace(/ /g, '').length >= 3;
+	// the file's title inside TMDB's, or TMDB's inside the file's first segment: a pack file's
+	// second segment (`102a-b - The Fast and the Phineas; Lawn Gnome Beach Party of Terror`) is
+	// not the episode at its number
+	return (
+		[title.whole, title.first].some((text) => usable(text) && named.includes(bare(text))) ||
+		(usable(title.first) && bare(title.first).includes(named))
+	);
 }
 
 // What a pack's file name says before its title: `14. `, `1.01. `, `101a-b - `, `237-8 - `, `-01 `.
 const TITLE_LEAD = /^-?\d+(?:\.\d+)?(?:[a-z](?:-[a-z])?|-\d{1,2})?\.?\s*(?:-\s+)?/;
+// The episode token of a scene name, and further episodes of a multi-episode file after it.
+const SCENE_TOKEN =
+	/(?:^|[^a-z0-9])(?:s\d{1,2}[\s._-]*e\d{1,3}|\d{1,2}x\d{1,3}|s?(?:19|20)\d{2}[xe]\d{2})(?![0-9])/i;
+const MORE_EPISODES = /^(?:[\s._-]*-?[\s._-]*e\d{1,3}(?![0-9]))*/i;
+
+/** The title a file's name carries after its episode token, its code or its number. */
+function titleOf(file: string, numbers: FileNumbers): { whole: string; first: string } | null {
+	const stem = file.replace(EXTENSION, '');
+	// a group's bracket is no episode token (`[0x539]`); it can be the number (`[Episode 19] …`)
+	const grouped = stem.match(LEADING_GROUPS)?.[0].length ?? 0;
+	const token = SCENE_TOKEN.exec(stem.slice(grouped));
+	const number = new RegExp(`(?<!\\d)0*${numbers.episode}(?!\\d)`).exec(stem);
+	const rest = token
+		? stem.slice(grouped + token.index + token[0].length).replace(MORE_EPISODES, '')
+		: numbers.coded
+			? stem.replace(TITLE_LEAD, '')
+			: number
+				? stem.slice(number.index + number[0].length)
+				: '';
+	return titleText(rest);
+}
 
 /**
- * The TMDB episode a pack's file is titled as, in its season. TMDB files Courage the
- * Cowardly Dog, Phineas and Ferb and PAW Patrol by their 11-minute segments and their packs
- * by the half hour: `S1 (2007-9)/102a-b - The Fast and the Phineas; Lawn Gnome Beach Party`
- * is TMDB's episode "The Fast and the Phineas", not S1E2. The file's title must start with
- * one episode's whole name, the longest when several do. Only a number that is no name's own
- * notation is read so: a scene release's S02E05 is its own.
+ * The TMDB episode a file's title names when the episode at its number is titled otherwise:
+ * the named season's, else one of any season, specials included. Firefly's pack numbers its
+ * files in DVD order (`S01E01.Serenity`, `S01E11.Trash`), TMDB in aired order with three
+ * episodes as specials; TMDB files Phineas and Ferb by segment and its packs by the half hour
+ * (`S1 (2007-9)/102a-b - The Fast and the Phineas`). A title that matches nothing, or two
+ * episodes alike, leaves the number to the other rules.
  */
-async function byTitle(
+async function byName(
 	show: PlacementShow,
-	season: number,
-	file: string,
-	numbers: FileNumbers
-): Promise<number | null> {
-	// a pack's code leads its title; a name that borrowed its season has its title after the
-	// number: `Season 2/Episode 17 Climax` is My Hero Academia's S2E4 "Climax"
-	const after = new RegExp(`(?<!\\d)0*${numbers.episode}(?!\\d)`).exec(file);
-	const title = numbers.coded
-		? file.replace(TITLE_LEAD, '')
-		: after
-			? file.slice(after.index + after[0].length)
-			: '';
-	return titled(title, (await show.episodes(season)) ?? [])?.episode ?? null;
+	numbers: FileNumbers,
+	file: string
+): Promise<[number, number] | null> {
+	const title = titleOf(file, numbers);
+	if (!title) return null;
+	const { season, episode } = numbers;
+	const listed = season === null ? null : await show.episodes(season);
+	const at = listed?.find((row) => row.episode === episode);
+	if (at && agrees(title, at.name)) return [season!, episode];
+	const inSeason = listed && titled(title, listed);
+	if (inSeason) return [season!, inSeason.episode];
+	const others = await Promise.all(
+		show.seasons
+			.filter((row) => row.season !== season)
+			.map(async (row) =>
+				((await show.episodes(row.season)) ?? []).map((item) => ({
+					...item,
+					season: row.season,
+				}))
+			)
+	);
+	const anywhere = titled(title, others.flat());
+	return anywhere ? [anywhere.season, anywhere.episode] : null;
+}
+
+/**
+ * A release's placements with every file its title did not place taken off an episode a
+ * file's title did: Friends' `S06E17.The.One.with.Unagi` is TMDB's S6E16, so the pack's
+ * `S06E16.The.One.That.Could.Have.Been.Part.2` is not, and its numbers place it nowhere.
+ */
+export function yieldToTitles(placements: (Placement | null)[]): (Placement | null)[] {
+	const key = (p: Placement) => `${p.season}|${p.episode}`;
+	const named = new Set(placements.flatMap((p) => (p?.titled ? [key(p)] : [])));
+	return placements.map((p) => (p && !p.titled && named.has(key(p)) ? null : p));
+}
+
+/**
+ * A release's placements with those the IMDb rule made taken back where they do not keep its
+ * files' order. IMDb's order is not every release's: Firefly's DVD-ordered `S01E12`-`E14` (The
+ * Message, Heart of Gold, Objects in Space) are IMDb's Heart of Gold, Trash and The Message,
+ * which TMDB files as S0E3, S0E1 and S0E2; read by IMDb's numbers they come out scrambled.
+ */
+export function keepImdbOrder(
+	numbers: (FileNumbers | null)[],
+	placements: (Placement | null)[]
+): (Placement | null)[] {
+	const bySeason = new Map<number | null, number[]>();
+	placements.forEach((p, at) => {
+		if (p?.how !== 'imdb') return;
+		const season = numbers[at]?.season ?? null;
+		bySeason.set(season, [...(bySeason.get(season) ?? []), at]);
+	});
+	const refused = new Set<number>();
+	for (const ats of bySeason.values()) {
+		const ordered = [...ats].sort((a, b) => numbers[a]!.episode - numbers[b]!.episode);
+		const keepsOrder = ordered.every((at, n) => {
+			if (n === 0) return true;
+			const [was, now] = [placements[ordered[n - 1]]!, placements[at]!];
+			return (
+				numbers[ordered[n - 1]]!.episode === numbers[at]!.episode ||
+				now.season > was.season ||
+				(now.season === was.season && now.episode > was.episode)
+			);
+		});
+		if (!keepsOrder) ats.forEach((at) => refused.add(at));
+	}
+	return placements.map((p, at) => (refused.has(at) ? null : p));
 }
 
 /**
@@ -695,15 +867,33 @@ export function absoluteFolders(
 		const at = key(file);
 		if (at) lowest.set(at, Math.min(lowest.get(at) ?? Infinity, file.numbers!.episode));
 	}
-	return files.map((file) => {
-		const at = key(file);
-		if (!at) return file.numbers;
-		const before = seasons
-			.filter((row) => row.season > 0 && row.season < file.numbers!.season!)
+	const before = (season: number) =>
+		seasons
+			.filter((row) => row.season > 0 && row.season < season)
 			.reduce((sum, row) => sum + row.episodes, 0);
-		return before > 0 && lowest.get(at) === before + 1
-			? { ...file.numbers!, season: null }
-			: file.numbers;
+	// the release's lowest number in each season it names, among files numbered alike: Clannad's
+	// `S02E22` beside `S02E23` numbers season 2 from its start, so E23 is no 23rd episode of the
+	// show; Monster Rancher's `Season 3/… - 53v2 - …` beside `s03e02` is counted through it
+	const alike = (n: FileNumbers) => `${n.season}|${n.borrowed ? 'folder' : 'name'}`;
+	const first = new Map<string, number>();
+	for (const { numbers } of files) {
+		if (numbers?.season) {
+			first.set(
+				alike(numbers),
+				Math.min(first.get(alike(numbers)) ?? Infinity, numbers.episode)
+			);
+		}
+	}
+	return files.map((file) => {
+		const numbers = file.numbers;
+		if (!numbers || numbers.season === null) return numbers;
+		const earlier = before(numbers.season);
+		const at = key(file);
+		if (at && earlier > 0 && lowest.get(at) === earlier + 1)
+			return { ...numbers, season: null };
+		return numbers.season > 1 && first.get(alike(numbers))! <= earlier
+			? { ...numbers, fromStart: true }
+			: numbers;
 	});
 }
 
