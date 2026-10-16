@@ -1,8 +1,9 @@
 # Sponsor API
 
-Three endpoints for sponsors' own tools. All take your DMM API key in the
-`x-api-key` header and stop working the moment the sponsorship lapses. Each allows
-2,500 items a minute, so send full batches.
+Four endpoints for sponsors' own tools. All take your DMM API key in the
+`x-api-key` header and stop working the moment the sponsorship lapses. The first three
+allow 2,500 items a minute per address; placement is budgeted per sponsorship. Send
+full batches.
 
 ## Identify releases by filename
 
@@ -62,3 +63,61 @@ have to download anything to learn it:
 address it was read from. A probe describes the file at `path` with that exact
 size, so match on both. Hashes nobody has analysed are left out, and so are
 files inside archives and Usenet releases, which zurg does not share.
+
+## Place releases on TMDB
+
+`POST /api/sponsor/place`, up to 100 releases and 2,000 files a call, 60 calls a minute
+per sponsorship wherever your servers run.
+
+```bash
+curl -X POST https://debridmediamanager.com/api/sponsor/place \
+  -H "x-api-key: $DMM_API_KEY" -H 'Content-Type: application/json' \
+  -d '{"releases":[{"name":"[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv","files":[{"path":"[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv","folder":""}]}]}'
+```
+
+Each release is `{name, hash?, imdbId?, files: [{path, folder}]}`: `path` is the file's
+name and `folder` the folder the provider lists it in inside the release (`""` at the
+top). Send `imdbId` when you already know the title; an episode's id is read as its show,
+and one TMDB cannot use (or a film's, for a release whose files name seasons) is set aside
+for the name. Without one, DMM identifies the release by its name as `/api/sponsor/identify`
+does.
+
+```json
+{
+	"complete": true,
+	"releases": [
+		{
+			"kind": "tv",
+			"imdbId": "tt4384306",
+			"tmdbId": 62564,
+			"files": [
+				{
+					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	]
+}
+```
+
+`releases` lines up with the request, and each `files` with its release's. `kind` is
+`movie`, `tv` or `null` when DMM cannot tell; `imdbId` and `tmdbId` are the movie's or
+the show's, never an episode's. `season` and `episode` are TMDB's numbering, so you can
+ask TMDB (or `/api/metadata/tmdb:tv:<tmdbId>?season=N`) for that exact episode;
+`episodeEnd` is the last episode of a multi-episode file (`S04E17E18`). Movies and files
+DMM cannot place have `season` and `episode` `null`. `how` says which rule placed a file:
+
+| `how`      | Rule                                                                                                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tmdb`     | The numbers as the name gives them (`S03E04`, `3x04`, a season folder), where TMDB lists them; or the TMDB episode a file's title names, for packs TMDB numbers by segment (`102a-b - The Fast and the Phineas`) and year-numbered seasons (`MythBusters.S2004E18.Exploding.House`). |
+| `anime`    | An anime cour mapped to TMDB: `Hibike Euphonium 3 - 01` is Sound! Euphonium S3E1, a scene `Jujutsu.Kaisen.S03E03` (TVDB's numbering) is TMDB's S1E50.                                                                                                                                |
+| `imdb`     | IMDb's episode by those numbers, where TMDB has no such episode and TMDB files IMDb's episode under the same show.                                                                                                                                                                   |
+| `absolute` | A number with no season (`One Piece - 1100`), counted through TMDB's seasons.                                                                                                                                                                                                        |
+
+`complete: false` means some releases were not looked at within the call's time budget,
+or needed the identifier while it was unreachable; those are marked `"skipped": true`.
+Send them again later.
