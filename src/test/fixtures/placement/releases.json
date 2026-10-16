@@ -1223,6 +1223,92 @@
 		}
 	},
 	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[iKaos] TFS Dragon Ball Z Abridged Collection",
+			"hash": null,
+			"imdbId": "tt10710138",
+			"files": [
+				{
+					"path": "DBZ Abridged - 013 - Dr. Briefs Made This. In A Cave. WITHABOXOFSCRAPS! [phantop].mkv",
+					"folder": "1 - Mainline Series + Specials/2 - Season 2 + SP1"
+				},
+				{
+					"path": "DBZ Abridged - 025 - Nail Is Piccolo, And So Can You! [phantop].mkv",
+					"folder": "1 - Mainline Series + Specials/2 - Season 2 + SP1"
+				}
+			]
+		},
+		"rex": [
+			[1, 13],
+			[1, 25]
+		],
+		"expect": {
+			"kind": null,
+			"imdbId": "tt10710138",
+			"tmdbId": null,
+			"files": [
+				{
+					"path": "DBZ Abridged - 013 - Dr. Briefs Made This. In A Cave. WITHABOXOFSCRAPS! [phantop].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "DBZ Abridged - 025 - Nail Is Piccolo, And So Can You! [phantop].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)",
+			"hash": null,
+			"imdbId": "tt2922300",
+			"files": [
+				{
+					"path": "[smol] Monogatari - S04E01 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F060A534].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[4, 1],
+			[4, 2]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1480925",
+			"tmdbId": 46195,
+			"files": [
+				{
+					"path": "[smol] Monogatari - S04E01 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F060A534].mkv",
+					"season": 4,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
+					"season": 4,
+					"episode": 2,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
 		"from": "rex tests/fixtures/anime/releases.json",
 		"request": {
 			"name": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",

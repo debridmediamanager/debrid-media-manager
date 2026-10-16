@@ -8825,6 +8825,8 @@
 		"tt0519626": "tt0103359",
 		"tt1185834": null,
 		"tt0458290": null,
+		"tt10710138": null,
+		"tt2922300": null,
 		"tt4384306": null,
 		"tt0434665": null,
 		"tt35437675": null,
@@ -9003,6 +9005,8 @@
 			"tv_results": [{ "id": 4194 }],
 			"tv_episode_results": []
 		},
+		"tt10710138": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+		"tt2922300": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
 		"tt4384306": {
 			"movie_results": [],
 			"tv_results": [{ "id": 62564 }],
@@ -9093,6 +9097,11 @@
 		"[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv": null,
 		"Star.Wars.The.Clone.Wars.-.S02.-.PGor.-.(BD-Remux.1080p.VC-1.Russian.English.AC3-5.1)": {
 			"imdbId": "tt0458290",
+			"kind": "tv"
+		},
+		"[iKaos] TFS Dragon Ball Z Abridged Collection": null,
+		"[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)": {
+			"imdbId": "tt2922300",
 			"kind": "tv"
 		}
 	},

@@ -118,6 +118,10 @@ DMM cannot place have `season` and `episode` `null`. `how` says which rule place
 | `imdb`     | IMDb's episode by those numbers, where TMDB has no such episode and TMDB files IMDb's episode under the same show.                                                                                                                                                                   |
 | `absolute` | A number with no season (`One Piece - 1100`), counted through TMDB's seasons.                                                                                                                                                                                                        |
 
-`complete: false` means some releases were not looked at within the call's time budget,
-or needed the identifier while it was unreachable; those are marked `"skipped": true`.
-Send them again later.
+`complete: false` means some releases could not be answered in this call: they ran past
+its time budget, or needed the identifier or TMDB while either was unreachable. Each such
+release comes back in its slot with `kind`, `imdbId` and `tmdbId` `null` and every file's
+`season`, `episode` and `episodeEnd` `null`, in the request's order, and `"skipped": true`;
+send it again later. A release DMM looked at and could not identify still answers what it
+knows, such as the `imdbId` you sent (an episode's as its show's), so only one DMM knows
+nothing about at all has the skipped shape without being skipped.

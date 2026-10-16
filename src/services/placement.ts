@@ -43,7 +43,7 @@ export interface PlacedRelease {
 	imdbId: string | null;
 	tmdbId: number | null;
 	files: PlacedFile[];
-	/** Not looked at in this request's time budget (or the identifier was unreachable); ask again. */
+	/** Not placed in this request's time budget, or a source could not be asked; ask again. */
 	skipped?: true;
 }
 
@@ -84,17 +84,19 @@ export type Identify = (
 	releases: { name: string; hash: string | null }[]
 ) => Promise<(Identified | null | undefined)[]>;
 
-/** A release's title as TMDB has it. */
+/** What DMM knows of a release's title; `tmdbId` is null where TMDB cannot use the id. */
 interface Title {
-	kind: 'movie' | 'tv';
-	imdbId: string;
-	tmdbId: number;
+	kind: 'movie' | 'tv' | null;
+	imdbId: string | null;
+	tmdbId: number | null;
 }
 
 /**
  * Each release's answer, in order. A release with no IMDb id, or one TMDB cannot use, is
- * named by its name. A release still waiting when `deadline` passes, or whose name could
- * not be asked about, is `skipped` and `complete` is false.
+ * named by its name. A release still waiting when `deadline` passes, or that needed an
+ * identifier or a TMDB answer that could not be had, is skipped: `kind`, `imdbId`, `tmdbId`
+ * and every file's numbers null, which zurg reads as "ask again", and `complete` is false.
+ * A release looked at and not identified answers what DMM does know, such as the id sent.
  */
 export async function placeReleases(
 	releases: PlaceRequest[],
@@ -108,15 +110,19 @@ export async function placeReleases(
 			release.imdbId ? resolve(release.imdbId, null, release, sources) : null
 		)
 	);
-	const ask = releases.flatMap((_, at) => (titles[at] === null ? [at] : []));
+	const ask = releases.flatMap((_, at) =>
+		titles[at] !== undefined && titles[at]?.tmdbId == null ? [at] : []
+	);
 	if (ask.length) {
 		const answers = await identify(ask.map((at) => releases[at]));
 		await Promise.all(
 			ask.map(async (at, n) => {
 				const answer = answers[n];
-				titles[at] = answer
-					? await resolve(answer.imdbId, answer.kind, releases[at], sources)
-					: answer;
+				if (answer === undefined) titles[at] = undefined;
+				else if (answer) {
+					const named = await resolve(answer.imdbId, answer.kind, releases[at], sources);
+					titles[at] = named && { ...named, kind: named.kind ?? answer.kind };
+				}
 			})
 		);
 	}
@@ -133,7 +139,7 @@ export async function placeReleases(
 				titles[at] === undefined ||
 				(!anime && [release.name, ...release.files.map((f) => f.path)].some(fansubShaped));
 			out[at] = waits
-				? { ...nothing(release), skipped: true }
+				? skipped(release)
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
 		}
 	};
@@ -141,32 +147,36 @@ export async function placeReleases(
 	return { releases: out, complete: out.every((release) => !release.skipped) };
 }
 
-function nothing(release: PlaceRequest): PlacedRelease {
+/** The answer zurg reads as "skipped, ask again": nothing known, every file unplaced, in order. */
+function skipped(release: PlaceRequest): PlacedRelease {
 	return {
 		kind: null,
 		imdbId: null,
 		tmdbId: null,
 		files: release.files.map((file) => unplaced(file.path)),
+		skipped: true,
 	};
 }
 
 /**
- * The movie or show an IMDb id names on TMDB, or null when TMDB cannot use it: TMDB's find
- * knows nothing by it, or it is a film while the release's files name seasons (DMM's hash
- * map files Star Wars: The Clone Wars S02 under the 2008 film).
+ * The movie or show an IMDb id names on TMDB. `tmdbId` is null when TMDB cannot use the id:
+ * its find knows nothing by it, or it is a film while the release's files name seasons (DMM's
+ * hash map files Star Wars: The Clone Wars S02 under the 2008 film). Undefined when TMDB could
+ * not be asked.
  */
 async function resolve(
 	given: string,
 	identified: 'movie' | 'tv' | null,
 	release: PlaceRequest,
 	sources: PlacementSources
-): Promise<Title | null> {
+): Promise<Title | undefined> {
 	// DMM's hash map files a season pack under one of its episodes (Arrow's pilot for the series)
 	const show = await sources.episodeShow(given);
 	const imdbId = show ?? given;
 	const found = await sources.find(imdbId);
-	const tv = found?.tv_results?.[0]?.id ?? found?.tv_episode_results?.[0]?.show_id;
-	const movie = found?.movie_results?.[0]?.id;
+	if (!found) return undefined;
+	const tv = found.tv_results?.[0]?.id ?? found.tv_episode_results?.[0]?.show_id;
+	const movie = found.movie_results?.[0]?.id;
 	const seasons = release.files.some(
 		(f) => fileNumbers(release.name, f.folder, f.path, false)?.season != null
 	);
@@ -175,8 +185,8 @@ async function resolve(
 		kind ??= identified ?? (seasons ? 'tv' : 'movie');
 	} else if (typeof tv === 'number') kind = 'tv';
 	else if (typeof movie === 'number' && !seasons) kind = 'movie';
-	const tmdbId = kind === 'movie' ? movie : kind === 'tv' ? tv : null;
-	return kind && typeof tmdbId === 'number' ? { kind, imdbId, tmdbId } : null;
+	const tmdbId = kind === 'movie' ? movie : kind === 'tv' ? tv : undefined;
+	return typeof tmdbId === 'number' ? { kind, imdbId, tmdbId } : { kind, imdbId, tmdbId: null };
 }
 
 async function placeRelease(
@@ -188,13 +198,14 @@ async function placeRelease(
 	let imdbId = title?.imdbId ?? null;
 	let kind: PlacedRelease['kind'] = title?.kind ?? null;
 	let tmdbId: number | null = title?.tmdbId ?? null;
-	if (!title && anime && fansubShaped(release.name)) {
-		// a fansub release nothing identified: the anime index names its show
-		const hit = lookupAnime(anime, release.name, release.files[0]?.path ?? '');
-		if (hit) {
-			kind = 'tv';
-			tmdbId = hit.target.tmdb;
-		}
+	// a fansub release TMDB could not name by its IMDb id: the anime index names its show
+	const hit =
+		tmdbId === null && anime && fansubShaped(release.name)
+			? lookupAnime(anime, release.name, release.files[0]?.path ?? '')
+			: null;
+	if (hit) {
+		kind = 'tv';
+		tmdbId = hit.target.tmdb;
 	}
 	const answer = (files: PlacedFile[]): PlacedRelease => ({ kind, imdbId, tmdbId, files });
 	if (kind !== 'tv' || tmdbId === null) {
@@ -203,9 +214,13 @@ async function placeRelease(
 
 	const showId = tmdbId;
 	const details = await sources.show(showId);
-	if (!details?.seasons) return answer(release.files.map((file) => unplaced(file.path)));
+	// TMDB's show could not be read: ask again rather than answer it unplaced
+	if (!details?.seasons) return skipped(release);
 	const external = details.external_ids?.imdb_id;
-	imdbId ??= typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+	const showImdb = typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+	// the show's own id where the anime index named it: `Monogatari Series Second Season`'s
+	// tt2922300 is a title TMDB files under Monogatari (tt1480925)
+	imdbId = hit ? (showImdb ?? imdbId) : (imdbId ?? showImdb);
 	const lists = new Map<
 		number,
 		Promise<{ episode: number; name: string; airDate: string | null }[] | null>

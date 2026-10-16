@@ -51,14 +51,53 @@ describe('placeReleases over real releases', () => {
 
 	const named = (name: string) => cases.find((c) => c.request.name.startsWith(name))!;
 
-	it('answers skipped, for zurg to ask again, past the time budget', async () => {
-		const { releases, complete } = await place(
-			[named('Family Guy').request as PlaceRequest],
-			0
-		);
+	// zurg reads exactly this as "skipped, ask again next pass" when `complete` is false, and
+	// stores nothing for it
+	const skippedShape = (request: PlaceRequest) => ({
+		kind: null,
+		imdbId: null,
+		tmdbId: null,
+		files: request.files.map(({ path }) => ({
+			path,
+			season: null,
+			episode: null,
+			episodeEnd: null,
+			how: null,
+		})),
+		skipped: true,
+	});
+
+	it('answers a release past the time budget in the shape zurg asks again for, files in order', async () => {
+		const family = named('Family Guy').request as PlaceRequest;
+		const foodWars = named('[Reza] Food Wars').request as PlaceRequest;
+		const { releases, complete } = await place([family, foodWars], 0);
 		expect(complete).toBe(false);
-		expect(releases[0]).toMatchObject({ kind: null, skipped: true });
-		expect(releases[0].files.every((f) => f.season === null)).toBe(true);
+		expect(releases).toEqual([skippedShape(family), skippedShape(foodWars)]);
+	});
+
+	it('answers skipped when TMDB could not be asked', async () => {
+		const family = named('Family Guy').request as PlaceRequest;
+		const down = { ...sources, find: async () => null };
+		expect(await place([family], Infinity, down)).toEqual({
+			releases: [skippedShape(family)],
+			complete: false,
+		});
+		const noShow = { ...sources, show: async () => null };
+		expect((await place([family], Infinity, noShow)).releases[0]).toEqual(skippedShape(family));
+	});
+
+	it('answers a release it looked at and could not identify with the id sent, so it never reads as skipped', async () => {
+		// zurg pushed tt10710138, which TMDB's find knows nothing by, and the identifier names nothing
+		const abridged = named('[iKaos] TFS Dragon Ball Z Abridged');
+		expect(recorded.find[abridged.request.imdbId!]).toEqual({
+			movie_results: [],
+			tv_results: [],
+			tv_episode_results: [],
+		});
+		const { releases, complete } = await place([abridged.request as PlaceRequest]);
+		expect(complete).toBe(true);
+		expect(releases[0]).toMatchObject({ kind: null, imdbId: 'tt10710138', tmdbId: null });
+		expect(releases[0].skipped).toBeUndefined();
 	});
 
 	it('answers skipped when the identifier could not be asked about a name', async () => {
@@ -82,6 +121,13 @@ describe('placeReleases over real releases', () => {
 		});
 		expect(releases[0].skipped).toBe(true);
 		expect(releases[1]).toMatchObject({ kind: 'tv', files: [{ season: 11, episode: 16 }] });
+	});
+
+	it("names a show the anime index found by that show's own IMDb id, never the one sent", async () => {
+		// zurg pushed tt2922300 (Monogatari Series: Second Season), a title TMDB's find knows nothing by
+		const second = named('[smol] Monogatari Series Second Season');
+		expect(second.request.imdbId).toBe('tt2922300');
+		expect(second.expect).toMatchObject({ kind: 'tv', imdbId: 'tt1480925', tmdbId: 46195 });
 	});
 
 	it('reads an episode id as its show and a film id on a release of seasons as a name to identify', async () => {
