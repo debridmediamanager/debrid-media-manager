@@ -132,6 +132,32 @@ export class AnimeService extends DatabaseClient {
 	 * `imdb_id` is unique, so it finds at most one row per IMDb id, and only
 	 * rows with an AniDB id can be linked to.
 	 */
+	/** Every title and alias stored for these AniDB entries, which name fansub releases. */
+	public async getAnimeTitles(
+		anidbIds: number[]
+	): Promise<{ anidbId: number; names: string[] }[]> {
+		if (anidbIds.length === 0) return [];
+		const rows = await this.prisma.anime.findMany({
+			where: { anidb_id: { in: anidbIds } },
+			select: { anidb_id: true, title: true, aliases: true },
+		});
+		return rows.flatMap((row) =>
+			row.anidb_id === null
+				? []
+				: [
+						{
+							anidbId: row.anidb_id,
+							names: [
+								row.title,
+								...(Array.isArray(row.aliases) ? row.aliases : []).filter(
+									(alias): alias is string => typeof alias === 'string'
+								),
+							],
+						},
+					]
+		);
+	}
+
 	public async getAnimeEntryRows({
 		anidbIds,
 		imdbIds,

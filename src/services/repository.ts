@@ -775,6 +775,10 @@ export class Repository {
 		return this.animeService.getAnimeEntryRows(ids);
 	}
 
+	public getAnimeTitles(anidbIds: number[]) {
+		return this.animeService.getAnimeTitles(anidbIds);
+	}
+
 	public getRecentlyUpdatedAnime(take: number) {
 		return this.animeService.getRecentlyUpdatedAnime(take);
 	}
@@ -1367,6 +1371,14 @@ export class Repository {
 
 	public getHashTitleIds(hashes: string[]) {
 		return this.hashImdbService.getHashTitleIds(hashes);
+	}
+
+	public getImdbEpisodeShow(tconst: string) {
+		return this.hashImdbService.getEpisodeShow(tconst);
+	}
+
+	public getImdbSeasonEpisodeIds(show: string, season: number) {
+		return this.hashImdbService.getSeasonEpisodeIds(show, season);
 	}
 
 	public getFilenameIdentifications(keys: { hash: string; titleKey: string }[]) {

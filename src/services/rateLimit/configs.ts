@@ -53,6 +53,9 @@ export const RATE_LIMIT_CONFIGS = {
 	sponsorIdentify: { name: 'sponsorIdentify', rateLimit: 5, windowSeconds: 60 },
 	sponsorAvailability: { name: 'sponsorAvailability', rateLimit: 25, windowSeconds: 60 },
 	sponsorMediaInfo: { name: 'sponsorMediaInfo', rateLimit: 25, windowSeconds: 60 },
+	// The placement API, per sponsorship: up to 100 releases a call, so a 10,000-release
+	// library backfills in under two minutes and zurg's later calls carry only new releases.
+	sponsorPlace: { name: 'sponsorPlace', rateLimit: 60, windowSeconds: 60 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
 	// rows in one request precisely so the browser does not walk `torrents` once
 	// per season at 1-per-2s, which for a twenty-season show is forty seconds of

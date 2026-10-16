@@ -26,18 +26,51 @@ export interface FranchiseEntry {
 	malId: number | null;
 	/** AniList's id, which reaches the entries Kitsu has never mapped. */
 	anilistId: number | null;
+	/** Where TMDB files the entry, for a TMDB show; null for a film or an unmapped entry. */
+	tmdb: AnimeTmdbPlace | null;
+}
+
+/**
+ * The dataset's `themoviedb_id.tv`, `season` and `episode_offset`: TMDB's show, season and
+ * episodes before this entry's first, and the same as TVDB counts them. Hibike! Euphonium 3
+ * is TMDB 62564 season 3; Frieren's second season TMDB's season 1 from episode 29.
+ */
+export interface AnimeTmdbPlace {
+	show: number;
+	/** Null when the dataset names the show and no season: TMDB numbers it absolutely (One Piece). */
+	season: number | null;
+	offset: number;
+	tvdbSeason: number | null;
+	tvdbOffset: number;
 }
 
 export interface FranchiseIndex {
 	byAnidb: Map<number, FranchiseEntry>;
 	/** Every entry naming an IMDb id, ascending by AniDB id. */
 	byImdb: Map<string, number[]>;
+	/** Every entry TMDB files under a show, by that show's TMDB id, ascending by AniDB id. */
+	byTmdbShow: Map<number, number[]>;
 }
 
 const IMDB_ID = /^tt\d+$/;
 
 const positiveInt = (value: unknown): number | null =>
 	typeof value === 'number' && Number.isInteger(value) && value > 0 ? value : null;
+
+const count = (value: unknown): number | null =>
+	typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : null;
+
+function tmdbPlace(item: FribbAnimeEntry): AnimeTmdbPlace | null {
+	const show = positiveInt(item.themoviedb_id?.tv);
+	if (show === null) return null;
+	return {
+		show,
+		season: count(item.season?.tmdb),
+		offset: count(item.episode_offset?.tmdb) ?? 0,
+		tvdbSeason: count(item.season?.tvdb),
+		tvdbOffset: count(item.episode_offset?.tvdb) ?? 0,
+	};
+}
 
 /**
  * Builds the index from the dataset exactly as published. Entries without an
@@ -48,6 +81,7 @@ const positiveInt = (value: unknown): number | null =>
 export function buildFranchiseIndex(raw: readonly FribbAnimeEntry[]): FranchiseIndex {
 	const byAnidb = new Map<number, FranchiseEntry>();
 	const byImdb = new Map<string, number[]>();
+	const byTmdbShow = new Map<number, number[]>();
 
 	for (const item of raw) {
 		const anidbId = positiveInt(item?.anidb_id);
@@ -72,16 +106,23 @@ export function buildFranchiseIndex(raw: readonly FribbAnimeEntry[]): FranchiseI
 			kitsuId: positiveInt(item.kitsu_id),
 			malId: positiveInt(item.mal_id),
 			anilistId: positiveInt(item.anilist_id),
+			tmdb: tmdbPlace(item),
 		});
 		for (const imdbId of imdbIds) {
 			const bucket = byImdb.get(imdbId);
 			if (bucket) bucket.push(anidbId);
 			else byImdb.set(imdbId, [anidbId]);
 		}
+		const show = byAnidb.get(anidbId)!.tmdb?.show;
+		if (show) {
+			const bucket = byTmdbShow.get(show);
+			if (bucket) bucket.push(anidbId);
+			else byTmdbShow.set(show, [anidbId]);
+		}
 	}
 
-	for (const bucket of byImdb.values()) bucket.sort((a, b) => a - b);
-	return { byAnidb, byImdb };
+	for (const bucket of [...byImdb.values(), ...byTmdbShow.values()]) bucket.sort((a, b) => a - b);
+	return { byAnidb, byImdb, byTmdbShow };
 }
 
 /**

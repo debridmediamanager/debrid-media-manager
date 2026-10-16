@@ -1,0 +1,96 @@
+import { buildFranchiseIndex } from '@/services/anime/animeFranchise';
+import type { FribbAnimeEntry } from '@/services/anime/animeMapping';
+import {
+	placeReleases,
+	type Identify,
+	type PlaceRequest,
+	type PlacementSources,
+} from '@/services/placement';
+import answers from '@/test/fixtures/placement/answers.json';
+import cases from '@/test/fixtures/placement/releases.json';
+import { buildAnimeIndex } from '@/utils/episodePlacement';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/services/repository');
+
+/**
+ * Real releases (rex-fun's library on fun, 2026-10-16, and rex's hand-read anime cases) and
+ * every answer placing them needed, recorded from production: TMDB through DMM's metadata
+ * API, IMDb's episodes and the `Anime` titles from dmmdb, the Fribb dataset and manami's
+ * synonyms. See src/test/fixtures/placement/README.md.
+ */
+const recorded = answers as any;
+const anime = buildAnimeIndex(
+	buildFranchiseIndex(recorded.anime.fribb as FribbAnimeEntry[]),
+	recorded.anime.titles
+);
+const sources: PlacementSources = {
+	find: async (id) => recorded.find[id] ?? null,
+	show: async (id) => recorded.show[id] ?? null,
+	season: async (id, n) => recorded.season[`${id}/${n}`] ?? null,
+	episodeShow: async (id) => recorded.episodeShow[id] ?? null,
+	seasonEpisodes: async (show, n) =>
+		new Map(
+			Object.entries(recorded.seasonEpisodes[`${show}/${n}`] ?? {}).map(([e, t]) => [
+				Number(e),
+				t as string,
+			])
+		),
+	anime: async () => anime,
+};
+const identify: Identify = async (list) => list.map(({ name }) => recorded.identify[name] ?? null);
+const place = (requests: PlaceRequest[], deadline = Infinity, from = sources, ask = identify) =>
+	placeReleases(requests, ask, from, deadline);
+
+describe('placeReleases over real releases', () => {
+	it.each(cases.map((c) => [c.request.files[0].path, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place([c.request as PlaceRequest]);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	const named = (name: string) => cases.find((c) => c.request.name.startsWith(name))!;
+
+	it('answers skipped, for zurg to ask again, past the time budget', async () => {
+		const { releases, complete } = await place(
+			[named('Family Guy').request as PlaceRequest],
+			0
+		);
+		expect(complete).toBe(false);
+		expect(releases[0]).toMatchObject({ kind: null, skipped: true });
+		expect(releases[0].files.every((f) => f.season === null)).toBe(true);
+	});
+
+	it('answers skipped when the identifier could not be asked about a name', async () => {
+		const hibike = named('[Erai-raws] Hibike Euphonium 3').request as PlaceRequest;
+		const { releases, complete } = await place(
+			[{ ...hibike, imdbId: null }],
+			Infinity,
+			sources,
+			async (list) => list.map(() => undefined)
+		);
+		expect(complete).toBe(false);
+		expect(releases[0].skipped).toBe(true);
+	});
+
+	it('holds a fansub release back while the anime index cannot load, rather than place it on its own numbers', async () => {
+		const hibike = named('[Erai-raws] Hibike Euphonium 3').request as PlaceRequest;
+		const family = named('Family Guy').request as PlaceRequest;
+		const { releases } = await place([hibike, family], Infinity, {
+			...sources,
+			anime: async () => null,
+		});
+		expect(releases[0].skipped).toBe(true);
+		expect(releases[1]).toMatchObject({ kind: 'tv', files: [{ season: 11, episode: 16 }] });
+	});
+
+	it('reads an episode id as its show and a film id on a release of seasons as a name to identify', async () => {
+		const ben10 = named('Ben 10 Omniverse');
+		expect(recorded.episodeShow[ben10.request.imdbId!]).toBe('tt2293002');
+		expect(ben10.expect).toMatchObject({ imdbId: 'tt2293002', tmdbId: 46922 });
+		// DMM's hash map files Star Wars: The Clone Wars S02 under the 2008 film
+		const cloneWars = named('Star.Wars.The.Clone.Wars');
+		expect(recorded.find[cloneWars.request.imdbId!].movie_results).toEqual([{ id: 12180 }]);
+		expect(cloneWars.expect).toMatchObject({ kind: 'tv', imdbId: 'tt0458290', tmdbId: 4194 });
+	});
+});

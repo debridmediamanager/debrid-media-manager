@@ -190,6 +190,28 @@ export class HashImdbService extends DatabaseClient {
 		return ids;
 	}
 
+	/** The show an IMDb episode id belongs to, or null when the id is no episode's. */
+	public async getEpisodeShow(tconst: string): Promise<string | null> {
+		const row = await this.prisma.imdbTitleEpisode.findUnique({
+			where: { tconst },
+			select: { parentTconst: true },
+		});
+		return row?.parentTconst ?? null;
+	}
+
+	/** IMDb's episode ids for one season of a show, by episode number (idx_season_episode). */
+	public async getSeasonEpisodeIds(show: string, season: number): Promise<Map<number, string>> {
+		const rows = await this.prisma.imdbTitleEpisode.findMany({
+			where: { parentTconst: show, seasonNumber: season },
+			select: { tconst: true, episodeNumber: true },
+		});
+		return new Map(
+			rows.flatMap((row) =>
+				row.episodeNumber === null ? [] : [[row.episodeNumber, row.tconst]]
+			)
+		);
+	}
+
 	/** Overwrite stored answers that were asked again and are now confident. */
 	public async confirmFilenameIdentifications(rows: FilenameIdentification[]): Promise<void> {
 		for (const { hash, titleKey, ...answer } of rows) {

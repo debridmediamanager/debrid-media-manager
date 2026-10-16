@@ -32,6 +32,7 @@ const SPONSOR_ONLY = [
 	'/api/sponsor/identify',
 	'/api/sponsor/availability',
 	'/api/sponsor/mediainfo',
+	'/api/sponsor/place',
 	'/api/torrents/identify',
 	'/api/zurg/search-torrents',
 	'/api/zurg/show-info',

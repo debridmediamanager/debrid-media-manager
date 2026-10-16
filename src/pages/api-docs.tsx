@@ -38,6 +38,9 @@ const {
 const METADATA_SPEC =
 	'https://github.com/debridmediamanager/debrid-media-manager/blob/main/docs/metadata-api.md';
 
+const SPONSOR_API_SPEC =
+	'https://github.com/debridmediamanager/debrid-media-manager/blob/main/docs/sponsor-api.md#place-releases-on-tmdb';
+
 const perAddress = `${RATE_LIMIT_CONFIGS.default.rateLimit} requests per second`;
 
 const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
@@ -125,6 +128,14 @@ const SECTIONS: { title: string; endpoints: Endpoint[] }[] = [
 				what: 'The ffprobe output zurg users have already shared for each release hash: streams, codecs, languages and duration per file, with the path and size it was taken of, so your tools need not download anything to read them. Hashes nobody has probed are left out. Up to 100 hashes a call.',
 				auth: 'x-api-key header',
 				limit: perMinute(RATE_LIMIT_CONFIGS.sponsorMediaInfo, 'calls'),
+			},
+			{
+				method: 'POST',
+				path: '/api/sponsor/place',
+				what: "What each release is and where its files go on TMDB: the movie or show's IMDb and TMDB ids, and each file's TMDB season and episode, anime cours and absolute numbering included. Up to 100 releases and 2,000 files a call.",
+				auth: 'x-api-key header',
+				limit: `${perMinute(RATE_LIMIT_CONFIGS.sponsorPlace, 'calls')} per key`,
+				guide: { href: SPONSOR_API_SPEC, label: 'Placement API' },
 			},
 			{
 				method: 'POST',

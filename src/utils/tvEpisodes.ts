@@ -61,7 +61,7 @@ const MAX_RANGE = 200;
  * resolution (`- 05 - 1080p`), and a resolution is not an episode
  * (`Attack on Titan - S03 - 1080p`).
  */
-const FANSUB_SEASON =
+export const FANSUB_SEASON =
 	/(?:^|[^a-z0-9])(?:(?:s|season[\s._]?)(\d{1,2})|(\d{1,2})(?:st|nd|rd|th)[\s._]season)[\s._]+[-–][\s._]+(\d{2,4})(?![0-9]|[pi]\b)(?:[\s._]*[-~][\s._]*(\d{2,4})(?![0-9a-z]))?/i;
 
 /**

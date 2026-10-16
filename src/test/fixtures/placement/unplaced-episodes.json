@@ -1,0 +1,644 @@
+{
+	"files": [
+		{
+			"shape": "site",
+			"release": "Suits.S06.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"file": "Suits.S06E01.To.Trouble.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+			"season": 6,
+			"episode": 1
+		},
+		{
+			"shape": "site",
+			"release": "Pinky.and.the.Brain.S04.1080p.UPSCALED.DD.5.1.x265-EDGE2020",
+			"file": "Pinky.and.the.Brain.S04E04.To.Russia.with.Lab.Mice.1080p.UPSCALED.DD.5.1.H.265.-EDGE2020.mkv",
+			"season": 4,
+			"episode": 4
+		},
+		{
+			"shape": "site",
+			"release": "SpongeBob.SquarePants.S05E39.To.Save.a.Squirrel.REPACK.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune",
+			"file": "SpongeBob.SquarePants.S05E39.To.Save.a.Squirrel.REPACK.1080p.AMZN.WEB-DL.DDP2.0.H.264-Kitsune.mkv",
+			"season": 5,
+			"episode": 39
+		},
+		{
+			"shape": "double",
+			"release": "The.Amazing.World.of.Gumball.S04.1080p.WEB-DL.AAC2.0.H.264-iT00NZ",
+			"file": "The.Amazing.World.of.Gumball.S04E17E18.The.Hug.The.Wicked.1080p.WEB-DL.AAC2.0.H.264-iT00NZ.mkv",
+			"season": 4,
+			"episode": 17
+		},
+		{
+			"shape": "double",
+			"release": "The Amazing World of Gumball",
+			"file": "The.Amazing.World.of.Gumball.S01E09E10.The Pressure. The Painting.mkv",
+			"season": 1,
+			"episode": 9
+		},
+		{
+			"shape": "double",
+			"release": "Friends.S09.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP[rartv]",
+			"file": "Friends.S09E23E24.The.One.in.Barbados.Part.1-2.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
+			"season": 9,
+			"episode": 23
+		},
+		{
+			"shape": "version",
+			"release": "[Vanilla] Fruits Basket (2019) - S03E08v2 - (BD 1080p HEVC Opus) [Dual Audio] [2AD8C836]",
+			"file": "[Vanilla] Fruits Basket (2019) - S03E08v2 - (BD 1080p HEVC Opus) [Dual Audio] [2AD8C836].mkv",
+			"season": 3,
+			"episode": 8
+		},
+		{
+			"shape": "version",
+			"release": "[KawaSubs] May I Ask for One Final Thing - S01",
+			"file": "[KawaSubs] May I Ask for One Final Thing - S01E09v2 [CR DUAL 1080p HEVC EAC3] [Eng-Sub].mkv",
+			"season": 1,
+			"episode": 9
+		},
+		{
+			"shape": "version",
+			"release": "[smol] Yagate Kimi ni Naru v2 (BD 1080p HEVC Opus)",
+			"file": "[smol] Yagate Kimi ni Naru - S01E09v2 (BD 1080p HEVC Opus) [Dual Audio] [256AAD0D].mkv",
+			"season": 1,
+			"episode": 9
+		},
+		{
+			"shape": "letter",
+			"release": "Spongebob Squarepants Season 1 Complete WEB x264 [i_c]",
+			"file": "SpongeBob SquarePants S01E04A Naughty Nautical Neighbors.mkv",
+			"season": 1,
+			"episode": 4
+		},
+		{
+			"shape": "letter",
+			"release": "The.Amazing.World.of.Gumball.S04.1080p.WEB-DL.AAC2.0.H.264-iT00NZ",
+			"file": "The.Amazing.World.of.Gumball.S04E13E14.The.Comic.The.Romantic.1080p.WEB-DL.AAC2.0.H.264-iT00NZ.mkv",
+			"season": 4,
+			"episode": 13
+		},
+		{
+			"shape": "letter",
+			"release": "Lost.S06.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-NOGRP[rartv]",
+			"file": "Lost.S06E17E18.The.End.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-NOGRP.mkv",
+			"season": 6,
+			"episode": 17
+		},
+		{
+			"shape": "4digit",
+			"release": "[Erai-raws] One Piece - 1089 ~ 1104 [1080p][HEVC][Multiple Subtitle]",
+			"file": "One Piece (1999) - s22e1094 - [Erai-raws][1080p][HEVC][1543037D].mkv",
+			"season": 22,
+			"episode": 1094
+		},
+		{
+			"shape": "4digit",
+			"release": "[Erai-raws] One Piece - 1089 ~ 1104 [1080p][HEVC][Multiple Subtitle]",
+			"file": "One Piece (1999) - s22e1103 - [Erai-raws][1080p][HEVC][56C9DEB8].mkv",
+			"season": 22,
+			"episode": 1103
+		},
+		{
+			"shape": "4digit",
+			"release": "Detective.Conan.S01E1201.Im.the.Culprit.1080p.CR.WEB-DL.AAC2.0.H.264-VARYG",
+			"file": "Detective.Conan.S01E1201.Im.the.Culprit.1080p.CR.WEB-DL.AAC2.0.H.264-VARYG.mkv",
+			"season": 1,
+			"episode": 1201
+		},
+		{
+			"shape": "yearseason",
+			"release": "Mythbusters.(2003).S01-S16.COMPLETE.576p.1080p.AMZN.WEB-DL.x265.HEVC.DDP.2.0.ReadNFO-PHOCiS",
+			"file": "MythBusters.S2009E05.Swimming.in.Syrup.1080p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
+			"season": 2009,
+			"episode": 5
+		},
+		{
+			"shape": "yearseason",
+			"release": "Streamlined Mythbusters Complete",
+			"file": "Smyth S2010E06 No Pain No Gain, Propane Tank Rocket.mp4",
+			"season": 2010,
+			"episode": 6
+		},
+		{
+			"shape": "yearseason",
+			"release": "Streamlined Mythbusters Complete",
+			"file": "Smyth S2015E01 The Simpsons Special.mp4",
+			"season": 2015,
+			"episode": 1
+		},
+		{
+			"shape": "yearx",
+			"release": "Mythbusters Complete",
+			"file": "MythBusters - 2010x03 - Dive to Survive.mkv",
+			"season": 2010,
+			"episode": 3
+		},
+		{
+			"shape": "yearx",
+			"release": "MythBusters 1080p",
+			"file": "MythBusters.2016x07.Failure.Is.Not.an.Option!.1080p.Rus.Eng.mkv",
+			"season": 2016,
+			"episode": 7
+		},
+		{
+			"shape": "yearx",
+			"release": "MythBusters 1080p",
+			"file": "MythBusters.2008x21.Viewer.Special.Threequel.1080p.Rus.Eng.mkv",
+			"season": 2008,
+			"episode": 21
+		},
+		{
+			"shape": "nx3",
+			"release": "Animaniacs",
+			"file": "Animaniacs - 1x100 - Raging Bird - SD DVD.mkv",
+			"season": 1,
+			"episode": 100
+		},
+		{
+			"shape": "nx3",
+			"release": "Animaniacs",
+			"file": "Animaniacs - 1x104 - What a Dump! - SD DVD.mkv",
+			"season": 1,
+			"episode": 104
+		},
+		{
+			"shape": "nx3",
+			"release": "Animaniacs",
+			"file": "Animaniacs - 1x119 - The Great Wakkorotti The Holiday Concert - SD DVD.mkv",
+			"season": 1,
+			"episode": 119
+		},
+		{
+			"shape": "episode",
+			"release": "[VeloEncodes] Digimon Adventure Zero Two Episode 18 - Track Down the Kaiser's Base! (Dual-Audio) (10-bit) (1080p BDRip) [4B3AFD94]",
+			"file": "[VeloEncodes] Digimon Adventure Zero Two Episode 18 - Track Down the Kaiser's Base! (Dual-Audio) (10-bit) (1080p BDRip) [4B3AFD94].mkv",
+			"season": 1,
+			"episode": 18
+		},
+		{
+			"shape": "episode",
+			"release": "[bonkai77] Neon Genesis Evangelion DC [BD-1080p] [DUAL-AUDIO] [MULTI-SUB] [x265] [HEVC] [AAC] [10bit] {FILTERED}",
+			"file": "[bonkai77].Neon.Genesis.Evangelion.Episode.20.[BD.1080p.Dual-Audio.x265.HEVC.10bit].mkv",
+			"season": 1,
+			"episode": 20
+		},
+		{
+			"shape": "episode",
+			"release": "Sesame Street",
+			"file": "Sesame Street - Episode 2275 - Part 2.mp4",
+			"season": 1,
+			"episode": 2275
+		},
+		{
+			"shape": "NNvN",
+			"release": "[CyC] Mushishi v2.1 (BD 720p Hi10 x264 AC3+FLAC) [Dual-Audio]",
+			"file": "[CyC] Mushishi 04v2 (BD 720p Hi10 x264 AC3+FLAC) [Dual-Audio] [8B117BE6].mkv",
+			"season": 1,
+			"episode": 4
+		},
+		{
+			"shape": "NNvN",
+			"release": "[sam] Hunter x Hunter (2011) Season 1 (000-026) [BD 1080p FLAC]",
+			"file": "[sam] Hunter x Hunter (2011) - 007v2 [BD 1080p FLAC] [7B06440A].mkv",
+			"season": 1,
+			"episode": 7
+		},
+		{
+			"shape": "season before an absolute number",
+			"release": "[SubsPlease] Tower of God S2 - 07v2 (1080p) [B9C87596]",
+			"file": "[SubsPlease] Tower of God S2 - 07v2 (1080p) [B9C87596].mkv",
+			"season": 2,
+			"episode": 7
+		},
+		{
+			"shape": "abs",
+			"release": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]",
+			"file": "[Anime Time] One Piece - 0175 - 0 Survival Rate! Chopper vs Ohm, the Sword Wielding Priest!.mkv",
+			"season": 1,
+			"episode": 175
+		},
+		{
+			"shape": "abs",
+			"release": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]",
+			"file": "[Anime Time] One Piece - 0160 - 10 Survival Rate! Satori, the Mantra Master!.mkv",
+			"season": 1,
+			"episode": 160
+		},
+		{
+			"shape": "abs",
+			"release": "[iKaos] TFS Dragon Ball Z Abridged Collection",
+			"file": "DBZ Abridged - 040 - 16, 17, 18 Things I Hate About You [iKaos].mkv",
+			"season": 1,
+			"episode": 40
+		},
+		{
+			"shape": "not an episode",
+			"release": "[Beatrice-Raws] Evangelion 1.0 You Are (Not) Alone [BDRip 1920x1080 HEVC TrueHD]",
+			"file": "[Beatrice-Raws] Evangelion 1.0 You Are (Not) Alone (PV 01) [BDRip 1920x1080 HEVC TrueHD]-trailer.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "not an episode",
+			"release": "[0x539] Seishun Buta Yarou wa Bunny Girl Senpai no Yume o Minai (BD 1080p x265 10bit FLAC)",
+			"file": "[0x539] Seishun Buta Yarou wa Bunny Girl Senpai no Yume o Minai - NCED A (BD 1080p x265 10bit FLAC) [56F42CEA].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "placed on the wrong episode",
+			"release": "[SubsPlease] Ace of Diamond Act II S2 - 01 (1080p) [38DEE8CD]",
+			"file": "[SubsPlease] Ace of Diamond Act II S2 - 01 (1080p) [38DEE8CD].mkv",
+			"season": 2,
+			"episode": 1
+		},
+		{
+			"shape": "placed on the wrong episode",
+			"release": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][Multiple Subtitle]",
+			"file": "One Piece (1999) - s21e1000 - [Erai-raws][1080p][HEVC][484B36B8].mkv",
+			"season": 21,
+			"episode": 1000
+		},
+		{
+			"shape": "a season named as an ordinal or a word, or an episode bracketed after the title",
+			"release": "[Erai-raws].Kingdom.4th.Season-21.[1080p]",
+			"file": "0816e0b1bd854e41b9aaa223db7a413b.mkv",
+			"season": 4,
+			"episode": 21
+		},
+		{
+			"shape": "a season named as an ordinal or a word, or an episode bracketed after the title",
+			"release": "[Sakurato].Bleach：.Sennen.Kessen.Hen.-.Kashin.Tan.[07][AVC-8bit.1080P.AAC][CHS]",
+			"file": "[Sakurato] Bleach： Sennen Kessen Hen - Kashin Tan [07][AVC-8bit 1080P AAC][CHS].mp4",
+			"season": 1,
+			"episode": 7
+		},
+		{
+			"shape": "a season named as an ordinal or a word, or an episode bracketed after the title",
+			"release": "[Erai-raws] Gintama. Shirogane no Tamashii-hen 2nd Season - 14 END [1080p][Multiple Subtitle]",
+			"file": "[Erai-raws] Gintama. Shirogane no Tamashii-hen 2nd Season - 14 END [1080p][Multiple Subtitle].mkv",
+			"season": 2,
+			"episode": 14
+		},
+		{
+			"shape": "a season named as an ordinal or a word, or an episode bracketed after the title",
+			"release": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8]",
+			"file": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+			"season": 3,
+			"episode": 1
+		},
+		{
+			"shape": "a season named as an ordinal or a word, or an episode bracketed after the title",
+			"release": "[Erai-raws] Jujutsu Kaisen 2nd Season - 01 ~ 23 [1080p][Multiple Subtitle]",
+			"file": "[Erai-raws] Jujutsu Kaisen 2nd Season - 23 [1080p][Multiple Subtitle][291558E2].mkv",
+			"season": 2,
+			"episode": 23
+		},
+		{
+			"shape": "not an episode",
+			"release": "[Coalgirls]_Evangelion_3.33.0_You_Can_(Not)_Redo_(1920x816_Blu-ray_FLAC)_[FC2091F9]",
+			"file": "[Coalgirls]_Evangelion_3.33.0_You_Can_(Not)_Redo_(1920x816_Blu-ray_FLAC)_[FC2091F9].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "leading-one-season",
+			"release": "Sailor.Moon.S01.576p.DVD.Remux.DD2.0-Sakhr-v2",
+			"file": "35. Returning Memories, Usagi and Mamoru's Past.mkv",
+			"season": 1,
+			"episode": 35
+		},
+		{
+			"shape": "leading-one-season",
+			"release": "Star Trek - The Original Series - Season 2 - Original",
+			"file": "02 - Who Mourns for Adonais - Stardate 3468.1 (Original).mkv",
+			"season": 2,
+			"episode": 2
+		},
+		{
+			"shape": "leading-one-season",
+			"release": "PAW.Patrol.Season1.NickelodeonHD1080i.rus.eng-rutracker",
+			"file": "02. Pup Pup Boogie + Pups in a Fog.HD.rus.eng.mkv",
+			"season": 1,
+			"episode": 2
+		},
+		{
+			"shape": "leading-absolute",
+			"release": "[DmonHiro] Inuyasha (BD, 720p) (US BD)",
+			"file": "140 - Eternal Love - The Naginata Of Kenkon.mkv",
+			"season": 1,
+			"episode": 140
+		},
+		{
+			"shape": "leading-absolute",
+			"release": "Утиные истории (DVDRemux)",
+			"file": "082 - Бесприданница.mkv",
+			"season": 1,
+			"episode": 82
+		},
+		{
+			"shape": "title-number",
+			"release": "[Coalgirls]_Hunter_X_Hunter_(1920x1080_Blu-ray_FLAC)",
+			"file": "[Coalgirls]_Hunter_X_Hunter_034_(1920x1080_Blu-ray_FLAC)_[C699BA0F].mkv",
+			"season": 1,
+			"episode": 34
+		},
+		{
+			"shape": "title-number",
+			"release": "Lovely Runner (2024)",
+			"file": "Lovely Runner 14.mkv",
+			"season": 1,
+			"episode": 14
+		},
+		{
+			"shape": "title-number",
+			"release": "House.M.D.S06.BDRemux",
+			"file": "House M.D. 14 - Private Lives.mkv",
+			"season": 6,
+			"episode": 14
+		},
+		{
+			"shape": "title-number",
+			"release": "Magic Knight Rayearth TV [BD-rip 1440x1080 x264 FLAC]",
+			"file": "Magic Knight Rayearth 11  [BD-rip 1440x1080 x264 FLAC].mkv",
+			"season": 1,
+			"episode": 11
+		},
+		{
+			"shape": "title-number",
+			"release": "[Zurako] Mawaru Penguindrum (BD 1080p AAC)",
+			"file": "[Zurako]_Mawaru_Penguindrum_08_Even_if_Your_Love_is_a_Lie,_I..._(BD_1080p_AAC)_[F49EF94A].mkv",
+			"season": 1,
+			"episode": 8
+		},
+		{
+			"shape": "title-number",
+			"release": "Cowboy Bebop [EG]",
+			"file": "[EG]Cowboy_Bebop_14_1080p_V2(10bit.DualAudio)[05AF11A7].mkv",
+			"season": 1,
+			"episode": 14
+		},
+		{
+			"shape": "title-number",
+			"release": "Digimon Tamers",
+			"file": "[Positron] Digimon Tamers 22 (XviD-MP3).avi",
+			"season": 1,
+			"episode": 22
+		},
+		{
+			"shape": "title-number",
+			"release": "[EG] Outlaw Star BD",
+			"file": "[EG]Outlaw_Star_21_BD(1080p_10bit_DualAudio)[A4347F2F].mkv",
+			"season": 1,
+			"episode": 21
+		},
+		{
+			"shape": "of-count",
+			"release": "Cosmos",
+			"file": "Carl.Sagans.Cosmos.10of13.The.Edge.of.Forever.DivX.MP3.avi",
+			"season": 1,
+			"episode": 10
+		},
+		{
+			"shape": "year-e",
+			"release": "Mythbusters - Complete Series",
+			"file": "MythBusters.2014e06.Mythssion impossible.mkv",
+			"season": 2014,
+			"episode": 6
+		},
+		{
+			"shape": "flattened-pack",
+			"release": "Smallville",
+			"file": "01 Odissea.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "flattened-pack",
+			"release": "Saturday Night Live Seasons 1-15",
+			"file": "05 Demi Moore, Johnny Clegg, Savuka.avi",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "season-in-number",
+			"release": "Are You Afraid Of The Dark Complete Series-JUGGALOTUS",
+			"file": "608 - The Tale of the Vampire Town.avi",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "extra",
+			"release": "[Holomux] To LOVE-Ru",
+			"file": "[Holomux] To Love-Ru OVA 04 [DVD x264 480p FLAC 2.0][621FD857]-other.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "extra",
+			"release": "[Zurako] Mawaru Penguindrum (BD 1080p AAC)",
+			"file": "[Zurako]_Mawaru_Penguindrum_NCED_07_(BD_1080p_AAC)_[969317E8].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "extra",
+			"release": "[EG] Outlaw Star BD",
+			"file": "[EG]Outlaw_Star_NCEDB_BD(1080p_10bit)[C644418F].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "intro",
+			"release": "Утиные истории (DVDRemux)",
+			"file": "000 - Заставка Дисней на ЦТ-1 1991.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "season-in-number",
+			"release": "Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT",
+			"file": "403a-b - Bully Bust; Backyard Hodge Podge.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "extra",
+			"release": "[iKaos] TFS Dragon Ball Z Abridged Collection",
+			"file": "002 - Deleted Scene Episodes 2-4 [iKaos]-deleted.mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "folder-top-level",
+			"release": "Heidi blu-ray complete",
+			"file": "[Silver_zero_Subs]Alps_no_Shoujo_Heidi_01 [232071A7].mkv",
+			"season": 1,
+			"episode": 1,
+			"folder": ""
+		},
+		{
+			"shape": "folder-top-level",
+			"release": "Cowboy Bebop [EG]",
+			"file": "[EG]Cowbop_Bebop_02_1080p_(10bit.DualAudio)[0AB5EDC0].mkv",
+			"season": 1,
+			"episode": 2,
+			"folder": ""
+		},
+		{
+			"shape": "dotted-title-number",
+			"release": "BBC.Frozen.Planet.2011.BluRay.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"file": "BBC.Frozen.Planet.02.Spring.2011.BluRay.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+			"season": 1,
+			"episode": 2
+		},
+		{
+			"shape": "underscore-season-ep",
+			"release": "Miraculous.Tales.of.Ladybug.Cat.Noir.S06.1080p.OnAdd",
+			"file": "MLB_S6EP03_SUBLIMATION_RUS_DUB_OnAdd.mkv",
+			"season": 6,
+			"episode": 3
+		},
+		{
+			"shape": "four-digit-title-number",
+			"release": "[HatSubs] One Piece 1107 (WEB 1080p) [7587906C]",
+			"file": "[HatSubs] One Piece 1107 (WEB 1080p) [7587906C].mkv",
+			"season": 1,
+			"episode": 1107
+		},
+		{
+			"shape": "season-dash-ep",
+			"release": "[Erai-raws].Grand.Blue.Season.3-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][5FD92C67]",
+			"file": "[Erai-raws].Grand.Blue.Season.3-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][5FD92C67].mkv",
+			"season": 3,
+			"episode": 9
+		},
+		{
+			"shape": "ep-stray-char",
+			"release": "Meteor Garden Complete Series",
+			"file": "meteor_garden_ep27#[jem].avi",
+			"season": 1,
+			"episode": 27
+		},
+		{
+			"shape": "paired-codes",
+			"release": "The Amazing World of Gumball {8623bc}",
+			"file": "The Amazing World of Gumball - 207, 208 - The Phone - The Job.mkv",
+			"season": 2,
+			"episode": 7
+		},
+		{
+			"shape": "double-nx",
+			"release": "Animaniacs",
+			"file": "Animaniacs - 5x19x20 - Katie KaBoom Prom Night & Magic Time - SD DVD.mkv",
+			"season": 5,
+			"episode": 19
+		},
+		{
+			"shape": "leading-absolute-pair",
+			"release": "[DmonHiro] Inuyasha (BD, 720p) (US BD)",
+			"file": "147-148 - The Tragic Love Song Of Destiny.mkv",
+			"season": 1,
+			"episode": 147
+		},
+		{
+			"shape": "primed-cut",
+			"release": "Neon Genesis Evangelion 1-26 DC+EoE [MULTI][BD 1080p 8bits v2.22][Sephirotic]",
+			"file": "[Sephirotic] Evangelion - 22' [MULTI][BD 1080p 8bits 5.1 AAC][82842B04].mkv",
+			"season": 1,
+			"episode": 22
+		},
+		{
+			"shape": "japanese-season",
+			"release": "[CyC] Natsume Yuujinchou Shi 03 (BD 1080p Hi10 x264 FLAC) [FF4CEA93]",
+			"file": "[CyC] Natsume Yuujinchou Shi 03 (BD 1080p Hi10 x264 FLAC) [FF4CEA93].mkv",
+			"season": 4,
+			"episode": 3
+		},
+		{
+			"shape": "not-episode",
+			"release": "Neon Genesis Evangelion 1-26 DC+EoE [MULTI][BD 1080p 8bits v2.22][Sephirotic]",
+			"file": "[Sephirotic] Evangelion - The End of Evangelion - 25' [MULTI][BD 1080p 8bits 5.1 AAC][80C45029].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "not-episode",
+			"release": "[iKaos] TFS Dragon Ball Z Abridged Collection",
+			"file": "DBZ Abridged - 010B - The Punchline (2) [iKaos].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "not-episode",
+			"release": "[SubsPlease] Re Zero kara Hajimeru Isekai Seikatsu (01-25) (1080p) [Batch]",
+			"file": "[SubsPlease] Re Zero kara Hajimeru Isekai Seikatsu - 01A (1080p) [39286AC6].mkv",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "not-episode",
+			"release": "The Electric Company - 1970s (Childrens TV series in MP4 format)",
+			"file": "4. The Best of the Electric Company - (Eps 491, 72A, 110A, 79B, 130B).mp4",
+			"season": null,
+			"episode": null
+		},
+		{
+			"shape": "not-episode-top-level",
+			"release": "[Holomux] To LOVE-Ru",
+			"file": "[Holomux] To Love-Ru OVA 04 [DVD x264 480p FLAC 2.0][621FD857]-other.mkv",
+			"season": null,
+			"episode": null,
+			"folder": ""
+		},
+		{
+			"shape": "not-episode-top-level",
+			"release": "[Zurako] Mawaru Penguindrum (BD 1080p AAC)",
+			"file": "[Zurako]_Mawaru_Penguindrum_NCED_07_(BD_1080p_AAC)_[969317E8].mkv",
+			"season": null,
+			"episode": null,
+			"folder": ""
+		},
+		{
+			"shape": "not-episode-top-level",
+			"release": "[EG] Outlaw Star BD",
+			"file": "[EG]Outlaw_Star_NCEDB_BD(1080p_10bit)[C644418F].mkv",
+			"season": null,
+			"episode": null,
+			"folder": ""
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Would.I.Lie.To.You.S03E01.PROPER.WS.PDTV.XviD-aAF",
+			"folder": "",
+			"file": "aaf-wilty.301.avi",
+			"season": 3,
+			"episode": 1
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Would.I.Lie.To.You.S03E01.PROPER.WS.PDTV.XviD-aAF",
+			"folder": "",
+			"file": "aaf-wilty.302.avi",
+			"season": 3,
+			"episode": 2
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Would.I.Lie.To.You.S03E02.WS.PDTV.XviD-aAF",
+			"folder": "",
+			"file": "aaf-wilty.302.avi",
+			"season": 3,
+			"episode": 2
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Would.I.Lie.To.You.S03E04.WS.PDTV.XviD-aAF",
+			"folder": "",
+			"file": "aaf-wilty.304.avi",
+			"season": 3,
+			"episode": 4
+		}
+	],
+	"source": "files the production rex's feed left unplaced as \"no episode number\" on 2026-10-13, and two it placed on the wrong episode; season and episode read by hand from each name; and anime seasons written as `4th Season`, `Season 3` or `[07]` (2026-10-13 afternoon); and names that carry their number only beside their release -- a leading number, the show's name then a number, `10of13`, `2014e06` -- with the shapes deliberately left unread (2026-10-15); and the shapes fun's Plex still held that rex did not (2026-10-15 afternoon): top-level files of a one-folder release, dotted, four-digit, S6EP01, Season.3-09, ep27#, two-episode files on their first episode, a director's cut, a Japanese season numeral, and what stays out; and scene files in an archive that number season and episode as one (`aaf-wilty.302` inside `Would.I.Lie.To.You.S03E01.PROPER`, which holds two episodes), from the production server's Usenet feed (2026-10-16)"
+}

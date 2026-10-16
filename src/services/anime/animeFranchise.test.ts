@@ -57,6 +57,20 @@ describe('buildFranchiseIndex', () => {
 	it('carries the Kitsu id the info route uses for entries the table lacks', () => {
 		expect(index.byAnidb.get(18886)).toMatchObject({ kitsuId: 49240, type: 'TV' });
 	});
+
+	it("keeps where TMDB files each cour, which placement reads: Frieren's second season is its season 1 from episode 29", () => {
+		expect(index.byAnidb.get(18886)?.tmdb).toEqual({
+			show: 209867,
+			season: 1,
+			offset: 28,
+			tvdbSeason: 2,
+			tvdbOffset: 0,
+		});
+		expect(index.byTmdbShow.get(209867)).toEqual([17617, 18886, 19977]);
+		// a film, and an ONA TMDB has no show for
+		expect(index.byAnidb.get(1250)?.tmdb).toBeNull();
+		expect(index.byAnidb.get(13789)?.tmdb).toBeNull();
+	});
 });
 
 describe('franchiseOf', () => {

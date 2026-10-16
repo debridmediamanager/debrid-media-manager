@@ -1,0 +1,2182 @@
+[
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]",
+			"hash": null,
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[Anime Time] One Piece - 0423 - A Reunion in Hell ! The Man Who Ate the Chop-Chop Fruit!.mkv",
+					"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+				},
+				{
+					"path": "[Anime Time] One Piece - 0424 - Break Through the Crimson Hell! Buggy's Chaos-Inducing Plan!.mkv",
+					"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+				}
+			]
+		},
+		"rex": [
+			[1, 423],
+			[1, 424]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0388629",
+			"tmdbId": 37854,
+			"files": [
+				{
+					"path": "[Anime Time] One Piece - 0423 - A Reunion in Hell ! The Man Who Ate the Chop-Chop Fruit!.mkv",
+					"season": 13,
+					"episode": 423,
+					"episodeEnd": null,
+					"how": "absolute"
+				},
+				{
+					"path": "[Anime Time] One Piece - 0424 - Break Through the Crimson Hell! Buggy's Chaos-Inducing Plan!.mkv",
+					"season": 13,
+					"episode": 424,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[HorribleSubs] One Piece (01-700) [1080p] (Batch) [HorribleSubs] One Piece - 06 [1080p].mkv \ud83d\udc64 7 \ud83d\udcbe 570.49 MB \u2699\ufe0f NyaaSi",
+			"hash": null,
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[HorribleSubs] One Piece - 102 [1080p].mkv",
+					"folder": "[HorribleSubs] One Piece (01-700) [1080p] (Batch)"
+				}
+			]
+		},
+		"rex": [[1, 102]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0388629",
+			"tmdbId": 37854,
+			"files": [
+				{
+					"path": "[HorribleSubs] One Piece - 102 [1080p].mkv",
+					"season": 4,
+					"episode": 102,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][BATCH][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]",
+			"hash": null,
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "One Piece (1999) - s21e892 - [Erai-raws][1080p][HEVC][C9BB8D4B].mkv",
+					"folder": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][Multiple Subtitle]"
+				},
+				{
+					"path": "One Piece (1999) - s21e893 - [Erai-raws][1080p][HEVC][ABE3BFC0].mkv",
+					"folder": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][Multiple Subtitle]"
+				}
+			]
+		},
+		"rex": [
+			[21, 892],
+			[21, 893]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0388629",
+			"tmdbId": 37854,
+			"files": [
+				{
+					"path": "One Piece (1999) - s21e892 - [Erai-raws][1080p][HEVC][C9BB8D4B].mkv",
+					"season": 21,
+					"episode": 892,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "One Piece (1999) - s21e893 - [Erai-raws][1080p][HEVC][ABE3BFC0].mkv",
+					"season": 21,
+					"episode": 893,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Anime Time] Boku No Hero Academia (My Hero Academia) (S01-S07+Movies+OVAs) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+			"hash": null,
+			"imdbId": "tt32179154",
+			"files": [
+				{
+					"path": "[Anime Time] My Hero Academia - 089.mkv",
+					"folder": "[Anime Time] My Hero Academia Season 05"
+				},
+				{
+					"path": "[Anime Time] My Hero Academia - 090.mkv",
+					"folder": "[Anime Time] My Hero Academia Season 05"
+				}
+			]
+		},
+		"rex": [
+			[1, 89],
+			[1, 90]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt5626028",
+			"tmdbId": 65930,
+			"files": [
+				{
+					"path": "[Anime Time] My Hero Academia - 089.mkv",
+					"season": 5,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "absolute"
+				},
+				{
+					"path": "[Anime Time] My Hero Academia - 090.mkv",
+					"season": 5,
+					"episode": 2,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "My Hero Academia",
+			"hash": null,
+			"imdbId": "tt32179154",
+			"files": [
+				{
+					"path": "[Episode 19] The Boy Born with Everything.mkv",
+					"folder": "Season 2"
+				},
+				{
+					"path": "[Episode 34] Gear up for Final Exams.mkv",
+					"folder": "Season 2"
+				}
+			]
+		},
+		"rex": [
+			[1, 19],
+			[1, 34]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt5626028",
+			"tmdbId": 65930,
+			"files": [
+				{
+					"path": "[Episode 19] The Boy Born with Everything.mkv",
+					"season": 2,
+					"episode": 6,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[Episode 34] Gear up for Final Exams.mkv",
+					"season": 2,
+					"episode": 21,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "102a-b - The Fast and the Phineas; Lawn Gnome Beach Party of Terror.mkv",
+					"folder": "Series/S1 (2007-9)"
+				},
+				{
+					"path": "103a-b - The Magnificent Few; S'Winter.mkv",
+					"folder": "Series/S1 (2007-9)"
+				}
+			]
+		},
+		"rex": [
+			[1, 4],
+			[1, 10]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0852863",
+			"tmdbId": 1877,
+			"files": [
+				{
+					"path": "102a-b - The Fast and the Phineas; Lawn Gnome Beach Party of Terror.mkv",
+					"season": 1,
+					"episode": 4,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "103a-b - The Magnificent Few; S'Winter.mkv",
+					"season": 1,
+					"episode": 10,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "PAW.Patrol.Season1.NickelodeonHD1080i.rus.eng-rutracker",
+			"hash": null,
+			"imdbId": "tt3121722",
+			"files": [
+				{
+					"path": "02. Pup Pup Boogie + Pups in a Fog.HD.rus.eng.mkv",
+					"folder": ""
+				},
+				{
+					"path": "03. Pups Save the Sea Turtles + Pup and the Very Big Baby.HD.rus.eng.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 3],
+			[1, 5]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt3121722",
+			"tmdbId": 57532,
+			"files": [
+				{
+					"path": "02. Pup Pup Boogie + Pups in a Fog.HD.rus.eng.mkv",
+					"season": 1,
+					"episode": 3,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "03. Pups Save the Sea Turtles + Pup and the Very Big Baby.HD.rus.eng.mkv",
+					"season": 1,
+					"episode": 5,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Medabots (MW DVD 0480p) (English Dub) S1",
+			"hash": null,
+			"imdbId": "tt0293731",
+			"files": [
+				{
+					"path": "[MW]_Medarot_-_06_-_The_Gimme_Ghost[59E47EF7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[MW]_Medarot_-_10_-_Mystery_Medabot[FBFA37F4].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 6],
+			[1, 10]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0293731",
+			"tmdbId": 11235,
+			"files": [
+				{
+					"path": "[MW]_Medarot_-_06_-_The_Gimme_Ghost[59E47EF7].mkv",
+					"season": 1,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[MW]_Medarot_-_10_-_Mystery_Medabot[FBFA37F4].mkv",
+					"season": 1,
+					"episode": 12,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Space.Dandy.S01.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR",
+			"hash": null,
+			"imdbId": "tt3158246",
+			"files": [
+				{
+					"path": "Space.Dandy.S01E13.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR.[CCC7C608].mkv",
+					"folder": ""
+				},
+				{
+					"path": "Space.Dandy.S01E14.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR.[96A3E8D8].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 13],
+			[1, 14]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt3158246",
+			"tmdbId": 60874,
+			"files": [
+				{
+					"path": "Space.Dandy.S01E13.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR.[CCC7C608].mkv",
+					"season": 1,
+					"episode": 13,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "Space.Dandy.S01E14.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR.[96A3E8D8].mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[SZN &amp; I-O] Hajime no Ippo New Challenger 01-26 [Complete 720p]",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 01[720p][1B50A5AA] v2.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[2, 1],
+			[2, 24]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0481256",
+			"tmdbId": 42705,
+			"files": [
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 01[720p][1B50A5AA] v2.mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
+					"season": 2,
+					"episode": 24,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Holomux] Gintama\u00b0 Love Potion Arc [DVD x264 10bit 480p FLAC 2.0]",
+			"hash": null,
+			"imdbId": "tt0988818",
+			"files": [
+				{
+					"path": "[Holomux] Gintama\u00b0 Love Potion Arc 01 [DVD x264 10bit 480p FLAC 2.0][0FF3A75E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[Holomux] Gintama\u00b0 Love Potion Arc 02 [DVD x264 10bit 480p FLAC 2.0][061FC3B5].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[0, 13],
+			[0, 14]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0988818",
+			"tmdbId": 57041,
+			"files": [
+				{
+					"path": "[Holomux] Gintama\u00b0 Love Potion Arc 01 [DVD x264 10bit 480p FLAC 2.0][0FF3A75E].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "[Holomux] Gintama\u00b0 Love Potion Arc 02 [DVD x264 10bit 480p FLAC 2.0][061FC3B5].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4384306",
+			"tmdbId": 62564,
+			"files": [
+				{
+					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8]",
+			"hash": null,
+			"imdbId": "tt14976292",
+			"files": [
+				{
+					"path": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+					"folder": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8]"
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt14976292",
+			"tmdbId": 123542,
+			"files": [
+				{
+					"path": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+					"season": 4,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[SubsPlease] Dorohedoro S2 - 07 (1080p) [280D3D22]",
+			"hash": null,
+			"imdbId": "tt11147852",
+			"files": [
+				{
+					"path": "[SubsPlease] Dorohedoro S2 - 07 (1080p) [280D3D22].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[2, 7]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt11147852",
+			"tmdbId": 94404,
+			"files": [
+				{
+					"path": "[SubsPlease] Dorohedoro S2 - 07 (1080p) [280D3D22].mkv",
+					"season": 2,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Some-Stuffs] Jojo's Bizarre Adventure Stone Ocean 25 (1920x1080 Blu-Ray Opus) [D51181A9]",
+			"hash": null,
+			"imdbId": "tt2359704",
+			"files": [
+				{
+					"path": "[Some-Stuffs] Jojo's Bizarre Adventure Stone Ocean 25 (1920x1080 Blu-Ray Opus) [D51181A9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[5, 25]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt2359704",
+			"tmdbId": 45790,
+			"files": [
+				{
+					"path": "[Some-Stuffs] Jojo's Bizarre Adventure Stone Ocean 25 (1920x1080 Blu-Ray Opus) [D51181A9].mkv",
+					"season": 5,
+					"episode": 25,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[Reza] Food Wars",
+			"hash": null,
+			"imdbId": "tt13155370",
+			"files": [
+				{
+					"path": "[Reza] Food Wars S01E01.mkv",
+					"folder": "Season 1"
+				},
+				{
+					"path": "[Reza] Food Wars S04E01.mkv",
+					"folder": "Season 4"
+				}
+			]
+		},
+		"rex": [
+			[1, 1],
+			[4, 1]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4731072",
+			"tmdbId": 62273,
+			"files": [
+				{
+					"path": "[Reza] Food Wars S01E01.mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[Reza] Food Wars S04E01.mkv",
+					"season": 4,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[sam] Fruits Basket (2019) 2nd Season v2 [BD 1080p FLAC]",
+			"hash": null,
+			"imdbId": "tt9614630",
+			"files": [
+				{
+					"path": "Fruits Basket (2019) - s02e01 - [sam][2019][BD 1080p FLAC][8E903543].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[2, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9304350",
+			"tmdbId": 85991,
+			"files": [
+				{
+					"path": "Fruits Basket (2019) - s02e01 - [sam][2019][BD 1080p FLAC][8E903543].mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[a-S] Dragon Ball Z COMPLETE (001-291)",
+			"hash": null,
+			"imdbId": "tt0121220",
+			"files": [
+				{
+					"path": "Dragon Ball Z (1989) - s01e07 - [a-s][52373A16].mkv",
+					"folder": ""
+				},
+				{
+					"path": "Dragon Ball Z (1989) - s02e01 - [a-s][826E7307].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 7],
+			[2, 1]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0121220",
+			"tmdbId": 12971,
+			"files": [
+				{
+					"path": "Dragon Ball Z (1989) - s01e07 - [a-s][52373A16].mkv",
+					"season": 1,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "Dragon Ball Z (1989) - s02e01 - [a-s][826E7307].mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Ascendance of a Bookworm S01+S02+OVAs 1080p Dual Audio BD Remux DTS-HD MA-TTGA",
+			"hash": null,
+			"imdbId": "tt10885406",
+			"files": [
+				{
+					"path": "S01E04-Forests and Clay Tablets.mkv",
+					"folder": "01. Season 1"
+				},
+				{
+					"path": "S02E01-Apprentice Priestess.mkv",
+					"folder": "03. Season 2"
+				}
+			]
+		},
+		"rex": [
+			[1, 4],
+			[1, 15]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt10885406",
+			"tmdbId": 91768,
+			"files": [
+				{
+					"path": "S01E04-Forests and Clay Tablets.mkv",
+					"season": 1,
+					"episode": 4,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "S02E01-Apprentice Priestess.mkv",
+					"season": 1,
+					"episode": 15,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Cells at Work S01+SP 1080p Dual Audio BD Remux FLAC-TTGA",
+			"hash": null,
+			"imdbId": "tt8673610",
+			"files": [
+				{
+					"path": "S01E13-Hemorrhagic Shock (Part 2).mkv",
+					"folder": ""
+				},
+				{
+					"path": "S01E14 [SP]-The Common Cold.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 13],
+			[1, 14]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt8673610",
+			"tmdbId": 80671,
+			"files": [
+				{
+					"path": "S01E13-Hemorrhagic Shock (Part 2).mkv",
+					"season": 1,
+					"episode": 13,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "S01E14 [SP]-The Common Cold.mkv",
+					"season": 0,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "imdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Clannad.S02.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD",
+			"hash": null,
+			"imdbId": "tt1118804",
+			"files": [
+				{
+					"path": "Clannad.S02E22.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD.mkv",
+					"folder": ""
+				},
+				{
+					"path": "Clannad.S02E23.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[2, 22],
+			[2, 23]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1118804",
+			"tmdbId": 24835,
+			"files": [
+				{
+					"path": "Clannad.S02E22.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD.mkv",
+					"season": 2,
+					"episode": 22,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "Clannad.S02E23.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD.mkv",
+					"season": 0,
+					"episode": 3,
+					"episodeEnd": null,
+					"how": "imdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Mythbusters.(2003).S01-S16.COMPLETE.576p.1080p.AMZN.WEB-DL.x265.HEVC.DDP.2.0.ReadNFO-PHOCiS",
+			"hash": null,
+			"imdbId": "tt0383126",
+			"files": [
+				{
+					"path": "MythBusters.S2004E18.Exploding.House.576p-480p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
+					"folder": "Mythbusters.(2003).S01-S16.COMPLETE.576p.1080p.AMZN.WEB-DL.x265.HEVC.DDP.2.0.ReadNFO-PHOCiS/Season 2004"
+				},
+				{
+					"path": "MythBusters.S2005E21.MythBusters.Revisited.576p-480p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
+					"folder": "Mythbusters.(2003).S01-S16.COMPLETE.576p.1080p.AMZN.WEB-DL.x265.HEVC.DDP.2.0.ReadNFO-PHOCiS/Season 2005"
+				}
+			]
+		},
+		"rex": [
+			[2004, 18],
+			[2005, 21]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0383126",
+			"tmdbId": 1428,
+			"files": [
+				{
+					"path": "MythBusters.S2004E18.Exploding.House.576p-480p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
+					"season": 2,
+					"episode": 15,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "MythBusters.S2005E21.MythBusters.Revisited.576p-480p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
+					"season": 3,
+					"episode": 15,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Family Guy - Seasons 1 to 20",
+			"hash": null,
+			"imdbId": "tt19268128",
+			"files": [
+				{
+					"path": "Family Guy - S11E16 - 12 and a Half Angry Men (Uncensored).mkv",
+					"folder": "Season 11"
+				}
+			]
+		},
+		"rex": [[11, 16]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0182576",
+			"tmdbId": 1434,
+			"files": [
+				{
+					"path": "Family Guy - S11E16 - 12 and a Half Angry Men (Uncensored).mkv",
+					"season": 11,
+					"episode": 16,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Smallville S01-10 (2001-2011) [COMPLETA] H264 1080p AC3 ITA DTS-HD ENG BDREMUX [black.soul]",
+			"hash": null,
+			"imdbId": "tt0279600",
+			"files": [
+				{
+					"path": "01 Zod.mkv",
+					"folder": "Smallville/Stagione 6"
+				}
+			]
+		},
+		"rex": [[6, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0279600",
+			"tmdbId": 4604,
+			"files": [
+				{
+					"path": "01 Zod.mkv",
+					"season": 6,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Suits (2011) Season 1-9 S01-S09 (1080p BluRay x265 HEVC 10bit AAC 5.1 ImE)",
+			"hash": null,
+			"imdbId": "tt1973786",
+			"files": [
+				{
+					"path": "Suits (2011) - S03E16 - No Way Out (1080p BluRay x265 ImE).mkv",
+					"folder": "Season 03"
+				},
+				{
+					"path": "Episode 16 Alternate Opening with Aaron Korsh.mkv",
+					"folder": "Extras/Season 03"
+				}
+			]
+		},
+		"rex": [
+			[3, 16],
+			[1, 16]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1632701",
+			"tmdbId": 37680,
+			"files": [
+				{
+					"path": "Suits (2011) - S03E16 - No Way Out (1080p BluRay x265 ImE).mkv",
+					"season": 3,
+					"episode": 16,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "Episode 16 Alternate Opening with Aaron Korsh.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Trailer.mkv",
+			"hash": null,
+			"imdbId": "tt0664521",
+			"files": [
+				{
+					"path": "S01E01 Pilot Deleted Scenes-deleted.mkv",
+					"folder": "Featurettes/Featurettes/Season 1/Deleted Scenes"
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0386676",
+			"tmdbId": 2316,
+			"files": [
+				{
+					"path": "S01E01 Pilot Deleted Scenes-deleted.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Ben 10 Omniverse (2012) Season 1-4 S01-04 (1080p HMAX.WEBDL x265 10bit AAC 2.0 EDGE2020)",
+			"hash": null,
+			"imdbId": "tt2320144",
+			"files": [
+				{
+					"path": "Ben 10 Omniverse - S01E01 - The More Things Change Part 1 (1080p x265 EDGE2020).mkv",
+					"folder": "Season 1"
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt2293002",
+			"tmdbId": 46922,
+			"files": [
+				{
+					"path": "Ben 10 Omniverse - S01E01 - The More Things Change Part 1 (1080p x265 EDGE2020).mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[SubsPlease] Ace of Diamond Act II S2 (01-13) (1080p) [Batch]",
+			"hash": null,
+			"imdbId": "tt3105422",
+			"files": [
+				{
+					"path": "[SubsPlease] Ace of Diamond Act II S2 - 01v2 (1080p) [75FA9829].mkv",
+					"folder": "[SubsPlease] Ace of Diamond Act II S2 (01-13) (1080p) [Batch]"
+				}
+			]
+		},
+		"rex": [[2, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt3105422",
+			"tmdbId": 60761,
+			"files": [
+				{
+					"path": "[SubsPlease] Ace of Diamond Act II S2 - 01v2 (1080p) [75FA9829].mkv",
+					"season": 4,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "[MTBB] Monogatari Series (BD 1080p)",
+			"hash": null,
+			"imdbId": "tt1483868",
+			"files": [
+				{
+					"path": "[MTBB] Owarimonogatari S1 - 04 [75444542].mkv",
+					"folder": "13 - Owarimonogatari S1"
+				}
+			]
+		},
+		"rex": [[1, 4]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1480925",
+			"tmdbId": 46195,
+			"files": [
+				{
+					"path": "[MTBB] Owarimonogatari S1 - 04 [75444542].mkv",
+					"season": 4,
+					"episode": 4,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP[rartv]",
+			"hash": null,
+			"imdbId": "tt3999226",
+			"files": [
+				{
+					"path": "Star.Wars.Rebels.S02E20.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[2, 20]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt2930604",
+			"tmdbId": 60554,
+			"files": [
+				{
+					"path": "Star.Wars.Rebels.S02E20.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+					"season": 2,
+					"episode": 18,
+					"episodeEnd": null,
+					"how": "imdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Sesame Street",
+			"hash": null,
+			"imdbId": "tt4366556",
+			"files": [
+				{
+					"path": "Sesame Street - Episode 0131 - Oscar's grandmother visits.mp4",
+					"folder": ""
+				},
+				{
+					"path": "Sesame Street - Episode 0847 - The Wicked Witch of the West loses her broomstick.mp4",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[1, 131],
+			[1, 847]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0063951",
+			"tmdbId": 502,
+			"files": [
+				{
+					"path": "Sesame Street - Episode 0131 - Oscar's grandmother visits.mp4",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "absolute"
+				},
+				{
+					"path": "Sesame Street - Episode 0847 - The Wicked Witch of the West loses her broomstick.mp4",
+					"season": 7,
+					"episode": 52,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Batman TAS Seasons 2-3",
+			"hash": null,
+			"imdbId": "tt0519626",
+			"files": [
+				{
+					"path": "Batman - 066 - Sideshow   [DarkDream].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[2, 66]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0103359",
+			"tmdbId": 2098,
+			"files": [
+				{
+					"path": "Batman - 066 - Sideshow   [DarkDream].mkv",
+					"season": 2,
+					"episode": 6,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex-fun library, 2026-10-16",
+		"request": {
+			"name": "Star.Wars.The.Clone.Wars.-.S02.-.PGor.-.(BD-Remux.1080p.VC-1.Russian.English.AC3-5.1)",
+			"hash": null,
+			"imdbId": "tt1185834",
+			"files": [
+				{
+					"path": "00001 (STAR_WARS_THE_CLONE_WARS_S2_E01_HOLOCRON_HEIST).m2ts",
+					"folder": "STAR_WARS_THE_CLONE_WARS_S2_E01_HOLOCRON_HEIST/BDMV/STREAM"
+				},
+				{
+					"path": "00001 (STAR_WARS_THE_CLONE_WARS_S2_E02_CARGO_OF_DOOM).m2ts",
+					"folder": "STAR_WARS_THE_CLONE_WARS_S2_E02_CARGO_OF_DOOM/BDMV/STREAM"
+				}
+			]
+		},
+		"rex": [
+			[2, 1],
+			[2, 2]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0458290",
+			"tmdbId": 4194,
+			"files": [
+				{
+					"path": "00001 (STAR_WARS_THE_CLONE_WARS_S2_E01_HOLOCRON_HEIST).m2ts",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "00001 (STAR_WARS_THE_CLONE_WARS_S2_E02_CARGO_OF_DOOM).m2ts",
+					"season": 2,
+					"episode": 2,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+			"hash": null,
+			"imdbId": "tt4384306",
+			"files": [
+				{
+					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4384306",
+			"tmdbId": 62564,
+			"files": [
+				{
+					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Bleach - Sennen Kessen Hen - Kashin Tan - 01 [1080p DSNP WEB-DL AVC AAC][MultiSub][AE2878AA].mkv",
+			"hash": null,
+			"imdbId": "tt0434665",
+			"files": [
+				{
+					"path": "[Erai-raws] Bleach - Sennen Kessen Hen - Kashin Tan - 01 [1080p DSNP WEB-DL AVC AAC][MultiSub][AE2878AA].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 41]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Erai-raws] Bleach - Sennen Kessen Hen - Kashin Tan - 01 [1080p DSNP WEB-DL AVC AAC][MultiSub][AE2878AA].mkv",
+					"season": 2,
+					"episode": 41,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Uma Musume - Cinderella Gray Part 2 - 05 [1080p AMZN WEB-DL AVC EAC3][MultiSub][DF799ED3].mkv",
+			"hash": null,
+			"imdbId": "tt35437675",
+			"files": [
+				{
+					"path": "[Erai-raws] Uma Musume - Cinderella Gray Part 2 - 05 [1080p AMZN WEB-DL AVC EAC3][MultiSub][DF799ED3].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 18]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt35437675",
+			"tmdbId": 262700,
+			"files": [
+				{
+					"path": "[Erai-raws] Uma Musume - Cinderella Gray Part 2 - 05 [1080p AMZN WEB-DL AVC EAC3][MultiSub][DF799ED3].mkv",
+					"season": 1,
+					"episode": 18,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Uma Musume-Cinderella Gray Part 2-09 [1080p AMZN WEB-DL AVC EAC3][MultiSub][8F047312].mkv",
+			"hash": null,
+			"imdbId": "tt35437675",
+			"files": [
+				{
+					"path": "[Erai-raws] Uma Musume-Cinderella Gray Part 2-09 [1080p AMZN WEB-DL AVC EAC3][MultiSub][8F047312].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 22]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt35437675",
+			"tmdbId": 262700,
+			"files": [
+				{
+					"path": "[Erai-raws] Uma Musume-Cinderella Gray Part 2-09 [1080p AMZN WEB-DL AVC EAC3][MultiSub][8F047312].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Dr Stone - New World Part 2 - 01 [1080p][HEVC][A3E31C3F].mkv",
+			"hash": null,
+			"imdbId": "tt9679542",
+			"files": [
+				{
+					"path": "[Erai-raws] Dr Stone - New World Part 2 - 01 [1080p][HEVC][A3E31C3F].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 12]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9679542",
+			"tmdbId": 86031,
+			"files": [
+				{
+					"path": "[Erai-raws] Dr Stone - New World Part 2 - 01 [1080p][HEVC][A3E31C3F].mkv",
+					"season": 3,
+					"episode": 12,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Hakoniwa] Enen no Shouboutai - San no Shou - 24 [1A11435E][WEB 1080p HEVC AAC].mkv",
+			"hash": null,
+			"imdbId": "tt9307686",
+			"files": [
+				{
+					"path": "[Hakoniwa] Enen no Shouboutai - San no Shou - 24 [1A11435E][WEB 1080p HEVC AAC].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 24]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9307686",
+			"tmdbId": 88046,
+			"files": [
+				{
+					"path": "[Hakoniwa] Enen no Shouboutai - San no Shou - 24 [1A11435E][WEB 1080p HEVC AAC].mkv",
+					"season": 3,
+					"episode": 24,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
+			"hash": null,
+			"imdbId": "tt0481256",
+			"files": [
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 24]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0481256",
+			"tmdbId": 42705,
+			"files": [
+				{
+					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
+					"season": 2,
+					"episode": 24,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[ToonsHub].Bleach-Thousand-Year.Blood.War-S17E23.JAP.2160p.x264.AAC.[Multi-Subs]",
+			"hash": null,
+			"imdbId": "tt0434665",
+			"files": [
+				{
+					"path": "[ToonsHub].Bleach-Thousand-Year.Blood.War-S17E23.JAP.2160p.x264.AAC.[Multi-Subs]",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 23]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[ToonsHub].Bleach-Thousand-Year.Blood.War-S17E23.JAP.2160p.x264.AAC.[Multi-Subs]",
+					"season": 2,
+					"episode": 23,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[ToonsHub] BLEACH Thousand-Year Blood War - S01E04 (JAP 2160p x264 AAC) [Multi-Subs].mkv",
+			"hash": null,
+			"imdbId": "tt0434665",
+			"files": [
+				{
+					"path": "[ToonsHub] BLEACH Thousand-Year Blood War - S01E04 (JAP 2160p x264 AAC) [Multi-Subs].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 4]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[ToonsHub] BLEACH Thousand-Year Blood War - S01E04 (JAP 2160p x264 AAC) [Multi-Subs].mkv",
+					"season": 2,
+					"episode": 4,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+			"hash": null,
+			"imdbId": "tt0434665",
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 47]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"season": 2,
+					"episode": 47,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws].Kingdom.4th.Season-21.[1080p]",
+			"hash": null,
+			"imdbId": "tt2404499",
+			"files": [
+				{
+					"path": "[Erai-raws].Kingdom.4th.Season-21.[1080p]",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[4, 21]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt2404499",
+			"tmdbId": 46437,
+			"files": [
+				{
+					"path": "[Erai-raws].Kingdom.4th.Season-21.[1080p]",
+					"season": 4,
+					"episode": 21,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Jujutsu Kaisen 2nd Season - 23 [1080p][Multiple Subtitle][ENG][5B2DEEB4].mkv",
+			"hash": null,
+			"imdbId": "tt12343534",
+			"files": [
+				{
+					"path": "[Erai-raws] Jujutsu Kaisen 2nd Season - 23 [1080p][Multiple Subtitle][ENG][5B2DEEB4].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 23]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt12343534",
+			"tmdbId": 95479,
+			"files": [
+				{
+					"path": "[Erai-raws] Jujutsu Kaisen 2nd Season - 23 [1080p][Multiple Subtitle][ENG][5B2DEEB4].mkv",
+					"season": 1,
+					"episode": 47,
+					"episodeEnd": null,
+					"how": "imdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+			"hash": null,
+			"imdbId": "tt14976292",
+			"files": [
+				{
+					"path": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[4, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt14976292",
+			"tmdbId": 123542,
+			"files": [
+				{
+					"path": "[Erai-raws] Shiguang Dailiren Season 3 - 01 (CA) [1080p CR WEBRip HEVC AAC][MultiSub][8FB131A8].mkv",
+					"season": 4,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Sakurato] Mairimashita! Iruma-kun (2026) [22][AVC-8bit 1080P AAC][CHS].mp4",
+			"hash": null,
+			"imdbId": "tt11034066",
+			"files": [
+				{
+					"path": "[Sakurato] Mairimashita! Iruma-kun (2026) [22][AVC-8bit 1080P AAC][CHS].mp4",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[4, 22]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt11034066",
+			"tmdbId": 91801,
+			"files": [
+				{
+					"path": "[Sakurato] Mairimashita! Iruma-kun (2026) [22][AVC-8bit 1080P AAC][CHS].mp4",
+					"season": 4,
+					"episode": 22,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Naruto-Kun.Hu - UraharaShop] Bleach 2 Sennen Kessen-hen - 46 [1080p].mkv",
+			"hash": null,
+			"imdbId": "tt0434665",
+			"files": [
+				{
+					"path": "[Naruto-Kun.Hu - UraharaShop] Bleach 2 Sennen Kessen-hen - 46 [1080p].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 46]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Naruto-Kun.Hu - UraharaShop] Bleach 2 Sennen Kessen-hen - 46 [1080p].mkv",
+					"season": 2,
+					"episode": 46,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[Cleo]Ranma_\u00bd_-_01_(Dual Audio_10bit_BD1080p_x265).mkv",
+			"hash": null,
+			"imdbId": "tt0096686",
+			"files": [
+				{
+					"path": "[Cleo]Ranma_\u00bd_-_01_(Dual Audio_10bit_BD1080p_x265).mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0096686",
+			"tmdbId": 57706,
+			"files": [
+				{
+					"path": "[Cleo]Ranma_\u00bd_-_01_(Dual Audio_10bit_BD1080p_x265).mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[a-s]_dragon_ball_z_-_001_-_the_new_threat__rs2_[862C00C2].mkv",
+			"hash": null,
+			"imdbId": "tt0121220",
+			"files": [
+				{
+					"path": "[a-s]_dragon_ball_z_-_001_-_the_new_threat__rs2_[862C00C2].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [null],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0121220",
+			"tmdbId": 12971,
+			"files": [
+				{
+					"path": "[a-s]_dragon_ball_z_-_001_-_the_new_threat__rs2_[862C00C2].mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/releases.json",
+		"request": {
+			"name": "[M-R]Monster_Rancher_-_17_-_Underground_Adventure_[re-encode].avi",
+			"hash": null,
+			"imdbId": "tt0218775",
+			"files": [
+				{
+					"path": "[M-R]Monster_Rancher_-_17_-_Underground_Adventure_[re-encode].avi",
+					"folder": null
+				}
+			]
+		},
+		"rex": [null],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0218775",
+			"tmdbId": 15130,
+			"files": [
+				{
+					"path": "[M-R]Monster_Rancher_-_17_-_Underground_Adventure_[re-encode].avi",
+					"season": 1,
+					"episode": 17,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[IK] Toaru Kagaku no Railgun (BD 1920x1080 FLAC) [Dual Audio]",
+			"hash": null,
+			"imdbId": "tt1515996",
+			"files": [
+				{
+					"path": "[IK] Toaru Kagaku no Railgun - 01 (BD 1920x1080 Hi10 FLAC).mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1515996",
+			"tmdbId": 30977,
+			"files": [
+				{
+					"path": "[IK] Toaru Kagaku no Railgun - 01 (BD 1920x1080 Hi10 FLAC).mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[IK] Toaru Kagaku no Railgun (BD 1920x1080 FLAC) [Dual Audio]",
+			"hash": null,
+			"imdbId": "tt1515996",
+			"files": [
+				{
+					"path": "A Certain Scientific Railgun (2009) - s02e01 - [IK][BD 1920x1080 Hi10 FLAC].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1515996",
+			"tmdbId": 30977,
+			"files": [
+				{
+					"path": "A Certain Scientific Railgun (2009) - s02e01 - [IK][BD 1920x1080 Hi10 FLAC].mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[IK] Toaru Kagaku no Railgun (BD 1920x1080 FLAC) [Dual Audio]",
+			"hash": null,
+			"imdbId": "tt1515996",
+			"files": [
+				{
+					"path": "A Certain Scientific Railgun (2009) - s03e01 - [IK][BD 1920x1080 x265 10bit FLAC].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1515996",
+			"tmdbId": 30977,
+			"files": [
+				{
+					"path": "A Certain Scientific Railgun (2009) - s03e01 - [IK][BD 1920x1080 x265 10bit FLAC].mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Reza] Food Wars",
+			"hash": null,
+			"imdbId": "tt4731072",
+			"files": [
+				{
+					"path": "[Reza] Food Wars S01E01.mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4731072",
+			"tmdbId": 62273,
+			"files": [
+				{
+					"path": "[Reza] Food Wars S01E01.mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Reza] Food Wars",
+			"hash": null,
+			"imdbId": "tt4731072",
+			"files": [
+				{
+					"path": "[Reza] Food Wars S02E01.mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4731072",
+			"tmdbId": 62273,
+			"files": [
+				{
+					"path": "[Reza] Food Wars S02E01.mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Reza] Food Wars",
+			"hash": null,
+			"imdbId": "tt4731072",
+			"files": [
+				{
+					"path": "[Reza] Food Wars S05E01.mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[5, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt4731072",
+			"tmdbId": 62273,
+			"files": [
+				{
+					"path": "[Reza] Food Wars S05E01.mkv",
+					"season": 5,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Tenrai-Sensei] Aria The Animation [BD][1080p][HEVC 10bit x265][Dual Audio]",
+			"hash": null,
+			"imdbId": "tt0977907",
+			"files": [
+				{
+					"path": "Aria The Animation - S00E01 - That Miracle In Which We May Meet Again.mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[0, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0977907",
+			"tmdbId": 53787,
+			"files": [
+				{
+					"path": "Aria The Animation - S00E01 - That Miracle In Which We May Meet Again.mkv",
+					"season": 0,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Tenrai-Sensei] Aria The Animation [BD][1080p][HEVC 10bit x265][Dual Audio]",
+			"hash": null,
+			"imdbId": "tt0977907",
+			"files": [
+				{
+					"path": "Aria The Animation - S01E01 - That Lovely Miracle....mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0977907",
+			"tmdbId": 53787,
+			"files": [
+				{
+					"path": "Aria The Animation - S01E01 - That Lovely Miracle....mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Tenrai-Sensei] Aria The Animation [BD][1080p][HEVC 10bit x265][Dual Audio]",
+			"hash": null,
+			"imdbId": "tt0977907",
+			"files": [
+				{
+					"path": "Aria The Animation - S03E01 - In That Spring Breeze That Finally Came To Visit....mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0977907",
+			"tmdbId": 53787,
+			"files": [
+				{
+					"path": "Aria The Animation - S03E01 - In That Spring Breeze That Finally Came To Visit....mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Pog42] Bakuman Seasons 1-3 (BD 1080p HEVC x265 10bit FLAC)",
+			"hash": null,
+			"imdbId": "tt1738419",
+			"files": [
+				{
+					"path": "[Pog42] Bakuman - 01 (BD 1080p x265 FLAC).mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1738419",
+			"tmdbId": 36041,
+			"files": [
+				{
+					"path": "[Pog42] Bakuman - 01 (BD 1080p x265 FLAC).mkv",
+					"season": 1,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Pog42] Bakuman Seasons 1-3 (BD 1080p HEVC x265 10bit FLAC)",
+			"hash": null,
+			"imdbId": "tt1738419",
+			"files": [
+				{
+					"path": "Bakuman (2010) - s02e01 - [Pog42][BD 1080p x265 FLAC].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1738419",
+			"tmdbId": 36041,
+			"files": [
+				{
+					"path": "Bakuman (2010) - s02e01 - [Pog42][BD 1080p x265 FLAC].mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Pog42] Bakuman Seasons 1-3 (BD 1080p HEVC x265 10bit FLAC)",
+			"hash": null,
+			"imdbId": "tt1738419",
+			"files": [
+				{
+					"path": "Bakuman (2010) - s03e01 - [Pog42][BD 1080p x265 FLAC].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1738419",
+			"tmdbId": 36041,
+			"files": [
+				{
+					"path": "Bakuman (2010) - s03e01 - [Pog42][BD 1080p x265 FLAC].mkv",
+					"season": 3,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Anime Time] Demon Slayer - Kimetsu no Yaiba (Season 01 + Season 02 + Mugen Train Arc + Movie) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+			"hash": null,
+			"imdbId": "tt9335498",
+			"files": [
+				{
+					"path": "[Anime Time] Demon Slayer - Kimetsu no Yaiba - 07.mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[1, 7]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9335498",
+			"tmdbId": 85937,
+			"files": [
+				{
+					"path": "[Anime Time] Demon Slayer - Kimetsu no Yaiba - 07.mkv",
+					"season": 1,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Anime Time] Demon Slayer - Kimetsu no Yaiba (Season 01 + Season 02 + Mugen Train Arc + Movie) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+			"hash": null,
+			"imdbId": "tt9335498",
+			"files": [
+				{
+					"path": "Demon Slayer - Kimetsu no Yaiba (2019) - s02e07 - [Anime Time].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[2, 7]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9335498",
+			"tmdbId": 85937,
+			"files": [
+				{
+					"path": "Demon Slayer - Kimetsu no Yaiba (2019) - s02e07 - [Anime Time].mkv",
+					"season": 2,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	},
+	{
+		"from": "rex tests/fixtures/anime/batch_files.json",
+		"request": {
+			"name": "[Anime Time] Demon Slayer - Kimetsu no Yaiba (Season 01 + Season 02 + Mugen Train Arc + Movie) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+			"hash": null,
+			"imdbId": "tt9335498",
+			"files": [
+				{
+					"path": "Demon Slayer - Kimetsu no Yaiba (2019) - s03e07 - [Anime Time].mkv",
+					"folder": null
+				}
+			]
+		},
+		"rex": [[3, 7]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt9335498",
+			"tmdbId": 85937,
+			"files": [
+				{
+					"path": "Demon Slayer - Kimetsu no Yaiba (2019) - s03e07 - [Anime Time].mkv",
+					"season": 3,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "tmdb"
+				}
+			]
+		}
+	}
+]
