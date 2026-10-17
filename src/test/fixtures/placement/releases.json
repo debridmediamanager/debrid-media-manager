@@ -3013,5 +3013,60 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "D\u00e9tective.Conan.-.In\u00e9dits.VF.(286-287-288).[WEBrip.1080p.NF.MULTI].[AVC]",
+			"hash": null,
+			"imdbId": "tt0131179",
+			"files": [
+				{
+					"path": "D\u00e9tective Conan S11E01 - 286 [MULTI] [AVC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "D\u00e9tective Conan S11E02 - 287 [MULTI] [AVC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "D\u00e9tective Conan S11E03 - 288 [MULTI] [AVC].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			[11, 1],
+			[11, 2],
+			[11, 3]
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0131179",
+			"tmdbId": 30983,
+			"files": [
+				{
+					"path": "D\u00e9tective Conan S11E01 - 286 [MULTI] [AVC].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "D\u00e9tective Conan S11E02 - 287 [MULTI] [AVC].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "D\u00e9tective Conan S11E03 - 288 [MULTI] [AVC].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
 	}
 ]

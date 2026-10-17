@@ -39,6 +39,8 @@ export interface FileNumbers {
 	coded?: true;
 	/** The release numbers this season from its start, so a number past its end is not the show's. */
 	fromStart?: true;
+	/** The show's running number, named beside the season and episode (`S11E01 - 286`). */
+	running?: number;
 }
 
 export interface TmdbSeason {
@@ -146,6 +148,8 @@ const JAPANESE_SEASON = new RegExp(
 );
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
+// `Détective Conan S11E01 - 286 [MULTI]`: the running number after the episode, nothing but tags after it.
+const SCENE_RUNNING = /s\d{1,2}[\s._-]*e\d{1,3}\s+-\s+(\d{2,4})\s*(?=[[(]|$)/i;
 // `Carl.Sagans.Cosmos.10of13`.
 const OF_COUNT = /(?:^|[\s._-])(\d{1,3})of(\d{1,3})(?:[\s._-]|$)/i;
 // `[Coalgirls]_Hunter_X_Hunter_001_(…)`, `House M.D. 14 - Private Lives`: the show's name, then the number.
@@ -175,8 +179,20 @@ function sceneNumbers(name: string): FileNumbers | null {
 	if (pairs.length > 0) {
 		// the first as named: `Family Guy - S11E16 - 12 and a Half Angry Men` is no episode 12
 		const [season, first] = pairs[0];
-		const last = Math.max(...pairs.filter(([s]) => s === season).map(([, e]) => e));
-		return first < 1 ? null : { season, episode: first, end: last > first ? last : null };
+		// and the run after it (`S04E17E18`, `S01E01-E03`): `Détective Conan S11E01 - 286` is
+		// one episode and the show's running number, not episodes 1 to 286
+		const named = new Set(pairs.filter(([s]) => s === season).map(([, e]) => e));
+		let last = first;
+		while (named.has(last + 1)) last++;
+		const running = positive(SCENE_RUNNING.exec(name)?.[1]);
+		return first < 1
+			? null
+			: {
+					season,
+					episode: first,
+					end: last > first ? last : null,
+					...(running ? { running } : {}),
+				};
 	}
 	const dashed = UNDERSCORE_SEASON_EP.exec(name) ?? SEASON_DASH_EP.exec(name);
 	if (dashed) {
@@ -571,9 +587,31 @@ function namesASubtitle(release: string, show: PlacementShow): boolean {
 /**
  * Where a show's file goes on TMDB, by the first rule that lands on an episode TMDB lists,
  * or null. `anime` is null when the index could not be loaded; `imdb` when the show has no
- * IMDb id.
+ * IMDb id. A file naming the show's running number beside its season and episode is placed
+ * only where TMDB's count reaches that number: `Détective Conan S11E01 - 286`, numbered in
+ * the French dub's seasons, is IMDb's S11E01 (TMDB's S1E271) by its first two numbers.
  */
 export async function placeFile(
+	show: PlacementShow,
+	anime: AnimeIndex | null,
+	release: string,
+	path: string,
+	numbers: FileNumbers,
+	imdb: ImdbLookup | null
+): Promise<Placement | null> {
+	const found = await placeByRules(show, anime, release, path, numbers, imdb);
+	if (!found || numbers.running === undefined || found.season < 1) return found;
+	const before = show.seasons
+		.filter((row) => row.season > 0 && row.season < found.season)
+		.reduce((sum, row) => sum + row.episodes, 0);
+	const listed = await show.episodes(found.season);
+	const nth = listed
+		? listed.findIndex((row) => row.episode === found.episode) + 1
+		: found.episode;
+	return before + nth === numbers.running ? found : null;
+}
+
+async function placeByRules(
 	show: PlacementShow,
 	anime: AnimeIndex | null,
 	release: string,

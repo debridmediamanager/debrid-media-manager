@@ -81,6 +81,14 @@ describe('fileNumbers', () => {
 			)
 		).toMatchObject({ season: 4, episode: 17, end: 18 });
 	});
+	it("reads `S11E01 - 286` as one episode and the show's running number, never episodes 1 to 286", () => {
+		const vf = release('Détective.Conan.-.Inédits.VF');
+		expect(vf.files.map((f) => fileNumbers(vf.name, f.folder, f.path, false))).toEqual([
+			{ season: 11, episode: 1, end: null, running: 286 },
+			{ season: 11, episode: 2, end: null, running: 287 },
+			{ season: 11, episode: 3, end: null, running: 288 },
+		]);
+	});
 });
 
 describe('parseName', () => {

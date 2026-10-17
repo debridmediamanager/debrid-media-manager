@@ -358,3 +358,21 @@ describe('a series of its own that TMDB files inside a show', () => {
 		expect(placedAt(releases[0])).toEqual([[null, null]]);
 	});
 });
+
+describe('a file named with its season, its episode and the show running number', () => {
+	it('is left unplaced where TMDB counts the episode its season and episode lead to otherwise', async () => {
+		// `S11E01 - 286` is the French dub's numbering; IMDb's S11E01 is TMDB's S1E271
+		const vf = recordedCase('Détective.Conan.-.Inédits.VF');
+		expect(recorded.seasonEpisodes['tt0131179/11']['1']).toBe('tt1015287');
+		expect(recorded.find.tt1015287.tv_episode_results).toEqual([
+			{ show_id: 30983, season_number: 1, episode_number: 271 },
+		]);
+		const { releases } = await place([vf.request as PlaceRequest]);
+		expect(releases[0]).toMatchObject({ kind: 'tv', tmdbId: 30983 });
+		expect(placedAt(releases[0])).toEqual([
+			[null, null],
+			[null, null],
+			[null, null],
+		]);
+	});
+});

@@ -116,7 +116,9 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 the show's, never an episode's. `season` and `episode` are TMDB's numbering, so you can
 ask TMDB (or `/api/metadata/tmdb:tv:<tmdbId>?season=N`) for that exact episode;
 `episodeEnd` is the last episode of a multi-episode file (`S04E17E18`). Movies and files
-DMM cannot place have `season` and `episode` `null`. `how` says which rule placed a file:
+DMM cannot place have `season` and `episode` `null`. A file naming the show's running
+number beside its season and episode (`Détective Conan S11E01 - 286`) is placed only where
+TMDB's count of the show's episodes reaches that number. `how` says which rule placed a file:
 
 | `how`      | Rule                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
