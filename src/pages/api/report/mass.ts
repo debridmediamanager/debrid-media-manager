@@ -1,6 +1,7 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { storedReporterId } from '@/services/reporterId';
 import { repository } from '@/services/repository';
+import { reviewReportsInBackground } from '@/services/scrapedVerdicts/reports';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -65,6 +66,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const db = repository;
 		const results = [];
 		const errors = [];
+		const byTitle = new Map<string, string[]>();
 
 		// Process each report
 		for (const report of reports) {
@@ -76,6 +78,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					type as 'porn' | 'wrong_imdb' | 'wrong_season'
 				);
 				results.push({ hash: report.hash, success: true });
+				byTitle.set(report.imdbId, [...(byTitle.get(report.imdbId) ?? []), report.hash]);
 			} catch (error) {
 				console.error(`Failed to report ${report.hash}:`, error);
 				errors.push({
@@ -84,6 +87,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				});
 			}
 		}
+
+		for (const [imdbId, hashes] of byTitle) reviewReportsInBackground(imdbId, hashes, type);
 
 		return res.status(200).json({
 			success: true,

@@ -1,0 +1,129 @@
+import type { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
+import { titleKeyOf } from '@/services/database/scrapedVerdict';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reviewReports } from './reports';
+
+vi.mock('@/services/repository', () => ({ repository: {} }));
+
+const movie = {
+	imdbId: 'tt15791034',
+	name: 'Barbarian',
+	year: 2022,
+	titles: ['Barbarian'],
+	ambiguous: {},
+};
+
+function fakeDb(overrides: Partial<Record<keyof ScrapedVerdictService, unknown>>) {
+	return {
+		getFilenames: vi.fn(async () => new Map<string, string>()),
+		getMovieContext: vi.fn(async () => null),
+		getShowTitles: vi.fn(async () => null),
+		getVerdicts: vi.fn(async () => []),
+		getTokensSpent: vi.fn(async () => 0),
+		addTokensSpent: vi.fn(async () => {}),
+		...overrides,
+	} as unknown as ScrapedVerdictService;
+}
+
+/** Jev answering every media question with `media` and every title question with `title`. */
+function jevAnswers(media: string, title: string) {
+	const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+		const body = JSON.parse(init.body as string);
+		const answers = Object.fromEntries(
+			Object.keys(body.questions).map((id) => [
+				id,
+				{ choice: id.startsWith('m') ? media : title },
+			])
+		);
+		return new Response(
+			JSON.stringify({ model: 'jev-test', answers, usage: { input_tokens: 7 } })
+		);
+	});
+	vi.stubGlobal('fetch', fetchMock);
+	return fetchMock;
+}
+
+describe('reviewReports', () => {
+	beforeEach(() => vi.stubEnv('TYPESAFE_API_KEY', 'test-key'));
+	afterEach(() => {
+		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
+	});
+
+	it('files a movie report when the verdict trashes the release', async () => {
+		const fetchMock = jevAnswers('ADULT', 'NO_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['aa', 'Barbarian.Girls.Hot.Clip.mp4']])),
+			getMovieContext: vi.fn(async () => movie),
+		});
+		const file = vi.fn(async () => {});
+
+		const confirmed = await reviewReports('tt15791034', ['aa'], 'porn', db, file);
+
+		expect(confirmed).toEqual(['aa']);
+		expect(file).toHaveBeenCalledWith('aa');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(db.addTokensSpent).toHaveBeenCalledWith(expect.any(String), 7);
+	});
+
+	it('does not file a movie report Jev disagrees with', async () => {
+		jevAnswers('FILM', 'SAME_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['bb', 'Barbarian.2022.1080p.WEB-DL.mkv']])),
+			getMovieContext: vi.fn(async () => movie),
+		});
+		const file = vi.fn(async () => {});
+
+		expect(await reviewReports('tt15791034', ['bb'], 'wrong_imdb', db, file)).toEqual([]);
+		expect(file).not.toHaveBeenCalled();
+	});
+
+	it('reuses a stored verdict without asking Jev', async () => {
+		const fetchMock = jevAnswers('FILM', 'SAME_TITLE');
+		const title = 'Some.Other.Film.2022.mkv';
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['cc', title]])),
+			getMovieContext: vi.fn(async () => movie),
+			getVerdicts: vi.fn(async () => [
+				{ hash: 'cc', titleKey: titleKeyOf(title), verdict: 'trash' },
+			]),
+		});
+		const file = vi.fn(async () => {});
+
+		expect(await reviewReports('tt15791034', ['cc'], 'wrong_imdb', db, file)).toEqual(['cc']);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('checks a series report against the one question its type asks', async () => {
+		jevAnswers('ADULT', 'SAME_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['dd', 'Show.S01E01.mkv']])),
+			getShowTitles: vi.fn(async () => ({ titles: ['Show'], year: 2020 })),
+		});
+		const file = vi.fn(async () => {});
+
+		expect(await reviewReports('tt1', ['dd'], 'porn', db, file)).toEqual(['dd']);
+		expect(await reviewReports('tt1', ['dd'], 'wrong_imdb', db, file)).toEqual([]);
+	});
+
+	it('leaves wrong_season and keyless instances to the two-reporter rule', async () => {
+		const fetchMock = jevAnswers('ADULT', 'NO_TITLE');
+		const db = fakeDb({});
+		expect(await reviewReports('tt1', ['ee'], 'wrong_season', db, vi.fn())).toEqual([]);
+		vi.stubEnv('TYPESAFE_API_KEY', '');
+		expect(await reviewReports('tt1', ['ee'], 'porn', db, vi.fn())).toEqual([]);
+		expect(db.getFilenames).not.toHaveBeenCalled();
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('asks nothing once the day budget is spent', async () => {
+		const fetchMock = jevAnswers('ADULT', 'NO_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['ff', 'Show.S01E01.mkv']])),
+			getShowTitles: vi.fn(async () => ({ titles: ['Show'], year: 2020 })),
+			getTokensSpent: vi.fn(async () => Number.MAX_SAFE_INTEGER),
+		});
+		expect(await reviewReports('tt1', ['ff'], 'porn', db, vi.fn())).toEqual([]);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+});

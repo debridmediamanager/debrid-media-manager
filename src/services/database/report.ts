@@ -1,3 +1,4 @@
+import { JEV_REPORTER } from '@/services/reporterId';
 import { DatabaseClient } from './client';
 
 export class ReportService extends DatabaseClient {
@@ -69,7 +70,7 @@ export class ReportService extends DatabaseClient {
 	 * Gets hashes that should be filtered out based on reports.
 	 * A hash is filtered if:
 	 * - It has 2 or more reports from different userIds
-	 * - It has any report from userId 'A4HGOIVJY65UIOOTMCD77OZCSYA6UFDYGYJI7WVCDF7QIBA7KDGQ' (admin/moderator)
+	 * - Jev agreed with one of its reports (see `reviewReports`)
 	 * @param imdbId - The IMDB ID to get reported hashes for
 	 * @returns Array of hash strings that should be filtered out
 	 */
@@ -86,12 +87,11 @@ export class ReportService extends DatabaseClient {
 
 			// Group reports by hash
 			const reportsByHash = new Map<string, Set<string>>();
-			const adminReportedHashes = new Set<string>();
+			const confirmedHashes = new Set<string>();
 
 			for (const report of reports) {
-				// Check if this is an admin/moderator report
-				if (report.userId === 'A4HGOIVJY65UIOOTMCD77OZCSYA6UFDYGYJI7WVCDF7QIBA7KDGQ') {
-					adminReportedHashes.add(report.hash);
+				if (report.userId === JEV_REPORTER) {
+					confirmedHashes.add(report.hash);
 				}
 
 				// Track unique userIds per hash
@@ -104,14 +104,14 @@ export class ReportService extends DatabaseClient {
 			// Filter hashes based on criteria
 			const filteredHashes: string[] = [];
 
-			// Add all admin-reported hashes
-			for (const hash of adminReportedHashes) {
+			// Add every hash Jev confirmed a report on
+			for (const hash of confirmedHashes) {
 				filteredHashes.push(hash);
 			}
 
 			// Add hashes with 2+ reports from different users
 			for (const [hash, userIds] of reportsByHash) {
-				if (userIds.size >= 2 && !adminReportedHashes.has(hash)) {
+				if (userIds.size >= 2 && !confirmedHashes.has(hash)) {
 					filteredHashes.push(hash);
 				}
 			}

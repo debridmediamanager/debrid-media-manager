@@ -1,3 +1,4 @@
+import { JEV_REPORTER, storedReporterId } from '@/services/reporterId';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { ReportService } from './report';
 
@@ -63,7 +64,7 @@ describe('ReportService', () => {
 
 	it('aggregates reported hashes using the filtering rules', async () => {
 		prismaMock.report.findMany.mockResolvedValue([
-			{ hash: 'admin-hash', userId: 'A4HGOIVJY65UIOOTMCD77OZCSYA6UFDYGYJI7WVCDF7QIBA7KDGQ' },
+			{ hash: 'admin-hash', userId: JEV_REPORTER },
 			{ hash: 'multi', userId: 'user-1' },
 			{ hash: 'multi', userId: 'user-2' },
 			{ hash: 'single', userId: 'user-1' },
@@ -72,6 +73,17 @@ describe('ReportService', () => {
 		const hashes = await service.getReportedHashes('tt1');
 		expect(hashes).toEqual(expect.arrayContaining(['admin-hash', 'multi']));
 		expect(hashes).not.toContain('single');
+	});
+
+	it('never lets a client-sent reporter id hide a result on its own', async () => {
+		// The old moderator id was compared in the public source, so anyone could
+		// send it. Whatever a client sends is stored through storedReporterId.
+		const sent = [JEV_REPORTER, 'jev', 'admin', 'pm:x', 'A'.repeat(52)];
+		prismaMock.report.findMany.mockResolvedValue(
+			sent.map((id, i) => ({ hash: `h${i}`, userId: storedReporterId(id) }))
+		);
+
+		expect(await service.getReportedHashes('tt1')).toEqual([]);
 	});
 
 	it('throws when report lookups fail', async () => {

@@ -121,6 +121,52 @@ export class ScrapedVerdictService extends DatabaseClient {
 		};
 	}
 
+	/** A series' titles in every language and its start year, for judging a report on it. */
+	public async getShowTitles(imdbId: string): Promise<{ titles: string[]; year: number } | null> {
+		const basics = await this.prisma.imdbTitleBasics.findUnique({
+			where: { tconst: imdbId },
+			select: { primaryTitle: true, originalTitle: true, startYear: true, titleType: true },
+		});
+		if (!basics?.primaryTitle || !basics.startYear || isMovieTitleType(basics.titleType)) {
+			return null;
+		}
+		const akas = await this.prisma.imdbTitleAkas.findMany({
+			where: { titleId: imdbId },
+			select: { title: true },
+		});
+		const byFold = new Map<string, string>();
+		for (const title of [basics.primaryTitle, basics.originalTitle, ...akas.map((a) => a.title)]
+			.filter((t): t is string => !!t && t.trim().length > 0)
+			.sort()) {
+			const folded = fold(title).trim() || title;
+			if (!byFold.has(folded)) byFold.set(folded, title);
+		}
+		return { titles: [...byFold.values()], year: basics.startYear };
+	}
+
+	/** The filename each hash carries on the title's movie page or any of its season pages. */
+	public async getFilenames(imdbId: string, hashes: string[]): Promise<Map<string, string>> {
+		const wanted = new Set(hashes.map((h) => h.toLowerCase()));
+		const where = {
+			OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
+		};
+		const rows = (
+			await Promise.all([
+				this.prisma.scrapedTrue.findMany({ where, select: { value: true } }),
+				this.prisma.scraped.findMany({ where, select: { value: true } }),
+			])
+		).flat();
+		const filenames = new Map<string, string>();
+		for (const row of rows) {
+			for (const entry of entriesOf(row.value)) {
+				if (typeof entry.hash !== 'string' || typeof entry.title !== 'string') continue;
+				const hash = entry.hash.toLowerCase();
+				if (wanted.has(hash) && !filenames.has(hash)) filenames.set(hash, entry.title);
+			}
+		}
+		return filenames;
+	}
+
 	/** Every stored result for a page key across both tables, whole, plus when either last changed. */
 	public async getStoredPairs(
 		key: string

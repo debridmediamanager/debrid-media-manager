@@ -1,6 +1,13 @@
 import { createHash } from 'crypto';
 
-const TAGGED = /^(pm|oc|dl):(.+)$/s;
+const TAGGED = /^(pm|oc|dl|jev):(.+)$/s;
+
+/**
+ * The reporter a report is filed under once Jev agrees with it. One such report
+ * hides the result, so a client must never be able to send it: `jev:` is a tag
+ * here, and a client-sent `jev:confirmed` is stored as its digest instead.
+ */
+export const JEV_REPORTER = 'jev:confirmed';
 
 /**
  * The reporter id as it is written to the `Report` table.

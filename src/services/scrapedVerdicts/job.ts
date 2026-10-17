@@ -35,14 +35,14 @@ function apiKey(): string | undefined {
 	return process.env.TYPESAFE_API_KEY || undefined;
 }
 
-const utcDay = () => new Date().toISOString().slice(0, 10);
+export const utcDay = () => new Date().toISOString().slice(0, 10);
 
 /**
  * Fleet-wide cap on model spend per UTC day, counted in the database. A
  * per-process counter reset on every deploy and let two deploys on 2026-09-27
  * spend past the ceiling.
  */
-async function underBudget(db: ScrapedVerdictService): Promise<boolean> {
+export async function underBudget(db: ScrapedVerdictService): Promise<boolean> {
 	const limit = Number(process.env.SCRAPED_VERDICTS_DAILY_TOKENS) || DEFAULT_DAILY_TOKENS;
 	return (await db.getTokensSpent(utcDay())) < limit;
 }

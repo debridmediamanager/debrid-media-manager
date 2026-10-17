@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { storedReporterId } from '@/services/reporterId';
+import { reviewReportsInBackground } from '@/services/scrapedVerdicts/reports';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '../../services/repository';
@@ -44,6 +45,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			storedReporterId(userId),
 			type as 'porn' | 'wrong_imdb' | 'wrong_season'
 		);
+		reviewReportsInBackground(imdbId, [hash], type);
 
 		return res.status(200).json({ success: true });
 	} catch (error) {
