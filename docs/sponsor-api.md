@@ -81,9 +81,12 @@ curl -X POST https://debridmediamanager.com/api/sponsor/place \
 Each release is `{name, hash?, imdbId?, files: [{path, folder}]}`: `path` is the file's
 name and `folder` the folder the provider lists it in inside the release (`""` at the
 top). Send `imdbId` when you already know the title; an episode's id is read as its show,
-and one TMDB cannot use (or a film's, for a release whose files name seasons) is set aside
-for the name. Without one, DMM identifies the release by its name as `/api/sponsor/identify`
-does.
+and one TMDB cannot use (one it knows nothing by, one whose show it has deleted, or a film's,
+for a release whose files name seasons) is set aside for the name. Without one, DMM
+identifies the release by its name as `/api/sponsor/identify` does. An anime release (a
+fansub's name, or a scene name with Japanese audio or an id TMDB cannot use) is named by the
+anime lists' titles when neither names it, and when TMDB's Japanese show for the id holds
+none of its numbers.
 
 ```json
 {

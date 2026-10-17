@@ -2365,5 +2365,295 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[Lazier] Bleach Thousand-Year Blood War - 27 (WEB 1080p EAC3) [8749C4A9].mkv",
+			"hash": null,
+			"imdbId": "tt14986406",
+			"files": [
+				{
+					"path": "[Lazier] Bleach Thousand-Year Blood War - 27 (WEB 1080p EAC3) [8749C4A9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 27]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Lazier] Bleach Thousand-Year Blood War - 27 (WEB 1080p EAC3) [8749C4A9].mkv",
+					"season": 2,
+					"episode": 27,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze",
+			"hash": null,
+			"imdbId": "tt14986406",
+			"files": [
+				{
+					"path": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[17, 45]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze.mkv",
+					"season": 2,
+					"episode": 45,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id), sent without the id",
+		"request": {
+			"name": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[17, 45]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "Bleach.Thousand-Year.Blood.War.S17E45.v2.1080p.WEBRip.EAC3.AV1-Breeze.mkv",
+					"season": 2,
+					"episode": 45,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore",
+			"hash": null,
+			"imdbId": "tt14986406",
+			"files": [
+				{
+					"path": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[4, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore.mkv",
+					"season": 2,
+					"episode": 41,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id), sent without the id",
+		"request": {
+			"name": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[4, 1]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "BLEACH.Thousand-Year.Blood.War.S04E01.720p.WEBRip.x265.HEVC-Mythicore.mkv",
+					"season": 2,
+					"episode": 41,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[ToonsHub] Bleach - Thousand-Year Blood War - S17E20 (JAP 2160p x264 AAC) [Multi-Subs]",
+			"hash": null,
+			"imdbId": "tt14986406",
+			"files": [
+				{
+					"path": "[ToonsHub] Bleach - Thousand-Year Blood War - S17E20 (JAP 2160p x264 AAC) [Multi-Subs].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[17, 20]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[ToonsHub] Bleach - Thousand-Year Blood War - S17E20 (JAP 2160p x264 AAC) [Multi-Subs].mkv",
+					"season": 2,
+					"episode": 20,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs]",
+			"hash": null,
+			"imdbId": "tt14986406",
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 47]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"season": 2,
+					"episode": 47,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id), sent without the id",
+		"request": {
+			"name": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs]",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 47]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Feibanyama] Bleach Thousand Year Blood War S01E47 [IQIYI WebRip 2160p HEVC AAC Multi-Subs].mkv",
+					"season": 2,
+					"episode": 47,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id), sent without the id",
+		"request": {
+			"name": "Detective.Conan.EP1212.Episode.1212.1080p.NF.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "Detective.Conan.EP1212.Episode.1212.1080p.NF.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 1212]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0131179",
+			"tmdbId": 30983,
+			"files": [
+				{
+					"path": "Detective.Conan.EP1212.Episode.1212.1080p.NF.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+					"season": 1,
+					"episode": 1212,
+					"episodeEnd": null,
+					"how": "absolute"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id), sent without the id",
+		"request": {
+			"name": "Kingdom.S02E06.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN",
+			"hash": null,
+			"imdbId": null,
+			"files": [
+				{
+					"path": "Kingdom.S02E06.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[2, 6]],
+		"expect": {
+			"kind": null,
+			"imdbId": null,
+			"tmdbId": null,
+			"files": [
+				{
+					"path": "Kingdom.S02E06.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
 	}
 ]

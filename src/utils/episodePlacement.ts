@@ -525,6 +525,31 @@ export function tvdbToTmdb(
 	return [target.season, episode - target.tvdbOffset + target.offset];
 }
 
+/**
+ * TMDB's numbers for a file of a series TVDB keeps as one season of cours, numbered by its
+ * cours instead (`BLEACH.Thousand-Year.Blood.War.S04E01` is the Calamity's first, TMDB's
+ * S2E41, TVDB's S17E41): the `season`th cour of the season the release's entry is in, when
+ * the episode is within it.
+ */
+function courNumbers(
+	index: AnimeIndex,
+	show: number,
+	hit: AnimeHit | null,
+	season: number,
+	episode: number
+): [number, number] | null {
+	if (!hit || hit.numbered) return null;
+	const entry = hit.target;
+	if (entry.tmdb !== show || entry.season < 1 || entry.tvdbSeason === null) return null;
+	if (entry.tvdbSeason === season) return null;
+	const cours = (index.byShow.get(show) ?? [])
+		.filter((t) => t.tvdbSeason === entry.tvdbSeason && t.season === entry.season)
+		.sort((a, b) => a.tvdbOffset - b.tvdbOffset || a.anidb - b.anidb);
+	const [cour, next] = [cours[season - 1], cours[season]];
+	if (cours.length < 2 || !cour || (next && episode > next.offset - cour.offset)) return null;
+	return [cour.season, cour.offset + episode];
+}
+
 /** Whether the release names the show and then a subtitle: `BLEACH.Thousand-Year.Blood.War` under Bleach is another series of it. */
 function namesASubtitle(release: string, show: PlacementShow): boolean {
 	const title = normalizeTitle(parseName(release).title);
@@ -592,7 +617,9 @@ export async function placeFile(
 		}
 	}
 	if (mapped && scene && season !== null && season > 0) {
-		const tvdb = tvdbToTmdb(mapped, show.tmdbId, season, episode);
+		const tvdb =
+			tvdbToTmdb(mapped, show.tmdbId, season, episode) ??
+			courNumbers(mapped, show.tmdbId, lookupAnime(mapped, release, file), season, episode);
 		const found = tvdb && (await placed(tvdb, 'anime'));
 		if (found) return found;
 	}

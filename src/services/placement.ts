@@ -60,7 +60,10 @@ export interface Identified {
 export interface PlacementSources {
 	/** TMDB's `/find` for an IMDb id. */
 	find(imdbId: string): Promise<any | null>;
-	/** TMDB's show details (seasons with episode counts and air dates, names, external ids). */
+	/**
+	 * TMDB's show details (seasons with episode counts and air dates, names, external ids), or
+	 * TMDB's 404 body (`status_code` 34) for a show it has deleted; null when it could not be asked.
+	 */
 	show(tmdbId: number): Promise<any | null>;
 	/** TMDB's list of one season (`tv/{id}/season/{n}`). */
 	season(tmdbId: number, season: number): Promise<any | null>;
@@ -189,34 +192,90 @@ async function resolve(
 	} else if (typeof tv === 'number') kind = 'tv';
 	else if (typeof movie === 'number' && !seasons) kind = 'movie';
 	const tmdbId = kind === 'movie' ? movie : kind === 'tv' ? tv : undefined;
-	return typeof tmdbId === 'number' ? { kind, imdbId, tmdbId } : { kind, imdbId, tmdbId: null };
+	if (typeof tmdbId !== 'number') return { kind, imdbId, tmdbId: null };
+	// DMM's cached find for tt14986406 names show 335660, which TMDB has since deleted: one TMDB
+	// cannot use, so the release's name names it
+	if (kind === 'tv' && deleted(await sources.show(tmdbId))) return { kind, imdbId, tmdbId: null };
+	return { kind, imdbId, tmdbId };
 }
 
+/** TMDB's answer for a show it has deleted: `/3/tv/335660` is a 404 with `status_code` 34. */
+const deleted = (answer: any) => answer?.status_code === 34;
+
+// `Detective.Conan.EP1212.Episode.1212.1080p.NF.WEB-DL.JPN.AAC2.0…`: Japanese audio
+const JAPANESE = /(?:^|[\s._\-[(])(?:jpn|jap|japanese)(?=[\s._\-\])]|$)/i;
+
+/**
+ * A release's show: the one its title names, else the one the anime index names by the
+ * release's name. That is a fansub's name, or a scene name of numbered episodes something else
+ * says is anime: Japanese audio, or a TV title its id or the identifier named that TMDB cannot
+ * use. The identifier names neither `Detective.Conan.EP1212…JPN…` nor
+ * `Kingdom.S02E06.1080p.NF.WEB-DL…-ExREN`, which is Netflix's Korean Kingdom and no anime.
+ * The anime index's show also stands in for a Japanese show of TMDB's that holds none of the
+ * release's numbers.
+ */
 async function placeRelease(
 	release: PlaceRequest,
 	title: Title | null,
 	sources: PlacementSources,
 	anime: AnimeIndex | null
 ): Promise<PlacedRelease> {
-	let imdbId = title?.imdbId ?? null;
-	let kind: PlacedRelease['kind'] = title?.kind ?? null;
-	let tmdbId: number | null = title?.tmdbId ?? null;
-	// a fansub release TMDB could not name by its IMDb id: the anime index names its show
-	const hit =
-		tmdbId === null && anime && fansubShaped(release.name)
-			? lookupAnime(anime, release.name, release.files[0]?.path ?? '')
-			: null;
-	if (hit) {
-		kind = 'tv';
-		tmdbId = hit.target.tmdb;
+	const numbered = release.files.some(
+		(file) =>
+			fileNumbers(release.name, file.folder, file.path, release.files.length === 1) !== null
+	);
+	const named = () =>
+		anime ? lookupAnime(anime, release.name, release.files[0]?.path ?? '') : null;
+	const onIndex = (hit: ReturnType<typeof named>) =>
+		hit && { kind: 'tv' as const, imdbId: title?.imdbId ?? null, tmdbId: hit.target.tmdb };
+	const animeShaped =
+		fansubShaped(release.name) ||
+		(numbered &&
+			(JAPANESE.test(release.name) || (title?.kind === 'tv' && title.tmdbId === null)));
+	const indexed = title?.tmdbId == null && animeShaped ? onIndex(named()) : null;
+	if (indexed) return placeOnShow(release, indexed, true, sources, anime);
+	if (title?.kind !== 'tv' || title.tmdbId === null) {
+		return {
+			kind: title?.kind ?? null,
+			imdbId: title?.imdbId ?? null,
+			tmdbId: title?.tmdbId ?? null,
+			files: release.files.map((file) => unplaced(file.path)),
+		};
 	}
-	const answer = (files: PlacedFile[]): PlacedRelease => ({ kind, imdbId, tmdbId, files });
-	if (kind !== 'tv' || tmdbId === null) {
-		return answer(release.files.map((file) => unplaced(file.path)));
+	const placed = await placeOnShow(
+		release,
+		{ ...title, tmdbId: title.tmdbId },
+		false,
+		sources,
+		anime
+	);
+	// TMDB's live find for tt14986406 names `Bleach: Sennen Kessen-hen` (336301), a Japanese
+	// stub whose one season holds an E13 alone, and none of the release's numbers: the anime
+	// index's show, if it does
+	if (placed.skipped || !numbered || placed.files.some((file) => file.season !== null)) {
+		return placed;
 	}
+	if ((await sources.show(title.tmdbId))?.original_language !== 'ja') return placed;
+	const other = onIndex(named());
+	if (!other || other.tmdbId === title.tmdbId) return placed;
+	const there = await placeOnShow(release, other, true, sources, anime);
+	return there.files.some((file) => file.season !== null) ? there : placed;
+}
 
+/** A release's files on one TMDB show; `hit` when the anime index named the show. */
+async function placeOnShow(
+	release: PlaceRequest,
+	title: Title & { tmdbId: number },
+	hit: boolean,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	const { kind, tmdbId } = title;
+	let imdbId = title.imdbId;
+	const answer = (files: PlacedFile[]): PlacedRelease => ({ kind, imdbId, tmdbId, files });
 	const showId = tmdbId;
 	const details = await sources.show(showId);
+	if (deleted(details)) return answer(release.files.map((file) => unplaced(file.path)));
 	// TMDB's show could not be read: ask again rather than answer it unplaced
 	if (!details?.seasons) return skipped(release);
 	const external = details.external_ids?.imdb_id;
@@ -342,6 +401,13 @@ async function currentAnimeIndex(): Promise<AnimeIndex | null> {
 	return animeIndex.index;
 }
 
+/** TMDB's 404 body in place of the error, so a show TMDB deleted is not one it could not be asked about. */
+function tmdbNotFound(error: unknown): unknown {
+	const response = (error as { response?: { status?: number; data?: any } } | null)?.response;
+	if (response?.status === 404 && deleted(response.data)) return response.data;
+	throw error;
+}
+
 /** DMM's own caches: TMDB through `metadataCache`, IMDb's episodes and anime titles from the database. */
 export const cachedSources: PlacementSources = {
 	find: (imdbId) =>
@@ -350,7 +416,9 @@ export const cachedSources: PlacementSources = {
 			: Promise.resolve(null),
 	show: (tmdbId) =>
 		getTmdbAuth()
-			? settle(() => getMetadataCache().getTmdbTvInfo(tmdbId, TMDB_TV_APPEND))
+			? settle(() =>
+					getMetadataCache().getTmdbTvInfo(tmdbId, TMDB_TV_APPEND).catch(tmdbNotFound)
+				)
 			: Promise.resolve(null),
 	season: (tmdbId, season) =>
 		getTmdbAuth()

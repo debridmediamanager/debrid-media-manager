@@ -1,6 +1,8 @@
 import { buildFranchiseIndex } from '@/services/anime/animeFranchise';
 import type { FribbAnimeEntry } from '@/services/anime/animeMapping';
+import { getMetadataCache } from '@/services/metadataCache';
 import {
+	cachedSources,
 	placeReleases,
 	type Identify,
 	type PlaceRequest,
@@ -9,10 +11,16 @@ import {
 import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import cases from '@/test/fixtures/placement/releases.json';
+import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/metadataCache', () => ({ getMetadataCache: vi.fn() }));
+vi.mock('@/utils/tmdbAuth', async (original) => ({
+	...(await original<typeof import('@/utils/tmdbAuth')>()),
+	getTmdbAuth: () => ({ headers: {}, apiKey: 'test' }),
+}));
 
 /**
  * Real releases (rex-fun's library on fun, 2026-10-16, and rex's hand-read anime cases) and
@@ -203,5 +211,97 @@ describe('placeReleases over real releases', () => {
 		const cloneWars = named('Star.Wars.The.Clone.Wars');
 		expect(recorded.find[cloneWars.request.imdbId!].movie_results).toEqual([{ id: 12180 }]);
 		expect(cloneWars.expect).toMatchObject({ kind: 'tv', imdbId: 'tt0458290', tmdbId: 4194 });
+	});
+});
+
+/** A recorded case by the start of its release's name, sent with its IMDb id or without. */
+const recordedCase = (name: string, withId = true) =>
+	cases.find((c) => c.request.name.startsWith(name) && Boolean(c.request.imdbId) === withId)!;
+const placedAt = (release: { files: { season: number | null; episode: number | null }[] }) =>
+	release.files.map((f) => [f.season, f.episode]);
+
+describe('a release whose IMDb id names a show TMDB no longer has', () => {
+	// zurg pushed tt14986406 (IMDb's own title for Thousand-Year Blood War); DMM's cached find
+	// names show 335660, which TMDB answers with a 404
+	const tybw = [
+		['[Lazier] Bleach Thousand-Year Blood War - 27', [2, 27]],
+		['Bleach.Thousand-Year.Blood.War.S17E45', [2, 45]],
+		['BLEACH.Thousand-Year.Blood.War.S04E01', [2, 41]],
+		['[ToonsHub] Bleach - Thousand-Year Blood War - S17E20', [2, 20]],
+		['[Feibanyama] Bleach Thousand Year Blood War S01E47', [2, 47]],
+	] as const;
+
+	it("is placed on Bleach's season 2 by its name, never answered skipped", async () => {
+		expect(recorded.find.tt14986406.tv_results).toEqual([{ id: 335660 }]);
+		expect(recorded.show['335660'].status_code).toBe(34);
+		for (const [name, at] of tybw) {
+			const { releases, complete } = await place([
+				recordedCase(name).request as PlaceRequest,
+			]);
+			expect(complete).toBe(true);
+			expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt0434665', tmdbId: 30984 });
+			expect(placedAt(releases[0])).toEqual([at]);
+		}
+	});
+
+	it("is placed the same when TMDB's find names its one-episode stub instead", async () => {
+		// TMDB's own find today: `Bleach: Sennen Kessen-hen`, one season holding an E13 alone
+		expect(liveFind.tt14986406.tv_results).toEqual([{ id: 336301 }]);
+		expect(recorded.show['336301'].seasons).toEqual([
+			{ season_number: 1, episode_count: 1, air_date: null },
+		]);
+		const live = {
+			...sources,
+			find: async (id: string) => (liveFind as any)[id] ?? recorded.find[id] ?? null,
+		};
+		for (const [name, at] of tybw) {
+			const request = recordedCase(name).request as PlaceRequest;
+			const { releases } = await place([request], Infinity, live);
+			expect(releases[0]).toMatchObject({ kind: 'tv', tmdbId: 30984 });
+			expect(placedAt(releases[0])).toEqual([at]);
+		}
+	});
+
+	it("reads a part's season as its cour: TYBW's S04E01 is the Calamity's first", async () => {
+		const mythicore = recordedCase('BLEACH.Thousand-Year.Blood.War.S04E01');
+		const { releases } = await place([mythicore.request as PlaceRequest]);
+		expect(releases[0].files[0]).toMatchObject({ season: 2, episode: 41, how: 'anime' });
+		// TMDB's S2E41 is "GOD OF THUNDER", which VARYG's `S01E41.GOD.OF.THUNDER` names
+		const s2 = recorded.season['30984/2'].episodes;
+		expect(s2.find((e: any) => e.episode_number === 41).name).toBe('GOD OF THUNDER');
+	});
+
+	it("tells TMDB's 404 from a read that failed, which is asked again", async () => {
+		const getTmdbTvInfo = vi.fn();
+		vi.mocked(getMetadataCache).mockReturnValue({ getTmdbTvInfo } as any);
+		getTmdbTvInfo.mockRejectedValueOnce(
+			Object.assign(new Error('Request failed with status code 404'), {
+				response: { status: 404, data: recorded.show['335660'] },
+			})
+		);
+		expect(await cachedSources.show(335660)).toEqual(recorded.show['335660']);
+		getTmdbTvInfo.mockRejectedValueOnce(new Error('timeout of 10000ms exceeded'));
+		expect(await cachedSources.show(335660)).toBeNull();
+	});
+});
+
+describe('a scene release no IMDb id or identifier names', () => {
+	it('is named by the anime index when its files are numbered episodes', async () => {
+		const ep = recordedCase('Detective.Conan.EP1212', false);
+		expect(recorded.identify[ep.request.name]).toBeNull();
+		const { releases } = await place([ep.request as PlaceRequest]);
+		expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt0131179', tmdbId: 30983 });
+		expect(releases[0].files[0]).toMatchObject({ season: 1, episode: 1212, how: 'absolute' });
+	});
+
+	it('is left to the identifier when nothing says it is anime', async () => {
+		// Netflix's Korean Kingdom, which the identifier does not name; the anime index's
+		// `Kingdom` would put it on the anime's season 2
+		const kingdom = recordedCase('Kingdom.S02E06', false);
+		expect(recorded.identify[kingdom.request.name]).toBeNull();
+		const { releases, complete } = await place([kingdom.request as PlaceRequest]);
+		expect(complete).toBe(true);
+		expect(releases[0]).toMatchObject({ kind: null, imdbId: null, tmdbId: null });
+		expect(placedAt(releases[0])).toEqual([[null, null]]);
 	});
 });
