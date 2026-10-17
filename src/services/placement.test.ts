@@ -305,3 +305,22 @@ describe('a scene release no IMDb id or identifier names', () => {
 		expect(placedAt(releases[0])).toEqual([[null, null]]);
 	});
 });
+
+describe('a fansub cour TMDB knows only as a film', () => {
+	it("is placed on the show's episodes the anime index numbers it as", async () => {
+		// tt43383343 is TMDB's movie 1669841, `Bleach: Thousand-Year Blood War - The Calamity`
+		expect(recorded.find.tt43383343).toEqual({
+			movie_results: [{ id: 1669841 }],
+			tv_results: [],
+			tv_episode_results: [],
+		});
+		for (const [name, at] of [
+			['[Onalrie].Bleach.Sennen.Kessen.Hen', [2, 48]],
+			['[Sakurato].Bleach', [2, 47]],
+		] as const) {
+			const { releases } = await place([recordedCase(name).request as PlaceRequest]);
+			expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt0434665', tmdbId: 30984 });
+			expect(placedAt(releases[0])).toEqual([at]);
+		}
+	});
+});

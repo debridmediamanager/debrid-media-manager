@@ -85,8 +85,9 @@ and one TMDB cannot use (one it knows nothing by, one whose show it has deleted,
 for a release whose files name seasons) is set aside for the name. Without one, DMM
 identifies the release by its name as `/api/sponsor/identify` does. An anime release (a
 fansub's name, or a scene name with Japanese audio or an id TMDB cannot use) is named by the
-anime lists' titles when neither names it, and when TMDB's Japanese show for the id holds
-none of its numbers.
+anime lists' titles when neither names it, when TMDB's Japanese show for the id holds none
+of its numbers, and when the id is a film's while the release is a fansub cour of numbered
+episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamity's film).
 
 ```json
 {

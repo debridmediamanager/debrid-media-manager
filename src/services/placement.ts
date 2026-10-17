@@ -212,7 +212,7 @@ const JAPANESE = /(?:^|[\s._\-[(])(?:jpn|jap|japanese)(?=[\s._\-\])]|$)/i;
  * use. The identifier names neither `Detective.Conan.EP1212…JPN…` nor
  * `Kingdom.S02E06.1080p.NF.WEB-DL…-ExREN`, which is Netflix's Korean Kingdom and no anime.
  * The anime index's show also stands in for a Japanese show of TMDB's that holds none of the
- * release's numbers.
+ * release's numbers, and for a film's on a fansub cour of numbered episodes.
  */
 async function placeRelease(
 	release: PlaceRequest,
@@ -232,7 +232,12 @@ async function placeRelease(
 		fansubShaped(release.name) ||
 		(numbered &&
 			(JAPANESE.test(release.name) || (title?.kind === 'tv' && title.tmdbId === null)));
-	const indexed = title?.tmdbId == null && animeShaped ? onIndex(named()) : null;
+	// TMDB knows tt43383343 only as the Calamity's film, and `[Onalrie] Bleach Sennen Kessen Hen -
+	// Kashin Tan - E08` is the cour's eighth episode: Bleach's S2E48
+	const film =
+		title?.kind === 'movie' && title.tmdbId !== null && fansubShaped(release.name) && numbered;
+	const hit = (title?.tmdbId == null && animeShaped) || film ? named() : null;
+	const indexed = hit && (!film || hit.target.season > 0) ? onIndex(hit) : null;
 	if (indexed) return placeOnShow(release, indexed, true, sources, anime);
 	if (title?.kind !== 'tv' || title.tmdbId === null) {
 		return {

@@ -2655,5 +2655,63 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[Onalrie].Bleach.Sennen.Kessen.Hen.-.Kashin.Tan.-.E08.[1080p.WEBRip.AV1]",
+			"hash": null,
+			"imdbId": "tt43383343",
+			"files": [
+				{
+					"path": "[Onalrie] Bleach Sennen Kessen Hen - Kashin Tan - E08 [1080p WEBRip AV1].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [null],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Onalrie] Bleach Sennen Kessen Hen - Kashin Tan - E08 [1080p WEBRip AV1].mkv",
+					"season": 2,
+					"episode": 48,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[Sakurato].Bleach\uff1a.Sennen.Kessen.Hen.-.Kashin.Tan.[07][AVC-8bit.1080P.AAC][CHT]",
+			"hash": null,
+			"imdbId": "tt43383343",
+			"files": [
+				{
+					"path": "[Sakurato] Bleach\uff1a Sennen Kessen Hen - Kashin Tan [07][AVC-8bit 1080P AAC][CHT].mp4",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [null],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0434665",
+			"tmdbId": 30984,
+			"files": [
+				{
+					"path": "[Sakurato] Bleach\uff1a Sennen Kessen Hen - Kashin Tan [07][AVC-8bit 1080P AAC][CHT].mp4",
+					"season": 2,
+					"episode": 47,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
 	}
 ]
