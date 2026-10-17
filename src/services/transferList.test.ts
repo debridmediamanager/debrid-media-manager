@@ -157,10 +157,10 @@ describe('cursor', () => {
 
 	it('names a debrid host by a hash, never its address', () => {
 		// The cursor rides in a query string, which every proxy in front of DMM logs.
-		const id = sourceIdOf('http://100.122.58.7:3100');
+		const id = sourceIdOf('http://uploader.example:3100');
 		expect(id).toMatch(/^debrid-[0-9a-f]{8}$/);
-		expect(id).toBe(sourceIdOf('http://100.122.58.7:3100'));
-		expect(id).not.toBe(sourceIdOf('http://100.110.215.49:3100'));
+		expect(id).toBe(sourceIdOf('http://uploader.example:3100'));
+		expect(id).not.toBe(sourceIdOf('http://uploader-2.example:3100'));
 	});
 
 	it('refuses anything it did not write', () => {

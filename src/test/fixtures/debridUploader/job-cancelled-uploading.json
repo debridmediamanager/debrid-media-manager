@@ -6,7 +6,7 @@
 	"destination": "rd",
 	"duration_seconds": null,
 	"error": null,
-	"file_path": "/home/ben/debrid/downloads/c2d87d7a-f19c-4274-918f-f2e085578208/Resident Evil 2026.1080p.WEB.DL.AAC.x264-rothebehap {imdb-tt35538033}.torrent",
+	"file_path": "/srv/debrid/downloads/c2d87d7a-f19c-4274-918f-f2e085578208/Resident Evil 2026.1080p.WEB.DL.AAC.x264-rothebehap {imdb-tt35538033}.torrent",
 	"force_qbit": 0,
 	"id": "c2d87d7a-f19c-4274-918f-f2e085578208",
 	"imdb_id": "tt35538033",

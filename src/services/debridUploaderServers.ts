@@ -19,7 +19,7 @@
 // the operator's RD/TorBox quota. The management API this file talks to lives
 // on the Tailscale :3100 vhost. A public IP here makes every job submission
 // fail with a bare 404.
-const DEFAULT_SERVER = 'http://100.122.58.7:3100'; // debrid02 over Tailscale
+const DEFAULT_SERVER = 'http://localhost:3100';
 
 export interface DebridServerConfig {
 	url: string;

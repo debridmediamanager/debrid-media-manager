@@ -6,7 +6,7 @@
 	"destination": "rd",
 	"duration_seconds": 613,
 	"error": "All torrent sources failed for 90a7b57357ed0f2ae65ca39336b3bd923684413e: https://itorrents.org/torrent/90A7B57357ED0F2AE65CA39336B3BD923684413E.torrent timed out after 10000ms; http://itorrents.net/torrent/90A7B57357ED0F2AE65CA39336B3BD923684413E.torrent timed out after 10000ms; https://btcache.me/torrent/90A7B57357ED0F2AE65CA39336B3BD923684413E returned invalid torrent for 90A7B57357ED0F2AE65CA39336B3BD923684413E; https://torrage.info/torrent/90A7B57357ED0F2AE65CA39336B3BD923684413E failed: 404; swarm fallback also failed: no peer offered metadata for 90a7b57357ed0f2ae65ca39336b3bd923684413e within 300s",
-	"file_path": "/home/ben/debrid/downloads/90a21951-6300-468c-8111-0c2a078e194d/Red Heat 1988 1080p AMZN WEB.DL H264-GPRS {imdb-tt0095963}.torrent",
+	"file_path": "/srv/debrid/downloads/90a21951-6300-468c-8111-0c2a078e194d/Red Heat 1988 1080p AMZN WEB.DL H264-GPRS {imdb-tt0095963}.torrent",
 	"force_qbit": 0,
 	"id": "90a21951-6300-468c-8111-0c2a078e194d",
 	"imdb_id": "tt0095963",

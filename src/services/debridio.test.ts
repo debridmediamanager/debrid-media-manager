@@ -7,7 +7,7 @@ import { parseBytes, parseDebridioStreams } from './debridio';
 const CACHED_REMUX = {
 	name: '[RD ⚡] \nDebridio 4k HDR REMUX',
 	title: 'The.Shawshank.Redemption.1994.MULTI.2160p.UHD.BluRay.HDR.REMUX.HEVC-LTN\n⚡ 📺 4k 💾 56.99 GB  \n🌐 Multi Audio',
-	url: 'https://addon.debridio.com/play/movie/realdebrid/10d20568d2f96886d67e466dde3ea6e7/CFXTZMPRYMGS3QI2MESPREXO5D5OWP76JTRVYXG3TJFOIZN3C2HQ/a9270b009f4e20ec39a1b02f1c782e1b774e108f/The.Shawshank.Redemption.1994.MULTI.2160p.UHD.BluRay.HDR.REMUX.HEVC-LTN',
+	url: 'https://addon.debridio.com/play/movie/realdebrid/0123456789abcdef0123456789abcdef/RDKEYPLACEHOLDERXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/a9270b009f4e20ec39a1b02f1c782e1b774e108f/The.Shawshank.Redemption.1994.MULTI.2160p.UHD.BluRay.HDR.REMUX.HEVC-LTN',
 	behaviorHints: {
 		bingeGroup: 'debridio-a9270b009f4e20ec39a1b02f1c782e1b774e108f',
 		filename: 'The.Shawshank.Redemption.1994.MULTI.2160p.UHD.BluRay.HDR.REMUX.HEVC-LTN.mkv',
@@ -17,13 +17,13 @@ const CACHED_REMUX = {
 const UNCACHED_EPISODE = {
 	name: '[RD] \nDebridio 4k',
 	title: 'Breaking.Bad.S01E01.MULTi.2160p.SDR.NF.WEB-DL.DDP5.1.H265-R3DUCT0.mkv\n 📦 📺 4k 💾 5.38 GB 👤 249 \n🌐 Multi Audio|🇫🇷',
-	url: 'https://addon.debridio.com/play/series/realdebrid/10d20568d2f96886d67e466dde3ea6e7/CFXTZMPRYMGS3QI2MESPREXO5D5OWP76JTRVYXG3TJFOIZN3C2HQ/76dab5ca28703a78fa027718cbfd347bb1268b75/Breaking.Bad.S01E01.MULTi.2160p.SDR.NF.WEB-DL.DDP5.1.H265-R3DUCT0.mkv',
+	url: 'https://addon.debridio.com/play/series/realdebrid/0123456789abcdef0123456789abcdef/RDKEYPLACEHOLDERXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/76dab5ca28703a78fa027718cbfd347bb1268b75/Breaking.Bad.S01E01.MULTi.2160p.SDR.NF.WEB-DL.DDP5.1.H265-R3DUCT0.mkv',
 };
 
 const CACHED_EPISODE = {
 	name: '[RD ⚡] \nDebridio 1080p',
 	title: 'Breaking.Bad.S01E01.Pilot.1080p.H264.BluRay.mkv\n⚡ 📦 📺 1080p 💾 3.55 GB  ',
-	url: 'https://addon.debridio.com/play/series/realdebrid/10d20568d2f96886d67e466dde3ea6e7/CFXTZMPRYMGS3QI2MESPREXO5D5OWP76JTRVYXG3TJFOIZN3C2HQ/01d2c1f3091ef56f08f840525264f51fac34ee9d/Breaking.Bad.S01E01.Pilot.1080p.H264.BluRay.mkv',
+	url: 'https://addon.debridio.com/play/series/realdebrid/0123456789abcdef0123456789abcdef/RDKEYPLACEHOLDERXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/01d2c1f3091ef56f08f840525264f51fac34ee9d/Breaking.Bad.S01E01.Pilot.1080p.H264.BluRay.mkv',
 	behaviorHints: {
 		bingeGroup: 'debridio-01d2c1f3091ef56f08f840525264f51fac34ee9d',
 		filename: 'Breaking.Bad.S01E01.Pilot.1080p.H264.BluRay.mkv',
@@ -33,7 +33,7 @@ const CACHED_EPISODE = {
 const TINY_JUNK = {
 	name: '[RD ⚡] \nDebridio 1080p',
 	title: '1.mkv\n⚡ 📺 1080p 💾 11.94 MB  ',
-	url: 'https://addon.debridio.com/play/series/realdebrid/10d20568d2f96886d67e466dde3ea6e7/CFXTZMPRYMGS3QI2MESPREXO5D5OWP76JTRVYXG3TJFOIZN3C2HQ/b43df67a93863ea91f2f773f00361072da771dd3/1.mkv',
+	url: 'https://addon.debridio.com/play/series/realdebrid/0123456789abcdef0123456789abcdef/RDKEYPLACEHOLDERXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/b43df67a93863ea91f2f773f00361072da771dd3/1.mkv',
 	behaviorHints: {
 		bingeGroup: 'debridio-b43df67a93863ea91f2f773f00361072da771dd3',
 		filename: '1.mkv',

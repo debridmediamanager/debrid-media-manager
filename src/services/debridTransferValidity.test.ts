@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 
-const SERVER = 'http://100.122.58.7:3100';
+const SERVER = 'http://uploader.example:3100';
 
 const uploaderAnswers = (body: unknown) =>
 	vi.stubGlobal(

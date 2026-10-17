@@ -18,7 +18,7 @@ describe('identifyFilenames', () => {
 	});
 
 	it('sends the token and splits at the service ceiling, keeping order', async () => {
-		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://100.126.93.56:3400/');
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.example:3400/');
 		vi.stubEnv('CONTENT_IDENTIFIER_TOKEN', 's3cret');
 		const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
 			const { filenames } = JSON.parse(init.body as string) as { filenames: string[] };
@@ -32,7 +32,7 @@ describe('identifyFilenames', () => {
 		expect(out).toHaveLength(1500);
 		expect(fetchMock).toHaveBeenCalledTimes(2);
 		const [url, init] = fetchMock.mock.calls[0];
-		expect(url).toBe('http://100.126.93.56:3400/identify/batch');
+		expect(url).toBe('http://identifier.example:3400/identify/batch');
 		expect((init.headers as Record<string, string>)['x-identifier-token']).toBe('s3cret');
 		expect(JSON.parse(fetchMock.mock.calls[1][1].body as string)).toMatchObject({
 			filenames: expect.arrayContaining(['Movie.1000.2020']),
@@ -41,7 +41,7 @@ describe('identifyFilenames', () => {
 	});
 
 	it('gives up on a refusal or an unreachable service', async () => {
-		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://100.126.93.56:3400');
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.example:3400');
 		vi.stubGlobal(
 			'fetch',
 			vi.fn().mockResolvedValue(new Response('bad token', { status: 401 }))

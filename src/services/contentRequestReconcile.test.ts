@@ -9,7 +9,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/repository');
 
 const mockDb = vi.mocked(db);
-const SERVER = 'http://100.122.58.7:3100';
+const SERVER = 'http://uploader.example:3100';
 const NOW = Date.parse('2026-09-24T12:00:00Z');
 
 const claimed = (over: Record<string, unknown> = {}) => ({

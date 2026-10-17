@@ -16,7 +16,7 @@
 import { isVideo } from '@/utils/selectable';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from './realDebrid';
 
-const DEFAULT_NZB2RD_URL = 'http://100.90.231.66:3200'; // dmm over Tailscale
+const DEFAULT_NZB2RD_URL = 'http://localhost:3200';
 const DEFAULT_NEWZNAB_URL = 'https://drunkenslug.com/api';
 const DEFAULT_ALTHUB_URL = 'https://api.althub.co.za/api';
 

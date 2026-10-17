@@ -15,7 +15,7 @@ vi.mock('@/services/transferRegistration', () => ({
 const mockDb = vi.mocked(db);
 const mockRegister = vi.mocked(registerCompletedDebridJob);
 
-const SERVER = 'http://100.122.58.7:3100';
+const SERVER = 'http://uploader.example:3100';
 
 const pendingRecord = (originalHash: string, jobId: string) => ({
 	originalHash,
