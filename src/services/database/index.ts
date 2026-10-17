@@ -16,6 +16,7 @@ import { OffcloudCastService } from './offcloudCast';
 import { PremiumizeCastService } from './premiumizeCast';
 import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
+import { RexDirectService } from './rexDirect';
 import { ScrapedService } from './scraped';
 import { SearchService } from './search';
 import { SponsorProviderKeysService } from './sponsorProviderKeys';
@@ -48,6 +49,7 @@ export {
 	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,
+	RexDirectService,
 	ScrapedService,
 	SearchService,
 	SponsorProviderKeysService,

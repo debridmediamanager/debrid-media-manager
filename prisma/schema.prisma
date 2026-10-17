@@ -1249,3 +1249,34 @@ model BlockedRelease {
 
   @@index([noticeId])
 }
+
+/// A rex server's own `<hash>.rex-direct.debridmediamanager.com` name, so Plex
+/// clients reach it over HTTPS from anywhere without the operator owning a domain
+/// (dmm's own plex.direct; `src/pages/api/rex-direct`). The hash is random and
+/// stored, never derived from the machineIdentifier -- that id is public via
+/// `/identity`, and a derivable hash would leak the server's home IP. Gated on an
+/// active sponsorship (the DMM API key), like the zurg endpoints.
+model RexDirectName {
+  machineIdentifier String   @id @db.VarChar(64)
+  hash              String   @unique @db.VarChar(64)
+  /// The sponsorship that owns this name (gatekeeper `Sponsors.shortId`).
+  shortId           String   @db.VarChar(16)
+  /// The source IP the A record was last pointed at, so an unchanged heartbeat
+  /// skips the Cloudflare write.
+  lastIp            String?  @db.VarChar(64)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([shortId])
+}
+
+/// The current `*.rex-direct.debridmediamanager.com` wildcard cert, written by the
+/// renewal cron on dmm-01 and served to rex servers by the register endpoint. One
+/// row (`id` = "current"). The dmm_web container has no host mount, so the cert
+/// reaches it through the database rather than a file path.
+model RexDirectCert {
+  id         String   @id @db.VarChar(16)
+  fullchain  String   @db.MediumText
+  privkey    String   @db.MediumText
+  updatedAt  DateTime @updatedAt
+}

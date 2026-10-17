@@ -25,6 +25,7 @@ import {
 	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,
+	RexDirectService,
 	ScrapedService,
 	SearchService,
 	SponsorProviderKeysService,
@@ -70,6 +71,7 @@ export type RepositoryDependencies = Partial<{
 	hashSearchService: HashSearchService;
 	zurgKeysService: ZurgKeysService;
 	sponsorsService: SponsorsService;
+	rexDirectService: RexDirectService;
 	sponsorProviderKeysService: SponsorProviderKeysService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
@@ -103,6 +105,7 @@ export class Repository {
 	private hashSearchService: HashSearchService;
 	private zurgKeysService: ZurgKeysService;
 	private sponsorsService: SponsorsService;
+	private rexDirectService: RexDirectService;
 	private sponsorProviderKeysService: SponsorProviderKeysService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
@@ -135,6 +138,7 @@ export class Repository {
 		hashSearchService,
 		zurgKeysService,
 		sponsorsService,
+		rexDirectService,
 		sponsorProviderKeysService,
 		streamHealthService,
 		historyAggregationService,
@@ -168,6 +172,7 @@ export class Repository {
 		this.sponsorsService = sponsorsService ?? new SponsorsService();
 		this.sponsorProviderKeysService =
 			sponsorProviderKeysService ?? new SponsorProviderKeysService();
+		this.rexDirectService = rexDirectService ?? new RexDirectService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
 		this.historyAggregationService =
 			historyAggregationService ?? new HistoryAggregationService();
@@ -1465,6 +1470,26 @@ export class Repository {
 
 	public getSponsorByShortId(shortId: string) {
 		return this.sponsorsService.getByShortId(shortId);
+	}
+
+	public rexDirectGetOrAssignHash(machineIdentifier: string, shortId: string) {
+		return this.rexDirectService.getOrAssignHash(machineIdentifier, shortId);
+	}
+
+	public rexDirectLastIp(machineIdentifier: string) {
+		return this.rexDirectService.lastIp(machineIdentifier);
+	}
+
+	public rexDirectRecordIp(machineIdentifier: string, ip: string) {
+		return this.rexDirectService.recordIp(machineIdentifier, ip);
+	}
+
+	public rexDirectGetCert() {
+		return this.rexDirectService.getCert();
+	}
+
+	public rexDirectSetCert(fullchain: string, privkey: string) {
+		return this.rexDirectService.setCert(fullchain, privkey);
 	}
 
 	public getCastSponsorGrant(service: string, userId: string) {
