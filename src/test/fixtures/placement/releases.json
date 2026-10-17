@@ -2713,5 +2713,276 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[KH] Motto To Love-Ru (BD 1920x1080 x264-10bit FLAC) [Dual-Audio]",
+			"hash": null,
+			"imdbId": "tt1743493",
+			"files": [
+				{
+					"path": "Menu - 01.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "Menu - 02.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "Menu - 03.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "Menu - 04.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "Menu - 05.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "Menu - 06.mkv",
+					"folder": "Extras/Menu"
+				},
+				{
+					"path": "NCED - 01.mkv",
+					"folder": "Extras/NC"
+				},
+				{
+					"path": "NCED - 02.mkv",
+					"folder": "Extras/NC"
+				},
+				{
+					"path": "NCOP.mkv",
+					"folder": "Extras/NC"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 01 - Once Again From The Beginning - War at the Baths - The Sound Of Ticking Love.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 02 - Things That Move in the Dark - Welcome to the Yuuki Household! - Slumber Party.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 03 - Special Love Medicine - Seeing You Through the Lens... - My Dear Beloved Cinderella.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 04 - Yami Yami Fashion - Wonderful Love - Twins' Escape.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 05 - The Queen of Love! - Let's Play - The Flavour of Chocolate is a Sweet Sensation.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 06 - Beach Girls - Late Night Tutor - Master of Love.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 07 - Yami's Clinic - The Antagonist - A Strange Haruna-chan.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 08 - Get Bigger! - Wan-derful Life - The Trance of Feelings.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 09 - For Whom the Bell Tolls - The Troubling Rampage - Loving Idol.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 10 - Pollen Telepathy - A Girl's Feelings - Doki Doki Mail.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 11 - All Quiet On The Sister Front - False Love - Predicting Love.mkv",
+					"folder": ""
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 12 - I Love You 1 - I Love You 2 - I Love You 3.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [
+			null,
+			[1, 2],
+			[1, 3],
+			null,
+			[1, 5],
+			[1, 6],
+			[1, 1],
+			[2, 2],
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null
+		],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt1216222",
+			"tmdbId": 34742,
+			"files": [
+				{
+					"path": "Menu - 01.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Menu - 02.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Menu - 03.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Menu - 04.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Menu - 05.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "Menu - 06.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "NCED - 01.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "NCED - 02.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "NCOP.mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 01 - Once Again From The Beginning - War at the Baths - The Sound Of Ticking Love.mkv",
+					"season": 2,
+					"episode": 1,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 02 - Things That Move in the Dark - Welcome to the Yuuki Household! - Slumber Party.mkv",
+					"season": 2,
+					"episode": 2,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 03 - Special Love Medicine - Seeing You Through the Lens... - My Dear Beloved Cinderella.mkv",
+					"season": 2,
+					"episode": 3,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 04 - Yami Yami Fashion - Wonderful Love - Twins' Escape.mkv",
+					"season": 2,
+					"episode": 4,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 05 - The Queen of Love! - Let's Play - The Flavour of Chocolate is a Sweet Sensation.mkv",
+					"season": 2,
+					"episode": 5,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 06 - Beach Girls - Late Night Tutor - Master of Love.mkv",
+					"season": 2,
+					"episode": 6,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 07 - Yami's Clinic - The Antagonist - A Strange Haruna-chan.mkv",
+					"season": 2,
+					"episode": 7,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 08 - Get Bigger! - Wan-derful Life - The Trance of Feelings.mkv",
+					"season": 2,
+					"episode": 8,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 09 - For Whom the Bell Tolls - The Troubling Rampage - Loving Idol.mkv",
+					"season": 2,
+					"episode": 9,
+					"episodeEnd": null,
+					"how": "tmdb"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 10 - Pollen Telepathy - A Girl's Feelings - Doki Doki Mail.mkv",
+					"season": 2,
+					"episode": 10,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 11 - All Quiet On The Sister Front - False Love - Predicting Love.mkv",
+					"season": 2,
+					"episode": 11,
+					"episodeEnd": null,
+					"how": "anime"
+				},
+				{
+					"path": "[KH] Motto To Love-Ru - 12 - I Love You 1 - I Love You 2 - I Love You 3.mkv",
+					"season": 2,
+					"episode": 12,
+					"episodeEnd": null,
+					"how": "anime"
+				}
+			]
+		}
 	}
 ]

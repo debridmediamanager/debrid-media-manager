@@ -324,3 +324,25 @@ describe('a fansub cour TMDB knows only as a film', () => {
 		}
 	});
 });
+
+describe('a batch whose title the parser cut short', () => {
+	it("names `Motto To Love-Ru` by its whole title and keeps the batch's extras unplaced", async () => {
+		const motto = recordedCase('[KH] Motto To Love-Ru');
+		const { releases } = await place([motto.request as PlaceRequest]);
+		expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt1216222', tmdbId: 34742 });
+		const byPath = new Map(releases[0].files.map((f) => [f.path, [f.season, f.episode]]));
+		for (const extra of [
+			'Menu - 01.mkv',
+			'Menu - 06.mkv',
+			'NCED - 01.mkv',
+			'NCED - 02.mkv',
+			'NCOP.mkv',
+		]) {
+			expect(byPath.get(extra)).toEqual([null, null]);
+		}
+		const episodes = releases[0].files.filter((f) => f.path.startsWith('[KH] Motto'));
+		expect(episodes.map((f) => [f.season, f.episode])).toEqual(
+			Array.from({ length: 12 }, (_, n) => [2, n + 1])
+		);
+	});
+});

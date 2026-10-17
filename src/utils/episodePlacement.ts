@@ -95,10 +95,19 @@ export function parseName(name: string): {
 	year: number | null;
 	season: number | null;
 } {
-	const parsed = ptt.parse(name.replace(LEADING_GROUPS, ''));
+	const stripped = name.replace(LEADING_GROUPS, '');
+	const parsed = ptt.parse(stripped);
 	const seasons = parsed.seasons ?? [];
+	const title = (parsed.title ?? '').trim();
+	// ptt reads the `Ru` of `Motto To Love-Ru` as Russian and drops it: a short word joined to
+	// the title by a hyphen is the title's own
+	const spaced = stripped.replace(/[._]/g, ' ');
+	const glued =
+		title && spaced.startsWith(title)
+			? /^-\p{L}{1,3}(?![\p{L}\p{N}])/u.exec(spaced.slice(title.length))
+			: null;
 	return {
-		title: (parsed.title ?? '').trim(),
+		title: glued ? title + glued[0] : title,
 		year: typeof parsed.year === 'number' ? parsed.year : null,
 		season: seasons.length === 1 ? seasons[0] : null,
 	};

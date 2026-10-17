@@ -1,7 +1,10 @@
 import packs from '@/test/fixtures/placement/pack-folders.json';
+import releases from '@/test/fixtures/placement/releases.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
-import { fileNumbers, normalizeTitle, titleText } from '@/utils/episodePlacement';
+import { fileNumbers, normalizeTitle, parseName, titleText } from '@/utils/episodePlacement';
 import { describe, expect, it } from 'vitest';
+
+const release = (name: string) => releases.find((c) => c.request.name.startsWith(name))!.request;
 
 type Case = {
 	release: string;
@@ -77,6 +80,14 @@ describe('fileNumbers', () => {
 				false
 			)
 		).toMatchObject({ season: 4, episode: 17, end: 18 });
+	});
+});
+
+describe('parseName', () => {
+	it('keeps a short word the title joins with a hyphen, which the parser reads as a language', () => {
+		const motto = release('[KH] Motto To Love-Ru');
+		expect(parseName(motto.name).title).toBe('Motto To Love-Ru');
+		expect(parseName(motto.files.at(-1)!.path).title).toBe('Motto To Love-Ru');
 	});
 });
 
