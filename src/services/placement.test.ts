@@ -346,3 +346,15 @@ describe('a batch whose title the parser cut short', () => {
 		);
 	});
 });
+
+describe('a series of its own that TMDB files inside a show', () => {
+	it("is never counted through the show's seasons when the anime index does not know it", async () => {
+		// TMDB files Aim to be a Pokémon Master as Pokémon's S25E47-E57; nothing maps it there
+		const pm = recordedCase('[Some-Stuffs] Pocket Monsters - Aim to be a Pokémon Master 10');
+		const s25 = recorded.show['60572'].seasons.find((s: any) => s.season_number === 25);
+		expect(s25.episode_count).toBe(57);
+		const { releases } = await place([pm.request as PlaceRequest]);
+		expect(releases[0]).toMatchObject({ kind: 'tv', tmdbId: 60572 });
+		expect(placedAt(releases[0])).toEqual([[null, null]]);
+	});
+});

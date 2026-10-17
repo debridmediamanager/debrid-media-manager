@@ -2984,5 +2984,34 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg on fun, 2026-10-17 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "[Some-Stuffs] Pocket Monsters - Aim to be a Pok\u00e9mon Master 10 (PM19 146) (1080p) [319275C2].mkv",
+			"hash": null,
+			"imdbId": "tt0168366",
+			"files": [
+				{
+					"path": "[Some-Stuffs] Pocket Monsters - Aim to be a Pok\u00e9mon Master 10 (PM19 146) (1080p) [319275C2].mkv",
+					"folder": ""
+				}
+			]
+		},
+		"rex": [[1, 10]],
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0168366",
+			"tmdbId": 60572,
+			"files": [
+				{
+					"path": "[Some-Stuffs] Pocket Monsters - Aim to be a Pok\u00e9mon Master 10 (PM19 146) (1080p) [319275C2].mkv",
+					"season": null,
+					"episode": null,
+					"episodeEnd": null,
+					"how": null
+				}
+			]
+		}
 	}
 ]

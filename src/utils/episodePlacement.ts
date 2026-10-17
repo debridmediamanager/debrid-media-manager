@@ -615,10 +615,17 @@ export async function placeFile(
 		// A fansub cour whose numbers TMDB does not list is not counted through the show when
 		// its title found a special or a later cour: `[Holomux] Gintama° Love Potion Arc 01` is
 		// an OVA the dataset files as a special TMDB no longer lists, not Gintama's first episode.
-		counted = !(
-			hit?.numbered &&
-			(hit.target.season === 0 || hit.target.season > 1 || hit.target.offset > 0)
-		);
+		// Nor is a title the index does not know, of a show the dataset files cour by cour in
+		// several TMDB seasons: `[Some-Stuffs] Pocket Monsters - Aim to be a Pokémon Master 10`
+		// is a series of its own, numbered from its own first, not Pokémon's tenth episode.
+		counted = hit
+			? !(
+					hit.numbered &&
+					(hit.target.season === 0 || hit.target.season > 1 || hit.target.offset > 0)
+				)
+			: new Set(
+					mapped.byShow.get(show.tmdbId)!.flatMap((t) => (t.season > 0 ? [t.season] : []))
+				).size < 2;
 		if (hit?.numbered && hit.target.tmdb === show.tmdbId) {
 			scene = false;
 			const found = await placed(animeNumbers(hit.target, season, episode), 'anime');
