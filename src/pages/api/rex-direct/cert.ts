@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { secretEquals } from '@/utils/secretEquals';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -19,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	if (!secret) {
 		return res.status(503).json({ error: 'cert upload not configured' });
 	}
-	if (req.headers['x-rex-direct-secret'] !== secret) {
+	if (!secretEquals(req.headers['x-rex-direct-secret'], secret)) {
 		return res.status(401).json({ error: 'unauthorized' });
 	}
 	const fullchain = typeof req.body?.fullchain === 'string' ? req.body.fullchain : '';

@@ -21,7 +21,7 @@ const originalEnv = { ...process.env };
 beforeEach(() => {
 	vi.clearAllMocks();
 	process.env = { ...originalEnv };
-	delete process.env.AGGREGATION_SECRET;
+	process.env.AGGREGATION_SECRET = 'test-secret';
 });
 
 describe('/api/observability/aggregate', () => {
@@ -38,7 +38,7 @@ describe('/api/observability/aggregate', () => {
 
 	it('returns 401 when secret is required but missing', async () => {
 		process.env.AGGREGATION_SECRET = 'my-secret';
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -69,19 +69,20 @@ describe('/api/observability/aggregate', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
-	it('allows access when no secret is configured', async () => {
-		mockRepository.repository.runDailyRollup.mockResolvedValue({ rows: 10 });
-		const req = createMockRequest({ method: 'POST' });
+	it('refuses every request when no secret is configured', async () => {
+		delete process.env.AGGREGATION_SECRET;
+		const req = createMockRequest({ method: 'POST', query: { action: 'cleanup' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(mockRepository.repository.cleanupOldHistoryData).not.toHaveBeenCalled();
 	});
 
 	it('defaults to daily action', async () => {
 		mockRepository.repository.runDailyRollup.mockResolvedValue({ rows: 5 });
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -107,7 +108,10 @@ describe('/api/observability/aggregate', () => {
 			dailyDeleted: 1,
 		});
 
-		const req = createMockRequest({ method: 'POST', query: { action: 'all' } });
+		const req = createMockRequest({
+			method: 'POST',
+			query: { action: 'all', secret: 'test-secret' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -128,7 +132,10 @@ describe('/api/observability/aggregate', () => {
 			dailyDeleted: 2,
 		});
 
-		const req = createMockRequest({ method: 'POST', query: { action: 'all' } });
+		const req = createMockRequest({
+			method: 'POST',
+			query: { action: 'all', secret: 'test-secret' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -141,7 +148,10 @@ describe('/api/observability/aggregate', () => {
 
 	it('runs cleanup action', async () => {
 		mockRepository.repository.cleanupOldHistoryData.mockResolvedValue({ deleted: 100 });
-		const req = createMockRequest({ method: 'POST', query: { action: 'cleanup' } });
+		const req = createMockRequest({
+			method: 'POST',
+			query: { action: 'cleanup', secret: 'test-secret' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -155,7 +165,10 @@ describe('/api/observability/aggregate', () => {
 	it('runs both daily and cleanup for all action', async () => {
 		mockRepository.repository.runDailyRollup.mockResolvedValue({ rows: 5 });
 		mockRepository.repository.cleanupOldHistoryData.mockResolvedValue({ deleted: 100 });
-		const req = createMockRequest({ method: 'POST', query: { action: 'all' } });
+		const req = createMockRequest({
+			method: 'POST',
+			query: { action: 'all', secret: 'test-secret' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -169,7 +182,7 @@ describe('/api/observability/aggregate', () => {
 
 	it('returns 500 on daily rollup failure', async () => {
 		mockRepository.repository.runDailyRollup.mockRejectedValue(new Error('Rollup failed'));
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -184,7 +197,10 @@ describe('/api/observability/aggregate', () => {
 		mockRepository.repository.cleanupOldHistoryData.mockRejectedValue(
 			new Error('Cleanup failed')
 		);
-		const req = createMockRequest({ method: 'POST', query: { action: 'cleanup' } });
+		const req = createMockRequest({
+			method: 'POST',
+			query: { action: 'cleanup', secret: 'test-secret' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -197,7 +213,7 @@ describe('/api/observability/aggregate', () => {
 
 	it('returns generic error message for non-Error throws', async () => {
 		mockRepository.repository.runDailyRollup.mockRejectedValue('string error');
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);

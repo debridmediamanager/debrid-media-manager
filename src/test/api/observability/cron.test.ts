@@ -76,28 +76,15 @@ describe('API /api/observability/cron', () => {
 		expect(res._getData()).toMatchObject({ success: false, error: 'Unauthorized' });
 	});
 
-	it('allows request when no CRON_SECRET is configured', async () => {
+	it('refuses every request when no CRON_SECRET is configured', async () => {
 		delete process.env.CRON_SECRET;
-		healthMocks.runHealthCheckNow.mockResolvedValue({
-			working: 5,
-			total: 10,
-			rate: 0.5,
-			avgLatencyMs: 120,
-		});
-		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
-		repositoryMocks.repository.runDailyRollup.mockResolvedValue({
-			streamDailyRolled: true,
-			rdDailyRolled: true,
-			torrentioDailyRolled: true,
-		});
-
 		const req = createMockRequest({ method: 'POST' });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res._getData()).toMatchObject({ success: true });
+		expect(res.status).toHaveBeenCalledWith(401);
+		expect(healthMocks.runHealthCheckNow).not.toHaveBeenCalled();
 	});
 
 	it('accepts secret via query param', async () => {
@@ -149,7 +136,7 @@ describe('API /api/observability/cron', () => {
 	});
 
 	it('returns stream health metrics when available', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue({
 			working: 8,
 			total: 10,
@@ -163,7 +150,7 @@ describe('API /api/observability/cron', () => {
 			torrentioDailyRolled: true,
 		});
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -179,7 +166,7 @@ describe('API /api/observability/cron', () => {
 	});
 
 	it('omits streamHealth when runHealthCheckNow returns null', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		repositoryMocks.repository.runDailyRollup.mockResolvedValue({
@@ -188,7 +175,7 @@ describe('API /api/observability/cron', () => {
 			torrentioDailyRolled: false,
 		});
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -198,7 +185,7 @@ describe('API /api/observability/cron', () => {
 	});
 
 	it('includes daily rollup results', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		repositoryMocks.repository.runDailyRollup.mockResolvedValue({
@@ -209,7 +196,7 @@ describe('API /api/observability/cron', () => {
 		repositoryMocks.repository.rollupTorBoxOperationalDaily.mockResolvedValue(true);
 		repositoryMocks.repository.rollupTorBoxCdnDaily.mockResolvedValue(true);
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -226,12 +213,12 @@ describe('API /api/observability/cron', () => {
 
 	it('handles daily rollup failure gracefully', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		repositoryMocks.repository.runDailyRollup.mockRejectedValue(new Error('DB error'));
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -244,11 +231,11 @@ describe('API /api/observability/cron', () => {
 
 	it('returns 500 when health check throws', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockRejectedValue(new Error('Connection timeout'));
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -262,11 +249,11 @@ describe('API /api/observability/cron', () => {
 
 	it('returns 500 with "Unknown error" for non-Error throws', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockRejectedValue('string error');
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', query: { secret: 'test-secret' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -279,81 +266,81 @@ describe('API /api/observability/cron', () => {
 	});
 
 	it('files completed transfers on every tick and reports what it did', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		const sweep = { completed: 12, due: 2, filed: 2, refused: 0 };
 		filingMocks.fileCompletedTransfers.mockResolvedValue(sweep);
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(filingMocks.fileCompletedTransfers).toHaveBeenCalledTimes(1);
 		expect(res._getData()).toMatchObject({ success: true, transferFilings: sweep });
 	});
 
 	it('keeps the tick when filing completed transfers throws', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		filingMocks.fileCompletedTransfers.mockRejectedValue(new Error('nzb2rd down'));
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res._getData()).toMatchObject({ success: true, transferFilings: undefined });
 	});
 
 	it('settles Usenet markers and waiter lists on every tick and reports what it did', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		const pass = { waiterLists: 3, expiredWaiters: 0, checked: 5, removed: 3, live: 1 };
 		markerMocks.reconcileNzb2rdMarkers.mockResolvedValue(pass);
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(markerMocks.reconcileNzb2rdMarkers).toHaveBeenCalledTimes(1);
 		expect(res._getData()).toMatchObject({ success: true, usenetMarkers: pass });
 	});
 
 	it('keeps the tick when settling Usenet markers throws', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		markerMocks.reconcileNzb2rdMarkers.mockRejectedValue(new Error('Cache unreachable'));
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res._getData()).toMatchObject({ success: true, usenetMarkers: undefined });
 	});
 
 	it('moves written-back trash off movie pages on every tick and reports what it did', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		const sweep = { status: 'done', pages: 9, judgedPages: 4, moved: 33, failed: 0 };
 		trashSweepMocks.sweepWrittenBackTrash.mockResolvedValue(sweep);
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(trashSweepMocks.sweepWrittenBackTrash).toHaveBeenCalledTimes(1);
 		expect(res._getData()).toMatchObject({ success: true, writtenBackTrash: sweep });
 	});
 
 	it('keeps the tick when moving written-back trash throws', async () => {
-		delete process.env.CRON_SECRET;
+		process.env.CRON_SECRET = 'test-secret';
 		healthMocks.runHealthCheckNow.mockResolvedValue(null);
 		torrentioMocks.runTorrentioHealthCheckNow.mockResolvedValue(undefined);
 		trashSweepMocks.sweepWrittenBackTrash.mockRejectedValue(new Error('Lock wait timeout'));
 
 		const res = createMockResponse();
-		await handler(createMockRequest({ method: 'POST' }), res);
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res._getData()).toMatchObject({ success: true, writtenBackTrash: undefined });

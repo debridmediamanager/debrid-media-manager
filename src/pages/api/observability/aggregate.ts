@@ -1,3 +1,4 @@
+import { secretEquals } from '@/utils/secretEquals';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { repository } from '@/services/repository';
@@ -13,10 +14,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	// Optional: Add secret key protection for production
+	// Refused when unset: the cleanup action deletes history, and the source is public.
 	const query = req.query as AggregateQuery;
 	const expectedSecret = process.env.AGGREGATION_SECRET;
-	if (expectedSecret && query.secret !== expectedSecret) {
+	if (!expectedSecret) {
+		return res.status(503).json({ error: 'Aggregation not configured' });
+	}
+	if (!secretEquals(query.secret, expectedSecret)) {
 		return res.status(401).json({ error: 'Unauthorized' });
 	}
 

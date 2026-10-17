@@ -12,6 +12,7 @@ import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
 import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
 import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
+import { secretEquals } from '@/utils/secretEquals';
 
 interface CronResponse {
 	success: boolean;
@@ -51,10 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		});
 	}
 
-	// Optional secret key protection
+	// Refused when unset, so a deploy that loses the env var cannot open it to anyone.
 	const expectedSecret = process.env.CRON_SECRET;
 	const providedSecret = req.query.secret ?? req.headers['x-cron-secret'];
-	if (expectedSecret && providedSecret !== expectedSecret) {
+	if (!expectedSecret || !secretEquals(providedSecret, expectedSecret)) {
 		return res.status(401).json({
 			success: false,
 			timestamp: new Date().toISOString(),

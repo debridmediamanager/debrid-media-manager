@@ -36,7 +36,7 @@ let world: ReturnType<typeof transferWorld>;
 const tick = async (at: Date) => {
 	vi.setSystemTime(at);
 	const res = createMockResponse();
-	await handler(createMockRequest({ method: 'POST' }), res);
+	await handler(createMockRequest({ method: 'POST', query: { secret: 'test-secret' } }), res);
 	expect(res.status).toHaveBeenCalledWith(200);
 	return res._getData() as Record<string, any>;
 };
@@ -46,7 +46,7 @@ const hashOf = (id: string) => recordedJob(id).info_hash.toLowerCase();
 beforeEach(() => {
 	vi.clearAllMocks();
 	vi.useFakeTimers({ toFake: ['Date'] });
-	delete process.env.CRON_SECRET;
+	process.env.CRON_SECRET = 'test-secret';
 	process.env.NZB2RD_URL = NZB2RD;
 	process.env.DEBRID_UPLOADER_URLS = DEBRID;
 	world = transferWorld();

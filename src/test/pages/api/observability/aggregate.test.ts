@@ -50,7 +50,7 @@ describe('aggregate API endpoint', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		process.env = { ...originalEnv };
-		delete process.env.AGGREGATION_SECRET;
+		process.env.AGGREGATION_SECRET = 'test-secret';
 	});
 
 	afterAll(() => {
@@ -69,7 +69,7 @@ describe('aggregate API endpoint', () => {
 
 	it('runs daily rollup by default', async () => {
 		const { repository } = await import('@/services/repository');
-		const req = createMockRequest('POST', {});
+		const req = createMockRequest('POST', { secret: 'test-secret' });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -89,7 +89,7 @@ describe('aggregate API endpoint', () => {
 
 	it('runs cleanup when action=cleanup', async () => {
 		const { repository } = await import('@/services/repository');
-		const req = createMockRequest('POST', { action: 'cleanup' });
+		const req = createMockRequest('POST', { action: 'cleanup', secret: 'test-secret' });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -109,7 +109,7 @@ describe('aggregate API endpoint', () => {
 
 	it('runs all actions when action=all', async () => {
 		const { repository } = await import('@/services/repository');
-		const req = createMockRequest('POST', { action: 'all' });
+		const req = createMockRequest('POST', { action: 'all', secret: 'test-secret' });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -157,7 +157,7 @@ describe('aggregate API endpoint', () => {
 			new Error('Database connection failed')
 		);
 
-		const req = createMockRequest('POST', {});
+		const req = createMockRequest('POST', { secret: 'test-secret' });
 		const res = createMockResponse();
 
 		await handler(req, res);
