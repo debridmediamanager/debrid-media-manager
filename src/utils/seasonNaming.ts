@@ -47,6 +47,8 @@ const S_RANGE = new RegExp(
 	`(?:^|[^A-Za-z0-9])s(\\d{1,2})${SEP}(?:-|–|—|~|to|thru|through)${SEP}s?(\\d{1,2})(?![0-9])`,
 	'gi'
 );
+/** `[S1S2S3]`: tokens written back to back, where only the first follows a separator. */
+const S_CHAIN = /(?:^|[^A-Za-z0-9])((?:s\d{1,2}){2,})(?![0-9])/gi;
 const SEASON_WORD = new RegExp(SEASON_WORDS, 'gi');
 /** `3ª Temporada`, `2nd Season` - the number leads the word instead of following it. */
 const LEADING_NUMBER = new RegExp(`(\\d{1,2})(?:st|nd|rd|th|ª|°)?${SEP}(?:${SEASON_WORDS})`, 'gi');
@@ -87,6 +89,9 @@ export function namedSeasons(title: string): Set<number> {
 	}
 	for (const match of title.matchAll(S_TOKEN)) {
 		found.add(Number(match[1]));
+	}
+	for (const match of title.matchAll(S_CHAIN)) {
+		for (const season of match[1].split(/s/i).slice(1)) found.add(Number(season));
 	}
 	for (const match of title.matchAll(LEADING_NUMBER)) {
 		found.add(Number(match[1]));

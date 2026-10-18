@@ -51,6 +51,16 @@ describe('namedSeasons', () => {
 		]);
 	});
 
+	it('reads seasons written back to back', () => {
+		// on Log Horizon's season 3 page, 2026-10-18
+		expect(
+			seasonsOf(
+				'[网盘下载] Log Horizon  记录的地平线  ログ・ホライズン 10bit 1080p AVC HEVC BDRip [S1S2S3]'
+			)
+		).toEqual([1, 2, 3]);
+		expect(seasonsOf('Show.S01E02.1080p')).toEqual([1]);
+	});
+
 	it('reads comma and dot separated lists', () => {
 		expect(seasonsOf('Breaking Bad Season 1, 2, 3, 4 & 5 + Extras')).toEqual([1, 2, 3, 4, 5]);
 		expect(seasonsOf('The Wire Seasons 1.2.3.4.5 Complete Series.Fuji74')).toEqual([
