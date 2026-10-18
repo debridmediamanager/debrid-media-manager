@@ -49,7 +49,8 @@ export async function reviewReports(
 			if (settled === 'trash') confirmed.push(hash);
 			else if (!settled) forModel.push([hash, title]);
 		}
-		const identified = await identifiedAnswers(
+		// a report's few names fit one pass, so none is deferred in practice
+		const { answers: identified } = await identifiedAnswers(
 			movie,
 			forModel.map(([, title]) => title)
 		);

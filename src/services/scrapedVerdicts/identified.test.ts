@@ -1,3 +1,4 @@
+import { forgetIdentifications } from '@/services/contentIdentifier';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import fixture from './__fixtures__/identified-filenames.json';
 import { identifiedAnswers } from './identified';
@@ -19,14 +20,17 @@ function recordedAnswers() {
 
 async function verdictFor(i: (typeof fixture.items)[number]) {
 	const movie = movies[i.imdbId];
-	const answer = (await identifiedAnswers(movie, [i.filename])).get(i.filename);
+	const answer = (await identifiedAnswers(movie, [i.filename])).answers.get(i.filename);
 	return answer
 		? { ...answer, verdict: decide(movie, i.filename, answer.media, answer.titleMatch) }
 		: null;
 }
 
 describe('identifiedAnswers', () => {
-	beforeEach(() => vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test'));
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+	});
 	afterEach(() => {
 		vi.unstubAllEnvs();
 		vi.unstubAllGlobals();

@@ -116,7 +116,7 @@ export async function judgeMoviePage(
 			}
 		}
 
-		const identified = await identifiedAnswers(movie, forModel);
+		const { answers: identified, deferred } = await identifiedAnswers(movie, forModel);
 		for (const [title, { media, titleMatch }] of identified) {
 			judged.set(title, {
 				verdict: decide(movie, title, media, titleMatch),
@@ -125,7 +125,8 @@ export async function judgeMoviePage(
 				titleMatch,
 			});
 		}
-		forModel = forModel.filter((title) => !identified.has(title));
+		// a name the identifier has not been asked about yet waits for the next view
+		forModel = forModel.filter((title) => !identified.has(title) && !deferred.has(title));
 
 		let inputTokens = 0;
 		let model = 'none';
@@ -150,9 +151,9 @@ export async function judgeMoviePage(
 		const newVerdicts: NewVerdict[] = [];
 		for (const pair of unjudged) {
 			const id = pairKeyOf(pair.hash, pair.title);
-			if (recorded.has(id)) continue; // same pair in both tables
+			const j = judged.get(pair.title);
+			if (!j || recorded.has(id)) continue; // deferred, or the same pair in both tables
 			recorded.add(id);
-			const j = judged.get(pair.title)!;
 			newVerdicts.push({ imdbId, hash: pair.hash, title: pair.title, engine, ...j });
 		}
 		await db.saveVerdicts(newVerdicts);
@@ -172,7 +173,7 @@ export async function judgeMoviePage(
 		}
 		const trashed = await db.trashPairs(pageKey, movie, toTrash, engine);
 
-		await db.setCheckpoint(pageKey, ENGINE, startedAt);
+		if (deferred.size === 0) await db.setCheckpoint(pageKey, ENGINE, startedAt);
 		console.log(
 			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${identified.size} identified, ${forModel.length} by model), trashed ${trashed}, ${inputTokens} tokens`
 		);

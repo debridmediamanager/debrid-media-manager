@@ -62,6 +62,50 @@ export async function identifyFilenames(filenames: string[]): Promise<Identifier
 	return results;
 }
 
+/** The service reloads its corpus daily, so an answer is kept for a day. */
+const REMEMBER_MS = 24 * 60 * 60 * 1000;
+const REMEMBER_MAX = 200_000;
+const remembered = new Map<string, { at: number; result: IdentifierResult }>();
+
+/** For tests: forget every remembered answer. */
+export function forgetIdentifications() {
+	remembered.clear();
+}
+
+/**
+ * Answers for these names, asking the service about at most `maxNew` of them
+ * and remembering every answer in this process. Pages are judged on every view
+ * and their unsure names were asked again each time: after the show-page pass
+ * went live on 2026-10-18 the service sat at 1,400% CPU and every replica logged
+ * 20 timeouts in 10 minutes, the library page's and zurg's requests among them.
+ * `complete` is false when names were left for a later call; `null` when the
+ * service could not be asked.
+ */
+export async function identifyFilenamesRemembered(
+	filenames: string[],
+	maxNew: number
+): Promise<{ answers: Map<string, IdentifierResult>; complete: boolean } | null> {
+	const now = Date.now();
+	const answers = new Map<string, IdentifierResult>();
+	const missing: string[] = [];
+	for (const name of new Set(filenames)) {
+		const hit = remembered.get(name);
+		if (hit && now - hit.at < REMEMBER_MS) answers.set(name, hit.result);
+		else missing.push(name);
+	}
+	const ask = missing.slice(0, maxNew);
+	if (ask.length > 0) {
+		const fresh = await identifyFilenames(ask);
+		if (!fresh) return null;
+		if (remembered.size + ask.length > REMEMBER_MAX) remembered.clear();
+		ask.forEach((name, i) => {
+			remembered.set(name, { at: now, result: fresh[i] });
+			answers.set(name, fresh[i]);
+		});
+	}
+	return { answers, complete: ask.length === missing.length };
+}
+
 // Release shapes the service names confidently and wrongly, each seen in production
 // (2026-10-12): `The Dirty Harry Collection (1971-1988)` as The Dead Pool, an album
 // (`MUSE Simulation Theory [DELUXE] FLAC CD 2018`) as the band's concert film, and

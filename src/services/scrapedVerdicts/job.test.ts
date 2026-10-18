@@ -1,6 +1,8 @@
+import { forgetIdentifications } from '@/services/contentIdentifier';
 import { titleKeyOf, type ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import fixture from './__fixtures__/labelled-filenames.json';
+import { IDENTIFY_PER_PASS } from './identified';
 import {
 	cleanMovieResultsInBackground,
 	ENGINE,
@@ -50,6 +52,7 @@ function fakeDb(overrides: Partial<Record<keyof ScrapedVerdictService, any>> = {
 
 describe('judgeMoviePage', () => {
 	beforeEach(() => {
+		forgetIdentifications();
 		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		mockClassify.mockReset();
@@ -214,6 +217,51 @@ describe('judgeMoviePage', () => {
 		expect(outcome).toMatchObject({ status: 'done', modelTitles: 1, inputTokens: 600 });
 	});
 
+	it('asks the identifier about no more names per pass than its budget, and keeps the page due', async () => {
+		// the show-page pass sent pages of thousands of names (3,204 on one) on every
+		// view and held content-identifier at 1,400% CPU on 2026-10-18
+		const names = Array.from({ length: IDENTIFY_PER_PASS + 50 }, (_, i) => `${MOVIE}.part${i}`);
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+		const asked: string[][] = [];
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (_url: string, init: RequestInit) => {
+				const { filenames } = JSON.parse(init.body as string) as { filenames: string[] };
+				asked.push(filenames);
+				const results = filenames.map(() => ({ confident: false, matches: [] }));
+				return new Response(JSON.stringify({ results }));
+			})
+		);
+		mockClassify.mockImplementation(async (_key, _movie, titles: string[]) => ({
+			answers: titles.map(() => ({ media: 'FILM', titleMatch: 'SAME_TITLE' })),
+			model: 'jev-1.13.0',
+			inputTokens: titles.length,
+		}));
+		const db = fakeDb({
+			getStoredPairs: vi.fn().mockResolvedValue({
+				pairs: names.map((title, i) => ({
+					source: 'Scraped',
+					hash: `h${i}`,
+					title,
+					fileSize: 1000,
+				})),
+				lastChanged: new Date('2026-09-27T00:00:00Z'),
+			}),
+			getVerdicts: vi.fn().mockResolvedValue([]),
+		});
+
+		await judgeMoviePage('tt5177120', db);
+		expect(asked.flat()).toHaveLength(IDENTIFY_PER_PASS);
+		expect(mockClassify.mock.calls[0][2]).toHaveLength(IDENTIFY_PER_PASS);
+		expect((db.saveVerdicts as any).mock.calls[0][0]).toHaveLength(IDENTIFY_PER_PASS);
+		expect(db.setCheckpoint).not.toHaveBeenCalled();
+
+		await judgeMoviePage('tt5177120', db);
+		expect(asked.flat()).toHaveLength(names.length);
+		expect(db.setCheckpoint).toHaveBeenCalled();
+		vi.unstubAllGlobals();
+	});
+
 	it('records nothing and keeps the page due when the model fails', async () => {
 		mockClassify.mockRejectedValue(new Error('Jev answered HTTP 503'));
 		const db = fakeDb();
@@ -246,7 +294,10 @@ describe('cleanMovieResultsInBackground', () => {
 });
 
 describe('withoutTrashedResults', () => {
-	beforeEach(() => vi.stubEnv('TYPESAFE_API_KEY', 'test-key'));
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+	});
 	afterEach(() => vi.unstubAllEnvs());
 
 	it('drops results whose hash and filename carry a trash verdict', async () => {

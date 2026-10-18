@@ -1,3 +1,4 @@
+import { forgetIdentifications } from '@/services/contentIdentifier';
 import type { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { titleKeyOf } from '@/services/database/scrapedVerdict';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -45,7 +46,10 @@ function jevAnswers(media: string, title: string) {
 }
 
 describe('reviewReports', () => {
-	beforeEach(() => vi.stubEnv('TYPESAFE_API_KEY', 'test-key'));
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+	});
 	afterEach(() => {
 		vi.unstubAllEnvs();
 		vi.unstubAllGlobals();

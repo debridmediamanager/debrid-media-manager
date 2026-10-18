@@ -1,4 +1,4 @@
-import { identifyFilenames, refused, VIDEO } from '@/services/contentIdentifier';
+import { identifyFilenamesRemembered, refused, VIDEO } from '@/services/contentIdentifier';
 import { fold, foundTitles, type Media, type MovieContext, type TitleMatch } from './rules';
 
 export type IdentifiedAnswer = { media: Media; titleMatch: TitleMatch };
@@ -23,13 +23,18 @@ export type IdentifiedAnswer = { media: Media; titleMatch: TitleMatch };
 export async function identifiedAnswers(
 	movie: MovieContext,
 	filenames: string[]
-): Promise<Map<string, IdentifiedAnswer>> {
-	const answers = filenames.length ? await identifyFilenames(filenames) : null;
+): Promise<{ answers: Map<string, IdentifiedAnswer>; deferred: Set<string> }> {
 	const out = new Map<string, IdentifiedAnswer>();
-	if (!answers) return out;
+	const asked = filenames.length
+		? await identifyFilenamesRemembered(filenames, IDENTIFY_PER_PASS)
+		: null;
+	// unreachable: every name goes on to Jev, as before the identifier was asked
+	if (!asked) return { answers: out, deferred: new Set() };
+	const deferred = new Set(filenames.filter((name) => !asked.answers.has(name)));
 	const ownTitles = new Set(movie.titles.map(withoutArticle));
-	filenames.forEach((name, i) => {
-		const answer = answers[i];
+	filenames.forEach((name) => {
+		const answer = asked.answers.get(name);
+		if (!answer) return;
 		const top = answer.matches[0];
 		if (!answer.confident || !top || refused(name, answer)) return;
 		const video = VIDEO.test(name);
@@ -45,7 +50,14 @@ export async function identifiedAnswers(
 			titleMatch: foundTitles(name, movie.titles).length ? 'DIFFERENT_TITLE' : 'NO_TITLE',
 		});
 	});
-	return out;
+	return { answers: out, deferred };
 }
+
+/**
+ * New names one pass may ask about; the rest wait for the page's next view. A
+ * 1,000-name batch keeps the service busy for about 8 s per kind, and pages run
+ * to thousands of names.
+ */
+export const IDENTIFY_PER_PASS = 300;
 
 const withoutArticle = (title: string) => fold(title).replace(/^ (?:the|a|an) /, ' ');
