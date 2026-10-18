@@ -37,7 +37,8 @@ model ScrapedVerdict {
   titleKey   String   @db.Char(40)
   title      String   @db.Text
   verdict    String   @db.VarChar(8)
-  /// "rules" when code settled it, "jev" when the model's answers were needed
+  /// "rules" when code settled it, "identified" when content-identifier named the movie,
+  /// "jev" when the model's answers were needed
   rule       String   @db.VarChar(16)
   media      String?  @db.VarChar(16)
   titleMatch String?  @db.VarChar(16)

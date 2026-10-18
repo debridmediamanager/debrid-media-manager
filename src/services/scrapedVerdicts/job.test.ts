@@ -157,6 +157,63 @@ describe('judgeMoviePage', () => {
 		expect(db.releaseLock).toHaveBeenCalledWith('movie:tt5177120');
 	});
 
+	it('keeps a release content-identifier names as the movie without asking Jev', async () => {
+		// content-identifier's answers for both filenames, read 2026-10-18
+		const answers = {
+			[MOVIE]: {
+				confident: true,
+				kind: 'movie',
+				matches: [
+					{
+						imdbId: 'tt5177120',
+						score: 2.6983,
+						title: 'The Ministry of Ungentlemanly Warfare',
+						year: 2024,
+					},
+				],
+				parsedTitle: 'The Ministry of Ungentlemanly Warfare',
+				parsedYear: 2024,
+				probability: 0.9092,
+			},
+			[GAME]: {
+				confident: false,
+				kind: 'movie',
+				matches: [{ imdbId: 'tt31434639', score: -0.4261, title: 'Warfare', year: 2025 }],
+				parsedTitle: 'Ungentlemanly Warfare Tactics v1 2',
+				parsedYear: null,
+				probability: 0.0864,
+			},
+		};
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (_url: string, init: RequestInit) => {
+				const { filenames } = JSON.parse(init.body as string) as { filenames: string[] };
+				const results = filenames.map((n) => answers[n as keyof typeof answers]);
+				return new Response(JSON.stringify({ results }));
+			})
+		);
+		mockClassify.mockResolvedValue({
+			answers: [{ media: 'GAME_SOFTWARE', titleMatch: 'DIFFERENT_TITLE' }],
+			model: 'jev-1.13.0',
+			inputTokens: 600,
+		});
+		const db = fakeDb();
+
+		const outcome = await judgeMoviePage('tt5177120', db);
+		vi.unstubAllGlobals();
+
+		expect(mockClassify).toHaveBeenCalledWith('test-key', ministry, [GAME]);
+		const saved = (db.saveVerdicts as any).mock.calls[0][0];
+		expect(saved.map((v: any) => [v.hash, v.verdict, v.rule])).toEqual([
+			['h1', 'keep', 'identified'],
+			['h2', 'trash', 'rules'],
+			['h4', 'trash', 'reused'],
+			['h5', 'trash', 'jev'],
+		]);
+		expect(outcome).toMatchObject({ status: 'done', modelTitles: 1, inputTokens: 600 });
+	});
+
 	it('records nothing and keeps the page due when the model fails', async () => {
 		mockClassify.mockRejectedValue(new Error('Jev answered HTTP 503'));
 		const db = fakeDb();

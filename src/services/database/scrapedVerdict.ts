@@ -25,7 +25,7 @@ export type NewVerdict = {
 	hash: string;
 	title: string;
 	verdict: Verdict;
-	rule: 'rules' | 'jev' | 'reused';
+	rule: 'rules' | 'identified' | 'jev' | 'reused';
 	media: string | null;
 	titleMatch: string | null;
 	engine: string;

@@ -1,6 +1,7 @@
 import { ScrapedVerdictService, titleKeyOf } from '@/services/database/scrapedVerdict';
 import { JEV_REPORTER } from '@/services/reporterId';
 import { repository } from '@/services/repository';
+import { namedAsMovie } from './identified';
 import { classifyFilenames } from './jev';
 import { ENGINE, underBudget, utcDay } from './job';
 import { decide, decideWithoutModel } from './rules';
@@ -42,12 +43,17 @@ export async function reviewReports(
 	const movie = await db.getMovieContext(imdbId);
 	if (movie) {
 		const stored = new Map((await db.getVerdicts(imdbId)).map((v) => [v.titleKey, v.verdict]));
-		const forModel: [string, string][] = [];
+		let forModel: [string, string][] = [];
 		for (const [hash, title] of reported) {
 			const settled = stored.get(titleKeyOf(title)) ?? decideWithoutModel(movie, title);
 			if (settled === 'trash') confirmed.push(hash);
 			else if (!settled) forModel.push([hash, title]);
 		}
+		const identified = await namedAsMovie(
+			imdbId,
+			forModel.map(([, title]) => title)
+		);
+		forModel = forModel.filter(([, title]) => !identified.has(title));
 		if (forModel.length > 0 && (await underBudget(db))) {
 			const result = await classifyFilenames(
 				key,

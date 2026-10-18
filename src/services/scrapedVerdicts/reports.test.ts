@@ -66,6 +66,33 @@ describe('reviewReports', () => {
 		expect(db.addTokensSpent).toHaveBeenCalledWith(expect.any(String), 7);
 	});
 
+	it('does not file a movie report on a release content-identifier names as the movie', async () => {
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+		// content-identifier's answer for this filename, read 2026-10-18
+		const identified = {
+			confident: true,
+			kind: 'movie',
+			matches: [{ imdbId: 'tt15791034', score: 2.7284, title: 'Barbarian', year: 2022 }],
+			parsedTitle: 'Barbarian',
+			parsedYear: 2022,
+			probability: 0.8934,
+		};
+		const fetchMock = vi.fn(
+			async () => new Response(JSON.stringify({ results: [identified] }))
+		);
+		vi.stubGlobal('fetch', fetchMock);
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['aa', 'Barbarian.2022.1080p.WEBRip.x264']])),
+			getMovieContext: vi.fn(async () => movie),
+		});
+		const file = vi.fn(async () => {});
+
+		await expect(reviewReports('tt15791034', ['aa'], 'porn', db, file)).resolves.toEqual([]);
+		expect(file).not.toHaveBeenCalled();
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(String((fetchMock.mock.calls[0] as unknown[])[0])).toContain('identifier.test');
+	});
+
 	it('does not file a movie report Jev disagrees with', async () => {
 		jevAnswers('FILM', 'SAME_TITLE');
 		const db = fakeDb({

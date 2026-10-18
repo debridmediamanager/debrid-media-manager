@@ -7,7 +7,10 @@ import { createHash } from 'crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/services/contentIdentifier');
+vi.mock('@/services/contentIdentifier', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/contentIdentifier')>()),
+	identifyFilenames: vi.fn(),
+}));
 
 const mockRepository = vi.mocked(repository);
 const mockIdentify = vi.mocked(identifyFilenames);

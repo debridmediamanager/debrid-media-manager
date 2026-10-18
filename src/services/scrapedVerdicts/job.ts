@@ -5,6 +5,7 @@ import {
 	type NewVerdict,
 	type StoredPair,
 } from '@/services/database/scrapedVerdict';
+import { namedAsMovie } from './identified';
 import { classifyFilenames } from './jev';
 import { decide, decideWithoutModel, type Verdict } from './rules';
 
@@ -49,7 +50,7 @@ export async function underBudget(db: ScrapedVerdictService): Promise<boolean> {
 
 type Judged = {
 	verdict: Verdict;
-	rule: 'rules' | 'jev' | 'reused';
+	rule: 'rules' | 'identified' | 'jev' | 'reused';
 	media: string | null;
 	titleMatch: string | null;
 };
@@ -103,7 +104,7 @@ export async function judgeMoviePage(
 
 		const unjudged = pairs.filter((p) => !byPair.has(pairKeyOf(p.hash, p.title)));
 		const judged = new Map<string, Judged>();
-		const forModel: string[] = [];
+		let forModel: string[] = [];
 		for (const title of new Set(unjudged.map((p) => p.title))) {
 			const reused = byTitle.get(titleKeyOf(title));
 			const settled = reused ?? decideWithoutModel(movie, title);
@@ -114,6 +115,17 @@ export async function judgeMoviePage(
 				forModel.push(title);
 			}
 		}
+
+		const identified = await namedAsMovie(imdbId, forModel);
+		for (const title of identified) {
+			judged.set(title, {
+				verdict: 'keep',
+				rule: 'identified',
+				media: null,
+				titleMatch: null,
+			});
+		}
+		forModel = forModel.filter((title) => !identified.has(title));
 
 		let inputTokens = 0;
 		let model = 'none';
@@ -162,7 +174,7 @@ export async function judgeMoviePage(
 
 		await db.setCheckpoint(pageKey, ENGINE, startedAt);
 		console.log(
-			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${forModel.length} filenames by model), trashed ${trashed}, ${inputTokens} tokens`
+			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${identified.size} identified, ${forModel.length} by model), trashed ${trashed}, ${inputTokens} tokens`
 		);
 		return {
 			status: 'done',

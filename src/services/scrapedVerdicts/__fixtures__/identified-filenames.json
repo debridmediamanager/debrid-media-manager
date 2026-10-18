@@ -1,0 +1,5552 @@
+{
+	"_note": [
+		"Random draws of rule='jev' ScrapedVerdict rows from production, read 2026-10-18 (read-only), each with the answer content-identifier gave for its filename that day (kind auto, top three matches kept) and the verdict Jev's answers produced. Adult releases are left out.",
+		"identified: whether namedAsMovie keeps it without Jev. Among the identified rows Jev trashed, the identifier is right except the Grand Prix and Batman The Long Halloween Part 2: the Hangover 1 2 pack holds Part II."
+	],
+	"items": [
+		{
+			"imdbId": "tt0104431",
+			"movie": {
+				"title": "Home Alone 2: Lost in New York",
+				"year": 1992
+			},
+			"filename": "Maman.j.ai.encore.rate.l.avion.1992.MULTI.VFI.1080p.BluRay.HDLight.EAC3.5.1.x265-KTH",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0104431",
+						"score": 3.6295,
+						"title": "Home Alone 2: Lost in New York",
+						"year": 1992
+					},
+					{
+						"imdbId": "tt0099785",
+						"score": -1.205,
+						"title": "Home Alone",
+						"year": 1990
+					},
+					{
+						"imdbId": "tt11012066",
+						"score": -2.6683,
+						"title": "Home Sweet Home Alone",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Maman j ai encore rate l avion",
+				"parsedYear": 1992,
+				"probability": 0.8223
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1790885",
+			"movie": {
+				"title": "Zero Dark Thirty",
+				"year": 2012
+			},
+			"filename": "Zero Dark Thrity (2012) (1080p BDRip x265 10bit DTS-HD MA 5.1 - ArcX)[TAoE].mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1790885",
+						"score": 3.7791,
+						"title": "Zero Dark Thirty",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1921179",
+						"score": -0.3961,
+						"title": "Zero",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1288367",
+						"score": -1.3029,
+						"title": "Operation Belvis Bash",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Zero Dark Thrity",
+				"parsedYear": 2012,
+				"probability": 0.7131
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0381061",
+			"movie": {
+				"title": "Casino Royale",
+				"year": 2006
+			},
+			"filename": "21 Casino Royale 2006.mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0381061",
+						"score": 2.4267,
+						"title": "Casino Royale",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0061452",
+						"score": -0.595,
+						"title": "Casino Royale",
+						"year": 1967
+					},
+					{
+						"imdbId": "tt0949836",
+						"score": -1.3239,
+						"title": "The Real Casino Royale",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "21 Casino Royale",
+				"parsedYear": 2006,
+				"probability": 0.8012
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1067583",
+			"movie": {
+				"title": "Water for Elephants",
+				"year": 2011
+			},
+			"filename": "Water.Elephnats.2011.DVDRip Audio Latino",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1067583",
+						"score": 0.7954,
+						"title": "Water for Elephants",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0240200",
+						"score": -1.4468,
+						"title": "Water",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt2390250",
+						"score": -4.5686,
+						"title": "Water",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "Water Elephnats",
+				"parsedYear": 2011,
+				"probability": 0.9632
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt14324650",
+			"movie": {
+				"title": "Batman: The Long Halloween, Part One",
+				"year": 2021
+			},
+			"filename": "Batman The Long Halloween Part 2 2021 1080p NewComers",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt14324650",
+						"score": 3.1294,
+						"title": "Batman: The Long Halloween, Part One",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt14402926",
+						"score": 2.38,
+						"title": "Batman: The Long Halloween, Part Two",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt21445686",
+						"score": 1.6272,
+						"title": "Batman: The Long Halloween",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Batman The Long Halloween Part 2",
+				"parsedYear": 2021,
+				"probability": 0.7683
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt19796422",
+			"movie": {
+				"title": "2022 MTV Video Music Awards",
+				"year": 2022
+			},
+			"filename": "MTV.Video.Music.Awards.2022.1080p.WEB.h264-KOGi",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt19796422",
+						"score": 3.4262,
+						"title": "2022 MTV Video Music Awards",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt14811264",
+						"score": -0.9197,
+						"title": "2021 MTV Video Music Awards",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt27837266",
+						"score": -1.4783,
+						"title": "2023 MTV Video Music Awards",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "MTV Video Music Awards",
+				"parsedYear": 2022,
+				"probability": 0.867
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt6146586",
+			"movie": {
+				"title": "John Wick: Chapter 3 - Parabellum",
+				"year": 2019
+			},
+			"filename": "3 John Wick 3 2019 1080p Bluray X264 AAC REE",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6146586",
+						"score": 1.5123,
+						"title": "John Wick: Chapter 3 - Parabellum",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt2911666",
+						"score": -2.469,
+						"title": "John Wick",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt7161856",
+						"score": -3.8533,
+						"title": "Training 'John Wick'",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "3 John Wick 3",
+				"parsedYear": 2019,
+				"probability": 0.9
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt6263850",
+			"movie": {
+				"title": "Deadpool & Wolverine",
+				"year": 2024
+			},
+			"filename": "Deadpool and Wolverine.mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6263850",
+						"score": 1.3494,
+						"title": "Deadpool & Wolverine",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0115138",
+						"score": -2.1852,
+						"title": "Code Name: Wolverine",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt31050020",
+						"score": -2.7018,
+						"title": "Once Upon a Deadpool",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Deadpool and Wolverine",
+				"parsedYear": null,
+				"probability": 0.8372
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1411697",
+			"movie": {
+				"title": "The Hangover Part II",
+				"year": 2011
+			},
+			"filename": "Felekten Bir Gece The Hangover 1 2 TR DVDRip XviD AC3 NOVA",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1411697",
+						"score": 1.7242,
+						"title": "The Hangover Part II",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1119646",
+						"score": 0.8486,
+						"title": "The Hangover",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt1951261",
+						"score": -1.1857,
+						"title": "The Hangover Part III",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Felekten Bir Gece The Hangover 1 2 TR",
+				"parsedYear": null,
+				"probability": 0.7958
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt16311594",
+			"movie": {
+				"title": "F1: The Movie",
+				"year": 2025
+			},
+			"filename": "F1.2025.Saudi.Arabian.GP.Qual.19.04.25.mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt16311594",
+						"score": 1.9943,
+						"title": "F1: The Movie",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt13788842",
+						"score": -4.2774,
+						"title": "2025 - The World enslaved by a Virus",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt24057390",
+						"score": -4.9156,
+						"title": "2025 Armageddon",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "F1",
+				"parsedYear": 2025,
+				"probability": 0.9504
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt3659388",
+			"movie": {
+				"title": "The Martian",
+				"year": 2015
+			},
+			"filename": "The.Marsian.2015.3D.BDRip.1080p.mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3659388",
+						"score": 1.5459,
+						"title": "The Martian",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt4943934",
+						"score": -2.7745,
+						"title": "Martian Land",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt2674430",
+						"score": -4.6661,
+						"title": "Approaching the Unknown",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "The Marsian",
+				"parsedYear": 2015,
+				"probability": 0.9565
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0133751",
+			"movie": {
+				"title": "The Faculty",
+				"year": 1998
+			},
+			"filename": "The Faculty โรงเรียนสยองโลก HD.mkv",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0133751",
+						"score": 0.1831,
+						"title": "The Faculty",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt0113009",
+						"score": -3.9333,
+						"title": "The Faculty",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt1473423",
+						"score": -4.0447,
+						"title": "The Faculty",
+						"year": 2007
+					}
+				],
+				"parsedTitle": "The Faculty โรงเรียนสยองโลก HD",
+				"parsedYear": null,
+				"probability": 0.6994
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1723121",
+			"movie": {
+				"title": "We're the Millers",
+				"year": 2013
+			},
+			"filename": "We are The Millers 2013 BRRIP XViD UNiQUE",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1723121",
+						"score": 2.6614,
+						"title": "We're the Millers",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt6339102",
+						"score": -0.924,
+						"title": "We're the Millers: The Miller Makeovers",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt33040259",
+						"score": -4.4826,
+						"title": "The Millers",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "We are The Millers",
+				"parsedYear": 2013,
+				"probability": 0.9435
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt11905962",
+			"movie": {
+				"title": "Sputnik",
+				"year": 2020
+			},
+			"filename": "Sputnik.2020.Hybrid.1080p.BluRay.DD+5.1.x264-iFT.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11905962",
+						"score": 3.5024,
+						"title": "Sputnik",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt1590193",
+						"score": -1.6917,
+						"title": "The Commuter",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt3498820",
+						"score": -2.8317,
+						"title": "Captain America: Civil War",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Sputnik",
+				"parsedYear": 2020,
+				"probability": 0.9742
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1619029",
+			"movie": {
+				"title": "Jackie",
+				"year": 2016
+			},
+			"filename": "Jackie 2016 1080p BluRay DDP 5 1 10bit H 265 iVy",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1619029",
+						"score": 4.0972,
+						"title": "Jackie",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt2108546",
+						"score": 0.0318,
+						"title": "Jackie",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1757772",
+						"score": -0.3115,
+						"title": "Jackie",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "Jackie",
+				"parsedYear": 2016,
+				"probability": 0.9511
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0795461",
+			"movie": {
+				"title": "Scary Movie 5",
+				"year": 2013
+			},
+			"filename": "[www.OMGTORRENT.com] Scary.Movie.5.2013.BRRip.XviD-ATN",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0795461",
+						"score": 4.0729,
+						"title": "Scary Movie 5",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0175142",
+						"score": -0.782,
+						"title": "Scary Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt32093575",
+						"score": -1.291,
+						"title": "Scary Movie",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "Scary Movie 5",
+				"parsedYear": 2013,
+				"probability": 0.968
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1706620",
+			"movie": {
+				"title": "Snowpiercer",
+				"year": 2013
+			},
+			"filename": "Snowpiercer.2013.L2.HDRip.2100MB.avi",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1706620",
+						"score": 3.3966,
+						"title": "Snowpiercer",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1146295",
+						"score": -5.2264,
+						"title": "Snow",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt2431410",
+						"score": -5.2659,
+						"title": "Snow",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Snowpiercer",
+				"parsedYear": 2013,
+				"probability": 0.9855
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt3566834",
+			"movie": {
+				"title": "A Minecraft Movie",
+				"year": 2025
+			},
+			"filename": "Minecraft в кино.2025.WEB-DL.2160p.DV.mp4",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3566834",
+						"score": 3.4021,
+						"title": "A Minecraft Movie",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt33052623",
+						"score": -5.6957,
+						"title": "Minecraft 3",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt37788431",
+						"score": -6.0209,
+						"title": "A Minecraft Movie: Squared",
+						"year": 2027
+					}
+				],
+				"parsedTitle": "Minecraft в кино",
+				"parsedYear": 2025,
+				"probability": 0.964
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1611224",
+			"movie": {
+				"title": "Abraham Lincoln: Vampire Hunter",
+				"year": 2012
+			},
+			"filename": "Abraham Lincoln Vampire Hunter (2012) Xvid DD 5.1(Ext) B-Sam",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1611224",
+						"score": 3.6504,
+						"title": "Abraham Lincoln: Vampire Hunter",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt2396396",
+						"score": 0.2795,
+						"title": "Abraham Lincoln Vampire Hunter: The Great Calamity",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0020620",
+						"score": -3.4942,
+						"title": "Abraham Lincoln",
+						"year": 1930
+					}
+				],
+				"parsedTitle": "Abraham Lincoln Vampire Hunter",
+				"parsedYear": 2012,
+				"probability": 0.9166
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0034583",
+			"movie": {
+				"title": "Casablanca",
+				"year": 1942
+			},
+			"filename": "Casablanca (1942) 70th Anniv (1080p BluRay x265 ITA ENG AC3 multisub) + extras - GEGE",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0034583",
+						"score": 3.713,
+						"title": "Casablanca",
+						"year": 1942
+					},
+					{
+						"imdbId": "tt10497826",
+						"score": -1.6477,
+						"title": "Kasablanka",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0038777",
+						"score": -3.8586,
+						"title": "A Night in Casablanca",
+						"year": 1946
+					}
+				],
+				"parsedTitle": "Casablanca",
+				"parsedYear": 1942,
+				"probability": 0.9466
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0357413",
+			"movie": {
+				"title": "Anchorman: The Legend of Ron Burgundy",
+				"year": 2004
+			},
+			"filename": "Anchorman The Legend of Ron Burgundy (2004) 1080p.BluRay.x264.Full 744MB",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0357413",
+						"score": 4.3659,
+						"title": "Anchorman: The Legend of Ron Burgundy",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0423505",
+						"score": -1.1764,
+						"title": "Wake Up, Ron Burgundy",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt1229340",
+						"score": -3.0921,
+						"title": "Anchorman 2: The Legend Continues",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Anchorman The Legend of Ron Burgundy",
+				"parsedYear": 2004,
+				"probability": 0.9486
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0102266",
+			"movie": {
+				"title": "The Last Boy Scout",
+				"year": 1991
+			},
+			"filename": "The.Last.Boy.Scout.1991.720p.BRRip.XviD-SHiRK",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0102266",
+						"score": 2.0952,
+						"title": "The Last Boy Scout",
+						"year": 1991
+					},
+					{
+						"imdbId": "tt4157728",
+						"score": -1.8763,
+						"title": "The Last Boy",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt2923834",
+						"score": -2.9369,
+						"title": "The Last Scout",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "The Last Boy Scout",
+				"parsedYear": 1991,
+				"probability": 0.965
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1160419",
+			"movie": {
+				"title": "Dune",
+				"year": 2021
+			},
+			"filename": "Dune 2021 1080p DS4K MA WEBRip x265 SDR DDP Atmos 5 1 English AnoZu",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1160419",
+						"score": 3.5557,
+						"title": "Dune",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt15331462",
+						"score": -1.1847,
+						"title": "Planet Dune",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt0087182",
+						"score": -1.3579,
+						"title": "Dune",
+						"year": 1984
+					}
+				],
+				"parsedTitle": "Dune",
+				"parsedYear": 2021,
+				"probability": 0.9009
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0120201",
+			"movie": {
+				"title": "Starship Troopers",
+				"year": 1997
+			},
+			"filename": "Starship.Troopers.1997.BluRay.1080p.VC-1.HDMA-星河战队国语特效字幕",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0120201",
+						"score": 3.2628,
+						"title": "Starship Troopers",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0844760",
+						"score": -1.6492,
+						"title": "Starship Troopers 3: Marauder",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt0367093",
+						"score": -2.199,
+						"title": "Starship Troopers 2: Hero of the Federation",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "Starship Troopers",
+				"parsedYear": 1997,
+				"probability": 0.8883
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0083170",
+			"movie": {
+				"title": "Tarzan the Ape Man",
+				"year": 1981
+			},
+			"filename": "Tarzan The Ape Man (1981) [720p] [WEBRip] [YTS MX]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0083170",
+						"score": 4.8985,
+						"title": "Tarzan the Ape Man",
+						"year": 1981
+					},
+					{
+						"imdbId": "tt0023551",
+						"score": -0.5701,
+						"title": "Tarzan the Ape Man",
+						"year": 1932
+					},
+					{
+						"imdbId": "tt0120855",
+						"score": -1.5621,
+						"title": "Tarzan",
+						"year": 1999
+					}
+				],
+				"parsedTitle": "Tarzan The Ape Man",
+				"parsedYear": 1981,
+				"probability": 0.9674
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1441953",
+			"movie": {
+				"title": "Testament of Youth",
+				"year": 2014
+			},
+			"filename": "Testament of Youth 2014 720p BluRay DD5 1 x264-VietHD",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1441953",
+						"score": 3.2881,
+						"title": "Testament of Youth",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0086429",
+						"score": -2.724,
+						"title": "Testament",
+						"year": 1983
+					},
+					{
+						"imdbId": "tt0479519",
+						"score": -3.3432,
+						"title": "Promise Me This",
+						"year": 2007
+					}
+				],
+				"parsedTitle": "Testament of Youth",
+				"parsedYear": 2014,
+				"probability": 0.987
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0074102",
+			"movie": {
+				"title": "In the Realm of the Senses",
+				"year": 1976
+			},
+			"filename": "In the Realm of the Senses AKA Ai no korîda 1976 2160p FRA UHD Blu-ray HEVC DTS-HD MA 1.0-Anonymous",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0074102",
+						"score": 3.0342,
+						"title": "In the Realm of the Senses",
+						"year": 1976
+					},
+					{
+						"imdbId": "tt7095482",
+						"score": -3.8283,
+						"title": "The Candidate",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0077132",
+						"score": -4.7785,
+						"title": "Empire of Passion",
+						"year": 1978
+					}
+				],
+				"parsedTitle": "In the Realm of the Senses AKA Ai no korîda",
+				"parsedYear": 1976,
+				"probability": 0.9917
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt6802400",
+			"movie": {
+				"title": "Coming 2 America",
+				"year": 2021
+			},
+			"filename": "Um Príncipe em Nova York 2 2021 1080p DUAL",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6802400",
+						"score": 4.2935,
+						"title": "Coming 2 America",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt0094898",
+						"score": -1.4173,
+						"title": "Coming to America",
+						"year": 1988
+					},
+					{
+						"imdbId": "tt13130948",
+						"score": -2.008,
+						"title": "Shehzada",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Um Príncipe em Nova York 2",
+				"parsedYear": 2021,
+				"probability": 0.9278
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2379713",
+			"movie": {
+				"title": "Spectre",
+				"year": 2015
+			},
+			"filename": "Spectre 2015 720p BrRip x264 - iFT",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2379713",
+						"score": 3.4131,
+						"title": "Spectre",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0076745",
+						"score": -2.0578,
+						"title": "Spectre",
+						"year": 1977
+					},
+					{
+						"imdbId": "tt0080464",
+						"score": -2.9663,
+						"title": "The Boogey Man",
+						"year": 1980
+					}
+				],
+				"parsedTitle": "Spectre",
+				"parsedYear": 2015,
+				"probability": 0.9258
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt31227572",
+			"movie": {
+				"title": "Predator: Badlands",
+				"year": 2025
+			},
+			"filename": "Predator.Badlands.2025.PLSUBBED.1080p.WEB-DL.h264-MAXX.mp4",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt31227572",
+						"score": 4.4284,
+						"title": "Predator: Badlands",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt3829266",
+						"score": -1.1459,
+						"title": "The Predator",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0093773",
+						"score": -1.8999,
+						"title": "Predator",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "Predator Badlands",
+				"parsedYear": 2025,
+				"probability": 0.9433
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt8332922",
+			"movie": {
+				"title": "A Quiet Place Part II",
+				"year": 2020
+			},
+			"filename": "【高清影视之家发布 www.HDBTHD.com】寂静之地2[简繁英字幕].A.Quiet.Place.Part.II.2021.1080p.iTunes.WEB-DL.DDP5.1.Atmos.H264-BATWEB",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt8332922",
+						"score": 0.9034,
+						"title": "A Quiet Place Part II",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt6644200",
+						"score": -1.0374,
+						"title": "A Quiet Place",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt13433802",
+						"score": -2.8654,
+						"title": "A Quiet Place: Day One",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "寂静之地2 A Quiet Place Part II",
+				"parsedYear": 2021,
+				"probability": 0.8501
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1628841",
+			"movie": {
+				"title": "Independence Day: Resurgence",
+				"year": 2016
+			},
+			"filename": "Independence Day Resurgence 2016 720p BrRip x264 - ASAP",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1628841",
+						"score": 3.0226,
+						"title": "Independence Day: Resurgence",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0116629",
+						"score": -1.0533,
+						"title": "Independence Day",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt5083736",
+						"score": -2.0357,
+						"title": "Interstellar Wars",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Independence Day Resurgence",
+				"parsedYear": 2016,
+				"probability": 0.9345
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0173886",
+			"movie": {
+				"title": "Halloweentown",
+				"year": 1998
+			},
+			"filename": "Miasteczko Halloween   Halloweentown (1998) PLDUB.WEB-DL.XviD-HMDb   Dubbing PL.avi.ts",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0173886",
+						"score": 1.1526,
+						"title": "Halloweentown",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt0414078",
+						"score": -0.2935,
+						"title": "Halloweentown High",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0107688",
+						"score": -1.2027,
+						"title": "The Nightmare Before Christmas",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "Miasteczko Halloween Halloweentown",
+				"parsedYear": 1998,
+				"probability": 0.9133
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt11310608",
+			"movie": {
+				"title": "Waiting for Bojangles",
+				"year": 2021
+			},
+			"filename": "En.attendant.Bojangles.AKA.Waiting.for.Bojangles.2021.1080p.BluRay.x264-HANDJOB.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11310608",
+						"score": 3.8811,
+						"title": "Waiting for Bojangles",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt0252287",
+						"score": -4.0208,
+						"title": "Bojangles",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt2034031",
+						"score": -4.3842,
+						"title": "Laggies",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "En attendant Bojangles AKA Waiting for Bojangles",
+				"parsedYear": 2021,
+				"probability": 0.993
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt6718170",
+			"movie": {
+				"title": "The Super Mario Bros. Movie",
+				"year": 2023
+			},
+			"filename": "The.Super.Mario.Bros.Movie.2023.1080p.AMZN.WEB-DL.2xRus.Eng-TeamHD.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6718170",
+						"score": 3.9397,
+						"title": "The Super Mario Bros. Movie",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt33904733",
+						"score": -0.1394,
+						"title": "The Super Mario Bros. Movie: Replayed",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0108255",
+						"score": -1.5365,
+						"title": "Super Mario Bros.",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "The Super Mario Bros Movie",
+				"parsedYear": 2023,
+				"probability": 0.8883
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2084970",
+			"movie": {
+				"title": "The Imitation Game",
+				"year": 2014
+			},
+			"filename": "The Imitation Game 2014 1080p BrRIP x264 quality vhs - POWER",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2084970",
+						"score": 3.9095,
+						"title": "The Imitation Game",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt3816614",
+						"score": -0.9812,
+						"title": "Turkey Shoot",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt2450186",
+						"score": -4.1897,
+						"title": "V/H/S/2",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "The Imitation Game",
+				"parsedYear": 2014,
+				"probability": 0.9536
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt4630562",
+			"movie": {
+				"title": "The Fate of the Furious",
+				"year": 2017
+			},
+			"filename": "The Fate of the Furious 2017 HDRip x264-ETRG",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4630562",
+						"score": 2.6265,
+						"title": "The Fate of the Furious",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6054874",
+						"score": -0.2621,
+						"title": "Furious",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt33311069",
+						"score": -1.3394,
+						"title": "The Furious",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "The Fate of the Furious",
+				"parsedYear": 2017,
+				"probability": 0.8515
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0054953",
+			"movie": {
+				"title": "The Guns of Navarone",
+				"year": 1961
+			},
+			"filename": "The Guns of Navarone 1961 720p BRRip x264 aac vice (HDScene Rele",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0054953",
+						"score": 4.3516,
+						"title": "The Guns of Navarone",
+						"year": 1961
+					},
+					{
+						"imdbId": "tt0058122",
+						"score": -3.8002,
+						"title": "The Guns",
+						"year": 1964
+					},
+					{
+						"imdbId": "tt0099720",
+						"score": -5.1328,
+						"title": "Guns",
+						"year": 1990
+					}
+				],
+				"parsedTitle": "The Guns of Navarone",
+				"parsedYear": 1961,
+				"probability": 0.9967
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt6334354",
+			"movie": {
+				"title": "The Suicide Squad",
+				"year": 2021
+			},
+			"filename": "The.Suicide.Squad.2021.WEB-DL.2160p.HDR.seleZen.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6334354",
+						"score": 4.0674,
+						"title": "The Suicide Squad",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt3832126",
+						"score": -2.1446,
+						"title": "Crazy Famous",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt1386697",
+						"score": -2.1534,
+						"title": "Suicide Squad",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "The Suicide Squad",
+				"parsedYear": 2021,
+				"probability": 0.8697
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2096673",
+			"movie": {
+				"title": "Inside Out",
+				"year": 2015
+			},
+			"filename": "[www.SceneTime.com] Inside Out 2015 BRRIP HEVC X265 AC3-ZEUS",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2096673",
+						"score": 1.7375,
+						"title": "Inside Out",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt1640486",
+						"score": -1.0627,
+						"title": "Inside Out",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0386534",
+						"score": -2.321,
+						"title": "Inside Out",
+						"year": 2005
+					}
+				],
+				"parsedTitle": "Inside Out",
+				"parsedYear": 2015,
+				"probability": 0.9148
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1179025",
+			"movie": {
+				"title": "The Extraordinary Adventures of Adèle Blanc-Sec",
+				"year": 2010
+			},
+			"filename": "Необычайные приключения Адель / Les aventures extraordinaires d'Adel Blanc-Sec (2010) BDRip",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1179025",
+						"score": 4.0266,
+						"title": "The Extraordinary Adventures of Adèle Blanc-Sec",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1244659",
+						"score": 0.0667,
+						"title": "Extraordinary Measures",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1230204",
+						"score": -1.5194,
+						"title": "A Turtle's Tale: Sammy's Adventures",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "Les aventures extraordinaires d'Adel Blanc-Sec",
+				"parsedYear": 2010,
+				"probability": 0.9613
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2582782",
+			"movie": {
+				"title": "Hell or High Water",
+				"year": 2016
+			},
+			"filename": "Hell.or.High.Water.2016.720p.WEB-DL.x264 - WeTv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2582782",
+						"score": 3.9428,
+						"title": "Hell or High Water",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt6043054",
+						"score": 0.7639,
+						"title": "Hell or High Waters",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt1043696",
+						"score": -4.3862,
+						"title": "One-Eyed Horse",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "Hell or High Water",
+				"parsedYear": 2016,
+				"probability": 0.9498
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0322259",
+			"movie": {
+				"title": "2 Fast 2 Furious",
+				"year": 2003
+			},
+			"filename": "2.Fast.2.Furious.2003.BDRip",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0322259",
+						"score": 3.3483,
+						"title": "2 Fast 2 Furious",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt13943572",
+						"score": 1.8591,
+						"title": "2 Fast, 2 Furious",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0496646",
+						"score": -2.4528,
+						"title": "2 Fast 2 Furious: Actor Driving School",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "2 Fast 2 Furious",
+				"parsedYear": 2003,
+				"probability": 0.8191
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0106246",
+			"movie": {
+				"title": "Alive",
+				"year": 1993
+			},
+			"filename": "Alive 1993 SloSubs 720p HDTV x264 DD2 0 FGT",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0106246",
+						"score": 4.41,
+						"title": "Alive",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt10620868",
+						"score": -0.5014,
+						"title": "#Alive",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt0331834",
+						"score": -2.4901,
+						"title": "Alive",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "Alive",
+				"parsedYear": 1993,
+				"probability": 0.9732
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2637276",
+			"movie": {
+				"title": "Ted 2",
+				"year": 2015
+			},
+			"filename": "Ted 2 [2015] [Unrated Edition] 1080p BDRip x265 DTS-HD MA 5.1 Kira [SEV]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2637276",
+						"score": 3.6441,
+						"title": "Ted 2",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt1637725",
+						"score": -2.3946,
+						"title": "Ted",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt8884166",
+						"score": -3.3957,
+						"title": "Ted 2: Deleted Scenes",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "Ted 2",
+				"parsedYear": 2015,
+				"probability": 0.8642
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt2765340",
+			"movie": {
+				"title": "So Young",
+				"year": 2013
+			},
+			"filename": "[致我们终将逝去的青春]So.Young.2013.HDTV.1080p.x264.2Audios.AC3-CnSCG",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2765340",
+						"score": 5.332,
+						"title": "So Young",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt2215537",
+						"score": 0.2679,
+						"title": "We Are So Young",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt2752200",
+						"score": -0.2239,
+						"title": "Young & Beautiful",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "So Young",
+				"parsedYear": 2013,
+				"probability": 0.9856
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0052311",
+			"movie": {
+				"title": "Touch of Evil",
+				"year": 1958
+			},
+			"filename": "Touch of Evil [1958, BDRemux 1080p] [PREVIEW VERSION] AVO + Original Eng + Comm + Sub Eng",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0052311",
+						"score": 4.6136,
+						"title": "Touch of Evil",
+						"year": 1958
+					},
+					{
+						"imdbId": "tt0274166",
+						"score": -4.3823,
+						"title": "Johnny English",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt23468836",
+						"score": -5.037,
+						"title": "Touch",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Touch of Evil",
+				"parsedYear": 1958,
+				"probability": 0.9948
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0118617",
+			"movie": {
+				"title": "Anastasia",
+				"year": 1997
+			},
+			"filename": "Anastasia.1997.(H.264).BDRip.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0118617",
+						"score": 3.1418,
+						"title": "Anastasia",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt1125856",
+						"score": 2.8534,
+						"title": "Anastasia",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt2060477",
+						"score": 0.5321,
+						"title": "Anastasia",
+						"year": 1997
+					}
+				],
+				"parsedTitle": "Anastasia",
+				"parsedYear": 1997,
+				"probability": 0.6938
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0335345",
+			"movie": {
+				"title": "The Passion of the Christ",
+				"year": 2004
+			},
+			"filename": "La passione di Cristo [DVD - Aramaico - Sub ITA Eng] [TNT Villag",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0335345",
+						"score": 1.9374,
+						"title": "The Passion of the Christ",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0064793",
+						"score": -1.2116,
+						"title": "The Passion of Anna",
+						"year": 1969
+					},
+					{
+						"imdbId": "tt1523498",
+						"score": -1.7048,
+						"title": "The Passion",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "La passione di Cristo",
+				"parsedYear": null,
+				"probability": 0.9055
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt1013752",
+			"movie": {
+				"title": "Fast & Furious",
+				"year": 2009
+			},
+			"filename": "Fast & Furious 2009 720p BluRay x264-x0r",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1013752",
+						"score": 3.3121,
+						"title": "Fast & Furious",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt0232500",
+						"score": -0.8954,
+						"title": "The Fast and the Furious",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt0031298",
+						"score": -1.9059,
+						"title": "Fast and Furious",
+						"year": 1939
+					}
+				],
+				"parsedTitle": "Fast & Furious",
+				"parsedYear": 2009,
+				"probability": 0.8173
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0343818",
+			"movie": {
+				"title": "I, Robot",
+				"year": 2004
+			},
+			"filename": "Eu Robô 2004 720P",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0343818",
+						"score": 2.1438,
+						"title": "I, Robot",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt1305797",
+						"score": -1.3688,
+						"title": "Enthiran",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1014693",
+						"score": -3.8935,
+						"title": "Zoo",
+						"year": 2005
+					}
+				],
+				"parsedTitle": "Eu Robô",
+				"parsedYear": 2004,
+				"probability": 0.8856
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0133240",
+			"movie": {
+				"title": "Treasure Planet",
+				"year": 2002
+			},
+			"filename": "Treasure.Planet.2002.720p.BluRay.5xRus.Ukr.Eng.HDCLUB.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0133240",
+						"score": 4.2441,
+						"title": "Treasure Planet",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt0294251",
+						"score": -3.4017,
+						"title": "2002",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt22450920",
+						"score": -4.0231,
+						"title": "Treasure",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "Treasure Planet",
+				"parsedYear": 2002,
+				"probability": 0.9911
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0093389",
+			"movie": {
+				"title": "The Last Emperor",
+				"year": 1987
+			},
+			"filename": "The Last Emperor (1987) [BluRay] [1080p] [YTS.AM]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0093389",
+						"score": 4.0388,
+						"title": "The Last Emperor",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt0091235",
+						"score": 1.6981,
+						"title": "The Last Emperor",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt2103264",
+						"score": 0.3006,
+						"title": "Emperor",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "The Last Emperor",
+				"parsedYear": 1987,
+				"probability": 0.8676
+			},
+			"identified": true
+		},
+		{
+			"imdbId": "tt0382625",
+			"movie": {
+				"title": "The Da Vinci Code",
+				"year": 2006
+			},
+			"filename": "The Da Vinci Code [PS2] [NTSC] [MULTI2]",
+			"jev": {
+				"verdict": "trash",
+				"media": "GAME_SOFTWARE",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0382625",
+						"score": 3.1858,
+						"title": "The Da Vinci Code",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0446053",
+						"score": -1.2649,
+						"title": "Beyond the Da Vinci Code",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0439219",
+						"score": -1.3671,
+						"title": "Cracking the Da Vinci Code",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "The Da Vinci Code",
+				"parsedYear": null,
+				"probability": 0.8996
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt28650488",
+			"movie": {
+				"title": "The Super Mario Galaxy Movie",
+				"year": 2026
+			},
+			"filename": "Super Mario Galaxy 2 [PAL][Wii][Spanish][www consolasatope com]",
+			"jev": {
+				"verdict": "trash",
+				"media": "GAME_SOFTWARE",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt28650488",
+						"score": 0.9597,
+						"title": "The Super Mario Galaxy Movie",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt0404977",
+						"score": -2.2391,
+						"title": "Battle for the Lost Planet",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt0108255",
+						"score": -2.5515,
+						"title": "Super Mario Bros.",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "Super Mario Galaxy 2",
+				"parsedYear": null,
+				"probability": 0.8723
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1216475",
+			"movie": {
+				"title": "Cars 2",
+				"year": 2011
+			},
+			"filename": "Cars 2 / Тачки 2  (2011) [Wii] [PAL] [Ru]",
+			"jev": {
+				"verdict": "trash",
+				"media": "GAME_SOFTWARE",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1216475",
+						"score": 1.9568,
+						"title": "Cars 2",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1691917",
+						"score": -2.881,
+						"title": "Planes",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0317219",
+						"score": -3.8311,
+						"title": "Cars",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "Тачки 2",
+				"parsedYear": 2011,
+				"probability": 0.9197
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2094766",
+			"movie": {
+				"title": "Assassin's Creed",
+				"year": 2016
+			},
+			"filename": "Assassins Creed - Syndicate - Gold Edition",
+			"jev": {
+				"verdict": "trash",
+				"media": "GAME_SOFTWARE",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2094766",
+						"score": 1.2233,
+						"title": "Assassin's Creed",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0112401",
+						"score": -0.6662,
+						"title": "Assassins",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt11394276",
+						"score": -1.745,
+						"title": "Assassins",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Assassins Creed",
+				"parsedYear": null,
+				"probability": 0.6559
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0317919",
+			"movie": {
+				"title": "Mission: Impossible III",
+				"year": 2006
+			},
+			"filename": "Mission Impossible Iii [2006] [soundtrack]",
+			"jev": {
+				"verdict": "trash",
+				"media": "AUDIO",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0317919",
+						"score": 3.78,
+						"title": "Mission: Impossible III",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0120755",
+						"score": -2.4581,
+						"title": "Mission: Impossible II",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0117060",
+						"score": -2.6232,
+						"title": "Mission: Impossible",
+						"year": 1996
+					}
+				],
+				"parsedTitle": "Mission Impossible Iii",
+				"parsedYear": 2006,
+				"probability": 0.88
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1285016",
+			"movie": {
+				"title": "The Social Network",
+				"year": 2010
+			},
+			"filename": "THE SOCIAL NETWORK",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1285016",
+						"score": 1.1694,
+						"title": "The Social Network",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt31189868",
+						"score": -2.1198,
+						"title": "The Antisocial Network: Memes to Mayhem",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0074958",
+						"score": -2.698,
+						"title": "Network",
+						"year": 1976
+					}
+				],
+				"parsedTitle": "THE SOCIAL NETWORK",
+				"parsedYear": null,
+				"probability": 0.8551
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0120737",
+			"movie": {
+				"title": "The Lord of the Rings: The Fellowship of the Ring",
+				"year": 2001
+			},
+			"filename": "The Lord of the Rings The Fellowship of the Ring (2001)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0120737",
+						"score": 4.9016,
+						"title": "The Lord of the Rings: The Fellowship of the Ring",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt21811588",
+						"score": -1.2247,
+						"title": "The Lord of the Rings: The Fellowship of the Ring - Special Extended Edition Scenes",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt10127200",
+						"score": -1.329,
+						"title": "National Geographic: Beyond the Movie - The Lord of the Rings: The Fellowship of the Ring",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "The Lord of the Rings The Fellowship of the Ring",
+				"parsedYear": 2001,
+				"probability": 0.9249
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0437806",
+			"movie": {
+				"title": "Alone in the Wilderness",
+				"year": 2004
+			},
+			"filename": "Alone in the Wilderness[2004] - Dick Proenneke",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0437806",
+						"score": 4.2208,
+						"title": "Alone in the Wilderness",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0465670",
+						"score": -1.4408,
+						"title": "Wilderness",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt2708794",
+						"score": -2.4147,
+						"title": "Alone in the Wilderness Part II",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Alone in the Wilderness",
+				"parsedYear": 2004,
+				"probability": 0.9893
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt8267604",
+			"movie": {
+				"title": "Capernaum",
+				"year": 2018
+			},
+			"filename": "Capernaum (2018)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt8267604",
+						"score": 4.1188,
+						"title": "Capernaum",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt9006564",
+						"score": -3.3409,
+						"title": "2018",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt6258232",
+						"score": -3.4397,
+						"title": "Doomsday Device",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Capernaum",
+				"parsedYear": 2018,
+				"probability": 0.9921
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1179056",
+			"movie": {
+				"title": "A Nightmare on Elm Street",
+				"year": 2010
+			},
+			"filename": "ANightmareOnElmStreet2010_201504",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1179056",
+						"score": -0.219,
+						"title": "A Nightmare on Elm Street",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0087800",
+						"score": -2.2532,
+						"title": "A Nightmare on Elm Street",
+						"year": 1984
+					},
+					{
+						"imdbId": "tt0093629",
+						"score": -3.2956,
+						"title": "A Nightmare on Elm Street 3: Dream Warriors",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "ANightmareOnElmStreet2010 201504",
+				"parsedYear": null,
+				"probability": 0.8367
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0113277",
+			"movie": {
+				"title": "Heat",
+				"year": 1995
+			},
+			"filename": "HEAT_1995_UHD_HDR_RMX_BLUEBIRD",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0113277",
+						"score": 1.7272,
+						"title": "Heat",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt0068688",
+						"score": -3.6505,
+						"title": "Heat",
+						"year": 1972
+					},
+					{
+						"imdbId": "tt0093164",
+						"score": -3.7494,
+						"title": "Heat",
+						"year": 1986
+					}
+				],
+				"parsedTitle": "HEAT",
+				"parsedYear": 1995,
+				"probability": 0.9431
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1611224",
+			"movie": {
+				"title": "Abraham Lincoln: Vampire Hunter",
+				"year": 2012
+			},
+			"filename": "Abraham Lincoln Vampire Hunter 2012 (Eng)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1611224",
+						"score": 3.5505,
+						"title": "Abraham Lincoln: Vampire Hunter",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt2396396",
+						"score": 0.9231,
+						"title": "Abraham Lincoln Vampire Hunter: The Great Calamity",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0032181",
+						"score": -2.9693,
+						"title": "Abe Lincoln in Illinois",
+						"year": 1940
+					}
+				],
+				"parsedTitle": "Abraham Lincoln Vampire Hunter",
+				"parsedYear": 2012,
+				"probability": 0.8671
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0385700",
+			"movie": {
+				"title": "Final Fantasy VII: Advent Children",
+				"year": 2005
+			},
+			"filename": "[kissu.si]Final Fantasy VII: Advent Children [SloSubs]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0385700",
+						"score": 3.971,
+						"title": "Final Fantasy VII: Advent Children",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0173840",
+						"score": -0.2134,
+						"title": "Final Fantasy: The Spirits Within",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt11416796",
+						"score": -1.6934,
+						"title": "Final Fantasy VII: Advent Children - The Distance - The Making of Advent Children",
+						"year": 2007
+					}
+				],
+				"parsedTitle": "Final Fantasy VII: Advent Children",
+				"parsedYear": null,
+				"probability": 0.9307
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1324999",
+			"movie": {
+				"title": "The Twilight Saga: Breaking Dawn - Part 1",
+				"year": 2011
+			},
+			"filename": "The Twilight Saga Breaking Dawn Part 2 divx full copy 2012 avi",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1673434",
+						"score": 3.3827,
+						"title": "The Twilight Saga: Breaking Dawn - Part 2",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1324999",
+						"score": 0.886,
+						"title": "The Twilight Saga: Breaking Dawn - Part 1",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt30427923",
+						"score": 0.2618,
+						"title": "The Twilight Saga: Breaking Dawn - Part 1 - Extended Scenes",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "The Twilight Saga Breaking Dawn Part 2",
+				"parsedYear": null,
+				"probability": 0.8691
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0988045",
+			"movie": {
+				"title": "Sherlock Holmes",
+				"year": 2009
+			},
+			"filename": "Sherlock Holmes [DvDRiP XViD 2010 Norars Eng]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1522835",
+						"score": 3.4762,
+						"title": "Sherlock Holmes",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0988045",
+						"score": 2.4913,
+						"title": "Sherlock Holmes",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt2304901",
+						"score": 1.1949,
+						"title": "Sherlock Holmes",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Sherlock Holmes",
+				"parsedYear": null,
+				"probability": 0.7908
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1228705",
+			"movie": {
+				"title": "Iron Man 2",
+				"year": 2010
+			},
+			"filename": "Iron Man 1 2 3 - Sci-Fi 2008-2013 Eng Ita Multi-Subs 1080p [H2",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1300854",
+						"score": 2.4658,
+						"title": "Iron Man 3",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1228705",
+						"score": -2.4147,
+						"title": "Iron Man 2",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt3375556",
+						"score": -2.4934,
+						"title": "Iron Man",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Iron Man 1 2 3",
+				"parsedYear": null,
+				"probability": 0.9402
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt28996126",
+			"movie": {
+				"title": "Nobody 2",
+				"year": 2025
+			},
+			"filename": "Nobody 2-2025-1080p UHD BluRay OPUS 7 1 SDR AV1-WhiskeyJack",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt36733027",
+						"score": 2.3484,
+						"title": "Nobody",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt28996126",
+						"score": 1.4052,
+						"title": "Nobody 2",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt7888964",
+						"score": -2.4523,
+						"title": "Nobody",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Nobody 2-2025-1080p",
+				"parsedYear": null,
+				"probability": 0.8041
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt29424168",
+			"movie": {
+				"title": "Inside",
+				"year": 2024
+			},
+			"filename": "Inside (2023) BDRip от MegaPeer",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt14781036",
+						"score": 4.3556,
+						"title": "Inside",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt29424168",
+						"score": 2.3389,
+						"title": "Inside",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt15683734",
+						"score": 0.5844,
+						"title": "It Lives Inside",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Inside",
+				"parsedYear": 2023,
+				"probability": 0.7778
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt11827628",
+			"movie": {
+				"title": "Memory",
+				"year": 2022
+			},
+			"filename": "Pudełko wspomnień   Memory Box (2021) 720p.WEB-DL.XviD.DD2.0-K83   Lektor PL.avi.ts",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt7265490",
+						"score": 2.1637,
+						"title": "Memory Box",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt6662736",
+						"score": -5.1623,
+						"title": "What They Had",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt6720618",
+						"score": -5.3524,
+						"title": "Ramen Shop",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Pudełko wspomnień Memory Box",
+				"parsedYear": 2021,
+				"probability": 0.9821
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt23558280",
+			"movie": {
+				"title": "Elevation",
+				"year": 2024
+			},
+			"filename": "Strefa wroga .2024.PL.1080p.AMZN.WEB-DL.x264.AC3-KiT",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt19864802",
+						"score": 3.5365,
+						"title": "Land of Bad",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt23558280",
+						"score": 1.4796,
+						"title": "Elevation",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt32606918",
+						"score": -1.3649,
+						"title": "From Ground Zero",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Strefa wroga",
+				"parsedYear": 2024,
+				"probability": 0.9024
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0381061",
+			"movie": {
+				"title": "Casino Royale",
+				"year": 2006
+			},
+			"filename": "James Bond: Casino Royale (A Martin Campbell Film)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0061452",
+						"score": 2.1643,
+						"title": "Casino Royale",
+						"year": 1967
+					},
+					{
+						"imdbId": "tt0381061",
+						"score": 0.0519,
+						"title": "Casino Royale",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0929765",
+						"score": -2.3971,
+						"title": "James Bond Casino",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "James Bond: Casino Royale",
+				"parsedYear": null,
+				"probability": 0.8149
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0304141",
+			"movie": {
+				"title": "Harry Potter and the Prisoner of Azkaban",
+				"year": 2004
+			},
+			"filename": "Harry Potter Integrale FRENCH HDLight 1080p",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0241527",
+						"score": 2.358,
+						"title": "Harry Potter and the Sorcerer's Stone",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt1201607",
+						"score": -1.2962,
+						"title": "Harry Potter and the Deathly Hallows: Part 2",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0295297",
+						"score": -3.4271,
+						"title": "Harry Potter and the Chamber of Secrets",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "Harry Potter Integrale FRENCH HDLight",
+				"parsedYear": null,
+				"probability": 0.6691
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1614989",
+			"movie": {
+				"title": "Headhunters",
+				"year": 2011
+			},
+			"filename": "Охотники за головами__Hodejegerne [2011.BDRip.1080p.Dub]-HDChina.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1596565",
+						"score": 4.0545,
+						"title": "Bounty Hunters",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1614989",
+						"score": 1.6117,
+						"title": "Headhunters",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1591504",
+						"score": -1.1818,
+						"title": "The Hunters",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Охотники за головами Hodejegerne",
+				"parsedYear": 2011,
+				"probability": 0.9186
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2184339",
+			"movie": {
+				"title": "The Purge",
+				"year": 2013
+			},
+			"filename": "The Purge Anarchy 2014 WEBRIP CAM AUDIO.mp4",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2975578",
+						"score": 3.8899,
+						"title": "The Purge: Anarchy",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt3093522",
+						"score": 1.1157,
+						"title": "Cymbeline",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt2184339",
+						"score": -0.848,
+						"title": "The Purge",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "The Purge Anarchy",
+				"parsedYear": 2014,
+				"probability": 0.8218
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0396184",
+			"movie": {
+				"title": "Pusher II",
+				"year": 2004
+			},
+			"filename": "Pusher Trilogy 1996 2005 720p BluRay x264 anoXmous",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0314063",
+						"score": -0.1382,
+						"title": "Immortal",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0117407",
+						"score": -3.3903,
+						"title": "Pusher",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0165996",
+						"score": -4.6469,
+						"title": "Trilogy",
+						"year": 1969
+					}
+				],
+				"parsedTitle": "Pusher Trilogy 1996",
+				"parsedYear": 2005,
+				"probability": 0.8811
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0094737",
+			"movie": {
+				"title": "Big",
+				"year": 1988
+			},
+			"filename": "Big Business (1988) [BluRay] [720p] [YTS] [YIFY]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0094739",
+						"score": 4.5476,
+						"title": "Big Business",
+						"year": 1988
+					},
+					{
+						"imdbId": "tt0090108",
+						"score": -2.2716,
+						"title": "Big Business",
+						"year": 1985
+					},
+					{
+						"imdbId": "tt0097172",
+						"score": -3.1907,
+						"title": "Dealers",
+						"year": 1989
+					}
+				],
+				"parsedTitle": "Big Business",
+				"parsedYear": 1988,
+				"probability": 0.9649
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1001526",
+			"movie": {
+				"title": "Megamind",
+				"year": 2010
+			},
+			"filename": "Megamind The Button of Doom(2011)(DD5.1)(nl subs)Minidvd TBS",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1847645",
+						"score": 4.2445,
+						"title": "Megamind: The Button of Doom",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1001526",
+						"score": -0.0871,
+						"title": "Megamind",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1837587",
+						"score": -2.7854,
+						"title": "War of the Buttons",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Megamind The Button of Doom",
+				"parsedYear": 2011,
+				"probability": 0.9867
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0105619",
+			"movie": {
+				"title": "The Heroic Trio",
+				"year": 1993
+			},
+			"filename": "The.Heroic.Trio.1993.Executioners.1993.COMPLETE.UHD.BLURAY-SURCODE",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0108606",
+						"score": 2.879,
+						"title": "Heroic Trio 2: Executioners",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt0105619",
+						"score": 1.7689,
+						"title": "The Heroic Trio",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt22460506",
+						"score": -1.1087,
+						"title": "1993",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "The Heroic Trio 1993 Executioners",
+				"parsedYear": 1993,
+				"probability": 0.7051
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt15654328",
+			"movie": {
+				"title": "Leo",
+				"year": 2023
+			},
+			"filename": "레오 (우리말 더빙) Leo,2023.1080p.KORDUB.WEBRip.H264.AAC",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt5755238",
+						"score": 2.1056,
+						"title": "Leo",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt15654328",
+						"score": -0.4202,
+						"title": "Leo",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt15509266",
+						"score": -1.9294,
+						"title": "Spy",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Leo,2023",
+				"parsedYear": null,
+				"probability": 0.9392
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0073195",
+			"movie": {
+				"title": "Jaws",
+				"year": 1975
+			},
+			"filename": "JAWS - TIBURON ( EDICION 30 ANIVERSARIO ) - PAL - WS -",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0085750",
+						"score": 1.9096,
+						"title": "Jaws 3-D",
+						"year": 1983
+					},
+					{
+						"imdbId": "tt0073195",
+						"score": -1.1901,
+						"title": "Jaws",
+						"year": 1975
+					},
+					{
+						"imdbId": "tt12583926",
+						"score": -2.0786,
+						"title": "Anniversary",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "JAWS",
+				"parsedYear": null,
+				"probability": 0.6798
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0087182",
+			"movie": {
+				"title": "Dune",
+				"year": 1984
+			},
+			"filename": "沙丘.1984.加长版",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0087803",
+						"score": 0.3016,
+						"title": "1984",
+						"year": 1984
+					},
+					{
+						"imdbId": "tt0087182",
+						"score": -0.8221,
+						"title": "Dune",
+						"year": 1984
+					},
+					{
+						"imdbId": "tt4227346",
+						"score": -2.0492,
+						"title": "Apple Mac: 1984",
+						"year": 1983
+					}
+				],
+				"parsedTitle": "沙丘",
+				"parsedYear": 1984,
+				"probability": 0.8617
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0110413",
+			"movie": {
+				"title": "Léon: The Professional",
+				"year": 1994
+			},
+			"filename": "Леон / Léon / Leon (Люк Бессон / Luc Besson) [1994 · Франция · боевик · криминал · драма · триллер · BDRip] [Международная версия / International Version] MVO (Супербит / Киномания) + AVO (Гаврилов)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0281724",
+						"score": 1.919,
+						"title": "Cinemania",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt2359427",
+						"score": -0.8253,
+						"title": "Linsanity",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt2547832",
+						"score": -1.7065,
+						"title": "Kinomaniya",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "Киномания) + AVO",
+				"parsedYear": null,
+				"probability": 0.9443
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0042332",
+			"movie": {
+				"title": "Cinderella",
+				"year": 1950
+			},
+			"filename": "Cinderella.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0128996",
+						"score": 4.8549,
+						"title": "Cinderella",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0057950",
+						"score": 1.996,
+						"title": "Cinderella",
+						"year": 1965
+					},
+					{
+						"imdbId": "tt10155932",
+						"score": 1.7393,
+						"title": "Cinderella",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Cinderella",
+				"parsedYear": null,
+				"probability": 0.7759
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0936501",
+			"movie": {
+				"title": "Taken",
+				"year": 2008
+			},
+			"filename": "2008.myHD.Taken.中文字幕.AC-3.1920x1080-MYfun4U.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1301698",
+						"score": 1.1649,
+						"title": "1920",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt0936501",
+						"score": -1.0098,
+						"title": "Taken",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt2446042",
+						"score": -2.0783,
+						"title": "Taken 3",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "myHD Taken AC-3",
+				"parsedYear": 2008,
+				"probability": 0.8642
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2948840",
+			"movie": {
+				"title": "Life",
+				"year": 2015
+			},
+			"filename": "Life in Color (2015) 1080p WEBRip 5.1 x264 -YTS",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4071498",
+						"score": 3.9602,
+						"title": "Life in Color",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0376304",
+						"score": -3.3958,
+						"title": "Vida y color",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0123964",
+						"score": -4.4432,
+						"title": "Life",
+						"year": 1999
+					}
+				],
+				"parsedTitle": "Life in Color",
+				"parsedYear": 2015,
+				"probability": 0.9944
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt9660502",
+			"movie": {
+				"title": "Close",
+				"year": 2022
+			},
+			"filename": "【首发于高清影视之家 www.BBQDDQ.com】我们的样子像极了爱情[国语配音+中文字幕].Close.To.Love.2022.1080p.WEB-DL.H264.AAC-MOMOWEB",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt18939364",
+						"score": 1.6276,
+						"title": "Close to Love",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt9660502",
+						"score": -0.5152,
+						"title": "Close",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0188801",
+						"score": -2.1349,
+						"title": "Close to Love",
+						"year": 1999
+					}
+				],
+				"parsedTitle": "Close To Love",
+				"parsedYear": 2022,
+				"probability": 0.9228
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1312221",
+			"movie": {
+				"title": "Frankenstein",
+				"year": 2025
+			},
+			"filename": "Frankenstein's Bride 2026 1080p AMZN WEBRip x264 5 1-ASYLUM",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt38627843",
+						"score": 3.2984,
+						"title": "Frankenstein's Bride",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt1312221",
+						"score": -0.0638,
+						"title": "Frankenstein",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt0021884",
+						"score": -1.626,
+						"title": "Frankenstein",
+						"year": 1931
+					}
+				],
+				"parsedTitle": "Frankenstein's Bride",
+				"parsedYear": 2026,
+				"probability": 0.9635
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2709768",
+			"movie": {
+				"title": "The Secret Life of Pets",
+				"year": 2016
+			},
+			"filename": "Pet 2016 Movies 720p BluRay x264 ESubs AAC New Sample   â˜»rDXâ˜»",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1183374",
+						"score": 3.2744,
+						"title": "Pet",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt5113040",
+						"score": -3.6685,
+						"title": "The Secret Life of Pets 2",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt5157616",
+						"score": -3.8854,
+						"title": "2016",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Pet",
+				"parsedYear": 2016,
+				"probability": 0.9887
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt4481066",
+			"movie": {
+				"title": "Giant Little Ones",
+				"year": 2018
+			},
+			"filename": "Zombieland Double Tap 2019 1080p BluRay x264 DRONES[rarbg]",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1560220",
+						"score": 2.5601,
+						"title": "Zombieland: Double Tap",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt2090440",
+						"score": -2.0985,
+						"title": "Zombieland",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1156398",
+						"score": -2.5108,
+						"title": "Zombieland",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "Zombieland Double Tap",
+				"parsedYear": 2019,
+				"probability": 0.8827
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt37989803",
+			"movie": {
+				"title": "Revenge",
+				"year": 2026
+			},
+			"filename": "Sisu: Road to Revenge (2025) UHD BDRemux 2160p от селезень",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt31844586",
+						"score": 4.8832,
+						"title": "Sisu: Road to Revenge",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt0100485",
+						"score": -2.5983,
+						"title": "Revenge",
+						"year": 1990
+					},
+					{
+						"imdbId": "tt0169183",
+						"score": -2.7191,
+						"title": "Champagne and Bullets",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "Sisu: Road to Revenge",
+				"parsedYear": 2025,
+				"probability": 0.9921
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1979320",
+			"movie": {
+				"title": "Rush",
+				"year": 2013
+			},
+			"filename": "Premium Rush 2012 [English].DVDRip   ETRG",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1547234",
+						"score": 4.1198,
+						"title": "Premium Rush",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt2256514",
+						"score": -0.5968,
+						"title": "Rush",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1979320",
+						"score": -2.9809,
+						"title": "Rush",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Premium Rush",
+				"parsedYear": 2012,
+				"probability": 0.9761
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0119488",
+			"movie": {
+				"title": "L.A. Confidential",
+				"year": 1997
+			},
+			"filename": "Сирота казанская (1997) DVDRip от New-Team",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0129380",
+						"score": 4.3843,
+						"title": "Sympathy Seeker",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0088814",
+						"score": -3.0781,
+						"title": "The Black Cauldron",
+						"year": 1985
+					},
+					{
+						"imdbId": "tt1148204",
+						"score": -3.214,
+						"title": "Orphan",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "Сирота казанская",
+				"parsedYear": 1997,
+				"probability": 0.9945
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2848292",
+			"movie": {
+				"title": "Pitch Perfect 2",
+				"year": 2015
+			},
+			"filename": "Insurgent 2015 HDRip x264 RARBG",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2908446",
+						"score": 1.5655,
+						"title": "The Divergent Series: Insurgent",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt11946138",
+						"score": -4.6938,
+						"title": "Rebel",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt7689964",
+						"score": -4.837,
+						"title": "RBG",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Insurgent",
+				"parsedYear": 2015,
+				"probability": 0.9574
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0366548",
+			"movie": {
+				"title": "Happy Feet",
+				"year": 2006
+			},
+			"filename": "Happy Feet 2 O Pinguim TS XviD Dublado YanKeeS",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1402488",
+						"score": 2.6889,
+						"title": "Happy Feet Two",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0366548",
+						"score": 0.5534,
+						"title": "Happy Feet",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0491775",
+						"score": -2.589,
+						"title": "Happy",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "Happy Feet 2 O Pinguim",
+				"parsedYear": null,
+				"probability": 0.8128
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1502407",
+			"movie": {
+				"title": "Halloween",
+				"year": 2018
+			},
+			"filename": "[EX-TORRENTY.ORG] Goosebumps.2.Haunted.Halloween.2018.PL.720p.WEB-DL.AC3.XviD-MR",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt5664636",
+						"score": 3.4488,
+						"title": "Goosebumps 2: Haunted Halloween",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt1051904",
+						"score": -2.5887,
+						"title": "Goosebumps",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt6535880",
+						"score": -3.0617,
+						"title": "Haunt",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Goosebumps 2 Haunted Halloween",
+				"parsedYear": 2018,
+				"probability": 0.9798
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0055913",
+			"movie": {
+				"title": "Divorce Italian Style",
+				"year": 1961
+			},
+			"filename": "Укрощение строптивой (1961) DVDRip-AVC от New-Team",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0125571",
+						"score": 2.2063,
+						"title": "The Taming of the Shrew",
+						"year": 1961
+					},
+					{
+						"imdbId": "tt0061407",
+						"score": -0.8083,
+						"title": "The Taming of the Shrew",
+						"year": 1967
+					},
+					{
+						"imdbId": "tt0020479",
+						"score": -1.4597,
+						"title": "The Taming of the Shrew",
+						"year": 1929
+					}
+				],
+				"parsedTitle": "Укрощение строптивой",
+				"parsedYear": 1961,
+				"probability": 0.9581
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt15325794",
+			"movie": {
+				"title": "Fall",
+				"year": 2022
+			},
+			"filename": "The Free Fall 2022 1080p AMZN WEB DL DDP5 1 H 264 GPRS",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt10703978",
+						"score": 3.2221,
+						"title": "The Free Fall",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt2617828",
+						"score": 0.3087,
+						"title": "Free Fall",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt26691890",
+						"score": -1.2272,
+						"title": "Free Fall",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "The Free Fall",
+				"parsedYear": 2022,
+				"probability": 0.9691
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt32919734",
+			"movie": {
+				"title": "Padakkalam",
+				"year": 2025
+			},
+			"filename": "Буратино (2025) WEB-DL 720p от ExKinoRay",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt32118517",
+						"score": 1.6709,
+						"title": "Pinocchio",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt0152066",
+						"score": -4.2709,
+						"title": "The Adventures of Buratino",
+						"year": 1960
+					},
+					{
+						"imdbId": "tt13788842",
+						"score": -5.1397,
+						"title": "2025 - The World enslaved by a Virus",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Буратино",
+				"parsedYear": 2025,
+				"probability": 0.9862
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt4481514",
+			"movie": {
+				"title": "The House",
+				"year": 2017
+			},
+			"filename": "Dark House (2017) WEBRip x264 - SHADOW[TGx]",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0/recheck-206"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6902510",
+						"score": 2.56,
+						"title": "Dark House",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt1260567",
+						"score": -0.8913,
+						"title": "Dark House",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt1385543",
+						"score": -1.0406,
+						"title": "Dark House",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "Dark House",
+				"parsedYear": 2017,
+				"probability": 0.947
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1147524",
+			"movie": {
+				"title": "Doraemon: Nobita's Three Visionary Swordsmen",
+				"year": 1994
+			},
+			"filename": "í™”ë£¡í’ìš´ (1994) Fire Dragon 1994 WEBRip 1080p x264 AAC 2Audio..",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0109803",
+						"score": 0.8385,
+						"title": "Fire Dragon",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt0106768",
+						"score": -2.4751,
+						"title": "Dragon Fire",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt0193692",
+						"score": -2.553,
+						"title": "1994",
+						"year": 1994
+					}
+				],
+				"parsedTitle": "í™”ë£¡í’ìš´ Fire Dragon",
+				"parsedYear": 1994,
+				"probability": 0.8202
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt6556670",
+			"movie": {
+				"title": "Serial (Bad) Weddings 2",
+				"year": 2019
+			},
+			"filename": "Бабушка легкого поведения 2 (2019) WEB-DLRip от GeneralFilm",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt9450542",
+						"score": 0.6041,
+						"title": "Babushka lyogkogo povedeniya 2",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt13456266",
+						"score": -0.4718,
+						"title": "Prababushka legkogo povedeniya. Nachalo",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt5037840",
+						"score": -1.5651,
+						"title": "Drunk Parents",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Бабушка легкого поведения 2",
+				"parsedYear": 2019,
+				"probability": 0.7122
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1322930",
+			"movie": {
+				"title": "Alone",
+				"year": 2008
+			},
+			"filename": "aone-lmf-ghost-in-the-shell-stand-alone-complex",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1024215",
+						"score": 4.8276,
+						"title": "Ghost in the Shell: Stand Alone Complex - The Laughing Man",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0856797",
+						"score": -0.2679,
+						"title": "Ghost in the Shell: Stand Alone Complex - Solid State Society",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt1024214",
+						"score": -1.4458,
+						"title": "Ghost in the Shell: S.A.C. 2nd GIG - Individual Eleven",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "lmf-ghost-in-the-shell-stand-alone-complex",
+				"parsedYear": null,
+				"probability": 0.8169
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt3076658",
+			"movie": {
+				"title": "Creed",
+				"year": 2015
+			},
+			"filename": "Assassin's Creed Mirage (v1.0.6 + Bonus Content + MULTi14) (From 20 GB) [DODI Repack]",
+			"jev": {
+				"verdict": "trash",
+				"media": "GAME_SOFTWARE",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2094766",
+						"score": 1.3715,
+						"title": "Assassin's Creed",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0118644",
+						"score": -1.8865,
+						"title": "Assassin(s)",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt3030354",
+						"score": -2.535,
+						"title": "Assassin",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "Assassin's Creed Mirage",
+				"parsedYear": null,
+				"probability": 0.6772
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt4530422",
+			"movie": {
+				"title": "Overlord",
+				"year": 2018
+			},
+			"filename": "[Doki] Overlord - Vol 5 (1920x1080 HEVC BD FLAC)",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt4869896",
+						"score": 4.4712,
+						"title": "Overlord",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt11156226",
+						"score": -2.1461,
+						"title": "Overlord DVD",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt10742214",
+						"score": -2.5144,
+						"title": "Jiu Liu Overlord",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Overlord",
+				"parsedYear": null,
+				"probability": 0.6991
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0181865",
+			"movie": {
+				"title": "Traffic",
+				"year": 2000
+			},
+			"filename": "Traffic (2000) [tmdb-1900][1080p WEB-DL][Dual].mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0344487",
+						"score": 2.8316,
+						"title": "Traffic",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0419365",
+						"score": -1.6076,
+						"title": "Sex Traffic",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt1809194",
+						"score": -2.1467,
+						"title": "Traffic Light",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Traffic",
+				"parsedYear": 1900,
+				"probability": 0.7618
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0385004",
+			"movie": {
+				"title": "House of Flying Daggers",
+				"year": 2004
+			},
+			"filename": "[AniMaunt] Jingkeuseuui Yeonin",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt21081006",
+						"score": 3.6535,
+						"title": "Jinxed at First",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt26228190",
+						"score": -1.0792,
+						"title": "My Dearest",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt1865740",
+						"score": -2.627,
+						"title": "Ink Master",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "Jingkeuseuui Yeonin",
+				"parsedYear": null,
+				"probability": 0.8662
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0369610",
+			"movie": {
+				"title": "Jurassic World",
+				"year": 2015
+			},
+			"filename": "Rifftrax - Jurassic World (2015) 2160p HDR 2.0 + 5.1 MKV -Mesc",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt3621078",
+						"score": 1.4614,
+						"title": "Total Riff Off",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt10413786",
+						"score": -3.3276,
+						"title": "Rifftrax Shorts",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt10436228",
+						"score": -5.2366,
+						"title": "Jurassic World: Camp Cretaceous",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Rifftrax",
+				"parsedYear": 2015,
+				"probability": 0.8647
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1431045",
+			"movie": {
+				"title": "Deadpool",
+				"year": 2016
+			},
+			"filename": "deadpool.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2622240",
+						"score": 2.0894,
+						"title": "Deadpool",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt3781670",
+						"score": -5.8593,
+						"title": "The Pool Master",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt5797926",
+						"score": -6.7152,
+						"title": "Pool Kings",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "deadpool",
+				"parsedYear": null,
+				"probability": 0.6601
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1454468",
+			"movie": {
+				"title": "Gravity",
+				"year": 2013
+			},
+			"filename": "Gravity [BluRay 1080p][AC3 5.1 Castellano AC3 5.1-Ingles+Subs][ES-EN]",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1548669",
+						"score": 2.1937,
+						"title": "Gravity",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1865718",
+						"score": -2.5525,
+						"title": "Gravity Falls",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1319690",
+						"score": -3.0345,
+						"title": "Defying Gravity",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "Gravity",
+				"parsedYear": null,
+				"probability": 0.9411
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0808151",
+			"movie": {
+				"title": "Angels & Demons",
+				"year": 2009
+			},
+			"filename": "[shincaps] Oroka na Tenshi wa Akuma to Odoru - 11 (ANIMAX Asia 1920x1080 H264...",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt30495098",
+						"score": 3.0731,
+						"title": "The Foolish Angel Dances with the Devil",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt19064770",
+						"score": -5.6508,
+						"title": "The Angel Next Door Spoils Me Rotten",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt32869282",
+						"score": -5.8473,
+						"title": "Asia",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Oroka na Tenshi wa Akuma to Odoru",
+				"parsedYear": null,
+				"probability": 0.971
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0499549",
+			"movie": {
+				"title": "Avatar",
+				"year": 2009
+			},
+			"filename": "[MagicStar] Avataro Sentai Donbrothers EP50 Director's Cut [WEBDL] [1080p]",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt15776622",
+						"score": 3.4785,
+						"title": "Avataro Sentai Donbrothers",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0417299",
+						"score": -2.9109,
+						"title": "Avatar: The Last Airbender",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt13906272",
+						"score": -3.3809,
+						"title": "Re: ZERO - Starting Life in Another World (Re-Edit)",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Avataro Sentai Donbrothers",
+				"parsedYear": null,
+				"probability": 0.9734
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0348333",
+			"movie": {
+				"title": "Waiting...",
+				"year": 2005
+			},
+			"filename": "Есенин [01-11 из 11] (2005) WEBRip-AVC",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0456776",
+						"score": 3.8331,
+						"title": "Esenin",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0289830",
+						"score": -4.6111,
+						"title": "Taken",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt6922826",
+						"score": -4.9535,
+						"title": "Once",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Есенин",
+				"parsedYear": 2005,
+				"probability": 0.9897
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0077869",
+			"movie": {
+				"title": "The Lord of the Rings",
+				"year": 1978
+			},
+			"filename": "Kekkon Yubiwa Monogatari - 10 (720p)(Multiple Subtitle)(F4B09641 ...",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt30488398",
+						"score": 3.6826,
+						"title": "Tales of Wedding Rings",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt1480925",
+						"score": 0.2574,
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt26140070",
+						"score": -4.3176,
+						"title": "Malevolent Spirits: Mononogatari",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Kekkon Yubiwa Monogatari",
+				"parsedYear": null,
+				"probability": 0.926
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0054215",
+			"movie": {
+				"title": "Psycho",
+				"year": 1960
+			},
+			"filename": "[2017.04.02]惊魂记[1960年美国犯罪剧情(MKV)]（帝国出品）",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0802948",
+						"score": -3.5693,
+						"title": "An American Crime",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt1552211",
+						"score": -5.3641,
+						"title": "The Last Days of American Crime",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt0112715",
+						"score": -6.0055,
+						"title": "Congo",
+						"year": 1995
+					}
+				],
+				"parsedTitle": "",
+				"parsedYear": null,
+				"probability": 0.0933
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt4972582",
+			"movie": {
+				"title": "Split",
+				"year": 2016
+			},
+			"filename": "Split 2017 BluRay x264 FULL-INSPIRAL",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4972582",
+						"score": 3.0431,
+						"title": "Split",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt6147768",
+						"score": 1.0919,
+						"title": "Split",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt2660118",
+						"score": 0.6944,
+						"title": "Split",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Split",
+				"parsedYear": 2017,
+				"probability": 0.6142
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2771200",
+			"movie": {
+				"title": "Beauty and the Beast",
+				"year": 2017
+			},
+			"filename": "Beauty.and.the.Beast.2017.PLDUB.MD.720p.HDRip.XviD-MAXX",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2771200",
+						"score": 3.611,
+						"title": "Beauty and the Beast",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt2316801",
+						"score": 1.9763,
+						"title": "Beauty and the Beast",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0038348",
+						"score": 0.7747,
+						"title": "Beauty and the Beast",
+						"year": 1946
+					}
+				],
+				"parsedTitle": "Beauty and the Beast",
+				"parsedYear": 2017,
+				"probability": 0.4264
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt3420504",
+			"movie": {
+				"title": "Finch",
+				"year": 2021
+			},
+			"filename": "Finch",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3420504",
+						"score": 1.455,
+						"title": "Finch",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt3907584",
+						"score": -0.6187,
+						"title": "All the Bright Places",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt11576938",
+						"score": -2.2165,
+						"title": "Il ladro di cardellini",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Finch",
+				"parsedYear": null,
+				"probability": 0.618
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0093773",
+			"movie": {
+				"title": "Predator",
+				"year": 1987
+			},
+			"filename": "铁血战士 Predator 4K",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3829266",
+						"score": 2.0797,
+						"title": "The Predator",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0816436",
+						"score": 1.575,
+						"title": "Black Water",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0093773",
+						"score": 1.0146,
+						"title": "Predator",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "Predator",
+				"parsedYear": null,
+				"probability": 0.5457
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt3450958",
+			"movie": {
+				"title": "War for the Planet of the Apes",
+				"year": 2017
+			},
+			"filename": "War.for.The.Planet.of.The.Apes.2​017.720p.KORSUB.HDRip.x264.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071033",
+						"score": 2.3399,
+						"title": "Planet of the Apes",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt0207267",
+						"score": -2.7192,
+						"title": "Return to the Planet of the Apes",
+						"year": 1975
+					},
+					{
+						"imdbId": "tt5884018",
+						"score": -4.323,
+						"title": "Planet of the Apps",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "War for The Planet of The Apes 2​017",
+				"parsedYear": null,
+				"probability": 0.3342
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0298148",
+			"movie": {
+				"title": "Shrek 2",
+				"year": 2004
+			},
+			"filename": "[DK Tale] Shrek 2",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0298148",
+						"score": -0.254,
+						"title": "Shrek 2",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0360985",
+						"score": -3.0826,
+						"title": "Shrek: The Ghost of Lord Farquaad",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt2907640",
+						"score": -3.1397,
+						"title": "L.DK",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "Shrek 2",
+				"parsedYear": null,
+				"probability": 0.5006
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt13649036",
+			"movie": {
+				"title": "Help",
+				"year": 2021
+			},
+			"filename": "Help.2021.WEBRip.1080p_.mkv",
+			"jev": {
+				"verdict": "keep",
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt13649036",
+						"score": 4.267,
+						"title": "Help",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt12870980",
+						"score": 3.7229,
+						"title": "Help",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt0059260",
+						"score": -0.1345,
+						"title": "Help!",
+						"year": 1965
+					}
+				],
+				"parsedTitle": "Help",
+				"parsedYear": 2021,
+				"probability": 0.2501
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt3783958",
+			"movie": {
+				"title": "La La Land",
+				"year": 2016
+			},
+			"filename": "[喵萌奶茶屋&VCB-Studio] Zombie Land Saga / 佐贺偶像是传奇 / ゾンビランドサガ 8-bit 720p AVC BDRip [MP4 CHT Ver]",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt9054354",
+						"score": -0.8937,
+						"title": "Zombieland Saga",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt7095194",
+						"score": -0.9168,
+						"title": "Beat",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt5674874",
+						"score": -2.6783,
+						"title": "Go 8 Bit",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "8-bit",
+				"parsedYear": null,
+				"probability": 0.1413
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0396171",
+			"movie": {
+				"title": "Perfume: The Story of a Murderer",
+				"year": 2006
+			},
+			"filename": "Карлос Руис Сафон - Сборник произведений (2006-2022) FB2",
+			"jev": {
+				"verdict": "trash",
+				"media": "BOOK_IMAGES",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1321865",
+						"score": -1.1787,
+						"title": "Carlos",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt28501949",
+						"score": -3.8215,
+						"title": "The Gathering",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0044284",
+						"score": -4.2998,
+						"title": "Omnibus",
+						"year": 1952
+					}
+				],
+				"parsedTitle": "Карлос Руис Сафон",
+				"parsedYear": null,
+				"probability": 0.0733
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt0281322",
+			"movie": {
+				"title": "Undisputed",
+				"year": 2002
+			},
+			"filename": "Invicto 3 [DVDrip][XViD][EspaÃ±ol][Spanish]",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "DIFFERENT_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0281322",
+						"score": 0.2832,
+						"title": "Undisputed",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt8362736",
+						"score": -0.9825,
+						"title": "Make Up",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0327951",
+						"score": -1.253,
+						"title": "Undefeated",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "Invicto 3",
+				"parsedYear": null,
+				"probability": 0.6388
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt2294449",
+			"movie": {
+				"title": "22 Jump Street",
+				"year": 2014
+			},
+			"filename": "Господа-товарищи [01-16 из 16] (2014-2015) WEB-DLRip от Generalfilm",
+			"jev": {
+				"verdict": "trash",
+				"media": "TV",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.1+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt4514150",
+						"score": 1.0693,
+						"title": "Gospoda-tovarishchi",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt13210838",
+						"score": -0.2907,
+						"title": "The Gentlemen",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt2190853",
+						"score": -4.4645,
+						"title": "Lebt wohl, Genossen!",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Господа-товарищи",
+				"parsedYear": null,
+				"probability": 0.6338
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt15239678",
+			"movie": {
+				"title": "Dune: Part Two",
+				"year": 2024
+			},
+			"filename": "Борис Конофальский - Рейд 6. Глубокий рейд 2, Голова (2025) MP3",
+			"jev": {
+				"verdict": "trash",
+				"media": "AUDIO",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.2+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt28089700",
+						"score": 0.8197,
+						"title": "Raid 2",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt11928060",
+						"score": -3.5729,
+						"title": "Glubokiy reyd",
+						"year": 1938
+					},
+					{
+						"imdbId": "tt1680058",
+						"score": -5.2113,
+						"title": "Boris - Il film",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Борис Конофальский",
+				"parsedYear": 2025,
+				"probability": 0.8825
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1950186",
+			"movie": {
+				"title": "Ford v Ferrari",
+				"year": 2019
+			},
+			"filename": "????2019????? 2019 1080p WEB-DL X264 AAC-Lieqiwang",
+			"jev": {
+				"verdict": "trash",
+				"media": "FILM",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4898564",
+						"score": -0.7467,
+						"title": "Red Devil",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt10161398",
+						"score": -1.3046,
+						"title": "The 71st Primetime Emmy Awards",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt11341950",
+						"score": -1.9386,
+						"title": "Vegan 2019",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "????2019?????",
+				"parsedYear": 2019,
+				"probability": 0.1777
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt1817232",
+			"movie": {
+				"title": "Phineas and Ferb the Movie: Candace Against the Universe",
+				"year": 2020
+			},
+			"filename": "Пётр Жгулёв - Город гоблинов [8 книг] (2020-2023) МР3",
+			"jev": {
+				"verdict": "trash",
+				"media": "AUDIO",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt21881796",
+						"score": -1.7941,
+						"title": "Undenama",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0091223",
+						"score": -5.763,
+						"title": "House",
+						"year": 1985
+					},
+					{
+						"imdbId": "tt6727598",
+						"score": -5.868,
+						"title": "2020",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Пётр Жгулёв",
+				"parsedYear": null,
+				"probability": 0.4141
+			},
+			"identified": false
+		},
+		{
+			"imdbId": "tt25400540",
+			"movie": {
+				"title": "Guruvayoor Ambalanadayil",
+				"year": 2024
+			},
+			"filename": "2024) FLAC",
+			"jev": {
+				"verdict": "trash",
+				"media": "AUDIO",
+				"titleMatch": "NO_TITLE",
+				"engine": "rules-v6.5+jev/jev-1.13.0"
+			},
+			"identifier": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt27590028",
+						"score": -3.359,
+						"title": "The Oscars",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt5106390",
+						"score": -3.5492,
+						"title": "Twenty Twenty-Four",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt13551026",
+						"score": -3.7499,
+						"title": "The Wig",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "",
+				"parsedYear": 2024,
+				"probability": 0.0381
+			},
+			"identified": false
+		}
+	]
+}
