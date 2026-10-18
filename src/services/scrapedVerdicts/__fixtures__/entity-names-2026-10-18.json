@@ -1,0 +1,55 @@
+{
+	"_note": [
+		"Lee Cronin's The Mummy's page (tt32612507) on 2026-10-18 (read-only): its MovieContext as getMovieContext read it, and the releases on its first screen whose names still carry the HTML entity &#039; for the apostrophe. The rules trashed all three; content-identifier named each as this film."
+	],
+	"movie": {
+		"imdbId": "tt32612507",
+		"name": "Lee Cronin's The Mummy",
+		"year": 2026,
+		"titles": [
+			"A Múmia, de Lee Cronin",
+			"La Posesión de la Momia",
+			"La momia de Lee Cronin",
+			"La momie: un film de Lee Cronin",
+			"La mummia di Lee Cronin",
+			"Le réveil de la momie",
+			"Lee Cronin'den Mumya",
+			"Lee Cronin's The Mummy",
+			"Lee Cronin: A múmia",
+			"Lee Cronin: Mumie",
+			"Lee Cronini muumia",
+			"Lee Cronino MUMIJA",
+			"Li Kroninin Mumiyası",
+			"MUMIA de la Lee Cronin",
+			"Maldição da Múmia",
+			"Moomia",
+			"Mumia: Film Lee Cronina",
+			"Mumija: Film Leeja Cronina",
+			"Mūmija. Lī Kronina filma",
+			"Một bộ phim của Lee Cronin: Xác Ướp",
+			"The Mummy",
+			"The Mummy: A Lee Cronin Film",
+			"The Resurrected",
+			"Η Μούμια από τον Λι Κρόνιν",
+			"Η μούμια",
+			"Мумия",
+			"Мумия Ли Кронина",
+			"Мумија: Филм Лија Кронина",
+			"Мумія Лі Кроніна",
+			"ली क्रोनिन्स द ममी",
+			"李克寧 墓乃伊"
+		],
+		"ambiguous": {
+			"the resurrected": [1991, 2025],
+			"the mummy": [
+				1908, 1911, 1913, 1923, 1932, 1959, 1966, 1969, 1971, 1999, 2001, 2017, 2023, 2025,
+				2026
+			]
+		}
+	},
+	"releases": [
+		"Lee Cronin&#039;s The Mummy (2026) UHD BDRemux",
+		"Lee Cronin&#039;s The Mummy (2026) BDRemux 1080p",
+		"Lee Cronin&#039;s The Mummy (2026) 2160p 4K HDR10 DV WEB-DL Dual Audio [Hindi + English] ESub ~ RemuxDoc"
+	]
+}

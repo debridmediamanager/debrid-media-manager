@@ -158,13 +158,29 @@ const YEAR_RANGE = /((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)/;
 const CJK = /[぀-ヿ㐀-鿿가-힯฀-๿]/;
 const LEADING_ARTICLE = /^ (the|a|an|le|la|les|el|los|las|il|der|die|das) /;
 
+const NAMED_ENTITIES: Record<string, string> = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
+
+/**
+ * Scraped names can still carry HTML entities: `Lee Cronin&#039;s The Mummy`
+ * read as "lee cronin and 039 s" and was trashed from that film's own page.
+ */
+function decodeEntities(value: string): string {
+	return value.replace(/&(#x[0-9a-f]+|#\d+|amp|quot|apos|lt|gt);/gi, (whole, code: string) => {
+		const lower = code.toLowerCase();
+		if (lower in NAMED_ENTITIES) return NAMED_ENTITIES[lower];
+		const point = lower.startsWith('#x')
+			? parseInt(lower.slice(2), 16)
+			: parseInt(lower.slice(1), 10);
+		return point > 0 && point <= 0x10ffff ? String.fromCodePoint(point) : whole;
+	});
+}
+
 function normalized(value: string): string {
-	return value
+	return decodeEntities(value)
 		.toLowerCase()
 		.normalize('NFKD')
 		.replace(/\p{M}/gu, '')
-		.replace(/&#x27;/g, "'")
-		.replace(/&#215;/g, 'x')
+		.replace(/×/g, 'x')
 		.replace(/\s*&\s*/g, ' and ')
 		.replace(/'/g, '');
 }

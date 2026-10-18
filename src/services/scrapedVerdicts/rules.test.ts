@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import entityNames from './__fixtures__/entity-names-2026-10-18.json';
 import fixture from './__fixtures__/labelled-filenames.json';
 import packSets from './__fixtures__/pack-sets-2026-10-06.json';
 import packWords from './__fixtures__/pack-words.json';
@@ -804,5 +805,21 @@ describe('a set named after another work', () => {
 		const item = setItems.find((i) => i.filename.includes(filename))!;
 		expect(item.humanLabel).toBe('OTHER');
 		expect(verdictOf(item)).toBe('trash');
+	});
+});
+
+describe('names that still carry HTML entities', () => {
+	it("does not trash Lee Cronin's The Mummy written as Lee Cronin&#039;s", () => {
+		const movie = entityNames.movie as MovieContext;
+		for (const name of entityNames.releases) {
+			expect([name, decideWithoutModel(movie, name)]).not.toEqual([name, 'trash']);
+			expect([name, decide(movie, name, 'FILM', 'SAME_TITLE')]).toEqual([name, 'keep']);
+		}
+	});
+
+	it('reads numeric and named entities as the characters they stand for', () => {
+		expect(fold('Lee Cronin&#039;s The Mummy')).toBe(fold("Lee Cronin's The Mummy"));
+		expect(fold('Tom &amp; Jerry')).toBe(fold('Tom & Jerry'));
+		expect(fold('Gold Rush Parker&#x27;s Trail')).toBe(fold("Gold Rush Parker's Trail"));
 	});
 });
