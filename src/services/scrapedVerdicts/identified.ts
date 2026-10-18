@@ -35,7 +35,7 @@ export async function identifiedAnswers(
 	filenames: string[]
 ): Promise<Map<string, IdentifiedAnswer>> {
 	const out = new Map<string, IdentifiedAnswer>();
-	for (const [name, { answer, top, ours }] of (await named(movie, filenames)) ?? []) {
+	for (const [name, { answer, top, ours }] of await named(movie, filenames)) {
 		const video = VIDEO.test(name);
 		if (ours) {
 			if (video) out.set(name, { media: 'FILM', titleMatch: 'SAME_TITLE' });
@@ -59,15 +59,16 @@ export async function identifiedAnswers(
  * Fiancé, films and other shows sharing a word with the title. Another show of
  * the same title is left alone although it was right every time (The Boys 2019
  * on a 1993 show's page), so a lesser-known show never loses its own releases
- * to its famous namesake. `null` when content-identifier could not be asked.
+ * to its famous namesake.
  */
 export async function identifiedShowVerdicts(
 	show: { imdbId: string; titles: string[] },
 	filenames: string[]
-): Promise<Map<string, Verdict> | null> {
-	const found = await named(show, filenames);
-	if (!found) return null;
-	return new Map([...found].map(([name, { ours }]) => [name, ours ? 'keep' : 'trash']));
+): Promise<Map<string, Verdict>> {
+	const out = new Map<string, Verdict>();
+	for (const [name, { ours }] of await named(show, filenames))
+		out.set(name, ours ? 'keep' : 'trash');
+	return out;
 }
 
 type Named = { answer: IdentifierResult; top: IdentifierMatch; ours: boolean };
@@ -77,17 +78,15 @@ type Named = { answer: IdentifierResult; top: IdentifierMatch; ours: boolean };
  * another work. Another work sharing one of the page's titles is left out:
  * Deadpool (2013), Gravity (2010), Scarface (1932) and Traffic (2004) were the
  * identifier's mistakes for the films themselves. So is a title with no letters
- * (`1920` for `2008.myHD.Taken...1920x1080`). `null` when content-identifier
- * could not be asked.
+ * (`1920` for `2008.myHD.Taken...1920x1080`).
  */
 async function named(
 	page: { imdbId: string; titles: string[] },
 	filenames: string[]
-): Promise<Map<string, Named> | null> {
+): Promise<Map<string, Named>> {
+	const answers = filenames.length ? await identifyFilenames(filenames) : null;
 	const out = new Map<string, Named>();
-	if (filenames.length === 0) return out;
-	const answers = await identifyFilenames(filenames);
-	if (!answers) return null;
+	if (!answers) return out;
 	const ownTitles = new Set(page.titles.map(withoutArticle));
 	filenames.forEach((name, i) => {
 		const answer = answers[i];

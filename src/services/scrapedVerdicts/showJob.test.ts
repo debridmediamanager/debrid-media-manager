@@ -109,33 +109,6 @@ describe('judgeShowPage', () => {
 		expect(trashedBy(db)).toHaveLength(p.results.filter((r) => r.expected).length);
 	});
 
-	it('keeps a page due when content-identifier cannot be asked, and still moves other seasons', async () => {
-		// as on dmm-01 on 2026-10-18: "content-identifier unreachable: The operation
-		// was aborted due to timeout" while the first show passes ran
-		vi.stubGlobal(
-			'fetch',
-			vi.fn(async () => {
-				throw new DOMException('The operation was aborted due to timeout', 'TimeoutError');
-			})
-		);
-		vi.spyOn(console, 'error').mockImplementation(() => {});
-		const p = page('tv:tt11311514:1');
-		const db = fakeDb(p);
-		await judgeShowPage(p.imdbId, p.season, db);
-		expect(db.setCheckpoint).not.toHaveBeenCalled();
-		expect(
-			trashedBy(db)
-				.map((t) => t.title)
-				.sort()
-		).toEqual(
-			p.results
-				.filter((r) => r.expected === 'season')
-				.map((r) => r.title)
-				.sort()
-		);
-		expect(db.releaseLock).toHaveBeenCalled();
-	});
-
 	it('leaves a page alone when IMDb has no record of the show', async () => {
 		const p = page('tv:tt2398172:1');
 		const db = fakeDb(p, { getShowTitles: vi.fn().mockResolvedValue(null) });

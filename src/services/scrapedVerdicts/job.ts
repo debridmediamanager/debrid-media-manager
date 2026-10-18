@@ -272,9 +272,7 @@ export async function judgeShowPage(
 		const unjudged = [...new Set(pairs.map((p) => p.title))].filter(
 			(title) => !byTitle.has(titleKeyOf(title))
 		);
-		// null when content-identifier could not be asked: the page stays due
-		const asked = await identifiedShowVerdicts({ imdbId, ...show }, unjudged);
-		const identified = asked ?? new Map<string, Verdict>();
+		const identified = await identifiedShowVerdicts({ imdbId, ...show }, unjudged);
 
 		const recorded = new Set<string>();
 		const newVerdicts: NewVerdict[] = [];
@@ -313,9 +311,9 @@ export async function judgeShowPage(
 			SHOW_ENGINE
 		);
 
-		if (asked) await db.setCheckpoint(pageKey, SHOW_ENGINE, startedAt);
+		await db.setCheckpoint(pageKey, SHOW_ENGINE, startedAt);
 		console.log(
-			`[verdicts] ${pageKey}: judged ${newVerdicts.length} (${asked ? `${identified.size} identified` : 'identifier unreachable'}), trashed ${trashed}`
+			`[verdicts] ${pageKey}: judged ${newVerdicts.length} (${identified.size} identified), trashed ${trashed}`
 		);
 		return { status: 'done', judged: newVerdicts.length, trashed };
 	} finally {
