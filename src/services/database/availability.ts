@@ -615,17 +615,22 @@ export class AvailabilityService extends DatabaseClient {
 	}
 
 	/**
-	 * Hashes RD has cached whose every file is an executable. These are fake
-	 * releases: a video-looking name over a ~1 GB padded .exe.
+	 * Hashes RD or AllDebrid has cached whose every file is an executable. These
+	 * are fake releases: a video-looking name over a ~1 GB padded .exe. AD counts
+	 * on its own: on 2026-10-18 eight fakes on two film pages were cached only there.
 	 */
 	public async filterExecutableOnlyHashes(hashes: string[]): Promise<Set<string>> {
 		if (hashes.length === 0) return new Set();
-		const rows = await this.prisma.available.findMany({
+		const query = {
 			where: { hash: { in: hashes.map((hash) => hash.toLowerCase()) } },
 			select: { hash: true, files: { select: { path: true } } },
-		});
+		};
+		const [rd, ad] = await Promise.all([
+			this.prisma.available.findMany(query),
+			this.prisma.availableAd.findMany(query),
+		]);
 		return new Set(
-			rows
+			[...rd, ...ad]
 				.filter(
 					(row) => row.files.length > 0 && row.files.every((f) => EXECUTABLE.test(f.path))
 				)

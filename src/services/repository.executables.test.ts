@@ -14,7 +14,10 @@ findMany.mockImplementation(async ({ where }: any) =>
 		.map((hash) => ({ hash, files: rdFiles[hash].map((path) => ({ path })) }))
 );
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn().mockImplementation(() => ({ available: { findMany } })),
+	PrismaClient: vi.fn().mockImplementation(() => ({
+		available: { findMany },
+		availableAd: { findMany: async () => [] },
+	})),
 }));
 
 const FAKES = Object.entries(rdFiles)
