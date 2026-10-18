@@ -8,6 +8,7 @@ import type { FilenameIdentification } from '@/services/database/hashImdb';
 import { cachedSources } from '@/services/placement';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { parseName } from '@/utils/episodePlacement';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { createHash } from 'crypto';
@@ -127,7 +128,7 @@ export async function identifyItems(
 	await Promise.all(
 		[...fresh].map(async ([name, answer]) => {
 			// a short answer from the service leaves names without one
-			const twin = answer && (await knownTwin(answer));
+			const twin = answer && (await knownTwin(name, answer));
 			if (twin) {
 				const rest = answer.matches.filter((m) => m !== twin);
 				fresh.set(name, { ...answer, confident: true, matches: [twin, ...rest] });
@@ -212,10 +213,11 @@ function agrees(answer: IdentifierResult, ids: Set<string> | undefined): boolean
 /**
  * The match to take for a doubted answer whose leading matches all carry the name's own
  * title: IMDb lists Dragon Ball Z twice (1989, and the 1996 dub as tt0214341), which the
- * service ranks too close to be sure of, and TMDB's find knows only the first. Null unless
- * TMDB knows exactly one of them as the kind the service found.
+ * service ranks too close to be sure of, and TMDB's find knows only the first. One Piece is
+ * the 1999 anime and the 2023 live action, both on TMDB, and only the anime has the season 22
+ * of `One.Piece.S22E46…`. Null unless one of them alone is left.
  */
-async function knownTwin(answer: IdentifierResult): Promise<IdentifierMatch | null> {
+async function knownTwin(name: string, answer: IdentifierResult): Promise<IdentifierMatch | null> {
 	const top = answer.matches[0];
 	const letters = (text = '') => text.toLowerCase().replace(/[^a-z0-9]/g, '');
 	if (answer.confident || !top || !answer.kind) return null;
@@ -226,8 +228,19 @@ async function knownTwin(answer: IdentifierResult): Promise<IdentifierMatch | nu
 	const finds = await Promise.all(twins.map((m) => cachedSources.find(m.imdbId)));
 	if (finds.some((found) => !found)) return null;
 	const results = answer.kind === 'tv' ? 'tv_results' : 'movie_results';
-	const known = twins.filter((_, n) => finds[n][results]?.length);
-	return known.length === 1 ? known[0] : null;
+	const known = twins.flatMap((match, n) => {
+		const id = finds[n][results]?.[0]?.id;
+		return typeof id === 'number' ? [{ match, id }] : [];
+	});
+	if (known.length === 1) return known[0].match;
+	const { season } = parseName(name);
+	if (answer.kind !== 'tv' || season === null || known.length < 2) return null;
+	const shows = await Promise.all(known.map(({ id }) => cachedSources.show(id)));
+	if (shows.some((show) => !Array.isArray(show?.seasons))) return null;
+	const holding = known.filter((_, n) =>
+		shows[n].seasons.some((row: any) => row?.season_number === season)
+	);
+	return holding.length === 1 ? holding[0].match : null;
 }
 
 /** One row per hash+filename; a library can list the same release twice. */

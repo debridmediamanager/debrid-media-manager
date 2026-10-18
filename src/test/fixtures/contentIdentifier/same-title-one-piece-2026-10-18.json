@@ -1,0 +1,193 @@
+{
+	"capturedAt": "2026-10-18",
+	"case": {
+		"filename": "One.Piece.S22E46.A.Fleeting.Moment.of.Happiness-Kumachi.and.Ginny.1080p.CR.WEB-DL.DUAL.DDP2.0.H.264-Kitsune",
+		"response": {
+			"confident": false,
+			"kind": "tv",
+			"matches": [
+				{
+					"imdbId": "tt0388629",
+					"score": 4.6224,
+					"title": "One Piece",
+					"year": 1999
+				},
+				{
+					"imdbId": "tt11737520",
+					"score": 3.5741,
+					"title": "One Piece",
+					"year": 2023
+				},
+				{
+					"imdbId": "tt31228002",
+					"score": -2.0821,
+					"title": "One Pace",
+					"year": 2016
+				},
+				{
+					"imdbId": "tt41538904",
+					"score": -2.2647,
+					"title": "Lego One Piece",
+					"year": 2026
+				},
+				{
+					"imdbId": "tt14979052",
+					"score": -2.4555,
+					"title": "Happiness",
+					"year": 2021
+				}
+			],
+			"parsedTitle": "One Piece",
+			"parsedYear": null,
+			"probability": 0.1594
+		}
+	},
+	"find": {
+		"tt0388629": {
+			"movie_results": [],
+			"tv_results": [
+				{
+					"id": 37854,
+					"name": "One Piece",
+					"first_air_date": "1999-10-20"
+				}
+			],
+			"tv_episode_results": []
+		},
+		"tt11737520": {
+			"movie_results": [],
+			"tv_results": [
+				{
+					"id": 111110,
+					"name": "ONE PIECE",
+					"first_air_date": "2023-08-31"
+				}
+			],
+			"tv_episode_results": []
+		}
+	},
+	"show": {
+		"37854": {
+			"id": 37854,
+			"name": "One Piece",
+			"seasons": [
+				{
+					"season_number": 0,
+					"episode_count": 39
+				},
+				{
+					"season_number": 1,
+					"episode_count": 61
+				},
+				{
+					"season_number": 2,
+					"episode_count": 16
+				},
+				{
+					"season_number": 3,
+					"episode_count": 14
+				},
+				{
+					"season_number": 4,
+					"episode_count": 39
+				},
+				{
+					"season_number": 5,
+					"episode_count": 13
+				},
+				{
+					"season_number": 6,
+					"episode_count": 52
+				},
+				{
+					"season_number": 7,
+					"episode_count": 33
+				},
+				{
+					"season_number": 8,
+					"episode_count": 35
+				},
+				{
+					"season_number": 9,
+					"episode_count": 73
+				},
+				{
+					"season_number": 10,
+					"episode_count": 45
+				},
+				{
+					"season_number": 11,
+					"episode_count": 26
+				},
+				{
+					"season_number": 12,
+					"episode_count": 14
+				},
+				{
+					"season_number": 13,
+					"episode_count": 101
+				},
+				{
+					"season_number": 14,
+					"episode_count": 58
+				},
+				{
+					"season_number": 15,
+					"episode_count": 62
+				},
+				{
+					"season_number": 16,
+					"episode_count": 50
+				},
+				{
+					"season_number": 17,
+					"episode_count": 56
+				},
+				{
+					"season_number": 18,
+					"episode_count": 55
+				},
+				{
+					"season_number": 19,
+					"episode_count": 74
+				},
+				{
+					"season_number": 20,
+					"episode_count": 14
+				},
+				{
+					"season_number": 21,
+					"episode_count": 197
+				},
+				{
+					"season_number": 22,
+					"episode_count": 67
+				},
+				{
+					"season_number": 23,
+					"episode_count": 25
+				}
+			]
+		},
+		"111110": {
+			"id": 111110,
+			"name": "ONE PIECE",
+			"seasons": [
+				{
+					"season_number": 1,
+					"episode_count": 8
+				},
+				{
+					"season_number": 2,
+					"episode_count": 8
+				},
+				{
+					"season_number": 3,
+					"episode_count": 1
+				}
+			]
+		}
+	},
+	"source": "content-identifier /identify/batch on dmm-01; TMDB find and tv details (seasons only)",
+	"why": "zurg-usenet on fun: Kitsune names One Piece S22 episodes with no year; IMDb and TMDB both list the 1999 anime and the 2023 live action as One Piece, and only the anime has a season 22"
+}

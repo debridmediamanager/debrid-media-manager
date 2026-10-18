@@ -4,6 +4,7 @@ import { cachedSources } from '@/services/placement';
 import { repository } from '@/services/repository';
 import guards from '@/test/fixtures/contentIdentifier/library-guards-2026-10-12.json';
 import sameTitle from '@/test/fixtures/contentIdentifier/same-title-2026-10-18.json';
+import onePiece from '@/test/fixtures/contentIdentifier/same-title-one-piece-2026-10-18.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { createHash } from 'crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -14,10 +15,11 @@ vi.mock('@/services/contentIdentifier', async (importOriginal) => ({
 	identifyFilenames: vi.fn(),
 }));
 
-vi.mock('@/services/placement', () => ({ cachedSources: { find: vi.fn() } }));
+vi.mock('@/services/placement', () => ({ cachedSources: { find: vi.fn(), show: vi.fn() } }));
 
 const mockRepository = vi.mocked(repository);
 const mockFind = vi.mocked(cachedSources.find);
+const mockShow = vi.mocked(cachedSources.show);
 const mockIdentify = vi.mocked(identifyFilenames);
 
 // real library names; the second is a sequel DMM users had filed under the original
@@ -73,6 +75,7 @@ describe('/api/library/identify', () => {
 		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(new Map());
 		mockRepository.confirmFilenameIdentifications = vi.fn().mockResolvedValue(undefined);
 		mockFind.mockResolvedValue(null);
+		mockShow.mockResolvedValue(null);
 	});
 
 	afterEach(() => {
@@ -416,6 +419,33 @@ describe('/api/library/identify', () => {
 				confident: true,
 			}),
 		]);
+	});
+
+	// zurg-usenet on fun, 2026-10-18: TMDB has both the 1999 anime and the 2023 live action,
+	// and only the anime has a season 22
+	it('takes the twice-listed title whose TMDB show has the season the name names', async () => {
+		mockIdentify.mockResolvedValue([onePiece.case.response as IdentifierResult]);
+		const finds = onePiece.find as Record<string, unknown>;
+		const shows = onePiece.show as Record<string, unknown>;
+		mockFind.mockImplementation(async (imdbId) => finds[imdbId] ?? null);
+		mockShow.mockImplementation(async (tmdbId) => shows[tmdbId] ?? null);
+		const res = await call({ items: [{ filename: onePiece.case.filename }] });
+
+		expect(res.json).toHaveBeenCalledWith({
+			results: [{ imdbId: 'tt0388629', title: 'One Piece', year: 1999, kind: 'tv' }],
+			complete: true,
+		});
+	});
+
+	it('stays unsure of twins TMDB both knows when the name names no season', async () => {
+		const response = onePiece.case.response as IdentifierResult;
+		mockIdentify.mockResolvedValue([response]);
+		const finds = onePiece.find as Record<string, unknown>;
+		const shows = onePiece.show as Record<string, unknown>;
+		mockFind.mockImplementation(async (imdbId) => finds[imdbId] ?? null);
+		mockShow.mockImplementation(async (tmdbId) => shows[tmdbId] ?? null);
+		const res = await call({ items: [{ filename: 'One.Piece.1080p.WEB-DL' }] });
+		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
 	});
 
 	it('stays unsure of a twice-listed name when TMDB cannot be asked', async () => {
