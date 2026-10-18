@@ -2,7 +2,7 @@
 	"_note": [
 		"Nine real season pages from production, read 2026-10-18 (read-only): up to 14 results each that name only another season, 12 that content-identifier named as another title and 10 kept, plus the shapes the tests name. Adult releases and the Cyrillic-led untrusted releases the page never shows are left out.",
 		"show and seasons are what getShowTitles and getShowSeasons read for the page; identifier is content-identifier's answer that day (kind auto, top three matches); expected is the rule judgeShowPage trashes the result under, or null where it stays.",
-		"Strike.Force.S01E01 on Strike Force's own page is the one known wrong trash: the identifier names it Smeris."
+		"A release that names the show is left alone unless the other title is the show's name and more and the filename carries all of it (identifiedShowVerdicts): Strike.Force.S01E01, once the one known wrong trash (the identifier names it Smeris), now stays."
 	],
 	"pages": [
 		{
@@ -454,7 +454,7 @@
 						"parsedYear": null,
 						"probability": 0.662
 					},
-					"expected": "identified"
+					"expected": null
 				}
 			]
 		},
@@ -535,7 +535,7 @@
 						"parsedYear": null,
 						"probability": 0.7716
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -569,7 +569,7 @@
 						"parsedYear": null,
 						"probability": 0.99
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -603,7 +603,7 @@
 						"parsedYear": null,
 						"probability": 0.9672
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -671,7 +671,7 @@
 						"parsedYear": null,
 						"probability": 0.9774
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -739,7 +739,7 @@
 						"parsedYear": null,
 						"probability": 0.9706
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -773,7 +773,7 @@
 						"parsedYear": null,
 						"probability": 0.968
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -807,7 +807,7 @@
 						"parsedYear": null,
 						"probability": 0.9699
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -2084,7 +2084,7 @@
 						"parsedYear": null,
 						"probability": 0.9806
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3123,7 +3123,7 @@
 						"parsedYear": null,
 						"probability": 0.8713
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3157,7 +3157,7 @@
 						"parsedYear": null,
 						"probability": 0.9563
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3191,7 +3191,7 @@
 						"parsedYear": null,
 						"probability": 0.932
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3225,7 +3225,7 @@
 						"parsedYear": null,
 						"probability": 0.8846
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3259,7 +3259,7 @@
 						"parsedYear": null,
 						"probability": 0.8904
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3293,7 +3293,7 @@
 						"parsedYear": null,
 						"probability": 0.8812
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3688,7 +3688,7 @@
 						"parsedYear": null,
 						"probability": 0.9972
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",
@@ -3722,7 +3722,7 @@
 						"parsedYear": null,
 						"probability": 0.9932
 					},
-					"expected": "identified"
+					"expected": null
 				},
 				{
 					"source": "Scraped",

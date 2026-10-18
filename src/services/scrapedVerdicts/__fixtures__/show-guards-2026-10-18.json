@@ -1,0 +1,1160 @@
+{
+	"_note": [
+		"Releases on the first screens of the Trakt shows' season pages, read 2026-10-18 (read-only), with the show's titles as getShowTitles read them and content-identifier's answer that day.",
+		"expected null: the show's own release, which the identifier names as another title (NCIS's Season 4 as Episodes, The Ark's season 3 as From, 24 Season 1 as 24: India); expected trash: another show the identifier names, which the page must lose."
+	],
+	"items": [
+		{
+			"imdbId": "tt0364845",
+			"show": {
+				"name": "NCIS",
+				"titles": [
+					"Agenci NCIS",
+					"NCIS",
+					"NCIS - Tengerészeti helyszínelők",
+					"NCIS - Unità anticrimine",
+					"NCIS : Enquêtes spéciales",
+					"NCIS Naval Criminal Investigative Service",
+					"NCIS Rikostutkijat",
+					"NCIS 〜ネイビー犯罪捜査班",
+					"NCIS: Anchetã militarã",
+					"NCIS: Criminología Naval",
+					"NCIS: Cơ Quan Điều Tra Hình Sự Hải Quân",
+					"NCIS: Investigação Criminal",
+					"NCIS: Investigação Naval",
+					"NCIS: Kriminalistid",
+					"NCIS: Námorný vyšetrovací úrad",
+					"NCIS: izmeklēšanas dienests",
+					"Naval CIS",
+					"Naval criminal invesgation service",
+					"Navy CIS",
+					"Navy NCIS: Naval Criminal Investigative Service",
+					"Navy Naval Criminal Investigative Service NCIS",
+					"Navy: Investigación criminal",
+					"Námořní vyšetřovací služba",
+					"Omada NCIS",
+					"Preiskovalci na delu: NCIS",
+					"Specialioji jūrų policijos tarnyba",
+					"Ν.Π.Δ.Υ",
+					"Ν.Π.Δ.Υ: Ναυτικές ποινικές διερευνητικές υπηρεσίες",
+					"Военни престъпления",
+					"Маринци",
+					"Морнарички истражитељи",
+					"Морская полиция: Спецотдел",
+					"Морська поліція",
+					"אן-סי-איי-אס",
+					"एनसीआईएस: नौसेना आपराधिक जांच सेवा",
+					"重返犯罪現場"
+				]
+			},
+			"filename": "NCIS Season 4 Episodes 1-24 Complete",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1582350",
+						"score": 0.5647,
+						"title": "Episodes",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0364845",
+						"score": -2.1052,
+						"title": "NCIS",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt1158671",
+						"score": -5.1208,
+						"title": "Spice and Wolf",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "NCIS Season 4 Episodes 1-24",
+				"parsedYear": null,
+				"probability": 0.7941
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0118480",
+			"show": {
+				"name": "Stargate SG-1",
+				"titles": [
+					"Csillagkapu",
+					"Gwiezdne wrota",
+					"Hviezdna brána SG-1",
+					"Hvězdná brána",
+					"Hvězdná brána SG-1",
+					"I pyli tou sympantos",
+					"La porte des étoiles",
+					"Stargate",
+					"Stargate Command",
+					"Stargate Kommando SG-1",
+					"Stargate SG-1",
+					"Tähevärav SG-1",
+					"Tähtiportti",
+					"Yıldız Geçidi YG-1",
+					"Zvaigžņu Vārti SG-1",
+					"Zvezdna vrata",
+					"Žvaigždžių vartai SG-1",
+					"Η πύλη του σύμπαντος",
+					"Звездана капија: SG-1",
+					"Звёздные врата: ЗВ-1",
+					"Зоряна брама: SG-1",
+					"Старгейт SG-1",
+					"スターゲイト SG-1"
+				]
+			},
+			"filename": "Stargate SG-1: Season 1-10 w/ Movies & Extras (DVDRip)",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0445114",
+						"score": 2.1155,
+						"title": "Extras",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0247094",
+						"score": -4.1385,
+						"title": "Extra",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt10468676",
+						"score": -4.7013,
+						"title": "The Movies",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Movies & Extras",
+				"parsedYear": null,
+				"probability": 0.972
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt17371078",
+			"show": {
+				"name": "The Ark",
+				"titles": ["The Ark", "Арка", "Ковчег"]
+			},
+			"filename": "Ковчег / The Ark / Сезон: 3 / Серии: 1-11 из 12 (Сандра Митрович, Милан Тодорович, Милан Конжевич) [2026, США, Фантастика, драма, WEB-DL 1080p] MVO (HDrezka, TVShows) + Original + Sub (Rus, Eng)",
+			"identifier": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt9813792",
+						"score": -2.8259,
+						"title": "From",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt6922826",
+						"score": -3.6391,
+						"title": "Once",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt4370302",
+						"score": -5.8797,
+						"title": "12",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "Серии: 1-11 из 12",
+				"parsedYear": 2026,
+				"probability": 0.4627
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0804503",
+			"show": {
+				"name": "Mad Men",
+				"titles": [
+					"Gã Điên",
+					"Mad Men",
+					"Mad Men - Reklámőrültek",
+					"Mad Men. Reklamos vilkai",
+					"Mad Men: Inventando Verdades",
+					"Momci s Madisona",
+					"Oglasevalci",
+					"Pöörased",
+					"Telbalar",
+					"Šialenci z Manhattanu",
+					"Šílenci z Manhattanu",
+					"Људи са Менхетна",
+					"Безумцы",
+					"Божевільні",
+					"Момци са Медисона",
+					"Момчетата от Медисън авеню",
+					"マッドメン",
+					"廣告狂人",
+					"매드 맨"
+				]
+			},
+			"filename": "Безумцы (1 сезон: 1-13 серии из 13) / Mad Men / 2007 / ПМ (LostFilm, TVShows, FOXLife), СТ / Blu-Ray Remux (1080p)",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt14160660",
+						"score": -0.932,
+						"title": "Ray",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt15536118",
+						"score": -5.2262,
+						"title": "DI Ray",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt18561422",
+						"score": -5.6575,
+						"title": "Vermeil in Gold",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "Blu-Ray",
+				"parsedYear": null,
+				"probability": 0.8473
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt2372162",
+			"show": {
+				"name": "Orange Is the New Black",
+				"titles": [
+					"Apelsin yangi qora",
+					"L'orange lui va si bien",
+					"Laranja É o Novo Preto",
+					"Naistevangla: oranž on uus must",
+					"Narancs az új fekete",
+					"Narıncı yeni qaradır",
+					"OItNB",
+					"Orange Is the New Black",
+					"Oranzna je nova crna",
+					"Oranžinė - tai nauja juoda",
+					"Trại Giam Kiểu Mỹ",
+					"Наранџаста је нова црна",
+					"Оранжевото е новото черно",
+					"Оранжевый - хит сезона",
+					"Помаранчевий - хіт сезону",
+					"Қызғылт сары - жаңа қара",
+					"オレンジ・イズ・ニュー・ブラック　塀の中の彼女たち",
+					"勁爆女子監獄",
+					"오렌지 이즈 더 뉴 블랙"
+				]
+			},
+			"filename": "Orange is The New Black - Stagione 01-07 (2013-2019) [COMPLETA] SD x264 AAC ITA SUB ITA - mkeagle3",
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt15677216",
+						"score": 0.9948,
+						"title": "Orange Is the New Black: Orange Anthem",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt8201924",
+						"score": -4.7837,
+						"title": "Fary Is the New Black",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt3060670",
+						"score": -5.1435,
+						"title": "The New Black",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "Orange is The New Black",
+				"parsedYear": null,
+				"probability": 0.8526
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0285331",
+			"show": {
+				"name": "24",
+				"titles": [
+					"24",
+					"24 -TWENTY FOUR-",
+					"24 Horas",
+					"24 Hours",
+					"24 de ore",
+					"24 godziny",
+					"24 heures chrono",
+					"24 hodin",
+					"24 stundas",
+					"24 timer",
+					"24 valandos",
+					"24 часа",
+					"24: Live Another Day",
+					"24h Chống Khủng Bố",
+					"24反恐任務",
+					"Przez 24 godziny",
+					"Twenty Four"
+				]
+			},
+			"filename": "24 Season 1 1080p.WEB-DL.AC3.x264",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2792284",
+						"score": -1.6541,
+						"title": "24: India",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0285331",
+						"score": -2.2607,
+						"title": "24",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt20234568",
+						"score": -5.3326,
+						"title": "Weak Hero Class 1",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "24 Season 1",
+				"parsedYear": null,
+				"probability": 0.7767
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0238784",
+			"show": {
+				"name": "Gilmore Girls",
+				"titles": [
+					"Die Gilmore Girls",
+					"Fetele Gilmore",
+					"Gilmore Girls",
+					"Gilmore Girls: Beginnings",
+					"Gilmore Girls: Tal Mãe, Tal Filha",
+					"Gilmore Girls: سنة في العمر",
+					"Gilmore Kızları",
+					"Gilmore'i tüdrukud",
+					"Gilmoreice",
+					"Gilmoren tytöt",
+					"Gilmoro merginos",
+					"Gilmorova děvčata",
+					"Kochane kłopoty",
+					"Las chicas Gilmore",
+					"Midve z mamo",
+					"Những Cô Gái Nhà Gilmore",
+					"Szívek szállodája",
+					"Tal Mãe, Tal Filha",
+					"The Gilmore Way",
+					"Una mamma per amica",
+					"Ženy z rodu Gilmorovcov",
+					"Οικογένεια Γκίλμορ",
+					"Гилморове",
+					"Девочки Гилмор",
+					"Дівчата Гілмор",
+					"Момичетата Гилмор",
+					"ギルモア・ガールズ",
+					"吉爾莫女孩",
+					"길모어 걸스"
+				]
+			},
+			"filename": "Gilmore.Girls.Season4-7.DVDRip",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt5435008",
+						"score": 2.001,
+						"title": "Gilmore Girls: A Year in the Life",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0238784",
+						"score": 1.3148,
+						"title": "Gilmore Girls",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1723816",
+						"score": -0.7145,
+						"title": "Girls",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "Gilmore Girls Season4-7",
+				"parsedYear": null,
+				"probability": 0.6915
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0072562",
+			"show": {
+				"name": "Saturday Night Live",
+				"titles": [
+					"Il Saturday Night Live",
+					"NBC's Saturday Night",
+					"SNL",
+					"SNL 25",
+					"SNL US",
+					"Saturday Night",
+					"Saturday Night Live",
+					"Saturday Night Live '80",
+					"Saturday Night Live 15",
+					"Saturday Night Live 20",
+					"Saturday Night Live 25",
+					"Saturday Night Live at Home",
+					"The Albert Brooks Show",
+					"Субботним вечером в прямом эфире",
+					"Уживо суботом увече",
+					"サタデー・ナイト・ライブ",
+					"週六夜現場"
+				]
+			},
+			"filename": "saturday-night-live-s-10-e-16-christopher-reeve-santana",
+			"identifier": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0433446",
+						"score": 2.0087,
+						"title": "Saturday Night Live: The Best of Christopher Walken",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0500149",
+						"score": -1.1494,
+						"title": "Saturday Night Live 25",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt21818968",
+						"score": -1.7557,
+						"title": "Saturday Night",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "saturday-night-live-s-10-e-16-christopher-reeve-santana",
+				"parsedYear": null,
+				"probability": 0.8099
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt0412142",
+			"show": {
+				"name": "House",
+				"titles": [
+					"Bác Sĩ House",
+					"Daktaras Hausas",
+					"Docteur House",
+					"Doctor House",
+					"Doktor House",
+					"Doktors Hauss",
+					"Dr House",
+					"Dr. House - Medical Division",
+					"Dr. [H]ouse",
+					"Hausas",
+					"House",
+					"House M.D.",
+					"Iatrikes ypotheseis",
+					"Zdravnikova vest",
+					"Ιατρικές υποθέσεις",
+					"Д-р Хаус",
+					"Доктор Хаус",
+					"怪醫豪斯"
+				]
+			},
+			"filename": "House MD Season 1, 2, 3, 4, 5, 6, 7 & 8 + Extras DVDRip - TSV",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0445114",
+						"score": -1.3929,
+						"title": "Extras",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt1990582",
+						"score": -5.328,
+						"title": "Dom 2",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt9518312",
+						"score": -6.652,
+						"title": "The Haunted House",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "House MD Season 1, 2, 3, 4, 5, 6, 7 & 8 + Extras",
+				"parsedYear": null,
+				"probability": 0.68
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt9288030",
+			"show": {
+				"name": "Reacher",
+				"titles": [
+					"Cek Riçer",
+					"Džekas Ryčeris",
+					"Jack Reacher",
+					"Jek Richer",
+					"Reacher",
+					"Джек Ричер",
+					"Ричер",
+					"Ричър",
+					"Річер",
+					"ジャック・リーチャー ～正義のアウトロー～",
+					"神隱任務",
+					"리처"
+				]
+			},
+			"filename": "Джек Ричер / Reacher [S04] (2026) WEB-DL 1080p | P",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt9288030",
+						"score": 4.6374,
+						"title": "Reacher",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt5016504",
+						"score": -1.1938,
+						"title": "Preacher",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt11789868",
+						"score": -6.0061,
+						"title": "The Teacher",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Reacher",
+				"parsedYear": 2026,
+				"probability": 0.9869
+			},
+			"expected": null
+		},
+		{
+			"imdbId": "tt11704040",
+			"show": {
+				"name": "Love Is Blind",
+				"titles": [
+					"Casamento às Cegas",
+					"El amor es ciego",
+					"Kjærlighet gjør blind",
+					"L'amore è cieco",
+					"Liebe macht blind",
+					"Ljubav je slepa",
+					"Love Is Blind",
+					"Love is Blind: After the Altar",
+					"Láska je slepá",
+					"Miłość jest ślepa",
+					"Vak szerelem",
+					"Vak szerelem: Az oltár után",
+					"Yêu Là Mù Quáng",
+					"Ο έρωτας είναι τυφλός",
+					"Кохання наосліп",
+					"Кохання наосліп: після весілля",
+					"Любов сліпа",
+					"مرآة الحب",
+					"爱情盲选",
+					"盲婚試愛"
+				]
+			},
+			"filename": "Love is Blind Germany S02E01 1080p WEB h264-EDITH",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt27719131",
+						"score": 3.3079,
+						"title": "Love Is Blind: Germany",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt11704040",
+						"score": -0.6218,
+						"title": "Love Is Blind",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt26675358",
+						"score": -3.3181,
+						"title": "Love Is Blind: UK",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Love is Blind Germany",
+				"parsedYear": null,
+				"probability": 0.9731
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt0251497",
+			"show": {
+				"name": "Big Brother",
+				"titles": [
+					"Big Brother",
+					"Big Brother 10",
+					"Big Brother 2",
+					"Big Brother 3",
+					"Big Brother 4: The X-Factor",
+					"Big Brother 5: Project DNA - Do Not Assume",
+					"Big Brother 6: Summer of Secrets",
+					"Big Brother 8",
+					"Big Brother All-Stars",
+					"Big Brother: Til Death Do You Part",
+					"Big Brother: USA",
+					"Celebrity Big Brother",
+					"Grande Fratello",
+					"Veliki Brat"
+				]
+			},
+			"filename": "Big Brother Canada S10E01 1080p AMZN WEB-DL DDP5.1 H.264-NTb",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2776888",
+						"score": 3.236,
+						"title": "Big Brother Canada",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0251497",
+						"score": -0.9517,
+						"title": "Big Brother",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0257295",
+						"score": -1.2039,
+						"title": "Big Brother",
+						"year": 2000
+					}
+				],
+				"parsedTitle": "Big Brother Canada",
+				"parsedYear": null,
+				"probability": 0.9639
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt0098844",
+			"show": {
+				"name": "Law & Order",
+				"titles": [
+					"Die Aufrechten - Aus den Akten der Straße",
+					"Esküdt ellenségek",
+					"I lagens namn",
+					"I lovens navn",
+					"Kova laki",
+					"La ley y el orden",
+					"Law & Order",
+					"Law & Order - I due volti della giustizia",
+					"Law & Order Prime",
+					"Lege si Ordine",
+					"Lei & Ordem",
+					"Ley y orden",
+					"Lov og orden",
+					"Luật Pháp Và Trật Tự",
+					"New York - Police judiciaire",
+					"New York district",
+					"Prawo i porządek",
+					"Qanun və sifariş",
+					"Qonun va tartib",
+					"Seaduse nimel",
+					"Zakon i red",
+					"Zákon a poriadok",
+					"Įstatymas ir tvarka",
+					"Νόμος και τάξη",
+					"Закон и порядок",
+					"Закон и ред",
+					"Закон і порядок",
+					"Заң мен тәртіп",
+					"Ред и закон",
+					"ロー&オーダー",
+					"法網遊龍"
+				]
+			},
+			"filename": "Law.and.Order.Special.Victims.Unit.S23.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0203259",
+						"score": 2.2516,
+						"title": "Law & Order: Special Victims Unit",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt0098844",
+						"score": 1.0372,
+						"title": "Law & Order",
+						"year": 1990
+					},
+					{
+						"imdbId": "tt0405564",
+						"score": -3.57,
+						"title": "Law & Order",
+						"year": 1978
+					}
+				],
+				"parsedTitle": "Law and Order Special Victims Unit",
+				"parsedYear": null,
+				"probability": 0.9627
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt9208876",
+			"show": {
+				"name": "The Falcon and the Winter Soldier",
+				"titles": [
+					"A Sólyom és a Tél Katonája",
+					"Captain America and the Winter Soldier",
+					"Falcon Và Chiến Binh Mùa Đông",
+					"Falcon a Winter Soldier",
+					"Falcon a Zimný vojak",
+					"Falcon et le Soldat de l'hiver",
+					"Falcon i Zimowy Żołnierz",
+					"Falcon ve Kış Askeri",
+					"Falcon y el Soldado de Invierno",
+					"Falcon y el Soldado del Invierno",
+					"Falcão e o Soldado Invernal",
+					"Halcón y el soldado de invierno",
+					"Le Faucon et le Soldat de l'Hiver",
+					"Lochin va Qishki askar",
+					"O Falcão e o Soldado do Inverno",
+					"Pistrik ja Talvesõdur",
+					"Sakalas ir Žiemos karys",
+					"Tag Team",
+					"The Falcon and the Winter Soldier",
+					"Το Γεράκι και ο Στρατιώτης του Χειμώνα",
+					"Сокал і Зімовы салдат",
+					"Сокол и Зимний солдат",
+					"Соколът и зимният войник",
+					"Сокіл та Зимовий солдат",
+					"Фалкон и Зимски Војник",
+					"הפאלקון וחייל החורף",
+					"الصقر وجندي الشتاء",
+					"فالكون وجندي الشتاء",
+					"ファルコン&ウィンター・ソルジャー",
+					"猎鹰与冬兵",
+					"獵鷹與酷寒戰士"
+				]
+			},
+			"filename": "Andor.S01.BluRay.1080p.TrueHD.Atmos.7.1.AVC.HYBRID.REMUX-FraMeSToR",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt9253284",
+						"score": 4.1262,
+						"title": "Andor",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0061262",
+						"score": -2.8925,
+						"title": "The Herculoids",
+						"year": 1967
+					},
+					{
+						"imdbId": "tt10207090",
+						"score": -3.3448,
+						"title": "Pandora",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Andor",
+				"parsedYear": null,
+				"probability": 0.9879
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt0285335",
+			"show": {
+				"name": "The Amazing Race",
+				"titles": [
+					"Amacing Race 29",
+					"Amazing Race",
+					"Cursa în jurul lumii",
+					"Das große Rennen",
+					"El gran reto",
+					"Le Rallye autour du monde",
+					"Nepaprastos lenktynės",
+					"Podivuhodný závod",
+					"Pöörane seiklus",
+					"The Amazing Race",
+					"The Amazing Race 13",
+					"The Amazing Race with Phil Keoghan",
+					"The Amazing Race: All-Stars",
+					"The Amazing Race: Family Edition",
+					"The Amazing Race: Unfinished Business",
+					"Trka oko sveta",
+					"Versenyfutás a világ körül",
+					"Удивительная гонка",
+					"アメージング・レース",
+					"驚險大挑戰",
+					"어메이징 레이스"
+				]
+			},
+			"filename": "The.Amazing.Race.Canada.S03E06.1080p.HDTV.x264-CROOKS[rarbg]",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt3069720",
+						"score": 3.6494,
+						"title": "The Amazing Race Canada",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt27054614",
+						"score": -0.3617,
+						"title": "Crooks",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0285335",
+						"score": -0.8324,
+						"title": "The Amazing Race",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "The Amazing Race Canada",
+				"parsedYear": null,
+				"probability": 0.9871
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt4934214",
+			"show": {
+				"name": "Taskmaster",
+				"titles": [
+					"A feladatosztó",
+					"Bäst i test England",
+					"Suurmestari UK",
+					"Taskmaster",
+					"Taskmaster UK",
+					"Tāskmāsters",
+					"Úkolář",
+					"Таскмастер"
+				]
+			},
+			"filename": "Taskmaster.NZ.S03E07.720p.WEB.H264-ROPATA",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt13544772",
+						"score": 3.5212,
+						"title": "Taskmaster NZ",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt4934214",
+						"score": -0.1148,
+						"title": "Taskmaster",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt25523050",
+						"score": -0.157,
+						"title": "Taskmaster",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Taskmaster NZ",
+				"parsedYear": null,
+				"probability": 0.9045
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt0251497",
+			"show": {
+				"name": "Big Brother",
+				"titles": [
+					"Big Brother",
+					"Big Brother 10",
+					"Big Brother 2",
+					"Big Brother 3",
+					"Big Brother 4: The X-Factor",
+					"Big Brother 5: Project DNA - Do Not Assume",
+					"Big Brother 6: Summer of Secrets",
+					"Big Brother 8",
+					"Big Brother All-Stars",
+					"Big Brother: Til Death Do You Part",
+					"Big Brother: USA",
+					"Celebrity Big Brother",
+					"Grande Fratello",
+					"Veliki Brat"
+				]
+			},
+			"filename": "Big.Brother.Late.and.Live.S03E31.1080p.HEVC.x265-MeGusta",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt29292214",
+						"score": 2.2352,
+						"title": "Big Brother: Late & Live",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0257295",
+						"score": -0.7632,
+						"title": "Big Brother",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0287196",
+						"score": -1.2427,
+						"title": "Big Brother",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "Big Brother Late and Live",
+				"parsedYear": null,
+				"probability": 0.9041
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt1800864",
+			"show": {
+				"name": "Gold Rush",
+				"titles": [
+					"Alaska : La ruée vers l'or",
+					"Aranyláz Alaszkában",
+					"Die Schatzsucher - Goldrausch in Alaska",
+					"Febre do Ouro",
+					"Gold Rush",
+					"Gold Rush - Kultakuume",
+					"Gold Rush: Alaska",
+					"Gorączka złota",
+					"La febbre dell'oro",
+					"La fiebre del oro",
+					"Zlatna groznica",
+					"Zlatá horečka - Aljaška",
+					"Zlatá horúčka - Aljaška",
+					"Златна грозница",
+					"Золота лихоманка",
+					"Золотая лихорадка. Аляска",
+					"金礦的賭注"
+				]
+			},
+			"filename": "Gold Rush Mine Rescue with Freddy and Juan S03E03 Married to the Mine 1080p AMZN WEB-DL DDP2.0 H.264-NTb",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt13610512",
+						"score": 3.0455,
+						"title": "Gold Rush: Mine Rescue with Freddy & Juan",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt1800864",
+						"score": -1.1922,
+						"title": "Gold Rush",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt14023192",
+						"score": -3.969,
+						"title": "Mine",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "Gold Rush Mine Rescue with Freddy and Juan",
+				"parsedYear": null,
+				"probability": 0.9893
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt7235466",
+			"show": {
+				"name": "9-1-1",
+				"titles": [
+					"9-1-1",
+					"9-1-1: LA救命最前線",
+					"9-1-1: Notruf L.A.",
+					"911",
+					"911 L.A.",
+					"Cuộc Gọi Khẩn Cấp 911",
+					"Hädaabi 911",
+					"Skubi pagalba",
+					"Záchranári L. A.",
+					"火速救援最前線",
+					"紧急呼救911"
+				]
+			},
+			"filename": "Hra o truny 7. serie / Game od Thrones S07 (CZ, EN ...) 2160p. 4K bluray REMUX = CSFD 91%",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0944947",
+						"score": 2.6559,
+						"title": "Game of Thrones",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt2946308",
+						"score": -3.1949,
+						"title": "Gay of Thrones",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt11198330",
+						"score": -5.2372,
+						"title": "House of the Dragon",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "Game od Thrones",
+				"parsedYear": null,
+				"probability": 0.9809
+			},
+			"expected": "trash"
+		},
+		{
+			"imdbId": "tt0239195",
+			"show": {
+				"name": "Survivor",
+				"titles": [
+					"Ellujääja",
+					"Lucha por sobrevivir",
+					"Robinson USA",
+					"Selviytyjät",
+					"Supravietuitorul",
+					"Survivor",
+					"Survivor - EUA",
+					"Survivor : États-Unis",
+					"Survivor: Africa",
+					"Survivor: All-Stars",
+					"Survivor: Amazonios",
+					"Survivor: Blood vs. Water",
+					"Survivor: Borneo",
+					"Survivor: Cagayan - Brawn vs Brains vs Beauty",
+					"Survivor: Cambodia - Second Chance",
+					"Survivor: Caramoan - Fans vs. Favorites",
+					"Survivor: China",
+					"Survivor: Cook Islands",
+					"Survivor: David vs. Goliath",
+					"Survivor: Edge of Extinction",
+					"Survivor: Fiji",
+					"Survivor: Gabon - Earth's Last Eden",
+					"Survivor: Game Changers - Mamanuca Islands",
+					"Survivor: Ghost Island",
+					"Survivor: Guatemala - The Maya Empire",
+					"Survivor: Heroes v Healers v Hustlers",
+					"Survivor: Heroes vs. Villains",
+					"Survivor: In the Hands of the Fans",
+					"Survivor: Island of the Idols",
+					"Survivor: Koh Rong - Brawn vs. Brains vs. Beauty",
+					"Survivor: Marquesas",
+					"Survivor: Micronesia - Fans vs. Favorites",
+					"Survivor: Millennials vs Gen X",
+					"Survivor: Nicaragua",
+					"Survivor: One World",
+					"Survivor: Palau",
+					"Survivor: Panama - Exile Island",
+					"Survivor: Pearl Islands",
+					"Survivor: Philippines",
+					"Survivor: Pulau Tiga",
+					"Survivor: Redemption Island",
+					"Survivor: Samoa",
+					"Survivor: San Juan del Sur - Blood vs. Water",
+					"Survivor: South Pacific",
+					"Survivor: Tailandi",
+					"Survivor: Thailand",
+					"Survivor: The Amazon",
+					"Survivor: The Australian Outback",
+					"Survivor: Tocantins - The Brazilian Highlands",
+					"Survivor: Vanuatu - Islands of Fire",
+					"Survivor: Winners at War",
+					"Survivor: Worlds Apart",
+					"Последний герой",
+					"Сурвајвор",
+					"サバイバー",
+					"我要活下去"
+				]
+			},
+			"filename": "Survivor Romania S04E18 1080p WEB-DL AAC2.0 H.264-playWEB",
+			"identifier": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt21747100",
+						"score": 1.1663,
+						"title": "Survivor România",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt0239195",
+						"score": -1.5516,
+						"title": "Survivor",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1258189",
+						"score": -1.6899,
+						"title": "Survivors",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "Survivor Romania",
+				"parsedYear": null,
+				"probability": 0.9172
+			},
+			"expected": "trash"
+		}
+	]
+}

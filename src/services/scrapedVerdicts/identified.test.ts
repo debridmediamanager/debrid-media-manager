@@ -1,7 +1,8 @@
 import { forgetIdentifications } from '@/services/contentIdentifier';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import fixture from './__fixtures__/identified-filenames.json';
-import { identifiedAnswers } from './identified';
+import showGuards from './__fixtures__/show-guards-2026-10-18.json';
+import { identifiedAnswers, identifiedShowVerdicts } from './identified';
 import { decide, type MovieContext } from './rules';
 
 const movies = fixture.movies as unknown as Record<string, MovieContext>;
@@ -84,5 +85,39 @@ describe('identifiedAnswers', () => {
 		const fetchMock = recordedAnswers();
 		await expect(verdictFor(item('Old.Henry.2021'))).resolves.toBeNull();
 		expect(fetchMock).not.toHaveBeenCalled();
+	});
+});
+
+describe('identifiedShowVerdicts', () => {
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+		const byName = new Map(showGuards.items.map((i) => [i.filename, i.identifier]));
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (_url: string, init: RequestInit) => {
+				const { filenames } = JSON.parse(init.body as string) as { filenames: string[] };
+				return new Response(
+					JSON.stringify({ results: filenames.map((n) => byName.get(n)) })
+				);
+			})
+		);
+	});
+	afterEach(() => {
+		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
+	});
+
+	it("keeps the show's own releases the identifier names as another title, and trashes other shows", async () => {
+		for (const i of showGuards.items) {
+			const got = await identifiedShowVerdicts({ imdbId: i.imdbId, titles: i.show.titles }, [
+				i.filename,
+			]);
+			expect([
+				i.show.name,
+				i.filename,
+				got?.verdicts.get(i.filename) === 'trash' ? 'trash' : null,
+			]).toEqual([i.show.name, i.filename, i.expected]);
+		}
 	});
 });

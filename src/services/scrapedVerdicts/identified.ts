@@ -63,6 +63,13 @@ export async function identifiedAnswers(
  * the same title is left alone although it was right every time (The Boys 2019
  * on a 1993 show's page), so a lesser-known show never loses its own releases
  * to its famous namesake. `null` when content-identifier could not be asked.
+ *
+ * On the first screens of every Trakt show (2026-10-18), 5 of 40 trusted
+ * releases it would have trashed were the show's own: NCIS's `Season 4 Episodes
+ * 1-24` as Episodes (2011), `Ковчег / The Ark / Сезон: 3` as From, `24 Season 1`
+ * as 24: India. So a release that names the show is trashed only when the other
+ * title is the show's name and more, and the filename carries all of it: Big
+ * Brother Canada, Love Is Blind: Germany, Law & Order: Organized Crime.
  */
 export async function identifiedShowVerdicts(
 	show: { imdbId: string; titles: string[] },
@@ -70,8 +77,22 @@ export async function identifiedShowVerdicts(
 ): Promise<{ verdicts: Map<string, Verdict>; deferred: Set<string> } | null> {
 	const found = await named(show, filenames);
 	if (!found) return null;
+	const ownTitles = show.titles.map(fold).filter((t) => t.trim().length >= 2);
 	const verdicts = new Map<string, Verdict>();
-	for (const [name, { ours }] of found.named) verdicts.set(name, ours ? 'keep' : 'trash');
+	for (const [name, { top, ours }] of found.named) {
+		if (ours) {
+			verdicts.set(name, 'keep');
+			continue;
+		}
+		const folded = fold(name);
+		const shown = ownTitles.filter((t) => folded.includes(t));
+		const other = fold(top.title);
+		if (shown.length > 0) {
+			if (!shown.some((t) => other.includes(t))) continue;
+			if (!folded.includes(withoutArticle(top.title))) continue;
+		}
+		verdicts.set(name, 'trash');
+	}
 	return { verdicts, deferred: found.deferred };
 }
 

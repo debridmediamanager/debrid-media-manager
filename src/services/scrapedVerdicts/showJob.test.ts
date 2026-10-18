@@ -80,7 +80,7 @@ describe('judgeShowPage', () => {
 	});
 
 	it('records the identifier verdicts under the show, and nothing for the season rule', async () => {
-		const p = page('tv:tt11311514:1');
+		const p = page('tv:tt0491738:1');
 		const db = fakeDb(p);
 		await judgeShowPage(p.imdbId, p.season, db);
 		const saved = (db.saveVerdicts as any).mock.calls[0][0];
