@@ -5,7 +5,7 @@ import {
 	type NewVerdict,
 	type StoredPair,
 } from '@/services/database/scrapedVerdict';
-import { namedAsMovie } from './identified';
+import { identifiedAnswers } from './identified';
 import { classifyFilenames } from './jev';
 import { decide, decideWithoutModel, type Verdict } from './rules';
 
@@ -116,13 +116,13 @@ export async function judgeMoviePage(
 			}
 		}
 
-		const identified = await namedAsMovie(imdbId, forModel);
-		for (const title of identified) {
+		const identified = await identifiedAnswers(movie, forModel);
+		for (const [title, { media, titleMatch }] of identified) {
 			judged.set(title, {
-				verdict: 'keep',
+				verdict: decide(movie, title, media, titleMatch),
 				rule: 'identified',
-				media: null,
-				titleMatch: null,
+				media,
+				titleMatch,
 			});
 		}
 		forModel = forModel.filter((title) => !identified.has(title));

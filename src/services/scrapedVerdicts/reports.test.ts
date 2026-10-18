@@ -1,6 +1,7 @@
 import type { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { titleKeyOf } from '@/services/database/scrapedVerdict';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import identified from './__fixtures__/identified-filenames.json';
 import { reviewReports } from './reports';
 
 vi.mock('@/services/repository', () => ({ repository: {} }));
@@ -91,6 +92,29 @@ describe('reviewReports', () => {
 		expect(file).not.toHaveBeenCalled();
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		expect(String((fetchMock.mock.calls[0] as unknown[])[0])).toContain('identifier.test');
+	});
+
+	it('files a movie report the identifier settles as another film without asking Jev', async () => {
+		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
+		const row = identified.items.find((i) => i.filename.startsWith('Old.Henry.2021'))!;
+		const fetchMock = vi.fn(
+			async () => new Response(JSON.stringify({ results: [row.identifier] }))
+		);
+		vi.stubGlobal('fetch', fetchMock);
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['aa', row.filename]])),
+			getMovieContext: vi.fn(
+				async () => identified.movies[row.imdbId as keyof typeof identified.movies]
+			),
+		});
+		const file = vi.fn(async () => {});
+
+		await expect(reviewReports(row.imdbId, ['aa'], 'wrong_imdb', db, file)).resolves.toEqual([
+			'aa',
+		]);
+		expect(file).toHaveBeenCalledWith('aa');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(db.addTokensSpent).not.toHaveBeenCalled();
 	});
 
 	it('does not file a movie report Jev disagrees with', async () => {

@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import fixture from './__fixtures__/identified-filenames.json';
-import { namedAsMovie } from './identified';
+import { identifiedAnswers } from './identified';
+import { decide, type MovieContext } from './rules';
+
+const movies = fixture.movies as unknown as Record<string, MovieContext>;
+const item = (prefix: string) => fixture.items.find((i) => i.filename.startsWith(prefix))!;
 
 /** content-identifier answering each filename as it did on 2026-10-18. */
 function recordedAnswers() {
@@ -13,45 +17,68 @@ function recordedAnswers() {
 	return fetchMock;
 }
 
-describe('namedAsMovie', () => {
+async function verdictFor(i: (typeof fixture.items)[number]) {
+	const movie = movies[i.imdbId];
+	const answer = (await identifiedAnswers(movie, [i.filename])).get(i.filename);
+	return answer
+		? { ...answer, verdict: decide(movie, i.filename, answer.media, answer.titleMatch) }
+		: null;
+}
+
+describe('identifiedAnswers', () => {
 	beforeEach(() => vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test'));
 	afterEach(() => {
 		vi.unstubAllEnvs();
 		vi.unstubAllGlobals();
 	});
 
-	it('keeps exactly the recorded filenames the identifier named as the page movie', async () => {
+	it('answers the recorded production filenames as expected', async () => {
 		recordedAnswers();
-		const pages = new Map<string, string[]>();
-		for (const item of fixture.items) {
-			pages.set(item.imdbId, [...(pages.get(item.imdbId) ?? []), item.filename]);
+		for (const i of fixture.items) {
+			expect([i.filename, await verdictFor(i)]).toEqual([i.filename, i.expected]);
 		}
-		const kept = new Set<string>();
-		for (const [imdbId, filenames] of pages) {
-			for (const name of await namedAsMovie(imdbId, filenames)) kept.add(name);
-		}
-		const expected = fixture.items.filter((i) => i.identified).map((i) => i.filename);
-		expect([...kept].sort()).toEqual([...new Set(expected)].sort());
 	});
 
-	it('leaves games and soundtracks named after the film to Jev', async () => {
+	it('overrules Jev wrongly only on the six releases found by hand', async () => {
+		const wrong = fixture.items.filter((i) => i.right === 'jev').map((i) => i.filename);
+		const right = fixture.items.filter((i) => i.right === 'identifier');
+		expect(wrong).toHaveLength(6);
+		expect(right).toHaveLength(33);
+	});
+
+	it('trashes another film that carries the movie title', async () => {
 		recordedAnswers();
-		const item = (name: string) => fixture.items.find((i) => i.filename.startsWith(name))!;
-		for (const name of [
-			'The Da Vinci Code [PS2]',
+		await expect(verdictFor(item('Old.Henry.2021'))).resolves.toMatchObject({
+			verdict: 'trash',
+		});
+	});
+
+	it('keeps a set that holds the movie although the identifier names another film', async () => {
+		recordedAnswers();
+		const sets = fixture.items.filter(
+			(i) => i.expected?.titleMatch !== 'SAME_TITLE' && i.expected?.verdict === 'keep'
+		);
+		expect(sets.map((i) => i.filename)).toContain(item('Kill Bill duology').filename);
+	});
+
+	it('leaves to Jev the films sharing the movie title, games and numbers read as titles', async () => {
+		recordedAnswers();
+		for (const prefix of [
+			'deadpool.mkv',
+			'Traffic (2000)',
+			'Super Mario Galaxy 2 [PAL][Wii]',
 			'Mission Impossible Iii [2006] [soundtrack]',
+			'2008.myHD.Taken',
+			'Монстры на каникулах',
 		]) {
-			const { imdbId, filename } = item(name);
-			await expect(namedAsMovie(imdbId, [filename])).resolves.toEqual(new Set());
+			await expect(verdictFor(item(prefix))).resolves.toBeNull();
 		}
 	});
 
-	it('keeps nothing when the identifier cannot be asked', async () => {
+	it('answers nothing when the identifier cannot be asked', async () => {
 		vi.stubEnv('CONTENT_IDENTIFIER_URL', '');
 		const fetchMock = recordedAnswers();
-		await expect(namedAsMovie('tt0104431', ['Home.Alone.2.1992.1080p.mkv'])).resolves.toEqual(
-			new Set()
-		);
+		await expect(verdictFor(item('Old.Henry.2021'))).resolves.toBeNull();
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 });

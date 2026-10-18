@@ -1,7 +1,7 @@
 import { ScrapedVerdictService, titleKeyOf } from '@/services/database/scrapedVerdict';
 import { JEV_REPORTER } from '@/services/reporterId';
 import { repository } from '@/services/repository';
-import { namedAsMovie } from './identified';
+import { identifiedAnswers } from './identified';
 import { classifyFilenames } from './jev';
 import { ENGINE, underBudget, utcDay } from './job';
 import { decide, decideWithoutModel } from './rules';
@@ -22,7 +22,7 @@ export type ReportType = 'porn' | 'wrong_imdb' | 'wrong_season';
 let service: ScrapedVerdictService | undefined;
 const verdicts = () => (service ??= new ScrapedVerdictService());
 
-/** Returns the hashes Jev confirmed, after filing each under `JEV_REPORTER`. */
+/** Returns the hashes the identifier or Jev confirmed, after filing each under `JEV_REPORTER`. */
 export async function reviewReports(
 	imdbId: string,
 	hashes: string[],
@@ -49,10 +49,16 @@ export async function reviewReports(
 			if (settled === 'trash') confirmed.push(hash);
 			else if (!settled) forModel.push([hash, title]);
 		}
-		const identified = await namedAsMovie(
-			imdbId,
+		const identified = await identifiedAnswers(
+			movie,
 			forModel.map(([, title]) => title)
 		);
+		for (const [hash, title] of forModel) {
+			const answer = identified.get(title);
+			if (answer && decide(movie, title, answer.media, answer.titleMatch) === 'trash') {
+				confirmed.push(hash);
+			}
+		}
 		forModel = forModel.filter(([, title]) => !identified.has(title));
 		if (forModel.length > 0 && (await underBudget(db))) {
 			const result = await classifyFilenames(
