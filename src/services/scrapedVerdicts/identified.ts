@@ -1,18 +1,5 @@
-import {
-	identifyFilenames,
-	refused,
-	VIDEO,
-	type IdentifierMatch,
-	type IdentifierResult,
-} from '@/services/contentIdentifier';
-import {
-	fold,
-	foundTitles,
-	type Media,
-	type MovieContext,
-	type TitleMatch,
-	type Verdict,
-} from './rules';
+import { identifyFilenames, refused, VIDEO } from '@/services/contentIdentifier';
+import { fold, foundTitles, type Media, type MovieContext, type TitleMatch } from './rules';
 
 export type IdentifiedAnswer = { media: Media; titleMatch: TitleMatch };
 
@@ -26,75 +13,37 @@ export type IdentifiedAnswer = { media: Media; titleMatch: TitleMatch };
  *   trashed the identifier was right on 11 (`Maman.j.ai.encore.rate.l.avion` is
  *   Home Alone 2). Without a video tag it is often a game or a soundtrack.
  * - Named as another movie or a show: a different title, which the rules still
- *   keep when it is a set holding this movie. A show whose title the filename
- *   lacks is left to Jev: 4 of 52 were wrong (Primal for a Hotel Transylvania
- *   release, The Continental for a John Wick box set).
+ *   keep when it is a set holding this movie. Another work sharing this movie's
+ *   title is left to Jev: Deadpool (2013), Gravity (2010), Scarface (1932) and
+ *   Traffic (2004) were the identifier's mistakes for the films themselves. So
+ *   is a title with no letters (`1920` for `2008.myHD.Taken...1920x1080`), and
+ *   a show whose title the filename lacks: 4 of 52 were wrong (Primal for a
+ *   Hotel Transylvania release, The Continental for a John Wick box set).
  */
 export async function identifiedAnswers(
 	movie: MovieContext,
 	filenames: string[]
 ): Promise<Map<string, IdentifiedAnswer>> {
-	const out = new Map<string, IdentifiedAnswer>();
-	for (const [name, { answer, top, ours }] of await named(movie, filenames)) {
-		const video = VIDEO.test(name);
-		if (ours) {
-			if (video) out.set(name, { media: 'FILM', titleMatch: 'SAME_TITLE' });
-			continue;
-		}
-		if (answer.kind === 'tv' && !fold(name).includes(withoutArticle(top.title))) continue;
-		out.set(name, {
-			media: answer.kind === 'tv' ? 'TV' : video ? 'FILM' : 'UNCLEAR',
-			titleMatch: foundTitles(name, movie.titles).length ? 'DIFFERENT_TITLE' : 'NO_TITLE',
-		});
-	}
-	return out;
-}
-
-/**
- * Whether each release on a show's page is the show, where content-identifier
- * is confident, with the same guards as for movies. Of 100 random releases on
- * show pages (2026-10-18) it named as another title, it was wrong on one
- * (`有匪·破雪斩.Legend.of.Fei.2021` as a film on Legend of Fei's page): the rest
- * were Power Book II: Ghost on a page called Ghost, 90 Day Fiancé UK on 90 Day
- * Fiancé, films and other shows sharing a word with the title. Another show of
- * the same title is left alone although it was right every time (The Boys 2019
- * on a 1993 show's page), so a lesser-known show never loses its own releases
- * to its famous namesake.
- */
-export async function identifiedShowVerdicts(
-	show: { imdbId: string; titles: string[] },
-	filenames: string[]
-): Promise<Map<string, Verdict>> {
-	const out = new Map<string, Verdict>();
-	for (const [name, { ours }] of await named(show, filenames))
-		out.set(name, ours ? 'keep' : 'trash');
-	return out;
-}
-
-type Named = { answer: IdentifierResult; top: IdentifierMatch; ours: boolean };
-
-/**
- * content-identifier's confident answers that name the page's own title or
- * another work. Another work sharing one of the page's titles is left out:
- * Deadpool (2013), Gravity (2010), Scarface (1932) and Traffic (2004) were the
- * identifier's mistakes for the films themselves. So is a title with no letters
- * (`1920` for `2008.myHD.Taken...1920x1080`).
- */
-async function named(
-	page: { imdbId: string; titles: string[] },
-	filenames: string[]
-): Promise<Map<string, Named>> {
 	const answers = filenames.length ? await identifyFilenames(filenames) : null;
-	const out = new Map<string, Named>();
+	const out = new Map<string, IdentifiedAnswer>();
 	if (!answers) return out;
-	const ownTitles = new Set(page.titles.map(withoutArticle));
+	const ownTitles = new Set(movie.titles.map(withoutArticle));
 	filenames.forEach((name, i) => {
 		const answer = answers[i];
 		const top = answer.matches[0];
 		if (!answer.confident || !top || refused(name, answer)) return;
-		if (top.imdbId === page.imdbId) return out.set(name, { answer, top, ours: true });
-		if (ownTitles.has(withoutArticle(top.title)) || !/\p{L}/u.test(top.title)) return;
-		out.set(name, { answer, top, ours: false });
+		const video = VIDEO.test(name);
+		if (top.imdbId === movie.imdbId) {
+			if (video) out.set(name, { media: 'FILM', titleMatch: 'SAME_TITLE' });
+			return;
+		}
+		const title = withoutArticle(top.title);
+		if (ownTitles.has(title) || !/\p{L}/u.test(top.title)) return;
+		if (answer.kind === 'tv' && !fold(name).includes(title)) return;
+		out.set(name, {
+			media: answer.kind === 'tv' ? 'TV' : video ? 'FILM' : 'UNCLEAR',
+			titleMatch: foundTitles(name, movie.titles).length ? 'DIFFERENT_TITLE' : 'NO_TITLE',
+		});
 	});
 	return out;
 }

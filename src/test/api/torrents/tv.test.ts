@@ -16,8 +16,6 @@ const {
 	mockSort,
 	mockBackfillDebridio,
 	mockRefreshDebridio,
-	mockWithoutTrashed,
-	mockCleanInBackground,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
@@ -30,8 +28,6 @@ const {
 	mockSort: vi.fn((items: any[]) => items),
 	mockBackfillDebridio: vi.fn().mockResolvedValue([]),
 	mockRefreshDebridio: vi.fn().mockResolvedValue(undefined),
-	mockWithoutTrashed: vi.fn(async (_imdbId: string, items: any[]) => items),
-	mockCleanInBackground: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('@/utils/problemToken', () => ({
@@ -60,11 +56,6 @@ vi.mock('@/services/canary/canaryStore', () => ({
 vi.mock('@/utils/debridioBackfill', () => ({
 	backfillFromDebridioNow: mockBackfillDebridio,
 	refreshDebridioAvailabilityInBackground: mockRefreshDebridio,
-}));
-
-vi.mock('@/services/scrapedVerdicts/job', () => ({
-	withoutTrashedResults: mockWithoutTrashed,
-	cleanShowResultsInBackground: mockCleanInBackground,
 }));
 
 describe('/api/torrents/tv', () => {
@@ -132,31 +123,6 @@ describe('/api/torrents/tv', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			results: [{ title: 'Season Pack', hash: 'hash-1' }],
 		});
-	});
-
-	it('hides results already judged to be another title', async () => {
-		mockGetReportedHashes.mockResolvedValue([]);
-		mockGetScrapedResults.mockResolvedValue([{ title: 'Other.Show.S02', hash: 'hash-2' }]);
-		mockWithoutTrashed.mockImplementationOnce(async (_imdbId: string, items: any[]) =>
-			items.filter((item) => item.hash !== 'hash-2')
-		);
-		const res = createMockResponse();
-
-		await handler(createMockRequest({ query: baseQuery }), res);
-
-		expect(mockWithoutTrashed).toHaveBeenCalledWith('tt7654321', [
-			{ title: 'Season Pack', hash: 'hash-1' },
-			{ title: 'Other.Show.S02', hash: 'hash-2' },
-		]);
-		expect(res.json).toHaveBeenCalledWith({
-			results: [{ title: 'Season Pack', hash: 'hash-1' }],
-		});
-	});
-
-	it('judges the season page in the background on a served page', async () => {
-		await handler(createMockRequest({ query: baseQuery }), createMockResponse());
-
-		expect(mockCleanInBackground).toHaveBeenCalledWith('tt7654321', 2);
 	});
 
 	// Card 248: every trusted release of Mosgaz. Metronom season 10 is named in

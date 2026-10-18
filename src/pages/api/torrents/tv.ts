@@ -1,10 +1,6 @@
 import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import {
-	cleanShowResultsInBackground,
-	withoutTrashedResults,
-} from '@/services/scrapedVerdicts/job';
 import { checkCanary, respondAsNeverScraped } from '@/utils/canaryGuard';
 import type { DebridioTarget } from '@/utils/debridioBackfill';
 import {
@@ -118,14 +114,11 @@ const handler: NextApiHandler = async (req, res) => {
 			const reportedHashes = await db.getReportedHashes(imdbId.toString().trim());
 
 			// Filter out reported torrents before any processing
-			const unreported = searchResults.filter((torrent) => {
+			const filteredResults = searchResults.filter((torrent) => {
 				if (!torrent.hash) return true; // Keep torrents without hash (shouldn't happen, but safe fallback)
 				const isReported = reportedHashes.includes(torrent.hash);
 				return !isReported;
 			});
-			// Results judged to be another title, until the background pass below
-			// has moved them off the page.
-			const filteredResults = await withoutTrashedResults(trimmedImdbId, unreported);
 
 			// Process the filtered results
 			let processedResults = flattenAndRemoveDuplicates(filteredResults);
@@ -133,8 +126,6 @@ const handler: NextApiHandler = async (req, res) => {
 			// Keeps the debridio ⚡ availability markers for this season fresh
 			// without holding the response; no-ops inside its TTL.
 			void refreshDebridioAvailabilityInBackground(debridioTarget);
-			// Judges whatever is new on this page so the next visit is clean.
-			void cleanShowResultsInBackground(trimmedImdbId, trimmedSeasonNum);
 			res.status(200).json({ results: processedResults });
 		} catch (error: any) {
 			console.error(

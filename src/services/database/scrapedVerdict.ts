@@ -122,9 +122,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 	}
 
 	/** A series' titles in every language and its start year, for judging a report on it. */
-	public async getShowTitles(
-		imdbId: string
-	): Promise<{ name: string; titles: string[]; year: number } | null> {
+	public async getShowTitles(imdbId: string): Promise<{ titles: string[]; year: number } | null> {
 		const basics = await this.prisma.imdbTitleBasics.findUnique({
 			where: { tconst: imdbId },
 			select: { primaryTitle: true, originalTitle: true, startYear: true, titleType: true },
@@ -143,17 +141,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 			const folded = fold(title).trim() || title;
 			if (!byFold.has(folded)) byFold.set(folded, title);
 		}
-		return { name: basics.primaryTitle, titles: [...byFold.values()], year: basics.startYear };
-	}
-
-	/** The season numbers IMDb lists episodes under for a show (idx_parent). */
-	public async getShowSeasons(imdbId: string): Promise<Set<number>> {
-		const rows = await this.prisma.imdbTitleEpisode.findMany({
-			where: { parentTconst: imdbId, seasonNumber: { not: null } },
-			select: { seasonNumber: true },
-			distinct: ['seasonNumber'],
-		});
-		return new Set(rows.map((row) => row.seasonNumber!));
+		return { titles: [...byFold.values()], year: basics.startYear };
 	}
 
 	/** The filename each hash carries on the title's movie page or any of its season pages. */

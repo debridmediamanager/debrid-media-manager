@@ -5,8 +5,7 @@ import {
 	type NewVerdict,
 	type StoredPair,
 } from '@/services/database/scrapedVerdict';
-import { namedSeasons } from '@/utils/seasonNaming';
-import { identifiedAnswers, identifiedShowVerdicts } from './identified';
+import { identifiedAnswers } from './identified';
 import { classifyFilenames } from './jev';
 import { decide, decideWithoutModel, type Verdict } from './rules';
 
@@ -27,12 +26,6 @@ const MAX_CONCURRENT_JOBS = 2;
 const LOCK_STALE_MS = 15 * 60 * 1000;
 /** About $8.40 a day at $0.042 per million input tokens. */
 const DEFAULT_DAILY_TOKENS = 200_000_000;
-
-/**
- * The show-page pass: content-identifier and the season reader, no model. Bump
- * it when either rule changes so every season page is checked again.
- */
-export const SHOW_ENGINE = 'show-v1+identified';
 
 const inFlight = new Set<string>();
 let service: ScrapedVerdictService | undefined;
@@ -212,129 +205,6 @@ export async function cleanMovieResultsInBackground(imdbId: string): Promise<voi
 		);
 	} finally {
 		inFlight.delete(imdbId);
-	}
-}
-
-export type ShowOutcome =
-	| { status: 'skipped'; reason: string }
-	| { status: 'done'; judged: number; trashed: number };
-
-/**
- * A release on a season page that names only seasons IMDb lists for the show,
- * none of them this page's: `Mister Rogers Neighborhood Season 13 - 1982` on
- * season 17's page. A season IMDb does not list keeps it here, so an anime IMDb
- * files as one long season keeps its `S2` releases on that season's page.
- */
-export function namesOnlyOtherSeasons(title: string, season: number, seasons: Set<number>) {
-	const named = namedSeasons(title);
-	return named.size > 0 && !named.has(season) && [...named].every((n) => seasons.has(n));
-}
-
-/**
- * One pass over a show's season page: results content-identifier names as
- * another title are trashed (and the verdict kept under the show, as it holds
- * on every season page), and results that belong on another season page are
- * moved off this one. Nothing is asked of Jev, so a release the identifier is
- * unsure of stays.
- */
-export async function judgeShowPage(
-	imdbId: string,
-	season: number,
-	db: ScrapedVerdictService = verdicts()
-): Promise<ShowOutcome> {
-	const pageKey = `tv:${imdbId}:${season}`;
-	const startedAt = new Date();
-	const { pairs, lastChanged } = await db.getStoredPairs(pageKey);
-	if (pairs.length === 0) return { status: 'skipped', reason: 'empty page' };
-
-	const checkpoint = await db.getCheckpoint(pageKey);
-	if (
-		checkpoint?.engine === SHOW_ENGINE &&
-		lastChanged !== null &&
-		checkpoint.checkedAt >= lastChanged
-	) {
-		return { status: 'skipped', reason: 'unchanged since last check' };
-	}
-	if (!(await db.acquireLock(pageKey, LOCK_STALE_MS))) {
-		return { status: 'skipped', reason: 'another instance is on it' };
-	}
-
-	try {
-		const show = await db.getShowTitles(imdbId);
-		if (!show) {
-			await db.setCheckpoint(pageKey, SHOW_ENGINE, startedAt);
-			return { status: 'skipped', reason: 'no IMDb record' };
-		}
-		const seasons = await db.getShowSeasons(imdbId);
-
-		const stored = await db.getVerdicts(imdbId);
-		const byTitle = new Map(stored.map((v) => [v.titleKey, v.verdict]));
-		const unjudged = [...new Set(pairs.map((p) => p.title))].filter(
-			(title) => !byTitle.has(titleKeyOf(title))
-		);
-		const identified = await identifiedShowVerdicts({ imdbId, ...show }, unjudged);
-
-		const recorded = new Set<string>();
-		const newVerdicts: NewVerdict[] = [];
-		for (const pair of pairs) {
-			const verdict = identified.get(pair.title);
-			const id = pairKeyOf(pair.hash, pair.title);
-			if (!verdict || recorded.has(id)) continue;
-			recorded.add(id);
-			newVerdicts.push({
-				imdbId,
-				hash: pair.hash,
-				title: pair.title,
-				verdict,
-				rule: 'identified',
-				media: null,
-				titleMatch: null,
-				engine: SHOW_ENGINE,
-			});
-		}
-		await db.saveVerdicts(newVerdicts);
-
-		const toTrash: (StoredPair & { rule: string })[] = [];
-		for (const pair of pairs) {
-			const known = byTitle.get(titleKeyOf(pair.title));
-			const verdict = known ?? identified.get(pair.title);
-			if (verdict === 'trash')
-				toTrash.push({ ...pair, rule: known ? 'reused' : 'identified' });
-			else if (namesOnlyOtherSeasons(pair.title, season, seasons)) {
-				toTrash.push({ ...pair, rule: 'season' });
-			}
-		}
-		const trashed = await db.trashPairs(
-			pageKey,
-			{ imdbId, name: show.name },
-			toTrash,
-			SHOW_ENGINE
-		);
-
-		await db.setCheckpoint(pageKey, SHOW_ENGINE, startedAt);
-		console.log(
-			`[verdicts] ${pageKey}: judged ${newVerdicts.length} (${identified.size} identified), trashed ${trashed}`
-		);
-		return { status: 'done', judged: newVerdicts.length, trashed };
-	} finally {
-		await db.releaseLock(pageKey).catch(() => {});
-	}
-}
-
-/** Fire-and-forget from the show route, as `cleanMovieResultsInBackground` is. */
-export async function cleanShowResultsInBackground(imdbId: string, season: number): Promise<void> {
-	const page = `${imdbId}:${season}`;
-	if (inFlight.has(page) || inFlight.size >= MAX_CONCURRENT_JOBS) return;
-	inFlight.add(page);
-	try {
-		await judgeShowPage(imdbId, season);
-	} catch (error) {
-		console.warn(
-			`[verdicts] tv:${page} failed:`,
-			error instanceof Error ? error.message : error
-		);
-	} finally {
-		inFlight.delete(page);
 	}
 }
 
