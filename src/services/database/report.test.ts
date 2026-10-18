@@ -1,4 +1,4 @@
-import { JEV_REPORTER, storedReporterId } from '@/services/reporterId';
+import { JEV_REPORTER } from '@/services/reporterId';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { ReportService } from './report';
 
@@ -77,10 +77,10 @@ describe('ReportService', () => {
 
 	it('never lets a client-sent reporter id hide a result on its own', async () => {
 		// The old moderator id was compared in the public source, so anyone could
-		// send it. Whatever a client sends is stored through storedReporterId.
-		const sent = [JEV_REPORTER, 'jev', 'admin', 'pm:x', 'A'.repeat(52)];
+		// send it. A client's id is what verifiedReporterId files, never JEV_REPORTER.
+		const sent = ['jev', 'admin', 'pm:x', 'rd:account', 'A'.repeat(52)];
 		prismaMock.report.findMany.mockResolvedValue(
-			sent.map((id, i) => ({ hash: `h${i}`, userId: storedReporterId(id) }))
+			sent.map((id, i) => ({ hash: `h${i}`, userId: id }))
 		);
 
 		expect(await service.getReportedHashes('tt1')).toEqual([]);

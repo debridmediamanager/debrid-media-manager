@@ -1,7 +1,7 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { storedReporterId } from '@/services/reporterId';
 import { repository } from '@/services/repository';
 import { reviewReportsInBackground } from '@/services/scrapedVerdicts/reports';
+import { verifiedReporterId } from '@/services/verifiedReporterId';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -61,7 +61,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		if (typeof userId !== 'string') {
 			return res.status(400).json({ message: 'Missing userId or type' });
 		}
-		const reporter = storedReporterId(userId);
+		const reporter = await verifiedReporterId(userId);
+		if (!reporter) {
+			return res.status(403).json({ errorMessage: 'Debrid account not verified' });
+		}
 
 		const db = repository;
 		const results = [];

@@ -1,13 +1,9 @@
 /**
  * Who a content report is from.
  *
- * Reports are counted per reporter, so the id only has to be stable and
- * distinct per account. Real-Debrid, AllDebrid and TorBox users have always
- * been identified by their key as-is, and the admin override matches one such
- * key, so those stay unchanged. The other services were never allowed to
- * report at all; their credential is sent tagged with its service so the
- * server can store a digest of it instead - see `storedReporterId`. The client
- * cannot digest it itself: Web Crypto is missing outside a secure context.
+ * Reports are counted per account. This is the credential the server asks its
+ * service about before filing anything (`verifiedReporterId`); Real-Debrid,
+ * AllDebrid and TorBox keys go as-is and the other services' are tagged.
  */
 export type ReporterKeys = {
 	rdKey?: string | null;

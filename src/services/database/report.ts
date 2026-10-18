@@ -1,4 +1,4 @@
-import { JEV_REPORTER } from '@/services/reporterId';
+import { JEV_REPORTER, type ReportType } from '@/services/reporterId';
 import { DatabaseClient } from './client';
 
 export class ReportService extends DatabaseClient {
@@ -7,14 +7,14 @@ export class ReportService extends DatabaseClient {
 	 * @param hash - The hash of the torrent being reported
 	 * @param imdbId - The IMDB ID of the content
 	 * @param userId - The user ID (from RealDebrid or AllDebrid)
-	 * @param type - The type of report ('porn', 'wrong_imdb', or 'wrong_season')
+	 * @param type - The type of report (see `ReportType`)
 	 * @returns A promise that resolves when the report is saved
 	 */
 	public async reportContent(
 		hash: string,
 		imdbId: string,
 		userId: string,
-		type: 'porn' | 'wrong_imdb' | 'wrong_season'
+		type: ReportType
 	): Promise<void> {
 		try {
 			await this.prisma.report.upsert({

@@ -69,6 +69,12 @@ export default function ReportButton({ hash, imdbId, userId, isShow }: ReportBut
 							>
 								Incorrect IMDB ID
 							</button>
+							<button
+								onClick={() => handleReport('malware')}
+								className="haptic-sm block w-full rounded border-2 border-red-500 bg-red-900/30 px-4 py-2 text-left text-sm text-red-100 transition-colors hover:bg-red-800/50"
+							>
+								Malware / Executable File
+							</button>
 							{isShow && (
 								<button
 									onClick={() => handleReport('wrong_season')}

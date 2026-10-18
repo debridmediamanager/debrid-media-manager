@@ -48,6 +48,7 @@ import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHe
 import { TorBoxCdnSample } from './database/torboxCdn';
 import { TorBoxOperation } from './database/torboxOperational';
 import { ScrapeSearchResult } from './mediasearch';
+import type { ReportType } from './reporterId';
 import { isHashBlocked, withoutBlockedHashList, withoutBlockedHashes } from './takedown/blocklist';
 import { TorrentInfoResponse } from './types';
 
@@ -1399,12 +1400,7 @@ export class Repository {
 	}
 
 	// Report Service Methods
-	public reportContent(
-		hash: string,
-		imdbId: string,
-		userId: string,
-		type: 'porn' | 'wrong_imdb' | 'wrong_season'
-	) {
+	public reportContent(hash: string, imdbId: string, userId: string, type: ReportType) {
 		return this.reportService.reportContent(hash, imdbId, userId, type);
 	}
 

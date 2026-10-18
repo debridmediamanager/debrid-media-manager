@@ -1,24 +1,10 @@
-import { createHash } from 'crypto';
+export type ReportType = 'porn' | 'wrong_imdb' | 'wrong_season' | 'malware';
 
-const TAGGED = /^(pm|oc|dl|jev):(.+)$/s;
+export const TAGGED = /^(pm|oc|dl|jev):(.+)$/s;
 
 /**
  * The reporter a report is filed under once Jev agrees with it. One such report
  * hides the result, so a client must never be able to send it: `jev:` is a tag
- * here, and a client-sent `jev:confirmed` is stored as its digest instead.
+ * here, and `verifiedReporterId` never answers with it.
  */
 export const JEV_REPORTER = 'jev:confirmed';
-
-/**
- * The reporter id as it is written to the `Report` table.
- *
- * A tagged credential (`pm:`, `oc:`, `dl:` - see `reporterIdFor`) is stored as
- * a SHA-256 digest under the same tag, so a moderation table never becomes a
- * second copy of those users' credentials. Anything else is stored as sent,
- * as it always has been.
- */
-export function storedReporterId(userId: string): string {
-	const match = TAGGED.exec(userId);
-	if (!match) return userId;
-	return `${match[1]}:${createHash('sha256').update(match[2]).digest('hex')}`;
-}

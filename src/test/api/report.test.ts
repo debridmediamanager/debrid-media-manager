@@ -6,6 +6,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 const mockRepository = vi.mocked(repository);
+// The provider lookups are covered in verifiedReporterId.test.ts; here a key starting
+// "forged" is one its service refuses.
+vi.mock('@/services/verifiedReporterId', () => ({
+	verifiedReporterId: vi.fn(async (key: string) =>
+		key.startsWith('forged') ? null : 'rd:account'
+	),
+}));
 
 const SECRET = 'test-problem-secret';
 
@@ -160,7 +167,7 @@ describe('/api/report', () => {
 	});
 
 	it('should handle valid POST requests with all valid report types', async () => {
-		const validTypes = ['porn', 'wrong_imdb', 'wrong_season'];
+		const validTypes = ['porn', 'wrong_imdb', 'wrong_season', 'malware'];
 
 		for (const type of validTypes) {
 			vi.clearAllMocks();
@@ -180,7 +187,7 @@ describe('/api/report', () => {
 			expect(mockRepository.reportContent).toHaveBeenCalledWith(
 				'abc123',
 				'tt1234567',
-				'user123',
+				'rd:account',
 				type
 			);
 			expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -188,22 +195,22 @@ describe('/api/report', () => {
 		}
 	});
 
-	it('stores a digest, never the credential, for a Debrid-Link reporter', async () => {
+	it('files nothing for a key its service does not vouch for', async () => {
+		// One person used to hide any result by sending two made-up ids.
 		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
 		mockReq.method = 'POST';
 		mockReq.body = {
 			hash: 'abc123',
 			imdbId: 'tt1234567',
-			userId: 'dl:secret-dl-token',
-			type: 'porn',
+			userId: 'forged-key-1',
+			type: 'malware',
 			...auth(),
 		};
 
 		await handler(mockReq, mockRes);
 
-		expect(mockRes.status).toHaveBeenCalledWith(200);
-		const stored = vi.mocked(mockRepository.reportContent).mock.calls[0][2];
-		expect(stored).toMatch(/^dl:[0-9a-f]{64}$/);
-		expect(stored).not.toContain('secret-dl-token');
+		expect(mockRes.status).toHaveBeenCalledWith(403);
+		expect(mockRes.json).toHaveBeenCalledWith({ errorMessage: 'Debrid account not verified' });
+		expect(mockRepository.reportContent).not.toHaveBeenCalled();
 	});
 });

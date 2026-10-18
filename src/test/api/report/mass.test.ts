@@ -13,6 +13,14 @@ vi.mock('@/services/repository', () => ({
 	},
 }));
 
+// The provider lookups are covered in verifiedReporterId.test.ts; here a key starting
+// "forged" is one its service refuses.
+vi.mock('@/services/verifiedReporterId', () => ({
+	verifiedReporterId: vi.fn(async (key: string) =>
+		key.startsWith('forged') ? null : 'rd:account'
+	),
+}));
+
 const SECRET = 'test-problem-secret';
 
 // A real minted pair rather than a mocked validator, so these tests exercise the
@@ -219,28 +227,7 @@ describe('/api/report/mass', () => {
 		});
 	});
 
-	it('stores a digest, never the credential, for a Premiumize reporter', async () => {
-		mockReportContent.mockResolvedValue(undefined);
-		const req = createMockRequest({
-			method: 'POST',
-			body: {
-				reports: [{ hash: 'h1', imdbId: 'tt1' }],
-				userId: 'pm:secret-pm-token',
-				type: 'porn',
-				...auth(),
-			},
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(200);
-		const stored = mockReportContent.mock.calls[0][2] as string;
-		expect(stored).toMatch(/^pm:[0-9a-f]{64}$/);
-		expect(stored).not.toContain('secret-pm-token');
-	});
-
-	it('stores a Real-Debrid reporter as sent, which the admin override matches', async () => {
+	it('files the verified account, never the key', async () => {
 		mockReportContent.mockResolvedValue(undefined);
 		const req = createMockRequest({
 			method: 'POST',
@@ -252,6 +239,22 @@ describe('/api/report/mass', () => {
 			},
 		});
 		await handler(req, createMockResponse());
-		expect(mockReportContent.mock.calls[0][2]).toBe('RDTOKEN123');
+		expect(mockReportContent.mock.calls[0][2]).toBe('rd:account');
+	});
+
+	it('files nothing for a key its service does not vouch for', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'forged-key-2',
+				type: 'porn',
+				...auth(),
+			},
+		});
+		const res = createMockResponse();
+		await handler(req, res);
+		expect(res.status).toHaveBeenCalledWith(403);
+		expect(mockReportContent).not.toHaveBeenCalled();
 	});
 });

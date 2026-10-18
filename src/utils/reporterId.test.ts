@@ -1,4 +1,3 @@
-import { storedReporterId } from '@/services/reporterId';
 import { describe, expect, it } from 'vitest';
 import { canReportWith, reporterIdFor } from './reporterId';
 
@@ -19,19 +18,5 @@ describe('reporterIdFor', () => {
 		expect(reporterIdFor({})).toBe('');
 		expect(canReportWith({ rdKey: null })).toBe(false);
 		expect(canReportWith({ debridLinkKey: 'dl' })).toBe(true);
-	});
-});
-
-describe('storedReporterId', () => {
-	it('digests a tagged credential, stably and per service', () => {
-		const once = storedReporterId('oc:key-1');
-		expect(once).toMatch(/^oc:[0-9a-f]{64}$/);
-		expect(storedReporterId('oc:key-1')).toBe(once);
-		expect(storedReporterId('oc:key-2')).not.toBe(once);
-		expect(storedReporterId('dl:key-1').slice(3)).toBe(once.slice(3));
-	});
-
-	it('leaves every other id as sent', () => {
-		expect(storedReporterId('ABCDEF123')).toBe('ABCDEF123');
 	});
 });

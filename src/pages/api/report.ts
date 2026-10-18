@@ -1,6 +1,7 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { storedReporterId } from '@/services/reporterId';
+import type { ReportType } from '@/services/reporterId';
 import { reviewReportsInBackground } from '@/services/scrapedVerdicts/reports';
+import { verifiedReporterId } from '@/services/verifiedReporterId';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '../../services/repository';
@@ -34,17 +35,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 
 		// Validate report type
-		if (!['porn', 'wrong_imdb', 'wrong_season'].includes(type)) {
+		if (!['porn', 'wrong_imdb', 'wrong_season', 'malware'].includes(type)) {
 			return res.status(400).json({ message: 'Invalid report type' });
 		}
 
+		const reporter = await verifiedReporterId(userId);
+		if (!reporter) {
+			return res.status(403).json({ errorMessage: 'Debrid account not verified' });
+		}
+
 		const db = repository;
-		await db.reportContent(
-			hash,
-			imdbId,
-			storedReporterId(userId),
-			type as 'porn' | 'wrong_imdb' | 'wrong_season'
-		);
+		await db.reportContent(hash, imdbId, reporter, type as ReportType);
 		reviewReportsInBackground(imdbId, [hash], type);
 
 		return res.status(200).json({ success: true });

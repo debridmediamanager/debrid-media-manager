@@ -1,5 +1,5 @@
 import { ScrapedVerdictService, titleKeyOf } from '@/services/database/scrapedVerdict';
-import { JEV_REPORTER } from '@/services/reporterId';
+import { JEV_REPORTER, type ReportType } from '@/services/reporterId';
 import { repository } from '@/services/repository';
 import { identifiedAnswers } from './identified';
 import { classifyFilenames } from './jev';
@@ -16,8 +16,11 @@ import { decide, decideWithoutModel } from './rules';
  * rules, so the report is checked against one narrow question: adult content
  * for `porn`, none of the series' titles in the filename for `wrong_imdb`.
  * `wrong_season` is not judged: the report does not say which season is right.
+ * Nor is `malware`: real releases carry executables too (every RARBG release
+ * ships `RARBG_DO_NOT_MIRROR.exe`), and fakes that are only an executable are
+ * already off the page (`withoutExecutables`).
  */
-export type ReportType = 'porn' | 'wrong_imdb' | 'wrong_season';
+export type { ReportType };
 
 let service: ScrapedVerdictService | undefined;
 const verdicts = () => (service ??= new ScrapedVerdictService());
@@ -32,7 +35,7 @@ export async function reviewReports(
 		repository.reportContent(hash, imdbId, JEV_REPORTER, type)
 ): Promise<string[]> {
 	const key = process.env.TYPESAFE_API_KEY;
-	if (!key || type === 'wrong_season' || hashes.length === 0) return [];
+	if (!key || type === 'wrong_season' || type === 'malware' || hashes.length === 0) return [];
 	db ??= verdicts();
 
 	const filenames = await db.getFilenames(imdbId, hashes);

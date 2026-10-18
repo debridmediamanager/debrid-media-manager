@@ -55,6 +55,22 @@ describe('reviewReports', () => {
 		vi.unstubAllGlobals();
 	});
 
+	it('never files a malware report on its own, not even on a release it would trash', async () => {
+		// A real release that ships an executable (AllDebrid's file list, 2026-10-18):
+		// one report must not hide what every RARBG release looks like.
+		const hash = '0069dda6150d1fd09f143d9d61ae3878b2e76b82';
+		const title = '28.Days.Later.2002.1080p.BluRay.x265-RARBG';
+		const file = vi.fn(async () => {});
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([[hash, title]])),
+			getMovieContext: vi.fn(async () => movie),
+			getVerdicts: vi.fn(async () => [{ titleKey: titleKeyOf(title), verdict: 'trash' }]),
+		});
+
+		expect(await reviewReports(movie.imdbId, [hash], 'malware', db, file)).toEqual([]);
+		expect(file).not.toHaveBeenCalled();
+	});
+
 	it('files a movie report when the verdict trashes the release', async () => {
 		const fetchMock = jevAnswers('ADULT', 'NO_TITLE');
 		const db = fakeDb({
