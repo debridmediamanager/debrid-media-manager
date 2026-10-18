@@ -1,0 +1,125 @@
+{
+	"capturedAt": "2026-10-18",
+	"cases": [
+		{
+			"filename": "Dragon.Ball.Z.S01E19.Defying.Gravity.1080p.FLAC.1.0.AVC.REMUX-FraMeSToR",
+			"response": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0121220",
+						"score": 4.3274,
+						"title": "Dragon Ball Z",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt0214341",
+						"score": 3.4262,
+						"title": "Dragon Ball Z",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0280249",
+						"score": 0.0739,
+						"title": "Dragon Ball",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt0088509",
+						"score": -0.4287,
+						"title": "Dragon Ball",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt1319690",
+						"score": -1.0555,
+						"title": "Defying Gravity",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "Dragon Ball Z",
+				"parsedYear": null,
+				"probability": 0.1031
+			}
+		},
+		{
+			"filename": "Dragon.Ball.Z.S04.BluRay.1080p.FLAC.1.0.AVC.REMUX-FraMeSToR",
+			"response": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0214341",
+						"score": 4.5999,
+						"title": "Dragon Ball Z",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0121220",
+						"score": 3.8088,
+						"title": "Dragon Ball Z",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt0088509",
+						"score": 1.0305,
+						"title": "Dragon Ball",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt0280249",
+						"score": 0.2455,
+						"title": "Dragon Ball",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt1409055",
+						"score": -1.6426,
+						"title": "Dragon Ball Z Kai",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "Dragon Ball Z",
+				"parsedYear": null,
+				"probability": 0.181
+			}
+		}
+	],
+	"find": {
+		"tt0121220": {
+			"movie_results": [],
+			"person_results": [],
+			"tv_results": [
+				{
+					"adult": false,
+					"backdrop_path": "/ydf1CeiBLfdxiyNTpskM0802TKl.jpg",
+					"id": 12971,
+					"name": "Dragon Ball Z",
+					"original_name": "ドラゴンボールゼット",
+					"overview": "Now happily married and with a son, martial arts champion Goku must defend Earth from a series of extraterrestrial invaders bent on destruction.",
+					"poster_path": "/oQ5CnVj3TRifXl2bIOri6H6rfNe.jpg",
+					"media_type": "tv",
+					"original_language": "ja",
+					"genre_ids": [16, 10765, 10759],
+					"popularity": 131.5246,
+					"first_air_date": "1989-04-26",
+					"softcore": false,
+					"vote_average": 8.382,
+					"vote_count": 5041,
+					"origin_country": ["JP"]
+				}
+			],
+			"tv_episode_results": [],
+			"tv_season_results": []
+		},
+		"tt0214341": {
+			"movie_results": [],
+			"person_results": [],
+			"tv_results": [],
+			"tv_episode_results": [],
+			"tv_season_results": []
+		}
+	},
+	"why": "IMDb lists Dragon Ball Z twice (1989 tt0121220, 1996 dub tt0214341); the identifier ranks them close and is never confident; TMDB find knows only tt0121220"
+}

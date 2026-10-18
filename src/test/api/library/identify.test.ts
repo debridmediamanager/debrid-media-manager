@@ -1,7 +1,9 @@
 import handler, { MAX_ITEMS } from '@/pages/api/library/identify';
 import { identifyFilenames, type IdentifierResult } from '@/services/contentIdentifier';
+import { cachedSources } from '@/services/placement';
 import { repository } from '@/services/repository';
 import guards from '@/test/fixtures/contentIdentifier/library-guards-2026-10-12.json';
+import sameTitle from '@/test/fixtures/contentIdentifier/same-title-2026-10-18.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { createHash } from 'crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -12,7 +14,10 @@ vi.mock('@/services/contentIdentifier', async (importOriginal) => ({
 	identifyFilenames: vi.fn(),
 }));
 
+vi.mock('@/services/placement', () => ({ cachedSources: { find: vi.fn() } }));
+
 const mockRepository = vi.mocked(repository);
+const mockFind = vi.mocked(cachedSources.find);
 const mockIdentify = vi.mocked(identifyFilenames);
 
 // real library names; the second is a sequel DMM users had filed under the original
@@ -67,6 +72,7 @@ describe('/api/library/identify', () => {
 		mockRepository.saveFilenameIdentifications = vi.fn().mockResolvedValue(1);
 		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(new Map());
 		mockRepository.confirmFilenameIdentifications = vi.fn().mockResolvedValue(undefined);
+		mockFind.mockResolvedValue(null);
 	});
 
 	afterEach(() => {
@@ -388,6 +394,34 @@ describe('/api/library/identify', () => {
 			complete: false,
 		});
 		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([]);
+	});
+
+	// zurg-usenet on fun, 2026-10-18: IMDb lists Dragon Ball Z twice (1989 and its 1996 dub),
+	// so the service doubts both, and for the S04 pack ranks the dub first. TMDB knows only
+	// the 1989 show, which is the one to take.
+	it('takes the one title TMDB knows when IMDb lists the name twice', async () => {
+		mockIdentify.mockResolvedValue(sameTitle.cases.map((c) => c.response as IdentifierResult));
+		const finds = sameTitle.find as Record<string, unknown>;
+		mockFind.mockImplementation(async (imdbId) => finds[imdbId] ?? null);
+		const res = await call({
+			items: sameTitle.cases.map((c, n) => ({ hash: n ? H2 : null, filename: c.filename })),
+		});
+
+		const dbz = { imdbId: 'tt0121220', title: 'Dragon Ball Z', year: 1989, kind: 'tv' };
+		expect(res.json).toHaveBeenCalledWith({ results: [dbz, dbz], complete: true });
+		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([
+			expect.objectContaining({
+				hash: H2.toLowerCase(),
+				imdbId: 'tt0121220',
+				confident: true,
+			}),
+		]);
+	});
+
+	it('stays unsure of a twice-listed name when TMDB cannot be asked', async () => {
+		mockIdentify.mockResolvedValue([sameTitle.cases[0].response as IdentifierResult]);
+		const res = await call({ items: [{ filename: sameTitle.cases[0].filename }] });
+		expect(res.json).toHaveBeenCalledWith({ results: [null], complete: true });
 	});
 
 	it('does not fail the answer when storing fails', async () => {

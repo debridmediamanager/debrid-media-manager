@@ -1,5 +1,11 @@
-import { identifyFilenames, refused, type IdentifierResult } from '@/services/contentIdentifier';
+import {
+	identifyFilenames,
+	refused,
+	type IdentifierMatch,
+	type IdentifierResult,
+} from '@/services/contentIdentifier';
 import type { FilenameIdentification } from '@/services/database/hashImdb';
+import { cachedSources } from '@/services/placement';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
@@ -118,6 +124,16 @@ export async function identifyItems(
 	const fresh = new Map<string, IdentifierResult>(
 		answers ? missing.map((name, n) => [name, answers[n]]) : []
 	);
+	await Promise.all(
+		[...fresh].map(async ([name, answer]) => {
+			// a short answer from the service leaves names without one
+			const twin = answer && (await knownTwin(answer));
+			if (twin) {
+				const rest = answer.matches.filter((m) => m !== twin);
+				fresh.set(name, { ...answer, confident: true, matches: [twin, ...rest] });
+			}
+		})
+	);
 
 	const unsure = items.filter((i) => {
 		const answer = fresh.get(i.filename);
@@ -191,6 +207,27 @@ function agrees(answer: IdentifierResult, ids: Set<string> | undefined): boolean
 	if (!top || !ids?.has(top.imdbId)) return false;
 	const year = answer.parsedYear;
 	return !(year && top.year && Math.abs(year - top.year) > 1);
+}
+
+/**
+ * The match to take for a doubted answer whose leading matches all carry the name's own
+ * title: IMDb lists Dragon Ball Z twice (1989, and the 1996 dub as tt0214341), which the
+ * service ranks too close to be sure of, and TMDB's find knows only the first. Null unless
+ * TMDB knows exactly one of them as the kind the service found.
+ */
+async function knownTwin(answer: IdentifierResult): Promise<IdentifierMatch | null> {
+	const top = answer.matches[0];
+	const letters = (text = '') => text.toLowerCase().replace(/[^a-z0-9]/g, '');
+	if (answer.confident || !top || !answer.kind) return null;
+	if (letters(top.title) !== letters(answer.parsedTitle)) return null;
+	const leading = answer.matches.findIndex((m) => letters(m.title) !== letters(top.title));
+	const twins = answer.matches.slice(0, leading === -1 ? undefined : leading);
+	if (twins.length < 2) return null;
+	const finds = await Promise.all(twins.map((m) => cachedSources.find(m.imdbId)));
+	if (finds.some((found) => !found)) return null;
+	const results = answer.kind === 'tv' ? 'tv_results' : 'movie_results';
+	const known = twins.filter((_, n) => finds[n][results]?.length);
+	return known.length === 1 ? known[0] : null;
 }
 
 /** One row per hash+filename; a library can list the same release twice. */
