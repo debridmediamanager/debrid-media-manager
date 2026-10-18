@@ -52,6 +52,11 @@ function entriesOf(value: Prisma.JsonValue | undefined): StoredEntry[] {
 	return Array.isArray(value) ? (value as StoredEntry[]) : [];
 }
 
+/** MySQL error 188: a full-text search matched more rows than its result cache holds. */
+const overflowsFullText = (error: unknown) =>
+	error instanceof Prisma.PrismaClientKnownRequestError &&
+	(error.meta as { code?: string } | undefined)?.code === '188';
+
 /** Boolean-mode fulltext treats these as operators, so they cannot appear in a phrase. */
 const phraseOf = (title: string) => title.replace(/[+\-<>()~*@"]/g, ' ').trim();
 
@@ -92,16 +97,32 @@ export class ScrapedVerdictService extends DatabaseClient {
 		const phrases = [...new Set(titles.map(phraseOf))].filter((p) => p.length >= 3);
 		const ambiguous: Record<string, number[]> = {};
 		if (phrases.length > 0 && aliases.size > 0) {
-			const against = phrases.map((p) => `"${p}"`).join(' ');
-			const others = await this.prisma.$queryRaw<
-				{ primary_title: string; start_year: number }[]
-			>(Prisma.sql`
+			const search = (against: string) =>
+				this.prisma.$queryRaw<{ primary_title: string; start_year: number }[]>(Prisma.sql`
 				SELECT primary_title, start_year FROM imdb_title_basics
 				WHERE MATCH(primary_title) AGAINST(${against} IN BOOLEAN MODE)
 				  AND tconst <> ${imdbId}
 				  AND title_type NOT IN ('tvEpisode', 'videoGame')
 				  AND start_year IS NOT NULL
 				LIMIT 5000`);
+			let others: { primary_title: string; start_year: number }[];
+			try {
+				others = await search(phrases.map((p) => `"${p}"`).join(' '));
+			} catch (error) {
+				// Star Wars' 109 titles overflow MySQL's full-text result cache, and
+				// so do some of its phrases alone ("Star Wars: Episode IV A New Hope"
+				// gathers every title holding all four words): ask one at a time and
+				// skip those, so the page is judged without them.
+				if (!overflowsFullText(error)) throw error;
+				others = [];
+				for (const phrase of phrases) {
+					try {
+						others.push(...(await search(`"${phrase}"`)));
+					} catch (inner) {
+						if (!overflowsFullText(inner)) throw inner;
+					}
+				}
+			}
 			for (const other of others) {
 				const folded = fold(other.primary_title).trim();
 				if (!aliases.has(folded)) continue;

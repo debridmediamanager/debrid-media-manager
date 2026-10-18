@@ -113,6 +113,49 @@ describe('ScrapedVerdictService', () => {
 			expect(sqlText(query)).toContain("title_type NOT IN ('tvEpisode', 'videoGame')");
 		});
 
+		it('asks phrase by phrase when the combined search overflows, skipping the phrases that still do', async () => {
+			// Star Wars (tt0076759) on 2026-10-18: 109 titles, and on their own the
+			// ones naming "Star Wars: Episode IV" overflow MySQL's full-text cache
+			const overflow = new Prisma.PrismaClientKnownRequestError(
+				'Raw query failed. Code: `188`. Message: `FTS query exceeds result cache limit`',
+				{ code: 'P2010', clientVersion: '6.16.1', meta: { code: '188' } }
+			);
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Star Wars: Episode IV - A New Hope',
+				originalTitle: 'Star Wars',
+				startYear: 1977,
+				titleType: 'movie',
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue([
+				{ title: 'Krieg der Sterne' },
+				{ title: 'La guerre des étoiles' },
+			]);
+			prismaMock.$queryRaw.mockImplementation(async (query: Prisma.Sql) => {
+				const against = String(query.values[0]);
+				if (against.includes('" "') || against.includes('Episode IV')) throw overflow;
+				return against === '"Star Wars"'
+					? [{ primary_title: 'Star Wars', start_year: 2016 }]
+					: [];
+			});
+
+			const context = await service.getMovieContext('tt0076759');
+
+			expect(context?.ambiguous).toEqual({ 'star wars': [2016] });
+			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(5);
+		});
+
+		it('still fails on any other database error', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Star Wars: Episode IV - A New Hope',
+				originalTitle: 'Star Wars',
+				startYear: 1977,
+				titleType: 'movie',
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue([]);
+			prismaMock.$queryRaw.mockRejectedValue(new Error('connection lost'));
+			await expect(service.getMovieContext('tt0076759')).rejects.toThrow('connection lost');
+		});
+
 		it('returns null when IMDb has no year for the title', async () => {
 			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
 				primaryTitle: 'Untitled',
