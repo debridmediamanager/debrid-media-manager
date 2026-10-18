@@ -22,6 +22,7 @@ import {
 	type ImdbLookup,
 	type Placement,
 	type PlacementRule,
+	type PlacementShow,
 } from '@/utils/episodePlacement';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
 
@@ -69,6 +70,10 @@ export interface PlacementSources {
 	season(tmdbId: number, season: number): Promise<any | null>;
 	/** The show an IMDb episode id belongs to. */
 	episodeShow(imdbId: string): Promise<string | null>;
+	/** TMDB's episode groups of a show (`tv/{id}/episode_groups`). */
+	episodeGroups(tmdbId: number): Promise<any | null>;
+	/** One TMDB episode group with its episodes (`tv/episode_group/{id}`). */
+	episodeGroup(id: string): Promise<any | null>;
 	/** IMDb's episode ids of one season of a show, by episode number. */
 	seasonEpisodes(showImdbId: string, season: number): Promise<Map<number, string>>;
 	anime(): Promise<AnimeIndex | null>;
@@ -312,7 +317,7 @@ async function placeOnShow(
 		}
 		return lists.get(season)!;
 	};
-	const placement = {
+	const placement: PlacementShow = {
 		episodes,
 		tmdbId,
 		imdbId,
@@ -331,6 +336,7 @@ async function placeOnShow(
 				: []
 		),
 	};
+	placement.tvdbOrder = tvdbOrderLookup(showId, sources);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
 	const numbers = absoluteFolders(
 		release.files.map((file) => ({
@@ -361,6 +367,41 @@ async function placeOnShow(
 				: unplaced(path);
 		})
 	);
+}
+
+/**
+ * TMDB's episode for TVDB's season and episode: the nth episode of that season in the show's
+ * "TVDB Order" episode group, read once per release and only when a file needs it.
+ */
+function tvdbOrderLookup(tmdbId: number, sources: PlacementSources): PlacementShow['tvdbOrder'] {
+	let order: Promise<Map<number, [number, number][]> | null> | null = null;
+	const read = async () => {
+		const results: any[] = (await sources.episodeGroups(tmdbId))?.results ?? [];
+		const named = results.filter((group) => /\btvdb\b/i.test(group?.name ?? ''));
+		const id = (named.find((group) => group?.type === 1) ?? named[0])?.id;
+		if (typeof id !== 'string') return null;
+		const groups: any[] = (await sources.episodeGroup(id))?.groups ?? [];
+		const seasons = new Map<number, [number, number][]>();
+		for (const group of groups) {
+			if (!Number.isInteger(group?.order)) continue;
+			const episodes: any[] = (group.episodes ?? []).filter(
+				(row: any) =>
+					Number.isInteger(row?.order) &&
+					Number.isInteger(row?.season_number) &&
+					Number.isInteger(row?.episode_number)
+			);
+			episodes.sort((a, b) => a.order - b.order);
+			seasons.set(
+				group.order,
+				episodes.map((row) => [row.season_number, row.episode_number])
+			);
+		}
+		return seasons;
+	};
+	return async (season, episode) => {
+		order ??= read();
+		return (await order)?.get(season)?.[episode - 1] ?? null;
+	};
 }
 
 /** IMDb's episode by these numbers, and the TMDB episode TMDB's find names for it if it is this show's. */
@@ -430,6 +471,14 @@ export const cachedSources: PlacementSources = {
 			? settle(() =>
 					getMetadataCache().getTmdbPassthrough(`tv/${tmdbId}/season/${season}`, {})
 				)
+			: Promise.resolve(null),
+	episodeGroups: (tmdbId) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().getTmdbPassthrough(`tv/${tmdbId}/episode_groups`, {}))
+			: Promise.resolve(null),
+	episodeGroup: (id) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().getTmdbPassthrough(`tv/episode_group/${id}`, {}))
 			: Promise.resolve(null),
 	episodeShow: (imdbId) => repository.getImdbEpisodeShow(imdbId),
 	seasonEpisodes: (show, season) => repository.getImdbSeasonEpisodeIds(show, season),

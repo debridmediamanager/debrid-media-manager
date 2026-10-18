@@ -25,7 +25,7 @@ import { namedEpisodes, namedSeasons } from '@/utils/seasonNaming';
 import { FANSUB_SEASON } from '@/utils/tvEpisodes';
 import ptt from 'parse-torrent-title';
 
-export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'absolute';
+export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'absolute';
 
 /** A file's numbers as its name (or its folder, or its release) gives them. */
 export interface FileNumbers {
@@ -63,6 +63,8 @@ export interface PlacementShow {
 	episodes(
 		season: number
 	): Promise<{ episode: number; name: string; airDate: string | null }[] | null>;
+	/** TMDB's episode for TVDB's season and episode, by the show's TVDB Order episode group. */
+	tvdbOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 }
 
 export interface Placement {
@@ -699,6 +701,12 @@ async function placeByRules(
 				found && (!title || (name && agrees(title, name))) && (await placed(found, 'imdb'));
 			if (answer) return answer;
 		}
+		// TMDB numbers One Piece's seasons by absolute episode (S23 is 1156-1180) where TVDB and
+		// Crunchyroll count each from 1, and start S22 three episodes sooner: the show's TVDB
+		// Order group makes `One.Piece.1999.S23E25` TMDB's S23E1180
+		const tvdb = show.tvdbOrder && (await show.tvdbOrder(season, episode));
+		const ordered = tvdb && (await placed(tvdb, 'tvdb'));
+		if (ordered) return ordered;
 	}
 	return counted && !numbers.fromStart
 		? absolute(show, season, episode, Boolean(mapped), placed)

@@ -37,6 +37,8 @@ const sources: PlacementSources = {
 	find: async (id) => recorded.find[id] ?? null,
 	show: async (id) => recorded.show[id] ?? null,
 	season: async (id, n) => recorded.season[`${id}/${n}`] ?? null,
+	episodeGroups: async (id) => recorded.episodeGroups?.[id] ?? null,
+	episodeGroup: async (id) => recorded.episodeGroup?.[id] ?? null,
 	episodeShow: async (id) => recorded.episodeShow[id] ?? null,
 	seasonEpisodes: async (show, n) =>
 		new Map(
@@ -56,6 +58,8 @@ const recordedSources = (r: any): PlacementSources => ({
 	find: async (id) => r.find[id] ?? null,
 	show: async (id) => r.show[id] ?? null,
 	season: async (id, n) => r.season[`${id}/${n}`] ?? null,
+	episodeGroups: async (id) => r.episodeGroups?.[id] ?? null,
+	episodeGroup: async (id) => r.episodeGroup?.[id] ?? null,
 	episodeShow: async (id) => r.episodeShow[id] ?? null,
 	seasonEpisodes: async (show, n) =>
 		new Map(

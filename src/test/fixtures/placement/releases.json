@@ -3068,5 +3068,63 @@
 				}
 			]
 		}
+	},
+	{
+		"from": "zurg-usenet on fun, 2026-10-18 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "One.Piece.1999.S23E22.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu",
+			"hash": null,
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "One.Piece.1999.S23E22.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0388629",
+			"tmdbId": 37854,
+			"files": [
+				{
+					"path": "One.Piece.1999.S23E22.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu.mkv",
+					"season": 23,
+					"episode": 1177,
+					"episodeEnd": null,
+					"how": "tvdb"
+				}
+			]
+		},
+		"rex": [[null, null]]
+	},
+	{
+		"from": "zurg-usenet on fun, 2026-10-18 (its .zurgtorrent: name, files, folders, IMDb id)",
+		"request": {
+			"name": "One.Piece.1999.S23E25.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu",
+			"hash": null,
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "One.Piece.1999.S23E25.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu.mkv",
+					"folder": ""
+				}
+			]
+		},
+		"expect": {
+			"kind": "tv",
+			"imdbId": "tt0388629",
+			"tmdbId": 37854,
+			"files": [
+				{
+					"path": "One.Piece.1999.S23E25.1080p.CR.WEB-DL.AAC2.0.H.264-AnoZu.mkv",
+					"season": 23,
+					"episode": 1180,
+					"episodeEnd": null,
+					"how": "tvdb"
+				}
+			]
+		},
+		"rex": [[null, null]]
 	}
 ]

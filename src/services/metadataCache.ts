@@ -445,7 +445,7 @@ export class MetadataCacheService {
 			? this.CACHE_DURATIONS.SEARCH
 			: path.startsWith('find/')
 				? this.CACHE_DURATIONS.ID_MAPPING
-				: /^tv\/\d+\/season\//.test(path)
+				: /^tv\/\d+\/season\/|^tv\/(\d+\/episode_groups|episode_group\/)/.test(path)
 					? this.CACHE_DURATIONS.EPISODE_SCHEDULE
 					: /^tv\/\d+$/.test(path)
 						? this.freshnessMaxAge(tmdbTvReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
