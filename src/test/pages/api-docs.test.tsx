@@ -1,128 +1,98 @@
-import { render, screen, within } from '@testing-library/react';
-import type { ReactNode } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { existsSync } from 'fs';
+import { join } from 'path';
+import { describe, expect, it } from 'vitest';
 
-vi.mock('@/components/Logo', () => ({
-	__esModule: true,
-	Logo: () => <div data-testid="logo" />,
-}));
+import { openApiDocument } from '@/utils/openapi';
 
-vi.mock('next/head', () => ({
-	__esModule: true,
-	default: ({ children }: { children: ReactNode }) => <>{children}</>,
-}));
+const API = join(__dirname, '../../pages');
 
-vi.mock('next/link', () => ({
-	__esModule: true,
-	default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
-		<a href={href} {...rest}>
-			{children}
-		</a>
-	),
-}));
+type Operation = {
+	tags: string[];
+	description?: string;
+	security?: unknown[];
+	operationId?: string;
+};
+const operations = Object.entries(openApiDocument.paths).flatMap(([path, methods]) =>
+	Object.entries(methods as Record<string, Operation>)
+		.filter(([method]) => method !== 'parameters')
+		.map(([method, op]) => ({
+			path,
+			method,
+			op,
+		}))
+);
+const byPath = (path: string) => operations.find((o) => o.path === path)!.op;
 
-import ApiDocsPage from '@/pages/api-docs';
-import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+/** The Next route file a documented path resolves to, catch-alls included. */
+function routeExists(path: string): boolean {
+	const segments = path.split('/').filter(Boolean);
+	const walk = (dir: string, rest: string[]): boolean => {
+		if (rest.length === 0) return existsSync(`${dir}.ts`) || existsSync(join(dir, 'index.ts'));
+		const [head, ...tail] = rest;
+		if (head.startsWith('{')) {
+			return ['[id]', '[userid]', '[...route]', '[[...path]]'].some((name) =>
+				name.includes('...')
+					? existsSync(join(dir, `${name}.ts`))
+					: walk(join(dir, name), tail)
+			);
+		}
+		return (
+			walk(join(dir, head), tail) ||
+			existsSync(join(dir, '[...route].ts')) ||
+			existsSync(join(dir, '[[...path]].ts'))
+		);
+	};
+	return walk(API, segments);
+}
 
-const SPONSOR_ONLY = [
-	'/api/torznab/api',
-	'/api/newznab/api',
-	'/api/plugins/manifest.json',
-	'/api/emby-plugins/',
-	'/api/sponsor/identify',
-	'/api/sponsor/availability',
-	'/api/sponsor/mediainfo',
-	'/api/sponsor/place',
-	'/api/torrents/identify',
-	'/api/zurg/search-torrents',
-	'/api/zurg/show-info',
-	'/api/zurg/resolve-tmdb',
-	'/api/metadata/<id>',
-	'/api/metadata/search',
-];
-const OPEN = [
-	'/api/stremio/<your id>/manifest.json',
-	'/api/sabnzbd/<mount root>/api',
-	'/api/takedown',
-];
-
-describe('/api-docs', () => {
-	it.each(SPONSOR_ONLY)('marks %s sponsors only, linked to gatekeeper', (path) => {
-		render(<ApiDocsPage />);
-
-		const badge = within(screen.getByTestId(`endpoint-${path}`)).getByRole('link', {
-			name: 'Sponsors only',
-		});
-		expect(badge).toHaveAttribute('href', GATEKEEPER_URL);
+describe('/api-docs OpenAPI document', () => {
+	it('is OpenAPI 3.1 with a unique operationId per operation', () => {
+		expect(openApiDocument.openapi).toBe('3.1.0');
+		const ids = operations.map((o) => o.op.operationId).filter(Boolean);
+		expect(new Set(ids).size).toBe(ids.length);
 	});
 
-	it.each(OPEN)('leaves %s open', (path) => {
-		render(<ApiDocsPage />);
-
-		expect(
-			within(screen.getByTestId(`endpoint-${path}`)).queryByText('Sponsors only')
-		).not.toBeInTheDocument();
+	it.each(operations.map((o) => o.path))('%s is a real route', (path) => {
+		expect(routeExists(path)).toBe(true);
 	});
 
-	it('tells SABnzbd users the allowance and where a sponsor key goes', () => {
-		render(<ApiDocsPage />);
-
-		const row = within(screen.getByTestId('endpoint-/api/sabnzbd/<mount root>/api'));
-		expect(row.getByText(/300 GB of Usenet per account, 2 TB/)).toBeInTheDocument();
-		expect(row.getByText(/Sponsors add their DMM API key as the Password/)).toBeInTheDocument();
+	it('gates every sponsor operation on a key and leaves open ones open', () => {
+		for (const { path, op } of operations) {
+			const open = op.tags.includes('Open');
+			expect(op.security?.length === 0, path).toBe(open);
+		}
 	});
 
-	it('tells the two identify endpoints apart by what they read', () => {
-		render(<ApiDocsPage />);
-
-		expect(
-			within(screen.getByTestId('endpoint-/api/sponsor/identify')).getByText(
-				/from each release filename/
-			)
-		).toBeInTheDocument();
-		expect(
-			within(screen.getByTestId('endpoint-/api/torrents/identify')).getByText(
-				/without reading any filename/
-			)
-		).toBeInTheDocument();
+	it('resolves every $ref', () => {
+		const text = JSON.stringify(openApiDocument);
+		for (const [, kind, name] of text.matchAll(/"#\/components\/(\w+)\/(\w+)"/g)) {
+			expect(
+				(openApiDocument.components as Record<string, Record<string, unknown>>)[kind][name],
+				`${kind}/${name}`
+			).toBeDefined();
+		}
 	});
 
 	it('states the limits the routes enforce', () => {
-		render(<ApiDocsPage />);
-
-		expect(
-			within(screen.getByTestId('endpoint-/api/sponsor/identify')).getByText(
-				/5 calls per minute/
-			)
-		).toBeInTheDocument();
-		expect(
-			within(screen.getByTestId('endpoint-/api/sponsor/availability')).getByText(
-				/25 calls per minute/
-			)
-		).toBeInTheDocument();
-		expect(
-			within(screen.getByTestId('endpoint-/api/torrents/identify')).getByText(
-				/5 calls per minute/
-			)
-		).toBeInTheDocument();
-		for (const path of ['/api/plugins/manifest.json', '/api/emby-plugins/']) {
-			expect(
-				within(screen.getByTestId(`endpoint-${path}`)).getByText(/5 requests per second/)
-			).toBeInTheDocument();
-		}
+		expect(byPath('/api/sponsor/identify').description).toMatch(/5 calls per minute/);
+		expect(byPath('/api/sponsor/availability').description).toMatch(/25 calls per minute/);
+		expect(byPath('/api/torrents/identify').description).toMatch(/5 calls per minute/);
+		expect(byPath('/api/sponsor/place').description).toMatch(/60 calls per minute per key/);
+		expect(byPath('/api/metadata/{id}').description).toMatch(/300 calls per minute per key/);
+		expect(byPath('/api/takedown').description).toMatch(/20 notices per hour/);
+		expect(byPath('/api/plugins/manifest.json').description).toMatch(/5 requests per second/);
 	});
 
-	it('links the metadata endpoints to the open spec', () => {
-		render(<ApiDocsPage />);
-		for (const path of ['/api/metadata/<id>', '/api/metadata/search']) {
-			expect(
-				within(screen.getByTestId(`endpoint-${path}`)).getByRole('link', {
-					name: 'Metadata API',
-				})
-			).toHaveAttribute(
-				'href',
-				'https://github.com/debridmediamanager/debrid-media-manager/blob/main/docs/metadata-api.md'
-			);
-		}
+	it('tells SABnzbd users the allowance and where a sponsor key goes', () => {
+		const sab = byPath('/api/sabnzbd/{mountRoot}/api');
+		expect(sab.description).toMatch(/300 GB of Usenet per account, 2 TB/);
+		expect(sab.description).toMatch(/your DMM API key as the Password/);
+	});
+
+	it('tells the two identify endpoints apart by what they read', () => {
+		expect(byPath('/api/sponsor/identify').description).toMatch(/from each release filename/);
+		expect(byPath('/api/torrents/identify').description).toMatch(
+			/without reading any filename/
+		);
 	});
 });
