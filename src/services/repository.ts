@@ -1,5 +1,6 @@
 import type { AnimeIdSource } from '@/services/database/anime';
 import type { AvailabilityUpsert } from '@/services/database/availability';
+import type { RexDirectOwner } from '@/services/database/rexDirect';
 import type { ScrapedTrueReadOptions } from '@/services/database/scraped';
 import type { SnapshotPost } from '@/services/database/torrentSnapshot';
 import type { RdCastCredentials } from '@/utils/castRdToken';
@@ -1468,8 +1469,42 @@ export class Repository {
 		return this.sponsorsService.getByShortId(shortId);
 	}
 
-	public rexDirectGetOrAssignHash(machineIdentifier: string, shortId: string) {
-		return this.rexDirectService.getOrAssignHash(machineIdentifier, shortId);
+	public rexDirectGetOrAssignHash(machineIdentifier: string, owner: RexDirectOwner) {
+		return this.rexDirectService.getOrAssignHash(machineIdentifier, owner);
+	}
+
+	public rexDirectExists(machineIdentifier: string) {
+		return this.rexDirectService.exists(machineIdentifier);
+	}
+
+	public rexDirectCountByPlexAccount(plexAccountId: string) {
+		return this.rexDirectService.countByPlexAccount(plexAccountId);
+	}
+
+	public rexDirectServerCert(machineIdentifier: string) {
+		return this.rexDirectService.serverCert(machineIdentifier);
+	}
+
+	public rexDirectStartIssuing(machineIdentifier: string) {
+		return this.rexDirectService.startIssuing(machineIdentifier);
+	}
+
+	public rexDirectStoreServerCert(
+		machineIdentifier: string,
+		certificate: string,
+		privateKey: string,
+		expiresAt: Date
+	) {
+		return this.rexDirectService.storeServerCert(
+			machineIdentifier,
+			certificate,
+			privateKey,
+			expiresAt
+		);
+	}
+
+	public rexDirectStopIssuing(machineIdentifier: string) {
+		return this.rexDirectService.stopIssuing(machineIdentifier);
 	}
 
 	public rexDirectLastIp(machineIdentifier: string) {

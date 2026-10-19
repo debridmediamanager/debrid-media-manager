@@ -1255,20 +1255,31 @@ model BlockedRelease {
 /// clients reach it over HTTPS from anywhere without the operator owning a domain
 /// (dmm's own plex.direct; `src/pages/api/rex-direct`). The hash is random and
 /// stored, never derived from the machineIdentifier -- that id is public via
-/// `/identity`, and a derivable hash would leak the server's home IP. Gated on an
-/// active sponsorship (the DMM API key), like the zurg endpoints.
+/// `/identity`, and a derivable hash would leak the server's home IP. Open to any
+/// rex claimed on a Plex account (its server token proves the account owns it);
+/// rows from the sponsor-only days carry the sponsorship instead.
 model RexDirectName {
-  machineIdentifier String   @id @db.VarChar(64)
-  hash              String   @unique @db.VarChar(64)
-  /// The sponsorship that owns this name (gatekeeper `Sponsors.shortId`).
-  shortId           String   @db.VarChar(16)
+  machineIdentifier String    @id @db.VarChar(64)
+  hash              String    @unique @db.VarChar(64)
+  /// The sponsorship that registered this name, for the old sponsor-key path.
+  shortId           String?   @db.VarChar(16)
+  /// The Plex account the server is claimed on, for the per-account cap.
+  plexAccountId     String?   @db.VarChar(32)
   /// The source IP the A record was last pointed at, so an unchanged heartbeat
   /// skips the Cloudflare write.
-  lastIp            String?  @db.VarChar(64)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  lastIp            String?   @db.VarChar(64)
+  /// This server's own certificate for its name (ZeroSSL, `utils/rexDirectAcme`).
+  certificate       String?   @db.MediumText
+  privateKey        String?   @db.Text
+  certExpiresAt     DateTime?
+  /// Set while a certificate is being issued, so replicas and heartbeats do not
+  /// start a second order; a stale one (15 min) is taken over.
+  issuingSince      DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([shortId])
+  @@index([plexAccountId])
 }
 
 /// The current `*.rex-direct.debridmediamanager.com` wildcard cert, written by the

@@ -73,3 +73,31 @@ export async function upsertRexDirectRecord(hash: string, ip: string): Promise<s
 	}
 	return name;
 }
+
+/**
+ * The ACME DNS-01 challenge record for a server's own certificate
+ * (`src/utils/rexDirectAcme.ts`): a TXT at `_acme-challenge.<name>`. Returns the
+ * record id so the challenge can be cleaned up once validated.
+ */
+export async function createRexDirectTxt(name: string, content: string): Promise<string> {
+	const { token, zone } = config();
+	const body = await cf(
+		`/zones/${zone}/dns_records`,
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				type: 'TXT',
+				name: `_acme-challenge.${name}`,
+				content,
+				ttl: 60,
+			}),
+		},
+		token
+	);
+	return body.result.id;
+}
+
+export async function deleteRexDirectRecord(id: string): Promise<void> {
+	const { token, zone } = config();
+	await cf(`/zones/${zone}/dns_records/${id}`, { method: 'DELETE' }, token);
+}
