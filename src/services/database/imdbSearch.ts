@@ -120,35 +120,41 @@ export class ImdbSearchService extends DatabaseClient {
 		'www',
 	]);
 
+	/**
+	 * The keyword in fulltext boolean mode, null when it has no word to require.
+	 * Stopwords are optional (no +), other words required (+). So is a word
+	 * shorter than innodb_ft_min_token_size (3 on dmmdb), which no index holds:
+	 * required, "10 Things I Hate About You" matched nothing and fell through to
+	 * the LIKE scan, 47 s (2026-10-19). A query of nothing but short words keeps
+	 * them required, as before.
+	 */
+	static fulltextKeyword(keyword: string): string | null {
+		const words = keyword
+			.split(' ')
+			.map((w) => w.replace(/[+\-<>()~*'"@]/g, ''))
+			.filter((w) => w.length >= 2);
+		const indexed = (w: string) =>
+			w.length >= 3 && !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
+		const anyIndexed = words.some(indexed);
+		const required = (w: string) =>
+			anyIndexed ? indexed(w) : !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
+		if (!words.some(required)) {
+			return null;
+		}
+		return words.map((w) => (required(w) ? `+${w}*` : `${w}*`)).join(' ');
+	}
+
 	private async searchBasicsFulltext(
 		keyword: string,
 		typeFilter: Prisma.Sql,
 		yearFilter: Prisma.Sql,
 		limit: number
 	): Promise<ImdbSearchResult[]> {
-		// Prepare keyword for fulltext boolean mode
-		// Stopwords are optional (no +), non-stopwords are required (+)
-		const words = keyword
-			.split(' ')
-			.map((w) => w.replace(/[+\-<>()~*'"@]/g, ''))
-			.filter((w) => w.length >= 2);
-
-		// Check if we have any non-stopwords (required terms)
-		const hasRequiredTerms = words.some(
-			(w) => !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase())
-		);
-
+		const fulltextKeyword = ImdbSearchService.fulltextKeyword(keyword);
 		// If all words are stopwords, skip fulltext (it won't be effective)
-		if (!hasRequiredTerms) {
+		if (!fulltextKeyword) {
 			return [];
 		}
-
-		const fulltextKeyword = words
-			.map((w) => {
-				const isStopword = ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
-				return isStopword ? `${w}*` : `+${w}*`;
-			})
-			.join(' ');
 
 		const query = Prisma.sql`
 			SELECT
@@ -194,29 +200,11 @@ export class ImdbSearchService extends DatabaseClient {
 		yearFilter: Prisma.Sql,
 		limit: number
 	): Promise<ImdbSearchResult[]> {
-		// Prepare keyword for fulltext boolean mode
-		// Stopwords are optional (no +), non-stopwords are required (+)
-		const words = keyword
-			.split(' ')
-			.map((w) => w.replace(/[+\-<>()~*'"@]/g, ''))
-			.filter((w) => w.length >= 2);
-
-		// Check if we have any non-stopwords (required terms)
-		const hasRequiredTerms = words.some(
-			(w) => !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase())
-		);
-
+		const fulltextKeyword = ImdbSearchService.fulltextKeyword(keyword);
 		// If all words are stopwords, skip fulltext (it won't be effective)
-		if (!hasRequiredTerms) {
+		if (!fulltextKeyword) {
 			return [];
 		}
-
-		const fulltextKeyword = words
-			.map((w) => {
-				const isStopword = ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
-				return isStopword ? `${w}*` : `+${w}*`;
-			})
-			.join(' ');
 
 		// Use Prisma.raw for fulltext keyword since MATCH AGAINST needs literal string
 		const query = Prisma.sql`
@@ -259,6 +247,13 @@ export class ImdbSearchService extends DatabaseClient {
 		}));
 	}
 
+	/**
+	 * The LIKE fallback reads every title (no index serves LOWER(...) LIKE '%…%'),
+	 * 22-30 s for a movie search on dmmdb's 12.9M (2026-10-19). Past this it gives
+	 * up: what the fulltext searches did not find is almost always no title.
+	 */
+	static readonly LIKE_TIMEOUT_MS = 5000;
+
 	private async searchWithLike(
 		keyword: string,
 		typeFilter: Prisma.Sql,
@@ -270,7 +265,7 @@ export class ImdbSearchService extends DatabaseClient {
 		const startsWithPattern = `${keyword}%`;
 
 		const query = Prisma.sql`
-			SELECT
+			SELECT /*+ MAX_EXECUTION_TIME(${Prisma.raw(String(ImdbSearchService.LIKE_TIMEOUT_MS))}) */
 				b.tconst as imdbId,
 				CASE
 					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
@@ -298,7 +293,16 @@ export class ImdbSearchService extends DatabaseClient {
 			LIMIT ${limit}
 		`;
 
-		const results = await this.prisma.$queryRaw<any[]>(query);
+		let results: any[];
+		try {
+			results = await this.prisma.$queryRaw<any[]>(query);
+		} catch (error) {
+			// ER_QUERY_TIMEOUT (3024): the scan ran out of time, which is no match.
+			if (String((error as Error)?.message).includes('maximum statement execution time')) {
+				return [];
+			}
+			throw error;
+		}
 
 		return results.map((r) => ({
 			imdbId: r.imdbId,

@@ -134,6 +134,60 @@ describe('ImdbSearchService', () => {
 			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(3);
 		});
 
+		// A zurg-usenet release, 10 Things I Hate About You (1999) Hin-Eng (1080p BluRay 10bit x265
+		// CZaRS) [PMZ], searched as "10 things i hate about you movie": "10" is shorter than
+		// innodb_ft_min_token_size, so requiring it matched nothing in either fulltext index and
+		// the search fell through to the LIKE scan, 47 s on dmmdb (2026-10-19).
+		it('leaves words no fulltext index holds optional', async () => {
+			prismaMock.$queryRaw.mockResolvedValueOnce([
+				{
+					imdbId: 'tt0147800',
+					type: 'movie',
+					year: 1999,
+					title: '10 Things I Hate About You',
+					originalTitle: '10 Things I Hate About You',
+					rating: 7.4,
+					votes: 400000,
+					isOriginalMatch: 1,
+				},
+			]);
+
+			const results = await service.searchTitles('10 things i hate about you', {
+				mediaType: 'movie',
+			});
+
+			expect(results.map((r) => r.imdbId)).toEqual(['tt0147800']);
+			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(1);
+			expect(prismaMock.$queryRaw.mock.calls[0][0].values).toContain(
+				'10* +things* +hate* about* +you*'
+			);
+		});
+
+		it('keeps short words required when nothing else is', () => {
+			expect(ImdbSearchService.fulltextKeyword('up')).toBe('+up*');
+			expect(ImdbSearchService.fulltextKeyword('24')).toBe('+24*');
+			expect(ImdbSearchService.fulltextKeyword('the')).toBeNull();
+			expect(ImdbSearchService.fulltextKeyword('up the')).toBe('+up* the*');
+		});
+
+		it('gives up on a LIKE scan that runs out of time', async () => {
+			prismaMock.$queryRaw
+				.mockResolvedValueOnce([])
+				.mockResolvedValueOnce([])
+				.mockRejectedValueOnce(
+					new Error(
+						'Raw query failed. Code: `3024`. Message: `Query execution was interrupted, maximum statement execution time exceeded`'
+					)
+				);
+
+			const results = await service.searchTitles('xf recyclotransformers nfo');
+
+			expect(results).toEqual([]);
+			expect(prismaMock.$queryRaw.mock.calls[2][0].sql).toContain(
+				`MAX_EXECUTION_TIME(${ImdbSearchService.LIKE_TIMEOUT_MS})`
+			);
+		});
+
 		it('skips fulltext for all-stopword queries', async () => {
 			prismaMock.$queryRaw.mockResolvedValueOnce([
 				{
