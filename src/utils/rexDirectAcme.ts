@@ -1,4 +1,5 @@
 import * as acme from 'acme-client';
+import { Resolver, promises as dns } from 'dns';
 import { createRexDirectTxt, deleteRexDirectRecord } from './rexDirectDns';
 
 /**
@@ -30,6 +31,29 @@ function config() {
 	};
 }
 
+/**
+ * Wait until the zone's own nameservers answer the challenge TXT. acme-client's
+ * check asks the system resolver at once and failed on a record Cloudflare had
+ * just accepted (2026-10-19); a recursive resolver can also cache that miss
+ * (the zone's negative TTL is 30 min), so ask the authoritative servers directly.
+ */
+async function waitForTxt(name: string, value: string): Promise<void> {
+	const zone = name.split('.').slice(-2).join('.');
+	const servers = (
+		await Promise.all((await dns.resolveNs(zone)).map((ns) => dns.resolve4(ns).catch(() => [])))
+	).flat();
+	const resolver = new Resolver();
+	resolver.setServers(servers);
+	for (let attempt = 0; attempt < 60; attempt++) {
+		const found = await new Promise<string[][]>((resolve) =>
+			resolver.resolveTxt(name, (error, records) => resolve(error ? [] : records))
+		);
+		if (found.some((parts) => parts.join('') === value)) return;
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+	}
+	throw new Error(`rex-direct: ${name} never appeared on the zone's nameservers`);
+}
+
 export interface IssuedCert {
 	certificate: string;
 	privateKey: string;
@@ -47,11 +71,11 @@ export async function issueRexDirectCert(hostname: string): Promise<IssuedCert> 
 		email,
 		termsOfServiceAgreed: true,
 		challengePriority: ['dns-01'],
+		skipChallengeVerification: true,
 		challengeCreateFn: async (authz, _challenge, keyAuthorization) => {
-			records.set(
-				authz.identifier.value,
-				await createRexDirectTxt(authz.identifier.value, keyAuthorization)
-			);
+			const name = authz.identifier.value;
+			records.set(name, await createRexDirectTxt(name, keyAuthorization));
+			await waitForTxt(`_acme-challenge.${name}`, keyAuthorization);
 		},
 		challengeRemoveFn: async (authz) => {
 			const id = records.get(authz.identifier.value);
