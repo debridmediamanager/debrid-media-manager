@@ -64,7 +64,15 @@ export async function issueRexDirectCert(hostname: string): Promise<IssuedCert> 
 	const { accountKey, externalAccountBinding, email, directoryUrl } = config();
 	const client = new acme.Client({ directoryUrl, accountKey, externalAccountBinding });
 	const privateKey = await acme.crypto.createPrivateEcdsaKey();
-	const [, csr] = await acme.crypto.createCsr({ commonName: hostname }, privateKey);
+	// The name goes in the SAN only: a CommonName holds at most 64 characters, and a
+	// 32-hex `<hash>.rex-direct.debridmediamanager.com` is 66, which ZeroSSL refused at
+	// finalize as "The CSR and order identifiers differ" (2026-10-19).
+	const [, csr] = await acme.crypto.createCsr(
+		hostname.length <= 64
+			? { commonName: hostname, altNames: [hostname] }
+			: { altNames: [hostname] },
+		privateKey
+	);
 	const records = new Map<string, string>();
 	const certificate = await client.auto({
 		csr,

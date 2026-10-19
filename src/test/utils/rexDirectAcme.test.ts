@@ -69,4 +69,17 @@ describe('issueRexDirectCert', () => {
 		expect(answers).toEqual([]);
 		expect(issued).toMatchObject({ certificate: 'CHAIN', privateKey: 'KEY' });
 	});
+
+	// 2026-10-19: a real 32-hex name is 66 characters, over a CommonName's 64, and
+	// ZeroSSL refused the order at finalize ("The CSR and order identifiers differ").
+	it('puts a name longer than 64 characters in the SAN only', async () => {
+		answers = [[['KA']]];
+		const acme = await import('acme-client');
+		const { issueRexDirectCert } = await import('@/utils/rexDirectAcme');
+		const long = `${'a'.repeat(32)}.rex-direct.debridmediamanager.com`;
+		await issueRexDirectCert(long);
+		expect(vi.mocked(acme.crypto.createCsr).mock.calls.at(-1)?.[0]).toEqual({
+			altNames: [long],
+		});
+	});
 });
