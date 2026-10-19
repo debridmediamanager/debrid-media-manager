@@ -17,7 +17,10 @@ const nextConfig = {
 	async rewrites() {
 		return {
 			beforeFiles: [],
-			afterFiles: [{ source: '/anticors', destination: '/api/anticors' }],
+			afterFiles: [
+				{ source: '/anticors', destination: '/api/anticors' },
+				{ source: '/api-docs', destination: '/api-docs.html' },
+			],
 			fallback: [
 				{
 					source: '/api/stremio/:userid/no-catalog/:path*',

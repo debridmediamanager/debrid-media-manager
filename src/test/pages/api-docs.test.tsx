@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { describe, expect, it } from 'vitest';
 
@@ -94,5 +94,28 @@ describe('/api-docs OpenAPI document', () => {
 		expect(byPath('/api/torrents/identify').description).toMatch(
 			/without reading any filename/
 		);
+	});
+});
+
+describe('/api-docs page', () => {
+	const html = readFileSync(join(__dirname, '../../../public/api-docs.html'), 'utf8');
+
+	// Scalar's standalone bundle auto-mounts an empty second app on id="api-reference":
+	// the page then opened on loading skeletons with a second, blank sidebar.
+	it('mounts Scalar once, on an element Scalar does not claim itself', () => {
+		expect(html).not.toMatch(/id=["']api-reference["']/);
+		expect(html.match(/createApiReference\(/g)).toHaveLength(1);
+		expect(html).toMatch(/createApiReference\('#app'/);
+		expect(html).toContain('<div id="app"></div>');
+	});
+
+	it('keeps code cards inside a phone screen', () => {
+		expect(html).toContain('.scalar-card-content { grid-template-columns: minmax(0, 1fr); }');
+	});
+
+	it('is what /api-docs serves', async () => {
+		const config = require('../../../next.config.js');
+		const { afterFiles } = await (config.rewrites ?? config.default?.rewrites)();
+		expect(afterFiles).toContainEqual({ source: '/api-docs', destination: '/api-docs.html' });
 	});
 });

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>Debrid Media Manager - API</title>
+		<link rel="icon" href="/favicon.ico" />
+		<style>
+			body {
+				margin: 0;
+				background: #0f0f0f;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Served outside the Next app so DMM's shell (library pill, debrid fetches)
+		     stays off the page. Never the id api-reference: Scalar auto-mounts a second, empty
+		     app on that id. -->
+		<noscript>
+			<p style="color: #ddd; padding: 16px">
+				The API reference needs JavaScript. The OpenAPI document is at
+				<a href="/api/openapi.json" style="color: #ddd">/api/openapi.json</a>.
+			</p>
+		</noscript>
+		<div id="app"></div>
+		<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.72.4/dist/browser/standalone.js"></script>
+		<script>
+			Scalar.createApiReference('#app', {
+				url: '/api/openapi.json',
+				forceDarkModeState: 'dark',
+				hideDarkModeToggle: true,
+				defaultOpenAllTags: true,
+				// the card's grid column grew to the code's width, sliding copy buttons off a phone
+				customCss: '.scalar-card-content { grid-template-columns: minmax(0, 1fr); }',
+			});
+		</script>
+	</body>
+</html>
