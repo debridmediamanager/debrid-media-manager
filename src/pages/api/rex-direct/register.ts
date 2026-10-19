@@ -146,6 +146,6 @@ async function orderCertificate(machineIdentifier: string, hostname: string): Pr
 		)
 		.catch(async (error) => {
 			console.error(`rex-direct: certificate for ${hostname} failed:`, error);
-			await db.rexDirectStopIssuing(machineIdentifier).catch(() => undefined);
+			await db.rexDirectBackOffIssuing(machineIdentifier).catch(() => undefined);
 		});
 }

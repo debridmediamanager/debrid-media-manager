@@ -1503,8 +1503,8 @@ export class Repository {
 		);
 	}
 
-	public rexDirectStopIssuing(machineIdentifier: string) {
-		return this.rexDirectService.stopIssuing(machineIdentifier);
+	public rexDirectBackOffIssuing(machineIdentifier: string) {
+		return this.rexDirectService.backOffIssuing(machineIdentifier);
 	}
 
 	public rexDirectLastIp(machineIdentifier: string) {

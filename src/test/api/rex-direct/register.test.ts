@@ -42,7 +42,7 @@ beforeEach(() => {
 	db.rexDirectStartIssuing.mockResolvedValue(true);
 	db.rexDirectServerCert.mockResolvedValue(null);
 	db.rexDirectStoreServerCert.mockResolvedValue(undefined);
-	db.rexDirectStopIssuing.mockResolvedValue(undefined);
+	db.rexDirectBackOffIssuing.mockResolvedValue(undefined);
 	vi.mocked(issueRexDirectCert).mockResolvedValue({
 		certificate: 'CERT',
 		privateKey: 'KEY',
@@ -121,11 +121,11 @@ describe('rex-direct register, open to claimed servers', () => {
 		expect(issueRexDirectCert).toHaveBeenCalledTimes(1);
 	});
 
-	it('releases the order when issuing fails, so the next heartbeat retries', async () => {
+	it('backs off after a failed order instead of starting another on the next call', async () => {
 		vi.mocked(issueRexDirectCert).mockRejectedValue(new Error('ACME said no'));
 		vi.spyOn(console, 'error').mockImplementation(() => undefined);
 		await call({ 'x-plex-token': 'tok' });
-		await vi.waitFor(() => expect(db.rexDirectStopIssuing).toHaveBeenCalledWith(MACHINE));
+		await vi.waitFor(() => expect(db.rexDirectBackOffIssuing).toHaveBeenCalledWith(MACHINE));
 	});
 
 	it('caps the names one Plex account holds', async () => {

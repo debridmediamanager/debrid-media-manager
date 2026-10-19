@@ -133,10 +133,16 @@ export class RexDirectService extends DatabaseClient {
 		});
 	}
 
-	public async stopIssuing(machineIdentifier: string): Promise<void> {
+	/**
+	 * After a failed order, keep the hold for 30 minutes instead of releasing it:
+	 * rex asks again every minute while it waits, and releasing at once started a
+	 * fresh ZeroSSL order on each of those calls (2026-10-19). The hold goes stale
+	 * 15 minutes after `issuingSince`, so dating it 15 minutes ahead gives 30.
+	 */
+	public async backOffIssuing(machineIdentifier: string): Promise<void> {
 		await this.prisma.rexDirectName.update({
 			where: { machineIdentifier },
-			data: { issuingSince: null },
+			data: { issuingSince: new Date(Date.now() + 15 * 60_000) },
 		});
 	}
 
