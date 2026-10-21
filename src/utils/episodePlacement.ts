@@ -135,8 +135,10 @@ const SEASON_LEADING =
 const LEADING_ABSOLUTE = /^([01]\d{2})(?:-[01]\d{2})?(?:\.\s*|\s+-\s+)\S/;
 // `MythBusters.2004x01`, `MythBusters.S2009E05`: a season numbered by its year (`1920x816` is a frame size).
 const YEAR_EPISODE = /(?:^|[^a-z0-9])s?((?:19|20)\d{2})[xe](\d{2})(?![0-9])/i;
-// `MLB_S6EP01_Climatiqueen`, `Grand.Blue.Season.3-09`, `Kingdom.4th.Season-21`.
-const UNDERSCORE_SEASON_EP = /(?:^|[\s._-])S(\d{1,2})[._-]?EP?(\d{1,4})(?:[^\da-z]|$)/i;
+// `MLB_S6EP01_Climatiqueen`, `Seinfeld  (S01EP02)  The Stake Out`, `Grand.Blue.Season.3-09`, `Kingdom.4th.Season-21`.
+const UNDERSCORE_SEASON_EP = /(?:^|[\s._\-([])S(\d{1,2})[._-]?EP?(\d{1,4})(?:[^\da-z]|$)/i;
+// The second half of a double episode after it: `(S09EP23) plus EP24 The Finale`.
+const PLUS_EP = /^[)\]]?\s*plus\s+EP?(\d{1,4})(?![\da-z])/i;
 const SEASON_DASH_EP =
 	/(?:^|[\s._-])(?:Season[\s._]*(\d{1,2})|(\d{1,2})(?:st|nd|rd|th)[\s._]Season)[\s._]*-[\s._]*(\d{1,4})(?:v\d)?(?:[^\da-z]|$)/i;
 // `The Amazing World of Gumball - 207, 208 - The Phone - The Job`: season 2's 7th and 8th.
@@ -196,11 +198,17 @@ function sceneNumbers(name: string): FileNumbers | null {
 					...(running ? { running } : {}),
 				};
 	}
-	const dashed = UNDERSCORE_SEASON_EP.exec(name) ?? SEASON_DASH_EP.exec(name);
+	const underscored = UNDERSCORE_SEASON_EP.exec(name);
+	const dashed = underscored ?? SEASON_DASH_EP.exec(name);
 	if (dashed) {
 		const season = positive(dashed[1] ?? dashed[2]);
 		const episode = positive(dashed.at(-1));
-		return season && episode ? { season, episode, end: null } : null;
+		// the match ends on the character after the number, which may open `) plus EP24`
+		const plus = underscored
+			? positive(PLUS_EP.exec(name.slice(dashed.index + dashed[0].length - 1))?.[1])
+			: null;
+		const end = episode && plus && plus > episode ? plus : null;
+		return season && episode ? { season, episode, end } : null;
 	}
 	const paired = PAIRED_CODES.exec(name);
 	if (paired) {

@@ -123,3 +123,24 @@ describe('titleText', () => {
 		expect(titleText(' END (2160p).mp4')).toBeNull();
 	});
 });
+
+// zurg#281: moviesbyrizzo's Seinfeld complete series names its files `Seinfeld  (S01EP02)  The
+// Stake Out …` and a double episode `(S09EP23) plus EP24 The Finale`. The request is the release
+// as zurg sent it on 2026-10-22; DMM's answer then placed none of them by their own numbers.
+describe('a season and episode in brackets as SxxEPyy', () => {
+	it('reads every Seinfeld file as the episode it names', async () => {
+		const { request } = (await import('@/test/fixtures/placement/seinfeld-sxxepyy.json'))
+			.default;
+		expect(request.files).toHaveLength(171);
+		const wrong: string[] = [];
+		for (const file of request.files) {
+			const m = /\(S(\d\d)EP(\d\d)\)(?: plus EP(\d\d))?/.exec(file.path)!;
+			const want = [Number(m[1]), Number(m[2]), m[3] ? Number(m[3]) : null];
+			const got = fileNumbers(request.name, file.folder, file.path, false);
+			const read = got && [got.season, got.episode, got.end];
+			if (JSON.stringify(read) !== JSON.stringify(want))
+				wrong.push(`${file.path}: ${read} for ${want}`);
+		}
+		expect(wrong).toEqual([]);
+	});
+});
