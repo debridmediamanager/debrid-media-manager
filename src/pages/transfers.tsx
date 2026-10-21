@@ -331,12 +331,11 @@ export default function TransfersPage() {
 
 				<p className="mb-4 text-xs text-gray-400">
 					Transfers put content into your Real-Debrid library, sourced from{' '}
-					<span className="text-indigo-300">TorBox</span>,{' '}
-					<span className="text-sky-300">AllDebrid</span> or{' '}
+					<span className="text-indigo-300">TorBox</span> or{' '}
 					<span className="text-amber-300">Usenet</span>. The first tag on each row is
-					where its bytes came from — a TorBox/AllDebrid transfer shows{' '}
-					<span className="text-slate-300">Cache</span> until the service settles on one.
-					Every transfer on your Real-Debrid account is listed here, newest first,
+					where its bytes came from — a TorBox transfer shows{' '}
+					<span className="text-slate-300">Cache</span> until the service records its
+					source. Every transfer on your Real-Debrid account is listed here, newest first,
 					whichever device started it. Active jobs refresh every {POLL_MS / 1000}s.
 				</p>
 
@@ -412,7 +411,7 @@ export default function TransfersPage() {
 													className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${ORIGIN_STYLES[origin]}`}
 													title={
 														origin === 'cache'
-															? 'Waiting on the service to pick TorBox or AllDebrid'
+															? 'Waiting on the service to record its source'
 															: `Sourced from ${ORIGIN_LABELS[origin]}`
 													}
 												>

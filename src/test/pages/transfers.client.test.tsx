@@ -109,6 +109,15 @@ describe('Transfers page listing', () => {
 		expect((fetch as any).mock.calls[0][0]).not.toContain('test-rd-key');
 	});
 
+	// AllDebrid was withdrawn as a source on 2026-09-01 (d88c5e54); the server
+	// refuses a job without a TorBox key, so the page must not offer it.
+	it('does not name AllDebrid as a transfer source', async () => {
+		const { container } = render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('Tracked Movie')).toBeInTheDocument());
+		expect(container.textContent).not.toMatch(/AllDebrid/);
+	});
+
 	it('shows a transfer this browser never started', async () => {
 		// An *arr job pushed into nzb2rd, or one started on another device. There
 		// is no localStorage entry for it, and it still belongs on the page.

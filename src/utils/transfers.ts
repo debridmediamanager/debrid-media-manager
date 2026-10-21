@@ -4,7 +4,8 @@ import type { QueuePlace, TransferSource } from './transferPhase';
 
 // Both transfer kinds land content in Real-Debrid and are followed the same way,
 // so they share one list. They differ only in where the bytes come from (a
-// TorBox/AllDebrid cache vs Usenet) and which service owns the job.
+// TorBox cache vs Usenet) and which service owns the job. AllDebrid was
+// withdrawn as a source on 2026-09-01; its label stays for older job rows.
 //
 // The source enums are translated into one user-facing vocabulary in
 // `transferPhase.ts`, which is where the two services' stage names are lined up.
