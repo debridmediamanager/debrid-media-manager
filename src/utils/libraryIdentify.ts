@@ -1,4 +1,5 @@
 import type { UserTorrent } from '@/torrent/userTorrent';
+import { normalize } from '@/utils/mediaId';
 
 /** A movie or show content-identifier confidently named from a release filename. */
 export interface LibraryIdentification {
@@ -73,4 +74,17 @@ export async function identifyLibrary(
 			break;
 		}
 	}
+}
+
+/**
+ * What "same title" groups a library row by. A movie the identifier named goes
+ * by its IMDb id, so "Abre los ojos" and "Open Your Eyes", or a Cyrillic and an
+ * English release of one film, count as duplicates; the parsed title alone
+ * split 17 of 54 doubled films in a real library apart (card 389). Shows keep
+ * the parsed title, which carries the season and episode.
+ */
+export function sameTitleKey(torrent: UserTorrent, identification?: LibraryIdentification): string {
+	return identification?.kind === 'movie' && torrent.mediaType === 'movie'
+		? identification.imdbId
+		: normalize(torrent.title);
 }

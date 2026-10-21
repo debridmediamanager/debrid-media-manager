@@ -64,7 +64,12 @@ import {
 } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
-import { identifiable, identifyLibrary, type LibraryIdentification } from '@/utils/libraryIdentify';
+import {
+	identifiable,
+	identifyLibrary,
+	sameTitleKey,
+	type LibraryIdentification,
+} from '@/utils/libraryIdentify';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
@@ -452,6 +457,7 @@ function TorrentsPage() {
 			selectedTorrents,
 			sameTitle,
 			sameHash,
+			identifications,
 		});
 		return { list: quickSearchLibrary(query, filteredItems), helpText: nextHelpText };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -465,6 +471,7 @@ function TorrentsPage() {
 		mediaType,
 		service,
 		selectedTorrents,
+		identifications,
 	]);
 
 	const maxPages = useMemo(
@@ -568,7 +575,7 @@ function TorrentsPage() {
 			}
 
 			/// group by title
-			const titleId = normalize(t.title);
+			const titleId = sameTitleKey(t, identifications[t.id]);
 			if (titleId in getTitleGroupings(t.mediaType)) {
 				if (getTitleGroupings(t.mediaType)[titleId] === 1) sameTitle.add(titleId);
 				getTitleGroupings(t.mediaType)[titleId]++;
@@ -592,6 +599,7 @@ function TorrentsPage() {
 	}, [
 		userTorrentsList,
 		loading,
+		identifications,
 		defaultTitleGrouping,
 		movieTitleGrouping,
 		tvGroupingByEpisode,
@@ -914,7 +922,7 @@ function TorrentsPage() {
 		const deleteBigger = deletePreference.isDenied;
 
 		// Get the key by status
-		const getKey = (torrent: UserTorrent) => normalize(torrent.title);
+		const getKey = (torrent: UserTorrent) => sameTitleKey(torrent, identifications[torrent.id]);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
@@ -1015,7 +1023,7 @@ function TorrentsPage() {
 		const deleteOlder = deletePreference.isConfirmed;
 
 		// Get the key by status
-		const getKey = (torrent: UserTorrent) => normalize(torrent.title);
+		const getKey = (torrent: UserTorrent) => sameTitleKey(torrent, identifications[torrent.id]);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);

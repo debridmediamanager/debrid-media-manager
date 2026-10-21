@@ -17,7 +17,7 @@ import {
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
-import type { LibraryIdentification } from '@/utils/libraryIdentify';
+import { sameTitleKey, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { normalize } from '@/utils/mediaId';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
@@ -403,7 +403,8 @@ function TorrentRow({
 	const hashGroupCount = hashGrouping[torrent.hash];
 	const hashFilterText = hashGroupCount > 1 && !hashFilter ? `${hashGroupCount} same hash` : '';
 
-	const titleGroupCount = titleGrouping[normalize(torrent.title)];
+	const titleKey = sameTitleKey(torrent, identification);
+	const titleGroupCount = titleGrouping[titleKey];
 	const titleFilterText =
 		titleGroupCount > 1 && !titleFilter && !hashFilter ? `${titleGroupCount} same title` : '';
 
@@ -482,7 +483,7 @@ function TorrentRow({
 							) : (
 								titleFilterText && (
 									<Link
-										href={`/library?title=${encodeURIComponent(normalize(torrent.title))}&page=1`}
+										href={`/library?title=${encodeURIComponent(titleKey)}&page=1`}
 										className="ml-1 inline-block cursor-pointer rounded border-2 border-amber-500 bg-amber-900/30 px-1 py-0 text-xs font-bold text-amber-100 transition-colors hover:bg-amber-800/50"
 										onClick={(e) => e.stopPropagation()}
 									>
