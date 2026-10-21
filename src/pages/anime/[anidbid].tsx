@@ -38,7 +38,7 @@ import {
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
 import { quickSearch } from '@/utils/quickSearch';
-import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
+import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByMean } from '@/utils/results';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
@@ -285,6 +285,7 @@ const AnimePage: FunctionComponent = () => {
 
 		let pendingChecks = 0;
 		let resultCount = 0;
+		let hiddenCount = 0;
 		const cached = { rd: 0, ad: 0, tb: 0, pm: 0, oc: 0 };
 		const finish = () => {
 			if (pendingChecks > 0 || !isMounted.current) return;
@@ -355,6 +356,11 @@ const AnimePage: FunctionComponent = () => {
 					hashesToCheck = fresh.map((r) => r.hash);
 					const next = fresh.length > 0 ? sortByMean([...prev, ...fresh]) : prev;
 					resultCount = next.length;
+					// Availability is not in yet, so only a TB transfer can keep a blocked row
+					hiddenCount = hideRdBlockedTorrents
+						? next.filter((r) => isRdBlockedFilename(r.title) && !r.tbTransferred)
+								.length
+						: 0;
 					return next;
 				});
 			});
@@ -367,12 +373,7 @@ const AnimePage: FunctionComponent = () => {
 			);
 			setSearchState('loaded');
 			if (page === 0) {
-				toast(
-					resultCount === 0
-						? 'No torrents found'
-						: `${resultCount} unique torrents found`,
-					searchToastOptions
-				);
+				toast(foundTorrentsMessage(resultCount, hiddenCount), searchToastOptions);
 			}
 
 			if (hashesToCheck.length > 0) {

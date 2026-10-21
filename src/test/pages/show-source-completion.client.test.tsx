@@ -3,24 +3,26 @@ import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { axiosGetMock, toastMock, AxiosErrorMock, posterMock, fetchEpisodeMock } = vi.hoisted(() => {
-	class AxiosError extends Error {
-		response?: { status?: number };
-	}
-	const toast = Object.assign(vi.fn(), {
-		success: vi.fn(),
-		error: vi.fn(),
+const { axiosGetMock, toastMock, AxiosErrorMock, posterMock, fetchEpisodeMock, storage } =
+	vi.hoisted(() => {
+		class AxiosError extends Error {
+			response?: { status?: number };
+		}
+		const toast = Object.assign(vi.fn(), {
+			success: vi.fn(),
+			error: vi.fn(),
+		});
+		return {
+			axiosGetMock: vi.fn(),
+			toastMock: toast,
+			AxiosErrorMock: AxiosError,
+			posterMock: vi.fn(({ title }: { title: string }) => (
+				<div data-testid="poster-fallback">{title}</div>
+			)),
+			fetchEpisodeMock: vi.fn(),
+			storage: { hideRdBlocked: false },
+		};
 	});
-	return {
-		axiosGetMock: vi.fn(),
-		toastMock: toast,
-		AxiosErrorMock: AxiosError,
-		posterMock: vi.fn(({ title }: { title: string }) => (
-			<div data-testid="poster-fallback">{title}</div>
-		)),
-		fetchEpisodeMock: vi.fn(),
-	};
-});
 
 vi.mock('@/components/poster', () => ({
 	__esModule: true,
@@ -119,7 +121,7 @@ vi.mock('@/utils/browserStorage', () => ({
 	__esModule: true,
 	getLocalStorageBoolean: () => false,
 	getLocalStorageItemOrDefault: (_key: string, defaultValue: any) => defaultValue,
-	hideRdBlockedTorrentsDefault: (fallback: boolean) => fallback,
+	hideRdBlockedTorrentsDefault: () => storage.hideRdBlocked,
 }));
 
 vi.mock('@/utils/token', () => ({
@@ -225,6 +227,7 @@ vi.mock('react-hot-toast', () => ({
 }));
 
 import ShowSeasonPage from '@/pages/show/[imdbid]/[seasonNum]';
+import slayTheGodsS02 from '../fixtures/searchToast/slay-the-gods-s02.json';
 
 const externalResult = (letter: string, episode: number) => ({
 	hash: letter.repeat(40),
@@ -244,6 +247,7 @@ const externalResult = (letter: string, episode: number) => ({
 describe('Show page source completion', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		storage.hideRdBlocked = false;
 
 		axiosGetMock.mockImplementation((url: string) => {
 			if (url.startsWith('/api/info/show')) {
@@ -300,6 +304,41 @@ describe('Show page source completion', () => {
 			String(call[0]).includes('unique torrents found')
 		);
 		expect(searchToasts).toHaveLength(1);
+	});
+
+	it('says how many found torrents the RD-blocked setting hides (card 365)', async () => {
+		// Live Slay the Gods S02 result: 24 found, 18 are WEB-DL names RD refuses, and an
+		// RD-only account hides those by default, so the list showed 6 under "24 found"
+		storage.hideRdBlocked = true;
+		fetchEpisodeMock.mockResolvedValue([]);
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show'))
+				return Promise.resolve({
+					status: 200,
+					data: {
+						title: 'Slay the Gods',
+						description: '',
+						poster: '',
+						backdrop: '',
+						imdb_score: 8.2,
+						season_count: 2,
+						season_names: [],
+						season_episode_counts: { 2: 15 },
+					},
+				});
+			if (url.startsWith('/api/torrents/tv'))
+				return Promise.resolve({ status: 200, headers: {}, data: slayTheGodsS02 });
+			return Promise.resolve({ status: 200, data: {} });
+		});
+
+		render(<ShowSeasonPage />);
+
+		await waitFor(() =>
+			expect(toastMock).toHaveBeenCalledWith(
+				'24 unique torrents found, 18 hidden because Real-Debrid blocks their names (Settings), 6 shown',
+				expect.anything()
+			)
+		);
 	});
 
 	it('names every source it is waiting on in the loading indicator', async () => {

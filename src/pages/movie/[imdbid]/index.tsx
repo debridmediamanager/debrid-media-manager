@@ -44,7 +44,7 @@ import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
-import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
+import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -740,23 +740,27 @@ const MovieSearch: FunctionComponent = () => {
 	}
 
 	// Derive filtered results and uncached count using useMemo to prevent setState during render
+	// Keep an RD-blocked row when it can still reach RD through a TB/AD
+	// transfer (which de-infringes the name) — that's where the block matters
+	// least and the Send-to-RD button is the whole point.
+	const shownBySettings = useCallback(
+		(r: SearchResult) =>
+			!hideRdBlockedTorrents ||
+			!isRdBlockedFilename(r.title) ||
+			(!!rdKey &&
+				!r.rdAvailable &&
+				((!!torboxKey && r.tbAvailable) ||
+					(!!adKey && r.adAvailable) ||
+					!!r.tbTransferred)),
+		[hideRdBlockedTorrents, rdKey, torboxKey, adKey]
+	);
+
 	const filteredResults = useMemo(() => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		let results = quickSearch(query, searchResults);
-		if (hideRdBlockedTorrents) {
-			// Keep an RD-blocked row when it can still reach RD through a TB/AD
-			// transfer (which de-infringes the name) — that's where the block matters
-			// least and the Send-to-RD button is the whole point.
-			const transferableToRd = (r: SearchResult) =>
-				!!rdKey &&
-				!r.rdAvailable &&
-				((!!torboxKey && r.tbAvailable) || (!!adKey && r.adAvailable) || !!r.tbTransferred);
-			results = results.filter((r) => !isRdBlockedFilename(r.title) || transferableToRd(r));
-		}
-		return cyrillicLedLast(results);
-	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
+		return cyrillicLedLast(quickSearch(query, searchResults).filter(shownBySettings));
+	}, [query, searchResults, shownBySettings]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter(
@@ -805,11 +809,8 @@ const MovieSearch: FunctionComponent = () => {
 
 		// Show search results toast (only if this is not an availability-only update)
 		if (!isAvailabilityOnly) {
-			if (finalResults === 0) {
-				toast('No torrents found', searchToastOptions);
-			} else {
-				toast(`${finalResults} unique torrents found`, searchToastOptions);
-			}
+			const hidden = searchResults.filter((r) => !shownBySettings(r)).length;
+			toast(foundTorrentsMessage(finalResults, hidden), searchToastOptions);
 		}
 
 		// Show availability toast and/or auto-trigger availability check per service
@@ -850,6 +851,8 @@ const MovieSearch: FunctionComponent = () => {
 		isLibrarySyncing,
 		checkServiceAvailabilityBulk,
 		filteredResults,
+		searchResults,
+		shownBySettings,
 		imdbid,
 	]);
 

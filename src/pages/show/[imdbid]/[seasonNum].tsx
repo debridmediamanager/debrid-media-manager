@@ -60,7 +60,7 @@ import { handleCastTvShowOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastTvShowPremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/utils/rdAddPause';
-import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
+import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
 import { sortByMean } from '@/utils/results';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
@@ -1189,11 +1189,8 @@ const TvSearch: FunctionComponent = () => {
 
 		// Show search results toast (only if this is not an availability-only update)
 		if (!isAvailabilityOnly) {
-			if (finalResults === 0) {
-				toast('No torrents found', searchToastOptions);
-			} else {
-				toast(`${finalResults} unique torrents found`, searchToastOptions);
-			}
+			const hidden = searchResults.filter((r) => !shownBySettings(r)).length;
+			toast(foundTorrentsMessage(finalResults, hidden), searchToastOptions);
 		}
 
 		// Show availability toast and/or auto-trigger availability check per service
@@ -1234,6 +1231,8 @@ const TvSearch: FunctionComponent = () => {
 		isLibrarySyncing,
 		checkServiceAvailabilityBulk,
 		filteredResults,
+		searchResults,
+		shownBySettings,
 		imdbid,
 		seasonNum,
 	]);
