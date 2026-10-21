@@ -18,9 +18,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		// Validate the salt matches environment variable
 		const expectedSalt = process.env.DMMCAST_SALT;
-		if (!expectedSalt) {
-			console.error('DMMCAST_SALT environment variable is not set');
-			return res.status(500).json({ error: 'Server configuration error' });
+		if (!expectedSalt || expectedSalt === 'your-random-salt-here') {
+			console.error('DMMCAST_SALT environment variable is not set securely');
+			return res.status(500).json({ error: 'Server configuration error: DMMCAST_SALT must be configured securely' });
 		}
 
 		if (authHeader !== expectedSalt) {

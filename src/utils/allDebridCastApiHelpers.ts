@@ -27,14 +27,15 @@ export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): strin
 };
 
 const deriveUserId = (username: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
+	let salt = process.env.DMMCAST_SALT;
+	if (!salt || salt === 'your-random-salt-here') {
+		const globalAny = global as any;
+		salt = globalAny.__DMMCAST_TEMP_SALT || (globalAny.__DMMCAST_TEMP_SALT = crypto.randomBytes(32).toString('hex'));
 	}
 
 	// Prefixed with 'alldebrid:' to ensure different IDs from RD/TB
 	const hmac = crypto
-		.createHmac('sha256', salt)
+		.createHmac('sha256', salt as string)
 		.update(`alldebrid:${username}`)
 		.digest('base64url'); // base64url is URL-safe (no +, /, or =)
 
