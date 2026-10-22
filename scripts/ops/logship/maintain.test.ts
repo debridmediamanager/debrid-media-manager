@@ -79,6 +79,20 @@ describe('logship maintain.sh', () => {
 		expect(readdirSync(dir).sort()).toEqual([name, `${name}.gz`].sort());
 	});
 
+	it('preserves both inputs when an archive emits lines before its CRC failure', () => {
+		const name = `web-${day(-2)}.log`;
+		const archive = gzipSync('early\n');
+		archive[archive.length - 8] ^= 1;
+		file(`${name}.gz`, archive, 600);
+		file(name, 'late\n', 90);
+
+		run();
+
+		expect(readFileSync(join(dir, `${name}.gz`))).toEqual(archive);
+		expect(readFileSync(join(dir, name), 'utf8')).toBe('late\n');
+		expect(readdirSync(dir).sort()).toEqual([name, `${name}.gz`].sort());
+	});
+
 	it('deletes days older than fourteen by the date in the name', () => {
 		for (const offset of [-30, -15, -14, -13, 0]) {
 			file(`web-${day(offset)}.log.gz`, gzipSync('x\n'));

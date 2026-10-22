@@ -11,8 +11,6 @@
 # gzip member, and anything appended after it is unreadable to zcat.
 
 set -u
-# A failed read of an existing .gz must not let a partial merge replace it.
-(set -o pipefail) 2>/dev/null && set -o pipefail
 
 DIR=${LOGSHIP_DIR:-/var/log/dmm-web}
 KEEP_DAYS=${LOGSHIP_KEEP_DAYS:-14}
@@ -22,7 +20,7 @@ umask 077
 
 for f in $(find "$DIR" -maxdepth 1 -name 'web-*.log' -mmin +"$IDLE_MIN"); do
 	if [ -e "$f.gz" ]; then
-		{ gzip -dc "$f.gz" && cat "$f"; } | gzip >"$f.gz.tmp"
+		gzip -t "$f.gz" && cat "$f.gz" >"$f.gz.tmp" && gzip -c "$f" >>"$f.gz.tmp"
 	else
 		gzip -c "$f" >"$f.gz.tmp"
 	fi && mv "$f.gz.tmp" "$f.gz" && rm -f "$f"

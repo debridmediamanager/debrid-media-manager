@@ -77,6 +77,10 @@ docker stack deploy -c docker-compose.yml dmm
 
 The website will be accessible at `http://localhost:3000`
 
+### Log archives
+
+The logship container merges late daily-log lines as complete gzip members. It validates an existing archive before replacing it; an unreadable archive and its late log remain intact for recovery. Maintenance works with POSIX `sh` and does not depend on `pipefail`.
+
 ## FAQ
 
 ### I just don't know where to start or why do I need this?
