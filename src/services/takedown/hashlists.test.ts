@@ -11,7 +11,9 @@ const git = vi.hoisted(() => ({
 }));
 
 vi.mock('@octokit/rest', () => ({
-	Octokit: vi.fn().mockImplementation(() => ({ rest: { git } })),
+	Octokit: vi.fn().mockImplementation(function () {
+		return { rest: { git } };
+	}),
 }));
 
 const OLD = '11111111-1111-4111-8111-111111111111';

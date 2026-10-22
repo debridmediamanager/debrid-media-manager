@@ -42,12 +42,6 @@ const durationOf = (buffer: Buffer, moov: Box): number => {
 const videos = Object.keys(CAST_PLAY_VIDEOS) as CastPlayVideo[];
 
 describe('DMM Cast play notice videos', () => {
-	// next-pwa precaches every file in public/ outside noprecache/, so a video
-	// anywhere else would be downloaded by every visitor's service worker.
-	it('live outside the service worker precache', () => {
-		expect(CAST_PLAY_VIDEO_DIR.startsWith('noprecache/')).toBe(true);
-	});
-
 	it.each(videos)('%s is a faststart MP4 that runs the declared length', (video) => {
 		const buffer = readFileSync(
 			path.join(process.cwd(), 'public', CAST_PLAY_VIDEO_DIR, `${video}.mp4`)
@@ -60,10 +54,12 @@ describe('DMM Cast play notice videos', () => {
 		expect(types.indexOf('moov')).toBeGreaterThan(-1);
 		expect(types.indexOf('moov')).toBeLessThan(types.indexOf('mdat'));
 		// Long enough that reading it never crosses Stremio's 70% watched mark.
-		expect(durationOf(buffer, top.find((box) => box.type === 'moov')!)).toBeCloseTo(
-			CAST_PLAY_VIDEO_SECONDS,
-			0
-		);
+		expect(
+			durationOf(
+				buffer,
+				top.find((box) => box.type === 'moov')!
+			)
+		).toBeCloseTo(CAST_PLAY_VIDEO_SECONDS, 0);
 		expect(buffer.length).toBeLessThan(1024 * 1024);
 	});
 

@@ -34,6 +34,8 @@ Native uploads routed through anticors require its byte-preserving request strea
 
 Add content to your library by searching for torrents. It detects what you already have downloaded and currently downloading in your library.
 
+Filename parsing enriches display without deciding whether a shared release belongs in the list; yearless releases remain searchable and available for checking.
+
 ### Movie and TV show info pages
 
 Browse detailed information about movies and TV shows including cast, crew, trailers, and related content. View comprehensive person filmography pages to explore an actor's or director's complete work.
@@ -65,6 +67,33 @@ Share your whole collection or select specific items. Head over to [r/debridmedi
 6. Install the dependencies: `npm install`
 7. Run the app: `npm run dev` (development) or `npm run build && npm run start` (production)
 8. Head to `http://localhost:3000`
+
+Use Node.js 24 and npm 11 for installation, builds and tests. `npm run build`
+first runs the required full-source ESLint and Oxlint checks, then Next.js runs
+type checking and the production build; invoking `next build` directly bypasses
+that required lint gate.
+Typed ESLint uses `tsconfig.eslint.json` to cover the application and tool
+configuration files, including `vitest.config.ts`, during normal staged-file
+hooks without changing the application type-check project's exclusions.
+
+### Offline installation and UI utilities
+
+Production builds generate the Serwist service worker. Application HTML documents
+are cached on full navigation and completed frontend routes, with an offline
+fallback for uncached documents. API responses remain network-only, including
+credential-bearing navigation URLs; worker upgrades remove API entries left by
+the previous page cache. Public assets under `noprecache/` are deliberately
+excluded from installation downloads, so Cast notice MP4s load only when used.
+
+Tailwind 4 requires Safari 16.4+, Chrome 111+ or Firefox 128+; see its
+[browser support requirements](https://tailwindcss.com/docs/upgrade-guide#browser-requirements).
+Use the official `outline-hidden` utility when a focus ring needs a
+forced-colors outline fallback. Existing visible-sibling layouts use
+`sibling-space-x-*` and `sibling-space-y-*`: one spacing owner applies margins
+only to following non-hidden siblings, preserving independent trailing margins.
+Do not re-register Tailwind's built-in outline or spacing utility names.
+The service-worker and library Cypress specs exercise installed caches,
+frontend HTML caching, computed spacing and forced-colors keyboard focus.
 
 ### Docker
 

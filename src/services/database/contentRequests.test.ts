@@ -2,15 +2,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContentRequestService } from './contentRequests';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		contentRequest: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			updateMany: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			contentRequest: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				updateMany: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 const HASH = 'a'.repeat(40);

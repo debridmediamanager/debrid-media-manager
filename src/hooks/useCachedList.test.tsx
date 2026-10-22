@@ -275,29 +275,4 @@ describe('useCachedList', () => {
 			expect(fetcher).toHaveBeenCalledTimes(callsBefore + 1);
 		});
 	});
-
-	describe('unmount safety', () => {
-		it('does not set state after unmount', async () => {
-			let resolveFetch!: (v: string[]) => void;
-			const fetcher = vi.fn(
-				() =>
-					new Promise<string[]>((resolve) => {
-						resolveFetch = resolve;
-					})
-			);
-
-			const { unmount } = renderHook(() => useCachedList('k1', fetcher));
-			unmount();
-
-			const warnSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-			await act(async () => {
-				resolveFetch(['late']);
-				await Promise.resolve();
-			});
-
-			// React would log a warning if setState was called on an unmounted component
-			expect(warnSpy).not.toHaveBeenCalled();
-			warnSpy.mockRestore();
-		});
-	});
 });

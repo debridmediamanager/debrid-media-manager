@@ -15,9 +15,9 @@ vi.mock('@/utils/torrentScraper', () => ({
 }));
 
 vi.mock('@/services/database/trackerStats', () => ({
-	TrackerStatsService: vi.fn().mockImplementation(() => ({
-		upsertTrackerStats: mockUpsertTrackerStats,
-	})),
+	TrackerStatsService: vi.fn().mockImplementation(function () {
+		return { upsertTrackerStats: mockUpsertTrackerStats };
+	}),
 }));
 
 const SECRET = 'test-problem-secret-0123456789';

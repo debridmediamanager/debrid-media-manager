@@ -55,5 +55,6 @@ declare module 'bittorrent-tracker' {
 		): void;
 	}
 
-	export = Client;
+	export default Client;
+	export { Client };
 }

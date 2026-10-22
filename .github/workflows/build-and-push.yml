@@ -2,60 +2,79 @@ name: Build and Deploy Docker Image
 # Trigger CI run (2026-09-13)
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - '**.md'
+    pull_request:
+        branches:
+            - main
+        paths-ignore:
+            - '**.md'
 
 jobs:
-  build-and-deploy:
-    runs-on: [self-hosted]
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
+    dependency-audit:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '24'
+            - name: Audit runtime and development dependencies
+              run: npm audit --package-lock-only --audit-level=low
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    build-and-deploy:
+        if: github.event_name == 'push'
+        needs: dependency-audit
+        runs-on: [self-hosted]
+        concurrency:
+            group: ${{ github.workflow }}-${{ github.ref }}
+            cancel-in-progress: true
 
-      - name: Build Docker image
-        run: |
-          docker build -t dmm-prod:latest .
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      # The logship service (docker-compose.yml) bind-mounts both paths, and a
-      # Swarm task cannot start while a bind source is missing. Its redaction
-      # tests gate the deploy: a config that leaks a credential never ships.
-      # The running Vector reloads the config when this replaces it.
-      - name: Install log shipping
-        run: |
-          image=$(grep -o -m1 'timberio/vector:[^ ]*' docker-compose.yml)
-          docker run --rm -v "$PWD/scripts/ops/logship:/etc/vector:ro" "$image" test /etc/vector/vector.yaml /etc/vector/vector.test.yaml
-          sudo -n install -d -m 700 /var/log/dmm-web
-          mkdir -p /home/ben/dmm/logship
-          cp scripts/ops/logship/vector.yaml scripts/ops/logship/maintain.sh /home/ben/dmm/logship/
+            - name: Build Docker image
+              run: |
+                  docker build -t dmm-prod:latest .
 
-      - name: Deploy to Docker Swarm
-        run: |
-          cp docker-compose.yml /home/ben/dmm/docker-compose.yml
-          cd /home/ben/dmm && docker stack deploy -c docker-compose.yml dmm --resolve-image always
-          docker service update --image dmm-prod:latest --force dmm_web
+            # The logship service (docker-compose.yml) bind-mounts both paths, and a
+            # Swarm task cannot start while a bind source is missing. Its redaction
+            # tests gate the deploy: a config that leaks a credential never ships.
+            # The running Vector reloads the config when this replaces it.
+            - name: Install log shipping
+              run: |
+                  image=$(grep -o -m1 'timberio/vector:[^ ]*' docker-compose.yml)
+                  docker run --rm -v "$PWD/scripts/ops/logship:/etc/vector:ro" "$image" test /etc/vector/vector.yaml /etc/vector/vector.test.yaml
+                  sudo -n install -d -m 700 /var/log/dmm-web
+                  mkdir -p /home/ben/dmm/logship
+                  cp scripts/ops/logship/vector.yaml scripts/ops/logship/maintain.sh /home/ben/dmm/logship/
 
-      - name: Install watchdog
-        run: |
-          install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh
-          (crontab -l 2>/dev/null | grep -v dmm-watchdog.sh; echo '* * * * * /home/ben/dmm/dmm-watchdog.sh') | crontab -
+            - name: Deploy to Docker Swarm
+              run: |
+                  cp docker-compose.yml /home/ben/dmm/docker-compose.yml
+                  cd /home/ben/dmm && docker stack deploy -c docker-compose.yml dmm --resolve-image always
+                  docker service update --image dmm-prod:latest --force dmm_web
 
-      - name: Purge Cloudflare Cache
-        run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CF_API_KEY }}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}'
+            - name: Install watchdog
+              run: |
+                  install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh
+                  (crontab -l 2>/dev/null | grep -v dmm-watchdog.sh; echo '* * * * * /home/ben/dmm/dmm-watchdog.sh') | crontab -
 
-      - name: Cleanup Docker
-        if: always()
-        run: |
-          docker image prune -f
-          docker image prune -af --filter "until=24h"
-          docker builder prune -f --keep-storage 8GB
+            - name: Purge Cloudflare Cache
+              run: |
+                  curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+                  -H "Authorization: Bearer ${{ secrets.CF_API_KEY }}" \
+                  -H "Content-Type: application/json" \
+                  --data '{"purge_everything":true}'
+
+            - name: Cleanup Docker
+              if: always()
+              run: |
+                  docker image prune -f
+                  docker image prune -af --filter "until=24h"
+                  docker builder prune -f --keep-storage 8GB

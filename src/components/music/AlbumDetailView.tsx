@@ -107,14 +107,14 @@ export default function AlbumDetailView({
 
 				{/* Album header */}
 				<div className="flex flex-col gap-8 md:flex-row md:items-end">
-					<div className="relative mx-auto h-48 w-48 flex-shrink-0 overflow-hidden rounded-xl bg-gray-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-[1.02] md:mx-0 md:h-64 md:w-64">
+					<div className="relative mx-auto h-48 w-48 shrink-0 overflow-hidden rounded-xl bg-gray-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-[1.02] md:mx-0 md:h-64 md:w-64">
 						{/* Fallback icon */}
 						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-700 to-gray-800">
 							<Disc3 className="h-24 w-24 text-gray-500" />
 						</div>
 						{/* Album cover */}
 						{coverUrl && (
-							// eslint-disable-next-line @next/next/no-img-element
+							// oxlint-disable-next-line nextjs/no-img-element
 							<img
 								src={coverUrl}
 								alt={album.album}
@@ -128,7 +128,7 @@ export default function AlbumDetailView({
 
 					<div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
 						<div>
-							<span className="text-xs font-bold uppercase tracking-wider text-green-500">
+							<span className="text-xs font-bold tracking-wider text-green-500 uppercase">
 								Album
 							</span>
 							<h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-4xl md:text-6xl md:leading-tight">
@@ -195,7 +195,7 @@ export default function AlbumDetailView({
 
 				{/* Track list */}
 				<div className="mt-8 md:mt-12">
-					<div className="mb-4 grid grid-cols-[40px_1fr_auto_auto] gap-4 border-b border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+					<div className="mb-4 grid grid-cols-[40px_1fr_auto_auto] gap-4 border-b border-white/10 px-4 py-2 text-xs font-medium tracking-wider text-gray-400 uppercase">
 						<span className="text-center">#</span>
 						<span>Title</span>
 						<span className="text-right">Size</span>

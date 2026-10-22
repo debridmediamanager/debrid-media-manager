@@ -5,7 +5,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockAxiosGet, mockSocksProxyAgent } = vi.hoisted(() => ({
 	mockAxiosGet: vi.fn(),
-	mockSocksProxyAgent: vi.fn((_uri: string, _opts?: unknown) => ({ proxy: true })),
+	mockSocksProxyAgent: vi.fn(function (_uri: string, _opts?: unknown) {
+		return { proxy: true };
+	}),
 }));
 
 vi.mock('axios', () => {

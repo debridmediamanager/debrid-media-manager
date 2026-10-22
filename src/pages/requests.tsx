@@ -96,7 +96,7 @@ function MyRequests({
 	return (
 		<section className="mb-6">
 			<h2 className="mb-2 text-sm font-bold text-white">Your requests</h2>
-			<div className="space-y-2">
+			<div className="sibling-space-y-2">
 				{rows.map((row) => {
 					const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
 					const busy = busyIds.has(row.id);
@@ -460,7 +460,7 @@ export default function RequestsPage() {
 					</div>
 				) : (
 					<>
-						<div className="space-y-2">
+						<div className="sibling-space-y-2">
 							{requests.map((row) => {
 								const busy = busyIds.has(row.id);
 								const claimable = CLAIMABLE.has(row.status);
@@ -518,7 +518,7 @@ export default function RequestsPage() {
 													</span>
 												</div>
 												{row.status === 'failed' && row.error && (
-													<div className="mt-1 whitespace-pre-wrap break-words text-xs text-amber-200">
+													<div className="mt-1 text-xs break-words whitespace-pre-wrap text-amber-200">
 														{row.error}
 													</div>
 												)}

@@ -97,7 +97,7 @@ export function CastSearchModal({
 				{/* Close button */}
 				<button
 					onClick={onClose}
-					className="absolute right-4 top-4 text-gray-400 transition-colors hover:text-white"
+					className="absolute top-4 right-4 text-gray-400 transition-colors hover:text-white"
 					aria-label="Close"
 				>
 					<X className="h-6 w-6" />
@@ -122,13 +122,13 @@ export function CastSearchModal({
 						Search for the movie or show:
 					</label>
 					<div className="relative">
-						<Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+						<Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
 						<input
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 							placeholder="Search by title or paste an IMDB ID (tt1234567)..."
-							className="w-full rounded-md border border-gray-700 bg-gray-800 py-2 pl-10 pr-4 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full rounded-md border border-gray-700 bg-gray-800 py-2 pr-4 pl-10 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
 							autoFocus
 						/>
 					</div>
@@ -161,7 +161,7 @@ export function CastSearchModal({
 
 				{/* Results */}
 				{!isLoading && suggestions.length > 0 && (
-					<div className="max-h-96 space-y-2 overflow-y-auto">
+					<div className="sibling-space-y-2 max-h-96 overflow-y-auto">
 						{suggestions.map((suggestion, index) => {
 							const media = suggestion.movie || suggestion.show;
 							if (!media?.ids?.imdb) return null;
@@ -173,7 +173,7 @@ export function CastSearchModal({
 									className="flex w-full items-center gap-4 rounded-md bg-gray-800 p-3 text-left transition-colors hover:bg-gray-700"
 								>
 									{/* Poster */}
-									<div className="h-20 w-14 flex-shrink-0 overflow-hidden rounded">
+									<div className="h-20 w-14 shrink-0 overflow-hidden rounded">
 										<Poster imdbId={media.ids.imdb} title={media.title} />
 									</div>
 

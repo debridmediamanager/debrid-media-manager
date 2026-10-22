@@ -243,7 +243,7 @@ const EpisodeCard = memo(function EpisodeCard({
 		<Link href={showPath} className="block">
 			<div className="rounded-xl border border-gray-800 bg-gray-900/80 px-2 py-2 hover:border-cyan-500/60">
 				<div className="flex gap-3">
-					<div className="w-16 flex-shrink-0 sm:w-20">
+					<div className="w-16 shrink-0 sm:w-20">
 						<Poster imdbId={imdbId} title={item.title || ''} />
 					</div>
 					<div className="flex flex-1 flex-col justify-between gap-1">
@@ -412,7 +412,7 @@ const DayColumn = memo(function DayColumn({
 			ref={(node) => {
 				dayRef(node);
 			}}
-			className={`min-w-[240px] max-w-xs flex-shrink-0 snap-start rounded-2xl border border-gray-800/80 p-3 shadow-sm transition-colors sm:min-w-[280px] ${
+			className={`max-w-xs min-w-[240px] shrink-0 snap-start rounded-2xl border border-gray-800/80 p-3 shadow-sm transition-colors sm:min-w-[280px] ${
 				isToday ? 'bg-cyan-950/50' : 'bg-gray-800/75'
 			}`}
 		>
@@ -420,7 +420,7 @@ const DayColumn = memo(function DayColumn({
 				<div className="flex items-center gap-2">
 					<h3 className="text-lg font-semibold text-white">{formatDayLabel(day.date)}</h3>
 					{isToday && (
-						<span className="rounded bg-cyan-900/70 px-2 py-0.5 text-[11px] font-semibold uppercase text-cyan-100">
+						<span className="rounded bg-cyan-900/70 px-2 py-0.5 text-[11px] font-semibold text-cyan-100 uppercase">
 							Today
 						</span>
 					)}
@@ -443,7 +443,7 @@ const DayColumn = memo(function DayColumn({
 						overscanCount={3}
 					/>
 				) : (
-					<div className="space-y-2">
+					<div className="sibling-space-y-2">
 						{items.map((item) => {
 							const imdbId = item._imdbId || (item.ids?.imdb as string);
 							const seasonPath = item.season ? item.season : 1;
@@ -762,7 +762,7 @@ function CalendarPage() {
 	// ─────────────────────────────────────────────────────────────────────────
 
 	return (
-		<div className="flex min-h-screen flex-col bg-gray-900 px-3 pb-12 pt-4 text-gray-100 sm:px-4 lg:px-6">
+		<div className="flex min-h-screen flex-col bg-gray-900 px-3 pt-4 pb-12 text-gray-100 sm:px-4 lg:px-6">
 			<Head>
 				<title>Debrid Media Manager - Episode Calendar</title>
 				<meta name="robots" content="noindex, nofollow" />
@@ -771,7 +771,7 @@ function CalendarPage() {
 			<main className="mx-auto flex w-full flex-col gap-3">
 				<section className="rounded-2xl border border-gray-800/80 bg-gray-900/80 p-3 shadow-lg shadow-black/25 sm:p-4">
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-						<div className="space-y-0.5">
+						<div className="sibling-space-y-0.5">
 							<h1 className="text-xl font-semibold text-white">Episode Calendar</h1>
 							<p className="text-xs text-gray-400">
 								{calendarWindow
@@ -797,7 +797,7 @@ function CalendarPage() {
 					<div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
 						<div className="relative w-full sm:max-w-md">
 							<svg
-								className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
+								className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500"
 								fill="none"
 								stroke="currentColor"
 								strokeLinecap="round"
@@ -814,10 +814,10 @@ function CalendarPage() {
 								value={query}
 								onChange={(e) => setQuery(e.target.value)}
 								placeholder="Search title, network, S01E01, or IMDB id (regex ok)"
-								className="w-full rounded-full border border-gray-700 bg-gray-800/70 px-3 py-2 pl-9 text-sm text-gray-100 placeholder-gray-500 shadow-inner focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-400 sm:py-1.5"
+								className="w-full rounded-full border border-gray-700 bg-gray-800/70 px-3 py-2 pl-9 text-sm text-gray-100 placeholder-gray-500 shadow-inner focus:border-cyan-500 focus:ring-1 focus:ring-cyan-400 focus:outline-hidden sm:py-1.5"
 							/>
 							{isSearching && (
-								<div className="absolute right-3 top-1/2 -translate-y-1/2">
+								<div className="absolute top-1/2 right-3 -translate-y-1/2">
 									<div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
 								</div>
 							)}
@@ -837,7 +837,7 @@ function CalendarPage() {
 
 				{loading && (
 					<div className="flex items-center justify-center">
-						<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-cyan-400"></div>
+						<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-cyan-400"></div>
 					</div>
 				)}
 
@@ -854,7 +854,7 @@ function CalendarPage() {
 				<div className="relative">
 					<div
 						ref={containerRef}
-						className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 pr-1 [-webkit-overflow-scrolling:touch]"
+						className="flex snap-x snap-mandatory gap-3 overflow-x-auto pr-1 pb-4 [-webkit-overflow-scrolling:touch]"
 					>
 						{filteredDays.map((day) => (
 							<DayColumn
@@ -875,7 +875,7 @@ function CalendarPage() {
 
 			<button
 				onClick={handleScrollToToday}
-				className="haptic-sm fixed bottom-4 right-4 z-30 inline-flex items-center justify-center rounded-full border-2 border-cyan-500/80 bg-cyan-900/80 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-lg shadow-black/40 backdrop-blur transition hover:bg-cyan-800/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 md:hidden"
+				className="haptic-sm fixed right-4 bottom-4 z-30 inline-flex items-center justify-center rounded-full border-2 border-cyan-500/80 bg-cyan-900/80 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-lg shadow-black/40 backdrop-blur transition hover:bg-cyan-800/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 md:hidden"
 			>
 				Today
 			</button>

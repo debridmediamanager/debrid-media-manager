@@ -133,15 +133,15 @@ export default function DebridLinkLoginPage() {
 			<Head>
 				<title>Debrid Media Manager - Debrid-Link Login</title>
 			</Head>
-			<div className="w-full max-w-md space-y-4 p-4">
+			<div className="sibling-space-y-4 w-full max-w-md p-4">
 				<h1 className="text-center text-2xl font-bold">Connect Debrid-Link</h1>
 				{error && <p className="text-center text-red-500">{error}</p>}
 
 				{device ? (
-					<div className="space-y-3 rounded-md border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-4 text-center">
+					<div className="sibling-space-y-3 rounded-md border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-4 text-center">
 						<p className="text-sm">Enter this code on Debrid-Link to finish:</p>
 						<p
-							className="select-all font-mono text-3xl font-bold tracking-widest"
+							className="font-mono text-3xl font-bold tracking-widest select-all"
 							data-testid="dl-user-code"
 						>
 							{device.user_code}
@@ -175,7 +175,7 @@ export default function DebridLinkLoginPage() {
 							<span className="h-px flex-1 bg-gray-700" />
 						</div>
 
-						<form onSubmit={handleSubmit} className="space-y-4">
+						<form onSubmit={handleSubmit} className="sibling-space-y-4">
 							<div>
 								<label htmlFor="apiKey" className="block text-sm font-medium">
 									API Token
@@ -185,12 +185,12 @@ export default function DebridLinkLoginPage() {
 									id="apiKey"
 									value={inputApiKey}
 									onChange={(e) => setInputApiKey(e.target.value)}
-									className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden"
 									placeholder="Enter your Debrid-Link API token"
 									required
 								/>
 							</div>
-							<div className="flex flex-col space-y-2">
+							<div className="sibling-space-y-2 flex flex-col">
 								<button
 									type="submit"
 									disabled={checking}

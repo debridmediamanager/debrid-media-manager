@@ -15,7 +15,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('axios');
 vi.mock('user-agents', () => ({
-	default: vi.fn().mockImplementation(() => ({ toString: () => 'TestAgent/1.0' })),
+	default: vi.fn().mockImplementation(function () {
+		return { toString: () => 'TestAgent/1.0' };
+	}),
 }));
 
 const mockResolveImdbIdFromSimkl = vi.fn();

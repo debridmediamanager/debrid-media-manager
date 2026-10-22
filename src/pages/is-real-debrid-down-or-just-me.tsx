@@ -325,7 +325,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									</span>
 								</div>
 								{workingServers.length > 0 && (
-									<div className="mt-3 space-y-1.5">
+									<div className="mt-3 sibling-space-y-1.5">
 										<div className="text-xs font-medium text-emerald-400">
 											Working servers ({workingServers.length})
 										</div>
@@ -354,7 +354,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									</div>
 								)}
 								{failedServers.length > 0 && (
-									<div className="mt-3 space-y-1.5">
+									<div className="mt-3 sibling-space-y-1.5">
 										<div className="text-xs font-medium text-rose-400">
 											Failed servers ({failedServers.length})
 										</div>
@@ -410,7 +410,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									</span>
 								</div>
 								{rdApi && rdApi.totalCount > 0 && (
-									<div className="mt-3 space-y-2">
+									<div className="mt-3 sibling-space-y-2">
 										<div className="text-xs font-medium text-slate-400">
 											By operation
 										</div>
@@ -499,7 +499,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									</span>
 								</div>
 								{torrentioTotalChecks > 0 && (
-									<div className="mt-3 space-y-1.5">
+									<div className="mt-3 sibling-space-y-1.5">
 										<div className="text-xs font-medium text-slate-400">
 											Last {torrentioTotalChecks} checks
 										</div>

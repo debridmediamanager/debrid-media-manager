@@ -9,9 +9,9 @@ vi.mock('./middlewareRateLimiter', () => ({
 	extractIdentifier: vi.fn().mockReturnValue('test-identifier'),
 	getClientIp: vi.fn().mockReturnValue('1.2.3.4'),
 	getRateLimitConfig: vi.fn().mockReturnValue({ rateLimit: 5, windowSeconds: 1 }),
-	HybridRateLimiter: vi.fn().mockImplementation(() => ({
-		check: mockCheck,
-	})),
+	HybridRateLimiter: vi.fn().mockImplementation(function () {
+		return { check: mockCheck };
+	}),
 	RATE_LIMIT_CONFIGS: {
 		stream: { rateLimit: 1, windowSeconds: 5 },
 		torrents: { rateLimit: 1, windowSeconds: 2 },

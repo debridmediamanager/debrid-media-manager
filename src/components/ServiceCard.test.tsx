@@ -116,7 +116,7 @@ describe('ServiceCard', () => {
 
 	it('shows AllDebrid, Torbox, and Trakt account shortcuts', () => {
 		render(
-			<div className="space-y-2">
+			<div className="sibling-space-y-2">
 				<ServiceCard
 					service="ad"
 					user={baseAdUser}
@@ -277,7 +277,7 @@ describe('ServiceCard', () => {
 	it('presents login buttons when accounts are missing', async () => {
 		const onLogin = vi.fn();
 		render(
-			<div className="space-y-2">
+			<div className="sibling-space-y-2">
 				<ServiceCard service="rd" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="tb" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="pm" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />

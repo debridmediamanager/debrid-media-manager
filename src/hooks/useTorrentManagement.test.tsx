@@ -67,7 +67,9 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 }));
 
 vi.mock('@/torrent/db', () => ({
-	default: vi.fn().mockImplementation(() => mockDb),
+	default: vi.fn().mockImplementation(function () {
+		return mockDb;
+	}),
 }));
 
 vi.mock('@/utils/addMagnet', () => ({

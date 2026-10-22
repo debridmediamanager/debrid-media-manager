@@ -15,6 +15,14 @@ export const getQueryForEpisodeCount = (videoCount: number, expectedEpisodeCount
 	return `videos:>${expectedEpisodeCount}`; // With extras
 };
 
+// Complete literals are required for CSS source detection, including opacity.
+const episodeBackgroundClasses: Record<string, string> = {
+	'gray-800': 'bg-gray-800/30',
+	'purple-800': 'bg-purple-800/30',
+	'green-900': 'bg-green-900/30',
+	'blue-900': 'bg-blue-900/30',
+};
+
 export const getEpisodeCountClass = (
 	videoCount: number,
 	expectedEpisodeCount: number,
@@ -24,10 +32,10 @@ export const getEpisodeCountClass = (
 	const scale = getColorScale(expectedEpisodeCount);
 	for (let i = 0; i < scale.length; i++) {
 		if (videoCount <= scale[i].threshold) {
-			return `bg-${scale[i].color}`;
+			return episodeBackgroundClasses[scale[i].color];
 		}
 	}
-	return `bg-${scale[scale.length - 1].color}`;
+	return episodeBackgroundClasses[scale[scale.length - 1].color];
 };
 
 export const getEpisodeCountLabel = (videoCount: number, expectedEpisodeCount: number) => {

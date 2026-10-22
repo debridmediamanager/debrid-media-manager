@@ -108,7 +108,7 @@ export default function AlbumCard({
 				</div>
 				{/* Album cover */}
 				{coverUrl && (
-					// eslint-disable-next-line @next/next/no-img-element
+					// oxlint-disable-next-line nextjs/no-img-element
 					<img
 						src={coverUrl}
 						alt={album.album}
@@ -122,7 +122,7 @@ export default function AlbumCard({
 
 				{/* Now Playing indicator */}
 				{isNowPlaying && (
-					<div className="absolute left-2 top-2 z-10 flex items-center gap-1 rounded-full bg-green-500 px-2 py-1 text-[10px] font-bold text-black shadow-lg">
+					<div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-full bg-green-500 px-2 py-1 text-[10px] font-bold text-black shadow-lg">
 						{isPlaying ? (
 							<>
 								<span className="flex h-3 items-end gap-0.5">
@@ -148,7 +148,7 @@ export default function AlbumCard({
 				)}
 
 				{/* Play button overlay */}
-				<div className="absolute bottom-2 right-2 z-10 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+				<div className="absolute right-2 bottom-2 z-10 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
 					<button
 						type="button"
 						onClick={(e) => {

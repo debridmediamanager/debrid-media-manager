@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import loadConfig from '../../../next.config.js';
 
 /**
  * The no-catalog addon variants are one manifest route plus a rewrite that
@@ -16,8 +17,13 @@ describe('no-catalog rewrites', () => {
 	];
 
 	it.each(providers)('%s folds no-catalog paths back onto the addon', async (provider) => {
-		const config = await import('../../../next.config.js');
-		const { fallback } = await ((config as any).default ?? config).rewrites();
+		const config = await loadConfig();
+		if (!config.rewrites) throw new Error('Expected Next rewrite configuration');
+		const rewrites = await config.rewrites();
+		if (Array.isArray(rewrites) || !rewrites.fallback) {
+			throw new Error('Expected fallback rewrites for no-catalog addons');
+		}
+		const { fallback } = rewrites;
 
 		expect(fallback).toContainEqual({
 			source: `/api/${provider}/:userid/no-catalog/:path*`,

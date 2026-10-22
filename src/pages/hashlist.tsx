@@ -84,14 +84,14 @@ const torrentDB = new UserTorrentDB();
 
 // Parsing a filename costs ~0.15 ms, so a 176k-item list took ~27 s of main
 // thread in one go; with the page frozen that long Chrome offers to kill it.
-function enrichHashlistTorrent(torrent: HashlistTorrent): EnrichedHashlistTorrent | null {
+function enrichHashlistTorrent(torrent: HashlistTorrent): EnrichedHashlistTorrent {
 	const mediaType = getTypeByName(torrent.filename);
 	const info =
 		mediaType === 'movie'
 			? filenameParse(torrent.filename)
 			: filenameParse(torrent.filename, true);
-	// Movies without a valid year are left out; TV shows don't need one
-	if (mediaType !== 'tv' && !(info.year && Number(info.year) > 0)) return null;
+	// Parsing supplies display metadata, not membership: a shared hash remains
+	// usable even when its filename has no year or the parser cannot identify it.
 	return {
 		score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 		info,
@@ -125,8 +125,7 @@ async function enrichInSlices(
 	let sliceStart = performance.now();
 	let lastPublish = sliceStart;
 	for (let i = 0; i < torrents.length; i++) {
-		const torrent = enrichHashlistTorrent(torrents[i]);
-		if (torrent) enriched.push(torrent);
+		enriched.push(enrichHashlistTorrent(torrents[i]));
 		if (i % 256 !== 255) continue;
 		const now = performance.now();
 		if (now - sliceStart < ENRICH_SLICE_MS) continue;
@@ -1114,7 +1113,7 @@ function HashlistPage() {
 			)}
 
 			<div className="mb-2 flex items-center justify-between gap-2">
-				<h1 className="min-w-0 break-words text-xl font-bold text-white">
+				<h1 className="min-w-0 text-xl font-bold break-words text-white">
 					{hashlistTitle} ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
@@ -1127,7 +1126,7 @@ function HashlistPage() {
 			</div>
 			<div className="mb-4 flex items-center border-b-2 border-gray-600 py-2">
 				<input
-					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-gray-100 focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-gray-100 focus:outline-hidden"
 					type="text"
 					id="query"
 					placeholder="quick search on filename, hash, or id; supports regex"
@@ -1139,7 +1138,7 @@ function HashlistPage() {
 			</div>
 			<div className="mb-4 flex flex-wrap items-center gap-1">
 				<button
-					className={`mb-2 mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
+					className={`mr-1 mb-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
 					}`}
 					onClick={handlePrevPage}
@@ -1151,7 +1150,7 @@ function HashlistPage() {
 					{currentPage}/{Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE))}
 				</span>
 				<button
-					className={`mb-2 ml-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
+					className={`mr-2 mb-2 ml-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)
 							? 'cursor-not-allowed opacity-60'
 							: ''
@@ -1163,23 +1162,23 @@ function HashlistPage() {
 				</button>
 				<Link
 					href="/hashlist?mediaType=movie"
-					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
+					className="mr-2 mb-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
 					{movieCount} Movies
 				</Link>
 				<Link
 					href="/hashlist?mediaType=tv"
-					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
+					className="mr-2 mb-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
 					{tvCount} TV Shows
 				</Link>
 				{mounted && (rdKey || adKey || tbKey) && (
 					<button
-						className={`mb-2 mr-2 rounded border-2 ${
+						className={`mr-2 mb-2 rounded border-2 ${
 							showOnlyAvailable
 								? 'border-green-500 bg-green-900/30 text-green-100'
 								: 'border-gray-500 bg-gray-900/30 text-gray-100'
-						} px-2 py-1 transition-colors hover:bg-opacity-70`}
+						} px-2 py-1 transition-colors`}
 						onClick={() => {
 							setShowOnlyAvailable(!showOnlyAvailable);
 							setCurrentPage(1);
@@ -1191,7 +1190,7 @@ function HashlistPage() {
 				{mounted && rdKey && (
 					<>
 						<button
-							className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
+							className={`mr-2 mb-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
 								filteredList.length === 0 || !rdKey
 									? 'cursor-not-allowed opacity-60'
 									: ''
@@ -1206,7 +1205,7 @@ function HashlistPage() {
 				{mounted && adKey && (
 					<>
 						<button
-							className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
+							className={`mr-2 mb-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
 								filteredList.length === 0 || !adKey
 									? 'cursor-not-allowed opacity-60'
 									: ''
@@ -1221,7 +1220,7 @@ function HashlistPage() {
 				{mounted && tbKey && (
 					<>
 						<button
-							className={`mb-2 mr-2 rounded border-2 border-purple-500 bg-purple-900/30 px-2 py-1 text-purple-100 transition-colors hover:bg-purple-800/50 ${
+							className={`mr-2 mb-2 rounded border-2 border-purple-500 bg-purple-900/30 px-2 py-1 text-purple-100 transition-colors hover:bg-purple-800/50 ${
 								filteredList.length === 0 || !tbKey
 									? 'cursor-not-allowed opacity-60'
 									: ''
@@ -1236,7 +1235,7 @@ function HashlistPage() {
 
 				{mounted && pmKey && (
 					<button
-						className={`mb-2 mr-2 rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-2 py-1 text-red-100 transition-colors hover:bg-[#aa0000]/50 ${
+						className={`mr-2 mb-2 rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-2 py-1 text-red-100 transition-colors hover:bg-[#aa0000]/50 ${
 							filteredList.length === 0 ? 'cursor-not-allowed opacity-60' : ''
 						}`}
 						onClick={downloadNonDupeTorrentsInPm}
@@ -1248,7 +1247,7 @@ function HashlistPage() {
 
 				{mounted && ocKey && (
 					<button
-						className={`mb-2 mr-2 rounded border-2 border-[#f97316] bg-[#f97316]/30 px-2 py-1 text-orange-100 transition-colors hover:bg-[#f97316]/50 ${
+						className={`mr-2 mb-2 rounded border-2 border-[#f97316] bg-[#f97316]/30 px-2 py-1 text-orange-100 transition-colors hover:bg-[#f97316]/50 ${
 							filteredList.length === 0 ? 'cursor-not-allowed opacity-60' : ''
 						}`}
 						onClick={downloadNonDupeTorrentsInOc}
@@ -1260,7 +1259,7 @@ function HashlistPage() {
 
 				{mounted && dlKey && (
 					<button
-						className={`mb-2 mr-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 px-2 py-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50 ${
+						className={`mr-2 mb-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 px-2 py-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50 ${
 							filteredList.length === 0 ? 'cursor-not-allowed opacity-60' : ''
 						}`}
 						onClick={downloadNonDupeTorrentsInDl}
@@ -1273,7 +1272,7 @@ function HashlistPage() {
 				{Object.keys(router.query).length !== 0 && (
 					<Link
 						href="/hashlist"
-						className="mb-2 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-2 py-1 text-yellow-100 transition-colors hover:bg-yellow-800/50"
+						className="mr-2 mb-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-2 py-1 text-yellow-100 transition-colors hover:bg-yellow-800/50"
 					>
 						Reset
 					</Link>
@@ -1281,7 +1280,7 @@ function HashlistPage() {
 
 				{mounted && !rdKey && !adKey && !tbKey && !pmKey && !ocKey && !dlKey && (
 					<>
-						<span className="mb-2 mr-2 rounded px-2 py-1 text-white">
+						<span className="mr-2 mb-2 rounded px-2 py-1 text-white">
 							Login to RD/AD/TB/PM/OC/DL to download
 						</span>
 					</>

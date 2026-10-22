@@ -6,9 +6,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockGetTrackerStatsByHashes = vi.fn();
 
 vi.mock('@/services/database/trackerStats', () => ({
-	TrackerStatsService: vi.fn().mockImplementation(() => ({
-		getTrackerStatsByHashes: mockGetTrackerStatsByHashes,
-	})),
+	TrackerStatsService: vi.fn().mockImplementation(function () {
+		return { getTrackerStatsByHashes: mockGetTrackerStatsByHashes };
+	}),
 }));
 
 const validHashA = 'a'.repeat(40);

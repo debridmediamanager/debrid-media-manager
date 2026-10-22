@@ -2,15 +2,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getMdblistCacheService, MdblistCacheService } from './mdblistCache';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		mdblistCache: {
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			upsert: vi.fn(),
-		},
-		$queryRaw: vi.fn(),
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			mdblistCache: {
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				upsert: vi.fn(),
+			},
+			$queryRaw: vi.fn(),
+			$disconnect: vi.fn(),
+		};
+	}),
 	Prisma: {
 		sql: (strings: TemplateStringsArray, ...values: unknown[]) => ({ strings, values }),
 		join: (values: unknown[]) => values,

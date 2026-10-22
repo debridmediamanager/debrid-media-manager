@@ -17,8 +17,10 @@ describe('Real Debrid Login Page', () => {
 		}).as('deviceCode');
 
 		cy.visit('/realdebrid/login');
+		cy.contains('button', 'Sign in with Real-Debrid').click();
 		cy.wait('@deviceCode');
 		cy.contains('ABCD1234').should('be.visible');
+		cy.contains('Open real-debrid.com/device').should('be.visible');
 	});
 });
 

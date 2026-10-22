@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 vi.mock('next/router', () => ({
 	useRouter: vi.fn(() => ({
@@ -35,10 +35,10 @@ vi.mock('next/link', () => ({
 }));
 
 describe('HashlistsPage', () => {
-	let fetchSpy: ReturnType<typeof vi.fn>;
+	let fetchSpy: Mock<(...args: Parameters<typeof fetch>) => any>;
 
 	beforeEach(() => {
-		fetchSpy = vi.fn();
+		fetchSpy = vi.fn<(...args: Parameters<typeof fetch>) => any>();
 		global.fetch = fetchSpy;
 		vi.spyOn(window.sessionStorage.__proto__, 'setItem').mockImplementation(() => {});
 	});

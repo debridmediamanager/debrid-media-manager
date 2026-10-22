@@ -57,10 +57,12 @@ beforeEach(() => {
 		SCRAPE_API_PASSWORD: TEST_SCRAPE_PASSWORD,
 		SCRAPE_WORKER: '1',
 	};
-	scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-		byLists: vi.fn(),
-		byListId: vi.fn(),
-	}));
+	scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+		return {
+			byLists: vi.fn(),
+			byListId: vi.fn(),
+		};
+	});
 });
 
 afterAll(() => {
@@ -119,10 +121,12 @@ describe('API /api/scrapers/listoflists', () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListsMock = vi.fn().mockReturnValue(makeAsyncIterator(['list-1']));
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt1234567']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
@@ -144,10 +148,12 @@ describe('API /api/scrapers/listoflists', () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListsMock = vi.fn().mockReturnValue(makeAsyncIterator(['list-1']));
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt1111111']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(true);
 
 		const req = createMockRequest({
@@ -166,10 +172,12 @@ describe('API /api/scrapers/listoflists', () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListsMock = vi.fn().mockReturnValue(makeAsyncIterator(['list-1']));
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt2222222']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(false);
 
@@ -189,10 +197,12 @@ describe('API /api/scrapers/listoflists', () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListsMock = vi.fn().mockReturnValue(makeAsyncIterator(['list-1']));
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['nm1234567']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 
 		const req = createMockRequest({
 			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies' },
@@ -211,10 +221,12 @@ describe('API /api/scrapers/listoflists', () => {
 		const byListIdMock = vi
 			.fn()
 			.mockReturnValue(makeAsyncIterator(['tt0000001', 'tt0000002', 'tt0000003']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
@@ -233,10 +245,12 @@ describe('API /api/scrapers/listoflists', () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListsMock = vi.fn().mockReturnValue(makeAsyncIterator(['list-1']));
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt5555555']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byLists: byListsMock,
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byLists: byListsMock,
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);

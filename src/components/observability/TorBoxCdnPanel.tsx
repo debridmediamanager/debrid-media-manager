@@ -92,7 +92,7 @@ export function TorBoxCdnPanel() {
 						data-testid="cdn-discovery-error"
 						className="flex items-start gap-2 text-sm text-amber-400"
 					>
-						<AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+						<AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
 						<span>
 							Could not read TorBox&apos;s CDN node list from your browser (
 							{discoveryError}). That is a result too: if the rest of this page says
@@ -124,7 +124,7 @@ export function TorBoxCdnPanel() {
 						</div>
 
 						{working.length > 0 && (
-							<div className="mt-3 space-y-1.5">
+							<div className="mt-3 sibling-space-y-1.5">
 								<div className="text-xs font-medium text-emerald-400">
 									Serving ({working.length})
 								</div>
@@ -153,7 +153,7 @@ export function TorBoxCdnPanel() {
 						)}
 
 						{failed.length > 0 && (
-							<div className="mt-3 space-y-1.5">
+							<div className="mt-3 sibling-space-y-1.5">
 								<div className="text-xs font-medium text-rose-400">
 									Not serving ({failed.length})
 								</div>

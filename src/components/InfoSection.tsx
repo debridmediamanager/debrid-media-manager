@@ -8,7 +8,7 @@ export function InfoSection() {
 	const { isSponsor } = useSponsor();
 
 	return (
-		<div className="space-y-3 text-center text-sm">
+		<div className="sibling-space-y-3 text-center text-sm">
 			<div className="rounded border-2 border-gray-600 bg-gray-800/50 p-4 text-gray-100">
 				<div className="mb-1 text-center text-sm">
 					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" />

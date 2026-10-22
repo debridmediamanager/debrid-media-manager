@@ -698,7 +698,7 @@ const AnimePage: FunctionComponent = () => {
 		<div data-testid="media-header-actions">
 			{rdKey && (
 				<button
-					className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+					className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
 					disabled={isAnyChecking}
 				>
@@ -714,7 +714,7 @@ const AnimePage: FunctionComponent = () => {
 			)}
 			{adKey && (
 				<button
-					className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+					className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
 					disabled={isAnyChecking}
 				>
@@ -730,7 +730,7 @@ const AnimePage: FunctionComponent = () => {
 			)}
 			{debridLinkKey && (
 				<button
-					className="mb-1 mr-2 mt-0 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
+					className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
 					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['DL'])}
 					disabled={isAnyChecking}
 					title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
@@ -824,7 +824,7 @@ const AnimePage: FunctionComponent = () => {
 
 			<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
 				<input
-					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -857,7 +857,7 @@ const AnimePage: FunctionComponent = () => {
 					{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer whitespace-nowrap rounded px-2 py-1 text-xs text-white`}
+							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForEpisodeCount(
 									scale.threshold,

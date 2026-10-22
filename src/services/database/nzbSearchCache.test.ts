@@ -8,15 +8,17 @@ import {
 } from './nzbSearchCache';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		cache: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			delete: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			cache: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				delete: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 const RESULTS = [{ id: 'a', title: 'Some.Release', size: 100 }];

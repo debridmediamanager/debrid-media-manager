@@ -53,14 +53,16 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 
 vi.mock('@/torrent/db', () => ({
 	__esModule: true,
-	default: vi.fn().mockImplementation(() => ({
-		initializeDB: vi.fn().mockResolvedValue(undefined),
-		all: vi.fn().mockResolvedValue([]),
-		hashes: vi.fn().mockResolvedValue(new Set()),
-		addAll: vi.fn().mockResolvedValue(undefined),
-		getAllByHash: vi.fn().mockResolvedValue([]),
-		deleteByHash: vi.fn().mockResolvedValue(undefined),
-	})),
+	default: vi.fn().mockImplementation(function () {
+		return {
+			initializeDB: vi.fn().mockResolvedValue(undefined),
+			all: vi.fn().mockResolvedValue([]),
+			hashes: vi.fn().mockResolvedValue(new Set()),
+			addAll: vi.fn().mockResolvedValue(undefined),
+			getAllByHash: vi.fn().mockResolvedValue([]),
+			deleteByHash: vi.fn().mockResolvedValue(undefined),
+		};
+	}),
 }));
 
 vi.mock('lz-string', () => ({

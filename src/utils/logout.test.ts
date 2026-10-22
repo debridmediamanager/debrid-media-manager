@@ -4,9 +4,11 @@ const clearMock = vi.fn();
 
 vi.mock('@/torrent/db', () => ({
 	__esModule: true,
-	default: vi.fn().mockImplementation(() => ({
-		clear: clearMock,
-	})),
+	default: vi.fn().mockImplementation(function () {
+		return {
+			clear: clearMock,
+		};
+	}),
 }));
 
 import { handleLogout } from './logout';

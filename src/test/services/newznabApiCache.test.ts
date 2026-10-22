@@ -10,15 +10,17 @@ import {
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		cache: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			delete: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			cache: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				delete: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 const HOUR = 60 * 60 * 1000;

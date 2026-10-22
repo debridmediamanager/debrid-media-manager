@@ -17,7 +17,7 @@ interface TorrentStats {
 
 class TorrentScraper {
 	private async scrapeTracker(
-		infoHash: string,
+		infoHash: Buffer,
 		announceUrl: string,
 		timeout: number = 10000
 	): Promise<TrackerResult | null> {
@@ -30,7 +30,7 @@ class TorrentScraper {
 			Client.scrape(
 				{
 					announce: announceUrl,
-					infoHash: infoHash,
+					infoHash,
 				},
 				(err: Error | null, data?: any) => {
 					clearTimeout(timer);
@@ -63,9 +63,12 @@ class TorrentScraper {
 
 		// Get current tracker list
 		const trackers = await trackerManager.getTrackers();
+		// UDP scrape packets require the 20 hash bytes, not the 40-character hex
+		// spelling. Reuse the same decoded hash across every tracker protocol.
+		const hashBytes = Buffer.from(infoHash, 'hex');
 
 		// Scrape all trackers in parallel
-		const scrapePromises = trackers.map((tracker) => this.scrapeTracker(infoHash, tracker));
+		const scrapePromises = trackers.map((tracker) => this.scrapeTracker(hashBytes, tracker));
 
 		const results = await Promise.all(scrapePromises);
 

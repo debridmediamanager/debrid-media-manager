@@ -57,10 +57,10 @@ export default function TorboxLoginPage() {
 			<Head>
 				<title>Debrid Media Manager - Torbox Login</title>
 			</Head>
-			<div className="w-full max-w-md space-y-4 p-4">
+			<div className="sibling-space-y-4 w-full max-w-md p-4">
 				<h1 className="text-center text-2xl font-bold">Connect Torbox</h1>
 				{error && <p className="text-center text-red-500">{error}</p>}
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<form onSubmit={handleSubmit} className="sibling-space-y-4">
 					<div>
 						<label htmlFor="apiKey" className="block text-sm font-medium">
 							API Key
@@ -70,12 +70,12 @@ export default function TorboxLoginPage() {
 							id="apiKey"
 							value={inputApiKey}
 							onChange={(e) => setInputApiKey(e.target.value)}
-							className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+							className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden"
 							placeholder="Enter your Torbox API key"
 							required
 						/>
 					</div>
-					<div className="flex flex-col space-y-2">
+					<div className="sibling-space-y-2 flex flex-col">
 						<button
 							type="submit"
 							className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"

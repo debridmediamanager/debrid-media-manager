@@ -6,9 +6,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('axios');
 
 const mockUserAgentString = 'TestAgent/1.0';
-const mockUserAgent = vi.fn().mockImplementation(() => ({
-	toString: () => mockUserAgentString,
-}));
+const mockUserAgent = vi.fn().mockImplementation(function () {
+	return {
+		toString: () => mockUserAgentString,
+	};
+});
 
 vi.mock('user-agents', () => ({
 	default: mockUserAgent,

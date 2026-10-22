@@ -75,7 +75,7 @@ export function AnimeHome() {
 			<h2 className="mb-2 text-lg font-semibold">Recently updated</h2>
 			{loading && entries.length === 0 && (
 				<div className="mt-4 flex items-center justify-center">
-					<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+					<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 				</div>
 			)}
 			{error && (
@@ -92,7 +92,7 @@ export function AnimeHome() {
 						const type = animeTypeLabel(entry.type);
 						return (
 							<Link key={href} href={href} className="block">
-								{/* eslint-disable-next-line @next/next/no-img-element */}
+								{/* oxlint-disable-next-line nextjs/no-img-element */}
 								<img
 									src={entry.poster_url}
 									alt={entry.title}

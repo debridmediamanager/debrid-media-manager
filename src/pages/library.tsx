@@ -1807,7 +1807,7 @@ function TorrentsPage() {
 					)}
 					<div className="mb-2 flex items-center border-b-2 border-gray-600 py-0">
 						<input
-							className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-0.5 text-xs leading-tight text-gray-100 focus:outline-none"
+							className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-0.5 text-xs leading-tight text-gray-100 focus:outline-hidden"
 							type="text"
 							id="query"
 							placeholder="search by filename/hash/id, supports regex"
@@ -1877,7 +1877,7 @@ function TorrentsPage() {
 						<div className="overflow-x-auto">
 							{loading ? (
 								<div className="mt-2 flex items-center justify-center">
-									<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+									<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 								</div>
 							) : (
 								<table className="w-full">

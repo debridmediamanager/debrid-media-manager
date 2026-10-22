@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const pwaConfig = require('./pwa.config.js');
-const withPWA = require('next-pwa')(pwaConfig);
 
 const nextConfig = {
 	output: 'standalone',
+	// npm's required prebuild runs full ESLint + Oxlint before Next's type/build workers.
+	// Avoid running a second, incomplete ESLint pass concurrently with type checking.
+	eslint: { ignoreDuringBuilds: true },
 	transpilePackages: ['recharts', '@reduxjs/toolkit'],
 	webpack: (config) => {
 		config.cache = {
@@ -150,4 +152,8 @@ const nextConfig = {
 	},
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = async () => {
+	// Serwist is ESM-only; this Next configuration is loaded as CommonJS.
+	const { default: withSerwist } = await import('@serwist/next');
+	return withSerwist(pwaConfig)(nextConfig);
+};

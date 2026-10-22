@@ -7,9 +7,9 @@ const { mockGetTrackerStats } = vi.hoisted(() => ({
 }));
 
 vi.mock('@/services/database/trackerStats', () => ({
-	TrackerStatsService: vi.fn().mockImplementation(() => ({
-		getTrackerStats: mockGetTrackerStats,
-	})),
+	TrackerStatsService: vi.fn().mockImplementation(function () {
+		return { getTrackerStats: mockGetTrackerStats };
+	}),
 }));
 
 describe('/api/torrents/stats/stored', () => {

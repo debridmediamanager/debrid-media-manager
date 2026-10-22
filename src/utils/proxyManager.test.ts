@@ -10,7 +10,9 @@ type AgentMock = {
 const asAgent = (value: unknown) => value as AgentMock;
 
 vi.mock('socks-proxy-agent', () => ({
-	SocksProxyAgent: vi.fn().mockImplementation((url: string, opts: any) => ({ url, opts })),
+	SocksProxyAgent: vi.fn().mockImplementation(function (url: string, opts: AgentMock['opts']) {
+		return { url, opts };
+	}),
 }));
 
 const socksAgentMock = SocksProxyAgent as unknown as Mock;

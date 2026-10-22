@@ -348,7 +348,7 @@ export function TorBoxHistoryCharts() {
 
 	if (loading) {
 		return (
-			<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+			<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
 					<h2 className="text-lg font-semibold text-white">Historical Data</h2>
@@ -365,7 +365,7 @@ export function TorBoxHistoryCharts() {
 
 	if (error) {
 		return (
-			<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+			<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
 					<h2 className="text-lg font-semibold text-white">Historical Data</h2>
@@ -402,7 +402,7 @@ export function TorBoxHistoryCharts() {
 	};
 
 	return (
-		<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+		<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
@@ -442,7 +442,7 @@ export function TorBoxHistoryCharts() {
 					</div>
 				</div>
 			) : (
-				<div className="space-y-6">
+				<div className="sibling-space-y-6">
 					{userApiChartData.length > 0 && (
 						<>
 							<div
@@ -707,7 +707,7 @@ export function TorBoxHistoryCharts() {
 												<span className="truncate text-slate-400">
 													{regionLabel(region.region)}
 												</span>
-												<div className="flex flex-shrink-0 items-center gap-2">
+												<div className="flex shrink-0 items-center gap-2">
 													{region.avgLatencyMs !== null && (
 														<span className="text-slate-400">
 															{Math.round(region.avgLatencyMs)}ms

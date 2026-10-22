@@ -32,9 +32,16 @@ export const authLocalStorage = {
 };
 
 Cypress.Commands.add('loginWithRealDebrid', (token?: string) => {
-	const rdToken = token ?? Cypress.env('RD_ACCESS_TOKEN');
-	cy.window().then((win) => {
-		win.localStorage.setItem('rd:accessToken', JSON.stringify(rdToken));
+	const saveToken = (rdToken: string | undefined) =>
+		cy.window().then((win) => {
+			win.localStorage.setItem('rd:accessToken', JSON.stringify(rdToken));
+		});
+	if (token !== undefined) {
+		saveToken(token);
+		return;
+	}
+	cy.env(['RD_ACCESS_TOKEN']).then(({ RD_ACCESS_TOKEN }) => {
+		saveToken(RD_ACCESS_TOKEN);
 	});
 });
 

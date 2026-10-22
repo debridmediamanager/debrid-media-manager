@@ -25,9 +25,11 @@ vi.mock('@/services/metadataCache', () => ({
 }));
 
 vi.mock('user-agents', () => ({
-	default: vi.fn().mockImplementation(() => ({
-		toString: () => 'test-agent',
-	})),
+	default: vi.fn().mockImplementation(function () {
+		return {
+			toString: () => 'test-agent',
+		};
+	}),
 }));
 
 import { getMdblistClient } from '@/services/mdblistClient';
@@ -49,9 +51,10 @@ describe('/api/info/movie', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockMetadataCache.getTmdbMovieInfo.mockResolvedValue(null);
-		mockMetadataCache.getTraktSummary.mockResolvedValue(null);
-		mockMetadataCache.searchTmdbByImdb.mockResolvedValue(null);
+		mockMdbClient.getInfoByImdbId.mockReset().mockResolvedValue(null);
+		for (const provider of Object.values(mockMetadataCache)) {
+			provider.mockReset().mockResolvedValue(null);
+		}
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdbClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
 		// Fixtures carry a real tmdbid; without a credential the route skips the
@@ -434,6 +437,8 @@ describe('/api/info/movie', () => {
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('network down'));
 		mockMetadataCache.getCinemetaMovie.mockRejectedValue(new Error('network down'));
+		mockMetadataCache.getOmdbInfo.mockRejectedValue(new Error('network down'));
+		mockMetadataCache.getTraktSummary.mockRejectedValue(new Error('network down'));
 
 		const req = createMockRequest({
 			method: 'GET',

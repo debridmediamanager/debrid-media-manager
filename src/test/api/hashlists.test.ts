@@ -1,5 +1,6 @@
 import handler from '@/pages/api/hashlists';
 import { createMockRequest } from '@/test/utils/api';
+import { Octokit } from '@octokit/rest';
 import { readFileSync } from 'fs';
 import lzString from 'lz-string';
 import path from 'path';
@@ -36,27 +37,29 @@ vi.mock('uuid', () => ({
 
 // Mock Octokit
 vi.mock('@octokit/rest', () => ({
-	Octokit: vi.fn().mockImplementation(() => ({
-		rest: {
-			git: {
-				getRef: vi.fn().mockResolvedValue({
-					data: {
-						object: { sha: 'test-commit-sha' },
-					},
-				}),
-				createBlob: vi.fn().mockResolvedValue({
-					data: { sha: 'test-blob-sha' },
-				}),
-				createTree: vi.fn().mockResolvedValue({
-					data: { sha: 'test-tree-sha' },
-				}),
-				createCommit: vi.fn().mockResolvedValue({
-					data: { sha: 'test-new-commit-sha' },
-				}),
-				updateRef: vi.fn().mockResolvedValue({}),
+	Octokit: vi.fn().mockImplementation(function () {
+		return {
+			rest: {
+				git: {
+					getRef: vi.fn().mockResolvedValue({
+						data: {
+							object: { sha: 'test-commit-sha' },
+						},
+					}),
+					createBlob: vi.fn().mockResolvedValue({
+						data: { sha: 'test-blob-sha' },
+					}),
+					createTree: vi.fn().mockResolvedValue({
+						data: { sha: 'test-tree-sha' },
+					}),
+					createCommit: vi.fn().mockResolvedValue({
+						data: { sha: 'test-new-commit-sha' },
+					}),
+					updateRef: vi.fn().mockResolvedValue({}),
+				},
 			},
-		},
-	})),
+		};
+	}),
 }));
 
 describe('/api/hashlists', () => {
@@ -99,8 +102,11 @@ describe('/api/hashlists', () => {
 		return { created, api };
 	};
 	const install = async (api: object) => {
-		const { Octokit } = await import('@octokit/rest');
-		vi.mocked(Octokit).mockImplementation(() => ({ rest: { git: api } }) as any);
+		vi.mocked(Octokit).mockImplementation(function () {
+			const client = { rest: { git: api } };
+			// This route consumes only Git REST methods, not the whole Octokit client.
+			return client as unknown as Octokit;
+		});
 	};
 	const blobAt = (created: ReturnType<typeof git>['created'], file: string) =>
 		created.blobs[Number(created.tree.find((e) => e.path === file)!.sha.split('-')[1]) - 1];
@@ -135,21 +141,21 @@ describe('/api/hashlists', () => {
 	});
 
 	it('should handle API errors gracefully', async () => {
-		const { Octokit } = await import('@octokit/rest');
-		vi.mocked(Octokit).mockImplementation(
-			() =>
-				({
-					rest: {
-						git: {
-							getRef: vi.fn().mockRejectedValue(new Error('GitHub API error')),
-							createBlob: vi.fn(),
-							createTree: vi.fn(),
-							createCommit: vi.fn(),
-							updateRef: vi.fn(),
-						},
+		vi.mocked(Octokit).mockImplementation(function () {
+			const client = {
+				rest: {
+					git: {
+						getRef: vi.fn().mockRejectedValue(new Error('GitHub API error')),
+						createBlob: vi.fn(),
+						createTree: vi.fn(),
+						createCommit: vi.fn(),
+						updateRef: vi.fn(),
 					},
-				}) as any
-		);
+				},
+			};
+			// This route consumes only Git REST methods, not the whole Octokit client.
+			return client as unknown as Octokit;
+		});
 
 		mockReq.method = 'POST';
 		mockReq.body = { url: DMM_URL };

@@ -129,8 +129,7 @@ type TokenResult =
 	| { ok: false; unknown?: boolean; message: string };
 
 type ServiceResult =
-	| { ok: true; completeDir: string; categories: string[] }
-	| { ok: false; message: string };
+	{ ok: true; completeDir: string; categories: string[] } | { ok: false; message: string };
 
 type TestState =
 	| { kind: 'idle' }
@@ -384,7 +383,7 @@ export default function SabnzbdSetupPage() {
 							gives this a path to import from — and what Plex, Jellyfin, Emby and
 							Infuse read.
 						</p>
-						<ul className="ml-4 mt-2 list-disc space-y-1">
+						<ul className="mt-2 sibling-space-y-1 ml-4 list-disc">
 							<li>
 								<a
 									href="https://github.com/debridmediamanager/zurg-public"
@@ -568,7 +567,7 @@ export default function SabnzbdSetupPage() {
 				</Card>
 
 				<Card title="What to expect once it is running">
-					<ul className="ml-4 list-disc space-y-2 text-gray-300">
+					<ul className="sibling-space-y-2 ml-4 list-disc text-gray-300">
 						<li>
 							A grab sits in *arr&apos;s queue while the work happens. The bar covers
 							two passes: <strong>0–50%</strong> is DMM pulling the release off

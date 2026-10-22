@@ -1,5 +1,6 @@
-import * as acme from 'acme-client';
+import * as acme from '@geektr/acme-dns01';
 import { Resolver, promises as dns } from 'dns';
+import { createPrivateKey } from 'node:crypto';
 import { createRexDirectTxt, deleteRexDirectRecord } from './rexDirectDns';
 
 /**
@@ -24,7 +25,10 @@ function config() {
 		);
 	}
 	return {
-		accountKey: Buffer.from(accountKey, 'base64'),
+		accountKey: createPrivateKey(Buffer.from(accountKey, 'base64')).export({
+			format: 'pem',
+			type: 'pkcs8',
+		}),
 		externalAccountBinding: { kid, hmacKey },
 		email,
 		directoryUrl: process.env.REXDIRECT_ACME_DIRECTORY || acme.directory.zerossl.production,
@@ -32,8 +36,8 @@ function config() {
 }
 
 /**
- * Wait until the zone's own nameservers answer the challenge TXT. acme-client's
- * check asks the system resolver at once and failed on a record Cloudflare had
+ * Wait until the zone's own nameservers answer the challenge TXT. The recursive
+ * check asked the system resolver at once and failed on a record Cloudflare had
  * just accepted (2026-10-19); a recursive resolver can also cache that miss
  * (the zone's negative TTL is 30 min), so ask the authoritative servers directly.
  */
@@ -75,10 +79,9 @@ export async function issueRexDirectCert(hostname: string): Promise<IssuedCert> 
 	);
 	const records = new Map<string, string>();
 	const certificate = await client.auto({
-		csr,
+		csr: Buffer.from(csr),
 		email,
 		termsOfServiceAgreed: true,
-		challengePriority: ['dns-01'],
 		skipChallengeVerification: true,
 		challengeCreateFn: async (authz, _challenge, keyAuthorization) => {
 			const name = authz.identifier.value;
@@ -92,7 +95,7 @@ export async function issueRexDirectCert(hostname: string): Promise<IssuedCert> 
 	});
 	return {
 		certificate,
-		privateKey: privateKey.toString(),
+		privateKey: Buffer.from(privateKey).toString('utf8'),
 		expiresAt: acme.crypto.readCertificateInfo(certificate).notAfter,
 	};
 }

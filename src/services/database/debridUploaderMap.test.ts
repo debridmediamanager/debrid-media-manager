@@ -2,15 +2,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DebridUploaderMapService } from './debridUploaderMap';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		cache: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			deleteMany: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			cache: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				deleteMany: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 const HASH = 'A'.repeat(40); // uppercase to exercise normalization

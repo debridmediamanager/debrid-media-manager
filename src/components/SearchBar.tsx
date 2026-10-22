@@ -50,7 +50,7 @@ function SuggestionRow({
 			{/* Content */}
 			<div className="relative z-20 flex h-full items-center">
 				<div className="flex w-[calc(100%-42px)] items-center justify-between px-3">
-					<div className="flex max-w-[70%] items-center space-x-2">
+					<div className="sibling-space-x-2 flex max-w-[70%] items-center">
 						<span
 							className="line-clamp-1 text-base font-medium text-white transition-colors group-hover:text-blue-400"
 							title={title}
@@ -58,14 +58,14 @@ function SuggestionRow({
 							{title}
 						</span>
 						{year != null && (
-							<span className="whitespace-nowrap text-sm text-gray-400">
+							<span className="text-sm whitespace-nowrap text-gray-400">
 								({year})
 							</span>
 						)}
 					</div>
 					{badge && (
 						<span
-							className={`whitespace-nowrap rounded-full bg-gray-900/80 px-2 py-0.5 text-xs ${badgeClassName}`}
+							className={`rounded-full bg-gray-900/80 px-2 py-0.5 text-xs whitespace-nowrap ${badgeClassName}`}
 						>
 							{badge}
 						</span>
@@ -73,7 +73,7 @@ function SuggestionRow({
 				</div>
 
 				{/* Right-side poster (full view) */}
-				<div className="absolute right-0 top-0 z-30 aspect-[2/3] h-full">{poster}</div>
+				<div className="absolute top-0 right-0 z-30 aspect-[2/3] h-full">{poster}</div>
 			</div>
 		</div>
 	);
@@ -185,7 +185,7 @@ export function SearchBar({
 			<form onSubmit={handleSearch}>
 				<div className="flex items-center border-b-2 border-gray-500 py-2">
 					<input
-						className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-lg leading-tight text-white focus:outline-none"
+						className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-lg leading-tight text-white focus:outline-hidden"
 						type="text"
 						placeholder={placeholder}
 						value={typedQuery}
@@ -194,7 +194,7 @@ export function SearchBar({
 					/>
 					<button
 						type="submit"
-						className="haptic-sm flex-shrink-0 rounded-lg border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-all hover:bg-gray-700/50"
+						className="haptic-sm shrink-0 rounded-lg border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-all hover:bg-gray-700/50"
 					>
 						Search
 					</button>
@@ -238,7 +238,7 @@ export function SearchBar({
 							data-testid="anime-suggestions"
 							className="divide-y divide-gray-700/50"
 						>
-							<div className="px-3 py-1 text-xs font-semibold uppercase tracking-wide text-fuchsia-300">
+							<div className="px-3 py-1 text-xs font-semibold tracking-wide text-fuchsia-300 uppercase">
 								Anime
 							</div>
 							{animeSuggestions.map((result) => {
@@ -252,7 +252,7 @@ export function SearchBar({
 										onSelect={() => handleAnimeClick(path)}
 										poster={
 											result.poster_url && (
-												// eslint-disable-next-line @next/next/no-img-element
+												// oxlint-disable-next-line nextjs/no-img-element
 												<img
 													src={result.poster_url}
 													alt={`${result.title} poster`}

@@ -194,7 +194,7 @@ export default function TransfersPage() {
 				</button>
 			</div>
 			{loaded && transfers.length > 0 && (
-				<span className="text-xs tabular-nums text-gray-400">
+				<span className="text-xs text-gray-400 tabular-nums">
 					Showing {page.start + 1}–{page.start + transfers.length}
 				</span>
 			)}
@@ -389,7 +389,7 @@ export default function TransfersPage() {
 						page.
 					</div>
 				) : (
-					<div className="space-y-2">
+					<div className="sibling-space-y-2">
 						{transfers.map((t) => {
 							const progress = describeTransfer(t.source, t);
 							const terminal = isTerminal(t.source, t.status);
@@ -488,7 +488,7 @@ export default function TransfersPage() {
 												</div>
 											)}
 											{t.status === 'failed' && t.error && (
-												<div className="mt-1 break-words text-xs text-red-300">
+												<div className="mt-1 text-xs break-words text-red-300">
 													{t.error}
 												</div>
 											)}

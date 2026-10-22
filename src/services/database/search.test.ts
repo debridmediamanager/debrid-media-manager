@@ -2,13 +2,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SearchService } from './search';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		search: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			search: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 describe('SearchService', () => {

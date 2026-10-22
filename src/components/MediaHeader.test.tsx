@@ -26,7 +26,7 @@ const { relatedMediaMock, posterMock } = vi.hoisted(() => ({
 // a browser; React listens for `error` on media elements only.
 vi.mock('next/image', () => ({
 	__esModule: true,
-	// eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+	// oxlint-disable-next-line nextjs/no-img-element, jsx-a11y/alt-text
 	default: ({ fill: _fill, ...props }: any) => <img data-testid="next-image-mock" {...props} />,
 }));
 

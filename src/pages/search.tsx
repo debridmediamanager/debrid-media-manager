@@ -109,7 +109,7 @@ function Search() {
 					<form onSubmit={handleSubmit}>
 						<div className="mb-4 flex items-center border-b-2 border-gray-500 py-2">
 							<input
-								className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-white focus:outline-none"
+								className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-white focus:outline-hidden"
 								type="text"
 								id="query"
 								placeholder="e.g. breaking bad show, tt1234567, etc."
@@ -117,7 +117,7 @@ function Search() {
 								onChange={(e) => setTypedQuery(e.target.value)}
 							/>
 							<button
-								className="haptic-sm flex-shrink-0 rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+								className="haptic-sm shrink-0 rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 								type="submit"
 							>
 								Search
@@ -129,7 +129,7 @@ function Search() {
 				{loading && searchResults.length === 0 && (
 					<div className="mt-4 flex items-center justify-center">
 						<div
-							className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"
+							className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"
 							data-testid="loading-spinner"
 						></div>
 					</div>
@@ -182,7 +182,7 @@ function Search() {
 										className="haptic flex flex-col items-center justify-center gap-2 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 p-3 text-fuchsia-100 transition-colors hover:bg-fuchsia-800/50"
 										href={animePagePath(result.id)!}
 									>
-										{/* eslint-disable-next-line @next/next/no-img-element */}
+										{/* oxlint-disable-next-line nextjs/no-img-element */}
 										<img
 											src={result.poster_url}
 											alt={`${result.title} poster`}

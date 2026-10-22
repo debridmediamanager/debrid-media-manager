@@ -1,0 +1,4 @@
+{
+	"exclude": ["node_modules", "prod_node_modules", ".claude"],
+	"extends": "./tsconfig.json"
+}

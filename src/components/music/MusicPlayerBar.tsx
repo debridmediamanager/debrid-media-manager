@@ -45,18 +45,18 @@ export default function MusicPlayerBar({
 	isQueueOpen,
 }: MusicPlayerBarProps) {
 	return (
-		<div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up border-t border-white/10 bg-black/90 px-3 py-2 backdrop-blur-xl md:bottom-4 md:left-4 md:right-4 md:rounded-xl md:border md:bg-black/80 md:px-5 md:py-3 md:shadow-music-2xl">
+		<div className="fixed right-0 bottom-0 left-0 z-50 animate-slide-up border-t border-white/10 bg-black/90 px-3 py-2 backdrop-blur-xl md:right-4 md:bottom-4 md:left-4 md:rounded-xl md:border md:bg-black/80 md:px-5 md:py-3 md:shadow-music-2xl">
 			{/* Mobile layout */}
 			<div className="flex flex-col gap-2 md:hidden">
 				{/* Row 1: Track info + controls */}
 				<div className="flex items-center gap-3">
 					{/* Cover */}
-					<div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md bg-gray-800">
+					<div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-gray-800">
 						<div className="flex h-full w-full items-center justify-center">
 							<Disc3 className="h-5 w-5 text-gray-500" />
 						</div>
 						{currentTrack.album.coverUrl && (
-							// eslint-disable-next-line @next/next/no-img-element
+							// oxlint-disable-next-line nextjs/no-img-element
 							<img
 								src={currentTrack.album.coverUrl}
 								alt={currentTrack.album.album}
@@ -151,14 +151,14 @@ export default function MusicPlayerBar({
 			<div className="mx-auto hidden max-w-screen-2xl items-center gap-4 md:flex">
 				{/* Track info */}
 				<div className="flex w-72 items-center gap-4">
-					<div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-gray-800 shadow-lg">
+					<div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-800 shadow-lg">
 						{/* Fallback icon */}
 						<div className="flex h-full w-full items-center justify-center">
 							<Disc3 className="h-8 w-8 text-gray-500" />
 						</div>
 						{/* Album cover */}
 						{currentTrack.album.coverUrl && (
-							// eslint-disable-next-line @next/next/no-img-element
+							// oxlint-disable-next-line nextjs/no-img-element
 							<img
 								src={currentTrack.album.coverUrl}
 								alt={currentTrack.album.album}

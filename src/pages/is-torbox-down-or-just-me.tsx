@@ -425,7 +425,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									</span>
 								</div>
 								{tbApi && tbApi.totalCount > 0 && (
-									<div className="mt-3 space-y-2">
+									<div className="mt-3 sibling-space-y-2">
 										<div className="text-xs font-medium text-slate-400">
 											By operation
 										</div>
@@ -487,7 +487,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 								<Activity className="h-4 w-4" />
 								Sample Size
 							</h3>
-							<div className="mt-4 space-y-3">
+							<div className="mt-4 sibling-space-y-3">
 								<div>
 									<div className="text-3xl font-bold text-white">
 										{formatCount(considered)}
@@ -558,7 +558,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										</Link>
 									</p>
 								</div>
-								<div className="flex flex-shrink-0 flex-wrap gap-2">
+								<div className="flex shrink-0 flex-wrap gap-2">
 									<Link
 										href="/torbox/login"
 										className="rounded bg-[#4f46e5] px-2.5 py-1 text-xs font-semibold text-white hover:bg-indigo-500"

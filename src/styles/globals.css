@@ -1,15 +1,104 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind dark;
+@import 'tailwindcss' source(none);
+@import './palette.css';
+@source "../";
 
-body {
-	background-color: rgb(17, 24, 39);
-	color: azure;
+/* Keep the existing interaction semantics on touch and hybrid devices. */
+@custom-variant hover (&:hover);
+
+@theme {
+	/* Bare and small utilities keep their original, distinct scales. */
+	--radius: 0.25rem;
+	--radius-sm: 0.125rem;
+	--radius-full: 9999px;
+	--shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+	--shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+	--blur: 8px;
+	--blur-sm: 4px;
+	--blur-md: 12px;
+	--blur-lg: 16px;
+	--blur-xl: 24px;
+	--blur-2xl: 40px;
+	--blur-3xl: 64px;
+	--drop-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 1px 1px rgb(0 0 0 / 0.06);
+	--drop-shadow-sm: 0 1px 1px rgb(0 0 0 / 0.05);
+	--default-ring-width: 3px;
+	--default-ring-color: rgb(59 130 246 / 0.5);
+	--shadow-glow: 0 0 10px blue, 0 0 15px blue;
+	--shadow-music-lg: 0 10px 25px -5px rgb(0 0 0 / 0.4);
+	--shadow-music-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+	--animate-slide-up: slide-up 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+	@keyframes slide-up {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 }
 
-a {
-	color: inherit;
+/* Preserve Preflight defaults that the app inherited before the major upgrade.
+ * https://tailwindcss.com/docs/upgrade-guide
+ */
+@layer base {
+	*,
+	::before,
+	::after,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
+
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--color-gray-400);
+		opacity: 1;
+	}
+
+	button,
+	[role='button'] {
+		cursor: pointer;
+	}
+
+	:disabled {
+		cursor: default;
+	}
+
+	dialog {
+		margin: auto;
+	}
+	body {
+		background-color: rgb(17, 24, 39);
+		color: azure;
+	}
+
+	a {
+		color: inherit;
+	}
+}
+
+/* Result action rows mix inline controls, hidden children and their own
+ * margins. Keep spacing on following visible siblings, not preceding children.
+ */
+@utility sibling-space-x-* {
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-left: calc(var(--spacing) * --value(number));
+		margin-left: --value([length], [percentage]);
+	}
+}
+
+@utility sibling-space-y-* {
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: calc(var(--spacing) * --value(number));
+		margin-top: --value([length], [percentage]);
+	}
 }
 
 /* Add these new utility classes for haptic feedback */

@@ -2,15 +2,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Nzb2rdMapService } from './nzb2rdMap';
 
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn(() => ({
-		cache: {
-			upsert: vi.fn(),
-			findUnique: vi.fn(),
-			findMany: vi.fn(),
-			deleteMany: vi.fn(),
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn(function () {
+		return {
+			cache: {
+				upsert: vi.fn(),
+				findUnique: vi.fn(),
+				findMany: vi.fn(),
+				deleteMany: vi.fn(),
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 const RELEASE = 'ABC123def'; // mixed case to exercise normalization

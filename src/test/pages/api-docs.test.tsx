@@ -3,6 +3,7 @@ import { join } from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openApiDocument } from '@/utils/openapi';
+import loadConfig from '../../../next.config.js';
 
 const API = join(__dirname, '../../pages');
 
@@ -114,8 +115,13 @@ describe('/api-docs page', () => {
 	});
 
 	it('is what /api-docs serves', async () => {
-		const config = require('../../../next.config.js');
-		const { afterFiles } = await (config.rewrites ?? config.default?.rewrites)();
+		const config = await loadConfig();
+		if (!config.rewrites) throw new Error('Expected Next rewrite configuration');
+		const rewrites = await config.rewrites();
+		if (Array.isArray(rewrites) || !rewrites.afterFiles) {
+			throw new Error('Expected afterFiles rewrites for the API documentation');
+		}
+		const { afterFiles } = rewrites;
 		expect(afterFiles).toContainEqual({ source: '/api-docs', destination: '/api-docs.html' });
 	});
 });

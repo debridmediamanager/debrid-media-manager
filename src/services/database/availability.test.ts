@@ -16,33 +16,35 @@ const findManyAdMock = vi.fn();
 const createManyAdMock = vi.fn();
 const createManyAdFileMock = vi.fn();
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn().mockImplementation(() => ({
-		available: {
-			findFirst: findFirstMock,
-			upsert: upsertMock,
-			findMany: findManyMock,
-			delete: deleteMock,
-			createMany: createManyMock,
-		},
-		availableAd: {
-			findMany: findManyAdMock,
-			createMany: createManyAdMock,
-		},
-		availableAdFile: {
-			createMany: createManyAdFileMock,
-		},
-		availableFile: {
-			findUnique: findUniqueMock,
-			findFirst: findFirstFileMock,
-			deleteMany: deleteManyFileMock,
-			createMany: createManyFileMock,
-		},
-		cache: {
-			findUnique: cacheFindUniqueMock,
-			upsert: cacheUpsertMock,
-		},
-		$disconnect: vi.fn(),
-	})),
+	PrismaClient: vi.fn().mockImplementation(function () {
+		return {
+			available: {
+				findFirst: findFirstMock,
+				upsert: upsertMock,
+				findMany: findManyMock,
+				delete: deleteMock,
+				createMany: createManyMock,
+			},
+			availableAd: {
+				findMany: findManyAdMock,
+				createMany: createManyAdMock,
+			},
+			availableAdFile: {
+				createMany: createManyAdFileMock,
+			},
+			availableFile: {
+				findUnique: findUniqueMock,
+				findFirst: findFirstFileMock,
+				deleteMany: deleteManyFileMock,
+				createMany: createManyFileMock,
+			},
+			cache: {
+				findUnique: cacheFindUniqueMock,
+				upsert: cacheUpsertMock,
+			},
+			$disconnect: vi.fn(),
+		};
+	}),
 }));
 
 describe('AvailabilityService', () => {

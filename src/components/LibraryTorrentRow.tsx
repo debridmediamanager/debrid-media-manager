@@ -512,7 +512,7 @@ function TorrentRow({
 												)}`
 									}
 									target="_blank"
-									className="ml-1 mr-2 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
+									className="mr-2 ml-1 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
 									onClick={(e) => e.stopPropagation()}
 								>
 									{identification
@@ -565,7 +565,7 @@ function TorrentRow({
 					{rdKey && torrent.id.startsWith('rd:') && (
 						<button
 							title="Cast (RD)"
-							className="cursor-pointer p-3 text-green-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-green-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleCastClick();
@@ -578,7 +578,7 @@ function TorrentRow({
 					{adKey && torrent.id.startsWith('ad:') && (
 						<button
 							title="Cast (AD)"
-							className="cursor-pointer p-3 text-purple-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-purple-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleAdCastClick();
@@ -591,7 +591,7 @@ function TorrentRow({
 					{tbKey && torrent.id.startsWith('tb:') && (
 						<button
 							title="Cast (TB)"
-							className="cursor-pointer p-3 text-cyan-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-cyan-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleTbCastClick();
@@ -604,7 +604,7 @@ function TorrentRow({
 					{pmKey && torrent.id.startsWith('pm:') && torrent.hash && (
 						<button
 							title="Cast (PM)"
-							className="cursor-pointer p-3 text-yellow-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-yellow-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handlePmCastClick();
@@ -617,7 +617,7 @@ function TorrentRow({
 					{ocKey && torrent.id.startsWith('oc:') && torrent.hash && (
 						<button
 							title="Cast (OC)"
-							className="cursor-pointer p-3 text-orange-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-orange-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleOcCastClick();
@@ -630,7 +630,7 @@ function TorrentRow({
 					{dlKey && torrent.id.startsWith('dl:') && torrent.hash && (
 						<button
 							title="Cast (DL)"
-							className="cursor-pointer p-3 text-sky-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-sky-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleDlCastClick();
@@ -643,7 +643,7 @@ function TorrentRow({
 					{canSendToRd && (
 						<button
 							title="Send to Real-Debrid"
-							className="cursor-pointer p-3 text-indigo-400 disabled:opacity-50 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-indigo-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								setShowSendModal(true);
@@ -660,7 +660,7 @@ function TorrentRow({
 					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Share"
-							className="cursor-pointer p-3 text-indigo-600 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-indigo-600 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={async (e) => {
 								e.stopPropagation();
 								router.push(await handleShare(torrent));
@@ -671,7 +671,7 @@ function TorrentRow({
 					)}
 					<button
 						title="Delete"
-						className="cursor-pointer p-3 text-red-500 sm:mb-2 sm:mr-2 sm:p-0"
+						className="cursor-pointer p-3 text-red-500 sm:mr-2 sm:mb-2 sm:p-0"
 						onClick={async (e) => {
 							e.stopPropagation();
 							let success = false;
@@ -705,7 +705,7 @@ function TorrentRow({
 					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Copy magnet url"
-							className="cursor-pointer p-3 text-pink-500 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-pink-500 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								void handleCopyOrDownloadMagnet(
@@ -720,7 +720,7 @@ function TorrentRow({
 					{!isTbWebDownload && (
 						<button
 							title="Reinsert"
-							className="cursor-pointer p-3 text-green-500 sm:mb-2 sm:mr-2 sm:p-0"
+							className="cursor-pointer p-3 text-green-500 sm:mr-2 sm:mb-2 sm:p-0"
 							onClick={async (e) => {
 								e.stopPropagation();
 								try {

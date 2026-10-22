@@ -128,7 +128,7 @@ function TraktMyLists() {
 
 				{loading && Object.keys(arrayOfResults).length === 0 && (
 					<div className="mt-4 flex items-center justify-center">
-						<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+						<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 					</div>
 				)}
 			</div>

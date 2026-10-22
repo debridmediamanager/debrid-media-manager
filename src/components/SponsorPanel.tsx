@@ -104,7 +104,7 @@ export const SponsorPanel: FC = () => {
 				placeholder="64-character DMM API key"
 				autoComplete="off"
 				spellCheck={false}
-				className="rounded border border-gray-600 bg-gray-900 px-3 py-2 font-mono text-xs text-gray-100 placeholder:text-gray-500 focus:border-pink-400 focus:outline-none"
+				className="rounded border border-gray-600 bg-gray-900 px-3 py-2 font-mono text-xs text-gray-100 placeholder:text-gray-500 focus:border-pink-400 focus:outline-hidden"
 			/>
 			{error && <p className="text-center text-xs text-red-300">{error}</p>}
 			<button

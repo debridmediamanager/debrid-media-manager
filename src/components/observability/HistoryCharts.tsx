@@ -255,7 +255,7 @@ export function HistoryCharts() {
 
 	if (loading) {
 		return (
-			<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+			<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
 					<h2 className="text-lg font-semibold text-white">Historical Data</h2>
@@ -272,7 +272,7 @@ export function HistoryCharts() {
 
 	if (error) {
 		return (
-			<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+			<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
 					<h2 className="text-lg font-semibold text-white">Historical Data</h2>
@@ -299,7 +299,7 @@ export function HistoryCharts() {
 	const hasData = hasStreamData || hasRdData || hasTorrentioData;
 
 	return (
-		<section className="space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
+		<section className="sibling-space-y-6 rounded-xl border border-white/10 bg-black/25 p-5">
 			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div className="flex items-center gap-3">
 					<TrendingUp className="h-5 w-5 text-slate-400" />
@@ -338,7 +338,7 @@ export function HistoryCharts() {
 					</div>
 				</div>
 			) : (
-				<div className="space-y-6">
+				<div className="sibling-space-y-6">
 					{hasStreamData && (
 						<div className="rounded-xl border border-white/10 bg-black/20 p-4">
 							<h3 className="mb-4 text-sm font-medium text-slate-200">

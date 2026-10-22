@@ -133,7 +133,7 @@ export default function ImdbPickerModal({
 						<SearchIcon className="h-4 w-4 shrink-0 text-gray-400" />
 						<input
 							ref={inputRef}
-							className="w-full bg-transparent px-2 py-2 text-sm text-white focus:outline-none"
+							className="w-full bg-transparent px-2 py-2 text-sm text-white focus:outline-hidden"
 							placeholder="Search movies & shows, or paste a tt… id"
 							value={query}
 							onChange={(e) => setQuery(e.target.value)}

@@ -36,9 +36,11 @@ vi.mock('@/services/metadataCache', () => ({
 }));
 
 vi.mock('user-agents', () => ({
-	default: vi.fn().mockImplementation(() => ({
-		toString: () => 'test-agent',
-	})),
+	default: vi.fn().mockImplementation(function () {
+		return {
+			toString: () => 'test-agent',
+		};
+	}),
 }));
 
 import { getMdblistClient } from '@/services/mdblistClient';

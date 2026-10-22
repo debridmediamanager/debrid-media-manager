@@ -56,6 +56,9 @@ src/json-to-import
 
 # PWA files
 public/service-worker.js
+public/service-worker.js.map
+public/swe-worker-*.js
+public/swe-worker-*.js.map
 public/workbox-*.js
 public/worker-*.js
 public/sw.js

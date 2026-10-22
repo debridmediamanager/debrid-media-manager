@@ -15,8 +15,8 @@
  * (stremio-core `WATCHED_THRESHOLD_COEF`, `CREDITS_THRESHOLD_COEF`). A member
  * reads the notice and stops long before 84 seconds.
  *
- * They live under `noprecache/` because next-pwa puts every other file in
- * `public/` into the service worker's precache, which every visitor downloads.
+ * They live under `noprecache/`, which the Serwist public-asset manifest excludes
+ * so visitors download them only when playback needs a notice.
  */
 
 export type CastPlayVideo =

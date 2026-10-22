@@ -9,7 +9,7 @@ import { FormEvent, useState } from 'react';
 // Approving it in /copyright/admin is what removes the content.
 
 const inputClass =
-	'w-full rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-cyan-500 focus:outline-none';
+	'w-full rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-cyan-500 focus:outline-hidden';
 
 type Receipt = { id: string; hashes: number; releases: number; hashlists: number };
 

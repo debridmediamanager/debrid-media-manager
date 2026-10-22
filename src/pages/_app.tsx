@@ -18,6 +18,34 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 	const router = useRouter();
 
 	useEffect(() => {
+		if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;
+		const cachePage = (path: string) => {
+			if (!navigator.onLine) return;
+			const url = new URL(path, window.location.origin);
+			if (
+				url.origin !== window.location.origin ||
+				url.pathname === '/api' ||
+				url.pathname.startsWith('/api/')
+			)
+				return;
+			navigator.serviceWorker.controller?.postMessage({
+				type: 'CACHE_APP_DOCUMENT',
+				url: url.href,
+			});
+		};
+		const cacheCurrentPage = () => cachePage(window.location.href);
+		router.events.on('routeChangeComplete', cachePage);
+		window.addEventListener('online', cacheCurrentPage);
+		navigator.serviceWorker.addEventListener('controllerchange', cacheCurrentPage);
+		cacheCurrentPage();
+		return () => {
+			router.events.off('routeChangeComplete', cachePage);
+			window.removeEventListener('online', cacheCurrentPage);
+			navigator.serviceWorker.removeEventListener('controllerchange', cacheCurrentPage);
+		};
+	}, [router.events]);
+
+	useEffect(() => {
 		// Save scroll position before route changes
 		const handleRouteChangeStart = (url: string) => {
 			sessionStorage.setItem(`scrollPos_${router.asPath}`, window.scrollY.toString());

@@ -523,8 +523,8 @@ const MovieSearchResults = ({
 
 	const getMovieCountClass = (videoCount: number, isInstantlyAvailable: boolean) => {
 		if (!isInstantlyAvailable) return ''; // No color for unavailable torrents
-		if (videoCount === 1) return 'bg-gray-800';
-		return 'bg-blue-900';
+		if (videoCount === 1) return 'bg-gray-800/30';
+		return 'bg-blue-900/30';
 	};
 
 	return (
@@ -598,17 +598,17 @@ const MovieSearchResults = ({
 				return (
 					<div
 						key={i}
-						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 					>
-						<div className="space-y-2 p-1">
-							<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
+						<div className="sibling-space-y-2 p-1">
+							<h2 className="line-clamp-2 overflow-hidden text-sm leading-tight font-bold break-words text-ellipsis">
 								{r.title}
 							</h2>
 
 							{r.videoCount > 0 ? (
 								<div className="text-xs text-gray-300">
 									<span
-										className="haptic-sm inline-flex cursor-pointer items-center rounded bg-black bg-opacity-50 px-2 py-1 hover:bg-opacity-75"
+										className="haptic-sm inline-flex cursor-pointer items-center rounded bg-black/50 px-2 py-1 hover:bg-black/75"
 										onClick={() => handleShowInfo(r)}
 									>
 										<Folder className="mr-1 h-4 w-4" />
@@ -676,7 +676,7 @@ const MovieSearchResults = ({
 								</div>
 							)}
 
-							<div className="space-x-1 space-y-1">
+							<div className="sibling-space-y-1 sibling-space-x-1">
 								{/* — RD — */}
 								{rdKey && inLibrary('rd', r.hash) && (
 									<button

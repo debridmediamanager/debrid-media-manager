@@ -1,7 +1,8 @@
 import { readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
-import colors from 'tailwindcss/colors';
-import { describe, expect, it } from 'vitest';
+import postcss, { type AnyNode, type PluginCreator, type Root } from 'postcss';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 // Every class list that paints its own solid background and text colour must
 // meet WCAG AA. Buttons are the common case: `bg-blue-500 text-white` reads at
@@ -11,18 +12,42 @@ import { describe, expect, it } from 'vitest';
 
 const SRC = path.join(process.cwd(), 'src');
 
+// The app's node module resolution cannot consume this package's ESM-only
+// declarations; load its public CJS entry with the PostCSS plugin contract.
+const tailwind = createRequire(path.join(process.cwd(), 'package.json'))(
+	'@tailwindcss/postcss'
+) as PluginCreator<{ optimize: boolean; base: string }>;
+
 type Rgb = [number, number, number];
 
-const palette = colors as unknown as Record<string, Record<string, string> | string>;
+const palette = new Map<string, string>();
+let stylesheet: Root;
+
+beforeAll(async () => {
+	const from = path.join(SRC, 'styles/globals.css');
+	const fixture = `
+		@source inline("shadow shadow-sm rounded rounded-sm blur blur-sm ring bg-black/50 hover:bg-black/75 animate-slide-up shadow-glow shadow-music-lg shadow-music-2xl");
+	`;
+	const result = await postcss([tailwind({ optimize: false, base: SRC })]).process(
+		readFileSync(from, 'utf-8') + fixture,
+		{ from }
+	);
+	stylesheet = result.root;
+	stylesheet.walkDecls(/^--color-/, ({ prop, value }) => {
+		palette.set(prop.slice('--color-'.length), value);
+	});
+});
 
 const colour = (token: string): Rgb | null => {
 	if (token === 'white') return [255, 255, 255];
 	if (token === 'black') return [0, 0, 0];
 	const match = token.match(/^([a-z]+)-(\d{2,3})$/);
 	if (!match) return null;
-	const shades = palette[match[1]];
-	const value = typeof shades === 'object' ? shades[match[2]] : undefined;
-	if (!value || !value.startsWith('#')) return null;
+	const value = palette.get(token);
+	// An unresolved/new color format must fail, not silently stop checking AA.
+	if (!value || !/^#[0-9a-f]{6}$/i.test(value)) {
+		throw new Error(`Cannot measure the compiled application color: ${token} (${value})`);
+	}
 	return [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16)) as Rgb;
 };
 
@@ -95,5 +120,72 @@ describe('solid colour class lists', () => {
 			)
 		);
 		expect(offenders).toEqual([]);
+	});
+});
+
+describe('compiled application styling', () => {
+	const declarations = (selector: string, property: string) => {
+		const values: string[] = [];
+		stylesheet.walkRules((rule) => {
+			if (rule.selector !== selector) return;
+			rule.walkDecls(property, ({ value }) => {
+				values.push(value);
+			});
+		});
+		return values;
+	};
+
+	const themeValue = (property: string) => {
+		const values: string[] = [];
+		stylesheet.walkDecls(property, ({ value }) => {
+			values.push(value);
+		});
+		return values.at(-1);
+	};
+
+	it('uses the application palette for emitted foreground and background utilities', () => {
+		expect(colour('blue-600')).toEqual([37, 99, 235]);
+		expect(colour('gray-900')).toEqual([17, 24, 39]);
+		expect(declarations('.bg-blue-600', 'background-color')).toContain('var(--color-blue-600)');
+		expect(declarations('.text-gray-100', 'color')).toContain('var(--color-gray-100)');
+		expect(() => colour('unknown-500')).toThrow('Cannot measure');
+	});
+
+	it('retains distinct small and bare radii, shadows, blurs and focus rings', () => {
+		expect(themeValue('--radius')).toBe('0.25rem');
+		expect(themeValue('--radius-sm')).toBe('0.125rem');
+		expect(declarations('.rounded', 'border-radius')).toContain('var(--radius)');
+		expect(declarations('.rounded-sm', 'border-radius')).toContain('var(--radius-sm)');
+		expect(themeValue('--shadow')).toContain('0 1px 3px');
+		expect(themeValue('--shadow-sm')).toBe('0 1px 2px 0 rgb(0 0 0 / 0.05)');
+		expect(themeValue('--blur')).toBe('8px');
+		expect(themeValue('--blur-sm')).toBe('4px');
+		expect(declarations('.ring', '--tw-ring-shadow').join(' ')).toContain('3px');
+	});
+
+	it('emits translucent overlays and unrestricted hover states', () => {
+		expect(declarations('.bg-black\\/50', 'background-color').join(' ')).toMatch(/50%/);
+		const hoverRules: string[] = [];
+		stylesheet.walkRules((rule) => {
+			if (!rule.selector.includes('hover\\:bg-black\\/75')) return;
+			hoverRules.push(rule.toString());
+			let ancestor: AnyNode | undefined = rule.parent;
+			while (ancestor) {
+				if (ancestor.type === 'atrule' && ancestor.name === 'media') {
+					expect(ancestor.params).not.toContain('hover: hover');
+				}
+				ancestor = ancestor.parent;
+			}
+		});
+		expect(hoverRules.join(' ')).toContain(':hover');
+		expect(hoverRules.join(' ')).toMatch(/75%/);
+	});
+
+	it('emits the music animation and custom shadows', () => {
+		expect(themeValue('--animate-slide-up')).toContain('slide-up 400ms');
+		expect(declarations('.animate-slide-up', 'animation')).toContain('var(--animate-slide-up)');
+		expect(themeValue('--shadow-glow')).toBe('0 0 10px blue, 0 0 15px blue');
+		expect(declarations('.shadow-music-lg', '--tw-shadow').join(' ')).toContain('25px');
+		expect(declarations('.shadow-music-2xl', '--tw-shadow').join(' ')).toContain('50px');
 	});
 });

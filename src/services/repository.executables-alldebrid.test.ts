@@ -20,10 +20,12 @@ const { rdFindMany, adFindMany } = vi.hoisted(() => ({
 rdFindMany.mockImplementation(filesOf(fixture.rdFiles as Record<string, string[]>));
 adFindMany.mockImplementation(filesOf(fixture.adFiles as Record<string, string[]>));
 vi.mock('@prisma/client', () => ({
-	PrismaClient: vi.fn().mockImplementation(() => ({
-		available: { findMany: rdFindMany },
-		availableAd: { findMany: adFindMany },
-	})),
+	PrismaClient: vi.fn().mockImplementation(function () {
+		return {
+			available: { findMany: rdFindMany },
+			availableAd: { findMany: adFindMany },
+		};
+	}),
 }));
 
 const AD_FAKES = [

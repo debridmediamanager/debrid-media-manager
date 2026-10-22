@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+/* oxlint-disable nextjs/no-img-element */
 import type { SearchResult } from '@/services/mediasearch';
 import {
 	addonFixture,

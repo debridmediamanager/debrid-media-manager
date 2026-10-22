@@ -53,23 +53,23 @@ describe('episodeUtils', () => {
 		});
 
 		it('returns gray class for single episode when available', () => {
-			expect(getEpisodeCountClass(1, 10, true)).toBe('bg-gray-800');
+			expect(getEpisodeCountClass(1, 10, true)).toBe('bg-gray-800/30');
 		});
 
 		it('returns purple class for incomplete pack when available', () => {
-			expect(getEpisodeCountClass(5, 10, true)).toBe('bg-purple-800');
+			expect(getEpisodeCountClass(5, 10, true)).toBe('bg-purple-800/30');
 		});
 
 		it('returns green class for complete pack when available', () => {
-			expect(getEpisodeCountClass(10, 10, true)).toBe('bg-green-900');
+			expect(getEpisodeCountClass(10, 10, true)).toBe('bg-green-900/30');
 		});
 
 		it('returns blue class for pack with extras when available', () => {
-			expect(getEpisodeCountClass(15, 10, true)).toBe('bg-blue-900');
+			expect(getEpisodeCountClass(15, 10, true)).toBe('bg-blue-900/30');
 		});
 
 		it('returns purple class for edge case at expected - 1', () => {
-			expect(getEpisodeCountClass(9, 10, true)).toBe('bg-purple-800');
+			expect(getEpisodeCountClass(9, 10, true)).toBe('bg-purple-800/30');
 		});
 	});
 

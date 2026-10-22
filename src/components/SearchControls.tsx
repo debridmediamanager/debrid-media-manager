@@ -52,7 +52,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 			<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
 				<Search className="mr-2 h-4 w-4 text-gray-400" />
 				<input
-					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -83,14 +83,14 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 					showMassReportButtons && (
 						<div className="ml-2 flex gap-2">
 							<span
-								className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+								className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 								onClick={() => onMassReport('porn')}
 								title="Report all filtered torrents as pornographic content"
 							>
 								Report as Porn ({totalCount})
 							</span>
 							<span
-								className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+								className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 								onClick={() => onMassReport('wrong_imdb')}
 								title="Report all filtered torrents as wrong IMDB ID"
 							>
@@ -98,7 +98,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 							</span>
 							{mediaType === 'tv' && (
 								<span
-									className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+									className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 									onClick={() => onMassReport('wrong_season')}
 									title="Report all filtered torrents as wrong season"
 								>
@@ -121,7 +121,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 					colorScales.map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer whitespace-nowrap rounded px-2 py-1 text-xs text-white`}
+							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForScale(scale.threshold);
 								const cleanedPrev = query.replace(/\bvideos:[^\s]+/g, '').trim();
@@ -136,7 +136,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 				{extraTokens?.map((token) => (
 					<span
 						key={token.label}
-						className="cursor-pointer whitespace-nowrap rounded bg-emerald-900 px-2 py-1 text-xs text-emerald-100"
+						className="cursor-pointer rounded bg-emerald-900 px-2 py-1 text-xs whitespace-nowrap text-emerald-100"
 						onClick={() => {
 							const nextQuery = query ? `${query} ${token.query}` : token.query;
 							onQueryChange(nextQuery);

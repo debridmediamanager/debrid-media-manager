@@ -167,9 +167,9 @@ interface BaseModalProps {
 }
 
 const LoadingModal: React.FC = () => (
-	<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+	<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 		<div className="rounded-lg bg-gray-900 p-6 shadow-xl">
-			<div className="flex items-center space-x-3">
+			<div className="sibling-space-x-3 flex items-center">
 				<Loader2 className="h-6 w-6 animate-spin text-cyan-500" />
 				<span className="text-gray-100">Loading...</span>
 			</div>
@@ -205,7 +205,7 @@ const ConfirmDialog: React.FC<FireOptions & BaseModalProps> = ({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 			onClick={handleBackdropClick}
 		>
 			<div
@@ -227,10 +227,10 @@ const ConfirmDialog: React.FC<FireOptions & BaseModalProps> = ({
 					<h2 className="mb-2 text-center text-xl font-bold text-gray-100">{title}</h2>
 				)}
 				{text && <p className="mb-6 text-center text-gray-300">{text}</p>}
-				<div className="flex justify-center space-x-3">
+				<div className="sibling-space-x-3 flex justify-center">
 					<button
 						onClick={() => onClose({ isConfirmed: true })}
-						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:ring-2 focus:ring-cyan-500 focus:outline-hidden"
 					>
 						{confirmButtonText}
 					</button>
@@ -243,7 +243,7 @@ const ConfirmDialog: React.FC<FireOptions & BaseModalProps> = ({
 									dismiss: 'cancel',
 								})
 							}
-							className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+							className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:outline-hidden"
 						>
 							Cancel
 						</button>
@@ -289,7 +289,7 @@ const ChoiceDialog: React.FC<FireOptions & BaseModalProps> = ({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 			onClick={handleBackdropClick}
 		>
 			<div
@@ -311,16 +311,16 @@ const ChoiceDialog: React.FC<FireOptions & BaseModalProps> = ({
 					<h2 className="mb-2 text-center text-xl font-bold text-gray-100">{title}</h2>
 				)}
 				{text && <p className="mb-6 text-center text-gray-300">{text}</p>}
-				<div className="flex justify-center space-x-3">
+				<div className="sibling-space-x-3 flex justify-center">
 					<button
 						onClick={() => onClose({ isConfirmed: true, isDenied: false })}
-						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:ring-2 focus:ring-cyan-500 focus:outline-hidden"
 					>
 						{confirmButtonText}
 					</button>
 					<button
 						onClick={() => onClose({ isConfirmed: false, isDenied: true })}
-						className="rounded bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+						className="rounded bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
 					>
 						{denyButtonText}
 					</button>
@@ -329,7 +329,7 @@ const ChoiceDialog: React.FC<FireOptions & BaseModalProps> = ({
 							onClick={() =>
 								onClose({ isConfirmed: false, isDenied: false, isDismissed: true })
 							}
-							className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+							className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:outline-hidden"
 						>
 							{cancelButtonText}
 						</button>
@@ -373,7 +373,7 @@ const InputDialog: React.FC<FireOptions & BaseModalProps> = ({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 			onClick={handleBackdropClick}
 		>
 			<div
@@ -389,13 +389,13 @@ const InputDialog: React.FC<FireOptions & BaseModalProps> = ({
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						placeholder={inputPlaceholder}
-						className="mb-6 w-full rounded border border-gray-700 bg-gray-800 p-2 text-gray-100 placeholder-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+						className="mb-6 w-full rounded border border-gray-700 bg-gray-800 p-2 text-gray-100 placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-hidden"
 						autoFocus
 					/>
-					<div className="flex justify-center space-x-3">
+					<div className="sibling-space-x-3 flex justify-center">
 						<button
 							type="submit"
-							className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+							className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:ring-2 focus:ring-cyan-500 focus:outline-hidden"
 						>
 							OK
 						</button>
@@ -410,7 +410,7 @@ const InputDialog: React.FC<FireOptions & BaseModalProps> = ({
 										dismiss: 'cancel',
 									})
 								}
-								className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+								className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:outline-hidden"
 							>
 								Cancel
 							</button>
@@ -476,7 +476,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 			onClick={handleBackdropClick}
 		>
 			<div className="relative w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
@@ -489,7 +489,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 						onClick={() =>
 							onClose({ isConfirmed: false, isDismissed: true, dismiss: 'close' })
 						}
-						className="absolute right-2 top-2 z-10 rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+						className="absolute top-2 right-2 z-10 rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
 					>
 						<X className="h-5 w-5" />
 					</button>
@@ -516,11 +516,11 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 						/>
 					)}
 					{(showConfirmButton || showCancelButton) && (
-						<div className="flex justify-center space-x-3">
+						<div className="sibling-space-x-3 flex justify-center">
 							{showConfirmButton && (
 								<button
 									onClick={handleConfirm}
-									className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+									className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:ring-2 focus:ring-cyan-500 focus:outline-hidden"
 								>
 									{confirmButtonText}
 								</button>
@@ -534,7 +534,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 											dismiss: 'cancel',
 										})
 									}
-									className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+									className="rounded bg-gray-700 px-4 py-2 font-semibold text-white hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:outline-hidden"
 								>
 									{cancelButtonText}
 								</button>

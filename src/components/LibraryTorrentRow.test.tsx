@@ -527,9 +527,9 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 						localeArg === undefined &&
 						Boolean(
 							optionsArg &&
-								typeof optionsArg === 'object' &&
-								'timeZone' in optionsArg &&
-								optionsArg.timeZone === 'UTC'
+							typeof optionsArg === 'object' &&
+							'timeZone' in optionsArg &&
+							optionsArg.timeZone === 'UTC'
 						)
 				);
 				expect(sawUtc).toBe(true);

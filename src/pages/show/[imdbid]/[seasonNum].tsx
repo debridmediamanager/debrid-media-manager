@@ -1657,7 +1657,7 @@ const TvSearch: FunctionComponent = () => {
 			{showInfo.has_specials && (
 				<Link
 					href={`/show/${imdbId}/0`}
-					className={`inline-flex items-center border-2 p-1 text-xs border-${selectedSeason === 0 ? 'red' : 'yellow'}-500 bg-${selectedSeason === 0 ? 'red' : 'yellow'}-900/30 text-${selectedSeason === 0 ? 'red' : 'yellow'}-100 hover:bg-${selectedSeason === 0 ? 'red' : 'yellow'}-800/50 mb-1 mr-2 rounded transition-colors`}
+					className={`inline-flex items-center border-2 p-1 text-xs border-${selectedSeason === 0 ? 'red' : 'yellow'}-500 bg-${selectedSeason === 0 ? 'red' : 'yellow'}-900/30 text-${selectedSeason === 0 ? 'red' : 'yellow'}-100 hover:bg-${selectedSeason === 0 ? 'red' : 'yellow'}-800/50 mr-2 mb-1 rounded transition-colors`}
 				>
 					<Tv className="mr-2 h-3 w-3 text-cyan-500" />
 					<span className="whitespace-nowrap">Specials</span>
@@ -1671,7 +1671,7 @@ const TvSearch: FunctionComponent = () => {
 							key={idx}
 							href={`/show/${imdbId}/${season}`}
 							title={seasonRunTitle(season)}
-							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mb-1 mr-2 rounded transition-colors`}
+							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mr-2 mb-1 rounded transition-colors`}
 						>
 							<Tv className="mr-2 h-3 w-3 text-cyan-500" />
 							<span className="whitespace-nowrap">
@@ -1873,7 +1873,7 @@ const TvSearch: FunctionComponent = () => {
 				<>
 					{rdKey && (
 						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+							className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
 							disabled={isAnyChecking}
 						>
@@ -1894,7 +1894,7 @@ const TvSearch: FunctionComponent = () => {
 					)}
 					{adKey && (
 						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+							className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
 							disabled={isAnyChecking}
 						>
@@ -1915,7 +1915,7 @@ const TvSearch: FunctionComponent = () => {
 					)}
 					{debridLinkKey && (
 						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
+							className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['DL'])}
 							disabled={isAnyChecking}
 							title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
@@ -1940,7 +1940,7 @@ const TvSearch: FunctionComponent = () => {
 							getCompleteSeasonTorrents(entry).length > 0 && (
 								<button
 									key={`whole-${entry.service}`}
-									className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
+									className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
 									onClick={() => handleInstantWholeSeason(entry)}
 								>
 									<b className="flex items-center justify-center">
@@ -1955,7 +1955,7 @@ const TvSearch: FunctionComponent = () => {
 							getIndividualEpisodeTorrents(entry).length > 0 && (
 								<button
 									key={`every-${entry.service}`}
-									className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
+									className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
 									onClick={() => handleInstantEveryEpisode(entry)}
 								>
 									<b className="flex items-center justify-center">
@@ -1967,7 +1967,7 @@ const TvSearch: FunctionComponent = () => {
 					)}
 					{showInfo.season_count > 1 && (isAddingSeasons || isDiscoveringSeasons) && (
 						<button
-							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-red-500 bg-red-900/30 p-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							className="haptic-sm mt-0 mr-2 mb-1 rounded border-2 border-red-500 bg-red-900/30 p-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
 							onClick={stopSeasons}
 						>
 							<b className="flex items-center justify-center">
@@ -1987,7 +1987,7 @@ const TvSearch: FunctionComponent = () => {
 						instantServices.map((entry) => (
 							<button
 								key={`all-${entry.service}`}
-								className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${entry.button}`}
+								className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${entry.button}`}
 								onClick={() => handleAllSeasons(entry.service)}
 								disabled={isDiscoveringSeasons}
 							>
@@ -2004,7 +2004,7 @@ const TvSearch: FunctionComponent = () => {
 							</button>
 						))}
 					<button
-						className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+						className="mt-0 mr-2 mb-1 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 						onClick={() =>
 							window.open(
 								getStremioDetailUrl(imdbId, { season: seasonId, episode: 1 })
@@ -2020,7 +2020,7 @@ const TvSearch: FunctionComponent = () => {
 			)}
 			{onlyShowCached && totalUncachedCount > 0 && (
 				<button
-					className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
+					className="haptic-sm mt-0 mr-2 mb-1 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
 					onClick={() => {
 						setOnlyShowCached(false);
 					}}
@@ -2082,7 +2082,7 @@ const TvSearch: FunctionComponent = () => {
 
 			<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
 				<input
-					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -2115,21 +2115,21 @@ const TvSearch: FunctionComponent = () => {
 				{query && filteredResults.length > 0 && canReport && showMassReportButtons && (
 					<div className="ml-2 flex gap-2">
 						<span
-							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 							onClick={() => handleMassReport('porn', filteredResults)}
 							title="Report all filtered torrents as pornographic content"
 						>
 							Report as Porn ({filteredResults.length})
 						</span>
 						<span
-							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 							onClick={() => handleMassReport('wrong_imdb', filteredResults)}
 							title="Report all filtered torrents as wrong IMDB ID"
 						>
 							Report Wrong IMDB ({filteredResults.length})
 						</span>
 						<span
-							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
 							onClick={() => handleMassReport('wrong_season', filteredResults)}
 							title="Report all filtered torrents as wrong season"
 						>
@@ -2153,7 +2153,7 @@ const TvSearch: FunctionComponent = () => {
 					{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer whitespace-nowrap rounded px-2 py-1 text-xs text-white`}
+							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForEpisodeCount(
 									scale.threshold,

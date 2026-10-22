@@ -360,7 +360,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		videoCount: number;
 	}) => (
 		<span
-			className="haptic-sm inline-flex cursor-pointer items-center rounded bg-black bg-opacity-50 px-2 py-1 hover:bg-opacity-75"
+			className="haptic-sm inline-flex cursor-pointer items-center rounded bg-black/50 px-2 py-1 hover:bg-black/75"
 			onClick={() => handleShowInfo(result)}
 		>
 			<Folder className="mr-1 h-4 w-4" />
@@ -529,10 +529,10 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						return (
 							<div
 								key={i}
-								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 							>
-								<div className="space-y-2 p-1">
-									<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
+								<div className="sibling-space-y-2 p-1">
+									<h2 className="line-clamp-2 overflow-hidden text-sm leading-tight font-bold break-words text-ellipsis">
 										{r.title}
 									</h2>
 
@@ -587,7 +587,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										</div>
 									)}
 
-									<div className="space-x-1 space-y-1">
+									<div className="sibling-space-y-1 sibling-space-x-1">
 										{/* — RD — */}
 										{rdKey && inLibrary('rd', r.hash) && (
 											<button

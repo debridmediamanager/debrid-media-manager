@@ -69,7 +69,7 @@ export function StremioOffcloudPage() {
 				<strong>Cast from any device to Stremio</strong>
 
 				{dmmCastToken && (
-					<div className="mb-4 mt-4 h-max text-center leading-8">
+					<div className="mt-4 mb-4 h-max text-center leading-8">
 						<Link
 							href={`stremio://${window.location.origin.replace(
 								/^https?:\/\//,
@@ -99,7 +99,7 @@ export function StremioOffcloudPage() {
 							Warning: Never share this install URL with anyone. It is unique to your
 							account and sharing it could compromise your access.
 						</div>
-						<code className="mt-2 block w-full break-all rounded bg-gray-800 p-2 text-sm text-gray-300">
+						<code className="mt-2 block w-full rounded bg-gray-800 p-2 text-sm break-all text-gray-300">
 							{window.location.origin}/api/stremio-oc/{dmmCastToken}/manifest.json
 						</code>
 
@@ -134,7 +134,7 @@ export function StremioOffcloudPage() {
 					</div>
 				)}
 
-				<div className="space-y-2 text-gray-300">
+				<div className="sibling-space-y-2 text-gray-300">
 					<div>1. Choose a Movie or TV Show in DMM</div>
 					<div>
 						2. Click the &quot;

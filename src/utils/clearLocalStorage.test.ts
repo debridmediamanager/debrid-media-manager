@@ -1,9 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { clearDlKeys, clearRdKeys } from './clearLocalStorage';
 
 describe('clearLocalStorage', () => {
 	let localStorageMock: Storage;
-	let dispatchEventSpy: ReturnType<typeof vi.spyOn>;
+	let dispatchEventSpy: MockInstance<typeof window.dispatchEvent>;
 
 	beforeEach(() => {
 		const storage: Record<string, string> = {};
@@ -31,7 +31,7 @@ describe('clearLocalStorage', () => {
 			writable: true,
 		});
 
-		dispatchEventSpy = vi.spyOn(window, 'dispatchEvent') as any;
+		dispatchEventSpy = vi.spyOn(window, 'dispatchEvent');
 	});
 
 	afterEach(() => {

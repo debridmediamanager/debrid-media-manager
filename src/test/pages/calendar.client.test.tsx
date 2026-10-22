@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 vi.mock('next/head', () => ({
 	__esModule: true,
@@ -24,10 +24,10 @@ vi.mock('react-window', () => ({
 }));
 
 describe('CalendarPage', () => {
-	let fetchSpy: ReturnType<typeof vi.fn>;
+	let fetchSpy: Mock<(...args: Parameters<typeof fetch>) => any>;
 
 	beforeEach(() => {
-		fetchSpy = vi.fn();
+		fetchSpy = vi.fn<(...args: Parameters<typeof fetch>) => any>();
 		global.fetch = fetchSpy;
 	});
 

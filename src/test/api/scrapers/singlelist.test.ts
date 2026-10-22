@@ -57,9 +57,11 @@ beforeEach(() => {
 		SCRAPE_API_PASSWORD: TEST_SCRAPE_PASSWORD,
 		SCRAPE_WORKER: '1',
 	};
-	scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-		byListId: vi.fn(),
-	}));
+	scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+		return {
+			byListId: vi.fn(),
+		};
+	});
 });
 
 afterAll(() => {
@@ -117,9 +119,11 @@ describe('API /api/scrapers/singlelist', () => {
 	it('processes list and generates scrape jobs', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt1234567']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
@@ -139,9 +143,11 @@ describe('API /api/scrapers/singlelist', () => {
 	it('skips already-processing IDs', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt1111111']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(true);
 
 		const req = createMockRequest({
@@ -159,9 +165,11 @@ describe('API /api/scrapers/singlelist', () => {
 	it('skips recently-scraped IDs', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt2222222']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(false);
 
@@ -180,9 +188,11 @@ describe('API /api/scrapers/singlelist', () => {
 	it('skips non-tt IMDB IDs', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['nm9999999']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 
 		const req = createMockRequest({
 			query: { password: TEST_SCRAPE_PASSWORD, listId: 'list-1' },
@@ -200,9 +210,11 @@ describe('API /api/scrapers/singlelist', () => {
 		const byListIdMock = vi
 			.fn()
 			.mockReturnValue(makeAsyncIterator(['tt0000001', 'tt0000002', 'tt0000003']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
@@ -220,9 +232,11 @@ describe('API /api/scrapers/singlelist', () => {
 	it('respects custom rescrapeIfXDaysOld param', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		const byListIdMock = vi.fn().mockReturnValue(makeAsyncIterator(['tt5555555']));
-		scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
-			byListId: byListIdMock,
-		}));
+		scrapeInputMocks.ScrapeInput.mockImplementation(function () {
+			return {
+				byListId: byListIdMock,
+			};
+		});
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);

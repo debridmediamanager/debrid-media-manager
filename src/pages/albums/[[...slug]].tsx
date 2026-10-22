@@ -83,10 +83,10 @@ function SidebarAlbumButton({
 					: 'text-gray-300 hover:bg-white/5 hover:text-white'
 			}`}
 		>
-			<div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded bg-gray-800">
+			<div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded bg-gray-800">
 				<Music2 className="h-4 w-4 text-gray-500" />
 				{coverUrl && (
-					// eslint-disable-next-line @next/next/no-img-element
+					// oxlint-disable-next-line nextjs/no-img-element
 					<img
 						src={coverUrl}
 						alt={album.album}
@@ -1003,13 +1003,13 @@ export default function AlbumsPage() {
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 							aria-label="Search artists or albums"
-							className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 pr-9 text-sm placeholder-gray-400 outline-none backdrop-blur-sm transition-all duration-200 focus:border-green-500/50 focus:bg-white/10 focus:ring-1 focus:ring-green-500/30"
+							className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 pr-9 text-sm placeholder-gray-400 outline-hidden backdrop-blur-sm transition-all duration-200 focus:border-green-500/50 focus:bg-white/10 focus:ring-1 focus:ring-green-500/30"
 						/>
 						{searchQuery && (
 							<button
 								type="button"
 								onClick={() => setSearchQuery('')}
-								className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:text-white"
+								className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:text-white"
 								aria-label="Clear search"
 								title="Clear search"
 							>
@@ -1060,7 +1060,7 @@ export default function AlbumsPage() {
 							</button>
 						</div>
 						<div className="min-h-0 flex-1 overflow-y-auto p-2">
-							<p className="px-3 py-2 text-xs font-bold uppercase text-gray-400">
+							<p className="px-3 py-2 text-xs font-bold text-gray-400 uppercase">
 								Recently added
 							</p>
 							{sidebarAlbums.map((album) => (

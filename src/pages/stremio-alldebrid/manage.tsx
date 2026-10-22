@@ -411,7 +411,7 @@ export function AllDebridManagePage() {
 			<Toaster position={toasterPosition()} />
 
 			{selectedLinks.size > 0 && (
-				<div className="fixed left-0 right-0 top-0 z-50 flex justify-center bg-gray-900/95 p-4 backdrop-blur">
+				<div className="fixed top-0 right-0 left-0 z-50 flex justify-center bg-gray-900/95 p-4 backdrop-blur">
 					<button
 						onClick={handleDeleteSelected}
 						className="haptic-sm rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -477,7 +477,7 @@ export function AllDebridManagePage() {
 										onClick={() => toggleGroupSelection(imdbId)}
 										aria-pressed={allSelected}
 										aria-label={`Toggle selection for ${isShowGroup ? 'show' : 'movie'} ${displayTitle}`}
-										className="group flex w-full max-w-[220px] flex-col items-center focus:outline-none"
+										className="group flex w-full max-w-[220px] flex-col items-center focus:outline-hidden"
 									>
 										<Poster imdbId={imdbId} title={displayTitle} />
 										<span className="mt-2 w-full text-center text-sm font-semibold text-gray-100 group-hover:text-white">
@@ -485,7 +485,7 @@ export function AllDebridManagePage() {
 										</span>
 									</button>
 								</div>
-								<div className="max-h-[300px] space-y-2 overflow-y-auto">
+								<div className="sibling-space-y-2 max-h-[300px] overflow-y-auto">
 									{links.map((link) => {
 										const episodeLabel = formatEpisodeLabel(link.imdbId);
 										return (
@@ -508,7 +508,7 @@ export function AllDebridManagePage() {
 																{episodeLabel}
 															</span>
 														)}
-														<span className="break-words text-sm text-gray-300">
+														<span className="text-sm break-words text-gray-300">
 															{getFilename(link.url)}
 														</span>
 														<span className="text-xs text-gray-300">

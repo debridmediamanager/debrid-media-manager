@@ -9,6 +9,13 @@ describe('Calendar Page', () => {
 	};
 
 	beforeEach(() => {
+		// Calendar responses are HTTP-cacheable; isolate each visit so the episode
+		// fixture reaches the real fetch rather than a previous visit's response.
+		cy.then(() =>
+			Cypress.automation('remote:debugger:protocol', {
+				command: 'Network.clearBrowserCache',
+			})
+		);
 		cy.intercept('GET', '**/rest/1.0/user', {
 			statusCode: 200,
 			body: {

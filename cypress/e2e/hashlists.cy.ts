@@ -35,9 +35,11 @@ describe('Hashlists Page', () => {
 		);
 	});
 
-	it('has a home link', () => {
+	it('returns home through the icon navigation control', () => {
 		cy.visit('/hashlists', authSetup);
-		cy.contains('Go Home').should('be.visible').and('have.attr', 'href', '/');
+		cy.get('a[title="Go Home"]').click();
+		cy.location('pathname').should('eq', '/');
+		cy.contains('Real-Debrid').should('be.visible');
 	});
 
 	it('shows loading state', () => {

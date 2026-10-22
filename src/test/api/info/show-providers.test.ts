@@ -23,7 +23,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/mdblistClient', () => ({ getMdblistClient: vi.fn() }));
 vi.mock('@/services/metadataCache', () => ({ getMetadataCache: vi.fn() }));
 vi.mock('user-agents', () => ({
-	default: vi.fn().mockImplementation(() => ({ toString: () => 'test-agent' })),
+	default: vi.fn().mockImplementation(function () {
+		return { toString: () => 'test-agent' };
+	}),
 }));
 
 import { getMdblistClient } from '@/services/mdblistClient';

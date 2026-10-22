@@ -119,7 +119,7 @@ export default function MovieInfoPage() {
 			<main className="mx-auto max-w-6xl px-4 py-4">
 				<div className="mb-4 flex flex-wrap items-end justify-between gap-3">
 					<div className="flex min-w-0 flex-wrap items-center gap-2">
-						<h1 className="min-w-0 break-words text-3xl font-bold">
+						<h1 className="min-w-0 text-3xl font-bold break-words">
 							{movieDetails?.title || 'Loading...'}
 						</h1>
 						{trailerUrl && (
@@ -156,7 +156,7 @@ export default function MovieInfoPage() {
 				{isLoading ? (
 					<div>Loading movie information…</div>
 				) : movieDetails ? (
-					<div className="space-y-8">
+					<div className="sibling-space-y-8">
 						<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
 							<div>
 								{movieDetails.posterPath && (
@@ -166,7 +166,7 @@ export default function MovieInfoPage() {
 										className="w-full rounded-lg shadow-lg"
 									/>
 								)}
-								<div className="mt-4 space-y-2">
+								<div className="mt-4 sibling-space-y-2">
 									<div className="text-sm">
 										<span className="text-gray-400">Release Date:</span>{' '}
 										{formatReleaseDate(movieDetails.releaseDate)}

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 vi.mock('next/head', () => ({
 	__esModule: true,
@@ -65,11 +65,11 @@ vi.mock('parse-torrent-title', () => ({
 }));
 
 describe('AllDebridManagePage', () => {
-	let fetchSpy: ReturnType<typeof vi.fn>;
+	let fetchSpy: Mock<(...args: Parameters<typeof fetch>) => any>;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		fetchSpy = vi.fn();
+		fetchSpy = vi.fn<(...args: Parameters<typeof fetch>) => any>();
 		global.fetch = fetchSpy;
 	});
 
@@ -142,7 +142,8 @@ describe('AllDebridManagePage', () => {
 	it('should render grouped links', async () => {
 		const useLocalStorage = (await import('@/hooks/localStorage')).default;
 		vi.mocked(useLocalStorage).mockReturnValue(['test-api-key', vi.fn()]);
-		fetchSpy.mockImplementation((url: string) => {
+		fetchSpy.mockImplementation((input) => {
+			const url = input instanceof Request ? input.url : String(input);
 			if (url.includes('/api/stremio-ad/links')) {
 				return Promise.resolve({
 					ok: true,
