@@ -25,7 +25,7 @@ import { namedEpisodes, namedSeasons } from '@/utils/seasonNaming';
 import { FANSUB_SEASON } from '@/utils/tvEpisodes';
 import ptt from 'parse-torrent-title';
 
-export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'absolute';
+export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'dub' | 'absolute';
 
 /** A file's numbers as its name (or its folder, or its release) gives them. */
 export interface FileNumbers {
@@ -65,6 +65,8 @@ export interface PlacementShow {
 	): Promise<{ episode: number; name: string; airDate: string | null }[] | null>;
 	/** TMDB's episode for TVDB's season and episode, by the show's TVDB Order episode group. */
 	tvdbOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
+	/** TMDB's episode for an English dub's season and episode, by the show's Dub Order group. */
+	dubOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 }
 
 export interface Placement {
@@ -656,6 +658,14 @@ async function placeByRules(
 	const titledAt = await byName(show, numbers, file);
 	const byTitle = titledAt && (await placed(titledAt, 'tmdb'));
 	if (byTitle) return { ...byTitle, titled: true };
+
+	// a dub's own seasons are TMDB's only through its Dub Order: Medabots' English dub season 3
+	// is TMDB's season 2 (Damashii), its season 2 episodes TMDB files out of order in season 1
+	if (show.dubOrder && season !== null && season > 0) {
+		const dub = await show.dubOrder(season, episode);
+		const found = dub && (await placed(dub, 'dub'));
+		if (found) return found;
+	}
 
 	// a fansub name its title maps; otherwise the name's numbers are its own (scene) ones
 	let scene = true;

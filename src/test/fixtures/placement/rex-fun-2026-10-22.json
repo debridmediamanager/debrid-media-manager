@@ -94,6 +94,15 @@
 				"movie_results": [],
 				"tv_results": [],
 				"tv_episode_results": []
+			},
+			"tt0293731": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 11235
+					}
+				],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -664,6 +673,26 @@
 						"season_number": 4,
 						"episode_count": 16,
 						"air_date": "2017-10-16"
+					}
+				]
+			},
+			"11235": {
+				"name": "Medabots",
+				"original_name": "メダロット",
+				"original_language": "ja",
+				"external_ids": {
+					"imdb_id": "tt0293731"
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 52,
+						"air_date": "1999-07-02"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 39,
+						"air_date": "2000-07-07"
 					}
 				]
 			}
@@ -9519,6 +9548,469 @@
 						"air_date": "2009-02-28"
 					}
 				]
+			},
+			"11235/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Stung by a Metabee",
+						"air_date": "1999-07-02"
+					},
+					{
+						"episode_number": 2,
+						"name": "Return of the Screws",
+						"air_date": "1999-07-09"
+					},
+					{
+						"episode_number": 3,
+						"name": "Running Scared",
+						"air_date": "1999-07-16"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Legendary Medafighter",
+						"air_date": "1999-07-23"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Old Man and the Sea Monster",
+						"air_date": "1999-07-30"
+					},
+					{
+						"episode_number": 6,
+						"name": "Spaceship Superstars",
+						"air_date": "1999-08-06"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Gimme Ghost",
+						"air_date": "1999-08-13"
+					},
+					{
+						"episode_number": 8,
+						"name": "No Body Home",
+						"air_date": "1999-08-20"
+					},
+					{
+						"episode_number": 9,
+						"name": "Cyandog Bites Back",
+						"air_date": "1999-08-27"
+					},
+					{
+						"episode_number": 10,
+						"name": "For Better for Worse (1)",
+						"air_date": "1999-09-03"
+					},
+					{
+						"episode_number": 11,
+						"name": "For Better for Worse (2)",
+						"air_date": "1999-09-10"
+					},
+					{
+						"episode_number": 12,
+						"name": "Mystery Medabot",
+						"air_date": "1999-09-17"
+					},
+					{
+						"episode_number": 13,
+						"name": "For Love or Robattle",
+						"air_date": "1999-09-24"
+					},
+					{
+						"episode_number": 14,
+						"name": "Welcome to Ninja World",
+						"air_date": "1999-10-01"
+					},
+					{
+						"episode_number": 15,
+						"name": "Eat, Drink, Man, Medabot",
+						"air_date": "1999-10-08"
+					},
+					{
+						"episode_number": 16,
+						"name": "There's Something About Miss Mimosa",
+						"air_date": "1999-10-15"
+					},
+					{
+						"episode_number": 17,
+						"name": "Phantom Renegade: Unmasked",
+						"air_date": "1999-10-22"
+					},
+					{
+						"episode_number": 18,
+						"name": "Ban All Medabots",
+						"air_date": "1999-10-29"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Birds and the Metabees",
+						"air_date": "1999-11-05"
+					},
+					{
+						"episode_number": 20,
+						"name": "Meet Your Meda-Maker",
+						"air_date": "1999-11-12"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Spy Who Robattled Me",
+						"air_date": "1999-11-19"
+					},
+					{
+						"episode_number": 22,
+						"name": "Skyward, Yo!",
+						"air_date": "1999-11-26"
+					},
+					{
+						"episode_number": 23,
+						"name": "I Dream of Hushi",
+						"air_date": "1999-12-03"
+					},
+					{
+						"episode_number": 24,
+						"name": "Dance with the Mantis",
+						"air_date": "1999-12-10"
+					},
+					{
+						"episode_number": 25,
+						"name": "Metabee Vs Rokusho",
+						"air_date": "1999-12-17"
+					},
+					{
+						"episode_number": 26,
+						"name": "Use the Medaforce",
+						"air_date": "1999-12-24"
+					},
+					{
+						"episode_number": 27,
+						"name": "Fifteen Minutes of Shame",
+						"air_date": "2000-01-07"
+					},
+					{
+						"episode_number": 28,
+						"name": "Love at First Bite",
+						"air_date": "2000-01-14"
+					},
+					{
+						"episode_number": 29,
+						"name": "Once Frostbitten, Twice Shy",
+						"air_date": "2000-01-21"
+					},
+					{
+						"episode_number": 30,
+						"name": "Heavy Medal",
+						"air_date": "2000-01-28"
+					},
+					{
+						"episode_number": 31,
+						"name": "Enter Rintaro",
+						"air_date": "2000-02-04"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Ace from Outer Space",
+						"air_date": "2000-02-11"
+					},
+					{
+						"episode_number": 33,
+						"name": "Bridge Over Troubled Squidguts",
+						"air_date": "2000-02-18"
+					},
+					{
+						"episode_number": 34,
+						"name": "Me and My Shadow Sword",
+						"air_date": "2000-02-25"
+					},
+					{
+						"episode_number": 35,
+						"name": "Dude, Where's My Ma?",
+						"air_date": "2000-03-03"
+					},
+					{
+						"episode_number": 36,
+						"name": "X-treme Measures",
+						"air_date": "2000-03-10"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Road to Ruins",
+						"air_date": "2000-03-17"
+					},
+					{
+						"episode_number": 38,
+						"name": "Beetle Mania (1)",
+						"air_date": "2000-03-24"
+					},
+					{
+						"episode_number": 39,
+						"name": "The Mother of All Robattles (2)",
+						"air_date": "2000-03-31"
+					},
+					{
+						"episode_number": 40,
+						"name": "Let the Meda-Games Begin (1)",
+						"air_date": "2000-04-07"
+					},
+					{
+						"episode_number": 41,
+						"name": "Pixies and Pirates (2)",
+						"air_date": "2000-04-14"
+					},
+					{
+						"episode_number": 42,
+						"name": "The French Deception",
+						"air_date": "2000-04-21"
+					},
+					{
+						"episode_number": 43,
+						"name": "Space Medaballerina X",
+						"air_date": "2000-04-28"
+					},
+					{
+						"episode_number": 44,
+						"name": "Swede and Sour",
+						"air_date": "2000-05-05"
+					},
+					{
+						"episode_number": 45,
+						"name": "Future's Past",
+						"air_date": "2000-05-12"
+					},
+					{
+						"episode_number": 46,
+						"name": "The Medaforce Within",
+						"air_date": "2000-05-19"
+					},
+					{
+						"episode_number": 47,
+						"name": "A Date with Destiny",
+						"air_date": "2000-05-26"
+					},
+					{
+						"episode_number": 48,
+						"name": "Calm Before the Storm",
+						"air_date": "2000-06-02"
+					},
+					{
+						"episode_number": 49,
+						"name": "Taking the Victor Out of Victory (1)",
+						"air_date": "2000-06-09"
+					},
+					{
+						"episode_number": 50,
+						"name": "Altered States (2)",
+						"air_date": "2000-06-16"
+					},
+					{
+						"episode_number": 51,
+						"name": "Waking to a Dream (1)",
+						"air_date": "2000-06-23"
+					},
+					{
+						"episode_number": 52,
+						"name": "Metabee's Last Stand (2)",
+						"air_date": "2000-06-30"
+					}
+				]
+			},
+			"11235/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Kilobot Rising",
+						"air_date": "2000-07-07"
+					},
+					{
+						"episode_number": 2,
+						"name": "Fighting Temptation",
+						"air_date": "2000-07-14"
+					},
+					{
+						"episode_number": 3,
+						"name": "What the World Needs Now [a.k.a. Who is the Mystery Medafighter]",
+						"air_date": "2000-07-21"
+					},
+					{
+						"episode_number": 4,
+						"name": "Delivery Boy",
+						"air_date": "2000-07-28"
+					},
+					{
+						"episode_number": 5,
+						"name": "Scoop of the Century",
+						"air_date": "2000-08-04"
+					},
+					{
+						"episode_number": 6,
+						"name": "Robbed Zombies",
+						"air_date": "2000-08-11"
+					},
+					{
+						"episode_number": 7,
+						"name": "Lights, Camera... Robattle!",
+						"air_date": "2000-08-18"
+					},
+					{
+						"episode_number": 8,
+						"name": "Dark Alliance (1)",
+						"air_date": "2000-08-25"
+					},
+					{
+						"episode_number": 9,
+						"name": "Dark Alliance (2)",
+						"air_date": "2000-09-01"
+					},
+					{
+						"episode_number": 10,
+						"name": "Redrun-Away",
+						"air_date": "2000-09-08"
+					},
+					{
+						"episode_number": 11,
+						"name": "Erika's Secret Garden",
+						"air_date": "2000-09-15"
+					},
+					{
+						"episode_number": 12,
+						"name": "Metabee's Out of Body Experience",
+						"air_date": "2000-09-22"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Bee Rescues the Honey",
+						"air_date": "2000-09-29"
+					},
+					{
+						"episode_number": 14,
+						"name": "A Night In The Medabot Junkyard",
+						"air_date": "2000-10-06"
+					},
+					{
+						"episode_number": 15,
+						"name": "Once A Medafighter (1)",
+						"air_date": "2000-10-13"
+					},
+					{
+						"episode_number": 16,
+						"name": "Once A Medafighter (2)",
+						"air_date": "2000-10-20"
+					},
+					{
+						"episode_number": 17,
+						"name": "Title Flight",
+						"air_date": "2000-10-27"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Agony of the Cheat",
+						"air_date": "2000-11-03"
+					},
+					{
+						"episode_number": 19,
+						"name": "It's the Medafighter Way",
+						"air_date": "2000-11-10"
+					},
+					{
+						"episode_number": 20,
+						"name": "Fall from Grace (1)",
+						"air_date": "2000-11-17"
+					},
+					{
+						"episode_number": 21,
+						"name": "Fall from Grace (2)",
+						"air_date": "2000-11-24"
+					},
+					{
+						"episode_number": 22,
+						"name": "Mystery Medafighter Unmasked?",
+						"air_date": "2000-12-01"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Truth About Charlie",
+						"air_date": "2000-12-08"
+					},
+					{
+						"episode_number": 24,
+						"name": "Roks Reborn",
+						"air_date": "2000-12-15"
+					},
+					{
+						"episode_number": 25,
+						"name": "I, Kilobot",
+						"air_date": "2000-12-22"
+					},
+					{
+						"episode_number": 26,
+						"name": "Thanks for the Memories",
+						"air_date": "2000-12-29"
+					},
+					{
+						"episode_number": 27,
+						"name": "How Spyke Got His Style Back",
+						"air_date": "2001-01-05"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Medabot Straight Line Marathon",
+						"air_date": "2001-01-12"
+					},
+					{
+						"episode_number": 29,
+						"name": "Kung Fu For Thought",
+						"air_date": "2001-01-19"
+					},
+					{
+						"episode_number": 30,
+						"name": "Erika to the Rescue",
+						"air_date": "2001-01-26"
+					},
+					{
+						"episode_number": 31,
+						"name": "Rough on a Hot Tin Cat",
+						"air_date": "2001-02-02"
+					},
+					{
+						"episode_number": 32,
+						"name": "Meda-Forced",
+						"air_date": "2001-02-09"
+					},
+					{
+						"episode_number": 33,
+						"name": "Poor Miss Nae",
+						"air_date": "2001-02-16"
+					},
+					{
+						"episode_number": 34,
+						"name": "Mystery Medafighter...Revealed!",
+						"air_date": "2001-02-23"
+					},
+					{
+						"episode_number": 35,
+						"name": "Winner Take All",
+						"air_date": "2001-03-02"
+					},
+					{
+						"episode_number": 36,
+						"name": "Transfusion Confusion",
+						"air_date": "2001-03-09"
+					},
+					{
+						"episode_number": 37,
+						"name": "Gryphoon Doom",
+						"air_date": "2001-03-16"
+					},
+					{
+						"episode_number": 38,
+						"name": "Final Goodbyes",
+						"air_date": "2001-03-23"
+					},
+					{
+						"episode_number": 39,
+						"name": "Into the Fire",
+						"air_date": "2001-03-30"
+					}
+				]
 			}
 		},
 		"episodeGroups": {
@@ -9653,9 +10145,493 @@
 						"type": 4
 					}
 				]
+			},
+			"11235": {
+				"results": [
+					{
+						"id": "6765ce17ae1b411f405e0f3f",
+						"name": "Dub Order",
+						"type": 7
+					}
+				]
 			}
 		},
-		"episodeGroup": {},
+		"episodeGroup": {
+			"6765ce17ae1b411f405e0f3f": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 1,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 1,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 1,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 1,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 1,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 1,
+								"episode_number": 7
+							},
+							{
+								"order": 6,
+								"season_number": 1,
+								"episode_number": 9
+							},
+							{
+								"order": 7,
+								"season_number": 1,
+								"episode_number": 10
+							},
+							{
+								"order": 8,
+								"season_number": 1,
+								"episode_number": 11
+							},
+							{
+								"order": 9,
+								"season_number": 1,
+								"episode_number": 12
+							},
+							{
+								"order": 10,
+								"season_number": 1,
+								"episode_number": 17
+							},
+							{
+								"order": 11,
+								"season_number": 1,
+								"episode_number": 18
+							},
+							{
+								"order": 12,
+								"season_number": 1,
+								"episode_number": 20
+							},
+							{
+								"order": 13,
+								"season_number": 1,
+								"episode_number": 21
+							},
+							{
+								"order": 14,
+								"season_number": 1,
+								"episode_number": 23
+							},
+							{
+								"order": 15,
+								"season_number": 1,
+								"episode_number": 25
+							},
+							{
+								"order": 16,
+								"season_number": 1,
+								"episode_number": 26
+							},
+							{
+								"order": 17,
+								"season_number": 1,
+								"episode_number": 27
+							},
+							{
+								"order": 18,
+								"season_number": 1,
+								"episode_number": 31
+							},
+							{
+								"order": 19,
+								"season_number": 1,
+								"episode_number": 32
+							},
+							{
+								"order": 20,
+								"season_number": 1,
+								"episode_number": 34
+							},
+							{
+								"order": 21,
+								"season_number": 1,
+								"episode_number": 35
+							},
+							{
+								"order": 22,
+								"season_number": 1,
+								"episode_number": 36
+							},
+							{
+								"order": 23,
+								"season_number": 1,
+								"episode_number": 37
+							},
+							{
+								"order": 24,
+								"season_number": 1,
+								"episode_number": 38
+							},
+							{
+								"order": 25,
+								"season_number": 1,
+								"episode_number": 39
+							}
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 1,
+								"episode_number": 6
+							},
+							{
+								"order": 1,
+								"season_number": 1,
+								"episode_number": 13
+							},
+							{
+								"order": 2,
+								"season_number": 1,
+								"episode_number": 24
+							},
+							{
+								"order": 3,
+								"season_number": 1,
+								"episode_number": 29
+							},
+							{
+								"order": 4,
+								"season_number": 1,
+								"episode_number": 33
+							},
+							{
+								"order": 5,
+								"season_number": 1,
+								"episode_number": 8
+							},
+							{
+								"order": 6,
+								"season_number": 1,
+								"episode_number": 14
+							},
+							{
+								"order": 7,
+								"season_number": 1,
+								"episode_number": 15
+							},
+							{
+								"order": 8,
+								"season_number": 1,
+								"episode_number": 16
+							},
+							{
+								"order": 9,
+								"season_number": 1,
+								"episode_number": 19
+							},
+							{
+								"order": 10,
+								"season_number": 1,
+								"episode_number": 22
+							},
+							{
+								"order": 11,
+								"season_number": 1,
+								"episode_number": 28
+							},
+							{
+								"order": 12,
+								"season_number": 1,
+								"episode_number": 30
+							},
+							{
+								"order": 13,
+								"season_number": 1,
+								"episode_number": 40
+							},
+							{
+								"order": 14,
+								"season_number": 1,
+								"episode_number": 41
+							},
+							{
+								"order": 15,
+								"season_number": 1,
+								"episode_number": 42
+							},
+							{
+								"order": 16,
+								"season_number": 1,
+								"episode_number": 43
+							},
+							{
+								"order": 17,
+								"season_number": 1,
+								"episode_number": 44
+							},
+							{
+								"order": 18,
+								"season_number": 1,
+								"episode_number": 45
+							},
+							{
+								"order": 19,
+								"season_number": 1,
+								"episode_number": 46
+							},
+							{
+								"order": 20,
+								"season_number": 1,
+								"episode_number": 47
+							},
+							{
+								"order": 21,
+								"season_number": 1,
+								"episode_number": 48
+							},
+							{
+								"order": 22,
+								"season_number": 1,
+								"episode_number": 49
+							},
+							{
+								"order": 23,
+								"season_number": 1,
+								"episode_number": 50
+							},
+							{
+								"order": 24,
+								"season_number": 1,
+								"episode_number": 51
+							},
+							{
+								"order": 25,
+								"season_number": 1,
+								"episode_number": 52
+							}
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 2,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 2,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 2,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 2,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 2,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 2,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 2,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 2,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 2,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 2,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 2,
+								"episode_number": 11
+							},
+							{
+								"order": 11,
+								"season_number": 2,
+								"episode_number": 12
+							},
+							{
+								"order": 12,
+								"season_number": 2,
+								"episode_number": 13
+							},
+							{
+								"order": 13,
+								"season_number": 2,
+								"episode_number": 14
+							},
+							{
+								"order": 14,
+								"season_number": 2,
+								"episode_number": 15
+							},
+							{
+								"order": 15,
+								"season_number": 2,
+								"episode_number": 16
+							},
+							{
+								"order": 16,
+								"season_number": 2,
+								"episode_number": 17
+							},
+							{
+								"order": 17,
+								"season_number": 2,
+								"episode_number": 18
+							},
+							{
+								"order": 18,
+								"season_number": 2,
+								"episode_number": 19
+							},
+							{
+								"order": 19,
+								"season_number": 2,
+								"episode_number": 20
+							},
+							{
+								"order": 20,
+								"season_number": 2,
+								"episode_number": 21
+							},
+							{
+								"order": 21,
+								"season_number": 2,
+								"episode_number": 22
+							},
+							{
+								"order": 22,
+								"season_number": 2,
+								"episode_number": 23
+							},
+							{
+								"order": 23,
+								"season_number": 2,
+								"episode_number": 24
+							},
+							{
+								"order": 24,
+								"season_number": 2,
+								"episode_number": 25
+							},
+							{
+								"order": 25,
+								"season_number": 2,
+								"episode_number": 26
+							},
+							{
+								"order": 26,
+								"season_number": 2,
+								"episode_number": 27
+							},
+							{
+								"order": 27,
+								"season_number": 2,
+								"episode_number": 28
+							},
+							{
+								"order": 28,
+								"season_number": 2,
+								"episode_number": 29
+							},
+							{
+								"order": 29,
+								"season_number": 2,
+								"episode_number": 30
+							},
+							{
+								"order": 30,
+								"season_number": 2,
+								"episode_number": 31
+							},
+							{
+								"order": 31,
+								"season_number": 2,
+								"episode_number": 32
+							},
+							{
+								"order": 32,
+								"season_number": 2,
+								"episode_number": 33
+							},
+							{
+								"order": 33,
+								"season_number": 2,
+								"episode_number": 34
+							},
+							{
+								"order": 34,
+								"season_number": 2,
+								"episode_number": 35
+							},
+							{
+								"order": 35,
+								"season_number": 2,
+								"episode_number": 36
+							},
+							{
+								"order": 36,
+								"season_number": 2,
+								"episode_number": 37
+							},
+							{
+								"order": 37,
+								"season_number": 2,
+								"episode_number": 38
+							},
+							{
+								"order": 38,
+								"season_number": 2,
+								"episode_number": 39
+							}
+						]
+					}
+				]
+			}
+		},
 		"episodeShow": {
 			"tt0380136": null,
 			"tt19268128": "tt0182576",
@@ -9664,7 +10640,8 @@
 			"tt3999226": "tt2930604",
 			"tt2207840": "tt1626038",
 			"tt0719125": "tt0318913",
-			"tt0807832": null
+			"tt0807832": null,
+			"tt0293731": null
 		},
 		"seasonEpisodes": {
 			"tt2293002/2": {
@@ -9888,6 +10865,46 @@
 						"tvdb": 3,
 						"tmdb": 3
 					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 3303,
+					"anilist_id": 1138,
+					"animecountdown_id": 36337,
+					"animenewsnetwork_id": 371,
+					"anime-planet_id": "medabots",
+					"anisearch_id": 1453,
+					"imdb_id": ["tt0293731"],
+					"kitsu_id": 1019,
+					"livechart_id": 6036,
+					"mal_id": 1138,
+					"simkl_id": 36337,
+					"themoviedb_id": {
+						"tv": 11235
+					},
+					"tvdb_id": 76906
+				},
+				{
+					"type": "TV",
+					"anidb_id": 4694,
+					"anilist_id": 4052,
+					"animecountdown_id": 36649,
+					"animenewsnetwork_id": 2617,
+					"anime-planet_id": "medabots-damashii",
+					"anisearch_id": 3831,
+					"imdb_id": ["tt0293731"],
+					"kitsu_id": 3432,
+					"livechart_id": 7670,
+					"mal_id": 4052,
+					"simkl_id": 36649,
+					"themoviedb_id": {
+						"tv": 11235
+					},
+					"tvdb_id": 76906,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
 				}
 			],
 			"titles": [
@@ -10046,6 +11063,36 @@
 						"蟲師 特別編「鈴の雫」",
 						"蟲師 特別編『鈴の雫』",
 						"蟲師 続章: 鈴の雫"
+					]
+				},
+				{
+					"anidbId": 3303,
+					"names": [
+						"Medarot",
+						"Medabots",
+						"מדבוט",
+						"メダロット",
+						"Medaboty",
+						"Metabot",
+						"徽章战士"
+					]
+				},
+				{
+					"anidbId": 4694,
+					"names": [
+						"Medarot Damashii",
+						"Medabots Spirit",
+						"Medabots 2",
+						"メダロット魂",
+						"Medabots II",
+						"medarot (2000)",
+						"Medabots Damashii",
+						"Medabots Souls",
+						"Medabots Spirits",
+						"Medarot Damashī",
+						"Medarot Spirits",
+						"Techno-robot Battle Adventure",
+						"徽章戰士魂"
 					]
 				}
 			]
@@ -15057,6 +16104,1024 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
+				"name": "[Rillant] Medabots S01-03 (English Dubbed) [SDBD 480p H265]",
+				"hash": null,
+				"imdbId": "tt0293731",
+				"files": [
+					{
+						"path": "[Rillant] Medabots S01E01 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E02 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E03 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E04 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E05 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E06 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E07 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E08 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E09 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E10 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E11 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E12 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E13 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E14 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E15 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E16 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E17 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E18 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E19 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E20 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E21 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E22 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E23 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E24 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E25 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S01E26 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S01 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E01 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E02 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E03 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E04 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E05 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E06 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E07 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E08 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E09 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E10 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E11 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E12 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E13 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E14 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E15 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E16 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E17 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E18 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E19 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E20 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E21 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E22 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E23 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E24 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E25 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S02E26 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S02 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E01 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E02 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E03 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E04 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E05 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E06 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E07 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E08 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E09 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E10 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E11 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E12 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E13 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E14 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E15 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E16 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E17 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E18 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E19 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E20 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E21 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E22 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E23 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E24 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E25 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E26 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E27 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E28 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E29 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E30 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E31 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E32 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E33 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E34 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E35 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E36 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E37 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E38 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					},
+					{
+						"path": "[Rillant] Medabots S03E39 [SDBD 480p H265].mkv",
+						"folder": "[Rillant] Medabots S03 (English Dubbed) [SDBD 480p H265]"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0293731",
+				"tmdbId": 11235,
+				"files": [
+					{
+						"path": "[Rillant] Medabots S01E01 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E02 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E03 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E04 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E05 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E06 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E07 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E08 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E09 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E10 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E11 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E12 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E13 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E14 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E15 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E16 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E17 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E18 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E19 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E20 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E21 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E22 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E23 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E24 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 37,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E25 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S01E26 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 39,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E01 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E02 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E03 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E04 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E05 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E06 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E07 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E08 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E09 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E10 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E11 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E12 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E13 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E14 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 40,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E15 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 41,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E16 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 42,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E17 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 43,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E18 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 44,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E19 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 45,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E20 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E21 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 47,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E22 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 48,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E23 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 49,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E24 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 50,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E25 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 51,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S02E26 [SDBD 480p H265].mkv",
+						"season": 1,
+						"episode": 52,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E01 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E02 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E03 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E04 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E05 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E06 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E07 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E08 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E09 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E10 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E11 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E12 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E13 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E14 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E15 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E16 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E17 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E18 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E19 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E20 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E21 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E22 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E23 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E24 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E25 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E26 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E27 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E28 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E29 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E30 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E31 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E32 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E33 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E34 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E35 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E36 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E37 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 37,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E38 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "dub"
+					},
+					{
+						"path": "[Rillant] Medabots S03E39 [SDBD 480p H265].mkv",
+						"season": 2,
+						"episode": 39,
+						"episodeEnd": null,
+						"how": "dub"
 					}
 				]
 			}

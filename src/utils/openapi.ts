@@ -583,6 +583,7 @@ export const openApiDocument = {
 																'anime',
 																'imdb',
 																'tvdb',
+																'dub',
 																'absolute',
 																null,
 															],

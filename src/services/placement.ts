@@ -458,7 +458,8 @@ async function placeOnShow(
 				: []
 		),
 	};
-	placement.tvdbOrder = tvdbOrderLookup(showId, sources);
+	placement.tvdbOrder = tvdbOrderLookup(showId, sources, TVDB_ORDER);
+	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
 	const numbers = absoluteFolders(
 		release.files.map((file) => ({
@@ -491,15 +492,25 @@ async function placeOnShow(
 	);
 }
 
+const TVDB_ORDER = /\btvdb\b/i;
+const DUB_ORDER = /\bdub\b/i;
+// `[Rillant] Medabots S01-03 (English Dubbed)`: numbered in the dub's own seasons
+const DUBBED = /(?:^|[\s._([-])(?:english[\s._-]+)?dub(?:bed)?(?=[\s._)\]-]|$)/i;
+
 /**
- * TMDB's episode for TVDB's season and episode: the nth episode of that season in the show's
- * "TVDB Order" episode group, read once per release and only when a file needs it.
+ * TMDB's episode for another order's season and episode: the nth episode of that season in the
+ * show's episode group of that order ("TVDB Order", "Dub Order"), read once per release and only
+ * when a file needs it.
  */
-function tvdbOrderLookup(tmdbId: number, sources: PlacementSources): PlacementShow['tvdbOrder'] {
+function tvdbOrderLookup(
+	tmdbId: number,
+	sources: PlacementSources,
+	name: RegExp
+): PlacementShow['tvdbOrder'] {
 	let order: Promise<Map<number, [number, number][]> | null> | null = null;
 	const read = async () => {
 		const results: any[] = (await sources.episodeGroups(tmdbId))?.results ?? [];
-		const named = results.filter((group) => /\btvdb\b/i.test(group?.name ?? ''));
+		const named = results.filter((group) => name.test(group?.name ?? ''));
 		const id = (named.find((group) => group?.type === 1) ?? named[0])?.id;
 		if (typeof id !== 'string') return null;
 		const groups: any[] = (await sources.episodeGroup(id))?.groups ?? [];

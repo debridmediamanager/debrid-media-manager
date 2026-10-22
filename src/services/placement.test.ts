@@ -523,4 +523,17 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 		expect(await at('QI', 'VG (Part 2)')).toEqual([10, 16]);
 		expect(await at('Teenage Mutant Ninja Turtles', 'Tale of Master Yoshi')).toEqual([4, 19]);
 	});
+
+	it("numbers an English dub's seasons by TMDB's Dub Order", async () => {
+		// TMDB's Dub Order for Medabots: the dub's season 2 is TMDB's season 1 out of order, its
+		// season 3 TMDB's season 2 (Damashii), where S02E01 had been placed on Damashii's first
+		const release = await placedHere('[Rillant] Medabots');
+		const at = (code: string) =>
+			placedAt(release)[release.files.findIndex((f) => f.path.includes(code))];
+		expect([at('S01E06'), at('S02E01'), at('S03E01')]).toEqual([
+			[1, 7],
+			[1, 6],
+			[2, 1],
+		]);
+	});
 });
