@@ -115,7 +115,10 @@ The `imdbId` you send is the title unless it places none of the release's number
 while DMM's identifier is sure of another title: `The.Magicians.S03` sent as The Ancient
 Magus' Bride is answered as The Magicians, and a release whose files read as a title TMDB
 cannot number answers that title with its files unplaced. A release with no title of its own
-(`Season 3`) is named by its first numbered file.
+(`Season 3`) is named by its first numbered file. A release whose titled files mostly name
+episodes of another show is placed on that show: one TMDB lists under the same name, one the
+identifier ranked beside it, or a franchise show holding it as a season (Power Rangers Dino
+Charge is TMDB's Power Rangers season 22).
 
 `releases` lines up with the request, and each `files` with its release's. `kind` is
 `movie`, `tv` or `null` when DMM cannot tell; `imdbId` and `tmdbId` are the movie's or

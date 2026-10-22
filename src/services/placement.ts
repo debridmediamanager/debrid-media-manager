@@ -22,7 +22,9 @@ import {
 	fileNumbers,
 	keepImdbOrder,
 	lookupAnime,
+	parseName,
 	placeFile,
+	titleOf,
 	yieldToTitles,
 	type AnimeIndex,
 	type ImdbLookup,
@@ -83,6 +85,8 @@ export interface PlacementSources {
 	/** IMDb's episode ids of one season of a show, by episode number. */
 	seasonEpisodes(showImdbId: string, season: number): Promise<Map<number, string>>;
 	anime(): Promise<AnimeIndex | null>;
+	/** TMDB's TV search for a title (`search/tv`). */
+	searchTv(query: string): Promise<any | null>;
 	/** content-identifier's own answers for these names, unjudged; null when it could not be asked. */
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 }
@@ -161,6 +165,7 @@ export async function placeReleases(
 				? skipped(release)
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -186,6 +191,76 @@ const placesFiles = (answer: PlacedRelease) => answer.files.some((file) => file.
  * was measured to add answers right only ~40% of the time (2026-10-12), while a title
  * spelled as the name and a show holding the file's episode are two facts that agree.
  */
+/**
+ * The show a release's titled files name, when it is another show than the one it was placed
+ * on: one TMDB lists under the same name (the 2003 PBS Berenstain Bears beside the 1985 CBS
+ * one), one the identifier ranked beside it (`Batman - 086 - Holiday Knights` from a pack of
+ * Batman TAS seasons 2-3 is The New Batman Adventures' S1E1), or a franchise show that holds a
+ * title as a season (TMDB's Power Rangers numbers Dino Charge as its season 22, which TMDB's
+ * find for Dino Charge's own IMDb id does not know). Taken only when most of the release's
+ * titled files place on it by their titles, more than on the show it had: the release is
+ * placed whole, so a pack that mixes two shows stays on the one most of it is.
+ */
+async function siblingLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind !== 'tv') return placed;
+	const single = release.files.length === 1;
+	const titled = release.files.filter((file) => {
+		const numbers = fileNumbers(release.name, file.folder, file.path, single);
+		return numbers && titleOf(file.path.split('/').pop() ?? file.path, numbers);
+	}).length;
+	const had = titledFiles.get(placed) ?? 0;
+	if (titled < 2 || had * 2 >= titled) return placed;
+	const shown = placed.tmdbId === null ? null : await sources.show(placed.tmdbId);
+	const queries = [parseName(release.name).title, shown?.name].filter(
+		(query): query is string => typeof query === 'string' && letters(query).length >= 3
+	);
+	const answer = (await sources.identifier([release.name]))?.get(release.name);
+	const ranked = await Promise.all(
+		(answer?.kind === 'tv' ? answer.matches.slice(0, 5) : []).map(
+			async (match) => (await sources.find(match.imdbId))?.tv_results?.[0]?.id
+		)
+	);
+	// a show TMDB names as the title or a part of it (Power Rangers in Power Rangers Dino Charge),
+	// never one that only shares a word (Among Friends, Thomas & Friends for Friends)
+	const searched = await Promise.all(
+		[...new Set(queries.map((query) => query.toLowerCase()))].map(async (query) =>
+			((await sources.searchTv(query))?.results ?? [])
+				.filter((row: any) => {
+					const name = letters(row?.name);
+					return name.length >= 3 && letters(query).includes(name);
+				})
+				.slice(0, 5)
+				.map((row: any) => row?.id)
+		)
+	);
+	const shows = [...new Set([...ranked, ...searched.flat()])].filter(
+		(id): id is number => typeof id === 'number' && id !== placed.tmdbId
+	);
+	let best = placed;
+	let most = Math.max(had, Math.ceil(titled / 2) - 1, 1);
+	for (const tmdbId of shows.slice(0, 8)) {
+		const details = await sources.show(tmdbId);
+		const external = details?.external_ids?.imdb_id;
+		const imdbId =
+			typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+		const there = await placeOnShow(
+			release,
+			{ kind: 'tv', imdbId, tmdbId },
+			false,
+			sources,
+			anime
+		);
+		const count = titledFiles.get(there) ?? 0;
+		if (!there.skipped && count > most) [best, most] = [there, count];
+	}
+	return best;
+}
+
 async function secondLook(
 	release: PlaceRequest,
 	placed: PlacedRelease,
@@ -476,8 +551,29 @@ async function placeOnShow(
 				: null
 		);
 	}
-	return answer(
-		yieldToTitles(keepImdbOrder(numbers, placed)).map((found, at) => {
+	const yielded = yieldToTitles(keepImdbOrder(numbers, placed));
+	// once a release's titled files show its numbers are not TMDB's (most of them), a file whose title placed it
+	// nowhere is not placed by its number either: the 2003 Berenstain Bears' `E53 (New Neighbors)`,
+	// a title TMDB lacks, counted to S2E26 "Count Their Blessings"
+	const titles = release.files.map((file, at) => {
+		const own = numbers[at];
+		return own ? titleOf(file.path.split('/').pop() ?? file.path, own) : null;
+	});
+	// most of them: QI's pack numbers as TMDB does, its one titled stray aside
+	const moved =
+		yielded.filter(
+			(found, at) =>
+				found?.titled &&
+				(found.season !== (numbers[at]!.season ?? found.season) ||
+					found.episode !== numbers[at]!.episode)
+		).length *
+			2 >
+		titles.filter(Boolean).length;
+	const kept = moved
+		? yielded.map((found, at) => (found && !found.titled && titles[at] ? null : found))
+		: yielded;
+	const placedAnswer = answer(
+		kept.map((found, at) => {
 			const path = release.files[at].path;
 			return found
 				? {
@@ -490,7 +586,12 @@ async function placeOnShow(
 				: unplaced(path);
 		})
 	);
+	titledFiles.set(placedAnswer, kept.filter((found) => found?.titled).length);
+	return placedAnswer;
 }
+
+/** How many of an answer's files placeOnShow placed by their own titles. */
+const titledFiles = new WeakMap<PlacedRelease, number>();
 
 const TVDB_ORDER = /\btvdb\b/i;
 const DUB_ORDER = /\bdub\b/i;
@@ -616,6 +717,10 @@ export const cachedSources: PlacementSources = {
 	episodeShow: (imdbId) => repository.getImdbEpisodeShow(imdbId),
 	seasonEpisodes: (show, season) => repository.getImdbSeasonEpisodeIds(show, season),
 	anime: () => settle(currentAnimeIndex),
+	searchTv: (query) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().searchTmdbTitles('tv', query))
+			: Promise.resolve(null),
 	// asks about at most 300 names it has not answered today: zurg asks again daily
 	identifier: (names) =>
 		settle(() => identifyFilenamesRemembered(names, 300)).then((r) => r?.answers ?? null),

@@ -884,7 +884,10 @@ const SCENE_TOKEN =
 const MORE_EPISODES = /^(?:[\s._-]*-?[\s._-]*e\d{1,3}(?![0-9]))*/i;
 
 /** The title a file's name carries after its episode token, its code or its number. */
-function titleOf(file: string, numbers: FileNumbers): { whole: string; first: string } | null {
+export function titleOf(
+	file: string,
+	numbers: FileNumbers
+): { whole: string; first: string } | null {
 	const stem = file.replace(EXTENSION, '');
 	// a group's bracket is no episode token (`[0x539]`); it can be the number (`[Episode 19] …`)
 	const grouped = stem.match(LEADING_GROUPS)?.[0].length ?? 0;
@@ -897,7 +900,8 @@ function titleOf(file: string, numbers: FileNumbers): { whole: string; first: st
 			: number
 				? stem.slice(number.index + number[0].length)
 				: '';
-	return titleText(rest);
+	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`
+	return titleText(rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1'));
 }
 
 /**

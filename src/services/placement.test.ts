@@ -12,6 +12,7 @@ import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
+import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
@@ -54,6 +55,7 @@ const sources: PlacementSources = {
 		),
 	anime: async () => anime,
 	identifier: async (names) => answered(recorded, names),
+	searchTv: async (query) => recorded.searchTv?.[query] ?? null,
 };
 const identify: Identify = async (list) => list.map(({ name }) => recorded.identify[name] ?? null);
 const place = (requests: PlaceRequest[], deadline = Infinity, from = sources, ask = identify) =>
@@ -76,6 +78,7 @@ const recordedSources = (r: any): PlacementSources => ({
 		),
 	anime: async () => anime,
 	identifier: async (names) => answered(r, names),
+	searchTv: async (query) => r.searchTv?.[query] ?? null,
 });
 
 describe('a pack numbered in another order than TMDB, named by its titles', () => {
@@ -447,8 +450,6 @@ describe('which title a release is, when the id sent places nothing or no id is 
 	});
 
 	it.each([
-		// `Batman - 086 - Holiday Knights` spells the 1966 Batman: an unsure answer never overrides an id
-		['Batman TAS Seasons 2-3', 2098],
 		// the release names its show; its file `The Avengers (EMH)` reads as the 1961 Avengers
 		['Marvels THE AVENGERS', 33623],
 		// sequels TMDB files under their show
@@ -535,5 +536,71 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 			[1, 6],
 			[2, 1],
 		]);
+	});
+});
+
+describe('a release whose titled files name another show than the one it was placed on', () => {
+	// rex-fun's unmatched releases (2026-10-22) and every answer placing them needed, TMDB's TV
+	// search and content-identifier's own answers included
+	const sib = siblingShows as any;
+	const from = recordedSources(sib.answers);
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => sib.answers.identify[name] ?? null);
+	const check = (name: string) => sib.cases.find((c: any) => c.request.name.startsWith(name));
+	const placeCase = async (name: string) =>
+		(await place([check(name).request as PlaceRequest], Infinity, from, ask)).releases[0];
+	const at = (placed: any, path: string) => placed.files.find((f: any) => f.path.endsWith(path));
+
+	it("moves Dino Charge's pack onto TMDB's Power Rangers, whose season 22 it is", async () => {
+		// TMDB's find knows nothing by Dino Charge's IMDb id; Power Rangers titles S22E02 as the file does
+		expect(sib.answers.find.tt3521854.tv_results).toEqual([]);
+		const placed = await placeCase('Power Rangers Dino Charge');
+		expect(placed).toEqual(check('Power Rangers Dino Charge').expect);
+		expect(placed.tmdbId).toBe(2328);
+		expect(
+			at(placed, 'S22E02 - Past, Present and Fusion (480p x265 EDGE2020).mkv')
+		).toMatchObject({
+			season: 22,
+			episode: 2,
+		});
+	});
+
+	it("moves Batman TAS's seasons 2-3 onto The New Batman Adventures, which TMDB lists apart", async () => {
+		const placed = await placeCase('Batman TAS Seasons 2-3');
+		expect(placed).toEqual(check('Batman TAS Seasons 2-3').expect);
+		// never the 1966 Batman its files spell (`Batman - 086 - Holiday Knights`): an unsure
+		// answer overrides no id, and a show is taken here only by its episodes' titles
+		expect(placed.tmdbId).toBe(4625);
+		expect(at(placed, 'Batman - 086 - Holiday Knights   [DarkDream].mkv')).toMatchObject({
+			season: 1,
+			episode: 1,
+		});
+	});
+
+	it('moves the 2003 Berenstain Bears off the 1985 show of the same name', async () => {
+		const placed = await placeCase('Berenstain Bears (Cartoon');
+		expect(placed).toEqual(check('Berenstain Bears (Cartoon').expect);
+		expect(placed.tmdbId).toBe(4665);
+		expect(at(placed, 'E54 (The Big Election).mp4')).toMatchObject({ season: 3, episode: 16 });
+		// a title TMDB does not list is not counted onto another episode
+		expect(at(placed, 'E53 (New Neighbors).mp4')).toMatchObject({
+			season: null,
+			episode: null,
+		});
+	});
+
+	it.each([
+		['[CyC] Mushishi v2.1', 26867],
+		['[smol] Owarimonogatari', 336855],
+		['The Crocodile Hunter', 1904],
+		// TMDB's search for Friends answers Among Friends and Thomas & Friends, no show of its name
+		['Friends.1994', 1668],
+	])('keeps %s on its show', async (name, show) => {
+		const placed = await placeCase(name);
+		// numbers only: the recorded anime index is older than the live one, which says `anime`
+		// where this one says `absolute` for the same episodes
+		const numbersOf = (r: any) => r.files.map((f: any) => [f.season, f.episode]);
+		expect(numbersOf(placed)).toEqual(numbersOf(check(name).expect));
+		expect(placed.tmdbId).toBe(show);
 	});
 });
