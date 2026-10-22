@@ -9,10 +9,11 @@ import lzString from 'lz-string';
  * were over it, the largest at 11.6 MB. Firefox's cap is half that, 1,048,572
  * characters, past which the iframe stays at `about:blank` with nothing in
  * the console, so lists that opened in Chrome were blank in Firefox. A list
- * for this app, whatever its size and whether it arrives as `data` or inside
- * an old-form `url`, is now stored beside its page as `lists/<id>.txt` (the
- * same lz-string text the fragment carried) and the fragment carries
- * `id=<id>`. `=` is outside lz-string's URI-safe alphabet, so the two forms
+ * too long for that, whether it arrives as `data` or inside an old-form
+ * `url`, is now stored beside its page as `lists/<id>.txt` (the same
+ * lz-string text the fragment carried) and the fragment carries `id=<id>`.
+ * One that fits stays in the fragment, the form other readers of the
+ * hashlists repo parse. `=` is outside lz-string's URI-safe alphabet, so the two forms
  * cannot be mistaken for each other, and old links keep working unchanged.
  *
  * A list published before this was moved there whole: its old page, iframe
@@ -26,6 +27,9 @@ const ID_PREFIX = 'id=';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 // lz-string's compressToEncodedURIComponent alphabet
 const LZ_URI_SAFE = /^[A-Za-z0-9+\-$]+$/;
+
+/** The longest URL Firefox 157 opens in an iframe; Chrome's cap is 2 MiB. */
+export const MAX_IFRAME_URL_LENGTH = 1_048_572;
 
 export const isHashlistId = (id: string) => UUID.test(id);
 export const isLzUriSafe = (text: string) => LZ_URI_SAFE.test(text);

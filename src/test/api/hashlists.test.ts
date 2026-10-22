@@ -216,7 +216,31 @@ describe('/api/hashlists', () => {
 			};
 			await handler(mockReq, mockRes);
 			expect(mockRes.status).toHaveBeenCalledWith(200);
-			expect(created.tree).toHaveLength(2);
+			expect(created.tree.map((e) => e.path)).toEqual(['test-uuid-123.html']);
+		});
+
+		// Zilean's DMM scraper (Thoroslives/zilean#25) clones the hashlists repo,
+		// reads only its top-level pages, and takes the list from the iframe with
+		// this pattern (DmmFileEntryProcessor.cs). From 2026-09-30 every new page
+		// carried `#id=<uuid>` there instead, and it stopped finding new lists.
+		const ZILEAN_IFRAME =
+			/<iframe src="https:\/\/debridmediamanager.com\/hashlist#(.*)"><\/iframe>/;
+
+		it('publishes a list that fits in the URL in the page itself, as Zilean reads it (card 433)', async () => {
+			for (const url of OLD_FORM_URLS) {
+				const list = url.slice(url.indexOf('#') + 1);
+				const { created, api } = git();
+				await install(api);
+				mockReq.method = 'POST';
+				mockReq.body = { data: list };
+				await handler(mockReq, mockRes);
+				expect(mockRes.status).toHaveBeenLastCalledWith(200);
+
+				const page = blobAt(created, 'test-uuid-123.html');
+				const found = page.match(ZILEAN_IFRAME)?.[1] ?? '';
+				expect(found).toBe(list);
+				expect(JSON.parse(lzString.decompressFromEncodedURIComponent(found))).toBeTruthy();
+			}
 		});
 	});
 
@@ -255,7 +279,7 @@ describe('/api/hashlists', () => {
 			expect(blobAt(created, 'lists/test-uuid-123.txt')).toBe(FRAGMENT);
 		});
 
-		it('accepts every old-form url clients sent, storing each list', async () => {
+		it('accepts every old-form url clients sent, publishing each list in its page', async () => {
 			expect(OLD_FORM_URLS).toHaveLength(16);
 			for (const url of OLD_FORM_URLS) {
 				const { created, api } = git();
@@ -264,11 +288,9 @@ describe('/api/hashlists', () => {
 				mockReq.body = { url };
 				await handler(mockReq, mockRes);
 				expect(mockRes.status).toHaveBeenLastCalledWith(200);
-				expect(blobAt(created, 'lists/test-uuid-123.txt')).toBe(
-					url.slice(url.indexOf('#') + 1)
-				);
+				expect(created.tree.map((e) => e.path)).toEqual(['test-uuid-123.html']);
 				expect(blobAt(created, 'test-uuid-123.html')).toContain(
-					'<iframe src="https://debridmediamanager.com/hashlist#id=test-uuid-123"></iframe>'
+					`<iframe src="${url}"></iframe>`
 				);
 			}
 		});

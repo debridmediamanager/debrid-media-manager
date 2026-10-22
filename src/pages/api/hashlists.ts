@@ -2,6 +2,7 @@
 import {
 	HASHLIST_APP_URL,
 	HASHLIST_HOST,
+	MAX_IFRAME_URL_LENGTH,
 	hashlistDataPath,
 	hashlistFragmentForId,
 	hashlistPageHtml,
@@ -91,7 +92,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	const uuid = uuidv4();
-	const iframeSrc = `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
+	// A list that fits in the iframe URL is published there, the form every
+	// page had before 2026-09-30 and the one other hash list readers parse
+	// (Zilean reads only the page's iframe, card 433); only a longer one goes
+	// beside its page, where every browser can open it.
+	const inline = `${HASHLIST_APP_URL}#${list}`;
+	const fitsInUrl = inline.length <= MAX_IFRAME_URL_LENGTH;
+	const iframeSrc = fitsInUrl ? inline : `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
 
 	const token = process.env.GH_PAT;
 
@@ -107,8 +114,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const files: { path: string; content: string }[] = [
 			{ path: `${uuid}.html`, content: hashlistPageHtml(iframeSrc) },
-			{ path: hashlistDataPath(uuid), content: list },
 		];
+		if (!fitsInUrl) files.push({ path: hashlistDataPath(uuid), content: list });
 
 		// Create the blobs, then one tree and one commit holding all of them
 		const blobs = await Promise.all(
