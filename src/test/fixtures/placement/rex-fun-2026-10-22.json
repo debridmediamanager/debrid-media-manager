@@ -10055,6 +10055,804 @@
 		{
 			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
 			"request": {
+				"name": "SpongeBob.SquarePants.1999.S10.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.FrysTAoE {imdb-tt0206512}",
+				"hash": null,
+				"imdbId": "tt0206512",
+				"files": [
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E01.Extreme.Spots.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E02.Squirrel.Record.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E03.Squid.Baby.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E04.The.Good.Krabby.Name.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E05.License.to.Milkshake.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E06.Hello.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E07.Garys.New.Toy.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E08.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E09.Chum.Fricassee.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E10.Move.It.or.Lose.It.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E11.Eek,.an.Urchin.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E12.Patrick-Man.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E13.Bumper.to.Bumper.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E14.Squid.Defense.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E15.Planktons.Pet.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E16.Little.Yellow.Book.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E17.Evil.Spatula.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E18.Jailbreak.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E19.Safe.Depo­sit.Krabs.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E20.Dont.Look.Now.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E21.Séance.Shméance.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E22.SpongeBob,.Youre.Fired.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E23.It.Came.from.Goo.Lagoon.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E24.Kenny.the.Cat.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E25.Yeti.Krabs.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E26.Lost.in.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E27.Tutor.Sauce.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E28.Squid.Plus.One.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E29.The.Executive.Treatment.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E30.Company.Picnic.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E31.Pull.Up.a.Barrel.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E32.Whats.Eating.Patrick.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E33.Sanctuary.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E34.Patrick.The.Game.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E35.The.Sewers.of.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E36.SpongeBob.LongPants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E37.Larrys.Gym.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E38.Mall.Girl.Pearl.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E39.Two.Thumbs.Down.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E40.The.Fish.Bowl.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E41.Married.to.Money.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E42.Sharks.vs..Pods.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E43.CopyBob.DittoPants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E44.Sold.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E45.Lame.and.Fortune.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E46.Sandys.Nutmare.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E47.Food.Con.Castaways.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E48.Pineapple.Invasion.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E49.Salsa.Imbecilicus.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E50.Bulletin.Board.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E51.Mutiny.on.the.Krusty.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E52.Whirly.Brains.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E53.Snail.Mail.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E54.Mermaid.Pants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E55.The.Whole.Tooth.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E56.Mimic.Madness.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E57.House.Worming.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E58.Snooze.You.Lose.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E59.Krusty.Katering.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E60.SpongeBobs.Place.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E61.Plankton.Gets.the.Boot.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E62.Life.Insurance.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E63.Burst.Your.Bubble.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E64.Plankton.Retires.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E65.Trident.Trouble.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E66.Unreal.Estate.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E67.Code.Yellow.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E68.The.Getaway.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E69.Lost.and.Found.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E70.Patricks.Coupon.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E71.Out.of.the.Picture.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0206512",
+				"tmdbId": 387,
+				"files": [
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E01.Extreme.Spots.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 41,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E02.Squirrel.Record.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 42,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E03.Squid.Baby.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E04.The.Good.Krabby.Name.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 45,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E05.License.to.Milkshake.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 47,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E06.Hello.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 48,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E07.Garys.New.Toy.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 50,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E08.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E09.Chum.Fricassee.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 51,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E10.Move.It.or.Lose.It.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 8,
+						"episode": 52,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E11.Eek,.an.Urchin.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E12.Patrick-Man.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E13.Bumper.to.Bumper.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E14.Squid.Defense.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E15.Planktons.Pet.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E16.Little.Yellow.Book.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E17.Evil.Spatula.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E18.Jailbreak.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E19.Safe.Depo­sit.Krabs.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E20.Dont.Look.Now.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E21.Séance.Shméance.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E22.SpongeBob,.Youre.Fired.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E23.It.Came.from.Goo.Lagoon.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E24.Kenny.the.Cat.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E25.Yeti.Krabs.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E26.Lost.in.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E27.Tutor.Sauce.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E28.Squid.Plus.One.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E29.The.Executive.Treatment.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E30.Company.Picnic.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E31.Pull.Up.a.Barrel.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E32.Whats.Eating.Patrick.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E33.Sanctuary.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E34.Patrick.The.Game.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E35.The.Sewers.of.Bikini.Bottom.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E36.SpongeBob.LongPants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E37.Larrys.Gym.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E38.Mall.Girl.Pearl.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E39.Two.Thumbs.Down.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E40.The.Fish.Bowl.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E41.Married.to.Money.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E42.Sharks.vs..Pods.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E43.CopyBob.DittoPants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E44.Sold.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E45.Lame.and.Fortune.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E46.Sandys.Nutmare.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 37,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E47.Food.Con.Castaways.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E48.Pineapple.Invasion.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 39,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E49.Salsa.Imbecilicus.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 40,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E50.Bulletin.Board.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 41,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E51.Mutiny.on.the.Krusty.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 42,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E52.Whirly.Brains.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 43,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E53.Snail.Mail.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 44,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E54.Mermaid.Pants.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 45,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E55.The.Whole.Tooth.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 9,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E56.Mimic.Madness.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E57.House.Worming.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E58.Snooze.You.Lose.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E59.Krusty.Katering.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E60.SpongeBobs.Place.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E61.Plankton.Gets.the.Boot.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E62.Life.Insurance.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E63.Burst.Your.Bubble.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E64.Plankton.Retires.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E65.Trident.Trouble.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E66.Unreal.Estate.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E67.Code.Yellow.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E68.The.Getaway.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E69.Lost.and.Found.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E70.Patricks.Coupon.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "SpongeBob.SquarePants.1999.S10E71.Out.of.the.Picture.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
+						"season": 10,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
 				"name": "[CyC] Mushishi v2.1 (BD 720p Hi10 x264 AC3+FLAC) [Dual-Audio]",
 				"hash": null,
 				"imdbId": "tt0807832",

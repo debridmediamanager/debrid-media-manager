@@ -768,6 +768,7 @@ const wordsOf = new WeakMap<object, string>();
 // What a release puts after the episode in place of a title, or after its title.
 const RELEASE_WORDS =
 	/^(?:proper|repack|rerip|real|internal|extended|uncut|uncensored|remastered|dubbed|subbed|multi|dual|end|fin|final)$/;
+const SCENE_WORDS = /^(?:proper|repack|rerip|internal)$/;
 const TAGS =
 	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
 // What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
@@ -786,7 +787,11 @@ export function titleText(raw: string): { whole: string; first: string } | null 
 		const list = words(text);
 		while (list.length && RELEASE_WORDS.test(list[0])) list.shift();
 		const end = list.findIndex((word) => TAGS.test(word));
-		return (end < 0 ? list : list.slice(0, end)).join(' ');
+		const title = end < 0 ? list : list.slice(0, end);
+		// and a scene word between the title and the tags: `S10E24.Kenny.the.Cat.REPACK.1080p`
+		// (never `end` or `final`, which end titles: Gumball's "The End")
+		while (title.length > 1 && SCENE_WORDS.test(title.at(-1)!)) title.pop();
+		return title.join(' ');
 	};
 	const rest = raw.replace(EXTENSION, '').replace(LEADING_MARKS, '');
 	const whole = cut(rest);

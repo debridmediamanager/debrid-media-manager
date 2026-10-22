@@ -494,4 +494,14 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 			})
 		);
 	});
+
+	it('cuts a scene word between the title and the tags', async () => {
+		// the Frys pack numbers SpongeBob's segments on from TMDB's: `S10E24.Kenny.the.Cat.REPACK.1080p`
+		// is TMDB's S9E15 "Kenny the Cat", which "kenny the cat repack" named nowhere
+		const release = await placedHere('SpongeBob.SquarePants.1999.S10');
+		const at = (title: string) =>
+			placedAt(release)[release.files.findIndex((f) => f.path.includes(title))];
+		expect(at('.Kenny.the.Cat.')).toEqual([9, 15]);
+		expect(at('.Squid.Baby.')).toEqual([8, 46]);
+	});
 });
