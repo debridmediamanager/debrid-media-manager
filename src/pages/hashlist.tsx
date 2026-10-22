@@ -153,6 +153,10 @@ function HashlistPage() {
 	const [hashlistTitle, setHashlistTitle] = useState<string>('');
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<EnrichedHashlistTorrent[]>([]);
+	const rdBulkCandidates = useMemo(
+		() => filteredList.filter((t) => t.rdAvailable),
+		[filteredList]
+	);
 	const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
 
@@ -538,7 +542,7 @@ function HashlistPage() {
 
 	async function downloadNonDupeTorrentsInRd() {
 		const libraryHashes = await torrentDB.hashes();
-		const yetToDownload = filteredList
+		const yetToDownload = rdBulkCandidates
 			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInRdFn);
 		if (yetToDownload.length === 0) {
@@ -1191,14 +1195,14 @@ function HashlistPage() {
 					<>
 						<button
 							className={`mr-2 mb-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
-								filteredList.length === 0 || !rdKey
+								rdBulkCandidates.length === 0 || !rdKey
 									? 'cursor-not-allowed opacity-60'
 									: ''
 							}`}
 							onClick={downloadNonDupeTorrentsInRd}
-							disabled={filteredList.length === 0 || !rdKey}
+							disabled={rdBulkCandidates.length === 0 || !rdKey}
 						>
-							RD Download ({filteredList.length})
+							RD Download ({rdBulkCandidates.length})
 						</button>
 					</>
 				)}

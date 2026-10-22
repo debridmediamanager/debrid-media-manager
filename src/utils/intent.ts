@@ -89,7 +89,9 @@ export const buildPlayerIntent = (
 		return `${player}://${downloadUrl.replace('https://', '')}`;
 	}
 	if (os === 'ios2' || os === 'mac4') {
-		return `${player}://x-callback-url/open?url=${downloadUrl}`;
+		// The stream is one query value, even when its own URL contains
+		// credentials, additional parameters, percent escapes or a fragment.
+		return `${player}://x-callback-url/open?url=${encodeURIComponent(downloadUrl)}`;
 	}
 	// SenPlayer is one app across iOS, tvOS and macOS, so both os keys land here;
 	// they exist apart only so the Settings list can group the entry twice.

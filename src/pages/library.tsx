@@ -1396,162 +1396,163 @@ function TorrentsPage() {
 		};
 
 		function wrapAddMagnetFn(hash: string) {
-			return async () => await addMagnet(hash);
+			return async () => {
+				const result = await addMagnet(hash);
+				if (debridService === 'rd' && result !== 'success') {
+					throw new Error(`Real-Debrid did not restore ${hash}: ${result}`);
+				}
+				return result;
+			};
 		}
 
-		const processingPromise = new Promise<{ success: number; error: number }>(
-			async (resolve) => {
-				toast.loading('Restoring... do not refresh.', libraryToastOptions);
+		const processingPromise = (async (): Promise<{ success: number; error: number }> => {
+			const newHashes = files.map((f) => f.hash).filter((h) => !serviceHashes.has(h));
 
-				const newHashes = files.map((f) => f.hash).filter((h) => !serviceHashes.has(h));
-
-				if (newHashes.length === 0) {
-					resolve({ success: 0, error: 0 });
-					return;
-				}
-
-				let availableHashes: string[] = [];
-				let unavailableHashes: string[] = [];
-
-				if ((rdKey && debridService === 'rd') || (tbKey && debridService === 'tb')) {
-					toast.loading(`Checking database for ${newHashes.length} torrents...`, {
-						id: 'database-check',
-					});
-
-					try {
-						if (rdKey && debridService === 'rd') {
-							// check2 answers 403 without a token from /api/challenge.
-							const [dmmProblemKey, solution] = await generateTokenAndHash();
-							for (let i = 0; i < newHashes.length; i += 100) {
-								const batch = newHashes.slice(i, i + 100);
-								const resp = await checkAvailabilityByHashes(
-									dmmProblemKey,
-									solution,
-									batch
-								);
-								for (const row of resp?.available ?? []) {
-									recordedNames.set(String(row.hash).toLowerCase(), [
-										row.originalFilename,
-										row.filename,
-									]);
-								}
-							}
-
-							availableHashes = newHashes.filter((h) =>
-								recordedNames.has(h.toLowerCase())
-							);
-							unavailableHashes = newHashes.filter(
-								(h) => !recordedNames.has(h.toLowerCase())
-							);
-						} else if (tbKey && debridService === 'tb') {
-							const availableSet = new Set<string>();
-
-							for (let i = 0; i < newHashes.length; i += 100) {
-								const batch = newHashes.slice(i, i + 100);
-								const resp = await checkCachedStatus(
-									{
-										hash: batch,
-										format: 'object',
-									},
-									tbKey
-								);
-								if (resp?.data) {
-									Object.entries(resp.data).forEach(
-										([hash, data]: [string, any]) => {
-											if (data) availableSet.add(hash);
-										}
-									);
-								}
-							}
-
-							availableHashes = newHashes.filter((h) => availableSet.has(h));
-							unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
-						}
-
-						toast.dismiss('database-check');
-						if (availableHashes.length > 0) {
-							toast.success(
-								`${availableHashes.length} cached torrents queued first.`,
-								libraryToastOptions
-							);
-						}
-						if (unavailableHashes.length > 0) {
-							toast(
-								`${unavailableHashes.length} torrents must download before restore.`,
-								libraryToastOptions
-							);
-						}
-					} catch (error) {
-						console.error('Error checking database availability:', error);
-						toast.dismiss('database-check');
-						unavailableHashes = newHashes;
-						availableHashes = [];
-					}
-				} else {
-					unavailableHashes = newHashes;
-				}
-
-				if (tbKey && debridService === 'tb' && cachedOnly) {
-					unavailableHashes = [];
-				}
-
-				const toAddAvailable = availableHashes.map(wrapAddMagnetFn);
-				const toAddUnavailable = unavailableHashes.map(wrapAddMagnetFn);
-
-				let totalCompleted = 0;
-				const totalToAdd = toAddAvailable.length + toAddUnavailable.length;
-
-				if (totalToAdd === 0) {
-					resolve({ success: 0, error: 0 });
-					return;
-				}
-
-				let availableResults: any[] = [];
-				let availableErrors: any[] = [];
-				if (toAddAvailable.length > 0) {
-					[availableResults, availableErrors] = await runConcurrentFunctions(
-						toAddAvailable,
-						4,
-						0,
-						(completed, total, errorCount) => {
-							totalCompleted = completed;
-							const message =
-								errorCount > 0
-									? `Restoring cached torrents ${completed}/${total} (${errorCount} errors)...`
-									: `Restoring cached torrents ${completed}/${total}...`;
-							toast.loading(message, { id: 'restore-progress' });
-						}
-					);
-				}
-
-				let unavailableResults: any[] = [];
-				let unavailableErrors: any[] = [];
-				if (toAddUnavailable.length > 0) {
-					[unavailableResults, unavailableErrors] = await runConcurrentFunctions(
-						toAddUnavailable,
-						1,
-						0,
-						(completed, total, errorCount) => {
-							const actualCompleted = totalCompleted + completed;
-							const message =
-								errorCount > 0
-									? `Restoring ${actualCompleted}/${totalToAdd} downloads (${availableErrors.length + errorCount} errors)...`
-									: `Restoring ${actualCompleted}/${totalToAdd} downloads...`;
-							toast.loading(message, { id: 'restore-progress' });
-						}
-					);
-				}
-
-				toast.dismiss('restore-progress');
-				const allResults = [...availableResults, ...unavailableResults];
-				const allErrors = [...availableErrors, ...unavailableErrors];
-
-				if (allResults.length) {
-					await refreshLibrary();
-				}
-				resolve({ success: allResults.length, error: allErrors.length });
+			if (newHashes.length === 0) {
+				return { success: 0, error: 0 };
 			}
-		);
+
+			let availableHashes: string[] = [];
+			let unavailableHashes: string[] = [];
+
+			if ((rdKey && debridService === 'rd') || (tbKey && debridService === 'tb')) {
+				toast.loading(`Checking database for ${newHashes.length} torrents...`, {
+					id: 'database-check',
+				});
+
+				try {
+					if (rdKey && debridService === 'rd') {
+						// check2 answers 403 without a token from /api/challenge.
+						const [dmmProblemKey, solution] = await generateTokenAndHash();
+						for (let i = 0; i < newHashes.length; i += 100) {
+							const batch = newHashes.slice(i, i + 100);
+							const resp = await checkAvailabilityByHashes(
+								dmmProblemKey,
+								solution,
+								batch
+							);
+							for (const row of resp?.available ?? []) {
+								recordedNames.set(String(row.hash).toLowerCase(), [
+									row.originalFilename,
+									row.filename,
+								]);
+							}
+						}
+
+						availableHashes = newHashes.filter((h) =>
+							recordedNames.has(h.toLowerCase())
+						);
+						unavailableHashes = newHashes.filter(
+							(h) => !recordedNames.has(h.toLowerCase())
+						);
+					} else if (tbKey && debridService === 'tb') {
+						const availableSet = new Set<string>();
+
+						for (let i = 0; i < newHashes.length; i += 100) {
+							const batch = newHashes.slice(i, i + 100);
+							const resp = await checkCachedStatus(
+								{
+									hash: batch,
+									format: 'object',
+								},
+								tbKey
+							);
+							if (resp?.data) {
+								Object.entries(resp.data).forEach(([hash, data]: [string, any]) => {
+									if (data) availableSet.add(hash);
+								});
+							}
+						}
+
+						availableHashes = newHashes.filter((h) => availableSet.has(h));
+						unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
+					}
+
+					toast.dismiss('database-check');
+					if (availableHashes.length > 0) {
+						toast.success(
+							`${availableHashes.length} cached torrents queued first.`,
+							libraryToastOptions
+						);
+					}
+					if (unavailableHashes.length > 0) {
+						toast(
+							`${unavailableHashes.length} torrents must download before restore.`,
+							libraryToastOptions
+						);
+					}
+				} catch (error) {
+					console.error('Error checking database availability:', error);
+					toast.dismiss('database-check');
+					unavailableHashes = newHashes;
+					availableHashes = [];
+				}
+			} else {
+				unavailableHashes = newHashes;
+			}
+
+			if (tbKey && debridService === 'tb' && cachedOnly) {
+				unavailableHashes = [];
+			}
+
+			const toAddAvailable = availableHashes.map(wrapAddMagnetFn);
+			const toAddUnavailable = unavailableHashes.map(wrapAddMagnetFn);
+
+			let totalCompleted = 0;
+			const totalToAdd = toAddAvailable.length + toAddUnavailable.length;
+
+			if (totalToAdd === 0) {
+				return { success: 0, error: 0 };
+			}
+
+			let availableResults: any[] = [];
+			let availableErrors: any[] = [];
+			if (toAddAvailable.length > 0) {
+				[availableResults, availableErrors] = await runConcurrentFunctions(
+					toAddAvailable,
+					4,
+					0,
+					(completed, total, errorCount) => {
+						totalCompleted = completed;
+						const message =
+							errorCount > 0
+								? `Restoring cached torrents ${completed}/${total} (${errorCount} errors)...`
+								: `Restoring cached torrents ${completed}/${total}...`;
+						toast.loading(message, { id: 'restore-progress' });
+					}
+				);
+			}
+
+			let unavailableResults: any[] = [];
+			let unavailableErrors: any[] = [];
+			if (toAddUnavailable.length > 0) {
+				[unavailableResults, unavailableErrors] = await runConcurrentFunctions(
+					toAddUnavailable,
+					1,
+					0,
+					(completed, total, errorCount) => {
+						const actualCompleted = totalCompleted + completed;
+						const message =
+							errorCount > 0
+								? `Restoring ${actualCompleted}/${totalToAdd} downloads (${availableErrors.length + errorCount} errors)...`
+								: `Restoring ${actualCompleted}/${totalToAdd} downloads...`;
+						toast.loading(message, { id: 'restore-progress' });
+					}
+				);
+			}
+
+			toast.dismiss('restore-progress');
+			const allResults = [...availableResults, ...unavailableResults];
+			const allErrors = [...availableErrors, ...unavailableErrors];
+
+			if (allResults.length) {
+				await refreshLibrary();
+			}
+			return { success: allResults.length, error: allErrors.length };
+		})().finally(() => {
+			toast.dismiss('restore-progress');
+			toast.dismiss('database-check');
+		});
 
 		toast.promise(
 			processingPromise,
@@ -1561,7 +1562,7 @@ function TorrentsPage() {
 					setTimeout(() => location.reload(), 10000);
 					return `Restored ${success}; ${error} failed in ${debridService.toUpperCase()} library. Refreshing in 10s.`;
 				},
-				error: '',
+				error: 'Restore failed. Refresh your library before trying again.',
 			},
 			{
 				...libraryToastOptions,

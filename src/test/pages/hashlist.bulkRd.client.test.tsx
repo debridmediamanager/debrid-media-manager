@@ -1,3 +1,4 @@
+import { handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -94,7 +95,12 @@ vi.mock('@/utils/token', () => ({
 
 vi.mock('@/utils/instantChecks', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/instantChecks')>()),
-	checkPlayableAvailabilityRd: vi.fn().mockResolvedValue(0),
+	checkPlayableAvailabilityRd: vi.fn(async (_token, _solution, _hashes, setList) => {
+		setList((rows: { hash: string; rdAvailable: boolean }[]) =>
+			rows.map((row, index) => ({ ...row, rdAvailable: index % 2 === 0 }))
+		);
+		return Math.ceil(_hashes.length / 2);
+	}),
 	wrapLoading: (_service: string, p: Promise<number>) => p,
 }));
 
@@ -119,9 +125,12 @@ describe('HashlistPage RD Download', () => {
 		const HashlistPage = (await import('@/pages/hashlist')).default;
 		render(<HashlistPage />);
 
-		fireEvent.click(await screen.findByText('Show All'));
+		const allButton = await screen.findByText('Show All');
+		fireEvent.click(allButton);
 		const button = await screen.findByRole('button', { name: /^RD Download \([1-9]\d*\)$/ });
-		const count = Number(button.textContent!.match(/\((\d+)\)/)![1]);
+		const available = list.torrents.filter((_, index) => index % 2 === 0);
+		const count = available.length;
+		expect(button).toHaveTextContent(`RD Download (${count})`);
 		fireEvent.click(button);
 
 		await waitFor(() =>
@@ -134,5 +143,11 @@ describe('HashlistPage RD Download', () => {
 			expect.stringMatching(/^Started/),
 			expect.anything()
 		);
+		expect(
+			vi
+				.mocked(handleAddAsMagnetInRd)
+				.mock.calls.map((call) => call[1])
+				.sort()
+		).toEqual(available.map((row) => row.hash).sort());
 	});
 });

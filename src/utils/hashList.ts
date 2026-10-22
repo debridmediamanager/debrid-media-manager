@@ -50,7 +50,9 @@ export async function generateHashList(title: string, filteredList: UserTorrent[
 		const shortUrl = await publishHashlist(
 			lzString.compressToEncodedURIComponent(JSON.stringify(hashlist))
 		);
-		window.open(shortUrl);
+		// Publishing can outlive the browser's popup activation window. If a
+		// new tab is blocked, still take the user to the list they just created.
+		if (!window.open(shortUrl)) window.location.assign(shortUrl);
 	} catch (error) {
 		toast.error('Failed to generate hash list; try again soon.', libraryToastOptions);
 		console.error(error);

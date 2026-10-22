@@ -1,5 +1,7 @@
 import handler from '@/pages/api/torrents/tv';
+import type * as MediaSearch from '@/services/mediasearch';
 import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
+import grandTourNullTitle from '@/test/fixtures/scraped/grand-tour-null-title-2026-10-22.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -132,6 +134,37 @@ describe('/api/torrents/tv', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			results: [{ title: 'Season Pack', hash: 'hash-1' }],
 		});
+	});
+
+	it('serves renderable releases from the captured Grand Tour response with a null title', async () => {
+		// The original console reports "e.title is null". This later real response
+		// still carries that shape; its complete 83 rows are preserved in the fixture.
+		const mediaSearch = await vi.importActual<typeof MediaSearch>('@/services/mediasearch');
+		mockFlatten.mockImplementationOnce(mediaSearch.flattenAndRemoveDuplicates);
+		mockSort.mockImplementationOnce(mediaSearch.sortByFileSize);
+		mockGetScrapedTrueResults.mockResolvedValue(grandTourNullTitle.response.results);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockGetReportedHashes.mockResolvedValue([]);
+		const res = createMockResponse();
+
+		await handler(
+			createMockRequest({ query: { ...baseQuery, imdbId: 'tt5712554', seasonNum: '3' } }),
+			res
+		);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		const rows = vi.mocked(res.json).mock.calls[0][0].results;
+		// Exercise the title operation that crashed the page, not a source-text check.
+		const renderedTitles = rows.map((row: { title: string }) => row.title.toLowerCase());
+		expect(renderedTitles).toHaveLength(82);
+		expect(renderedTitles).toContain(
+			'the.grand.tour.2016.s03e01.motown.funk.2160p.amzn.web-dl.ddp.5.1.hdr10plus.hevc-gnome.mkv'
+		);
+		expect(
+			rows.some(
+				(row: { hash: string }) => row.hash === '710759f188c8e5b38e4525909f633e3126444572'
+			)
+		).toBe(false);
 	});
 
 	it('hides results already judged to be another title', async () => {

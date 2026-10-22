@@ -1,7 +1,8 @@
 /* oxlint-disable nextjs/no-img-element */
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
+import type * as HotToast from 'react-hot-toast';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -412,6 +413,57 @@ describe('Instant RD (Every Episode) pacing', () => {
 		]);
 	});
 
+	it('lets the viewer dismiss the final episode counts', async () => {
+		const button = await mountSeason();
+		await userEvent.click(button);
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(3));
+		const summary = toastMock.success.mock.calls.at(-1)![0];
+		render(<>{typeof summary === 'function' ? summary({ id: 'final-summary' }) : summary}</>);
+		const dismiss = screen.getByRole('button', { name: 'Dismiss episode summary' });
+		await userEvent.click(dismiss);
+		expect(toastMock.dismiss).toHaveBeenCalledWith('final-summary');
+	});
+
+	it('does not resurrect an old page summary or replace the next page summary after navigation', async () => {
+		const actual = await vi.importActual<typeof HotToast>('react-hot-toast');
+		const ActualToaster = actual.Toaster;
+		const pendingAdd = Promise.withResolvers<boolean>();
+		toastMock.success.mockImplementation(actual.default.success);
+		toastMock.dismiss.mockImplementation(actual.default.dismiss);
+		addCachedMock.mockImplementationOnce(() => pendingAdd.promise);
+		try {
+			const oldButton = await mountSeason();
+			render(<ActualToaster />);
+			await userEvent.click(oldButton);
+			await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(1));
+			cleanup();
+
+			const newButton = await mountSeason();
+			render(<ActualToaster />);
+			await userEvent.click(newButton);
+			const currentSummary = await screen.findByRole('button', {
+				name: 'Dismiss episode summary',
+			});
+			await act(async () => pendingAdd.resolve(true));
+			await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(6));
+
+			expect(screen.getAllByRole('button', { name: 'Dismiss episode summary' })).toHaveLength(
+				1
+			);
+			expect(screen.getByRole('button', { name: 'Dismiss episode summary' })).toBe(
+				currentSummary
+			);
+			expect(
+				toastMock.success.mock.calls.filter(([message]) => typeof message === 'function')
+			).toHaveLength(1);
+		} finally {
+			pendingAdd.resolve(true);
+			act(() => actual.default.remove());
+			toastMock.success.mockReset();
+			toastMock.dismiss.mockReset();
+		}
+	});
+
 	it('offers an AllDebrid user the same action, adding to AllDebrid', async () => {
 		keys.rd = null;
 		keys.ad = 'ad-key';
@@ -438,12 +490,10 @@ describe('Instant RD (Every Episode) pacing', () => {
 		await userEvent.click(button);
 
 		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(3));
-		await waitFor(() =>
-			expect(toastMock.success).toHaveBeenCalledWith(
-				expect.stringContaining('2 added, 1 not cached'),
-				expect.anything()
-			)
-		);
+		await waitFor(() => expect(toastMock.success).toHaveBeenCalled());
+		const summary = toastMock.success.mock.calls.at(-1)![0];
+		render(<>{typeof summary === 'function' ? summary({ id: 'summary' }) : summary}</>);
+		expect(screen.getByText(/2 added, 1 not cached/)).toBeTruthy();
 	});
 
 	// RD answers a 451 while it refuses every add on the account for a while
@@ -476,12 +526,10 @@ describe('Instant RD (Every Episode) pacing', () => {
 			'hash-3',
 			'hash-3',
 		]);
-		await waitFor(() =>
-			expect(toastMock.success).toHaveBeenCalledWith(
-				expect.stringContaining('2 added, 1 refused by Real-Debrid for now'),
-				expect.anything()
-			)
-		);
+		await waitFor(() => expect(toastMock.success).toHaveBeenCalled());
+		const summary = toastMock.success.mock.calls.at(-1)![0];
+		render(<>{typeof summary === 'function' ? summary({ id: 'summary' }) : summary}</>);
+		expect(screen.getByText(/2 added, 1 refused by Real-Debrid for now/)).toBeTruthy();
 		expect(toastMock.error.mock.calls.some((call) => /Not cached/.test(String(call[0])))).toBe(
 			false
 		);

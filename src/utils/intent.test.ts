@@ -120,13 +120,28 @@ describe('buildPlayerIntent', () => {
 	it.each([
 		['ios', 'infuse://cdn.example.com/movie.mkv'],
 		['mac', 'infuse://cdn.example.com/movie.mkv'],
-		['ios2', `infuse://x-callback-url/open?url=${url}`],
-		['mac4', `infuse://x-callback-url/open?url=${url}`],
+		['ios2', `infuse://x-callback-url/open?url=${encodeURIComponent(url)}`],
+		['mac4', `infuse://x-callback-url/open?url=${encodeURIComponent(url)}`],
 		['mac2', `infuse://weblink?url=${url}`],
 		['mac3', `infuse://weblink?url=${url}&new_window=1`],
 		['windows', `infuse://${url}`],
 	])('maps %s to its scheme', (os, expected) => {
 		expect(buildPlayerIntent(os, 'infuse', url, 'fallback')).toBe(expected);
+	});
+
+	it.each(['ios2', 'mac4'])('hands VidHub the complete stream URL on %s', (os) => {
+		// Modelled CDN input: no provider request or real credential is needed
+		// to exercise how the receiving app parses its callback query.
+		const stream =
+			'https://cdn.example.com/Oz%20the%20Great.mkv?token=example%2Btoken&download=1#chapter';
+		const callback = new URL(buildPlayerIntent(os, 'vidhub', stream, 'fallback'));
+
+		expect(callback.protocol).toBe('vidhub:');
+		expect(callback.hostname).toBe('x-callback-url');
+		expect(callback.pathname).toBe('/open');
+		expect([...callback.searchParams.keys()]).toEqual(['url']);
+		expect(callback.searchParams.get('url')).toBe(stream);
+		expect(callback.hash).toBe('');
 	});
 
 	// SenPlayer's x-callback-url action is `play`, not VidHub's `open`, and it

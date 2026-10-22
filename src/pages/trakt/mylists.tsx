@@ -12,13 +12,14 @@ import { withAuth } from '@/utils/withAuth';
 import { List } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
 
 function TraktMyLists() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [selectedList, setSelectedList] = useState<string>('');
+	const router = useRouter();
+	const selectedList = typeof router.query.list === 'string' ? router.query.list : '';
 
 	const { data, loading } = useCachedList<Record<string, TraktMediaItem[]>>(
 		traktToken && traktUserSlug ? `trakt:mylists:${traktUserSlug}` : null,
@@ -52,6 +53,10 @@ function TraktMyLists() {
 	);
 
 	const arrayOfResults = data ?? {};
+	const selectedItems =
+		Object.hasOwn(arrayOfResults, selectedList) && Array.isArray(arrayOfResults[selectedList])
+			? arrayOfResults[selectedList]
+			: null;
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">
@@ -76,7 +81,18 @@ function TraktMyLists() {
 			<div className="mb-6">
 				<select
 					value={selectedList}
-					onChange={(e) => setSelectedList(e.target.value)}
+					onChange={(e) => {
+						const query = { ...router.query };
+						if (e.target.value) {
+							query.list = e.target.value;
+						} else {
+							delete query.list;
+						}
+						void router.replace({ pathname: router.pathname, query }, undefined, {
+							shallow: true,
+							scroll: false,
+						});
+					}}
 					className="w-full rounded bg-gray-800 p-2 text-white"
 				>
 					<option value="">Select a list</option>
@@ -91,11 +107,11 @@ function TraktMyLists() {
 			</div>
 
 			<div className="flex w-full max-w-7xl flex-col items-center gap-6">
-				{selectedList && arrayOfResults[selectedList] && (
+				{selectedItems && (
 					<div className="w-full">
 						<h2 className="mb-4 text-xl font-bold text-white">{selectedList}</h2>
 						<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
-							{arrayOfResults[selectedList].map((item: TraktMediaItem) => {
+							{selectedItems.map((item: TraktMediaItem) => {
 								const imdbid =
 									item.movie?.ids?.imdb ||
 									item.show?.ids?.imdb ||

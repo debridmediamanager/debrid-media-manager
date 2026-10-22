@@ -169,19 +169,16 @@ export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeS
 	const flattened = arr.reduce((acc, val) => acc.concat(val), []);
 	const unique = new Map<string, ScrapeSearchResult>();
 	flattened.forEach((item) => {
+		// Stored scraper JSON predates this type. A nameless row cannot be
+		// rendered or matched by consumers, and must not hide a later named
+		// occurrence of the same hash.
+		if (typeof item.title !== 'string' || !item.title.trim()) return;
 		if (!unique.has(item.hash)) {
-			unique.set(item.hash, item);
+			const title = decodeTitle(item.title);
+			if (title) unique.set(item.hash, title === item.title ? item : { ...item, title });
 		}
 	});
-	// Titles are normalised here rather than in each adapter: this runs on the
-	// read path too, so the entity-encoded rows already in the table are cleaned
-	// up for callers without waiting on a backfill.
-	return Array.from(unique.values())
-		.filter((r) => isUsableHash(r.hash))
-		.map((r) => {
-			const title = decodeTitle(r.title);
-			return title === r.title ? r : { ...r, title };
-		});
+	return Array.from(unique.values()).filter((r) => isUsableHash(r.hash));
 };
 
 export const sortByFileSize = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {

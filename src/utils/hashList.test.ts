@@ -53,16 +53,29 @@ describe('hashList utils', () => {
 			value: {
 				protocol: 'https:',
 				host: 'example.com',
+				assign: vi.fn(),
 			},
 			writable: true,
 		});
 		Object.defineProperty(window, 'open', {
-			value: vi.fn(),
+			value: vi.fn(() => ({})),
 			writable: true,
 		});
 	});
 
 	describe('generateHashList', () => {
+		it('opens the published list in this tab when an asynchronous popup is blocked', async () => {
+			vi.mocked(window.open).mockReturnValue(null);
+			const { promise, resolve } = Promise.withResolvers<string>();
+			vi.mocked(publishHashlist).mockReturnValue(promise);
+			const sharing = generateHashList('Large library', [mockTorrent]);
+			expect(window.location.assign).not.toHaveBeenCalled();
+			resolve('https://short.url/published');
+			await sharing;
+			expect(window.location.assign).toHaveBeenCalledWith('https://short.url/published');
+			expect(toast.error).not.toHaveBeenCalled();
+		});
+
 		it('leaves out a Premiumize row that has no info hash', async () => {
 			// transfer/list never reports a hash, and job/src cannot recover one
 			// once the transfer record is gone - so these rows would be shared as

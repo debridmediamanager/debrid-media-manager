@@ -669,39 +669,6 @@ function TorrentRow({
 							<Share2 className="h-4 w-4 text-indigo-500" />
 						</button>
 					)}
-					<button
-						title="Delete"
-						className="cursor-pointer p-3 text-red-500 sm:mr-2 sm:mb-2 sm:p-0"
-						onClick={async (e) => {
-							e.stopPropagation();
-							let success = false;
-							if (rdKey && torrent.id.startsWith('rd:')) {
-								success = await handleDeleteRdTorrent(rdKey, torrent.id);
-							}
-							if (adKey && torrent.id.startsWith('ad:')) {
-								success = await handleDeleteAdTorrent(adKey, torrent.id);
-							}
-							if (tbKey && torrent.id.startsWith('tb:')) {
-								success = await handleDeleteTbTorrent(tbKey, torrent.id);
-							}
-							if (pmKey && torrent.id.startsWith('pm:')) {
-								success = await handleDeletePmTorrent(pmKey, torrent.id);
-							}
-							if (ocKey && torrent.id.startsWith('oc:')) {
-								success = await handleDeleteOcTorrent(ocKey, torrent.id);
-							}
-							// Debrid-Link's remove never reports a failure - it echoes
-							// back whatever id it was asked about - so this is
-							// "asked", not "destroyed"; the next library listing is
-							// what settles it.
-							if (dlKey && torrent.id.startsWith('dl:')) {
-								success = await handleDeleteDlTorrent(dlKey, torrent.id);
-							}
-							if (success) onDelete(torrent.id);
-						}}
-					>
-						<Trash2 className="h-4 w-4 text-red-500" />
-					</button>
 					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Copy magnet url"
@@ -755,6 +722,39 @@ function TorrentRow({
 							<RefreshCw className="h-4 w-4 text-green-500" />
 						</button>
 					)}
+					<button
+						title="Delete"
+						className="cursor-pointer p-3 text-red-500 sm:mr-2 sm:mb-2 sm:p-0"
+						onClick={async (e) => {
+							e.stopPropagation();
+							let success = false;
+							if (rdKey && torrent.id.startsWith('rd:')) {
+								success = await handleDeleteRdTorrent(rdKey, torrent.id);
+							}
+							if (adKey && torrent.id.startsWith('ad:')) {
+								success = await handleDeleteAdTorrent(adKey, torrent.id);
+							}
+							if (tbKey && torrent.id.startsWith('tb:')) {
+								success = await handleDeleteTbTorrent(tbKey, torrent.id);
+							}
+							if (pmKey && torrent.id.startsWith('pm:')) {
+								success = await handleDeletePmTorrent(pmKey, torrent.id);
+							}
+							if (ocKey && torrent.id.startsWith('oc:')) {
+								success = await handleDeleteOcTorrent(ocKey, torrent.id);
+							}
+							// Debrid-Link's remove never reports a failure - it echoes
+							// back whatever id it was asked about - so this is
+							// "asked", not "destroyed"; the next library listing is
+							// what settles it.
+							if (dlKey && torrent.id.startsWith('dl:')) {
+								success = await handleDeleteDlTorrent(dlKey, torrent.id);
+							}
+							if (success) onDelete(torrent.id);
+						}}
+					>
+						<Trash2 className="h-4 w-4 text-red-500" />
+					</button>
 				</td>
 			</tr>
 			{/* Cast Search Modal */}

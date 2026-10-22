@@ -28,17 +28,23 @@ On Debrid-Link, standalone hash lists remain **cached-only**; full magnets and `
 
 On Real-Debrid, Save Selection leaves a cached torrent intact when a strict subset would download again. Selecting different files remains an explicit replacement, even when the new selection is smaller.
 
+Shared progress and error notifications let pointer clicks reach the controls underneath them; dismissible episode summaries remain interactive. Backup restores count provider refusals as failures and finish their progress notification even if the final library refresh fails.
+
 Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
 
 ### Torrent search
 
 Add content to your library by searching for torrents. It detects what you already have downloaded and currently downloading in your library.
 
+The hashlist's bulk RD Download action targets only releases marked available in Real-Debrid, including with Show All enabled. Its count reflects those eligible releases; individual release downloads remain separate. Nameless stored release rows are omitted rather than crashing a title page.
+
 Filename parsing enriches display without deciding whether a shared release belongs in the list; yearless releases remain searchable and available for checking.
 
 ### Movie and TV show info pages
 
 Browse detailed information about movies and TV shows including cast, crew, trailers, and related content. View comprehensive person filmography pages to explore an actor's or director's complete work.
+
+The final Every Episode totals stay visible until dismissed or until you leave the title/season. An older in-flight action may finish its provider work, but cannot bring its summary back on another page.
 
 ### Stremio integration
 
@@ -48,9 +54,13 @@ Use DMM as a Stremio addon to stream your debrid library directly through Stremi
 
 Sync with your Trakt watchlist, collection, and custom lists to easily add content to your library.
 
+Custom-list selection is stored in the URL, so opening a title and using Back returns to the selected list. Choosing the empty list-picker option clears that selection.
+
 ### Share your library and mirror other libraries
 
 Share your whole collection or select specific items. Head over to [r/debridmediamanager](https://www.reddit.com/r/debridmediamanager/) to see other people's media collections and easily mirror their content to yours.
+
+If the browser blocks the new tab after publishing a library share, DMM opens the resulting list in the current tab instead.
 
 ## Setup
 
@@ -126,7 +136,7 @@ It doesn't do any sort of monitoring. It gets that information when you open the
 
 ### When I share my library, is it linked to my account's identity?
 
-No. It's completely anonymous. What's shared are 3 things: filename, magnet hash, file size. It's not even stored in any database. The data is compressed and stored in the URL. A "webpage" is then created over at https://hashlists.debridmediamanager.com that loads this list of magnet hashes.
+Account credentials and account identifiers are not included. A shared list contains the chosen title, filenames, magnet hashes, and file sizes, so check those names before sharing. Published pages are public at https://hashlists.debridmediamanager.com. Small lists are compressed into the page's DMM URL; larger lists load a compressed file published beside the page.
 
 ## License
 

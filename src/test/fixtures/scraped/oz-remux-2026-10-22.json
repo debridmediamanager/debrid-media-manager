@@ -1,0 +1,439 @@
+{
+	"captureDate": "2026-10-22",
+	"credentials": "Ephemeral dmmProblemKey/solution query values omitted; response fields unchanged",
+	"metadata": {
+		"title": "Oz the Great and Powerful",
+		"description": "A small-time magician is swept away to an enchanted land and is forced into a power struggle among three witches.",
+		"poster": "https://images.metahub.space/poster/small/tt1623205/img",
+		"backdrop": "https://images.metahub.space/background/medium/tt1623205/img",
+		"year": 2013,
+		"imdb_score": 63,
+		"trailer": "https://youtube.com/watch?v=DylgNj4YQVc",
+		"digitalReleaseDate": "",
+		"expectedDigitalReleaseDate": "",
+		"expectedDigitalReleaseSource": null,
+		"digitalReleaseAvailable": false
+	},
+	"metadataSource": "Actual isolated19437 /api/info/movie?imdbid=tt1623205 response; metadata query key is lowercase imdbid",
+	"response": {
+		"results": [
+			{
+				"hash": "2f42b2a5378c6921e5faa05bd0ef4e1ff09d0688",
+				"title": "[魔境仙踪].OZ.The.Great.and.Powerful.2013.Blu-ray.1080p.AVC.DTS-HD.MA.7.1-CMCT",
+				"fileSize": 52016
+			},
+			{
+				"hash": "a5cebc2884e2e3dcc4cddc77a932c94ab817556d",
+				"title": "Оз: Великий и Ужасный в 3Д / Oz the Great and Powerful 3D [2013 Blu-ray disc Custom 1080p] BD3D",
+				"fileSize": 47667.2
+			},
+			{
+				"hash": "964c6e7f56e00f493dcfd7f744787cac1918c813",
+				"title": "Oz the Great and Powerful 2013 1080p Blu-ray AVC DTS-HD MA 7 1-PHDTteam",
+				"fileSize": 47165.44
+			},
+			{
+				"hash": "941f94e16a561b3d3eb41135a0fd3423ba3a5504",
+				"title": "Oz the Great and Powerful 2013 1080p Blu-ray AVC DTS-HD MA 7.1-LAZERS",
+				"fileSize": 46858.24
+			},
+			{
+				"hash": "f6fac9c41c2ba150caefa397e8b4aefd9c1036d5",
+				"title": "Oz the Great and Powerful 2013 Blu-ray AVC DTS-HD MA 7.1-LAZERS",
+				"fileSize": 46858.24
+			},
+			{
+				"hash": "61c78c30ef71a4d170dabf64252009721ec1620e",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.EUR.BluRay.AVC.DTS-HD.MA.7.1-FGT",
+				"fileSize": 46644.61
+			},
+			{
+				"hash": "cbfad1468ee0bdd651fac4f53d12f7df415f5352",
+				"title": "Оз: Великий и Ужасный / Oz the Great and Powerful (2013) Blu-ray 1080p от New-Team и HDCLUB | D",
+				"fileSize": 46643.2
+			},
+			{
+				"hash": "2e04b67345234555eaa81d078566585b7d67f8ab",
+				"title": "OZ The Great and Powerful 2013 1080p Blu-ray AVC DTS-HD MA 7.1-CHDBits",
+				"fileSize": 45649.92
+			},
+			{
+				"hash": "4161b03c81c0210bd24060ec000b56827660722d",
+				"title": "Oz The Great and Powerful 2013 2D CEE 1080p Bluray AVC DTS-HD MA 7 1",
+				"fileSize": 45066.24
+			},
+			{
+				"hash": "78ad965bde07871919f4a7620952ee3c0ae06f7f",
+				"title": "Le.Monde.Fantastique.D.oz.2013.MULTI.VFF.1080p.BluRay.ISO.3D.DTS.HD.MA.7.1.AVC-RPWork",
+				"fileSize": 43601.92
+			},
+			{
+				"hash": "cfa21307415fec898094bfabf3a57eb7564ed6bb",
+				"title": "Oz.the.Great.and.Powerful.2013.ITA.ENG.1080p.BluRay.Walrus54",
+				"fileSize": 42643.86
+			},
+			{
+				"hash": "db4b8dc5968281bd0bea11bdde978963b2fab9a3",
+				"title": "Oz the Great and Powerful 3D 2013 1080p Blu-ray AVC DTS-HD MA 7 1 CHDBits",
+				"fileSize": 42536.96
+			},
+			{
+				"hash": "c2180fd118906d1b273eef62aaad2ed6b7967ca2",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.COMPLETE.BLURAY-TAPAS",
+				"fileSize": 42526.72
+			},
+			{
+				"hash": "378df500eeeea5620ac6e430bdf2400aa069ef5d",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.COMPLETE.BLURAY-TAPAS",
+				"fileSize": 42522.26
+			},
+			{
+				"hash": "276575deb882b5f7435f3525a3bdecd8a71b6f44",
+				"title": "Oz The Great and Powerful 2013 USA 1080p Complete Bluray 3D-NAdagRP",
+				"fileSize": 42522.19
+			},
+			{
+				"hash": "a6cf7c0f15d42a36426e31880d4df1002dd4c0ba",
+				"title": "Оз: Великий и Ужасный / Oz the Great and Powerful (2013) Blu-ray 1080p от New-Team и HDCLUB | D | 3D-Video",
+				"fileSize": 42424.32
+			},
+			{
+				"hash": "e97ca8f78b08cc3183fe756e90eb644165f28026",
+				"title": "Oz The Great and Powerful 2013 1080p 3D BluRay AVC DTS-HD MA 7 1-CHDBits",
+				"fileSize": 41850.88
+			},
+			{
+				"hash": "cddee317d27eaca5985e26c6583eb53f562f0471",
+				"title": "Oz The Great and Powerful 2013 3D CEE 1080p Bluray AVC DTS-HD MA 7 1",
+				"fileSize": 41707.52
+			},
+			{
+				"hash": "2dcb6098ad9e2fcead8d4f8740b7657112c9fc59",
+				"title": "Oz.the.Great.and.Powerful.2013.BD3D.1080p.BluRay.REMUX.AVC.DTS-HD.MA.7.1-Asmo",
+				"fileSize": 40212.48
+			},
+			{
+				"hash": "064b65cf4ba116e7e590adad75f276815fe98c82",
+				"title": "Oz the Great and Powerful 2013 3D 1080p BluRay REMUX AVC DTS-HD MA 7.1-EPSiLON",
+				"fileSize": 35942.4
+			},
+			{
+				"hash": "863b1b344fd5ac6f1bb4711fec7fa7f64d24c49f",
+				"title": "Оз: Великий и Ужасный в 3Д / Oz the Great and Powerful 3D [2013 BDRemux 1080p] BD3D [Re-Encode - Left foreshortening first]",
+				"fileSize": 35921.92
+			},
+			{
+				"hash": "e9de6863cf9f5e04e3b451fc2099d9adc5d55812",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.7.1.Rus.Eng.Subs-KRaLiMaRKo.mkv",
+				"fileSize": 34071.56
+			},
+			{
+				"hash": "6c0fb7f264a11b1c692096c4721cceb44bd2ffe7",
+				"title": "Oz the Great and Powerful (2013) 1080p AVC DTS-HDMA 7.1 NL Subs",
+				"fileSize": 32174.08
+			},
+			{
+				"hash": "e0c2b42b6fe3d6a7ed55937a23d088cb366ac4b1",
+				"title": "Oz the Great and Powerful (2013) BDRemux 1080p.mkv",
+				"fileSize": 31744.29
+			},
+			{
+				"hash": "f650b53e807ac00deac4fd5f66c2b260cfb7bb01",
+				"title": "[www.pReaLL.com]魔境仙踪.Oz.The.Great.and.Powerful.2013.BluRay.REMUX.1080p.AVC.DTS-HD.MA7.1-CHD",
+				"fileSize": 31621.12
+			},
+			{
+				"hash": "d3eed0e0eb0628ead65ae051fe51d26544bdafa1",
+				"title": "Oz the Great and Powerful.2013.1080p.BDRemux.mkv",
+				"fileSize": 31602.18
+			},
+			{
+				"hash": "343dd1e8fab3aaf960ec15a4580eda34774f1ec3",
+				"title": "Oz.the.Great.and.Powerful.2013.BluRay.1080p.DTS-HD.MA.7.1.AVC.REMUX-FraMeSToR",
+				"fileSize": 30658.56
+			},
+			{
+				"hash": "ec5275f0893042426dc3ebe593ba1428aff2a96a",
+				"title": "Oz.The.Great.And.Powerful.2013.1080p.Bluray.Remux.AVC.DTS-HD.MA.7.1-4K4U",
+				"fileSize": 30643.18
+			},
+			{
+				"hash": "dbc16c8b0c49367cfdd58fffa708bc4e56c3da4b",
+				"title": "Oz the Great and Powerful 2013 1080p Blu-ray Remux AVC DTS-HD MA",
+				"fileSize": 30638.08
+			},
+			{
+				"hash": "1c174d353dc9dfafc927df5e6b7402e1d5f4eb7b",
+				"title": "Oz the Great and Powerful 2013 1080p Blu-ray Remux AVC DTS-HD MA 7.1 - KRaLiMaRKo",
+				"fileSize": 30638.08
+			},
+			{
+				"hash": "0d53ad12d6a2c3c5d3bec418d2ae291219788894",
+				"title": "Oz the Great and Powerful 3D (2013) [BDRip 1080p by alE13][AC3\\DTS][Audio & Sub Eng\\Ita\\PL][Eng]",
+				"fileSize": 30566.4
+			},
+			{
+				"hash": "02481f03405889986e8e37176058fc26f923d7d1",
+				"title": "Oz The Great and Powerful 2013 1080p BDRemux 3D.Half-OU.x264.DTS-HD.MA.7.1-NIBIRU",
+				"fileSize": 28362.1
+			},
+			{
+				"hash": "c4a250cda194dccf835944a16b69e281b92eb9e3",
+				"title": "Oz.The.Great.And.Powerful.2013.2D+3D.BuRay.1080p.Re-Encoded.DTS-HD.MA7.1-TruHD",
+				"fileSize": 23613.44
+			},
+			{
+				"hash": "3bd18d3e6463a2a115410397301a357c00ec4026",
+				"title": "Oz The Great And Powerful 2013 2D+3D 1080P Blu Ray.iso 3DBD25",
+				"fileSize": 23613.44
+			},
+			{
+				"hash": "2805b4747c32a2605c1115e244123de6dab24894",
+				"title": "Oz the Great and Powerful 3D 2013 2160p F-OU BluRay x264 DTS 5.1 vice",
+				"fileSize": 22282.24
+			},
+			{
+				"hash": "136ea11de030ad2558c543cc883fcb793a7de19a",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.3D.BluRay.Half-OU.x264.DTS-HD.MA.7.1-FGT",
+				"fileSize": 21514.24
+			},
+			{
+				"hash": "71853cc0e1d043fa64937aeff1da66fa70df70a6",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.3D.BluRay.Half-SBS.x264.DTS-HD.MA.7.1-FGT",
+				"fileSize": 21350.25
+			},
+			{
+				"hash": "5762dd80720e51e0ae61eafe9bd92177f9bd5e1f",
+				"title": "Oz the Great and Powerful (2013).mkv",
+				"fileSize": 20581.17
+			},
+			{
+				"hash": "b9a51abb7c5039c6f9564251f1214453ec8465e5",
+				"title": "Oz.The.Great.and.Powerful.2013.Bluray.1080p.DTS-HD-7.1.x264-Grym",
+				"fileSize": 20142.08
+			},
+			{
+				"hash": "104375db5b9d7559b4bd34b5ec18073b5dfb0671",
+				"title": "Oz the Great and Powerful 2013 1080p BluRay x264-OFT",
+				"fileSize": 20142.08
+			},
+			{
+				"hash": "650ac93ba8bbe83464eb8eb68700120ca6087dc5",
+				"title": "The Wizard Of Oz Collection (1939-2013) BDRip 1080p",
+				"fileSize": 19179.52
+			},
+			{
+				"hash": "dfdea37c96486c6386a92b64ecc7dfd0ebb32228",
+				"title": "Wizard of Ozz Collection",
+				"fileSize": 18319.36
+			},
+			{
+				"hash": "5e532311e0a056d838e12eb6ecc1e3cad690bcef",
+				"title": "Оз: Великий и Ужасный в 3Д / Oz the Great and Powerful 3D [2013 BDRip 1080p] SideBySide / Горизонтальная стереопара",
+				"fileSize": 17889.28
+			},
+			{
+				"hash": "df16166c083249ec6040bcf8c7f09d40c608f909",
+				"title": "Оз: Великий и Ужасный 3D / Oz the Great and Powerful 3D [2013 BDRip 1080p]OverUnder / Вертикальная стереопара",
+				"fileSize": 17428.48
+			},
+			{
+				"hash": "c67780f3028232d6d57f8de6deb1b2ebbf355b65",
+				"title": "Il Grande E Potente Oz 3D 2013 DTS ITA ENG Half SBS 1080p BluRay x264 BLUWORLD",
+				"fileSize": 16138.24
+			},
+			{
+				"hash": "f300505d0178708452306fc25d0b2e1fb524289a",
+				"title": "Oz the Great and Powerful 2013 BluRay 1080p DTSHD-MA 7 1 264 dxva-BluHD",
+				"fileSize": 15964.16
+			},
+			{
+				"hash": "076689065860ef0535c7def9d7fb3e29e5ebb8af",
+				"title": "Il Grande E Potente Oz 2013 DTS ITA ENG 1080p BluRay x264 BLUWORLD",
+				"fileSize": 15216.64
+			},
+			{
+				"hash": "1eb718acfb0b9c1a2fa6c2bb9933ca6c80b54f52",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.HSBS.1080p.BluRay.x264.HQ-TUSAHD",
+				"fileSize": 14509.55
+			},
+			{
+				"hash": "ec939091e786f4d3f16e54cd44c76b2c58933971",
+				"title": "Oz the Great and Powerful 2013.mp4",
+				"fileSize": 14284.27
+			},
+			{
+				"hash": "7b2f4b0f04e17f510bc1880d7d74b0b8f2c86a24",
+				"title": "Oz the Great and Powerful (2013).1080p.mkv",
+				"fileSize": 14050.32
+			},
+			{
+				"hash": "8acf4d598dab96ab48937bd61911ab62678d8f0c",
+				"title": "Oz Un Mundo de Fantasia [BluRay 1080p][AC3 5.1 Castellano DTS En",
+				"fileSize": 13905.92
+			},
+			{
+				"hash": "727b03984893c5ed2e03879a3e7e7c6c7f575268",
+				"title": "Oz Un Mundo de Fantasia [BluRay 1080p][AC3 5.1 Castellano DTS English+Subs.ES-EN-FR][2013]",
+				"fileSize": 13905.92
+			},
+			{
+				"hash": "2dd514d6a5c015642e74480f9b001202681ce61c",
+				"title": "Oz the Great and Powerful 2013 1080p BluRay DTS-HDMA 7 1 x264-LE",
+				"fileSize": 13608.96
+			},
+			{
+				"hash": "980c3c00974cdb2f01d2af7cfc1a11cfddfeeac2",
+				"title": "[上下半高]3D.魔境仙踪.Oz.The.Great.And.Powerful.3D.HTB.2013.BluRay.3D.1080p.DTS.x264-3DTV",
+				"fileSize": 13445
+			},
+			{
+				"hash": "a7f83f61e825b12c277309c2fb534108e22e715a",
+				"title": "[左右半宽]3D.魔境仙踪.Oz.The.Great.And.Powerful.3D.HSBS.2013.BluRay.3D.1080p.DTS.x264-3DTV",
+				"fileSize": 13445
+			},
+			{
+				"hash": "7d724ed48e78a490bf02fd58f41b222bf691c75e",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.3D.BluRay.Half-SBS.Rus.Ukr.2xEng.HDCLUB.mkv",
+				"fileSize": 12800
+			},
+			{
+				"hash": "5ab9a813092eb24786b7afb1d3bcf5aa9a8769d6",
+				"title": "Oz.The.Great.And.Powerful.2013.1080p.BluRay.DTS.x264.D-Z0N3",
+				"fileSize": 12790
+			},
+			{
+				"hash": "1ae83fedcf63e8051672e305f9aec9567d4f2f62",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.3D.BluRay.Half-OU.DTS.x264.HuN-No1",
+				"fileSize": 12780
+			},
+			{
+				"hash": "f7ca824cefe2c2212402e91bfd32944fff785bd4",
+				"title": "[cnliti]魔境仙踪.3D.Oz.The.Great.and.Powerful.2013.3D.3DTV.HSBS.3DSub.1080P-3DV.mkv",
+				"fileSize": 12759
+			},
+			{
+				"hash": "8f12fcfaad2d50827ef7241f7446a1c1ab1aa5d3",
+				"title": "Oz the Great and Powerful 2013 Blu Ray 1080p x264 DTS - Eclipse",
+				"fileSize": 12616
+			},
+			{
+				"hash": "12e7d2fea1b2d4b9df5d3177109bacef808e1931",
+				"title": "Oz.the.Great.and.Powerful.2013.3D.HSBS.1080p.BluRay.DTS.x264.Rus.Eng.Subs-CHD3D.mkv",
+				"fileSize": 12524
+			},
+			{
+				"hash": "987a2b7cd07c294cf70b93809e49a7275e6f6938",
+				"title": "Oz-Un-Mundo-de-Fantasia-3D-Half-OU-[BluRay-1080p][AC3-5-1-Castellano-DTS-English..",
+				"fileSize": 12492.8
+			},
+			{
+				"hash": "8d074177399d383f5f923e4d34421ab74acb5b5c",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.BluRay.DTS.x264.HuN-TRiNiTY",
+				"fileSize": 12288
+			},
+			{
+				"hash": "1c432640f5e27a950fa00be685d49daaccd1349f",
+				"title": "Oz The Great and Powerful 3D 2013 1080p BluRay Half-OU DTS x264-HDMaNiAcS",
+				"fileSize": 12206
+			},
+			{
+				"hash": "34e010dd64fbdb5800221f8d2fb1f62d37e2d5d2",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.3D.BluRay.Half-SBS.Rus.Ukr.2xEng.HDCLUB.mkv",
+				"fileSize": 11930
+			},
+			{
+				"hash": "cbf6f11228e5946c4fee103e59ea5143c8c53f25",
+				"title": "Oz.The.Great.And.Powerful.2013.BDRip.1080p.Rus.Ukr.Eng.mkv",
+				"fileSize": 11827
+			},
+			{
+				"hash": "6105c70d31d52b2352df4e3a12dbda8058218ace",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HOU.AC3.DTS.x264-GBHcrew",
+				"fileSize": 11745
+			},
+			{
+				"hash": "ff3a85c37a0b5d713ef137063a4a1e5f7de142f5",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HOU.AC3.DTS.x264-GBHcrew",
+				"fileSize": 11745
+			},
+			{
+				"hash": "7afe2eb91314f1602b7caecb59970dbbbaf00afc",
+				"title": "Oz The Great and Powerful 3D 2013 1080p Blu-ray Half SBS x264 DT",
+				"fileSize": 11571.2
+			},
+			{
+				"hash": "82f84a0ee9d538e19bfdf0a510486f4fe7441f5b",
+				"title": "2013.魔境仙踪（国英）.Oz.The.Great.and.Powerful.BluRay.1080p.DTS.x264-CHD",
+				"fileSize": 11561
+			},
+			{
+				"hash": "980043dce0b6ce563222b68e2ca1c7b2041b3913",
+				"title": "Oz.The.Great.And.Powerful.2013.3DRip.1080p.mkv",
+				"fileSize": 11561
+			},
+			{
+				"hash": "c2169d0acf0c31f2d835d6ee61649d0026b857d5",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HOU.X264-CHD3D.mkv",
+				"fileSize": 11561
+			},
+			{
+				"hash": "ebdc527dd75ad2956075fb74744dea9a9e1e317a",
+				"title": "Oz.the.Great.and.Powerful.2013.1080p.BluRay.Rus.Ukr.2xEng.HDCLUB.mkv",
+				"fileSize": 11468.8
+			},
+			{
+				"hash": "da240b12227248ae61d2ec144bd82a463e140fab",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.HSBS.mkv",
+				"fileSize": 11387
+			},
+			{
+				"hash": "a523e7bacf57804a33c0f6344de4e796a435918c",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HSBS.mkv",
+				"fileSize": 11387
+			},
+			{
+				"hash": "eab7ce4f5b08ececedc576a40e378dca5e4ddf28",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HSBS.X264-CHD3D.mkv",
+				"fileSize": 11377
+			},
+			{
+				"hash": "58f98fa42f51d4faa1441ce93aeec0b7a33ed50d",
+				"title": "Oz.The.Great.And.Powerful.2013.3D.1080p.Bluray.HSBS.X264-CHD3D.mkv",
+				"fileSize": 11377
+			},
+			{
+				"hash": "d75cf59c28ae4c52bddf4a60679732fa13fe46de",
+				"title": "Oz Wielki i Potężny 3D Oz The Great and Powerful 3D (2013) 1080p Half SBS Dual Audio [Dubbing PLEN]",
+				"fileSize": 11336
+			},
+			{
+				"hash": "03b7afb27e2eaa08bf6d915344ea308caf8c9f99",
+				"title": "Oz The Great And Powerful 2013 3D 1080p Bluray HOU X264 CHD3D rarbg com",
+				"fileSize": 11141.12
+			},
+			{
+				"hash": "5c10fed122149fb0be01414c3ee4c20ad618d052",
+				"title": "Oz.The.Great.And.Powerful.3D.2013.1080p.BluRay.Half OU.x264 CHD3D [Public3D]",
+				"fileSize": 11141.12
+			},
+			{
+				"hash": "acaf60e26300da61e9adc0b7679bf3110374d4ba",
+				"title": "Oz.The.Great.and.Powerful.2013.BluRay.1080p.DTS.x264-CHD",
+				"fileSize": 11141
+			},
+			{
+				"hash": "a8389badb18e63f3a757ef218a3fc5eda393a64c",
+				"title": "Mocny vladce Oz / Oz: The Great and Powerful (2013)(CZ)[3D O/U][1080p] = CSFD 59%",
+				"fileSize": 11059.2
+			},
+			{
+				"hash": "e1cbe19641f8a6edca6392b537b9c045a60f770a",
+				"title": "Oz.The.Great.And.Powerful.3D.2013.1080p.Bluray.Half SBS.x264 CHD3D [Public3D]",
+				"fileSize": 10956.8
+			}
+		]
+	},
+	"responseCanonicalSha256": "61d42c04df57462835b3c01a5ce0c2900266601afabb165af0e4f5b8a6bfbbdd",
+	"source": "https://debridmediamanager.com/api/torrents/movie?imdbId=tt1623205&onlyTrusted=false&page=0"
+}

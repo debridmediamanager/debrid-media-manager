@@ -1,6 +1,7 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
 import EpisodeChips, { type EpisodeChipItem } from '@/components/EpisodeChips';
+import { showEpisodeSummary } from '@/components/EpisodeSummaryToast';
 import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
@@ -230,6 +231,8 @@ const TvSearch: FunctionComponent = () => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
+	const episodeSummaryId = useRef<string | undefined>(undefined);
+	const episodeSummaryGeneration = useRef(0);
 	const [query, setQuery] = useState(storedTorrentsFilter);
 	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
@@ -274,6 +277,14 @@ const TvSearch: FunctionComponent = () => {
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
+	useEffect(
+		() => () => {
+			episodeSummaryGeneration.current++;
+			if (episodeSummaryId.current) toast.dismiss(episodeSummaryId.current);
+			episodeSummaryId.current = undefined;
+		},
+		[imdbid, seasonNum]
+	);
 
 	/**
 	 * The AniDB entries this show is split into. IMDb files every season, cour
@@ -1496,6 +1507,7 @@ const TvSearch: FunctionComponent = () => {
 
 		// Determine the range of episodes to add
 		const maxEpisode = Math.max(expectedEpisodeCount, ...Array.from(episodeMap.keys()));
+		const summaryGeneration = ++episodeSummaryGeneration.current;
 
 		const toastId = toast.loading(`Checking episodes 1-${maxEpisode}...`);
 
@@ -1576,6 +1588,8 @@ const TvSearch: FunctionComponent = () => {
 
 			// Final summary
 			toast.dismiss(toastId);
+			// Finish provider work, but do not resurrect a summary from an old page/action.
+			if (summaryGeneration !== episodeSummaryGeneration.current) return;
 
 			const summaryParts = [];
 			if (addedCount > 0) summaryParts.push(`${addedCount} added`);
@@ -1595,13 +1609,11 @@ const TvSearch: FunctionComponent = () => {
 
 			const summaryMessage = `Episodes 1-${maxEpisode}: ${summaryParts.join(', ')}`;
 
-			if (notFoundCount === 0 && uncachedCount === 0 && refusedCount === 0) {
-				toast.success(summaryMessage, { duration: 5000 });
-			} else if (addedCount > 0) {
-				toast.success(summaryMessage, { duration: 5000 });
-			} else {
-				toast.error(summaryMessage, { duration: 5000 });
-			}
+			if (episodeSummaryId.current) toast.dismiss(episodeSummaryId.current);
+			episodeSummaryId.current = showEpisodeSummary(
+				summaryMessage,
+				(notFoundCount === 0 && uncachedCount === 0 && refusedCount === 0) || addedCount > 0
+			);
 		} catch (error) {
 			toast.error('Failed to add some episodes.', { id: toastId });
 			console.error('Error adding episodes:', error);

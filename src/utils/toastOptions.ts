@@ -5,6 +5,8 @@ const globalToastOptions = {
 		color: '#000',
 		fontSize: '1rem',
 		padding: '0.1rem',
+		// Passive notifications must not intercept controls underneath them.
+		pointerEvents: 'none' as const,
 	},
 };
 

@@ -447,6 +447,49 @@ describe('Library backup restore to Real-Debrid', () => {
 		expect(second[1]).toBe(WEAPONS);
 		expect(second[8]).toEqual([]);
 	});
+
+	it('settles all 7500 modelled backup entries and counts RD refusals as failures', async () => {
+		// Scale replay only: no reporter backup was attached and no provider is mutated.
+		const files = Array.from({ length: 7500 }, (_, index) => ({
+			hash: index.toString(16).padStart(40, '0'),
+			filename: `Replay.Movie.${index}.mkv`,
+		}));
+		mockModalFire.mockResolvedValue({ isConfirmed: true, value: { files, cachedOnly: false } });
+		mockHandleAddAsMagnetInRd.mockImplementation(async (_key, hash) =>
+			hash === files[100].hash ? 'infringing_file' : 'success'
+		);
+		render(<LibraryPage />);
+		await act(async () => {
+			fireEvent.click(await screen.findByRole('button', { name: /RD Restore/ }));
+		});
+		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
+		const processing = mockToast.promise.mock.calls[0][0];
+		await expect(processing).resolves.toEqual({ success: 7499, error: 1 });
+		expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledTimes(7500);
+		expect(new Set(mockHandleAddAsMagnetInRd.mock.calls.map((call) => call[1])).size).toBe(
+			7500
+		);
+		expect(mockToast.loading).not.toHaveBeenCalledWith(
+			'Restoring... do not refresh.',
+			expect.anything()
+		);
+	});
+
+	it('rejects the restore notification when the final library refresh fails instead of hanging', async () => {
+		mockRefreshLibrary.mockRejectedValueOnce(new Error('Library fetch failed'));
+		mockToast.promise.mockImplementationOnce((processing) => {
+			processing.catch(() => undefined);
+		});
+		render(<LibraryPage />);
+		await act(async () => {
+			fireEvent.click(await screen.findByRole('button', { name: /RD Restore/ }));
+		});
+		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
+		const [processing, messages] = mockToast.promise.mock.calls[0];
+		await expect(processing).rejects.toThrow('Library fetch failed');
+		expect(messages.error).toBe('Restore failed. Refresh your library before trying again.');
+		expect(mockToast.dismiss).toHaveBeenCalledWith('restore-progress');
+	});
 });
 
 describe('Library identification arriving after initial grouping', () => {
