@@ -512,4 +512,15 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 		expect(at(avengers, 'S01 E15 - 459')).toEqual([1, 15]);
 		expect(at(await placedHere('Family Guy - Seasons'), 'S07E12 - 420')).toEqual([7, 12]);
 	});
+
+	it('matches a title without its leading article and with its part spelled either way', async () => {
+		const at = async (name: string, title: string) => {
+			const release = await placedHere(name);
+			return placedAt(release)[release.files.findIndex((f) => f.path.includes(title))];
+		};
+		expect(await at('Ben 10 Omniverse', 'S02E01 - Showdown Part 1')).toEqual([3, 1]);
+		expect(await at('Marvels THE AVENGERS', 'Breakout, Part 2 of 2')).toEqual([1, 2]);
+		expect(await at('QI', 'VG (Part 2)')).toEqual([10, 16]);
+		expect(await at('Teenage Mutant Ninja Turtles', 'Tale of Master Yoshi')).toEqual([4, 19]);
+	});
 });

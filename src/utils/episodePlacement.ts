@@ -813,15 +813,16 @@ function titled<T extends { name: string }>(
 		if (!wordsOf.has(item)) wordsOf.set(item, words(item.name).join(' '));
 		const name = wordsOf.get(item)!;
 		const usable = name.replace(/ /g, '').length >= 3 && !GENERIC.test(name);
-		// spacing aside (`Bulletproof.Water` is "Bullet Proof Water"), and a part TMDB numbers
-		// that the file does not (`Pirate.Special` is "Pirate Special (1)")
+		// spacing aside (`Bulletproof.Water` is "Bullet Proof Water"), a part TMDB numbers
+		// that the file does not (`Pirate.Special` is "Pirate Special (1)"), and a leading
+		// article or a part written out on either side
 		return usable
-			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, '')]
-			: ['', ''];
+			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, ''), plain(name)]
+			: ['', '', ''];
 	});
 	for (const text of new Set([title.whole, title.first])) {
-		const key = text.replace(/ /g, '');
-		for (const form of [0, 1]) {
+		for (const form of [0, 1, 2]) {
+			const key = form === 2 ? plain(text) : text.replace(/ /g, '');
 			const found = candidates.filter((_, n) => keys[n][form] === key);
 			if (found.length) return found.length === 1 ? found[0] : null;
 		}
@@ -830,6 +831,21 @@ function titled<T extends { name: string }>(
 }
 
 const PART = / (?:part |pt )?\d{1,2}$/;
+const SPELLED: Record<string, string> = { one: '1', two: '2', three: '3', four: '4', five: '5' };
+/**
+ * A title without its leading article and with its part as a bare number: TMDB's TMNT S4E19
+ * "A Tale of Master Yoshi" is the pack's `Tale of Master Yoshi`, Ben 10 Omniverse's "Showdown
+ * (1)" its `Showdown Part 1`, Earth's Mightiest Heroes' "Breakout (1)" its `Breakout, Part 1
+ * of 2`, QI's "VG Part Two" its `VG (Part 2)`.
+ */
+const plain = (text: string) =>
+	text
+		.replace(/^(?:the|a|an) /, '')
+		.replace(
+			/ (?:part |pt )?(one|two|three|four|five|\d{1,2})(?: of \d{1,2})?$/,
+			(_, n: string) => ` ${SPELLED[n] ?? n}`
+		)
+		.replace(/ /g, '');
 
 /**
  * Whether the episode at a file's number is titled as the file is, one title holding the

@@ -10053,6 +10053,221 @@
 	},
 	"cases": [
 		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id; the Series 10 folder's files of the 377",
+			"request": {
+				"name": "QI",
+				"hash": null,
+				"imdbId": "tt0380136",
+				"files": [
+					{
+						"path": "QI - s10e16 - VG (Part 1).mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI - s10e17 - VG (Part 2).mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e01 - Jargon.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e02 - Jam, Jelly & Juice.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e03 - Journeys.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e04 - Jack & Jill.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e05 - J-Places.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e06 - Joints.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e07 - Journalism.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e08 - Jumble.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e09 - Jeopardy.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e10 - Jungles.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e11 - Jumpers.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e12 - Justice.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e13 - Jobs.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e14 - Jingle Bells (Christmas Special).mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e15 - Jolly.mkv",
+						"folder": "Series 10"
+					},
+					{
+						"path": "QI XL - s10e18 - Just The Job.mkv",
+						"folder": "Series 10"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0380136",
+				"tmdbId": 1554,
+				"files": [
+					{
+						"path": "QI - s10e16 - VG (Part 1).mkv",
+						"season": 10,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI - s10e17 - VG (Part 2).mkv",
+						"season": 10,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e01 - Jargon.mkv",
+						"season": 10,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e02 - Jam, Jelly & Juice.mkv",
+						"season": 10,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e03 - Journeys.mkv",
+						"season": 10,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e04 - Jack & Jill.mkv",
+						"season": 10,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e05 - J-Places.mkv",
+						"season": 10,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e06 - Joints.mkv",
+						"season": 10,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e07 - Journalism.mkv",
+						"season": 10,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e08 - Jumble.mkv",
+						"season": 10,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e09 - Jeopardy.mkv",
+						"season": 10,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e10 - Jungles.mkv",
+						"season": 10,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e11 - Jumpers.mkv",
+						"season": 10,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e12 - Justice.mkv",
+						"season": 10,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e13 - Jobs.mkv",
+						"season": 10,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e14 - Jingle Bells (Christmas Special).mkv",
+						"season": 10,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e15 - Jolly.mkv",
+						"season": 10,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "QI XL - s10e18 - Just The Job.mkv",
+						"season": 10,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
 			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id; the Season 07 folder's files of the 395",
 			"request": {
 				"name": "Family Guy - Seasons 1 to 20",
@@ -10250,6 +10465,903 @@
 						"path": "Family Guy - S07E16 - Peter's Progress (Uncensored).mkv",
 						"season": 7,
 						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
+				"name": "Ben 10 Omniverse (2012) Season 1-4 S01-04 (1080p HMAX.WEBDL x265 10bit AAC 2.0 EDGE2020)",
+				"hash": null,
+				"imdbId": "tt2320144",
+				"files": [
+					{
+						"path": "Ben 10 Omniverse - S01E01 - The More Things Change Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E02 - The More Things Change Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E03 - A Jolt From The Past (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E04 - Trouble Helix (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E05 - Have I Got a Deal for You (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E06 - It Was Them (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E07 - So Long, and Thanks for All the Smoothies (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E08 - Hot Stretch (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E09 - Of Predators and Prey Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E10 - Of Predators and Prey Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E11 - Outbreak (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E12 - Many Happy Returns (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E13 - Gone Fishin' (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E14 - Blukic and Driba go to Mr. Smoothy's (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E15 - Malefactor (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E16 - Arrested Development (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E17 - Bros in Space (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E18 - Ben Again (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E19 - Store 23 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E20 - Special Delivery (1080p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E01 - Showdown Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E02 - Showdown Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E03 - Tummy Trouble (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E04 - Vilgax Must Croak (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E05 - While You Were Away (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E06 - The Frogs of War Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E07 - The Frogs of War Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E08 - Rules of Engagement (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E09 - Rad (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E10 - Evil's Encore (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E11 - T.G.I.S. (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E12 - Food Around The Corner (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E13 - O Mother, Where Art Thou (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E14 - Return to Forever (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E15 - Mud is Thicker Than Water (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E16 - OTTO Motives (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E17 - The Ultimate Heist (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E18 - A Fistful of Brains (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E19 - For a Few Brains More (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E20 - Max's Monster (1080p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E01 - Something Zombozo This Way Comes (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E02 - Mystery, Incorporeal (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E03 - Bengeance Is Mine (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E04 - An American Benwolf in London (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E05 - Animo Crackers (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E06 - Rad Monster Party (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E07 - Charmed, I'm Sure (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E08 - The Vampire Strikes Back (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E09 - Catfight (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E10 - Collect This (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E11 - And Then There Were None (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E12 - And Then There Was Ben (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E13 - The Vengers (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E14 - Cough It Up (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E15 - The Rooters of All Evil (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E16 - Blukic and Driba Go to Area 51 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E17 - No Honor Among Bros (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E18 - Universe Vs. Tennyson (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E19 - Weapon XI Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E20 - Weapon XI Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E01 - Clyde Five (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E02 - Rook Tales (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E03 - Charm School (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E04 - The Ballad of Mr. Baumann (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E05 - Fight at the Museum (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E06 - Breakpoint (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E07 - The Color of Monkey (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E08 - Vreedlemania (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E09 - It's a Mad, Mad, Mad Ben World Part 1 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E10 - It's a Mad, Mad, Mad Ben World Part 2 (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E11 - From Hedorium to Eternity (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E12 - Stuck on You (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E13 - Let's Do the Time War Again (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E14 - Secret of Dos Santos (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E15 - Third Time's a Charm (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E16 - Final Countdown (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E17 - Malgax Attacks (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E18 - Most Dangerous Game Show (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E19 - The End of an Era (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E20 - A New Dawn (1080p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2293002",
+				"tmdbId": 46922,
+				"files": [
+					{
+						"path": "Ben 10 Omniverse - S01E01 - The More Things Change Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E02 - The More Things Change Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E03 - A Jolt From The Past (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E04 - Trouble Helix (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E05 - Have I Got a Deal for You (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E06 - It Was Them (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E07 - So Long, and Thanks for All the Smoothies (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E08 - Hot Stretch (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E09 - Of Predators and Prey Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E10 - Of Predators and Prey Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E11 - Outbreak (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E12 - Many Happy Returns (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E13 - Gone Fishin' (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E14 - Blukic and Driba go to Mr. Smoothy's (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E15 - Malefactor (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E16 - Arrested Development (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E17 - Bros in Space (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E18 - Ben Again (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E19 - Store 23 (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S01E20 - Special Delivery (1080p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E01 - Showdown Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E02 - Showdown Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E03 - Tummy Trouble (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E04 - Vilgax Must Croak (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E05 - While You Were Away (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E06 - The Frogs of War Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E07 - The Frogs of War Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E08 - Rules of Engagement (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E09 - Rad (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E10 - Evil's Encore (1080p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E11 - T.G.I.S. (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E12 - Food Around The Corner (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E13 - O Mother, Where Art Thou (1080p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E14 - Return to Forever (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E15 - Mud is Thicker Than Water (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E16 - OTTO Motives (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E17 - The Ultimate Heist (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E18 - A Fistful of Brains (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E19 - For a Few Brains More (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S02E20 - Max's Monster (1080p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E01 - Something Zombozo This Way Comes (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E02 - Mystery, Incorporeal (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E03 - Bengeance Is Mine (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E04 - An American Benwolf in London (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E05 - Animo Crackers (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E06 - Rad Monster Party (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E07 - Charmed, I'm Sure (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E08 - The Vampire Strikes Back (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E09 - Catfight (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E10 - Collect This (1080p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E11 - And Then There Were None (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E12 - And Then There Was Ben (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E13 - The Vengers (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E14 - Cough It Up (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E15 - The Rooters of All Evil (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E16 - Blukic and Driba Go to Area 51 (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E17 - No Honor Among Bros (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E18 - Universe Vs. Tennyson (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E19 - Weapon XI Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S03E20 - Weapon XI Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E01 - Clyde Five (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E02 - Rook Tales (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E03 - Charm School (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E04 - The Ballad of Mr. Baumann (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E05 - Fight at the Museum (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E06 - Breakpoint (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E07 - The Color of Monkey (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E08 - Vreedlemania (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E09 - It's a Mad, Mad, Mad Ben World Part 1 (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E10 - It's a Mad, Mad, Mad Ben World Part 2 (1080p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E11 - From Hedorium to Eternity (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E12 - Stuck on You (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E13 - Let's Do the Time War Again (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E14 - Secret of Dos Santos (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E15 - Third Time's a Charm (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E16 - Final Countdown (1080p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E17 - Malgax Attacks (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E18 - Most Dangerous Game Show (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E19 - The End of an Era (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Ben 10 Omniverse - S04E20 - A New Dawn (1080p x265 EDGE2020).mkv",
+						"season": 8,
+						"episode": 10,
 						"episodeEnd": null,
 						"how": "tmdb"
 					}
@@ -11057,6 +12169,265 @@
 		{
 			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
 			"request": {
+				"name": "Star.Wars.Rebels.S03.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP[rartv]",
+				"hash": null,
+				"imdbId": "tt3999226",
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.S03E01.Steps.Into.Shadow.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E02.Steps.Into.Shadow.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E03.The.Holocrons.of.Fate.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E04.The.Antilles.Extraction.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E05.Heras.Heroes.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E06.The.Last.Battle.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E07.Imperial.Supercommandos.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E08.Iron.Squadron.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E09.The.Wynkahthu.Job.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E10.An.Inside.Man.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E11.Visions.and.Voices.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E12.Ghosts.of.Geonosis.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E13.Ghosts.of.Geonosis.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E14.Warhead.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E15.Trials.of.the.Darksaber.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E16.Legacy.of.Mandalore.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E17.Through.Imperial.Eyes.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E18.Secret.Cargo.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E19.Double.Agent.Droid.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E20.Twin.Suns.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E21.Zero.Hour.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E22.Zero.Hour.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2930604",
+				"tmdbId": 60554,
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.S03E01.Steps.Into.Shadow.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E02.Steps.Into.Shadow.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E03.The.Holocrons.of.Fate.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E04.The.Antilles.Extraction.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E05.Heras.Heroes.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E06.The.Last.Battle.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E07.Imperial.Supercommandos.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E08.Iron.Squadron.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E09.The.Wynkahthu.Job.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E10.An.Inside.Man.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E11.Visions.and.Voices.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E12.Ghosts.of.Geonosis.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E13.Ghosts.of.Geonosis.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E14.Warhead.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E15.Trials.of.the.Darksaber.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E16.Legacy.of.Mandalore.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E17.Through.Imperial.Eyes.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E18.Secret.Cargo.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E19.Double.Agent.Droid.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E20.Twin.Suns.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E21.Zero.Hour.Part.1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Star.Wars.Rebels.S03E22.Zero.Hour.Part.2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
 				"name": "Marvels THE AVENGERS, Earth's MIGHTIEST Heroes - Complete 2010-2012 TV Series, Season 1-2 S01-S02 - 1080p BluRay x264",
 				"hash": null,
 				"imdbId": "tt2207840",
@@ -11285,10 +12656,10 @@
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E02 - Hulk vs the World (1080p - BluRay).mp4",
-						"season": 1,
-						"episode": 2,
+						"season": null,
+						"episode": null,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": null
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E03 - Thor the Mighty (1080p - BluRay).mp4",
@@ -11313,17 +12684,17 @@
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E06 - Breakout, Part 1 of 2 (1080p - BluRay).mp4",
-						"season": null,
-						"episode": null,
+						"season": 1,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null
+						"how": "tmdb"
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E07 - Breakout, Part 2 of 2 (1080p - BluRay).mp4",
-						"season": null,
-						"episode": null,
+						"season": 1,
+						"episode": 2,
 						"episodeEnd": null,
-						"how": null
+						"how": "tmdb"
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E08 - Some Assembly Required (1080p - BluRay).mp4",
@@ -11637,6 +13008,1728 @@
 						"path": "The Avengers (EMH) - S02 E26 - Avengers Assemble (1080p - BluRay).mp4",
 						"season": 2,
 						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
+				"name": "Teenage Mutant Ninja Turtles (2003) Season 1-7 S01-07 (480p AMZN.WEBDL x265 10bit EAC3 2.0 EDGE2020)",
+				"hash": null,
+				"imdbId": "tt0719125",
+				"files": [
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E01 - Things Change (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E02 - A Better Mousetrap (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E03 - Attack of the Mousers (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E04 - Meet Casey Jones (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E05 - Nano (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E06 - Darkness on the Edge of Town (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E07 - The Way of Invisibility (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E08 - Fallen Angel (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E09 - Garbageman (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E10 - The Shredder Strikes (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E11 - The Shredder Strikes (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E12 - The Unconvincing Turtle Titan (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E13 - Notes from the Underground (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E14 - Notes from the Underground (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E15 - Notes from the Underground (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E16 - The King (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E17 - The Shredder Strikes Back (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E18 - The Shredder Strikes Back (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E19 - Tales of Leo (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E20 - The Monster Hunter (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E21 - Return to New York (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E22 - Return to New York (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E23 - Return to New York (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E24 - Lone Raph and Cub (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E25 - The Search for Splinter (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E26 - The Search for Splinter (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E01 - Turtles in Space (1) The Fugitoid (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E02 - Turtles in Space (2) The Trouble with Triceratons (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E03 - Turtles in Space (3) The Big House (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E04 - Turtles in Space (4) The Arena (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E05 - Turtles in Space (5) Triceraton Wars (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E06 - Secret Origins (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E07 - Secret Origins (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E08 - Secret Origins (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E09 - Reflections (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E10 - The Ultimate Ninja (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E11 - The Return of Nano (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E12 - What a Croc (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E13 - Return to the Underground (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E14 - City at War (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E15 - City at War (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E16 - City at War (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E17 - Junklantis (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E18 - The Golden Puck (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E19 - Rogue in the House (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E20 - Rogue in the House (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E21 - April's Artifact (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E22 - Return of the Justice Force (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E23 - The Big Brawl (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E24 - The Big Brawl (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E25 - The Big Brawl (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E26 - The Big Brawl (4) (480p x265 EDGE2020).mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E01 - Space Invaders (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E02 - Space Invaders (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E03 - Space Invaders (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E04 - Worlds Collide (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E05 - Worlds Collide (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E06 - Worlds Collide (3) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E07 - Touch and Go (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E08 - Hunted (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E09 - H.A.T.E. (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E10 - Nobody's Fool (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E11 - New Blood (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E12 - The Lesson (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E13 - The Christmas Aliens (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E14 - The Darkness Within (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E15 - Mission of Gravity (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E16 - The Entity Below (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E17 - Time Travails (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E18 - Hun on the Run (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E19 - Reality Check (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E20 - Across the Universe (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E21 - Same as It Never Was (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E22 - The Real World (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E23 - The Real World (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E24 - Bishop's Gambit (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E25 - Exodus (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E26 - Exodus (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E01 - Cousin Sid (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E02 - The People's Choice (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E03 - Sons of the Silent Age (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E04 - Dragon's Brew (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E05 - I, Monster (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E06 - Grudge Match (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E07 - A Wing and a Prayer (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E08 - Bad Day (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E09 - Aliens Among Us (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E10 - Dragons Rising (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E11 - Still Nobody (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E12 - All Hallows Thieves (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E13 - Samurai Tourist (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E14 - The Ancient One (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E15 - Scion of the Shredder (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E16 - Prodigal Son (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E17 - Outbreak (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E18 - Trouble with Augie (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E19 - Insane in the Membrane (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E20 - Return of Savanti (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E21 - Return of Savanti (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E22 - Tale of Master Yoshi (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E23 - Adventures in Turtle Sitting (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E24 - Good Genes (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E25 - Good Genes (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E26 - Ninja Tribunal (480p x265 EDGE2020).mkv",
+						"folder": "Season 4"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E01 - Lap of the Gods (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E02 - Demons and Dragons (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E03 - Legend of the 5 Dragons (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E04 - More Worlds Than One (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E05 - Beginning of the End (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E06 - Membership Drive (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E07 - New World Order (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E08 - New World Order (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E09 - Fathers and Sons (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E10 - Past and Present (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E11 - Enter the Dragons (1) (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E12 - Enter the Dragons (2) (480p x265 EDGE2020).mkv",
+						"folder": "Season 5"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E01 - Future Shellshock (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E02 - Obsolete (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E03 - Home Invasion (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E04 - Headlock Prime (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E05 - Playtime's Over (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E06 - Bishop to Knight (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E07 - Night of Sh'Okanabo (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E08 - Clash of the Turtle Titans (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E09 - Fly Me to the Moon (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E10 - Invasion of the Body Snatcher! (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E11 - The Freaks Come Out at Night (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E12 - Bad Blood (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E13 - The Journal (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E14 - The Gaminator (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E15 - Graduation Day Class of 2105 (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E16 - Timing is Everything (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E17 - Enter the Jammerhead (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E18 - Milk Run (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E19 - The Fall of Darius Dunn (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E20 - Turtle X-Tinction (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E21 - Race for Glory (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E22 - Head of State (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E23 - DNA is Thicker Than Water (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E24 - The Cosmic Completist (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E25 - The Day of Awakening (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E26 - Zixxth Sense (480p x265 EDGE2020).mkv",
+						"folder": "Season 6"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E01 - Tempus Fugit (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E02 - Karate Schooled (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E03 - Something Wicked (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E04 - The Engagement Ring (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E05 - Hacking Stockman (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E06 - Incredible Shrinking Serling (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E07 - Identity Crisis (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E08 - Web Wranglers (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E09 - Superquest (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E10 - Virtual Reality Check (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E11 - City Under Siege (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E12 - Super Power Struggle (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E13 - Wedding Bells and Bytes (480p x265 EDGE2020).mkv",
+						"folder": "Season 7"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0318913",
+				"tmdbId": 2284,
+				"files": [
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E01 - Things Change (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E02 - A Better Mousetrap (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E03 - Attack of the Mousers (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E04 - Meet Casey Jones (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E05 - Nano (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E06 - Darkness on the Edge of Town (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E07 - The Way of Invisibility (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E08 - Fallen Angel (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E09 - Garbageman (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E10 - The Shredder Strikes (1) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E11 - The Shredder Strikes (2) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E12 - The Unconvincing Turtle Titan (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E13 - Notes from the Underground (1) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E14 - Notes from the Underground (2) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E15 - Notes from the Underground (3) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E16 - The King (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E17 - The Shredder Strikes Back (1) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E18 - The Shredder Strikes Back (2) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E19 - Tales of Leo (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E20 - The Monster Hunter (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E21 - Return to New York (1) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E22 - Return to New York (2) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E23 - Return to New York (3) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E24 - Lone Raph and Cub (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E25 - The Search for Splinter (1) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S01E26 - The Search for Splinter (2) (480p x265 EDGE2020).mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E01 - Turtles in Space (1) The Fugitoid (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E02 - Turtles in Space (2) The Trouble with Triceratons (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E03 - Turtles in Space (3) The Big House (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E04 - Turtles in Space (4) The Arena (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E05 - Turtles in Space (5) Triceraton Wars (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E06 - Secret Origins (1) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E07 - Secret Origins (2) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E08 - Secret Origins (3) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E09 - Reflections (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E10 - The Ultimate Ninja (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E11 - The Return of Nano (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E12 - What a Croc (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E13 - Return to the Underground (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E14 - City at War (1) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E15 - City at War (2) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E16 - City at War (3) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E17 - Junklantis (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E18 - The Golden Puck (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E19 - Rogue in the House (1) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E20 - Rogue in the House (2) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E21 - April's Artifact (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E22 - Return of the Justice Force (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E23 - The Big Brawl (1) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E24 - The Big Brawl (2) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E25 - The Big Brawl (3) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S02E26 - The Big Brawl (4) (480p x265 EDGE2020).mkv",
+						"season": 2,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E01 - Space Invaders (1) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E02 - Space Invaders (2) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E03 - Space Invaders (3) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E04 - Worlds Collide (1) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E05 - Worlds Collide (2) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E06 - Worlds Collide (3) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E07 - Touch and Go (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E08 - Hunted (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E09 - H.A.T.E. (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E10 - Nobody's Fool (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E11 - New Blood (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E12 - The Lesson (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E13 - The Christmas Aliens (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E14 - The Darkness Within (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E15 - Mission of Gravity (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E16 - The Entity Below (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E17 - Time Travails (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E18 - Hun on the Run (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E19 - Reality Check (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E20 - Across the Universe (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E21 - Same as It Never Was (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E22 - The Real World (1) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E23 - The Real World (2) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E24 - Bishop's Gambit (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E25 - Exodus (1) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S03E26 - Exodus (2) (480p x265 EDGE2020).mkv",
+						"season": 3,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E01 - Cousin Sid (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E02 - The People's Choice (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E03 - Sons of the Silent Age (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E04 - Dragon's Brew (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E05 - I, Monster (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E06 - Grudge Match (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E07 - A Wing and a Prayer (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E08 - Bad Day (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E09 - Aliens Among Us (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E10 - Dragons Rising (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E11 - Still Nobody (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E12 - All Hallows Thieves (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E13 - Samurai Tourist (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E14 - The Ancient One (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E15 - Scion of the Shredder (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E16 - Prodigal Son (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E17 - Outbreak (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E18 - Trouble with Augie (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E19 - Insane in the Membrane (480p x265 EDGE2020).mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E20 - Return of Savanti (1) (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E21 - Return of Savanti (2) (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E22 - Tale of Master Yoshi (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E23 - Adventures in Turtle Sitting (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E24 - Good Genes (1) (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E25 - Good Genes (2) (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S04E26 - Ninja Tribunal (480p x265 EDGE2020).mkv",
+						"season": 4,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E01 - Lap of the Gods (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E02 - Demons and Dragons (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E03 - Legend of the 5 Dragons (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E04 - More Worlds Than One (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E05 - Beginning of the End (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E06 - Membership Drive (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E07 - New World Order (1) (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E08 - New World Order (2) (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E09 - Fathers and Sons (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E10 - Past and Present (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E11 - Enter the Dragons (1) (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S05E12 - Enter the Dragons (2) (480p x265 EDGE2020).mkv",
+						"season": 5,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E01 - Future Shellshock (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E02 - Obsolete (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E03 - Home Invasion (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E04 - Headlock Prime (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E05 - Playtime's Over (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E06 - Bishop to Knight (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E07 - Night of Sh'Okanabo (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E08 - Clash of the Turtle Titans (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E09 - Fly Me to the Moon (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E10 - Invasion of the Body Snatcher! (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E11 - The Freaks Come Out at Night (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E12 - Bad Blood (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E13 - The Journal (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E14 - The Gaminator (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E15 - Graduation Day Class of 2105 (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E16 - Timing is Everything (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E17 - Enter the Jammerhead (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E18 - Milk Run (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E19 - The Fall of Darius Dunn (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E20 - Turtle X-Tinction (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E21 - Race for Glory (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E22 - Head of State (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E23 - DNA is Thicker Than Water (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E24 - The Cosmic Completist (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E25 - The Day of Awakening (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S06E26 - Zixxth Sense (480p x265 EDGE2020).mkv",
+						"season": 6,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E01 - Tempus Fugit (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E02 - Karate Schooled (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E03 - Something Wicked (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E04 - The Engagement Ring (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E05 - Hacking Stockman (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E06 - Incredible Shrinking Serling (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E07 - Identity Crisis (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E08 - Web Wranglers (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E09 - Superquest (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E10 - Virtual Reality Check (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E11 - City Under Siege (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E12 - Super Power Struggle (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Teenage Mutant Ninja Turtles (2003) - S07E13 - Wedding Bells and Bytes (480p x265 EDGE2020).mkv",
+						"season": 7,
+						"episode": 13,
 						"episodeEnd": null,
 						"how": "tmdb"
 					}
