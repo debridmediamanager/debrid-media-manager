@@ -1,4 +1,6 @@
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import type { TorrentInfoResponse } from '@/services/types';
+import recordedSubset from '@/test/fixtures/realdebrid/torrent-info-subset-of-cached-downloading-2026-10-22.json';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from 'vitest';
@@ -376,6 +378,39 @@ describe('handleReinsertTorrentinRd with a narrower selection', () => {
 		expect(mockHandleDeleteRdTorrent).not.toHaveBeenCalledWith(
 			'key',
 			'rd:HLFMCOTTYAFEU',
+			expect.anything()
+		);
+	});
+
+	it('accepts replacing cached files 1 and 2 with file 3 even when the replacement downloads', async () => {
+		// Model selection and cached/downloaded state from the captured file table.
+		// The in-progress wire response omits ended and the client-only fake flag.
+		const replacement = {
+			...recordedSubset,
+			files: recordedSubset.files.map((file) => ({
+				...file,
+				selected: file.id === 3 ? 1 : 0,
+			})),
+		} as unknown as TorrentInfoResponse;
+		const cached = {
+			...recordedSubset,
+			id: 'HLFMCOTTYAFEU',
+			status: 'downloaded',
+			progress: 100,
+		} as unknown as TorrentInfoResponse;
+		mockAddHashAsMagnet.mockResolvedValueOnce(replacement.id);
+		mockSelectFiles.mockResolvedValueOnce(undefined);
+		mockGetTorrentInfo.mockImplementation(async (_key, id) =>
+			id === replacement.id ? replacement : cached
+		);
+
+		await expect(handleReinsertTorrentinRd('key', finished, true, ['3'])).resolves.toBe(
+			`rd:${replacement.id}`
+		);
+		expect(mockHandleDeleteRdTorrent).toHaveBeenCalledWith('key', finished.id, true);
+		expect(mockHandleDeleteRdTorrent).not.toHaveBeenCalledWith(
+			'key',
+			`rd:${replacement.id}`,
 			expect.anything()
 		);
 	});

@@ -24,6 +24,8 @@ The library's **Add** buttons accept full magnet links, standalone v1 info hashe
 
 On Debrid-Link, standalone hash lists remain **cached-only**; full magnets and `.torrent` files explicitly request a download and may consume the account's quota. TorBox also accepts direct HTTP(S) download links in its Add dialog.
 
+On Real-Debrid, Save Selection leaves a cached torrent intact when a strict subset would download again. Selecting different files remains an explicit replacement, even when the new selection is smaller.
+
 Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
 
 ### Torrent search

@@ -519,12 +519,21 @@ export const handleReinsertTorrentinRd = async (
 				response?.progress !== 100
 					? await getTorrentInfo(rdKey, oldId.substring(3))
 					: undefined;
-			const oldSelected = (oldInfo?.files ?? []).filter((f: any) => f.selected === 1).length;
-			if (oldInfo?.progress === 100 && selectedFileIds.length < oldSelected) {
-				await handleDeleteRdTorrent(rdKey, `rd:${newId}`, true);
-				throw new Error(
-					'Real-Debrid has not cached this selection and would download it again; your torrent was left as it was'
-				);
+			if (oldInfo?.progress === 100) {
+				const cachedSelection = new Set<string>();
+				for (const file of oldInfo.files) {
+					if (file.selected === 1) cachedSelection.add(String(file.id));
+				}
+				const requestedSelection = new Set(selectedFileIds);
+				const narrowsCachedSelection =
+					requestedSelection.size < cachedSelection.size &&
+					selectedFileIds.every((id) => cachedSelection.has(id));
+				if (narrowsCachedSelection) {
+					await handleDeleteRdTorrent(rdKey, `rd:${newId}`, true);
+					throw new Error(
+						'Real-Debrid has not cached this selection and would download it again; your torrent was left as it was'
+					);
+				}
 			}
 		}
 		await handleDeleteRdTorrent(rdKey, oldId, true);
