@@ -103,6 +103,15 @@
 					}
 				],
 				"tv_episode_results": []
+			},
+			"tt1942683": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 37606
+					}
+				],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -693,6 +702,51 @@
 						"season_number": 2,
 						"episode_count": 39,
 						"air_date": "2000-07-07"
+					}
+				]
+			},
+			"37606": {
+				"name": "The Amazing World of Gumball",
+				"original_name": "The Amazing World of Gumball",
+				"original_language": "en",
+				"external_ids": {
+					"imdb_id": "tt1942683"
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 14,
+						"air_date": "2008-05-09"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 36,
+						"air_date": "2011-05-03"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 40,
+						"air_date": "2012-08-07"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 40,
+						"air_date": "2014-06-05"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 40,
+						"air_date": "2015-07-07"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 40,
+						"air_date": "2016-09-01"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 44,
+						"air_date": "2018-01-05"
 					}
 				]
 			}
@@ -10011,6 +10065,1304 @@
 						"air_date": "2001-03-30"
 					}
 				]
+			},
+			"37606/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Early Reel",
+						"air_date": "2008-05-09"
+					},
+					{
+						"episode_number": 2,
+						"name": "Waiting for Gumball: Cool To Be Felt",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 3,
+						"name": "Waiting for Gumball: Pineapple",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 4,
+						"name": "Waiting for Gumball: Infinite Loop",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 5,
+						"name": "Waiting for Gumball: Weird Food",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 6,
+						"name": "Waiting for Gumball: BirdPlaneBird",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 7,
+						"name": "Waiting for Gumball: Gnomes",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 8,
+						"name": "Waiting for Gumball: Insulting Voices",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 9,
+						"name": "Waiting for Gumball: Beards",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 10,
+						"name": "Waiting for Gumball: Grump",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 11,
+						"name": "Waiting for Gumball: Spoons",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 12,
+						"name": "Waiting for Gumball: Telly",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 13,
+						"name": "Waiting for Gumball: Cleaning Up",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 14,
+						"name": "Waiting for Gumball: Bored",
+						"air_date": "2017-10-08"
+					}
+				]
+			},
+			"37606/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The DVD",
+						"air_date": "2011-05-03"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Responsible",
+						"air_date": "2011-05-09"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Third",
+						"air_date": "2011-05-16"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Debt",
+						"air_date": "2011-05-16"
+					},
+					{
+						"episode_number": 5,
+						"name": "The End",
+						"air_date": "2011-05-23"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Dress",
+						"air_date": "2011-05-23"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Quest",
+						"air_date": "2011-05-30"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Spoon",
+						"air_date": "2011-05-30"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Pressure",
+						"air_date": "2011-06-06"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Painting",
+						"air_date": "2011-06-13"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Laziest",
+						"air_date": "2011-06-20"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Ghost",
+						"air_date": "2011-06-27"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Mystery",
+						"air_date": "2011-07-11"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Prank",
+						"air_date": "2011-07-18"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Gi",
+						"air_date": "2011-07-25"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Kiss",
+						"air_date": "2011-08-01"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Party",
+						"air_date": "2011-08-08"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Refund",
+						"air_date": "2011-08-15"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Robot",
+						"air_date": "2011-08-22"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Picnic",
+						"air_date": "2011-08-29"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Goons",
+						"air_date": "2011-09-05"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Secret",
+						"air_date": "2011-09-26"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Sock",
+						"air_date": "2011-10-03"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Genius",
+						"air_date": "2011-10-10"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Poltergeist",
+						"air_date": "2011-10-17"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Mustache",
+						"air_date": "2011-11-21"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Date",
+						"air_date": "2011-11-28"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Club",
+						"air_date": "2011-12-05"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Wand",
+						"air_date": "2012-01-24"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Ape",
+						"air_date": "2012-01-31"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Car",
+						"air_date": "2012-02-07"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Curse",
+						"air_date": "2012-02-14"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Microwave",
+						"air_date": "2012-02-21"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Meddler",
+						"air_date": "2012-02-28"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Helmet",
+						"air_date": "2012-03-06"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Fight",
+						"air_date": "2012-03-13"
+					}
+				]
+			},
+			"37606/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Remote",
+						"air_date": "2012-08-07"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Colossus",
+						"air_date": "2012-08-14"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Knights",
+						"air_date": "2012-08-21"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Fridge",
+						"air_date": "2012-09-04"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Flower",
+						"air_date": "2012-09-11"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Banana",
+						"air_date": "2012-09-11"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Phone",
+						"air_date": "2012-09-18"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Job",
+						"air_date": "2012-09-18"
+					},
+					{
+						"episode_number": 9,
+						"name": "Halloween",
+						"air_date": "2012-10-23"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Treasure",
+						"air_date": "2012-10-30"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Apology",
+						"air_date": "2012-11-06"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Words",
+						"air_date": "2012-11-13"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Skull",
+						"air_date": "2012-11-20"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Bet",
+						"air_date": "2012-11-27"
+					},
+					{
+						"episode_number": 15,
+						"name": "Christmas",
+						"air_date": "2012-12-04"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Watch",
+						"air_date": "2013-01-22"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Bumpkin",
+						"air_date": "2013-01-29"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Flakers",
+						"air_date": "2013-02-05"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Authority",
+						"air_date": "2013-02-12"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Virus",
+						"air_date": "2013-06-05"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Pony",
+						"air_date": "2013-06-12"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Hero",
+						"air_date": "2013-06-19"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Dream",
+						"air_date": "2013-06-26"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Sidekick",
+						"air_date": "2013-07-03"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Photo",
+						"air_date": "2013-07-17"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Tag",
+						"air_date": "2013-07-24"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Storm",
+						"air_date": "2013-07-31"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Lesson",
+						"air_date": "2013-08-07"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Game",
+						"air_date": "2013-08-21"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Limit",
+						"air_date": "2013-08-28"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Voice",
+						"air_date": "2013-09-10"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Promise",
+						"air_date": "2013-09-17"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Castle",
+						"air_date": "2013-10-01"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Boombox",
+						"air_date": "2013-10-08"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Tape",
+						"air_date": "2013-10-15"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Sweaters",
+						"air_date": "2013-11-05"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Internet",
+						"air_date": "2013-11-12"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Plan",
+						"air_date": "2013-11-19"
+					},
+					{
+						"episode_number": 39,
+						"name": "The World",
+						"air_date": "2013-11-26"
+					},
+					{
+						"episode_number": 40,
+						"name": "The Finale",
+						"air_date": "2013-12-03"
+					}
+				]
+			},
+			"37606/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Kids",
+						"air_date": "2014-06-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Fan",
+						"air_date": "2014-06-05"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Coach",
+						"air_date": "2014-06-12"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Joy",
+						"air_date": "2014-06-19"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Puppy",
+						"air_date": "2014-06-26"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Recipe",
+						"air_date": "2014-07-03"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Name",
+						"air_date": "2014-07-10"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Extras",
+						"air_date": "2014-07-17"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Gripes",
+						"air_date": "2014-07-24"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Vacation",
+						"air_date": "2014-07-31"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Fraud",
+						"air_date": "2014-08-07"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Void",
+						"air_date": "2014-08-14"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Boss",
+						"air_date": "2014-08-21"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Move",
+						"air_date": "2014-08-28"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Law",
+						"air_date": "2014-09-04"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Allergy",
+						"air_date": "2014-09-11"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Mothers",
+						"air_date": "2014-09-18"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Password",
+						"air_date": "2014-09-25"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Procrastinators",
+						"air_date": "2014-10-02"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Shell",
+						"air_date": "2014-10-09"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Burden",
+						"air_date": "2014-10-16"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Bros",
+						"air_date": "2014-10-23"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Mirror",
+						"air_date": "2014-10-30"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Man",
+						"air_date": "2014-10-30"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Pizza",
+						"air_date": "2014-11-13"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Lie",
+						"air_date": "2014-11-20"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Butterfly",
+						"air_date": "2015-01-08"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Question",
+						"air_date": "2015-01-08"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Saint",
+						"air_date": "2015-01-15"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Friend",
+						"air_date": "2015-01-22"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Oracle",
+						"air_date": "2015-01-29"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Safety",
+						"air_date": "2015-02-05"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Society",
+						"air_date": "2015-02-12"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Spoiler",
+						"air_date": "2015-02-19"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Countdown",
+						"air_date": "2015-02-26"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Nobody",
+						"air_date": "2015-03-05"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Downer",
+						"air_date": "2015-04-05"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Egg",
+						"air_date": "2015-04-05"
+					},
+					{
+						"episode_number": 39,
+						"name": "The Triangle",
+						"air_date": "2015-04-12"
+					},
+					{
+						"episode_number": 40,
+						"name": "The Money",
+						"air_date": "2015-04-12"
+					}
+				]
+			},
+			"37606/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Return",
+						"air_date": "2015-07-07"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Nemesis",
+						"air_date": "2015-07-10"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Crew",
+						"air_date": "2015-08-13"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Others",
+						"air_date": "2015-08-20"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Signature",
+						"air_date": "2015-08-27"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Check",
+						"air_date": "2015-08-31"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Pest",
+						"air_date": "2015-09-01"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Sale",
+						"air_date": "2015-09-02"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Gift",
+						"air_date": "2015-09-03"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Parking",
+						"air_date": "2015-09-04"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Routine",
+						"air_date": "2015-10-05"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Upgrade",
+						"air_date": "2015-10-06"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Comic",
+						"air_date": "2015-10-07"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Romantic",
+						"air_date": "2015-10-08"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Uploads",
+						"air_date": "2015-10-09"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Apprentice",
+						"air_date": "2016-01-07"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Hug",
+						"air_date": "2016-01-14"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Wicked",
+						"air_date": "2016-01-21"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Traitor",
+						"air_date": "2016-01-28"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Origins (1)",
+						"air_date": "2016-02-15"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Origins (2)",
+						"air_date": "2016-02-15"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Girlfriend",
+						"air_date": "2016-03-31"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Advice",
+						"air_date": "2016-04-21"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Signal",
+						"air_date": "2016-04-28"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Parasite",
+						"air_date": "2016-05-05"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Love",
+						"air_date": "2016-05-12"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Awkwardness",
+						"air_date": "2016-05-19"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Nest",
+						"air_date": "2016-05-26"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Points",
+						"air_date": "2016-06-02"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Bus",
+						"air_date": "2016-06-09"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Night",
+						"air_date": "2016-06-16"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Misunderstandings",
+						"air_date": "2016-06-23"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Roots",
+						"air_date": "2016-08-15"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Blame",
+						"air_date": "2016-08-16"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Slap",
+						"air_date": "2016-08-17"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Detective",
+						"air_date": "2016-08-18"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Fury",
+						"air_date": "2016-08-19"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Compilation",
+						"air_date": "2016-08-25"
+					},
+					{
+						"episode_number": 39,
+						"name": "The Scam",
+						"air_date": "2016-10-27"
+					},
+					{
+						"episode_number": 40,
+						"name": "The Disaster",
+						"air_date": "2016-09-05"
+					}
+				]
+			},
+			"37606/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Stories",
+						"air_date": "2016-09-01"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Re-Run",
+						"air_date": "2016-09-05"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Guy",
+						"air_date": "2016-09-08"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Boredom",
+						"air_date": "2016-09-15"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Vision",
+						"air_date": "2016-10-06"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Choices",
+						"air_date": "2016-10-13"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Code",
+						"air_date": "2016-10-20"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Test",
+						"air_date": "2016-11-03"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Slide",
+						"air_date": "2016-11-10"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Loophole",
+						"air_date": "2016-11-17"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Potato",
+						"air_date": "2017-02-06"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Fuss",
+						"air_date": "2017-02-07"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Copycats",
+						"air_date": "2017-02-08"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Outside",
+						"air_date": "2017-02-09"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Vase",
+						"air_date": "2017-02-13"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Matchmaker",
+						"air_date": "2017-02-14"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Box",
+						"air_date": "2017-02-15"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Console",
+						"air_date": "2017-02-16"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Ollie",
+						"air_date": "2017-02-20"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Catfish",
+						"air_date": "2017-02-21"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Cycle",
+						"air_date": "2017-02-22"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Stars",
+						"air_date": "2017-02-23"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Grades",
+						"air_date": "2017-02-27"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Diet",
+						"air_date": "2017-02-28"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Ex",
+						"air_date": "2017-03-01"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Sorcerer",
+						"air_date": "2017-03-02"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Menu",
+						"air_date": "2017-03-06"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Uncle",
+						"air_date": "2017-03-07"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Weirdo",
+						"air_date": "2017-03-08"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Heist",
+						"air_date": "2017-03-09"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Singing",
+						"air_date": "2017-09-01"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Best",
+						"air_date": "2017-09-08"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Worst",
+						"air_date": "2017-09-15"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Deal",
+						"air_date": "2017-09-22"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Petals",
+						"air_date": "2017-09-29"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Puppets",
+						"air_date": "2017-10-06"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Nuisance",
+						"air_date": "2017-10-13"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Line",
+						"air_date": "2017-10-20"
+					},
+					{
+						"episode_number": 39,
+						"name": "The List",
+						"air_date": "2017-11-03"
+					},
+					{
+						"episode_number": 40,
+						"name": "The News",
+						"air_date": "2017-11-10"
+					}
+				]
+			},
+			"37606/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Rival",
+						"air_date": "2018-01-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Lady",
+						"air_date": "2018-01-05"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Sucker",
+						"air_date": "2018-01-12"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Vegging",
+						"air_date": "2018-01-15"
+					},
+					{
+						"episode_number": 5,
+						"name": "The One",
+						"air_date": "2018-01-19"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Father",
+						"air_date": "2018-01-26"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Cringe",
+						"air_date": "2018-02-02"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Cage",
+						"air_date": "2018-02-09"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Faith",
+						"air_date": "2018-02-23"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Candidate",
+						"air_date": "2018-03-02"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Anybody",
+						"air_date": "2018-03-09"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Pact",
+						"air_date": "2018-04-09"
+					},
+					{
+						"episode_number": 13,
+						"name": "The Neighbor",
+						"air_date": "2018-04-13"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Shippening",
+						"air_date": "2018-04-20"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Brain",
+						"air_date": "2018-06-18"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Parents",
+						"air_date": "2018-06-18"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Founder",
+						"air_date": "2018-06-18"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Schooling",
+						"air_date": "2018-06-18"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Intelligence",
+						"air_date": "2018-06-18"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Potion",
+						"air_date": "2018-07-16"
+					},
+					{
+						"episode_number": 21,
+						"name": "The Spinoffs",
+						"air_date": "2018-07-16"
+					},
+					{
+						"episode_number": 22,
+						"name": "The Transformation",
+						"air_date": "2018-07-16"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Understanding",
+						"air_date": "2018-07-16"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Ad",
+						"air_date": "2018-07-16"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Ghouls",
+						"air_date": "2018-10-19"
+					},
+					{
+						"episode_number": 26,
+						"name": "The Stink",
+						"air_date": "2018-11-05"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Awareness",
+						"air_date": "2018-11-06"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Slip",
+						"air_date": "2018-11-07"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Drama",
+						"air_date": "2018-11-08"
+					},
+					{
+						"episode_number": 30,
+						"name": "The Buddy",
+						"air_date": "2018-11-09"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Possession",
+						"air_date": "2019-04-15"
+					},
+					{
+						"episode_number": 32,
+						"name": "The Master",
+						"air_date": "2019-04-22"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Silence",
+						"air_date": "2019-04-29"
+					},
+					{
+						"episode_number": 34,
+						"name": "The Future",
+						"air_date": "2019-05-06"
+					},
+					{
+						"episode_number": 35,
+						"name": "The Wish",
+						"air_date": "2019-05-13"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Factory",
+						"air_date": "2019-05-20"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Agent",
+						"air_date": "2019-05-27"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Web",
+						"air_date": "2019-06-03"
+					},
+					{
+						"episode_number": 39,
+						"name": "The Mess",
+						"air_date": "2019-06-10"
+					},
+					{
+						"episode_number": 40,
+						"name": "The Heart",
+						"air_date": "2019-06-10"
+					},
+					{
+						"episode_number": 41,
+						"name": "The Revolt",
+						"air_date": "2019-06-17"
+					},
+					{
+						"episode_number": 42,
+						"name": "The Decisions",
+						"air_date": "2019-06-17"
+					},
+					{
+						"episode_number": 43,
+						"name": "The BFFs",
+						"air_date": "2019-06-24"
+					},
+					{
+						"episode_number": 44,
+						"name": "The Inquisition",
+						"air_date": "2019-06-24"
+					}
+				]
 			}
 		},
 		"episodeGroups": {
@@ -10641,7 +11993,8 @@
 			"tt2207840": "tt1626038",
 			"tt0719125": "tt0318913",
 			"tt0807832": null,
-			"tt0293731": null
+			"tt0293731": null,
+			"tt1942683": null
 		},
 		"seasonEpisodes": {
 			"tt2293002/2": {
@@ -11096,7 +12449,8 @@
 					]
 				}
 			]
-		}
+		},
+		"identifier": {}
 	},
 	"cases": [
 		{
@@ -17122,6 +18476,419 @@
 						"episode": 39,
 						"episodeEnd": null,
 						"how": "dub"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
+				"name": "The Amazing World of Gumball",
+				"hash": null,
+				"imdbId": "tt1942683",
+				"files": [
+					{
+						"path": "The Amazing World of Gumball - 101 - The Responsible - The DVD (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 102 - The Third - The Debt (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 103 - The End - The Dress (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 104 - The Quest - The Spoon (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 105a - The Pressure (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 105b - The Painting (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 106a - The Car.avi",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 106a - The Laziest (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 106b - The Ghost (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 107a - The Mystery (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 107b - The Prank (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 108a - The GI (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 108b - The Kiss (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 109a - The Party (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 109b - The Refund (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 110a - The Robot (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 110b - The Picnic (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 111a - The Goons (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 111b - The Secret (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 112a - The Sock (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 112b - The Genius (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 113a - The Poltergeist (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 113b - The Mustache (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 114a - The Date (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 114b - The Club (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 115a - The Wand (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 115b - The Ape (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 116a - The Car.avi",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 116b - The Curse (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 117a - The Microwave (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 117b - The Meddler (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 118a - The Helmet (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 118b - The Fight (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 201a - The Remote.mp4",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 201b - The Colossus (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Amazing World of Gumball - 202a - The Knights (720p.x264.ac3-5.1) [449].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1942683",
+				"tmdbId": 37606,
+				"files": [
+					{
+						"path": "The Amazing World of Gumball - 101 - The Responsible - The DVD (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 102 - The Third - The Debt (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 103 - The End - The Dress (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 104 - The Quest - The Spoon (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 105a - The Pressure (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 105b - The Painting (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 106a - The Car.avi",
+						"season": 1,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 106a - The Laziest (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 106b - The Ghost (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 107a - The Mystery (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 107b - The Prank (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 108a - The GI (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 108b - The Kiss (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 109a - The Party (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 109b - The Refund (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 110a - The Robot (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 110b - The Picnic (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 111a - The Goons (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 111b - The Secret (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 112a - The Sock (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 112b - The Genius (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 113a - The Poltergeist (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 113b - The Mustache (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 114a - The Date (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 114b - The Club (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 115a - The Wand (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 115b - The Ape (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 116a - The Car.avi",
+						"season": 1,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 116b - The Curse (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 117a - The Microwave (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 117b - The Meddler (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 118a - The Helmet (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 118b - The Fight (720p.x264.ac3-5.1) [449].mkv",
+						"season": 1,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 201a - The Remote.mp4",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 201b - The Colossus (720p.x264.ac3-5.1) [449].mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Amazing World of Gumball - 202a - The Knights (720p.x264.ac3-5.1) [449].mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
 					}
 				]
 			}

@@ -537,6 +537,20 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 			[2, 1],
 		]);
 	});
+
+	it("reads a show's production code with its segment, the group's tag aside", async () => {
+		// `The Amazing World of Gumball - 105a - The Pressure (720p.x264.ac3-5.1) [449]`: TMDB
+		// lists the show by segment, S1E9 "The Pressure"; `[449]` had been read as the episode
+		const release = await placedHere('The Amazing World of Gumball');
+		const at = (code: string) =>
+			placedAt(release)[release.files.findIndex((f) => f.path.includes(code))];
+		expect([at('105a'), at('105b'), at('118b'), at('201a')]).toEqual([
+			[1, 9],
+			[1, 10],
+			[1, 36],
+			[2, 1],
+		]);
+	});
 });
 
 describe('a release whose titled files name another show than the one it was placed on', () => {

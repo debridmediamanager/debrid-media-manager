@@ -146,6 +146,10 @@ const SEASON_DASH_EP =
 	/(?:^|[\s._-])(?:Season[\s._]*(\d{1,2})|(\d{1,2})(?:st|nd|rd|th)[\s._]Season)[\s._]*-[\s._]*(\d{1,4})(?:v\d)?(?:[^\da-z]|$)/i;
 // `The Amazing World of Gumball - 207, 208 - The Phone - The Job`: season 2's 7th and 8th.
 const PAIRED_CODES = /(?:^|\s-\s)(\d{3}),\s*(\d{3})\s-\s/;
+// `The Amazing World of Gumball - 105a - The Pressure (…) [449]`: the show's name, then a
+// production code of a season, a half hour and its segment (`- 105 -` alone is Yu-Gi-Oh!'s
+// absolute 105th)
+const SHOW_CODE = /^(.*?\S)\s+-\s+([1-9])(\d{2})([ab])\s+-\s+\S/i;
 // `aaf-wilty.302` in `Would.I.Lie.To.You.S03E01`: the season and episode as one number.
 const SCENE_SHORTHAND = /(?:^|[\s._-])(\d)(\d{2})(?:[\s._-]|$)/;
 // `[CyC] Natsume Yuujinchou Shi 03`: a season as a Japanese numeral (shi, four), capitalised.
@@ -342,6 +346,14 @@ export function fileNumbers(
 		if (folder === '' && leading) return coded(leading, null);
 	}
 
+	const code = season === null ? SHOW_CODE.exec(stem) : null;
+	if (code && fold(code[1]) === fold(parseName(release).title) && positive(code[3])) {
+		// TMDB lists such a show by segment: 105a and 105b are season 1's ninth and tenth
+		return coded(
+			Number(code[3]) * 2 - (code[4].toLowerCase() === 'a' ? 1 : 0),
+			Number(code[2])
+		);
+	}
 	const loose = looseNumbers(stem);
 	if (loose) return withSeason(loose);
 	const titled = titleNumber(release, folder, stem);
@@ -877,6 +889,8 @@ function agrees(title: { whole: string; first: string }, name: string): boolean 
 }
 
 // What a pack's file name says before its title: `14. `, `1.01. `, `101a-b - `, `237-8 - `, `-01 `.
+// The show's name before a production code: `The Amazing World of Gumball - 105a - …`.
+const SHOW_CODE_LEAD = /^\D*?\S\s+-\s+(?=[1-9]\d{2}[ab]\s+-\s)/i;
 const TITLE_LEAD = /^-?\d+(?:\.\d+)?(?:[a-z](?:-[a-z])?|-\d{1,2})?\.?\s*(?:-\s+)?/;
 // The episode token of a scene name, and further episodes of a multi-episode file after it.
 const SCENE_TOKEN =
@@ -896,7 +910,7 @@ export function titleOf(
 	const rest = token
 		? stem.slice(grouped + token.index + token[0].length).replace(MORE_EPISODES, '')
 		: numbers.coded
-			? stem.replace(TITLE_LEAD, '')
+			? stem.replace(SHOW_CODE_LEAD, '').replace(TITLE_LEAD, '')
 			: number
 				? stem.slice(number.index + number[0].length)
 				: '';
