@@ -11,6 +11,7 @@ import {
 import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import cases from '@/test/fixtures/placement/releases.json';
+import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
@@ -29,6 +30,9 @@ vi.mock('@/utils/tmdbAuth', async (original) => ({
  * synonyms. See src/test/fixtures/placement/README.md.
  */
 const recorded = answers as any;
+/** content-identifier's recorded answers for these names, as `PlacementSources.identifier` gives them. */
+const answered = (r: any, names: string[]) =>
+	new Map(names.flatMap((name) => (r.identifier?.[name] ? [[name, r.identifier[name]]] : [])));
 const anime = buildAnimeIndex(
 	buildFranchiseIndex(recorded.anime.fribb as FribbAnimeEntry[]),
 	recorded.anime.titles
@@ -48,6 +52,7 @@ const sources: PlacementSources = {
 			])
 		),
 	anime: async () => anime,
+	identifier: async (names) => answered(recorded, names),
 };
 const identify: Identify = async (list) => list.map(({ name }) => recorded.identify[name] ?? null);
 const place = (requests: PlaceRequest[], deadline = Infinity, from = sources, ask = identify) =>
@@ -69,6 +74,7 @@ const recordedSources = (r: any): PlacementSources => ({
 			])
 		),
 	anime: async () => anime,
+	identifier: async (names) => answered(r, names),
 });
 
 describe('a pack numbered in another order than TMDB, named by its titles', () => {
@@ -378,5 +384,78 @@ describe('a file named with its season, its episode and the show running number'
 			[null, null],
 			[null, null],
 		]);
+	});
+});
+
+describe('which title a release is, when the id sent places nothing or no id is sent', () => {
+	// rex-fun's unmatched releases (2026-10-22) and every answer placing them needed, content-identifier's
+	// own included: the ids came from DMM's hash map, which zurg fills from Plex's matcher
+	const checks = titleChecks as any;
+	const from = recordedSources(checks.answers);
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => checks.answers.identify[name] ?? null);
+	const check = (name: string) => checks.cases.find((c: any) => c.request.name.startsWith(name));
+	const placeCase = async (name: string) =>
+		(await place([check(name).request as PlaceRequest], Infinity, from, ask)).releases[0];
+
+	it.each([
+		// the id sent, and the show the identifier is sure of, where all the files place
+		['The.Magicians.S03', 'tt7326322', 64432],
+		['The.100.S04', 'tt6464966', 48866],
+		['Love death robots - season 3', 'tt14586350', 86831],
+	])(
+		'drops the id sent for %s when its show holds none of the files',
+		async (name, sent, show) => {
+			expect(check(name).request.imdbId).toBe(sent);
+			const placed = await placeCase(name);
+			expect(placed).toEqual(check(name).expect);
+			expect(placed.tmdbId).toBe(show);
+			expect(placed.files.every((f: any) => f.season !== null)).toBe(true);
+		}
+	);
+
+	it.each([
+		// filed as Chihayafuru; its files read Dragon Ball Z Abridged, which TMDB's find does not know
+		['Season 3', 'tt10710138'],
+		// filed as Power Rangers HyperForce; Dino Charge numbers itself as the franchise's season 22
+		['Power Rangers Dino Charge', 'tt3521854'],
+	])(
+		'names %s as the title the identifier is sure of, unplaced, when TMDB cannot number it',
+		async (name, imdbId) => {
+			const placed = await placeCase(name);
+			expect(placed).toEqual(check(name).expect);
+			expect(placed).toMatchObject({ kind: 'tv', imdbId, tmdbId: null });
+		}
+	);
+
+	it.each([
+		// unsure answers that spell the name's own title, whose show holds the files
+		['ReZERO.-Starting.Life.in.Another.World-.S04E13', 65942],
+		['Fairy.Tail.E180.', 46261],
+		['JJBA - S06E05', 45790],
+	])('names %s by the title it spells, checked by its files placing', async (name, show) => {
+		const placed = await placeCase(name);
+		expect(placed).toEqual(check(name).expect);
+		expect(placed.tmdbId).toBe(show);
+		expect(placed.files[0].season).not.toBeNull();
+	});
+
+	it('names an unnumbered release as the one film it spells', async () => {
+		const placed = await placeCase('BOCCHI THE ROCK! Recap Part 2');
+		expect(placed).toMatchObject({ kind: 'movie', imdbId: 'tt32576588', tmdbId: 1201387 });
+	});
+
+	it.each([
+		// `Batman - 086 - Holiday Knights` spells the 1966 Batman: an unsure answer never overrides an id
+		['Batman TAS Seasons 2-3', 2098],
+		// the release names its show; its file `The Avengers (EMH)` reads as the 1961 Avengers
+		['Marvels THE AVENGERS', 33623],
+		// sequels TMDB files under their show
+		['[ARC] Mushishi Zoku Shou', 26867],
+		['[smol] Monogatari Series Second Season', 46195],
+	])('keeps the show of %s', async (name, show) => {
+		const placed = await placeCase(name);
+		expect(placed).toEqual(check(name).expect);
+		expect(placed.tmdbId).toBe(show);
 	});
 });

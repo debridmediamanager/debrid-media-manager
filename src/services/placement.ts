@@ -6,6 +6,12 @@
  */
 import { getFranchiseIndex, type FranchiseIndex } from '@/services/anime/animeFranchise';
 import { getAnimeSynonyms } from '@/services/anime/animeSynonyms';
+import {
+	identifyFilenamesRemembered,
+	refused,
+	type IdentifierMatch,
+	type IdentifierResult,
+} from '@/services/contentIdentifier';
 import { settle, TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository } from '@/services/repository';
@@ -77,6 +83,8 @@ export interface PlacementSources {
 	/** IMDb's episode ids of one season of a show, by episode number. */
 	seasonEpisodes(showImdbId: string, season: number): Promise<Map<number, string>>;
 	anime(): Promise<AnimeIndex | null>;
+	/** content-identifier's own answers for these names, unjudged; null when it could not be asked. */
+	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 }
 
 /** Releases placed at once; each one's files go one after another, sharing its lookups. */
@@ -152,10 +160,124 @@ export async function placeReleases(
 			out[at] = waits
 				? skipped(release)
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
+			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 	return { releases: out, complete: out.every((release) => !release.skipped) };
+}
+
+const letters = (text = '') => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+const placesFiles = (answer: PlacedRelease) => answer.files.some((file) => file.season !== null);
+
+/**
+ * Another look at a release DMM could not name, or whose show holds none of its numbered
+ * files: the identifier's own answers for the release's name and, when that names nothing,
+ * for its first numbered file (`Season 3`, a folder of `Dragon Ball Z Abridged - S03E25 …`).
+ * Each title it offers is checked by placing the files on it, and one is taken only if it
+ * alone places them; a film only when the release has no numbered file and the title is the
+ * name's own. The ids zurg sends come from DMM's hash map, which zurg fills from Plex's
+ * matcher: `The.Magicians.S03` came as The Ancient Magus' Bride, `The.100.S04` as It's All
+ * About the Looks, and their files placed nowhere on those shows.
+ *
+ * An answer below the identifier's 98% bar counts only when its title is the name's own by
+ * letters, as `ReZERO.-Starting.Life.in.Another.World-.S04E13` reads Re: Zero - Starting
+ * Life in Another World. That is a deterministic check, not a lower bar: lowering the bar
+ * was measured to add answers right only ~40% of the time (2026-10-12), while a title
+ * spelled as the name and a show holding the file's episode are two facts that agree.
+ */
+async function secondLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	const single = release.files.length === 1;
+	const numbered = release.files.filter(
+		(file) => fileNumbers(release.name, file.folder, file.path, single) !== null
+	);
+	const unnamed = placed.tmdbId === null;
+	if (
+		placed.skipped ||
+		(!unnamed && (placed.kind !== 'tv' || !numbered.length || placesFiles(placed)))
+	) {
+		return placed;
+	}
+	const file = numbered[0]?.path
+		.split('/')
+		.pop()
+		?.replace(/\.[a-z0-9]{2,4}$/i, '');
+	const names = [...new Set([release.name, ...(file ? [file] : [])])];
+	const answers = await sources.identifier(names);
+	for (const name of names) {
+		const answer = answers?.get(name);
+		const top = answer?.matches[0];
+		if (!answer || !top || !answer.kind || refused(name, answer)) continue;
+		// a title the name only spells, with no other fact behind it, never overrides the id sent:
+		// `Batman - 086 - Holiday Knights` spells the 1966 Batman, whose season 2 has an E52
+		if (!answer.confident && !unnamed) continue;
+		const own = (match: IdentifierMatch) =>
+			letters(match.title) === letters(answer.parsedTitle);
+		const leading = answer.matches.findIndex((match) => !own(match));
+		const offered = answer.confident
+			? [top]
+			: answer.matches
+					.slice(0, leading === -1 ? undefined : leading)
+					.filter(
+						(match) =>
+							!(
+								answer.kind === 'movie' &&
+								answer.parsedYear &&
+								match.year &&
+								Math.abs(answer.parsedYear - match.year) > 1
+							)
+					);
+		if (answer.kind === 'movie') {
+			if (!unnamed || numbered.length || offered.length !== 1) continue;
+			const title = await resolve(offered[0].imdbId, 'movie', release, sources);
+			if (title?.kind === 'movie' && title.tmdbId !== null) {
+				return { ...title, files: release.files.map((f) => unplaced(f.path)) };
+			}
+			continue;
+		}
+		const tried: PlacedRelease[] = [];
+		for (const match of offered) {
+			const title = await resolve(match.imdbId, 'tv', release, sources);
+			if (title?.kind !== 'tv' || title.tmdbId === null || title.tmdbId === placed.tmdbId)
+				continue;
+			const there = await placeRelease(release, title, sources, anime);
+			if (!there.skipped && placesFiles(there)) tried.push(there);
+		}
+		if (tried.length === 1) return tried[0];
+		// the id sent placed nothing and the identifier is sure of another title, which TMDB
+		// cannot number the files on either: that title, unplaced, rather than one it is not
+		if (answer.confident && !unnamed && !tried.length) {
+			// TMDB's find knows neither Dragon Ball Z Abridged nor Power Rangers Dino Charge
+			const title = await resolve(top.imdbId, 'tv', release, sources);
+			// a sequel TMDB files under its show is no other title: `Mushishi Zoku Shou` is Mushi-Shi's
+			// season 2, `Monogatari Series Second Season` Monogatari's
+			const shown = placed.tmdbId === null ? null : await sources.show(placed.tmdbId);
+			const own = [shown?.name, shown?.original_name]
+				.map((name) => letters(name))
+				.filter(Boolean);
+			const sequel = own.some(
+				(name) => letters(top.title).includes(name) || name.includes(letters(top.title))
+			);
+			if (
+				title &&
+				!sequel &&
+				(title.kind ?? 'tv') === 'tv' &&
+				title.imdbId !== placed.imdbId &&
+				title.tmdbId !== placed.tmdbId
+			) {
+				return { ...title, kind: 'tv', files: release.files.map((f) => unplaced(f.path)) };
+			}
+		}
+		// a file is asked about only when the release's own name names nothing: `The Avengers (EMH)
+		// - S01 E15` in Earth's Mightiest Heroes' pack reads as the 1961 Avengers
+		if (answer.confident || offered.length) break;
+	}
+	return placed;
 }
 
 /** The answer zurg reads as "skipped, ask again": nothing known, every file unplaced, in order. */
@@ -483,4 +605,7 @@ export const cachedSources: PlacementSources = {
 	episodeShow: (imdbId) => repository.getImdbEpisodeShow(imdbId),
 	seasonEpisodes: (show, season) => repository.getImdbSeasonEpisodeIds(show, season),
 	anime: () => settle(currentAnimeIndex),
+	// asks about at most 300 names it has not answered today: zurg asks again daily
+	identifier: (names) =>
+		settle(() => identifyFilenamesRemembered(names, 300)).then((r) => r?.answers ?? null),
 };

@@ -1,0 +1,7328 @@
+{
+	"answers": {
+		"find": {
+			"tt7326322": {
+				"tv_results": [
+					{
+						"id": 73833
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt6464966": {
+				"tv_results": [
+					{
+						"id": 71103
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt14586350": {
+				"tv_results": [
+					{
+						"id": 124800
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt2150751": {
+				"tv_results": [
+					{
+						"id": 45247
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt7542154": {
+				"tv_results": [
+					{
+						"id": 210832
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt0103359": {
+				"tv_results": [
+					{
+						"id": 2098
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt1626038": {
+				"tv_results": [
+					{
+						"id": 33623
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt2661044": {
+				"tv_results": [
+					{
+						"id": 48866
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt9561862": {
+				"tv_results": [
+					{
+						"id": 86831
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt10710138": {
+				"tv_results": [],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt3521854": {
+				"tv_results": [],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt4254242": {
+				"tv_results": [
+					{
+						"id": 64432
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt5607616": {
+				"tv_results": [
+					{
+						"id": 65942
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt1528406": {
+				"tv_results": [
+					{
+						"id": 46261
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt32576588": {
+				"tv_results": [],
+				"movie_results": [
+					{
+						"id": 1201387
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0807832": {
+				"tv_results": [
+					{
+						"id": 26867
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt1480925": {
+				"tv_results": [
+					{
+						"id": 46195
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt2359704": {
+				"tv_results": [
+					{
+						"id": 45790
+					}
+				],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt3443522": {
+				"tv_results": [],
+				"movie_results": [],
+				"tv_episode_results": []
+			},
+			"tt2922300": {
+				"tv_results": [],
+				"movie_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"2098": {
+				"name": "Batman: The Animated Series",
+				"original_name": "Batman: The Animated Series",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "1991-03-05"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 60,
+						"air_date": "1992-09-05"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 10,
+						"air_date": "1993-09-13"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "1994-09-10"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 5,
+						"air_date": "1995-09-11"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt0103359"
+				}
+			},
+			"26867": {
+				"name": "Mushi-Shi",
+				"original_name": "蟲師",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "2006-05-08"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2005-10-23"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "2014-04-05"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt0807832"
+				}
+			},
+			"33623": {
+				"name": "The Avengers: Earth's Mightiest Heroes",
+				"original_name": "The Avengers: Earth's Mightiest Heroes",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 24,
+						"air_date": "2010-09-22"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2010-10-20"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 26,
+						"air_date": "2012-04-01"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt1626038"
+				}
+			},
+			"45247": {
+				"name": "Chihayafuru",
+				"original_name": "ちはやふる",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 3,
+						"air_date": "2013-09-13"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 25,
+						"air_date": "2011-10-05"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 25,
+						"air_date": "2013-01-12"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 24,
+						"air_date": "2019-10-22"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt2150751"
+				}
+			},
+			"45790": {
+				"name": "JoJo's Bizarre Adventure",
+				"original_name": "ジョジョの奇妙な冒険",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 7,
+						"air_date": "2017-09-20"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2012-10-06"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 48,
+						"air_date": "2014-04-05"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 39,
+						"air_date": "2016-04-02"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 39,
+						"air_date": "2018-10-06"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 38,
+						"air_date": "2022-01-08"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 12,
+						"air_date": "2026-03-19"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt2359704"
+				}
+			},
+			"46195": {
+				"name": "Monogatari",
+				"original_name": "化物語",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 49,
+						"air_date": "2009-08-07"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2009-07-03"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 11,
+						"air_date": "2012-01-08"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 23,
+						"air_date": "2013-07-07"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 12,
+						"air_date": "2015-10-04"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 15,
+						"air_date": "2024-07-06"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt1480925"
+				}
+			},
+			"46261": {
+				"name": "Fairy Tail",
+				"original_name": "FAIRY TAIL",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 9,
+						"air_date": "2011-04-15"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 48,
+						"air_date": "2009-10-12"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 48,
+						"air_date": "2010-10-11"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 54,
+						"air_date": "2011-09-17"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 25,
+						"air_date": "2012-10-06"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 51,
+						"air_date": "2014-04-05"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 39,
+						"air_date": "2015-04-04"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 12,
+						"air_date": "2016-01-09"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 51,
+						"air_date": "2018-10-07"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt1528406"
+				}
+			},
+			"48866": {
+				"name": "The 100",
+				"original_name": "The 100",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2014-03-19"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 16,
+						"air_date": "2014-10-22"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 16,
+						"air_date": "2016-01-21"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2017-02-01"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2018-04-24"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "2019-04-30"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 16,
+						"air_date": "2020-05-20"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt2661044"
+				}
+			},
+			"64432": {
+				"name": "The Magicians",
+				"original_name": "The Magicians",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2015-12-16"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2017-01-25"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 13,
+						"air_date": "2018-01-10"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2019-01-23"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2020-01-15"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt4254242"
+				}
+			},
+			"65942": {
+				"name": "Re:ZERO -Starting Life in Another World-",
+				"original_name": "Re:ゼロから始める異世界生活",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 90,
+						"air_date": "2016-04-05"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 85,
+						"air_date": "2016-04-04"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt5607616"
+				}
+			},
+			"71103": {
+				"name": "It's All About the Looks",
+				"original_name": "人は見た目が100パーセント",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2017-04-13"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt6464966"
+				}
+			},
+			"73833": {
+				"name": "The Ancient Magus' Bride",
+				"original_name": "魔法使いの嫁",
+				"original_language": "ja",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 35,
+						"air_date": "2017-10-03"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 24,
+						"air_date": "2017-10-08"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 24,
+						"air_date": "2023-04-06"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt7326322"
+				}
+			},
+			"86831": {
+				"name": "Love, Death & Robots",
+				"original_name": "Love, Death & Robots",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 18,
+						"air_date": "2019-03-15"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 8,
+						"air_date": "2021-05-14"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 9,
+						"air_date": "2022-05-20"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 10,
+						"air_date": "2025-05-15"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt9561862"
+				}
+			},
+			"124800": {
+				"name": "Love & Death",
+				"original_name": "Love & Death",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "2023-04-27"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt14586350"
+				}
+			},
+			"210832": {
+				"name": "Power Rangers HyperForce",
+				"original_name": "Power Rangers HyperForce",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 25,
+						"air_date": "2017-10-24"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt7542154"
+				}
+			}
+		},
+		"season": {
+			"45247/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "May it be that I find",
+						"air_date": "2019-10-22"
+					},
+					{
+						"episode_number": 2,
+						"name": "The hazed early dawn light comes not from the moon",
+						"air_date": "2019-10-29"
+					},
+					{
+						"episode_number": 3,
+						"name": "But from the crystal white snow of Yoshino",
+						"air_date": "2019-10-29"
+					},
+					{
+						"episode_number": 4,
+						"name": "Nobody wishes to see",
+						"air_date": "2019-11-05"
+					},
+					{
+						"episode_number": 5,
+						"name": "Mount Amanokagu",
+						"air_date": "2019-11-05"
+					},
+					{
+						"episode_number": 6,
+						"name": "Tatsuta River Ablaze",
+						"air_date": "2019-11-12"
+					},
+					{
+						"episode_number": 7,
+						"name": "The storm blasts",
+						"air_date": "2019-11-19"
+					},
+					{
+						"episode_number": 8,
+						"name": "As friends and strangers",
+						"air_date": "2019-11-26"
+					},
+					{
+						"episode_number": 9,
+						"name": "I recall how my own efforts were in vain",
+						"air_date": "2019-12-03"
+					},
+					{
+						"episode_number": 10,
+						"name": "Scarlet kadsuras",
+						"air_date": "2019-12-10"
+					},
+					{
+						"episode_number": 11,
+						"name": "Leaving a hovering mist above the trees and grass",
+						"air_date": "2019-12-17"
+					},
+					{
+						"episode_number": 12,
+						"name": "So the flower petals are scattered like the snow by the passing storm",
+						"air_date": "2019-12-24"
+					},
+					{
+						"episode_number": 13,
+						"name": "Yet it is I who withers and wilts",
+						"air_date": "2020-01-07"
+					},
+					{
+						"episode_number": 14,
+						"name": "The emotions experienced",
+						"air_date": "2020-01-14"
+					},
+					{
+						"episode_number": 15,
+						"name": "As helpless autumn leaves are caught against the flow",
+						"air_date": "2020-01-21"
+					},
+					{
+						"episode_number": 16,
+						"name": "Takes me away in haste",
+						"air_date": "2020-01-28"
+					},
+					{
+						"episode_number": 17,
+						"name": "As my sleeves are wet with dew",
+						"air_date": "2020-02-04"
+					},
+					{
+						"episode_number": 18,
+						"name": "The storm will soon carry me",
+						"air_date": "2020-02-11"
+					},
+					{
+						"episode_number": 19,
+						"name": "Bring a life of everlasting love",
+						"air_date": "2020-02-18"
+					},
+					{
+						"episode_number": 20,
+						"name": "May the scarlet kadsuras",
+						"air_date": "2020-02-25"
+					},
+					{
+						"episode_number": 21,
+						"name": "To restore my faith",
+						"air_date": "2020-03-03"
+					},
+					{
+						"episode_number": 22,
+						"name": "Just as my beauty has faded",
+						"air_date": "2020-03-10"
+					},
+					{
+						"episode_number": 23,
+						"name": "Like a boatsman adrift",
+						"air_date": "2020-03-17"
+					},
+					{
+						"episode_number": 24,
+						"name": "When winds send waves crashing",
+						"air_date": "2020-03-24"
+					}
+				]
+			},
+			"48866/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Echoes",
+						"air_date": "2017-02-01"
+					},
+					{
+						"episode_number": 2,
+						"name": "Heavy Lies the Crown",
+						"air_date": "2017-02-08"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Four Horsemen",
+						"air_date": "2017-02-15"
+					},
+					{
+						"episode_number": 4,
+						"name": "A Lie Guarded",
+						"air_date": "2017-02-22"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Tinder Box",
+						"air_date": "2017-03-01"
+					},
+					{
+						"episode_number": 6,
+						"name": "We Will Rise",
+						"air_date": "2017-03-15"
+					},
+					{
+						"episode_number": 7,
+						"name": "Gimme Shelter",
+						"air_date": "2017-03-22"
+					},
+					{
+						"episode_number": 8,
+						"name": "God Complex",
+						"air_date": "2017-03-29"
+					},
+					{
+						"episode_number": 9,
+						"name": "DNR",
+						"air_date": "2017-04-26"
+					},
+					{
+						"episode_number": 10,
+						"name": "Die All, Die Merrily",
+						"air_date": "2017-05-03"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Other Side",
+						"air_date": "2017-05-10"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Chosen",
+						"air_date": "2017-05-17"
+					},
+					{
+						"episode_number": 13,
+						"name": "Praimfaya",
+						"air_date": "2017-05-24"
+					}
+				]
+			},
+			"73833/3": null,
+			"45247/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "During My Forlorn Years in This World",
+						"air_date": "2013-09-13"
+					},
+					{
+						"episode_number": 2,
+						"name": "So I wish for a memory",
+						"air_date": "2020-01-28"
+					},
+					{
+						"episode_number": 3,
+						"name": "Episode 3",
+						"air_date": "2020-03-24"
+					}
+				]
+			},
+			"45247/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Now the Flower Blooms",
+						"air_date": "2011-10-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Red That Is",
+						"air_date": "2011-10-12"
+					},
+					{
+						"episode_number": 3,
+						"name": "From the Crystal White Snow",
+						"air_date": "2011-10-19"
+					},
+					{
+						"episode_number": 4,
+						"name": "A Whirlwind of Flower Petals Descends",
+						"air_date": "2011-10-26"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Sight of a Midnight Moon",
+						"air_date": "2011-11-02"
+					},
+					{
+						"episode_number": 6,
+						"name": "Now Bloom Inside the Nine-fold Palace",
+						"air_date": "2011-11-09"
+					},
+					{
+						"episode_number": 7,
+						"name": "But for Autumn's Coming",
+						"air_date": "2011-11-16"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Sounds of the Waterfall",
+						"air_date": "2011-11-23"
+					},
+					{
+						"episode_number": 9,
+						"name": "But I Cannot Hide",
+						"air_date": "2011-11-30"
+					},
+					{
+						"episode_number": 10,
+						"name": "Exchange Hellos And Goodbyes",
+						"air_date": "2011-12-07"
+					},
+					{
+						"episode_number": 11,
+						"name": "The Sky is the Road Home",
+						"air_date": "2011-12-14"
+					},
+					{
+						"episode_number": 12,
+						"name": "Sets These Forbidden Fields Aglow",
+						"air_date": "2011-12-21"
+					},
+					{
+						"episode_number": 13,
+						"name": "For You, I Head Out",
+						"air_date": "2012-01-04"
+					},
+					{
+						"episode_number": 14,
+						"name": "For There Is No One Else Out Here",
+						"air_date": "2012-01-11"
+					},
+					{
+						"episode_number": 15,
+						"name": "As Though Pearls Have Been Strung Across the Autumn Plain",
+						"air_date": "2012-01-18"
+					},
+					{
+						"episode_number": 16,
+						"name": "The Autumn Leaves of Mount Ogura",
+						"air_date": "2012-01-25"
+					},
+					{
+						"episode_number": 17,
+						"name": "World Offers No Escape",
+						"air_date": "2012-02-01"
+					},
+					{
+						"episode_number": 18,
+						"name": "The Plum Blossoms Still Smell the Same",
+						"air_date": "2012-02-08"
+					},
+					{
+						"episode_number": 19,
+						"name": "As the Years Pass",
+						"air_date": "2012-02-15"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Cresting Waves Almost Look Like Clouds in the Skies",
+						"air_date": "2012-02-22"
+					},
+					{
+						"episode_number": 21,
+						"name": "As My Sleeves Are Wet with Dew",
+						"air_date": "2012-02-29"
+					},
+					{
+						"episode_number": 22,
+						"name": "Just as My Beauty Has Faded",
+						"air_date": "2012-03-07"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Night is Nearly Past",
+						"air_date": "2012-03-14"
+					},
+					{
+						"episode_number": 24,
+						"name": "Nobody Wishes to See the Beautiful Cherry Blossoms",
+						"air_date": "2012-03-21"
+					},
+					{
+						"episode_number": 25,
+						"name": "Moonlight, Clear and Bright",
+						"air_date": "2012-03-28"
+					}
+				]
+			},
+			"45247/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "So The Flower Has Wilted",
+						"air_date": "2013-01-12"
+					},
+					{
+						"episode_number": 2,
+						"name": "As My First Love Came",
+						"air_date": "2013-01-19"
+					},
+					{
+						"episode_number": 3,
+						"name": "Feel Love Deepen",
+						"air_date": "2013-01-26"
+					},
+					{
+						"episode_number": 4,
+						"name": "To tell the people in the capital that I make for the islands",
+						"air_date": "2013-02-02"
+					},
+					{
+						"episode_number": 5,
+						"name": "Be as dear now, those were the good old days",
+						"air_date": "2013-02-09"
+					},
+					{
+						"episode_number": 6,
+						"name": "To set the Tatsuta River ablaze",
+						"air_date": "2013-02-16"
+					},
+					{
+						"episode_number": 7,
+						"name": "They all exchange hellos and goodbyes at the famous gates of Afusaka",
+						"air_date": "2013-02-23"
+					},
+					{
+						"episode_number": 8,
+						"name": "Which shines over Mount Mikasa",
+						"air_date": "2013-03-02"
+					},
+					{
+						"episode_number": 9,
+						"name": "My Only Thought",
+						"air_date": "2013-03-09"
+					},
+					{
+						"episode_number": 10,
+						"name": "Rain takes longer to dry",
+						"air_date": "2013-03-16"
+					},
+					{
+						"episode_number": 11,
+						"name": "I feel as though my body is on fire with Ibuki mugwort",
+						"air_date": "2013-03-23"
+					},
+					{
+						"episode_number": 12,
+						"name": "The only sign of summer",
+						"air_date": "2013-03-30"
+					},
+					{
+						"episode_number": 13,
+						"name": "In my dreams, I creep closer to you",
+						"air_date": "2013-04-06"
+					},
+					{
+						"episode_number": 14,
+						"name": "People would always ask if I was pining for someone",
+						"air_date": "2013-04-13"
+					},
+					{
+						"episode_number": 15,
+						"name": "No matter where I stand",
+						"air_date": "2013-04-20"
+					},
+					{
+						"episode_number": 16,
+						"name": "Wait for the Emperor's Return",
+						"air_date": "2013-04-27"
+					},
+					{
+						"episode_number": 17,
+						"name": "Gust of wind",
+						"air_date": "2013-05-04"
+					},
+					{
+						"episode_number": 18,
+						"name": "My fear is that you will forget",
+						"air_date": "2013-05-11"
+					},
+					{
+						"episode_number": 19,
+						"name": "I do not know where this love will take me",
+						"air_date": "2013-05-18"
+					},
+					{
+						"episode_number": 20,
+						"name": "The fall paddy shacks",
+						"air_date": "2013-05-25"
+					},
+					{
+						"episode_number": 21,
+						"name": "But its legacy continues to spread",
+						"air_date": "2013-06-01"
+					},
+					{
+						"episode_number": 22,
+						"name": "Long Last We Meet",
+						"air_date": "2013-06-08"
+					},
+					{
+						"episode_number": 23,
+						"name": "To see the beautiful cherry blossoms",
+						"air_date": "2013-06-15"
+					},
+					{
+						"episode_number": 24,
+						"name": "When I must hide...",
+						"air_date": "2013-06-22"
+					},
+					{
+						"episode_number": 25,
+						"name": "I can look up and see the snowy cap of Mt. Fuji",
+						"air_date": "2013-06-29"
+					}
+				]
+			},
+			"210832/22": null,
+			"210832/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Welcome to Time Force Academy",
+						"air_date": "2017-10-24"
+					},
+					{
+						"episode_number": 2,
+						"name": "It's Morphin Time!",
+						"air_date": "2017-10-31"
+					},
+					{
+						"episode_number": 3,
+						"name": "Whatever Happened to Scorpina?",
+						"air_date": "2017-11-07"
+					},
+					{
+						"episode_number": 4,
+						"name": "Aisha Campbell Returns!",
+						"air_date": "2017-11-14"
+					},
+					{
+						"episode_number": 5,
+						"name": "We Need Megazord Power!",
+						"air_date": "2017-11-21"
+					},
+					{
+						"episode_number": 6,
+						"name": "Vesper's Betrayal",
+						"air_date": "2017-11-28"
+					},
+					{
+						"episode_number": 7,
+						"name": "It's Boom Time",
+						"air_date": "2017-12-12"
+					},
+					{
+						"episode_number": 8,
+						"name": "Holiday Special",
+						"air_date": "2017-12-19"
+					},
+					{
+						"episode_number": 9,
+						"name": "Dr. Tommy Oliver Returns!",
+						"air_date": "2018-01-02"
+					},
+					{
+						"episode_number": 10,
+						"name": "Family",
+						"air_date": "2018-01-09"
+					},
+					{
+						"episode_number": 11,
+						"name": "A Ranger in King Arthur's Court",
+						"air_date": "2018-01-16"
+					},
+					{
+						"episode_number": 12,
+						"name": "Save Marv",
+						"air_date": "2018-01-23"
+					},
+					{
+						"episode_number": 13,
+						"name": "What Happened to Rita Repulsa",
+						"air_date": "2018-01-30"
+					},
+					{
+						"episode_number": 14,
+						"name": "SPD Emergency",
+						"air_date": "2018-02-06"
+					},
+					{
+						"episode_number": 15,
+						"name": "Absorption",
+						"air_date": "2018-02-13"
+					},
+					{
+						"episode_number": 16,
+						"name": "Homecoming",
+						"air_date": "2018-02-20"
+					},
+					{
+						"episode_number": 17,
+						"name": "Director Ransik",
+						"air_date": "2018-02-27"
+					},
+					{
+						"episode_number": 18,
+						"name": "Stage 4: The Armada",
+						"air_date": "2018-03-06"
+					},
+					{
+						"episode_number": 19,
+						"name": "Shattered Grid (1)",
+						"air_date": "2018-03-13"
+					},
+					{
+						"episode_number": 20,
+						"name": "Shattered Grid (2)",
+						"air_date": "2018-03-20"
+					},
+					{
+						"episode_number": 21,
+						"name": "Enter the Green Ranger",
+						"air_date": "2018-03-27"
+					},
+					{
+						"episode_number": 22,
+						"name": "Fight for the Corona Aurora",
+						"air_date": "2018-04-03"
+					},
+					{
+						"episode_number": 23,
+						"name": "Rebirth… Kind Of",
+						"air_date": "2018-04-10"
+					},
+					{
+						"episode_number": 24,
+						"name": "Finale (1)",
+						"air_date": "2018-04-17"
+					},
+					{
+						"episode_number": 25,
+						"name": "Finale (2)",
+						"air_date": "2018-04-24"
+					}
+				]
+			},
+			"73833/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "MahoYome 0 - Greetings",
+						"air_date": "2017-10-03"
+					},
+					{
+						"episode_number": 2,
+						"name": "MahoYome 1 - MahoYome",
+						"air_date": "2017-10-10"
+					},
+					{
+						"episode_number": 3,
+						"name": "MahoYome 2 - The Dinner Table",
+						"air_date": "2017-10-17"
+					},
+					{
+						"episode_number": 4,
+						"name": "MahoYome 3 - Trip",
+						"air_date": "2017-10-25"
+					},
+					{
+						"episode_number": 5,
+						"name": "MahoYome 4 - Halloween",
+						"air_date": "2017-10-27"
+					},
+					{
+						"episode_number": 6,
+						"name": "MahoYome 5 - Magic",
+						"air_date": "2017-11-07"
+					},
+					{
+						"episode_number": 7,
+						"name": "MahoYome 6 - Pet Food",
+						"air_date": "2017-11-14"
+					},
+					{
+						"episode_number": 8,
+						"name": "MahoYome 7 - Thanks",
+						"air_date": "2017-11-21"
+					},
+					{
+						"episode_number": 9,
+						"name": "MahoYome 8 - Sleeping Position",
+						"air_date": "2017-11-28"
+					},
+					{
+						"episode_number": 10,
+						"name": "MahoYome 9 - Snacks",
+						"air_date": "2017-12-05"
+					},
+					{
+						"episode_number": 11,
+						"name": "MahoYome 10 - New Creation",
+						"air_date": "2017-12-12"
+					},
+					{
+						"episode_number": 12,
+						"name": "MahoYome 11 - Preference",
+						"air_date": "2017-12-19"
+					},
+					{
+						"episode_number": 13,
+						"name": "MahoYome 12 - Socks",
+						"air_date": "2017-12-26"
+					},
+					{
+						"episode_number": 14,
+						"name": "MahoYome 13 - Silky's Job",
+						"air_date": "2018-01-09"
+					},
+					{
+						"episode_number": 15,
+						"name": "MahoYome 14 - Frisbee",
+						"air_date": "2018-01-16"
+					},
+					{
+						"episode_number": 16,
+						"name": "MahoYome 15 - Pain",
+						"air_date": "2018-01-23"
+					},
+					{
+						"episode_number": 17,
+						"name": "MahoYome 16 - Shogi",
+						"air_date": "2018-01-30"
+					},
+					{
+						"episode_number": 18,
+						"name": "MahoYome 17 - Bone",
+						"air_date": "2018-02-06"
+					},
+					{
+						"episode_number": 19,
+						"name": "MahoYome 18 - Medicinal Plant Gathering",
+						"air_date": "2018-02-13"
+					},
+					{
+						"episode_number": 20,
+						"name": "MahoYome 19 - Fish Pie",
+						"air_date": "2018-02-20"
+					},
+					{
+						"episode_number": 21,
+						"name": "MahoYome 20 - Bath",
+						"air_date": "2018-02-27"
+					},
+					{
+						"episode_number": 22,
+						"name": "MahoYome 21 - Outfits",
+						"air_date": "2018-03-06"
+					},
+					{
+						"episode_number": 23,
+						"name": "MahoYome 22 - Regret",
+						"air_date": "2018-03-13"
+					},
+					{
+						"episode_number": 24,
+						"name": "MahoYome 23 - Letter",
+						"air_date": "2018-03-20"
+					},
+					{
+						"episode_number": 25,
+						"name": "MahoYome 24 - Embrace",
+						"air_date": "2018-03-27"
+					},
+					{
+						"episode_number": 26,
+						"name": "MahoYome 25 - Mouse",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 27,
+						"name": "MahoYome 26 - Condition",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 28,
+						"name": "MahoYome 27 - Gardening",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 29,
+						"name": "MahoYome 28 - Lid",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 30,
+						"name": "MahoYome 29 - Rule",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 31,
+						"name": "MahoYome 30 - Medicine",
+						"air_date": "2018-03-25"
+					},
+					{
+						"episode_number": 32,
+						"name": "Episode 12.5 - Recap",
+						"air_date": "2017-12-31"
+					},
+					{
+						"episode_number": 33,
+						"name": "Audio Drama #1",
+						"air_date": "2023-08-23"
+					},
+					{
+						"episode_number": 34,
+						"name": "Audio Drama #2",
+						"air_date": "2023-10-25"
+					},
+					{
+						"episode_number": 35,
+						"name": "Audio Drama #3",
+						"air_date": "2024-02-28"
+					}
+				]
+			},
+			"73833/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "April showers bring May flowers.",
+						"air_date": "2017-10-08"
+					},
+					{
+						"episode_number": 2,
+						"name": "One today is worth two tomorrows.",
+						"air_date": "2017-10-15"
+					},
+					{
+						"episode_number": 3,
+						"name": "The balance distinguishes not between gold and lead.",
+						"air_date": "2017-10-22"
+					},
+					{
+						"episode_number": 4,
+						"name": "Everything must have a beginning.",
+						"air_date": "2017-10-29"
+					},
+					{
+						"episode_number": 5,
+						"name": "Love conquers all.",
+						"air_date": "2017-11-05"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Faerie Queene",
+						"air_date": "2017-11-12"
+					},
+					{
+						"episode_number": 7,
+						"name": "Talk of the devil, and he is sure to appear.",
+						"air_date": "2017-11-19"
+					},
+					{
+						"episode_number": 8,
+						"name": "Let sleeping dogs lie.",
+						"air_date": "2017-11-26"
+					},
+					{
+						"episode_number": 9,
+						"name": "None so deaf as those who will not hear.",
+						"air_date": "2017-12-03"
+					},
+					{
+						"episode_number": 10,
+						"name": "We live and learn.",
+						"air_date": "2017-12-10"
+					},
+					{
+						"episode_number": 11,
+						"name": "Lovers ever run before the clock.",
+						"air_date": "2017-12-17"
+					},
+					{
+						"episode_number": 12,
+						"name": "Better to ask the way than go astray.",
+						"air_date": "2017-12-24"
+					},
+					{
+						"episode_number": 13,
+						"name": "East, west, home's best.",
+						"air_date": "2018-01-07"
+					},
+					{
+						"episode_number": 14,
+						"name": "Looks breed love.",
+						"air_date": "2018-01-14"
+					},
+					{
+						"episode_number": 15,
+						"name": "There is no place like home.",
+						"air_date": "2018-01-21"
+					},
+					{
+						"episode_number": 16,
+						"name": "God's mill grinds slow but sure.",
+						"air_date": "2018-01-28"
+					},
+					{
+						"episode_number": 17,
+						"name": "Look before you leap.",
+						"air_date": "2018-02-04"
+					},
+					{
+						"episode_number": 18,
+						"name": "Forgive and forget.",
+						"air_date": "2018-02-11"
+					},
+					{
+						"episode_number": 19,
+						"name": "Any port in a storm.",
+						"air_date": "2018-02-18"
+					},
+					{
+						"episode_number": 20,
+						"name": "You can't make an omelet without breaking a few eggs.",
+						"air_date": "2018-02-25"
+					},
+					{
+						"episode_number": 21,
+						"name": "Necessity has no law.",
+						"air_date": "2018-03-04"
+					},
+					{
+						"episode_number": 22,
+						"name": "As you sow, so shall you reap.",
+						"air_date": "2018-03-11"
+					},
+					{
+						"episode_number": 23,
+						"name": "Nothing seek, nothing find.",
+						"air_date": "2018-03-18"
+					},
+					{
+						"episode_number": 24,
+						"name": "Live and let live.",
+						"air_date": "2018-03-25"
+					}
+				]
+			},
+			"73833/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Live and let live. II",
+						"air_date": "2023-04-06"
+					},
+					{
+						"episode_number": 2,
+						"name": "Birds of a feather flock together. I",
+						"air_date": "2023-04-13"
+					},
+					{
+						"episode_number": 3,
+						"name": "Birds of a feather flock together. II",
+						"air_date": "2023-04-20"
+					},
+					{
+						"episode_number": 4,
+						"name": "The cowl does not make the monk.",
+						"air_date": "2023-04-27"
+					},
+					{
+						"episode_number": 5,
+						"name": "First impressions are the most lasting.",
+						"air_date": "2023-05-04"
+					},
+					{
+						"episode_number": 6,
+						"name": "Better bend than break.",
+						"air_date": "2023-05-11"
+					},
+					{
+						"episode_number": 7,
+						"name": "Slow and sure. I",
+						"air_date": "2023-05-18"
+					},
+					{
+						"episode_number": 8,
+						"name": "Slow and sure. II",
+						"air_date": "2023-05-25"
+					},
+					{
+						"episode_number": 9,
+						"name": "Conscience does make cowards of us all. I",
+						"air_date": "2023-06-01"
+					},
+					{
+						"episode_number": 10,
+						"name": "Conscience does make cowards of us all. II",
+						"air_date": "2023-06-08"
+					},
+					{
+						"episode_number": 11,
+						"name": "A small leak will sink a great ship. I",
+						"air_date": "2023-06-15"
+					},
+					{
+						"episode_number": 12,
+						"name": "A small leak will sink a great ship. II",
+						"air_date": "2023-06-22"
+					},
+					{
+						"episode_number": 13,
+						"name": "Nothing venture, nothing have. I",
+						"air_date": "2023-10-05"
+					},
+					{
+						"episode_number": 14,
+						"name": "Nothing venture, nothing have. II",
+						"air_date": "2023-10-12"
+					},
+					{
+						"episode_number": 15,
+						"name": "Needs must when the devil drives. I",
+						"air_date": "2023-10-19"
+					},
+					{
+						"episode_number": 16,
+						"name": "Needs must when the devil drives. II",
+						"air_date": "2023-10-26"
+					},
+					{
+						"episode_number": 17,
+						"name": "Gather ye rosebuds while ye may.",
+						"air_date": "2023-11-02"
+					},
+					{
+						"episode_number": 18,
+						"name": "Coming events cast their shadows before.",
+						"air_date": "2023-11-09"
+					},
+					{
+						"episode_number": 19,
+						"name": "Man's extremity is God's opportunity.",
+						"air_date": "2023-11-16"
+					},
+					{
+						"episode_number": 20,
+						"name": "Even a worm will turn.",
+						"air_date": "2023-11-23"
+					},
+					{
+						"episode_number": 21,
+						"name": "A burnt child dreads the fire.",
+						"air_date": "2023-11-30"
+					},
+					{
+						"episode_number": 22,
+						"name": "Give a thief enough rope and he'll hang himself.",
+						"air_date": "2023-12-07"
+					},
+					{
+						"episode_number": 23,
+						"name": "Of two evils choose the less.",
+						"air_date": "2023-12-14"
+					},
+					{
+						"episode_number": 24,
+						"name": "The show must go on. I",
+						"air_date": "2023-12-21"
+					}
+				]
+			},
+			"86831/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Three Robots: Exit Strategies",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 2,
+						"name": "Bad Travelling",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Very Pulse of the Machine",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 4,
+						"name": "Night of the Mini Dead",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 5,
+						"name": "Kill Team Kill",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 6,
+						"name": "Swarm",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 7,
+						"name": "Mason's Rats",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 8,
+						"name": "In Vaulted Halls Entombed",
+						"air_date": "2022-05-20"
+					},
+					{
+						"episode_number": 9,
+						"name": "Jibaro",
+						"air_date": "2022-05-20"
+					}
+				]
+			},
+			"64432/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Tales of the Seven Keys",
+						"air_date": "2018-01-10"
+					},
+					{
+						"episode_number": 2,
+						"name": "Heroes and Morons",
+						"air_date": "2018-01-17"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Losses of Magic",
+						"air_date": "2018-01-24"
+					},
+					{
+						"episode_number": 4,
+						"name": "Be the Penny",
+						"air_date": "2018-01-31"
+					},
+					{
+						"episode_number": 5,
+						"name": "A Life in the Day",
+						"air_date": "2018-02-07"
+					},
+					{
+						"episode_number": 6,
+						"name": "Do You Like Teeth?",
+						"air_date": "2018-02-14"
+					},
+					{
+						"episode_number": 7,
+						"name": "Poached Eggs",
+						"air_date": "2018-02-21"
+					},
+					{
+						"episode_number": 8,
+						"name": "Six Short Stories About Magic",
+						"air_date": "2018-02-28"
+					},
+					{
+						"episode_number": 9,
+						"name": "All That Josh",
+						"air_date": "2018-03-07"
+					},
+					{
+						"episode_number": 10,
+						"name": "The Art of the Deal",
+						"air_date": "2018-03-14"
+					},
+					{
+						"episode_number": 11,
+						"name": "Twenty-Three",
+						"air_date": "2018-03-21"
+					},
+					{
+						"episode_number": 12,
+						"name": "The Fillorian Candidate",
+						"air_date": "2018-03-28"
+					},
+					{
+						"episode_number": 13,
+						"name": "Will You Play with Me?",
+						"air_date": "2018-04-04"
+					}
+				]
+			},
+			"2098/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Dark Knight's First Night",
+						"air_date": "1991-03-05"
+					}
+				]
+			},
+			"2098/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Cat and the Claw (1)",
+						"air_date": "1992-09-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "On Leather Wings",
+						"air_date": "1992-09-06"
+					},
+					{
+						"episode_number": 3,
+						"name": "Heart of Ice",
+						"air_date": "1992-09-07"
+					},
+					{
+						"episode_number": 4,
+						"name": "Feat of Clay (1)",
+						"air_date": "1992-09-08"
+					},
+					{
+						"episode_number": 5,
+						"name": "Feat of Clay (2)",
+						"air_date": "1992-09-09"
+					},
+					{
+						"episode_number": 6,
+						"name": "It's Never Too Late",
+						"air_date": "1992-09-10"
+					},
+					{
+						"episode_number": 7,
+						"name": "Joker's Favor",
+						"air_date": "1992-09-11"
+					},
+					{
+						"episode_number": 8,
+						"name": "The Cat and the Claw (2)",
+						"air_date": "1992-09-12"
+					},
+					{
+						"episode_number": 9,
+						"name": "Pretty Poison",
+						"air_date": "1992-09-14"
+					},
+					{
+						"episode_number": 10,
+						"name": "Nothing to Fear",
+						"air_date": "1992-09-15"
+					},
+					{
+						"episode_number": 11,
+						"name": "Be a Clown",
+						"air_date": "1992-09-16"
+					},
+					{
+						"episode_number": 12,
+						"name": "Appointment in Crime Alley",
+						"air_date": "1992-09-17"
+					},
+					{
+						"episode_number": 13,
+						"name": "P.O.V.",
+						"air_date": "1992-09-18"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Clock King",
+						"air_date": "1992-09-21"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Last Laugh",
+						"air_date": "1992-09-22"
+					},
+					{
+						"episode_number": 16,
+						"name": "Eternal Youth",
+						"air_date": "1992-09-23"
+					},
+					{
+						"episode_number": 17,
+						"name": "Two-Face (1)",
+						"air_date": "1992-09-25"
+					},
+					{
+						"episode_number": 18,
+						"name": "Two-Face (2)",
+						"air_date": "1992-09-28"
+					},
+					{
+						"episode_number": 19,
+						"name": "Fear of Victory",
+						"air_date": "1992-09-29"
+					},
+					{
+						"episode_number": 20,
+						"name": "I've Got Batman in My Basement",
+						"air_date": "1992-09-30"
+					},
+					{
+						"episode_number": 21,
+						"name": "Vendetta",
+						"air_date": "1992-10-05"
+					},
+					{
+						"episode_number": 22,
+						"name": "Prophecy of Doom",
+						"air_date": "1992-10-06"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Forgotten",
+						"air_date": "1992-10-08"
+					},
+					{
+						"episode_number": 24,
+						"name": "Mad as a Hatter",
+						"air_date": "1992-10-12"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Cape and Cowl Conspiracy",
+						"air_date": "1992-10-14"
+					},
+					{
+						"episode_number": 26,
+						"name": "Perchance to Dream",
+						"air_date": "1992-10-19"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Underdwellers",
+						"air_date": "1992-10-21"
+					},
+					{
+						"episode_number": 28,
+						"name": "Night of the Ninja",
+						"air_date": "1992-10-26"
+					},
+					{
+						"episode_number": 29,
+						"name": "The Strange Secret of Bruce Wayne",
+						"air_date": "1992-10-29"
+					},
+					{
+						"episode_number": 30,
+						"name": "Tyger, Tyger",
+						"air_date": "1992-10-30"
+					},
+					{
+						"episode_number": 31,
+						"name": "Dreams in Darkness",
+						"air_date": "1992-11-03"
+					},
+					{
+						"episode_number": 32,
+						"name": "Beware the Gray Ghost",
+						"air_date": "1992-11-04"
+					},
+					{
+						"episode_number": 33,
+						"name": "Cat Scratch Fever",
+						"air_date": "1992-11-05"
+					},
+					{
+						"episode_number": 34,
+						"name": "I Am the Night",
+						"air_date": "1992-11-09"
+					},
+					{
+						"episode_number": 35,
+						"name": "Almost Got 'Im",
+						"air_date": "1992-11-10"
+					},
+					{
+						"episode_number": 36,
+						"name": "Moon of the Wolf",
+						"air_date": "1992-11-11"
+					},
+					{
+						"episode_number": 37,
+						"name": "Terror in the Sky",
+						"air_date": "1992-11-12"
+					},
+					{
+						"episode_number": 38,
+						"name": "Christmas with the Joker",
+						"air_date": "1992-11-13"
+					},
+					{
+						"episode_number": 39,
+						"name": "Heart of Steel (1)",
+						"air_date": "1992-11-16"
+					},
+					{
+						"episode_number": 40,
+						"name": "Heart of Steel (2)",
+						"air_date": "1992-11-17"
+					},
+					{
+						"episode_number": 41,
+						"name": "If You're So Smart, Why Aren't You Rich?",
+						"air_date": "1992-11-18"
+					},
+					{
+						"episode_number": 42,
+						"name": "Joker's Wild",
+						"air_date": "1992-11-19"
+					},
+					{
+						"episode_number": 43,
+						"name": "His Silicon Soul",
+						"air_date": "1992-11-20"
+					},
+					{
+						"episode_number": 44,
+						"name": "Off Balance",
+						"air_date": "1992-11-23"
+					},
+					{
+						"episode_number": 45,
+						"name": "What Is Reality?",
+						"air_date": "1992-11-24"
+					},
+					{
+						"episode_number": 46,
+						"name": "The Laughing Fish",
+						"air_date": "1993-01-10"
+					},
+					{
+						"episode_number": 47,
+						"name": "Harley and Ivy",
+						"air_date": "1993-01-18"
+					},
+					{
+						"episode_number": 48,
+						"name": "The Mechanic",
+						"air_date": "1993-01-24"
+					},
+					{
+						"episode_number": 49,
+						"name": "The Man Who Killed Batman",
+						"air_date": "1993-02-01"
+					},
+					{
+						"episode_number": 50,
+						"name": "Zatanna",
+						"air_date": "1993-02-02"
+					},
+					{
+						"episode_number": 51,
+						"name": "Robin's Reckoning (1)",
+						"air_date": "1993-02-07"
+					},
+					{
+						"episode_number": 52,
+						"name": "Birds of a Feather",
+						"air_date": "1993-02-08"
+					},
+					{
+						"episode_number": 53,
+						"name": "Robin's Reckoning (2)",
+						"air_date": "1993-02-14"
+					},
+					{
+						"episode_number": 54,
+						"name": "Blind as a Bat",
+						"air_date": "1993-02-22"
+					},
+					{
+						"episode_number": 55,
+						"name": "Day of the Samurai",
+						"air_date": "1993-02-23"
+					},
+					{
+						"episode_number": 56,
+						"name": "See No Evil",
+						"air_date": "1993-02-24"
+					},
+					{
+						"episode_number": 57,
+						"name": "The Demon's Quest (1)",
+						"air_date": "1993-05-03"
+					},
+					{
+						"episode_number": 58,
+						"name": "The Demon's Quest (2)",
+						"air_date": "1993-05-04"
+					},
+					{
+						"episode_number": 59,
+						"name": "Read My Lips",
+						"air_date": "1993-05-10"
+					},
+					{
+						"episode_number": 60,
+						"name": "Fire from Olympus",
+						"air_date": "1993-05-24"
+					}
+				]
+			},
+			"2098/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Shadow of the Bat (1)",
+						"air_date": "1993-09-13"
+					},
+					{
+						"episode_number": 2,
+						"name": "Shadow of the Bat (2)",
+						"air_date": "1993-09-14"
+					},
+					{
+						"episode_number": 3,
+						"name": "Mudslide",
+						"air_date": "1993-09-15"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Worry Men",
+						"air_date": "1993-09-16"
+					},
+					{
+						"episode_number": 5,
+						"name": "Paging the Crime Doctor",
+						"air_date": "1993-09-17"
+					},
+					{
+						"episode_number": 6,
+						"name": "House & Garden",
+						"air_date": "1994-05-02"
+					},
+					{
+						"episode_number": 7,
+						"name": "Sideshow",
+						"air_date": "1994-05-03"
+					},
+					{
+						"episode_number": 8,
+						"name": "Avatar",
+						"air_date": "1994-05-09"
+					},
+					{
+						"episode_number": 9,
+						"name": "Trial",
+						"air_date": "1994-05-16"
+					},
+					{
+						"episode_number": 10,
+						"name": "Harlequinade",
+						"air_date": "1994-05-23"
+					}
+				]
+			},
+			"2098/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Bane",
+						"air_date": "1994-09-10"
+					},
+					{
+						"episode_number": 2,
+						"name": "Second Chance",
+						"air_date": "1994-09-17"
+					},
+					{
+						"episode_number": 3,
+						"name": "Riddler's Reform",
+						"air_date": "1994-09-24"
+					},
+					{
+						"episode_number": 4,
+						"name": "Baby-Doll",
+						"air_date": "1994-10-01"
+					},
+					{
+						"episode_number": 5,
+						"name": "Time Out of Joint",
+						"air_date": "1994-10-08"
+					},
+					{
+						"episode_number": 6,
+						"name": "Harley's Holiday",
+						"air_date": "1994-10-15"
+					},
+					{
+						"episode_number": 7,
+						"name": "Make 'Em Laugh",
+						"air_date": "1994-11-05"
+					},
+					{
+						"episode_number": 8,
+						"name": "Batgirl Returns",
+						"air_date": "1994-11-12"
+					},
+					{
+						"episode_number": 9,
+						"name": "Lock-Up",
+						"air_date": "1994-11-19"
+					},
+					{
+						"episode_number": 10,
+						"name": "Deep Freeze",
+						"air_date": "1994-11-26"
+					}
+				]
+			},
+			"2098/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The Terrible Trio",
+						"air_date": "1995-09-11"
+					},
+					{
+						"episode_number": 2,
+						"name": "Showdown",
+						"air_date": "1995-09-12"
+					},
+					{
+						"episode_number": 3,
+						"name": "Catwalk",
+						"air_date": "1995-09-13"
+					},
+					{
+						"episode_number": 4,
+						"name": "A Bullet for Bullock",
+						"air_date": "1995-09-14"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Lion and the Unicorn",
+						"air_date": "1995-09-15"
+					}
+				]
+			},
+			"65942/4": null,
+			"33623/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Breakout (1)",
+						"air_date": "2010-10-20"
+					},
+					{
+						"episode_number": 2,
+						"name": "Breakout (2)",
+						"air_date": "2010-10-20"
+					},
+					{
+						"episode_number": 3,
+						"name": "Iron Man Is Born",
+						"air_date": "2010-10-24"
+					},
+					{
+						"episode_number": 4,
+						"name": "Thor the Mighty",
+						"air_date": "2010-10-24"
+					},
+					{
+						"episode_number": 5,
+						"name": "Hulk Versus the World",
+						"air_date": "2010-10-24"
+					},
+					{
+						"episode_number": 6,
+						"name": "Meet Captain America",
+						"air_date": "2010-10-24"
+					},
+					{
+						"episode_number": 7,
+						"name": "The Man in the Ant Hill",
+						"air_date": "2010-10-24"
+					},
+					{
+						"episode_number": 8,
+						"name": "Some Assembly Required",
+						"air_date": "2010-10-27"
+					},
+					{
+						"episode_number": 9,
+						"name": "Living Legend",
+						"air_date": "2010-11-03"
+					},
+					{
+						"episode_number": 10,
+						"name": "Everything Is Wonderful",
+						"air_date": "2010-11-10"
+					},
+					{
+						"episode_number": 11,
+						"name": "Panther's Quest",
+						"air_date": "2010-11-17"
+					},
+					{
+						"episode_number": 12,
+						"name": "Gamma World (1)",
+						"air_date": "2010-11-26"
+					},
+					{
+						"episode_number": 13,
+						"name": "Gamma World (2)",
+						"air_date": "2010-11-26"
+					},
+					{
+						"episode_number": 14,
+						"name": "Masters of Evil",
+						"air_date": "2010-12-05"
+					},
+					{
+						"episode_number": 15,
+						"name": "459",
+						"air_date": "2010-12-12"
+					},
+					{
+						"episode_number": 16,
+						"name": "Widow's Sting",
+						"air_date": "2010-12-19"
+					},
+					{
+						"episode_number": 17,
+						"name": "The Man Who Stole Tomorrow",
+						"air_date": "2011-01-09"
+					},
+					{
+						"episode_number": 18,
+						"name": "Come the Conqueror",
+						"air_date": "2011-01-16"
+					},
+					{
+						"episode_number": 19,
+						"name": "The Kang Dynasty",
+						"air_date": "2011-01-23"
+					},
+					{
+						"episode_number": 20,
+						"name": "The Casket of Ancient Winters",
+						"air_date": "2011-05-15"
+					},
+					{
+						"episode_number": 21,
+						"name": "Hail Hydra!",
+						"air_date": "2011-05-22"
+					},
+					{
+						"episode_number": 22,
+						"name": "Ultron-5",
+						"air_date": "2011-05-29"
+					},
+					{
+						"episode_number": 23,
+						"name": "The Ultron Imperative",
+						"air_date": "2011-06-05"
+					},
+					{
+						"episode_number": 24,
+						"name": "This Hostage Earth",
+						"air_date": "2011-06-12"
+					},
+					{
+						"episode_number": 25,
+						"name": "The Fall of Asgard",
+						"air_date": "2011-06-19"
+					},
+					{
+						"episode_number": 26,
+						"name": "A Day Unlike Any Other",
+						"air_date": "2011-06-26"
+					}
+				]
+			},
+			"46261/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "King of the Dragons",
+						"air_date": "2014-04-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Eclipse Project",
+						"air_date": "2014-04-12"
+					},
+					{
+						"episode_number": 3,
+						"name": "Fairy Tactician",
+						"air_date": "2014-04-19"
+					},
+					{
+						"episode_number": 4,
+						"name": "Gray vs. Rufus",
+						"air_date": "2014-04-26"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Hungry Wolf Knights",
+						"air_date": "2014-05-03"
+					},
+					{
+						"episode_number": 6,
+						"name": "Fairy Tail vs. Executioners",
+						"air_date": "2014-05-10"
+					},
+					{
+						"episode_number": 7,
+						"name": "Scorching Earth",
+						"air_date": "2014-05-17"
+					},
+					{
+						"episode_number": 8,
+						"name": "Our Place",
+						"air_date": "2014-05-24"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Kingdom 'til Tomorrow",
+						"air_date": "2014-05-31"
+					},
+					{
+						"episode_number": 10,
+						"name": "Erza vs. Kagura",
+						"air_date": "2014-06-07"
+					},
+					{
+						"episode_number": 11,
+						"name": "A Future Racing Toward Despair",
+						"air_date": "2014-06-14"
+					},
+					{
+						"episode_number": 12,
+						"name": "Frog",
+						"air_date": "2014-06-21"
+					},
+					{
+						"episode_number": 13,
+						"name": "Roaring Thunder!",
+						"air_date": "2014-06-28"
+					},
+					{
+						"episode_number": 14,
+						"name": "Gloria",
+						"air_date": "2014-07-05"
+					},
+					{
+						"episode_number": 15,
+						"name": "The One Who Closes the Gate",
+						"air_date": "2014-07-12"
+					},
+					{
+						"episode_number": 16,
+						"name": "Natsu vs. Rogue",
+						"air_date": "2014-07-19"
+					},
+					{
+						"episode_number": 17,
+						"name": "For Me, Too",
+						"air_date": "2014-07-26"
+					},
+					{
+						"episode_number": 18,
+						"name": "Seven Dragons",
+						"air_date": "2014-08-02"
+					},
+					{
+						"episode_number": 19,
+						"name": "Zirconis' Magic",
+						"air_date": "2014-08-09"
+					},
+					{
+						"episode_number": 20,
+						"name": "People and People, Dragons and Dragons, People and Dragons",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 21,
+						"name": "Sin and Sacrifice",
+						"air_date": "2014-08-23"
+					},
+					{
+						"episode_number": 22,
+						"name": "Time of Life",
+						"air_date": "2014-08-30"
+					},
+					{
+						"episode_number": 23,
+						"name": "Fields of Gold",
+						"air_date": "2014-09-06"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Grand Banquet",
+						"air_date": "2014-09-13"
+					},
+					{
+						"episode_number": 25,
+						"name": "Droplets of Time",
+						"air_date": "2014-09-20"
+					},
+					{
+						"episode_number": 26,
+						"name": "A Gift",
+						"air_date": "2014-09-27"
+					},
+					{
+						"episode_number": 27,
+						"name": "Welcome Back, Frosch",
+						"air_date": "2014-10-04"
+					},
+					{
+						"episode_number": 28,
+						"name": "Moulin Rouge",
+						"air_date": "2014-10-11"
+					},
+					{
+						"episode_number": 29,
+						"name": "Full Effort Hospitality!",
+						"air_date": "2014-10-18"
+					},
+					{
+						"episode_number": 30,
+						"name": "Signal of Rebellion",
+						"air_date": "2014-10-25"
+					},
+					{
+						"episode_number": 31,
+						"name": "Library Panic",
+						"air_date": "2014-11-01"
+					},
+					{
+						"episode_number": 32,
+						"name": "Hisui Rises!",
+						"air_date": "2014-11-08"
+					},
+					{
+						"episode_number": 33,
+						"name": "Astral Spiritus",
+						"air_date": "2014-11-15"
+					},
+					{
+						"episode_number": 34,
+						"name": "Wendy vs. Aquarius - Let's Have Fun in the Amusement Park!",
+						"air_date": "2014-11-22"
+					},
+					{
+						"episode_number": 35,
+						"name": "Guild Deck vs. Celestial Deck",
+						"air_date": "2014-11-29"
+					},
+					{
+						"episode_number": 36,
+						"name": "Gray vs. Cancer! Dance Battle!",
+						"air_date": "2014-12-06"
+					},
+					{
+						"episode_number": 37,
+						"name": "Juvia vs. Aries! Desert Death Match!",
+						"air_date": "2014-12-13"
+					},
+					{
+						"episode_number": 38,
+						"name": "Erza vs. Sagittarius! Horseback Showdown!",
+						"air_date": "2014-12-20"
+					},
+					{
+						"episode_number": 39,
+						"name": "Natsu vs. Leo",
+						"air_date": "2014-12-27"
+					},
+					{
+						"episode_number": 40,
+						"name": "Ophiuchus, the Snake Charmer",
+						"air_date": "2015-01-10"
+					},
+					{
+						"episode_number": 41,
+						"name": "When the Stars Fall",
+						"air_date": "2015-01-17"
+					},
+					{
+						"episode_number": 42,
+						"name": "Celestial Spirit Beast",
+						"air_date": "2015-01-24"
+					},
+					{
+						"episode_number": 43,
+						"name": "Believe",
+						"air_date": "2015-01-31"
+					},
+					{
+						"episode_number": 44,
+						"name": "What a Pure Heart Weaves",
+						"air_date": "2015-02-07"
+					},
+					{
+						"episode_number": 45,
+						"name": "413 Days",
+						"air_date": "2015-02-14"
+					},
+					{
+						"episode_number": 46,
+						"name": "The Labyrinth of White",
+						"air_date": "2015-02-21"
+					},
+					{
+						"episode_number": 47,
+						"name": "Transform!",
+						"air_date": "2015-02-28"
+					},
+					{
+						"episode_number": 48,
+						"name": "It's Kemo-Kemo!",
+						"air_date": "2015-03-07"
+					},
+					{
+						"episode_number": 49,
+						"name": "The Place You Came To",
+						"air_date": "2015-03-14"
+					},
+					{
+						"episode_number": 50,
+						"name": "Lightning Man",
+						"air_date": "2015-03-21"
+					},
+					{
+						"episode_number": 51,
+						"name": "Fairy Tail of the Dead Meeeeeeeeen",
+						"air_date": "2015-03-28"
+					}
+				]
+			},
+			"65942/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 1-1",
+						"air_date": "2016-04-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 1-4, Side A",
+						"air_date": "2016-04-12"
+					},
+					{
+						"episode_number": 3,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 1-4, Epilogue",
+						"air_date": "2016-04-19"
+					},
+					{
+						"episode_number": 4,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-1",
+						"air_date": "2016-04-26"
+					},
+					{
+						"episode_number": 5,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-2",
+						"air_date": "2016-05-03"
+					},
+					{
+						"episode_number": 6,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-3",
+						"air_date": "2016-05-10"
+					},
+					{
+						"episode_number": 7,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-4",
+						"air_date": "2016-05-17"
+					},
+					{
+						"episode_number": 8,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-5, Side A",
+						"air_date": "2016-05-24"
+					},
+					{
+						"episode_number": 9,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-5, Side B",
+						"air_date": "2016-05-31"
+					},
+					{
+						"episode_number": 10,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-5-3, Side C",
+						"air_date": "2016-06-07"
+					},
+					{
+						"episode_number": 11,
+						"name": "Re:ZERO ~Starting Break Time From Zero~ World 2-5, Epilogue",
+						"air_date": "2016-06-14"
+					},
+					{
+						"episode_number": 12,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 1: Return to School",
+						"air_date": "2016-06-21"
+					},
+					{
+						"episode_number": 13,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 2: Beatrice, Self-Proclaimed Teacher",
+						"air_date": "2016-06-28"
+					},
+					{
+						"episode_number": 14,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 3: The Master and His Maids",
+						"air_date": "2016-07-05"
+					},
+					{
+						"episode_number": 15,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 4: That Menu Item Is…",
+						"air_date": "2016-07-12"
+					},
+					{
+						"episode_number": 16,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 5: Ditz",
+						"air_date": "2016-07-19"
+					},
+					{
+						"episode_number": 17,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 6: Greed That Isn’t a Pig’s",
+						"air_date": "2016-07-26"
+					},
+					{
+						"episode_number": 18,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 7: From Zero",
+						"air_date": "2016-08-02"
+					},
+					{
+						"episode_number": 19,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 8: The Day of the Battle",
+						"air_date": "2016-08-09"
+					},
+					{
+						"episode_number": 20,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 9: Conquering the Watermelon",
+						"air_date": "2016-08-16"
+					},
+					{
+						"episode_number": 21,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 10: Just Resisting Desires of the Flesh",
+						"air_date": "2016-08-23"
+					},
+					{
+						"episode_number": 22,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 11: That and That and (Omitted) at Checkout",
+						"air_date": "2016-08-30"
+					},
+					{
+						"episode_number": 23,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 12: Buy It",
+						"air_date": "2016-09-06"
+					},
+					{
+						"episode_number": 24,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 13: The Book the Lion King Saw",
+						"air_date": "2016-09-13"
+					},
+					{
+						"episode_number": 25,
+						"name": "Re:PETIT ~Starting Life in Another World From PETIT~ 14: That’s All This Promotion Is About",
+						"air_date": "2016-09-20"
+					},
+					{
+						"episode_number": 26,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 1",
+						"air_date": "2020-07-09"
+					},
+					{
+						"episode_number": 27,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 2",
+						"air_date": "2020-07-16"
+					},
+					{
+						"episode_number": 28,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 3",
+						"air_date": "2020-07-23"
+					},
+					{
+						"episode_number": 29,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: The Diary of Petra's Struggles",
+						"air_date": "2020-07-30"
+					},
+					{
+						"episode_number": 30,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 4",
+						"air_date": "2020-08-06"
+					},
+					{
+						"episode_number": 31,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 5",
+						"air_date": "2020-08-13"
+					},
+					{
+						"episode_number": 32,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 6",
+						"air_date": "2020-08-20"
+					},
+					{
+						"episode_number": 33,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Maid's Days 1",
+						"air_date": "2020-08-27"
+					},
+					{
+						"episode_number": 34,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Fang of Iron Report 1",
+						"air_date": "2020-09-03"
+					},
+					{
+						"episode_number": 35,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Maid's Days 2",
+						"air_date": "2020-09-10"
+					},
+					{
+						"episode_number": 36,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Diary of the Dark Work Sisters 1",
+						"air_date": "2020-09-17"
+					},
+					{
+						"episode_number": 37,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Maid's Days 3",
+						"air_date": "2020-09-24"
+					},
+					{
+						"episode_number": 38,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 7",
+						"air_date": "2020-10-01"
+					},
+					{
+						"episode_number": 39,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto and Subaru's Resolve",
+						"air_date": "2021-01-07"
+					},
+					{
+						"episode_number": 40,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Fang of Iron Report 2",
+						"air_date": "2021-01-14"
+					},
+					{
+						"episode_number": 41,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 8",
+						"air_date": "2021-01-21"
+					},
+					{
+						"episode_number": 42,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Witch's Tea Confectionery",
+						"air_date": "2021-01-28"
+					},
+					{
+						"episode_number": 43,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Days Waiting for the Gospel",
+						"air_date": "2021-02-04"
+					},
+					{
+						"episode_number": 44,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 9",
+						"air_date": "2021-02-11"
+					},
+					{
+						"episode_number": 45,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Diary of the Dark Work Sisters 2",
+						"air_date": "2021-02-18"
+					},
+					{
+						"episode_number": 46,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 10",
+						"air_date": "2021-02-25"
+					},
+					{
+						"episode_number": 47,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: The Stone of the Miracle, the Path to the Miracle.",
+						"air_date": "2021-03-04"
+					},
+					{
+						"episode_number": 48,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Tea Party of Witches",
+						"air_date": "2021-03-11"
+					},
+					{
+						"episode_number": 49,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Meili's Diary",
+						"air_date": "2021-03-18"
+					},
+					{
+						"episode_number": 50,
+						"name": "Re:ZERO - Starting Break Time From Zero 2: Otto's Diary 11",
+						"air_date": "2021-03-25"
+					},
+					{
+						"episode_number": 51,
+						"name": "Re:Zero - Starting Break Time from Zero: Night Tales of the Sleeping Oni",
+						"air_date": "2024-10-03"
+					},
+					{
+						"episode_number": 52,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 1",
+						"air_date": "2024-10-10"
+					},
+					{
+						"episode_number": 53,
+						"name": "Re:Zero - Starting Break Time from Zero: CHOMP of LOVE and PASSION",
+						"air_date": "2024-10-17"
+					},
+					{
+						"episode_number": 54,
+						"name": "Re:Zero - Starting Break Time from Zero: Doki-Doki Royal Selection Social Gathering - 1",
+						"air_date": "2024-10-24"
+					},
+					{
+						"episode_number": 55,
+						"name": "Re:Zero - Starting Break Time from Zero: Great Waterfalls Followers - 1",
+						"air_date": "2024-10-31"
+					},
+					{
+						"episode_number": 56,
+						"name": "Re:Zero - Starting Break Time from Zero: Great Waterfalls Followers - 2",
+						"air_date": "2024-11-07"
+					},
+					{
+						"episode_number": 57,
+						"name": "Re:Zero - Starting Break Time from Zero: Doki-Doki Royal Selection Social Gathering - 2",
+						"air_date": "2024-11-14"
+					},
+					{
+						"episode_number": 58,
+						"name": "Re:Zero - Starting Break Time from Zero: Doki-Doki Royal Selection Social Gathering - 3",
+						"air_date": "2024-11-21"
+					},
+					{
+						"episode_number": 59,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 2",
+						"air_date": "2025-02-05"
+					},
+					{
+						"episode_number": 60,
+						"name": "Re:Zero - Starting Break Time from Zero: Pre-Theater Malice",
+						"air_date": "2025-02-12"
+					},
+					{
+						"episode_number": 61,
+						"name": "Re:Zero - Starting Break Time from Zero: Scarlet Romantic Tales",
+						"air_date": "2025-02-19"
+					},
+					{
+						"episode_number": 62,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 3",
+						"air_date": "2025-02-26"
+					},
+					{
+						"episode_number": 63,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 4",
+						"air_date": "2025-03-05"
+					},
+					{
+						"episode_number": 64,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 5",
+						"air_date": "2025-03-12"
+					},
+					{
+						"episode_number": 65,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 6",
+						"air_date": "2025-03-19"
+					},
+					{
+						"episode_number": 66,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 7",
+						"air_date": "2025-03-26"
+					},
+					{
+						"episode_number": 67,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 8",
+						"air_date": "2026-04-08"
+					},
+					{
+						"episode_number": 68,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles - 9",
+						"air_date": "2026-04-15"
+					},
+					{
+						"episode_number": 69,
+						"name": "Re:Zero - Starting Break Time from Zero: Everyone Is Quite a Handful, I Suppose 1",
+						"air_date": "2026-04-22"
+					},
+					{
+						"episode_number": 70,
+						"name": "Re:Zero - Starting Break Time from Zero: Everyone Is Quite a Handful, I Suppose 2",
+						"air_date": "2026-04-29"
+					},
+					{
+						"episode_number": 71,
+						"name": "Re:Zero - Starting Break Time from Zero: Walk-the-Talk Log 1",
+						"air_date": "2026-05-06"
+					},
+					{
+						"episode_number": 72,
+						"name": "Re:Zero - Starting Break Time from Zero: Walk-the-Talk Log 2",
+						"air_date": "2026-05-13"
+					},
+					{
+						"episode_number": 73,
+						"name": "Re:Zero - Starting Break Time from Zero: Walk-the-Talk Log 3",
+						"air_date": "2026-05-20"
+					},
+					{
+						"episode_number": 74,
+						"name": "Re:Zero - Starting Break Time from Zero: The Wiry-Armed Success in Kararagi",
+						"air_date": "2026-05-27"
+					},
+					{
+						"episode_number": 75,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles 10",
+						"air_date": "2026-06-03"
+					},
+					{
+						"episode_number": 76,
+						"name": "Re:Zero - Starting Break Time from Zero: Emilia Party Struggles 11",
+						"air_date": "2026-06-10"
+					},
+					{
+						"episode_number": 77,
+						"name": "Re:Zero - Starting Break Time from Zero: Golden Lion & the Sword Saint",
+						"air_date": "2026-06-17"
+					},
+					{
+						"episode_number": 78,
+						"name": "Re:Zero - Starting Break Time from Zero: Diary of the Dark Work Sisters",
+						"air_date": "2026-08-12"
+					},
+					{
+						"episode_number": 79,
+						"name": "Re:Zero - Starting Break Time from Zero: Golden Lion & the Sword Saint",
+						"air_date": "2026-08-19"
+					},
+					{
+						"episode_number": 80,
+						"name": "Re:Zero - Starting Break Time from Zero: Golden Lion & the Sword Saint",
+						"air_date": "2026-08-26"
+					},
+					{
+						"episode_number": 81,
+						"name": "Re:Zero - Starting Break Time from Zero: Cheers for Me",
+						"air_date": "2026-09-02"
+					},
+					{
+						"episode_number": 82,
+						"name": "Re:Zero - Starting Break Time from Zero: Cheers for Me",
+						"air_date": "2026-09-09"
+					},
+					{
+						"episode_number": 83,
+						"name": "Re:Zero - Starting Break Time from Zero: The Pleiades Travelogue 1",
+						"air_date": "2026-09-16"
+					},
+					{
+						"episode_number": 84,
+						"name": "Re:Zero - Starting Break Time from Zero: The Pleiades Travelogue 2",
+						"air_date": "2026-09-23"
+					},
+					{
+						"episode_number": 85,
+						"name": "Re:Zero - Starting Break Time from Zero: The Scorpion's Fairy Tale",
+						"air_date": "2026-09-30"
+					},
+					{
+						"episode_number": 86,
+						"name": "He Wei Dao x Re:ZERO 1",
+						"air_date": "2018-09-21"
+					},
+					{
+						"episode_number": 87,
+						"name": "He Wei Dao x Re:ZERO 2",
+						"air_date": "2018-12-11"
+					},
+					{
+						"episode_number": 88,
+						"name": "He Wei Dao x Re:ZERO 3",
+						"air_date": "2019-03-08"
+					},
+					{
+						"episode_number": 89,
+						"name": "Memory Snow: Manner Movie",
+						"air_date": "2018-10-06"
+					},
+					{
+						"episode_number": 90,
+						"name": "The Frozen Bond: Manner Movie",
+						"air_date": "2019-11-08"
+					}
+				]
+			},
+			"65942/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "The End of the Beginning and the Beginning of the End",
+						"air_date": "2016-04-04"
+					},
+					{
+						"episode_number": 2,
+						"name": "Reunion with the Witch",
+						"air_date": "2016-04-11"
+					},
+					{
+						"episode_number": 3,
+						"name": "Starting Life from Zero in Another World",
+						"air_date": "2016-04-18"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Happy Roswaal Mansion Family",
+						"air_date": "2016-04-25"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Morning of Our Promise Is Still Distant",
+						"air_date": "2016-05-02"
+					},
+					{
+						"episode_number": 6,
+						"name": "The Sound of Chains",
+						"air_date": "2016-05-09"
+					},
+					{
+						"episode_number": 7,
+						"name": "Natsuki Subaru’s Restart",
+						"air_date": "2016-05-16"
+					},
+					{
+						"episode_number": 8,
+						"name": "I Cried, Cried My Lungs Out, and Stopped Crying",
+						"air_date": "2016-05-23"
+					},
+					{
+						"episode_number": 9,
+						"name": "The Meaning of Courage",
+						"air_date": "2016-05-30"
+					},
+					{
+						"episode_number": 10,
+						"name": "Demonically Inspired Methods",
+						"air_date": "2016-06-06"
+					},
+					{
+						"episode_number": 11,
+						"name": "Rem",
+						"air_date": "2016-06-13"
+					},
+					{
+						"episode_number": 12,
+						"name": "Return to the Capital",
+						"air_date": "2016-06-20"
+					},
+					{
+						"episode_number": 13,
+						"name": "Self-Proclaimed Knight Natsuki Subaru",
+						"air_date": "2016-06-27"
+					},
+					{
+						"episode_number": 14,
+						"name": "The Sickness Called Despair",
+						"air_date": "2016-07-04"
+					},
+					{
+						"episode_number": 15,
+						"name": "The Outside of Madness",
+						"air_date": "2016-07-11"
+					},
+					{
+						"episode_number": 16,
+						"name": "A Pig's Greed",
+						"air_date": "2016-07-18"
+					},
+					{
+						"episode_number": 17,
+						"name": "Disgrace in the Extreme",
+						"air_date": "2016-07-25"
+					},
+					{
+						"episode_number": 18,
+						"name": "From Zero",
+						"air_date": "2016-08-01"
+					},
+					{
+						"episode_number": 19,
+						"name": "Battle Against the White Whale",
+						"air_date": "2016-08-08"
+					},
+					{
+						"episode_number": 20,
+						"name": "Wilhelm van Astrea",
+						"air_date": "2016-08-15"
+					},
+					{
+						"episode_number": 21,
+						"name": "A Wager That Defies Despair",
+						"air_date": "2016-08-22"
+					},
+					{
+						"episode_number": 22,
+						"name": "A Flash of Sloth",
+						"air_date": "2016-08-29"
+					},
+					{
+						"episode_number": 23,
+						"name": "Nefarious Sloth",
+						"air_date": "2016-09-05"
+					},
+					{
+						"episode_number": 24,
+						"name": "The Self-Proclaimed Knight and the Greatest of Knights",
+						"air_date": "2016-09-12"
+					},
+					{
+						"episode_number": 25,
+						"name": "That’s All This Story Is About",
+						"air_date": "2016-09-19"
+					},
+					{
+						"episode_number": 26,
+						"name": "Each One's Promise",
+						"air_date": "2020-07-08"
+					},
+					{
+						"episode_number": 27,
+						"name": "The Next Location",
+						"air_date": "2020-07-15"
+					},
+					{
+						"episode_number": 28,
+						"name": "The Long-Awaited Reunion",
+						"air_date": "2020-07-22"
+					},
+					{
+						"episode_number": 29,
+						"name": "Parent and Child",
+						"air_date": "2020-07-29"
+					},
+					{
+						"episode_number": 30,
+						"name": "A Step Forward",
+						"air_date": "2020-08-05"
+					},
+					{
+						"episode_number": 31,
+						"name": "The Maiden's Gospel",
+						"air_date": "2020-08-12"
+					},
+					{
+						"episode_number": 32,
+						"name": "Friend",
+						"air_date": "2020-08-19"
+					},
+					{
+						"episode_number": 33,
+						"name": "The Value of Life",
+						"air_date": "2020-08-26"
+					},
+					{
+						"episode_number": 34,
+						"name": "Love Love Love Love Love Love You",
+						"air_date": "2020-09-02"
+					},
+					{
+						"episode_number": 35,
+						"name": "I Know Hell",
+						"air_date": "2020-09-09"
+					},
+					{
+						"episode_number": 36,
+						"name": "The Taste of Death",
+						"air_date": "2020-09-16"
+					},
+					{
+						"episode_number": 37,
+						"name": "The Witches’ Tea Party",
+						"air_date": "2020-09-23"
+					},
+					{
+						"episode_number": 38,
+						"name": "The Sounds That Make You Want to Cry",
+						"air_date": "2020-09-30"
+					},
+					{
+						"episode_number": 39,
+						"name": "Straight Bet",
+						"air_date": "2021-01-06"
+					},
+					{
+						"episode_number": 40,
+						"name": "Otto Suwen / A Reason to Believe",
+						"air_date": "2021-01-13"
+					},
+					{
+						"episode_number": 41,
+						"name": "Nobody Can Lift a Quain Stone Alone",
+						"air_date": "2021-01-20"
+					},
+					{
+						"episode_number": 42,
+						"name": "A Journey Through Memories",
+						"air_date": "2021-01-27"
+					},
+					{
+						"episode_number": 43,
+						"name": "The Day Betelgeuse Laughed",
+						"air_date": "2021-02-03"
+					},
+					{
+						"episode_number": 44,
+						"name": "The Permafrost of Elior Forest",
+						"air_date": "2021-02-10"
+					},
+					{
+						"episode_number": 45,
+						"name": "The Beginning of the Sanctuary and the Beginning of the End",
+						"air_date": "2021-02-17"
+					},
+					{
+						"episode_number": 46,
+						"name": "Reunion of Roars",
+						"air_date": "2021-02-24"
+					},
+					{
+						"episode_number": 47,
+						"name": "Happiness Reflected on the Water's Surface",
+						"air_date": "2021-03-03"
+					},
+					{
+						"episode_number": 48,
+						"name": "Love Me Down to My Blood and Guts",
+						"air_date": "2021-03-10"
+					},
+					{
+						"episode_number": 49,
+						"name": "Choose Me",
+						"air_date": "2021-03-17"
+					},
+					{
+						"episode_number": 50,
+						"name": "Offbeat Steps Under the Moonlight",
+						"air_date": "2021-03-24"
+					},
+					{
+						"episode_number": 51,
+						"name": "Theatrical Malice",
+						"air_date": "2024-10-02"
+					},
+					{
+						"episode_number": 52,
+						"name": "A Showdown of Fire and Ice",
+						"air_date": "2024-10-09"
+					},
+					{
+						"episode_number": 53,
+						"name": "Gorgeous Tiger",
+						"air_date": "2024-10-16"
+					},
+					{
+						"episode_number": 54,
+						"name": "Operation: Take Back the Government Office",
+						"air_date": "2024-10-23"
+					},
+					{
+						"episode_number": 55,
+						"name": "A Dark Torrent",
+						"air_date": "2024-10-30"
+					},
+					{
+						"episode_number": 56,
+						"name": "Conditions of the Knight",
+						"air_date": "2024-11-06"
+					},
+					{
+						"episode_number": 57,
+						"name": "The Newest of Heroes and the Most Ancient of Heroes",
+						"air_date": "2024-11-13"
+					},
+					{
+						"episode_number": 58,
+						"name": "The One I'll Love Someday",
+						"air_date": "2024-11-20"
+					},
+					{
+						"episode_number": 59,
+						"name": "City Scramble",
+						"air_date": "2025-02-05"
+					},
+					{
+						"episode_number": 60,
+						"name": "The Plan to Conquer Greed",
+						"air_date": "2025-02-12"
+					},
+					{
+						"episode_number": 61,
+						"name": "Liliana Masquerade",
+						"air_date": "2025-02-19"
+					},
+					{
+						"episode_number": 62,
+						"name": "Regulus Corneas",
+						"air_date": "2025-02-26"
+					},
+					{
+						"episode_number": 63,
+						"name": "The Warrior's Commendation",
+						"air_date": "2025-03-05"
+					},
+					{
+						"episode_number": 64,
+						"name": "Theresia van Astrea",
+						"air_date": "2025-03-12"
+					},
+					{
+						"episode_number": 65,
+						"name": "A Hideous Dinner Party",
+						"air_date": "2025-03-19"
+					},
+					{
+						"episode_number": 66,
+						"name": "The Result of the Battle for Priestella",
+						"air_date": "2025-03-26"
+					},
+					{
+						"episode_number": 67,
+						"name": "The Reason I'm Taking You with Me / Gorgeous Tiger Reloaded",
+						"air_date": "2026-04-08"
+					},
+					{
+						"episode_number": 68,
+						"name": "Overcome Sand Time",
+						"air_date": "2026-04-15"
+					},
+					{
+						"episode_number": 69,
+						"name": "The Keeper of the Watchtower",
+						"air_date": "2026-04-22"
+					},
+					{
+						"episode_number": 70,
+						"name": "A White Sky Asterism",
+						"air_date": "2026-04-29"
+					},
+					{
+						"episode_number": 71,
+						"name": "Stick Swinger",
+						"air_date": "2026-05-06"
+					},
+					{
+						"episode_number": 72,
+						"name": "Julius Juukulius",
+						"air_date": "2026-05-13"
+					},
+					{
+						"episode_number": 73,
+						"name": "Walking Out of the Convenience Store and into a Wondrous World",
+						"air_date": "2026-05-20"
+					},
+					{
+						"episode_number": 74,
+						"name": "Who Are You?",
+						"air_date": "2026-05-27"
+					},
+					{
+						"episode_number": 75,
+						"name": "Empty Shell",
+						"air_date": "2026-06-03"
+					},
+					{
+						"episode_number": 76,
+						"name": "Murder Is a Habit",
+						"air_date": "2026-06-10"
+					},
+					{
+						"episode_number": 77,
+						"name": "Re: Life Starting in Another World From Zero",
+						"air_date": "2026-06-17"
+					},
+					{
+						"episode_number": 78,
+						"name": "From Now On",
+						"air_date": "2026-08-12"
+					},
+					{
+						"episode_number": 79,
+						"name": "Stand Up",
+						"air_date": "2026-08-19"
+					},
+					{
+						"episode_number": 80,
+						"name": "Five Obstacles",
+						"air_date": "2026-08-26"
+					},
+					{
+						"episode_number": 81,
+						"name": "A Single-Minded Star",
+						"air_date": "2026-09-02"
+					},
+					{
+						"episode_number": 82,
+						"name": "Natsuki Subaru",
+						"air_date": "2026-09-09"
+					},
+					{
+						"episode_number": 83,
+						"name": "Good Loser",
+						"air_date": "2026-09-16"
+					},
+					{
+						"episode_number": 84,
+						"name": "Ram",
+						"air_date": "2026-09-23"
+					},
+					{
+						"episode_number": 85,
+						"name": "Shaula / Hero",
+						"air_date": "2026-09-30"
+					}
+				]
+			},
+			"46195/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Ougi Formula",
+						"air_date": "2015-10-04"
+					},
+					{
+						"episode_number": 2,
+						"name": "Sodachi Riddle (1)",
+						"air_date": "2015-10-11"
+					},
+					{
+						"episode_number": 3,
+						"name": "Sodachi Riddle (2)",
+						"air_date": "2015-10-18"
+					},
+					{
+						"episode_number": 4,
+						"name": "Sodachi Lost (1)",
+						"air_date": "2015-10-25"
+					},
+					{
+						"episode_number": 5,
+						"name": "Sodachi Lost (2)",
+						"air_date": "2015-11-01"
+					},
+					{
+						"episode_number": 6,
+						"name": "Sodachi Lost (3)",
+						"air_date": "2015-11-08"
+					},
+					{
+						"episode_number": 7,
+						"name": "SHINOBU Mail (1)",
+						"air_date": "2015-11-15"
+					},
+					{
+						"episode_number": 8,
+						"name": "SHINOBU Mail (2)",
+						"air_date": "2015-11-22"
+					},
+					{
+						"episode_number": 9,
+						"name": "SHINOBU Mail (3)",
+						"air_date": "2015-11-29"
+					},
+					{
+						"episode_number": 10,
+						"name": "SHINOBU Mail (4)",
+						"air_date": "2015-12-06"
+					},
+					{
+						"episode_number": 11,
+						"name": "SHINOBU Mail (5)",
+						"air_date": "2015-12-13"
+					},
+					{
+						"episode_number": 12,
+						"name": "SHINOBU Mail (6)",
+						"air_date": "2015-12-20"
+					}
+				]
+			},
+			"26867/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Banquet at the Forest's Edge",
+						"air_date": "2014-04-05"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Warbling Seashell",
+						"air_date": "2014-04-12"
+					},
+					{
+						"episode_number": 3,
+						"name": "Beneath the Snow",
+						"air_date": "2014-04-19"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Hand That Caresses the Night",
+						"air_date": "2014-04-26"
+					},
+					{
+						"episode_number": 5,
+						"name": "Mirror Lake",
+						"air_date": "2014-05-03"
+					},
+					{
+						"episode_number": 6,
+						"name": "Floral Delusion",
+						"air_date": "2014-05-10"
+					},
+					{
+						"episode_number": 7,
+						"name": "Cloudless Rain",
+						"air_date": "2014-05-24"
+					},
+					{
+						"episode_number": 8,
+						"name": "Wind Raiser",
+						"air_date": "2014-06-07"
+					},
+					{
+						"episode_number": 9,
+						"name": "Valley of the Welling Tide",
+						"air_date": "2014-06-14"
+					},
+					{
+						"episode_number": 10,
+						"name": "Depths of Winter",
+						"air_date": "2014-06-21"
+					},
+					{
+						"episode_number": 11,
+						"name": "Cushion of Grass",
+						"air_date": "2014-10-19"
+					},
+					{
+						"episode_number": 12,
+						"name": "Fragrant Darkness",
+						"air_date": "2014-10-26"
+					},
+					{
+						"episode_number": 13,
+						"name": "Lingering Crimson",
+						"air_date": "2014-11-02"
+					},
+					{
+						"episode_number": 14,
+						"name": "Hidden Cove",
+						"air_date": "2014-11-09"
+					},
+					{
+						"episode_number": 15,
+						"name": "Thread of Light",
+						"air_date": "2014-11-16"
+					},
+					{
+						"episode_number": 16,
+						"name": "Sea of Otherworldly Stars",
+						"air_date": "2014-11-23"
+					},
+					{
+						"episode_number": 17,
+						"name": "Azure Waters",
+						"air_date": "2014-11-30"
+					},
+					{
+						"episode_number": 18,
+						"name": "Lightning's End",
+						"air_date": "2014-12-07"
+					},
+					{
+						"episode_number": 19,
+						"name": "Mud Grass",
+						"air_date": "2014-12-14"
+					},
+					{
+						"episode_number": 20,
+						"name": "Tree of Eternity",
+						"air_date": "2014-12-21"
+					}
+				]
+			},
+			"45790/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "STEEL BALL RUN",
+						"air_date": "2026-03-19"
+					},
+					{
+						"episode_number": 2,
+						"name": "The Sheriff's Request to Mountain Tim",
+						"air_date": "2026-09-25"
+					},
+					{
+						"episode_number": 3,
+						"name": "The Desert-Born Outlaws",
+						"air_date": "2026-10-02"
+					},
+					{
+						"episode_number": 4,
+						"name": "The Devil's Palm",
+						"air_date": "2026-10-09"
+					},
+					{
+						"episode_number": 5,
+						"name": "The Terrorist from a Faraway Country",
+						"air_date": "2026-10-16"
+					},
+					{
+						"episode_number": 6,
+						"name": "Gyro Zeppeli’s Destiny",
+						"air_date": "2026-10-23"
+					},
+					{
+						"episode_number": 7,
+						"name": "Episode 7",
+						"air_date": "2026-10-30"
+					},
+					{
+						"episode_number": 8,
+						"name": "Episode 8",
+						"air_date": "2026-11-06"
+					},
+					{
+						"episode_number": 9,
+						"name": "Episode 9",
+						"air_date": "2026-11-13"
+					},
+					{
+						"episode_number": 10,
+						"name": "Episode 10",
+						"air_date": "2026-11-20"
+					},
+					{
+						"episode_number": 11,
+						"name": "Episode 11",
+						"air_date": "2026-11-27"
+					},
+					{
+						"episode_number": 12,
+						"name": "Episode 12",
+						"air_date": "2026-12-04"
+					}
+				]
+			},
+			"46195/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Ghostory (Monstory)",
+						"air_date": "2009-08-07"
+					},
+					{
+						"episode_number": 2,
+						"name": "Tsubasa Cat (3)",
+						"air_date": "2009-11-03"
+					},
+					{
+						"episode_number": 3,
+						"name": "Tsubasa Cat (4)",
+						"air_date": "2010-02-23"
+					},
+					{
+						"episode_number": 4,
+						"name": "Tsubasa Cat (5)",
+						"air_date": "2010-06-25"
+					},
+					{
+						"episode_number": 5,
+						"name": "Nekomonogatari Kuro: The Story of Araragi Koyomi and the girls who encountered oddities",
+						"air_date": "2012-12-31"
+					},
+					{
+						"episode_number": 6,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (1)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"episode_number": 7,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (2)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"episode_number": 8,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (3)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"episode_number": 9,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (4)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"episode_number": 10,
+						"name": "Summary I",
+						"air_date": "2013-08-11"
+					},
+					{
+						"episode_number": 11,
+						"name": "Summary II",
+						"air_date": "2013-09-15"
+					},
+					{
+						"episode_number": 12,
+						"name": "Summary III",
+						"air_date": "2013-10-20"
+					},
+					{
+						"episode_number": 13,
+						"name": "Hanamonogatari: Suruga Devil (1)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 14,
+						"name": "Hanamonogatari: Suruga Devil (2)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 15,
+						"name": "Hanamonogatari: Suruga Devil (3)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 16,
+						"name": "Hanamonogatari: Suruga Devil (4)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 17,
+						"name": "Hanamonogatari: Suruga Devil (5)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"episode_number": 18,
+						"name": "Tsukimonogatari: Yotsugi Doll (1)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"episode_number": 19,
+						"name": "Tsukimonogatari: Yotsugi Doll (2)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"episode_number": 20,
+						"name": "Tsukimonogatari: Yotsugi Doll (3)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"episode_number": 21,
+						"name": "Tsukimonogatari: Yotsugi Doll (4)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"episode_number": 22,
+						"name": "Koyomimonogatari: Koyomi Stone",
+						"air_date": "2016-01-09"
+					},
+					{
+						"episode_number": 23,
+						"name": "Koyomimonogatari: Koyomi Flower",
+						"air_date": "2016-01-16"
+					},
+					{
+						"episode_number": 24,
+						"name": "Koyomimonogatari: Koyomi Sand",
+						"air_date": "2016-01-23"
+					},
+					{
+						"episode_number": 25,
+						"name": "Koyomimonogatari: Koyomi Water",
+						"air_date": "2016-01-30"
+					},
+					{
+						"episode_number": 26,
+						"name": "Koyomimonogatari: Koyomi Wind",
+						"air_date": "2016-02-06"
+					},
+					{
+						"episode_number": 27,
+						"name": "Koyomimonogatari: Koyomi Tree",
+						"air_date": "2016-02-13"
+					},
+					{
+						"episode_number": 28,
+						"name": "Koyomimonogatari: Koyomi Tea",
+						"air_date": "2016-02-20"
+					},
+					{
+						"episode_number": 29,
+						"name": "Koyomimonogatari: Koyomi Mountain",
+						"air_date": "2016-02-27"
+					},
+					{
+						"episode_number": 30,
+						"name": "Koyomimonogatari: Koyomi Torus",
+						"air_date": "2016-03-05"
+					},
+					{
+						"episode_number": 31,
+						"name": "Koyomimonogatari: Koyomi Seed",
+						"air_date": "2016-03-12"
+					},
+					{
+						"episode_number": 32,
+						"name": "Koyomimonogatari: Koyomi Nothing",
+						"air_date": "2016-03-19"
+					},
+					{
+						"episode_number": 33,
+						"name": "Koyomimonogatari: Koyomi Dead",
+						"air_date": "2016-03-26"
+					},
+					{
+						"episode_number": 34,
+						"name": "Koyomi History",
+						"air_date": "2016-06-23"
+					},
+					{
+						"episode_number": 35,
+						"name": "Owarimonogatari: Mayoi Hell (1)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"episode_number": 36,
+						"name": "Owarimonogatari: Mayoi Hell (2)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"episode_number": 37,
+						"name": "Owarimonogatari: Hitagi Rendez-vous (1)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"episode_number": 38,
+						"name": "Owarimonogatari: Hitagi Rendez-vous (2)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"episode_number": 39,
+						"name": "Owarimonogatari: Ougi Dark (1)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"episode_number": 40,
+						"name": "Owarimonogatari: Ougi Dark (2)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"episode_number": 41,
+						"name": "Owarimonogatari: Ougi Dark (3)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"episode_number": 42,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (1)",
+						"air_date": "2019-05-18"
+					},
+					{
+						"episode_number": 43,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (2)",
+						"air_date": "2019-05-25"
+					},
+					{
+						"episode_number": 44,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (3)",
+						"air_date": "2019-06-01"
+					},
+					{
+						"episode_number": 45,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (4)",
+						"air_date": "2019-06-08"
+					},
+					{
+						"episode_number": 46,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (5)",
+						"air_date": "2019-06-15"
+					},
+					{
+						"episode_number": 47,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (6)",
+						"air_date": "2019-06-22"
+					},
+					{
+						"episode_number": 48,
+						"name": "A Cruel Fairy Tale: The Beautiful Princess",
+						"air_date": "2024-08-17"
+					},
+					{
+						"episode_number": 49,
+						"name": "Monogatari Series Off & Monster Season ABEMA SP Special Program",
+						"air_date": "2024-09-07"
+					}
+				]
+			},
+			"46195/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Hitagi Crab (1)",
+						"air_date": "2009-07-03"
+					},
+					{
+						"episode_number": 2,
+						"name": "Hitagi Crab (2)",
+						"air_date": "2009-07-10"
+					},
+					{
+						"episode_number": 3,
+						"name": "Mayoi Snail (1)",
+						"air_date": "2009-07-17"
+					},
+					{
+						"episode_number": 4,
+						"name": "Mayoi Snail (2)",
+						"air_date": "2009-07-24"
+					},
+					{
+						"episode_number": 5,
+						"name": "Mayoi Snail (3)",
+						"air_date": "2009-07-31"
+					},
+					{
+						"episode_number": 6,
+						"name": "Suruga Monkey (1)",
+						"air_date": "2009-08-09"
+					},
+					{
+						"episode_number": 7,
+						"name": "Suruga Monkey (2)",
+						"air_date": "2009-08-21"
+					},
+					{
+						"episode_number": 8,
+						"name": "Suruga Monkey (3)",
+						"air_date": "2009-08-28"
+					},
+					{
+						"episode_number": 9,
+						"name": "Nadeko Snake (1)",
+						"air_date": "2009-09-04"
+					},
+					{
+						"episode_number": 10,
+						"name": "Nadeko Snake (2)",
+						"air_date": "2009-09-11"
+					},
+					{
+						"episode_number": 11,
+						"name": "Tsubasa Cat (1)",
+						"air_date": "2009-09-18"
+					},
+					{
+						"episode_number": 12,
+						"name": "Tsubasa Cat (2)",
+						"air_date": "2009-09-25"
+					}
+				]
+			},
+			"46195/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Karen Bee (1)",
+						"air_date": "2012-01-08"
+					},
+					{
+						"episode_number": 2,
+						"name": "Karen Bee (2)",
+						"air_date": "2012-01-15"
+					},
+					{
+						"episode_number": 3,
+						"name": "Karen Bee (3)",
+						"air_date": "2012-01-22"
+					},
+					{
+						"episode_number": 4,
+						"name": "Karen Bee (4)",
+						"air_date": "2012-01-29"
+					},
+					{
+						"episode_number": 5,
+						"name": "Karen Bee (5)",
+						"air_date": "2012-02-05"
+					},
+					{
+						"episode_number": 6,
+						"name": "Karen Bee (6)",
+						"air_date": "2012-02-12"
+					},
+					{
+						"episode_number": 7,
+						"name": "Karen Bee (7)",
+						"air_date": "2012-02-19"
+					},
+					{
+						"episode_number": 8,
+						"name": "Tsukihi Phoenix (1)",
+						"air_date": "2012-02-26"
+					},
+					{
+						"episode_number": 9,
+						"name": "Tsukihi Phoenix (2)",
+						"air_date": "2012-03-04"
+					},
+					{
+						"episode_number": 10,
+						"name": "Tsukihi Phoenix (3)",
+						"air_date": "2012-03-11"
+					},
+					{
+						"episode_number": 11,
+						"name": "Tsukihi Phoenix (4)",
+						"air_date": "2012-03-18"
+					}
+				]
+			},
+			"46195/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Tsubasa Tiger (1)",
+						"air_date": "2013-07-07"
+					},
+					{
+						"episode_number": 2,
+						"name": "Tsubasa Tiger (2)",
+						"air_date": "2013-07-14"
+					},
+					{
+						"episode_number": 3,
+						"name": "Tsubasa Tiger (3)",
+						"air_date": "2013-07-21"
+					},
+					{
+						"episode_number": 4,
+						"name": "Tsubasa Tiger (4)",
+						"air_date": "2013-07-28"
+					},
+					{
+						"episode_number": 5,
+						"name": "Tsubasa Tiger (5)",
+						"air_date": "2013-08-04"
+					},
+					{
+						"episode_number": 6,
+						"name": "Mayoi Jiangshi (1)",
+						"air_date": "2013-08-18"
+					},
+					{
+						"episode_number": 7,
+						"name": "Mayoi Jiangshi (2)",
+						"air_date": "2013-08-25"
+					},
+					{
+						"episode_number": 8,
+						"name": "Mayoi Jiangshi (3)",
+						"air_date": "2013-09-01"
+					},
+					{
+						"episode_number": 9,
+						"name": "Mayoi Jiangshi (4)",
+						"air_date": "2013-09-08"
+					},
+					{
+						"episode_number": 10,
+						"name": "Nadeko Medusa (1)",
+						"air_date": "2013-09-22"
+					},
+					{
+						"episode_number": 11,
+						"name": "Nadeko Medusa (2)",
+						"air_date": "2013-09-29"
+					},
+					{
+						"episode_number": 12,
+						"name": "Nadeko Medusa (3)",
+						"air_date": "2013-10-06"
+					},
+					{
+						"episode_number": 13,
+						"name": "Nadeko Medusa (4)",
+						"air_date": "2013-10-13"
+					},
+					{
+						"episode_number": 14,
+						"name": "Shinobu Time (1)",
+						"air_date": "2013-10-27"
+					},
+					{
+						"episode_number": 15,
+						"name": "Shinobu Time (2)",
+						"air_date": "2013-11-03"
+					},
+					{
+						"episode_number": 16,
+						"name": "Shinobu Time (3)",
+						"air_date": "2013-11-10"
+					},
+					{
+						"episode_number": 17,
+						"name": "Shinobu Time (4)",
+						"air_date": "2013-11-17"
+					},
+					{
+						"episode_number": 18,
+						"name": "Hitagi End (1)",
+						"air_date": "2013-11-24"
+					},
+					{
+						"episode_number": 19,
+						"name": "Hitagi End (2)",
+						"air_date": "2013-12-01"
+					},
+					{
+						"episode_number": 20,
+						"name": "Hitagi End (3)",
+						"air_date": "2013-12-08"
+					},
+					{
+						"episode_number": 21,
+						"name": "Hitagi End (4)",
+						"air_date": "2013-12-15"
+					},
+					{
+						"episode_number": 22,
+						"name": "Hitagi End (5)",
+						"air_date": "2013-12-22"
+					},
+					{
+						"episode_number": 23,
+						"name": "Hitagi End (6)",
+						"air_date": "2013-12-29"
+					}
+				]
+			},
+			"46195/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "OROKAMONOGATARI Tsukihi Undo",
+						"air_date": "2024-07-06"
+					},
+					{
+						"episode_number": 2,
+						"name": "NADEMONOGATARI Nadeko Draw (1)",
+						"air_date": "2024-07-13"
+					},
+					{
+						"episode_number": 3,
+						"name": "NADEMONOGATARI Nadeko Draw (2)",
+						"air_date": "2024-07-20"
+					},
+					{
+						"episode_number": 4,
+						"name": "NADEMONOGATARI Nadeko Draw (3)",
+						"air_date": "2024-07-27"
+					},
+					{
+						"episode_number": 5,
+						"name": "NADEMONOGATARI Nadeko Draw (4)",
+						"air_date": "2024-08-03"
+					},
+					{
+						"episode_number": 6,
+						"name": "NADEMONOGATARI Nadeko Draw (5)",
+						"air_date": "2024-08-10"
+					},
+					{
+						"episode_number": 7,
+						"name": "WAZAMONOGATARI Acerola Bon Appétit (1)",
+						"air_date": "2024-08-24"
+					},
+					{
+						"episode_number": 8,
+						"name": "WAZAMONOGATARI Acerola Bon Appétit (2)",
+						"air_date": "2024-08-31"
+					},
+					{
+						"episode_number": 9,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (1)",
+						"air_date": "2024-09-14"
+					},
+					{
+						"episode_number": 10,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (2)",
+						"air_date": "2024-09-21"
+					},
+					{
+						"episode_number": 11,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (3)",
+						"air_date": "2024-09-28"
+					},
+					{
+						"episode_number": 12,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (4)",
+						"air_date": "2024-10-05"
+					},
+					{
+						"episode_number": 13,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (5)",
+						"air_date": "2024-10-12"
+					},
+					{
+						"episode_number": 14,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (6)",
+						"air_date": "2024-10-19"
+					},
+					{
+						"episode_number": 15,
+						"name": "WAZAMONOGATARI: Karen Ogre",
+						"air_date": null
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"26867": {
+				"results": [
+					{
+						"id": "5e074b62d236e600129e0be2",
+						"name": "Absolute Order",
+						"type": 2
+					}
+				]
+			},
+			"45247": {
+				"results": []
+			},
+			"46195": {
+				"results": [
+					{
+						"id": "666f011e06254acbc9ebfcbc",
+						"name": "Order by initial air date",
+						"type": 1
+					},
+					{
+						"id": "6a125fe96d1fa649f9d49475",
+						"name": "TV",
+						"type": 1
+					},
+					{
+						"id": "6a3a296cc6f0168a53bf6244",
+						"name": "物语系列",
+						"type": 1
+					},
+					{
+						"id": "69f7fe355ccaded85cc5ff9e",
+						"name": "TV",
+						"type": 2
+					},
+					{
+						"id": "6ab48116b3d8a18dc5a92401",
+						"name": "Chronological Order",
+						"type": 2
+					},
+					{
+						"id": "6aca87d22bc0504e56de404b",
+						"name": "Absolute (Novel Order)",
+						"type": 2
+					},
+					{
+						"id": "6aca87d7a5145441b2b669a7",
+						"name": "Absolute (TV Order)",
+						"type": 2
+					},
+					{
+						"id": "603c68c579b3d40052670822",
+						"name": "DVD Order",
+						"type": 3
+					},
+					{
+						"id": "66e75be9d7bcca524db0d047",
+						"name": "ABEMA",
+						"type": 4
+					},
+					{
+						"id": "5ad0ec240e0a26303f00d84d",
+						"name": "Novel groupings",
+						"type": 5
+					},
+					{
+						"id": "6805129403344aee7089d8ef",
+						"name": "Plot Order",
+						"type": 5
+					},
+					{
+						"id": "6ab47dc53332f056b8045169",
+						"name": "Light Novel Seasons",
+						"type": 5
+					},
+					{
+						"id": "6224ccddfe077a0043a57f5c",
+						"name": "Order by original author Nisio Isin",
+						"type": 6
+					},
+					{
+						"id": "63b834c6f44f2700bddedc3a",
+						"name": "TVDB Order",
+						"type": 7
+					}
+				]
+			},
+			"71103": {
+				"results": []
+			},
+			"73833": {
+				"results": [
+					{
+						"id": "6506d095109dec00eb16734c",
+						"name": "Cours",
+						"type": 6
+					}
+				]
+			},
+			"124800": {
+				"results": []
+			},
+			"210832": {
+				"results": []
+			}
+		},
+		"episodeGroup": {
+			"63b834c6f44f2700bddedc3a": {
+				"groups": [
+					{
+						"order": 0,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 0,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 0,
+								"episode_number": 6
+							},
+							{
+								"order": 2,
+								"season_number": 0,
+								"episode_number": 7
+							},
+							{
+								"order": 3,
+								"season_number": 0,
+								"episode_number": 8
+							},
+							{
+								"order": 4,
+								"season_number": 0,
+								"episode_number": 9
+							},
+							{
+								"order": 5,
+								"season_number": 0,
+								"episode_number": 10
+							},
+							{
+								"order": 6,
+								"season_number": 0,
+								"episode_number": 11
+							},
+							{
+								"order": 7,
+								"season_number": 0,
+								"episode_number": 12
+							},
+							{
+								"order": 8,
+								"season_number": 0,
+								"episode_number": 13
+							},
+							{
+								"order": 9,
+								"season_number": 0,
+								"episode_number": 14
+							},
+							{
+								"order": 10,
+								"season_number": 0,
+								"episode_number": 15
+							},
+							{
+								"order": 11,
+								"season_number": 0,
+								"episode_number": 16
+							},
+							{
+								"order": 12,
+								"season_number": 0,
+								"episode_number": 17
+							},
+							{
+								"order": 13,
+								"season_number": 0,
+								"episode_number": 18
+							},
+							{
+								"order": 14,
+								"season_number": 0,
+								"episode_number": 19
+							},
+							{
+								"order": 15,
+								"season_number": 0,
+								"episode_number": 20
+							},
+							{
+								"order": 16,
+								"season_number": 0,
+								"episode_number": 21
+							},
+							{
+								"order": 17,
+								"season_number": 0,
+								"episode_number": 22
+							},
+							{
+								"order": 18,
+								"season_number": 0,
+								"episode_number": 23
+							},
+							{
+								"order": 19,
+								"season_number": 0,
+								"episode_number": 24
+							},
+							{
+								"order": 20,
+								"season_number": 0,
+								"episode_number": 25
+							},
+							{
+								"order": 21,
+								"season_number": 0,
+								"episode_number": 26
+							},
+							{
+								"order": 22,
+								"season_number": 0,
+								"episode_number": 27
+							},
+							{
+								"order": 23,
+								"season_number": 0,
+								"episode_number": 28
+							},
+							{
+								"order": 24,
+								"season_number": 0,
+								"episode_number": 29
+							},
+							{
+								"order": 25,
+								"season_number": 0,
+								"episode_number": 30
+							},
+							{
+								"order": 26,
+								"season_number": 0,
+								"episode_number": 31
+							},
+							{
+								"order": 27,
+								"season_number": 0,
+								"episode_number": 32
+							},
+							{
+								"order": 28,
+								"season_number": 0,
+								"episode_number": 33
+							},
+							{
+								"order": 29,
+								"season_number": 0,
+								"episode_number": 42
+							},
+							{
+								"order": 30,
+								"season_number": 0,
+								"episode_number": 43
+							},
+							{
+								"order": 31,
+								"season_number": 0,
+								"episode_number": 44
+							},
+							{
+								"order": 32,
+								"season_number": 0,
+								"episode_number": 45
+							},
+							{
+								"order": 33,
+								"season_number": 0,
+								"episode_number": 46
+							},
+							{
+								"order": 34,
+								"season_number": 0,
+								"episode_number": 47
+							},
+							{
+								"order": 35,
+								"season_number": 0,
+								"episode_number": 48
+							}
+						]
+					},
+					{
+						"order": 1,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 1,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 1,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 1,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 1,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 1,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 1,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 1,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 1,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 1,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 1,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 1,
+								"episode_number": 11
+							},
+							{
+								"order": 11,
+								"season_number": 1,
+								"episode_number": 12
+							},
+							{
+								"order": 12,
+								"season_number": 0,
+								"episode_number": 2
+							},
+							{
+								"order": 13,
+								"season_number": 0,
+								"episode_number": 3
+							},
+							{
+								"order": 14,
+								"season_number": 0,
+								"episode_number": 4
+							}
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 2,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 2,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 2,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 2,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 2,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 2,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 2,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 2,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 2,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 2,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 2,
+								"episode_number": 11
+							}
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 3,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 3,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 3,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 3,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 3,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 3,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 3,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 3,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 3,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 3,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 3,
+								"episode_number": 11
+							},
+							{
+								"order": 11,
+								"season_number": 3,
+								"episode_number": 12
+							},
+							{
+								"order": 12,
+								"season_number": 3,
+								"episode_number": 13
+							},
+							{
+								"order": 13,
+								"season_number": 3,
+								"episode_number": 14
+							},
+							{
+								"order": 14,
+								"season_number": 3,
+								"episode_number": 15
+							},
+							{
+								"order": 15,
+								"season_number": 3,
+								"episode_number": 16
+							},
+							{
+								"order": 16,
+								"season_number": 3,
+								"episode_number": 17
+							},
+							{
+								"order": 17,
+								"season_number": 3,
+								"episode_number": 18
+							},
+							{
+								"order": 18,
+								"season_number": 3,
+								"episode_number": 19
+							},
+							{
+								"order": 19,
+								"season_number": 3,
+								"episode_number": 20
+							},
+							{
+								"order": 20,
+								"season_number": 3,
+								"episode_number": 21
+							},
+							{
+								"order": 21,
+								"season_number": 3,
+								"episode_number": 22
+							},
+							{
+								"order": 22,
+								"season_number": 3,
+								"episode_number": 23
+							}
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 4,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 4,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 4,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 4,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 4,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 4,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 4,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 4,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 4,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 4,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 4,
+								"episode_number": 11
+							},
+							{
+								"order": 11,
+								"season_number": 4,
+								"episode_number": 12
+							}
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 0,
+								"episode_number": 35
+							},
+							{
+								"order": 1,
+								"season_number": 0,
+								"episode_number": 36
+							},
+							{
+								"order": 2,
+								"season_number": 0,
+								"episode_number": 37
+							},
+							{
+								"order": 3,
+								"season_number": 0,
+								"episode_number": 38
+							},
+							{
+								"order": 4,
+								"season_number": 0,
+								"episode_number": 39
+							},
+							{
+								"order": 5,
+								"season_number": 0,
+								"episode_number": 40
+							},
+							{
+								"order": 6,
+								"season_number": 0,
+								"episode_number": 41
+							}
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{
+								"order": 0,
+								"season_number": 5,
+								"episode_number": 1
+							},
+							{
+								"order": 1,
+								"season_number": 5,
+								"episode_number": 2
+							},
+							{
+								"order": 2,
+								"season_number": 5,
+								"episode_number": 3
+							},
+							{
+								"order": 3,
+								"season_number": 5,
+								"episode_number": 4
+							},
+							{
+								"order": 4,
+								"season_number": 5,
+								"episode_number": 5
+							},
+							{
+								"order": 5,
+								"season_number": 5,
+								"episode_number": 6
+							},
+							{
+								"order": 6,
+								"season_number": 5,
+								"episode_number": 7
+							},
+							{
+								"order": 7,
+								"season_number": 5,
+								"episode_number": 8
+							},
+							{
+								"order": 8,
+								"season_number": 5,
+								"episode_number": 9
+							},
+							{
+								"order": 9,
+								"season_number": 5,
+								"episode_number": 10
+							},
+							{
+								"order": 10,
+								"season_number": 5,
+								"episode_number": 11
+							},
+							{
+								"order": 11,
+								"season_number": 5,
+								"episode_number": 12
+							},
+							{
+								"order": 12,
+								"season_number": 5,
+								"episode_number": 13
+							},
+							{
+								"order": 13,
+								"season_number": 5,
+								"episode_number": 14
+							}
+						]
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt7326322": null,
+			"tt6464966": null,
+			"tt14586350": null,
+			"tt2150751": null,
+			"tt7542154": null,
+			"tt0103359": null,
+			"tt1626038": null,
+			"tt2661044": null,
+			"tt9561862": null,
+			"tt10710138": null,
+			"tt3521854": null,
+			"tt4254242": null,
+			"tt5607616": null,
+			"tt1528406": null,
+			"tt32576588": null,
+			"tt0807832": null,
+			"tt1480925": null,
+			"tt2359704": null,
+			"tt3443522": null,
+			"tt2922300": null
+		},
+		"seasonEpisodes": {
+			"tt6464966/4": {},
+			"tt2150751/3": {
+				"1": "tt10937702",
+				"2": "tt11212816",
+				"3": "tt11212822",
+				"4": "tt11251488",
+				"5": "tt11251494",
+				"6": "tt11569354",
+				"7": "tt11569486",
+				"8": "tt11569650",
+				"9": "tt11572230",
+				"10": "tt11574354",
+				"11": "tt11574506",
+				"12": "tt11574596",
+				"13": "tt11574656",
+				"14": "tt11609032",
+				"15": "tt11664424",
+				"16": "tt11702722",
+				"17": "tt11730482",
+				"18": "tt11826014",
+				"19": "tt11826018",
+				"20": "tt12490186",
+				"21": "tt12490200",
+				"22": "tt12490202",
+				"23": "tt12490206",
+				"24": "tt12490208"
+			},
+			"tt7542154/22": {},
+			"tt7326322/3": {},
+			"tt0807832/2": {}
+		},
+		"identify": {
+			"ReZERO.-Starting.Life.in.Another.World-.S04E13.Stand.Up.1080p.CR.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub": null,
+			"Fairy.Tail.E180.Der.Ritterorden.des.hungrigen.Wolfes.German.2014.ANiME.DL.720p.BluRay.x264-STARS": null,
+			"BOCCHI THE ROCK! Recap Part 2 - (BD Remux 1080p H.264 FLAC.DTS-HD MA.AC-3) [319289DF]-realpinkgirl321.mkv": null,
+			"JJBA - S06E05 - 2160p HDR Ai Upscale -Mesc": null
+		},
+		"identifier": {
+			"The.100.S04.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB": {
+				"kind": "tv",
+				"probability": 0.9937,
+				"confident": true,
+				"parsedTitle": "The 100 S04",
+				"parsedYear": 2017,
+				"matches": [
+					{
+						"imdbId": "tt2661044",
+						"title": "The 100",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0314970",
+						"title": "100%",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0844203",
+						"title": "The One Show",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt25274446",
+						"title": "Physical: 100",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt5600406",
+						"title": "Dark/Web",
+						"year": 2019
+					}
+				]
+			},
+			"The.100.S04E01.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB": {
+				"kind": "tv",
+				"probability": 0.9823,
+				"confident": true,
+				"parsedTitle": "The 100",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt2661044",
+						"title": "The 100",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt25274446",
+						"title": "Physical: 100",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0844203",
+						"title": "The One Show",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0314970",
+						"title": "100%",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0042167",
+						"title": "The Web",
+						"year": 1950
+					}
+				]
+			},
+			"Love death robots - season 3(2022).2160p.SDR.HEVC": {
+				"kind": "tv",
+				"probability": 0.9868,
+				"confident": true,
+				"parsedTitle": "Love death robots",
+				"parsedYear": 2022,
+				"matches": [
+					{
+						"imdbId": "tt9561862",
+						"title": "Love, Death & Robots",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt36041841",
+						"title": "Food, Love, Robots",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt12853970",
+						"title": "Shinchan",
+						"year": 1992
+					},
+					{
+						"imdbId": "tt14586350",
+						"title": "Love & Death",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt9179552",
+						"title": "Dr. Death",
+						"year": 2021
+					}
+				]
+			},
+			"Love, Death & Robots.S03E01.2160p.Three Robots- Exit Strategies": {
+				"kind": "tv",
+				"probability": 0.9866,
+				"confident": true,
+				"parsedTitle": "Love, Death & Robots",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt9561862",
+						"title": "Love, Death & Robots",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt14586350",
+						"title": "Love & Death",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt4613726",
+						"title": "Bad Robots",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0437745",
+						"title": "Robot Chicken",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt8682608",
+						"title": "Amar a muerte",
+						"year": 2018
+					}
+				]
+			},
+			"Season 3": {
+				"kind": "tv",
+				"probability": 0.1598,
+				"confident": false,
+				"parsedTitle": "Season 3",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt31638277",
+						"title": "The Truth",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt12970484",
+						"title": "Woke: Season 3",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt36237567",
+						"title": "The Season",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt15479692",
+						"title": "Off Season",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt11417530",
+						"title": "The Coming One",
+						"year": 2017
+					}
+				]
+			},
+			"Dragon Ball Z Abridged - S03E25 - It's Been A Year If It's Been A Day SDTV": {
+				"kind": "tv",
+				"probability": 0.956,
+				"confident": true,
+				"parsedTitle": "Dragon Ball Z Abridged",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt10710138",
+						"title": "Dragon Ball Z Abridged",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt0214341",
+						"title": "Dragon Ball Z",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0121220",
+						"title": "Dragon Ball Z",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt0280249",
+						"title": "Dragon Ball",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt0088509",
+						"title": "Dragon Ball",
+						"year": 1986
+					}
+				]
+			},
+			"Power Rangers Dino Charge (2015) Season 1 S01 (480p DVD x265 HEVC 10bit DD 5.1 EDGE2020)": {
+				"kind": "tv",
+				"probability": 0.9885,
+				"confident": true,
+				"parsedTitle": "Power Rangers Dino Charge",
+				"parsedYear": 2015,
+				"matches": [
+					{
+						"imdbId": "tt3521854",
+						"title": "Power Rangers Dino Charge",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0106064",
+						"title": "Mighty Morphin Power Rangers",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt12360292",
+						"title": "Power Rangers Dino Fury",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt9546826",
+						"title": "Knight Dragon Squadron Ryusoulger",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0373587",
+						"title": "Power Rangers DinoThunder",
+						"year": 2004
+					}
+				]
+			},
+			"Power Rangers - S22E02 - Past, Present and Fusion (480p x265 EDGE2020)": {
+				"kind": "tv",
+				"probability": 0.0278,
+				"confident": false,
+				"parsedTitle": "Power Rangers",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt0414762",
+						"title": "Power Rangers S.P.D.",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt1121628",
+						"title": "Power Rangers Jungle Fury",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt1704503",
+						"title": "Power Rangers Samurai",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0115319",
+						"title": "Power Rangers Zeo",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0120575",
+						"title": "Power Rangers in Space",
+						"year": 1998
+					}
+				]
+			},
+			"The.Magicians.S03.2018.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR": {
+				"kind": "tv",
+				"probability": 0.9548,
+				"confident": true,
+				"parsedTitle": "The Magicians S03",
+				"parsedYear": 2018,
+				"matches": [
+					{
+						"imdbId": "tt4254242",
+						"title": "The Magicians",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt1830351",
+						"title": "The Magicians",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0069606",
+						"title": "The Magician",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0205659",
+						"title": "The Magician",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt0216894",
+						"title": "The Magician's House",
+						"year": 1999
+					}
+				]
+			},
+			"The.Magicians.S03E02.Heroes.and.Morons.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR": {
+				"kind": "tv",
+				"probability": 0.9695,
+				"confident": true,
+				"parsedTitle": "The Magicians",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt4254242",
+						"title": "The Magicians",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt1830351",
+						"title": "The Magicians",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0069606",
+						"title": "The Magician",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0205659",
+						"title": "The Magician",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt8814346",
+						"title": "Aiqing mo fa shi",
+						"year": 2006
+					}
+				]
+			},
+			"ReZERO.-Starting.Life.in.Another.World-.S04E13.Stand.Up.1080p.CR.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub": {
+				"kind": "tv",
+				"probability": 0.4943,
+				"confident": false,
+				"parsedTitle": "ReZERO -Starting Life in Another World",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt5607616",
+						"title": "Re: Zero - Starting Life in Another World",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt13906272",
+						"title": "Re: ZERO - Starting Life in Another World (Re-Edit)",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt14464886",
+						"title": "Blind Wave: Re: Zero - Starting Life in Another World Reaction",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt19223420",
+						"title": "Farming Life in Another World",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0057731",
+						"title": "Another World",
+						"year": 1964
+					}
+				]
+			},
+			"Fairy.Tail.E180.Der.Ritterorden.des.hungrigen.Wolfes.German.2014.ANiME.DL.720p.BluRay.x264-STARS": {
+				"kind": "tv",
+				"probability": 0.218,
+				"confident": false,
+				"parsedTitle": "Fairy Tail E180 Der Ritterorden des hungrigen Wolfes German",
+				"parsedYear": 2014,
+				"matches": [
+					{
+						"imdbId": "tt1528406",
+						"title": "Fairy Tail",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8324472",
+						"title": "Fairy Tail OVA Series",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt32178759",
+						"title": "Garouden: The Way of the Lone Wolf",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt3556920",
+						"title": "Wolf Hall",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0421384",
+						"title": "The Valley of the Wolves",
+						"year": 2003
+					}
+				]
+			},
+			"stars-fairy.tail.e180.720p": {
+				"kind": "tv",
+				"probability": 0.9551,
+				"confident": true,
+				"parsedTitle": "fairy tail",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt1528406",
+						"title": "Fairy Tail",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8324472",
+						"title": "Fairy Tail OVA Series",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt15414478",
+						"title": "Fairy Tail: 100 Years Quest",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt28728531",
+						"title": "Fairy Tale",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt11397978",
+						"title": "JJ Villard's Fairy Tales",
+						"year": 2020
+					}
+				]
+			},
+			"BOCCHI THE ROCK! Recap Part 2 - (BD Remux 1080p H.264 FLAC.DTS-HD MA.AC-3) [319289DF]-realpinkgirl321.mkv": {
+				"kind": "movie",
+				"probability": 0.469,
+				"confident": false,
+				"parsedTitle": "BOCCHI THE ROCK! Recap Part 2",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt32576588",
+						"title": "Bocchi the Rock! Recap Part 2",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt32561659",
+						"title": "Bocchi the Rock! Recap Part 1",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0117500",
+						"title": "The Rock",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0297162",
+						"title": "Half Past Dead",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt0495624",
+						"title": "Rock",
+						"year": 2005
+					}
+				]
+			},
+			"Batman TAS Seasons 2-3": {
+				"kind": "tv",
+				"probability": 0.4669,
+				"confident": false,
+				"parsedTitle": "Batman TAS Seasons 2-3",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt0103359",
+						"title": "Batman: The Animated Series",
+						"year": 1992
+					},
+					{
+						"imdbId": "tt0059968",
+						"title": "Batman",
+						"year": 1966
+					},
+					{
+						"imdbId": "tt0118266",
+						"title": "The New Batman Adventures",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0398417",
+						"title": "The Batman",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt29794599",
+						"title": "Bolo Sezoni",
+						"year": 2023
+					}
+				]
+			},
+			"Batman - 086 - Holiday Knights   [DarkDream]": {
+				"kind": "tv",
+				"probability": 0.462,
+				"confident": false,
+				"parsedTitle": "Batman",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt0059968",
+						"title": "Batman",
+						"year": 1966
+					},
+					{
+						"imdbId": "tt0103359",
+						"title": "Batman: The Animated Series",
+						"year": 1992
+					},
+					{
+						"imdbId": "tt0398417",
+						"title": "The Batman",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0118266",
+						"title": "The New Batman Adventures",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0147746",
+						"title": "Batman Beyond",
+						"year": 1999
+					}
+				]
+			},
+			"Marvels THE AVENGERS, Earth's MIGHTIEST Heroes - Complete 2010-2012 TV Series, Season 1-2 S01-S02 - 1080p BluRay x264": {
+				"kind": "tv",
+				"probability": 0.8857,
+				"confident": true,
+				"parsedTitle": "Marvels THE AVENGERS, Earth's MIGHTIEST Heroes",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt1626038",
+						"title": "The Avengers: Earth's Mightiest Heroes",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt7657124",
+						"title": "The Heroes",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt0054518",
+						"title": "The Avengers",
+						"year": 1961
+					},
+					{
+						"imdbId": "tt2455546",
+						"title": "Avengers Assemble",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0203247",
+						"title": "The Avengers: United They Stand",
+						"year": 1999
+					}
+				]
+			},
+			"The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay)": {
+				"kind": "tv",
+				"probability": 0.967,
+				"confident": true,
+				"parsedTitle": "The Avengers",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt0054518",
+						"title": "The Avengers",
+						"year": 1961
+					},
+					{
+						"imdbId": "tt0074031",
+						"title": "The New Avengers",
+						"year": 1976
+					},
+					{
+						"imdbId": "tt0203247",
+						"title": "The Avengers: United They Stand",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt30971553",
+						"title": "The Avengers",
+						"year": null
+					},
+					{
+						"imdbId": "tt0883021",
+						"title": "Avenger",
+						"year": 2003
+					}
+				]
+			},
+			"JJBA - S06E05 - 2160p HDR Ai Upscale -Mesc": {
+				"kind": "tv",
+				"probability": 0.008,
+				"confident": false,
+				"parsedTitle": "JJBA",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt12343534",
+						"title": "Jujutsu Kaisen",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt2406986",
+						"title": "Grojband",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt4061080",
+						"title": "Love",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt6235122",
+						"title": "Servant of the People",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt9742936",
+						"title": "FBI: Most Wanted",
+						"year": 2020
+					}
+				]
+			},
+			"JoJos Bizarre Adventure - S06E05 - The Terrorist from a Faraway Country - 2160p HDR Ai Upscale -Mesc": {
+				"kind": "tv",
+				"probability": 0.6734,
+				"confident": true,
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt13280486",
+						"title": "Thus Spoke Kishibe Rohan",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt0080200",
+						"title": "Bizarre",
+						"year": 1979
+					}
+				]
+			},
+			"[ARC] Mushishi Zoku Shou + Specials (2014) [BD 1080p 10-bit x265 FLAC]": {
+				"kind": "tv",
+				"probability": 0.9602,
+				"confident": true,
+				"parsedTitle": "Mushishi Zoku Shou + Specials",
+				"parsedYear": 2014,
+				"matches": [
+					{
+						"imdbId": "tt3443522",
+						"title": "Mushi-Shi: Next Passage",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0807832",
+						"title": "Mushi-Shi",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt9381622",
+						"title": "Special",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt8365408",
+						"title": "The King's Avatar Specials",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt1216196",
+						"title": "Special A",
+						"year": 2008
+					}
+				]
+			},
+			"[ARC] Mushishi Zoku Shou - S02E21 [BD 1080p 10-bit x265 FLAC]": {
+				"kind": "tv",
+				"probability": 0.9369,
+				"confident": true,
+				"parsedTitle": "Mushishi Zoku Shou",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt3443522",
+						"title": "Mushi-Shi: Next Passage",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt0807832",
+						"title": "Mushi-Shi",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt4277922",
+						"title": "Call My Agent!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt20228550",
+						"title": "The Seven Deadly Sins: Four Knights of the Apocalypse",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt1674117",
+						"title": "Hero 108",
+						"year": 2010
+					}
+				]
+			},
+			"[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)": {
+				"kind": "tv",
+				"probability": 0.9773,
+				"confident": true,
+				"parsedTitle": "Monogatari Series Second Season",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt2922300",
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1480925",
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt30971467",
+						"title": "Monogatari Series: Off & Monster Season",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt4616700",
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt26140070",
+						"title": "Malevolent Spirits: Mononogatari",
+						"year": 2023
+					}
+				]
+			},
+			"[smol] Monogatari - S04E13 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4223495C]": {
+				"kind": "tv",
+				"probability": 0.4035,
+				"confident": false,
+				"parsedTitle": "Monogatari",
+				"parsedYear": null,
+				"matches": [
+					{
+						"imdbId": "tt2922300",
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1480925",
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt4616700",
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt30971467",
+						"title": "Monogatari Series: Off & Monster Season",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt3621678",
+						"title": "Hanamonogatari",
+						"year": 2014
+					}
+				]
+			}
+		}
+	},
+	"cases": [
+		{
+			"request": {
+				"name": "The.Magicians.S03.2018.BluRay.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+				"hash": "694585723ff60891f3da4b93f0691c172f704b2b",
+				"imdbId": "tt7326322",
+				"files": [
+					{
+						"path": "The.Magicians.S03E02.Heroes.and.Morons.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E03.The.Losses.of.Magic.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E04.Be.the.Penny.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E05.A.Life.in.the.Day.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E06.Do.You.Like.Teeth.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E07.Poached.Eggs.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E08.Six.Short.Stories.About.Magic.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E09.All.That.Josh.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E10.The.Art.of.the.Deal.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E11.Twenty-Three.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E12.The.Fillorian.Candidate.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E13.Will.You.Play.with.Me.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.Magicians.S03E01.The.Tales.of.the.Seven.Keys.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt4254242",
+				"tmdbId": 64432,
+				"files": [
+					{
+						"path": "The.Magicians.S03E02.Heroes.and.Morons.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E03.The.Losses.of.Magic.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E04.Be.the.Penny.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E05.A.Life.in.the.Day.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E06.Do.You.Like.Teeth.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E07.Poached.Eggs.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E08.Six.Short.Stories.About.Magic.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E09.All.That.Josh.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E10.The.Art.of.the.Deal.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E11.Twenty-Three.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E12.The.Fillorian.Candidate.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E13.Will.You.Play.with.Me.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.Magicians.S03E01.The.Tales.of.the.Seven.Keys.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "The.100.S04.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB",
+				"hash": null,
+				"imdbId": "tt6464966",
+				"files": [
+					{
+						"path": "The.100.S04E01.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E02.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E03.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E04.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E05.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E06.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E07.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E08.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E09.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E10.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E11.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E12.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S04E13.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2661044",
+				"tmdbId": 48866,
+				"files": [
+					{
+						"path": "The.100.S04E01.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E02.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E03.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E04.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E05.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E06.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E07.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E08.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E09.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E10.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E11.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E12.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The.100.S04E13.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-HDSWEB.mkv",
+						"season": 4,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Love death robots - season 3(2022).2160p.SDR.HEVC",
+				"hash": "1fa7bb554dcedcf4679ad91466cf67f1d3899000",
+				"imdbId": "tt14586350",
+				"files": [
+					{
+						"path": "Love, Death & Robots.S03E01.2160p.Three Robots- Exit Strategies.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love, Death & Robots.S03E02.2160p.Bad Travelling.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E04.2160p.Night of the Mini Dead.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E05.2160p.Kill Team Kill.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E06.2160p.Swarm.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E07.2160p.Mason's Rats.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E08.2160p.In Vaulted Halls Entombed.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E09.2160p.Jibaro.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E03.2160p.The Very Pulse of the Machine.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt9561862",
+				"tmdbId": 86831,
+				"files": [
+					{
+						"path": "Love, Death & Robots.S03E01.2160p.Three Robots- Exit Strategies.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love, Death & Robots.S03E02.2160p.Bad Travelling.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E04.2160p.Night of the Mini Dead.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E05.2160p.Kill Team Kill.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E06.2160p.Swarm.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E07.2160p.Mason's Rats.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E08.2160p.In Vaulted Halls Entombed.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E09.2160p.Jibaro.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Love.Death.and.Robots.S03E03.2160p.The Very Pulse of the Machine.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Season 3",
+				"hash": "c6cf2cb9c7cddf969bca1a34d183a0a5f7a54a53",
+				"imdbId": "tt2150751",
+				"files": [
+					{
+						"path": "Dragon Ball Z Abridged - S03E25 - It's Been A Year If It's Been A Day SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E26 - Deities, Devils, and Doing the Dirty SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E27 - Opening Serumonies SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E28 - Cell Mates SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E29 - The Hard Cell SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E30 - Cell-Out (Part 1 - Mitosis) SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E31 - Cell-Out (Part 2 - Apoptosis) SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E32 - Cell-Out (Part 3 - Necrosis) SDTV.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E33 - Epilogue - Die, Robot SDTV.mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt10710138",
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Dragon Ball Z Abridged - S03E25 - It's Been A Year If It's Been A Day SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E26 - Deities, Devils, and Doing the Dirty SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E27 - Opening Serumonies SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E28 - Cell Mates SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E29 - The Hard Cell SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E30 - Cell-Out (Part 1 - Mitosis) SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E31 - Cell-Out (Part 2 - Apoptosis) SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E32 - Cell-Out (Part 3 - Necrosis) SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Dragon Ball Z Abridged - S03E33 - Epilogue - Die, Robot SDTV.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Power Rangers Dino Charge (2015) Season 1 S01 (480p DVD x265 HEVC 10bit DD 5.1 EDGE2020)",
+				"hash": "a75fc25c531b912ee444f8ade2f943d006700766",
+				"imdbId": "tt7542154",
+				"files": [
+					{
+						"path": "Power Rangers - S22E02 - Past, Present and Fusion (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E03 - A Fool's Hour (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E04 - Return of the Caveman (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E05 - Breaking Black (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E06 - The Tooth Hurts (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E07 - Let Sleeping Zords Lie (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E08 - Double Ranger, Double Danger (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E09 - When Logic Fails (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E10 - The Royal Rangers (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E11 - Break Out (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E13 - Sync or Swim (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E14 - True Black (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E15 - The Ghostest with the Mostest (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E16 - Rise of a Ranger (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E17 - No Matter How You Slice It (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E18 - World Famous (In New Zealand) (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E19 - Deep Down Under (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E20 - Wishing for a Hero (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E21 - Race to Rescue Christmas (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E22 - One More Energem (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					},
+					{
+						"path": "Power Rangers - S22E12 - Knight After Knights (480p x265 EDGE2020).mkv",
+						"folder": "Season 22 - Dino Charge"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt3521854",
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Power Rangers - S22E02 - Past, Present and Fusion (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E03 - A Fool's Hour (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E04 - Return of the Caveman (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E05 - Breaking Black (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E06 - The Tooth Hurts (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E07 - Let Sleeping Zords Lie (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E08 - Double Ranger, Double Danger (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E09 - When Logic Fails (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E10 - The Royal Rangers (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E11 - Break Out (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E13 - Sync or Swim (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E14 - True Black (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E15 - The Ghostest with the Mostest (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E16 - Rise of a Ranger (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E17 - No Matter How You Slice It (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E18 - World Famous (In New Zealand) (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E19 - Deep Down Under (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E20 - Wishing for a Hero (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E21 - Race to Rescue Christmas (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E22 - One More Energem (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Power Rangers - S22E12 - Knight After Knights (480p x265 EDGE2020).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "ReZERO.-Starting.Life.in.Another.World-.S04E13.Stand.Up.1080p.CR.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "ReZERO.-Starting.Life.in.Another.World-.S04E13.Stand.Up.1080p.CR.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5607616",
+				"tmdbId": 65942,
+				"files": [
+					{
+						"path": "ReZERO.-Starting.Life.in.Another.World-.S04E13.Stand.Up.1080p.CR.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+						"season": 1,
+						"episode": 79,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Fairy.Tail.E180.Der.Ritterorden.des.hungrigen.Wolfes.German.2014.ANiME.DL.720p.BluRay.x264-STARS",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "JAYNKLeOIIY7iDj3tSnTV2.part1.rar/stars-fairy.tail.e180.720p.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1528406",
+				"tmdbId": 46261,
+				"files": [
+					{
+						"path": "JAYNKLeOIIY7iDj3tSnTV2.part1.rar/stars-fairy.tail.e180.720p.mkv",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "absolute"
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "BOCCHI THE ROCK! Recap Part 2 - (BD Remux 1080p H.264 FLAC.DTS-HD MA.AC-3) [319289DF]-realpinkgirl321.mkv",
+				"hash": "793b239f23b758ed49560ea9e64d438199f5b567",
+				"imdbId": null,
+				"files": [
+					{
+						"path": "BOCCHI THE ROCK! Recap Part 2 - (BD Remux 1080p H.264 FLAC.DTS-HD MA.AC-3) [319289DF]-realpinkgirl321.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt32576588",
+				"tmdbId": 1201387,
+				"files": [
+					{
+						"path": "BOCCHI THE ROCK! Recap Part 2 - (BD Remux 1080p H.264 FLAC.DTS-HD MA.AC-3) [319289DF]-realpinkgirl321.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Batman TAS Seasons 2-3",
+				"hash": "4d71701a8915b996e35e73fe0f4423820b671df9",
+				"imdbId": "tt0103359",
+				"files": [
+					{
+						"path": "Batman - 086 - Holiday Knights   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 087 - Sins Of The Father   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 088 - Cold Comfort   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 089 - Double Talk   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 090 - You Scratch My Back   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 091 - Never Fear   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 092 - Joker's Millions   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 093 - Growing Pains   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 094 - Love Is A Croc   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 095 - Torch Song   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 096 - The Ultimate Thrill   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 097 - Over The Edge   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 098 - Mean Seasons   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 099 - Critters   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 100 - Cult Of The Cat   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 101 - Animal Act   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 102 - Old Wounds   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 103 - The Demon Within   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 104 - Legends Of The Dark Knight   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 105 - Girl's Night Out   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 106 - Mad Love   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 107 - Chemistry   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 108 - Beware The Creeper   [DarkDream].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Batman - 109 - Judgment Day   [DarkDream].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0103359",
+				"tmdbId": 2098,
+				"files": [
+					{
+						"path": "Batman - 086 - Holiday Knights   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 087 - Sins Of The Father   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 088 - Cold Comfort   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 089 - Double Talk   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 090 - You Scratch My Back   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 091 - Never Fear   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 092 - Joker's Millions   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 093 - Growing Pains   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 094 - Love Is A Croc   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 095 - Torch Song   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 096 - The Ultimate Thrill   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 097 - Over The Edge   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 098 - Mean Seasons   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 099 - Critters   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 100 - Cult Of The Cat   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 101 - Animal Act   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 102 - Old Wounds   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 103 - The Demon Within   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 104 - Legends Of The Dark Knight   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 105 - Girl's Night Out   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 106 - Mad Love   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 107 - Chemistry   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 108 - Beware The Creeper   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "Batman - 109 - Judgment Day   [DarkDream].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Marvels THE AVENGERS, Earth's MIGHTIEST Heroes - Complete 2010-2012 TV Series, Season 1-2 S01-S02 - 1080p BluRay x264",
+				"hash": "8c5dece7a72036bbf2ad664fc51fb7e76387e002",
+				"imdbId": "tt1626038",
+				"files": [
+					{
+						"path": "The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1626038",
+				"tmdbId": 33623,
+				"files": [
+					{
+						"path": "The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "[ARC] Mushishi Zoku Shou + Specials (2014) [BD 1080p 10-bit x265 FLAC]",
+				"hash": "c95f83343a43f9e4fa8a64458bb2e4925d614524",
+				"imdbId": "tt0807832",
+				"files": [
+					{
+						"path": "[ARC] Mushishi - Hihamukage - S02E00 [BD 1080p 10-bit x265 FLAC].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - S02E21 [BD 1080p 10-bit x265 FLAC].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - S02E22 [BD 1080p 10-bit x265 FLAC].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - Suzu no Shizuku - S02E23-E24 [BD 1080p 10-bit x265 FLAC].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0807832",
+				"tmdbId": 26867,
+				"files": [
+					{
+						"path": "[ARC] Mushishi - Hihamukage - S02E00 [BD 1080p 10-bit x265 FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - S02E21 [BD 1080p 10-bit x265 FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - S02E22 [BD 1080p 10-bit x265 FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[ARC] Mushishi Zoku Shou - Suzu no Shizuku - S02E23-E24 [BD 1080p 10-bit x265 FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)",
+				"hash": "ff13439e7e644541b0434527cb379b5bfadb27e8",
+				"imdbId": "tt1480925",
+				"files": [
+					{
+						"path": "[smol] Monogatari - S04E13 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4223495C].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E14 - Monogatari Series Second Season (BD 1080p HEVC Opus) [2886C5FB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E15 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4615CE44].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E16 - Monogatari Series Second Season (BD 1080p HEVC Opus) [BC971869].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E17 - Monogatari Series Second Season (BD 1080p HEVC Opus) [63AC7F41].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E18 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A15AA17B].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E19 - Monogatari Series Second Season (BD 1080p HEVC Opus) [B484CA31].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E20 - Monogatari Series Second Season (BD 1080p HEVC Opus) [90A33F28].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E21 - Monogatari Series Second Season (BD 1080p HEVC Opus) [8E4A37A3].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E22 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C2F90D9E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E23 - Monogatari Series Second Season (BD 1080p HEVC Opus) [86B8080A].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1480925",
+				"tmdbId": 46195,
+				"files": [
+					{
+						"path": "[smol] Monogatari - S04E13 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4223495C].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E14 - Monogatari Series Second Season (BD 1080p HEVC Opus) [2886C5FB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E15 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4615CE44].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E16 - Monogatari Series Second Season (BD 1080p HEVC Opus) [BC971869].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E17 - Monogatari Series Second Season (BD 1080p HEVC Opus) [63AC7F41].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E18 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A15AA17B].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E19 - Monogatari Series Second Season (BD 1080p HEVC Opus) [B484CA31].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E20 - Monogatari Series Second Season (BD 1080p HEVC Opus) [90A33F28].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E21 - Monogatari Series Second Season (BD 1080p HEVC Opus) [8E4A37A3].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E22 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C2F90D9E].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E23 - Monogatari Series Second Season (BD 1080p HEVC Opus) [86B8080A].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JJBA - S06E05 - 2160p HDR Ai Upscale -Mesc",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "JoJos Bizarre Adventure - S06E05 - The Terrorist from a Faraway Country - 2160p HDR Ai Upscale -Mesc.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "JoJos Bizarre Adventure - S06E05 - The Terrorist from a Faraway Country - 2160p HDR Ai Upscale -Mesc.mkv",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		}
+	]
+}

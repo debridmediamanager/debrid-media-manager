@@ -111,6 +111,12 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 }
 ```
 
+The `imdbId` you send is the title unless it places none of the release's numbered files
+while DMM's identifier is sure of another title: `The.Magicians.S03` sent as The Ancient
+Magus' Bride is answered as The Magicians, and a release whose files read as a title TMDB
+cannot number answers that title with its files unplaced. A release with no title of its own
+(`Season 3`) is named by its first numbered file.
+
 `releases` lines up with the request, and each `files` with its release's. `kind` is
 `movie`, `tv` or `null` when DMM cannot tell; `imdbId` and `tmdbId` are the movie's or
 the show's, never an episode's. `season` and `episode` are TMDB's numbering, so you can
