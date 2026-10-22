@@ -1,3 +1,6 @@
+import duplicateFilms from '@/test/fixtures/library/duplicate-films.json';
+import { UserTorrentStatus, type UserTorrent } from '@/torrent/userTorrent';
+import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -30,7 +33,7 @@ vi.mock('next/config', () => ({
 const mockAddTorrent = vi.fn();
 const mockRefreshLibrary = vi.fn();
 const mockLibraryCache = {
-	libraryItems: [],
+	libraryItems: [] as UserTorrent[],
 	isLoading: false,
 	isFetching: false,
 	refreshLibrary: mockRefreshLibrary,
@@ -443,5 +446,133 @@ describe('Library backup restore to Real-Debrid', () => {
 		expect(first[8]).toEqual([recorded.originalFilename, recorded.filename]);
 		expect(second[1]).toBe(WEAPONS);
 		expect(second[8]).toEqual([]);
+	});
+});
+
+describe('Library identification arriving after initial grouping', () => {
+	const southpaw = duplicateFilms.films.tt1798684;
+	let answerIdentification: (results: (LibraryIdentification | null)[]) => Promise<void>;
+	let identificationRequested: Promise<void>;
+
+	const rowFromRelease = (
+		release: { filename: string; hash: string },
+		index: number
+	): UserTorrent => ({
+		id: `rd:identity-${index}`,
+		filename: release.filename,
+		hash: release.hash,
+		title: 'Southpaw (2015)',
+		bytes: 1_000_000,
+		progress: 100,
+		status: UserTorrentStatus.finished,
+		serviceStatus: 'downloaded',
+		added: new Date('2026-10-22T00:00:00.000Z'),
+		mediaType: 'movie',
+		links: [],
+		selectedFiles: [],
+		seeders: 0,
+		speed: 0,
+	});
+	const identity = (index: number): LibraryIdentification => ({
+		...southpaw[index].identification,
+		kind: 'movie',
+	});
+	const expectSouthpawRows = () => {
+		for (const release of southpaw) {
+			expect(screen.getByText(release.filename, { exact: false })).toBeVisible();
+		}
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		mockRouter.query = {};
+		mockRouter.asPath = '/library';
+		mockCredentials.rd = 'test-rd-key';
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
+		mockLibraryCache.libraryItems = southpaw.map(rowFromRelease);
+		const { promise: requestedPromise, resolve: requested } = Promise.withResolvers<void>();
+		identificationRequested = requestedPromise;
+		const { promise: response, resolve: respond } = Promise.withResolvers<Response>();
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (input: RequestInfo | URL) => {
+				if (String(input) === '/api/library/identify') {
+					requested();
+					return response;
+				}
+				return new Response('{}', { status: 404 });
+			})
+		);
+		answerIdentification = async (results) => {
+			await act(async () => {
+				respond(new Response(JSON.stringify({ results })));
+				await response;
+			});
+		};
+	});
+
+	afterEach(() => {
+		mockLibraryCache.libraryItems = [];
+		mockRouter.query = {};
+		mockRouter.asPath = '/library';
+		mockCredentials.ad = 'test-ad-key';
+		mockCredentials.tb = 'test-tb-key';
+		vi.unstubAllGlobals();
+	});
+
+	it('keeps both same-title rows visible when their delayed movie identities arrive without another keystroke', async () => {
+		const page = render(<LibraryPage />);
+		await identificationRequested;
+		await waitFor(expectSouthpawRows);
+		mockRouter.query = { status: 'sametitle', page: '1' };
+		page.rerender(<LibraryPage />);
+		await waitFor(expectSouthpawRows);
+
+		await answerIdentification([identity(0), identity(1)]);
+
+		await waitFor(expectSouthpawRows);
+	});
+
+	it('keeps an existing parsed-title library link populated after both IMDb identities arrive', async () => {
+		mockRouter.query = { title: 'southpaw2015', page: '1' };
+		mockRouter.asPath = '/library?title=southpaw2015&page=1';
+		render(<LibraryPage />);
+		await identificationRequested;
+		await waitFor(expectSouthpawRows);
+
+		await answerIdentification([identity(0), identity(1)]);
+
+		await waitFor(expectSouthpawRows);
+	});
+
+	it('still groups matching parsed movie titles when only one release has been identified', async () => {
+		const page = render(<LibraryPage />);
+		await identificationRequested;
+		await waitFor(expectSouthpawRows);
+		await answerIdentification([identity(0), null]);
+		mockRouter.query = { status: 'sametitle', page: '1' };
+		page.rerender(<LibraryPage />);
+
+		await waitFor(expectSouthpawRows);
+	});
+
+	it('does not join distinct known movies through an unidentified parsed-title bridge', async () => {
+		// This is an intentional title-collision control, not a provider capture:
+		// three real releases share a deliberately ambiguous local parsed title.
+		const taken = duplicateFilms.films.tt0936501[0];
+		mockLibraryCache.libraryItems = [...southpaw, taken].map(rowFromRelease);
+		const page = render(<LibraryPage />);
+		await identificationRequested;
+		await waitFor(expectSouthpawRows);
+		await answerIdentification([identity(0), null, { ...taken.identification, kind: 'movie' }]);
+		mockRouter.query = { status: 'sametitle', page: '1' };
+		page.rerender(<LibraryPage />);
+
+		await waitFor(() => {
+			for (const release of [...southpaw, taken]) {
+				expect(screen.queryByText(release.filename, { exact: false })).toBeNull();
+			}
+		});
 	});
 });

@@ -12,12 +12,25 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { buildLibraryGrouping } from '@/utils/libraryGrouping';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
+import type { ComponentProps } from 'react';
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from 'vitest';
-import LibraryTorrentRow from './LibraryTorrentRow';
+import TorrentRow from './LibraryTorrentRow';
+
+type StandaloneRowProps = Omit<ComponentProps<typeof TorrentRow>, 'grouping'>;
+
+function LibraryTorrentRow(props: StandaloneRowProps) {
+	const identifications = props.identification
+		? { [props.torrent.id]: props.identification }
+		: {};
+	return (
+		<TorrentRow {...props} grouping={buildLibraryGrouping([props.torrent], identifications)} />
+	);
+}
 
 // Mock dependencies
 vi.mock('@/utils/addMagnet');
@@ -95,9 +108,6 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		ocKey: null,
 		dlKey: null,
 		shouldDownloadMagnets: false,
-		hashGrouping: {},
-		titleGrouping: {},
-		tvGroupingByTitle: {},
 		isSelected: false,
 		onSelect: vi.fn(),
 		onDelete: vi.fn(),

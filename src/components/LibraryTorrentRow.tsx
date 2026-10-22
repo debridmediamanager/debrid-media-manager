@@ -17,8 +17,8 @@ import {
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
-import { sameTitleKey, type LibraryIdentification } from '@/utils/libraryIdentify';
-import { normalize } from '@/utils/mediaId';
+import type { LibraryGrouping } from '@/utils/libraryGrouping';
+import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { getRealDebridStatusText } from '@/utils/realDebridStatus';
@@ -60,9 +60,7 @@ interface TorrentRowProps {
 	ocKey: string | null;
 	dlKey: string | null;
 	shouldDownloadMagnets: boolean;
-	hashGrouping: Record<string, number>;
-	titleGrouping: Record<string, number>;
-	tvGroupingByTitle: Record<string, number>;
+	grouping: LibraryGrouping;
 	hashFilter?: string;
 	titleFilter?: string;
 	tvTitleFilter?: string;
@@ -85,9 +83,7 @@ function TorrentRow({
 	ocKey,
 	dlKey,
 	shouldDownloadMagnets,
-	hashGrouping,
-	titleGrouping,
-	tvGroupingByTitle,
+	grouping,
 	hashFilter,
 	titleFilter,
 	tvTitleFilter,
@@ -400,17 +396,19 @@ function TorrentRow({
 	};
 
 	// Calculate filter texts
-	const hashGroupCount = hashGrouping[torrent.hash];
+	const hashGroupCount = grouping.hashCounts.get(torrent.hash) ?? 0;
 	const hashFilterText = hashGroupCount > 1 && !hashFilter ? `${hashGroupCount} same hash` : '';
 
-	const titleKey = sameTitleKey(torrent, identification);
-	const titleGroupCount = titleGrouping[titleKey];
+	const titleGroup = grouping.titleGroupsById[torrent.id];
+	const titleKey = titleGroup.filter;
+	const titleGroupCount = titleGroup.count;
 	const titleFilterText =
 		titleGroupCount > 1 && !titleFilter && !hashFilter ? `${titleGroupCount} same title` : '';
 
 	let tvTitleFilterText = '';
-	if (torrent.mediaType === 'tv' && torrent.info?.title) {
-		const tvTitleGroupCount = tvGroupingByTitle[normalize(torrent.info.title)];
+	const tvTitleKey = grouping.tvTitlesById[torrent.id];
+	if (tvTitleKey !== undefined) {
+		const tvTitleGroupCount = grouping.tvTitleCounts.get(tvTitleKey) ?? 0;
 		if (tvTitleGroupCount > 1 && !tvTitleFilter && titleGroupCount < tvTitleGroupCount) {
 			tvTitleFilterText = `${tvTitleGroupCount} same show`;
 		}
@@ -491,9 +489,9 @@ function TorrentRow({
 									</Link>
 								)
 							)}
-							{tvTitleFilterText && torrent.info?.title && (
+							{tvTitleFilterText && tvTitleKey !== undefined && (
 								<Link
-									href={`/library?tvTitle=${encodeURIComponent(normalize(torrent.info.title))}&page=1`}
+									href={`/library?tvTitle=${encodeURIComponent(tvTitleKey)}&page=1`}
 									className="ml-1 inline-block cursor-pointer rounded border-2 border-sky-500 bg-sky-900/30 px-1 py-0 text-xs font-bold text-sky-100 transition-colors hover:bg-sky-800/50"
 									onClick={(e) => e.stopPropagation()}
 								>

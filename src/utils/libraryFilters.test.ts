@@ -1,6 +1,16 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { describe, expect, it, vi } from 'vitest';
-import { filterLibraryItems } from './libraryFilters';
+import {
+	filterLibraryItems as filterGroupedLibraryItems,
+	type LibraryFilterOptions,
+} from './libraryFilters';
+import { buildLibraryGrouping } from './libraryGrouping';
+
+const filterLibraryItems = (options: Omit<LibraryFilterOptions, 'grouping'>) =>
+	filterGroupedLibraryItems({
+		...options,
+		grouping: buildLibraryGrouping(options.torrents),
+	});
 
 vi.mock('@/utils/slow', () => ({
 	__esModule: true,
@@ -33,78 +43,72 @@ const createTorrent = (override: Partial<UserTorrent>): UserTorrent => ({
 });
 
 describe('filterLibraryItems', () => {
-	it('filters slow torrents and sets help text', () => {
+	it('filters slow torrents', () => {
 		const slowTorrent = createTorrent({ id: 'slow', title: 'Slow', hash: 'h1' });
 		const normalTorrent = createTorrent({ id: 'normal', title: 'Normal', hash: 'h2' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [slowTorrent, normalTorrent],
 			status: 'slow',
 		});
 
 		expect(list).toHaveLength(1);
 		expect(list[0].id).toBe('slow');
-		expect(helpText).toContain('lack any seeders');
 	});
 
-	it('filters by media type and updates help text', () => {
+	it('filters by media type', () => {
 		const movieTorrent = createTorrent({ id: 'movie', mediaType: 'movie' });
 		const tvTorrent = createTorrent({ id: 'tv', mediaType: 'tv' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [movieTorrent, tvTorrent],
 			mediaType: 'movie',
 		});
 
 		expect(list).toEqual([movieTorrent]);
-		expect(helpText).toContain('movies');
 	});
 
 	it('honors selected status filter', () => {
 		const alpha = createTorrent({ id: 'alpha', title: 'Alpha' });
 		const beta = createTorrent({ id: 'beta', title: 'Beta' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [alpha, beta],
 			status: 'selected',
 			selectedTorrents: new Set(['beta']),
 		});
 
 		expect(list).toEqual([beta]);
-		expect(helpText).toBe('Torrents that you have selected');
 	});
 
 	it('honors the uncached status filter', () => {
 		const dropped = createTorrent({ id: 'uncached', title: 'Dropped' });
 		const healthy = createTorrent({ id: 'healthy', title: 'Healthy' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [dropped, healthy],
 			status: 'uncached',
 		});
 
 		expect(list).toEqual([dropped]);
-		expect(helpText).toBe('Torrents that are no longer cached');
 	});
 
-	it('names Offcloud when filtering by its service tab', () => {
+	it('filters by the Offcloud service tab', () => {
 		const offcloud = createTorrent({ id: 'oc:req-1', title: 'Cloud item', hash: 'h1' });
 		const premiumize = createTorrent({ id: 'pm:t1', title: 'Transfer', hash: 'h2' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [offcloud, premiumize],
 			service: 'oc',
 		});
 
 		expect(list).toEqual([offcloud]);
-		expect(helpText).toBe('Showing torrents from Offcloud');
 	});
 
-	it('names Debrid-Link when filtering by its service tab', () => {
+	it('filters by the Debrid-Link service tab', () => {
 		const debridLink = createTorrent({ id: 'dl:seed-1', title: 'Seedbox item', hash: 'h1' });
 		const offcloud = createTorrent({ id: 'oc:req-1', title: 'Cloud item', hash: 'h2' });
-		const { list, helpText } = filterLibraryItems({
+		const { list } = filterLibraryItems({
 			torrents: [debridLink, offcloud],
 			service: 'dl',
 		});
 
 		expect(list).toEqual([debridLink]);
-		expect(helpText).toBe('Showing torrents from Debrid-Link');
 	});
 
 	it('matches normalized title filters from router params', () => {

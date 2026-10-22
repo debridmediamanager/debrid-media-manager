@@ -64,15 +64,10 @@ import {
 } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
-import {
-	identifiable,
-	identifyLibrary,
-	sameTitleKey,
-	type LibraryIdentification,
-} from '@/utils/libraryIdentify';
+import { buildLibraryGrouping, duplicateLibraryTorrents } from '@/utils/libraryGrouping';
+import { identifiable, identifyLibrary, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
-import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, toasterPosition } from '@/utils/toastOptions';
@@ -182,9 +177,6 @@ function TorrentsPage() {
 		identifyLibrary(todo, (found) => setIdentifications((prev) => ({ ...prev, ...found })));
 	}, [cacheLoading, isFetching, cachedLibraryItems]);
 
-	// loading states
-	const [grouping, setGrouping] = useState(false);
-
 	// Use cached items directly instead of duplicating state
 	const userTorrentsList = cachedLibraryItems;
 	const loading = cacheLoading;
@@ -201,22 +193,16 @@ function TorrentsPage() {
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
 
-	const [defaultTitleGrouping] = useState<Record<string, number>>(() => ({}));
-	const [movieTitleGrouping] = useState<Record<string, number>>(() => ({}));
-	const [tvGroupingByEpisode] = useState<Record<string, number>>(() => ({}));
-	const [tvGroupingByTitle] = useState<Record<string, number>>(() => ({}));
-	const [hashGrouping] = useState<Record<string, number>>(() => ({}));
-	const [sameTitle] = useState<Set<string>>(() => new Set());
-	const [sameHash] = useState<Set<string>>(() => new Set());
+	const grouping = useMemo(
+		() => buildLibraryGrouping(userTorrentsList, identifications),
+		[userTorrentsList, identifications]
+	);
 
 	const [shouldDownloadMagnets] = useState(
 		() =>
 			typeof window !== 'undefined' &&
 			window.localStorage.getItem('settings:downloadMagnets') === 'true'
 	);
-
-	// stats
-	const [totalBytes, setTotalBytes] = useState<number>(0);
 
 	// generate STRM files for each video in torrent
 	useEffect(() => {
@@ -455,9 +441,7 @@ function TorrentsPage() {
 			mediaType,
 			service,
 			selectedTorrents,
-			sameTitle,
-			sameHash,
-			identifications,
+			grouping,
 		});
 		return { list: quickSearchLibrary(query, filteredItems), helpText: nextHelpText };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -471,7 +455,7 @@ function TorrentsPage() {
 		mediaType,
 		service,
 		selectedTorrents,
-		identifications,
+		grouping,
 	]);
 
 	const maxPages = useMemo(
@@ -536,75 +520,6 @@ function TorrentsPage() {
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [handlePrevPage, handleNextPage]);
-
-	// aggregate metadata
-	useEffect(() => {
-		if (loading) return;
-
-		setGrouping(true);
-		// accumulated locally - one setState at the end instead of one per torrent
-		let bytes = 0;
-		sameTitle.clear();
-		sameHash.clear();
-
-		// title grouping
-		clearGroupings(defaultTitleGrouping);
-		clearGroupings(movieTitleGrouping);
-		clearGroupings(tvGroupingByEpisode);
-		// tv show title grouping
-		clearGroupings(tvGroupingByTitle);
-		// hash grouping
-		clearGroupings(hashGrouping);
-
-		for (const t of userTorrentsList) {
-			if (/^Magnet/.test(t.title)) continue;
-
-			// group by hash. A Premiumize row often has no info hash at all -
-			// `transfer/list` never reports one - and an Offcloud row created from a
-			// plain HTTP URL never had one. Grouping on the empty string would fold
-			// every such row into one "same hash" set and count only the first one's
-			// bytes.
-			if (!t.hash) {
-				bytes += t.bytes;
-			} else if (t.hash in hashGrouping) {
-				if (hashGrouping[t.hash] === 1) sameHash.add(t.hash);
-				hashGrouping[t.hash]++;
-			} else {
-				hashGrouping[t.hash] = 1;
-				bytes += t.bytes;
-			}
-
-			/// group by title
-			const titleId = sameTitleKey(t, identifications[t.id]);
-			if (titleId in getTitleGroupings(t.mediaType)) {
-				if (getTitleGroupings(t.mediaType)[titleId] === 1) sameTitle.add(titleId);
-				getTitleGroupings(t.mediaType)[titleId]++;
-			} else {
-				getTitleGroupings(t.mediaType)[titleId] = 1;
-			}
-
-			/// group by tv title
-			if (t.mediaType === 'tv' && t.info?.title) {
-				const tvShowTitleId = normalize(t.info.title);
-				if (tvShowTitleId in tvGroupingByTitle) {
-					tvGroupingByTitle[tvShowTitleId]++;
-				} else {
-					tvGroupingByTitle[tvShowTitleId] = 1;
-				}
-			}
-		}
-		setTotalBytes(bytes);
-		setGrouping(false);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		userTorrentsList,
-		loading,
-		identifications,
-		defaultTitleGrouping,
-		movieTitleGrouping,
-		tvGroupingByEpisode,
-		tvGroupingByTitle,
-	]);
 
 	const timeBasedTip = useMemo(() => TIPS[new Date().getMinutes() % TIPS.length], []);
 
@@ -680,7 +595,7 @@ function TorrentsPage() {
 	}, [sortedData, currentPage]);
 
 	useEffect(() => {
-		if (!router.isReady || loading || grouping || currentPage <= maxPages) return;
+		if (!router.isReady || loading || currentPage <= maxPages) return;
 		setCurrentPage(maxPages);
 		router.replace(
 			{
@@ -690,28 +605,11 @@ function TorrentsPage() {
 			undefined,
 			{ shallow: true }
 		);
-	}, [currentPage, grouping, loading, maxPages, router]);
+	}, [currentPage, loading, maxPages, router]);
 
 	const relevantList = selectedTorrents.size
 		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
 		: sortedData;
-
-	const getTitleGroupings = (mediaType: UserTorrent['mediaType']) => {
-		switch (mediaType) {
-			case 'movie':
-				return movieTitleGrouping;
-			case 'tv':
-				return tvGroupingByEpisode;
-			default:
-				return defaultTitleGrouping;
-		}
-	};
-
-	function clearGroupings(frequencyMap: { [x: string]: number }) {
-		for (let key in frequencyMap) {
-			delete frequencyMap[key];
-		}
-	}
 
 	async function handleReinsertTorrents() {
 		if (
@@ -921,27 +819,9 @@ function TorrentsPage() {
 		// Determine the preference for deletion
 		const deleteBigger = deletePreference.isDenied;
 
-		// Get the key by status
-		const getKey = (torrent: UserTorrent) => sameTitleKey(torrent, identifications[torrent.id]);
-		const dupes: UserTorrent[] = [];
-		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
-			let key = getKey(cur);
-			if (acc[key]) {
-				// Check if current is bigger or smaller based on the user's choice
-				const isPreferred = deleteBigger
-					? acc[key].bytes > cur.bytes
-					: acc[key].bytes < cur.bytes;
-				if (isPreferred) {
-					dupes.push(acc[key]);
-					acc[key] = cur;
-				} else {
-					dupes.push(cur);
-				}
-			} else {
-				acc[key] = cur;
-			}
-			return acc;
-		}, {});
+		const dupes = duplicateLibraryTorrents(filteredList, grouping, (retained, candidate) =>
+			deleteBigger ? retained.bytes > candidate.bytes : retained.bytes < candidate.bytes
+		);
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
@@ -1022,27 +902,9 @@ function TorrentsPage() {
 		// Determine the preference for deletion
 		const deleteOlder = deletePreference.isConfirmed;
 
-		// Get the key by status
-		const getKey = (torrent: UserTorrent) => sameTitleKey(torrent, identifications[torrent.id]);
-		const dupes: UserTorrent[] = [];
-		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
-			let key = getKey(cur);
-			if (acc[key]) {
-				// Check if current is newer based on the user's choice
-				const isPreferred = deleteOlder
-					? acc[key].added < cur.added
-					: acc[key].added > cur.added;
-				if (isPreferred) {
-					dupes.push(acc[key]);
-					acc[key] = cur;
-				} else {
-					dupes.push(cur);
-				}
-			} else {
-				acc[key] = cur;
-			}
-			return acc;
-		}, {});
+		const dupes = duplicateLibraryTorrents(filteredList, grouping, (retained, candidate) =>
+			deleteOlder ? retained.added < candidate.added : retained.added > candidate.added
+		);
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
@@ -1886,7 +1748,7 @@ function TorrentsPage() {
 								Library{' '}
 								<LibrarySize
 									torrentCount={userTorrentsList.length}
-									totalBytes={totalBytes}
+									totalBytes={grouping.totalBytes}
 									isLoading={isFetching}
 								/>
 								{selectedTorrents.size > 0 && (
@@ -1962,8 +1824,8 @@ function TorrentsPage() {
 						onPrevPage={handlePrevPage}
 						onNextPage={handleNextPage}
 						onResetFilters={resetFilters}
-						sameHashSize={sameHash.size}
-						sameTitleSize={sameTitle.size}
+						sameHashSize={grouping.duplicateHashes}
+						sameTitleSize={grouping.duplicateTitleGroups}
 						selectedTorrentsSize={selectedTorrents.size}
 						inProgressCount={memoInProgressCount}
 						slowCount={memoSlowCount}
@@ -2013,7 +1875,7 @@ function TorrentsPage() {
 				<div className="flex-1 overflow-hidden">
 					<div className="h-full overflow-y-auto pb-6">
 						<div className="overflow-x-auto">
-							{loading || grouping ? (
+							{loading ? (
 								<div className="mt-2 flex items-center justify-center">
 									<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
 								</div>
@@ -2051,9 +1913,7 @@ function TorrentsPage() {
 												ocKey={ocKey}
 												dlKey={dlKey}
 												shouldDownloadMagnets={shouldDownloadMagnets}
-												hashGrouping={hashGrouping}
-												titleGrouping={getTitleGroupings(torrent.mediaType)}
-												tvGroupingByTitle={tvGroupingByTitle}
+												grouping={grouping}
 												hashFilter={hashFilter as string}
 												titleFilter={titleFilter as string}
 												tvTitleFilter={tvTitleFilter as string}

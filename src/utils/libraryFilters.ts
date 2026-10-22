@@ -1,6 +1,5 @@
 import { UserTorrent } from '@/torrent/userTorrent';
-import { sameTitleKey, type LibraryIdentification } from '@/utils/libraryIdentify';
-import { normalize } from '@/utils/mediaId';
+import type { LibraryGrouping } from '@/utils/libraryGrouping';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from '@/utils/slow';
 
@@ -22,9 +21,7 @@ export interface LibraryFilterOptions {
 	mediaType?: QueryValue;
 	service?: QueryValue;
 	selectedTorrents?: Set<string>;
-	sameTitle?: Set<string>;
-	sameHash?: Set<string>;
-	identifications?: Record<string, LibraryIdentification>;
+	grouping: LibraryGrouping;
 }
 
 export interface LibraryFilterResult {
@@ -41,9 +38,7 @@ export const filterLibraryItems = ({
 	mediaType,
 	service,
 	selectedTorrents = new Set<string>(),
-	sameTitle = new Set<string>(),
-	sameHash = new Set<string>(),
-	identifications = {},
+	grouping,
 }: LibraryFilterOptions): LibraryFilterResult => {
 	let filteredList = torrents;
 	let nextHelpText: string | null = null;
@@ -84,26 +79,27 @@ export const filterLibraryItems = ({
 			"RD torrents whose names match Real-Debrid's filename filter (WEB-DL, WEB.x264 or WEB.H264 in exactly that case; WEBRip, BDRip, HDRip, DVDRip, HDTV.x264, HDTV.XviD, BluRay.x264 or p.BluRay.DTS in any case). RD refuses to add these. This is a minimum count — only torrent names are checked, not the files inside, which RD refuses to stream when their own names match. Use zurg's manage page for the full count.";
 	}
 	if (statusValue === 'sametitle') {
-		filteredList = filteredList.filter((torrent) =>
-			sameTitle.has(sameTitleKey(torrent, identifications[torrent.id]))
+		filteredList = filteredList.filter(
+			(torrent) => grouping.titleGroupsById[torrent.id].count > 1
 		);
 	}
 	if (statusValue === 'samehash') {
-		filteredList = filteredList.filter((torrent) => sameHash.has(torrent.hash));
+		filteredList = filteredList.filter(
+			(torrent) => (grouping.hashCounts.get(torrent.hash) ?? 0) > 1
+		);
 	}
 	if (titleValue) {
 		const decoded = decodeURIComponent(titleValue);
 		filteredList = filteredList.filter(
-			(torrent) => sameTitleKey(torrent, identifications[torrent.id]) === decoded
+			(torrent) =>
+				grouping.titleGroupsById[torrent.id].filter === decoded ||
+				grouping.parsedTitlesById[torrent.id] === decoded
 		);
 	}
 	if (tvTitleValue) {
 		const decoded = decodeURIComponent(tvTitleValue);
 		filteredList = filteredList.filter(
-			(torrent) =>
-				torrent.mediaType === 'tv' &&
-				torrent.info?.title &&
-				normalize(torrent.info.title) === decoded
+			(torrent) => grouping.tvTitlesById[torrent.id] === decoded
 		);
 	}
 	if (hashValue) {
