@@ -4,6 +4,8 @@ import path from 'node:path';
 import postcss, { type AnyNode, type PluginCreator, type Root } from 'postcss';
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import { episodeChipClasses, getColorScale } from '@/utils/episodeUtils';
+
 // Every class list that paints its own solid background and text colour must
 // meet WCAG AA. Buttons are the common case: `bg-blue-500 text-white` reads at
 // 3.7:1 and `bg-green-500 text-white` at 2.3:1, below the 4.5:1 body-text floor.
@@ -36,7 +38,8 @@ beforeAll(async () => {
 	stylesheet.walkDecls(/^--color-/, ({ prop, value }) => {
 		palette.set(prop.slice('--color-'.length), value);
 	});
-});
+	// Scanning all of src takes ~7 s idle and over 60 s on a loaded machine.
+}, 120_000);
 
 const colour = (token: string): Rgb | null => {
 	if (token === 'white') return [255, 255, 255];
@@ -187,5 +190,16 @@ describe('compiled application styling', () => {
 		expect(themeValue('--shadow-glow')).toBe('0 0 10px blue, 0 0 15px blue');
 		expect(declarations('.shadow-music-lg', '--tw-shadow').join(' ')).toContain('25px');
 		expect(declarations('.shadow-music-2xl', '--tw-shadow').join(' ')).toContain('50px');
+	});
+
+	// The episode legends once built `bg-${scale.color}`. Tailwind 4 emits only
+	// classes written out in the source, so the Incomplete chip shipped with no
+	// background on 8f1225f7.
+	it('emits a background for every episode legend chip', () => {
+		for (const { color } of getColorScale(10)) {
+			const className = episodeChipClasses[color];
+			expect(className, color).toBeDefined();
+			expect(declarations(`.${className}`, 'background-color'), className).not.toEqual([]);
+		}
 	});
 });

@@ -1,5 +1,6 @@
 import AvailabilityTokens from '@/components/AvailabilityTokens';
 import SearchTokens from '@/components/SearchTokens';
+import { episodeChipClasses } from '@/utils/episodeUtils';
 import { canReportWith } from '@/utils/reporterId';
 import { RotateCcw, Search } from 'lucide-react';
 import React from 'react';
@@ -121,7 +122,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 					colorScales.map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
+							className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForScale(scale.threshold);
 								const cleanedPrev = query.replace(/\bvideos:[^\s]+/g, '').trim();

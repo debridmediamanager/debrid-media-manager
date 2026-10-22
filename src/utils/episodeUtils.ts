@@ -16,6 +16,13 @@ export const getQueryForEpisodeCount = (videoCount: number, expectedEpisodeCount
 };
 
 // Complete literals are required for CSS source detection, including opacity.
+export const episodeChipClasses: Record<string, string> = {
+	'gray-800': 'bg-gray-800',
+	'purple-800': 'bg-purple-800',
+	'green-900': 'bg-green-900',
+	'blue-900': 'bg-blue-900',
+};
+
 const episodeBackgroundClasses: Record<string, string> = {
 	'gray-800': 'bg-gray-800/30',
 	'purple-800': 'bg-purple-800/30',

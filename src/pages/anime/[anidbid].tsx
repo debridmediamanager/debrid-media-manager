@@ -29,7 +29,7 @@ import { getLocalStorageItemOrDefault, hideRdBlockedTorrentsDefault } from '@/ut
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { cyrillicLedLast } from '@/utils/cyrillicLed';
 import { markTransferredHashes } from '@/utils/debridUploader';
-import { getColorScale, getQueryForEpisodeCount } from '@/utils/episodeUtils';
+import { episodeChipClasses, getColorScale, getQueryForEpisodeCount } from '@/utils/episodeUtils';
 import {
 	checkAvailabilityOc,
 	checkAvailabilityPm,
@@ -857,7 +857,7 @@ const AnimePage: FunctionComponent = () => {
 					{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
+							className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForEpisodeCount(
 									scale.threshold,

@@ -46,6 +46,7 @@ import { handleCastTvShowDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import { delay } from '@/utils/delay';
 import {
+	episodeChipClasses,
 	getColorScale,
 	getExpectedEpisodeCount,
 	getQueryForEpisodeCount,
@@ -2165,7 +2166,7 @@ const TvSearch: FunctionComponent = () => {
 					{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 						<span
 							key={idx}
-							className={`bg-${scale.color} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
+							className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
 							onClick={() => {
 								const queryText = getQueryForEpisodeCount(
 									scale.threshold,
