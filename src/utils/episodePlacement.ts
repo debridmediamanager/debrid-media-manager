@@ -102,7 +102,8 @@ export function parseName(name: string): {
 	const stripped = name.replace(LEADING_GROUPS, '');
 	const parsed = ptt.parse(stripped);
 	const seasons = parsed.seasons ?? [];
-	const title = (parsed.title ?? '').trim();
+	// a fansub's version tag is no part of the title: ptt keeps `Mushishi v2.1` and `Mushishi 01v2`
+	const title = (parsed.title ?? '').trim().replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');
 	// ptt reads the `Ru` of `Motto To Love-Ru` as Russian and drops it: a short word joined to
 	// the title by a hyphen is the title's own
 	const spaced = stripped.replace(/[._]/g, ' ');

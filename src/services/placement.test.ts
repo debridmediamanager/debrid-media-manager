@@ -11,6 +11,7 @@ import {
 import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import cases from '@/test/fixtures/placement/releases.json';
+import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
@@ -457,5 +458,40 @@ describe('which title a release is, when the id sent places nothing or no id is 
 		const placed = await placeCase(name);
 		expect(placed).toEqual(check(name).expect);
 		expect(placed.tmdbId).toBe(show);
+	});
+});
+
+describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
+	// zurg's own requests for releases rex-fun showed unmatched, and the answers placing them
+	// needed, anime dataset entries included (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(fun1022.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(fun1022.answers.anime.fribb as FribbAnimeEntry[]),
+				fun1022.answers.anime.titles
+			),
+	};
+	const placedHere = async (name: string) => {
+		const c = fun1022.cases.find((c) => c.request.name.startsWith(name))!;
+		return (await place([c.request as PlaceRequest], Infinity, from)).releases[0];
+	};
+
+	it.each(fun1022.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place([c.request as PlaceRequest], Infinity, from);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	it("reads a fansub's version tag as no part of the title", async () => {
+		// `[CyC] Mushishi v2.1`'s `Mushishi 01v2`: the anime index knows `Mushishi`, not
+		// `Mushishi v2 1`, and TMDB's season 1 has the 26 episodes; its two DVD specials stay
+		const release = await placedHere('[CyC] Mushishi');
+		expect(placedAt(release)).toEqual(
+			release.files.map((f) => {
+				const at = /Mushishi (\d{2})v/.exec(f.path);
+				return at ? [1, Number(at[1])] : [null, null];
+			})
+		);
 	});
 });
