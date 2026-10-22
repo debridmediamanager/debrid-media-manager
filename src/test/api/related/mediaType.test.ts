@@ -65,7 +65,9 @@ describe('/api/related/[mediaType]', () => {
 	it('returns 500 when TRAKT_CLIENT_ID is not configured', async () => {
 		delete process.env.TRAKT_CLIENT_ID;
 		vi.resetModules();
-		vi.mock('next/config', () => ({
+		// doMock applies to the import below only; a nested vi.mock is hoisted to the
+		// top of the file and races the module-level next/config mock.
+		vi.doMock('next/config', () => ({
 			default: () => ({ publicRuntimeConfig: {} }),
 		}));
 		const { default: freshHandler } = await import('@/pages/api/related/[mediaType]');
