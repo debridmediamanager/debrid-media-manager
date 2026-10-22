@@ -30,7 +30,7 @@ import ReportButton from './ReportButton';
 // A rule between two action groups. Only rendered when the groups on both
 // sides of it actually produced buttons, so a single-service user never sees
 // a stray line.
-const ActionSeparator = () => <hr data-action-separator="true" className="my-1 border-gray-600" />;
+const ActionSeparator = () => <hr data-action-separator="true" className="mt-1 border-gray-600" />;
 
 /**
  * The three states of an add button, written out in full.

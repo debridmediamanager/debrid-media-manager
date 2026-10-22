@@ -1,6 +1,10 @@
 import type { SearchResult } from '@/services/mediasearch';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import postcss, { type PluginCreator } from 'postcss';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import MovieSearchResults from './MovieSearchResults';
@@ -375,6 +379,40 @@ describe('MovieSearchResults', () => {
 			expect(kinds[ruleAt[0] + 1]).toContain('AD');
 			expect(kinds[ruleAt[1] + 1]).toContain('TB');
 			expect(kinds[ruleAt[2] + 1]).toContain('Watch');
+		});
+
+		// Tailwind 3's space-y also zeroed each later child's bottom margin, so the
+		// rule sat flush against the next group. sibling-space-y keeps the child's
+		// own bottom margin, so my-1 added 4px under every rule (8f1225f7).
+		it('gives a rule no bottom margin of its own, as space-y did', async () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: 'ad-key',
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+			});
+			const classes = [...container.querySelector('[data-action-separator]')!.classList];
+
+			// Compile only the rule's own classes; scanning all of src is slow.
+			const from = path.join(process.cwd(), 'src/styles/globals.css');
+			const tailwind = createRequire(path.join(process.cwd(), 'package.json'))(
+				'@tailwindcss/postcss'
+			) as PluginCreator<{ optimize: boolean; base: string }>;
+			const css =
+				readFileSync(from, 'utf-8').replace(/^@source "\.\.\/";$/m, '') +
+				`\n@source inline("${classes.join(' ')}");`;
+			const { root } = await postcss([
+				tailwind({ optimize: false, base: process.cwd() }),
+			]).process(css, { from });
+
+			const bottomMargins: string[] = [];
+			root.walkRules((rule) => {
+				if (!rule.selectors.some((s) => classes.includes(s.replace(/^\./, '')))) return;
+				rule.walkDecls(/^margin(-bottom|-block(-end)?)?$/, (d) => {
+					bottomMargins.push(`${rule.selector} { ${d.prop}: ${d.value} }`);
+				});
+			});
+			expect(bottomMargins).toEqual([]);
 		});
 
 		it('draws only the shared-actions rule when one service is logged in', () => {
