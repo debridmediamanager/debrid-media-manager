@@ -464,6 +464,40 @@ describe('Instant RD (Every Episode) pacing', () => {
 		}
 	});
 
+	it('keeps both totals when RD and AD Every Episode run at the same time', async () => {
+		const actual = await vi.importActual<typeof HotToast>('react-hot-toast');
+		const ActualToaster = actual.Toaster;
+		const pendingAdd = Promise.withResolvers<boolean>();
+		toastMock.success.mockImplementation(actual.default.success);
+		toastMock.dismiss.mockImplementation(actual.default.dismiss);
+		addCachedMock.mockImplementationOnce(() => pendingAdd.promise);
+		keys.ad = 'ad-key';
+		try {
+			const rdButton = await mountSeason({ rdAvailable: true, adAvailable: true });
+			render(<ActualToaster />);
+			await userEvent.click(rdButton);
+			await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(1));
+
+			await userEvent.click(
+				screen.getByRole('button', { name: /Instant AD \(Every Episode\)/i })
+			);
+			await screen.findByRole('button', { name: 'Dismiss episode summary' });
+			await act(async () => pendingAdd.resolve(true));
+			await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(6));
+
+			await waitFor(() =>
+				expect(
+					screen.getAllByRole('button', { name: 'Dismiss episode summary' })
+				).toHaveLength(2)
+			);
+		} finally {
+			pendingAdd.resolve(true);
+			act(() => actual.default.remove());
+			toastMock.success.mockReset();
+			toastMock.dismiss.mockReset();
+		}
+	});
+
 	it('offers an AllDebrid user the same action, adding to AllDebrid', async () => {
 		keys.rd = null;
 		keys.ad = 'ad-key';

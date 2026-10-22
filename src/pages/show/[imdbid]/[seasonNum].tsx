@@ -232,7 +232,9 @@ const TvSearch: FunctionComponent = () => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
-	const episodeSummaryId = useRef<string | undefined>(undefined);
+	// One summary per service, so concurrent RD and AD runs each keep their totals.
+	const episodeSummaryIds = useRef(new Map<string, string>());
+	const episodeSummaryRuns = useRef(new Map<string, number>());
 	const episodeSummaryGeneration = useRef(0);
 	const [query, setQuery] = useState(storedTorrentsFilter);
 	const [descLimit, setDescLimit] = useState(100);
@@ -281,8 +283,8 @@ const TvSearch: FunctionComponent = () => {
 	useEffect(
 		() => () => {
 			episodeSummaryGeneration.current++;
-			if (episodeSummaryId.current) toast.dismiss(episodeSummaryId.current);
-			episodeSummaryId.current = undefined;
+			episodeSummaryIds.current.forEach((id) => toast.dismiss(id));
+			episodeSummaryIds.current.clear();
 		},
 		[imdbid, seasonNum]
 	);
@@ -1508,7 +1510,9 @@ const TvSearch: FunctionComponent = () => {
 
 		// Determine the range of episodes to add
 		const maxEpisode = Math.max(expectedEpisodeCount, ...Array.from(episodeMap.keys()));
-		const summaryGeneration = ++episodeSummaryGeneration.current;
+		const summaryGeneration = episodeSummaryGeneration.current;
+		const summaryRun = (episodeSummaryRuns.current.get(service) ?? 0) + 1;
+		episodeSummaryRuns.current.set(service, summaryRun);
 
 		const toastId = toast.loading(`Checking episodes 1-${maxEpisode}...`);
 
@@ -1589,8 +1593,13 @@ const TvSearch: FunctionComponent = () => {
 
 			// Final summary
 			toast.dismiss(toastId);
-			// Finish provider work, but do not resurrect a summary from an old page/action.
-			if (summaryGeneration !== episodeSummaryGeneration.current) return;
+			// Finish provider work, but do not resurrect a summary on another page or
+			// replace a newer run's summary for the same service.
+			if (
+				summaryGeneration !== episodeSummaryGeneration.current ||
+				summaryRun !== episodeSummaryRuns.current.get(service)
+			)
+				return;
 
 			const summaryParts = [];
 			if (addedCount > 0) summaryParts.push(`${addedCount} added`);
@@ -1610,11 +1619,13 @@ const TvSearch: FunctionComponent = () => {
 
 			const summaryMessage = `Episodes 1-${maxEpisode}: ${summaryParts.join(', ')}`;
 
-			if (episodeSummaryId.current) toast.dismiss(episodeSummaryId.current);
-			episodeSummaryId.current = showEpisodeSummary(
+			const previousSummary = episodeSummaryIds.current.get(service);
+			if (previousSummary) toast.dismiss(previousSummary);
+			const summaryId = showEpisodeSummary(
 				summaryMessage,
 				(notFoundCount === 0 && uncachedCount === 0 && refusedCount === 0) || addedCount > 0
 			);
+			episodeSummaryIds.current.set(service, summaryId);
 		} catch (error) {
 			toast.error('Failed to add some episodes.', { id: toastId });
 			console.error('Error adding episodes:', error);
