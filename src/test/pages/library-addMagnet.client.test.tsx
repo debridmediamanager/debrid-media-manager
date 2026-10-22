@@ -475,19 +475,16 @@ describe('Library backup restore to Real-Debrid', () => {
 		);
 	});
 
-	it('rejects the restore notification when the final library refresh fails instead of hanging', async () => {
+	it('still reports the restored count when the final library refresh fails', async () => {
 		mockRefreshLibrary.mockRejectedValueOnce(new Error('Library fetch failed'));
-		mockToast.promise.mockImplementationOnce((processing) => {
-			processing.catch(() => undefined);
-		});
 		render(<LibraryPage />);
 		await act(async () => {
 			fireEvent.click(await screen.findByRole('button', { name: /RD Restore/ }));
 		});
 		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
-		const [processing, messages] = mockToast.promise.mock.calls[0];
-		await expect(processing).rejects.toThrow('Library fetch failed');
-		expect(messages.error).toBe('Restore failed. Refresh your library before trying again.');
+		const [processing] = mockToast.promise.mock.calls[0];
+		await expect(processing).resolves.toEqual({ success: 2, error: 0 });
+		expect(mockRefreshLibrary).toHaveBeenCalled();
 		expect(mockToast.dismiss).toHaveBeenCalledWith('restore-progress');
 	});
 });

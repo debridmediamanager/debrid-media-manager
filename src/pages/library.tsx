@@ -1546,7 +1546,13 @@ function TorrentsPage() {
 			const allErrors = [...availableErrors, ...unavailableErrors];
 
 			if (allResults.length) {
-				await refreshLibrary();
+				// The torrents are already on the account and the page reloads in 10s,
+				// so a failed listing must not report the restore itself as failed.
+				try {
+					await refreshLibrary();
+				} catch (error) {
+					console.error(error);
+				}
 			}
 			return { success: allResults.length, error: allErrors.length };
 		})().finally(() => {
