@@ -10053,6 +10053,210 @@
 	},
 	"cases": [
 		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id; the Season 07 folder's files of the 395",
+			"request": {
+				"name": "Family Guy - Seasons 1 to 20",
+				"hash": null,
+				"imdbId": "tt19268128",
+				"files": [
+					{
+						"path": "Family Guy - S07E01 - Love Blactually (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E02 - I Dream of Jesus (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E03 - Road to Germany (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E04 - Baby Not On Board (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E05 - The Man With Two Brians (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E06 - Tales of a Third Grade Nothing (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E07 - Ocean's Three and a Half (Uncensored + Bale Scene).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E07 - Ocean's Three and a Half (Uncensored + Commentary Audio Track).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E08 - Family Gay (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E09 - The Juice is Loose! (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E10 - FOX-y Lady (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E11 - Not All Dogs Go to Heaven (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E12 - 420 (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E13 - Stew-Roids (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E14 - We Love You, Conrad (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E15 - Three Kings (Uncensored).mkv",
+						"folder": "Season 07"
+					},
+					{
+						"path": "Family Guy - S07E16 - Peter's Progress (Uncensored).mkv",
+						"folder": "Season 07"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0182576",
+				"tmdbId": 1434,
+				"files": [
+					{
+						"path": "Family Guy - S07E01 - Love Blactually (Uncensored).mkv",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E02 - I Dream of Jesus (Uncensored).mkv",
+						"season": 7,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E03 - Road to Germany (Uncensored).mkv",
+						"season": 7,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E04 - Baby Not On Board (Uncensored).mkv",
+						"season": 7,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E05 - The Man With Two Brians (Uncensored).mkv",
+						"season": 7,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E06 - Tales of a Third Grade Nothing (Uncensored).mkv",
+						"season": 7,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E07 - Ocean's Three and a Half (Uncensored + Bale Scene).mkv",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E07 - Ocean's Three and a Half (Uncensored + Commentary Audio Track).mkv",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E08 - Family Gay (Uncensored).mkv",
+						"season": 7,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E09 - The Juice is Loose! (Uncensored).mkv",
+						"season": 7,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E10 - FOX-y Lady (Uncensored).mkv",
+						"season": 7,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E11 - Not All Dogs Go to Heaven (Uncensored).mkv",
+						"season": 7,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E12 - 420 (Uncensored).mkv",
+						"season": 7,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E13 - Stew-Roids (Uncensored).mkv",
+						"season": 7,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E14 - We Love You, Conrad (Uncensored).mkv",
+						"season": 7,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E15 - Three Kings (Uncensored).mkv",
+						"season": 7,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "Family Guy - S07E16 - Peter's Progress (Uncensored).mkv",
+						"season": 7,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
 			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
 			"request": {
 				"name": "SpongeBob.SquarePants.1999.S10.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.FrysTAoE {imdb-tt0206512}",
@@ -10844,6 +11048,595 @@
 						"path": "SpongeBob.SquarePants.1999.S10E71.Out.of.the.Picture.REPACK.1080p.AMZN.Web-rip.x265.10bit.EAC3.2.0.Frys-TAoE.mkv",
 						"season": 10,
 						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-22: the .zurgtorrent's name, video files, folders and IMDb id",
+			"request": {
+				"name": "Marvels THE AVENGERS, Earth's MIGHTIEST Heroes - Complete 2010-2012 TV Series, Season 1-2 S01-S02 - 1080p BluRay x264",
+				"hash": null,
+				"imdbId": "tt2207840",
+				"files": [
+					{
+						"path": "The Avengers (EMH) - S01 E01 - Iron Man is Born (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E02 - Hulk vs the World (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E03 - Thor the Mighty (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E04 - The Man in the Ant Hill (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E05 - Meet Captain America (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E06 - Breakout, Part 1 of 2 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E07 - Breakout, Part 2 of 2 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E08 - Some Assembly Required (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E09 - Living Legend (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E10 - Everything is Wonderful (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E11 - Panther's Quest (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E12 - Gamma World, Part 1 of 2 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E13 - Gamma World, Part 2 of 2 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E14 - Masters of Evil (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E16 - Widow's Sting (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E17 - The Man Who Stole Tomorrow (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E18 - Come the Conqueror (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E19 - The Kang Dynasty (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E20 - The Casket of Ancient Winters (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E21 - Hail, HYDRA (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E22 - Ultron-5 (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E23 - The Ultron Imperative (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E24 - This Hostage Earth (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E25 - The Fall of Asgard (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E26 - A Day Unlike Any Other (1080p - BluRay).mp4",
+						"folder": "Season 1 (2010-11)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E01 - The Private War of Doctor Doom (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E02 - Alone Against A.I.M (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E03 - Acts of Vengeance (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E04 - Welcome to the Kree Empire (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E05 - To Steal an Ant-Man (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E06 - Michael Korvac (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E07 - Who Do You Trust (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E08 - The Ballad of Beta Ray Bill (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E09 - Nightmare in Red (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E10 - Prisoner of War (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E11 - Infiltration (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E12 - Secret Invasion (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E13 - Along Came a Spider (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E14 - Behold, The Vision (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E15 - Assault on 42 (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E16 - Ultron Unlimited (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E17 - Powerless (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E18 - Yellowjacket (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E19 - Emperor Stark (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E20 - Code Red (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E21 - Winter Soldier (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E22 - The Deadliest Man Alive (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E23 - New Avengers (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E24 - Operation Galactic Storm (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E25 - Live Kree or Die (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E26 - Avengers Assemble (1080p - BluRay).mp4",
+						"folder": "Season 2 (2012)"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1626038",
+				"tmdbId": 33623,
+				"files": [
+					{
+						"path": "The Avengers (EMH) - S01 E01 - Iron Man is Born (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E02 - Hulk vs the World (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E03 - Thor the Mighty (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E04 - The Man in the Ant Hill (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E05 - Meet Captain America (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E06 - Breakout, Part 1 of 2 (1080p - BluRay).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E07 - Breakout, Part 2 of 2 (1080p - BluRay).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E08 - Some Assembly Required (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E09 - Living Legend (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E10 - Everything is Wonderful (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E11 - Panther's Quest (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E12 - Gamma World, Part 1 of 2 (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E13 - Gamma World, Part 2 of 2 (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E14 - Masters of Evil (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E16 - Widow's Sting (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E17 - The Man Who Stole Tomorrow (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E18 - Come the Conqueror (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E19 - The Kang Dynasty (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E20 - The Casket of Ancient Winters (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E21 - Hail, HYDRA (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E22 - Ultron-5 (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E23 - The Ultron Imperative (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E24 - This Hostage Earth (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E25 - The Fall of Asgard (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S01 E26 - A Day Unlike Any Other (1080p - BluRay).mp4",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E01 - The Private War of Doctor Doom (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E02 - Alone Against A.I.M (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E03 - Acts of Vengeance (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E04 - Welcome to the Kree Empire (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E05 - To Steal an Ant-Man (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E06 - Michael Korvac (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E07 - Who Do You Trust (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E08 - The Ballad of Beta Ray Bill (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E09 - Nightmare in Red (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E10 - Prisoner of War (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E11 - Infiltration (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E12 - Secret Invasion (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E13 - Along Came a Spider (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E14 - Behold, The Vision (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E15 - Assault on 42 (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E16 - Ultron Unlimited (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E17 - Powerless (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E18 - Yellowjacket (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E19 - Emperor Stark (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E20 - Code Red (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E21 - Winter Soldier (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E22 - The Deadliest Man Alive (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E23 - New Avengers (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E24 - Operation Galactic Storm (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E25 - Live Kree or Die (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb"
+					},
+					{
+						"path": "The Avengers (EMH) - S02 E26 - Avengers Assemble (1080p - BluRay).mp4",
+						"season": 2,
+						"episode": 26,
 						"episodeEnd": null,
 						"how": "tmdb"
 					}

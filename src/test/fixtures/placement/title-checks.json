@@ -7092,10 +7092,10 @@
 				"files": [
 					{
 						"path": "The Avengers (EMH) - S01 E15 - 459 (1080p - BluRay).mp4",
-						"season": null,
-						"episode": null,
+						"season": 1,
+						"episode": 15,
 						"episodeEnd": null,
-						"how": null
+						"how": "tmdb"
 					}
 				]
 			}

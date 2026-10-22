@@ -611,7 +611,9 @@ export async function placeFile(
 	imdb: ImdbLookup | null
 ): Promise<Placement | null> {
 	const found = await placeByRules(show, anime, release, path, numbers, imdb);
-	if (!found || numbers.running === undefined || found.season < 1) return found;
+	// a number TMDB titles the episode with is its title, not a running count: Earth's Mightiest
+	// Heroes' `S01 E15 - 459` is TMDB's S1E15 "459", Family Guy's `S07E12 - 420` its S7E12 "420"
+	if (!found || numbers.running === undefined || found.season < 1 || found.titled) return found;
 	const before = show.seasons
 		.filter((row) => row.season > 0 && row.season < found.season)
 		.reduce((sum, row) => sum + row.episodes, 0);

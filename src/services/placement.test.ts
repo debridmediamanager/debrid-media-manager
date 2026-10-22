@@ -504,4 +504,12 @@ describe('packs on fun numbered otherwise than TMDB (2026-10-22)', () => {
 		expect(at('.Kenny.the.Cat.')).toEqual([9, 15]);
 		expect(at('.Squid.Baby.')).toEqual([8, 46]);
 	});
+
+	it("places a file whose number after its episode is TMDB's title, not the show's count", async () => {
+		const avengers = await placedHere('Marvels THE AVENGERS');
+		const at = (release: Awaited<ReturnType<typeof placedHere>>, title: string) =>
+			placedAt(release)[release.files.findIndex((f) => f.path.includes(title))];
+		expect(at(avengers, 'S01 E15 - 459')).toEqual([1, 15]);
+		expect(at(await placedHere('Family Guy - Seasons'), 'S07E12 - 420')).toEqual([7, 12]);
+	});
 });
