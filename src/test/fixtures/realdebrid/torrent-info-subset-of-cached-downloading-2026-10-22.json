@@ -1,0 +1,36 @@
+{
+	"added": "2026-10-22T02:24:08.000Z",
+	"bytes": 1142642668,
+	"filename": "Slow.Horses.S06.400p.Kerob",
+	"files": [
+		{
+			"id": 1,
+			"path": "/Slow.Horses.S06E01.400p.Kerob.avi",
+			"bytes": 566874742,
+			"selected": 1
+		},
+		{
+			"id": 2,
+			"path": "/Slow.Horses.S06E02.400p.Kerob.avi",
+			"bytes": 575767926,
+			"selected": 1
+		},
+		{
+			"id": 3,
+			"path": "/Slow.Horses.S06E03.400p.Kerob.avi",
+			"bytes": 345289042,
+			"selected": 0
+		}
+	],
+	"hash": "e9c6ee21c13c5217cc8a79f0f999ffda12ca3a96",
+	"host": "real-debrid.com",
+	"id": "RAXBEBAUV4QTK",
+	"links": [],
+	"original_bytes": 1487931710,
+	"original_filename": "Slow.Horses.S06.400p.Kerob",
+	"progress": 0,
+	"seeders": 0,
+	"speed": 0,
+	"split": 2000,
+	"status": "downloading"
+}

@@ -319,3 +319,64 @@ describe('handleReinsertTorrentinRd', () => {
 		});
 	});
 });
+
+// Card 417: RD caches a torrent's whole file set, not each subset of it. Live on
+// 2026-10-22, unticking one of three files of a cached torrent and pressing Save
+// re-added it as a fresh download (0%, 0 seeders), and the cached copy was gone.
+describe('handleReinsertTorrentinRd with a narrower selection', () => {
+	const finished: UserTorrent = {
+		id: 'rd:HLFMCOTTYAFEU',
+		hash: 'e9c6ee21c13c5217cc8a79f0f999ffda12ca3a96',
+		filename: 'Slow.Horses.S06.400p.Kerob',
+		title: 'Slow Horses',
+		bytes: 1487931710,
+		progress: 100,
+		status: UserTorrentStatus.finished,
+		serviceStatus: 'downloaded',
+		added: new Date(),
+		mediaType: 'tv',
+		links: ['l1', 'l2', 'l3'],
+		// A finished RD library row carries no file selection of its own
+		selectedFiles: [],
+		seeders: 0,
+		speed: 0,
+	};
+
+	beforeEach(() => {
+		vi.resetAllMocks();
+		(toast as any).success = vi.fn();
+		(toast as any).error = vi.fn();
+	});
+
+	it('keeps the cached torrent when RD starts the subset as a new download', async () => {
+		const subsetInfo = (
+			await import(
+				'@/test/fixtures/realdebrid/torrent-info-subset-of-cached-downloading-2026-10-22.json'
+			)
+		).default;
+		mockAddHashAsMagnet.mockResolvedValueOnce('RAXBEBAUV4QTK');
+		mockSelectFiles.mockResolvedValueOnce({} as any);
+		// The cached original: all three files selected, downloaded
+		const cachedInfo = {
+			...subsetInfo,
+			id: 'HLFMCOTTYAFEU',
+			status: 'downloaded',
+			progress: 100,
+			files: subsetInfo.files.map((f: any) => ({ ...f, selected: 1 })),
+		};
+		mockGetTorrentInfo.mockImplementation(
+			async (_key, id) => (id === 'RAXBEBAUV4QTK' ? subsetInfo : cachedInfo) as any
+		);
+
+		await expect(handleReinsertTorrentinRd('key', finished, true, ['1', '2'])).rejects.toThrow(
+			/not cached/i
+		);
+
+		expect(mockHandleDeleteRdTorrent).toHaveBeenCalledWith('key', 'rd:RAXBEBAUV4QTK', true);
+		expect(mockHandleDeleteRdTorrent).not.toHaveBeenCalledWith(
+			'key',
+			'rd:HLFMCOTTYAFEU',
+			expect.anything()
+		);
+	});
+});
