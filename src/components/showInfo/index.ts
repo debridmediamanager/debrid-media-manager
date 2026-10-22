@@ -1141,7 +1141,13 @@ export const showInfoForTB = async (
 				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
 				try {
 					const lines: string[] = [];
-					for (const file of files) {
+					for (const [index, file] of files.entries()) {
+						// One request per file, paced to TorBox's requestdl limit: a big pack
+						// takes minutes, so say how far along it is (card 402)
+						toast.loading(`Fetching download links (${index + 1}/${files.length})...`, {
+							...magnetToastOptions,
+							id: toastId,
+						});
 						try {
 							const resp = isWebDownload
 								? await requestWebDownloadLink(tbKey, {
