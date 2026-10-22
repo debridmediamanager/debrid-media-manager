@@ -528,7 +528,13 @@ function HashlistPage() {
 	}
 
 	function wrapDownloadFilesInRdFn(t: EnrichedHashlistTorrent) {
-		return async () => await addRd(t.hash, t.filename);
+		return async () => {
+			// A refusal comes back as a result, not a throw, and the bulk counter
+			// only counts throws: ten 451s read "Started 10 downloads" (card 455).
+			const result = await addRd(t.hash, t.filename);
+			if (result !== 'success')
+				throw new Error(`Real-Debrid did not add ${t.filename}: ${result}`);
+		};
 	}
 
 	async function downloadNonDupeTorrentsInRd() {
@@ -689,7 +695,7 @@ function HashlistPage() {
 	}
 
 	async function addRd(hash: string, filename: string) {
-		await handleAddAsMagnetInRd(
+		return await handleAddAsMagnetInRd(
 			rdKey!,
 			hash,
 			async (info) => {
