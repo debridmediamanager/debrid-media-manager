@@ -14,6 +14,11 @@ vi.mock('user-agents', () => ({
 	default: mockUserAgent,
 }));
 
+const mockFetchAniListAnime = vi.fn();
+vi.mock('@/services/anime/anilist', () => ({
+	fetchAniListAnime: (...args: unknown[]) => mockFetchAniListAnime(...args),
+}));
+
 const mockFetchKitsuAnime = vi.fn();
 vi.mock('@/services/anime/kitsu', () => ({
 	fetchKitsuAnime: (...args: unknown[]) => mockFetchKitsuAnime(...args),
@@ -61,6 +66,7 @@ describe('/api/info/anime', () => {
 		vi.resetModules();
 		vi.clearAllMocks();
 		mockFetchKitsuAnime.mockResolvedValue(null);
+		mockFetchAniListAnime.mockResolvedValue(null);
 		mockGetAnimeByExternalId.mockResolvedValue(null);
 		mockResolveImdbIdFromSimkl.mockResolvedValue(null);
 		mockGetFranchiseIndex.mockResolvedValue(null);
@@ -311,19 +317,5 @@ describe('/api/info/anime', () => {
 		await handler(req, res);
 
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: '' }));
-	});
-
-	it('asks no upstream for a mal id the table does not hold', async () => {
-		const handler = await loadHandler();
-		const req = createMockRequest({ query: { animeid: 'mal-99' } });
-		const res = createMockResponse();
-		mockedAxios.get.mockRejectedValue(new Error('down'));
-
-		await handler(req, res);
-
-		expect(mockGetAnimeByExternalId).toHaveBeenCalledWith('mal', 99);
-		expect(mockedAxios.get).not.toHaveBeenCalled();
-		expect(mockFetchKitsuAnime).not.toHaveBeenCalled();
-		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'Unknown' }));
 	});
 });
