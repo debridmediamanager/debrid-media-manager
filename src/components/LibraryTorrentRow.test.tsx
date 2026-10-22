@@ -124,6 +124,17 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		(useRouter as any).mockReturnValue?.(mockRouter);
 	});
 
+	// Delete has no confirmation. 8f1225f7 moved it into the slot Reinsert used to
+	// hold, so a member clicking by position deleted instead of reinserting.
+	it('keeps Delete beside Share, ahead of Copy magnet and Reinsert', () => {
+		const torrent = { ...defaultProps.torrent, hash: 'a'.repeat(40) };
+		const { container } = render(<LibraryTorrentRow {...defaultProps} torrent={torrent} />);
+		const titles = [...container.querySelectorAll('button[title]')]
+			.map((b) => b.getAttribute('title'))
+			.filter((t) => ['Share', 'Delete', 'Copy magnet url', 'Reinsert'].includes(t!));
+		expect(titles).toEqual(['Share', 'Delete', 'Copy magnet url', 'Reinsert']);
+	});
+
 	describe('Premiumize cast button', () => {
 		const pmProps = (overrides: Partial<UserTorrent> = {}) => ({
 			...defaultProps,
