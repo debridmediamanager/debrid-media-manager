@@ -34,7 +34,7 @@ jobs:
     build-and-deploy:
         if: github.event_name == 'push'
         needs: dependency-audit
-        runs-on: [self-hosted]
+        runs-on: [self-hosted, prod]
         concurrency:
             group: ${{ github.workflow }}-${{ github.ref }}
             cancel-in-progress: true
