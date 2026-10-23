@@ -3,6 +3,7 @@ import FloatingLibraryIndicator from '@/components/FloatingLibraryIndicator';
 import { ModalProvider } from '@/components/modals/ModalContext';
 import { LibraryCacheProvider } from '@/contexts/LibraryCacheContext';
 import '@/styles/globals.css';
+import { bridgePageCache } from '@/utils/pageCacheBridge';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -19,30 +20,7 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 
 	useEffect(() => {
 		if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;
-		const cachePage = (path: string) => {
-			if (!navigator.onLine) return;
-			const url = new URL(path, window.location.origin);
-			if (
-				url.origin !== window.location.origin ||
-				url.pathname === '/api' ||
-				url.pathname.startsWith('/api/')
-			)
-				return;
-			navigator.serviceWorker.controller?.postMessage({
-				type: 'CACHE_APP_DOCUMENT',
-				url: url.href,
-			});
-		};
-		const cacheCurrentPage = () => cachePage(window.location.href);
-		router.events.on('routeChangeComplete', cachePage);
-		window.addEventListener('online', cacheCurrentPage);
-		navigator.serviceWorker.addEventListener('controllerchange', cacheCurrentPage);
-		cacheCurrentPage();
-		return () => {
-			router.events.off('routeChangeComplete', cachePage);
-			window.removeEventListener('online', cacheCurrentPage);
-			navigator.serviceWorker.removeEventListener('controllerchange', cacheCurrentPage);
-		};
+		return bridgePageCache(router.events, navigator.serviceWorker);
 	}, [router.events]);
 
 	useEffect(() => {

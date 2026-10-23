@@ -12,7 +12,8 @@ module.exports = {
 	cacheOnNavigation: false,
 	// node-glob does not subtract "!path" patterns; exclude the root with an extglob.
 	globPublicPatterns: ['!(noprecache){,/**}'],
-	exclude: [/dynamic-css-manifest\.json$/],
+	// Setting exclude replaces the plugin's defaults, so restate them.
+	exclude: [/\.map$/, /^manifest.*\.js$/, /dynamic-css-manifest\.json$/],
 	manifestTransforms: [
 		async (entries) => ({
 			// Serwist uses size: 0 for external entries without a compilation asset.

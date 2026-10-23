@@ -24,6 +24,8 @@ const isAppDocumentUrl = (url: URL) =>
 const pages = new NetworkFirst({
 	cacheName: 'pages',
 	plugins: [
+		// Every movie, season and search URL is its own entry.
+		new ExpirationPlugin({ maxEntries: 100 }),
 		{
 			cacheWillUpdate: async ({ response }) =>
 				response.status === 200 &&
@@ -37,6 +39,8 @@ const pages = new NetworkFirst({
 
 const serwist = new Serwist({
 	precacheEntries: self.__SW_MANIFEST,
+	// Also removes next-pwa's `workbox-precache-v2-…` precache from before Serwist.
+	precacheOptions: { cleanupOutdatedCaches: true },
 	skipWaiting: true,
 	clientsClaim: true,
 	runtimeCaching: [
@@ -80,20 +84,12 @@ self.addEventListener('message', (event) => {
 	event.waitUntil(Promise.all([response, complete]));
 });
 
-// An upgrade must also remove API URLs/bodies written by the old navigation
-// cache, without clearing application documents or unrelated browser storage.
+// next-pwa's runtime caches held API URLs and bodies (`others` kept every pushState
+// URL, query strings included). `pages` goes too: documents cached by the previous
+// build name scripts this build no longer serves.
+const STALE_CACHES = ['start-url', 'next-data', 'others', 'pages'];
 self.addEventListener('activate', (event) => {
-	event.waitUntil(
-		(async () => {
-			if (!(await caches.has('pages'))) return;
-			const cache = await caches.open('pages');
-			await Promise.all(
-				(await cache.keys())
-					.filter((request) => isApiPath(new URL(request.url).pathname))
-					.map((request) => cache.delete(request))
-			);
-		})()
-	);
+	event.waitUntil(Promise.all(STALE_CACHES.map((name) => caches.delete(name))));
 });
 
 serwist.addEventListeners();
