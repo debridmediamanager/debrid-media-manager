@@ -11,7 +11,11 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
 }));
-vi.mock('@/services/placement', () => ({ placeReleases: vi.fn(), cachedSources: {} }));
+vi.mock('@/services/placement', () => ({
+	placeReleases: vi.fn(),
+	cachedSources: {},
+	PLACEMENT_RULES: '2026-10-23',
+}));
 vi.mock('@/pages/api/library/identify', () => ({
 	identifyItems: vi.fn(),
 	identificationItem: (filename: string, hash: string | null) => ({
@@ -76,6 +80,20 @@ describe('/api/sponsor/place', () => {
 				files: [{ path: 'Show.S01E01.mkv', folder: null }],
 			},
 		]);
+	});
+
+	// zurg keeps a placement until it asks again a day or a week on, so a fix to the rules
+	// reached rex-fun's releases only that much later (2026-10-22); a caller holding answers
+	// from older rules asks about them again
+	it('names the rules its answer was placed by', async () => {
+		const res = createMockResponse();
+		await handler(post({ releases: [CONAN] }), res);
+
+		expect(res.json).toHaveBeenCalledWith({
+			releases: [],
+			complete: true,
+			rules: '2026-10-23',
+		});
 	});
 
 	it('answers a name the identifier could not be asked about as unknown, to be asked again', async () => {

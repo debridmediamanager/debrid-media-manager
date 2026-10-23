@@ -107,7 +107,8 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 				}
 			]
 		}
-	]
+	],
+	"rules": "2026-10-23"
 }
 ```
 
@@ -138,6 +139,8 @@ TMDB's count of the show's episodes reaches that number. `how` says which rule p
 | `tvdb`     | TVDB's season and episode where TMDB has no such episode, by the show's TVDB Order episode group on TMDB: TMDB numbers One Piece's seasons by absolute episode, so Crunchyroll's `One.Piece.1999.S23E25` is TMDB's S23E1180.                                                                                                                                                                                                                                                                                                                                                                                               |
 | `dub`      | An English dub's season and episode, for a release named as dubbed, by the show's Dub Order episode group on TMDB: `[Rillant] Medabots S01-03 (English Dubbed)`'s S03E01 is TMDB's S2E1, the dub's third season being TMDB's second.                                                                                                                                                                                                                                                                                                                                                                                       |
 | `absolute` | A number with no season (`One Piece - 1100`), counted through TMDB's seasons; never for a fansub title the anime lists do not know, of a show they map season by season (`Pocket Monsters - Aim to be a Pokémon Master 10` is no tenth episode of Pokémon).                                                                                                                                                                                                                                                                                                                                                                |
+
+`rules` names the placement rules the answer was made by. DMM changes it whenever it places releases differently; an answer you keep from other rules is worth asking about again, which is how zurg picks up DMM's fixes for releases it has already placed.
 
 `complete: false` means some releases could not be answered in this call: they ran past
 its time budget, or needed the identifier or TMDB while either was unreachable. Each such

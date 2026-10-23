@@ -2,6 +2,7 @@ import { identificationItem, identifyItems } from '@/pages/api/library/identify'
 import { sponsorOfDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import {
 	cachedSources,
+	PLACEMENT_RULES,
 	placeReleases,
 	type Identify,
 	type PlaceRequest,
@@ -55,7 +56,7 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
  * What each release of a sponsor's library is, and its files' TMDB season and episode:
  * `{"releases": [{name, hash?, imdbId?, files: [{path, folder}]}]}` answers
  * `{"releases": [{kind, imdbId, tmdbId, files: [{path, season, episode, episodeEnd, how}]}],
- * "complete"}` in request order. See docs/sponsor-api.md.
+ * "complete", "rules"}` in request order. See docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -89,9 +90,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// a name content-identifier could not be asked about is answered `skipped`
 			return results.map((result) => result ?? (complete ? null : undefined));
 		};
-		return res
-			.status(200)
-			.json(await placeReleases(releases, identify, cachedSources, deadline));
+		const placed = await placeReleases(releases, identify, cachedSources, deadline);
+		return res.status(200).json({ ...placed, rules: PLACEMENT_RULES });
 	} catch (error) {
 		console.error('Failed to place sponsor releases', error);
 		return res.status(500).json({ error: 'Internal server error' });

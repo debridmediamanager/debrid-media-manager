@@ -35,6 +35,15 @@ import {
 } from '@/utils/episodePlacement';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
 
+/**
+ * The rules an answer was placed by. Bump it with any change that places a release differently:
+ * zurg asks again about every placement made under other rules, and otherwise keeps one a day
+ * (a file left unplaced) or a week (a release placed whole), so a fix reached rex-fun's library
+ * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
+ * ask about whole libraries again for nothing.
+ */
+export const PLACEMENT_RULES = '2026-10-23';
+
 export interface PlaceRequest {
 	name: string;
 	hash: string | null;

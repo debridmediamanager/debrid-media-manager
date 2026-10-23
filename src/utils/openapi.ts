@@ -483,7 +483,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'placeReleases',
 				summary: 'Place releases on TMDB',
-				description: `What each release is and where its files go on TMDB: the movie's or show's IMDb and TMDB ids, and each file's TMDB season and episode, anime cours and absolute numbering included. Send \`imdbId\` when you already know the title; otherwise DMM identifies the release by its name.\n\n\`releases\` lines up with the request and each \`files\` with its release's. \`complete: false\` means some releases ran past the call's time budget or needed an unreachable service: they come back \`"skipped": true\` with everything \`null\`; send them again later.\n\n**Limit:** ${per(sponsorPlace, 'calls')} per key, wherever your servers run.`,
+				description: `What each release is and where its files go on TMDB: the movie's or show's IMDb and TMDB ids, and each file's TMDB season and episode, anime cours and absolute numbering included. Send \`imdbId\` when you already know the title; otherwise DMM identifies the release by its name.\n\n\`releases\` lines up with the request and each \`files\` with its release's. \`complete: false\` means some releases ran past the call's time budget or needed an unreachable service: they come back \`"skipped": true\` with everything \`null\`; send them again later. \`rules\` names the placement rules the answer was made by: an answer kept from other rules is worth asking about again.\n\n**Limit:** ${per(sponsorPlace, 'calls')} per key, wherever your servers run.`,
 				externalDocs: {
 					url: `${REPO}/sponsor-api.md#place-releases-on-tmdb`,
 					description: 'Placement rules',
@@ -555,6 +555,11 @@ export const openApiDocument = {
 							type: 'object',
 							properties: {
 								complete: { type: 'boolean' },
+								rules: {
+									type: 'string',
+									description:
+										'The placement rules this answer was made by; ask again about answers made by other rules',
+								},
 								releases: {
 									type: 'array',
 									items: {
@@ -600,6 +605,7 @@ export const openApiDocument = {
 						},
 						{
 							complete: true,
+							rules: '2026-10-23',
 							releases: [
 								{
 									kind: 'tv',
