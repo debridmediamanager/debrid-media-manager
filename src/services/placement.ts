@@ -12,6 +12,7 @@ import {
 	type IdentifierMatch,
 	type IdentifierResult,
 } from '@/services/contentIdentifier';
+import type { ImdbSeries } from '@/services/database/hashImdb';
 import { settle, TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository } from '@/services/repository';
@@ -87,6 +88,8 @@ export interface PlacementSources {
 	anime(): Promise<AnimeIndex | null>;
 	/** TMDB's TV search for a title (`search/tv`). */
 	searchTv(query: string): Promise<any | null>;
+	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
+	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
 	/** content-identifier's own answers for these names, unjudged; null when it could not be asked. */
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 }
@@ -112,6 +115,8 @@ interface Title {
 	kind: 'movie' | 'tv' | null;
 	imdbId: string | null;
 	tmdbId: number | null;
+	/** IMDb's episodes of a series TMDB cannot use, which the files are numbered on instead. */
+	listed?: ImdbSeries;
 }
 
 /**
@@ -133,8 +138,11 @@ export async function placeReleases(
 			release.imdbId ? resolve(release.imdbId, null, release, sources) : null
 		)
 	);
+	// a series IMDb numbers is the id sent, numbered there, never one its name reads as: the
+	// identifier reads `Digimon.Adventure.02.E03` as TMDB's Digimon: Digital Monsters, whose
+	// season 1 is the 1999 series
 	const ask = releases.flatMap((_, at) =>
-		titles[at] !== undefined && titles[at]?.tmdbId == null ? [at] : []
+		titles[at] !== undefined && titles[at]?.tmdbId == null && !titles[at]?.listed ? [at] : []
 	);
 	if (ask.length) {
 		const answers = await identify(ask.map((at) => releases[at]));
@@ -214,7 +222,11 @@ async function siblingLook(
 		return numbers && titleOf(file.path.split('/').pop() ?? file.path, numbers);
 	}).length;
 	const had = titledFiles.get(placed) ?? 0;
-	if (titled < 2 || had * 2 >= titled) return placed;
+	// a release on IMDb's own list still looks for a show TMDB lists that its titles name as
+	// well: Plex's agent knows Power Rangers Dino Charge only as Power Rangers' season 22, not by
+	// Dino Charge's IMDb id (tt3521854), which IMDb lists as a series of its own
+	const onImdb = placed.tmdbId === null && placesFiles(placed);
+	if (titled < 2 || (had * 2 >= titled && !onImdb)) return placed;
 	const shown = placed.tmdbId === null ? null : await sources.show(placed.tmdbId);
 	const queries = [parseName(release.name).title, shown?.name].filter(
 		(query): query is string => typeof query === 'string' && letters(query).length >= 3
@@ -256,7 +268,8 @@ async function siblingLook(
 			anime
 		);
 		const count = titledFiles.get(there) ?? 0;
-		if (!there.skipped && count > most) [best, most] = [there, count];
+		if (!there.skipped && (count > most || (onImdb && best === placed && count >= most)))
+			[best, most] = [there, count];
 	}
 	return best;
 }
@@ -274,6 +287,7 @@ async function secondLook(
 	const unnamed = placed.tmdbId === null;
 	if (
 		placed.skipped ||
+		(unnamed && placesFiles(placed)) ||
 		(!unnamed && (placed.kind !== 'tv' || !numbered.length || placesFiles(placed)))
 	) {
 		return placed;
@@ -318,7 +332,11 @@ async function secondLook(
 		const tried: PlacedRelease[] = [];
 		for (const match of offered) {
 			const title = await resolve(match.imdbId, 'tv', release, sources);
-			if (title?.kind !== 'tv' || title.tmdbId === null || title.tmdbId === placed.tmdbId)
+			if (
+				title?.kind !== 'tv' ||
+				(title.tmdbId === null && !title.listed) ||
+				(title.tmdbId ?? title.imdbId) === (placed.tmdbId ?? placed.imdbId)
+			)
 				continue;
 			const there = await placeRelease(release, title, sources, anime);
 			if (!there.skipped && placesFiles(there)) tried.push(there);
@@ -394,11 +412,34 @@ async function resolve(
 	} else if (typeof tv === 'number') kind = 'tv';
 	else if (typeof movie === 'number' && !seasons) kind = 'movie';
 	const tmdbId = kind === 'movie' ? movie : kind === 'tv' ? tv : undefined;
-	if (typeof tmdbId !== 'number') return { kind, imdbId, tmdbId: null };
+	if (typeof tmdbId !== 'number') {
+		if (kind === 'movie') return { kind, imdbId, tmdbId: null };
+		const listed = await listedSeries(imdbId, sources);
+		return listed
+			? { kind: 'tv', imdbId, tmdbId: null, listed }
+			: { kind, imdbId, tmdbId: null };
+	}
 	// DMM's cached find for tt14986406 names show 335660, which TMDB has since deleted: one TMDB
 	// cannot use, so the release's name names it
-	if (kind === 'tv' && deleted(await sources.show(tmdbId))) return { kind, imdbId, tmdbId: null };
+	if (kind === 'tv' && deleted(await sources.show(tmdbId))) {
+		const listed = await listedSeries(imdbId, sources);
+		return { kind, imdbId, tmdbId: null, ...(listed ? { listed } : {}) };
+	}
 	return { kind, imdbId, tmdbId };
+}
+
+/**
+ * IMDb's episodes of a series TMDB cannot use, when IMDb numbers them: TMDB has deleted Dragon
+ * Ball Z Abridged (tt10710138, `tv/337297` a 404) and its find knows neither it nor Digimon
+ * Adventure 02 (tt0243694), while IMDb lists both by season and episode, as Plex's agent does.
+ */
+async function listedSeries(imdbId: string, sources: PlacementSources) {
+	const series = await sources.imdbSeries(imdbId);
+	return series &&
+		/^tv(?:Mini)?Series$/.test(series.titleType) &&
+		series.episodes.some((row) => row.season !== null && row.season > 0 && row.episode !== null)
+		? series
+		: null;
 }
 
 /** TMDB's answer for a show it has deleted: `/3/tv/335660` is a 404 with `status_code` 34. */
@@ -440,7 +481,22 @@ async function placeRelease(
 		title?.kind === 'movie' && title.tmdbId !== null && fansubShaped(release.name) && numbered;
 	const hit = (title?.tmdbId == null && animeShaped) || film ? named() : null;
 	const indexed = hit && (!film || hit.target.season > 0) ? onIndex(hit) : null;
-	if (indexed) return placeOnShow(release, indexed, true, sources, anime);
+	const listed = title?.listed
+		? await placeOnImdb(release, { ...title, listed: title.listed }, anime)
+		: null;
+	if (indexed) {
+		const there = await placeOnShow(release, indexed, true, sources, anime);
+		if (!listed || !placesFiles(listed)) return there;
+		// the anime index's show is read off the name, IMDb's list is the id sent: the list wins
+		// where more of the files' titles name its episodes (`Season 2`'s `Dragon Ball Z Abridged -
+		// S02E01 - …` read as another series), or where the index's show only counted them
+		// (`Digimon.Adventure.02.E03` as Digimon: Digital Monsters' S1E3, the 1999 series); else
+		// the index's numbering stands (Thousand-Year Blood War's `S04E01` as Bleach's S2E41)
+		const titles = (answer: PlacedRelease) => titledFiles.get(answer) ?? 0;
+		const counted = there.files.every((file) => file.how === null || file.how === 'absolute');
+		return titles(listed) > titles(there) || counted ? listed : there;
+	}
+	if (listed) return listed;
 	if (title?.kind !== 'tv' || title.tmdbId === null) {
 		return {
 			kind: title?.kind ?? null,
@@ -536,6 +592,22 @@ async function placeOnShow(
 	placement.tvdbOrder = tvdbOrderLookup(showId, sources, TVDB_ORDER);
 	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
+	return placeFiles(release, placement, anime, imdb, (files) => answer(files));
+}
+
+/**
+ * A release's files on one show, by the rules in `@/utils/episodePlacement`, as `answer` reports
+ * them; `how` rewrites each file's rule.
+ */
+async function placeFiles(
+	release: PlaceRequest,
+	placement: PlacementShow,
+	anime: AnimeIndex | null,
+	imdb: ImdbLookup | null,
+	answer: (files: PlacedFile[]) => PlacedRelease,
+	how: (found: Placement) => PlacementRule | null = (found) => found.how,
+	byTitle = false
+): Promise<PlacedRelease> {
 	const numbers = absoluteFolders(
 		release.files.map((file) => ({
 			folder: file.folder,
@@ -569,25 +641,77 @@ async function placeOnShow(
 		).length *
 			2 >
 		titles.filter(Boolean).length;
-	const kept = moved
-		? yielded.map((found, at) => (found && !found.titled && titles[at] ? null : found))
-		: yielded;
+	// scene notation is the list's own numbering; a count or a folder's season is not
+	const counted = (at: number) =>
+		numbers[at]!.season === null || Boolean(numbers[at]!.coded || numbers[at]!.borrowed);
+	const kept = yielded.map((found, at) =>
+		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
+	);
 	const placedAnswer = answer(
 		kept.map((found, at) => {
 			const path = release.files[at].path;
-			return found
+			const rule = found && how(found);
+			return found && rule
 				? {
 						path,
 						season: found.season,
 						episode: found.episode,
 						episodeEnd: found.episodeEnd,
-						how: found.how,
+						how: rule,
 					}
 				: unplaced(path);
 		})
 	);
 	titledFiles.set(placedAnswer, kept.filter((found) => found?.titled).length);
 	return placedAnswer;
+}
+
+/**
+ * A release's files on IMDb's episode list of a series TMDB cannot use, by the same rules as on
+ * TMDB's (a file's own title first) and all answered `imdb`: the show's ids are IMDb's alone, and
+ * Plex's agent knows the show by them with IMDb's seasons. A number counted through the seasons is
+ * taken only for a series of one season, and a file numbered by a count or its folder, with a
+ * title, only by its title: TFS numbers Dragon Ball Z Abridged on through its seasons and splits
+ * episodes in parts (`DBZ Abridged - 025 - Nail Is Piccolo, And So Can You!` is IMDb's S2E15,
+ * `DragonBall Z Abridged Episode 11` its S2E1), which no count reaches.
+ */
+async function placeOnImdb(
+	release: PlaceRequest,
+	title: Title & { listed: ImdbSeries },
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	const bySeason = new Map<number, { episode: number; name: string; airDate: string | null }[]>();
+	for (const row of title.listed.episodes) {
+		if (row.season === null || row.episode === null) continue;
+		const list = bySeason.get(row.season) ?? [];
+		list.push({ episode: row.episode, name: row.name, airDate: null });
+		bySeason.set(row.season, list);
+	}
+	for (const list of bySeason.values()) list.sort((a, b) => a.episode - b.episode);
+	const placement: PlacementShow = {
+		episodes: async (season) => bySeason.get(season) ?? null,
+		// no TMDB show, so no anime entry names it
+		tmdbId: -1,
+		imdbId: title.imdbId,
+		names: title.listed.title ? [title.listed.title] : [],
+		seasons: [...bySeason]
+			.map(([season, list]) => ({ season, episodes: list.length, airDate: null }))
+			.sort((a, b) => a.season - b.season),
+	};
+	return placeFiles(
+		release,
+		placement,
+		anime,
+		null,
+		(files) => ({ kind: 'tv', imdbId: title.imdbId, tmdbId: null, files }),
+		// a count only through a series of one season: Digimon Adventure 02's 50
+		(found) =>
+			found.how === 'absolute' && placement.seasons.filter((row) => row.season > 0).length > 1
+				? null
+				: 'imdb',
+		// a file with a title only by it: TFS's `Episode 11 - TeamFourStar (TFS)` is IMDb's S2E1
+		true
+	);
 }
 
 /** How many of an answer's files placeOnShow placed by their own titles. */
@@ -717,6 +841,7 @@ export const cachedSources: PlacementSources = {
 	episodeShow: (imdbId) => repository.getImdbEpisodeShow(imdbId),
 	seasonEpisodes: (show, season) => repository.getImdbSeasonEpisodeIds(show, season),
 	anime: () => settle(currentAnimeIndex),
+	imdbSeries: (imdbId) => repository.getImdbSeries(imdbId),
 	searchTv: (query) =>
 		getTmdbAuth()
 			? settle(() => getMetadataCache().searchTmdbTitles('tv', query))

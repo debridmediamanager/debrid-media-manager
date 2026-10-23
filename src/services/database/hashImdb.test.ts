@@ -12,6 +12,7 @@ const prismaMock = vi.hoisted(() => ({
 	available: { findMany: vi.fn() },
 	availableAd: { findMany: vi.fn() },
 	imdbTitleEpisode: { findMany: vi.fn() },
+	imdbTitleBasics: { findUnique: vi.fn(), findMany: vi.fn() },
 	scrapedVerdict: { findMany: vi.fn() },
 	$queryRaw: vi.fn(),
 }));
@@ -331,5 +332,36 @@ describe('soleKeeps', () => {
 		);
 		expect(picks.get(A)).toBe('tt0000002');
 		expect(picks.get(B)).toBe('tt0000003');
+	});
+});
+
+describe('getImdbSeries', () => {
+	it("lists a series' episodes with IMDb's own titles, a season-less one kept as such", async () => {
+		// dmmdb's rows for Dragon Ball Z Abridged (tt10710138), 2026-10-23
+		prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+			titleType: 'tvSeries',
+			primaryTitle: 'Dragon Ball Z Abridged',
+		});
+		prismaMock.imdbTitleEpisode.findMany.mockResolvedValue([
+			{ tconst: 'tt1', seasonNumber: 2, episodeNumber: 15 },
+			{ tconst: 'tt2', seasonNumber: null, episodeNumber: null },
+		]);
+		prismaMock.imdbTitleBasics.findMany.mockResolvedValue([
+			{ tconst: 'tt1', primaryTitle: 'Nail is Piccolo, and so can you!' },
+			{ tconst: 'tt2', primaryTitle: 'Dead Zone' },
+		]);
+		expect(await new HashImdbService().getImdbSeries('tt10710138')).toEqual({
+			titleType: 'tvSeries',
+			title: 'Dragon Ball Z Abridged',
+			episodes: [
+				{ season: 2, episode: 15, name: 'Nail is Piccolo, and so can you!' },
+				{ season: null, episode: null, name: 'Dead Zone' },
+			],
+		});
+	});
+
+	it('answers null for a title IMDb does not have', async () => {
+		prismaMock.imdbTitleBasics.findUnique.mockResolvedValue(null);
+		expect(await new HashImdbService().getImdbSeries('tt0000000')).toBeNull();
 	});
 });

@@ -1384,6 +1384,10 @@ export class Repository {
 		return this.hashImdbService.getEpisodeShow(tconst);
 	}
 
+	public getImdbSeries(tconst: string) {
+		return this.hashImdbService.getImdbSeries(tconst);
+	}
+
 	public getImdbSeasonEpisodeIds(show: string, season: number) {
 		return this.hashImdbService.getSeasonEpisodeIds(show, season);
 	}

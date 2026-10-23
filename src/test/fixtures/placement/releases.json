@@ -1201,7 +1201,7 @@
 			[1, 25]
 		],
 		"expect": {
-			"kind": null,
+			"kind": "tv",
 			"imdbId": "tt10710138",
 			"tmdbId": null,
 			"files": [
@@ -1214,10 +1214,10 @@
 				},
 				{
 					"path": "DBZ Abridged - 025 - Nail Is Piccolo, And So Can You! [phantop].mkv",
-					"season": null,
-					"episode": null,
+					"season": 2,
+					"episode": 15,
 					"episodeEnd": null,
-					"how": null
+					"how": "imdb"
 				}
 			]
 		}

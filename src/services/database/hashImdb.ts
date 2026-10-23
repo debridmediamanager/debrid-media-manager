@@ -6,6 +6,13 @@ export interface HashImdbPair {
 	imdbId: string;
 }
 
+/** A series and its episodes as IMDb lists them; `season` and `episode` are null where IMDb has none. */
+export interface ImdbSeries {
+	titleType: string;
+	title: string | null;
+	episodes: { season: number | null; episode: number | null; name: string }[];
+}
+
 /** The title DMM matched a release hash to. */
 export interface HashIdentity {
 	imdbId: string;
@@ -197,6 +204,39 @@ export class HashImdbService extends DatabaseClient {
 			select: { parentTconst: true },
 		});
 		return row?.parentTconst ?? null;
+	}
+
+	/**
+	 * A series as IMDb lists it: its type and every episode's season, number and title, read by
+	 * the show's index (idx_parent) and the episodes' ids; null when IMDb has no such title.
+	 */
+	public async getImdbSeries(tconst: string): Promise<ImdbSeries | null> {
+		const show = await this.prisma.imdbTitleBasics.findUnique({
+			where: { tconst },
+			select: { titleType: true, primaryTitle: true },
+		});
+		if (!show) return null;
+		const rows = await this.prisma.imdbTitleEpisode.findMany({
+			where: { parentTconst: tconst },
+			select: { tconst: true, seasonNumber: true, episodeNumber: true },
+		});
+		const titles = new Map(
+			(
+				await this.prisma.imdbTitleBasics.findMany({
+					where: { tconst: { in: rows.map((row) => row.tconst) } },
+					select: { tconst: true, primaryTitle: true },
+				})
+			).map((row) => [row.tconst, row.primaryTitle ?? ''])
+		);
+		return {
+			titleType: show.titleType,
+			title: show.primaryTitle,
+			episodes: rows.map((row) => ({
+				season: row.seasonNumber,
+				episode: row.episodeNumber,
+				name: titles.get(row.tconst) ?? '',
+			})),
+		};
 	}
 
 	/** IMDb's episode ids for one season of a show, by episode number (idx_season_episode). */

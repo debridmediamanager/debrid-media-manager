@@ -10,6 +10,7 @@ import {
 } from '@/services/placement';
 import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
+import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
@@ -56,6 +57,7 @@ const sources: PlacementSources = {
 	anime: async () => anime,
 	identifier: async (names) => answered(recorded, names),
 	searchTv: async (query) => recorded.searchTv?.[query] ?? null,
+	imdbSeries: async (id) => recorded.imdbSeries?.[id] ?? null,
 };
 const identify: Identify = async (list) => list.map(({ name }) => recorded.identify[name] ?? null);
 const place = (requests: PlaceRequest[], deadline = Infinity, from = sources, ask = identify) =>
@@ -79,6 +81,7 @@ const recordedSources = (r: any): PlacementSources => ({
 	anime: async () => anime,
 	identifier: async (names) => answered(r, names),
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
+	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
 });
 
 describe('a pack numbered in another order than TMDB, named by its titles', () => {
@@ -164,8 +167,8 @@ describe('placeReleases over real releases', () => {
 		expect((await place([family], Infinity, noShow)).releases[0]).toEqual(skippedShape(family));
 	});
 
-	it('answers a release it looked at and could not identify with the id sent, so it never reads as skipped', async () => {
-		// zurg pushed tt10710138, which TMDB's find knows nothing by, and the identifier names nothing
+	it('answers a release whose id TMDB cannot use with the id sent, so it never reads as skipped', async () => {
+		// zurg pushed tt10710138, which TMDB's find knows nothing by: IMDb's own list numbers it
 		const abridged = named('[iKaos] TFS Dragon Ball Z Abridged');
 		expect(recorded.find[abridged.request.imdbId!]).toEqual({
 			movie_results: [],
@@ -174,7 +177,7 @@ describe('placeReleases over real releases', () => {
 		});
 		const { releases, complete } = await place([abridged.request as PlaceRequest]);
 		expect(complete).toBe(true);
-		expect(releases[0]).toMatchObject({ kind: null, imdbId: 'tt10710138', tmdbId: null });
+		expect(releases[0]).toMatchObject({ kind: 'tv', imdbId: 'tt10710138', tmdbId: null });
 		expect(releases[0].skipped).toBeUndefined();
 	});
 
@@ -616,5 +619,62 @@ describe('a release whose titled files name another show than the one it was pla
 		const numbersOf = (r: any) => r.files.map((f: any) => [f.season, f.episode]);
 		expect(numbersOf(placed)).toEqual(numbersOf(check(name).expect));
 		expect(placed.tmdbId).toBe(show);
+	});
+});
+
+describe("a series TMDB cannot use, numbered on IMDb's own list (zurg on fun, 2026-10-23)", () => {
+	// TMDB has deleted Dragon Ball Z Abridged (tt10710138; tv/337297 answers status_code 34) and
+	// its find knows neither it nor Digimon Adventure 02 (tt0243694); IMDb lists both by season
+	// and episode, as Plex's agent does (plex://show/5d9c0885ef619b00204806bd, seasons 1-3 of
+	// 12/22/33; Digimon Adventure 02 one season of 50)
+	const from = {
+		...recordedSources(imdbSeries.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(imdbSeries.answers.anime.fribb as FribbAnimeEntry[]),
+				imdbSeries.answers.anime.titles
+			),
+	};
+	const placedHere = async (name: string, imdbId?: string) => {
+		const c = imdbSeries.cases.find(
+			(c) => c.request.name.startsWith(name) && (!imdbId || c.request.imdbId === imdbId)
+		)!;
+		return (await place([c.request as PlaceRequest], Infinity, from)).releases[0];
+	};
+	const at = (release: Awaited<ReturnType<typeof placedHere>>, part: string) => {
+		const file = release.files.find((f) => f.path.includes(part))!;
+		return [file.season, file.episode, file.how];
+	};
+
+	it.each(imdbSeries.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place([c.request as PlaceRequest], Infinity, from);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	it("places a pack's files by their titles on IMDb's seasons, never by TFS's running count", async () => {
+		const pack = await placedHere('[iKaos] TFS Dragon Ball Z Abridged Collection');
+		expect(pack).toMatchObject({ kind: 'tv', imdbId: 'tt10710138', tmdbId: null });
+		expect(at(pack, '025 - Nail Is Piccolo')).toEqual([2, 15, 'imdb']);
+		expect(at(pack, '055 - It')).toEqual([3, 25, 'imdb']);
+		// a side series' number and a deleted scene's are no episodes of the show
+		expect(at(pack, 'DragonShortZ - 001')).toEqual([null, null, null]);
+		expect(at(pack, '001 - Deleted Scene Episode 3')).toEqual([null, null, null]);
+		const series = await placedHere('TFS Dragon Ball Z Abridged - Complete');
+		// TFS's `Episode 11` is IMDb's S2E1, so no `Episode N` is placed by its number
+		expect(series.files.every((f) => f.season === null)).toBe(true);
+	});
+
+	it("numbers a one-season series by its episodes' own numbers", async () => {
+		// the identifier reads Digimon Adventure 02 as TMDB's Digimon: Digital Monsters, whose
+		// season 1 is the 1999 series; `E03` had been placed there
+		const digimon = await placedHere('Digimon.Adventure.02.E03');
+		expect(digimon).toMatchObject({ imdbId: 'tt0243694', tmdbId: null });
+		expect(at(digimon, 'e03.1080p.mkv')).toEqual([1, 3, 'imdb']);
+	});
+
+	it('keeps a show TMDB lists that the titles name as well', async () => {
+		// Plex's agent knows Dino Charge only as Power Rangers' season 22, not by tt3521854
+		expect(await placedHere('Power Rangers Dino Charge')).toMatchObject({ tmdbId: 2328 });
 	});
 });
