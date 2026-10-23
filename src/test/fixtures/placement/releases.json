@@ -30,14 +30,16 @@
 					"season": 13,
 					"episode": 423,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1154168
 				},
 				{
 					"path": "[Anime Time] One Piece - 0424 - Break Through the Crimson Hell! Buggy's Chaos-Inducing Plan!.mkv",
 					"season": 13,
 					"episode": 424,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1154169
 				}
 			]
 		}
@@ -66,7 +68,8 @@
 					"season": 4,
 					"episode": 102,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "absolute",
+					"tmdbEpisodeId": 1149687
 				}
 			]
 		}
@@ -102,14 +105,16 @@
 					"season": 21,
 					"episode": 892,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1817016
 				},
 				{
 					"path": "One Piece (1999) - s21e893 - [Erai-raws][1080p][HEVC][ABE3BFC0].mkv",
 					"season": 21,
 					"episode": 893,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1839900
 				}
 			]
 		}
@@ -145,14 +150,16 @@
 					"season": 5,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "absolute",
+					"tmdbEpisodeId": 2252141
 				},
 				{
 					"path": "[Anime Time] My Hero Academia - 090.mkv",
 					"season": 5,
 					"episode": 2,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "absolute",
+					"tmdbEpisodeId": 2817760
 				}
 			]
 		}
@@ -188,14 +195,16 @@
 					"season": 2,
 					"episode": 6,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1309619
 				},
 				{
 					"path": "[Episode 34] Gear up for Final Exams.mkv",
 					"season": 2,
 					"episode": 21,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1347318
 				}
 			]
 		}
@@ -231,14 +240,16 @@
 					"season": 1,
 					"episode": 4,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1202880
 				},
 				{
 					"path": "103a-b - The Magnificent Few; S'Winter.mkv",
 					"season": 1,
 					"episode": 10,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 114712
 				}
 			]
 		}
@@ -274,14 +285,16 @@
 					"season": 1,
 					"episode": 3,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 943006
 				},
 				{
 					"path": "03. Pups Save the Sea Turtles + Pup and the Very Big Baby.HD.rus.eng.mkv",
 					"season": 1,
 					"episode": 5,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 943005
 				}
 			]
 		}
@@ -317,14 +330,16 @@
 					"season": 1,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 447723
 				},
 				{
 					"path": "[MW]_Medarot_-_10_-_Mystery_Medabot[FBFA37F4].mkv",
 					"season": 1,
 					"episode": 12,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 447728
 				}
 			]
 		}
@@ -360,14 +375,16 @@
 					"season": 1,
 					"episode": 13,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 993938
 				},
 				{
 					"path": "Space.Dandy.S01E14.1080p-Hi10p.BluRay.FLAC5.1.x264-CTR.[96A3E8D8].mkv",
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "absolute",
+					"tmdbEpisodeId": 993951
 				}
 			]
 		}
@@ -403,14 +420,16 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 882254
 				},
 				{
 					"path": "[SZN & I-O] Hajime no Ippo New Challenger - 24[720p][2CA28B99].mkv",
 					"season": 2,
 					"episode": 24,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 882272
 				}
 			]
 		}
@@ -446,14 +465,16 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "[Holomux] Gintama\u00b0 Love Potion Arc 02 [DVD x264 10bit 480p FLAC 2.0][061FC3B5].mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -482,7 +503,8 @@
 					"season": 3,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 4703269
 				}
 			]
 		}
@@ -511,7 +533,8 @@
 					"season": 4,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7411170
 				}
 			]
 		}
@@ -540,7 +563,8 @@
 					"season": 2,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 7084741
 				}
 			]
 		}
@@ -569,7 +593,8 @@
 					"season": 5,
 					"episode": 25,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 3992992
 				}
 			]
 		}
@@ -605,14 +630,16 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1050974
 				},
 				{
 					"path": "[Reza] Food Wars S04E01.mkv",
 					"season": 4,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1921701
 				}
 			]
 		}
@@ -641,7 +668,8 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1935016
 				}
 			]
 		}
@@ -677,14 +705,16 @@
 					"season": 1,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 969587
 				},
 				{
 					"path": "Dragon Ball Z (1989) - s02e01 - [a-s][826E7307].mkv",
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 969620
 				}
 			]
 		}
@@ -720,14 +750,16 @@
 					"season": 1,
 					"episode": 4,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1944458
 				},
 				{
 					"path": "S02E01-Apprentice Priestess.mkv",
 					"season": 1,
 					"episode": 15,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 2186171
 				}
 			]
 		}
@@ -763,14 +795,16 @@
 					"season": 1,
 					"episode": 13,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1554582
 				},
 				{
 					"path": "S01E14 [SP]-The Common Cold.mkv",
 					"season": 0,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1652146
 				}
 			]
 		}
@@ -806,14 +840,16 @@
 					"season": 2,
 					"episode": 22,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 647142
 				},
 				{
 					"path": "Clannad.S02E23.1080p.Blu-Ray.10-Bit.Dual-Audio.DTS-HD.x265-iAHD.mkv",
 					"season": 0,
 					"episode": 3,
 					"episodeEnd": null,
-					"how": "imdb"
+					"how": "imdb",
+					"tmdbEpisodeId": 2006521
 				}
 			]
 		}
@@ -849,14 +885,16 @@
 					"season": 2,
 					"episode": 15,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1057057
 				},
 				{
 					"path": "MythBusters.S2005E21.MythBusters.Revisited.576p-480p.AMZN.WEB-DL.x265.HEVC.DDP.2.0-PHOCiS.mkv",
 					"season": 3,
 					"episode": 15,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 65270
 				}
 			]
 		}
@@ -885,7 +923,8 @@
 					"season": 11,
 					"episode": 16,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 66274
 				}
 			]
 		}
@@ -914,7 +953,8 @@
 					"season": 6,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 333347
 				}
 			]
 		}
@@ -950,14 +990,16 @@
 					"season": 3,
 					"episode": 16,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 974119
 				},
 				{
 					"path": "Episode 16 Alternate Opening with Aaron Korsh.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -986,7 +1028,8 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -1015,7 +1058,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 914218
 				}
 			]
 		}
@@ -1044,7 +1088,8 @@
 					"season": 4,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7032818
 				}
 			]
 		}
@@ -1073,7 +1118,8 @@
 					"season": 4,
 					"episode": 4,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 1112980
 				}
 			]
 		}
@@ -1102,7 +1148,8 @@
 					"season": 2,
 					"episode": 18,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1174484
 				}
 			]
 		}
@@ -1131,7 +1178,8 @@
 					"season": 2,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1029139
 				}
 			]
 		}
@@ -1167,14 +1215,16 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 286589
 				},
 				{
 					"path": "00001 (STAR_WARS_THE_CLONE_WARS_S2_E02_CARGO_OF_DOOM).m2ts",
 					"season": 2,
 					"episode": 2,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 286609
 				}
 			]
 		}
@@ -1210,14 +1260,16 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "DBZ Abridged - 025 - Nail Is Piccolo, And So Can You! [phantop].mkv",
 					"season": 2,
 					"episode": 15,
 					"episodeEnd": null,
-					"how": "imdb"
+					"how": "imdb",
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -1253,14 +1305,16 @@
 					"season": 4,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1112711
 				},
 				{
 					"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
 					"season": 4,
 					"episode": 2,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1112978
 				}
 			]
 		}
@@ -1296,14 +1350,16 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Friends.S06E17.The.One.with.Unagi.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv",
 					"season": 6,
 					"episode": 16,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 86912
 				}
 			]
 		}
@@ -1332,7 +1388,8 @@
 					"season": 1,
 					"episode": 26,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 949406
 				}
 			]
 		}
@@ -1361,7 +1418,8 @@
 					"season": 3,
 					"episode": 9,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1184505
 				}
 			]
 		}
@@ -1397,14 +1455,16 @@
 					"season": 9,
 					"episode": 38,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1041443
 				},
 				{
 					"path": "Power Rangers - S09E39 - The End of Time (2) (480p x265 EDGE2020).mkv",
 					"season": 9,
 					"episode": 39,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1041444
 				}
 			]
 		}
@@ -1433,7 +1493,8 @@
 					"season": 3,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 4703269
 				}
 			]
 		}
@@ -1462,7 +1523,8 @@
 					"season": 2,
 					"episode": 41,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7338204
 				}
 			]
 		}
@@ -1491,7 +1553,8 @@
 					"season": 1,
 					"episode": 18,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 6578492
 				}
 			]
 		}
@@ -1520,7 +1583,8 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -1549,7 +1613,8 @@
 					"season": 3,
 					"episode": 12,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 4531975
 				}
 			]
 		}
@@ -1578,7 +1643,8 @@
 					"season": 3,
 					"episode": 24,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 6830765
 				}
 			]
 		}
@@ -1607,7 +1673,8 @@
 					"season": 2,
 					"episode": 24,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 882272
 				}
 			]
 		}
@@ -1636,7 +1703,8 @@
 					"season": 2,
 					"episode": 23,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 4584674
 				}
 			]
 		}
@@ -1665,7 +1733,8 @@
 					"season": 2,
 					"episode": 4,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 3997308
 				}
 			]
 		}
@@ -1694,7 +1763,8 @@
 					"season": 2,
 					"episode": 47,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470577
 				}
 			]
 		}
@@ -1723,7 +1793,8 @@
 					"season": 4,
 					"episode": 21,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 3875993
 				}
 			]
 		}
@@ -1752,7 +1823,8 @@
 					"season": 1,
 					"episode": 47,
 					"episodeEnd": null,
-					"how": "imdb"
+					"how": "imdb",
+					"tmdbEpisodeId": 4562731
 				}
 			]
 		}
@@ -1781,7 +1853,8 @@
 					"season": 4,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7411170
 				}
 			]
 		}
@@ -1810,7 +1883,8 @@
 					"season": 4,
 					"episode": 22,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7384416
 				}
 			]
 		}
@@ -1839,7 +1913,8 @@
 					"season": 2,
 					"episode": 46,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470576
 				}
 			]
 		}
@@ -1868,7 +1943,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 1168010
 				}
 			]
 		}
@@ -1897,7 +1973,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 969581
 				}
 			]
 		}
@@ -1926,7 +2003,8 @@
 					"season": 1,
 					"episode": 17,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 535098
 				}
 			]
 		}
@@ -1955,7 +2033,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 749407
 				}
 			]
 		}
@@ -1984,7 +2063,8 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 749423
 				}
 			]
 		}
@@ -2013,7 +2093,8 @@
 					"season": 3,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1821976
 				}
 			]
 		}
@@ -2042,7 +2123,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1050974
 				}
 			]
 		}
@@ -2071,7 +2153,8 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1203133
 				}
 			]
 		}
@@ -2100,7 +2183,8 @@
 					"season": 5,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 2024984
 				}
 			]
 		}
@@ -2129,7 +2213,8 @@
 					"season": 0,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1043308
 				}
 			]
 		}
@@ -2158,7 +2243,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1043310
 				}
 			]
 		}
@@ -2187,7 +2273,8 @@
 					"season": 3,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 1452460
 				}
 			]
 		}
@@ -2216,7 +2303,8 @@
 					"season": 1,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 819835
 				}
 			]
 		}
@@ -2245,7 +2333,8 @@
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 819906
 				}
 			]
 		}
@@ -2274,7 +2363,8 @@
 					"season": 3,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 819873
 				}
 			]
 		}
@@ -2303,7 +2393,8 @@
 					"season": 1,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 1732619
 				}
 			]
 		}
@@ -2332,7 +2423,8 @@
 					"season": 2,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 3274460
 				}
 			]
 		}
@@ -2361,7 +2453,8 @@
 					"season": 3,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 3394861
 				}
 			]
 		}
@@ -2390,7 +2483,8 @@
 					"season": 2,
 					"episode": 27,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 5545060
 				}
 			]
 		}
@@ -2419,7 +2513,8 @@
 					"season": 2,
 					"episode": 45,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470575
 				}
 			]
 		}
@@ -2448,7 +2543,8 @@
 					"season": 2,
 					"episode": 45,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470575
 				}
 			]
 		}
@@ -2477,7 +2573,8 @@
 					"season": 2,
 					"episode": 41,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7338204
 				}
 			]
 		}
@@ -2506,7 +2603,8 @@
 					"season": 2,
 					"episode": 41,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7338204
 				}
 			]
 		}
@@ -2535,7 +2633,8 @@
 					"season": 2,
 					"episode": 20,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 4584671
 				}
 			]
 		}
@@ -2564,7 +2663,8 @@
 					"season": 2,
 					"episode": 47,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470577
 				}
 			]
 		}
@@ -2593,7 +2693,8 @@
 					"season": 2,
 					"episode": 47,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470577
 				}
 			]
 		}
@@ -2622,7 +2723,8 @@
 					"season": 1,
 					"episode": 1212,
 					"episodeEnd": null,
-					"how": "absolute"
+					"how": "absolute",
+					"tmdbEpisodeId": 7622654
 				}
 			]
 		}
@@ -2651,7 +2753,8 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -2680,7 +2783,8 @@
 					"season": 2,
 					"episode": 48,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470579
 				}
 			]
 		}
@@ -2709,7 +2813,8 @@
 					"season": 2,
 					"episode": 47,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 7470577
 				}
 			]
 		}
@@ -2840,147 +2945,168 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Menu - 02.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Menu - 03.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Menu - 04.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Menu - 05.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "Menu - 06.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "NCED - 01.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "NCED - 02.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "NCOP.mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 01 - Once Again From The Beginning - War at the Baths - The Sound Of Ticking Love.mkv",
 					"season": 2,
 					"episode": 1,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791298
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 02 - Things That Move in the Dark - Welcome to the Yuuki Household! - Slumber Party.mkv",
 					"season": 2,
 					"episode": 2,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791300
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 03 - Special Love Medicine - Seeing You Through the Lens... - My Dear Beloved Cinderella.mkv",
 					"season": 2,
 					"episode": 3,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791299
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 04 - Yami Yami Fashion - Wonderful Love - Twins' Escape.mkv",
 					"season": 2,
 					"episode": 4,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 791301
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 05 - The Queen of Love! - Let's Play - The Flavour of Chocolate is a Sweet Sensation.mkv",
 					"season": 2,
 					"episode": 5,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791302
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 06 - Beach Girls - Late Night Tutor - Master of Love.mkv",
 					"season": 2,
 					"episode": 6,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791304
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 07 - Yami's Clinic - The Antagonist - A Strange Haruna-chan.mkv",
 					"season": 2,
 					"episode": 7,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791303
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 08 - Get Bigger! - Wan-derful Life - The Trance of Feelings.mkv",
 					"season": 2,
 					"episode": 8,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791305
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 09 - For Whom the Bell Tolls - The Troubling Rampage - Loving Idol.mkv",
 					"season": 2,
 					"episode": 9,
 					"episodeEnd": null,
-					"how": "tmdb"
+					"how": "tmdb",
+					"tmdbEpisodeId": 791306
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 10 - Pollen Telepathy - A Girl's Feelings - Doki Doki Mail.mkv",
 					"season": 2,
 					"episode": 10,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791307
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 11 - All Quiet On The Sister Front - False Love - Predicting Love.mkv",
 					"season": 2,
 					"episode": 11,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791308
 				},
 				{
 					"path": "[KH] Motto To Love-Ru - 12 - I Love You 1 - I Love You 2 - I Love You 3.mkv",
 					"season": 2,
 					"episode": 12,
 					"episodeEnd": null,
-					"how": "anime"
+					"how": "anime",
+					"tmdbEpisodeId": 791309
 				}
 			]
 		}
@@ -3009,7 +3135,8 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -3050,21 +3177,24 @@
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "D\u00e9tective Conan S11E02 - 287 [MULTI] [AVC].mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				},
 				{
 					"path": "D\u00e9tective Conan S11E03 - 288 [MULTI] [AVC].mkv",
 					"season": null,
 					"episode": null,
 					"episodeEnd": null,
-					"how": null
+					"how": null,
+					"tmdbEpisodeId": null
 				}
 			]
 		}
@@ -3092,7 +3222,8 @@
 					"season": 23,
 					"episode": 1177,
 					"episodeEnd": null,
-					"how": "tvdb"
+					"how": "tvdb",
+					"tmdbEpisodeId": 7550220
 				}
 			]
 		},
@@ -3121,7 +3252,8 @@
 					"season": 23,
 					"episode": 1180,
 					"episodeEnd": null,
-					"how": "tvdb"
+					"how": "tvdb",
+					"tmdbEpisodeId": 7550231
 				}
 			]
 		},

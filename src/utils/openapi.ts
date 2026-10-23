@@ -595,6 +595,11 @@ export const openApiDocument = {
 															description:
 																'Which rule placed the file',
 														},
+														tmdbEpisodeId: {
+															type: ['integer', 'null'],
+															description:
+																"TMDB's id for the episode, which Plex's episode rows carry as tmdb://; null when unplaced or placed on IMDb's numbering",
+														},
 													},
 												},
 											},
@@ -605,7 +610,7 @@ export const openApiDocument = {
 						},
 						{
 							complete: true,
-							rules: '2026-10-23',
+							rules: '2026-10-23.2',
 							releases: [
 								{
 									kind: 'tv',
@@ -618,6 +623,7 @@ export const openApiDocument = {
 											episode: 1,
 											episodeEnd: null,
 											how: 'anime',
+											tmdbEpisodeId: 4703269,
 										},
 									],
 								},

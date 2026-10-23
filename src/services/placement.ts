@@ -42,7 +42,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
  * ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23';
+export const PLACEMENT_RULES = '2026-10-23.2';
 
 export interface PlaceRequest {
 	name: string;
@@ -58,6 +58,12 @@ export interface PlacedFile {
 	episode: number | null;
 	episodeEnd: number | null;
 	how: PlacementRule | null;
+	/**
+	 * TMDB's own id for the episode, which Plex's episode rows carry as `tmdb://`: Plex numbers
+	 * many shows otherwise than TMDB (Re:ZERO's TMDB S1E84 is Plex's S4E18). Null where the file
+	 * is unplaced or placed on IMDb's numbering.
+	 */
+	tmdbEpisodeId: number | null;
 }
 
 export interface PlacedRelease {
@@ -112,6 +118,7 @@ const unplaced = (path: string): PlacedFile => ({
 	episode: null,
 	episodeEnd: null,
 	how: null,
+	tmdbEpisodeId: null,
 });
 
 /** Names releases by their names (content-identifier); `undefined` where it could not be asked. */
@@ -566,7 +573,7 @@ async function placeOnShow(
 	imdbId = hit ? (showImdb ?? imdbId) : (imdbId ?? showImdb);
 	const lists = new Map<
 		number,
-		Promise<{ episode: number; name: string; airDate: string | null }[] | null>
+		Promise<{ episode: number; name: string; airDate: string | null; id?: number }[] | null>
 	>();
 	const episodes = (season: number) => {
 		if (!lists.has(season)) {
@@ -580,6 +587,7 @@ async function placeOnShow(
 									episode: row.episode_number as number,
 									name: typeof row.name === 'string' ? row.name : '',
 									airDate: typeof row.air_date === 'string' ? row.air_date : null,
+									...(Number.isInteger(row.id) ? { id: row.id as number } : {}),
 								}))
 								.sort((a, b) => a.episode - b.episode)
 						: null
@@ -665,20 +673,30 @@ async function placeFiles(
 	const kept = yielded.map((found, at) =>
 		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
 	);
+	// every rule lands on an episode of TMDB's season lists, which carry its id; IMDb's list has none
+	const episodeId = async (found: Placement) =>
+		placement.tmdbId > 0
+			? ((await placement.episodes(found.season))?.find(
+					(row) => row.episode === found.episode
+				)?.id ?? null)
+			: null;
 	const placedAnswer = answer(
-		kept.map((found, at) => {
-			const path = release.files[at].path;
-			const rule = found && how(found);
-			return found && rule
-				? {
-						path,
-						season: found.season,
-						episode: found.episode,
-						episodeEnd: found.episodeEnd,
-						how: rule,
-					}
-				: unplaced(path);
-		})
+		await Promise.all(
+			kept.map(async (found, at) => {
+				const path = release.files[at].path;
+				const rule = found && how(found);
+				return found && rule
+					? {
+							path,
+							season: found.season,
+							episode: found.episode,
+							episodeEnd: found.episodeEnd,
+							how: rule,
+							tmdbEpisodeId: await episodeId(found),
+						}
+					: unplaced(path);
+			})
+		)
 	);
 	titledFiles.set(placedAnswer, kept.filter((found) => found?.titled).length);
 	return placedAnswer;

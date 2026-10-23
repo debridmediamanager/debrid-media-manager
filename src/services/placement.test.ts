@@ -144,6 +144,7 @@ describe('placeReleases over real releases', () => {
 			episode: null,
 			episodeEnd: null,
 			how: null,
+			tmdbEpisodeId: null,
 		})),
 		skipped: true,
 	});
@@ -683,5 +684,33 @@ describe("a series TMDB cannot use, numbered on IMDb's own list (zurg on fun, 20
 	it('keeps a show TMDB lists that the titles name as well', async () => {
 		// Plex's agent knows Dino Charge only as Power Rangers' season 22, not by tt3521854
 		expect(await placedHere('Power Rangers Dino Charge')).toMatchObject({ tmdbId: 2328 });
+	});
+});
+
+describe("a placed file's TMDB episode id", () => {
+	// Plex numbers Re:ZERO's TMDB S1E84 as its S4E18, so rex matches Plex's episode by the TMDB
+	// episode id its rows carry (`tmdb://`), never by the index; TMDB's season lists carry the id
+	it('is the id of the episode TMDB lists at the placed season and episode, on every rule', async () => {
+		for (const c of cases) {
+			const { releases } = await place([c.request as PlaceRequest]);
+			for (const file of releases[0].files) {
+				const listed = recorded.season[`${releases[0].tmdbId}/${file.season}`]?.episodes;
+				const id = listed?.find((row: any) => row.episode_number === file.episode)?.id;
+				expect(file.tmdbEpisodeId).toBe(file.episode === null ? null : (id ?? null));
+			}
+		}
+	});
+
+	it("is null on IMDb's numbering, which names no TMDB episode", async () => {
+		const abridged = cases.find((c) =>
+			c.request.name.startsWith('[iKaos] TFS Dragon Ball Z Abridged')
+		)!;
+		const { releases } = await place([abridged.request as PlaceRequest]);
+		expect(releases[0].files.find((f) => f.episode !== null)).toMatchObject({
+			season: 2,
+			episode: 15,
+			how: 'imdb',
+			tmdbEpisodeId: null,
+		});
 	});
 });

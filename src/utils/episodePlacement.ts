@@ -62,7 +62,7 @@ export interface PlacementShow {
 	 */
 	episodes(
 		season: number
-	): Promise<{ episode: number; name: string; airDate: string | null }[] | null>;
+	): Promise<{ episode: number; name: string; airDate: string | null; id?: number }[] | null>;
 	/** TMDB's episode for TVDB's season and episode, by the show's TVDB Order episode group. */
 	tvdbOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 	/** TMDB's episode for an English dub's season and episode, by the show's Dub Order group. */
