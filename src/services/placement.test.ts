@@ -834,4 +834,9 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		expect(ep).toMatchObject({ tmdbId: 37854 });
 		expect(ep.files[0]).toMatchObject({ season: 22, episode: 1154 });
 	});
+	it("titles a release's one file named by a hash as the release", async () => {
+		// `SpongeBob.SquarePants.S10E24.Kenny.the.Cat.…` holds `060332c365c0452ca9c51192416150af.mkv`
+		const kenny = await placedHere('SpongeBob.SquarePants.S10E24.Kenny.the.Cat');
+		expect(kenny.files[0]).toMatchObject({ season: 9, episode: 15 });
+	});
 });

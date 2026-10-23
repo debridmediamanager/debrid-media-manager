@@ -46,7 +46,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
  * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.11';
+export const PLACEMENT_RULES = '2026-10-23.12';
 
 export interface PlaceRequest {
 	name: string;
@@ -771,11 +771,24 @@ async function placeFiles(
 		})),
 		placement.seasons
 	);
+	// a release's one file named by a hash is titled as the release: Usenet's
+	// `SpongeBob.SquarePants.1999.S10E25.Yeti.Krabs.…` holds `1501ec8cb21ed376ee71db04c4bb2dfb.mkv`
+	const titledAs = (path: string) => {
+		const stem = (path.split('/').pop() ?? path).replace(/\.[a-z0-9]{2,4}$/i, '');
+		return release.files.length === 1 && /^[0-9a-f]{16,}$/i.test(stem) ? release.name : path;
+	};
 	const placed: (Placement | null)[] = [];
 	for (const [at, file] of release.files.entries()) {
 		placed.push(
 			numbers[at]
-				? await placeFile(placement, anime, release.name, file.path, numbers[at]!, imdb)
+				? await placeFile(
+						placement,
+						anime,
+						release.name,
+						titledAs(file.path),
+						numbers[at]!,
+						imdb
+					)
 				: await specialOf(placement, release.name, file.path)
 		);
 	}
@@ -785,7 +798,8 @@ async function placeFiles(
 	// a title TMDB lacks, counted to S2E26 "Count Their Blessings"
 	const titles = release.files.map((file, at) => {
 		const own = numbers[at];
-		return own ? titleOf(file.path.split('/').pop() ?? file.path, own) : null;
+		const path = titledAs(file.path);
+		return own ? titleOf(path.split('/').pop() ?? path, own) : null;
 	});
 	// most of them: QI's pack numbers as TMDB does, its one titled stray aside
 	const moved =
