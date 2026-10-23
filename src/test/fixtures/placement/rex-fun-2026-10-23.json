@@ -113,6 +113,149 @@
 				"movie_results": [],
 				"tv_results": [{ "id": 615 }],
 				"tv_episode_results": []
+			},
+			"tt0105950": {
+				"movie_results": [],
+				"tv_results": [{ "id": 13943 }],
+				"tv_episode_results": []
+			},
+			"tt5370118": {
+				"movie_results": [],
+				"tv_results": [{ "id": 65844 }],
+				"tv_episode_results": []
+			},
+			"tt0071054": {
+				"movie_results": [],
+				"tv_results": [{ "id": 1663 }],
+				"tv_episode_results": []
+			},
+			"tt5734550": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+			"tt0247902": {
+				"movie_results": [],
+				"tv_results": [{ "id": 902 }],
+				"tv_episode_results": []
+			},
+			"tt0193019": {
+				"movie_results": [{ "id": 25242 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt13544716": {
+				"movie_results": [{ "id": 768744 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0115641": {
+				"movie_results": [{ "id": 3179 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0285627": {
+				"movie_results": [{ "id": 24232 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0250440": {
+				"movie_results": [{ "id": 44756 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt14145426": {
+				"movie_results": [{ "id": 828947 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt9239552": {
+				"movie_results": [{ "id": 532067 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0121955": {
+				"movie_results": [],
+				"tv_results": [{ "id": 2190 }],
+				"tv_episode_results": []
+			},
+			"tt0403703": {
+				"movie_results": [{ "id": 11052 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0093853": {
+				"movie_results": [{ "id": 82085 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0096931": {
+				"movie_results": [{ "id": 97262 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt11107074": {
+				"movie_results": [{ "id": 592350 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt7745068": {
+				"movie_results": [{ "id": 505262 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt2076781": {
+				"movie_results": [{ "id": 76360 }],
+				"tv_results": [],
+				"tv_episode_results": [
+					{ "show_id": 2190, "season_number": 0, "episode_number": 33 }
+				]
+			},
+			"tt0814243": {
+				"movie_results": [{ "id": 19576 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0997084": {
+				"movie_results": [{ "id": 44725 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1006926": {
+				"movie_results": [{ "id": 44727 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1010435": {
+				"movie_results": [{ "id": 44728 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1206326": {
+				"movie_results": [{ "id": 44731 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1485763": {
+				"movie_results": [{ "id": 41498 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt2375379": {
+				"movie_results": [{ "id": 176983 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt5251328": {
+				"movie_results": [{ "id": 374205 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt9430698": {
+				"movie_results": [{ "id": 568012 }],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt16183464": {
+				"movie_results": [{ "id": 900667 }],
+				"tv_results": [],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -122,30 +265,145 @@
 				"original_language": "ja",
 				"external_ids": { "imdb_id": "tt0388629" },
 				"seasons": [
-					{ "season_number": 0, "episode_count": 39, "air_date": "1999-12-15" },
-					{ "season_number": 1, "episode_count": 61, "air_date": "1999-10-20" },
-					{ "season_number": 2, "episode_count": 16, "air_date": null },
-					{ "season_number": 3, "episode_count": 14, "air_date": null },
-					{ "season_number": 4, "episode_count": 39, "air_date": null },
-					{ "season_number": 5, "episode_count": 13, "air_date": null },
-					{ "season_number": 6, "episode_count": 52, "air_date": null },
-					{ "season_number": 7, "episode_count": 33, "air_date": null },
-					{ "season_number": 8, "episode_count": 35, "air_date": null },
-					{ "season_number": 9, "episode_count": 73, "air_date": null },
-					{ "season_number": 10, "episode_count": 45, "air_date": null },
-					{ "season_number": 11, "episode_count": 26, "air_date": null },
-					{ "season_number": 12, "episode_count": 14, "air_date": null },
-					{ "season_number": 13, "episode_count": 101, "air_date": null },
-					{ "season_number": 14, "episode_count": 58, "air_date": null },
-					{ "season_number": 15, "episode_count": 62, "air_date": null },
-					{ "season_number": 16, "episode_count": 50, "air_date": null },
-					{ "season_number": 17, "episode_count": 56, "air_date": null },
-					{ "season_number": 18, "episode_count": 55, "air_date": "2016-07-13" },
-					{ "season_number": 19, "episode_count": 74, "air_date": "2017-09-05" },
-					{ "season_number": 20, "episode_count": 14, "air_date": "2019-04-01" },
-					{ "season_number": 21, "episode_count": 197, "air_date": "2019-07-08" },
-					{ "season_number": 22, "episode_count": 67, "air_date": null },
-					{ "season_number": 23, "episode_count": 25, "air_date": null }
+					{
+						"season_number": 0,
+						"episode_count": 39,
+						"air_date": "1999-12-15",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 61,
+						"air_date": "1999-10-20",
+						"name": "East Blue"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 16,
+						"air_date": null,
+						"name": "Whiskey Peak & Little Garden"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 14,
+						"air_date": null,
+						"name": "Drum Island"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 39,
+						"air_date": null,
+						"name": "Alabasta"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": null,
+						"name": "Dreams!, The Zenny Pirate Crew Sortie!, Beyond the Rainbow"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 52,
+						"air_date": null,
+						"name": "Skypiea"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 33,
+						"air_date": null,
+						"name": "G-8 & Long Ring Long Land"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 35,
+						"air_date": null,
+						"name": "Water Seven"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 73,
+						"air_date": null,
+						"name": "Enies Lobby"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 45,
+						"air_date": null,
+						"name": "Thriller Bark"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 26,
+						"air_date": null,
+						"name": "Sabaody Archipelago"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 14,
+						"air_date": null,
+						"name": "Amazon Lily"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 101,
+						"air_date": null,
+						"name": "Impel Down & Marineford"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 58,
+						"air_date": null,
+						"name": "Fishman Island"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 62,
+						"air_date": null,
+						"name": "Punk Hazard"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 50,
+						"air_date": null,
+						"name": "Dressrosa"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 56,
+						"air_date": null,
+						"name": "Dressrosa (2)"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 55,
+						"air_date": "2016-07-13",
+						"name": "Zou"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 74,
+						"air_date": "2017-09-05",
+						"name": "Whole Cake Island"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 14,
+						"air_date": "2019-04-01",
+						"name": "Levely Arc"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 197,
+						"air_date": "2019-07-08",
+						"name": "Wano Country Arc"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 67,
+						"air_date": null,
+						"name": "Egghead"
+					},
+					{ "season_number": 23, "episode_count": 25, "air_date": null, "name": "Elbaph" }
 				]
 			},
 			"502": {
@@ -640,14 +898,54 @@
 				"original_language": "en",
 				"external_ids": { "imdb_id": "tt0163929" },
 				"seasons": [
-					{ "season_number": 0, "episode_count": 16, "air_date": "1994-09-22" },
-					{ "season_number": 1, "episode_count": 20, "air_date": "1996-09-08" },
-					{ "season_number": 2, "episode_count": 20, "air_date": "1997-11-03" },
-					{ "season_number": 3, "episode_count": 32, "air_date": "1999-03-14" },
-					{ "season_number": 4, "episode_count": 29, "air_date": "2001-04-09" },
-					{ "season_number": 5, "episode_count": 41, "air_date": "2002-04-30" },
-					{ "season_number": 6, "episode_count": 15, "air_date": "2004-02-08" },
-					{ "season_number": 7, "episode_count": 2, "air_date": "2006-07-27" }
+					{
+						"season_number": 0,
+						"episode_count": 16,
+						"air_date": "1994-09-22",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 20,
+						"air_date": "1996-09-08",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "1997-11-03",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 32,
+						"air_date": "1999-03-14",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 29,
+						"air_date": "2001-04-09",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 41,
+						"air_date": "2002-04-30",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 15,
+						"air_date": "2004-02-08",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 2,
+						"air_date": "2006-07-27",
+						"name": "Season 7"
+					}
 				]
 			},
 			"65930": {
@@ -656,15 +954,60 @@
 				"original_language": "ja",
 				"external_ids": { "imdb_id": "tt5626028" },
 				"seasons": [
-					{ "season_number": 0, "episode_count": 19, "air_date": "2017-04-04" },
-					{ "season_number": 1, "episode_count": 13, "air_date": "2016-04-03" },
-					{ "season_number": 2, "episode_count": 25, "air_date": "2017-04-01" },
-					{ "season_number": 3, "episode_count": 25, "air_date": "2018-04-07" },
-					{ "season_number": 4, "episode_count": 25, "air_date": "2019-10-12" },
-					{ "season_number": 5, "episode_count": 25, "air_date": "2021-03-27" },
-					{ "season_number": 6, "episode_count": 25, "air_date": "2022-10-01" },
-					{ "season_number": 7, "episode_count": 21, "air_date": "2024-05-04" },
-					{ "season_number": 8, "episode_count": 11, "air_date": "2025-10-04" }
+					{
+						"season_number": 0,
+						"episode_count": 19,
+						"air_date": "2017-04-04",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2016-04-03",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 25,
+						"air_date": "2017-04-01",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 25,
+						"air_date": "2018-04-07",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 25,
+						"air_date": "2019-10-12",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 25,
+						"air_date": "2021-03-27",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 25,
+						"air_date": "2022-10-01",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 21,
+						"air_date": "2024-05-04",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 11,
+						"air_date": "2025-10-04",
+						"name": "FINAL SEASON"
+					}
 				]
 			},
 			"75865": {
@@ -1706,6 +2049,353 @@
 						"air_date": "2026-08-03",
 						"name": "Season 11"
 					}
+				]
+			},
+			"902": {
+				"name": "Yu-Gi-Oh! Duel Monsters",
+				"original_name": "遊☆戯☆王デュエルモンスターズ",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt0247902" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 4,
+						"air_date": "2002-01-01",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 224,
+						"air_date": "2000-04-18",
+						"name": "Yu-Gi-Oh! Duel Monsters"
+					}
+				]
+			},
+			"1663": {
+				"name": "The Six Million Dollar Man",
+				"original_name": "The Six Million Dollar Man",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0071054" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "1973-03-07",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1974-01-18",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 22,
+						"air_date": "1974-09-13",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 21,
+						"air_date": "1975-09-14",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 22,
+						"air_date": "1976-09-19",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 21,
+						"air_date": "1977-09-11",
+						"name": "Season 5"
+					}
+				]
+			},
+			"2190": {
+				"name": "South Park",
+				"original_name": "South Park",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0121955" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 33,
+						"air_date": "1992-12-08",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1997-08-13",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 18,
+						"air_date": "1998-04-01",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 17,
+						"air_date": "1999-04-07",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 17,
+						"air_date": "2000-04-05",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 14,
+						"air_date": "2001-06-20",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 17,
+						"air_date": "2002-03-06",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 15,
+						"air_date": "2003-03-19",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 14,
+						"air_date": "2004-03-17",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 14,
+						"air_date": "2005-03-09",
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 14,
+						"air_date": "2006-03-22",
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 14,
+						"air_date": "2007-03-07",
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 14,
+						"air_date": "2008-03-12",
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 14,
+						"air_date": "2009-03-11",
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 14,
+						"air_date": "2010-03-17",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 14,
+						"air_date": "2011-04-27",
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 14,
+						"air_date": "2012-03-14",
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 10,
+						"air_date": "2013-09-25",
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 10,
+						"air_date": "2014-09-24",
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 10,
+						"air_date": "2015-09-16",
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 10,
+						"air_date": "2016-09-14",
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 10,
+						"air_date": "2017-09-13",
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 10,
+						"air_date": "2018-09-26",
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 10,
+						"air_date": "2019-09-25",
+						"name": "Season 23"
+					},
+					{
+						"season_number": 24,
+						"episode_count": 2,
+						"air_date": "2020-09-30",
+						"name": "Season 24"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 6,
+						"air_date": "2022-02-02",
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 6,
+						"air_date": "2023-02-08",
+						"name": "Season 26"
+					},
+					{
+						"season_number": 27,
+						"episode_count": 5,
+						"air_date": "2025-07-23",
+						"name": "Season 27"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 5,
+						"air_date": "2025-10-15",
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 6,
+						"air_date": "2026-09-16",
+						"name": "Season 29"
+					}
+				]
+			},
+			"13943": {
+				"name": "Beavis and Butt-Head",
+				"original_name": "Beavis and Butt-Head",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0105950" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 209,
+						"air_date": "1992-09-22",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 3,
+						"air_date": "1993-03-08",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 26,
+						"air_date": "1993-05-17",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 28,
+						"air_date": "1993-09-06",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 32,
+						"air_date": "1994-03-14",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 50,
+						"air_date": "1994-10-31",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 20,
+						"air_date": "1995-10-31",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 40,
+						"air_date": "1997-01-26",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 22,
+						"air_date": "2011-10-27",
+						"name": "Season 8"
+					}
+				]
+			},
+			"65844": {
+				"name": "KONOSUBA - God's blessing on this wonderful world!",
+				"original_name": "この素晴らしい世界に祝福を！",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt5370118" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 4,
+						"air_date": "2016-06-24",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2016-01-14",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 10,
+						"air_date": "2017-01-12",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 11,
+						"air_date": "2024-04-10",
+						"name": "Season 3"
+					},
+					{ "season_number": 4, "episode_count": 0, "air_date": null, "name": "Season 4" }
 				]
 			}
 		},
@@ -41649,6 +42339,1547 @@
 						"air_date": "2025-09-15"
 					}
 				]
+			},
+			"13943/0": {
+				"episodes": [
+					{
+						"id": 510302,
+						"episode_number": 1,
+						"name": "Frog Baseball",
+						"air_date": "1992-09-22"
+					},
+					{
+						"id": 510273,
+						"episode_number": 2,
+						"name": "Peace, Love & Understanding",
+						"air_date": "1992-11-17"
+					},
+					{
+						"id": 510275,
+						"episode_number": 3,
+						"name": "Bungholio: Lord of the Harvest",
+						"air_date": "1995-10-31"
+					},
+					{
+						"id": 510274,
+						"episode_number": 4,
+						"name": "Beavis and Butt-head Do Christmas",
+						"air_date": "1995-12-19"
+					},
+					{
+						"id": 510119,
+						"episode_number": 7,
+						"name": "Beavis and Butt-Head Do Thanksgiving",
+						"air_date": "1997-11-27"
+					},
+					{
+						"id": 510121,
+						"episode_number": 8,
+						"name": "Taint of Greatness: The Journey of Beavis and Butt-head (1)",
+						"air_date": "2005-11-08"
+					},
+					{
+						"id": 510122,
+						"episode_number": 9,
+						"name": "Taint of Greatness: The Journey of Beavis and Butt-head (2)",
+						"air_date": "2006-06-13"
+					},
+					{
+						"id": 510125,
+						"episode_number": 10,
+						"name": "Taint of Greatness: The Journey of Beavis and Butt-head (3)",
+						"air_date": "2006-08-01"
+					},
+					{ "id": 510124, "episode_number": 12, "name": "Appearances", "air_date": null },
+					{
+						"id": 510126,
+						"episode_number": 13,
+						"name": "Music Videos",
+						"air_date": null
+					},
+					{ "id": 510127, "episode_number": 14, "name": "Huh?", "air_date": null },
+					{ "id": 510128, "episode_number": 15, "name": "2005 VMAs", "air_date": null },
+					{
+						"id": 510129,
+						"episode_number": 16,
+						"name": "1997 Press Conference Shorts (DVD Extra)",
+						"air_date": null
+					},
+					{
+						"id": 510131,
+						"episode_number": 17,
+						"name": "Interview with Chris Connelly (DVD Extra)",
+						"air_date": null
+					},
+					{
+						"id": 510130,
+						"episode_number": 18,
+						"name": "Letters to Santa Butt-Head (DVD Extra)",
+						"air_date": null
+					},
+					{
+						"id": 510132,
+						"episode_number": 19,
+						"name": "Yule Log Clips (DVD Extra)",
+						"air_date": null
+					},
+					{
+						"id": 510134,
+						"episode_number": 20,
+						"name": "1993 MTV Music Video Awards",
+						"air_date": null
+					},
+					{
+						"id": 510133,
+						"episode_number": 21,
+						"name": "Music Video: \"Get Ready for This\" by 2 Unlimited",
+						"air_date": null
+					},
+					{
+						"id": 510135,
+						"episode_number": 22,
+						"name": "Music Video: \"Teenage Frankenstein\" by Alice Cooper",
+						"air_date": null
+					},
+					{
+						"id": 510136,
+						"episode_number": 23,
+						"name": "Music Video: \"Existence is Punishment\" by Crowbar",
+						"air_date": null
+					},
+					{
+						"id": 510137,
+						"episode_number": 24,
+						"name": "Music Video: \"Glamorous\" by Jesus Lizard",
+						"air_date": null
+					},
+					{
+						"id": 510138,
+						"episode_number": 25,
+						"name": "Music Video: \"Dang\" by The Jon Spencer Blues Explosion",
+						"air_date": null
+					},
+					{
+						"id": 510141,
+						"episode_number": 26,
+						"name": "Music Video: \"Hollywood Halloween\" by Paul Broucek",
+						"air_date": null
+					},
+					{
+						"id": 510140,
+						"episode_number": 27,
+						"name": "Music Video: \"Down by the Water\" by PJ Harvey",
+						"air_date": null
+					},
+					{
+						"id": 510139,
+						"episode_number": 28,
+						"name": "Music Video: \"I Want Action\" by Poison",
+						"air_date": null
+					},
+					{
+						"id": 510142,
+						"episode_number": 29,
+						"name": "Music Video: \"Liar\" by Rollins Band",
+						"air_date": null
+					},
+					{
+						"id": 510143,
+						"episode_number": 30,
+						"name": "Music Video: \"Whatta Man\" by Salt-N-Pepa",
+						"air_date": null
+					},
+					{
+						"id": 510144,
+						"episode_number": 31,
+						"name": "Music Video: \"Dirty Boots\" by Sonic Youth",
+						"air_date": null
+					},
+					{
+						"id": 510145,
+						"episode_number": 32,
+						"name": "Music Video: \"Spoonman\" by Soundgarden",
+						"air_date": null
+					},
+					{
+						"id": 510146,
+						"episode_number": 33,
+						"name": "Music Video: \"Here We Go\" by Stakka Bo",
+						"air_date": null
+					},
+					{
+						"id": 510147,
+						"episode_number": 34,
+						"name": "Music Video: \"Possum Kingdom\" by The Toadies",
+						"air_date": null
+					},
+					{
+						"id": 510148,
+						"episode_number": 35,
+						"name": "Music Video: \"I Got a Girl\" by Tripping Daisy",
+						"air_date": null
+					},
+					{
+						"id": 510150,
+						"episode_number": 36,
+						"name": "1992 MTV Music Video Awards",
+						"air_date": null
+					},
+					{
+						"id": 510151,
+						"episode_number": 37,
+						"name": "1993 MTV Video Music Awards",
+						"air_date": null
+					},
+					{
+						"id": 510149,
+						"episode_number": 38,
+						"name": "1994 MTV Video Music Awards",
+						"air_date": null
+					},
+					{
+						"id": 510154,
+						"episode_number": 39,
+						"name": "1996 MTV Video Music Awards",
+						"air_date": null
+					},
+					{
+						"id": 510152,
+						"episode_number": 40,
+						"name": "2005 MTV Video Music Awards",
+						"air_date": null
+					},
+					{
+						"id": 510153,
+						"episode_number": 41,
+						"name": "ACDC 1996 Ballbreaker-Tour Concert Intro Clip",
+						"air_date": null
+					},
+					{
+						"id": 510155,
+						"episode_number": 42,
+						"name": "Attention All Bungholes Disclaimer",
+						"air_date": null
+					},
+					{
+						"id": 510157,
+						"episode_number": 43,
+						"name": "Back From The Dead Moron-A-Thon Ad ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510156,
+						"episode_number": 44,
+						"name": "Beavis & Butt-Head are Dead + Thanksgiving Special Promo ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510158,
+						"episode_number": 45,
+						"name": "Beavis & Butt-Head Are Dead Promo ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510160,
+						"episode_number": 46,
+						"name": "Beavis & Butt-Head Classics Ad ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510159,
+						"episode_number": 47,
+						"name": "Beavis & Butt-Head Experience CD Marketing Party ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510161,
+						"episode_number": 48,
+						"name": "Beavis & Butt-Head Featured On Friends",
+						"air_date": null
+					},
+					{
+						"id": 510162,
+						"episode_number": 49,
+						"name": "Beavis & Butt-Head Interview With Norm MacDonald ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510163,
+						"episode_number": 50,
+						"name": "Beavis & Butt-Head Montage Clips #1 - Names",
+						"air_date": null
+					},
+					{
+						"id": 510164,
+						"episode_number": 51,
+						"name": "Beavis & Butt-Head Montage Clips #2 - Chicks",
+						"air_date": null
+					},
+					{
+						"id": 510165,
+						"episode_number": 52,
+						"name": "Beavis & Butt-Head Montage Clips #3 - Pain",
+						"air_date": null
+					},
+					{
+						"id": 510166,
+						"episode_number": 53,
+						"name": "Beavis & Butt-Head Montage Clips #4 - Misc Characters",
+						"air_date": null
+					},
+					{
+						"id": 510167,
+						"episode_number": 54,
+						"name": "Beavis & Butt-Head On Austin Powers Movie ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510168,
+						"episode_number": 55,
+						"name": "Beavis & Butt-Head On The David Letterman Show ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510170,
+						"episode_number": 56,
+						"name": "Beavis & Butt-Head Premiere Ad ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510169,
+						"episode_number": 57,
+						"name": "Beavis & Butt-Head Watch Steve-O's Rap Music Video",
+						"air_date": null
+					},
+					{
+						"id": 510171,
+						"episode_number": 58,
+						"name": "Butt Bowl Ad  ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510172,
+						"episode_number": 59,
+						"name": "Butt Bowl I ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510173,
+						"episode_number": 60,
+						"name": "Butt Bowl II ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510174,
+						"episode_number": 61,
+						"name": "Butt Bowl II Promo ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510175,
+						"episode_number": 62,
+						"name": "Butt Bowl III ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510177,
+						"episode_number": 63,
+						"name": "Butt Bowl III Promo ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510176,
+						"episode_number": 64,
+						"name": "Calvin Klein Ad Parodies ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510179,
+						"episode_number": 65,
+						"name": "Cameo On 'Airheads' ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510178,
+						"episode_number": 66,
+						"name": "Citizen Butt-Head Promo ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510181,
+						"episode_number": 67,
+						"name": "'Coming Back Soon' Ad ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510180,
+						"episode_number": 68,
+						"name": "Coming Soon Ad ('92)",
+						"air_date": null
+					},
+					{
+						"id": 510182,
+						"episode_number": 69,
+						"name": "Doing It Twice Ad ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510184,
+						"episode_number": 70,
+						"name": "Dumb Fun In The Sun Ad ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510183,
+						"episode_number": 71,
+						"name": "Fire Controversy ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510185,
+						"episode_number": 72,
+						"name": "Holiday Gifts Commercial ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510186,
+						"episode_number": 73,
+						"name": "'I Got You' Music Video With Cher ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510187,
+						"episode_number": 74,
+						"name": "Japanese Mint Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510188,
+						"episode_number": 75,
+						"name": "Mike Judge Collection Promos (05)",
+						"air_date": null
+					},
+					{
+						"id": 510191,
+						"episode_number": 76,
+						"name": "Mike Judge On Howard Stern ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510190,
+						"episode_number": 77,
+						"name": "Mike Judge On Space Ghost ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510189,
+						"episode_number": 78,
+						"name": "Mike Judge On The David Letterman Show ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510192,
+						"episode_number": 79,
+						"name": "Mike Judge On The David Letterman Show ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510193,
+						"episode_number": 80,
+						"name": "Mike Judge On The David Letterman Show ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510194,
+						"episode_number": 81,
+						"name": "Mike Judge On The John Stewart Show ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510195,
+						"episode_number": 82,
+						"name": "Mike Judge Short - Huh ('91)",
+						"air_date": null
+					},
+					{
+						"id": 510197,
+						"episode_number": 83,
+						"name": "Mike Judge Short - Inbred Jed ('91)",
+						"air_date": null
+					},
+					{
+						"id": 510196,
+						"episode_number": 84,
+						"name": "Milton Shorts (Office Space) ('91-94)",
+						"air_date": null
+					},
+					{
+						"id": 510198,
+						"episode_number": 85,
+						"name": "Moron-A-Thon Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510199,
+						"episode_number": 86,
+						"name": "Moron-A-Thon Clips ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510201,
+						"episode_number": 87,
+						"name": "MTV Beach House Beavis & Butt-Head Mega Model Jam ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510200,
+						"episode_number": 88,
+						"name": "MTV Behind The Scenes Of Beavis & Butt-Head",
+						"air_date": null
+					},
+					{
+						"id": 510202,
+						"episode_number": 89,
+						"name": "MTV Home Video Ad ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510203,
+						"episode_number": 90,
+						"name": "MTV Home Video Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510204,
+						"episode_number": 91,
+						"name": "MTV News Press Conference ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510205,
+						"episode_number": 92,
+						"name": "MTV's 20th Anniversary (2001)",
+						"air_date": null
+					},
+					{
+						"id": 510206,
+						"episode_number": 93,
+						"name": "MTV's Celebrity Deathmatch Featuring Beavis & Butt-head",
+						"air_date": null
+					},
+					{
+						"id": 510209,
+						"episode_number": 94,
+						"name": "New Episodes Ad ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510208,
+						"episode_number": 95,
+						"name": "New MTV Disclaimer",
+						"air_date": null
+					},
+					{
+						"id": 510207,
+						"episode_number": 96,
+						"name": "New Season 2 Ad ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510210,
+						"episode_number": 97,
+						"name": "New Season 5 Episodes Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510212,
+						"episode_number": 98,
+						"name": "New Season 5 Episodes Ad 2 ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510211,
+						"episode_number": 99,
+						"name": "New Season 6 Episodes Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510215,
+						"episode_number": 100,
+						"name": "Old MTV Disclaimer",
+						"air_date": null
+					},
+					{
+						"id": 510213,
+						"episode_number": 101,
+						"name": "Rush Limbaugh Parody Response ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510214,
+						"episode_number": 102,
+						"name": "Saturday Night Live TV Funhouse ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510216,
+						"episode_number": 103,
+						"name": "Season 3 Ad ('93)",
+						"air_date": null
+					},
+					{
+						"id": 510217,
+						"episode_number": 104,
+						"name": "Senator Hollings' Attack ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510218,
+						"episode_number": 105,
+						"name": "Send Your Letters To Santa Butt-Head",
+						"air_date": null
+					},
+					{
+						"id": 510221,
+						"episode_number": 106,
+						"name": "Snoop Dogg Hosting Beavis & Butt-Head Moron-A-Thons ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510220,
+						"episode_number": 107,
+						"name": "Taint of Greatness - The Journey Of Beavis & Butt-Head",
+						"air_date": "2011-10-04"
+					},
+					{
+						"id": 510219,
+						"episode_number": 108,
+						"name": "Thanksgiving Special Commercial ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510223,
+						"episode_number": 109,
+						"name": "The Beavis & Butt-Head experience CD Ad ('96)",
+						"air_date": null
+					},
+					{
+						"id": 510222,
+						"episode_number": 110,
+						"name": "The Butt-Files Promo ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510224,
+						"episode_number": 111,
+						"name": "The Mike Judge Collection - Interview With Beavis & Butt-Head",
+						"air_date": null
+					},
+					{
+						"id": 510225,
+						"episode_number": 112,
+						"name": "'The World's Most Dangerous Episodes' Trailer",
+						"air_date": null
+					},
+					{
+						"id": 510226,
+						"episode_number": 113,
+						"name": "TimeLife Commercial ('98)",
+						"air_date": null
+					},
+					{
+						"id": 510228,
+						"episode_number": 114,
+						"name": "Travel Log Commercial ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510227,
+						"episode_number": 115,
+						"name": "Unaired 'I Love The 90's' Clip (2004)",
+						"air_date": null
+					},
+					{
+						"id": 510230,
+						"episode_number": 116,
+						"name": "Video Game Ad ('94)",
+						"air_date": null
+					},
+					{
+						"id": 510231,
+						"episode_number": 117,
+						"name": "Virtual Stupidity ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510229,
+						"episode_number": 118,
+						"name": "Virtual Stupidity Video Game & Inactivity Book Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510232,
+						"episode_number": 119,
+						"name": "Virtual Stupidity Video Game Ad ('95)",
+						"air_date": null
+					},
+					{
+						"id": 510233,
+						"episode_number": 120,
+						"name": "'Waco' New Episodes Ad ('92)",
+						"air_date": null
+					},
+					{
+						"id": 510234,
+						"episode_number": 121,
+						"name": "'9 Out Of 10 Chicks...' Promo",
+						"air_date": null
+					},
+					{
+						"id": 510235,
+						"episode_number": 122,
+						"name": "10th Anniversary DVD-Intro",
+						"air_date": null
+					},
+					{
+						"id": 510236,
+						"episode_number": 123,
+						"name": "Book Commercial ('97)",
+						"air_date": null
+					},
+					{
+						"id": 510237,
+						"episode_number": 124,
+						"name": "Deleted Scene from 'Do America'",
+						"air_date": null
+					},
+					{
+						"id": 510238,
+						"episode_number": 125,
+						"name": "'Do America' Contest Ad",
+						"air_date": null
+					},
+					{
+						"id": 510240,
+						"episode_number": 126,
+						"name": "'Do America' Movie Promos",
+						"air_date": null
+					},
+					{
+						"id": 510239,
+						"episode_number": 127,
+						"name": "'Do America' Movie Teasers",
+						"air_date": null
+					},
+					{
+						"id": 510241,
+						"episode_number": 128,
+						"name": "MTV 'Do America' Movie Special With Chris Connelly",
+						"air_date": null
+					},
+					{
+						"id": 510243,
+						"episode_number": 129,
+						"name": "MTV 'Do America' News Bulletins With Kurt Loder",
+						"air_date": null
+					},
+					{
+						"id": 510244,
+						"episode_number": 130,
+						"name": "MTV 'Do America' Promo",
+						"air_date": null
+					},
+					{
+						"id": 510242,
+						"episode_number": 131,
+						"name": "On The Set With Mike Judge",
+						"air_date": null
+					},
+					{
+						"id": 510246,
+						"episode_number": 132,
+						"name": "Promo With Queen Latifah",
+						"air_date": null
+					},
+					{
+						"id": 510245,
+						"episode_number": 133,
+						"name": "Scoring 'Do America'",
+						"air_date": null
+					},
+					{
+						"id": 510247,
+						"episode_number": 134,
+						"name": "The 12 Days of Beavis",
+						"air_date": null
+					},
+					{
+						"id": 510248,
+						"episode_number": 135,
+						"name": "'The Big Picture' With Mike Judge",
+						"air_date": null
+					},
+					{
+						"id": 510249,
+						"episode_number": 136,
+						"name": "Poop Manners",
+						"air_date": null
+					},
+					{
+						"id": 510250,
+						"episode_number": 137,
+						"name": "Beavis' Tainted Meat",
+						"air_date": null
+					},
+					{
+						"id": 510252,
+						"episode_number": 138,
+						"name": "King Turd Collection Preview",
+						"air_date": null
+					},
+					{
+						"id": 510251,
+						"episode_number": 139,
+						"name": "Decade of Power",
+						"air_date": null
+					},
+					{
+						"id": 510253,
+						"episode_number": 140,
+						"name": "Give Blood - Version B",
+						"air_date": null
+					},
+					{
+						"id": 510254,
+						"episode_number": 141,
+						"name": "Frog Baseball - Version B",
+						"air_date": null
+					},
+					{
+						"id": 510255,
+						"episode_number": 142,
+						"name": "Frog Baseball - Version C (Liquid Television)",
+						"air_date": null
+					},
+					{
+						"id": 510258,
+						"episode_number": 143,
+						"name": "Videos That Rule Vol. 1",
+						"air_date": null
+					},
+					{
+						"id": 510256,
+						"episode_number": 144,
+						"name": "Videos That Rule Vol. 2",
+						"air_date": null
+					},
+					{
+						"id": 510257,
+						"episode_number": 145,
+						"name": "Videos That Suck Vol. 1",
+						"air_date": null
+					},
+					{
+						"id": 510260,
+						"episode_number": 146,
+						"name": "Videos That Suck Vol. 2",
+						"air_date": null
+					},
+					{
+						"id": 510259,
+						"episode_number": 147,
+						"name": "The Best of the Rest Vol. 1",
+						"air_date": null
+					},
+					{
+						"id": 510263,
+						"episode_number": 148,
+						"name": "The Best of the Rest Vol. 2",
+						"air_date": null
+					},
+					{
+						"id": 510261,
+						"episode_number": 149,
+						"name": "Mike Judge at comic-con 2011",
+						"air_date": null
+					},
+					{
+						"id": 510262,
+						"episode_number": 150,
+						"name": "Making of 'Do America'",
+						"air_date": null
+					},
+					{
+						"id": 7499416,
+						"episode_number": 151,
+						"name": "Beavis and Butt-Head in Jackass 3D",
+						"air_date": "2010-10-15"
+					},
+					{
+						"id": 7499417,
+						"episode_number": 152,
+						"name": "Film Forum with Beavis and Butt-Head",
+						"air_date": null
+					},
+					{
+						"id": 7499418,
+						"episode_number": 153,
+						"name": "Beavis and Butt-Head Announce Their Return to Comedy Central",
+						"air_date": null
+					},
+					{
+						"id": 7499429,
+						"episode_number": 154,
+						"name": "Mike Judge on the Late Show with David Letterman",
+						"air_date": "2011-11-03"
+					},
+					{
+						"id": 7499430,
+						"episode_number": 155,
+						"name": "Unfinished Pencil Tests and Other Experiments",
+						"air_date": null
+					},
+					{
+						"id": 7499431,
+						"episode_number": 156,
+						"name": "Sunday Stew Promos",
+						"air_date": null
+					},
+					{
+						"id": 7499434,
+						"episode_number": 157,
+						"name": "Beavis and Butt-Head Do Videos Bumpers",
+						"air_date": null
+					},
+					{
+						"id": 7499476,
+						"episode_number": 158,
+						"name": "Peace, Love and Understanding (Version A)",
+						"air_date": null
+					},
+					{
+						"id": 7499484,
+						"episode_number": 159,
+						"name": "Peace, Love and Understanding (Version B)",
+						"air_date": null
+					},
+					{
+						"id": 7499491,
+						"episode_number": 160,
+						"name": "Peace, Love and Understanding (Version C)",
+						"air_date": null
+					},
+					{
+						"id": 510264,
+						"episode_number": 191,
+						"name": "The Mike Judge Collection Disc 1",
+						"air_date": null
+					},
+					{
+						"id": 510266,
+						"episode_number": 192,
+						"name": "The Mike Judge Collection Disc 2",
+						"air_date": null
+					},
+					{
+						"id": 510265,
+						"episode_number": 193,
+						"name": "The Mike Judge Collection Disc 3",
+						"air_date": null
+					},
+					{
+						"id": 510268,
+						"episode_number": 194,
+						"name": "The Mike Judge Collection Disc 4",
+						"air_date": null
+					},
+					{
+						"id": 510267,
+						"episode_number": 195,
+						"name": "The Mike Judge Collection Disc 5",
+						"air_date": null
+					},
+					{
+						"id": 510269,
+						"episode_number": 196,
+						"name": "The Mike Judge Collection Disc 6",
+						"air_date": null
+					},
+					{
+						"id": 510270,
+						"episode_number": 197,
+						"name": "The Mike Judge Collection Disc 7",
+						"air_date": null
+					},
+					{
+						"id": 510272,
+						"episode_number": 198,
+						"name": "The Mike Judge Collection Disc 8",
+						"air_date": null
+					},
+					{
+						"id": 510271,
+						"episode_number": 199,
+						"name": "The Mike Judge Collection Disc 9",
+						"air_date": null
+					},
+					{
+						"id": 510276,
+						"episode_number": 200,
+						"name": "Red Hot Chili Peppers's music video \"Love Roller coaster\"",
+						"air_date": null
+					},
+					{
+						"id": 510277,
+						"episode_number": 201,
+						"name": "Take This Heart",
+						"air_date": null
+					},
+					{
+						"id": 510278,
+						"episode_number": 202,
+						"name": "Music Video: \"Superdeformed\" by Matthew Sweet",
+						"air_date": null
+					},
+					{
+						"id": 510279,
+						"episode_number": 203,
+						"name": "Music Video: \"This Love\" by Pantera",
+						"air_date": null
+					},
+					{
+						"id": 510280,
+						"episode_number": 204,
+						"name": "Music Video: \"Push\" by Moist",
+						"air_date": null
+					},
+					{
+						"id": 510281,
+						"episode_number": 205,
+						"name": "Music Video: \"Suds & Soda\" by Deus",
+						"air_date": null
+					},
+					{
+						"id": 510282,
+						"episode_number": 206,
+						"name": "Music Video: \"Fear No Evil\" by Grim Reaper",
+						"air_date": null
+					},
+					{
+						"id": 510283,
+						"episode_number": 207,
+						"name": "Music Video: \"Negasonic Teenage Warhead\" by Monster Magnet",
+						"air_date": null
+					},
+					{
+						"id": 510284,
+						"episode_number": 208,
+						"name": "Music Video: \"Blind\" by Korn",
+						"air_date": null
+					},
+					{
+						"id": 510285,
+						"episode_number": 209,
+						"name": "Music Video: \"Waydown\" by Catherine Wheel",
+						"air_date": null
+					},
+					{
+						"id": 510286,
+						"episode_number": 210,
+						"name": "Music Video: \"Pass the Mic\" by The Beastie Boys",
+						"air_date": null
+					},
+					{
+						"id": 510287,
+						"episode_number": 211,
+						"name": "Music Video: \"Box Full of Letters\" by Wilco",
+						"air_date": null
+					},
+					{
+						"id": 510288,
+						"episode_number": 212,
+						"name": "Music Video: \"Stars\" by Hum",
+						"air_date": null
+					},
+					{
+						"id": 510289,
+						"episode_number": 213,
+						"name": "Music Video: \"Sabotage\" by The Beastie Boys",
+						"air_date": null
+					},
+					{
+						"id": 510290,
+						"episode_number": 214,
+						"name": "Music Video: \"Kid Candy\" by Seaweed",
+						"air_date": null
+					},
+					{
+						"id": 510291,
+						"episode_number": 215,
+						"name": "Music Video: \"I'm Broken\" by Pantera",
+						"air_date": null
+					},
+					{
+						"id": 510292,
+						"episode_number": 216,
+						"name": "Music Video: \"The Bell Witch\" by Mercyful Fate",
+						"air_date": null
+					},
+					{
+						"id": 510293,
+						"episode_number": 217,
+						"name": "Music Video: \"Delivery\" by Compulsion",
+						"air_date": null
+					},
+					{
+						"id": 510294,
+						"episode_number": 218,
+						"name": "Music Video: \"Secret\" by Madonna",
+						"air_date": null
+					},
+					{
+						"id": 510295,
+						"episode_number": 219,
+						"name": "Music Video: \"Parlour Games\" by Six Finger Satellite",
+						"air_date": null
+					},
+					{
+						"id": 510296,
+						"episode_number": 220,
+						"name": "Music Video: \"Twiggy, Twiggy\" by Pizzicato 5",
+						"air_date": null
+					},
+					{
+						"id": 510297,
+						"episode_number": 221,
+						"name": "Music Video: \"Stick It Out\" by Rush",
+						"air_date": null
+					},
+					{
+						"id": 510298,
+						"episode_number": 222,
+						"name": "Music Video: \"Fake Plastic Trees\" by Radiohead",
+						"air_date": null
+					},
+					{
+						"id": 510299,
+						"episode_number": 223,
+						"name": "Music Video: \"Hole Hearted\" by Extreme",
+						"air_date": null
+					},
+					{
+						"id": 510300,
+						"episode_number": 224,
+						"name": "Music Video: \"Pat's Trick\" by Helium",
+						"air_date": null
+					},
+					{
+						"id": 510301,
+						"episode_number": 225,
+						"name": "Music Video: \"If I Only Had A Brain\" by MC 900 FT. JESUS",
+						"air_date": null
+					},
+					{
+						"id": 1139571,
+						"episode_number": 226,
+						"name": "Silence Your Cell Phones",
+						"air_date": "2012-02-14"
+					},
+					{
+						"id": 1139572,
+						"episode_number": 227,
+						"name": "Beavis & Butt-Head Interruptions - Gym. Tan. Butt-Head",
+						"air_date": "2012-02-14"
+					},
+					{
+						"id": 1139573,
+						"episode_number": 228,
+						"name": "Beavis & Butt-Head Interruptions - Settle Down Snooki",
+						"air_date": "2012-02-14"
+					},
+					{
+						"id": 1139574,
+						"episode_number": 229,
+						"name": "Beavis & Butt-Head Interruptions - Beavis and Juice-Head",
+						"air_date": "2012-02-14"
+					},
+					{
+						"id": 1139575,
+						"episode_number": 230,
+						"name": "Beavis & Butt-Head Interruptions - Vinny Reloaded",
+						"air_date": "2012-02-14"
+					},
+					{
+						"id": 1394716,
+						"episode_number": 231,
+						"name": "MTV All Access: Behind the Scenes of Beavis & Butt-Head (1994)",
+						"air_date": "1993-11-18"
+					},
+					{
+						"id": 1394717,
+						"episode_number": 232,
+						"name": "A Very Special Christmas With Beavis & Butt-Head",
+						"air_date": "1993-12-12"
+					},
+					{
+						"id": 1394718,
+						"episode_number": 233,
+						"name": "Another Season 5 Ad",
+						"air_date": "2005-11-01"
+					},
+					{
+						"id": 1394719,
+						"episode_number": 234,
+						"name": "Beavis and Butt-Head on Jackass 24 hour Mtv Take Over",
+						"air_date": "2008-11-19"
+					},
+					{
+						"id": 1394720,
+						"episode_number": 235,
+						"name": "Greatest Hits Montage",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1394721,
+						"episode_number": 236,
+						"name": "Friends & Neighbors Montage",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1394722,
+						"episode_number": 237,
+						"name": "Name-Calling Montage",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1394723,
+						"episode_number": 238,
+						"name": "Memories of Love Montage",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1394724,
+						"episode_number": 239,
+						"name": "Mike Judge Collection Promos",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1394725,
+						"episode_number": 240,
+						"name": "Fire Controversy",
+						"air_date": "2017-11-19"
+					},
+					{
+						"id": 1884285,
+						"episode_number": 241,
+						"name": "King Turd's Collection Music Video Quality Disclaimer",
+						"air_date": "2017-11-21"
+					},
+					{
+						"id": 5672866,
+						"episode_number": 242,
+						"name": "2011 MTV Video Music Awards",
+						"air_date": "2011-08-28"
+					}
+				]
+			},
+			"1663/0": {
+				"episodes": [
+					{
+						"id": 1185072,
+						"episode_number": 1,
+						"name": "The Moon and the Desert (1)",
+						"air_date": "1973-03-07"
+					},
+					{
+						"id": 1185073,
+						"episode_number": 2,
+						"name": "The Moon and the Desert (2)",
+						"air_date": "1973-03-07"
+					},
+					{
+						"id": 1185074,
+						"episode_number": 3,
+						"name": "Wine, Women and War (1)",
+						"air_date": "1973-10-20"
+					},
+					{
+						"id": 1185077,
+						"episode_number": 4,
+						"name": "Wine, Women and War (2)",
+						"air_date": "1973-10-20"
+					},
+					{
+						"id": 1185078,
+						"episode_number": 5,
+						"name": "The Solid Gold Kidnapping (1)",
+						"air_date": "1973-11-17"
+					},
+					{
+						"id": 1185079,
+						"episode_number": 6,
+						"name": "The Solid Gold Kidnapping (2)",
+						"air_date": "1973-11-17"
+					}
+				]
+			},
+			"65844/0": {
+				"episodes": [
+					{
+						"id": 1174618,
+						"episode_number": 1,
+						"name": "God's Blessing on This Wonderful Choker!",
+						"air_date": "2016-06-24"
+					},
+					{
+						"id": 1341906,
+						"episode_number": 2,
+						"name": "God's Blessing on These Wonderful Works of Art!",
+						"air_date": "2017-07-24"
+					},
+					{
+						"id": 5604594,
+						"episode_number": 3,
+						"name": "Red Stream Explosion",
+						"air_date": "2025-04-25"
+					},
+					{
+						"id": 5847869,
+						"episode_number": 4,
+						"name": "Watch Out for Impostors!",
+						"air_date": "2025-04-25"
+					}
+				]
+			},
+			"902/0": {
+				"episodes": [
+					{
+						"id": 3075807,
+						"episode_number": 1,
+						"name": "Yu-Gi-Oh! Duel Monsters Battle City TV Special",
+						"air_date": "2002-01-01"
+					},
+					{
+						"id": 3075806,
+						"episode_number": 2,
+						"name": "Yu-Gi-Oh! Duel Monsters Battle City Edition: Special Edition Road to Battle City",
+						"air_date": "2015-04-07"
+					},
+					{
+						"id": 3075841,
+						"episode_number": 3,
+						"name": "Yu-Gi-Oh! The Dark Side of Dimensions Just Before Release Special: Eternal Rivals - Yuugi and Kaiba",
+						"air_date": "2016-04-17"
+					},
+					{
+						"id": 3075842,
+						"episode_number": 4,
+						"name": "Yu-Gi-Oh! The Dark Side of Dimensions Commemoration Special: Eternal Rivals - Yuugi and Kaiba",
+						"air_date": "2016-04-23"
+					}
+				]
+			},
+			"2190/0": {
+				"episodes": [
+					{
+						"id": 153783,
+						"episode_number": 1,
+						"name": "The Spirit of Christmas (Jesus vs. Frosty)",
+						"air_date": "1992-12-08"
+					},
+					{
+						"id": 153798,
+						"episode_number": 2,
+						"name": "Your Studio and You",
+						"air_date": "1995-09-14"
+					},
+					{
+						"id": 153784,
+						"episode_number": 3,
+						"name": "The Spirit of Christmas (Jesus vs. Santa)",
+						"air_date": "1995-12-01"
+					},
+					{
+						"id": 153807,
+						"episode_number": 4,
+						"name": "Countdown to 1997",
+						"air_date": "1996-12-31"
+					},
+					{
+						"id": 153799,
+						"episode_number": 5,
+						"name": "The 1997 CableACE Awards",
+						"air_date": "1997-11-15"
+					},
+					{
+						"id": 153786,
+						"episode_number": 6,
+						"name": "Jay Leno Comes To South Park",
+						"air_date": "1997-11-20"
+					},
+					{
+						"id": 153791,
+						"episode_number": 7,
+						"name": "O Holy Night Music Video",
+						"air_date": "1997-12-25"
+					},
+					{
+						"id": 153793,
+						"episode_number": 8,
+						"name": "O Little Town Of Bethlehem Music Video",
+						"air_date": "1997-12-25"
+					},
+					{
+						"id": 153808,
+						"episode_number": 9,
+						"name": "Countdown to 1998",
+						"air_date": "1997-12-31"
+					},
+					{
+						"id": 153803,
+						"episode_number": 10,
+						"name": "MADtv: South Parknuts",
+						"air_date": "1998-05-02"
+					},
+					{
+						"id": 153794,
+						"episode_number": 11,
+						"name": "Chef's Chocolate Salty Balls Music Video",
+						"air_date": "1998-08-19"
+					},
+					{
+						"id": 153785,
+						"episode_number": 12,
+						"name": "Chef Aid: Behind The Menu",
+						"air_date": "1998-12-08"
+					},
+					{
+						"id": 153809,
+						"episode_number": 13,
+						"name": "Countdown to 1999",
+						"air_date": "1998-12-31"
+					},
+					{
+						"id": 153802,
+						"episode_number": 14,
+						"name": "What Would Brian Boitano Do Music Video",
+						"air_date": "1999-02-13"
+					},
+					{
+						"id": 153805,
+						"episode_number": 15,
+						"name": "Movie Trailer: Beefcake",
+						"air_date": "1999-06-01"
+					},
+					{
+						"id": 153806,
+						"episode_number": 16,
+						"name": "Movie Trailer: Disco",
+						"air_date": "1999-06-01"
+					},
+					{
+						"id": 153804,
+						"episode_number": 17,
+						"name": "Movie Trailer: German Dance",
+						"air_date": "1999-06-01"
+					},
+					{
+						"id": 153795,
+						"episode_number": 18,
+						"name": "Dead Friend Sketch (South Park's Tribute To Monty Python)",
+						"air_date": "1999-10-05"
+					},
+					{
+						"id": 153810,
+						"episode_number": 19,
+						"name": "Countdown to 2000",
+						"air_date": "1999-12-31"
+					},
+					{
+						"id": 153792,
+						"episode_number": 20,
+						"name": "Blame Canada Music Video (Academy Awards)",
+						"air_date": "2000-03-26"
+					},
+					{
+						"id": 1965556,
+						"episode_number": 21,
+						"name": "The Gauntlet",
+						"air_date": "2000-06-03"
+					},
+					{
+						"id": 153796,
+						"episode_number": 22,
+						"name": "MTV Movie Awards 2000",
+						"air_date": "2000-06-08"
+					},
+					{
+						"id": 153789,
+						"episode_number": 23,
+						"name": "Great Destinations (a.k.a. The Most Notorious Episode)",
+						"air_date": "2002-06-19"
+					},
+					{
+						"id": 153790,
+						"episode_number": 24,
+						"name": "South Park 5th Anniversary Special",
+						"air_date": "2002-09-03"
+					},
+					{
+						"id": 153800,
+						"episode_number": 25,
+						"name": "Going Down To South Park",
+						"air_date": "2003-06-03"
+					},
+					{
+						"id": 153812,
+						"episode_number": 26,
+						"name": "VH1 Goes Inside: South Park",
+						"air_date": "2003-10-17"
+					},
+					{
+						"id": 153797,
+						"episode_number": 27,
+						"name": "The Aristocrats Sketch",
+						"air_date": "2005-08-12"
+					},
+					{
+						"id": 153782,
+						"episode_number": 28,
+						"name": "Cartman Gets an Anal Probe: The Unaired and Uncut Original Pilot",
+						"air_date": "2006-10-03"
+					},
+					{
+						"id": 1965557,
+						"episode_number": 29,
+						"name": "Lil' Rush",
+						"air_date": "2007-06-13"
+					},
+					{
+						"id": 153788,
+						"episode_number": 30,
+						"name": "The Imaginationland Trilogy",
+						"air_date": "2008-03-12"
+					},
+					{
+						"id": 153801,
+						"episode_number": 31,
+						"name": "Behind the Scenes of Major Boobage",
+						"air_date": "2008-06-25"
+					},
+					{
+						"id": 1965559,
+						"episode_number": 32,
+						"name": "The Real South Park",
+						"air_date": "2010-04-01"
+					},
+					{
+						"id": 153811,
+						"episode_number": 33,
+						"name": "Six Days to Air: The Making of South Park",
+						"air_date": "2011-10-09"
+					}
+				]
 			}
 		},
 		"episodeGroups": {
@@ -44100,7 +46331,14 @@
 			"tt38848632": null,
 			"tt33060122": null,
 			"tt5274556": null,
-			"tt2005616": "tt0149460"
+			"tt2005616": "tt0149460",
+			"tt0105950": null,
+			"tt5536088": "tt5370118",
+			"tt0071054": null,
+			"tt5734550": null,
+			"tt0247902": null,
+			"tt5626028": null,
+			"tt0121955": null
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -44827,6 +47065,2046 @@
 				"parsedTitle": "Sesame Street",
 				"parsedYear": null,
 				"probability": 0.9377
+			},
+			"Blue's Clues 03xS1 Blue's Big Musical Movie": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0193019",
+						"score": 3.9444,
+						"title": "Blue's Big Musical Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0077252",
+						"score": -2.9516,
+						"title": "Blue Movie",
+						"year": 1978
+					},
+					{ "imdbId": "tt1148198", "score": -3.0135, "title": "Blue", "year": 2009 },
+					{
+						"imdbId": "tt0105819",
+						"score": -3.0511,
+						"title": "Wild Orchid II: Two Shades of Blue",
+						"year": 1991
+					},
+					{ "imdbId": "tt0062745", "score": -3.1253, "title": "Blue Movie", "year": 1969 }
+				],
+				"parsedTitle": "Blue's Clues 03xS1 Blue's Big Musical Movie",
+				"parsedYear": null,
+				"probability": 0.9448
+			},
+			"My Hero Academia Movie 01 - Two Heroes": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt7745068",
+						"score": 1.9968,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": 0.1962,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt11107074",
+						"score": -2.4592,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt32176689",
+						"score": -4.0374,
+						"title": "My Hero Academia: You're Next",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -4.2243,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "My Hero Academia Movie 01",
+				"parsedYear": null,
+				"probability": 0.4566
+			},
+			"My Hero Academia Movie 02 - Heroes Rising": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11107074",
+						"score": 2.261,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": 0.222,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt7745068",
+						"score": -0.996,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt32176689",
+						"score": -3.9334,
+						"title": "My Hero Academia: You're Next",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0079652",
+						"score": -3.9369,
+						"title": "The Odd Angry Shot",
+						"year": 1979
+					}
+				],
+				"parsedTitle": "My Hero Academia Movie 02",
+				"parsedYear": null,
+				"probability": 0.5535
+			},
+			"My Hero Academia Movie 03 - World Heroes Mission": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt13544716",
+						"score": 3.757,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt7745068",
+						"score": -1.0207,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt11107074",
+						"score": -2.1984,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt18933868",
+						"score": -2.583,
+						"title": "My Hero Academia: World Heroes' Mission - Take-Off",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -3.088,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "My Hero Academia Movie 03",
+				"parsedYear": null,
+				"probability": 0.9133
+			},
+			"My Hero Academia Movie OVA": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt7745068",
+						"score": 0.927,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": 0.8545,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt11107074",
+						"score": -2.4162,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt9198442",
+						"score": -2.8983,
+						"title": "My Hero Academia",
+						"year": null
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -3.5653,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "My Hero Academia Movie OVA",
+				"parsedYear": null,
+				"probability": 0.303
+			},
+			"My Hero Academia Movie 04 - You're Next": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt32176689",
+						"score": 1.0845,
+						"title": "My Hero Academia: You're Next",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": 0.2724,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt7745068",
+						"score": -0.1479,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt11107074",
+						"score": -1.9985,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -3.4726,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "My Hero Academia Movie 04",
+				"parsedYear": null,
+				"probability": 0.3187
+			},
+			"Beavis and Butt-Head {1994}(SNES Playthrough}": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0105950",
+						"score": 2.9401,
+						"title": "Beavis and Butt-Head",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt20859904",
+						"score": 1.1629,
+						"title": "Beavis and Butt-Head",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt8619514",
+						"score": -4.8919,
+						"title": "Beavis and Butt-Head: Revamped",
+						"year": 2018
+					},
+					{ "imdbId": "tt8736278", "score": -5.7816, "title": "1994", "year": 2019 },
+					{ "imdbId": "tt10243640", "score": -6.4615, "title": "1994", "year": 2019 }
+				],
+				"parsedTitle": "Beavis and Butt-Head {1994}",
+				"parsedYear": null,
+				"probability": 0.7143
+			},
+			"Beavis and Butt-Head {1994}{Game Gear Playthrough}": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0115641",
+						"score": 1.019,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt14145426",
+						"score": -5.8218,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt5872942",
+						"score": -6.4472,
+						"title": "Inside Playthrough",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt5708276",
+						"score": -6.574,
+						"title": "Ao Oni Playthrough",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt5592562",
+						"score": -6.7112,
+						"title": "Until Dawn Playthrough",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {1994}{Game Gear Playthrough}",
+				"parsedYear": null,
+				"probability": 0.4869
+			},
+			"Beavis and Butt-Head {1994}{Genesis Playthrough}": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0105950",
+						"score": 1.4204,
+						"title": "Beavis and Butt-Head",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt20859904",
+						"score": 0.1991,
+						"title": "Beavis and Butt-Head",
+						"year": 2022
+					},
+					{ "imdbId": "tt8736278", "score": -4.7651, "title": "1994", "year": 2019 },
+					{ "imdbId": "tt11737102", "score": -5.0404, "title": "Genesis", "year": 2021 },
+					{
+						"imdbId": "tt8619514",
+						"score": -5.3124,
+						"title": "Beavis and Butt-Head: Revamped",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {1994}{Genesis Playthrough}",
+				"parsedYear": null,
+				"probability": 0.5825
+			},
+			"Beavis and Butt-Head {1995} Virtual Stupidity {PC Playthrough, No Commentary}": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0115641",
+						"score": 1.6509,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{ "imdbId": "tt0399704", "score": -2.9423, "title": "Stupidity", "year": 2003 },
+					{
+						"imdbId": "tt0436194",
+						"score": -4.8189,
+						"title": "Courage & Stupidity",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt14145426",
+						"score": -5.3722,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0093056",
+						"score": -6.934,
+						"title": "The Romancing Star",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {1995} Virtual Stupidity {PC Playthrough, No Commentary}",
+				"parsedYear": null,
+				"probability": 0.9407
+			},
+			"Beavis and Butt-Head {1998}{Game Boy Playthrough}": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0105950",
+						"score": 1.8111,
+						"title": "Beavis and Butt-Head",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt20859904",
+						"score": 0.1868,
+						"title": "Beavis and Butt-Head",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt8619514",
+						"score": -5.8659,
+						"title": "Beavis and Butt-Head: Revamped",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt15016532",
+						"score": -8.3917,
+						"title": "The Last of Us - The Definitive Playthrough",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt8475906",
+						"score": -8.5492,
+						"title": "Clip: Mario & Luigi Paper Jam Playthrough",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {1998}{Game Boy Playthrough}",
+				"parsedYear": null,
+				"probability": 0.4527
+			},
+			"Beavis and Butt-Head {1999} Do U {PC Playthrough, No Commentary}": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0105950",
+						"score": 2.6733,
+						"title": "Beavis and Butt-Head",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt20859904",
+						"score": 1.237,
+						"title": "Beavis and Butt-Head",
+						"year": 2022
+					},
+					{ "imdbId": "tt0346354", "score": -5.6598, "title": "1999", "year": 1985 },
+					{ "imdbId": "tt0312258", "score": -6.1228, "title": "X", "year": 2001 },
+					{
+						"imdbId": "tt8619514",
+						"score": -6.6051,
+						"title": "Beavis and Butt-Head: Revamped",
+						"year": 2018
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {1999} Do U {PC Playthrough, No Commentary}",
+				"parsedYear": null,
+				"probability": 0.3575
+			},
+			"Beavis and Butt-Head {2021} Bunghole in One {PC Playthrough, No Commentary}": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0115641",
+						"score": 0.3503,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt14145426",
+						"score": -3.2506,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt5592562",
+						"score": -5.6445,
+						"title": "Until Dawn Playthrough",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt6352540",
+						"score": -6.6129,
+						"title": "Papers, Please Playthrough",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt5592588",
+						"score": -7.0241,
+						"title": "Emily Wants to Play Playthrough",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head {2021} Bunghole in One {PC Playthrough, No Commentary}",
+				"parsedYear": null,
+				"probability": 0.2905
+			},
+			"Beavis and Butt-head S06M01 Do America (1996)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0115641",
+						"score": 3.055,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt14145426",
+						"score": -3.6014,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt1512901",
+						"score": -5.3703,
+						"title": "WCW the Great American Bash",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0784159",
+						"score": -5.4646,
+						"title": "Taint of Greatness: The Journey of Beavis and Butt-Head, Part 1",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0878715",
+						"score": -5.5176,
+						"title": "Taint of Greatness: The Journey of Beavis and Butt-Head, Part 2",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "Beavis and Butt-head S06M01 Do America",
+				"parsedYear": 1996,
+				"probability": 0.9874
+			},
+			"Beavis and Butt-Head Daria ~ Is It College Yet {2002}{TV Movie}": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0285627",
+						"score": 3.7014,
+						"title": "Daria in 'Is It College Yet?'",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt0115641",
+						"score": -1.5068,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0324947",
+						"score": -2.012,
+						"title": "2002 MTV Movie Awards",
+						"year": 2002
+					},
+					{ "imdbId": "tt0294251", "score": -2.4228, "title": "2002", "year": 2001 },
+					{
+						"imdbId": "tt0250440",
+						"score": -3.6552,
+						"title": "Daria in 'Is It Fall Yet?'",
+						"year": 2000
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head Daria ~ Is It College Yet {2002}{TV Movie}",
+				"parsedYear": null,
+				"probability": 0.9812
+			},
+			"Beavis and Butt-Head Daria ~ Is It Fall Yet {2000}{TV Movie}": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0250440",
+						"score": 2.6153,
+						"title": "Daria in 'Is It Fall Yet?'",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0115641",
+						"score": -0.9458,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0285627",
+						"score": -1.4774,
+						"title": "Daria in 'Is It College Yet?'",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt14145426",
+						"score": -3.7104,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0460952",
+						"score": -5.3205,
+						"title": "TV: The Movie",
+						"year": 2006
+					}
+				],
+				"parsedTitle": "Beavis and Butt-Head Daria ~ Is It Fall Yet {2000}{TV Movie}",
+				"parsedYear": null,
+				"probability": 0.9053
+			},
+			"Mike Judges Beavis and Butt-Head ~ S09M02 Do The Universe {2022}": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt14145426",
+						"score": 2.1148,
+						"title": "Beavis and Butt-Head Do the Universe",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0115641",
+						"score": -1.5897,
+						"title": "Beavis and Butt-Head Do America",
+						"year": 1996
+					},
+					{ "imdbId": "tt0460838", "score": -3.4343, "title": "Judges", "year": 2006 },
+					{ "imdbId": "tt6722822", "score": -5.2255, "title": "Universe", "year": 2020 },
+					{
+						"imdbId": "tt23745180",
+						"score": -5.3064,
+						"title": "Miss Universe 2022",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Mike Judges Beavis and Butt-Head ~ S09M02 Do The Universe {2022}",
+				"parsedYear": null,
+				"probability": 0.9254
+			},
+			"South Park - Seasons 1 to 25 (S01-S25) Master Collection, The Movie & Extras [1080p-2160p NVEnc 10Bit HEVC][TrueHD+DDP 5.1Ch][English Subs]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{ "imdbId": "tt0121955", "score": 4.5623, "title": "South Park", "year": 1997 },
+					{ "imdbId": "tt0934648", "score": -2.8542, "title": "Extr@", "year": 2002 },
+					{ "imdbId": "tt7795640", "score": -3.7207, "title": "Sul", "year": 2019 },
+					{ "imdbId": "tt6456546", "score": -5.4237, "title": "The Cheat", "year": 2017 },
+					{
+						"imdbId": "tt5239494",
+						"score": -5.8992,
+						"title": "The Collection",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "South Park",
+				"parsedYear": null,
+				"probability": 0.9893
+			},
+			"KonoSuba God's Blessing on this Wonderful World! - Legend of Crimson (2019)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt9239552",
+						"score": 5.1521,
+						"title": "Konosuba!: God's Blessing on This Wonderful World! - Legend of Crimson",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0857275",
+						"score": -3.3164,
+						"title": "Wonderful World",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt5594234",
+						"score": -3.355,
+						"title": "Konosuba OVA: God's Blessing on This Wonderful Choker!",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0456467",
+						"score": -5.0295,
+						"title": "Un mundo maravilloso",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt21393208",
+						"score": -5.9773,
+						"title": "What a Wonderful World",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "KonoSuba God's Blessing on this Wonderful World!",
+				"parsedYear": 2019,
+				"probability": 0.9875
+			},
+			"Yu-Gi-Oh! Duel Monsters Yu-Gi-Oh! 3D The Movie - Bonds Beyond Time (720p BD Dual Audio) [F-R][74C144AA]": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1587157",
+						"score": 1.2718,
+						"title": "Yu-Gi-Oh! Bonds Beyond Time",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0403703",
+						"score": 0.7179,
+						"title": "Yu-Gi-Oh!: The Movie",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt6541084",
+						"score": -3.2725,
+						"title": "Yu-Gi-Oh! Trading Card Game: Duel Master's Guide",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt1781955",
+						"score": -3.7105,
+						"title": "Yu-Gi-Oh!: The Abridged Movie",
+						"year": 2007
+					},
+					{ "imdbId": "tt3716530", "score": -4.7733, "title": "Elle", "year": 2016 }
+				],
+				"parsedTitle": "Yu-Gi-Oh! Duel Monsters Yu-Gi-Oh! 3D The Movie",
+				"parsedYear": null,
+				"probability": 0.4585
+			},
+			"Yu-Gi-Oh! Duel Monsters The Movie - Pyramid of Light (720p BDxHDTV) [F-R][A3051BB0]": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0403703",
+						"score": 1.792,
+						"title": "Yu-Gi-Oh!: The Movie",
+						"year": 2004
+					},
+					{ "imdbId": "tt0291358", "score": -2.929, "title": "Monsters", "year": 2001 },
+					{ "imdbId": "tt0349835", "score": -3.1623, "title": "Monsters", "year": 1993 },
+					{ "imdbId": "tt1470827", "score": -3.6172, "title": "Monsters", "year": 2010 },
+					{
+						"imdbId": "tt1781955",
+						"score": -3.9274,
+						"title": "Yu-Gi-Oh!: The Abridged Movie",
+						"year": 2007
+					}
+				],
+				"parsedTitle": "Yu-Gi-Oh! Duel Monsters The Movie",
+				"parsedYear": null,
+				"probability": 0.7324
+			},
+			"Yu-Gi-Oh! Duel Monsters The Movie - The Dark Side of Dimensions (720p BD Dual Audio) [ColdFusion][F6C07E2B]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0247902",
+						"score": 2.6907,
+						"title": "Yu-Gi-Oh! Duel Monsters",
+						"year": 2000
+					},
+					{ "imdbId": "tt0249327", "score": 1.2955, "title": "Yu-Gi-Oh!", "year": 2000 },
+					{ "imdbId": "tt4834194", "score": -3.2105, "title": "Yu-Gi-Oh!", "year": 1998 },
+					{ "imdbId": "tt13207736", "score": -3.6541, "title": "Monster", "year": 2022 },
+					{ "imdbId": "tt0094512", "score": -3.7138, "title": "Monsters", "year": 1988 }
+				],
+				"parsedTitle": "Yu-Gi-Oh! Duel Monsters The Movie",
+				"parsedYear": null,
+				"probability": 0.3617
+			},
+			"The Six Million Dollar Man 1- Harve Bennett -- executive producer (2010 Interview)": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.6488,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt4612922",
+						"score": -3.8619,
+						"title": "The Producers",
+						"year": 2015
+					},
+					{ "imdbId": "tt0206467", "score": -5.1011, "title": "Action", "year": 1999 },
+					{
+						"imdbId": "tt0090426",
+						"score": -6.2479,
+						"title": "Executive Stress",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt10438490",
+						"score": -6.7657,
+						"title": "Comicstaan Semma Comedy Pa",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man 1- Harve Bennett -- executive producer",
+				"parsedYear": 2010,
+				"probability": 0.7031
+			},
+			"The Six Million Dollar Man 1973.03.07 -- The Moon and the Desert": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0070700",
+						"score": 5.1059,
+						"title": "The Six Million Dollar Man",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0211121",
+						"score": 0.8297,
+						"title": "The Six Million Dollar Man: Wine, Women and War",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt34968474",
+						"score": -3.0258,
+						"title": "The Six Billion Dollar Man",
+						"year": 2025
+					},
+					{ "imdbId": "tt7754284", "score": -3.5026, "title": "Okuotoko", "year": 2018 },
+					{
+						"imdbId": "tt0093853",
+						"score": -4.1509,
+						"title": "The Return of the Six-Million-Dollar Man and the Bionic Woman",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man",
+				"parsedYear": 1973,
+				"probability": 0.981
+			},
+			"The Six Million Dollar Man 1973.10.20 -- Wine, Women and War": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0070700",
+						"score": 4.3194,
+						"title": "The Six Million Dollar Man",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0211121",
+						"score": 2.9874,
+						"title": "The Six Million Dollar Man: Wine, Women and War",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt34968474",
+						"score": -3.109,
+						"title": "The Six Billion Dollar Man",
+						"year": 2025
+					},
+					{ "imdbId": "tt7754284", "score": -3.3925, "title": "Okuotoko", "year": 2018 },
+					{
+						"imdbId": "tt0112446",
+						"score": -4.1586,
+						"title": "Sixty Million Dollar Man",
+						"year": 1995
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man",
+				"parsedYear": 1973,
+				"probability": 0.8459
+			},
+			"The Six Million Dollar Man 1973.11.17 -- The Solid Gold Kidnapping": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0070700",
+						"score": 4.0992,
+						"title": "The Six Million Dollar Man",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0210991",
+						"score": 3.1816,
+						"title": "The Six Million Dollar Man: The Solid Gold Kidnapping",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0211121",
+						"score": -0.1878,
+						"title": "The Six Million Dollar Man: Wine, Women and War",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt34968474",
+						"score": -3.3852,
+						"title": "The Six Billion Dollar Man",
+						"year": 2025
+					},
+					{ "imdbId": "tt7754284", "score": -3.5722, "title": "Okuotoko", "year": 2018 }
+				],
+				"parsedTitle": "The Six Million Dollar Man",
+				"parsedYear": 1973,
+				"probability": 0.8463
+			},
+			"1987 -- The Return of The Six Million Dollar Man and The Bionic Woman": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0093853",
+						"score": 4.3035,
+						"title": "The Return of the Six-Million-Dollar Man and the Bionic Woman",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt0070700",
+						"score": -1.8637,
+						"title": "The Six Million Dollar Man",
+						"year": 1973
+					},
+					{
+						"imdbId": "tt0096931",
+						"score": -3.0133,
+						"title": "Bionic Showdown: The Six Million Dollar Man and the Bionic Woman",
+						"year": 1989
+					},
+					{ "imdbId": "tt7754284", "score": -3.976, "title": "Okuotoko", "year": 2018 },
+					{
+						"imdbId": "tt0211121",
+						"score": -5.1359,
+						"title": "The Six Million Dollar Man: Wine, Women and War",
+						"year": 1973
+					}
+				],
+				"parsedTitle": "The Return of The Six Million Dollar Man and The Bionic Woman",
+				"parsedYear": 1987,
+				"probability": 0.9823
+			},
+			"1989 -- Bionic Showdown - The Six Million Dollar Man and The Bionic Woman": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0096931",
+						"score": 4.0933,
+						"title": "Bionic Showdown: The Six Million Dollar Man and the Bionic Woman",
+						"year": 1989
+					},
+					{ "imdbId": "tt16427902", "score": -2.4442, "title": "Bionic", "year": 2024 },
+					{
+						"imdbId": "tt0093853",
+						"score": -2.7889,
+						"title": "The Return of the Six-Million-Dollar Man and the Bionic Woman",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt0109274",
+						"score": -2.853,
+						"title": "Bionic Ever After?",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt0070700",
+						"score": -3.3677,
+						"title": "The Six Million Dollar Man",
+						"year": 1973
+					}
+				],
+				"parsedTitle": "Bionic Showdown",
+				"parsedYear": 1989,
+				"probability": 0.9888
+			},
+			"The Six Million Dollar Man 1994 -- Bionic Ever After": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.3171,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{ "imdbId": "tt8736278", "score": -2.8127, "title": "1994", "year": 2019 },
+					{
+						"imdbId": "tt0092323",
+						"score": -3.8074,
+						"title": "Bionic Six",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt0815063",
+						"score": -4.2154,
+						"title": "Million Dollar Listing Los Angeles",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt8808802",
+						"score": -4.4308,
+						"title": "Million Dollar Mile",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man",
+				"parsedYear": 1994,
+				"probability": 0.8583
+			},
+			"The Six Million Dollar Man 2- Kenneth Johnson -- writer & producer (2010 Interview)": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.6695,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt4612922",
+						"score": -2.6508,
+						"title": "The Producers",
+						"year": 2015
+					},
+					{ "imdbId": "tt13604988", "score": -3.9961, "title": "Johnson", "year": 2021 },
+					{ "imdbId": "tt0206467", "score": -4.0054, "title": "Action", "year": 1999 },
+					{
+						"imdbId": "tt2137109",
+						"score": -6.0153,
+						"title": "Masters of Sex",
+						"year": 2013
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man 2- Kenneth Johnson -- writer & producer",
+				"parsedYear": 2010,
+				"probability": 0.731
+			},
+			"The Six Million Dollar Man 3- Lee Majors -- actor who played Steve Austin (2010 Interview)": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.8394,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt1616120",
+						"score": -4.4177,
+						"title": "Million Dollar Decorators",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0815063",
+						"score": -4.6892,
+						"title": "Million Dollar Listing Los Angeles",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0169455",
+						"score": -4.6948,
+						"title": "Inside the Actors Studio",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt2090206",
+						"score": -5.2329,
+						"title": "Million Dollar Contractor",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man 3- Lee Majors -- actor who played Steve Austin",
+				"parsedYear": 2010,
+				"probability": 0.5913
+			},
+			"The Six Million Dollar Man 4- Richard Anderson -- actor who played Oscar Goldman (2010 Interview)": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.3753,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt2090206",
+						"score": -5.0226,
+						"title": "Million Dollar Contractor",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0169455",
+						"score": -5.6904,
+						"title": "Inside the Actors Studio",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt2787372",
+						"score": -5.8757,
+						"title": "Million Dollar Traders",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8808802",
+						"score": -5.9746,
+						"title": "Million Dollar Mile",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "The Six Million Dollar Man 4- Richard Anderson -- actor who played Oscar Goldman",
+				"parsedYear": 2010,
+				"probability": 0.6983
+			},
+			"The Six Million Dollar Man 5- Martin E. Brooks -- actor who played Dr. Rudy Wells (2010 Interview)": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0071054",
+						"score": 2.8337,
+						"title": "The Six Million Dollar Man",
+						"year": 1974
+					},
+					{
+						"imdbId": "tt2090206",
+						"score": -5.0587,
+						"title": "Million Dollar Contractor",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt17676766",
+						"score": -5.2631,
+						"title": "Million Dollar Wheels",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0169455",
+						"score": -5.777,
+						"title": "Inside the Actors Studio",
+						"year": 1994
+					},
+					{ "imdbId": "tt2886812", "score": -5.7846, "title": "Played", "year": 2013 }
+				],
+				"parsedTitle": "The Six Million Dollar Man 5- Martin E Brooks -- actor who played Dr Rudy Wells",
+				"parsedYear": 2010,
+				"probability": 0.7112
+			},
+			"My.Hero.Academia.Heroes.Rising.2019.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11107074",
+						"score": 4.0756,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt7745068",
+						"score": -1.6315,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt18933868",
+						"score": -3.2696,
+						"title": "My Hero Academia: World Heroes' Mission - Take-Off",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": -4.4925,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -4.9798,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "My Hero Academia Heroes Rising",
+				"parsedYear": 2019,
+				"probability": 0.9839
+			},
+			"My Hero Academia The Two Heroes": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt7745068",
+						"score": 2.9015,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt11107074",
+						"score": -1.4957,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": -2.6325,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -3.5287,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt18933868",
+						"score": -3.8366,
+						"title": "My Hero Academia: World Heroes' Mission - Take-Off",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "My Hero Academia The Two Heroes",
+				"parsedYear": null,
+				"probability": 0.8774
+			},
+			"My Hero Academia Heroes Rising": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11107074",
+						"score": 3.8761,
+						"title": "My Hero Academia: Heroes Rising",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt7745068",
+						"score": -1.1365,
+						"title": "My Hero Academia: Two Heroes",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt13544716",
+						"score": -2.7759,
+						"title": "My Hero Academia: World Heroes' Mission",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt43677790",
+						"score": -3.4433,
+						"title": "My Hero Academia: I am a hero too",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt32176689",
+						"score": -3.7513,
+						"title": "My Hero Academia: You're Next",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "My Hero Academia Heroes Rising",
+				"parsedYear": null,
+				"probability": 0.9557
+			},
+			"6 Days to Air - The Making of South Park (2011)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2076781",
+						"score": 3.3213,
+						"title": "6 Days to Air: The Making of South Park",
+						"year": 2011
+					},
+					{ "imdbId": "tt4703048", "score": -2.4928, "title": "6 Days", "year": 2017 },
+					{ "imdbId": "tt1297261", "score": -3.421, "title": "6 Days", "year": 2008 },
+					{ "imdbId": "tt34338540", "score": -3.9837, "title": "6 Days", "year": 2025 },
+					{ "imdbId": "tt1377259", "score": -4.2097, "title": "6 Days", "year": 2009 }
+				],
+				"parsedTitle": "6 Days to Air",
+				"parsedYear": 2011,
+				"probability": 0.9875
+			},
+			"South Park Bigger, Longer and Uncut (1992)": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0158983",
+						"score": -2.8519,
+						"title": "South Park: Bigger, Longer & Uncut",
+						"year": 1999
+					},
+					{ "imdbId": "tt3226786", "score": -3.6573, "title": "Bigger", "year": 2018 },
+					{ "imdbId": "tt4959750", "score": -5.0032, "title": "1992", "year": 2022 },
+					{ "imdbId": "tt1528266", "score": -5.2853, "title": "Boobs", "year": 2014 },
+					{
+						"imdbId": "tt24176986",
+						"score": -5.4831,
+						"title": "Big, Bigger & Bigger",
+						"year": 1992
+					}
+				],
+				"parsedTitle": "South Park Bigger, Longer and",
+				"parsedYear": 1992,
+				"probability": 0.2112
+			},
+			"One Piece OVA - Defeat Him! The Pirate Ganzack!": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1012788",
+						"score": 1.6169,
+						"title": "One Piece: Defeat Him! The Pirate Ganzack!",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": 0.5015,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt3354352",
+						"score": -0.7951,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -1.101,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					},
+					{ "imdbId": "tt0215010", "score": -1.4293, "title": "One Piece!", "year": 1999 }
+				],
+				"parsedTitle": "One Piece OVA",
+				"parsedYear": null,
+				"probability": 0.5745
+			},
+			"One Piece Movie 01 (2000) - One Piece the Movie": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0814243",
+						"score": 2.7757,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0215010",
+						"score": -0.2055,
+						"title": "One Piece!",
+						"year": 1999
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -0.3959,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -1.2338,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -1.8512,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "One Piece Movie 01",
+				"parsedYear": 2000,
+				"probability": 0.766
+			},
+			"One Piece Movie 02 (2001) - Adventures on Clockwork Island": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0832449",
+						"score": 2.828,
+						"title": "One Piece: Clockwork Island Adventure",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": 0.3671,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -0.224,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -0.2259,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{ "imdbId": "tt0169324", "score": -1.244, "title": "Tick Tock", "year": 2000 }
+				],
+				"parsedTitle": "One Piece Movie 02",
+				"parsedYear": 2001,
+				"probability": 0.9328
+			},
+			"One Piece Movie 03 (2002) - Chopper's Kingdom in the Strange Animal Island": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0997084",
+						"score": 4.8175,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -0.3356,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.3626,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -1.8028,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0832449",
+						"score": -1.956,
+						"title": "One Piece: Clockwork Island Adventure",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "One Piece Movie 03",
+				"parsedYear": 2002,
+				"probability": 0.98
+			},
+			"One Piece Movie 04 (2003) - The Adventure of Dead End": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1006926",
+						"score": 4.5652,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": 0.7381,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -0.4005,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.6314,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0832449",
+						"score": -2.6875,
+						"title": "One Piece: Clockwork Island Adventure",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "One Piece Movie 04",
+				"parsedYear": 2003,
+				"probability": 0.9583
+			},
+			"One Piece Movie 05 (2004) - The Cursed Holy Sword": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1010435",
+						"score": 4.509,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": 0.7763,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -0.2266,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.4281,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0832449",
+						"score": -3.1358,
+						"title": "One Piece: Clockwork Island Adventure",
+						"year": 2001
+					}
+				],
+				"parsedTitle": "One Piece Movie 05",
+				"parsedYear": 2004,
+				"probability": 0.9645
+			},
+			"One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1018764",
+						"score": 0.304,
+						"title": "One Piece: Baron Omatsuri and the Secret Island",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -0.1967,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.5116,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -0.5938,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -1.6663,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "One Piece Movie 06",
+				"parsedYear": 2005,
+				"probability": 0.2572
+			},
+			"One Piece Movie 07 (2006) - Giant Mecha Soldier of Karakuri Castle": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1059950",
+						"score": 2.1206,
+						"title": "One Piece: The Giant Mechanical Soldier of Karakuri Castle",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.7918,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -1.3571,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -1.8097,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -1.8169,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "One Piece Movie 07",
+				"parsedYear": 2006,
+				"probability": 0.9601
+			},
+			"One Piece Movie 08 (2007) - The Desert Princess and the Pirates, Adventures in Alabasta": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1037116",
+						"score": 1.8914,
+						"title": "One Piece: Episode of Alabasta - The Desert Princess and the Pirates",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -1.3766,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.811,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -2.5583,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -2.828,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "One Piece Movie 08",
+				"parsedYear": 2007,
+				"probability": 0.9621
+			},
+			"One Piece Movie 09 (2008) - Episode of Chopper Plus, Bloom in the Winter, Miracle Sakura": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1206326",
+						"score": 2.8087,
+						"title": "One Piece: Episode of Chopper Plus - Bloom in the Winter, Miracle Sakura",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.0205,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -2.0577,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.3329,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -2.5955,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "One Piece Movie 09",
+				"parsedYear": 2008,
+				"probability": 0.9539
+			},
+			"One Piece Movie 10 (2009) - Strong World": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1485763",
+						"score": 0.6369,
+						"title": "One Piece: Strong World",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.5111,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.1051,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -2.329,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.7462,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "One Piece Movie 10",
+				"parsedYear": 2009,
+				"probability": 0.7519
+			},
+			"One Piece Movie 11 (2011) - (3D) Straw Hat Chase": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{ "imdbId": "tt1712159", "score": 0.8965, "title": "11-11-11", "year": 2011 },
+					{ "imdbId": "tt2015261", "score": -0.7734, "title": "11/11/11", "year": 2011 },
+					{
+						"imdbId": "tt0814243",
+						"score": -1.2034,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -1.3056,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.1793,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "One Piece Movie 11",
+				"parsedYear": 2011,
+				"probability": 0.6002
+			},
+			"One Piece Movie 12 (2012) - Film Z": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2375379",
+						"score": 3.327,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.5873,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt3354352",
+						"score": -1.6901,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.1245,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.5101,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "One Piece Movie 12",
+				"parsedYear": 2012,
+				"probability": 0.9612
+			},
+			"One Piece Movie 13 (2016) - Film Gold": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt5251328",
+						"score": 1.5884,
+						"title": "One Piece Film: Gold",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -2.2316,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.3421,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.7607,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -2.7778,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					}
+				],
+				"parsedTitle": "One Piece Movie 13",
+				"parsedYear": 2016,
+				"probability": 0.9317
+			},
+			"One Piece Movie 14 (2019) - Stampede": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt9430698",
+						"score": 0.7167,
+						"title": "One Piece: Stampede",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.9634,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -2.0727,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1006926",
+						"score": -2.5454,
+						"title": "One Piece: Dead End Adventure",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.668,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					}
+				],
+				"parsedTitle": "One Piece Movie 14",
+				"parsedYear": 2019,
+				"probability": 0.6678
+			},
+			"One Piece Movie 15 (2022) - One Piece Film RED": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt16183464",
+						"score": 2.0559,
+						"title": "One Piece Film: Red",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.6228,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt0997084",
+						"score": -2.7768,
+						"title": "One Piece: Chopper's Kingdom in the Strange Animal Island",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt2375379",
+						"score": -2.8418,
+						"title": "One Piece Film: Z",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt1010435",
+						"score": -2.8615,
+						"title": "One Piece: The Cursed Holy Sword",
+						"year": 2004
+					}
+				],
+				"parsedTitle": "One Piece Movie 15",
+				"parsedYear": 2022,
+				"probability": 0.8484
+			},
+			"One Piece Special - 3D2Y": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{ "imdbId": "tt0388629", "score": 3.9324, "title": "One Piece", "year": 1999 },
+					{ "imdbId": "tt11737520", "score": 2.1714, "title": "One Piece", "year": 2023 },
+					{ "imdbId": "tt9381622", "score": -0.7938, "title": "Special", "year": 2019 },
+					{ "imdbId": "tt31228002", "score": -2.4784, "title": "One Pace", "year": 2016 },
+					{ "imdbId": "tt1216196", "score": -4.541, "title": "Special A", "year": 2008 }
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.3017
+			},
+			"One Piece Special - Episode of Luffy": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3354344",
+						"score": -0.2602,
+						"title": "One Piece: Episode of Luffy - Adventure on Hand Island",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.5477,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{ "imdbId": "tt0479162", "score": -1.873, "title": "Special", "year": 2006 },
+					{
+						"imdbId": "tt3354352",
+						"score": -2.083,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt16900692",
+						"score": -2.7964,
+						"title": "One Piece: Luffy Senpai Ouen Kikaku! Barto no Himitsu no Heya!",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.2846
+			},
+			"One Piece Special - Episode of Merry": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt3354352",
+						"score": 2.509,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -1.5487,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{ "imdbId": "tt0479162", "score": -1.8268, "title": "Special", "year": 2006 },
+					{
+						"imdbId": "tt2598466",
+						"score": -2.2972,
+						"title": "One Piece: Episode of Nami - Tears of a Navigator and the Bonds of Friends",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt16900692",
+						"score": -2.6771,
+						"title": "One Piece: Luffy Senpai Ouen Kikaku! Barto no Himitsu no Heya!",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.913
+			},
+			"One Piece Special - Episode of Nami": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2598466",
+						"score": 0.6757,
+						"title": "One Piece: Episode of Nami - Tears of a Navigator and the Bonds of Friends",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt3354352",
+						"score": -0.3926,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{ "imdbId": "tt0479162", "score": -1.873, "title": "Special", "year": 2006 },
+					{
+						"imdbId": "tt0814243",
+						"score": -1.9061,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt16900692",
+						"score": -2.642,
+						"title": "One Piece: Luffy Senpai Ouen Kikaku! Barto no Himitsu no Heya!",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.3894
+			},
+			"One Piece Special - Episode of Sabo": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{ "imdbId": "tt0388629", "score": 3.0624, "title": "One Piece", "year": 1999 },
+					{ "imdbId": "tt11737520", "score": 1.374, "title": "One Piece", "year": 2023 },
+					{ "imdbId": "tt9381622", "score": -0.3141, "title": "Special", "year": 2019 },
+					{ "imdbId": "tt31228002", "score": -2.8362, "title": "One Pace", "year": 2016 },
+					{ "imdbId": "tt1582350", "score": -4.4039, "title": "Episodes", "year": 2011 }
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.2443
+			},
+			"One Piece Special - Episode of Skypiea": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11744496",
+						"score": 0.2124,
+						"title": "One Piece: Episode of Skypiea",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0814243",
+						"score": -0.5138,
+						"title": "One Piece: The Movie",
+						"year": 2000
+					},
+					{
+						"imdbId": "tt3354352",
+						"score": -1.0256,
+						"title": "One Piece: Episode of Merry - Mou Hitori no Nakama no Monogatari",
+						"year": 2013
+					},
+					{ "imdbId": "tt0479162", "score": -1.8268, "title": "Special", "year": 2006 },
+					{ "imdbId": "tt0215010", "score": -1.9529, "title": "One Piece!", "year": 1999 }
+				],
+				"parsedTitle": "One Piece Special",
+				"parsedYear": null,
+				"probability": 0.2117
 			}
 		},
 		"searchTv": {
@@ -46680,7 +50958,131 @@
 			},
 			"Futurama HD": { "page": 1, "results": [], "total_pages": 1, "total_results": 0 }
 		},
-		"imdbSeries": {},
+		"imdbSeries": {
+			"tt5734550": {
+				"titleType": "tvSeries",
+				"title": "Comic Con Workshop",
+				"episodes": [
+					{
+						"season": null,
+						"episode": null,
+						"name": "Taking Your Cosplay to the Next Level"
+					},
+					{
+						"season": null,
+						"episode": null,
+						"name": "Writing Fantasy & Science Fiction"
+					},
+					{ "season": null, "episode": null, "name": "Doctor Who Celebration" },
+					{ "season": null, "episode": null, "name": "High Stakes Comics" },
+					{ "season": 1, "episode": 1, "name": "Creativity, Comics and Your Career" },
+					{ "season": 1, "episode": 2, "name": "Paranormal City: Richmond" },
+					{ "season": 1, "episode": 3, "name": "Learning About Cosplay" },
+					{ "season": 1, "episode": 4, "name": "Vampires from a to V" },
+					{ "season": 1, "episode": 5, "name": "Hallowhat? A Guide to Oct 31st Lore" },
+					{ "season": 1, "episode": 6, "name": "Professional Ghost Hunting" },
+					{ "season": 1, "episode": 7, "name": "The Great Romantic Comics Artists" },
+					{
+						"season": 1,
+						"episode": 8,
+						"name": "The Art of the Saturday Morning Cartoon"
+					},
+					{ "season": 1, "episode": 9, "name": "Will Eisner: Life and Legacy" },
+					{
+						"season": 1,
+						"episode": 10,
+						"name": "Billy Ireland Cartoon Library & Museum"
+					},
+					{ "season": 1, "episode": 11, "name": "The Art of Editorial Cartoons" },
+					{
+						"season": 1,
+						"episode": 12,
+						"name": "Ten Commandments of Working with Artists"
+					},
+					{ "season": 1, "episode": 13, "name": "Small Publishers, Big Books!" },
+					{ "season": 1, "episode": 14, "name": "Horror Today" },
+					{ "season": 1, "episode": 15, "name": "Video Game Symphony" },
+					{ "season": 1, "episode": 16, "name": "Cosplay: Face Cast Molding" },
+					{
+						"season": 2,
+						"episode": 1,
+						"name": "New Orleans Fan Panel with a Mardi Gras Beat"
+					},
+					{ "season": 2, "episode": 2, "name": "Paranormal City: New Orleans" },
+					{ "season": 2, "episode": 3, "name": "The Haunted History of New Orleans" },
+					{
+						"season": 2,
+						"episode": 4,
+						"name": "The Walking Dead Psychology: Fight the Dead, Fear the Freud"
+					},
+					{ "season": 2, "episode": 5, "name": "The Journey Into Endless Night" },
+					{ "season": 2, "episode": 6, "name": "Indie Creators" },
+					{ "season": 2, "episode": 11, "name": "Dark Horse's Celebration of Buffy" },
+					{ "season": 2, "episode": 12, "name": "Dark Horse's Look at Manga" },
+					{ "season": 2, "episode": 13, "name": "Vixens, Horror, Cosplay" },
+					{ "season": 2, "episode": 14, "name": "Dark Horse's Look at Comics" },
+					{ "season": 2, "episode": 15, "name": "For the Love of Star Trek" },
+					{ "season": 2, "episode": 16, "name": "Jet City Jedi Training" },
+					{ "season": 2, "episode": 17, "name": "Dark Horse's Plants v Zombies" },
+					{ "season": 2, "episode": 18, "name": "Spotlight on Love and Rockets" },
+					{
+						"season": 2,
+						"episode": 19,
+						"name": "How to Be a Professional Geek - Las Vegas"
+					},
+					{
+						"season": 2,
+						"episode": 20,
+						"name": "A Career in Video Games - Wizard World Comic Con Las Vegas"
+					},
+					{ "season": 2, "episode": 21, "name": "Genetic Engineering" },
+					{
+						"season": 2,
+						"episode": 22,
+						"name": "Civil Rights and Social Justice in Comic Books"
+					},
+					{ "season": 2, "episode": 23, "name": "Calling All Aspiring Writers" },
+					{ "season": 2, "episode": 24, "name": "Crafting Comic Characters" },
+					{ "season": 2, "episode": 25, "name": "How to Draw Superheroes" },
+					{ "season": 2, "episode": 26, "name": "Cosplay Q&A" },
+					{ "season": 2, "episode": 27, "name": "The Heroine's Journey" },
+					{ "season": 2, "episode": 28, "name": "Body Images and Diversity in Comics" },
+					{ "season": 2, "episode": 29, "name": "The Creativity Engine" },
+					{
+						"season": 2,
+						"episode": 30,
+						"name": "A Career in Video Games - Wizard World Comic Con Sacramento"
+					},
+					{ "season": 2, "episode": 31, "name": "Super Villains and Psychology" },
+					{
+						"season": 2,
+						"episode": 32,
+						"name": "Synergy of Video Games, Books and Films"
+					},
+					{
+						"season": 2,
+						"episode": 33,
+						"name": "Living in the Shadow of George McFly (Back to the Future)"
+					},
+					{ "season": 2, "episode": 34, "name": "NASA Takes on the Galaxy" },
+					{ "season": 2, "episode": 35, "name": "Would That Fight Scene Really Work?" },
+					{ "season": 2, "episode": 36, "name": "Iconic Billy West" },
+					{ "season": 2, "episode": 37, "name": "Oishi High School Battle" },
+					{ "season": 2, "episode": 38, "name": "Comic Con Fantasy Dates" },
+					{ "season": 2, "episode": 39, "name": "Teatime with Deadpool" },
+					{ "season": 2, "episode": 40, "name": "The Producers of Riftworld Chronicles" },
+					{ "season": 2, "episode": 41, "name": "Most Racist Panel Ever!" },
+					{ "season": 2, "episode": 42, "name": "The Cast of Mortal Kombat: The Game" },
+					{ "season": 2, "episode": 43, "name": "Dino Science" },
+					{ "season": 2, "episode": 44, "name": "Tales of Halloween" },
+					{
+						"season": 2,
+						"episode": 45,
+						"name": "How to Be a Professional Geek - New York Comic Con"
+					}
+				]
+			}
+		},
 		"anime": {
 			"fribb": [
 				{
@@ -48222,6 +52624,176 @@
 					"themoviedb_id": { "tv": 46195 },
 					"tvdb_id": 102261,
 					"season": { "tvdb": 6, "tmdb": 6 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 2061,
+					"anilist_id": 481,
+					"animecountdown_id": 37775,
+					"animenewsnetwork_id": 5074,
+					"anime-planet_id": "yu-gi-oh-duel-monsters",
+					"anisearch_id": 220,
+					"imdb_id": ["tt0247902"],
+					"kitsu_id": 442,
+					"livechart_id": 3803,
+					"mal_id": 481,
+					"simkl_id": 37775,
+					"themoviedb_id": { "tv": 902 },
+					"tvdb_id": 76894
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 2761,
+					"anilist_id": 1894,
+					"animecountdown_id": 39456,
+					"anime-planet_id": "yu-gi-oh-movie-2-pyramid-of-light",
+					"anisearch_id": 1310,
+					"imdb_id": ["tt0403703"],
+					"kitsu_id": 1704,
+					"livechart_id": 4830,
+					"mal_id": 1894,
+					"simkl_id": 39456,
+					"themoviedb_id": { "tv": 902 },
+					"tvdb_id": 76894,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 7036,
+					"anilist_id": 6951,
+					"animecountdown_id": 38203,
+					"animenewsnetwork_id": 11395,
+					"anime-planet_id": "yu-gi-oh-3d-bonds-beyond-time",
+					"anisearch_id": 5761,
+					"imdb_id": ["tt1587157"],
+					"kitsu_id": 4802,
+					"livechart_id": 4649,
+					"mal_id": 6951,
+					"simkl_id": 38203,
+					"themoviedb_id": { "tv": 902 },
+					"tvdb_id": 76894,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 10963,
+					"anilist_id": 21265,
+					"animecountdown_id": 445682,
+					"animenewsnetwork_id": 16671,
+					"anime-planet_id": "yu-gi-oh-movie-4-the-dark-side-of-dimensions",
+					"anisearch_id": 10086,
+					"imdb_id": ["tt4273562"],
+					"kitsu_id": 10092,
+					"livechart_id": 625,
+					"mal_id": 28771,
+					"simkl_id": 445682,
+					"themoviedb_id": { "tv": 902 },
+					"tvdb_id": 76894,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 14, "tmdb": 14 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11261,
+					"anilist_id": 21202,
+					"animecountdown_id": 520074,
+					"animenewsnetwork_id": 17123,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world",
+					"anisearch_id": 10448,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 10941,
+					"livechart_id": 1615,
+					"mal_id": 30831,
+					"simkl_id": 520074,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 11854,
+					"anilist_id": 21574,
+					"animecountdown_id": 545458,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world-ova",
+					"anisearch_id": 11053,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 11752,
+					"livechart_id": 1974,
+					"mal_id": 32380,
+					"simkl_id": 545458,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11992,
+					"anilist_id": 21699,
+					"animecountdown_id": 568514,
+					"animenewsnetwork_id": 18777,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world-2",
+					"anisearch_id": 11210,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 11937,
+					"livechart_id": 2077,
+					"mal_id": 32937,
+					"simkl_id": 568514,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 13317,
+					"anilist_id": 97996,
+					"animecountdown_id": 705161,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world-2-ova",
+					"anisearch_id": 12616,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 13136,
+					"livechart_id": 3359,
+					"mal_id": 34626,
+					"simkl_id": 705161,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17431,
+					"anilist_id": 136804,
+					"animecountdown_id": 1920042,
+					"animenewsnetwork_id": 25730,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world-3",
+					"anisearch_id": 16505,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 44911,
+					"livechart_id": 11233,
+					"mal_id": 49458,
+					"simkl_id": 1920042,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 18865,
+					"anilist_id": 181244,
+					"animecountdown_id": 2582160,
+					"animenewsnetwork_id": 33539,
+					"anime-planet_id": "konosuba-gods-blessing-on-this-wonderful-world-3-bonus-stage",
+					"anisearch_id": 19628,
+					"imdb_id": ["tt5370118"],
+					"kitsu_id": 49203,
+					"livechart_id": 12833,
+					"mal_id": 59833,
+					"simkl_id": 2582160,
+					"themoviedb_id": { "tv": 65844 },
+					"tvdb_id": 303867,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 5, "tmdb": 5 }
 				}
 			],
 			"titles": [
@@ -50995,6 +55567,387 @@
 						"〈物語〉シリーズオフ&モンスターシーズン",
 						"物语系列 第外季&第怪季"
 					]
+				},
+				{
+					"anidbId": 2061,
+					"names": [
+						"Yuu Gi Ou: Duel Monsters",
+						"Ю-ГИ-О!",
+						"Yu-Gi-Oh!",
+						"Yu-Gi-Oh",
+						"Yu-Gi-Oh !",
+						"!יוגי-הו",
+						"遊☆戯☆王 デュエルモンスターズ",
+						"Yu-Gi-Oh! Duel Monsters",
+						"ดูเอลมอนสเตอร์ ยูกิโอ",
+						"游戏王－怪兽之决斗",
+						"yugioh",
+						"yugiou",
+						"يو جي أوه",
+						"يوغي",
+						"Yu-Gi-Oh: Duel Monsters",
+						"Yu-Gi-Oh ! À toi de jouer !",
+						"YGO",
+						"Yu☆Gi☆Oh! Duel Monsters",
+						"König der Spiele",
+						"Yu-Gi-Oh! Overload",
+						"Yu-Gi-Oh! a Toi de Jouer!",
+						"Yu-Gi-Oh!: Duel Monsters",
+						"YuGiOh",
+						"Yugi-Oh",
+						"Yugioh",
+						"Yugioh: Duel Monsters",
+						"Yugiou",
+						"Yuu Gi Ou!",
+						"Yū Gi Ō: Duel Monsters",
+						"يوغي اوه مبارزة الوحوش",
+						"يوغي يو",
+						"遊☆戯☆王",
+						"遊☆戯☆王　デュエルモンスターズ",
+						"遊戯王 デュエルモンスターズ",
+						"遊戲王 怪獸之決鬥",
+						"遊戲王－怪獸之決鬥",
+						"유희왕 듀얼몬스터즈"
+					]
+				},
+				{
+					"anidbId": 2761,
+					"names": [
+						"Yuu Gi Ou: Duel Monsters - Hikari no Pyramid",
+						"Yu-Gi-Oh! Film: Pyramida světla",
+						"Yu-Gi-Oh! - Der Film",
+						"Yu-Gi-Oh, Η Ταινία",
+						"Yu-Gi-Oh!: The Movie",
+						"Yu-Gi-Oh! Le film : La pyramide de lumière",
+						"יו-גי-הו!: הסרט",
+						"Yu-Gi-Oh! A Mozifilm",
+						"遊☆戯☆王 デュエルモンスターズ 光のピラミッド",
+						"Yu-Gi-Oh! Ostateczne Starcie",
+						"Yu-Gi-Oh! - O Filme",
+						"Югио!",
+						"yugiohmovie",
+						"Yu-Gi-Oh!: Pyramid of Light",
+						"Yu☆Gi☆Oh! Hikari no Pyramid",
+						"Yu-Gi-Oh ! Le Film",
+						"Yu-Gi-Oh!",
+						"Yu-Gi-Oh! Der Film",
+						"Yu-Gi-Oh! Der Film: Die Pyramide des Lichts",
+						"Yu-Gi-Oh! Filmen: Den Lysende Pyramiden",
+						"Yu-Gi-Oh! Filmen: Ljusets Pyramid",
+						"Yu-Gi-Oh! Il Film",
+						"Yu-Gi-Oh! La película",
+						"Yu-Gi-Oh! La película: Pirámide de la luz",
+						"Yu-Gi-Oh! Movie 2: Hikari no Pyramid",
+						"Yu-Gi-Oh! Movie 2: Pyramid of Light",
+						"Yu-Gi-Oh! Ostateczne starcie",
+						"Yu-Gi-Oh! The Movie",
+						"Yu-Gi-Oh! The Movie: Pyramid of Light",
+						"Yu-Gi-Oh!: Der Film",
+						"Yu-Gi-Oh!: Duel Monsters",
+						"Yu-Gi-Oh!: Le film",
+						"Yugioh",
+						"Yugioh: Duel Monsters",
+						"Yu☆Gi☆Oh!: Hikari no Pyramid",
+						"Yū Gi Ō: Duel Monsters - Hikari no Pyramid",
+						"遊☆戯☆王　デュエルモンスターズ　光のピラミッド"
+					]
+				},
+				{
+					"anidbId": 7036,
+					"names": [
+						"Gekijouban Yuu Gi Ou: Chou Yuugou! Toki o Koeta Kizuna",
+						"Yu-Gi-Oh! 3D: Bonds Beyond Time",
+						"劇場版 遊☆戯☆王 ~超融合! 時空を越えた絆~",
+						"游戏王剧场版 超融合！超越时空的羁绊",
+						"yugiohmovie2",
+						"فيلم يو غي أوه :الانصهار الخارق ! تخطي حاجز الزمان والمكان",
+						"Ю-Ги-О: Връзки през време и пространство",
+						"Yu-Gi-Oh! 10th Anniversary Movie ~Super Fusion! Bonds Beyond Time~",
+						"Yu-Gi-Oh! The Movie - Fusion Ultra! Bond over time and space",
+						"Yu☆Gi☆Oh! Movie: Chou Yuugou! Toki wo Koeta Kizuna",
+						"10th Anniversary Gekijouban",
+						"10th Anniversary Gekijouban Yu Gi Oh! Chou Yuugou! Toki o Koeta Kizuna",
+						"10th Anniversary Gekijouban Yu Gi Oh! Chou Yuugou! Toki wo Koeta Kizuna",
+						"Gekijouban Yuu Gi Ou: Chou Yuugou! Toki wo Koeta Kizuna",
+						"Gekijō-ban Yu-Gi-Oh! ~Chō-Yūgō! Jikū o Koeta Kizuna",
+						"Gekijōban Yū Gi Ō: Chō Yūgō! Toki o Koeta Kizuna",
+						"Yu-Gi-Oh! 10th Anniversary Special",
+						"Yu-Gi-Oh! 3D Más allá del tiempo",
+						"Yu-Gi-Oh! 3D: Chou Yuugou! Toki wo Koeta Kizuna",
+						"Yu-Gi-Oh! 3D: Vínculos Através do Tempo",
+						"Yu-Gi-Oh! : Bonds Beyond Time - Réunis au Delà du Temps",
+						"Yu-Gi-Oh! Bonds Beyond Time",
+						"Yu-Gi-Oh! Réunis au delà du temps",
+						"Yu-Gi-Oh! The Movie: Fusion Ultra! Bond over Time and Space",
+						"Yu-Gi-Oh! The Movie: Super Fusion! Bonds That Transcend Time",
+						"Yu-Gi-Oh! The Movie: Ultra Fusion! Bonds Over Time and Space",
+						"Yu-Gi-Oh! the Movie: Super Fusion! Bonds that Transcend Time",
+						"Yu-Gi-Oh!: Bonds Beyond Time",
+						"Yu-Gi-Oh!: Vínculos Além do Tempo",
+						"Yugioh",
+						"Yu☆Gi☆Oh!: Chou Yuugou! Toki wo Koeta Kizuna",
+						"劇場版 遊☆戯☆王 ～超融合! 時空を越えた絆～",
+						"劇場版 遊☆戯☆王 ～超融合！ 時空を超えた絆～",
+						"劇場版 遊☆戯☆王 ～超融合！時空を越えた絆～"
+					]
+				},
+				{
+					"anidbId": 10963,
+					"names": [
+						"Yuu Gi Ou: The Dark Side of Dimensions",
+						"Yu-Gi-Oh! The Dark Side of Dimensions",
+						"遊☆戯☆王 THE DARK SIDE OF DIMENSIONS",
+						"游戏王 次元的黑暗面",
+						"yugiohmovie3",
+						"Ю-Ги-О: Тъмната страна на измеренията",
+						"Yu☆Gi☆Oh! The Dark Side of Dimensions",
+						"Yu-Gi-Oh! El lado oscuro de las dimensiones",
+						"Yu-Gi-Oh! Film: The Darkside of Dimensions",
+						"Yu-Gi-Oh! Movie 4: The Dark Side of Dimensions",
+						"Yu-Gi-Oh! O Lado Negro das Dimensões",
+						"Yu-Gi-Oh!: O Lado Negro das Dimensões",
+						"Yu-Gi-Oh!: The Dark Side of Dimensions",
+						"Yu-Gi-Oh!: The Darkside of Dimensions",
+						"Yugioh",
+						"Yu☆Gi☆Oh!: THE DARK SIDE OF DIMENSIONS",
+						"Yu☆Gi☆Oh!: The Dark Side of Dimensions",
+						"Yū Gi Ō: The Dark Side of Dimensions",
+						"劇場版 遊☆戯☆王",
+						"遊☆戯☆王 THE DARK SIDE OF DIMENTSIONS"
+					]
+				},
+				{
+					"anidbId": 11261,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o!",
+						"Konosuba: God`s Blessing on This Wonderful World!",
+						"Konosuba! Un mundo maravilloso",
+						"この素晴らしい世界に祝福を!",
+						"이 멋진 세계에 축복을!",
+						"KONOSUBA - As Bênçãos de Deus Nesse Mundo Maravilhoso!",
+						"Да благословят боги сей расчудесный мир!",
+						"为美好的世界献上祝福!",
+						"為美好的世界獻上祝福！",
+						"konosuba 1",
+						"konosuba",
+						"Богиня благословляет этот прекрасный мир",
+						"Этот замечательный мир!",
+						"Kono Subarashii Sekai ni Shukufuku wo!",
+						"As Bênçãos de Deus Nesse Mundo Maravilhoso!",
+						"Gifting this Wonderful World with Blessings!",
+						"Give Blessings to This Wonderful World!",
+						"KONOSUBA -God's blessing on this wonderful world!",
+						"Kono Subarashii Sekai ni Syukufuku wo!",
+						"Kono Subarashī Sekai ni Shukufuku o!",
+						"KonoSuba",
+						"KonoSuba – God's blessing on this wonderful world!",
+						"KonoSuba – God’s blessing on this wonderful world!!",
+						"KonoSuba: God's Blessing on This Wonderful World!",
+						"KonoSuba: God's blessing on this wonderful world!",
+						"KonoSuba: Un Mundo Maravilloso",
+						"Konosuba",
+						"Konosuba - As Bençãos de Deus Neste Mundo Maravilhoso",
+						"Konosuba : God’s Blessing on This Wonderful World !",
+						"Konosuba : Sois béni monde merveilleux !",
+						"Konosuba: God's Blessing on This Wonderful World!",
+						"Konosuba: God’s Blessing on This Wonderful World!",
+						"Konosuba: Un mundo maravilloso",
+						"Konosuba: Un mundo maravilloso!",
+						"Konosuba: ¡Bendito sea este maravilloso mundo!",
+						"Konosuba: ¡bendito sea este maravilloso mundo!",
+						"ขอให้โชคดีมีชัยในโลกแฟนตาซี!",
+						"この素晴らしい世界に祝福を！",
+						"为美好的世界献上祝福！"
+					]
+				},
+				{
+					"anidbId": 11854,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o! Kono Subarashii Choker ni Shukufuku o!",
+						"Konosuba: Choker Game",
+						"Konosuba: God`s Blessing on This Wonderful World! God`s Blessing on This Wonderful Choker!",
+						"この素晴らしい世界に祝福を! この素晴らしいチョーカーに祝福を!",
+						"为美好的世界献上祝福！为美好的项圈献上祝福！",
+						"為美好的世界獻上祝福！：為美好的項圈獻上祝福！",
+						"konosuba OAD",
+						"Kono Subarashii Sekai ni Shukufuku o! Episode 11",
+						"Kono Subarashii Sekai ni Shukufuku o! OAD",
+						"この素晴らしい世界に祝福を OAD",
+						"Kono Subarashii Sekai ni Shukufuku wo!: Kono Subarashii Choker ni Shukufuku wo!",
+						"A Blessing to this Wonderful Choker!",
+						"KONOSUBA -God's Blessings On This Wonderful Choker!",
+						"KONOSUBA -God's blessing on this wonderful world!: God's Blessings On This Wonderful Choker!",
+						"Kono Subarashii Choker ni Shufuku wo!",
+						"Kono Subarashii Sekai ni Shukufuku wo! OVA",
+						"Kono Subarashī Sekai ni Shukufuku o! Kono Subarashī Choker ni Shukufuku o!",
+						"KonoSuba : God’s Blessing on This Wonderful World ! Béni soit ce merveilleux collier !",
+						"KonoSuba OAD: A Blessing to This Wonderful Choker!",
+						"KonoSuba OVA",
+						"KonoSuba – God’s blessing on this wonderful world! OVA",
+						"KonoSuba: God's Blessing on This Wonderful World! - God's Blessing on This Wonderful Choker!",
+						"KonoSuba: God’s Blessing on This Wonderful World! Choker Game",
+						"KonoSuba: God’s Blessing on This Wonderful World! God’s Blessings on This Wonderful Choker!",
+						"KonoSuba: God’s Blessing on This Wonderful World! ¡Bendita sea esta gargantilla maravillosa!",
+						"Konosuba - As Bençãos de Deus Neste Mundo Maravilhoso: As Bençãos de Deus Nesta Maravilhosa Gargantilha!",
+						"Konosuba OVA",
+						"Konosuba ¡Bendito sea este mundo maravilloso!: ¡Bendita sea esta gargantilla maravillosa!",
+						"Konosuba: God's Blessing on This Wonderful World! God's Blessing on This Wonderful Choker!",
+						"Konosuba: God’s Blessing on This Wonderful World! God’s Blessing on This Wonderful Choker!",
+						"この素晴らしい世界に祝福を! 第11話 この素晴らしいチヨーカーに祝福を!",
+						"この素晴らしい世界に祝福を！ この素晴らしいチョーカーに祝福を!",
+						"この素晴らしい世界に祝福を！ この素晴らしいチョーカーに祝福を！",
+						"この素晴らしい世界に祝福を！ 第11話 この素晴らしいチヨーカーに祝福を！"
+					]
+				},
+				{
+					"anidbId": 11992,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o! 2",
+						"Konosuba: God`s Blessing on This Wonderful World! 2",
+						"Konosuba! Un mundo maravilloso: Segunda temporada",
+						"この素晴らしい世界に祝福を! 2",
+						"이 멋진 세계에 축복을! 2",
+						"KONOSUBA! 2 As bençãos de Deus neste mundo maravilhoso!",
+						"Да благословят боги сей расчудесный мир! 2",
+						"为美好的世界献上祝福！ 第二季",
+						"為美好的世界獻上祝福！第二季",
+						"konosuba 2",
+						"Богиня благословляет этот прекрасный мир ТВ2",
+						"Этот замечательный мир! ТВ2",
+						"Kono Subarashii Sekai ni Shukufuku wo! 2",
+						"Give Blessings to This Wonderful World! 2",
+						"KONOSUBA - God's blessing on this wonderful world! 2",
+						"KONOSUBA -God's blessing on this wonderful world! 2",
+						"Kono Subarashī Sekai ni Shukufuku o! 2",
+						"KonoSuba – God's blessing on this wonderful world! 2",
+						"KonoSuba: God's Blessing on This Wonderful World! 2",
+						"KonoSuba: God's blessing on this wonderful world! 2",
+						"KonoSuba: God’s Blessing on This Wonderful World! 2",
+						"KonoSuba: God’s Blessing on This Wonderful World! Season 2",
+						"KonoSuba: God’s Blessing on This Wonderful World! Staffel 2",
+						"Konosuba 2",
+						"Konosuba : God’s Blessing on This Wonderful World ! 2",
+						"Konosuba : Une explosion dans ce monde merveilleux !",
+						"Konosuba! - As Bençãos de Deus Neste Mundo Maravilhoso 2!",
+						"Konosuba! Un mundo maravilloso 2",
+						"Konosuba: God's Blessing on This Wonderful World! 2",
+						"Konosuba: God’s Blessing on This Wonderful World! 2",
+						"ขอให้โชคดีมีชัยในโลกแฟนตาซี! ภาค 2",
+						"この素晴らしい世界に祝福を！ 2",
+						"この素晴らしい世界に祝福を！2",
+						"为美好的世界献上祝福第二季",
+						"为美好的世界献上祝福！2"
+					]
+				},
+				{
+					"anidbId": 13317,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o! 2: Kono Subarashii Geijutsu ni Shukufuku o!",
+						"Konosuba: God`s Blessing on This Wonderful World! 2 God`s Blessing on These Wonderful Works of Art!",
+						"この素晴らしい世界に祝福を! 2 この素晴らしい芸術に祝福を!",
+						"为美好的世界献上祝福！ OAD",
+						"為美好的世界獻上祝福！第二季：為美好的藝術獻上祝福！",
+						"konosuba OAD 2",
+						"Kono Subarashii Sekai ni Shukufuku o! 2 Episode 11",
+						"Konosuba: God`s Blessing on This Wonderful World! 2 God`s Blessing on This Wonderful Work of Art!",
+						"Kono Subarashii Sekai ni Shukufuku wo! 2: Kono Subarashii Geijutsu ni Shukufuku wo!",
+						"KONOSUBA -God's Blessings on These Wonderful Works of Art!",
+						"KONOSUBA -God's blessing on this wonderful world! 2 OVA",
+						"KONOSUBA -God's blessing on this wonderful world! 2: God's Blessings on These Wonderful Works of Art!",
+						"Kono Subarashii Sekai ni Shukufuku o! 2 OAD",
+						"Kono Subarashii Sekai ni Shukufuku wo! 2 OVA",
+						"Kono Subarashī Sekai ni Shukufuku o! 2: Kono Subarashī Geijutsu ni Shukufuku o!",
+						"KonoSuba – God’s blessing on this wonderful world! 2 OVA",
+						"KonoSuba: God's Blessing on This Wonderful World! 2 - God's Blessing on This Wonderful Art!",
+						"KonoSuba: God's Blessing on This Wonderful World! Second Season OVA",
+						"KonoSuba: God’s Blessing on This Wonderful World! 2 God’s Blessings on These Wonderful Works of Art!",
+						"KonoSuba: God’s Blessing on This Wonderful World! 2 OAD",
+						"KonoSuba: God’s Blessing on This Wonderful World! 2 ¡Benditas sean estas maravillosas obras de arte!",
+						"KonoSuba: God’s Blessing on This Wonderful World!: Die Rückkehr der Abenteurer",
+						"Konosuba 2 OVA",
+						"Konosuba : God’s Blessing on This Wonderful World ! 2 Bénies soient ces belles créations !",
+						"Konosuba ¡Bendito sea este mundo maravilloso!: ¡Benditas sean estas maravillosas obras de arte!",
+						"Konosuba! - As Bençãos de Deus Neste Mundo Maravilhoso 2!: As Bençãos de Deus Nestas Obras de Arte Maravilhosas!",
+						"Konosuba: God's Blessing on This Wonderful World! 2 God's Blessing on These Wonderful Works of Art!",
+						"Konosuba: God’s Blessing on This Wonderful World! 2 God’s Blessing on These Wonderful Works of Art!",
+						"Konosuba: God’s Blessing on This Wonderful World! 2 God’s Blessing on This Wonderful Work of Art!",
+						"この素晴らしい世界に祝福を! 2 OAD",
+						"この素晴らしい世界に祝福を！ 2 OVA",
+						"この素晴らしい世界に祝福を！ 2 この素晴らしい芸術に祝福を!",
+						"この素晴らしい世界に祝福を！ 2 この素晴らしい芸術に祝福を！",
+						"この素晴らしい世界に祝福を！2 この素晴らしい芸術に祝福を！"
+					]
+				},
+				{
+					"anidbId": 17431,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o! 3",
+						"Konosuba: God`s Blessing on This Wonderful World! 3",
+						"この素晴らしい世界に祝福を! 3",
+						"为美好的世界献上祝福！ 第三季",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3",
+						"konosuba 3",
+						"KONOSUBA -God's blessing on this wonderful world! 3",
+						"Kono Subarashī Sekai ni Shukufuku o! 3",
+						"KonoSuba : God’s Blessing on This Wonderful World ! 3",
+						"KonoSuba – God's blessing on this wonderful world! 3",
+						"KonoSuba – God’s blessing on this wonderful world! 3",
+						"KonoSuba: God's Blessing on This Wonderful World! 3",
+						"KonoSuba: God’s Blessing on This Wonderful World! 3",
+						"KonoSuba: Un Mondo Miravilloso! 3",
+						"Konosuba 3",
+						"Konosuba! Un mundo maravilloso 3",
+						"Konosuba: A Bênção de Deus Para Este Maravilhoso Mundo! 3",
+						"Konosuba: God's Blessing on This Wonderful World! 3",
+						"Konosuba: God’s Blessing on This Wonderful World! 3",
+						"Konosuba: God’s Blessing on This Wonderful World! Season 3",
+						"Konosuba: God’s Blessing on This Wonderful World! Staffel 3",
+						"Да благословят боги сей расчудесный мир! 3",
+						"ขอให้โชคดีมีชัยในโลกแฟนตาซี! ภาค 3",
+						"この素晴らしい世界に祝福を！ 3",
+						"この素晴らしい世界に祝福を！3",
+						"この素晴らしい世界に祝福を！新作アニメ 3",
+						"この素晴らしい世界に祝福を！３",
+						"為美好的世界獻上祝福！3"
+					]
+				},
+				{
+					"anidbId": 18865,
+					"names": [
+						"Kono Subarashii Sekai ni Shukufuku o! 3 Bonus Stage",
+						"Konosuba: God`s Blessing on This Wonderful World! 3 Bonus Stage",
+						"この素晴らしい世界に祝福を! 3 -BONUS STAGE-",
+						"Konosuba: A Bênção de Deus Para Este Maravilhoso Mundo! 3 - Bónus",
+						"KonoSuba: God’s Blessing on This Wonderful World! 3 - Bonus Stage",
+						"Konosuba! Un mundo maravilloso 3 - Bonus Stage",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3 OVA",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3: Bonus Stage",
+						"KONOSUBA -God's Blessing on This Wonderful World! 3 -BONUS STAGE-",
+						"KONOSUBA -God's blessing on this wonderful world! 3 -BONUS STAGE-",
+						"KONOSUBA -God's blessing on this wonderful world! 3 OVA",
+						"Kono Subarashii Sekai ni Shukufuku o! 3 -Bonus Stage-",
+						"Kono Subarashii Sekai ni Shukufuku o! 3: Bonus Stage",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3 -BONUS STAGE-",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3 Bonus Stage",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3: -BONUS STAGE-",
+						"Kono Subarashii Sekai ni Shukufuku wo! 3: BONUS STAGE",
+						"Kono Subarashī Sekai ni Shukufuku o! 3: Bonus Stage",
+						"KonoSuba -God's blessing on This Wonderful World! 3 - BONUS STAGE -",
+						"KonoSuba : God’s Blessing on This Wonderful World ! 3 - Bonus Stage",
+						"KonoSuba – God's blessing on this wonderful world! 3 Bonus Stage",
+						"KonoSuba – God’s blessing on this wonderful world! 3 -Bonus Stage-",
+						"KonoSuba: God's Blessing on This Wonderful World! 3 OVA",
+						"KonoSuba: God’s Blessing on This Wonderful World! 3 OVA",
+						"KonoSuba: Un Mondo Miravilloso! 3 - Bonus Stage",
+						"Konosuba: God's Blessing on This Wonderful World! 3 Bonus Stage",
+						"Konosuba: God’s Blessing on This Wonderful World! 3 Bonus Stage",
+						"この素晴らしい世界に祝福を! 3 Bonus Stage",
+						"この素晴らしい世界に祝福を! 3 OVA",
+						"この素晴らしい世界に祝福を！ 3 ーBONUS STAGEー",
+						"この素晴らしい世界に祝福を！3 ―BONUS STAGE―",
+						"この素晴らしい世界に祝福を！３ OVA",
+						"この素晴らしい世界に祝福を！３ーBONUS STAGEー"
+					]
 				}
 			]
 		}
@@ -51862,7 +56815,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0814243",
+						"tmdbId": 19576
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 02 (2001) - Adventures on Clockwork Island.mkv",
@@ -51878,7 +56834,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0997084",
+						"tmdbId": 44725
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 04 (2003) - The Adventure of Dead End.mkv",
@@ -51886,7 +56845,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1006926",
+						"tmdbId": 44727
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 05 (2004) - The Cursed Holy Sword.mkv",
@@ -51894,7 +56856,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1010435",
+						"tmdbId": 44728
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island.mkv",
@@ -51926,7 +56891,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1206326",
+						"tmdbId": 44731
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 10 (2009) - Strong World.mkv",
@@ -51934,7 +56902,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1485763",
+						"tmdbId": 41498
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 11 (2011) - (3D) Straw Hat Chase.mkv",
@@ -51950,7 +56921,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt2375379",
+						"tmdbId": 176983
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 13 (2016) - Film Gold.mkv",
@@ -51958,7 +56932,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt5251328",
+						"tmdbId": 374205
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 14 (2019) - Stampede.mkv",
@@ -51966,7 +56943,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt9430698",
+						"tmdbId": 568012
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 15 (2022) - One Piece Film RED.mkv",
@@ -51974,7 +56954,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt16183464",
+						"tmdbId": 900667
 					},
 					{
 						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - 3D2Y.mkv",
@@ -52139,7 +57122,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0193019",
+						"tmdbId": 25242
 					},
 					{
 						"path": "Blues Room Little Blue Riding Hood.avi",
@@ -52766,7 +57752,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt13544716",
+						"tmdbId": 768744
 					},
 					{
 						"path": "[Anime Time] My Hero Academia Movie 04 - You're Next.mkv",
@@ -53074,7 +58063,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt13544716",
+						"tmdbId": 768744
 					},
 					{
 						"path": "[Anime Time] My Hero Academia Movie OVA.mkv",
@@ -57375,6 +62367,1039 @@
 						"episodeEnd": null,
 						"how": "group",
 						"tmdbEpisodeId": 35130
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Beavis and Butt-head S08E09 Used Car, Bounty Hunters.mp4",
+				"hash": null,
+				"imdbId": "tt0105950",
+				"files": [
+					{
+						"path": "Beavis and Butt-Head {1994}(SNES Playthrough}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {1994}{Game Gear Playthrough}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {1994}{Genesis Playthrough}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {1995} Virtual Stupidity {PC Playthrough, No Commentary}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {1998}{Game Boy Playthrough}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {1999} Do U {PC Playthrough, No Commentary}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-Head {2021} Bunghole in One {PC Playthrough, No Commentary}.mp4",
+						"folder": "06 ~ Beavis and Butt-Head Video Game Movies {Playthrough no Commentary}"
+					},
+					{
+						"path": "Beavis and Butt-head S06M01 Do America (1996).mp4",
+						"folder": "03 ~ Beavis and Butt-Head Movies {1996 & 2022}"
+					},
+					{
+						"path": "Daria ~ Is It College Yet {2002}{TV Movie}.avi",
+						"folder": "09 ~ Daria {1997-2002}/Daria Movies"
+					},
+					{
+						"path": "Daria ~ Is It Fall Yet {2000}{TV Movie}.avi",
+						"folder": "09 ~ Daria {1997-2002}/Daria Movies"
+					},
+					{
+						"path": "Mike Judges Beavis and Butt-Head ~ S09M02 Do The Universe {2022}.mkv",
+						"folder": "03 ~ Beavis and Butt-Head Movies {1996 & 2022}"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0105950",
+				"tmdbId": 13943,
+				"files": [
+					{
+						"path": "Beavis and Butt-Head {1994}(SNES Playthrough}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {1994}{Game Gear Playthrough}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {1994}{Genesis Playthrough}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {1995} Virtual Stupidity {PC Playthrough, No Commentary}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {1998}{Game Boy Playthrough}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {1999} Do U {PC Playthrough, No Commentary}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-Head {2021} Bunghole in One {PC Playthrough, No Commentary}.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Beavis and Butt-head S06M01 Do America (1996).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0115641",
+						"tmdbId": 3179
+					},
+					{
+						"path": "Daria ~ Is It College Yet {2002}{TV Movie}.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0285627",
+						"tmdbId": 24232
+					},
+					{
+						"path": "Daria ~ Is It Fall Yet {2000}{TV Movie}.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0250440",
+						"tmdbId": 44756
+					},
+					{
+						"path": "Mike Judges Beavis and Butt-Head ~ S09M02 Do The Universe {2022}.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt14145426",
+						"tmdbId": 828947
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Blue's Clues",
+				"hash": null,
+				"imdbId": "tt0163929",
+				"files": [
+					{
+						"path": "Blue's Clues 03xS1 Blue's Big Musical Movie.avi",
+						"folder": "Blue's Clues Season 3"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0163929",
+				"tmdbId": 10821,
+				"files": [
+					{
+						"path": "Blue's Clues 03xS1 Blue's Big Musical Movie.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0193019",
+						"tmdbId": 25242
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] Boku No Hero Academia (My Hero Academia) (S01-S07+Movies+OVAs) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt32179154",
+				"files": [
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 04 - You're Next.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{ "path": "[Anime Time] My Hero Academia Movie OVA.mkv", "folder": "OVA" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt13544716",
+						"tmdbId": 768744
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 04 - You're Next.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie OVA.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] Boku No Hero Academia (My Hero Academia) (S01+S02+S03+S04+S05+Movies+OVAs) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt32179154",
+				"files": [
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"folder": "Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"folder": "Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"folder": "Movies"
+					},
+					{ "path": "[Anime Time] My Hero Academia Movie OVA.mkv", "folder": "OVA" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt13544716",
+						"tmdbId": 768744
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie OVA.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] Konosuba S01+02+OVA+Movie [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt5536088",
+				"files": [
+					{
+						"path": "KonoSuba God's Blessing on this Wonderful World! - Legend of Crimson (2019).mkv",
+						"folder": "Movie"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5370118",
+				"tmdbId": 65844,
+				"files": [
+					{
+						"path": "KonoSuba God's Blessing on this Wonderful World! - Legend of Crimson (2019).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt9239552",
+						"tmdbId": 532067
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "The Six Million Dollar Man (S1, Season 1) 1080p + All TV Movies",
+				"hash": null,
+				"imdbId": "tt0071054",
+				"files": [
+					{
+						"path": "1- Harve Bennett -- executive producer (2010 Interview).mp4",
+						"folder": "(2010)...............Interviews"
+					},
+					{
+						"path": "1973.03.07 -- The Moon and the Desert.mkv",
+						"folder": "(1973)...............Three Pilot Episodes (TV Movies)"
+					},
+					{
+						"path": "1973.10.20 -- Wine, Women and War.mkv",
+						"folder": "(1973)...............Three Pilot Episodes (TV Movies)"
+					},
+					{
+						"path": "1973.11.17 -- The Solid Gold Kidnapping.mkv",
+						"folder": "(1973)...............Three Pilot Episodes (TV Movies)"
+					},
+					{
+						"path": "1987 -- The Return of The Six Million Dollar Man and The Bionic Woman.avi",
+						"folder": "(1987-1994).....Three Bionic Reunion TV Movies"
+					},
+					{
+						"path": "1989 -- Bionic Showdown - The Six Million Dollar Man and The Bionic Woman.avi",
+						"folder": "(1987-1994).....Three Bionic Reunion TV Movies"
+					},
+					{
+						"path": "1994 -- Bionic Ever After.avi",
+						"folder": "(1987-1994).....Three Bionic Reunion TV Movies"
+					},
+					{
+						"path": "2- Kenneth Johnson -- writer & producer (2010 Interview).mp4",
+						"folder": "(2010)...............Interviews"
+					},
+					{
+						"path": "3- Lee Majors -- actor who played Steve Austin (2010 Interview).mp4",
+						"folder": "(2010)...............Interviews"
+					},
+					{
+						"path": "4- Richard Anderson -- actor who played Oscar Goldman (2010 Interview).mp4",
+						"folder": "(2010)...............Interviews"
+					},
+					{
+						"path": "5- Martin E. Brooks -- actor who played Dr. Rudy Wells (2010 Interview).mp4",
+						"folder": "(2010)...............Interviews"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0071054",
+				"tmdbId": 1663,
+				"files": [
+					{
+						"path": "1- Harve Bennett -- executive producer (2010 Interview).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "1973.03.07 -- The Moon and the Desert.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "1973.10.20 -- Wine, Women and War.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "1973.11.17 -- The Solid Gold Kidnapping.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "1987 -- The Return of The Six Million Dollar Man and The Bionic Woman.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0093853",
+						"tmdbId": 82085
+					},
+					{
+						"path": "1989 -- Bionic Showdown - The Six Million Dollar Man and The Bionic Woman.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0096931",
+						"tmdbId": 97262
+					},
+					{
+						"path": "1994 -- Bionic Ever After.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "2- Kenneth Johnson -- writer & producer (2010 Interview).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "3- Lee Majors -- actor who played Steve Austin (2010 Interview).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "4- Richard Anderson -- actor who played Oscar Goldman (2010 Interview).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "5- Martin E. Brooks -- actor who played Dr. Rudy Wells (2010 Interview).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "South Park - Seasons 1 to 25 (S01-S25) Master Collection, The Movie & Extras [1080p-2160p NVEnc 10Bit HEVC][TrueHD+DDP 5.1Ch][English Subs]",
+				"hash": null,
+				"imdbId": "tt5734550",
+				"files": [
+					{
+						"path": "6 Days to Air - The Making of South Park (2011).mkv",
+						"folder": "Extras/6 Days to Air - The Making of South Park (2011)"
+					},
+					{
+						"path": "South Park Bigger, Longer and Uncut (1992).mkv",
+						"folder": "South Park Bigger, Longer and Uncut (1992)[2160p]"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5734550",
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "6 Days to Air - The Making of South Park (2011).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt2076781",
+						"tmdbId": 76360
+					},
+					{
+						"path": "South Park Bigger, Longer and Uncut (1992).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[F-R] Yu-Gi-Oh! Duel Monsters (Japanese, English Sub)",
+				"hash": null,
+				"imdbId": "tt0247902",
+				"files": [
+					{
+						"path": "Yu-Gi-Oh! 3D The Movie - Bonds Beyond Time (720p BD Dual Audio) [F-R][74C144AA].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Yu-Gi-Oh! Duel Monsters The Movie - Pyramid of Light (720p BDxHDTV) [F-R][A3051BB0].mkv",
+						"folder": ""
+					},
+					{
+						"path": "Yu-Gi-Oh! Duel Monsters The Movie - The Dark Side of Dimensions (720p BD Dual Audio) [ColdFusion][F6C07E2B].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0247902",
+				"tmdbId": 902,
+				"files": [
+					{
+						"path": "Yu-Gi-Oh! 3D The Movie - Bonds Beyond Time (720p BD Dual Audio) [F-R][74C144AA].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Yu-Gi-Oh! Duel Monsters The Movie - Pyramid of Light (720p BDxHDTV) [F-R][A3051BB0].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0403703",
+						"tmdbId": 11052
+					},
+					{
+						"path": "Yu-Gi-Oh! Duel Monsters The Movie - The Dark Side of Dimensions (720p BD Dual Audio) [ColdFusion][F6C07E2B].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "My Hero Academia",
+				"hash": null,
+				"imdbId": "tt32179154",
+				"files": [
+					{
+						"path": "My.Hero.Academia.Heroes.Rising.2019.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+						"folder": "Movies"
+					},
+					{ "path": "[Movie 01] The Two Heroes.mkv", "folder": "Movies" },
+					{ "path": "[Movie 02] Heroes Rising.mkv", "folder": "Movies" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "My.Hero.Academia.Heroes.Rising.2019.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt11107074",
+						"tmdbId": 592350
+					},
+					{
+						"path": "[Movie 01] The Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt7745068",
+						"tmdbId": 505262
+					},
+					{
+						"path": "[Movie 02] Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt11107074",
+						"tmdbId": 592350
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "My Hero Academia S01-04P1+Movies (Dual audio BDremux)",
+				"hash": null,
+				"imdbId": "tt5626028",
+				"files": [
+					{
+						"path": "[Movie 01] The Two Heroes.mkv",
+						"folder": "My Hero Academia/Movies"
+					},
+					{ "path": "[Movie 02] Heroes Rising.mkv", "folder": "My Hero Academia/Movies" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "[Movie 01] The Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt7745068",
+						"tmdbId": 505262
+					},
+					{
+						"path": "[Movie 02] Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt11107074",
+						"tmdbId": 592350
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]",
+				"hash": null,
+				"imdbId": "tt0388629",
+				"files": [
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece OVA - Defeat Him! The Pirate Ganzack!.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 01 (2000) - One Piece the Movie.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 02 (2001) - Adventures on Clockwork Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 03 (2002) - Chopper's Kingdom in the Strange Animal Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 04 (2003) - The Adventure of Dead End.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 05 (2004) - The Cursed Holy Sword.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 07 (2006) - Giant Mecha Soldier of Karakuri Castle.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 08 (2007) - The Desert Princess and the Pirates, Adventures in Alabasta.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 09 (2008) - Episode of Chopper Plus, Bloom in the Winter, Miracle Sakura.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 10 (2009) - Strong World.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 11 (2011) - (3D) Straw Hat Chase.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 12 (2012) - Film Z.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 13 (2016) - Film Gold.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 14 (2019) - Stampede.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 15 (2022) - One Piece Film RED.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - 3D2Y.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Luffy.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Merry.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Nami.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Sabo.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Skypiea.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0388629",
+				"tmdbId": 37854,
+				"files": [
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece OVA - Defeat Him! The Pirate Ganzack!.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 01 (2000) - One Piece the Movie.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0814243",
+						"tmdbId": 19576
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 02 (2001) - Adventures on Clockwork Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 03 (2002) - Chopper's Kingdom in the Strange Animal Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0997084",
+						"tmdbId": 44725
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 04 (2003) - The Adventure of Dead End.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1006926",
+						"tmdbId": 44727
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 05 (2004) - The Cursed Holy Sword.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1010435",
+						"tmdbId": 44728
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 07 (2006) - Giant Mecha Soldier of Karakuri Castle.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 08 (2007) - The Desert Princess and the Pirates, Adventures in Alabasta.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 09 (2008) - Episode of Chopper Plus, Bloom in the Winter, Miracle Sakura.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1206326",
+						"tmdbId": 44731
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 10 (2009) - Strong World.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt1485763",
+						"tmdbId": 41498
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 11 (2011) - (3D) Straw Hat Chase.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 12 (2012) - Film Z.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt2375379",
+						"tmdbId": 176983
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 13 (2016) - Film Gold.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt5251328",
+						"tmdbId": 374205
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 14 (2019) - Stampede.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt9430698",
+						"tmdbId": 568012
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 15 (2022) - One Piece Film RED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt16183464",
+						"tmdbId": 900667
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - 3D2Y.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Luffy.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Merry.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Nami.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Sabo.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Skypiea.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
 					}
 				]
 			}

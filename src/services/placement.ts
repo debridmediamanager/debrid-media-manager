@@ -46,7 +46,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
  * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.9';
+export const PLACEMENT_RULES = '2026-10-23.10';
 
 export interface PlaceRequest {
 	name: string;
@@ -68,6 +68,13 @@ export interface PlacedFile {
 	 * is unplaced or placed on IMDb's numbering.
 	 */
 	tmdbEpisodeId: number | null;
+	/**
+	 * A film inside a show's release, named on its own (`[Movie 02] Heroes Rising` in a My Hero
+	 * Academia pack): `kind` `movie` with the film's ids, present only on such files.
+	 */
+	kind?: 'movie';
+	imdbId?: string;
+	tmdbId?: number;
 }
 
 export interface PlacedRelease {
@@ -195,6 +202,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await filmLook(release, out[at], sources);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -348,6 +356,67 @@ async function namesakeLook(
 		else if (best !== placed && count(there) === count(best)) tie = true;
 	}
 	return tie ? placed : best;
+}
+
+// A film a show's release carries beside its episodes: `[Movie 02] Heroes Rising`, `One Piece Movie
+// 05 (2004) - The Cursed Holy Sword`, `Mask of The Phantasm (1993 - 1080p BluRay)`, a `Movies` folder.
+const titleWords = (text: string) =>
+	text
+		.toLowerCase()
+		.replace(/['’`]/g, '')
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter((word) => word.length > 2);
+const FILM_WORD = /(?:^|[^a-z])(?:movies?|films?)(?:[^a-z]|$)/i;
+const FILM_YEAR = /[[(]\s*(?:19|20)\d{2}\b/;
+const FILM_FOLDER = /(?:^|\/)[^/]*\b(?:movies?|films?|tv movies)\b[^/]*$/i;
+
+/**
+ * Each film of a show's release named on its own: a file left unplaced whose name or folder says
+ * it is a film, asked about by its name with the show's title before it where the name lacks it,
+ * and taken where the identifier is sure of a film, or its film is titled as the name by letters
+ * in the year the name says, and TMDB's find knows the film.
+ */
+async function filmLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind !== 'tv') return placed;
+	const shown = placed.tmdbId === null ? null : await sources.show(placed.tmdbId);
+	const show = shown?.name ?? parseName(release.name).title;
+	const asked = placed.files.flatMap((file, at) => {
+		if (file.season !== null) return [];
+		const { path, folder } = release.files[at];
+		const stem = (path.split('/').pop() ?? path).replace(/\.[a-z0-9]{2,4}$/i, '');
+		const shaped =
+			FILM_WORD.test(stem) || FILM_YEAR.test(stem) || FILM_FOLDER.test(folder ?? '');
+		if (!shaped) return [];
+		const own = stem.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
+		const name = letters(own).includes(letters(show)) ? own : `${show} ${own}`;
+		return [{ at, name }];
+	});
+	if (!asked.length) return placed;
+	const answers = await sources.identifier([...new Set(asked.map((a) => a.name))]);
+	const files = [...placed.files];
+	for (const { at, name } of asked) {
+		const answer = answers?.get(name);
+		const top = answer?.matches[0];
+		if (!answer || !top || answer.kind !== 'movie' || refused(name, answer)) continue;
+		const spelled =
+			letters(top.title) === letters(answer.parsedTitle) &&
+			(!answer.parsedYear || !top.year || Math.abs(answer.parsedYear - top.year) <= 1);
+		if (!answer.confident && !spelled) continue;
+		// the film's own title in the name, the show's words aside: `Beavis and Butt-Head {1995}
+		// Virtual Stupidity` is no Beavis and Butt-Head Do America, and the Six Million Dollar Man's
+		// three pilot films all read as the one titled as the show
+		const own = titleWords(top.title).filter((word) => !titleWords(show).includes(word));
+		const named = titleWords(name);
+		if (!own.length || !own.every((word) => named.includes(word))) continue;
+		const movie = (await sources.find(top.imdbId))?.movie_results?.[0]?.id;
+		if (typeof movie !== 'number') continue;
+		files[at] = { ...files[at], kind: 'movie', imdbId: top.imdbId, tmdbId: movie };
+	}
+	return { ...placed, files };
 }
 
 async function secondLook(

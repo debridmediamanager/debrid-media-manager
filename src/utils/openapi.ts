@@ -596,6 +596,21 @@ export const openApiDocument = {
 															description:
 																'Which rule placed the file',
 														},
+														kind: {
+															enum: ['movie'],
+															description:
+																"Only on a film inside a show's release, named on its own (with imdbId and tmdbId, the film's)",
+														},
+														imdbId: {
+															type: 'string',
+															description:
+																"The film's IMDb id, with kind movie",
+														},
+														tmdbId: {
+															type: 'integer',
+															description:
+																"The film's TMDB movie id, with kind movie",
+														},
 														tmdbEpisodeId: {
 															type: ['integer', 'null'],
 															description:
@@ -611,7 +626,7 @@ export const openApiDocument = {
 						},
 						{
 							complete: true,
-							rules: '2026-10-23.9',
+							rules: '2026-10-23.10',
 							releases: [
 								{
 									kind: 'tv',

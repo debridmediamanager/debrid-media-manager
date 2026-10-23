@@ -808,4 +808,24 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		expect(at(pack, 'Futurama.s10e13.pl')).toEqual([7, 26]);
 		expect(at(pack, 'Futurama.s01e01.pl')).toEqual([1, 1]);
 	});
+	it("names a film inside a show's release on its own", async () => {
+		const academia = await placedHere('My Hero Academia S01-04P1+Movies');
+		expect(
+			academia.files.find((f) => f.path.includes('[Movie 02] Heroes Rising'))
+		).toMatchObject({
+			season: null,
+			kind: 'movie',
+			imdbId: 'tt11107074',
+			tmdbId: 592350,
+		});
+		// a game played through, titled as no film, and three pilot films read as one
+		const beavis = await placedHere('Beavis and Butt-head S08E09');
+		expect(
+			beavis.files.find((f) => f.path.includes('Virtual Stupidity'))!.kind
+		).toBeUndefined();
+		const bionic = await placedHere('The Six Million Dollar Man');
+		expect(
+			bionic.files.find((f) => f.path.includes('Wine, Women and War'))!.kind
+		).toBeUndefined();
+	});
 });
