@@ -40,10 +40,12 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * The rules an answer was placed by. Bump it with any change that places a release differently:
  * zurg asks again about every placement made under other rules, and otherwise keeps one a day
  * (a file left unplaced) or a week (a release placed whole), so a fix reached rex-fun's library
- * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
- * ask about whole libraries again for nothing.
+ * that much later (2026-10-22). Bump it too when an answer gains a field callers start reading:
+ * zurg on fun re-placed its library under '2026-10-23.8' minutes before the build that reads
+ * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
+ * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.8';
+export const PLACEMENT_RULES = '2026-10-23.9';
 
 export interface PlaceRequest {
 	name: string;
