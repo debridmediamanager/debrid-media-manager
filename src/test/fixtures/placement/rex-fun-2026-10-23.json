@@ -108,7 +108,12 @@
 			"tt0343298": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
 			"tt4550686": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
 			"tt2813508": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
-			"tt1882559": { "movie_results": [], "tv_results": [], "tv_episode_results": [] }
+			"tt1882559": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+			"tt0149460": {
+				"movie_results": [],
+				"tv_results": [{ "id": 615 }],
+				"tv_episode_results": []
+			}
 		},
 		"show": {
 			"37854": {
@@ -1620,6 +1625,86 @@
 						"episode_count": 31,
 						"air_date": "2015-01-01",
 						"name": "Season 1"
+					}
+				]
+			},
+			"615": {
+				"name": "Futurama",
+				"original_name": "Futurama",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0149460" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "2007-11-27",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 9,
+						"air_date": "1999-03-28",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "1999-09-26",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 15,
+						"air_date": "2000-11-05",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 12,
+						"air_date": "2001-12-09",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 16,
+						"air_date": "2002-11-10",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 26,
+						"air_date": "2010-06-24",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 26,
+						"air_date": "2012-06-20",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 10,
+						"air_date": "2023-07-24",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 10,
+						"air_date": "2024-07-29",
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 10,
+						"air_date": "2025-09-15",
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 10,
+						"air_date": "2026-08-03",
+						"name": "Season 11"
 					}
 				]
 			}
@@ -40600,6 +40685,970 @@
 						"air_date": "2005-01-01"
 					}
 				]
+			},
+			"615/1": {
+				"episodes": [
+					{
+						"id": 35006,
+						"episode_number": 1,
+						"name": "Space Pilot 3000",
+						"air_date": "1999-03-28"
+					},
+					{
+						"id": 35007,
+						"episode_number": 2,
+						"name": "The Series Has Landed",
+						"air_date": "1999-04-04"
+					},
+					{
+						"id": 35008,
+						"episode_number": 3,
+						"name": "I, Roommate",
+						"air_date": "1999-04-06"
+					},
+					{
+						"id": 35009,
+						"episode_number": 4,
+						"name": "Love's Labours Lost in Space",
+						"air_date": "1999-04-13"
+					},
+					{
+						"id": 35010,
+						"episode_number": 5,
+						"name": "Fear of a Bot Planet",
+						"air_date": "1999-04-20"
+					},
+					{
+						"id": 35011,
+						"episode_number": 6,
+						"name": "A Fishful of Dollars",
+						"air_date": "1999-04-27"
+					},
+					{
+						"id": 35012,
+						"episode_number": 7,
+						"name": "My Three Suns",
+						"air_date": "1999-05-04"
+					},
+					{
+						"id": 35013,
+						"episode_number": 8,
+						"name": "A Big Piece of Garbage",
+						"air_date": "1999-05-11"
+					},
+					{
+						"id": 35014,
+						"episode_number": 9,
+						"name": "Hell Is Other Robots",
+						"air_date": "1999-05-18"
+					}
+				]
+			},
+			"615/2": {
+				"episodes": [
+					{
+						"id": 1285653,
+						"episode_number": 1,
+						"name": "A Flight to Remember",
+						"air_date": "1999-09-26"
+					},
+					{
+						"id": 1285654,
+						"episode_number": 2,
+						"name": "Mars University",
+						"air_date": "1999-10-03"
+					},
+					{
+						"id": 1285655,
+						"episode_number": 3,
+						"name": "When Aliens Attack",
+						"air_date": "1999-11-07"
+					},
+					{
+						"id": 1285656,
+						"episode_number": 4,
+						"name": "Fry & the Slurm Factory",
+						"air_date": "1999-11-14"
+					},
+					{
+						"id": 35019,
+						"episode_number": 5,
+						"name": "I Second That Emotion",
+						"air_date": "1999-11-21"
+					},
+					{
+						"id": 35020,
+						"episode_number": 6,
+						"name": "Brannigan, Begin Again",
+						"air_date": "1999-11-28"
+					},
+					{
+						"id": 35021,
+						"episode_number": 7,
+						"name": "A Head in the Polls",
+						"air_date": "1999-12-12"
+					},
+					{
+						"id": 35022,
+						"episode_number": 8,
+						"name": "Xmas Story",
+						"air_date": "1999-12-19"
+					},
+					{
+						"id": 35023,
+						"episode_number": 9,
+						"name": "Why Must I Be a Crustacean in Love?",
+						"air_date": "2000-02-06"
+					},
+					{
+						"id": 35024,
+						"episode_number": 10,
+						"name": "Put Your Head on My Shoulders",
+						"air_date": "2000-02-13"
+					},
+					{
+						"id": 35034,
+						"episode_number": 11,
+						"name": "Lesser of Two Evils",
+						"air_date": "2000-02-20"
+					},
+					{
+						"id": 35025,
+						"episode_number": 12,
+						"name": "Raging Bender",
+						"air_date": "2000-02-27"
+					},
+					{
+						"id": 35026,
+						"episode_number": 13,
+						"name": "A Bicyclops Built For Two",
+						"air_date": "2000-03-19"
+					},
+					{
+						"id": 35029,
+						"episode_number": 14,
+						"name": "How Hermes Requisitioned His Groove Back",
+						"air_date": "2000-04-02"
+					},
+					{
+						"id": 35027,
+						"episode_number": 15,
+						"name": "A Clone of My Own",
+						"air_date": "2000-04-09"
+					},
+					{
+						"id": 35028,
+						"episode_number": 16,
+						"name": "The Deep South",
+						"air_date": "2000-04-16"
+					},
+					{
+						"id": 35030,
+						"episode_number": 17,
+						"name": "Bender Gets Made",
+						"air_date": "2000-04-30"
+					},
+					{
+						"id": 35033,
+						"episode_number": 18,
+						"name": "The Problem with Popplers",
+						"air_date": "2000-05-07"
+					},
+					{
+						"id": 35031,
+						"episode_number": 19,
+						"name": "Mother's Day",
+						"air_date": "2000-05-14"
+					},
+					{
+						"id": 1089973,
+						"episode_number": 20,
+						"name": "Anthology of Interest I",
+						"air_date": "2000-05-21"
+					}
+				]
+			},
+			"615/3": {
+				"episodes": [
+					{
+						"id": 1285650,
+						"episode_number": 1,
+						"name": "The Honking",
+						"air_date": "2000-11-05"
+					},
+					{
+						"id": 1285651,
+						"episode_number": 2,
+						"name": "War Is the H-Word",
+						"air_date": "2000-11-26"
+					},
+					{
+						"id": 1285652,
+						"episode_number": 3,
+						"name": "The Cryonic Woman",
+						"air_date": "2000-12-03"
+					},
+					{
+						"id": 35038,
+						"episode_number": 4,
+						"name": "Parasites Lost",
+						"air_date": "2001-01-21"
+					},
+					{
+						"id": 35049,
+						"episode_number": 5,
+						"name": "Amazon Women in the Mood",
+						"air_date": "2001-02-04"
+					},
+					{
+						"id": 35039,
+						"episode_number": 6,
+						"name": "Bendless Love",
+						"air_date": "2001-02-11"
+					},
+					{
+						"id": 35040,
+						"episode_number": 7,
+						"name": "The Day the Earth Stood Stupid",
+						"air_date": "2001-02-18"
+					},
+					{
+						"id": 35041,
+						"episode_number": 8,
+						"name": "That's Lobstertainment!",
+						"air_date": "2001-02-25"
+					},
+					{
+						"id": 35042,
+						"episode_number": 9,
+						"name": "The Birdbot of Ice-Catraz",
+						"air_date": "2001-03-04"
+					},
+					{
+						"id": 35043,
+						"episode_number": 10,
+						"name": "The Luck of the Fryrish",
+						"air_date": "2001-03-11"
+					},
+					{
+						"id": 35044,
+						"episode_number": 11,
+						"name": "The Cyber House Rules",
+						"air_date": "2001-04-01"
+					},
+					{
+						"id": 35045,
+						"episode_number": 12,
+						"name": "Insane in the Mainframe",
+						"air_date": "2001-04-08"
+					},
+					{
+						"id": 35046,
+						"episode_number": 13,
+						"name": "Bendin' in the Wind",
+						"air_date": "2001-04-22"
+					},
+					{
+						"id": 35047,
+						"episode_number": 14,
+						"name": "Time Keeps On Slippin'",
+						"air_date": "2001-05-06"
+					},
+					{
+						"id": 35048,
+						"episode_number": 15,
+						"name": "I Dated a Robot",
+						"air_date": "2001-05-13"
+					}
+				]
+			},
+			"615/4": {
+				"episodes": [
+					{
+						"id": 1285641,
+						"episode_number": 1,
+						"name": "Roswell That Ends Well",
+						"air_date": "2001-12-09"
+					},
+					{
+						"id": 1285642,
+						"episode_number": 2,
+						"name": "A Tale of Two Santas",
+						"air_date": "2001-12-23"
+					},
+					{
+						"id": 1285643,
+						"episode_number": 3,
+						"name": "Anthology of Interest II",
+						"air_date": "2002-01-06"
+					},
+					{
+						"id": 35052,
+						"episode_number": 4,
+						"name": "Love and Rocket",
+						"air_date": "2002-02-10"
+					},
+					{
+						"id": 35053,
+						"episode_number": 5,
+						"name": "Leela's Homeworld",
+						"air_date": "2002-02-17"
+					},
+					{
+						"id": 1285644,
+						"episode_number": 6,
+						"name": "Where the Buggalo Roam",
+						"air_date": "2002-03-03"
+					},
+					{
+						"id": 1285645,
+						"episode_number": 7,
+						"name": "A Pharaoh to Remember",
+						"air_date": "2002-03-10"
+					},
+					{
+						"id": 1285646,
+						"episode_number": 8,
+						"name": "Godfellas",
+						"air_date": "2002-03-17"
+					},
+					{
+						"id": 1285647,
+						"episode_number": 9,
+						"name": "Future Stock",
+						"air_date": "2002-03-17"
+					},
+					{
+						"id": 1285648,
+						"episode_number": 10,
+						"name": "A Leela of Her Own",
+						"air_date": "2002-04-07"
+					},
+					{
+						"id": 1285649,
+						"episode_number": 11,
+						"name": "30% Iron Chef",
+						"air_date": "2002-04-14"
+					},
+					{
+						"id": 35060,
+						"episode_number": 12,
+						"name": "Where No Fan Has Gone Before",
+						"air_date": "2002-04-21"
+					}
+				]
+			},
+			"615/5": {
+				"episodes": [
+					{
+						"id": 35076,
+						"episode_number": 1,
+						"name": "Crimes of the Hot",
+						"air_date": "2002-11-10"
+					},
+					{
+						"id": 1108227,
+						"episode_number": 2,
+						"name": "Jurassic Bark",
+						"air_date": "2002-11-17"
+					},
+					{
+						"id": 1108228,
+						"episode_number": 3,
+						"name": "The Route of All Evil",
+						"air_date": "2002-12-08"
+					},
+					{
+						"id": 1108229,
+						"episode_number": 4,
+						"name": "A Taste of Freedom",
+						"air_date": "2002-12-22"
+					},
+					{
+						"id": 1232873,
+						"episode_number": 5,
+						"name": "Kif Gets Knocked Up a Notch",
+						"air_date": "2003-01-12"
+					},
+					{
+						"id": 1232874,
+						"episode_number": 6,
+						"name": "Less Than Hero",
+						"air_date": "2003-03-02"
+					},
+					{
+						"id": 1232875,
+						"episode_number": 7,
+						"name": "Teenage Mutant Leela's Hurdles",
+						"air_date": "2003-03-30"
+					},
+					{
+						"id": 1232876,
+						"episode_number": 8,
+						"name": "The Why of Fry",
+						"air_date": "2003-04-06"
+					},
+					{
+						"id": 1232877,
+						"episode_number": 9,
+						"name": "The Sting",
+						"air_date": "2003-06-01"
+					},
+					{
+						"id": 1232878,
+						"episode_number": 10,
+						"name": "The Farnsworth Parabox",
+						"air_date": "2003-06-08"
+					},
+					{
+						"id": 1232879,
+						"episode_number": 11,
+						"name": "Three Hundred Big Boys",
+						"air_date": "2003-06-15"
+					},
+					{
+						"id": 1232880,
+						"episode_number": 12,
+						"name": "Spanish Fry",
+						"air_date": "2003-07-13"
+					},
+					{
+						"id": 1232881,
+						"episode_number": 13,
+						"name": "Bend Her",
+						"air_date": "2003-07-20"
+					},
+					{
+						"id": 1232882,
+						"episode_number": 14,
+						"name": "Obsoletely Fabulous",
+						"air_date": "2003-07-27"
+					},
+					{
+						"id": 1232883,
+						"episode_number": 15,
+						"name": "Bender Should Not Be Allowed on TV",
+						"air_date": "2003-08-03"
+					},
+					{
+						"id": 1232884,
+						"episode_number": 16,
+						"name": "The Devil's Hands Are Idle Playthings",
+						"air_date": "2003-08-10"
+					}
+				]
+			},
+			"615/6": {
+				"episodes": [
+					{
+						"id": 35077,
+						"episode_number": 1,
+						"name": "Rebirth",
+						"air_date": "2010-06-24"
+					},
+					{
+						"id": 35078,
+						"episode_number": 2,
+						"name": "In-A-Gadda-Da-Leela",
+						"air_date": "2010-06-24"
+					},
+					{
+						"id": 35079,
+						"episode_number": 3,
+						"name": "Attack of the Killer App",
+						"air_date": "2010-07-01"
+					},
+					{
+						"id": 35080,
+						"episode_number": 4,
+						"name": "Proposition Infinity",
+						"air_date": "2010-07-08"
+					},
+					{
+						"id": 35081,
+						"episode_number": 5,
+						"name": "The Duh-Vinci Code",
+						"air_date": "2010-07-15"
+					},
+					{
+						"id": 35082,
+						"episode_number": 6,
+						"name": "Lethal Inspection",
+						"air_date": "2010-07-22"
+					},
+					{
+						"id": 35083,
+						"episode_number": 7,
+						"name": "The Late Philip J. Fry",
+						"air_date": "2010-07-29"
+					},
+					{
+						"id": 35084,
+						"episode_number": 8,
+						"name": "That Darn Katz!",
+						"air_date": "2010-08-05"
+					},
+					{
+						"id": 35085,
+						"episode_number": 9,
+						"name": "A Clockwork Origin",
+						"air_date": "2010-08-12"
+					},
+					{
+						"id": 35086,
+						"episode_number": 10,
+						"name": "The Prisoner of Benda",
+						"air_date": "2010-08-19"
+					},
+					{
+						"id": 35087,
+						"episode_number": 11,
+						"name": "Lrrreconcilable Ndndifferences",
+						"air_date": "2010-08-26"
+					},
+					{
+						"id": 35088,
+						"episode_number": 12,
+						"name": "The Mutants Are Revolting",
+						"air_date": "2010-09-02"
+					},
+					{
+						"id": 35089,
+						"episode_number": 13,
+						"name": "The Futurama Holiday Spectacular",
+						"air_date": "2010-11-21"
+					},
+					{
+						"id": 35002,
+						"episode_number": 14,
+						"name": "Neutopia",
+						"air_date": "2011-06-23"
+					},
+					{
+						"id": 35090,
+						"episode_number": 15,
+						"name": "Benderama",
+						"air_date": "2011-06-23"
+					},
+					{
+						"id": 35091,
+						"episode_number": 16,
+						"name": "Ghost in the Machines",
+						"air_date": "2011-06-30"
+					},
+					{
+						"id": 35092,
+						"episode_number": 17,
+						"name": "Law and Oracle",
+						"air_date": "2011-07-07"
+					},
+					{
+						"id": 35003,
+						"episode_number": 18,
+						"name": "The Silence of the Clamps",
+						"air_date": "2011-07-14"
+					},
+					{
+						"id": 35094,
+						"episode_number": 19,
+						"name": "Yo Leela Leela",
+						"air_date": "2011-07-21"
+					},
+					{
+						"id": 35093,
+						"episode_number": 20,
+						"name": "All the Presidents' Heads",
+						"air_date": "2011-07-28"
+					},
+					{
+						"id": 35096,
+						"episode_number": 21,
+						"name": "Mobius Dick",
+						"air_date": "2011-08-04"
+					},
+					{
+						"id": 35095,
+						"episode_number": 22,
+						"name": "Fry Am the Egg Man",
+						"air_date": "2011-08-11"
+					},
+					{
+						"id": 35098,
+						"episode_number": 23,
+						"name": "The Tip of the Zoidberg",
+						"air_date": "2011-08-18"
+					},
+					{
+						"id": 35097,
+						"episode_number": 24,
+						"name": "Cold Warriors",
+						"air_date": "2011-08-25"
+					},
+					{
+						"id": 35099,
+						"episode_number": 25,
+						"name": "Overclockwise",
+						"air_date": "2011-09-01"
+					},
+					{
+						"id": 35100,
+						"episode_number": 26,
+						"name": "Reincarnation",
+						"air_date": "2011-09-08"
+					}
+				]
+			},
+			"615/7": {
+				"episodes": [
+					{
+						"id": 35107,
+						"episode_number": 1,
+						"name": "The Bots and the Bees",
+						"air_date": "2012-06-20"
+					},
+					{
+						"id": 35108,
+						"episode_number": 2,
+						"name": "A Farewell to Arms",
+						"air_date": "2012-06-20"
+					},
+					{
+						"id": 35109,
+						"episode_number": 3,
+						"name": "Decision 3012",
+						"air_date": "2012-06-27"
+					},
+					{
+						"id": 35110,
+						"episode_number": 4,
+						"name": "The Thief of Baghead",
+						"air_date": "2012-07-04"
+					},
+					{
+						"id": 35112,
+						"episode_number": 5,
+						"name": "Zapp Dingbat",
+						"air_date": "2012-07-11"
+					},
+					{
+						"id": 35113,
+						"episode_number": 6,
+						"name": "The Butterjunk Effect",
+						"air_date": "2012-07-18"
+					},
+					{
+						"id": 35111,
+						"episode_number": 7,
+						"name": "The Six Million Dollar Mon",
+						"air_date": "2012-07-25"
+					},
+					{
+						"id": 35115,
+						"episode_number": 8,
+						"name": "Fun on a Bun",
+						"air_date": "2012-08-01"
+					},
+					{
+						"id": 35116,
+						"episode_number": 9,
+						"name": "Free Will Hunting",
+						"air_date": "2012-08-08"
+					},
+					{
+						"id": 35114,
+						"episode_number": 10,
+						"name": "Near-Death Wish",
+						"air_date": "2012-08-15"
+					},
+					{
+						"id": 35118,
+						"episode_number": 11,
+						"name": "Viva Mars Vegas",
+						"air_date": "2012-08-22"
+					},
+					{
+						"id": 35117,
+						"episode_number": 12,
+						"name": "31st Century Fox",
+						"air_date": "2012-08-29"
+					},
+					{
+						"id": 35004,
+						"episode_number": 13,
+						"name": "Naturama",
+						"air_date": "2012-08-29"
+					},
+					{
+						"id": 35005,
+						"episode_number": 14,
+						"name": "2-D Blacktop",
+						"air_date": "2013-06-19"
+					},
+					{
+						"id": 35119,
+						"episode_number": 15,
+						"name": "Fry and Leela's Big Fling",
+						"air_date": "2013-06-19"
+					},
+					{
+						"id": 35120,
+						"episode_number": 16,
+						"name": "T.: The Terrestrial",
+						"air_date": "2013-06-26"
+					},
+					{
+						"id": 35121,
+						"episode_number": 17,
+						"name": "Forty Percent Leadbelly",
+						"air_date": "2013-07-03"
+					},
+					{
+						"id": 35123,
+						"episode_number": 18,
+						"name": "The Inhuman Torch",
+						"air_date": "2013-07-10"
+					},
+					{
+						"id": 35122,
+						"episode_number": 19,
+						"name": "Saturday Morning Fun Pit",
+						"air_date": "2013-07-17"
+					},
+					{
+						"id": 35126,
+						"episode_number": 20,
+						"name": "Calculon 2.0",
+						"air_date": "2013-07-24"
+					},
+					{
+						"id": 35124,
+						"episode_number": 21,
+						"name": "Assie Come Home",
+						"air_date": "2013-07-31"
+					},
+					{
+						"id": 35125,
+						"episode_number": 22,
+						"name": "Leela and the Genestalk",
+						"air_date": "2013-08-07"
+					},
+					{
+						"id": 35129,
+						"episode_number": 23,
+						"name": "Game of Tones",
+						"air_date": "2013-08-14"
+					},
+					{
+						"id": 35127,
+						"episode_number": 24,
+						"name": "Murder on the Planet Express",
+						"air_date": "2013-08-21"
+					},
+					{
+						"id": 35128,
+						"episode_number": 25,
+						"name": "Stench and Stenchibility",
+						"air_date": "2013-08-28"
+					},
+					{
+						"id": 35130,
+						"episode_number": 26,
+						"name": "Meanwhile",
+						"air_date": "2013-09-04"
+					}
+				]
+			},
+			"615/8": {
+				"episodes": [
+					{
+						"id": 4413381,
+						"episode_number": 1,
+						"name": "The Impossible Stream",
+						"air_date": "2023-07-24"
+					},
+					{
+						"id": 4413386,
+						"episode_number": 2,
+						"name": "Children of a Lesser Bog",
+						"air_date": "2023-07-31"
+					},
+					{
+						"id": 4413387,
+						"episode_number": 3,
+						"name": "How the West Was 1010001",
+						"air_date": "2023-08-07"
+					},
+					{
+						"id": 4413389,
+						"episode_number": 4,
+						"name": "Parasites Regained",
+						"air_date": "2023-08-14"
+					},
+					{
+						"id": 4413385,
+						"episode_number": 5,
+						"name": "Related to Items You've Viewed",
+						"air_date": "2023-08-21"
+					},
+					{
+						"id": 4413388,
+						"episode_number": 6,
+						"name": "I Know What You Did Next Xmas",
+						"air_date": "2023-08-28"
+					},
+					{
+						"id": 4413382,
+						"episode_number": 7,
+						"name": "Rage Against the Vaccine",
+						"air_date": "2023-09-04"
+					},
+					{
+						"id": 4413383,
+						"episode_number": 8,
+						"name": "Zapp Gets Canceled",
+						"air_date": "2023-09-11"
+					},
+					{
+						"id": 4413384,
+						"episode_number": 9,
+						"name": "The Prince and the Product",
+						"air_date": "2023-09-18"
+					},
+					{
+						"id": 4413390,
+						"episode_number": 10,
+						"name": "All the Way Down",
+						"air_date": "2023-09-25"
+					}
+				]
+			},
+			"615/9": {
+				"episodes": [
+					{
+						"id": 5260284,
+						"episode_number": 1,
+						"name": "The One Amigo",
+						"air_date": "2024-07-29"
+					},
+					{
+						"id": 5260285,
+						"episode_number": 2,
+						"name": "Quids Game",
+						"air_date": "2024-08-05"
+					},
+					{
+						"id": 5260286,
+						"episode_number": 3,
+						"name": "The Temp",
+						"air_date": "2024-08-12"
+					},
+					{
+						"id": 5260287,
+						"episode_number": 4,
+						"name": "Beauty and the Bug",
+						"air_date": "2024-08-19"
+					},
+					{
+						"id": 5260288,
+						"episode_number": 5,
+						"name": "One Is Silicon and the Other Gold",
+						"air_date": "2024-08-26"
+					},
+					{
+						"id": 5260289,
+						"episode_number": 6,
+						"name": "Attack of the Clothes",
+						"air_date": "2024-09-02"
+					},
+					{
+						"id": 5260290,
+						"episode_number": 7,
+						"name": "Planet Espresso",
+						"air_date": "2024-09-09"
+					},
+					{
+						"id": 5260291,
+						"episode_number": 8,
+						"name": "Cuteness Overload",
+						"air_date": "2024-09-16"
+					},
+					{
+						"id": 5260292,
+						"episode_number": 9,
+						"name": "The Futurama Mystery Liberry",
+						"air_date": "2024-09-23"
+					},
+					{
+						"id": 5260293,
+						"episode_number": 10,
+						"name": "Otherwise",
+						"air_date": "2024-09-30"
+					}
+				]
+			},
+			"615/10": {
+				"episodes": [
+					{
+						"id": 6396606,
+						"episode_number": 1,
+						"name": "Destroy Tall Monsters",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396607,
+						"episode_number": 2,
+						"name": "The World Is Hot Enough",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396609,
+						"episode_number": 3,
+						"name": "Fifty Shades of Green",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396610,
+						"episode_number": 4,
+						"name": "The Numberland Gap",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396612,
+						"episode_number": 5,
+						"name": "Scared Screenless",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396613,
+						"episode_number": 6,
+						"name": "Wicked Human",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396615,
+						"episode_number": 7,
+						"name": "Murderoni",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396616,
+						"episode_number": 8,
+						"name": "Crab Splatter",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396618,
+						"episode_number": 9,
+						"name": "The Trouble with Truffles",
+						"air_date": "2025-09-15"
+					},
+					{
+						"id": 6396620,
+						"episode_number": 10,
+						"name": "The White Hole",
+						"air_date": "2025-09-15"
+					}
+				]
 			}
 		},
 		"episodeGroups": {
@@ -40719,7 +41768,14 @@
 					{ "id": "63b834c6f44f2700bddedc3a", "name": "TVDB Order", "type": 7 }
 				]
 			},
-			"336855": { "results": [] }
+			"336855": { "results": [] },
+			"615": {
+				"results": [
+					{ "id": "5ad2557a0e0a266c25015a52", "name": "DVD Order", "type": 3 },
+					{ "id": "5ad25f9b0e0a266c3101674b", "name": "Digital Order", "type": 4 },
+					{ "id": "5ad24bf4c3a3683eed0145a8", "name": "Production Order", "type": 6 }
+				]
+			}
 		},
 		"episodeGroup": {
 			"69b8016aa7e52bcbf75a77b8": {
@@ -42307,6 +43363,721 @@
 						]
 					}
 				]
+			},
+			"5ad2557a0e0a266c25015a52": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 1 },
+							{ "order": 10, "season_number": 2, "episode_number": 2 },
+							{ "order": 11, "season_number": 2, "episode_number": 3 },
+							{ "order": 12, "season_number": 2, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 5 },
+							{ "order": 1, "season_number": 2, "episode_number": 6 },
+							{ "order": 2, "season_number": 2, "episode_number": 7 },
+							{ "order": 3, "season_number": 2, "episode_number": 8 },
+							{ "order": 4, "season_number": 2, "episode_number": 9 },
+							{ "order": 5, "season_number": 2, "episode_number": 11 },
+							{ "order": 6, "season_number": 2, "episode_number": 10 },
+							{ "order": 7, "season_number": 2, "episode_number": 12 },
+							{ "order": 8, "season_number": 2, "episode_number": 13 },
+							{ "order": 9, "season_number": 2, "episode_number": 15 },
+							{ "order": 10, "season_number": 2, "episode_number": 14 },
+							{ "order": 11, "season_number": 2, "episode_number": 16 },
+							{ "order": 12, "season_number": 2, "episode_number": 17 },
+							{ "order": 13, "season_number": 2, "episode_number": 19 },
+							{ "order": 14, "season_number": 2, "episode_number": 18 },
+							{ "order": 15, "season_number": 2, "episode_number": 20 },
+							{ "order": 16, "season_number": 3, "episode_number": 2 },
+							{ "order": 17, "season_number": 3, "episode_number": 1 },
+							{ "order": 18, "season_number": 3, "episode_number": 3 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 5 },
+							{ "order": 1, "season_number": 3, "episode_number": 4 },
+							{ "order": 2, "season_number": 4, "episode_number": 2 },
+							{ "order": 3, "season_number": 3, "episode_number": 10 },
+							{ "order": 4, "season_number": 3, "episode_number": 9 },
+							{ "order": 5, "season_number": 3, "episode_number": 6 },
+							{ "order": 6, "season_number": 3, "episode_number": 7 },
+							{ "order": 7, "season_number": 3, "episode_number": 8 },
+							{ "order": 8, "season_number": 3, "episode_number": 11 },
+							{ "order": 9, "season_number": 4, "episode_number": 6 },
+							{ "order": 10, "season_number": 3, "episode_number": 12 },
+							{ "order": 11, "season_number": 5, "episode_number": 3 },
+							{ "order": 12, "season_number": 3, "episode_number": 13 },
+							{ "order": 13, "season_number": 3, "episode_number": 14 },
+							{ "order": 14, "season_number": 3, "episode_number": 15 },
+							{ "order": 15, "season_number": 4, "episode_number": 10 },
+							{ "order": 16, "season_number": 4, "episode_number": 7 },
+							{ "order": 17, "season_number": 4, "episode_number": 3 },
+							{ "order": 18, "season_number": 4, "episode_number": 1 },
+							{ "order": 19, "season_number": 4, "episode_number": 8 },
+							{ "order": 20, "season_number": 4, "episode_number": 9 },
+							{ "order": 21, "season_number": 4, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 5 },
+							{ "order": 1, "season_number": 4, "episode_number": 5 },
+							{ "order": 2, "season_number": 4, "episode_number": 4 },
+							{ "order": 3, "season_number": 5, "episode_number": 6 },
+							{ "order": 4, "season_number": 5, "episode_number": 4 },
+							{ "order": 5, "season_number": 5, "episode_number": 15 },
+							{ "order": 6, "season_number": 5, "episode_number": 2 },
+							{ "order": 7, "season_number": 5, "episode_number": 1 },
+							{ "order": 8, "season_number": 5, "episode_number": 7 },
+							{ "order": 9, "season_number": 5, "episode_number": 8 },
+							{ "order": 10, "season_number": 4, "episode_number": 12 },
+							{ "order": 11, "season_number": 5, "episode_number": 9 },
+							{ "order": 12, "season_number": 5, "episode_number": 13 },
+							{ "order": 13, "season_number": 5, "episode_number": 14 },
+							{ "order": 14, "season_number": 5, "episode_number": 10 },
+							{ "order": 15, "season_number": 5, "episode_number": 11 },
+							{ "order": 16, "season_number": 5, "episode_number": 12 },
+							{ "order": 17, "season_number": 5, "episode_number": 16 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 6, "episode_number": 1 },
+							{ "order": 1, "season_number": 6, "episode_number": 2 },
+							{ "order": 2, "season_number": 6, "episode_number": 3 },
+							{ "order": 3, "season_number": 6, "episode_number": 4 },
+							{ "order": 4, "season_number": 6, "episode_number": 5 },
+							{ "order": 5, "season_number": 6, "episode_number": 6 },
+							{ "order": 6, "season_number": 6, "episode_number": 7 },
+							{ "order": 7, "season_number": 6, "episode_number": 8 },
+							{ "order": 8, "season_number": 6, "episode_number": 9 },
+							{ "order": 9, "season_number": 6, "episode_number": 10 },
+							{ "order": 10, "season_number": 6, "episode_number": 11 },
+							{ "order": 11, "season_number": 6, "episode_number": 12 },
+							{ "order": 12, "season_number": 6, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 6, "episode_number": 18 },
+							{ "order": 1, "season_number": 6, "episode_number": 21 },
+							{ "order": 2, "season_number": 6, "episode_number": 17 },
+							{ "order": 3, "season_number": 6, "episode_number": 15 },
+							{ "order": 4, "season_number": 6, "episode_number": 23 },
+							{ "order": 5, "season_number": 6, "episode_number": 16 },
+							{ "order": 6, "season_number": 6, "episode_number": 14 },
+							{ "order": 7, "season_number": 6, "episode_number": 19 },
+							{ "order": 8, "season_number": 6, "episode_number": 22 },
+							{ "order": 9, "season_number": 6, "episode_number": 20 },
+							{ "order": 10, "season_number": 6, "episode_number": 24 },
+							{ "order": 11, "season_number": 6, "episode_number": 25 },
+							{ "order": 12, "season_number": 6, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 7, "episode_number": 1 },
+							{ "order": 1, "season_number": 7, "episode_number": 2 },
+							{ "order": 2, "season_number": 7, "episode_number": 3 },
+							{ "order": 3, "season_number": 7, "episode_number": 4 },
+							{ "order": 4, "season_number": 7, "episode_number": 5 },
+							{ "order": 5, "season_number": 7, "episode_number": 6 },
+							{ "order": 6, "season_number": 7, "episode_number": 7 },
+							{ "order": 7, "season_number": 7, "episode_number": 8 },
+							{ "order": 8, "season_number": 7, "episode_number": 9 },
+							{ "order": 9, "season_number": 7, "episode_number": 10 },
+							{ "order": 10, "season_number": 7, "episode_number": 12 },
+							{ "order": 11, "season_number": 7, "episode_number": 11 },
+							{ "order": 12, "season_number": 7, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 7, "episode_number": 17 },
+							{ "order": 1, "season_number": 7, "episode_number": 14 },
+							{ "order": 2, "season_number": 7, "episode_number": 16 },
+							{ "order": 3, "season_number": 7, "episode_number": 15 },
+							{ "order": 4, "season_number": 7, "episode_number": 18 },
+							{ "order": 5, "season_number": 7, "episode_number": 19 },
+							{ "order": 6, "season_number": 7, "episode_number": 20 },
+							{ "order": 7, "season_number": 7, "episode_number": 21 },
+							{ "order": 8, "season_number": 7, "episode_number": 22 },
+							{ "order": 9, "season_number": 7, "episode_number": 23 },
+							{ "order": 10, "season_number": 7, "episode_number": 24 },
+							{ "order": 11, "season_number": 7, "episode_number": 25 },
+							{ "order": 12, "season_number": 7, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 0,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 3 },
+							{ "order": 2, "season_number": 0, "episode_number": 4 },
+							{ "order": 3, "season_number": 0, "episode_number": 5 },
+							{ "order": 4, "season_number": 0, "episode_number": 6 },
+							{ "order": 5, "season_number": 0, "episode_number": 2 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 8, "episode_number": 1 },
+							{ "order": 1, "season_number": 8, "episode_number": 2 },
+							{ "order": 2, "season_number": 8, "episode_number": 3 },
+							{ "order": 3, "season_number": 8, "episode_number": 4 },
+							{ "order": 4, "season_number": 8, "episode_number": 5 },
+							{ "order": 5, "season_number": 8, "episode_number": 6 },
+							{ "order": 6, "season_number": 8, "episode_number": 7 },
+							{ "order": 7, "season_number": 8, "episode_number": 8 },
+							{ "order": 8, "season_number": 8, "episode_number": 9 },
+							{ "order": 9, "season_number": 8, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 9, "episode_number": 1 },
+							{ "order": 1, "season_number": 9, "episode_number": 2 },
+							{ "order": 2, "season_number": 9, "episode_number": 3 },
+							{ "order": 3, "season_number": 9, "episode_number": 4 },
+							{ "order": 4, "season_number": 9, "episode_number": 5 },
+							{ "order": 5, "season_number": 9, "episode_number": 6 },
+							{ "order": 6, "season_number": 9, "episode_number": 7 },
+							{ "order": 7, "season_number": 9, "episode_number": 8 },
+							{ "order": 8, "season_number": 9, "episode_number": 9 },
+							{ "order": 9, "season_number": 9, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 10, "episode_number": 1 },
+							{ "order": 1, "season_number": 10, "episode_number": 2 },
+							{ "order": 2, "season_number": 10, "episode_number": 3 },
+							{ "order": 3, "season_number": 10, "episode_number": 4 },
+							{ "order": 4, "season_number": 10, "episode_number": 5 },
+							{ "order": 5, "season_number": 10, "episode_number": 6 },
+							{ "order": 6, "season_number": 10, "episode_number": 7 },
+							{ "order": 7, "season_number": 10, "episode_number": 8 },
+							{ "order": 8, "season_number": 10, "episode_number": 9 },
+							{ "order": 9, "season_number": 10, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 12,
+						"episodes": [
+							{ "order": 0, "season_number": 11, "episode_number": 1 },
+							{ "order": 1, "season_number": 11, "episode_number": 2 },
+							{ "order": 2, "season_number": 11, "episode_number": 3 },
+							{ "order": 3, "season_number": 11, "episode_number": 4 },
+							{ "order": 4, "season_number": 11, "episode_number": 5 },
+							{ "order": 5, "season_number": 11, "episode_number": 6 },
+							{ "order": 6, "season_number": 11, "episode_number": 7 },
+							{ "order": 7, "season_number": 11, "episode_number": 8 },
+							{ "order": 8, "season_number": 11, "episode_number": 9 },
+							{ "order": 9, "season_number": 11, "episode_number": 10 }
+						]
+					}
+				]
+			},
+			"5ad25f9b0e0a266c3101674b": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 },
+							{ "order": 11, "season_number": 2, "episode_number": 12 },
+							{ "order": 12, "season_number": 2, "episode_number": 13 },
+							{ "order": 13, "season_number": 2, "episode_number": 14 },
+							{ "order": 14, "season_number": 2, "episode_number": 15 },
+							{ "order": 15, "season_number": 2, "episode_number": 16 },
+							{ "order": 16, "season_number": 2, "episode_number": 17 },
+							{ "order": 17, "season_number": 2, "episode_number": 18 },
+							{ "order": 18, "season_number": 2, "episode_number": 19 },
+							{ "order": 19, "season_number": 2, "episode_number": 20 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 },
+							{ "order": 5, "season_number": 3, "episode_number": 6 },
+							{ "order": 6, "season_number": 3, "episode_number": 7 },
+							{ "order": 7, "season_number": 3, "episode_number": 8 },
+							{ "order": 8, "season_number": 3, "episode_number": 9 },
+							{ "order": 9, "season_number": 3, "episode_number": 10 },
+							{ "order": 10, "season_number": 3, "episode_number": 11 },
+							{ "order": 11, "season_number": 3, "episode_number": 12 },
+							{ "order": 12, "season_number": 3, "episode_number": 13 },
+							{ "order": 13, "season_number": 3, "episode_number": 14 },
+							{ "order": 14, "season_number": 3, "episode_number": 15 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 1 },
+							{ "order": 1, "season_number": 5, "episode_number": 2 },
+							{ "order": 2, "season_number": 5, "episode_number": 3 },
+							{ "order": 3, "season_number": 5, "episode_number": 4 },
+							{ "order": 4, "season_number": 5, "episode_number": 5 },
+							{ "order": 5, "season_number": 5, "episode_number": 6 },
+							{ "order": 6, "season_number": 5, "episode_number": 7 },
+							{ "order": 7, "season_number": 5, "episode_number": 8 },
+							{ "order": 8, "season_number": 5, "episode_number": 9 },
+							{ "order": 9, "season_number": 5, "episode_number": 10 },
+							{ "order": 10, "season_number": 5, "episode_number": 11 },
+							{ "order": 11, "season_number": 5, "episode_number": 12 },
+							{ "order": 12, "season_number": 5, "episode_number": 13 },
+							{ "order": 13, "season_number": 5, "episode_number": 14 },
+							{ "order": 14, "season_number": 5, "episode_number": 15 },
+							{ "order": 15, "season_number": 5, "episode_number": 16 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 3 },
+							{ "order": 2, "season_number": 0, "episode_number": 5 },
+							{ "order": 3, "season_number": 0, "episode_number": 6 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 6, "episode_number": 1 },
+							{ "order": 1, "season_number": 6, "episode_number": 2 },
+							{ "order": 2, "season_number": 6, "episode_number": 3 },
+							{ "order": 3, "season_number": 6, "episode_number": 4 },
+							{ "order": 4, "season_number": 6, "episode_number": 5 },
+							{ "order": 5, "season_number": 6, "episode_number": 6 },
+							{ "order": 6, "season_number": 6, "episode_number": 7 },
+							{ "order": 7, "season_number": 6, "episode_number": 8 },
+							{ "order": 8, "season_number": 6, "episode_number": 9 },
+							{ "order": 9, "season_number": 6, "episode_number": 10 },
+							{ "order": 10, "season_number": 6, "episode_number": 11 },
+							{ "order": 11, "season_number": 6, "episode_number": 12 },
+							{ "order": 12, "season_number": 6, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 6, "episode_number": 14 },
+							{ "order": 1, "season_number": 6, "episode_number": 15 },
+							{ "order": 2, "season_number": 6, "episode_number": 16 },
+							{ "order": 3, "season_number": 6, "episode_number": 17 },
+							{ "order": 4, "season_number": 6, "episode_number": 18 },
+							{ "order": 5, "season_number": 6, "episode_number": 19 },
+							{ "order": 6, "season_number": 6, "episode_number": 20 },
+							{ "order": 7, "season_number": 6, "episode_number": 21 },
+							{ "order": 8, "season_number": 6, "episode_number": 22 },
+							{ "order": 9, "season_number": 6, "episode_number": 23 },
+							{ "order": 10, "season_number": 6, "episode_number": 24 },
+							{ "order": 11, "season_number": 6, "episode_number": 25 },
+							{ "order": 12, "season_number": 6, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 7, "episode_number": 1 },
+							{ "order": 1, "season_number": 7, "episode_number": 2 },
+							{ "order": 2, "season_number": 7, "episode_number": 3 },
+							{ "order": 3, "season_number": 7, "episode_number": 4 },
+							{ "order": 4, "season_number": 7, "episode_number": 5 },
+							{ "order": 5, "season_number": 7, "episode_number": 6 },
+							{ "order": 6, "season_number": 7, "episode_number": 7 },
+							{ "order": 7, "season_number": 7, "episode_number": 8 },
+							{ "order": 8, "season_number": 7, "episode_number": 9 },
+							{ "order": 9, "season_number": 7, "episode_number": 10 },
+							{ "order": 10, "season_number": 7, "episode_number": 11 },
+							{ "order": 11, "season_number": 7, "episode_number": 12 },
+							{ "order": 12, "season_number": 7, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 7, "episode_number": 14 },
+							{ "order": 1, "season_number": 7, "episode_number": 15 },
+							{ "order": 2, "season_number": 7, "episode_number": 16 },
+							{ "order": 3, "season_number": 7, "episode_number": 17 },
+							{ "order": 4, "season_number": 7, "episode_number": 18 },
+							{ "order": 5, "season_number": 7, "episode_number": 19 },
+							{ "order": 6, "season_number": 7, "episode_number": 20 },
+							{ "order": 7, "season_number": 7, "episode_number": 21 },
+							{ "order": 8, "season_number": 7, "episode_number": 22 },
+							{ "order": 9, "season_number": 7, "episode_number": 23 },
+							{ "order": 10, "season_number": 7, "episode_number": 24 },
+							{ "order": 11, "season_number": 7, "episode_number": 25 },
+							{ "order": 12, "season_number": 7, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 8, "episode_number": 1 },
+							{ "order": 1, "season_number": 8, "episode_number": 2 },
+							{ "order": 2, "season_number": 8, "episode_number": 3 },
+							{ "order": 3, "season_number": 8, "episode_number": 4 },
+							{ "order": 4, "season_number": 8, "episode_number": 5 },
+							{ "order": 5, "season_number": 8, "episode_number": 6 },
+							{ "order": 6, "season_number": 8, "episode_number": 7 },
+							{ "order": 7, "season_number": 8, "episode_number": 8 },
+							{ "order": 8, "season_number": 8, "episode_number": 9 },
+							{ "order": 9, "season_number": 8, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 12,
+						"episodes": [
+							{ "order": 0, "season_number": 9, "episode_number": 1 },
+							{ "order": 1, "season_number": 9, "episode_number": 2 },
+							{ "order": 2, "season_number": 9, "episode_number": 3 },
+							{ "order": 3, "season_number": 9, "episode_number": 4 },
+							{ "order": 4, "season_number": 9, "episode_number": 5 },
+							{ "order": 5, "season_number": 9, "episode_number": 6 },
+							{ "order": 6, "season_number": 9, "episode_number": 7 },
+							{ "order": 7, "season_number": 9, "episode_number": 8 },
+							{ "order": 8, "season_number": 9, "episode_number": 9 },
+							{ "order": 9, "season_number": 9, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 13,
+						"episodes": [
+							{ "order": 0, "season_number": 10, "episode_number": 1 },
+							{ "order": 1, "season_number": 10, "episode_number": 2 },
+							{ "order": 2, "season_number": 10, "episode_number": 3 },
+							{ "order": 3, "season_number": 10, "episode_number": 4 },
+							{ "order": 4, "season_number": 10, "episode_number": 5 },
+							{ "order": 5, "season_number": 10, "episode_number": 6 },
+							{ "order": 6, "season_number": 10, "episode_number": 7 },
+							{ "order": 7, "season_number": 10, "episode_number": 8 },
+							{ "order": 8, "season_number": 10, "episode_number": 9 },
+							{ "order": 9, "season_number": 10, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 14,
+						"episodes": [
+							{ "order": 0, "season_number": 11, "episode_number": 1 },
+							{ "order": 1, "season_number": 11, "episode_number": 2 },
+							{ "order": 2, "season_number": 11, "episode_number": 3 },
+							{ "order": 3, "season_number": 11, "episode_number": 4 },
+							{ "order": 4, "season_number": 11, "episode_number": 5 },
+							{ "order": 5, "season_number": 11, "episode_number": 6 },
+							{ "order": 6, "season_number": 11, "episode_number": 7 },
+							{ "order": 7, "season_number": 11, "episode_number": 8 },
+							{ "order": 8, "season_number": 11, "episode_number": 9 },
+							{ "order": 9, "season_number": 11, "episode_number": 10 }
+						]
+					}
+				]
+			},
+			"5ad24bf4c3a3683eed0145a8": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 1 },
+							{ "order": 10, "season_number": 2, "episode_number": 2 },
+							{ "order": 11, "season_number": 2, "episode_number": 3 },
+							{ "order": 12, "season_number": 2, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 5 },
+							{ "order": 1, "season_number": 2, "episode_number": 6 },
+							{ "order": 2, "season_number": 2, "episode_number": 7 },
+							{ "order": 3, "season_number": 2, "episode_number": 8 },
+							{ "order": 4, "season_number": 2, "episode_number": 9 },
+							{ "order": 5, "season_number": 2, "episode_number": 11 },
+							{ "order": 6, "season_number": 2, "episode_number": 10 },
+							{ "order": 7, "season_number": 2, "episode_number": 12 },
+							{ "order": 8, "season_number": 2, "episode_number": 13 },
+							{ "order": 9, "season_number": 2, "episode_number": 15 },
+							{ "order": 10, "season_number": 2, "episode_number": 14 },
+							{ "order": 11, "season_number": 2, "episode_number": 16 },
+							{ "order": 12, "season_number": 2, "episode_number": 17 },
+							{ "order": 13, "season_number": 2, "episode_number": 19 },
+							{ "order": 14, "season_number": 2, "episode_number": 18 },
+							{ "order": 15, "season_number": 2, "episode_number": 20 },
+							{ "order": 16, "season_number": 3, "episode_number": 2 },
+							{ "order": 17, "season_number": 3, "episode_number": 1 },
+							{ "order": 18, "season_number": 3, "episode_number": 3 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 5 },
+							{ "order": 1, "season_number": 3, "episode_number": 4 },
+							{ "order": 2, "season_number": 4, "episode_number": 2 },
+							{ "order": 3, "season_number": 3, "episode_number": 10 },
+							{ "order": 4, "season_number": 3, "episode_number": 9 },
+							{ "order": 5, "season_number": 3, "episode_number": 6 },
+							{ "order": 6, "season_number": 3, "episode_number": 7 },
+							{ "order": 7, "season_number": 3, "episode_number": 8 },
+							{ "order": 8, "season_number": 3, "episode_number": 11 },
+							{ "order": 9, "season_number": 4, "episode_number": 6 },
+							{ "order": 10, "season_number": 3, "episode_number": 12 },
+							{ "order": 11, "season_number": 5, "episode_number": 3 },
+							{ "order": 12, "season_number": 3, "episode_number": 13 },
+							{ "order": 13, "season_number": 3, "episode_number": 14 },
+							{ "order": 14, "season_number": 3, "episode_number": 15 },
+							{ "order": 15, "season_number": 4, "episode_number": 10 },
+							{ "order": 16, "season_number": 4, "episode_number": 7 },
+							{ "order": 17, "season_number": 4, "episode_number": 3 },
+							{ "order": 18, "season_number": 4, "episode_number": 1 },
+							{ "order": 19, "season_number": 4, "episode_number": 8 },
+							{ "order": 20, "season_number": 4, "episode_number": 9 },
+							{ "order": 21, "season_number": 4, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 5 },
+							{ "order": 1, "season_number": 4, "episode_number": 5 },
+							{ "order": 2, "season_number": 4, "episode_number": 4 },
+							{ "order": 3, "season_number": 5, "episode_number": 6 },
+							{ "order": 4, "season_number": 5, "episode_number": 4 },
+							{ "order": 5, "season_number": 5, "episode_number": 15 },
+							{ "order": 6, "season_number": 5, "episode_number": 2 },
+							{ "order": 7, "season_number": 5, "episode_number": 1 },
+							{ "order": 8, "season_number": 5, "episode_number": 7 },
+							{ "order": 9, "season_number": 5, "episode_number": 8 },
+							{ "order": 10, "season_number": 4, "episode_number": 12 },
+							{ "order": 11, "season_number": 5, "episode_number": 9 },
+							{ "order": 12, "season_number": 5, "episode_number": 13 },
+							{ "order": 13, "season_number": 5, "episode_number": 14 },
+							{ "order": 14, "season_number": 5, "episode_number": 10 },
+							{ "order": 15, "season_number": 5, "episode_number": 11 },
+							{ "order": 16, "season_number": 5, "episode_number": 12 },
+							{ "order": 17, "season_number": 5, "episode_number": 16 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 3 },
+							{ "order": 2, "season_number": 0, "episode_number": 5 },
+							{ "order": 3, "season_number": 0, "episode_number": 6 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 6, "episode_number": 1 },
+							{ "order": 1, "season_number": 6, "episode_number": 2 },
+							{ "order": 2, "season_number": 6, "episode_number": 3 },
+							{ "order": 3, "season_number": 6, "episode_number": 4 },
+							{ "order": 4, "season_number": 6, "episode_number": 5 },
+							{ "order": 5, "season_number": 6, "episode_number": 6 },
+							{ "order": 6, "season_number": 6, "episode_number": 7 },
+							{ "order": 7, "season_number": 6, "episode_number": 8 },
+							{ "order": 8, "season_number": 6, "episode_number": 9 },
+							{ "order": 9, "season_number": 6, "episode_number": 10 },
+							{ "order": 10, "season_number": 6, "episode_number": 11 },
+							{ "order": 11, "season_number": 6, "episode_number": 12 },
+							{ "order": 12, "season_number": 6, "episode_number": 13 },
+							{ "order": 13, "season_number": 6, "episode_number": 18 },
+							{ "order": 14, "season_number": 6, "episode_number": 21 },
+							{ "order": 15, "season_number": 6, "episode_number": 17 },
+							{ "order": 16, "season_number": 6, "episode_number": 15 },
+							{ "order": 17, "season_number": 6, "episode_number": 23 },
+							{ "order": 18, "season_number": 6, "episode_number": 16 },
+							{ "order": 19, "season_number": 6, "episode_number": 14 },
+							{ "order": 20, "season_number": 6, "episode_number": 19 },
+							{ "order": 21, "season_number": 6, "episode_number": 22 },
+							{ "order": 22, "season_number": 6, "episode_number": 20 },
+							{ "order": 23, "season_number": 6, "episode_number": 24 },
+							{ "order": 24, "season_number": 6, "episode_number": 25 },
+							{ "order": 25, "season_number": 6, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 7, "episode_number": 1 },
+							{ "order": 1, "season_number": 7, "episode_number": 2 },
+							{ "order": 2, "season_number": 7, "episode_number": 3 },
+							{ "order": 3, "season_number": 7, "episode_number": 4 },
+							{ "order": 4, "season_number": 7, "episode_number": 5 },
+							{ "order": 5, "season_number": 7, "episode_number": 6 },
+							{ "order": 6, "season_number": 7, "episode_number": 7 },
+							{ "order": 7, "season_number": 7, "episode_number": 8 },
+							{ "order": 8, "season_number": 7, "episode_number": 9 },
+							{ "order": 9, "season_number": 7, "episode_number": 10 },
+							{ "order": 10, "season_number": 7, "episode_number": 12 },
+							{ "order": 11, "season_number": 7, "episode_number": 11 },
+							{ "order": 12, "season_number": 7, "episode_number": 13 },
+							{ "order": 13, "season_number": 7, "episode_number": 17 },
+							{ "order": 14, "season_number": 7, "episode_number": 14 },
+							{ "order": 15, "season_number": 7, "episode_number": 16 },
+							{ "order": 16, "season_number": 7, "episode_number": 15 },
+							{ "order": 17, "season_number": 7, "episode_number": 18 },
+							{ "order": 18, "season_number": 7, "episode_number": 19 },
+							{ "order": 19, "season_number": 7, "episode_number": 20 },
+							{ "order": 20, "season_number": 7, "episode_number": 21 },
+							{ "order": 21, "season_number": 7, "episode_number": 22 },
+							{ "order": 22, "season_number": 7, "episode_number": 23 },
+							{ "order": 23, "season_number": 7, "episode_number": 24 },
+							{ "order": 24, "season_number": 7, "episode_number": 25 },
+							{ "order": 25, "season_number": 7, "episode_number": 26 }
+						]
+					},
+					{
+						"order": 0,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 4 },
+							{ "order": 1, "season_number": 0, "episode_number": 2 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 8, "episode_number": 1 },
+							{ "order": 1, "season_number": 8, "episode_number": 2 },
+							{ "order": 2, "season_number": 8, "episode_number": 3 },
+							{ "order": 3, "season_number": 8, "episode_number": 4 },
+							{ "order": 4, "season_number": 8, "episode_number": 5 },
+							{ "order": 5, "season_number": 8, "episode_number": 6 },
+							{ "order": 6, "season_number": 8, "episode_number": 7 },
+							{ "order": 7, "season_number": 8, "episode_number": 8 },
+							{ "order": 8, "season_number": 8, "episode_number": 9 },
+							{ "order": 9, "season_number": 8, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 9, "episode_number": 1 },
+							{ "order": 1, "season_number": 9, "episode_number": 2 },
+							{ "order": 2, "season_number": 9, "episode_number": 3 },
+							{ "order": 3, "season_number": 9, "episode_number": 4 },
+							{ "order": 4, "season_number": 9, "episode_number": 5 },
+							{ "order": 5, "season_number": 9, "episode_number": 6 },
+							{ "order": 6, "season_number": 9, "episode_number": 7 },
+							{ "order": 7, "season_number": 9, "episode_number": 8 },
+							{ "order": 8, "season_number": 9, "episode_number": 9 },
+							{ "order": 9, "season_number": 9, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 10, "episode_number": 1 },
+							{ "order": 1, "season_number": 10, "episode_number": 2 },
+							{ "order": 2, "season_number": 10, "episode_number": 3 },
+							{ "order": 3, "season_number": 10, "episode_number": 4 },
+							{ "order": 4, "season_number": 10, "episode_number": 5 },
+							{ "order": 5, "season_number": 10, "episode_number": 6 },
+							{ "order": 6, "season_number": 10, "episode_number": 7 },
+							{ "order": 7, "season_number": 10, "episode_number": 8 },
+							{ "order": 8, "season_number": 10, "episode_number": 9 },
+							{ "order": 9, "season_number": 10, "episode_number": 10 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 11, "episode_number": 1 },
+							{ "order": 1, "season_number": 11, "episode_number": 2 },
+							{ "order": 2, "season_number": 11, "episode_number": 3 },
+							{ "order": 3, "season_number": 11, "episode_number": 4 },
+							{ "order": 4, "season_number": 11, "episode_number": 5 },
+							{ "order": 5, "season_number": 11, "episode_number": 6 },
+							{ "order": 6, "season_number": 11, "episode_number": 7 },
+							{ "order": 7, "season_number": 11, "episode_number": 8 },
+							{ "order": 8, "season_number": 11, "episode_number": 9 },
+							{ "order": 9, "season_number": 11, "episode_number": 10 }
+						]
+					}
+				]
 			}
 		},
 		"episodeShow": {
@@ -42328,7 +44099,8 @@
 			"tt0965546": null,
 			"tt38848632": null,
 			"tt33060122": null,
-			"tt5274556": null
+			"tt5274556": null,
+			"tt2005616": "tt0149460"
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -44905,7 +46677,8 @@
 				],
 				"total_pages": 1,
 				"total_results": 18
-			}
+			},
+			"Futurama HD": { "page": 1, "results": [], "total_pages": 1, "total_results": 0 }
 		},
 		"imdbSeries": {},
 		"anime": {
@@ -54325,6 +56098,1283 @@
 						"episodeEnd": null,
 						"how": null,
 						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Futurama HD PL",
+				"hash": null,
+				"imdbId": "tt2005616",
+				"files": [
+					{ "path": "Futurama.s01e01.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e02.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e03.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e04.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e05.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e06.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e07.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e08.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s01e09.pl.mkv", "folder": "S01" },
+					{ "path": "Futurama.s02e01.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e02.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e03.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e04.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e05.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e06.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e07.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e08.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e09.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e10.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e11.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e12.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e13.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e14.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e15.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e16.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e17.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e18.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e19.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s02e20.pl.mkv", "folder": "S02" },
+					{ "path": "Futurama.s03e01.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e02.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e03.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e04.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e05.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e06.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e07.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e08.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e09.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e10.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e11.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e12.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e13.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e14.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s03e15.pl.mkv", "folder": "S03" },
+					{ "path": "Futurama.s04e01.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e02.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e03.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e04.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e05.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e06.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e07.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e08.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e09.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e10.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e11.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s04e12.pl.mkv", "folder": "S04" },
+					{ "path": "Futurama.s05e01.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e02.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e03.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e04.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e05.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e06.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e07.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e08.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e09.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e10.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e11.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e12.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e13.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e14.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e15.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s05e16.pl.mkv", "folder": "S05" },
+					{ "path": "Futurama.s06e01.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e02.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e03.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e04.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e05.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e06.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e07.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e08.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e09.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e10.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e11.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e12.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e13.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e14.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e15.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s06e16.pl.mkv", "folder": "S06" },
+					{ "path": "Futurama.s07e01.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e02.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e03.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e04.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e05.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e06.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e07.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e08.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e09.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e10.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e11.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e12.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s07e13.pl.mkv", "folder": "S07" },
+					{ "path": "Futurama.s08e01.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e02.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e03.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e04.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e05.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e06.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e07.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e08.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e09.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e10.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e11.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e12.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s08e13.pl.mkv", "folder": "S08" },
+					{ "path": "Futurama.s09e01.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e02.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e03.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e04.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e05.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e06.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e07.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e08.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e09.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e10.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e11.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e12.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s09e13.pl.mkv", "folder": "S09" },
+					{ "path": "Futurama.s10e01.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e02.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e03.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e04.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e05.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e06.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e07.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e08.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e09.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e10.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e11.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e12.pl.mkv", "folder": "S10" },
+					{ "path": "Futurama.s10e13.pl.mkv", "folder": "S10" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0149460",
+				"tmdbId": 615,
+				"files": [
+					{
+						"path": "Futurama.s01e01.pl.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35006
+					},
+					{
+						"path": "Futurama.s01e02.pl.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35007
+					},
+					{
+						"path": "Futurama.s01e03.pl.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35008
+					},
+					{
+						"path": "Futurama.s01e04.pl.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35009
+					},
+					{
+						"path": "Futurama.s01e05.pl.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35010
+					},
+					{
+						"path": "Futurama.s01e06.pl.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35011
+					},
+					{
+						"path": "Futurama.s01e07.pl.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35012
+					},
+					{
+						"path": "Futurama.s01e08.pl.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35013
+					},
+					{
+						"path": "Futurama.s01e09.pl.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35014
+					},
+					{
+						"path": "Futurama.s02e01.pl.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285653
+					},
+					{
+						"path": "Futurama.s02e02.pl.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285654
+					},
+					{
+						"path": "Futurama.s02e03.pl.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285655
+					},
+					{
+						"path": "Futurama.s02e04.pl.mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285656
+					},
+					{
+						"path": "Futurama.s02e05.pl.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35019
+					},
+					{
+						"path": "Futurama.s02e06.pl.mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35020
+					},
+					{
+						"path": "Futurama.s02e07.pl.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35021
+					},
+					{
+						"path": "Futurama.s02e08.pl.mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35022
+					},
+					{
+						"path": "Futurama.s02e09.pl.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35023
+					},
+					{
+						"path": "Futurama.s02e10.pl.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35024
+					},
+					{
+						"path": "Futurama.s02e11.pl.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35034
+					},
+					{
+						"path": "Futurama.s02e12.pl.mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35025
+					},
+					{
+						"path": "Futurama.s02e13.pl.mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35026
+					},
+					{
+						"path": "Futurama.s02e14.pl.mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35029
+					},
+					{
+						"path": "Futurama.s02e15.pl.mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35027
+					},
+					{
+						"path": "Futurama.s02e16.pl.mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35028
+					},
+					{
+						"path": "Futurama.s02e17.pl.mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35030
+					},
+					{
+						"path": "Futurama.s02e18.pl.mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35033
+					},
+					{
+						"path": "Futurama.s02e19.pl.mkv",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35031
+					},
+					{
+						"path": "Futurama.s02e20.pl.mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1089973
+					},
+					{
+						"path": "Futurama.s03e01.pl.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285650
+					},
+					{
+						"path": "Futurama.s03e02.pl.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285651
+					},
+					{
+						"path": "Futurama.s03e03.pl.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285652
+					},
+					{
+						"path": "Futurama.s03e04.pl.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35038
+					},
+					{
+						"path": "Futurama.s03e05.pl.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35049
+					},
+					{
+						"path": "Futurama.s03e06.pl.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35039
+					},
+					{
+						"path": "Futurama.s03e07.pl.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35040
+					},
+					{
+						"path": "Futurama.s03e08.pl.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35041
+					},
+					{
+						"path": "Futurama.s03e09.pl.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35042
+					},
+					{
+						"path": "Futurama.s03e10.pl.mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35043
+					},
+					{
+						"path": "Futurama.s03e11.pl.mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35044
+					},
+					{
+						"path": "Futurama.s03e12.pl.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35045
+					},
+					{
+						"path": "Futurama.s03e13.pl.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35046
+					},
+					{
+						"path": "Futurama.s03e14.pl.mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35047
+					},
+					{
+						"path": "Futurama.s03e15.pl.mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35048
+					},
+					{
+						"path": "Futurama.s04e01.pl.mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285641
+					},
+					{
+						"path": "Futurama.s04e02.pl.mkv",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285642
+					},
+					{
+						"path": "Futurama.s04e03.pl.mkv",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285643
+					},
+					{
+						"path": "Futurama.s04e04.pl.mkv",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35052
+					},
+					{
+						"path": "Futurama.s04e05.pl.mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35053
+					},
+					{
+						"path": "Futurama.s04e06.pl.mkv",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285644
+					},
+					{
+						"path": "Futurama.s04e07.pl.mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285645
+					},
+					{
+						"path": "Futurama.s04e08.pl.mkv",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285646
+					},
+					{
+						"path": "Futurama.s04e09.pl.mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285647
+					},
+					{
+						"path": "Futurama.s04e10.pl.mkv",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285648
+					},
+					{
+						"path": "Futurama.s04e11.pl.mkv",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1285649
+					},
+					{
+						"path": "Futurama.s04e12.pl.mkv",
+						"season": 4,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35060
+					},
+					{
+						"path": "Futurama.s05e01.pl.mkv",
+						"season": 5,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35076
+					},
+					{
+						"path": "Futurama.s05e02.pl.mkv",
+						"season": 5,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1108227
+					},
+					{
+						"path": "Futurama.s05e03.pl.mkv",
+						"season": 5,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1108228
+					},
+					{
+						"path": "Futurama.s05e04.pl.mkv",
+						"season": 5,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1108229
+					},
+					{
+						"path": "Futurama.s05e05.pl.mkv",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232873
+					},
+					{
+						"path": "Futurama.s05e06.pl.mkv",
+						"season": 5,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232874
+					},
+					{
+						"path": "Futurama.s05e07.pl.mkv",
+						"season": 5,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232875
+					},
+					{
+						"path": "Futurama.s05e08.pl.mkv",
+						"season": 5,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232876
+					},
+					{
+						"path": "Futurama.s05e09.pl.mkv",
+						"season": 5,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232877
+					},
+					{
+						"path": "Futurama.s05e10.pl.mkv",
+						"season": 5,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232878
+					},
+					{
+						"path": "Futurama.s05e11.pl.mkv",
+						"season": 5,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232879
+					},
+					{
+						"path": "Futurama.s05e12.pl.mkv",
+						"season": 5,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232880
+					},
+					{
+						"path": "Futurama.s05e13.pl.mkv",
+						"season": 5,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232881
+					},
+					{
+						"path": "Futurama.s05e14.pl.mkv",
+						"season": 5,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232882
+					},
+					{
+						"path": "Futurama.s05e15.pl.mkv",
+						"season": 5,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232883
+					},
+					{
+						"path": "Futurama.s05e16.pl.mkv",
+						"season": 5,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1232884
+					},
+					{
+						"path": "Futurama.s06e01.pl.mkv",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35077
+					},
+					{
+						"path": "Futurama.s06e02.pl.mkv",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35078
+					},
+					{
+						"path": "Futurama.s06e03.pl.mkv",
+						"season": 6,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35079
+					},
+					{
+						"path": "Futurama.s06e04.pl.mkv",
+						"season": 6,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35080
+					},
+					{
+						"path": "Futurama.s06e05.pl.mkv",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35081
+					},
+					{
+						"path": "Futurama.s06e06.pl.mkv",
+						"season": 6,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35082
+					},
+					{
+						"path": "Futurama.s06e07.pl.mkv",
+						"season": 6,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35083
+					},
+					{
+						"path": "Futurama.s06e08.pl.mkv",
+						"season": 6,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35084
+					},
+					{
+						"path": "Futurama.s06e09.pl.mkv",
+						"season": 6,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35085
+					},
+					{
+						"path": "Futurama.s06e10.pl.mkv",
+						"season": 6,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35086
+					},
+					{
+						"path": "Futurama.s06e11.pl.mkv",
+						"season": 6,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35087
+					},
+					{
+						"path": "Futurama.s06e12.pl.mkv",
+						"season": 6,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35088
+					},
+					{
+						"path": "Futurama.s06e13.pl.mkv",
+						"season": 6,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35089
+					},
+					{
+						"path": "Futurama.s06e14.pl.mkv",
+						"season": 6,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35002
+					},
+					{
+						"path": "Futurama.s06e15.pl.mkv",
+						"season": 6,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35090
+					},
+					{
+						"path": "Futurama.s06e16.pl.mkv",
+						"season": 6,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 35091
+					},
+					{
+						"path": "Futurama.s07e01.pl.mkv",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35077
+					},
+					{
+						"path": "Futurama.s07e02.pl.mkv",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35078
+					},
+					{
+						"path": "Futurama.s07e03.pl.mkv",
+						"season": 6,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35079
+					},
+					{
+						"path": "Futurama.s07e04.pl.mkv",
+						"season": 6,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35080
+					},
+					{
+						"path": "Futurama.s07e05.pl.mkv",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35081
+					},
+					{
+						"path": "Futurama.s07e06.pl.mkv",
+						"season": 6,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35082
+					},
+					{
+						"path": "Futurama.s07e07.pl.mkv",
+						"season": 6,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35083
+					},
+					{
+						"path": "Futurama.s07e08.pl.mkv",
+						"season": 6,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35084
+					},
+					{
+						"path": "Futurama.s07e09.pl.mkv",
+						"season": 6,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35085
+					},
+					{
+						"path": "Futurama.s07e10.pl.mkv",
+						"season": 6,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35086
+					},
+					{
+						"path": "Futurama.s07e11.pl.mkv",
+						"season": 6,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35087
+					},
+					{
+						"path": "Futurama.s07e12.pl.mkv",
+						"season": 6,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35088
+					},
+					{
+						"path": "Futurama.s07e13.pl.mkv",
+						"season": 6,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35089
+					},
+					{
+						"path": "Futurama.s08e01.pl.mkv",
+						"season": 6,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35002
+					},
+					{
+						"path": "Futurama.s08e02.pl.mkv",
+						"season": 6,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35090
+					},
+					{
+						"path": "Futurama.s08e03.pl.mkv",
+						"season": 6,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35091
+					},
+					{
+						"path": "Futurama.s08e04.pl.mkv",
+						"season": 6,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35092
+					},
+					{
+						"path": "Futurama.s08e05.pl.mkv",
+						"season": 6,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35003
+					},
+					{
+						"path": "Futurama.s08e06.pl.mkv",
+						"season": 6,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35094
+					},
+					{
+						"path": "Futurama.s08e07.pl.mkv",
+						"season": 6,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35093
+					},
+					{
+						"path": "Futurama.s08e08.pl.mkv",
+						"season": 6,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35096
+					},
+					{
+						"path": "Futurama.s08e09.pl.mkv",
+						"season": 6,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35095
+					},
+					{
+						"path": "Futurama.s08e10.pl.mkv",
+						"season": 6,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35098
+					},
+					{
+						"path": "Futurama.s08e11.pl.mkv",
+						"season": 6,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35097
+					},
+					{
+						"path": "Futurama.s08e12.pl.mkv",
+						"season": 6,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35099
+					},
+					{
+						"path": "Futurama.s08e13.pl.mkv",
+						"season": 6,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35100
+					},
+					{
+						"path": "Futurama.s09e01.pl.mkv",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35107
+					},
+					{
+						"path": "Futurama.s09e02.pl.mkv",
+						"season": 7,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35108
+					},
+					{
+						"path": "Futurama.s09e03.pl.mkv",
+						"season": 7,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35109
+					},
+					{
+						"path": "Futurama.s09e04.pl.mkv",
+						"season": 7,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35110
+					},
+					{
+						"path": "Futurama.s09e05.pl.mkv",
+						"season": 7,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35112
+					},
+					{
+						"path": "Futurama.s09e06.pl.mkv",
+						"season": 7,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35113
+					},
+					{
+						"path": "Futurama.s09e07.pl.mkv",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35111
+					},
+					{
+						"path": "Futurama.s09e08.pl.mkv",
+						"season": 7,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35115
+					},
+					{
+						"path": "Futurama.s09e09.pl.mkv",
+						"season": 7,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35116
+					},
+					{
+						"path": "Futurama.s09e10.pl.mkv",
+						"season": 7,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35114
+					},
+					{
+						"path": "Futurama.s09e11.pl.mkv",
+						"season": 7,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35118
+					},
+					{
+						"path": "Futurama.s09e12.pl.mkv",
+						"season": 7,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35117
+					},
+					{
+						"path": "Futurama.s09e13.pl.mkv",
+						"season": 7,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35004
+					},
+					{
+						"path": "Futurama.s10e01.pl.mkv",
+						"season": 7,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35005
+					},
+					{
+						"path": "Futurama.s10e02.pl.mkv",
+						"season": 7,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35119
+					},
+					{
+						"path": "Futurama.s10e03.pl.mkv",
+						"season": 7,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35120
+					},
+					{
+						"path": "Futurama.s10e04.pl.mkv",
+						"season": 7,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35121
+					},
+					{
+						"path": "Futurama.s10e05.pl.mkv",
+						"season": 7,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35123
+					},
+					{
+						"path": "Futurama.s10e06.pl.mkv",
+						"season": 7,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35122
+					},
+					{
+						"path": "Futurama.s10e07.pl.mkv",
+						"season": 7,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35126
+					},
+					{
+						"path": "Futurama.s10e08.pl.mkv",
+						"season": 7,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35124
+					},
+					{
+						"path": "Futurama.s10e09.pl.mkv",
+						"season": 7,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35125
+					},
+					{
+						"path": "Futurama.s10e10.pl.mkv",
+						"season": 7,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35129
+					},
+					{
+						"path": "Futurama.s10e11.pl.mkv",
+						"season": 7,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35127
+					},
+					{
+						"path": "Futurama.s10e12.pl.mkv",
+						"season": 7,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35128
+					},
+					{
+						"path": "Futurama.s10e13.pl.mkv",
+						"season": 7,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "group",
+						"tmdbEpisodeId": 35130
 					}
 				]
 			}

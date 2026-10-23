@@ -589,6 +589,7 @@ export const openApiDocument = {
 																'imdb',
 																'tvdb',
 																'dub',
+																'group',
 																'absolute',
 																null,
 															],
@@ -610,7 +611,7 @@ export const openApiDocument = {
 						},
 						{
 							complete: true,
-							rules: '2026-10-23.2',
+							rules: '2026-10-23.9',
 							releases: [
 								{
 									kind: 'tv',

@@ -33,6 +33,7 @@ import {
 	type Placement,
 	type PlacementRule,
 	type PlacementShow,
+	type TmdbSeason,
 } from '@/utils/episodePlacement';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
 
@@ -676,6 +677,7 @@ async function placeOnShow(
 	};
 	placement.tvdbOrder = tvdbOrderLookup(showId, sources, TVDB_ORDER);
 	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
+	placement.packOrder = await packOrderLookup(release, placement.seasons, showId, sources);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
 	return placeFiles(release, placement, anime, imdb, (files) => answer(files));
 }
@@ -825,6 +827,108 @@ const DUBBED = /(?:^|[\s._([-])(?:english[\s._-]+)?dub(?:bed)?(?=[\s._)\]-]|$)/i
  * show's episode group of that order ("TVDB Order", "Dub Order"), read once per release and only
  * when a file needs it.
  */
+/** One episode group's seasons, by its order: each the TMDB season and episode of its nth episode. */
+async function groupSeasons(
+	id: string,
+	sources: PlacementSources
+): Promise<Map<number, [number, number][]>> {
+	const groups: any[] = (await sources.episodeGroup(id))?.groups ?? [];
+	const seasons = new Map<number, [number, number][]>();
+	for (const group of groups) {
+		if (!Number.isInteger(group?.order)) continue;
+		const episodes: any[] = (group.episodes ?? []).filter(
+			(row: any) =>
+				Number.isInteger(row?.order) &&
+				Number.isInteger(row?.season_number) &&
+				Number.isInteger(row?.episode_number)
+		);
+		episodes.sort((a, b) => a.order - b.order);
+		seasons.set(
+			group.order,
+			episodes.map((row) => [row.season_number, row.episode_number])
+		);
+	}
+	return seasons;
+}
+
+/**
+ * The order of a pack numbered in one of the show's episode groups rather than as TMDB aired it:
+ * the group whose seasons hold exactly as many episodes as the pack's, in more of its seasons
+ * than TMDB's own list does, used for the seasons where it does and TMDB's does not. The Polish
+ * `Futurama HD PL` numbers seasons 7-10 by 13 as TMDB's "Digital Order" does, where TMDB lists
+ * 26 and 10s, so its `s08e05` is not TMDB's S8E5 of 2023. Read only when a season of four
+ * files or more runs past TMDB's list; two groups alike leave the pack to TMDB's numbering.
+ */
+async function packOrderLookup(
+	release: PlaceRequest,
+	seasons: TmdbSeason[],
+	tmdbId: number,
+	sources: PlacementSources
+): Promise<PlacementShow['packOrder'] | undefined> {
+	const single = release.files.length === 1;
+	const held = new Map<number, Set<number>>();
+	for (const file of release.files) {
+		const numbers = fileNumbers(release.name, file.folder, file.path, single);
+		if (
+			!numbers ||
+			numbers.season === null ||
+			numbers.season < 1 ||
+			numbers.coded ||
+			numbers.borrowed
+		)
+			continue;
+		const set = held.get(numbers.season) ?? new Set<number>();
+		for (let episode = numbers.episode; episode <= (numbers.end ?? numbers.episode); episode++)
+			set.add(episode);
+		held.set(numbers.season, set);
+	}
+	const aired = new Map(seasons.map((row) => [row.season, row.episodes]));
+	const runs = [...held].filter(([, set]) => set.size >= 4);
+	if (!runs.some(([season, set]) => Math.max(...set) > (aired.get(season) ?? 0)))
+		return undefined;
+	// a season the pack holds whole: as many episodes as the order lists, numbered 1 to n
+	const whole = (season: number, size: number | undefined) => {
+		const set = held.get(season)!;
+		return size === set.size && Math.max(...set) === size;
+	};
+	const own = runs.filter(([season]) => whole(season, aired.get(season))).length;
+	const results: any[] = (await sources.episodeGroups(tmdbId))?.results ?? [];
+	let best: { order: Map<number, [number, number][]>; count: number } | null = null;
+	let tie = false;
+	// an order in seasons (aired, DVD, digital, production, TV), never an absolute or story-arc one
+	for (const group of results.filter((group) => [1, 3, 4, 6, 7].includes(group?.type))) {
+		if (typeof group?.id !== 'string') continue;
+		const order = await groupSeasons(group.id, sources);
+		// the group agrees with TMDB's list wherever that holds the pack's season, and names no special
+		const agrees = runs.every(
+			([season]) =>
+				!whole(season, aired.get(season)) ||
+				order.get(season)?.every(([s, e], at) => s === season && e === at + 1)
+		);
+		// a season the group numbers whole where TMDB's list does not, and only regular episodes
+		const used = runs.filter(
+			([season]) =>
+				whole(season, order.get(season)?.length) && !whole(season, aired.get(season))
+		);
+		const regular = used.every(([season]) => order.get(season)!.every(([s]) => s > 0));
+		const count = runs.filter(([season]) => whole(season, order.get(season)?.length)).length;
+		if (!agrees || !regular || !used.length || count <= own) continue;
+		if (!best || count > best.count) [best, tie] = [{ order, count }, false];
+		else if (count === best.count) tie = true;
+	}
+	if (!best || tie) return undefined;
+	const { order } = best;
+	const used = new Set(
+		runs.flatMap(([season]) =>
+			whole(season, order.get(season)?.length) && !whole(season, aired.get(season))
+				? [season]
+				: []
+		)
+	);
+	return async (season, episode) =>
+		used.has(season) ? (order.get(season)?.[episode - 1] ?? null) : null;
+}
+
 function tvdbOrderLookup(
 	tmdbId: number,
 	sources: PlacementSources,
@@ -836,23 +940,7 @@ function tvdbOrderLookup(
 		const named = results.filter((group) => name.test(group?.name ?? ''));
 		const id = (named.find((group) => group?.type === 1) ?? named[0])?.id;
 		if (typeof id !== 'string') return null;
-		const groups: any[] = (await sources.episodeGroup(id))?.groups ?? [];
-		const seasons = new Map<number, [number, number][]>();
-		for (const group of groups) {
-			if (!Number.isInteger(group?.order)) continue;
-			const episodes: any[] = (group.episodes ?? []).filter(
-				(row: any) =>
-					Number.isInteger(row?.order) &&
-					Number.isInteger(row?.season_number) &&
-					Number.isInteger(row?.episode_number)
-			);
-			episodes.sort((a, b) => a.order - b.order);
-			seasons.set(
-				group.order,
-				episodes.map((row) => [row.season_number, row.episode_number])
-			);
-		}
-		return seasons;
+		return groupSeasons(id, sources);
 	};
 	return async (season, episode) => {
 		order ??= read();

@@ -25,7 +25,7 @@ import { namedEpisodes, namedSeasons } from '@/utils/seasonNaming';
 import { FANSUB_SEASON } from '@/utils/tvEpisodes';
 import ptt from 'parse-torrent-title';
 
-export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'dub' | 'absolute';
+export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'dub' | 'group' | 'absolute';
 
 /** A file's numbers as its name (or its folder, or its release) gives them. */
 export interface FileNumbers {
@@ -67,6 +67,8 @@ export interface PlacementShow {
 	tvdbOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 	/** TMDB's episode for an English dub's season and episode, by the show's Dub Order group. */
 	dubOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
+	/** TMDB's episode for a pack's season and episode, by the episode group its seasons match. */
+	packOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 }
 
 export interface Placement {
@@ -688,6 +690,12 @@ async function placeByRules(
 	if (show.dubOrder && season !== null && season > 0) {
 		const dub = await show.dubOrder(season, episode);
 		const found = dub && (await placed(dub, 'dub'));
+		if (found) return found;
+	}
+	// a pack numbered in one of the show's episode groups (`Futurama HD PL`'s "Digital Order")
+	if (show.packOrder && season !== null && season > 0) {
+		const ordered = await show.packOrder(season, episode);
+		const found = ordered && (await placed(ordered, 'group'));
 		if (found) return found;
 	}
 

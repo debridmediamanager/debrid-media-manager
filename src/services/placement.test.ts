@@ -800,4 +800,12 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		// no TMDB title carries 1969
 		expect(at(street, 'Episode 1969')).toEqual([null, null]);
 	});
+	it("numbers a pack by the episode group its seasons match, not TMDB's aired seasons", async () => {
+		// the Polish pack's seasons 7-10 are TMDB's "Digital Order": 13 each, where TMDB airs 26s and 10s
+		const pack = await placedHere('Futurama HD PL');
+		expect(at(pack, 'Futurama.s07e01.pl')).toEqual([6, 1]);
+		expect(at(pack, 'Futurama.s08e11.pl')).toEqual([6, 24]);
+		expect(at(pack, 'Futurama.s10e13.pl')).toEqual([7, 26]);
+		expect(at(pack, 'Futurama.s01e01.pl')).toEqual([1, 1]);
+	});
 });
