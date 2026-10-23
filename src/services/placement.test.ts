@@ -13,6 +13,7 @@ import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
+import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -712,5 +713,40 @@ describe("a placed file's TMDB episode id", () => {
 			how: 'imdb',
 			tmdbEpisodeId: null,
 		});
+	});
+});
+
+describe('what rex-fun still could not match on 2026-10-23', () => {
+	// zurg's requests for the releases behind rex-fun's unmatched episode rows after its morning
+	// re-placement, and every answer placing them needed (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(fun1023.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(fun1023.answers.anime.fribb as FribbAnimeEntry[]),
+				fun1023.answers.anime.titles
+			),
+	};
+	const placedHere = async (name: string) => {
+		const c = fun1023.cases.find((c) => c.request.name.startsWith(name))!;
+		return (await place([c.request as PlaceRequest], Infinity, from)).releases[0];
+	};
+	const at = (release: Awaited<ReturnType<typeof placedHere>>, part: string) => {
+		const file = release.files.find((f) => f.path.includes(part))!;
+		return [file.season, file.episode];
+	};
+
+	it.each(fun1023.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place([c.request as PlaceRequest], Infinity, from);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	it("reads a word like `Special` or `Op` after an episode's number as its title", async () => {
+		const pack = await placedHere('[Anime Time] One Piece (0001-1071+Movies+Specials)');
+		expect(at(pack, '0700 - The Ultimate Power! The Secret of the Op-Op Fruit!')).toEqual([
+			17, 700,
+		]);
+		expect(at(pack, '0918 - It')).toEqual([21, 918]);
 	});
 });

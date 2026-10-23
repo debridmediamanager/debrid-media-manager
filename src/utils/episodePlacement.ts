@@ -229,7 +229,10 @@ function sceneNumbers(name: string): FileNumbers | null {
 
 /** Fansub and loose numbering: `Oshi no Ko S2 - 05`, `Kingdom 4th Season - 21`, `- 05`, `[05]`, `10of13`. */
 function looseNumbers(stem: string): FileNumbers | null {
-	if (NOT_EPISODE.test(stem.replace(BRACKETS, ' ').replace(/_/g, ' '))) return null;
+	// the words before the number only: after it is the episode's own title, `One Piece - 0700 -
+	// The Ultimate Power! The Secret of the Op-Op Fruit!` and `- 0918 - … The Special Operation …`
+	const head = stem.split(/\s-\s\d{2,4}(?:v\d)?\s-\s/)[0];
+	if (NOT_EPISODE.test(head.replace(BRACKETS, ' ').replace(/_/g, ' '))) return null;
 	const fansub = FANSUB_SEASON.exec(stem);
 	if (fansub && fansub[4] === undefined) {
 		const episode = positive(fansub[3]);

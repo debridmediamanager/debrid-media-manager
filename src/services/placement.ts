@@ -42,7 +42,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
  * ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.2';
+export const PLACEMENT_RULES = '2026-10-23.3';
 
 export interface PlaceRequest {
 	name: string;
