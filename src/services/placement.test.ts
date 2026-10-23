@@ -771,4 +771,12 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		const ghost = await placedHere('Detective.Conan.S33E26.a.Ghost');
 		expect(ghost.files[0]).toMatchObject({ season: 1, episode: 1173, how: 'tvdb' });
 	});
+	it('moves a release to a show TMDB lists under its own title when that show holds more of it', async () => {
+		// the id sent names the 11-episode Nodame Cantabile drama; the anime of that name has 23
+		expect(await placedHere('[HEVC] Nodame Cantabile')).toMatchObject({ tmdbId: 45527 });
+		// Bunny Girl Senpai's season 2 is named "Rascal Does Not Dream of Santa Claus"
+		const rascal = await placedHere('[Delta] Rascal');
+		expect(rascal).toMatchObject({ tmdbId: 82739 });
+		expect(at(rascal, 'S02E13')).toEqual([2, 13]);
+	});
 });

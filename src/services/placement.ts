@@ -43,7 +43,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
  * ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.5';
+export const PLACEMENT_RULES = '2026-10-23.6';
 
 export interface PlaceRequest {
 	name: string;
@@ -191,6 +191,7 @@ export async function placeReleases(
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -289,6 +290,61 @@ async function siblingLook(
 			[best, most] = [there, count];
 	}
 	return best;
+}
+
+/**
+ * A show TMDB lists under the release's own title, by its name or a season's, when the show it
+ * was placed on leaves numbered files unplaced: the id sent with `[HEVC] Nodame Cantabile
+ * [Season 1]` is the 11-episode drama (34142), the 23 files the anime of that name (45527); TMDB
+ * files `[Delta] Rascal Does Not Dream of Santa Claus S02` as season 2, "Rascal Does Not Dream of
+ * Santa Claus", of Bunny Girl Senpai (82739), and that title's own show is a one-episode stub.
+ * Taken only where one such show places more of the files than any other and than the one it had.
+ */
+async function namesakeLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind !== 'tv' || placed.tmdbId === null) return placed;
+	const single = release.files.length === 1;
+	const numbered = release.files.filter(
+		(file) => fileNumbers(release.name, file.folder, file.path, single) !== null
+	).length;
+	const count = (answer: PlacedRelease) =>
+		answer.files.filter((file) => file.season !== null).length;
+	if (!numbered || count(placed) >= numbered) return placed;
+	const title = letters(parseName(release.name).title);
+	if (title.length < 4) return placed;
+	const named = ((await sources.searchTv(parseName(release.name).title))?.results ?? [])
+		.map((row: any) => row?.id)
+		.filter((id: unknown): id is number => typeof id === 'number' && id !== placed.tmdbId)
+		.slice(0, 8);
+	let best = placed;
+	let tie = false;
+	for (const tmdbId of named) {
+		const details = await sources.show(tmdbId);
+		const names = [
+			details?.name,
+			details?.original_name,
+			...((details?.seasons as any[]) ?? []).map((row) => row?.name),
+		];
+		if (!names.some((name) => typeof name === 'string' && letters(name) === title)) continue;
+		const external = details?.external_ids?.imdb_id;
+		const imdbId =
+			typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+		const there = await placeOnShow(
+			release,
+			{ kind: 'tv', imdbId, tmdbId },
+			false,
+			sources,
+			anime
+		);
+		if (there.skipped) continue;
+		if (count(there) > count(best)) [best, tie] = [there, false];
+		else if (best !== placed && count(there) === count(best)) tie = true;
+	}
+	return tie ? placed : best;
 }
 
 async function secondLook(

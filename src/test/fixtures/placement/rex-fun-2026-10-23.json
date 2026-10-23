@@ -79,7 +79,27 @@
 			"tt2377091": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
 			"tt2391583": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
 			"tt2263922": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
-			"tt2377089": { "movie_results": [], "tv_results": [], "tv_episode_results": [] }
+			"tt2377089": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+			"tt5897304": {
+				"movie_results": [],
+				"tv_results": [{ "id": 67075 }],
+				"tv_episode_results": []
+			},
+			"tt0965546": {
+				"movie_results": [],
+				"tv_results": [{ "id": 34142 }],
+				"tv_episode_results": []
+			},
+			"tt38848632": {
+				"movie_results": [],
+				"tv_results": [{ "id": 301991 }],
+				"tv_episode_results": []
+			},
+			"tt33060122": {
+				"movie_results": [],
+				"tv_results": [{ "id": 329907 }],
+				"tv_episode_results": []
+			}
 		},
 		"show": {
 			"37854": {
@@ -378,6 +398,634 @@
 				"seasons": [
 					{ "season_number": 0, "episode_count": 35, "air_date": "2000-01-01" },
 					{ "season_number": 1, "episode_count": 1218, "air_date": "1996-01-08" }
+				]
+			},
+			"4267": {
+				"name": "The Kingdom",
+				"original_name": "Riget",
+				"original_language": "da",
+				"external_ids": { "imdb_id": "tt0108906" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 5,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 4,
+						"air_date": "1994-11-24",
+						"name": "The Kingdom I"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 4,
+						"air_date": "1997-11-01",
+						"name": "The Kingdom II"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 5,
+						"air_date": "2022-10-09",
+						"name": "Exodus"
+					}
+				]
+			},
+			"5287": {
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0841961" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2007-04-21",
+						"name": "Series 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2008-01-12",
+						"name": "Series 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 6,
+						"air_date": "2009-06-06",
+						"name": "Series 3"
+					}
+				]
+			},
+			"11047": {
+				"name": "The 100 Lives of Black Jack Savage",
+				"original_name": "The 100 Lives of Black Jack Savage",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0101082" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "1991-03-31",
+						"name": "Season 1"
+					}
+				]
+			},
+			"22423": {
+				"name": "100 Greatest Songs of the '80s",
+				"original_name": "100 Greatest Songs of the '80s",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt1243635" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "2006-10-30",
+						"name": "Season 1"
+					}
+				]
+			},
+			"34142": {
+				"name": "Nodame Cantabile",
+				"original_name": "のだめ カンタービレ",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt0965546" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "2008-01-04",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 11,
+						"air_date": "2006-10-16",
+						"name": "Season 1"
+					}
+				]
+			},
+			"45527": {
+				"name": "Nodame Cantabile",
+				"original_name": "のだめカンタービレ",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt0928099" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 5,
+						"air_date": "2007-06-08",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 23,
+						"air_date": "2007-01-12",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 11,
+						"air_date": "2008-10-10",
+						"name": "Paris-hen"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 11,
+						"air_date": "2010-01-15",
+						"name": "Finale"
+					}
+				]
+			},
+			"46437": {
+				"name": "Kingdom",
+				"original_name": "キングダム",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt2404499" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 38,
+						"air_date": "2012-06-04",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 39,
+						"air_date": "2013-06-08",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 26,
+						"air_date": "2020-04-06",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 26,
+						"air_date": "2022-04-10",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2024-01-14",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 14,
+						"air_date": "2025-10-05",
+						"name": "Season 6"
+					}
+				]
+			},
+			"48866": {
+				"name": "The 100",
+				"original_name": "The 100",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt2661044" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2014-03-19",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 16,
+						"air_date": "2014-10-22",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 16,
+						"air_date": "2016-01-21",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2017-02-01",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2018-04-24",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "2019-04-30",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 16,
+						"air_date": "2020-05-20",
+						"name": "Season 7"
+					}
+				]
+			},
+			"61427": {
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt3673794" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2014-10-08",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "2015-10-14",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2017-05-31",
+						"name": "Season 3"
+					}
+				]
+			},
+			"61580": {
+				"name": "Naeil's Cantabile",
+				"original_name": "내일도 칸타빌레",
+				"original_language": "ko",
+				"external_ids": { "imdb_id": "tt4284134" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2014-10-13",
+						"name": "Season 1"
+					}
+				]
+			},
+			"63333": {
+				"name": "The Last Kingdom",
+				"original_name": "The Last Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt4179452" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "2017-03-08",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2015-10-10",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 8,
+						"air_date": "2017-03-16",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2018-11-19",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 10,
+						"air_date": "2020-04-26",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 10,
+						"air_date": "2022-03-09",
+						"name": "Season 5"
+					}
+				]
+			},
+			"66025": {
+				"name": "Animal Kingdom",
+				"original_name": "Animal Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt5574490" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2016-06-14",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2017-05-30",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 13,
+						"air_date": "2018-05-29",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2019-05-28",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2021-07-11",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "2022-06-19",
+						"name": "Season 6"
+					}
+				]
+			},
+			"67075": {
+				"name": "Mob Psycho 100",
+				"original_name": "モブサイコ100",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt5897304" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 9,
+						"air_date": "2016-09-28",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2016-07-12",
+						"name": "Mob Psycho"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2019-01-07",
+						"name": "Mob Psycho II"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 12,
+						"air_date": "2022-10-06",
+						"name": "Mob Psycho III"
+					}
+				]
+			},
+			"67141": {
+				"name": "The $100,000 Pyramid",
+				"original_name": "The $100,000 Pyramid",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt5330088" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2016-06-27",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2017-06-11",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 14,
+						"air_date": "2018-06-10",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2019-06-09",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2021-05-26",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 18,
+						"air_date": "2022-07-10",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 10,
+						"air_date": "2023-09-27",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 8,
+						"air_date": "2025-03-09",
+						"name": "Season 8"
+					}
+				]
+			},
+			"70593": {
+				"name": "Kingdom",
+				"original_name": "킹덤",
+				"original_language": "ko",
+				"external_ids": { "imdb_id": "tt6611916" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2019-01-25",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2020-03-13",
+						"name": "Season 2"
+					}
+				]
+			},
+			"74911": {
+				"name": "Savage Kingdom",
+				"original_name": "Savage Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt6498784" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 3,
+						"air_date": "2016-11-25",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 4,
+						"air_date": "2017-11-24",
+						"name": "Uprising"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 6,
+						"air_date": "2019-04-07",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 6,
+						"air_date": "2020-08-14",
+						"name": "Season 4"
+					}
+				]
+			},
+			"82739": {
+				"name": "Rascal Does Not Dream of Bunny Girl Senpai",
+				"original_name": "青春ブタ野郎はバニーガール先輩の夢を見ない",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt8993398" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 5,
+						"air_date": "2018-12-19",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2018-10-04",
+						"name": "Rascal Does Not Dream of Bunny Girl Senpai"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2025-07-05",
+						"name": "Rascal Does Not Dream of Santa Claus"
+					}
+				]
+			},
+			"120161": {
+				"name": "100% Wolf: The Legend of the Moonstone",
+				"original_name": "100% Wolf: The Legend of the Moonstone",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt13814356" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2020-12-27",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 26,
+						"air_date": "2023-10-01",
+						"name": "Season 2"
+					}
+				]
+			},
+			"217766": {
+				"name": "Zom 100: Bucket List of the Dead",
+				"original_name": "ゾン100～ゾンビになるまでにしたい100のこと～",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt25811262" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 2,
+						"air_date": "2023-08-06",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2023-07-09",
+						"name": "Season 1"
+					}
+				]
+			},
+			"223564": {
+				"name": "The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You",
+				"original_name": "君のことが大大大大大好きな100人の彼女",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt28919914" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 36,
+						"air_date": "2023-10-08",
+						"name": "Season 1"
+					}
+				]
+			},
+			"285392": {
+				"name": "The 100 Days",
+				"original_name": "The 100 Days",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt25504488" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2022-11-01",
+						"name": "Season 1"
+					}
+				]
+			},
+			"301991": {
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt38848632" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2025-11-09",
+						"name": "Miniseries"
+					}
+				]
+			},
+			"329907": {
+				"name": "Rascal Does Not Dream of Santa Claus",
+				"original_name": "Rascal Does Not Dream of Santa Claus",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt33060122" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 1,
+						"air_date": "2025-07-05",
+						"name": "Season 1"
+					}
 				]
 			}
 		},
@@ -17137,6 +17785,633 @@
 						"air_date": "2026-10-31"
 					}
 				]
+			},
+			"67075/3": {
+				"episodes": [
+					{
+						"id": 3292913,
+						"episode_number": 1,
+						"name": "Future ~Career Paths~",
+						"air_date": "2022-10-06"
+					},
+					{
+						"id": 3983676,
+						"episode_number": 2,
+						"name": "Yokai Hunter Amakusa Haruaki Appears! ~The Threat of a Hundred Demons!!~",
+						"air_date": "2022-10-13"
+					},
+					{
+						"id": 3983677,
+						"episode_number": 3,
+						"name": "Getting Carried Away ~100%~",
+						"air_date": "2022-10-20"
+					},
+					{
+						"id": 3983678,
+						"episode_number": 4,
+						"name": "Divine Tree 1 ~The Founder Appears~",
+						"air_date": "2022-10-27"
+					},
+					{
+						"id": 3983679,
+						"episode_number": 5,
+						"name": "Divine Tree 2 ~Peace~",
+						"air_date": "2022-11-03"
+					},
+					{
+						"id": 3983680,
+						"episode_number": 6,
+						"name": "Divine Tree 3 ~Dimple Is~",
+						"air_date": "2022-11-10"
+					},
+					{
+						"id": 3983681,
+						"episode_number": 7,
+						"name": "Transmission 1 ~Winter Break~",
+						"air_date": "2022-11-17"
+					},
+					{
+						"id": 3983682,
+						"episode_number": 8,
+						"name": "Transmission 2 ~Encountering the Unknown~",
+						"air_date": "2022-11-24"
+					},
+					{
+						"id": 3983683,
+						"episode_number": 9,
+						"name": "Mob 1 ~Moving~",
+						"air_date": "2022-12-01"
+					},
+					{
+						"id": 3983684,
+						"episode_number": 10,
+						"name": "Mob 2 ~Rival~",
+						"air_date": "2022-12-08"
+					},
+					{
+						"id": 3983685,
+						"episode_number": 11,
+						"name": "Mob 3 ~Trauma~",
+						"air_date": "2022-12-15"
+					},
+					{
+						"id": 3983686,
+						"episode_number": 12,
+						"name": "Confession ~The Future~",
+						"air_date": "2022-12-22"
+					}
+				]
+			},
+			"34142/1": {
+				"episodes": [
+					{
+						"id": 782920,
+						"episode_number": 1,
+						"name": "Rhapsody of a Weirdo Pianist and a Snob Conductor",
+						"air_date": "2006-10-16"
+					},
+					{
+						"id": 782921,
+						"episode_number": 2,
+						"name": "Attack of the Creep Flunker Orchestra!",
+						"air_date": "2006-10-23"
+					},
+					{
+						"id": 782922,
+						"episode_number": 3,
+						"name": "Orchestra of the Lesser: Can Love Trump Poverty?",
+						"air_date": "2006-10-30"
+					},
+					{
+						"id": 782923,
+						"episode_number": 4,
+						"name": "Will They or Won't They? Battle of the Regular Concert!",
+						"air_date": "2006-11-06"
+					},
+					{
+						"id": 782924,
+						"episode_number": 5,
+						"name": "Goodbye, Maestro! School Festival Battle of Love",
+						"air_date": "2006-11-13"
+					},
+					{
+						"id": 782925,
+						"episode_number": 6,
+						"name": "Goodbye, Orchestra S! A Tearful Disbanding and a Piano Duet of Love",
+						"air_date": "2006-11-20"
+					},
+					{
+						"id": 782926,
+						"episode_number": 7,
+						"name": "New Orchestra! Tensions in the Relationship",
+						"air_date": "2006-11-27"
+					},
+					{
+						"id": 782927,
+						"episode_number": 8,
+						"name": "Rising Star Orchestra's Concert! Fighting Old Traumas with Love",
+						"air_date": "2006-12-04"
+					},
+					{
+						"id": 782928,
+						"episode_number": 9,
+						"name": "Competition vs. Studying Abroad! A Relationship-Ending Decision",
+						"air_date": "2006-12-11"
+					},
+					{
+						"id": 782929,
+						"episode_number": 10,
+						"name": "Madness at the Competition! A Surprising Confession",
+						"air_date": "2006-12-18"
+					},
+					{
+						"id": 782930,
+						"episode_number": 11,
+						"name": "Goodbye, Nodame! A Tearful Christmas Concert",
+						"air_date": "2006-12-25"
+					}
+				]
+			},
+			"34142/0": {
+				"episodes": [
+					{
+						"id": 782931,
+						"episode_number": 1,
+						"name": "Shinshun Special in Europe, Night 1",
+						"air_date": "2008-01-04"
+					},
+					{
+						"id": 782932,
+						"episode_number": 2,
+						"name": "Shinshun Special in Europe, Night 2",
+						"air_date": "2008-01-05"
+					},
+					{
+						"id": 782933,
+						"episode_number": 3,
+						"name": "Shinshun Special in Europe - Behind the Scenes",
+						"air_date": null
+					},
+					{
+						"id": 782934,
+						"episode_number": 4,
+						"name": "The Finale Score - Part I",
+						"air_date": "2009-12-19"
+					},
+					{
+						"id": 782935,
+						"episode_number": 5,
+						"name": "The Finale Score - Part II",
+						"air_date": "2010-04-17"
+					},
+					{
+						"id": 4856049,
+						"episode_number": 6,
+						"name": "Episode 6",
+						"air_date": "2010-04-23"
+					}
+				]
+			},
+			"48866/3": {
+				"episodes": [
+					{
+						"id": 1146093,
+						"episode_number": 1,
+						"name": "Wanheda (1)",
+						"air_date": "2016-01-21"
+					},
+					{
+						"id": 1146094,
+						"episode_number": 2,
+						"name": "Wanheda (2)",
+						"air_date": "2016-01-28"
+					},
+					{
+						"id": 1158146,
+						"episode_number": 3,
+						"name": "Ye Who Enter Here",
+						"air_date": "2016-02-04"
+					},
+					{
+						"id": 1158147,
+						"episode_number": 4,
+						"name": "Watch the Thrones",
+						"air_date": "2016-02-11"
+					},
+					{
+						"id": 1163512,
+						"episode_number": 5,
+						"name": "Hakeldama",
+						"air_date": "2016-02-18"
+					},
+					{
+						"id": 1166744,
+						"episode_number": 6,
+						"name": "Bitter Harvest",
+						"air_date": "2016-02-25"
+					},
+					{
+						"id": 1166745,
+						"episode_number": 7,
+						"name": "Thirteen",
+						"air_date": "2016-03-03"
+					},
+					{
+						"id": 1174518,
+						"episode_number": 8,
+						"name": "Terms and Conditions",
+						"air_date": "2016-03-10"
+					},
+					{
+						"id": 1176186,
+						"episode_number": 9,
+						"name": "Stealing Fire",
+						"air_date": "2016-03-31"
+					},
+					{
+						"id": 1184333,
+						"episode_number": 10,
+						"name": "Fallen",
+						"air_date": "2016-04-07"
+					},
+					{
+						"id": 1184334,
+						"episode_number": 11,
+						"name": "Nevermore",
+						"air_date": "2016-04-14"
+					},
+					{
+						"id": 1184335,
+						"episode_number": 12,
+						"name": "Demons",
+						"air_date": "2016-04-21"
+					},
+					{
+						"id": 1184336,
+						"episode_number": 13,
+						"name": "Join or Die",
+						"air_date": "2016-04-28"
+					},
+					{
+						"id": 1189895,
+						"episode_number": 14,
+						"name": "Red Sky at Morning",
+						"air_date": "2016-05-05"
+					},
+					{
+						"id": 1190494,
+						"episode_number": 15,
+						"name": "Perverse Instantiation (1)",
+						"air_date": "2016-05-12"
+					},
+					{
+						"id": 1190495,
+						"episode_number": 16,
+						"name": "Perverse Instantiation (2)",
+						"air_date": "2016-05-19"
+					}
+				]
+			},
+			"45527/1": {
+				"episodes": [
+					{
+						"id": 903051,
+						"episode_number": 1,
+						"name": "Lesson 1",
+						"air_date": "2007-01-12"
+					},
+					{
+						"id": 903050,
+						"episode_number": 2,
+						"name": "Lesson 2",
+						"air_date": "2007-01-19"
+					},
+					{
+						"id": 903052,
+						"episode_number": 3,
+						"name": "Lesson 3: Queen of Percussion Instruments",
+						"air_date": "2007-01-26"
+					},
+					{
+						"id": 903055,
+						"episode_number": 4,
+						"name": "Lesson 4: Master Milch's Appearance",
+						"air_date": "2007-02-02"
+					},
+					{
+						"id": 903053,
+						"episode_number": 5,
+						"name": "Lesson 5: Many Years of S Orchestra's Direction",
+						"air_date": "2007-02-09"
+					},
+					{
+						"id": 903054,
+						"episode_number": 6,
+						"name": "Lesson 6: Secession",
+						"air_date": "2007-02-16"
+					},
+					{
+						"id": 903056,
+						"episode_number": 7,
+						"name": "Lesson 7: Kazuo's Many Years",
+						"air_date": "2007-02-23"
+					},
+					{
+						"id": 903057,
+						"episode_number": 8,
+						"name": "Lesson 8: Milch's Repatriation",
+						"air_date": "2007-03-02"
+					},
+					{
+						"id": 903059,
+						"episode_number": 9,
+						"name": "Lesson 9: Music Festival",
+						"air_date": "2007-03-09"
+					},
+					{
+						"id": 903058,
+						"episode_number": 10,
+						"name": "Lesson 10: The Notion That Where It Can Charm",
+						"air_date": "2007-03-16"
+					},
+					{
+						"id": 903060,
+						"episode_number": 11,
+						"name": "Lesson 11: Piano",
+						"air_date": "2007-03-23"
+					},
+					{
+						"id": 903061,
+						"episode_number": 12,
+						"name": "Lesson 12: Course",
+						"air_date": "2007-04-13"
+					},
+					{
+						"id": 903063,
+						"episode_number": 13,
+						"name": "Lesson 13: Graduation",
+						"air_date": "2007-04-20"
+					},
+					{
+						"id": 903062,
+						"episode_number": 14,
+						"name": "Lesson 14: Past",
+						"air_date": "2007-04-27"
+					},
+					{
+						"id": 903066,
+						"episode_number": 15,
+						"name": "Lesson 15: Change",
+						"air_date": "2007-05-04"
+					},
+					{
+						"id": 903065,
+						"episode_number": 16,
+						"name": "Lesson 16: Starting",
+						"air_date": "2007-05-11"
+					},
+					{
+						"id": 903064,
+						"episode_number": 17,
+						"name": "Lesson 17: Wastefulness",
+						"air_date": "2007-05-18"
+					},
+					{
+						"id": 903067,
+						"episode_number": 18,
+						"name": "Lesson 18: Awakening",
+						"air_date": "2007-05-25"
+					},
+					{
+						"id": 903070,
+						"episode_number": 19,
+						"name": "Lesson 19: Flight",
+						"air_date": "2007-06-01"
+					},
+					{
+						"id": 903069,
+						"episode_number": 20,
+						"name": "Lesson 20: World",
+						"air_date": "2007-06-08"
+					},
+					{
+						"id": 903068,
+						"episode_number": 21,
+						"name": "Lesson 21: Accident",
+						"air_date": "2007-06-15"
+					},
+					{
+						"id": 903072,
+						"episode_number": 22,
+						"name": "Lesson 22: End",
+						"air_date": "2007-06-22"
+					},
+					{
+						"id": 903071,
+						"episode_number": 23,
+						"name": "Lesson 23: Future",
+						"air_date": "2007-06-29"
+					}
+				]
+			},
+			"45527/0": {
+				"episodes": [
+					{
+						"id": 903035,
+						"episode_number": 1,
+						"name": "Puri Gorota: The Movie",
+						"air_date": "2007-06-08"
+					},
+					{
+						"id": 903036,
+						"episode_number": 2,
+						"name": "Nodame and Chiaki's Summer Tales",
+						"air_date": "2007-10-05"
+					},
+					{
+						"id": 903037,
+						"episode_number": 3,
+						"name": "Side Story of Paris-Hen",
+						"air_date": "2009-08-10"
+					},
+					{
+						"id": 903038,
+						"episode_number": 4,
+						"name": "Mine and Kiyora's Reunion",
+						"air_date": "2010-04-07"
+					},
+					{
+						"id": 1226736,
+						"episode_number": 5,
+						"name": "Sequel of Finale",
+						"air_date": "2010-04-26"
+					}
+				]
+			},
+			"82739/2": {
+				"episodes": [
+					{
+						"id": 6244314,
+						"episode_number": 1,
+						"name": "Puberty Continues",
+						"air_date": "2025-07-05"
+					},
+					{
+						"id": 6338626,
+						"episode_number": 2,
+						"name": "What Flavor Is the Atmosphere?",
+						"air_date": "2025-07-12"
+					},
+					{
+						"id": 6361416,
+						"episode_number": 3,
+						"name": "Idol Song",
+						"air_date": "2025-07-19"
+					},
+					{
+						"id": 6367049,
+						"episode_number": 4,
+						"name": "Heroism",
+						"air_date": "2025-07-26"
+					},
+					{
+						"id": 6367050,
+						"episode_number": 5,
+						"name": "Dissonant Notes",
+						"air_date": "2025-08-02"
+					},
+					{
+						"id": 6367051,
+						"episode_number": 6,
+						"name": "You and I Within the Realm of Memories",
+						"air_date": "2025-08-09"
+					},
+					{
+						"id": 6367052,
+						"episode_number": 7,
+						"name": "From Beyond Hilbert Space",
+						"air_date": "2025-08-16"
+					},
+					{
+						"id": 6367053,
+						"episode_number": 8,
+						"name": "Secrets and Promises",
+						"air_date": "2025-08-23"
+					},
+					{
+						"id": 6367054,
+						"episode_number": 9,
+						"name": "I Need You",
+						"air_date": "2025-08-30"
+					},
+					{
+						"id": 6367055,
+						"episode_number": 10,
+						"name": "Holy Night",
+						"air_date": "2025-09-06"
+					},
+					{
+						"id": 6367056,
+						"episode_number": 11,
+						"name": "The World Dreams",
+						"air_date": "2025-09-13"
+					},
+					{
+						"id": 6367057,
+						"episode_number": 12,
+						"name": "Reindeer's Work",
+						"air_date": "2025-09-20"
+					},
+					{
+						"id": 6367058,
+						"episode_number": 13,
+						"name": "No Dreams of Santa Claus",
+						"air_date": "2025-09-27"
+					}
+				]
+			},
+			"46437/6": {
+				"episodes": [
+					{
+						"id": 6451826,
+						"episode_number": 1,
+						"name": "Qin's Stumbling Block",
+						"air_date": "2025-10-05"
+					},
+					{
+						"id": 6577447,
+						"episode_number": 2,
+						"name": "The Rising Tumult",
+						"air_date": "2025-10-12"
+					},
+					{
+						"id": 6596373,
+						"episode_number": 3,
+						"name": "The Qin Army Lineup",
+						"air_date": "2025-10-19"
+					},
+					{
+						"id": 6620412,
+						"episode_number": 4,
+						"name": "Zhao's National Gate",
+						"air_date": "2025-10-26"
+					},
+					{
+						"id": 6630578,
+						"episode_number": 5,
+						"name": "Storming Liewei",
+						"air_date": "2025-11-02"
+					},
+					{
+						"id": 6650053,
+						"episode_number": 6,
+						"name": "Liewei's Trap",
+						"air_date": "2025-11-09"
+					},
+					{
+						"id": 6668677,
+						"episode_number": 7,
+						"name": "Weapons of Conquest",
+						"air_date": "2025-11-16"
+					},
+					{
+						"id": 6692924,
+						"episode_number": 8,
+						"name": "The Battle Begins",
+						"air_date": "2025-11-23"
+					},
+					{
+						"id": 6710474,
+						"episode_number": 9,
+						"name": "The Weight of Resolve",
+						"air_date": "2025-11-30"
+					},
+					{
+						"id": 6726818,
+						"episode_number": 10,
+						"name": "Descendants of the Quanrong",
+						"air_date": "2025-12-07"
+					},
+					{
+						"id": 6746056,
+						"episode_number": 11,
+						"name": "The One-Hit-Kill Detached Force",
+						"air_date": "2025-12-14"
+					},
+					{
+						"id": 6762521,
+						"episode_number": 12,
+						"name": "Insufficient Rank",
+						"air_date": "2025-12-21"
+					},
+					{
+						"id": 6775706,
+						"episode_number": 13,
+						"name": "A Great General's View",
+						"air_date": "2025-12-28"
+					},
+					{ "id": 7690389, "episode_number": 14, "name": "Zoku-hen", "air_date": null }
+				]
 			}
 		},
 		"episodeGroups": {
@@ -17216,7 +18491,16 @@
 						"type": 7
 					}
 				]
-			}
+			},
+			"5287": { "results": [] },
+			"34142": { "results": [] },
+			"61427": { "results": [] },
+			"67075": {
+				"results": [{ "id": "6346a97ff621b2007ed0c28f", "name": "Story Arcs", "type": 5 }]
+			},
+			"70593": { "results": [] },
+			"301991": { "results": [] },
+			"329907": { "results": [] }
 		},
 		"episodeGroup": {
 			"69b8016aa7e52bcbf75a77b8": {
@@ -18663,7 +19947,11 @@
 			"tt11547516": null,
 			"tt0852739": "tt0320808",
 			"tt0112225": null,
-			"tt0131179": null
+			"tt0131179": null,
+			"tt5897304": null,
+			"tt0965546": null,
+			"tt38848632": null,
+			"tt33060122": null
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -18709,7 +19997,39 @@
 				"24": "tt2263938",
 				"25": "tt2263952",
 				"26": "tt2080881"
-			}
+			},
+			"tt33060122/2": {},
+			"tt38848632/6": {},
+			"tt5897304/3": {
+				"1": "tt21362990",
+				"2": "tt22500204",
+				"3": "tt22496160",
+				"4": "tt22865140",
+				"5": "tt23018608",
+				"6": "tt23018612",
+				"7": "tt23018616",
+				"8": "tt23722424",
+				"9": "tt23793514",
+				"10": "tt23875764",
+				"11": "tt23994272",
+				"12": "tt23994498"
+			},
+			"tt0965546/1": {
+				"1": "tt0969481",
+				"2": "tt0996134",
+				"3": "tt0969482",
+				"4": "tt0969483",
+				"5": "tt0996135",
+				"6": "tt0996136",
+				"7": "tt0996137",
+				"8": "tt0996138",
+				"9": "tt0969484",
+				"10": "tt0969480",
+				"11": "tt0969485"
+			},
+			"tt3673794/6": {},
+			"tt6611916/6": {},
+			"tt0841961/6": {}
 		},
 		"identify": {
 			"Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT": {
@@ -19147,9 +20467,895 @@
 				"parsedTitle": "Detective Conan",
 				"parsedYear": null,
 				"probability": 0.9927
+			},
+			"[Delta] Rascal Does Not Dream of Santa Claus S02 BATCH [1080p CR-WEB-DL AAC-192 H.264]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt33060122",
+						"score": 3.4252,
+						"title": "Rascal Does Not Dream of Santa Claus",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt8993398",
+						"score": -1.4797,
+						"title": "Rascal Does Not Dream of Bunny Girl Senpai",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt17047510",
+						"score": -2.9727,
+						"title": "The Santa Clauses",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0168293",
+						"score": -4.2649,
+						"title": "Rascal the Raccoon",
+						"year": 1977
+					},
+					{
+						"imdbId": "tt0302145",
+						"score": -5.8999,
+						"title": "The Secret World of Santa Claus",
+						"year": 1997
+					}
+				],
+				"parsedTitle": "Rascal Does Not Dream of Santa Claus",
+				"parsedYear": null,
+				"probability": 0.9711
+			},
+			"[Delta] Rascal Does Not Dream of Santa Claus S02E01 [1080p CR-WEB-DL AAC-192 H.264]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt33060122",
+						"score": 3.334,
+						"title": "Rascal Does Not Dream of Santa Claus",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt8993398",
+						"score": -1.9103,
+						"title": "Rascal Does Not Dream of Bunny Girl Senpai",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt17047510",
+						"score": -3.4876,
+						"title": "The Santa Clauses",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0168293",
+						"score": -4.1667,
+						"title": "Rascal the Raccoon",
+						"year": 1977
+					},
+					{
+						"imdbId": "tt0302145",
+						"score": -5.9198,
+						"title": "The Secret World of Santa Claus",
+						"year": 1997
+					}
+				],
+				"parsedTitle": "Rascal Does Not Dream of Santa Claus",
+				"parsedYear": null,
+				"probability": 0.9773
+			},
+			"Kingdom.S06E13.2025.1080p.Friday.WEB-DL.AAC.H.264-HDSWEB": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{ "imdbId": "tt38848632", "score": 4.0161, "title": "Kingdom", "year": 2025 },
+					{ "imdbId": "tt6611916", "score": 0.2559, "title": "Kingdom", "year": 2019 },
+					{ "imdbId": "tt0841961", "score": -0.0965, "title": "Kingdom", "year": 2007 },
+					{ "imdbId": "tt2404499", "score": -0.2114, "title": "Kingdom", "year": 2012 },
+					{ "imdbId": "tt3673794", "score": -0.2895, "title": "Kingdom", "year": 2014 }
+				],
+				"parsedTitle": "Kingdom",
+				"parsedYear": null,
+				"probability": 0.8897
 			}
 		},
-		"searchTv": {},
+		"searchTv": {
+			"The 100": {
+				"page": 1,
+				"results": [
+					{
+						"id": 48866,
+						"name": "The 100",
+						"adult": false,
+						"overview": "100 years in the future, when the Earth has been abandoned due to radioactivity, the last surviving humans live on an ark orbiting the planet — but the ark won't last forever. So the repressive regime picks 100 expendable juvenile delinquents to send down to Earth to see if the planet is still habitable.",
+						"softcore": false,
+						"genre_ids": [10765, 10759, 18, 80],
+						"popularity": 92.5453,
+						"vote_count": 8837,
+						"poster_path": "/wHIMMLFsk32wIzDmawWkYVbxFCS.jpg",
+						"vote_average": 7.879,
+						"backdrop_path": "/8ZerYKvIaNUJZvAHXYTQu4qTwFw.jpg",
+						"original_name": "The 100",
+						"first_air_date": "2014-03-19",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 67141,
+						"name": "The $100,000 Pyramid",
+						"adult": false,
+						"overview": "In $100,000 Pyramid, contestants are in teams of two. The goal of the game is to help your partner guess an answer, by listing items that would be included in said answer, or synonymous. For instance, if the answer is “Things That Bounce”, clues would be “Po-Go Sticks”, “Kangaroos”, “Basketballs”, etc. To add to the challenge, the contestant who is giving the clues has their hands strapped to their chair, so they’re unable to gesture in order to help the guessing process.",
+						"softcore": false,
+						"genre_ids": [10764, 10767],
+						"popularity": 27.8546,
+						"vote_count": 9,
+						"poster_path": "/q4M2OYBvyDgmmSCKgj5PgbFBY1y.jpg",
+						"vote_average": 7,
+						"backdrop_path": "/eptaUIUYrbJEK7Nfwlw49RXclrd.jpg",
+						"original_name": "The $100,000 Pyramid",
+						"first_air_date": "2016-06-27",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 223564,
+						"name": "The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You",
+						"adult": false,
+						"overview": "Rentaro Aijo was rejected 100 times in middle school. He visits a shrine and prays for better luck in high school. The God of Love appears and promises that he'll soon meet 100 people he's destined to date. But there's a catch—once destiny introduces someone to him, the two must happily love each other. If they don't, they'll die. What will befall Rentaro and his 100 girlfriends in high school?",
+						"softcore": false,
+						"genre_ids": [16, 35],
+						"popularity": 38.4112,
+						"vote_count": 231,
+						"poster_path": "/wr3mS1pifbUVLgCloqf1B9QwZ4E.jpg",
+						"vote_average": 8.299,
+						"backdrop_path": "/shXdGFZIEaSmiOkVW2BeEaPihuA.jpg",
+						"original_name": "君のことが大大大大大好きな100人の彼女",
+						"first_air_date": "2023-10-08",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 217766,
+						"name": "Zom 100: Bucket List of the Dead",
+						"adult": false,
+						"overview": "An overworked 24-year-old finally decides to live a little and create a bucket list, when a zombie outbreak hits the country.",
+						"softcore": false,
+						"genre_ids": [16, 10759, 35, 10765],
+						"popularity": 24.4484,
+						"vote_count": 228,
+						"poster_path": "/XzOeAppGpnsSAiK82idkg0BoCt.jpg",
+						"vote_average": 7.5,
+						"backdrop_path": "/90b5d67rcpYfh5aVOwfd9jrbnfL.jpg",
+						"original_name": "ゾン100～ゾンビになるまでにしたい100のこと～",
+						"first_air_date": "2023-07-09",
+						"origin_country": ["JP", "US"],
+						"original_language": "ja"
+					},
+					{
+						"id": 22423,
+						"name": "100 Greatest Songs of the '80s",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 3.2799,
+						"vote_count": 0,
+						"poster_path": "/oZWxwHjN1WSGJJgqVVfYY2VxAmv.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "100 Greatest Songs of the '80s",
+						"first_air_date": "2006-10-30",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 120161,
+						"name": "100% Wolf: The Legend of the Moonstone",
+						"adult": false,
+						"overview": "Freddy may be a poodle, but he has the heart of a wolf, and he's going to prove it by graduating from the werewolf-only Howlington Academy!",
+						"softcore": false,
+						"genre_ids": [10762, 10751, 10759, 35, 16],
+						"popularity": 6.2487,
+						"vote_count": 7,
+						"poster_path": "/mysnnnNc6AN8GIyAF7O4ySCSvPp.jpg",
+						"vote_average": 8,
+						"backdrop_path": "/x9jV2wqlhq7rJTNHtn72tXe6qbb.jpg",
+						"original_name": "100% Wolf: The Legend of the Moonstone",
+						"first_air_date": "2020-12-27",
+						"origin_country": ["AU"],
+						"original_language": "en"
+					},
+					{
+						"id": 285392,
+						"name": "The 100 Days",
+						"adult": false,
+						"overview": "This dramatic series tells stories of 20th century world events, revealing unexpected aspects of some of the pivotal moments of modern history. Each episode focuses on one major event and the 100 days that give context to the events leading up, during or at the close. The narrative of each episode will unearth little-known incidents and characters and gives a sense of what lies ahead.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 2.0775,
+						"vote_count": 0,
+						"poster_path": "/iksdAnPwAuoKgWgyZCM8iBmO5zE.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "The 100 Days",
+						"first_air_date": "2022-11-01",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 11047,
+						"name": "The 100 Lives of Black Jack Savage",
+						"adult": false,
+						"overview": "The 100 Lives of Black Jack Savage is a television series broadcast in the United States by NBC and produced by Stephen J. Cannell Productions in association with Walt Disney Television. This show originated as a TV-movie. The program originally aired in 1991, but lasted less than one season. The series was officially titled Disney Presents The 100 Lives of Black Jack Savage.",
+						"softcore": false,
+						"genre_ids": [10765, 35],
+						"popularity": 3.4448,
+						"vote_count": 7,
+						"poster_path": "/qEEY0Ue6yOZcFFNORSpMTAraOKx.jpg",
+						"vote_average": 4.5,
+						"backdrop_path": null,
+						"original_name": "The 100 Lives of Black Jack Savage",
+						"first_air_date": "1991-03-31",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 225829,
+						"name": "100% Wolf: The Book of Hath",
+						"adult": false,
+						"overview": "Freddy and the Howlington pack go paw to paw with ancient dark magic in an epic battle through time and space to save Milford, Werewolves, and the world as we know it.",
+						"softcore": false,
+						"genre_ids": [16, 10759, 10765],
+						"popularity": 4.0155,
+						"vote_count": 1,
+						"poster_path": "/Ac8RBBvN2sZbADha04EsfdjsWil.jpg",
+						"vote_average": 7,
+						"backdrop_path": "/heWrbP0xD4mI4lkhpQ2UHU9jfQE.jpg",
+						"original_name": "100% Wolf: The Book of Hath",
+						"first_air_date": "2023-05-01",
+						"origin_country": ["AU"],
+						"original_language": "en"
+					},
+					{
+						"id": 101576,
+						"name": "The Abyss of 100 Flowers",
+						"adult": false,
+						"overview": "During 1930s Minguo in the nation's capital, opera performer Xiao Jun Sheng is arrested for the murders of five women at the peak of his career after a witness, Master Na, claimed to see him at one of the crime scenes. Jun Sheng is subsequently poisoned in jail with his death made to appear as a guilt-driven suicide, and his wife is forced to flee with their two young children. Eighteen years later, to carry out the final wish of their now departed mother, Ke Lan and Ming Xuan return to the capital to clear their father's name and uncover the truth. Ke Lan decides to enter the Na household as a servant while Ming Xuan joins the police force.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 4.4147,
+						"vote_count": 2,
+						"poster_path": "/mljMSOhUrrcHcVk9EWkrxCgGLc2.jpg",
+						"vote_average": 7.5,
+						"backdrop_path": "/iaUD22bPl1Sz2IeU7yGjrlzHKqG.jpg",
+						"original_name": "百花深处",
+						"first_air_date": "2012-02-18",
+						"origin_country": ["CN"],
+						"original_language": "zh"
+					},
+					{
+						"id": 220070,
+						"name": "100 Ideas to Save the World",
+						"adult": false,
+						"overview": "Be inspired! Introducing 100 passionate stories of efforts and innovations that pave the way towards the UN's 17 SDGs.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 1.2474,
+						"vote_count": 0,
+						"poster_path": "/vHVY3nMsWn3JqhUZQQYCiThRIzQ.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/zQosRo7CmOE9fJiHFa4OKFb1WeO.jpg",
+						"original_name": "100 Ideas to Save the World",
+						"first_air_date": "2021-04-29",
+						"origin_country": ["JP"],
+						"original_language": "en"
+					},
+					{
+						"id": 89736,
+						"name": "The Forbidden City 100",
+						"adult": false,
+						"overview": "100 timeless images of the Forbidden City",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 1.688,
+						"vote_count": 1,
+						"poster_path": "/6rO2IRcxpiC4vjCkh8PSU0j1z2f.jpg",
+						"vote_average": 8,
+						"backdrop_path": "/A8fcbahVFHCESmdo3TfEV6h1elm.jpg",
+						"original_name": "故宫100",
+						"first_air_date": "2012-01-01",
+						"origin_country": ["CN"],
+						"original_language": "zh"
+					},
+					{
+						"id": 34140,
+						"name": "100 Greatest One Hit Wonders of the 80s",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 2.6406,
+						"vote_count": 1,
+						"poster_path": null,
+						"vote_average": 10,
+						"backdrop_path": null,
+						"original_name": "100 Greatest One Hit Wonders of the 80s",
+						"first_air_date": "2009-03-31",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 153917,
+						"name": "The 100 Jokes",
+						"adult": false,
+						"overview": "A series of short comedy clips written and produced by model, singer, actress, and singer Ellen Alexander",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 0.4171,
+						"vote_count": 0,
+						"poster_path": "/fgOHJiGQ8JhWmpL3ripI1n3v1X6.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "The 100 Jokes",
+						"first_air_date": "2016-12-06",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 32291,
+						"name": "The $100,000 Pyramid",
+						"adult": false,
+						"overview": "Two contestants are paired with celebrities in this remake of the word-association game show.",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 1.3106,
+						"vote_count": 0,
+						"poster_path": "/k9DZGA6guAhkvRalU73DTBn8UFl.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "The $100,000 Pyramid",
+						"first_air_date": "1985-09-09",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 231483,
+						"name": "Live to 100: Secrets of the Blue Zones",
+						"adult": false,
+						"overview": "Travel around the world with author Dan Buettner to discover five unique communities where people live extraordinarily long and vibrant lives.",
+						"softcore": false,
+						"genre_ids": [99, 9648],
+						"popularity": 3.4401,
+						"vote_count": 40,
+						"poster_path": "/aI22aHKtFHQ5r6AVu0uf7q9UUAn.jpg",
+						"vote_average": 7.7,
+						"backdrop_path": "/i3QiUjRgK3ie8bUoRwMH0cGXMpC.jpg",
+						"original_name": "Live to 100: Secrets of the Blue Zones",
+						"first_air_date": "2023-08-30",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 236456,
+						"name": "The 100 videos that made the whole world laugh",
+						"adult": false,
+						"overview": "Presented by Issa Doumbia and his Dream Team of commentators, featuring the 100 funniest videos in the world. They’ll reveal the rankings of the funniest videos, from 100th place right up to the top three, with humour and a quirky twist. Expect fits of laughter, heart-warming moments, comical marriage proposals, unlucky journalists, brilliant senior citizens, adorable children, stunt-performing animals, and much more besides. But that’s not all – Issa has some surprises in store for the panellists and guests. Musical games, a high-heel fashion show, cooking challenges, dance routines and embarrassing photos are all on the programme. Guests will join the panellists to react to the videos. The big question: which video will top the charts?",
+						"softcore": false,
+						"genre_ids": [10764, 10767, 35],
+						"popularity": 4.3722,
+						"vote_count": 1,
+						"poster_path": "/vpAAfWcAPzUjSKkQvLOu5w2ZfAV.jpg",
+						"vote_average": 6,
+						"backdrop_path": "/3p3C2RbM80udMXbsH0SD3E62SyR.jpg",
+						"original_name": "Les 100 vidéos qui ont fait rire le monde entier",
+						"first_air_date": "2018-11-01",
+						"origin_country": ["FR"],
+						"original_language": "fr"
+					},
+					{
+						"id": 331987,
+						"name": "The Knie Dynasty: 100 Years of National Circus",
+						"adult": false,
+						"overview": "To celebrate the 100th anniversary of the Circus Knie, SRF, RTS, RSI and RTR staged a 180-minute docu-fiction in two parts. The story of the Swiss National Circus is told over several generations through a fictional part, a documentary part as well as archive footage. The viewer experiences the ups and downs in the history of the Swiss National Circus and obtains insight into the circus life that takes place behind the spectacular performances.",
+						"softcore": false,
+						"genre_ids": [99, 18],
+						"popularity": 1.3758,
+						"vote_count": 0,
+						"poster_path": "/4t5FDQXUNUg3pO7TOS15UfLU8OH.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/jzy6ZeD8j3iHRKtGwrfaopTxqVW.jpg",
+						"original_name": "The Knie Dynasty: 100 Years of National Circus",
+						"first_air_date": "2019-01-01",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 80628,
+						"name": "100 Sleeping Princes & the Kingdom of Dreams",
+						"adult": false,
+						"overview": "The heroine is a normal girl, until one day she is invited to another world and becomes the princess of the dream world, where people use dreams as the energy to live. One day, the dream world is being attacked by something called \"yumekui\" (\"dream eater\"), and many princes are being attacked by it. The heroine must wake them up to save the dream world, as the princes are unable to wake up due to having their dreams stolen.",
+						"softcore": false,
+						"genre_ids": [16, 10765],
+						"popularity": 4.0698,
+						"vote_count": 3,
+						"poster_path": "/cBPMbuZXZfCsG2PZGPRqMUojsMf.jpg",
+						"vote_average": 5.7,
+						"backdrop_path": "/2nPODi9lcAKVzPoczgQcGytECp7.jpg",
+						"original_name": "夢王国と眠れる100人の王子様",
+						"first_air_date": "2018-07-05",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 21698,
+						"name": "The 100 Mile Challenge",
+						"adult": false,
+						"overview": "The 100 Mile Challenge is a Canadian reality television series produced by Paperny Entertainment and aired on Food Network Canada. The series follows the lives and eating habits of six families living in Mission, British Columbia who, for a period of 100 days, agreed to only consume food and drink that has been grown, raised and produced within a 100-mile radius from Mission. The series is based on the concept of local food consumption as described in the book The 100-Mile Diet authored by J.B. MacKinnon and Alisa Smith where the two authors describe their experience of eating locally for one full year. To coincide with the premiere of the series, FoodTV.ca launched a companion website that Canwest described as \"the largest, most innovative and interactive companion website to a series to date\".\n\nAfter the series' initial run was concluded, it was announced that the global distribution rights to both the format and the program were acquired by the British company Passion Distribution after which Discovery Communications' Planet Green acquired the rights to broadcast the series in the United States.\n\nThe success of the series has also inspired other communities in Canada to organize similar challenges.",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 0.4386,
+						"vote_count": 0,
+						"poster_path": null,
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "The 100 Mile Challenge",
+						"first_air_date": "2009-04-05",
+						"origin_country": ["CA"],
+						"original_language": "en"
+					}
+				],
+				"total_pages": 5,
+				"total_results": 84
+			},
+			"Nodame Cantabile": {
+				"page": 1,
+				"results": [
+					{
+						"id": 45527,
+						"name": "Nodame Cantabile",
+						"adult": false,
+						"overview": "Shinichi Chiaki is a first class musician whose dream is to play among the elites in Europe. Coming from a distinguished family, he is an infamous perfectionist; not only is he highly critical of himself, but of others as well. The only thing stopping Chiaki from leaving for Europe is his fear of flying. As a result, he's grounded in Japan.\n\nDuring his 4th year at Japan's top music university, Chiaki happens to meet Noda Megumi—or as she refers to herself, Nodame. On the surface, she seems to be an unkempt girl with no direction in life. However, when Chiaki hears Nodame play the piano for the first time, he is in awe at the kind of music she plays. To Chiaki's dismay, Nodame moves into the apartment next to his and finds out that she is head-over-heels in love with him.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18],
+						"popularity": 19.8472,
+						"vote_count": 41,
+						"poster_path": "/dVqK7BmEPjq225nG1SLT2bXnhYx.jpg",
+						"vote_average": 7.9,
+						"backdrop_path": "/v6K9BEzL5cjq8yYABSYR4aP61dK.jpg",
+						"original_name": "のだめカンタービレ",
+						"first_air_date": "2007-01-12",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 34142,
+						"name": "Nodame Cantabile",
+						"adult": false,
+						"overview": "When a classically trained young conductor meets a free-spirited pianist at music school, their romance and their music have a hard time harmonizing.",
+						"softcore": false,
+						"genre_ids": [18, 35],
+						"popularity": 9.0037,
+						"vote_count": 46,
+						"poster_path": "/rrJWoOlU3URsQzHmVklJcMyMB6b.jpg",
+						"vote_average": 7.7,
+						"backdrop_path": "/f9VmpKNsQ4UG4vYdu28E4jcwJ7x.jpg",
+						"original_name": "のだめ カンタービレ",
+						"first_air_date": "2006-10-16",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 61580,
+						"name": "Naeil's Cantabile",
+						"adult": false,
+						"overview": "An arrogant piano student is forced to perform a duet with an unorthodox classmate, but her unique take on music might be just what he needs.",
+						"softcore": false,
+						"genre_ids": [35, 18],
+						"popularity": 5.3458,
+						"vote_count": 9,
+						"poster_path": "/65B1t9NJe4KEGzT6d0jXmehptn8.jpg",
+						"vote_average": 6.1,
+						"backdrop_path": "/gGg1aSFMED2cFDf8g97SmPEd4EE.jpg",
+						"original_name": "내일도 칸타빌레",
+						"first_air_date": "2014-10-13",
+						"origin_country": ["KR"],
+						"original_language": "ko"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 3
+			},
+			"Rascal Does Not Dream of Santa Claus": {
+				"page": 1,
+				"results": [
+					{
+						"id": 329907,
+						"name": "Rascal Does Not Dream of Santa Claus",
+						"adult": false,
+						"overview": "After surviving the entrance exams, Sakuta Azusagawa has finally enrolled in the same university as his girlfriend, Mai Sakurajima. He is gradually getting used to the unfamiliar environment as he attends student gatherings and makes new acquaintances. Everything seems to be going smoothly until Sakuta's friend and Sweet Bullet idol group member Uzuki Hirokawa begins acting out.\n\nWith fellow Sweet Bullet member Nodoka Toyohama pleading for his help, Sakuta realizes that he has stumbled upon another case of the inexplicable Puberty Syndrome—Uzuki is feeling pressured by the sudden surge of popularity and rumors of a potential solo career. While Sakuta searches for a solution, another occurrence of Puberty Syndrome gradually emerges from the shadows.",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 0.7744,
+						"vote_count": 2,
+						"poster_path": "/xRWYCvt41wcFwBQnndjGhrHzQvO.jpg",
+						"vote_average": 10,
+						"backdrop_path": "/t4kjBSbQ5zKmgXQtcbb1o86STy5.jpg",
+						"original_name": "Rascal Does Not Dream of Santa Claus",
+						"first_air_date": "2025-07-05",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 82739,
+						"name": "Rascal Does Not Dream of Bunny Girl Senpai",
+						"adult": false,
+						"overview": "Puberty Syndrome—a rumored, mysterious syndrome that only affects those in their puberty. For example, a bunny girl suddenly appeared in front of Sakuta Azusagawa. The bunny girl's real identity is Mai Sakurajima, a teenage celebrity who is currently an inactive high school senior. For some reason, her charming figure does not reflect in the eyes of others. In the course of revealing the mystery behind this phenomenon, Sakuta begins to explore his feelings towards Mai. Set in a city where the skies and seas shine, Sakuta unfolds the meaning behind his bizarre encounters on women with the said syndrome.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18],
+						"popularity": 42.323,
+						"vote_count": 1346,
+						"poster_path": "/fbqDG7GjodvaNecgv1q8kfSNPl5.jpg",
+						"vote_average": 8.5,
+						"backdrop_path": "/8165gnzhyRbkKfm3WFBINdkDQBR.jpg",
+						"original_name": "青春ブタ野郎はバニーガール先輩の夢を見ない",
+						"first_air_date": "2018-10-04",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 2
+			},
+			"Kingdom": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46437,
+						"name": "Kingdom",
+						"adult": false,
+						"overview": "In the Warring States period, young orphan Xin vows to aid King Zheng of Qin in his quest to unify China by becoming a general himself.",
+						"softcore": false,
+						"genre_ids": [10759, 16, 18],
+						"popularity": 67.5503,
+						"vote_count": 61,
+						"poster_path": "/dehuJJkKo50nYvCYppigrWejqLe.jpg",
+						"vote_average": 7.689,
+						"backdrop_path": "/5CGM0vQpq0QBcslUXqoo0unlGPZ.jpg",
+						"original_name": "キングダム",
+						"first_air_date": "2012-06-04",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 66025,
+						"name": "Animal Kingdom",
+						"adult": false,
+						"overview": "17-year-old Joshua \"J\" Cody moves in with his freewheeling relatives in their Southern California beach town after his mother dies of a heroin overdose. Headed by boot-tough matriarch Janine \"Smurf\" Cody and her right-hand Baz, who runs the business and calls the shots, the clan also consists of Pope, the oldest and most dangerous of the Cody boys; Craig, the tough and fearless middle son; and Deran, the troubled, suspicious \"baby\" of the family.",
+						"softcore": false,
+						"genre_ids": [80, 18],
+						"popularity": 63.9159,
+						"vote_count": 579,
+						"poster_path": "/rzvdKrnSRKPFI0pgqMQknDPpRC9.jpg",
+						"vote_average": 7.8,
+						"backdrop_path": "/eQJwfyMqSra10ck8HOoiCrbQR32.jpg",
+						"original_name": "Animal Kingdom",
+						"first_air_date": "2016-06-14",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 63333,
+						"name": "The Last Kingdom",
+						"adult": false,
+						"overview": "A show of heroic deeds and epic battles with a thematic depth that embraces politics, religion, warfare, courage, love, loyalty and our universal search for identity. Combining real historical figures and events with fictional characters, it is the story of how a people combined their strength under one of the most iconic kings of history in order to reclaim their land for themselves and build a place they call home.",
+						"softcore": false,
+						"genre_ids": [10759, 18, 10768],
+						"popularity": 54.1713,
+						"vote_count": 2068,
+						"poster_path": "/8eJf0hxgIhE6QSxbtuNCekTddy1.jpg",
+						"vote_average": 8.255,
+						"backdrop_path": "/QbtctI8EzlhsyFDMUMyG3fli8B.jpg",
+						"original_name": "The Last Kingdom",
+						"first_air_date": "2015-10-10",
+						"origin_country": ["GB"],
+						"original_language": "en"
+					},
+					{
+						"id": 61427,
+						"name": "Kingdom",
+						"adult": false,
+						"overview": "A raw family drama set against the world of Mixed Martial Arts (MMA) in Venice, California. Alvey Kulina owns Navy St. MMA with the help of his girlfriend Lisa Prince. He is willing to go through extraordinary means to make sure his fighters are taken care of, but all of this responsibility comes at a steep price. He has complicated relationships with both of his sons, Jay and Nate, who are both struggling with their own identities and places within Alvey’s life and gym.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 18.7143,
+						"vote_count": 139,
+						"poster_path": "/xkRyopANOnO60KWm6DjozXlq9w4.jpg",
+						"vote_average": 6.9,
+						"backdrop_path": "/vzgIoCjNKDDpeEoDRqzTEwXPSo6.jpg",
+						"original_name": "Kingdom",
+						"first_air_date": "2014-10-08",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 70593,
+						"name": "Kingdom",
+						"adult": false,
+						"overview": "In this zombie thriller set in Korea's medieval Joseon dynasty which has been defeated by corruption and famine, a mysterious rumor of the king’s death spreads, as does a strange plague that renders the infected immune to death and hungry for flesh. The crown prince, fallen victim to a conspiracy, sets out on a journey to unveil the evil scheme and save his people.",
+						"softcore": false,
+						"genre_ids": [18, 9648],
+						"popularity": 16.0519,
+						"vote_count": 1286,
+						"poster_path": "/AsICtiVtz4icMQQRwDvOzfaTzjK.jpg",
+						"vote_average": 8.198,
+						"backdrop_path": "/jRhJlV4inm8wAAqTeHUX5HpjZcc.jpg",
+						"original_name": "킹덤",
+						"first_air_date": "2019-01-25",
+						"origin_country": ["KR"],
+						"original_language": "ko"
+					},
+					{
+						"id": 5287,
+						"name": "Kingdom",
+						"adult": false,
+						"overview": "Looks can be deceiving. Peter Kingdom seems to have everything — a man of some standing in the seaside town of Market Shipborough, he dresses well and has all the trappings of success. Why, then, does he wander along the beach and stare out to sea for hours at a time? Despite Peter's thriving legal practice, he must deal with his dysfunctional family (which includes his unstable sister) and his grief over his missing half-brother and law partner, Simon.",
+						"softcore": false,
+						"genre_ids": [18, 35],
+						"popularity": 15.2418,
+						"vote_count": 22,
+						"poster_path": "/9hXjCwADXXUksnOG6FFN7xxKxSu.jpg",
+						"vote_average": 7.1,
+						"backdrop_path": "/mwxpAjEoh00pgEEfji1ZTrOzkyP.jpg",
+						"original_name": "Kingdom",
+						"first_air_date": "2007-04-22",
+						"origin_country": ["GB"],
+						"original_language": "en"
+					},
+					{
+						"id": 74911,
+						"name": "Savage Kingdom",
+						"adult": false,
+						"overview": "A rare look at warring animal clans battling for survival in a remote region of Africa, which is drying up after years of flood-soaked abundance.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 8.7936,
+						"vote_count": 53,
+						"poster_path": "/1CZhxbKA8NzPmCbWMzdLcvwu9CY.jpg",
+						"vote_average": 7.9,
+						"backdrop_path": "/e2jVbKUuMeXIVJYFfmvymBk0XA1.jpg",
+						"original_name": "Savage Kingdom",
+						"first_air_date": "2016-11-25",
+						"origin_country": ["GB", "US"],
+						"original_language": "en"
+					},
+					{
+						"id": 301991,
+						"name": "Kingdom",
+						"adult": false,
+						"overview": "Filmed across five years in a single spectacular location, the lives and fates of our four families - leopards, hyenas, wild dogs, and lions - are inextricably linked as they strive for a foothold in a remote and fertile river valley in Zambia.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 5.1624,
+						"vote_count": 14,
+						"poster_path": "/s596vM9OIz1k6tvid7s3LxfaNfu.jpg",
+						"vote_average": 7.9,
+						"backdrop_path": "/8yzl3OCiASqbvimgpdepao43IqX.jpg",
+						"original_name": "Kingdom",
+						"first_air_date": "2025-11-09",
+						"origin_country": ["GB"],
+						"original_language": "en"
+					},
+					{
+						"id": 4267,
+						"name": "The Kingdom",
+						"adult": false,
+						"overview": "The Kingdom is the most technologically advanced hospital in Denmark, a gleaming bastion of medical science. A rash of uncanny occurrences, however, begins to weaken the staff's faith in science – a phantom ambulance pulls in every night, but disappears; voices echo in the elevator shaft; and a pregnant doctor's fetus seems to be developing much faster than is natural.",
+						"softcore": false,
+						"genre_ids": [35, 18, 9648],
+						"popularity": 15.4334,
+						"vote_count": 85,
+						"poster_path": "/6Z0Hc9o6HIydmGOHok2e4FoWhXD.jpg",
+						"vote_average": 7.7,
+						"backdrop_path": "/seybe1nVuV1cut9yXgFN8R5MdWz.jpg",
+						"original_name": "Riget",
+						"first_air_date": "1994-11-24",
+						"origin_country": ["DK"],
+						"original_language": "da"
+					},
+					{
+						"id": 40546,
+						"name": "The 10th Kingdom",
+						"adult": false,
+						"overview": "Virginia and Tony, a father and daughter living in Manhattan, find themselves in a parallel universe where Snow White, Cinderella and Little Red Riding Hood are struggling to maintain order. Their kingdoms have been fragmented by trolls, giants and goblins.",
+						"softcore": false,
+						"genre_ids": [10765, 35, 10751, 9648],
+						"popularity": 9.283,
+						"vote_count": 278,
+						"poster_path": "/aD5ISjx3AG1rygncAdv7eb8KYYo.jpg",
+						"vote_average": 7.6,
+						"backdrop_path": "/hIImI4RaqgrcJSOwJbnUFEE8SbL.jpg",
+						"original_name": "The 10th Kingdom",
+						"first_air_date": "2000-02-27",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 221646,
+						"name": "Ania Kingdom",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 6.0057,
+						"vote_count": 0,
+						"poster_path": "/kDX1H8gb7mzauWscz73yitvou1i.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "冒険大陸 アニアキングダム",
+						"first_air_date": "2023-04-02",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 153296,
+						"name": "Mutual of Omaha's Wild Kingdom",
+						"adult": false,
+						"overview": "Premiering in 1963 broadcast on prime-time from 1968-1971 and airing in syndication until 1988 the Emmy Award-winning Mutual of Omaha's Wild Kingdom was one of the longest-running and most beloved television series of all time. A pioneer of the narrative nature-documentary format the educational series followed venerable host and ecologist Marlin Perkins (later joined by Jim Fowler Peter Gros Stan Brock and Tom Allen) as he trekked to the farthest reaches of the globe to study wild animals in their natural habitats.",
+						"softcore": false,
+						"genre_ids": [99, 10751],
+						"popularity": 10.6979,
+						"vote_count": 5,
+						"poster_path": "/feQpPj2aDaXxRUhtAoQrbWgUSKU.jpg",
+						"vote_average": 8.6,
+						"backdrop_path": "/54rRHX8XMHRBCHoI3cNZN5kmaJD.jpg",
+						"original_name": "Mutual of Omaha's Wild Kingdom",
+						"first_air_date": "1963-01-06",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 202158,
+						"name": "Kingdom Business",
+						"adult": false,
+						"overview": "An exotic dancer with a powerful voice rises from the pole to the pulpit, forcing the reigning queen of gospel to guard her family and its many secrets.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 3.9494,
+						"vote_count": 12,
+						"poster_path": "/wM8DTRNokHbXL7CgKBaDZR7bTb6.jpg",
+						"vote_average": 7.6,
+						"backdrop_path": "/l0rT3CRYYayyvgJviP2uhsH1bXt.jpg",
+						"original_name": "Kingdom Business",
+						"first_air_date": "2022-05-19",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 32388,
+						"name": "Ben & Holly's Little Kingdom",
+						"adult": false,
+						"overview": "The friendship between fairy princess Holly and Ben Elf in an enchanted magical kingdom of elves and fairies.",
+						"softcore": false,
+						"genre_ids": [10762, 16, 35, 10751, 10765, 10759],
+						"popularity": 18.4517,
+						"vote_count": 29,
+						"poster_path": "/iJfBAzPNojxE3LTcUhrev7TR0eH.jpg",
+						"vote_average": 6,
+						"backdrop_path": "/dtwKMr3wu0C8G81ZLyCk98DUskq.jpg",
+						"original_name": "Ben & Holly's Little Kingdom",
+						"first_air_date": "2009-04-06",
+						"origin_country": ["GB"],
+						"original_language": "en"
+					},
+					{
+						"id": 130364,
+						"name": "The Kingdom",
+						"adult": false,
+						"overview": "After his running mate's murder, a controversial televangelist becomes Argentina's presidential candidate. But nothing about him is as holy as he seems.",
+						"softcore": false,
+						"genre_ids": [80, 18],
+						"popularity": 10.0962,
+						"vote_count": 57,
+						"poster_path": "/1P8oDpDUb3mDtz2bFYwSQeTupiu.jpg",
+						"vote_average": 7.3,
+						"backdrop_path": "/yhhStAMdc6Q0iwDlOdqgjN2x5L0.jpg",
+						"original_name": "El Reino",
+						"first_air_date": "2021-08-13",
+						"origin_country": ["AR"],
+						"original_language": "es"
+					},
+					{
+						"id": 287609,
+						"name": "The Kingdom",
+						"adult": false,
+						"overview": "In 2024, the two-time defending champion Kansas City Chiefs aimed to make history by becoming the first NFL team to win three straight Super Bowls. \"The Kingdom\" – a new six-part ESPN Original Series – chronicles the Chiefs’ dramatic pursuit of a three-peat, the legacy of the franchise, and the unforgettable characters who built its modern-day football dynasty.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 4.0731,
+						"vote_count": 18,
+						"poster_path": "/2TNOPyT73MLAkILou5QgRMTuA9k.jpg",
+						"vote_average": 6.3,
+						"backdrop_path": "/xY7jR69rSRq9dKdoPFmsRSqQ9Qr.jpg",
+						"original_name": "The Kingdom",
+						"first_air_date": "2025-08-14",
+						"origin_country": ["US"],
+						"original_language": "en"
+					},
+					{
+						"id": 114771,
+						"name": "Kingdom Force",
+						"adult": false,
+						"overview": "A 3D-animated action series for kids ages 3-6, KINGDOM FORCE follows the fast-paced exploits of five mighty animal heroes as they serve and protect the citizens of five unique animal kingdoms.",
+						"softcore": false,
+						"genre_ids": [16, 10759, 10762, 35],
+						"popularity": 3.1735,
+						"vote_count": 0,
+						"poster_path": "/n7yPzQcwwAjs4mIZXjxXfgEB1O3.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/brUVrjU4W81vzVgcZRrTpakmmcQ.jpg",
+						"original_name": "Kingdom Force",
+						"first_air_date": "2019-12-06",
+						"origin_country": ["CA"],
+						"original_language": "en"
+					},
+					{
+						"id": 324326,
+						"name": "The Seven Knights of the Marronnier Kingdom",
+						"adult": false,
+						"overview": "At the heart of a continent of eight kingdoms lies the Marronnier Kingdom. Its general, Baribara, has seven sons, each with a unique gift and serving as a knight commander. Bound by a single noble cause of heroically rescuing a princess someday, the brothers set out as goodwill ambassadors to the seven neighboring kingdoms. What encounters, trials, and destinies await them in these unknown lands?",
+						"softcore": false,
+						"genre_ids": [16, 10765, 35],
+						"popularity": 18.3122,
+						"vote_count": 1,
+						"poster_path": "/rYB2YdEaZKL08Bi91uZfZnCq8vv.jpg",
+						"vote_average": 8,
+						"backdrop_path": "/59oBbiLeG3jeDOUmx6zF6Qfmea3.jpg",
+						"original_name": "マロニエ王国の七人の騎士",
+						"first_air_date": "2026-10-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 66297,
+						"name": "The Other Kingdom",
+						"adult": false,
+						"overview": "Astral is a fairy princess who lives in the secret fairy kingdom of Athenia which is full of mythical creatures. While that sounds amazing, Astral likes to fantasize about living in the human world and attending high school. Once she leaves her home to do just that, she has to try to fit in and keep her identity a secret.",
+						"softcore": false,
+						"genre_ids": [35, 18, 10751, 10765],
+						"popularity": 4.2535,
+						"vote_count": 15,
+						"poster_path": "/3yhShqxSoM9ElDZg05Eolqij0tq.jpg",
+						"vote_average": 7.1,
+						"backdrop_path": "/oulzXGZEBGO2UCfxB4EmNmYfwvO.jpg",
+						"original_name": "The Other Kingdom",
+						"first_air_date": "2016-04-10",
+						"origin_country": ["CA", "US"],
+						"original_language": "en"
+					},
+					{
+						"id": 92278,
+						"name": "Lion Kingdom",
+						"adult": false,
+						"overview": "The saga of three lion families linked together by a strange, charmed place: a beautiful oasis on the Mwagusi River in Tanzania, where there is always water called the Glade.",
+						"softcore": false,
+						"genre_ids": [99],
+						"popularity": 2.3472,
+						"vote_count": 5,
+						"poster_path": "/5iycwnr12YPJSN1yN2ityEygXNK.jpg",
+						"vote_average": 7.6,
+						"backdrop_path": "/eVd5ZeNVhKZtzu9gsEYhKOAzP2c.jpg",
+						"original_name": "Lion Kingdom",
+						"first_air_date": "2017-08-04",
+						"origin_country": ["US"],
+						"original_language": "en"
+					}
+				],
+				"total_pages": 10,
+				"total_results": 192
+			}
+		},
 		"imdbSeries": {},
 		"anime": {
 			"fribb": [
@@ -20131,6 +22337,382 @@
 					"themoviedb_id": { "tv": 30983 },
 					"tvdb_id": 72454,
 					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 4691,
+					"anilist_id": 1698,
+					"animecountdown_id": 38245,
+					"animenewsnetwork_id": 7010,
+					"anime-planet_id": "nodame-cantabile",
+					"anisearch_id": 3783,
+					"imdb_id": ["tt0928099"],
+					"kitsu_id": 1525,
+					"livechart_id": 3674,
+					"mal_id": 1698,
+					"simkl_id": 38245,
+					"themoviedb_id": { "tv": 45527 },
+					"tvdb_id": 80005,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 5941,
+					"anilist_id": 4477,
+					"animecountdown_id": 38776,
+					"animenewsnetwork_id": 9859,
+					"anime-planet_id": "nodame-cantabile-paris",
+					"anisearch_id": 4901,
+					"imdb_id": ["tt0928099"],
+					"kitsu_id": 3632,
+					"livechart_id": 4122,
+					"mal_id": 4477,
+					"simkl_id": 38776,
+					"themoviedb_id": { "tv": 45527 },
+					"tvdb_id": 80005,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 6779,
+					"anilist_id": 6187,
+					"animecountdown_id": 39160,
+					"animenewsnetwork_id": 15362,
+					"anime-planet_id": "nodame-cantabile-ova",
+					"anisearch_id": 5347,
+					"imdb_id": ["tt0928099"],
+					"kitsu_id": 4465,
+					"livechart_id": 5192,
+					"mal_id": 6187,
+					"simkl_id": 39160,
+					"themoviedb_id": { "tv": 45527 },
+					"tvdb_id": 80005,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 7019,
+					"anilist_id": 5690,
+					"animecountdown_id": 40165,
+					"animenewsnetwork_id": 10950,
+					"anime-planet_id": "nodame-cantabile-finale",
+					"anisearch_id": 5471,
+					"imdb_id": ["tt0928099"],
+					"kitsu_id": 4248,
+					"livechart_id": 4128,
+					"mal_id": 5690,
+					"simkl_id": 40165,
+					"themoviedb_id": { "tv": 45527 },
+					"tvdb_id": 80005,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 8791,
+					"anilist_id": 12031,
+					"animecountdown_id": 40660,
+					"animenewsnetwork_id": 13783,
+					"anime-planet_id": "kingdom",
+					"anisearch_id": 7436,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 6648,
+					"livechart_id": 1116,
+					"mal_id": 12031,
+					"simkl_id": 40660,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 9672,
+					"anilist_id": 17389,
+					"animecountdown_id": 45120,
+					"animenewsnetwork_id": 15113,
+					"anime-planet_id": "kingdom-2",
+					"anisearch_id": 8339,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 7680,
+					"livechart_id": 30,
+					"mal_id": 17389,
+					"simkl_id": 45120,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11803,
+					"anilist_id": 21507,
+					"animecountdown_id": 541198,
+					"animenewsnetwork_id": 18064,
+					"anime-planet_id": "mob-psycho-100",
+					"anisearch_id": 11092,
+					"imdb_id": ["tt5897304"],
+					"kitsu_id": 11578,
+					"livechart_id": 1936,
+					"mal_id": 32182,
+					"simkl_id": 541198,
+					"themoviedb_id": { "tv": 67075 },
+					"tvdb_id": 307375,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 13527,
+					"anilist_id": 100353,
+					"animecountdown_id": 728839,
+					"animenewsnetwork_id": 20761,
+					"anime-planet_id": "mob-psycho-100-reigen-the-miraculous-unknown-psychic",
+					"anisearch_id": 12922,
+					"imdb_id": ["tt5897304"],
+					"kitsu_id": 41073,
+					"livechart_id": 2944,
+					"mal_id": 36616,
+					"simkl_id": 728839,
+					"themoviedb_id": { "tv": 67075 },
+					"tvdb_id": 307375,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13900,
+					"anilist_id": 101291,
+					"animecountdown_id": 779705,
+					"animenewsnetwork_id": 20848,
+					"anime-planet_id": "rascal-does-not-dream-of-bunny-girl-senpai",
+					"anisearch_id": 13457,
+					"imdb_id": ["tt8993398"],
+					"kitsu_id": 41056,
+					"livechart_id": 3147,
+					"mal_id": 37450,
+					"simkl_id": 779705,
+					"themoviedb_id": { "tv": 82739 },
+					"tvdb_id": 345596,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13939,
+					"anilist_id": 101338,
+					"animecountdown_id": 784013,
+					"animenewsnetwork_id": 21204,
+					"anime-planet_id": "mob-psycho-100-ii",
+					"anisearch_id": 13484,
+					"imdb_id": ["tt5897304"],
+					"kitsu_id": 41071,
+					"livechart_id": 3163,
+					"mal_id": 37510,
+					"simkl_id": 784013,
+					"themoviedb_id": { "tv": 67075 },
+					"tvdb_id": 307375,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 14397,
+					"anilist_id": 104157,
+					"animecountdown_id": 911137,
+					"animenewsnetwork_id": 21406,
+					"anime-planet_id": "rascal-does-not-dream-of-a-dreaming-girl",
+					"anisearch_id": 13889,
+					"imdb_id": ["tt10472884"],
+					"kitsu_id": 41991,
+					"livechart_id": 3513,
+					"mal_id": 38329,
+					"simkl_id": 911137,
+					"themoviedb_id": { "tv": 82739 },
+					"tvdb_id": 345596,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 5, "tmdb": 5 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 14941,
+					"anilist_id": 109819,
+					"animecountdown_id": 1106339,
+					"animenewsnetwork_id": 22493,
+					"anime-planet_id": "mob-psycho-100-ii-the-first-spirits-and-such-company-trip-a-journey-that-mends-the-heart-and-heals-the-soul",
+					"anisearch_id": 14437,
+					"imdb_id": ["tt5897304"],
+					"kitsu_id": 42416,
+					"livechart_id": 9406,
+					"mal_id": 39651,
+					"simkl_id": 1106339,
+					"themoviedb_id": { "tv": 67075 },
+					"tvdb_id": 307375,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 7, "tmdb": 7 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15259,
+					"anilist_id": 113108,
+					"animecountdown_id": 1203191,
+					"animenewsnetwork_id": 24876,
+					"anime-planet_id": "kingdom-3",
+					"anisearch_id": 14737,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 43037,
+					"livechart_id": 9668,
+					"mal_id": 40682,
+					"simkl_id": 1203191,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16912,
+					"anilist_id": 140350,
+					"animecountdown_id": 1754477,
+					"anime-planet_id": "kingdom-4",
+					"anisearch_id": 16663,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 45324,
+					"livechart_id": 10840,
+					"mal_id": 50160,
+					"simkl_id": 1754477,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 4, "tmdb": 4 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16915,
+					"anilist_id": 140439,
+					"animecountdown_id": 1756821,
+					"animenewsnetwork_id": 24878,
+					"anime-planet_id": "mob-psycho-100-iii",
+					"anisearch_id": 16661,
+					"imdb_id": ["tt5897304"],
+					"kitsu_id": 45338,
+					"livechart_id": 10841,
+					"mal_id": 50172,
+					"simkl_id": 1756821,
+					"themoviedb_id": { "tv": 67075 },
+					"tvdb_id": 307375,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17655,
+					"anilist_id": 155227,
+					"animecountdown_id": 2003646,
+					"anime-planet_id": "kingdom-5",
+					"anisearch_id": 17755,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 46564,
+					"livechart_id": 11538,
+					"mal_id": 53223,
+					"simkl_id": 2003646,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 5, "tmdb": 5 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17806,
+					"anilist_id": 159831,
+					"animecountdown_id": 2070506,
+					"animenewsnetwork_id": 26825,
+					"anime-planet_id": "zom-100-bucket-list-of-the-dead",
+					"anisearch_id": 18071,
+					"imdb_id": ["tt25811262"],
+					"kitsu_id": 46954,
+					"livechart_id": 11767,
+					"mal_id": 54112,
+					"simkl_id": 2070506,
+					"themoviedb_id": { "tv": 217766 },
+					"tvdb_id": 429310,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17906,
+					"anilist_id": 162694,
+					"animecountdown_id": 2120192,
+					"animenewsnetwork_id": 27380,
+					"anime-planet_id": "the-100-girlfriends-who-really-really-really-really-really-love-you",
+					"anisearch_id": 18267,
+					"imdb_id": ["tt28919914"],
+					"kitsu_id": 47179,
+					"livechart_id": 11832,
+					"mal_id": 54714,
+					"simkl_id": 2120192,
+					"themoviedb_id": { "tv": 223564 },
+					"tvdb_id": 432050,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18300,
+					"anilist_id": 171046,
+					"animecountdown_id": 2314264,
+					"animenewsnetwork_id": 33077,
+					"anime-planet_id": "rascal-does-not-dream-of-santa-claus",
+					"anisearch_id": 18908,
+					"imdb_id": ["tt8993398"],
+					"kitsu_id": 48917,
+					"livechart_id": 12437,
+					"mal_id": 57433,
+					"simkl_id": 2314264,
+					"themoviedb_id": { "tv": 82739 },
+					"tvdb_id": 345596,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18343,
+					"anilist_id": 172258,
+					"animecountdown_id": 2330428,
+					"animenewsnetwork_id": 31112,
+					"anime-planet_id": "the-100-girlfriends-who-really-really-really-really-really-love-you-season-2",
+					"anisearch_id": 18980,
+					"imdb_id": ["tt28919914"],
+					"kitsu_id": 48348,
+					"livechart_id": 12476,
+					"mal_id": 57616,
+					"simkl_id": 2330428,
+					"themoviedb_id": { "tv": 223564 },
+					"tvdb_id": 432050,
+					"season": { "tvdb": 2, "tmdb": 1 },
+					"episode_offset": { "tmdb": 12 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 19295,
+					"anilist_id": 190840,
+					"animecountdown_id": 2758730,
+					"animenewsnetwork_id": 38195,
+					"anime-planet_id": "kingdom-6",
+					"anisearch_id": 20459,
+					"imdb_id": ["tt2404499"],
+					"kitsu_id": 49861,
+					"livechart_id": 13144,
+					"mal_id": 61517,
+					"simkl_id": 2758730,
+					"themoviedb_id": { "tv": 46437 },
+					"tvdb_id": 259635,
+					"season": { "tvdb": 6, "tmdb": 6 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 19663,
+					"anilist_id": 200637,
+					"animecountdown_id": 2906736,
+					"animenewsnetwork_id": 37923,
+					"anime-planet_id": "the-100-girlfriends-who-really-really-really-really-really-love-you-season-3",
+					"anisearch_id": 20994,
+					"imdb_id": ["tt28919914"],
+					"kitsu_id": 50272,
+					"livechart_id": 13368,
+					"mal_id": 62811,
+					"simkl_id": 2906736,
+					"themoviedb_id": { "tv": 223564 },
+					"tvdb_id": 432050,
+					"season": { "tvdb": 3, "tmdb": 1 },
+					"episode_offset": { "tmdb": 24 }
 				}
 			],
 			"titles": [
@@ -22133,6 +24715,526 @@
 						"名偵探柯南 紺青之拳",
 						"名探偵コナン 紺青の拳",
 						"名探偵コナン 紺青の拳（フィスト）"
+					]
+				},
+				{
+					"anidbId": 4691,
+					"names": [
+						"Nodame Cantabile",
+						"Нодаме Кантабиле",
+						"のだめカンタービレ",
+						"노다메 칸타빌레",
+						"交响情人梦",
+						"โนดาเมะ",
+						"NC",
+						"NC1",
+						"noda",
+						"Nodame",
+						"Нодамэ Кантабиле",
+						"จังหวะรัก หัวใจดนตรี",
+						"วุ่นรักนักดนตรี",
+						"Нодаме Кантабіле",
+						"交響情人夢"
+					]
+				},
+				{
+					"anidbId": 5941,
+					"names": [
+						"Nodame Cantabile: Paris Hen",
+						"のだめカンタービレ 巴里編",
+						"nc s2",
+						"NC2",
+						"nodame 2",
+						"nodame s2",
+						"nodame2",
+						"nodameparis",
+						"Nodame Cantabile 2",
+						"Nodame Cantabile: Paris",
+						"Nodame Cantabile: Paris Chapter",
+						"Нодамэ Кантабиле (второй сезон)",
+						"交响情人梦 巴黎篇",
+						"交響情人夢 巴黎篇",
+						"Nodame Cantabile: Paris-hen",
+						"Nodame Cantabile Pari Hen",
+						"Nodame Cantabile Pari-Hen",
+						"Nodame Cantabile Pari-hen",
+						"Nodame Cantabile Paris Chapter",
+						"Nodame Cantabile: Pari-hen",
+						"Nodame Cantabile: Paris (TV)"
+					]
+				},
+				{
+					"anidbId": 6779,
+					"names": [
+						"Nodame Cantabile (2009)",
+						"のだめカンタービレ (2009)",
+						"交响情人梦 OAD",
+						"nc ova",
+						"nodame ova",
+						"nodamefinale ova",
+						"nodameparis ova",
+						"Нодаме Кантабиле OVA",
+						"Nodame Cantabile OAD",
+						"Nodame Cantabile",
+						"Nodame Cantabile OVA",
+						"のだめカンタービレ",
+						"のだめカンタービレ OVA"
+					]
+				},
+				{
+					"anidbId": 7019,
+					"names": [
+						"Nodame Cantabile: Finale",
+						"のだめカンタービレ フィナーレ",
+						"交响情人梦Finale",
+						"NC3",
+						"Ncf",
+						"nc s3",
+						"nodame s3",
+						"nodamefinale",
+						"Nodame Cantabile 3",
+						"Нодамэ Кантабиле (третий сезон)",
+						"交响情人梦 最终篇",
+						"交響情人夢 最終篇",
+						"Nodame Cantabile Finale",
+						"Nodame Cantabile Season 3",
+						"Nodame Cantabile Third Season"
+					]
+				},
+				{
+					"anidbId": 8791,
+					"names": ["Kingdom", "キングダム", "王者天下", "Kingdom (2012)", "Царство"]
+				},
+				{
+					"anidbId": 9672,
+					"names": [
+						"Kingdom (2013)",
+						"Kingdom Season 2",
+						"キングダム (2013)",
+						"王者天下 第二季",
+						"王者天下",
+						"キングダム 第2シリーズ",
+						"Царство [ТВ-2]",
+						"Kingdom: Dai 2 Series",
+						"Kingdom 2nd Season",
+						"Kingdom",
+						"Kingdom 2",
+						"Kingdom Hisho Hen",
+						"Kingdom Saison 2",
+						"Kingdom Second Season",
+						"Kingdom Staffel 2",
+						"Kingdom Temporada 2",
+						"Kingdom: Season 2",
+						"Царство 2",
+						"キングダム",
+						"キングダム （2013）"
+					]
+				},
+				{
+					"anidbId": 11803,
+					"names": [
+						"Mob Psycho 100",
+						"モブサイコ100",
+						"모브 사이코 100",
+						"Моб Психо 100",
+						"灵能百分百",
+						"MP100",
+						"النفسي موب 100",
+						"موب سايكو 100",
+						"מוב פסיכו 100",
+						"Mob Psycho Hyaku",
+						"Mob Psycho One Hundred",
+						"ม็อบไซโค 100 คนพลังจิต",
+						"モブサイコ１００",
+						"路人超能100"
+					]
+				},
+				{
+					"anidbId": 13527,
+					"names": [
+						"Mob Psycho 100 Reigen: Shirarezaru Kiseki no Reinouryokusha",
+						"Mob Psycho 100 Reigen: The Miraculous Unknown Psychic",
+						"モブサイコ100 REIGEN ~知られざる奇跡の霊能力者~",
+						"Моб Психо 100: Рейген — таинственный чудесный экстрасенс",
+						"路人超能100 REIGEN～不为人知的奇迹灵能者～",
+						"MP100 R",
+						"mp100 ova 1",
+						"mp100r",
+						"Mob Psycho 100 Reigen",
+						"Mob Psycho 100: Reigen - Shirarezaru Kiseki no Reinouryokusha",
+						"Mob Psycho 100 OVA",
+						"Mob Psycho 100 REIGEN Shirarezaru Kiseki Reinouryokusha",
+						"Mob Psycho 100 REIGEN The Miraculous Unknown Psychic",
+						"Mob Psycho 100 REIGEN: Shirarezaru Kiseki Reinouryokusha",
+						"Mob Psycho 100 REIGEN: The Miraculous Unknown Psychic",
+						"Mob Psycho 100 Reigen Ova: The Miraculous Unknown Psychic",
+						"Mob Psycho 100 Reigen: Der Unbekannte Typ mit Kräften",
+						"Mob Psycho 100 Reigen: Le Médium prodige de l’ombre",
+						"Mob Psycho 100 Reigen: Shirarezaru Kiseki Reinouryokusha",
+						"Mob Psycho 100 Reigen: Shirarezaru Kiseki Reinōryokusha",
+						"Mob Psycho 100 Reigen: Shirarezaru Kiseki no Reinōryokusha",
+						"Mob Psycho 100: Reigen - The Miracle Psychic that Nobody Knows",
+						"Mob Psycho 100: Reigen - The Miraculous Unknown Psychic",
+						"モブサイコ100",
+						"モブサイコ100 REIGEN ～知られざる奇跡の霊能力者～"
+					]
+				},
+				{
+					"anidbId": 13900,
+					"names": [
+						"Seishun Buta Yarou wa Bunny Girl Senpai no Yume o Minai",
+						"Rascal Does Not Dream of Bunny Girl Senpai",
+						"青春ブタ野郎はバニーガール先輩の夢を見ない",
+						"청춘 돼지는 바니걸 선배의 꿈을 꾸지 않는다",
+						"青春期笨蛋不做兔女郎学姐的梦",
+						"青春豬頭少年不會夢到兔女郎學姊",
+						"BGS",
+						"Bunny Girl Senpai",
+						"aobuta",
+						"Seibuta",
+						"Puberty Syndrome: Abnormal Experiences During Adolescence Due to Sensitivity and Instability.",
+						"Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai",
+						"AoButa",
+						"Rascal Dpes Not Dream Of Bunny Girl Senpai",
+						"Rascal does not Dream of Bunny Girl Senpai (Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai)",
+						"Seishun Buta Yarou wa Bunny Girl-senpai no Yume wo Minai",
+						"Seishun Buta Yarō wa Bunny Girl Senpai no Yume o Minai",
+						"Seishun Buta Yarō wa Bunny Girl-senpai no Yume wo Minai",
+						"That Adolescent Pig-Rascal Did Not Dream a Bunny-Girl Sempai",
+						"That Bastard Pig of Youth Doesn’t See the Bunny Girl Upperclassman’s Dream",
+						"Негодник, которому не снилась девушка-кролик",
+						"Этот глупый свин не понимает мечту девочки-зайки",
+						"מניאק בן עמלק לא רואה ילדת ארנבת שיותר מבוגרת ממנו בחלומותיו",
+						"เรื่องฝันปั่นป่วยของผมกับรุ่นพี่บันนี่เกิร์ล",
+						"青ブタ",
+						"青春猪头少年不会梦到兔女郎学姐"
+					]
+				},
+				{
+					"anidbId": 13939,
+					"names": [
+						"Mob Psycho 100 II",
+						"モブサイコ100 II",
+						"모브 사이코 100 II",
+						"Моб Психо 100 II",
+						"灵能百分百 第二季",
+						"路人超能100 II",
+						"MP100 2",
+						"mp100 s2",
+						"mp1002",
+						"موب سايكو 100 2",
+						"Mob Psycho 100 S2",
+						"II מוב פסיכו 100",
+						"Mob Psycho 100 (2019)",
+						"Mob Psycho 100 2nd Season",
+						"Mob Psycho 100 Season 2",
+						"Mob Psycho Hyaku",
+						"Mob Psycho One Hundred",
+						"ม็อบไซโค 100 คนพลังจิต ภาค 2",
+						"モブサイコ100 S2",
+						"モブサイコ100 Ⅱ"
+					]
+				},
+				{
+					"anidbId": 14397,
+					"names": [
+						"Seishun Buta Yarou wa Yumemiru Shoujo no Yume o Minai",
+						"Rascal Does Not Dream of a Dreaming Girl",
+						"青春ブタ野郎はゆめみる少女の夢を見ない",
+						"青春猪头少年不会梦到怀梦美少女",
+						"BGS Movie",
+						"seibuta movie",
+						"aobuta movie",
+						"청춘 돼지는 꿈꾸는 소녀의 꿈을 꾸지 않는다",
+						"Seishun Buta Yarou wa Yumemiru Shoujo no Yume wo Minai",
+						"Ao Buta",
+						"Gekijouban Seishun Buta Yarou wa Yumemiru Shoujo no Yume o Minai",
+						"Gekijouban Seishun Buta Yarou wa Yumemiru Shoujo no Yume wo Minai",
+						"Gekijōban Seishun Buta Yarō wa Yumemiru Shōjo no Yume o Minai",
+						"Rascal Does Not Dream of Bunny Girl Senpai Movie",
+						"Rascal Does Not Dream of Dreaming Girl the Movie",
+						"Seishun Buta Yarō wa Yume-Miru Shōjo no Yume wo Minai",
+						"That Adolescent Pig-Rascal Did Not Dream a Bunny-Girl Sempai Movie",
+						"That Bastard Pig of Youth Doesn’t See the Bunny Girl Upperclassman’s Dream Movie",
+						"Негодник, которому не снилась девушка-кролик. Фильм",
+						"Этот глупый свин не понимает мечту девочки-зайки. Фильм",
+						"劇場版 青春ブタ野郎はゆめみる少女の夢を見ない",
+						"青ブタ"
+					]
+				},
+				{
+					"anidbId": 14941,
+					"names": [
+						"Mob Psycho 100: Daiikkai Rei toka Soudansho Ian Ryokou - Kokoro Mitasu Iyashi no Tabi",
+						"Mob Psycho 100: Der erste superbillige Ausflug der Berater für Geister und so`n Zeugs",
+						"Mob Psycho 100: Spirits and Such Company Trip - A Journey That Mends the Heart and Heals the Soul",
+						"モブサイコ100 第一回霊とか相談所慰安旅行~ココロ満たす癒やしの旅~",
+						"灵能百分百 第一回灵能相谈所犒劳旅行～心满意足的治愈之旅～",
+						"Mob Psycho 100 2 OAV",
+						"mp100 ova",
+						"Mob Psycho 100: The Spirits and Such Consultation Office`s First Company Outing - A Healing Trip That Warms the Heart",
+						"Mob Psycho 100: La première excursion du bureau ~ Le voyage apaisant ~",
+						"Mob Psycho 100: Dai Ikkai Rei toka Soudansho Ian Ryokou - Kokoro Mitasu Iyashi no Tabi",
+						"Mob Psycho 100 II OVA",
+						"Mob Psycho 100 II OVA: Der erste superbillige Ausflug des PS-Büros",
+						"Mob Psycho 100 II: The First Spirits and Such Company Trip - A Journey that Mends the Heart and Heals the Soul",
+						"Mob Psycho 100 II: The First Spirits and Such Company Trip ~A Journey that Mends the Heart and Heals the Soul~",
+						"Mob Psycho 100: Daīkkai Rei toka Sōdansho Ian Ryokō - Kokoro Mitasu Iyashi no Tabi",
+						"Mob Psycho 100: Der erste superbillige Ausflug der Berater für Geister und so’n Zeugs",
+						"Mob Psycho 100: The First Spirits and Such Company Trip - A Journey that Mends the Heart and Heals the Soul",
+						"Mob Psycho 100: The First Spirits and Such Company Trip ~A Journey that Mends the Heart and Heals the Soul~",
+						"Mob Psycho 100: The First Spirits and Such Field Trip - A Journey that Mends the Heart and Heals the Soul.",
+						"Mob Psycho 100: The Spirits and Such Company Trip - A Journey That Mends the Heart and Heals the Soul",
+						"Mob Psycho 100: The Spirits and Such Consultation Office's First Company Outing - A Healing Trip That Warms the Heart",
+						"Mob Psycho 100: The Spirits and Such Consultation Office’s First Company Outing - A Healing Trip That Warms the Heart",
+						"Mob Psycho: Der erste superbillige Ausflug der Berater für Geister und so Zeugs ~ Eine erholsame Reise für Herz und Seele",
+						"モブサイコ100 第一回霊とか相談所慰安旅行~ココロ満たす癒やしの旅",
+						"モブサイコ100 第一回霊とか相談所慰安旅行～ココロ満たす癒やしの旅～"
+					]
+				},
+				{
+					"anidbId": 15259,
+					"names": [
+						"Kingdom (2020)",
+						"Kingdom Season 3",
+						"キングダム (2020)",
+						"王者天下 第三季",
+						"キングダム 第3シリーズ",
+						"Kingdom: Dai 3 Series",
+						"Kingdom 3",
+						"Kingdom 3rd Season",
+						"Kingdom : Saison 3",
+						"Kingdom Staffel 3",
+						"Царство 3",
+						"สงครามบัลลังก์ผงาดจิ๋นซี ภาค 3",
+						"キングダム",
+						"キングダム （2020）",
+						"キングダム3"
+					]
+				},
+				{
+					"anidbId": 16912,
+					"names": [
+						"Kingdom (2022)",
+						"Kingdom Season 4",
+						"キングダム (2022)",
+						"Царство 4",
+						"Kingdom 4",
+						"王者天下 第四季",
+						"Kingdom 4th Season",
+						"Kingdom : Saison 4",
+						"Kingdom Staffel 4",
+						"สงครามบัลลังก์ผงาดจิ๋นซี ภาค 4",
+						"キングダム",
+						"キングダム 4",
+						"キングダム 第4シリーズ",
+						"キングダム （2022）",
+						"キングダム4"
+					]
+				},
+				{
+					"anidbId": 16915,
+					"names": [
+						"Mob Psycho 100 III",
+						"モブサイコ100 III",
+						"灵能百分百 第三季",
+						"路人超能100 III",
+						"MP100 s3",
+						"موب سايكو 100 3",
+						"Mob Psycho 100 S3",
+						"Mob Psycho 100 (2022)",
+						"Mob Psycho 100 3rd Season",
+						"Mob Psycho 100 Season 3",
+						"Mob Psycho 3rd Season",
+						"Mob Psycho Hyaku",
+						"Mob Psycho One Hundred",
+						"Моб Психо 100 III",
+						"ม็อบไซโค 100 คนพลังจิต ภาค 3",
+						"モブサイコ III",
+						"モブサイコ100 Ⅲ"
+					]
+				},
+				{
+					"anidbId": 17655,
+					"names": [
+						"Kingdom (2024)",
+						"Kingdom Season 5",
+						"キングダム (2024)",
+						"王者天下 第五季",
+						"Kingdom S5",
+						"Kingdom 5",
+						"Kingdom 5th Season",
+						"Kingdom : Saison 5",
+						"Kingdom Staffel 5",
+						"Kingdom: Season 5",
+						"Kingdom: Staffel 5",
+						"Царство 5",
+						"สงครามบัลลังก์ผงาดจิ๋นซี ภาค 5",
+						"キングダム",
+						"キングダム 第5シリーズ",
+						"キングダム （2024）",
+						"キングダム5"
+					]
+				},
+				{
+					"anidbId": 17806,
+					"names": [
+						"Zom 100: Zombie ni Naru made ni Shitai 100 no Koto",
+						"Zom 100: Bucket List of the Dead",
+						"Zom 100: Bakancslista zombiapokalipszis idejére",
+						"ゾン100~ゾンビになるまでにしたい100のこと~",
+						"僵尸100～在成为僵尸前要做的100件事～",
+						"殭屍100～在成為殭屍前要做的100件事～",
+						"zom100",
+						"殭屍 100",
+						"100 Coisas para Fazer Antes de Virar Zumbi",
+						"100 rzeczy do zrobienia, zanim zostanę zombie",
+						"100 สิ่งที่อยากทำก่อนจะกลายเป็นซอมบี้",
+						"Bucket List of The Dead",
+						"Bucket List of The Dead, Zombie 100: 100 Things I Want to do Before I Become a Zombie",
+						"Zom 100 : Bucket List of the Dead",
+						"Zom 100: The Bucket List of the Dead",
+						"Zom 100: Zombie ni Naru Made ni Shitai 100 no Koto",
+						"Zombie 100 ~100 Things I Want to do Before I Become a Zombie~",
+						"Zombie 100 ~Zombie ni Naru Made ni Shitai 100 no Koto~",
+						"Zombie 100: 100 Things I Want to do Before I Become a Zombie",
+						"Zombie 100: Bucket List of the Dead",
+						"Зомби-апокалипсис и 100 предсмертных дел",
+						"ゾン100～ゾンビになるまでにしたい100のこと～",
+						"ン100～ゾンビになるまでにしたい100のこと～"
+					]
+				},
+				{
+					"anidbId": 17906,
+					"names": [
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na 100-nin no Kanojo",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You",
+						"100 Pacar yang Sungguh Sangat Amat Benar-benar Mencintaimu",
+						"君のことが大大大大大好きな100人の彼女",
+						"Сто девушек, которые очень-очень-очень-очень-очень сильно тебя любят",
+						"超超超超超喜欢你的100个女朋友",
+						"超超超超超喜歡你的100個女朋友",
+						"100カノ",
+						"hyakkano",
+						"100 Girlfriends",
+						"100 Kanojo",
+						"Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo",
+						"100 Cô Bạn Gái Yêu Bạn Rất Rất Rất Rất Rất Nhiều",
+						"100 Namoradas Que Te Amam Muuuuuito",
+						"100 девушек, которые очень-очень-очень-очень-очень сильно тебя любят",
+						"100Kano",
+						"Hyakkano",
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na Hyakunin no Kanojo",
+						"Kimi no koto ga Dai Dai Dai Dai Daisuki na 100-nin no Kanojo",
+						"Le 100 ragazze che ti amano tanto tanto tanto tanto tanto",
+						"Les 100 petites amies qui t'aiiiment à en mourir",
+						"Les 100 petites amies qui t’aiiiment à en mourir",
+						"Mis 100 Novias Que Me Quieren Mogollón Mogollón",
+						"Really",
+						"Really Love You",
+						"The 100 Girlfriends Who Really",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You",
+						"รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน"
+					]
+				},
+				{
+					"anidbId": 18300,
+					"names": [
+						"Seishun Buta Yarou Series: Daigakusei Hen",
+						"青春ブタ野郎シリーズ 大学生編",
+						"Seishun Buta Yarou wa Santa Claus no Yume wo Minai",
+						"AoButa",
+						"Rascal Does Not Dream of Bunny Girl Senpai Season 2",
+						"Rascal Does Not Dream of Santa Claus",
+						"Rascal Does Not Dream: University Student Arc",
+						"Rascal Series: University Arc",
+						"Seishun Buta Yarou Santa Claus no Yume wo Minai",
+						"Seishun Buta Yarou wa Santa Claus no Yume o Minai",
+						"Seishun Buta Yarou: Daigakusei-hen",
+						"Seishun Buta Yarō wa Santa Claus no Yume o Minai",
+						"Seishun Buta Yarō wa Santa Claus no Yume wo Minai",
+						"青ブタ",
+						"青春ブタ野郎 大学生編",
+						"青春ブタ野郎はサンタクロースの夢を見ない",
+						"青春猪头少年不会梦到圣诞服女郎",
+						"青春笨蛋少年不做圣诞服女郎的梦",
+						"青春豬頭少年不會夢到聖誕服女郎"
+					]
+				},
+				{
+					"anidbId": 18343,
+					"names": [
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na 100-nin no Kanojo 2",
+						"君のことが大大大大大好きな100人の彼女 2",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You 2",
+						"Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 2nd Season",
+						"100 Girlfriends 2",
+						"100 Girlfriends Season 2",
+						"100 Kanojo 2",
+						"100 Pacar yang Sungguh Sangat Amat Benar-benar Mencintaimu Season 2",
+						"100Kano 2",
+						"100カノ 2",
+						"Hyakkano 2",
+						"Hyakkano 2nd Season",
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na 100-nin no Kanojo 2nd Season",
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na Hyakunin no Kanojo (2025)",
+						"Kimi no koto ga Dai Dai Dai Dai Daisuki na 100-nin no Kanojo",
+						"Les 100 petites amies qui t’aiiiment à en mourir (Saison 2)",
+						"Really",
+						"Really Love You",
+						"Really Love You Season 2",
+						"The 100 Girlfriends Who Really",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You (Season 2)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You (Staffel 2)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You (Stagione 2)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You (Temporada 2)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, REALLY Love You Season 2",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You (2025)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You 2nd Season",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You Season 2",
+						"hyakkano 2",
+						"รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน ซีซั่น 2",
+						"君のことが大大大大大好きな100人の彼女",
+						"君のことが大大大大大好きな100人の彼女 (2025)",
+						"君のことが大大大大大好きな100人の彼女 2期",
+						"君のことが大大大大大好きな100人の彼女 第2期",
+						"超超超超超喜欢你的100个女朋友 第二季",
+						"超超超超超喜歡你的100個女朋友 第二季"
+					]
+				},
+				{
+					"anidbId": 19295,
+					"names": [
+						"Kingdom (2025)",
+						"Kingdom Season 6",
+						"キングダム (2025)",
+						"Kingdom Staffel 6",
+						"Kingdom 6",
+						"Kingdom S6",
+						"Kingdom 6th Season",
+						"Kingdom : Saison 6",
+						"Kingdom: Season 6",
+						"Kingdom: Staffel 6",
+						"Kingdom: Stagione 6",
+						"Kingdom: Temporada 6",
+						"Царство 6",
+						"キングダム",
+						"キングダム 第6シリーズ",
+						"キングダム （2025）",
+						"キングダム6"
+					]
+				},
+				{
+					"anidbId": 19663,
+					"names": [
+						"Kimi no Koto ga Dai Dai Dai Dai Daisuki na Hyakunin no Kanojo (2026)",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You (2026)",
+						"君のことが大大大大大好きな100人の彼女 (2026)",
+						"100 Girlfriends Season 3",
+						"100 Kanojo 3",
+						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You Season 3",
+						"hyakkano 3"
 					]
 				}
 			]
@@ -25092,6 +28194,653 @@
 						"episodeEnd": null,
 						"how": "tmdb",
 						"tmdbEpisodeId": 6726229
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "The.100.S03.2016.Complete.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV",
+				"hash": null,
+				"imdbId": "tt5897304",
+				"files": [
+					{
+						"path": "The.100.S03E01.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E02.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E03.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E04.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E05.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E06.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E07.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E08.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E09.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E10.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E11.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E12.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E13.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E14.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E15.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The.100.S03E16.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2661044",
+				"tmdbId": 48866,
+				"files": [
+					{
+						"path": "The.100.S03E01.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1146093
+					},
+					{
+						"path": "The.100.S03E02.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1146094
+					},
+					{
+						"path": "The.100.S03E03.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158146
+					},
+					{
+						"path": "The.100.S03E04.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158147
+					},
+					{
+						"path": "The.100.S03E05.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1163512
+					},
+					{
+						"path": "The.100.S03E06.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1166744
+					},
+					{
+						"path": "The.100.S03E07.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1166745
+					},
+					{
+						"path": "The.100.S03E08.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1174518
+					},
+					{
+						"path": "The.100.S03E09.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1176186
+					},
+					{
+						"path": "The.100.S03E10.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1184333
+					},
+					{
+						"path": "The.100.S03E11.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1184334
+					},
+					{
+						"path": "The.100.S03E12.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1184335
+					},
+					{
+						"path": "The.100.S03E13.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1184336
+					},
+					{
+						"path": "The.100.S03E14.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1189895
+					},
+					{
+						"path": "The.100.S03E15.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1190494
+					},
+					{
+						"path": "The.100.S03E16.2016.1080p.Netflix.WEB-DL.AVC.DDP.5.1-DBTV.mkv",
+						"season": 3,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1190495
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[HEVC] Nodame Cantabile [Season 1] [BD 1080p x265 HEVC AAC] [Dual Audio]",
+				"hash": null,
+				"imdbId": "tt0965546",
+				"files": [
+					{ "path": "Nodame Cantabile - S01E01.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E02.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E03.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E04.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E05.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E06.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E07.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E08.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E09.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E10.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E11.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E12.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E13.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E14.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E15.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E16.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E17.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E18.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E19.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E20.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E21.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E22.mkv", "folder": "Season 1" },
+					{ "path": "Nodame Cantabile - S01E23.mkv", "folder": "Season 1" },
+					{
+						"path": "Nodame and Chiaki Summer Tales.mkv",
+						"folder": "Season 1/Season 1 - Special"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0928099",
+				"tmdbId": 45527,
+				"files": [
+					{
+						"path": "Nodame Cantabile - S01E01.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903051
+					},
+					{
+						"path": "Nodame Cantabile - S01E02.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903050
+					},
+					{
+						"path": "Nodame Cantabile - S01E03.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903052
+					},
+					{
+						"path": "Nodame Cantabile - S01E04.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903055
+					},
+					{
+						"path": "Nodame Cantabile - S01E05.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903053
+					},
+					{
+						"path": "Nodame Cantabile - S01E06.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903054
+					},
+					{
+						"path": "Nodame Cantabile - S01E07.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903056
+					},
+					{
+						"path": "Nodame Cantabile - S01E08.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903057
+					},
+					{
+						"path": "Nodame Cantabile - S01E09.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903059
+					},
+					{
+						"path": "Nodame Cantabile - S01E10.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903058
+					},
+					{
+						"path": "Nodame Cantabile - S01E11.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903060
+					},
+					{
+						"path": "Nodame Cantabile - S01E12.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903061
+					},
+					{
+						"path": "Nodame Cantabile - S01E13.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903063
+					},
+					{
+						"path": "Nodame Cantabile - S01E14.mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903062
+					},
+					{
+						"path": "Nodame Cantabile - S01E15.mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903066
+					},
+					{
+						"path": "Nodame Cantabile - S01E16.mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903065
+					},
+					{
+						"path": "Nodame Cantabile - S01E17.mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903064
+					},
+					{
+						"path": "Nodame Cantabile - S01E18.mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903067
+					},
+					{
+						"path": "Nodame Cantabile - S01E19.mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903070
+					},
+					{
+						"path": "Nodame Cantabile - S01E20.mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903069
+					},
+					{
+						"path": "Nodame Cantabile - S01E21.mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903068
+					},
+					{
+						"path": "Nodame Cantabile - S01E22.mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903072
+					},
+					{
+						"path": "Nodame Cantabile - S01E23.mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 903071
+					},
+					{
+						"path": "Nodame and Chiaki Summer Tales.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Kingdom.S06E13.2025.1080p.Friday.WEB-DL.AAC.H.264-HDSWEB",
+				"hash": null,
+				"imdbId": "tt38848632",
+				"files": [
+					{
+						"path": "Kingdom.S06E13.2025.1080p.Friday.WEB-DL.AAC.H.264-HDSWEB.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2404499",
+				"tmdbId": 46437,
+				"files": [
+					{
+						"path": "Kingdom.S06E13.2025.1080p.Friday.WEB-DL.AAC.H.264-HDSWEB.mkv",
+						"season": 6,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6775706
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Delta] Rascal Does Not Dream of Santa Claus S02 BATCH [1080p CR-WEB-DL AAC-192 H.264]",
+				"hash": null,
+				"imdbId": "tt33060122",
+				"files": [
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E01 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E02 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E03 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E04 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E05 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E06 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E07 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E08 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E09 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E10 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E11 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E12 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E13 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt8993398",
+				"tmdbId": 82739,
+				"files": [
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E01 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6244314
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E02 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6338626
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E03 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6361416
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E04 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367049
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E05 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367050
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E06 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367051
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E07 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367052
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E08 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367053
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E09 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367054
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E10 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367055
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E11 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367056
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E12 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367057
+					},
+					{
+						"path": "[Delta] Rascal Does Not Dream of Santa Claus S02E13 [1080p CR-WEB-DL AAC-192 H.264].mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6367058
 					}
 				]
 			}
