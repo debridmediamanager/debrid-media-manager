@@ -48,6 +48,7 @@
 		"file-saver": "^2.0.5",
 		"idb": "^8.0.2",
 		"ioredis": "^5.8.2",
+		"ip": "file:vendor/ip",
 		"lodash": "^4.18.1",
 		"lucide-react": "^0.544.0",
 		"lz-string": "^1.5.0",
@@ -116,9 +117,7 @@
 		"@prisma/config": {
 			"deepmerge-ts": "^8.0.2"
 		},
-		"bittorrent-tracker": {
-			"ip": "npm:@bybrave/ip2@3.1.0"
-		}
+		"ip": "$ip"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,mjs,cjs,ts,tsx}": [

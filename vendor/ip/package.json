@@ -1,0 +1,11 @@
+{
+	"name": "ip",
+	"version": "0.0.0-dmm",
+	"private": true,
+	"description": "The one ip function bittorrent-tracker calls, kept in-repo instead of a registry package",
+	"type": "module",
+	"main": "index.js",
+	"exports": {
+		".": "./index.js"
+	}
+}

@@ -21,7 +21,6 @@ describe('dependency pins', () => {
 	// inside the tracker client: a new release must be a deliberate change.
 	it('pins single-maintainer packages to an exact version', () => {
 		expect(pkg.dependencies['@geektr/acme-dns01']).toMatch(/^\d+\.\d+\.\d+$/);
-		expect(pkg.overrides['bittorrent-tracker'].ip).toMatch(/^npm:@bybrave\/ip2@\d+\.\d+\.\d+$/);
 	});
 
 	// npm 12 skips install scripts not in allowScripts, so a version bump without a

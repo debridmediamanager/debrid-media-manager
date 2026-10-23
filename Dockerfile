@@ -7,6 +7,8 @@ WORKDIR /app
 FROM base AS deps
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
+# Local packages that package.json installs with file:
+COPY vendor ./vendor
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 

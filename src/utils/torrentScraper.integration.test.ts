@@ -209,54 +209,21 @@ describe('torrentScraper real local tracker compatibility (Integration)', () => 
 });
 
 describe('tracker IP dependency native runtime contract (Integration)', () => {
-	it('supports native CJS/ESM address APIs', () => {
-		// Resolve ip from the actual tracker dependency boundary, not an unrelated
-		// root install. Node, rather than Vitest interop, loads both export modes.
-		// Primary published API use: bittorrent-tracker/lib/server/parse-udp.js
-		// imports default ip and calls toString.
+	// bittorrent-tracker/lib/server/parse-udp.js imports default `ip` and calls
+	// toString with the announce's optional IPv4 field, a uint32. That is the whole
+	// contract. Load it as the tracker does, in Node rather than Vitest interop.
+	it('serves parse-udp from the tracker dependency boundary', () => {
 		const script = `
 			import assert from 'node:assert/strict';
 			import { createRequire } from 'node:module';
 			import { pathToFileURL } from 'node:url';
-			import { readFileSync } from 'node:fs';
 			const require = createRequire(import.meta.resolve('bittorrent-tracker'));
-			const packageUrl = pathToFileURL(require.resolve('ip/package.json'));
-			const metadata = JSON.parse(readFileSync(packageUrl, 'utf8'));
-			const cjs = require('ip');
-			// Select the package's real ESM export, rather than CJS namespace wrapping.
-			const esm = await import(new URL(metadata.exports['.'].import, packageUrl).href);
-			assert.equal(typeof esm.isPublic, 'function');
-			for (const ip of [cjs, esm.default]) {
-				assert.equal(ip.toString(Buffer.from([127, 0, 0, 1])), '127.0.0.1');
-				assert.equal(ip.toString(Buffer.from([0, 0, 127, 0, 0, 1, 0]), 2, 4), '127.0.0.1');
-				assert.equal(ip.toString(Buffer.from('20014860486000000000000000008888', 'hex')), '2001:4860:4860::8888');
-				assert.deepEqual(ip.toBuffer('127.0.0.1'), Buffer.from([127, 0, 0, 1]));
-				assert.equal(ip.isPublic('8.8.8.8'), true);
-			}
-		`;
-		expect(() =>
-			execFileSync(process.execPath, ['--input-type=module', '-e', script], {
-				cwd: process.cwd(),
-				timeout: 10000,
-				stdio: 'pipe',
-			})
-		).not.toThrow();
-	});
-
-	it('fails closed on the advisory bypass addresses through the tracker dependency', () => {
-		// Keep this independent of package exports metadata so the same functional
-		// assertion fails on original ip, not merely on its absent ESM exports.
-		const script = `
-			import assert from 'node:assert/strict';
-			import { createRequire } from 'node:module';
-			const require = createRequire(import.meta.resolve('bittorrent-tracker'));
-			const ip = require('ip');
-			assert.equal(ip.isPublic('8.8.8.8'), true);
-			assert.equal(ip.isPublic('000:0:0000::01'), false);
-			assert.equal(ip.isPrivate('::ffff:127.0.0.1'), true);
-			for (const unsafe of ['127.1', '012.1.2.3', '01200034567', '0x7f.1', '2130706433']) {
-				assert.throws(() => ip.isPublic(unsafe));
-			}
+			const ip = (await import(pathToFileURL(require.resolve('ip')).href)).default;
+			assert.equal(ip.toString(0x7f000001), '127.0.0.1');
+			assert.equal(ip.toString(Buffer.from([127, 0, 0, 1])), '127.0.0.1');
+			assert.equal(ip.toString(Buffer.from('20014860486000000000000000008888', 'hex')), '2001:4860:4860::8888');
+			// The advisory (GHSA-2p57-rm9w-gvfp) is in isPublic: nothing here may offer it.
+			assert.equal(ip.isPublic, undefined);
 		`;
 		expect(() =>
 			execFileSync(process.execPath, ['--input-type=module', '-e', script], {
