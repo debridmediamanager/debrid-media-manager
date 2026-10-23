@@ -266,6 +266,28 @@
 				"movie_results": [],
 				"tv_results": [{ "id": 387 }],
 				"tv_episode_results": []
+			},
+			"tt2922300": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+			"tt9266104": { "movie_results": [], "tv_results": [], "tv_episode_results": [] },
+			"tt1480925": {
+				"movie_results": [],
+				"tv_results": [{ "id": 46195 }],
+				"tv_episode_results": []
+			},
+			"tt30971467": {
+				"movie_results": [],
+				"tv_results": [{ "id": 322162 }],
+				"tv_episode_results": []
+			},
+			"tt4616700": {
+				"movie_results": [],
+				"tv_results": [{ "id": 62565 }],
+				"tv_episode_results": []
+			},
+			"tt26140070": {
+				"movie_results": [],
+				"tv_results": [{ "id": 138948 }],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -2592,6 +2614,48 @@
 						"season_number": 1,
 						"episode_count": 8,
 						"air_date": "2022-11-19",
+						"name": "Season 1"
+					}
+				]
+			},
+			"62565": {
+				"name": "My Love Story!!",
+				"original_name": "俺物語!!",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt4616700" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 24,
+						"air_date": "2015-04-09",
+						"name": "Season 1"
+					}
+				]
+			},
+			"138948": {
+				"name": "Malevolent Spirits: Mononogatari",
+				"original_name": "もののがたり",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt26140070" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 24,
+						"air_date": "2023-01-10",
+						"name": "Season 1"
+					}
+				]
+			},
+			"322162": {
+				"name": "〈物語〉シリーズ オフ＆モンスターシーズン",
+				"original_name": "〈物語〉シリーズ オフ＆モンスターシーズン",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt30971467" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 14,
+						"air_date": "2024-07-06",
 						"name": "Season 1"
 					}
 				]
@@ -48840,7 +48904,395 @@
 						"air_date": "2026-11-02"
 					}
 				]
-			}
+			},
+			"46195/10": null,
+			"322162/1": {
+				"episodes": [
+					{
+						"id": 7256606,
+						"episode_number": 1,
+						"name": "S1.E1 ∙ OROKAMONOGATARI: Tsukihi Undo",
+						"air_date": "2024-07-06"
+					},
+					{
+						"id": 7842767,
+						"episode_number": 2,
+						"name": "Episode 2",
+						"air_date": "2024-07-13"
+					},
+					{
+						"id": 7842768,
+						"episode_number": 3,
+						"name": "Episode 3",
+						"air_date": "2024-07-20"
+					},
+					{
+						"id": 7842769,
+						"episode_number": 4,
+						"name": "Episode 4",
+						"air_date": "2024-07-27"
+					},
+					{
+						"id": 7842770,
+						"episode_number": 5,
+						"name": "Episode 5",
+						"air_date": "2024-08-03"
+					},
+					{
+						"id": 7842771,
+						"episode_number": 6,
+						"name": "Episode 6",
+						"air_date": "2024-08-10"
+					},
+					{
+						"id": 7842772,
+						"episode_number": 7,
+						"name": "Episode 7",
+						"air_date": "2024-08-24"
+					},
+					{
+						"id": 7842773,
+						"episode_number": 8,
+						"name": "Episode 8",
+						"air_date": "2024-08-31"
+					},
+					{
+						"id": 7842774,
+						"episode_number": 9,
+						"name": "Episode 9",
+						"air_date": "2024-09-14"
+					},
+					{
+						"id": 7842775,
+						"episode_number": 10,
+						"name": "Episode 10",
+						"air_date": "2024-09-21"
+					},
+					{
+						"id": 7842776,
+						"episode_number": 11,
+						"name": "Episode 11",
+						"air_date": "2024-09-28"
+					},
+					{
+						"id": 7842777,
+						"episode_number": 12,
+						"name": "Episode 12",
+						"air_date": "2024-10-05"
+					},
+					{
+						"id": 7842780,
+						"episode_number": 13,
+						"name": "Episode 13",
+						"air_date": "2024-10-12"
+					},
+					{
+						"id": 7842781,
+						"episode_number": 14,
+						"name": "Episode 14",
+						"air_date": "2024-10-19"
+					}
+				]
+			},
+			"322162/4": null,
+			"62565/1": {
+				"episodes": [
+					{
+						"id": 1057795,
+						"episode_number": 1,
+						"name": "My Story",
+						"air_date": "2015-04-09"
+					},
+					{
+						"id": 1060457,
+						"episode_number": 2,
+						"name": "My Romance",
+						"air_date": "2015-04-16"
+					},
+					{
+						"id": 1060458,
+						"episode_number": 3,
+						"name": "My Blue Ogre",
+						"air_date": "2015-04-23"
+					},
+					{
+						"id": 1060459,
+						"episode_number": 4,
+						"name": "My Boyfriend",
+						"air_date": "2015-04-30"
+					},
+					{
+						"id": 1060460,
+						"episode_number": 5,
+						"name": "I'm Dense",
+						"air_date": "2015-05-07"
+					},
+					{
+						"id": 1077624,
+						"episode_number": 6,
+						"name": "My Wish",
+						"air_date": "2015-05-14"
+					},
+					{
+						"id": 1077625,
+						"episode_number": 7,
+						"name": "My Strength",
+						"air_date": "2015-05-21"
+					},
+					{
+						"id": 1077626,
+						"episode_number": 8,
+						"name": "My Friend",
+						"air_date": "2015-05-28"
+					},
+					{
+						"id": 1077627,
+						"episode_number": 9,
+						"name": "My Friend and I",
+						"air_date": "2015-06-04"
+					},
+					{
+						"id": 1077628,
+						"episode_number": 10,
+						"name": "My Mountain",
+						"air_date": "2015-06-11"
+					},
+					{
+						"id": 1104055,
+						"episode_number": 11,
+						"name": "My Ocean",
+						"air_date": "2015-06-18"
+					},
+					{
+						"id": 1104056,
+						"episode_number": 12,
+						"name": "My Grades",
+						"air_date": "2015-06-25"
+					},
+					{
+						"id": 1104057,
+						"episode_number": 13,
+						"name": "Today Is on Me",
+						"air_date": "2015-07-02"
+					},
+					{
+						"id": 1104058,
+						"episode_number": 14,
+						"name": "My Jinx",
+						"air_date": "2015-07-09"
+					},
+					{
+						"id": 1104059,
+						"episode_number": 15,
+						"name": "My Girlfriend",
+						"air_date": "2015-07-16"
+					},
+					{
+						"id": 1104060,
+						"episode_number": 16,
+						"name": "My Disciple",
+						"air_date": "2015-07-23"
+					},
+					{
+						"id": 1104061,
+						"episode_number": 17,
+						"name": "My Christmas",
+						"air_date": "2015-07-30"
+					},
+					{
+						"id": 1104062,
+						"episode_number": 18,
+						"name": "My Birthday",
+						"air_date": "2015-08-06"
+					},
+					{
+						"id": 1104063,
+						"episode_number": 19,
+						"name": "My Mom",
+						"air_date": "2015-08-13"
+					},
+					{
+						"id": 1104064,
+						"episode_number": 20,
+						"name": "My Chocolate",
+						"air_date": "2015-08-20"
+					},
+					{
+						"id": 1104065,
+						"episode_number": 21,
+						"name": "The Letter and Me",
+						"air_date": "2015-08-27"
+					},
+					{
+						"id": 1103782,
+						"episode_number": 22,
+						"name": "The Letter to Me",
+						"air_date": "2015-09-03"
+					},
+					{
+						"id": 1104073,
+						"episode_number": 23,
+						"name": "My Spring Break",
+						"air_date": "2015-09-10"
+					},
+					{
+						"id": 1106418,
+						"episode_number": 24,
+						"name": "My Heart",
+						"air_date": "2015-09-24"
+					}
+				]
+			},
+			"62565/4": null,
+			"138948/1": {
+				"episodes": [
+					{
+						"id": 3343198,
+						"episode_number": 1,
+						"name": "Hyoma",
+						"air_date": "2023-01-10"
+					},
+					{
+						"id": 4150288,
+						"episode_number": 2,
+						"name": "Shoreline",
+						"air_date": "2023-01-17"
+					},
+					{
+						"id": 4150289,
+						"episode_number": 3,
+						"name": "Overflow",
+						"air_date": "2023-01-24"
+					},
+					{
+						"id": 4150290,
+						"episode_number": 4,
+						"name": "Arrangement",
+						"air_date": "2023-01-31"
+					},
+					{
+						"id": 4150292,
+						"episode_number": 5,
+						"name": "Suspicions",
+						"air_date": "2023-02-07"
+					},
+					{
+						"id": 4150294,
+						"episode_number": 6,
+						"name": "Botan",
+						"air_date": "2023-02-14"
+					},
+					{
+						"id": 4150295,
+						"episode_number": 7,
+						"name": "Quickening",
+						"air_date": "2023-02-21"
+					},
+					{
+						"id": 4150297,
+						"episode_number": 8,
+						"name": "Circumstances",
+						"air_date": "2023-02-28"
+					},
+					{
+						"id": 4150299,
+						"episode_number": 9,
+						"name": "Fire",
+						"air_date": "2023-03-07"
+					},
+					{
+						"id": 4150300,
+						"episode_number": 10,
+						"name": "Radiance",
+						"air_date": "2023-03-14"
+					},
+					{
+						"id": 4150302,
+						"episode_number": 11,
+						"name": "Ambush",
+						"air_date": "2023-03-21"
+					},
+					{
+						"id": 4150304,
+						"episode_number": 12,
+						"name": "Efflorescence",
+						"air_date": "2023-03-28"
+					},
+					{
+						"id": 4499010,
+						"episode_number": 13,
+						"name": "Entrance",
+						"air_date": "2023-07-04"
+					},
+					{
+						"id": 4562302,
+						"episode_number": 14,
+						"name": "Duet",
+						"air_date": "2023-07-11"
+					},
+					{
+						"id": 4576989,
+						"episode_number": 15,
+						"name": "Specter",
+						"air_date": "2023-07-18"
+					},
+					{
+						"id": 4587102,
+						"episode_number": 16,
+						"name": "Draconic",
+						"air_date": "2023-07-25"
+					},
+					{
+						"id": 4587103,
+						"episode_number": 17,
+						"name": "Moonset",
+						"air_date": "2023-08-01"
+					},
+					{
+						"id": 4587104,
+						"episode_number": 18,
+						"name": "Vow",
+						"air_date": "2023-08-08"
+					},
+					{
+						"id": 4587105,
+						"episode_number": 19,
+						"name": "Turbulence",
+						"air_date": "2023-08-15"
+					},
+					{
+						"id": 4587106,
+						"episode_number": 20,
+						"name": "Unseasonal",
+						"air_date": "2023-08-22"
+					},
+					{
+						"id": 4587107,
+						"episode_number": 21,
+						"name": "Advent",
+						"air_date": "2023-08-29"
+					},
+					{
+						"id": 4587108,
+						"episode_number": 22,
+						"name": "Dance",
+						"air_date": "2023-09-05"
+					},
+					{
+						"id": 4587109,
+						"episode_number": 23,
+						"name": "Sparks",
+						"air_date": "2023-09-12"
+					},
+					{
+						"id": 4587110,
+						"episode_number": 24,
+						"name": "Fluttering",
+						"air_date": "2023-09-19"
+					}
+				]
+			},
+			"138948/4": null
 		},
 		"episodeGroups": {
 			"30983": {
@@ -48999,7 +49451,12 @@
 						"type": 7
 					}
 				]
-			}
+			},
+			"62565": { "results": [] },
+			"138948": {
+				"results": [{ "id": "6512caea8e2ba6011ec2b669", "name": "Seasons", "type": 6 }]
+			},
+			"322162": { "results": [] }
 		},
 		"episodeGroup": {
 			"69b8016aa7e52bcbf75a77b8": {
@@ -51302,6 +51759,1207 @@
 						]
 					}
 				]
+			},
+			"666f011e06254acbc9ebfcbc": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 6 },
+							{ "order": 1, "season_number": 3, "episode_number": 7 },
+							{ "order": 2, "season_number": 3, "episode_number": 8 },
+							{ "order": 3, "season_number": 3, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 13 },
+							{ "order": 1, "season_number": 0, "episode_number": 14 },
+							{ "order": 2, "season_number": 0, "episode_number": 15 },
+							{ "order": 3, "season_number": 0, "episode_number": 16 },
+							{ "order": 4, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 10 },
+							{ "order": 1, "season_number": 3, "episode_number": 11 },
+							{ "order": 2, "season_number": 3, "episode_number": 12 },
+							{ "order": 3, "season_number": 3, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 14 },
+							{ "order": 1, "season_number": 3, "episode_number": 15 },
+							{ "order": 2, "season_number": 3, "episode_number": 16 },
+							{ "order": 3, "season_number": 3, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 18 },
+							{ "order": 1, "season_number": 3, "episode_number": 19 },
+							{ "order": 2, "season_number": 3, "episode_number": 20 },
+							{ "order": 3, "season_number": 3, "episode_number": 21 },
+							{ "order": 4, "season_number": 3, "episode_number": 22 },
+							{ "order": 5, "season_number": 3, "episode_number": 23 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 12,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{
+						"order": 13,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 14,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 15,
+						"episodes": [{ "order": 0, "season_number": 5, "episode_number": 1 }]
+					},
+					{
+						"order": 16,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 2 },
+							{ "order": 1, "season_number": 5, "episode_number": 3 },
+							{ "order": 2, "season_number": 5, "episode_number": 4 },
+							{ "order": 3, "season_number": 5, "episode_number": 5 },
+							{ "order": 4, "season_number": 5, "episode_number": 6 }
+						]
+					},
+					{
+						"order": 17,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 48 },
+							{ "order": 1, "season_number": 5, "episode_number": 7 },
+							{ "order": 2, "season_number": 5, "episode_number": 8 }
+						]
+					},
+					{
+						"order": 18,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 9 },
+							{ "order": 1, "season_number": 5, "episode_number": 10 },
+							{ "order": 2, "season_number": 5, "episode_number": 11 },
+							{ "order": 3, "season_number": 5, "episode_number": 12 },
+							{ "order": 4, "season_number": 5, "episode_number": 13 },
+							{ "order": 5, "season_number": 5, "episode_number": 14 }
+						]
+					},
+					{
+						"order": 0,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 10 },
+							{ "order": 2, "season_number": 0, "episode_number": 11 },
+							{ "order": 3, "season_number": 0, "episode_number": 12 },
+							{ "order": 4, "season_number": 0, "episode_number": 5 },
+							{ "order": 5, "season_number": 0, "episode_number": 34 },
+							{ "order": 6, "season_number": 0, "episode_number": 49 }
+						]
+					}
+				]
+			},
+			"6a125fe96d1fa649f9d49475": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 },
+							{ "order": 5, "season_number": 0, "episode_number": 10 },
+							{ "order": 6, "season_number": 3, "episode_number": 6 },
+							{ "order": 7, "season_number": 3, "episode_number": 7 },
+							{ "order": 8, "season_number": 3, "episode_number": 8 },
+							{ "order": 9, "season_number": 3, "episode_number": 9 },
+							{ "order": 10, "season_number": 0, "episode_number": 11 },
+							{ "order": 11, "season_number": 3, "episode_number": 10 },
+							{ "order": 12, "season_number": 3, "episode_number": 11 },
+							{ "order": 13, "season_number": 3, "episode_number": 12 },
+							{ "order": 14, "season_number": 3, "episode_number": 13 },
+							{ "order": 15, "season_number": 0, "episode_number": 12 },
+							{ "order": 16, "season_number": 3, "episode_number": 14 },
+							{ "order": 17, "season_number": 3, "episode_number": 15 },
+							{ "order": 18, "season_number": 3, "episode_number": 16 },
+							{ "order": 19, "season_number": 3, "episode_number": 17 },
+							{ "order": 20, "season_number": 3, "episode_number": 18 },
+							{ "order": 21, "season_number": 3, "episode_number": 19 },
+							{ "order": 22, "season_number": 3, "episode_number": 20 },
+							{ "order": 23, "season_number": 3, "episode_number": 21 },
+							{ "order": 24, "season_number": 3, "episode_number": 22 },
+							{ "order": 25, "season_number": 3, "episode_number": 23 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 13 },
+							{ "order": 1, "season_number": 0, "episode_number": 14 },
+							{ "order": 2, "season_number": 0, "episode_number": 15 },
+							{ "order": 3, "season_number": 0, "episode_number": 16 },
+							{ "order": 4, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 1 },
+							{ "order": 1, "season_number": 5, "episode_number": 2 },
+							{ "order": 2, "season_number": 5, "episode_number": 3 },
+							{ "order": 3, "season_number": 5, "episode_number": 4 },
+							{ "order": 4, "season_number": 5, "episode_number": 5 },
+							{ "order": 5, "season_number": 5, "episode_number": 6 },
+							{ "order": 6, "season_number": 5, "episode_number": 7 },
+							{ "order": 7, "season_number": 5, "episode_number": 8 },
+							{ "order": 8, "season_number": 5, "episode_number": 9 },
+							{ "order": 9, "season_number": 5, "episode_number": 10 },
+							{ "order": 10, "season_number": 5, "episode_number": 11 },
+							{ "order": 11, "season_number": 5, "episode_number": 12 },
+							{ "order": 12, "season_number": 5, "episode_number": 13 },
+							{ "order": 13, "season_number": 5, "episode_number": 14 }
+						]
+					},
+					{
+						"order": 0,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 5 },
+							{ "order": 2, "season_number": 0, "episode_number": 34 },
+							{ "order": 3, "season_number": 0, "episode_number": 48 },
+							{ "order": 4, "season_number": 0, "episode_number": 49 }
+						]
+					}
+				]
+			},
+			"6a3a296cc6f0168a53bf6244": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 6 },
+							{ "order": 1, "season_number": 3, "episode_number": 7 },
+							{ "order": 2, "season_number": 3, "episode_number": 8 },
+							{ "order": 3, "season_number": 3, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 10 },
+							{ "order": 1, "season_number": 3, "episode_number": 11 },
+							{ "order": 2, "season_number": 3, "episode_number": 12 },
+							{ "order": 3, "season_number": 3, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 14 },
+							{ "order": 1, "season_number": 3, "episode_number": 15 },
+							{ "order": 2, "season_number": 3, "episode_number": 16 },
+							{ "order": 3, "season_number": 3, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 18 },
+							{ "order": 1, "season_number": 3, "episode_number": 19 },
+							{ "order": 2, "season_number": 3, "episode_number": 20 },
+							{ "order": 3, "season_number": 3, "episode_number": 21 },
+							{ "order": 4, "season_number": 3, "episode_number": 22 },
+							{ "order": 5, "season_number": 3, "episode_number": 23 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 13 },
+							{ "order": 1, "season_number": 0, "episode_number": 14 },
+							{ "order": 2, "season_number": 0, "episode_number": 15 },
+							{ "order": 3, "season_number": 0, "episode_number": 16 },
+							{ "order": 4, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 12,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{ "order": 13, "episodes": [] },
+					{
+						"order": 14,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 15,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 16,
+						"episodes": [{ "order": 0, "season_number": 5, "episode_number": 1 }]
+					},
+					{
+						"order": 17,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 2 },
+							{ "order": 1, "season_number": 5, "episode_number": 3 },
+							{ "order": 2, "season_number": 5, "episode_number": 4 },
+							{ "order": 3, "season_number": 5, "episode_number": 5 },
+							{ "order": 4, "season_number": 5, "episode_number": 6 }
+						]
+					},
+					{
+						"order": 18,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 48 },
+							{ "order": 1, "season_number": 5, "episode_number": 7 },
+							{ "order": 2, "season_number": 5, "episode_number": 8 }
+						]
+					},
+					{
+						"order": 19,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 9 },
+							{ "order": 1, "season_number": 5, "episode_number": 10 },
+							{ "order": 2, "season_number": 5, "episode_number": 11 },
+							{ "order": 3, "season_number": 5, "episode_number": 12 },
+							{ "order": 4, "season_number": 5, "episode_number": 13 },
+							{ "order": 5, "season_number": 5, "episode_number": 14 }
+						]
+					}
+				]
+			},
+			"603c68c579b3d40052670822": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 },
+							{ "order": 5, "season_number": 3, "episode_number": 6 },
+							{ "order": 6, "season_number": 3, "episode_number": 7 },
+							{ "order": 7, "season_number": 3, "episode_number": 8 },
+							{ "order": 8, "season_number": 3, "episode_number": 9 },
+							{ "order": 9, "season_number": 3, "episode_number": 10 },
+							{ "order": 10, "season_number": 3, "episode_number": 11 },
+							{ "order": 11, "season_number": 3, "episode_number": 12 },
+							{ "order": 12, "season_number": 3, "episode_number": 13 },
+							{ "order": 13, "season_number": 3, "episode_number": 14 },
+							{ "order": 14, "season_number": 3, "episode_number": 15 },
+							{ "order": 15, "season_number": 3, "episode_number": 16 },
+							{ "order": 16, "season_number": 3, "episode_number": 17 },
+							{ "order": 17, "season_number": 3, "episode_number": 18 },
+							{ "order": 18, "season_number": 3, "episode_number": 19 },
+							{ "order": 19, "season_number": 3, "episode_number": 20 },
+							{ "order": 20, "season_number": 3, "episode_number": 21 },
+							{ "order": 21, "season_number": 3, "episode_number": 22 },
+							{ "order": 22, "season_number": 3, "episode_number": 23 },
+							{ "order": 23, "season_number": 0, "episode_number": 10 },
+							{ "order": 24, "season_number": 0, "episode_number": 11 },
+							{ "order": 25, "season_number": 0, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 13 },
+							{ "order": 1, "season_number": 0, "episode_number": 14 },
+							{ "order": 2, "season_number": 0, "episode_number": 15 },
+							{ "order": 3, "season_number": 0, "episode_number": 16 },
+							{ "order": 4, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 1 },
+							{ "order": 1, "season_number": 5, "episode_number": 2 },
+							{ "order": 2, "season_number": 5, "episode_number": 3 },
+							{ "order": 3, "season_number": 5, "episode_number": 4 },
+							{ "order": 4, "season_number": 5, "episode_number": 5 },
+							{ "order": 5, "season_number": 5, "episode_number": 6 },
+							{ "order": 6, "season_number": 0, "episode_number": 48 },
+							{ "order": 7, "season_number": 5, "episode_number": 7 },
+							{ "order": 8, "season_number": 5, "episode_number": 8 },
+							{ "order": 9, "season_number": 5, "episode_number": 9 },
+							{ "order": 10, "season_number": 5, "episode_number": 10 },
+							{ "order": 11, "season_number": 5, "episode_number": 11 },
+							{ "order": 12, "season_number": 5, "episode_number": 12 },
+							{ "order": 13, "season_number": 5, "episode_number": 13 },
+							{ "order": 14, "season_number": 5, "episode_number": 14 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					}
+				]
+			},
+			"66e75be9d7bcca524db0d047": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 },
+							{ "order": 5, "season_number": 0, "episode_number": 10 },
+							{ "order": 6, "season_number": 3, "episode_number": 6 },
+							{ "order": 7, "season_number": 3, "episode_number": 7 },
+							{ "order": 8, "season_number": 3, "episode_number": 8 },
+							{ "order": 9, "season_number": 3, "episode_number": 9 },
+							{ "order": 10, "season_number": 0, "episode_number": 11 },
+							{ "order": 11, "season_number": 3, "episode_number": 10 },
+							{ "order": 12, "season_number": 3, "episode_number": 11 },
+							{ "order": 13, "season_number": 3, "episode_number": 12 },
+							{ "order": 14, "season_number": 3, "episode_number": 13 },
+							{ "order": 15, "season_number": 0, "episode_number": 12 },
+							{ "order": 16, "season_number": 3, "episode_number": 14 },
+							{ "order": 17, "season_number": 3, "episode_number": 15 },
+							{ "order": 18, "season_number": 3, "episode_number": 16 },
+							{ "order": 19, "season_number": 3, "episode_number": 17 },
+							{ "order": 20, "season_number": 3, "episode_number": 18 },
+							{ "order": 21, "season_number": 3, "episode_number": 19 },
+							{ "order": 22, "season_number": 3, "episode_number": 20 },
+							{ "order": 23, "season_number": 3, "episode_number": 21 },
+							{ "order": 24, "season_number": 3, "episode_number": 22 },
+							{ "order": 25, "season_number": 3, "episode_number": 23 },
+							{ "order": 26, "season_number": 0, "episode_number": 13 },
+							{ "order": 27, "season_number": 0, "episode_number": 14 },
+							{ "order": 28, "season_number": 0, "episode_number": 15 },
+							{ "order": 29, "season_number": 0, "episode_number": 16 },
+							{ "order": 30, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 1 },
+							{ "order": 1, "season_number": 5, "episode_number": 2 },
+							{ "order": 2, "season_number": 5, "episode_number": 3 },
+							{ "order": 3, "season_number": 5, "episode_number": 4 },
+							{ "order": 4, "season_number": 5, "episode_number": 5 },
+							{ "order": 5, "season_number": 5, "episode_number": 6 },
+							{ "order": 6, "season_number": 0, "episode_number": 48 },
+							{ "order": 7, "season_number": 5, "episode_number": 7 },
+							{ "order": 8, "season_number": 5, "episode_number": 8 },
+							{ "order": 9, "season_number": 5, "episode_number": 9 },
+							{ "order": 10, "season_number": 5, "episode_number": 10 },
+							{ "order": 11, "season_number": 5, "episode_number": 11 },
+							{ "order": 12, "season_number": 5, "episode_number": 12 },
+							{ "order": 13, "season_number": 5, "episode_number": 13 },
+							{ "order": 14, "season_number": 5, "episode_number": 14 }
+						]
+					}
+				]
+			},
+			"6224ccddfe077a0043a57f5c": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 6 },
+							{ "order": 1, "season_number": 0, "episode_number": 7 },
+							{ "order": 2, "season_number": 0, "episode_number": 8 },
+							{ "order": 3, "season_number": 0, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 6 },
+							{ "order": 1, "season_number": 3, "episode_number": 7 },
+							{ "order": 2, "season_number": 3, "episode_number": 8 },
+							{ "order": 3, "season_number": 3, "episode_number": 9 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 13 },
+							{ "order": 1, "season_number": 0, "episode_number": 14 },
+							{ "order": 2, "season_number": 0, "episode_number": 15 },
+							{ "order": 3, "season_number": 0, "episode_number": 16 },
+							{ "order": 4, "season_number": 0, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 7,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 10 },
+							{ "order": 1, "season_number": 3, "episode_number": 11 },
+							{ "order": 2, "season_number": 3, "episode_number": 12 },
+							{ "order": 3, "season_number": 3, "episode_number": 13 }
+						]
+					},
+					{
+						"order": 8,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 14 },
+							{ "order": 1, "season_number": 3, "episode_number": 15 },
+							{ "order": 2, "season_number": 3, "episode_number": 16 },
+							{ "order": 3, "season_number": 3, "episode_number": 17 }
+						]
+					},
+					{
+						"order": 9,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 18 },
+							{ "order": 1, "season_number": 3, "episode_number": 19 },
+							{ "order": 2, "season_number": 3, "episode_number": 20 },
+							{ "order": 3, "season_number": 3, "episode_number": 21 },
+							{ "order": 4, "season_number": 3, "episode_number": 22 },
+							{ "order": 5, "season_number": 3, "episode_number": 23 }
+						]
+					},
+					{
+						"order": 10,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 18 },
+							{ "order": 1, "season_number": 0, "episode_number": 19 },
+							{ "order": 2, "season_number": 0, "episode_number": 20 },
+							{ "order": 3, "season_number": 0, "episode_number": 21 }
+						]
+					},
+					{
+						"order": 11,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 22 },
+							{ "order": 1, "season_number": 0, "episode_number": 23 },
+							{ "order": 2, "season_number": 0, "episode_number": 24 },
+							{ "order": 3, "season_number": 0, "episode_number": 25 },
+							{ "order": 4, "season_number": 0, "episode_number": 26 },
+							{ "order": 5, "season_number": 0, "episode_number": 27 },
+							{ "order": 6, "season_number": 0, "episode_number": 28 },
+							{ "order": 7, "season_number": 0, "episode_number": 29 },
+							{ "order": 8, "season_number": 0, "episode_number": 30 },
+							{ "order": 9, "season_number": 0, "episode_number": 31 },
+							{ "order": 10, "season_number": 0, "episode_number": 32 },
+							{ "order": 11, "season_number": 0, "episode_number": 33 }
+						]
+					},
+					{
+						"order": 12,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 13,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 14,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 42 },
+							{ "order": 1, "season_number": 0, "episode_number": 43 },
+							{ "order": 2, "season_number": 0, "episode_number": 44 },
+							{ "order": 3, "season_number": 0, "episode_number": 45 },
+							{ "order": 4, "season_number": 0, "episode_number": 46 },
+							{ "order": 5, "season_number": 0, "episode_number": 47 }
+						]
+					},
+					{
+						"order": 17,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 2 },
+							{ "order": 1, "season_number": 5, "episode_number": 3 },
+							{ "order": 2, "season_number": 5, "episode_number": 4 },
+							{ "order": 3, "season_number": 5, "episode_number": 5 },
+							{ "order": 4, "season_number": 5, "episode_number": 6 }
+						]
+					},
+					{
+						"order": 16,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 48 },
+							{ "order": 1, "season_number": 5, "episode_number": 7 },
+							{ "order": 2, "season_number": 5, "episode_number": 8 }
+						]
+					},
+					{
+						"order": 15,
+						"episodes": [{ "order": 0, "season_number": 5, "episode_number": 1 }]
+					},
+					{
+						"order": 18,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 9 },
+							{ "order": 1, "season_number": 5, "episode_number": 10 },
+							{ "order": 2, "season_number": 5, "episode_number": 11 },
+							{ "order": 3, "season_number": 5, "episode_number": 12 },
+							{ "order": 4, "season_number": 5, "episode_number": 13 },
+							{ "order": 5, "season_number": 5, "episode_number": 14 }
+						]
+					}
+				]
+			},
+			"6512caea8e2ba6011ec2b669": {
+				"groups": [
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 13 },
+							{ "order": 1, "season_number": 1, "episode_number": 14 },
+							{ "order": 2, "season_number": 1, "episode_number": 15 },
+							{ "order": 3, "season_number": 1, "episode_number": 16 },
+							{ "order": 4, "season_number": 1, "episode_number": 17 },
+							{ "order": 5, "season_number": 1, "episode_number": 18 },
+							{ "order": 6, "season_number": 1, "episode_number": 19 },
+							{ "order": 7, "season_number": 1, "episode_number": 20 },
+							{ "order": 8, "season_number": 1, "episode_number": 21 },
+							{ "order": 9, "season_number": 1, "episode_number": 22 },
+							{ "order": 10, "season_number": 1, "episode_number": 23 },
+							{ "order": 11, "season_number": 1, "episode_number": 24 }
+						]
+					}
+				]
 			}
 		},
 		"episodeShow": {
@@ -51333,7 +52991,9 @@
 			"tt5626028": null,
 			"tt0121955": null,
 			"tt11737520": null,
-			"tt0206512": null
+			"tt0206512": null,
+			"tt2922300": null,
+			"tt9266104": null
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -51426,7 +53086,11 @@
 				"9": "tt6663030",
 				"10": "tt6663032",
 				"11": "tt6735072"
-			}
+			},
+			"tt30971467/4": {},
+			"tt4616700/4": {},
+			"tt26140070/4": {},
+			"tt1480925/10": {}
 		},
 		"identify": {
 			"Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT": {
@@ -51441,7 +53105,13 @@
 				"year": 1995,
 				"kind": "tv"
 			},
-			"One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub": null
+			"One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub": null,
+			"[smol] Zoku Owarimonogatari (BD 1080p HEVC Opus)": {
+				"imdbId": "tt9266104",
+				"title": "Zoku Owarimonogatari",
+				"year": 2018,
+				"kind": "movie"
+			}
 		},
 		"identifier": {
 			"Detective.Conan.S33E26.a.Ghost.1080p.CR.WEB-DL.DDP2.0.H.264-Kitsune": {
@@ -57055,6 +58725,162 @@
 				"parsedTitle": "05c6f0b02ef440c3956e345041377d0b",
 				"parsedYear": null,
 				"probability": 0.0065
+			},
+			"[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2922300",
+						"score": 3.834,
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1480925",
+						"score": -0.3163,
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt30971467",
+						"score": -2.3316,
+						"title": "Monogatari Series: Off & Monster Season",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt4616700",
+						"score": -5.1883,
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt26140070",
+						"score": -5.9786,
+						"title": "Malevolent Spirits: Mononogatari",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Monogatari Series Second Season",
+				"parsedYear": null,
+				"probability": 0.9735
+			},
+			"[smol] Monogatari - S04E01 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F060A534]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2922300",
+						"score": 2.9469,
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1480925",
+						"score": 2.1968,
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt4616700",
+						"score": -2.5856,
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt30971467",
+						"score": -2.9374,
+						"title": "Monogatari Series: Off & Monster Season",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt3621678",
+						"score": -3.0157,
+						"title": "Hanamonogatari",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "Monogatari",
+				"parsedYear": null,
+				"probability": 0.4619
+			},
+			"[smol] Zoku Owarimonogatari (BD 1080p HEVC Opus)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt9266104",
+						"score": 3.2589,
+						"title": "Zoku Owarimonogatari",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0200309",
+						"score": -2.532,
+						"title": "The Tale of Zatoichi Continues",
+						"year": 1962
+					},
+					{
+						"imdbId": "tt4681414",
+						"score": -4.9349,
+						"title": "My Love Story!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0085991",
+						"score": -5.0509,
+						"title": "Antarctica",
+						"year": 1983
+					},
+					{
+						"imdbId": "tt0053131",
+						"score": -5.1651,
+						"title": "The Nun's Story",
+						"year": 1959
+					}
+				],
+				"parsedTitle": "Zoku Owarimonogatari",
+				"parsedYear": null,
+				"probability": 0.9815
+			},
+			"[smol] Monogatari - S10E01 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [D6FDD5FA]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1480925",
+						"score": 2.4216,
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt5274556",
+						"score": 0.2301,
+						"title": "Owarimonogatari",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt2922300",
+						"score": -1.0729,
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt4616700",
+						"score": -2.6113,
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt3621678",
+						"score": -2.667,
+						"title": "Hanamonogatari",
+						"year": 2014
+					}
+				],
+				"parsedTitle": "Monogatari",
+				"parsedYear": null,
+				"probability": 0.519
 			}
 		},
 		"searchTv": {
@@ -58964,6 +60790,102 @@
 				],
 				"total_pages": 1,
 				"total_results": 3
+			},
+			"zoku owarimonogatari": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 1
+			},
+			"monogatari series second season": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 1
+			},
+			"Zoku Owarimonogatari": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 1
+			},
+			"Monogatari Series Second Season": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 1
 			}
 		},
 		"imdbSeries": {
@@ -59089,7 +61011,40 @@
 						"name": "How to Be a Professional Geek - New York Comic Con"
 					}
 				]
-			}
+			},
+			"tt2922300": {
+				"titleType": "tvSeries",
+				"title": "Monogatari Series: Second Season",
+				"episodes": [
+					{ "season": 1, "episode": 1, "name": "Tsubasa Taigâ Sono Ichi" },
+					{ "season": 1, "episode": 2, "name": "Tsubasa Taigâ Sono Ni" },
+					{ "season": 1, "episode": 3, "name": "Tsubasa Taigâ Sono San" },
+					{ "season": 1, "episode": 4, "name": "Tsubasa Taigâ Sono Yon" },
+					{ "season": 1, "episode": 5, "name": "Tsubasa Taigâ Sono Go" },
+					{ "season": 1, "episode": 6, "name": "Sôshûhen I" },
+					{ "season": 1, "episode": 7, "name": "Mayoi Kyonshî Sono Ichi" },
+					{ "season": 1, "episode": 8, "name": "Mayoi Kyonshî Sono Ni" },
+					{ "season": 1, "episode": 9, "name": "Mayoi Kyonshî Sono San" },
+					{ "season": 1, "episode": 10, "name": "Mayoi Kyonshî Sono Yon" },
+					{ "season": 1, "episode": 11, "name": "Sôshûhen II" },
+					{ "season": 1, "episode": 12, "name": "Nadeko Medûsa Sono Ichi" },
+					{ "season": 1, "episode": 13, "name": "Nadeko Medûsa Sono Ni" },
+					{ "season": 1, "episode": 14, "name": "Nadeko Medûsa Sono San" },
+					{ "season": 1, "episode": 15, "name": "Nadeko Medûsa Sono Yon" },
+					{ "season": 1, "episode": 16, "name": "Sôshûhen III" },
+					{ "season": 1, "episode": 17, "name": "Shinobu Taimu Sono Ichi" },
+					{ "season": 1, "episode": 18, "name": "Shinobu Taimu Sono Ni" },
+					{ "season": 1, "episode": 19, "name": "Shinobu Taimu Sono San" },
+					{ "season": 1, "episode": 20, "name": "Shinobu Taimu Sono Yon" },
+					{ "season": 1, "episode": 21, "name": "Hitagi Endo Sono Ichi" },
+					{ "season": 1, "episode": 22, "name": "Hitagi Endo Sono Ni" },
+					{ "season": 1, "episode": 23, "name": "Hitagi Endo Sono San" },
+					{ "season": 1, "episode": 24, "name": "Hitagi Endo Sono Yon" },
+					{ "season": 1, "episode": 25, "name": "Hitagi Endo Sono Go" },
+					{ "season": 1, "episode": 26, "name": "Hitagi Endo Sono Roku" }
+				]
+			},
+			"tt9266104": { "titleType": "movie", "title": "Zoku Owarimonogatari", "episodes": [] }
 		},
 		"anime": {
 			"fribb": [
@@ -60802,6 +62757,57 @@
 					"tvdb_id": 303867,
 					"season": { "tvdb": 0, "tmdb": 0 },
 					"episode_offset": { "tvdb": 5, "tmdb": 5 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10918,
+					"anilist_id": 20946,
+					"animecountdown_id": 433228,
+					"animenewsnetwork_id": 16514,
+					"anime-planet_id": "my-love-story",
+					"anisearch_id": 10034,
+					"imdb_id": ["tt4616700"],
+					"kitsu_id": 10016,
+					"livechart_id": 1289,
+					"mal_id": 28297,
+					"simkl_id": 433228,
+					"themoviedb_id": { "tv": 62565 },
+					"tvdb_id": 289905,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16976,
+					"anilist_id": 141785,
+					"animecountdown_id": 1777666,
+					"animenewsnetwork_id": 24973,
+					"anime-planet_id": "malevolent-spirits-mononogatari",
+					"anisearch_id": 16794,
+					"imdb_id": ["tt26140070"],
+					"kitsu_id": 45509,
+					"livechart_id": 10889,
+					"mal_id": 50384,
+					"simkl_id": 1777666,
+					"themoviedb_id": { "tv": 138948 },
+					"tvdb_id": 412626,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17958,
+					"anilist_id": 163205,
+					"animecountdown_id": 2128184,
+					"animenewsnetwork_id": 27688,
+					"anime-planet_id": "malevolent-spirits-mononogatari-part-ii",
+					"anisearch_id": 18322,
+					"imdb_id": ["tt26140070"],
+					"kitsu_id": 47269,
+					"livechart_id": 11914,
+					"mal_id": 54883,
+					"simkl_id": 2128184,
+					"themoviedb_id": { "tv": 138948 },
+					"tvdb_id": 412626,
+					"season": { "tvdb": 2, "tmdb": 2 }
 				}
 			],
 			"titles": [
@@ -63955,6 +65961,72 @@
 						"この素晴らしい世界に祝福を！3 ―BONUS STAGE―",
 						"この素晴らしい世界に祝福を！３ OVA",
 						"この素晴らしい世界に祝福を！３ーBONUS STAGEー"
+					]
+				},
+				{
+					"anidbId": 10918,
+					"names": [
+						"Ore Monogatari!!",
+						"My Love Story!!",
+						"Mon histoire",
+						"俺物語!!",
+						"Mijn Verhaal!!",
+						"俺物语!!",
+						"Oregatari",
+						"OreMono",
+						"Mon Histoire",
+						"My Love Story!!: Ore Monogatari!!",
+						"My Story!!",
+						"¡Mi historia de amor!",
+						"俺物語！！"
+					]
+				},
+				{
+					"anidbId": 16976,
+					"names": [
+						"Mononogatari",
+						"Mononogatari - Die Wächter der Artefaktgeister",
+						"Malevolent Spirits: Mononogatari",
+						"もののがたり",
+						"Истории нечисти",
+						"物之古物奇谭",
+						"物物语",
+						"A Tale of a Thing",
+						"Being a Tale of a Being",
+						"Malevolent Spirits : Mononogatari",
+						"Mono no Gatari",
+						"Mononogatari: Die Wächter der Artefaktgeister",
+						"Spirits Seekers",
+						"Stories of Some Thing"
+					]
+				},
+				{
+					"anidbId": 17958,
+					"names": [
+						"Mononogatari (2023)",
+						"Malevolent Spirits: Mononogatari (2023)",
+						"もののがたり (2023)",
+						"Mononogatari 2nd Season",
+						"Malevolent Spirits : Mononogatari - Cour 2",
+						"Malevolent Spirits: Mononogatari",
+						"Malevolent Spirits: Mononogatari - Cour 2",
+						"Malevolent Spirits: Mononogatari - Part II",
+						"Malevolent Spirits: Mononogatari 2nd Season",
+						"Malevolent Spirits: Mononogatari Cour 2",
+						"Malevolent Spirits: Mononogatari Part 2",
+						"Malevolent Spirits: Mononogatari Season 2",
+						"Mono no Gatari 2",
+						"Mononogatari",
+						"Mononogatari Chapter 2",
+						"Mononogatari Dai 2 Shou (もののがたり 第2章)",
+						"Mononogatari Dai Ni Shou",
+						"Mononogatari Dai Ni Shō",
+						"Mononogatari Kapitel 2",
+						"Mononogatari Part 2",
+						"Mononogatari Second Chapter",
+						"Mononogatari: Die Wächter der Artefaktgeister - Cour 2",
+						"もののがたり",
+						"もののがたり 第二章"
 					]
 				}
 			]
@@ -72829,6 +74901,532 @@
 						"episodeEnd": null,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1026502
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[smol] Zoku Owarimonogatari (BD 1080p HEVC Opus)",
+				"hash": "b95737b0f6c58429151892b76c0acf5e4aa894ab",
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[smol] Monogatari - S10 Zoku Owarimonogatari - NCED - azure (BD 1080p HEVC Opus) [C638530F].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S10 Zoku Owarimonogatari - NCOP - 07734 (BD 1080p HEVC Opus) [3528FD89].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S10E01 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [D6FDD5FA].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S10E02 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [D3727786].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S10E03 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [725E4C41].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S10E04 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [A4DF91B9].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S10E05 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [6D2FD5C6].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S10E06 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [8004200C].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1480925",
+				"tmdbId": 46195,
+				"files": [
+					{
+						"path": "[smol] Monogatari - S10 Zoku Owarimonogatari - NCED - azure (BD 1080p HEVC Opus) [C638530F].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S10 Zoku Owarimonogatari - NCOP - 07734 (BD 1080p HEVC Opus) [3528FD89].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S10E01 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [D6FDD5FA].mkv",
+						"season": 0,
+						"episode": 42,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1644184
+					},
+					{
+						"path": "[smol] Monogatari - S10E02 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [D3727786].mkv",
+						"season": 0,
+						"episode": 43,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1859775
+					},
+					{
+						"path": "[smol] Monogatari - S10E03 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [725E4C41].mkv",
+						"season": 0,
+						"episode": 44,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1859776
+					},
+					{
+						"path": "[smol] Monogatari - S10E04 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [A4DF91B9].mkv",
+						"season": 0,
+						"episode": 45,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1859777
+					},
+					{
+						"path": "[smol] Monogatari - S10E05 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [6D2FD5C6].mkv",
+						"season": 0,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1859778
+					},
+					{
+						"path": "[smol] Monogatari - S10E06 - Zoku Owarimonogatari (BD 1080p HEVC Opus) [8004200C].mkv",
+						"season": 0,
+						"episode": 47,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1859779
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[smol] Monogatari Series Second Season (BD 1080p HEVC Opus)",
+				"hash": "0936f1e8a2c3968ad47f3331919a065fcd81e985",
+				"imdbId": "tt2922300",
+				"files": [
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 01 - Ai o Utae (BD 1080p HEVC Opus) [4BB006DB].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 02 - Ai o Utae (BD 1080p HEVC Opus) [3974A0BE].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 03 - Ai o Utae (BD 1080p HEVC Opus) [502C940C].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 04 - Sono Koe wo Oboeteru (BD 1080p HEVC Opus) [B103B91F].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 05 - Sono Koe wo Oboeteru (BD 1080p HEVC Opus) [03DDBAFA].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 06 - snowdrop (BD 1080p HEVC Opus) [78977AD3].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 01 - chocolate insomnia (BD 1080p HEVC Opus) [1AEFA697].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 02 - happy bite (BD 1080p HEVC Opus) [F8166D8B].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 03 - Mousou Express (BD 1080p HEVC Opus) [B4DB49AE].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 04 - Kogarashi Sentiment (BD 1080p HEVC Opus) [Dual Audio] [BFFD308C].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S04E01 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F060A534].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E03 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F9216424].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E04 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A47C2974].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E05 - Monogatari Series Second Season (BD 1080p HEVC Opus) [0F6F3A54].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E06 - Monogatari Series Second Season (BD 1080p HEVC Opus) [651A59B3].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E07 - Monogatari Series Second Season (BD 1080p HEVC Opus) [6281F43A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E08 - Monogatari Series Second Season (BD 1080p HEVC Opus) [57B3E672].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E09 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C0FBDBBE].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E10 - Monogatari Series Second Season (BD 1080p HEVC Opus) [70A5BC81].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E11 - Monogatari Series Second Season (BD 1080p HEVC Opus) [49649242].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E12 - Monogatari Series Second Season (BD 1080p HEVC Opus) [359A6D81].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E13 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4223495C].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E14 - Monogatari Series Second Season (BD 1080p HEVC Opus) [2886C5FB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E15 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4615CE44].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E16 - Monogatari Series Second Season (BD 1080p HEVC Opus) [BC971869].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E17 - Monogatari Series Second Season (BD 1080p HEVC Opus) [63AC7F41].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E18 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A15AA17B].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E19 - Monogatari Series Second Season (BD 1080p HEVC Opus) [B484CA31].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E20 - Monogatari Series Second Season (BD 1080p HEVC Opus) [90A33F28].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E21 - Monogatari Series Second Season (BD 1080p HEVC Opus) [8E4A37A3].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E22 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C2F90D9E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S04E23 - Monogatari Series Second Season (BD 1080p HEVC Opus) [86B8080A].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1480925",
+				"tmdbId": 46195,
+				"files": [
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 01 - Ai o Utae (BD 1080p HEVC Opus) [4BB006DB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 02 - Ai o Utae (BD 1080p HEVC Opus) [3974A0BE].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 03 - Ai o Utae (BD 1080p HEVC Opus) [502C940C].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 04 - Sono Koe wo Oboeteru (BD 1080p HEVC Opus) [B103B91F].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 05 - Sono Koe wo Oboeteru (BD 1080p HEVC Opus) [03DDBAFA].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCED 06 - snowdrop (BD 1080p HEVC Opus) [78977AD3].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 01 - chocolate insomnia (BD 1080p HEVC Opus) [1AEFA697].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 02 - happy bite (BD 1080p HEVC Opus) [F8166D8B].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 03 - Mousou Express (BD 1080p HEVC Opus) [B4DB49AE].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04 - Monogatari Series Second Season - NCOP 04 - Kogarashi Sentiment (BD 1080p HEVC Opus) [Dual Audio] [BFFD308C].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S04E01 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F060A534].mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907757
+					},
+					{
+						"path": "[smol] Monogatari - S04E02 - Monogatari Series Second Season (BD 1080p HEVC Opus) [46DDBCD7].mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907758
+					},
+					{
+						"path": "[smol] Monogatari - S04E03 - Monogatari Series Second Season (BD 1080p HEVC Opus) [F9216424].mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1029995
+					},
+					{
+						"path": "[smol] Monogatari - S04E04 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A47C2974].mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1029996
+					},
+					{
+						"path": "[smol] Monogatari - S04E05 - Monogatari Series Second Season (BD 1080p HEVC Opus) [0F6F3A54].mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907765
+					},
+					{
+						"path": "[smol] Monogatari - S04E06 - Monogatari Series Second Season (BD 1080p HEVC Opus) [651A59B3].mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907764
+					},
+					{
+						"path": "[smol] Monogatari - S04E07 - Monogatari Series Second Season (BD 1080p HEVC Opus) [6281F43A].mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907761
+					},
+					{
+						"path": "[smol] Monogatari - S04E08 - Monogatari Series Second Season (BD 1080p HEVC Opus) [57B3E672].mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907760
+					},
+					{
+						"path": "[smol] Monogatari - S04E09 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C0FBDBBE].mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907763
+					},
+					{
+						"path": "[smol] Monogatari - S04E10 - Monogatari Series Second Season (BD 1080p HEVC Opus) [70A5BC81].mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907762
+					},
+					{
+						"path": "[smol] Monogatari - S04E11 - Monogatari Series Second Season (BD 1080p HEVC Opus) [49649242].mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907766
+					},
+					{
+						"path": "[smol] Monogatari - S04E12 - Monogatari Series Second Season (BD 1080p HEVC Opus) [359A6D81].mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907759
+					},
+					{
+						"path": "[smol] Monogatari - S04E13 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4223495C].mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907769
+					},
+					{
+						"path": "[smol] Monogatari - S04E14 - Monogatari Series Second Season (BD 1080p HEVC Opus) [2886C5FB].mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907768
+					},
+					{
+						"path": "[smol] Monogatari - S04E15 - Monogatari Series Second Season (BD 1080p HEVC Opus) [4615CE44].mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 907767
+					},
+					{
+						"path": "[smol] Monogatari - S04E16 - Monogatari Series Second Season (BD 1080p HEVC Opus) [BC971869].mkv",
+						"season": 3,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1029998
+					},
+					{
+						"path": "[smol] Monogatari - S04E17 - Monogatari Series Second Season (BD 1080p HEVC Opus) [63AC7F41].mkv",
+						"season": 3,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1029999
+					},
+					{
+						"path": "[smol] Monogatari - S04E18 - Monogatari Series Second Season (BD 1080p HEVC Opus) [A15AA17B].mkv",
+						"season": 3,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030000
+					},
+					{
+						"path": "[smol] Monogatari - S04E19 - Monogatari Series Second Season (BD 1080p HEVC Opus) [B484CA31].mkv",
+						"season": 3,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030001
+					},
+					{
+						"path": "[smol] Monogatari - S04E20 - Monogatari Series Second Season (BD 1080p HEVC Opus) [90A33F28].mkv",
+						"season": 3,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030002
+					},
+					{
+						"path": "[smol] Monogatari - S04E21 - Monogatari Series Second Season (BD 1080p HEVC Opus) [8E4A37A3].mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030003
+					},
+					{
+						"path": "[smol] Monogatari - S04E22 - Monogatari Series Second Season (BD 1080p HEVC Opus) [C2F90D9E].mkv",
+						"season": 3,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030004
+					},
+					{
+						"path": "[smol] Monogatari - S04E23 - Monogatari Series Second Season (BD 1080p HEVC Opus) [86B8080A].mkv",
+						"season": 3,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1030005
 					}
 				]
 			}

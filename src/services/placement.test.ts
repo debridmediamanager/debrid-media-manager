@@ -839,4 +839,16 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		const kenny = await placedHere('SpongeBob.SquarePants.S10E24.Kenny.the.Cat');
 		expect(kenny.files[0]).toMatchObject({ season: 9, episode: 15 });
 	});
+	it('numbers a release on the run of episodes TMDB names after it', async () => {
+		// smol's `S04E01`-`E23` are TMDB's season 3 "Monogatari Series: Second Season", not its
+		// season 4 (Owarimonogatari), where `E01`-`E12` had landed by number
+		const second = await placedHere('[smol] Monogatari Series Second Season');
+		expect(second.files.filter((f) => f.season === 3)).toHaveLength(23);
+		expect(second.files.some((f) => f.season === 4)).toBe(false);
+		// `S10E01`-`E06` are S0E42-E47 "Zoku Owarimonogatari: Koyomi Reverse (1)"-"(6)"
+		const zoku = await placedHere('[smol] Zoku Owarimonogatari');
+		expect(zoku.files.filter((f) => f.season === 0).map((f) => f.episode)).toEqual([
+			42, 43, 44, 45, 46, 47,
+		]);
+	});
 });

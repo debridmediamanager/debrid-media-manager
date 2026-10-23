@@ -47,6 +47,8 @@ export interface TmdbSeason {
 	season: number;
 	episodes: number;
 	airDate: string | null;
+	/** TMDB's name for the season, where it gave one. */
+	name?: string;
 }
 
 /** The identified show as TMDB has it. */
@@ -69,6 +71,8 @@ export interface PlacementShow {
 	dubOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 	/** TMDB's episode for a pack's season and episode, by the episode group its seasons match. */
 	packOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
+	/** TMDB's episode for a release's season and episode, by the run TMDB names after the release. */
+	namedRun?: (season: number, episode: number) => Promise<[number, number] | null>;
 }
 
 export interface Placement {
@@ -699,6 +703,13 @@ async function placeByRules(
 	if (show.packOrder && season !== null && season > 0) {
 		const ordered = await show.packOrder(season, episode);
 		const found = ordered && (await placed(ordered, 'group'));
+		if (found) return found;
+	}
+
+	// a release numbered in the run of episodes TMDB names after it (smol's Monogatari arcs)
+	if (show.namedRun && season !== null) {
+		const named = await show.namedRun(season, episode);
+		const found = named && (await placed(named, 'tmdb'));
 		if (found) return found;
 	}
 

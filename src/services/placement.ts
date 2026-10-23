@@ -46,7 +46,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
  * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.12';
+export const PLACEMENT_RULES = '2026-10-23.13';
 
 export interface PlaceRequest {
 	name: string;
@@ -739,6 +739,7 @@ async function placeOnShow(
 							season: row.season_number as number,
 							episodes: Number.isInteger(row.episode_count) ? row.episode_count : 0,
 							airDate: typeof row.air_date === 'string' ? row.air_date : null,
+							...(typeof row.name === 'string' ? { name: row.name } : {}),
 						},
 					]
 				: []
@@ -747,6 +748,7 @@ async function placeOnShow(
 	placement.tvdbOrder = tvdbOrderLookup(showId, sources, TVDB_ORDER);
 	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
 	placement.packOrder = await packOrderLookup(release, placement.seasons, showId, sources);
+	placement.namedRun = await namedRunLookup(release, placement.seasons, episodes);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
 	return placeFiles(release, placement, anime, imdb, (files) => answer(files));
 }
@@ -932,6 +934,54 @@ async function groupSeasons(
 		);
 	}
 	return seasons;
+}
+
+/**
+ * The run of episodes TMDB names after a release whose numbered files are one season, numbered 1
+ * to n: a season of the release's name (smol's `[smol] Monogatari Series Second Season` numbers
+ * its 23 files `S04E01`-`E23`, TMDB's season 3 "Monogatari Series: Second Season"), or the
+ * episodes titled after it (`[smol] Zoku Owarimonogatari`'s `S10E01`-`E06` are S0E42-E47 "Zoku
+ * Owarimonogatari: Koyomi Reverse (1)"-"(6)"). Taken where exactly one such run is n long.
+ */
+async function namedRunLookup(
+	release: PlaceRequest,
+	seasons: TmdbSeason[],
+	episodes: PlacementShow['episodes']
+): Promise<PlacementShow['namedRun'] | undefined> {
+	const title = letters(parseName(release.name).title);
+	if (title.length < 8) return undefined;
+	const single = release.files.length === 1;
+	const held = new Map<number, Set<number>>();
+	for (const file of release.files) {
+		const numbers = fileNumbers(release.name, file.folder, file.path, single);
+		if (!numbers || numbers.season === null || numbers.coded) continue;
+		held.set(numbers.season, (held.get(numbers.season) ?? new Set()).add(numbers.episode));
+	}
+	if (held.size !== 1) return undefined;
+	const [[season, set]] = [...held];
+	if (set.size < 4 || Math.max(...set) !== set.size) return undefined;
+	const lists = await Promise.all(
+		seasons.map(async (row) => ({ row, list: (await episodes(row.season)) ?? [] }))
+	);
+	const runs: [number, number][][] = [];
+	for (const { row, list } of lists) {
+		if (row.season > 0 && row.season !== season && letters(row.name ?? '') === title) {
+			runs.push(list.map((item) => [row.season, item.episode]));
+		}
+	}
+	const titled = lists.flatMap(({ row, list }) =>
+		list.flatMap((item) => {
+			const name = letters(item.name);
+			return name.startsWith(title) && name.length > title.length
+				? [[row.season, item.episode] as [number, number]]
+				: [];
+		})
+	);
+	if (titled.length) runs.push(titled);
+	const fit = runs.filter((run) => run.length === set.size);
+	if (fit.length !== 1) return undefined;
+	const [run] = fit;
+	return async (at, episode) => (at === season ? (run[episode - 1] ?? null) : null);
 }
 
 /**
