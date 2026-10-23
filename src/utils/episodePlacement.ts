@@ -515,6 +515,15 @@ export function lookupAnime(index: AnimeIndex, release: string, file: string): A
 	if (!found) return null;
 	const { season } = parseName(file);
 	if (season === null || season === found.target.tvdbSeason) return found;
+	// a season no entry of the show is in TVDB's numbering is the packer's own: smol numbers the
+	// Monogatari series in seasons of its own, so `[smol] Owarimonogatari`'s `S07E01` is the
+	// Owarimonogatari entry's first episode, TMDB's S4E1
+	const tvdbSeasons = new Set(
+		(index.byShow.get(found.target.tmdb) ?? []).map((target) => target.tvdbSeason)
+	);
+	if (found.numbered && found.target.season > 0 && season > 0 && !tvdbSeasons.has(season)) {
+		return found;
+	}
 	const own = lookup(index, file);
 	// Scene notation in a batch is TVDB's (`[Reza] Food Wars S04E01`, `Fruits Basket (2019) -
 	// s02e01`) unless it is a cour's own first season; a special (`Aria The Animation -

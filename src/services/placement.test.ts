@@ -610,7 +610,8 @@ describe('a release whose titled files name another show than the one it was pla
 
 	it.each([
 		['[CyC] Mushishi v2.1', 26867],
-		['[smol] Owarimonogatari', 336855],
+		// TMDB's Monogatari, by Owarimonogatari's anime entry (smol's `S07E01` is its S4E1)
+		['[smol] Owarimonogatari', 46195],
 		['The Crocodile Hunter', 1904],
 		// TMDB's search for Friends answers Among Friends and Thomas & Friends, no show of its name
 		['Friends.1994', 1668],
@@ -778,5 +779,11 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		const rascal = await placedHere('[Delta] Rascal');
 		expect(rascal).toMatchObject({ tmdbId: 82739 });
 		expect(at(rascal, 'S02E13')).toEqual([2, 13]);
+	});
+	it("numbers a cour's files in the packer's own seasons by the cour the release names", async () => {
+		// smol's `S07` is no season TVDB numbers the Monogatari series in: Owarimonogatari's own
+		const owari = await placedHere('[smol] Owarimonogatari');
+		expect(owari).toMatchObject({ tmdbId: 46195 });
+		expect(at(owari, 'S07E01')).toEqual([4, 1]);
 	});
 });

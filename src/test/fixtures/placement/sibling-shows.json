@@ -15815,104 +15815,104 @@
 			},
 			"expect": {
 				"kind": "tv",
-				"imdbId": "tt5274556",
-				"tmdbId": 336855,
+				"imdbId": "tt1480925",
+				"tmdbId": 46195,
 				"files": [
 					{
 						"path": "[smol] Monogatari - S07E01 - Owarimonogatari (BD 1080p HEVC Opus) [EFB6BDFE].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112711
 					},
 					{
 						"path": "[smol] Monogatari - S07E02 - Owarimonogatari (BD 1080p HEVC Opus) [977BD0EF].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 2,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112978
 					},
 					{
 						"path": "[smol] Monogatari - S07E03 - Owarimonogatari (BD 1080p HEVC Opus) [4E37B919].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112979
 					},
 					{
 						"path": "[smol] Monogatari - S07E04 - Owarimonogatari (BD 1080p HEVC Opus) [E00FDDC7].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112980
 					},
 					{
 						"path": "[smol] Monogatari - S07E05 - Owarimonogatari (BD 1080p HEVC Opus) [A89E97DA].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112981
 					},
 					{
 						"path": "[smol] Monogatari - S07E06 - Owarimonogatari (BD 1080p HEVC Opus) [61394B75].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112982
 					},
 					{
 						"path": "[smol] Monogatari - S07E07 - Owarimonogatari (BD 1080p HEVC Opus) [552114D0].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 7,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112983
 					},
 					{
 						"path": "[smol] Monogatari - S07E08 - Owarimonogatari (BD 1080p HEVC Opus) [DAE4FDFA].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 8,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112984
 					},
 					{
 						"path": "[smol] Monogatari - S07E09 - Owarimonogatari (BD 1080p HEVC Opus) [FEB01A0C].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 9,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112985
 					},
 					{
 						"path": "[smol] Monogatari - S07E10 - Owarimonogatari (BD 1080p HEVC Opus) [74D4578B].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 10,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112986
 					},
 					{
 						"path": "[smol] Monogatari - S07E11 - Owarimonogatari (BD 1080p HEVC Opus) [EBCB3D41].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 11,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112987
 					},
 					{
 						"path": "[smol] Monogatari - S07E12 - Owarimonogatari (BD 1080p HEVC Opus) [E09AE54B].mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 12,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1112988
 					},
 					{
 						"path": "[smol] Monogatari - S07E13 - Owarimonogatari (BD 1080p HEVC Opus) [19228B73].mkv",

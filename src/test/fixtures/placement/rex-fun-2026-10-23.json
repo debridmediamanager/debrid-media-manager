@@ -99,6 +99,11 @@
 				"movie_results": [],
 				"tv_results": [{ "id": 329907 }],
 				"tv_episode_results": []
+			},
+			"tt5274556": {
+				"movie_results": [],
+				"tv_results": [{ "id": 336855 }],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -1026,6 +1031,65 @@
 						"air_date": "2025-07-05",
 						"name": "Season 1"
 					}
+				]
+			},
+			"46195": {
+				"name": "Monogatari",
+				"original_name": "化物語",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt1480925" },
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 49,
+						"air_date": "2009-08-07",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2009-07-03",
+						"name": "Bakemonogatari"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 11,
+						"air_date": "2012-01-08",
+						"name": "Nisemonogatari"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 23,
+						"air_date": "2013-07-07",
+						"name": "Monogatari Series: Second Season"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 12,
+						"air_date": "2015-10-04",
+						"name": "Owarimonogatari"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 15,
+						"air_date": "2024-07-06",
+						"name": "MONOGATARI Series OFF & MONSTER Season"
+					}
+				]
+			},
+			"336855": {
+				"name": "Owarimonogatari",
+				"original_name": "Owarimonogatari",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt5274556" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Season 1"
+					},
+					{ "season_number": 2, "episode_count": 0, "air_date": null, "name": "Season 2" }
 				]
 			}
 		},
@@ -18412,6 +18476,775 @@
 					},
 					{ "id": 7690389, "episode_number": 14, "name": "Zoku-hen", "air_date": null }
 				]
+			},
+			"336855/7": null,
+			"336855/1": {
+				"episodes": [
+					{
+						"id": 7889675,
+						"episode_number": 12,
+						"name": "Shinobu Mail, Part Six",
+						"air_date": null
+					}
+				]
+			},
+			"336855/2": { "episodes": [] },
+			"46195/0": {
+				"episodes": [
+					{
+						"id": 907782,
+						"episode_number": 1,
+						"name": "Ghostory (Monstory)",
+						"air_date": "2009-08-07"
+					},
+					{
+						"id": 1583512,
+						"episode_number": 2,
+						"name": "Tsubasa Cat (3)",
+						"air_date": "2009-11-03"
+					},
+					{
+						"id": 1583513,
+						"episode_number": 3,
+						"name": "Tsubasa Cat (4)",
+						"air_date": "2010-02-23"
+					},
+					{
+						"id": 1583514,
+						"episode_number": 4,
+						"name": "Tsubasa Cat (5)",
+						"air_date": "2010-06-25"
+					},
+					{
+						"id": 1906459,
+						"episode_number": 5,
+						"name": "Nekomonogatari Kuro: The Story of Araragi Koyomi and the girls who encountered oddities",
+						"air_date": "2012-12-31"
+					},
+					{
+						"id": 907785,
+						"episode_number": 6,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (1)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"id": 907783,
+						"episode_number": 7,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (2)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"id": 907784,
+						"episode_number": 8,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (3)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"id": 907786,
+						"episode_number": 9,
+						"name": "Nekomonogatari Kuro: Tsubasa Family (4)",
+						"air_date": "2012-12-31"
+					},
+					{
+						"id": 907787,
+						"episode_number": 10,
+						"name": "Summary I",
+						"air_date": "2013-08-11"
+					},
+					{
+						"id": 1134942,
+						"episode_number": 11,
+						"name": "Summary II",
+						"air_date": "2013-09-15"
+					},
+					{
+						"id": 907789,
+						"episode_number": 12,
+						"name": "Summary III",
+						"air_date": "2013-10-20"
+					},
+					{
+						"id": 1031146,
+						"episode_number": 13,
+						"name": "Hanamonogatari: Suruga Devil (1)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"id": 1031147,
+						"episode_number": 14,
+						"name": "Hanamonogatari: Suruga Devil (2)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"id": 1031148,
+						"episode_number": 15,
+						"name": "Hanamonogatari: Suruga Devil (3)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"id": 1031149,
+						"episode_number": 16,
+						"name": "Hanamonogatari: Suruga Devil (4)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"id": 1031150,
+						"episode_number": 17,
+						"name": "Hanamonogatari: Suruga Devil (5)",
+						"air_date": "2014-08-16"
+					},
+					{
+						"id": 1031151,
+						"episode_number": 18,
+						"name": "Tsukimonogatari: Yotsugi Doll (1)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"id": 1031152,
+						"episode_number": 19,
+						"name": "Tsukimonogatari: Yotsugi Doll (2)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"id": 1031153,
+						"episode_number": 20,
+						"name": "Tsukimonogatari: Yotsugi Doll (3)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"id": 1031154,
+						"episode_number": 21,
+						"name": "Tsukimonogatari: Yotsugi Doll (4)",
+						"air_date": "2014-12-31"
+					},
+					{
+						"id": 1155845,
+						"episode_number": 22,
+						"name": "Koyomimonogatari: Koyomi Stone",
+						"air_date": "2016-01-09"
+					},
+					{
+						"id": 1158157,
+						"episode_number": 23,
+						"name": "Koyomimonogatari: Koyomi Flower",
+						"air_date": "2016-01-16"
+					},
+					{
+						"id": 1163455,
+						"episode_number": 24,
+						"name": "Koyomimonogatari: Koyomi Sand",
+						"air_date": "2016-01-23"
+					},
+					{
+						"id": 1163456,
+						"episode_number": 25,
+						"name": "Koyomimonogatari: Koyomi Water",
+						"air_date": "2016-01-30"
+					},
+					{
+						"id": 1174079,
+						"episode_number": 26,
+						"name": "Koyomimonogatari: Koyomi Wind",
+						"air_date": "2016-02-06"
+					},
+					{
+						"id": 1174080,
+						"episode_number": 27,
+						"name": "Koyomimonogatari: Koyomi Tree",
+						"air_date": "2016-02-13"
+					},
+					{
+						"id": 1174081,
+						"episode_number": 28,
+						"name": "Koyomimonogatari: Koyomi Tea",
+						"air_date": "2016-02-20"
+					},
+					{
+						"id": 1174082,
+						"episode_number": 29,
+						"name": "Koyomimonogatari: Koyomi Mountain",
+						"air_date": "2016-02-27"
+					},
+					{
+						"id": 1174083,
+						"episode_number": 30,
+						"name": "Koyomimonogatari: Koyomi Torus",
+						"air_date": "2016-03-05"
+					},
+					{
+						"id": 1176975,
+						"episode_number": 31,
+						"name": "Koyomimonogatari: Koyomi Seed",
+						"air_date": "2016-03-12"
+					},
+					{
+						"id": 1176976,
+						"episode_number": 32,
+						"name": "Koyomimonogatari: Koyomi Nothing",
+						"air_date": "2016-03-19"
+					},
+					{
+						"id": 1179257,
+						"episode_number": 33,
+						"name": "Koyomimonogatari: Koyomi Dead",
+						"air_date": "2016-03-26"
+					},
+					{
+						"id": 2037285,
+						"episode_number": 34,
+						"name": "Koyomi History",
+						"air_date": "2016-06-23"
+					},
+					{
+						"id": 1583504,
+						"episode_number": 35,
+						"name": "Owarimonogatari: Mayoi Hell (1)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"id": 1583505,
+						"episode_number": 36,
+						"name": "Owarimonogatari: Mayoi Hell (2)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"id": 1583506,
+						"episode_number": 37,
+						"name": "Owarimonogatari: Hitagi Rendez-vous (1)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"id": 1583507,
+						"episode_number": 38,
+						"name": "Owarimonogatari: Hitagi Rendez-vous (2)",
+						"air_date": "2017-08-12"
+					},
+					{
+						"id": 1583508,
+						"episode_number": 39,
+						"name": "Owarimonogatari: Ougi Dark (1)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"id": 1583509,
+						"episode_number": 40,
+						"name": "Owarimonogatari: Ougi Dark (2)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"id": 1583510,
+						"episode_number": 41,
+						"name": "Owarimonogatari: Ougi Dark (3)",
+						"air_date": "2017-08-13"
+					},
+					{
+						"id": 1644184,
+						"episode_number": 42,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (1)",
+						"air_date": "2019-05-18"
+					},
+					{
+						"id": 1859775,
+						"episode_number": 43,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (2)",
+						"air_date": "2019-05-25"
+					},
+					{
+						"id": 1859776,
+						"episode_number": 44,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (3)",
+						"air_date": "2019-06-01"
+					},
+					{
+						"id": 1859777,
+						"episode_number": 45,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (4)",
+						"air_date": "2019-06-08"
+					},
+					{
+						"id": 1859778,
+						"episode_number": 46,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (5)",
+						"air_date": "2019-06-15"
+					},
+					{
+						"id": 1859779,
+						"episode_number": 47,
+						"name": "Zoku Owarimonogatari: Koyomi Reverse (6)",
+						"air_date": "2019-06-22"
+					},
+					{
+						"id": 5535136,
+						"episode_number": 48,
+						"name": "A Cruel Fairy Tale: The Beautiful Princess",
+						"air_date": "2024-08-17"
+					},
+					{
+						"id": 5601850,
+						"episode_number": 49,
+						"name": "Monogatari Series Off & Monster Season ABEMA SP Special Program",
+						"air_date": "2024-09-07"
+					}
+				]
+			},
+			"46195/7": null,
+			"46195/1": {
+				"episodes": [
+					{
+						"id": 907790,
+						"episode_number": 1,
+						"name": "Hitagi Crab (1)",
+						"air_date": "2009-07-03"
+					},
+					{
+						"id": 907791,
+						"episode_number": 2,
+						"name": "Hitagi Crab (2)",
+						"air_date": "2009-07-10"
+					},
+					{
+						"id": 907799,
+						"episode_number": 3,
+						"name": "Mayoi Snail (1)",
+						"air_date": "2009-07-17"
+					},
+					{
+						"id": 907795,
+						"episode_number": 4,
+						"name": "Mayoi Snail (2)",
+						"air_date": "2009-07-24"
+					},
+					{
+						"id": 907794,
+						"episode_number": 5,
+						"name": "Mayoi Snail (3)",
+						"air_date": "2009-07-31"
+					},
+					{
+						"id": 907802,
+						"episode_number": 6,
+						"name": "Suruga Monkey (1)",
+						"air_date": "2009-08-09"
+					},
+					{
+						"id": 907792,
+						"episode_number": 7,
+						"name": "Suruga Monkey (2)",
+						"air_date": "2009-08-21"
+					},
+					{
+						"id": 907796,
+						"episode_number": 8,
+						"name": "Suruga Monkey (3)",
+						"air_date": "2009-08-28"
+					},
+					{
+						"id": 907797,
+						"episode_number": 9,
+						"name": "Nadeko Snake (1)",
+						"air_date": "2009-09-04"
+					},
+					{
+						"id": 907798,
+						"episode_number": 10,
+						"name": "Nadeko Snake (2)",
+						"air_date": "2009-09-11"
+					},
+					{
+						"id": 907793,
+						"episode_number": 11,
+						"name": "Tsubasa Cat (1)",
+						"air_date": "2009-09-18"
+					},
+					{
+						"id": 907800,
+						"episode_number": 12,
+						"name": "Tsubasa Cat (2)",
+						"air_date": "2009-09-25"
+					}
+				]
+			},
+			"46195/2": {
+				"episodes": [
+					{
+						"id": 907770,
+						"episode_number": 1,
+						"name": "Karen Bee (1)",
+						"air_date": "2012-01-08"
+					},
+					{
+						"id": 907772,
+						"episode_number": 2,
+						"name": "Karen Bee (2)",
+						"air_date": "2012-01-15"
+					},
+					{
+						"id": 907771,
+						"episode_number": 3,
+						"name": "Karen Bee (3)",
+						"air_date": "2012-01-22"
+					},
+					{
+						"id": 907773,
+						"episode_number": 4,
+						"name": "Karen Bee (4)",
+						"air_date": "2012-01-29"
+					},
+					{
+						"id": 907774,
+						"episode_number": 5,
+						"name": "Karen Bee (5)",
+						"air_date": "2012-02-05"
+					},
+					{
+						"id": 907776,
+						"episode_number": 6,
+						"name": "Karen Bee (6)",
+						"air_date": "2012-02-12"
+					},
+					{
+						"id": 907775,
+						"episode_number": 7,
+						"name": "Karen Bee (7)",
+						"air_date": "2012-02-19"
+					},
+					{
+						"id": 907777,
+						"episode_number": 8,
+						"name": "Tsukihi Phoenix (1)",
+						"air_date": "2012-02-26"
+					},
+					{
+						"id": 907780,
+						"episode_number": 9,
+						"name": "Tsukihi Phoenix (2)",
+						"air_date": "2012-03-04"
+					},
+					{
+						"id": 907779,
+						"episode_number": 10,
+						"name": "Tsukihi Phoenix (3)",
+						"air_date": "2012-03-11"
+					},
+					{
+						"id": 907778,
+						"episode_number": 11,
+						"name": "Tsukihi Phoenix (4)",
+						"air_date": "2012-03-18"
+					}
+				]
+			},
+			"46195/3": {
+				"episodes": [
+					{
+						"id": 907757,
+						"episode_number": 1,
+						"name": "Tsubasa Tiger (1)",
+						"air_date": "2013-07-07"
+					},
+					{
+						"id": 907758,
+						"episode_number": 2,
+						"name": "Tsubasa Tiger (2)",
+						"air_date": "2013-07-14"
+					},
+					{
+						"id": 1029995,
+						"episode_number": 3,
+						"name": "Tsubasa Tiger (3)",
+						"air_date": "2013-07-21"
+					},
+					{
+						"id": 1029996,
+						"episode_number": 4,
+						"name": "Tsubasa Tiger (4)",
+						"air_date": "2013-07-28"
+					},
+					{
+						"id": 907765,
+						"episode_number": 5,
+						"name": "Tsubasa Tiger (5)",
+						"air_date": "2013-08-04"
+					},
+					{
+						"id": 907764,
+						"episode_number": 6,
+						"name": "Mayoi Jiangshi (1)",
+						"air_date": "2013-08-18"
+					},
+					{
+						"id": 907761,
+						"episode_number": 7,
+						"name": "Mayoi Jiangshi (2)",
+						"air_date": "2013-08-25"
+					},
+					{
+						"id": 907760,
+						"episode_number": 8,
+						"name": "Mayoi Jiangshi (3)",
+						"air_date": "2013-09-01"
+					},
+					{
+						"id": 907763,
+						"episode_number": 9,
+						"name": "Mayoi Jiangshi (4)",
+						"air_date": "2013-09-08"
+					},
+					{
+						"id": 907762,
+						"episode_number": 10,
+						"name": "Nadeko Medusa (1)",
+						"air_date": "2013-09-22"
+					},
+					{
+						"id": 907766,
+						"episode_number": 11,
+						"name": "Nadeko Medusa (2)",
+						"air_date": "2013-09-29"
+					},
+					{
+						"id": 907759,
+						"episode_number": 12,
+						"name": "Nadeko Medusa (3)",
+						"air_date": "2013-10-06"
+					},
+					{
+						"id": 907769,
+						"episode_number": 13,
+						"name": "Nadeko Medusa (4)",
+						"air_date": "2013-10-13"
+					},
+					{
+						"id": 907768,
+						"episode_number": 14,
+						"name": "Shinobu Time (1)",
+						"air_date": "2013-10-27"
+					},
+					{
+						"id": 907767,
+						"episode_number": 15,
+						"name": "Shinobu Time (2)",
+						"air_date": "2013-11-03"
+					},
+					{
+						"id": 1029998,
+						"episode_number": 16,
+						"name": "Shinobu Time (3)",
+						"air_date": "2013-11-10"
+					},
+					{
+						"id": 1029999,
+						"episode_number": 17,
+						"name": "Shinobu Time (4)",
+						"air_date": "2013-11-17"
+					},
+					{
+						"id": 1030000,
+						"episode_number": 18,
+						"name": "Hitagi End (1)",
+						"air_date": "2013-11-24"
+					},
+					{
+						"id": 1030001,
+						"episode_number": 19,
+						"name": "Hitagi End (2)",
+						"air_date": "2013-12-01"
+					},
+					{
+						"id": 1030002,
+						"episode_number": 20,
+						"name": "Hitagi End (3)",
+						"air_date": "2013-12-08"
+					},
+					{
+						"id": 1030003,
+						"episode_number": 21,
+						"name": "Hitagi End (4)",
+						"air_date": "2013-12-15"
+					},
+					{
+						"id": 1030004,
+						"episode_number": 22,
+						"name": "Hitagi End (5)",
+						"air_date": "2013-12-22"
+					},
+					{
+						"id": 1030005,
+						"episode_number": 23,
+						"name": "Hitagi End (6)",
+						"air_date": "2013-12-29"
+					}
+				]
+			},
+			"46195/4": {
+				"episodes": [
+					{
+						"id": 1112711,
+						"episode_number": 1,
+						"name": "Ougi Formula",
+						"air_date": "2015-10-04"
+					},
+					{
+						"id": 1112978,
+						"episode_number": 2,
+						"name": "Sodachi Riddle (1)",
+						"air_date": "2015-10-11"
+					},
+					{
+						"id": 1112979,
+						"episode_number": 3,
+						"name": "Sodachi Riddle (2)",
+						"air_date": "2015-10-18"
+					},
+					{
+						"id": 1112980,
+						"episode_number": 4,
+						"name": "Sodachi Lost (1)",
+						"air_date": "2015-10-25"
+					},
+					{
+						"id": 1112981,
+						"episode_number": 5,
+						"name": "Sodachi Lost (2)",
+						"air_date": "2015-11-01"
+					},
+					{
+						"id": 1112982,
+						"episode_number": 6,
+						"name": "Sodachi Lost (3)",
+						"air_date": "2015-11-08"
+					},
+					{
+						"id": 1112983,
+						"episode_number": 7,
+						"name": "SHINOBU Mail (1)",
+						"air_date": "2015-11-15"
+					},
+					{
+						"id": 1112984,
+						"episode_number": 8,
+						"name": "SHINOBU Mail (2)",
+						"air_date": "2015-11-22"
+					},
+					{
+						"id": 1112985,
+						"episode_number": 9,
+						"name": "SHINOBU Mail (3)",
+						"air_date": "2015-11-29"
+					},
+					{
+						"id": 1112986,
+						"episode_number": 10,
+						"name": "SHINOBU Mail (4)",
+						"air_date": "2015-12-06"
+					},
+					{
+						"id": 1112987,
+						"episode_number": 11,
+						"name": "SHINOBU Mail (5)",
+						"air_date": "2015-12-13"
+					},
+					{
+						"id": 1112988,
+						"episode_number": 12,
+						"name": "SHINOBU Mail (6)",
+						"air_date": "2015-12-20"
+					}
+				]
+			},
+			"46195/5": {
+				"episodes": [
+					{
+						"id": 5457175,
+						"episode_number": 1,
+						"name": "OROKAMONOGATARI Tsukihi Undo",
+						"air_date": "2024-07-06"
+					},
+					{
+						"id": 5460330,
+						"episode_number": 2,
+						"name": "NADEMONOGATARI Nadeko Draw (1)",
+						"air_date": "2024-07-13"
+					},
+					{
+						"id": 5460331,
+						"episode_number": 3,
+						"name": "NADEMONOGATARI Nadeko Draw (2)",
+						"air_date": "2024-07-20"
+					},
+					{
+						"id": 5460332,
+						"episode_number": 4,
+						"name": "NADEMONOGATARI Nadeko Draw (3)",
+						"air_date": "2024-07-27"
+					},
+					{
+						"id": 5511286,
+						"episode_number": 5,
+						"name": "NADEMONOGATARI Nadeko Draw (4)",
+						"air_date": "2024-08-03"
+					},
+					{
+						"id": 5514293,
+						"episode_number": 6,
+						"name": "NADEMONOGATARI Nadeko Draw (5)",
+						"air_date": "2024-08-10"
+					},
+					{
+						"id": 5520905,
+						"episode_number": 7,
+						"name": "WAZAMONOGATARI Acerola Bon Appétit (1)",
+						"air_date": "2024-08-24"
+					},
+					{
+						"id": 5548813,
+						"episode_number": 8,
+						"name": "WAZAMONOGATARI Acerola Bon Appétit (2)",
+						"air_date": "2024-08-31"
+					},
+					{
+						"id": 5562968,
+						"episode_number": 9,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (1)",
+						"air_date": "2024-09-14"
+					},
+					{
+						"id": 5584561,
+						"episode_number": 10,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (2)",
+						"air_date": "2024-09-21"
+					},
+					{
+						"id": 5584562,
+						"episode_number": 11,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (3)",
+						"air_date": "2024-09-28"
+					},
+					{
+						"id": 5584564,
+						"episode_number": 12,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (4)",
+						"air_date": "2024-10-05"
+					},
+					{
+						"id": 5668581,
+						"episode_number": 13,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (5)",
+						"air_date": "2024-10-12"
+					},
+					{
+						"id": 5672922,
+						"episode_number": 14,
+						"name": "SHINOBUMONOGATARI Shinobu Mustard (6)",
+						"air_date": "2024-10-19"
+					},
+					{
+						"id": 7448847,
+						"episode_number": 15,
+						"name": "WAZAMONOGATARI: Karen Ogre",
+						"air_date": null
+					}
+				]
 			}
 		},
 		"episodeGroups": {
@@ -18500,7 +19333,38 @@
 			},
 			"70593": { "results": [] },
 			"301991": { "results": [] },
-			"329907": { "results": [] }
+			"329907": { "results": [] },
+			"46195": {
+				"results": [
+					{
+						"id": "666f011e06254acbc9ebfcbc",
+						"name": "Order by initial air date",
+						"type": 1
+					},
+					{ "id": "6a125fe96d1fa649f9d49475", "name": "TV", "type": 1 },
+					{ "id": "6a3a296cc6f0168a53bf6244", "name": "物语系列", "type": 1 },
+					{ "id": "69f7fe355ccaded85cc5ff9e", "name": "TV", "type": 2 },
+					{ "id": "6ab48116b3d8a18dc5a92401", "name": "Chronological Order", "type": 2 },
+					{
+						"id": "6aca87d22bc0504e56de404b",
+						"name": "Absolute (Novel Order)",
+						"type": 2
+					},
+					{ "id": "6aca87d7a5145441b2b669a7", "name": "Absolute (TV Order)", "type": 2 },
+					{ "id": "603c68c579b3d40052670822", "name": "DVD Order", "type": 3 },
+					{ "id": "66e75be9d7bcca524db0d047", "name": "ABEMA", "type": 4 },
+					{ "id": "5ad0ec240e0a26303f00d84d", "name": "Novel groupings", "type": 5 },
+					{ "id": "6805129403344aee7089d8ef", "name": "Plot Order", "type": 5 },
+					{ "id": "6ab47dc53332f056b8045169", "name": "Light Novel Seasons", "type": 5 },
+					{
+						"id": "6224ccddfe077a0043a57f5c",
+						"name": "Order by original author Nisio Isin",
+						"type": 6
+					},
+					{ "id": "63b834c6f44f2700bddedc3a", "name": "TVDB Order", "type": 7 }
+				]
+			},
+			"336855": { "results": [] }
 		},
 		"episodeGroup": {
 			"69b8016aa7e52bcbf75a77b8": {
@@ -19931,6 +20795,163 @@
 						]
 					}
 				]
+			},
+			"63b834c6f44f2700bddedc3a": {
+				"groups": [
+					{
+						"order": 0,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 1 },
+							{ "order": 1, "season_number": 0, "episode_number": 6 },
+							{ "order": 2, "season_number": 0, "episode_number": 7 },
+							{ "order": 3, "season_number": 0, "episode_number": 8 },
+							{ "order": 4, "season_number": 0, "episode_number": 9 },
+							{ "order": 5, "season_number": 0, "episode_number": 10 },
+							{ "order": 6, "season_number": 0, "episode_number": 11 },
+							{ "order": 7, "season_number": 0, "episode_number": 12 },
+							{ "order": 8, "season_number": 0, "episode_number": 13 },
+							{ "order": 9, "season_number": 0, "episode_number": 14 },
+							{ "order": 10, "season_number": 0, "episode_number": 15 },
+							{ "order": 11, "season_number": 0, "episode_number": 16 },
+							{ "order": 12, "season_number": 0, "episode_number": 17 },
+							{ "order": 13, "season_number": 0, "episode_number": 18 },
+							{ "order": 14, "season_number": 0, "episode_number": 19 },
+							{ "order": 15, "season_number": 0, "episode_number": 20 },
+							{ "order": 16, "season_number": 0, "episode_number": 21 },
+							{ "order": 17, "season_number": 0, "episode_number": 22 },
+							{ "order": 18, "season_number": 0, "episode_number": 23 },
+							{ "order": 19, "season_number": 0, "episode_number": 24 },
+							{ "order": 20, "season_number": 0, "episode_number": 25 },
+							{ "order": 21, "season_number": 0, "episode_number": 26 },
+							{ "order": 22, "season_number": 0, "episode_number": 27 },
+							{ "order": 23, "season_number": 0, "episode_number": 28 },
+							{ "order": 24, "season_number": 0, "episode_number": 29 },
+							{ "order": 25, "season_number": 0, "episode_number": 30 },
+							{ "order": 26, "season_number": 0, "episode_number": 31 },
+							{ "order": 27, "season_number": 0, "episode_number": 32 },
+							{ "order": 28, "season_number": 0, "episode_number": 33 },
+							{ "order": 29, "season_number": 0, "episode_number": 42 },
+							{ "order": 30, "season_number": 0, "episode_number": 43 },
+							{ "order": 31, "season_number": 0, "episode_number": 44 },
+							{ "order": 32, "season_number": 0, "episode_number": 45 },
+							{ "order": 33, "season_number": 0, "episode_number": 46 },
+							{ "order": 34, "season_number": 0, "episode_number": 47 },
+							{ "order": 35, "season_number": 0, "episode_number": 48 }
+						]
+					},
+					{
+						"order": 1,
+						"episodes": [
+							{ "order": 0, "season_number": 1, "episode_number": 1 },
+							{ "order": 1, "season_number": 1, "episode_number": 2 },
+							{ "order": 2, "season_number": 1, "episode_number": 3 },
+							{ "order": 3, "season_number": 1, "episode_number": 4 },
+							{ "order": 4, "season_number": 1, "episode_number": 5 },
+							{ "order": 5, "season_number": 1, "episode_number": 6 },
+							{ "order": 6, "season_number": 1, "episode_number": 7 },
+							{ "order": 7, "season_number": 1, "episode_number": 8 },
+							{ "order": 8, "season_number": 1, "episode_number": 9 },
+							{ "order": 9, "season_number": 1, "episode_number": 10 },
+							{ "order": 10, "season_number": 1, "episode_number": 11 },
+							{ "order": 11, "season_number": 1, "episode_number": 12 },
+							{ "order": 12, "season_number": 0, "episode_number": 2 },
+							{ "order": 13, "season_number": 0, "episode_number": 3 },
+							{ "order": 14, "season_number": 0, "episode_number": 4 }
+						]
+					},
+					{
+						"order": 2,
+						"episodes": [
+							{ "order": 0, "season_number": 2, "episode_number": 1 },
+							{ "order": 1, "season_number": 2, "episode_number": 2 },
+							{ "order": 2, "season_number": 2, "episode_number": 3 },
+							{ "order": 3, "season_number": 2, "episode_number": 4 },
+							{ "order": 4, "season_number": 2, "episode_number": 5 },
+							{ "order": 5, "season_number": 2, "episode_number": 6 },
+							{ "order": 6, "season_number": 2, "episode_number": 7 },
+							{ "order": 7, "season_number": 2, "episode_number": 8 },
+							{ "order": 8, "season_number": 2, "episode_number": 9 },
+							{ "order": 9, "season_number": 2, "episode_number": 10 },
+							{ "order": 10, "season_number": 2, "episode_number": 11 }
+						]
+					},
+					{
+						"order": 3,
+						"episodes": [
+							{ "order": 0, "season_number": 3, "episode_number": 1 },
+							{ "order": 1, "season_number": 3, "episode_number": 2 },
+							{ "order": 2, "season_number": 3, "episode_number": 3 },
+							{ "order": 3, "season_number": 3, "episode_number": 4 },
+							{ "order": 4, "season_number": 3, "episode_number": 5 },
+							{ "order": 5, "season_number": 3, "episode_number": 6 },
+							{ "order": 6, "season_number": 3, "episode_number": 7 },
+							{ "order": 7, "season_number": 3, "episode_number": 8 },
+							{ "order": 8, "season_number": 3, "episode_number": 9 },
+							{ "order": 9, "season_number": 3, "episode_number": 10 },
+							{ "order": 10, "season_number": 3, "episode_number": 11 },
+							{ "order": 11, "season_number": 3, "episode_number": 12 },
+							{ "order": 12, "season_number": 3, "episode_number": 13 },
+							{ "order": 13, "season_number": 3, "episode_number": 14 },
+							{ "order": 14, "season_number": 3, "episode_number": 15 },
+							{ "order": 15, "season_number": 3, "episode_number": 16 },
+							{ "order": 16, "season_number": 3, "episode_number": 17 },
+							{ "order": 17, "season_number": 3, "episode_number": 18 },
+							{ "order": 18, "season_number": 3, "episode_number": 19 },
+							{ "order": 19, "season_number": 3, "episode_number": 20 },
+							{ "order": 20, "season_number": 3, "episode_number": 21 },
+							{ "order": 21, "season_number": 3, "episode_number": 22 },
+							{ "order": 22, "season_number": 3, "episode_number": 23 }
+						]
+					},
+					{
+						"order": 4,
+						"episodes": [
+							{ "order": 0, "season_number": 4, "episode_number": 1 },
+							{ "order": 1, "season_number": 4, "episode_number": 2 },
+							{ "order": 2, "season_number": 4, "episode_number": 3 },
+							{ "order": 3, "season_number": 4, "episode_number": 4 },
+							{ "order": 4, "season_number": 4, "episode_number": 5 },
+							{ "order": 5, "season_number": 4, "episode_number": 6 },
+							{ "order": 6, "season_number": 4, "episode_number": 7 },
+							{ "order": 7, "season_number": 4, "episode_number": 8 },
+							{ "order": 8, "season_number": 4, "episode_number": 9 },
+							{ "order": 9, "season_number": 4, "episode_number": 10 },
+							{ "order": 10, "season_number": 4, "episode_number": 11 },
+							{ "order": 11, "season_number": 4, "episode_number": 12 }
+						]
+					},
+					{
+						"order": 5,
+						"episodes": [
+							{ "order": 0, "season_number": 0, "episode_number": 35 },
+							{ "order": 1, "season_number": 0, "episode_number": 36 },
+							{ "order": 2, "season_number": 0, "episode_number": 37 },
+							{ "order": 3, "season_number": 0, "episode_number": 38 },
+							{ "order": 4, "season_number": 0, "episode_number": 39 },
+							{ "order": 5, "season_number": 0, "episode_number": 40 },
+							{ "order": 6, "season_number": 0, "episode_number": 41 }
+						]
+					},
+					{
+						"order": 6,
+						"episodes": [
+							{ "order": 0, "season_number": 5, "episode_number": 1 },
+							{ "order": 1, "season_number": 5, "episode_number": 2 },
+							{ "order": 2, "season_number": 5, "episode_number": 3 },
+							{ "order": 3, "season_number": 5, "episode_number": 4 },
+							{ "order": 4, "season_number": 5, "episode_number": 5 },
+							{ "order": 5, "season_number": 5, "episode_number": 6 },
+							{ "order": 6, "season_number": 5, "episode_number": 7 },
+							{ "order": 7, "season_number": 5, "episode_number": 8 },
+							{ "order": 8, "season_number": 5, "episode_number": 9 },
+							{ "order": 9, "season_number": 5, "episode_number": 10 },
+							{ "order": 10, "season_number": 5, "episode_number": 11 },
+							{ "order": 11, "season_number": 5, "episode_number": 12 },
+							{ "order": 12, "season_number": 5, "episode_number": 13 },
+							{ "order": 13, "season_number": 5, "episode_number": 14 }
+						]
+					}
+				]
 			}
 		},
 		"episodeShow": {
@@ -19951,7 +20972,8 @@
 			"tt5897304": null,
 			"tt0965546": null,
 			"tt38848632": null,
-			"tt33060122": null
+			"tt33060122": null,
+			"tt5274556": null
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -20029,7 +21051,9 @@
 			},
 			"tt3673794/6": {},
 			"tt6611916/6": {},
-			"tt0841961/6": {}
+			"tt0841961/6": {},
+			"tt5274556/7": {},
+			"tt1480925/7": {}
 		},
 		"identify": {
 			"Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT": {
@@ -20559,6 +21583,84 @@
 				"parsedTitle": "Kingdom",
 				"parsedYear": null,
 				"probability": 0.8897
+			},
+			"[smol] Owarimonogatari (BD 1080p HEVC Opus)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt9266104",
+						"score": 2.2354,
+						"title": "Zoku Owarimonogatari",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt4681414",
+						"score": -4.0741,
+						"title": "My Love Story!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0053131",
+						"score": -4.7909,
+						"title": "The Nun's Story",
+						"year": 1959
+					},
+					{
+						"imdbId": "tt1114757",
+						"score": -5.1643,
+						"title": "Detective Story",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt1977699",
+						"score": -6.1766,
+						"title": "Kawaguchi Kaiji's 9 Love Stories",
+						"year": 1991
+					}
+				],
+				"parsedTitle": "Owarimonogatari",
+				"parsedYear": null,
+				"probability": 0.7708
+			},
+			"[smol] Monogatari - S07E01 - Owarimonogatari (BD 1080p HEVC Opus) [EFB6BDFE]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1480925",
+						"score": 2.3129,
+						"title": "Bakemonogatari",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt5274556",
+						"score": 0.3014,
+						"title": "Owarimonogatari",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt2922300",
+						"score": -1.6429,
+						"title": "Monogatari Series: Second Season",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt4616700",
+						"score": -2.5637,
+						"title": "Ore Monogatari!!",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt30971467",
+						"score": -3.0343,
+						"title": "Monogatari Series: Off & Monster Season",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Monogatari",
+				"parsedYear": null,
+				"probability": 0.4948
 			}
 		},
 		"searchTv": {
@@ -21354,6 +22456,435 @@
 				],
 				"total_pages": 10,
 				"total_results": 192
+			},
+			"owarimonogatari": {
+				"page": 1,
+				"results": [
+					{
+						"id": 336855,
+						"name": "Owarimonogatari",
+						"adult": false,
+						"overview": "The end of the saga of Araragi Koyomi. What are they fighting against? What will happen to them? And who- or what- is the darkness?",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 0.8297,
+						"vote_count": 0,
+						"poster_path": "/hgYJjdb15CsFOS5HzF3UYzK9q8q.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "Owarimonogatari",
+						"first_air_date": "",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 2
+			},
+			"monogatari": {
+				"page": 1,
+				"results": [
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 23791,
+						"name": "Popolocrois Monogatari",
+						"adult": false,
+						"overview": "Prince Pietro is the half-human, half-dragon prince of the kingdom of Popolocrois. After the evil GamiGami tries to take over the Kingdom, a mysterious girl named Hyuu appears in the forest near Popolocrois Castle, which is the beginning of an adventure for Pietro, his witch friend Narcia, and all their friends.",
+						"softcore": false,
+						"genre_ids": [16, 10765, 10759],
+						"popularity": 21.3151,
+						"vote_count": 4,
+						"poster_path": "/n6p4vlE2mh4zRVt3DJjcrLfRScx.jpg",
+						"vote_average": 5,
+						"backdrop_path": "/52KuG01xVqBPgM54sdRFxpe29nX.jpg",
+						"original_name": "ポポロクロイス物語",
+						"first_air_date": "1998-10-04",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 225920,
+						"name": "Yonimo Kimyou na Monogatari Tokubetsuhen",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [9648, 10765],
+						"popularity": 30.8066,
+						"vote_count": 2,
+						"poster_path": "/kUMRtW0Db4K5LrjU8JhXwgCNqju.jpg",
+						"vote_average": 9.5,
+						"backdrop_path": "/1XWKaMFq7xGC6SRYIJUkwf0Gp25.jpg",
+						"original_name": "世にも奇妙な物語特別編",
+						"first_air_date": "1990-10-04",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 117959,
+						"name": "Kunitori Monogatari",
+						"adult": false,
+						"overview": "Set in Japan several centuries back. It depicts the struggles of three historical warriors, Dosan Saito, Nobunaga Oda and Mitsuhide Akechi.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 6.2834,
+						"vote_count": 0,
+						"poster_path": "/1tiHPghujFUTrz63t9S9por24bl.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/6oQrxarMREd4z5v72enEaMk9Blm.jpg",
+						"original_name": "国盗り物語",
+						"first_air_date": "1973-01-07",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 23021,
+						"name": "Kojika Monogatari",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [16, 18],
+						"popularity": 9.1612,
+						"vote_count": 1,
+						"poster_path": "/1S8ATfw5iJh1ZVjWiA1BBxfZDJj.jpg",
+						"vote_average": 9,
+						"backdrop_path": "/ue0wnuGyl1W3ydYAZRuXWuk1qu6.jpg",
+						"original_name": "子鹿物語 THE YEARLING",
+						"first_air_date": "1983-11-08",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 22974,
+						"name": "Umi Monogatari",
+						"adult": false,
+						"overview": "Marin and Urin are sea folk, people who live in a peaceful underwater world surrounded by bright fish and colorful coral. But one day, a beautiful ring falls from the \"sky\" - that dangerous place above the water - and the two girls decide to return the lovely trinket to its owner.\n\nWhile the surface world holds amazing wonders for the pair, it also hides a great darkness... a darkness that Urin accidentally unleashes when she opens a stone box at a local shrine. Now it's up to Marin, Urin, and their new friend Kanon to set things right again before that darkness swallows the entire world!",
+						"softcore": false,
+						"genre_ids": [16, 18],
+						"popularity": 6.0052,
+						"vote_count": 7,
+						"poster_path": "/77c1TnNUMCGnHz9ZIApCmgoeQ3R.jpg",
+						"vote_average": 4.6,
+						"backdrop_path": "/iVqDHEb5wkIl86lUgU9SB7Zg8KK.jpg",
+						"original_name": "うみものがたり ～あなたがいてくれたコト～",
+						"first_air_date": "2009-06-25",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 84765,
+						"name": "Zatoichi Monogatari",
+						"adult": false,
+						"overview": "Blind masseur Zatôichi travels from town to town gambling, drinking, and fighting off the local gangs.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 5.2847,
+						"vote_count": 5,
+						"poster_path": "/3arVXKAQRVTUpV8rpI4RHFoHSTC.jpg",
+						"vote_average": 8.2,
+						"backdrop_path": "/5cHNjixcHXjlff0cbdHOvhxsY7I.jpg",
+						"original_name": "座頭市物語",
+						"first_air_date": "1974-10-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 204833,
+						"name": "Manga Hajimete Monogatari",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [16, 10762],
+						"popularity": 7.8329,
+						"vote_count": 0,
+						"poster_path": "/unGVjYNOaYXOXwAa9O3ibc2x8pZ.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/zO1dI6ZW1KRIsi4gmwkhXRQWLOU.jpg",
+						"original_name": "まんがはじめて物語",
+						"first_air_date": "1978-05-06",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 92365,
+						"name": "Onmyouji: Heian Monogatari",
+						"adult": false,
+						"overview": "",
+						"softcore": false,
+						"genre_ids": [16, 35],
+						"popularity": 9.2475,
+						"vote_count": 1,
+						"poster_path": "/s7sEbiKWXvoUCpoQBV1EHecLhPf.jpg",
+						"vote_average": 10,
+						"backdrop_path": "/kZRZPsvFwYVHgYKzQWi18kOF4G.jpg",
+						"original_name": "陰陽師・平安物語",
+						"first_air_date": "2018-07-04",
+						"origin_country": ["CN", "JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 44577,
+						"name": "Showa Monogatari",
+						"adult": false,
+						"overview": "Shōwa Monogatari is a 2011 Japanese anime film and television series about the Yamazaki family, who live in Tokyo during Shōwa 39, the same year Tokyo hosts the 1964 Summer Olympics. The film, directed by Tadahiro Murakami, was released in Japan on January 29, 2011. Hiroshi Kugimiya directed the 13-episode television series, which had its broadcast run between April and July 2011",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 10751],
+						"popularity": 4.6518,
+						"vote_count": 4,
+						"poster_path": "/7T6XT9536fSeWJrVThamLwJOymq.jpg",
+						"vote_average": 8.5,
+						"backdrop_path": "/3zbDX1niS6sRvcLYCqRVDKgPenz.jpg",
+						"original_name": "テレビまんが 昭和物語",
+						"first_air_date": "2011-04-04",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 44376,
+						"name": "Andersen Monogatari",
+						"adult": false,
+						"overview": "Hans Christian Andersen Stories is a Japanese anime series by Mushi Productions and aired on Fuji TV from January 3 to December 21, 1971.",
+						"softcore": false,
+						"genre_ids": [16, 10762],
+						"popularity": 3.7986,
+						"vote_count": 2,
+						"poster_path": "/1dD1pFbuRrRwE8VvunOdoQULL7N.jpg",
+						"vote_average": 6.5,
+						"backdrop_path": "/fKezHDdH7HTAEJsKNxLrJgu77ng.jpg",
+						"original_name": "アンデルセン物語",
+						"first_air_date": "1971-01-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 117999,
+						"name": "Shin Heike Monogatari",
+						"adult": false,
+						"overview": "Set at the end of the 12th century when several wars for control of Japan disrupted a long era of peace, this tale of \"Heike\" (another name for the Taira clan) focuses on Taira Kiyomori who fights alongside other members of his clan to at first successfully overcome the Minamoto clan and their bid for power. Battles and intrigue abound, as the puppet Emperor and Buddhist monks take sides in the power struggle. At issue is Kiyomori's parentage, not an unusual problem for the nobility in that era where clandestine liaisons among courtiers and the upper classes were common.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 5.5723,
+						"vote_count": 3,
+						"poster_path": "/cQ3vTkhQUEosz0zrV2ZxH7JFR9q.jpg",
+						"vote_average": 7.3,
+						"backdrop_path": "/sPGl9RqQh7fpxUvV64hj64beWQ9.jpg",
+						"original_name": "新・平家物語",
+						"first_air_date": "1972-01-02",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 37538,
+						"name": "Wellber no Monogatari: Sisters of Wellber",
+						"adult": false,
+						"overview": "The loquacious sentient tank, Gyrano De Borgerac seems very busy being pampered by solicitous maids. The fairy Sherri, too, is enjoying the luxury of the court's life. And for Rita, time has come to face her duties as princess of Wellber. But Tina is resolute: she wants to continue her search for the Man with a tattoo of Bee the Death, the devil who exterminated her family. An unspeakable feeling of sadness fills the hearts of the two girls, who shared so much and are now about to say farewell to each other.\n\nAnd then, on the day of Tina's departure...\n\nA new journey that will take Tina walking through the still sore scars of the Great War that wiped out entire cities ten years before, until the unsuspected truth about her nemesis!",
+						"softcore": false,
+						"genre_ids": [16, 10765, 10759],
+						"popularity": 7.8514,
+						"vote_count": 0,
+						"poster_path": "/lAsqukqS4TpnOePSNQKiYmrTLKg.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/lfbg6801YmE8uRfieDvKoH3DOGy.jpg",
+						"original_name": "ウエルベールの物語 〜Sisters of Wellber〜",
+						"first_air_date": "2007-04-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 273173,
+						"name": "Koshodo Monogatari",
+						"adult": false,
+						"overview": "Set in a certain old bookstore, when the girls who visit there start reading a mystery novel recommended by the store owner, they travel back in time to the world of the novel, where the brutality unfolds. It also depicts the growth of a girl who finds answers to the troubles and conflicts that girls have in the real world by interacting with people they meet in the world of novels that have slipped back in time.",
+						"softcore": false,
+						"genre_ids": [9648, 18],
+						"popularity": 1.5453,
+						"vote_count": 0,
+						"poster_path": "/nhtsILpTP8oFoBj71qKdNHVGvx7.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/gdfmPb6iNJ9iC3w0ifX9iRSqMgL.jpg",
+						"original_name": "古書堂ものがたり",
+						"first_air_date": "2023-04-12",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 112218,
+						"name": "Natsu Taiken Monogatari",
+						"adult": false,
+						"overview": "Four high school girls from troubled homes are living in a high school dormitory, and decide to go on a summer vacation trip, with some of their teachers. In part, the girls want to meet boys, and possibly to have their first \"personal experience\" .",
+						"softcore": false,
+						"genre_ids": [18, 35],
+						"popularity": 2.3193,
+						"vote_count": 1,
+						"poster_path": "/rKG5WnzwElt4qvh7CeGLUquaw5k.jpg",
+						"vote_average": 3,
+						"backdrop_path": "/1cfCYwcVCI4eVCi9wkmFuWiAkrq.jpg",
+						"original_name": "夏・体験物語",
+						"first_air_date": "1985-08-20",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 135849,
+						"name": "Tokyo Daigaku Monogatari",
+						"adult": false,
+						"overview": "Naoki is smart, handsome and athletic. His friend Sano takes him to watch a tennis game where he falls in love at first sight with Haruka. He asks her out. They get to know each other while trying to balance their studies.",
+						"softcore": false,
+						"genre_ids": [35, 18],
+						"popularity": 2.2944,
+						"vote_count": 1,
+						"poster_path": "/yUC33JocA8Ox2FU8GAScfjkVr9n.jpg",
+						"vote_average": 6,
+						"backdrop_path": null,
+						"original_name": "東京大学物語",
+						"first_air_date": "1994-10-10",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 109478,
+						"name": "Danjoshichi Natsu Monogatari",
+						"adult": false,
+						"overview": "He brought together the Akashi family and Shinobu Otake, who later married (Imalu was born, then divorced). The fun of the interaction between Sanma and Otake became a hot topic, with a peak viewership of over 31%, and a sequel \"The Story of Seven Men and Women in Autumn\" was produced. It is also said to be the originator of trendy drama.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 2.5128,
+						"vote_count": 1,
+						"poster_path": "/2j11SIYSKYqUb9Z9wrsSiNIt8i.jpg",
+						"vote_average": 9,
+						"backdrop_path": "/p2of6CboU9gFjj4xfPq0GE0HqTy.jpg",
+						"original_name": "男女7人夏物語",
+						"first_air_date": "1986-07-25",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 111303,
+						"name": "Junretsu Monogatari",
+						"adult": false,
+						"overview": "A documentary drama featuring Junretsu.",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 2.2494,
+						"vote_count": 0,
+						"poster_path": "/45qbPn3ubMoBK6eZHjmf0vFR5p0.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/59XDMPidqsStacMs0DsH7DJ18nj.jpg",
+						"original_name": "純烈ものがたり",
+						"first_air_date": "2021-07-01",
+						"origin_country": [],
+						"original_language": "ja"
+					},
+					{
+						"id": 273700,
+						"name": "Heisei Monogatari",
+						"adult": false,
+						"overview": "A story spanning 30 years, following a man born in the first year of the Heisei era, and his life until the era's end, intertwined with the music that defined the times.\n\nThe protagonist is a plain man named Heisei (Hiranari). He grows up in a family of four in the countryside, with a hobby of playing guitar. He moves to Tokyo for university, aiming to become a band musician, but life doesn't go so smoothly. His love life also gets complicated, torn between Yui, a childhood friend from his hometown, and Tsumugi, a woman he meets in Tokyo. As his band activities take an unexpected turn, Heisei is faced with life-altering decisions.\n\nNow, at 30 years old, what reality lies before Heisei (Hiranari)? And what kind of answer will he come up with for himself?",
+						"softcore": false,
+						"genre_ids": [18],
+						"popularity": 0.9775,
+						"vote_count": 0,
+						"poster_path": "/tf4yv63uwv2CqmRCxl2wxJmL75I.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "平成物語",
+						"first_air_date": "2019-03-18",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 207818,
+						"name": "Ultraman Kids no Kotowaza Monogatari",
+						"adult": false,
+						"overview": "Educational anime based on the popular Ultraman giant fighters.",
+						"softcore": false,
+						"genre_ids": [16, 10762],
+						"popularity": 3.8414,
+						"vote_count": 0,
+						"poster_path": "/g6nmJCrngBFLlRTlSRotnA0SngS.jpg",
+						"vote_average": 0,
+						"backdrop_path": "/hNWc7IipSwmse8zFDQ0TjFGUgZi.jpg",
+						"original_name": "ウルトラマンキッズのことわざ物語",
+						"first_air_date": "1986-04-16",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 6,
+				"total_results": 120
+			},
+			"Owarimonogatari": {
+				"page": 1,
+				"results": [
+					{
+						"id": 336855,
+						"name": "Owarimonogatari",
+						"adult": false,
+						"overview": "The end of the saga of Araragi Koyomi. What are they fighting against? What will happen to them? And who- or what- is the darkness?",
+						"softcore": false,
+						"genre_ids": [],
+						"popularity": 0.8297,
+						"vote_count": 0,
+						"poster_path": "/hgYJjdb15CsFOS5HzF3UYzK9q8q.jpg",
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "Owarimonogatari",
+						"first_air_date": "",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					},
+					{
+						"id": 46195,
+						"name": "Monogatari",
+						"adult": false,
+						"overview": "Koyomi Araragi, a high school student, finds himself constantly encountering girls afflicted by supernatural \"oddities.\" He dedicates himself to helping them, often with the aid of the eccentric specialist Meme Oshino. Each arc talks about a different girl's unique struggle and the mysterious cause of their affliction. The series explores themes of adolescence, personal growth, and the complexities of human relationships. It's known for its witty dialogue, stylistic animation, and unique narrative structure.",
+						"softcore": false,
+						"genre_ids": [16, 35, 18, 9648],
+						"popularity": 89.8104,
+						"vote_count": 536,
+						"poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+						"vote_average": 8.063,
+						"backdrop_path": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+						"original_name": "化物語",
+						"first_air_date": "2009-07-03",
+						"origin_country": ["JP"],
+						"original_language": "ja"
+					}
+				],
+				"total_pages": 1,
+				"total_results": 2
 			}
 		},
 		"imdbSeries": {},
@@ -22713,6 +24244,191 @@
 					"tvdb_id": 432050,
 					"season": { "tvdb": 3, "tmdb": 1 },
 					"episode_offset": { "tmdb": 24 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 6327,
+					"anilist_id": 5081,
+					"animecountdown_id": 45006,
+					"animenewsnetwork_id": 10196,
+					"anime-planet_id": "bakemonogatari",
+					"anisearch_id": 5027,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 3919,
+					"livechart_id": 3241,
+					"mal_id": 5081,
+					"simkl_id": 45006,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 8658,
+					"anilist_id": 11597,
+					"animecountdown_id": 41084,
+					"animenewsnetwork_id": 13556,
+					"anime-planet_id": "nisemonogatari",
+					"anisearch_id": 7306,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 6546,
+					"livechart_id": 1156,
+					"mal_id": 11597,
+					"simkl_id": 41084,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 9183,
+					"anilist_id": 17074,
+					"animecountdown_id": 38649,
+					"animenewsnetwork_id": 15054,
+					"anime-planet_id": "monogatari-series-second-season",
+					"anisearch_id": 7796,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 7573,
+					"livechart_id": 25,
+					"mal_id": 17074,
+					"simkl_id": 38649,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 9453,
+					"anilist_id": 15689,
+					"animecountdown_id": 39702,
+					"animenewsnetwork_id": 14954,
+					"anime-planet_id": "nekomonogatari-black",
+					"anisearch_id": 8117,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 7294,
+					"livechart_id": 2791,
+					"mal_id": 15689,
+					"simkl_id": 39702,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 10046,
+					"anilist_id": 20593,
+					"animecountdown_id": 46134,
+					"animenewsnetwork_id": 15973,
+					"anime-planet_id": "hanamonogatari",
+					"anisearch_id": 9095,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 8032,
+					"livechart_id": 248,
+					"mal_id": 21855,
+					"simkl_id": 46134,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 10891,
+					"anilist_id": 20918,
+					"animecountdown_id": 428592,
+					"animenewsnetwork_id": 16342,
+					"anime-planet_id": "tsukimonogatari",
+					"anisearch_id": 9932,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 9961,
+					"livechart_id": 1269,
+					"mal_id": 28025,
+					"simkl_id": 428592,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11350,
+					"anilist_id": 21262,
+					"animecountdown_id": 507964,
+					"animenewsnetwork_id": 17645,
+					"anime-planet_id": "owarimonogatari",
+					"anisearch_id": 10536,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 11182,
+					"livechart_id": 1682,
+					"mal_id": 31181,
+					"simkl_id": 507964,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 4, "tmdb": 4 }
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 11827,
+					"anilist_id": 21520,
+					"animecountdown_id": 543142,
+					"animenewsnetwork_id": 17938,
+					"anime-planet_id": "koyomimonogatari",
+					"anisearch_id": 11060,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 11613,
+					"livechart_id": 1952,
+					"mal_id": 32268,
+					"simkl_id": 543142,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 20, "tmdb": 20 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 13033,
+					"anilist_id": 21745,
+					"animecountdown_id": 671791,
+					"animenewsnetwork_id": 19397,
+					"anime-planet_id": "owarimonogatari-ii",
+					"anisearch_id": 12343,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 13268,
+					"livechart_id": 2133,
+					"mal_id": 35247,
+					"simkl_id": 671791,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 5, "tmdb": 5 }
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 13691,
+					"animecountdown_id": 749711,
+					"anime-planet_id": "zoku-owarimonogatari",
+					"anisearch_id": 13149,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 14129,
+					"livechart_id": 3026,
+					"simkl_id": 749711,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 18424,
+					"anilist_id": 173533,
+					"animecountdown_id": 2352394,
+					"animenewsnetwork_id": 31635,
+					"anime-planet_id": "monogatari-series-off-and-monster-season",
+					"anisearch_id": 19020,
+					"imdb_id": ["tt1480925"],
+					"kitsu_id": 48434,
+					"livechart_id": 12502,
+					"mal_id": 57864,
+					"simkl_id": 2352394,
+					"themoviedb_id": { "tv": 46195 },
+					"tvdb_id": 102261,
+					"season": { "tvdb": 6, "tmdb": 6 }
 				}
 			],
 			"titles": [
@@ -25235,6 +26951,256 @@
 						"100 Kanojo 3",
 						"The 100 Girlfriends Who Really, Really, Really, Really, Really Love You Season 3",
 						"hyakkano 3"
+					]
+				},
+				{
+					"anidbId": 6327,
+					"names": [
+						"Bakemonogatari",
+						"باكيمونوغاتاري",
+						"化物語",
+						"괴물 이야기",
+						"ปกรณัมของเหล่าภูต",
+						"Canavar Hikayeleri",
+						"바케모노가타리",
+						"化物语",
+						"bakemono",
+						"BMG",
+						"mng s1",
+						"Истории за Чудовището",
+						"Ghostory",
+						"باکمونوگاتاری",
+						"داستان از ما بهتران",
+						"Monstrų Istorijos",
+						"Истории монстров",
+						"Истории о Чудовищах",
+						"Монстрассказы",
+						"บาเกะโมโนกาตาริ",
+						"Бакемоноґатарі",
+						"Монстроповідання",
+						"Оповідання про монстрів",
+						"Потвороповідь",
+						"A Monster Story",
+						"Ghost Story",
+						"Monogatari",
+						"Monster Tale",
+						"Monstory",
+						"Phantom Stories"
+					]
+				},
+				{
+					"anidbId": 8658,
+					"names": [
+						"Nisemonogatari",
+						"Nisemonogatari (Histoires d`Imposture)",
+						"偽物語",
+						"니세모노가타리",
+						"伪物语",
+						"mng s2",
+						"NMG",
+						"Bogustory",
+						"Impostory",
+						"가짜 이야기",
+						"Истории подделок",
+						"Fake Tale",
+						"ปกรณัมของเทียม"
+					]
+				},
+				{
+					"anidbId": 9183,
+					"names": [
+						"Monogatari Series: Second Season",
+						"Monogatari Series Second Season",
+						"Monogatari Seconde Saison",
+						"物語シリーズ セカンドシーズン",
+						"物语系列 第二季",
+						"物語系列 第二季",
+						"mng s4",
+						"MSSS",
+						"Monogatari S2",
+						"Monogatari SS",
+						"Story Series: Second Season",
+						"傾物語",
+						"全物語",
+						"囮物語",
+						"恋物語",
+						"猫物語(白)",
+						"鬼物語",
+						"Kabukimonogatari",
+						"Koimonogatari",
+						"Nekomonogatari (Shiro)",
+						"Onimonogatari",
+						"Otorimonogatari",
+						"Zenmonogatari",
+						"Kabukimonogatari: Mayoi Jianshi",
+						"Monogatari Second Season",
+						"Monogatari Series: Saison 2",
+						"Nekomonogatari White",
+						"Nekomonogatari [White]",
+						"Nekomonogatari: Shiro",
+						"Nekomonogatari: Shiro (White)",
+						"Onimonogatari, Koimonogatari",
+						"〈物語〉シリーズ セカンドシーズン",
+						"＜物語＞シリーズ セカンドシーズン"
+					]
+				},
+				{
+					"anidbId": 9453,
+					"names": [
+						"Nekomonogatari (Kuro): Tsubasa Family",
+						"Nekomonogatari (Black): Tsubasa Family",
+						"Nekomonogatari Noir",
+						"猫物語(黒) つばさファミリー",
+						"네코모노가타리",
+						"猫物语(黑)",
+						"mng s3",
+						"nkmg",
+						"nmgk",
+						"Cat Story (Black)",
+						"Nekomonogatari (Kuro)",
+						"Nekomonogatari Black: Tsubasa Family",
+						"고양이 이야기 (흑)",
+						"Tsubasa Family",
+						"Nekomonogatari: Kuro",
+						"Nekomonogatari (Black)",
+						"Nekomonogatari Black",
+						"Nekomonogatari: Black",
+						"猫物語 黒",
+						"猫物語(黒)",
+						"猫物語（黒）"
+					]
+				},
+				{
+					"anidbId": 10046,
+					"names": [
+						"Hanamonogatari: Suruga Devil",
+						"花物語 するがデビル",
+						"花物语",
+						"Hanamonogatari",
+						"HMG",
+						"mng s5",
+						"Monogatari Series: Second Season +α",
+						"Hanamonogatari: El demonio de Suruga",
+						"Monogatari Series Second Season +α",
+						"Monogatari Series: Second Season +Alpha",
+						"Monogatari Series: Second Season plus Alpha",
+						"История цветов",
+						"ปกรณัมแห่งบุปผา",
+						"花物語",
+						"이야기"
+					]
+				},
+				{
+					"anidbId": 10891,
+					"names": [
+						"Tsukimonogatari: Yotsugi Doll",
+						"憑物語 よつぎドール",
+						"凭物语",
+						"憑物語",
+						"mng s6",
+						"tmgyd",
+						"Tsukimonogatari",
+						"Monogatari Final Season",
+						"Possession Tale",
+						"Tsukimonogatari: La muñeca Yotsugi"
+					]
+				},
+				{
+					"anidbId": 11350,
+					"names": [
+						"Owarimonogatari",
+						"終物語",
+						"终物语",
+						"mng s7",
+						"OMG",
+						"Край на историята",
+						"Endstory",
+						"Истории Последствий",
+						"End Story",
+						"End Tale"
+					]
+				},
+				{
+					"anidbId": 11827,
+					"names": [
+						"Koyomimonogatari",
+						"暦物語",
+						"历物语",
+						"曆物語",
+						"mng ova",
+						"Calendar Story",
+						"コヨミモノガタリ",
+						"Calendar Tale"
+					]
+				},
+				{
+					"anidbId": 13033,
+					"names": [
+						"Owarimonogatari (2017)",
+						"Owarimonogatari Second Season",
+						"終物語 (2017)",
+						"终物语 (2017)",
+						"終物語 第二季",
+						"mng s8",
+						"Owarimonogatari S2",
+						"omg2",
+						"终物语 下",
+						"Owarimonogatari 2nd Season",
+						"End Story 2nd Season",
+						"End Tale",
+						"OWARIMONOGATARI Second Season",
+						"Owarimonogatari (Ge)",
+						"Owarimonogatari 2",
+						"Owarimonogatari : Saison 2",
+						"Owarimonogatari II",
+						"Owarimonogatari Saison 2",
+						"Owarimonogatari: Staffel 2",
+						"終物語",
+						"終物語 （2017）",
+						"終物語（下）",
+						"终物语"
+					]
+				},
+				{
+					"anidbId": 13691,
+					"names": [
+						"Zoku Owarimonogatari",
+						"続・終物語",
+						"续·终物语",
+						"續‧終物語",
+						"mng s9",
+						"Следващ край на историята",
+						"Koyomi Reverse",
+						"Next endstory",
+						"続終物語",
+						"Zokuowarimonogatari",
+						"Continued End Story"
+					]
+				},
+				{
+					"anidbId": 18424,
+					"names": [
+						"Monogatari Series: Off & Monster Season",
+						"〈物語〉シリーズ オフ＆モンスターシーズン",
+						"Amarimonogatari Ougimonogatari",
+						"MONOGATARI Series: OFF & MONSTER Season",
+						"Monogatari Series - Off & Monster Season",
+						"Monogatari Series - Off and Monster Season",
+						"Monogatari Series : Off & Monster Season",
+						"Monogatari: O&MS",
+						"Monogatari: OMS",
+						"Monogatari: Off & Monster",
+						"Musubimonogatari",
+						"Nademonogatari",
+						"Orokamonogatari",
+						"Shinobumonogatari",
+						"Shinomonogatari",
+						"Wazamonogatari",
+						"Yoimonogatari",
+						"mng oms",
+						"〈物語〉シリーズ オフ&モンスターシーズン",
+						"〈物語〉シリーズオフ&モンスターシーズン",
+						"物语系列 第外季&第怪季"
 					]
 				}
 			]
@@ -28841,6 +30807,407 @@
 						"episodeEnd": null,
 						"how": "tmdb",
 						"tmdbEpisodeId": 6367058
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[smol] Owarimonogatari (BD 1080p HEVC Opus)",
+				"hash": null,
+				"imdbId": "tt5274556",
+				"files": [
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCED 01 - Sayonara no Yukue (BD 1080p HEVC Opus) [CB73E119].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCED 02 - Sayonara no Yukue (BD 1080p HEVC Opus) [495AE718].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 01 - decent black (BD 1080p HEVC Opus) [968C5EDA].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 02 - mathemagics (BD 1080p HEVC Opus) [426CAB16].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 03 - Yuudachi Houteishiki (BD 1080p HEVC Opus) [BF37D924].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 04 - mein schatz (BD 1080p HEVC Opus) [7A9A5853].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 01 - SHIORI (BD 1080p HEVC Opus) [AFB58653].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 02 - SHIORI (BD 1080p HEVC Opus) [7958EC69].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 03 - SHIORI (BD 1080p HEVC Opus) [8F492956].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 01 - terminal terminal (BD 1080p HEVC Opus) [6C2BE22D].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 02 - dreamy date drive (BD 1080p HEVC Opus) [27DF285F].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 03 - dark cherry mystery (BD 1080p HEVC Opus) [9D7B50BA].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[smol] Monogatari - S07E01 - Owarimonogatari (BD 1080p HEVC Opus) [EFB6BDFE].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E02 - Owarimonogatari (BD 1080p HEVC Opus) [977BD0EF].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E03 - Owarimonogatari (BD 1080p HEVC Opus) [4E37B919].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E04 - Owarimonogatari (BD 1080p HEVC Opus) [E00FDDC7].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E05 - Owarimonogatari (BD 1080p HEVC Opus) [A89E97DA].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E06 - Owarimonogatari (BD 1080p HEVC Opus) [61394B75].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E07 - Owarimonogatari (BD 1080p HEVC Opus) [552114D0].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E08 - Owarimonogatari (BD 1080p HEVC Opus) [DAE4FDFA].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E09 - Owarimonogatari (BD 1080p HEVC Opus) [FEB01A0C].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E10 - Owarimonogatari (BD 1080p HEVC Opus) [74D4578B].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E11 - Owarimonogatari (BD 1080p HEVC Opus) [EBCB3D41].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E12 - Owarimonogatari (BD 1080p HEVC Opus) [E09AE54B].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E13 - Owarimonogatari (BD 1080p HEVC Opus) [19228B73].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E14 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [EBAB5DDD].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E15 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [AE8CEEAB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E16 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [4F58D72A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E17 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [9E65997A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E18 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [F4359815].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E19 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [2D4EE6A9].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[smol] Monogatari - S07E20 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [57147F0C].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1480925",
+				"tmdbId": 46195,
+				"files": [
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCED 01 - Sayonara no Yukue (BD 1080p HEVC Opus) [CB73E119].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCED 02 - Sayonara no Yukue (BD 1080p HEVC Opus) [495AE718].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 01 - decent black (BD 1080p HEVC Opus) [968C5EDA].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 02 - mathemagics (BD 1080p HEVC Opus) [426CAB16].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 03 - Yuudachi Houteishiki (BD 1080p HEVC Opus) [BF37D924].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari - NCOP 04 - mein schatz (BD 1080p HEVC Opus) [7A9A5853].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 01 - SHIORI (BD 1080p HEVC Opus) [AFB58653].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 02 - SHIORI (BD 1080p HEVC Opus) [7958EC69].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCED 03 - SHIORI (BD 1080p HEVC Opus) [8F492956].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 01 - terminal terminal (BD 1080p HEVC Opus) [6C2BE22D].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 02 - dreamy date drive (BD 1080p HEVC Opus) [27DF285F].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07 Owarimonogatari Second Season (Ge) - NCOP 03 - dark cherry mystery (BD 1080p HEVC Opus) [9D7B50BA].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E01 - Owarimonogatari (BD 1080p HEVC Opus) [EFB6BDFE].mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112711
+					},
+					{
+						"path": "[smol] Monogatari - S07E02 - Owarimonogatari (BD 1080p HEVC Opus) [977BD0EF].mkv",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112978
+					},
+					{
+						"path": "[smol] Monogatari - S07E03 - Owarimonogatari (BD 1080p HEVC Opus) [4E37B919].mkv",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112979
+					},
+					{
+						"path": "[smol] Monogatari - S07E04 - Owarimonogatari (BD 1080p HEVC Opus) [E00FDDC7].mkv",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112980
+					},
+					{
+						"path": "[smol] Monogatari - S07E05 - Owarimonogatari (BD 1080p HEVC Opus) [A89E97DA].mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112981
+					},
+					{
+						"path": "[smol] Monogatari - S07E06 - Owarimonogatari (BD 1080p HEVC Opus) [61394B75].mkv",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112982
+					},
+					{
+						"path": "[smol] Monogatari - S07E07 - Owarimonogatari (BD 1080p HEVC Opus) [552114D0].mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112983
+					},
+					{
+						"path": "[smol] Monogatari - S07E08 - Owarimonogatari (BD 1080p HEVC Opus) [DAE4FDFA].mkv",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112984
+					},
+					{
+						"path": "[smol] Monogatari - S07E09 - Owarimonogatari (BD 1080p HEVC Opus) [FEB01A0C].mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112985
+					},
+					{
+						"path": "[smol] Monogatari - S07E10 - Owarimonogatari (BD 1080p HEVC Opus) [74D4578B].mkv",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112986
+					},
+					{
+						"path": "[smol] Monogatari - S07E11 - Owarimonogatari (BD 1080p HEVC Opus) [EBCB3D41].mkv",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112987
+					},
+					{
+						"path": "[smol] Monogatari - S07E12 - Owarimonogatari (BD 1080p HEVC Opus) [E09AE54B].mkv",
+						"season": 4,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1112988
+					},
+					{
+						"path": "[smol] Monogatari - S07E13 - Owarimonogatari (BD 1080p HEVC Opus) [19228B73].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E14 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [EBAB5DDD].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E15 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [AE8CEEAB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E16 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [4F58D72A].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E17 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [9E65997A].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E18 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [F4359815].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E19 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [2D4EE6A9].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[smol] Monogatari - S07E20 - Owarimonogatari Second Season (Ge) (BD 1080p HEVC Opus) [57147F0C].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
 					}
 				]
 			}
