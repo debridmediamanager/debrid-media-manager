@@ -7,6 +7,8 @@ vi.mock('@geektr/acme-dns01', () => ({
 		return { auto };
 	}),
 	directory: { zerossl: { production: 'https://acme.zerossl.com/v2/DV90' } },
+	// The package's own default, which aborts any single request after 30 s.
+	settings: { timeout: 30_000, retryMaxAttempts: 5, retryDefaultDelay: 5 },
 	crypto: {
 		createPrivateEcdsaKey: vi.fn(async () => Buffer.from('KEY')),
 		createCsr: vi.fn(async () => [Buffer.from('KEY'), Buffer.from('CSR')]),
@@ -120,5 +122,13 @@ describe('issueRexDirectCert', () => {
 		expect(createPublicKey(passed).export({ format: 'der', type: 'spki' })).toEqual(
 			createPublicKey(configured).export({ format: 'der', type: 'spki' })
 		);
+	});
+
+	// acme-client sent through axios with no timeout. Its replacement aborts a ZeroSSL
+	// request after 30 s and does not retry an abort, failing the whole ~400 s issuance.
+	it('gives a single ACME request as long as acme-client did', async () => {
+		const acme = await import('@geektr/acme-dns01');
+		await import('@/utils/rexDirectAcme');
+		expect(acme.settings.timeout).toBeGreaterThanOrEqual(120_000);
 	});
 });

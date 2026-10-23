@@ -3,6 +3,10 @@ import { Resolver, promises as dns } from 'dns';
 import { createPrivateKey } from 'node:crypto';
 import { createRexDirectTxt, deleteRexDirectRecord } from './rexDirectDns';
 
+// The client aborts any request after 30 s and never retries an abort; acme-client,
+// which this replaced, waited on ZeroSSL without a limit.
+acme.settings.timeout = 120_000;
+
 /**
  * A certificate for one rex server's own `<hash>.rex-direct…` name, from ZeroSSL
  * over ACME DNS-01 (`src/pages/api/rex-direct/register`). Each server gets its own
