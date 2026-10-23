@@ -35,4 +35,14 @@ describe('dependency pins', () => {
 			expect(locked, entry).toContain(version);
 		}
 	});
+
+	// @geektr/acme-dns01 0.3.0 was read in full on 2026-10-23: one fetch, aimed at the
+	// directory it is given; no environment reads, no exec, no install script. Its
+	// rex-direct issuance is asserted to contact only the CA. A different tarball
+	// needs the same reading before this hash changes.
+	it('installs the audited ACME client tarball', () => {
+		expect(lock.packages['node_modules/@geektr/acme-dns01'].integrity).toBe(
+			'sha512-YQMidzfBspmjxPLH5aazQAhkdSOz7lcBsx66QJ+ZpVER2ZHXKEIrcFJBMSTsRmhFsjGTcaqxQ0nNO2MuqjXNOg=='
+		);
+	});
 });

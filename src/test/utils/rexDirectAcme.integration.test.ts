@@ -311,7 +311,18 @@ describe.skipIf(!runtimeAvailable)('RexDirect real Pebble DNS-01 issuance (Integ
 		});
 		const createOrder = vi.spyOn(acme.Client.prototype, 'createOrder');
 		const createAccount = vi.spyOn(acme.Client.prototype, 'createAccount');
-		const issued = await issueRexDirectCert(HOSTNAME);
+		// The client holds the ZeroSSL account key and EAB HMAC, and comes from a
+		// one-maintainer package: it may talk to the CA it was given and nothing else.
+		const realFetch = globalThis.fetch;
+		const contacted = new Set<string>();
+		const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
+			contacted.add(new URL(input instanceof Request ? input.url : String(input)).host);
+			return realFetch(input, init);
+		});
+		const issued = await issueRexDirectCert(HOSTNAME).finally(() => fetchSpy.mockRestore());
+		// challtestsrv's management API stands in for DMM's Cloudflare writes.
+		contacted.delete(new URL(fixture.management).host);
+		expect([...contacted]).toEqual([new URL(DIRECTORY).host]);
 		expect(HOSTNAME).toHaveLength(66);
 		expect(Object.keys(issued).sort()).toEqual(['certificate', 'expiresAt', 'privateKey']);
 		expect(issued.privateKey).toMatch(/^-----BEGIN (?:EC )?PRIVATE KEY-----/);
