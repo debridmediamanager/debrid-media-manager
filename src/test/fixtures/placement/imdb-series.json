@@ -17369,239 +17369,239 @@
 			},
 			"expect": {
 				"kind": "tv",
-				"imdbId": "tt2150751",
-				"tmdbId": 45247,
+				"imdbId": "tt10710138",
+				"tmdbId": null,
 				"files": [
 					{
 						"path": "Dragon Ball Z Abridged - S03E01 - There's Something About Maron SDTV.mp4",
 						"season": 3,
 						"episode": 1,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E02 - Battlefield Ee-arth SDTV.mp4",
 						"season": 3,
 						"episode": 2,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E03 - Cold Cuts SDTV.mp4",
 						"season": 3,
 						"episode": 3,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E04 - News From Future Past SDTV.mp4",
 						"season": 3,
 						"episode": 4,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E05 - The Island of Dr. Gero SDTV.mp4",
 						"season": 3,
 						"episode": 5,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E06 - Super Saiyan Swagger SDTV.mp4",
 						"season": 3,
 						"episode": 6,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E07 - Catch Me If You Can-droid SDTV.mp4",
 						"season": 3,
 						"episode": 7,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E08 - Dr. Gero or - How I Learned to Stop Worrying and Love the Androids SDTV.mp4",
 						"season": 3,
 						"episode": 8,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E09 - Blood, Sweat, and Gears SDTV.mp4",
 						"season": 3,
 						"episode": 9,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E10 - 16, 17, 18 Things I Hate About You SDTV.mp4",
 						"season": 3,
 						"episode": 10,
 						"episodeEnd": 16,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E11 - The Trouble with Time Travel SDTV.mp4",
 						"season": 3,
 						"episode": 11,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E12 - Fear and Loathing in Ginger Town SDTV.mp4",
 						"season": 3,
 						"episode": 12,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E13 - Cell Service SDTV.mp4",
 						"season": 3,
 						"episode": 13,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E14 - Cell Reception SDTV.mp4",
 						"season": 3,
 						"episode": 14,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E15 - Hyperbolic Plot Device SDTV.mp4",
 						"season": 3,
 						"episode": 15,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E16 - Percussive Maintenance SDTV.mp4",
 						"season": 3,
 						"episode": 16,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E17 - Family Reunion SDTV.mp4",
 						"season": 3,
 						"episode": 17,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E18 - Advanced Geometry SDTV.mp4",
 						"season": 3,
 						"episode": 18,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E19 - Group Therapy SDTV.mp4",
 						"season": 3,
 						"episode": 19,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E20 - A Raging Semi SDTV.mp4",
 						"season": 3,
 						"episode": 20,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E21 - The “PERFECT” Guy SDTV.mp4",
 						"season": 3,
 						"episode": 21,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E22 - Flashpoint SDTV.mp4",
 						"season": 3,
 						"episode": 22,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E23 - My Body is a Temple’O’Trunks SDTV.mp4",
 						"season": 3,
 						"episode": 23,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E24 - Tiles and Tribulations SDTV.mp4",
 						"season": 3,
 						"episode": 24,
 						"episodeEnd": null,
-						"how": "tmdb"
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E25 - It's Been A Year If It's Been A Day SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 25,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E26 - Deities, Devils, and Doing the Dirty SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 26,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E27 - Opening Serumonies SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 27,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E28 - Cell Mates SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 28,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E29 - The Hard Cell SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 29,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E30 - Cell-Out (Part 1 - Mitosis) SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 30,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E31 - Cell-Out (Part 2 - Apoptosis) SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 31,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E32 - Cell-Out (Part 3 - Necrosis) SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 32,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					},
 					{
 						"path": "Dragon Ball Z Abridged - S03E33 - Epilogue - Die, Robot SDTV.mp4",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 33,
 						"episodeEnd": null,
-						"how": null
+						"how": "imdb"
 					}
 				]
 			}

@@ -665,6 +665,13 @@ describe("a series TMDB cannot use, numbered on IMDb's own list (zurg on fun, 20
 		expect(series.files.every((f) => f.season === null)).toBe(true);
 	});
 
+	it("takes a file's name when the id sent is another show's episode", async () => {
+		// `Season 3` came with tt2741248, an episode of Chihayafuru, and landed on its S3E1-E24
+		const third = await placedHere('Season 3');
+		expect(third).toMatchObject({ imdbId: 'tt10710138', tmdbId: null });
+		expect(at(third, 'S03E25')).toEqual([3, 25, 'imdb']);
+	});
+
 	it("numbers a one-season series by its episodes' own numbers", async () => {
 		// the identifier reads Digimon Adventure 02 as TMDB's Digimon: Digital Monsters, whose
 		// season 1 is the 1999 series; `E03` had been placed there

@@ -285,10 +285,19 @@ async function secondLook(
 		(file) => fileNumbers(release.name, file.folder, file.path, single) !== null
 	);
 	const unnamed = placed.tmdbId === null;
+	// files placed by their numbers alone, while their titles name none of the episodes there, are
+	// not that show's: `Season 3` came with Chihayafuru's episode tt2741248, and Dragon Ball Z
+	// Abridged's `S03E01 - There's Something About Maron` landed on Chihayafuru's S3E1
+	const titled = numbered.filter((file) => {
+		const numbers = fileNumbers(release.name, file.folder, file.path, single);
+		return numbers && titleOf(file.path.split('/').pop() ?? file.path, numbers);
+	}).length;
+	const untitled = titled >= 2 && (titledFiles.get(placed) ?? 0) === 0;
 	if (
 		placed.skipped ||
 		(unnamed && placesFiles(placed)) ||
-		(!unnamed && (placed.kind !== 'tv' || !numbered.length || placesFiles(placed)))
+		(!unnamed &&
+			(placed.kind !== 'tv' || !numbered.length || (placesFiles(placed) && !untitled)))
 	) {
 		return placed;
 	}
