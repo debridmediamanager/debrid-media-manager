@@ -956,6 +956,44 @@ async function byName(
 	return anywhere ? [anywhere.season, anywhere.episode] : null;
 }
 
+// What names a special as one beside its title: `- OVA - Water Slide`, `DC Comics Special II`.
+const SPECIAL_WORDS = /^(?:ova|oad|ona|special|specials|sp|movie|film|the|a|an|episode|part)$/;
+
+/** A special's title as letters, the release's tags, the show's name and the special words left out. */
+function specialKey(text: string, shows: string[]): string {
+	const key = words(text.replace(LEADING_GROUPS, '').replace(BRACKETS, ' '))
+		.filter((word) => !TAGS.test(word) && !SPECIAL_WORDS.test(word))
+		.join('');
+	const show = shows.find((name) => name && key.length > name.length && key.startsWith(name));
+	return show ? key.slice(show.length) : key;
+}
+
+/**
+ * The special TMDB lists in season 0 under a file's own title, for a file that names no number:
+ * Teasing Master Takagi-san's `[KH] Teasing Master Takagi-san - OVA - Water Slide` is TMDB's
+ * S0E1 "Water Slide", Robot Chicken's `Robot Chicken DC Comics Special II Villains in Paradise`
+ * its S0E13 "DC Comics Special II: Villains in Paradise". Only one special titled so, and a title
+ * of six letters or more: `Clean Opening A` names no special.
+ */
+export async function specialOf(
+	show: PlacementShow,
+	release: string,
+	path: string
+): Promise<Placement | null> {
+	if (!show.seasons.some((row) => row.season === 0)) return null;
+	const shows = [...show.names, parseName(release).title]
+		.map((name) => specialKey(name, []))
+		.sort((a, b) => b.length - a.length);
+	const key = specialKey((path.split('/').pop() ?? path).replace(EXTENSION, ''), shows);
+	if (key.length < 6) return null;
+	const found = ((await show.episodes(0)) ?? []).filter(
+		(row) => !GENERIC.test(words(row.name).join(' ')) && specialKey(row.name, shows) === key
+	);
+	return found.length === 1
+		? { season: 0, episode: found[0].episode, episodeEnd: null, how: 'tmdb', titled: true }
+		: null;
+}
+
 /**
  * A release's placements with every file its title did not place taken off an episode a
  * file's title did: Friends' `S06E17.The.One.with.Unagi` is TMDB's S6E16, so the pack's

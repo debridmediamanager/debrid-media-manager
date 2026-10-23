@@ -727,9 +727,11 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 				fun1023.answers.anime.titles
 			),
 	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (fun1023.answers.identify as any)?.[name] ?? null);
 	const placedHere = async (name: string) => {
 		const c = fun1023.cases.find((c) => c.request.name.startsWith(name))!;
-		return (await place([c.request as PlaceRequest], Infinity, from)).releases[0];
+		return (await place([c.request as PlaceRequest], Infinity, from, ask)).releases[0];
 	};
 	const at = (release: Awaited<ReturnType<typeof placedHere>>, part: string) => {
 		const file = release.files.find((f) => f.path.includes(part))!;
@@ -737,7 +739,12 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 	};
 
 	it.each(fun1023.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
-		const { releases, complete } = await place([c.request as PlaceRequest], Infinity, from);
+		const { releases, complete } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			from,
+			ask
+		);
 		expect(complete).toBe(true);
 		expect(releases[0]).toEqual(c.expect);
 	});
@@ -748,5 +755,15 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 			17, 700,
 		]);
 		expect(at(pack, '0918 - It')).toEqual([21, 918]);
+	});
+	it("places a special by its own title on TMDB's season 0", async () => {
+		// `[KH] Teasing Master Takagi-san - OVA - Water Slide` is TMDB's S0E1 "Water Slide"
+		expect(at(await placedHere('[KH] Teasing Master Takagi-san'), 'Water Slide')).toEqual([
+			0, 1,
+		]);
+		const chicken = await placedHere('Robot Chicken (2005-2020)');
+		expect(at(chicken, 'Robot Chicken Star Wars II.mkv')).toEqual([0, 7]);
+		// TMDB's S0E4 is "Robot Chicken: Star Wars", no title the file has: no special
+		expect(at(chicken, 'Robot Chicken Star Wars I.mkv')).toEqual([null, null]);
 	});
 });

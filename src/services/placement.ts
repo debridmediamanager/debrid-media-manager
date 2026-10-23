@@ -25,6 +25,7 @@ import {
 	lookupAnime,
 	parseName,
 	placeFile,
+	specialOf,
 	titleOf,
 	yieldToTitles,
 	type AnimeIndex,
@@ -42,7 +43,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
  * ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.3';
+export const PLACEMENT_RULES = '2026-10-23.4';
 
 export interface PlaceRequest {
 	name: string;
@@ -646,7 +647,7 @@ async function placeFiles(
 		placed.push(
 			numbers[at]
 				? await placeFile(placement, anime, release.name, file.path, numbers[at]!, imdb)
-				: null
+				: await specialOf(placement, release.name, file.path)
 		);
 	}
 	const yielded = yieldToTitles(keepImdbOrder(numbers, placed));
@@ -662,6 +663,7 @@ async function placeFiles(
 		yielded.filter(
 			(found, at) =>
 				found?.titled &&
+				numbers[at] &&
 				(found.season !== (numbers[at]!.season ?? found.season) ||
 					found.episode !== numbers[at]!.episode)
 		).length *

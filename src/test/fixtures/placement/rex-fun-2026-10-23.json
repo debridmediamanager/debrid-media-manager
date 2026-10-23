@@ -5,6 +5,66 @@
 				"movie_results": [],
 				"tv_results": [{ "id": 37854 }],
 				"tv_episode_results": []
+			},
+			"tt0437745": {
+				"movie_results": [],
+				"tv_results": [{ "id": 709 }],
+				"tv_episode_results": []
+			},
+			"tt0063951": {
+				"movie_results": [],
+				"tv_results": [{ "id": 502 }],
+				"tv_episode_results": []
+			},
+			"tt0380136": {
+				"movie_results": [],
+				"tv_results": [{ "id": 1554 }],
+				"tv_episode_results": []
+			},
+			"tt0163929": {
+				"movie_results": [],
+				"tv_results": [{ "id": 10821 }],
+				"tv_episode_results": []
+			},
+			"tt7808344": {
+				"movie_results": [],
+				"tv_results": [{ "id": 75865 }],
+				"tv_episode_results": []
+			},
+			"tt0182576": {
+				"movie_results": [],
+				"tv_results": [{ "id": 1434 }],
+				"tv_episode_results": []
+			},
+			"tt0122353": {
+				"movie_results": [],
+				"tv_results": [{ "id": 544 }],
+				"tv_episode_results": []
+			},
+			"tt5626028": {
+				"movie_results": [],
+				"tv_results": [{ "id": 65930 }],
+				"tv_episode_results": []
+			},
+			"tt0852863": {
+				"movie_results": [],
+				"tv_results": [{ "id": 1877 }],
+				"tv_episode_results": []
+			},
+			"tt11547516": {
+				"movie_results": [],
+				"tv_results": [{ "id": 96420 }],
+				"tv_episode_results": []
+			},
+			"tt0320808": {
+				"movie_results": [],
+				"tv_results": [{ "id": 2129 }],
+				"tv_episode_results": []
+			},
+			"tt0112225": {
+				"movie_results": [],
+				"tv_results": [{ "id": 2152 }],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -38,6 +98,262 @@
 					{ "season_number": 21, "episode_count": 197, "air_date": "2019-07-08" },
 					{ "season_number": 22, "episode_count": 67, "air_date": null },
 					{ "season_number": 23, "episode_count": 25, "air_date": null }
+				]
+			},
+			"502": {
+				"name": "Sesame Street",
+				"original_name": "Sesame Street",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0063951" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 126, "air_date": null },
+					{ "season_number": 1, "episode_count": 130, "air_date": "1969-11-10" },
+					{ "season_number": 2, "episode_count": 145, "air_date": "1970-11-09" },
+					{ "season_number": 3, "episode_count": 130, "air_date": "1971-11-08" },
+					{ "season_number": 4, "episode_count": 130, "air_date": "1972-11-27" },
+					{ "season_number": 5, "episode_count": 130, "air_date": "1973-11-19" },
+					{ "season_number": 6, "episode_count": 130, "air_date": "1974-11-04" },
+					{ "season_number": 7, "episode_count": 130, "air_date": "1975-12-01" },
+					{ "season_number": 8, "episode_count": 130, "air_date": "1976-11-29" },
+					{ "season_number": 9, "episode_count": 84, "air_date": "1977-11-28" },
+					{ "season_number": 10, "episode_count": 130, "air_date": "1978-11-27" },
+					{ "season_number": 11, "episode_count": 130, "air_date": "1979-11-26" },
+					{ "season_number": 12, "episode_count": 130, "air_date": "1980-11-24" },
+					{ "season_number": 13, "episode_count": 31, "air_date": "1981-11-23" },
+					{ "season_number": 14, "episode_count": 130, "air_date": "1982-11-22" },
+					{ "season_number": 15, "episode_count": 130, "air_date": "1983-11-21" },
+					{ "season_number": 16, "episode_count": 130, "air_date": "1984-11-19" },
+					{ "season_number": 17, "episode_count": 130, "air_date": "1985-11-18" },
+					{ "season_number": 18, "episode_count": 31, "air_date": "1986-11-17" },
+					{ "season_number": 19, "episode_count": 33, "air_date": "1987-11-16" },
+					{ "season_number": 20, "episode_count": 33, "air_date": "1988-11-21" },
+					{ "season_number": 21, "episode_count": 36, "air_date": "1989-11-13" },
+					{ "season_number": 22, "episode_count": 130, "air_date": "1990-11-12" },
+					{ "season_number": 23, "episode_count": 44, "air_date": "1991-11-11" },
+					{ "season_number": 24, "episode_count": 71, "air_date": "1992-11-09" },
+					{ "season_number": 25, "episode_count": 31, "air_date": "1993-11-22" },
+					{ "season_number": 26, "episode_count": 33, "air_date": "1994-11-21" },
+					{ "season_number": 27, "episode_count": 32, "air_date": "1995-11-20" },
+					{ "season_number": 28, "episode_count": 56, "air_date": "1996-11-18" },
+					{ "season_number": 29, "episode_count": 130, "air_date": "1997-11-17" },
+					{ "season_number": 30, "episode_count": 65, "air_date": "1998-11-16" },
+					{ "season_number": 31, "episode_count": 65, "air_date": "2000-01-03" },
+					{ "season_number": 32, "episode_count": 65, "air_date": "2001-01-01" },
+					{ "season_number": 33, "episode_count": 50, "air_date": "2002-02-04" },
+					{ "season_number": 34, "episode_count": 33, "air_date": "2003-04-07" },
+					{ "season_number": 35, "episode_count": 26, "air_date": "2004-02-15" },
+					{ "season_number": 36, "episode_count": 26, "air_date": "2005-04-04" },
+					{ "season_number": 37, "episode_count": 26, "air_date": "2006-08-14" },
+					{ "season_number": 38, "episode_count": 26, "air_date": "2007-08-13" },
+					{ "season_number": 39, "episode_count": 26, "air_date": "2008-08-11" },
+					{ "season_number": 40, "episode_count": 26, "air_date": "2009-11-10" },
+					{ "season_number": 41, "episode_count": 26, "air_date": "2010-09-27" },
+					{ "season_number": 42, "episode_count": 26, "air_date": "2011-09-26" },
+					{ "season_number": 43, "episode_count": 27, "air_date": "2012-09-24" },
+					{ "season_number": 44, "episode_count": 26, "air_date": "2013-09-16" },
+					{ "season_number": 45, "episode_count": 27, "air_date": "2014-09-14" },
+					{ "season_number": 46, "episode_count": 35, "air_date": "2016-01-15" },
+					{ "season_number": 47, "episode_count": 35, "air_date": "2017-01-06" },
+					{ "season_number": 48, "episode_count": 35, "air_date": "2017-11-17" },
+					{ "season_number": 49, "episode_count": 35, "air_date": "2018-11-16" },
+					{ "season_number": 50, "episode_count": 35, "air_date": "2019-11-15" },
+					{ "season_number": 51, "episode_count": 35, "air_date": "2020-11-11" },
+					{ "season_number": 52, "episode_count": 35, "air_date": "2021-11-10" },
+					{ "season_number": 53, "episode_count": 35, "air_date": "2022-11-01" },
+					{ "season_number": 54, "episode_count": 35, "air_date": "2023-11-07" },
+					{ "season_number": 55, "episode_count": 35, "air_date": "2025-01-14" },
+					{ "season_number": 56, "episode_count": 13, "air_date": "2025-11-10" }
+				]
+			},
+			"544": {
+				"name": "KaBlam!",
+				"original_name": "KaBlam!",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0122353" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 5, "air_date": "1995-03-15" },
+					{ "season_number": 1, "episode_count": 13, "air_date": "1996-10-11" },
+					{ "season_number": 2, "episode_count": 13, "air_date": "1997-09-19" },
+					{ "season_number": 3, "episode_count": 11, "air_date": "1998-09-04" },
+					{ "season_number": 4, "episode_count": 11, "air_date": "1999-03-26" }
+				]
+			},
+			"709": {
+				"name": "Robot Chicken",
+				"original_name": "Robot Chicken",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0437745" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 29, "air_date": "2001-01-01" },
+					{ "season_number": 1, "episode_count": 20, "air_date": "2005-02-19" },
+					{ "season_number": 2, "episode_count": 20, "air_date": "2006-04-01" },
+					{ "season_number": 3, "episode_count": 20, "air_date": "2007-08-11" },
+					{ "season_number": 4, "episode_count": 19, "air_date": "2008-12-07" },
+					{ "season_number": 5, "episode_count": 20, "air_date": "2010-12-12" },
+					{ "season_number": 6, "episode_count": 20, "air_date": "2012-09-16" },
+					{ "season_number": 7, "episode_count": 18, "air_date": "2014-04-13" },
+					{ "season_number": 8, "episode_count": 20, "air_date": "2015-10-26" },
+					{ "season_number": 9, "episode_count": 20, "air_date": "2017-12-10" },
+					{ "season_number": 10, "episode_count": 20, "air_date": "2019-09-29" },
+					{ "season_number": 11, "episode_count": 21, "air_date": "2021-05-23" }
+				]
+			},
+			"1434": {
+				"name": "Family Guy",
+				"original_name": "Family Guy",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0182576" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 27, "air_date": "1995-01-01" },
+					{ "season_number": 1, "episode_count": 7, "air_date": "1999-01-31" },
+					{ "season_number": 2, "episode_count": 21, "air_date": "1999-09-23" },
+					{ "season_number": 3, "episode_count": 22, "air_date": "2001-07-11" },
+					{ "season_number": 4, "episode_count": 30, "air_date": "2005-05-01" },
+					{ "season_number": 5, "episode_count": 18, "air_date": "2006-09-10" },
+					{ "season_number": 6, "episode_count": 12, "air_date": "2007-09-23" },
+					{ "season_number": 7, "episode_count": 16, "air_date": "2008-09-28" },
+					{ "season_number": 8, "episode_count": 20, "air_date": "2009-09-26" },
+					{ "season_number": 9, "episode_count": 18, "air_date": "2010-09-26" },
+					{ "season_number": 10, "episode_count": 23, "air_date": "2011-09-25" },
+					{ "season_number": 11, "episode_count": 22, "air_date": "2012-09-30" },
+					{ "season_number": 12, "episode_count": 21, "air_date": "2013-09-29" },
+					{ "season_number": 13, "episode_count": 18, "air_date": "2014-09-28" },
+					{ "season_number": 14, "episode_count": 20, "air_date": "2015-09-27" },
+					{ "season_number": 15, "episode_count": 20, "air_date": "2016-09-25" },
+					{ "season_number": 16, "episode_count": 20, "air_date": "2017-10-01" },
+					{ "season_number": 17, "episode_count": 20, "air_date": "2018-09-30" },
+					{ "season_number": 18, "episode_count": 20, "air_date": "2019-09-29" },
+					{ "season_number": 19, "episode_count": 20, "air_date": "2020-09-27" },
+					{ "season_number": 20, "episode_count": 20, "air_date": "2021-09-26" },
+					{ "season_number": 21, "episode_count": 20, "air_date": "2022-09-25" },
+					{ "season_number": 22, "episode_count": 15, "air_date": "2023-10-01" },
+					{ "season_number": 23, "episode_count": 18, "air_date": "2025-02-16" },
+					{ "season_number": 24, "episode_count": 15, "air_date": "2026-02-15" }
+				]
+			},
+			"1554": {
+				"name": "QI",
+				"original_name": "QI",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0380136" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 62, "air_date": "2006-12-06" },
+					{ "season_number": 1, "episode_count": 12, "air_date": "2003-09-11" },
+					{ "season_number": 2, "episode_count": 12, "air_date": "2004-10-08" },
+					{ "season_number": 3, "episode_count": 12, "air_date": "2005-09-30" },
+					{ "season_number": 4, "episode_count": 13, "air_date": "2006-09-29" },
+					{ "season_number": 5, "episode_count": 13, "air_date": "2007-09-21" },
+					{ "season_number": 6, "episode_count": 12, "air_date": "2008-11-14" },
+					{ "season_number": 7, "episode_count": 18, "air_date": "2009-11-26" },
+					{ "season_number": 8, "episode_count": 18, "air_date": "2010-09-17" },
+					{ "season_number": 9, "episode_count": 18, "air_date": "2011-09-09" },
+					{ "season_number": 10, "episode_count": 18, "air_date": "2012-09-14" },
+					{ "season_number": 11, "episode_count": 18, "air_date": "2013-09-06" },
+					{ "season_number": 12, "episode_count": 18, "air_date": "2014-10-03" },
+					{ "season_number": 13, "episode_count": 18, "air_date": "2015-10-16" },
+					{ "season_number": 14, "episode_count": 18, "air_date": "2016-10-21" },
+					{ "season_number": 15, "episode_count": 18, "air_date": "2017-10-20" },
+					{ "season_number": 16, "episode_count": 18, "air_date": "2018-09-10" },
+					{ "season_number": 17, "episode_count": 18, "air_date": "2019-09-06" },
+					{ "season_number": 18, "episode_count": 16, "air_date": "2020-05-27" },
+					{ "season_number": 19, "episode_count": 16, "air_date": "2021-09-09" },
+					{ "season_number": 20, "episode_count": 16, "air_date": "2022-11-11" },
+					{ "season_number": 21, "episode_count": 17, "air_date": "2023-12-18" },
+					{ "season_number": 22, "episode_count": 16, "air_date": "2024-10-22" },
+					{ "season_number": 23, "episode_count": 16, "air_date": "2025-10-21" }
+				]
+			},
+			"1877": {
+				"name": "Phineas and Ferb",
+				"original_name": "Phineas and Ferb",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0852863" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 2, "air_date": "2013-02-26" },
+					{ "season_number": 1, "episode_count": 47, "air_date": "2007-08-17" },
+					{ "season_number": 2, "episode_count": 66, "air_date": "2009-02-19" },
+					{ "season_number": 3, "episode_count": 62, "air_date": "2011-03-04" },
+					{ "season_number": 4, "episode_count": 48, "air_date": "2012-12-07" },
+					{ "season_number": 5, "episode_count": 38, "air_date": "2025-05-25" },
+					{ "season_number": 6, "episode_count": 2, "air_date": "2026-10-06" }
+				]
+			},
+			"2129": {
+				"name": "The Adventures of Jimmy Neutron: Boy Genius",
+				"original_name": "The Adventures of Jimmy Neutron: Boy Genius",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0320808" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 9, "air_date": null },
+					{ "season_number": 1, "episode_count": 32, "air_date": "2002-07-20" },
+					{ "season_number": 2, "episode_count": 21, "air_date": "2003-09-19" },
+					{ "season_number": 3, "episode_count": 23, "air_date": "2004-11-27" }
+				]
+			},
+			"2152": {
+				"name": "Wishbone",
+				"original_name": "Wishbone",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0112225" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 3, "air_date": null },
+					{ "season_number": 1, "episode_count": 40, "air_date": "1995-03-23" },
+					{ "season_number": 2, "episode_count": 10, "air_date": "1997-03-03" }
+				]
+			},
+			"10821": {
+				"name": "Blue's Clues",
+				"original_name": "Blue's Clues",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt0163929" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 16, "air_date": "1994-09-22" },
+					{ "season_number": 1, "episode_count": 20, "air_date": "1996-09-08" },
+					{ "season_number": 2, "episode_count": 20, "air_date": "1997-11-03" },
+					{ "season_number": 3, "episode_count": 32, "air_date": "1999-03-14" },
+					{ "season_number": 4, "episode_count": 29, "air_date": "2001-04-09" },
+					{ "season_number": 5, "episode_count": 41, "air_date": "2002-04-30" },
+					{ "season_number": 6, "episode_count": 15, "air_date": "2004-02-08" },
+					{ "season_number": 7, "episode_count": 2, "air_date": "2006-07-27" }
+				]
+			},
+			"65930": {
+				"name": "My Hero Academia",
+				"original_name": "僕のヒーローアカデミア",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt5626028" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 19, "air_date": "2017-04-04" },
+					{ "season_number": 1, "episode_count": 13, "air_date": "2016-04-03" },
+					{ "season_number": 2, "episode_count": 25, "air_date": "2017-04-01" },
+					{ "season_number": 3, "episode_count": 25, "air_date": "2018-04-07" },
+					{ "season_number": 4, "episode_count": 25, "air_date": "2019-10-12" },
+					{ "season_number": 5, "episode_count": 25, "air_date": "2021-03-27" },
+					{ "season_number": 6, "episode_count": 25, "air_date": "2022-10-01" },
+					{ "season_number": 7, "episode_count": 21, "air_date": "2024-05-04" },
+					{ "season_number": 8, "episode_count": 11, "air_date": "2025-10-04" }
+				]
+			},
+			"75865": {
+				"name": "Teasing Master Takagi-san",
+				"original_name": "からかい上手の高木さん",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt7808344" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 1, "air_date": "2018-07-11" },
+					{ "season_number": 1, "episode_count": 12, "air_date": "2018-01-08" },
+					{ "season_number": 2, "episode_count": 12, "air_date": "2019-07-07" },
+					{ "season_number": 3, "episode_count": 12, "air_date": "2022-01-08" }
+				]
+			},
+			"96420": {
+				"name": "Pokémon: Twilight Wings",
+				"original_name": "薄明の翼",
+				"original_language": "ja",
+				"external_ids": { "imdb_id": "tt11547516" },
+				"seasons": [
+					{ "season_number": 0, "episode_count": 1, "air_date": "2020-11-05" },
+					{ "season_number": 1, "episode_count": 7, "air_date": "2020-01-15" }
 				]
 			}
 		},
@@ -7451,13 +7767,1858 @@
 						"air_date": "2026-09-27"
 					}
 				]
+			},
+			"709/0": {
+				"episodes": [
+					{
+						"id": 1026576,
+						"episode_number": 1,
+						"name": "Sweet J Presents",
+						"air_date": "2001-01-01"
+					},
+					{
+						"id": 1026577,
+						"episode_number": 2,
+						"name": "Robot Chicken Christmas Special",
+						"air_date": "2005-12-22"
+					},
+					{
+						"id": 1026578,
+						"episode_number": 3,
+						"name": "PlayStation 3 Promo",
+						"air_date": "2006-11-19"
+					},
+					{
+						"id": 1026579,
+						"episode_number": 4,
+						"name": "Robot Chicken: Star Wars",
+						"air_date": "2007-06-17"
+					},
+					{
+						"id": 1026580,
+						"episode_number": 5,
+						"name": "Behind the Scenes",
+						"air_date": "2007-09-04"
+					},
+					{
+						"id": 1026586,
+						"episode_number": 6,
+						"name": "Adultizzle Swizzle",
+						"air_date": "2008-04-11"
+					},
+					{
+						"id": 1026582,
+						"episode_number": 7,
+						"name": "Robot Chicken: Star Wars Episode II",
+						"air_date": "2008-11-16"
+					},
+					{
+						"id": 1026583,
+						"episode_number": 8,
+						"name": "Dear Consumer (The Robot Chicken Full-Assed Christmas Special)",
+						"air_date": "2009-12-06"
+					},
+					{
+						"id": 1026585,
+						"episode_number": 9,
+						"name": "Robot Chicken: Star Wars Episode III",
+						"air_date": "2010-12-19"
+					},
+					{
+						"id": 7060590,
+						"episode_number": 10,
+						"name": "Robot Chicken Sk8 Party Bus Tour",
+						"air_date": "2011-07-22"
+					},
+					{
+						"id": 1026587,
+						"episode_number": 11,
+						"name": "Robot Chicken DC Comics Special",
+						"air_date": "2012-09-09"
+					},
+					{
+						"id": 1026588,
+						"episode_number": 12,
+						"name": "Born Again Virgin Christmas Special",
+						"air_date": "2013-12-16"
+					},
+					{
+						"id": 1026589,
+						"episode_number": 13,
+						"name": "Robot Chicken DC Comics Special II: Villains in Paradise",
+						"air_date": "2014-04-06"
+					},
+					{
+						"id": 4216678,
+						"episode_number": 14,
+						"name": "The Robot Chicken Bitch Pudding Special",
+						"air_date": "2014-07-27"
+					},
+					{
+						"id": 2968877,
+						"episode_number": 15,
+						"name": "The Robot Chicken Lots of Holidays but Don’t Worry Christmas is Still in There Too so Pull the Stick out of Your Ass Fox News Special",
+						"air_date": "2014-12-07"
+					},
+					{
+						"id": 1131234,
+						"episode_number": 16,
+						"name": "Robot Chicken DC Comics Special III: Magical Friendship",
+						"air_date": "2015-10-18"
+					},
+					{
+						"id": 2968876,
+						"episode_number": 17,
+						"name": "But Not in that Way (April Fools 2017 Airing)",
+						"air_date": "2017-04-01"
+					},
+					{
+						"id": 1250851,
+						"episode_number": 18,
+						"name": "The Robot Chicken Walking Dead Special: Look Who's Walking",
+						"air_date": "2017-10-09"
+					},
+					{
+						"id": 2968874,
+						"episode_number": 19,
+						"name": "Night of 1000 Bawks",
+						"air_date": "2019-09-27"
+					},
+					{
+						"id": 3460064,
+						"episode_number": 20,
+						"name": "Alabama Jackson Doesn't Worry",
+						"air_date": "2022-02-15"
+					},
+					{
+						"id": 3460087,
+						"episode_number": 21,
+						"name": "Alabama Jackson and the Diner Sit-in",
+						"air_date": "2022-02-16"
+					},
+					{
+						"id": 3460090,
+						"episode_number": 22,
+						"name": "Alabama Jackson Inspires Olympic Protest",
+						"air_date": "2022-02-17"
+					},
+					{
+						"id": 3519620,
+						"episode_number": 23,
+						"name": "Alabama Jackson Saves Nelson Mandela",
+						"air_date": "2022-02-18"
+					},
+					{
+						"id": 3519625,
+						"episode_number": 24,
+						"name": "Alabama Jackson Crashes The Salem Witch Trials",
+						"air_date": "2022-02-19"
+					},
+					{
+						"id": 3519627,
+						"episode_number": 25,
+						"name": "Alabama Jackson Creates Rap",
+						"air_date": "2022-02-20"
+					},
+					{
+						"id": 3520209,
+						"episode_number": 26,
+						"name": "Alabama Jackson and Frederick Douglass",
+						"air_date": "2022-02-21"
+					},
+					{
+						"id": 6342454,
+						"episode_number": 27,
+						"name": "Robot Chicken: Self-Discovery Special",
+						"air_date": "2025-07-20"
+					},
+					{
+						"id": 7540722,
+						"episode_number": 28,
+						"name": "The Undercurrent Chronicles - Robot Chicken: The Career Killer",
+						"air_date": "2025-10-21"
+					},
+					{
+						"id": 7752772,
+						"episode_number": 29,
+						"name": "The Robot Chicken Adult Swim Special",
+						"air_date": "2026-08-31"
+					}
+				]
+			},
+			"502/0": {
+				"episodes": [
+					{
+						"id": 27601,
+						"episode_number": 1,
+						"name": "The Letter of the Month Club",
+						"air_date": null
+					},
+					{
+						"id": 27602,
+						"episode_number": 2,
+						"name": "Do The Alphabet",
+						"air_date": null
+					},
+					{
+						"id": 27603,
+						"episode_number": 3,
+						"name": "Let's Make Music",
+						"air_date": null
+					},
+					{
+						"id": 27604,
+						"episode_number": 5,
+						"name": "123 Count With Me",
+						"air_date": null
+					},
+					{
+						"id": 27605,
+						"episode_number": 6,
+						"name": "Learning about Numbers",
+						"air_date": null
+					},
+					{
+						"id": 27606,
+						"episode_number": 7,
+						"name": "Count it Higher",
+						"air_date": null
+					},
+					{
+						"id": 27607,
+						"episode_number": 8,
+						"name": "Sleepytime Songs and Stories",
+						"air_date": null
+					},
+					{
+						"id": 27608,
+						"episode_number": 9,
+						"name": "Sing, Hoot & Howl",
+						"air_date": "2004-04-06"
+					},
+					{
+						"id": 27609,
+						"episode_number": 10,
+						"name": "Happy Healthy Monsters",
+						"air_date": null
+					},
+					{
+						"id": 25169,
+						"episode_number": 11,
+						"name": "What's the Name of That Song",
+						"air_date": null
+					},
+					{
+						"id": 27610,
+						"episode_number": 12,
+						"name": "Computer Caper",
+						"air_date": null
+					},
+					{
+						"id": 27611,
+						"episode_number": 13,
+						"name": "Elmo's World Opposites",
+						"air_date": "2008-02-05"
+					},
+					{
+						"id": 27612,
+						"episode_number": 14,
+						"name": "Kids' Favorite Songs",
+						"air_date": null
+					},
+					{
+						"id": 27613,
+						"episode_number": 15,
+						"name": "Abby in Wonderland",
+						"air_date": "2008-11-28"
+					},
+					{ "id": 25171, "episode_number": 16, "name": "Let's Eat", "air_date": null },
+					{
+						"id": 27614,
+						"episode_number": 17,
+						"name": "Elmo Says Boo!",
+						"air_date": null
+					},
+					{
+						"id": 27615,
+						"episode_number": 18,
+						"name": "The Best of Elmo",
+						"air_date": null
+					},
+					{
+						"id": 25167,
+						"episode_number": 19,
+						"name": "Elmo's Christmas Countdown",
+						"air_date": "2007-12-23"
+					},
+					{
+						"id": 27616,
+						"episode_number": 20,
+						"name": "Furry Red Monster Parade",
+						"air_date": null
+					},
+					{
+						"id": 953880,
+						"episode_number": 21,
+						"name": "Learning About Letters",
+						"air_date": null
+					},
+					{
+						"id": 953881,
+						"episode_number": 22,
+						"name": "Elmo's World: Happy Holidays",
+						"air_date": "2002-09-24"
+					},
+					{
+						"id": 27617,
+						"episode_number": 23,
+						"name": "Elmo In Grouchland",
+						"air_date": "1999-01-27"
+					},
+					{
+						"id": 27618,
+						"episode_number": 24,
+						"name": "Elmo's World: Wake Up With Elmo",
+						"air_date": "2002-05-14"
+					},
+					{
+						"id": 27619,
+						"episode_number": 25,
+						"name": "Kids' Favorite Songs 2",
+						"air_date": null
+					},
+					{
+						"id": 27620,
+						"episode_number": 26,
+						"name": "The Great Numbers Game",
+						"air_date": "1998-01-27"
+					},
+					{
+						"id": 27621,
+						"episode_number": 27,
+						"name": "Elmo's World: The Great Outdoors",
+						"air_date": "2003-06-03"
+					},
+					{
+						"id": 27622,
+						"episode_number": 28,
+						"name": "Bert and Ernie's Word Play",
+						"air_date": null
+					},
+					{
+						"id": 25166,
+						"episode_number": 29,
+						"name": "The Alphabet Jungle Game",
+						"air_date": null
+					},
+					{
+						"id": 25165,
+						"episode_number": 30,
+						"name": "25th Birthday Musical Celebration",
+						"air_date": null
+					},
+					{
+						"id": 25170,
+						"episode_number": 31,
+						"name": "Sing Yourself Silly",
+						"air_date": null
+					},
+					{
+						"id": 27623,
+						"episode_number": 32,
+						"name": "How To Do Elmo's Brand New Dance",
+						"air_date": null
+					},
+					{
+						"id": 27624,
+						"episode_number": 33,
+						"name": "Elmo's Musical Adventure: The Story of Peter And The Wolf",
+						"air_date": null
+					},
+					{
+						"id": 27625,
+						"episode_number": 34,
+						"name": "Elmo's World: Babies, Dogs & More!",
+						"air_date": null
+					},
+					{
+						"id": 27626,
+						"episode_number": 35,
+						"name": "Elmo's World: Birthdays, Games & More!",
+						"air_date": null
+					},
+					{ "id": 27627, "episode_number": 36, "name": "Fiesta!", "air_date": null },
+					{
+						"id": 27629,
+						"episode_number": 37,
+						"name": "Plaza Sésamo: Me Gusta Ser Yo",
+						"air_date": null
+					},
+					{
+						"id": 27628,
+						"episode_number": 38,
+						"name": "Plaza Sésamo: Lola Aventuras",
+						"air_date": null
+					},
+					{
+						"id": 27630,
+						"episode_number": 39,
+						"name": "Plaza Sésamo: Lola Aventuras Extras",
+						"air_date": null
+					},
+					{
+						"id": 27631,
+						"episode_number": 40,
+						"name": "Plaza Sésamo: Bienvenida La Primavera",
+						"air_date": null
+					},
+					{
+						"id": 27632,
+						"episode_number": 41,
+						"name": "Plaza Sésamo: Vamos a Cantar",
+						"air_date": null
+					},
+					{
+						"id": 25168,
+						"episode_number": 42,
+						"name": "Imagine With Me",
+						"air_date": null
+					},
+					{
+						"id": 25163,
+						"episode_number": 43,
+						"name": "Sesame Beginings - Moving Together",
+						"air_date": null
+					},
+					{
+						"id": 27633,
+						"episode_number": 44,
+						"name": "40 Years of Sunny Days Part 1",
+						"air_date": "2009-11-10"
+					},
+					{
+						"id": 27634,
+						"episode_number": 45,
+						"name": "40 Years of Sunny Days Part 2",
+						"air_date": "2009-11-10"
+					},
+					{
+						"id": 25162,
+						"episode_number": 46,
+						"name": "Original Sales Pitch Reel",
+						"air_date": null
+					},
+					{
+						"id": 27635,
+						"episode_number": 47,
+						"name": "The Best of Elmo 2",
+						"air_date": null
+					},
+					{
+						"id": 27636,
+						"episode_number": 48,
+						"name": "Abby and Friends: P Is for Princess",
+						"air_date": null
+					},
+					{
+						"id": 25164,
+						"episode_number": 49,
+						"name": "Bert and Ernies Great Adventures",
+						"air_date": null
+					},
+					{
+						"id": 25156,
+						"episode_number": 50,
+						"name": "Counting With Elmo",
+						"air_date": null
+					},
+					{
+						"id": 25161,
+						"episode_number": 51,
+						"name": "Firefly Fun and Buggy Buddy",
+						"air_date": null
+					},
+					{
+						"id": 27637,
+						"episode_number": 52,
+						"name": "Elmo's Animal Adventures",
+						"air_date": null
+					},
+					{
+						"id": 27698,
+						"episode_number": 53,
+						"name": "Sesame Street: Guess That Shape and Color",
+						"air_date": null
+					},
+					{
+						"id": 27639,
+						"episode_number": 54,
+						"name": "Bedtime With Elmo",
+						"air_date": null
+					},
+					{
+						"id": 27638,
+						"episode_number": 55,
+						"name": "Elmo's World: All About Faces",
+						"air_date": "2009-01-09"
+					},
+					{
+						"id": 27640,
+						"episode_number": 56,
+						"name": "Springtime Fun",
+						"air_date": null
+					},
+					{
+						"id": 25158,
+						"episode_number": 57,
+						"name": "animals and nature",
+						"air_date": null
+					},
+					{
+						"id": 27641,
+						"episode_number": 58,
+						"name": "Elmo Visits the Doctor",
+						"air_date": null
+					},
+					{
+						"id": 27642,
+						"episode_number": 59,
+						"name": "All-Star Alphabet",
+						"air_date": null
+					},
+					{
+						"id": 27643,
+						"episode_number": 60,
+						"name": "Elmo Saves Christmas",
+						"air_date": null
+					},
+					{
+						"id": 27644,
+						"episode_number": 61,
+						"name": "Elmo and Abby's Birthday Fun",
+						"air_date": null
+					},
+					{
+						"id": 27645,
+						"episode_number": 62,
+						"name": "Elmo's World: Families, Mail and Bath Time",
+						"air_date": null
+					},
+					{
+						"id": 27646,
+						"episode_number": 63,
+						"name": "Elmo's World: Food, Water & Exercise",
+						"air_date": null
+					},
+					{
+						"id": 27647,
+						"episode_number": 64,
+						"name": "Friends to the Rescue",
+						"air_date": null
+					},
+					{
+						"id": 27648,
+						"episode_number": 65,
+						"name": "Elmo's World: What Makes You Happy",
+						"air_date": "2007-01-01"
+					},
+					{
+						"id": 27650,
+						"episode_number": 66,
+						"name": "Elmo Visits The Firehouse",
+						"air_date": "2002-01-01"
+					},
+					{
+						"id": 27649,
+						"episode_number": 67,
+						"name": "Elmo's World: Singing, Drawing and More",
+						"air_date": "2002-01-01"
+					},
+					{
+						"id": 27651,
+						"episode_number": 68,
+						"name": "A Magical Halloween Adventure",
+						"air_date": null
+					},
+					{ "id": 25153, "episode_number": 69, "name": "Elmocize", "air_date": null },
+					{
+						"id": 27652,
+						"episode_number": 70,
+						"name": "Elmo and the Bookaneers",
+						"air_date": "2009-04-21"
+					},
+					{
+						"id": 27653,
+						"episode_number": 71,
+						"name": "Elmo's World: Pets",
+						"air_date": "2011-04-11"
+					},
+					{
+						"id": 27654,
+						"episode_number": 72,
+						"name": "Elmo's World: Reach for the Sky",
+						"air_date": "2011-04-11"
+					},
+					{
+						"id": 27655,
+						"episode_number": 73,
+						"name": "Season 1 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27656,
+						"episode_number": 74,
+						"name": "Season 2 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27657,
+						"episode_number": 75,
+						"name": "Season 3 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27658,
+						"episode_number": 76,
+						"name": "Season 4 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27659,
+						"episode_number": 77,
+						"name": "Season 5 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27660,
+						"episode_number": 78,
+						"name": "Learning to Share",
+						"air_date": null
+					},
+					{
+						"id": 27661,
+						"episode_number": 79,
+						"name": "Season 6 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27662,
+						"episode_number": 80,
+						"name": "Season 7 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27663,
+						"episode_number": 81,
+						"name": "Season 8 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27664,
+						"episode_number": 82,
+						"name": "Season 9 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27665,
+						"episode_number": 83,
+						"name": "Season 10 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 25159,
+						"episode_number": 84,
+						"name": "Pilot Episode",
+						"air_date": null
+					},
+					{
+						"id": 27666,
+						"episode_number": 87,
+						"name": "Elmo's Magic Cookbook",
+						"air_date": "2001-09-01"
+					},
+					{
+						"id": 27667,
+						"episode_number": 88,
+						"name": "Elmo Loves You",
+						"air_date": "2009-06-01"
+					},
+					{
+						"id": 27668,
+						"episode_number": 89,
+						"name": "Elmo's Potty Time",
+						"air_date": "2008-10-06"
+					},
+					{ "id": 27669, "episode_number": 90, "name": "Elmopalooza!", "air_date": null },
+					{
+						"id": 27670,
+						"episode_number": 91,
+						"name": "Dance Along!",
+						"air_date": "1995-04-18"
+					},
+					{
+						"id": 27671,
+						"episode_number": 92,
+						"name": "Telling the Truth",
+						"air_date": "1997-01-28"
+					},
+					{
+						"id": 27672,
+						"episode_number": 93,
+						"name": "Quiet Time",
+						"air_date": "1997-04-01"
+					},
+					{
+						"id": 27673,
+						"episode_number": 94,
+						"name": "Elmo's Sing-Along Guessing Game",
+						"air_date": "1991-12-05"
+					},
+					{
+						"id": 27674,
+						"episode_number": 95,
+						"name": "Best of Sesame Street Spoofs! Volume 1",
+						"air_date": null
+					},
+					{
+						"id": 27675,
+						"episode_number": 96,
+						"name": "Best of Sesame Street Spoofs! Volume 2",
+						"air_date": null
+					},
+					{
+						"id": 27676,
+						"episode_number": 97,
+						"name": "Talk, Listen, Connect: Deployments",
+						"air_date": "2005-08-30"
+					},
+					{
+						"id": 27677,
+						"episode_number": 98,
+						"name": "Talk, Listen, Connect: Homecomings",
+						"air_date": "2008-04-29"
+					},
+					{
+						"id": 27678,
+						"episode_number": 99,
+						"name": "Talk, Listen, Connect: Changes",
+						"air_date": "2008-04-29"
+					},
+					{
+						"id": 27679,
+						"episode_number": 100,
+						"name": "When Families Grieve",
+						"air_date": "2010-04-14"
+					},
+					{
+						"id": 27680,
+						"episode_number": 101,
+						"name": "Put Down the Duckie",
+						"air_date": "1998-01-15"
+					},
+					{
+						"id": 25154,
+						"episode_number": 102,
+						"name": "CinderElmo",
+						"air_date": "1999-12-06"
+					},
+					{
+						"id": 27689,
+						"episode_number": 103,
+						"name": "Elmo's World: Dancing, Music and Books!",
+						"air_date": "2000-10-30"
+					},
+					{
+						"id": 27690,
+						"episode_number": 104,
+						"name": "Elmo's World: Flowers, Bananas & More!",
+						"air_date": "2002-05-14"
+					},
+					{
+						"id": 27688,
+						"episode_number": 107,
+						"name": "A New Baby in My House",
+						"air_date": "1995-04-18"
+					},
+					{
+						"id": 27681,
+						"episode_number": 109,
+						"name": "Preschool Is Cool! ABCs with Elmo",
+						"air_date": null
+					},
+					{
+						"id": 25155,
+						"episode_number": 110,
+						"name": "Best Pet in the World",
+						"air_date": null
+					},
+					{
+						"id": 27682,
+						"episode_number": 111,
+						"name": "A Celebration of Me, Grover",
+						"air_date": null
+					},
+					{
+						"id": 27683,
+						"episode_number": 112,
+						"name": "Being Green",
+						"air_date": "2009-08-08"
+					},
+					{
+						"id": 27684,
+						"episode_number": 113,
+						"name": "A Sesame Street Christmas Carol",
+						"air_date": "2006-11-01"
+					},
+					{
+						"id": 25147,
+						"episode_number": 114,
+						"name": "Wild Words & Outdoor Adventures",
+						"air_date": null
+					},
+					{
+						"id": 27685,
+						"episode_number": 115,
+						"name": "Three Bears and a New Baby",
+						"air_date": "2003-05-08"
+					},
+					{
+						"id": 27686,
+						"episode_number": 116,
+						"name": "Elmo's World: Head to Toe with Elmo",
+						"air_date": "2003-01-14"
+					},
+					{
+						"id": 27687,
+						"episode_number": 117,
+						"name": "Elmo's World: People in Your Neighborhood",
+						"air_date": "2011-06-07"
+					},
+					{
+						"id": 27691,
+						"episode_number": 118,
+						"name": "The Alphabet Game",
+						"air_date": "1998-10-19"
+					},
+					{
+						"id": 27692,
+						"episode_number": 119,
+						"name": "Silly Storytime",
+						"air_date": null
+					},
+					{
+						"id": 27693,
+						"episode_number": 120,
+						"name": "Ready for School",
+						"air_date": null
+					},
+					{
+						"id": 25152,
+						"episode_number": 121,
+						"name": "Abby's First Day of School",
+						"air_date": "2006-08-15"
+					},
+					{
+						"id": 25151,
+						"episode_number": 122,
+						"name": "Tales of Adventure",
+						"air_date": "2012-11-17"
+					},
+					{
+						"id": 27694,
+						"episode_number": 124,
+						"name": "Christmas Eve on Sesame Street",
+						"air_date": "1978-12-03"
+					},
+					{
+						"id": 27695,
+						"episode_number": 125,
+						"name": "Season 11 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27696,
+						"episode_number": 126,
+						"name": "Season 12 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 25157,
+						"episode_number": 127,
+						"name": "Season 13 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 27697,
+						"episode_number": 128,
+						"name": "Season 14 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 25160,
+						"episode_number": 129,
+						"name": "Season 15 Classic Cuts",
+						"air_date": null
+					},
+					{
+						"id": 24986,
+						"episode_number": 130,
+						"name": "Goodbye Mr Hooper",
+						"air_date": null
+					},
+					{
+						"id": 25124,
+						"episode_number": 131,
+						"name": "Interview with Caroll Spinney",
+						"air_date": null
+					},
+					{
+						"id": 27699,
+						"episode_number": 133,
+						"name": "Preschool is Cool: Making Friends",
+						"air_date": "2012-10-02"
+					},
+					{
+						"id": 5615302,
+						"episode_number": 282,
+						"name": "Sesame Street All-Star 25th Birthday: Stars and Street Forever!",
+						"air_date": "1994-05-18"
+					}
+				]
+			},
+			"1554/0": {
+				"episodes": [
+					{ "id": 79873, "episode_number": 1, "name": "Pilot", "air_date": "2006-12-06" },
+					{
+						"id": 79868,
+						"episode_number": 2,
+						"name": "Comic Relief 24 Hour Panel People Special",
+						"air_date": "2011-03-06"
+					},
+					{
+						"id": 79870,
+						"episode_number": 3,
+						"name": "The Making of QI Documentary",
+						"air_date": "2011-09-10"
+					},
+					{
+						"id": 1378721,
+						"episode_number": 4,
+						"name": "Sport Relief Special 2012",
+						"air_date": "2012-03-23"
+					},
+					{
+						"id": 2803023,
+						"episode_number": 5,
+						"name": "VG: Part 1",
+						"air_date": "2020-08-13"
+					},
+					{
+						"id": 2803024,
+						"episode_number": 6,
+						"name": "VG: Part 2",
+						"air_date": "2021-02-04"
+					},
+					{
+						"id": 79864,
+						"episode_number": 7,
+						"name": "Bonus Bits & Bloopers - Series 1",
+						"air_date": "2006-12-06"
+					},
+					{
+						"id": 79866,
+						"episode_number": 8,
+						"name": "Bonus Bits & Bloopers - Series 2",
+						"air_date": "2008-03-17"
+					},
+					{
+						"id": 3382183,
+						"episode_number": 9,
+						"name": "Bonus Bits & Bloopers - Series 3",
+						"air_date": "2008-03-19"
+					},
+					{
+						"id": 3382190,
+						"episode_number": 10,
+						"name": "Peter Cushing Lives in Whitstable",
+						"air_date": "2008-03-20"
+					},
+					{
+						"id": 3984628,
+						"episode_number": 11,
+						"name": "Comic Relief 2022 Special",
+						"air_date": "2022-03-18"
+					},
+					{
+						"id": 5997847,
+						"episode_number": 12,
+						"name": "Series 2 Banter Part 1",
+						"air_date": null
+					},
+					{
+						"id": 5997848,
+						"episode_number": 13,
+						"name": "Series 2 Banter Part 2",
+						"air_date": null
+					},
+					{
+						"id": 4155151,
+						"episode_number": 14,
+						"name": "Series 1 Bonus Bits & Bloopers",
+						"air_date": "2022-03-19"
+					},
+					{
+						"id": 4155154,
+						"episode_number": 15,
+						"name": "Series 2 Bonus Bits & Bloopers",
+						"air_date": "2022-03-20"
+					},
+					{
+						"id": 4155156,
+						"episode_number": 16,
+						"name": "Series 3 Bonus Bits & Bloopers",
+						"air_date": "2022-03-21"
+					},
+					{
+						"id": 4155158,
+						"episode_number": 17,
+						"name": "Deleted Bits (Volume 1)",
+						"air_date": "2022-03-23"
+					},
+					{
+						"id": 4155159,
+						"episode_number": 18,
+						"name": "Deleted Bits (Volume 2)",
+						"air_date": "2022-03-24"
+					},
+					{
+						"id": 4155160,
+						"episode_number": 19,
+						"name": "Deleted Bits (Volume 3)",
+						"air_date": "2022-03-25"
+					},
+					{
+						"id": 4155161,
+						"episode_number": 20,
+						"name": "Deleted Bits (Volume 4)",
+						"air_date": "2022-03-26"
+					},
+					{
+						"id": 4155162,
+						"episode_number": 21,
+						"name": "Fry Says Hi",
+						"air_date": "2022-03-27"
+					},
+					{
+						"id": 4155163,
+						"episode_number": 22,
+						"name": "A QI Christmas Cracker (Christmas Compilation)",
+						"air_date": "2022-03-28"
+					},
+					{
+						"id": 4155165,
+						"episode_number": 23,
+						"name": "QI Live in Kent",
+						"air_date": "2022-03-30"
+					},
+					{
+						"id": 4155166,
+						"episode_number": 24,
+						"name": "Fourteen Quite Interesting Years",
+						"air_date": "2022-03-31"
+					},
+					{
+						"id": 4155167,
+						"episode_number": 25,
+						"name": "Sandi's First Day",
+						"air_date": "2022-04-01"
+					},
+					{
+						"id": 4155168,
+						"episode_number": 26,
+						"name": "All the QI Buzzers (A to M)",
+						"air_date": "2022-04-02"
+					},
+					{
+						"id": 4155169,
+						"episode_number": 27,
+						"name": "A QI Director's Guide to Research",
+						"air_date": "2022-04-03"
+					},
+					{
+						"id": 4155170,
+						"episode_number": 28,
+						"name": "Jolly Japes with the QI Elves",
+						"air_date": "2022-04-04"
+					},
+					{
+						"id": 4155171,
+						"episode_number": 29,
+						"name": "A Peek Behind the Scenes",
+						"air_date": "2022-04-06"
+					},
+					{
+						"id": 4155173,
+						"episode_number": 30,
+						"name": "Stephen's Spare Sounds",
+						"air_date": "2022-04-07"
+					},
+					{
+						"id": 4155175,
+						"episode_number": 31,
+						"name": "A Quite Interesting Marriage Proposal",
+						"air_date": "2022-04-08"
+					},
+					{
+						"id": 4155176,
+						"episode_number": 32,
+						"name": "The QI Philosophy",
+						"air_date": "2022-04-09"
+					},
+					{
+						"id": 4155178,
+						"episode_number": 33,
+						"name": "QI Quibble Awards",
+						"air_date": "2022-04-10"
+					},
+					{
+						"id": 4155179,
+						"episode_number": 34,
+						"name": "No Such Thing as the News Chats QI",
+						"air_date": "2022-04-11"
+					},
+					{
+						"id": 4155181,
+						"episode_number": 35,
+						"name": "QI XS S01E01 Quite Internal",
+						"air_date": "2022-04-13"
+					},
+					{
+						"id": 4155182,
+						"episode_number": 36,
+						"name": "QI XS S01E02 Quite International",
+						"air_date": "2022-04-14"
+					},
+					{
+						"id": 4155184,
+						"episode_number": 37,
+						"name": "QI XS S01E03 Quite Insubordinate",
+						"air_date": "2022-04-15"
+					},
+					{
+						"id": 4155185,
+						"episode_number": 38,
+						"name": "QI XS S01E04 Quite Into the Wild",
+						"air_date": "2022-04-16"
+					},
+					{
+						"id": 4155186,
+						"episode_number": 39,
+						"name": "QI XS S01E05 Quite Inappropriate",
+						"air_date": "2022-04-17"
+					},
+					{
+						"id": 4155188,
+						"episode_number": 40,
+						"name": "QI XS S01E06 Silent Quite",
+						"air_date": "2022-04-18"
+					},
+					{
+						"id": 4500875,
+						"episode_number": 41,
+						"name": "QI XS S02E01 Quite Irregular",
+						"air_date": "2023-03-07"
+					},
+					{
+						"id": 4500877,
+						"episode_number": 42,
+						"name": "QI XS S02E02 Quite Inept",
+						"air_date": "2023-03-14"
+					},
+					{
+						"id": 4500878,
+						"episode_number": 43,
+						"name": "QI XS S02E03 Quite Ignorant",
+						"air_date": "2023-03-21"
+					},
+					{
+						"id": 4500880,
+						"episode_number": 44,
+						"name": "QI XS S02E04 Quite Intrepid",
+						"air_date": "2023-05-22"
+					},
+					{
+						"id": 4500884,
+						"episode_number": 45,
+						"name": "QI Series T: New Guest Initiations",
+						"air_date": "2022-12-23"
+					},
+					{
+						"id": 4500886,
+						"episode_number": 46,
+						"name": "QI Series T Pre-Show Banter",
+						"air_date": "2022-12-02"
+					},
+					{
+						"id": 4500904,
+						"episode_number": 47,
+						"name": "QI Quickies - E01 Engineering",
+						"air_date": "2007-09-21"
+					},
+					{
+						"id": 4500909,
+						"episode_number": 48,
+						"name": "QI Quickies - E02 Electricity",
+						"air_date": "2007-09-21"
+					},
+					{
+						"id": 4500912,
+						"episode_number": 49,
+						"name": "QI Quickies - E03 Eating",
+						"air_date": "2007-09-28"
+					},
+					{
+						"id": 4500914,
+						"episode_number": 50,
+						"name": "QI Quickies - E04 Exploration",
+						"air_date": "2007-10-06"
+					},
+					{
+						"id": 4500920,
+						"episode_number": 51,
+						"name": "QI Quickies - E05 Europe",
+						"air_date": "2007-10-12"
+					},
+					{
+						"id": 4500926,
+						"episode_number": 52,
+						"name": "QI Quickies - E06 Everything Etc",
+						"air_date": "2007-10-19"
+					},
+					{
+						"id": 4500932,
+						"episode_number": 53,
+						"name": "QI Quickies - E07 Espionage",
+						"air_date": "2007-10-26"
+					},
+					{
+						"id": 4500936,
+						"episode_number": 54,
+						"name": "QI Quickies - E08 Eyes and Ears",
+						"air_date": "2007-11-02"
+					},
+					{
+						"id": 4500937,
+						"episode_number": 55,
+						"name": "QI Quickies - E09 Entertainment",
+						"air_date": "2007-11-09"
+					},
+					{
+						"id": 4500938,
+						"episode_number": 56,
+						"name": "QI Quickies - E10 England",
+						"air_date": "2007-11-16"
+					},
+					{
+						"id": 4500939,
+						"episode_number": 57,
+						"name": "QI Quickies - E11 Endings",
+						"air_date": "2007-11-23"
+					},
+					{
+						"id": 4500941,
+						"episode_number": 58,
+						"name": "QI Quickies - E12 Empire",
+						"air_date": "2007-12-07"
+					},
+					{
+						"id": 4500943,
+						"episode_number": 59,
+						"name": "QI Quickies - E13 Elephants",
+						"air_date": "2007-12-14"
+					},
+					{
+						"id": 5997864,
+						"episode_number": 60,
+						"name": "QI Series U: New Guest Initiations",
+						"air_date": null
+					},
+					{
+						"id": 5997865,
+						"episode_number": 61,
+						"name": "QI Series U: Behind The Scenes Unbroadcastable Banter",
+						"air_date": null
+					},
+					{
+						"id": 5997866,
+						"episode_number": 62,
+						"name": "QI's 300th Episode Celebration",
+						"air_date": null
+					}
+				]
+			},
+			"10821/0": {
+				"episodes": [
+					{
+						"id": 437097,
+						"episode_number": 1,
+						"name": "Blue Prints",
+						"air_date": "1994-09-22"
+					},
+					{
+						"id": 437244,
+						"episode_number": 4,
+						"name": "Blue's Holiday",
+						"air_date": null
+					},
+					{
+						"id": 437245,
+						"episode_number": 5,
+						"name": "Shapes and Colors",
+						"air_date": "2003-03-06"
+					},
+					{
+						"id": 437246,
+						"episode_number": 7,
+						"name": "Blue's Biggest Stories",
+						"air_date": "2006-01-08"
+					},
+					{
+						"id": 437099,
+						"episode_number": 8,
+						"name": "All about Fall",
+						"air_date": null
+					},
+					{
+						"id": 437098,
+						"episode_number": 9,
+						"name": "The First Day of School",
+						"air_date": null
+					},
+					{
+						"id": 437247,
+						"episode_number": 10,
+						"name": "Rhythm and Blue",
+						"air_date": null
+					},
+					{
+						"id": 437248,
+						"episode_number": 11,
+						"name": "Blue's Sad Day - UK",
+						"air_date": null
+					},
+					{
+						"id": 437251,
+						"episode_number": 12,
+						"name": "Anatomy - UK",
+						"air_date": null
+					},
+					{
+						"id": 437250,
+						"episode_number": 13,
+						"name": "Animal Behavior - UK",
+						"air_date": null
+					},
+					{
+						"id": 437249,
+						"episode_number": 14,
+						"name": "Art Appreciation - UK",
+						"air_date": null
+					},
+					{
+						"id": 437252,
+						"episode_number": 15,
+						"name": "Blue Experiments - UK",
+						"air_date": null
+					},
+					{
+						"id": 5356866,
+						"episode_number": 16,
+						"name": "Backstage at Blues Clues",
+						"air_date": "2000-10-03"
+					},
+					{
+						"id": 5356867,
+						"episode_number": 17,
+						"name": "I Can Be Anything that I Want to Be Music Video",
+						"air_date": "2000-10-05"
+					},
+					{
+						"id": 5356868,
+						"episode_number": 18,
+						"name": "There It Is Music Video",
+						"air_date": "2000-10-08"
+					},
+					{
+						"id": 437243,
+						"episode_number": 419,
+						"name": "Blue's Clues: Blue's Big Musical Movie",
+						"air_date": "2000-10-03"
+					}
+				]
+			},
+			"75865/0": {
+				"episodes": [
+					{
+						"id": 1523619,
+						"episode_number": 1,
+						"name": "Water Slide",
+						"air_date": "2018-07-11"
+					}
+				]
+			},
+			"1434/0": {
+				"episodes": [
+					{
+						"id": 66240,
+						"episode_number": 1,
+						"name": "The Life of Larry",
+						"air_date": "1995-01-01"
+					},
+					{
+						"id": 66241,
+						"episode_number": 2,
+						"name": "Larry & Steve",
+						"air_date": "1997-04-28"
+					},
+					{
+						"id": 66242,
+						"episode_number": 3,
+						"name": "Family Guy (Pilot)",
+						"air_date": "1998-12-20"
+					},
+					{
+						"id": 66252,
+						"episode_number": 4,
+						"name": "Behind the Scenes of Family Guy",
+						"air_date": "1999-09-23"
+					},
+					{
+						"id": 66237,
+						"episode_number": 5,
+						"name": "Family Guy Live in Vegas: Stewie's Sexy Party",
+						"air_date": "2005-04-26"
+					},
+					{
+						"id": 66238,
+						"episode_number": 6,
+						"name": "Family Guy Live in Vegas: The Making of Stewie's Sexy Party",
+						"air_date": "2005-04-26"
+					},
+					{
+						"id": 66243,
+						"episode_number": 7,
+						"name": "Saving Family Guy",
+						"air_date": "2005-05-01"
+					},
+					{
+						"id": 66255,
+						"episode_number": 8,
+						"name": "Stewie Griffin: The Untold Story",
+						"air_date": "2006-05-21"
+					},
+					{
+						"id": 66239,
+						"episode_number": 9,
+						"name": "Webisode: Up Late with Stewie & Brian",
+						"air_date": "2007-02-25"
+					},
+					{
+						"id": 66246,
+						"episode_number": 10,
+						"name": "Stewie & Brian Live at the Emmy's",
+						"air_date": "2007-09-16"
+					},
+					{
+						"id": 66256,
+						"episode_number": 11,
+						"name": "The Family Guy 100th Episode Special",
+						"air_date": "2007-11-04"
+					},
+					{
+						"id": 66251,
+						"episode_number": 12,
+						"name": "The List (Stewie's Banned Song)",
+						"air_date": "2007-11-11"
+					},
+					{
+						"id": 66248,
+						"episode_number": 13,
+						"name": "Comic-Con 2008",
+						"air_date": "2008-07-26"
+					},
+					{
+						"id": 66245,
+						"episode_number": 14,
+						"name": "The Story So Far...",
+						"air_date": "2009-04-18"
+					},
+					{
+						"id": 66244,
+						"episode_number": 15,
+						"name": "Creating the Chaos...",
+						"air_date": "2009-04-18"
+					},
+					{
+						"id": 66247,
+						"episode_number": 16,
+						"name": "Family Guy on Inside The Actors Studio",
+						"air_date": "2009-09-14"
+					},
+					{
+						"id": 66249,
+						"episode_number": 17,
+						"name": "Family Guy Presents: Seth and Alex's Almost Live Comedy Show",
+						"air_date": "2009-11-08"
+					},
+					{
+						"id": 66250,
+						"episode_number": 18,
+						"name": "Family Guy: The Top 20 Characters",
+						"air_date": "2010-05-08"
+					},
+					{
+						"id": 1477902,
+						"episode_number": 19,
+						"name": "Partial Terms of Endearment",
+						"air_date": "2010-06-20"
+					},
+					{
+						"id": 66253,
+						"episode_number": 20,
+						"name": "Ground Breaking Gags",
+						"air_date": "2011-05-08"
+					},
+					{
+						"id": 66254,
+						"episode_number": 21,
+						"name": "200 Episodes Later",
+						"air_date": "2012-11-11"
+					},
+					{
+						"id": 3864136,
+						"episode_number": 22,
+						"name": "New Phone, Who Dis?",
+						"air_date": "2019-03-29"
+					},
+					{
+						"id": 5648073,
+						"episode_number": 23,
+						"name": "Family Guy COVID-19 Vaccine Awareness PSA",
+						"air_date": "2021-09-21"
+					},
+					{
+						"id": 5511329,
+						"episode_number": 24,
+						"name": "Peter, Peter, Pumpkin Cheater",
+						"air_date": "2024-10-14"
+					},
+					{
+						"id": 5511330,
+						"episode_number": 25,
+						"name": "Gift of the White Guy",
+						"air_date": "2024-11-25"
+					},
+					{
+						"id": 6409016,
+						"episode_number": 26,
+						"name": "A Little Fright Music",
+						"air_date": "2025-10-06"
+					},
+					{
+						"id": 6687140,
+						"episode_number": 27,
+						"name": "Holiday 2025: Disney's Hulu's Family Guy's Hallmark Channel's Lifetime's Unoriginal Holiday Movie",
+						"air_date": "2025-11-28"
+					}
+				]
+			},
+			"1877/0": {
+				"episodes": [
+					{
+						"id": 115289,
+						"episode_number": 1,
+						"name": "Pilot Episode",
+						"air_date": "2013-02-26"
+					},
+					{
+						"id": 115290,
+						"episode_number": 2,
+						"name": "The O.W.C.A. Files",
+						"air_date": "2015-11-09"
+					}
+				]
+			},
+			"544/0": {
+				"episodes": [
+					{
+						"id": 7641198,
+						"episode_number": 1,
+						"name": "Blam!",
+						"air_date": "1995-03-15"
+					},
+					{
+						"id": 7641197,
+						"episode_number": 2,
+						"name": "A Very Special Action League Now! Special",
+						"air_date": "1998-03-28"
+					},
+					{
+						"id": 3671464,
+						"episode_number": 3,
+						"name": "Life with Loopy Birthday Gala-Bration",
+						"air_date": "1998-09-25"
+					},
+					{
+						"id": 3671491,
+						"episode_number": 4,
+						"name": "An Off-Beats Valentine's",
+						"air_date": "1999-02-12"
+					},
+					{
+						"id": 3671470,
+						"episode_number": 5,
+						"name": "The Henry & June Show",
+						"air_date": "1999-07-25"
+					}
+				]
+			},
+			"65930/0": {
+				"episodes": [
+					{
+						"id": 1337935,
+						"episode_number": 1,
+						"name": "Save! Rescue Training!",
+						"air_date": "2017-04-04"
+					},
+					{
+						"id": 1372558,
+						"episode_number": 2,
+						"name": "Hero Notebook",
+						"air_date": "2017-03-25"
+					},
+					{
+						"id": 1323602,
+						"episode_number": 3,
+						"name": "Training of the Dead",
+						"air_date": "2017-06-02"
+					},
+					{
+						"id": 5843601,
+						"episode_number": 4,
+						"name": "All Might: Rising",
+						"air_date": "2019-02-13"
+					},
+					{
+						"id": 5843598,
+						"episode_number": 5,
+						"name": "End-Roll BBQ Picture Drama",
+						"air_date": "2019-02-13"
+					},
+					{
+						"id": 2390057,
+						"episode_number": 6,
+						"name": "Make It! Do-or-Die Survival Training (1)",
+						"air_date": "2020-08-16"
+					},
+					{
+						"id": 2390058,
+						"episode_number": 7,
+						"name": "Make It! Do-or-Die Survival Training (2)",
+						"air_date": "2020-08-16"
+					},
+					{
+						"id": 5843596,
+						"episode_number": 8,
+						"name": "Heroes Rising - Epilogue Plus",
+						"air_date": "2020-07-15"
+					},
+					{
+						"id": 5843595,
+						"episode_number": 9,
+						"name": "World Heroes' Mission - Take-off",
+						"air_date": "2022-02-16"
+					},
+					{
+						"id": 3770074,
+						"episode_number": 10,
+						"name": "HLB",
+						"air_date": "2022-06-16"
+					},
+					{
+						"id": 3770076,
+						"episode_number": 11,
+						"name": "Laugh! As If You Are in Hell",
+						"air_date": "2022-06-16"
+					},
+					{
+						"id": 4741787,
+						"episode_number": 12,
+						"name": "U.A. Heroes Battle",
+						"air_date": "2023-10-20"
+					},
+					{
+						"id": 5202832,
+						"episode_number": 13,
+						"name": "Memories Episode 1 - Izuku Midoriya: Resolve",
+						"air_date": "2024-04-06"
+					},
+					{
+						"id": 5202833,
+						"episode_number": 14,
+						"name": "Memories Episode 2 - Toshinori Yagi: Embers",
+						"air_date": "2024-04-13"
+					},
+					{
+						"id": 5202834,
+						"episode_number": 15,
+						"name": "Memories Episode 3 - Heroes: Convictions",
+						"air_date": "2024-04-20"
+					},
+					{
+						"id": 5202835,
+						"episode_number": 16,
+						"name": "Memories Episode 4 - Tomura Shigaraki: Destruction",
+						"air_date": "2024-04-27"
+					},
+					{
+						"id": 6052381,
+						"episode_number": 17,
+						"name": "A Piece of Cake",
+						"air_date": "2025-02-19"
+					},
+					{
+						"id": 6775049,
+						"episode_number": 18,
+						"name": "More",
+						"air_date": "2026-05-02"
+					},
+					{
+						"id": 7228509,
+						"episode_number": 19,
+						"name": "I am a hero too",
+						"air_date": "2026-08-03"
+					}
+				]
+			},
+			"96420/0": {
+				"episodes": [
+					{
+						"id": 2486705,
+						"episode_number": 1,
+						"name": "The Gathering of Stars",
+						"air_date": "2020-11-05"
+					}
+				]
+			},
+			"2152/0": {
+				"episodes": [
+					{ "id": 150805, "episode_number": 1, "name": "Feed the Dog", "air_date": null },
+					{
+						"id": 150806,
+						"episode_number": 2,
+						"name": "Wishbone's Dog Days of the West",
+						"air_date": "1998-03-13"
+					},
+					{
+						"id": 150807,
+						"episode_number": 3,
+						"name": "The Making of Wishbone",
+						"air_date": null
+					}
+				]
+			},
+			"2129/0": {
+				"episodes": [
+					{
+						"id": 149645,
+						"episode_number": 1,
+						"name": "Pilot - Runaway Rocketboy!",
+						"air_date": null
+					},
+					{
+						"id": 149654,
+						"episode_number": 2,
+						"name": "The Egg-pire Strikes Back",
+						"air_date": "2003-04-25"
+					},
+					{
+						"id": 149649,
+						"episode_number": 3,
+						"name": "Operation: Rescue Jet Fusion",
+						"air_date": "2003-10-13"
+					},
+					{
+						"id": 149651,
+						"episode_number": 4,
+						"name": "The Jimmy Timmy Power Hour",
+						"air_date": "2004-05-07"
+					},
+					{
+						"id": 149653,
+						"episode_number": 5,
+						"name": "Win, Lose, and Kaboom!",
+						"air_date": "2004-07-09"
+					},
+					{
+						"id": 149646,
+						"episode_number": 6,
+						"name": "Attack of the Twonkies",
+						"air_date": "2004-11-11"
+					},
+					{
+						"id": 149652,
+						"episode_number": 7,
+						"name": "League of Villains",
+						"air_date": "2005-06-18"
+					},
+					{
+						"id": 149647,
+						"episode_number": 8,
+						"name": "Jimmy Timmy Power Hour 2 - When Nerds Collide",
+						"air_date": "2006-01-16"
+					},
+					{
+						"id": 149650,
+						"episode_number": 9,
+						"name": "Jimmy Timmy Power Hour 3 - The Jerkinators!",
+						"air_date": "2006-07-21"
+					}
+				]
 			}
 		},
 		"episodeGroups": {},
 		"episodeGroup": {},
-		"episodeShow": { "tt0388629": null },
+		"episodeShow": {
+			"tt0388629": null,
+			"tt0437745": null,
+			"tt4366556": "tt0063951",
+			"tt0380136": null,
+			"tt0163929": null,
+			"tt7808344": null,
+			"tt19268128": "tt0182576",
+			"tt0122353": null,
+			"tt32179154": "tt5626028",
+			"tt0852863": null,
+			"tt11547516": null,
+			"tt0852739": "tt0320808",
+			"tt0112225": null
+		},
 		"seasonEpisodes": {},
-		"identify": {},
+		"identify": {
+			"Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT": {
+				"imdbId": "tt0852863",
+				"title": "Phineas and Ferb",
+				"year": 2007,
+				"kind": "tv"
+			},
+			"Wishbone.COMPLETE.VariousRip.XviD": {
+				"imdbId": "tt0112225",
+				"title": "Wishbone",
+				"year": 1995,
+				"kind": "tv"
+			}
+		},
 		"identifier": {},
 		"searchTv": {},
 		"imdbSeries": {},
@@ -7478,6 +9639,310 @@
 					"simkl_id": 38636,
 					"themoviedb_id": { "tv": 37854 },
 					"tvdb_id": 81797
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11739,
+					"anilist_id": 21459,
+					"animecountdown_id": 532942,
+					"animenewsnetwork_id": 17786,
+					"anime-planet_id": "my-hero-academia",
+					"anisearch_id": 10978,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 11469,
+					"livechart_id": 1895,
+					"mal_id": 31964,
+					"simkl_id": 532942,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 12233,
+					"anilist_id": 21856,
+					"animecountdown_id": 595017,
+					"animenewsnetwork_id": 18485,
+					"anime-planet_id": "my-hero-academia-2",
+					"anisearch_id": 11549,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 12268,
+					"livechart_id": 2225,
+					"mal_id": 33486,
+					"simkl_id": 595017,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 12344,
+					"animecountdown_id": 610915,
+					"imdb_id": ["tt5626028"],
+					"livechart_id": 2292,
+					"simkl_id": 610915,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13270,
+					"anilist_id": 99468,
+					"animecountdown_id": 699675,
+					"animenewsnetwork_id": 20176,
+					"anime-planet_id": "teasing-master-takagi-san",
+					"anisearch_id": 12642,
+					"imdb_id": ["tt7808344"],
+					"kitsu_id": 13635,
+					"livechart_id": 2782,
+					"mal_id": 35860,
+					"simkl_id": 699675,
+					"themoviedb_id": { "tv": 75865 },
+					"tvdb_id": 337936,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13485,
+					"anilist_id": 100166,
+					"animecountdown_id": 723427,
+					"animenewsnetwork_id": 20356,
+					"anime-planet_id": "my-hero-academia-3",
+					"anisearch_id": 12846,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 13881,
+					"livechart_id": 2899,
+					"mal_id": 36456,
+					"simkl_id": 723427,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 13991,
+					"anilist_id": 101426,
+					"animecountdown_id": 793555,
+					"animenewsnetwork_id": 21134,
+					"anime-planet_id": "teasing-master-takagi-san-ova",
+					"anisearch_id": 13530,
+					"imdb_id": ["tt7808344"],
+					"kitsu_id": 41481,
+					"livechart_id": 3196,
+					"mal_id": 37621,
+					"simkl_id": 793555,
+					"themoviedb_id": { "tv": 75865 },
+					"tvdb_id": 337936,
+					"season": { "tvdb": 0, "tmdb": 0 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 14416,
+					"anilist_id": 104276,
+					"animecountdown_id": 920009,
+					"animenewsnetwork_id": 22265,
+					"anime-planet_id": "my-hero-academia-4",
+					"anisearch_id": 13910,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 41971,
+					"livechart_id": 3539,
+					"mal_id": 38408,
+					"simkl_id": 920009,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 4, "tmdb": 4 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 14591,
+					"anilist_id": 107068,
+					"animecountdown_id": 1011585,
+					"animenewsnetwork_id": 22274,
+					"anime-planet_id": "teasing-master-takagi-san-2",
+					"anisearch_id": 14102,
+					"imdb_id": ["tt7808344"],
+					"kitsu_id": 42110,
+					"livechart_id": 9187,
+					"mal_id": 38993,
+					"simkl_id": 1011585,
+					"themoviedb_id": { "tv": 75865 },
+					"tvdb_id": 337936,
+					"season": { "tvdb": 2, "tmdb": 2 }
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 15309,
+					"anilist_id": 113932,
+					"animecountdown_id": 1225821,
+					"animenewsnetwork_id": 23154,
+					"anime-planet_id": "pokemon-twilight-wings",
+					"anisearch_id": 14824,
+					"imdb_id": ["tt11547516"],
+					"kitsu_id": 42869,
+					"livechart_id": 9717,
+					"mal_id": 40861,
+					"simkl_id": 1225821,
+					"themoviedb_id": { "tv": 96420 },
+					"tvdb_id": 373770,
+					"season": { "tvdb": 1, "tmdb": 1 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15484,
+					"anilist_id": 117193,
+					"animecountdown_id": 1310995,
+					"animenewsnetwork_id": 23862,
+					"anime-planet_id": "my-hero-academia-5",
+					"anisearch_id": 15141,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 43108,
+					"livechart_id": 9877,
+					"mal_id": 41587,
+					"simkl_id": 1310995,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 5, "tmdb": 5 }
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 15672,
+					"anilist_id": 122349,
+					"animecountdown_id": 1403255,
+					"animenewsnetwork_id": 23572,
+					"anime-planet_id": "my-hero-academia-make-it-do-or-die-survival-training",
+					"anisearch_id": 15480,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 43485,
+					"livechart_id": 10100,
+					"mal_id": 42603,
+					"simkl_id": 1403255,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 7, "tmdb": 7 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16559,
+					"anilist_id": 138424,
+					"animecountdown_id": 1717393,
+					"animenewsnetwork_id": 24696,
+					"anime-planet_id": "teasing-master-takagi-san-3",
+					"anisearch_id": 16555,
+					"imdb_id": ["tt7808344"],
+					"kitsu_id": 45022,
+					"livechart_id": 10764,
+					"mal_id": 49721,
+					"simkl_id": 1717393,
+					"themoviedb_id": { "tv": 75865 },
+					"tvdb_id": 337936,
+					"season": { "tvdb": 3, "tmdb": 3 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16793,
+					"anilist_id": 139630,
+					"animecountdown_id": 1737071,
+					"animenewsnetwork_id": 24773,
+					"anime-planet_id": "my-hero-academia-6",
+					"anisearch_id": 16609,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 45240,
+					"livechart_id": 10814,
+					"mal_id": 49918,
+					"simkl_id": 1737071,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 6, "tmdb": 6 }
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 17356,
+					"anilist_id": 149073,
+					"animecountdown_id": 1907328,
+					"animenewsnetwork_id": 25667,
+					"anime-planet_id": "my-hero-academia-web",
+					"anisearch_id": 17447,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 46117,
+					"livechart_id": 11210,
+					"mal_id": 51781,
+					"simkl_id": 1907328,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 12, "tmdb": 12 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17931,
+					"anilist_id": 163139,
+					"animecountdown_id": 2125452,
+					"animenewsnetwork_id": 27621,
+					"anime-planet_id": "my-hero-academia-7",
+					"anisearch_id": 18294,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 47232,
+					"livechart_id": 11909,
+					"mal_id": 54789,
+					"simkl_id": 2125452,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 7, "tmdb": 7 }
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 18199,
+					"anilist_id": 169402,
+					"animecountdown_id": 2259030,
+					"animenewsnetwork_id": 29929,
+					"anime-planet_id": "my-hero-academia-ua-heroes-battle",
+					"anisearch_id": 18697,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 48276,
+					"livechart_id": 12333,
+					"mal_id": 56685,
+					"simkl_id": 2259030,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 14, "tmdb": 14 }
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18921,
+					"anilist_id": 182896,
+					"animecountdown_id": 2607190,
+					"animenewsnetwork_id": 33714,
+					"anime-planet_id": "my-hero-academia-final-season",
+					"anisearch_id": 19698,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 49279,
+					"livechart_id": 12882,
+					"mal_id": 60098,
+					"simkl_id": 2607190,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 8, "tmdb": 8 }
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 20039,
+					"anilist_id": 204356,
+					"animecountdown_id": 3105338,
+					"animenewsnetwork_id": 38146,
+					"anime-planet_id": "my-hero-academia-1701-more",
+					"anisearch_id": 21118,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 50399,
+					"livechart_id": 13435,
+					"mal_id": 63130,
+					"simkl_id": 3105338,
+					"themoviedb_id": { "tv": 65930 },
+					"tvdb_id": 305074,
+					"season": { "tvdb": 0, "tmdb": 0 },
+					"episode_offset": { "tvdb": 22, "tmdb": 17 }
 				}
 			],
 			"titles": [
@@ -7519,6 +9984,568 @@
 						"Tutti all'arrembaggio!",
 						"Vua Hải Tặc",
 						"Ντρέηκ, το Κυνήγι του Θησαυρού"
+					]
+				},
+				{
+					"anidbId": 11739,
+					"names": [
+						"Boku no Hero Academia",
+						"أكاديميتي للأبطال",
+						"My Hero Academia",
+						"אקדמיית הגיבורים שלי",
+						"僕のヒーローアカデミア",
+						"Akademia bohaterów",
+						"Моя геройская академия",
+						"我的英雄学院",
+						"heroaca",
+						"MHA",
+						"ヒロアカ",
+						"bnha",
+						"أبطال الغد",
+						"أكاديمية بطلي",
+						"Моята академия на героите",
+						"My Hero Academia S1",
+						"BNHA",
+						"Hősakadémia",
+						"Học Viện Anh Hùng",
+						"My Hero Academia 1. Staffel",
+						"My Hero Academia 1st Season",
+						"Η Δική Μου Ακαδημία Ηρώων",
+						"มายฮีโร่ อคาเดเมีย",
+						"나의 히어로 아카데미아 1기",
+						"나히아 1기"
+					]
+				},
+				{
+					"anidbId": 12233,
+					"names": [
+						"Boku no Hero Academia (2017)",
+						"أكاديميتي للأبطال (2017)",
+						"My Hero Academia Season 2",
+						"My Hero Academia Saison 2",
+						"אקדמיית הגיבורים שלי עונה 2",
+						"僕のヒーローアカデミア (2017)",
+						"나의 히어로 아카데미아 (2017)",
+						"Akademia bohaterów (2017)",
+						"My Hero Academia - Temporada 2",
+						"我的英雄学院 第二季",
+						"بنها",
+						"heroaca2",
+						"bnha s2",
+						"bnha2",
+						"أبطال الغد (2017)",
+						"أكاديمية بطلي (2017)",
+						"My Hero Academia S2",
+						"Моя геройская академия 2",
+						"Boku no Hero Academia 2",
+						"Boku no Hero Academia 2nd Season",
+						"BNHA 2",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S2",
+						"MHA 2",
+						"My Hero Academia",
+						"My Hero Academia (Segunda Temporada)",
+						"My Hero Academia 2",
+						"My Hero Academia 2. Staffel",
+						"My Hero Academia : Saison 2",
+						"My Hero Academia Temporada 2",
+						"My Hero Academia – 2. Staffel",
+						"My Hero Academia: Season 2",
+						"My Hero Academia: Stagione 2",
+						"mha s2",
+						"mhas2",
+						"أكاديميتي للأبطال2",
+						"มายฮีโร่ อคาเดเมีย ภาค 2",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 2",
+						"僕のヒーローアカデミア 第二期",
+						"僕のヒーローアカデミア２",
+						"我的英雄学院 2",
+						"我的英雄学院第二季",
+						"나의 히어로 아카데미아 2기",
+						"나히아 2기"
+					]
+				},
+				{
+					"anidbId": 12344,
+					"names": [
+						"Boku no Hero Academia (2016)",
+						"أكاديميتي للأبطال (2016)",
+						"My Hero Academia OVA",
+						"僕のヒーローアカデミア(2016)",
+						"我的英雄学院 OAD",
+						"bnha ova",
+						"أبطال الغد (2016)",
+						"أكاديمية بطلي (2016)",
+						"Boku no Hero Academia OVA (2016)",
+						"Boku no Hero Academia OVA",
+						"My Hero Academia: Rescue! Rescue Training",
+						"mha ova",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア OVA"
+					]
+				},
+				{
+					"anidbId": 13270,
+					"names": [
+						"Karakai Jouzu no Takagi-san",
+						"Nicht schon wieder, Takagi-san",
+						"Teasing Master Takagi-san",
+						"טאקאגי-סאן אלופת ההקנטות",
+						"からかい上手の高木さん",
+						"장난을 잘 치는 타카기양",
+						"擅长捉弄的高木同学",
+						"takagi",
+						"Karakai Jozu no Takagi-san",
+						"takagi-san s1",
+						"Karakai Jozu No Takagi-san",
+						"Karakai Jōzu no Takagi-san",
+						"Nhất quỷ Nhì ma, Thứ ba Takagi",
+						"Skilled Teaser Takagi-san",
+						"Takagi-san: Experta en Bromas Pesadas",
+						"Takagi-san: Experta en Bromas pesadas",
+						"Τακάγκι-σαν, το Αρχιπειραχτήρι",
+						"Озорная Такаги",
+						"سيد الدعابة تاكاجي-سان",
+						"แกล้งนัก รักนะ รู้ยัง"
+					]
+				},
+				{
+					"anidbId": 13485,
+					"names": [
+						"Boku no Hero Academia (2018)",
+						"أكاديميتي للأبطال (2018)",
+						"My Hero Academia Season 3",
+						"My Hero Academia Saison 3",
+						"僕のヒーローアカデミア (2018)",
+						"나의 히어로 아카데미아 3",
+						"Akademia bohaterów (2018)",
+						"My Hero Academia - Temporada 3",
+						"我的英雄学院 第三季",
+						"heroaca3",
+						"bnha s3",
+						"bnha3",
+						"أبطال الغد (2018)",
+						"أكاديمية بطلي (2018)",
+						"My Hero Academia S3",
+						"אקדמיית הגיבורים שלי עונה 3",
+						"Моя геройская академия 3",
+						"Boku no Hero Academia 3",
+						"Boku no Hero Academia Season 3",
+						"Boku no Hero Academia 3rd Season",
+						"3أكاديميتي للأبطال",
+						"BNHA 3",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S3",
+						"MHA 3",
+						"My Hero Academia",
+						"My Hero Academia (Tercera Temporada)",
+						"My Hero Academia 3",
+						"My Hero Academia 3. Staffel",
+						"My Hero Academia : Saison 3",
+						"My Hero Academia Temporada 3",
+						"My Hero Academia: Season 3",
+						"My Hero Academia: Stagione 3",
+						"mha s3",
+						"มายฮีโร่ อคาเดเมีย ภาค 3",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 3",
+						"僕のヒーローアカデミア 第三期",
+						"僕のヒーローアカデミア３",
+						"我的英雄学院 3",
+						"我的英雄学院第三季"
+					]
+				},
+				{
+					"anidbId": 13991,
+					"names": [
+						"Karakai Jouzu no Takagi-san: Water Slider",
+						"Teasing Master Takagi-san: Water Slider",
+						"からかい上手の高木さん ウォータースライダー",
+						"擅长捉弄的高木同学：滑水道",
+						"takagi ova",
+						"سيدة الإغاظة تاكاغي-سان: المنزلق المائي",
+						"Takagi-san OVA",
+						"Karakai Jouzu no Takagi-san: Water Slide",
+						"Karakai Jouzu no Takagi-san OVA",
+						"Karakai Jōzu no Takagi-san: Water Slider",
+						"Skilled Teaser Takagi-san OVA",
+						"Teasing Master Takagi-san OVA",
+						"Teasing Master Takagi-san: Water Slide",
+						"เเกล้งนัก รักนะรู้ยัง OVA",
+						"からかい上手の高木さん",
+						"からかい上手の高木さん OVA"
+					]
+				},
+				{
+					"anidbId": 14416,
+					"names": [
+						"Boku no Hero Academia (2019)",
+						"أكاديميتي للأبطال (2019)",
+						"My Hero Academia Season 4",
+						"My Hero Academia Saison 4",
+						"僕のヒーローアカデミア (2019)",
+						"My Hero Academia - Temporada 4",
+						"Моя Геройская Академия 4 сезон",
+						"我的英雄学院 第四季",
+						"我的英雄學院 第四季",
+						"bnha s4",
+						"bnha4",
+						"heroaca4",
+						"أبطال الغد (2019)",
+						"أكاديمية بطلي (2019)",
+						"My Hero Academia S4",
+						"אקדמיית הגיבורים שלי עונה 4",
+						"Моя геройская академия 4",
+						"Boku no Hero Academia 4",
+						"Boku no Hero Academia 4th Season",
+						"BNHA 4",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S4",
+						"MHA 4",
+						"My Hero Academia",
+						"My Hero Academia 4",
+						"My Hero Academia : Saison 4",
+						"My Hero Academia Staffel 4",
+						"My Hero Academia Temporada 4",
+						"My Hero Academia: Season 4",
+						"My Hero Academia: Staffel 4",
+						"mha s4",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 4",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 4",
+						"僕のヒーローアカデミア 第4期",
+						"僕のヒーローアカデミア４",
+						"我的英雄学院 4",
+						"我的英雄学院第四季"
+					]
+				},
+				{
+					"anidbId": 14591,
+					"names": [
+						"Karakai Jouzu no Takagi-san 2",
+						"Teasing Master Takagi-san: Season 2",
+						"טאקאגי-סאן אלופת ההקנטות עונה 2",
+						"からかい上手の高木さん2",
+						"擅长捉弄的高木同学2",
+						"takagi s2",
+						"takagi-san s2",
+						"Teasing Master Takagi-san S2",
+						"からかい上手の高木さん②",
+						"Karakai Jouzu no Takagi-san (2019)",
+						"Karakai Jouzu no Takagi-san Second Season",
+						"Karakai Jouzu no Takagi-san: Saison 2",
+						"Karakai Jozu No Takagi-san Saison 2",
+						"Karakai Jozu No Takagi-san Staffel 2",
+						"Karakai Jozu no Takagi-san: Staffel 2",
+						"Karakai Jozu no Takagi-san: Stagione 2",
+						"Karakai Jōzu no Takagi-san 2",
+						"La maestra de las bromas Takagi-san",
+						"Nhất quỷ Nhì ma, Thứ ba Takagi 2",
+						"Nicht schon wieder, Takagi-san",
+						"Nicht schon wieder, Takagi-san! Staffel 2",
+						"Skilled Teaser Takagi-san 2nd Season",
+						"Takagi-san, experta en bromas pesadas",
+						"Takagi-san: Experta en Bromas Pesadas Temporada 2",
+						"Takagi-san: Experta en bromas pesadas",
+						"Takagi-san: Experta en bromas pesadas - Temporada 2",
+						"Teasing Master Takagi-san",
+						"Teasing Master Takagi-san 2",
+						"Teasing Master Takagi-san Season 2",
+						"טאקאגי-סאן אלופת ההקנטות 2",
+						"แกล้งนัก รักนะ รู้ยัง ภาค 2",
+						"からかい上手の高木さん 2"
+					]
+				},
+				{
+					"anidbId": 15309,
+					"names": [
+						"Hakumei no Tsubasa",
+						"Pokemon: Twilight Wings",
+						"薄明の翼",
+						"破晓之翼",
+						"寶可夢 劍／盾 破曉之翼",
+						"pm ona: hakumei no tsubasa",
+						"Pokémon: Twilight Wings",
+						"Pocket Monsters: Hakumei no Tsubasa",
+						"Pokemon: Hakumei no Tsubasa",
+						"Pokémon Sword & Shield Short Anime",
+						"Pokémon: Alas del Crepúsculo",
+						"Pokémon: Alas del crepúsculo",
+						"Pokémon: Zwielichtschwingen"
+					]
+				},
+				{
+					"anidbId": 15484,
+					"names": [
+						"Boku no Hero Academia (2021)",
+						"أكاديميتي للأبطال (2021)",
+						"My Hero Academia Season 5",
+						"My Hero Academia Saison 5",
+						"僕のヒーローアカデミア (2021)",
+						"My Hero Academia - Temporada 5",
+						"Моя геройская академия 5 сезон",
+						"我的英雄学院 第五季",
+						"bnha s5",
+						"bnha5",
+						"heroaca5",
+						"My Hero Academia S5",
+						"Boku no Hero Academia 5th Season",
+						"BNHA 5",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 5",
+						"Boku no Hero Academia S5",
+						"MHA 5",
+						"My Hero Academia",
+						"My Hero Academia 5",
+						"My Hero Academia : Saison 5",
+						"My Hero Academia Staffel 5",
+						"My Hero Academia Temporada 5",
+						"My Hero Academia: Season 5",
+						"My Hero Academia: Staffel 5",
+						"My Hero Academia: Stagione 5",
+						"My Hero Academia: Temporada 5",
+						"mha s5",
+						"Моя геройская академия 5",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 5",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 5",
+						"僕のヒーローアカデミア 第5期",
+						"僕のヒーローアカデミア５",
+						"我的英雄学院 5",
+						"我的英雄学院第五季"
+					]
+				},
+				{
+					"anidbId": 15672,
+					"names": [
+						"Boku no Hero Academia: Ikinokore! Kesshi no Survival Kunren",
+						"My Hero Academia: Make It! Do-or-Die Survival Training",
+						"僕のヒーローアカデミア 生き残れ! 決死のサバイバル訓練",
+						"Моя Геройская Академия: Сделай это! Тренировка навыков выживания",
+						"我的英雄学院OVA 活下来！殊死的生存训练",
+						"BNHA: Ikinokore! Kesshi no Survival Kunren",
+						"أكاديميتي للأبطال: انجوا! تدريب النجاة من حافّة الموت",
+						"My Hero Academia : Entraînement à la survie",
+						"My Hero Academia : Restez en Vie ! Entraînement à la survie",
+						"My Hero Academia Temporada 4 Ovas: ¡Sobrevive! Entrenamiento de Supervivencia Mortal",
+						"My Hero Academia: Das todesmutige Überlebenstraining",
+						"My Hero Academia: Make It! ¡Sobrevive! Entrenamiento de supervivencia mortal",
+						"My Hero Academia: Resistete! La prova di sopravvivenza",
+						"My Hero Academia: Season 4 OVAs",
+						"My Hero Academia: Sobreviva! Treinamento de Sobrevivência Mortal",
+						"僕のヒーローアカデミア 生き残れ！ 決死のサバイバル訓練",
+						"僕のヒーローアカデミア 生き残れ！決死のサバイバル訓練"
+					]
+				},
+				{
+					"anidbId": 16559,
+					"names": [
+						"Karakai Jouzu no Takagi-san 3",
+						"Teasing Master Takagi-san 3",
+						"からかい上手の高木さん3",
+						"擅长捉弄的高木同学3",
+						"takagi s3",
+						"takagi-san s3",
+						"Teasing Master Takagi-san: Season 3",
+						"擅长捉弄人的高木同学 第三季",
+						"擅長捉弄人的高木同學 第三季",
+						"Karakai Jouzu no Takagi-san Third Season",
+						"Karakai Jōzu no Takagi-san 3",
+						"Nicht schon wieder, Takagi-san: Staffel 3",
+						"Skilled Teaser Takagi-san 3rd Season",
+						"Teasing Master Takagi-san Season 3",
+						"แกล้งนัก รักนะรู้ยัง ภาค 3",
+						"からかい上手の高木さん 3",
+						"からかい上手の高木さん３"
+					]
+				},
+				{
+					"anidbId": 16793,
+					"names": [
+						"Boku no Hero Academia (2022)",
+						"أكاديميتي للأبطال (2022)",
+						"My Hero Academia Season 6",
+						"My Hero Academia Saison 6",
+						"僕のヒーローアカデミア (2022)",
+						"My Hero Academia - Temporada 6",
+						"Моя геройская академия. 6 сезон",
+						"我的英雄学院 第六季",
+						"bnha6, heroaca6",
+						"bnha s6",
+						"bnha6",
+						"My Hero Academia S6",
+						"Моя геройская академия [ТВ-5]",
+						"我的英雄學院 第六季",
+						"Boku no Hero Academia 6th Season",
+						"BNHA 6",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 6",
+						"Boku no Hero Academia S6",
+						"MHA 6",
+						"My Hero Academia",
+						"My Hero Academia 6",
+						"My Hero Academia Staffel 6",
+						"My Hero Academia: Stagione 6",
+						"My Hero Academia: Temporada 6",
+						"heroaca6",
+						"mha s6",
+						"Моя геройская академия 6",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 6",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 6",
+						"僕のヒーローアカデミア Season6",
+						"僕のヒーローアカデミア 第6期",
+						"僕のヒーローアカデミア６",
+						"我的英雄学院 6",
+						"我的英雄学院第六季"
+					]
+				},
+				{
+					"anidbId": 17356,
+					"names": [
+						"Boku no Hero Academia (Web)",
+						"My Hero Academia (Web)",
+						"僕のヒーローアカデミア (Web)",
+						"我的英雄学院 HLB",
+						"bnha(Web)",
+						"bnha (2022)",
+						"我的英雄學院(Web)",
+						"Boku no Hero Academia (ONA)",
+						"Boku no Hero Academia 5 (ONA)",
+						"Boku no Hero Academia 5th Season OVA",
+						"Boku no Hero Academia HLA",
+						"Boku no Hero Academia HLB",
+						"Boku no Hero Academia: HLB",
+						"Boku no Hero Academia: Hero League Baseball",
+						"Boku no Hero Academia: Warae! Jigoku no You ni",
+						"HLB",
+						"HLB: Hero League Baseball",
+						"Hero League Baseball",
+						"Heroes League Baseball",
+						"My Hero Academia ONA",
+						"My Hero Academia Saison 5 OVAs",
+						"My Hero Academia Season 5 OVA",
+						"My Hero Academia Season 5 OVAs",
+						"My Hero Academia Staffel 5 OVAs",
+						"My Hero Academia Stagione 5 OVAs",
+						"My Hero Academia: HLB",
+						"My Hero Academia: HLB (Hero League Baseball)",
+						"My Hero Academia: Hero League Baseball",
+						"My Hero Academia: Laugh! As if you are in hell",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 5 (ONA)",
+						"僕のヒーローアカデミア HLB",
+						"僕のヒーローアカデミア 笑え!地獄のように",
+						"僕のヒーローアカデミア 第5期 OVA",
+						"僕のヒーローアカデミア （Web）",
+						"僕のヒーローアカデミア: HLB"
+					]
+				},
+				{
+					"anidbId": 17931,
+					"names": [
+						"Boku no Hero Academia (2024)",
+						"My Hero Academia Staffel 7",
+						"My Hero Academia Season 7",
+						"My Hero Academia Saison 7",
+						"僕のヒーローアカデミア (2024)",
+						"bnha s7",
+						"bnha7",
+						"bnha7, heroaca7",
+						"Boku no Hero Academia Season 7",
+						"Boku no Hero Academia 7th Season",
+						"BNHA 7",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 7",
+						"Boku no Hero Academia S7",
+						"MHA 7",
+						"My Hero Academia",
+						"My Hero Academia 7",
+						"My Hero Academia : Saison 7",
+						"My Hero Academia: Season 7",
+						"My Hero Academia: Staffel 7",
+						"My Hero Academia: Stagione 7",
+						"My Hero Academia: Temporada 7",
+						"heroaca7",
+						"mha s7",
+						"Моя геройская академия 7",
+						"Моя геройская академия. 7 сезон",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 7",
+						"僕のヒーローアカデミア Season7",
+						"僕のヒーローアカデミア 第7期",
+						"僕のヒーローアカデミア7",
+						"我的英雄学院 第七季"
+					]
+				},
+				{
+					"anidbId": 18199,
+					"names": [
+						"Boku no Hero Academia: Yuuei Heroes Battle",
+						"My Hero Academia: UA Heroes Battle",
+						"僕のヒーローアカデミア 雄英ヒーローズ・バトル",
+						"我的英雄学院：雄英HEROES BATTLE",
+						"我的英雄學院：雄英HEROES BATTLE",
+						"Boku no Hero Academia: UA Heroes Battle",
+						"Boku no Hero Academia: Yūei Heroes Battle",
+						"My Hero Academia 6 OVA",
+						"My Hero Academia : U.A. Heroes Battle",
+						"My Hero Academia UA BATTLE HEROES",
+						"My Hero Academia: Batalla de Héroes de la U.A.",
+						"My Hero Academia: Season 6 OVA",
+						"My Hero Academia: U.A. Heroes Battle",
+						"My Hero Academia: Yuei Heroes Battle"
+					]
+				},
+				{
+					"anidbId": 18921,
+					"names": [
+						"Boku no Hero Academia (2025)",
+						"My Hero Academia Final Season",
+						"僕のヒーローアカデミア (2025)",
+						"My Hero Academia Staffel 8",
+						"Boku no Hero Academia Final Season",
+						"Hero Academia 8",
+						"My Hero Academia (2025)",
+						"My Hero Academia Season 8",
+						"僕のヒーローアカデミア FINAL SEASON",
+						"bnha s8",
+						"bnha8",
+						"heroaca8",
+						"mha s8",
+						"Boku no Hero Academia: Final Season",
+						"BNHA 8",
+						"Boku no Hero Academia 8",
+						"Boku no Hero Academia FINAL SEASON",
+						"Boku no Hero Academia Season 8",
+						"MHA 8",
+						"My Hero Academia",
+						"My Hero Academia 8",
+						"My Hero Academia : Final Season",
+						"My Hero Academia : La saison finale",
+						"My Hero Academia FINAL SEASON",
+						"My Hero Academia: Final Season",
+						"My Hero Academia: Season 8",
+						"My Hero Academia: Staffel 8",
+						"My Hero Academia: Temporada Final",
+						"Моя геройская академия 8",
+						"มายฮีโร่ อคาเดเมีย ไฟนอลซีซัน",
+						"ヒロアカ 8",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア Final Season"
+					]
+				},
+				{
+					"anidbId": 20039,
+					"names": [
+						"Boku no Hero Academia: More",
+						"My Hero Academia: More",
+						"僕のヒーローアカデミア More",
+						"Boku no Hero Academia More"
 					]
 				}
 			]
@@ -7814,6 +10841,1945 @@
 						"episodeEnd": null,
 						"how": "tmdb",
 						"tmdbEpisodeId": 4561279
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Robot Chicken (2005-2020)",
+				"hash": null,
+				"imdbId": "tt0437745",
+				"files": [
+					{
+						"path": "2005 - Robot Chicken Christmas Special.mkv",
+						"folder": "Other Specials (2005-2017)"
+					},
+					{
+						"path": "2013 - Robot Chicken Born Again Virgin Christmas Special.mkv",
+						"folder": "Other Specials (2005-2017)"
+					},
+					{
+						"path": "2017 - Robot Chicken Walking Dead Special Look Whos Walking.mkv",
+						"folder": "Other Specials (2005-2017)"
+					},
+					{ "path": "Behind The Scenes.avi", "folder": "Extras" },
+					{
+						"path": "Robot Chicken DC Comics Special I.mkv",
+						"folder": "DC Comics Specials (2012-2015)"
+					},
+					{
+						"path": "Robot Chicken DC Comics Special II Villains in Paradise.mkv",
+						"folder": "DC Comics Specials (2012-2015)"
+					},
+					{
+						"path": "Robot Chicken DC Comics Special III Magical Friendship.mkv",
+						"folder": "DC Comics Specials (2012-2015)"
+					},
+					{
+						"path": "Robot Chicken Star Wars I.mkv",
+						"folder": "Star Wars Specials (2007-2010)"
+					},
+					{
+						"path": "Robot Chicken Star Wars II.mkv",
+						"folder": "Star Wars Specials (2007-2010)"
+					},
+					{
+						"path": "Robot Chicken Star Wars III.mkv",
+						"folder": "Star Wars Specials (2007-2010)"
+					},
+					{ "path": "Sweet J. Presents.avi", "folder": "Extras" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0437745",
+				"tmdbId": 709,
+				"files": [
+					{
+						"path": "2005 - Robot Chicken Christmas Special.mkv",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026577
+					},
+					{
+						"path": "2013 - Robot Chicken Born Again Virgin Christmas Special.mkv",
+						"season": 0,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026588
+					},
+					{
+						"path": "2017 - Robot Chicken Walking Dead Special Look Whos Walking.mkv",
+						"season": 0,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1250851
+					},
+					{
+						"path": "Behind The Scenes.avi",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026580
+					},
+					{
+						"path": "Robot Chicken DC Comics Special I.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Robot Chicken DC Comics Special II Villains in Paradise.mkv",
+						"season": 0,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026589
+					},
+					{
+						"path": "Robot Chicken DC Comics Special III Magical Friendship.mkv",
+						"season": 0,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1131234
+					},
+					{
+						"path": "Robot Chicken Star Wars I.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Robot Chicken Star Wars II.mkv",
+						"season": 0,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026582
+					},
+					{
+						"path": "Robot Chicken Star Wars III.mkv",
+						"season": 0,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026585
+					},
+					{
+						"path": "Sweet J. Presents.avi",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1026576
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Sesame Street",
+				"hash": null,
+				"imdbId": "tt4366556",
+				"files": [
+					{
+						"path": "Another Unknown Sesame Street episode part 1 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 2 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 3 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 4 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 5 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 6 Free Download, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 7 Free Download, .mp4",
+						"folder": ""
+					},
+					{ "path": "Big Bird in Japan.avi", "folder": "" },
+					{
+						"path": "Classic Sesame Street - Big Bird, Grover and cast sing Surprise.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Classic Sesame Street - Ernie and the Pumpkin Seed Candy Sales.mp4",
+						"folder": ""
+					},
+					{ "path": "Classic Sesame Street - Mr. Rogers Visits.mp4", "folder": "" },
+					{ "path": "Sesame Street - Bedtime Stories & Songs (1986).mp4", "folder": "" },
+					{ "path": "Sesame Street - Elmocize.mp4", "folder": "" },
+					{ "path": "Sesame Street - Episode 1969 -.mp4", "folder": "" },
+					{
+						"path": "Sesame Street - Helping Traumatized Children Cope The Aspen In.mp4",
+						"folder": ""
+					},
+					{ "path": "Sesame Street - I'm Glad I'm Me and Sing Along.mp4", "folder": "" },
+					{
+						"path": "Sesame Street - Imagine That! Activities For Rainy Days And Every Day.mp4",
+						"folder": ""
+					},
+					{ "path": "Sesame Street - Kids' Favorite Songs.mp4", "folder": "" },
+					{ "path": "Sesame Street - Learn To Read ABC.mp4", "folder": "" },
+					{ "path": "Sesame Street - Learning about letters.mp4", "folder": "" },
+					{
+						"path": "Unknown Sesame Street episode part 1 Free Download, Borrow, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Unknown Sesame Street episode part 2 Free Download, Borrow, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Unknown Sesame Street episode part 3 Free Download, Borrow, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Unknown Sesame Street episode part 4 Free Download, Borrow, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Unknown Sesame Street episode part 5 Free Download, Borrow, .mp4",
+						"folder": ""
+					},
+					{
+						"path": "Unknown Sesame Street episode part 6 Free Download, Borrow, .mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0063951",
+				"tmdbId": 502,
+				"files": [
+					{
+						"path": "Another Unknown Sesame Street episode part 1 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 2 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 3 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 4 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 5 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 6 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Another Unknown Sesame Street episode part 7 Free Download, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Big Bird in Japan.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Classic Sesame Street - Big Bird, Grover and cast sing Surprise.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Classic Sesame Street - Ernie and the Pumpkin Seed Candy Sales.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Classic Sesame Street - Mr. Rogers Visits.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Bedtime Stories & Songs (1986).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Elmocize.mp4",
+						"season": 0,
+						"episode": 69,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 25153
+					},
+					{
+						"path": "Sesame Street - Episode 1969 -.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Helping Traumatized Children Cope The Aspen In.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - I'm Glad I'm Me and Sing Along.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Imagine That! Activities For Rainy Days And Every Day.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Kids' Favorite Songs.mp4",
+						"season": 0,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 27612
+					},
+					{
+						"path": "Sesame Street - Learn To Read ABC.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Sesame Street - Learning about letters.mp4",
+						"season": 0,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 953880
+					},
+					{
+						"path": "Unknown Sesame Street episode part 1 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Unknown Sesame Street episode part 2 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Unknown Sesame Street episode part 3 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Unknown Sesame Street episode part 4 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Unknown Sesame Street episode part 5 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Unknown Sesame Street episode part 6 Free Download, Borrow, .mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]",
+				"hash": null,
+				"imdbId": "tt0388629",
+				"files": [
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece OVA - Defeat Him! The Pirate Ganzack!.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 01 (2000) - One Piece the Movie.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 02 (2001) - Adventures on Clockwork Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 03 (2002) - Chopper's Kingdom in the Strange Animal Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 04 (2003) - The Adventure of Dead End.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 05 (2004) - The Cursed Holy Sword.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 07 (2006) - Giant Mecha Soldier of Karakuri Castle.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 08 (2007) - The Desert Princess and the Pirates, Adventures in Alabasta.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 09 (2008) - Episode of Chopper Plus, Bloom in the Winter, Miracle Sakura.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 10 (2009) - Strong World.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 11 (2011) - (3D) Straw Hat Chase.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 12 (2012) - Film Z.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 13 (2016) - Film Gold.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 14 (2019) - Stampede.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 15 (2022) - One Piece Film RED.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - 3D2Y.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Adventure of Nebulandia.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Luffy.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Merry.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Nami.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Sabo.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Skypiea.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Heart of Gold.mkv",
+						"folder": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch]"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0388629",
+				"tmdbId": 37854,
+				"files": [
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece OVA - Defeat Him! The Pirate Ganzack!.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 01 (2000) - One Piece the Movie.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 02 (2001) - Adventures on Clockwork Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 03 (2002) - Chopper's Kingdom in the Strange Animal Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 04 (2003) - The Adventure of Dead End.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 05 (2004) - The Cursed Holy Sword.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 06 (2005) - Baron Omatsuri and the Secret Island.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 07 (2006) - Giant Mecha Soldier of Karakuri Castle.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 08 (2007) - The Desert Princess and the Pirates, Adventures in Alabasta.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 09 (2008) - Episode of Chopper Plus, Bloom in the Winter, Miracle Sakura.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 10 (2009) - Strong World.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 11 (2011) - (3D) Straw Hat Chase.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 12 (2012) - Film Z.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 13 (2016) - Film Gold.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 14 (2019) - Stampede.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Movie 15 (2022) - One Piece Film RED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - 3D2Y.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Adventure of Nebulandia.mkv",
+						"season": 0,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1154717
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Luffy.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Merry.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Nami.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Sabo.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Episode of Skypiea.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] One Piece (0001-1071+Movies+Specials) [BD+CR] [Dual Audio] [1080p][HEVC 10bit x265][AAC][Multi Sub] [Batch].zip/[Anime Time] One Piece Special - Heart of Gold.mkv",
+						"season": 0,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1557229
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "QI",
+				"hash": null,
+				"imdbId": "tt0380136",
+				"files": [
+					{ "path": "QI Series T - New Guest Initiation.mkv", "folder": "Specials" },
+					{ "path": "QI Series T - Pre-Show Banter.mkv", "folder": "Specials" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0380136",
+				"tmdbId": 1554,
+				"files": [
+					{
+						"path": "QI Series T - New Guest Initiation.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "QI Series T - Pre-Show Banter.mkv",
+						"season": 0,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4500886
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Blue's Clues",
+				"hash": null,
+				"imdbId": "tt0163929",
+				"files": [
+					{ "path": "Blue's Clues - Planets Song.mpg", "folder": "EXTRAS" },
+					{ "path": "Blue's Clues - Shapes And Colors (1).avi", "folder": "EXTRAS" },
+					{ "path": "Blue's Clues - Shapes And Colors [3].avi", "folder": "EXTRAS" },
+					{ "path": "Blue's Clues - Show and tell.avi", "folder": "EXTRAS" },
+					{
+						"path": "Blue's Clues 03xS1 Blue's Big Musical Movie.avi",
+						"folder": "Blue's Clues Season 3"
+					},
+					{ "path": "Blues Room Little Blue Riding Hood.avi", "folder": "EXTRAS" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0163929",
+				"tmdbId": 10821,
+				"files": [
+					{
+						"path": "Blue's Clues - Planets Song.mpg",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Blue's Clues - Shapes And Colors (1).avi",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 437245
+					},
+					{
+						"path": "Blue's Clues - Shapes And Colors [3].avi",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 437245
+					},
+					{
+						"path": "Blue's Clues - Show and tell.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Blue's Clues 03xS1 Blue's Big Musical Movie.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Blues Room Little Blue Riding Hood.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[KH] Teasing Master Takagi-san (BD 1080p) [Dual-Audio]",
+				"hash": null,
+				"imdbId": "tt7808344",
+				"files": [
+					{ "path": "NCED - 01.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 02.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 03.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 04.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 05.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 06.mkv", "folder": "Extras/NC" },
+					{ "path": "NCED - 07.mkv", "folder": "Extras/NC" },
+					{ "path": "NCOP.mkv", "folder": "Extras/NC" },
+					{
+						"path": "[KH] Teasing Master Takagi-san - OVA - Water Slide.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt7808344",
+				"tmdbId": 75865,
+				"files": [
+					{
+						"path": "NCED - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 03.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 04.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 05.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 06.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCED - 07.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[KH] Teasing Master Takagi-san - OVA - Water Slide.mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1523619
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Family Guy - Seasons 1 to 20",
+				"hash": null,
+				"imdbId": "tt19268128",
+				"files": [
+					{
+						"path": "Family Guy - Stewie Griffin The Untold Story (Uncensored).mkv",
+						"folder": "The Movie - Stewie Griffin The Untold Story (Uncensored)"
+					},
+					{
+						"path": "Seth & Alex's Almost Live Comedy Show.mkv",
+						"folder": "Seth & Alex's Almost Live Comedy Show"
+					},
+					{
+						"path": "Star Wars Parody 1 - Family Guy Presents Blue Harvest (Uncensored - 2007).mkv",
+						"folder": "Star Wars Parodies"
+					},
+					{
+						"path": "Star Wars Parody 2 - Family Guy - Something, Something, Something, Dark Side (Uncensored - 2010).mkv",
+						"folder": "Star Wars Parodies"
+					},
+					{
+						"path": "Star Wars Parody 3 - Family Guy - It's A Trap! (Uncensored - 2011).mkv",
+						"folder": "Star Wars Parodies"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0182576",
+				"tmdbId": 1434,
+				"files": [
+					{
+						"path": "Family Guy - Stewie Griffin The Untold Story (Uncensored).mkv",
+						"season": 0,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 66255
+					},
+					{
+						"path": "Seth & Alex's Almost Live Comedy Show.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star Wars Parody 1 - Family Guy Presents Blue Harvest (Uncensored - 2007).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star Wars Parody 2 - Family Guy - Something, Something, Something, Dark Side (Uncensored - 2010).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star Wars Parody 3 - Family Guy - It's A Trap! (Uncensored - 2011).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Phineas and Ferb Season 1 2 3 4 OWCA 1080p v2 DONUT",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "O.W.C.A. Files.mkv",
+						"folder": "Specials/2015-11-09 - O.W.C.A. Files"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0852863",
+				"tmdbId": 1877,
+				"files": [
+					{
+						"path": "O.W.C.A. Files.mkv",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 115290
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "KaBlam!",
+				"hash": null,
+				"imdbId": "tt0122353",
+				"files": [
+					{ "path": "Kablam Promo - Cartoon Crammed (1997).mp4", "folder": "" },
+					{ "path": "Kablam Promo - Get Down (1997).mp4", "folder": "" },
+					{ "path": "Life with Loopy Birthday Gala-Bration (1998).mp4", "folder": "" },
+					{ "path": "The Henry & June Show (1999).mp4", "folder": "" },
+					{ "path": "The Off-Beats Valentine's Special (1998).mp4", "folder": "" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0122353",
+				"tmdbId": 544,
+				"files": [
+					{
+						"path": "Kablam Promo - Cartoon Crammed (1997).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Kablam Promo - Get Down (1997).mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Life with Loopy Birthday Gala-Bration (1998).mp4",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3671464
+					},
+					{
+						"path": "The Henry & June Show (1999).mp4",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3671470
+					},
+					{
+						"path": "The Off-Beats Valentine's Special (1998).mp4",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3671491
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] Boku No Hero Academia (My Hero Academia) (S01-S07+Movies+OVAs) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt32179154",
+				"files": [
+					{
+						"path": "Boku no Hero Academia S2 [SP01] NCOP - 01.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 02/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP01] NCOP - 02.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 02/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 01.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 02/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 02.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 02/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 03.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 02/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP01] NCOP - 01.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 03/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP01] NCOP - 02.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 03/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP02] NCED - 01.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 03/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP02] NCED - 02.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 03/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S4 NCED 1.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 04/NC"
+					},
+					{
+						"path": "Boku no Hero Academia S4 NCOP 1.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 04/NC"
+					},
+					{
+						"path": "Boku no Hero Academia [SP01] NCOP.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 01/NC"
+					},
+					{
+						"path": "Boku no Hero Academia [SP02] NCED - 01.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 01/NC"
+					},
+					{
+						"path": "Boku no Hero Academia [SP02] NCED - 02.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 01/NC"
+					},
+					{ "path": "ED 01.mkv", "folder": "[Anime Time] My Hero Academia Season 05/NC" },
+					{ "path": "ED 02.mkv", "folder": "[Anime Time] My Hero Academia Season 05/NC" },
+					{
+						"path": "My Hero Academia S6 NCED.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 06/NC"
+					},
+					{
+						"path": "My Hero Academia S6 NCOP.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 06/NC"
+					},
+					{
+						"path": "My Hero Academia S7 - NCED.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 07/NC"
+					},
+					{
+						"path": "My Hero Academia S7 - NCOP.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 07/NC"
+					},
+					{
+						"path": "My Hero Academia SP NCED.mkv",
+						"folder": "[Anime Time] My Hero Academia Season 06/NC"
+					},
+					{ "path": "OP 01.mkv", "folder": "[Anime Time] My Hero Academia Season 05/NC" },
+					{ "path": "OP 02.mkv", "folder": "[Anime Time] My Hero Academia Season 05/NC" },
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 04 - You're Next.mkv",
+						"folder": "[Anime Time] My Hero Academia Movies"
+					},
+					{ "path": "[Anime Time] My Hero Academia Movie OVA.mkv", "folder": "OVA" },
+					{
+						"path": "[Anime Time] My Hero Academia OVA - All Might Rising The Animation.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - HLB (Hero League Baseball).mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Laugh! As If You Are In Hell.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 1.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 2.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Rescue! Rescue Training!.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Training of the Dead!.mkv",
+						"folder": "OVA"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "Boku no Hero Academia S2 [SP01] NCOP - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP01] NCOP - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S2 [SP02] NCED - 03.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP01] NCOP - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP01] NCOP - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP02] NCED - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S3 [SP02] NCED - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S4 NCED 1.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia S4 NCOP 1.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia [SP01] NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia [SP02] NCED - 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boku no Hero Academia [SP02] NCED - 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "My Hero Academia S6 NCED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "My Hero Academia S6 NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "My Hero Academia S7 - NCED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "My Hero Academia S7 - NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "My Hero Academia SP NCED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 01.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 02.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 04 - You're Next.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie OVA.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - All Might Rising The Animation.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - HLB (Hero League Baseball).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Laugh! As If You Are In Hell.mkv",
+						"season": 0,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3770076
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 1.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 2.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Rescue! Rescue Training!.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Training of the Dead!.mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1323602
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "[Anime Time] Boku No Hero Academia (My Hero Academia) (S01+S02+S03+S04+S05+Movies+OVAs) [BD] [Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt32179154",
+				"files": [
+					{ "path": "ED 01 (Season 01).mkv", "folder": "Season 01/NC" },
+					{ "path": "ED 01 (Season 02).mkv", "folder": "Season 02/NC" },
+					{ "path": "ED 01 (Season 03).mkv", "folder": "Season 03/NC" },
+					{ "path": "ED 01 (Season 05).mkv", "folder": "Season 05/NC" },
+					{ "path": "ED 02 (Season 01).mkv", "folder": "Season 01/NC" },
+					{ "path": "ED 02 (Season 02).mkv", "folder": "Season 02/NC" },
+					{ "path": "ED 02 (Season 03).mkv", "folder": "Season 03/NC" },
+					{ "path": "ED 02 (Season 05).mkv", "folder": "Season 05/NC" },
+					{ "path": "ED 03.mkv", "folder": "Season 02/NC" },
+					{ "path": "ED.mkv", "folder": "Season 04/NC" },
+					{ "path": "OP (Season 01).mkv", "folder": "Season 01/NC" },
+					{ "path": "OP (Season 04).mkv", "folder": "Season 04/NC" },
+					{ "path": "OP 01 (Season 02).mkv", "folder": "Season 02/NC" },
+					{ "path": "OP 01 (Season 03).mkv", "folder": "Season 03/NC" },
+					{ "path": "OP 01 (Season 05).mkv", "folder": "Season 05/NC" },
+					{ "path": "OP 02 (Season 02).mkv", "folder": "Season 02/NC" },
+					{ "path": "OP 02 (Season 03).mkv", "folder": "Season 03/NC" },
+					{ "path": "OP 02 (Season 05).mkv", "folder": "Season 05/NC" },
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"folder": "Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"folder": "Movies"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"folder": "Movies"
+					},
+					{ "path": "[Anime Time] My Hero Academia Movie OVA.mkv", "folder": "OVA" },
+					{
+						"path": "[Anime Time] My Hero Academia OVA - All Might Rising The Animation.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 1.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 2.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Rescue! Rescue Training!.mkv",
+						"folder": "OVA"
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Training of the Dead!.mkv",
+						"folder": "OVA"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "ED 01 (Season 01).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 01 (Season 02).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 01 (Season 03).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 01 (Season 05).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 02 (Season 01).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 02 (Season 02).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 02 (Season 03).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 02 (Season 05).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED 03.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "ED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP (Season 01).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP (Season 04).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 01 (Season 02).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 01 (Season 03).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 01 (Season 05).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 02 (Season 02).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 02 (Season 03).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "OP 02 (Season 05).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 01 - Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 02 - Heroes Rising.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie 03 - World Heroes Mission.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia Movie OVA.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - All Might Rising The Animation.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 1.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Make It! Do-or-Die Survival Training, Part 2.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Rescue! Rescue Training!.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] My Hero Academia OVA - Training of the Dead!.mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1323602
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Pokémon- Twilight Wings (Hakumei no Tsubasa) [1080p x264 AAC] [Dual-Subs] [EN, ES] [DDL]",
+				"hash": null,
+				"imdbId": "tt11547516",
+				"files": [
+					{ "path": "Pokémon- Twilight Wings—The Gathering of Stars.mkv", "folder": "" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt11547516",
+				"tmdbId": 96420,
+				"files": [
+					{
+						"path": "Pokémon- Twilight Wings—The Gathering of Stars.mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2486705
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "Wishbone.COMPLETE.VariousRip.XviD",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Dog.Days.of.the.West.avi",
+						"folder": "Wishbone.Dog.Days.of.the.West.VHSRip.XviD"
+					},
+					{ "path": "The Making of Wishbone.avi", "folder": "" }
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0112225",
+				"tmdbId": 2152,
+				"files": [
+					{
+						"path": "Dog.Days.of.the.West.avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "The Making of Wishbone.avi",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 150807
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "The Adventures of Jimmy Neutron - Boy Genius",
+				"hash": null,
+				"imdbId": "tt0852739",
+				"files": [
+					{
+						"path": "The Jimmy Timmy Power Hour 2 - When Nerds Collide!.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "The Jimmy Timmy Power Hour 3 - The Jerkinators!.mkv",
+						"folder": "Specials"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0320808",
+				"tmdbId": 2129,
+				"files": [
+					{
+						"path": "The Jimmy Timmy Power Hour 2 - When Nerds Collide!.mkv",
+						"season": 0,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 149647
+					},
+					{
+						"path": "The Jimmy Timmy Power Hour 3 - The Jerkinators!.mkv",
+						"season": 0,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 149650
 					}
 				]
 			}
