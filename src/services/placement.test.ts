@@ -730,8 +730,13 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 	};
 	const ask: Identify = async (list) =>
 		list.map(({ name }) => (fun1023.answers.identify as any)?.[name] ?? null);
-	const placedHere = async (name: string) => {
-		const c = fun1023.cases.find((c) => c.request.name.startsWith(name))!;
+	// the case of that release holding a file named so, where one release has several cases
+	const placedHere = async (name: string, file = '') => {
+		const c = fun1023.cases.find(
+			(c) =>
+				c.request.name.startsWith(name) &&
+				c.request.files.some((f) => f.path.includes(file))
+		)!;
 		return (await place([c.request as PlaceRequest], Infinity, from, ask)).releases[0];
 	};
 	const at = (release: Awaited<ReturnType<typeof placedHere>>, part: string) => {
@@ -785,5 +790,14 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		const owari = await placedHere('[smol] Owarimonogatari');
 		expect(owari).toMatchObject({ tmdbId: 46195 });
 		expect(at(owari, 'S07E01')).toEqual([4, 1]);
+	});
+	it('places a number TMDB titles an episode with', async () => {
+		// TMDB titles Sesame Street's episodes with their production numbers
+		const street = await placedHere('Sesame Street', 'Episode 3815');
+		expect(at(street, "Episode 3815 - Oscar's trash sale - Part 1")).toEqual([30, 30]);
+		// counted through the seasons it had landed on S11E95 "Episode 1410"
+		expect(at(street, 'Episode 1364 - C-3PO')).toEqual([11, 49]);
+		// no TMDB title carries 1969
+		expect(at(street, 'Episode 1969')).toEqual([null, null]);
 	});
 });

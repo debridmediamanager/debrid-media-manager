@@ -753,6 +753,25 @@ async function placeByRules(
 		const ordered = tvdb && (await placed(tvdb, 'tvdb'));
 		if (ordered) return ordered;
 	}
+	// a number TMDB titles an episode with: Sesame Street's `Episode 3815 - Oscar's trash sale` is
+	// its S30E30 "Oscar's Trash Sale (3815)", by production number
+	if (season === null && episode >= 100) {
+		const code = new RegExp(`\\(0*${episode}\\)\\s*$`);
+		const lists = await Promise.all(
+			show.seasons
+				.filter((row) => row.season > 0)
+				.map(async (row) =>
+					((await show.episodes(row.season)) ?? []).map((item) => ({
+						...item,
+						season: row.season,
+					}))
+				)
+		);
+		const coded = lists.flat().filter((item) => code.test(item.name));
+		const found =
+			coded.length === 1 && (await placed([coded[0].season, coded[0].episode], 'tmdb'));
+		if (found) return found;
+	}
 	return counted && !numbers.fromStart
 		? absolute(show, season, episode, Boolean(mapped), placed)
 		: null;
