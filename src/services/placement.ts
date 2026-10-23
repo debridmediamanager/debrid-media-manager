@@ -43,7 +43,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * that much later (2026-10-22). Deploys that change no placement keep it, so callers do not
  * ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.4';
+export const PLACEMENT_RULES = '2026-10-23.5';
 
 export interface PlaceRequest {
 	name: string;
@@ -755,7 +755,9 @@ async function placeOnImdb(
 /** How many of an answer's files placeOnShow placed by their own titles. */
 const titledFiles = new WeakMap<PlacedRelease, number>();
 
-const TVDB_ORDER = /\btvdb\b/i;
+// TMDB names Detective Conan's "Aired Order (TheTVDB)": `S33E26.a.Ghost` (Crunchyroll's, TVDB's
+// season 33) is its S1E1173 "It's a Ghost!"
+const TVDB_ORDER = /tvdb/i;
 const DUB_ORDER = /\bdub\b/i;
 // `[Rillant] Medabots S01-03 (English Dubbed)`: numbered in the dub's own seasons
 const DUBBED = /(?:^|[\s._([-])(?:english[\s._-]+)?dub(?:bed)?(?=[\s._)\]-]|$)/i;

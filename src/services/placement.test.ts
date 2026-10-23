@@ -766,4 +766,9 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		// TMDB's S0E4 is "Robot Chicken: Star Wars", no title the file has: no special
 		expect(at(chicken, 'Robot Chicken Star Wars I.mkv')).toEqual([null, null]);
 	});
+	it('numbers a show by an episode group TMDB names after TheTVDB', async () => {
+		// Detective Conan's "Aired Order (TheTVDB)": Crunchyroll's `S33E26` is TMDB's S1E1173
+		const ghost = await placedHere('Detective.Conan.S33E26.a.Ghost');
+		expect(ghost.files[0]).toMatchObject({ season: 1, episode: 1173, how: 'tvdb' });
+	});
 });
