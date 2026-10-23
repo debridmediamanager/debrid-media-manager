@@ -1,6 +1,8 @@
+import debridLinkSeedbox from '@/test/fixtures/debridlink/seedbox-list-2026-09-06.json';
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
+import frierenAddons from '@/test/fixtures/seasonEpisodes/addons-tt22248376-s1.json';
 import { fileNumbers, normalizeTitle, parseName, titleText } from '@/utils/episodePlacement';
 import { describe, expect, it } from 'vitest';
 
@@ -142,5 +144,26 @@ describe('a season and episode in brackets as SxxEPyy', () => {
 				wrong.push(`${file.path}: ${read} for ${want}`);
 		}
 		expect(wrong).toEqual([]);
+	});
+});
+
+// A lockfile refresh in f9818bba moved ptt from the pinned branch to upstream master,
+// which reads `BS4` (a broadcaster) and `DS4K` (a downscale tag) as a season: Frieren's
+// episodes went looking for a fourth season and Se7en became a show.
+describe('parseName on real names a ptt upgrade misread', () => {
+	const names = [
+		...JSON.stringify(debridLinkSeedbox).matchAll(/"([^"/]*DS4K[^"]*\.mkv)"/g),
+		...JSON.stringify(frierenAddons).matchAll(
+			/"(\[YE\] Sousou no Frieren - \d+ \(BS4[^"]*\.mkv)"/g
+		),
+	].map((m) => JSON.parse(`"${m[1]}"`) as string);
+
+	it('reads them from the fixtures', () => {
+		expect(names.some((n) => n.includes('DS4K'))).toBe(true);
+		expect(names.some((n) => n.includes('BS4'))).toBe(true);
+	});
+
+	it.each(names)('names no season in %s', (name) => {
+		expect(parseName(name).season).toBeNull();
 	});
 });

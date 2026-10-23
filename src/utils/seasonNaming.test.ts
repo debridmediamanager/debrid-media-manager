@@ -211,6 +211,8 @@ describe('against the live corpus', () => {
 	it('keeps the season packs whose names carry a phantom episode number', () => {
 		// `ptt` reads an episode out of `2xRus`, `3D` and `Cap. 101`, which both
 		// dropped these from the pack list and offered them as single episodes.
+		// 88 distinct titles in this fixture are affected (131 rows before the
+		// fixture was deduplicated), and every one of them is a real pack.
 		const recovered = rows.filter((r) => {
 			const parsed = ptt.parse(r.title) as { season?: number; episode?: number };
 			const pttCalledItAnEpisode = typeof parsed.episode === 'number';
@@ -218,6 +220,9 @@ describe('against the live corpus', () => {
 			return filterSeasonPacks([asRow(r)], { season: r.season }).length > 0;
 		});
 
+		// Without a floor the loop below passes on an empty set; f9818bba dropped it
+		// when a lockfile refresh moved ptt to another branch.
+		expect(recovered.length).toBeGreaterThanOrEqual(80);
 		// And none of them is offered as an episode any more.
 		for (const r of recovered) {
 			expect(filterSeasonEpisodes([asRow(r)], { season: r.season }).size).toBe(0);
