@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@badrap/valita": "^0.4.6",
 		"@ctrl/video-filename-parser": "^5.2.2",
-		"@geektr/acme-dns01": "^0.3.0",
+		"@geektr/acme-dns01": "0.3.0",
 		"@octokit/rest": "^22.0.0",
 		"@prisma/client": "^6.5.0",
 		"@serwist/next": "^9.5.13",
@@ -117,7 +117,7 @@
 			"deepmerge-ts": "^8.0.2"
 		},
 		"bittorrent-tracker": {
-			"ip": "npm:@bybrave/ip2@^3.1.0"
+			"ip": "npm:@bybrave/ip2@3.1.0"
 		}
 	},
 	"lint-staged": {
