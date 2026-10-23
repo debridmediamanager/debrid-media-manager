@@ -23,7 +23,12 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: '24'
-            - name: Audit runtime and development dependencies
+            # Only a serious advisory in what ships may hold a deploy: a revert is
+            # the rollback, and a fresh low advisory in a dev tool must not block it.
+            - name: Audit runtime dependencies
+              run: npm audit --package-lock-only --omit=dev --audit-level=high
+            - name: Audit all dependencies
+              continue-on-error: ${{ github.event_name == 'push' }}
               run: npm audit --package-lock-only --audit-level=low
 
     build-and-deploy:
