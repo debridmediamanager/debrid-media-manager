@@ -256,6 +256,11 @@
 				"movie_results": [{ "id": 900667 }],
 				"tv_results": [],
 				"tv_episode_results": []
+			},
+			"tt11737520": {
+				"movie_results": [],
+				"tv_results": [{ "id": 111110 }],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -2396,6 +2401,32 @@
 						"name": "Season 3"
 					},
 					{ "season_number": 4, "episode_count": 0, "air_date": null, "name": "Season 4" }
+				]
+			},
+			"111110": {
+				"name": "ONE PIECE",
+				"original_name": "ONE PIECE",
+				"original_language": "en",
+				"external_ids": { "imdb_id": "tt11737520" },
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2023-08-31",
+						"name": "ONE PIECE"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 8,
+						"air_date": "2026-03-10",
+						"name": "Into the Grand Line"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "The Battle of Alabasta"
+					}
 				]
 			}
 		},
@@ -46338,7 +46369,8 @@
 			"tt5734550": null,
 			"tt0247902": null,
 			"tt5626028": null,
-			"tt0121955": null
+			"tt0121955": null,
+			"tt11737520": null
 		},
 		"seasonEpisodes": {
 			"tt0131179/34": {
@@ -46432,7 +46464,8 @@
 				"title": "Wishbone",
 				"year": 1995,
 				"kind": "tv"
-			}
+			},
+			"One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub": null
 		},
 		"identifier": {
 			"Detective.Conan.S33E26.a.Ghost.1080p.CR.WEB-DL.DDP2.0.H.264-Kitsune": {
@@ -49105,6 +49138,30 @@
 				"parsedTitle": "One Piece Special",
 				"parsedYear": null,
 				"probability": 0.2117
+			},
+			"One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{ "imdbId": "tt0388629", "score": 4.2002, "title": "One Piece", "year": 1999 },
+					{ "imdbId": "tt11737520", "score": 3.1888, "title": "One Piece", "year": 2023 },
+					{ "imdbId": "tt31228002", "score": -1.4673, "title": "One Pace", "year": 2016 },
+					{
+						"imdbId": "tt41538904",
+						"score": -2.1194,
+						"title": "Lego One Piece",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt41295042",
+						"score": -2.7317,
+						"title": "One Piece: Heroines",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "One Piece",
+				"parsedYear": null,
+				"probability": 0.1272
 			}
 		},
 		"searchTv": {
@@ -63400,6 +63457,35 @@
 						"episodeEnd": null,
 						"how": null,
 						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun, 2026-10-23: the .zurgtorrent's name, video files, folders and IMDb id (archive members from rex-fun's rows)",
+			"request": {
+				"name": "One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0388629",
+				"tmdbId": 37854,
+				"files": [
+					{
+						"path": "One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan.Vegapunk.Claims.Victory.2160p.BILI.WEB-DL.JPN.AAC2.0.H.264.MSubs-ToonsHub.mkv",
+						"season": 22,
+						"episode": 1154,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6639703
 					}
 				]
 			}

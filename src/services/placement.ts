@@ -46,7 +46,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
  * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.10';
+export const PLACEMENT_RULES = '2026-10-23.11';
 
 export interface PlaceRequest {
 	name: string;

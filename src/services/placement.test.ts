@@ -828,4 +828,10 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 			bionic.files.find((f) => f.path.includes('Wine, Women and War'))!.kind
 		).toBeUndefined();
 	});
+	it("reads `Behind` after a scene episode token as the episode's title", async () => {
+		// the identifier offers One Piece (1999) and (2023) alike; only the 1999 show holds E1154
+		const ep = await placedHere('One.Piece.EP1154');
+		expect(ep).toMatchObject({ tmdbId: 37854 });
+		expect(ep.files[0]).toMatchObject({ season: 22, episode: 1154 });
+	});
 });
