@@ -408,10 +408,7 @@ describe('IndexPage', () => {
 		expect(message).toMatch(/card below/i);
 	});
 
-	// The megaphone beside the title went to Patreon. gatekeeper replaced it and
-	// then took it away again: the info card below already says where to sponsor,
-	// so a second link in the header was the same offer twice on one page.
-	it('links to zurg, rex and the guides', () => {
+	it('links to zurg, rex, the guides and gatekeeper', () => {
 		currentUserMock.mockReturnValue(settledFixture);
 
 		render(<IndexPage />);
@@ -421,15 +418,27 @@ describe('IndexPage', () => {
 			'href',
 			'https://rex.debridmediamanager.com/'
 		);
+		// The info card hides its gatekeeper link from sponsors, who still need the
+		// site for their API key, so the row of sites carries it for everyone.
+		expect(within(nav).getByRole('link', { name: 'Gatekeeper' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com/'
+		);
 	});
 
+	// The megaphone beside the title went to Patreon. gatekeeper replaced it and
+	// then took it away again: the info card below already says where to sponsor,
+	// so a second link in the header was the same offer twice on one page. The
+	// row of DMM sites names gatekeeper as a site, which is not that offer.
 	it('leaves the sponsorship offer to the info card alone', () => {
 		currentUserMock.mockReturnValue(settledFixture);
 
 		render(<IndexPage />);
 
 		expect(screen.queryByRole('link', { name: 'Sponsor DMM' })).toBeNull();
+		const sites = screen.getByRole('navigation', { name: 'Other DMM sites' });
 		for (const link of screen.getAllByRole('link')) {
+			if (sites.contains(link)) continue;
 			expect(link.getAttribute('href')).not.toMatch(
 				/patreon\.com|paypal\.me|github\.com\/sponsors|gatekeeper\./
 			);

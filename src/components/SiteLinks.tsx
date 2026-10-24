@@ -1,9 +1,11 @@
-// The other sites in the family, so each can be reached from DMM. Sponsoring and
-// Discord stay with the info card: one sponsorship offer per page.
+// The other sites in the family, so each can be reached from DMM. gatekeeper is
+// listed as a site, not as an offer: sponsors get their API key there too, and the
+// info card hides its own gatekeeper link from sponsors.
 export const SITE_LINKS = [
 	{ label: 'zurg', href: 'https://zurg.debridmediamanager.com/' },
 	{ label: 'rex', href: 'https://rex.debridmediamanager.com/' },
 	{ label: 'Guides', href: 'https://notes.debridmediamanager.com/' },
+	{ label: 'Gatekeeper', href: 'https://gatekeeper.debridmediamanager.com/' },
 ];
 
 export function SiteLinks() {

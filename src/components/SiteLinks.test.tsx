@@ -12,6 +12,7 @@ describe('SiteLinks', () => {
 			'https://zurg.debridmediamanager.com/',
 			'https://rex.debridmediamanager.com/',
 			'https://notes.debridmediamanager.com/',
+			'https://gatekeeper.debridmediamanager.com/',
 		]);
 		for (const link of nav.querySelectorAll('a')) {
 			expect(link).toHaveAttribute('target', '_blank');
