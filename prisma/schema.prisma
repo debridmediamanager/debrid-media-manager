@@ -1046,6 +1046,32 @@ model SponsorProviderKey {
   @@id([shortId, service])
 }
 
+/// A title a sponsor wants, for their zurg to fetch.
+///
+/// zurg polls `/api/sponsor/wanted` with the sponsor's DMM API key and fetches each
+/// item with its acquisition engine: a cached torrent onto a debrid account or an NZB
+/// for its Usenet backend. Keyed on the gatekeeper `shortId`, like
+/// `SponsorProviderKey`, so the website (sponsor token) and zurg (API key) name the
+/// same list. A show without `seasons` wants every season, new ones included.
+model WantedItem {
+  id           String    @id @default(uuid())
+  shortId      String    @db.VarChar(16)
+  imdbId       String    @db.VarChar(16)
+  /// `movie` or `show`.
+  kind         String    @db.VarChar(8)
+  title        String    @db.VarChar(512)
+  /// Season numbers wanted, or null for all of them.
+  seasons      Json?
+  createdAt    DateTime  @default(now())
+  /// When zurg acknowledged the film acquired. Shows stay followed.
+  fulfilledAt  DateTime?
+  /// When zurg last read this sponsor's list.
+  lastPolledAt DateTime?
+
+  @@unique([shortId, imdbId])
+  @@index([shortId])
+}
+
 /// Which sponsorship let a cast profile store an "other streams" limit above
 /// the standard 5.
 ///

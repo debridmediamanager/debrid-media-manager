@@ -1,0 +1,96 @@
+import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
+import dailyShow from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
+import bakeOffAppended from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off-appended.json';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { airedSeasons, resolveWanted } from './wanted';
+
+const cache = vi.hoisted(() => ({ searchTmdbByImdb: vi.fn(), getTmdbTvInfo: vi.fn() }));
+vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => cache }));
+
+const row = (over: Partial<Parameters<typeof resolveWanted>[0]> = {}) => ({
+	id: '0b7c2f8e-1d1f-4a55-9c3a-6c9d8e7f1a2b',
+	imdbId: 'tt0115082',
+	kind: 'show' as const,
+	title: '3rd Rock from the Sun',
+	seasons: null,
+	createdAt: new Date(),
+	fulfilledAt: null,
+	lastPolledAt: null,
+	...over,
+});
+
+describe('airedSeasons', () => {
+	it('lists every episode of an ended show, without specials', () => {
+		const seasons = airedSeasons(thirdRock, null);
+		expect(seasons.map((s) => [s.season, s.episodes.length])).toEqual([
+			[1, 20],
+			[2, 26],
+			[3, 27],
+			[4, 24],
+			[5, 22],
+			[6, 20],
+		]);
+		expect(seasons[0].episodes.slice(0, 3)).toEqual([1, 2, 3]);
+	});
+
+	// TMDB counts the airing season's announced episodes too: The Daily Show's
+	// season 31 has 122 listed and episode 107 next to air.
+	it('stops an airing season before the next episode to air', () => {
+		const [current] = airedSeasons(dailyShow, [31]);
+		expect(current.season).toBe(31);
+		expect(current.episodes.at(-1)).toBe(106);
+	});
+
+	it('keeps only the seasons asked for', () => {
+		expect(airedSeasons(thirdRock, [2, 5]).map((s) => s.season)).toEqual([2, 5]);
+	});
+
+	it('answers nothing for a show TMDB lists no seasons of', () => {
+		expect(airedSeasons({}, null)).toEqual([]);
+	});
+});
+
+describe('resolveWanted', () => {
+	beforeEach(() => {
+		cache.searchTmdbByImdb.mockReset();
+		cache.getTmdbTvInfo.mockReset();
+	});
+
+	it("gives a show TMDB's and TVDB's ids beside the aired seasons", async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ tv_results: [{ id: bakeOffAppended.id }] });
+		cache.getTmdbTvInfo.mockResolvedValue(bakeOffAppended);
+
+		const item = await resolveWanted(row({ imdbId: 'tt1877368', title: 'Bake Off' }));
+
+		expect(item.tmdb).toBe(bakeOffAppended.id);
+		expect(item.tvdb).toBe(bakeOffAppended.external_ids.tvdb_id);
+		expect(item.seasons?.length).toBeGreaterThan(0);
+	});
+
+	it('gives a film its TMDB id and no seasons', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ movie_results: [{ id: 603 }] });
+
+		const item = await resolveWanted(
+			row({ kind: 'movie', imdbId: 'tt0133093', title: 'The Matrix' })
+		);
+
+		expect(item).toMatchObject({ kind: 'movie', imdb: 'tt0133093', tmdb: 603 });
+		expect(item.seasons).toBeUndefined();
+		expect(cache.getTmdbTvInfo).not.toHaveBeenCalled();
+	});
+
+	// Absent seasons mean "not known this time", which zurg must not read as
+	// "nothing aired" and settle the show on.
+	it('leaves seasons out, not empty, when TMDB cannot be asked', async () => {
+		cache.searchTmdbByImdb.mockRejectedValue(new Error('TMDB down'));
+
+		const item = await resolveWanted(row());
+
+		expect(item).toEqual({
+			id: row().id,
+			kind: 'show',
+			title: '3rd Rock from the Sun',
+			imdb: 'tt0115082',
+		});
+	});
+});

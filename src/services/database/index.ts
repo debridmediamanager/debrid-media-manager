@@ -28,6 +28,7 @@ import { TorBoxOperationalService } from './torboxOperational';
 import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferFilingService } from './transferFiling';
 import { TransferMetaService } from './transferMeta';
+import { WantedItemsService } from './wantedItems';
 import { ZurgKeysService } from './zurgKeys';
 
 export {
@@ -61,6 +62,7 @@ export {
 	TorrentSnapshotService,
 	TransferFilingService,
 	TransferMetaService,
+	WantedItemsService,
 	ZurgKeysService,
 };
 

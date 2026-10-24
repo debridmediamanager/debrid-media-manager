@@ -1,9 +1,9 @@
 # Sponsor API
 
-Four endpoints for sponsors' own tools. All take your DMM API key in the
-`x-api-key` header and stop working the moment the sponsorship lapses. The first three
-allow 2,500 items a minute per address; placement is budgeted per sponsorship. Send
-full batches.
+Endpoints for sponsors' own tools. All take your DMM API key in the
+`x-api-key` header and stop working the moment the sponsorship lapses. Identify,
+availability and media info allow 2,500 items a minute per address; placement and the
+wanted list are budgeted per sponsorship. Send full batches.
 
 ## Identify releases by filename
 
@@ -151,3 +151,42 @@ release comes back in its slot with `kind`, `imdbId` and `tmdbId` `null` and eve
 send it again later. A release DMM looked at and could not identify still answers what it
 knows, such as the `imdbId` you sent (an episode's as its show's), so only one DMM knows
 nothing about at all has the skipped shape without being skipped.
+
+## Wanted list
+
+The titles you added to your wanted list on DMM, for a tool that fetches them; zurg's
+acquisition reads it. Both calls share 30 a minute per sponsorship.
+
+`GET /api/sponsor/wanted`
+
+```json
+{
+	"items": [
+		{
+			"id": "0b7c2f8e-…",
+			"kind": "movie",
+			"title": "The Matrix",
+			"imdb": "tt0133093",
+			"tmdb": 603
+		},
+		{
+			"id": "5d1e…",
+			"kind": "show",
+			"title": "3rd Rock from the Sun",
+			"imdb": "tt0115082",
+			"tmdb": 155,
+			"seasons": [{ "season": 1, "episodes": [1, 2, 3] }]
+		}
+	]
+}
+```
+
+`seasons` lists, for each season wanted, the episodes aired so far, numbered as TMDB
+numbers them; specials are never listed. An airing season grows as episodes air.
+`seasons` is absent when TMDB could not be asked this time, which means ask again
+later, not that nothing aired. `tmdb` and `tvdb` are absent where TMDB does not know
+the title.
+
+`POST /api/sponsor/wanted/complete` with `{"id": "<item id>"}` says the title was
+fetched. Repeating it is harmless. A film then leaves the list; a show stays on it so
+new episodes are fetched. 404 means the item is no longer on the list.
