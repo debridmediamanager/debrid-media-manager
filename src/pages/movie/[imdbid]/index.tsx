@@ -4,6 +4,7 @@ import MovieSearchResults from '@/components/MovieSearchResults';
 import SearchControls from '@/components/SearchControls';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import UsenetResults from '@/components/UsenetResults';
+import WantedButton from '@/components/WantedButton';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
@@ -978,7 +979,7 @@ const MovieSearch: FunctionComponent = () => {
 					<>
 						{rdKey && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 								onClick={() =>
 									checkServiceAvailabilityBulk(filteredResults, ['RD'])
 								}
@@ -1001,7 +1002,7 @@ const MovieSearch: FunctionComponent = () => {
 						)}
 						{adKey && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 								onClick={() =>
 									checkServiceAvailabilityBulk(filteredResults, ['AD'])
 								}
@@ -1024,7 +1025,7 @@ const MovieSearch: FunctionComponent = () => {
 						)}
 						{debridLinkKey && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
+								className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
 								onClick={() =>
 									checkServiceAvailabilityBulk(filteredResults, ['DL'])
 								}
@@ -1049,7 +1050,7 @@ const MovieSearch: FunctionComponent = () => {
 						{getFirstAvailableRdTorrent() && (
 							<>
 								<button
-									className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+									className="mt-0 mr-2 mb-1 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
 									onClick={() => {
 										const firstAvailable = getFirstAvailableRdTorrent()!;
 										if (`rd:${firstAvailable.hash}` in hashAndProgress) {
@@ -1065,7 +1066,7 @@ const MovieSearch: FunctionComponent = () => {
 									</b>
 								</button>
 								<button
-									className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+									className="mt-0 mr-2 mb-1 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
 									onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
 								>
 									<b className="flex items-center justify-center">
@@ -1077,7 +1078,7 @@ const MovieSearch: FunctionComponent = () => {
 						)}
 						{watchableService && player && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								className="mt-0 mr-2 mb-1 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 								title={`Watch via ${WATCH_SERVICE_LABEL[watchableService]}`}
 								onClick={handleWatchFirst}
 								disabled={isWatching}
@@ -1094,8 +1095,9 @@ const MovieSearch: FunctionComponent = () => {
 						)}
 					</>
 				)}
+				<WantedButton imdbId={imdbid as string} kind="movie" title={movieInfo.title} />
 				<button
-					className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+					className="mt-0 mr-2 mb-1 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 					onClick={() => window.open(getStremioDetailUrl(imdbid as string))}
 				>
 					<b className="flex items-center justify-center">
@@ -1105,7 +1107,7 @@ const MovieSearch: FunctionComponent = () => {
 				</button>
 				{onlyShowCached && totalUncachedCount > 0 && (
 					<button
-						className="mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
+						className="mt-0 mr-2 mb-1 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
 						onClick={() => setOnlyShowCached(false)}
 					>
 						<CloudOff className="mr-1 h-3 w-3 text-blue-500" />

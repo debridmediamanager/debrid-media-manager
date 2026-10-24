@@ -7,6 +7,7 @@ import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import UsenetResults from '@/components/UsenetResults';
+import WantedButton from '@/components/WantedButton';
 import Modal from '@/components/modals/modal';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
@@ -2042,6 +2043,16 @@ const TvSearch: FunctionComponent = () => {
 					</button>
 				</>
 			)}
+			{/* zurg's acquisition takes no specials, so season 0 offers only the whole show. */}
+			{selectedSeason >= 1 && (
+				<WantedButton
+					imdbId={imdbId}
+					kind="show"
+					title={showInfo.title}
+					season={selectedSeason}
+				/>
+			)}
+			<WantedButton imdbId={imdbId} kind="show" title={showInfo.title} />
 			{onlyShowCached && totalUncachedCount > 0 && (
 				<button
 					className="haptic-sm mt-0 mr-2 mb-1 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"

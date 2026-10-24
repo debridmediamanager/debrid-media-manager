@@ -30,6 +30,11 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: "DMM's torrent library as a Torznab indexer",
 	},
 	{
+		href: '/wanted',
+		name: 'Wanted list',
+		what: 'films and shows your zurg fetches for you, new episodes included, with nothing mounted',
+	},
+	{
 		href: '/jellyfin',
 		name: 'Jellyfin plugins',
 		what: 'your Real-Debrid, AllDebrid, TorBox and Usenet libraries inside Jellyfin, with nothing mounted',

@@ -232,6 +232,6 @@ describe('IndexPage indexer entries', () => {
 		const hrefs = Array.from(
 			screen.getByText('Sponsor features').closest('details')!.querySelectorAll('a')
 		).map((link) => link.getAttribute('href'));
-		expect(hrefs).toEqual(['/torznab', '/newznab', '/jellyfin', '/emby']);
+		expect(hrefs).toEqual(['/torznab', '/newznab', '/jellyfin', '/emby', '/wanted']);
 	});
 });

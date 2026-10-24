@@ -26,7 +26,7 @@ import { Toaster, toast } from 'react-hot-toast';
 const PROFILE_WAIT_MS = 5000;
 
 // Indexers first, torrent before Usenet as everywhere else in DMM, then the
-// media server plugins.
+// media server plugins, then the wanted list zurg fetches.
 const sponsorLinks = [
 	{
 		href: '/torznab',
@@ -44,6 +44,11 @@ const sponsorLinks = [
 		description: 'Your library in Jellyfin, for sponsors',
 	},
 	{ href: '/emby', label: 'Emby plugins', description: 'Your library in Emby, for sponsors' },
+	{
+		href: '/wanted',
+		label: 'Wanted list',
+		description: 'Titles your zurg fetches, for sponsors',
+	},
 ];
 
 function IndexPage() {
