@@ -39,6 +39,8 @@ describe('airedSeasons', () => {
 		const [current] = airedSeasons(dailyShow, [31]);
 		expect(current.season).toBe(31);
 		expect(current.episodes.at(-1)).toBe(106);
+		expect(current.airing).toBe(true);
+		expect(airedSeasons(dailyShow, [30])[0].airing).toBeUndefined();
 	});
 
 	it('keeps only the seasons asked for', () => {
@@ -63,18 +65,21 @@ describe('resolveWanted', () => {
 		const item = await resolveWanted(row({ imdbId: 'tt1877368', title: 'Bake Off' }));
 
 		expect(item.tmdb).toBe(bakeOffAppended.id);
+		expect(item.year).toBe(Number(bakeOffAppended.first_air_date.slice(0, 4)));
 		expect(item.tvdb).toBe(bakeOffAppended.external_ids.tvdb_id);
 		expect(item.seasons?.length).toBeGreaterThan(0);
 	});
 
 	it('gives a film its TMDB id and no seasons', async () => {
-		cache.searchTmdbByImdb.mockResolvedValue({ movie_results: [{ id: 603 }] });
+		cache.searchTmdbByImdb.mockResolvedValue({
+			movie_results: [{ id: 603, release_date: '1999-03-30' }],
+		});
 
 		const item = await resolveWanted(
 			row({ kind: 'movie', imdbId: 'tt0133093', title: 'The Matrix' })
 		);
 
-		expect(item).toMatchObject({ kind: 'movie', imdb: 'tt0133093', tmdb: 603 });
+		expect(item).toMatchObject({ kind: 'movie', imdb: 'tt0133093', tmdb: 603, year: 1999 });
 		expect(item.seasons).toBeUndefined();
 		expect(cache.getTmdbTvInfo).not.toHaveBeenCalled();
 	});

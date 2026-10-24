@@ -7,6 +7,8 @@ import { firstUnairedEpisode } from '@/utils/tvEpisodes';
 export interface WantedSeason {
 	season: number;
 	episodes: number[];
+	/** Episodes of this season are still to air, so no pack covers it yet. */
+	airing?: boolean;
 }
 
 /** A wanted title as `/api/sponsor/wanted` answers it. See docs/sponsor-api.md. */
@@ -15,6 +17,8 @@ export interface WantedForZurg {
 	kind: 'movie' | 'show';
 	title: string;
 	imdb: string;
+	/** The release or first-air year, which tells same-named titles apart. */
+	year?: number;
 	tmdb?: number;
 	tvdb?: number;
 	/** Shows only. Empty while TMDB knows nothing aired, which zurg reads as nothing to do yet. */
@@ -41,7 +45,11 @@ export function airedSeasons(show: any, only: number[] | null): WantedSeason[] {
 		);
 		const last = unaired === null ? count : Math.min(count, unaired - 1);
 		if (last < 1) continue;
-		out.push({ season, episodes: Array.from({ length: last }, (_, i) => i + 1) });
+		out.push({
+			season,
+			episodes: Array.from({ length: last }, (_, i) => i + 1),
+			...(last < count ? { airing: true } : {}),
+		});
 	}
 	return out;
 }
@@ -62,9 +70,15 @@ export async function resolveWanted(row: WantedItemRow): Promise<WantedForZurg> 
 	} catch {
 		// TMDB unreachable: the IMDb id alone, and seasons left out rather than empty
 	}
+	const year = (date: unknown) => {
+		const y = typeof date === 'string' ? Number.parseInt(date.slice(0, 4), 10) : NaN;
+		return Number.isInteger(y) && y > 1800 ? { year: y } : {};
+	};
 	if (row.kind === 'movie') {
-		const tmdb = found?.movie_results?.[0]?.id;
-		return typeof tmdb === 'number' ? { ...base, tmdb } : base;
+		const movie = found?.movie_results?.[0];
+		return typeof movie?.id === 'number'
+			? { ...base, ...year(movie.release_date), tmdb: movie.id }
+			: base;
 	}
 	const tmdb = found?.tv_results?.[0]?.id;
 	if (typeof tmdb !== 'number') return base;
@@ -77,6 +91,7 @@ export async function resolveWanted(row: WantedItemRow): Promise<WantedForZurg> 
 	const tvdb = show?.external_ids?.tvdb_id;
 	return {
 		...base,
+		...year(show?.first_air_date ?? found.tv_results[0].first_air_date),
 		tmdb,
 		...(typeof tvdb === 'number' ? { tvdb } : {}),
 		seasons: airedSeasons(show, row.seasons),

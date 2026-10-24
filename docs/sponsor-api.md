@@ -167,6 +167,7 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"kind": "movie",
 			"title": "The Matrix",
 			"imdb": "tt0133093",
+			"year": 1999,
 			"tmdb": 603
 		},
 		{
@@ -174,6 +175,7 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"kind": "show",
 			"title": "3rd Rock from the Sun",
 			"imdb": "tt0115082",
+			"year": 1996,
 			"tmdb": 155,
 			"seasons": [{ "season": 1, "episodes": [1, 2, 3] }]
 		}
@@ -182,10 +184,11 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 ```
 
 `seasons` lists, for each season wanted, the episodes aired so far, numbered as TMDB
-numbers them; specials are never listed. An airing season grows as episodes air.
+numbers them; specials are never listed. An airing season grows as episodes air and
+carries `"airing": true` while TMDB lists episodes still to come.
 `seasons` is absent when TMDB could not be asked this time, which means ask again
-later, not that nothing aired. `tmdb` and `tvdb` are absent where TMDB does not know
-the title.
+later, not that nothing aired. `year`, `tmdb` and `tvdb` are absent where TMDB does
+not know the title.
 
 `POST /api/sponsor/wanted/complete` with `{"id": "<item id>"}` says the title was
 fetched. Repeating it is harmless. A film then leaves the list; a show stays on it so
