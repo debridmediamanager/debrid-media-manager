@@ -151,6 +151,8 @@ describe('RequestsPage rewards', () => {
 		});
 		render(<RequestsPage />);
 		expect(await screen.findByText('3 of 10 toward your next 7 days')).toBeTruthy();
+		// Earned time opens DMM's perks only, never zurg or rex access.
+		expect(screen.getByText(/does not include zurg or rex access/)).toBeTruthy();
 		expect(screen.getByLabelText('Show my GitHub name on the leaderboard')).toBeTruthy();
 	});
 });

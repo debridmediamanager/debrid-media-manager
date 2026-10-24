@@ -91,11 +91,12 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 			</div>
 
 			<div className="mb-1">
-				Every {stats.sendsPerBlock} sends earn {stats.daysPerBlock} days of{' '}
+				Every {stats.sendsPerBlock} sends earn {stats.daysPerBlock} days of DMM{' '}
 				<Link href="/settings" className="text-pink-300 underline hover:text-pink-200">
 					sponsor perks
 				</Link>{' '}
-				(Torznab, Newznab, zurg&apos;s sponsor features). One send per asker per day counts.
+				like Torznab and Newznab. It does not include zurg or rex access. One send per asker
+				per day counts.
 			</div>
 			<div
 				className="h-2 w-full overflow-hidden rounded bg-gray-700"
