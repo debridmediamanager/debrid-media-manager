@@ -643,9 +643,10 @@ export async function placeFile(
 	release: string,
 	path: string,
 	numbers: FileNumbers,
-	imdb: ImdbLookup | null
+	imdb: ImdbLookup | null,
+	byTitle = true
 ): Promise<Placement | null> {
-	const found = await placeByRules(show, anime, release, path, numbers, imdb);
+	const found = await placeByRules(show, anime, release, path, numbers, imdb, byTitle);
 	// a number TMDB titles the episode with is its title, not a running count: Earth's Mightiest
 	// Heroes' `S01 E15 - 459` is TMDB's S1E15 "459", Family Guy's `S07E12 - 420` its S7E12 "420"
 	if (!found || numbers.running === undefined || found.season < 1 || found.titled) return found;
@@ -665,7 +666,8 @@ async function placeByRules(
 	release: string,
 	path: string,
 	numbers: FileNumbers,
-	imdb: ImdbLookup | null
+	imdb: ImdbLookup | null,
+	byTitle: boolean
 ): Promise<Placement | null> {
 	const counts = new Map(show.seasons.map((row) => [row.season, row.episodes]));
 	const fits = async (season: number, episode: number) => {
@@ -688,9 +690,9 @@ async function placeByRules(
 	const mapped = anime?.byShow.has(show.tmdbId) ? anime : null;
 
 	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
-	const titledAt = await byName(show, numbers, file);
-	const byTitle = titledAt && (await placed(titledAt, 'tmdb'));
-	if (byTitle) return { ...byTitle, titled: true };
+	const titledAt = byTitle ? await byName(show, numbers, file) : null;
+	const named = titledAt && (await placed(titledAt, 'tmdb'));
+	if (named) return { ...named, titled: true };
 
 	// a dub's own seasons are TMDB's only through its Dub Order: Medabots' English dub season 3
 	// is TMDB's season 2 (Damashii), its season 2 episodes TMDB files out of order in season 1
@@ -832,12 +834,15 @@ async function ofYear(
 }
 
 /** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */
+// `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World"
 const words = (text: string) =>
 	text
 		.toLowerCase()
 		.replace(/['’`]/g, '')
+		.replace(/&/g, ' and ')
 		.split(/[^\p{L}\p{N}]+/u)
-		.filter(Boolean);
+		.filter(Boolean)
+		.map((word) => (word === 'vs' ? 'versus' : word));
 // TMDB's placeholders name no episode: `Episode 5` is in every season of some shows
 const GENERIC = /^(?:episode|ep|part|chapter|folge|episodio|capitulo) \d+$/;
 const wordsOf = new WeakMap<object, string>();
@@ -847,7 +852,7 @@ const RELEASE_WORDS =
 	/^(?:proper|repack|rerip|real|internal|extended|uncut|uncensored|remastered|dubbed|subbed|multi|dual|end|fin|final)$/;
 const SCENE_WORDS = /^(?:proper|repack|rerip|internal)$/;
 const TAGS =
-	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
+	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
 // What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
 // Olga Gets Engaged`, `One of Us; Vanishing Act`, `Pup Pup Boogie + Pups in a Fog`, `The Magic
 // Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
@@ -915,7 +920,11 @@ const SPELLED: Record<string, string> = { one: '1', two: '2', three: '3', four: 
  */
 const plain = (text: string) =>
 	text
-		.replace(/^(?:the|a|an) /, '')
+		// articles anywhere (`Pups.Save.a.Hum-Mover` is "Pups Save the Hum-Mover", `Crab and Urchin`
+		// "The Crab and the Urchin"), and the years TMDB adds after a title ("Hitler's Germany: The
+		// People's Community (1933–1939)")
+		.replace(/(?:^|(?<= ))(?:the|a|an) /g, '')
+		.replace(/(?: (?:19|20)\d{2}){1,2}$/, '')
 		.replace(
 			/ (?:part |pt )?(one|two|three|four|five|\d{1,2})(?: of \d{1,2})?$/,
 			(_, n: string) => ` ${SPELLED[n] ?? n}`

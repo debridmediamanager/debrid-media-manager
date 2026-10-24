@@ -46,7 +46,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * `tmdbEpisodeId` went live, and kept those answers without their episode ids. Deploys that
  * change neither keep it, so callers do not ask about whole libraries again for nothing.
  */
-export const PLACEMENT_RULES = '2026-10-23.13';
+export const PLACEMENT_RULES = '2026-10-24.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -803,23 +803,67 @@ async function placeFiles(
 		const path = titledAs(file.path);
 		return own ? titleOf(path.split('/').pop() ?? path, own) : null;
 	});
-	// most of them: QI's pack numbers as TMDB does, its one titled stray aside
-	const moved =
-		yielded.filter(
-			(found, at) =>
-				found?.titled &&
-				numbers[at] &&
-				(found.season !== (numbers[at]!.season ?? found.season) ||
-					found.episode !== numbers[at]!.episode)
-		).length *
-			2 >
-		titles.filter(Boolean).length;
+	// most of them: QI's pack numbers as TMDB does, its one titled stray aside. Moved from where its
+	// numbers place it by the rules, not from the numbers as written: Shangri-La Frontier's
+	// `S02E01` is TMDB's S1E26 by its title and by its number alike, TMDB numbering on through S1
+	const movedBy = await Promise.all(
+		yielded.map(async (found, at) => {
+			if (!found?.titled || !numbers[at]) return false;
+			const path = titledAs(release.files[at].path);
+			const own = await placeFile(
+				placement,
+				anime,
+				release.name,
+				path,
+				numbers[at]!,
+				imdb,
+				false
+			);
+			return own?.season !== found.season || own?.episode !== found.episode;
+		})
+	);
+	const moved = movedBy.filter(Boolean).length * 2 > titles.filter(Boolean).length;
 	// scene notation is the list's own numbering; a count or a folder's season is not
 	const counted = (at: number) =>
 		numbers[at]!.season === null || Boolean(numbers[at]!.coded || numbers[at]!.borrowed);
-	const kept = yielded.map((found, at) =>
+	const dropped = yielded.map((found, at) =>
 		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
 	);
+	// a file its title and numbers placed nowhere, between the files numbered just before and after
+	// it that their titles placed one episode apart from it: Hell's Paradise's `S02E06.Conflict.and.
+	// Growing.Together` is TMDB's S1E19 "Hindering and Restoration", `S02E05` and `S02E07` S1E18 and
+	// S1E20 by their titles
+	const taken = new Set(dropped.flatMap((p) => (p ? [`${p.season}|${p.episode}`] : [])));
+	const titledAt = (season: number | null, episode: number) => {
+		const at = numbers.findIndex(
+			(n, i) =>
+				n &&
+				n.season === season &&
+				n.episode === episode &&
+				n.end === null &&
+				dropped[i]?.titled
+		);
+		return at < 0 ? null : dropped[at];
+	};
+	const kept = dropped.map((found, at) => {
+		const own = numbers[at];
+		if (found || !own || own.end !== null) return found;
+		const [before, after] = [
+			titledAt(own.season, own.episode - 1),
+			titledAt(own.season, own.episode + 1),
+		];
+		if (
+			!before ||
+			!after ||
+			before.season !== after.season ||
+			after.episode !== before.episode + 2
+		)
+			return found;
+		const between = { season: before.season, episode: before.episode + 1 };
+		return taken.has(`${between.season}|${between.episode}`)
+			? found
+			: { ...between, episodeEnd: null, how: before.how };
+	});
 	// every rule lands on an episode of TMDB's season lists, which carry its id; IMDb's list has none
 	const episodeId = async (found: Placement) =>
 		placement.tmdbId > 0

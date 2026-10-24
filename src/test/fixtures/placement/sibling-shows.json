@@ -15236,11 +15236,11 @@
 					},
 					{
 						"path": "Berenstain Bears - E69 (Say Please and Thank You).mp4",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1355233
 					},
 					{
 						"path": "Berenstain Bears - E70 (Help Around the Workshop).mp4",
@@ -16056,11 +16056,11 @@
 					},
 					{
 						"path": "s17e01 - Where Devils Run Wild.mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120229
 					},
 					{
 						"path": "s18e02 - Big Croc Diaries Special Edition.mkv",

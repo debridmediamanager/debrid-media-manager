@@ -15555,11 +15555,11 @@
 					},
 					{
 						"path": "Ben 10 Omniverse - S02E13 - O Mother, Where Art Thou (1080p x265 EDGE2020).mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1107014
 					},
 					{
 						"path": "Ben 10 Omniverse - S02E14 - Return to Forever (1080p x265 EDGE2020).mkv",
@@ -15899,11 +15899,11 @@
 					},
 					{
 						"path": "Ben 10 Omniverse - S04E16 - Final Countdown (1080p x265 EDGE2020).mkv",
-						"season": null,
-						"episode": null,
+						"season": 8,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1107058
 					},
 					{
 						"path": "Ben 10 Omniverse - S04E17 - Malgax Attacks (1080p x265 EDGE2020).mkv",
@@ -17322,11 +17322,11 @@
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E02 - Hulk vs the World (1080p - BluRay).mp4",
-						"season": null,
-						"episode": null,
+						"season": 1,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 777764
 					},
 					{
 						"path": "The Avengers (EMH) - S01 E03 - Thor the Mighty (1080p - BluRay).mp4",

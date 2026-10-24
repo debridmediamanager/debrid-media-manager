@@ -14,6 +14,7 @@ import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
+import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -850,5 +851,80 @@ describe('what rex-fun still could not match on 2026-10-23', () => {
 		expect(zoku.files.filter((f) => f.season === 0).map((f) => f.episode)).toEqual([
 			42, 43, 44, 45, 46, 47,
 		]);
+	});
+});
+
+describe('what rex-fun still could not match on 2026-10-24', () => {
+	// zurg's requests for the releases behind rex-fun's unmatched rows, built as zurg builds them
+	// from its .zurgtorrent, and every answer placing them needed (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(fun1024.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(fun1024.answers.anime.fribb as FribbAnimeEntry[]),
+				fun1024.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (fun1024.answers.identify as any)?.[name] ?? null);
+	const placedHere = async (name: string) => {
+		const c = fun1024.cases.find((c) => c.request.name.startsWith(name))!;
+		return (await place([c.request as PlaceRequest], Infinity, from, ask)).releases[0];
+	};
+	const at = (release: Awaited<ReturnType<typeof placedHere>>, part: string) => {
+		const file = release.files.find((f) => f.path.includes(part))!;
+		return [file.season, file.episode];
+	};
+
+	it.each(fun1024.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			from,
+			ask
+		);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	it('reads `&` as `and`, `vs` as `versus` and an article anywhere as none', async () => {
+		// TMDB's S12E11 "Gary & Spot"
+		expect(at(await placedHere('SpongeBob.SquarePants.S12'), 'S12E11.Gary.and.Spot')).toEqual([
+			12, 11,
+		]);
+		// TMDB's S5E4 "Pups Save the Hum-Mover", S5E5 "Sea Patrol: Pups Save a Sunken Sloop"
+		const five = await placedHere('Paw Patrol Season 5');
+		expect(at(five, 'S05E04.Pups.Save.a.Hum-Mover')).toEqual([5, 4]);
+		expect(at(five, 'S05E05.Sea.Patrol.Pups.Save.the.Sunken.Sloop')).toEqual([5, 5]);
+		// TMDB's S1E8 "The Crab and the Urchin", S1E5 "Hulk Versus the World"
+		expect(at(await placedHere('Octonauts'), 'S01E03 - Crab and Urchin')).toEqual([1, 8]);
+		expect(at(await placedHere('Marvels THE AVENGERS'), 'S01 E02 - Hulk vs the World')).toEqual(
+			[1, 5]
+		);
+	});
+	it("reads a title past TMDB's years after it and a broadcast's `HD` tag", async () => {
+		// TMDB's S0E5 "Hitler's Germany: The People's Community (1933–1939)"
+		const war = await placedHere('The World at War (1973)');
+		expect(at(war, "S00E02 - Hitler's Germany - The People's Community")).toEqual([0, 5]);
+		expect(at(war, "S00E03 - Hitler's Germany - Total War")).toEqual([0, 6]);
+		// TMDB's S1E23 "Pups and the Ghost Pirate", S1E30 "Pups Save Christmas"
+		const one = await placedHere('PAW.Patrol.Season1');
+		expect(at(one, '12. Pups and the Ghost Pirate.HD.rus.eng')).toEqual([1, 23]);
+		expect(at(one, '16. Pups Save Christmas.HD.rus.eng')).toEqual([1, 30]);
+	});
+	it('keeps a numbered file of a season TMDB numbers on through the one before', async () => {
+		// TMDB has no season 2: S2E1 is its S1E26 by title and by number alike, so the titles do not
+		// say the pack is numbered otherwise, and S02E03, titled otherwise, keeps its number
+		const frontier = await placedHere('Shangri-La.Frontier.S02');
+		expect(at(frontier, 'S02E03.Accelerating.Meetings')).toEqual([1, 28]);
+		expect(at(frontier, 'S02E08.The.Lion.Catches.a.Rabbit')).toEqual([1, 33]);
+	});
+	it('places a file its title missed between the episodes its neighbours were titled onto', async () => {
+		// TMDB's S1E19 is "Hindering and Restoration"; S02E05 and S02E07 are its S1E18 and S1E20
+		const paradise = await placedHere('Hells.Paradise.S02');
+		expect(at(paradise, 'S02E06.Conflict.and.Growing.Together')).toEqual([1, 19]);
+		// a file numbered by nothing, between no titled neighbours, stays off every episode
+		const zenki = await placedHere('[DmonHiro] Kishin Douji Zenki');
+		expect(at(zenki, 'Clean Opening I.mkv')).toEqual([null, null]);
 	});
 });

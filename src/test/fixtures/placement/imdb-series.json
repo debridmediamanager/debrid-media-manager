@@ -17889,10 +17889,10 @@
 					},
 					{
 						"path": "DBZ Abridged - 013 - Dr. Briefs Made This. In A Cave. WITHABOXOFSCRAPS! [phantop].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
@@ -17945,10 +17945,10 @@
 					},
 					{
 						"path": "DBZ Abridged - 020 - Namekimania 2011 [phantop].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 10,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
@@ -18065,10 +18065,10 @@
 					},
 					{
 						"path": "DBZ Abridged - 038 - Dr. Gero or How I Learned to Stop Worrying and Love the Androids [iKaos].mkv",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 8,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
@@ -18081,10 +18081,10 @@
 					},
 					{
 						"path": "DBZ Abridged - 040 - 16, 17, 18 Things I Hate About You [iKaos].mkv",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 10,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
