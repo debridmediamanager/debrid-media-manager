@@ -1,0 +1,612 @@
+{
+	"data": [
+		{
+			"time": "2026-10-18T01:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 912.9812499997206
+		},
+		{
+			"time": "2026-10-18T04:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 935.6875000000109
+		},
+		{
+			"time": "2026-10-18T06:00:00.000Z",
+			"okCount": 31,
+			"failCount": 1,
+			"rate": 0.96875,
+			"avgLatencyMs": 761.6967741932359
+		},
+		{
+			"time": "2026-10-18T07:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 482.96874999441206
+		},
+		{
+			"time": "2026-10-18T08:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 436.5
+		},
+		{
+			"time": "2026-10-18T11:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 825.5
+		},
+		{
+			"time": "2026-10-18T13:00:00.000Z",
+			"okCount": 15,
+			"failCount": 1,
+			"rate": 0.9375,
+			"avgLatencyMs": 598.0066666672627
+		},
+		{
+			"time": "2026-10-18T16:00:00.000Z",
+			"okCount": 48,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 776.0208333333334
+		},
+		{
+			"time": "2026-10-18T17:00:00.000Z",
+			"okCount": 30,
+			"failCount": 2,
+			"rate": 0.9375,
+			"avgLatencyMs": 566.2166666547457
+		},
+		{
+			"time": "2026-10-18T18:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 468.8125
+		},
+		{
+			"time": "2026-10-18T19:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 544.7187500000073
+		},
+		{
+			"time": "2026-10-18T20:00:00.000Z",
+			"okCount": 109,
+			"failCount": 3,
+			"rate": 0.9732142857142857,
+			"avgLatencyMs": 666.1422018311438
+		},
+		{
+			"time": "2026-10-18T21:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 426.6062499997206
+		},
+		{
+			"time": "2026-10-18T22:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 793.5625000037253
+		},
+		{
+			"time": "2026-10-18T23:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 528.25
+		},
+		{
+			"time": "2026-10-19T00:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 624.5562500022352
+		},
+		{
+			"time": "2026-10-19T01:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 528.3624999999884
+		},
+		{
+			"time": "2026-10-19T03:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 404.2749999947846
+		},
+		{
+			"time": "2026-10-19T10:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 1417.7366875000002
+		},
+		{
+			"time": "2026-10-19T14:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 637.6875
+		},
+		{
+			"time": "2026-10-19T16:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 1074.0625
+		},
+		{
+			"time": "2026-10-19T19:00:00.000Z",
+			"okCount": 64,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 658.484375
+		},
+		{
+			"time": "2026-10-19T21:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 909.4000000096858
+		},
+		{
+			"time": "2026-10-20T02:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 564.15625
+		},
+		{
+			"time": "2026-10-20T04:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 485.8125
+		},
+		{
+			"time": "2026-10-20T14:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 768.65625
+		},
+		{
+			"time": "2026-10-20T15:00:00.000Z",
+			"okCount": 47,
+			"failCount": 1,
+			"rate": 0.9791666666666666,
+			"avgLatencyMs": 993.2127659574468
+		},
+		{
+			"time": "2026-10-20T16:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 435.16249999962747
+		},
+		{
+			"time": "2026-10-20T17:00:00.000Z",
+			"okCount": 48,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 619.7229166664183
+		},
+		{
+			"time": "2026-10-20T18:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 832.6312500000931
+		},
+		{
+			"time": "2026-10-20T20:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 380.68750000000273
+		},
+		{
+			"time": "2026-10-21T00:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 706.7625000020489
+		},
+		{
+			"time": "2026-10-21T04:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 528.9375
+		},
+		{
+			"time": "2026-10-21T08:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 426.1875
+		},
+		{
+			"time": "2026-10-21T10:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 2308.556249999907
+		},
+		{
+			"time": "2026-10-21T11:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 963.3125
+		},
+		{
+			"time": "2026-10-21T12:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 440.73750000447035
+		},
+		{
+			"time": "2026-10-21T14:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 733.9906249996857
+		},
+		{
+			"time": "2026-10-21T17:00:00.000Z",
+			"okCount": 58,
+			"failCount": 6,
+			"rate": 0.90625,
+			"avgLatencyMs": 649.5137931049384
+		},
+		{
+			"time": "2026-10-21T18:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 522
+		},
+		{
+			"time": "2026-10-21T20:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 496.31249999999636
+		},
+		{
+			"time": "2026-10-21T21:00:00.000Z",
+			"okCount": 48,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 948.2145833132478
+		},
+		{
+			"time": "2026-10-22T01:00:00.000Z",
+			"okCount": 48,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 888.3104166785876
+		},
+		{
+			"time": "2026-10-22T02:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 540.25
+		},
+		{
+			"time": "2026-10-22T04:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 676.0187499979511
+		},
+		{
+			"time": "2026-10-22T05:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 636.8500000000931
+		},
+		{
+			"time": "2026-10-22T07:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 706.125
+		},
+		{
+			"time": "2026-10-22T18:00:00.000Z",
+			"okCount": 30,
+			"failCount": 2,
+			"rate": 0.9375,
+			"avgLatencyMs": 294.3
+		},
+		{
+			"time": "2026-10-22T20:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 587.8781249998137
+		},
+		{
+			"time": "2026-10-22T21:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 661.0875000000524
+		},
+		{
+			"time": "2026-10-23T07:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 536.6625000007916
+		},
+		{
+			"time": "2026-10-23T09:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 853.4875000044703
+		},
+		{
+			"time": "2026-10-23T13:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 1239.981250000652
+		},
+		{
+			"time": "2026-10-23T15:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 564.5625
+		},
+		{
+			"time": "2026-10-23T18:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 463.8125
+		},
+		{
+			"time": "2026-10-23T19:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 750.5374999998894
+		},
+		{
+			"time": "2026-10-23T21:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 698.4062500000028
+		},
+		{
+			"time": "2026-10-23T23:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 532.2812500000003
+		},
+		{
+			"time": "2026-10-24T01:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 970.0625
+		},
+		{
+			"time": "2026-10-24T06:00:00.000Z",
+			"okCount": 31,
+			"failCount": 1,
+			"rate": 0.96875,
+			"avgLatencyMs": 769.4612903133516
+		},
+		{
+			"time": "2026-10-24T09:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 791.28125
+		},
+		{
+			"time": "2026-10-24T10:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 563.125
+		},
+		{
+			"time": "2026-10-24T14:00:00.000Z",
+			"okCount": 64,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 566.9437500052154
+		},
+		{
+			"time": "2026-10-24T15:00:00.000Z",
+			"okCount": 31,
+			"failCount": 1,
+			"rate": 0.96875,
+			"avgLatencyMs": 708.2935483888273
+		},
+		{
+			"time": "2026-10-24T16:00:00.000Z",
+			"okCount": 109,
+			"failCount": 3,
+			"rate": 0.9732142857142857,
+			"avgLatencyMs": 652.300000000164
+		},
+		{
+			"time": "2026-10-24T17:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 890.8687500003725
+		},
+		{
+			"time": "2026-10-24T19:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 850.6937499996275
+		},
+		{
+			"time": "2026-10-24T20:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 471.85624999995343
+		},
+		{
+			"time": "2026-10-24T21:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 423.6875
+		},
+		{
+			"time": "2026-10-24T23:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 161.15000000596046
+		}
+	],
+	"granularity": "hourly",
+	"range": "7d",
+	"regionWindowHours": 24,
+	"regions": [
+		{
+			"region": "enam",
+			"okCount": 21,
+			"failCount": 3,
+			"rate": 0.875,
+			"avgLatencyMs": 558.7190476179657
+		},
+		{
+			"region": "ceur",
+			"okCount": 23,
+			"failCount": 1,
+			"rate": 0.9583333333333334,
+			"avgLatencyMs": 584.5521739117966
+		},
+		{
+			"region": "erth",
+			"okCount": 23,
+			"failCount": 1,
+			"rate": 0.9583333333333334,
+			"avgLatencyMs": 269.70000001002586
+		},
+		{
+			"region": "apac",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 887.9791666526193
+		},
+		{
+			"region": "cnam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 464.1500000079008
+		},
+		{
+			"region": "hare",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 413.1916666786031
+		},
+		{
+			"region": "indi",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 880.8666666657663
+		},
+		{
+			"region": "japn",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 796.299999992208
+		},
+		{
+			"region": "latm",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 791.2916666669771
+		},
+		{
+			"region": "neur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 583.820833343702
+		},
+		{
+			"region": "nord",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 641.0916666702833
+		},
+		{
+			"region": "seur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 620.57916667033
+		},
+		{
+			"region": "snam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 489.0083333374159
+		},
+		{
+			"region": "weur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 643.2166666651608
+		},
+		{
+			"region": "wnam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 609.933333323725
+		},
+		{
+			"region": "zafr",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 1196.8499999934188
+		}
+	],
+	"type": "torbox-cdn"
+}

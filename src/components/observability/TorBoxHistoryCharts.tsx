@@ -93,11 +93,11 @@ const TORBOX_INDIGO = '#4f46e5';
 const USER_API_SKY = '#0ea5e9';
 const CDN_EMERALD = '#10b981';
 
-// Below this many region votes an hour says nothing: one reader behind a DNS
+// Below this many region votes a bucket says nothing: one reader behind a DNS
 // block would read as a global CDN outage. The panel's own live reading is
 // per-reader and needs no floor; this chart aggregates strangers, so it does.
-// Every reader contributes one vote per region, so the hourly floor is roughly
-// "more than one visitor".
+// Every reader contributes one vote per region (16 today), so the floor is
+// roughly "more than one visitor".
 const CDN_MIN_SAMPLE = 20;
 
 // The per-region floor is lower because it is a different denominator: the
@@ -148,6 +148,30 @@ function formatCount(value: number): string {
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
+
+// Hourly CDN rows are folded into wider buckets before the floor applies. Most
+// hours see one visitor or none, so on 2026-10-25 only 30 of 168 hours in the
+// 7d series cleared the floor; 12-hour buckets plotted all 14, and 3-hour
+// buckets plotted 6 of 8 in the 24h one. Wider buckets, not a lower floor: a
+// lone reader behind a DNS block still cannot draw an outage.
+const CDN_BUCKET_MS = { '24h': 3 * HOUR_MS, multiDay: 12 * HOUR_MS };
+
+// Sums hourly rows into UTC-aligned buckets of `stepMs`. Rows already at or
+// above that width (daily) pass through unchanged.
+function foldCdnBuckets(rows: TorBoxCdnBucket[], stepMs: number) {
+	const buckets = new Map<number, { okCount: number; failCount: number }>();
+	for (const row of rows) {
+		const start = Math.floor(parseUtcDate(row.time).getTime() / stepMs) * stepMs;
+		const bucket = buckets.get(start) ?? { okCount: 0, failCount: 0 };
+		bucket.okCount += row.okCount;
+		bucket.failCount += row.failCount;
+		buckets.set(start, bucket);
+	}
+	return Array.from(buckets, ([start, counts]) => ({
+		time: new Date(start).toISOString(),
+		...counts,
+	}));
+}
 
 // The server returns only the buckets somebody measured, so a quiet stretch
 // arrives as no rows at all. On a category axis that pulled readings hours
@@ -294,35 +318,42 @@ export function TorBoxHistoryCharts() {
 		? dayStartTicks(userApiChartData.map((point) => point.time))
 		: undefined;
 
+	const cdnBucketMs =
+		cdnGranularity === 'daily'
+			? DAY_MS
+			: range === '24h'
+				? CDN_BUCKET_MS['24h']
+				: CDN_BUCKET_MS.multiDay;
+
 	// Buckets under the sample floor are plotted as gaps rather than as zeroes:
 	// recharts skips a null, so a quiet 4am leaves a break in the line instead of
 	// a cliff that reads as an outage.
-	const measuredCdnPoints = (cdnData ?? [])
+	const measuredCdnPoints = foldCdnBuckets(cdnData ?? [], cdnBucketMs)
 		.map((item) => {
 			const sampleCount = item.okCount + item.failCount;
 			return {
 				time: item.time,
-				rate: sampleCount >= CDN_MIN_SAMPLE ? item.rate : null,
+				rate: sampleCount >= CDN_MIN_SAMPLE ? item.okCount / sampleCount : null,
 				sampleCount,
 				failCount: item.failCount,
-				avgLatencyMs: item.avgLatencyMs,
 			};
 		})
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
-	const cdnChartData = fillMissingBuckets(
-		measuredCdnPoints,
-		cdnGranularity === 'daily' ? DAY_MS : HOUR_MS,
-		(time) => ({ time, rate: null, sampleCount: 0, failCount: 0, avgLatencyMs: null })
-	);
+	const cdnChartData = fillMissingBuckets(measuredCdnPoints, cdnBucketMs, (time) => ({
+		time,
+		rate: null,
+		sampleCount: 0,
+		failCount: 0,
+	}));
 
 	const cdnTicks = isMultiDay
 		? dayStartTicks(cdnChartData.map((point) => point.time))
 		: undefined;
 
-	// An area only draws between two plotted neighbours, so an hour that cleared
+	// An area only draws between two plotted neighbours, so a bucket that cleared
 	// the floor with a gap on each side left no mark at all, and a quiet day of
-	// real readings rendered as an empty grid. Those hours get a dot.
+	// real readings rendered as an empty grid. Those buckets get a dot.
 	const isCdnPointPlotted = (index: number) => typeof cdnChartData[index]?.rate === 'number';
 	const renderCdnDot = ({ index, cx, cy }: { index?: number; cx?: number; cy?: number }) => {
 		const key = `cdn-dot-${index}`;
@@ -645,11 +676,16 @@ export function TorBoxHistoryCharts() {
 									/>
 									<Tooltip
 										{...tooltipProps}
-										labelFormatter={(_, payload) =>
-											payload && payload.length > 0
-												? formatTooltipLabel(payload[0].payload.time)
-												: ''
-										}
+										labelFormatter={(_, payload) => {
+											if (!payload || payload.length === 0) return '';
+											const time: string = payload[0].payload.time;
+											if (cdnBucketMs >= DAY_MS)
+												return formatTooltipLabel(time);
+											const end = new Date(
+												parseUtcDate(time).getTime() + cdnBucketMs
+											).toISOString();
+											return `${formatTooltipLabel(time)} - ${formatShortTime(end)}`;
+										}}
 										formatter={(value, _name, entry) => [
 											`${formatPercent(value as number)} of ${formatCount(
 												entry?.payload?.sampleCount ?? 0
@@ -676,7 +712,7 @@ export function TorBoxHistoryCharts() {
 								<div>
 									<p>Not enough visitor checks yet</p>
 									<p className="mt-1 text-xs">
-										An hour needs {CDN_MIN_SAMPLE} region checks before it is
+										Each point needs {CDN_MIN_SAMPLE} region checks before it is
 										plotted, so one visitor behind a DNS block cannot read as a
 										global outage.
 									</p>

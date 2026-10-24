@@ -30,6 +30,7 @@ vi.mock('recharts', () => ({
 
 import apiHistory7d from '@/test/fixtures/observability/torbox-api-history-7d-2026-09-13.json';
 import cdnHistory24h from '@/test/fixtures/observability/torbox-cdn-history-24h-2026-09-13.json';
+import cdnHistory7d from '@/test/fixtures/observability/torbox-cdn-history-7d-2026-10-24.json';
 import { TorBoxHistoryCharts } from './TorBoxHistoryCharts';
 
 const API_PAYLOAD = {
@@ -263,11 +264,23 @@ describe('TorBoxHistoryCharts', () => {
 		expect(screen.queryByTestId('torbox-cdn-chart')).toBeNull();
 	});
 
-	// Production's 24h CDN series on 2026-09-13. Every hour that cleared the
-	// floor had an unplotted hour on both sides, and an area draws nothing for a
-	// lone point, so the chart rendered as an empty grid.
-	it('marks a plotted hour that has no plotted neighbour', async () => {
-		mockFetch({ cdn: cdnHistory24h });
+	// Production's 24h CDN series on 2026-09-13 had every plotted hour flanked
+	// by unplotted ones, and an area draws nothing for a lone point, so the chart
+	// rendered as an empty grid. Three-hour buckets join that day up, but a
+	// quiet stretch can still strand one bucket.
+	it('marks a plotted bucket that has no plotted neighbour', async () => {
+		const bucket = (time: string) => ({
+			time,
+			okCount: 32,
+			failCount: 0,
+			rate: 1,
+			avgLatencyMs: 50,
+		});
+		mockFetch({
+			cdn: cdnPayload({
+				data: [bucket('2026-08-28T03:00:00Z'), bucket('2026-08-28T12:00:00Z')],
+			}),
+		});
 
 		render(<TorBoxHistoryCharts />);
 
@@ -291,7 +304,7 @@ describe('TorBoxHistoryCharts', () => {
 	// The server returns only the hours somebody measured. On a category axis
 	// that pulled readings hours apart next to each other, and the 24h axis ran
 	// 9 PM, 1 AM, 10 AM at even spacing.
-	it('keeps unmeasured hours on the axis as gaps', async () => {
+	it('keeps unmeasured buckets on the axis as gaps', async () => {
 		mockFetch({ cdn: cdnHistory24h });
 
 		render(<TorBoxHistoryCharts />);
@@ -299,14 +312,65 @@ describe('TorBoxHistoryCharts', () => {
 		await screen.findByTestId('torbox-cdn-chart');
 		const points = cdnPoints();
 		const times = points.map((point) => Date.parse(point.time));
-		expect(times[0]).toBe(Date.parse('2026-09-12T11:00:00Z'));
-		expect(times[times.length - 1]).toBe(Date.parse('2026-09-13T08:00:00Z'));
+		expect(times[0]).toBe(Date.parse('2026-09-12T09:00:00Z'));
+		expect(times[times.length - 1]).toBe(Date.parse('2026-09-13T06:00:00Z'));
 		expect(times.slice(1).map((time, i) => time - times[i])).toEqual(
-			Array(times.length - 1).fill(60 * 60 * 1000)
+			Array(times.length - 1).fill(3 * 60 * 60 * 1000)
 		);
 		expect(
-			points.find((point) => Date.parse(point.time) === Date.parse('2026-09-12T20:00:00Z'))
+			points.find((point) => Date.parse(point.time) === Date.parse('2026-09-13T00:00:00Z'))
 		).toMatchObject({ rate: null, sampleCount: 0 });
+	});
+
+	// One visitor adds 16 region checks, under the floor of 20, and most hours
+	// see one visitor or none: hourly, 8 of the 14 measured hours on 2026-09-13
+	// were dropped. Summed into three-hour buckets, every measured one clears.
+	it('plots every measured three-hour bucket of a quiet day', async () => {
+		mockFetch({ cdn: cdnHistory24h });
+
+		render(<TorBoxHistoryCharts />);
+
+		await screen.findByTestId('torbox-cdn-chart');
+		const measured = cdnPoints().filter((point) => point.sampleCount > 0);
+		expect(measured).toHaveLength(7);
+		expect(measured.every((point) => point.rate !== null)).toBe(true);
+	});
+
+	// Production's 7d series on 2026-10-24: 30 of 168 hours cleared the floor,
+	// so the week drew as scattered fragments. Twelve-hour buckets fill it.
+	it('plots a sparse week in twelve-hour buckets', async () => {
+		globalWithFetch.fetch = vi.fn().mockImplementation((url: string) =>
+			Promise.resolve({
+				ok: true,
+				status: 200,
+				json: () =>
+					Promise.resolve(
+						url.includes('type=torbox-cdn')
+							? url.includes('range=7d')
+								? cdnHistory7d
+								: cdnHistory24h
+							: apiHistory7d
+					),
+			})
+		) as unknown as typeof fetch;
+
+		render(<TorBoxHistoryCharts />);
+
+		fireEvent.click(await screen.findByRole('button', { name: '7 Days' }));
+		await screen.findByText('Hourly aggregates for the past 7d');
+
+		await waitFor(() =>
+			expect(cdnPoints().map((point) => Date.parse(point.time))[0]).toBe(
+				Date.parse('2026-10-18T00:00:00Z')
+			)
+		);
+		const points = cdnPoints();
+		const times = points.map((point) => Date.parse(point.time));
+		expect(times.slice(1).map((time, i) => time - times[i])).toEqual(
+			Array(times.length - 1).fill(12 * 60 * 60 * 1000)
+		);
+		expect(points).toHaveLength(14);
+		expect(points.every((point) => point.rate !== null)).toBe(true);
 	});
 
 	// Production's 7d API series on 2026-09-13. Ticks chosen by pixel spacing
