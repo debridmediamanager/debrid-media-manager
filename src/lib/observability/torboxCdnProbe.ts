@@ -4,9 +4,9 @@
 // probe of ours - see the status-page section of CLAUDE.md. This module is not
 // a return of that probe. The one that was removed ran server-side on a cron
 // from a single datacentre IP, so a 429 aimed at that IP was published to every
-// visitor as "TorBox is Down". Here nothing runs on a schedule and nothing is
-// stored: the check fires in the reader's browser, from the reader's network,
-// and answers only for them. That is literally the "or just me" half of the
+// visitor as "TorBox is Down". Here nothing runs from DMM's servers: the check
+// fires in the reader's browser, from the reader's network, and answers only
+// for them. That is literally the "or just me" half of the
 // question, and it is the half the traffic counters cannot answer - they
 // aggregate the API across everyone, not the byte path, and not the reader's
 // own route to it.
@@ -26,6 +26,8 @@
 // else outright (measured 2026-08-28). Production reads the list straight from
 // TorBox; a self-hosted or dev origin falls back to DMM's own cached copy.
 
+import { getLocalStorageItem } from '@/utils/browserStorage';
+
 const API_BASE = 'https://api.torbox.app';
 const API_VERSION = 'v1';
 const SPEEDTEST_PATH = `${API_VERSION}/api/speedtest?test_length=short`;
@@ -33,6 +35,8 @@ const NODE_LIST_FALLBACK_URL = '/api/observability/torbox-cdn-nodes';
 const SUBMIT_URL = '/api/observability/torbox-cdn';
 const NODE_LIST_TIMEOUT_MS = 10_000;
 const NODE_TIMEOUT_MS = 8_000;
+const LAST_CHECK_KEY = 'tb:cdnCheckedAt';
+const BACKGROUND_INTERVAL_MS = 60 * 60 * 1000;
 
 // Human names for the region codes TorBox returns from /api/speedtest.
 const REGION_NAMES: Record<string, string> = {
@@ -297,4 +301,31 @@ export async function submitCdnProbe(
 	} catch {
 		return false;
 	}
+}
+
+/** Records that this browser just ran a check, so the background one waits an hour. */
+export function markCdnChecked(now: number = Date.now()): void {
+	try {
+		window.localStorage.setItem(LAST_CHECK_KEY, String(now));
+	} catch {
+		// Storage refused (private mode, quota): the next page load checks again.
+	}
+}
+
+/**
+ * The status page alone left most hours of the history chart below its floor:
+ * one visitor is 16 region votes and the floor is 20. DMM users with TorBox
+ * linked are readers on their own networks too, so their browser contributes
+ * a run at most once an hour. It is the same probe and the same submission as
+ * the panel's: nothing runs from DMM's servers, and a user without TorBox is
+ * never made to touch it.
+ */
+export async function runBackgroundCdnCheck(now: number = Date.now()): Promise<boolean> {
+	if (!getLocalStorageItem('tb:apiKey')) return false;
+	const last = Number(getLocalStorageItem(LAST_CHECK_KEY));
+	if (Number.isFinite(last) && now - last < BACKGROUND_INTERVAL_MS) return false;
+
+	// Stamped before the run, so a second tab opened meanwhile does not repeat it.
+	markCdnChecked(now);
+	return submitCdnProbe(await runCdnProbe());
 }

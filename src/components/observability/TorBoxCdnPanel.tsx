@@ -1,4 +1,5 @@
 import {
+	markCdnChecked,
 	regionLabel,
 	runCdnProbe,
 	submitCdnProbe,
@@ -25,6 +26,7 @@ export function TorBoxCdnPanel() {
 		abortRef.current = controller;
 
 		setTesting(true);
+		markCdnChecked();
 		const result = await runCdnProbe(controller.signal);
 		if (controller.signal.aborted) return;
 

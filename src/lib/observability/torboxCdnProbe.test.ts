@@ -2,6 +2,7 @@ import {
 	fetchCdnNodes,
 	probeCdnNode,
 	regionLabel,
+	runBackgroundCdnCheck,
 	runCdnProbe,
 	submitCdnProbe,
 	type TorBoxCdnNode,
@@ -474,5 +475,65 @@ describe('submitCdnProbe', () => {
 		await expect(
 			submitCdnProbe({ nodes: [nodeResult()], discoveryError: null, checkedAt: 1 })
 		).resolves.toBe(false);
+	});
+});
+
+describe('runBackgroundCdnCheck', () => {
+	const HOUR = 60 * 60 * 1000;
+	const NOW = Date.parse('2026-10-25T12:00:00Z');
+
+	function mockTorBox() {
+		const fetchMock = vi.fn().mockImplementation((url: string) => {
+			if (url.includes('/api/speedtest')) {
+				return Promise.resolve(jsonResponse({ success: true, data: [speedtestEntry()] }));
+			}
+			if (url === '/api/observability/torbox-cdn') {
+				return Promise.resolve({ ok: true, status: 202 });
+			}
+			return Promise.resolve(rangeResponse(206));
+		});
+		globalWithFetch.fetch = fetchMock as unknown as typeof fetch;
+		return fetchMock;
+	}
+
+	const submitted = (fetchMock: ReturnType<typeof vi.fn>) =>
+		fetchMock.mock.calls.filter(([url]) => url === '/api/observability/torbox-cdn').length;
+
+	afterEach(() => {
+		window.localStorage.clear();
+	});
+
+	// The check spends the user's own requests on TorBox, so only someone who
+	// already uses TorBox is ever asked to make them.
+	it('does nothing for a user without TorBox linked', async () => {
+		const fetchMock = mockTorBox();
+
+		await expect(runBackgroundCdnCheck(NOW)).resolves.toBe(false);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('probes and submits for a TorBox user, then waits an hour', async () => {
+		window.localStorage.setItem('tb:apiKey', '"key"');
+		const fetchMock = mockTorBox();
+
+		await expect(runBackgroundCdnCheck(NOW)).resolves.toBe(true);
+		expect(submitted(fetchMock)).toBe(1);
+		expect(window.localStorage.getItem('tb:cdnCheckedAt')).toBe(String(NOW));
+
+		await expect(runBackgroundCdnCheck(NOW + HOUR - 1)).resolves.toBe(false);
+		expect(submitted(fetchMock)).toBe(1);
+
+		await expect(runBackgroundCdnCheck(NOW + HOUR)).resolves.toBe(true);
+		expect(submitted(fetchMock)).toBe(2);
+	});
+
+	// A status-page visit already contributed this hour's vote.
+	it('skips when the status panel checked within the hour', async () => {
+		window.localStorage.setItem('tb:apiKey', '"key"');
+		window.localStorage.setItem('tb:cdnCheckedAt', String(NOW - 10 * 60 * 1000));
+		const fetchMock = mockTorBox();
+
+		await expect(runBackgroundCdnCheck(NOW)).resolves.toBe(false);
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 });

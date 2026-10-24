@@ -2,6 +2,7 @@ import CanaryLinks from '@/components/CanaryLinks';
 import FloatingLibraryIndicator from '@/components/FloatingLibraryIndicator';
 import { ModalProvider } from '@/components/modals/ModalContext';
 import { LibraryCacheProvider } from '@/contexts/LibraryCacheContext';
+import { runBackgroundCdnCheck } from '@/lib/observability/torboxCdnProbe';
 import '@/styles/globals.css';
 import { bridgePageCache } from '@/utils/pageCacheBridge';
 import type { AppProps } from 'next/app';
@@ -22,6 +23,12 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 		if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;
 		return bridgePageCache(router.events, navigator.serviceWorker);
 	}, [router.events]);
+
+	useEffect(() => {
+		// Late enough not to compete with the page's own requests.
+		const timeoutId = setTimeout(() => void runBackgroundCdnCheck(), 15_000);
+		return () => clearTimeout(timeoutId);
+	}, []);
 
 	useEffect(() => {
 		// Save scroll position before route changes

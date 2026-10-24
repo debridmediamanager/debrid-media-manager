@@ -5,7 +5,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 // Where the status page's CDN history comes from.
 //
-// The panel probes tb-cdn in the reader's own browser; this is the only way
+// The status-page panel probes tb-cdn in the reader's own browser, as does any
+// DMM page for a user with TorBox linked (hourly); this is the only way
 // those results can become a time series, because DMM's servers never touch
 // tb-cdn themselves and must not start - a probe from one datacentre IP
 // measures that IP's rate-limit standing, which is exactly the mistake the

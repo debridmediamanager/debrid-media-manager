@@ -125,6 +125,17 @@ describe('TorBoxCdnPanel', () => {
 		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalledWith(result));
 	});
 
+	// The background check on other pages reads the same stamp, so a status
+	// page visit is not followed by a second vote from the same reader.
+	it('stamps the check so the hourly background run skips this hour', async () => {
+		window.localStorage.removeItem('tb:cdnCheckedAt');
+
+		render(<TorBoxCdnPanel />);
+
+		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalled());
+		expect(Number(window.localStorage.getItem('tb:cdnCheckedAt'))).toBeGreaterThan(0);
+	});
+
 	it('contributes again after a manual re-test', async () => {
 		render(<TorBoxCdnPanel />);
 		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalledTimes(1));
