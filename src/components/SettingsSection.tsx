@@ -15,6 +15,7 @@ import {
 	getLocalStorageString,
 	hideRdBlockedTorrentsDefault,
 } from '../utils/browserStorage';
+import { RESULTS_TAB_SETTING } from '../utils/resultsTab';
 import {
 	defaultAvailabilityCheckLimit,
 	defaultDownloadMagnets,
@@ -25,6 +26,7 @@ import {
 	defaultMovieYearFilter,
 	defaultOtherStreamsLimit,
 	defaultPlayer,
+	defaultResultsTab,
 	defaultShowCalendarAddButtonsApple,
 	defaultShowCalendarAddButtonsGoogle,
 	defaultShowSeasonFilter,
@@ -56,6 +58,9 @@ export const SettingsSection = () => {
 	);
 	const [hideAnime, setHideAnime] = useState(() =>
 		getLocalStorageBoolean('settings:hideAnime', false)
+	);
+	const [resultsTab, setResultsTab] = useState(() =>
+		getLocalStorageItemOrDefault(RESULTS_TAB_SETTING, defaultResultsTab)
 	);
 	const [movieYearFilter, setMovieYearFilter] = useState(() =>
 		getLocalStorageItemOrDefault('settings:movieYearFilter', defaultMovieYearFilter)
@@ -282,6 +287,12 @@ export const SettingsSection = () => {
 		setHideRdBlockedTorrents(checked);
 		if (typeof localStorage !== 'undefined')
 			localStorage.setItem('settings:hideRdBlockedTorrents', String(checked));
+	};
+
+	const handleResultsTabChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = e.target.value;
+		setResultsTab(value);
+		if (typeof localStorage !== 'undefined') localStorage.setItem(RESULTS_TAB_SETTING, value);
 	};
 
 	const handleMovieYearFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -726,6 +737,25 @@ export const SettingsSection = () => {
 										>
 											Learn more
 										</a>
+									</p>
+								</div>
+
+								<div className="flex flex-col gap-1">
+									<label htmlFor="dmm-results-tab" className="font-semibold">
+										Show results on
+									</label>
+									<select
+										id="dmm-results-tab"
+										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+										value={resultsTab}
+										onChange={handleResultsTabChange}
+									>
+										<option value="torrents">Torrents tab</option>
+										<option value="usenet">Usenet tab</option>
+									</select>
+									<p className="mt-1 text-xs text-gray-400">
+										Which tab a movie or season opens on. The other tab is one
+										click away.
 									</p>
 								</div>
 

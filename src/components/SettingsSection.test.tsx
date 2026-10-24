@@ -79,6 +79,16 @@ describe('SettingsSection', () => {
 		});
 	});
 
+	it('saves which tab results open on, torrents until told otherwise', async () => {
+		render(<SettingsSection />);
+		const select = screen.getByLabelText('Show results on') as HTMLSelectElement;
+		expect(select.value).toBe('torrents');
+
+		await userEvent.setup().selectOptions(select, 'usenet');
+
+		expect(localStorage.getItem('settings:defaultResultsTab')).toBe('usenet');
+	});
+
 	// Requested in #xmas-wishlist: SenPlayer is the iOS/tvOS player on a current
 	// FFmpeg build, and it answers a different x-callback-url action than the
 	// other two iOS entries, so the option carries its own os key.

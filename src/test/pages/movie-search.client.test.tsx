@@ -8,6 +8,7 @@ const {
 	toastMock,
 	routerQuery,
 	routerPath,
+	routerReplace,
 	torrentUrls,
 	torrentManagement,
 	authKeys,
@@ -25,6 +26,7 @@ const {
 		toastMock: toast,
 		routerQuery: { imdbid: 'tt1111111' } as { imdbid: string },
 		routerPath: { current: '/movie/[imdbid]' },
+		routerReplace: vi.fn(),
 		torrentUrls: [] as string[],
 		// Mutable so a test can hand the page a different combination of keys
 		authKeys: { rd: 'rd-token', ad: null, tb: null, pm: null, oc: null, dl: null } as {
@@ -145,7 +147,11 @@ vi.mock('@/utils/browserStorage', () => ({
 	__esModule: true,
 	getLocalStorageBoolean: (_key: string, defaultValue: boolean) => defaultValue,
 	getLocalStorageItemOrDefault: (key: string, defaultValue: any) =>
-		key === 'settings:movieYearFilter' ? '1' : defaultValue,
+		key === 'settings:movieYearFilter'
+			? '1'
+			: key === 'settings:defaultResultsTab'
+				? (localStorage.getItem(key) ?? defaultValue)
+				: defaultValue,
 	hideRdBlockedTorrentsDefault: (fallback: boolean) => fallback,
 }));
 
@@ -208,7 +214,9 @@ vi.mock('next/router', () => ({
 	useRouter: () => ({
 		query: routerQuery,
 		pathname: routerPath.current,
+		isReady: true,
 		push: vi.fn(),
+		replace: routerReplace,
 		prefetch: vi.fn(),
 	}),
 }));
@@ -327,6 +335,37 @@ describe('Movie search page across client-side navigation', () => {
 		}
 	});
 
+	// The Settings page's "Show results on: Usenet tab".
+	describe('with results set to open on Usenet', () => {
+		beforeEach(() => localStorage.setItem('settings:defaultResultsTab', 'usenet'));
+		afterEach(() => {
+			localStorage.removeItem('settings:defaultResultsTab');
+			delete (routerQuery as Record<string, string>).tab;
+		});
+
+		it('opens the Usenet tab without searching torrents', async () => {
+			render(<MovieSearchPage />);
+
+			await waitFor(() =>
+				expect(routerReplace).toHaveBeenCalledWith({
+					pathname: '/movie/[imdbid]/usenet',
+					query: { imdbid: 'tt1111111' },
+				})
+			);
+			await waitFor(() => expect(screen.getByTestId('media-header')).toBeInTheDocument());
+			expect(torrentUrls).toHaveLength(0);
+		});
+
+		// The Torrents tab asks for torrents in its URL, or it would bounce back.
+		it('stays on the torrents the Torrents tab asked for', async () => {
+			(routerQuery as Record<string, string>).tab = 'torrents';
+			render(<MovieSearchPage />);
+
+			await waitFor(() => expect(torrentUrls).toHaveLength(1));
+			expect(routerReplace).not.toHaveBeenCalled();
+		});
+	});
+
 	it('keeps the Usenet search off the torrent tab', async () => {
 		render(<MovieSearchPage />);
 
@@ -335,6 +374,10 @@ describe('Movie search page across client-side navigation', () => {
 		expect(screen.getByRole('link', { name: /Usenet/ })).toHaveAttribute(
 			'href',
 			'/movie/tt1111111/usenet'
+		);
+		expect(screen.getByRole('link', { name: /Torrents/ })).toHaveAttribute(
+			'href',
+			'/movie/tt1111111?tab=torrents'
 		);
 	});
 

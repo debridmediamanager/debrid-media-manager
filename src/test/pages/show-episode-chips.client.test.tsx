@@ -27,19 +27,28 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // search, all from `src/test/fixtures/seasonEpisodes`. The page's own merge,
 // its external-source hook and its text filter run for real.
 
-const { axiosGetMock, pushMock, routerState, resultsProps, fetchMock, parsedNames, settings } =
-	vi.hoisted(() => ({
-		axiosGetMock: vi.fn(),
-		pushMock: vi.fn(),
-		routerState: {
-			query: {} as Record<string, string>,
-			pathname: '/show/[imdbid]/[seasonNum]',
-		},
-		resultsProps: [] as { filteredResults: SearchResult[] }[],
-		fetchMock: vi.fn(),
-		parsedNames: [] as string[],
-		settings: { hideRdBlocked: false },
-	}));
+const {
+	axiosGetMock,
+	pushMock,
+	replaceMock,
+	routerState,
+	resultsProps,
+	fetchMock,
+	parsedNames,
+	settings,
+} = vi.hoisted(() => ({
+	axiosGetMock: vi.fn(),
+	pushMock: vi.fn(),
+	replaceMock: vi.fn(),
+	routerState: {
+		query: {} as Record<string, string>,
+		pathname: '/show/[imdbid]/[seasonNum]',
+	},
+	resultsProps: [] as { filteredResults: SearchResult[] }[],
+	fetchMock: vi.fn(),
+	parsedNames: [] as string[],
+	settings: { hideRdBlocked: false, resultsTab: 'torrents' },
+}));
 
 // Counts how often a name is read, to show the chips parse each title once.
 vi.mock('@/utils/seasonNaming', async (importOriginal) => {
@@ -129,7 +138,11 @@ vi.mock('@/utils/browserStorage', () => ({
 	getLocalStorageBoolean: (key: string, fallback: boolean) =>
 		key.startsWith('settings:enable') ? fallback : false,
 	getLocalStorageItemOrDefault: (key: string, fallback: unknown) =>
-		key === 'settings:defaultTorrentsFilter' ? '' : fallback,
+		key === 'settings:defaultTorrentsFilter'
+			? ''
+			: key === 'settings:defaultResultsTab'
+				? settings.resultsTab
+				: fallback,
 	// What a Real-Debrid-only account gets by default, switched per test.
 	hideRdBlockedTorrentsDefault: () => settings.hideRdBlocked,
 }));
@@ -170,7 +183,7 @@ vi.mock('next/router', () => ({
 		pathname: routerState.pathname,
 		isReady: true,
 		push: pushMock,
-		replace: vi.fn(),
+		replace: replaceMock,
 		prefetch: vi.fn(),
 	}),
 }));
@@ -277,6 +290,7 @@ beforeEach(() => {
 	settings.hideRdBlocked = false;
 	vi.stubGlobal('fetch', fetchMock);
 	routerState.pathname = '/show/[imdbid]/[seasonNum]';
+	settings.resultsTab = 'torrents';
 });
 
 afterEach(() => {
@@ -533,6 +547,39 @@ describe('episode chips on /show/[imdbid]/[seasonNum]', { timeout: 30000 }, () =
 		expect(screen.getByRole('link', { name: /Torrents/ })).toHaveAttribute(
 			'href',
 			expect.stringContaining('/show/tt13706018/3')
+		);
+	});
+
+	// Results set to open on Usenet: a bare season page goes there, and torrents
+	// asked for with the Torrents tab stay torrents across seasons and chips.
+	it('opens a season on Usenet when set to, and keeps torrents asked for', async () => {
+		settings.resultsTab = 'usenet';
+		serve('tt0108778-s10');
+		const bare = render(<ShowSeasonPage />);
+		await waitFor(() =>
+			expect(replaceMock).toHaveBeenCalledWith({
+				pathname: '/show/[imdbid]/[seasonNum]/usenet',
+				query: { imdbid: 'tt0108778', seasonNum: '10' },
+			})
+		);
+		expect(torrentsCalls()).toBe(0);
+		bare.unmount();
+
+		replaceMock.mockClear();
+		routerState.query = { imdbid: 'tt0108778', seasonNum: '10', tab: 'torrents' };
+		render(<ShowSeasonPage />);
+		await waitFor(() => expect(torrentsCalls()).toBeGreaterThan(0));
+		expect(replaceMock).not.toHaveBeenCalled();
+		expect(document.querySelector('a[href="/show/tt0108778/9?tab=torrents"]')).not.toBeNull();
+		await screen.findByTestId('season-episode-nav');
+		fireEvent.click(chip('17'));
+		expect(pushMock).toHaveBeenLastCalledWith(
+			{
+				pathname: '/show/[imdbid]/[seasonNum]',
+				query: { imdbid: 'tt0108778', seasonNum: '10', episode: '17', tab: 'torrents' },
+			},
+			undefined,
+			{ shallow: true, scroll: false }
 		);
 	});
 });

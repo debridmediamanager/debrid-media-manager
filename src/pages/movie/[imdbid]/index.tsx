@@ -48,6 +48,7 @@ import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
+import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
@@ -133,6 +134,12 @@ const MovieSearch: FunctionComponent = () => {
 	const router = useRouter();
 	// `/movie/tt…/usenet` renders this page on its Usenet tab.
 	const usenetTab = !!router.pathname?.endsWith('/usenet');
+	// A viewer whose results open on Usenet lands on that tab instead.
+	useEffect(() => {
+		if (router.isReady && !usenetTab && opensOnUsenet(router.query)) {
+			router.replace(usenetRouteFor(router.pathname, router.query));
+		}
+	}, [router, usenetTab]);
 	const { imdbid } = router.query;
 	const isMounted = useRef(true);
 	const hasLoadedTrackerStats = useRef(false);
@@ -365,7 +372,7 @@ const MovieSearch: FunctionComponent = () => {
 	// Initialize data - waits for this movie's own info so the search can use its title.
 	// The Usenet tab searches on its own and never shows the torrents.
 	useEffect(() => {
-		if (!imdbid || infoImdbId !== imdbid || usenetTab) return;
+		if (!imdbid || infoImdbId !== imdbid || usenetTab || opensOnUsenet(router.query)) return;
 
 		const initializeData = async () => {
 			await torrentDB.initializeDB();

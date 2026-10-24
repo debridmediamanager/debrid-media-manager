@@ -67,6 +67,7 @@ import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/uti
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
 import { sortByMean } from '@/utils/results';
+import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
@@ -284,7 +285,16 @@ const TvSearch: FunctionComponent = () => {
 	// `/show/tt…/N/usenet` renders this page on its Usenet tab; its season and episode
 	// links stay on that tab.
 	const usenetTab = !!router.pathname?.endsWith('/usenet');
+	// A viewer whose results open on Usenet lands on that tab instead.
+	useEffect(() => {
+		if (router.isReady && !usenetTab && opensOnUsenet(router.query)) {
+			router.replace(usenetRouteFor(router.pathname, router.query));
+		}
+	}, [router, usenetTab]);
 	const tabSuffix = usenetTab ? '/usenet' : '';
+	// Torrents asked for over a Usenet default stay asked for across seasons and chips.
+	const torrentsAsked = !usenetTab && router.query.tab === 'torrents';
+	const seasonLinkSuffix = torrentsAsked ? '?tab=torrents' : tabSuffix;
 	const { imdbid, seasonNum } = router.query;
 	useEffect(
 		() => () => {
@@ -704,7 +714,14 @@ const TvSearch: FunctionComponent = () => {
 
 	useEffect(() => {
 		// The Usenet tab searches on its own and never shows the torrents.
-		if (!imdbid || !seasonNum || infoImdbId !== imdbid || usenetTab) return;
+		if (
+			!imdbid ||
+			!seasonNum ||
+			infoImdbId !== imdbid ||
+			usenetTab ||
+			opensOnUsenet(router.query)
+		)
+			return;
 		const parsedSeason = parseInt(seasonNum as string, 10);
 		if (isNaN(parsedSeason)) return;
 
@@ -1149,6 +1166,7 @@ const TvSearch: FunctionComponent = () => {
 			if (typeof imdbid !== 'string' || typeof seasonNum !== 'string') return;
 			const nextQuery: Record<string, string> = { imdbid, seasonNum };
 			if (filter !== null) nextQuery.episode = String(filter);
+			if (torrentsAsked) nextQuery.tab = 'torrents';
 			// Pushed, not replaced, so back and forward step through the chips.
 			router.push(
 				{ pathname: `/show/[imdbid]/[seasonNum]${tabSuffix}`, query: nextQuery },
@@ -1159,7 +1177,7 @@ const TvSearch: FunctionComponent = () => {
 				}
 			);
 		},
-		[imdbid, seasonNum, router, tabSuffix]
+		[imdbid, seasonNum, router, tabSuffix, torrentsAsked]
 	);
 
 	const filteredResults = useMemo(() => {
@@ -1691,7 +1709,7 @@ const TvSearch: FunctionComponent = () => {
 		<div className="flex items-center overflow-x-auto" data-testid="media-header-season-nav">
 			{showInfo.has_specials && (
 				<Link
-					href={`/show/${imdbId}/0${tabSuffix}`}
+					href={`/show/${imdbId}/0${seasonLinkSuffix}`}
 					className={`inline-flex items-center border-2 p-1 text-xs border-${selectedSeason === 0 ? 'red' : 'yellow'}-500 bg-${selectedSeason === 0 ? 'red' : 'yellow'}-900/30 text-${selectedSeason === 0 ? 'red' : 'yellow'}-100 hover:bg-${selectedSeason === 0 ? 'red' : 'yellow'}-800/50 mr-2 mb-1 rounded transition-colors`}
 				>
 					<Tv className="mr-2 h-3 w-3 text-cyan-500" />
@@ -1704,7 +1722,7 @@ const TvSearch: FunctionComponent = () => {
 					return (
 						<Link
 							key={idx}
-							href={`/show/${imdbId}/${season}${tabSuffix}`}
+							href={`/show/${imdbId}/${season}${seasonLinkSuffix}`}
 							title={seasonRunTitle(season)}
 							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mr-2 mb-1 rounded transition-colors`}
 						>

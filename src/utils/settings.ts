@@ -11,5 +11,7 @@ export const defaultShowCalendarAddButtonsGoogle = false;
 export const defaultShowCalendarAddButtonsApple = false;
 
 export const defaultMovieYearFilter = 'off';
+/** The tab a title's results open on: `torrents` or `usenet`. */
+export const defaultResultsTab = 'torrents';
 export const defaultShowSeasonFilter = false;
 export const defaultHideRdBlockedTorrents = false;

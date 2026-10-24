@@ -18,12 +18,16 @@ const TAB =
  * Usenet indexer bills a daily API-call quota.
  */
 export default function ResultsTabs({ basePath, active, query }: ResultsTabsProps) {
-	const search = query ? `?${new URLSearchParams(query)}` : '';
-	const href = (path: string) => `${path}${search}`;
+	// The Torrents tab says so in its URL, or a viewer whose results open on
+	// Usenet would be sent straight back there.
+	const href = (path: string, extra: Record<string, string> = {}) => {
+		const params = new URLSearchParams({ ...query, ...extra }).toString();
+		return params ? `${path}?${params}` : path;
+	};
 	return (
 		<nav className="mt-3 flex gap-1 border-b-2 border-gray-700" aria-label="Results">
 			<Link
-				href={href(basePath)}
+				href={href(basePath, { tab: 'torrents' })}
 				aria-current={active === 'torrents' ? 'page' : undefined}
 				className={`${TAB} ${active === 'torrents' ? 'border-gray-600 bg-gray-800 text-white' : 'border-transparent text-gray-400 hover:text-gray-200'}`}
 			>
