@@ -107,11 +107,11 @@ export default function WantedPage() {
 
 				{!isSponsor ? (
 					<div className="rounded border-2 border-rose-700 bg-rose-900/20 p-3 text-sm text-rose-100">
-						The wanted list is for sponsors. Link your DMM API key under{' '}
-						<Link href="/" className="underline">
-							Settings on the home page
+						The wanted list is for sponsors. Paste your DMM API key on the{' '}
+						<Link href="/settings" className="underline">
+							Settings
 						</Link>{' '}
-						to use it.
+						page to use it.
 					</div>
 				) : (
 					<>

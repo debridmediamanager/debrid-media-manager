@@ -40,6 +40,7 @@ describe('/wanted', () => {
 		global.fetch = vi.fn() as any;
 		render(<WantedPage />);
 		expect(screen.getByText(/The wanted list is for sponsors/)).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
