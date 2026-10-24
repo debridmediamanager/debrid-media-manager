@@ -1,4 +1,5 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
+import EasynewsResults from '@/components/EasynewsResults';
 import MediaHeader from '@/components/MediaHeader';
 import MovieSearchResults from '@/components/MovieSearchResults';
 import ResultsTabs from '@/components/ResultsTabs';
@@ -1166,7 +1167,12 @@ const MovieSearch: FunctionComponent = () => {
 			/>
 
 			<ResultsTabs basePath={`/movie/${imdbid}`} active={usenetTab ? 'usenet' : 'torrents'} />
-			{usenetTab && <UsenetResults imdbId={imdbid as string} rdKey={rdKey} />}
+			{usenetTab && (
+				<>
+					<UsenetResults imdbId={imdbid as string} rdKey={rdKey} />
+					<EasynewsResults title={movieInfo.title} year={movieInfo.year} />
+				</>
+			)}
 			{!usenetTab && (
 				<>
 					{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}

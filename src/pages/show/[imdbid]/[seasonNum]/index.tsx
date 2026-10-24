@@ -1,5 +1,6 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
+import EasynewsResults from '@/components/EasynewsResults';
 import EpisodeChips, { type EpisodeChipItem } from '@/components/EpisodeChips';
 import { showEpisodeSummary } from '@/components/EpisodeSummaryToast';
 import MediaHeader from '@/components/MediaHeader';
@@ -2140,6 +2141,11 @@ const TvSearch: FunctionComponent = () => {
 						title={showInfo.title}
 						rdKey={rdKey}
 						onResults={handleUsenetResults}
+						rowFilter={usenetRowFilter}
+					/>
+					<EasynewsResults
+						title={showInfo.title}
+						seasonNum={selectedSeason}
 						rowFilter={usenetRowFilter}
 					/>
 				</>
