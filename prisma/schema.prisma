@@ -1068,8 +1068,8 @@ model WantedItem {
   /// When zurg last read this sponsor's list.
   lastPolledAt DateTime?
 
+  /// Leads with `shortId`, so it also serves reading one sponsor's list.
   @@unique([shortId, imdbId])
-  @@index([shortId])
 }
 
 /// Which sponsorship let a cast profile store an "other streams" limit above
