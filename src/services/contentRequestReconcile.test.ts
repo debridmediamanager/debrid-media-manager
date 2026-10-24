@@ -1,4 +1,5 @@
 import { ORPHANED_CLAIM_MS, reconcileContentRequests } from '@/services/contentRequestReconcile';
+import { creditFulfiller } from '@/services/fulfillerRewards';
 import { repository as db } from '@/services/repository';
 import completedJob from '@/test/fixtures/contentRequests/job-completed.json';
 import uncachedJob from '@/test/fixtures/contentRequests/job-failed-uncached.json';
@@ -7,6 +8,7 @@ import cancelledJob from '@/test/fixtures/debridUploader/job-cancelled-claimed-r
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/fulfillerRewards', () => ({ creditFulfiller: vi.fn() }));
 
 const mockDb = vi.mocked(db);
 const SERVER = 'http://uploader.example:3100';
@@ -181,5 +183,38 @@ describe('reconcileContentRequests', () => {
 			'stale',
 			'the transfer never started'
 		);
+	});
+
+	describe('fulfiller credit', () => {
+		it('credits the fulfiller when their transfer lands, on the recorded job', async () => {
+			mockDb.listClaimedContentRequests = vi
+				.fn()
+				.mockResolvedValue([claimed({ jobId: completedJob.id })]);
+			uploaderSays({ [completedJob.id]: { body: completedJob } });
+			vi.mocked(creditFulfiller).mockResolvedValue(undefined);
+			await reconcileContentRequests(20, NOW);
+			expect(creditFulfiller).toHaveBeenCalledWith('helper');
+		});
+
+		it('credits nobody for a send another sweep already settled', async () => {
+			mockDb.listClaimedContentRequests = vi
+				.fn()
+				.mockResolvedValue([claimed({ jobId: completedJob.id })]);
+			mockDb.settleContentRequestDelivered = vi.fn().mockResolvedValue(false);
+			uploaderSays({ [completedJob.id]: { body: completedJob } });
+			await reconcileContentRequests(20, NOW);
+			expect(creditFulfiller).not.toHaveBeenCalled();
+		});
+
+		it('still settles the request when crediting fails', async () => {
+			mockDb.listClaimedContentRequests = vi
+				.fn()
+				.mockResolvedValue([claimed({ jobId: completedJob.id })]);
+			uploaderSays({ [completedJob.id]: { body: completedJob } });
+			vi.mocked(creditFulfiller).mockRejectedValue(new Error('db down'));
+			vi.spyOn(console, 'error').mockImplementation(() => {});
+			const result = await reconcileContentRequests(20, NOW);
+			expect(result.delivered).toBe(1);
+		});
 	});
 });

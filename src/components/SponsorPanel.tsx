@@ -59,6 +59,7 @@ const SOURCE_LABELS: Record<string, string> = {
 	patreon: 'Patreon',
 	onetime: 'One-time donation',
 	staff: 'Discord staff',
+	earned: 'Fulfilling requests',
 };
 
 /**

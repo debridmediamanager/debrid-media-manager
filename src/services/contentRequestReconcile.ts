@@ -1,5 +1,6 @@
 import { lookupJob } from '@/services/debridTransferReconcile';
 import { isAllowedServer } from '@/services/debridUploaderServers';
+import { creditFulfiller } from '@/services/fulfillerRewards';
 import { repository as db } from '@/services/repository';
 
 /**
@@ -88,7 +89,17 @@ export async function reconcileContentRequests(
 		}
 
 		if (job?.status === 'completed') {
-			if (await db.settleContentRequestDelivered(row.id, row.jobId)) result.delivered++;
+			if (await db.settleContentRequestDelivered(row.id, row.jobId)) {
+				result.delivered++;
+				// A failed credit is recounted on the fulfiller's next send.
+				if (row.fulfillerId) {
+					try {
+						await creditFulfiller(row.fulfillerId);
+					} catch (error) {
+						console.error('Crediting a fulfiller failed:', error);
+					}
+				}
+			}
 			continue;
 		}
 

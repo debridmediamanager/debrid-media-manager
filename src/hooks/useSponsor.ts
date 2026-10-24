@@ -17,7 +17,7 @@ export const SPONSOR_TOKEN_KEY = 'dmm:sponsorToken';
  */
 export const SPONSOR_API_KEY_KEY = 'dmm:apiKey';
 
-export type SponsorSource = 'github' | 'patreon' | 'onetime' | 'staff';
+export type SponsorSource = 'github' | 'patreon' | 'onetime' | 'staff' | 'earned';
 
 interface SponsorClaims {
 	shortId: string;

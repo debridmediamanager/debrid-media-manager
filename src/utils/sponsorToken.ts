@@ -1,10 +1,11 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
 /**
- * Where a sponsorship comes from. Mirrors the sources gatekeeper tracks
- * on the shared `Sponsors` row.
+ * Where a sponsorship comes from. The first four mirror the sources gatekeeper
+ * tracks on the shared `Sponsors` row; `earned` is DMM's own, time paid for by
+ * fulfilling requests (`SponsorEarned`).
  */
-export type SponsorSource = 'github' | 'patreon' | 'onetime' | 'staff';
+export type SponsorSource = 'github' | 'patreon' | 'onetime' | 'staff' | 'earned';
 
 export interface SponsorTokenPayload {
 	/** gatekeeper's 4-character Sponsorship ID, used to re-check on refresh. */

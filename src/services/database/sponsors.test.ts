@@ -6,6 +6,9 @@ const prismaMock = vi.hoisted(() => ({
 		findUnique: vi.fn(),
 		findFirst: vi.fn(),
 	},
+	sponsorEarned: {
+		findUnique: vi.fn(),
+	},
 	castSponsorGrant: {
 		findUnique: vi.fn(),
 		upsert: vi.fn(),
@@ -221,6 +224,42 @@ describe('SponsorsService', () => {
 				where: { service: 'tb', userId: 'u1' },
 			});
 			expect(prismaMock.castSponsorGrant.upsert).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('earned sponsor time', () => {
+		beforeEach(() => {
+			(prismaMock.sponsors.findUnique as Mock).mockResolvedValue(LAPSED);
+			(prismaMock.sponsorEarned.findUnique as Mock).mockReset();
+		});
+
+		it('makes a non-paying account a sponsor while it lasts', async () => {
+			(prismaMock.sponsorEarned.findUnique as Mock).mockResolvedValue({
+				earnedUntil: new Date(Date.now() + 60_000),
+			});
+			const lookup = await service.getByShortId('ZP1M');
+			expect(lookup?.isSponsor).toBe(true);
+			expect(lookup?.sources).toEqual(['earned']);
+		});
+
+		it('lapses when the time runs out', async () => {
+			(prismaMock.sponsorEarned.findUnique as Mock).mockResolvedValue({
+				earnedUntil: new Date(Date.now() - 60_000),
+			});
+			expect((await service.getByShortId('ZP1M'))?.isSponsor).toBe(false);
+		});
+
+		// Every sponsor check reads it, so a failure must cost earned time only.
+		it('keeps a paying sponsor when earned time cannot be read', async () => {
+			(prismaMock.sponsors.findUnique as Mock).mockResolvedValue({
+				...LAPSED,
+				githubSponsoring: true,
+			});
+			(prismaMock.sponsorEarned.findUnique as Mock).mockRejectedValue(new Error('no table'));
+			vi.spyOn(console, 'error').mockImplementation(() => {});
+			const lookup = await service.getByShortId('ZP1M');
+			expect(lookup?.isSponsor).toBe(true);
+			expect(lookup?.sources).toEqual(['github']);
 		});
 	});
 });

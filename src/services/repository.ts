@@ -288,6 +288,53 @@ export class Repository {
 		return this.contentRequestService.cancelRequest(id, requesterId);
 	}
 
+	public async listContentRequestBoard(limit: number, offset: number, viewerId: string | null) {
+		return withoutBlockedHashes(
+			await this.contentRequestService.listOpenBoard(limit, offset, viewerId)
+		);
+	}
+
+	public listContentRequestSendsBy(fulfillerIds: string[]) {
+		return this.contentRequestService.listSendsBy(fulfillerIds);
+	}
+
+	public countContentRequestSendsByFulfiller(since: Date | null, limit: number) {
+		return this.contentRequestService.countSendsByFulfiller(since, limit);
+	}
+
+	public thankContentRequest(id: string, requesterId: string) {
+		return this.contentRequestService.thankRequest(id, requesterId);
+	}
+
+	public linkFulfillers(fulfillerIds: string[], shortId: string, showName: boolean) {
+		return this.contentRequestService.linkFulfillers(fulfillerIds, shortId, showName);
+	}
+
+	public getFulfillerLinks(fulfillerIds: string[]) {
+		return this.contentRequestService.getFulfillerLinks(fulfillerIds);
+	}
+
+	public getFulfillerLinksForSponsors(shortIds: string[]) {
+		return this.contentRequestService.getLinksForSponsors(shortIds);
+	}
+
+	public getSponsorEarned(shortId: string) {
+		return this.contentRequestService.getEarned(shortId);
+	}
+
+	public paySponsorEarned(
+		shortId: string,
+		paidBlocks: number | null,
+		blocks: number,
+		earnedUntil: Date
+	) {
+		return this.contentRequestService.payEarned(shortId, paidBlocks, blocks, earnedUntil);
+	}
+
+	public getSponsorGithubNames(shortIds: string[]) {
+		return this.sponsorsService.githubNames(shortIds);
+	}
+
 	// Debrid Uploader (TB → RD transfer) mapping methods
 	public getDebridTransfer(originalHash: string) {
 		return this.debridUploaderMapService.getTransfer(originalHash);

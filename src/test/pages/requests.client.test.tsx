@@ -3,8 +3,10 @@ import RequestsPage from '@/pages/requests';
 import type { PublicRequest } from '@/utils/contentRequest';
 import {
 	fetchContentRequests,
+	fetchFulfillerStats,
 	fetchMyContentRequests,
 	fulfillContentRequest,
+	thankContentRequest,
 } from '@/utils/contentRequestsApi';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
@@ -24,6 +26,9 @@ vi.mock('@/utils/contentRequestsApi', async (importOriginal) => ({
 	fetchMyContentRequests: vi.fn(),
 	fulfillContentRequest: vi.fn(),
 	cancelContentRequest: vi.fn(),
+	thankContentRequest: vi.fn(),
+	fetchFulfillerStats: vi.fn(() => new Promise(() => {})),
+	fetchLeaderboard: vi.fn(() => new Promise(() => {})),
 }));
 
 // The asker's row as the board serves it to a stranger.
@@ -39,6 +44,9 @@ const ROW: PublicRequest = {
 	jobId: null,
 	tbCached: true,
 	error: null,
+	wantedBy: 1,
+	thanked: false,
+	canThank: false,
 };
 
 beforeEach(() => {
@@ -97,5 +105,52 @@ describe('RequestsPage for a fulfiller', () => {
 
 		await screen.findByText(ROW.title!);
 		expect(screen.queryByRole('button', { name: /Fulfil/ })).toBeNull();
+	});
+});
+
+describe('RequestsPage rewards', () => {
+	it('shows how many people want a release', async () => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue('TB_KEY');
+		vi.mocked(fetchContentRequests).mockResolvedValue({
+			requests: [{ ...ROW, wantedBy: 12 }],
+			authenticated: false,
+			hasMore: false,
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText('Wanted by 12')).toBeTruthy();
+	});
+
+	it('lets the asker thank whoever sent their request', async () => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue(['RD_TOKEN', false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue(null as any);
+		vi.mocked(fetchMyContentRequests).mockResolvedValue([
+			{ ...ROW, mine: true, status: 'fulfilled', canThank: true },
+		]);
+		vi.mocked(thankContentRequest).mockResolvedValue(undefined);
+		render(<RequestsPage />);
+
+		fireEvent.click(await screen.findByRole('button', { name: /Say thanks/ }));
+
+		await waitFor(() => expect(thankContentRequest).toHaveBeenCalledWith('RD_TOKEN', ROW.id));
+		expect(await screen.findByText('Thanked')).toBeTruthy();
+	});
+
+	it('shows a fulfiller their progress toward sponsor time', async () => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue('TB_KEY');
+		vi.mocked(fetchFulfillerStats).mockResolvedValue({
+			sends: 13,
+			thanked: 4,
+			credited: 13,
+			sendsPerBlock: 10,
+			daysPerBlock: 7,
+			linked: false,
+			showName: false,
+			earnedUntil: null,
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText('3 of 10 toward your next 7 days')).toBeTruthy();
+		expect(screen.getByLabelText('Show my GitHub name on the leaderboard')).toBeTruthy();
 	});
 });

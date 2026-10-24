@@ -197,6 +197,12 @@ export interface PublicRequest {
 	 * credentials, which {@link publicError} replaces with a neutral line.
 	 */
 	error: string | null;
+	/** How many people asked for this release. One send reaches them all. */
+	wantedBy: number;
+	/** The asker thanked whoever sent it. */
+	thanked: boolean;
+	/** The caller asked, somebody sent it, and no thanks has gone yet. */
+	canThank: boolean;
 }
 
 export interface StoredRequest {
@@ -213,8 +219,12 @@ export interface StoredRequest {
 	error?: string | null;
 	sizeBytes?: bigint | number | null;
 	returnPath?: string | null;
+	fulfilledAt?: Date | string | null;
+	thankedAt?: Date | string | null;
 	createdAt: Date | string;
 	updatedAt?: Date | string;
+	/** Set on board rows, which stand for every ask of their release. */
+	wantedBy?: number;
 }
 
 /** What strangers read in place of a reason about the asker's credentials. */
@@ -260,5 +270,9 @@ export function toPublicRequest(
 		jobId: row.jobId,
 		tbCached: tbCached ? tbCached.has(row.hash) : null,
 		error: mine ? (row.error ?? null) : publicError(row.error),
+		wantedBy: row.wantedBy ?? 1,
+		thanked: Boolean(row.thankedAt),
+		// Only a send somebody made: a free delivery has nobody to thank.
+		canThank: mine && row.status === 'fulfilled' && Boolean(row.fulfillerId) && !row.thankedAt,
 	};
 }

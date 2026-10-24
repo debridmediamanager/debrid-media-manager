@@ -37,7 +37,7 @@ const SELECT = {
  * sponsorship-perks.ts, sponsorship.service.ts and sponsorship-data.ts. If it
  * changes there it has to change here too.
  */
-function activeSources(sponsor: SponsorRow): SponsorSource[] {
+function activeSources(sponsor: SponsorRow, earnedUntil: Date | null): SponsorSource[] {
 	const sources: SponsorSource[] = [];
 	if (sponsor.githubSponsoring) sources.push('github');
 	if (sponsor.patreonAmount > 0) sources.push('patreon');
@@ -46,11 +46,14 @@ function activeSources(sponsor: SponsorRow): SponsorSource[] {
 	}
 	// A Discord admin or moderator, flagged by gatekeeper's sync from the guild roles.
 	if (sponsor.discordStaff) sources.push('staff');
+	// DMM's own: sponsor time paid for by fulfilling requests. gatekeeper never
+	// sees it, so it opens DMM's perks and none of gatekeeper's.
+	if (earnedUntil && earnedUntil > new Date()) sources.push('earned');
 	return sources;
 }
 
-function toLookup(sponsor: SponsorRow): SponsorLookup {
-	const sources = activeSources(sponsor);
+function toLookup(sponsor: SponsorRow, earnedUntil: Date | null): SponsorLookup {
+	const sources = activeSources(sponsor, earnedUntil);
 	return {
 		isSponsor: sources.length > 0,
 		sources,
@@ -61,6 +64,34 @@ function toLookup(sponsor: SponsorRow): SponsorLookup {
 }
 
 export class SponsorsService extends DatabaseClient {
+	/**
+	 * A failed read of earned time costs only earned time: every sponsor check
+	 * passes through here, and paying sponsors must not lose access over it.
+	 */
+	private async withEarned(sponsor: SponsorRow): Promise<SponsorLookup> {
+		let earnedUntil: Date | null = null;
+		try {
+			const earned = await this.prisma.sponsorEarned.findUnique({
+				where: { shortId: sponsor.shortId },
+				select: { earnedUntil: true },
+			});
+			earnedUntil = earned?.earnedUntil ?? null;
+		} catch (error) {
+			console.error('Reading earned sponsor time failed:', error);
+		}
+		return toLookup(sponsor, earnedUntil);
+	}
+
+	/** GitHub names for these sponsorships, for the opted-in leaderboard. */
+	public async githubNames(shortIds: string[]): Promise<Map<string, string>> {
+		if (shortIds.length === 0) return new Map();
+		const rows = await this.prisma.sponsors.findMany({
+			where: { shortId: { in: shortIds } },
+			select: { shortId: true, githubUsername: true },
+		});
+		return new Map(rows.map((r) => [r.shortId, r.githubUsername]));
+	}
+
 	/**
 	 * Resolves the sponsorship behind a DMM API key.
 	 *
@@ -80,7 +111,7 @@ export class SponsorsService extends DatabaseClient {
 			select: SELECT,
 		});
 
-		return sponsor ? toLookup(sponsor) : null;
+		return sponsor ? this.withEarned(sponsor) : null;
 	}
 
 	/**
@@ -99,7 +130,7 @@ export class SponsorsService extends DatabaseClient {
 			select: SELECT,
 		});
 
-		return sponsor ? toLookup(sponsor) : null;
+		return sponsor ? this.withEarned(sponsor) : null;
 	}
 
 	/**
@@ -114,7 +145,7 @@ export class SponsorsService extends DatabaseClient {
 			select: SELECT,
 		});
 
-		return sponsor ? toLookup(sponsor) : null;
+		return sponsor ? this.withEarned(sponsor) : null;
 	}
 
 	/**

@@ -30,7 +30,7 @@ const TB_KEY_HEADER = 'x-tb-api-key';
 
 const DEFAULT_LIMIT = 25;
 /**
- * How much of the board the "only what TorBox can send" view reads. It filters
+ * How many releases the "only what TorBox can send" view reads. It filters
  * before paging, so it has to see the whole board rather than one page; 1,095
  * rows were open on 2026-09-24.
  */
@@ -116,7 +116,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		if (req.query.servable === '1') {
 			if (!tbKey) return res.status(400).json({ error: 'a TorBox key is required' });
 			try {
-				const rows = await db.listOpenContentRequests(SERVABLE_SCAN, 0);
+				const rows = await db.listContentRequestBoard(SERVABLE_SCAN, 0, viewerId);
 				const cached = await torboxCachedHashesReusing(
 					tbKey,
 					rows.map((row) => row.hash)
@@ -144,7 +144,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// count query. A viewer's own open request is already on the board, so
 			// it is marked `mine` in place rather than merged in from a second list
 			// — merging broke pagination, since a `mine` row could land on any page.
-			const rows = await db.listOpenContentRequests(limit + 1, offset);
+			const rows = await db.listContentRequestBoard(limit + 1, offset, viewerId);
 			const hasMore = rows.length > limit;
 			const page = rows.slice(0, limit);
 			// Asked here rather than from the browser so the answer is the same

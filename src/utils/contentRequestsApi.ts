@@ -145,3 +145,75 @@ export async function cancelContentRequest(rdKey: string, id: string): Promise<v
 		})
 	);
 }
+
+/** Thank whoever sent one's own request. */
+export async function thankContentRequest(rdKey: string, id: string): Promise<void> {
+	await unwrap(
+		await fetch(`/api/requests/${encodeURIComponent(id)}/thanks`, {
+			method: 'POST',
+			headers: headers(rdKey),
+		})
+	);
+}
+
+export interface FulfillerStats {
+	sends: number;
+	thanked: number;
+	/** Sends that count toward the reward: one per asker per day. */
+	credited: number;
+	sendsPerBlock: number;
+	daysPerBlock: number;
+	linked: boolean;
+	showName: boolean;
+	earnedUntil: string | null;
+}
+
+function fulfillerHeaders(rdKey: string | null, tbKey: string | null, json = false) {
+	return { ...headers(rdKey, json), ...(tbKey ? { [TB_KEY_HEADER]: tbKey } : {}) };
+}
+
+/** The caller's own sends and reward, by their Real-Debrid session and TorBox key. */
+export async function fetchFulfillerStats(
+	rdKey: string | null,
+	tbKey: string | null
+): Promise<FulfillerStats> {
+	return unwrap(
+		await fetch('/api/requests/fulfiller', { headers: fulfillerHeaders(rdKey, tbKey) })
+	);
+}
+
+/**
+ * Tie the caller's sends to the gatekeeper account whose DMM API key this is,
+ * so the sponsor time they earn lands there. Sends made before count too.
+ */
+export async function linkFulfiller(
+	rdKey: string | null,
+	tbKey: string | null,
+	apiKey: string,
+	showName: boolean
+): Promise<FulfillerStats> {
+	return unwrap(
+		await fetch('/api/requests/fulfiller', {
+			method: 'POST',
+			headers: fulfillerHeaders(rdKey, tbKey, true),
+			body: JSON.stringify({ apiKey, showName }),
+		})
+	);
+}
+
+export interface LeaderboardEntry {
+	/** GitHub name, only for a fulfiller who chose to show it. */
+	name: string | null;
+	sends: number;
+}
+
+export async function fetchLeaderboard(): Promise<{
+	week: LeaderboardEntry[];
+	allTime: LeaderboardEntry[];
+}> {
+	const data = await unwrap(await fetch('/api/requests/leaderboard'));
+	return {
+		week: Array.isArray(data.week) ? data.week : [],
+		allTime: Array.isArray(data.allTime) ? data.allTime : [],
+	};
+}

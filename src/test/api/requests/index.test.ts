@@ -54,7 +54,7 @@ beforeEach(() => {
 	vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map());
 	vi.mocked(addHashToRd).mockResolvedValue(true);
 	mockUserId.mockResolvedValue('asker');
-	mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
+	mockRepo.listContentRequestBoard = vi.fn().mockResolvedValue([row()]);
 	mockRepo.listContentRequestsFor = vi.fn().mockResolvedValue([]);
 	mockRepo.createContentRequest = vi.fn().mockResolvedValue(row());
 });
@@ -70,7 +70,7 @@ describe('GET /api/requests?servable=1', () => {
 		});
 
 	beforeEach(() => {
-		mockRepo.listOpenContentRequests = vi
+		mockRepo.listContentRequestBoard = vi
 			.fn()
 			.mockResolvedValue([
 				row({ id: 'old-uncached', hash: UNCACHED }),
@@ -84,7 +84,7 @@ describe('GET /api/requests?servable=1', () => {
 	it('lists only what TorBox can send, from across the whole board', async () => {
 		const res = await servable();
 		expect(statusOf(res)).toBe(200);
-		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(3000, 0);
+		expect(mockRepo.listContentRequestBoard).toHaveBeenCalledWith(3000, 0, expect.anything());
 		expect(bodyOf(res).requests.map((r: any) => r.id)).toEqual(['newer-cached']);
 		expect(bodyOf(res).requests[0].tbCached).toBe(true);
 		expect(bodyOf(res).hasMore).toBe(false);
@@ -120,7 +120,7 @@ describe('GET /api/requests', () => {
 		const res = await call({ query: { mine: '1' } });
 		expect(statusOf(res)).toBe(200);
 		expect(mockRepo.listContentRequestsFor).toHaveBeenCalledWith('asker', 100);
-		expect(mockRepo.listOpenContentRequests).not.toHaveBeenCalled();
+		expect(mockRepo.listContentRequestBoard).not.toHaveBeenCalled();
 		expect(bodyOf(res).requests.map((r: any) => [r.status, r.error])).toEqual([
 			['claimed', null],
 			['failed', 'uncached'],
@@ -135,7 +135,7 @@ describe('GET /api/requests', () => {
 
 	it('never shows the asker’s credential state on somebody else’s row', async () => {
 		mockUserId.mockResolvedValue('helper');
-		mockRepo.listOpenContentRequests = vi
+		mockRepo.listContentRequestBoard = vi
 			.fn()
 			.mockResolvedValue([row({ status: 'failed', error: 'RD credentials rejected: 401' })]);
 		const res = await call();
@@ -144,7 +144,7 @@ describe('GET /api/requests', () => {
 
 	it('shows everyone why a release failed', async () => {
 		mockUserId.mockResolvedValue('helper');
-		mockRepo.listOpenContentRequests = vi
+		mockRepo.listContentRequestBoard = vi
 			.fn()
 			.mockResolvedValue([row({ status: 'failed', error: 'uncached' })]);
 		const res = await call();
@@ -153,7 +153,7 @@ describe('GET /api/requests', () => {
 
 	it('marks each row with whether the viewer’s TorBox can send it', async () => {
 		const other = 'b'.repeat(40);
-		mockRepo.listOpenContentRequests = vi
+		mockRepo.listContentRequestBoard = vi
 			.fn()
 			.mockResolvedValue([row(), row({ id: 'req-2', hash: other })]);
 		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
@@ -207,7 +207,7 @@ describe('GET /api/requests', () => {
 	});
 
 	it('never exposes participant ids', async () => {
-		mockRepo.listOpenContentRequests = vi
+		mockRepo.listContentRequestBoard = vi
 			.fn()
 			.mockResolvedValue([row({ fulfillerId: 'helper' })]);
 		const res = await call();
@@ -224,12 +224,16 @@ describe('GET /api/requests', () => {
 		['junk', 25],
 	])('clamps limit=%s to %i and peeks one past it', async (limit, effective) => {
 		await call({ query: { limit } });
-		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(effective + 1, 0);
+		expect(mockRepo.listContentRequestBoard).toHaveBeenCalledWith(
+			effective + 1,
+			0,
+			expect.anything()
+		);
 	});
 
 	it('passes the offset straight through', async () => {
 		await call({ query: { offset: '50' } });
-		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(26, 50);
+		expect(mockRepo.listContentRequestBoard).toHaveBeenCalledWith(26, 50, expect.anything());
 	});
 
 	it.each([
@@ -238,27 +242,31 @@ describe('GET /api/requests', () => {
 		['', 0],
 	])('clamps a bad offset=%s to %i', async (offset, expected) => {
 		await call({ query: { offset } });
-		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(26, expected);
+		expect(mockRepo.listContentRequestBoard).toHaveBeenCalledWith(
+			26,
+			expected,
+			expect.anything()
+		);
 	});
 
 	it('reports hasMore when the peek row comes back, and hides it', async () => {
 		// Twenty-six rows for a page of twenty-five: there is another page, and the
 		// twenty-sixth must not be served.
 		const rows = Array.from({ length: 26 }, (_, i) => row({ id: `req-${i}` }));
-		mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue(rows);
+		mockRepo.listContentRequestBoard = vi.fn().mockResolvedValue(rows);
 		const res = await call();
 		expect(bodyOf(res).hasMore).toBe(true);
 		expect(bodyOf(res).requests).toHaveLength(25);
 	});
 
 	it('reports no more when the page is not full', async () => {
-		mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
+		mockRepo.listContentRequestBoard = vi.fn().mockResolvedValue([row()]);
 		const res = await call();
 		expect(bodyOf(res).hasMore).toBe(false);
 	});
 
 	it('500s when the listing fails', async () => {
-		mockRepo.listOpenContentRequests = vi.fn().mockRejectedValue(new Error('db down'));
+		mockRepo.listContentRequestBoard = vi.fn().mockRejectedValue(new Error('db down'));
 		expect(statusOf(await call())).toBe(500);
 	});
 });

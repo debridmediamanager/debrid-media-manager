@@ -72,6 +72,55 @@ export class ContentRequestService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * The board one row per release, most-wanted first.
+	 *
+	 * Every ask for a release is its own row, but one transfer serves them all:
+	 * once it lands on Real-Debrid the cron adds it to every other asker's
+	 * library for free. So a fulfiller sees each release once with how many
+	 * people want it, and the release that helps the most people comes first.
+	 * Ties go oldest first so nothing starves, then by hash so pages are stable.
+	 *
+	 * The row standing for a release is the viewer's own when they asked for it,
+	 * so a cancel from the board withdraws their ask, and otherwise the oldest.
+	 */
+	public async listOpenBoard(
+		limit: number,
+		offset: number,
+		viewerId: string | null
+	): Promise<(StoredRequest & { wantedBy: number })[]> {
+		const where = { status: { in: ['open', 'failed'] } };
+		const groups = await this.prisma.contentRequest.groupBy({
+			by: ['hash'],
+			where,
+			_count: { hash: true },
+			_min: { createdAt: true },
+			orderBy: [
+				{ _count: { hash: 'desc' } },
+				{ _min: { createdAt: 'asc' } },
+				{ hash: 'asc' },
+			],
+			take: limit,
+			skip: offset,
+		});
+		if (groups.length === 0) return [];
+		const rows = await this.prisma.contentRequest.findMany({
+			where: { ...where, hash: { in: groups.map((g) => g.hash) } },
+			orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+		});
+		const byHash = new Map<string, StoredRequest>();
+		for (const row of rows) {
+			const held = byHash.get(row.hash);
+			if (!held || (viewerId !== null && row.requesterId === viewerId)) {
+				byHash.set(row.hash, row);
+			}
+		}
+		return groups.flatMap((g) => {
+			const row = byHash.get(g.hash);
+			return row ? [{ ...row, wantedBy: g._count.hash }] : [];
+		});
+	}
+
 	/** One person's own asks, newest first, whatever state they are in. */
 	public async listRequestsFor(requesterId: string, limit: number): Promise<StoredRequest[]> {
 		return this.prisma.contentRequest.findMany({
@@ -126,7 +175,7 @@ export class ContentRequestService extends DatabaseClient {
 	public async settleDelivered(id: string, jobId: string): Promise<boolean> {
 		const { count } = await this.prisma.contentRequest.updateMany({
 			where: { id, status: 'claimed', jobId },
-			data: { status: 'fulfilled', error: null },
+			data: { status: 'fulfilled', error: null, fulfilledAt: new Date() },
 		});
 		return count > 0;
 	}
@@ -206,6 +255,144 @@ export class ContentRequestService extends DatabaseClient {
 		const { count } = await this.prisma.contentRequest.updateMany({
 			where: { id, status: 'claimed' },
 			data: { status: 'open', fulfillerId: null },
+		});
+		return count > 0;
+	}
+
+	/**
+	 * Sends that reached an asker through a transfer these fulfiller ids
+	 * started. Rows the cron delivered free carry no fulfiller, and a fulfil that
+	 * found the release already on Real-Debrid spent nobody's TorBox, so neither
+	 * has a job and neither counts.
+	 */
+	public async listSendsBy(
+		fulfillerIds: string[]
+	): Promise<{ requesterId: string; fulfilledAt: Date | null; thankedAt: Date | null }[]> {
+		if (fulfillerIds.length === 0) return [];
+		return this.prisma.contentRequest.findMany({
+			where: { fulfillerId: { in: fulfillerIds }, status: 'fulfilled', jobId: { not: null } },
+			select: { requesterId: true, fulfilledAt: true, thankedAt: true },
+		});
+	}
+
+	/** Sends per fulfiller id since `since` (all time when null), most first. */
+	public async countSendsByFulfiller(
+		since: Date | null,
+		limit: number
+	): Promise<{ fulfillerId: string; sends: number }[]> {
+		const groups = await this.prisma.contentRequest.groupBy({
+			by: ['fulfillerId'],
+			where: {
+				status: 'fulfilled',
+				jobId: { not: null },
+				fulfillerId: { not: null },
+				...(since ? { fulfilledAt: { gte: since } } : {}),
+			},
+			_count: { fulfillerId: true },
+			orderBy: { _count: { fulfillerId: 'desc' } },
+			take: limit,
+		});
+		return groups.map((g) => ({
+			fulfillerId: g.fulfillerId as string,
+			sends: g._count.fulfillerId,
+		}));
+	}
+
+	/**
+	 * Thank whoever sent one's own request, once. Scoped to the asker in the
+	 * `where` like a cancel, and only a send somebody made can be thanked.
+	 */
+	public async thankRequest(id: string, requesterId: string): Promise<string | null> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: {
+				id,
+				requesterId,
+				status: 'fulfilled',
+				fulfillerId: { not: null },
+				thankedAt: null,
+			},
+			data: { thankedAt: new Date() },
+		});
+		if (count === 0) return null;
+		return (await this.getRequest(id))?.fulfillerId ?? null;
+	}
+
+	/** Tie these fulfiller ids to a sponsorship, replacing any earlier tie. */
+	public async linkFulfillers(
+		fulfillerIds: string[],
+		shortId: string,
+		showName: boolean
+	): Promise<void> {
+		await this.prisma.$transaction([
+			...fulfillerIds.map((fulfillerId) =>
+				this.prisma.fulfillerLink.upsert({
+					where: { fulfillerId },
+					create: { fulfillerId, shortId, showName },
+					update: { shortId, showName },
+				})
+			),
+			// The name choice is the person's, so it holds for every id of theirs.
+			this.prisma.fulfillerLink.updateMany({ where: { shortId }, data: { showName } }),
+		]);
+	}
+
+	public async getFulfillerLinks(
+		fulfillerIds: string[]
+	): Promise<{ fulfillerId: string; shortId: string; showName: boolean }[]> {
+		if (fulfillerIds.length === 0) return [];
+		return this.prisma.fulfillerLink.findMany({
+			where: { fulfillerId: { in: fulfillerIds } },
+			select: { fulfillerId: true, shortId: true, showName: true },
+		});
+	}
+
+	/** Every fulfiller id tied to these sponsorships. */
+	public async getLinksForSponsors(
+		shortIds: string[]
+	): Promise<{ fulfillerId: string; shortId: string; showName: boolean }[]> {
+		if (shortIds.length === 0) return [];
+		return this.prisma.fulfillerLink.findMany({
+			where: { shortId: { in: shortIds } },
+			select: { fulfillerId: true, shortId: true, showName: true },
+		});
+	}
+
+	public async getEarned(
+		shortId: string
+	): Promise<{ earnedUntil: Date; creditedBlocks: number } | null> {
+		return this.prisma.sponsorEarned.findUnique({
+			where: { shortId },
+			select: { earnedUntil: true, creditedBlocks: true },
+		});
+	}
+
+	/**
+	 * Pay reward blocks, if nobody paid them first.
+	 *
+	 * Conditional on the blocks already paid, the same way a claim is
+	 * conditional on status: two settles for one fulfiller in the same cron tick
+	 * would otherwise both read "one block owed" and both pay it.
+	 */
+	public async payEarned(
+		shortId: string,
+		paidBlocks: number | null,
+		blocks: number,
+		earnedUntil: Date
+	): Promise<boolean> {
+		if (paidBlocks === null) {
+			try {
+				await this.prisma.sponsorEarned.create({
+					data: { shortId, creditedBlocks: blocks, earnedUntil },
+				});
+				return true;
+			} catch {
+				// Somebody created it first; the next settle recounts.
+				return false;
+			}
+		}
+		const { count } = await this.prisma.sponsorEarned.updateMany({
+			where: { shortId, creditedBlocks: paidBlocks },
+			data: { creditedBlocks: blocks, earnedUntil },
 		});
 		return count > 0;
 	}

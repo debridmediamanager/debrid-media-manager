@@ -1,3 +1,4 @@
+import { FulfillerPanel, Leaderboard } from '@/components/FulfillerPanel';
 import { useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import type { PublicRequest } from '@/utils/contentRequest';
 import {
@@ -5,12 +6,14 @@ import {
 	fetchContentRequests,
 	fetchMyContentRequests,
 	fulfillContentRequest,
+	thankContentRequest,
 	UncachedError,
 } from '@/utils/contentRequestsApi';
 import { toasterPosition } from '@/utils/toastOptions';
 import {
 	CheckCircle2,
 	HandHeart,
+	Heart,
 	Home,
 	Loader2,
 	RefreshCw,
@@ -87,10 +90,12 @@ function MyRequests({
 	rows,
 	busyIds,
 	onCancel,
+	onThank,
 }: {
 	rows: PublicRequest[];
 	busyIds: Set<string>;
 	onCancel: (row: PublicRequest) => void;
+	onThank: (row: PublicRequest) => void;
 }) {
 	if (rows.length === 0) return null;
 	return (
@@ -138,6 +143,27 @@ function MyRequests({
 										</div>
 									)}
 							</div>
+							{row.canThank && (
+								<button
+									onClick={() => onThank(row)}
+									disabled={busy}
+									className={`haptic-sm inline-flex shrink-0 items-center rounded border-2 border-pink-500 bg-pink-900/30 px-2 py-1.5 text-xs text-pink-100 transition-colors hover:bg-pink-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+									title="Thank whoever sent this"
+								>
+									{busy ? (
+										<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+									) : (
+										<Heart className="mr-1 h-3 w-3" />
+									)}
+									Say thanks
+								</button>
+							)}
+							{row.thanked && (
+								<span className="inline-flex shrink-0 items-center text-xs text-pink-300">
+									<Heart className="mr-1 h-3 w-3 fill-current" />
+									Thanked
+								</span>
+							)}
 							{(CLAIMABLE.has(row.status) || row.status === 'stalled') && (
 								<button
 									onClick={() => onCancel(row)}
@@ -347,6 +373,25 @@ export default function RequestsPage() {
 			}
 		});
 
+	const handleThank = (row: PublicRequest) =>
+		withBusy(row.id, async () => {
+			const key = rdKeyRef.current;
+			if (!key) return;
+			try {
+				await thankContentRequest(key, row.id);
+				setMyRequests((prev) =>
+					prev.map((r) =>
+						r.id === row.id ? { ...r, thanked: true, canThank: false } : r
+					)
+				);
+				toast.success('Thanks sent.');
+			} catch (error) {
+				toast.error(
+					`Could not send thanks: ${error instanceof Error ? error.message : 'unreachable'}`
+				);
+			}
+		});
+
 	const handleCancel = (row: PublicRequest) =>
 		withBusy(row.id, async () => {
 			const key = rdKeyRef.current;
@@ -424,8 +469,16 @@ export default function RequestsPage() {
 				 * makes the two disagree and fails hydration.
 				 */}
 				{loaded && (
-					<MyRequests rows={myRequests} busyIds={busyIds} onCancel={handleCancel} />
+					<MyRequests
+						rows={myRequests}
+						busyIds={busyIds}
+						onCancel={handleCancel}
+						onThank={handleThank}
+					/>
 				)}
+
+				{loaded && torboxKey && <FulfillerPanel rdKey={rdKey} tbKey={torboxKey} />}
+				{loaded && <Leaderboard />}
 
 				{loaded && canFulfil && (
 					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
@@ -500,6 +553,11 @@ export default function RequestsPage() {
 													{row.tbCached === false && (
 														<span className="inline-flex items-center rounded border-2 border-gray-600 bg-gray-800/30 px-1.5 py-0.5 font-medium text-gray-400">
 															Not on TorBox yet
+														</span>
+													)}
+													{row.wantedBy > 1 && (
+														<span className="inline-flex items-center rounded border-2 border-pink-500 bg-pink-900/30 px-1.5 py-0.5 font-medium text-pink-100">
+															Wanted by {row.wantedBy}
 														</span>
 													)}
 													{row.mine && (

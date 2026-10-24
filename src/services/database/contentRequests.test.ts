@@ -9,7 +9,11 @@ vi.mock('@prisma/client', () => ({
 				findUnique: vi.fn(),
 				findMany: vi.fn(),
 				updateMany: vi.fn(),
+				groupBy: vi.fn(),
 			},
+			fulfillerLink: { upsert: vi.fn(), updateMany: vi.fn(), findMany: vi.fn() },
+			sponsorEarned: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
+			$transaction: vi.fn(),
 			$disconnect: vi.fn(),
 		};
 	}),
@@ -166,7 +170,7 @@ describe('ContentRequestService', () => {
 			expect(await service.settleDelivered('req-1', 'job-9')).toBe(true);
 			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
 				where: { id: 'req-1', status: 'claimed', jobId: 'job-9' },
-				data: { status: 'fulfilled', error: null },
+				data: { status: 'fulfilled', error: null, fulfilledAt: expect.any(Date) },
 			});
 		});
 	});
@@ -271,6 +275,123 @@ describe('ContentRequestService', () => {
 				where: { requesterId: 'asker' },
 				orderBy: { createdAt: 'desc' },
 				take: 20,
+			});
+		});
+	});
+
+	describe('listOpenBoard', () => {
+		const H2 = 'b'.repeat(40);
+
+		beforeEach(() => {
+			prisma.contentRequest.groupBy.mockResolvedValue([
+				{ hash: H2, _count: { hash: 3 }, _min: { createdAt: new Date() } },
+				{ hash: HASH, _count: { hash: 1 }, _min: { createdAt: new Date() } },
+			]);
+			prisma.contentRequest.findMany.mockResolvedValue([
+				row({ id: 'h2-oldest', hash: H2, requesterId: 'a1' }),
+				row({ id: 'h2-viewer', hash: H2, requesterId: 'viewer' }),
+				row({ id: 'h2-other', hash: H2, requesterId: 'a3' }),
+				row({ id: 'h1', hash: HASH }),
+			]);
+		});
+
+		// One send reaches every asker, so the release helping most people leads.
+		it('orders releases by how many want them, then oldest first', async () => {
+			await service.listOpenBoard(25, 50, null);
+			expect(prisma.contentRequest.groupBy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					by: ['hash'],
+					where: { status: { in: ['open', 'failed'] } },
+					orderBy: [
+						{ _count: { hash: 'desc' } },
+						{ _min: { createdAt: 'asc' } },
+						{ hash: 'asc' },
+					],
+					take: 25,
+					skip: 50,
+				})
+			);
+		});
+
+		it('shows each release once with its demand, as the oldest ask', async () => {
+			const board = await service.listOpenBoard(25, 0, null);
+			expect(board.map((r) => [r.id, r.wantedBy])).toEqual([
+				['h2-oldest', 3],
+				['h1', 1],
+			]);
+		});
+
+		// So the board's cancel withdraws the viewer's own ask.
+		it('stands the viewer’s own ask for a release they asked for', async () => {
+			const board = await service.listOpenBoard(25, 0, 'viewer');
+			expect(board[0].id).toBe('h2-viewer');
+		});
+
+		it('reads no rows for an empty page', async () => {
+			prisma.contentRequest.groupBy.mockResolvedValue([]);
+			expect(await service.listOpenBoard(25, 0, null)).toEqual([]);
+			expect(prisma.contentRequest.findMany).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('listSendsBy', () => {
+		// Free deliveries and already-on-RD fulfils spent nobody's TorBox.
+		it('counts only sends that ran a transfer', async () => {
+			prisma.contentRequest.findMany.mockResolvedValue([]);
+			await service.listSendsBy(['tb:abc']);
+			expect(prisma.contentRequest.findMany.mock.calls[0][0].where).toEqual({
+				fulfillerId: { in: ['tb:abc'] },
+				status: 'fulfilled',
+				jobId: { not: null },
+			});
+		});
+	});
+
+	describe('thankRequest', () => {
+		it('thanks only the asker’s own sent row, once', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			prisma.contentRequest.findUnique.mockResolvedValue(row({ fulfillerId: 'helper' }));
+			expect(await service.thankRequest('req-1', 'asker')).toBe('helper');
+			expect(prisma.contentRequest.updateMany.mock.calls[0][0].where).toEqual({
+				id: 'req-1',
+				requesterId: 'asker',
+				status: 'fulfilled',
+				fulfillerId: { not: null },
+				thankedAt: null,
+			});
+		});
+
+		it('answers null when nothing matched', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 0 });
+			expect(await service.thankRequest('req-1', 'stranger')).toBeNull();
+		});
+	});
+
+	describe('payEarned', () => {
+		const until = new Date('2026-11-01T00:00:00Z');
+
+		// Two settles in one tick must not both pay the same block.
+		it('pays only if no one has paid since the count was read', async () => {
+			prisma.sponsorEarned.updateMany.mockResolvedValue({ count: 0 });
+			expect(await service.payEarned('ZP1M', 1, 2, until)).toBe(false);
+			expect(prisma.sponsorEarned.updateMany).toHaveBeenCalledWith({
+				where: { shortId: 'ZP1M', creditedBlocks: 1 },
+				data: { creditedBlocks: 2, earnedUntil: until },
+			});
+		});
+
+		it('creates the first payment, and loses a race to create quietly', async () => {
+			prisma.sponsorEarned.create.mockRejectedValue(new Error('duplicate'));
+			expect(await service.payEarned('ZP1M', null, 1, until)).toBe(false);
+		});
+	});
+
+	describe('linkFulfillers', () => {
+		it('applies the name choice to every id of that sponsorship', async () => {
+			await service.linkFulfillers(['tb:abc'], 'ZP1M', false);
+			expect(prisma.fulfillerLink.updateMany).toHaveBeenCalledWith({
+				where: { shortId: 'ZP1M' },
+				data: { showName: false },
 			});
 		});
 	});

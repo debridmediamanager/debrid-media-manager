@@ -1224,6 +1224,11 @@ model ContentRequest {
   /// The page it was asked from, so a completed transfer is filed under the
   /// right film or season.
   returnPath  String?  @db.Text
+  /// When the transfer landed, so a fulfiller's sends can be counted by day.
+  /// `updatedAt` moves on any later write, a thank-you included.
+  fulfilledAt DateTime?
+  /// When the asker thanked whoever sent it.
+  thankedAt   DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -1232,6 +1237,32 @@ model ContentRequest {
   @@index([status, createdAt])
   @@index([requesterId, status])
   @@index([imdbId])
+  @@index([fulfillerId, status])
+}
+
+/// A fulfiller's identity on the board, tied to the gatekeeper sponsorship that
+/// collects the sponsor time their sends earn. A fulfiller is known by the id
+/// they fulfilled under — a Real-Debrid-derived DMM id or a TorBox user id — so
+/// one person can hold two rows pointing at the same sponsorship.
+model FulfillerLink {
+  fulfillerId String   @id
+  shortId     String   @db.VarChar(16)
+  /// Opted in to their GitHub name on the leaderboard.
+  showName    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([shortId])
+}
+
+/// Sponsor time earned by fulfilling requests. DMM's own: gatekeeper never reads
+/// it, so it opens DMM's sponsor perks and nothing gatekeeper grants.
+model SponsorEarned {
+  shortId        String   @id @db.VarChar(16)
+  earnedUntil    DateTime
+  /// How many reward blocks have been paid, so a recount never pays one twice.
+  creditedBlocks Int      @default(0)
+  updatedAt      DateTime @updatedAt
 }
 
 /// A copyright notice as it arrived. Nothing it names is blocked until an

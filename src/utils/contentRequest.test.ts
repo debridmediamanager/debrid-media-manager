@@ -217,6 +217,25 @@ describe('toPublicRequest', () => {
 
 	// Both ids are stable HMACs of a Real-Debrid username. Publishing them would
 	// let anyone watching the board follow one person across every release.
+	it('lets the asker thank a send somebody made, once', () => {
+		const sent = { ...row, status: 'fulfilled', fulfillerId: 'helper' };
+		expect(toPublicRequest(sent, 'asker').canThank).toBe(true);
+		expect(toPublicRequest(sent, 'helper').canThank).toBe(false);
+		const thanked = { ...sent, thankedAt: new Date() };
+		expect(toPublicRequest(thanked, 'asker')).toMatchObject({ canThank: false, thanked: true });
+	});
+
+	// The cron's free deliveries carry no fulfiller, so there is nobody to thank.
+	it('offers no thanks for a free delivery', () => {
+		const free = { ...row, status: 'fulfilled', fulfillerId: null };
+		expect(toPublicRequest(free, 'asker').canThank).toBe(false);
+	});
+
+	it('says how many people want the release', () => {
+		expect(toPublicRequest(row, null).wantedBy).toBe(1);
+		expect(toPublicRequest({ ...row, wantedBy: 12 }, null).wantedBy).toBe(12);
+	});
+
 	it('never leaks either participant id', () => {
 		const serialised = JSON.stringify(toPublicRequest(row, null));
 		expect(serialised).not.toContain('asker');
