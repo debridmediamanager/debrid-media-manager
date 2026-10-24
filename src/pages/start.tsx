@@ -1,3 +1,4 @@
+import { SiteLinks } from '@/components/SiteLinks';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import {
 	useAllDebridApiKey,
@@ -229,7 +230,7 @@ export default function StartPage() {
 					</p>
 				</div>
 
-				<h2 className="text-l mb-2 mt-2 font-bold text-slate-300">Data Storage Policy</h2>
+				<h2 className="text-l mt-2 mb-2 font-bold text-slate-300">Data Storage Policy</h2>
 				<p className="flex-row text-center text-sm text-slate-400">
 					Please note that no data or logs are stored on our servers
 					<br />
@@ -237,6 +238,9 @@ export default function StartPage() {
 					<br />
 					Everything is stored on your browser&apos;s local storage
 				</p>
+				<div className="mt-4">
+					<SiteLinks />
+				</div>
 				<Link href="/copyright" className="mt-4 text-xs text-slate-400 underline">
 					Report copyright infringement
 				</Link>

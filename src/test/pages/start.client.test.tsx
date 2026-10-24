@@ -10,7 +10,7 @@ import {
 import StartPage from '@/pages/start';
 import { GUEST_MODE_KEY, isGuestMode } from '@/utils/guestMode';
 import { REAL_DEBRID_REFERRAL_IDS } from '@/utils/referrals';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -125,6 +125,16 @@ describe('StartPage', () => {
 		expect(
 			screen.getByText(/Everything is stored on your browser's local storage/i)
 		).toBeInTheDocument();
+	});
+
+	it('links to zurg, rex and the guides', () => {
+		render(<StartPage />);
+
+		const nav = screen.getByRole('navigation', { name: 'Other DMM sites' });
+		expect(within(nav).getByRole('link', { name: 'Guides' })).toHaveAttribute(
+			'href',
+			'https://notes.debridmediamanager.com/'
+		);
 	});
 
 	it('should call login functions when buttons are clicked', () => {

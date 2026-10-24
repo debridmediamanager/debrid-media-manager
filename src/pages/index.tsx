@@ -4,6 +4,7 @@ import { Logo } from '@/components/Logo';
 import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
+import { SiteLinks } from '@/components/SiteLinks';
 import { TraktSection } from '@/components/TraktSection';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
@@ -373,6 +374,7 @@ function IndexPage() {
 							/>
 						</div>
 						<InfoSection />
+						<SiteLinks />
 
 						{/* Action Buttons */}
 						<div className={actionButtonGroupClasses}>

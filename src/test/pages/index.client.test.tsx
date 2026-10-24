@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -411,6 +411,18 @@ describe('IndexPage', () => {
 	// The megaphone beside the title went to Patreon. gatekeeper replaced it and
 	// then took it away again: the info card below already says where to sponsor,
 	// so a second link in the header was the same offer twice on one page.
+	it('links to zurg, rex and the guides', () => {
+		currentUserMock.mockReturnValue(settledFixture);
+
+		render(<IndexPage />);
+
+		const nav = screen.getByRole('navigation', { name: 'Other DMM sites' });
+		expect(within(nav).getByRole('link', { name: 'rex' })).toHaveAttribute(
+			'href',
+			'https://rex.debridmediamanager.com/'
+		);
+	});
+
 	it('leaves the sponsorship offer to the info card alone', () => {
 		currentUserMock.mockReturnValue(settledFixture);
 
