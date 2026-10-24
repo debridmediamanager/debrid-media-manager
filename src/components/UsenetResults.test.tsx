@@ -38,7 +38,7 @@ const RESULTS: UsenetResult[] = [
 	{ id: 'b', title: 'Alpha.Release.2160p', size: 9 * 1024 ** 3 },
 ];
 
-// The section makes two calls on open: the search, then a best-effort lookup of
+// The section makes two calls when shown: the search, then a best-effort lookup of
 // which releases already have a transfer.
 function mockSearch(results: UsenetResult[] = RESULTS, transfers: unknown[] = []) {
 	const fetchMock = vi.fn().mockImplementation((url: string) =>
@@ -319,7 +319,6 @@ describe('UsenetResults — claiming a finished release', () => {
 
 	const openAndFind = async (name: RegExp) => {
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		return await screen.findByRole('button', { name });
 	};
 
@@ -386,23 +385,18 @@ describe('UsenetResults — claiming a finished release', () => {
 });
 
 describe('UsenetResults', () => {
-	it('starts collapsed and does not hit the indexer until opened', () => {
+	// Its own tab now: opening the tab is the ask, so the search starts at once.
+	it('searches as soon as it is shown', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
 
-		expect(screen.getByRole('button', { name: /usenet/i })).toHaveAttribute(
-			'aria-expanded',
-			'false'
-		);
-		expect(screen.queryByRole('table')).not.toBeInTheDocument();
-		expect(fetchMock).not.toHaveBeenCalled();
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+		expect(searchCalls(fetchMock)).toHaveLength(1);
 	});
 
-	it('loads results on first open, biggest first', async () => {
+	it('loads results biggest first', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 		expect(searchCalls(fetchMock)[0][0]).toBe('/api/nzb2rd/search?imdbId=tt1418646');
@@ -425,8 +419,6 @@ describe('UsenetResults', () => {
 		]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
 
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
-
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 		expect(renderedTitles()).toEqual(['Alpha.Release.2160p', 'Bravo.Release.1080p']);
 		expect(screen.queryByText(/drunkenslug/i)).not.toBeInTheDocument();
@@ -437,8 +429,6 @@ describe('UsenetResults', () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt0944947" seasonNum={3} rdKey="rd-key" />);
 
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
-
 		await waitFor(() =>
 			expect(searchCalls(fetchMock)[0][0]).toBe(
 				'/api/nzb2rd/search?imdbId=tt0944947&seasonNum=3'
@@ -446,24 +436,21 @@ describe('UsenetResults', () => {
 		);
 	});
 
-	it('refetches nothing when reopened, since the results are already loaded', async () => {
+	// The indexer bills a daily quota: a re-render must not search again.
+	it('searches once, not on every render', async () => {
 		const fetchMock = mockSearch();
-		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		const toggle = screen.getByRole('button', { name: /usenet/i });
-
-		await userEvent.click(toggle);
+		const view = render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
-		await userEvent.click(toggle);
-		await userEvent.click(toggle);
 
-		expect(screen.getByRole('table')).toBeInTheDocument();
+		view.rerender(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		view.rerender(<UsenetResults imdbId="tt1418646" rdKey="other-key" />);
+
 		expect(searchCalls(fetchMock)).toHaveLength(1);
 	});
 
 	it('sorts by the clicked column and flips direction on a second click', async () => {
 		mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		await userEvent.click(screen.getByRole('button', { name: /^release/i }));
@@ -479,7 +466,6 @@ describe('UsenetResults', () => {
 	it('sends a release to nzb2rd with the user RD key and marks the row sent', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -526,7 +512,6 @@ describe('UsenetResults', () => {
 
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -548,7 +533,6 @@ describe('UsenetResults', () => {
 	it('surfaces a send failure and leaves the row re-sendable', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -570,7 +554,6 @@ describe('UsenetResults', () => {
 	it('refuses to send without a Real-Debrid key', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey={null} />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
@@ -591,8 +574,6 @@ describe('UsenetResults', () => {
 			.mockResolvedValueOnce({ ok: false, status: 502, json: async () => ({}) });
 		vi.stubGlobal('fetch', fetchMock);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 
 		const retry = await screen.findByRole('button', { name: /retry/i });
 		fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ results: RESULTS }) });
@@ -615,7 +596,6 @@ describe('UsenetResults', () => {
 			{ releaseId: 'a', status: 'pending', infoHash: null, jobId: 'j2' },
 		]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		expect(await screen.findByRole('button', { name: /add to rd/i })).toBeEnabled();
@@ -640,7 +620,6 @@ describe('UsenetResults', () => {
 			},
 		]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		expect(await screen.findByRole('button', { name: /add to rd/i })).toBeEnabled();
@@ -660,7 +639,6 @@ describe('UsenetResults', () => {
 			},
 		]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		const row = await screen.findByRole('button', { name: /downloading/i });
@@ -671,7 +649,6 @@ describe('UsenetResults', () => {
 	it('tracks a started job so the Transfers page can follow it', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt0944947" seasonNum={2} rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -694,7 +671,6 @@ describe('UsenetResults', () => {
 	it('reports an already-finished release as added to your own library', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -719,7 +695,6 @@ describe('UsenetResults', () => {
 	it("follows someone else's in-flight job so the result reaches this account", async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		fetchMock.mockResolvedValueOnce({
@@ -747,7 +722,6 @@ describe('UsenetResults', () => {
 		]);
 		render(<UsenetResults imdbId="tt0944947" seasonNum={2} title="Show" rdKey="rd-key" />);
 
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		expect(searchCalls(fetchMock)[0][0]).toBe(
@@ -762,7 +736,6 @@ describe('UsenetResults', () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" title="Some Movie" rdKey="rd-key" />);
 
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		expect(searchCalls(fetchMock)[0][0]).toBe('/api/nzb2rd/search?imdbId=tt1418646');
@@ -772,8 +745,6 @@ describe('UsenetResults', () => {
 	it('says so when the indexer has nothing', async () => {
 		mockSearch([]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 
 		expect(await screen.findByText(/no usenet results found/i)).toBeInTheDocument();
 	});
@@ -787,7 +758,6 @@ describe('UsenetResults NZB download', () => {
 	const openPanel = async (rdKey: string | null = 'rd-key') => {
 		mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey={rdKey} />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 	};
 
@@ -869,7 +839,6 @@ describe('UsenetResults NZB download', () => {
 			{ releaseId: 'b', jobId: 'job-1', infoHash: null, status: 'pending' },
 		]);
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
-		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 		await waitFor(() =>
 			expect(screen.getByRole('button', { name: /in progress/i })).toBeDisabled()

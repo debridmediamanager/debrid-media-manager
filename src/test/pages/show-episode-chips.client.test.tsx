@@ -31,7 +31,10 @@ const { axiosGetMock, pushMock, routerState, resultsProps, fetchMock, parsedName
 	vi.hoisted(() => ({
 		axiosGetMock: vi.fn(),
 		pushMock: vi.fn(),
-		routerState: { query: {} as Record<string, string> },
+		routerState: {
+			query: {} as Record<string, string>,
+			pathname: '/show/[imdbid]/[seasonNum]',
+		},
 		resultsProps: [] as { filteredResults: SearchResult[] }[],
 		fetchMock: vi.fn(),
 		parsedNames: [] as string[],
@@ -164,6 +167,7 @@ vi.mock('next/router', () => ({
 	__esModule: true,
 	useRouter: () => ({
 		query: routerState.query,
+		pathname: routerState.pathname,
 		isReady: true,
 		push: pushMock,
 		replace: vi.fn(),
@@ -272,6 +276,7 @@ beforeEach(() => {
 	clearAnimeEntriesCache();
 	settings.hideRdBlocked = false;
 	vi.stubGlobal('fetch', fetchMock);
+	routerState.pathname = '/show/[imdbid]/[seasonNum]';
 });
 
 afterEach(() => {
@@ -447,7 +452,7 @@ describe('episode chips on /show/[imdbid]/[seasonNum]', { timeout: 30000 }, () =
 		expect(chipRow().queryByRole('button', { name: /^Other/ })).not.toBeInTheDocument();
 	});
 
-	it("reads Spy x Family's absolute numbering and counts the Usenet rows once they load", async () => {
+	it("reads Spy x Family's absolute numbering", async () => {
 		const id = 'tt13706018-s3';
 		const view = await openSeason(id);
 		const read = readerFor(id);
@@ -487,15 +492,34 @@ describe('episode chips on /show/[imdbid]/[seasonNum]', { timeout: 30000 }, () =
 
 		const before = summarizeTvEpisodes(deeper, read);
 		expect(chip('13')).toHaveTextContent(`13 (${before.episodes.get(13)})`);
+	});
 
-		fireEvent.click(screen.getByRole('button', { name: /Send NZBs from Usenet/ }));
+	// Usenet is its own tab: its chips count the Usenet rows alone, the chip
+	// filters its table, and the torrent search is never run there.
+	it('counts and filters the Usenet rows on the Usenet tab, without searching torrents', async () => {
+		const id = 'tt13706018-s3';
+		serve(id);
+		routerState.pathname = '/show/[imdbid]/[seasonNum]/usenet';
+		const view = render(<ShowSeasonPage />);
+		const read = readerFor(id);
 		await screen.findByRole('columnheader', { name: /Release/ });
 		const usenet = usenetFixture(id)!.map((r) => r.title);
-		const after = summarizeTvEpisodes([...deeper, ...usenet], read);
-		await waitFor(() => expect(chip('13')).toHaveTextContent(`13 (${after.episodes.get(13)})`));
-		expect(after.episodes.get(13)).toBeGreaterThan(before.episodes.get(13)!);
+		const counts = summarizeTvEpisodes(usenet, read);
+		await waitFor(() =>
+			expect(chip('13')).toHaveTextContent(`13 (${counts.episodes.get(13)})`)
+		);
+		expect(torrentsCalls()).toBe(0);
+		expect(screen.queryByPlaceholderText(/filter results/)).not.toBeInTheDocument();
 
-		// The chip filters the Usenet table too.
+		fireEvent.click(chip('13'));
+		expect(pushMock).toHaveBeenCalledWith(
+			{
+				pathname: '/show/[imdbid]/[seasonNum]/usenet',
+				query: { imdbid: 'tt13706018', seasonNum: '3', episode: '13' },
+			},
+			undefined,
+			{ shallow: true, scroll: false }
+		);
 		await act(async () => {
 			navigate(view, { imdbid: 'tt13706018', seasonNum: '3', episode: '13' });
 		});
@@ -506,5 +530,9 @@ describe('episode chips on /show/[imdbid]/[seasonNum]', { timeout: 30000 }, () =
 		expect(
 			screen.getByText(`(${usenetThirteen.length} of ${usenet.length})`)
 		).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: /Torrents/ })).toHaveAttribute(
+			'href',
+			expect.stringContaining('/show/tt13706018/3')
+		);
 	});
 });

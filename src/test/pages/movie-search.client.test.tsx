@@ -7,6 +7,7 @@ const {
 	axiosGetMock,
 	toastMock,
 	routerQuery,
+	routerPath,
 	torrentUrls,
 	torrentManagement,
 	authKeys,
@@ -23,6 +24,7 @@ const {
 		axiosGetMock: vi.fn(),
 		toastMock: toast,
 		routerQuery: { imdbid: 'tt1111111' } as { imdbid: string },
+		routerPath: { current: '/movie/[imdbid]' },
 		torrentUrls: [] as string[],
 		// Mutable so a test can hand the page a different combination of keys
 		authKeys: { rd: 'rd-token', ad: null, tb: null, pm: null, oc: null, dl: null } as {
@@ -57,6 +59,11 @@ const {
 		},
 	};
 });
+
+vi.mock('@/components/UsenetResults', () => ({
+	__esModule: true,
+	default: ({ imdbId }: { imdbId: string }) => <div data-testid="usenet-results">{imdbId}</div>,
+}));
 
 vi.mock('@/components/MediaHeader', () => ({
 	__esModule: true,
@@ -198,7 +205,12 @@ vi.mock('next/config', () => ({
 
 vi.mock('next/router', () => ({
 	__esModule: true,
-	useRouter: () => ({ query: routerQuery, push: vi.fn(), prefetch: vi.fn() }),
+	useRouter: () => ({
+		query: routerQuery,
+		pathname: routerPath.current,
+		push: vi.fn(),
+		prefetch: vi.fn(),
+	}),
 }));
 
 vi.mock('next/head', () => ({
@@ -295,6 +307,35 @@ describe('Movie search page across client-side navigation', () => {
 		// The first movie's years must be gone - stacked regexes AND together and
 		// filter every result away
 		expect(screen.getByTestId('query-value')).not.toHaveTextContent('2019');
+	});
+
+	// The Usenet tab is its own route: it shows the Usenet search and never the torrents.
+	it('shows the Usenet search on /usenet without searching torrents', async () => {
+		routerPath.current = '/movie/[imdbid]/usenet';
+		try {
+			render(<MovieSearchPage />);
+
+			expect(await screen.findByTestId('usenet-results')).toHaveTextContent('tt1111111');
+			await waitFor(() => expect(screen.getByTestId('media-header')).toBeInTheDocument());
+			expect(torrentUrls).toHaveLength(0);
+			expect(screen.getByRole('link', { name: /Usenet/ })).toHaveAttribute(
+				'aria-current',
+				'page'
+			);
+		} finally {
+			routerPath.current = '/movie/[imdbid]';
+		}
+	});
+
+	it('keeps the Usenet search off the torrent tab', async () => {
+		render(<MovieSearchPage />);
+
+		await waitFor(() => expect(torrentUrls).toHaveLength(1));
+		expect(screen.queryByTestId('usenet-results')).not.toBeInTheDocument();
+		expect(screen.getByRole('link', { name: /Usenet/ })).toHaveAttribute(
+			'href',
+			'/movie/tt1111111/usenet'
+		);
 	});
 
 	it('searches with the movie its own metadata belongs to', async () => {

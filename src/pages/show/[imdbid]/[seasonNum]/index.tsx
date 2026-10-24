@@ -3,6 +3,7 @@ import AvailabilityTokens from '@/components/AvailabilityTokens';
 import EpisodeChips, { type EpisodeChipItem } from '@/components/EpisodeChips';
 import { showEpisodeSummary } from '@/components/EpisodeSummaryToast';
 import MediaHeader from '@/components/MediaHeader';
+import ResultsTabs from '@/components/ResultsTabs';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
@@ -280,6 +281,10 @@ const TvSearch: FunctionComponent = () => {
 	);
 
 	const router = useRouter();
+	// `/show/tt…/N/usenet` renders this page on its Usenet tab; its season and episode
+	// links stay on that tab.
+	const usenetTab = !!router.pathname?.endsWith('/usenet');
+	const tabSuffix = usenetTab ? '/usenet' : '';
 	const { imdbid, seasonNum } = router.query;
 	useEffect(
 		() => () => {
@@ -698,7 +703,8 @@ const TvSearch: FunctionComponent = () => {
 	}, [showInfo, infoImdbId, seasonNum, imdbid, router]);
 
 	useEffect(() => {
-		if (!imdbid || !seasonNum || infoImdbId !== imdbid) return;
+		// The Usenet tab searches on its own and never shows the torrents.
+		if (!imdbid || !seasonNum || infoImdbId !== imdbid || usenetTab) return;
 		const parsedSeason = parseInt(seasonNum as string, 10);
 		if (isNaN(parsedSeason)) return;
 
@@ -1144,12 +1150,16 @@ const TvSearch: FunctionComponent = () => {
 			const nextQuery: Record<string, string> = { imdbid, seasonNum };
 			if (filter !== null) nextQuery.episode = String(filter);
 			// Pushed, not replaced, so back and forward step through the chips.
-			router.push({ pathname: '/show/[imdbid]/[seasonNum]', query: nextQuery }, undefined, {
-				shallow: true,
-				scroll: false,
-			});
+			router.push(
+				{ pathname: `/show/[imdbid]/[seasonNum]${tabSuffix}`, query: nextQuery },
+				undefined,
+				{
+					shallow: true,
+					scroll: false,
+				}
+			);
 		},
-		[imdbid, seasonNum, router]
+		[imdbid, seasonNum, router, tabSuffix]
 	);
 
 	const filteredResults = useMemo(() => {
@@ -1681,7 +1691,7 @@ const TvSearch: FunctionComponent = () => {
 		<div className="flex items-center overflow-x-auto" data-testid="media-header-season-nav">
 			{showInfo.has_specials && (
 				<Link
-					href={`/show/${imdbId}/0`}
+					href={`/show/${imdbId}/0${tabSuffix}`}
 					className={`inline-flex items-center border-2 p-1 text-xs border-${selectedSeason === 0 ? 'red' : 'yellow'}-500 bg-${selectedSeason === 0 ? 'red' : 'yellow'}-900/30 text-${selectedSeason === 0 ? 'red' : 'yellow'}-100 hover:bg-${selectedSeason === 0 ? 'red' : 'yellow'}-800/50 mr-2 mb-1 rounded transition-colors`}
 				>
 					<Tv className="mr-2 h-3 w-3 text-cyan-500" />
@@ -1694,7 +1704,7 @@ const TvSearch: FunctionComponent = () => {
 					return (
 						<Link
 							key={idx}
-							href={`/show/${imdbId}/${season}`}
+							href={`/show/${imdbId}/${season}${tabSuffix}`}
 							title={seasonRunTitle(season)}
 							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mr-2 mb-1 rounded transition-colors`}
 						>
@@ -2098,194 +2108,224 @@ const TvSearch: FunctionComponent = () => {
 				trailer={showInfo.trailer}
 			/>
 
-			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
-			{searchState === 'processing' && (
-				<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
-					<strong className="font-bold">Notice:</strong>
-					<span className="block sm:inline">
-						{' '}
-						Looking for torrents in the dark web. Please wait for 1-2 minutes.
-					</span>
-				</div>
-			)}
-			{errorMessage && (
-				<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
-					<strong className="font-bold">Error:</strong>
-					<span className="block sm:inline"> {errorMessage}</span>
-				</div>
-			)}
-
-			<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
-				<input
-					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
-					type="text"
-					id="query"
-					placeholder="filter results, supports regex"
-					value={query}
-					onChange={(e) => {
-						setQuery(e.target.value.toLocaleLowerCase());
-					}}
-				/>
-				<span
-					className="me-2 inline-flex cursor-pointer items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-					onClick={() => setQuery('')}
-					title="Reset search"
-				>
-					<RotateCcw className="h-3 w-3" />
-					<span className="ml-1 hidden sm:inline">Reset</span>
-				</span>
-				<span className="text-xs text-gray-400">
-					{
-						filteredResults.filter(
-							(r) =>
-								r.rdAvailable ||
-								r.adAvailable ||
-								r.tbAvailable ||
-								r.pmAvailable ||
-								r.ocAvailable
-						).length
-					}
-					/{filteredResults.length}
-				</span>
-				{query && filteredResults.length > 0 && canReport && showMassReportButtons && (
-					<div className="ml-2 flex gap-2">
-						<span
-							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-							onClick={() => handleMassReport('porn', filteredResults)}
-							title="Report all filtered torrents as pornographic content"
-						>
-							Report as Porn ({filteredResults.length})
-						</span>
-						<span
-							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-							onClick={() => handleMassReport('wrong_imdb', filteredResults)}
-							title="Report all filtered torrents as wrong IMDB ID"
-						>
-							Report Wrong IMDB ({filteredResults.length})
-						</span>
-						<span
-							className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-							onClick={() => handleMassReport('wrong_season', filteredResults)}
-							title="Report all filtered torrents as wrong season"
-						>
-							Report Wrong Season ({filteredResults.length})
-						</span>
-					</div>
-				)}
-			</div>
-
-			<div className="mb-2 flex flex-col gap-2 p-2">
-				{episodeNav}
-				<div className="flex items-center gap-2 overflow-x-auto">
-					<SearchTokens
+			<ResultsTabs
+				basePath={`/show/${imdbId}/${seasonId}`}
+				active={usenetTab ? 'usenet' : 'torrents'}
+				query={episodeFilter !== null ? { episode: String(episodeFilter) } : undefined}
+			/>
+			{usenetTab && (
+				<>
+					<div className="p-2">{episodeNav}</div>
+					<UsenetResults
+						imdbId={imdbId}
+						seasonNum={selectedSeason}
 						title={showInfo.title}
-						year={seasonNum as string}
-						isShow={true}
-						onTokenClick={(token) =>
-							setQuery((prev) => (prev ? `${prev} ${token}` : token))
-						}
+						rdKey={rdKey}
+						onResults={handleUsenetResults}
+						rowFilter={usenetRowFilter}
 					/>
-					{getColorScale(expectedEpisodeCount).map((scale, idx) => (
-						<span
-							key={idx}
-							className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
-							onClick={() => {
-								const queryText = getQueryForEpisodeCount(
-									scale.threshold,
-									expectedEpisodeCount
-								);
-								setQuery((prev) => {
-									const cleanedPrev = prev.replace(/\bvideos:[^\s]+/g, '').trim();
-									return cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText;
-								});
+				</>
+			)}
+			{!usenetTab && (
+				<>
+					{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
+					{searchState === 'processing' && (
+						<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
+							<strong className="font-bold">Notice:</strong>
+							<span className="block sm:inline">
+								{' '}
+								Looking for torrents in the dark web. Please wait for 1-2 minutes.
+							</span>
+						</div>
+					)}
+					{errorMessage && (
+						<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
+							<strong className="font-bold">Error:</strong>
+							<span className="block sm:inline"> {errorMessage}</span>
+						</div>
+					)}
+
+					<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
+						<input
+							className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
+							type="text"
+							id="query"
+							placeholder="filter results, supports regex"
+							value={query}
+							onChange={(e) => {
+								setQuery(e.target.value.toLocaleLowerCase());
 							}}
+						/>
+						<span
+							className="me-2 inline-flex cursor-pointer items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+							onClick={() => setQuery('')}
+							title="Reset search"
 						>
-							{scale.label}
+							<RotateCcw className="h-3 w-3" />
+							<span className="ml-1 hidden sm:inline">Reset</span>
 						</span>
-					))}
-					<AvailabilityTokens
-						query={query}
-						onQueryChange={setQuery}
+						<span className="text-xs text-gray-400">
+							{
+								filteredResults.filter(
+									(r) =>
+										r.rdAvailable ||
+										r.adAvailable ||
+										r.tbAvailable ||
+										r.pmAvailable ||
+										r.ocAvailable
+								).length
+							}
+							/{filteredResults.length}
+						</span>
+						{query &&
+							filteredResults.length > 0 &&
+							canReport &&
+							showMassReportButtons && (
+								<div className="ml-2 flex gap-2">
+									<span
+										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+										onClick={() => handleMassReport('porn', filteredResults)}
+										title="Report all filtered torrents as pornographic content"
+									>
+										Report as Porn ({filteredResults.length})
+									</span>
+									<span
+										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+										onClick={() =>
+											handleMassReport('wrong_imdb', filteredResults)
+										}
+										title="Report all filtered torrents as wrong IMDB ID"
+									>
+										Report Wrong IMDB ({filteredResults.length})
+									</span>
+									<span
+										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+										onClick={() =>
+											handleMassReport('wrong_season', filteredResults)
+										}
+										title="Report all filtered torrents as wrong season"
+									>
+										Report Wrong Season ({filteredResults.length})
+									</span>
+								</div>
+							)}
+					</div>
+
+					<div className="mb-2 flex flex-col gap-2 p-2">
+						{episodeNav}
+						<div className="flex items-center gap-2 overflow-x-auto">
+							<SearchTokens
+								title={showInfo.title}
+								year={seasonNum as string}
+								isShow={true}
+								onTokenClick={(token) =>
+									setQuery((prev) => (prev ? `${prev} ${token}` : token))
+								}
+							/>
+							{getColorScale(expectedEpisodeCount).map((scale, idx) => (
+								<span
+									key={idx}
+									className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
+									onClick={() => {
+										const queryText = getQueryForEpisodeCount(
+											scale.threshold,
+											expectedEpisodeCount
+										);
+										setQuery((prev) => {
+											const cleanedPrev = prev
+												.replace(/\bvideos:[^\s]+/g, '')
+												.trim();
+											return cleanedPrev
+												? `${cleanedPrev} ${queryText}`
+												: queryText;
+										});
+									}}
+								>
+									{scale.label}
+								</span>
+							))}
+							<AvailabilityTokens
+								query={query}
+								onQueryChange={setQuery}
+								rdKey={rdKey}
+								adKey={adKey}
+								torboxKey={torboxKey}
+								premiumizeKey={premiumizeKey}
+								offcloudKey={offcloudKey}
+							/>
+						</div>
+					</div>
+
+					{episodeEmptyMessage &&
+						searchState === 'loaded' &&
+						searchResults.length > 0 &&
+						filteredResults.length === 0 && (
+							<div
+								className="mx-2 my-4 rounded border border-gray-600 bg-gray-800/50 px-4 py-3 text-sm text-gray-300"
+								data-testid="season-episode-empty"
+							>
+								{episodeEmptyMessage}
+							</div>
+						)}
+
+					<TvSearchResults
+						filteredResults={filteredResults}
+						expectedEpisodeCount={expectedEpisodeCount}
+						onlyShowCached={onlyShowCached}
+						episodeMaxSize={episodeMaxSize}
 						rdKey={rdKey}
 						adKey={adKey}
 						torboxKey={torboxKey}
 						premiumizeKey={premiumizeKey}
 						offcloudKey={offcloudKey}
+						debridLinkKey={debridLinkKey}
+						player={player}
+						hashAndProgress={hashAndProgress}
+						handleShowInfo={handleShowInfo}
+						handleCast={handleCast}
+						handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
+						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+						handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
+						handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
+						handleCastDebridLink={debridLinkKey ? handleCastDebridLink : undefined}
+						handleCopyMagnet={(hash) =>
+							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
+						}
+						checkServiceAvailability={checkServiceAvailability}
+						addRd={addRd}
+						addAd={addAd}
+						addTb={addTb}
+						addPm={addPm}
+						addOc={addOc}
+						addDl={addDl}
+						sendTbToRd={sendTbToRd}
+						requestContent={canRequest ? handleRequestContent : undefined}
+						deleteRd={deleteRd}
+						deleteAd={deleteAd}
+						deleteTb={deleteTb}
+						deletePm={deletePm}
+						deleteOc={deleteOc}
+						deleteDl={deleteDl}
+						imdbId={imdbid as string}
+						isHashServiceChecking={isHashServiceChecking}
 					/>
-				</div>
-			</div>
 
-			{episodeEmptyMessage &&
-				searchState === 'loaded' &&
-				searchResults.length > 0 &&
-				filteredResults.length === 0 && (
-					<div
-						className="mx-2 my-4 rounded border border-gray-600 bg-gray-800/50 px-4 py-3 text-sm text-gray-300"
-						data-testid="season-episode-empty"
-					>
-						{episodeEmptyMessage}
-					</div>
-				)}
-
-			<UsenetResults
-				imdbId={imdbId}
-				seasonNum={selectedSeason}
-				title={showInfo.title}
-				rdKey={rdKey}
-				onResults={handleUsenetResults}
-				rowFilter={usenetRowFilter}
-			/>
-
-			<TvSearchResults
-				filteredResults={filteredResults}
-				expectedEpisodeCount={expectedEpisodeCount}
-				onlyShowCached={onlyShowCached}
-				episodeMaxSize={episodeMaxSize}
-				rdKey={rdKey}
-				adKey={adKey}
-				torboxKey={torboxKey}
-				premiumizeKey={premiumizeKey}
-				offcloudKey={offcloudKey}
-				debridLinkKey={debridLinkKey}
-				player={player}
-				hashAndProgress={hashAndProgress}
-				handleShowInfo={handleShowInfo}
-				handleCast={handleCast}
-				handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
-				handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
-				handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
-				handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
-				handleCastDebridLink={debridLinkKey ? handleCastDebridLink : undefined}
-				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
-				checkServiceAvailability={checkServiceAvailability}
-				addRd={addRd}
-				addAd={addAd}
-				addTb={addTb}
-				addPm={addPm}
-				addOc={addOc}
-				addDl={addDl}
-				sendTbToRd={sendTbToRd}
-				requestContent={canRequest ? handleRequestContent : undefined}
-				deleteRd={deleteRd}
-				deleteAd={deleteAd}
-				deleteTb={deleteTb}
-				deletePm={deletePm}
-				deleteOc={deleteOc}
-				deleteDl={deleteDl}
-				imdbId={imdbid as string}
-				isHashServiceChecking={isHashServiceChecking}
-			/>
-
-			{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
-				<button
-					className="haptic my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
-					onClick={() => {
-						setCurrentPage((prev) => prev + 1);
-						fetchData(imdbid as string, parseInt(seasonNum as string), currentPage + 1);
-					}}
-				>
-					Show More Results
-				</button>
+					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
+						<button
+							className="haptic my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
+							onClick={() => {
+								setCurrentPage((prev) => prev + 1);
+								fetchData(
+									imdbid as string,
+									parseInt(seasonNum as string),
+									currentPage + 1
+								);
+							}}
+						>
+							Show More Results
+						</button>
+					)}
+				</>
 			)}
 		</div>
 	);

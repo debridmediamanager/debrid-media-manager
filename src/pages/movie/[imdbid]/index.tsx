@@ -1,6 +1,7 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import MediaHeader from '@/components/MediaHeader';
 import MovieSearchResults from '@/components/MovieSearchResults';
+import ResultsTabs from '@/components/ResultsTabs';
 import SearchControls from '@/components/SearchControls';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import UsenetResults from '@/components/UsenetResults';
@@ -130,6 +131,8 @@ const getQueryForMovieCount = (videoCount: number) => {
 
 const MovieSearch: FunctionComponent = () => {
 	const router = useRouter();
+	// `/movie/tt…/usenet` renders this page on its Usenet tab.
+	const usenetTab = !!router.pathname?.endsWith('/usenet');
 	const { imdbid } = router.query;
 	const isMounted = useRef(true);
 	const hasLoadedTrackerStats = useRef(false);
@@ -359,9 +362,10 @@ const MovieSearch: FunctionComponent = () => {
 		setQuery((prev) => (prev ? `${prev} ${yearPattern}` : yearPattern));
 	}, [movieYearFilter, movieInfo.year, infoImdbId]);
 
-	// Initialize data - waits for this movie's own info so the search can use its title
+	// Initialize data - waits for this movie's own info so the search can use its title.
+	// The Usenet tab searches on its own and never shows the torrents.
 	useEffect(() => {
-		if (!imdbid || infoImdbId !== imdbid) return;
+		if (!imdbid || infoImdbId !== imdbid || usenetTab) return;
 
 		const initializeData = async () => {
 			await torrentDB.initializeDB();
@@ -1154,117 +1158,127 @@ const MovieSearch: FunctionComponent = () => {
 				}
 			/>
 
-			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
-			{searchState === 'processing' && (
-				<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
-					<strong className="font-bold">Notice:</strong>
-					<span className="block sm:inline">
-						{' '}
-						Looking for torrents in the dark web. Please wait for 1-2 minutes.
-					</span>
-				</div>
-			)}
-			{errorMessage && (
-				<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
-					<strong className="font-bold">Error:</strong>
-					<span className="block sm:inline"> {errorMessage}</span>
-				</div>
-			)}
-
-			<SearchControls
-				query={query}
-				onQueryChange={setQuery}
-				filteredCount={
-					filteredResults.filter(
-						(r) =>
-							r.rdAvailable ||
-							r.adAvailable ||
-							r.tbAvailable ||
-							r.pmAvailable ||
-							r.ocAvailable
-					).length
-				}
-				totalCount={filteredResults.length}
-				showMassReportButtons={showMassReportButtons}
-				rdKey={rdKey}
-				adKey={adKey}
-				torboxKey={torboxKey}
-				premiumizeKey={premiumizeKey}
-				offcloudKey={offcloudKey}
-				debridLinkKey={debridLinkKey}
-				onMassReport={(type) => handleMassReport(type, filteredResults)}
-				mediaType="movie"
-				title={movieInfo.title}
-				year={movieInfo.year}
-				colorScales={getColorScale()}
-				getQueryForScale={getQueryForMovieCount}
-				extraTokens={
-					movieInfo.digitalReleaseAvailable
-						? [
-								{
-									label: 'Quality releases',
-									query: 'web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p',
-								},
-							]
-						: undefined
-				}
-			/>
-
-			<UsenetResults imdbId={imdbid as string} rdKey={rdKey} />
-
-			{searchResults.length > 0 && (
+			<ResultsTabs basePath={`/movie/${imdbid}`} active={usenetTab ? 'usenet' : 'torrents'} />
+			{usenetTab && <UsenetResults imdbId={imdbid as string} rdKey={rdKey} />}
+			{!usenetTab && (
 				<>
-					<MovieSearchResults
-						filteredResults={filteredResults}
-						onlyShowCached={onlyShowCached}
-						movieMaxSize={movieMaxSize}
+					{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
+					{searchState === 'processing' && (
+						<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
+							<strong className="font-bold">Notice:</strong>
+							<span className="block sm:inline">
+								{' '}
+								Looking for torrents in the dark web. Please wait for 1-2 minutes.
+							</span>
+						</div>
+					)}
+					{errorMessage && (
+						<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
+							<strong className="font-bold">Error:</strong>
+							<span className="block sm:inline"> {errorMessage}</span>
+						</div>
+					)}
+
+					<SearchControls
+						query={query}
+						onQueryChange={setQuery}
+						filteredCount={
+							filteredResults.filter(
+								(r) =>
+									r.rdAvailable ||
+									r.adAvailable ||
+									r.tbAvailable ||
+									r.pmAvailable ||
+									r.ocAvailable
+							).length
+						}
+						totalCount={filteredResults.length}
+						showMassReportButtons={showMassReportButtons}
 						rdKey={rdKey}
 						adKey={adKey}
 						torboxKey={torboxKey}
 						premiumizeKey={premiumizeKey}
 						offcloudKey={offcloudKey}
 						debridLinkKey={debridLinkKey}
-						player={player}
-						hashAndProgress={hashAndProgress}
-						handleShowInfo={handleShowInfo}
-						handleCast={handleCast}
-						handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
-						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
-						handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
-						handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
-						handleCastDebridLink={debridLinkKey ? handleCastDebridLink : undefined}
-						handleCopyMagnet={(hash) =>
-							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
+						onMassReport={(type) => handleMassReport(type, filteredResults)}
+						mediaType="movie"
+						title={movieInfo.title}
+						year={movieInfo.year}
+						colorScales={getColorScale()}
+						getQueryForScale={getQueryForMovieCount}
+						extraTokens={
+							movieInfo.digitalReleaseAvailable
+								? [
+										{
+											label: 'Quality releases',
+											query: 'web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p',
+										},
+									]
+								: undefined
 						}
-						checkServiceAvailability={checkServiceAvailability}
-						addRd={addRd}
-						addAd={addAd}
-						addTb={addTb}
-						addPm={addPm}
-						addOc={addOc}
-						addDl={addDl}
-						sendTbToRd={sendTbToRd}
-						requestContent={canRequest ? handleRequestContent : undefined}
-						deleteRd={deleteRd}
-						deleteAd={deleteAd}
-						deleteTb={deleteTb}
-						deletePm={deletePm}
-						deleteOc={deleteOc}
-						deleteDl={deleteDl}
-						imdbId={imdbid as string}
-						isHashServiceChecking={isHashServiceChecking}
 					/>
 
-					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
-						<button
-							className="my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
-							onClick={() => {
-								setCurrentPage((prev) => prev + 1);
-								fetchData(imdbid as string, currentPage + 1);
-							}}
-						>
-							Show More Results
-						</button>
+					{searchResults.length > 0 && (
+						<>
+							<MovieSearchResults
+								filteredResults={filteredResults}
+								onlyShowCached={onlyShowCached}
+								movieMaxSize={movieMaxSize}
+								rdKey={rdKey}
+								adKey={adKey}
+								torboxKey={torboxKey}
+								premiumizeKey={premiumizeKey}
+								offcloudKey={offcloudKey}
+								debridLinkKey={debridLinkKey}
+								player={player}
+								hashAndProgress={hashAndProgress}
+								handleShowInfo={handleShowInfo}
+								handleCast={handleCast}
+								handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
+								handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+								handleCastPremiumize={
+									premiumizeKey ? handleCastPremiumize : undefined
+								}
+								handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
+								handleCastDebridLink={
+									debridLinkKey ? handleCastDebridLink : undefined
+								}
+								handleCopyMagnet={(hash) =>
+									handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
+								}
+								checkServiceAvailability={checkServiceAvailability}
+								addRd={addRd}
+								addAd={addAd}
+								addTb={addTb}
+								addPm={addPm}
+								addOc={addOc}
+								addDl={addDl}
+								sendTbToRd={sendTbToRd}
+								requestContent={canRequest ? handleRequestContent : undefined}
+								deleteRd={deleteRd}
+								deleteAd={deleteAd}
+								deleteTb={deleteTb}
+								deletePm={deletePm}
+								deleteOc={deleteOc}
+								deleteDl={deleteDl}
+								imdbId={imdbid as string}
+								isHashServiceChecking={isHashServiceChecking}
+							/>
+
+							{searchResults.length > 0 &&
+								searchState === 'loaded' &&
+								hasMoreResults && (
+									<button
+										className="my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
+										onClick={() => {
+											setCurrentPage((prev) => prev + 1);
+											fetchData(imdbid as string, currentPage + 1);
+										}}
+									>
+										Show More Results
+									</button>
+								)}
+						</>
 					)}
 				</>
 			)}

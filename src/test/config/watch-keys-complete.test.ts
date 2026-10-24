@@ -40,7 +40,7 @@ describe('watch call sites carry every provider key', () => {
 
 	const files = [
 		'src/pages/movie/[imdbid]/index.tsx',
-		'src/pages/show/[imdbid]/[seasonNum].tsx',
+		'src/pages/show/[imdbid]/[seasonNum]/index.tsx',
 		'src/components/MovieSearchResults.tsx',
 		'src/components/TvSearchResults.tsx',
 	];
