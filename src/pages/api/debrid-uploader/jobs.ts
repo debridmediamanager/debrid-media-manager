@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'rdKey is required' });
 	}
 	// TorBox is the only cache source. AllDebrid was withdrawn on 2026-09-01 with
-	// debrid01, the one uploader host whose IP AllDebrid permitted: `magnet/upload`
+	// the one uploader host whose IP AllDebrid permitted: `magnet/upload`
 	// is the cache probe now that the read-only check is retired, so from any
 	// remaining host it can only answer `NO_SERVER`. The UI stopped offering it
 	// first, but this route kept accepting `adKey` from stale browser bundles and

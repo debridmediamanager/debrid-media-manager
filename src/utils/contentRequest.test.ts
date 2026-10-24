@@ -171,8 +171,8 @@ describe('pickSourceKeys', () => {
 		expect(pickSourceKeys({ torboxApiKey: 'TB' })).toEqual({ tb_api_key: 'TB' });
 	});
 
-	// AllDebrid was withdrawn as a cache source on 2026-09-01 with debrid01, the
-	// only uploader host whose IP it permitted. An AD key reaching the uploader
+	// AllDebrid was withdrawn as a cache source on 2026-09-01 with the only
+	// uploader host whose IP it permitted. An AD key reaching the uploader
 	// can now only come back `NO_SERVER`, so it must never be forwarded — and a
 	// fulfiller holding one is refused here rather than after the job dies.
 	it('never forwards an AllDebrid key, even alongside a TorBox one', () => {

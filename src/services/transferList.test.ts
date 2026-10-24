@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/debridUploaderServers', () => ({
 	__esModule: true,
-	getDebridUploaderServers: () => ['http://debrid01:3100', 'http://debrid02:3100'],
+	getDebridUploaderServers: () => ['http://spare:3100', 'http://debrid02:3100'],
 }));
 
 vi.mock('@/services/nzb2rd', () => ({
@@ -185,7 +185,7 @@ describe('listTransfers', () => {
 		if (url.startsWith('http://nzb2rd')) {
 			return [{ id: 'n1', status: 'fetching', created_at: '2026-08-19 12:00:02' }];
 		}
-		if (url.startsWith('http://debrid01')) {
+		if (url.startsWith('http://spare')) {
 			return [{ id: 'd1', status: 'uploading', created_at: '2026-08-19 12:00:03' }];
 		}
 		return [{ id: 'd2', status: 'completed', created_at: '2026-08-19 12:00:01' }];
@@ -263,7 +263,7 @@ describe('listTransfers', () => {
 		vi.stubGlobal('fetch', spy);
 
 		await listTransfers('rd-key', 20, {
-			[sourceIdOf('http://debrid01:3100')]: 7,
+			[sourceIdOf('http://spare:3100')]: 7,
 			nzb2rd: 40,
 		});
 
@@ -271,7 +271,7 @@ describe('listTransfers', () => {
 			(spy.mock.calls as any[]).map(([url]) => [new URL(url).host, new URL(url).search])
 		);
 		expect(asked).toEqual({
-			'debrid01:3100': '?limit=21&offset=7',
+			'spare:3100': '?limit=21&offset=7',
 			// A host the cursor does not name starts at the top.
 			'debrid02:3100': '?limit=21&offset=0',
 			'nzb2rd:3200': '?limit=21&offset=40',
@@ -293,7 +293,7 @@ describe('listTransfers', () => {
 
 		expect(transfers.map((t) => t.id)).toEqual(['d1', 'n1']);
 		expect(decodeCursor(next!)).toEqual({
-			[sourceIdOf('http://debrid01:3100')]: 1,
+			[sourceIdOf('http://spare:3100')]: 1,
 			[sourceIdOf('http://debrid02:3100')]: 0,
 			nzb2rd: 1,
 		});

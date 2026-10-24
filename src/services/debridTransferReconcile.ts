@@ -22,7 +22,7 @@ import { settleCancelledDebridJob } from '@/utils/debridJobOutcome';
  * those 344 rewritten hashes had reached `Available`. So roughly 335 finished
  * transfers were invisible — the TorBox bandwidth and the uploader egress spent,
  * the content sitting in RD, reachable by nobody. The remaining pending rows
- * were 575 failed jobs and 452 belonging to the retired debrid01, both of which
+ * were 575 failed jobs and 452 belonging to a retired uploader host, both of which
  * pin the mapping open forever and make `isTransferStillValid` answer "still in
  * progress" to every later submitter of that hash.
  *

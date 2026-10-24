@@ -211,8 +211,8 @@ describe('POST /api/requests/[id]/fulfill', () => {
 		expect(mockToken).toHaveBeenCalledWith('cid', 'secret', 'refresh', true);
 	});
 
-	// AllDebrid was withdrawn as a cache source on 2026-09-01 along with debrid01,
-	// the only uploader host whose IP AllDebrid permitted. A forwarded AD key can
+	// AllDebrid was withdrawn as a cache source on 2026-09-01 along with the only
+	// uploader host whose IP AllDebrid permitted. A forwarded AD key can
 	// now only come back `NO_SERVER`, which surfaced to the user as their job's
 	// failure reason, so the refusal has to happen here instead.
 	it('refuses an AllDebrid-only fulfiller rather than forwarding the key', async () => {
@@ -367,7 +367,7 @@ describe('races and failures', () => {
 			status: 422,
 			json: async () => ({ error: 'not cached on TorBox' }),
 		}) as any;
-		mockServers.mockReturnValue(['http://debrid01:3100', 'http://debrid02:3100']);
+		mockServers.mockReturnValue(['http://spare:3100', 'http://debrid02:3100']);
 		const res = await call();
 		expect(statusOf(res)).toBe(422);
 		expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -386,7 +386,7 @@ describe('races and failures', () => {
 				status: 200,
 				json: async () => ({ id: 'job-9' }),
 			}) as any;
-		mockServers.mockReturnValue(['http://debrid01:3100', 'http://debrid02:3100']);
+		mockServers.mockReturnValue(['http://spare:3100', 'http://debrid02:3100']);
 		expect(statusOf(await call())).toBe(200);
 		expect(global.fetch).toHaveBeenCalledTimes(2);
 	});

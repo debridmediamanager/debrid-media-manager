@@ -85,7 +85,7 @@ describe('reconcileDebridTransfers', () => {
 		expect(result).toMatchObject({ pruned: 1, registered: 0 });
 	});
 
-	// 452 of the pending mappings pointed at jobs created on the retired debrid01.
+	// 452 of the pending mappings pointed at jobs created on a retired uploader host.
 	// The surviving host answers 404 for those, which is a definite answer.
 	it('prunes the mapping for a job the uploader no longer has', async () => {
 		const record = pendingRecord('c'.repeat(40), 'job-gone');

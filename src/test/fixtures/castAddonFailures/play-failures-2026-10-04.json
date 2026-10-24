@@ -13,7 +13,7 @@
 		"ad-unlock-auth-blocked": {
 			"provider": "ad",
 			"request": "POST https://api.alldebrid.com/v4.1/link/unlock",
-			"source": "dmm-01 logged this message for nine unlocks from DMM's server between 2026-10-04 00:06 and 00:14 UTC ('Error unlocking AllDebrid link: ...'), with three magnet and user calls refused the same way. The log keeps only the message; the code is AllDebrid's for it, recorded in full when debrid01 and debrid02 first used a key on 2026-08-06, minus the verification token that body carried.",
+			"source": "dmm-01 logged this message for nine unlocks from DMM's server between 2026-10-04 00:06 and 00:14 UTC ('Error unlocking AllDebrid link: ...'), with three magnet and user calls refused the same way. The log keeps only the message; the code is AllDebrid's for it, recorded in full when the uploader hosts first used a key on 2026-08-06, minus the verification token that body carried.",
 			"status": 200,
 			"contentType": "application/json",
 			"body": {

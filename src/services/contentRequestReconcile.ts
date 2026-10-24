@@ -69,7 +69,7 @@ export async function reconcileContentRequests(
 
 		// The host comes from our own row, but it is still a URL we are about to
 		// fetch, so it must be one of the configured uploaders. One that has been
-		// taken out of the pool (debrid01, 2026-09-01) will never answer again, so
+		// taken out of the pool will never answer again, so
 		// its claims go back to the board rather than waiting forever.
 		if (!isAllowedServer(row.jobHost)) {
 			if (

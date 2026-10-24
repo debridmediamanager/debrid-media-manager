@@ -1,4 +1,4 @@
-// The debrid uploader runs on one or more servers (debrid01, debrid02, …). Each
+// The debrid uploader runs on one or more servers (today only debrid02). Each
 // server generates its own job IDs and only knows its own jobs, so a job is
 // pinned to the server that created it: status polls, the files fetch and delete
 // must all go back to that same server.
@@ -8,7 +8,7 @@
 // existing single-server deployments behave exactly as before.
 //
 // Each entry may carry a `;maxGb=N` cap for an underpowered box, e.g.
-//   DEBRID_UPLOADER_URLS=http://debrid01:3100;maxGb=10,http://debrid02:3100
+//   DEBRID_UPLOADER_URLS=http://spare:3100;maxGb=10,http://debrid02:3100
 // A job larger than a server's cap is never routed there — rewriteTorrent is
 // synchronous, so one big torrent stalls a single-core host and its webseed
 // serving. Uncapped servers take any size.

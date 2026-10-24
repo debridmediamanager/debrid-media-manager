@@ -38,7 +38,7 @@ import { toast, Toaster } from 'react-hot-toast';
  * three thousand rows.
  *
  * **TorBox is the only source.** AllDebrid was withdrawn on 2026-09-01 with
- * debrid01, the one uploader host whose IP it permitted, and Premiumize,
+ * the one uploader host whose IP it permitted, and Premiumize,
  * Offcloud and Debrid-Link were never sources. None of those keys buys a viewer
  * anything here, so none of them is offered the board on the home page
  * (`MainActions`) unless the viewer also asks with Real-Debrid.
@@ -189,8 +189,8 @@ export default function RequestsPage() {
 	const loadingRef = useRef(false);
 
 	// TorBox is the only source the uploader can pull from, so it is the only key
-	// the board cares about. AllDebrid was withdrawn on 2026-09-01 with debrid01,
-	// the one uploader host whose IP it permitted; offering fulfil to an AD-only
+	// the board cares about. AllDebrid was withdrawn on 2026-09-01 with the one
+	// uploader host whose IP it permitted; offering fulfil to an AD-only
 	// holder would now only earn them a 400. (Premiumize is not one either: the
 	// uploader cannot source from it, which is why a Premiumize user is not sent
 	// here in the first place.) A Real-Debrid login is not needed to fulfil: the
