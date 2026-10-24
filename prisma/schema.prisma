@@ -860,6 +860,7 @@ model ImdbTitleBasics {
   @@index([titleType], map: "idx_title_type")
   @@index([isAdult], map: "idx_is_adult")
   @@index([startYear], map: "idx_start_year")
+  @@index([primaryTitle(length: 100)], map: "idx_primary_title")
   @@fulltext([primaryTitle], map: "ft_ngram_primary_title")
   @@fulltext([primaryTitle], map: "ft_primary_title")
   @@map("imdb_title_basics")

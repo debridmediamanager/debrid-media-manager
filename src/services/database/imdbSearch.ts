@@ -45,6 +45,14 @@ export class ImdbSearchService extends DatabaseClient {
 		// Build year filter as parameterized Prisma.sql
 		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
 
+		const exact = ImdbSearchService.fulltextCannotFind(cleanKeyword)
+			? await this.searchExactTitles(cleanKeyword, typeFilter, yearFilter, limit)
+			: [];
+		const withExact = (results: ImdbSearchResult[]) => {
+			const seen = new Set(exact.map((r) => r.imdbId));
+			return [...exact, ...results.filter((r) => !seen.has(r.imdbId))].slice(0, limit);
+		};
+
 		// Try fulltext search on imdb_title_basics first (faster, smaller table)
 		try {
 			const results = await this.searchBasicsFulltext(
@@ -54,7 +62,7 @@ export class ImdbSearchService extends DatabaseClient {
 				limit
 			);
 			if (results.length > 0) {
-				return results;
+				return withExact(results);
 			}
 		} catch (error) {
 			// Fulltext index might not exist yet
@@ -70,15 +78,86 @@ export class ImdbSearchService extends DatabaseClient {
 				limit
 			);
 			if (results.length > 0) {
-				return results;
+				return withExact(results);
 			}
 		} catch (error) {
 			// Fulltext index might not exist yet
 			console.warn('Akas fulltext search failed:', error);
 		}
 
+		if (exact.length > 0) {
+			return exact;
+		}
+
 		// Fall back to LIKE search on basics table
 		return this.searchWithLike(cleanKeyword, typeFilter, yearFilter, limit);
+	}
+
+	/**
+	 * True when no word of the keyword is in the fulltext index: all shorter
+	 * than innodb_ft_min_token_size (3 on dmmdb) or stopwords. "20/20", "Up",
+	 * "It", "Us", "24", "9-1-1" and "M*A*S*H" could never be found, and the
+	 * prefix match "+20*" filled the results with 2012 and 2046 (2026-10-24).
+	 */
+	static fulltextCannotFind(keyword: string): boolean {
+		return !keyword
+			.split(' ')
+			.some(
+				(w) => w.length >= 3 && !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase())
+			);
+	}
+
+	/**
+	 * The titles the keyword could have been before its punctuation was
+	 * stripped: "20 20" was "20/20", "9 1 1" was "9-1-1", "m a s h" "M*A*S*H".
+	 */
+	static exactTitleSpellings(keyword: string): string[] {
+		const words = keyword.split(' ');
+		return [...new Set(['', ' ', '/', '-', ':', '.', '*', ' & '].map((s) => words.join(s)))];
+	}
+
+	/** Equality on primary_title, served by idx_primary_title: a scan would take ~28 s. */
+	private async searchExactTitles(
+		keyword: string,
+		typeFilter: Prisma.Sql,
+		yearFilter: Prisma.Sql,
+		limit: number
+	): Promise<ImdbSearchResult[]> {
+		const query = Prisma.sql`
+			SELECT
+				b.tconst as imdbId,
+				CASE
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
+					ELSE 'show'
+				END as type,
+				b.start_year as year,
+				b.primary_title as title,
+				b.original_title as originalTitle,
+				r.average_rating as rating,
+				r.num_votes as votes,
+				1 as isOriginalMatch
+			FROM imdb_title_basics b
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			WHERE b.primary_title IN (${Prisma.join(ImdbSearchService.exactTitleSpellings(keyword))})
+				${typeFilter}
+				${yearFilter}
+				AND b.is_adult = 0
+			ORDER BY r.tconst IS NULL, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			LIMIT ${limit}
+		`;
+
+		const results = await this.prisma.$queryRaw<any[]>(query);
+
+		return results.map((r) => ({
+			imdbId: r.imdbId,
+			type: r.type as 'movie' | 'show',
+			year: r.year,
+			title: r.title || r.originalTitle || '',
+			originalTitle: r.originalTitle,
+			rating: r.rating ? Number(r.rating) : null,
+			votes: r.votes ? Number(r.votes) : null,
+			isOriginalMatch: Boolean(r.isOriginalMatch),
+		}));
 	}
 
 	// MySQL InnoDB default stopwords - these break search when using + (required) prefix

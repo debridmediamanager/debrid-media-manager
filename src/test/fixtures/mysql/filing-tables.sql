@@ -57,6 +57,7 @@ CREATE TABLE `imdb_title_basics` (
   KEY `idx_title_type` (`title_type`),
   KEY `idx_start_year` (`start_year`),
   KEY `idx_is_adult` (`is_adult`),
+  KEY `idx_primary_title` (`primary_title`(100)),
   FULLTEXT KEY `ft_primary_title` (`primary_title`),
   FULLTEXT KEY `ft_ngram_primary_title` (`primary_title`) /*!50100 WITH PARSER `ngram` */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

@@ -170,6 +170,32 @@ describe('ImdbSearchService', () => {
 			expect(ImdbSearchService.fulltextKeyword('up the')).toBe('+up* the*');
 		});
 
+		// "20/20" arrives as "20 20": no word is in the fulltext index, so its exact
+		// spellings are looked up first (title.integration.test.ts runs them on MySQL).
+		it('looks up the exact spellings of a title fulltext cannot hold', async () => {
+			const twenty = {
+				imdbId: 'tt0124932',
+				type: 'show',
+				year: 1978,
+				title: '20/20',
+				originalTitle: '20/20',
+				rating: 6.4,
+				votes: 1800,
+				isOriginalMatch: 1,
+			};
+			const film2020 = { ...twenty, imdbId: 'tt6727598', type: 'movie', title: '2020' };
+			prismaMock.$queryRaw.mockResolvedValueOnce([twenty]).mockResolvedValueOnce([film2020]);
+
+			const results = await service.searchTitles('20 20');
+
+			expect(results.map((r) => r.imdbId)).toEqual(['tt0124932', 'tt6727598']);
+			expect(prismaMock.$queryRaw.mock.calls[0][0].values).toEqual(
+				expect.arrayContaining(['20/20', '20-20', '2020'])
+			);
+			expect(ImdbSearchService.exactTitleSpellings('m a s h')).toContain('m*a*s*h');
+			expect(ImdbSearchService.fulltextCannotFind('48 hours')).toBe(false);
+		});
+
 		it('gives up on a LIKE scan that runs out of time', async () => {
 			prismaMock.$queryRaw
 				.mockResolvedValueOnce([])
