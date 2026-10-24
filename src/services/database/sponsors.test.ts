@@ -28,6 +28,7 @@ const LAPSED = {
 	githubSponsoring: false,
 	patreonAmount: 0,
 	oneTimeDonationEndDate: null,
+	discordStaff: false,
 };
 
 describe('SponsorsService', () => {
@@ -109,6 +110,16 @@ describe('SponsorsService', () => {
 				oneTimeDonationEndDate: new Date(Date.now() + 60_000),
 			});
 			expect((await service.getByDmmApiKey(KEY))?.sources).toEqual(['onetime']);
+		});
+
+		it('recognises a Discord admin or moderator as a sponsor', async () => {
+			(prismaMock.sponsors.findUnique as Mock).mockResolvedValue({
+				...LAPSED,
+				discordStaff: true,
+			});
+			const result = await service.getByDmmApiKey(KEY);
+			expect(result?.isSponsor).toBe(true);
+			expect(result?.sources).toEqual(['staff']);
 		});
 
 		// A key outlives the sponsorship it was issued for, so "the key resolves"

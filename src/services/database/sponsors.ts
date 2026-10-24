@@ -19,6 +19,7 @@ type SponsorRow = {
 	githubSponsoring: boolean;
 	patreonAmount: number;
 	oneTimeDonationEndDate: Date | null;
+	discordStaff: boolean;
 };
 
 const SELECT = {
@@ -28,6 +29,7 @@ const SELECT = {
 	githubSponsoring: true,
 	patreonAmount: true,
 	oneTimeDonationEndDate: true,
+	discordStaff: true,
 } as const;
 
 /**
@@ -42,6 +44,8 @@ function activeSources(sponsor: SponsorRow): SponsorSource[] {
 	if (sponsor.oneTimeDonationEndDate && sponsor.oneTimeDonationEndDate > new Date()) {
 		sources.push('onetime');
 	}
+	// A Discord admin or moderator, flagged by gatekeeper's sync from the guild roles.
+	if (sponsor.discordStaff) sources.push('staff');
 	return sources;
 }
 

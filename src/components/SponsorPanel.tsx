@@ -58,6 +58,7 @@ const SOURCE_LABELS: Record<string, string> = {
 	github: 'GitHub Sponsors',
 	patreon: 'Patreon',
 	onetime: 'One-time donation',
+	staff: 'Discord staff',
 };
 
 /**

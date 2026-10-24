@@ -1,10 +1,10 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
 /**
- * Where a sponsorship comes from. Mirrors the three sources gatekeeper tracks
+ * Where a sponsorship comes from. Mirrors the sources gatekeeper tracks
  * on the shared `Sponsors` row.
  */
-export type SponsorSource = 'github' | 'patreon' | 'onetime';
+export type SponsorSource = 'github' | 'patreon' | 'onetime' | 'staff';
 
 export interface SponsorTokenPayload {
 	/** gatekeeper's 4-character Sponsorship ID, used to re-check on refresh. */
