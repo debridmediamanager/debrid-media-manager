@@ -117,7 +117,8 @@
 		"@prisma/config": {
 			"deepmerge-ts": "^8.0.2"
 		},
-		"ip": "$ip"
+		"ip": "$ip",
+		"zod": "^4.6.6"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,mjs,cjs,ts,tsx}": [
