@@ -2155,7 +2155,7 @@ const TvSearch: FunctionComponent = () => {
 			/>
 			{usenetTab && (
 				<>
-					<div className="p-2">{episodeNav}</div>
+					{episodeNav && <div className="p-2">{episodeNav}</div>}
 					<UsenetResults
 						imdbId={imdbId}
 						seasonNum={selectedSeason}

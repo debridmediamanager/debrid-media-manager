@@ -519,9 +519,10 @@ const UsenetResults = ({
 										// A failure reason is a sentence, not
 										// a place in line: let it wrap, and cap
 										// it so one long message cannot stretch
-										// the row down the page.
+										// the row down the page. Phones show it
+										// on its own line under the buttons.
 										state.kind === 'failed'
-											? 'line-clamp-2 break-words whitespace-normal'
+											? 'line-clamp-2 break-words whitespace-normal max-sm:hidden'
 											: ''
 									}`}
 								>
@@ -548,6 +549,10 @@ const UsenetResults = ({
 						</button>
 					</>
 				);
+			}}
+			note={(result) => {
+				const state = buttonState(result.id, sendingIds, sentIds, transferred, addedIds);
+				return state.kind === 'failed' && state.detail ? state.detail : null;
 			}}
 		/>
 	);
