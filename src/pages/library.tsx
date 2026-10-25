@@ -1887,8 +1887,8 @@ function TorrentsPage() {
 									<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 								</div>
 							) : (
-								<table className="w-full max-sm:block">
-									<thead className="max-sm:block">
+								<table className="w-full max-lg:block">
+									<thead className="max-lg:block">
 										<LibraryTableHeader
 											sortBy={sortBy}
 											onSort={handleSort}
@@ -1896,7 +1896,7 @@ function TorrentsPage() {
 											selectedTorrentsSize={selectedTorrents.size}
 										/>
 									</thead>
-									<tbody className="max-sm:block">
+									<tbody className="max-lg:block">
 										{currentPageData.length === 0 && (
 											<tr>
 												<td

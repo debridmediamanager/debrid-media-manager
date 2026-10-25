@@ -416,14 +416,16 @@ function TorrentRow({
 
 	return (
 		<>
-			{/* Phones: the row is a card. Title and filename take the full width beside
-			    the select toggle, and size, status, date and actions wrap beneath them. */}
+			{/* Below lg the row is a card: title and filename take the full width beside
+			    the select toggle, and size, status, date and actions wrap beneath them.
+			    From lg up the title cell's max-w-0 truncates it rather than letting a long
+			    filename widen the table past the window. */}
 			<tr
-				className={`border-b border-gray-800 align-middle max-sm:flex max-sm:flex-wrap max-sm:items-center max-sm:py-1 lg:hover:bg-gray-800/50 ${isSelected ? 'bg-green-800' : ''}`}
+				className={`border-b border-gray-800 align-middle max-lg:flex max-lg:flex-wrap max-lg:items-center max-lg:py-1 lg:hover:bg-gray-800/50 ${isSelected ? 'bg-green-800' : ''}`}
 			>
 				<td
 					onClick={() => onSelect(torrent.id)}
-					className="truncate px-0.5 py-1 text-center text-sm max-sm:w-8"
+					className="truncate px-0.5 py-1 text-center text-sm max-lg:w-8"
 				>
 					{isSelected ? (
 						<Check className="inline-block h-4 w-4 text-green-500" />
@@ -433,7 +435,7 @@ function TorrentRow({
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="truncate px-0.5 py-1 text-sm max-sm:grow max-sm:basis-[calc(100%-2rem)] max-sm:[overflow-wrap:anywhere] max-sm:whitespace-normal"
+					className="truncate px-0.5 py-1 text-sm max-lg:grow max-lg:basis-[calc(100%-2rem)] max-lg:[overflow-wrap:anywhere] max-lg:whitespace-normal lg:max-w-0"
 				>
 					{!['Invalid Magnet', 'Magnet', 'noname'].includes(torrent.filename) && (
 						<>
@@ -539,13 +541,13 @@ function TorrentRow({
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="px-0.5 py-1 text-center text-xs max-sm:ml-8 max-sm:pr-3"
+					className="px-0.5 py-1 text-center text-xs max-lg:ml-8 max-lg:pr-3"
 				>
 					{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="px-0.5 py-1 text-center text-xs max-sm:pr-3"
+					className="px-0.5 py-1 text-center text-xs max-lg:pr-3"
 				>
 					{torrent.status !== UserTorrentStatus.finished &&
 					torrent.status !== UserTorrentStatus.error ? (
@@ -568,13 +570,13 @@ function TorrentRow({
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="px-0.5 py-1 text-center text-xs max-sm:pr-3"
+					className="px-0.5 py-1 text-center text-xs max-lg:pr-3"
 				>
 					{new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' })}
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="flex place-content-center px-0.5 py-1 max-sm:ml-auto"
+					className="flex place-content-center px-0.5 py-1 max-lg:ml-auto"
 				>
 					{rdKey && torrent.id.startsWith('rd:') && (
 						<button

@@ -23,8 +23,8 @@ export default function LibraryTableHeader({
 		`cursor-pointer select-none hover:text-gray-100 ${sortBy.column === column ? 'text-cyan-300' : 'text-gray-300'}`;
 
 	return (
-		// Phones: the column headings become a row of sort controls; Actions has nothing to sort.
-		<tr className="border-b border-gray-700 text-xs whitespace-nowrap max-sm:flex max-sm:flex-wrap max-sm:gap-x-3 max-sm:px-1 max-sm:[&>th]:w-auto max-sm:[&>th]:max-w-none max-sm:[&>th]:min-w-0 max-sm:[&>th:last-child]:hidden">
+		// Below lg: the column headings become a row of sort controls; Actions has nothing to sort.
+		<tr className="border-b border-gray-700 text-xs whitespace-nowrap max-lg:flex max-lg:flex-wrap max-lg:gap-x-3 max-lg:px-1 max-lg:[&>th]:w-auto max-lg:[&>th]:max-w-none max-lg:[&>th]:min-w-0 max-lg:[&>th:last-child]:hidden">
 			<th
 				className={`w-8 max-w-8 min-w-8 px-0.5 py-1 ${sortableClass('id')}`}
 				onClick={() => onSort('id')}
@@ -42,7 +42,7 @@ export default function LibraryTableHeader({
 				{sortIndicator('id')}
 			</th>
 			<th
-				className={`w-[500px] max-w-[500px] min-w-96 px-1 py-2 ${sortableClass('title')}`}
+				className={`w-[500px] max-w-[500px] min-w-96 px-1 py-2 lg:w-full ${sortableClass('title')}`}
 				onClick={() => onSort('title')}
 				role="button"
 				aria-sort={
