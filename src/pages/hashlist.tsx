@@ -1321,10 +1321,11 @@ function HashlistPage() {
 					</thead>
 					<tbody>
 						{currentPageData().map((t, i) => {
-							const groupCount = getGroupings(t.mediaType)[t.filename];
+							// grouped by title in the aggregate above, so looked up by title
+							const groupCount = getGroupings(t.mediaType)[t.title];
 							const filterText =
 								groupCount > 1 && !router.query.filter
-									? `${groupCount - 1} other file${groupCount === 1 ? '' : 's'}`
+									? `${groupCount - 1} other file${groupCount === 2 ? '' : 's'}`
 									: '';
 							return (
 								<tr
@@ -1354,7 +1355,7 @@ function HashlistPage() {
 												&nbsp;<strong>{t.title}</strong>{' '}
 												{filterText && (
 													<Link
-														href={`/library?filter=${encodeURIComponent(
+														href={`/hashlist?filter=${encodeURIComponent(
 															t.title
 														)}`}
 														className="inline-block cursor-pointer rounded border-2 border-green-500 bg-green-900/30 px-1 py-0 text-xs text-green-100 transition-colors hover:bg-green-800/50"
