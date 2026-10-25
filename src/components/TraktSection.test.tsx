@@ -63,4 +63,19 @@ describe('TraktSection', () => {
 		expect(screen.getByText('Shows')).toBeInTheDocument();
 		expect(screen.getByText('Calendar')).toBeInTheDocument();
 	});
+
+	// The row sat in `col-span-2 sm:col-span-3` of a three-column grid, so on
+	// phones it filled two thirds and left a hole; its labels then overflowed
+	// cells a third that narrow.
+	it('spans the signed-in row across all three columns at every width', () => {
+		const user = { username: 'testuser' } as any;
+		render(<TraktSection traktUser={user} />);
+		const row = screen.getByText('Watchlist').closest('a')!.parentElement!;
+		const classes = row.className.split(/\s+/);
+		expect(classes).toContain('col-span-3');
+		expect(classes).not.toContain('col-span-2');
+		for (const name of ['Watchlist', 'Collections', 'My lists', 'Calendar']) {
+			expect(screen.getByText(name).closest('a')).toHaveClass('whitespace-nowrap');
+		}
+	});
 });
