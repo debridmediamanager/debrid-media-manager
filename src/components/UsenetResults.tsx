@@ -21,6 +21,7 @@ import {
 } from '@/utils/transferPhase';
 import type { TvEpisodeMatch } from '@/utils/tvEpisodes';
 import { Check, Download, FileDown, Loader2, RotateCw, Send } from 'lucide-react';
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -424,11 +425,16 @@ const UsenetResults = ({
 	return (
 		<ReleaseSection
 			heading={
-				// The hyphen is a break opportunity, so a narrow screen would otherwise
-				// split the service name across two lines as "Real-" / "Debrid".
-				<>
-					Send to <span className="whitespace-nowrap">Real-Debrid</span>
-				</>
+				// Without Real-Debrid the only thing a row can do is save the NZB.
+				rdKey ? (
+					// The hyphen is a break opportunity, so a narrow screen would otherwise
+					// split the service name across two lines as "Real-" / "Debrid".
+					<>
+						Send to <span className="whitespace-nowrap">Real-Debrid</span>
+					</>
+				) : (
+					'Download NZB'
+				)
 			}
 			collapsedKey="settings:usenetSendCollapsed"
 			count={
@@ -468,6 +474,18 @@ const UsenetResults = ({
 							above.
 						</p>
 					)}
+
+					{!rdKey && kept.length > 0 && !isLoading && !error && (
+						<p className="px-2 py-2 text-sm text-gray-400">
+							<Link
+								href="/realdebrid/login"
+								className="text-blue-400 hover:underline"
+							>
+								Log in with Real-Debrid
+							</Link>{' '}
+							to send these to your library.
+						</p>
+					)}
 				</>
 			}
 			rows={!isLoading && !error ? kept : []}
@@ -476,60 +494,62 @@ const UsenetResults = ({
 				const state = buttonState(result.id, sendingIds, sentIds, transferred, addedIds);
 				return (
 					<>
-						<button
-							type="button"
-							onClick={() => send(result)}
-							disabled={state.disabled}
-							title={state.title}
-							className={`haptic flex flex-1 flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
-								// Green covers both halves of a finished
-								// fetch — the live "Add to RD" and the
-								// "Added" it becomes — so the colour tracks
-								// "this release exists" rather than
-								// whether the button is still clickable.
-								state.kind === 'cached' || state.kind === 'added'
-									? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
-									: state.kind === 'failed'
-										? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
-										: state.phase
-											? PHASE_STYLES[state.phase]
-											: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
-							}`}
-						>
-							<span className="flex items-center gap-1">
-								{state.kind === 'sending' || state.kind === 'running' ? (
-									<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
-								) : state.kind === 'added' || state.kind === 'sent' ? (
-									<Check className="h-3 w-3 shrink-0" />
-								) : state.kind === 'cached' ? (
-									<Download className="h-3 w-3 shrink-0" />
-								) : state.kind === 'failed' ? (
-									<RotateCw className="h-3 w-3 shrink-0" />
-								) : (
-									<Send className="h-3 w-3 shrink-0" />
-								)}
-								{state.label}
-							</span>
-							{/* Place in line, or how far through the current
+						{rdKey && (
+							<button
+								type="button"
+								onClick={() => send(result)}
+								disabled={state.disabled}
+								title={state.title}
+								className={`haptic flex flex-1 flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
+									// Green covers both halves of a finished
+									// fetch — the live "Add to RD" and the
+									// "Added" it becomes — so the colour tracks
+									// "this release exists" rather than
+									// whether the button is still clickable.
+									state.kind === 'cached' || state.kind === 'added'
+										? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
+										: state.kind === 'failed'
+											? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
+											: state.phase
+												? PHASE_STYLES[state.phase]
+												: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
+								}`}
+							>
+								<span className="flex items-center gap-1">
+									{state.kind === 'sending' || state.kind === 'running' ? (
+										<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+									) : state.kind === 'added' || state.kind === 'sent' ? (
+										<Check className="h-3 w-3 shrink-0" />
+									) : state.kind === 'cached' ? (
+										<Download className="h-3 w-3 shrink-0" />
+									) : state.kind === 'failed' ? (
+										<RotateCw className="h-3 w-3 shrink-0" />
+									) : (
+										<Send className="h-3 w-3 shrink-0" />
+									)}
+									{state.label}
+								</span>
+								{/* Place in line, or how far through the current
 														    stage — the thing that tells a waiting user
 														    whether "not done yet" means minutes or days. */}
-							{state.detail && (
-								<span
-									className={`pl-4 text-xs opacity-70 ${
-										// A failure reason is a sentence, not
-										// a place in line: let it wrap, and cap
-										// it so one long message cannot stretch
-										// the row down the page. Phones show it
-										// on its own line under the buttons.
-										state.kind === 'failed'
-											? 'line-clamp-2 break-words whitespace-normal max-sm:hidden'
-											: ''
-									}`}
-								>
-									{state.detail}
-								</span>
-							)}
-						</button>
+								{state.detail && (
+									<span
+										className={`pl-4 text-xs opacity-70 ${
+											// A failure reason is a sentence, not
+											// a place in line: let it wrap, and cap
+											// it so one long message cannot stretch
+											// the row down the page. Phones show it
+											// on its own line under the buttons.
+											state.kind === 'failed'
+												? 'line-clamp-2 break-words whitespace-normal max-sm:hidden'
+												: ''
+										}`}
+									>
+										{state.detail}
+									</span>
+								)}
+							</button>
+						)}
 						{/* Always live, unlike Send: a release someone else already
 											    fetched is still one this user can save, and no Real-Debrid
 											    login is involved either way. */}
@@ -539,18 +559,23 @@ const UsenetResults = ({
 							disabled={downloadingIds.has(result.id)}
 							title="Download the NZB, cleaned of the indexer’s watermark"
 							aria-label={`Download clean NZB for ${result.title}`}
-							className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 transition-colors duration-200 hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-60"
+							className={`haptic flex items-center gap-1 rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 transition-colors duration-200 hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-60 ${
+								rdKey ? 'shrink-0' : 'flex-1 py-1'
+							}`}
 						>
 							{downloadingIds.has(result.id) ? (
 								<Loader2 className="h-3.5 w-3.5 animate-spin" />
 							) : (
 								<FileDown className="h-3.5 w-3.5" />
 							)}
+							{/* The row's only button then, so it says what it is. */}
+							{!rdKey && 'NZB'}
 						</button>
 					</>
 				);
 			}}
 			note={(result) => {
+				if (!rdKey) return null;
 				const state = buttonState(result.id, sendingIds, sentIds, transferred, addedIds);
 				return state.kind === 'failed' && state.detail ? state.detail : null;
 			}}

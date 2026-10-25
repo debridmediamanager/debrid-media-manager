@@ -553,17 +553,25 @@ describe('UsenetResults', () => {
 		expect(screen.getAllByRole('button', { name: /^send$/i })[0]).toBeEnabled();
 	});
 
-	it('refuses to send without a Real-Debrid key', async () => {
+	// Without Real-Debrid every Send only ever answered with an error toast, so
+	// the rows offer what still works: the cleaned NZB.
+	it('offers only the NZB download without a Real-Debrid key', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey={null} />);
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
-
-		expect(toastError).toHaveBeenCalledWith(
-			'Log in with Real-Debrid to send Usenet releases',
-			expect.anything()
+		expect(screen.getByRole('button', { name: /download nzb/i })).toBeInTheDocument();
+		expect(screen.queryByText(/send to/i)).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: /^send$/i })).not.toBeInTheDocument();
+		expect(screen.getByRole('link', { name: /log in with real-debrid/i })).toHaveAttribute(
+			'href',
+			'/realdebrid/login'
 		);
+
+		await userEvent.click(
+			screen.getByRole('button', { name: 'Download clean NZB for Alpha.Release.2160p' })
+		);
+		expect(downloadCleanNzbMock).toHaveBeenCalledWith('b', 'Alpha.Release.2160p');
 		expect(
 			fetchMock.mock.calls.filter((c: any[]) => String(c[0]).includes('/jobs'))
 		).toHaveLength(0);
