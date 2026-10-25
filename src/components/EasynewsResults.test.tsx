@@ -44,19 +44,21 @@ beforeEach(() => localStorage.clear());
 afterEach(() => vi.unstubAllGlobals());
 
 describe('EasynewsResults', () => {
-	it('asks for a login and searches nothing without one', () => {
+	it('points to Settings and searches nothing without a login', () => {
 		const fetchMock = mockApi();
 		render(<EasynewsResults title="Cocaine Bear" year="2023" />);
-		expect(screen.getByLabelText('Easynews username')).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Add it in Settings' })).toHaveAttribute(
+			'href',
+			'/settings'
+		);
+		expect(screen.queryByLabelText('Easynews password')).not.toBeInTheDocument();
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
-	it('keeps a login only once Easynews accepts it', async () => {
+	it('searches once with the saved login', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
 		const fetchMock = mockApi();
 		render(<EasynewsResults title="Cocaine Bear" year="2023" />);
-		await userEvent.type(screen.getByLabelText('Easynews username'), 'user');
-		await userEvent.type(screen.getByLabelText('Easynews password'), 'pass');
-		await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
 
 		expect(await screen.findByText('Cocaine.Bear.2023.2160p')).toBeInTheDocument();
 		expect(bodyOf(fetchMock.mock.calls[0])).toEqual({
@@ -64,23 +66,22 @@ describe('EasynewsResults', () => {
 			title: 'Cocaine Bear',
 			year: '2023',
 		});
-		expect(JSON.parse(localStorage.getItem('en:account')!)).toEqual(ACCOUNT);
-		// Saving the login must not search a second time: Easynews serves two
-		// searches at a time per account (seen live on 2026-10-25, one sign-in, two calls).
+		// Easynews serves two searches at a time per account.
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
-	it('does not save a login Easynews refuses', async () => {
+	it('sends a refused login back to Settings', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
 		mockApi(401);
 		render(<EasynewsResults title="Cocaine Bear" year="2023" />);
-		await userEvent.type(screen.getByLabelText('Easynews username'), 'user');
-		await userEvent.type(screen.getByLabelText('Easynews password'), 'wrong');
-		await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
 
 		expect(
 			await screen.findByText('Easynews rejected the username or password')
 		).toBeInTheDocument();
-		expect(localStorage.getItem('en:account')).toBeNull();
+		expect(screen.getByRole('link', { name: 'Easynews login' })).toHaveAttribute(
+			'href',
+			'/settings'
+		);
 	});
 
 	it('searches a season with a saved login and applies the episode filter', async () => {
@@ -127,14 +128,5 @@ describe('EasynewsResults', () => {
 			String(c[0]).includes('/api/easynews/link')
 		)!;
 		expect(bodyOf(linkCall)).toEqual({ ...ACCOUNT, path: PATH });
-	});
-
-	it('forgets the login on sign out', async () => {
-		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
-		mockApi();
-		render(<EasynewsResults title="Cocaine Bear" year="2023" />);
-		await userEvent.click(await screen.findByRole('button', { name: 'Sign out' }));
-		expect(localStorage.getItem('en:account')).toBeNull();
-		expect(screen.getByLabelText('Easynews username')).toBeInTheDocument();
 	});
 });

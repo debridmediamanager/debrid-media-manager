@@ -142,6 +142,20 @@ export async function searchEasynews(
 	return toResults(Array.isArray(body?.data) ? body.data : [], target);
 }
 
+/**
+ * Whether Easynews takes this login. Its members page answers 200 or 401 (2026-10-25)
+ * and, unlike a search, does not take one of the account's two search slots.
+ */
+export async function checkEasynewsLogin(credentials: EasynewsCredentials): Promise<void> {
+	const response = await fetch(`${EASYNEWS_BASE}/`, {
+		headers: { Authorization: authHeader(credentials) },
+		redirect: 'manual',
+		signal: AbortSignal.timeout(TIMEOUT_MS),
+	});
+	if (response.status === 401 || response.status === 403) throw new EasynewsAuthError();
+	if (!response.ok) throw new Error(`Easynews login check failed: HTTP ${response.status}`);
+}
+
 const PATH_RE = /^[0-9a-f]{20,80}\.[A-Za-z0-9]{1,6}\/[^/?#\\]{1,300}$/;
 
 export const isEasynewsPath = (path: unknown): path is string =>

@@ -1,4 +1,5 @@
 import {
+	checkEasynewsLogin,
 	EasynewsAuthError,
 	isEasynewsPath,
 	matchesTarget,
@@ -221,5 +222,23 @@ describe('resolveEasynewsLink', () => {
 		await expect(resolveEasynewsLink(credentials, path)).rejects.toBeInstanceOf(
 			EasynewsAuthError
 		);
+	});
+});
+
+describe('checkEasynewsLogin', () => {
+	it('reads the members page with the login, and tells 401 from an outage', async () => {
+		const fetchMock = vi.fn().mockResolvedValue(new Response('', { status: 200 }));
+		vi.stubGlobal('fetch', fetchMock);
+		await expect(checkEasynewsLogin(credentials)).resolves.toBeUndefined();
+		expect(fetchMock.mock.calls[0][0]).toBe('https://members.easynews.com/');
+		expect(fetchMock.mock.calls[0][1].headers.Authorization).toBe(
+			`Basic ${Buffer.from('user:pass').toString('base64')}`
+		);
+
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 401 })));
+		await expect(checkEasynewsLogin(credentials)).rejects.toBeInstanceOf(EasynewsAuthError);
+
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 503 })));
+		await expect(checkEasynewsLogin(credentials)).rejects.toThrow('HTTP 503');
 	});
 });

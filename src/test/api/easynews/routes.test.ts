@@ -1,16 +1,28 @@
+import accountHandler from '@/pages/api/easynews/account';
 import linkHandler from '@/pages/api/easynews/link';
 import searchHandler from '@/pages/api/easynews/search';
-import { EasynewsAuthError, resolveEasynewsLink, searchEasynews } from '@/services/easynews';
+import {
+	checkEasynewsLogin,
+	EasynewsAuthError,
+	resolveEasynewsLink,
+	searchEasynews,
+} from '@/services/easynews';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/easynews', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/easynews')>();
-	return { ...actual, searchEasynews: vi.fn(), resolveEasynewsLink: vi.fn() };
+	return {
+		...actual,
+		searchEasynews: vi.fn(),
+		resolveEasynewsLink: vi.fn(),
+		checkEasynewsLogin: vi.fn(),
+	};
 });
 
 const mockSearch = vi.mocked(searchEasynews);
 const mockLink = vi.mocked(resolveEasynewsLink);
+const mockCheck = vi.mocked(checkEasynewsLogin);
 const login = { username: 'user', password: 'pass' };
 const PATH = '682d74c4d3e935f0dee9a945a6e1a1d8010fde2f543e8.mkv/Cocaine.Bear.2023.mkv';
 
@@ -90,5 +102,22 @@ describe('POST /api/easynews/link', () => {
 	it('says 401 when Easynews refuses the login', async () => {
 		mockLink.mockRejectedValue(new EasynewsAuthError());
 		expect((await run(linkHandler, { ...login, path: PATH })).status).toHaveBeenCalledWith(401);
+	});
+});
+
+describe('POST /api/easynews/account', () => {
+	it('accepts a login Easynews takes', async () => {
+		mockCheck.mockResolvedValue();
+		const res = await run(accountHandler, login);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockCheck).toHaveBeenCalledWith(login);
+	});
+
+	it('says 401 for a refused login, 502 when Easynews is down, 400 without one', async () => {
+		mockCheck.mockRejectedValueOnce(new EasynewsAuthError());
+		expect((await run(accountHandler, login)).status).toHaveBeenCalledWith(401);
+		mockCheck.mockRejectedValueOnce(new Error('HTTP 503'));
+		expect((await run(accountHandler, login)).status).toHaveBeenCalledWith(502);
+		expect((await run(accountHandler, { username: 'u' })).status).toHaveBeenCalledWith(400);
 	});
 });

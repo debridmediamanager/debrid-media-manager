@@ -33,6 +33,7 @@ import {
 	defaultTorrentsFilter,
 } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
+import { EasynewsAccountPanel } from './EasynewsAccountPanel';
 import { SponsorPanel } from './SponsorPanel';
 
 export const SettingsSection = () => {
@@ -470,6 +471,8 @@ export const SettingsSection = () => {
 				<div className="mt-4 text-sm text-gray-200">
 					<div className="flex flex-col gap-4">
 						<SponsorPanel />
+
+						<EasynewsAccountPanel />
 
 						<div className="rounded border-2 border-yellow-500/30 p-4">
 							<div className="mb-4 flex items-center justify-center text-center text-sm font-medium text-yellow-200">
