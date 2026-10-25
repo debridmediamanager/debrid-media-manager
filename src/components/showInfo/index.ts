@@ -861,15 +861,23 @@ export const showInfoForAD = async (
 				logAction('restart clicked (AD)', {
 					hash: info.hash,
 				});
-				if (handlers.onRestartAd) {
-					await handlers.onRestartAd(adKey, `ad:${info.id}`);
-				} else {
-					await handleRestartTorrent(adKey, `ad:${info.id}`);
+				try {
+					if (handlers.onRestartAd) {
+						await handlers.onRestartAd(adKey, `ad:${info.id}`);
+					} else {
+						await handleRestartTorrent(adKey, `ad:${info.id}`);
+					}
+					logAction('restart completed (AD)', {
+						hash: info.hash,
+					});
+					Modal.close();
+				} catch (error) {
+					// The restart already told the member why in a toast.
+					logAction('restart failed (AD)', {
+						hash: info.hash,
+						error: error instanceof Error ? error.message : String(error),
+					});
 				}
-				logAction('restart completed (AD)', {
-					hash: info.hash,
-				});
-				Modal.close();
 			});
 
 			const exportBtn = document.getElementById('btn-export-links');

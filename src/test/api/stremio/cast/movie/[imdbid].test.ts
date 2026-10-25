@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio/cast/movie/[imdbid]';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import rdUrl from '../../../../fixtures/rd-cast-stream-url.json';
 
 const { mockSaveCast, mockGenerateUserId, mockGetBiggestFileStreamUrl } = vi.hoisted(() => ({
 	mockSaveCast: vi.fn(),
@@ -111,6 +112,29 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 			message: 'You can now stream the movie in Stremio',
 			filename: 'Video.mkv',
 		});
+	});
+
+	// RD download URLs end in the percent-encoded filename, and the cast toast
+	// showed it raw: "Casted Big%20Buck%20Bunny%20%282008%29... to Stremio."
+	it('answers the decoded filename of a real RD download URL', async () => {
+		mockGenerateUserId.mockResolvedValue('user-1');
+		mockGetBiggestFileStreamUrl.mockResolvedValue([
+			rdUrl.streamUrl,
+			'https://rd.example.com/link',
+			2480,
+		]);
+
+		const req = createMockRequest({
+			query: { imdbid: 'tt1254207', hash: 'hashabc' },
+			headers: { authorization: 'Bearer token-abc', 'x-real-ip': '127.0.0.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ filename: 'Big Buck Bunny (2008) [1080p] BDRemux.m2ts' })
+		);
 	});
 
 	it('returns 500 when stream url acquisition fails', async () => {

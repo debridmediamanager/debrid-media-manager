@@ -45,7 +45,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			await db.saveCast(imdbid, userid, hash, streamUrl, rdLink, fileSize);
 
-			const filename = streamUrl.split('/').pop() ?? '???';
+			// RD download URLs carry the filename percent-encoded.
+			const lastSegment = streamUrl.split('/').pop() ?? '???';
+			let filename = lastSegment;
+			try {
+				filename = decodeURIComponent(lastSegment);
+			} catch {}
 
 			res.status(200).json({
 				status: 'success',

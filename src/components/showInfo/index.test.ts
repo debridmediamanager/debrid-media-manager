@@ -70,6 +70,7 @@ vi.mock('./utils', async () => {
 import axios from 'axios';
 
 import adFixture from '../../test/fixtures/alldebrid-library-magnet.json';
+import restartRefused from '../../test/fixtures/alldebrid-restart-refused.json';
 import Modal from '../modals/modal';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from './index';
 
@@ -514,6 +515,23 @@ describe('AllDebrid popup Reinsert', () => {
 		await open(readyMagnet);
 
 		expect(document.getElementById('btn-restart-ad')).toBeNull();
+	});
+
+	// A refused restart rejected inside the click handler, which nothing
+	// caught: an unhandled rejection on every MAGNET_PROCESSING answer.
+	it('handles a restart AllDebrid refuses', async () => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		const unhandled = vi.fn();
+		process.on('unhandledRejection', unhandled);
+		const post = vi.mocked(axios.post).mockResolvedValue({ data: restartRefused.response });
+		await open({ ...readyMagnet, status: 'No peer after 30 minutes', statusCode: 7 });
+
+		document.getElementById('btn-restart-ad')!.click();
+		await vi.waitFor(() => expect(post).toHaveBeenCalled());
+		await new Promise((resolve) => setTimeout(resolve, 20));
+
+		process.off('unhandledRejection', unhandled);
+		expect(unhandled).not.toHaveBeenCalled();
 	});
 
 	// The popup passed the bare id to a restart that strips an `ad:` prefix,
