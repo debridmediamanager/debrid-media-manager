@@ -85,3 +85,44 @@ export function formatReleaseDate(date?: string | null): string {
 		year: 'numeric',
 	});
 }
+
+/** Older than this, a film is out digitally whatever TMDB's dates claim. */
+const LONG_RELEASED_YEARS = 2;
+
+export type MovieReleaseFields = {
+	year?: string;
+	expectedDigitalReleaseDate?: string;
+	expectedDigitalReleaseSource?: ExpectedDigitalReleaseSource | null;
+	digitalReleaseAvailable?: boolean;
+};
+
+/**
+ * Whether the film can be had digitally. TMDB's dates are often wrong for old
+ * films (The Godfather, 1972: digital Sep 13, 2026; The Wizard of Oz: an
+ * estimate of Oct 5, 1939), so a film whose year is long past counts as out.
+ */
+export function isMovieDigitallyReleased(info: MovieReleaseFields, today = new Date()): boolean {
+	if (info.digitalReleaseAvailable) return true;
+	const year = parseInt(info.year ?? '', 10);
+	if (!Number.isNaN(year) && year < today.getUTCFullYear() - LONG_RELEASED_YEARS) return true;
+	return isIsoDateOnOrBeforeToday(info.expectedDigitalReleaseDate, today);
+}
+
+/**
+ * The header chip for a digital release still to come: `Digital Nov 17, 2026`,
+ * or `Digital ~Jan 29, 2027` for an estimate. Null once the film is out.
+ */
+export function upcomingDigitalRelease(
+	info: MovieReleaseFields,
+	today = new Date()
+): { label: string; title: string } | null {
+	if (!info.expectedDigitalReleaseDate || isMovieDigitallyReleased(info, today)) return null;
+	const date = formatReleaseDate(info.expectedDigitalReleaseDate);
+	if (info.expectedDigitalReleaseSource === 'estimated') {
+		return {
+			label: `Digital ~${date}`,
+			title: `Expected digital release ${date}: an estimate, 45 days after the theatrical release, as TMDB has no digital date yet`,
+		};
+	}
+	return { label: `Digital ${date}`, title: `Digital release ${date}, from TMDB` };
+}
