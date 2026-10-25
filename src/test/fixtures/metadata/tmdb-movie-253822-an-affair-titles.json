@@ -1,0 +1,57 @@
+{
+	"adult": false,
+	"alternative_titles": { "titles": [] },
+	"backdrop_path": "/aIJRCvZ1cQqeyS11jMDkYfVXibN.jpg",
+	"belongs_to_collection": null,
+	"budget": 0,
+	"genres": [
+		{ "id": 18, "name": "Drama" },
+		{ "id": 10749, "name": "Romance" }
+	],
+	"homepage": "",
+	"id": 253822,
+	"imdb_id": "tt0186488",
+	"origin_country": ["PH"],
+	"original_language": "tl",
+	"original_title": "Relasyon",
+	"overview": "In a time in the Philippines when the concept of divorce does not exist, a young woman has an affair with a married man. Eventually, they move in together, and that is when the problems start.",
+	"popularity": 1.9386,
+	"poster_path": "/csNw7QjAUc3Ede4zEU2PDzi5Tg1.jpg",
+	"production_companies": [
+		{
+			"id": 8238,
+			"logo_path": "/3f3SS3sep9V3Nf7RAxNd5UUEw1E.png",
+			"name": "Regal Entertainment",
+			"origin_country": "PH"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "PH", "name": "Philippines" }],
+	"release_date": "1982-07-02",
+	"revenue": 0,
+	"runtime": 115,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Tagalog", "iso_639_1": "tl", "name": "" }],
+	"status": "Released",
+	"tagline": "She meets her man in some back street... during stolen hours.",
+	"title": "An Affair",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"homepage": "",
+					"overview": "In a time in the Philippines when the concept of divorce does not exist, a young woman has an affair with a married man. Eventually, they move in together, and that is when the problems start.",
+					"runtime": 115,
+					"tagline": "She meets her man in some back street... during stolen hours.",
+					"title": "An Affair"
+				}
+			}
+		]
+	},
+	"video": false,
+	"vote_average": 6.4,
+	"vote_count": 8
+}

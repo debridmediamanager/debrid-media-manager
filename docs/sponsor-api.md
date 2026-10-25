@@ -175,7 +175,8 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"title": "The Matrix",
 			"imdb": "tt0133093",
 			"year": 1999,
-			"tmdb": 603
+			"tmdb": 603,
+			"titles": ["The Matrix", "Matrix", "Матрица"]
 		},
 		{
 			"id": "5d1e…",
@@ -193,6 +194,9 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 `seasons` lists, for each season wanted, the episodes aired so far, numbered as TMDB
 numbers them; specials are never listed. An airing season grows as episodes air and
 carries `"airing": true` while TMDB lists episodes still to come.
+`titles` lists every title TMDB knows a film by, its original title, alternatives and
+translations, so a fetcher can refuse a release filed under the film's IMDb id that
+names another film; it is absent when TMDB could not be asked.
 `seasons` is absent when TMDB could not be asked this time, which means ask again
 later, not that nothing aired. `year`, `tmdb` and `tvdb` are absent where TMDB does
 not know the title.

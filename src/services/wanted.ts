@@ -21,6 +21,13 @@ export interface WantedForZurg {
 	year?: number;
 	tmdb?: number;
 	tvdb?: number;
+	/**
+	 * Films only: every title TMDB knows the film by, its original title,
+	 * alternatives and translations, so zurg can refuse a release an indexer
+	 * filed under this IMDb id that names another film. Absent when TMDB could
+	 * not be asked.
+	 */
+	titles?: string[];
 	/** Shows only. Empty while TMDB knows nothing aired, which zurg reads as nothing to do yet. */
 	seasons?: WantedSeason[];
 }
@@ -82,13 +89,14 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 	};
 	if (row.kind === 'movie') {
 		const movie = found?.movie_results?.[0];
-		return {
-			resolved:
-				typeof movie?.id === 'number'
-					? { ...base, ...year(movie.release_date), tmdb: movie.id }
-					: base,
-			settled: true,
-		};
+		if (typeof movie?.id !== 'number') return { resolved: base, settled: true };
+		const resolved = { ...base, ...year(movie.release_date), tmdb: movie.id };
+		try {
+			const info = await cache.getTmdbMovieInfo(movie.id, 'alternative_titles,translations');
+			return { resolved: { ...resolved, titles: filmTitles(info) }, settled: true };
+		} catch {
+			return { resolved, settled: false };
+		}
 	}
 	const tmdb = found?.tv_results?.[0]?.id;
 	if (typeof tmdb !== 'number') return { resolved: base, settled: true };
@@ -109,6 +117,17 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 		},
 		settled: true,
 	};
+}
+
+/** A film's titles as TMDB lists them, each once. */
+export function filmTitles(info: any): string[] {
+	const titles = [
+		info?.title,
+		info?.original_title,
+		...(info?.alternative_titles?.titles ?? []).map((t: any) => t?.title),
+		...(info?.translations?.translations ?? []).map((t: any) => t?.data?.title),
+	];
+	return [...new Set(titles.filter((t): t is string => typeof t === 'string' && !!t.trim()))];
 }
 
 /**

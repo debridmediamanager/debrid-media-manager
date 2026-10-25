@@ -1,0 +1,617 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [
+			{ "iso_3166_1": "PL", "title": "Les misérables: Nędznicy", "type": "" },
+			{ "iso_3166_1": "IR", "title": "Bi Navayan", "type": "" },
+			{ "iso_3166_1": "US", "title": "Le Mis", "type": "short title" },
+			{ "iso_3166_1": "KR", "title": "레 미제라블", "type": "" },
+			{
+				"iso_3166_1": "JP",
+				"title": "レ・ミゼラブル　デジタルリマスター／リミックス",
+				"type": "remaster"
+			},
+			{ "iso_3166_1": "AZ", "title": "Səfillər", "type": "" }
+		]
+	},
+	"backdrop_path": "/bsG8LkZx1ijrcf3fP6AvBlGTxkX.jpg",
+	"belongs_to_collection": null,
+	"budget": 61000000,
+	"genres": [
+		{ "id": 36, "name": "History" },
+		{ "id": 18, "name": "Drama" }
+	],
+	"homepage": "http://www.lesmiserablesfilm.com",
+	"id": 82695,
+	"imdb_id": "tt1707386",
+	"origin_country": ["GB", "US"],
+	"original_language": "en",
+	"original_title": "Les Misérables",
+	"overview": "An adaptation of the successful stage musical based on Victor Hugo's classic novel set in 19th-century France. Jean Valjean, a man imprisoned for stealing bread, must flee a relentless policeman named Javert. The pursuit consumes both men's lives, and soon Valjean finds himself in the midst of the student revolutions in France.",
+	"popularity": 11.5128,
+	"poster_path": "/6CuzBs2Lb8At7qQr64mLXg2RYRb.jpg",
+	"production_companies": [
+		{
+			"id": 33,
+			"logo_path": "/8lvHyhjr8oUKOOy2dKXoALWKdp0.png",
+			"name": "Universal Pictures",
+			"origin_country": "US"
+		},
+		{
+			"id": 10163,
+			"logo_path": "/16KWBMmfPX0aJzDExDrPxSLj0Pg.png",
+			"name": "Working Title",
+			"origin_country": "GB"
+		},
+		{
+			"id": 135040,
+			"logo_path": "/qhPk7bzBn1YFveIDhGjif21ENSj.png",
+			"name": "Cameron Mackintosh Ltd.",
+			"origin_country": "GB"
+		},
+		{
+			"id": 7295,
+			"logo_path": "/5MYE96QiE5a5oFhXxFb4y8ILSpw.png",
+			"name": "Relativity Media",
+			"origin_country": "US"
+		},
+		{
+			"id": 221513,
+			"logo_path": "/16KWBMmfPX0aJzDExDrPxSLj0Pg.png",
+			"name": "Working Title Films",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [
+		{ "iso_3166_1": "GB", "name": "United Kingdom" },
+		{ "iso_3166_1": "US", "name": "United States of America" }
+	],
+	"release_date": "2012-12-18",
+	"revenue": 442636309,
+	"runtime": 158,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Released",
+	"tagline": "Fight. Dream. Hope. Love.",
+	"title": "Les Misérables",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"homepage": "http://www.lesmiserablesfilm.com",
+					"overview": "An adaptation of the successful stage musical based on Victor Hugo's classic novel set in 19th-century France. Jean Valjean, a man imprisoned for stealing bread, must flee a relentless policeman named Javert. The pursuit consumes both men's lives, and soon Valjean finds himself in the midst of the student revolutions in France.",
+					"runtime": 158,
+					"tagline": "Fight. Dream. Hope. Love.",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"homepage": "",
+					"overview": "Francia, XIX° secolo. Jean Valjean, un uomo povero, ma volitivo, finisce in carcere dopo aver rubato del pane per nutrire la sorella. Dopo essere stato liberato ed essersi fatto una posizione nella società, l'uomo si prenderà cura della piccola orfana Cosette.",
+					"runtime": 158,
+					"tagline": "Combattimento. Sogno. Speranza. Amore.",
+					"title": "Les Misérables"
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "　　贫苦的冉·阿让（休·杰克曼 Hugh Jackman 饰）为了挨饿的孩子去偷面包，结果被判处19年的苦役。出狱后，走投无路的他偷走了收留他过夜的主教的银器潜逃，被警察捉回。主教声称银器是送给他的，使他免于被捕。主教的言行感化了他，他化名马德兰，从此洗心革面奋发向上开始新生活。但缉拿过他的警长沙威（罗素·克劳 Russell Crowe 饰）却一心要找他麻烦。在得知了芳汀（安妮·海瑟薇 Anne Hathaway 饰）的悲惨遭遇后，他承诺照顾她的私生女柯赛特（阿曼达·塞弗里德 Amanda Seyfried 饰）。八年后，柯赛特爱上了共和派青年马利尤斯（埃迪·雷德梅恩 Eddie Redmayne 饰），轰轰烈烈的巴黎人民起义爆发了，无赖德纳迪埃（萨莎·拜伦·科恩 Sacha Baron Cohen 饰）和他又狭路相逢，而多年来从未放弃追捕他的沙威又出现在他的面前……",
+					"runtime": 0,
+					"tagline": "",
+					"title": "悲惨世界"
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"homepage": "",
+					"overview": "Jean Valjean es enviado a prisión tras robar un trozo de pan con el que pretendía alimentar a sus sobrinos y a su hermana viuda. Adaptación del musical del mismo título que, a su vez, se basa en la obra de Victor Hugo \"Los miserables\"..",
+					"runtime": 158,
+					"tagline": "Lucha. Sueña. Desea. Ama",
+					"title": "Los miserables"
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"homepage": "",
+					"overview": "Valjean, der 19 Jahre für den Diebstahl eines Laibes Brot verbüßt hat, macht nach seiner Freilassung eine tiefgreifende religiöse Erfahrung. Er taucht unter und hat sich acht Jahre später zum wohltätigen Fabrikbesitzer gewandelt. Nach dem Tod von Fantine, die sich und ihre Tochter Cosette als Prostituierte durchbringen musste, kümmert sich Valjean um das Mädchen. Als junge Frau verliebt sich Cosette in den passionierten Revolutionär Marius. Die Revolte endet im Blutbad, dank Valjeans Edelmut werden die jungen Liebenden jedoch vereint.",
+					"runtime": 152,
+					"tagline": "Kämpfe. Träume. Hoffnung. Liebe.",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"homepage": "",
+					"overview": "Jean Valjean foi preso por roubar um pão. Décadas depois, foi libertado em condicional, mas viola-a e desaparece, disposto a esquecer quem foi e assumir uma vida nova, com um novo nome. Mas tudo se complica quando o Inspector Javert surge, disposto a tudo para o prender, ao mesmo tempo que ele procura assegurar o futuro da pequena Cosette, que lhe fora entregue pela mãe, Fantine, no leito de morte.",
+					"runtime": 152,
+					"tagline": "Lutar. Sonhar. Amar. Morrer.",
+					"title": "Os Miseráveis"
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"homepage": "",
+					"overview": "Jean Valjean olarak bilinen 24601 nolu mahkum, hapishaneden salınır. Kendisine yeni bir hayat kurmak ister ama müfettiş Javert'in gölgesi onu daima takip etmektedir. Jean Valjean Fantine'in kızı Cosette ile ilgilenmeyi kabul ettikten sonra ikisinin hayatı da tamamen değişecektir. Fransız Devrimi'nin arifesinde geçen hikaye ihtilalin her iki tarafının da yüzünü gözler önüne serer.",
+					"runtime": 0,
+					"tagline": "Savaş. Hayal. Umut. Aşk.",
+					"title": "Sefiller"
+				}
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"homepage": "http://www.lesmiserablesfilm.com/splashpage/",
+					"overview": "A XIX. századi Franciaországban játszódó történet az összetört álmokról, a viszonzatlan szerelemről, a szenvedélyről, az áldozatról és a megváltásról szól - az emberi lélek túlélésének időtlen testamentuma. Jackman alakítja Jean Valjeant, az egykori elítéltet, akit évtizedeken át üldöz a könyörtelen Javert felügyelő (Crowe), miután megszegi a próbaidejét. Amikor Valjean vállalja, hogy gondoskodik Fantine, a munkásnő leányáról, Cosette-ről, az életük örökre megváltozik",
+					"runtime": 0,
+					"tagline": "Harc. Álom. Remény. Szerelem.",
+					"title": "A nyomorultak"
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"homepage": "",
+					"overview": "'Les Miserables' gaat over Jean Valjean (Hugh Jackman), een man die lang in een strafkamp heeft gezeten en na vrijlating uit de gevangenis besluit een beter mens te worden. Het verleden van Valjean laat hem echter niet zomaar met rust, en de Fransman wordt gedwongen te vluchten van de meedogenloze agent Javert (Russell Crowe) die hem wil oppakken wegens oplichting.",
+					"runtime": 0,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"homepage": "",
+					"overview": "Ex-fången Jean Valjean är jagad sedan årtionden av den hänsynslösa polismannen Javert efter att han en gång brutit mot sin villkorliga frigivning. När Valjean går med på att ta hand om fabriksarbetaren Fantines unga dotter, Cosette, förändras deras liv för alltid.",
+					"runtime": 158,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"homepage": "",
+					"overview": "Франция, начало XIX века. Беглый каторжник Жан Вальжан, приговорённый к тюремному заключению, вынужден долгие годы скрываться от жестокого правосудия. Инспектор парижской полиции Жавер считает его поимку делом всей своей жизни. После смерти Фантины — женщины, за судьбу которой Жан Вальжан считал себя в ответе, — единственным близким ему человеком остается её дочь Козетта. Ради счастья девушки Жан готов на все.",
+					"runtime": 158,
+					"tagline": "«Борьба. Мечта. Надежда. Любовь»",
+					"title": "Отверженные"
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"homepage": "",
+					"overview": "Dans la France du XIXème siècle, une histoire poignante de rêves brisés, d'amour malheureux, de passion, de sacrifice et de rédemption : l'affirmation intemporelle de la force inépuisable de l'âme humaine. Quand Jean Valjean promet à Fantine de sauver sa fille Cosette du destin tragique dont elle est elle-même victime, la vie du forçat et de la gamine va en être changée à tout jamais.",
+					"runtime": 150,
+					"tagline": "Un passé auquel il ne peut échapper. Un destin qu'elle ne peut changer. Et le rêve d'un avenir meilleur.",
+					"title": "Les Misérables"
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"homepage": "",
+					"overview": "Wspaniała adaptacja powieści Victora Hugo. Los francuskiego ludu, dotkniętego niesprawiedliwością społeczną, uosabia postać głównego bohatera, katorżnika Jeana Valjeana (Hugh Jackman), skazanego na ciężkie roboty za kradzież chleba. Wydźwignąwszy się z upadku dzięki pomocy biskupa, Jean odnajduje sens dobra, zdobywa wysoką pozycję społeczną i staje się protektorem skrzywdzonych i uciśnionych. Wciąż jednak prześladuje go inspektor policji Javert (Russell Crowe).",
+					"runtime": 157,
+					"tagline": "Walka, marzenie, nadzieja, miłość",
+					"title": "Nędznicy"
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"homepage": "",
+					"overview": "1800-luvun Ranskaan sijoittuva Les Misérables on tarina särkyneistä unelmista ja saavuttamattomasta rakkaudesta, intohimosta, uhrauksesta ja katumuksesta – ajaton kertomus ihmisen selviytymiskyvystä. Hugh Jackman näyttelee entistä vankia, Jean Valjeania, jota säälimätön poliisi Javert (Russell Crowe) jäljittää. Kun Valjean suostuu huolehtimaan tehtaassa raatavan Fantinen (Anne Hathaway) pienestä Cosette-tyttärestä, heidän elämänsä muuttuvat ikiajoiksi. Maailman kaikkien aikojen pisimmän ajan näyttämöillä pysytellyt musikaali on tällä kertaa siirtynyt valkokankaalle Tom Hooperin loisteliaana tulkintana Victor Hugon romaaniin pohjautuvasta tarinasta.",
+					"runtime": 159,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "DK",
+				"iso_639_1": "da",
+				"name": "Dansk",
+				"english_name": "Danish",
+				"data": {
+					"homepage": "",
+					"overview": "I det 19. århundredes Frankrig har den noble Jean Valjean skabt sig en succesfuld tilværelse med masser af indflydelse. Hvad ingen ved er, at Valjean kommer fra ludfattige kår og faktisk er en bortsluppen straffefange. Da den ihærdige politiinspektør Javert pludselig dukker op i Valjeans by, genkender han den tidligere indsatte, og snart sætter en årelang menneskejagt ind. Valjean undslipper i første omgang, men da han og adoptivdatteren Cosette mange år senere slår sig ned i Paris, forelsker hun sig i den unge revolutionær Marius, hvilket atter placerer Valjean i Javert's søgelys.",
+					"runtime": 158,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"homepage": "",
+					"overview": "Bývalý vězeň Jean Valjean, kterého ve Francii v 19. století dlouhá léta pronásleduje nelítostný policista Javert, souhlasí, že se postará o dceru továrního dělníka.",
+					"runtime": 157,
+					"tagline": "Boj, sny, naděje a láska.",
+					"title": "Bídníci"
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"homepage": "",
+					"overview": "‏עיבוד קולנועי לסיפור המפורסם על אהבה והקרבה פרי עטו של ויקטור הוגו. הגרסה המוזיקלית הראשונה של הסיפור הועלתה במסגרת הפקה בימתית ב-1985.",
+					"runtime": 0,
+					"tagline": "מלחמה. חלום. תקווה. אהבה.",
+					"title": "עלובי החיים"
+				}
+			},
+			{
+				"iso_3166_1": "GR",
+				"iso_639_1": "el",
+				"name": "ελληνικά",
+				"english_name": "Greek",
+				"data": {
+					"homepage": "",
+					"overview": "Το 1815 και ύστερα από δύο δεκαετίες στη φυλακή ο Γιάννης Αγιάννης απελευθερώνεται, αλλά παραβιάζει τους όρους της επιτήρησής του και ξεκινάει μια καινούργια ζωή με νέο όνομα. Κι ενώ ολόκληρη η Γαλλία συγκλονίζεται από τις βίαιες κοινωνικές αλλαγές, ο επιθεωρητής Ιαβέρης έχει κάνει σκοπό της ζωής του να τον βρει και να τον συλλάβει.",
+					"runtime": 157,
+					"tagline": "",
+					"title": "Οι Άθλιοι"
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"homepage": "",
+					"overview": "Les Miserables หรือ เหยื่ออธรรม สร้างจากวรรณกรรมอันเลื่องชื่อของฝรั่งเศสเมื่อปี 1862 ประพันธ์โดย วิคเตอร์ ฮูโก เนื้อเรื่องได้สะท้อนให้เห็นความทุกข์ยากของประชาชนซึ่งไม่ได้ความเป็นธรรม และความเท่าเทียมในสังคม แต่ในขณะเดียวกันก็สะท้อนให้เห็นความงดงามของจิตใจมนุษย์อันมีอิทธิพลผลักดันให้มนุษย์มุ่งมั่นที่จะกระทำความดีอย่างถึงที่สุด แม้ว่าจะต้องพบพานความยากลำบากก็ตาม",
+					"runtime": 0,
+					"tagline": "",
+					"title": "เหยื่ออธรรม"
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"homepage": "",
+					"overview": "빵 한 조각을 훔친 죄로 19년의 감옥살이를 한 장발장(휴 잭맨). 우연히 만난 신부의 손길 아래 구원을 받고 새로운 삶을 결심한다. 정체를 숨기고 마들렌이라는 새 이름으로 가난한 이들을 도우던 장발장은 운명의 여인, 판틴(앤 해서웨이)과 마주치고, 죽음을 눈앞에 둔 판틴은 자신의 유일한 희망인 딸 코제트(아만다 사이프리드)를 장발장에게 부탁한다. 그러나 코제트를 만나기도 전에 경감 자베르(러셀 크로우)는 장발장의 진짜 정체를 알아차리고, 오래된 누명으로 다시 체포된 장발장은 코제트를 찾아 탈옥을 감행하는데...",
+					"runtime": 158,
+					"tagline": "사랑과 용서, 구원과 희망을 향한 노래",
+					"title": "레미제라블"
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"homepage": "",
+					"overview": "Hlavným hrdinom muzikálu, natočenom podľa rovnomenného románu Victora Huga, je Jean Valjean, ktorý je odsúdený na galeje za to, že ukradol kúsok chleba. Po svojom prepustení sa z neho stáva skutočný zločinec, ktorý precitne zo svojich hriechov až keď biskup zaprie pred políciou jeho lúpež. Desať rokov potom sa stáva starostom mestečka Viga, veliteľom miestnej polície je však nanešťastie menovaný Inšpektor Javert, ktorý má s Valjeanom z galejí nevybavené účty.",
+					"runtime": 160,
+					"tagline": "Boj, sen, nádej, láska",
+					"title": "Bedári"
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"homepage": "",
+					"overview": "19世紀のフランス。パンを盗んだ罪で19年間の服役生活を送ったジャン・バルジャンは、ついに仮釈放されたものの、世間の風は冷たく、再び盗みを働いてしまう。しかし、その罪を見逃してくれた司教の温かい真心に触れて、彼は更生を心に誓う。名前もマドレーヌと改めて、こつこつと善行を積み重ねた彼は、やがて世間の人望を集める市長の座にまで上り詰めるが、昔の彼を知るジャベール警部が執拗にその後をつきまとう。",
+					"runtime": 158,
+					"tagline": "",
+					"title": "レ・ミゼラブル"
+				}
+			},
+			{
+				"iso_3166_1": "RO",
+				"iso_639_1": "ro",
+				"name": "Română",
+				"english_name": "Romanian",
+				"data": {
+					"homepage": "",
+					"overview": "În Franța secolului al XIX-lea, fostul prizonier Jean Valjean, urmărit de mulți ani de polițistul nemilos Javert, este de acord să aibă grijă de fiica unui lucrător în fabrică.",
+					"runtime": 0,
+					"tagline": "Luptă. Visează. Speră. Iubește.",
+					"title": "Mizerabilii"
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"homepage": "",
+					"overview": "Дія розвивається на початку XIX сторіччя. Побіжний каторжник Жан Вальжан, засуджений до тюремного ув'язнення, змушений довгі роки ховатися від жорстокого правосуддя. Інспектор паризької поліції Жавер вважає його упіймання справою всього свого життя. Після смерті Фантіни - жінки, за долю якої Жан Вальжан вважав себе відповідальним, - єдиною близькою йому людиною залишається її дочка Козетта. Заради щастя дівчини Жан готовий на все.",
+					"runtime": 0,
+					"tagline": "Битва. Мрія. Надія. Любов.",
+					"title": "Знедолені"
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"homepage": "",
+					"overview": "Na França do século 19, o ex-prisioneiro Jean Valjean, perseguido ao longo de décadas pelo impiedoso policial Javert por ter violado sua liberdade condicional, busca redenção pelo seu passado e decide acolher a filha da prostituta Fantine.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Os Miseráveis"
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "改編自雨果的同名小說，背景為十九世紀法國大革命時期。尚萬強(休傑克曼飾)假釋出獄後重新做人，隱姓埋名當上了市長。但他違反假釋規定，遭到警探賈維(羅素克洛飾)追捕。尚萬強答應女工芳婷(安海瑟威飾)會照顧她女兒珂賽特;芳婷死後，尚萬強帶著珂賽特逃離養父母，展開逃亡生活…",
+					"runtime": 158,
+					"tagline": "奮鬥 夢想 希望 真愛",
+					"title": "悲慘世界"
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"homepage": "",
+					"overview": "На фона на събитията във Франция през XIX век, Клетниците разказва една завладяваща история за несбъднати мечти, несподелена любов, страст, саможертва и изкупление – неподвластно на времето свидетелство за оцеляването на човешкия дух. Джакман изпълнява ролята на бившия затворник Жан Валжан, преследван в продължение на десетилетия от безпощадния полицай Жавер. Когато Валжан се съгласява да се грижи за Козет - дъщеря на болната работничка във фабрика Фантин, животът на всички се променя завинаги.",
+					"runtime": 157,
+					"tagline": "Бори се. Мечтай. Вярвай. Обичай.",
+					"title": "Клетниците"
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"homepage": "",
+					"overview": "El director Tom Hooper, después de triunfar con 'El discurso del rey', se sumerge en la traslacción a la gran pantalla del musical del mismo nombre que tomaba como base la célebre novela publicada por Victor Hugo en 1862. La película narra la historia de Jean Valjean (Hugh Jackman, 'X-Men') y su particular camino de redención, desde sus días como prisionero en una cárcel hasta convertirse, con otra identidad, en alcalde de una ciudad francesa. Vlajean se hará cargo de la hija ilegítima de una mujer, Fantine (Anne Hathaway, 'El diablo viste de Prada') que es apresada después de ser obligada a prostituirse para poder ganar dinero con el que mantener a su criatura. Los años pasarán y esa niña se convertirá en la bella Cosette (Amanda Seyfried, 'Querido John'), al tiempo que las suspicacias del inspector Javert (Russel Crowe, 'Gladiator') crecerán en lo que respecta al pasado de Valjean.",
+					"runtime": 157,
+					"tagline": "Lucha. Sueña. Desea. Ama",
+					"title": "Los miserables"
+				}
+			},
+			{
+				"iso_3166_1": "LV",
+				"iso_639_1": "lv",
+				"name": "Latviešu",
+				"english_name": "Latvian",
+				"data": {
+					"homepage": "",
+					"overview": "Filmas darbība risinās 19. Gs. Francijā. Žans Valžāns, kuru jau gadiem meklē nežēlīgais policists Žavērs, apsola parūpēties par fabrikas strādnieces Fantinas meitu Kozeti. Šis liktenīgais lēmums izmaina daudzas dzīves.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Nožēlojamie"
+				}
+			},
+			{
+				"iso_3166_1": "LT",
+				"iso_639_1": "lt",
+				"name": "Lietuvių",
+				"english_name": "Lithuanian",
+				"data": {
+					"homepage": "",
+					"overview": "Filmas pasakoja tragišką istoriją, nutikusią XIX amžiaus Prancūzijoje. Norėdamasišmaitinti šeimą Žanas Valžanas (vaidina akt. Hugh Jackman) apvagia karavaną iruž tai beveik dviem dešimtmečiams atsiduria kalėjime. Visų atstumtas, pamirštas iriš kalėjimo paleistas Žanas neatsispiria pagundai ir vagia dar sykį, taippatraukdamas policijos inspektoriaus Žavero (vaidina akt. Russell Crowe) dėmesį.Slapstydamasis, bėgdamas nuo įstatymo Žanas tikisi išvengti teisingumo, tačiaurūstusis Žaveras vagies nubaudimą laiko garbės reikalu ir net neketina nutraukti jomedžioklės. Pavargęs nuo savo praeities šleifo, bandydamas ištaisyti anksčiau padarytas klaidas,Žanas ryžtasi kardinaliems gyvenimo pokyčiams. Kaltindamas save dėl tragiškofabriko darbininkės Fantinos (vaidina akt. Anne Hathaway) likimo vyras imasigloboti jos dukterį Kozetę (vaidina akt. Amanda Seyfried), vardan kurios laimės irgeresnio gyvenimo ryžtasi viskam...",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Vargdieniai"
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "故事發生在 19 世紀的法國。窮苦農民 Jean Valjean（曉治積曼\r 飾）因偷麵包而入獄，監禁期間屢次無視法律，於是展開長達二十年的逃亡生涯，並受到鐵面警官 Javert（羅素高爾\r 飾）鍥而不捨地追捕。\r 期間遇上女工 Fantine（安妮夏菲維\r 飾），早被男友拋棄的 Fantine 為了自己和幼女 Cosette 的生活，被迫出賣頭髮和身體，最後更積勞成疾去世，Jean 決定撫養 Cosette。\r 多年後，當 Cosette（雅曼達施菲\r 飾）長大成人，當時的巴黎更趨動盪不安。\r 而一場改變他們和法國人民命運的重大革命，正山雨欲來…",
+					"runtime": 0,
+					"tagline": "鬥志高昂 夢想啟航 愛有希望",
+					"title": "孤星淚"
+				}
+			},
+			{
+				"iso_3166_1": "NO",
+				"iso_639_1": "no",
+				"name": "Norsk",
+				"english_name": "Norwegian",
+				"data": {
+					"homepage": "",
+					"overview": "Handlingen i Les Miserables er lagt til 1800-tallets Frankrike. Filmen er en oppslukende fortelling om brustne drømmer og ugjengjeldt kjærlighet, om lidenskap, offer og frelse - et tidløst testament til menneskets overlevelsesvilje. Eksfangen Jean Valjean som jaktes på i flere tiår av den nådeløse politimannen Javert. Når Valjean tar på seg ansvaret for å passe på den unge datteren til fabrikkarbeideren Fantine, endres livene deres for alltid.",
+					"runtime": 157,
+					"tagline": "",
+					"title": "Les Miserables"
+				}
+			},
+			{
+				"iso_3166_1": "GE",
+				"iso_639_1": "ka",
+				"name": "ქართული",
+				"english_name": "Georgian",
+				"data": {
+					"homepage": "",
+					"overview": "მეცხრამეტე საუკუნის ბოლო. ევროპა რევოლუციის პირას დგას. ჟან ვალჟანი – განდევნილი, რომელსაც პატიმრობა აქვს მისჯილი და იძულებულია სასტიკ სამართალს დაემალოს. პარიზის პოლიციის დეპარტამენტის უფროსი ჟავერი მის დაჭერას თავისი ცხოვრების მათავარ საქმედ თვლის. ჟანის შეყვარებულის დაღუპვის შემდეგ, მისთვის ერთადერთი ახლობელი ადამიანი მისი ქალიშვილი კოზეტია. ის ყველაფერზე წავა გოგონას ბედნიერებისთვის…",
+					"runtime": 0,
+					"tagline": "",
+					"title": "საბრალონი"
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": {
+					"homepage": "",
+					"overview": "قرن نوزدهم، فرانسه. ژان والژان (با بازی هیو جکمن)، مردی است که بخاطر سرقتی که انجام داده، سال هاست از چنگ پلیسی بی رحم بنام “ژاور” (با بازی راسل کرو) می گریزد. او سرپرستی دختر یتیمی بنام “کزت” را به عهده می گیرد و این تصمیم او زندگی هر دوی آن ها را برای همیشه تغییر می دهد…",
+					"runtime": 0,
+					"tagline": "",
+					"title": "بینوایان"
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"homepage": "",
+					"overview": "مقتبس من مسرحية موسيقية ناجحة مستوحاة من رواية فيكتور هوجو الكلاسيكية التي تدور أحداثها في فرنسا في القرن التاسع عشر ، حيث يسعى سجين مُفرج عنه يُدعى جان فالجيان للخلاص.",
+					"runtime": 0,
+					"tagline": "يقاتل. حلم. أمل. حب.",
+					"title": "البُؤساء"
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"homepage": "",
+					"overview": "Tác phẩm chuyển thể từ tiểu thuyết cùng tên của đại văn hào Victor Hugo. Trong tác phẩm phim âm nhạc chuyển thể này Hugh Jackman vào vai nhân vật chính Jean Valjean – người tù khốn khổ trong cuộc chiến đấu giành lại tự do và cứu rỗi những người dân nghèo khốn cùng. Poster mới nhất chính là hình ảnh về Jean Valjean, và như những poster trước đó, trọng tâm lại dồn vào đôi mắt với cái nhìn đầy biểu cảm. Cùng với Hugh Jackman trong phim còn có sự tham gia của Russell Crowe, Anne Hathaway, Sacha Baron Cohen, và Eddie Redmayne.",
+					"runtime": 0,
+					"tagline": "Tranh đấu. Mơ ước. Khát vọng. Tình yêu.",
+					"title": "Những Người Khốn Khổ"
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "ca",
+				"name": "Català",
+				"english_name": "Catalan",
+				"data": {
+					"homepage": "",
+					"overview": "Jean Valjean és enviat a la presó després de robar un tros de pa amb què pretenia alimentar els seus nebots i la seva germana vídua. Adaptació del musical del mateix títol que, alhora, es basa en l'obra de Victor Hugo \"Els miserables\".",
+					"runtime": 0,
+					"tagline": "Lluita. Somia. Vola. Estima.",
+					"title": "Els miserables"
+				}
+			},
+			{
+				"iso_3166_1": "CA",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"homepage": "",
+					"overview": "Dans la France du 19e siècle, une histoire poignante de rêves brisés, d'amour malheureux, de passion, de sacrifice et de rédemption : l'affirmation intemporelle de la force inépuisable de l'âme humaine. Quand Jean Valjean promet à Fantine de sauver sa fille Cosette du destin tragique dont elle est elle-même victime, la vie du forçat et de la gamine va en être changée à tout jamais.",
+					"runtime": 158,
+					"tagline": "Combat. Rêve. Espoir. Amour.",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "HR",
+				"iso_639_1": "hr",
+				"name": "Hrvatski",
+				"english_name": "Croatian",
+				"data": {
+					"homepage": "",
+					"overview": "Radi se o revolucionarnoj priči u kojoj se bivši zatvorenik Jean Valjean, nakon odsluženja kazne u zatvoru , pokušava vratiti normalnom životu i povratiti nekadašnji ugled. No, radnja se odvija u vrijeme Pariškog ustanka, 1832. godine, pa Valjean biva upleten u ovaj posljednji pokušaj rušenja francuske monarhije. Jadnici prenose poruku o bitci običnih ljudi za ravnopravnost, moral i etično društvo, za ideale koji niti danas još nisu posve dostignuti i ostaju za mnoge gotovo jednako daleki i neuhvatljivi kao i u vrijeme pariških ustanaka u 19. stoljeću.",
+					"runtime": 0,
+					"tagline": "Adaptacija najpopularnijeg mjuzikla svih vremena.",
+					"title": "Jadnici"
+				}
+			},
+			{
+				"iso_3166_1": "EE",
+				"iso_639_1": "et",
+				"name": "Eesti",
+				"english_name": "Estonian",
+				"data": {
+					"homepage": "",
+					"overview": "Pole siis ka midagi imestada, et sedapuhku on tee suurele kinoekraanile rajanud selle klassikalise loo muusikaliversioon, milles võtavad igihaljad laulud käsile ning annavad nendele uue, värske hingamise sellised maailmakuulsad staarid nagu Hugh Jackman, Russell Crowe, Anne Hathaway, Amanda Seyfried, Eddie Redmayne, Sacha Baron Cohen, Helena Bonham Carter ja paljud teised. Linaloo lavastajaks on filmiga \"Kuninga kõne\" nii parima režissööri Oscari, kui ka kõik teised võimalikud auhinnad endale korjanud Tom Hooper, kes kasutas seda linalugu filmilindile talletades lihtsat ent samas äärmiselt harva kasutatavat meetodit - absoluutselt kõik näitlejad laulsid oma laulunumbrid otse võtteplatsil kaamerate surisedes ega ei kasutanud selleks eelnevalt stuudios salvestatud laulude fonogramme. Esituste ausus ja autentsus jõuavad sel moel sootuks paremini ning vahetumalt kinopublikuni.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Hüljatud"
+				}
+			},
+			{
+				"iso_3166_1": "RS",
+				"iso_639_1": "sr",
+				"name": "Srpski",
+				"english_name": "Serbian",
+				"data": {
+					"homepage": "",
+					"overview": "Ова спектакуларна филмска адаптација чувеног позоришног мјузикла прати бившег затвореника Жана Валжана у његовој потрази за искупљењем у Француској из 19. века. Након што прекрши условну слободу, Валжан успева да изгради нови идентитет као поштовани градоначелник, док истовремено помаже сиромашној Фантини и обећава да ће се бринути о њеној малој ћерки Козети. Његов нови живот је у сталној опасности од окрутног инспектора Жавера, који сматра да криминалац никада не може да се промени. Радња достиже врхунац током Јунског устанка у Паризу 1932. године, где се преплићу судбине младих револуционара, сломљених срца и људи који се боре за слободу.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Јадници"
+				}
+			}
+		]
+	},
+	"video": false,
+	"vote_average": 7.289,
+	"vote_count": 5731
+}

@@ -1,10 +1,22 @@
+import anAffair from '@/test/fixtures/metadata/tmdb-movie-253822-an-affair-titles.json';
+import lesMiserables from '@/test/fixtures/metadata/tmdb-movie-82695-les-miserables-titles.json';
 import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
 import dailyShow from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
 import bakeOffAppended from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off-appended.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { airedSeasons, resolveWanted, resolveWantedReused, seasonsTmdbLacks } from './wanted';
+import {
+	airedSeasons,
+	filmTitles,
+	resolveWanted,
+	resolveWantedReused,
+	seasonsTmdbLacks,
+} from './wanted';
 
-const cache = vi.hoisted(() => ({ searchTmdbByImdb: vi.fn(), getTmdbTvInfo: vi.fn() }));
+const cache = vi.hoisted(() => ({
+	searchTmdbByImdb: vi.fn(),
+	getTmdbTvInfo: vi.fn(),
+	getTmdbMovieInfo: vi.fn(),
+}));
 vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => cache }));
 
 const row = (over: Partial<Parameters<typeof resolveWanted>[0]> = {}) => ({
@@ -56,6 +68,8 @@ describe('resolveWanted', () => {
 	beforeEach(() => {
 		cache.searchTmdbByImdb.mockReset();
 		cache.getTmdbTvInfo.mockReset();
+		cache.getTmdbMovieInfo.mockReset();
+		cache.getTmdbMovieInfo.mockResolvedValue({ title: 'x' });
 	});
 
 	it("gives a show TMDB's and TVDB's ids beside the aired seasons", async () => {
@@ -106,6 +120,8 @@ describe('resolveWantedReused', () => {
 	beforeEach(() => {
 		cache.searchTmdbByImdb.mockReset();
 		cache.getTmdbTvInfo.mockReset();
+		cache.getTmdbMovieInfo.mockReset();
+		cache.getTmdbMovieInfo.mockResolvedValue({ title: 'x' });
 	});
 
 	it('asks the metadata cache once for every poll inside half an hour', async () => {
@@ -134,6 +150,8 @@ describe('seasonsTmdbLacks', () => {
 	beforeEach(() => {
 		cache.searchTmdbByImdb.mockReset();
 		cache.getTmdbTvInfo.mockReset();
+		cache.getTmdbMovieInfo.mockReset();
+		cache.getTmdbMovieInfo.mockResolvedValue({ title: 'x' });
 	});
 
 	it('names the Sonarr seasons TMDB has nothing aired in', async () => {
@@ -151,5 +169,47 @@ describe('seasonsTmdbLacks', () => {
 		await expect(
 			seasonsTmdbLacks([{ imdbId: 'tt9999999', title: 'Unknown', seasons: [1] }])
 		).resolves.toEqual([]);
+	});
+});
+
+// DrunkenSlug files Przesluchanie (1982) under An Affair (1982, tt0186488), and
+// zurg fetched it on 2026-10-25: the year agrees, only the titles tell them apart.
+describe('film titles', () => {
+	beforeEach(() => {
+		cache.searchTmdbByImdb.mockReset();
+		cache.getTmdbMovieInfo.mockReset();
+	});
+
+	it('sends every title TMDB knows a film by', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({
+			movie_results: [{ id: anAffair.id, release_date: anAffair.release_date }],
+		});
+		cache.getTmdbMovieInfo.mockResolvedValue(anAffair);
+		const item = await resolveWanted(
+			row({ imdbId: 'tt0186488', kind: 'movie', title: 'An Affair' })
+		);
+		expect(item.titles).toContain('Relasyon');
+		expect(item.titles?.[0]).toBe('An Affair');
+		expect(cache.getTmdbMovieInfo).toHaveBeenCalledWith(
+			253822,
+			'alternative_titles,translations'
+		);
+	});
+
+	it('lists alternatives and translations once each', () => {
+		const titles = filmTitles(lesMiserables);
+		expect(titles).toContain('Les Misérables');
+		expect(titles).toContain('Le Mis');
+		expect(titles).toContain('Os Miseráveis');
+		expect(new Set(titles).size).toBe(titles.length);
+	});
+
+	it('leaves titles out, and does not keep the answer, when TMDB fails', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ movie_results: [{ id: anAffair.id }] });
+		cache.getTmdbMovieInfo.mockRejectedValueOnce(new Error('down'));
+		cache.getTmdbMovieInfo.mockResolvedValue(anAffair);
+		const film = row({ imdbId: 'tt0186488', kind: 'movie', title: 'An Affair' });
+		expect((await resolveWantedReused(film, 0)).titles).toBeUndefined();
+		expect((await resolveWantedReused(film, 1)).titles).toContain('Relasyon');
 	});
 });
