@@ -205,7 +205,7 @@ export const Browse: FunctionComponent = () => {
 							return (
 								<div key={listName}>
 									<h2 className="mt-3 mb-1 text-base font-bold">{listName}</h2>
-									<div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+									<div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
 										{data[listName].map((key: string) => {
 											const item = parseBrowseKey(key);
 											if (!item) return null;

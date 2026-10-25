@@ -101,7 +101,7 @@ export const Genre: FunctionComponent = () => {
 					section.data.length > 0 && (
 						<div key={section.title}>
 							<h2 className="mt-3 mb-1 text-base font-bold">{section.title}</h2>
-							<div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+							<div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
 								{section.data.map((item) => {
 									const key = formatMediaKey(item);
 									if (!key) return null;
