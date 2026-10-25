@@ -1,10 +1,11 @@
+import Poster from '@/components/poster';
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { WantedImportResponse } from '@/pages/api/wanted/import';
 import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
 import { deflatedZipMember } from '@/utils/zipEntry';
-import { BookmarkCheck, Home, Loader2, RefreshCw, Trash2, Upload } from 'lucide-react';
+import { BookmarkCheck, Film, Home, Loader2, RefreshCw, Trash2, Tv, Upload } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -13,8 +14,7 @@ import { toast, Toaster } from 'react-hot-toast';
 const when = (iso: string) => new Date(iso).toLocaleString();
 
 function seasonsLabel(item: WantedItemResponse): string {
-	if (item.kind === 'movie') return 'Film';
-	if (item.seasons === null) return 'Every season, new ones too';
+	if (item.seasons === null) return 'All seasons';
 	return `Season${item.seasons.length > 1 ? 's' : ''} ${item.seasons.join(', ')}`;
 }
 
@@ -49,6 +49,7 @@ export default function WantedPage() {
 	const [busy, setBusy] = useState<string | null>(null);
 	const [importing, setImporting] = useState(false);
 	const [imported, setImported] = useState<string | null>(null);
+	const [tab, setTab] = useState<WantedItemResponse['kind']>('movie');
 
 	const load = useCallback(async () => {
 		setError('');
@@ -113,6 +114,7 @@ export default function WantedPage() {
 		.filter((d): d is string => !!d)
 		.sort()
 		.at(-1);
+	const shown = items?.filter((i) => i.kind === tab);
 
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
@@ -121,7 +123,7 @@ export default function WantedPage() {
 			</Head>
 			<Toaster position={toasterPosition()} />
 
-			<div className="w-full max-w-3xl">
+			<div className="w-full max-w-6xl">
 				<div className="mb-4 flex items-center justify-between">
 					<h1 className="flex items-center text-xl font-bold text-white">
 						<BookmarkCheck className="mr-2 h-5 w-5 text-rose-400" />
@@ -221,40 +223,72 @@ export default function WantedPage() {
 						{items?.length === 0 && (
 							<p className="text-center text-sm text-gray-400">Nothing wanted yet.</p>
 						)}
-						<ul className="space-y-2">
-							{items?.map((item) => (
-								<li
-									key={item.id}
-									className="flex items-center justify-between rounded border border-gray-700 bg-gray-800/40 p-3"
-								>
-									<div className="min-w-0">
-										<Link
-											href={
-												item.kind === 'movie'
-													? `/movie/${item.imdbId}`
-													: `/show/${item.imdbId}/${item.seasons?.[0] ?? 1}`
-											}
-											className="block truncate text-sm text-white hover:underline"
-										>
+						{!!items?.length && (
+							<div className="mb-3 flex gap-2" role="tablist">
+								{(
+									[
+										['movie', 'Movies', Film],
+										['show', 'Shows', Tv],
+									] as const
+								).map(([kind, label, Icon]) => (
+									<button
+										key={kind}
+										role="tab"
+										aria-selected={tab === kind}
+										onClick={() => setTab(kind)}
+										className={`haptic-sm flex items-center rounded border-2 px-3 py-1 text-sm transition-colors ${
+											tab === kind
+												? 'border-rose-500 bg-rose-900/40 text-rose-100'
+												: 'border-gray-600 bg-gray-800/40 text-gray-300 hover:bg-gray-700/50'
+										}`}
+									>
+										<Icon className="mr-1 h-4 w-4" />
+										{label} ({items.filter((i) => i.kind === kind).length})
+									</button>
+								))}
+							</div>
+						)}
+						{!!items?.length && shown?.length === 0 && (
+							<p className="text-center text-sm text-gray-400">
+								No {tab === 'movie' ? 'films' : 'shows'} wanted.
+							</p>
+						)}
+						<ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+							{shown?.map((item) => (
+								<li key={item.id} className="group relative min-w-0">
+									<Link
+										href={
+											item.kind === 'movie'
+												? `/movie/${item.imdbId}`
+												: `/show/${item.imdbId}/${item.seasons?.[0] ?? 1}`
+										}
+										className="block"
+									>
+										<Poster imdbId={item.imdbId} title={item.title} />
+										{/* Radarr/Sonarr's bar under the poster: green once zurg fetched it. */}
+										<div
+											className={`h-1 rounded-b ${item.fulfilledAt ? 'bg-green-500' : 'bg-rose-500'}`}
+										/>
+										<span className="mt-1 block truncate text-xs text-white group-hover:underline">
 											{item.title}
-										</Link>
-										<span className="text-xs text-gray-400">
-											{seasonsLabel(item)} ·{' '}
-											<span title={when(item.fulfilledAt ?? item.createdAt)}>
-												{item.fulfilledAt
-													? `fetched ${shortDate(item.fulfilledAt)}`
-													: `since ${shortDate(item.createdAt)}`}
-											</span>
 										</span>
-									</div>
+									</Link>
+									<span className="block truncate text-[11px] text-gray-400">
+										{item.kind === 'show' && <>{seasonsLabel(item)} · </>}
+										<span title={when(item.fulfilledAt ?? item.createdAt)}>
+											{item.fulfilledAt
+												? `fetched ${shortDate(item.fulfilledAt)}`
+												: `since ${shortDate(item.createdAt)}`}
+										</span>
+									</span>
 									<button
 										onClick={() => remove(item)}
 										disabled={busy === item.imdbId}
-										className="haptic-sm ml-3 rounded border-2 border-red-600 bg-red-900/30 p-2 text-red-100 transition-colors hover:bg-red-800/50 disabled:opacity-50"
+										className="haptic-sm absolute top-1 right-1 rounded border-2 border-red-600 bg-red-900/80 p-1 text-red-100 transition-colors hover:bg-red-800 disabled:opacity-50"
 										title="Remove from your wanted list"
 										aria-label={`Remove ${item.title}`}
 									>
-										<Trash2 className="h-4 w-4" />
+										<Trash2 className="h-3.5 w-3.5" />
 									</button>
 								</li>
 							))}
