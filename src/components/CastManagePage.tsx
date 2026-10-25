@@ -4,7 +4,6 @@ import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { toasterPosition } from '@/utils/toastOptions';
 import { Eye, Trash2 } from 'lucide-react';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import ptt from 'parse-torrent-title';
 import { ComponentProps, useEffect, useState } from 'react';
@@ -42,7 +41,6 @@ export interface CastManageConfig {
 	loginProvider: ComponentProps<typeof CastLoginRequired>['provider'];
 	apiPrefix: string;
 	castPath: string;
-	logo: string;
 	logTag: string;
 	// Real-Debrid's original endpoints: GET with a Bearer header, and a POST
 	// delete carrying `token`. Every other provider's links endpoint is
@@ -212,7 +210,7 @@ export function CastManagePage({
 		return () => {
 			active = false;
 		};
-	}, [groupedLinks, mediaInfo]);
+	}, [groupedLinks, mediaInfo, config.logTag]);
 
 	const getStremioUrl = (link: CastedLink): string => {
 		const baseImdbId = link.imdbId.split(':')[0];
@@ -434,7 +432,6 @@ export function CastManagePage({
 			<Head>
 				<title>{titleText}</title>
 			</Head>
-			<Image width={100} height={100} src={config.logo} alt="logo" className="mb-4" />
 			<Toaster position={toasterPosition()} />
 
 			{selectedLinks.size > 0 && (
@@ -448,16 +445,14 @@ export function CastManagePage({
 				</div>
 			)}
 
-			<div className="mb-6 flex flex-col items-center gap-4">
-				<h1 className="text-xl font-bold text-white">{titleText}</h1>
-			</div>
+			<h1 className="mb-4 text-xl font-bold text-white">Casted links</h1>
 
 			{loading ? (
 				<p className="text-white">Loading...</p>
 			) : Object.keys(groupedLinks).length === 0 ? (
 				<p className="text-white">No casted links found</p>
 			) : (
-				<div className="grid w-full max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid w-full max-w-6xl items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{Object.entries(groupedLinks).map(([imdbId, links]) => {
 						const allSelected = links.every((link) => selectedLinks.has(link.url));
 						const someSelected = links.some((link) => selectedLinks.has(link.url));
@@ -468,9 +463,34 @@ export function CastManagePage({
 							metadata?.type === 'show' ||
 							links.some((link) => link.imdbId.split(':').length === 3);
 						return (
-							<div key={imdbId} className="rounded-lg bg-gray-800 p-4">
-								<div className="mb-4 flex items-center justify-between">
-									<label className="flex cursor-pointer items-center gap-2">
+							<div key={imdbId} className="rounded-lg bg-gray-800 p-3">
+								<div className="mb-2 flex items-center gap-3">
+									{/* The thumbnail and title stay the card's select-all toggle */}
+									<button
+										type="button"
+										onClick={() => toggleGroupSelection(imdbId)}
+										aria-pressed={allSelected}
+										aria-label={`Toggle selection for ${isShowGroup ? 'show' : 'movie'} ${displayTitle}`}
+										className="group flex min-w-0 flex-1 items-center gap-3 text-left focus:outline-hidden"
+									>
+										<span className="block w-14 shrink-0">
+											<Poster imdbId={imdbId} title={displayTitle} />
+										</span>
+										<span className="min-w-0 text-base font-semibold text-gray-100 group-hover:text-white">
+											{displayTitle}
+										</span>
+									</button>
+									<Link
+										href={`/x/${imdbId}`}
+										className={`haptic-sm shrink-0 rounded px-3 py-1 text-sm text-white ${theme.castButton}`}
+										title={`Cast other torrents for ${displayTitle}`}
+										aria-label={`Cast other torrents for ${displayTitle}`}
+									>
+										Cast other torrents
+									</Link>
+								</div>
+								{links.length > 1 && (
+									<label className="mb-2 flex w-max cursor-pointer items-center gap-2">
 										<input
 											type="checkbox"
 											checked={allSelected}
@@ -487,29 +507,7 @@ export function CastManagePage({
 											Select All
 										</span>
 									</label>
-									<Link
-										href={`/x/${imdbId}`}
-										className={`haptic-sm rounded px-3 py-1 text-sm text-white ${theme.castButton}`}
-										title={`Cast other torrents for ${displayTitle}`}
-										aria-label={`Cast other torrents for ${displayTitle}`}
-									>
-										Cast other torrents
-									</Link>
-								</div>
-								<div className="mb-4 flex justify-center">
-									<button
-										type="button"
-										onClick={() => toggleGroupSelection(imdbId)}
-										aria-pressed={allSelected}
-										aria-label={`Toggle selection for ${isShowGroup ? 'show' : 'movie'} ${displayTitle}`}
-										className="group flex w-full max-w-[220px] flex-col items-center focus:outline-hidden"
-									>
-										<Poster imdbId={imdbId} title={displayTitle} />
-										<span className="mt-2 w-full text-center text-sm font-semibold text-gray-100 group-hover:text-white">
-											{displayTitle}
-										</span>
-									</button>
-								</div>
+								)}
 								<div className="sibling-space-y-2 max-h-[300px] overflow-y-auto">
 									{links.map((link) => {
 										const episodeLabel = formatEpisodeLabel(link.imdbId);
@@ -532,26 +530,34 @@ export function CastManagePage({
 															<span
 																className={`text-sm font-medium ${theme.episode}`}
 															>
-																{episodeLabel}
+																{episodeLabel} ·{' '}
+																{formatSize(link.size)}
 															</span>
 														)}
 														<span className="text-sm [overflow-wrap:anywhere] text-gray-300">
 															{getFilename(link.url)}
-														</span>
-														<span className="text-xs text-gray-300">
-															{formatSize(link.size)}
+															{!episodeLabel && (
+																<span className="text-xs whitespace-nowrap text-gray-400">
+																	{' '}
+																	· {formatSize(link.size)}
+																</span>
+															)}
 														</span>
 													</div>
 												</div>
 												<div className="flex shrink-0 gap-2">
 													<a
 														href={getStremioUrl(link)}
+														aria-label={`Open ${episodeLabel ?? displayTitle} in Stremio`}
+														title="Open in Stremio"
 														className="haptic-sm rounded bg-cyan-700 px-3 py-1 text-sm text-white hover:bg-cyan-800"
 													>
 														<Eye className="h-4 w-4" />
 													</a>
 													<button
 														onClick={() => handleDelete(link)}
+														aria-label={`Delete casted link ${getFilename(link.url)}`}
+														title="Delete casted link"
 														className="haptic-sm rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
 													>
 														<Trash2 className="h-4 w-4" />

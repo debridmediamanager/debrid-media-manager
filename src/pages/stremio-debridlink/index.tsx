@@ -23,7 +23,6 @@ const config: CastPageConfig = {
 		buttonText: 'text-sky-100',
 		alert: 'text-sky-400',
 		alertBox: 'border-sky-500 bg-sky-900/20',
-		popcorn: 'text-sky-500',
 	},
 	notice: (
 		<div className="mt-4 max-w-md rounded border border-sky-700 bg-sky-900/20 p-3 text-center text-xs text-sky-100">

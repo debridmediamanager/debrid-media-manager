@@ -10,12 +10,11 @@ const config: CastManageConfig = {
 	loginProvider: 'premiumize',
 	apiPrefix: 'stremio-pm',
 	castPath: '/stremio-premiumize',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
 	logTag: 'PremiumizeStremioManage',
 	theme: {
-		checkbox: 'text-yellow-600 focus:ring-yellow-500',
-		castButton: 'bg-yellow-700 hover:bg-yellow-800',
-		episode: 'text-yellow-300',
+		checkbox: 'text-red-600 focus:ring-red-500',
+		castButton: 'bg-red-700 hover:bg-red-800',
+		episode: 'text-red-300',
 	},
 };
 

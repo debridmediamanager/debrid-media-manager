@@ -106,7 +106,7 @@ describe('StremioPage', () => {
 		const webHref = webLink?.getAttribute('href') || '';
 		expect(decodeURIComponent(webHref)).toContain('/api/stremio/token123/manifest.json');
 
-		expect(screen.getByText(/Warning: Never share this install URL/i)).toBeInTheDocument();
+		expect(screen.getByText(/Private to your account: never share it/i)).toBeInTheDocument();
 		expect(screen.getByText(/api\/stremio\/token123\/manifest\.json/i)).toBeInTheDocument();
 	});
 });

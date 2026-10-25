@@ -21,7 +21,6 @@ const config: CastPageConfig = {
 		buttonText: 'text-orange-100',
 		alert: 'text-orange-400',
 		alertBox: 'border-orange-500 bg-orange-900/20',
-		popcorn: 'text-orange-500',
 	},
 };
 

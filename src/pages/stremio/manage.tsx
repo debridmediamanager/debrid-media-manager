@@ -10,7 +10,6 @@ const config: CastManageConfig = {
 	loginProvider: 'realdebrid',
 	apiPrefix: 'stremio',
 	castPath: '/stremio',
-	logo: 'https://static.debridmediamanager.com/greenlogo.jpeg',
 	logTag: 'StremioManage',
 	legacyRdApi: true,
 	theme: {

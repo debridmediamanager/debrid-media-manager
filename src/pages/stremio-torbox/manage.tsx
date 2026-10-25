@@ -10,7 +10,6 @@ const config: CastManageConfig = {
 	loginProvider: 'torbox',
 	apiPrefix: 'stremio-tb',
 	castPath: '/stremio-torbox',
-	logo: 'https://static.debridmediamanager.com/dmmcast.png',
 	logTag: 'TorBoxStremioManage',
 	bearerLinks: true,
 	theme: {

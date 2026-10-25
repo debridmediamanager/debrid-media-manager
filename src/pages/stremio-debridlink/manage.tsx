@@ -10,7 +10,6 @@ const config: CastManageConfig = {
 	loginProvider: 'debridlink',
 	apiPrefix: 'stremio-dl',
 	castPath: '/stremio-debridlink',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
 	logTag: 'DebridLinkStremioManage',
 	theme: {
 		checkbox: 'text-sky-600 focus:ring-sky-500',

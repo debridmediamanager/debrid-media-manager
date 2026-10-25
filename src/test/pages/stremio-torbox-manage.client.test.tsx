@@ -109,7 +109,7 @@ describe('TorBoxManagePage', () => {
 		const { TorBoxManagePage } = await import('@/pages/stremio-torbox/manage');
 		render(<TorBoxManagePage />);
 
-		expect(screen.getByText('DMM Cast TorBox - Manage Casted Links')).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Casted links' })).toBeInTheDocument();
 	});
 
 	it('should show no links message when empty', async () => {
@@ -154,10 +154,17 @@ describe('TorBoxManagePage', () => {
 						Promise.resolve({
 							links: [
 								{
-									imdbId: 'tt7777777',
+									imdbId: 'tt7777777:1:1',
 									url: 'https://example.com/show.mkv',
 									hash: 'def456',
 									size: 4096,
+									updatedAt: new Date().toISOString(),
+								},
+								{
+									imdbId: 'tt7777777:1:2',
+									url: 'https://example.com/show2.mkv',
+									hash: 'def457',
+									size: 900,
 									updatedAt: new Date().toISOString(),
 								},
 							],
@@ -176,5 +183,7 @@ describe('TorBoxManagePage', () => {
 		const selectAll = await screen.findByText('Select All');
 		expect(selectAll).toBeInTheDocument();
 		expect(screen.getByText('show.mkv')).toBeInTheDocument();
+		expect(screen.getByText('S01E01 · 4.00 GB')).toBeInTheDocument();
+		expect(screen.getByText('S01E02 · 0.88 GB')).toBeInTheDocument();
 	});
 });

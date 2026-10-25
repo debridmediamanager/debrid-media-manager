@@ -275,46 +275,48 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 
 	return (
 		<div
-			className={`mt-6 w-full max-w-md rounded-lg border ${colors.border} bg-gray-800/50 p-4`}
+			className={`mt-4 w-full max-w-md rounded-lg border ${colors.border} bg-gray-800/50 p-4`}
 		>
-			<div className="mb-4 flex items-center gap-2">
+			<div className="mb-3 flex items-center gap-2">
 				<Settings className={`h-5 w-5 ${colors.icon}`} />
 				<h2 className={`text-lg font-semibold ${colors.title}`}>Cast Settings</h2>
 			</div>
 
 			<div className="flex flex-col gap-4 text-sm text-gray-200">
-				<div className="flex flex-col gap-1">
-					<label className="font-semibold">Biggest movie size</label>
-					<select
-						className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-						value={movieMaxSize}
-						onChange={handleMovieSizeChange}
-					>
-						<option value="1">1 GB (~1.5 Mbps)</option>
-						<option value="3">3 GB (~4.5 Mbps)</option>
-						<option value="5">5 GB (~7.5 Mbps)</option>
-						<option value="15">15 GB (~22 Mbps)</option>
-						<option value="30">30 GB (~45 Mbps)</option>
-						<option value="60">60 GB (~90 Mbps)</option>
-						<option value="0">Biggest available</option>
-					</select>
-				</div>
+				<div className="grid grid-cols-2 gap-2">
+					<div className="flex min-w-0 flex-col gap-1">
+						<label className="font-semibold">Max movie size</label>
+						<select
+							className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+							value={movieMaxSize}
+							onChange={handleMovieSizeChange}
+						>
+							<option value="1">1 GB (~1.5 Mbps)</option>
+							<option value="3">3 GB (~4.5 Mbps)</option>
+							<option value="5">5 GB (~7.5 Mbps)</option>
+							<option value="15">15 GB (~22 Mbps)</option>
+							<option value="30">30 GB (~45 Mbps)</option>
+							<option value="60">60 GB (~90 Mbps)</option>
+							<option value="0">Biggest available</option>
+						</select>
+					</div>
 
-				<div className="flex flex-col gap-1">
-					<label className="font-semibold">Biggest episode size</label>
-					<select
-						className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-						value={episodeMaxSize}
-						onChange={handleEpisodeSizeChange}
-					>
-						<option value="0.1">100 MB (~0.7 Mbps)</option>
-						<option value="0.3">300 MB (~2 Mbps)</option>
-						<option value="0.5">500 MB (~3.5 Mbps)</option>
-						<option value="1">1 GB (~7 Mbps)</option>
-						<option value="3">3 GB (~21 Mbps)</option>
-						<option value="5">5 GB (~35 Mbps)</option>
-						<option value="0">Biggest available</option>
-					</select>
+					<div className="flex min-w-0 flex-col gap-1">
+						<label className="font-semibold">Max episode size</label>
+						<select
+							className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+							value={episodeMaxSize}
+							onChange={handleEpisodeSizeChange}
+						>
+							<option value="0.1">100 MB (~0.7 Mbps)</option>
+							<option value="0.3">300 MB (~2 Mbps)</option>
+							<option value="0.5">500 MB (~3.5 Mbps)</option>
+							<option value="1">1 GB (~7 Mbps)</option>
+							<option value="3">3 GB (~21 Mbps)</option>
+							<option value="5">5 GB (~35 Mbps)</option>
+							<option value="0">Biggest available</option>
+						</select>
+					</div>
 				</div>
 
 				<div className="flex flex-col gap-1">

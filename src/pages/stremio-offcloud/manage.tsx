@@ -10,7 +10,6 @@ const config: CastManageConfig = {
 	loginProvider: 'offcloud',
 	apiPrefix: 'stremio-oc',
 	castPath: '/stremio-offcloud',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
 	logTag: 'OffcloudStremioManage',
 	theme: {
 		checkbox: 'text-orange-600 focus:ring-orange-500',

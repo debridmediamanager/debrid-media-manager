@@ -60,8 +60,8 @@ describe('CastSettingsPanel', () => {
 
 	it('renders all form controls', () => {
 		render(<CastSettingsPanel service="rd" accentColor="green" />);
-		expect(screen.getByText('Biggest movie size')).toBeInTheDocument();
-		expect(screen.getByText('Biggest episode size')).toBeInTheDocument();
+		expect(screen.getByText('Max movie size')).toBeInTheDocument();
+		expect(screen.getByText('Max episode size')).toBeInTheDocument();
 		expect(screen.getByText('Other streams limit')).toBeInTheDocument();
 		expect(screen.getByText(/Hide.*Cast a file inside a torrent.*option/)).toBeInTheDocument();
 	});

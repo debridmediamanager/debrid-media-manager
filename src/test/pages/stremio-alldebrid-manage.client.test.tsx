@@ -106,7 +106,7 @@ describe('AllDebridManagePage', () => {
 		const { AllDebridManagePage } = await import('@/pages/stremio-alldebrid/manage');
 		render(<AllDebridManagePage />);
 
-		expect(screen.getByText('DMM Cast AllDebrid - Manage Casted Links')).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Casted links' })).toBeInTheDocument();
 	});
 
 	it('should show no links message when empty', async () => {
@@ -170,8 +170,10 @@ describe('AllDebridManagePage', () => {
 		const { AllDebridManagePage } = await import('@/pages/stremio-alldebrid/manage');
 		render(<AllDebridManagePage />);
 
-		const selectAll = await screen.findByText('Select All');
-		expect(selectAll).toBeInTheDocument();
-		expect(screen.getByText('movie.mkv')).toBeInTheDocument();
+		// One file: the card's thumbnail is the only select-all, and the size
+		// follows the filename on the same line.
+		expect(await screen.findByText('movie.mkv')).toBeInTheDocument();
+		expect(screen.getByText('· 2.00 GB')).toBeInTheDocument();
+		expect(screen.queryByText('Select All')).not.toBeInTheDocument();
 	});
 });
