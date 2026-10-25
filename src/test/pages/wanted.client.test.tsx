@@ -69,8 +69,8 @@ describe('/wanted', () => {
 				)
 		) as any;
 		render(<WantedPage />);
-		expect(await screen.findByText(/zurg fetched it/)).toBeInTheDocument();
-		expect(screen.getByText(/Your zurg last read this list/)).toBeInTheDocument();
+		expect(await screen.findByText(/^fetched /)).toBeInTheDocument();
+		expect(screen.getByText(/^zurg read it /)).toBeInTheDocument();
 	});
 
 	it('removes a title', async () => {

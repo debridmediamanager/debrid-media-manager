@@ -1,6 +1,7 @@
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { WantedImportResponse } from '@/pages/api/wanted/import';
+import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
 import { deflatedZipMember } from '@/utils/zipEntry';
 import { BookmarkCheck, Home, Loader2, RefreshCw, Trash2, Upload } from 'lucide-react';
@@ -159,17 +160,20 @@ export default function WantedPage() {
 					</div>
 				) : (
 					<>
-						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
-							{lastPolled ? (
-								<>Your zurg last read this list {when(lastPolled)}.</>
-							) : (
-								<>
+						{/* Only a list zurg never read needs words: zurg is not set up yet. */}
+						{lastPolled ? (
+							<p className="mb-3 text-xs text-gray-400" title={when(lastPolled)}>
+								zurg read it {timeAgo(lastPolled)}
+							</p>
+						) : (
+							items && (
+								<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
 									Your zurg has not read this list yet. Put your DMM API key in
 									zurg&apos;s <code>config.yml</code> as <code>dmm_api_key</code>{' '}
 									and it reads the list about once a minute.
-								</>
-							)}
-						</div>
+								</div>
+							)
+						)}
 
 						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
 							<p className="mb-2">
@@ -231,9 +235,11 @@ export default function WantedPage() {
 										</Link>
 										<span className="text-xs text-gray-400">
 											{seasonsLabel(item)} ·{' '}
-											{item.fulfilledAt
-												? `zurg fetched it ${when(item.fulfilledAt)}`
-												: `wanted since ${when(item.createdAt)}`}
+											<span title={when(item.fulfilledAt ?? item.createdAt)}>
+												{item.fulfilledAt
+													? `fetched ${shortDate(item.fulfilledAt)}`
+													: `since ${shortDate(item.createdAt)}`}
+											</span>
 										</span>
 									</div>
 									<button
