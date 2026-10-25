@@ -503,7 +503,7 @@ export function TorBoxManagePage() {
 																{episodeLabel}
 															</span>
 														)}
-														<span className="text-sm break-words text-gray-300">
+														<span className="text-sm [overflow-wrap:anywhere] text-gray-300">
 															{getFilename(link.url)}
 														</span>
 														<span className="text-xs text-gray-300">

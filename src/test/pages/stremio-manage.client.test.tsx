@@ -196,12 +196,16 @@ describe('Stremio manage page poster integration', () => {
 	});
 
 	// break-all split every filename at the card edge mid-word, "After An / other"
-	// and "Bl / uRay" at 320px; words should only break when one cannot fit.
+	// and "Bl / uRay" at 320px; words should only break when one cannot fit. Plain
+	// break-words did that but still counted the whole name in the card's minimum
+	// width, so one long name widened the card past a phone screen and zoomed the
+	// page out (512px wide at 360). overflow-wrap:anywhere breaks the same way and
+	// lets the card shrink.
 	it('wraps casted filenames at word boundaries', async () => {
 		render(<ManagePage />);
 
 		const filename = await screen.findByText('Example.Movie.2020.1080p.mkv');
-		expect(filename).toHaveClass('break-words');
+		expect(filename).toHaveClass('[overflow-wrap:anywhere]');
 		expect(filename).not.toHaveClass('break-all');
 	});
 });
