@@ -1,3 +1,4 @@
+import { ReleaseSection } from '@/components/ReleaseSection';
 import { UsenetResult } from '@/services/nzb2rd';
 import { transferContextFromPath } from '@/utils/debridUploader';
 import {
@@ -22,9 +23,6 @@ import { Check, Download, FileDown, Loader2, RotateCw, Send } from 'lucide-react
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
-type SortKey = 'title' | 'size';
-type SortDir = 'asc' | 'desc';
-
 type UsenetResultsProps = {
 	imdbId: string;
 	/** Present for a show season, absent for a movie. */
@@ -38,19 +36,8 @@ type UsenetResultsProps = {
 	rowFilter?: (title: string) => boolean;
 };
 
-/** Bytes → GB, matching how sizes read elsewhere on these pages. */
-export function formatSize(bytes: number): string {
-	if (!bytes) return '—';
-	return `${(bytes / 1024 ** 3).toFixed(2)} GB`;
-}
-
-export function sortResults(results: UsenetResult[], key: SortKey, dir: SortDir): UsenetResult[] {
-	const factor = dir === 'asc' ? 1 : -1;
-	return [...results].sort((a, b) => {
-		if (key === 'size') return (a.size - b.size) * factor;
-		return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }) * factor;
-	});
-}
+// Kept importable from here, where they started.
+export { formatSize, sortResults } from '@/components/ReleaseSection';
 
 export type SendButtonKind =
 	'send' | 'sending' | 'sent' | 'cached' | 'running' | 'failed' | 'added';
@@ -214,8 +201,6 @@ const UsenetResults = ({
 	const [results, setResults] = useState<UsenetResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const [sortKey, setSortKey] = useState<SortKey>('size');
-	const [sortDir, setSortDir] = useState<SortDir>('desc');
 	const [sendingIds, setSendingIds] = useState<Set<string>>(new Set());
 	const [sentIds, setSentIds] = useState<Set<string>>(new Set());
 	// Releases this browser has just put into its own Real-Debrid library.
@@ -259,21 +244,10 @@ const UsenetResults = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbId, seasonNum]);
 
-	const changeSort = (key: SortKey) => {
-		if (key === sortKey) {
-			setSortDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-			return;
-		}
-		setSortKey(key);
-		// Biggest-first and A-Z are the useful defaults for their columns.
-		setSortDir(key === 'size' ? 'desc' : 'asc');
-	};
-
-	const sorted = useMemo(() => {
+	const kept = useMemo(() => {
 		if (!results) return [];
-		const kept = rowFilter ? results.filter((r) => rowFilter(r.title)) : results;
-		return sortResults(kept, sortKey, sortDir);
-	}, [results, rowFilter, sortKey, sortDir]);
+		return rowFilter ? results.filter((r) => rowFilter(r.title)) : results;
+	}, [results, rowFilter]);
 
 	const returnPath = () =>
 		seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`;
@@ -433,197 +407,139 @@ const UsenetResults = ({
 		}
 	};
 
-	const sortArrow = (key: SortKey) => (sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
-
 	// Both pages read the id straight off router.query, which is undefined on the
 	// first client render; searching then would ask for "undefined" and come back 400.
 	if (!imdbId) return null;
 
 	return (
-		<div className="mx-2 my-4 rounded border border-gray-700 bg-gray-800/30">
-			<h2 className="flex w-full items-center gap-2 px-4 py-3 text-left font-medium text-gray-100">
-				{/* The hyphen is a break opportunity, so a narrow screen would otherwise
-				    split the service name across two lines as "Real-" / "Debrid". */}
-				<span>
-					Send NZBs from Usenet to <span className="whitespace-nowrap">Real-Debrid</span>
-				</span>
-				{results !== null && (
-					<span className="text-sm text-gray-400">
-						{rowFilter && sorted.length !== results.length
-							? `(${sorted.length} of ${results.length})`
-							: `(${results.length})`}
-					</span>
-				)}
-				{isLoading && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
-			</h2>
+		<ReleaseSection
+			heading={
+				// The hyphen is a break opportunity, so a narrow screen would otherwise
+				// split the service name across two lines as "Real-" / "Debrid".
+				<>
+					Send to <span className="whitespace-nowrap">Real-Debrid</span>
+				</>
+			}
+			collapsedKey="settings:usenetSendCollapsed"
+			count={
+				results === null
+					? null
+					: rowFilter && kept.length !== results.length
+						? `(${kept.length} of ${results.length})`
+						: `(${results.length})`
+			}
+			isLoading={isLoading}
+			status={
+				<>
+					{isLoading && (
+						<p className="px-2 py-3 text-sm text-gray-400">Searching Usenet…</p>
+					)}
 
-			<div className="border-t border-gray-700 px-2 pb-2">
-				{isLoading && <p className="px-2 py-3 text-sm text-gray-400">Searching Usenet…</p>}
+					{error && (
+						<div className="flex items-center gap-3 px-2 py-3 text-sm text-red-300">
+							<span>{error}</span>
+							<button
+								type="button"
+								onClick={fetchResults}
+								className="haptic rounded border border-gray-500 px-2 py-1 text-gray-100 hover:bg-gray-700/50"
+							>
+								Retry
+							</button>
+						</div>
+					)}
 
-				{error && (
-					<div className="flex items-center gap-3 px-2 py-3 text-sm text-red-300">
-						<span>{error}</span>
+					{!isLoading && !error && results !== null && results.length === 0 && (
+						<p className="px-2 py-3 text-sm text-gray-400">No Usenet results found.</p>
+					)}
+
+					{!isLoading && !error && !!results?.length && kept.length === 0 && (
+						<p className="px-2 py-3 text-sm text-gray-400">
+							None of the {results.length} Usenet results match the episode picked
+							above.
+						</p>
+					)}
+				</>
+			}
+			rows={!isLoading && !error ? kept : []}
+			rowKey={(result) => result.id}
+			actions={(result) => {
+				const state = buttonState(result.id, sendingIds, sentIds, transferred, addedIds);
+				return (
+					<>
 						<button
 							type="button"
-							onClick={fetchResults}
-							className="haptic rounded border border-gray-500 px-2 py-1 text-gray-100 hover:bg-gray-700/50"
+							onClick={() => send(result)}
+							disabled={state.disabled}
+							title={state.title}
+							className={`haptic flex flex-1 flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
+								// Green covers both halves of a finished
+								// fetch — the live "Add to RD" and the
+								// "Added" it becomes — so the colour tracks
+								// "this release exists" rather than
+								// whether the button is still clickable.
+								state.kind === 'cached' || state.kind === 'added'
+									? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
+									: state.kind === 'failed'
+										? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
+										: state.phase
+											? PHASE_STYLES[state.phase]
+											: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
+							}`}
 						>
-							Retry
-						</button>
-					</div>
-				)}
-
-				{!isLoading && !error && results !== null && results.length === 0 && (
-					<p className="px-2 py-3 text-sm text-gray-400">No Usenet results found.</p>
-				)}
-
-				{!isLoading && !error && !!results?.length && sorted.length === 0 && (
-					<p className="px-2 py-3 text-sm text-gray-400">
-						None of the {results.length} Usenet results match the episode picked above.
-					</p>
-				)}
-
-				{!isLoading && !error && sorted.length > 0 && (
-					<div className="overflow-x-auto">
-						<table className="w-full table-auto text-sm">
-							<thead>
-								<tr className="text-left text-gray-400">
-									<th className="px-2 py-2">
-										<button
-											type="button"
-											onClick={() => changeSort('title')}
-											className="font-medium hover:text-gray-100"
-										>
-											Release{sortArrow('title')}
-										</button>
-									</th>
-									<th className="w-28 px-2 py-2">
-										<button
-											type="button"
-											onClick={() => changeSort('size')}
-											className="font-medium hover:text-gray-100"
-										>
-											Size{sortArrow('size')}
-										</button>
-									</th>
-									{/* Fixed, because the phase labels differ a lot in
-										    length ("In RD" against "Real-Debrid downloading")
-										    and a column that sizes to its content leaves the
-										    buttons ragged down the page. */}
-									<th className="w-40 px-2 py-2"></th>
-								</tr>
-							</thead>
-							<tbody>
-								{sorted.map((result) => {
-									const state = buttonState(
-										result.id,
-										sendingIds,
-										sentIds,
-										transferred,
-										addedIds
-									);
-									return (
-										<tr
-											key={result.id}
-											className="border-t border-gray-700/60 align-top"
-										>
-											<td className="px-2 py-2 break-all text-gray-100">
-												{result.isPack && (
-													<span className="mr-2 rounded border border-amber-500 bg-amber-900/30 px-1.5 py-0.5 text-xs whitespace-nowrap text-amber-100">
-														Season pack
-													</span>
-												)}
-												{result.title}
-											</td>
-											<td className="px-2 py-2 whitespace-nowrap text-gray-300">
-												{formatSize(result.size)}
-											</td>
-											<td className="px-2 py-2">
-												<div className="flex items-stretch gap-1">
-													<button
-														type="button"
-														onClick={() => send(result)}
-														disabled={state.disabled}
-														title={state.title}
-														className={`haptic flex flex-1 flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
-															// Green covers both halves of a finished
-															// fetch — the live "Add to RD" and the
-															// "Added" it becomes — so the colour tracks
-															// "this release exists" rather than
-															// whether the button is still clickable.
-															state.kind === 'cached' ||
-															state.kind === 'added'
-																? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
-																: state.kind === 'failed'
-																	? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
-																	: state.phase
-																		? PHASE_STYLES[state.phase]
-																		: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
-														}`}
-													>
-														<span className="flex items-center gap-1">
-															{state.kind === 'sending' ||
-															state.kind === 'running' ? (
-																<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
-															) : state.kind === 'added' ||
-															  state.kind === 'sent' ? (
-																<Check className="h-3 w-3 shrink-0" />
-															) : state.kind === 'cached' ? (
-																<Download className="h-3 w-3 shrink-0" />
-															) : state.kind === 'failed' ? (
-																<RotateCw className="h-3 w-3 shrink-0" />
-															) : (
-																<Send className="h-3 w-3 shrink-0" />
-															)}
-															{state.label}
-														</span>
-														{/* Place in line, or how far through the current
+							<span className="flex items-center gap-1">
+								{state.kind === 'sending' || state.kind === 'running' ? (
+									<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+								) : state.kind === 'added' || state.kind === 'sent' ? (
+									<Check className="h-3 w-3 shrink-0" />
+								) : state.kind === 'cached' ? (
+									<Download className="h-3 w-3 shrink-0" />
+								) : state.kind === 'failed' ? (
+									<RotateCw className="h-3 w-3 shrink-0" />
+								) : (
+									<Send className="h-3 w-3 shrink-0" />
+								)}
+								{state.label}
+							</span>
+							{/* Place in line, or how far through the current
 														    stage — the thing that tells a waiting user
 														    whether "not done yet" means minutes or days. */}
-														{state.detail && (
-															<span
-																className={`pl-4 text-xs opacity-70 ${
-																	// A failure reason is a sentence, not
-																	// a place in line: let it wrap, and cap
-																	// it so one long message cannot stretch
-																	// the row down the page.
-																	state.kind === 'failed'
-																		? 'line-clamp-2 break-words whitespace-normal'
-																		: ''
-																}`}
-															>
-																{state.detail}
-															</span>
-														)}
-													</button>
-													{/* Always live, unlike Send: a release someone else already
+							{state.detail && (
+								<span
+									className={`pl-4 text-xs opacity-70 ${
+										// A failure reason is a sentence, not
+										// a place in line: let it wrap, and cap
+										// it so one long message cannot stretch
+										// the row down the page.
+										state.kind === 'failed'
+											? 'line-clamp-2 break-words whitespace-normal'
+											: ''
+									}`}
+								>
+									{state.detail}
+								</span>
+							)}
+						</button>
+						{/* Always live, unlike Send: a release someone else already
 											    fetched is still one this user can save, and no Real-Debrid
 											    login is involved either way. */}
-													<button
-														type="button"
-														onClick={() => download(result)}
-														disabled={downloadingIds.has(result.id)}
-														title="Download the NZB, cleaned of the indexer’s watermark"
-														aria-label={`Download clean NZB for ${result.title}`}
-														className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 transition-colors duration-200 hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-60"
-													>
-														{downloadingIds.has(result.id) ? (
-															<Loader2 className="h-3.5 w-3.5 animate-spin" />
-														) : (
-															<FileDown className="h-3.5 w-3.5" />
-														)}
-													</button>
-												</div>
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</div>
-				)}
-			</div>
-		</div>
+						<button
+							type="button"
+							onClick={() => download(result)}
+							disabled={downloadingIds.has(result.id)}
+							title="Download the NZB, cleaned of the indexer’s watermark"
+							aria-label={`Download clean NZB for ${result.title}`}
+							className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 transition-colors duration-200 hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-60"
+						>
+							{downloadingIds.has(result.id) ? (
+								<Loader2 className="h-3.5 w-3.5 animate-spin" />
+							) : (
+								<FileDown className="h-3.5 w-3.5" />
+							)}
+						</button>
+					</>
+				);
+			}}
+		/>
 	);
 };
 

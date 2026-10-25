@@ -1,4 +1,4 @@
-import { formatSize } from '@/components/UsenetResults';
+import { ReleaseSection } from '@/components/ReleaseSection';
 import useLocalStorage from '@/hooks/localStorage';
 import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
 import { Copy, Download, Loader2 } from 'lucide-react';
@@ -112,116 +112,85 @@ const EasynewsResults = ({ title, year, seasonNum, rowFilter }: EasynewsResultsP
 	}
 
 	return (
-		<div className="mx-2 my-4 rounded border border-gray-700 bg-gray-800/30">
-			<h2 className="flex w-full items-center gap-2 px-4 py-3 text-left font-medium text-gray-100">
-				<span>Download from your Easynews account</span>
-				{results !== null && (
-					<span className="text-sm text-gray-400">
-						{rowFilter && shown.length !== results.length
-							? `(${shown.length} of ${results.length})`
-							: `(${results.length})`}
-					</span>
-				)}
-				{isLoading && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
-			</h2>
+		<ReleaseSection
+			heading="Download from Easynews"
+			collapsedKey="settings:easynewsCollapsed"
+			count={
+				results === null
+					? null
+					: rowFilter && shown.length !== results.length
+						? `(${shown.length} of ${results.length})`
+						: `(${results.length})`
+			}
+			isLoading={isLoading}
+			status={
+				<>
+					{error && (
+						<div className="flex items-center gap-3 px-2 py-3 text-sm text-red-300">
+							<span>{error}</span>
+							<button
+								type="button"
+								onClick={() => search(account)}
+								className="haptic rounded border border-gray-500 px-2 py-1 text-gray-100 hover:bg-gray-700/50"
+							>
+								Retry
+							</button>
+							<Link href="/settings" className="text-blue-400 hover:underline">
+								Easynews login
+							</Link>
+						</div>
+					)}
 
-			<div className="border-t border-gray-700 px-2 pb-2">
-				{error && (
-					<div className="flex items-center gap-3 px-2 py-3 text-sm text-red-300">
-						<span>{error}</span>
-						<button
-							type="button"
-							onClick={() => search(account)}
-							className="haptic rounded border border-gray-500 px-2 py-1 text-gray-100 hover:bg-gray-700/50"
-						>
-							Retry
-						</button>
-						<Link href="/settings" className="text-blue-400 hover:underline">
-							Easynews login
-						</Link>
-					</div>
-				)}
+					{!isLoading && !error && results?.length === 0 && (
+						<p className="px-2 py-3 text-sm text-gray-400">
+							No Easynews results found.
+						</p>
+					)}
 
-				{!isLoading && !error && results?.length === 0 && (
-					<p className="px-2 py-3 text-sm text-gray-400">No Easynews results found.</p>
-				)}
-
-				{!isLoading && !error && !!results?.length && shown.length === 0 && (
-					<p className="px-2 py-3 text-sm text-gray-400">
-						None of the {results.length} Easynews results match the episode picked
-						above.
-					</p>
-				)}
-
-				{!isLoading && !error && shown.length > 0 && (
-					<div className="overflow-x-auto">
-						<table className="w-full table-auto text-sm">
-							<thead>
-								<tr className="text-left text-gray-400">
-									<th className="px-2 py-2">Release</th>
-									<th className="w-28 px-2 py-2">Size</th>
-									<th className="w-40 px-2 py-2"></th>
-								</tr>
-							</thead>
-							<tbody>
-								{shown.map((result) => (
-									<tr
-										key={result.path}
-										className="border-t border-gray-700/60 align-top"
-									>
-										<td className="px-2 py-2 break-all text-gray-100">
-											{result.title}
-										</td>
-										<td className="px-2 py-2 whitespace-nowrap text-gray-300">
-											{formatSize(result.size)}
-										</td>
-										<td className="px-2 py-2">
-											<div className="flex items-stretch gap-1">
-												<button
-													type="button"
-													onClick={() =>
-														withLink(result, (url) =>
-															window.location.assign(url)
-														)
-													}
-													disabled={linking !== null}
-													className="haptic flex flex-1 items-center gap-1 rounded border border-gray-500 bg-gray-800/60 px-2 py-1 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
-												>
-													{linking === result.path ? (
-														<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
-													) : (
-														<Download className="h-3 w-3 shrink-0" />
-													)}
-													Download
-												</button>
-												{/* For a player such as VLC, which streams it as it downloads. */}
-												<button
-													type="button"
-													onClick={() =>
-														withLink(result, async (url) => {
-															await navigator.clipboard.writeText(
-																url
-															);
-															toast.success('Easynews link copied');
-														})
-													}
-													disabled={linking !== null}
-													title="Copy a link to play in VLC or another player"
-													aria-label={`Copy Easynews link for ${result.title}`}
-													className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
-												>
-													<Copy className="h-3.5 w-3.5" />
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-			</div>
-		</div>
+					{!isLoading && !error && !!results?.length && shown.length === 0 && (
+						<p className="px-2 py-3 text-sm text-gray-400">
+							None of the {results.length} Easynews results match the episode picked
+							above.
+						</p>
+					)}
+				</>
+			}
+			rows={!isLoading && !error ? shown : []}
+			rowKey={(result) => result.path}
+			actions={(result) => (
+				<>
+					<button
+						type="button"
+						onClick={() => withLink(result, (url) => window.location.assign(url))}
+						disabled={linking !== null}
+						className="haptic flex flex-1 items-center gap-1 rounded border border-gray-500 bg-gray-800/60 px-2 py-1 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
+					>
+						{linking === result.path ? (
+							<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+						) : (
+							<Download className="h-3 w-3 shrink-0" />
+						)}
+						Download
+					</button>
+					{/* For a player such as VLC, which streams it as it downloads. */}
+					<button
+						type="button"
+						onClick={() =>
+							withLink(result, async (url) => {
+								await navigator.clipboard.writeText(url);
+								toast.success('Easynews link copied');
+							})
+						}
+						disabled={linking !== null}
+						title="Copy a link to play in VLC or another player"
+						aria-label={`Copy Easynews link for ${result.title}`}
+						className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
+					>
+						<Copy className="h-3.5 w-3.5" />
+					</button>
+				</>
+			)}
+		/>
 	);
 };
 
