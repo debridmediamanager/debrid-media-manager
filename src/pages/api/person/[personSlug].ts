@@ -59,6 +59,78 @@ type MediaItem = {
 	};
 };
 
+// Trakt groups crew credits by department; show them as role names.
+const DEPARTMENT_LABELS: Record<string, string> = {
+	'created by': 'Creator',
+	directing: 'Director',
+	writing: 'Writer',
+	production: 'Producer',
+	crew: 'Crew',
+	sound: 'Sound',
+	camera: 'Camera',
+	editing: 'Editor',
+	art: 'Art',
+	lighting: 'Lighting',
+	'visual effects': 'Visual Effects',
+	'costume & make-up': 'Costume & Make-Up',
+};
+const ROLE_ORDER = ['Creator', 'Director', 'Writer', 'Producer'];
+
+const departmentLabel = (department: string) =>
+	DEPARTMENT_LABELS[department] ?? department.charAt(0).toUpperCase() + department.slice(1);
+
+const rolePriority = (role: string) => {
+	const index = ROLE_ORDER.indexOf(role);
+	return index === -1 ? ROLE_ORDER.length : index;
+};
+
+// The display name keeps punctuation the slug drops ("Samuel L. Jackson"); it is optional.
+const fetchPersonName = async (personSlug: string, headers: Record<string, string>) => {
+	try {
+		const response = await axios.get<{ name?: string }>(
+			`${TRAKT_BASE_URL}/people/${personSlug}`,
+			{ headers }
+		);
+		return response.data.name || null;
+	} catch {
+		return null;
+	}
+};
+
+const sortNewestFirst = (items: MediaItem[]) =>
+	[...items].sort((a, b) => (b.year || 0) - (a.year || 0));
+
+// Trakt lists a title once per cast role and once per crew department; keep one entry per
+// title, with its roles merged into one "Director · Writer · Producer" line.
+const mergeCredits = (items: MediaItem[]): MediaItem[] => {
+	const byId = new Map<string, { item: MediaItem; characters: string[]; jobs: string[] }>();
+	for (const item of items) {
+		const id = item.ids.imdb;
+		let entry = byId.get(id);
+		if (!entry) {
+			entry = { item: { ...item }, characters: [], jobs: [] };
+			delete entry.item.character;
+			delete entry.item.job;
+			byId.set(id, entry);
+		}
+		if (item.creditType === 'cast') entry.item.creditType = 'cast';
+		if (item.character && !entry.characters.includes(item.character)) {
+			entry.characters.push(item.character);
+		}
+		const job = item.job ? departmentLabel(item.job) : '';
+		if (job && !entry.jobs.includes(job)) entry.jobs.push(job);
+	}
+	return sortNewestFirst(
+		[...byId.values()].map(({ item, characters, jobs }) => ({
+			...item,
+			...(characters.length ? { character: characters.join(' / ') } : {}),
+			...(jobs.length
+				? { job: jobs.sort((a, b) => rolePriority(a) - rolePriority(b)).join(' · ') }
+				: {}),
+		}))
+	);
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		res.setHeader('Allow', 'GET');
@@ -89,13 +161,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	};
 
 	try {
-		const [movieResponse, showResponse] = await Promise.all([
+		const [movieResponse, showResponse, name] = await Promise.all([
 			axios.get<TraktMovieCreditsResponse>(`${TRAKT_BASE_URL}/people/${personSlug}/movies`, {
 				headers,
 			}),
 			axios.get<TraktShowCreditsResponse>(`${TRAKT_BASE_URL}/people/${personSlug}/shows`, {
 				headers,
 			}),
+			fetchPersonName(personSlug, headers),
 		]);
 
 		const movieCastCredits: MediaItem[] = (movieResponse.data.cast || [])
@@ -156,11 +229,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					}))
 		);
 
-		const movieCredits = [...movieCastCredits, ...movieCrewCredits];
-		const showCredits = [...showCastCredits, ...showCrewCredits];
-		const allCredits = [...movieCredits, ...showCredits].sort((a, b) => b.year - a.year);
+		const movieCredits = mergeCredits([...movieCastCredits, ...movieCrewCredits]);
+		const showCredits = mergeCredits([...showCastCredits, ...showCrewCredits]);
+		const allCredits = sortNewestFirst([...movieCredits, ...showCredits]);
 
 		return res.status(200).json({
+			name,
 			movies: movieCredits,
 			shows: showCredits,
 			all: allCredits,

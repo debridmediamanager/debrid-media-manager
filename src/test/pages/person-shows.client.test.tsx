@@ -33,7 +33,7 @@ describe('PersonShowsPage responsive content', () => {
 			events: { on: vi.fn(), off: vi.fn() },
 		} as any);
 		useCachedListMock.mockReturnValue({
-			data: longTitleCredits,
+			data: { movies: longTitleCredits, shows: longTitleCredits, all: [] },
 			loading: false,
 			error: null,
 			refetch: vi.fn(),

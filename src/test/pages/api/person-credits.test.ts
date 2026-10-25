@@ -129,7 +129,16 @@ describe('person credits API', () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
+			name: null,
 			movies: [
+				{
+					title: 'The Grand Budapest Hotel',
+					year: 2014,
+					job: 'Director',
+					mediaType: 'movie',
+					creditType: 'crew',
+					ids: { imdb: 'tt2278388' },
+				},
 				{
 					title: 'Titanic',
 					year: 1997,
@@ -137,14 +146,6 @@ describe('person credits API', () => {
 					mediaType: 'movie',
 					creditType: 'cast',
 					ids: { imdb: 'tt0120338' },
-				},
-				{
-					title: 'The Grand Budapest Hotel',
-					year: 2014,
-					job: 'directing',
-					mediaType: 'movie',
-					creditType: 'crew',
-					ids: { imdb: 'tt2278388' },
 				},
 			],
 			shows: [
@@ -161,7 +162,7 @@ describe('person credits API', () => {
 				{
 					title: 'The Grand Budapest Hotel',
 					year: 2014,
-					job: 'directing',
+					job: 'Director',
 					mediaType: 'movie',
 					creditType: 'crew',
 					ids: { imdb: 'tt2278388' },

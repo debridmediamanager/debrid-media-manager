@@ -1,0 +1,98 @@
+{
+	"cast": [],
+	"crew": {
+		"directing": [
+			{
+				"job": "Director",
+				"jobs": ["Director"],
+				"show": {
+					"ids": {
+						"imdb": "tt2431438",
+						"plex": { "guid": "5d9c084e08fddd001f296f79", "slug": "sense8" },
+						"slug": "sense8",
+						"tmdb": 61664,
+						"tvdb": 268156,
+						"trakt": 70384
+					},
+					"year": 2015,
+					"title": "Sense8",
+					"aired_episodes": 24
+				}
+			}
+		],
+		"writing": [
+			{
+				"job": "Writer",
+				"jobs": ["Writer"],
+				"show": {
+					"ids": {
+						"imdb": "tt2431438",
+						"plex": { "guid": "5d9c084e08fddd001f296f79", "slug": "sense8" },
+						"slug": "sense8",
+						"tmdb": 61664,
+						"tvdb": 268156,
+						"trakt": 70384
+					},
+					"year": 2015,
+					"title": "Sense8",
+					"aired_episodes": 24
+				}
+			},
+			{
+				"job": "Writer, Story",
+				"jobs": ["Writer", "Story"],
+				"show": {
+					"ids": {
+						"imdb": "tt0328832",
+						"plex": { "guid": "5d9c085108fddd001f29757b", "slug": "the-animatrix" },
+						"slug": "the-animatrix",
+						"tmdb": 313038,
+						"tvdb": 80468,
+						"trakt": 315955
+					},
+					"year": 2003,
+					"title": "The Animatrix",
+					"aired_episodes": 9
+				}
+			}
+		],
+		"production": [
+			{
+				"job": "Executive Producer",
+				"jobs": ["Executive Producer"],
+				"show": {
+					"ids": {
+						"imdb": "tt2431438",
+						"plex": { "guid": "5d9c084e08fddd001f296f79", "slug": "sense8" },
+						"slug": "sense8",
+						"tmdb": 61664,
+						"tvdb": 268156,
+						"trakt": 70384
+					},
+					"year": 2015,
+					"title": "Sense8",
+					"aired_episodes": 24
+				}
+			}
+		],
+		"created by": [
+			{
+				"job": "Creator",
+				"jobs": ["Creator"],
+				"show": {
+					"ids": {
+						"imdb": "tt2431438",
+						"plex": { "guid": "5d9c084e08fddd001f296f79", "slug": "sense8" },
+						"slug": "sense8",
+						"tmdb": 61664,
+						"tvdb": 268156,
+						"trakt": 70384
+					},
+					"year": 2015,
+					"title": "Sense8",
+					"aired_episodes": 24
+				}
+			}
+		]
+	}
+}

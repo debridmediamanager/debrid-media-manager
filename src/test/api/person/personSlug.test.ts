@@ -1,4 +1,6 @@
 import handler from '@/pages/api/person/[personSlug]';
+import lanaMovies from '@/test/fixtures/person/lana-wachowski-movies.json';
+import lanaShows from '@/test/fixtures/person/lana-wachowski-shows.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -114,21 +116,22 @@ describe('/api/person/[personSlug]', () => {
 		const data = res._getData() as any;
 		expect(data.movies).toHaveLength(2);
 		expect(data.shows).toHaveLength(2);
+		// Newest first, Trakt's department shown as a role name.
 		expect(data.movies[0]).toEqual({
+			title: 'Plan B',
+			year: 2007,
+			job: 'Producer',
+			mediaType: 'movie',
+			creditType: 'crew',
+			ids: { imdb: 'tt0448134' },
+		});
+		expect(data.movies[1]).toEqual({
 			title: 'Fight Club',
 			year: 1999,
 			character: 'Tyler Durden',
 			mediaType: 'movie',
 			creditType: 'cast',
 			ids: { imdb: 'tt0137523' },
-		});
-		expect(data.movies[1]).toEqual({
-			title: 'Plan B',
-			year: 2007,
-			job: 'production',
-			mediaType: 'movie',
-			creditType: 'crew',
-			ids: { imdb: 'tt0448134' },
 		});
 		consoleSpy.mockRestore();
 	});
@@ -255,5 +258,57 @@ describe('/api/person/[personSlug]', () => {
 		expect(res._getData()).toEqual({ message: 'Failed to fetch person credits.' });
 		consoleSpy.mockRestore();
 		consoleInfoSpy.mockRestore();
+	});
+
+	it('lists each title once with its roles merged (real Trakt credits)', async () => {
+		// Trakt returns Lana Wachowski's 30 films as 51 entries: The Matrix once per department.
+		mockedAxios.get.mockResolvedValueOnce({ data: lanaMovies });
+		mockedAxios.get.mockResolvedValueOnce({ data: lanaShows });
+		mockedAxios.get.mockResolvedValueOnce({ data: { name: 'Lana Wachowski' } });
+		const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const req = createMockRequest({ method: 'GET', query: { personSlug: 'lana-wachowski' } });
+
+		await handler(req, res);
+
+		const data = res._getData() as any;
+		const ids = data.movies.map((item: any) => item.ids.imdb);
+		expect(data.movies).toHaveLength(30);
+		expect(new Set(ids).size).toBe(30);
+		expect(data.movies.filter((item: any) => item.title === 'The Matrix')).toEqual([
+			{
+				title: 'The Matrix',
+				year: 1999,
+				job: 'Director · Writer · Producer',
+				mediaType: 'movie',
+				creditType: 'crew',
+				ids: { imdb: 'tt0133093' },
+			},
+		]);
+		expect(new Set(data.shows.map((item: any) => item.ids.imdb)).size).toBe(data.shows.length);
+		const years = data.movies.map((item: any) => item.year || 0);
+		expect(years).toEqual([...years].sort((a: number, b: number) => b - a));
+		expect(data.name).toBe('Lana Wachowski');
+		consoleSpy.mockRestore();
+	});
+
+	it('returns the real display name, or null when Trakt has none', async () => {
+		mockedAxios.get.mockResolvedValueOnce({ data: { cast: [], crew: {} } });
+		mockedAxios.get.mockResolvedValueOnce({ data: { cast: [], crew: {} } });
+		mockedAxios.get.mockResolvedValueOnce({ data: { name: 'Samuel L. Jackson' } });
+		const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+		await handler(
+			createMockRequest({ method: 'GET', query: { personSlug: 'samuel-l-jackson' } }),
+			res
+		);
+		expect((res._getData() as any).name).toBe('Samuel L. Jackson');
+
+		res = createMockResponse();
+		mockedAxios.get.mockResolvedValueOnce({ data: { cast: [], crew: {} } });
+		mockedAxios.get.mockResolvedValueOnce({ data: { cast: [], crew: {} } });
+		mockedAxios.get.mockRejectedValueOnce(new Error('not found'));
+		await handler(createMockRequest({ method: 'GET', query: { personSlug: 'x' } }), res);
+		expect(res._getStatusCode()).toBe(200);
+		expect((res._getData() as any).name).toBeNull();
+		consoleSpy.mockRestore();
 	});
 });
