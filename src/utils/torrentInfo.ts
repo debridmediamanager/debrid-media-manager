@@ -6,6 +6,7 @@ import {
 	showInfoForRD,
 	showInfoForTB,
 } from '@/components/showInfo/index';
+import { getMagnetLinks, isAdStatusReady } from '@/services/allDebrid';
 import { getTorrentInfo } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -235,12 +236,17 @@ export async function handleShowInfoForRD(
 	);
 }
 
-export function handleShowInfoForAD(t: UserTorrent, adKey: string, poster?: DialogPoster) {
+export async function handleShowInfoForAD(t: UserTorrent, adKey: string, poster?: DialogPoster) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
 		alert('No player selected');
 	}
-	showInfoForAD(player, adKey, t.adData!, '', undefined, { poster });
+	const info = t.adData!;
+	// The library listing carries no files, so a Ready magnet's are fetched on open.
+	if (!info.links?.length && isAdStatusReady(info)) {
+		info.links = await getMagnetLinks(adKey, info.id).catch(() => []);
+	}
+	await showInfoForAD(player, adKey, info, '', undefined, { poster });
 }
 
 export async function handleShowInfoForTB(

@@ -601,6 +601,10 @@ export const getMagnetFiles = async (
 	}
 };
 
+/** A magnet's files as links: the list form of /magnet/status carries none. */
+export const getMagnetLinks = async (apikey: string, magnetId: number): Promise<LinkObject[]> =>
+	convertFilesToLinks((await getMagnetFiles(apikey, [magnetId])).magnets[0]?.files);
+
 export const deleteMagnet = async (apikey: string, id: string): Promise<MagnetDeleteData> => {
 	const endpoint = `${config.allDebridHostname}/v4.1/magnet/delete`;
 	try {
