@@ -75,12 +75,21 @@ export interface PlacedFile {
 	kind?: 'movie';
 	imdbId?: string;
 	tmdbId?: number;
+	/** That film's TMDB title and year, which a client names its folder by. */
+	title?: string;
+	year?: number;
 }
 
 export interface PlacedRelease {
 	kind: 'movie' | 'tv' | null;
 	imdbId: string | null;
 	tmdbId: number | null;
+	/**
+	 * TMDB's title and first year of the movie or show the ids name, for a client that files the
+	 * release under a folder of its own (`Title (Year)`); absent where TMDB has none.
+	 */
+	title?: string;
+	year?: number;
 	files: PlacedFile[];
 	/** Not placed in this request's time budget, or a source could not be asked; ask again. */
 	skipped?: true;
@@ -207,6 +216,50 @@ export async function placeReleases(
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 	return { releases: out, complete: out.every((release) => !release.skipped) };
+}
+
+/** TMDB's title and first year of a movie or show, from the record placement already read. */
+async function tmdbTitle(
+	kind: 'movie' | 'tv',
+	imdbId: string | null | undefined,
+	tmdbId: number | null | undefined,
+	sources: PlacementSources
+): Promise<{ title?: string; year?: number }> {
+	const record =
+		kind === 'tv'
+			? tmdbId == null
+				? null
+				: await sources.show(tmdbId)
+			: imdbId
+				? (await sources.find(imdbId))?.movie_results?.find((m: any) => m?.id === tmdbId)
+				: null;
+	const title = kind === 'tv' ? record?.name : record?.title;
+	const year = Number(
+		String((kind === 'tv' ? record?.first_air_date : record?.release_date) ?? '').slice(0, 4)
+	);
+	return typeof title === 'string' && title.trim()
+		? { title: title.trim(), ...(year > 0 ? { year } : {}) }
+		: {};
+}
+
+/**
+ * The release's title and year, and those of each film placed inside it. Asked after placement,
+ * from the records placement already read, so what a release is placed as never depends on it.
+ */
+export async function titled(
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (placed.skipped || !placed.kind || placed.tmdbId === null) return placed;
+	const own = await tmdbTitle(placed.kind, placed.imdbId, placed.tmdbId, sources);
+	const files = await Promise.all(
+		placed.files.map(async (file) =>
+			file.kind === 'movie' && file.tmdbId
+				? { ...file, ...(await tmdbTitle('movie', file.imdbId, file.tmdbId, sources)) }
+				: file
+		)
+	);
+	return { ...placed, ...own, files };
 }
 
 const letters = (text = '') => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');

@@ -13,6 +13,7 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 }));
 vi.mock('@/services/placement', () => ({
 	placeReleases: vi.fn(),
+	titled: vi.fn(async (release: object) => ({ ...release, title: 'Titled' })),
 	cachedSources: {},
 	PLACEMENT_RULES: '2026-10-23',
 }));
@@ -55,6 +56,18 @@ describe('/api/sponsor/place', () => {
 
 	afterEach(() => {
 		vi.clearAllMocks();
+	});
+
+	it('answers each placed release with its title', async () => {
+		const placed = { kind: 'tv' as const, imdbId: 'tt0131179', tmdbId: 30983, files: [] };
+		mockPlace.mockResolvedValueOnce({ releases: [placed], complete: true });
+		const res = createMockResponse();
+		await handler(post({ releases: [CONAN] }), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ releases: [{ ...placed, title: 'Titled' }], complete: true })
+		);
 	});
 
 	it('hands the releases over as the contract names them, an empty imdbId as none', async () => {

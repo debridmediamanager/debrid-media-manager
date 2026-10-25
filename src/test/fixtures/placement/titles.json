@@ -1,0 +1,29 @@
+{
+	"captured": "2026-10-25 from api.themoviedb.org/3",
+	"find/tt1361336": {
+		"movie_results": [
+			{
+				"id": 587807,
+				"title": "Tom & Jerry",
+				"release_date": "2021-02-10"
+			}
+		],
+		"tv_results": []
+	},
+	"find/tt29714073": {
+		"movie_results": [
+			{
+				"id": 1198654,
+				"title": "Bad Apples",
+				"release_date": "2026-09-10"
+			}
+		],
+		"tv_results": []
+	},
+	"show/30983": {
+		"id": 30983,
+		"name": "Detective Conan",
+		"first_air_date": "1996-01-08",
+		"original_language": "ja"
+	}
+}

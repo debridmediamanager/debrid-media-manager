@@ -4,6 +4,7 @@ import {
 	cachedSources,
 	PLACEMENT_RULES,
 	placeReleases,
+	titled,
 	type Identify,
 	type PlaceRequest,
 } from '@/services/placement';
@@ -91,7 +92,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return results.map((result) => result ?? (complete ? null : undefined));
 		};
 		const placed = await placeReleases(releases, identify, cachedSources, deadline);
-		return res.status(200).json({ ...placed, rules: PLACEMENT_RULES });
+		const named = await Promise.all(placed.releases.map((r) => titled(r, cachedSources)));
+		return res.status(200).json({ ...placed, releases: named, rules: PLACEMENT_RULES });
 	} catch (error) {
 		console.error('Failed to place sponsor releases', error);
 		return res.status(500).json({ error: 'Internal server error' });
