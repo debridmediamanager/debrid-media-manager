@@ -327,10 +327,6 @@ function IndexPage() {
 							</Link>
 							<details className="flex-1 rounded border-2 border-pink-500/40 bg-gray-800/30 open:basis-full">
 								<summary className="haptic-sm cursor-pointer px-2 py-2 text-center text-sm font-medium whitespace-nowrap text-gray-100 transition-colors hover:bg-gray-700/50">
-									<span
-										aria-hidden="true"
-										className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-									/>
 									Sponsor features
 								</summary>
 								<div className="grid grid-cols-1 gap-3 p-3 pt-0">
