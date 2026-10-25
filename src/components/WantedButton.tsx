@@ -14,7 +14,7 @@ interface WantedButtonProps {
 }
 
 const BUTTON =
-	'mb-1 mr-2 mt-0 rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50 disabled:cursor-not-allowed disabled:opacity-50';
+	'mb-1 mr-2 mt-0 inline-block rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50 disabled:cursor-not-allowed disabled:opacity-50';
 
 /**
  * Puts a title on the sponsor's wanted list, which their zurg fetches. On a

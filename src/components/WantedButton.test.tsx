@@ -103,4 +103,14 @@ describe('WantedButton', () => {
 		expect(screen.getByRole('link', { name: /Want/ })).toHaveAttribute('href', '/wanted');
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
+
+	// An inline <a> around the flex label splits its border into empty fragments with
+	// the label on a line of its own (Discord report, 2026-10-25). jsdom has no layout,
+	// so this pins the class that keeps the link one box.
+	it("keeps the non-sponsor link one box like the page's buttons", () => {
+		sponsorMock.mockReturnValue({ isSponsor: false });
+		global.fetch = vi.fn() as any;
+		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={1} />);
+		expect(screen.getByRole('link', { name: /Want S1/ })).toHaveClass('inline-block');
+	});
 });
