@@ -551,11 +551,11 @@ function TorrentRow({
 										target="_blank"
 										aria-label={`Go to ${identification.kind === 'tv' ? 'show' : 'movie'} page`}
 										title={`Verified: identified from the filename as ${identification.imdbId}. Open the ${identification.kind === 'tv' ? 'show' : 'movie'} page`}
-										className="inline-block align-text-bottom"
+										className="inline-block align-[-3px]"
 										onClick={(e) => e.stopPropagation()}
 									>
 										<BadgeCheck
-											className="inline-block h-4 w-4 text-sky-400 hover:text-sky-300"
+											className="block h-4 w-4 text-sky-400 hover:text-sky-300"
 											aria-label={`Verified: identified from the filename as ${identification.imdbId}`}
 										/>
 									</Link>
