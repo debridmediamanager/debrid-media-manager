@@ -59,10 +59,7 @@ export default function RelatedMoviesPage() {
 			</Head>
 			<main className="mx-auto max-w-6xl px-4 py-8">
 				<div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-					<div>
-						<h1 className="text-2xl font-bold">Related Movies</h1>
-						<p className="text-sm text-gray-400">Based on IMDb ID {imdbIdParam}</p>
-					</div>
+					<h1 className="text-2xl font-bold">Related Movies</h1>
 					<Link
 						href={`/movie/${imdbIdParam}`}
 						className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
@@ -82,21 +79,30 @@ export default function RelatedMoviesPage() {
 				) : relatedMedia.length === 0 ? (
 					<div>No related movies found.</div>
 				) : (
-					<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+					<div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-[repeat(auto-fill,minmax(170px,1fr))]">
 						{relatedMedia.map((item) => (
 							<button
 								key={item.ids.imdb}
 								onClick={(event) => handleNavigate(event, item.ids.imdb)}
 								type="button"
-								className="cursor-pointer rounded bg-gray-800/40 p-2 text-left transition-transform hover:scale-105 hover:bg-gray-800/70"
+								className="min-w-0 cursor-pointer rounded bg-gray-800/40 p-1 text-left transition-transform hover:scale-105 hover:bg-gray-800/70 sm:p-2"
 							>
-								<div className="mx-auto flex w-full max-w-[200px] flex-col items-center">
+								<div className="mx-auto flex w-full max-w-[200px] min-w-0 flex-col items-center">
 									<Poster imdbId={item.ids.imdb} title={item.title} />
 									<div className="mt-2 w-full text-center">
-										<div className="text-sm font-semibold text-gray-100">
-											{item.title}
+										<div className="flex flex-wrap items-baseline justify-center gap-x-1">
+											<span
+												className="line-clamp-2 min-w-0 text-sm font-semibold break-words text-gray-100"
+												title={item.title}
+											>
+												{item.title}
+											</span>
+											{item.year ? (
+												<span className="shrink-0 text-xs text-gray-400">
+													{item.year}
+												</span>
+											) : null}
 										</div>
-										<div className="text-xs text-gray-400">{item.year}</div>
 									</div>
 								</div>
 							</button>
