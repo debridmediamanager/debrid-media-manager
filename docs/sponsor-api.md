@@ -99,6 +99,7 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 			"tmdbId": 62564,
 			"title": "Sound! Euphonium",
 			"year": 2015,
+			"tvdbId": 289884,
 			"files": [
 				{
 					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
@@ -111,7 +112,7 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 			]
 		}
 	],
-	"rules": "2026-10-23.10"
+	"rules": "2026-10-25.1"
 }
 ```
 
@@ -128,8 +129,9 @@ Charge is TMDB's Power Rangers season 22).
 `movie`, `tv` or `null` when DMM cannot tell; `imdbId` and `tmdbId` are the movie's or
 the show's, never an episode's. `title` and `year` are TMDB's title and first year for that
 movie or show, for naming a folder after it (`Sound! Euphonium (2015)`); both are absent where
-`tmdbId` is `null` or TMDB gives none, and a film placed inside a show's release carries its own
-`title` and `year` beside its ids. `season` and `episode` are TMDB's numbering, so you can
+`tmdbId` is `null` or TMDB gives none. `tvdbId` is a show's TheTVDB id as TMDB records it, which
+Plex's show rows carry as `tvdb://<id>`; it is absent for a movie and where TMDB records none.
+A film placed inside a show's release carries its own `title` and `year` beside its ids. `season` and `episode` are TMDB's numbering, so you can
 ask TMDB (or `/api/metadata/tmdb:tv:<tmdbId>?season=N`) for that exact episode;
 With `tmdbId` `null` they are IMDb's numbering of the show `imdbId` names, for a series TMDB cannot use (`how` `imdb`).
 `episodeEnd` is the last episode of a multi-episode file (`S04E17E18`). `tmdbEpisodeId` is TMDB's own id for that episode (from TMDB's season list, whichever rule placed the file), which Plex's episode rows carry as `tmdb://<id>`: Plex numbers many shows otherwise than TMDB (Re:ZERO's TMDB S1E84 is Plex's S4E18), so match by it rather than by the numbers. It is `null` where the file is unplaced or placed on IMDb's numbering. A film inside a show's release (`[Movie 02] Heroes Rising` in a My Hero Academia pack, a `Movies` folder, a name with a year in brackets), left unplaced as an episode, is named on its own where DMM can: such a file also carries `kind` `"movie"`, `imdbId` and `tmdbId`, the film's (TMDB's movie id), and no other file carries them. Movies and files

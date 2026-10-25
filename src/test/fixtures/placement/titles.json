@@ -24,6 +24,20 @@
 		"id": 30983,
 		"name": "Detective Conan",
 		"first_air_date": "1996-01-08",
-		"original_language": "ja"
+		"original_language": "ja",
+		"external_ids": {
+			"imdb_id": "tt0131179",
+			"tvdb_id": 72454
+		}
+	},
+	"show/456": {
+		"id": 456,
+		"name": "The Simpsons",
+		"first_air_date": "1989-12-17",
+		"original_language": "en",
+		"external_ids": {
+			"imdb_id": "tt0096697",
+			"tvdb_id": 71663
+		}
 	}
 }

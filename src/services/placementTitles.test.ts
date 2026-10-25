@@ -24,7 +24,25 @@ describe('titled', () => {
 			...placed,
 			title: 'Detective Conan',
 			year: 1996,
+			tvdbId: 72454,
 		});
+	});
+
+	it("gives a show the TVDB id TMDB records, which Plex's show rows carry", async () => {
+		const placed: PlacedRelease = {
+			kind: 'tv',
+			imdbId: 'tt0096697',
+			tmdbId: 456,
+			files: [
+				{
+					path: 'The.Simpsons.S38E03.720p.HDTV.x264-SYNCOPY.mkv',
+					...episode,
+					season: 38,
+					episode: 3,
+				},
+			],
+		};
+		expect((await titled(placed, sources)).tvdbId).toBe(71663);
 	});
 
 	it('names a film by the TMDB movie its ids name', async () => {
