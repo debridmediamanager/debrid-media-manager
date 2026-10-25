@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Home, Shuffle, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, Shuffle } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -124,6 +124,7 @@ export default function HashlistsPage() {
 						href="/"
 						className="rounded border-2 border-cyan-500 bg-cyan-900/30 p-2 text-cyan-100 transition-colors hover:bg-cyan-800/50"
 						title="Go Home"
+						aria-label="Go Home"
 					>
 						<Home className="h-4 w-4" />
 					</Link>
@@ -163,13 +164,6 @@ export default function HashlistsPage() {
 					>
 						<ChevronRight className="h-4 w-4" />
 					</button>
-					<Link
-						href="/"
-						className="rounded border-2 border-red-500 bg-red-900/30 p-2 text-red-100 transition-colors hover:bg-red-800/50"
-						title="Close"
-					>
-						<X className="h-4 w-4" />
-					</Link>
 				</div>
 
 				<div className="text-center text-sm text-gray-300">
