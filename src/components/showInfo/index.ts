@@ -13,6 +13,7 @@ import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/re
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
 import { handleRestartTorrent, interactiveRdPauseRetries } from '@/utils/addMagnet';
+import { isAdMagnetFailed } from '@/utils/canReinsert';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { getDebridLinkServiceStatus, getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import {
@@ -719,7 +720,7 @@ export const showInfoForAD = async (
             ${renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-ad' })}
             ${renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
-            ${renderButton('reinsert', { id: 'btn-restart-ad' })}
+            ${isAdMagnetFailed(info.statusCode) ? renderButton('reinsert', { id: 'btn-restart-ad' }) : ''}
             ${adKey ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
 	            ${info.links.length > 1 ? renderButton('downloadAll', { link: `${downloadAllLink}`, id: 'btn-download-all-ad' }) : ''}
             ${info.links.length > 0 ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
@@ -861,9 +862,9 @@ export const showInfoForAD = async (
 					hash: info.hash,
 				});
 				if (handlers.onRestartAd) {
-					await handlers.onRestartAd(adKey, `${info.id}`);
+					await handlers.onRestartAd(adKey, `ad:${info.id}`);
 				} else {
-					await handleRestartTorrent(adKey, `${info.id}`);
+					await handleRestartTorrent(adKey, `ad:${info.id}`);
 				}
 				logAction('restart completed (AD)', {
 					hash: info.hash,

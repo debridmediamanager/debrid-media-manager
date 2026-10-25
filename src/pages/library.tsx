@@ -41,11 +41,13 @@ import {
 	handleAddMultipleTorrentFilesInTb,
 	handleAddMultipleWebDownloadsInTb,
 	handleReinsertTorrentinRd,
+	handleRestartTbTorrent,
 	handleRestartTorrent,
 } from '@/utils/addMagnet';
 import { checkAvailabilityByHashes, fetchRdNamesOnRecord } from '@/utils/availability';
 import type { AsyncFunction } from '@/utils/batch';
 import { runConcurrentFunctions } from '@/utils/batch';
+import { canReinsert, NOT_REINSERTABLE } from '@/utils/canReinsert';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import {
 	handleDeleteAdTorrent,
@@ -87,7 +89,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import Modal from '../components/modals/modal';
 
 const ITEMS_PER_PAGE = 100;
@@ -612,12 +614,22 @@ function TorrentsPage() {
 		: sortedData;
 
 	async function handleReinsertTorrents() {
+		const reinsertable = relevantList.filter(canReinsert);
+		const skipped = relevantList.length - reinsertable.length;
+		if (reinsertable.length === 0) {
+			if (relevantList.length > 0) toast(NOT_REINSERTABLE, magnetToastOptions);
+			return;
+		}
 		if (
-			relevantList.length > 0 &&
 			!(
 				await Modal.fire({
 					title: 'Reinsert shown',
-					text: `This will reinsert the ${relevantList.length} torrents filtered. Are you sure?`,
+					text:
+						`This will reinsert ${reinsertable.length} of the ${relevantList.length} torrents shown.` +
+						(skipped
+							? ` ${skipped} cannot be reinserted and will be left alone.`
+							: '') +
+						' Are you sure?',
 					icon: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#0891b2',
@@ -633,12 +645,7 @@ function TorrentsPage() {
 			).isConfirmed
 		)
 			return;
-		const toReinsert = relevantList.map(wrapReinsertFn);
-
-		if (toReinsert.length === 0) {
-			toast('No torrents to reinsert.', magnetToastOptions);
-			return;
-		}
+		const toReinsert = reinsertable.map(wrapReinsertFn);
 
 		const progressToast = toast.loading(
 			`Reinserting 0/${toReinsert.length} torrents...`,
@@ -786,10 +793,15 @@ function TorrentsPage() {
 					await handleRestartTorrent(adKey, t.id);
 					return oldId;
 				}
-				return undefined;
+				if (tbKey && t.id.startsWith('tb:')) {
+					// A reannounce keeps the torrent and its id.
+					await handleRestartTbTorrent(tbKey, t.id);
+					return undefined;
+				}
+				throw new Error(`No key to reinsert ${t.id}`);
 			};
 		},
-		[rdKey, adKey]
+		[rdKey, adKey, tbKey]
 	);
 
 	async function dedupeBySize() {

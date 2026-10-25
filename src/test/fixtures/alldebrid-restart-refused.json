@@ -1,0 +1,10 @@
+{
+	"_source": "AllDebrid v4.1 POST /magnet/restart id=813291548 (a Ready magnet, statusCode 4) on the test account, captured 2026-10-25",
+	"response": {
+		"status": "error",
+		"error": {
+			"code": "MAGNET_PROCESSING",
+			"message": "Magnet is processing or completed"
+		}
+	}
+}

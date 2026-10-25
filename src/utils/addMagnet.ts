@@ -720,7 +720,15 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 			'Error restarting torrent:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		toast.error(`Failed to restart torrent (${id}).`, magnetToastOptions);
+		// The listing it was offered from can be stale: the magnet recovered or
+		// was restarted since, and AllDebrid restarts only failed magnets.
+		const notFailed = (error as { code?: string })?.code === 'MAGNET_PROCESSING';
+		toast.error(
+			notFailed
+				? `AllDebrid restarts only failed torrents; ${id} is downloading or done.`
+				: `Failed to restart torrent (${id}).`,
+			magnetToastOptions
+		);
 		throw error;
 	}
 };

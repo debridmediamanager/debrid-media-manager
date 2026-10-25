@@ -653,7 +653,7 @@ export const restartMagnet = async (apikey: string, id: string): Promise<MagnetR
 		);
 
 		if (!response.data || response.data.status === 'error') {
-			throw new Error(response.data?.error?.message || 'Unknown error');
+			throw allDebridEnvelopeError(response.data?.error, 'Unknown error');
 		}
 
 		return response.data.data!;

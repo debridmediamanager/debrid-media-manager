@@ -5,6 +5,7 @@ import {
 	handleRestartTorrent,
 } from '@/utils/addMagnet';
 import { getAllDebridStatusText } from '@/utils/allDebridStatus';
+import { canReinsert } from '@/utils/canReinsert';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import { runDebridTransferToRd } from '@/utils/debridUploader';
@@ -733,7 +734,7 @@ function TorrentRow({
 							<Link2 className="h-4 w-4 text-teal-500" />
 						</button>
 					)}
-					{!isTbWebDownload && (
+					{canReinsert(torrent) && (
 						<button
 							title="Reinsert"
 							className="cursor-pointer p-3 text-green-500 sm:mr-2 sm:mb-2 sm:p-0"

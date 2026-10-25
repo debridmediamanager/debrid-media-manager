@@ -1,3 +1,4 @@
+import type { MagnetStatus } from '@/services/allDebrid';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleReinsertTorrentinRd,
@@ -19,6 +20,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ComponentProps } from 'react';
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from 'vitest';
+import adFixture from '../test/fixtures/alldebrid-library-magnet.json';
 import TorrentRow from './LibraryTorrentRow';
 
 type StandaloneRowProps = Omit<ComponentProps<typeof TorrentRow>, 'grouping'>;
@@ -33,6 +35,13 @@ function LibraryTorrentRow(props: StandaloneRowProps) {
 }
 
 // Mock dependencies
+const readyAdMagnet = { ...adFixture.listStatusMagnet, links: [] } as unknown as MagnetStatus;
+const failedAdMagnet = {
+	...readyAdMagnet,
+	status: 'No peer after 30 minutes',
+	statusCode: 7,
+} as MagnetStatus;
+
 vi.mock('@/utils/addMagnet');
 vi.mock('@/utils/deleteTorrent');
 vi.mock('@/utils/copyMagnet');
@@ -395,7 +404,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		});
 
 		it('should handle AllDebrid torrents differently', async () => {
-			const adTorrent = { ...mockTorrent, id: 'ad:456' };
+			const adTorrent = { ...mockTorrent, id: 'ad:456', adData: failedAdMagnet };
 			const adProps = {
 				...defaultProps,
 				torrent: adTorrent,
@@ -691,6 +700,21 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 	});
 
 	describe('Conditional Rendering', () => {
+		// Clicking Reinsert on these did nothing at all (2026-10-25), and on a
+		// healthy AllDebrid magnet it drew a bare "Failed to restart".
+		it.each([
+			['a Ready AllDebrid magnet', { id: 'ad:813291548', adData: readyAdMagnet }],
+			['Premiumize', { id: 'pm:tNwjm2iDZBrmew324IRGIwA' }],
+			['Offcloud', { id: 'oc:bUk9yEUGbyeBokKgW9wyBA' }],
+			['Debrid-Link', { id: 'dl:s1p7g8e3g1olpl44s8ocwn1p' }],
+		])('offers no Reinsert for %s', (_name, over) => {
+			const { container } = render(
+				<LibraryTorrentRow {...defaultProps} torrent={{ ...mockTorrent, ...over }} />
+			);
+
+			expect(container.querySelector('button[title="Reinsert"]')).toBeNull();
+		});
+
 		it('should not call reinsert if no rdKey for RD torrent', async () => {
 			const propsNoRdKey = { ...defaultProps, rdKey: null };
 
@@ -705,7 +729,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		});
 
 		it('should not call reinsert if no adKey for AD torrent', async () => {
-			const adTorrent = { ...mockTorrent, id: 'ad:456' };
+			const adTorrent = { ...mockTorrent, id: 'ad:456', adData: failedAdMagnet };
 			const propsNoAdKey = {
 				...defaultProps,
 				torrent: adTorrent,

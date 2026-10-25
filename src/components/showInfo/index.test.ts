@@ -67,6 +67,9 @@ vi.mock('./utils', async () => {
 	};
 });
 
+import axios from 'axios';
+
+import adFixture from '../../test/fixtures/alldebrid-library-magnet.json';
 import Modal from '../modals/modal';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from './index';
 
@@ -493,5 +496,39 @@ describe('watch button binding', () => {
 		);
 
 		expect(bound).toMatchObject({ service: 'tbw' });
+	});
+});
+
+describe('AllDebrid popup Reinsert', () => {
+	const readyMagnet = { ...adFixture.listStatusMagnet, links: [] };
+
+	const open = async (info: object) => {
+		mocks.modalFireMock.mockClear();
+		await showInfoForAD('app', 'ad-key', info);
+		const options = mocks.modalFireMock.mock.calls[0][0];
+		document.body.innerHTML = options.html as string;
+		options.didOpen?.();
+	};
+
+	it('offers no Reinsert on a magnet AllDebrid will not restart', async () => {
+		await open(readyMagnet);
+
+		expect(document.getElementById('btn-restart-ad')).toBeNull();
+	});
+
+	// The popup passed the bare id to a restart that strips an `ad:` prefix,
+	// so magnet 813291548 went to AllDebrid as 291548.
+	it('restarts a failed magnet by its own id', async () => {
+		const post = vi
+			.mocked(axios.post)
+			.mockResolvedValue({ data: { status: 'success', data: { message: 'ok' } } });
+		await open({ ...readyMagnet, status: 'No peer after 30 minutes', statusCode: 7 });
+
+		document.getElementById('btn-restart-ad')!.click();
+
+		await vi.waitFor(() => expect(post).toHaveBeenCalled());
+		const [url, body] = post.mock.calls.at(-1)!;
+		expect(url).toContain('/magnet/restart');
+		expect(String(body)).toBe('id=813291548');
 	});
 });
