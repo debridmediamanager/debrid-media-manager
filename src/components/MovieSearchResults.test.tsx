@@ -251,8 +251,8 @@ describe('MovieSearchResults', () => {
 				],
 			});
 
-			expect(screen.getByText(/Total: 80\.00 GB/)).toBeTruthy();
-			expect(screen.queryByText(/Total: 0\.00 GB/)).toBeNull();
+			expect(screen.getByText(/80\.00 GB/)).toBeTruthy();
+			expect(screen.queryByText(/^0\.00 GB/)).toBeNull();
 		});
 
 		it('still shows 0.00 GB when nothing at all is known', () => {
@@ -270,7 +270,44 @@ describe('MovieSearchResults', () => {
 				],
 			});
 
-			expect(screen.getByText(/Total: 0\.00 GB/)).toBeTruthy();
+			expect(screen.getByText(/^0\.00 GB/)).toBeTruthy();
+		});
+	});
+
+	// The size line says each number once; the old wording stays in the tooltip.
+	describe('size line', () => {
+		it('shows a release with extras as biggest of total and keeps the wording in a tooltip', () => {
+			renderComponent({
+				movieMaxSize: '0',
+				filteredResults: [
+					{
+						...baseResult,
+						fileSize: 60 * 1024,
+						videoCount: 4,
+						biggestFileSize: 50 * 1024,
+					},
+				],
+			});
+
+			const chip = screen.getByText('4 videos').closest('span')!;
+			expect(chip).toHaveAttribute('title', 'With extras: 4 video files');
+			const size = screen.getByText('50.00 of 60.00 GB');
+			expect(size).toHaveAttribute('title', 'Total: 60.00 GB; Biggest: 50.00 GB');
+		});
+
+		it('shows a single-video release as one size', () => {
+			renderComponent({
+				movieMaxSize: '0',
+				filteredResults: [
+					{ ...baseResult, fileSize: 8 * 1024, videoCount: 1, biggestFileSize: 8 * 1024 },
+				],
+			});
+
+			expect(screen.getByText('1 video').closest('span')).toHaveAttribute(
+				'title',
+				'Single: one video file'
+			);
+			expect(screen.getByText('8.00 GB')).toHaveAttribute('title', 'Total: 8.00 GB');
 		});
 	});
 

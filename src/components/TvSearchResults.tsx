@@ -541,9 +541,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												result={r}
 												videoCount={r.videoCount}
 											/>
-											<span className="ml-2">
-												Total: {fileSize(totalFileSize(r))} GB; Median:{' '}
-												{fileSize(r.medianFileSize)} GB
+											<span
+												className="ml-2"
+												title={`Total: ${fileSize(totalFileSize(r))} GB; Median: ${fileSize(r.medianFileSize)} GB per episode`}
+											>
+												{fileSize(totalFileSize(r))} GB
+												{r.videoCount > 1 &&
+													` · ${fileSize(r.medianFileSize)} GB/ep`}
 												{r.trackerStats &&
 													!r.rdAvailable &&
 													!r.adAvailable &&
@@ -564,8 +568,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											</span>
 										</div>
 									) : (
-										<div className="text-xs text-gray-300">
-											Total: {fileSize(totalFileSize(r))} GB
+										<div
+											className="text-xs text-gray-300"
+											title={`Total: ${fileSize(totalFileSize(r))} GB`}
+										>
+											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
 												!r.rdAvailable &&
 												!r.adAvailable &&

@@ -516,8 +516,8 @@ const MovieSearchResults = ({
 	};
 
 	const getMovieCountLabel = (videoCount: number) => {
-		if (videoCount === 1) return `Single`;
-		return `With extras (${videoCount})`;
+		if (videoCount === 1) return '1 video';
+		return `${videoCount} videos`;
 	};
 
 	const getMovieCountClass = (videoCount: number, isInstantlyAvailable: boolean) => {
@@ -609,14 +609,22 @@ const MovieSearchResults = ({
 									<span
 										className="haptic-sm inline-flex cursor-pointer items-center rounded bg-black/50 px-2 py-1 hover:bg-black/75"
 										onClick={() => handleShowInfo(r)}
+										title={
+											r.videoCount === 1
+												? 'Single: one video file'
+												: `With extras: ${r.videoCount} video files`
+										}
 									>
 										<Folder className="mr-1 h-4 w-4" />
 										{getMovieCountLabel(r.videoCount)}
 									</span>
 									{r.videoCount > 1 ? (
-										<span className="ml-2">
-											Total: {fileSize(totalFileSize(r))} GB; Biggest:{' '}
-											{fileSize(r.biggestFileSize)} GB
+										<span
+											className="ml-2"
+											title={`Total: ${fileSize(totalFileSize(r))} GB; Biggest: ${fileSize(r.biggestFileSize)} GB`}
+										>
+											{fileSize(r.biggestFileSize)} of{' '}
+											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
 												!r.rdAvailable &&
 												!r.adAvailable &&
@@ -636,8 +644,11 @@ const MovieSearchResults = ({
 												))}
 										</span>
 									) : (
-										<span className="ml-2">
-											Total: {fileSize(totalFileSize(r))} GB
+										<span
+											className="ml-2"
+											title={`Total: ${fileSize(totalFileSize(r))} GB`}
+										>
+											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
 												!r.rdAvailable &&
 												!r.adAvailable &&
@@ -659,8 +670,11 @@ const MovieSearchResults = ({
 									)}
 								</div>
 							) : (
-								<div className="text-xs text-gray-300">
-									Total: {fileSize(totalFileSize(r))} GB
+								<div
+									className="text-xs text-gray-300"
+									title={`Total: ${fileSize(totalFileSize(r))} GB`}
+								>
+									{fileSize(totalFileSize(r))} GB
 									{r.trackerStats &&
 										!r.rdAvailable &&
 										!r.adAvailable &&

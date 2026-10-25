@@ -240,6 +240,42 @@ describe('TvSearchResults', () => {
 	// The action row reads left to right as "what each service can do", then the
 	// things that are not tied to a service. Watch used to sit inside the RD
 	// group, which made it look like an RD action when it picks its own service.
+	describe('size line', () => {
+		it('shows total and median per episode for a pack', () => {
+			renderTv({
+				episodeMaxSize: '0',
+				filteredResults: [
+					{
+						...baseTvResult,
+						fileSize: 66 * 1024,
+						videoCount: 2,
+						medianFileSize: 33 * 1024,
+					},
+				],
+			});
+
+			const size = screen.getByText(/66\.00 GB · 33\.00 GB\/ep/);
+			expect(size).toHaveAttribute('title', 'Total: 66.00 GB; Median: 33.00 GB per episode');
+		});
+
+		it('shows just the size for a single episode', () => {
+			renderTv({
+				episodeMaxSize: '0',
+				filteredResults: [
+					{
+						...baseTvResult,
+						fileSize: 2 * 1024,
+						videoCount: 1,
+						medianFileSize: 2 * 1024,
+					},
+				],
+			});
+
+			expect(screen.getByText('2.00 GB')).toBeTruthy();
+			expect(screen.queryByText(/GB\/ep/)).toBeNull();
+		});
+	});
+
 	describe('action row grouping', () => {
 		const everywhere = {
 			...baseTvResult,
