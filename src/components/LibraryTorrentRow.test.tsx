@@ -1,4 +1,5 @@
 import type { MagnetStatus } from '@/services/allDebrid';
+import type { TorBoxTorrentInfo } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleReinsertTorrentinRd,
@@ -21,6 +22,7 @@ import { useRouter } from 'next/router';
 import type { ComponentProps } from 'react';
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from 'vitest';
 import adFixture from '../test/fixtures/alldebrid-library-magnet.json';
+import tbFixture from '../test/fixtures/torbox-reannounce-finished.json';
 import TorrentRow from './LibraryTorrentRow';
 
 type StandaloneRowProps = Omit<ComponentProps<typeof TorrentRow>, 'grouping'>;
@@ -431,7 +433,15 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		});
 
 		it('should call appropriate restart function for TB torrents', async () => {
-			const tbTorrent = { ...mockTorrent, id: 'tb:789' };
+			const tbTorrent = {
+				...mockTorrent,
+				id: 'tb:789',
+				tbData: {
+					...tbFixture.torrent,
+					id: 789,
+					active: true,
+				} as unknown as TorBoxTorrentInfo,
+			};
 			const tbProps = {
 				...defaultProps,
 				torrent: tbTorrent,
@@ -707,6 +717,13 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			['Premiumize', { id: 'pm:tNwjm2iDZBrmew324IRGIwA' }],
 			['Offcloud', { id: 'oc:bUk9yEUGbyeBokKgW9wyBA' }],
 			['Debrid-Link', { id: 'dl:s1p7g8e3g1olpl44s8ocwn1p' }],
+			[
+				'a finished TorBox torrent',
+				{
+					id: `tb:${tbFixture.torrent.id}`,
+					tbData: tbFixture.torrent as unknown as TorBoxTorrentInfo,
+				},
+			],
 		])('offers no Reinsert for %s', (_name, over) => {
 			const { container } = render(
 				<LibraryTorrentRow {...defaultProps} torrent={{ ...mockTorrent, ...over }} />
