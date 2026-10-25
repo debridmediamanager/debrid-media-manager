@@ -74,8 +74,36 @@ describe('RealDebridStatusPage client refresh', () => {
 		const workingStreamCard = getByTestId('working-stream-card');
 		expect(workingStreamCard).toBeTruthy();
 		expect(within(workingStreamCard).getByText('Stream Server Check')).toBeTruthy();
-		expect(getByTestId('status-answer-mobile').textContent).toBe(' collecting data');
+		expect(getByTestId('status-answer').textContent).toBe('Waiting for data');
 		expect(getByTestId('status-freshness').textContent?.startsWith('Last updated:')).toBe(true);
+	});
+
+	// 6 of 10 servers working turned the stream card amber while the headline
+	// still read "Operational": the page had no band between up and down.
+	it.each([
+		[10, 10, 'Real-Debrid is Operational'],
+		[6, 10, 'Real-Debrid is Partially Degraded'],
+		[4, 10, 'Real-Debrid is Down'],
+	])('calls %i of %i working servers "%s"', async (working, total, headline) => {
+		setMockFetch(
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: () =>
+					Promise.resolve({
+						...baseStats,
+						workingStream: {
+							...buildWorkingStream(),
+							working,
+							total,
+							rate: working / total,
+						},
+					}),
+			})
+		);
+
+		const { getByRole } = render(<RealDebridStatusPage />);
+
+		await waitFor(() => expect(getByRole('heading', { level: 1 })).toHaveTextContent(headline));
 	});
 
 	it('promotes Debrid Media Manager with an external CTA link', async () => {

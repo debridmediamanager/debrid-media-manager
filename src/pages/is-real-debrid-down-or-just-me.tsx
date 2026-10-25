@@ -36,7 +36,7 @@ function formatDateTime(timestamp: number): string {
 	});
 }
 
-type StatusState = 'idle' | 'up' | 'down';
+type StatusState = 'idle' | 'up' | 'degraded' | 'down';
 
 function isRealDebridObservabilityPayload(value: unknown): value is RealDebridObservabilityStats {
 	if (!value || typeof value !== 'object') {
@@ -49,6 +49,24 @@ function isRealDebridObservabilityPayload(value: unknown): value is RealDebridOb
 	}
 	return true;
 }
+
+/** Share of stream servers working at or above which the headline says so. */
+const STREAM_UP_RATE = 0.8;
+/** Below this share the headline calls it down; between the two, degraded. */
+const STREAM_DOWN_RATE = 0.5;
+
+const PING_CLASS: Record<StatusState, string> = {
+	idle: 'bg-slate-400',
+	up: 'bg-emerald-400',
+	degraded: 'bg-amber-400',
+	down: 'bg-rose-500',
+};
+const DOT_CLASS: Record<StatusState, string> = {
+	idle: 'bg-slate-500',
+	up: 'bg-emerald-500',
+	degraded: 'bg-amber-500',
+	down: 'bg-rose-600',
+};
 
 const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => {
 	const [stats, setStats] = useState<RealDebridObservabilityStats | null>(null);
@@ -137,8 +155,16 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 			: null;
 
 	// Determine status based on stream health (working servers / total servers)
+	// Four bands, as TorBox's page has. The stream card turns amber between them,
+	// and the headline used to say "Operational" over an amber card.
 	const state: StatusState =
-		workingStream.total === 0 ? 'idle' : streamPct !== null && streamPct < 50 ? 'down' : 'up';
+		workingStream.total === 0
+			? 'idle'
+			: workingStream.rate >= STREAM_UP_RATE
+				? 'up'
+				: workingStream.rate >= STREAM_DOWN_RATE
+					? 'degraded'
+					: 'down';
 
 	const statusMeta: Record<
 		StatusState,
@@ -166,6 +192,14 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 			bgColorClass: 'bg-emerald-500/10',
 			borderColorClass: 'border-emerald-500/20',
 			icon: CheckCircle2,
+		},
+		degraded: {
+			label: 'Real-Debrid is Partially Degraded',
+			description: 'Some stream servers not responding',
+			colorClass: 'text-amber-400',
+			bgColorClass: 'bg-amber-500/10',
+			borderColorClass: 'border-amber-500/20',
+			icon: AlertTriangle,
 		},
 		down: {
 			label: 'Real-Debrid is Down',
@@ -200,34 +234,20 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 
 				<div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
 					{/* Header / Hero */}
-					<header className="flex flex-col items-center gap-6 pt-8 text-center">
-						<div
-							className={`flex items-center gap-3 rounded-full border px-6 py-2 ${currentStatus.bgColorClass} ${currentStatus.borderColorClass}`}
-						>
-							<div className={`relative flex h-3 w-3`}>
+					<header className="flex flex-col items-center gap-3 text-center">
+						<h1 className="flex items-center justify-center gap-3 text-2xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+							<span className="relative flex h-3 w-3 shrink-0">
 								<span
-									className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${state === 'up' ? 'bg-emerald-400' : state === 'down' ? 'bg-rose-500' : 'bg-slate-400'}`}
+									className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${PING_CLASS[state]}`}
 								></span>
 								<span
-									className={`relative inline-flex h-3 w-3 rounded-full ${state === 'up' ? 'bg-emerald-500' : state === 'down' ? 'bg-rose-600' : 'bg-slate-500'}`}
+									className={`relative inline-flex h-3 w-3 rounded-full ${DOT_CLASS[state]}`}
 								></span>
-							</div>
-							<span className={`font-semibold ${currentStatus.colorClass}`}>
-								<span data-testid="status-answer-mobile">
-									{state === 'up'
-										? 'Operational'
-										: state === 'down'
-											? 'Major Outage'
-											: ' collecting data'}
-								</span>
 							</span>
-						</div>
-
-						<h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-							{currentStatus.label}
+							<span data-testid="status-answer">{currentStatus.label}</span>
 						</h1>
 
-						<p className="max-w-2xl text-lg text-slate-400">
+						<p className="max-w-2xl text-sm text-slate-400 sm:text-lg">
 							Live monitoring of Real-Debrid stream server availability.
 						</p>
 
@@ -247,48 +267,6 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 								<span>Refresh</span>
 							</button>
 						</div>
-
-						<div className="mt-4 grid w-full gap-6 md:grid-cols-2">
-							<div className="rounded-xl border border-white/10 bg-white/5 p-6">
-								<h3 className="text-lg font-medium text-white">About this data</h3>
-								<p className="mt-2 text-sm text-slate-400">
-									This status page is powered by{' '}
-									<a
-										className="font-semibold text-sky-300 hover:text-white"
-										href="https://debridmediamanager.com/"
-										rel="noreferrer noopener"
-										target="_blank"
-									>
-										Debrid Media Manager
-									</a>
-									, a free, open source dashboard for Real-Debrid, AllDebrid, and
-									TorBox. We run automated health checks every 5 minutes to
-									monitor stream server and{' '}
-									<a
-										className="font-semibold text-sky-300 hover:text-white"
-										href="https://torrentio.strem.fun/configure"
-										rel="noreferrer noopener"
-										target="_blank"
-									>
-										Torrentio
-									</a>{' '}
-									availability.
-								</p>
-							</div>
-
-							<div className="rounded-xl border border-white/10 bg-white/5 p-6">
-								<h3 className="flex items-center gap-2 text-lg font-medium text-white">
-									<span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-									Is it just you?
-								</h3>
-								<p className="mt-2 text-sm text-slate-400">
-									Check your internet connection first. If Real-Debrid is down for
-									everyone, you&apos;ll see failure here. If this page says
-									&quot;Operational&quot; but you can&apos;t connect, the issue
-									might be your ISP or local network.
-								</p>
-							</div>
-						</div>
 					</header>
 
 					{/* Stream Health & Info */}
@@ -307,9 +285,9 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 										className={`text-3xl font-bold ${
 											workingStream.total === 0
 												? 'text-slate-400'
-												: workingStream.rate >= 0.8
+												: workingStream.rate >= STREAM_UP_RATE
 													? 'text-emerald-400'
-													: workingStream.rate >= 0.4
+													: workingStream.rate >= STREAM_DOWN_RATE
 														? 'text-amber-400'
 														: 'text-rose-500'
 										}`}
@@ -556,21 +534,48 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 						</div>
 					</div>
 
+					<div className="rounded-xl border border-white/10 bg-white/5 p-6">
+						<h3 className="flex items-center gap-2 text-lg font-medium text-white">
+							<span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+							Is it just you?
+						</h3>
+						<p className="mt-2 text-sm text-slate-400">
+							Check your internet connection first. If Real-Debrid is down for
+							everyone, you&apos;ll see failure here. If this page says
+							&quot;Operational&quot; but you can&apos;t connect, the issue might be
+							your ISP or local network.
+						</p>
+					</div>
+
 					{/* Charts */}
 					<HistoryCharts />
 
-					{/* Footer */}
-					<footer className="mt-8 border-t border-white/10 pt-8 text-center">
-						<p className="text-sm text-slate-400">
-							Debrid Media Manager is an open-source project.
+					<div className="rounded-xl border border-white/10 bg-white/5 p-6">
+						<h3 className="text-lg font-medium text-white">About this data</h3>
+						<p className="mt-2 text-sm text-slate-400">
+							This status page is powered by{' '}
 							<a
-								href="https://debridmediamanager.com"
-								className="ml-1 text-emerald-400 hover:underline"
+								className="font-semibold text-sky-300 hover:text-white"
+								href="https://debridmediamanager.com/"
+								rel="noreferrer noopener"
+								target="_blank"
 							>
-								Visit Homepage
+								Debrid Media Manager
 							</a>
+							, a free, open source dashboard for Real-Debrid, AllDebrid, and TorBox.
+							We run automated health checks every 5 minutes to monitor stream server
+							and{' '}
+							<a
+								className="font-semibold text-sky-300 hover:text-white"
+								href="https://torrentio.strem.fun/configure"
+								rel="noreferrer noopener"
+								target="_blank"
+							>
+								Torrentio
+							</a>{' '}
+							availability.
 						</p>
-					</footer>
+					</div>
 				</div>
 			</main>
 		</>

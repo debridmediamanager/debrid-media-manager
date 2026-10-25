@@ -90,7 +90,9 @@ describe('TorBoxStatusPage', () => {
 	it('renders the operational verdict from real user traffic', async () => {
 		const { getByTestId } = render(<TorBoxStatusPage />);
 
-		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Operational'));
+		await waitFor(() =>
+			expect(getByTestId('status-answer')).toHaveTextContent('TorBox is Operational')
+		);
 		expect(getByTestId('tb-api-rate')).toHaveTextContent('98%');
 		expect(getByTestId('volume-card')).toHaveTextContent('100');
 	});
@@ -195,7 +197,7 @@ describe('TorBoxStatusPage', () => {
 
 			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
 			expect(getByTestId('tb-api-rate')).toHaveTextContent('—');
-			expect(getByTestId('status-answer')).toHaveTextContent('Collecting data');
+			expect(getByTestId('status-answer')).toHaveTextContent('Not Enough Traffic To Say');
 		});
 
 		// Only 2xx and 5xx are counted. The gap between the two totals is 4xx -
@@ -237,7 +239,9 @@ describe('TorBoxStatusPage', () => {
 			const { getByTestId } = render(<TorBoxStatusPage />);
 
 			await waitFor(() =>
-				expect(getByTestId('status-answer')).toHaveTextContent('Partial Outage')
+				expect(getByTestId('status-answer')).toHaveTextContent(
+					'TorBox is Partially Degraded'
+				)
 			);
 		});
 
@@ -257,7 +261,7 @@ describe('TorBoxStatusPage', () => {
 			const { getByTestId } = render(<TorBoxStatusPage />);
 
 			await waitFor(() =>
-				expect(getByTestId('status-answer')).toHaveTextContent('Major Outage')
+				expect(getByTestId('status-answer')).toHaveTextContent('TorBox is Down')
 			);
 			expect(getByTestId('tb-api-rate')).toHaveTextContent('10%');
 		});
@@ -280,7 +284,7 @@ describe('TorBoxStatusPage', () => {
 			const { getByTestId } = render(<TorBoxStatusPage />);
 
 			await waitFor(() =>
-				expect(getByTestId('status-answer')).toHaveTextContent('Collecting data')
+				expect(getByTestId('status-answer')).toHaveTextContent('Not Enough Traffic To Say')
 			);
 			expect(getByTestId('volume-card')).toHaveTextContent('floor');
 		});
@@ -321,13 +325,15 @@ describe('TorBoxStatusPage', () => {
 
 	it('keeps the last good payload when a refresh fails', async () => {
 		const { getByTestId } = render(<TorBoxStatusPage />);
-		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Operational'));
+		await waitFor(() =>
+			expect(getByTestId('status-answer')).toHaveTextContent('TorBox is Operational')
+		);
 
 		setMockFetch(null, false);
 		await vi.advanceTimersByTimeAsync(60_000);
 
 		await waitFor(() => expect(getByTestId('stale-banner')).toBeInTheDocument());
-		expect(getByTestId('status-answer')).toHaveTextContent('Operational');
+		expect(getByTestId('status-answer')).toHaveTextContent('TorBox is Operational');
 		expect(getByTestId('stale-banner')).toHaveTextContent('Could not reach the status API');
 	});
 
