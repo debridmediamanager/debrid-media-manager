@@ -47,7 +47,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-10-25.1';
+export const PLACEMENT_RULES = '2026-10-26.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -538,6 +538,25 @@ async function secondLook(
 								Math.abs(answer.parsedYear - match.year) > 1
 							)
 					);
+		// a title IMDb spells otherwise than the name and TMDB as it, among the identifier's: `KonoSuba`
+		// is an alternative title of TMDB's KONOSUBA - God's blessing on this wonderful world!,
+		// `Teasing Master Takagi-san` TMDB's name for IMDb's Karakai Jouzu no Takagi-san, and `Would I
+		// Lie To You AU` the Australian show's, which the identifier ranks below the British one
+		if (!offered.length && answer.kind === 'tv' && letters(answer.parsedTitle).length >= 3) {
+			for (const match of answer.matches.slice(0, 5)) {
+				const tv = (await sources.find(match.imdbId))?.tv_results?.[0]?.id;
+				const shown = typeof tv === 'number' ? await sources.show(tv) : null;
+				const names = [
+					shown?.name,
+					shown?.original_name,
+					...((shown?.alternative_titles?.results as any[]) ?? []).map(
+						(row) => row?.title
+					),
+				];
+				if (names.some((name) => letters(name) === letters(answer.parsedTitle)))
+					offered.push(match);
+			}
+		}
 		if (answer.kind === 'movie') {
 			if (!unnamed || numbered.length || offered.length !== 1) continue;
 			const title = await resolve(offered[0].imdbId, 'movie', release, sources);
@@ -556,9 +575,21 @@ async function secondLook(
 			)
 				continue;
 			const there = await placeRelease(release, title, sources, anime);
-			if (!there.skipped && placesFiles(there)) tried.push(there);
+			const show = (answer: PlacedRelease) => answer.tmdbId ?? answer.imdbId;
+			// two titles can land on one show: the 2024 drama Teasing Master Takagi-san, holding no
+			// season 2, hands `S02E01` to the anime index's show, the anime the identifier ranked first
+			if (!there.skipped && placesFiles(there) && !tried.some((t) => show(t) === show(there)))
+				tried.push(there);
 		}
 		if (tried.length === 1) return tried[0];
+		// shows titled alike that both hold the files' numbers (Animaniacs of 1993 and of 2020): the
+		// one whose episodes the files' titles name, at their own numbers before elsewhere (Fruits
+		// Basket of 2019 lists "Let's Go Home" as S1E24, that of 2001 as S1E26)
+		const rank = (there: PlacedRelease) =>
+			(agreedFiles.get(there) ?? 0) * (release.files.length + 1) +
+			(titledFiles.get(there) ?? 0);
+		const [best, next] = tried.map(rank).sort((a, b) => b - a);
+		if (best > 0 && best > next) return tried.find((there) => rank(there) === best)!;
 		// the id sent placed nothing and the identifier is sure of another title, which TMDB
 		// cannot number the files on either: that title, unplaced, rather than one it is not
 		if (answer.confident && !unnamed && !tried.length) {
@@ -953,6 +984,7 @@ async function placeFiles(
 		)
 	);
 	titledFiles.set(placedAnswer, kept.filter((found) => found?.titled).length);
+	agreedFiles.set(placedAnswer, kept.filter((found, at) => found?.titled && !movedBy[at]).length);
 	return placedAnswer;
 }
 
@@ -1006,6 +1038,8 @@ async function placeOnImdb(
 
 /** How many of an answer's files placeOnShow placed by their own titles. */
 const titledFiles = new WeakMap<PlacedRelease, number>();
+/** How many of those its titles placed on the episode its numbers name as well. */
+const agreedFiles = new WeakMap<PlacedRelease, number>();
 
 // TMDB names Detective Conan's "Aired Order (TheTVDB)": `S33E26.a.Ghost` (Crunchyroll's, TVDB's
 // season 33) is its S1E1173 "It's a Ghost!"

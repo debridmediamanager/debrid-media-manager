@@ -15,6 +15,7 @@ import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
+import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -926,5 +927,80 @@ describe('what rex-fun still could not match on 2026-10-24', () => {
 		// a file numbered by nothing, between no titled neighbours, stays off every episode
 		const zenki = await placedHere('[DmonHiro] Kishin Douji Zenki');
 		expect(at(zenki, 'Clean Opening I.mkv')).toEqual([null, null]);
+	});
+});
+
+describe('single episodes rex-fun showed as shows of their own on 2026-10-25', () => {
+	// zurg-usenet's requests for one-episode releases DMM left unnamed, a Discord report's file, and
+	// every answer placing them needed (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(fun1025.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(fun1025.answers.anime.fribb as FribbAnimeEntry[]),
+				fun1025.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (fun1025.answers.identify as any)?.[name] ?? null);
+	const placedHere = async (name: string) => {
+		const c = fun1025.cases.find((c) => c.request.name.startsWith(name))!;
+		return (await place([c.request as PlaceRequest], Infinity, from, ask)).releases[0];
+	};
+	const at = async (name: string) => {
+		const { tmdbId, files } = await placedHere(name);
+		return [tmdbId, files[0].season, files[0].episode];
+	};
+
+	it.each(fun1025.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			from,
+			ask
+		);
+		expect(complete).toBe(true);
+		expect(releases[0]).toEqual(c.expect);
+	});
+
+	it('takes the one of two same-named shows whose episode the title names', async () => {
+		// Animaniacs of 1993 (82) and of 2020 (107124) both have an S1E25; the 1993 one's is the title
+		expect(await at('Animaniacs - S01E25 - Garage Sale of the Century')).toEqual([82, 1, 25]);
+		// the 1993 OVA (60862) reaches S01E07 only by counting through its two seasons
+		expect(await at('JoJos.Bizarre.Adventure.S01E07.Sorrowful.Successor')).toEqual([
+			45790, 1, 7,
+		]);
+		// Fruits Basket of 2019 (85991); the 2001 series (36941) titles its S1E26 "Let's Go Home"
+		expect(await at('Fruits Basket S01E08 See You When You Get Back')).toEqual([85991, 1, 8]);
+		expect(await at('Fruits Basket S01E24 Let')).toEqual([85991, 1, 24]);
+	});
+	it('reads a title written as UTF-8 and read as Latin-1', async () => {
+		// the file is `Fruits Basket S01E19 Iâ\u0080\u0099m So Sorry!.mkv`, TMDB's S1E19 "I'm So Sorry!"
+		expect(await at('Fruits Basket S01E19 I')).toEqual([85991, 1, 19]);
+	});
+	it('takes a title TMDB spells as the name where IMDb spells it otherwise', async () => {
+		// an alternative title of KONOSUBA - God's blessing on this wonderful world!
+		expect(await at('KonoSuba.S02E01.German')).toEqual([65844, 2, 1]);
+		// "Would I Lie to You? (AU)", which the identifier ranks below the British show (4775)
+		expect(await at('Would.I.Lie.To.You.AU.S01E03')).toEqual([158741, 1, 3]);
+		// IMDb's Karakai Jouzu no Takagi-san; the 2024 drama of TMDB's name (235913) has no S1E9
+		expect(await at('Teasing.Master.Takagi-san.S01E09')).toEqual([75865, 1, 9]);
+		expect(await at('Teasing.Master.Takagi-san.S02E01')).toEqual([75865, 2, 1]);
+	});
+	it('leaves a file two same-named shows hold alike, with no title naming one, unplaced', async () => {
+		for (const name of [
+			// the 2018 anime and the 2024 drama both have an S1E1
+			'Teasing.Master.Takagi-san.S01E01',
+			// no title, and both Fruits Baskets have an S1E6
+			'Fruits.Basket.S01E06',
+			// TMDB titles the 2012 series' S1E5 "The Dark Knights", the OVA's another way
+			'JoJos.Bizarre.Adventure.S01E05.Black.Knights',
+		]) {
+			expect(await placedHere(name)).toMatchObject({
+				kind: null,
+				imdbId: null,
+				tmdbId: null,
+			});
+		}
 	});
 });

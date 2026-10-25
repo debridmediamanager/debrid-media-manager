@@ -112,7 +112,7 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 			]
 		}
 	],
-	"rules": "2026-10-25.1"
+	"rules": "2026-10-26.1"
 }
 ```
 
@@ -120,7 +120,11 @@ The `imdbId` you send is the title unless it places none of the release's number
 while DMM's identifier is sure of another title: `The.Magicians.S03` sent as The Ancient
 Magus' Bride is answered as The Magicians, and a release whose files read as a title TMDB
 cannot number answers that title with its files unplaced. A release with no title of its own
-(`Season 3`) is named by its first numbered file. A release whose titled files mostly name
+(`Season 3`) is named by its first numbered file. One sent without an id, which the identifier
+is unsure of, is named by a title it offers that IMDb or TMDB spells as the name (`KonoSuba` is
+one of TMDB's titles for KONOSUBA - God's blessing on this wonderful world!); where two shows
+are named so and both hold the files' numbers (Animaniacs of 1993 and of 2020), by the one
+whose episodes the files' titles name, and by neither where no title does. A release whose titled files mostly name
 episodes of another show is placed on that show: one TMDB lists under the same name, one the
 identifier ranked beside it, or a franchise show holding it as a season (Power Rangers Dino
 Charge is TMDB's Power Rangers season 22).
