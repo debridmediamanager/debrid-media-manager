@@ -1,6 +1,8 @@
 import type { UsenetResult } from '@/services/nzb2rd';
+import BEBOP from '@/test/fixtures/usenet/cowboy-bebop-tt0213338-season1.json';
 import type * as Nzb2rdModule from '@/utils/nzb2rd';
 import type { Nzb2rdTransferSummary } from '@/utils/nzb2rd';
+import { createTvEpisodeReader, summarizeTvEpisodes } from '@/utils/tvEpisodes';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { Mock } from 'vitest';
@@ -847,5 +849,45 @@ describe('UsenetResults NZB download', () => {
 		expect(downloadButtons()[0]).toBeEnabled();
 		await userEvent.click(downloadButtons()[0]);
 		expect(downloadCleanNzbMock).toHaveBeenCalledWith('b', 'Alpha.Release.2160p');
+	});
+});
+
+// Real results for Cowboy Bebop S1: the Packs chip counted 7 whole-season
+// releases while only the 5 the pack search found wore the badge, because the
+// episode search also returns whole-season releases and those kept no flag.
+describe('UsenetResults — season pack badge', () => {
+	it('marks the same rows the Packs chip counts', async () => {
+		const results = BEBOP.results as UsenetResult[];
+		mockSearch(results);
+		const reader = createTvEpisodeReader({
+			season: 1,
+			episodeCounts: BEBOP.show.season_episode_counts,
+			seasonCount: BEBOP.show.season_count,
+			anime: true,
+		});
+		render(
+			<UsenetResults
+				imdbId="tt0213338"
+				seasonNum={1}
+				title="Cowboy Bebop"
+				rdKey="rd-key"
+				episodeReader={reader}
+			/>
+		);
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		const chipPacks = summarizeTvEpisodes(
+			results.map((r) => r.title),
+			reader
+		).packs;
+		const badged = renderedTitles().filter((t) => t.startsWith('Season pack'));
+		expect(chipPacks).toBe(7);
+		expect(badged).toHaveLength(chipPacks);
+		expect(badged).toEqual(
+			expect.arrayContaining([
+				'Season packKauboi.bibappu.S01.REPACK2.1080p.NF.WEB-DL.DD+5.1.H.264-playWEB',
+				'Season packCowboy.Bebop.S01.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE',
+			])
+		);
 	});
 });

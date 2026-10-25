@@ -2163,6 +2163,7 @@ const TvSearch: FunctionComponent = () => {
 						rdKey={rdKey}
 						onResults={handleUsenetResults}
 						rowFilter={usenetRowFilter}
+						episodeReader={episodeReader}
 					/>
 					<EasynewsResults
 						title={showInfo.title}

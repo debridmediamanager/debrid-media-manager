@@ -19,6 +19,7 @@ import {
 	TRANSFER_TOAST_MS,
 	type TransferPhase,
 } from '@/utils/transferPhase';
+import type { TvEpisodeMatch } from '@/utils/tvEpisodes';
 import { Check, Download, FileDown, Loader2, RotateCw, Send } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -34,6 +35,12 @@ type UsenetResultsProps = {
 	onResults?: (results: UsenetResult[]) => void;
 	/** Keeps only the rows whose title passes, e.g. the season page's episode chip. */
 	rowFilter?: (title: string) => boolean;
+	/**
+	 * The season page's episode reader, so the badge marks exactly the rows its
+	 * Packs chip counts. The episode search returns whole-season releases too,
+	 * and only the pack search's own finds carry `isPack`.
+	 */
+	episodeReader?: ((title: string) => TvEpisodeMatch) | null;
 };
 
 // Kept importable from here, where they started.
@@ -197,6 +204,7 @@ const UsenetResults = ({
 	rdKey,
 	onResults,
 	rowFilter,
+	episodeReader,
 }: UsenetResultsProps) => {
 	const [results, setResults] = useState<UsenetResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -246,8 +254,10 @@ const UsenetResults = ({
 
 	const kept = useMemo(() => {
 		if (!results) return [];
-		return rowFilter ? results.filter((r) => rowFilter(r.title)) : results;
-	}, [results, rowFilter]);
+		const shown = rowFilter ? results.filter((r) => rowFilter(r.title)) : results;
+		if (!episodeReader) return shown;
+		return shown.map((r) => ({ ...r, isPack: episodeReader(r.title).kind === 'pack' }));
+	}, [results, rowFilter, episodeReader]);
 
 	const returnPath = () =>
 		seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`;

@@ -1,0 +1,777 @@
+{
+	"_source": "GET /api/nzb2rd/search?imdbId=tt0213338&seasonNum=1&title=Cowboy%20Bebop on debridmediamanager.com, 2026-10-25; ids replaced, indexer fields dropped",
+	"results": [
+		{
+			"id": "r0",
+			"title": "[Judas] Cowboy Bebop v2 (Season 1) [BD 1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)",
+			"size": 598017019,
+			"isPack": true
+		},
+		{
+			"id": "r1",
+			"title": "[Judas] Cowboy Bebop (Season 1) [BD 1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)",
+			"size": 598011475,
+			"isPack": true
+		},
+		{
+			"id": "r2",
+			"title": "Cowboy.Bebop.Season.1.1998.WEBRip.1080p.x265",
+			"size": 28024833387,
+			"isPack": true
+		},
+		{
+			"id": "r3",
+			"title": "Cowboy.Bebop.Season.1.2021.WEBRip.1080p.x265",
+			"size": 10947835203,
+			"isPack": true
+		},
+		{
+			"id": "r4",
+			"title": "[Anime Chap] Cowboy Bebop (Complete Anime Collection) - Season 1, Specials & Movie [BD 1080p] [Dual Audio] - {Batch}",
+			"size": 12317921988,
+			"isPack": true
+		},
+		{
+			"id": "r5",
+			"title": "Cowboy.Bebop.S01E17.Mushroom.Samba.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6308962141
+		},
+		{
+			"id": "r6",
+			"title": "Cowboy.Bebop.S01E18.Speak.Like.a.Child.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 5945443925
+		},
+		{
+			"id": "r7",
+			"title": "Cowboy.Bebop.S01E25.The.Real.Folk.Blues.1.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6031127907
+		},
+		{
+			"id": "r8",
+			"title": "Cowboy.Bebop.S01E16.Black.Dog.Serenade.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 5537233810
+		},
+		{
+			"id": "r9",
+			"title": "Cowboy.Bebop.S01E22.Cowboy.Funk.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1141822318
+		},
+		{
+			"id": "r10",
+			"title": "Cowboy.Bebop.S01E15.My.Funny.Valentine.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1056309071
+		},
+		{
+			"id": "r11",
+			"title": "Cowboy.Bebop.S01E18.Speak.Like.a.Child.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1166114232
+		},
+		{
+			"id": "r12",
+			"title": "Cowboy.Bebop.S01E21.Boogie.Woogie.Feng.Shui.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1149677072
+		},
+		{
+			"id": "r13",
+			"title": "Cowboy.Bebop.S01E20.Pierrot.le.Fou.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 1106091919
+		},
+		{
+			"id": "r14",
+			"title": "Cowboy.Bebop.S01E24.Hard.Luck.Woman.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1105797593
+		},
+		{
+			"id": "r15",
+			"title": "Cowboy.Bebop.S01E17.Mushroom.Samba.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1003491073
+		},
+		{
+			"id": "r16",
+			"title": "Cowboy.Bebop.S01E19.Wild.Horses.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 968452567
+		},
+		{
+			"id": "r17",
+			"title": "Cowboy.Bebop.S01E26.The.Real.Folk.Blues.Part.2.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 951946788
+		},
+		{
+			"id": "r18",
+			"title": "Cowboy.Bebop.S01E25.The.Real.Folk.Blues.Part.1.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 929000790
+		},
+		{
+			"id": "r19",
+			"title": "Cowboy.Bebop.S01E11.Toys.in.the.Attic.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 872480383
+		},
+		{
+			"id": "r20",
+			"title": "Cowboy.Bebop.S01E13.Jupiter.Jazz.Part.2.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 838253098
+		},
+		{
+			"id": "r21",
+			"title": "Cowboy.Bebop.S01E16.Black.Dog.Serenade.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 825176256
+		},
+		{
+			"id": "r22",
+			"title": "Cowboy.Bebop.S01E14.Bohemian.Rhapsody.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 823327601
+		},
+		{
+			"id": "r23",
+			"title": "Cowboy.Bebop.S01E12.Jupiter.Jazz.Part.1.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 809885694
+		},
+		{
+			"id": "r24",
+			"title": "Cowboy.Bebop.S01E24.Hard.Luck.Woman.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 783005401
+		},
+		{
+			"id": "r25",
+			"title": "Cowboy.Bebop.S01E21.Boogie.Woogie.Feng.Shui.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 767874857
+		},
+		{
+			"id": "r26",
+			"title": "Cowboy.Bebop.S01E13.Jupiter.Jazz.Part.2.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 699351616
+		},
+		{
+			"id": "r27",
+			"title": "Cowboy.Bebop.S01E17.Mushroom.Samba.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 682568698
+		},
+		{
+			"id": "r28",
+			"title": "Cowboy.Bebop.S01E25.The.Real.Folk.Blues.Part.1.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 677169573
+		},
+		{
+			"id": "r29",
+			"title": "Cowboy.Bebop.S01E12.Jupiter.Jazz.Part.1.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 653337666
+		},
+		{
+			"id": "r30",
+			"title": "Cowboy.Bebop.S01E26.The.Real.Folk.Blues.Part.2.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 649083738
+		},
+		{
+			"id": "r31",
+			"title": "Cowboy.Bebop.S01E19.Wild.Horses.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 644773174
+		},
+		{
+			"id": "r32",
+			"title": "Cowboy.Bebop.S01E15.My.Funny.Valentine.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 624563145
+		},
+		{
+			"id": "r33",
+			"title": "Cowboy.Bebop.S01E11.Toys.in.the.Attic.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 613726750
+		},
+		{
+			"id": "r34",
+			"title": "Cowboy.Bebop.S01E24.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 3116459245
+		},
+		{
+			"id": "r35",
+			"title": "Cowboy.Bebop.S01E21.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 3011372007
+		},
+		{
+			"id": "r36",
+			"title": "Kauboi.bibappu.S01E14.Bohemian.Rhapsody.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2263319597
+		},
+		{
+			"id": "r37",
+			"title": "Kauboi.bibappu.S01E07.Heavy.Metal.Queen.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2614982425
+		},
+		{
+			"id": "r38",
+			"title": "Kauboi.bibappu.S01E04.Gateway.Shuffle.REPACK2.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2289338864
+		},
+		{
+			"id": "r39",
+			"title": "Kauboi.bibappu.S01E25.The.Real.Folk.Blues.1.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2365273984
+		},
+		{
+			"id": "r40",
+			"title": "Kauboi.bibappu.S01E26.The.Real.Folk.Blues.2.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 1814043337
+		},
+		{
+			"id": "r41",
+			"title": "Kauboi.bibappu.S01E10.Ganymede.Elegy.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2942941146
+		},
+		{
+			"id": "r42",
+			"title": "Kauboi.bibappu.S01E03.Honky.Tonk.Women.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2031504367
+		},
+		{
+			"id": "r43",
+			"title": "Kauboi.bibappu.S01E01.Asteroid.Blues.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 3158005988
+		},
+		{
+			"id": "r44",
+			"title": "Kauboi.bibappu.S01E17.Mushroom.Samba.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2720108271
+		},
+		{
+			"id": "r45",
+			"title": "Kauboi.bibappu.S01E18.Speak.Like.a.Child.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2792255474
+		},
+		{
+			"id": "r46",
+			"title": "Kauboi.bibappu.S01E11.Toys.in.the.Attic.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2226750142
+		},
+		{
+			"id": "r47",
+			"title": "Kauboi.bibappu.S01E05.Ballad.of.Fallen.Angels.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2420364550
+		},
+		{
+			"id": "r48",
+			"title": "Kauboi.bibappu.S01E15.MyFunny.Valentine.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2741722176
+		},
+		{
+			"id": "r49",
+			"title": "Kauboi.bibappu.S01E13.Jupiter.Jazz.2.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2570277076
+		},
+		{
+			"id": "r50",
+			"title": "Kauboi.bibappu.S01E20.Pierrot.Le.Fou.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2473161717
+		},
+		{
+			"id": "r51",
+			"title": "Kauboi.bibappu.S01E08.Waltz.for.Venus.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2520807639
+		},
+		{
+			"id": "r52",
+			"title": "Kauboi.bibappu.S01E02.Stray.Dog.Strut.REPACK.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2852715783
+		},
+		{
+			"id": "r53",
+			"title": "Kauboi.bibappu.S01E22.Cowboy.Funk.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 1956860911
+		},
+		{
+			"id": "r54",
+			"title": "Kauboi.bibappu.S01E24.Hard.Luck.Woman.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 3419584701
+		},
+		{
+			"id": "r55",
+			"title": "Kauboi.bibappu.S01E16.Black.Dog.Serenade.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 1816000786
+		},
+		{
+			"id": "r56",
+			"title": "Kauboi.bibappu.S01E12.Jupiter.Jazz.1.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2144324714
+		},
+		{
+			"id": "r57",
+			"title": "Kauboi.bibappu.S01E06.Sympathy.for.the.Devil.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2366547889
+		},
+		{
+			"id": "r58",
+			"title": "Kauboi.bibappu.S01E21.Boogie.Woogie.Feng.Shui.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 3313727534
+		},
+		{
+			"id": "r59",
+			"title": "Kauboi.bibappu.S01E09.Jamming.with.Edward.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2851710132
+		},
+		{
+			"id": "r60",
+			"title": "Kauboi.bibappu.S01E23.Brain.Scratch.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2920144987
+		},
+		{
+			"id": "r61",
+			"title": "Kauboi.bibappu.S01E19.Wild.Horses.1080p.NF.WEB-DL.DD_5.1.H.264-playWEB",
+			"size": 2735493648
+		},
+		{
+			"id": "r62",
+			"title": "Cowboy.Bebop.S01E23.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2660172944
+		},
+		{
+			"id": "r63",
+			"title": "Cowboy.Bebop.S01E18.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2543040924
+		},
+		{
+			"id": "r64",
+			"title": "Cowboy.Bebop.S01E15.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2499175566
+		},
+		{
+			"id": "r65",
+			"title": "Cowboy.Bebop.S01E19.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2492430092
+		},
+		{
+			"id": "r66",
+			"title": "Cowboy.Bebop.S01E17.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2476175990
+		},
+		{
+			"id": "r67",
+			"title": "Cowboy.Bebop.S01E13.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2335004906
+		},
+		{
+			"id": "r68",
+			"title": "Cowboy.Bebop.S01E20.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2251768317
+		},
+		{
+			"id": "r69",
+			"title": "Cowboy.Bebop.S01E25.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2155693336
+		},
+		{
+			"id": "r70",
+			"title": "Cowboy.Bebop.S01E14.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2055315917
+		},
+		{
+			"id": "r71",
+			"title": "Cowboy.Bebop.S01E11.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 2026876954
+		},
+		{
+			"id": "r72",
+			"title": "Cowboy.Bebop.S01E12.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 1947997234
+		},
+		{
+			"id": "r73",
+			"title": "Cowboy.Bebop.S01E22.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 1776968389
+		},
+		{
+			"id": "r74",
+			"title": "Cowboy.Bebop.S01E22.Cowboy.Funk.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 1768284852
+		},
+		{
+			"id": "r75",
+			"title": "Cowboy.Bebop.S01E23.Brain.Scratch.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1722529022
+		},
+		{
+			"id": "r76",
+			"title": "Cowboy.Bebop.S01E26.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 1654302213
+		},
+		{
+			"id": "r77",
+			"title": "Cowboy.Bebop.S01E16.1080p.NF.WEB-DL.DDP5.1.H.264-PrimeFix",
+			"size": 1656253884
+		},
+		{
+			"id": "r78",
+			"title": "Cowboy.Bebop.S01E18.Speak.Like.a.Child.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 1532235502
+		},
+		{
+			"id": "r79",
+			"title": "Cowboy.Bebop.S01E20.Pierrot.le.Fou.1080p.NF.WEB-DL.DDP5.1.AV1-Saon",
+			"size": 1354375126
+		},
+		{
+			"id": "r80",
+			"title": "Cowboy.Bebop.S01E23.Brain.Scratch.1080p.NF.WEB-DL.DDP5.1.HEVC-Saon",
+			"size": 1293271403
+		},
+		{
+			"id": "r81",
+			"title": "Cowboy.Bebop.S01E25.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2365264464
+		},
+		{
+			"id": "r82",
+			"title": "Cowboy.Bebop.S01E19.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2735480930
+		},
+		{
+			"id": "r83",
+			"title": "Cowboy.Bebop.S01E16.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 1815994776
+		},
+		{
+			"id": "r84",
+			"title": "Cowboy.Bebop.S01E17.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2720102089
+		},
+		{
+			"id": "r85",
+			"title": "Cowboy.Bebop.S01E13.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2570270786
+		},
+		{
+			"id": "r86",
+			"title": "Cowboy.Bebop.S01E12.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2144322123
+		},
+		{
+			"id": "r87",
+			"title": "Cowboy.Bebop.S01E20.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2473154567
+		},
+		{
+			"id": "r88",
+			"title": "Cowboy.Bebop.S01E26.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 1814042960
+		},
+		{
+			"id": "r89",
+			"title": "Cowboy.Bebop.S01E18.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2792245336
+		},
+		{
+			"id": "r90",
+			"title": "Cowboy.Bebop.S01E23.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2920108509
+		},
+		{
+			"id": "r91",
+			"title": "Cowboy.Bebop.S01E21.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 3313713798
+		},
+		{
+			"id": "r92",
+			"title": "Cowboy.Bebop.S01E22.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 1956854584
+		},
+		{
+			"id": "r93",
+			"title": "Cowboy.Bebop.S01E14.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2263308613
+		},
+		{
+			"id": "r94",
+			"title": "Cowboy.Bebop.S01E24.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 3419583465
+		},
+		{
+			"id": "r95",
+			"title": "Cowboy.Bebop.S01E15.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2741719467
+		},
+		{
+			"id": "r96",
+			"title": "Cowboy.Bebop.S01E11.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2226740075
+		},
+		{
+			"id": "r97",
+			"title": "Cowboy.Bebop.S01E26.The.Real.Folk.Blues.2.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6245260204
+		},
+		{
+			"id": "r98",
+			"title": "Cowboy.Bebop.S01E22.Cowboy.Funk.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6289811385
+		},
+		{
+			"id": "r99",
+			"title": "Cowboy.Bebop.S01E23.Brain.Scratch.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6134589681
+		},
+		{
+			"id": "r100",
+			"title": "Cowboy.Bebop.S01E24.Hard.Luck.Woman.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6327694383
+		},
+		{
+			"id": "r101",
+			"title": "Cowboy.Bebop.S01E21.Boogie.Woogie.Feng.Shui.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6273303357
+		},
+		{
+			"id": "r102",
+			"title": "Cowboy.Bebop.S01E19.Wild.Horses.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8585614885
+		},
+		{
+			"id": "r103",
+			"title": "Cowboy.Bebop.S01E20.Pierrot.Le.Fou.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 7049020640
+		},
+		{
+			"id": "r104",
+			"title": "Kauboi.bibappu.S01.REPACK2.1080p.NF.WEB-DL.DD+5.1.H.264-playWEB",
+			"size": 66347707678
+		},
+		{
+			"id": "r105",
+			"title": "Cowboy.Bebop.S01.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 66347378984
+		},
+		{
+			"id": "r106",
+			"title": "Cowboy.Bebop.S01E05.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2420357771
+		},
+		{
+			"id": "r107",
+			"title": "Cowboy.Bebop.S01E08.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2520798665
+		},
+		{
+			"id": "r108",
+			"title": "Cowboy.Bebop.S01E02.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2852701401
+		},
+		{
+			"id": "r109",
+			"title": "Cowboy.Bebop.S01E10.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2942931332
+		},
+		{
+			"id": "r110",
+			"title": "Cowboy.Bebop.S01E07.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2614978973
+		},
+		{
+			"id": "r111",
+			"title": "Cowboy.Bebop.S01E01.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 3158009721
+		},
+		{
+			"id": "r112",
+			"title": "Cowboy.Bebop.S01E04.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2289321835
+		},
+		{
+			"id": "r113",
+			"title": "Cowboy.Bebop.S01E09.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2851685735
+		},
+		{
+			"id": "r114",
+			"title": "Cowboy.Bebop.S01E06.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2366543558
+		},
+		{
+			"id": "r115",
+			"title": "Cowboy.Bebop.S01E03.NORDiC.1080p.NF.WEB-DL.H.264-NORViNE",
+			"size": 2031499341
+		},
+		{
+			"id": "r116",
+			"title": "Cowboy.Bebop.S01E08.Waltz.for.Venus.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8385490859
+		},
+		{
+			"id": "r117",
+			"title": "Cowboy.Bebop.S01E05.Ballad.of.Fallen.Angels.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8305673765
+		},
+		{
+			"id": "r118",
+			"title": "Cowboy.Bebop.S01E14.Bohemian.Rhapsody.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8099614646
+		},
+		{
+			"id": "r119",
+			"title": "Cowboy.Bebop.S01E01.Asteroid.Blues.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8503204909
+		},
+		{
+			"id": "r120",
+			"title": "Cowboy.Bebop.S01E15.My.Funny.Valentine.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8210952655
+		},
+		{
+			"id": "r121",
+			"title": "Cowboy.Bebop.S01E13.Jupiter.Jazz.2.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8595320665
+		},
+		{
+			"id": "r122",
+			"title": "Cowboy.Bebop.S01E04.Gateway.Shuffle.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8512617453
+		},
+		{
+			"id": "r123",
+			"title": "Cowboy.Bebop.S01E03.Honky.Tonk.Women.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8471133041
+		},
+		{
+			"id": "r124",
+			"title": "Cowboy.Bebop.S01E06.Sympathy.for.the.Devil.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8480175982
+		},
+		{
+			"id": "r125",
+			"title": "Cowboy.Bebop.S01E07.Heavy.Metal.Queen.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8598426937
+		},
+		{
+			"id": "r126",
+			"title": "Cowboy.Bebop.S01E09.Jamming.with.Edward.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8437958134
+		},
+		{
+			"id": "r127",
+			"title": "Cowboy.Bebop.S01E11.Toys.in.the.Attic.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8560557165
+		},
+		{
+			"id": "r128",
+			"title": "Cowboy.Bebop.S01E10.Ganymede.Elegy.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8559382268
+		},
+		{
+			"id": "r129",
+			"title": "Cowboy.Bebop.S01E12.Jupiter.Jazz.1.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 8500911717
+		},
+		{
+			"id": "r130",
+			"title": "Cowboy.Bebop.S01E02.Stray.Dog.Strut.1080i.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR",
+			"size": 6012691181
+		},
+		{
+			"id": "r131",
+			"title": "Cowboy Bebop (1998) S01E12 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2413335208
+		},
+		{
+			"id": "r132",
+			"title": "Cowboy Bebop (1998) S01E11 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2374393223
+		},
+		{
+			"id": "r133",
+			"title": "Cowboy Bebop (1998) S01E02 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1759444962
+		},
+		{
+			"id": "r134",
+			"title": "Cowboy Bebop (1998) S01E25 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2048580464
+		},
+		{
+			"id": "r135",
+			"title": "Cowboy Bebop (1998) S01E04 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2179806959
+		},
+		{
+			"id": "r136",
+			"title": "Cowboy Bebop (1998) S01E05 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2466184408
+		},
+		{
+			"id": "r137",
+			"title": "Cowboy Bebop (1998) S01E10 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1954569829
+		},
+		{
+			"id": "r138",
+			"title": "Cowboy Bebop (1998) S01E01 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2467133246
+		},
+		{
+			"id": "r139",
+			"title": "Cowboy Bebop (1998) S01E15 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2097075915
+		},
+		{
+			"id": "r140",
+			"title": "Cowboy Bebop (1998) S01E16 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2049778086
+		},
+		{
+			"id": "r141",
+			"title": "Cowboy Bebop (1998) S01E19 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2368143113
+		},
+		{
+			"id": "r142",
+			"title": "Cowboy Bebop (1998) S01E14 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1985029645
+		},
+		{
+			"id": "r143",
+			"title": "Cowboy Bebop (1998) S01E08 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1854021521
+		},
+		{
+			"id": "r144",
+			"title": "Cowboy Bebop (1998) S01E22 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1691822485
+		},
+		{
+			"id": "r145",
+			"title": "Cowboy Bebop (1998) S01E24 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2952728840
+		},
+		{
+			"id": "r146",
+			"title": "Cowboy Bebop (1998) S01E09 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2217719582
+		},
+		{
+			"id": "r147",
+			"title": "Cowboy Bebop (1998) S01E18 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2348133746
+		},
+		{
+			"id": "r148",
+			"title": "Cowboy Bebop (1998) S01E17 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1580122003
+		},
+		{
+			"id": "r149",
+			"title": "Cowboy Bebop (1998) S01E13 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2723406955
+		},
+		{
+			"id": "r150",
+			"title": "Cowboy Bebop (1998) S01E21 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 2854940873
+		},
+		{
+			"id": "r151",
+			"title": "Cowboy Bebop (1998) S01E26 (1080p NF WEB-DL H264 SDR DDP 5.1 Dual - HONE)",
+			"size": 1578216911
+		}
+	],
+	"show": {
+		"season_count": 1,
+		"season_episode_counts": {
+			"0": 3,
+			"1": 26
+		}
+	}
+}
