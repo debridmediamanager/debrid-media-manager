@@ -2,7 +2,7 @@ import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-su
 import dailyShow from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
 import bakeOffAppended from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off-appended.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { airedSeasons, resolveWanted } from './wanted';
+import { airedSeasons, resolveWanted, resolveWantedReused } from './wanted';
 
 const cache = vi.hoisted(() => ({ searchTmdbByImdb: vi.fn(), getTmdbTvInfo: vi.fn() }));
 vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => cache }));
@@ -97,5 +97,35 @@ describe('resolveWanted', () => {
 			title: '3rd Rock from the Sun',
 			imdb: 'tt0115082',
 		});
+	});
+});
+
+// zurg reads the whole list every minute; an imported Radarr list of 1,273
+// titles took 28 to 53 s a poll on 2026-10-25, against zurg's 60 s timeout.
+describe('resolveWantedReused', () => {
+	beforeEach(() => {
+		cache.searchTmdbByImdb.mockReset();
+		cache.getTmdbTvInfo.mockReset();
+	});
+
+	it('asks the metadata cache once for every poll inside half an hour', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({
+			movie_results: [{ id: 603, release_date: '1999-03-31' }],
+		});
+		const film = row({ imdbId: 'tt0133093', kind: 'movie', title: 'The Matrix' });
+		const first = await resolveWantedReused(film, 0);
+		const again = await resolveWantedReused({ ...film, id: 'another-sponsor' }, 29 * 60_000);
+		expect(cache.searchTmdbByImdb).toHaveBeenCalledTimes(1);
+		expect(again).toEqual({ ...first, id: 'another-sponsor' });
+		await resolveWantedReused(film, 31 * 60_000);
+		expect(cache.searchTmdbByImdb).toHaveBeenCalledTimes(2);
+	});
+
+	it('does not keep an answer TMDB could not give', async () => {
+		cache.searchTmdbByImdb.mockRejectedValueOnce(new Error('down'));
+		cache.searchTmdbByImdb.mockResolvedValue({ movie_results: [{ id: 680 }] });
+		const film = row({ imdbId: 'tt0110912', kind: 'movie', title: 'Pulp Fiction' });
+		expect((await resolveWantedReused(film, 0)).tmdb).toBeUndefined();
+		expect((await resolveWantedReused(film, 1)).tmdb).toBe(680);
 	});
 });

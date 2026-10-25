@@ -62,6 +62,11 @@ export function airedSeasons(show: any, only: number[] | null): WantedSeason[] {
  * which zurg's indexer searches take on their own.
  */
 export async function resolveWanted(row: WantedItemRow): Promise<WantedForZurg> {
+	return (await lookUp(row)).resolved;
+}
+
+/** `settled` is false when TMDB could not be asked, so the answer is not worth keeping. */
+async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; settled: boolean }> {
 	const base: WantedForZurg = { id: row.id, kind: row.kind, title: row.title, imdb: row.imdbId };
 	const cache = getMetadataCache();
 	let found: any = null;
@@ -69,6 +74,7 @@ export async function resolveWanted(row: WantedItemRow): Promise<WantedForZurg> 
 		found = await cache.searchTmdbByImdb(row.imdbId);
 	} catch {
 		// TMDB unreachable: the IMDb id alone, and seasons left out rather than empty
+		return { resolved: base, settled: false };
 	}
 	const year = (date: unknown) => {
 		const y = typeof date === 'string' ? Number.parseInt(date.slice(0, 4), 10) : NaN;
@@ -76,24 +82,59 @@ export async function resolveWanted(row: WantedItemRow): Promise<WantedForZurg> 
 	};
 	if (row.kind === 'movie') {
 		const movie = found?.movie_results?.[0];
-		return typeof movie?.id === 'number'
-			? { ...base, ...year(movie.release_date), tmdb: movie.id }
-			: base;
+		return {
+			resolved:
+				typeof movie?.id === 'number'
+					? { ...base, ...year(movie.release_date), tmdb: movie.id }
+					: base,
+			settled: true,
+		};
 	}
 	const tmdb = found?.tv_results?.[0]?.id;
-	if (typeof tmdb !== 'number') return base;
+	if (typeof tmdb !== 'number') return { resolved: base, settled: true };
 	let show: any = null;
 	try {
 		show = await cache.getTmdbTvInfo(tmdb, TMDB_TV_APPEND);
 	} catch {
-		return { ...base, tmdb };
+		return { resolved: { ...base, tmdb }, settled: false };
 	}
 	const tvdb = show?.external_ids?.tvdb_id;
 	return {
-		...base,
-		...year(show?.first_air_date ?? found.tv_results[0].first_air_date),
-		tmdb,
-		...(typeof tvdb === 'number' ? { tvdb } : {}),
-		seasons: airedSeasons(show, row.seasons),
+		resolved: {
+			...base,
+			...year(show?.first_air_date ?? found.tv_results[0].first_air_date),
+			tmdb,
+			...(typeof tvdb === 'number' ? { tvdb } : {}),
+			seasons: airedSeasons(show, row.seasons),
+		},
+		settled: true,
 	};
+}
+
+/**
+ * How long a title's resolution is reused. zurg reads the whole list every
+ * minute, and a list imported from Radarr holds over a thousand titles, each a
+ * metadata-cache read: 28 to 53 s a poll against zurg's 60 s timeout
+ * (2026-10-25). Half an hour is well inside the hours an airing show's new
+ * episodes take to reach the metadata cache anyway.
+ */
+const RESOLVED_FOR_MS = 30 * 60_000;
+const resolvedTitles = new Map<string, { until: number; resolved: Omit<WantedForZurg, 'id'> }>();
+
+/** `resolveWanted`, reused for RESOLVED_FOR_MS across polls and sponsors. */
+export async function resolveWantedReused(
+	row: WantedItemRow,
+	now = Date.now()
+): Promise<WantedForZurg> {
+	const key = `${row.kind}:${row.imdbId}:${row.seasons?.join(',') ?? '*'}:${row.title}`;
+	const hit = resolvedTitles.get(key);
+	if (hit && hit.until > now) return { id: row.id, ...hit.resolved };
+	const { resolved, settled } = await lookUp(row);
+	if (settled) {
+		// ponytail: drops everything at the bound instead of evicting the oldest; fine while lists stay this size
+		if (resolvedTitles.size >= 50_000) resolvedTitles.clear();
+		const { id: _id, ...rest } = resolved;
+		resolvedTitles.set(key, { until: now + RESOLVED_FOR_MS, resolved: rest });
+	}
+	return resolved;
 }

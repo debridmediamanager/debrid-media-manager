@@ -2,12 +2,12 @@ import completeHandler from '@/pages/api/sponsor/wanted/complete';
 import listHandler from '@/pages/api/sponsor/wanted/index';
 import { checkRateLimitFor } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { resolveWanted } from '@/services/wanted';
+import { resolveWantedReused } from '@/services/wanted';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/services/wanted', () => ({ resolveWanted: vi.fn() }));
+vi.mock('@/services/wanted', () => ({ resolveWantedReused: vi.fn() }));
 vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
@@ -40,7 +40,7 @@ describe('/api/sponsor/wanted', () => {
 		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
 		mockRepository.touchWantedPolled = vi.fn().mockResolvedValue(undefined);
 		vi.mocked(checkRateLimitFor).mockResolvedValue(true);
-		vi.mocked(resolveWanted).mockImplementation(async (r) => ({
+		vi.mocked(resolveWantedReused).mockImplementation(async (r) => ({
 			id: r.id,
 			kind: r.kind,
 			title: r.title,

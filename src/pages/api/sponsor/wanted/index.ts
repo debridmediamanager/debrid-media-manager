@@ -1,11 +1,11 @@
 import { sponsorOfDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { resolveWanted, type WantedForZurg } from '@/services/wanted';
+import { resolveWantedReused, type WantedForZurg } from '@/services/wanted';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /** TMDB lookups in flight at once; each is a metadata-cache read almost every time. */
-const RESOLVE_AT_ONCE = 10;
+const RESOLVE_AT_ONCE = 25;
 
 /**
  * A sponsor's wanted list, for their zurg to fetch: `{"items": [{id, kind, title,
@@ -37,7 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const items: WantedForZurg[] = [];
 		for (let i = 0; i < rows.length; i += RESOLVE_AT_ONCE) {
 			items.push(
-				...(await Promise.all(rows.slice(i, i + RESOLVE_AT_ONCE).map(resolveWanted)))
+				...(await Promise.all(
+					rows.slice(i, i + RESOLVE_AT_ONCE).map((row) => resolveWantedReused(row))
+				))
 			);
 		}
 		await db.touchWantedPolled(sponsor.shortId);
