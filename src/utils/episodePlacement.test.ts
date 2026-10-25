@@ -124,6 +124,15 @@ describe('titleText', () => {
 		expect(titleText('.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv')).toBeNull();
 		expect(titleText(' END (2160p).mp4')).toBeNull();
 	});
+	it('reads a title written as UTF-8 and read as Latin-1 as written', () => {
+		// zurg-usenet's `Fruits Basket S01E24 Letâ\u0080\u0099s Go Home.mkv` (2026-10-25), whose release
+		// name `…LetÃ¢Â\u0080Â\u0099s Go Home` was read so twice; TMDB's S1E24 is "Let's Go Home"
+		expect(titleText(' Letâ\u0080\u0099s Go Home.mkv')?.whole).toBe('lets go home');
+		expect(titleText(' LetÃ¢Â\u0080Â\u0099s Go Home')?.whole).toBe('lets go home');
+		expect(titleText(' You Look Wellâ\u0080¦.mkv')?.whole).toBe('you look well');
+		// Latin-1 that is no UTF-8 stays as it is
+		expect(titleText(' Pokémon Fan Club.mkv')?.whole).toBe('pokémon fan club');
+	});
 });
 
 // zurg#281: moviesbyrizzo's Seinfeld complete series names its files `Seinfeld  (S01EP02)  The

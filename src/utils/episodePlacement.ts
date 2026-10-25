@@ -858,6 +858,22 @@ const TAGS =
 // Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
 const SEGMENT = /\s+[-+]\s+|;|\.\s|__|--|[[(]/;
 const LEADING_MARKS = /^[\s._\-)\]]*(?:[[(][^\])]*[\])][\s._-]*)*/;
+const STRICT_UTF8 = new TextDecoder('utf-8', { fatal: true });
+
+/**
+ * A name written as UTF-8 and read as Latin-1, as often as it was: `Fruits Basket S01E24 Letâ\u0080\u0099s
+ * Go Home` is "Let’s Go Home". A name whose bytes are no UTF-8 is as given (`Pokémon`).
+ */
+function utf8(text: string): string {
+	while (/[Â-ô][\u0080-¿]/.test(text) && /^[\u0000-ÿ]*$/.test(text)) {
+		try {
+			text = STRICT_UTF8.decode(Uint8Array.from(text, (char) => char.charCodeAt(0)));
+		} catch {
+			break;
+		}
+	}
+	return text;
+}
 
 /**
  * A title as a file names it, the whole and its first segment, each cut where the release's
@@ -875,7 +891,7 @@ export function titleText(raw: string): { whole: string; first: string } | null 
 		while (title.length > 1 && SCENE_WORDS.test(title.at(-1)!)) title.pop();
 		return title.join(' ');
 	};
-	const rest = raw.replace(EXTENSION, '').replace(LEADING_MARKS, '');
+	const rest = utf8(raw).replace(EXTENSION, '').replace(LEADING_MARKS, '');
 	const whole = cut(rest);
 	return whole ? { whole, first: cut(rest.split(SEGMENT)[0]) } : null;
 }
