@@ -17,13 +17,13 @@ vi.mock('next/link', () => ({
 	default: ({
 		children,
 		href,
-		className,
+		...props
 	}: {
 		children: ReactNode;
 		href: string;
-		className?: string;
+		[key: string]: unknown;
 	}) => (
-		<a href={href} className={className}>
+		<a href={href} {...props}>
 			{children}
 		</a>
 	),
@@ -70,15 +70,16 @@ describe('ShowInfoPage', () => {
 		expect(screen.getByText('Loading...')).toBeInTheDocument();
 	});
 
-	it('should render Back to Show link', async () => {
+	it('should render the back-to-show icon link', async () => {
 		const axios = (await import('axios')).default;
 		vi.mocked(axios.get).mockReturnValue(new Promise(() => {}));
 
 		const ShowInfoPage = (await import('@/pages/show/[imdbid]/info')).default;
 		render(<ShowInfoPage />);
 
-		const backLink = screen.getByText('Back to Show');
+		const backLink = screen.getByRole('link', { name: 'Back to show' });
 		expect(backLink).toHaveAttribute('href', '/show/tt9999999/1');
+		expect(backLink).toHaveAttribute('title', 'Back to show');
 	});
 
 	// At 320px /show/tt…/info put "Game of Thrones", its icon buttons and
@@ -91,8 +92,7 @@ describe('ShowInfoPage', () => {
 		const ShowInfoPage = (await import('@/pages/show/[imdbid]/info')).default;
 		render(<ShowInfoPage />);
 
-		const back = screen.getByText('Back to Show');
-		expect(back).toHaveClass('shrink-0');
+		const back = screen.getByRole('link', { name: 'Back to show' });
 		expect(back.parentElement).toHaveClass('flex-wrap');
 		expect(screen.getByRole('heading', { level: 1 })).toHaveClass('min-w-0', 'break-words');
 	});
@@ -147,11 +147,14 @@ describe('ShowInfoPage', () => {
 
 		expect(await screen.findByText('Test Show')).toBeInTheDocument();
 		expect(await screen.findByText('A great show.')).toBeInTheDocument();
-		expect(screen.getByText('Overview')).toBeInTheDocument();
-		expect(screen.getByText('Genres')).toBeInTheDocument();
-		expect(screen.getByText('Creators')).toBeInTheDocument();
+		expect(screen.queryByText('Overview')).not.toBeInTheDocument();
+		expect(screen.queryByText('Genres')).not.toBeInTheDocument();
+		expect(screen.getByText('Drama')).toBeInTheDocument();
+		expect(screen.getByText('Created by')).toBeInTheDocument();
 		expect(screen.getByText('Creator One')).toBeInTheDocument();
-		expect(screen.getByText('Returning Series')).toBeInTheDocument();
+		expect(
+			screen.getByText('2023– · Returning · 3 seasons · 30 ep · ★ 9.1 (5.0k)')
+		).toBeInTheDocument();
 	});
 
 	it('should show no details message when data is null after loading', async () => {
@@ -169,5 +172,58 @@ describe('ShowInfoPage', () => {
 		render(<ShowInfoPage />);
 
 		expect(screen.getByText('No show details found.')).toBeInTheDocument();
+	});
+
+	// Cowboy Bebop showed raw ISO dates; a show without a last air date rendered a
+	// blank "Last Air Date:" row (2026-10-25).
+	const renderShow = async (overrides: Record<string, unknown>) => {
+		const axios = (await import('axios')).default;
+		vi.mocked(axios.get).mockImplementation((url: string) =>
+			Promise.resolve({
+				data: url.includes('show-details')
+					? {
+							title: 'Test Show',
+							overview: '',
+							firstAirDate: '1998-04-03',
+							lastAirDate: '1999-04-24',
+							numberOfSeasons: 1,
+							numberOfEpisodes: 26,
+							genres: [],
+							voteAverage: 8.482,
+							voteCount: 2058,
+							posterPath: null,
+							backdropPath: null,
+							status: 'Ended',
+							type: 'Scripted',
+							cast: [],
+							creators: [],
+							...overrides,
+						}
+					: { trailer: '' },
+			})
+		);
+		const ShowInfoPage = (await import('@/pages/show/[imdbid]/info')).default;
+		render(<ShowInfoPage />);
+		await screen.findByText('Test Show');
+		return document.querySelector('main')!.textContent ?? '';
+	};
+
+	it('shows an ended run as a year span, with no raw ISO dates', async () => {
+		const text = await renderShow({});
+		expect(text).toContain('1998–1999 · Ended · 1 season · 26 ep · ★ 8.5 (2.1k)');
+		expect(text).not.toMatch(/\d{4}-\d{2}-\d{2}/);
+	});
+
+	it('leaves out an empty last air date and a rating with no votes', async () => {
+		const text = await renderShow({
+			firstAirDate: '2026-10-15',
+			lastAirDate: '',
+			status: 'Returning Series',
+			voteAverage: 0,
+			voteCount: 0,
+			numberOfEpisodes: 0,
+		});
+		expect(text).not.toMatch(/Last Air Date|0\.0\/10|0 votes|★|0 ep/);
+		expect(text).toContain('2026– · Returning · 1 season');
 	});
 });

@@ -17,13 +17,13 @@ vi.mock('next/link', () => ({
 	default: ({
 		children,
 		href,
-		className,
+		...props
 	}: {
 		children: ReactNode;
 		href: string;
-		className?: string;
+		[key: string]: unknown;
 	}) => (
-		<a href={href} className={className}>
+		<a href={href} {...props}>
 			{children}
 		</a>
 	),
@@ -70,15 +70,16 @@ describe('MovieInfoPage', () => {
 		expect(screen.getByText('Loading...')).toBeInTheDocument();
 	});
 
-	it('should render Back to Movie link', async () => {
+	it('should render the back-to-movie icon link', async () => {
 		const axios = (await import('axios')).default;
 		vi.mocked(axios.get).mockReturnValue(new Promise(() => {}));
 
 		const MovieInfoPage = (await import('@/pages/movie/[imdbid]/info')).default;
 		render(<MovieInfoPage />);
 
-		const backLink = screen.getByText('Back to Movie');
+		const backLink = screen.getByRole('link', { name: 'Back to movie' });
 		expect(backLink).toHaveAttribute('href', '/movie/tt1234567');
+		expect(backLink).toHaveAttribute('title', 'Back to movie');
 	});
 
 	// At 320px /movie/tt…/info put "The Shawshank Redemption", its icon buttons and
@@ -91,8 +92,7 @@ describe('MovieInfoPage', () => {
 		const MovieInfoPage = (await import('@/pages/movie/[imdbid]/info')).default;
 		render(<MovieInfoPage />);
 
-		const back = screen.getByText('Back to Movie');
-		expect(back).toHaveClass('shrink-0');
+		const back = screen.getByRole('link', { name: 'Back to movie' });
 		expect(back.parentElement).toHaveClass('flex-wrap');
 		expect(screen.getByRole('heading', { level: 1 })).toHaveClass('min-w-0', 'break-words');
 	});
@@ -141,11 +141,12 @@ describe('MovieInfoPage', () => {
 
 		expect(await screen.findByText('Test Movie')).toBeInTheDocument();
 		expect(await screen.findByText('A great movie.')).toBeInTheDocument();
-		expect(screen.getByText('Overview')).toBeInTheDocument();
-		expect(screen.getByText('Genres')).toBeInTheDocument();
-		expect(screen.getByText('Director')).toBeInTheDocument();
+		expect(screen.queryByText('Overview')).not.toBeInTheDocument();
+		expect(screen.queryByText('Genres')).not.toBeInTheDocument();
+		expect(screen.getByText('Action')).toBeInTheDocument();
+		expect(screen.getByText('Directed by')).toBeInTheDocument();
 		expect(screen.getByText('Test Director')).toBeInTheDocument();
-		expect(screen.getByText('2h 5m')).toBeInTheDocument();
+		expect(screen.getByText(/2h 5m · ★ 8\.5 \(1\.0k\)/)).toBeInTheDocument();
 	});
 
 	it('should show no details message when data is null after loading', async () => {
@@ -163,5 +164,60 @@ describe('MovieInfoPage', () => {
 		render(<MovieInfoPage />);
 
 		expect(screen.getByText('No movie details found.')).toBeInTheDocument();
+	});
+
+	// The Matrix rendered "Release window reached" and a past "Digital Release" date;
+	// Avengers: Doomsday rendered "0h 0m"-style zeros as "0.0/10 (0 votes)" (2026-10-25).
+	const renderMovie = async (overrides: Record<string, unknown>) => {
+		const axios = (await import('axios')).default;
+		vi.mocked(axios.get).mockImplementation((url: string) =>
+			Promise.resolve({
+				data: url.includes('movie-details')
+					? {
+							title: 'Test Movie',
+							overview: '',
+							releaseDate: '1999-03-31',
+							digitalReleaseDate: '2020-07-15',
+							expectedDigitalReleaseDate: '2020-07-15',
+							expectedDigitalReleaseSource: 'tmdb',
+							digitalReleaseAvailable: true,
+							runtime: 136,
+							genres: [],
+							voteAverage: 8.3,
+							voteCount: 28880,
+							posterPath: null,
+							backdropPath: null,
+							cast: [],
+							director: null,
+							...overrides,
+						}
+					: { trailer: '' },
+			})
+		);
+		const MovieInfoPage = (await import('@/pages/movie/[imdbid]/info')).default;
+		render(<MovieInfoPage />);
+		await screen.findByText('Test Movie');
+		return document.querySelector('main')!.textContent ?? '';
+	};
+
+	it('drops a digital release that has already happened', async () => {
+		const text = await renderMovie({});
+		expect(text).not.toMatch(/Release window reached|Digital/);
+		expect(text).toContain('2h 16m · ★ 8.3 (28.9k)');
+	});
+
+	it('hides zero runtime, a rating with no votes and an empty release date', async () => {
+		const text = await renderMovie({
+			releaseDate: '',
+			runtime: 0,
+			voteAverage: 0,
+			voteCount: 0,
+			digitalReleaseDate: '',
+			expectedDigitalReleaseDate: '2999-01-30',
+			expectedDigitalReleaseSource: 'estimated',
+			digitalReleaseAvailable: false,
+		});
+		expect(text).not.toMatch(/0h 0m|0\.0\/10|0 votes|★|Release Date:|Runtime:/);
+		expect(text).toMatch(/Digital .*2999 \(est\.\)/);
 	});
 });

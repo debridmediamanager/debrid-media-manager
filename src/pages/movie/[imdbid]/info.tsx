@@ -1,8 +1,8 @@
 import TrailerModal from '@/components/TrailerModal';
 import { formatGenreForUrl, mapTmdbGenreToTrakt } from '@/utils/genreMapping';
-import { formatReleaseDate } from '@/utils/movieReleaseDates';
+import { movieMetaParts } from '@/utils/infoMeta';
 import axios from 'axios';
-import { Play, Popcorn } from 'lucide-react';
+import { ArrowLeft, Play, Popcorn } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -82,17 +82,6 @@ export default function MovieInfoPage() {
 		void fetchDetails();
 	}, [fetchDetails, router.isReady]);
 
-	const formatRuntime = (minutes: number) => {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return `${hours}h ${mins}m`;
-	};
-
-	const digitalReleaseLabel =
-		movieDetails?.expectedDigitalReleaseSource === 'estimated'
-			? 'Expected Digital Release'
-			: 'Digital Release';
-
 	return (
 		<div className="min-h-screen bg-gray-900 text-gray-100">
 			<Head>
@@ -101,7 +90,7 @@ export default function MovieInfoPage() {
 
 			{movieDetails?.backdropPath && (
 				<div
-					className="h-64 bg-cover bg-center"
+					className="h-24 bg-cover bg-center md:h-64"
 					style={{
 						backgroundImage: `linear-gradient(to bottom, rgba(17, 24, 39, 0.7), rgba(17, 24, 39, 1)), url(https://image.tmdb.org/t/p/original${movieDetails.backdropPath})`,
 					}}
@@ -117,33 +106,33 @@ export default function MovieInfoPage() {
 			)}
 
 			<main className="mx-auto max-w-6xl px-4 py-4">
-				<div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-					<div className="flex min-w-0 flex-wrap items-center gap-2">
-						<h1 className="min-w-0 text-3xl font-bold break-words">
-							{movieDetails?.title || 'Loading...'}
-						</h1>
-						{trailerUrl && (
-							<button
-								onClick={() => setShowTrailer(true)}
-								className="rounded border border-red-500 bg-red-900/30 p-1 text-red-100 transition-colors hover:bg-red-800/50"
-								title="Watch trailer"
-							>
-								<Play size={18} />
-							</button>
-						)}
+				<div className="mb-4 flex min-w-0 flex-wrap items-center gap-2">
+					<h1 className="min-w-0 text-3xl font-bold break-words">
+						{movieDetails?.title || 'Loading...'}
+					</h1>
+					{trailerUrl && (
 						<button
-							onClick={() => router.push(`/movie/${imdbId}/related`)}
-							className="rounded border border-purple-500 bg-purple-900/30 p-1 text-purple-100 transition-colors hover:bg-purple-800/50"
-							title="Show related media"
+							onClick={() => setShowTrailer(true)}
+							className="rounded border border-red-500 bg-red-900/30 p-1 text-red-100 transition-colors hover:bg-red-800/50"
+							title="Watch trailer"
 						>
-							<Popcorn size={18} />
+							<Play size={18} />
 						</button>
-					</div>
+					)}
+					<button
+						onClick={() => router.push(`/movie/${imdbId}/related`)}
+						className="rounded border border-purple-500 bg-purple-900/30 p-1 text-purple-100 transition-colors hover:bg-purple-800/50"
+						title="Show related media"
+					>
+						<Popcorn size={18} />
+					</button>
 					<Link
 						href={`/movie/${imdbId}`}
-						className="inline-flex shrink-0 items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+						className="rounded border border-indigo-500 bg-indigo-900/30 p-1 text-indigo-100 transition-colors hover:bg-indigo-800/50"
+						title="Back to movie"
+						aria-label="Back to movie"
 					>
-						Back to Movie
+						<ArrowLeft size={18} />
 					</Link>
 				</div>
 
@@ -157,59 +146,20 @@ export default function MovieInfoPage() {
 					<div>Loading movie information…</div>
 				) : movieDetails ? (
 					<div className="sibling-space-y-8">
-						<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-							<div>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+							{/* Phones put the poster beside the facts instead of a full-width poster above them. */}
+							<div className="flex items-start gap-3 md:block">
 								{movieDetails.posterPath && (
 									<img
 										src={`https://image.tmdb.org/t/p/w500${movieDetails.posterPath}`}
 										alt={movieDetails.title}
-										className="w-full rounded-lg shadow-lg"
+										className="w-[34vw] flex-none rounded-lg shadow-lg md:w-full"
 									/>
 								)}
-								<div className="mt-4 sibling-space-y-2">
-									<div className="text-sm">
-										<span className="text-gray-400">Release Date:</span>{' '}
-										{formatReleaseDate(movieDetails.releaseDate)}
+								<div className="sibling-space-y-3 min-w-0 flex-1 md:mt-4">
+									<div className="text-sm text-gray-300">
+										{movieMetaParts(movieDetails).join(' · ')}
 									</div>
-									{movieDetails.expectedDigitalReleaseDate && (
-										<div className="text-sm">
-											<span className="text-gray-400">
-												{digitalReleaseLabel}:
-											</span>{' '}
-											{formatReleaseDate(
-												movieDetails.expectedDigitalReleaseDate
-											)}
-											{movieDetails.expectedDigitalReleaseSource ===
-												'estimated' && (
-												<span className="text-gray-500"> estimate</span>
-											)}
-										</div>
-									)}
-									{movieDetails.digitalReleaseAvailable && (
-										<div className="text-sm text-emerald-300">
-											Release window reached
-										</div>
-									)}
-									<div className="text-sm">
-										<span className="text-gray-400">Runtime:</span>{' '}
-										{formatRuntime(movieDetails.runtime)}
-									</div>
-									<div className="text-sm">
-										<span className="text-gray-400">Rating:</span>{' '}
-										{movieDetails.voteAverage.toFixed(1)}/10 (
-										{movieDetails.voteCount} votes)
-									</div>
-								</div>
-							</div>
-
-							<div className="md:col-span-2">
-								<div className="mb-4">
-									<h2 className="mb-2 text-xl font-semibold">Overview</h2>
-									<p className="text-gray-300">{movieDetails.overview}</p>
-								</div>
-
-								<div className="mb-4">
-									<h2 className="mb-2 text-xl font-semibold">Genres</h2>
 									<div className="flex flex-wrap gap-2">
 										{movieDetails.genres
 											.filter(
@@ -225,27 +175,32 @@ export default function MovieInfoPage() {
 												</Link>
 											))}
 									</div>
+									{movieDetails.director && (
+										<div className="text-sm">
+											<span className="text-gray-400">Directed by </span>
+											{movieDetails.director.slug ? (
+												<Link
+													href={`/person/${movieDetails.director.slug}/movies`}
+													className="text-indigo-400 hover:text-indigo-300"
+												>
+													{movieDetails.director.name}
+												</Link>
+											) : (
+												<span>{movieDetails.director.name}</span>
+											)}
+										</div>
+									)}
 								</div>
+							</div>
 
-								{movieDetails.director && (
-									<div className="mb-4">
-										<h2 className="mb-2 text-xl font-semibold">Director</h2>
-										{movieDetails.director.slug ? (
-											<Link
-												href={`/person/${movieDetails.director.slug}/movies`}
-												className="text-indigo-400 hover:text-indigo-300"
-											>
-												{movieDetails.director.name}
-											</Link>
-										) : (
-											<span>{movieDetails.director.name}</span>
-										)}
-									</div>
+							<div className="md:col-span-2">
+								{movieDetails.overview && (
+									<p className="mb-4 text-gray-300">{movieDetails.overview}</p>
 								)}
 
 								<div>
 									<h2 className="mb-4 text-xl font-semibold">Cast</h2>
-									<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+									<div className="grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
 										{movieDetails.cast.map((member, index) => {
 											const handleClick = (
 												event: React.MouseEvent<HTMLButtonElement>
@@ -265,13 +220,13 @@ export default function MovieInfoPage() {
 													onClick={handleClick}
 													type="button"
 													disabled={!member.slug}
-													className={`rounded bg-gray-800/40 p-2 text-center transition-transform ${
+													className={`min-w-0 rounded bg-gray-800/40 p-1 text-center transition-transform sm:p-2 ${
 														member.slug
 															? 'cursor-pointer hover:scale-105 hover:bg-gray-800/70'
 															: 'cursor-default'
 													}`}
 												>
-													<div className="mx-auto flex w-full max-w-[200px] flex-col items-center">
+													<div className="mx-auto flex w-full max-w-[200px] min-w-0 flex-col items-center">
 														<div className="relative mb-2 aspect-[2/3] w-full overflow-hidden rounded bg-gray-800">
 															{member.profilePath ? (
 																<img
@@ -290,7 +245,7 @@ export default function MovieInfoPage() {
 														</div>
 														<div className="w-full">
 															<div
-																className={`text-sm font-semibold ${
+																className={`line-clamp-2 text-sm font-semibold break-words ${
 																	member.slug
 																		? 'text-indigo-400'
 																		: 'text-gray-100'
@@ -298,7 +253,10 @@ export default function MovieInfoPage() {
 															>
 																{member.name}
 															</div>
-															<div className="text-xs text-gray-400">
+															<div
+																className="line-clamp-2 text-xs text-gray-400"
+																title={member.character}
+															>
 																{member.character}
 															</div>
 														</div>
