@@ -63,53 +63,41 @@ beforeEach(() => {
 	mocks.postMock.mockResolvedValue({ data: { success: true }, status: 200 });
 });
 
-describe('TorBox browser proxy routing', () => {
-	// Browser traffic must egress from the Cloudflare Worker's IP pool, never
-	// from our own anticors. `*.cors.debridmediamanager.com` resolves to the one
-	// dmm-01 host, so routing every user's TorBox calls through it pooled the
-	// whole user base into a single per-IP rate-limit bucket. TorBox started
-	// 429ing 7 minutes after that shipped on 2026-08-24 and kept throttling ~20%
-	// of all calls (27% of `/user/me`), which wedged the home page for 330 of 549
-	// users: `index.tsx` renders nothing until every provider profile resolves,
-	// and a 429 parks `getUserData` behind a 5-minute pause for 3 retries.
-	it('routes an ordinary browser call through the Cloudflare Worker', async () => {
+describe('TorBox browser routing', () => {
+	// Since 2026-10-25 TorBox's Cloudflare answers every request from the
+	// Cloudflare Worker with a managed challenge (403 "Just a moment"), so a
+	// proxied call fails however it is retried. Our own anticors is no
+	// alternative: it is one dmm-01 IP and pooled every user into a single
+	// TorBox rate-limit bucket (~20% 429s on 2026-08-24). TorBox allows
+	// debridmediamanager.com's CORS, so browsers call it directly.
+	it('sends an ordinary browser call straight to TorBox', async () => {
 		await getTorrentList('token');
 
-		const url = mocks.getMock.mock.calls[0][0] as string;
-		expect(url).toContain(`${TB}/v1/api/torrents/mylist`);
-		expect(url).toMatch(/^https:\/\/anticors\.example\/anticors\?url=/);
+		expect(mocks.getMock.mock.calls[0][0]).toBe(`${TB}/v1/api/torrents/mylist`);
 	});
 
-	// The profile call is the one that gates the home page, so it is the one a
-	// shared rate-limit bucket hurts most.
-	it('keeps the profile call off our own single-IP anticors', async () => {
+	it('sends the profile call that gates login and the home page straight to TorBox', async () => {
 		await getUserData('token');
 
-		const url = mocks.getMock.mock.calls[0][0] as string;
-		expect(url).toContain(`${TB}/v1/api/user/me`);
-		expect(url).not.toMatch(/\d+\.cors\.example/);
+		expect(mocks.getMock.mock.calls[0][0]).toBe(`${TB}/v1/api/user/me`);
 	});
 
-	// requestdl puts the raw API key in `?token=`. Our own nginx logs query
-	// strings, so these must stay off it regardless of what else changes.
-	it('keeps requestdl on the Cloudflare Worker proxy', async () => {
+	// requestdl puts the raw API key in `?token=`; it must never pass a proxy.
+	it('sends requestdl straight to TorBox', async () => {
 		mocks.getMock.mockResolvedValue({ data: { success: true, data: 'link' }, status: 200 });
 
 		await requestDownloadLink('token', { torrent_id: 1 });
 
-		const url = mocks.getMock.mock.calls[0][0] as string;
-		expect(url).toBe(`https://anticors.example/anticors?url=${TB}/v1/api/torrents/requestdl`);
-		expect(url).not.toMatch(/\d+\.cors\.example/);
+		expect(mocks.getMock.mock.calls[0][0]).toBe(`${TB}/v1/api/torrents/requestdl`);
 	});
 
-	it('keeps webdl requestdl on the Cloudflare Worker proxy too', async () => {
+	it('sends webdl requestdl straight to TorBox too', async () => {
 		mocks.getMock.mockResolvedValue({ data: { success: true, data: 'link' }, status: 200 });
 
 		const { requestWebDownloadLink } = await import('./torbox');
 		await requestWebDownloadLink('token', { web_id: 1 });
 
-		const url = mocks.getMock.mock.calls[0][0] as string;
-		expect(url).toBe(`https://anticors.example/anticors?url=${TB}/v1/api/webdl/requestdl`);
+		expect(mocks.getMock.mock.calls[0][0]).toBe(`${TB}/v1/api/webdl/requestdl`);
 	});
 });
 

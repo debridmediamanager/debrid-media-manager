@@ -25,7 +25,6 @@ export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser, TorBoxWebDown
 
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
-	proxy: '',
 	torboxHostname: 'https://api.torbox.app',
 };
 
@@ -74,8 +73,7 @@ const SERVER_MAX_WAIT_MS = 5_000;
 
 function keyOf(config: { headers?: unknown } | undefined): string {
 	const headers = config?.headers as
-		| { get?: (name: string) => unknown; Authorization?: unknown }
-		| undefined;
+		{ get?: (name: string) => unknown; Authorization?: unknown } | undefined;
 	const value =
 		typeof headers?.get === 'function' ? headers.get('Authorization') : headers?.Authorization;
 	return typeof value === 'string' ? value.replace(/^Bearer\s+/i, '') : '';
@@ -295,34 +293,18 @@ function parseRetryAfterMs(error: any): number | undefined {
 	return undefined;
 }
 
-function getProxyUrl(baseUrl: string): string {
-	return baseUrl.replace('#num#', Math.floor(Math.random() * 1000).toString());
-}
-
-// Get the base URL for TorBox API (with or without proxy)
-// Server-side calls bypass the proxy (the CF Worker rejects them with 403);
-// client-side calls go through the Cloudflare Worker to avoid CORS.
+// Browser calls go straight to TorBox, which answers debridmediamanager.com's
+// CORS itself and puts each user in their own per-IP rate-limit bucket.
 //
-// Browser traffic must NOT go through our own anticors (`authProxy`). That
-// hostname is wildcard DNS onto the single dmm-01 host, so it pools every
-// user's TorBox calls into one per-IP rate-limit bucket - TorBox began 429ing
-// 7 minutes after we tried it on 2026-08-24 and throttled ~20% of all calls
-// until it was reverted. The Worker egresses from Cloudflare's pool instead,
-// which is what keeps each user in their own bucket. It is also the only safe
-// path for requestdl, which puts the raw API key in `?token=`: our own nginx
-// logs query strings, the Worker does not.
-//
-// Observing this traffic is the Worker's job, not a reason to re-route it.
+// Never route them through a proxy. Our own anticors (`authProxy`) is wildcard
+// DNS onto the single dmm-01 host, which pooled every user into one bucket:
+// TorBox 429ed ~20% of calls from 2026-08-24 until it was reverted. The
+// Cloudflare Worker (`proxy`) replaced it until 2026-10-25, when TorBox's
+// Cloudflare started answering every Worker request with a managed challenge
+// (403 "Just a moment", cZone api.torbox.app) and the library, login and adds
+// all failed. Direct calls also keep requestdl's `?token=` out of our logs.
 function getTorBoxBaseUrl(): string {
-	const torboxHost = config.torboxHostname || BASE_URL;
-	const isServer = typeof window === 'undefined';
-	if (isServer) {
-		return torboxHost;
-	}
-	if (config.proxy) {
-		return `${getProxyUrl(config.proxy)}${torboxHost}`;
-	}
-	return torboxHost;
+	return config.torboxHostname || BASE_URL;
 }
 
 // Resolves which monitored TorBox operation a request represents, so the status
