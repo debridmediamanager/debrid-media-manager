@@ -86,7 +86,7 @@ export default function LibraryMenuButtons({
 			>
 				<ChevronLeft className="h-4 w-4 text-indigo-400" />
 			</LibraryButton>
-			<span className="w-16 text-center">
+			<span className="w-16 shrink-0 text-center">
 				{currentPage}/{maxPages}
 			</span>
 			<LibraryButton

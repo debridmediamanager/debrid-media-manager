@@ -84,7 +84,7 @@ import {
 } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Home } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -1770,14 +1770,8 @@ function TorrentsPage() {
 									totalBytes={grouping.totalBytes}
 									isLoading={isFetching}
 								/>
-								{selectedTorrents.size > 0 && (
-									<span className="ml-2 text-sm font-normal text-cyan-400">
-										({selectedTorrents.size}/{filteredList.length} selected)
-									</span>
-								)}
 							</h1>
 							<div className="flex items-center gap-2">
-								<span className="text-xs text-gray-400">{lastFetchLabel}</span>
 								<button
 									onClick={refreshLibrary}
 									disabled={isFetching}
@@ -1788,7 +1782,12 @@ function TorrentsPage() {
 												? 'bg-red-900/50 text-red-400 hover:bg-red-800/50'
 												: 'bg-cyan-900/50 text-cyan-400 hover:bg-cyan-800/50 hover:text-cyan-300'
 									}`}
-									title={cacheError ? `Retry (${cacheError})` : 'Refresh library'}
+									title={
+										cacheError
+											? `Retry (${cacheError})`
+											: `Refresh library (fetched ${lastFetchLabel.toLowerCase()})`
+									}
+									aria-label="Refresh library"
 								>
 									<svg
 										className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`}
@@ -1808,9 +1807,11 @@ function TorrentsPage() {
 						</div>
 						<Link
 							href="/"
-							className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
+							className="rounded border-2 border-cyan-500 bg-cyan-900/30 p-1 text-cyan-100 transition-colors hover:bg-cyan-800/50"
+							title="Go Home"
+							aria-label="Go Home"
 						>
-							Go Home
+							<Home className="h-4 w-4" />
 						</Link>
 					</div>
 					{cacheError && (
@@ -1912,7 +1913,7 @@ function TorrentsPage() {
 										{currentPageData.length === 0 && (
 											<tr>
 												<td
-													colSpan={6}
+													colSpan={5}
 													className="py-8 text-center text-sm text-gray-400"
 												>
 													{query || mediaType || status || service

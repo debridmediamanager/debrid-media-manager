@@ -2,15 +2,7 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 
 type ButtonVariant =
-	| 'orange'
-	| 'yellow'
-	| 'amber'
-	| 'slate'
-	| 'green'
-	| 'red'
-	| 'cyan'
-	| 'teal'
-	| 'indigo';
+	'orange' | 'yellow' | 'amber' | 'slate' | 'green' | 'red' | 'cyan' | 'teal' | 'indigo';
 
 interface LibraryLinkButtonProps {
 	href: string;
@@ -61,7 +53,7 @@ export default function LibraryLinkButton({
 	return (
 		<Link
 			href={active ? (deactivateHref ?? '/library?page=1') : href}
-			className={`mb-1 mr-2 rounded border-2 px-1 ${sizeClasses} ${styles} transition-colors`}
+			className={`mr-2 mb-1 shrink-0 rounded border-2 px-1 whitespace-nowrap ${sizeClasses} ${styles} transition-colors`}
 			onClick={onClick}
 		>
 			{children}

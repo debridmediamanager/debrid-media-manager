@@ -1,15 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 type ButtonVariant =
-	| 'orange'
-	| 'green'
-	| 'indigo'
-	| 'red'
-	| 'teal'
-	| 'yellow'
-	| 'amber'
-	| 'slate'
-	| 'cyan';
+	'orange' | 'green' | 'indigo' | 'red' | 'teal' | 'yellow' | 'amber' | 'slate' | 'cyan';
 
 interface LibraryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant: ButtonVariant;
@@ -44,7 +36,7 @@ export default function LibraryButton({
 
 	return (
 		<button
-			className={`mb-1 mr-2 rounded border-2 px-1 py-0.5 ${sizeClasses} ${variantStyles[variant]} transition-colors ${disabledClasses} ${className}`}
+			className={`mr-2 mb-1 shrink-0 rounded border-2 px-1 py-0.5 whitespace-nowrap ${sizeClasses} ${variantStyles[variant]} transition-colors ${disabledClasses} ${className}`}
 			disabled={disabled}
 			{...props}
 		>
