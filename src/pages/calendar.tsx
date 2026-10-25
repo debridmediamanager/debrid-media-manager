@@ -69,7 +69,15 @@ type ProcessedDay = {
 const EPISODE_CARD_HEIGHT = 140; // Height of each episode card in pixels (including gap)
 const DMM_BASE_URL = 'https://debridmediamanager.com';
 
-const toIsoDate = (date: Date) => date.toISOString().slice(0, 10);
+// Calendar days are the reader's local days. toISOString() and new Date('YYYY-MM-DD')
+// are both UTC, which put every label a day early and "today" a day late west of UTC.
+const toIsoDate = (date: Date) =>
+	`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+const parseIsoDate = (isoDate: string) => {
+	const [year, month, day] = isoDate.split('-').map(Number);
+	return new Date(year, month - 1, day);
+};
 
 const isoDaysAgo = (days: number) => {
 	const d = new Date();
@@ -79,7 +87,7 @@ const isoDaysAgo = (days: number) => {
 
 const formatDayLabel = (isoDate: string) =>
 	new Intl.DateTimeFormat(undefined, { weekday: 'short', month: 'short', day: 'numeric' }).format(
-		new Date(isoDate)
+		parseIsoDate(isoDate)
 	);
 
 const formatEpisodeCode = (season: number | null, episode: number | null) => {
@@ -169,22 +177,29 @@ const createSearchMatcher = (terms: string[]) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const processCalendarData = (data: CalendarResponse): ProcessedDay[] => {
-	return data.days.map((day) => {
-		// Pre-compute sort keys and filter invalid items ONCE
-		const processedItems = day.items
-			.map((item) => ({
-				...item,
-				_sortKey: new Date(item.firstAired).getTime(),
-				_imdbId: typeof item.ids?.imdb === 'string' ? String(item.ids.imdb) : '',
-			}))
-			.filter((item) => item._imdbId) // Only keep linkable items
-			.sort((a, b) => {
-				if (a._sortKey !== b._sortKey) return a._sortKey - b._sortKey;
-				return (a.title || '').localeCompare(b.title || '');
-			});
+	// The API buckets by UTC date; re-bucket by the reader's local air date so an
+	// 8 PM Chicago episode (01:00 UTC) sits under the evening it airs.
+	const byDate = new Map<string, CalendarEvent[]>(data.days.map((day) => [day.date, []]));
+	for (const day of data.days) {
+		for (const item of day.items) {
+			const sortKey = new Date(item.firstAired).getTime();
+			const imdbId = typeof item.ids?.imdb === 'string' ? String(item.ids.imdb) : '';
+			if (!imdbId) continue; // Only keep linkable items
+			const date = Number.isNaN(sortKey) ? day.date : toIsoDate(new Date(sortKey));
+			if (!byDate.has(date)) byDate.set(date, []);
+			byDate.get(date)!.push({ ...item, _sortKey: sortKey, _imdbId: imdbId });
+		}
+	}
 
-		return { date: day.date, items: processedItems };
-	});
+	return [...byDate.entries()]
+		.sort(([a], [b]) => a.localeCompare(b))
+		.map(([date, items]) => ({
+			date,
+			items: items.sort((a, b) => {
+				if (a._sortKey !== b._sortKey) return a._sortKey! - b._sortKey!;
+				return (a.title || '').localeCompare(b.title || '');
+			}),
+		}));
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -618,7 +633,7 @@ function CalendarPage() {
 
 	const calendarWindow = useMemo(() => {
 		if (!data) return null;
-		const endDate = new Date(data.range.start);
+		const endDate = parseIsoDate(data.range.start);
 		endDate.setDate(endDate.getDate() + data.range.days - 1);
 		return `${formatDayLabel(data.range.start)} - ${formatDayLabel(toIsoDate(endDate))}`;
 	}, [data]);
