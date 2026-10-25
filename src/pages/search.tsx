@@ -87,7 +87,7 @@ function Search() {
 	);
 
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
+		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
 			<Head>
 				<title>{`Debrid Media Manager - Search: ${query}`}</title>
 			</Head>
@@ -144,14 +144,11 @@ function Search() {
 				{/* Update search results display */}
 				{searchResults.length > 0 && (
 					<>
-						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
-							Search Results for <span className="text-yellow-500">{query}</span>
-						</h2>
-						<div className="grid w-full grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+						<div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 							{searchResults.map((result: SearchResult) => (
 								<Link
 									key={result.imdbid}
-									className="haptic flex flex-col items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
+									className="haptic flex flex-col items-center justify-start gap-1 rounded border-2 border-cyan-500 bg-cyan-900/30 p-1.5 text-cyan-100 transition-colors hover:bg-cyan-800/50"
 									href={
 										result.type === 'movie'
 											? `/movie/${result.imdbid}`
@@ -159,10 +156,13 @@ function Search() {
 									}
 								>
 									<Poster imdbId={result.imdbid} title={result.title} />
-									<h3 className="text-center text-lg font-bold text-slate-300">
+									<h3
+										className="line-clamp-2 text-center text-sm font-bold text-slate-300"
+										title={result.title}
+									>
 										{result.title}
 									</h3>
-									<div className="text-sm text-gray-400">{result.year}</div>
+									<div className="text-xs text-gray-400">{result.year}</div>
 								</Link>
 							))}
 						</div>
@@ -173,13 +173,13 @@ function Search() {
 						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
 							Anime entries for <span className="text-yellow-500">{query}</span>
 						</h2>
-						<div className="grid w-full grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+						<div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 							{animeResults.map((result) => {
 								const type = animeTypeLabel(result.type);
 								return (
 									<Link
 										key={result.id}
-										className="haptic flex flex-col items-center justify-center gap-2 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 p-3 text-fuchsia-100 transition-colors hover:bg-fuchsia-800/50"
+										className="haptic flex flex-col items-center justify-start gap-1 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 p-1.5 text-fuchsia-100 transition-colors hover:bg-fuchsia-800/50"
 										href={animePagePath(result.id)!}
 									>
 										{/* oxlint-disable-next-line nextjs/no-img-element */}
@@ -194,11 +194,14 @@ function Search() {
 												e.currentTarget.style.visibility = 'hidden';
 											}}
 										/>
-										<h3 className="text-center text-lg font-bold text-slate-300">
+										<h3
+											className="line-clamp-2 text-center text-sm font-bold text-slate-300"
+											title={result.title}
+										>
 											{result.title}
 										</h3>
 										{type && (
-											<div className="text-sm text-fuchsia-300">{type}</div>
+											<div className="text-xs text-fuchsia-300">{type}</div>
 										)}
 									</Link>
 								);
