@@ -24,6 +24,10 @@ interface MediaHeaderProps {
 	onDescToggle: () => void;
 	actionButtons: React.ReactNode;
 	additionalInfo?: React.ReactNode;
+	/** A short chip beside the title and its icons, e.g. an upcoming digital release. */
+	titleExtra?: React.ReactNode;
+	/** Inline text after the rating, e.g. a show's "· Ended". */
+	scoreSuffix?: React.ReactNode;
 	trailer?: string;
 	/** Where an anime entry's rating links to; its own page on AniDB. */
 	ratingHref?: string;
@@ -70,6 +74,8 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 	onDescToggle,
 	actionButtons,
 	additionalInfo,
+	titleExtra,
+	scoreSuffix,
 	trailer,
 	ratingHref,
 }) => {
@@ -156,6 +162,7 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 								mediaType={mediaType === 'tv' ? 'show' : 'movie'}
 							/>
 						)}
+						{titleExtra}
 					</div>
 
 					<div
@@ -189,6 +196,7 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 								</Link>
 							</div>
 						)}
+						{scoreSuffix}
 					</div>
 				</div>
 

@@ -110,7 +110,23 @@ describe('WantedButton', () => {
 	it("keeps the non-sponsor link one box like the page's buttons", () => {
 		sponsorMock.mockReturnValue({ isSponsor: false });
 		global.fetch = vi.fn() as any;
-		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={1} />);
-		expect(screen.getByRole('link', { name: /Want S1/ })).toHaveClass('inline-block');
+		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" />);
+		expect(screen.getByRole('link', { name: /Want/ })).toHaveClass('inline-block');
+	});
+
+	// Both of a season page's buttons led a non-sponsor to /wanted; one says it.
+	it('gives a non-sponsor one Want link on a season page', () => {
+		sponsorMock.mockReturnValue({ isSponsor: false });
+		global.fetch = vi.fn() as any;
+		render(
+			<>
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={1} />
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" />
+			</>
+		);
+		const links = screen.getAllByRole('link');
+		expect(links).toHaveLength(1);
+		expect(links[0]).toHaveTextContent(/^Want$/);
+		expect(links[0]).toHaveAttribute('href', '/wanted');
 	});
 });

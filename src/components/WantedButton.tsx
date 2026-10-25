@@ -19,8 +19,8 @@ const BUTTON =
 /**
  * Puts a title on the sponsor's wanted list, which their zurg fetches. On a
  * season page it wants that season, keeping the others already wanted; a show
- * wanted whole stays whole. A non-sponsor gets a link to `/wanted`, which says
- * what the list is and how to get it.
+ * wanted whole stays whole. A non-sponsor gets one "Want" link to `/wanted`,
+ * which says what the list is and how to get it.
  */
 export default function WantedButton({ imdbId, kind, title, season }: WantedButtonProps) {
 	const { isSponsor } = useSponsor();
@@ -99,7 +99,9 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 					? `Wanted: S${season}`
 					: `Want S${season}`;
 
+	// Every non-sponsor button leads to the same page, so a season page shows one: the whole-show one.
 	if (!isSponsor) {
+		if (season !== undefined) return null;
 		return (
 			<Link
 				href="/wanted"
@@ -108,7 +110,7 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 			>
 				<b className="flex items-center justify-center">
 					<BookmarkPlus className="mr-1 h-3 w-3 text-rose-400" />
-					{label}
+					Want
 				</b>
 			</Link>
 		);

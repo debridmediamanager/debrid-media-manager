@@ -312,6 +312,7 @@ describe('All Seasons buttons', () => {
 		keys.tb = 'tb-token';
 		keys.pm = null;
 		keys.oc = null;
+		localStorage.removeItem('settings:instantService');
 		for (const key of Object.keys(seasonStateMock)) delete seasonStateMock[key as never];
 		runMock.mockResolvedValue({
 			added: 2,
@@ -323,14 +324,25 @@ describe('All Seasons buttons', () => {
 		});
 	});
 
-	it('offers one button per service the user actually holds', async () => {
+	// Several services share one button, with a picker for the service it adds to.
+	it('offers one button and a picker of the services the user actually holds', async () => {
 		const actions = await mountPage();
+		const picker = within(
+			actions.getByRole('group', { name: 'Service the Instant buttons add to' })
+		);
+		expect(picker.getAllByRole('button').map((b) => b.textContent)).toEqual(['RD', 'TB']);
+		expect(picker.getByRole('button', { name: 'RD' })).toHaveAttribute('aria-pressed', 'true');
 		expect(
 			actions.getByRole('button', { name: /Instant RD \(All Seasons\)/i })
-		).toBeInTheDocument();
+		).toHaveTextContent('Instant (All Seasons)');
+		expect(actions.queryByRole('button', { name: /Instant TB \(All Seasons\)/i })).toBeNull();
+
+		await userEvent.click(picker.getByRole('button', { name: 'TB' }));
 		expect(
 			actions.getByRole('button', { name: /Instant TB \(All Seasons\)/i })
 		).toBeInTheDocument();
+		expect(actions.queryByRole('button', { name: /Instant RD \(All Seasons\)/i })).toBeNull();
+		expect(JSON.parse(localStorage.getItem('settings:instantService')!)).toBe('tb');
 	});
 
 	it('hides the TorBox button for a user with no TorBox key', async () => {

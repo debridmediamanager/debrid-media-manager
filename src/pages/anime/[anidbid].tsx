@@ -1,5 +1,6 @@
 import AnimeEntryLinks, { animeTypeLabel } from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
+import CheckAvailabilityButtons from '@/components/CheckAvailabilityButtons';
 import EpisodeChips from '@/components/EpisodeChips';
 import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
@@ -58,7 +59,7 @@ import { generateTokenAndHash } from '@/utils/token';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
 import { withAuth } from '@/utils/withAuth';
 import { AxiosError } from 'axios';
-import { ExternalLink, Film, Loader2, RotateCcw, Search, Tv } from 'lucide-react';
+import { ExternalLink, Film, RotateCcw, Tv } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -622,11 +623,10 @@ const AnimePage: FunctionComponent = () => {
 	}
 
 	const entries = franchise?.entries ?? [];
-	const position = entries.findIndex((e) => e.anidbId === anidbId);
-	const previous = position > 0 ? entries[position - 1] : null;
-	const next = position >= 0 && position < entries.length - 1 ? entries[position + 1] : null;
 	const imdbIds = franchise?.imdbIds?.length ? franchise.imdbIds : imdbId ? [imdbId] : [];
 	const isMovie = (info?.type || self?.type || '').toUpperCase() === 'MOVIE';
+	const rating = metadataKnown ? info!.imdbRating : 0;
+	const ratingLinksHere = rating > 0;
 
 	const entryFacts = (
 		<div className="flex flex-wrap items-center gap-2 text-xs" data-testid="anime-entry-facts">
@@ -641,14 +641,17 @@ const AnimePage: FunctionComponent = () => {
 					{info.episodeCount} episode{info.episodeCount === 1 ? '' : 's'}
 				</span>
 			) : null}
-			<Link
-				href={anidbUrl}
-				target="_blank"
-				className="inline-flex items-center rounded border border-gray-500 bg-gray-800/70 px-2 py-0.5 text-gray-200 hover:bg-gray-700/70"
-			>
-				{idLabel}
-				<ExternalLink className="ml-1 h-3 w-3" />
-			</Link>
+			{/* The header's Rating already links here when there is one. */}
+			{!ratingLinksHere && (
+				<Link
+					href={anidbUrl}
+					target="_blank"
+					className="inline-flex items-center rounded border border-gray-500 bg-gray-800/70 px-2 py-0.5 text-gray-200 hover:bg-gray-700/70"
+				>
+					{idLabel}
+					<ExternalLink className="ml-1 h-3 w-3" />
+				</Link>
+			)}
 			{imdbIds.map((id) => (
 				<Link
 					key={id}
@@ -663,88 +666,29 @@ const AnimePage: FunctionComponent = () => {
 		</div>
 	);
 
+	// The list draws its neighbours and marks this entry, so it needs no
+	// previous/next links; the words every title shares are said once.
 	const franchiseNav =
 		entries.length > 1 ? (
 			<div className="flex flex-col gap-1" data-testid="anime-franchise">
-				<div className="flex flex-wrap gap-2 text-xs">
-					{previous && (
-						<Link
-							href={`/anime/${previous.anidbId}`}
-							className="rounded border border-fuchsia-500 bg-fuchsia-900/30 px-2 py-0.5 text-fuchsia-100 hover:bg-fuchsia-800/50"
-							title={previous.title}
-						>
-							&larr; Previous entry
-						</Link>
-					)}
-					{next && (
-						<Link
-							href={`/anime/${next.anidbId}`}
-							className="rounded border border-fuchsia-500 bg-fuchsia-900/30 px-2 py-0.5 text-fuchsia-100 hover:bg-fuchsia-800/50"
-							title={next.title}
-						>
-							Next entry &rarr;
-						</Link>
-					)}
-				</div>
 				<AnimeEntryLinks
 					entries={entries}
 					currentAnidbId={anidbId ?? undefined}
 					label="Same IMDb title"
+					stripSharedPrefix
 				/>
 			</div>
 		) : null;
 
 	const headerActionButtons = (
 		<div data-testid="media-header-actions">
-			{rdKey && (
-				<button
-					className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
-					disabled={isAnyChecking}
-				>
-					<b className="flex items-center justify-center">
-						{isAnyChecking ? (
-							<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
-						) : (
-							<Search className="mr-1 h-3 w-3 text-yellow-500" />
-						)}
-						{isAnyChecking ? 'Checking RD...' : 'Check RD'}
-					</b>
-				</button>
-			)}
-			{adKey && (
-				<button
-					className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
-					disabled={isAnyChecking}
-				>
-					<b className="flex items-center justify-center">
-						{isAnyChecking ? (
-							<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
-						) : (
-							<Search className="mr-1 h-3 w-3 text-orange-500" />
-						)}
-						{isAnyChecking ? 'Checking AD...' : 'Check AD'}
-					</b>
-				</button>
-			)}
-			{debridLinkKey && (
-				<button
-					className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
-					onClick={() => checkServiceAvailabilityBulk(filteredResults, ['DL'])}
-					disabled={isAnyChecking}
-					title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
-				>
-					<b className="flex items-center justify-center">
-						{isAnyChecking ? (
-							<Loader2 className="mr-1 h-3 w-3 animate-spin text-sky-400" />
-						) : (
-							<Search className="mr-1 h-3 w-3 text-sky-400" />
-						)}
-						{isAnyChecking ? 'Checking DL...' : 'Check DL'}
-					</b>
-				</button>
-			)}
+			<CheckAvailabilityButtons
+				rdKey={rdKey}
+				adKey={adKey}
+				debridLinkKey={debridLinkKey}
+				isAnyChecking={isAnyChecking}
+				onCheck={(services) => checkServiceAvailabilityBulk(filteredResults, services)}
+			/>
 		</div>
 	);
 
@@ -801,7 +745,7 @@ const AnimePage: FunctionComponent = () => {
 				description={metadataKnown ? info!.description : ''}
 				poster={poster}
 				backdrop={metadataKnown ? info!.backdrop : ''}
-				imdbScore={metadataKnown ? info!.imdbRating : 0}
+				imdbScore={rating}
 				ratingHref={anidbUrl}
 				descLimit={descLimit}
 				onDescToggle={() => setDescLimit(0)}
@@ -814,7 +758,6 @@ const AnimePage: FunctionComponent = () => {
 				}
 			/>
 
-			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
 			{errorMessage && (
 				<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
 					<strong className="font-bold">Error:</strong>
@@ -842,6 +785,12 @@ const AnimePage: FunctionComponent = () => {
 				<span className="text-xs text-gray-400">
 					{filteredResults.filter((r) => !unavailable(r)).length}/{filteredResults.length}
 				</span>
+				{/* No tab bar here, so the progress sits at the end of the filter row. */}
+				{searchState === 'loading' && (
+					<span className="ml-2">
+						<SearchSourceProgress sources={sourceStates} />
+					</span>
+				)}
 			</div>
 
 			<div className="mb-2 flex flex-col gap-2 p-2">

@@ -1,5 +1,5 @@
 /* oxlint-disable nextjs/no-img-element */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 
@@ -69,9 +69,21 @@ vi.mock('@/components/UsenetResults', () => ({
 
 vi.mock('@/components/MediaHeader', () => ({
 	__esModule: true,
-	default: ({ title, actionButtons }: { title: string; actionButtons?: ReactNode }) => (
+	default: ({
+		title,
+		actionButtons,
+		titleExtra,
+		additionalInfo,
+	}: {
+		title: string;
+		actionButtons?: ReactNode;
+		titleExtra?: ReactNode;
+		additionalInfo?: ReactNode;
+	}) => (
 		<>
 			<div data-testid="media-header">{title}</div>
+			{titleExtra}
+			{additionalInfo}
 			{actionButtons}
 		</>
 	),
@@ -117,12 +129,13 @@ vi.mock('@/hooks/useExternalSources', () => ({
 	}),
 }));
 
+const { bulkCheckMock } = vi.hoisted(() => ({ bulkCheckMock: vi.fn() }));
 vi.mock('@/hooks/useAvailabilityCheck', () => ({
 	useAvailabilityCheck: () => ({
 		isAnyChecking: false,
 		isHashServiceChecking: () => false,
 		checkServiceAvailability: vi.fn(),
-		checkServiceAvailabilityBulk: vi.fn(),
+		checkServiceAvailabilityBulk: bulkCheckMock,
 	}),
 }));
 
@@ -244,10 +257,37 @@ import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
 
-const movieInfo: Record<string, { title: string; year: string }> = {
+const daysFromNow = (days: number) =>
+	new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10);
+const thisYear = String(new Date().getUTCFullYear());
+
+const movieInfo: Record<string, { title: string; year: string; [field: string]: unknown }> = {
 	tt1111111: { title: 'First Movie', year: '2019' },
 	tt2222222: { title: 'Second Movie', year: '1998' },
 	tt0446009: { title: 'The Vexxer', year: '2007' },
+	// As production served The Godfather on 2026-10-25, a digital date to come
+	// for a 1972 film; The Wizard of Oz had a 1939 "estimate".
+	tt0068646: {
+		title: 'The Godfather',
+		year: '1972',
+		expectedDigitalReleaseDate: daysFromNow(30),
+		expectedDigitalReleaseSource: 'tmdb',
+		digitalReleaseAvailable: false,
+	},
+	tt0032138: {
+		title: 'The Wizard of Oz',
+		year: '1939',
+		expectedDigitalReleaseDate: '1939-10-05',
+		expectedDigitalReleaseSource: 'estimated',
+		digitalReleaseAvailable: false,
+	},
+	tt3137850: {
+		title: 'Upcoming Movie',
+		year: thisYear,
+		expectedDigitalReleaseDate: daysFromNow(30),
+		expectedDigitalReleaseSource: 'estimated',
+		digitalReleaseAvailable: false,
+	},
 };
 
 describe('Movie search page across client-side navigation', () => {
@@ -273,13 +313,12 @@ describe('Movie search page across client-side navigation', () => {
 				return Promise.resolve({
 					status: 200,
 					data: {
-						title: info.title,
 						description: '',
 						poster: '',
 						backdrop: '',
-						year: info.year,
 						imdb_score: 7,
 						trailer: '',
+						...info,
 					},
 				});
 			}
@@ -298,6 +337,12 @@ describe('Movie search page across client-side navigation', () => {
 	});
 
 	it('replaces the year prefilter instead of stacking it on the previous movie', async () => {
+		// A result keeps the filter on screen; with none the page shows its empty state.
+		torrentResults.push({
+			title: 'Some Movie 2019 1080p',
+			fileSize: 2048,
+			hash: 'b'.repeat(40),
+		});
 		const { rerender } = render(<MovieSearchPage />);
 
 		await waitFor(() =>
@@ -371,11 +416,12 @@ describe('Movie search page across client-side navigation', () => {
 
 		await waitFor(() => expect(torrentUrls).toHaveLength(1));
 		expect(screen.queryByTestId('usenet-results')).not.toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /Usenet/ })).toHaveAttribute(
+		// Exact names: with nothing found, the empty state links "Usenet tab" too.
+		expect(screen.getByRole('link', { name: /^Usenet$/ })).toHaveAttribute(
 			'href',
 			'/movie/tt1111111/usenet'
 		);
-		expect(screen.getByRole('link', { name: /Torrents/ })).toHaveAttribute(
+		expect(screen.getByRole('link', { name: /^Torrents$/ })).toHaveAttribute(
 			'href',
 			'/movie/tt1111111?tab=torrents'
 		);
@@ -387,6 +433,68 @@ describe('Movie search page across client-side navigation', () => {
 		await waitFor(() => expect(torrentUrls).toHaveLength(1));
 		expect(torrentUrls[0]).toContain('imdbId=tt1111111');
 		expect(torrentUrls[0]).toContain('page=0');
+	});
+
+	describe('digital release chip', () => {
+		it.each(['tt0068646', 'tt0032138'])(
+			'shows no digital date for long-released %s',
+			async (id) => {
+				routerQuery.imdbid = id;
+				render(<MovieSearchPage />);
+				await waitFor(() => expect(torrentUrls).toHaveLength(1));
+				expect(screen.queryByText(/digital/i)).not.toBeInTheDocument();
+			}
+		);
+
+		it('shows a release still to come in a few words, its estimate explained', async () => {
+			routerQuery.imdbid = 'tt3137850';
+			render(<MovieSearchPage />);
+			const chip = await screen.findByTestId('digital-release');
+			expect(chip).toHaveTextContent(/^Digital ~/);
+			expect(chip).toHaveAttribute('title', expect.stringMatching(/estimate/));
+		});
+	});
+
+	describe('with nothing found', () => {
+		it('swaps the filter and checks for a pointer to Want and Usenet', async () => {
+			authKeys.ad = 'ad-key';
+			render(<MovieSearchPage />);
+			const empty = await screen.findByTestId('no-torrents');
+			expect(empty).toHaveTextContent(/No torrents found yet/);
+			expect(within(empty).getByRole('link', { name: 'Usenet tab' })).toHaveAttribute(
+				'href',
+				'/movie/tt1111111/usenet'
+			);
+			expect(screen.queryByTestId('query-value')).not.toBeInTheDocument();
+			expect(screen.queryByRole('button', { name: /^Check/ })).not.toBeInTheDocument();
+		});
+	});
+
+	describe('availability checks', () => {
+		beforeEach(() => {
+			torrentResults.push({
+				title: 'First Movie 2019 1080p',
+				fileSize: 2048,
+				hash: 'c'.repeat(40),
+			});
+		});
+
+		it('keeps one service its own Check button', async () => {
+			render(<MovieSearchPage />);
+			await screen.findByTestId('movie-search-results');
+			fireEvent.click(screen.getByRole('button', { name: 'Check RD' }));
+			expect(bulkCheckMock).toHaveBeenCalledWith(expect.any(Array), ['RD']);
+		});
+
+		it('checks every checkable service from one button', async () => {
+			authKeys.ad = 'ad-key';
+			authKeys.dl = 'dl-key';
+			render(<MovieSearchPage />);
+			await screen.findByTestId('movie-search-results');
+			expect(screen.queryByRole('button', { name: /Check (RD|AD|DL)/ })).toBeNull();
+			fireEvent.click(screen.getByRole('button', { name: 'Check all' }));
+			expect(bulkCheckMock).toHaveBeenCalledWith(expect.any(Array), ['RD', 'AD', 'DL']);
+		});
 	});
 
 	describe('info modal service selection', () => {

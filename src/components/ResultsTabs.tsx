@@ -1,5 +1,6 @@
 import { Magnet, Newspaper } from 'lucide-react';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 interface ResultsTabsProps {
 	/** The torrent page, `/movie/tt…` or `/show/tt…/N`. Usenet's is it plus `/usenet`. */
@@ -7,17 +8,36 @@ interface ResultsTabsProps {
 	active: 'torrents' | 'usenet';
 	/** Carried to the other tab, e.g. the season page's `episode` chip. */
 	query?: Record<string, string>;
+	/** Drawn at the bar's right end, e.g. the search progress. */
+	extra?: ReactNode;
 }
 
 const TAB =
 	'haptic-sm flex items-center rounded-t border-2 border-b-0 px-3 py-1 text-sm transition-colors';
+
+/** The Torrents tab of a title nothing has been scraped for yet. */
+export function NoTorrentsYet({ basePath }: { basePath: string }) {
+	return (
+		<div
+			className="mx-2 my-4 rounded border border-gray-600 bg-gray-800/50 px-4 py-3 text-sm text-gray-300"
+			data-testid="no-torrents"
+		>
+			No torrents found yet. Use Want above to have zurg fetch it once one turns up, or try
+			the{' '}
+			<Link href={`${basePath}/usenet`} className="text-cyan-300 underline">
+				Usenet tab
+			</Link>
+			.
+		</div>
+	);
+}
 
 /**
  * Torrents | Usenet above a title's results. Each is its own route so a Usenet
  * search is linkable and the indexers are only asked when someone opens it: the
  * Usenet indexer bills a daily API-call quota.
  */
-export default function ResultsTabs({ basePath, active, query }: ResultsTabsProps) {
+export default function ResultsTabs({ basePath, active, query, extra }: ResultsTabsProps) {
 	// The Torrents tab says so in its URL, or a viewer whose results open on
 	// Usenet would be sent straight back there.
 	const href = (path: string, extra: Record<string, string> = {}) => {
@@ -42,6 +62,7 @@ export default function ResultsTabs({ basePath, active, query }: ResultsTabsProp
 				<Newspaper className="mr-1 h-4 w-4" />
 				Usenet
 			</Link>
+			{extra && <div className="ml-auto flex items-center self-center pr-2">{extra}</div>}
 		</nav>
 	);
 }

@@ -1,10 +1,11 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
+import CheckAvailabilityButtons from '@/components/CheckAvailabilityButtons';
 import EasynewsResults from '@/components/EasynewsResults';
 import EpisodeChips, { type EpisodeChipItem } from '@/components/EpisodeChips';
 import { showEpisodeSummary } from '@/components/EpisodeSummaryToast';
 import MediaHeader from '@/components/MediaHeader';
-import ResultsTabs from '@/components/ResultsTabs';
+import ResultsTabs, { NoTorrentsYet } from '@/components/ResultsTabs';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
@@ -20,6 +21,7 @@ import {
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
+import useLocalStorage from '@/hooks/localStorage';
 import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
@@ -109,10 +111,8 @@ import {
 	Layers,
 	Loader2,
 	RotateCcw,
-	Search,
 	Sparkles,
 	Square,
-	Tv,
 	X,
 	Zap,
 } from 'lucide-react';
@@ -135,6 +135,9 @@ const INSTANT_SERVICES: {
 	available: 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable';
 	button: string;
 	icon: string;
+	/** The provider picker, in the service's identity colour (AGENTS.md). */
+	picked: string;
+	unpicked: string;
 }[] = [
 	{
 		service: 'rd',
@@ -143,6 +146,8 @@ const INSTANT_SERVICES: {
 		available: 'rdAvailable',
 		button: 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
 		icon: 'text-yellow-500',
+		picked: 'border-[#b5d496] bg-[#b5d496] text-black',
+		unpicked: 'border-[#b5d496] bg-gray-900/80 text-[#b5d496] hover:bg-[#b5d496]/20',
 	},
 	{
 		service: 'ad',
@@ -151,6 +156,8 @@ const INSTANT_SERVICES: {
 		available: 'adAvailable',
 		button: 'border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50',
 		icon: 'text-orange-400',
+		picked: 'border-[#fbc730] bg-[#fbc730] text-black',
+		unpicked: 'border-[#fbc730] bg-gray-900/80 text-[#fbc730] hover:bg-[#fbc730]/20',
 	},
 	{
 		service: 'tb',
@@ -159,6 +166,8 @@ const INSTANT_SERVICES: {
 		available: 'tbAvailable',
 		button: 'border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50',
 		icon: 'text-indigo-300',
+		picked: 'border-[#4f46e5] bg-[#4f46e5] text-white',
+		unpicked: 'border-[#4f46e5] bg-gray-900/80 text-indigo-200 hover:bg-[#4f46e5]/30',
 	},
 	{
 		service: 'pm',
@@ -167,6 +176,8 @@ const INSTANT_SERVICES: {
 		available: 'pmAvailable',
 		button: 'border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50',
 		icon: 'text-rose-300',
+		picked: 'border-[#aa0000] bg-[#aa0000] text-white',
+		unpicked: 'border-[#aa0000] bg-gray-900/80 text-red-200 hover:bg-[#aa0000]/30',
 	},
 	{
 		service: 'oc',
@@ -175,8 +186,14 @@ const INSTANT_SERVICES: {
 		available: 'ocAvailable',
 		button: 'border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50',
 		icon: 'text-teal-300',
+		picked: 'border-[#f97316] bg-[#f97316] text-black',
+		unpicked: 'border-[#f97316] bg-gray-900/80 text-[#f97316] hover:bg-[#f97316]/20',
 	},
 ];
+
+/** "S29" for the generic "Season 29" the metadata names most seasons; a real name stays. */
+const seasonLabel = (name: string | undefined, season: number) =>
+	name && name.trim().toLowerCase() !== `season ${season}` ? name : `S${season}`;
 
 const labelFor = (service: SeasonAdderService) =>
 	INSTANT_SERVICES.find((entry) => entry.service === service)!.label;
@@ -642,6 +659,13 @@ const TvSearch: FunctionComponent = () => {
 				oc: offcloudKey,
 			})[service]
 	);
+	// With several services the header shows one button per action and a picker
+	// for which service it adds to, remembered across titles.
+	const [pickedInstant, setPickedInstant] = useLocalStorage<string>('settings:instantService');
+	const multiInstant = instantServices.length > 1;
+	const shownInstantServices = multiInstant
+		? [instantServices.find((entry) => entry.service === pickedInstant) ?? instantServices[0]]
+		: instantServices;
 
 	const expectedEpisodeCount = useMemo(
 		() =>
@@ -1706,14 +1730,14 @@ const TvSearch: FunctionComponent = () => {
 		return undefined;
 	};
 
-	const seasonNavigation = (
+	// A lone "S1" only repeats the title, so a one-season show without specials has no nav.
+	const seasonNavigation = (showInfo.season_count > 1 || showInfo.has_specials) && (
 		<div className="flex items-center overflow-x-auto" data-testid="media-header-season-nav">
 			{showInfo.has_specials && (
 				<Link
 					href={`/show/${imdbId}/0${seasonLinkSuffix}`}
 					className={`inline-flex items-center border-2 p-1 text-xs border-${selectedSeason === 0 ? 'red' : 'yellow'}-500 bg-${selectedSeason === 0 ? 'red' : 'yellow'}-900/30 text-${selectedSeason === 0 ? 'red' : 'yellow'}-100 hover:bg-${selectedSeason === 0 ? 'red' : 'yellow'}-800/50 mr-2 mb-1 rounded transition-colors`}
 				>
-					<Tv className="mr-2 h-3 w-3 text-cyan-500" />
 					<span className="whitespace-nowrap">Specials</span>
 				</Link>
 			)}
@@ -1727,11 +1751,8 @@ const TvSearch: FunctionComponent = () => {
 							title={seasonRunTitle(season)}
 							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mr-2 mb-1 rounded transition-colors`}
 						>
-							<Tv className="mr-2 h-3 w-3 text-cyan-500" />
 							<span className="whitespace-nowrap">
-								{showInfo.season_names && showInfo.season_names[season - 1]
-									? showInfo.season_names[season - 1]
-									: `Season ${season}`}
+								{seasonLabel(showInfo.season_names?.[season - 1], season)}
 							</span>
 							{seasonRunIcon(season)}
 						</Link>
@@ -1755,37 +1776,39 @@ const TvSearch: FunctionComponent = () => {
 		return `${datePart} ${timePart}`;
 	};
 
+	const episodeCode = (ep: EpisodeAirInfo) =>
+		`S${String(ep.season_number).padStart(2, '0')}E${String(ep.episode_number).padStart(2, '0')}`;
+
+	// Ended, Canceled and an Airing show with nothing scheduled ride after the
+	// rating as a few words; a scheduled episode keeps its own chip.
+	const statusSuffix = (() => {
+		const status = showInfo.status;
+		const last = showInfo.last_episode_to_air;
+		if (status === 'Ended' || status === 'Canceled') {
+			return <span className="text-gray-300"> &middot; {status}</span>;
+		}
+		if (status === 'Returning Series' && !showInfo.next_episode_to_air) {
+			return (
+				<span
+					className="text-green-200"
+					title={last ? `Last aired ${formatAirDate(last.first_aired)}` : undefined}
+				>
+					{' '}
+					&middot; Airing{last ? ` (last ${episodeCode(last)})` : ''}
+				</span>
+			);
+		}
+		return null;
+	})();
+
 	const airingStatus = (() => {
 		const status = showInfo.status;
 		const next = showInfo.next_episode_to_air;
-		const last = showInfo.last_episode_to_air;
 		const episodeCount = showInfo.season_episode_counts[selectedSeason] ?? 0;
-
-		if (!status && !next && !last) return null;
 
 		const badges: React.ReactNode[] = [];
 
-		// Show status badge
-		if (status === 'Ended' || status === 'Canceled') {
-			badges.push(
-				<span
-					key="status"
-					className="inline-flex items-center rounded border border-gray-500 bg-gray-800/70 px-2 py-0.5 text-xs text-gray-300"
-				>
-					<CheckCircle className="mr-1 h-3 w-3" />
-					{status === 'Ended' ? 'Series Ended' : 'Series Canceled'}
-				</span>
-			);
-		} else if (status === 'Returning Series') {
-			badges.push(
-				<span
-					key="status"
-					className="inline-flex items-center rounded border border-green-500 bg-green-900/30 px-2 py-0.5 text-xs text-green-100"
-				>
-					Airing
-				</span>
-			);
-		} else if (status === 'In Production' || status === 'Planned' || status === 'Pilot') {
+		if (status === 'In Production' || status === 'Planned' || status === 'Pilot') {
 			badges.push(
 				<span
 					key="status"
@@ -1798,25 +1821,13 @@ const TvSearch: FunctionComponent = () => {
 
 		// Show next episode info
 		if (next) {
-			const epCode = `S${String(next.season_number).padStart(2, '0')}E${String(next.episode_number).padStart(2, '0')}`;
 			badges.push(
 				<span
 					key="next"
 					className="inline-flex items-center rounded border border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-xs text-cyan-100"
 				>
 					<Calendar className="mr-1 h-3 w-3" />
-					Next: {epCode} &middot; {formatAirDate(next.first_aired)}
-				</span>
-			);
-		} else if (status === 'Returning Series' && last) {
-			// Returning but no next episode scheduled yet
-			const epCode = `S${String(last.season_number).padStart(2, '0')}E${String(last.episode_number).padStart(2, '0')}`;
-			badges.push(
-				<span
-					key="last"
-					className="inline-flex items-center rounded border border-blue-500 bg-blue-900/30 px-2 py-0.5 text-xs text-blue-100"
-				>
-					Last aired: {epCode} &middot; {formatAirDate(last.first_aired)}
+					Next: {episodeCode(next)} &middot; {formatAirDate(next.first_aired)}
 				</span>
 			);
 		}
@@ -1835,7 +1846,13 @@ const TvSearch: FunctionComponent = () => {
 
 		if (badges.length === 0) return null;
 
-		return <div className="flex flex-wrap items-center gap-2">{badges}</div>;
+		// The AniDB links share the row rather than taking one of their own.
+		return (
+			<div className="flex flex-wrap items-center gap-2">
+				{badges}
+				<AnimeEntryLinks entries={animeLinks} />
+			</div>
+		);
 	})();
 
 	const episodeNav = (() => {
@@ -1921,100 +1938,90 @@ const TvSearch: FunctionComponent = () => {
 						? `No releases for episode ${episodeFilter} match the filter.`
 						: `No releases for episode ${episodeFilter}.`;
 
+	// Nothing scraped yet: the filter, chips and checks have nothing to work on.
+	const noTorrents = searchState === 'loaded' && searchResults.length === 0 && !errorMessage;
+	const hasInstantAction = instantServices.some(
+		(entry) =>
+			getCompleteSeasonTorrents(entry).length > 0 ||
+			getIndividualEpisodeTorrents(entry).length > 0
+	);
+	const finished = showInfo.status === 'Ended' || showInfo.status === 'Canceled';
+
 	const headerActionButtons = (
 		<div data-testid="media-header-actions">
 			{(rdKey || adKey || torboxKey || premiumizeKey || offcloudKey || debridLinkKey) && (
 				<>
-					{rdKey && (
-						<button
-							className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
-							disabled={isAnyChecking}
-						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
-										Checking RD...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-yellow-500" />
-										Check RD
-									</>
-								)}
-							</b>
-						</button>
+					{!noTorrents && (
+						<CheckAvailabilityButtons
+							rdKey={rdKey}
+							adKey={adKey}
+							debridLinkKey={debridLinkKey}
+							isAnyChecking={isAnyChecking}
+							onCheck={(services) =>
+								checkServiceAvailabilityBulk(filteredResults, services)
+							}
+						/>
 					)}
-					{adKey && (
-						<button
-							className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
-							disabled={isAnyChecking}
+					{multiInstant && (showInfo.season_count > 1 || hasInstantAction) && (
+						<span
+							role="group"
+							aria-label="Service the Instant buttons add to"
+							className="mt-0 mr-2 mb-1 inline-flex align-middle text-xs max-sm:m-0"
 						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
-										Checking AD...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-orange-500" />
-										Check AD
-									</>
-								)}
-							</b>
-						</button>
+							{instantServices.map((entry) => {
+								const picked = entry === shownInstantServices[0];
+								return (
+									<button
+										key={`pick-${entry.service}`}
+										className={`haptic-sm border-2 px-1.5 py-0.5 font-bold transition-colors first:rounded-l last:rounded-r ${picked ? entry.picked : entry.unpicked}`}
+										aria-pressed={picked}
+										title={`Instant buttons add to ${entry.label}`}
+										onClick={() => setPickedInstant(entry.service)}
+									>
+										{entry.short}
+									</button>
+								);
+							})}
+						</span>
 					)}
-					{debridLinkKey && (
-						<button
-							className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['DL'])}
-							disabled={isAnyChecking}
-							title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
-						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-sky-400" />
-										Checking DL...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-sky-400" />
-										Check DL
-									</>
-								)}
-							</b>
-						</button>
-					)}
-					{instantServices.map(
+					{shownInstantServices.map(
 						(entry) =>
 							getCompleteSeasonTorrents(entry).length > 0 && (
 								<button
 									key={`whole-${entry.service}`}
 									className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
 									onClick={() => handleInstantWholeSeason(entry)}
+									aria-label={
+										multiInstant
+											? `Instant ${entry.short} (Whole Season)`
+											: undefined
+									}
 								>
 									<b className="flex items-center justify-center">
 										<Zap className={`mr-1 h-3 w-3 ${entry.icon}`} />
-										Instant {entry.short} (Whole Season)
+										Instant {multiInstant ? '' : `${entry.short} `}(Whole
+										Season)
 									</b>
 								</button>
 							)
 					)}
-					{instantServices.map(
+					{shownInstantServices.map(
 						(entry) =>
 							getIndividualEpisodeTorrents(entry).length > 0 && (
 								<button
 									key={`every-${entry.service}`}
 									className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
 									onClick={() => handleInstantEveryEpisode(entry)}
+									aria-label={
+										multiInstant
+											? `Instant ${entry.short} (Every Episode)`
+											: undefined
+									}
 								>
 									<b className="flex items-center justify-center">
 										<Zap className={`mr-1 h-3 w-3 ${entry.icon}`} />
-										Instant {entry.short} (Every Episode)
+										Instant {multiInstant ? '' : `${entry.short} `}(Every
+										Episode)
 									</b>
 								</button>
 							)
@@ -2038,12 +2045,17 @@ const TvSearch: FunctionComponent = () => {
 					 */}
 					{showInfo.season_count > 1 &&
 						!isAddingSeasons &&
-						instantServices.map((entry) => (
+						shownInstantServices.map((entry) => (
 							<button
 								key={`all-${entry.service}`}
 								className={`haptic-sm mt-0 mr-2 mb-1 rounded border-2 p-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${entry.button}`}
 								onClick={() => handleAllSeasons(entry.service)}
 								disabled={isDiscoveringSeasons}
+								aria-label={
+									multiInstant
+										? `Instant ${entry.short} (All Seasons)`
+										: undefined
+								}
 							>
 								<b className="flex items-center justify-center">
 									{isDiscoveringSeasons ? (
@@ -2053,7 +2065,7 @@ const TvSearch: FunctionComponent = () => {
 									) : (
 										<Layers className={`mr-1 h-3 w-3 ${entry.icon}`} />
 									)}
-									Instant {entry.short} (All Seasons)
+									Instant {multiInstant ? '' : `${entry.short} `}(All Seasons)
 								</b>
 							</button>
 						))}
@@ -2072,8 +2084,9 @@ const TvSearch: FunctionComponent = () => {
 					</button>
 				</>
 			)}
-			{/* zurg's acquisition takes no specials, so season 0 offers only the whole show. */}
-			{selectedSeason >= 1 && (
+			{/* zurg's acquisition takes no specials, so season 0 offers only the whole show;
+			    nor does a finished one-season show need its season wanted apart. */}
+			{selectedSeason >= 1 && !(finished && showInfo.season_count === 1) && (
 				<WantedButton
 					imdbId={imdbId}
 					kind="show"
@@ -2117,12 +2130,15 @@ const TvSearch: FunctionComponent = () => {
 				descLimit={descLimit}
 				onDescToggle={() => setDescLimit(0)}
 				actionButtons={headerActionButtons}
+				scoreSuffix={statusSuffix}
 				additionalInfo={
-					<>
-						{airingStatus}
-						{seasonNavigation}
-						<AnimeEntryLinks entries={animeLinks} />
-					</>
+					airingStatus || seasonNavigation || animeLinks.length > 0 ? (
+						<>
+							{airingStatus}
+							{seasonNavigation}
+							{!airingStatus && <AnimeEntryLinks entries={animeLinks} />}
+						</>
+					) : null
 				}
 				trailer={showInfo.trailer}
 			/>
@@ -2131,6 +2147,11 @@ const TvSearch: FunctionComponent = () => {
 				basePath={`/show/${imdbId}/${seasonId}`}
 				active={usenetTab ? 'usenet' : 'torrents'}
 				query={episodeFilter !== null ? { episode: String(episodeFilter) } : undefined}
+				extra={
+					!usenetTab && searchState === 'loading' ? (
+						<SearchSourceProgress sources={sourceStates} />
+					) : null
+				}
 			/>
 			{usenetTab && (
 				<>
@@ -2152,7 +2173,6 @@ const TvSearch: FunctionComponent = () => {
 			)}
 			{!usenetTab && (
 				<>
-					{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
 					{searchState === 'processing' && (
 						<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
 							<strong className="font-bold">Notice:</strong>
@@ -2169,116 +2189,126 @@ const TvSearch: FunctionComponent = () => {
 						</div>
 					)}
 
-					<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
-						<input
-							className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
-							type="text"
-							id="query"
-							placeholder="filter results, supports regex"
-							value={query}
-							onChange={(e) => {
-								setQuery(e.target.value.toLocaleLowerCase());
-							}}
-						/>
-						<span
-							className="me-2 inline-flex cursor-pointer items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-							onClick={() => setQuery('')}
-							title="Reset search"
-						>
-							<RotateCcw className="h-3 w-3" />
-							<span className="ml-1 hidden sm:inline">Reset</span>
-						</span>
-						<span className="text-xs text-gray-400">
-							{
-								filteredResults.filter(
-									(r) =>
-										r.rdAvailable ||
-										r.adAvailable ||
-										r.tbAvailable ||
-										r.pmAvailable ||
-										r.ocAvailable
-								).length
-							}
-							/{filteredResults.length}
-						</span>
-						{query &&
-							filteredResults.length > 0 &&
-							canReport &&
-							showMassReportButtons && (
-								<div className="ml-2 flex gap-2">
-									<span
-										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-										onClick={() => handleMassReport('porn', filteredResults)}
-										title="Report all filtered torrents as pornographic content"
-									>
-										Report as Porn ({filteredResults.length})
-									</span>
-									<span
-										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-										onClick={() =>
-											handleMassReport('wrong_imdb', filteredResults)
-										}
-										title="Report all filtered torrents as wrong IMDB ID"
-									>
-										Report Wrong IMDB ({filteredResults.length})
-									</span>
-									<span
-										className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
-										onClick={() =>
-											handleMassReport('wrong_season', filteredResults)
-										}
-										title="Report all filtered torrents as wrong season"
-									>
-										Report Wrong Season ({filteredResults.length})
-									</span>
-								</div>
-							)}
-					</div>
-
-					<div className="mb-2 flex flex-col gap-2 p-2">
-						{episodeNav}
-						<div className="flex items-center gap-2 overflow-x-auto">
-							<SearchTokens
-								title={showInfo.title}
-								year={seasonNum as string}
-								isShow={true}
-								onTokenClick={(token) =>
-									setQuery((prev) => (prev ? `${prev} ${token}` : token))
-								}
-							/>
-							{getColorScale(expectedEpisodeCount).map((scale, idx) => (
-								<span
-									key={idx}
-									className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
-									onClick={() => {
-										const queryText = getQueryForEpisodeCount(
-											scale.threshold,
-											expectedEpisodeCount
-										);
-										setQuery((prev) => {
-											const cleanedPrev = prev
-												.replace(/\bvideos:[^\s]+/g, '')
-												.trim();
-											return cleanedPrev
-												? `${cleanedPrev} ${queryText}`
-												: queryText;
-										});
+					{noTorrents && <NoTorrentsYet basePath={`/show/${imdbId}/${seasonId}`} />}
+					{!noTorrents && (
+						<>
+							<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
+								<input
+									className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-hidden"
+									type="text"
+									id="query"
+									placeholder="filter results, supports regex"
+									value={query}
+									onChange={(e) => {
+										setQuery(e.target.value.toLocaleLowerCase());
 									}}
+								/>
+								<span
+									className="me-2 inline-flex cursor-pointer items-center rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+									onClick={() => setQuery('')}
+									title="Reset search"
 								>
-									{scale.label}
+									<RotateCcw className="h-3 w-3" />
+									<span className="ml-1 hidden sm:inline">Reset</span>
 								</span>
-							))}
-							<AvailabilityTokens
-								query={query}
-								onQueryChange={setQuery}
-								rdKey={rdKey}
-								adKey={adKey}
-								torboxKey={torboxKey}
-								premiumizeKey={premiumizeKey}
-								offcloudKey={offcloudKey}
-							/>
-						</div>
-					</div>
+								<span className="text-xs text-gray-400">
+									{
+										filteredResults.filter(
+											(r) =>
+												r.rdAvailable ||
+												r.adAvailable ||
+												r.tbAvailable ||
+												r.pmAvailable ||
+												r.ocAvailable
+										).length
+									}
+									/{filteredResults.length}
+								</span>
+								{query &&
+									filteredResults.length > 0 &&
+									canReport &&
+									showMassReportButtons && (
+										<div className="ml-2 flex gap-2">
+											<span
+												className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+												onClick={() =>
+													handleMassReport('porn', filteredResults)
+												}
+												title="Report all filtered torrents as pornographic content"
+											>
+												Report as Porn ({filteredResults.length})
+											</span>
+											<span
+												className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+												onClick={() =>
+													handleMassReport('wrong_imdb', filteredResults)
+												}
+												title="Report all filtered torrents as wrong IMDB ID"
+											>
+												Report Wrong IMDB ({filteredResults.length})
+											</span>
+											<span
+												className="cursor-pointer rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs whitespace-nowrap text-red-100 transition-colors hover:bg-red-800/50"
+												onClick={() =>
+													handleMassReport(
+														'wrong_season',
+														filteredResults
+													)
+												}
+												title="Report all filtered torrents as wrong season"
+											>
+												Report Wrong Season ({filteredResults.length})
+											</span>
+										</div>
+									)}
+							</div>
+
+							<div className="mb-2 flex flex-col gap-2 p-2">
+								{episodeNav}
+								<div className="flex items-center gap-2 overflow-x-auto">
+									<SearchTokens
+										title={showInfo.title}
+										year={seasonNum as string}
+										isShow={true}
+										onTokenClick={(token) =>
+											setQuery((prev) => (prev ? `${prev} ${token}` : token))
+										}
+									/>
+									{getColorScale(expectedEpisodeCount).map((scale, idx) => (
+										<span
+											key={idx}
+											className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
+											onClick={() => {
+												const queryText = getQueryForEpisodeCount(
+													scale.threshold,
+													expectedEpisodeCount
+												);
+												setQuery((prev) => {
+													const cleanedPrev = prev
+														.replace(/\bvideos:[^\s]+/g, '')
+														.trim();
+													return cleanedPrev
+														? `${cleanedPrev} ${queryText}`
+														: queryText;
+												});
+											}}
+										>
+											{scale.label}
+										</span>
+									))}
+									<AvailabilityTokens
+										query={query}
+										onQueryChange={setQuery}
+										rdKey={rdKey}
+										adKey={adKey}
+										torboxKey={torboxKey}
+										premiumizeKey={premiumizeKey}
+										offcloudKey={offcloudKey}
+									/>
+								</div>
+							</div>
+						</>
+					)}
 
 					{episodeEmptyMessage &&
 						searchState === 'loaded' &&

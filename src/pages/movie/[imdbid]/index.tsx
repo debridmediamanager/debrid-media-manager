@@ -1,8 +1,9 @@
 import AnimeEntryLinks from '@/components/AnimeEntryLinks';
+import CheckAvailabilityButtons from '@/components/CheckAvailabilityButtons';
 import EasynewsResults from '@/components/EasynewsResults';
 import MediaHeader from '@/components/MediaHeader';
 import MovieSearchResults from '@/components/MovieSearchResults';
-import ResultsTabs from '@/components/ResultsTabs';
+import ResultsTabs, { NoTorrentsYet } from '@/components/ResultsTabs';
 import SearchControls from '@/components/SearchControls';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import UsenetResults from '@/components/UsenetResults';
@@ -43,7 +44,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
-import { formatReleaseDate } from '@/utils/movieReleaseDates';
+import { isMovieDigitallyReleased, upcomingDigitalRelease } from '@/utils/movieReleaseDates';
 import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
@@ -79,7 +80,7 @@ import {
 } from '@/utils/watchService';
 import { withAuth } from '@/utils/withAuth';
 import { buildYearRegex } from '@/utils/yearFilter';
-import { Cast, CloudOff, Eye as EyeIcon, Loader2, Search, Sparkles, Zap } from 'lucide-react';
+import { Cast, CloudOff, Eye as EyeIcon, Loader2, Sparkles, Zap } from 'lucide-react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -786,22 +787,23 @@ const MovieSearch: FunctionComponent = () => {
 		).length;
 	}, [filteredResults]);
 
+	// Only a release still to come earns a chip; it sits beside the title.
 	const movieReleaseInfo = useMemo(() => {
-		if (!movieInfo.expectedDigitalReleaseDate) return null;
-		const date = formatReleaseDate(movieInfo.expectedDigitalReleaseDate);
-		const label =
-			movieInfo.expectedDigitalReleaseSource === 'estimated'
-				? 'Expected digital release'
-				: 'Digital release';
+		const upcoming = upcomingDigitalRelease(movieInfo);
+		if (!upcoming) return null;
 		return (
-			<div className="w-fit rounded bg-slate-900/75 px-2 py-1 text-xs text-slate-100">
-				<span className="text-slate-400">{label}:</span> {date}
-				{movieInfo.expectedDigitalReleaseSource === 'estimated' && (
-					<span className="text-slate-400"> estimate</span>
-				)}
-			</div>
+			<span
+				className="w-fit rounded bg-slate-900/75 px-2 py-1 text-xs whitespace-nowrap text-slate-100"
+				title={upcoming.title}
+				data-testid="digital-release"
+			>
+				{upcoming.label}
+			</span>
 		);
-	}, [movieInfo.expectedDigitalReleaseDate, movieInfo.expectedDigitalReleaseSource]);
+	}, [movieInfo]);
+
+	// Nothing scraped yet: the filter, chips and checks have nothing to work on.
+	const noTorrents = searchState === 'loaded' && searchResults.length === 0 && !errorMessage;
 
 	// Handle toast notifications when search completes
 	useEffect(() => {
@@ -989,75 +991,16 @@ const MovieSearch: FunctionComponent = () => {
 			<>
 				{(rdKey || adKey || torboxKey || debridLinkKey) && (
 					<>
-						{rdKey && (
-							<button
-								className="mt-0 mr-2 mb-1 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-								onClick={() =>
-									checkServiceAvailabilityBulk(filteredResults, ['RD'])
+						{!noTorrents && (
+							<CheckAvailabilityButtons
+								rdKey={rdKey}
+								adKey={adKey}
+								debridLinkKey={debridLinkKey}
+								isAnyChecking={isAnyChecking}
+								onCheck={(services) =>
+									checkServiceAvailabilityBulk(filteredResults, services)
 								}
-								disabled={isAnyChecking}
-							>
-								<b className="flex items-center justify-center">
-									{isAnyChecking ? (
-										<>
-											<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
-											Checking RD...
-										</>
-									) : (
-										<>
-											<Search className="mr-1 h-3 w-3 text-yellow-500" />
-											Check RD
-										</>
-									)}
-								</b>
-							</button>
-						)}
-						{adKey && (
-							<button
-								className="mt-0 mr-2 mb-1 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-								onClick={() =>
-									checkServiceAvailabilityBulk(filteredResults, ['AD'])
-								}
-								disabled={isAnyChecking}
-							>
-								<b className="flex items-center justify-center">
-									{isAnyChecking ? (
-										<>
-											<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
-											Checking AD...
-										</>
-									) : (
-										<>
-											<Search className="mr-1 h-3 w-3 text-orange-500" />
-											Check AD
-										</>
-									)}
-								</b>
-							</button>
-						)}
-						{debridLinkKey && (
-							<button
-								className="mt-0 mr-2 mb-1 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
-								onClick={() =>
-									checkServiceAvailabilityBulk(filteredResults, ['DL'])
-								}
-								disabled={isAnyChecking}
-								title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
-							>
-								<b className="flex items-center justify-center">
-									{isAnyChecking ? (
-										<>
-											<Loader2 className="mr-1 h-3 w-3 animate-spin text-sky-400" />
-											Checking DL...
-										</>
-									) : (
-										<>
-											<Search className="mr-1 h-3 w-3 text-sky-400" />
-											Check DL
-										</>
-									)}
-								</b>
-							</button>
+							/>
 						)}
 						{getFirstAvailableRdTorrent() && (
 							<>
@@ -1156,17 +1099,21 @@ const MovieSearch: FunctionComponent = () => {
 				onDescToggle={() => setDescLimit(0)}
 				actionButtons={handleActionButtons()}
 				trailer={movieInfo.trailer}
+				titleExtra={movieReleaseInfo}
 				additionalInfo={
-					movieReleaseInfo || animeLinks.length > 0 ? (
-						<>
-							{movieReleaseInfo}
-							<AnimeEntryLinks entries={animeLinks} />
-						</>
-					) : null
+					animeLinks.length > 0 ? <AnimeEntryLinks entries={animeLinks} /> : null
 				}
 			/>
 
-			<ResultsTabs basePath={`/movie/${imdbid}`} active={usenetTab ? 'usenet' : 'torrents'} />
+			<ResultsTabs
+				basePath={`/movie/${imdbid}`}
+				active={usenetTab ? 'usenet' : 'torrents'}
+				extra={
+					!usenetTab && searchState === 'loading' ? (
+						<SearchSourceProgress sources={sourceStates} />
+					) : null
+				}
+			/>
 			{usenetTab && (
 				<>
 					<UsenetResults imdbId={imdbid as string} rdKey={rdKey} />
@@ -1175,7 +1122,6 @@ const MovieSearch: FunctionComponent = () => {
 			)}
 			{!usenetTab && (
 				<>
-					{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
 					{searchState === 'processing' && (
 						<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
 							<strong className="font-bold">Notice:</strong>
@@ -1192,44 +1138,47 @@ const MovieSearch: FunctionComponent = () => {
 						</div>
 					)}
 
-					<SearchControls
-						query={query}
-						onQueryChange={setQuery}
-						filteredCount={
-							filteredResults.filter(
-								(r) =>
-									r.rdAvailable ||
-									r.adAvailable ||
-									r.tbAvailable ||
-									r.pmAvailable ||
-									r.ocAvailable
-							).length
-						}
-						totalCount={filteredResults.length}
-						showMassReportButtons={showMassReportButtons}
-						rdKey={rdKey}
-						adKey={adKey}
-						torboxKey={torboxKey}
-						premiumizeKey={premiumizeKey}
-						offcloudKey={offcloudKey}
-						debridLinkKey={debridLinkKey}
-						onMassReport={(type) => handleMassReport(type, filteredResults)}
-						mediaType="movie"
-						title={movieInfo.title}
-						year={movieInfo.year}
-						colorScales={getColorScale()}
-						getQueryForScale={getQueryForMovieCount}
-						extraTokens={
-							movieInfo.digitalReleaseAvailable
-								? [
-										{
-											label: 'Quality releases',
-											query: 'web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p',
-										},
-									]
-								: undefined
-						}
-					/>
+					{noTorrents && <NoTorrentsYet basePath={`/movie/${imdbid}`} />}
+					{!noTorrents && (
+						<SearchControls
+							query={query}
+							onQueryChange={setQuery}
+							filteredCount={
+								filteredResults.filter(
+									(r) =>
+										r.rdAvailable ||
+										r.adAvailable ||
+										r.tbAvailable ||
+										r.pmAvailable ||
+										r.ocAvailable
+								).length
+							}
+							totalCount={filteredResults.length}
+							showMassReportButtons={showMassReportButtons}
+							rdKey={rdKey}
+							adKey={adKey}
+							torboxKey={torboxKey}
+							premiumizeKey={premiumizeKey}
+							offcloudKey={offcloudKey}
+							debridLinkKey={debridLinkKey}
+							onMassReport={(type) => handleMassReport(type, filteredResults)}
+							mediaType="movie"
+							title={movieInfo.title}
+							year={movieInfo.year}
+							colorScales={getColorScale()}
+							getQueryForScale={getQueryForMovieCount}
+							extraTokens={
+								isMovieDigitallyReleased(movieInfo)
+									? [
+											{
+												label: 'Quality releases',
+												query: 'web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p',
+											},
+										]
+									: undefined
+							}
+						/>
+					)}
 
 					{searchResults.length > 0 && (
 						<>

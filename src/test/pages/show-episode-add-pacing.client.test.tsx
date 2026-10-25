@@ -392,6 +392,7 @@ describe('Instant RD (Every Episode) pacing', () => {
 		keys.rd = 'rd-token';
 		keys.ad = null;
 		keys.tb = null;
+		localStorage.removeItem('settings:instantService');
 	});
 
 	it('waits the add budget between episodes instead of adding flat out', async () => {
@@ -478,6 +479,8 @@ describe('Instant RD (Every Episode) pacing', () => {
 			await userEvent.click(rdButton);
 			await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(1));
 
+			// One Every Episode button serves both services; the picker switches it to AD.
+			await userEvent.click(screen.getByRole('button', { name: 'AD' }));
 			await userEvent.click(
 				screen.getByRole('button', { name: /Instant AD \(Every Episode\)/i })
 			);

@@ -340,4 +340,101 @@ describe('TV show page header', () => {
 		expect(screen.getByTestId('poster-fallback')).toHaveTextContent('Example Show');
 		expect(screen.getByTestId('related-media')).toBeInTheDocument();
 	});
+
+	describe('compact header', () => {
+		const mountShow = async (info: Record<string, unknown>) => {
+			axiosGetMock.mockImplementation((url: string) => {
+				if (url.startsWith('/api/info/show')) {
+					return Promise.resolve({
+						status: 200,
+						data: {
+							title: 'Example Show',
+							description: 'Example description',
+							poster: '',
+							backdrop: '',
+							imdb_score: 7.2,
+							season_episode_counts: { 1: 8 },
+							...info,
+						},
+					});
+				}
+				return Promise.resolve({ status: 200, headers: {}, data: { results: [] } });
+			});
+			render(<ShowSeasonPage />);
+			await screen.findByRole('heading', { name: /Example Show - Season 1/ });
+		};
+
+		it('names generic seasons S1.. and keeps a real name', async () => {
+			await mountShow({
+				season_count: 3,
+				season_names: ['Season 1', 'The Middle Years', 'Season 3'],
+				has_specials: true,
+				season_episode_counts: { 1: 8, 2: 8, 3: 8 },
+			});
+			const nav = within(screen.getByTestId('media-header-season-nav'));
+			expect(nav.getAllByRole('link').map((a) => a.textContent)).toEqual([
+				'Specials',
+				'S3',
+				'The Middle Years',
+				'S1',
+			]);
+		});
+
+		it('drops the season row and the season Want for an ended one-season show', async () => {
+			await mountShow({ season_count: 1, season_names: ['Season 1'], status: 'Ended' });
+			expect(screen.queryByTestId('media-header-season-nav')).not.toBeInTheDocument();
+			expect(screen.getByTestId('media-description')).toHaveTextContent(
+				/IMDB Score: 7.2 · Ended$/
+			);
+			expect(screen.queryByText(/Series Ended/)).not.toBeInTheDocument();
+			// A non-sponsor's Want buttons all lead to /wanted: one of them.
+			const actions = within(screen.getByTestId('media-header-actions'));
+			expect(actions.getAllByRole('link', { name: /Want/ })).toHaveLength(1);
+		});
+
+		it('folds an airing show with nothing scheduled into the description', async () => {
+			await mountShow({
+				season_count: 1,
+				season_names: ['Season 1'],
+				status: 'Returning Series',
+				last_episode_to_air: {
+					first_aired: '2026-10-15T02:00:00Z',
+					season_number: 1,
+					episode_number: 8,
+					name: 'Eight',
+				},
+			});
+			expect(screen.getByTestId('media-description')).toHaveTextContent(
+				/· Airing \(last S01E08\)$/
+			);
+			expect(screen.queryByText(/Last aired/)).not.toBeInTheDocument();
+		});
+
+		it('keeps only the Next chip for an airing show with an episode scheduled', async () => {
+			await mountShow({
+				season_count: 1,
+				season_names: ['Season 1'],
+				status: 'Returning Series',
+				next_episode_to_air: {
+					first_aired: '2026-10-29T02:00:00Z',
+					season_number: 1,
+					episode_number: 9,
+					name: 'Nine',
+				},
+			});
+			expect(screen.getByText(/Next: S01E09/)).toBeInTheDocument();
+			expect(screen.queryByText(/^Airing$/)).not.toBeInTheDocument();
+			expect(screen.getByTestId('media-description')).not.toHaveTextContent(/Airing/);
+		});
+
+		it('swaps the filter row for a pointer to Want and Usenet when nothing is found', async () => {
+			await mountShow({ season_count: 1, season_names: ['Season 1'] });
+			const empty = await screen.findByTestId('no-torrents');
+			expect(within(empty).getByRole('link', { name: 'Usenet tab' })).toHaveAttribute(
+				'href',
+				'/show/tt1234567/1/usenet'
+			);
+			expect(document.getElementById('query')).toBeNull();
+		});
+	});
 });

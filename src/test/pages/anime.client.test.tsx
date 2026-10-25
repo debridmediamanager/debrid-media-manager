@@ -233,25 +233,27 @@ describe('/anime/[anidbid]', () => {
 		// Production's info answer has no type yet; the franchise entry supplies it.
 		expect(within(screen.getByTestId('anime-entry-facts')).getByText('TV')).toBeInTheDocument();
 		expect(screen.getByTestId('anime-imdb-link')).toHaveAttribute('href', '/show/tt22248376');
-		expect(screen.getByRole('link', { name: /AniDB 17617/ })).toHaveAttribute(
+		// The rating links to the entry on AniDB, so no second chip says "AniDB 17617".
+		expect(screen.getByRole('link', { name: /Rating:/ })).toHaveAttribute(
 			'href',
 			'https://anidb.net/anime/17617'
 		);
+		expect(screen.queryByRole('link', { name: /AniDB 17617/ })).not.toBeInTheDocument();
 
+		// The list marks this entry among its neighbours: no previous/next links,
+		// and the shared "Sousou no Frieren" is said once, as the label.
 		const franchise = screen.getByTestId('anime-franchise');
-		expect(within(franchise).getByRole('link', { name: 'Next entry →' })).toHaveAttribute(
-			'href',
-			'/anime/18886'
+		expect(within(franchise).queryByText(/Next entry|Previous entry/)).not.toBeInTheDocument();
+		expect(within(franchise).getByText('Sousou no Frieren:')).toBeInTheDocument();
+		expect(within(franchise).getByLabelText('Sousou no Frieren (TV)')).toHaveAttribute(
+			'aria-current',
+			'page'
 		);
-		expect(within(franchise).queryByText(/Previous entry/)).not.toBeInTheDocument();
-		expect(
-			within(franchise)
-				.getByText('Sousou no Frieren', { selector: 'span' })
-				.closest('[aria-current]')
-		).not.toBeNull();
-		expect(
-			within(franchise).getByRole('link', { name: /Sousou no Frieren 2nd Season/ })
-		).toHaveAttribute('href', '/anime/18886');
+		const second = within(franchise).getByRole('link', {
+			name: /Sousou no Frieren 2nd Season/,
+		});
+		expect(second).toHaveAttribute('href', '/anime/18886');
+		expect(second).toHaveTextContent(/^2nd Season/);
 
 		await waitFor(() => expect(screen.getByTestId('results').children).toHaveLength(50));
 		const nav = screen.getByTestId('anime-episode-nav');
@@ -312,11 +314,7 @@ describe('/anime/[anidbid]', () => {
 		expect(screen.getByTestId('anime-imdb-link')).toHaveAttribute('href', '/show/tt10885406');
 
 		const franchise = screen.getByTestId('anime-franchise');
-		expect(within(franchise).getByRole('link', { name: '← Previous entry' })).toHaveAttribute(
-			'href',
-			'/anime/15634'
-		);
-		expect(within(franchise).queryByText(/Next entry/)).not.toBeInTheDocument();
+		expect(within(franchise).queryByText(/Next entry|Previous entry/)).not.toBeInTheDocument();
 		expect(
 			within(franchise)
 				.getAllByRole('link', { name: /Honzuki/ })
@@ -378,7 +376,7 @@ describe('/anime/[anidbid]', () => {
 		await openEntry('mal-26395');
 
 		expect(await screen.findByRole('heading', { name: 'Teekyuu 4' })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /MAL 26395/ })).toHaveAttribute(
+		expect(screen.getByRole('link', { name: /Rating:/ })).toHaveAttribute(
 			'href',
 			'https://myanimelist.net/anime/26395'
 		);
