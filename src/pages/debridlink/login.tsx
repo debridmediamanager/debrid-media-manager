@@ -129,7 +129,7 @@ export default function DebridLinkLoginPage() {
 	};
 
 	return (
-		<div className="flex h-screen flex-col items-center justify-center">
+		<div className="flex min-h-screen flex-col items-center px-4 pt-[12vh] pb-8">
 			<Head>
 				<title>Debrid Media Manager - Debrid-Link Login</title>
 			</Head>

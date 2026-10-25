@@ -83,9 +83,7 @@ describe('StartPage', () => {
 
 		expect(screen.getByText('Welcome to Debrid Media Manager')).toBeInTheDocument();
 		expect(
-			screen.getByText(
-				'Start building your movie and TV show library with truly unlimited storage size'
-			)
+			screen.getByText('Build your movie and TV show library with truly unlimited storage')
 		).toBeInTheDocument();
 		expect(
 			screen.getByText('Please login with one of the supported services below')
@@ -106,25 +104,32 @@ describe('StartPage', () => {
 	it('should render account creation links', () => {
 		render(<StartPage />);
 
-		expect(screen.getByText('Create an account with RealDebrid')).toBeInTheDocument();
-		expect(screen.getByText('Create an account with AllDebrid')).toBeInTheDocument();
-		expect(screen.getByText('Create an account with Torbox')).toBeInTheDocument();
-		expect(screen.getByText('Create an account with Premiumize')).toBeInTheDocument();
-		expect(screen.getByText('Create an account with Offcloud')).toBeInTheDocument();
-		expect(screen.getByText('Create an account with Debrid-Link')).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with RealDebrid' })
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with AllDebrid' })
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with Torbox' })
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with Premiumize' })
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with Offcloud' })
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Create an account with Debrid-Link' })
+		).toBeInTheDocument();
 	});
 
 	it('should render data storage policy', () => {
 		render(<StartPage />);
 
-		expect(screen.getByText('Data Storage Policy')).toBeInTheDocument();
-		expect(
-			screen.getByText(/Please note that no data or logs are stored on our servers/i)
-		).toBeInTheDocument();
-		expect(screen.getByText(/You can inspect every request if you want/i)).toBeInTheDocument();
-		expect(
-			screen.getByText(/Everything is stored on your browser's local storage/i)
-		).toBeInTheDocument();
+		const policy = screen.getByText(/No data or logs are stored on our servers/i);
+		expect(policy).toHaveTextContent(/you can inspect every request/i);
+		expect(policy).toHaveTextContent(/your browser's local storage/i);
 	});
 
 	it('links to zurg, rex and the guides', () => {
@@ -255,9 +260,7 @@ describe('StartPage', () => {
 	it('should render open source link with correct attributes', () => {
 		render(<StartPage />);
 
-		const githubLink = screen.getByText(
-			'This website is open source and you can also run this on your own machine'
-		);
+		const githubLink = screen.getByText('Open source: run it on your own machine');
 		expect(githubLink).toHaveAttribute('target', '_blank');
 		expect(githubLink).toHaveAttribute(
 			'href',
@@ -268,7 +271,7 @@ describe('StartPage', () => {
 	it('should render account creation links with correct attributes', () => {
 		render(<StartPage />);
 
-		const rdLink = screen.getByText('Create an account with RealDebrid');
+		const rdLink = screen.getByRole('link', { name: 'Create an account with RealDebrid' });
 		expect(rdLink).toHaveAttribute('target', '_blank');
 		expect(rdLink).toHaveAttribute('rel', 'noopener noreferrer');
 		const rdHref = rdLink.getAttribute('href') ?? '';
@@ -276,12 +279,12 @@ describe('StartPage', () => {
 		expect(rdMatch).not.toBeNull();
 		expect(REAL_DEBRID_REFERRAL_IDS).toContain(rdMatch![1]);
 
-		const adLink = screen.getByText('Create an account with AllDebrid');
+		const adLink = screen.getByRole('link', { name: 'Create an account with AllDebrid' });
 		expect(adLink).toHaveAttribute('target', '_blank');
 		expect(adLink).toHaveAttribute('rel', 'noopener noreferrer');
 		expect(adLink).toHaveAttribute('href', 'https://alldebrid.com/?uid=1kk5i&lang=en');
 
-		const tbLink = screen.getByText('Create an account with Torbox');
+		const tbLink = screen.getByRole('link', { name: 'Create an account with Torbox' });
 		expect(tbLink).toHaveAttribute('target', '_blank');
 		expect(tbLink).toHaveAttribute('rel', 'noopener noreferrer');
 		expect(tbLink).toHaveAttribute(
@@ -289,12 +292,12 @@ describe('StartPage', () => {
 			'https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670'
 		);
 
-		const ocLink = screen.getByText('Create an account with Offcloud');
+		const ocLink = screen.getByRole('link', { name: 'Create an account with Offcloud' });
 		expect(ocLink).toHaveAttribute('target', '_blank');
 		expect(ocLink).toHaveAttribute('rel', 'noopener noreferrer');
 		expect(ocLink).toHaveAttribute('href', 'https://offcloud.com');
 
-		const dlLink = screen.getByText('Create an account with Debrid-Link');
+		const dlLink = screen.getByRole('link', { name: 'Create an account with Debrid-Link' });
 		expect(dlLink).toHaveAttribute('target', '_blank');
 		expect(dlLink).toHaveAttribute('rel', 'noopener noreferrer');
 		expect(dlLink).toHaveAttribute('href', 'https://debrid-link.com/id/diG1t');
@@ -315,8 +318,8 @@ describe('StartPage', () => {
 
 		const svg = document.querySelector('svg');
 		expect(svg).toBeInTheDocument();
-		expect(svg).toHaveAttribute('width', '200');
-		expect(svg).toHaveAttribute('height', '200');
+		expect(svg).toHaveAttribute('width', '88');
+		expect(svg).toHaveAttribute('height', '88');
 		expect(svg).toHaveAttribute('viewBox', '0 0 200 200');
 	});
 
@@ -330,10 +333,9 @@ describe('StartPage', () => {
 
 		const loginButton = screen.getByText('Login with Real Debrid');
 		expect(loginButton).toHaveClass(
-			'm-2',
 			'rounded',
 			'bg-blue-600',
-			'px-4',
+			'px-2',
 			'py-2',
 			'text-white',
 			'hover:bg-blue-700'
