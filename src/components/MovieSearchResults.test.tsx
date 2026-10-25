@@ -1,10 +1,6 @@
 import type { SearchResult } from '@/services/mediasearch';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import path from 'node:path';
-import postcss, { type PluginCreator } from 'postcss';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import MovieSearchResults from './MovieSearchResults';
@@ -328,7 +324,10 @@ describe('MovieSearchResults', () => {
 			expect(watch).toBeLessThan(copy);
 		});
 
-		it('draws a separator between the provider group and the shared actions', () => {
+		// Each service's buttons sit in one group that wraps as a unit, so a
+		// service never splits across lines; the shared actions follow in the
+		// same row instead of under a rule.
+		it('groups each service and lets the shared actions follow in the same row', () => {
 			const { container } = renderComponent({
 				rdKey: 'rd-key',
 				adKey: 'ad-key',
@@ -340,94 +339,27 @@ describe('MovieSearchResults', () => {
 				handleCastTorBox: vi.fn(),
 			});
 
-			expect(container.querySelector('[data-action-separator]')).not.toBeNull();
-		});
+			const groups = Array.from(container.querySelectorAll('[data-action-group]'));
+			expect(groups.map((g) => g.getAttribute('data-action-group'))).toEqual([
+				'rd',
+				'ad',
+				'tb',
+			]);
+			expect(groups[0].textContent).toContain('RD');
+			expect(groups[1].textContent).toContain('AD');
+			expect(groups[2].textContent).toContain('TB');
+			for (const g of groups) expect(g).toHaveClass('inline-flex');
 
-		// A rule only earns its place between two groups that both rendered
-		// something - otherwise a user with one service gets a stray line.
-		it('rules off each service group when the neighbouring group exists', () => {
-			const { container } = renderComponent({
-				rdKey: 'rd-key',
-				adKey: 'ad-key',
-				torboxKey: 'tb-key',
-				player: 'windows/vlc',
-				filteredResults: [everywhere],
-				sendTbToRd: vi.fn(),
-				handleCastAllDebrid: vi.fn(),
-				handleCastTorBox: vi.fn(),
-			});
-
-			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(3);
-
-			const row = container.querySelector('[data-action-separator]')!.parentElement!;
-			const kinds = Array.from(row.children).map((e) =>
-				e.hasAttribute('data-action-separator')
-					? 'hr'
-					: (e.textContent || '').replace(/\s+/g, ' ').trim()
+			const row = groups[0].parentElement!;
+			expect(row).toHaveClass('flex', 'flex-wrap');
+			const watch = screen.getByText('Watch').closest('button')!;
+			expect(watch.parentElement).toBe(row);
+			expect(Array.from(row.children).indexOf(watch)).toBeGreaterThan(
+				Array.from(row.children).indexOf(groups[2])
 			);
-			const ruleAt = kinds.reduce<number[]>(
-				(acc, k, i) => (k === 'hr' ? [...acc, i] : acc),
-				[]
-			);
-
-			// never leading, never trailing, never two in a row
-			expect(ruleAt[0]).toBeGreaterThan(0);
-			expect(ruleAt[ruleAt.length - 1]).toBeLessThan(kinds.length - 1);
-			expect(ruleAt.some((i) => kinds[i + 1] === 'hr')).toBe(false);
-
-			// each rule lands on a service boundary
-			expect(kinds[ruleAt[0] + 1]).toContain('AD');
-			expect(kinds[ruleAt[1] + 1]).toContain('TB');
-			expect(kinds[ruleAt[2] + 1]).toContain('Watch');
 		});
 
-		// Tailwind 3's space-y also zeroed each later child's bottom margin, so the
-		// rule sat flush against the next group. sibling-space-y keeps the child's
-		// own bottom margin, so my-1 added 4px under every rule (8f1225f7).
-		it('gives a rule no bottom margin of its own, as space-y did', async () => {
-			const { container } = renderComponent({
-				rdKey: 'rd-key',
-				adKey: 'ad-key',
-				player: 'windows/vlc',
-				filteredResults: [everywhere],
-			});
-			const classes = [...container.querySelector('[data-action-separator]')!.classList];
-
-			// Compile only the rule's own classes; scanning all of src is slow.
-			const from = path.join(process.cwd(), 'src/styles/globals.css');
-			const tailwind = createRequire(path.join(process.cwd(), 'package.json'))(
-				'@tailwindcss/postcss'
-			) as PluginCreator<{ optimize: boolean; base: string }>;
-			const css =
-				readFileSync(from, 'utf-8').replace(/^@source "\.\.\/";$/m, '') +
-				`\n@source inline("${classes.join(' ')}");`;
-			const { root } = await postcss([
-				tailwind({ optimize: false, base: process.cwd() }),
-			]).process(css, { from });
-
-			const bottomMargins: string[] = [];
-			root.walkRules((rule) => {
-				if (!rule.selectors.some((s) => classes.includes(s.replace(/^\./, '')))) return;
-				rule.walkDecls(/^margin(-bottom|-block(-end)?)?$/, (d) => {
-					bottomMargins.push(`${rule.selector} { ${d.prop}: ${d.value} }`);
-				});
-			});
-			expect(bottomMargins).toEqual([]);
-		});
-
-		it('draws only the shared-actions rule when one service is logged in', () => {
-			const { container } = renderComponent({
-				rdKey: 'rd-key',
-				adKey: null,
-				torboxKey: null,
-				player: 'windows/vlc',
-				filteredResults: [everywhere],
-			});
-
-			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(1);
-		});
-
-		it('skips the rule for a service that is not logged in', () => {
+		it('renders a group only for a service that is logged in', () => {
 			const { container } = renderComponent({
 				rdKey: 'rd-key',
 				adKey: null,
@@ -438,11 +370,11 @@ describe('MovieSearchResults', () => {
 				handleCastTorBox: vi.fn(),
 			});
 
-			// RD | TB | shared - no phantom rule where AllDebrid would have been
-			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(2);
+			const groups = Array.from(container.querySelectorAll('[data-action-group]'));
+			expect(groups.map((g) => g.getAttribute('data-action-group'))).toEqual(['rd', 'tb']);
 		});
 
-		it('leaves the separator out when no service button is shown', () => {
+		it('renders no service group when no service is logged in', () => {
 			const { container } = renderComponent({
 				rdKey: null,
 				adKey: null,
@@ -451,7 +383,8 @@ describe('MovieSearchResults', () => {
 				filteredResults: [everywhere],
 			});
 
-			expect(container.querySelector('[data-action-separator]')).toBeNull();
+			expect(container.querySelector('[data-action-group]')).toBeNull();
+			expect(screen.getByText('Copy')).toBeTruthy();
 		});
 	});
 

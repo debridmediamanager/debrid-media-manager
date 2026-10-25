@@ -28,7 +28,6 @@ import ReportButton from './ReportButton';
 // A rule between two action groups. Only rendered when the groups on both
 // sides of it actually produced buttons, so a single-service user never sees
 // a stray line.
-const ActionSeparator = () => <hr data-action-separator="true" className="mt-1 border-gray-600" />;
 
 /**
  * The three states of an add button, written out in full.
@@ -676,381 +675,424 @@ const MovieSearchResults = ({
 								</div>
 							)}
 
-							<div className="sibling-space-y-1 sibling-space-x-1">
-								{/* — RD — */}
-								{rdKey && inLibrary('rd', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteRd(r.hash)}
-										disabled={isLoading}
+							<div className="flex flex-wrap items-center gap-1">
+								{rdKey && (
+									<span
+										data-action-group="rd"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
 									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
+										{/* — RD — */}
+										{rdKey && inLibrary('rd', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeleteRd(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `RD (${hashAndProgress[`rd:${r.hash}`] + '%'})`}
+											</button>
 										)}
-										{isLoading
-											? 'Removing...'
-											: `RD (${hashAndProgress[`rd:${r.hash}`] + '%'})`}
-									</button>
-								)}
-								{rdKey && notInLibrary('rd', r.hash) && (
-									<button
-										className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddRd(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											btnIcon(r.rdAvailable)
+										{rdKey && notInLibrary('rd', r.hash) && (
+											<button
+												className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddRd(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													btnIcon(r.rdAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(
+															r.rdAvailable,
+															'RD',
+															r.archiveOnly?.rd
+														)}
+											</button>
 										)}
-										{isLoading
-											? 'Adding...'
-											: btnLabel(r.rdAvailable, 'RD', r.archiveOnly?.rd)}
-									</button>
-								)}
-								{rdKey &&
-									(torboxKey || adKey) &&
-									r.tbTransferred &&
-									!r.rdAvailable &&
-									(transferHash && !transferInLibrary ? (
-										<button
-											className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isAddingTransfer ? 'cursor-not-allowed opacity-50' : ''}`}
-											onClick={() => handleAddRd(transferHash)}
-											disabled={isAddingTransfer}
-											title="Already in Real-Debrid under a transferred torrent. This row's own name is the one RD blocks, so adding it can only fail — this adds the copy that works."
-										>
-											{isAddingTransfer ? (
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+										{rdKey &&
+											(torboxKey || adKey) &&
+											r.tbTransferred &&
+											!r.rdAvailable &&
+											(transferHash && !transferInLibrary ? (
+												<button
+													className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isAddingTransfer ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleAddRd(transferHash)}
+													disabled={isAddingTransfer}
+													title="Already in Real-Debrid under a transferred torrent. This row's own name is the one RD blocks, so adding it can only fail — this adds the copy that works."
+												>
+													{isAddingTransfer ? (
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													) : (
+														<Zap className="mr-1 inline h-3 w-3 text-yellow-400" />
+													)}
+													{isAddingTransfer ? 'Adding...' : 'Instant RD'}
+												</button>
 											) : (
-												<Zap className="mr-1 inline h-3 w-3 text-yellow-400" />
-											)}
-											{isAddingTransfer ? 'Adding...' : 'Instant RD'}
-										</button>
-									) : (
-										<span
-											className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
-											title="Already in Real-Debrid via a transfer, and in your library."
-										>
-											<span className="inline-flex items-center">
-												<Send className="mr-1 h-3 w-3 text-indigo-400" />
-												In RD
-											</span>
-										</span>
-									))}
-								{rdKey && r.rdAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastWithLoading(r.hash)}
-										disabled={isCasting}
-									>
-										{isCasting ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-green-400" />
-												Cast (RD)
-											</span>
-										)}
-									</button>
-								)}
-								{rdKey && !r.rdAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCheckingRd ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => checkServiceAvailability(r, ['RD'])}
-										disabled={isCheckingRd}
-									>
-										{isCheckingRd ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Checking RD...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<SearchIcon className="mr-1 h-3 w-3 text-yellow-500" />
-												Check RD
-											</span>
-										)}
-									</button>
-								)}
-								{rdKey && adKey && <ActionSeparator />}
-
-								{/* — AD — */}
-								{adKey && inLibrary('ad', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteAd(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
-										)}
-										{isLoading
-											? 'Removing...'
-											: `AD (${hashAndProgress[`ad:${r.hash}`] + '%'})`}
-									</button>
-								)}
-								{adKey && notInLibrary('ad', r.hash) && (
-									<button
-										className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddAd(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											btnIcon(r.adAvailable)
-										)}
-										{isLoading
-											? 'Adding...'
-											: btnLabel(r.adAvailable, 'AD', r.archiveOnly?.ad)}
-									</button>
-								)}
-								{adKey && handleCastAllDebrid && r.adAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCastingAd ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastAllDebridWithLoading(r.hash)}
-										disabled={isCastingAd}
-									>
-										{isCastingAd ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-yellow-400" />
-												Cast (AD)
-											</span>
-										)}
-									</button>
-								)}
-								{adKey && !r.adAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-orange-500 bg-orange-900/30 px-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 ${isCheckingAd ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => checkServiceAvailability(r, ['AD'])}
-										disabled={isCheckingAd}
-									>
-										{isCheckingAd ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Checking AD...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<SearchIcon className="mr-1 h-3 w-3 text-orange-500" />
-												Check AD
-											</span>
-										)}
-									</button>
-								)}
-
-								{(rdKey || adKey) && torboxKey && <ActionSeparator />}
-
-								{/* — TB — */}
-								{torboxKey && inLibrary('tb', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteTb(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
-										)}
-										{isLoading
-											? 'Removing...'
-											: `TB (${hashAndProgress[`tb:${r.hash}`] + '%'})`}
-									</button>
-								)}
-								{torboxKey && notInLibrary('tb', r.hash) && (
-									<button
-										className={`border-2 border-${tbColor}-500 bg-${tbColor}-900/30 text-${tbColor}-100 hover:bg-${tbColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddTb(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											btnIcon(r.tbAvailable)
-										)}
-										{isLoading
-											? 'Adding...'
-											: btnLabel(r.tbAvailable, 'TB', r.archiveOnly?.tb)}
-									</button>
-								)}
-								{rdKey &&
-									torboxKey &&
-									sendTbToRd &&
-									r.tbAvailable &&
-									!r.rdAvailable &&
-									!r.tbTransferred &&
-									notInLibrary('rd', r.hash) && (
-										<button
-											className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
-											onClick={() => handleSendTbToRd(r.hash)}
-											disabled={isSendingToRd}
-										>
-											{isSendingToRd ? (
-												<>
-													<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-													Sending...
-												</>
-											) : (
-												<span className="inline-flex items-center">
-													<Send className="mr-1 h-3 w-3 text-indigo-400" />
-													TB → RD
+												<span
+													className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
+													title="Already in Real-Debrid via a transfer, and in your library."
+												>
+													<span className="inline-flex items-center">
+														<Send className="mr-1 h-3 w-3 text-indigo-400" />
+														In RD
+													</span>
 												</span>
+											))}
+										{rdKey && r.rdAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleCastWithLoading(r.hash)}
+												disabled={isCasting}
+											>
+												{isCasting ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-green-400" />
+														Cast (RD)
+													</span>
+												)}
+											</button>
+										)}
+										{rdKey && !r.rdAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCheckingRd ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => checkServiceAvailability(r, ['RD'])}
+												disabled={isCheckingRd}
+											>
+												{isCheckingRd ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Checking RD...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<SearchIcon className="mr-1 h-3 w-3 text-yellow-500" />
+														Check RD
+													</span>
+												)}
+											</button>
+										)}
+									</span>
+								)}
+								{adKey && (
+									<span
+										data-action-group="ad"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
+									>
+										{/* — AD — */}
+										{adKey && inLibrary('ad', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeleteAd(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `AD (${hashAndProgress[`ad:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{adKey && notInLibrary('ad', r.hash) && (
+											<button
+												className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddAd(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													btnIcon(r.adAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(
+															r.adAvailable,
+															'AD',
+															r.archiveOnly?.ad
+														)}
+											</button>
+										)}
+										{adKey && handleCastAllDebrid && r.adAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCastingAd ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastAllDebridWithLoading(r.hash)
+												}
+												disabled={isCastingAd}
+											>
+												{isCastingAd ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-yellow-400" />
+														Cast (AD)
+													</span>
+												)}
+											</button>
+										)}
+										{adKey && !r.adAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-orange-500 bg-orange-900/30 px-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 ${isCheckingAd ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => checkServiceAvailability(r, ['AD'])}
+												disabled={isCheckingAd}
+											>
+												{isCheckingAd ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Checking AD...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<SearchIcon className="mr-1 h-3 w-3 text-orange-500" />
+														Check AD
+													</span>
+												)}
+											</button>
+										)}
+									</span>
+								)}
+								{torboxKey && (
+									<span
+										data-action-group="tb"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
+									>
+										{/* — TB — */}
+										{torboxKey && inLibrary('tb', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeleteTb(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `TB (${hashAndProgress[`tb:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{torboxKey && notInLibrary('tb', r.hash) && (
+											<button
+												className={`border-2 border-${tbColor}-500 bg-${tbColor}-900/30 text-${tbColor}-100 hover:bg-${tbColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddTb(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													btnIcon(r.tbAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(
+															r.tbAvailable,
+															'TB',
+															r.archiveOnly?.tb
+														)}
+											</button>
+										)}
+										{rdKey &&
+											torboxKey &&
+											sendTbToRd &&
+											r.tbAvailable &&
+											!r.rdAvailable &&
+											!r.tbTransferred &&
+											notInLibrary('rd', r.hash) && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleSendTbToRd(r.hash)}
+													disabled={isSendingToRd}
+												>
+													{isSendingToRd ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Sending...
+														</>
+													) : (
+														<span className="inline-flex items-center">
+															<Send className="mr-1 h-3 w-3 text-indigo-400" />
+															TB → RD
+														</span>
+													)}
+												</button>
 											)}
-										</button>
-									)}
-								{torboxKey && handleCastTorBox && r.tbAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50 ${isCastingTb ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastTorBoxWithLoading(r.hash)}
-										disabled={isCastingTb}
-									>
-										{isCastingTb ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-purple-400" />
-												Cast (TB)
-											</span>
+										{torboxKey && handleCastTorBox && r.tbAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50 ${isCastingTb ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleCastTorBoxWithLoading(r.hash)}
+												disabled={isCastingTb}
+											>
+												{isCastingTb ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-purple-400" />
+														Cast (TB)
+													</span>
+												)}
+											</button>
 										)}
-									</button>
+									</span>
 								)}
-
-								{(rdKey || adKey || torboxKey) && premiumizeKey && (
-									<ActionSeparator />
-								)}
-
-								{/* — PM — */}
-								{premiumizeKey && inLibrary('pm', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeletePm(r.hash)}
-										disabled={isLoading}
+								{premiumizeKey && (
+									<span
+										data-action-group="pm"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
 									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
+										{/* — PM — */}
+										{premiumizeKey && inLibrary('pm', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeletePm(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `PM (${hashAndProgress[`pm:${r.hash}`] + '%'})`}
+											</button>
 										)}
-										{isLoading
-											? 'Removing...'
-											: `PM (${hashAndProgress[`pm:${r.hash}`] + '%'})`}
-									</button>
+										{premiumizeKey && notInLibrary('pm', r.hash) && (
+											<button
+												className={`border-2 border-${pmColor}-500 bg-${pmColor}-900/30 text-${pmColor}-100 hover:bg-${pmColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddPm(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													btnIcon(r.pmAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(r.pmAvailable, 'PM')}
+											</button>
+										)}
+										{premiumizeKey && handleCastPremiumize && r.pmAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCastingPm ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastPremiumizeWithLoading(r.hash)
+												}
+												disabled={isCastingPm}
+											>
+												{isCastingPm ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-red-400" />
+														Cast (PM)
+													</span>
+												)}
+											</button>
+										)}
+									</span>
 								)}
-								{premiumizeKey && notInLibrary('pm', r.hash) && (
-									<button
-										className={`border-2 border-${pmColor}-500 bg-${pmColor}-900/30 text-${pmColor}-100 hover:bg-${pmColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddPm(r.hash)}
-										disabled={isLoading}
+								{offcloudKey && (
+									<span
+										data-action-group="oc"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
 									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											btnIcon(r.pmAvailable)
-										)}
-										{isLoading ? 'Adding...' : btnLabel(r.pmAvailable, 'PM')}
-									</button>
-								)}
-								{premiumizeKey && handleCastPremiumize && r.pmAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCastingPm ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastPremiumizeWithLoading(r.hash)}
-										disabled={isCastingPm}
-									>
-										{isCastingPm ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-red-400" />
-												Cast (PM)
-											</span>
-										)}
-									</button>
-								)}
-
-								{(rdKey || adKey || torboxKey || premiumizeKey) && offcloudKey && (
-									<ActionSeparator />
-								)}
-
-								{/* — OC —
+										{/* — OC —
 								    No "Check OC" button on purpose: the page-load
 								    sweep already probed every row with the same
 								    `/cache` call, so a per-row repeat finds nothing
 								    new. Premiumize had one and it was removed in
 								    d3d6dd49 for exactly that reason. */}
-								{offcloudKey && inLibrary('oc', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteOc(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
+										{offcloudKey && inLibrary('oc', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeleteOc(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `OC (${hashAndProgress[`oc:${r.hash}`] + '%'})`}
+											</button>
 										)}
-										{isLoading
-											? 'Removing...'
-											: `OC (${hashAndProgress[`oc:${r.hash}`] + '%'})`}
-									</button>
-								)}
-								{offcloudKey && notInLibrary('oc', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.ocAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddOc(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											btnIcon(r.ocAvailable)
+										{offcloudKey && notInLibrary('oc', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.ocAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddOc(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													btnIcon(r.ocAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(r.ocAvailable, 'OC')}
+											</button>
 										)}
-										{isLoading ? 'Adding...' : btnLabel(r.ocAvailable, 'OC')}
-									</button>
-								)}
 
-								{offcloudKey && handleCastOffcloud && r.ocAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-[#f97316] bg-[#f97316]/30 px-1 text-xs text-orange-100 transition-colors hover:bg-[#f97316]/50 ${isCastingOc ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastOffcloudWithLoading(r.hash)}
-										disabled={isCastingOc}
-									>
-										{isCastingOc ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-orange-400" />
-												Cast (OC)
-											</span>
+										{offcloudKey && handleCastOffcloud && r.ocAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#f97316] bg-[#f97316]/30 px-1 text-xs text-orange-100 transition-colors hover:bg-[#f97316]/50 ${isCastingOc ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastOffcloudWithLoading(r.hash)
+												}
+												disabled={isCastingOc}
+											>
+												{isCastingOc ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-orange-400" />
+														Cast (OC)
+													</span>
+												)}
+											</button>
 										)}
-									</button>
+									</span>
 								)}
-
-								{(rdKey || adKey || torboxKey || premiumizeKey || offcloudKey) &&
-									debridLinkKey && <ActionSeparator />}
-
-								{/* — DL —
+								{debridLinkKey && (
+									<span
+										data-action-group="dl"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
+									>
+										{/* — DL —
 								    Debrid-Link retired `/seedbox/cached`, but
 								    `/seedbox/add` takes a bare info hash and only
 								    accepts one it already holds, so the availability
@@ -1060,118 +1102,114 @@ const MovieSearchResults = ({
 								    as every other service's flag. The add button
 								    below still sends the full magnet, because there
 								    the intent is "download this". */}
-								{debridLinkKey && inLibrary('dl', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteDl(r.hash)}
-										disabled={isLoading}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<X className="mr-2 inline h-3 w-3" />
+										{debridLinkKey && inLibrary('dl', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeleteDl(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `DL (${hashAndProgress[`dl:${r.hash}`] + '%'})`}
+											</button>
 										)}
-										{isLoading
-											? 'Removing...'
-											: `DL (${hashAndProgress[`dl:${r.hash}`] + '%'})`}
-									</button>
-								)}
-								{debridLinkKey && !r.dlAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCheckingDl ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => checkServiceAvailability(r, ['DL'])}
-										disabled={isCheckingDl}
-										title="Asks Debrid-Link by adding the bare hash, which only works when it already has the release. A hit is removed again straight away."
-									>
-										{isCheckingDl ? (
-											<span className="inline-flex items-center">
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Checking DL...
-											</span>
-										) : (
-											<span className="inline-flex items-center">
-												<SearchIcon className="mr-1 h-3 w-3 text-sky-400" />
-												Check DL
-											</span>
+										{debridLinkKey && !r.dlAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCheckingDl ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => checkServiceAvailability(r, ['DL'])}
+												disabled={isCheckingDl}
+												title="Asks Debrid-Link by adding the bare hash, which only works when it already has the release. A hit is removed again straight away."
+											>
+												{isCheckingDl ? (
+													<span className="inline-flex items-center">
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Checking DL...
+													</span>
+												) : (
+													<span className="inline-flex items-center">
+														<SearchIcon className="mr-1 h-3 w-3 text-sky-400" />
+														Check DL
+													</span>
+												)}
+											</button>
 										)}
-									</button>
-								)}
-								{debridLinkKey && notInLibrary('dl', r.hash) && (
-									<button
-										className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.dlAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleAddDl(r.hash)}
-										disabled={isLoading}
-										title={
-											r.dlAvailable
-												? 'Debrid-Link already holds this — it will be ready at once'
-												: 'Not found in Debrid-Link’s cache — adding starts a real download'
-										}
-									>
-										{isLoading ? (
-											<Loader2 className="inline-block h-3 w-3 animate-spin" />
-										) : (
-											<Download className="mr-2 inline h-3 w-3" />
+										{debridLinkKey && notInLibrary('dl', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.dlAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddDl(r.hash)}
+												disabled={isLoading}
+												title={
+													r.dlAvailable
+														? 'Debrid-Link already holds this — it will be ready at once'
+														: 'Not found in Debrid-Link’s cache — adding starts a real download'
+												}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<Download className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading ? (
+													'Adding...'
+												) : r.dlAvailable ? (
+													<b>Instant DL</b>
+												) : (
+													'Add to DL'
+												)}
+											</button>
 										)}
-										{isLoading ? (
-											'Adding...'
-										) : r.dlAvailable ? (
-											<b>Instant DL</b>
-										) : (
-											'Add to DL'
-										)}
-									</button>
-								)}
-								{/* Gated on `dlAvailable` now that a sweep can set
+										{/* Gated on `dlAvailable` now that a sweep can set
 								    it, matching Cast (OC). The cast adds the full
 								    magnet with the caster's own credential, so an
 								    uncached one would download for real — which is
 								    exactly what the gate avoids offering. */}
-								{debridLinkKey && handleCastDebridLink && r.dlAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCastingDl ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleCastDebridLinkWithLoading(r.hash)}
-										disabled={isCastingDl}
-										title="Debrid-Link holds this — casting is instant"
-									>
-										{isCastingDl ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Casting...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<Cast className="mr-1 h-3 w-3 text-sky-400" />
-												Cast (DL)
-											</span>
+										{debridLinkKey && handleCastDebridLink && r.dlAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCastingDl ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastDebridLinkWithLoading(r.hash)
+												}
+												disabled={isCastingDl}
+												title="Debrid-Link holds this — casting is instant"
+											>
+												{isCastingDl ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<span className="inline-flex items-center">
+														<Cast className="mr-1 h-3 w-3 text-sky-400" />
+														Cast (DL)
+													</span>
+												)}
+											</button>
 										)}
-									</button>
-								)}
 
-								{debridLinkKey && inLibrary('dl', r.hash) && player && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
-										title="Watch via Debrid-Link"
-										onClick={() => handleWatchDl(r)}
-										disabled={isWatching}
-									>
-										<span className="inline-flex items-center">
-											{isWatching ? (
-												<Loader2 className="mr-1 h-3 w-3 animate-spin" />
-											) : (
-												<EyeIcon className="mr-1 h-3 w-3 text-sky-400" />
-											)}
-											Watch (DL)
-										</span>
-									</button>
+										{debridLinkKey && inLibrary('dl', r.hash) && player && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
+												title="Watch via Debrid-Link"
+												onClick={() => handleWatchDl(r)}
+												disabled={isWatching}
+											>
+												<span className="inline-flex items-center">
+													{isWatching ? (
+														<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+													) : (
+														<EyeIcon className="mr-1 h-3 w-3 text-sky-400" />
+													)}
+													Watch (DL)
+												</span>
+											</button>
+										)}
+									</span>
 								)}
-
-								{/* — Separator: everything above belongs to one service, everything below does not — */}
-								{(rdKey ||
-									adKey ||
-									torboxKey ||
-									premiumizeKey ||
-									offcloudKey ||
-									debridLinkKey) && <ActionSeparator />}
 
 								{watchService && player && (
 									<button
