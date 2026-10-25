@@ -1,4 +1,4 @@
-import { Logo } from '@/components/Logo';
+import { BackToDashboard } from '@/components/IndexerSetup';
 import { magicMountRoot, needsUsernameSlot, SAB_DAILY, sabUrlBase } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
@@ -63,7 +63,7 @@ function Field({
 		>
 			<div className="w-40 shrink-0 text-sm font-semibold text-gray-300">{label}</div>
 			<div className="flex min-w-0 flex-1 items-center gap-1">
-				<code className="min-w-0 flex-1 truncate rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300">
+				<code className="min-w-0 flex-1 rounded bg-gray-800 px-2 py-1.5 font-mono text-sm break-all text-cyan-300 sm:truncate">
 					{value || <span className="text-gray-400">{blank}</span>}
 				</code>
 				{value ? <CopyButton value={value} label={label} /> : null}
@@ -223,10 +223,10 @@ export default function SabnzbdSetupPage() {
 				<title>Debrid Media Manager - Radarr / Sonarr setup</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
 
-			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
+			<div className="flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<BackToDashboard />
 				<header>
 					<h1 className="text-2xl font-bold text-gray-100">
 						Use DMM as a download client in Radarr / Sonarr
@@ -322,12 +322,12 @@ export default function SabnzbdSetupPage() {
 					)}
 
 					{magicRoot && (
-						<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
-							<AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
-							<div>
-								<div className="mb-1 font-semibold text-gray-200">
-									On a zurg nightly? Import from __magic__ instead.
-								</div>
+						<details className="mt-3 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
+							<summary className="cursor-pointer font-semibold text-gray-200">
+								<AlertTriangle className="mr-1 inline-block h-4 w-4 align-text-bottom text-yellow-400" />
+								On a zurg nightly? Import from __magic__ instead
+							</summary>
+							<div className="mt-2">
 								<p>
 									Use{' '}
 									<code className="rounded bg-gray-800 px-1.5 py-0.5 font-mono text-cyan-300">
@@ -371,14 +371,14 @@ export default function SabnzbdSetupPage() {
 									Use {magicRoot}
 								</button>
 							</div>
-						</div>
+						</details>
 					)}
 
-					<div className="mt-4 rounded border-2 border-gray-600/50 p-3 text-xs text-gray-300">
-						<div className="mb-1 font-semibold text-gray-200">
+					<details className="mt-3 rounded border-2 border-gray-600/50 p-3 text-xs text-gray-300">
+						<summary className="cursor-pointer font-semibold text-gray-200">
 							No mount yet? You need zurg.
-						</div>
-						<p>
+						</summary>
+						<p className="mt-2">
 							zurg exposes your Real-Debrid library as a filesystem, which is what
 							gives this a path to import from — and what Plex, Jellyfin, Emby and
 							Infuse read.
@@ -416,7 +416,7 @@ export default function SabnzbdSetupPage() {
 								.
 							</li>
 						</ul>
-					</div>
+					</details>
 				</Card>
 
 				<Card title="3. Paste this into Radarr / Sonarr">
@@ -444,26 +444,37 @@ export default function SabnzbdSetupPage() {
 							blank="(blank, or your DMM API key)"
 							hint="sponsors only, for the allowance below"
 						/>
-						<Field label="Category" value={category} />
-					</div>
-
-					<div className="mt-4 flex flex-wrap items-center gap-3">
-						<label className="text-sm text-gray-300">Category</label>
-						<select
-							value={category}
-							onChange={(e) => setCategory(e.target.value)}
-							className="rounded bg-gray-800 px-2 py-1.5 text-sm text-gray-200"
+						{/* Picked here rather than copied: it must be one nzb2rd knows */}
+						<div
+							data-testid="field-Category"
+							className="flex flex-col gap-1 py-2.5 sm:flex-row sm:items-center sm:gap-3"
 						>
-							{categories.map((name) => (
-								<option key={name} value={name}>
-									{name}
-								</option>
-							))}
-						</select>
-						<span className="text-xs text-gray-400">
-							It must be one of these, or *arr&apos;s test fails with &ldquo;Category
-							does not exist&rdquo;.
-						</span>
+							<label
+								htmlFor="sab-category"
+								className="w-40 shrink-0 text-sm font-semibold text-gray-300"
+							>
+								Category
+							</label>
+							<div className="flex min-w-0 flex-1 items-center gap-1">
+								<select
+									id="sab-category"
+									value={category}
+									onChange={(e) => setCategory(e.target.value)}
+									className="min-w-0 flex-1 rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300"
+								>
+									{categories.map((name) => (
+										<option key={name} value={name}>
+											{name}
+										</option>
+									))}
+								</select>
+								<CopyButton value={category} label="Category" />
+							</div>
+							<div className="text-xs text-gray-400 sm:w-48 sm:shrink-0">
+								must be one of these, or *arr&apos;s test fails with &ldquo;Category
+								does not exist&rdquo;
+							</div>
+						</div>
 					</div>
 				</Card>
 

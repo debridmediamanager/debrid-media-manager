@@ -130,12 +130,12 @@ describe('the page', () => {
 	it('pitches a sponsorship to a visitor, and not to a sponsor', () => {
 		asVisitor();
 		const { unmount } = render(<JellyfinSetupPage />);
-		expect(screen.getByText('A sponsor feature')).toBeTruthy();
+		expect(screen.getByTestId('sponsor-strip')).toBeTruthy();
 		unmount();
 
 		asSponsor(API_KEY);
 		render(<JellyfinSetupPage />);
-		expect(screen.queryByText('A sponsor feature')).toBeNull();
+		expect(screen.queryByTestId('sponsor-strip')).toBeNull();
 	});
 
 	it('links to the Emby page', () => {

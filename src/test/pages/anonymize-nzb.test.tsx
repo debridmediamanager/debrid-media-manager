@@ -107,7 +107,7 @@ describe('Anonymize NZB page', () => {
 		render(<AnonymizeNzbPage />);
 
 		const notice = screen.getByTestId('client-side-notice');
-		expect(within(notice).getByText('Client-side only')).toBeTruthy();
+		expect(within(notice).getByText('Client-side only.')).toBeTruthy();
 		expect(within(notice).getByText(/Nothing is uploaded, not even to DMM/)).toBeTruthy();
 		expect(screen.queryByTestId('nzb-result')).toBeNull();
 	});

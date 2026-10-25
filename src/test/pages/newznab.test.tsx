@@ -213,7 +213,7 @@ describe('Newznab setup page, for a sponsor', () => {
 		render(<NewznabSetupPage />);
 
 		expect(screen.queryByText(/Sponsor this project/)).toBeNull();
-		expect(screen.queryByText('A sponsor feature')).toBeNull();
+		expect(screen.queryByTestId('sponsor-strip')).toBeNull();
 	});
 });
 
@@ -255,7 +255,7 @@ describe('Newznab setup page, for everyone else', () => {
 		asVisitor();
 		render(<NewznabSetupPage />);
 
-		expect(screen.getByText('A sponsor feature')).toBeTruthy();
+		expect(screen.getByTestId('sponsor-strip')).toBeTruthy();
 		// Once. The setup guide below used to repeat the whole "connect your
 		// GitHub account on gatekeeper" sentence, so a visitor read the same
 		// instruction twice on one page.
@@ -282,5 +282,25 @@ describe('Newznab setup page, for everyone else', () => {
 		for (const link of screen.getAllByRole('link', { name: 'gatekeeper' })) {
 			expect(link.getAttribute('href')).toBe('https://gatekeeper.debridmediamanager.com');
 		}
+	});
+});
+
+// The key note under the form used to tell every visitor that "the copy button
+// above hands over the whole key" - but with no key there is no copy button.
+describe('NewznabSetupPage key note', () => {
+	it('says nothing about a key to a visitor who has none', () => {
+		asVisitor();
+		render(<NewznabSetupPage />);
+
+		expect(screen.queryByText(/copy button/)).toBeNull();
+		expect(screen.queryByText(/works for the torrent indexer too/)).toBeNull();
+	});
+
+	it('tells a linked sponsor the key also works for the torrent indexer', () => {
+		asLinkedSponsor();
+		render(<NewznabSetupPage />);
+
+		expect(screen.getByText(/works for the torrent indexer too/)).toBeTruthy();
+		expect(screen.queryByText(/copy button/)).toBeNull();
 	});
 });

@@ -1,18 +1,8 @@
-import { Card, Field, maskApiKey } from '@/components/IndexerSetup';
-import { Logo } from '@/components/Logo';
+import { BackToDashboard, Card, Field, maskApiKey, SponsorStrip } from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
-import {
-	ArrowLeft,
-	ArrowRight,
-	Eye,
-	EyeOff,
-	Handshake,
-	KeyRound,
-	Lock,
-	ShieldCheck,
-} from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, KeyRound, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -255,45 +245,6 @@ function SetupGuide({
 	);
 }
 
-function SponsorPitch() {
-	return (
-		<Card title="A sponsor feature">
-			<p className="text-gray-300">
-				These plugins put your debrid and Usenet libraries straight into Jellyfin as
-				ordinary movies and episodes, with no mount and no second service to run. The whole
-				setup is written out below. The one thing it needs that this browser does not have
-				yet is a DMM API key, which comes with a sponsorship.
-			</p>
-
-			<div className="mt-4 rounded border-2 border-pink-500/30 p-4 text-center">
-				<div className="mb-2 flex items-center justify-center gap-2 text-sm font-medium text-pink-200">
-					<Handshake className="h-4 w-4 text-pink-400" />
-					Sponsor this project&apos;s development
-				</div>
-				<div className="text-sm text-gray-300">
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href={GATEKEEPER_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						gatekeeper
-					</a>
-				</div>
-			</div>
-
-			<p className="mt-4 text-sm text-gray-400">
-				Get your key by connecting your GitHub account there, then paste it in{' '}
-				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-					Settings
-				</Link>{' '}
-				to link this browser. Already sponsoring on another machine? It is the same key on
-				this one, so there is nothing to pay twice.
-			</p>
-		</Card>
-	);
-}
-
 export default function JellyfinSetupPage() {
 	const { isSponsor, apiKey } = useSponsor();
 
@@ -311,20 +262,12 @@ export default function JellyfinSetupPage() {
 				<title>Debrid Media Manager - Jellyfin plugins</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
 
-			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
-				<Link
-					href="/"
-					className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					<span>Back to dashboard</span>
-				</Link>
+			<div className="flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<BackToDashboard />
 				<header>
 					<h1 className="flex items-center gap-2 text-2xl font-bold text-gray-100">
-						{isSponsor ? null : <Lock className="h-5 w-5 text-pink-400" />}
 						Put your library in Jellyfin
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
@@ -341,7 +284,7 @@ export default function JellyfinSetupPage() {
 					</Link>
 				</header>
 
-				{isSponsor ? null : <SponsorPitch />}
+				{isSponsor ? null : <SponsorStrip />}
 				<SetupGuide origin={origin} apiKey={apiKey} needsKeySource={isSponsor && !apiKey} />
 			</div>
 		</div>

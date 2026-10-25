@@ -1,10 +1,9 @@
-import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
-import { Logo } from '@/components/Logo';
+import { ApiKeyField, BackToDashboard, Card, Field, SponsorStrip } from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
-import { ArrowLeft, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
+import { KeyRound, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -100,32 +99,33 @@ function SetupGuide({
 					<Field label="API Path" value={API_PATH} hint="appended to the URL above" />
 					<ApiKeyField apiKey={apiKey} />
 				</div>
-				<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
-					<KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
-					<span>
-						The same 64-character DMM API key works for the torrent indexer too.{' '}
-						{needsKeySource ? (
-							<>
-								Get it by connecting your GitHub account on{' '}
-								<a
-									href={GATEKEEPER_URL}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="underline decoration-dotted"
-								>
-									gatekeeper
-								</a>
-								, then paste it in{' '}
-								<Link href="/settings" className="underline decoration-dotted">
-									Settings
-								</Link>{' '}
-								to fill it in here.
-							</>
-						) : (
-							'This browser remembers it once linked, and the copy button above hands over the whole key without putting it on screen.'
-						)}
-					</span>
-				</div>
+				{/* A visitor has no key yet: the strip above already says where one comes from */}
+				{apiKey || needsKeySource ? (
+					<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
+						<KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
+						<span>
+							The same 64-character DMM API key works for the torrent indexer too.{' '}
+							{needsKeySource ? (
+								<>
+									Get it by connecting your GitHub account on{' '}
+									<a
+										href={GATEKEEPER_URL}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="underline decoration-dotted"
+									>
+										gatekeeper
+									</a>
+									, then paste it in{' '}
+									<Link href="/settings" className="underline decoration-dotted">
+										Settings
+									</Link>{' '}
+									to fill it in here.
+								</>
+							) : null}
+						</span>
+					</div>
+				) : null}
 			</Card>
 
 			<Card title="2. What you can search for">
@@ -212,45 +212,6 @@ function SetupGuide({
 	);
 }
 
-function SponsorPitch() {
-	return (
-		<Card title="A sponsor feature">
-			<p className="text-gray-300">
-				The Usenet indexer answers Prowlarr, Sonarr and Radarr as a Newznab indexer, so your
-				*arr stack can search DMM directly and hand grabs straight to your Real-Debrid
-				account. The whole setup is written out below; the one thing it needs that this
-				browser does not have yet is a DMM API key, which comes with a sponsorship.
-			</p>
-
-			<div className="mt-4 rounded border-2 border-pink-500/30 p-4 text-center">
-				<div className="mb-2 flex items-center justify-center gap-2 text-sm font-medium text-pink-200">
-					<Handshake className="h-4 w-4 text-pink-400" />
-					Sponsor this project&apos;s development
-				</div>
-				<div className="text-sm text-gray-300">
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href={GATEKEEPER_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						gatekeeper
-					</a>
-				</div>
-			</div>
-
-			<p className="mt-4 text-sm text-gray-400">
-				Get your key by connecting your GitHub account there, then paste it in{' '}
-				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-					Settings
-				</Link>{' '}
-				to link this browser. Already sponsoring on another machine? It is the same key on
-				this one, so there is nothing to pay twice.
-			</p>
-		</Card>
-	);
-}
-
 export default function NewznabSetupPage() {
 	const { isSponsor, apiKey } = useSponsor();
 
@@ -271,20 +232,12 @@ export default function NewznabSetupPage() {
 				<title>Debrid Media Manager - Usenet indexer setup</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
 
-			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
-				<Link
-					href="/"
-					className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					<span>Back to dashboard</span>
-				</Link>
+			<div className="flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<BackToDashboard />
 				<header>
 					<h1 className="flex items-center gap-2 text-2xl font-bold text-gray-100">
-						{isSponsor ? null : <Lock className="h-5 w-5 text-pink-400" />}
 						Use DMM as a Usenet indexer
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
@@ -293,7 +246,7 @@ export default function NewznabSetupPage() {
 					</p>
 				</header>
 
-				{isSponsor ? null : <SponsorPitch />}
+				{isSponsor ? null : <SponsorStrip />}
 				<SetupGuide
 					indexerUrl={indexerUrl}
 					apiKey={apiKey}

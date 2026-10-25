@@ -1,10 +1,13 @@
-import { Check, Copy, Eye, EyeOff } from 'lucide-react';
+import { Logo } from '@/components/Logo';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import { ArrowLeft, Check, Copy, Eye, EyeOff, Handshake } from 'lucide-react';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-// The furniture shared by the two indexer setup pages, `/newznab` and
-// `/torznab`. They render the same three-column rows of an *arr's Add Indexer
+// The furniture shared by the setup pages: `/newznab`, `/torznab`, `/emby`,
+// `/jellyfin` and friends. They render the same three-column rows of an *arr's Add Indexer
 // form, and one of those rows carries a credential — which is reason enough for
 // there to be exactly one copy of it rather than one per page.
 
@@ -61,7 +64,7 @@ export function Field({
 		>
 			<div className="w-32 shrink-0 text-sm font-semibold text-gray-300">{label}</div>
 			<div className="flex min-w-0 flex-1 items-center gap-1">
-				<code className="min-w-0 flex-1 truncate rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300">
+				<code className="min-w-0 flex-1 rounded bg-gray-800 px-2 py-1.5 font-mono text-sm break-all text-cyan-300 sm:truncate">
 					{value}
 				</code>
 				{extra}
@@ -133,5 +136,49 @@ export function Card({ title, children }: { title: string; children: ReactNode }
 			<h2 className="mb-3 text-lg font-semibold text-gray-100">{title}</h2>
 			<div className="text-sm text-gray-200">{children}</div>
 		</section>
+	);
+}
+
+/**
+ * The one line a visitor without a key needs: where the key comes from. Shared
+ * by every setup page that asks for a DMM API key.
+ */
+export function SponsorStrip() {
+	return (
+		<p
+			data-testid="sponsor-strip"
+			className="flex gap-2 rounded border border-pink-500/30 bg-pink-900/10 px-3 py-2 text-sm text-gray-300"
+		>
+			<Handshake className="mt-0.5 h-4 w-4 shrink-0 text-pink-400" />
+			<span>
+				Needs a DMM API key, which comes with a sponsorship. Get it on{' '}
+				<a
+					className="text-blue-300 underline hover:text-blue-200"
+					href={GATEKEEPER_URL}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					gatekeeper
+				</a>
+				, then paste it in{' '}
+				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
+					Settings
+				</Link>
+				. Already sponsoring on another machine? Same key.
+			</span>
+		</p>
+	);
+}
+
+export function BackToDashboard() {
+	return (
+		<Link
+			href="/"
+			className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
+		>
+			<ArrowLeft className="h-4 w-4" />
+			<Logo className="h-6 w-6" />
+			<span>Back to dashboard</span>
+		</Link>
 	);
 }

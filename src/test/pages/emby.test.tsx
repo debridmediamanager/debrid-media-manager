@@ -139,12 +139,12 @@ describe('the page', () => {
 	it('pitches a sponsorship to a visitor, and not to a sponsor', () => {
 		asVisitor();
 		const { unmount } = render(<EmbySetupPage />);
-		expect(screen.getByText('A sponsor feature')).toBeTruthy();
+		expect(screen.getByTestId('sponsor-strip')).toBeTruthy();
 		unmount();
 
 		asSponsor();
 		render(<EmbySetupPage />);
-		expect(screen.queryByText('A sponsor feature')).toBeNull();
+		expect(screen.queryByTestId('sponsor-strip')).toBeNull();
 	});
 
 	it('keeps the setup visible to a visitor, with downloads off until a key is linked', () => {

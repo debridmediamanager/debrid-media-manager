@@ -1,19 +1,15 @@
-import { ApiKeyField, Card, CopyButton } from '@/components/IndexerSetup';
-import { Logo } from '@/components/Logo';
+import {
+	ApiKeyField,
+	BackToDashboard,
+	Card,
+	CopyButton,
+	SponsorStrip,
+} from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ALLDEBRID_APIKEYS_URL } from '@/utils/referrals';
 import { toasterPosition } from '@/utils/toastOptions';
-import {
-	ArrowLeft,
-	ArrowRight,
-	Download,
-	Handshake,
-	KeyRound,
-	Loader2,
-	Lock,
-	ShieldCheck,
-} from 'lucide-react';
+import { ArrowRight, Download, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -212,7 +208,7 @@ function DownloadButton({ plugin, apiKey }: { plugin: EmbyPlugin; apiKey: string
 function Command({ label, command }: { label: string; command: string }) {
 	return (
 		<div className="flex items-start gap-1">
-			<pre className="min-w-0 flex-1 overflow-x-auto whitespace-pre rounded bg-gray-800 px-2 py-1.5 font-mono text-xs text-cyan-300">
+			<pre className="min-w-0 flex-1 overflow-x-auto rounded bg-gray-800 px-2 py-1.5 font-mono text-xs whitespace-pre text-cyan-300">
 				{command}
 			</pre>
 			<CopyButton value={command} label={label} />
@@ -344,7 +340,7 @@ function SetupGuide({
 								{where}
 							</div>
 							<div className="min-w-0 flex-1">
-								<code className="break-all font-mono text-xs text-cyan-300">
+								<code className="font-mono text-xs break-all text-cyan-300">
 									{path}
 								</code>
 								{note ? (
@@ -355,7 +351,7 @@ function SetupGuide({
 					))}
 				</div>
 
-				<h3 className="mb-2 mt-4 text-sm font-semibold text-gray-200">Docker</h3>
+				<h3 className="mt-4 mb-2 text-sm font-semibold text-gray-200">Docker</h3>
 				<p className="mb-2 text-xs text-gray-400">
 					<code>/config</code> is the folder you mounted into the container, so the file
 					can go into the host side of that mount, or straight in with{' '}
@@ -369,7 +365,7 @@ function SetupGuide({
 					}
 				/>
 
-				<h3 className="mb-2 mt-4 text-sm font-semibold text-gray-200">
+				<h3 className="mt-4 mb-2 text-sm font-semibold text-gray-200">
 					Linux, installed from the Emby package
 				</h3>
 				<Command
@@ -469,45 +465,6 @@ function SetupGuide({
 	);
 }
 
-function SponsorPitch() {
-	return (
-		<Card title="A sponsor feature">
-			<p className="text-gray-300">
-				These plugins put your debrid libraries straight into Emby as ordinary movies and
-				episodes, with no mount and no second service to run. The whole setup is written out
-				below. The one thing it needs that this browser does not have yet is a DMM API key,
-				which comes with a sponsorship.
-			</p>
-
-			<div className="mt-4 rounded border-2 border-pink-500/30 p-4 text-center">
-				<div className="mb-2 flex items-center justify-center gap-2 text-sm font-medium text-pink-200">
-					<Handshake className="h-4 w-4 text-pink-400" />
-					Sponsor this project&apos;s development
-				</div>
-				<div className="text-sm text-gray-300">
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href={GATEKEEPER_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						gatekeeper
-					</a>
-				</div>
-			</div>
-
-			<p className="mt-4 text-sm text-gray-400">
-				Get your key by connecting your GitHub account there, then paste it in{' '}
-				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-					Settings
-				</Link>{' '}
-				to link this browser. Already sponsoring on another machine? It is the same key on
-				this one, so there is nothing to pay twice.
-			</p>
-		</Card>
-	);
-}
-
 export default function EmbySetupPage() {
 	const { isSponsor, apiKey } = useSponsor();
 
@@ -547,20 +504,12 @@ export default function EmbySetupPage() {
 				<title>Debrid Media Manager - Emby plugins</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
 
-			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
-				<Link
-					href="/"
-					className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					<span>Back to dashboard</span>
-				</Link>
+			<div className="flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<BackToDashboard />
 				<header>
 					<h1 className="flex items-center gap-2 text-2xl font-bold text-gray-100">
-						{isSponsor ? null : <Lock className="h-5 w-5 text-pink-400" />}
 						Put your library in Emby
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
@@ -577,7 +526,7 @@ export default function EmbySetupPage() {
 					</Link>
 				</header>
 
-				{isSponsor ? null : <SponsorPitch />}
+				{isSponsor ? null : <SponsorStrip />}
 				<SetupGuide
 					origin={origin}
 					apiKey={apiKey}

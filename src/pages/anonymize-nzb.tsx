@@ -1,5 +1,4 @@
-import { Card } from '@/components/IndexerSetup';
-import { Logo } from '@/components/Logo';
+import { BackToDashboard, Card } from '@/components/IndexerSetup';
 import { saveBlob } from '@/utils/nzbDownload';
 import { safeNzbName } from '@/utils/nzbName';
 import { sanitizeNzb, type SanitizedNzb } from '@/utils/nzbSanitize';
@@ -227,9 +226,9 @@ export default function AnonymizeNzbPage() {
 				<title>Debrid Media Manager - Anonymize an NZB</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 
-			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
+			<div className="flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<BackToDashboard />
 				<header>
 					<h1 className="text-2xl font-bold text-gray-100">Anonymize an NZB</h1>
 					<p className="mt-2 text-sm text-gray-400">
@@ -238,22 +237,6 @@ export default function AnonymizeNzbPage() {
 						download, with nothing on it that says who grabbed it.
 					</p>
 				</header>
-
-				<div
-					data-testid="client-side-notice"
-					className="flex gap-3 rounded border-2 border-green-500/40 bg-green-900/10 p-3"
-				>
-					<ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-green-400" />
-					<div className="text-sm">
-						<div className="font-semibold text-green-200">Client-side only</div>
-						<p className="mt-1 text-gray-300">
-							Your NZB is read, cleaned and saved inside this browser. Nothing is
-							uploaded, not even to DMM, so the tag being removed never reaches any
-							server. Once this page has loaded it works with the network switched
-							off.
-						</p>
-					</div>
-				</div>
 
 				<Card title="Your NZBs">
 					<label
@@ -287,6 +270,14 @@ export default function AnonymizeNzbPage() {
 							}}
 						/>
 					</label>
+					<p data-testid="client-side-notice" className="mt-2 text-xs text-green-300">
+						<ShieldCheck className="mr-1 inline-block h-3.5 w-3.5 align-text-bottom text-green-400" />
+						<strong className="font-semibold">Client-side only.</strong>{' '}
+						<span>
+							Nothing is uploaded, not even to DMM, so the tag never reaches a server.
+							Works offline once loaded.
+						</span>
+					</p>
 
 					<label className="mt-3 flex items-start gap-2 text-xs text-gray-300">
 						<input
