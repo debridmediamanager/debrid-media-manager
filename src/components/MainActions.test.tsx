@@ -191,15 +191,13 @@ describe('MainActions', () => {
 		expect(castLink.getAttribute('href')).toBe('/stremio-offcloud');
 	});
 
-	// Five buttons used to fall through to `grid-cols-4`, wrapping the fifth
-	// alone into a quarter-width cell. Past four they wrap onto a second line
-	// instead: 3+2 for five, 3+3 for six.
+	// Up to six "Cast for XX" buttons took two rows. Two or more providers now
+	// share one row of chips named by provider code, each still announced and
+	// titled with its full "Cast for XX" label.
 	it.each([
-		[{ pmUser: false, ocUser: false, dlUser: false }, 'grid-cols-3'],
-		[{ pmUser: true, ocUser: false, dlUser: false }, 'grid-cols-4'],
-		[{ pmUser: true, ocUser: true, dlUser: false }, 'grid-cols-3'],
-		[{ pmUser: true, ocUser: true, dlUser: true }, 'grid-cols-3'],
-	])('lays the cast row out as %o -> %s', (flags, expected) => {
+		[{ pmUser: false, ocUser: false, dlUser: false }, ['RD', 'TB', 'AD']],
+		[{ pmUser: true, ocUser: true, dlUser: true }, ['RD', 'TB', 'AD', 'PM', 'OC', 'DL']],
+	])('lays every cast provider out on one chip row for %o', (flags, codes) => {
 		const { container } = render(
 			<MainActions
 				rdUser={baseRdUser}
@@ -212,8 +210,51 @@ describe('MainActions', () => {
 			/>
 		);
 
-		const row = container.querySelector('a[href="/stremio"]')?.parentElement;
-		expect(row?.className).toContain(expected);
+		const row = container.querySelector('a[href="/stremio"]')!.parentElement!;
+		const chips = Array.from(row.querySelectorAll('a'));
+		expect(chips.map((a) => a.textContent)).toEqual(codes);
+		for (const chip of chips) {
+			expect(chip.getAttribute('aria-label')).toBe(`Cast for ${chip.textContent}`);
+			expect(chip.getAttribute('title')).toBe(`Cast for ${chip.textContent}`);
+		}
+		expect(row.textContent).toMatch(/^Cast/);
+	});
+
+	it('keeps the full Cast button for a single provider', () => {
+		render(
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				ocUser={false}
+				dlUser={false}
+				isLoading={false}
+			/>
+		);
+
+		expect(screen.getByRole('link', { name: /cast for rd/i }).textContent).toBe('Cast for RD');
+	});
+
+	it('puts both status pages on one text line', () => {
+		render(
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				ocUser={false}
+				dlUser={false}
+				isLoading={false}
+			/>
+		);
+
+		const rd = screen.getByRole('link', { name: 'Real-Debrid' });
+		const tb = screen.getByRole('link', { name: 'TorBox' });
+		expect(rd).toHaveAttribute('href', '/is-real-debrid-down-or-just-me');
+		expect(tb).toHaveAttribute('href', '/is-torbox-down-or-just-me');
+		expect(rd.parentElement).toBe(tb.parentElement);
+		expect(rd.parentElement?.textContent).toBe('Status: Real-Debrid · TorBox');
 	});
 
 	it('shows both RD and TB cast actions when both users are authenticated', () => {

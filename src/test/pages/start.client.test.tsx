@@ -358,7 +358,6 @@ describe('StartPage', () => {
 		const heading = screen.getByRole('heading', { name: /Welcome to Debrid Media Manager/i });
 		const loginPrompt = screen.getByText(/Please login with one of the supported services/i);
 		expect(banner.getAttribute('href')).toContain('zurg.debridmediamanager.com');
-		expect(screen.getByText('No symlinks!')).toBeInTheDocument();
 		expect(
 			heading.compareDocumentPosition(banner) & Node.DOCUMENT_POSITION_FOLLOWING
 		).toBeTruthy();

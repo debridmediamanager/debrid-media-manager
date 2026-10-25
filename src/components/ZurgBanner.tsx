@@ -35,16 +35,12 @@ export function ZurgBanner() {
 			<button
 				onClick={dismiss}
 				aria-label="Dismiss zurg banner"
-				className="haptic-sm absolute right-1 top-1 rounded p-1 text-sky-300/70 transition-colors hover:bg-sky-800/40 hover:text-sky-100"
+				className="haptic-sm absolute top-1 right-1 rounded p-1 text-sky-300/70 transition-colors hover:bg-sky-800/40 hover:text-sky-100"
 			>
 				<X className="h-4 w-4" />
 			</button>
 
-			<p className="pr-6 text-[10px] font-bold uppercase tracking-widest text-sky-400">
-				No symlinks!
-			</p>
-
-			<div className="mt-0.5 flex items-center gap-2 pr-6 text-sm font-bold">
+			<div className="flex items-center gap-2 pr-6 text-sm font-bold">
 				<FolderTree className="h-4 w-4 shrink-0 text-sky-400" />
 				Your whole debrid library in one folder
 			</div>

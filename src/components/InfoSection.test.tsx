@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { InfoSection } from './InfoSection';
+import { CommunityLinks, InfoSection } from './InfoSection';
 
 describe('InfoSection', () => {
-	it('highlights extension download links with external targets', () => {
-		render(<InfoSection />);
+	it('keeps every extension download link, with external targets', () => {
+		render(<CommunityLinks />);
 
 		const chromeLink = screen.getByRole('link', { name: 'Chrome' });
 		expect(chromeLink.getAttribute('href')).toContain('chromewebstore');
@@ -14,13 +14,15 @@ describe('InfoSection', () => {
 		expect(firefoxLink.getAttribute('href')).toContain('mozilla.org');
 		expect(firefoxLink.getAttribute('target')).toBe('_blank');
 
-		const safariLink = screen.getByRole('link', { name: 'Safari' });
+		const safariLink = screen.getByRole('link', { name: /Safari/ });
 		expect(safariLink.getAttribute('href')).toContain('apple.com');
 		expect(safariLink.getAttribute('target')).toBe('_blank');
 
 		const userscriptLink = screen.getByRole('link', { name: 'userscript' });
 		expect(userscriptLink.getAttribute('href')).toContain('greasyfork');
 		expect(userscriptLink.getAttribute('target')).toBe('_blank');
+
+		expect(chromeLink.closest('details')).not.toBeNull();
 	});
 
 	// The sponsorship block named three payment links and no way to use a
@@ -36,7 +38,12 @@ describe('InfoSection', () => {
 	});
 
 	it('promotes community and sponsorship resources', () => {
-		render(<InfoSection />);
+		render(
+			<>
+				<InfoSection />
+				<CommunityLinks />
+			</>
+		);
 
 		expect(screen.queryByRole('link', { name: /zurg/i })).toBeNull();
 		expect(
@@ -55,12 +62,11 @@ describe('InfoSection', () => {
 		);
 	});
 
-	it('keeps the community badge readable on the dark panel', () => {
+	it('keeps only the sponsor line in the info card', () => {
 		render(<InfoSection />);
 
-		expect(screen.getByRole('link', { name: 'r/debridmediamanager' })).toHaveClass(
-			'bg-red-600',
-			'text-white'
-		);
+		expect(screen.queryByRole('link', { name: /Discord/i })).toBeNull();
+		expect(screen.queryByRole('link', { name: 'Chrome' })).toBeNull();
+		expect(screen.queryByText(/Lastly/)).toBeNull();
 	});
 });

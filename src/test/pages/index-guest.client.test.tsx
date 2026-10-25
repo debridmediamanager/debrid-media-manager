@@ -18,6 +18,7 @@ vi.mock('@/components/BrowseSection', () => ({
 vi.mock('@/components/InfoSection', () => ({
 	__esModule: true,
 	InfoSection: () => <div data-testid="info-section" />,
+	CommunityLinks: () => <span data-testid="community-links" />,
 }));
 
 vi.mock('@/components/Logo', () => ({

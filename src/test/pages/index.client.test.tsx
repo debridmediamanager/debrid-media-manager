@@ -21,6 +21,7 @@ vi.mock('@/components/BrowseSection', () => ({
 vi.mock('@/components/InfoSection', () => ({
 	__esModule: true,
 	InfoSection: () => <div data-testid="info-section" />,
+	CommunityLinks: () => <span data-testid="community-links" />,
 }));
 
 vi.mock('@/components/Logo', () => ({
@@ -335,12 +336,13 @@ describe('IndexPage', () => {
 
 		expect(refreshButton.className).toBe(clearCacheButton.className);
 		expect(logoutButton.className).toBe(refreshButton.className);
-		expect(refreshButton).toHaveClass('w-full');
+		// One text row like the footer, not three full-width buttons
+		expect(refreshButton).toHaveClass('underline');
 
 		const container = refreshButton.parentElement;
 		expect(container).not.toBeNull();
-		expect(container).toHaveClass('grid');
-		expect(container).toHaveClass('gap-3');
+		expect(container).toHaveClass('flex-wrap');
+		expect(container).toContainElement(logoutButton);
 	});
 
 	it('applies the same spacing while loading', () => {

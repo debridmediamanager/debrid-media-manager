@@ -1,5 +1,5 @@
 import { BrowseSection } from '@/components/BrowseSection';
-import { InfoSection } from '@/components/InfoSection';
+import { CommunityLinks, InfoSection } from '@/components/InfoSection';
 import { Logo } from '@/components/Logo';
 import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
@@ -218,6 +218,7 @@ function IndexPage() {
 	};
 
 	const actionButtonGroupClasses = 'grid w-full max-w-md gap-3 sm:grid-cols-2 md:grid-cols-3';
+	const maintenanceLinkClasses = 'haptic-sm underline hover:text-gray-200';
 	const actionButtonClasses =
 		'haptic-sm w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50';
 
@@ -276,13 +277,13 @@ function IndexPage() {
 				<title>Debrid Media Manager - Home</title>
 				<meta name="robots" content="index, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
 			{servicesSettled || profileWaitElapsed ? (
 				<>
-					<h1 className="mb-2 flex items-center justify-center text-xl font-bold text-white">
-						Debrid Media Manager
-					</h1>
+					<div className="mb-3 flex items-center justify-center gap-2">
+						<Logo className="h-11 w-11 shrink-0" />
+						<h1 className="text-xl font-bold text-white">Debrid Media Manager</h1>
+					</div>
 
 					<ZurgBanner />
 
@@ -312,41 +313,42 @@ function IndexPage() {
 							isLoading={isLoading}
 							isGuest={isGuest}
 						/>
-						<Link
-							href="/settings"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
+						{/* Settings and the sponsor features share a row. The features are
+						    folded like the guest-mode debrid cards: four always-open rows
+						    pushed the rest of the page down for everyone, sponsor or not.
+						    Opened, the disclosure wraps onto a row of its own. */}
+						<div className="flex w-full flex-wrap items-start gap-3">
+							<Link
+								href="/settings"
+								className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-gray-500 bg-gray-800/30 px-2 py-2 text-sm font-medium whitespace-nowrap text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
 								<Settings className="mr-2 inline-block h-4 w-4 text-gray-400" />
 								Settings
-							</span>
-							<span className="text-xs text-gray-400">Open full page</span>
-						</Link>
-						{/* Folded like the guest-mode debrid cards: four always-open rows
-						    pushed the rest of the page down for everyone, sponsor or not. */}
-						<details className="w-full rounded border-2 border-pink-500/40 bg-gray-800/30">
-							<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Sponsor features
-							</summary>
-							<div className="grid grid-cols-1 gap-3 p-3 pt-0">
-								{sponsorLinks.map(({ href, label, description }) => (
-									<Link
-										key={href}
-										href={href}
-										className="haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-									>
-										<span className="shrink-0">{label}</span>
-										<span className="text-right text-xs text-gray-400">
-											{description}
-										</span>
-									</Link>
-								))}
-							</div>
-						</details>
+							</Link>
+							<details className="flex-1 rounded border-2 border-pink-500/40 bg-gray-800/30 open:basis-full">
+								<summary className="haptic-sm cursor-pointer px-2 py-2 text-center text-sm font-medium whitespace-nowrap text-gray-100 transition-colors hover:bg-gray-700/50">
+									<span
+										aria-hidden="true"
+										className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
+									/>
+									Sponsor features
+								</summary>
+								<div className="grid grid-cols-1 gap-3 p-3 pt-0">
+									{sponsorLinks.map(({ href, label, description }) => (
+										<Link
+											key={href}
+											href={href}
+											className="haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+										>
+											<span className="shrink-0">{label}</span>
+											<span className="text-right text-xs text-gray-400">
+												{description}
+											</span>
+										</Link>
+									))}
+								</div>
+							</details>
+						</div>
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
@@ -374,19 +376,21 @@ function IndexPage() {
 							/>
 						</div>
 						<InfoSection />
-						<SiteLinks />
+						<SiteLinks>
+							<CommunityLinks />
+						</SiteLinks>
 
-						{/* Action Buttons */}
-						<div className={actionButtonGroupClasses}>
+						{/* Maintenance actions, as a text row like the footer below */}
+						<div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
 							<button
 								onClick={() => window.location.reload()}
-								className={actionButtonClasses}
+								className={maintenanceLinkClasses}
 							>
 								↻&nbsp;Refresh
 							</button>
 							<button
 								onClick={() => handleClearCache()}
-								className={actionButtonClasses}
+								className={maintenanceLinkClasses}
 							>
 								Clear library cache
 							</button>
@@ -397,12 +401,12 @@ function IndexPage() {
 							    key survived - was invisible from the labels. */}
 							<button
 								onClick={async () => await handleLogout(undefined, router)}
-								className={actionButtonClasses}
+								className={maintenanceLinkClasses}
 							>
 								Clear browser data
 							</button>
 						</div>
-						<div className="mt-2 flex justify-center gap-4 text-xs text-gray-400">
+						<div className="-mt-4 flex justify-center gap-4 text-xs text-gray-400">
 							<Link href="/api-docs" className="underline">
 								API
 							</Link>
@@ -414,6 +418,7 @@ function IndexPage() {
 				</>
 			) : (
 				<div className="flex flex-col items-center gap-4">
+					<Logo />
 					<h1 className="pb-4 text-center text-xl text-white">
 						Debrid Media Manager is loading...
 					</h1>

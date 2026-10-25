@@ -8,7 +8,7 @@ export const SITE_LINKS = [
 	{ label: 'Gatekeeper', href: 'https://gatekeeper.debridmediamanager.com/' },
 ];
 
-export function SiteLinks() {
+export function SiteLinks({ children }: { children?: React.ReactNode }) {
 	return (
 		<nav
 			aria-label="Other DMM sites"
@@ -26,6 +26,7 @@ export function SiteLinks() {
 					{label}
 				</a>
 			))}
+			{children}
 		</nav>
 	);
 }
