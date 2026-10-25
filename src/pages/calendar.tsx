@@ -66,7 +66,15 @@ type ProcessedDay = {
 // Constants & Utility Functions
 // ─────────────────────────────────────────────────────────────────────────────
 
-const EPISODE_CARD_HEIGHT = 140; // Height of each episode card in pixels (including gap)
+// Virtualized rows are a card plus the 8px gap. Cards are a fixed height, the
+// poster's (w-16 / sm:w-20 at 2:3) plus padding and border, plus a line for the
+// calendar buttons when shown, so a row always fits its card: rows sized apart
+// from the card clipped or overlapped them.
+const EPISODE_ROW_HEIGHT = 122;
+const EPISODE_ROW_HEIGHT_SM = 146;
+// The two buttons wrap onto two lines in a phone's narrow column
+const EPISODE_ROW_HEIGHT_BUTTONS = 178;
+const EPISODE_ROW_HEIGHT_BUTTONS_SM = 174;
 const DMM_BASE_URL = 'https://debridmediamanager.com';
 
 // Calendar days are the reader's local days. toISOString() and new Date('YYYY-MM-DD')
@@ -206,8 +214,6 @@ const processCalendarData = (data: CalendarResponse): ProcessedDay[] => {
 // Memoized Episode Card Component
 // ─────────────────────────────────────────────────────────────────────────────
 
-const badgeClasses = 'rounded px-2 py-0.5 text-xs font-semibold';
-
 type EpisodeCardProps = {
 	item: CalendarEvent;
 	showPath: string;
@@ -256,27 +262,32 @@ const EpisodeCard = memo(function EpisodeCard({
 
 	return (
 		<Link href={showPath} className="block">
-			<div className="rounded-xl border border-gray-800 bg-gray-900/80 px-2 py-2 hover:border-cyan-500/60">
+			<div
+				className={`overflow-hidden rounded-xl border border-gray-800 bg-gray-900/80 px-2 py-2 hover:border-cyan-500/60 ${
+					showGoogleAdd || showAppleAdd
+						? 'h-[170px] sm:h-[166px]'
+						: 'h-[114px] sm:h-[138px]'
+				}`}
+			>
 				<div className="flex gap-3">
-					<div className="w-16 shrink-0 sm:w-20">
+					<div className="relative w-16 shrink-0 sm:w-20">
 						<Poster imdbId={imdbId} title={item.title || ''} />
+						{/* On the poster, so the title keeps the column's full width */}
+						{item.isPremiere && (
+							<span className="absolute bottom-1 left-1/2 -translate-x-1/2 rounded bg-amber-900/90 px-1.5 py-0.5 text-[10px] font-semibold text-amber-100">
+								Premiere
+							</span>
+						)}
 					</div>
-					<div className="flex flex-1 flex-col justify-between gap-1">
-						<div className="flex items-start justify-between gap-2">
-							<div className="flex flex-col">
-								<span className="text-sm font-semibold text-white">
-									{item.title}
-								</span>
-								<span className="text-xs text-gray-400">
-									{formatEpisodeCode(item.season, item.episode)}
-									{item.network ? ` • ${item.network}` : ''}
-								</span>
-							</div>
-							{item.isPremiere && (
-								<span className={`${badgeClasses} bg-amber-900/70 text-amber-100`}>
-									Premiere
-								</span>
-							)}
+					<div className="flex min-w-0 flex-1 flex-col justify-between gap-1">
+						<div className="flex min-w-0 flex-col">
+							<span className="line-clamp-2 text-sm font-semibold text-white">
+								{item.title}
+							</span>
+							<span className="text-xs text-gray-400">
+								{formatEpisodeCode(item.season, item.episode)}
+								{item.network ? ` · ${item.network}` : ''} · {localTime}
+							</span>
 						</div>
 						{(showGoogleAdd || showAppleAdd) && (
 							<div className="flex flex-wrap items-center gap-2 text-[11px]">
@@ -298,7 +309,6 @@ const EpisodeCard = memo(function EpisodeCard({
 								)}
 							</div>
 						)}
-						<p className="text-xs text-gray-400">{localTime} (local)</p>
 					</div>
 				</div>
 			</div>
@@ -388,6 +398,7 @@ const DayColumn = memo(function DayColumn({
 	const items = day.items;
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [containerHeight, setContainerHeight] = useState(400);
+	const [isSm, setIsSm] = useState(false);
 
 	// Measure available height for virtualization
 	useEffect(() => {
@@ -399,6 +410,7 @@ const DayColumn = memo(function DayColumn({
 				const availableHeight = Math.max(300, viewportHeight - containerTop - 60);
 				setContainerHeight(availableHeight);
 			}
+			setIsSm(!!window.matchMedia?.('(min-width: 640px)').matches);
 		};
 
 		updateHeight();
@@ -406,8 +418,18 @@ const DayColumn = memo(function DayColumn({
 		return () => window.removeEventListener('resize', updateHeight);
 	}, []);
 
-	// Decide whether to virtualize based on item count
-	const shouldVirtualize = items.length > 10;
+	const rowHeight =
+		showGoogleAdd || showAppleAdd
+			? isSm
+				? EPISODE_ROW_HEIGHT_BUTTONS_SM
+				: EPISODE_ROW_HEIGHT_BUTTONS
+			: isSm
+				? EPISODE_ROW_HEIGHT_SM
+				: EPISODE_ROW_HEIGHT;
+
+	// Virtualize long days, and any day taller than its column, so a short day
+	// never stretches the page past the viewport
+	const shouldVirtualize = items.length > 10 || items.length * rowHeight > containerHeight;
 
 	// Memoize row props for virtualization
 	const rowProps: VirtualRowExtraProps = useMemo(
@@ -453,7 +475,7 @@ const DayColumn = memo(function DayColumn({
 						style={{ height: containerHeight }}
 						rowComponent={VirtualRow as any}
 						rowCount={items.length}
-						rowHeight={EPISODE_CARD_HEIGHT}
+						rowHeight={rowHeight}
 						rowProps={rowProps as any}
 						overscanCount={3}
 					/>
@@ -662,6 +684,13 @@ function CalendarPage() {
 		}
 	}, [todayIso]);
 
+	const scrolledToToday = useRef(false);
+	useEffect(() => {
+		if (scrolledToToday.current || loading || !dayRefs.current[todayIso]) return;
+		scrolledToToday.current = true;
+		handleScrollToToday();
+	}, [loading, filteredDays, todayIso, handleScrollToToday]);
+
 	const handleGoogleCalendar = useCallback(
 		(item: CalendarEvent, showPath: string) => {
 			const start = new Date(item.firstAired);
@@ -785,25 +814,25 @@ function CalendarPage() {
 
 			<main className="mx-auto flex w-full flex-col gap-3">
 				<section className="rounded-2xl border border-gray-800/80 bg-gray-900/80 p-3 shadow-lg shadow-black/25 sm:p-4">
-					<div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-						<div className="sibling-space-y-0.5">
+					<div className="flex items-start justify-between gap-2">
+						<div className="sibling-space-y-0.5 min-w-0">
 							<h1 className="text-xl font-semibold text-white">Episode Calendar</h1>
 							<p className="text-xs text-gray-400">
 								{calendarWindow
-									? `Window: ${calendarWindow} • ${totalLinkableEpisodes} episodes`
+									? `${calendarWindow} · ${totalLinkableEpisodes} episodes · local times`
 									: 'Loading calendar window...'}
 							</p>
 						</div>
-						<div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:items-center">
+						<div className="flex shrink-0 items-center gap-2">
 							<button
 								onClick={handleScrollToToday}
-								className="haptic-sm inline-flex w-full items-center justify-center rounded-full border-2 border-cyan-500/70 bg-cyan-900/40 px-3 py-1.5 text-sm font-semibold text-cyan-100 transition-colors hover:bg-cyan-800/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 sm:w-auto"
+								className="haptic-sm hidden items-center justify-center rounded-full border-2 border-cyan-500/70 bg-cyan-900/40 px-3 py-1.5 text-sm font-semibold text-cyan-100 transition-colors hover:bg-cyan-800/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 sm:inline-flex"
 							>
 								Jump to Today
 							</button>
 							<Link
 								href="/"
-								className="haptic-sm inline-flex w-full items-center justify-center rounded-full border-2 border-gray-700 bg-gray-800/70 px-3 py-1.5 text-sm font-semibold text-gray-100 transition-colors hover:border-cyan-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 sm:w-auto"
+								className="haptic-sm inline-flex items-center justify-center rounded-full border border-gray-700 bg-gray-800/70 px-2 py-1 text-xs font-semibold whitespace-nowrap text-gray-100 transition-colors hover:border-cyan-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 sm:border-2 sm:px-3 sm:py-1.5 sm:text-sm"
 							>
 								Go Home
 							</Link>

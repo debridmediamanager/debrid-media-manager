@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
@@ -19,8 +19,14 @@ vi.mock('@/components/poster', () => ({
 	default: ({ title }: { title: string }) => <div data-testid="poster">{title}</div>,
 }));
 
+// Renders the first row the way react-window would, at the row height the page
+// asked for, so the row-versus-card sizing can be checked
 vi.mock('react-window', () => ({
-	List: ({ children }: any) => <div data-testid="virtual-list">{children}</div>,
+	List: ({ rowComponent: Row, rowHeight, rowProps }: any) => (
+		<div data-testid="virtual-list" data-row-height={rowHeight}>
+			<Row index={0} style={{ height: rowHeight }} {...rowProps} />
+		</div>
+	),
 }));
 
 describe('CalendarPage', () => {
@@ -125,6 +131,8 @@ describe('CalendarPage west of UTC', () => {
 		vi.useFakeTimers({ toFake: ['Date'] });
 		// Saturday 2026-10-24, 10 PM in Chicago; already Sunday 03:00 in UTC.
 		vi.setSystemTime(new Date('2026-10-25T03:00:00Z'));
+		// jsdom has no Element.scrollTo; the page scrolls to today on load
+		Element.prototype.scrollTo = vi.fn();
 	});
 
 	afterEach(() => {
@@ -176,5 +184,74 @@ describe('CalendarPage west of UTC', () => {
 			'Today'
 		);
 		expect(screen.getByText(/Oct 17 - .*Oct 30/)).toBeInTheDocument();
+	});
+
+	it('opens scrolled to today once the days load', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					range: { start: '2026-10-17', days: 14 },
+					days: [
+						{
+							date: '2026-10-24',
+							items: [episode('Afternoon', '2026-10-24T19:00:00Z')],
+						},
+					],
+					tmdb: { airingToday: [], onTheAir: [] },
+				}),
+		}) as any;
+
+		const CalendarPage = (await import('@/pages/calendar')).default;
+		render(<CalendarPage />);
+
+		await screen.findAllByText('Afternoon');
+		expect(Element.prototype.scrollTo).toHaveBeenCalledTimes(1);
+	});
+});
+
+// Virtualized rows were a fixed 140px while cards were 114px on phones and
+// 138px from 640px, and from 640px the 132px slot left for the card was shorter
+// than the card, so neighbours overlapped. A row is now its card plus the gap.
+describe('CalendarPage virtualized rows', () => {
+	const many = Array.from({ length: 12 }, (_, i) => ({
+		title: `Show ${i}`,
+		season: 1,
+		episode: i + 1,
+		firstAired: '2026-10-24T18:00:00Z',
+		isPremiere: false,
+		ids: { imdb: `tt${1000000 + i}` },
+		network: 'HBO',
+	}));
+
+	it.each([
+		[false, /(^|\s)h-\[(\d+)px\]/],
+		[true, /sm:h-\[(\d+)px\]/],
+	])('sizes each row to its card (from 640px: %s)', async (wide, cardHeight) => {
+		window.matchMedia = vi.fn().mockReturnValue({ matches: wide }) as any;
+		Element.prototype.scrollTo = vi.fn();
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					range: { start: '2026-10-24', days: 1 },
+					days: [{ date: '2026-10-24', items: many }],
+					tmdb: { airingToday: [], onTheAir: [] },
+				}),
+		}) as any;
+
+		const CalendarPage = (await import('@/pages/calendar')).default;
+		render(<CalendarPage />);
+
+		const list = await screen.findByTestId('virtual-list');
+		const card = list.querySelector('a > div')!;
+		const match = card.className.match(cardHeight);
+		expect(match).not.toBeNull();
+		// The breakpoint is read in an effect after the first render
+		await waitFor(() =>
+			expect(Number(list.getAttribute('data-row-height'))).toBe(
+				Number(match![match!.length - 1]) + 8
+			)
+		);
 	});
 });
