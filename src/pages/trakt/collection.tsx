@@ -42,7 +42,7 @@ function TraktCollection() {
 				</h1>
 				<Link
 					href="/"
-					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
@@ -66,7 +66,7 @@ function TraktCollection() {
 
 			{loading && (
 				<div className="mt-4 flex items-center justify-center">
-					<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+					<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 				</div>
 			)}
 		</div>

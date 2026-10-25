@@ -72,7 +72,7 @@ function TraktMyLists() {
 				</h1>
 				<Link
 					href="/"
-					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
