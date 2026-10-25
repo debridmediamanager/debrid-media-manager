@@ -110,7 +110,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 			: services;
 
 	return (
-		<div className="flex flex-row flex-wrap gap-1">
+		<div className="flex shrink-0 flex-row flex-nowrap gap-1">
 			{tokens.map(({ token, label, title, style }) => {
 				const isActive = hasAvailabilityToken(query, token);
 				return (
@@ -119,7 +119,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 						onClick={() => onQueryChange(toggleAvailabilityToken(query, token))}
 						title={title}
 						aria-pressed={isActive}
-						className={`cursor-pointer whitespace-nowrap rounded border px-2 py-0.5 text-xs transition-colors ${
+						className={`cursor-pointer rounded border px-2 py-0.5 text-xs whitespace-nowrap transition-colors ${
 							isActive ? style.active : style.idle
 						}`}
 					>
