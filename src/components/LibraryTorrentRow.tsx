@@ -544,7 +544,7 @@ function TorrentRow({
 					onClick={() => onShowInfo(torrent)}
 					className="px-0.5 py-1 text-center text-xs max-lg:ml-8 max-lg:pr-3"
 				>
-					{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
+					{(Math.max(0, torrent.bytes) / ONE_GIGABYTE).toFixed(1)} GB
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}

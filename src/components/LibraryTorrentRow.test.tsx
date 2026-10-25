@@ -680,6 +680,28 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(screen.getByText('Downloaded')).toBeInTheDocument();
 		});
 
+		// A TorBox row still checking reported a negative size, shown as "-0.0 GB".
+		it('never shows a negative size', () => {
+			const { container } = render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					rdKey={null}
+					tbKey="test-tb-key"
+					torrent={{
+						...mockTorrent,
+						id: 'tb:1',
+						bytes: -1,
+						status: UserTorrentStatus.waiting,
+						serviceStatus: 'checking',
+						progress: 0,
+						speed: 0,
+					}}
+				/>
+			);
+			expect(container.textContent).not.toContain('-0.0 GB');
+			expect(screen.getByText(/^0\.0 GB/)).toBeInTheDocument();
+		});
+
 		it('should show progress for downloading torrents', () => {
 			const downloadingTorrent = {
 				...mockTorrent,
