@@ -24,10 +24,12 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 	};
 
 	return (
-		<div className="flex w-full items-center justify-center gap-2 overflow-x-auto pb-2">
+		// Wraps rather than scrolls: centring an overflowing row clipped the first chip
+		// past the left edge with no way to scroll back to it.
+		<div className="flex w-full flex-wrap items-center justify-center gap-2">
 			<Link
 				href="/browse"
-				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				<Drama className="mr-1 inline-block h-3 w-3 text-blue-500" />
 				genres
@@ -35,7 +37,7 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 			{!hideAnime && (
 				<Link
 					href="/anime"
-					className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+					className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-100 transition-colors hover:bg-blue-800/50"
 				>
 					<Clapperboard className="mr-1 inline-block h-3 w-3 text-blue-500" />
 					anime
@@ -43,20 +45,20 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 			)}
 			<Link
 				href="/browse/recent"
-				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				<Clock3 className="mr-1 inline-block h-3 w-3 text-blue-500" />
 				recent
 			</Link>
 			<Link
 				href={`/browse/${randomTerm.replace(/\W/gi, '')}`}
-				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				{randomTerm}
 			</Link>
 			<button
 				onClick={handleCustomSearch}
-				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
+				className="haptic-sm flex flex-1 items-center justify-center rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-xs font-medium whitespace-nowrap text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				<Search className="mr-1 inline-block h-3 w-3 text-blue-500" />
 				browse

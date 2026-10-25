@@ -82,4 +82,18 @@ describe('BrowseSection', () => {
 		randomSpy.mockRestore();
 		promptMock.mockRestore();
 	});
+
+	// justify-center on an overflow-x-auto row pushed the first chip past the
+	// left edge, where scrolling cannot reach; long or emoji terms also wrapped
+	// inside their chip. The row wraps instead and each chip stays on one line.
+	it('wraps the chip row instead of centring an overflowing scroller', () => {
+		render(<BrowseSection terms={['🎃 halloween']} />);
+		const genres = screen.getByRole('link', { name: /genres/i });
+		const row = genres.parentElement!;
+		expect(row).toHaveClass('flex-wrap');
+		expect(row).not.toHaveClass('overflow-x-auto');
+		for (const chip of Array.from(row.children)) {
+			expect(chip).toHaveClass('whitespace-nowrap');
+		}
+	});
 });
