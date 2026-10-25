@@ -23,7 +23,8 @@ export default function LibraryTableHeader({
 		`cursor-pointer select-none hover:text-gray-100 ${sortBy.column === column ? 'text-cyan-300' : 'text-gray-300'}`;
 
 	return (
-		<tr className="border-b border-gray-700 text-xs whitespace-nowrap">
+		// Phones: the column headings become a row of sort controls; Actions has nothing to sort.
+		<tr className="border-b border-gray-700 text-xs whitespace-nowrap max-sm:flex max-sm:flex-wrap max-sm:gap-x-3 max-sm:px-1 max-sm:[&>th]:w-auto max-sm:[&>th]:max-w-none max-sm:[&>th]:min-w-0 max-sm:[&>th:last-child]:hidden">
 			<th
 				className={`w-8 max-w-8 min-w-8 px-0.5 py-1 ${sortableClass('id')}`}
 				onClick={() => onSort('id')}

@@ -1796,7 +1796,7 @@ function TorrentsPage() {
 						</div>
 						<Link
 							href="/"
-							className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+							className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
 						>
 							Go Home
 						</Link>
@@ -1887,8 +1887,8 @@ function TorrentsPage() {
 									<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 								</div>
 							) : (
-								<table className="w-full">
-									<thead>
+								<table className="w-full max-sm:block">
+									<thead className="max-sm:block">
 										<LibraryTableHeader
 											sortBy={sortBy}
 											onSort={handleSort}
@@ -1896,7 +1896,7 @@ function TorrentsPage() {
 											selectedTorrentsSize={selectedTorrents.size}
 										/>
 									</thead>
-									<tbody>
+									<tbody className="max-sm:block">
 										{currentPageData.length === 0 && (
 											<tr>
 												<td
