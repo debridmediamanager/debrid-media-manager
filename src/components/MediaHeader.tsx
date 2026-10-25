@@ -103,11 +103,11 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 				className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] items-start gap-2"
 				style={backdropStyle}
 			>
-				<div className="relative col-start-1 row-start-1 aspect-[2/3] w-[200px] max-w-[50vw] shrink-0 self-start shadow-lg sm:row-span-3">
+				<div className="relative col-start-1 row-start-1 aspect-[2/3] w-[34vw] shrink-0 self-start shadow-lg sm:row-span-3 sm:w-[200px]">
 					{posterUrl ? (
 						<Image
 							fill
-							sizes="(max-width: 640px) 50vw, 200px"
+							sizes="(max-width: 640px) 34vw, 200px"
 							src={posterUrl}
 							alt={`${mediaType === 'movie' ? 'Movie' : isAnime ? 'Anime' : 'Show'} poster`}
 							className="object-cover"
@@ -119,17 +119,17 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 				</div>
 
 				<div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-2">
-					<div className="flex justify-end p-2">
+					<div className="flex justify-end pt-2 pr-2 sm:p-2">
 						<Link
 							href="/"
-							className="h-fit w-fit rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+							className="h-fit w-fit rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 sm:py-1 sm:text-sm"
 						>
 							Go Home
 						</Link>
 					</div>
 
 					<div className="flex min-w-0 flex-wrap items-center gap-2">
-						<h2 className="min-w-0 text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
+						<h2 className="min-w-0 text-[1.05rem] leading-snug font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)] sm:text-xl sm:leading-7">
 							{displayTitle}
 						</h2>
 						{!isAnime && (
@@ -159,7 +159,7 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 					</div>
 
 					<div
-						className="h-fit w-fit bg-slate-900/75"
+						className="h-fit w-fit bg-slate-900/75 px-1 py-0.5 text-sm leading-snug sm:p-0 sm:text-base sm:leading-normal"
 						onClick={onDescToggle}
 						data-testid="media-description"
 					>
@@ -197,7 +197,9 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 						{additionalInfo}
 					</div>
 				)}
-				<div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-2">
+				{/* Phones: the buttons wrap as one row set with 36px tap targets. The
+				    show and anime pages wrap theirs in a div, which drops out here. */}
+				<div className="col-span-2 flex flex-wrap items-center gap-2 max-sm:gap-1.5 max-sm:px-2 max-sm:pb-2 sm:col-span-1 sm:col-start-2 max-sm:[&_:is(button,a)]:m-0 max-sm:[&_:is(button,a)]:inline-flex max-sm:[&_:is(button,a)]:min-h-9 max-sm:[&_:is(button,a)]:items-center max-sm:[&_:is(button,a)]:px-2 max-sm:[&>[data-testid=media-header-actions]]:contents">
 					{actionButtons}
 				</div>
 			</div>
