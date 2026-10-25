@@ -21,7 +21,7 @@ const corpus = JSON.parse(lzString.decompressFromEncodedURIComponent(FRAGMENT)) 
 const expectedHashes = new Set(corpus.torrents.map(({ hash }) => hash));
 const LISTED = expectedHashes.size;
 // Every row of the list, yearless and unparseable releases included.
-const HEADING = "Aster's hashlist (27991 files in total; size: 615.7 TB)";
+const HEADING = "Aster's hashlist · 27991 files · 615.7 TB";
 
 const auth = vi.hoisted(() => ({ rdKey: null as string | null }));
 

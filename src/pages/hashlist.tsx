@@ -61,6 +61,7 @@ import {
 	ChevronRight,
 	Download,
 	Film,
+	Search,
 	Shuffle,
 	Tv,
 	X,
@@ -513,6 +514,9 @@ function HashlistPage() {
 			return isAsc ? comparison : comparison * -1;
 		});
 	}, [filteredList, sortBy]);
+	const pageCount = Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE));
+	// one page needs no pager, unless a narrowed list left the reader past its end
+	const showPager = pageCount > 1 || currentPage > 1;
 
 	function currentPageData() {
 		return sortedList.slice(
@@ -1100,10 +1104,13 @@ function HashlistPage() {
 						>
 							<ChevronRight className="h-4 w-4" />
 						</button>
-						<span className="ml-2 text-sm text-gray-300">
+						<span
+							className="ml-2 text-sm text-gray-300"
+							title={navState.names[navState.currentIndex]}
+						>
 							{navLoading
 								? 'Loading...'
-								: `${navState.names[navState.currentIndex]} (${navState.currentIndex + 1}/${navState.files.length})`}
+								: `List ${navState.currentIndex + 1} of ${navState.files.length}`}
 						</span>
 					</div>
 					<button
@@ -1118,8 +1125,11 @@ function HashlistPage() {
 
 			<div className="mb-2 flex items-center justify-between gap-2">
 				<h1 className="min-w-0 text-xl font-bold break-words text-white">
-					{hashlistTitle} ({userTorrentsList.length} files in total; size:{' '}
-					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
+					{hashlistTitle}{' '}
+					<span className="text-sm font-normal whitespace-nowrap text-gray-400">
+						· {userTorrentsList.length} files ·{' '}
+						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
+					</span>
 				</h1>
 				<Link
 					href="/"
@@ -1140,30 +1150,34 @@ function HashlistPage() {
 					}}
 				/>
 			</div>
-			<div className="mb-4 flex flex-wrap items-center gap-1">
-				<button
-					className={`mr-1 mb-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
-					}`}
-					onClick={handlePrevPage}
-					disabled={currentPage <= 1}
-				>
-					<ChevronLeft className="h-4 w-4" />
-				</button>
-				<span className="w-16 text-center">
-					{currentPage}/{Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE))}
-				</span>
-				<button
-					className={`mr-2 mb-2 ml-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)
-							? 'cursor-not-allowed opacity-60'
-							: ''
-					}`}
-					onClick={handleNextPage}
-					disabled={currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)}
-				>
-					<ChevronRight className="h-4 w-4" />
-				</button>
+			<div className="mb-4 flex flex-wrap items-center gap-1 max-sm:mb-2 max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:[&>*]:mb-0 max-sm:[&>*]:shrink-0 max-sm:[&>*]:text-xs max-sm:[&>*]:whitespace-nowrap">
+				{showPager && (
+					<>
+						<button
+							className={`mr-1 mb-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
+								currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
+							}`}
+							onClick={handlePrevPage}
+							disabled={currentPage <= 1}
+						>
+							<ChevronLeft className="h-4 w-4" />
+						</button>
+						<span className="w-16 text-center">
+							{currentPage}/{pageCount}
+						</span>
+						<button
+							className={`mr-2 mb-2 ml-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
+								currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)
+									? 'cursor-not-allowed opacity-60'
+									: ''
+							}`}
+							onClick={handleNextPage}
+							disabled={currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)}
+						>
+							<ChevronRight className="h-4 w-4" />
+						</button>
+					</>
+				)}
 				<Link
 					href="/hashlist?mediaType=movie"
 					className="mr-2 mb-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
@@ -1297,9 +1311,11 @@ function HashlistPage() {
 				)}
 			</div>
 			<div className="overflow-x-auto">
-				<table className="w-full">
-					<thead>
-						<tr className="border-b border-gray-700">
+				{/* Below sm each row is a card: the title takes the width, size and the
+				    download buttons sit beneath it. */}
+				<table className="w-full max-sm:block">
+					<thead className="max-sm:block">
+						<tr className="border-b border-gray-700 max-sm:flex max-sm:gap-3 max-sm:text-xs max-sm:[&>th]:px-1 max-sm:[&>th:last-child]:hidden">
 							<th
 								className="cursor-pointer px-4 py-2 text-gray-300"
 								onClick={() => handleSort('title')}
@@ -1319,7 +1335,7 @@ function HashlistPage() {
 							<th className="px-4 py-2 text-gray-300">Actions</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody className="max-sm:block">
 						{currentPageData().map((t, i) => {
 							// grouped by title in the aggregate above, so looked up by title
 							const groupCount = getGroupings(t.mediaType)[t.title];
@@ -1330,7 +1346,7 @@ function HashlistPage() {
 							return (
 								<tr
 									key={i}
-									className={`border-b border-gray-800 hover:bg-gray-800/50 ${
+									className={`border-b border-gray-800 hover:bg-gray-800/50 max-sm:flex max-sm:flex-wrap max-sm:items-center max-sm:py-1 ${
 										isDownloaded('rd', t.hash) ||
 										isDownloaded('ad', t.hash) ||
 										isDownloaded('tb', t.hash)
@@ -1342,7 +1358,7 @@ function HashlistPage() {
 												: ''
 									} `}
 								>
-									<td className="border-0 px-4 py-2">
+									<td className="border-0 px-4 py-2 max-sm:basis-full max-sm:px-1 max-sm:py-0.5 max-sm:[overflow-wrap:anywhere]">
 										{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
 											<>
 												<span className="cursor-pointer">
@@ -1352,7 +1368,25 @@ function HashlistPage() {
 														<Film className="inline-block h-4 w-4 text-yellow-400" />
 													)}
 												</span>
-												&nbsp;<strong>{t.title}</strong>{' '}
+												&nbsp;<strong>{t.title}</strong>
+												{/* glued to the title so the icon never wraps onto a line alone */}
+												{'\u00a0'}
+												<Link
+													href={`/search?query=${encodeURIComponent(
+														(
+															t.info.title +
+															' ' +
+															(t.info.year || '')
+														).trim() || t.title
+													)}`}
+													target="_blank"
+													aria-label="Search again"
+													title="Search again"
+													className="inline-block align-text-bottom text-blue-400 hover:text-blue-300"
+													onClick={(e) => e.stopPropagation()}
+												>
+													<Search className="h-4 w-4" />
+												</Link>{' '}
 												{filterText && (
 													<Link
 														href={`/hashlist?filter=${encodeURIComponent(
@@ -1364,30 +1398,16 @@ function HashlistPage() {
 														{filterText}
 													</Link>
 												)}
-												<Link
-													href={`/search?query=${encodeURIComponent(
-														(
-															t.info.title +
-															' ' +
-															(t.info.year || '')
-														).trim() || t.title
-													)}`}
-													target="_blank"
-													className="ml-1 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
-													onClick={(e) => e.stopPropagation()}
-												>
-													Search again
-												</Link>
 												<br />
 											</>
 										)}
 										{t.filename}
 									</td>
 
-									<td className="border-0 px-4 py-2">
+									<td className="border-0 px-4 py-2 whitespace-nowrap max-sm:px-1 max-sm:py-0.5 max-sm:text-xs max-sm:text-gray-300">
 										{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 									</td>
-									<td className="border-0 px-4 py-2">
+									<td className="border-0 px-4 py-2 max-sm:ml-auto max-sm:px-1 max-sm:py-0.5">
 										{mounted && rdKey && isDownloading('rd', t.hash) && (
 											<button
 												className="rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
@@ -1563,7 +1583,7 @@ function HashlistPage() {
 				</table>
 			</div>
 			{/* Bottom pagination */}
-			<div className="mt-4 flex items-center">
+			<div className={`mt-4 flex items-center ${showPager ? '' : 'hidden'}`}>
 				<button
 					className={`mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
@@ -1574,7 +1594,7 @@ function HashlistPage() {
 					<ChevronLeft className="h-4 w-4" />
 				</button>
 				<span className="w-16 text-center">
-					{currentPage}/{Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE))}
+					{currentPage}/{pageCount}
 				</span>
 				<button
 					className={`ml-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
