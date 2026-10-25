@@ -147,6 +147,11 @@ export default function AlbumCard({
 					</div>
 				)}
 
+				{/* Track count on the cover, so the meta under it stays one line */}
+				<span className="absolute top-2 right-2 z-10 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold text-gray-100">
+					{album.trackCount} {album.trackCount === 1 ? 'track' : 'tracks'}
+				</span>
+
 				{/* Play button overlay */}
 				<div className="absolute right-2 bottom-2 z-10 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
 					<button
@@ -168,9 +173,6 @@ export default function AlbumCard({
 			<p className="truncate text-sm text-gray-400">
 				{album.artist}
 				{album.year && ` \u00b7 ${album.year}`}
-			</p>
-			<p className="mt-1 text-xs text-gray-400">
-				{album.trackCount} {album.trackCount === 1 ? 'track' : 'tracks'}
 			</p>
 		</div>
 	);

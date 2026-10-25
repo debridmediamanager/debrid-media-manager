@@ -36,9 +36,9 @@ export default function AlbumGrid({
 }: AlbumGridProps) {
 	return (
 		<div className="p-3 md:p-6">
-			<div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-end md:justify-between">
-				<div>
-					<p className="text-xs font-bold uppercase text-gray-400">Collection</p>
+			<div className="mb-3 flex justify-end md:mb-6 md:items-end md:justify-between">
+				<div className="hidden md:block">
+					<p className="text-xs font-bold text-gray-400 uppercase">Collection</p>
 					<h2 className="mt-1 text-2xl font-black text-white md:text-4xl">
 						Your Library
 					</h2>
