@@ -1,7 +1,9 @@
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
+import type { WantedImportResponse } from '@/pages/api/wanted/import';
 import { toasterPosition } from '@/utils/toastOptions';
-import { BookmarkCheck, Home, Loader2, RefreshCw, Trash2 } from 'lucide-react';
+import { deflatedZipMember } from '@/utils/zipEntry';
+import { BookmarkCheck, Home, Loader2, RefreshCw, Trash2, Upload } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -15,6 +17,20 @@ function seasonsLabel(item: WantedItemResponse): string {
 	return `Season${item.seasons.length > 1 ? 's' : ''} ${item.seasons.join(', ')}`;
 }
 
+function importSummary(r: WantedImportResponse): string {
+	const app = r.app === 'radarr' ? 'Radarr' : 'Sonarr';
+	const parts = [
+		`${app} is searching for ${r.found.toLocaleString()} title${r.found === 1 ? '' : 's'}: ${r.added.toLocaleString()} added`,
+	];
+	if (r.alreadyWanted) parts.push(`${r.alreadyWanted.toLocaleString()} already wanted`);
+	if (r.overCap) parts.push(`${r.overCap.toLocaleString()} did not fit, the list is full`);
+	let text = parts.join(', ') + '.';
+	if (r.noImdbId) text += ` ${r.noImdbId.toLocaleString()} left out for having no IMDb id.`;
+	if (r.notAvailable)
+		text += ` ${r.notAvailable.toLocaleString()} not released yet, which Radarr would not search either.`;
+	return text;
+}
+
 /**
  * A sponsor's wanted list. Their zurg reads it from `/api/sponsor/wanted` and
  * fetches each title, so this page is the list and what zurg made of it: when
@@ -25,6 +41,8 @@ export default function WantedPage() {
 	const [items, setItems] = useState<WantedItemResponse[] | null>(null);
 	const [error, setError] = useState('');
 	const [busy, setBusy] = useState<string | null>(null);
+	const [importing, setImporting] = useState(false);
+	const [imported, setImported] = useState<string | null>(null);
 
 	const load = useCallback(async () => {
 		setError('');
@@ -55,6 +73,32 @@ export default function WantedPage() {
 			toast.error(`Could not remove: ${e instanceof Error ? e.message : 'unreachable'}`);
 		} finally {
 			setBusy(null);
+		}
+	};
+
+	// Only the database leaves the browser, still compressed; config.xml holds the arr's API key.
+	const importBackup = async (file: File) => {
+		setImporting(true);
+		setImported(null);
+		try {
+			const { data } = await deflatedZipMember(file, (name) =>
+				/^(radarr|sonarr)\.db$/i.test(name)
+			).catch(() => {
+				throw new Error('that is not a Radarr or Sonarr backup zip');
+			});
+			const res = await fetch('/api/wanted/import', {
+				method: 'POST',
+				headers: { ...sponsorHeaders(), 'Content-Type': 'application/octet-stream' },
+				body: data,
+			});
+			const result = await res.json();
+			if (!res.ok) throw new Error(result.error || res.statusText);
+			setImported(importSummary(result));
+			await load();
+		} catch (e) {
+			toast.error(`Could not import: ${e instanceof Error ? e.message : 'unreachable'}`);
+		} finally {
+			setImporting(false);
 		}
 	};
 
@@ -125,6 +169,35 @@ export default function WantedPage() {
 									and it reads the list about once a minute.
 								</>
 							)}
+						</div>
+
+						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
+							<p className="mb-2">
+								Moving from Radarr or Sonarr? Import a backup (System → Backup, or
+								the zip in its <code>Backups</code> folder) and everything it is
+								still searching for is added: its monitored films without a file,
+								and the seasons of its monitored shows with aired episodes missing.
+							</p>
+							<label className="haptic-sm inline-flex cursor-pointer items-center rounded border-2 border-rose-500 bg-rose-900/30 px-2 py-1 text-rose-100 transition-colors hover:bg-rose-800/50">
+								{importing ? (
+									<Loader2 className="mr-1 h-4 w-4 animate-spin" />
+								) : (
+									<Upload className="mr-1 h-4 w-4" />
+								)}
+								Import a Radarr or Sonarr backup
+								<input
+									type="file"
+									accept=".zip,application/zip"
+									className="hidden"
+									disabled={importing}
+									onChange={(e) => {
+										const file = e.target.files?.[0];
+										e.target.value = '';
+										if (file) importBackup(file);
+									}}
+								/>
+							</label>
+							{imported && <p className="mt-2 text-gray-200">{imported}</p>}
 						</div>
 
 						{error && (

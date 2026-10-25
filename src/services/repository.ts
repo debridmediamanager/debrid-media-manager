@@ -1619,6 +1619,10 @@ export class Repository {
 		return this.wantedItemsService.want(shortId, item);
 	}
 
+	public wantMany(shortId: string, items: Parameters<WantedItemsService['wantMany']>[1]) {
+		return this.wantedItemsService.wantMany(shortId, items);
+	}
+
 	public unwant(shortId: string, imdbId: string) {
 		return this.wantedItemsService.remove(shortId, imdbId);
 	}

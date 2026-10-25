@@ -16,7 +16,7 @@ export interface WantedItemRow {
 }
 
 /** At most this many titles a sponsor's zurg is asked to keep fetching. */
-export const MAX_WANTED_ITEMS = 500;
+export const MAX_WANTED_ITEMS = 5000;
 
 function toRow(row: any): WantedItemRow {
 	return {
@@ -74,6 +74,43 @@ export class WantedItemsService extends DatabaseClient {
 			create: { shortId, imdbId: item.imdbId, kind: item.kind, title: item.title, seasons },
 		});
 		return toRow(row);
+	}
+
+	/**
+	 * Adds every title not on the list yet, as an import from Radarr or Sonarr does,
+	 * leaving the ones already there as they are, until the list is full.
+	 */
+	public async wantMany(
+		shortId: string,
+		items: { imdbId: string; kind: WantedKind; title: string; seasons: number[] | null }[]
+	): Promise<{ added: number; alreadyWanted: number; overCap: number }> {
+		const existing = new Set(
+			(
+				await this.prisma.wantedItem.findMany({
+					where: { shortId },
+					select: { imdbId: true },
+				})
+			).map((row) => row.imdbId)
+		);
+		const fresh = items.filter((item) => !existing.has(item.imdbId));
+		const taken = fresh.slice(0, Math.max(0, MAX_WANTED_ITEMS - existing.size));
+		if (taken.length) {
+			await this.prisma.wantedItem.createMany({
+				data: taken.map((item) => ({
+					shortId,
+					imdbId: item.imdbId,
+					kind: item.kind,
+					title: item.title.slice(0, 512),
+					seasons: item.seasons ?? Prisma.DbNull,
+				})),
+				skipDuplicates: true,
+			});
+		}
+		return {
+			added: taken.length,
+			alreadyWanted: items.length - fresh.length,
+			overCap: fresh.length - taken.length,
+		};
 	}
 
 	/** False when the title was not on the list, which is not an error. */

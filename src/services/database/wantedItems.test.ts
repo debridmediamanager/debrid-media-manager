@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { MAX_WANTED_ITEMS, WantedItemsService } from './wantedItems';
 
@@ -7,6 +8,7 @@ const prismaMock = vi.hoisted(() => ({
 		findUnique: vi.fn(),
 		findFirst: vi.fn(),
 		count: vi.fn(),
+		createMany: vi.fn(),
 		upsert: vi.fn(),
 		deleteMany: vi.fn(),
 		updateMany: vi.fn(),
@@ -59,6 +61,34 @@ describe('WantedItemsService', () => {
 		});
 		expect(prismaMock.wantedItem.count).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilledAt).toBeNull();
+	});
+
+	// An import from Radarr or Sonarr leaves titles already wanted as they are.
+	it('imports only titles not wanted yet, until the list is full', async () => {
+		prismaMock.wantedItem.findMany.mockResolvedValue([
+			...Array.from({ length: MAX_WANTED_ITEMS - 2 }, (_, i) => ({
+				imdbId: `tt${9000000 + i}`,
+			})),
+			{ imdbId: 'tt0133093' },
+		]);
+		const film = (imdbId: string) => ({
+			imdbId,
+			kind: 'movie' as const,
+			title: imdbId,
+			seasons: null,
+		});
+		await expect(
+			service.wantMany('ZP1M', [film('tt0133093'), film('tt0234215'), film('tt0242653')])
+		).resolves.toEqual({ added: 1, alreadyWanted: 1, overCap: 1 });
+		expect(prismaMock.wantedItem.createMany.mock.calls[0][0].data).toEqual([
+			{
+				shortId: 'ZP1M',
+				imdbId: 'tt0234215',
+				kind: 'movie',
+				title: 'tt0234215',
+				seasons: Prisma.DbNull,
+			},
+		]);
 	});
 
 	it('keeps the first acknowledgement date when zurg repeats it', async () => {
