@@ -136,7 +136,7 @@ export const TraktBrowse: FunctionComponent = () => {
 				</Link>
 			</div>
 
-			<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
+			<div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 				{ranked.map((item) => (
 					<Link key={item.imdbid} href={`/${data.mediaType}/${item.imdbid}`}>
 						<Poster imdbId={item.imdbid} title={item.title} />

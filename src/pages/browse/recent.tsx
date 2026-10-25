@@ -39,7 +39,7 @@ function RecentlyUpdated() {
 			</div>
 			{loading && searchResults.length === 0 && (
 				<div className="mt-4 flex items-center justify-center">
-					<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+					<div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
 				</div>
 			)}
 			{error && (
@@ -49,7 +49,7 @@ function RecentlyUpdated() {
 				</div>
 			)}
 			{searchResults.length > 0 && (
-				<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+				<div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 					{searchResults.map((key: string, idx: number) => {
 						const match = key.match(/^(movie|tv):(.+)/);
 						if (match) {

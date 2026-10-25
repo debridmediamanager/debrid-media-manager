@@ -173,7 +173,9 @@ export const Browse: FunctionComponent = () => {
 			</Head>
 			<Toaster position={toasterPosition()} />
 			<div className="mb-2 flex items-center justify-between">
-				<h1 className="text-xl font-bold">Browse</h1>
+				<h1 className="text-xl font-bold">
+					{searchKey ? `Browse: ${searchKey}` : 'Browse'}
+				</h1>
 				<Link
 					href="/"
 					className="rounded bg-cyan-800 px-2 py-1 text-sm text-white hover:bg-cyan-700"
@@ -199,14 +201,11 @@ export const Browse: FunctionComponent = () => {
 				data &&
 				Object.keys(data).length > 0 && (
 					<>
-						{Object.keys(data).map((listName: string, idx: number) => {
+						{Object.keys(data).map((listName: string) => {
 							return (
 								<div key={listName}>
-									<h2 className="mt-4 text-xl font-bold">
-										<span className="text-yellow-500">{idx + 1}</span>{' '}
-										{listName}
-									</h2>
-									<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+									<h2 className="mt-3 mb-1 text-base font-bold">{listName}</h2>
+									<div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 										{data[listName].map((key: string) => {
 											const item = parseBrowseKey(key);
 											if (!item) return null;
