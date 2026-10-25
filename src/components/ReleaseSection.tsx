@@ -94,9 +94,11 @@ export function ReleaseSection<T extends ReleaseRow>({
 					{status}
 					{sorted.length > 0 && (
 						<div className="overflow-x-auto">
-							<table className="w-full table-auto text-sm">
-								<thead>
-									<tr className="text-left text-gray-400">
+							{/* Phones: each row is a card, the release name across the full width with
+							    size and the buttons beneath it; as columns the name got ~70px. */}
+							<table className="w-full table-auto text-sm max-sm:block">
+								<thead className="max-sm:block">
+									<tr className="text-left text-gray-400 max-sm:flex max-sm:justify-between">
 										<th className="px-2 py-2">
 											<button
 												type="button"
@@ -119,16 +121,16 @@ export function ReleaseSection<T extends ReleaseRow>({
 										    length ("In RD" against "Real-Debrid downloading")
 										    and a column that sizes to its content leaves the
 										    buttons ragged down the page. */}
-										<th className="w-40 px-2 py-2"></th>
+										<th className="w-40 px-2 py-2 max-sm:hidden"></th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody className="max-sm:block">
 									{sorted.map((row) => (
 										<tr
 											key={rowKey(row)}
-											className="border-t border-gray-700/60 align-top"
+											className="border-t border-gray-700/60 align-top max-sm:grid max-sm:grid-cols-[1fr_auto] max-sm:items-center"
 										>
-											<td className="px-2 py-2 break-all text-gray-100">
+											<td className="px-2 py-2 break-all text-gray-100 max-sm:col-span-2 max-sm:pb-1">
 												{row.isPack && (
 													<span className="mr-2 rounded border border-amber-500 bg-amber-900/30 px-1.5 py-0.5 text-xs whitespace-nowrap text-amber-100">
 														Season pack
@@ -136,10 +138,10 @@ export function ReleaseSection<T extends ReleaseRow>({
 												)}
 												{row.title}
 											</td>
-											<td className="px-2 py-2 whitespace-nowrap text-gray-300">
+											<td className="px-2 py-2 whitespace-nowrap text-gray-300 max-sm:pt-0">
 												{formatSize(row.size)}
 											</td>
-											<td className="px-2 py-2">
+											<td className="px-2 py-2 max-sm:w-48 max-sm:pt-0">
 												<div className="flex items-stretch gap-1">
 													{actions(row)}
 												</div>
