@@ -226,6 +226,29 @@ describe('/api/arr (Seerr talking to DMM as Radarr and Sonarr)', () => {
 		expect(db.want).not.toHaveBeenCalled();
 	});
 
+	// Seerr's "Open in Radarr/Sonarr" links to <url base>/movie/<titleSlug> or
+	// /series/<titleSlug>, without the key: send it to the title's DMM page.
+	it("sends Seerr's Open in Radarr and Sonarr links to the DMM page", async () => {
+		const open = async (path: string) => {
+			const res = createMockResponse();
+			await handler(
+				createMockRequest({ method: 'GET', query: { route: path.split('/') } }),
+				res
+			);
+			return res;
+		};
+		expect((await open('radarr/movie/603')).redirect).toHaveBeenCalledWith(
+			302,
+			'/movie/tt0133093'
+		);
+		expect((await open('sonarr/series/371980')).redirect).toHaveBeenCalledWith(
+			302,
+			'/show/tt11280740'
+		);
+		expect((await open('radarr/movie/999')).status).toHaveBeenCalledWith(404);
+		expect(db.getSponsorByDmmApiKey).not.toHaveBeenCalled();
+	});
+
 	// DownloadTracker every minute: a refresh command, then the queue.
 	it('answers the download sync with an empty queue', async () => {
 		expect(

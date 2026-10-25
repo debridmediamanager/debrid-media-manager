@@ -26,6 +26,19 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const [app, api, version, ...rest] = Array.isArray(req.query.route) ? req.query.route : [];
+	// Seerr's "Open in Radarr/Sonarr" link: <url base>/movie/<tmdb> or /series/<tvdb>, no key.
+	if (
+		((app === 'radarr' && api === 'movie') || (app === 'sonarr' && api === 'series')) &&
+		idOf(version) &&
+		rest.length === 0
+	) {
+		const found =
+			app === 'radarr'
+				? await lookUpMovie(idOf(version), [])
+				: await lookUpSeries(idOf(version), []);
+		if (!found) return res.status(404).json({ message: 'NotFound' });
+		return res.redirect(302, `/${app === 'radarr' ? 'movie' : 'show'}/${found.imdbId}`);
+	}
 	if ((app !== 'radarr' && app !== 'sonarr') || api !== 'api' || version !== 'v3') {
 		return res.status(404).json({ message: 'NotFound' });
 	}
