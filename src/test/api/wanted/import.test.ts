@@ -13,6 +13,9 @@ import { Readable } from 'node:stream';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/wanted', () => ({
+	seasonsTmdbLacks: vi.fn().mockResolvedValue([{ title: 'Fruits Basket', seasons: [1] }]),
+}));
 vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
@@ -65,6 +68,7 @@ describe('/api/wanted/import', () => {
 			overCap: 0,
 			noImdbId: 0,
 			notAvailable: 0,
+			seasonsTmdbLacks: [{ title: 'Fruits Basket', seasons: [1] }],
 		});
 	});
 

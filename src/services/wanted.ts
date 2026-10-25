@@ -138,3 +138,40 @@ export async function resolveWantedReused(
 	}
 	return resolved;
 }
+
+/**
+ * The seasons of wanted shows TMDB has no aired episodes in, which is how this
+ * list numbers them. Sonarr numbers by TheTVDB, which splits long anime into
+ * more seasons: of fun's Sonarr import on 2026-10-25, 52 of 155 seasons in 15
+ * shows (Detective Conan 5-34, Bleach 3-16). Shows TMDB could not be asked about
+ * are left out rather than counted.
+ */
+export async function seasonsTmdbLacks(
+	shows: { imdbId: string; title: string; seasons: number[] | null }[]
+): Promise<{ title: string; seasons: number[] }[]> {
+	const out: { title: string; seasons: number[] }[] = [];
+	for (let i = 0; i < shows.length; i += 10) {
+		const batch = shows.slice(i, i + 10).filter((show) => show.seasons?.length);
+		const resolved = await Promise.all(
+			batch.map((show) =>
+				resolveWantedReused({
+					id: '',
+					imdbId: show.imdbId,
+					kind: 'show',
+					title: show.title,
+					seasons: show.seasons,
+					createdAt: new Date(0),
+					fulfilledAt: null,
+					lastPolledAt: null,
+				})
+			)
+		);
+		batch.forEach((show, j) => {
+			const aired = resolved[j].seasons;
+			if (!aired) return;
+			const lacking = show.seasons!.filter((s) => !aired.some((a) => a.season === s));
+			if (lacking.length) out.push({ title: show.title, seasons: lacking });
+		});
+	}
+	return out;
+}

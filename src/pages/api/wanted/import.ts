@@ -1,6 +1,7 @@
 import { readArrWanted } from '@/services/arrBackup';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { seasonsTmdbLacks } from '@/services/wanted';
 import { requireSponsor } from '@/utils/requireSponsor';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createWriteStream } from 'node:fs';
@@ -26,6 +27,8 @@ export interface WantedImportResponse {
 	overCap: number;
 	noImdbId: number;
 	notAvailable: number;
+	/** Sonarr seasons TMDB, which the list follows, has nothing aired in; zurg will not fetch them. */
+	seasonsTmdbLacks: { title: string; seasons: number[] }[];
 }
 
 /**
@@ -87,6 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			...result,
 			noImdbId: found.noImdbId,
 			notAvailable: found.notAvailable,
+			seasonsTmdbLacks: found.app === 'sonarr' ? await seasonsTmdbLacks(found.wanted) : [],
 		};
 		return res.status(200).json(body);
 	} catch (error) {

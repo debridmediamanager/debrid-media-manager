@@ -2,7 +2,7 @@ import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-su
 import dailyShow from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
 import bakeOffAppended from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off-appended.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { airedSeasons, resolveWanted, resolveWantedReused } from './wanted';
+import { airedSeasons, resolveWanted, resolveWantedReused, seasonsTmdbLacks } from './wanted';
 
 const cache = vi.hoisted(() => ({ searchTmdbByImdb: vi.fn(), getTmdbTvInfo: vi.fn() }));
 vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => cache }));
@@ -127,5 +127,29 @@ describe('resolveWantedReused', () => {
 		const film = row({ imdbId: 'tt0110912', kind: 'movie', title: 'Pulp Fiction' });
 		expect((await resolveWantedReused(film, 0)).tmdb).toBeUndefined();
 		expect((await resolveWantedReused(film, 1)).tmdb).toBe(680);
+	});
+});
+
+describe('seasonsTmdbLacks', () => {
+	beforeEach(() => {
+		cache.searchTmdbByImdb.mockReset();
+		cache.getTmdbTvInfo.mockReset();
+	});
+
+	it('names the Sonarr seasons TMDB has nothing aired in', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ tv_results: [{ id: thirdRock.id }] });
+		cache.getTmdbTvInfo.mockResolvedValue(thirdRock);
+		await expect(
+			seasonsTmdbLacks([
+				{ imdbId: 'tt0115082', title: '3rd Rock from the Sun', seasons: [6, 7, 8] },
+			])
+		).resolves.toEqual([{ title: '3rd Rock from the Sun', seasons: [7, 8] }]);
+	});
+
+	it('leaves out a show TMDB could not be asked about', async () => {
+		cache.searchTmdbByImdb.mockRejectedValue(new Error('down'));
+		await expect(
+			seasonsTmdbLacks([{ imdbId: 'tt9999999', title: 'Unknown', seasons: [1] }])
+		).resolves.toEqual([]);
 	});
 });

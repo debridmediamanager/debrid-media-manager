@@ -29,6 +29,11 @@ function importSummary(r: WantedImportResponse): string {
 	if (r.noImdbId) text += ` ${r.noImdbId.toLocaleString()} left out for having no IMDb id.`;
 	if (r.notAvailable)
 		text += ` ${r.notAvailable.toLocaleString()} not released yet, which Radarr would not search either.`;
+	const lacking = r.seasonsTmdbLacks ?? [];
+	if (lacking.length) {
+		const seasons = lacking.reduce((n, show) => n + show.seasons.length, 0);
+		text += ` ${seasons.toLocaleString()} season${seasons === 1 ? '' : 's'} of ${lacking.map((show) => show.title).join(', ')} will not be fetched: TMDB, which this list follows, numbers them differently from Sonarr. Pick their seasons on their DMM pages instead.`;
+	}
 	return text;
 }
 
