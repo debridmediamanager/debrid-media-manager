@@ -42,6 +42,19 @@ const saveToken = (token: string) => {
 	}
 };
 
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+
+/** "1 hash · 2 share pages": the non-zero counts of what a notice names. */
+function parsedCounts(notice: Pick<Notice, 'hashes' | 'releases' | 'hashlistIds'>) {
+	return [
+		notice.hashes.length && plural(notice.hashes.length, 'hash', 'hashes'),
+		notice.releases.length && plural(notice.releases.length, 'release', 'releases'),
+		notice.hashlistIds.length && plural(notice.hashlistIds.length, 'share page', 'share pages'),
+	]
+		.filter(Boolean)
+		.join(' · ');
+}
+
 function NoticeCard({
 	notice,
 	onAction,
@@ -67,7 +80,8 @@ function NoticeCard({
 					{notice.work.slice(0, 140)}
 				</h2>
 				<span className="font-mono text-xs text-gray-400">
-					{new Date(notice.createdAt).toLocaleString()} · {notice.id}
+					{new Date(notice.createdAt).toLocaleString()} ·{' '}
+					<span title={notice.id}>{notice.id.slice(0, 8)}</span>
 				</span>
 			</div>
 			<p className="mt-1 text-gray-300">
@@ -76,19 +90,17 @@ function NoticeCard({
 				{notice.submitterIp ? ` · ${notice.submitterIp}` : ''}
 			</p>
 			<p className="mt-2 whitespace-pre-wrap text-gray-300">{notice.reason}</p>
-			<p className="mt-2 text-xs text-gray-400">
-				{notice.hashes.length} hashes · {notice.releases.length} releases ·{' '}
-				{notice.hashlistIds.length} share pages
-			</p>
 			<details className="mt-2">
-				<summary className="cursor-pointer text-xs text-cyan-300">What was parsed</summary>
-				<pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-all rounded bg-gray-900/70 p-2 font-mono text-xs text-gray-300">
+				<summary className="cursor-pointer text-xs text-cyan-300">
+					What was parsed{parsedCounts(notice) ? ` (${parsedCounts(notice)})` : ''}
+				</summary>
+				<pre className="mt-2 max-h-64 overflow-auto rounded bg-gray-900/70 p-2 font-mono text-xs break-all whitespace-pre-wrap text-gray-300">
 					{[...notice.hashes, ...notice.releases, ...notice.hashlistIds].join('\n')}
 				</pre>
 			</details>
 			<details className="mt-1">
 				<summary className="cursor-pointer text-xs text-cyan-300">As submitted</summary>
-				<pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-all rounded bg-gray-900/70 p-2 font-mono text-xs text-gray-300">
+				<pre className="mt-2 max-h-64 overflow-auto rounded bg-gray-900/70 p-2 font-mono text-xs break-all whitespace-pre-wrap text-gray-300">
 					{notice.locations}
 				</pre>
 			</details>
@@ -128,6 +140,8 @@ export default function CopyrightAdminPage() {
 	const [status, setStatus] = useState<(typeof STATUSES)[number]>('pending');
 	const [notices, setNotices] = useState<Notice[] | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
+	// The token form folds to a link once a load has succeeded with it.
+	const [changingToken, setChangingToken] = useState(false);
 
 	useEffect(() => setToken(readToken()), []);
 
@@ -181,29 +195,39 @@ export default function CopyrightAdminPage() {
 			<Logo />
 			<div className="mt-6 flex w-full max-w-4xl flex-col gap-4 pb-16">
 				<h1 className="text-2xl font-bold text-gray-100">Copyright notices</h1>
-				<form
-					className="flex gap-2"
-					onSubmit={(event) => {
-						event.preventDefault();
-						const value =
-							new FormData(event.currentTarget).get('token')?.toString() ?? '';
-						saveToken(value);
-						setMessage(null);
-						setToken(value);
-					}}
-				>
-					<input
-						name="token"
-						type="password"
-						defaultValue={token}
-						key={token}
-						placeholder="Admin token"
-						className="flex-1 rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100"
-					/>
-					<button className="rounded bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-600">
-						Use token
+				{notices && !changingToken ? (
+					<button
+						onClick={() => setChangingToken(true)}
+						className="self-start text-sm text-cyan-300 underline hover:text-cyan-200"
+					>
+						Change token
 					</button>
-				</form>
+				) : (
+					<form
+						className="flex gap-2"
+						onSubmit={(event) => {
+							event.preventDefault();
+							const value =
+								new FormData(event.currentTarget).get('token')?.toString() ?? '';
+							saveToken(value);
+							setMessage(null);
+							setChangingToken(false);
+							setToken(value);
+						}}
+					>
+						<input
+							name="token"
+							type="password"
+							defaultValue={token}
+							key={token}
+							placeholder="Admin token"
+							className="flex-1 rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100"
+						/>
+						<button className="rounded bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-600">
+							Use token
+						</button>
+					</form>
+				)}
 				<div className="flex gap-2">
 					{STATUSES.map((s) => (
 						<button
