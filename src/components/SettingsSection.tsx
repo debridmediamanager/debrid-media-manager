@@ -1,12 +1,7 @@
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
-import { GATEKEEPER_URL } from '@/utils/gatekeeper';
-import {
-	SPONSOR_MAX_OTHER_STREAMS_LIMIT,
-	otherStreamsLimitChoices,
-	otherStreamsLimitLabel,
-} from '@/utils/sponsorLimits';
-import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
-import { useState } from 'react';
+import { otherStreamsLimitChoices, otherStreamsLimitLabel } from '@/utils/sponsorLimits';
+import { AlertTriangle, Check, Link2 } from 'lucide-react';
+import { Fragment, useState } from 'react';
 import toast from 'react-hot-toast';
 import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
 import {
@@ -434,6 +429,49 @@ export const SettingsSection = () => {
 		}
 	};
 
+	const externalSources = [
+		{
+			id: 'torrentio',
+			name: 'Torrentio',
+			on: enableTorrentio,
+			onChange: handleEnableTorrentioChange,
+			tor: enableTorrentioTor,
+			onTorChange: handleEnableTorrentioTorChange,
+		},
+		{
+			id: 'comet',
+			name: 'Comet',
+			on: enableComet,
+			onChange: handleEnableCometChange,
+			tor: enableCometTor,
+			onTorChange: handleEnableCometTorChange,
+		},
+		{
+			id: 'mediafusion',
+			name: 'MediaFusion',
+			on: enableMediaFusion,
+			onChange: handleEnableMediaFusionChange,
+			tor: enableMediaFusionTor,
+			onTorChange: handleEnableMediaFusionTorChange,
+		},
+		{
+			id: 'peerflix',
+			name: 'Peerflix',
+			on: enablePeerflix,
+			onChange: handleEnablePeerflixChange,
+			tor: enablePeerflixTor,
+			onTorChange: handleEnablePeerflixTorChange,
+		},
+		{
+			id: 'torrentsdb',
+			name: 'TorrentsDB',
+			on: enableTorrentsDB,
+			onChange: handleEnableTorrentsDBChange,
+			tor: enableTorrentsDBTor,
+			onTorChange: handleEnableTorrentsDBTorChange,
+		},
+	];
+
 	const getBrowserSettingsInfo = () => {
 		if (typeof navigator === 'undefined') {
 			return { text: 'Browser protocol handler settings:', url: '' };
@@ -462,653 +500,534 @@ export const SettingsSection = () => {
 	};
 
 	return (
-		<div className="w-full max-w-md">
-			<div className="rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-5 shadow-sm">
-				<div className="flex items-center gap-2 text-gray-100">
-					<Settings className="h-5 w-5 text-gray-300" />
-					<h1 className="text-lg font-semibold">Settings</h1>
-				</div>
-				<div className="mt-4 text-sm text-gray-200">
-					<div className="flex flex-col gap-4">
-						<SponsorPanel />
+		<div className="w-full">
+			<div className="text-sm text-gray-200">
+				{/* One column on phones; two balanced columns from 1024px, each group kept whole. */}
+				<div className="*:mb-4 *:break-inside-avoid lg:columns-2 lg:gap-4">
+					<SponsorPanel />
 
-						<EasynewsAccountPanel />
+					<EasynewsAccountPanel />
 
-						<div className="rounded border-2 border-yellow-500/30 p-4">
-							<div className="mb-4 flex items-center justify-center text-center text-sm font-medium text-yellow-200">
-								<AlertTriangle className="mr-2 inline-block h-4 w-4 text-yellow-400" />
-								Experiencing lag or buffering? Try smaller files
-							</div>
-
-							<div className="flex flex-col gap-4">
-								<div className="text-center text-xs text-gray-400">
-									Check your connection speed:{' '}
-									<a
-										href="https://real-debrid.com/speedtest"
-										target="_blank"
-										rel="noopener"
-										className="text-blue-400 hover:underline"
-									>
-										Real-Debrid
-									</a>
-									{' · '}
-									<a
-										href="https://alldebrid.com/speedtest"
-										target="_blank"
-										rel="noopener"
-										className="text-blue-400 hover:underline"
-									>
-										AllDebrid
-									</a>
-									{' · '}
-									<a
-										href="https://speedtest.torbox.app/"
-										target="_blank"
-										rel="noopener"
-										className="text-blue-400 hover:underline"
-									>
-										Torbox
-									</a>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">Biggest movie size</label>
-									<select
-										id="dmm-movie-max-size"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										value={movieMaxSize}
-										onChange={handleMovieSizeChange}
-									>
-										<option value="1">1 GB (~1.5 Mbps)</option>
-										<option value="3">3 GB (~4.5 Mbps)</option>
-										<option value="5">5 GB (~7.5 Mbps)</option>
-										<option value="15">15 GB (~22 Mbps)</option>
-										<option value="30">30 GB (~45 Mbps)</option>
-										<option value="60">60 GB (~90 Mbps)</option>
-										<option value="0">Biggest available</option>
-									</select>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">Biggest episode size</label>
-									<select
-										id="dmm-episode-max-size"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										value={episodeMaxSize}
-										onChange={handleEpisodeSizeChange}
-									>
-										<option value="0.1">100 MB (~0.7 Mbps)</option>
-										<option value="0.3">300 MB (~2 Mbps)</option>
-										<option value="0.5">500 MB (~3.5 Mbps)</option>
-										<option value="1">1 GB (~7 Mbps)</option>
-										<option value="3">3 GB (~21 Mbps)</option>
-										<option value="5">5 GB (~35 Mbps)</option>
-										<option value="0">Biggest available</option>
-									</select>
-									<p className="mt-1 text-xs text-gray-400">
-										💡 These size limits also apply to the Stremio Cast addon
-										stream selection
-									</p>
-								</div>
-							</div>
+					<div className="rounded border-2 border-yellow-500/30 p-4">
+						<div className="mb-4 flex items-center justify-center text-center text-sm font-medium text-yellow-200">
+							<AlertTriangle className="mr-2 inline-block h-4 w-4 text-yellow-400" />
+							Experiencing lag or buffering? Try smaller files
 						</div>
 
-						<div className="rounded border-2 border-purple-500/30 p-4">
-							<div className="mb-2 text-sm font-semibold text-purple-200">
-								Stremio Cast Settings
+						<div className="flex flex-col gap-4">
+							<div className="text-center text-xs text-gray-400">
+								Check your connection speed:{' '}
+								<a
+									href="https://real-debrid.com/speedtest"
+									target="_blank"
+									rel="noopener"
+									className="text-blue-400 hover:underline"
+								>
+									Real-Debrid
+								</a>
+								{' · '}
+								<a
+									href="https://alldebrid.com/speedtest"
+									target="_blank"
+									rel="noopener"
+									className="text-blue-400 hover:underline"
+								>
+									AllDebrid
+								</a>
+								{' · '}
+								<a
+									href="https://speedtest.torbox.app/"
+									target="_blank"
+									rel="noopener"
+									className="text-blue-400 hover:underline"
+								>
+									Torbox
+								</a>
 							</div>
-
-							<div className="flex flex-col gap-4">
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">Other streams limit</label>
-									<select
-										id="dmm-other-streams-limit"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										value={otherStreamsLimit}
-										onChange={handleOtherStreamsLimitChange}
-									>
-										{otherStreamsLimitChoices(
-											isSponsor,
-											Number(otherStreamsLimit)
-										).map((choice) => (
-											<option
-												key={choice.value}
-												value={String(choice.value)}
-												disabled={choice.sponsorOnly}
-											>
-												{otherStreamsLimitLabel(choice)}
-											</option>
-										))}
-									</select>
-									<p className="mt-1 text-xs text-gray-400">
-										Limits streams from available files, torrents, and other
-										users&apos; casts shown in the Stremio Cast addon
-									</p>
-									{!isSponsor && (
-										<p className="text-xs text-gray-400">
-											Sponsors can raise this to{' '}
-											{SPONSOR_MAX_OTHER_STREAMS_LIMIT}. Get your DMM API key
-											on{' '}
-											<a
-												href={GATEKEEPER_URL}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-blue-300 underline hover:text-blue-200"
-											>
-												gatekeeper
-											</a>{' '}
-											and paste it in the Sponsorship box above.
-										</p>
-									)}
-								</div>
-
-								<div className="flex items-center gap-2">
-									<input
-										id="dmm-hide-cast-option"
-										type="checkbox"
-										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-										checked={hideCastOption}
-										onChange={handleHideCastOptionChange}
-									/>
-									<label htmlFor="dmm-hide-cast-option" className="font-semibold">
-										Hide &quot;Cast a file inside a torrent&quot; option
-									</label>
-								</div>
-								<p className="-mt-2 text-xs text-gray-400">
-									When enabled, the cast option will not appear in Stremio streams
-								</p>
-							</div>
-						</div>
-
-						<div className="rounded border-2 border-gray-500/30 p-4">
-							<div className="mb-2 text-sm font-semibold text-gray-200">Playback</div>
 
 							<div className="flex flex-col gap-1">
-								<label className="font-semibold">Video player</label>
+								<label className="font-semibold">Biggest movie size</label>
 								<select
-									id="dmm-player"
+									id="dmm-movie-max-size"
 									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-									value={storedPlayer}
-									onChange={handlePlayerChange}
+									value={movieMaxSize}
+									onChange={handleMovieSizeChange}
 								>
-									<optgroup label="Web">
-										<option value="web/rd">Real-Debrid Stream</option>
-									</optgroup>
-									<optgroup label="Android">
-										<option value="android/chooser">App chooser</option>
-										<option value="android/org.videolan.vlc">VLC</option>
-										<option value="android/com.mxtech.videoplayer.ad">
-											MX Player
-										</option>
-										<option value="android/com.mxtech.videoplayer.pro">
-											MX Player Pro
-										</option>
-										<option value="android/com.brouken.player">
-											JustPlayer
-										</option>
-									</optgroup>
-									<optgroup label="iOS">
-										<option value="ios2/open-vidhub">VidHub</option>
-										<option value="ios/infuse">Infuse</option>
-										<option value="ios/vlc">VLC</option>
-										<option value="ios/outplayer">Outplayer</option>
-										<option value="ios3/senplayer">SenPlayer</option>
-									</optgroup>
-									<optgroup label="MacOS">
-										<option value="mac4/open-vidhub">VidHub</option>
-										<option value="mac/infuse">Infuse</option>
-										<option value="mac2/iina">IINA</option>
-										<option value="mac2/omniplayer">OmniPlayer</option>
-										<option value="mac2/figplayer">Fig Player</option>
-										<option value="mac3/nplayer-mac">nPlayer</option>
-										<option value="mac5/senplayer">SenPlayer</option>
-									</optgroup>
-									<optgroup label="Windows">
-										<option value="windows/vlc">VLC</option>
-										<option value="windows/potplayer">PotPlayer</option>
-									</optgroup>
+									<option value="1">1 GB (~1.5 Mbps)</option>
+									<option value="3">3 GB (~4.5 Mbps)</option>
+									<option value="5">5 GB (~7.5 Mbps)</option>
+									<option value="15">15 GB (~22 Mbps)</option>
+									<option value="30">30 GB (~45 Mbps)</option>
+									<option value="60">60 GB (~90 Mbps)</option>
+									<option value="0">Biggest available</option>
 								</select>
 							</div>
-						</div>
 
-						<div className="rounded border-2 border-gray-500/30 p-4">
-							<div className="mb-2 text-sm font-semibold text-gray-200">
-								Torrent Search &amp; Discovery
-							</div>
-
-							<div className="flex flex-col gap-4">
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">Default torrents filter</label>
-									<input
-										id="dmm-default-torrents-filter"
-										type="text"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										placeholder="filter results, supports regex"
-										value={defaultTorrentsFilterValue}
-										onChange={handleTorrentsFilterChange}
-									/>
-								</div>
-
-								<div className="flex items-center gap-2">
-									<input
-										id="dmm-only-trusted-torrents"
-										type="checkbox"
-										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-										checked={onlyTrustedTorrents}
-										onChange={handleTrustedTorrentsChange}
-									/>
-									<label className="font-semibold">Only trusted torrents</label>
-								</div>
-
-								<div className="flex items-center gap-2">
-									<input
-										id="dmm-hide-anime"
-										type="checkbox"
-										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-										checked={hideAnime}
-										onChange={handleHideAnimeChange}
-									/>
-									<label htmlFor="dmm-hide-anime" className="font-semibold">
-										Hide anime in search and on the home page
-									</label>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-hide-rd-blocked-torrents"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={hideRdBlockedTorrents}
-											onChange={handleHideRdBlockedTorrentsChange}
-										/>
-										<label
-											htmlFor="dmm-hide-rd-blocked-torrents"
-											className="font-semibold"
-										>
-											Hide Real-Debrid blocked torrents
-										</label>
-									</div>
-									<p className="mt-1 text-xs text-gray-400">
-										Hide torrents with filenames that Real-Debrid blocks (e.g.
-										WEB-DL, WEB.H264, HDTV.x264).{' '}
-										<a
-											href="https://www.patreon.com/debridmediamanager/posts/complete-list-of-158388927"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-blue-400 hover:underline"
-										>
-											Learn more
-										</a>
-									</p>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<label htmlFor="dmm-results-tab" className="font-semibold">
-										Show results on
-									</label>
-									<select
-										id="dmm-results-tab"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										value={resultsTab}
-										onChange={handleResultsTabChange}
-									>
-										<option value="torrents">Torrents tab</option>
-										<option value="usenet">Usenet tab</option>
-									</select>
-									<p className="mt-1 text-xs text-gray-400">
-										Which tab a movie or season opens on. The other tab is one
-										click away.
-									</p>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">
-										Prefilter movies by year
-									</label>
-									<select
-										id="dmm-movie-year-filter"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										value={movieYearFilter}
-										onChange={handleMovieYearFilterChange}
-									>
-										<option value="off">Off</option>
-										<option value="0">Exact year</option>
-										<option value="1">&plusmn;1 year</option>
-										<option value="2">&plusmn;2 years</option>
-									</select>
-									<p className="mt-1 text-xs text-gray-400">
-										Automatically filter movie results by release year with
-										optional tolerance for off-by-one metadata
-									</p>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-show-season-filter"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={showSeasonFilter}
-											onChange={handleShowSeasonFilterChange}
-										/>
-										<label
-											htmlFor="dmm-show-season-filter"
-											className="font-semibold"
-										>
-											Prefilter shows by season
-										</label>
-									</div>
-									<p className="mt-1 text-xs text-gray-400">
-										Automatically filter TV show results by season number (e.g.
-										S01, Season 1)
-									</p>
-								</div>
-
-								<div className="flex flex-col gap-2 rounded border-2 border-blue-500/30 p-3">
-									<div className="text-sm font-semibold text-blue-200">
-										External Sources
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-torrentio"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableTorrentio}
-											onChange={handleEnableTorrentioChange}
-										/>
-										<label className="font-semibold">Enable Torrentio</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-comet"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableComet}
-											onChange={handleEnableCometChange}
-										/>
-										<label className="font-semibold">Enable Comet</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-mediafusion"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableMediaFusion}
-											onChange={handleEnableMediaFusionChange}
-										/>
-										<label className="font-semibold">Enable MediaFusion</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-peerflix"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enablePeerflix}
-											onChange={handleEnablePeerflixChange}
-										/>
-										<label className="font-semibold">Enable Peerflix</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-torrentsdb"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableTorrentsDB}
-											onChange={handleEnableTorrentsDBChange}
-										/>
-										<label className="font-semibold">Enable TorrentsDB</label>
-									</div>
-
-									<span className="text-xs text-gray-400">
-										External sources provide additional cached torrents from
-										Real-Debrid. Disable if you want to use only DMM&apos;s own
-										search results.
-									</span>
-								</div>
-
-								<div className="flex flex-col gap-2 rounded border-2 border-orange-500/30 p-3">
-									<div className="text-sm font-semibold text-orange-200">
-										Tor Proxy Options (bypasses rate limits)
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-torrentio-tor"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableTorrentioTor}
-											onChange={handleEnableTorrentioTorChange}
-										/>
-										<label className="font-semibold">
-											Enable Torrentio (Tor)
-										</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-comet-tor"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableCometTor}
-											onChange={handleEnableCometTorChange}
-										/>
-										<label className="font-semibold">Enable Comet (Tor)</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-mediafusion-tor"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableMediaFusionTor}
-											onChange={handleEnableMediaFusionTorChange}
-										/>
-										<label className="font-semibold">
-											Enable MediaFusion (Tor)
-										</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-peerflix-tor"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enablePeerflixTor}
-											onChange={handleEnablePeerflixTorChange}
-										/>
-										<label className="font-semibold">
-											Enable Peerflix (Tor)
-										</label>
-									</div>
-
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-enable-torrentsdb-tor"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={enableTorrentsDBTor}
-											onChange={handleEnableTorrentsDBTorChange}
-										/>
-										<label className="font-semibold">
-											Enable TorrentsDB (Tor)
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div className="rounded border-2 border-gray-500/30 p-4">
-							<div className="mb-2 text-sm font-semibold text-gray-200">
-								Torrent Management
-							</div>
-
-							<div className="flex flex-col gap-4">
-								<div className="flex items-center gap-2">
-									<input
-										id="dmm-download-magnets"
-										type="checkbox"
-										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-										checked={downloadMagnets}
-										onChange={handleDownloadMagnetsChange}
-									/>
-									<label className="font-semibold">
-										Download .magnet files instead of copy
-									</label>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<label className="font-semibold">Service check limit</label>
-									<input
-										id="dmm-availability-check-limit"
-										type="number"
-										min="0"
-										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-										placeholder="0 for no limit"
-										value={availabilityCheckLimit}
-										onChange={handleAvailabilityCheckLimitChange}
-									/>
-									<span className="text-xs text-gray-400">
-										Maximum torrents to check when using &quot;Check All
-										Services&quot; button (0 = no limit)
-									</span>
-								</div>
-
-								<div className="flex flex-col gap-1">
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-include-tracker-stats"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={includeTrackerStats}
-											onChange={handleIncludeTrackerStatsChange}
-										/>
-										<label className="font-semibold">
-											Include tracker stats in service check
-										</label>
-									</div>
-									<span className="text-xs text-gray-400">
-										When enabled, also fetches seeders, leechers, and download
-										counts from trackers during service checks. This provides
-										more detailed information but may slow down the check
-										process.
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<div className="rounded border-2 border-gray-500/30 p-4">
-							<div className="mb-2 text-sm font-semibold text-gray-200">Advanced</div>
-
-							<div className="flex flex-col gap-3">
-								<div className="flex flex-col gap-2 rounded border border-cyan-500/30 p-3">
-									<div className="text-sm font-semibold text-cyan-200">
-										Episode Calendar buttons
-									</div>
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-show-calendar-add-buttons-google"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={showCalendarAddButtonsGoogle}
-											onChange={handleShowCalendarAddButtonsGoogleChange}
-										/>
-										<label className="font-semibold">
-											Show Google Calendar button
-										</label>
-									</div>
-									<div className="flex items-center gap-2">
-										<input
-											id="dmm-show-calendar-add-buttons-apple"
-											type="checkbox"
-											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-											checked={showCalendarAddButtonsApple}
-											onChange={handleShowCalendarAddButtonsAppleChange}
-										/>
-										<label className="font-semibold">
-											Show Apple / .ics button
-										</label>
-									</div>
-									<span className="text-xs text-gray-400">
-										Toggle quick-add actions on the calendar page. Changes apply
-										immediately; default is hidden.
-									</span>
-								</div>
-
-								<div className="flex items-center gap-2">
-									<input
-										id="dmm-show-mass-report-buttons"
-										type="checkbox"
-										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
-										checked={showMassReportButtons}
-										onChange={handleMassReportButtonsChange}
-									/>
-									<label className="font-semibold">
-										Show mass report buttons
-									</label>
-								</div>
+							<div className="flex flex-col gap-1">
+								<label className="font-semibold">Biggest episode size</label>
+								<select
+									id="dmm-episode-max-size"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									value={episodeMaxSize}
+									onChange={handleEpisodeSizeChange}
+								>
+									<option value="0.1">100 MB (~0.7 Mbps)</option>
+									<option value="0.3">300 MB (~2 Mbps)</option>
+									<option value="0.5">500 MB (~3.5 Mbps)</option>
+									<option value="1">1 GB (~7 Mbps)</option>
+									<option value="3">3 GB (~21 Mbps)</option>
+									<option value="5">5 GB (~35 Mbps)</option>
+									<option value="0">Biggest available</option>
+								</select>
+								<p className="mt-1 text-xs text-gray-400">
+									💡 These size limits also apply to the Stremio Cast addon stream
+									selection
+								</p>
 							</div>
 						</div>
 					</div>
 
-					<div className="mt-6 flex flex-col gap-2">
-						<button
-							id="dmm-default"
-							className={`haptic-sm w-full rounded border-2 ${
-								isMagnetHandlerEnabled
-									? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50'
-									: 'border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50'
-							} px-4 py-2 text-sm transition-colors`}
-							onClick={() => {
-								if (
-									typeof navigator !== 'undefined' &&
-									'registerProtocolHandler' in navigator
-								) {
-									try {
-										navigator.registerProtocolHandler(
-											'magnet',
-											`${(typeof location !== 'undefined' && location.origin) || ''}/library?addMagnet=%s`
-										);
-										if (typeof localStorage !== 'undefined')
-											localStorage.setItem(
-												'settings:magnetHandlerEnabled',
-												'true'
-											);
-										setIsMagnetHandlerEnabled(true);
-									} catch (error) {
-										console.error('Error registering protocol handler:', error);
-									}
-								}
-							}}
-						>
-							{isMagnetHandlerEnabled ? (
-								<>
-									<Check className="mr-1 inline-block h-4 w-4 text-green-400" />
-									DMM is your default magnet handler
-								</>
-							) : (
-								<>
-									<Link2 className="mr-1 inline-block h-4 w-4 text-blue-400" />
-									Make DMM your default magnet handler
-								</>
-							)}
-						</button>
-
-						<div className="flex flex-col gap-2 text-xs text-gray-400">
-							<div>{getBrowserSettingsInfo().text}</div>
-							<input
-								type="text"
-								readOnly
-								className="w-full rounded bg-gray-800 px-2 py-1.5 text-gray-200"
-								value={getBrowserSettingsInfo().url}
-								onClick={(e) => (e.target as HTMLInputElement).select()}
-							/>
+					<div className="rounded border-2 border-purple-500/30 p-4">
+						<div className="mb-2 text-sm font-semibold text-purple-200">
+							Stremio Cast Settings
 						</div>
+
+						<div className="flex flex-col gap-4">
+							<div className="flex flex-col gap-1">
+								<label className="font-semibold">Other streams limit</label>
+								<select
+									id="dmm-other-streams-limit"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									value={otherStreamsLimit}
+									onChange={handleOtherStreamsLimitChange}
+								>
+									{otherStreamsLimitChoices(
+										isSponsor,
+										Number(otherStreamsLimit)
+									).map((choice) => (
+										<option
+											key={choice.value}
+											value={String(choice.value)}
+											disabled={choice.sponsorOnly}
+										>
+											{otherStreamsLimitLabel(choice)}
+										</option>
+									))}
+								</select>
+								<p className="mt-1 text-xs text-gray-400">
+									Limits streams from available files, torrents, and other
+									users&apos; casts shown in the Stremio Cast addon
+								</p>
+							</div>
+
+							<div className="flex items-center gap-2">
+								<input
+									id="dmm-hide-cast-option"
+									type="checkbox"
+									className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+									checked={hideCastOption}
+									onChange={handleHideCastOptionChange}
+								/>
+								<label htmlFor="dmm-hide-cast-option" className="font-semibold">
+									Hide &quot;Cast a file inside a torrent&quot; option
+								</label>
+							</div>
+							<p className="-mt-2 text-xs text-gray-400">
+								When enabled, the cast option will not appear in Stremio streams
+							</p>
+						</div>
+					</div>
+
+					<div className="rounded border-2 border-gray-500/30 p-4">
+						<div className="mb-2 text-sm font-semibold text-gray-200">Playback</div>
+
+						<div className="flex flex-col gap-1">
+							<label className="font-semibold">Video player</label>
+							<select
+								id="dmm-player"
+								className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+								value={storedPlayer}
+								onChange={handlePlayerChange}
+							>
+								<optgroup label="Web">
+									<option value="web/rd">Real-Debrid Stream</option>
+								</optgroup>
+								<optgroup label="Android">
+									<option value="android/chooser">App chooser</option>
+									<option value="android/org.videolan.vlc">VLC</option>
+									<option value="android/com.mxtech.videoplayer.ad">
+										MX Player
+									</option>
+									<option value="android/com.mxtech.videoplayer.pro">
+										MX Player Pro
+									</option>
+									<option value="android/com.brouken.player">JustPlayer</option>
+								</optgroup>
+								<optgroup label="iOS">
+									<option value="ios2/open-vidhub">VidHub</option>
+									<option value="ios/infuse">Infuse</option>
+									<option value="ios/vlc">VLC</option>
+									<option value="ios/outplayer">Outplayer</option>
+									<option value="ios3/senplayer">SenPlayer</option>
+								</optgroup>
+								<optgroup label="MacOS">
+									<option value="mac4/open-vidhub">VidHub</option>
+									<option value="mac/infuse">Infuse</option>
+									<option value="mac2/iina">IINA</option>
+									<option value="mac2/omniplayer">OmniPlayer</option>
+									<option value="mac2/figplayer">Fig Player</option>
+									<option value="mac3/nplayer-mac">nPlayer</option>
+									<option value="mac5/senplayer">SenPlayer</option>
+								</optgroup>
+								<optgroup label="Windows">
+									<option value="windows/vlc">VLC</option>
+									<option value="windows/potplayer">PotPlayer</option>
+								</optgroup>
+							</select>
+						</div>
+					</div>
+
+					<div className="rounded border-2 border-gray-500/30 p-4">
+						<div className="mb-2 text-sm font-semibold text-gray-200">
+							Torrent Search &amp; Discovery
+						</div>
+
+						<div className="flex flex-col gap-4">
+							<div className="flex flex-col gap-1">
+								<label className="font-semibold">Default torrents filter</label>
+								<input
+									id="dmm-default-torrents-filter"
+									type="text"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									placeholder="filter results, supports regex"
+									value={defaultTorrentsFilterValue}
+									onChange={handleTorrentsFilterChange}
+								/>
+							</div>
+
+							<div className="flex items-center gap-2">
+								<input
+									id="dmm-only-trusted-torrents"
+									type="checkbox"
+									className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+									checked={onlyTrustedTorrents}
+									onChange={handleTrustedTorrentsChange}
+								/>
+								<label className="font-semibold">Only trusted torrents</label>
+							</div>
+
+							<div className="flex items-center gap-2">
+								<input
+									id="dmm-hide-anime"
+									type="checkbox"
+									className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+									checked={hideAnime}
+									onChange={handleHideAnimeChange}
+								/>
+								<label htmlFor="dmm-hide-anime" className="font-semibold">
+									Hide anime in search and on the home page
+								</label>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-hide-rd-blocked-torrents"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={hideRdBlockedTorrents}
+										onChange={handleHideRdBlockedTorrentsChange}
+									/>
+									<label
+										htmlFor="dmm-hide-rd-blocked-torrents"
+										className="font-semibold"
+									>
+										Hide Real-Debrid blocked torrents
+									</label>
+								</div>
+								<p className="mt-1 text-xs text-gray-400">
+									Hide torrents with filenames that Real-Debrid blocks (e.g.
+									WEB-DL, WEB.H264, HDTV.x264).{' '}
+									<a
+										href="https://www.patreon.com/debridmediamanager/posts/complete-list-of-158388927"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-blue-400 hover:underline"
+									>
+										Learn more
+									</a>
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<label htmlFor="dmm-results-tab" className="font-semibold">
+									Show results on
+								</label>
+								<select
+									id="dmm-results-tab"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									value={resultsTab}
+									onChange={handleResultsTabChange}
+								>
+									<option value="torrents">Torrents tab</option>
+									<option value="usenet">Usenet tab</option>
+								</select>
+								<p className="mt-1 text-xs text-gray-400">
+									Which tab a movie or season opens on. The other tab is one click
+									away.
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<label className="font-semibold">Prefilter movies by year</label>
+								<select
+									id="dmm-movie-year-filter"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									value={movieYearFilter}
+									onChange={handleMovieYearFilterChange}
+								>
+									<option value="off">Off</option>
+									<option value="0">Exact year</option>
+									<option value="1">&plusmn;1 year</option>
+									<option value="2">&plusmn;2 years</option>
+								</select>
+								<p className="mt-1 text-xs text-gray-400">
+									Automatically filter movie results by release year with optional
+									tolerance for off-by-one metadata
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-show-season-filter"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={showSeasonFilter}
+										onChange={handleShowSeasonFilterChange}
+									/>
+									<label
+										htmlFor="dmm-show-season-filter"
+										className="font-semibold"
+									>
+										Prefilter shows by season
+									</label>
+								</div>
+								<p className="mt-1 text-xs text-gray-400">
+									Automatically filter TV show results by season number (e.g. S01,
+									Season 1)
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-2 rounded border-2 border-blue-500/30 p-3">
+								<div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4 gap-y-2">
+									<div className="text-sm font-semibold text-blue-200">
+										External Sources
+									</div>
+									<div className="text-xs text-gray-400">On</div>
+									<div
+										className="text-xs text-gray-400"
+										title="Through DMM's Tor proxy, which bypasses rate limits"
+									>
+										via Tor
+									</div>
+									{externalSources.map((src) => (
+										<Fragment key={src.id}>
+											<label
+												htmlFor={`dmm-enable-${src.id}`}
+												className="font-semibold"
+											>
+												{src.name}
+											</label>
+											<input
+												id={`dmm-enable-${src.id}`}
+												type="checkbox"
+												aria-label={`Enable ${src.name}`}
+												className="h-5 w-5 justify-self-center rounded border-gray-600 bg-gray-800"
+												checked={src.on}
+												onChange={src.onChange}
+											/>
+											<input
+												id={`dmm-enable-${src.id}-tor`}
+												type="checkbox"
+												aria-label={`Enable ${src.name} (Tor)`}
+												className="h-5 w-5 justify-self-center rounded border-gray-600 bg-gray-800"
+												checked={src.tor}
+												onChange={src.onTorChange}
+											/>
+										</Fragment>
+									))}
+								</div>
+
+								<span className="text-xs text-gray-400">
+									External sources provide additional cached torrents from
+									Real-Debrid. Disable if you want to use only DMM&apos;s own
+									search results. Tor bypasses their rate limits.
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="rounded border-2 border-gray-500/30 p-4">
+						<div className="mb-2 text-sm font-semibold text-gray-200">
+							Torrent Management
+						</div>
+
+						<div className="flex flex-col gap-4">
+							<div className="flex items-center gap-2">
+								<input
+									id="dmm-download-magnets"
+									type="checkbox"
+									className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+									checked={downloadMagnets}
+									onChange={handleDownloadMagnetsChange}
+								/>
+								<label className="font-semibold">
+									Download .magnet files instead of copy
+								</label>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<label className="font-semibold">Service check limit</label>
+								<input
+									id="dmm-availability-check-limit"
+									type="number"
+									min="0"
+									className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+									placeholder="0 for no limit"
+									value={availabilityCheckLimit}
+									onChange={handleAvailabilityCheckLimitChange}
+								/>
+								<span className="text-xs text-gray-400">
+									Maximum torrents to check when using &quot;Check All
+									Services&quot; button (0 = no limit)
+								</span>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-include-tracker-stats"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={includeTrackerStats}
+										onChange={handleIncludeTrackerStatsChange}
+									/>
+									<label className="font-semibold">
+										Include tracker stats in service check
+									</label>
+								</div>
+								<span className="text-xs text-gray-400">
+									Adds seeders and leechers; slower.
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="rounded border-2 border-gray-500/30 p-4">
+						<div className="mb-2 text-sm font-semibold text-gray-200">Advanced</div>
+
+						<div className="flex flex-col gap-3">
+							<div className="flex flex-col gap-2 rounded border border-cyan-500/30 p-3">
+								<div className="text-sm font-semibold text-cyan-200">
+									Episode Calendar buttons
+								</div>
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-show-calendar-add-buttons-google"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={showCalendarAddButtonsGoogle}
+										onChange={handleShowCalendarAddButtonsGoogleChange}
+									/>
+									<label className="font-semibold">
+										Show Google Calendar button
+									</label>
+								</div>
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-show-calendar-add-buttons-apple"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={showCalendarAddButtonsApple}
+										onChange={handleShowCalendarAddButtonsAppleChange}
+									/>
+									<label className="font-semibold">
+										Show Apple / .ics button
+									</label>
+								</div>
+								<span className="text-xs text-gray-400">
+									Toggle quick-add actions on the calendar page. Changes apply
+									immediately; default is hidden.
+								</span>
+							</div>
+
+							<div className="flex items-center gap-2">
+								<input
+									id="dmm-show-mass-report-buttons"
+									type="checkbox"
+									className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+									checked={showMassReportButtons}
+									onChange={handleMassReportButtonsChange}
+								/>
+								<label className="font-semibold">Show mass report buttons</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="mt-6 flex flex-col gap-2">
+					<button
+						id="dmm-default"
+						className={`haptic-sm w-full rounded border-2 ${
+							isMagnetHandlerEnabled
+								? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50'
+								: 'border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50'
+						} px-4 py-2 text-sm transition-colors`}
+						onClick={() => {
+							if (
+								typeof navigator !== 'undefined' &&
+								'registerProtocolHandler' in navigator
+							) {
+								try {
+									navigator.registerProtocolHandler(
+										'magnet',
+										`${(typeof location !== 'undefined' && location.origin) || ''}/library?addMagnet=%s`
+									);
+									if (typeof localStorage !== 'undefined')
+										localStorage.setItem(
+											'settings:magnetHandlerEnabled',
+											'true'
+										);
+									setIsMagnetHandlerEnabled(true);
+								} catch (error) {
+									console.error('Error registering protocol handler:', error);
+								}
+							}
+						}}
+					>
+						{isMagnetHandlerEnabled ? (
+							<>
+								<Check className="mr-1 inline-block h-4 w-4 text-green-400" />
+								DMM is your default magnet handler
+							</>
+						) : (
+							<>
+								<Link2 className="mr-1 inline-block h-4 w-4 text-blue-400" />
+								Make DMM your default magnet handler
+							</>
+						)}
+					</button>
+
+					<div className="flex flex-col gap-2 text-xs text-gray-400">
+						<div>{getBrowserSettingsInfo().text}</div>
+						<input
+							type="text"
+							readOnly
+							className="w-full rounded bg-gray-800 px-2 py-1.5 text-gray-200"
+							value={getBrowserSettingsInfo().url}
+							onClick={(e) => (e.target as HTMLInputElement).select()}
+						/>
 					</div>
 				</div>
 			</div>

@@ -82,12 +82,26 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
 	});
 
-	it('drops the pitch once the sponsorship is linked', () => {
+	const perksList = () =>
+		screen
+			.getByText(/What a sponsorship opens \(\d+\)/)
+			.closest('details') as HTMLDetailsElement;
+
+	// The pitch is long, so it opens only on a non-sponsor's first visit.
+	it('opens the perks list on the first visit and closes it afterwards', async () => {
+		const { unmount } = render(<SponsorPanel />);
+		await waitFor(() => expect(perksList().open).toBe(true));
+		unmount();
+		render(<SponsorPanel />);
+		expect(perksList().open).toBe(false);
+	});
+
+	it('keeps the pitch collapsed once the sponsorship is linked', () => {
 		storeToken(ACTIVE);
 		storeApiKey();
 		render(<SponsorPanel />);
 
-		expect(screen.queryByRole('link', { name: 'Usenet indexer' })).toBeNull();
+		expect(perksList().open).toBe(false);
 	});
 
 	it('keeps submit disabled until a key is typed', async () => {

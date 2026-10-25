@@ -1,8 +1,8 @@
-import { useSponsor } from '@/hooks/useSponsor';
+import { SPONSOR_TOKEN_KEY, useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { Heart, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SponsorBadge } from './SponsorBadge';
 
@@ -54,6 +54,9 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 ];
 
+/** Set once the perks list has been shown open, so later visits start it closed. */
+const PERKS_SEEN_KEY = 'settings:sponsorPerksSeen';
+
 const SOURCE_LABELS: Record<string, string> = {
 	github: 'GitHub Sponsors',
 	patreon: 'Patreon',
@@ -80,6 +83,20 @@ export const SponsorPanel: FC = () => {
 	const [apiKey, setApiKey] = useState('');
 	const [busy, setBusy] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	// Closed unless this is a non-sponsor's first visit. Decided in an effect
+	// from storage directly: `isSponsor` reads false on the first render for
+	// everyone, which would open it for sponsors too.
+	const [perksOpen, setPerksOpen] = useState(false);
+
+	useEffect(() => {
+		try {
+			if (localStorage.getItem(PERKS_SEEN_KEY)) return;
+			localStorage.setItem(PERKS_SEEN_KEY, '1');
+			if (!localStorage.getItem(SPONSOR_TOKEN_KEY)) setPerksOpen(true);
+		} catch {
+			// Storage blocked: the list just starts closed.
+		}
+	}, []);
 
 	const submit = async (event: FormEvent) => {
 		event.preventDefault();
@@ -97,6 +114,32 @@ export const SponsorPanel: FC = () => {
 			setError(result.error ?? 'Could not verify that key');
 		}
 	};
+
+	const perks = (
+		<details
+			open={perksOpen}
+			onToggle={(e) => setPerksOpen(e.currentTarget.open)}
+			className="text-xs text-gray-400"
+		>
+			<summary className="cursor-pointer text-center text-gray-300">
+				What a sponsorship opens ({PERKS.length})
+			</summary>
+			<ul className="mt-2 flex list-none flex-col gap-1">
+				{PERKS.map(({ href, name, what }) => (
+					<li key={name} className="flex flex-col">
+						{href ? (
+							<Link href={href} className="text-blue-400 hover:underline">
+								{name}
+							</Link>
+						) : (
+							<span className="text-gray-300">{name}</span>
+						)}
+						<span className="text-gray-400">{what}</span>
+					</li>
+				))}
+			</ul>
+		</details>
+	);
 
 	const keyForm = (
 		<>
@@ -163,6 +206,7 @@ export const SponsorPanel: FC = () => {
 							{keyForm}
 						</form>
 					)}
+					{perks}
 					<button
 						onClick={() => {
 							disconnect();
@@ -176,23 +220,7 @@ export const SponsorPanel: FC = () => {
 				</div>
 			) : (
 				<form onSubmit={submit} className="flex flex-col gap-3">
-					<div className="text-xs text-gray-400">
-						<p className="mb-2 text-center">A sponsorship opens:</p>
-						<ul className="flex list-none flex-col gap-1">
-							{PERKS.map(({ href, name, what }) => (
-								<li key={name} className="flex flex-col">
-									{href ? (
-										<Link href={href} className="text-blue-400 hover:underline">
-											{name}
-										</Link>
-									) : (
-										<span className="text-gray-300">{name}</span>
-									)}
-									<span className="text-gray-400">{what}</span>
-								</li>
-							))}
-						</ul>
-					</div>
+					{perks}
 					<label htmlFor="dmm-api-key" className="text-center text-xs text-gray-400">
 						Already sponsoring? Paste your DMM API key to show your badge and open them
 						here.

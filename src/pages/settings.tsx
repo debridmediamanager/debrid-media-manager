@@ -1,4 +1,3 @@
-import { Logo } from '@/components/Logo';
 import { SettingsSection } from '@/components/SettingsSection';
 import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -14,16 +13,19 @@ function SettingsPage() {
 				<title>Debrid Media Manager - Settings</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
-			<Logo />
 			<Toaster position={toasterPosition()} />
-			<div className="mt-6 flex w-full max-w-md flex-col items-center gap-6">
-				<Link
-					href="/"
-					className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					<span>Back to dashboard</span>
-				</Link>
+			{/* Two columns of groups from 1024px, so the container widens there. */}
+			<div className="flex w-full max-w-md flex-col gap-4 lg:max-w-4xl">
+				<div className="flex items-center justify-between gap-2">
+					<h1 className="text-lg font-semibold text-gray-100">Settings</h1>
+					<Link
+						href="/"
+						className="inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
+					>
+						<ArrowLeft className="h-4 w-4" />
+						<span>Back to dashboard</span>
+					</Link>
+				</div>
 				<SettingsSection />
 			</div>
 		</div>

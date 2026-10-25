@@ -134,8 +134,6 @@ describe('SettingsSection', () => {
 		const { rerender } = render(<SettingsSection />);
 		const user = userEvent.setup();
 
-		expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
-
 		const movieSizeContainer = screen.getByText('Biggest movie size').closest('div')!;
 		const movieSize = within(movieSizeContainer).getByRole('combobox');
 		expect(movieSize).toHaveValue('15');
@@ -199,35 +197,34 @@ describe('SettingsSection', () => {
 		await user.click(trackerCheckbox);
 		expect(localStorage.getItem('settings:includeTrackerStats')).toBe('false');
 
-		const torrentioContainer = screen.getByText('Enable Torrentio').closest('div')!;
-		const torrentioCheckbox = within(torrentioContainer).getByRole('checkbox');
+		const torrentioCheckbox = screen.getByLabelText('Enable Torrentio');
 		expect(torrentioCheckbox).not.toBeChecked();
 		await user.click(torrentioCheckbox);
 		expect(localStorage.getItem('settings:enableTorrentio')).toBe('true');
 
-		const cometContainer = screen.getByText('Enable Comet').closest('div')!;
-		const cometCheckbox = within(cometContainer).getByRole('checkbox');
+		const cometCheckbox = screen.getByLabelText('Enable Comet');
 		expect(cometCheckbox).toBeChecked();
 		await user.click(cometCheckbox);
 		expect(localStorage.getItem('settings:enableComet')).toBe('false');
 
-		const mediaFusionContainer = screen.getByText('Enable MediaFusion').closest('div')!;
-		const mediaFusionCheckbox = within(mediaFusionContainer).getByRole('checkbox');
+		const mediaFusionCheckbox = screen.getByLabelText('Enable MediaFusion');
 		expect(mediaFusionCheckbox).not.toBeChecked();
 		await user.click(mediaFusionCheckbox);
 		expect(localStorage.getItem('settings:enableMediaFusion')).toBe('true');
 
-		const peerflixContainer = screen.getByText('Enable Peerflix').closest('div')!;
-		const peerflixCheckbox = within(peerflixContainer).getByRole('checkbox');
+		const peerflixCheckbox = screen.getByLabelText('Enable Peerflix');
 		expect(peerflixCheckbox).toBeChecked();
 		await user.click(peerflixCheckbox);
 		expect(localStorage.getItem('settings:enablePeerflix')).toBe('false');
 
-		const torrentsDbContainer = screen.getByText('Enable TorrentsDB').closest('div')!;
-		const torrentsDbCheckbox = within(torrentsDbContainer).getByRole('checkbox');
+		const torrentsDbCheckbox = screen.getByLabelText('Enable TorrentsDB');
 		expect(torrentsDbCheckbox).not.toBeChecked();
 		await user.click(torrentsDbCheckbox);
 		expect(localStorage.getItem('settings:enableTorrentsDB')).toBe('true');
+
+		// Each source's Tor route sits on the same row as the source.
+		await user.click(screen.getByLabelText('Enable Comet (Tor)'));
+		expect(localStorage.getItem('settings:enableCometTor')).toBe('true');
 	});
 
 	it('handles magnet handler registration and browser instructions for different agents', async () => {

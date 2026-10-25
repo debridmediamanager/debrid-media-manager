@@ -2,11 +2,6 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/components/Logo', () => ({
-	__esModule: true,
-	Logo: () => <div data-testid="logo" />,
-}));
-
 vi.mock('@/components/SettingsSection', () => ({
 	__esModule: true,
 	SettingsSection: () => <div data-testid="settings-section" />,
@@ -37,10 +32,10 @@ vi.mock('next/link', () => ({
 import SettingsPage from '@/pages/settings';
 
 describe('SettingsPage', () => {
-	it('renders logo, toast, settings section, and back link', () => {
+	it('renders the heading, toast, settings section, and back link', () => {
 		render(<SettingsPage />);
 
-		expect(screen.getByTestId('logo')).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
 		expect(screen.getByTestId('toaster')).toBeInTheDocument();
 		expect(screen.getByTestId('settings-section')).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /back to dashboard/i })).toHaveAttribute(
