@@ -1,6 +1,6 @@
 import { FulfillerPanel, Leaderboard } from '@/components/FulfillerPanel';
 import { useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
-import type { PublicRequest } from '@/utils/contentRequest';
+import { failureNote, type PublicRequest } from '@/utils/contentRequest';
 import {
 	cancelContentRequest,
 	fetchContentRequests,
@@ -9,6 +9,7 @@ import {
 	thankContentRequest,
 	UncachedError,
 } from '@/utils/contentRequestsApi';
+import { timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
 import {
 	CheckCircle2,
@@ -69,6 +70,35 @@ const STATUS_LABELS: Record<string, string> = {
 	stalled: 'Paused',
 };
 
+/** The movie or show page a request belongs to. */
+const titleHref = (row: PublicRequest) =>
+	row.mediaType === 'show' ? `/show/${row.imdbId}` : `/movie/${row.imdbId}`;
+
+/**
+ * A missed try because TorBox had not cached it is the commonest failure by far,
+ * and says nothing a chip cannot, so it reads in the chip instead of a line.
+ */
+const lastTryUncached = (row: PublicRequest) => row.status === 'failed' && row.error === 'uncached';
+
+/** The failure reason under a row, two lines at most with the whole text on hover. */
+function FailureLine({ error }: { error: string | null }) {
+	const note = failureNote(error);
+	if (!note) return null;
+	return (
+		<div
+			className="mt-1 line-clamp-2 text-xs break-words text-amber-200"
+			title={error ?? undefined}
+		>
+			{note}
+		</div>
+	);
+}
+
+/** Age of a request, with the exact time on hover. */
+function Age({ at }: { at: string | Date }) {
+	return <span title={new Date(at).toLocaleString()}>{timeAgo(at)}</span>;
+}
+
 /** Only these can be taken, matching `isClaimable` on the server. */
 const CLAIMABLE = new Set(['open', 'failed']);
 
@@ -111,9 +141,12 @@ function MyRequests({
 							className="flex items-start justify-between gap-2 rounded-lg border-2 border-gray-700 bg-gray-800/30 p-3"
 						>
 							<div className="min-w-0 flex-1">
-								<div className="truncate text-sm font-bold text-white">
+								<Link
+									href={titleHref(row)}
+									className="block truncate text-sm font-bold text-white hover:underline"
+								>
 									{row.title || row.hash}
-								</div>
+								</Link>
 								<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
 									<span
 										className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${style}`}
@@ -124,9 +157,11 @@ function MyRequests({
 										{row.status === 'claimed' && (
 											<Loader2 className="mr-1 h-3 w-3 animate-spin" />
 										)}
-										{MINE_LABELS[row.status] ?? row.status}
+										{lastTryUncached(row)
+											? 'Waiting. Last try: not cached'
+											: (MINE_LABELS[row.status] ?? row.status)}
 									</span>
-									<span>{new Date(row.createdAt).toLocaleString()}</span>
+									<Age at={row.createdAt} />
 									{row.status === 'claimed' && (
 										<Link
 											href="/transfers"
@@ -136,12 +171,9 @@ function MyRequests({
 										</Link>
 									)}
 								</div>
-								{(row.status === 'failed' || row.status === 'stalled') &&
-									row.error && (
-										<div className="mt-1 text-xs text-amber-200">
-											{row.error}
-										</div>
-									)}
+								{(row.status === 'failed' || row.status === 'stalled') && (
+									<FailureLine error={row.error} />
+								)}
 							</div>
 							{row.canThank && (
 								<button
@@ -447,13 +479,9 @@ export default function RequestsPage() {
 				</div>
 
 				<p className="mb-4 text-xs text-gray-400">
-					These are releases people want in their{' '}
-					<span className="text-emerald-300">Real-Debrid</span> library but cannot fetch
-					themselves. Fulfil one with your <span className="text-indigo-300">TorBox</span>{' '}
-					account and it lands in the asker&apos;s library, not yours, on your quota.
-					Every row is checked against TorBox&apos;s cache:{' '}
-					<span className="text-indigo-300">TB cached</span> means you can send it now,
-					and a release that is not on TorBox yet cannot be sent by anyone.
+					Releases people want in their{' '}
+					<span className="text-emerald-300">Real-Debrid</span>: send one with your{' '}
+					<span className="text-indigo-300">TorBox</span> quota and it lands in theirs.
 				</p>
 
 				{errorText && (
@@ -478,7 +506,7 @@ export default function RequestsPage() {
 				)}
 
 				{loaded && torboxKey && <FulfillerPanel rdKey={rdKey} tbKey={torboxKey} />}
-				{loaded && <Leaderboard />}
+				{loaded && canFulfil && <Leaderboard />}
 
 				{loaded && canFulfil && (
 					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
@@ -518,10 +546,6 @@ export default function RequestsPage() {
 								const busy = busyIds.has(row.id);
 								const claimable = CLAIMABLE.has(row.status);
 								const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
-								const href =
-									row.mediaType === 'show'
-										? `/show/${row.imdbId}`
-										: `/movie/${row.imdbId}`;
 
 								return (
 									<div
@@ -531,7 +555,12 @@ export default function RequestsPage() {
 										<div className="flex items-start justify-between gap-2">
 											<div className="min-w-0 flex-1">
 												<h2 className="truncate text-sm font-bold text-white">
-													{row.title || row.hash}
+													<Link
+														href={titleHref(row)}
+														className="hover:underline"
+													>
+														{row.title || row.hash}
+													</Link>
 												</h2>
 												<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
 													<span
@@ -543,15 +572,26 @@ export default function RequestsPage() {
 														{row.status === 'claimed' && (
 															<Loader2 className="mr-1 h-3 w-3 animate-spin" />
 														)}
-														{STATUS_LABELS[row.status] ?? row.status}
+														{lastTryUncached(row)
+															? 'Open — last try: not cached'
+															: (STATUS_LABELS[row.status] ??
+																row.status)}
 													</span>
-													{row.tbCached === true && (
-														<span className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-1.5 py-0.5 font-medium text-indigo-100">
-															TB cached
-														</span>
-													)}
+													{/* Every row is TorBox-cached while the filter is on. */}
+													{row.tbCached === true &&
+														!(canFulfil && onlyServable) && (
+															<span
+																title="You can send it now: TorBox has it cached."
+																className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-1.5 py-0.5 font-medium text-indigo-100"
+															>
+																TB cached
+															</span>
+														)}
 													{row.tbCached === false && (
-														<span className="inline-flex items-center rounded border-2 border-gray-600 bg-gray-800/30 px-1.5 py-0.5 font-medium text-gray-400">
+														<span
+															title="Nobody can send it until TorBox has it cached."
+															className="inline-flex items-center rounded border-2 border-gray-600 bg-gray-800/30 px-1.5 py-0.5 font-medium text-gray-400"
+														>
 															Not on TorBox yet
 														</span>
 													)}
@@ -565,20 +605,10 @@ export default function RequestsPage() {
 															Yours
 														</span>
 													)}
-													<Link
-														href={href}
-														className="text-indigo-300 underline hover:text-indigo-200"
-													>
-														{row.imdbId}
-													</Link>
-													<span>
-														{new Date(row.createdAt).toLocaleString()}
-													</span>
+													<Age at={row.createdAt} />
 												</div>
-												{row.status === 'failed' && row.error && (
-													<div className="mt-1 text-xs break-words whitespace-pre-wrap text-amber-200">
-														{row.error}
-													</div>
+												{row.status === 'failed' && (
+													<FailureLine error={row.error} />
 												)}
 											</div>
 											<div className="flex shrink-0 items-center gap-1">

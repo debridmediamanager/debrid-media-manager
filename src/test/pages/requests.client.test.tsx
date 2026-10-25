@@ -150,9 +150,37 @@ describe('RequestsPage rewards', () => {
 			earnedUntil: null,
 		});
 		render(<RequestsPage />);
-		expect(await screen.findByText('3 of 10 toward your next 7 days')).toBeTruthy();
+		const bar = await screen.findByRole('progressbar');
+		expect(bar.getAttribute('aria-valuenow')).toBe('3');
+		// Unlinked, the key form waits behind one button.
+		expect(screen.queryByLabelText('Show my GitHub name on the leaderboard')).toBeNull();
+		fireEvent.click(screen.getByRole('button', { name: 'Link your DMM API key to collect' }));
 		// Earned time opens DMM's perks only, never zurg or rex access.
 		expect(screen.getByText(/does not include zurg or rex access/)).toBeTruthy();
 		expect(screen.getByLabelText('Show my GitHub name on the leaderboard')).toBeTruthy();
+	});
+
+	it('folds an uncached miss into the chip and shortens noisy reasons', async () => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue(null as any);
+		const tb404 = 'TorBox reports the release cached but serves 404';
+		vi.mocked(fetchContentRequests).mockResolvedValue({
+			requests: [
+				{ ...ROW, id: 'a', status: 'failed', error: 'uncached' },
+				{ ...ROW, id: 'b', status: 'failed', error: `${tb404} for Some.Release/file.mkv` },
+			],
+			authenticated: false,
+			hasMore: false,
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText('Open — last try: not cached')).toBeTruthy();
+		expect(screen.queryByText('uncached')).toBeNull();
+		const line = screen.getByText(tb404);
+		expect(line.getAttribute('title')).toBe(`${tb404} for Some.Release/file.mkv`);
+		// The title is the link to the film; the bare IMDb id is gone.
+		expect(screen.getAllByRole('link', { name: ROW.title! })[0].getAttribute('href')).toBe(
+			`/movie/${ROW.imdbId}`
+		);
+		expect(screen.queryByText(ROW.imdbId)).toBeNull();
 	});
 });

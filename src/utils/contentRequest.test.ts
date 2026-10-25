@@ -1,5 +1,6 @@
 import {
 	canClaim,
+	failureNote,
 	isClaimable,
 	normalizeHash,
 	normalizeImdbId,
@@ -298,5 +299,27 @@ describe('failure reasons on the board', () => {
 
 	it('has no reason for a row that never failed', () => {
 		expect(toPublicRequest(failed, null).error).toBeNull();
+	});
+});
+
+// Every reason the board has stored, as the board's failure line renders it.
+describe('failureNote', () => {
+	it.each([
+		['uncached', null],
+		[
+			"AllDebrid NO_SERVER: Servers are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.",
+			null,
+		],
+		[storedErrors[0], 'Could not fetch the .torrent file'],
+		[
+			'TorBox reports the release cached but serves 404 for Resident Dead (2026) [1080p] [WEBRip] [5.1] [YTS.GG - YTS.BZ]/Resident.Dead.2026.1080p.WEBRip.x264.AAC5.1-[YTS.GG - YTS.BZ].mp4',
+			'TorBox reports the release cached but serves 404',
+		],
+		['job limit reached', 'job limit reached'],
+		[null, null],
+	])('%s', (error, note) => expect(failureNote(error)).toBe(note));
+
+	it('rewrites only the four noisy shapes in the stored corpus', () => {
+		expect(storedErrors.filter((e) => failureNote(e) !== e)).toHaveLength(4);
 	});
 });

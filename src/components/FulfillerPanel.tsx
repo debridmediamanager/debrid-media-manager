@@ -48,6 +48,13 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 	if (!stats) return null;
 
 	const toward = stats.credited % stats.sendsPerBlock;
+	const scope = (
+		<>
+			{' '}
+			like Torznab and Newznab. It does not include zurg or rex access. One send per asker per
+			day counts.
+		</>
+	);
 	const pct = Math.round((toward / stats.sendsPerBlock) * 100);
 
 	const submit = async (event: FormEvent) => {
@@ -94,9 +101,8 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 				Every {stats.sendsPerBlock} sends earn {stats.daysPerBlock} days of DMM{' '}
 				<Link href="/settings" className="text-pink-300 underline hover:text-pink-200">
 					sponsor perks
-				</Link>{' '}
-				like Torznab and Newznab. It does not include zurg or rex access. One send per asker
-				per day counts.
+				</Link>
+				{stats.linked ? scope : '.'}
 			</div>
 			<div
 				className="h-2 w-full overflow-hidden rounded bg-gray-700"
@@ -108,11 +114,21 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 			>
 				<div className="h-full bg-pink-500" style={{ width: `${pct}%` }} />
 			</div>
-			<div className="mt-1 text-gray-400">
-				{toward} of {stats.sendsPerBlock} toward your next {stats.daysPerBlock} days
-			</div>
+			{/* Unlinked, the bar alone says it; the count stays in aria-valuenow. */}
+			{stats.linked && (
+				<div className="mt-1 text-gray-400">
+					{toward} of {stats.sendsPerBlock} toward your next {stats.daysPerBlock} days
+				</div>
+			)}
 
-			{stats.linked && !editing ? (
+			{!stats.linked && !editing ? (
+				<button
+					onClick={() => setEditing(true)}
+					className="haptic-sm mt-2 rounded border-2 border-pink-500 bg-pink-900/30 px-3 py-1.5 text-pink-100 transition-colors hover:bg-pink-800/50"
+				>
+					Link your DMM API key to collect
+				</button>
+			) : stats.linked && !editing ? (
 				<div className="mt-2 text-gray-400">
 					Linked to your DMM account
 					{stats.showName ? ', shown by name on the leaderboard' : ''}.{' '}
@@ -125,6 +141,7 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 				</div>
 			) : (
 				<form onSubmit={submit} className="mt-2 flex flex-col gap-2">
+					{!stats.linked && <div>Perks are DMM&apos;s own,{scope}</div>}
 					<label htmlFor="fulfiller-api-key">
 						{stats.linked ? 'Link again' : 'To collect, paste your DMM API key'}. No
 						sponsorship needed: sign in at{' '}
@@ -177,7 +194,7 @@ function Board({ title, rows }: { title: string; rows: LeaderboardEntry[] }) {
 				<div className="text-gray-500">Nobody yet. Be the first.</div>
 			) : (
 				<ol className="list-none">
-					{rows.map((row, i) => (
+					{rows.slice(0, 3).map((row, i) => (
 						<li key={i} className="flex justify-between gap-2">
 							<span className="truncate">
 								{i + 1}.{' '}

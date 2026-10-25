@@ -246,6 +246,21 @@ export function publicError(error: string | null | undefined): string | null {
 }
 
 /**
+ * The failure line a row shows under its status, or null when it shows none.
+ * `uncached` is folded into the status chip instead (the page tests for it),
+ * and AllDebrid's NO_SERVER is history: AD was withdrawn as a source on
+ * 2026-09-01, so a stale reason about it tells nobody anything they can act on.
+ * The rest are shortened to what a fulfiller can judge a retry by.
+ */
+export function failureNote(error: string | null | undefined): string | null {
+	if (!error || error === 'uncached' || /^AllDebrid NO_SERVER\b/.test(error)) return null;
+	if (/^All torrent sources failed\b/.test(error)) return 'Could not fetch the .torrent file';
+	const tb404 = 'TorBox reports the release cached but serves 404';
+	if (error.startsWith(`${tb404} for `)) return tb404;
+	return error;
+}
+
+/**
  * Strip a row down to what a stranger may see.
  *
  * `requesterId` and `fulfillerId` never cross the wire. They are stable HMACs
