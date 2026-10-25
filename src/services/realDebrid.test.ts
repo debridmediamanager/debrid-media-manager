@@ -67,6 +67,25 @@ describe('getToken caching', () => {
 		expect(genericAxios.post).toHaveBeenCalledTimes(1);
 	});
 
+	// Real-Debrid keeps the client id when a member signs in again and only
+	// mints a new refresh token: the dead mark refused that new sign-in for an
+	// hour on every replica (client QCU333 in dmm-01's logs, 2026-10-25).
+	it('tries a new refresh token for a client whose old one was refused', async () => {
+		const error403 = new Error('Forbidden');
+		(error403 as any).response = { status: 403 };
+		genericAxios.post.mockRejectedValueOnce(error403).mockResolvedValueOnce({
+			data: { access_token: 'signed-in-again', expires_in: 3600 },
+			status: 200,
+		});
+
+		await expect(getToken('resigned-cid', 'secret', 'old-refresh')).rejects.toThrow(
+			RdTokenExpiredError
+		);
+		const result = await getToken('resigned-cid', 'secret', 'new-refresh');
+		expect(result.access_token).toBe('signed-in-again');
+		expect(genericAxios.post).toHaveBeenCalledTimes(2);
+	});
+
 	it('clears cache on non-403 errors so next request retries', async () => {
 		genericAxios.post.mockRejectedValueOnce(new Error('Network error')).mockResolvedValueOnce({
 			data: { access_token: 'recovered', expires_in: 3600 },

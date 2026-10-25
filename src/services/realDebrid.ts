@@ -183,7 +183,7 @@ export function rdAddPauseRemainingMs(token: string): number {
  */
 export async function waitOutRdAddPause(token: string): Promise<number> {
 	const started = Date.now();
-	for (let remaining = rdAddPauseRemainingMs(token); remaining > 0; ) {
+	for (let remaining = rdAddPauseRemainingMs(token); remaining > 0;) {
 		await delayWithMessageChannel(remaining);
 		remaining = rdAddPauseRemainingMs(token);
 	}
@@ -602,10 +602,13 @@ export const getCredentials = async (deviceCode: string) => {
 };
 
 // In-memory access token cache keyed by clientId (unique per user)
-// Stores either a valid token or a 403 "dead" marker to avoid retrying revoked tokens
+// Stores either a valid token or a 403 "dead" marker to avoid retrying revoked tokens.
+// The marker names the refresh token that was refused: signing in again keeps the
+// client id and brings a new refresh token, which must not inherit the refusal.
 const accessTokenCache = new Map<
 	string,
-	{ data: AccessTokenResponse; expiresAt: number } | { dead: true; expiresAt: number }
+	| { data: AccessTokenResponse; expiresAt: number }
+	| { dead: true; refreshToken: string; expiresAt: number }
 >();
 // Dedup concurrent token requests for the same user
 const inflightTokenRequests = new Map<string, Promise<AccessTokenResponse>>();
@@ -638,8 +641,8 @@ export const getToken = async (
 	// Return cached token if still valid, or throw immediately if token is known-dead
 	const cached = accessTokenCache.get(clientId);
 	if (cached && cached.expiresAt > Date.now()) {
-		if ('dead' in cached) throw new RdTokenExpiredError(clientId);
-		return cached.data;
+		if (!('dead' in cached)) return cached.data;
+		if (cached.refreshToken === refreshToken) throw new RdTokenExpiredError(clientId);
 	}
 
 	// Dedup concurrent requests for the same user
@@ -681,6 +684,7 @@ export const getToken = async (
 				// Token revoked/expired — cache as dead for 1 hour to stop retrying
 				accessTokenCache.set(clientId, {
 					dead: true,
+					refreshToken,
 					expiresAt: Date.now() + 3600 * 1000,
 				});
 				console.error('RD token expired/revoked for client:', clientId.substring(0, 6));
