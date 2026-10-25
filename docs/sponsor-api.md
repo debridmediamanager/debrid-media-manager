@@ -204,3 +204,23 @@ not know the title.
 `POST /api/sponsor/wanted/complete` with `{"id": "<item id>"}` says the title was
 fetched. Repeating it is harmless. A film then leaves the list; a show stays on it so
 new episodes are fetched. 404 means the item is no longer on the list.
+
+## Seerr, Overseerr and Jellyseerr
+
+DMM answers as a Radarr and a Sonarr, so requests approved in Seerr land on your wanted
+list. In Seerr, Settings → Services, add a Radarr server and a Sonarr server with:
+
+| Field                         | Radarr                   | Sonarr                   |
+| ----------------------------- | ------------------------ | ------------------------ |
+| Hostname or IP                | `debridmediamanager.com` | `debridmediamanager.com` |
+| Port                          | `443`                    | `443`                    |
+| Use SSL                       | on                       | on                       |
+| API Key                       | your DMM API key         | your DMM API key         |
+| URL Base                      | `/api/arr/radarr`        | `/api/arr/sonarr`        |
+| Quality Profile / Root Folder | `Any` / `/dmm`           | `Any` / `/dmm`           |
+
+Tick Default Server and Enable Scan. A film request adds the film; a show request adds the
+seasons asked for, and once every season is asked for the show is followed whole, new seasons
+included. Deleting a title in Seerr with its file removes it from the list. Seerr's Radarr scan
+shows a film as available once zurg has fetched it; shows stay "processing" until Seerr's
+Plex or Jellyfin scan finds the episodes. Calls share 120 a minute per sponsorship.

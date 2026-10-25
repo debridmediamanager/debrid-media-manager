@@ -60,6 +60,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// fetched, and the website lists, adds and removes. Per sponsorship, both sides.
 	sponsorWanted: { name: 'sponsorWanted', rateLimit: 30, windowSeconds: 60 },
 	wanted: { name: 'wanted', rateLimit: 30, windowSeconds: 60 },
+	// Seerr talking to DMM as its Radarr and Sonarr: a download sync every minute
+	// (two calls per server), a handful per request, settings tests. Per sponsorship.
+	arr: { name: 'arr', rateLimit: 120, windowSeconds: 60 },
 	// Importing a Radarr or Sonarr backup inflates a database of up to a few hundred MB.
 	wantedImport: { name: 'wantedImport', rateLimit: 10, windowSeconds: 3600 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
