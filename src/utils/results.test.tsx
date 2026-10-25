@@ -82,6 +82,27 @@ describe('results utils', () => {
 			expect(totalFileSize(result())).toBe(0);
 		});
 
+		// Matrix "KOLEKCJA" release: scraped 51.90 GB, provider lists a 69.46 GB biggest file.
+		it('never reports less than the provider files or the biggest file', () => {
+			const gb = (n: number) => Math.round(n * 1024 * 1024 * 1024);
+			const files = [
+				{ fileId: 0, filename: 'The.Matrix.Resurrections.mkv', filesize: gb(69.46) },
+				{ fileId: 1, filename: 'The.Matrix.mkv', filesize: gb(30) },
+			];
+			expect(
+				fileSize(
+					totalFileSize(result({ fileSize: 51.9 * 1024, biggestFileSize: 69.46 * 1024 }))
+				)
+			).toBe('69.46');
+			expect(
+				fileSize(
+					totalFileSize(
+						result({ fileSize: 51.9 * 1024, files, biggestFileSize: 69.46 * 1024 })
+					)
+				)
+			).toBe('99.46');
+		});
+
 		it('tolerates a missing files array', () => {
 			expect(totalFileSize(result({ files: undefined, biggestFileSize: 512 }))).toBe(512);
 		});

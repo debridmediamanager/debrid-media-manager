@@ -13,13 +13,13 @@ export const fileSize = (size: number) => (size / 1024).toFixed(2);
 // Scraped rows and external addons sometimes report no size at all (e.g. Peerflix
 // omits the 💾 field on non-cached streams). Once a debrid availability check runs
 // we know the real per-file bytes, so fall back to those instead of showing 0.00 GB.
+// A scraped size can also be smaller than what the provider lists (a mislabelled
+// collection), so the total is never less than the files' sum or the biggest file.
 export const totalFileSize = (
 	result: Pick<SearchResult, 'fileSize' | 'files' | 'biggestFileSize'>
 ) => {
-	if (result.fileSize > 0) return result.fileSize;
 	const filesTotal = (result.files ?? []).reduce((acc, f) => acc + (f.filesize || 0), 0);
-	if (filesTotal > 0) return filesTotal / 1024 / 1024;
-	return result.biggestFileSize || 0;
+	return Math.max(result.fileSize || 0, filesTotal / 1024 / 1024, result.biggestFileSize || 0);
 };
 
 export const btnColor = (avail: boolean, noVideos: boolean) =>
