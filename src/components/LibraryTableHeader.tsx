@@ -55,36 +55,36 @@ export default function LibraryTableHeader({
 			>
 				Title ({filteredListLength}){sortIndicator('title')}
 			</th>
+			{/* The row's status sits under its size, shown only while it says something,
+			    so the one column sorts both ways. */}
 			<th
-				className={`w-20 max-w-20 min-w-20 px-1 py-2 ${sortableClass('bytes')}`}
-				onClick={() => onSort('bytes')}
-				role="button"
+				className="w-28 max-w-28 min-w-28 px-1 py-2 text-gray-300"
 				aria-sort={
-					sortBy.column === 'bytes'
+					sortBy.column === 'bytes' || sortBy.column === 'progress'
 						? sortBy.direction === 'asc'
 							? 'ascending'
 							: 'descending'
 						: 'none'
 				}
 			>
-				Size{sortIndicator('bytes')}
+				<span
+					className={sortableClass('bytes')}
+					onClick={() => onSort('bytes')}
+					role="button"
+				>
+					Size{sortIndicator('bytes')}
+				</span>
+				{' · '}
+				<span
+					className={sortableClass('progress')}
+					onClick={() => onSort('progress')}
+					role="button"
+				>
+					Status{sortIndicator('progress')}
+				</span>
 			</th>
 			<th
-				className={`w-20 max-w-20 min-w-20 px-1 py-2 ${sortableClass('progress')}`}
-				onClick={() => onSort('progress')}
-				role="button"
-				aria-sort={
-					sortBy.column === 'progress'
-						? sortBy.direction === 'asc'
-							? 'ascending'
-							: 'descending'
-						: 'none'
-				}
-			>
-				Status{sortIndicator('progress')}
-			</th>
-			<th
-				className={`w-24 max-w-28 min-w-24 px-1 py-2 ${sortableClass('added')}`}
+				className={`w-20 max-w-20 min-w-20 px-1 py-2 ${sortableClass('added')}`}
 				onClick={() => onSort('added')}
 				role="button"
 				aria-sort={

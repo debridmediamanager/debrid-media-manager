@@ -159,12 +159,13 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(container.querySelector('button[title="Cast (PM)"]')).toBeInTheDocument();
 		});
 
-		// Measured at 390px: the bare 16px icons were too small to hit on a phone.
+		// Measured at 390px: the bare 16px icons were too small to hit on a phone;
+		// 10px padding keeps a 36px target and fits the row's size and date beside them.
 		it('gives every row action a finger-sized target on phones', () => {
 			const { container } = render(<LibraryTorrentRow {...pmProps()} />);
 			const actions = container.querySelectorAll('td button[title]');
 			expect(actions.length).toBeGreaterThan(0);
-			actions.forEach((b) => expect(b).toHaveClass('p-3', 'sm:p-0'));
+			actions.forEach((b) => expect(b).toHaveClass('p-2.5', 'sm:p-0'));
 		});
 
 		// A row whose transfer record was cleared reports no info hash, and
@@ -676,8 +677,40 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			// Check file size (approx 1GB in GiB units)
 			expect(screen.getByText('0.9 GB')).toBeInTheDocument();
 
-			// Check status for finished torrent
-			expect(screen.getByText('Downloaded')).toBeInTheDocument();
+			// The provider's own "done" word is on nearly every row, so it is left out
+			expect(screen.queryByText('Downloaded')).toBeNull();
+		});
+
+		it('still names a finished status that is not the done word', () => {
+			const { container } = render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					rdKey={null}
+					tbKey="test-tb-key"
+					torrent={{ ...mockTorrent, id: 'tb:1', serviceStatus: 'expired' }}
+				/>
+			);
+			expect(container.textContent).toContain('expired');
+		});
+
+		it('names the provider status of a transfer that has not started', () => {
+			render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					rdKey={null}
+					tbKey="test-tb-key"
+					torrent={{
+						...mockTorrent,
+						id: 'tb:1',
+						status: UserTorrentStatus.waiting,
+						serviceStatus: 'queued',
+						progress: 0,
+						speed: 0,
+					}}
+				/>
+			);
+			expect(screen.getByText('Queued')).toBeInTheDocument();
+			expect(screen.queryByText(/0\.00%/)).toBeNull();
 		});
 
 		// A TorBox row still checking reported a negative size, shown as "-0.0 GB".
@@ -700,6 +733,53 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			);
 			expect(container.textContent).not.toContain('-0.0 GB');
 			expect(screen.getByText(/^0\.0 GB/)).toBeInTheDocument();
+		});
+
+		it('reads an unnamed magnet as "Magnet", not its hash', () => {
+			const hash = 'a'.repeat(40);
+			const { container } = render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					torrent={{
+						...mockTorrent,
+						hash,
+						filename: hash,
+						title: hash,
+						status: UserTorrentStatus.downloading,
+						serviceStatus: 'magnet_conversion',
+						progress: 0,
+						speed: 0,
+					}}
+				/>
+			);
+			expect(container.textContent).not.toContain(hash);
+			expect(screen.getByText('Magnet')).toBeInTheDocument();
+			expect(screen.getByText('Converting Magnet')).toBeInTheDocument();
+		});
+
+		it('hides the filename line when it only repeats the title', () => {
+			const { container } = render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					torrent={{
+						...mockTorrent,
+						title: 'Big Buck Bunny',
+						filename: 'Big Buck Bunny',
+					}}
+				/>
+			);
+			expect(container.textContent!.match(/Big Buck Bunny/g)).toHaveLength(1);
+		});
+
+		it('shows the added date short, with the full UTC timestamp in its title', () => {
+			render(
+				<LibraryTorrentRow
+					{...defaultProps}
+					torrent={{ ...mockTorrent, added: new Date('2024-10-15T03:39:54Z') }}
+				/>
+			);
+			const cell = screen.getByText(/Oct 15, 2024/);
+			expect(cell).toHaveAttribute('title', expect.stringMatching(/UTC$/));
 		});
 
 		it('should show progress for downloading torrents', () => {

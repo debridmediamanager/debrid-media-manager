@@ -38,6 +38,7 @@ import {
 	Loader2,
 	Plus,
 	RefreshCw,
+	Search,
 	Send,
 	Share2,
 	Trash2,
@@ -45,12 +46,24 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { memo, useState } from 'react';
+import { memo, ReactNode, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { CastSearchModal } from './CastSearchModal';
 import ImdbPickerModal, { ImdbPick } from './ImdbPickerModal';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
+
+// What each provider calls a finished, playable torrent.
+const DONE_STATUS_TEXTS = new Set(['Downloaded', 'Ready', 'cached', 'Finished', 'completed']);
+
+// "The.Movie.2020.mkv" and "The Movie (2020)" name the same thing
+const normalizeName = (name: string) =>
+	name
+		.replace(/ ➡️ .*$/, '')
+		.toLowerCase()
+		.replace(/\.(mkv|mp4|avi)$/, '')
+		.replace(/\((\d{4})\)/, '$1')
+		.replace(/[^a-z0-9]+/g, '');
 
 interface TorrentRowProps {
 	torrent: UserTorrent;
@@ -415,6 +428,69 @@ function TorrentRow({
 		}
 	}
 
+	const hashChip = hashFilterText ? (
+		<Link
+			href={`/library?hash=${torrent.hash}&page=1`}
+			className="ml-1 inline-block cursor-pointer rounded border-2 border-orange-500 bg-orange-900/30 px-1 py-0 text-xs font-bold text-orange-100 transition-colors hover:bg-orange-800/50"
+			onClick={(e) => e.stopPropagation()}
+		>
+			{hashFilterText}
+		</Link>
+	) : null;
+
+	// A magnet the provider has not named yet reports its hash as the filename;
+	// the hash as a title says nothing, so the row reads "Magnet" like the others.
+	const isMagnetRow =
+		['Invalid Magnet', 'Magnet', 'noname'].includes(torrent.filename) ||
+		torrent.filename === torrent.hash;
+	const displayTitle = identification
+		? `${identification.title}${identification.year ? ` (${identification.year})` : ''}${
+				// a show's parsed title ends in the seasons it holds: "Title ➡️ S01"
+				torrent.title.includes(' ➡️ ')
+					? torrent.title.slice(torrent.title.indexOf(' ➡️ '))
+					: ''
+			}`
+		: torrent.title;
+	const filenameIsTitle = normalizeName(torrent.filename) === normalizeName(displayTitle);
+	const multipleServices = [rdKey, adKey, tbKey, pmKey, ocKey, dlKey].filter(Boolean).length > 1;
+
+	// The provider's own word for "done" is on nearly every row and says nothing;
+	// anything else (expired, stalled, an error, a transfer under way) is shown.
+	const statusText = getStatusText(torrent);
+	const progress = torrent.progress ?? 0;
+	let statusLine: ReactNode = null;
+	if (
+		torrent.status !== UserTorrentStatus.finished &&
+		torrent.status !== UserTorrentStatus.error
+	) {
+		statusLine =
+			progress > 0 || torrent.speed > 0 ? (
+				<>
+					<span className="inline-block align-middle">{progress.toFixed(2)}%&nbsp;</span>
+					{torrent.speed > 0 ? (
+						<>
+							<span className="inline-block align-middle">
+								<Leaf className="inline-block h-4 w-4 text-green-500" />
+							</span>
+							<span className="mr-1 inline-block align-middle">
+								{torrent.seeders}
+							</span>
+							<span className="inline-block align-middle">
+								{shortenNumber(torrent.speed)}B/s
+							</span>
+						</>
+					) : (
+						<span className="inline-block align-middle">{statusText}</span>
+					)}
+				</>
+			) : (
+				statusText
+			);
+	} else if (torrent.status === UserTorrentStatus.error || !DONE_STATUS_TEXTS.has(statusText)) {
+		statusLine = statusText;
+	}
+	const added = new Date(torrent.added);
+
 	return (
 		<>
 			{/* Below lg the row is a card: title and filename take the full width beside
@@ -438,7 +514,12 @@ function TorrentRow({
 					onClick={() => onShowInfo(torrent)}
 					className="truncate px-0.5 py-1 text-sm max-lg:grow max-lg:basis-[calc(100%-2rem)] max-lg:[overflow-wrap:anywhere] max-lg:whitespace-normal lg:max-w-0"
 				>
-					{!['Invalid Magnet', 'Magnet', 'noname'].includes(torrent.filename) && (
+					{isMagnetRow ? (
+						<>
+							{torrent.filename === torrent.hash ? 'Magnet' : torrent.filename}
+							{hashChip}
+						</>
+					) : (
 						<>
 							<div
 								className="inline-block cursor-pointer"
@@ -462,32 +543,50 @@ function TorrentRow({
 							&nbsp;
 							{identification ? (
 								<strong>
-									{identification.title}
-									{identification.year ? ` (${identification.year})` : ''}
-									{/* a show's parsed title ends in the seasons it holds: "Title ➡️ S01" */}
-									{torrent.title.includes(' ➡️ ')
-										? torrent.title.slice(torrent.title.indexOf(' ➡️ '))
-										: ''}
-									<BadgeCheck
-										className="ml-1 inline-block h-4 w-4 align-text-bottom text-sky-400"
-										aria-label={`Verified: identified from the filename as ${identification.imdbId}`}
+									{displayTitle}
+									{/* the no-break space keeps the badge on the title's last line */}
+									{'\u00a0'}
+									<Link
+										href={`/${identification.kind === 'tv' ? 'show' : 'movie'}/${identification.imdbId}`}
+										target="_blank"
+										aria-label={`Go to ${identification.kind === 'tv' ? 'show' : 'movie'} page`}
+										title={`Verified: identified from the filename as ${identification.imdbId}. Open the ${identification.kind === 'tv' ? 'show' : 'movie'} page`}
+										className="inline-block align-text-bottom"
+										onClick={(e) => e.stopPropagation()}
 									>
-										<title>{`Verified: identified from the filename as ${identification.imdbId}`}</title>
-									</BadgeCheck>
+										<BadgeCheck
+											className="inline-block h-4 w-4 text-sky-400 hover:text-sky-300"
+											aria-label={`Verified: identified from the filename as ${identification.imdbId}`}
+										/>
+									</Link>
 								</strong>
 							) : (
 								<strong>{torrent.title}</strong>
+							)}
+							{!identification && torrent.info && (
+								<>
+									{/* glued to the title so the icon never wraps onto a line alone */}
+									{'\u00a0'}
+									<Link
+										href={`/search?query=${encodeURIComponent(
+											(
+												torrent.info.title +
+												' ' +
+												(torrent.info.year || '')
+											).trim() || torrent.title
+										)}`}
+										target="_blank"
+										aria-label="Search again"
+										title="Search again"
+										className="inline-block align-text-bottom text-blue-400 hover:text-blue-300"
+										onClick={(e) => e.stopPropagation()}
+									>
+										<Search className="h-4 w-4" />
+									</Link>
+								</>
 							)}{' '}
-							{hashFilterText ? (
-								<Link
-									href={`/library?hash=${torrent.hash}&page=1`}
-									className="ml-1 inline-block cursor-pointer rounded border-2 border-orange-500 bg-orange-900/30 px-1 py-0 text-xs font-bold text-orange-100 transition-colors hover:bg-orange-800/50"
-									onClick={(e) => e.stopPropagation()}
-								>
-									{hashFilterText}
-								</Link>
-							) : (
-								titleFilterText && (
+							{hashChip ||
+								(titleFilterText && (
 									<Link
 										href={`/library?title=${encodeURIComponent(titleKey)}&page=1`}
 										className="ml-1 inline-block cursor-pointer rounded border-2 border-amber-500 bg-amber-900/30 px-1 py-0 text-xs font-bold text-amber-100 transition-colors hover:bg-amber-800/50"
@@ -495,8 +594,7 @@ function TorrentRow({
 									>
 										{titleFilterText}
 									</Link>
-								)
-							)}
+								))}
 							{tvTitleFilterText && tvTitleKey !== undefined && (
 								<Link
 									href={`/library?tvTitle=${encodeURIComponent(tvTitleKey)}&page=1`}
@@ -506,83 +604,49 @@ function TorrentRow({
 									{tvTitleFilterText}
 								</Link>
 							)}
-							{(identification || torrent.info) && (
-								<Link
-									href={
-										identification
-											? `/${identification.kind === 'tv' ? 'show' : 'movie'}/${identification.imdbId}`
-											: `/search?query=${encodeURIComponent(
-													(
-														torrent.info!.title +
-														' ' +
-														(torrent.info!.year || '')
-													).trim() || torrent.title
-												)}`
-									}
-									target="_blank"
-									className="mr-2 ml-1 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs font-bold text-blue-100 transition-colors hover:bg-blue-800/50"
-									onClick={(e) => e.stopPropagation()}
-								>
-									{identification
-										? `Go to ${identification.kind === 'tv' ? 'show' : 'movie'} page`
-										: 'Search again'}
-								</Link>
+							{!filenameIsTitle && (
+								<>
+									<br />
+									{torrent.filename}
+								</>
 							)}
-							<br />
 						</>
 					)}
-					{[rdKey, adKey, tbKey, pmKey, ocKey, dlKey].filter(Boolean).length > 1 &&
-						torrentPrefix(torrent.id)}{' '}
-					{torrent.filename === torrent.hash ? 'Magnet' : torrent.filename}
-					{torrent.filename === torrent.hash ||
-					torrent.filename === 'Magnet' ||
-					torrent.status === UserTorrentStatus.error
-						? ` (${getStatusText(torrent)})`
-						: ''}
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
 					className="px-0.5 py-1 text-center text-xs max-lg:ml-8 max-lg:pr-3"
 				>
+					{multipleServices && (
+						<span className="mr-1 inline-block">{torrentPrefix(torrent.id)}</span>
+					)}
 					{(Math.max(0, torrent.bytes) / ONE_GIGABYTE).toFixed(1)} GB
-				</td>
-				<td
-					onClick={() => onShowInfo(torrent)}
-					className="px-0.5 py-1 text-center text-xs max-lg:pr-3"
-				>
-					{torrent.status !== UserTorrentStatus.finished &&
-					torrent.status !== UserTorrentStatus.error ? (
-						<>
-							<span className="inline-block align-middle">
-								{(torrent.progress ?? 0).toFixed(2)}%&nbsp;
-							</span>
-							<span className="inline-block align-middle">
-								<Leaf className="inline-block h-4 w-4 text-green-500" />
-							</span>
-							<span className="inline-block align-middle">{torrent.seeders}</span>
-							<br />
-							<span className="inline-block align-middle">
-								{shortenNumber(torrent.speed)}B/s
-							</span>
-						</>
-					) : (
-						getStatusText(torrent)
+					{statusLine && (
+						<span className="whitespace-nowrap max-lg:ml-3 lg:block">{statusLine}</span>
 					)}
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="px-0.5 py-1 text-center text-xs max-lg:pr-3"
+					className="px-0.5 py-1 text-center text-xs whitespace-nowrap max-lg:pr-3"
+					title={`${added.toLocaleString(undefined, { timeZone: 'UTC' })} UTC`}
 				>
-					{new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' })}
+					{added.toLocaleDateString(undefined, {
+						timeZone: 'UTC',
+						month: 'short',
+						day: 'numeric',
+						...(added.getUTCFullYear() !== new Date().getUTCFullYear() && {
+							year: 'numeric',
+						}),
+					})}
 				</td>
 				<td
 					onClick={() => onShowInfo(torrent)}
-					className="flex place-content-center px-0.5 py-1 max-lg:ml-auto"
+					className="flex place-content-center px-0.5 py-1 max-lg:ml-auto max-lg:py-0"
 				>
 					{rdKey && torrent.id.startsWith('rd:') && (
 						<button
 							title="Cast (RD)"
-							className="cursor-pointer p-3 text-green-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-green-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleCastClick();
@@ -595,7 +659,7 @@ function TorrentRow({
 					{adKey && torrent.id.startsWith('ad:') && (
 						<button
 							title="Cast (AD)"
-							className="cursor-pointer p-3 text-purple-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-purple-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleAdCastClick();
@@ -608,7 +672,7 @@ function TorrentRow({
 					{tbKey && torrent.id.startsWith('tb:') && (
 						<button
 							title="Cast (TB)"
-							className="cursor-pointer p-3 text-cyan-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-cyan-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleTbCastClick();
@@ -621,7 +685,7 @@ function TorrentRow({
 					{pmKey && torrent.id.startsWith('pm:') && torrent.hash && (
 						<button
 							title="Cast (PM)"
-							className="cursor-pointer p-3 text-yellow-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-yellow-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handlePmCastClick();
@@ -634,7 +698,7 @@ function TorrentRow({
 					{ocKey && torrent.id.startsWith('oc:') && torrent.hash && (
 						<button
 							title="Cast (OC)"
-							className="cursor-pointer p-3 text-orange-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-orange-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleOcCastClick();
@@ -647,7 +711,7 @@ function TorrentRow({
 					{dlKey && torrent.id.startsWith('dl:') && torrent.hash && (
 						<button
 							title="Cast (DL)"
-							className="cursor-pointer p-3 text-sky-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-sky-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								handleDlCastClick();
@@ -660,7 +724,7 @@ function TorrentRow({
 					{canSendToRd && (
 						<button
 							title="Send to Real-Debrid"
-							className="cursor-pointer p-3 text-indigo-400 disabled:opacity-50 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-indigo-400 disabled:opacity-50 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								setShowSendModal(true);
@@ -677,7 +741,7 @@ function TorrentRow({
 					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Share"
-							className="cursor-pointer p-3 text-indigo-600 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-indigo-600 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={async (e) => {
 								e.stopPropagation();
 								router.push(await handleShare(torrent));
@@ -688,7 +752,7 @@ function TorrentRow({
 					)}
 					<button
 						title="Delete"
-						className="cursor-pointer p-3 text-red-500 sm:mr-2 sm:mb-2 sm:p-0"
+						className="cursor-pointer p-2.5 text-red-500 sm:mr-2 sm:p-0 lg:mb-2"
 						onClick={async (e) => {
 							e.stopPropagation();
 							let success = false;
@@ -722,7 +786,7 @@ function TorrentRow({
 					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Copy magnet url"
-							className="cursor-pointer p-3 text-pink-500 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-pink-500 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={(e) => {
 								e.stopPropagation();
 								void handleCopyOrDownloadMagnet(
@@ -737,7 +801,7 @@ function TorrentRow({
 					{canReinsert(torrent) && (
 						<button
 							title="Reinsert"
-							className="cursor-pointer p-3 text-green-500 sm:mr-2 sm:mb-2 sm:p-0"
+							className="cursor-pointer p-2.5 text-green-500 sm:mr-2 sm:p-0 lg:mb-2"
 							onClick={async (e) => {
 								e.stopPropagation();
 								try {
