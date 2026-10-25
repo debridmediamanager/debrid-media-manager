@@ -323,21 +323,30 @@ export default function TransfersPage() {
 							href="/"
 							className="haptic-sm rounded border-2 border-cyan-500 bg-cyan-900/30 p-2 text-cyan-100 transition-colors hover:bg-cyan-800/50"
 							title="Go Home"
+							aria-label="Go Home"
 						>
 							<Home className="h-4 w-4" />
 						</Link>
 					</div>
 				</div>
 
-				<p className="mb-4 text-xs text-gray-400">
-					Transfers put content into your Real-Debrid library, sourced from{' '}
-					<span className="text-indigo-300">TorBox</span> or{' '}
-					<span className="text-amber-300">Usenet</span>. The first tag on each row is
-					where its bytes came from — a TorBox transfer shows{' '}
-					<span className="text-slate-300">Cache</span> until the service records its
-					source. Every transfer on your Real-Debrid account is listed here, newest first,
-					whichever device started it. Active jobs refresh every {POLL_MS / 1000}s.
-				</p>
+				{/* Open until there are transfers to show; after that it is one line. */}
+				<details
+					className="mb-3 text-xs text-gray-400"
+					open={!loaded || transfers.length === 0}
+				>
+					<summary className="cursor-pointer select-none">About transfers</summary>
+					<p className="mt-1">
+						Transfers put content into your Real-Debrid library, sourced from{' '}
+						<span className="text-indigo-300">TorBox</span> or{' '}
+						<span className="text-amber-300">Usenet</span>. The first tag on each row is
+						where its bytes came from — a TorBox transfer shows{' '}
+						<span className="text-slate-300">Cache</span> until the service records its
+						source. Every transfer on your Real-Debrid account is listed here, newest
+						first, whichever device started it. Active jobs refresh every{' '}
+						{POLL_MS / 1000}s.
+					</p>
+				</details>
 
 				{degraded.length > 0 && (
 					<div className="mb-3 flex items-start gap-2 rounded border-2 border-yellow-600 bg-yellow-900/20 p-3 text-xs text-yellow-200">
@@ -443,45 +452,42 @@ export default function TransfersPage() {
 													{new Date(t.createdAt).toLocaleString()}
 												</span>
 											</div>
-											{progress.percent !== null && (
-												<div className="mt-2">
-													<div className="mb-1 flex items-center justify-between text-[11px] text-gray-400">
-														<span>
-															{progress.step !== null
-																? `Step ${progress.step} of ${progress.totalSteps} — ${progress.label}`
-																: progress.label}
-															{progress.detail && (
-																<span className="text-indigo-300">
-																	{' · '}
-																	{progress.detail}
-																</span>
-															)}
-														</span>
-														<span className="tabular-nums">
-															{progress.percent}%
-														</span>
-													</div>
-													<div
-														className="h-1.5 w-full overflow-hidden rounded bg-gray-700"
-														role="progressbar"
-														aria-valuenow={progress.percent}
-														aria-valuemin={0}
-														aria-valuemax={100}
-														aria-label={progress.label}
-													>
+											{progress.percent !== null &&
+												progress.phase !== 'completed' && (
+													<div className="mt-2">
+														<div className="mb-1 flex items-center justify-between text-[11px] text-gray-400">
+															<span>
+																{progress.step !== null
+																	? `Step ${progress.step} of ${progress.totalSteps} — ${progress.label}`
+																	: progress.label}
+																{progress.detail && (
+																	<span className="text-indigo-300">
+																		{' · '}
+																		{progress.detail}
+																	</span>
+																)}
+															</span>
+															<span className="tabular-nums">
+																{progress.percent}%
+															</span>
+														</div>
 														<div
-															className={`h-full rounded transition-all duration-500 ${
-																progress.phase === 'completed'
-																	? 'bg-green-500'
-																	: 'bg-indigo-500'
-															}`}
-															style={{
-																width: `${progress.percent}%`,
-															}}
-														/>
+															className="h-1.5 w-full overflow-hidden rounded bg-gray-700"
+															role="progressbar"
+															aria-valuenow={progress.percent}
+															aria-valuemin={0}
+															aria-valuemax={100}
+															aria-label={progress.label}
+														>
+															<div
+																className="h-full rounded bg-indigo-500 transition-all duration-500"
+																style={{
+																	width: `${progress.percent}%`,
+																}}
+															/>
+														</div>
 													</div>
-												</div>
-											)}
+												)}
 											{t.status_message && !terminal && (
 												<div className="mt-1 text-xs text-gray-300">
 													{t.status_message}

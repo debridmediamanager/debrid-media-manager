@@ -118,6 +118,16 @@ describe('Transfers page listing', () => {
 		expect(container.textContent).not.toMatch(/AllDebrid/);
 	});
 
+	// The green Completed chip already says it; a full bar under it repeated it,
+	// and the intro paragraph pushed the list down on every visit.
+	it('folds the intro and drops the progress bar of a completed transfer', async () => {
+		const { container } = render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('Tracked Movie')).toBeInTheDocument());
+		expect(container.querySelector('details')).not.toHaveAttribute('open');
+		expect(screen.queryByRole('progressbar')).toBeNull();
+	});
+
 	it('shows a transfer this browser never started', async () => {
 		// An *arr job pushed into nzb2rd, or one started on another device. There
 		// is no localStorage entry for it, and it still belongs on the page.
