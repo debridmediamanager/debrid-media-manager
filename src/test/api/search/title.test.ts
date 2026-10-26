@@ -1,4 +1,4 @@
-import handler from '@/pages/api/search/title';
+import handler, { clearTitleSearchMemo } from '@/pages/api/search/title';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -18,6 +18,18 @@ vi.mock('@/services/repository', () => ({
 describe('/api/search/title', () => {
 	beforeEach(() => {
 		searchImdbTitlesMock.mockReset();
+		clearTitleSearchMemo();
+	});
+
+	it('asks the database once for a title asked again', async () => {
+		// keyless zurgs place whole libraries by name: the same title arrives from every install
+		searchImdbTitlesMock.mockResolvedValue([]);
+		for (const keyword of ['Severance 2022', 'severance  2022']) {
+			const res = createMockResponse();
+			await handler(createMockRequest({ query: { keyword } }), res);
+			expect(res.status).toHaveBeenCalledWith(200);
+		}
+		expect(searchImdbTitlesMock).toHaveBeenCalledTimes(1);
 	});
 
 	it('returns 400 when keyword is missing', async () => {

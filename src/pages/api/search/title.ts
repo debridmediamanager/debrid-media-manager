@@ -1,7 +1,54 @@
 import { repository as db } from '@/services/repository';
 import { distance } from 'fastest-levenshtein';
+import Redis from 'ioredis';
 import _ from 'lodash';
 import { NextApiHandler } from 'next';
+
+// Every zurg without a sponsor key places its library by name through this route, so the same
+// titles arrive from many installs, and a miss costs dmmdb seconds. The IMDb tables are
+// re-imported daily: a half-day memo of the query's answer, Redis-backed and shared by the
+// Swarm's replicas, in memory when Redis is down.
+const MEMO_TTL_SECONDS = 12 * 60 * 60;
+const MEMO_MEMORY_MAX = 20_000;
+const memoMemory = new Map<string, { expiresAt: number; value: string }>();
+let memoRedis: Redis | null = null;
+let memoRedisAvailable = true;
+
+function memoClient(): Redis | null {
+	if (memoRedis) return memoRedis;
+	if (!process.env.REDIS_URL || !memoRedisAvailable) return null;
+	memoRedis = new Redis(process.env.REDIS_URL, {
+		maxRetriesPerRequest: 1,
+		retryStrategy: () => null,
+		connectTimeout: 2000,
+		commandTimeout: 1000,
+		lazyConnect: true,
+	});
+	memoRedis.on('error', () => {
+		memoRedisAvailable = false;
+	});
+	return memoRedis;
+}
+
+async function memoized<T>(key: string, load: () => Promise<T>): Promise<T> {
+	const now = Date.now();
+	const local = memoMemory.get(key);
+	if (local && local.expiresAt > now) return JSON.parse(local.value);
+	const redis = memoClient();
+	const shared = redis ? await redis.get(key).catch(() => null) : null;
+	if (shared !== null) return JSON.parse(shared);
+	const value = await load();
+	const text = JSON.stringify(value);
+	if (memoMemory.size >= MEMO_MEMORY_MAX) memoMemory.clear();
+	memoMemory.set(key, { expiresAt: now + MEMO_TTL_SECONDS * 1000, value: text });
+	if (redis) await redis.set(key, text, 'EX', MEMO_TTL_SECONDS).catch(() => undefined);
+	return value;
+}
+
+/** Forget the memo; tests only. */
+export function clearTitleSearchMemo() {
+	memoMemory.clear();
+}
 
 export type SearchResult = {
 	id: string;
@@ -109,11 +156,15 @@ const handler: NextApiHandler = async (req, res) => {
 		const normalizedQuery = removeLeadingArticles(searchQuery);
 
 		// Search local IMDB database (fetch more to allow for filtering/ranking)
-		const imdbResults = await db.searchImdbTitles(searchQuery, {
-			limit: 120,
-			year,
-			mediaType: mediaType as 'movie' | 'show' | undefined,
-		});
+		const imdbResults = await memoized(
+			`search:title:v1:${JSON.stringify([searchQuery, year ?? null, mediaType ?? null])}`,
+			() =>
+				db.searchImdbTitles(searchQuery, {
+					limit: 120,
+					year,
+					mediaType: mediaType as 'movie' | 'show' | undefined,
+				})
+		);
 
 		// Map IMDB results to SearchResult format with extended properties
 		type ExtendedResult = SearchResult & { distance?: number; matchCount?: number };
