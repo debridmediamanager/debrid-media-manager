@@ -19,7 +19,6 @@ export default function Document() {
 					property="og:image"
 					content="https://debridmediamanager.com/apple-touch-icon.png"
 				/>
-				<meta property="og:url" content="https://debridmediamanager.com" />
 				<meta property="og:type" content="website" />
 				<meta name="author" content="yowmamasita" />
 				<meta name="robots" content="noindex, nofollow" />

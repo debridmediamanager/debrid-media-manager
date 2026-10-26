@@ -109,7 +109,6 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 	}, []);
 
 	const pageTitle = 'Is Real-Debrid Down Or Just Me?';
-	const canonicalUrl = 'https://debridmediamanager.com/is-real-debrid-down-or-just-me';
 	const defaultDescription =
 		'Live Real-Debrid availability dashboard covering account, torrent, and unrestrict endpoints.';
 
@@ -119,7 +118,6 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 			<>
 				<Head>
 					<title>{pageTitle}</title>
-					<link rel="canonical" href={canonicalUrl} />
 					<meta name="description" content={defaultDescription} />
 				</Head>
 				<main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
@@ -217,7 +215,6 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 		<>
 			<Head>
 				<title>{pageTitle}</title>
-				<link rel="canonical" href={canonicalUrl} />
 				<meta name="description" content={defaultDescription} />
 			</Head>
 

@@ -310,7 +310,7 @@ describe('StartPage', () => {
 		expect(titleElement).toHaveTextContent('Debrid Media Manager - Home');
 
 		const metaRobots = document.querySelector('meta[name="robots"]');
-		expect(metaRobots).toHaveAttribute('content', 'index, nofollow');
+		expect(metaRobots).toHaveAttribute('content', 'noindex, nofollow');
 	});
 
 	it('should render logo SVG', () => {

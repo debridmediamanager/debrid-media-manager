@@ -51,6 +51,15 @@ const nextConfig = {
 			],
 		};
 	},
+	async headers() {
+		// DMM stays out of search engines; this also covers API responses and static files.
+		return [
+			{
+				source: '/:path*',
+				headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+			},
+		];
+	},
 	async redirects() {
 		return [
 			{

@@ -275,7 +275,7 @@ function IndexPage() {
 		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
 				<title>Debrid Media Manager - Home</title>
-				<meta name="robots" content="index, nofollow" />
+				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Toaster position={toasterPosition()} />
 			{servicesSettled || profileWaitElapsed ? (

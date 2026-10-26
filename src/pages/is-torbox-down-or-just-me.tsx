@@ -148,7 +148,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	}, []);
 
 	const pageTitle = 'Is TorBox Down Or Just Me?';
-	const canonicalUrl = 'https://debridmediamanager.com/is-torbox-down-or-just-me';
 	const defaultDescription =
 		'Live TorBox availability, measured from what TorBox actually returns to real Debrid Media Manager users, plus a per-region CDN check your own browser runs against every TorBox node.';
 
@@ -157,7 +156,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 			<>
 				<Head>
 					<title>{pageTitle}</title>
-					<link rel="canonical" href={canonicalUrl} />
 					<meta name="description" content={defaultDescription} />
 				</Head>
 				<main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
@@ -259,7 +257,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		<>
 			<Head>
 				<title>{pageTitle}</title>
-				<link rel="canonical" href={canonicalUrl} />
 				<meta name="description" content={defaultDescription} />
 			</Head>
 
