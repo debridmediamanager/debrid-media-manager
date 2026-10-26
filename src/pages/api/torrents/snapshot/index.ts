@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { fileSharedRdLinks } from '@/services/sharedRdLinks';
 import { countFiles, TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -94,7 +95,13 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 				posted: Object.keys(snapshot.SelectedFiles).length,
 			});
 		}
-		return res.status(201).json({ success: true, id });
+		res.status(201).json({ success: true, id });
+		// After answering: Real-Debrid checks each code one at a time, and a pack's
+		// would hold zurg's post open for as many requests as it has episodes.
+		await fileSharedRdLinks(result.value).catch((error) =>
+			console.error('Failed to file shared Real-Debrid links', error)
+		);
+		return;
 	} catch (error) {
 		console.error('Failed to persist torrent snapshot', error);
 		return res.status(500).json({ message: 'Internal server error' });

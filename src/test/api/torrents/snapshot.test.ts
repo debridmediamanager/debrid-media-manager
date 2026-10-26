@@ -1,5 +1,6 @@
 import handler from '@/pages/api/torrents/snapshot';
 import { repository } from '@/services/repository';
+import { fileSharedRdLinks } from '@/services/sharedRdLinks';
 import legacyWorkerSnapshot from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
 import zurgDeletedEpisodeSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-deleted-episode.json';
 import zurgMatrixFilmPass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-film-pass.json';
@@ -14,7 +15,9 @@ import crypto from 'crypto';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/sharedRdLinks');
 const mockRepository = vi.mocked(repository);
+const mockFileSharedRdLinks = vi.mocked(fileSharedRdLinks);
 
 // The fixtures are real snapshots with their account links, torrent ids and
 // Plex keys replaced. One is what zurgtorrent-worker forwarded before January,
@@ -106,6 +109,29 @@ describe('/api/torrents/snapshot', () => {
 			expect(mockRepository.mergeTorrentSnapshot).toHaveBeenCalledWith(
 				expect.objectContaining({ id, hash: zurgDirectSnapshot.Hash })
 			);
+		});
+
+		it("files the release's Real-Debrid codes once zurg has its answer", async () => {
+			const res = createMockResponse();
+			mockFileSharedRdLinks.mockImplementation(async () => {
+				expect(res.status).toHaveBeenCalledWith(201);
+				return 1;
+			});
+
+			await handler(post(zurgDirectSnapshot), res);
+
+			expect(mockFileSharedRdLinks).toHaveBeenCalledWith(
+				expect.objectContaining({ Hash: zurgDirectSnapshot.Hash, IMDBID: 'tt30895834' })
+			);
+		});
+
+		it('answers zurg 201 even when filing its codes fails', async () => {
+			const res = createMockResponse();
+			mockFileSharedRdLinks.mockRejectedValue(new Error('database down'));
+
+			await handler(post(zurgDirectSnapshot), res);
+
+			expect(res.status).toHaveBeenCalledWith(201);
 		});
 
 		it.each(fixtures)('accepts a snapshot %s', async (_, snapshot) => {

@@ -994,6 +994,34 @@ function normalizeRdLink(link: string): string {
 	return link;
 }
 
+/**
+ * What Real-Debrid says a `/d/` link is, or null when it will not say. It takes
+ * no token and adds nothing to any account. Measured 2026-10-27: a 13-character
+ * code answers its file's name and exact size; a code that names no file
+ * answers 404 `unavailable_file`, and a few of those in a row 429. Plain axios,
+ * because `realDebridAxios` retries a 429 seven times.
+ */
+export const checkRdLink = async (
+	link: string
+): Promise<{ filename: string; filesize: number } | null> => {
+	try {
+		const response = await axios.post(
+			'https://api.real-debrid.com/rest/1.0/unrestrict/check',
+			new URLSearchParams({ link }).toString(),
+			{
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				timeout: REQUEST_TIMEOUT,
+			}
+		);
+		const { filename, filesize } = response.data ?? {};
+		return typeof filename === 'string' && typeof filesize === 'number'
+			? { filename, filesize }
+			: null;
+	} catch {
+		return null;
+	}
+};
+
 export const unrestrictLink = async (
 	accessToken: string,
 	link: string,
