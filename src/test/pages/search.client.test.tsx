@@ -163,25 +163,41 @@ describe('SearchPage', () => {
 		expect(mockPush).toHaveBeenCalledWith('/x/tt123456789/');
 	});
 
-	it('should handle URL query parameter on mount', () => {
-		mockQuery = { query: 'encoded%20movie' };
-
+	// Next.js has already decoded router.query; decoding it again threw a URIError
+	// on "100%" and took the whole page down.
+	it('shows a query holding a percent sign as typed', () => {
 		vi.mocked(useRouter).mockReturnValue({
 			push: mockPush,
-			query: mockQuery,
+			query: { query: '100%' },
 			pathname: '/search',
-			asPath: '/search?query=encoded%20movie',
+			asPath: '/search?query=100%25',
 		} as any);
+		global.fetch = vi.fn<typeof fetch>().mockResolvedValue(createJsonResponse({ results: [] }));
 
+		render(<SearchPage />);
+
+		expect(screen.getByDisplayValue('100%')).toBeInTheDocument();
+	});
+
+	it('sends &, # and % in the query to the search API intact', async () => {
+		vi.mocked(useRouter).mockReturnValue({
+			push: mockPush,
+			query: { query: 'Tom & Jerry #1 100%' },
+			pathname: '/search',
+			asPath: '/search',
+		} as any);
 		const mockFetch = vi
 			.fn<typeof fetch>()
 			.mockResolvedValue(createJsonResponse({ results: [] }));
-
 		global.fetch = mockFetch;
 
 		render(<SearchPage />);
 
-		expect(screen.getByDisplayValue('encoded movie')).toBeInTheDocument();
+		await waitFor(() => {
+			expect(mockFetch).toHaveBeenCalledWith(
+				'/api/search/title?keyword=Tom%20%26%20Jerry%20%231%20100%25'
+			);
+		});
 	});
 
 	it('should fetch search results when query is present in URL', async () => {

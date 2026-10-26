@@ -20,7 +20,7 @@ function Search() {
 	const router = useRouter();
 
 	const rawQuery = router.query.query;
-	const query = typeof rawQuery === 'string' && rawQuery ? decodeURIComponent(rawQuery) : '';
+	const query = typeof rawQuery === 'string' ? rawQuery : '';
 
 	useEffect(() => {
 		if (query && typedQuery !== query) setTypedQuery(query);
@@ -31,7 +31,7 @@ function Search() {
 		query ? `search:${query}` : null,
 		async () => {
 			try {
-				let path = `api/search/title?keyword=${query}`;
+				let path = `api/search/title?keyword=${encodeURIComponent(query)}`;
 				if (config.externalSearchApiHostname) {
 					path = encodeURIComponent(path);
 				}
