@@ -155,6 +155,13 @@ describe('buildPlayerIntent', () => {
 		);
 	});
 
+	// Aether documents the same shape: aether://x-callback-url/play?url=<encoded>.
+	it.each(['ios3', 'mac5'])('builds an Aether intent for %s', (os) => {
+		expect(buildPlayerIntent(os, 'aether', url, 'fallback')).toBe(
+			`aether://x-callback-url/play?url=${encodeURIComponent(url)}`
+		);
+	});
+
 	// A TorBox download URL carries its own credential in a query string. Pasted
 	// in raw, its `&` starts a second parameter of the *intent* and the player
 	// receives a truncated, unauthenticated link.

@@ -115,6 +115,19 @@ describe('SettingsSection', () => {
 		expect(localStorage.getItem('settings:player')).toBe('mac5/senplayer');
 	});
 
+	// Aether (iOS, iPadOS, tvOS, macOS, visionOS) answers SenPlayer's
+	// x-callback-url `play` action, so it shares SenPlayer's os keys.
+	it.each(['ios3/aether', 'mac5/aether'])('offers Aether as %s', async (value) => {
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const playerContainer = screen.getByText('Video player').closest('div')!;
+		const playerSelect = within(playerContainer).getByRole('combobox');
+		await user.selectOptions(playerSelect, value);
+
+		expect(localStorage.getItem('settings:player')).toBe(value);
+	});
+
 	it('loads persisted preferences and updates each toggle', async () => {
 		localStorage.setItem('settings:player', 'ios/infuse');
 		localStorage.setItem('settings:movieMaxSize', '15');

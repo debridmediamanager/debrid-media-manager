@@ -669,6 +669,7 @@ export const SettingsSection = () => {
 									<option value="ios/vlc">VLC</option>
 									<option value="ios/outplayer">Outplayer</option>
 									<option value="ios3/senplayer">SenPlayer</option>
+									<option value="ios3/aether">Aether</option>
 								</optgroup>
 								<optgroup label="MacOS">
 									<option value="mac4/open-vidhub">VidHub</option>
@@ -678,6 +679,7 @@ export const SettingsSection = () => {
 									<option value="mac2/figplayer">Fig Player</option>
 									<option value="mac3/nplayer-mac">nPlayer</option>
 									<option value="mac5/senplayer">SenPlayer</option>
+									<option value="mac5/aether">Aether</option>
 								</optgroup>
 								<optgroup label="Windows">
 									<option value="windows/vlc">VLC</option>
