@@ -374,6 +374,44 @@ describe('openWatch', () => {
 		expect(tab.shown()).toContain('href="vlc://stream"');
 	});
 
+	// #462, seen on a Pixel 6 in Firefox 151: in DMM installed as a web app the
+	// blank popup became an about:blank window that stayed blank for 30+ s while
+	// RD had already unrestricted the file. There the watch page is drawn over DMM.
+	it('draws the watch page over DMM itself in an installed web app', async () => {
+		const open = vi.fn(() => fakeTab());
+		window.open = open as any;
+		const matchMedia = vi.mocked(window.matchMedia).getMockImplementation()!;
+		vi.mocked(window.matchMedia).mockImplementation(
+			(query: string) => ({ matches: query === '(display-mode: standalone)' }) as any
+		);
+		fetchMock.mockResolvedValue({
+			ok: true,
+			status: 200,
+			json: async () => ({ intent: 'intent://cdn/movie.mkv#Intent;end' }),
+		});
+
+		try {
+			await openWatch({
+				service: 'rd',
+				player: 'android/org.videolan.vlc',
+				hash: 'abc',
+				keys: { rdKey: 'rd-key' },
+			});
+
+			expect(open).not.toHaveBeenCalled();
+			const frame = document.querySelector('iframe[title="Watch"]') as HTMLIFrameElement;
+			const play = frame.contentDocument!.querySelector('a.play')!;
+			expect(play.getAttribute('href')).toBe('intent://cdn/movie.mkv#Intent;end');
+			expect(play.getAttribute('target')).toBe('_top');
+
+			(document.querySelector('button') as HTMLButtonElement).click();
+			expect(document.querySelector('iframe[title="Watch"]')).toBeNull();
+		} finally {
+			vi.mocked(window.matchMedia).mockImplementation(matchMedia);
+			document.body.innerHTML = '';
+		}
+	});
+
 	// RD's resolve is five sequential API calls, so the tab is on screen for
 	// seconds before an intent exists. It said nothing at all before.
 	it('tells the tab it is working before the intent arrives', async () => {

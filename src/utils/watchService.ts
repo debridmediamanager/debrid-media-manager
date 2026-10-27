@@ -8,7 +8,7 @@ import {
 	pickBiggestVideo,
 	prepareMagnetForCast,
 } from './allDebridCastClientPipeline';
-import { renderWatchTab } from './watchTab';
+import { isInstalledWebApp, openWatchOverlay, renderWatchTab } from './watchTab';
 
 export type { WatchService };
 
@@ -227,7 +227,8 @@ export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 		return;
 	}
 
-	const tab = window.open('', '_blank');
+	const inWebApp = isInstalledWebApp();
+	const tab = inWebApp ? openWatchOverlay() : window.open('', '_blank');
 	renderWatchTab(tab, { status: 'resolving', label });
 	try {
 		const link =
@@ -255,7 +256,8 @@ export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 		// fallback URL doing it, dropping the user on a raw stream in the browser
 		// instead of the player they chose. There, the tap is the only attempt.
 		if (osOf(player) !== 'android') {
-			tab.location.href = intent;
+			// The overlay is a frame inside DMM; the player is launched from the page
+			(inWebApp ? window : tab).location.href = intent;
 		}
 	} catch (error: any) {
 		const message = error instanceof Error ? error.message : String(error);

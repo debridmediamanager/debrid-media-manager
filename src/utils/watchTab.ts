@@ -76,7 +76,7 @@ const render = (view: WatchTabView): string => {
 	return shell(
 		'Ready to play',
 		`<h1>Ready to play</h1>
-<a class="play" href="${escapeHtml(view.intent)}" autofocus>▶ Play</a>
+<a class="play" href="${escapeHtml(view.intent)}" target="_top" autofocus>▶ Play</a>
 <p>Your player opens when you press Play. Browsers only hand a stream to an app
 on a real tap, which is why this step cannot happen on its own.</p>`
 	);
@@ -99,4 +99,36 @@ export const renderWatchTab = (tab: WatchTab | null | undefined, view: WatchTabV
 	} catch {
 		// Tab closed, or navigated somewhere we no longer own.
 	}
+};
+
+/**
+ * Whether DMM runs as an installed web app. Firefox's on Android turns the
+ * blank popup Watch opens into an about:blank window its opener can never write
+ * into (#462), so there the watch page is drawn over DMM itself instead.
+ */
+export const isInstalledWebApp = (): boolean =>
+	Boolean(window.matchMedia?.('(display-mode: standalone)').matches) ||
+	(navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+/**
+ * A full-screen frame over the current page that plays the part of the watch
+ * tab: `renderWatchTab` writes into it the same way. The Play link targets the
+ * top page, so the tap launches the player exactly as it does in a real tab.
+ */
+export const openWatchOverlay = (): Window | null => {
+	const overlay = document.createElement('div');
+	overlay.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:#111827';
+	const frame = document.createElement('iframe');
+	frame.title = 'Watch';
+	frame.style.cssText = 'display:block;width:100%;height:100%;border:0';
+	const close = document.createElement('button');
+	close.type = 'button';
+	close.textContent = '✕ Close';
+	close.style.cssText =
+		'position:absolute;top:.75rem;right:.75rem;padding:.5rem 1rem;border-radius:.5rem;' +
+		'border:1px solid #4b5563;background:#1f2937;color:#e5e7eb;font-size:1rem';
+	close.addEventListener('click', () => overlay.remove());
+	overlay.append(frame, close);
+	document.body.appendChild(overlay);
+	return frame.contentWindow;
 };
