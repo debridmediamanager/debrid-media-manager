@@ -368,4 +368,52 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			details: 'db down',
 		});
 	});
+
+	// #456: nuker22110's file (the report elides the middle; S01 added). Saved, it
+	// answered success while the stream route dropped it from Stremio.
+	it('refuses a cast whose only file Real-Debrid blocks by name', async () => {
+		const path = '都挺好.All.is.Well.2019.S01E01.WEB-DL.H264.AAC-NYHD.mp4';
+		mockGetTorrentInfo.mockResolvedValue(
+			makeTorrentInfo({
+				files: [{ id: 1, path, bytes: 1048576, selected: true }],
+				links: ['https://rd/link-1'],
+			})
+		);
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockDbSaveCast).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(422);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: expect.stringContaining('Real-Debrid refuses to stream'),
+		});
+	});
+
+	it('casts the files Real-Debrid allows and skips the blocked ones', async () => {
+		mockGetTorrentInfo.mockResolvedValue(
+			makeTorrentInfo({
+				files: [
+					{ id: 1, path: 'Show.S01E01.WEB-DL.H264.mkv', bytes: 1048576, selected: true },
+					{ id: 2, path: 'Show.S01E02.mkv', bytes: 1048576, selected: true },
+				],
+			})
+		);
+		const req = createMockRequest({
+			headers: { authorization: 'Bearer token' },
+			query: { torrentIdPlusHash: '1:hash' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockDbSaveCast).toHaveBeenCalledTimes(1);
+		expect(mockDbSaveCast.mock.calls[0][3]).toBe('Show.S01E02.mkv');
+		expect(mockDbSaveCast.mock.calls[0][4]).toBe('https://rd/link-2');
+	});
 });

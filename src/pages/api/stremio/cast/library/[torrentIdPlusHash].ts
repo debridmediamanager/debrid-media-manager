@@ -3,6 +3,7 @@ import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
 import { readProviderKey } from '@/utils/providerKeyHeader';
+import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -123,11 +124,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	// Step 3: Process files with IMDB ID
 	// `links[i]` pairs with `selectedFiles[i]`, so the index has to be carried
 	// through the planner rather than recomputed from the file.
-	const plan = planLibraryCast(
-		imdbid,
-		selectedFiles.map((file, index) => ({ file, index })),
-		({ file }) => ({ filename: file.path, size: file.bytes })
-	);
+	// The stream route drops RD-blocked names, so saving them only answered
+	// success for casts Stremio never shows (#456); movie/series casts refuse them.
+	const castable = selectedFiles
+		.map((file, index) => ({ file, index }))
+		.filter(({ file }) => !rdBlockedCastMessage(file.path));
+	if (castable.length === 0) {
+		res.status(422).json({
+			status: 'error',
+			errorMessage: rdBlockedCastMessage(selectedFiles[0]?.path ?? ''),
+		});
+		return;
+	}
+	const plan = planLibraryCast(imdbid, castable, ({ file }) => ({
+		filename: file.path,
+		size: file.bytes,
+	}));
 
 	for (const { file: entry, stremioKey } of plan) {
 		try {
