@@ -21,6 +21,7 @@ import {
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '@/services/rateLimit/UnifiedRateLimiter';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { getTypeByNameAndFileCount } from '@/utils/mediaType';
 import {
 	ReactNode,
 	createContext,
@@ -135,6 +136,21 @@ const upsertTorrentById = (torrents: UserTorrent[], torrent: UserTorrent): UserT
 	const next = torrents.slice();
 	next[existingIndex] = torrent;
 	return next;
+};
+
+// An RD listing has no files, so a refresh typed rows from their name alone and
+// turned rows retyped from their files on opening, or by hand, back into movies
+// (#356). Where the fresh type is only that name guess, keep the settled one.
+const keepKnownTypes = (prev: UserTorrent[], fresh: UserTorrent[]): UserTorrent[] => {
+	const known = new Map(prev.map((t) => [t.id, t]));
+	return fresh.map((t) => {
+		const old = known.get(t.id);
+		return old &&
+			old.mediaType !== t.mediaType &&
+			t.mediaType === getTypeByNameAndFileCount(t.filename)
+			? { ...t, mediaType: old.mediaType, info: old.info, title: old.title }
+			: t;
+	});
 };
 
 const normalizeToken = (token: string | null | undefined): string | null => {
@@ -662,22 +678,22 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 					switch (target) {
 						case 'realdebrid':
-							setRdLibrary(torrents);
+							setRdLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 						case 'alldebrid':
-							setAdLibrary(torrents);
+							setAdLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 						case 'torbox':
-							setTbLibrary(torrents);
+							setTbLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 						case 'premiumize':
-							setPmLibrary(torrents);
+							setPmLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 						case 'offcloud':
-							setOcLibrary(torrents);
+							setOcLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 						case 'debridlink':
-							setDlLibrary(torrents);
+							setDlLibrary((prev) => keepKnownTypes(prev, torrents));
 							break;
 					}
 

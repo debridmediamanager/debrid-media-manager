@@ -10,7 +10,9 @@ import {
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
+import deathInParadise from '@/test/fixtures/rd-death-in-paradise.json';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import {
 	EnhancedLibraryCacheProvider,
 	useEnhancedLibraryCache,
@@ -592,5 +594,41 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		expect(result.current.libraryItems).toHaveLength(1);
 		expect(result.current.rdLibrary[0]?.title).toBe('updated title');
 		expect(result.current.libraryItems[0]?.title).toBe('updated title');
+	});
+
+	// #356: wason92's release. Its RD name has no season token, so the listing
+	// types it a movie; opening it retypes it a show from its 98 episode files.
+	it('keeps a row retyped from its files a show across a refresh', async () => {
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		fetchLibraryMock.mockImplementation(async () => [
+			convertToUserTorrent(deathInParadise.torrent as any),
+		]);
+		const { result } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+		await waitFor(() => expect(result.current.rdLibrary).toHaveLength(1));
+		expect(result.current.rdLibrary[0].mediaType).toBe('movie');
+
+		act(() => {
+			result.current.replaceLibrary([{ ...result.current.rdLibrary[0], mediaType: 'tv' }]);
+		});
+		await act(async () => {
+			await result.current.refreshLibrary('realdebrid', true);
+		});
+
+		expect(result.current.rdLibrary[0].mediaType).toBe('tv');
+	});
+
+	it('still takes a fresh type the listing read from files', async () => {
+		mockedUseTorBoxAccessToken.mockReturnValue('tb-token');
+		const named = { ...buildTorrent('tb:1'), filename: 'Show' };
+		fetchLibraryMock.mockResolvedValueOnce([named]);
+		const { result } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+		await waitFor(() => expect(result.current.tbLibrary).toHaveLength(1));
+
+		fetchLibraryMock.mockResolvedValueOnce([{ ...named, mediaType: 'tv' }]);
+		await act(async () => {
+			await result.current.refreshLibrary('torbox', true);
+		});
+
+		expect(result.current.tbLibrary[0].mediaType).toBe('tv');
 	});
 });

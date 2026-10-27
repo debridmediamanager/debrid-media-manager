@@ -1,0 +1,819 @@
+{
+	"_source": "Real-Debrid, test account rdd1215dc4a661, captured 2026-10-27: GET /torrents and GET /torrents/info for hash fcfc31ea (wason92's release, card 356) after addMagnet + selectFiles all. /d/ links redacted.",
+	"info": {
+		"id": "FHECML67ZOZWC",
+		"filename": "Death in Paradise",
+		"original_filename": "Death in Paradise",
+		"hash": "fcfc31ea7a5363a189596faaafb3277d0a00356e",
+		"bytes": 418960682114,
+		"original_bytes": 418960682114,
+		"host": "real-debrid.com",
+		"split": 2000,
+		"progress": 100,
+		"status": "downloaded",
+		"added": "2026-10-27T10:43:24.000Z",
+		"files": [
+			{
+				"id": 1,
+				"path": "/Death in Paradise (S01E01).mkv",
+				"bytes": 4133957115,
+				"selected": 1
+			},
+			{
+				"id": 2,
+				"path": "/Death in Paradise (S01E02).mkv",
+				"bytes": 4110478007,
+				"selected": 1
+			},
+			{
+				"id": 3,
+				"path": "/Death in Paradise (S01E03).mkv",
+				"bytes": 4130560788,
+				"selected": 1
+			},
+			{
+				"id": 4,
+				"path": "/Death in Paradise (S01E04).mkv",
+				"bytes": 4134655349,
+				"selected": 1
+			},
+			{
+				"id": 5,
+				"path": "/Death in Paradise (S01E05).mkv",
+				"bytes": 4125087011,
+				"selected": 1
+			},
+			{
+				"id": 6,
+				"path": "/Death in Paradise (S01E06).mkv",
+				"bytes": 4127925842,
+				"selected": 1
+			},
+			{
+				"id": 7,
+				"path": "/Death in Paradise (S01E07).mkv",
+				"bytes": 4117687143,
+				"selected": 1
+			},
+			{
+				"id": 8,
+				"path": "/Death in Paradise (S01E08).mkv",
+				"bytes": 4091824695,
+				"selected": 1
+			},
+			{
+				"id": 9,
+				"path": "/Death in Paradise (S02E01).mkv",
+				"bytes": 4019227122,
+				"selected": 1
+			},
+			{
+				"id": 10,
+				"path": "/Death in Paradise (S02E02).mkv",
+				"bytes": 4021792960,
+				"selected": 1
+			},
+			{
+				"id": 11,
+				"path": "/Death in Paradise (S02E03).mkv",
+				"bytes": 4018108514,
+				"selected": 1
+			},
+			{
+				"id": 12,
+				"path": "/Death in Paradise (S02E04).mkv",
+				"bytes": 4020286302,
+				"selected": 1
+			},
+			{
+				"id": 13,
+				"path": "/Death in Paradise (S02E05).mkv",
+				"bytes": 4022093127,
+				"selected": 1
+			},
+			{
+				"id": 14,
+				"path": "/Death in Paradise (S02E06).mkv",
+				"bytes": 4020560960,
+				"selected": 1
+			},
+			{
+				"id": 15,
+				"path": "/Death in Paradise (S02E07).mkv",
+				"bytes": 4018743048,
+				"selected": 1
+			},
+			{
+				"id": 16,
+				"path": "/Death in Paradise (S02E08).mkv",
+				"bytes": 4021615586,
+				"selected": 1
+			},
+			{
+				"id": 17,
+				"path": "/Death in Paradise (S03E01).mkv",
+				"bytes": 4446892097,
+				"selected": 1
+			},
+			{
+				"id": 18,
+				"path": "/Death in Paradise (S03E02).mkv",
+				"bytes": 4417131822,
+				"selected": 1
+			},
+			{
+				"id": 19,
+				"path": "/Death in Paradise (S03E03).mkv",
+				"bytes": 4360127731,
+				"selected": 1
+			},
+			{
+				"id": 20,
+				"path": "/Death in Paradise (S03E04).mkv",
+				"bytes": 4311411975,
+				"selected": 1
+			},
+			{
+				"id": 21,
+				"path": "/Death in Paradise (S03E05).mkv",
+				"bytes": 4334649753,
+				"selected": 1
+			},
+			{
+				"id": 22,
+				"path": "/Death in Paradise (S03E06).mkv",
+				"bytes": 4318767644,
+				"selected": 1
+			},
+			{
+				"id": 23,
+				"path": "/Death in Paradise (S03E07).mkv",
+				"bytes": 3890419460,
+				"selected": 1
+			},
+			{
+				"id": 24,
+				"path": "/Death in Paradise (S03E08).mkv",
+				"bytes": 4292279547,
+				"selected": 1
+			},
+			{
+				"id": 25,
+				"path": "/Death in Paradise (S04E01).mkv",
+				"bytes": 4362485792,
+				"selected": 1
+			},
+			{
+				"id": 26,
+				"path": "/Death in Paradise (S04E02).mkv",
+				"bytes": 4396033342,
+				"selected": 1
+			},
+			{
+				"id": 27,
+				"path": "/Death in Paradise (S04E03).mkv",
+				"bytes": 4369764148,
+				"selected": 1
+			},
+			{
+				"id": 28,
+				"path": "/Death in Paradise (S04E04).mkv",
+				"bytes": 4380707167,
+				"selected": 1
+			},
+			{
+				"id": 29,
+				"path": "/Death in Paradise (S04E05).mkv",
+				"bytes": 4480538038,
+				"selected": 1
+			},
+			{
+				"id": 30,
+				"path": "/Death in Paradise (S04E06).mkv",
+				"bytes": 4431668523,
+				"selected": 1
+			},
+			{
+				"id": 31,
+				"path": "/Death in Paradise (S04E07).mkv",
+				"bytes": 4419356742,
+				"selected": 1
+			},
+			{
+				"id": 32,
+				"path": "/Death in Paradise (S04E08).mkv",
+				"bytes": 4440589710,
+				"selected": 1
+			},
+			{
+				"id": 33,
+				"path": "/Death in Paradise (S05E01).mkv",
+				"bytes": 4429603791,
+				"selected": 1
+			},
+			{
+				"id": 34,
+				"path": "/Death in Paradise (S05E02).mkv",
+				"bytes": 4421789955,
+				"selected": 1
+			},
+			{
+				"id": 35,
+				"path": "/Death in Paradise (S05E03).mkv",
+				"bytes": 4442904076,
+				"selected": 1
+			},
+			{
+				"id": 36,
+				"path": "/Death in Paradise (S05E04).mkv",
+				"bytes": 4444909201,
+				"selected": 1
+			},
+			{
+				"id": 37,
+				"path": "/Death in Paradise (S05E05).mkv",
+				"bytes": 4380856560,
+				"selected": 1
+			},
+			{
+				"id": 38,
+				"path": "/Death in Paradise (S05E06).mkv",
+				"bytes": 4404874864,
+				"selected": 1
+			},
+			{
+				"id": 39,
+				"path": "/Death in Paradise (S05E07).mkv",
+				"bytes": 4453319687,
+				"selected": 1
+			},
+			{
+				"id": 40,
+				"path": "/Death in Paradise (S05E08).mkv",
+				"bytes": 4431434804,
+				"selected": 1
+			},
+			{
+				"id": 41,
+				"path": "/Death in Paradise (S06E01).mkv",
+				"bytes": 4391497459,
+				"selected": 1
+			},
+			{
+				"id": 42,
+				"path": "/Death in Paradise (S06E02).mkv",
+				"bytes": 4404426096,
+				"selected": 1
+			},
+			{
+				"id": 43,
+				"path": "/Death in Paradise (S06E03).mkv",
+				"bytes": 4356020523,
+				"selected": 1
+			},
+			{
+				"id": 44,
+				"path": "/Death in Paradise (S06E04).mkv",
+				"bytes": 4357373928,
+				"selected": 1
+			},
+			{
+				"id": 45,
+				"path": "/Death in Paradise (S06E05).mkv",
+				"bytes": 4389687006,
+				"selected": 1
+			},
+			{
+				"id": 46,
+				"path": "/Death in Paradise (S06E06).mkv",
+				"bytes": 4234879207,
+				"selected": 1
+			},
+			{
+				"id": 47,
+				"path": "/Death in Paradise (S06E07).mkv",
+				"bytes": 4397418626,
+				"selected": 1
+			},
+			{
+				"id": 48,
+				"path": "/Death in Paradise (S06E08).mkv",
+				"bytes": 4366347482,
+				"selected": 1
+			},
+			{
+				"id": 49,
+				"path": "/Death in Paradise (S07E01).mkv",
+				"bytes": 4356332153,
+				"selected": 1
+			},
+			{
+				"id": 50,
+				"path": "/Death in Paradise (S07E02).mkv",
+				"bytes": 4400086410,
+				"selected": 1
+			},
+			{
+				"id": 51,
+				"path": "/Death in Paradise (S07E03).mkv",
+				"bytes": 4408443011,
+				"selected": 1
+			},
+			{
+				"id": 52,
+				"path": "/Death in Paradise (S07E04).mkv",
+				"bytes": 4407946897,
+				"selected": 1
+			},
+			{
+				"id": 53,
+				"path": "/Death in Paradise (S07E05).mkv",
+				"bytes": 4273333505,
+				"selected": 1
+			},
+			{
+				"id": 54,
+				"path": "/Death in Paradise (S07E06).mkv",
+				"bytes": 4362892331,
+				"selected": 1
+			},
+			{
+				"id": 55,
+				"path": "/Death in Paradise (S07E07).mkv",
+				"bytes": 4323782803,
+				"selected": 1
+			},
+			{
+				"id": 56,
+				"path": "/Death in Paradise (S07E08).mkv",
+				"bytes": 4335011089,
+				"selected": 1
+			},
+			{
+				"id": 57,
+				"path": "/Death in Paradise (S08E01).mkv",
+				"bytes": 4265791205,
+				"selected": 1
+			},
+			{
+				"id": 58,
+				"path": "/Death in Paradise (S08E02).mkv",
+				"bytes": 4398643730,
+				"selected": 1
+			},
+			{
+				"id": 59,
+				"path": "/Death in Paradise (S08E03).mkv",
+				"bytes": 4391872293,
+				"selected": 1
+			},
+			{
+				"id": 60,
+				"path": "/Death in Paradise (S08E04).mkv",
+				"bytes": 4385757555,
+				"selected": 1
+			},
+			{
+				"id": 61,
+				"path": "/Death in Paradise (S08E05).mkv",
+				"bytes": 4348050606,
+				"selected": 1
+			},
+			{
+				"id": 62,
+				"path": "/Death in Paradise (S08E06).mkv",
+				"bytes": 4348188986,
+				"selected": 1
+			},
+			{
+				"id": 63,
+				"path": "/Death in Paradise (S08E07).mkv",
+				"bytes": 4422026177,
+				"selected": 1
+			},
+			{
+				"id": 64,
+				"path": "/Death in Paradise (S08E08).mkv",
+				"bytes": 4409690847,
+				"selected": 1
+			},
+			{
+				"id": 65,
+				"path": "/Death in Paradise (S09E01).mkv",
+				"bytes": 4405352240,
+				"selected": 1
+			},
+			{
+				"id": 66,
+				"path": "/Death in Paradise (S09E02).mkv",
+				"bytes": 4437838056,
+				"selected": 1
+			},
+			{
+				"id": 67,
+				"path": "/Death in Paradise (S09E03).mkv",
+				"bytes": 4441682530,
+				"selected": 1
+			},
+			{
+				"id": 68,
+				"path": "/Death in Paradise (S09E04).mkv",
+				"bytes": 4432577649,
+				"selected": 1
+			},
+			{
+				"id": 69,
+				"path": "/Death in Paradise (S09E05).mkv",
+				"bytes": 4423401608,
+				"selected": 1
+			},
+			{
+				"id": 70,
+				"path": "/Death in Paradise (S09E06).mkv",
+				"bytes": 4414327913,
+				"selected": 1
+			},
+			{
+				"id": 71,
+				"path": "/Death in Paradise (S09E07).mkv",
+				"bytes": 4450474031,
+				"selected": 1
+			},
+			{
+				"id": 72,
+				"path": "/Death in Paradise (S09E08).mkv",
+				"bytes": 4436831873,
+				"selected": 1
+			},
+			{
+				"id": 73,
+				"path": "/Death in Paradise (S10E01).mkv",
+				"bytes": 4420604861,
+				"selected": 1
+			},
+			{
+				"id": 74,
+				"path": "/Death in Paradise (S10E02).mkv",
+				"bytes": 4368191205,
+				"selected": 1
+			},
+			{
+				"id": 75,
+				"path": "/Death in Paradise (S10E03).mkv",
+				"bytes": 4393587781,
+				"selected": 1
+			},
+			{
+				"id": 76,
+				"path": "/Death in Paradise (S10E04).mkv",
+				"bytes": 4282049512,
+				"selected": 1
+			},
+			{
+				"id": 77,
+				"path": "/Death in Paradise (S10E05).mkv",
+				"bytes": 4392735385,
+				"selected": 1
+			},
+			{
+				"id": 78,
+				"path": "/Death in Paradise (S10E06).mkv",
+				"bytes": 4478149241,
+				"selected": 1
+			},
+			{
+				"id": 79,
+				"path": "/Death in Paradise (S10E07).mkv",
+				"bytes": 4390507835,
+				"selected": 1
+			},
+			{
+				"id": 80,
+				"path": "/Death in Paradise (S10E08).mkv",
+				"bytes": 4411249330,
+				"selected": 1
+			},
+			{
+				"id": 81,
+				"path": "/Death in Paradise (S11E00) Christmas Special.mkv",
+				"bytes": 6204032518,
+				"selected": 1
+			},
+			{
+				"id": 82,
+				"path": "/Death in Paradise (S11E01).mkv",
+				"bytes": 4190152015,
+				"selected": 1
+			},
+			{
+				"id": 83,
+				"path": "/Death in Paradise (S11E02).mkv",
+				"bytes": 4178672618,
+				"selected": 1
+			},
+			{
+				"id": 84,
+				"path": "/Death in Paradise (S11E03).mkv",
+				"bytes": 4253278373,
+				"selected": 1
+			},
+			{
+				"id": 85,
+				"path": "/Death in Paradise (S11E04).mkv",
+				"bytes": 4170940900,
+				"selected": 1
+			},
+			{
+				"id": 86,
+				"path": "/Death in Paradise (S11E05).mkv",
+				"bytes": 4193108935,
+				"selected": 1
+			},
+			{
+				"id": 87,
+				"path": "/Death in Paradise (S11E06).mkv",
+				"bytes": 4195119810,
+				"selected": 1
+			},
+			{
+				"id": 88,
+				"path": "/Death in Paradise (S11E07).mkv",
+				"bytes": 3993496765,
+				"selected": 1
+			},
+			{
+				"id": 89,
+				"path": "/Death in Paradise (S11E08).mkv",
+				"bytes": 4172316266,
+				"selected": 1
+			},
+			{
+				"id": 90,
+				"path": "/Death in Paradise (S12E00) Christmas Special.mkv",
+				"bytes": 2563874709,
+				"selected": 1
+			},
+			{
+				"id": 91,
+				"path": "/Death in Paradise (S12E01).mkv",
+				"bytes": 4125134247,
+				"selected": 1
+			},
+			{
+				"id": 92,
+				"path": "/Death in Paradise (S12E02).mkv",
+				"bytes": 4059317620,
+				"selected": 1
+			},
+			{
+				"id": 93,
+				"path": "/Death in Paradise (S12E03).mkv",
+				"bytes": 3718867557,
+				"selected": 1
+			},
+			{
+				"id": 94,
+				"path": "/Death in Paradise (S12E04).mkv",
+				"bytes": 3660553614,
+				"selected": 1
+			},
+			{
+				"id": 95,
+				"path": "/Death in Paradise (S12E05).mkv",
+				"bytes": 3878602828,
+				"selected": 1
+			},
+			{
+				"id": 96,
+				"path": "/Death in Paradise (S12E06).mkv",
+				"bytes": 3994453288,
+				"selected": 1
+			},
+			{
+				"id": 97,
+				"path": "/Death in Paradise (S12E07).mkv",
+				"bytes": 4158996477,
+				"selected": 1
+			},
+			{
+				"id": 98,
+				"path": "/Death in Paradise (S12E08).mkv",
+				"bytes": 3737582601,
+				"selected": 1
+			}
+		],
+		"links": [
+			"https://real-debrid.com/d/REDACTED00",
+			"https://real-debrid.com/d/REDACTED01",
+			"https://real-debrid.com/d/REDACTED02",
+			"https://real-debrid.com/d/REDACTED03",
+			"https://real-debrid.com/d/REDACTED04",
+			"https://real-debrid.com/d/REDACTED05",
+			"https://real-debrid.com/d/REDACTED06",
+			"https://real-debrid.com/d/REDACTED07",
+			"https://real-debrid.com/d/REDACTED08",
+			"https://real-debrid.com/d/REDACTED09",
+			"https://real-debrid.com/d/REDACTED10",
+			"https://real-debrid.com/d/REDACTED11",
+			"https://real-debrid.com/d/REDACTED12",
+			"https://real-debrid.com/d/REDACTED13",
+			"https://real-debrid.com/d/REDACTED14",
+			"https://real-debrid.com/d/REDACTED15",
+			"https://real-debrid.com/d/REDACTED16",
+			"https://real-debrid.com/d/REDACTED17",
+			"https://real-debrid.com/d/REDACTED18",
+			"https://real-debrid.com/d/REDACTED19",
+			"https://real-debrid.com/d/REDACTED20",
+			"https://real-debrid.com/d/REDACTED21",
+			"https://real-debrid.com/d/REDACTED22",
+			"https://real-debrid.com/d/REDACTED23",
+			"https://real-debrid.com/d/REDACTED24",
+			"https://real-debrid.com/d/REDACTED25",
+			"https://real-debrid.com/d/REDACTED26",
+			"https://real-debrid.com/d/REDACTED27",
+			"https://real-debrid.com/d/REDACTED28",
+			"https://real-debrid.com/d/REDACTED29",
+			"https://real-debrid.com/d/REDACTED30",
+			"https://real-debrid.com/d/REDACTED31",
+			"https://real-debrid.com/d/REDACTED32",
+			"https://real-debrid.com/d/REDACTED33",
+			"https://real-debrid.com/d/REDACTED34",
+			"https://real-debrid.com/d/REDACTED35",
+			"https://real-debrid.com/d/REDACTED36",
+			"https://real-debrid.com/d/REDACTED37",
+			"https://real-debrid.com/d/REDACTED38",
+			"https://real-debrid.com/d/REDACTED39",
+			"https://real-debrid.com/d/REDACTED40",
+			"https://real-debrid.com/d/REDACTED41",
+			"https://real-debrid.com/d/REDACTED42",
+			"https://real-debrid.com/d/REDACTED43",
+			"https://real-debrid.com/d/REDACTED44",
+			"https://real-debrid.com/d/REDACTED45",
+			"https://real-debrid.com/d/REDACTED46",
+			"https://real-debrid.com/d/REDACTED47",
+			"https://real-debrid.com/d/REDACTED48",
+			"https://real-debrid.com/d/REDACTED49",
+			"https://real-debrid.com/d/REDACTED50",
+			"https://real-debrid.com/d/REDACTED51",
+			"https://real-debrid.com/d/REDACTED52",
+			"https://real-debrid.com/d/REDACTED53",
+			"https://real-debrid.com/d/REDACTED54",
+			"https://real-debrid.com/d/REDACTED55",
+			"https://real-debrid.com/d/REDACTED56",
+			"https://real-debrid.com/d/REDACTED57",
+			"https://real-debrid.com/d/REDACTED58",
+			"https://real-debrid.com/d/REDACTED59",
+			"https://real-debrid.com/d/REDACTED60",
+			"https://real-debrid.com/d/REDACTED61",
+			"https://real-debrid.com/d/REDACTED62",
+			"https://real-debrid.com/d/REDACTED63",
+			"https://real-debrid.com/d/REDACTED64",
+			"https://real-debrid.com/d/REDACTED65",
+			"https://real-debrid.com/d/REDACTED66",
+			"https://real-debrid.com/d/REDACTED67",
+			"https://real-debrid.com/d/REDACTED68",
+			"https://real-debrid.com/d/REDACTED69",
+			"https://real-debrid.com/d/REDACTED70",
+			"https://real-debrid.com/d/REDACTED71",
+			"https://real-debrid.com/d/REDACTED72",
+			"https://real-debrid.com/d/REDACTED73",
+			"https://real-debrid.com/d/REDACTED74",
+			"https://real-debrid.com/d/REDACTED75",
+			"https://real-debrid.com/d/REDACTED76",
+			"https://real-debrid.com/d/REDACTED77",
+			"https://real-debrid.com/d/REDACTED78",
+			"https://real-debrid.com/d/REDACTED79",
+			"https://real-debrid.com/d/REDACTED80",
+			"https://real-debrid.com/d/REDACTED81",
+			"https://real-debrid.com/d/REDACTED82",
+			"https://real-debrid.com/d/REDACTED83",
+			"https://real-debrid.com/d/REDACTED84",
+			"https://real-debrid.com/d/REDACTED85",
+			"https://real-debrid.com/d/REDACTED86",
+			"https://real-debrid.com/d/REDACTED87",
+			"https://real-debrid.com/d/REDACTED88",
+			"https://real-debrid.com/d/REDACTED89",
+			"https://real-debrid.com/d/REDACTED90",
+			"https://real-debrid.com/d/REDACTED91",
+			"https://real-debrid.com/d/REDACTED92",
+			"https://real-debrid.com/d/REDACTED93",
+			"https://real-debrid.com/d/REDACTED94",
+			"https://real-debrid.com/d/REDACTED95",
+			"https://real-debrid.com/d/REDACTED96",
+			"https://real-debrid.com/d/REDACTED97"
+		],
+		"ended": "2026-01-17T12:20:36.000Z"
+	},
+	"torrent": {
+		"id": "FHECML67ZOZWC",
+		"filename": "Death in Paradise",
+		"hash": "fcfc31ea7a5363a189596faaafb3277d0a00356e",
+		"bytes": 418960682114,
+		"host": "real-debrid.com",
+		"split": 2000,
+		"progress": 100,
+		"status": "downloaded",
+		"added": "2026-10-27T10:43:24.000Z",
+		"links": [
+			"https://real-debrid.com/d/REDACTED00",
+			"https://real-debrid.com/d/REDACTED01",
+			"https://real-debrid.com/d/REDACTED02",
+			"https://real-debrid.com/d/REDACTED03",
+			"https://real-debrid.com/d/REDACTED04",
+			"https://real-debrid.com/d/REDACTED05",
+			"https://real-debrid.com/d/REDACTED06",
+			"https://real-debrid.com/d/REDACTED07",
+			"https://real-debrid.com/d/REDACTED08",
+			"https://real-debrid.com/d/REDACTED09",
+			"https://real-debrid.com/d/REDACTED10",
+			"https://real-debrid.com/d/REDACTED11",
+			"https://real-debrid.com/d/REDACTED12",
+			"https://real-debrid.com/d/REDACTED13",
+			"https://real-debrid.com/d/REDACTED14",
+			"https://real-debrid.com/d/REDACTED15",
+			"https://real-debrid.com/d/REDACTED16",
+			"https://real-debrid.com/d/REDACTED17",
+			"https://real-debrid.com/d/REDACTED18",
+			"https://real-debrid.com/d/REDACTED19",
+			"https://real-debrid.com/d/REDACTED20",
+			"https://real-debrid.com/d/REDACTED21",
+			"https://real-debrid.com/d/REDACTED22",
+			"https://real-debrid.com/d/REDACTED23",
+			"https://real-debrid.com/d/REDACTED24",
+			"https://real-debrid.com/d/REDACTED25",
+			"https://real-debrid.com/d/REDACTED26",
+			"https://real-debrid.com/d/REDACTED27",
+			"https://real-debrid.com/d/REDACTED28",
+			"https://real-debrid.com/d/REDACTED29",
+			"https://real-debrid.com/d/REDACTED30",
+			"https://real-debrid.com/d/REDACTED31",
+			"https://real-debrid.com/d/REDACTED32",
+			"https://real-debrid.com/d/REDACTED33",
+			"https://real-debrid.com/d/REDACTED34",
+			"https://real-debrid.com/d/REDACTED35",
+			"https://real-debrid.com/d/REDACTED36",
+			"https://real-debrid.com/d/REDACTED37",
+			"https://real-debrid.com/d/REDACTED38",
+			"https://real-debrid.com/d/REDACTED39",
+			"https://real-debrid.com/d/REDACTED40",
+			"https://real-debrid.com/d/REDACTED41",
+			"https://real-debrid.com/d/REDACTED42",
+			"https://real-debrid.com/d/REDACTED43",
+			"https://real-debrid.com/d/REDACTED44",
+			"https://real-debrid.com/d/REDACTED45",
+			"https://real-debrid.com/d/REDACTED46",
+			"https://real-debrid.com/d/REDACTED47",
+			"https://real-debrid.com/d/REDACTED48",
+			"https://real-debrid.com/d/REDACTED49",
+			"https://real-debrid.com/d/REDACTED50",
+			"https://real-debrid.com/d/REDACTED51",
+			"https://real-debrid.com/d/REDACTED52",
+			"https://real-debrid.com/d/REDACTED53",
+			"https://real-debrid.com/d/REDACTED54",
+			"https://real-debrid.com/d/REDACTED55",
+			"https://real-debrid.com/d/REDACTED56",
+			"https://real-debrid.com/d/REDACTED57",
+			"https://real-debrid.com/d/REDACTED58",
+			"https://real-debrid.com/d/REDACTED59",
+			"https://real-debrid.com/d/REDACTED60",
+			"https://real-debrid.com/d/REDACTED61",
+			"https://real-debrid.com/d/REDACTED62",
+			"https://real-debrid.com/d/REDACTED63",
+			"https://real-debrid.com/d/REDACTED64",
+			"https://real-debrid.com/d/REDACTED65",
+			"https://real-debrid.com/d/REDACTED66",
+			"https://real-debrid.com/d/REDACTED67",
+			"https://real-debrid.com/d/REDACTED68",
+			"https://real-debrid.com/d/REDACTED69",
+			"https://real-debrid.com/d/REDACTED70",
+			"https://real-debrid.com/d/REDACTED71",
+			"https://real-debrid.com/d/REDACTED72",
+			"https://real-debrid.com/d/REDACTED73",
+			"https://real-debrid.com/d/REDACTED74",
+			"https://real-debrid.com/d/REDACTED75",
+			"https://real-debrid.com/d/REDACTED76",
+			"https://real-debrid.com/d/REDACTED77",
+			"https://real-debrid.com/d/REDACTED78",
+			"https://real-debrid.com/d/REDACTED79",
+			"https://real-debrid.com/d/REDACTED80",
+			"https://real-debrid.com/d/REDACTED81",
+			"https://real-debrid.com/d/REDACTED82",
+			"https://real-debrid.com/d/REDACTED83",
+			"https://real-debrid.com/d/REDACTED84",
+			"https://real-debrid.com/d/REDACTED85",
+			"https://real-debrid.com/d/REDACTED86",
+			"https://real-debrid.com/d/REDACTED87",
+			"https://real-debrid.com/d/REDACTED88",
+			"https://real-debrid.com/d/REDACTED89",
+			"https://real-debrid.com/d/REDACTED90",
+			"https://real-debrid.com/d/REDACTED91",
+			"https://real-debrid.com/d/REDACTED92",
+			"https://real-debrid.com/d/REDACTED93",
+			"https://real-debrid.com/d/REDACTED94",
+			"https://real-debrid.com/d/REDACTED95",
+			"https://real-debrid.com/d/REDACTED96",
+			"https://real-debrid.com/d/REDACTED97"
+		],
+		"ended": "2026-01-17T12:20:36.000Z"
+	}
+}
