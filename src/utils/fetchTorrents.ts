@@ -320,7 +320,7 @@ export const fetchAllDebrid = async (
 
 export function convertToAllDebridUserTorrent(magnetInfo: MagnetStatus): UserTorrent {
 	// Normalize filename if it's just a hash
-	if (magnetInfo.filename === magnetInfo.hash) {
+	if (!magnetInfo.filename || magnetInfo.filename === magnetInfo.hash) {
 		magnetInfo.filename = 'Magnet';
 	}
 
@@ -470,6 +470,8 @@ const buildTbUserTorrent = (
 	info: TorBoxTorrentInfo | TorBoxWebDownload,
 	isWebDownload: boolean
 ): UserTorrent => {
+	// A nameless entry (#267) threw in getMediaId and failed the whole TorBox library.
+	info = { ...info, name: info.name || info.hash || String(info.id) };
 	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(info.name);
 	const serviceStatus = info.download_state;
 	let status: UserTorrentStatus;
@@ -479,7 +481,7 @@ const buildTbUserTorrent = (
 	if (info.download_finished) {
 		status = UserTorrentStatus.finished;
 	} else {
-		switch (info.download_state.toLowerCase()) {
+		switch ((info.download_state ?? '').toLowerCase()) {
 			case 'queued':
 			case 'checking':
 				status = UserTorrentStatus.waiting;
@@ -761,6 +763,7 @@ export function convertToPremiumizeUserTorrent(
 	source: PremiumizeRowSource,
 	hash: string
 ): UserTorrent {
+	source = { ...source, name: source.name || 'noname' };
 	const filenames = source.files.map((file) => file.name);
 	const torrentAndFiles = [source.name, ...filenames];
 	const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
