@@ -434,6 +434,44 @@ export class MetadataCacheService {
 	 * DMM's own, never a caller's. A season's episode list gains episodes while it airs,
 	 * so it lives as long as an airing show's row; a search an hour.
 	 */
+	private tvdbToken: Promise<string> | null = null;
+
+	/**
+	 * A TheTVDB v4 GET (`series/80552/episodes/default?page=0`), cached as TMDB's season lists
+	 * are; null without `TVDB_API_KEY`. Placement asks it only of a show TMDB gives no TVDB id.
+	 */
+	async getTvdb(path: string): Promise<any | null> {
+		const apikey = process.env.TVDB_API_KEY;
+		if (!apikey) return null;
+		// a login's token lasts a month; a refused request logs in again next time
+		this.tvdbToken ??= axios
+			.post(
+				'https://api4.thetvdb.com/v4/login',
+				{ apikey },
+				{ timeout: MetadataCacheService.REQUEST_TIMEOUT_MS }
+			)
+			.then((response) => String(response.data?.data?.token ?? ''));
+		try {
+			const token = await this.tvdbToken;
+			return await this.fetchWithCache(
+				`https://api4.thetvdb.com/v4/${path}`,
+				`tvdb_${path}`,
+				'tvdb',
+				{ headers: { Authorization: `Bearer ${token}` } },
+				path.startsWith('search/')
+					? this.CACHE_DURATIONS.ID_MAPPING
+					: this.CACHE_DURATIONS.EPISODE_SCHEDULE
+			);
+		} catch (error) {
+			this.tvdbToken = null;
+			scrubRequestError(error);
+			// a failed login's body is the key itself
+			const config = (error as { config?: { data?: unknown } } | null)?.config;
+			if (config) config.data = undefined;
+			throw error;
+		}
+	}
+
 	async getTmdbPassthrough(path: string, params: Record<string, string>): Promise<any> {
 		const auth = this.requireTmdbAuth();
 		const query = Object.keys(params)

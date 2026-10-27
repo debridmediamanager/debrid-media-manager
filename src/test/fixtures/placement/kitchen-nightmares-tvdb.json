@@ -1,0 +1,1364 @@
+{
+	"answers": {
+		"find": {
+			"tt32436778": {
+				"movie_results": [],
+				"person_results": [],
+				"tv_results": [
+					{
+						"adult": false,
+						"backdrop_path": "/5xISdWrDjpEhvzibj05a69g5lh.jpg",
+						"id": 235884,
+						"name": "Kitchen Nightmares",
+						"original_name": "Kitchen Nightmares",
+						"overview": "Chef Gordon Ramsay hits the road to help struggling restaurants all over the United States turn their luck around. Ramsay examines the problems each establishment faces, from unsanitary refrigerators to lazy or inexperienced staff, and searches for resolutions. With help from his team, Ramsay redecorates each eatery to give it a fresh new look and updates the menu as needed. Ramsay's ultimate goal is to make the restaurants he visits popular and profitable, but it's up to the restaurateurs to take his advice and turn their business nightmare into the American dream.",
+						"poster_path": "/2DTagps3y2VMkEDY1TYZDqugPr5.jpg",
+						"media_type": "tv",
+						"original_language": "en",
+						"genre_ids": [10764],
+						"popularity": 7.7108,
+						"first_air_date": "2023-09-25",
+						"softcore": false,
+						"vote_average": 8.5,
+						"vote_count": 17,
+						"origin_country": ["US"]
+					}
+				],
+				"tv_episode_results": [],
+				"tv_season_results": []
+			}
+		},
+		"show": {
+			"11294": {
+				"adult": false,
+				"episode_run_time": [44],
+				"first_air_date": "2007-09-19",
+				"id": 11294,
+				"in_production": false,
+				"languages": ["en"],
+				"last_air_date": "2014-09-12",
+				"name": "Kitchen Nightmares",
+				"number_of_episodes": 92,
+				"number_of_seasons": 6,
+				"origin_country": ["US"],
+				"original_language": "en",
+				"original_name": "Kitchen Nightmares",
+				"seasons": [
+					{
+						"air_date": "2007-09-19",
+						"episode_count": 22,
+						"id": 21792,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2010-01-29",
+						"episode_count": 13,
+						"id": 21793,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2011-01-21",
+						"episode_count": 14,
+						"id": 21794,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2011-09-23",
+						"episode_count": 17,
+						"id": 21795,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2012-10-26",
+						"episode_count": 16,
+						"id": 21796,
+						"name": "Season 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "2014-04-11",
+						"episode_count": 10,
+						"id": 21791,
+						"name": "Season 6",
+						"season_number": 6
+					}
+				],
+				"softcore": false,
+				"status": "Ended",
+				"type": "Reality",
+				"external_ids": {
+					"imdb_id": "tt0983514",
+					"freebase_mid": "/m/027y7m3",
+					"freebase_id": "/en/kitchen_nightmares",
+					"tvdb_id": 80552,
+					"tvrage_id": 15769,
+					"wikidata_id": "Q2531243",
+					"facebook_id": "KitchenNightmares",
+					"instagram_id": null,
+					"twitter_id": "knonfox"
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "BG",
+							"title": "Кошмарите в кухнята на Рамзи",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BG",
+							"title": "Кухненските кошмари",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BG",
+							"title": "Кухненски кошмари",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BG",
+							"title": "Кошмарите в кухнята",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BG",
+							"title": "Кулинарни кошмари",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BG",
+							"title": "Кошмари в кухнята на САЩ",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "DE",
+							"title": "In Teufels Küche mit Gordon Ramsay",
+							"type": "TV titel"
+						},
+						{
+							"iso_3166_1": "FI",
+							"title": "Kuppilat kuntoon, Gordon Ramsay!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Cauchemar en cuisine (USA)",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Cauchemar en cuisine (US)",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "GB",
+							"title": "Ramsay's Kitchen Nightmares USA",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Kitchen Nightmares (US)",
+							"type": ""
+						}
+					]
+				}
+			},
+			"235884": {
+				"adult": false,
+				"episode_run_time": [],
+				"first_air_date": "2023-09-25",
+				"id": 235884,
+				"in_production": true,
+				"languages": ["en"],
+				"last_air_date": "2026-09-15",
+				"name": "Kitchen Nightmares",
+				"number_of_episodes": 33,
+				"number_of_seasons": 3,
+				"origin_country": ["US"],
+				"original_language": "en",
+				"original_name": "Kitchen Nightmares",
+				"seasons": [
+					{
+						"air_date": "2023-09-25",
+						"episode_count": 10,
+						"id": 358647,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2025-01-07",
+						"episode_count": 11,
+						"id": 429116,
+						"name": "Road to Super Bowl LIX",
+						"season_number": 2
+					},
+					{
+						"air_date": "2026-07-21",
+						"episode_count": 12,
+						"id": 524372,
+						"name": "Season 3",
+						"season_number": 3
+					}
+				],
+				"softcore": false,
+				"status": "Returning Series",
+				"type": "Reality",
+				"external_ids": {
+					"imdb_id": "tt32436778",
+					"freebase_mid": null,
+					"freebase_id": null,
+					"tvdb_id": null,
+					"tvrage_id": null,
+					"wikidata_id": null,
+					"facebook_id": null,
+					"instagram_id": null,
+					"twitter_id": null
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "BR",
+							"title": "Pesadelo na Cozinha com Gordon Ramsey",
+							"type": "Continuação (2023) da série anterior (2007)."
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Kitchen Nightmares 2023",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Kitchen Nightmares Reboot",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Kitchen Nightmares: Road to Super Bowl LIX",
+							"type": "season 2"
+						}
+					]
+				}
+			}
+		},
+		"season": {
+			"235884/2": {
+				"id": 429116,
+				"air_date": "2025-01-07",
+				"episodes": [
+					{
+						"air_date": "2025-01-07",
+						"episode_number": 1,
+						"episode_type": "standard",
+						"id": 5767857,
+						"name": "Iberville (1)",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-01-14",
+						"episode_number": 2,
+						"episode_type": "standard",
+						"id": 5884642,
+						"name": "Iberville (2)",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-01-21",
+						"episode_number": 3,
+						"episode_type": "standard",
+						"id": 5896393,
+						"name": "Voleos",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-01-28",
+						"episode_number": 4,
+						"episode_type": "standard",
+						"id": 5917531,
+						"name": "Kindred",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-02-04",
+						"episode_number": 5,
+						"episode_type": "standard",
+						"id": 5917532,
+						"name": "Three Southern Girls",
+						"runtime": 43,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-02-11",
+						"episode_number": 6,
+						"episode_type": "standard",
+						"id": 5940349,
+						"name": "Kings Blu Jam",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-02-18",
+						"episode_number": 7,
+						"episode_type": "standard",
+						"id": 5970218,
+						"name": "Verdict",
+						"runtime": 44,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-02-25",
+						"episode_number": 8,
+						"episode_type": "standard",
+						"id": 5978900,
+						"name": "Grumpy George",
+						"runtime": 43,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-03-04",
+						"episode_number": 9,
+						"episode_type": "standard",
+						"id": 5998406,
+						"name": "Leo's Italian Grill",
+						"runtime": 43,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-03-11",
+						"episode_number": 10,
+						"episode_type": "standard",
+						"id": 6018220,
+						"name": "Blake’s Place",
+						"runtime": 43,
+						"season_number": 2,
+						"show_id": 235884
+					},
+					{
+						"air_date": "2025-03-18",
+						"episode_number": 11,
+						"episode_type": "finale",
+						"id": 6024260,
+						"name": "Simmer Down",
+						"runtime": 43,
+						"season_number": 2,
+						"show_id": 235884
+					}
+				],
+				"name": "Road to Super Bowl LIX",
+				"networks": [
+					{
+						"id": 19,
+						"logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+						"name": "FOX",
+						"origin_country": "US"
+					}
+				],
+				"season_number": 2
+			}
+		},
+		"searchTv": {
+			"Kitchen Nightmares": {
+				"results": [
+					{
+						"id": 11294,
+						"name": "Kitchen Nightmares",
+						"original_name": "Kitchen Nightmares",
+						"first_air_date": "2007-09-19"
+					},
+					{
+						"id": 235884,
+						"name": "Kitchen Nightmares",
+						"original_name": "Kitchen Nightmares",
+						"first_air_date": "2023-09-25"
+					},
+					{
+						"id": 65076,
+						"name": "Kitchen Nightmares Spain",
+						"original_name": "Pesadilla en la cocina",
+						"first_air_date": "2012-10-25"
+					},
+					{
+						"id": 198186,
+						"name": "Kitchen Nightmares Italia",
+						"original_name": "Cucine da incubo",
+						"first_air_date": "2013-05-15"
+					},
+					{
+						"id": 2178,
+						"name": "Ramsay's Kitchen Nightmares",
+						"original_name": "Ramsay's Kitchen Nightmares",
+						"first_air_date": "2004-04-27"
+					},
+					{
+						"id": 212144,
+						"name": "Kitchen Nightmares Australia",
+						"original_name": "Kitchen Nightmares Australia",
+						"first_air_date": "2022-10-12"
+					},
+					{
+						"id": 281244,
+						"name": "Kitchen Nightmares: Road to Super Bowl LIX",
+						"original_name": "Kitchen Nightmares: Road to Super Bowl LIX",
+						"first_air_date": "2025-01-01"
+					},
+					{
+						"id": 69021,
+						"name": "Cauchemar en cuisine avec Philippe Etchebest",
+						"original_name": "Cauchemar en cuisine avec Philippe Etchebest",
+						"first_air_date": "2011-04-18"
+					},
+					{
+						"id": 69925,
+						"name": "Pesadelo na Cozinha",
+						"original_name": "Pesadelo na Cozinha",
+						"first_air_date": "2017-01-26"
+					},
+					{
+						"id": 100631,
+						"name": "Pesadilla en la cocina Argentina",
+						"original_name": "Pesadilla en la cocina Argentina",
+						"first_air_date": "2016-09-30"
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt32436778": null
+		},
+		"seasonEpisodes": {},
+		"tvdbSeriesOf": {
+			"tt32436778": {
+				"status": "success",
+				"data": null
+			}
+		},
+		"tvdbEpisodes": {
+			"80552": {
+				"status": "success",
+				"data": {
+					"episodes": [
+						{
+							"id": 7935135,
+							"seasonNumber": 0,
+							"number": 1,
+							"aired": "2007-09-30",
+							"name": "Christmas Special 2007"
+						},
+						{
+							"id": 335862,
+							"seasonNumber": 1,
+							"number": 1,
+							"aired": "2007-09-19",
+							"name": "Peter's"
+						},
+						{
+							"id": 336481,
+							"seasonNumber": 1,
+							"number": 2,
+							"aired": "2007-09-26",
+							"name": "Dillon's"
+						},
+						{
+							"id": 337177,
+							"seasonNumber": 1,
+							"number": 3,
+							"aired": "2007-10-03",
+							"name": "The Mixing Bowl"
+						},
+						{
+							"id": 337979,
+							"seasonNumber": 1,
+							"number": 4,
+							"aired": "2007-10-10",
+							"name": "Seascape"
+						},
+						{
+							"id": 338732,
+							"seasonNumber": 1,
+							"number": 5,
+							"aired": "2007-10-17",
+							"name": "Olde Stone Mill"
+						},
+						{
+							"id": 341450,
+							"seasonNumber": 1,
+							"number": 6,
+							"aired": "2007-11-07",
+							"name": "Sebastian's"
+						},
+						{
+							"id": 341451,
+							"seasonNumber": 1,
+							"number": 7,
+							"aired": "2007-11-14",
+							"name": "Finn McCool's"
+						},
+						{
+							"id": 341452,
+							"seasonNumber": 1,
+							"number": 8,
+							"aired": "2007-11-21",
+							"name": "Lela's"
+						},
+						{
+							"id": 341453,
+							"seasonNumber": 1,
+							"number": 9,
+							"aired": "2007-11-28",
+							"name": "Campania"
+						},
+						{
+							"id": 345076,
+							"seasonNumber": 1,
+							"number": 10,
+							"aired": "2007-12-12",
+							"name": "Secret Garden"
+						},
+						{
+							"id": 385522,
+							"seasonNumber": 1,
+							"number": 11,
+							"aired": "2008-09-04",
+							"name": "Revisited: Gordon Returns"
+						},
+						{
+							"id": 386278,
+							"seasonNumber": 1,
+							"number": 12,
+							"aired": "2008-09-11",
+							"name": "Handlebar"
+						},
+						{
+							"id": 388861,
+							"seasonNumber": 1,
+							"number": 13,
+							"aired": "2008-09-18",
+							"name": "Giuseppi's"
+						},
+						{
+							"id": 390353,
+							"seasonNumber": 1,
+							"number": 14,
+							"aired": "2008-09-25",
+							"name": "Trobiano's"
+						},
+						{
+							"id": 390354,
+							"seasonNumber": 1,
+							"number": 15,
+							"aired": "2008-09-25",
+							"name": "Black Pearl"
+						},
+						{
+							"id": 402203,
+							"seasonNumber": 1,
+							"number": 16,
+							"aired": "2008-10-30",
+							"name": "J Willy's"
+						},
+						{
+							"id": 402204,
+							"seasonNumber": 1,
+							"number": 17,
+							"aired": "2008-11-06",
+							"name": "Hannah & Mason's"
+						},
+						{
+							"id": 402205,
+							"seasonNumber": 1,
+							"number": 18,
+							"aired": "2008-11-06",
+							"name": "Jack's Waterfront"
+						},
+						{
+							"id": 403823,
+							"seasonNumber": 1,
+							"number": 19,
+							"aired": "2008-11-13",
+							"name": "Sabatiello's"
+						},
+						{
+							"id": 403824,
+							"seasonNumber": 1,
+							"number": 20,
+							"aired": "2008-11-13",
+							"name": "Fiesta Sunrise"
+						},
+						{
+							"id": 403825,
+							"seasonNumber": 1,
+							"number": 21,
+							"aired": "2008-11-20",
+							"name": "Sante La Brea"
+						},
+						{
+							"id": 424956,
+							"seasonNumber": 1,
+							"number": 22,
+							"aired": "2009-01-15",
+							"name": "Cafe 36"
+						},
+						{
+							"id": 1630601,
+							"seasonNumber": 2,
+							"number": 1,
+							"aired": "2010-01-29",
+							"name": "Hot Potato Café"
+						},
+						{
+							"id": 1630611,
+							"seasonNumber": 2,
+							"number": 2,
+							"aired": "2010-02-02",
+							"name": "Flamangos"
+						},
+						{
+							"id": 1630621,
+							"seasonNumber": 2,
+							"number": 3,
+							"aired": "2010-02-05",
+							"name": "Bazzini"
+						},
+						{
+							"id": 1788701,
+							"seasonNumber": 2,
+							"number": 4,
+							"aired": "2010-02-25",
+							"name": "Mojitos"
+						},
+						{
+							"id": 1788771,
+							"seasonNumber": 2,
+							"number": 5,
+							"aired": "2010-03-04",
+							"name": "Lido di Manhattan Beach"
+						},
+						{
+							"id": 1824111,
+							"seasonNumber": 2,
+							"number": 6,
+							"aired": "2010-03-11",
+							"name": "Le Bistro"
+						},
+						{
+							"id": 1776981,
+							"seasonNumber": 2,
+							"number": 7,
+							"aired": "2010-03-12",
+							"name": "Casa Roma"
+						},
+						{
+							"id": 1855471,
+							"seasonNumber": 2,
+							"number": 8,
+							"aired": "2010-03-19",
+							"name": "Mama Rita's"
+						},
+						{
+							"id": 1855481,
+							"seasonNumber": 2,
+							"number": 9,
+							"aired": "2010-03-26",
+							"name": "Anna Vincenzo's"
+						},
+						{
+							"id": 2048641,
+							"seasonNumber": 2,
+							"number": 10,
+							"aired": "2010-04-09",
+							"name": "Revisited #2"
+						},
+						{
+							"id": 2158371,
+							"seasonNumber": 2,
+							"number": 11,
+							"aired": "2010-05-07",
+							"name": "Fleming"
+						},
+						{
+							"id": 2188021,
+							"seasonNumber": 2,
+							"number": 12,
+							"aired": "2010-05-14",
+							"name": "Sushi Ko"
+						},
+						{
+							"id": 2031751,
+							"seasonNumber": 2,
+							"number": 13,
+							"aired": "2010-05-21",
+							"name": "Revisited #3"
+						},
+						{
+							"id": 3484931,
+							"seasonNumber": 3,
+							"number": 1,
+							"aired": "2011-01-21",
+							"name": "Spanish Pavillion"
+						},
+						{
+							"id": 3484941,
+							"seasonNumber": 3,
+							"number": 2,
+							"aired": "2011-01-28",
+							"name": "Classic American"
+						},
+						{
+							"id": 3484951,
+							"seasonNumber": 3,
+							"number": 3,
+							"aired": "2011-02-04",
+							"name": "PJ's Steakhouse"
+						},
+						{
+							"id": 3574831,
+							"seasonNumber": 3,
+							"number": 4,
+							"aired": "2011-02-11",
+							"name": "Revisited #4"
+						},
+						{
+							"id": 3574841,
+							"seasonNumber": 3,
+							"number": 5,
+							"aired": "2011-02-18",
+							"name": "Grasshopper Also"
+						},
+						{
+							"id": 3681571,
+							"seasonNumber": 3,
+							"number": 6,
+							"aired": "2011-02-25",
+							"name": "Davide"
+						},
+						{
+							"id": 3733171,
+							"seasonNumber": 3,
+							"number": 7,
+							"aired": "2011-03-11",
+							"name": "Down City"
+						},
+						{
+							"id": 3891251,
+							"seasonNumber": 3,
+							"number": 8,
+							"aired": "2011-03-18",
+							"name": "Revisited #5"
+						},
+						{
+							"id": 3942351,
+							"seasonNumber": 3,
+							"number": 9,
+							"aired": "2011-03-25",
+							"name": "Café Tavolini"
+						},
+						{
+							"id": 4012131,
+							"seasonNumber": 3,
+							"number": 10,
+							"aired": "2011-04-15",
+							"name": "Kingston Cafe"
+						},
+						{
+							"id": 4085118,
+							"seasonNumber": 3,
+							"number": 11,
+							"aired": "2011-04-29",
+							"name": "La Frite"
+						},
+						{
+							"id": 4086930,
+							"seasonNumber": 3,
+							"number": 12,
+							"aired": "2011-05-06",
+							"name": "Capri"
+						},
+						{
+							"id": 4099227,
+							"seasonNumber": 3,
+							"number": 13,
+							"aired": "2011-05-13",
+							"name": "Zeke's"
+						},
+						{
+							"id": 4103030,
+							"seasonNumber": 3,
+							"number": 14,
+							"aired": "2011-05-20",
+							"name": "Oceana"
+						},
+						{
+							"id": 4169798,
+							"seasonNumber": 4,
+							"number": 1,
+							"aired": "2011-09-23",
+							"name": "Blackberry's"
+						},
+						{
+							"id": 4169799,
+							"seasonNumber": 4,
+							"number": 2,
+							"aired": "2011-09-30",
+							"name": "Leone's"
+						},
+						{
+							"id": 4179791,
+							"seasonNumber": 4,
+							"number": 3,
+							"aired": "2011-10-07",
+							"name": "Mike and Nellie's"
+						},
+						{
+							"id": 4184712,
+							"seasonNumber": 4,
+							"number": 4,
+							"aired": "2011-10-14",
+							"name": "Luigi's"
+						},
+						{
+							"id": 4184774,
+							"seasonNumber": 4,
+							"number": 5,
+							"aired": "2011-10-21",
+							"name": "Revisited #6"
+						},
+						{
+							"id": 4195327,
+							"seasonNumber": 4,
+							"number": 6,
+							"aired": "2011-11-04",
+							"name": "Burger Kitchen (1)"
+						},
+						{
+							"id": 4198218,
+							"seasonNumber": 4,
+							"number": 7,
+							"aired": "2011-11-11",
+							"name": "Burger Kitchen (2)"
+						},
+						{
+							"id": 4188756,
+							"seasonNumber": 4,
+							"number": 8,
+							"aired": "2011-11-18",
+							"name": "Greek at the Harbor"
+						},
+						{
+							"id": 4240970,
+							"seasonNumber": 4,
+							"number": 9,
+							"aired": "2012-01-13",
+							"name": "Michon's"
+						},
+						{
+							"id": 4240971,
+							"seasonNumber": 4,
+							"number": 10,
+							"aired": "2012-01-20",
+							"name": "El Greco"
+						},
+						{
+							"id": 4245229,
+							"seasonNumber": 4,
+							"number": 11,
+							"aired": "2012-01-27",
+							"name": "Revisited #7"
+						},
+						{
+							"id": 4251283,
+							"seasonNumber": 4,
+							"number": 12,
+							"aired": "2012-02-03",
+							"name": "Park's Edge"
+						},
+						{
+							"id": 4254011,
+							"seasonNumber": 4,
+							"number": 13,
+							"aired": "2012-02-10",
+							"name": "Spin a Yarn"
+						},
+						{
+							"id": 4259955,
+							"seasonNumber": 4,
+							"number": 14,
+							"aired": "2012-02-17",
+							"name": "Charlie's"
+						},
+						{
+							"id": 4263960,
+							"seasonNumber": 4,
+							"number": 15,
+							"aired": "2012-02-24",
+							"name": "Café Hon"
+						},
+						{
+							"id": 4292381,
+							"seasonNumber": 4,
+							"number": 16,
+							"aired": "2012-03-23",
+							"name": "Chiarella's"
+						},
+						{
+							"id": 4292382,
+							"seasonNumber": 4,
+							"number": 17,
+							"aired": "2012-03-30",
+							"name": "Zocalo"
+						},
+						{
+							"id": 4430264,
+							"seasonNumber": 5,
+							"number": 1,
+							"aired": "2012-10-26",
+							"name": "La Galleria 33 (1)"
+						},
+						{
+							"id": 4430265,
+							"seasonNumber": 5,
+							"number": 2,
+							"aired": "2012-11-02",
+							"name": "La Galleria 33 (2)"
+						},
+						{
+							"id": 4430266,
+							"seasonNumber": 5,
+							"number": 3,
+							"aired": "2012-11-09",
+							"name": "Mama Maria's"
+						},
+						{
+							"id": 4686198,
+							"seasonNumber": 5,
+							"number": 4,
+							"aired": "2012-11-16",
+							"name": "Ms. Jean's Southern Cuisine"
+						},
+						{
+							"id": 4686199,
+							"seasonNumber": 5,
+							"number": 5,
+							"aired": "2012-12-07",
+							"name": "Barefoot Bob's"
+						},
+						{
+							"id": 4686200,
+							"seasonNumber": 5,
+							"number": 6,
+							"aired": "2012-12-14",
+							"name": "Revisited #8"
+						},
+						{
+							"id": 4686201,
+							"seasonNumber": 5,
+							"number": 7,
+							"aired": "2013-01-25",
+							"name": "Olde Hitching Post Restaurant & Tavern"
+						},
+						{
+							"id": 4686202,
+							"seasonNumber": 5,
+							"number": 8,
+							"aired": "2013-02-01",
+							"name": "Levanti's Italian Restaurant"
+						},
+						{
+							"id": 4686203,
+							"seasonNumber": 5,
+							"number": 9,
+							"aired": "2013-02-15",
+							"name": "Sam's Mediterranean Kabob Room"
+						},
+						{
+							"id": 4686204,
+							"seasonNumber": 5,
+							"number": 10,
+							"aired": "2013-02-22",
+							"name": "Nino's Italian Restaurant"
+						},
+						{
+							"id": 4686205,
+							"seasonNumber": 5,
+							"number": 11,
+							"aired": "2013-03-01",
+							"name": "Mill Street Bistro (1)"
+						},
+						{
+							"id": 4686206,
+							"seasonNumber": 5,
+							"number": 12,
+							"aired": "2013-03-08",
+							"name": "Mill Street Bistro (2)"
+						},
+						{
+							"id": 4686207,
+							"seasonNumber": 5,
+							"number": 13,
+							"aired": "2013-03-15",
+							"name": "Yanni's"
+						},
+						{
+							"id": 4686208,
+							"seasonNumber": 5,
+							"number": 14,
+							"aired": "2013-04-26",
+							"name": "Prohibition Grille"
+						},
+						{
+							"id": 4686209,
+							"seasonNumber": 5,
+							"number": 15,
+							"aired": "2013-05-03",
+							"name": "Chappy's"
+						},
+						{
+							"id": 4686210,
+							"seasonNumber": 5,
+							"number": 16,
+							"aired": "2013-05-10",
+							"name": "Amy's Baking Company"
+						},
+						{
+							"id": 4847822,
+							"seasonNumber": 6,
+							"number": 1,
+							"aired": "2014-04-11",
+							"name": "Return to Amy's Baking Company"
+						},
+						{
+							"id": 4847823,
+							"seasonNumber": 6,
+							"number": 2,
+							"aired": "2014-04-11",
+							"name": "Pantaleone's"
+						},
+						{
+							"id": 4847824,
+							"seasonNumber": 6,
+							"number": 3,
+							"aired": "2014-04-18",
+							"name": "Old Neighborhood"
+						},
+						{
+							"id": 4847825,
+							"seasonNumber": 6,
+							"number": 4,
+							"aired": "2014-04-18",
+							"name": "Kati Allo"
+						},
+						{
+							"id": 4853735,
+							"seasonNumber": 6,
+							"number": 5,
+							"aired": "2014-04-25",
+							"name": "Mangia Mangia (1)"
+						},
+						{
+							"id": 4853736,
+							"seasonNumber": 6,
+							"number": 6,
+							"aired": "2014-04-25",
+							"name": "Mangia Mangia (2)"
+						},
+						{
+							"id": 4867838,
+							"seasonNumber": 6,
+							"number": 7,
+							"aired": "2014-05-02",
+							"name": "Zayna Flaming Grill (1)"
+						},
+						{
+							"id": 4867839,
+							"seasonNumber": 6,
+							"number": 8,
+							"aired": "2014-05-02",
+							"name": "Zayna Flaming Grill (2)"
+						},
+						{
+							"id": 4885174,
+							"seasonNumber": 6,
+							"number": 9,
+							"aired": "2014-05-16",
+							"name": "Bella Luna"
+						},
+						{
+							"id": 4981877,
+							"seasonNumber": 6,
+							"number": 10,
+							"aired": "2014-09-12",
+							"name": "Revisited #9"
+						},
+						{
+							"id": 9893344,
+							"seasonNumber": 7,
+							"number": 1,
+							"aired": "2023-09-25",
+							"name": "Bel Aire"
+						},
+						{
+							"id": 10053323,
+							"seasonNumber": 7,
+							"number": 2,
+							"aired": "2023-10-02",
+							"name": "Bask 46"
+						},
+						{
+							"id": 10066046,
+							"seasonNumber": 7,
+							"number": 3,
+							"aired": "2023-10-09",
+							"name": "In the Drink"
+						},
+						{
+							"id": 10066047,
+							"seasonNumber": 7,
+							"number": 4,
+							"aired": "2023-10-16",
+							"name": "Da Mimmo"
+						},
+						{
+							"id": 10066048,
+							"seasonNumber": 7,
+							"number": 5,
+							"aired": "2023-11-06",
+							"name": "Juicy Box"
+						},
+						{
+							"id": 10066049,
+							"seasonNumber": 7,
+							"number": 6,
+							"aired": "2023-11-13",
+							"name": "Love Bites"
+						},
+						{
+							"id": 10066050,
+							"seasonNumber": 7,
+							"number": 7,
+							"aired": "2023-11-20",
+							"name": "El Cantito"
+						},
+						{
+							"id": 10066051,
+							"seasonNumber": 7,
+							"number": 8,
+							"aired": "2023-11-27",
+							"name": "South Brooklyn"
+						},
+						{
+							"id": 10066052,
+							"seasonNumber": 7,
+							"number": 9,
+							"aired": "2023-12-04",
+							"name": "Max's Bar & Grill"
+						},
+						{
+							"id": 10066053,
+							"seasonNumber": 7,
+							"number": 10,
+							"aired": "2023-12-04",
+							"name": "Diwan"
+						},
+						{
+							"id": 10893125,
+							"seasonNumber": 8,
+							"number": 1,
+							"aired": "2025-01-07",
+							"name": "Iberville: Ramsay's Worst Nightmare"
+						},
+						{
+							"id": 10895755,
+							"seasonNumber": 8,
+							"number": 2,
+							"aired": "2025-01-14",
+							"name": "Iberville: The Nightmare Continues"
+						},
+						{
+							"id": 10906646,
+							"seasonNumber": 8,
+							"number": 3,
+							"aired": "2025-01-21",
+							"name": "Voleo's"
+						},
+						{
+							"id": 10921716,
+							"seasonNumber": 8,
+							"number": 4,
+							"aired": "2025-01-28",
+							"name": "Kindred"
+						},
+						{
+							"id": 10921717,
+							"seasonNumber": 8,
+							"number": 5,
+							"aired": "2025-02-04",
+							"name": "3 Southern Girls"
+						},
+						{
+							"id": 10946495,
+							"seasonNumber": 8,
+							"number": 6,
+							"aired": "2025-02-11",
+							"name": "Kings Blu Jam"
+						},
+						{
+							"id": 10958834,
+							"seasonNumber": 8,
+							"number": 7,
+							"aired": "2025-02-18",
+							"name": "Verdict"
+						},
+						{
+							"id": 10971688,
+							"seasonNumber": 8,
+							"number": 8,
+							"aired": "2025-02-25",
+							"name": "Grumpy George"
+						},
+						{
+							"id": 10983273,
+							"seasonNumber": 8,
+							"number": 9,
+							"aired": "2025-03-04",
+							"name": "Leo's"
+						},
+						{
+							"id": 11004510,
+							"seasonNumber": 8,
+							"number": 10,
+							"aired": "2025-03-11",
+							"name": "Blake's Place"
+						},
+						{
+							"id": 11004511,
+							"seasonNumber": 8,
+							"number": 11,
+							"aired": "2025-03-18",
+							"name": "Simmer Down"
+						},
+						{
+							"id": 11868909,
+							"seasonNumber": 9,
+							"number": 1,
+							"aired": "2026-07-21",
+							"name": "Freddy's Steak House"
+						},
+						{
+							"id": 11868910,
+							"seasonNumber": 9,
+							"number": 2,
+							"aired": "2026-07-21",
+							"name": "4-Star Diner"
+						},
+						{
+							"id": 11893286,
+							"seasonNumber": 9,
+							"number": 3,
+							"aired": "2026-07-28",
+							"name": "Love on the Blu"
+						},
+						{
+							"id": 11893287,
+							"seasonNumber": 9,
+							"number": 4,
+							"aired": "2026-08-04",
+							"name": "Borelli's Pizzeria"
+						},
+						{
+							"id": 11894030,
+							"seasonNumber": 9,
+							"number": 5,
+							"aired": "2026-08-11",
+							"name": "Renate's German Restaurant"
+						},
+						{
+							"id": 11917447,
+							"seasonNumber": 9,
+							"number": 6,
+							"aired": "2026-08-18",
+							"name": "Boodles Restaurant"
+						},
+						{
+							"id": 11903193,
+							"seasonNumber": 9,
+							"number": 7,
+							"aired": "2026-08-25",
+							"name": "Cafe Notte"
+						},
+						{
+							"id": 11933137,
+							"seasonNumber": 9,
+							"number": 8,
+							"aired": "2026-09-01",
+							"name": "Golden Girls"
+						},
+						{
+							"id": 11952989,
+							"seasonNumber": 9,
+							"number": 9,
+							"aired": "2026-09-08",
+							"name": "Lyla's Family Restaurant (1)"
+						},
+						{
+							"id": 11952990,
+							"seasonNumber": 9,
+							"number": 10,
+							"aired": "2026-09-08",
+							"name": "Lyla's Family Restaurant (2)"
+						},
+						{
+							"id": 11961405,
+							"seasonNumber": 9,
+							"number": 11,
+							"aired": "2026-09-15",
+							"name": "Wick 'n Ore Kitchen & Tap"
+						},
+						{
+							"id": 11961406,
+							"seasonNumber": 9,
+							"number": 12,
+							"aired": "2026-09-15",
+							"name": "Firenze Restaurant & Pizzeria"
+						}
+					]
+				},
+				"links": {
+					"prev": null,
+					"self": "https://api4.thetvdb.com/v4/series/80552/episodes/default?page=0",
+					"next": null,
+					"total_items": 126,
+					"page_size": 500
+				}
+			}
+		}
+	},
+	"request": {
+		"name": "Kitchen.Nightmares.2023.S02.1080p.AMZN.WEB-DL.DDP5.1.H.264-FLUX",
+		"hash": "d640e09d47065f0a151f0f56cd766a06db7f2b77",
+		"imdbId": "tt32436778",
+		"files": [
+			{
+				"path": "Kitchen.Nightmares.2023.S02E01.Iberville.Ramsays.Worst.Nightmare.1080p.AMZN.WEB-DL.DDP5.1.H.264-FLUX.mkv",
+				"folder": ""
+			},
+			{
+				"path": "Kitchen.Nightmares.2023.S02E03.Voleos.1080p.AMZN.WEB-DL.DDP5.1.H.264-FLUX.mkv",
+				"folder": ""
+			}
+		]
+	}
+}

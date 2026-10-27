@@ -47,7 +47,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-10-26.1';
+export const PLACEMENT_RULES = '2026-10-27.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -130,6 +130,10 @@ export interface PlacementSources {
 	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
 	/** content-identifier's own answers for these names, unjudged; null when it could not be asked. */
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
+	/** TheTVDB's series for an IMDb id (`search/remoteid`); absent or null where TVDB cannot be asked. */
+	tvdbSeriesOf?(imdbId: string): Promise<number[] | null>;
+	/** A TheTVDB series' episodes in its default (aired) order, which Plex numbers by. */
+	tvdbEpisodes?(tvdbId: number): Promise<any[] | null>;
 }
 
 /** Releases placed at once; each one's files go one after another, sharing its lookups. */
@@ -215,6 +219,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
+			if (!waits) out[at] = await tvdbLook(out[at], sources);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -274,6 +279,82 @@ export async function titled(
 
 const letters = (text = '') => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 const placesFiles = (answer: PlacedRelease) => answer.files.some((file) => file.season !== null);
+
+/**
+ * Plex's numbers for a show TMDB lists apart from the series TVDB files it under: TMDB keeps the
+ * 2023 Kitchen Nightmares revival as a show of its own (235884, no TVDB id) and numbers
+ * `Kitchen.Nightmares.2023.S02E03.Voleos` its S2E3, while TVDB, and Plex with it, keeps the
+ * revival as seasons 7-9 of the 2007 series (80552), where it is S8E3 (zurg#285). Asked only of a
+ * show TMDB gives no TVDB id. The series is one TVDB lists for the release's IMDb id, or the TVDB
+ * id of a TMDB show of the same name; each placed episode is found there by its TMDB air date, a
+ * date two episodes share by title. The release moves only when every placed file is found, on one
+ * series alone, at other numbers; `tmdbEpisodeId` stays TMDB's, which Plex lists on no such row.
+ */
+async function tvdbLook(placed: PlacedRelease, sources: PlacementSources): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind !== 'tv' || placed.tmdbId === null || !sources.tvdbEpisodes)
+		return placed;
+	const files = placed.files.filter((file) => file.season !== null);
+	// ponytail: multi-episode files and IMDb's numbering keep the release as it is; map them when one turns up
+	if (!files.length || files.some((f) => f.tmdbEpisodeId === null || f.episodeEnd !== null))
+		return placed;
+	const show = await sources.show(placed.tmdbId);
+	if (!show?.name || show.external_ids?.tvdb_id) return placed;
+	const tmdbEpisodes = new Map<number, any>();
+	for (const season of new Set(files.map((file) => file.season as number)))
+		for (const episode of (await sources.season(placed.tmdbId, season))?.episodes ?? [])
+			tmdbEpisodes.set(episode?.id, episode);
+	const named = ((await sources.searchTv(show.name))?.results ?? [])
+		.filter(
+			(row: any) => row?.id !== placed.tmdbId && letters(row?.name) === letters(show.name)
+		)
+		.slice(0, 5);
+	const series = new Set<number>(
+		placed.imdbId ? ((await sources.tvdbSeriesOf?.(placed.imdbId)) ?? []) : []
+	);
+	for (const row of named) {
+		const tvdbId = Number((await sources.show(row.id))?.external_ids?.tvdb_id);
+		if (Number.isInteger(tvdbId) && tvdbId > 0) series.add(tvdbId);
+	}
+	let found: { tvdbId: number; at: any[] } | null = null;
+	for (const tvdbId of series) {
+		const listed = ((await sources.tvdbEpisodes(tvdbId)) ?? []).filter(
+			(episode: any) => episode?.seasonNumber > 0
+		);
+		const at = files.map((file) => {
+			const tmdb = tmdbEpisodes.get(file.tmdbEpisodeId as number);
+			const aired = tmdb?.air_date
+				? listed.filter((episode: any) => episode?.aired === tmdb.air_date)
+				: [];
+			const hit =
+				aired.length > 1
+					? aired.filter((episode: any) => letters(episode?.name) === letters(tmdb.name))
+					: aired;
+			return hit.length === 1 ? hit[0] : null;
+		});
+		if (at.some((episode) => !episode) || new Set(at).size < at.length) continue;
+		if (found) return placed;
+		found = { tvdbId, at };
+	}
+	if (
+		!found ||
+		found.at.every(
+			(episode, n) =>
+				episode.seasonNumber === files[n].season && episode.number === files[n].episode
+		)
+	)
+		return placed;
+	const { tvdbId, at } = found;
+	return {
+		...placed,
+		tvdbId,
+		files: placed.files.map((file) => {
+			const n = files.indexOf(file);
+			return n < 0
+				? file
+				: { ...file, season: at[n].seasonNumber, episode: at[n].number, how: 'tvdbSeries' };
+		}),
+	};
+}
 
 /**
  * Another look at a release DMM could not name, or whose show holds none of its numbered
@@ -1309,4 +1390,25 @@ export const cachedSources: PlacementSources = {
 	// asks about at most 300 names it has not answered today: zurg asks again daily
 	identifier: (names) =>
 		settle(() => identifyFilenamesRemembered(names, 300)).then((r) => r?.answers ?? null),
+	tvdbSeriesOf: (imdbId) =>
+		settle(() => getMetadataCache().getTvdb(`search/remoteid/${imdbId}`)).then(
+			(answer) =>
+				answer &&
+				(answer.data ?? [])
+					.map((row: any) => row?.series?.id)
+					.filter((id: unknown) => typeof id === 'number')
+		),
+	tvdbEpisodes: async (tvdbId) => {
+		const episodes: any[] = [];
+		// 500 a page: Kitchen Nightmares' 126 episodes are one
+		for (let page = 0; page < 20; page++) {
+			const answer = await settle(() =>
+				getMetadataCache().getTvdb(`series/${tvdbId}/episodes/default?page=${page}`)
+			);
+			if (!answer) return null;
+			episodes.push(...(answer.data?.episodes ?? []));
+			if (!answer.links?.next) break;
+		}
+		return episodes;
+	},
 };

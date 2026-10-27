@@ -11,6 +11,7 @@ import {
 import answers from '@/test/fixtures/placement/answers.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
+import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
@@ -85,6 +86,44 @@ const recordedSources = (r: any): PlacementSources => ({
 	identifier: async (names) => answered(r, names),
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
 	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
+	tvdbSeriesOf: async (id) =>
+		r.tvdbSeriesOf?.[id]
+			? (r.tvdbSeriesOf[id].data ?? []).map((row: any) => row.series.id)
+			: null,
+	tvdbEpisodes: async (id) => r.tvdbEpisodes?.[id]?.data.episodes ?? null,
+});
+
+describe('a show TMDB lists apart from the TVDB series Plex files it under', () => {
+	// zurg#285: TMDB's Kitchen Nightmares 2023 (235884, no TVDB id) numbers the revival from S1;
+	// TVDB and Plex keep it as seasons 7-9 of the 2007 series (80552), where Voleo's is S8E3
+	it("places the revival's files on TVDB's numbering, with the series' TVDB id", async () => {
+		const { releases } = await place(
+			[kitchenNightmares.request as PlaceRequest],
+			Infinity,
+			recordedSources(kitchenNightmares.answers)
+		);
+		expect(releases[0]).toMatchObject({ kind: 'tv', tmdbId: 235884, tvdbId: 80552 });
+		expect(releases[0].files.map((f) => [f.season, f.episode, f.tmdbEpisodeId, f.how])).toEqual(
+			[
+				[8, 1, 5767857, 'tvdbSeries'],
+				[8, 3, 5896393, 'tvdbSeries'],
+			]
+		);
+	});
+
+	it("keeps TMDB's numbering where TVDB cannot be asked", async () => {
+		const { tvdbEpisodes: _, ...withoutTvdb } = recordedSources(kitchenNightmares.answers);
+		const { releases } = await place(
+			[kitchenNightmares.request as PlaceRequest],
+			Infinity,
+			withoutTvdb
+		);
+		expect(releases[0].tvdbId).toBeUndefined();
+		expect(releases[0].files.map((f) => [f.season, f.episode])).toEqual([
+			[2, 1],
+			[2, 3],
+		]);
+	});
 });
 
 describe('a pack numbered in another order than TMDB, named by its titles', () => {

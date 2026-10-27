@@ -25,7 +25,8 @@ import { namedEpisodes, namedSeasons } from '@/utils/seasonNaming';
 import { FANSUB_SEASON } from '@/utils/tvEpisodes';
 import ptt from 'parse-torrent-title';
 
-export type PlacementRule = 'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'dub' | 'group' | 'absolute';
+export type PlacementRule =
+	'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'tvdbSeries' | 'dub' | 'group' | 'absolute';
 
 /** A file's numbers as its name (or its folder, or its release) gives them. */
 export interface FileNumbers {
