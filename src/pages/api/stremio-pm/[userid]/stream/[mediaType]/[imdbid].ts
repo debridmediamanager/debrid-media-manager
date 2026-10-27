@@ -58,7 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	if (!profile.hideCastOption) {
 		streams.push({
-			name: 'DMM Cast PM✨',
+			name: 'DMM Cast PM ✨',
 			title: 'Cast a file inside a torrent',
 			externalUrl,
 			behaviorHints: { bingeGroup: `dmm-pm:${imdbidStr}:cast` },

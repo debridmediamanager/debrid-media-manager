@@ -113,7 +113,7 @@ describe('/api/stremio-oc/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 	it('offers the cast entry point unless the profile hides it', async () => {
 		await handler(request(), res);
-		expect((res._getData() as any).streams[0].name).toBe('DMM Cast OC✨');
+		expect((res._getData() as any).streams[0].name).toBe('DMM Cast OC ✨');
 
 		mockRepository.getOffcloudCastProfile = vi.fn().mockResolvedValue({
 			apiKey: 'viewer-key',

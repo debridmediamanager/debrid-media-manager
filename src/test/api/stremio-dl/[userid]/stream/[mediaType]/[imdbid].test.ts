@@ -113,7 +113,7 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 	it('offers the cast entry point unless the profile hides it', async () => {
 		await handler(request(), res);
-		expect((res._getData() as any).streams[0].name).toContain('DMM Cast DL');
+		expect((res._getData() as any).streams[0].name).toBe('DMM Cast DL ✨');
 
 		const res2 = createMockResponse();
 		mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue({

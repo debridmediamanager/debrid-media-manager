@@ -684,7 +684,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 			expect(castOptionStream).toBeDefined();
 			// A member filter written against the stream name stops matching if it changes.
-			expect(castOptionStream.name).toBe('DMM Cast RD✨');
+			expect(castOptionStream.name).toBe('DMM Cast RD ✨');
 		});
 
 		it('user streams are always returned regardless of maxSize settings', async () => {

@@ -125,7 +125,7 @@ describe('/api/stremio-pm/[userid]/stream/[mediaType]/[imdbid]', () => {
 	it('offers the cast entry point unless the profile hides it', async () => {
 		mockCacheCheck.mockResolvedValue([]);
 		await handler(request(), res);
-		expect((res._getData() as any).streams[0].name).toBe('DMM Cast PM✨');
+		expect((res._getData() as any).streams[0].name).toBe('DMM Cast PM ✨');
 
 		mockRepository.getPremiumizeCastProfile = vi.fn().mockResolvedValue({
 			apiKey: 'viewer-key',

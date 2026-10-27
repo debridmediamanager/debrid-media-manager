@@ -77,7 +77,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	// Add cast option unless hidden in profile settings
 	if (!profile.hideCastOption) {
 		streams.push({
-			name: 'DMM Cast RD✨',
+			name: 'DMM Cast RD ✨',
 			title: 'Cast a file inside a torrent',
 			externalUrl,
 			behaviorHints: {

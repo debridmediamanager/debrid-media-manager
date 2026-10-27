@@ -254,7 +254,7 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 
 			const payload = (res.json as Mock).mock.calls[0][0];
 			const castOptionStream = payload.streams.find(
-				(s: any) => s.externalUrl && s.name === 'DMM Cast AD✨'
+				(s: any) => s.externalUrl && s.name === 'DMM Cast AD ✨'
 			);
 			expect(castOptionStream).toBeUndefined();
 			expect(payload.streams).toHaveLength(1); // only user stream
@@ -272,7 +272,7 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			await handler(req, res);
 
 			const payload = (res.json as Mock).mock.calls[0][0];
-			const castOptionStream = payload.streams.find((s: any) => s.name === 'DMM Cast AD✨');
+			const castOptionStream = payload.streams.find((s: any) => s.name === 'DMM Cast AD ✨');
 			expect(castOptionStream).toBeDefined();
 		});
 
