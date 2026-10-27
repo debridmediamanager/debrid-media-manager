@@ -1405,9 +1405,12 @@ const TvSearch: FunctionComponent = () => {
 		} catch {
 			return;
 		}
-		window.open(
-			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
-		);
+		// After the await the tap no longer counts as a gesture, and iOS Safari
+		// silently blocks window.open; navigating to the deep link still works (#472)
+		window.location.href = getStremioDetailUrl(imdbid as string, {
+			season: String(seasonNum),
+			episode: 1,
+		});
 	}
 
 	const handleCast = (hash: string, fileIds: string[]) =>

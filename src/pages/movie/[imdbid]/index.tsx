@@ -906,7 +906,9 @@ const MovieSearch: FunctionComponent = () => {
 		} catch {
 			return;
 		}
-		window.open(getStremioDetailUrl(imdbid as string));
+		// After the await the tap no longer counts as a gesture, and iOS Safari
+		// silently blocks window.open; navigating to the deep link still works (#472)
+		window.location.href = getStremioDetailUrl(imdbid as string);
 	}
 
 	const handleCast = (hash: string) =>

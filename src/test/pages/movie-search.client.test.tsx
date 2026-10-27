@@ -591,14 +591,28 @@ describe('Movie search page across client-side navigation', () => {
 			dl: { key: 'dl', prop: 'handleCastDebridLink', helper: handleCastMovieDebridLink },
 		} as const;
 		let openSpy: MockInstance<typeof window.open>;
+		const realLocation = window.location;
 
 		beforeEach(() => {
 			// react-hot-toast's promise() hands back the promise it was given.
 			toastMock.promise.mockImplementation((p: Promise<unknown>) => p);
 			openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+			// iOS Safari blocks a window.open made after the cast's await (#472)
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: { ...realLocation, href: 'http://localhost/' },
+			});
 		});
 
-		afterEach(() => openSpy.mockRestore());
+		afterEach(() => {
+			openSpy.mockRestore();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: realLocation,
+			});
+		});
 
 		const castWith = async (service: keyof typeof casts) => {
 			const { key, prop } = casts[service];
@@ -628,6 +642,7 @@ describe('Movie search page across client-side navigation', () => {
 
 				expect(messages.error(reason)).toBe(body.errorMessage);
 				expect(openSpy).not.toHaveBeenCalled();
+				expect(window.location.href).toBe('http://localhost/');
 			}
 		);
 
@@ -637,7 +652,9 @@ describe('Movie search page across client-side navigation', () => {
 			const messages = await castWith(service as keyof typeof casts);
 
 			expect(messages.success).toBe('Cast started in Stremio');
-			expect(openSpy).toHaveBeenCalledWith(expect.stringContaining('tt1111111'));
+			expect(window.location.href).toContain('stremio://');
+			expect(window.location.href).toContain('tt1111111');
+			expect(openSpy).not.toHaveBeenCalled();
 		});
 	});
 

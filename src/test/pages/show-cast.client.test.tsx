@@ -253,6 +253,7 @@ type Service = keyof typeof casts;
 // when no episode was cast. The helpers now reject with the reason.
 describe('Show page cast buttons', () => {
 	let openSpy: MockInstance<typeof window.open>;
+	const realLocation = window.location;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -260,6 +261,12 @@ describe('Show page cast buttons', () => {
 		// react-hot-toast's promise() hands back the promise it was given.
 		toastMock.promise.mockImplementation((p: Promise<unknown>) => p);
 		openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+		// iOS Safari blocks a window.open made after the cast's await (#472)
+		Object.defineProperty(window, 'location', {
+			configurable: true,
+			writable: true,
+			value: { ...realLocation, href: 'http://localhost/' },
+		});
 		axiosGetMock.mockImplementation((url: string) => {
 			if (url.startsWith('/api/info/show')) {
 				return Promise.resolve({
@@ -280,7 +287,14 @@ describe('Show page cast buttons', () => {
 		});
 	});
 
-	afterEach(() => openSpy.mockRestore());
+	afterEach(() => {
+		openSpy.mockRestore();
+		Object.defineProperty(window, 'location', {
+			configurable: true,
+			writable: true,
+			value: realLocation,
+		});
+	});
 
 	const castWith = async (service: Service) => {
 		const { prop, args } = casts[service];
@@ -300,6 +314,7 @@ describe('Show page cast buttons', () => {
 
 			expect(messages.error(reason)).toBe(body.errorMessage);
 			expect(openSpy).not.toHaveBeenCalled();
+			expect(window.location.href).toBe('http://localhost/');
 		}
 	);
 
@@ -319,6 +334,8 @@ describe('Show page cast buttons', () => {
 		const messages = await castWith(service as Service);
 
 		expect(messages.success).toBe('Casting succeeded.');
-		expect(openSpy).toHaveBeenCalledWith(expect.stringContaining('tt1234567'));
+		expect(window.location.href).toContain('stremio://');
+		expect(window.location.href).toContain('tt1234567');
+		expect(openSpy).not.toHaveBeenCalled();
 	});
 });
