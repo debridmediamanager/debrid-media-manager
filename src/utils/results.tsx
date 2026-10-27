@@ -126,10 +126,11 @@ export const sortByMean = (searchResults: SearchResult[]): SearchResult[] => {
 			return b.videoCount - a.videoCount;
 		}
 
-		// If video counts are equal, sort alphabetically
+		// If video counts are equal, sort alphabetically, then by hash so the
+		// order never depends on the order rows arrived in
 		const titleA = a.title || '';
 		const titleB = b.title || '';
-		return titleA.localeCompare(titleB);
+		return titleA.localeCompare(titleB) || a.hash.localeCompare(b.hash);
 	});
 	return searchResults;
 };

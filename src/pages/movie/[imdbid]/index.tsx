@@ -509,6 +509,7 @@ const MovieSearch: FunctionComponent = () => {
 			if (!allSourcesCompleted || pendingAvailabilityChecks > 0) return;
 
 			toastShown = true;
+			setSearchResults((prev) => sortByBiggest([...prev]));
 			setSearchCompleteInfo({
 				finalResults: finalResultCount,
 				totalAvailableCount:
@@ -526,6 +527,10 @@ const MovieSearch: FunctionComponent = () => {
 				pendingAvailabilityChecks: 0,
 			});
 		};
+
+		// Availability answers land for up to ~30 s; re-sorting on each one made
+		// rows jump back and forth (#370), so they only mark rows until the end
+		const keepOrder = (results: SearchResult[]) => results;
 
 		const titleStartsWithYear = /^\d{4}\b/.test(movieInfo.title);
 
@@ -566,9 +571,9 @@ const MovieSearch: FunctionComponent = () => {
 						return prevResults;
 					}
 
-					// Same ordering the availability checks re-apply as they land, so
-					// rows do not jump between two different sorts
-					const sorted = sortByBiggest([...prevResults, ...newUniqueResults]);
+					// Rows already on screen keep their place while the search runs;
+					// the whole list is sorted once, when every check is in (#370)
+					const sorted = [...prevResults, ...sortByBiggest(newUniqueResults)];
 
 					hashesToCheck = newUniqueResults
 						.filter(
@@ -602,7 +607,7 @@ const MovieSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByBiggest
+							keepOrder
 						);
 						rdAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -619,7 +624,7 @@ const MovieSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByBiggest
+							keepOrder
 						);
 						adAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -635,7 +640,7 @@ const MovieSearch: FunctionComponent = () => {
 						premiumizeKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByBiggest
+						keepOrder
 					).then((count) => {
 						pmAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -653,7 +658,7 @@ const MovieSearch: FunctionComponent = () => {
 						offcloudKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByBiggest
+						keepOrder
 					).then((count) => {
 						ocAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -667,7 +672,7 @@ const MovieSearch: FunctionComponent = () => {
 						torboxKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByBiggest
+						keepOrder
 					).then((count) => {
 						tbAvailableCount += count;
 						pendingAvailabilityChecks--;

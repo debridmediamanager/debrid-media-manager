@@ -842,6 +842,7 @@ const TvSearch: FunctionComponent = () => {
 			if (!allSourcesCompleted || pendingAvailabilityChecks > 0) return;
 
 			toastShown = true;
+			setSearchResults((prev) => sortByMean([...prev]));
 			setSearchCompleteInfo({
 				finalResults: finalResultCount,
 				totalAvailableCount:
@@ -859,6 +860,10 @@ const TvSearch: FunctionComponent = () => {
 				pendingAvailabilityChecks: 0,
 			});
 		};
+
+		// Availability answers land for up to ~30 s; re-sorting on each one made
+		// rows jump back and forth (#370), so they only mark rows until the end
+		const keepOrder = (results: SearchResult[]) => results;
 
 		const titleStartsWithYear = showInfo ? /^\d{4}\b/.test(showInfo.title) : false;
 
@@ -899,9 +904,9 @@ const TvSearch: FunctionComponent = () => {
 						return prevResults;
 					}
 
-					// Same ordering the availability checks re-apply as they land, so
-					// rows do not jump between two different sorts
-					const sorted = sortByMean([...prevResults, ...newUniqueResults]);
+					// Rows already on screen keep their place while the search runs;
+					// the whole list is sorted once, when every check is in (#370)
+					const sorted = [...prevResults, ...sortByMean(newUniqueResults)];
 
 					hashesToCheck = newUniqueResults
 						.filter(
@@ -935,7 +940,7 @@ const TvSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByMean
+							keepOrder
 						);
 						rdAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -952,7 +957,7 @@ const TvSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByMean
+							keepOrder
 						);
 						adAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -968,7 +973,7 @@ const TvSearch: FunctionComponent = () => {
 						premiumizeKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByMean
+						keepOrder
 					).then((count) => {
 						pmAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -986,7 +991,7 @@ const TvSearch: FunctionComponent = () => {
 						offcloudKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByMean
+						keepOrder
 					).then((count) => {
 						ocAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -1000,7 +1005,7 @@ const TvSearch: FunctionComponent = () => {
 						torboxKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByMean
+						keepOrder
 					).then((count) => {
 						tbAvailableCount += count;
 						pendingAvailabilityChecks--;

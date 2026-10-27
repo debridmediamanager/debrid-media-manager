@@ -752,4 +752,55 @@ describe('Movie search page across client-side navigation', () => {
 			expect(handleCastMovie).toHaveBeenCalledWith('tt0446009', 'rd-token', GERMAN_X265);
 		});
 	});
+
+	// #370: availability answers land for up to ~30 s, and re-sorting the list on
+	// each one made rows jump back and forth while the user read it.
+	describe('while availability checks are in flight', () => {
+		afterEach(() => {
+			sortByBiggestMock.mockImplementation((results: any[]) => results);
+		});
+
+		it('keeps the rows still, then sorts them once when every check is in', async () => {
+			const actual =
+				await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+			sortByBiggestMock.mockImplementation(actual.sortByBiggest);
+			const row = (hash: string, fileSize: number) => ({
+				title: `First Movie 2019 1080p ${hash}`,
+				fileSize,
+				hash: hash.repeat(40),
+			});
+			torrentResults.push(row('a', 3000), row('b', 2000), row('c', 1000));
+
+			// The smallest release turns out cached on the first batch, and the
+			// check stays open, as the later batches do on a real page
+			let finishCheck!: (count: number) => void;
+			vi.mocked(checkDatabaseAvailabilityRd).mockImplementationOnce(
+				(_t, _h, _id, _hashes, setResults, sortFn) => {
+					setResults((prev) =>
+						sortFn(
+							prev.map((r) =>
+								r.hash === 'c'.repeat(40) ? { ...r, rdAvailable: true } : r
+							)
+						)
+					);
+					return new Promise((resolve) => (finishCheck = resolve));
+				}
+			);
+			const order = () =>
+				searchResultsProps.current.filteredResults.map((r: { hash: string }) => r.hash[0]);
+
+			render(<MovieSearchPage />);
+			await waitFor(() =>
+				expect(
+					searchResultsProps.current?.filteredResults.find(
+						(r: { rdAvailable: boolean }) => r.rdAvailable
+					)
+				).toBeDefined()
+			);
+			expect(order()).toEqual(['a', 'b', 'c']);
+
+			finishCheck(1);
+			await waitFor(() => expect(order()).toEqual(['c', 'a', 'b']));
+		});
+	});
 });

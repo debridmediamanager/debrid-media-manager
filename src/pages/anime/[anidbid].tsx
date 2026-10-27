@@ -288,8 +288,12 @@ const AnimePage: FunctionComponent = () => {
 		let resultCount = 0;
 		let hiddenCount = 0;
 		const cached = { rd: 0, ad: 0, tb: 0, pm: 0, oc: 0 };
+		// Availability answers only mark rows; the list is sorted once, when every
+		// check is in, so rows do not jump back and forth while they land (#370)
+		const keepOrder = (results: SearchResult[]) => results;
 		const finish = () => {
 			if (pendingChecks > 0 || !isMounted.current) return;
+			setSearchResults((prev) => sortByMean([...prev]));
 			const total = cached.rd + cached.ad + cached.tb + cached.pm + cached.oc;
 			if (total > 0) {
 				const parts = (
@@ -355,7 +359,7 @@ const AnimePage: FunctionComponent = () => {
 						(r) => r.hash && !seen.has(r.hash) && hasSubstantialTitle(r.title)
 					);
 					hashesToCheck = fresh.map((r) => r.hash);
-					const next = fresh.length > 0 ? sortByMean([...prev, ...fresh]) : prev;
+					const next = fresh.length > 0 ? [...prev, ...sortByMean(fresh)] : prev;
 					resultCount = next.length;
 					// Availability is not in yet, so only a TB transfer can keep a blocked row
 					hiddenCount = hideRdBlockedTorrents
@@ -389,7 +393,7 @@ const AnimePage: FunctionComponent = () => {
 								'',
 								hashesToCheck,
 								setSearchResults,
-								sortByMean
+								keepOrder
 							)
 						),
 						'rd'
@@ -404,7 +408,7 @@ const AnimePage: FunctionComponent = () => {
 								'',
 								hashesToCheck,
 								setSearchResults,
-								sortByMean
+								keepOrder
 							)
 						),
 						'ad'
@@ -416,7 +420,7 @@ const AnimePage: FunctionComponent = () => {
 							premiumizeKey,
 							hashesToCheck,
 							setSearchResults,
-							sortByMean
+							keepOrder
 						),
 						'pm'
 					);
@@ -427,7 +431,7 @@ const AnimePage: FunctionComponent = () => {
 							offcloudKey,
 							hashesToCheck,
 							setSearchResults,
-							sortByMean
+							keepOrder
 						),
 						'oc'
 					);
@@ -438,13 +442,14 @@ const AnimePage: FunctionComponent = () => {
 							torboxKey,
 							hashesToCheck,
 							setSearchResults,
-							sortByMean
+							keepOrder
 						),
 						'tb'
 					);
 				}
 				if (rdKey && torboxKey) markTransferredHashes(hashesToCheck, setSearchResults);
 			}
+			finish();
 		} catch (error) {
 			console.error(
 				'Error fetching torrents:',

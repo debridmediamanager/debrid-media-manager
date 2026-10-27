@@ -1,7 +1,7 @@
 /* oxlint-disable nextjs/no-img-element */
 import { render, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	axiosGetMock,
@@ -11,6 +11,8 @@ const {
 	checkDatabaseAvailabilityRdMock,
 	checkDatabaseAvailabilityAdMock,
 	checkDatabaseAvailabilityTbMock,
+	tvResultsProps,
+	sortByMeanMock,
 } = vi.hoisted(() => {
 	class AxiosError extends Error {
 		response?: { status?: number };
@@ -29,6 +31,8 @@ const {
 		checkDatabaseAvailabilityRdMock: vi.fn().mockResolvedValue(0),
 		checkDatabaseAvailabilityAdMock: vi.fn().mockResolvedValue(0),
 		checkDatabaseAvailabilityTbMock: vi.fn().mockResolvedValue(0),
+		tvResultsProps: { current: null as any },
+		sortByMeanMock: vi.fn((results: any[]) => results),
 	};
 });
 
@@ -51,7 +55,10 @@ vi.mock('@/components/SearchTokens', () => ({
 
 vi.mock('@/components/TvSearchResults', () => ({
 	__esModule: true,
-	default: () => <div data-testid="tv-search-results" />,
+	default: (props: any) => {
+		tvResultsProps.current = props;
+		return <div data-testid="tv-search-results" />;
+	},
 }));
 
 vi.mock('@/components/showInfo', () => ({
@@ -146,7 +153,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByMean: (results: any[]) => results,
+	sortByMean: (results: any[]) => sortByMeanMock(results),
 }));
 
 vi.mock('@/utils/quickSearch', () => ({
@@ -328,5 +335,71 @@ describe('Show page availability checks', () => {
 		await new Promise((resolve) => setTimeout(resolve, 100));
 
 		expect(checkDatabaseAvailabilityRdMock).not.toHaveBeenCalled();
+	});
+
+	// #370: on Breaking Bad S1 availability answers kept landing for 31 s and
+	// rows swapped places and back as each one re-sorted the list.
+	describe('while availability checks are in flight', () => {
+		afterEach(() => {
+			sortByMeanMock.mockImplementation((results: any[]) => results);
+		});
+
+		it('keeps the rows still, then sorts them once when every check is in', async () => {
+			const actual =
+				await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+			sortByMeanMock.mockImplementation(actual.sortByMean);
+			const row = (hash: string, fileSize: number) => ({
+				hash: hash.repeat(40),
+				title: `Test Show S01 ${hash}`,
+				fileSize,
+				files: [],
+			});
+			axiosGetMock.mockImplementation((url: string) => {
+				if (url.startsWith('/api/info/show')) return Promise.resolve(showInfoResponse);
+				if (url.startsWith('/api/torrents/tv')) {
+					return Promise.resolve({
+						status: 200,
+						headers: {},
+						data: { results: [row('a', 3000), row('b', 2000), row('c', 1000)] },
+					});
+				}
+				return Promise.resolve({ status: 200, data: {} });
+			});
+			let finishCheck!: (count: number) => void;
+			checkDatabaseAvailabilityRdMock.mockImplementationOnce(
+				(
+					_t: string,
+					_h: string,
+					_id: string,
+					_hashes: string[],
+					setResults: any,
+					sortFn: any
+				) => {
+					setResults((prev: any[]) =>
+						sortFn(
+							prev.map((r) =>
+								r.hash === 'c'.repeat(40) ? { ...r, rdAvailable: true } : r
+							)
+						)
+					);
+					return new Promise((resolve) => (finishCheck = resolve));
+				}
+			);
+			const order = () =>
+				tvResultsProps.current.filteredResults.map((r: { hash: string }) => r.hash[0]);
+
+			render(<ShowSeasonPage />);
+			await waitFor(() =>
+				expect(
+					tvResultsProps.current?.filteredResults.find(
+						(r: { rdAvailable: boolean }) => r.rdAvailable
+					)
+				).toBeDefined()
+			);
+			expect(order()).toEqual(['a', 'b', 'c']);
+
+			finishCheck(1);
+			await waitFor(() => expect(order()).toEqual(['c', 'a', 'b']));
+		});
 	});
 });
