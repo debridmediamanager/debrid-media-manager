@@ -1,7 +1,7 @@
 import type { FileData, SearchResult } from '@/services/mediasearch';
 import { checkOffcloudCache } from '@/services/offcloud';
 import { checkPremiumizeCache } from '@/services/premiumize';
-import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
+import { RD_ADD_MIN_SPACING_MS, RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { runConcurrentFunctions } from '@/utils/batch';
@@ -60,6 +60,8 @@ export type SeasonRunState = 'pending' | 'running' | 'added' | 'held' | 'gap' | 
  * RD was seen to hold — see `RdPauseStreak`.
  */
 const ADD_SPACING_MS = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
+/** RD's own, wider: it pauses an account after about four adds in three minutes. */
+const RD_ADD_SPACING_MS = process.env.VITEST_WORKER_ID ? 0 : RD_BULK_ADD_SPACING_MS;
 /** TorBox swallows a hundred hashes per cache probe; two in flight is its measured comfort. */
 const TB_PROBE_BATCH = 100;
 
@@ -447,6 +449,7 @@ export function useSeasonPackAdder({
 				return outcome;
 			};
 			const pausedTooLong = () => pauseStreak.exhausted;
+			const spacing = plan.service === 'rd' ? RD_ADD_SPACING_MS : ADD_SPACING_MS;
 
 			try {
 				for (const entry of plan.entries) {
@@ -467,7 +470,7 @@ export function useSeasonPackAdder({
 							}
 							if (outcome === 'paused') sawPause = true;
 							if (pausedTooLong()) break;
-							await delay(ADD_SPACING_MS);
+							await delay(spacing);
 						}
 						if (done) {
 							added++;
@@ -487,7 +490,7 @@ export function useSeasonPackAdder({
 							gaps.push(entry.season);
 							markSeason(entry.season, 'gap');
 						}
-						await delay(ADD_SPACING_MS);
+						await delay(spacing);
 						continue;
 					}
 
@@ -513,12 +516,12 @@ export function useSeasonPackAdder({
 							}
 							if (outcome === 'paused') pausedHere = true;
 							if (pausedTooLong()) break;
-							await delay(ADD_SPACING_MS);
+							await delay(spacing);
 						}
 						if (got) addedHere++;
 						else missedHere++;
 						if (pausedTooLong()) break;
-						await delay(ADD_SPACING_MS);
+						await delay(spacing);
 					}
 
 					if (pausedTooLong()) {

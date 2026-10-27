@@ -8,7 +8,9 @@ import {
 	RD_ADD_PAUSE_GIVE_UP_MS,
 	RD_ADD_PAUSE_MS,
 	RdAddPausedError,
+	rdAddPauseRetryMessage,
 	rdAddRefusedMessage,
+	rdAddWaitMessage,
 	RdPauseStreak,
 	retryRdAddThroughPause,
 } from './rdAddPause';
@@ -92,6 +94,18 @@ describe('retryRdAddThroughPause', () => {
 
 		await expect(retryRdAddThroughPause(add)).rejects.toThrow('network');
 		expect(add).toHaveBeenCalledTimes(1);
+	});
+});
+
+// A 451 is the same body whether RD paused the account or refused one hash for
+// a while; on 2026-10-27 an unpaused test account had its first add refused and
+// Big Buck Bunny accepted 15 s later. The notices must not blame the account.
+describe('the notices while an add waits', () => {
+	it('do not say the account is paused', () => {
+		expect(rdAddPauseRetryMessage()).toBe(
+			'Real-Debrid refused this add for now. Trying again in 30 seconds...'
+		);
+		expect(rdAddWaitMessage(20_000)).not.toContain('on your account');
 	});
 });
 

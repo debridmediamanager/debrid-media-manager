@@ -35,7 +35,7 @@ import {
 	addTorrentFile,
 	getTorrentInfo,
 	isRdThrottling,
-	RD_ADD_MIN_SPACING_MS,
+	RD_BULK_ADD_SPACING_MS,
 	rdAddPauseRemainingMs,
 	recordRdAddPause,
 	recordRdRateLimit,
@@ -146,7 +146,7 @@ const MAX_509_RETRIES = 5;
 // own budget of roughly 30 a minute per account (see `RD_ADDS_PER_MINUTE`), and
 // 500ms between hashes was four times that, so a batch spent the user's whole
 // allowance in the first fifteen seconds and then failed the rest of the run.
-const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
+const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : RD_BULK_ADD_SPACING_MS;
 const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
 // A 451 the name does not explain is tried again after each of the
 // account's holds (`RD_ADD_INTERACTIVE_HOLDS_MS`) — see `rdAddPause.ts` for

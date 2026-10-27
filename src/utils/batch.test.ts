@@ -31,6 +31,19 @@ describe('batch utilities', () => {
 			expect(data.sort()).toEqual([1, 2, 3, 4]);
 		});
 
+		// A spaced RD bulk add waits a minute between adds; a wait after the last
+		// one only held back the final toast
+		it('spaces starts without waiting after the last one', async () => {
+			vi.useFakeTimers();
+			let settled: unknown = null;
+			runConcurrentFunctions([async () => 1, async () => 2], 1, 60_000).then(
+				(result) => (settled = result)
+			);
+			await vi.advanceTimersByTimeAsync(60_000);
+			vi.useRealTimers();
+			expect(settled).toEqual([[1, 2], []]);
+		});
+
 		it('handles errors gracefully', async () => {
 			const functions: AsyncFunction<number>[] = [
 				async () => 1,

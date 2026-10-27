@@ -307,7 +307,6 @@ vi.mock('@/utils/delay', () => ({
 }));
 
 import ShowSeasonPage from '@/pages/show/[imdbid]/[seasonNum]';
-import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
 import { checkDatabaseAvailabilityRd } from '@/utils/instantChecks';
 
@@ -405,13 +404,9 @@ describe('Instant RD (Every Episode) pacing', () => {
 
 		// One add, then a gap, for every episode after the first.
 		expect(callLog.filter((entry) => entry === 'add')).toHaveLength(3);
-		expect(callLog).toEqual([
-			'add',
-			`delay:${RD_ADD_MIN_SPACING_MS}`,
-			'add',
-			`delay:${RD_ADD_MIN_SPACING_MS}`,
-			'add',
-		]);
+		// A minute apart on RD: 45 s apart still had RD pause the account on the
+		// fourth add (measured 2026-10-27, #348)
+		expect(callLog).toEqual(['add', 'delay:60000', 'add', 'delay:60000', 'add']);
 	});
 
 	it('lets the viewer dismiss the final episode counts', async () => {

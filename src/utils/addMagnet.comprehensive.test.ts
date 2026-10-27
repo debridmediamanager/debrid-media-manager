@@ -157,8 +157,10 @@ describe('addMagnet utilities', () => {
 				links: [],
 			} as any;
 
+			// RD refuses single hashes on unpaused accounts too (#348), so the
+			// notice must not blame the account
 			const PAUSE_RETRY =
-				'Real-Debrid is pausing adds on your account. Trying again in 30 seconds...';
+				'Real-Debrid refused this add for now. Trying again in 30 seconds...';
 			const REFUSED =
 				'Real-Debrid is still refusing adds on your account after 5 minutes, so this is most likely not about this release. Adds from other apps on this Real-Debrid account (zurg, Sonarr, Radarr) count too. Try again in a few minutes.';
 

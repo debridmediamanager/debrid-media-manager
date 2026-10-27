@@ -85,6 +85,9 @@ vi.mock('@/components/modals/modal', () => ({
 		DismissReason: { cancel: 'cancel' },
 	},
 }));
+// A restore to RD is spaced a minute per add; do not wait the gaps out
+vi.mock('@/utils/delay', () => ({ delay: vi.fn(async () => {}) }));
+
 vi.mock('@/utils/addMagnet', () => ({
 	__esModule: true,
 	handleAddAsMagnetInRd: (...args: unknown[]) => mockHandleAddAsMagnetInRd(...args),

@@ -13,6 +13,7 @@ export async function runConcurrentFunctions<T>(
 	const total = functions.length;
 	let completed = 0;
 	let running = 0;
+	let started = 0;
 	let resolveSlot: (() => void) | null = null;
 
 	function waitForSlot(): Promise<void> {
@@ -40,6 +41,7 @@ export async function runConcurrentFunctions<T>(
 	for (const fn of functions) {
 		await waitForSlot();
 		running++;
+		started++;
 		const task = fn()
 			.then((result) => {
 				results.push(result);
@@ -48,7 +50,8 @@ export async function runConcurrentFunctions<T>(
 				errors.push(err);
 			})
 			.then(async () => {
-				if (typeof delay === 'number' && delay > 0) await sleep(delay);
+				// The delay spaces starts, so nothing waits after the last one has started
+				if (typeof delay === 'number' && delay > 0 && started < total) await sleep(delay);
 				onTaskDone();
 			});
 		pending.push(task);

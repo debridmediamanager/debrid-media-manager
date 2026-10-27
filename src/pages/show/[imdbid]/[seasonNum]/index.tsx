@@ -34,7 +34,7 @@ import {
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import type { UsenetResult } from '@/services/nzb2rd';
-import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
+import { RD_ADD_MIN_SPACING_MS, RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { handleCastTvShowAllDebrid } from '@/utils/allDebridCastApiClient';
 import axiosWithRetry from '@/utils/axiosWithRetry';
@@ -604,7 +604,7 @@ const TvSearch: FunctionComponent = () => {
 				const outcome = await runSeasons(plan, (paused) =>
 					toast.loading(
 						paused
-							? `${label} is pausing adds on your account. Waiting for it to lift, then trying again...`
+							? `${label} refused an add for now. Waiting, then trying again...`
 							: `Adding seasons to ${label}...`,
 						{ id: runToast }
 					)
@@ -1487,7 +1487,8 @@ const TvSearch: FunctionComponent = () => {
 			}
 
 			// Walking the candidates is a burst of adds like any other.
-			if (attempted > 0) await delay(RD_ADD_MIN_SPACING_MS);
+			if (attempted > 0)
+				await delay(service === 'rd' ? RD_BULK_ADD_SPACING_MS : RD_ADD_MIN_SPACING_MS);
 			attempted++;
 			// Cached only: a release the service does not serve at once is
 			// removed again (and, on RD, cleaned out of the availability table).
@@ -1616,7 +1617,7 @@ const TvSearch: FunctionComponent = () => {
 				// any length spent the user's whole add budget partway through
 				// and then failed every episode after that.
 				if (addedCount + uncachedCount + refusedCount > 0) {
-					await delay(RD_ADD_MIN_SPACING_MS);
+					await delay(service === 'rd' ? RD_BULK_ADD_SPACING_MS : RD_ADD_MIN_SPACING_MS);
 				}
 				// Cached only, like the button says: a miss is removed again
 				// rather than left downloading. An RD add refused with a 451 its
@@ -1628,7 +1629,7 @@ const TvSearch: FunctionComponent = () => {
 						silent: true,
 						onPaused: () => {
 							toast.loading(
-								`Episode ${epNum}: ${label} is pausing adds on your account. Trying again when it lifts...`,
+								`Episode ${epNum}: ${label} refused it for now. Waiting, then trying again...`,
 								{ id: toastId }
 							);
 							onPaused();

@@ -131,6 +131,19 @@ export const RD_ADDS_PER_MINUTE = 30;
 export const RD_ADD_MIN_SPACING_MS = 60_000 / RD_ADDS_PER_MINUTE;
 const ADD_RATE_WINDOW_MS = 60_000;
 
+/**
+ * Spacing between the adds of a bulk run (a whole season, every episode, a
+ * Check RD sweep, a library restore or hashlist download). Far wider than
+ * `RD_ADD_MIN_SPACING_MS`, because the 429 budget is not what stops a run: RD
+ * pauses an account's adds (451 on everything, Big Buck Bunny included) after
+ * about four adds in three minutes. Measured 2026-10-27 on two test accounts:
+ * clean-named film hashes sent 45 s apart had the fourth refused, a pause that
+ * lifted about 1m45s later. One a minute keeps four adds over three minutes
+ * apart. No spacing was seen to rule a pause out, so a run still waits them out
+ * (`rdAddPause.ts`). Adds a user clicks one at a time are not spaced.
+ */
+export const RD_BULK_ADD_SPACING_MS = 60_000;
+
 /** One attempted add on this token, whatever it answered: RD counts refusals too. */
 export function recordRdAddAttempt(token: string): void {
 	if (!token) return;

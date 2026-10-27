@@ -14,7 +14,7 @@ import {
 } from '@/hooks/auth';
 import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { getMagnetStatus, uploadMagnet } from '@/services/allDebrid';
-import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
+import { getTorrentInfo, proxyUnrestrictLink, RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import UserTorrentDB from '@/torrent/db';
 import type { UserTorrent } from '@/torrent/userTorrent';
@@ -1517,13 +1517,16 @@ function TorrentsPage() {
 				return { success: 0, error: 0 };
 			}
 
+			// RD pauses an account's adds after a few in a row, so a restore to RD
+			// goes one at a time, spaced
+			const rdPaced = debridService === 'rd';
 			let availableResults: any[] = [];
 			let availableErrors: any[] = [];
 			if (toAddAvailable.length > 0) {
 				[availableResults, availableErrors] = await runConcurrentFunctions(
 					toAddAvailable,
-					4,
-					0,
+					rdPaced ? 1 : 4,
+					rdPaced ? RD_BULK_ADD_SPACING_MS : 0,
 					(completed, total, errorCount) => {
 						totalCompleted = completed;
 						const message =
@@ -1541,7 +1544,7 @@ function TorrentsPage() {
 				[unavailableResults, unavailableErrors] = await runConcurrentFunctions(
 					toAddUnavailable,
 					1,
-					0,
+					rdPaced ? RD_BULK_ADD_SPACING_MS : 0,
 					(completed, total, errorCount) => {
 						const actualCompleted = totalCompleted + completed;
 						const message =

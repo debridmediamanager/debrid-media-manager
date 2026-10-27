@@ -107,6 +107,10 @@ vi.mock('@/utils/instantChecks', async (importOriginal) => ({
 // Real-Debrid answered every add from this list (a real shared list) with
 // 451 {"error":"infringing_file","error_code":35} on 2026-10-22, and
 // handleAddAsMagnetInRd turns that into 'infringing_file' rather than a throw.
+// The bulk download is spaced a minute per add; record the gaps, do not wait them
+const { delayMock } = vi.hoisted(() => ({ delayMock: vi.fn(async (_ms: number) => {}) }));
+vi.mock('@/utils/delay', () => ({ delay: delayMock }));
+
 vi.mock('@/utils/addMagnet', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/addMagnet')>()),
 	handleAddAsMagnetInRd: vi.fn().mockResolvedValue('infringing_file'),
@@ -149,5 +153,8 @@ describe('HashlistPage RD Download', () => {
 				.mock.calls.map((call) => call[1])
 				.sort()
 		).toEqual(available.map((row) => row.hash).sort());
+		// One at a time, a minute apart: RD pauses an account's adds after about
+		// four in three minutes (#348); this ran four at once with no gap
+		expect(delayMock.mock.calls.filter(([ms]) => ms === 60_000)).toHaveLength(count - 1);
 	});
 });

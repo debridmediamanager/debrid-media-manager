@@ -9,6 +9,7 @@ import {
 } from '@/hooks/auth';
 import { deleteMagnetAd, getMagnetStatus, uploadMagnet } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, Hashlist, HashlistTorrent } from '@/services/mediasearch';
+import { RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import {
 	checkCachedStatus,
 	createTorrent,
@@ -569,8 +570,9 @@ function HashlistPage() {
 
 		const [results, errors] = await runConcurrentFunctions(
 			yetToDownload,
-			4,
-			0,
+			// One at a time and spaced: RD pauses an account's adds after a few in a row
+			1,
+			RD_BULK_ADD_SPACING_MS,
 			(completed, total, errorCount) => {
 				const message =
 					errorCount > 0

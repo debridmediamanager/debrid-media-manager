@@ -27,6 +27,7 @@ vi.mock('@/services/offcloud', () => ({ checkOffcloudCache: mockCheckOffcloudCac
 vi.mock('@/services/realDebrid', () => ({
 	isRdThrottling: mockIsRdThrottling,
 	RD_ADD_MIN_SPACING_MS: 2000,
+	RD_BULK_ADD_SPACING_MS: 60_000,
 }));
 vi.mock('@/utils/token', () => ({
 	generateTokenAndHash: vi.fn(async () => ['token-ts', 'token-hash']),

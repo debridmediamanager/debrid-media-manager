@@ -69,6 +69,11 @@ const describeLongRefusal = ({ refused, tries, forMs }: RdLongRefusal) =>
  * Shown while an interactive add waits `holdMs` to be tried again. When RD has
  * been refusing the account for longer than a pause (`rdLongRefusal`), says so
  * rather than promising a short wait.
+ *
+ * It does not say the account is paused: RD also refuses a single hash for a
+ * while on an account that is not paused (measured 2026-10-27: a first add
+ * refused while Big Buck Bunny 15 s later was accepted, both hashes accepted
+ * 13-18 min later), and the 451 body is the same either way.
  */
 export const rdAddPauseRetryMessage = (
 	holdMs: number = RD_ADD_PAUSE_MS,
@@ -76,7 +81,7 @@ export const rdAddPauseRetryMessage = (
 ) =>
 	longRefusal
 		? `${describeLongRefusal(longRefusal)}. Trying again in ${formatRdAddWait(holdMs)}...`
-		: `Real-Debrid is pausing adds on your account. Trying again in ${formatRdAddWait(holdMs)}...`;
+		: `Real-Debrid refused this add for now. Trying again in ${formatRdAddWait(holdMs)}...`;
 
 /**
  * Shown when every try was refused, `waitedMs` of holds apart. Says what it
@@ -97,9 +102,7 @@ export const rdAddRefusedMessage = (
 
 /** Shown when an add has to wait for a pause another add ran into. */
 export const rdAddWaitMessage = (waitMs: number) =>
-	`Real-Debrid is pausing adds on your account. This add will go through in ${formatRdAddWait(
-		waitMs
-	)}.`;
+	`Real-Debrid refused an add a moment ago, so this one is sent in ${formatRdAddWait(waitMs)}.`;
 
 type RefusalShape = {
 	response?: { status?: unknown; data?: { error?: unknown; error_code?: unknown } | null };

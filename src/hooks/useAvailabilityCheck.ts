@@ -5,7 +5,7 @@ import {
 	CACHE_CHECK_CHUNK_SIZE as OC_CACHE_CHECK_CHUNK_SIZE,
 } from '@/services/offcloud';
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
-import { isRdThrottling, RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
+import { isRdThrottling, RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
 import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay } from '@/utils/delay';
@@ -34,8 +34,10 @@ export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC' | 'DL';
 // actually sustains (about 30 adds a minute per account, not the 250/min the
 // API as a whole publishes), widen the gap every time RD pushes back, and give
 // up rather than grind out answers that are wrong.
-const RD_PROBE_BASE_SPACING_MS = RD_ADD_MIN_SPACING_MS;
-const RD_PROBE_MAX_SPACING_MS = 30_000;
+// Since 2026-10-27 the start is the bulk spacing: each probe is an add, and
+// RD pauses an account after about four adds in three minutes.
+const RD_PROBE_BASE_SPACING_MS = RD_BULK_ADD_SPACING_MS;
+const RD_PROBE_MAX_SPACING_MS = 4 * RD_BULK_ADD_SPACING_MS;
 // Five rows in a row throttled means the penalty is not clearing inside a gap
 // this sweep can afford to wait.
 const RD_THROTTLE_ABORT_AFTER = 5;
@@ -528,7 +530,7 @@ export function useAvailabilityCheck(
 				if (rdThrottled) {
 					// RD refused to answer rather than answering "not cached".
 					toast.error(
-						'Real-Debrid is pausing adds on your account — try this row again in a few minutes.',
+						'Real-Debrid did not answer for this row now — try it again in a few minutes.',
 						{ id: toastId, duration: 6000 }
 					);
 				} else {
