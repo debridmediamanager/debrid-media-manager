@@ -19,9 +19,10 @@
  * asks one property at a time (`src/services/wikidataImport/wikidataIds.ts`
  * says why each query has its shape). About 1,450 queries, ~40 minutes.
  *
- * `--apply` loads `*_next` copies and renames them over the live tables in one
- * statement, so readers see last week's table or this week's, never a half.
- * Nothing goes live unless every property loaded whole. Every failure exits
+ * Everything is fetched before the database is touched. `--apply` then loads
+ * `*_next` copies and renames them over the live tables in one statement, so
+ * readers see last week's table or this week's, never a half. Nothing goes
+ * live unless every property loaded whole. Every failure exits
  * non-zero with a line starting `FAILED:`.
  */
 import { PrismaClient } from '@prisma/client';
@@ -46,6 +47,8 @@ import {
 /** Floor well under the 1,436 properties seen on 2026-10-28; fewer is a broken answer. */
 const MIN_PROPERTIES = 1000;
 const ATTEMPTS = 4;
+/** mysqld took ~45 s to come back from each 2026-10-28 crash. */
+const LOAD_ATTEMPTS = 3;
 const INSERT_BATCH = 2000;
 const IDS = 'wikidata_external_ids';
 const PROPS = 'wikidata_properties';
@@ -107,14 +110,76 @@ async function sparql<T>(
 	}
 }
 
-async function insertRows(prisma: PrismaClient, prop: string, rows: ExternalIdRow[]) {
-	for (let i = 0; i < rows.length; i += INSERT_BATCH) {
-		const batch = rows.slice(i, i + INSERT_BATCH);
+interface LoadedProperty {
+	prop: string;
+	items: number;
+	rows: ExternalIdRow[];
+}
+
+/**
+ * Load everything into `*_next` and rename it live. Nothing here talks to
+ * QLever, so the phase lasts minutes and can start over when mysqld drops the
+ * connection (it restarted every 10-20 min on 2026-10-28).
+ */
+async function load(
+	prisma: PrismaClient,
+	loaded: LoadedProperty[],
+	labels: Map<string, PropertyLabel>,
+	total: number
+): Promise<void> {
+	await prisma.$executeRawUnsafe(`DROP TABLE IF EXISTS ${IDS}_next, ${PROPS}_next`);
+	await prisma.$executeRawUnsafe(`CREATE TABLE ${IDS}_next LIKE ${IDS}`);
+	await prisma.$executeRawUnsafe(`CREATE TABLE ${PROPS}_next LIKE ${PROPS}`);
+
+	for (const { prop, rows } of loaded) {
+		for (let i = 0; i < rows.length; i += INSERT_BATCH) {
+			const batch = rows.slice(i, i + INSERT_BATCH);
+			await prisma.$executeRawUnsafe(
+				`INSERT INTO ${IDS}_next (qid, prop, value) VALUES ${batch.map(() => '(?,?,?)').join(',')}`,
+				...batch.flatMap((r) => [r.qid, prop, r.value])
+			);
+		}
+	}
+	for (let i = 0; i < loaded.length; i += 500) {
+		const batch = loaded.slice(i, i + 500);
 		await prisma.$executeRawUnsafe(
-			`INSERT INTO ${IDS}_next (qid, prop, value) VALUES ${batch.map(() => '(?,?,?)').join(',')}`,
-			...batch.flatMap((r) => [r.qid, prop, r.value])
+			`INSERT INTO ${PROPS}_next (prop, label, formatter_url, items, row_count) VALUES ${batch
+				.map(() => '(?,?,?,?,?)')
+				.join(',')}`,
+			...batch.flatMap((p) => [
+				p.prop,
+				labels.get(p.prop)?.label ?? null,
+				labels.get(p.prop)?.formatterUrl ?? null,
+				p.items,
+				p.rows.length,
+			])
 		);
 	}
+
+	const [written] = await prisma.$queryRawUnsafe<{ n: bigint }[]>(
+		`SELECT COUNT(*) AS n FROM ${IDS}_next`
+	);
+	if (Number(written.n) !== total) {
+		throw new RunFailure(`${IDS}_next holds ${written.n} rows, ${total} were inserted`);
+	}
+	const [live] = await prisma.$queryRawUnsafe<{ rows: unknown; props: bigint }[]>(
+		`SELECT COALESCE(SUM(row_count), 0) AS \`rows\`, COUNT(*) AS props FROM ${PROPS}`
+	);
+	const before = { rows: Number(live.rows), props: Number(live.props) };
+	const refusal = refuseShrink(before, { rows: total, props: loaded.length });
+	if (refusal && !process.argv.includes('--allow-shrink')) {
+		throw new RunFailure(`${refusal}; --allow-shrink replaces them anyway`);
+	}
+
+	await prisma.$executeRawUnsafe(`DROP TABLE IF EXISTS ${IDS}_old, ${PROPS}_old`);
+	await prisma.$executeRawUnsafe(
+		`RENAME TABLE ${IDS} TO ${IDS}_old, ${IDS}_next TO ${IDS}, ${PROPS} TO ${PROPS}_old, ${PROPS}_next TO ${PROPS}`
+	);
+	await prisma.$executeRawUnsafe(`DROP TABLE ${IDS}_old, ${PROPS}_old`);
+	log(
+		`Live: ${total} rows over ${loaded.length} properties ` +
+			`(was ${before.rows} over ${before.props})`
+	);
 }
 
 async function main(prisma: PrismaClient): Promise<void> {
@@ -144,13 +209,7 @@ async function main(prisma: PrismaClient): Promise<void> {
 	log(`${props.length} external-id properties on media items, of ${externalIds.size}`);
 	if (only) props = props.filter((p) => only.includes(p.prop));
 
-	if (apply) {
-		await prisma.$executeRawUnsafe(`DROP TABLE IF EXISTS ${IDS}_next, ${PROPS}_next`);
-		await prisma.$executeRawUnsafe(`CREATE TABLE ${IDS}_next LIKE ${IDS}`);
-		await prisma.$executeRawUnsafe(`CREATE TABLE ${PROPS}_next LIKE ${PROPS}`);
-	}
-
-	const loaded: { prop: string; items: number; rows: number }[] = [];
+	const loaded: LoadedProperty[] = [];
 	let total = 0;
 	let tooLong = 0;
 	for (const [n, { prop, items: indexed }] of props.entries()) {
@@ -161,8 +220,7 @@ async function main(prisma: PrismaClient): Promise<void> {
 			}
 			return values;
 		});
-		if (apply) await insertRows(prisma, prop, parsed.rows);
-		loaded.push({ prop, items: parsed.items, rows: parsed.rows.length });
+		loaded.push({ prop, items: parsed.items, rows: parsed.rows });
 		total += parsed.rows.length;
 		tooLong += parsed.tooLong;
 		if (parsed.tooLong) log(`${prop}: ${parsed.tooLong} values over 255 characters left out`);
@@ -184,9 +242,9 @@ async function main(prisma: PrismaClient): Promise<void> {
 		}
 	}
 	log(`Fetched ${total} rows over ${loaded.length} properties, ${tooLong} values too long`);
-	for (const p of [...loaded].sort((a, b) => b.rows - a.rows).slice(0, 15)) {
+	for (const p of [...loaded].sort((a, b) => b.rows.length - a.rows.length).slice(0, 15)) {
 		console.log(
-			`  ${p.prop.padEnd(8)} ${String(p.rows).padStart(8)}  ${labels.get(p.prop)?.label ?? ''}`
+			`  ${p.prop.padEnd(8)} ${String(p.rows.length).padStart(8)}  ${labels.get(p.prop)?.label ?? ''}`
 		);
 	}
 
@@ -194,47 +252,18 @@ async function main(prisma: PrismaClient): Promise<void> {
 		log('Dry run: nothing written. Re-run with --apply to write.');
 		return;
 	}
-
-	for (let i = 0; i < loaded.length; i += 500) {
-		const batch = loaded.slice(i, i + 500);
-		await prisma.$executeRawUnsafe(
-			`INSERT INTO ${PROPS}_next (prop, label, formatter_url, items, row_count) VALUES ${batch
-				.map(() => '(?,?,?,?,?)')
-				.join(',')}`,
-			...batch.flatMap((p) => [
-				p.prop,
-				labels.get(p.prop)?.label ?? null,
-				labels.get(p.prop)?.formatterUrl ?? null,
-				p.items,
-				p.rows,
-			])
-		);
+	for (let attempt = 1; ; attempt++) {
+		try {
+			return await load(prisma, loaded, labels, total);
+		} catch (error) {
+			if (error instanceof RunFailure || attempt >= LOAD_ATTEMPTS) throw error;
+			const message = error instanceof Error ? error.message.trim().split('\n').pop() : error;
+			console.error(
+				`${new Date().toISOString()} load attempt ${attempt}: ${message}; starting over in 90s`
+			);
+			await sleep(90_000);
+		}
 	}
-
-	const [written] = await prisma.$queryRawUnsafe<{ n: bigint }[]>(
-		`SELECT COUNT(*) AS n FROM ${IDS}_next`
-	);
-	if (Number(written.n) !== total) {
-		throw new RunFailure(`${IDS}_next holds ${written.n} rows, ${total} were inserted`);
-	}
-	const [live] = await prisma.$queryRawUnsafe<{ rows: unknown; props: bigint }[]>(
-		`SELECT COALESCE(SUM(row_count), 0) AS \`rows\`, COUNT(*) AS props FROM ${PROPS}`
-	);
-	const before = { rows: Number(live.rows), props: Number(live.props) };
-	const refusal = refuseShrink(before, { rows: total, props: loaded.length });
-	if (refusal && !process.argv.includes('--allow-shrink')) {
-		throw new RunFailure(`${refusal}; --allow-shrink replaces them anyway`);
-	}
-
-	await prisma.$executeRawUnsafe(`DROP TABLE IF EXISTS ${IDS}_old, ${PROPS}_old`);
-	await prisma.$executeRawUnsafe(
-		`RENAME TABLE ${IDS} TO ${IDS}_old, ${IDS}_next TO ${IDS}, ${PROPS} TO ${PROPS}_old, ${PROPS}_next TO ${PROPS}`
-	);
-	await prisma.$executeRawUnsafe(`DROP TABLE ${IDS}_old, ${PROPS}_old`);
-	log(
-		`Live: ${total} rows over ${loaded.length} properties ` +
-			`(was ${before.rows} over ${before.props})`
-	);
 }
 
 const prisma = new PrismaClient();
