@@ -1351,3 +1351,32 @@ model RexDirectCert {
   privkey    String   @db.MediumText
   updatedAt  DateTime @updatedAt
 }
+
+/// Every external id Wikidata holds for a film, TV or anime item: IMDb, TMDB,
+/// TVDB, Plex, AniDB, HanCinema, KMDb and ~1,400 more. One row per value; an
+/// item can carry several for one property. Rebuilt weekly by
+/// `scripts/import-wikidata.ts` and swapped in whole, so it is never half new.
+/// Map one id to another through `qid`. `value` is case-sensitive
+/// (utf8mb4_0900_bin, set in the migration).
+model WikidataExternalId {
+  qid   Int    @db.UnsignedInt
+  /// Wikidata property, e.g. "P345" (IMDb); `wikidata_properties` names it.
+  prop  String @db.VarChar(12)
+  value String @db.VarChar(255)
+
+  @@id([prop, value, qid])
+  @@index([qid])
+  @@map("wikidata_external_ids")
+}
+
+/// The properties in `wikidata_external_ids`, with how many items carry each.
+model WikidataProperty {
+  prop         String  @id @db.VarChar(12)
+  label        String? @db.VarChar(255)
+  /// URL template, `$1` replaced by the value.
+  formatterUrl String? @map("formatter_url") @db.VarChar(512)
+  items        Int     @db.UnsignedInt
+  rowCount     Int     @map("row_count") @db.UnsignedInt
+
+  @@map("wikidata_properties")
+}

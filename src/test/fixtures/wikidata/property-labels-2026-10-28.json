@@ -1,0 +1,32 @@
+{
+	"head": { "vars": ["p", "label", "formatter"] },
+	"meta": { "query-time-ms": 54, "result-size-total": 3 },
+	"results": {
+		"bindings": [
+			{
+				"p": { "type": "uri", "value": "http://www.wikidata.org/entity/P11460" },
+				"label": { "type": "literal", "value": "Plex media key", "xml:lang": "en" },
+				"formatter": {
+					"type": "literal",
+					"value": "https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/$1"
+				}
+			},
+			{
+				"p": { "type": "uri", "value": "http://www.wikidata.org/entity/P345" },
+				"label": { "type": "literal", "value": "IMDb ID", "xml:lang": "en" },
+				"formatter": {
+					"type": "literal",
+					"value": "https://wikidata-externalid-url.toolforge.org/?p=345&url_prefix=https://www.imdb.com/&id=$1"
+				}
+			},
+			{
+				"p": { "type": "uri", "value": "http://www.wikidata.org/entity/P5091" },
+				"label": { "type": "literal", "value": "HanCinema drama ID", "xml:lang": "en" },
+				"formatter": {
+					"type": "literal",
+					"value": "https://www.hancinema.net/korean_drama_$1.php"
+				}
+			}
+		]
+	}
+}

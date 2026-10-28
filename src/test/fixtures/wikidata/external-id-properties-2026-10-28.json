@@ -1,0 +1,15 @@
+{
+	"head": { "vars": ["p"] },
+	"meta": { "query-time-ms": 37, "result-size-total": 10687 },
+	"results": {
+		"bindings": [
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P10000" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P10001" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P11460" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P345" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P3704" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P5091" } },
+			{ "p": { "type": "uri", "value": "http://www.wikidata.org/entity/P5108" } }
+		]
+	}
+}

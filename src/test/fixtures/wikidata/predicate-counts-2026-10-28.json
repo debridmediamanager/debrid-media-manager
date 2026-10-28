@@ -1,0 +1,64 @@
+{
+	"head": { "vars": ["pred", "items"] },
+	"meta": { "query-time-ms": 9394, "result-size-total": 4459 },
+	"results": {
+		"bindings": [
+			{
+				"pred": { "type": "uri", "value": "http://schema.org/description" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "790214"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P11460" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "236073"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P31" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "829165"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P345" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "570623"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P3704" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "5049"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P5091" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "1499"
+				}
+			},
+			{
+				"pred": { "type": "uri", "value": "http://www.wikidata.org/prop/direct/P5108" },
+				"items": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#int",
+					"type": "literal",
+					"value": "1997"
+				}
+			}
+		]
+	}
+}
