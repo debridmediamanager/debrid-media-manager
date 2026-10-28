@@ -74,11 +74,12 @@ describe('parsePropertyValues', () => {
 });
 
 describe('looksTruncated', () => {
-	// Measured 2026-10-28: a full fetch returns at least as many items as the
-	// has-predicate index counts (P345 576,428 vs 570,623; P5091 1,513 vs 1,499).
-	it('accepts a full answer and refuses one well short of the index count', () => {
+	// Full fetches measured 2026-10-28 against the has-predicate index's count:
+	// P5091 1,513 vs 1,499, and P14509 (Beeld & Geluid) 2,753 vs 2,819, which
+	// failed the first full run under a 2% tolerance.
+	it('accepts full answers on either side of the index count and refuses a gross shortfall', () => {
 		expect(looksTruncated(1513, 1499)).toBe(false);
-		expect(looksTruncated(1480, 1499)).toBe(false);
+		expect(looksTruncated(2753, 2819)).toBe(false);
 		expect(looksTruncated(1000, 1499)).toBe(true);
 		expect(looksTruncated(0, 1)).toBe(true);
 	});

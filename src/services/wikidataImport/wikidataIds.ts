@@ -156,12 +156,13 @@ export function parsePropertyValues(json: SparqlResults): {
 }
 
 /**
- * Whether a property's answer came back short. A full fetch returns at least
- * the has-predicate index's count (measured 2026-10-28, always a little more),
- * so far fewer means QLever cut the answer off.
+ * Whether a property's answer came back far short of the has-predicate
+ * index's count. The two only roughly agree: on 2026-10-28 a full fetch of
+ * P345 had 1% more items than the index counts, P14509's 2.3% fewer, every
+ * value a plain literal. So only a gross shortfall counts.
  */
 export function looksTruncated(fetchedItems: number, indexedItems: number): boolean {
-	return fetchedItems < indexedItems * 0.98;
+	return fetchedItems < indexedItems * 0.9;
 }
 
 export interface PropertyLabel {

@@ -10,7 +10,7 @@
  * Options:
  *   --apply           write; without it nothing is written
  *   --props a,b       only these properties (dry run only: a partial table must not go live)
- *   --delay-ms N      pause between QLever queries (default 250)
+ *   --delay-ms N      pause between QLever queries (default 500; QLever answers 429 to faster)
  *   --allow-shrink    replace the live tables even with a tenth fewer rows or properties
  *
  * Source: QLever's Wikidata endpoint, which keeps the whole graph and answers
@@ -185,7 +185,7 @@ async function load(
 async function main(prisma: PrismaClient): Promise<void> {
 	const apply = process.argv.includes('--apply');
 	const only = argValue('--props')?.split(',');
-	const delayMs = Number(argValue('--delay-ms') ?? 250);
+	const delayMs = Number(argValue('--delay-ms') ?? 500);
 	if (apply && only)
 		throw new RunFailure('--props is for dry runs; a partial table must not go live');
 	if (!Number.isFinite(delayMs) || delayMs < 0) throw new RunFailure('--delay-ms needs a number');
