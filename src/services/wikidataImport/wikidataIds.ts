@@ -55,6 +55,9 @@ SELECT ?p WHERE { ?p wikibase:propertyType wikibase:ExternalId }`;
 /**
  * How many media items carry each predicate. QLever answers this from its
  * has-predicate index in seconds; grouping `?item ?wdt ?v` instead times out.
+ * The index dates from QLever's last full build while the data takes live
+ * updates, so a count can be off either way (2026-10-28: P14064 32 here, 20 in
+ * the whole graph). It picks which properties to fetch, never checks a fetch.
  */
 export const predicateCountsQuery = `${PREFIXES}
 SELECT ?pred (COUNT(?item) AS ?items) WHERE { ${MEDIA_ITEMS} ?item ql:has-predicate ?pred } GROUP BY ?pred`;
@@ -127,9 +130,8 @@ export interface ExternalIdRow {
 }
 
 /**
- * One property's rows, sorted by value so inserts follow the primary key.
- * `items` is how many distinct items came back, checked against the
- * has-predicate count to catch a truncated answer.
+ * One property's rows, sorted by value so inserts follow the primary key,
+ * and how many distinct items carry them.
  */
 export function parsePropertyValues(json: SparqlResults): {
 	rows: ExternalIdRow[];
@@ -153,16 +155,6 @@ export function parsePropertyValues(json: SparqlResults): {
 		(r, i) => i === 0 || r.value !== rows[i - 1].value || r.qid !== rows[i - 1].qid
 	);
 	return { rows: unique, items: items.size, tooLong };
-}
-
-/**
- * Whether a property's answer came back far short of the has-predicate
- * index's count. The two only roughly agree: on 2026-10-28 a full fetch of
- * P345 had 1% more items than the index counts, P14509's 2.3% fewer, every
- * value a plain literal. So only a gross shortfall counts.
- */
-export function looksTruncated(fetchedItems: number, indexedItems: number): boolean {
-	return fetchedItems < indexedItems * 0.9;
 }
 
 export interface PropertyLabel {

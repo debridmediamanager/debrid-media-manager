@@ -28,7 +28,6 @@
 import { PrismaClient } from '@prisma/client';
 import {
 	externalIdPropertiesQuery,
-	looksTruncated,
 	parseExternalIdProperties,
 	parsePredicateCounts,
 	parsePropertyLabels,
@@ -212,14 +211,8 @@ async function main(prisma: PrismaClient): Promise<void> {
 	const loaded: LoadedProperty[] = [];
 	let total = 0;
 	let tooLong = 0;
-	for (const [n, { prop, items: indexed }] of props.entries()) {
-		const parsed = await sparql(prop, propertyValuesQuery(prop), (json) => {
-			const values = parsePropertyValues(json);
-			if (looksTruncated(values.items, indexed)) {
-				throw new Error(`${values.items} items, the index counts ${indexed}`);
-			}
-			return values;
-		});
+	for (const [n, { prop }] of props.entries()) {
+		const parsed = await sparql(prop, propertyValuesQuery(prop), parsePropertyValues);
 		loaded.push({ prop, items: parsed.items, rows: parsed.rows });
 		total += parsed.rows.length;
 		tooLong += parsed.tooLong;

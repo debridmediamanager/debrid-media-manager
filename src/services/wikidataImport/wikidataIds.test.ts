@@ -4,7 +4,6 @@ import counts from '@/test/fixtures/wikidata/predicate-counts-2026-10-28.json';
 import labels from '@/test/fixtures/wikidata/property-labels-2026-10-28.json';
 import { describe, expect, it } from 'vitest';
 import {
-	looksTruncated,
 	parseExternalIdProperties,
 	parsePredicateCounts,
 	parsePropertyLabels,
@@ -70,18 +69,6 @@ describe('parsePropertyValues', () => {
 		]);
 		expect(parsed.items).toBe(3);
 		expect(parsed.tooLong).toBe(1);
-	});
-});
-
-describe('looksTruncated', () => {
-	// Full fetches measured 2026-10-28 against the has-predicate index's count:
-	// P5091 1,513 vs 1,499, and P14509 (Beeld & Geluid) 2,753 vs 2,819, which
-	// failed the first full run under a 2% tolerance.
-	it('accepts full answers on either side of the index count and refuses a gross shortfall', () => {
-		expect(looksTruncated(1513, 1499)).toBe(false);
-		expect(looksTruncated(2753, 2819)).toBe(false);
-		expect(looksTruncated(1000, 1499)).toBe(true);
-		expect(looksTruncated(0, 1)).toBe(true);
 	});
 });
 
