@@ -3,6 +3,17 @@ import { DatabaseClient } from './client';
 
 export type WantedKind = 'movie' | 'show';
 
+/** What zurg said it took when it acknowledged a title. Empty strings where it did not say. */
+export type WantedFulfilled = {
+	release: string;
+	/** zurg's library id of it: an info hash or an NZB id. */
+	grab: string;
+	torrent: boolean;
+	resolution: string;
+	/** Set while zurg wants a better release, which keeps a fulfilled film on the list. */
+	upgradeTo?: string;
+};
+
 export interface WantedItemRow {
 	id: string;
 	imdbId: string;
@@ -12,6 +23,7 @@ export interface WantedItemRow {
 	seasons: number[] | null;
 	createdAt: Date;
 	fulfilledAt: Date | null;
+	fulfilled: WantedFulfilled | null;
 	lastPolledAt: Date | null;
 }
 
@@ -27,6 +39,7 @@ function toRow(row: any): WantedItemRow {
 		seasons: Array.isArray(row.seasons) ? row.seasons : null,
 		createdAt: row.createdAt,
 		fulfilledAt: row.fulfilledAt ?? null,
+		fulfilled: row.fulfilled ?? null,
 		lastPolledAt: row.lastPolledAt ?? null,
 	};
 }
@@ -50,7 +63,7 @@ export class WantedItemsService extends DatabaseClient {
 
 	/**
 	 * Adds a title, or replaces the seasons of one already wanted. Wanting a film
-	 * again after zurg fetched it starts over, so its `fulfilledAt` is cleared.
+	 * again after zurg fetched it starts over, so its acknowledgement is cleared.
 	 * Null when the list is full.
 	 */
 	public async want(
@@ -70,7 +83,13 @@ export class WantedItemsService extends DatabaseClient {
 		const seasons = item.seasons ?? Prisma.DbNull;
 		const row = await this.prisma.wantedItem.upsert({
 			where: { shortId_imdbId: { shortId, imdbId: item.imdbId } },
-			update: { kind: item.kind, title: item.title, seasons, fulfilledAt: null },
+			update: {
+				kind: item.kind,
+				title: item.title,
+				seasons,
+				fulfilledAt: null,
+				fulfilled: Prisma.DbNull,
+			},
 			create: { shortId, imdbId: item.imdbId, kind: item.kind, title: item.title, seasons },
 		});
 		return toRow(row);
@@ -119,19 +138,24 @@ export class WantedItemsService extends DatabaseClient {
 		return result.count > 0;
 	}
 
-	/** zurg's acknowledgement. Repeating it keeps the first date. False for an unknown id. */
-	public async markFulfilled(shortId: string, id: string): Promise<boolean> {
+	/**
+	 * zurg's acknowledgement, with what it took. Each one replaces what was stored,
+	 * an upgrade wish included; the first date stands. False for an unknown id.
+	 */
+	public async markFulfilled(
+		shortId: string,
+		id: string,
+		fulfilled: WantedFulfilled
+	): Promise<boolean> {
 		const row = await this.prisma.wantedItem.findFirst({
 			where: { shortId, id },
 			select: { fulfilledAt: true },
 		});
 		if (!row) return false;
-		if (!row.fulfilledAt) {
-			await this.prisma.wantedItem.updateMany({
-				where: { shortId, id, fulfilledAt: null },
-				data: { fulfilledAt: new Date() },
-			});
-		}
+		await this.prisma.wantedItem.updateMany({
+			where: { shortId, id },
+			data: { fulfilled, fulfilledAt: row.fulfilledAt ?? new Date() },
+		});
 		return true;
 	}
 

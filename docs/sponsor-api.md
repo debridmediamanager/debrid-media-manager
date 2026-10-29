@@ -182,7 +182,8 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"imdb": "tt0133093",
 			"year": 1999,
 			"tmdb": 603,
-			"titles": ["The Matrix", "Matrix", "Матрица"]
+			"titles": ["The Matrix", "Matrix", "Матрица"],
+			"upgrade": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" }
 		},
 		{
 			"id": "5d1e…",
@@ -206,10 +207,31 @@ names another film; it is absent when TMDB could not be asked.
 `seasons` is absent when TMDB could not be asked this time, which means ask again
 later, not that nothing aired. `year`, `tmdb` and `tvdb` are absent where TMDB does
 not know the title.
+`upgrade` is on a film fetched already whose fetcher wants a better release: `grab` and
+`resolution` are what it said it holds, `to` the resolution it wants. DMM only echoes
+what the last acknowledgement said.
 
-`POST /api/sponsor/wanted/complete` with `{"id": "<item id>"}` says the title was
-fetched. Repeating it is harmless. A film then leaves the list; a show stays on it so
-new episodes are fetched. 404 means the item is no longer on the list.
+`POST /api/sponsor/wanted/complete` says the title was fetched:
+
+```json
+{
+	"grab": "<info hash>",
+	"id": "0b7c2f8e-…",
+	"release": "The.Matrix.1999.1080p.BluRay.x264-GRP",
+	"resolution": "1080p",
+	"torrent": true,
+	"upgrade_to": "2160p"
+}
+```
+
+Only `id` is required. `release` (up to 512 characters) is the release taken, `grab` (up
+to 64) the fetcher's id of it, such as an info hash or NZB id, and `resolution` one of
+`""`, `480p`, `720p`, `1080p` and `2160p`. `upgrade_to`, one of `720p`, `1080p` and
+`2160p`, needs a `resolution`, and keeps a film on the list, with `upgrade`, until an
+acknowledgement without `upgrade_to`. Each acknowledgement replaces the last one's
+fields; the first date stands, so repeating it is harmless. A film without `upgrade_to`
+then leaves the list; a show stays on it so new episodes are fetched. 400 names a
+malformed field; 404 means the item is no longer on the list.
 
 ## Seerr, Overseerr and Jellyseerr
 

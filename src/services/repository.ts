@@ -1627,8 +1627,12 @@ export class Repository {
 		return this.wantedItemsService.remove(shortId, imdbId);
 	}
 
-	public markWantedFulfilled(shortId: string, id: string) {
-		return this.wantedItemsService.markFulfilled(shortId, id);
+	public markWantedFulfilled(
+		shortId: string,
+		id: string,
+		fulfilled: Parameters<WantedItemsService['markFulfilled']>[2]
+	) {
+		return this.wantedItemsService.markFulfilled(shortId, id, fulfilled);
 	}
 
 	public touchWantedPolled(shortId: string) {

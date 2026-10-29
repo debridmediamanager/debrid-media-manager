@@ -30,6 +30,12 @@ export interface WantedForZurg {
 	titles?: string[];
 	/** Shows only. Empty while TMDB knows nothing aired, which zurg reads as nothing to do yet. */
 	seasons?: WantedSeason[];
+	/**
+	 * Films only: zurg fetched it and wants a better release, so it stays listed
+	 * with what zurg holds and the resolution it wants. Echoed from zurg's last
+	 * acknowledgement.
+	 */
+	upgrade?: { grab: string; resolution: string; to: string };
 }
 
 /**
@@ -181,6 +187,7 @@ export async function seasonsTmdbLacks(
 					seasons: show.seasons,
 					createdAt: new Date(0),
 					fulfilledAt: null,
+					fulfilled: null,
 					lastPolledAt: null,
 				})
 			)

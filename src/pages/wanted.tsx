@@ -275,10 +275,19 @@ export default function WantedPage() {
 									</Link>
 									<span className="block truncate text-[11px] text-gray-400">
 										{item.kind === 'show' && <>{seasonsLabel(item)} · </>}
-										<span title={when(item.fulfilledAt ?? item.createdAt)}>
+										<span
+											title={[
+												when(item.fulfilledAt ?? item.createdAt),
+												item.fulfilled?.release,
+											]
+												.filter(Boolean)
+												.join('\n')}
+										>
 											{item.fulfilledAt
 												? `fetched ${shortDate(item.fulfilledAt)}`
 												: `since ${shortDate(item.createdAt)}`}
+											{item.fulfilled?.upgradeTo &&
+												` · waiting for ${item.fulfilled.upgradeTo}`}
 										</span>
 									</span>
 									<button

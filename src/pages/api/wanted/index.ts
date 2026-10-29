@@ -1,4 +1,8 @@
-import { MAX_WANTED_ITEMS, type WantedItemRow } from '@/services/database/wantedItems';
+import {
+	MAX_WANTED_ITEMS,
+	type WantedFulfilled,
+	type WantedItemRow,
+} from '@/services/database/wantedItems';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { requireSponsor } from '@/utils/requireSponsor';
@@ -14,6 +18,7 @@ export interface WantedItemResponse {
 	seasons: number[] | null;
 	createdAt: string;
 	fulfilledAt: string | null;
+	fulfilled: WantedFulfilled | null;
 	lastPolledAt: string | null;
 }
 

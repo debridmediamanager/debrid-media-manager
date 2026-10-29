@@ -1067,6 +1067,10 @@ model WantedItem {
   createdAt    DateTime  @default(now())
   /// When zurg acknowledged the film acquired. Shows stay followed.
   fulfilledAt  DateTime?
+  /// What zurg said it took: `{release, grab, torrent, resolution, upgradeTo?}`.
+  /// `upgradeTo` is set while zurg wants a better release, which keeps a
+  /// fulfilled film on the list.
+  fulfilled    Json?
   /// When zurg last read this sponsor's list.
   lastPolledAt DateTime?
 

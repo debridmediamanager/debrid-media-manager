@@ -27,6 +27,7 @@ const row = (over: Partial<Parameters<typeof resolveWanted>[0]> = {}) => ({
 	seasons: null,
 	createdAt: new Date(),
 	fulfilledAt: null,
+	fulfilled: null,
 	lastPolledAt: null,
 	...over,
 });

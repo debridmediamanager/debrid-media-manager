@@ -30,6 +30,7 @@ const ROW = {
 	seasons: null,
 	createdAt: new Date(),
 	fulfilledAt: null,
+	fulfilled: null,
 	lastPolledAt: null,
 };
 
@@ -61,6 +62,7 @@ describe('WantedItemsService', () => {
 		});
 		expect(prismaMock.wantedItem.count).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilledAt).toBeNull();
+		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilled).toBe(Prisma.DbNull);
 	});
 
 	// An import from Radarr or Sonarr leaves titles already wanted as they are.
@@ -91,15 +93,39 @@ describe('WantedItemsService', () => {
 		]);
 	});
 
-	it('keeps the first acknowledgement date when zurg repeats it', async () => {
-		prismaMock.wantedItem.findFirst.mockResolvedValue({ fulfilledAt: new Date('2026-10-01') });
-		await expect(service.markFulfilled('ZP1M', ROW.id)).resolves.toBe(true);
-		expect(prismaMock.wantedItem.updateMany).not.toHaveBeenCalled();
+	const TOOK = {
+		release: 'The.Matrix.1999.1080p.BluRay.x264-GRP',
+		grab: 'c'.repeat(40),
+		torrent: true,
+		resolution: '1080p',
+	};
+
+	it('dates the first acknowledgement and stores what zurg took', async () => {
+		prismaMock.wantedItem.findFirst.mockResolvedValue({ fulfilledAt: null });
+		await expect(
+			service.markFulfilled('ZP1M', ROW.id, { ...TOOK, upgradeTo: '2160p' })
+		).resolves.toBe(true);
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenCalledWith({
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: { fulfilled: { ...TOOK, upgradeTo: '2160p' }, fulfilledAt: expect.any(Date) },
+		});
+	});
+
+	// Each acknowledgement replaces what zurg holds, upgrade wish included.
+	it('keeps the first date and overwrites what zurg took when it repeats', async () => {
+		const first = new Date('2026-10-01');
+		prismaMock.wantedItem.findFirst.mockResolvedValue({ fulfilledAt: first });
+		await expect(service.markFulfilled('ZP1M', ROW.id, TOOK)).resolves.toBe(true);
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenCalledWith({
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: { fulfilled: TOOK, fulfilledAt: first },
+		});
 	});
 
 	it("does not acknowledge another sponsor's item", async () => {
 		prismaMock.wantedItem.findFirst.mockResolvedValue(null);
-		await expect(service.markFulfilled('OTHER', ROW.id)).resolves.toBe(false);
+		await expect(service.markFulfilled('OTHER', ROW.id, TOOK)).resolves.toBe(false);
+		expect(prismaMock.wantedItem.updateMany).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.findFirst).toHaveBeenCalledWith({
 			where: { shortId: 'OTHER', id: ROW.id },
 			select: { fulfilledAt: true },

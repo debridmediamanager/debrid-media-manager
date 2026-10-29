@@ -28,6 +28,7 @@ const film = {
 	seasons: null,
 	createdAt: '2026-10-24T10:00:00Z',
 	fulfilledAt: null,
+	fulfilled: null,
 	lastPolledAt: null,
 };
 
@@ -71,6 +72,33 @@ describe('/wanted', () => {
 		render(<WantedPage />);
 		expect(await screen.findByText(/^fetched /)).toBeInTheDocument();
 		expect(screen.getByText(/^zurg read it /)).toBeInTheDocument();
+	});
+
+	it('names the release zurg took and the resolution it still waits for', async () => {
+		const release = 'The.Matrix.1999.1080p.BluRay.x264-GRP';
+		global.fetch = vi.fn(
+			async () =>
+				new Response(
+					JSON.stringify({
+						items: [
+							{
+								...film,
+								fulfilledAt: '2026-10-24T11:00:00Z',
+								fulfilled: {
+									release,
+									grab: 'c'.repeat(40),
+									torrent: true,
+									resolution: '1080p',
+									upgradeTo: '2160p',
+								},
+							},
+						],
+					})
+				)
+		) as any;
+		render(<WantedPage />);
+		const line = await screen.findByText(/^fetched .* · waiting for 2160p$/);
+		expect(line.getAttribute('title')).toContain(release);
 	});
 
 	it('removes a title', async () => {
