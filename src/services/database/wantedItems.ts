@@ -133,9 +133,12 @@ export class WantedItemsService extends DatabaseClient {
 	}
 
 	/** False when the title was not on the list, which is not an error. */
-	public async remove(shortId: string, imdbId: string): Promise<boolean> {
-		const result = await this.prisma.wantedItem.deleteMany({ where: { shortId, imdbId } });
-		return result.count > 0;
+	/** How many of the titles were on the list. */
+	public async remove(shortId: string, imdbIds: string[]): Promise<number> {
+		const result = await this.prisma.wantedItem.deleteMany({
+			where: { shortId, imdbId: { in: imdbIds } },
+		});
+		return result.count;
 	}
 
 	/**

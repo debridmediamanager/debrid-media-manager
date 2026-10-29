@@ -1629,8 +1629,8 @@ export class Repository {
 		return this.wantedItemsService.wantMany(shortId, items);
 	}
 
-	public unwant(shortId: string, imdbId: string) {
-		return this.wantedItemsService.remove(shortId, imdbId);
+	public unwant(shortId: string, ...imdbIds: string[]) {
+		return this.wantedItemsService.remove(shortId, imdbIds);
 	}
 
 	public markWantedFulfilled(

@@ -117,6 +117,26 @@ describe('/api/wanted', () => {
 		expect(mockRepository.unwant).toHaveBeenCalledWith('ZP1M', 'tt0115082');
 	});
 
+	// One call for many, or the page's bulk remove would spend the 30-a-minute limit.
+	it('removes several titles in one call', async () => {
+		mockRepository.unwant = vi.fn().mockResolvedValue(2);
+		const res = createMockResponse();
+		await handler(call('DELETE', { body: { imdbIds: ['tt0115082', 'tt0133093'] } }), res);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ ok: true, removed: 2 });
+		expect(mockRepository.unwant).toHaveBeenCalledWith('ZP1M', 'tt0115082', 'tt0133093');
+	});
+
+	it('refuses a bulk remove holding anything but IMDb ids', async () => {
+		mockRepository.unwant = vi.fn();
+		for (const body of [{}, { imdbIds: [] }, { imdbIds: ['tt0115082', 'x'] }]) {
+			const res = createMockResponse();
+			await handler(call('DELETE', { body }), res);
+			expect(res.status).toHaveBeenCalledWith(400);
+		}
+		expect(mockRepository.unwant).not.toHaveBeenCalled();
+	});
+
 	it('refuses a request without a sponsor token', async () => {
 		const res = createMockResponse();
 		await handler(createMockRequest({ method: 'GET' }), res);

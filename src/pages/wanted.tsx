@@ -14,6 +14,7 @@ import {
 	ListPlus,
 	Loader2,
 	RefreshCw,
+	Search,
 	Trash2,
 	Tv,
 	Upload,
@@ -24,6 +25,24 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 const when = (iso: string) => new Date(iso).toLocaleString();
+
+const STATUSES = {
+	all: ['All', () => true],
+	waiting: ['Not fetched yet', (i) => !i.fulfilledAt],
+	fetched: ['Fetched', (i) => !!i.fulfilledAt],
+	upgrade: ['Waiting for an upgrade', (i) => !!i.fulfilled?.upgradeTo],
+} satisfies Record<string, [string, (i: WantedItemResponse) => boolean]>;
+
+// ISO dates sort as strings; never-fetched titles go last.
+const SORTS = {
+	added: ['Recently added', (a, b) => b.createdAt.localeCompare(a.createdAt)],
+	oldest: ['Oldest first', (a, b) => a.createdAt.localeCompare(b.createdAt)],
+	title: ['Title', (a, b) => a.title.localeCompare(b.title)],
+	fetched: [
+		'Recently fetched',
+		(a, b) => (b.fulfilledAt ?? '').localeCompare(a.fulfilledAt ?? ''),
+	],
+} satisfies Record<string, [string, (a: WantedItemResponse, b: WantedItemResponse) => number]>;
 
 function seasonsLabel(item: WantedItemResponse): string {
 	if (item.seasons === null) return 'All seasons';
@@ -67,6 +86,10 @@ export default function WantedPage() {
 	/** The list being read now: its id, or 'new' for the one being followed. */
 	const [following, setFollowing] = useState<string | null>(null);
 	const [followed, setFollowed] = useState<string | null>(null);
+	const [query, setQuery] = useState('');
+	const [status, setStatus] = useState<keyof typeof STATUSES>('all');
+	const [sort, setSort] = useState<keyof typeof SORTS>('added');
+	const [selected, setSelected] = useState<Set<string>>(new Set());
 
 	const load = useCallback(async () => {
 		setError('');
@@ -102,6 +125,38 @@ export default function WantedPage() {
 			setBusy(null);
 		}
 	};
+
+	const removeMany = async (doomed: WantedItemResponse[]) => {
+		if (
+			!window.confirm(
+				`Remove ${doomed.length} title${doomed.length === 1 ? '' : 's'} from your wanted list? Ones a followed list added will not come back.`
+			)
+		)
+			return;
+		const ids = new Set(doomed.map((i) => i.imdbId));
+		setBusy('selected');
+		try {
+			const res = await fetch('/api/wanted', {
+				method: 'DELETE',
+				headers: { ...sponsorHeaders(), 'Content-Type': 'application/json' },
+				body: JSON.stringify({ imdbIds: [...ids] }),
+			});
+			if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+			setItems((prev) => prev?.filter((i) => !ids.has(i.imdbId)) ?? null);
+			setSelected(new Set());
+		} catch (e) {
+			toast.error(`Could not remove: ${e instanceof Error ? e.message : 'unreachable'}`);
+		} finally {
+			setBusy(null);
+		}
+	};
+
+	const toggle = (imdbId: string) =>
+		setSelected((prev) => {
+			const next = new Set(prev);
+			if (!next.delete(imdbId)) next.add(imdbId);
+			return next;
+		});
 
 	// Only the database leaves the browser, still compressed; config.xml holds the arr's API key.
 	const importBackup = async (file: File) => {
@@ -167,7 +222,14 @@ export default function WantedPage() {
 		.filter((d): d is string => !!d)
 		.sort()
 		.at(-1);
-	const shown = items?.filter((i) => i.kind === tab);
+	const ofKind = items?.filter((i) => i.kind === tab);
+	const needle = query.trim().toLowerCase();
+	const shown = ofKind
+		?.filter((i) => STATUSES[status][1](i) && i.title.toLowerCase().includes(needle))
+		.sort(SORTS[sort][1]);
+	// Only what is on screen can be removed, so a filter change never removes a title out of sight.
+	const picked = shown?.filter((i) => selected.has(i.imdbId)) ?? [];
+	const allPicked = !!shown?.length && picked.length === shown.length;
 
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
@@ -400,14 +462,111 @@ export default function WantedPage() {
 								))}
 							</div>
 						)}
-						{!!items?.length && shown?.length === 0 && (
+						{!!ofKind?.length && (
+							<div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
+								<label className="relative min-w-40 flex-1">
+									<Search className="pointer-events-none absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+									<input
+										type="search"
+										value={query}
+										onChange={(e) => setQuery(e.target.value)}
+										placeholder="Search titles"
+										aria-label="Search titles"
+										className="w-full rounded border border-gray-600 bg-gray-900 py-1 pr-2 pl-8 text-gray-100 placeholder-gray-500"
+									/>
+								</label>
+								<select
+									value={status}
+									onChange={(e) =>
+										setStatus(e.target.value as keyof typeof STATUSES)
+									}
+									aria-label="Show"
+									className="rounded border border-gray-600 bg-gray-800 px-2 py-1 text-gray-100"
+								>
+									{Object.entries(STATUSES).map(([key, [label]]) => (
+										<option key={key} value={key}>
+											{label} (
+											{
+												ofKind.filter(
+													STATUSES[key as keyof typeof STATUSES][1]
+												).length
+											}
+											)
+										</option>
+									))}
+								</select>
+								<select
+									value={sort}
+									onChange={(e) => setSort(e.target.value as keyof typeof SORTS)}
+									aria-label="Sort by"
+									className="rounded border border-gray-600 bg-gray-800 px-2 py-1 text-gray-100"
+								>
+									{Object.entries(SORTS).map(([key, [label]]) => (
+										<option key={key} value={key}>
+											{label}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+						{!!shown?.length && (
+							<div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-gray-300">
+								<label className="inline-flex cursor-pointer items-center gap-1.5">
+									<input
+										type="checkbox"
+										checked={allPicked}
+										onChange={() =>
+											setSelected(
+												new Set(allPicked ? [] : shown.map((i) => i.imdbId))
+											)
+										}
+										className="h-4 w-4 accent-rose-500"
+									/>
+									Select all {shown.length.toLocaleString()}
+									{shown.length < (ofKind?.length ?? 0) && ' shown'}
+								</label>
+								{picked.length > 0 && (
+									<>
+										<button
+											onClick={() => removeMany(picked)}
+											disabled={busy !== null}
+											className="haptic-sm inline-flex items-center rounded border-2 border-red-600 bg-red-900/40 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/60 disabled:opacity-50"
+										>
+											{busy === 'selected' ? (
+												<Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+											) : (
+												<Trash2 className="mr-1 h-3.5 w-3.5" />
+											)}
+											Remove {picked.length.toLocaleString()} selected
+										</button>
+										<button
+											onClick={() => setSelected(new Set())}
+											className="text-gray-400 hover:text-gray-200 hover:underline"
+										>
+											Clear selection
+										</button>
+									</>
+								)}
+							</div>
+						)}
+						{!!items?.length && ofKind?.length === 0 && (
 							<p className="text-center text-sm text-gray-400">
 								No {tab === 'movie' ? 'films' : 'shows'} wanted.
 							</p>
 						)}
+						{!!ofKind?.length && shown?.length === 0 && (
+							<p className="text-center text-sm text-gray-400">Nothing matches.</p>
+						)}
 						<ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
 							{shown?.map((item) => (
 								<li key={item.id} className="group relative min-w-0">
+									<input
+										type="checkbox"
+										checked={selected.has(item.imdbId)}
+										onChange={() => toggle(item.imdbId)}
+										aria-label={`Select ${item.title}`}
+										className="absolute top-1.5 left-1.5 z-10 h-4 w-4 cursor-pointer accent-rose-500"
+									/>
 									<Link
 										href={
 											item.kind === 'movie'
@@ -416,7 +575,15 @@ export default function WantedPage() {
 										}
 										className="block"
 									>
-										<Poster imdbId={item.imdbId} title={item.title} />
+										<div
+											className={
+												selected.has(item.imdbId)
+													? 'rounded-t ring-2 ring-rose-400'
+													: undefined
+											}
+										>
+											<Poster imdbId={item.imdbId} title={item.title} />
+										</div>
 										{/* Radarr/Sonarr's bar under the poster: green once zurg fetched it. */}
 										<div
 											className={`h-1 rounded-b ${item.fulfilledAt ? 'bg-green-500' : 'bg-rose-500'}`}
@@ -444,7 +611,7 @@ export default function WantedPage() {
 									</span>
 									<button
 										onClick={() => remove(item)}
-										disabled={busy === item.imdbId}
+										disabled={busy !== null}
 										className="haptic-sm absolute top-1 right-1 rounded border-2 border-red-600 bg-red-900/80 p-1 text-red-100 transition-colors hover:bg-red-800 disabled:opacity-50"
 										title="Remove from your wanted list"
 										aria-label={`Remove ${item.title}`}

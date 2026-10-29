@@ -127,6 +127,104 @@ describe('/wanted', () => {
 		);
 	});
 
+	describe('with several films', () => {
+		const films = [
+			film,
+			{
+				...film,
+				id: 'b',
+				imdbId: 'tt0076759',
+				title: 'Star Wars',
+				createdAt: '2026-10-22T10:00:00Z',
+				fulfilledAt: '2026-10-23T10:00:00Z',
+			},
+			{
+				...film,
+				id: 'c',
+				imdbId: 'tt0088763',
+				title: 'Back to the Future',
+				createdAt: '2026-10-26T10:00:00Z',
+			},
+		];
+		const titles = () =>
+			screen
+				.getAllByRole('checkbox', { name: /^Select (?!all)/ })
+				.map((box) => box.getAttribute('aria-label')!.slice('Select '.length));
+		let fetchMock: ReturnType<typeof vi.fn>;
+		beforeEach(() => {
+			fetchMock = vi.fn(async (url: string, init?: RequestInit) =>
+				init?.method === 'DELETE'
+					? new Response(JSON.stringify({ ok: true, removed: 2 }))
+					: url === '/api/wanted/lists'
+						? listsAnswer()
+						: new Response(JSON.stringify({ items: films }))
+			);
+			global.fetch = fetchMock as any;
+		});
+
+		it('searches, filters by status and sorts', async () => {
+			render(<WantedPage />);
+			await screen.findByText('Star Wars');
+			expect(titles()).toEqual(['Back to the Future', 'The Matrix', 'Star Wars']);
+
+			fireEvent.change(screen.getByRole('combobox', { name: 'Sort by' }), {
+				target: { value: 'title' },
+			});
+			expect(titles()).toEqual(['Back to the Future', 'Star Wars', 'The Matrix']);
+
+			fireEvent.change(screen.getByRole('combobox', { name: 'Show' }), {
+				target: { value: 'waiting' },
+			});
+			expect(titles()).toEqual(['Back to the Future', 'The Matrix']);
+
+			fireEvent.change(screen.getByRole('searchbox', { name: 'Search titles' }), {
+				target: { value: 'matrix' },
+			});
+			expect(titles()).toEqual(['The Matrix']);
+
+			fireEvent.change(screen.getByRole('searchbox', { name: 'Search titles' }), {
+				target: { value: 'nope' },
+			});
+			expect(screen.getByText('Nothing matches.')).toBeInTheDocument();
+		});
+
+		it('removes the selected titles in one call', async () => {
+			vi.spyOn(window, 'confirm').mockReturnValue(true);
+			render(<WantedPage />);
+			fireEvent.click(await screen.findByRole('checkbox', { name: 'Select The Matrix' }));
+			fireEvent.click(screen.getByRole('checkbox', { name: 'Select Star Wars' }));
+			fireEvent.click(screen.getByRole('button', { name: 'Remove 2 selected' }));
+			await waitFor(() => expect(screen.queryByText('Star Wars')).not.toBeInTheDocument());
+			expect(screen.queryByText('The Matrix')).not.toBeInTheDocument();
+			expect(screen.getByText('Back to the Future')).toBeInTheDocument();
+			const [, init] = fetchMock.mock.calls.find(([, i]) => i?.method === 'DELETE')!;
+			expect(JSON.parse(init.body)).toEqual({ imdbIds: ['tt0133093', 'tt0076759'] });
+		});
+
+		// Selecting all and then narrowing the search must not remove titles out of sight.
+		it('removes only the selected titles still shown', async () => {
+			vi.spyOn(window, 'confirm').mockReturnValue(true);
+			render(<WantedPage />);
+			fireEvent.click(await screen.findByRole('checkbox', { name: 'Select all 3' }));
+			fireEvent.change(screen.getByRole('searchbox', { name: 'Search titles' }), {
+				target: { value: 'star' },
+			});
+			fireEvent.click(screen.getByRole('button', { name: 'Remove 1 selected' }));
+			await waitFor(() => expect(screen.queryByText('Star Wars')).not.toBeInTheDocument());
+			const [, init] = fetchMock.mock.calls.find(([, i]) => i?.method === 'DELETE')!;
+			expect(JSON.parse(init.body)).toEqual({ imdbIds: ['tt0076759'] });
+		});
+
+		it('keeps everything when the removal is not confirmed', async () => {
+			vi.spyOn(window, 'confirm').mockReturnValue(false);
+			render(<WantedPage />);
+			fireEvent.click(await screen.findByRole('checkbox', { name: 'Select all 3' }));
+			fireEvent.click(screen.getByRole('button', { name: 'Remove 3 selected' }));
+			expect(fetchMock.mock.calls.some(([, i]) => i?.method === 'DELETE')).toBe(false);
+			expect(screen.getByText('Star Wars')).toBeInTheDocument();
+		});
+	});
+
 	it('follows a pasted list and shows what that added, then the list among those followed', async () => {
 		const followed = {
 			id: 'list-1',

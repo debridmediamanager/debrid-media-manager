@@ -40,7 +40,8 @@ function parseSeasons(raw: unknown): number[] | null | undefined {
 /**
  * The signed-in sponsor's wanted list, which their zurg reads from
  * `/api/sponsor/wanted`: GET lists it, POST `{imdbId, kind, title, seasons?}`
- * adds a title or replaces its seasons, DELETE `?imdbId=` removes one.
+ * adds a title or replaces its seasons, DELETE `?imdbId=` removes one and
+ * DELETE `{imdbIds: [...]}` several at once.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const payload = await requireSponsor(req, res);
@@ -92,12 +93,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		if (req.method === 'DELETE') {
-			const imdbId = typeof req.query.imdbId === 'string' ? req.query.imdbId : '';
-			if (!IMDB_ID.test(imdbId)) {
-				return res.status(400).json({ error: 'Expected ?imdbId=tt…' });
+			const { imdbIds: rawIds } = (req.body ?? {}) as Record<string, unknown>;
+			const imdbIds = typeof req.query.imdbId === 'string' ? [req.query.imdbId] : rawIds;
+			if (
+				!Array.isArray(imdbIds) ||
+				imdbIds.length === 0 ||
+				imdbIds.length > MAX_WANTED_ITEMS ||
+				!imdbIds.every((id) => typeof id === 'string' && IMDB_ID.test(id))
+			) {
+				return res
+					.status(400)
+					.json({ error: 'Expected ?imdbId=tt… or {"imdbIds": ["tt…", …]}' });
 			}
-			await db.unwant(payload.shortId, imdbId);
-			return res.status(200).json({ ok: true });
+			const removed = await db.unwant(payload.shortId, ...imdbIds);
+			return res.status(200).json({ ok: true, removed });
 		}
 
 		res.setHeader('Allow', 'GET, POST, DELETE');
