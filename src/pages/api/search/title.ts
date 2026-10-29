@@ -158,7 +158,8 @@ const handler: NextApiHandler = async (req, res) => {
 
 		// Search local IMDB database (fetch more to allow for filtering/ranking)
 		const imdbResults = await memoized(
-			`search:title:v1:${JSON.stringify([searchQuery, year ?? null, mediaType ?? null])}`,
+			// v2: rows carry matchedTitle, which v1's cached rows lack
+			`search:title:v2:${JSON.stringify([searchQuery, year ?? null, mediaType ?? null])}`,
 			() =>
 				db.searchImdbTitles(searchQuery, {
 					limit: 120,
