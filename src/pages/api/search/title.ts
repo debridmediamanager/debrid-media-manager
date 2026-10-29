@@ -143,7 +143,7 @@ const handler: NextApiHandler = async (req, res) => {
 	try {
 		const cleanKeyword = keyword
 			.toString()
-			.replace(/[\W]+/gi, ' ')
+			.replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
 			.split(' ')
 			.filter((e) => e)
 			.join(' ')
@@ -152,8 +152,9 @@ const handler: NextApiHandler = async (req, res) => {
 
 		const [title, year, mediaType] = parseQuery(cleanKeyword);
 		const searchQuery = title.toLowerCase();
-		// Normalize query by removing leading articles (same as searchTitle processing)
-		const normalizedQuery = removeLeadingArticles(searchQuery);
+		// Normalize the query exactly as titles are (accents off, leading article off),
+		// or "amélie" never matches the title's "amelie"
+		const normalizedQuery = processSearchTitle(searchQuery, false);
 
 		// Search local IMDB database (fetch more to allow for filtering/ranking)
 		const imdbResults = await memoized(
@@ -176,12 +177,13 @@ const handler: NextApiHandler = async (req, res) => {
 			imdbid: r.imdbId,
 			score: r.votes ? Math.min(100, Math.round(r.votes / 10000)) : 1,
 			score_average: r.rating ?? 1,
-			searchTitle: processSearchTitle(r.title, false),
+			// Ranked by the title that matched: a search for "千と千尋の神隠し" finds Spirited Away through that alternative title
+			searchTitle: processSearchTitle(r.matchedTitle ?? r.title, false),
 		}));
 
 		// Calculate distance and match count for sorting
 		// Use normalizedQuery (without leading articles) for fair comparison with searchTitle
-		let queryTerms = normalizedQuery.split(/\W/).filter((w) => w);
+		let queryTerms = normalizedQuery.split(' ').filter((w) => w);
 		if (queryTerms.length === 0) queryTerms = [normalizedQuery];
 
 		results = results.map((result) => {

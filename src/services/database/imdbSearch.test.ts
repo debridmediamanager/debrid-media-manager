@@ -163,6 +163,40 @@ describe('ImdbSearchService', () => {
 			);
 		});
 
+		// Production searches on 2026-10-29: \w is ASCII only, so these reached
+		// the database as "" (nothing searched) and "Am lie".
+		it('searches the letters of every script, accents kept', async () => {
+			for (const [keyword, against] of [
+				['千と千尋の神隠し', '+千と千尋の神隠し*'],
+				['Ирония судьбы', '+Ирония* +судьбы*'],
+				['दंगल', '+दंगल*'],
+				['Amélie', '+Amélie*'],
+			]) {
+				prismaMock.$queryRaw.mockReset();
+				prismaMock.$queryRaw.mockResolvedValue([]);
+				await service.searchTitles(keyword);
+				expect(prismaMock.$queryRaw.mock.calls[0][0].values).toContain(against);
+			}
+		});
+
+		it('says which alternative title an akas match came through', async () => {
+			prismaMock.$queryRaw.mockResolvedValueOnce([]).mockResolvedValueOnce([
+				{
+					imdbId: 'tt0245429',
+					type: 'movie',
+					year: 2001,
+					title: 'Spirited Away',
+					originalTitle: 'Sen to Chihiro no kamikakushi',
+					rating: 8.6,
+					votes: 986000,
+					isOriginalMatch: 0,
+					matchedTitle: '千と千尋の神隠し',
+				},
+			]);
+			const [result] = await service.searchTitles('千と千尋の神隠し');
+			expect(result.matchedTitle).toBe('千と千尋の神隠し');
+		});
+
 		it('keeps short words required when nothing else is', () => {
 			expect(ImdbSearchService.fulltextKeyword('up')).toBe('+up*');
 			expect(ImdbSearchService.fulltextKeyword('24')).toBe('+24*');

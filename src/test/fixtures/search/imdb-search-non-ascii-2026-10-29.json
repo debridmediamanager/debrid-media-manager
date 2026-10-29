@@ -1,0 +1,216 @@
+{
+	"Amélie": [
+		{
+			"imdbId": "tt0211915",
+			"type": "movie",
+			"year": 2001,
+			"title": "Amélie",
+			"originalTitle": "Le fabuleux destin d'Amélie Poulain",
+			"rating": 8.2,
+			"votes": 849493,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt29313285",
+			"type": "movie",
+			"year": 2025,
+			"title": "Little Amélie or the Character of Rain",
+			"originalTitle": "Amélie et la métaphysique des tubes",
+			"rating": 7.6,
+			"votes": 6345,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt0041710",
+			"type": "movie",
+			"year": 1949,
+			"title": "Occupe-toi d'Amélie..!",
+			"originalTitle": "Occupe-toi d'Amélie..!",
+			"rating": 6.8,
+			"votes": 266,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt1636727",
+			"type": "movie",
+			"year": 2010,
+			"title": "Amélie au pays des Bodin's",
+			"originalTitle": "Amélie au pays des Bodin's",
+			"rating": 5.2,
+			"votes": 65,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt0166076",
+			"type": "movie",
+			"year": 1961,
+			"title": "Amelie or The Time to Love",
+			"originalTitle": "Amélie ou le temps d'aimer",
+			"rating": 6.3,
+			"votes": 42,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt0316869",
+			"type": "movie",
+			"year": 1974,
+			"title": "Le voyage d'Amélie",
+			"originalTitle": "Le voyage d'Amélie",
+			"rating": 5.7,
+			"votes": 28,
+			"isOriginalMatch": true
+		},
+		{
+			"imdbId": "tt6324066",
+			"type": "show",
+			"year": 2017,
+			"title": "Amélie et Compagnie",
+			"originalTitle": "Amélie et Compagnie",
+			"rating": 7.9,
+			"votes": 11,
+			"isOriginalMatch": true
+		}
+	],
+	"Cernobyl": [
+		{
+			"imdbId": "tt7366338",
+			"type": "show",
+			"year": 2019,
+			"title": "Chernobyl",
+			"originalTitle": "Chernobyl",
+			"rating": 9.3,
+			"votes": 1073920,
+			"isOriginalMatch": false,
+			"matchedTitle": "Černobyl"
+		},
+		{
+			"imdbId": "tt1991245",
+			"type": "movie",
+			"year": 2012,
+			"title": "Chernobyl Diaries",
+			"originalTitle": "Chernobyl Diaries",
+			"rating": 5.1,
+			"votes": 71225,
+			"isOriginalMatch": false,
+			"matchedTitle": "Cernobylio dienorasciai"
+		},
+		{
+			"imdbId": "tt10648714",
+			"type": "movie",
+			"year": 2021,
+			"title": "Chernobyl: Abyss",
+			"originalTitle": "Chernobyl",
+			"rating": 5.2,
+			"votes": 11970,
+			"isOriginalMatch": false,
+			"matchedTitle": "Černobylis. Bedugnė"
+		},
+		{
+			"imdbId": "tt5689446",
+			"type": "movie",
+			"year": 2015,
+			"title": "Chernobyl 30 Years On: Nuclear Heritage",
+			"originalTitle": "Chernobyl 30 Years On: Nuclear Heritage",
+			"rating": 5.6,
+			"votes": 138,
+			"isOriginalMatch": false,
+			"matchedTitle": "Cernobylis: po 30 metu. Zmonijos branduolinis paveldas"
+		}
+	],
+	"Ирония судьбы": [
+		{
+			"imdbId": "tt14456350",
+			"type": "movie",
+			"year": 2022,
+			"title": "About Fate",
+			"originalTitle": "About Fate",
+			"rating": 6.4,
+			"votes": 15883,
+			"isOriginalMatch": false,
+			"matchedTitle": "Ирония судьбы в Голливуде"
+		},
+		{
+			"imdbId": "tt0073179",
+			"type": "movie",
+			"year": 1976,
+			"title": "The Irony of Fate, or Enjoy Your Bath!",
+			"originalTitle": "Ironiya sudby, ili S legkim parom!",
+			"rating": 8,
+			"votes": 15217,
+			"isOriginalMatch": false,
+			"matchedTitle": "Ирония судьбы, или С легким паром!"
+		},
+		{
+			"imdbId": "tt0987918",
+			"type": "movie",
+			"year": 2007,
+			"title": "The Irony of Fate 2",
+			"originalTitle": "Ironiya sudby. Prodolzhenie",
+			"rating": 4.9,
+			"votes": 4187,
+			"isOriginalMatch": false,
+			"matchedTitle": "Ирония судьбы 2"
+		}
+	],
+	"दंगल": [
+		{
+			"imdbId": "tt5074352",
+			"type": "movie",
+			"year": 2016,
+			"title": "Dangal",
+			"originalTitle": "Dangal",
+			"rating": 8.3,
+			"votes": 249643,
+			"isOriginalMatch": false,
+			"matchedTitle": "दंगल"
+		},
+		{
+			"imdbId": "tt9110172",
+			"type": "show",
+			"year": 2018,
+			"title": "Mangalam Dangalam - Kabhi Pyaar, Kabhi Vaar",
+			"originalTitle": "Mangalam Dangalam - Kabhi Pyaar, Kabhi Vaar",
+			"rating": 8.2,
+			"votes": 49,
+			"isOriginalMatch": false,
+			"matchedTitle": "मंगलम दंगलम - कभी प्यार, कभी वार"
+		}
+	],
+	"千と千尋の神隠し": [
+		{
+			"imdbId": "tt0245429",
+			"type": "movie",
+			"year": 2001,
+			"title": "Spirited Away",
+			"originalTitle": "Sen to Chihiro no kamikakushi",
+			"rating": 8.6,
+			"votes": 991560,
+			"isOriginalMatch": false,
+			"matchedTitle": "千と千尋の神隠し"
+		},
+		{
+			"imdbId": "tt26678995",
+			"type": "movie",
+			"year": 2022,
+			"title": "Spirited Away: Live on Stage",
+			"originalTitle": "Sen to Chihiro no kamikakushi: Butai",
+			"rating": 8.6,
+			"votes": 1114,
+			"isOriginalMatch": false,
+			"matchedTitle": "舞台 千と千尋の神隠し"
+		}
+	],
+	"기생충": [
+		{
+			"imdbId": "tt6751668",
+			"type": "movie",
+			"year": 2019,
+			"title": "Parasite",
+			"originalTitle": "Gisaengchung",
+			"rating": 8.5,
+			"votes": 1205894,
+			"isOriginalMatch": false,
+			"matchedTitle": "기생충"
+		}
+	]
+}

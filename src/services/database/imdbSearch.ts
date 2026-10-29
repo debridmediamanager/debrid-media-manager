@@ -11,6 +11,8 @@ export type ImdbSearchResult = {
 	rating: number | null;
 	votes: number | null;
 	isOriginalMatch: boolean;
+	/** The alternative title the akas search matched, when that is how it was found. */
+	matchedTitle?: string;
 };
 
 export class ImdbSearchService extends DatabaseClient {
@@ -28,9 +30,10 @@ export class ImdbSearchService extends DatabaseClient {
 	): Promise<ImdbSearchResult[]> {
 		const { limit = 50, year, mediaType } = options;
 
-		// Clean the keyword for search
+		// Clean the keyword for search. Letters of every script, with their marks:
+		// \w is ASCII only and left "千と千尋の神隠し" empty and "Amélie" "Am lie".
 		const cleanKeyword = keyword
-			.replace(/[^\w\s]/gi, ' ')
+			.replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
 			.split(' ')
 			.filter((w) => w.length > 0)
 			.join(' ')
@@ -299,7 +302,9 @@ export class ImdbSearchService extends DatabaseClient {
 				r.average_rating as rating,
 				r.num_votes as votes,
 				MAX(a.is_original_title) as isOriginalMatch,
-				MAX(MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)) as relevance
+				MAX(MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)) as relevance,
+				-- every aka in the group passed the MATCH below, so any one is a title the search found
+				ANY_VALUE(a.title) as matchedTitle
 			FROM imdb_title_akas a
 			JOIN imdb_title_basics b ON a.title_id = b.tconst
 			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
@@ -323,6 +328,7 @@ export class ImdbSearchService extends DatabaseClient {
 			rating: r.rating ? Number(r.rating) : null,
 			votes: r.votes ? Number(r.votes) : null,
 			isOriginalMatch: Boolean(r.isOriginalMatch),
+			matchedTitle: r.matchedTitle ?? undefined,
 		}));
 	}
 
