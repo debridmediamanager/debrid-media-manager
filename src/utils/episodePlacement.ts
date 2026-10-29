@@ -15,6 +15,7 @@
  * - `imdb`: IMDb's episode by those numbers, and the TMDB episode TMDB's find names for it,
  *   when that is the identified show's (Detective Conan S33, which TMDB keeps in season 1).
  * - `absolute`: a number with no season, counted through TMDB's seasons.
+ * - `airdate`: a daily show's file named by its air date, the episode TMDB lists that day.
  *
  * The rules are rex's (`rust/src/runtime/anime.rs`, `scan.rs`), each measured on a production
  * library; rex keeps its own name parser for whatever arrives here unplaced.
@@ -26,7 +27,7 @@ import { FANSUB_SEASON } from '@/utils/tvEpisodes';
 import ptt from 'parse-torrent-title';
 
 export type PlacementRule =
-	'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'tvdbSeries' | 'dub' | 'group' | 'absolute';
+	'tmdb' | 'anime' | 'imdb' | 'tvdb' | 'tvdbSeries' | 'dub' | 'group' | 'absolute' | 'airdate';
 
 /** A file's numbers as its name (or its folder, or its release) gives them. */
 export interface FileNumbers {
@@ -182,6 +183,29 @@ const BRACKETS = /[[(][^\])]*[\])]/g;
 const SAMPLE = /(?:^|[\s._-])sample(?:[\s._-]|$)/i;
 const EXTENSION = /\.[a-z0-9]{2,4}$/i;
 const RESOLUTIONS = new Set([480, 576, 720, 1080, 2160]);
+
+// A daily show's air date: `WWE.RAW.2026.10.05`, `RAW 2026.09.14 1080`, `Saturday Night Live 2018 12.04`.
+const AIR_DATE = /(?<!\d)((?:19|20)\d{2})[\s._-](0[1-9]|1[0-2])[\s._-](0[1-9]|[12]\d|3[01])(?!\d)/;
+// The day and month before the year, either way round: `WWE Monday Night Raw 14 07 2025`.
+const AIR_DATE_YEAR_LAST = /(?<!\d)(\d{2})[\s._-](\d{2})[\s._-]((?:19|20)\d{2})(?!\d)/;
+
+/**
+ * The days a name says it aired, as TMDB writes them (`2026-10-05`): none, one, or two where
+ * the name puts the year last and the day and month could be either.
+ */
+export function airDates(name: string): string[] {
+	const real = (y: string, m: string, d: string) => {
+		const day = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d)));
+		return day.getUTCMonth() === Number(m) - 1 && day.getUTCDate() === Number(d)
+			? [`${y}-${m}-${d}`]
+			: [];
+	};
+	const first = AIR_DATE.exec(name);
+	if (first) return real(first[1], first[2], first[3]);
+	const last = AIR_DATE_YEAR_LAST.exec(name);
+	if (!last) return [];
+	return [...new Set([...real(last[3], last[2], last[1]), ...real(last[3], last[1], last[2])])];
+}
 
 const positive = (raw: string | undefined) => {
 	const value = Number(raw);
@@ -367,11 +391,18 @@ export function fileNumbers(
 			Number(code[2])
 		);
 	}
+	// a daily show's episode is its air date (`airDated`), and the loose numbers beside it are
+	// none: `RAW 2026.09.14 1080` is no episode 1080, `WWE Monday Night Raw 14 07 2025` no 14
+	if (airDates(stem).length) return null;
 	const loose = looseNumbers(stem);
 	if (loose) return withSeason(loose);
 	const titled = titleNumber(release, folder, stem);
 	if (titled) return withSeason({ season: null, episode: titled, end: null });
-	if (single) return withSeason(sceneNumbers(release) ?? looseNumbers(release));
+	if (single) {
+		return withSeason(
+			sceneNumbers(release) ?? (airDates(release).length ? null : looseNumbers(release))
+		);
+	}
 	return null;
 }
 
@@ -1067,6 +1098,36 @@ export async function specialOf(
 	);
 	return found.length === 1
 		? { season: 0, episode: found[0].episode, episodeEnd: null, how: 'tmdb', titled: true }
+		: null;
+}
+
+/**
+ * The episode TMDB lists as aired on the day a daily show's file names, in the last season to
+ * start by then or the one before it: `WWE.RAW.2026.10.05.NF.DEF.1080p.WEB.h265-HEEL` is Raw's
+ * S34E40 (rex#12). Only one episode that day, of one of the days the name may mean.
+ */
+export async function airDated(show: PlacementShow, path: string): Promise<Placement | null> {
+	const days = airDates((path.split('/').pop() ?? path).replace(EXTENSION, ''));
+	const found: [number, number][] = [];
+	for (const day of days) {
+		const started = show.seasons
+			.filter((row) => row.season > 0 && row.airDate !== null && row.airDate <= day)
+			.sort((a, b) => b.airDate!.localeCompare(a.airDate!))
+			.slice(0, 2);
+		for (const row of started) {
+			for (const item of (await show.episodes(row.season)) ?? []) {
+				if (item.airDate === day) found.push([row.season, item.episode]);
+			}
+		}
+	}
+	return found.length === 1
+		? {
+				season: found[0][0],
+				episode: found[0][1],
+				episodeEnd: null,
+				how: 'airdate',
+				titled: true,
+			}
 		: null;
 }
 

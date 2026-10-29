@@ -18,6 +18,7 @@ import { getMetadataCache } from '@/services/metadataCache';
 import { repository } from '@/services/repository';
 import {
 	absoluteFolders,
+	airDated,
 	buildAnimeIndex,
 	fansubShaped,
 	fileNumbers,
@@ -47,7 +48,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-10-27.1';
+export const PLACEMENT_RULES = '2026-10-29.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -966,7 +967,12 @@ async function placeFiles(
 						numbers[at]!,
 						imdb
 					)
-				: await specialOf(placement, release.name, file.path)
+				: // a release of one file may carry the air date its file's name leaves out
+					((await airDated(placement, titledAs(file.path))) ??
+						(release.files.length === 1
+							? await airDated(placement, release.name)
+							: null) ??
+						(await specialOf(placement, release.name, file.path)))
 		);
 	}
 	const yielded = yieldToTitles(keepImdbOrder(numbers, placed));

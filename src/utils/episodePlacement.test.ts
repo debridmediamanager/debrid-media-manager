@@ -3,7 +3,13 @@ import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
 import frierenAddons from '@/test/fixtures/seasonEpisodes/addons-tt22248376-s1.json';
-import { fileNumbers, normalizeTitle, parseName, titleText } from '@/utils/episodePlacement';
+import {
+	airDates,
+	fileNumbers,
+	normalizeTitle,
+	parseName,
+	titleText,
+} from '@/utils/episodePlacement';
 import { describe, expect, it } from 'vitest';
 
 const release = (name: string) => releases.find((c) => c.request.name.startsWith(name))!.request;
@@ -90,6 +96,46 @@ describe('fileNumbers', () => {
 			{ season: 11, episode: 2, end: null, running: 287 },
 			{ season: 11, episode: 3, end: null, running: 288 },
 		]);
+	});
+});
+
+describe('airDates', () => {
+	// Real names from DMM's library (ScrapedTrue, 2026-10-29) of daily shows
+	it('reads the day a daily show aired, in the shapes its releases write it', () => {
+		expect(airDates('WWE.RAW.2026.10.05.NF.DEF.1080p.WEB.h265-HEEL')).toEqual(['2026-10-05']);
+		expect(airDates('WWE Monday Night RAW 2026 10 12 1080p HDTV H264-Star [TJET]')).toEqual([
+			'2026-10-12',
+		]);
+		expect(
+			airDates('The.Daily.Show.2025.03.31.Oren.Cass.1080p.WEB.h264-EDITH[EZTVx.to]')
+		).toEqual(['2025-03-31']);
+		expect(
+			airDates('Saturday Night Live 2018 12.04 A Saturday Night Live Christmas Special 1080p')
+		).toEqual(['2018-12-04']);
+		// day and month before the year: either way round where both could be
+		expect(airDates('WWE Monday Night Raw 14 07 2025 1080p WEBDL H264 Ita Ac3 2 0 Co')).toEqual(
+			['2025-07-14']
+		);
+		expect(airDates('WWE Raw 05.10.2026 [2026, Рестлинг, WEB-DL1080p60fps, MKVH.265]')).toEqual(
+			['2026-10-05', '2026-05-10']
+		);
+	});
+
+	it('reads no day from a year alone, a resolution or a date no calendar has', () => {
+		expect(airDates('Kitchen.Nightmares.2023.S02E03.Voleos.1080p.AMZN.WEB-DL')).toEqual([]);
+		expect(airDates('Show.2026.02.30.1080p.WEB.h264')).toEqual([]);
+	});
+
+	it('leaves the numbers beside an air date unread', () => {
+		// 1080 was read as the episode, counted through the show's seasons
+		const name = 'RAW 2026.09.14 1080 (DTvW).mp4';
+		expect(fileNumbers(name, '', name, true)).toBeNull();
+		// nor 14, a day, read as the episode after the show's name
+		const italian = 'WWE Monday Night Raw 14 07 2025 1080p WEBDL H264 Ita Ac3 2 0 Co';
+		expect(fileNumbers(italian, '', `${italian}.mkv`, true)).toBeNull();
+		// an episode named as well is still that episode
+		const both = 'WWE Monday Night Raw S34E31 Netflix 2026-08-03 1080p AVCHD-SC-SDH.mp4';
+		expect(fileNumbers(both, '', both, true)).toMatchObject({ season: 34, episode: 31 });
 	});
 });
 

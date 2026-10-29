@@ -20,6 +20,7 @@ import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
+import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -91,6 +92,50 @@ const recordedSources = (r: any): PlacementSources => ({
 			? (r.tvdbSeriesOf[id].data ?? []).map((row: any) => row.series.id)
 			: null,
 	tvdbEpisodes: async (id) => r.tvdbEpisodes?.[id]?.data.episodes ?? null,
+});
+
+describe('a daily show named by its air date', () => {
+	// rex#12: WWE's weekly releases name the day they aired and no episode, and came back
+	// unplaced, so rex filed every one at S1E1 as versions of one episode. TMDB numbers Raw
+	// (4656) 2026-07-27 S34E30 and SmackDown (1549) 2026-08-14 S28E33, as Sonarr does.
+	it('places each on the episode TMDB lists as aired that day', async () => {
+		const { releases } = await place(
+			wwe.requests as PlaceRequest[],
+			Infinity,
+			recordedSources(wwe.answers)
+		);
+		expect(
+			releases.map((r) => [
+				r.tmdbId,
+				...r.files.flatMap((f) => [f.season, f.episode, f.tmdbEpisodeId, f.how]),
+			])
+		).toEqual([
+			[4656, 34, 30, 7436669, 'airdate'], // 2026-07-27
+			[4656, 34, 32, 7568084, 'airdate'], // 08-10
+			[4656, 34, 33, 7568088, 'airdate'], // 08-17
+			[4656, 34, 34, 7627958, 'airdate'], // 08-24
+			[4656, 34, 35, 7627959, 'airdate'], // 08-31
+			[4656, 34, 36, 7682237, 'airdate'], // 09-07
+			[4656, 34, 37, 7682238, 'airdate'], // 09-14
+			[4656, 34, 38, 7682239, 'airdate'], // 09-21
+			[4656, 34, 39, 7682241, 'airdate'], // 09-28
+			[4656, 34, 40, 7811068, 'airdate'], // 10-05, the issue's own release
+			[4656, 34, 41, 7811072, 'airdate'], // 10-12
+			[4656, 34, 42, 7825715, 'airdate'], // 10-19
+			// named by its episode as well: its numbers place it, as before
+			[4656, 34, 31, 7568066, 'tmdb'],
+			[1549, 28, 33, 7547478, 'airdate'], // 2026-08-14
+			[1549, 28, 34, 7627961, 'airdate'], // 08-21
+			[1549, 28, 35, 7627963, 'airdate'], // 08-28
+			[1549, 28, 36, 7682215, 'airdate'], // 09-04
+			[1549, 28, 37, 7682216, 'airdate'], // 09-11
+			[1549, 28, 38, 7682217, 'airdate'], // 09-18
+			[1549, 28, 39, 7682218, 'airdate'], // 09-25
+			[1549, 28, 40, 7811080, 'airdate'], // 10-02
+			[1549, 28, 43, 7825727, 'airdate'], // 10-23
+			[1549, 28, 34, 7627961, 'tmdb'],
+		]);
+	});
 });
 
 describe('a show TMDB lists apart from the TVDB series Plex files it under', () => {
