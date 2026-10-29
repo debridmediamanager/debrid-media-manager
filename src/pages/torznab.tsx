@@ -1,12 +1,17 @@
-import { ApiKeyField, BackToDashboard, Card, Field, SponsorStrip } from '@/components/IndexerSetup';
+import {
+	ApiKeyField,
+	BackToDashboard,
+	Card,
+	Field,
+	GetKeySteps,
+	SponsorStrip,
+} from '@/components/IndexerSetup';
 import { TorznabProviderPanel } from '@/components/TorznabProviderPanel';
 import { useSponsor } from '@/hooks/useSponsor';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
-import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
 import { KeyRound, Zap } from 'lucide-react';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -134,24 +139,7 @@ function SetupGuide({
 						<KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
 						<span>
 							The same 64-character DMM API key works for the Usenet indexer too.{' '}
-							{needsKeySource ? (
-								<>
-									Get it by connecting your GitHub account on{' '}
-									<a
-										href={GATEKEEPER_URL}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="underline decoration-dotted"
-									>
-										gatekeeper
-									</a>
-									, then paste it in{' '}
-									<Link href="/settings" className="underline decoration-dotted">
-										Settings
-									</Link>{' '}
-									to fill it in here.
-								</>
-							) : null}
+							{needsKeySource ? <GetKeySteps /> : null}
 						</span>
 					</div>
 				) : null}

@@ -1,6 +1,6 @@
 import { Logo } from '@/components/Logo';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
-import { ArrowLeft, Check, Copy, Eye, EyeOff, Handshake } from 'lucide-react';
+import { ArrowLeft, Check, Copy, ExternalLink, Eye, EyeOff, Handshake } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
@@ -98,14 +98,26 @@ export function ApiKeyField({ apiKey }: { apiKey: string | null }) {
 	const [revealed, setRevealed] = useState(false);
 
 	// A browser that linked its sponsorship before this page could store the key,
-	// or one that never linked at all. Settings is where that is fixed.
+	// or one that never linked at all. Sponsors kept asking which key goes here
+	// (zurg's? Prowlarr's?), so the row itself links to where it comes from.
 	if (!apiKey) {
 		return (
 			<Field
 				label="API Key"
-				value="your DMM API key from gatekeeper"
+				value="your DMM API key"
 				copyable={false}
-				hint="paste it in Settings to show it here"
+				hint="from gatekeeper, not a zurg or Prowlarr key"
+				extra={
+					<a
+						href={GATEKEEPER_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="inline-flex shrink-0 items-center gap-1 rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white transition-colors hover:bg-blue-500"
+					>
+						Get it
+						<ExternalLink className="h-3 w-3" />
+					</a>
+				}
 			/>
 		);
 	}
@@ -140,6 +152,32 @@ export function Card({ title, children }: { title: string; children: ReactNode }
 }
 
 /**
+ * Where a DMM API key comes from, step by step. gatekeeper signs everyone in
+ * with GitHub first, Patreon sponsors included, which is the step people miss.
+ */
+export function GetKeySteps() {
+	return (
+		<>
+			Get it on{' '}
+			<a
+				className="text-blue-300 underline hover:text-blue-200"
+				href={GATEKEEPER_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				gatekeeper
+			</a>
+			: connect GitHub (sponsoring on Patreon? link it after that) and copy the{' '}
+			<strong>DMM API Key</strong> shown there. Then paste it in{' '}
+			<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
+				Settings
+			</Link>{' '}
+			to fill it in here.
+		</>
+	);
+}
+
+/**
  * The one line a visitor without a key needs: where the key comes from. Shared
  * by every setup page that asks for a DMM API key.
  */
@@ -151,20 +189,8 @@ export function SponsorStrip() {
 		>
 			<Handshake className="mt-0.5 h-4 w-4 shrink-0 text-pink-400" />
 			<span>
-				Needs a DMM API key, which comes with a sponsorship. Get it on{' '}
-				<a
-					className="text-blue-300 underline hover:text-blue-200"
-					href={GATEKEEPER_URL}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					gatekeeper
-				</a>
-				, then paste it in{' '}
-				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-					Settings
-				</Link>
-				. Already sponsoring on another machine? Same key.
+				Needs a DMM API key, which comes with a sponsorship. <GetKeySteps /> Already
+				sponsoring on another machine? Same key.
 			</span>
 		</p>
 	);

@@ -85,9 +85,20 @@ describe('Newznab setup page, for a sponsor', () => {
 		asSponsor(null);
 		render(<NewznabSetupPage />);
 
-		expect(within(field('API Key')).getByText('your DMM API key from gatekeeper')).toBeTruthy();
+		expect(within(field('API Key')).getByText('your DMM API key')).toBeTruthy();
+		// The row itself says where the key comes from, so nobody reaches for zurg's.
+		expect(
+			within(field('API Key')).getByText('from gatekeeper, not a zurg or Prowlarr key')
+		).toBeTruthy();
+		expect(within(field('API Key')).getByRole('link', { name: 'Get it' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
 		expect(screen.queryByLabelText('Copy API Key')).toBeNull();
 		expect(screen.queryByLabelText('Reveal API key')).toBeNull();
+		expect(document.body).toHaveTextContent(
+			/connect GitHub \(sponsoring on Patreon\? link it after that\) and copy the DMM API Key/
+		);
 	});
 
 	// Masked rather than printed: this page is what someone screen-shares while
@@ -244,8 +255,19 @@ describe('Newznab setup page, for everyone else', () => {
 		asVisitor();
 		render(<NewznabSetupPage />);
 
-		expect(within(field('API Key')).getByText('your DMM API key from gatekeeper')).toBeTruthy();
+		expect(within(field('API Key')).getByText('your DMM API key')).toBeTruthy();
+		// The row itself says where the key comes from, so nobody reaches for zurg's.
+		expect(
+			within(field('API Key')).getByText('from gatekeeper, not a zurg or Prowlarr key')
+		).toBeTruthy();
+		expect(within(field('API Key')).getByRole('link', { name: 'Get it' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
 		expect(screen.queryByLabelText('Reveal API key')).toBeNull();
+		expect(screen.getByTestId('sponsor-strip')).toHaveTextContent(
+			/connect GitHub \(sponsoring on Patreon\? link it after that\) and copy the DMM API Key/
+		);
 	});
 
 	// The pitch used to name Github, Patreon and Paypal side by side. Every way
