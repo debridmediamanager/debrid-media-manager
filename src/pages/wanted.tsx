@@ -76,7 +76,8 @@ export default function WantedPage() {
 			if (!res.ok) throw new Error(data.error || res.statusText);
 			setItems(data.items);
 			const listsRes = await fetch('/api/wanted/lists', { headers: sponsorHeaders() });
-			if (listsRes.ok) setLists((await listsRes.json()).lists);
+			const listsData = listsRes.ok ? await listsRes.json() : {};
+			setLists(Array.isArray(listsData.lists) ? listsData.lists : []);
 		} catch (e) {
 			setError(e instanceof Error ? e.message : 'unreachable');
 		}
