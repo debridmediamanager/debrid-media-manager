@@ -1,3 +1,4 @@
+import FollowListButton from '@/components/FollowListButton';
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
 import { useCachedList } from '@/hooks/useCachedList';
@@ -36,12 +37,19 @@ function TraktWatchlist() {
 					Trakt - <Eye className="mr-1 inline-block h-5 w-5 text-purple-400" />{' '}
 					{traktUserSlug}&apos;s Watchlist
 				</h1>
-				<Link
-					href="/"
-					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
-				>
-					Go Home
-				</Link>
+				<div className="flex shrink-0 items-center gap-2">
+					{traktUserSlug && (
+						<FollowListButton
+							url={`https://trakt.tv/users/${traktUserSlug}/watchlist`}
+						/>
+					)}
+					<Link
+						href="/"
+						className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					>
+						Go Home
+					</Link>
+				</div>
 			</div>
 
 			<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">

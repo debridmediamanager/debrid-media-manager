@@ -1,3 +1,4 @@
+import FollowListButton from '@/components/FollowListButton';
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
 import { useCachedList } from '@/hooks/useCachedList';
@@ -22,7 +23,11 @@ function TraktMyLists() {
 	const listName =
 		typeof router.query.listName === 'string' ? decodeURIComponent(router.query.listName) : '';
 
-	const { data, loading } = useCachedList<Record<string, TraktMediaItem[]>>(
+	// `url` is the list's trakt.tv page, which "Follow with Want" hands to DMM.
+	const { data, loading } = useCachedList<{
+		items: Record<string, TraktMediaItem[]>;
+		url: string | null;
+	}>(
 		traktToken && traktUserSlug && listName
 			? `trakt:mylist:${traktUserSlug}:${listName}`
 			: null,
@@ -35,7 +40,10 @@ function TraktMyLists() {
 			const personal = personalLists.find((l) => l.name === listName);
 			if (personal) {
 				const items = await fetchListItems(traktToken!, traktUserSlug!, personal.ids.trakt);
-				return { [listName]: items };
+				return {
+					items: { [listName]: items },
+					url: `https://trakt.tv/users/${traktUserSlug}/lists/${personal.ids.slug}`,
+				};
 			}
 
 			const liked = likedLists.find((lc) => lc.list.name === listName);
@@ -45,14 +53,17 @@ function TraktMyLists() {
 					liked.list.user.ids.slug,
 					liked.list.ids.trakt
 				);
-				return { [listName]: items };
+				return {
+					items: { [listName]: items },
+					url: `https://trakt.tv/users/${liked.list.user.ids.slug}/lists/${liked.list.ids.slug}`,
+				};
 			}
 
-			return {};
+			return { items: {}, url: null };
 		}
 	);
 
-	const arrayOfResults = data ?? {};
+	const arrayOfResults = data?.items ?? {};
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">
@@ -67,12 +78,15 @@ function TraktMyLists() {
 				<h1 className="text-xl font-bold text-white">
 					Trakt - {traktUserSlug} - {listName}
 				</h1>
-				<Link
-					href="/"
-					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
-				>
-					Go Home
-				</Link>
+				<div className="flex shrink-0 items-center gap-2">
+					{data?.url && <FollowListButton url={data.url} />}
+					<Link
+						href="/"
+						className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					>
+						Go Home
+					</Link>
+				</div>
 			</div>
 
 			<div className="flex w-full max-w-7xl flex-col items-center gap-6">

@@ -2,7 +2,7 @@ import { mdblistReleaseSignals, metadataMaxAge } from '@/utils/metadataFreshness
 import { scrubRequestError } from '@/utils/requestRedaction';
 import axios from 'axios';
 import { getMdblistCacheService } from './database/mdblistCache';
-import { MList, MMovie, MSearchResponse, MShow } from './mdblist';
+import { MList, MListItem, MMovie, MSearchResponse, MShow } from './mdblist';
 
 const ONE_HOUR = 3600000;
 const ONE_DAY = 86400000;
@@ -363,6 +363,43 @@ export class MDBListClient {
 		console.log(`[MDBList] Cached list items for ID: ${listId}`);
 
 		return response;
+	}
+
+	/**
+	 * A list by the `/lists/{user}/{slug}` path of its mdblist.com page, as the
+	 * newer api.mdblist.com host answers it: `[{id, name, items, private, ...}]`,
+	 * empty for a list it does not have. Not cached: a sponsor following it
+	 * expects what is on it now.
+	 */
+	async getListByPath(user: string, slug: string): Promise<MList[]> {
+		const url = new URL(
+			`https://api.mdblist.com/lists/${encodeURIComponent(user)}/${encodeURIComponent(slug)}`
+		);
+		url.searchParams.append('apikey', this.apiKey);
+		const data = await this.get(url);
+		return Array.isArray(data) ? data : [];
+	}
+
+	/**
+	 * One page of a list's items from api.mdblist.com, which splits them into
+	 * `movies` and `shows` and says in `pagination.has_more` whether to ask for
+	 * the next `offset`. Not cached, for the same reason as `getListByPath`.
+	 */
+	async getListItemsPage(
+		listId: number,
+		offset: number,
+		limit = 1000
+	): Promise<{ movies: MListItem[]; shows: MListItem[]; pagination?: { has_more?: boolean } }> {
+		const url = new URL(`https://api.mdblist.com/lists/${listId}/items`);
+		url.searchParams.append('apikey', this.apiKey);
+		url.searchParams.append('limit', String(limit));
+		url.searchParams.append('offset', String(offset));
+		const data = await this.get(url);
+		return {
+			movies: Array.isArray(data?.movies) ? data.movies : [],
+			shows: Array.isArray(data?.shows) ? data.shows : [],
+			pagination: data?.pagination,
+		};
 	}
 
 	/**

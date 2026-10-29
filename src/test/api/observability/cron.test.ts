@@ -37,6 +37,10 @@ vi.mock('@/services/nzb2rdMarkers', () => markerMocks);
 const trashSweepMocks = vi.hoisted(() => ({ sweepWrittenBackTrash: vi.fn() }));
 vi.mock('@/services/scrapedVerdicts/sweep', () => trashSweepMocks);
 
+// Reads Trakt and MDBList; `wantedLists.test.ts` drives the real one from recorded pages.
+const wantedListMocks = vi.hoisted(() => ({ syncDueWantedLists: vi.fn() }));
+vi.mock('@/services/wantedLists', () => wantedListMocks);
+
 import handler from '@/pages/api/observability/cron';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 
@@ -48,6 +52,7 @@ beforeEach(() => {
 	filingMocks.fileCompletedTransfers.mockResolvedValue(undefined);
 	trashSweepMocks.sweepWrittenBackTrash.mockResolvedValue(undefined);
 	markerMocks.reconcileNzb2rdMarkers.mockResolvedValue(undefined);
+	wantedListMocks.syncDueWantedLists.mockResolvedValue({ synced: 0, failed: 0 });
 });
 
 describe('API /api/observability/cron', () => {

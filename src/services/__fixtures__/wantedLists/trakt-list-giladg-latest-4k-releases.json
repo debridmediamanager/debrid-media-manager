@@ -1,0 +1,46 @@
+{
+	"allow_comments": false,
+	"comment_count": 0,
+	"converted_to": null,
+	"created_at": "2019-05-05T23:33:35.000Z",
+	"description": "",
+	"display_numbers": false,
+	"ids": { "slug": "latest-4k-releases", "trakt": 6639877 },
+	"images": { "posters": [] },
+	"item_count": 272,
+	"likes": 4035,
+	"name": "Latest 4K Releases",
+	"privacy": "public",
+	"share_link": "https://app.trakt.tv/users/giladg/lists/latest-4k-releases",
+	"sort_by": "added",
+	"sort_how": "desc",
+	"stale_origin": null,
+	"total_count": 1,
+	"type": "personal",
+	"updated_at": "2026-10-29T12:29:00.000Z",
+	"user": {
+		"ids": { "slug": "giladg", "trakt": 325584 },
+		"images": {
+			"avatar": {
+				"full": "https://media.trakt.tv/images/users/000/325/584/avatars/medium/e5131bdbee.jpeg"
+			}
+		},
+		"username": "giladg",
+		"private": false,
+		"deleted": false,
+		"joined_at": "2013-10-11T22:03:34.000Z",
+		"location": "Toronto, ON",
+		"about": "",
+		"name": "G&A",
+		"gender": "male",
+		"age": null,
+		"vip": false,
+		"vip_ep": false,
+		"vip_veteran_since": null,
+		"vip_veteran_years": null,
+		"vip_veteran_tier": null,
+		"vip_veteran_title": null,
+		"vip_cover_image": null,
+		"director": false
+	}
+}

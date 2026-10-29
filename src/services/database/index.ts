@@ -29,6 +29,7 @@ import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferFilingService } from './transferFiling';
 import { TransferMetaService } from './transferMeta';
 import { WantedItemsService } from './wantedItems';
+import { WantedListsService } from './wantedLists';
 import { ZurgKeysService } from './zurgKeys';
 
 export {
@@ -63,6 +64,7 @@ export {
 	TransferFilingService,
 	TransferMetaService,
 	WantedItemsService,
+	WantedListsService,
 	ZurgKeysService,
 };
 

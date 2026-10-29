@@ -41,6 +41,7 @@ import {
 	TransferMetaService,
 	type TransferMetaSource,
 	WantedItemsService,
+	WantedListsService,
 	ZurgKeysService,
 } from './database';
 import type { FilenameIdentification } from './database/hashImdb';
@@ -77,6 +78,7 @@ export type RepositoryDependencies = Partial<{
 	rexDirectService: RexDirectService;
 	sponsorProviderKeysService: SponsorProviderKeysService;
 	wantedItemsService: WantedItemsService;
+	wantedListsService: WantedListsService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
 	rdOperationalService: RdOperationalService;
@@ -112,6 +114,7 @@ export class Repository {
 	private rexDirectService: RexDirectService;
 	private sponsorProviderKeysService: SponsorProviderKeysService;
 	private wantedItemsService: WantedItemsService;
+	private wantedListsService: WantedListsService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
 	private rdOperationalService: RdOperationalService;
@@ -146,6 +149,7 @@ export class Repository {
 		rexDirectService,
 		sponsorProviderKeysService,
 		wantedItemsService,
+		wantedListsService,
 		streamHealthService,
 		historyAggregationService,
 		rdOperationalService,
@@ -179,6 +183,7 @@ export class Repository {
 		this.sponsorProviderKeysService =
 			sponsorProviderKeysService ?? new SponsorProviderKeysService();
 		this.wantedItemsService = wantedItemsService ?? new WantedItemsService();
+		this.wantedListsService = wantedListsService ?? new WantedListsService();
 		this.rexDirectService = rexDirectService ?? new RexDirectService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
 		this.historyAggregationService =
@@ -214,6 +219,7 @@ export class Repository {
 			this.sponsorsService.disconnect(),
 			this.sponsorProviderKeysService.disconnect(),
 			this.wantedItemsService.disconnect(),
+			this.wantedListsService.disconnect(),
 			this.streamHealthService.disconnect(),
 			this.historyAggregationService.disconnect(),
 			this.rdOperationalService.disconnect(),
@@ -1637,6 +1643,31 @@ export class Repository {
 
 	public touchWantedPolled(shortId: string) {
 		return this.wantedItemsService.touchPolled(shortId);
+	}
+
+	// Followed lists: Trakt and MDBList lists whose new titles join the wanted list
+	public listWantedLists(shortId: string) {
+		return this.wantedListsService.list(shortId);
+	}
+
+	public followWantedList(shortId: string, url: string, name: string) {
+		return this.wantedListsService.follow(shortId, url, name);
+	}
+
+	public unfollowWantedList(shortId: string, id: string) {
+		return this.wantedListsService.remove(shortId, id);
+	}
+
+	public dueWantedLists(limit: number) {
+		return this.wantedListsService.due(limit);
+	}
+
+	public recordWantedListRead(id: string, read: Parameters<WantedListsService['recordRead']>[1]) {
+		return this.wantedListsService.recordRead(id, read);
+	}
+
+	public recordWantedListFailure(id: string, error: string) {
+		return this.wantedListsService.recordFailure(id, error);
 	}
 
 	// Stream Health Service Methods

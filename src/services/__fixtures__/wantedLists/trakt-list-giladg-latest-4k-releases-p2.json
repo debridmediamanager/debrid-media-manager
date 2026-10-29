@@ -1,0 +1,432 @@
+[
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31227572",
+				"plex": { "guid": "65ca74670a8f3c2de645d488", "slug": "predator-badlands" },
+				"slug": "predator-badlands-2025",
+				"tmdb": 1242898,
+				"trakt": 1006226
+			},
+			"year": 2025,
+			"title": "Predator: Badlands"
+		},
+		"rank": 44,
+		"id": 1402669057,
+		"listed_at": "2026-01-05T15:14:40.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt19847976",
+				"plex": { "guid": "627b6faaef5508740b16ef7c", "slug": "wicked-for-good" },
+				"slug": "wicked-for-good-2025",
+				"tmdb": 967941,
+				"trakt": 777917
+			},
+			"year": 2025,
+			"title": "Wicked: For Good"
+		},
+		"rank": 43,
+		"id": 1398738463,
+		"listed_at": "2025-12-30T14:30:45.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt35766629",
+				"plex": { "guid": "5f40d3b186422500429ed741", "slug": "goodbye-june" },
+				"slug": "goodbye-june-2025",
+				"tmdb": 1435092,
+				"trakt": 1174061
+			},
+			"year": 2025,
+			"title": "Goodbye June"
+		},
+		"rank": 42,
+		"id": 1398205890,
+		"listed_at": "2025-12-29T20:28:29.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt37660887",
+				"plex": { "guid": "68816ff5d94386c18be86a56", "slug": "cover-up-2025" },
+				"slug": "cover-up-2025",
+				"tmdb": 1516391,
+				"trakt": 1244141
+			},
+			"year": 2025,
+			"title": "Cover-Up"
+		},
+		"rank": 41,
+		"id": 1398205877,
+		"listed_at": "2025-12-29T20:28:25.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31514146",
+				"plex": { "guid": "65e3eb0a23aec5894d58b76b", "slug": "i-swear-2025" },
+				"slug": "i-swear-2025-09-22",
+				"tmdb": 1317149,
+				"trakt": 1076539
+			},
+			"year": 2025,
+			"title": "I Swear"
+		},
+		"rank": 40,
+		"id": 1398205872,
+		"listed_at": "2025-12-29T20:28:21.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31851518",
+				"plex": { "guid": "65fe3fd1e0b022e8013bbf76", "slug": "the-choral-2025" },
+				"slug": "the-choral-2025",
+				"tmdb": 1262815,
+				"trakt": 1024702
+			},
+			"year": 2025,
+			"title": "The Choral"
+		},
+		"rank": 39,
+		"id": 1396299818,
+		"listed_at": "2025-12-26T21:07:15.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt29008225",
+				"plex": { "guid": "64fecf1cfc409784111601ce", "slug": "fackham-hall-2025" },
+				"slug": "fackham-hall-2025",
+				"tmdb": 1175174,
+				"trakt": 947485
+			},
+			"year": 2025,
+			"title": "Fackham Hall"
+		},
+		"rank": 38,
+		"id": 1396299804,
+		"listed_at": "2025-12-26T21:07:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt33350512",
+				"plex": { "guid": "66e1c73bca98d35afa0bc835", "slug": "100-nights-of-hero-2025" },
+				"slug": "100-nights-of-hero-2025",
+				"tmdb": 1354518,
+				"trakt": 1105137
+			},
+			"year": 2025,
+			"title": "100 Nights of Hero"
+		},
+		"rank": 37,
+		"id": 1396299687,
+		"listed_at": "2025-12-26T21:07:06.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt29567915",
+				"plex": { "guid": "6535c7c85e7b825c593535f4", "slug": "nuremberg-2025" },
+				"slug": "nuremberg-2025",
+				"tmdb": 1214931,
+				"trakt": 979297
+			},
+			"year": 2025,
+			"title": "Nuremberg"
+		},
+		"rank": 36,
+		"id": 1394344650,
+		"listed_at": "2025-12-23T15:23:35.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt24950660",
+				"plex": { "guid": "63a72f629cfe35576abf6d2f", "slug": "eternity-2025-1" },
+				"slug": "eternity-2025",
+				"tmdb": 1259102,
+				"trakt": 1020977
+			},
+			"year": 2025,
+			"title": "Eternity"
+		},
+		"rank": 35,
+		"id": 1394344630,
+		"listed_at": "2025-12-23T15:23:29.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt30274401",
+				"plex": {
+					"guid": "656f8c3b8690c21cd4de87e9",
+					"slug": "five-nights-at-freddys-2-2025"
+				},
+				"slug": "five-nights-at-freddy-s-2-2025",
+				"tmdb": 1228246,
+				"trakt": 992825
+			},
+			"year": 2025,
+			"title": "Five Nights at Freddy's 2"
+		},
+		"rank": 34,
+		"id": 1394344617,
+		"listed_at": "2025-12-23T15:23:23.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31923069",
+				"plex": { "guid": "6605d234c4af9f36bc46b172", "slug": "deliver-me-from-nowhere" },
+				"slug": "springsteen-deliver-me-from-nowhere-2025",
+				"tmdb": 1230368,
+				"trakt": 994890
+			},
+			"year": 2025,
+			"title": "Springsteen: Deliver Me from Nowhere"
+		},
+		"rank": 33,
+		"id": 1393694875,
+		"listed_at": "2025-12-22T15:53:34.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31727191",
+				"plex": {
+					"guid": "65f5fd80cfa6d7eea9ba12a1",
+					"slug": "preparation-for-the-next-life"
+				},
+				"slug": "preparation-for-the-next-life-2025",
+				"tmdb": 1314129,
+				"trakt": 1074209
+			},
+			"year": 2025,
+			"title": "Preparation for the Next Life"
+		},
+		"rank": 32,
+		"id": 1392414579,
+		"listed_at": "2025-12-20T21:45:19.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt27773954",
+				"plex": {
+					"guid": "64666c56a5b8a07c81d72ca9",
+					"slug": "the-thing-with-feathers-2025"
+				},
+				"slug": "the-thing-with-feathers-2025",
+				"tmdb": 1127628,
+				"trakt": 907508
+			},
+			"year": 2025,
+			"title": "The Thing with Feathers"
+		},
+		"rank": 31,
+		"id": 1392414494,
+		"listed_at": "2025-12-20T21:45:14.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31844586",
+				"plex": { "guid": "65fe3fc25aa62f67c0f04cee", "slug": "sisu-road-to-revenge" },
+				"slug": "sisu-road-to-revenge-2025",
+				"tmdb": 1223601,
+				"trakt": 988284
+			},
+			"year": 2025,
+			"title": "Sisu: Road to Revenge"
+		},
+		"rank": 30,
+		"id": 1392414477,
+		"listed_at": "2025-12-20T21:45:11.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt4712810",
+				"plex": {
+					"guid": "5d776c8a23d5a3001f51c944",
+					"slug": "now-you-see-me-now-you-dont-2025"
+				},
+				"slug": "now-you-see-me-now-you-don-t-2025",
+				"tmdb": 425274,
+				"trakt": 292275
+			},
+			"year": 2025,
+			"title": "Now You See Me: Now You Don't"
+		},
+		"rank": 29,
+		"id": 1392414427,
+		"listed_at": "2025-12-20T21:45:07.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt24807110",
+				"plex": { "guid": "63a4d7c95fa2605ebc81ad85", "slug": "dont-move-2024" },
+				"slug": "don-t-move-2024",
+				"tmdb": 1063877,
+				"trakt": 856067
+			},
+			"year": 2024,
+			"title": "Don't Move"
+		},
+		"rank": 28,
+		"id": 1392414393,
+		"listed_at": "2025-12-20T21:45:02.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt14364480",
+				"plex": { "guid": "6066880ce3e5b1002c9aee03", "slug": "wake-up-dead-man" },
+				"slug": "wake-up-dead-man-a-knives-out-mystery-2025",
+				"tmdb": 812583,
+				"trakt": 646497
+			},
+			"year": 2025,
+			"title": "Wake Up Dead Man: A Knives Out Mystery"
+		},
+		"rank": 27,
+		"id": 1392414377,
+		"listed_at": "2025-12-20T21:44:57.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt20222166",
+				"plex": { "guid": "6284c9b96edd7e8c5756994d", "slug": "spinal-tap-ii" },
+				"slug": "spinal-tap-ii-the-end-continues-2025",
+				"tmdb": 975225,
+				"trakt": 783631
+			},
+			"year": 2025,
+			"title": "Spinal Tap II: The End Continues"
+		},
+		"rank": 26,
+		"id": 1392414315,
+		"listed_at": "2025-12-20T21:44:53.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt9362736",
+				"plex": { "guid": "5e5d3b0b01f65d003eca6208", "slug": "die-my-love" },
+				"slug": "die-my-love-2025",
+				"tmdb": 1033148,
+				"trakt": 831157
+			},
+			"year": 2025,
+			"title": "Die My Love"
+		},
+		"rank": 25,
+		"id": 1392414302,
+		"listed_at": "2025-12-20T21:44:49.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt33009027",
+				"plex": { "guid": "669f217bdfc291e6901926b1", "slug": "turbulence-2025-1" },
+				"slug": "turbulence-2025",
+				"tmdb": 1401778,
+				"trakt": 1146781
+			},
+			"year": 2025,
+			"title": "Turbulence"
+		},
+		"rank": 24,
+		"id": 1392414296,
+		"listed_at": "2025-12-20T21:44:45.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt21825416",
+				"plex": { "guid": "67ad92170d2267eb1810dc6d", "slug": "truth-and-treason" },
+				"slug": "truth-treason-2025",
+				"tmdb": 1443940,
+				"trakt": 1181859
+			},
+			"year": 2025,
+			"title": "Truth & Treason"
+		},
+		"rank": 23,
+		"id": 1392414293,
+		"listed_at": "2025-12-20T21:44:41.000Z",
+		"notes": null,
+		"my_rating": null
+	}
+]

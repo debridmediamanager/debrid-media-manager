@@ -32,6 +32,9 @@ const film = {
 	lastPolledAt: null,
 };
 
+/** `/api/wanted/lists`: the Trakt and MDBList lists followed, none unless given. */
+const listsAnswer = (lists: unknown[] = []) => new Response(JSON.stringify({ lists }));
+
 describe('/wanted', () => {
 	beforeEach(() => sponsorMock.mockReturnValue({ isSponsor: true }));
 	afterEach(() => vi.restoreAllMocks());
@@ -47,7 +50,11 @@ describe('/wanted', () => {
 
 	// A list zurg has never read means zurg is not set up yet, which is the thing to fix.
 	it('says how to point zurg at the list when zurg never read it', async () => {
-		global.fetch = vi.fn(async () => new Response(JSON.stringify({ items: [film] }))) as any;
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(JSON.stringify({ items: [film] }))
+		) as any;
 		render(<WantedPage />);
 		expect(await screen.findByText('The Matrix')).toBeInTheDocument();
 		expect(screen.getByText(/has not read this list yet/)).toBeInTheDocument();
@@ -55,19 +62,20 @@ describe('/wanted', () => {
 	});
 
 	it('shows when zurg last read it and what it fetched', async () => {
-		global.fetch = vi.fn(
-			async () =>
-				new Response(
-					JSON.stringify({
-						items: [
-							{
-								...film,
-								fulfilledAt: '2026-10-24T11:00:00Z',
-								lastPolledAt: '2026-10-24T11:05:00Z',
-							},
-						],
-					})
-				)
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(
+						JSON.stringify({
+							items: [
+								{
+									...film,
+									fulfilledAt: '2026-10-24T11:00:00Z',
+									lastPolledAt: '2026-10-24T11:05:00Z',
+								},
+							],
+						})
+					)
 		) as any;
 		render(<WantedPage />);
 		expect(await screen.findByText(/^fetched /)).toBeInTheDocument();
@@ -102,10 +110,12 @@ describe('/wanted', () => {
 	});
 
 	it('removes a title', async () => {
-		const fetchMock = vi.fn(async (_url: string, init?: RequestInit) =>
+		const fetchMock = vi.fn(async (url: string, init?: RequestInit) =>
 			init?.method === 'DELETE'
 				? new Response(JSON.stringify({ ok: true }))
-				: new Response(JSON.stringify({ items: [film] }))
+				: url === '/api/wanted/lists'
+					? listsAnswer()
+					: new Response(JSON.stringify({ items: [film] }))
 		);
 		global.fetch = fetchMock as any;
 		render(<WantedPage />);
@@ -115,5 +125,68 @@ describe('/wanted', () => {
 			'/api/wanted?imdbId=tt0133093',
 			expect.objectContaining({ method: 'DELETE' })
 		);
+	});
+
+	it('follows a pasted list and shows what that added, then the list among those followed', async () => {
+		const followed = {
+			id: 'list-1',
+			url: 'https://trakt.tv/users/giladg/lists/latest-4k-releases',
+			name: 'Latest 4K Releases',
+			count: 272,
+			added: 240,
+			createdAt: '2026-10-29T10:00:00Z',
+			syncedAt: '2026-10-29T10:00:05Z',
+			error: null,
+		};
+		let lists: unknown[] = [];
+		const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+			if (url === '/api/wanted/lists' && init?.method === 'POST') {
+				lists = [followed];
+				return new Response(
+					JSON.stringify({
+						name: followed.name,
+						count: 272,
+						added: 240,
+						alreadyWanted: 12,
+						overCap: 0,
+						noImdbId: 20,
+						list: followed,
+					})
+				);
+			}
+			if (url === '/api/wanted/lists') return listsAnswer(lists);
+			return new Response(JSON.stringify({ items: [film] }));
+		});
+		global.fetch = fetchMock as any;
+		render(<WantedPage />);
+		await screen.findByText('The Matrix');
+		fireEvent.change(screen.getByRole('textbox', { name: 'List URL' }), {
+			target: { value: 'https://trakt.tv/users/giladg/lists/latest-4k-releases' },
+		});
+		fireEvent.click(screen.getByRole('button', { name: 'Follow' }));
+		expect(
+			await screen.findByText(
+				'Following Latest 4K Releases (272 titles): 240 added, 12 already wanted. 20 left out for having no IMDb id.'
+			)
+		).toBeInTheDocument();
+		expect(fetchMock).toHaveBeenCalledWith(
+			'/api/wanted/lists',
+			expect.objectContaining({
+				method: 'POST',
+				body: JSON.stringify({
+					url: 'https://trakt.tv/users/giladg/lists/latest-4k-releases',
+				}),
+			})
+		);
+		expect(screen.getByRole('link', { name: 'Latest 4K Releases' })).toHaveAttribute(
+			'href',
+			followed.url
+		);
+		expect(
+			screen.getByRole('link', { name: 'Latest 4K Releases' }).parentElement?.textContent
+		).toMatch(/272 titles · 240 added so far · read /);
+		expect(
+			screen.getByRole('button', { name: 'Unfollow Latest 4K Releases' })
+		).toBeInTheDocument();
 	});
 });

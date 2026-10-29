@@ -65,6 +65,8 @@ export const RATE_LIMIT_CONFIGS = {
 	arr: { name: 'arr', rateLimit: 120, windowSeconds: 60 },
 	// Importing a Radarr or Sonarr backup inflates a database of up to a few hundred MB.
 	wantedImport: { name: 'wantedImport', rateLimit: 10, windowSeconds: 3600 },
+	// Following or re-reading a Trakt or MDBList list reads every page of it upstream.
+	wantedLists: { name: 'wantedLists', rateLimit: 30, windowSeconds: 3600 },
 	// The whole-show season resolver behind "All Seasons". It reads many season
 	// rows in one request precisely so the browser does not walk `torrents` once
 	// per season at 1-per-2s, which for a twenty-season show is forty seconds of

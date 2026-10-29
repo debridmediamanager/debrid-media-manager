@@ -1,11 +1,23 @@
+import { followList, followSummary } from '@/components/FollowListButton';
 import Poster from '@/components/poster';
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { WantedImportResponse } from '@/pages/api/wanted/import';
+import type { WantedListResponse } from '@/pages/api/wanted/lists';
 import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
 import { deflatedZipMember } from '@/utils/zipEntry';
-import { BookmarkCheck, Film, Home, Loader2, RefreshCw, Trash2, Tv, Upload } from 'lucide-react';
+import {
+	BookmarkCheck,
+	Film,
+	Home,
+	ListPlus,
+	Loader2,
+	RefreshCw,
+	Trash2,
+	Tv,
+	Upload,
+} from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -50,6 +62,11 @@ export default function WantedPage() {
 	const [importing, setImporting] = useState(false);
 	const [imported, setImported] = useState<string | null>(null);
 	const [tab, setTab] = useState<WantedItemResponse['kind']>('movie');
+	const [lists, setLists] = useState<WantedListResponse[]>([]);
+	const [listUrl, setListUrl] = useState('');
+	/** The list being read now: its id, or 'new' for the one being followed. */
+	const [following, setFollowing] = useState<string | null>(null);
+	const [followed, setFollowed] = useState<string | null>(null);
 
 	const load = useCallback(async () => {
 		setError('');
@@ -58,6 +75,8 @@ export default function WantedPage() {
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error || res.statusText);
 			setItems(data.items);
+			const listsRes = await fetch('/api/wanted/lists', { headers: sponsorHeaders() });
+			if (listsRes.ok) setLists((await listsRes.json()).lists);
 		} catch (e) {
 			setError(e instanceof Error ? e.message : 'unreachable');
 		}
@@ -106,6 +125,39 @@ export default function WantedPage() {
 			toast.error(`Could not import: ${e instanceof Error ? e.message : 'unreachable'}`);
 		} finally {
 			setImporting(false);
+		}
+	};
+
+	// Follow and "Read again" are the same call: the list is read and what is new on it wanted.
+	const follow = async (url: string, id = 'new') => {
+		setFollowing(id);
+		setFollowed(null);
+		try {
+			setFollowed(followSummary(await followList(url)));
+			setListUrl('');
+			await load();
+		} catch (e) {
+			toast.error(`Could not follow: ${e instanceof Error ? e.message : 'unreachable'}`, {
+				duration: 8000,
+			});
+		} finally {
+			setFollowing(null);
+		}
+	};
+
+	const unfollow = async (list: WantedListResponse) => {
+		setFollowing(list.id);
+		try {
+			const res = await fetch(`/api/wanted/lists?id=${encodeURIComponent(list.id)}`, {
+				method: 'DELETE',
+				headers: sponsorHeaders(),
+			});
+			if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+			setLists((prev) => prev.filter((l) => l.id !== list.id));
+		} catch (e) {
+			toast.error(`Could not unfollow: ${e instanceof Error ? e.message : 'unreachable'}`);
+		} finally {
+			setFollowing(null);
 		}
 	};
 
@@ -209,6 +261,105 @@ export default function WantedPage() {
 								/>
 							</label>
 							{imported && <p className="mt-2 text-gray-200">{imported}</p>}
+						</div>
+
+						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
+							<p className="mb-2">
+								Follow a Trakt or MDBList list and its titles are wanted, new ones
+								included: the list is read again every six hours. A title you remove
+								here stays removed, and unfollowing keeps what was added. For an
+								IMDb or Letterboxd list, make an MDBList list of it first.
+							</p>
+							<form
+								className="flex flex-wrap gap-2"
+								onSubmit={(e) => {
+									e.preventDefault();
+									if (listUrl.trim()) follow(listUrl.trim());
+								}}
+							>
+								<input
+									type="url"
+									value={listUrl}
+									onChange={(e) => setListUrl(e.target.value)}
+									placeholder="https://trakt.tv/users/<user>/lists/<list> or https://mdblist.com/lists/<user>/<list>"
+									aria-label="List URL"
+									disabled={following !== null}
+									className="min-w-0 flex-1 rounded border border-gray-600 bg-gray-900 px-2 py-1 text-gray-100 placeholder-gray-500"
+								/>
+								<button
+									type="submit"
+									disabled={following !== null || !listUrl.trim()}
+									className="haptic-sm inline-flex items-center rounded border-2 border-rose-500 bg-rose-900/30 px-2 py-1 text-rose-100 transition-colors hover:bg-rose-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								>
+									{following === 'new' ? (
+										<Loader2 className="mr-1 h-4 w-4 animate-spin" />
+									) : (
+										<ListPlus className="mr-1 h-4 w-4" />
+									)}
+									Follow
+								</button>
+							</form>
+							{followed && <p className="mt-2 text-gray-200">{followed}</p>}
+							{lists.length > 0 && (
+								<ul className="mt-3 divide-y divide-gray-700">
+									{lists.map((list) => (
+										<li
+											key={list.id}
+											className="flex flex-wrap items-center gap-2 py-2"
+										>
+											<div className="min-w-0 flex-1">
+												<a
+													href={list.url}
+													target="_blank"
+													rel="noreferrer"
+													className="block truncate font-medium text-gray-100 hover:underline"
+												>
+													{list.name}
+												</a>
+												<span className="text-gray-400">
+													{list.count.toLocaleString()} title
+													{list.count === 1 ? '' : 's'} ·{' '}
+													{list.added.toLocaleString()} added so far ·{' '}
+													{list.error ? (
+														<span className="text-red-300">
+															{list.error}
+														</span>
+													) : list.syncedAt ? (
+														<span title={when(list.syncedAt)}>
+															read {timeAgo(list.syncedAt)}
+														</span>
+													) : (
+														'not read yet'
+													)}
+												</span>
+											</div>
+											<button
+												onClick={() => follow(list.url, list.id)}
+												disabled={following !== null}
+												className="haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 disabled:opacity-50"
+												title="Read the list now"
+											>
+												{following === list.id ? (
+													<Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+												) : (
+													<RefreshCw className="mr-1 h-3.5 w-3.5" />
+												)}
+												Read again
+											</button>
+											<button
+												onClick={() => unfollow(list)}
+												disabled={following !== null}
+												className="haptic-sm inline-flex items-center rounded border-2 border-red-600 bg-red-900/40 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/60 disabled:opacity-50"
+												title="Stop following; what it added stays wanted"
+												aria-label={`Unfollow ${list.name}`}
+											>
+												<Trash2 className="mr-1 h-3.5 w-3.5" />
+												Unfollow
+											</button>
+										</li>
+									))}
+								</ul>
+							)}
 						</div>
 
 						{error && (

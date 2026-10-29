@@ -1078,6 +1078,27 @@ model WantedItem {
   @@unique([shortId, imdbId])
 }
 
+/// A Trakt or MDBList list a sponsor follows: its new titles join their wanted list.
+model WantedList {
+  id        String    @id @default(uuid())
+  shortId   String    @db.VarChar(16)
+  /// The list's page on trakt.tv or mdblist.com, normalised; what to read is derived from it.
+  url       String    @db.VarChar(512)
+  name      String    @db.VarChar(512)
+  /// IMDb ids on the list when it was last read. Only ids not in here are added,
+  /// so a title the sponsor removed from the wanted list stays removed.
+  seen      Json
+  /// Titles this list has put on the wanted list so far.
+  added     Int       @default(0)
+  createdAt DateTime  @default(now())
+  /// When the list was last read, whether or not the read succeeded.
+  syncedAt  DateTime?
+  /// Why the last read failed, or null.
+  error     String?   @db.VarChar(512)
+
+  @@unique([shortId, url])
+}
+
 /// Which sponsorship let a cast profile store an "other streams" limit above
 /// the standard 5.
 ///

@@ -1,0 +1,20 @@
+[
+	{
+		"id": 14,
+		"user_id": 3,
+		"user_name": "linaspurinis",
+		"name": "Top Watched Movies of The Week / >60",
+		"slug": "top-watched-movies-of-the-week",
+		"description": "",
+		"mediatype": "movie",
+		"items": 39,
+		"likes": 1345,
+		"dynamic": true,
+		"private": false,
+		"updated": "2026-10-29T01:14:06.000Z",
+		"expires": "2026-10-30T01:32:06.000Z",
+		"liked": false,
+		"movies": 39,
+		"shows": 0
+	}
+]

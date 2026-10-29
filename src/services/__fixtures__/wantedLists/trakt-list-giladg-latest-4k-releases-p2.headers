@@ -1,0 +1,24 @@
+HTTP/2 200 
+date: Thu, 29 Oct 2026 19:01:06 GMT
+content-type: application/json; charset=utf-8
+content-length: 7160
+access-control-allow-origin: *
+cache-control: public, max-age=600, s-maxage=3600
+vary: query, Origin, accept-encoding
+access-control-expose-headers: X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Recommendation-Mode,X-Search-Ignored-Types,Cache-Control,Pragma,Expires,Deprecation
+cache-tag: user,user_list_items,resource:list:6639877,resource:movie:1006226,resource:movie:777917,resource:movie:1174061,resource:movie:1244141,resource:movie:1076539,resource:movie:1024702,resource:movie:947485,resource:movie:1105137,resource:movie:979297,resource:movie:1020977,resource:movie:992825,resource:movie:994890,resource:movie:1074209,resource:movie:907508,resource:movie:988284,resource:movie:292275,resource:movie:856067,resource:movie:646497,resource:movie:783631,resource:movie:831157,resource:movie:1146781,resource:movie:1181859
+cf-placement: remote-IAD
+x-content-type-options: nosniff
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-pagination-item-count: 272
+x-pagination-limit: 250
+x-pagination-page: 2
+x-pagination-page-count: 2
+x-sort-by: added
+x-sort-how: desc
+speculation-rules: "/cdn-cgi/speculation"
+server: cloudflare
+cf-ray: a5246d4c298116eb-TXL
+

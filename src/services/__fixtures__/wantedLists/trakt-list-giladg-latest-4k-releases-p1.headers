@@ -1,0 +1,24 @@
+HTTP/2 200 
+date: Thu, 29 Oct 2026 19:01:06 GMT
+content-type: application/json; charset=utf-8
+content-length: 80175
+access-control-allow-origin: *
+cache-control: public, max-age=600, s-maxage=3600
+vary: query, Origin, accept-encoding
+access-control-expose-headers: X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Recommendation-Mode,X-Search-Ignored-Types,Cache-Control,Pragma,Expires,Deprecation
+cache-tag: user,user_list_items,resource:list:6639877,resource:movie:1265074,resource:movie:1381607,resource:movie:1326425,resource:movie:1043653,resource:movie:1200342,resource:movie:1131132,resource:movie:1403450,resource:movie:1163229,resource:movie:1124416,resource:movie:1210620,resource:movie:1401421,resource:movie:1127982,resource:movie:1241469,resource:movie:1172770,resource:movie:967502,resource:movie:1406563,resource:movie:1048114,resource:movie:1289096,resource:movie:1128339,resource:movie:999910,resource:movie:1042363,resource:movie:1062564,resource:movie:925050,resource:movie:905132,resource:movie:1051116,resource:movie:1194719,resource:movie:1403734,resource:movie:785864,resource:movie:1224034,resource:movie:1336677,resource:movie:1097178,resource:movie:509004,resource:movie:830859,resource:movie:673734,resource:movie:1043813,resource:movie:1396965,resource:movie:1242796,resource:movie:1004362,resource:movie:1373695,resource:movie:904662,resource:movie:1096220,resource:movie:1077768,resource:movie:1171803,resource:movie:1087296,resource:movie:1163200,resource:movie:885985,resource:movie:1389558,resource:movie:1115244,resource:movie:647052,resource:movie:1336376,resource:movie:956219,resource:movie:1249031,resource:movie:1011207,resource:movie:1172561,resource:movie:891793,resource:movie:1150101,resource:movie:1048396,resource:movie:916057,resource:movie:1394092,resource:movie:1235745,resource:movie:1384828,resource:movie:1132946,resource:movie:1048093,resource:movie:1213316,resource:movie:991294,resource:movie:970531,resource:movie:688185,resource:movie:1244419,resource:movie:65760,resource:movie:1203883,resource:movie:1281643,resource:movie:1388018,resource:movie:1385662,resource:movie:910265,resource:movie:1392344,resource:movie:1210248,resource:movie:871500,resource:movie:1224697,resource:movie:1233639,resource:movie:1044784,resource:movie:1069346,resource:movie:1075712,resource:movie:1200773,resource:movie:1326410,resource:movie:763652,resource:movie:1339052,resource:movie:1148867,resource:movie:1325277,resource:movie:977901,resource:movie:1144738,resource:movie:1066241,resource:movie:1214338,resource:movie:1290816,resource:movie:868842,resource:movie:787853,resource:movie:763449,resource:movie:1111709,resource:movie:1379395,resource:movie:1036433
+cf-placement: remote-IAD
+x-content-type-options: nosniff
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-pagination-item-count: 272
+x-pagination-limit: 250
+x-pagination-page: 1
+x-pagination-page-count: 2
+x-sort-by: added
+x-sort-how: desc
+speculation-rules: "/cdn-cgi/speculation"
+server: cloudflare
+cf-ray: a5246d490a845315-TXL
+

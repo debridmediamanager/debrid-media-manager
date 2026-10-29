@@ -12,6 +12,7 @@ import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
 import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
 import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
+import { syncDueWantedLists } from '@/services/wantedLists';
 import { secretEquals } from '@/utils/secretEquals';
 
 interface CronResponse {
@@ -39,6 +40,7 @@ interface CronResponse {
 	writtenBackTrash?: SweepResult;
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
+	wantedLists?: { synced: number; failed: number };
 	error?: string;
 }
 
@@ -147,6 +149,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Free request delivery failed:', e);
 		}
 
+		// The Trakt and MDBList lists sponsors follow are read again every six hours
+		// so that what is new on them gets wanted; nothing else reads them.
+		let wantedLists: CronResponse['wantedLists'];
+		try {
+			wantedLists = await syncDueWantedLists();
+		} catch (e) {
+			console.error('[Cron] Reading followed lists failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -168,6 +179,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			writtenBackTrash,
 			contentRequests,
 			freeRequestDeliveries,
+			wantedLists,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

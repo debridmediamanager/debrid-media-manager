@@ -9,6 +9,8 @@ export type MList = {
 	mediatype: string;
 	user_name: string;
 	description: string;
+	/** api.mdblist.com says it; the legacy host leaves it out. */
+	private?: boolean;
 };
 
 export type MListItem = {

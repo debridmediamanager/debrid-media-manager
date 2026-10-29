@@ -1,0 +1,2270 @@
+[
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt12785720",
+				"plex": { "guid": "5f20151f54b8860041e38bd3", "slug": "the-witcher-blood-origin" },
+				"slug": "the-witcher-blood-origin",
+				"tmdb": 106541,
+				"tvdb": 399987,
+				"trakt": 164920
+			},
+			"year": 2022,
+			"title": "The Witcher: Blood Origin",
+			"aired_episodes": 4
+		},
+		"rank": 33,
+		"id": 753270164,
+		"listed_at": "2022-10-17T16:40:57.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt12661338",
+				"plex": { "guid": "62272f54a6829f2a2074edd5", "slug": "a-friend-of-the-family" },
+				"slug": "a-friend-of-the-family",
+				"tmdb": 197434,
+				"tvdb": 417373,
+				"trakt": 194867
+			},
+			"year": 2022,
+			"title": "A Friend of the Family",
+			"aired_episodes": 9
+		},
+		"rank": 39,
+		"id": 763313982,
+		"listed_at": "2022-11-10T15:56:16.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt12580982",
+				"plex": {
+					"guid": "617c231e6d9bee0ff52ef74b",
+					"slug": "national-treasure-edge-of-history"
+				},
+				"slug": "national-treasure-edge-of-history",
+				"tmdb": 137437,
+				"tvdb": 382210,
+				"trakt": 162050
+			},
+			"year": 2022,
+			"title": "National Treasure: Edge of History",
+			"aired_episodes": 10
+		},
+		"rank": 43,
+		"id": 763315918,
+		"listed_at": "2022-11-10T16:03:31.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14675860",
+				"plex": { "guid": "610d45b2b7f406002da30e70", "slug": "welcome-to-chippendales" },
+				"slug": "welcome-to-chippendales",
+				"tmdb": 130567,
+				"tvdb": 403128,
+				"trakt": 185579
+			},
+			"year": 2022,
+			"title": "Welcome to Chippendales",
+			"aired_episodes": 8
+		},
+		"rank": 47,
+		"id": 763316564,
+		"listed_at": "2022-11-10T16:04:53.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt11714334",
+				"plex": {
+					"guid": "5ff4b253eaf79f002d34e78d",
+					"slug": "limitless-with-chris-hemsworth"
+				},
+				"slug": "limitless-with-chris-hemsworth",
+				"tmdb": 115996,
+				"tvdb": 393215,
+				"trakt": 170636
+			},
+			"year": 2022,
+			"title": "Limitless with Chris Hemsworth",
+			"aired_episodes": 6
+		},
+		"rank": 49,
+		"id": 763316849,
+		"listed_at": "2022-11-10T16:06:16.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt15765450",
+				"plex": { "guid": "617955336d5519c6836b9062", "slug": "the-calling-1" },
+				"slug": "the-calling",
+				"tmdb": 156473,
+				"tvdb": 411867,
+				"trakt": 190473
+			},
+			"year": 2022,
+			"title": "The Calling",
+			"aired_episodes": 8
+		},
+		"rank": 50,
+		"id": 763316952,
+		"listed_at": "2022-11-10T16:06:35.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt15565872",
+				"plex": { "guid": "6164f8de94babd93600bb634", "slug": "a-spy-among-friends" },
+				"slug": "a-spy-among-friends",
+				"tmdb": 138624,
+				"tvdb": 402296,
+				"trakt": 189363
+			},
+			"year": 2022,
+			"title": "A Spy Among Friends",
+			"aired_episodes": 6
+		},
+		"rank": 51,
+		"id": 763317162,
+		"listed_at": "2022-11-10T16:07:09.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt5822112",
+				"plex": { "guid": "6404a874e32b42634f611081", "slug": "rabbit-hole-1" },
+				"slug": "rabbit-hole",
+				"tmdb": 156819,
+				"tvdb": 415584,
+				"trakt": 193078
+			},
+			"year": 2023,
+			"title": "Rabbit Hole",
+			"aired_episodes": 8
+		},
+		"rank": 57,
+		"id": 788063122,
+		"listed_at": "2023-01-30T01:33:06.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14586350",
+				"plex": { "guid": "60917bce3d1b44002dbca0fd", "slug": "love-and-death" },
+				"slug": "love-death",
+				"tmdb": 124800,
+				"tvdb": 402181,
+				"trakt": 183346
+			},
+			"year": 2023,
+			"title": "Love & Death",
+			"aired_episodes": 7
+		},
+		"rank": 73,
+		"id": 809671509,
+		"listed_at": "2023-03-23T20:17:23.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt12923632",
+				"plex": { "guid": "61b1810da0a7085218501d21", "slug": "dead-ringers-2023" },
+				"slug": "dead-ringers-2023",
+				"tmdb": 130987,
+				"tvdb": 387113,
+				"trakt": 198208
+			},
+			"year": 2023,
+			"title": "Dead Ringers",
+			"aired_episodes": 6
+		},
+		"rank": 74,
+		"id": 809671646,
+		"listed_at": "2023-03-23T20:18:05.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt11468254",
+				"plex": { "guid": "5e1625a4acedb3003f136cbd", "slug": "white-house-plumbers" },
+				"slug": "white-house-plumbers",
+				"tmdb": 96237,
+				"tvdb": 401845,
+				"trakt": 169968
+			},
+			"year": 2023,
+			"title": "White House Plumbers",
+			"aired_episodes": 5
+		},
+		"rank": 80,
+		"id": 818426320,
+		"listed_at": "2023-04-11T18:23:13.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14509130",
+				"plex": { "guid": "608055d2f42cc80035752fbe", "slug": "florida-man" },
+				"slug": "florida-man",
+				"tmdb": 123856,
+				"tvdb": 408709,
+				"trakt": 187264
+			},
+			"year": 2023,
+			"title": "Florida Man",
+			"aired_episodes": 7
+		},
+		"rank": 82,
+		"id": 818427234,
+		"listed_at": "2023-04-11T18:26:23.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14263564",
+				"plex": { "guid": "61e41615da35c57acc672352", "slug": "justified-city-primeval" },
+				"slug": "justified-city-primeval",
+				"tmdb": 201304,
+				"tvdb": 414677,
+				"trakt": 195285
+			},
+			"year": 2023,
+			"title": "Justified: City Primeval",
+			"aired_episodes": 8
+		},
+		"rank": 93,
+		"id": 847479682,
+		"listed_at": "2023-06-13T02:13:37.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13911628",
+				"plex": { "guid": "61b17e758f749b300c78357a", "slug": "lessons-in-chemistry" },
+				"slug": "lessons-in-chemistry",
+				"tmdb": 117303,
+				"tvdb": 395685,
+				"trakt": 187723
+			},
+			"year": 2023,
+			"title": "Lessons in Chemistry",
+			"aired_episodes": 8
+		},
+		"rank": 96,
+		"id": 847481050,
+		"listed_at": "2023-06-13T02:17:00.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt15320362",
+				"plex": {
+					"guid": "6164f7595db2d7cbb1041282",
+					"slug": "all-the-light-we-cannot-see"
+				},
+				"slug": "all-the-light-we-cannot-see",
+				"tmdb": 155421,
+				"tvdb": 411029,
+				"trakt": 189362
+			},
+			"year": 2023,
+			"title": "All the Light We Cannot See",
+			"aired_episodes": 4
+		},
+		"rank": 97,
+		"id": 847481161,
+		"listed_at": "2023-06-13T02:18:09.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13623608",
+				"plex": { "guid": "5fd8e3bcbf60cd002d4bdc5c", "slug": "the-curse-3" },
+				"slug": "the-curse",
+				"tmdb": 114655,
+				"tvdb": 377278,
+				"trakt": 158409
+			},
+			"year": 2023,
+			"title": "The Curse",
+			"aired_episodes": 10
+		},
+		"rank": 101,
+		"id": 847482024,
+		"listed_at": "2023-06-13T02:21:05.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16294384",
+				"plex": { "guid": "61a89b515896a7e158873ef5", "slug": "disclaimer" },
+				"slug": "disclaimer",
+				"tmdb": 147050,
+				"tvdb": 413062,
+				"trakt": 191552
+			},
+			"year": 2024,
+			"title": "Disclaimer",
+			"aired_episodes": 7
+		},
+		"rank": 105,
+		"id": 847482459,
+		"listed_at": "2023-06-13T02:22:26.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13918446",
+				"plex": { "guid": "643b6662257affc935deded7", "slug": null },
+				"slug": "harry-potter",
+				"tmdb": 224377,
+				"tvdb": 433637,
+				"trakt": 204167
+			},
+			"year": 2026,
+			"title": "Harry Potter",
+			"aired_episodes": 0
+		},
+		"rank": 107,
+		"id": 847482696,
+		"listed_at": "2023-06-13T02:23:15.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16418808",
+				"plex": { "guid": "62a35be541db86d50abcadfb", "slug": "sugar-2024" },
+				"slug": "sugar-2024",
+				"tmdb": 203744,
+				"tvdb": 421070,
+				"trakt": 196180
+			},
+			"year": 2024,
+			"title": "Sugar",
+			"aired_episodes": 16
+		},
+		"rank": 111,
+		"id": 847483915,
+		"listed_at": "2023-06-13T02:27:33.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt1928307",
+				"plex": { "guid": "5ff8bf27ecc247002c8b7c4c", "slug": "time-bandits" },
+				"slug": "time-bandits",
+				"tmdb": 114924,
+				"tvdb": 425453,
+				"trakt": 155535
+			},
+			"year": 2024,
+			"title": "Time Bandits",
+			"aired_episodes": 10
+		},
+		"rank": 113,
+		"id": 847484270,
+		"listed_at": "2023-06-13T02:28:26.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt0185906",
+				"plex": { "guid": "5d9c086fffd9ef001e994da4", "slug": "band-of-brothers" },
+				"slug": "band-of-brothers",
+				"tmdb": 4613,
+				"tvdb": 74205,
+				"trakt": 4589
+			},
+			"year": 2001,
+			"title": "Band of Brothers",
+			"aired_episodes": 10
+		},
+		"rank": 114,
+		"id": 849018125,
+		"listed_at": "2023-06-16T01:27:25.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16027074",
+				"plex": {
+					"guid": "618fbfc98046d2cd94b0f98c",
+					"slug": "your-friendly-neighborhood-spider-man"
+				},
+				"slug": "your-friendly-neighborhood-spider-man",
+				"tmdb": 138503,
+				"tvdb": 412427,
+				"trakt": 191188
+			},
+			"year": 2025,
+			"title": "Your Friendly Neighborhood Spider-Man",
+			"aired_episodes": 10
+		},
+		"rank": 115,
+		"id": 928005056,
+		"listed_at": "2023-11-06T19:46:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt19244304",
+				"plex": { "guid": "62554fd3f9d8ae441b2bdddc", "slug": "it-welcome-to-derry" },
+				"slug": "it-welcome-to-derry",
+				"tmdb": 200875,
+				"tvdb": 418424,
+				"trakt": 195268
+			},
+			"year": 2025,
+			"title": "IT: Welcome to Derry",
+			"aired_episodes": 8
+		},
+		"rank": 120,
+		"id": 928005373,
+		"listed_at": "2023-11-06T19:48:18.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt19395018",
+				"plex": { "guid": "62505c1fa77822ffbc5d39eb", "slug": "constellation" },
+				"slug": "constellation",
+				"tmdb": 197125,
+				"tvdb": 418727,
+				"trakt": 194662
+			},
+			"year": 2024,
+			"title": "Constellation",
+			"aired_episodes": 8
+		},
+		"rank": 126,
+		"id": 984204851,
+		"listed_at": "2024-02-21T19:18:53.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt5611024",
+				"plex": { "guid": "63f4941f156872008622e9e0", "slug": "fool-me-once" },
+				"slug": "fool-me-once",
+				"tmdb": 220801,
+				"tvdb": 431352,
+				"trakt": 202693
+			},
+			"year": 2024,
+			"title": "Fool Me Once",
+			"aired_episodes": 8
+		},
+		"rank": 127,
+		"id": 940937553,
+		"listed_at": "2023-12-04T00:07:13.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16912512",
+				"plex": { "guid": "61e163fd6ca7af2761792499", "slug": "manhunt-2024" },
+				"slug": "manhunt-2024",
+				"tmdb": 155533,
+				"tvdb": 414337,
+				"trakt": 192561
+			},
+			"year": 2024,
+			"title": "Manhunt",
+			"aired_episodes": 7
+		},
+		"rank": 128,
+		"id": 984205364,
+		"listed_at": "2024-02-21T19:20:33.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt11016042",
+				"plex": { "guid": "5e160e7c2b8866001e609ba8", "slug": "ripley" },
+				"slug": "ripley",
+				"tmdb": 94028,
+				"tvdb": 372727,
+				"trakt": 155523
+			},
+			"year": 2024,
+			"title": "RIPLEY",
+			"aired_episodes": 8
+		},
+		"rank": 130,
+		"id": 984205739,
+		"listed_at": "2024-02-21T19:21:02.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14404618",
+				"plex": { "guid": "60f6a01cb88da5002c8a83ce", "slug": "the-sympathizer" },
+				"slug": "the-sympathizer",
+				"tmdb": 129398,
+				"tvdb": 406620,
+				"trakt": 184220
+			},
+			"year": 2024,
+			"title": "The Sympathizer",
+			"aired_episodes": 7
+		},
+		"rank": 131,
+		"id": 984205869,
+		"listed_at": "2024-02-21T19:21:23.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt19516036",
+				"plex": {
+					"guid": "62602d8d6fe46eb3a2ee22b7",
+					"slug": "the-completely-made-up-adventures-of-dick-turpin-1"
+				},
+				"slug": "the-completely-made-up-adventures-of-dick-turpin",
+				"tmdb": 197459,
+				"tvdb": 437929,
+				"trakt": 194773
+			},
+			"year": 2024,
+			"title": "The Completely Made-Up Adventures of Dick Turpin",
+			"aired_episodes": 7
+		},
+		"rank": 132,
+		"id": 984206191,
+		"listed_at": "2024-02-21T19:22:15.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14371926",
+				"plex": { "guid": "6210a3edd9e3b486ecb9227a", "slug": "apples-never-fall" },
+				"slug": "apples-never-fall",
+				"tmdb": 222031,
+				"tvdb": 416127,
+				"trakt": 203281
+			},
+			"year": 2024,
+			"title": "Apples Never Fall",
+			"aired_episodes": 7
+		},
+		"rank": 133,
+		"id": 984206271,
+		"listed_at": "2024-02-21T19:22:39.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31433814",
+				"plex": { "guid": "6558fa8ef5d059fb88b67c54", "slug": "doctor-who-2023-1" },
+				"slug": "doctor-who-2024",
+				"tmdb": 239770,
+				"tvdb": 449991,
+				"trakt": 213360
+			},
+			"year": 2024,
+			"title": "Doctor Who",
+			"aired_episodes": 16
+		},
+		"rank": 133,
+		"id": 986874891,
+		"listed_at": "2024-02-26T16:37:17.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt28466465",
+				"plex": { "guid": "62866cfcc84ca0369193617d", "slug": "rick-and-morty-the-anime" },
+				"slug": "rick-and-morty-the-anime",
+				"tmdb": 202282,
+				"tvdb": 420279,
+				"trakt": 195553
+			},
+			"year": 2024,
+			"title": "Rick and Morty: The Anime",
+			"aired_episodes": 10
+		},
+		"rank": 134,
+		"id": 986875495,
+		"listed_at": "2024-02-26T16:39:41.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt3520692",
+				"plex": { "guid": null, "slug": null },
+				"slug": "anansi-boys",
+				"tmdb": 129548,
+				"tvdb": 407249,
+				"trakt": 184473
+			},
+			"year": null,
+			"title": "Anansi Boys",
+			"aired_episodes": 0
+		},
+		"rank": 136,
+		"id": 986877131,
+		"listed_at": "2024-02-26T16:42:04.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13930822",
+				"plex": {
+					"guid": "6016d94378a766002ba722b2",
+					"slug": "tomb-raider-the-legend-of-lara-croft"
+				},
+				"slug": "tomb-raider-the-legend-of-lara-croft",
+				"tmdb": 117830,
+				"tvdb": 409591,
+				"trakt": 172944
+			},
+			"year": 2024,
+			"title": "Tomb Raider: The Legend of Lara Croft",
+			"aired_episodes": 16
+		},
+		"rank": 137,
+		"id": 986877262,
+		"listed_at": "2024-02-26T16:42:43.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt0264235",
+				"plex": { "guid": "5d9c086b4eefaa001f5dcd8b", "slug": "curb-your-enthusiasm" },
+				"slug": "curb-your-enthusiasm",
+				"tmdb": 4546,
+				"tvdb": 76203,
+				"trakt": 4522
+			},
+			"year": 2000,
+			"title": "Curb Your Enthusiasm",
+			"aired_episodes": 120
+		},
+		"rank": 140,
+		"id": 1008530350,
+		"listed_at": "2024-04-09T04:47:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt10016724",
+				"plex": { "guid": "624eff9d8b4bb01462d999aa", "slug": "orphan-black-echoes" },
+				"slug": "orphan-black-echoes",
+				"tmdb": 206916,
+				"tvdb": 418712,
+				"trakt": 197135
+			},
+			"year": 2024,
+			"title": "Orphan Black: Echoes",
+			"aired_episodes": 10
+		},
+		"rank": 143,
+		"id": 1008536983,
+		"listed_at": "2024-04-09T05:14:38.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt8230448",
+				"plex": { "guid": "630a127385083526cd9fbeee", "slug": "a-gentleman-in-moscow-1" },
+				"slug": "a-gentleman-in-moscow",
+				"tmdb": 208942,
+				"tvdb": 417619,
+				"trakt": 197769
+			},
+			"year": 2024,
+			"title": "A Gentleman in Moscow",
+			"aired_episodes": 8
+		},
+		"rank": 144,
+		"id": 999116450,
+		"listed_at": "2024-03-19T20:25:22.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt1640719",
+				"plex": { "guid": "633452486088aa9eb9e9f1b8", "slug": "under-the-bridge" },
+				"slug": "under-the-bridge",
+				"tmdb": 211358,
+				"tvdb": 425386,
+				"trakt": 200025
+			},
+			"year": 2024,
+			"title": "Under the Bridge",
+			"aired_episodes": 8
+		},
+		"rank": 145,
+		"id": 1008537322,
+		"listed_at": "2024-04-09T05:16:12.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt14153236",
+				"plex": { "guid": "655051e90ad0cae4317c4ba3", "slug": "terminator-zero" },
+				"slug": "terminator-zero",
+				"tmdb": 239287,
+				"tvdb": 442145,
+				"trakt": 213064
+			},
+			"year": 2024,
+			"title": "Terminator Zero",
+			"aired_episodes": 8
+		},
+		"rank": 145,
+		"id": 1066924206,
+		"listed_at": "2024-08-06T04:23:38.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16283824",
+				"plex": { "guid": "62b5b8b6516b9e73458c3ad8", "slug": "eric-2024" },
+				"slug": "eric",
+				"tmdb": 217667,
+				"tvdb": 421652,
+				"trakt": 71636
+			},
+			"year": 2024,
+			"title": "Eric",
+			"aired_episodes": 6
+		},
+		"rank": 146,
+		"id": 1008537433,
+		"listed_at": "2024-04-09T05:16:24.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt22012992",
+				"plex": { "guid": "631b89cb5f94ca088b4122f7", "slug": "house-of-ninjas" },
+				"slug": "house-of-ninjas",
+				"tmdb": 210098,
+				"tvdb": 424542,
+				"trakt": 199390
+			},
+			"year": 2024,
+			"title": "House of Ninjas",
+			"aired_episodes": 8
+		},
+		"rank": 147,
+		"id": 987441460,
+		"listed_at": "2024-02-27T19:39:54.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt15203646",
+				"plex": { "guid": "6112643cfc96b7002c11dbea", "slug": "bad-monkey" },
+				"slug": "bad-monkey",
+				"tmdb": 130853,
+				"tvdb": 408436,
+				"trakt": 185699
+			},
+			"year": 2024,
+			"title": "Bad Monkey",
+			"aired_episodes": 10
+		},
+		"rank": 147,
+		"id": 1066924353,
+		"listed_at": "2024-08-06T04:24:13.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt10625492",
+				"plex": { "guid": "5e165b5491c203004123aec3", "slug": "twilight-of-the-gods" },
+				"slug": "twilight-of-the-gods",
+				"tmdb": 97333,
+				"tvdb": 404605,
+				"trakt": 181922
+			},
+			"year": 2024,
+			"title": "Twilight of the Gods",
+			"aired_episodes": 8
+		},
+		"rank": 162,
+		"id": 1083556847,
+		"listed_at": "2024-09-07T04:56:39.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt22754212",
+				"plex": { "guid": "636aab287d4b35eded1cd64b", "slug": "citadel-diana" },
+				"slug": "citadel-diana",
+				"tmdb": 214032,
+				"tvdb": 435360,
+				"trakt": 206011
+			},
+			"year": 2024,
+			"title": "Citadel: Diana",
+			"aired_episodes": 6
+		},
+		"rank": 163,
+		"id": 1083557027,
+		"listed_at": "2024-09-07T04:57:06.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31896788",
+				"plex": { "guid": "606ef58bff5b43002ce0589a", "slug": "monster-2022" },
+				"slug": "monsters-the-lyle-and-erik-menendez-story",
+				"tmdb": 225634,
+				"tvdb": 453544,
+				"trakt": 206920
+			},
+			"year": 2024,
+			"title": "Monsters: The Lyle and Erik Menendez Story",
+			"aired_episodes": 9
+		},
+		"rank": 167,
+		"id": 1083557341,
+		"listed_at": "2024-09-07T04:59:00.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt30102397",
+				"plex": { "guid": "65b11757a0235daeff76c95c", "slug": "a-very-royal-scandal-1" },
+				"slug": "a-very-royal-scandal",
+				"tmdb": 244326,
+				"tvdb": 442487,
+				"trakt": 220860
+			},
+			"year": 2024,
+			"title": "A Very Royal Scandal",
+			"aired_episodes": 3
+		},
+		"rank": 168,
+		"id": 1083557949,
+		"listed_at": "2024-09-07T05:01:16.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt11514868",
+				"plex": { "guid": "63effc79c607a5c58614c4f8", "slug": "the-perfect-couple" },
+				"slug": "the-perfect-couple",
+				"tmdb": 220564,
+				"tvdb": 432782,
+				"trakt": 202577
+			},
+			"year": 2024,
+			"title": "The Perfect Couple",
+			"aired_episodes": 6
+		},
+		"rank": 169,
+		"id": 1090248962,
+		"listed_at": "2024-09-19T20:44:17.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt0103414",
+				"plex": { "guid": "5d9c086a3c3f87001f34f220", "slug": "fish-police" },
+				"slug": "fish-police",
+				"tmdb": 13670,
+				"tvdb": 72214,
+				"trakt": 13611
+			},
+			"year": 1992,
+			"title": "Fish Police",
+			"aired_episodes": 6
+		},
+		"rank": 169,
+		"id": 1103241269,
+		"listed_at": "2024-10-15T03:18:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33480540",
+				"plex": {
+					"guid": "66f4d6d2d4797af9e32a432b",
+					"slug": "this-is-the-zodiac-speaking"
+				},
+				"slug": "this-is-the-zodiac-speaking",
+				"tmdb": 272299,
+				"tvdb": 454805,
+				"trakt": 256938
+			},
+			"year": 2024,
+			"title": "This Is the Zodiac Speaking",
+			"aired_episodes": 3
+		},
+		"rank": 171,
+		"id": 1114231768,
+		"listed_at": "2024-11-04T02:20:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31122777",
+				"plex": { "guid": "65bd41c1414230404b768a2e", "slug": "say-nothing" },
+				"slug": "say-nothing",
+				"tmdb": 245256,
+				"tvdb": 445610,
+				"trakt": 222933
+			},
+			"year": 2024,
+			"title": "Say Nothing",
+			"aired_episodes": 9
+		},
+		"rank": 175,
+		"id": 1118384805,
+		"listed_at": "2024-11-11T21:55:21.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt32544507",
+				"plex": { "guid": "6660c30bf5d27d9a1ecb22e3", "slug": "the-creep-tapes" },
+				"slug": "the-creep-tapes",
+				"tmdb": 256201,
+				"tvdb": 450857,
+				"trakt": 243221
+			},
+			"year": 2024,
+			"title": "The Creep Tapes",
+			"aired_episodes": 18
+		},
+		"rank": 176,
+		"id": 1118384987,
+		"listed_at": "2024-11-11T21:55:32.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt26443935",
+				"plex": { "guid": "66047595aab94ce1e3820a55", "slug": "earth-abides-1" },
+				"slug": "earth-abides",
+				"tmdb": 250308,
+				"tvdb": 448175,
+				"trakt": 232779
+			},
+			"year": 2024,
+			"title": "Earth Abides",
+			"aired_episodes": 6
+		},
+		"rank": 178,
+		"id": 1118385111,
+		"listed_at": "2024-11-11T21:56:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt19636984",
+				"plex": { "guid": "625843332b7d2f6e19359590", "slug": "the-sticky" },
+				"slug": "the-sticky",
+				"tmdb": 197543,
+				"tvdb": 418984,
+				"trakt": 201074
+			},
+			"year": 2024,
+			"title": "The Sticky",
+			"aired_episodes": 6
+		},
+		"rank": 179,
+		"id": 1118385210,
+		"listed_at": "2024-11-11T21:56:18.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt26545355",
+				"plex": { "guid": "63d9d840072f0c6451568d9b", "slug": "creature-commandos" },
+				"slug": "creature-commandos",
+				"tmdb": 219543,
+				"tvdb": 430518,
+				"trakt": 202153
+			},
+			"year": 2024,
+			"title": "Creature Commandos",
+			"aired_episodes": 7
+		},
+		"rank": 180,
+		"id": 1151921974,
+		"listed_at": "2025-01-06T17:07:31.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt4063800",
+				"plex": { "guid": "5d9c0852705e7a001e6d8f16", "slug": "the-bureau-2" },
+				"slug": "the-bureau",
+				"tmdb": 62476,
+				"tvdb": 294564,
+				"trakt": 98427
+			},
+			"year": 2015,
+			"title": "The Bureau",
+			"aired_episodes": 50
+		},
+		"rank": 183,
+		"id": 1160103113,
+		"listed_at": "2025-01-21T17:48:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13968252",
+				"plex": { "guid": "6579a05ef431e6d1123f10fa", "slug": "eyes-of-wakanda" },
+				"slug": "eyes-of-wakanda",
+				"tmdb": 241388,
+				"tvdb": 443358,
+				"trakt": 217575
+			},
+			"year": 2025,
+			"title": "Eyes of Wakanda",
+			"aired_episodes": 4
+		},
+		"rank": 184,
+		"id": 1160624995,
+		"listed_at": "2025-01-22T17:29:15.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt23872886",
+				"plex": { "guid": "64010db42ab22540d29cbf4a", "slug": "zero-day-1" },
+				"slug": "zero-day",
+				"tmdb": 216082,
+				"tvdb": 431842,
+				"trakt": 201952
+			},
+			"year": 2025,
+			"title": "Zero Day",
+			"aired_episodes": 6
+		},
+		"rank": 186,
+		"id": 1160625066,
+		"listed_at": "2025-01-22T17:30:00.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt29485142",
+				"plex": { "guid": "669bac4bc1cd84be5a118e34", "slug": "suits-la" },
+				"slug": "suits-la",
+				"tmdb": 259453,
+				"tvdb": 452385,
+				"trakt": 248982
+			},
+			"year": 2025,
+			"title": "Suits LA",
+			"aired_episodes": 13
+		},
+		"rank": 188,
+		"id": 1160625298,
+		"listed_at": "2025-01-22T17:30:49.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt24512588",
+				"plex": { "guid": "639bc81b8b8550f98c3ba6ba", "slug": "side-quest-1" },
+				"slug": "side-quest",
+				"tmdb": 216412,
+				"tvdb": 428425,
+				"trakt": 200711
+			},
+			"year": 2025,
+			"title": "Side Quest",
+			"aired_episodes": 4
+		},
+		"rank": 191,
+		"id": 1171032229,
+		"listed_at": "2025-02-08T23:57:52.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt0111873",
+				"plex": { "guid": "5d9c080b1cae62001f74936c", "slug": "aeon-flux" },
+				"slug": "aeon-flux",
+				"tmdb": 406,
+				"tvdb": 78660,
+				"trakt": 405
+			},
+			"year": 1991,
+			"title": "Æon Flux",
+			"aired_episodes": 16
+		},
+		"rank": 192,
+		"id": 1175117308,
+		"listed_at": "2025-02-18T18:01:25.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt30826447",
+				"plex": { "guid": "659f162f4ac34b656efae4ed", "slug": "the-four-seasons-1" },
+				"slug": "the-four-seasons-2025",
+				"tmdb": 243316,
+				"tvdb": 444528,
+				"trakt": 220439
+			},
+			"year": 2025,
+			"title": "The Four Seasons",
+			"aired_episodes": 16
+		},
+		"rank": 201,
+		"id": 1215913524,
+		"listed_at": "2025-04-27T01:18:43.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt10405370",
+				"plex": { "guid": "5e1612e0141119002055b9bf", "slug": "sas-rogue-heroes" },
+				"slug": "sas-rogue-heroes",
+				"tmdb": 93870,
+				"tvdb": 368401,
+				"trakt": 176599
+			},
+			"year": 2022,
+			"title": "SAS: Rogue Heroes",
+			"aired_episodes": 12
+		},
+		"rank": 209,
+		"id": 1238009959,
+		"listed_at": "2025-05-27T16:11:37.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13723084",
+				"plex": { "guid": "65ab821215498aa6fff62dc3", "slug": "motorheads" },
+				"slug": "motorheads",
+				"tmdb": 243954,
+				"tvdb": 450314,
+				"trakt": 222384
+			},
+			"year": 2025,
+			"title": "Motorheads",
+			"aired_episodes": 10
+		},
+		"rank": 210,
+		"id": 1238880054,
+		"listed_at": "2025-05-28T16:59:53.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt32409123",
+				"plex": { "guid": "664c9128051127b7bb549b37", "slug": "death-valley-2025" },
+				"slug": "death-valley-2025",
+				"tmdb": 254897,
+				"tvdb": 451817,
+				"trakt": 240592
+			},
+			"year": 2025,
+			"title": "Death Valley",
+			"aired_episodes": 12
+		},
+		"rank": 237,
+		"id": 1261018929,
+		"listed_at": "2025-06-24T16:53:26.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt26576161",
+				"plex": {
+					"guid": "63de97ef33e7813c6f545a68",
+					"slug": "the-terminal-list-dark-wolf"
+				},
+				"slug": "the-terminal-list-dark-wolf",
+				"tmdb": 219760,
+				"tvdb": 464185,
+				"trakt": 202250
+			},
+			"year": 2025,
+			"title": "The Terminal List: Dark Wolf",
+			"aired_episodes": 7
+		},
+		"rank": 269,
+		"id": 1267871054,
+		"listed_at": "2025-07-02T08:44:39.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31449991",
+				"plex": { "guid": "65d88d78a57f7d57d36d552a", "slug": "chad-powers" },
+				"slug": "chad-powers",
+				"tmdb": 247168,
+				"tvdb": 446526,
+				"trakt": 227577
+			},
+			"year": 2025,
+			"title": "Chad Powers",
+			"aired_episodes": 12
+		},
+		"rank": 270,
+		"id": 1267871838,
+		"listed_at": "2025-07-02T08:46:06.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt32596156",
+				"plex": {
+					"guid": "66699250bf4b6ef07509c69a",
+					"slug": "anne-rices-talamasca-the-secret-order"
+				},
+				"slug": "talamasca-the-secret-order",
+				"tmdb": 256624,
+				"tvdb": 433933,
+				"trakt": 243762
+			},
+			"year": 2025,
+			"title": "Talamasca: The Secret Order",
+			"aired_episodes": 6
+		},
+		"rank": 270,
+		"id": 1373326835,
+		"listed_at": "2025-11-26T05:27:40.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31710822",
+				"plex": { "guid": "65f136abc4656c4712b545a4", "slug": "untamed" },
+				"slug": "untamed",
+				"tmdb": 248852,
+				"tvdb": 447456,
+				"trakt": 230614
+			},
+			"year": 2025,
+			"title": "UNTAMED",
+			"aired_episodes": 6
+		},
+		"rank": 271,
+		"id": 1281137070,
+		"listed_at": "2025-07-18T18:36:56.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt28013708",
+				"plex": { "guid": "6484c59a303021d6e0396988", "slug": "task" },
+				"slug": "task",
+				"tmdb": 228305,
+				"tvdb": 451873,
+				"trakt": 206561
+			},
+			"year": 2025,
+			"title": "Task",
+			"aired_episodes": 7
+		},
+		"rank": 271,
+		"id": 1373327149,
+		"listed_at": "2025-11-26T05:28:48.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt27497448",
+				"plex": {
+					"guid": "643cbf9ec1962a0897b7f6dd",
+					"slug": "a-knight-of-the-seven-kingdoms"
+				},
+				"slug": "a-knight-of-the-seven-kingdoms",
+				"tmdb": 224372,
+				"tvdb": 433631,
+				"trakt": 204141
+			},
+			"year": 2026,
+			"title": "A Knight of the Seven Kingdoms",
+			"aired_episodes": 6
+		},
+		"rank": 271,
+		"id": 1398485040,
+		"listed_at": "2025-12-30T06:04:04.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt8622160",
+				"plex": {
+					"guid": "6426d5438debdad08445123d",
+					"slug": "star-trek-starfleet-academy"
+				},
+				"slug": "star-trek-starfleet-academy",
+				"tmdb": 223530,
+				"tvdb": 433120,
+				"trakt": 203632
+			},
+			"year": 2026,
+			"title": "Star Trek: Starfleet Academy",
+			"aired_episodes": 10
+		},
+		"rank": 272,
+		"id": 1398485066,
+		"listed_at": "2025-12-30T06:04:09.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33246591",
+				"plex": { "guid": "66c93d25b40e74c363bea652", "slug": "the-assassin-2025" },
+				"slug": "the-assassin-2025",
+				"tmdb": 262352,
+				"tvdb": 453648,
+				"trakt": 252898
+			},
+			"year": 2025,
+			"title": "The Assassin",
+			"aired_episodes": 6
+		},
+		"rank": 273,
+		"id": 1295585641,
+		"listed_at": "2025-08-04T14:30:24.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31038430",
+				"plex": { "guid": "651ea53e1b11ca96332faa7c", "slug": "the-hunting-wives" },
+				"slug": "the-hunting-wives",
+				"tmdb": 244447,
+				"tvdb": 440472,
+				"trakt": 220908
+			},
+			"year": 2025,
+			"title": "The Hunting Wives",
+			"aired_episodes": 8
+		},
+		"rank": 274,
+		"id": 1295585991,
+		"listed_at": "2025-08-04T14:31:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt23734948",
+				"plex": {
+					"guid": "65108abbcc44992dfe148bcb",
+					"slug": "the-pendragon-cycle-rise-of-the-merlin"
+				},
+				"slug": "the-pendragon-cycle-rise-of-the-merlin",
+				"tmdb": 235685,
+				"tvdb": 463624,
+				"trakt": 210039
+			},
+			"year": 2026,
+			"title": "The Pendragon Cycle: Rise of the Merlin",
+			"aired_episodes": 7
+		},
+		"rank": 274,
+		"id": 1398485332,
+		"listed_at": "2025-12-30T06:04:24.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt35515227",
+				"plex": { "guid": "6807f9768d0f702ad2219f2d", "slug": "cia-2026" },
+				"slug": "cia-2026",
+				"tmdb": 289560,
+				"tvdb": 462856,
+				"trakt": 283328
+			},
+			"year": 2026,
+			"title": "CIA",
+			"aired_episodes": 16
+		},
+		"rank": 276,
+		"id": 1398485748,
+		"listed_at": "2025-12-30T06:04:56.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt6048596",
+				"plex": { "guid": "5d9c0853ef619b002047eb36", "slug": "the-sinner" },
+				"slug": "the-sinner",
+				"tmdb": 39852,
+				"tvdb": 326866,
+				"trakt": 118193
+			},
+			"year": 2017,
+			"title": "The Sinner",
+			"aired_episodes": 32
+		},
+		"rank": 287,
+		"id": 1541145293,
+		"listed_at": "2026-09-05T01:19:16.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt10982034",
+				"plex": { "guid": "5e29902a2daaa6003c83c105", "slug": "trying" },
+				"slug": "trying",
+				"tmdb": 98177,
+				"tvdb": 375903,
+				"trakt": 157481
+			},
+			"year": 2020,
+			"title": "Trying",
+			"aired_episodes": 40
+		},
+		"rank": 288,
+		"id": 1532372516,
+		"listed_at": "2026-08-10T16:08:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt31512174",
+				"plex": { "guid": "638baf5059b991107f0912fd", "slug": null },
+				"slug": "neuromancer",
+				"tmdb": 215528,
+				"tvdb": 435047,
+				"trakt": 202690
+			},
+			"year": 2027,
+			"title": "Neuromancer",
+			"aired_episodes": 0
+		},
+		"rank": 288,
+		"id": 1541705502,
+		"listed_at": "2026-09-07T01:19:03.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt18347622",
+				"plex": { "guid": "64e6cfd7c19cf3e4f1642bf8", "slug": "bodies-2023" },
+				"slug": "bodies-2023",
+				"tmdb": 233629,
+				"tvdb": 417257,
+				"trakt": 208663
+			},
+			"year": 2023,
+			"title": "Bodies",
+			"aired_episodes": 8
+		},
+		"rank": 289,
+		"id": 1463473222,
+		"listed_at": "2026-05-02T01:46:01.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt18224594",
+				"plex": { "guid": "6224c3a8a782817fe2a9bcd1", "slug": null },
+				"slug": "blade-runner-2099",
+				"tmdb": 171802,
+				"tvdb": 424855,
+				"trakt": 193839
+			},
+			"year": 2026,
+			"title": "Blade Runner 2099",
+			"aired_episodes": 0
+		},
+		"rank": 289,
+		"id": 1541705510,
+		"listed_at": "2026-09-07T01:19:11.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt32140872",
+				"plex": { "guid": "67a711656b1b8d167eb3f327", "slug": "star-city-1" },
+				"slug": "star-city",
+				"tmdb": 252107,
+				"tvdb": 449146,
+				"trakt": 235622
+			},
+			"year": 2026,
+			"title": "Star City",
+			"aired_episodes": 8
+		},
+		"rank": 290,
+		"id": 1477014605,
+		"listed_at": "2026-06-08T16:07:13.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt23112594",
+				"plex": { "guid": "639106ac93ce26bea48d65f2", "slug": "visionquest" },
+				"slug": "visionquest",
+				"tmdb": 213375,
+				"tvdb": 426606,
+				"trakt": 199379
+			},
+			"year": 2026,
+			"title": "VisionQuest",
+			"aired_episodes": 6
+		},
+		"rank": 290,
+		"id": 1541705620,
+		"listed_at": "2026-09-07T01:20:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt43717420",
+				"plex": {
+					"guid": "60d9f320181db7002d8772f7",
+					"slug": "interview-with-the-vampire"
+				},
+				"slug": "the-vampire-lestat",
+				"tmdb": 323411,
+				"tvdb": 2198088,
+				"trakt": 320162
+			},
+			"year": 2026,
+			"title": "The Vampire Lestat",
+			"aired_episodes": 7
+		},
+		"rank": 291,
+		"id": 1477014883,
+		"listed_at": "2026-06-08T16:07:45.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt6867482",
+				"plex": { "guid": "612767ea31273b002c0d03da", "slug": "drops-of-god-2023" },
+				"slug": "drops-of-god-2023",
+				"tmdb": 218961,
+				"tvdb": 409159,
+				"trakt": 186546
+			},
+			"year": 2023,
+			"title": "Drops of God",
+			"aired_episodes": 16
+		},
+		"rank": 291,
+		"id": 1486057810,
+		"listed_at": "2026-06-27T04:21:33.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt11540908",
+				"plex": { "guid": "671e44f76f2f5c8e20f67374", "slug": "carrie" },
+				"slug": "carrie",
+				"tmdb": 288673,
+				"tvdb": 455755,
+				"trakt": 282156
+			},
+			"year": 2026,
+			"title": "Carrie",
+			"aired_episodes": 8
+		},
+		"rank": 292,
+		"id": 1541705657,
+		"listed_at": "2026-09-07T01:20:33.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt30051064",
+				"plex": { "guid": "65569bccb690e76d694bee11", "slug": "american-hostage" },
+				"slug": "american-hostage",
+				"tmdb": 239618,
+				"tvdb": 462907,
+				"trakt": 213280
+			},
+			"year": 2026,
+			"title": "American Hostage",
+			"aired_episodes": 7
+		},
+		"rank": 294,
+		"id": 1541705896,
+		"listed_at": "2026-09-07T01:22:05.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33270224",
+				"plex": { "guid": "681c423d43269f79fcab28d1", "slug": "cupertino" },
+				"slug": "cupertino",
+				"tmdb": 303630,
+				"tvdb": 463435,
+				"trakt": 304435
+			},
+			"year": 2026,
+			"title": "Cupertino",
+			"aired_episodes": 3
+		},
+		"rank": 295,
+		"id": 1541705921,
+		"listed_at": "2026-09-07T01:22:28.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt8599532",
+				"plex": { "guid": "66589e320f6e7f8278b9be69", "slug": "young-sherlock-2026" },
+				"slug": "young-sherlock-2026",
+				"tmdb": 255661,
+				"tvdb": 450633,
+				"trakt": 242387
+			},
+			"year": 2026,
+			"title": "Young Sherlock",
+			"aired_episodes": 8
+		},
+		"rank": 296,
+		"id": 1440219035,
+		"listed_at": "2026-03-05T19:09:54.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt32375763",
+				"plex": { "guid": "6647e95b5c60c923b730c93b", "slug": null },
+				"slug": "12-12-12",
+				"tmdb": 254630,
+				"tvdb": 450094,
+				"trakt": 240270
+			},
+			"year": 2026,
+			"title": "12 12 12",
+			"aired_episodes": 0
+		},
+		"rank": 296,
+		"id": 1541705945,
+		"listed_at": "2026-09-07T01:22:40.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33741848",
+				"plex": { "guid": "66c761bb1dd42ae9a1e535ff", "slug": "under-salt-marsh" },
+				"slug": "under-salt-marsh",
+				"tmdb": 262262,
+				"tvdb": 453602,
+				"trakt": 252884
+			},
+			"year": 2026,
+			"title": "Under Salt Marsh",
+			"aired_episodes": 6
+		},
+		"rank": 297,
+		"id": 1440219849,
+		"listed_at": "2026-03-05T19:11:37.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt37972251",
+				"plex": { "guid": "68af9f683a2cf5507ddee977", "slug": "war-2026-1" },
+				"slug": "war-2026",
+				"tmdb": 298852,
+				"tvdb": 467092,
+				"trakt": 295637
+			},
+			"year": 2026,
+			"title": "WAR",
+			"aired_episodes": 4
+		},
+		"rank": 297,
+		"id": 1541705956,
+		"listed_at": "2026-09-07T01:22:50.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt9169516",
+				"plex": { "guid": "65b0456b3fcfb91d383a46e7", "slug": "run-away-1" },
+				"slug": "run-away-2026",
+				"tmdb": 244244,
+				"tvdb": 445068,
+				"trakt": 220846
+			},
+			"year": 2026,
+			"title": "Run Away",
+			"aired_episodes": 8
+		},
+		"rank": 298,
+		"id": 1402927689,
+		"listed_at": "2026-01-06T00:49:55.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt26598805",
+				"plex": { "guid": "63dd7fbc74d8c627e0fac4de", "slug": "nocturne" },
+				"slug": "nocturne",
+				"tmdb": 292741,
+				"tvdb": 430654,
+				"trakt": 287248
+			},
+			"year": 2026,
+			"title": "Nocturne",
+			"aired_episodes": 0
+		},
+		"rank": 313,
+		"id": 1551210405,
+		"listed_at": "2026-10-04T00:13:30.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33078239",
+				"plex": { "guid": "69d8c5bfa87070d5f51efb98", "slug": "eternally-yours-2" },
+				"slug": "eternally-yours",
+				"tmdb": 313630,
+				"tvdb": 476594,
+				"trakt": 316617
+			},
+			"year": 2026,
+			"title": "Eternally Yours",
+			"aired_episodes": 3
+		},
+		"rank": 320,
+		"id": 1552642107,
+		"listed_at": "2026-10-07T20:20:00.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt26862142",
+				"plex": { "guid": "63f94eebeaeab7f4ec72292f", "slug": "the-last-frontier-2025" },
+				"slug": "the-last-frontier-2025",
+				"tmdb": 221079,
+				"tvdb": 431488,
+				"trakt": 202773
+			},
+			"year": 2025,
+			"title": "The Last Frontier",
+			"aired_episodes": 10
+		},
+		"rank": 325,
+		"id": 1552824033,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt4779762",
+				"plex": { "guid": "5d9c083ce98e47001eb0ae36", "slug": "detroiters" },
+				"slug": "detroiters",
+				"tmdb": 69866,
+				"tvdb": 320196,
+				"trakt": 113377
+			},
+			"year": 2017,
+			"title": "Detroiters",
+			"aired_episodes": 20
+		},
+		"rank": 326,
+		"id": 1552824034,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt8740614",
+				"plex": { "guid": "622a9fcb89bbabccb5ec820d", "slug": "the-residence" },
+				"slug": "the-residence",
+				"tmdb": 242054,
+				"tvdb": 417552,
+				"trakt": 218239
+			},
+			"year": 2025,
+			"title": "The Residence",
+			"aired_episodes": 8
+		},
+		"rank": 327,
+		"id": 1552824035,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt30459041",
+				"plex": {
+					"guid": "657dc33ef513062f56b44a23",
+					"slug": "your-friends-and-neighbors"
+				},
+				"slug": "your-friends-neighbors",
+				"tmdb": 241609,
+				"tvdb": 443433,
+				"trakt": 217691
+			},
+			"year": 2025,
+			"title": "Your Friends & Neighbors",
+			"aired_episodes": 19
+		},
+		"rank": 328,
+		"id": 1552824036,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt21638826",
+				"plex": { "guid": "631ccdfb5183515528385101", "slug": "dope-thief" },
+				"slug": "dope-thief",
+				"tmdb": 209876,
+				"tvdb": 423332,
+				"trakt": 198189
+			},
+			"year": 2025,
+			"title": "Dope Thief",
+			"aired_episodes": 8
+		},
+		"rank": 329,
+		"id": 1552824037,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt33406999",
+				"plex": { "guid": "65a24f22b17bcca7339f7f36", "slug": "get-jiro-1" },
+				"slug": "get-jiro",
+				"tmdb": 231801,
+				"tvdb": 444631,
+				"trakt": 244316
+			},
+			"year": 2026,
+			"title": "GET JIRO",
+			"aired_episodes": 5
+		},
+		"rank": 329,
+		"id": 1556752855,
+		"listed_at": "2026-10-26T16:13:04.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt23649128",
+				"plex": { "guid": "65e1ca66944cddc4295cdf68", "slug": "the-studio-2025" },
+				"slug": "the-studio-2025",
+				"tmdb": 247767,
+				"tvdb": 448147,
+				"trakt": 228700
+			},
+			"year": 2025,
+			"title": "The Studio",
+			"aired_episodes": 10
+		},
+		"rank": 330,
+		"id": 1552824038,
+		"listed_at": "2026-10-08T09:56:08.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt0791205",
+				"plex": { "guid": "5d9c086b705e7a001e6dbd9f", "slug": "ergo-proxy" },
+				"slug": "ergo-proxy",
+				"tmdb": 1097,
+				"tvdb": 79228,
+				"trakt": 1092
+			},
+			"year": 2006,
+			"title": "Ergo Proxy",
+			"aired_episodes": 23
+		},
+		"rank": 331,
+		"id": 1552824040,
+		"listed_at": "2026-10-08T09:56:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13623126",
+				"plex": { "guid": "6089894473a4d4002cf5baa0", "slug": "ironheart" },
+				"slug": "ironheart",
+				"tmdb": 114471,
+				"tvdb": 393204,
+				"trakt": 170565
+			},
+			"year": 2025,
+			"title": "Ironheart",
+			"aired_episodes": 6
+		},
+		"rank": 332,
+		"id": 1552824041,
+		"listed_at": "2026-10-08T09:56:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt13623632",
+				"plex": { "guid": "66391fb2895fabeb264433d1", "slug": "alien-earth" },
+				"slug": "alien-earth",
+				"tmdb": 157239,
+				"tvdb": 458912,
+				"trakt": 170689
+			},
+			"year": 2025,
+			"title": "Alien: Earth",
+			"aired_episodes": 8
+		},
+		"rank": 333,
+		"id": 1552824042,
+		"listed_at": "2026-10-08T09:56:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt21088136",
+				"plex": { "guid": "62b1b378e2ad35049f91ee10", "slug": "criminal-record" },
+				"slug": "criminal-record",
+				"tmdb": 204490,
+				"tvdb": 421495,
+				"trakt": 196417
+			},
+			"year": 2024,
+			"title": "Criminal Record",
+			"aired_episodes": 16
+		},
+		"rank": 334,
+		"id": 1552824043,
+		"listed_at": "2026-10-08T09:56:10.000Z",
+		"notes": null,
+		"my_rating": null
+	},
+	{
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt16027014",
+				"plex": { "guid": "618fc461f4da835fbeee1582", "slug": "marvel-zombies" },
+				"slug": "marvel-zombies",
+				"tmdb": 138505,
+				"tvdb": 412428,
+				"trakt": 191189
+			},
+			"year": 2025,
+			"title": "Marvel Zombies",
+			"aired_episodes": 4
+		},
+		"rank": 335,
+		"id": 1552824044,
+		"listed_at": "2026-10-08T09:56:10.000Z",
+		"notes": null,
+		"my_rating": null
+	}
+]
