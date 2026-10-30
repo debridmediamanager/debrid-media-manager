@@ -11,7 +11,7 @@ services:
         condition: any
 
   tor:
-    image: debridmediamanager/tor
+    image: dmm-tor:latest
     deploy:
       replicas: 1
 

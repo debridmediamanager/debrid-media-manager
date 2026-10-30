@@ -47,6 +47,13 @@ jobs:
               run: |
                   docker build -t dmm-prod:latest .
 
+            # Built here, from a fresh Alpine, rather than pulled: the Docker Hub
+            # image went stale at Tor 0.4.8.16, which the network's consensus
+            # refused by 2026-10-30, and the healthcheck killed it every 3 minutes.
+            - name: Build Tor image
+              run: |
+                  docker build --pull -t dmm-tor:latest -f tor.Dockerfile .
+
             # The logship service (docker-compose.yml) bind-mounts both paths, and a
             # Swarm task cannot start while a bind source is missing. Its redaction
             # tests gate the deploy: a config that leaks a credential never ships.
@@ -64,6 +71,9 @@ jobs:
                   cp docker-compose.yml /home/ben/dmm/docker-compose.yml
                   cd /home/ben/dmm && docker stack deploy -c docker-compose.yml dmm --resolve-image always
                   docker service update --image dmm-prod:latest --force dmm_web
+                  # Restart Tor only when its image changed: a restart costs a minute of bootstrap.
+                  running=$(docker inspect --format '{{.Image}}' "$(docker ps -q -f name=dmm_tor | head -1)" 2>/dev/null || true)
+                  [ "$running" = "$(docker image inspect --format '{{.Id}}' dmm-tor:latest)" ] || docker service update --image dmm-tor:latest --force dmm_tor
 
             - name: Install watchdog
               run: |
