@@ -20,6 +20,8 @@ const {
 	scrapeSeasonMock,
 	cinemetaMock,
 	titleTypeMock,
+	addonMovieMock,
+	addonSeasonMock,
 } = vi.hoisted(() => ({
 	keyExistsMock: vi.fn(),
 	saveScrapedResultsMock: vi.fn(),
@@ -35,6 +37,8 @@ const {
 	scrapeSeasonMock: vi.fn(),
 	cinemetaMock: vi.fn(),
 	titleTypeMock: vi.fn(),
+	addonMovieMock: vi.fn(),
+	addonSeasonMock: vi.fn(),
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -65,6 +69,12 @@ vi.mock('@/services/debridio', () => ({
 	scrapeDebridioSeason: scrapeSeasonMock,
 }));
 
+vi.mock('@/services/stremioAddons', () => ({
+	STREMIO_ADDON_NAMES: ['torrentio', 'peerflix'],
+	scrapeAddonMovie: addonMovieMock,
+	scrapeAddonSeason: addonSeasonMock,
+}));
+
 vi.mock('@/services/metadataCache', () => ({
 	getMetadataCache: () => ({ getCinemetaSeries: cinemetaMock }),
 }));
@@ -81,6 +91,8 @@ const SCRAPE = {
 	torrents: [{ title: 'Some.Release.1080p', fileSize: 2048, hash: 'a'.repeat(40) }],
 	available: [{ hash: 'a'.repeat(40), filename: 'Some.Release.1080p.mkv', bytes: 2147483648 }],
 };
+
+const EMPTY = { torrents: [], available: [] };
 
 const AD_SCRAPE = {
 	torrents: [
@@ -105,14 +117,47 @@ describe('backfillFromDebridioNow', () => {
 		getDebridioRefreshedAtMock.mockResolvedValue(null);
 		markDebridioRefreshedMock.mockResolvedValue(undefined);
 		titleTypeMock.mockImplementation(async (id: string) => TITLE_TYPES[id] ?? null);
+		addonMovieMock.mockReset().mockResolvedValue(EMPTY);
+		addonSeasonMock.mockReset().mockResolvedValue(EMPTY);
 	});
 
-	it('returns nothing and touches nothing when debridio is disabled', async () => {
+	// Production runs without debridio: the addons alone fill an empty page.
+	it('fills the page from Torrentio and Peerflix when debridio is not configured', async () => {
 		enabledMock.mockReturnValue(false);
+		providersMock.mockReturnValue([]);
+		addonMovieMock.mockImplementation(async (_id: string, addon: string) =>
+			addon === 'torrentio' ? SCRAPE : AD_SCRAPE
+		);
 
-		expect(await backfillFromDebridioNow(MOVIE_TARGET)).toEqual([]);
-		expect(keyExistsMock).not.toHaveBeenCalled();
+		const torrents = await backfillFromDebridioNow(MOVIE_TARGET);
+
 		expect(scrapeMovieMock).not.toHaveBeenCalled();
+		expect(addonMovieMock.mock.calls).toEqual([
+			['tt0111161', 'torrentio'],
+			['tt0111161', 'peerflix'],
+		]);
+		expect(torrents.map((t) => t.hash)).toEqual(['a'.repeat(40), 'b'.repeat(40)]);
+		expect(saveScrapedTrueResultsMock).toHaveBeenCalledWith('movie:tt0111161', torrents, true);
+		// Both addons' [RD+] marks are Real-Debrid's; none are AllDebrid's.
+		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', [
+			...SCRAPE.available,
+			...AD_SCRAPE.available,
+		]);
+		expect(saveInstantAvailabilityAdMock).not.toHaveBeenCalled();
+		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
+	});
+
+	it('asks the addons for every episode of a season, as it asks debridio', async () => {
+		enabledMock.mockReturnValue(false);
+		providersMock.mockReturnValue([]);
+		cinemetaMock.mockResolvedValue({
+			meta: { videos: [1, 2, 3].map((episode) => ({ season: 1, episode })) },
+		});
+
+		await backfillFromDebridioNow(SEASON_TARGET);
+
+		expect(addonSeasonMock).toHaveBeenCalledWith('tt0903747', 1, [1, 2, 3], 'torrentio');
+		expect(addonSeasonMock).toHaveBeenCalledWith('tt0903747', 1, [1, 2, 3], 'peerflix');
 	});
 
 	it('steps aside when another scrape of this title is in flight', async () => {
@@ -234,9 +279,10 @@ describe('backfillFromDebridioNow', () => {
 		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
 	});
 
-	it('fails without tombstoning when every configured provider fails', async () => {
+	it('fails without tombstoning when every source fails', async () => {
 		providersMock.mockReturnValue(['realdebrid', 'alldebrid']);
 		scrapeMovieMock.mockRejectedValue(new Error('(upstream_error) bad_token'));
+		addonMovieMock.mockRejectedValue(new Error('torrentio.strem.fun responded 403'));
 
 		expect(await backfillFromDebridioNow(MOVIE_TARGET)).toEqual([]);
 		expect(markDebridioRefreshedMock).not.toHaveBeenCalled();
@@ -281,6 +327,16 @@ describe('refreshDebridioAvailabilityInBackground', () => {
 		expect(scrapeMovieMock).toHaveBeenCalledWith('tt0111161', 'realdebrid');
 		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
 		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
+	});
+
+	// A page the library already has results for never reaches the addons.
+	it('never asks the addons', async () => {
+		getDebridioRefreshedAtMock.mockResolvedValue(new Date('2026-01-01'));
+
+		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
+
+		expect(scrapeMovieMock).toHaveBeenCalled();
+		expect(addonMovieMock).not.toHaveBeenCalled();
 	});
 
 	it('does not re-arm the ttl when the scrape fails', async () => {

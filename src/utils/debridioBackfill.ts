@@ -9,6 +9,12 @@ import {
 import { ScrapeSearchResult, flattenAndRemoveDuplicates } from '@/services/mediasearch';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository as db } from '@/services/repository';
+import {
+	STREMIO_ADDON_NAMES,
+	StremioAddon,
+	scrapeAddonMovie,
+	scrapeAddonSeason,
+} from '@/services/stremioAddons';
 import { isMovieTitleType, isShowTitleType } from '@/utils/imdbTitleTypes';
 
 export type DebridioTarget = {
@@ -43,33 +49,43 @@ async function seasonEpisodes(imdbId: string, season: number): Promise<number[]>
 	return Array.from({ length: FALLBACK_EPISODE_COUNT }, (_, i) => i + 1);
 }
 
-async function scrapeProvider(
-	target: DebridioTarget,
-	provider: DebridioProvider
-): Promise<DebridioScrape> {
+/** A debridio provider, or a keyless addon whose cache marks are Real-Debrid's. */
+type Source = DebridioProvider | StremioAddon;
+
+const isAddon = (source: Source): source is StremioAddon =>
+	(STREMIO_ADDON_NAMES as string[]).includes(source);
+
+async function scrapeProvider(target: DebridioTarget, provider: Source): Promise<DebridioScrape> {
 	if (target.kind === 'movie') {
-		return scrapeDebridioMovie(target.imdbId, provider);
+		return isAddon(provider)
+			? scrapeAddonMovie(target.imdbId, provider)
+			: scrapeDebridioMovie(target.imdbId, provider);
 	}
 	const season = target.season ?? 1;
-	return scrapeDebridioSeason(
-		target.imdbId,
-		season,
-		await seasonEpisodes(target.imdbId, season),
-		provider
-	);
+	const episodes = await seasonEpisodes(target.imdbId, season);
+	return isAddon(provider)
+		? scrapeAddonSeason(target.imdbId, season, episodes, provider)
+		: scrapeDebridioSeason(target.imdbId, season, episodes, provider);
 }
 
-type ProviderScrapes = Partial<Record<DebridioProvider, DebridioScrape>>;
+type ProviderScrapes = Partial<Record<Source, DebridioScrape>>;
 
 /**
- * Scrapes every configured provider for the target. Torrent listings land in
- * the same ScrapedTrue key from both (deduped by hash at merge); each
- * provider's ⚡ availability is kept apart because the caches differ - RD's
- * cached set is not AD's. Throws only when every configured provider fails;
- * one failing provider is logged and the rest still land.
+ * Scrapes every configured debridio provider for the target, and with addons
+ * Torrentio and Peerflix too. Torrent listings land in the same ScrapedTrue
+ * key from all of them (deduped by hash at merge); availability is kept apart
+ * by debrid service because the caches differ - RD's cached set is not AD's.
+ * Throws only when every source fails; one failing is logged and the rest
+ * still land.
  */
-async function scrapeAllProviders(target: DebridioTarget): Promise<ProviderScrapes> {
-	const providers = configuredDebridioProviders();
+async function scrapeAllProviders(
+	target: DebridioTarget,
+	addons: boolean
+): Promise<ProviderScrapes> {
+	const providers: Source[] = [
+		...configuredDebridioProviders(),
+		...(addons ? STREMIO_ADDON_NAMES : []),
+	];
 	const settled = await Promise.allSettled(
 		providers.map((provider) => scrapeProvider(target, provider))
 	);
@@ -87,7 +103,7 @@ async function scrapeAllProviders(target: DebridioTarget): Promise<ProviderScrap
 		}
 	});
 	if (succeeded === 0) {
-		throw new Error(`all debridio providers failed for ${target.key}`);
+		throw new Error(`every source failed for ${target.key}`);
 	}
 	return scrapes;
 }
@@ -101,8 +117,12 @@ async function persist(target: DebridioTarget, scrapes: ProviderScrapes): Promis
 	if (torrents.length > 0) {
 		await db.saveScrapedTrueResults(target.key, torrents, true);
 	}
-	if (scrapes.realdebrid?.available.length) {
-		await db.saveInstantAvailability(target.imdbId, scrapes.realdebrid.available);
+	// The addons' [RD+] marks are Real-Debrid's, as debridio's realdebrid ⚡ are.
+	const rd = [scrapes.realdebrid, ...STREMIO_ADDON_NAMES.map((addon) => scrapes[addon])].flatMap(
+		(scrape) => scrape?.available ?? []
+	);
+	if (rd.length) {
+		await db.saveInstantAvailability(target.imdbId, rd);
 	}
 	if (scrapes.alldebrid?.available.length) {
 		await db.saveInstantAvailabilityAd(target.imdbId, scrapes.alldebrid.available);
@@ -149,16 +169,18 @@ async function refreshedRecently(key: string): Promise<boolean> {
 }
 
 /**
- * Synchronous first-fill for a title the external scrapers have not reached.
- * Debridio answers in about a second, so the page gets results on this request
- * instead of a 204 'requested' plus polling. Returns [] when debridio is
- * disabled, another scrape of this title is in flight, or debridio knows
- * nothing - the caller then falls back to the request queue as before.
+ * Synchronous first-fill for a title the external scrapers have not reached:
+ * debridio when configured, and Torrentio and Peerflix always. Each answers in
+ * about a second, so the page gets results on this request instead of a 204
+ * 'requested' plus polling, and what they found is the library's from then on,
+ * for every user and every feed. Only an empty page gets here, so the library
+ * always answers first. Returns [] when another scrape of this title is in
+ * flight or nothing knows the title - the caller then falls back to the
+ * request queue as before.
  */
 export async function backfillFromDebridioNow(
 	target: DebridioTarget
 ): Promise<ScrapeSearchResult[]> {
-	if (!isDebridioEnabled()) return [];
 	if (await refreshedRecently(target.key)) return [];
 	if (!(await idIsKind(target))) return [];
 
@@ -167,7 +189,7 @@ export async function backfillFromDebridioNow(
 	await db.saveScrapedResults(processingKey, []);
 
 	try {
-		const scrapes = await scrapeAllProviders(target);
+		const scrapes = await scrapeAllProviders(target, true);
 		await persist(target, scrapes);
 		// Tombstone the answer itself - including an empty one, so a title whose
 		// stored results are all filtered out at read time or that debridio
@@ -178,7 +200,7 @@ export async function backfillFromDebridioNow(
 			Object.values(scrapes).map((scrape) => scrape?.torrents ?? [])
 		);
 		if (torrents.length === 0) {
-			console.log(`[debridio] no results for ${target.kind} ${target.imdbId}`);
+			console.log(`[backfill] no results for ${target.kind} ${target.imdbId}`);
 		}
 		return torrents;
 	} catch (error) {
@@ -196,7 +218,8 @@ export async function backfillFromDebridioNow(
 
 /**
  * Availability refresh for titles that already have scrape results, so their ⚡
- * markers survive RD cache turnover. Throttled per ScrapedTrue key: the
+ * markers survive RD cache turnover. Debridio only: a title the library knows
+ * never sends traffic to Torrentio or Peerflix. Throttled per ScrapedTrue key: the
  * debridio:refresh Cache row's updatedAt is the clock, so a refresh that finds
  * no new cached hashes (create-only writes, nothing advanced in Available)
  * still counts and suppresses the next views. Returns the promise so callers
@@ -210,7 +233,7 @@ export async function refreshDebridioAvailabilityInBackground(
 	if (!(await idIsKind(target))) return;
 
 	try {
-		const scrapes = await scrapeAllProviders(target);
+		const scrapes = await scrapeAllProviders(target, false);
 		await persist(target, scrapes);
 		await db.markDebridioRefreshed(target.key);
 		const cached = Object.values(scrapes).reduce(

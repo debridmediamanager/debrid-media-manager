@@ -126,7 +126,7 @@ this budget exists to pace.
    which also answers with the title's type — so a generic `t=search` for a show name
    reads season pages rather than a movie page.
 2. Each page is read with `getScrapedTrueRow`, one row per key.
-3. Nothing found → debridio backfill (below).
+3. Nothing found → backfill from debridio, Torrentio and Peerflix (below).
 4. An episode search keeps the releases that name that episode (below).
 5. Reported hashes are dropped, exactly as the site does before rendering a title. A
    failure there serves the unfiltered set rather than failing the search.
@@ -224,16 +224,27 @@ This matters more than it looks: Prowlarr tests an indexer with exactly this req
 reports an empty answer as a **failed** test, so an indexer that answers nothing here
 looks broken on setup. It never triggers a scrape.
 
-### Debridio backfill
+### Backfill from debridio, Torrentio and Peerflix
 
 A page nothing has scraped yet falls through to `backfillFromDebridioNow` — the same call
-`/api/torrents/movie` makes for the website. Debridio answers in about a second, so the
-search is filled on that request instead of coming back empty. Only for a single, fully
-named page: a query that resolved to several pages has no one thing to ask about. The
-scrape is guarded by debridio's own in-flight marker and refresh window.
+`/api/torrents/movie` makes for the website. It asks debridio when that is configured,
+and the Torrentio and Peerflix Stremio addons always (`src/services/stremioAddons.ts`).
+Each answers in about a second, so the search is filled on that request instead of coming
+back empty, and what they found is saved to the library for every later search and every
+user: the torrents to `ScrapedTrue`, and the ones Real-Debrid holds (debridio's ⚡,
+the addons' `[RD+]`) to `Available`, which the `cached` feeds read. The library always
+answers first: a page with anything on it never reaches the addons. Only for a single,
+fully named page: a query that resolved to several pages has no one thing to ask about.
+The scrape is guarded by an in-flight marker and a seven-day refresh window, kept even
+when nothing was found.
+
+The addons are given no key. Their `realdebrid=real-debrid-key` path still carries their
+Real-Debrid cache marks. Addons that need a real debrid key, such as Comet or TorrentsDB,
+are left out: they can use it from their own servers.
 
 When a page _was_ served, `refreshDebridioAvailabilityInBackground` fires and is not
 awaited — that is what keeps the cache markers this feed's `seeders` are made of fresh.
+It asks debridio only, so a title the library knows sends no traffic to the addons.
 
 ## What `seeders` means here
 
@@ -348,7 +359,7 @@ the first would be wrong if the filter were applied after slicing. Lookups are c
 | ------------------------------------- | ---------------------------------------------------------- |
 | `src/pages/api/torznab/[...route].ts` | Dispatch, path variants, auth wiring, rate limits          |
 | `src/services/torznab/resolve.ts`     | Query → library page keys (id normalization, TVDB, titles) |
-| `src/services/torznab/search.ts`      | Library reads, debridio fallback, cache signal, paging     |
+| `src/services/torznab/search.ts`      | Library reads, backfill fallback, cache signal, paging     |
 | `src/services/torznab/categories.ts`  | Category derivation and `cat=` matching                    |
 | `src/services/torznab/xml.ts`         | Hand-rolled caps / RSS writers                             |
 | `src/pages/torznab.tsx`               | Sponsor setup page (client gate is cosmetic)               |
@@ -363,7 +374,7 @@ Supporting additions elsewhere: `getScrapedTrueRow` / `getScrapedTrueSeasonKeys`
 None. The endpoint needs no new configuration — no token secret, no public base, no
 store — which also means there is no deploy step that can half-enable it. Debridio
 backfill uses the `DEBRIDIO_ADDON_URL` / `DEBRIDIO_ALLDEBRID_URL` the site already sets,
-and cleanly does nothing when they are unset. The verdict filter follows the verdicts'
+and cleanly skips debridio when they are unset; Torrentio and Peerflix need nothing. The verdict filter follows the verdicts'
 existing switch, `TYPESAFE_API_KEY`, and passes everything through without it.
 
 ## Tests

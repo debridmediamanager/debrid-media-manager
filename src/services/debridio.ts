@@ -103,19 +103,37 @@ function collectStreams(payloads: unknown[]): unknown[] {
 	return streams;
 }
 
+/** How one addon's streams say which torrent they are and whether RD holds it. */
+export type StreamReading = {
+	hashOf(stream: Record<string, unknown>): string | null;
+	cachedOf(stream: Record<string, unknown>): boolean;
+};
+
+const DEBRIDIO_READING: StreamReading = {
+	hashOf: (s) => hashFromPlayUrl(s.url),
+	cachedOf: (s) => typeof s.name === 'string' && s.name.includes('⚡'),
+};
+
+export function parseDebridioStreams(payloads: unknown | unknown[]): DebridioScrape {
+	return parseStreams(payloads, DEBRIDIO_READING);
+}
+
 /**
- * Turns one or more debridio stream responses into scrape rows plus the
+ * Turns one or more Stremio stream responses into scrape rows plus the
  * cached-on-RD subset. Multiple payloads (a season fanned out per episode) are
  * merged by hash: the cached flag ORs, and the larger size wins so an episode
  * query that saw the full pack is not overwritten by a partial one.
  */
-export function parseDebridioStreams(payloads: unknown | unknown[]): DebridioScrape {
+export function parseStreams(
+	payloads: unknown | unknown[],
+	reading: StreamReading
+): DebridioScrape {
 	const list = Array.isArray(payloads) ? payloads : [payloads];
 	const byHash = new Map<string, ParsedStream>();
 
 	for (const stream of collectStreams(list)) {
 		const s = stream as Record<string, unknown>;
-		const hash = hashFromPlayUrl(s.url);
+		const hash = reading.hashOf(s);
 		if (!hash) continue;
 
 		const fullTitle = typeof s.title === 'string' ? s.title : '';
@@ -132,7 +150,7 @@ export function parseDebridioStreams(payloads: unknown | unknown[]): DebridioScr
 		const behaviorHints = s.behaviorHints as Record<string, unknown> | undefined;
 		const filename =
 			(typeof behaviorHints?.filename === 'string' && behaviorHints.filename) || title;
-		const cached = typeof s.name === 'string' && s.name.includes('⚡');
+		const cached = reading.cachedOf(s);
 
 		const existing = byHash.get(hash);
 		if (!existing) {
@@ -161,10 +179,11 @@ export function parseDebridioStreams(payloads: unknown | unknown[]): DebridioScr
 	return { torrents, available };
 }
 
+// The error names the host alone: debridio's path carries its provider key.
 async function fetchStreams(url: string): Promise<unknown> {
 	const response = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
 	if (!response.ok) {
-		throw new Error(`debridio responded ${response.status}`);
+		throw new Error(`${new URL(url).host} responded ${response.status}`);
 	}
 	return response.json();
 }
@@ -175,7 +194,7 @@ export async function scrapeDebridioMovie(
 ): Promise<DebridioScrape> {
 	const base = addonBase(provider);
 	if (!base) throw new Error(`${ENV_BY_PROVIDER[provider]} is not configured`);
-	return parseDebridioStreams(await fetchStreams(`${base}/stream/movie/${imdbId}.json`));
+	return scrapeStremioMovie(base, imdbId, parseDebridioStreams);
 }
 
 export async function scrapeDebridioSeason(
@@ -186,6 +205,26 @@ export async function scrapeDebridioSeason(
 ): Promise<DebridioScrape> {
 	const base = addonBase(provider);
 	if (!base) throw new Error(`${ENV_BY_PROVIDER[provider]} is not configured`);
+	return scrapeStremioSeason(base, imdbId, season, episodes, parseDebridioStreams);
+}
+
+/** A film from any Stremio addon whose /stream paths hang off base. */
+export async function scrapeStremioMovie(
+	base: string,
+	imdbId: string,
+	parse: (payloads: unknown[]) => DebridioScrape
+): Promise<DebridioScrape> {
+	return parse([await fetchStreams(`${base}/stream/movie/${imdbId}.json`)]);
+}
+
+/** A season from any Stremio addon, asked one episode at a time. */
+export async function scrapeStremioSeason(
+	base: string,
+	imdbId: string,
+	season: number,
+	episodes: number[],
+	parse: (payloads: unknown[]) => DebridioScrape
+): Promise<DebridioScrape> {
 	const list = episodes.slice(0, MAX_EPISODES_PER_SEASON);
 	if (list.length === 0) throw new Error('no episodes to scrape');
 
@@ -214,7 +253,7 @@ export async function scrapeDebridioSeason(
 		}
 	}
 	if (payloads.length === 0) {
-		throw new Error('all debridio episode requests failed');
+		throw new Error(`all ${new URL(base).host} episode requests failed`);
 	}
-	return parseDebridioStreams(payloads);
+	return parse(payloads);
 }
