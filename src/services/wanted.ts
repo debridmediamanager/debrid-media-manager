@@ -36,6 +36,11 @@ export interface WantedForZurg {
 	 * acknowledgement.
 	 */
 	upgrade?: { grab: string; resolution: string; to: string };
+	/**
+	 * Films only, when zurg asked for `?bands=`: what it holds at each of those
+	 * resolutions it fetched already, with `to` while it wants a better copy there.
+	 */
+	bands?: Record<string, { grab: string; resolution: string; to?: string }>;
 }
 
 /**

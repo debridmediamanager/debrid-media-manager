@@ -12,7 +12,16 @@ export type WantedFulfilled = {
 	resolution: string;
 	/** Set while zurg wants a better release, which keeps a fulfilled film on the list. */
 	upgradeTo?: string;
+	/**
+	 * Films only, for a zurg that keeps a copy at each of several resolutions: what it
+	 * took for each, keyed by that resolution (`1080p`, `2160p`). The fields above are
+	 * then the first copy's, with no `upgradeTo`.
+	 */
+	bands?: Record<string, WantedTook>;
 };
+
+/** What zurg took for one resolution it keeps a copy at. */
+export type WantedTook = Omit<WantedFulfilled, 'bands'>;
 
 export interface WantedItemRow {
 	id: string;
@@ -143,18 +152,28 @@ export class WantedItemsService extends DatabaseClient {
 
 	/**
 	 * zurg's acknowledgement, with what it took. Each one replaces what was stored,
-	 * an upgrade wish included; the first date stands. False for an unknown id.
+	 * an upgrade wish included; the first date stands. With a `band` it replaces only
+	 * that resolution's copy and keeps the others. False for an unknown id.
 	 */
 	public async markFulfilled(
 		shortId: string,
 		id: string,
-		fulfilled: WantedFulfilled
+		took: WantedTook,
+		band?: string
 	): Promise<boolean> {
 		const row = await this.prisma.wantedItem.findFirst({
 			where: { shortId, id },
-			select: { fulfilledAt: true },
+			select: { fulfilledAt: true, fulfilled: true },
 		});
 		if (!row) return false;
+		const before = (row.fulfilled ?? null) as WantedFulfilled | null;
+		let fulfilled: WantedFulfilled;
+		if (band) {
+			const { upgradeTo: _, ...first } = took;
+			fulfilled = { ...(before ?? first), bands: { ...before?.bands, [band]: took } };
+		} else {
+			fulfilled = before?.bands ? { ...took, bands: before.bands } : took;
+		}
 		await this.prisma.wantedItem.updateMany({
 			where: { shortId, id },
 			data: { fulfilled, fulfilledAt: row.fulfilledAt ?? new Date() },

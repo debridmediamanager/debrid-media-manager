@@ -15,6 +15,9 @@ const UPGRADES = ['720p', '1080p', '2160p'];
  * zurgs send, ends an upgrade wish. A film is then left off the list zurg reads
  * unless it wants an upgrade; a show stays on it. 404 for an id that is not
  * this sponsor's, which includes one the sponsor removed in the meantime.
+ *
+ * `band`, one of the `UPGRADES`, is the resolution this copy is kept at by a zurg that
+ * keeps one at each of several: it replaces only that resolution's record.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -39,6 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		torrent = false,
 		resolution = '',
 		upgrade_to: upgradeTo,
+		band,
 	} = (req.body ?? {}) as Record<string, unknown>;
 	if (typeof id !== 'string' || !ITEM_ID.test(id)) {
 		return res.status(400).json({ error: 'Expected {"id": "<wanted item id>"}' });
@@ -60,6 +64,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		return refuse('"upgrade_to" must be "720p", "1080p" or "2160p", with a "resolution"');
 	}
+	if (band !== undefined && (typeof band !== 'string' || !UPGRADES.includes(band))) {
+		return refuse('"band" must be "720p", "1080p" or "2160p"');
+	}
 
 	try {
 		const fulfilled = {
@@ -69,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			resolution,
 			...(upgradeTo ? { upgradeTo } : {}),
 		};
-		if (!(await db.markWantedFulfilled(sponsor.shortId, id, fulfilled))) {
+		if (!(await db.markWantedFulfilled(sponsor.shortId, id, fulfilled, band))) {
 			return res.status(404).json({ error: 'Not on this wanted list' });
 		}
 		return res.status(200).json({ ok: true });

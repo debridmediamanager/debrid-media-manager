@@ -211,6 +211,20 @@ not know the title.
 `resolution` are what it said it holds, `to` the resolution it wants. DMM only echoes
 what the last acknowledgement said.
 
+`GET /api/sponsor/wanted?bands=1080p,2160p` is for a fetcher that keeps a copy of each
+film at several resolutions. A film then stays on the list until every band named holds
+a copy its fetcher wants no better than, and carries `bands` in place of `upgrade`:
+
+```json
+"bands": {
+	"1080p": { "grab": "<info hash>", "resolution": "1080p" },
+	"2160p": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" }
+}
+```
+
+A band missing from `bands` has no copy yet. A band with `to` holds one its fetcher wants
+bettered. `bands` takes `720p`, `1080p` and `2160p`, separated by commas.
+
 `POST /api/sponsor/wanted/complete` says the title was fetched:
 
 ```json
@@ -232,6 +246,10 @@ acknowledgement without `upgrade_to`. Each acknowledgement replaces the last one
 fields; the first date stands, so repeating it is harmless. A film without `upgrade_to`
 then leaves the list; a show stays on it so new episodes are fetched. 400 names a
 malformed field; 404 means the item is no longer on the list.
+
+`band`, one of `720p`, `1080p` and `2160p`, is the resolution this copy is kept at, for
+a fetcher that asked for `?bands=`. The acknowledgement then replaces only that band's
+record and leaves the others alone.
 
 ## Seerr, Overseerr and Jellyseerr
 

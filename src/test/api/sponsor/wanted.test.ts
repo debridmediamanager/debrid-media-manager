@@ -125,6 +125,69 @@ describe('/api/sponsor/wanted', () => {
 		expect(await poll(better)).toEqual([]);
 	});
 
+	// zurg keeps a 1080p and a 2160p copy of each film: a film stays listed until
+	// both are held at their resolution, and says what is held at each.
+	it('lists a film until every band zurg asked about is held at its resolution', async () => {
+		const hd = { ...TOOK, grab: 'a'.repeat(40) };
+		const uhd = { ...TOOK, grab: 'b'.repeat(40), resolution: '2160p' };
+		mockRepository.listWanted = vi.fn().mockResolvedValue([
+			row({ id: 'legacy', fulfilledAt: new Date(), fulfilled: TOOK }),
+			row({
+				id: 'waiting',
+				fulfilledAt: new Date(),
+				fulfilled: {
+					...TOOK,
+					bands: { '1080p': hd, '2160p': { ...hd, upgradeTo: '2160p' } },
+				},
+			}),
+			row({
+				id: 'half',
+				fulfilledAt: new Date(),
+				fulfilled: { ...TOOK, bands: { '2160p': uhd } },
+			}),
+			row({
+				id: 'done',
+				fulfilledAt: new Date(),
+				fulfilled: { ...TOOK, bands: { '1080p': hd, '2160p': uhd } },
+			}),
+		]);
+		const res = createMockResponse();
+		await listHandler(
+			createMockRequest({
+				method: 'GET',
+				headers: { 'x-api-key': sponsorKey },
+				query: { bands: '1080p,2160p' },
+			}),
+			res
+		);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		const { items } = vi.mocked(res.json).mock.calls[0][0];
+		expect(items.map((i: { id: string }) => i.id)).toEqual(['legacy', 'waiting', 'half']);
+		expect(items[0]).not.toHaveProperty('bands');
+		expect(items[0]).not.toHaveProperty('upgrade');
+		expect(items[1].bands).toEqual({
+			'1080p': { grab: hd.grab, resolution: '1080p' },
+			'2160p': { grab: hd.grab, resolution: '1080p', to: '2160p' },
+		});
+		expect(items[2].bands).toEqual({ '2160p': { grab: uhd.grab, resolution: '2160p' } });
+	});
+
+	it.each(['4k', '1080p,1440p', ''])('refuses bands=%s', async (bands) => {
+		mockRepository.listWanted = vi.fn();
+		const res = createMockResponse();
+		await listHandler(
+			createMockRequest({
+				method: 'GET',
+				headers: { 'x-api-key': sponsorKey },
+				query: { bands },
+			}),
+			res
+		);
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(mockRepository.listWanted).not.toHaveBeenCalled();
+	});
+
 	it('refuses a missing key', async () => {
 		const res = createMockResponse();
 		await listHandler(get({}), res);
@@ -174,12 +237,12 @@ describe('/api/sponsor/wanted/complete', () => {
 		const res = createMockResponse();
 		await completeHandler(post({ id: ID }), res);
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(mockRepository.markWantedFulfilled).toHaveBeenCalledWith('ZP1M', ID, {
-			release: '',
-			grab: '',
-			torrent: false,
-			resolution: '',
-		});
+		expect(mockRepository.markWantedFulfilled).toHaveBeenCalledWith(
+			'ZP1M',
+			ID,
+			{ release: '', grab: '', torrent: false, resolution: '' },
+			undefined
+		);
 	});
 
 	it('stores what zurg took and the resolution it wants', async () => {
@@ -187,10 +250,29 @@ describe('/api/sponsor/wanted/complete', () => {
 		const res = createMockResponse();
 		await completeHandler(post({ id: ID, ...TOOK, upgrade_to: '2160p' }), res);
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(mockRepository.markWantedFulfilled).toHaveBeenCalledWith('ZP1M', ID, {
-			...TOOK,
-			upgradeTo: '2160p',
-		});
+		expect(mockRepository.markWantedFulfilled).toHaveBeenCalledWith(
+			'ZP1M',
+			ID,
+			{ ...TOOK, upgradeTo: '2160p' },
+			undefined
+		);
+	});
+
+	// A zurg keeping a copy at each of several resolutions says which this one is.
+	it('stores the copy under the resolution band zurg keeps it at', async () => {
+		mockRepository.markWantedFulfilled = vi.fn().mockResolvedValue(true);
+		const res = createMockResponse();
+		await completeHandler(
+			post({ id: ID, ...TOOK, resolution: '720p', upgrade_to: '1080p', band: '1080p' }),
+			res
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockRepository.markWantedFulfilled).toHaveBeenCalledWith(
+			'ZP1M',
+			ID,
+			{ ...TOOK, resolution: '720p', upgradeTo: '1080p' },
+			'1080p'
+		);
 	});
 
 	it.each([
@@ -201,6 +283,8 @@ describe('/api/sponsor/wanted/complete', () => {
 		['release', { release: 'x'.repeat(513) }],
 		['grab', { grab: 'x'.repeat(65) }],
 		['torrent', { torrent: 'yes' }],
+		['band', { band: '4k' }],
+		['band', { band: '' }],
 	])('refuses a malformed %s', async (field, fields) => {
 		mockRepository.markWantedFulfilled = vi.fn();
 		const res = createMockResponse();

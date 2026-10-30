@@ -1636,9 +1636,10 @@ export class Repository {
 	public markWantedFulfilled(
 		shortId: string,
 		id: string,
-		fulfilled: Parameters<WantedItemsService['markFulfilled']>[2]
+		fulfilled: Parameters<WantedItemsService['markFulfilled']>[2],
+		band?: string
 	) {
-		return this.wantedItemsService.markFulfilled(shortId, id, fulfilled);
+		return this.wantedItemsService.markFulfilled(shortId, id, fulfilled, band);
 	}
 
 	public touchWantedPolled(shortId: string) {

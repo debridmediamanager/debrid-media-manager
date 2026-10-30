@@ -128,7 +128,56 @@ describe('WantedItemsService', () => {
 		expect(prismaMock.wantedItem.updateMany).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.findFirst).toHaveBeenCalledWith({
 			where: { shortId: 'OTHER', id: ROW.id },
-			select: { fulfilledAt: true },
+			select: { fulfilledAt: true, fulfilled: true },
+		});
+	});
+
+	// A zurg keeping a copy at several resolutions acknowledges each on its own.
+	it('stores a band acknowledgement beside the bands already held', async () => {
+		const uhd = { ...TOOK, grab: 'd'.repeat(40), resolution: '2160p' };
+		prismaMock.wantedItem.findFirst.mockResolvedValue({ fulfilledAt: null, fulfilled: null });
+		await service.markFulfilled('ZP1M', ROW.id, { ...TOOK, upgradeTo: '2160p' }, '2160p');
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenLastCalledWith({
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: {
+				fulfilled: { ...TOOK, bands: { '2160p': { ...TOOK, upgradeTo: '2160p' } } },
+				fulfilledAt: expect.any(Date),
+			},
+		});
+
+		const first = new Date('2026-10-01');
+		const before = { ...TOOK, bands: { '2160p': { ...TOOK, upgradeTo: '2160p' } } };
+		prismaMock.wantedItem.findFirst.mockResolvedValue({
+			fulfilledAt: first,
+			fulfilled: before,
+		});
+		await service.markFulfilled('ZP1M', ROW.id, TOOK, '1080p');
+		await service.markFulfilled('ZP1M', ROW.id, uhd, '2160p');
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenNthCalledWith(2, {
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: {
+				fulfilled: { ...before, bands: { ...before.bands, '1080p': TOOK } },
+				fulfilledAt: first,
+			},
+		});
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenLastCalledWith({
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: { fulfilled: { ...TOOK, bands: { '2160p': uhd } }, fulfilledAt: first },
+		});
+	});
+
+	// An older zurg on the same key acknowledges without a band; the bands stay.
+	it('keeps the bands when an acknowledgement names none', async () => {
+		const bands = { '1080p': TOOK };
+		prismaMock.wantedItem.findFirst.mockResolvedValue({
+			fulfilledAt: new Date('2026-10-01'),
+			fulfilled: { ...TOOK, bands },
+		});
+		const later = { ...TOOK, grab: 'e'.repeat(40) };
+		await service.markFulfilled('ZP1M', ROW.id, later);
+		expect(prismaMock.wantedItem.updateMany).toHaveBeenCalledWith({
+			where: { shortId: 'ZP1M', id: ROW.id },
+			data: { fulfilled: { ...later, bands }, fulfilledAt: expect.any(Date) },
 		});
 	});
 
