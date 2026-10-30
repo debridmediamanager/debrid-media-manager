@@ -430,9 +430,12 @@ async function executeCheck(): Promise<void> {
 		return;
 	}
 
-	const rdKey = process.env.REALDEBRID_KEY;
+	// Torrentio resolves with this key from its own servers, so it is an account of
+	// its own: never REALDEBRID_KEY, which the stream-server check uses from dmm-01,
+	// and Real-Debrid allows an account on one IP.
+	const rdKey = process.env.TORRENTIO_HEALTH_RD_KEY;
 	if (!rdKey) {
-		console.warn('[TorrentioHealth] REALDEBRID_KEY not set, skipping check');
+		console.warn('[TorrentioHealth] TORRENTIO_HEALTH_RD_KEY not set, skipping check');
 		return;
 	}
 

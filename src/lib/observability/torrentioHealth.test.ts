@@ -26,7 +26,11 @@ vi.mock('socks-proxy-agent', () => ({
 }));
 
 import axios from 'axios';
-import { __testing, isTorrentioHealthCheckInProgress } from './torrentioHealth';
+import {
+	__testing,
+	isTorrentioHealthCheckInProgress,
+	runTorrentioHealthCheckNow,
+} from './torrentioHealth';
 
 const { reset, FALLBACK_MOVIES, buildResolveUrl, getTestMovies, testTorrentioUrl } = __testing;
 const mockAxiosHead = vi.mocked(axios.head);
@@ -243,5 +247,51 @@ describe('testTorrentioUrl', () => {
 
 		expect(result.ok).toBe(false);
 		expect(result.error).toBe('Timeout');
+	});
+});
+
+// Torrentio resolves with the key from its own servers, so the key it is given
+// must be an account nothing else uses: never DMM's REALDEBRID_KEY, which the
+// stream-server check uses from dmm-01 (one IP per Real-Debrid account).
+describe('runTorrentioHealthCheckNow key', () => {
+	const env = { ...process.env };
+	beforeEach(() => {
+		process.env = { ...env };
+		vi.mocked(axios.get).mockRejectedValue(new Error('offline'));
+		mockAxiosHead.mockResolvedValue({
+			status: 302,
+			headers: { location: 'https://x.real-debrid.com/d/a' },
+		} as any);
+	});
+
+	it('does not hand DMM REALDEBRID_KEY to Torrentio', async () => {
+		process.env.REALDEBRID_KEY = 'dmm-01-key';
+		delete process.env.TORRENTIO_HEALTH_RD_KEY;
+
+		await runTorrentioHealthCheckNow();
+
+		expect(vi.mocked(axios.get)).not.toHaveBeenCalled();
+		expect(mockAxiosHead).not.toHaveBeenCalled();
+	});
+
+	it('resolves with TORRENTIO_HEALTH_RD_KEY alone', async () => {
+		process.env.REALDEBRID_KEY = 'dmm-01-key';
+		process.env.TORRENTIO_HEALTH_RD_KEY = 'torrentio-only-key';
+		vi.mocked(axios.get).mockImplementation(async (url: string) =>
+			url.includes('ipify')
+				? ({ data: { ip: '185.220.100.243' } } as any)
+				: ({
+						status: 200,
+						data: {
+							streams: [{ infoHash: 'a'.repeat(40), fileIdx: 0, title: 'Film' }],
+						},
+					} as any)
+		);
+
+		await runTorrentioHealthCheckNow();
+
+		const resolved = mockAxiosHead.mock.calls.map(([url]) => String(url));
+		expect(resolved.some((url) => url.includes('/realdebrid/torrentio-only-key/'))).toBe(true);
+		expect(resolved.some((url) => url.includes('dmm-01-key'))).toBe(false);
 	});
 });
