@@ -85,12 +85,13 @@ const biggestVideoSize = (result: SearchResult) =>
 	result.biggestFileSize > 0 ? result.biggestFileSize : totalFileSize(result);
 
 /**
- * Average video file, in MB - the per-episode size a season pack works out to.
- * Uses the mean of the actual video files when an availability check has filled
- * them in, and divides the total by the video count otherwise.
+ * Median video file, in MB - the per-episode size a season pack works out to.
+ * Uses the median of the actual video files when an availability check has filled
+ * them in, so an opening, an ending or extras beside the episodes do not drag it
+ * down as they do a mean, and divides the total by the video count otherwise.
  */
-const meanVideoSize = (result: SearchResult) => {
-	if (result.meanFileSize && result.meanFileSize > 0) return result.meanFileSize;
+const medianVideoSize = (result: SearchResult) => {
+	if (result.medianFileSize > 0) return result.medianFileSize;
 	const total = totalFileSize(result);
 	return result.videoCount > 0 ? total / result.videoCount : total;
 };
@@ -100,7 +101,7 @@ const meanVideoSize = (result: SearchResult) => {
  *
  * The two groups rank on different measures on purpose: a cached row is one the
  * user can play right now, so it ranks on the size of what they would actually
- * watch (the biggest file for a movie, the average episode for a season). An
+ * watch (the biggest file for a movie, the median episode for a season). An
  * uncached row has no per-file breakdown to rank on, so it ranks on the total.
  */
 const compareBySize = (
@@ -116,9 +117,9 @@ const compareBySize = (
 	return sizeOf(b) - sizeOf(a);
 };
 
-export const sortByMean = (searchResults: SearchResult[]): SearchResult[] => {
+export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
-		const bySize = compareBySize(a, b, meanVideoSize);
+		const bySize = compareBySize(a, b, medianVideoSize);
 		if (bySize !== 0) return bySize;
 
 		// If sizes are equal, sort by video count

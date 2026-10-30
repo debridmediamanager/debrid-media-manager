@@ -1,4 +1,5 @@
 import { checkCachedStatus } from '@/services/torbox';
+import tatami from '@/test/fixtures/sortByMedian/tatami-galaxy-s01-2026-10-31.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	checkAvailability,
@@ -10,6 +11,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from './instantChecks';
+import { sortByMedian } from './results';
 
 // Kept out of instantChecks.test.ts on purpose: the RD rate limiter keeps
 // module-level timestamps, and that file already runs at its 10-requests-per-10s
@@ -190,45 +192,36 @@ describe('missing fileSize backfill', () => {
 		expect(getState()[0].fileSize).toBe(3);
 	});
 
-	// The show page ranks cached rows on the mean, so it has to be the mean of the
-	// video files - distinct from both the median and the biggest
-	it('records the mean of the video files, ignoring non-video ones', async () => {
-		mockCheckAvailability.mockResolvedValue({
-			available: [
-				{
-					hash: 'hash-mean',
-					files: [
-						{ file_id: 1, path: 'Episode.1.mkv', bytes: 6 * MB },
-						{ file_id: 2, path: 'Episode.2.mkv', bytes: 10 * MB },
-						{ file_id: 3, path: 'Episode.3.mkv', bytes: 20 * MB },
-						{ file_id: 4, path: 'Subs.srt', bytes: 60 * MB },
-					],
-				},
-			],
-		} as any);
-		const { setter, getState } = createStateHarness([
-			{
-				hash: 'hash-mean',
+	// The TTGA remux carries a 45 MB opening and a 675 MB ending beside its 5.1 GB
+	// episodes, which pulled its mean under the S0L0PURE remux's 4.6 GB episodes.
+	it('ranks a cached season on its median video, so short extras do not sink it', async () => {
+		mockCheckAvailability.mockResolvedValue({ available: tatami.available } as any);
+		const { setter, getState } = createStateHarness(
+			tatami.available.map((t) => ({
+				hash: t.hash,
+				title: t.title,
 				noVideos: false,
 				rdAvailable: false,
 				files: [],
-				fileSize: 96,
+				fileSize: t.bytes / MB,
 				medianFileSize: 0,
 				biggestFileSize: 0,
-			},
-		] as any[]);
+				videoCount: 0,
+			})) as any[]
+		);
 
 		await checkDatabaseAvailabilityRd(
 			'problem',
 			'solution',
-			'tt1234567',
-			['hash-mean'],
+			'tt1847445',
+			tatami.available.map((t) => t.hash),
 			setter,
 			identity
 		);
 
-		expect(getState()[0].meanFileSize).toBe(12);
-		expect(getState()[0].medianFileSize).toBe(10);
-		expect(getState()[0].biggestFileSize).toBe(20);
+		expect(sortByMedian([...getState()]).map((r) => r.title)).toEqual([
+			'The Tatami Galaxy S01 1080p BD Remux FLAC-TTGA',
+			'The.Tatami.Galaxy.S01.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE',
+		]);
 	});
 });

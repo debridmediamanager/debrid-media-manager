@@ -8,7 +8,7 @@ import {
 	fileSize,
 	isAvailable,
 	sortByBiggest,
-	sortByMean,
+	sortByMedian,
 	torrentPrefix,
 	totalFileSize,
 } from './results';
@@ -216,7 +216,7 @@ describe('results utils', () => {
 	});
 
 	// Sorting spec: cached rows first, then uncached, always biggest to smallest.
-	// Cached rows rank on the biggest video file (movies) or the mean video file
+	// Cached rows rank on the biggest video file (movies) or the median video file
 	// (shows); uncached rows rank on the total torrent size in both.
 	const searchResult = (overrides: Partial<SearchResult>): SearchResult =>
 		({
@@ -234,36 +234,36 @@ describe('results utils', () => {
 			...overrides,
 		}) as SearchResult;
 
-	describe('sortByMean', () => {
+	describe('sortByMedian', () => {
 		it('sorts available torrents before unavailable ones, however big', () => {
 			const results = [
 				searchResult({ hash: 'uncached', fileSize: 100_000, videoCount: 10 }),
 				searchResult({ hash: 'cached', rdAvailable: true, fileSize: 500, videoCount: 10 }),
 			];
 
-			expect(sortByMean(results).map((r) => r.hash)).toEqual(['cached', 'uncached']);
+			expect(sortByMedian(results).map((r) => r.hash)).toEqual(['cached', 'uncached']);
 		});
 
-		it('ranks available torrents by mean video size, not by total', () => {
+		it('ranks available torrents by median video size, not by total', () => {
 			const results = [
-				// bigger pack, but 20 episodes - the smaller mean
+				// bigger pack, but 20 episodes - the smaller median
 				searchResult({
 					hash: 'big-pack',
 					rdAvailable: true,
 					fileSize: 40_000,
 					videoCount: 20,
-					meanFileSize: 2_000,
+					medianFileSize: 2_000,
 				}),
 				searchResult({
 					hash: 'small-pack',
 					tbAvailable: true,
 					fileSize: 30_000,
 					videoCount: 10,
-					meanFileSize: 3_000,
+					medianFileSize: 3_000,
 				}),
 			];
 
-			expect(sortByMean(results).map((r) => r.hash)).toEqual(['small-pack', 'big-pack']);
+			expect(sortByMedian(results).map((r) => r.hash)).toEqual(['small-pack', 'big-pack']);
 		});
 
 		it('falls back to total over video count when no check has run yet', () => {
@@ -272,7 +272,7 @@ describe('results utils', () => {
 				searchResult({ hash: 'two', adAvailable: true, fileSize: 4_000, videoCount: 2 }),
 			];
 
-			expect(sortByMean(results).map((r) => r.hash)).toEqual(['two', 'ten']);
+			expect(sortByMedian(results).map((r) => r.hash)).toEqual(['two', 'ten']);
 		});
 
 		it('ranks unavailable torrents by total size, ignoring per-file stats', () => {
@@ -281,17 +281,17 @@ describe('results utils', () => {
 					hash: 'small-total',
 					fileSize: 5_000,
 					videoCount: 1,
-					meanFileSize: 5_000,
+					medianFileSize: 5_000,
 				}),
 				searchResult({
 					hash: 'big-total',
 					fileSize: 50_000,
 					videoCount: 20,
-					meanFileSize: 2_500,
+					medianFileSize: 2_500,
 				}),
 			];
 
-			expect(sortByMean(results).map((r) => r.hash)).toEqual(['big-total', 'small-total']);
+			expect(sortByMedian(results).map((r) => r.hash)).toEqual(['big-total', 'small-total']);
 		});
 
 		it('sorts by video count when sizes are equal', () => {
@@ -305,7 +305,7 @@ describe('results utils', () => {
 				}),
 			];
 
-			expect(sortByMean(results)[0].videoCount).toBe(20);
+			expect(sortByMedian(results)[0].videoCount).toBe(20);
 		});
 
 		it('sorts alphabetically when all other factors are equal', () => {
@@ -324,7 +324,7 @@ describe('results utils', () => {
 				}),
 			];
 
-			expect(sortByMean(results)[0].title).toBe('Apple');
+			expect(sortByMedian(results)[0].title).toBe('Apple');
 		});
 
 		it('handles empty titles', () => {
@@ -334,7 +334,7 @@ describe('results utils', () => {
 			];
 
 			// Empty title is sorted first
-			expect(sortByMean(results)[0].title).toBe('');
+			expect(sortByMedian(results)[0].title).toBe('');
 		});
 
 		it('orders a mixed list biggest to smallest within each group', () => {
@@ -345,7 +345,7 @@ describe('results utils', () => {
 					rdAvailable: true,
 					fileSize: 2_000,
 					videoCount: 2,
-					meanFileSize: 1_000,
+					medianFileSize: 1_000,
 				}),
 				searchResult({ hash: 'uncached-big', fileSize: 90_000 }),
 				searchResult({
@@ -353,11 +353,11 @@ describe('results utils', () => {
 					tbAvailable: true,
 					fileSize: 8_000,
 					videoCount: 2,
-					meanFileSize: 4_000,
+					medianFileSize: 4_000,
 				}),
 			];
 
-			expect(sortByMean(results).map((r) => r.hash)).toEqual([
+			expect(sortByMedian(results).map((r) => r.hash)).toEqual([
 				'cached-big',
 				'cached-small',
 				'uncached-big',

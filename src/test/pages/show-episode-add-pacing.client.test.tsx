@@ -20,7 +20,7 @@ const {
 	delayMock,
 	callLog,
 	tvResultsProps,
-	sortByMeanMock,
+	sortByMedianMock,
 } = vi.hoisted(() => {
 	class AxiosError extends Error {
 		response?: { status?: number };
@@ -53,7 +53,7 @@ const {
 		callLog: [] as string[],
 		tvResultsProps: { current: null as any },
 		// The page's own sort, swapped in where the order on screen is the point
-		sortByMeanMock: vi.fn((results: any[]) => results),
+		sortByMedianMock: vi.fn((results: any[]) => results),
 	};
 });
 
@@ -222,7 +222,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByMean: (results: any[]) => sortByMeanMock(results),
+	sortByMedian: (results: any[]) => sortByMedianMock(results),
 }));
 
 vi.mock('@/utils/quickSearch', () => ({
@@ -640,7 +640,7 @@ describe('Season list next to releases named in Russian', () => {
 
 	beforeEach(async () => {
 		const actual = await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
-		sortByMeanMock.mockImplementation(actual.sortByMean);
+		sortByMedianMock.mockImplementation(actual.sortByMedian);
 		axiosGetMock.mockReset();
 		keys.rd = 'rd-token';
 		keys.ad = null;
@@ -680,7 +680,7 @@ describe('Season list next to releases named in Russian', () => {
 	});
 
 	afterEach(() => {
-		sortByMeanMock.mockImplementation((results: any[]) => results);
+		sortByMedianMock.mockImplementation((results: any[]) => results);
 		vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(defaultRdCheck);
 	});
 
@@ -697,12 +697,12 @@ describe('Season list next to releases named in Russian', () => {
 		const russian = (r: Row) => /^[А-Яа-яЁё]/.test(r.title);
 
 		// The page's own order puts a Russian pack first.
-		expect(russian(actual.sortByMean([...listed] as any)[0])).toBe(true);
+		expect(russian(actual.sortByMedian([...listed] as any)[0])).toBe(true);
 		expect(listed).toHaveLength(madMen.value.length);
 		expect(listed.map((r) => r.hash)).toEqual(
 			[
-				...actual.sortByMean(listed.filter((r) => !russian(r)) as any),
-				...actual.sortByMean(listed.filter(russian) as any),
+				...actual.sortByMedian(listed.filter((r) => !russian(r)) as any),
+				...actual.sortByMedian(listed.filter(russian) as any),
 			].map((r) => r.hash)
 		);
 		expect(listed.findIndex(russian)).toBe(listed.length - 15);

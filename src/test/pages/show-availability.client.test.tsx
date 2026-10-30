@@ -12,7 +12,7 @@ const {
 	checkDatabaseAvailabilityAdMock,
 	checkDatabaseAvailabilityTbMock,
 	tvResultsProps,
-	sortByMeanMock,
+	sortByMedianMock,
 } = vi.hoisted(() => {
 	class AxiosError extends Error {
 		response?: { status?: number };
@@ -32,7 +32,7 @@ const {
 		checkDatabaseAvailabilityAdMock: vi.fn().mockResolvedValue(0),
 		checkDatabaseAvailabilityTbMock: vi.fn().mockResolvedValue(0),
 		tvResultsProps: { current: null as any },
-		sortByMeanMock: vi.fn((results: any[]) => results),
+		sortByMedianMock: vi.fn((results: any[]) => results),
 	};
 });
 
@@ -153,7 +153,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByMean: (results: any[]) => sortByMeanMock(results),
+	sortByMedian: (results: any[]) => sortByMedianMock(results),
 }));
 
 vi.mock('@/utils/quickSearch', () => ({
@@ -341,13 +341,13 @@ describe('Show page availability checks', () => {
 	// rows swapped places and back as each one re-sorted the list.
 	describe('while availability checks are in flight', () => {
 		afterEach(() => {
-			sortByMeanMock.mockImplementation((results: any[]) => results);
+			sortByMedianMock.mockImplementation((results: any[]) => results);
 		});
 
 		it('keeps the rows still, then sorts them once when every check is in', async () => {
 			const actual =
 				await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
-			sortByMeanMock.mockImplementation(actual.sortByMean);
+			sortByMedianMock.mockImplementation(actual.sortByMedian);
 			const row = (hash: string, fileSize: number) => ({
 				hash: hash.repeat(40),
 				title: `Test Show S01 ${hash}`,

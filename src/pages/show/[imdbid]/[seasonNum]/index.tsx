@@ -69,7 +69,7 @@ import { quickSearch } from '@/utils/quickSearch';
 import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/utils/rdAddPause';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
-import { sortByMean } from '@/utils/results';
+import { sortByMedian } from '@/utils/results';
 import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -456,7 +456,7 @@ const TvSearch: FunctionComponent = () => {
 		addAd,
 		deleteRd,
 		deleteAd,
-		sortByMean
+		sortByMedian
 	);
 
 	const reporterKeys = {
@@ -842,7 +842,7 @@ const TvSearch: FunctionComponent = () => {
 			if (!allSourcesCompleted || pendingAvailabilityChecks > 0) return;
 
 			toastShown = true;
-			setSearchResults((prev) => sortByMean([...prev]));
+			setSearchResults((prev) => sortByMedian([...prev]));
 			setSearchCompleteInfo({
 				finalResults: finalResultCount,
 				totalAvailableCount:
@@ -906,7 +906,7 @@ const TvSearch: FunctionComponent = () => {
 
 					// Rows already on screen keep their place while the search runs;
 					// the whole list is sorted once, when every check is in (#370)
-					const sorted = [...prevResults, ...sortByMean(newUniqueResults)];
+					const sorted = [...prevResults, ...sortByMedian(newUniqueResults)];
 
 					hashesToCheck = newUniqueResults
 						.filter(

@@ -140,7 +140,7 @@ vi.mock('@/utils/instantChecks', () => ({
 }));
 
 vi.mock('@/utils/results', () => ({
-	sortByMean: (results: any[]) => results,
+	sortByMedian: (results: any[]) => results,
 }));
 
 vi.mock('@/utils/quickSearch', () => ({

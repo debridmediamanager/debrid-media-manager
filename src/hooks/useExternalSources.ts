@@ -119,7 +119,6 @@ export function transformExternalStream(stream: any, source: string): SearchResu
 		noVideos: false,
 		medianFileSize: fileSize,
 		biggestFileSize: fileSize,
-		meanFileSize: fileSize,
 		videoCount: 1,
 		imdbId: '',
 	};

@@ -40,7 +40,7 @@ import {
 } from '@/utils/instantChecks';
 import { quickSearch } from '@/utils/quickSearch';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
-import { sortByMean } from '@/utils/results';
+import { sortByMedian } from '@/utils/results';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
 	DMM_SOURCE,
@@ -223,7 +223,7 @@ const AnimePage: FunctionComponent = () => {
 		addAd,
 		deleteRd,
 		deleteAd,
-		sortByMean
+		sortByMedian
 	);
 
 	useEffect(() => {
@@ -293,7 +293,7 @@ const AnimePage: FunctionComponent = () => {
 		const keepOrder = (results: SearchResult[]) => results;
 		const finish = () => {
 			if (pendingChecks > 0 || !isMounted.current) return;
-			setSearchResults((prev) => sortByMean([...prev]));
+			setSearchResults((prev) => sortByMedian([...prev]));
 			const total = cached.rd + cached.ad + cached.tb + cached.pm + cached.oc;
 			if (total > 0) {
 				const parts = (
@@ -359,7 +359,7 @@ const AnimePage: FunctionComponent = () => {
 						(r) => r.hash && !seen.has(r.hash) && hasSubstantialTitle(r.title)
 					);
 					hashesToCheck = fresh.map((r) => r.hash);
-					const next = fresh.length > 0 ? [...prev, ...sortByMean(fresh)] : prev;
+					const next = fresh.length > 0 ? [...prev, ...sortByMedian(fresh)] : prev;
 					resultCount = next.length;
 					// Availability is not in yet, so only a TB transfer can keep a blocked row
 					hiddenCount = hideRdBlockedTorrents

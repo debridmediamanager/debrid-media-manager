@@ -1,0 +1,144 @@
+{
+	"_source": "DMM's Available/AvailableFile rows for The Tatami Galaxy season 1 (tt1847445), read from dmmdb on 2026-10-31; files are exactly what /api/availability/check answers for these hashes",
+	"available": [
+		{
+			"hash": "825a52fc2bf6c2a757fe66e6e7acb91d6e73bf72",
+			"title": "The Tatami Galaxy S01 1080p BD Remux FLAC-TTGA",
+			"bytes": 59813791398,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/S01E05-Softball Circle.mkv",
+					"bytes": 5389156705
+				},
+				{
+					"file_id": 2,
+					"path": "/S01E02-Movie Club.mkv",
+					"bytes": 5369190921
+				},
+				{
+					"file_id": 3,
+					"path": "/S01E03-Cycling Association.mkv",
+					"bytes": 5368055163
+				},
+				{
+					"file_id": 4,
+					"path": "/S01E04-Disciples Wanted.mkv",
+					"bytes": 5373043172
+				},
+				{
+					"file_id": 5,
+					"path": "/S01E01-Tennis Club.mkv",
+					"bytes": 5383567300
+				},
+				{
+					"file_id": 6,
+					"path": "/S01E06-English Conversation Circle.mkv",
+					"bytes": 5369403254
+				},
+				{
+					"file_id": 7,
+					"path": "/S01E07-Hero Show Association.mkv",
+					"bytes": 5372366556
+				},
+				{
+					"file_id": 8,
+					"path": "/S01E08-Reading Circle.mkv",
+					"bytes": 5364230278
+				},
+				{
+					"file_id": 9,
+					"path": "/S01E09-Secret Society.mkv",
+					"bytes": 5369329706
+				},
+				{
+					"file_id": 10,
+					"path": "/S01E10-The 4.5 Tatami Ideologist.mkv",
+					"bytes": 5342689931
+				},
+				{
+					"file_id": 11,
+					"path": "/S01E11-End of the 4.5 Tatami Age.mkv",
+					"bytes": 5357255886
+				},
+				{
+					"file_id": 12,
+					"path": "/S01ED-As God says [Junji Ishiwatari & Yoshinori Sunahara + Etsuko Yakushimaru].mkv",
+					"bytes": 707901243
+				},
+				{
+					"file_id": 13,
+					"path": "/S01OP-Maigoinu to Ame no Beat [Scenario art].mkv",
+					"bytes": 47601283
+				}
+			]
+		},
+		{
+			"hash": "c9ae53119a36fc55719c054fa60cc43ee5b84281",
+			"title": "The.Tatami.Galaxy.S01.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE",
+			"bytes": 57883191774,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/The.Tatami.Galaxy.S01E01.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819778981
+				},
+				{
+					"file_id": 2,
+					"path": "/The.Tatami.Galaxy.S01E02.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819219289
+				},
+				{
+					"file_id": 3,
+					"path": "/The.Tatami.Galaxy.S01E03.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819932849
+				},
+				{
+					"file_id": 4,
+					"path": "/The.Tatami.Galaxy.S01E04.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819890479
+				},
+				{
+					"file_id": 5,
+					"path": "/The.Tatami.Galaxy.S01E05.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819330792
+				},
+				{
+					"file_id": 6,
+					"path": "/The.Tatami.Galaxy.S01E06.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819732829
+				},
+				{
+					"file_id": 7,
+					"path": "/The.Tatami.Galaxy.S01E07.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819323055
+				},
+				{
+					"file_id": 8,
+					"path": "/The.Tatami.Galaxy.S01E08.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4819173969
+				},
+				{
+					"file_id": 9,
+					"path": "/The.Tatami.Galaxy.S01E09.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4809372639
+				},
+				{
+					"file_id": 10,
+					"path": "/The.Tatami.Galaxy.S01E10.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4818640502
+				},
+				{
+					"file_id": 11,
+					"path": "/The.Tatami.Galaxy.S01E11.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4880021022
+				},
+				{
+					"file_id": 12,
+					"path": "/The.Tatami.Galaxy.S01E12.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE.mkv",
+					"bytes": 4818775368
+				}
+			]
+		}
+	]
+}
