@@ -2,7 +2,7 @@
  * Maps TorBox status strings to user-friendly display text
  */
 export function getTorBoxStatusText(status: string): string {
-	switch (status.toLowerCase()) {
+	switch (status?.toLowerCase()) {
 		case 'queued':
 			return 'Queued';
 		case 'checking':

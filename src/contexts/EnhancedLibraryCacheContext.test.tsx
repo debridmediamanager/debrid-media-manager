@@ -431,6 +431,18 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		unmount();
 	});
 
+	it('deletes the row a queued TorBox add stored before reading the library', async () => {
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+		expect(torrentDbMocks.deleteById).toHaveBeenCalledWith('tb:undefined');
+		expect(torrentDbMocks.deleteById.mock.invocationCallOrder[0]).toBeLessThan(
+			torrentDbMocks.all.mock.invocationCallOrder[0]
+		);
+
+		unmount();
+	});
+
 	it('leaves a freshly synced library alone', async () => {
 		window.localStorage.setItem('library:lastSync', new Date().toISOString());
 		torrentDbMocks.all.mockResolvedValueOnce([buildTorrent('rd:cached')]);

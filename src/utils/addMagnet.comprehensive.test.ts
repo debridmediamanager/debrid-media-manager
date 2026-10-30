@@ -1005,36 +1005,6 @@ describe('addMagnet utilities', () => {
 			expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.any(Object));
 		});
 
-		it('should handle queued torrents', async () => {
-			const mockTorrentInfo: TorBoxTorrentInfo = {
-				id: 456,
-				name: 'Queued Torrent',
-				size: 2000000,
-				progress: 0,
-				download_state: 'queued',
-				seeds: 5,
-				download_speed: 0,
-				created_at: '2024-01-02T00:00:00Z',
-				hash: 'queued-hash',
-				files: [],
-			} as any;
-
-			vi.mocked(createTorrent).mockResolvedValue({
-				data: { queued_id: 456 },
-			} as any);
-			vi.mocked(getTorrentList).mockResolvedValue({
-				data: mockTorrentInfo,
-			} as any);
-			vi.mocked(convertToTbUserTorrent).mockReturnValue({} as UserTorrent);
-
-			await handleAddAsMagnetInTb(tbKey, hash);
-
-			expect(createTorrent).toHaveBeenCalledWith(tbKey, {
-				magnet: `magnet:?xt=urn:btih:${hash}`,
-			});
-			expect(toast.success).toHaveBeenCalledWith('Torrent added.', expect.any(Object));
-		});
-
 		it('should handle no ID returned', async () => {
 			vi.mocked(createTorrent).mockResolvedValue({
 				data: {},

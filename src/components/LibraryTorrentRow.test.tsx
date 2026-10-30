@@ -14,6 +14,7 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { convertToTbUserTorrent } from '@/utils/fetchTorrents';
 import { buildLibraryGrouping } from '@/utils/libraryGrouping';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import '@testing-library/jest-dom';
@@ -23,6 +24,7 @@ import type { ComponentProps } from 'react';
 import { beforeEach, describe, expect, it, vi, type MockedFunction } from 'vitest';
 import adFixture from '../test/fixtures/alldebrid-library-magnet.json';
 import tbFixture from '../test/fixtures/torbox-reannounce-finished.json';
+import tbMylistEntry from '../test/fixtures/torbox/mylist-entry-349-files-2026-10-22.json';
 import TorrentRow from './LibraryTorrentRow';
 
 type StandaloneRowProps = Omit<ComponentProps<typeof TorrentRow>, 'grouping'>;
@@ -144,6 +146,20 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			.map((b) => b.getAttribute('title'))
 			.filter((t) => ['Share', 'Delete', 'Copy magnet url', 'Reinsert'].includes(t!));
 		expect(titles).toEqual(['Share', 'Delete', 'Copy magnet url', 'Reinsert']);
+	});
+
+	it('renders the statusless row a queued TorBox add left in browsers', () => {
+		// What every load of /library read back from IndexedDB and threw on: a queued add's
+		// list lookup, whole library and all, converted as if it were one torrent.
+		const torrent = convertToTbUserTorrent([tbMylistEntry] as unknown as TorBoxTorrentInfo);
+		expect(torrent.id).toBe('tb:undefined');
+		expect(torrent.serviceStatus).toBeUndefined();
+
+		const { container } = render(
+			<LibraryTorrentRow {...defaultProps} torrent={torrent} tbKey="test-tb-key" />
+		);
+
+		expect(container).toHaveTextContent('undefined');
 	});
 
 	describe('Premiumize cast button', () => {

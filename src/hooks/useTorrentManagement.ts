@@ -893,7 +893,7 @@ export function useTorrentManagement(
 			const row = added as UserTorrent | null;
 			// No row means the add came back without an id to read (a TorBox
 			// add that only queued), so there is nothing to judge or remove.
-			if (!row || !row.id || row.id.endsWith(':undefined')) return false;
+			if (!row || !row.id) return false;
 
 			if (!(row.progress >= 100)) {
 				if (service === 'tb') await handleDeleteTbTorrent(key, row.id, true);

@@ -363,6 +363,9 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	// Load existing data from IndexedDB to display while monitor initializes
 	const loadExistingData = useCallback(async () => {
 		try {
+			// A queued TorBox add used to store this row, with no torrent behind it. It threw on
+			// every library render, and no refresh removes it once the page is down.
+			await torrentDB.deleteById('tb:undefined');
 			// Load any existing data to show while monitor initializes
 			const cachedTorrents = await torrentDB.all();
 			if (cachedTorrents.length > 0) {

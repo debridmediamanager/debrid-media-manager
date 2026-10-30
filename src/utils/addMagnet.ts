@@ -775,12 +775,17 @@ export const handleAddAsMagnetInTb = async (
 		const response = await createTorrent(tbKey, {
 			magnet,
 		});
-		if (response.data?.torrent_id || response.data?.queued_id) {
+		if (response.data?.torrent_id) {
 			const torrentInfo = await getTorrentList(tbKey, { id: response.data.torrent_id });
 			const info = torrentInfo.data as TorBoxTorrentInfo;
 			const userTorrent = convertToTbUserTorrent(info);
 			if (callback) await callback(userTorrent);
 			if (!silent) toast.success('Torrent added.', magnetToastOptions);
+		} else if (response.data?.queued_id) {
+			// No torrent exists yet to read: mylist without an id answers with the whole
+			// library. The next library refresh picks it up once TorBox starts it.
+			if (!silent)
+				toast.success('Queued on TorBox until a slot is free.', magnetToastOptions);
 		} else if (!silent) {
 			toast.error('Torrent added without an ID.', magnetToastOptions);
 		}
