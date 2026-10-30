@@ -58,7 +58,7 @@ describe('/api/proxy/stream', () => {
 	it('rejects non-whitelisted hosts', async () => {
 		const req = createMockRequest({
 			method: 'GET',
-			query: { ...auth, url: 'https://example.com/data', service: 'comet' },
+			query: { ...auth, url: 'https://example.com/data', service: 'torrentio' },
 		});
 		const res = createMockResponse();
 
@@ -71,7 +71,7 @@ describe('/api/proxy/stream', () => {
 	it('refuses a caller with no token', async () => {
 		const req = createMockRequest({
 			method: 'GET',
-			query: { url: 'https://comet.elfhosted.com/api', service: 'comet-tor' },
+			query: { url: 'https://torrentio.strem.fun/api', service: 'torrentio-tor' },
 		});
 		const res = createMockResponse();
 
@@ -86,8 +86,8 @@ describe('/api/proxy/stream', () => {
 		const req = createMockRequest({
 			method: 'GET',
 			query: {
-				url: 'https://comet.elfhosted.com/api',
-				service: 'comet-tor',
+				url: 'https://torrentio.strem.fun/api',
+				service: 'torrentio-tor',
 				dmmProblemKey: token,
 				solution: 'forged',
 			},
@@ -104,7 +104,7 @@ describe('/api/proxy/stream', () => {
 		const req = createMockRequest({
 			method: 'GET',
 			headers: { 'sec-fetch-site': 'cross-site' },
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet-tor' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio-tor' },
 		});
 		const res = createMockResponse();
 
@@ -118,7 +118,7 @@ describe('/api/proxy/stream', () => {
 		const req = createMockRequest({
 			method: 'GET',
 			headers: { 'sec-fetch-site': 'same-origin' },
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet-tor' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio-tor' },
 		});
 		const res = createMockResponse();
 
@@ -130,7 +130,7 @@ describe('/api/proxy/stream', () => {
 	it('proxies requests without TOR when service is direct', async () => {
 		const req = createMockRequest({
 			method: 'GET',
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio' },
 		});
 		const res = createMockResponse();
 
@@ -138,7 +138,7 @@ describe('/api/proxy/stream', () => {
 
 		expect(mockSocksProxyAgent).not.toHaveBeenCalled();
 		expect(mockAxiosGet).toHaveBeenCalledWith(
-			'https://comet.elfhosted.com/api',
+			'https://torrentio.strem.fun/api',
 			expect.objectContaining({
 				timeout: 30000,
 				headers: expect.objectContaining({ referer: 'https://web.stremio.com/' }),
@@ -151,7 +151,7 @@ describe('/api/proxy/stream', () => {
 	it('proxies using TOR when service requires it', async () => {
 		const req = createMockRequest({
 			method: 'GET',
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet-tor' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio-tor' },
 		});
 		const res = createMockResponse();
 
@@ -162,7 +162,7 @@ describe('/api/proxy/stream', () => {
 			expect.objectContaining({ timeout: 4000 })
 		);
 		expect(mockAxiosGet).toHaveBeenCalledWith(
-			'https://comet.elfhosted.com/api',
+			'https://torrentio.strem.fun/api',
 			expect.objectContaining({
 				httpAgent: expect.any(Object),
 				httpsAgent: expect.any(Object),
@@ -185,8 +185,8 @@ describe('/api/proxy/stream', () => {
 				query: {
 					dmmProblemKey: token,
 					solution: hash,
-					url: 'https://comet.elfhosted.com/api',
-					service: 'comet-tor',
+					url: 'https://torrentio.strem.fun/api',
+					service: 'torrentio-tor',
 				},
 			});
 			await handler(req, createMockResponse());
@@ -211,7 +211,7 @@ describe('/api/proxy/stream', () => {
 		});
 		const req = createMockRequest({
 			method: 'GET',
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio' },
 		});
 		const res = createMockResponse();
 
@@ -225,7 +225,7 @@ describe('/api/proxy/stream', () => {
 		mockAxiosGet.mockRejectedValue(new Error('boom'));
 		const req = createMockRequest({
 			method: 'GET',
-			query: { ...auth, url: 'https://comet.elfhosted.com/api', service: 'comet' },
+			query: { ...auth, url: 'https://torrentio.strem.fun/api', service: 'torrentio' },
 		});
 		const res = createMockResponse();
 

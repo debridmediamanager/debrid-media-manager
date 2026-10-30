@@ -97,32 +97,20 @@ export const SettingsSection = () => {
 	const [enableTorrentio, setEnableTorrentio] = useState(() =>
 		getLocalStorageBoolean('settings:enableTorrentio', true)
 	);
-	const [enableComet, setEnableComet] = useState(() =>
-		getLocalStorageBoolean('settings:enableComet', true)
-	);
 	const [enableMediaFusion, setEnableMediaFusion] = useState(() =>
 		getLocalStorageBoolean('settings:enableMediaFusion', true)
 	);
 	const [enablePeerflix, setEnablePeerflix] = useState(() =>
 		getLocalStorageBoolean('settings:enablePeerflix', true)
 	);
-	const [enableTorrentsDB, setEnableTorrentsDB] = useState(() =>
-		getLocalStorageBoolean('settings:enableTorrentsDB', true)
-	);
 	const [enableTorrentioTor, setEnableTorrentioTor] = useState(() =>
 		getLocalStorageBoolean('settings:enableTorrentioTor', false)
-	);
-	const [enableCometTor, setEnableCometTor] = useState(() =>
-		getLocalStorageBoolean('settings:enableCometTor', false)
 	);
 	const [enableMediaFusionTor, setEnableMediaFusionTor] = useState(() =>
 		getLocalStorageBoolean('settings:enableMediaFusionTor', false)
 	);
 	const [enablePeerflixTor, setEnablePeerflixTor] = useState(() =>
 		getLocalStorageBoolean('settings:enablePeerflixTor', false)
-	);
-	const [enableTorrentsDBTor, setEnableTorrentsDBTor] = useState(() =>
-		getLocalStorageBoolean('settings:enableTorrentsDBTor', false)
 	);
 	const [hideCastOption, setHideCastOption] = useState(() =>
 		getLocalStorageBoolean('settings:hideCastOption', false)
@@ -357,13 +345,6 @@ export const SettingsSection = () => {
 			localStorage.setItem('settings:enableTorrentio', String(checked));
 	};
 
-	const handleEnableCometChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const checked = e.target.checked;
-		setEnableComet(checked);
-		if (typeof localStorage !== 'undefined')
-			localStorage.setItem('settings:enableComet', String(checked));
-	};
-
 	const handleEnableMediaFusionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
 		setEnableMediaFusion(checked);
@@ -378,20 +359,6 @@ export const SettingsSection = () => {
 			localStorage.setItem('settings:enablePeerflix', String(checked));
 	};
 
-	const handleEnableTorrentsDBChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const checked = e.target.checked;
-		setEnableTorrentsDB(checked);
-		if (typeof localStorage !== 'undefined')
-			localStorage.setItem('settings:enableTorrentsDB', String(checked));
-	};
-
-	const handleEnableCometTorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const checked = e.target.checked;
-		setEnableCometTor(checked);
-		if (typeof localStorage !== 'undefined')
-			localStorage.setItem('settings:enableCometTor', String(checked));
-	};
-
 	const handleEnableMediaFusionTorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
 		setEnableMediaFusionTor(checked);
@@ -404,13 +371,6 @@ export const SettingsSection = () => {
 		setEnablePeerflixTor(checked);
 		if (typeof localStorage !== 'undefined')
 			localStorage.setItem('settings:enablePeerflixTor', String(checked));
-	};
-
-	const handleEnableTorrentsDBTorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const checked = e.target.checked;
-		setEnableTorrentsDBTor(checked);
-		if (typeof localStorage !== 'undefined')
-			localStorage.setItem('settings:enableTorrentsDBTor', String(checked));
 	};
 
 	const handleEnableTorrentioTorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -439,14 +399,6 @@ export const SettingsSection = () => {
 			onTorChange: handleEnableTorrentioTorChange,
 		},
 		{
-			id: 'comet',
-			name: 'Comet',
-			on: enableComet,
-			onChange: handleEnableCometChange,
-			tor: enableCometTor,
-			onTorChange: handleEnableCometTorChange,
-		},
-		{
 			id: 'mediafusion',
 			name: 'MediaFusion',
 			on: enableMediaFusion,
@@ -461,14 +413,6 @@ export const SettingsSection = () => {
 			onChange: handleEnablePeerflixChange,
 			tor: enablePeerflixTor,
 			onTorChange: handleEnablePeerflixTorChange,
-		},
-		{
-			id: 'torrentsdb',
-			name: 'TorrentsDB',
-			on: enableTorrentsDB,
-			onChange: handleEnableTorrentsDBChange,
-			tor: enableTorrentsDBTor,
-			onTorChange: handleEnableTorrentsDBTorChange,
 		},
 	];
 

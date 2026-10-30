@@ -14,10 +14,8 @@ export const DMM_SOURCE = 'DMM';
 const SOURCE_LABELS: Record<string, string> = {
 	[DMM_SOURCE]: 'DMM',
 	torrentio: 'Torrentio',
-	comet: 'Comet',
 	mediafusion: 'MediaFusion',
 	peerflix: 'Peerflix',
-	torrentsdb: 'TorrentsDB',
 };
 
 /** "mediafusion-tor" -> "MediaFusion (Tor)" */

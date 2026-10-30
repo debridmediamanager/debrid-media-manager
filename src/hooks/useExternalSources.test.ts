@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EXTERNAL_SOURCE_SETTINGS, buildCometConfig, parseSizeToMb } from './useExternalSources';
+import { EXTERNAL_SOURCE_SETTINGS, parseSizeToMb } from './useExternalSources';
 
 describe('parseSizeToMb', () => {
 	it('parses the decimal units addons commonly emit', () => {
@@ -33,28 +33,6 @@ describe('parseSizeToMb', () => {
 	});
 });
 
-describe('buildCometConfig', () => {
-	const decode = (b64: string) => JSON.parse(atob(b64));
-
-	it('produces base64 JSON carrying the RD key', () => {
-		const config = decode(buildCometConfig('MY-RD-KEY'));
-		expect(config.debridServices).toEqual([{ service: 'realdebrid', apiKey: 'MY-RD-KEY' }]);
-	});
-
-	it('never asks Comet to enumerate the user library', () => {
-		const config = decode(buildCometConfig('MY-RD-KEY'));
-		expect(config.scrapeDebridAccountTorrents).toBe(false);
-	});
-
-	it('does not cap or pre-filter results, so DMM can do its own filtering', () => {
-		const config = decode(buildCometConfig('MY-RD-KEY'));
-		expect(config.maxResultsPerResolution).toBe(0);
-		expect(config.maxSize).toBe(0);
-		expect(config.cachedOnly).toBe(false);
-		expect(config.removeTrash).toBe(false);
-	});
-});
-
 describe('EXTERNAL_SOURCE_SETTINGS', () => {
 	const torEntries = EXTERNAL_SOURCE_SETTINGS.filter((entry) => entry.source.endsWith('-tor'));
 	const directEntries = EXTERNAL_SOURCE_SETTINGS.filter(
@@ -65,27 +43,23 @@ describe('EXTERNAL_SOURCE_SETTINGS', () => {
 		// these used to be read as `getItem(...) !== 'false'`, so a user who had
 		// never touched the toggles saw them off in settings while every search
 		// still queried them over Tor
-		expect(torEntries).toHaveLength(5);
+		expect(torEntries).toHaveLength(3);
 		expect(torEntries.every((entry) => entry.defaultEnabled === false)).toBe(true);
 	});
 
 	it('keeps the direct addons on by default', () => {
-		expect(directEntries).toHaveLength(5);
+		expect(directEntries).toHaveLength(3);
 		expect(directEntries.every((entry) => entry.defaultEnabled === true)).toBe(true);
 	});
 
 	it('uses the same storage keys the settings screen writes', () => {
 		expect(EXTERNAL_SOURCE_SETTINGS.map((entry) => entry.key)).toEqual([
 			'settings:enableTorrentio',
-			'settings:enableComet',
 			'settings:enableMediaFusion',
 			'settings:enablePeerflix',
-			'settings:enableTorrentsDB',
 			'settings:enableTorrentioTor',
-			'settings:enableCometTor',
 			'settings:enableMediaFusionTor',
 			'settings:enablePeerflixTor',
-			'settings:enableTorrentsDBTor',
 		]);
 	});
 });

@@ -89,15 +89,11 @@ describe('Movie Detail Page', () => {
 				}
 				for (const name of [
 					'Torrentio',
-					'Comet',
 					'MediaFusion',
 					'Peerflix',
-					'TorrentsDB',
 					'TorrentioTor',
-					'CometTor',
 					'MediaFusionTor',
 					'PeerflixTor',
-					'TorrentsDBTor',
 				])
 					win.localStorage.setItem(`settings:enable${name}`, JSON.stringify(false));
 				win.localStorage.setItem('settings:hideRdBlockedTorrents', 'false');

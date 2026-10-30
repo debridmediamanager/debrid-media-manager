@@ -5,21 +5,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { randomUUID } from 'node:crypto';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
-const ALLOWED_HOSTS = [
-	'comet.elfhosted.com',
-	'mediafusion.elfhosted.com',
-	'torrentsdb.com',
-	'addon.peerflix.mov',
-	'torrentio.strem.fun',
-];
+const ALLOWED_HOSTS = ['mediafusion.elfhosted.com', 'addon.peerflix.mov', 'torrentio.strem.fun'];
 
-const TOR_SERVICES = [
-	'comet-tor',
-	'mediafusion-tor',
-	'peerflix-tor',
-	'torrentsdb-tor',
-	'torrentio-tor',
-];
+const TOR_SERVICES = ['mediafusion-tor', 'peerflix-tor', 'torrentio-tor'];
 
 // This endpoint spends dmm's own resources on the caller's behalf - a Tor
 // circuit out of dmm-01 and a slice of the per-IP budget - so it is meant for

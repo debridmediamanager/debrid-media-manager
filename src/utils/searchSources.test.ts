@@ -12,10 +12,8 @@ describe('formatSourceLabel', () => {
 	it('gives each known source its display name', () => {
 		expect(formatSourceLabel(DMM_SOURCE)).toBe('DMM');
 		expect(formatSourceLabel('torrentio')).toBe('Torrentio');
-		expect(formatSourceLabel('comet')).toBe('Comet');
 		expect(formatSourceLabel('mediafusion')).toBe('MediaFusion');
 		expect(formatSourceLabel('peerflix')).toBe('Peerflix');
-		expect(formatSourceLabel('torrentsdb')).toBe('TorrentsDB');
 	});
 
 	it('marks the Tor-routed variants', () => {
@@ -31,8 +29,8 @@ describe('formatSourceLabel', () => {
 
 describe('initSourceStates', () => {
 	it('always includes DMM and lists it first', () => {
-		const states = initSourceStates(['torrentio', 'comet']);
-		expect(Object.keys(states)).toEqual([DMM_SOURCE, 'torrentio', 'comet']);
+		const states = initSourceStates(['torrentio', 'peerflix']);
+		expect(Object.keys(states)).toEqual([DMM_SOURCE, 'torrentio', 'peerflix']);
 		expect(Object.values(states).every((s) => s.status === 'loading' && s.count === 0)).toBe(
 			true
 		);

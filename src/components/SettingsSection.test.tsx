@@ -139,10 +139,8 @@ describe('SettingsSection', () => {
 		localStorage.setItem('settings:availabilityCheckLimit', '5');
 		localStorage.setItem('settings:includeTrackerStats', 'true');
 		localStorage.setItem('settings:enableTorrentio', 'false');
-		localStorage.setItem('settings:enableComet', 'true');
 		localStorage.setItem('settings:enableMediaFusion', 'false');
 		localStorage.setItem('settings:enablePeerflix', 'true');
-		localStorage.setItem('settings:enableTorrentsDB', 'false');
 
 		const { rerender } = render(<SettingsSection />);
 		const user = userEvent.setup();
@@ -215,11 +213,6 @@ describe('SettingsSection', () => {
 		await user.click(torrentioCheckbox);
 		expect(localStorage.getItem('settings:enableTorrentio')).toBe('true');
 
-		const cometCheckbox = screen.getByLabelText('Enable Comet');
-		expect(cometCheckbox).toBeChecked();
-		await user.click(cometCheckbox);
-		expect(localStorage.getItem('settings:enableComet')).toBe('false');
-
 		const mediaFusionCheckbox = screen.getByLabelText('Enable MediaFusion');
 		expect(mediaFusionCheckbox).not.toBeChecked();
 		await user.click(mediaFusionCheckbox);
@@ -230,14 +223,13 @@ describe('SettingsSection', () => {
 		await user.click(peerflixCheckbox);
 		expect(localStorage.getItem('settings:enablePeerflix')).toBe('false');
 
-		const torrentsDbCheckbox = screen.getByLabelText('Enable TorrentsDB');
-		expect(torrentsDbCheckbox).not.toBeChecked();
-		await user.click(torrentsDbCheckbox);
-		expect(localStorage.getItem('settings:enableTorrentsDB')).toBe('true');
-
 		// Each source's Tor route sits on the same row as the source.
-		await user.click(screen.getByLabelText('Enable Comet (Tor)'));
-		expect(localStorage.getItem('settings:enableCometTor')).toBe('true');
+		await user.click(screen.getByLabelText('Enable Peerflix (Tor)'));
+		expect(localStorage.getItem('settings:enablePeerflixTor')).toBe('true');
+
+		// Sources that would be sent the user's Real-Debrid key are not offered.
+		expect(screen.queryByLabelText('Enable Comet')).toBeNull();
+		expect(screen.queryByLabelText('Enable TorrentsDB')).toBeNull();
 	});
 
 	it('handles magnet handler registration and browser instructions for different agents', async () => {

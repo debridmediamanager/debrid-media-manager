@@ -86,12 +86,53 @@ describe('useExternalSources', () => {
 	});
 
 	it('reads enabled sources from localStorage flags', () => {
-		localStorage.setItem('settings:enableComet', 'false');
+		localStorage.setItem('settings:enablePeerflix', 'false');
 		localStorage.setItem('settings:enableOcean', 'false'); // ignored unknown key
 		const { result } = renderHook(() => useExternalSources('rd-key'));
 
 		const sources = result.current.getEnabledSources();
 		expect(sources).toContain('torrentio');
+		expect(sources).not.toContain('peerflix');
+	});
+
+	// An addon given the user's key can use it from its own servers, a second IP
+	// on their Real-Debrid account: Comet and TorrentsDB were sent it by default.
+	it("never sends the user's Real-Debrid key to any source, with every one switched on", async () => {
+		localStorage.setItem('mediafusion_hash', 'hash');
+		for (const key of [
+			'settings:enableComet',
+			'settings:enableTorrentsDB',
+			'settings:enableCometTor',
+			'settings:enableTorrentsDBTor',
+			'settings:enableTorrentioTor',
+			'settings:enableMediaFusionTor',
+			'settings:enablePeerflixTor',
+		]) {
+			localStorage.setItem(key, 'true');
+		}
+		mockGet.mockResolvedValue({ data: { streams: [] } });
+		const { result } = renderHook(() => useExternalSources('SECRETRDKEY'));
+
+		const sources = result.current.getEnabledSources();
+		await act(async () => {
+			for (const source of sources) {
+				await result.current.fetchMovieFromExternalSource('tt123', source as any);
+				await result.current.fetchEpisodeFromExternalSource('tt123', 1, 1, source as any);
+			}
+		});
+
+		expect(mockGet).toHaveBeenCalled();
+		const sent = JSON.stringify(mockGet.mock.calls);
+		const decoded = [...sent.matchAll(/[A-Za-z0-9+/=]{40,}/g)].map((m) => {
+			try {
+				return atob(m[0]);
+			} catch {
+				return '';
+			}
+		});
+		expect(sent).not.toContain('SECRETRDKEY');
+		expect(decoded.join(' ')).not.toContain('SECRETRDKEY');
 		expect(sources).not.toContain('comet');
+		expect(sources).not.toContain('torrentsdb');
 	});
 });

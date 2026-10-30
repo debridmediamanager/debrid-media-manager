@@ -3,7 +3,7 @@ import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import { normalizeHash } from '@/utils/extractHashes';
 import { generateTokenAndHash } from '@/utils/token';
 import axios from 'axios';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Addons render size as "💾 4.5 GB", but units vary between decimal (GB) and
 // binary (GiB), and some locales use a comma decimal separator. Returns MB.
@@ -21,47 +21,11 @@ export function parseSizeToMb(text?: string): number {
 	return value;
 }
 
-// Comet takes its settings as a base64 JSON blob in the URL path. ElfHosted
-// refuses non-debrid searches, so a real debrid key is required - the old
-// "realdebrid=real-debrid-key" placeholder URL returns an OBSOLETE CONFIGURATION
-// stream and nothing else.
-export function buildCometConfig(rdKey: string): string {
-	return btoa(
-		JSON.stringify({
-			maxResultsPerResolution: 0,
-			maxSize: 0,
-			cachedOnly: false,
-			sortCachedUncachedTogether: true,
-			removeTrash: false,
-			resultFormat: ['all'],
-			debridServices: [{ service: 'realdebrid', apiKey: rdKey }],
-			enableTorrent: false,
-			deduplicateStreams: false,
-			// never let Comet enumerate the user's own debrid library
-			scrapeDebridAccountTorrents: false,
-			debridStreamProxyPassword: '',
-			languages: { required: [], allowed: [], exclude: [], preferred: [] },
-			resolutions: {},
-			options: {
-				remove_ranks_under: -10000000000,
-				allow_english_in_languages: false,
-				remove_unknown_languages: false,
-			},
-		})
-	);
-}
-
+// Only addons that need no key of the user's. Comet and TorrentsDB were sent the
+// user's Real-Debrid key, which they can use from their own servers: a second IP
+// on an account Real-Debrid allows on one.
 export type ExternalSource =
-	| 'torrentio'
-	| 'comet'
-	| 'mediafusion'
-	| 'peerflix'
-	| 'torrentsdb'
-	| 'torrentio-tor'
-	| 'comet-tor'
-	| 'mediafusion-tor'
-	| 'peerflix-tor'
-	| 'torrentsdb-tor';
+	'torrentio' | 'mediafusion' | 'peerflix' | 'torrentio-tor' | 'mediafusion-tor' | 'peerflix-tor';
 
 /**
  * Single source of truth for which addons a search queries.
@@ -74,15 +38,11 @@ export const EXTERNAL_SOURCE_SETTINGS: {
 	defaultEnabled: boolean;
 }[] = [
 	{ key: 'settings:enableTorrentio', source: 'torrentio', defaultEnabled: true },
-	{ key: 'settings:enableComet', source: 'comet', defaultEnabled: true },
 	{ key: 'settings:enableMediaFusion', source: 'mediafusion', defaultEnabled: true },
 	{ key: 'settings:enablePeerflix', source: 'peerflix', defaultEnabled: true },
-	{ key: 'settings:enableTorrentsDB', source: 'torrentsdb', defaultEnabled: true },
 	{ key: 'settings:enableTorrentioTor', source: 'torrentio-tor', defaultEnabled: false },
-	{ key: 'settings:enableCometTor', source: 'comet-tor', defaultEnabled: false },
 	{ key: 'settings:enableMediaFusionTor', source: 'mediafusion-tor', defaultEnabled: false },
 	{ key: 'settings:enablePeerflixTor', source: 'peerflix-tor', defaultEnabled: false },
-	{ key: 'settings:enableTorrentsDBTor', source: 'torrentsdb-tor', defaultEnabled: false },
 ];
 
 /**
@@ -99,20 +59,8 @@ export function transformExternalStream(stream: any, source: string): SearchResu
 		if (titleParts.length > 1) {
 			cleanTitle = titleParts[0].trim();
 		}
-	} else if (source === 'torrentsdb') {
-		// Parse TorrentsDB format
-		if (stream.title) {
-			const lines = stream.title.split('\n');
-			if (lines.length > 0) {
-				cleanTitle = lines[0].trim();
-			}
-		}
-		if (!cleanTitle && stream.name) {
-			const nameParts = stream.name.split('\n');
-			cleanTitle = nameParts[nameParts.length - 1].trim();
-		}
 	} else {
-		// Parse Comet/MediaFusion format
+		// Parse MediaFusion format
 		if (stream.description) {
 			const lines = stream.description.split('\n');
 			if (lines.length > 0) {
@@ -184,7 +132,6 @@ export function useExternalSources(
 ) {
 	const hasAnyDebridKey = !!(rdKey || adKey || tbKey);
 	const [mediafusionHash, setMediafusionHash] = useState<string>('');
-	const cometConfig = useMemo(() => (rdKey ? buildCometConfig(rdKey) : ''), [rdKey]);
 
 	// Get or generate MediaFusion hash
 	useEffect(() => {
@@ -375,20 +322,7 @@ export function useExternalSources(
 	);
 
 	const fetchMovieFromExternalSource = useCallback(
-		async (
-			imdbId: string,
-			source:
-				| 'torrentio'
-				| 'comet'
-				| 'mediafusion'
-				| 'peerflix'
-				| 'torrentsdb'
-				| 'torrentio-tor'
-				| 'comet-tor'
-				| 'mediafusion-tor'
-				| 'peerflix-tor'
-				| 'torrentsdb-tor'
-		): Promise<SearchResult[]> => {
+		async (imdbId: string, source: ExternalSource): Promise<SearchResult[]> => {
 			let url = '';
 
 			switch (source) {
@@ -397,11 +331,6 @@ export function useExternalSources(
 					break;
 				case 'torrentio-tor':
 					url = `https://torrentio.strem.fun/realdebrid=real-debrid-key/stream/movie/${imdbId}.json`;
-					break;
-				case 'comet':
-				case 'comet-tor':
-					if (!cometConfig) return [];
-					url = `https://comet.elfhosted.com/${cometConfig}/stream/movie/${imdbId}.json`;
 					break;
 				case 'mediafusion':
 					if (!mediafusionHash) return [];
@@ -417,19 +346,11 @@ export function useExternalSources(
 				case 'peerflix-tor':
 					url = `https://addon.peerflix.mov/realdebrid=real-debrid-key/stream/movie/${imdbId}.json`;
 					break;
-				case 'torrentsdb':
-					if (!rdKey) return [];
-					url = `https://torrentsdb.com/${rdKey}/stream/movie/${imdbId}.json`;
-					break;
-				case 'torrentsdb-tor':
-					if (!rdKey) return [];
-					url = `https://torrentsdb.com/${rdKey}/stream/movie/${imdbId}.json`;
-					break;
 			}
 
 			return fetchExternalSource(url, source, imdbId);
 		},
-		[rdKey, hasAnyDebridKey, cometConfig, mediafusionHash, fetchExternalSource]
+		[mediafusionHash, fetchExternalSource]
 	);
 
 	const fetchEpisodeFromExternalSource = useCallback(
@@ -437,17 +358,7 @@ export function useExternalSources(
 			imdbId: string,
 			seasonNum: number,
 			episodeNum: number,
-			source:
-				| 'torrentio'
-				| 'comet'
-				| 'mediafusion'
-				| 'peerflix'
-				| 'torrentsdb'
-				| 'torrentio-tor'
-				| 'comet-tor'
-				| 'mediafusion-tor'
-				| 'peerflix-tor'
-				| 'torrentsdb-tor'
+			source: ExternalSource
 		): Promise<SearchResult[]> => {
 			let url = '';
 
@@ -457,11 +368,6 @@ export function useExternalSources(
 					break;
 				case 'torrentio-tor':
 					url = `https://torrentio.strem.fun/realdebrid=real-debrid-key/stream/series/${imdbId}:${seasonNum}:${episodeNum}.json`;
-					break;
-				case 'comet':
-				case 'comet-tor':
-					if (!cometConfig) return [];
-					url = `https://comet.elfhosted.com/${cometConfig}/stream/series/${imdbId}:${seasonNum}:${episodeNum}.json`;
 					break;
 				case 'mediafusion':
 					if (!mediafusionHash) return [];
@@ -477,19 +383,11 @@ export function useExternalSources(
 				case 'peerflix-tor':
 					url = `https://addon.peerflix.mov/realdebrid=real-debrid-key/stream/series/${imdbId}:${seasonNum}:${episodeNum}.json`;
 					break;
-				case 'torrentsdb':
-					if (!rdKey) return [];
-					url = `https://torrentsdb.com/${rdKey}/stream/series/${imdbId}:${seasonNum}:${episodeNum}.json`;
-					break;
-				case 'torrentsdb-tor':
-					if (!rdKey) return [];
-					url = `https://torrentsdb.com/${rdKey}/stream/series/${imdbId}:${seasonNum}:${episodeNum}.json`;
-					break;
 			}
 
 			return fetchExternalSource(url, source, imdbId);
 		},
-		[rdKey, hasAnyDebridKey, cometConfig, mediafusionHash, fetchExternalSource]
+		[mediafusionHash, fetchExternalSource]
 	);
 
 	const getEnabledSources = useCallback(() => {

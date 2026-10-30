@@ -881,7 +881,7 @@ def main():
             page.call("Page.navigate", {"url": args.base_url.rstrip("/") + "/_offline"})
             page.pump(2)
             page.evaluate("(() => { localStorage.setItem('dmm:guest', 'true');"
-                          " for (const k of ['Torrentio','Comet','MediaFusion','Peerflix','TorrentsDB'])"
+                          " for (const k of ['Torrentio','MediaFusion','Peerflix'])"
                           " localStorage.setItem('settings:enable' + k, 'false'); return true; })()")
         if args.rd_token_env:
             token = os.environ[args.rd_token_env]
@@ -895,7 +895,7 @@ def main():
             # useLocalStorage JSON-parses the token; the addon toggles are raw
             # strings. External addons are off so the page shows DMM's own data.
             page.evaluate("(() => {" + f"localStorage.setItem('rd:accessToken', {json.dumps(json.dumps(token))});" +
-                          "for (const k of ['Torrentio','Comet','MediaFusion','Peerflix','TorrentsDB'])"
+                          "for (const k of ['Torrentio','MediaFusion','Peerflix'])"
                           " localStorage.setItem('settings:enable' + k, 'false'); return true;})()")
         for route in dict.fromkeys(args.routes):
             target = args.base_url.rstrip("/") + (route if route.startswith("/") else "/" + route)
