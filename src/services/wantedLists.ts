@@ -265,12 +265,31 @@ export async function syncWantedList(row: WantedListRow): Promise<ListSyncResult
 	return { name: read.name, count: read.titles.length, noImdbId: read.noImdbId, ...result };
 }
 
-/** The cron's pass: the lists longest unread, a page of them per tick. */
-export async function syncDueWantedLists(): Promise<{ synced: number; failed: number }> {
+/**
+ * The cron's pass: the lists longest unread, a page of them per tick.
+ *
+ * A lapsed sponsor's list is not read: nothing reads their wanted list, and it
+ * would only fill to the cap with titles no zurg fetches. It is recorded as a
+ * failed read instead, so it waits its six hours rather than taking every tick
+ * from the lists of sponsors still active, and is read again once the
+ * sponsorship is back. A sponsorship that could not be checked is skipped and
+ * left due, never taken for one that ended.
+ */
+export async function syncDueWantedLists(): Promise<{
+	synced: number;
+	failed: number;
+	lapsed: number;
+}> {
 	let synced = 0;
 	let failed = 0;
+	let lapsed = 0;
 	for (const row of await db.dueWantedLists(LISTS_PER_TICK)) {
 		try {
+			if (!(await db.getSponsorByShortId(row.shortId))?.isSponsor) {
+				await db.recordWantedListFailure(row.id, 'Sponsorship is no longer active');
+				lapsed++;
+				continue;
+			}
 			await syncWantedList(row);
 			synced++;
 		} catch (error) {
@@ -280,5 +299,5 @@ export async function syncDueWantedLists(): Promise<{ synced: number; failed: nu
 			);
 		}
 	}
-	return { synced, failed };
+	return { synced, failed, lapsed };
 }

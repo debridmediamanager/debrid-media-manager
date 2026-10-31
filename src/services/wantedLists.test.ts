@@ -91,6 +91,7 @@ beforeEach(() => {
 	vi.mocked(db).wantMany = vi.fn().mockResolvedValue({ added: 0, alreadyWanted: 0, overCap: 0 });
 	vi.mocked(db).recordWantedListRead = vi.fn().mockResolvedValue(undefined);
 	vi.mocked(db).recordWantedListFailure = vi.fn().mockResolvedValue(undefined);
+	vi.mocked(db).getSponsorByShortId = vi.fn().mockResolvedValue({ isSponsor: true });
 });
 
 describe('parseListUrl', () => {
@@ -266,11 +267,38 @@ describe('syncDueWantedLists', () => {
 				row({ id: 'list-2', url: 'https://trakt.tv/users/nobody/lists/nothing' }),
 			]);
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		await expect(syncDueWantedLists()).resolves.toEqual({ synced: 1, failed: 1 });
+		await expect(syncDueWantedLists()).resolves.toEqual({ synced: 1, failed: 1, lapsed: 0 });
 		expect(db.recordWantedListRead).toHaveBeenCalledTimes(1);
 		expect(db.recordWantedListFailure).toHaveBeenCalledWith(
 			'list-2',
 			'Trakt has no such list or user'
 		);
+	});
+
+	// Nothing reads a lapsed sponsor's wanted list, so a list they follow would
+	// only fill it, up to the 5,000 cap, with titles no zurg fetches. Their list
+	// waits its six hours unread instead, so it takes no tick from the lists of
+	// sponsors still active, and is read again once the sponsorship is back.
+	it("leaves a lapsed sponsor's list unread until the sponsorship is back", async () => {
+		vi.mocked(db).dueWantedLists = vi.fn().mockResolvedValue([row()]);
+		vi.mocked(db).getSponsorByShortId = vi.fn().mockResolvedValue({ isSponsor: false });
+		await expect(syncDueWantedLists()).resolves.toEqual({ synced: 0, failed: 0, lapsed: 1 });
+		expect(axios.get).not.toHaveBeenCalled();
+		expect(db.wantMany).not.toHaveBeenCalled();
+		expect(db.recordWantedListFailure).toHaveBeenCalledWith(
+			row().id,
+			'Sponsorship is no longer active'
+		);
+	});
+
+	// A lookup that failed is not a sponsorship that ended: the list is left due.
+	it('skips a list whose sponsorship could not be checked, without recording a read', async () => {
+		vi.mocked(db).dueWantedLists = vi.fn().mockResolvedValue([row()]);
+		vi.mocked(db).getSponsorByShortId = vi.fn().mockRejectedValue(new Error('db down'));
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		await expect(syncDueWantedLists()).resolves.toEqual({ synced: 0, failed: 1, lapsed: 0 });
+		expect(db.wantMany).not.toHaveBeenCalled();
+		expect(db.recordWantedListFailure).not.toHaveBeenCalled();
+		expect(db.recordWantedListRead).not.toHaveBeenCalled();
 	});
 });

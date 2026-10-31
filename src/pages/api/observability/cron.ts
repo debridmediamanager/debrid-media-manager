@@ -40,7 +40,7 @@ interface CronResponse {
 	writtenBackTrash?: SweepResult;
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
-	wantedLists?: { synced: number; failed: number };
+	wantedLists?: { synced: number; failed: number; lapsed: number };
 	error?: string;
 }
 
