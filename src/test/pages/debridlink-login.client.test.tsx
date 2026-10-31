@@ -1,8 +1,9 @@
 import DebridLinkLoginPage from '@/pages/debridlink/login';
+import { listSavedAccounts, parkCurrentAccount } from '@/utils/savedAccounts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
@@ -20,6 +21,14 @@ const setStored: Record<string, ReturnType<typeof vi.fn>> = {
 vi.mock('@/hooks/localStorage', () => ({
 	__esModule: true,
 	default: (key: string) => [null, setStored[key] ?? vi.fn()],
+	notifyLocalStorageChange: vi.fn(),
+}));
+
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { clear: vi.fn() };
+	}),
 }));
 
 const requestDebridLinkDeviceCode = vi.fn();
@@ -307,6 +316,116 @@ describe('DebridLinkLoginPage', () => {
 			expect(
 				screen.getByRole('button', { name: /Sign in with Debrid-Link/ })
 			).toBeInTheDocument();
+		});
+	});
+
+	// "Add another account" and a logout with another login parked both land
+	// here with nothing under dl:. The parked login is one click away, and the
+	// click is a full load so useDebridLink reads the restored keys.
+	describe('saved accounts', () => {
+		const realLocation = window.location;
+		const assign = vi.fn();
+
+		beforeEach(() => {
+			localStorage.clear();
+			assign.mockReset();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: { ...realLocation, assign },
+			});
+		});
+
+		afterEach(() => {
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: realLocation,
+			});
+			localStorage.clear();
+		});
+
+		it('restores a parked OAuth login and goes to the redirect with a full load', async () => {
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: '/library' },
+			} as any);
+			localStorage.setItem('dl:accessToken', '"dad-access"');
+			localStorage.setItem('dl:refreshToken', '"dad-refresh"');
+			localStorage.setItem('dl:tokenExpiry', '1893456000000');
+			await parkCurrentAccount('dl:', { id: 'dad', label: 'dad' });
+
+			render(<DebridLinkLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: 'dad' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/library'));
+			expect(localStorage.getItem('dl:accessToken')).toBe('"dad-access"');
+			expect(localStorage.getItem('dl:refreshToken')).toBe('"dad-refresh"');
+			expect(localStorage.getItem('dl:tokenExpiry')).toBe('1893456000000');
+			expect(listSavedAccounts('dl:')).toEqual([]);
+			expect(replace).not.toHaveBeenCalled();
+		});
+
+		it('restores a parked pasted API token', async () => {
+			localStorage.setItem('dl:apiKey', '"son-key"');
+			await parkCurrentAccount('dl:', { id: 'son', label: 'son' });
+
+			render(<DebridLinkLoginPage />);
+			fireEvent.click(await screen.findByRole('button', { name: 'son' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/'));
+			expect(localStorage.getItem('dl:apiKey')).toBe('"son-key"');
+			expect(localStorage.getItem('dl:accessToken')).toBeNull();
+			expect(listSavedAccounts('dl:')).toEqual([]);
+		});
+
+		it('never sends an off-site redirect to the hard navigation', async () => {
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: 'https://evil.example' },
+			} as any);
+			localStorage.setItem('dl:apiKey', '"son-key"');
+			await parkCurrentAccount('dl:', { id: 'son', label: 'son' });
+
+			render(<DebridLinkLoginPage />);
+			fireEvent.click(await screen.findByRole('button', { name: 'son' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/'));
+		});
+
+		it('hides the row while a device code is pending', async () => {
+			localStorage.setItem('dl:apiKey', '"son-key"');
+			await parkCurrentAccount('dl:', { id: 'son', label: 'son' });
+			requestDebridLinkDeviceCode.mockResolvedValue({
+				verification_url: 'https://debrid-link.fr/webapp/device',
+				user_code: 'ABCD-1234',
+				device_code: 'dc123',
+				expires_in: 1800,
+				interval: 0,
+			});
+			pollDebridLinkDeviceToken.mockResolvedValue(null);
+
+			render(<DebridLinkLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Debrid-Link/ }));
+
+			await waitFor(() => expect(screen.getByTestId('dl-user-code')).toBeInTheDocument());
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+		});
+
+		it('shows nothing extra to a single-account user', async () => {
+			render(<DebridLinkLoginPage />);
+
+			expect(
+				await screen.findByRole('button', { name: /Sign in with Debrid-Link/ })
+			).toBeInTheDocument();
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+			expect(screen.getAllByRole('button').map((b) => b.textContent)).toEqual([
+				'Sign in with Debrid-Link',
+				'Save API Token',
+				'Get API Token from Debrid-Link',
+			]);
 		});
 	});
 });

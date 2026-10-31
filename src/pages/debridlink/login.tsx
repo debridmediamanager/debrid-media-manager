@@ -1,3 +1,4 @@
+import { SavedAccountsPicker } from '@/components/SavedAccountsPicker';
 import useLocalStorage from '@/hooks/localStorage';
 import { getDebridLinkAccountInfo, isDebridLinkPremium } from '@/services/debridLink';
 import {
@@ -160,6 +161,18 @@ export default function DebridLinkLoginPage() {
 					</div>
 				) : (
 					<>
+						{/* A full load, not router.replace: withAuth reads the credential
+						    once per mount, and debridLink.ts's lockouts and library
+						    snapshots are module state only a reload resets. */}
+						<SavedAccountsPicker
+							prefix="dl:"
+							current={null}
+							afterSwitch={() =>
+								window.location.assign(
+									getSafeRedirectPath(router.query.redirect, '/')
+								)
+							}
+						/>
 						<button
 							type="button"
 							onClick={startDeviceLogin}
