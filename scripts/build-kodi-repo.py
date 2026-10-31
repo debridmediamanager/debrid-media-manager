@@ -6,7 +6,8 @@
 
 Writes public/repo/: addons.xml (+ .md5), <id>/<id>-<version>.zip with the addon's icon and
 fanart beside it, the repository zip again at the top for Kodi's "Install from zip file", and an
-index.html Kodi can browse as a file source (it keeps a link only when href equals its text).
+index.html Kodi can browse as a file source (it keeps a link only when href equals its text) that
+lists every top-level file Kodi fetches.
 Zips are byte-for-byte reproducible, so rebuilding unchanged addons leaves git clean. Bump an
 addon's version in its addon.xml for Kodi to offer the update.
 """
@@ -72,7 +73,9 @@ def build(out):
         f.write(addons_xml)
     with open(os.path.join(out, 'addons.xml.md5'), 'w') as f:
         f.write(hashlib.md5(addons_xml.encode('utf-8')).hexdigest())
-    links = '\n'.join('<a href="%s">%s</a><br>' % (n, n) for n in top)
+    # Every file Kodi reads from here: once a member has browsed this folder as a source, Kodi treats
+    # a file missing from the listing as absent and the repository's checksum read fails unattempted.
+    links = '\n'.join('<a href="%s">%s</a><br>' % (n, n) for n in top + ['addons.xml', 'addons.xml.md5'])
     with open(os.path.join(out, 'index.html'), 'w') as f:
         f.write('<!doctype html>\n<html><head><meta charset="utf-8"><title>DMM Kodi repository</title>'
                 '<meta name="robots" content="noindex, nofollow"></head>\n<body>\n%s\n</body></html>\n' % links)
