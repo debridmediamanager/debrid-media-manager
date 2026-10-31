@@ -1,0 +1,1464 @@
+{
+	"_source": "DMM's Available/AvailableFile rows for Game of Thrones season 1 (tt0944947), whose page counts 10 episodes, read from dmmdb on 2026-10-31; files are exactly what /api/availability/check answers for these hashes",
+	"available": [
+		{
+			"hash": "aaa3461902a5e44313d15900f40b947252a0fb76",
+			"title": "Game of Thrones (2011) Complete (1080p BluRay x265 HEVC 10bit TrueHD Atmos 7.1) [UTR]",
+			"bytes": 294884770227,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/EXTRAS/Season 01/Anatomy of An Episode- A Golden Crown (1080p x265 Joy).mkv",
+					"bytes": 477352628
+				},
+				{
+					"file_id": 2,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Aegon the Conqueror.mkv",
+					"bytes": 21534502
+				},
+				{
+					"file_id": 3,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Children of the Forest.mkv",
+					"bytes": 24309914
+				},
+				{
+					"file_id": 4,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Current State of The Night's Watch.mkv",
+					"bytes": 13047123
+				},
+				{
+					"file_id": 5,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Faith of the Seven.mkv",
+					"bytes": 27453216
+				},
+				{
+					"file_id": 6,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/History of The Night's Watch.mkv",
+					"bytes": 18873311
+				},
+				{
+					"file_id": 7,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/History of Valyria.mkv",
+					"bytes": 21369764
+				},
+				{
+					"file_id": 8,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/House Arryn.mkv",
+					"bytes": 16537645
+				},
+				{
+					"file_id": 9,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/House Baratheon.mkv",
+					"bytes": 19453699
+				},
+				{
+					"file_id": 10,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/House Lannister.mkv",
+					"bytes": 25974811
+				},
+				{
+					"file_id": 11,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/House Stark.mkv",
+					"bytes": 13801054
+				},
+				{
+					"file_id": 12,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Maesters of Oldtown.mkv",
+					"bytes": 13310745
+				},
+				{
+					"file_id": 13,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Sacking of Kingslanding, Rebels.mkv",
+					"bytes": 15160751
+				},
+				{
+					"file_id": 14,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Sacking of Kingslanding, Targaryens.mkv",
+					"bytes": 16145958
+				},
+				{
+					"file_id": 15,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Seven Kingdoms.mkv",
+					"bytes": 21689579
+				},
+				{
+					"file_id": 16,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Stark, the King who Knelt.mkv",
+					"bytes": 13758903
+				},
+				{
+					"file_id": 17,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Targaryen Rule.mkv",
+					"bytes": 20788002
+				},
+				{
+					"file_id": 18,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Mad King Seeds the Rebellion.mkv",
+					"bytes": 17863093
+				},
+				{
+					"file_id": 19,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Mad King.mkv",
+					"bytes": 17654883
+				},
+				{
+					"file_id": 20,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The NIght's Watch.mkv",
+					"bytes": 25412160
+				},
+				{
+					"file_id": 21,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Rebellion, Baratheon viewpoint.mkv",
+					"bytes": 19934805
+				},
+				{
+					"file_id": 22,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Rebellion, Lannister viewpoint.mkv",
+					"bytes": 15862988
+				},
+				{
+					"file_id": 23,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Rebellion, Stark viewpoint.mkv",
+					"bytes": 18267189
+				},
+				{
+					"file_id": 24,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/The Rebellion, Targaryen viewpoint.mkv",
+					"bytes": 14911912
+				},
+				{
+					"file_id": 25,
+					"path": "/EXTRAS/Season 01/Blu-ray Complete Guide to Westeros/Tywin Lannister, Hand of The Mad King.mkv",
+					"bytes": 17096003
+				},
+				{
+					"file_id": 26,
+					"path": "/EXTRAS/Season 01/Character Profiles (1080p x265 10bit Joy).mkv",
+					"bytes": 200780592
+				},
+				{
+					"file_id": 27,
+					"path": "/EXTRAS/Season 01/Creating the Dorhraki Language.mkv",
+					"bytes": 38398020
+				},
+				{
+					"file_id": 28,
+					"path": "/EXTRAS/Season 01/Creating the Show Open.mkv",
+					"bytes": 34647010
+				},
+				{
+					"file_id": 29,
+					"path": "/EXTRAS/Season 01/From the Book to the Screen.mkv",
+					"bytes": 36852552
+				},
+				{
+					"file_id": 30,
+					"path": "/EXTRAS/Season 01/Making Game of Thrones.mkv",
+					"bytes": 172667649
+				},
+				{
+					"file_id": 31,
+					"path": "/EXTRAS/Season 01/Screen Test- Dance Instructor.mkv",
+					"bytes": 8886281
+				},
+				{
+					"file_id": 32,
+					"path": "/EXTRAS/Season 01/Screen Test-The Hound.mkv",
+					"bytes": 8365417
+				},
+				{
+					"file_id": 33,
+					"path": "/EXTRAS/Season 01/The Nights Watch.mkv",
+					"bytes": 56842208
+				},
+				{
+					"file_id": 34,
+					"path": "/EXTRAS/Season 02/Batrayal by the Iron Isles.mkv",
+					"bytes": 23880864
+				},
+				{
+					"file_id": 35,
+					"path": "/EXTRAS/Season 02/Character Profile - Daenerys Targaryen.mkv",
+					"bytes": 14623253
+				},
+				{
+					"file_id": 36,
+					"path": "/EXTRAS/Season 02/Character Profile - Joffrey Baratheon.mkv",
+					"bytes": 12058115
+				},
+				{
+					"file_id": 37,
+					"path": "/EXTRAS/Season 02/Character Profile - Renly Baratheon.mkv",
+					"bytes": 19746277
+				},
+				{
+					"file_id": 38,
+					"path": "/EXTRAS/Season 02/Character Profile - Robb Stark.mkv",
+					"bytes": 15270193
+				},
+				{
+					"file_id": 39,
+					"path": "/EXTRAS/Season 02/Character Profile - Stannis Baratheon.mkv",
+					"bytes": 13818975
+				},
+				{
+					"file_id": 40,
+					"path": "/EXTRAS/Season 02/Character Profile - Theon Greyjoy.mkv",
+					"bytes": 13669380
+				},
+				{
+					"file_id": 41,
+					"path": "/EXTRAS/Season 02/Character Profile- John Snow.mkv",
+					"bytes": 13578965
+				},
+				{
+					"file_id": 42,
+					"path": "/EXTRAS/Season 02/Creating the Battle of Blackwater Bay.mkv",
+					"bytes": 344396587
+				},
+				{
+					"file_id": 43,
+					"path": "/EXTRAS/Season 02/Deleted Scene- Sansa and Clegane.mkv",
+					"bytes": 10137827
+				},
+				{
+					"file_id": 44,
+					"path": "/EXTRAS/Season 02/Deleted Scene-Murder in Quarth.mkv",
+					"bytes": 4888588
+				},
+				{
+					"file_id": 45,
+					"path": "/EXTRAS/Season 02/History- Dragon Stone.mkv",
+					"bytes": 25691579
+				},
+				{
+					"file_id": 46,
+					"path": "/EXTRAS/Season 02/History- Drowned God.mkv",
+					"bytes": 16571866
+				},
+				{
+					"file_id": 47,
+					"path": "/EXTRAS/Season 02/History- Harrenhall.mkv",
+					"bytes": 25602738
+				},
+				{
+					"file_id": 48,
+					"path": "/EXTRAS/Season 02/History- House Tyrell.mkv",
+					"bytes": 26983977
+				},
+				{
+					"file_id": 49,
+					"path": "/EXTRAS/Season 02/History- Iron Isles.mkv",
+					"bytes": 20775395
+				},
+				{
+					"file_id": 50,
+					"path": "/EXTRAS/Season 02/History- Nightwatch.mkv",
+					"bytes": 17128837
+				},
+				{
+					"file_id": 51,
+					"path": "/EXTRAS/Season 02/History- Quarth.mkv",
+					"bytes": 18842765
+				},
+				{
+					"file_id": 52,
+					"path": "/EXTRAS/Season 02/History- The Onion Knight.mkv",
+					"bytes": 35266666
+				},
+				{
+					"file_id": 53,
+					"path": "/EXTRAS/Season 02/History- Valyria.mkv",
+					"bytes": 23594564
+				},
+				{
+					"file_id": 54,
+					"path": "/EXTRAS/Season 02/History- Warlocks of Quarth.mkv",
+					"bytes": 14747728
+				},
+				{
+					"file_id": 55,
+					"path": "/EXTRAS/Season 02/History- Wildfire.mkv",
+					"bytes": 22388171
+				},
+				{
+					"file_id": 56,
+					"path": "/EXTRAS/Season 02/History- Wildlings.mkv",
+					"bytes": 16154981
+				},
+				{
+					"file_id": 57,
+					"path": "/EXTRAS/Season 02/History-Stanis Holds the Castle.mkv",
+					"bytes": 20112394
+				},
+				{
+					"file_id": 58,
+					"path": "/EXTRAS/Season 02/House Clegane.mkv",
+					"bytes": 21568145
+				},
+				{
+					"file_id": 59,
+					"path": "/EXTRAS/Season 02/House Tully.mkv",
+					"bytes": 27052922
+				},
+				{
+					"file_id": 60,
+					"path": "/EXTRAS/Season 02/House Tyrell.mkv",
+					"bytes": 24861185
+				},
+				{
+					"file_id": 61,
+					"path": "/EXTRAS/Season 02/Locations - Flea Bottom.mkv",
+					"bytes": 35309501
+				},
+				{
+					"file_id": 62,
+					"path": "/EXTRAS/Season 02/Rebelion of the Iron Isles.mkv",
+					"bytes": 21792254
+				},
+				{
+					"file_id": 63,
+					"path": "/EXTRAS/Season 02/Religons of Westeros.mkv",
+					"bytes": 54375485
+				},
+				{
+					"file_id": 64,
+					"path": "/EXTRAS/Season 02/Rountable-Clash of Kings.mkv",
+					"bytes": 132039023
+				},
+				{
+					"file_id": 65,
+					"path": "/EXTRAS/Season 02/Taming the Iron Isles.mkv",
+					"bytes": 18775886
+				},
+				{
+					"file_id": 66,
+					"path": "/EXTRAS/Season 03/Beyond the wall, Jon's dilema.mkv",
+					"bytes": 5659403
+				},
+				{
+					"file_id": 67,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/Battle Plans Extended Scene.mkv",
+					"bytes": 22875866
+				},
+				{
+					"file_id": 68,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/King Beyond the Wall Extended scene 2.mkv",
+					"bytes": 31866475
+				},
+				{
+					"file_id": 69,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/King Beyond the Wall Extended scene.mkv",
+					"bytes": 87168910
+				},
+				{
+					"file_id": 70,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/Post Battle Confrence.mkv",
+					"bytes": 6127599
+				},
+				{
+					"file_id": 71,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/Rains of Castamere extended scene.mkv",
+					"bytes": 46981402
+				},
+				{
+					"file_id": 72,
+					"path": "/EXTRAS/Season 03/Deleted & Extended Scenes/Tywin Fishing.mkv",
+					"bytes": 20634260
+				},
+				{
+					"file_id": 73,
+					"path": "/EXTRAS/Season 03/GoT A Gathering Storm.mkv",
+					"bytes": 94580507
+				},
+				{
+					"file_id": 74,
+					"path": "/EXTRAS/Season 03/GoT New Characters.mkv",
+					"bytes": 66727527
+				},
+				{
+					"file_id": 75,
+					"path": "/EXTRAS/Season 03/GoT New Charaters.mkv",
+					"bytes": 66727527
+				},
+				{
+					"file_id": 76,
+					"path": "/EXTRAS/Season 03/GoT Recap of Season 2.mkv",
+					"bytes": 82229338
+				},
+				{
+					"file_id": 77,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Darthraki.mkv",
+					"bytes": 26526279
+				},
+				{
+					"file_id": 78,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Dorne and the First Men.mkv",
+					"bytes": 18223228
+				},
+				{
+					"file_id": 79,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Ghis.mkv",
+					"bytes": 17505826
+				},
+				{
+					"file_id": 80,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore House Bolton.mkv",
+					"bytes": 16674963
+				},
+				{
+					"file_id": 81,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore House Frey.mkv",
+					"bytes": 26899570
+				},
+				{
+					"file_id": 82,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore House Lannister.mkv",
+					"bytes": 24486606
+				},
+				{
+					"file_id": 83,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore House Tulley.mkv",
+					"bytes": 30741162
+				},
+				{
+					"file_id": 84,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore House Tyrell.mkv",
+					"bytes": 32275301
+				},
+				{
+					"file_id": 85,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Lord of Light.mkv",
+					"bytes": 23985761
+				},
+				{
+					"file_id": 86,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Roose Bolton's Motivation.mkv",
+					"bytes": 17649611
+				},
+				{
+					"file_id": 87,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Targaryans.mkv",
+					"bytes": 33412785
+				},
+				{
+					"file_id": 88,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore Tarth.mkv",
+					"bytes": 34556391
+				},
+				{
+					"file_id": 89,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore The Neck.mkv",
+					"bytes": 22142733
+				},
+				{
+					"file_id": 90,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore The North.mkv",
+					"bytes": 30605142
+				},
+				{
+					"file_id": 91,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore the Red Keep.mkv",
+					"bytes": 24481679
+				},
+				{
+					"file_id": 92,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore the Riverland.mkv",
+					"bytes": 26160757
+				},
+				{
+					"file_id": 93,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore the Vale.mkv",
+					"bytes": 25208177
+				},
+				{
+					"file_id": 94,
+					"path": "/EXTRAS/Season 03/Histories and Lore/Histories and Lore the first men.mkv",
+					"bytes": 18224052
+				},
+				{
+					"file_id": 95,
+					"path": "/EXTRAS/Season 03/Inside the Wildlings.mkv",
+					"bytes": 42868046
+				},
+				{
+					"file_id": 96,
+					"path": "/EXTRAS/Season 03/Reflections of Rain of Castamere.mkv",
+					"bytes": 75987639
+				},
+				{
+					"file_id": 97,
+					"path": "/EXTRAS/Season 03/The Politics of Marriage.mkv",
+					"bytes": 57002051
+				},
+				{
+					"file_id": 98,
+					"path": "/EXTRAS/Season 03/The Rains of Castamere Unveilded.mkv",
+					"bytes": 84106745
+				},
+				{
+					"file_id": 99,
+					"path": "/EXTRAS/Season 03/The Rains of Castamere Unveiled (2).mkv",
+					"bytes": 84106745
+				},
+				{
+					"file_id": 100,
+					"path": "/EXTRAS/Season 03/The Rains of Castamere Unveiled.mkv",
+					"bytes": 301582782
+				},
+				{
+					"file_id": 101,
+					"path": "/EXTRAS/Season 04/2 Deleted Scenes.mkv",
+					"bytes": 16552397
+				},
+				{
+					"file_id": 102,
+					"path": "/EXTRAS/Season 04/Bastards of Westeros.mkv",
+					"bytes": 49134033
+				},
+				{
+					"file_id": 103,
+					"path": "/EXTRAS/Season 04/Behind the Battle for the Wall.mkv",
+					"bytes": 252576517
+				},
+				{
+					"file_id": 104,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Aagon.mkv",
+					"bytes": 20046072
+				},
+				{
+					"file_id": 105,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Bastards.mkv",
+					"bytes": 13719176
+				},
+				{
+					"file_id": 106,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Dorn.mkv",
+					"bytes": 30926714
+				},
+				{
+					"file_id": 107,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Dragons.mkv",
+					"bytes": 24215412
+				},
+				{
+					"file_id": 108,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - History of the Kings Guard.mkv",
+					"bytes": 24083420
+				},
+				{
+					"file_id": 109,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - House Martin.mkv",
+					"bytes": 25590174
+				},
+				{
+					"file_id": 110,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Justice.mkv",
+					"bytes": 20644139
+				},
+				{
+					"file_id": 111,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Kings Guard.mkv",
+					"bytes": 24083420
+				},
+				{
+					"file_id": 112,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Poison.mkv",
+					"bytes": 23671636
+				},
+				{
+					"file_id": 113,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Sellswords.mkv",
+					"bytes": 17901063
+				},
+				{
+					"file_id": 114,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Fingers.mkv",
+					"bytes": 26746616
+				},
+				{
+					"file_id": 115,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Freefolk.mkv",
+					"bytes": 26499066
+				},
+				{
+					"file_id": 116,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Iron Bank.mkv",
+					"bytes": 16155314
+				},
+				{
+					"file_id": 117,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Kings Guard.mkv",
+					"bytes": 16607547
+				},
+				{
+					"file_id": 118,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Maestors.mkv",
+					"bytes": 16280273
+				},
+				{
+					"file_id": 119,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - The Wall.mkv",
+					"bytes": 28122669
+				},
+				{
+					"file_id": 120,
+					"path": "/EXTRAS/Season 04/Lore & Histories/Lore & Histories - Valerian Steel.mkv",
+					"bytes": 19652953
+				},
+				{
+					"file_id": 121,
+					"path": "/EXTRAS/Season 04/Main Menu.mkv",
+					"bytes": 18505499
+				},
+				{
+					"file_id": 122,
+					"path": "/EXTRAS/Season 04/New Characters and Locations.mkv",
+					"bytes": 49485589
+				},
+				{
+					"file_id": 123,
+					"path": "/EXTRAS/Season 04/The Fallen - A Round Table.mkv",
+					"bytes": 198200542
+				},
+				{
+					"file_id": 124,
+					"path": "/EXTRAS/Season 04/The Politics of Power - A Look Back at Season 3.mkv",
+					"bytes": 163524510
+				},
+				{
+					"file_id": 125,
+					"path": "/EXTRAS/Season 04/Trial by Combat.mkv",
+					"bytes": 12598382
+				},
+				{
+					"file_id": 126,
+					"path": "/EXTRAS/Season 05/Extra Features/Anantomy of an Episode - A Mother's Mercy.mkv",
+					"bytes": 167580648
+				},
+				{
+					"file_id": 127,
+					"path": "/EXTRAS/Season 05/Extra Features/Extended Scenes.mkv",
+					"bytes": 43119738
+				},
+				{
+					"file_id": 128,
+					"path": "/EXTRAS/Season 05/Extra Features/Game of Thrones - A Day in the Life.mkv",
+					"bytes": 145523857
+				},
+				{
+					"file_id": 129,
+					"path": "/EXTRAS/Season 05/Extra Features/New Characters - New Locations.mkv",
+					"bytes": 43705668
+				},
+				{
+					"file_id": 130,
+					"path": "/EXTRAS/Season 05/Extra Features/The Real History of Game of Thrones Part One.mkv",
+					"bytes": 101978529
+				},
+				{
+					"file_id": 131,
+					"path": "/EXTRAS/Season 05/Extra Features/The Real History of Game of Thrones Part Two.mkv",
+					"bytes": 123576311
+				},
+				{
+					"file_id": 132,
+					"path": "/EXTRAS/Season 05/Extra Features/Title Animation.mkv",
+					"bytes": 45105559
+				},
+				{
+					"file_id": 133,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Bariston the Bold.mkv",
+					"bytes": 33128304
+				},
+				{
+					"file_id": 134,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Braavos.mkv",
+					"bytes": 31882175
+				},
+				{
+					"file_id": 135,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Fighting Pits of Mereen.mkv",
+					"bytes": 16010123
+				},
+				{
+					"file_id": 136,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Grey Scale.mkv",
+					"bytes": 13516488
+				},
+				{
+					"file_id": 137,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Mereen.mkv",
+					"bytes": 15292885
+				},
+				{
+					"file_id": 138,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Nimiria.mkv",
+					"bytes": 22662808
+				},
+				{
+					"file_id": 139,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Order of the Faith Militiant.mkv",
+					"bytes": 28517133
+				},
+				{
+					"file_id": 140,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Dance of Dragons.mkv",
+					"bytes": 116125123
+				},
+				{
+					"file_id": 141,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Faceless Men.mkv",
+					"bytes": 12903270
+				},
+				{
+					"file_id": 142,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Fall of Winterfell.mkv",
+					"bytes": 14935261
+				},
+				{
+					"file_id": 143,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Lord Commander of the Night's Watch.mkv",
+					"bytes": 19116608
+				},
+				{
+					"file_id": 144,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Many Faced God.mkv",
+					"bytes": 16795208
+				},
+				{
+					"file_id": 145,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Rioner.mkv",
+					"bytes": 22488012
+				},
+				{
+					"file_id": 146,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - The Seven Pointed Star.mkv",
+					"bytes": 19409913
+				},
+				{
+					"file_id": 147,
+					"path": "/EXTRAS/Season 05/Histories & Lore/Histories and Lore - Volantis.mkv",
+					"bytes": 24393911
+				},
+				{
+					"file_id": 148,
+					"path": "/EXTRAS/Season 06/18 Hours at the Paint Hall.mkv",
+					"bytes": 157781282
+				},
+				{
+					"file_id": 149,
+					"path": "/EXTRAS/Season 06/Battle of the Bastards.mkv",
+					"bytes": 169941155
+				},
+				{
+					"file_id": 150,
+					"path": "/EXTRAS/Season 06/Disk One Title Screen.mkv",
+					"bytes": 20019309
+				},
+				{
+					"file_id": 151,
+					"path": "/EXTRAS/Season 06/Extended Scenes.mkv",
+					"bytes": 59860586
+				},
+				{
+					"file_id": 152,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Dothraki Sea.mkv",
+					"bytes": 26982682
+				},
+				{
+					"file_id": 153,
+					"path": "/EXTRAS/Season 06/Histories & Lore/House Dane.mkv",
+					"bytes": 23250130
+				},
+				{
+					"file_id": 154,
+					"path": "/EXTRAS/Season 06/Histories & Lore/House Greyjoy.mkv",
+					"bytes": 24976851
+				},
+				{
+					"file_id": 155,
+					"path": "/EXTRAS/Season 06/Histories & Lore/House Stark Kings of Winter.mkv",
+					"bytes": 28327862
+				},
+				{
+					"file_id": 156,
+					"path": "/EXTRAS/Season 06/Histories & Lore/House Tarlye.mkv",
+					"bytes": 25575769
+				},
+				{
+					"file_id": 157,
+					"path": "/EXTRAS/Season 06/Histories & Lore/King Slayer.mkv",
+					"bytes": 34400246
+				},
+				{
+					"file_id": 158,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Kings of the Ironborn.mkv",
+					"bytes": 20810866
+				},
+				{
+					"file_id": 159,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Knights of the Vale.mkv",
+					"bytes": 31647867
+				},
+				{
+					"file_id": 160,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Of Children and Men.mkv",
+					"bytes": 26562884
+				},
+				{
+					"file_id": 161,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Old Town.mkv",
+					"bytes": 31065201
+				},
+				{
+					"file_id": 162,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Paying with Fire & Blood.mkv",
+					"bytes": 22733710
+				},
+				{
+					"file_id": 163,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Riverrun.mkv",
+					"bytes": 20360485
+				},
+				{
+					"file_id": 164,
+					"path": "/EXTRAS/Season 06/Histories & Lore/The Brotherhood without Banners.mkv",
+					"bytes": 22519334
+				},
+				{
+					"file_id": 165,
+					"path": "/EXTRAS/Season 06/Histories & Lore/The Cept of Balor.mkv",
+					"bytes": 24601482
+				},
+				{
+					"file_id": 166,
+					"path": "/EXTRAS/Season 06/Histories & Lore/The Spider.mkv",
+					"bytes": 17606526
+				},
+				{
+					"file_id": 167,
+					"path": "/EXTRAS/Season 06/Histories & Lore/The War of the Nine Penny Kings.mkv",
+					"bytes": 16083642
+				},
+				{
+					"file_id": 168,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Tournement at Harrenhal.mkv",
+					"bytes": 34294145
+				},
+				{
+					"file_id": 169,
+					"path": "/EXTRAS/Season 06/Histories & Lore/Vayes Darthrak.mkv",
+					"bytes": 21842830
+				},
+				{
+					"file_id": 170,
+					"path": "/EXTRAS/Season 06/Recreating the Dothraki World.mkv",
+					"bytes": 114578640
+				},
+				{
+					"file_id": 171,
+					"path": "/EXTRAS/Season 07/Conquest & Rebellion - An Animated History of the Seven Kingdoms.mkv",
+					"bytes": 587930825
+				},
+				{
+					"file_id": 172,
+					"path": "/EXTRAS/Season 07/Fire & Steel - Creating the Invation of Westeros.mkv",
+					"bytes": 241438251
+				},
+				{
+					"file_id": 173,
+					"path": "/EXTRAS/Season 07/Histories & Lore/High Garden.mkv",
+					"bytes": 27313825
+				},
+				{
+					"file_id": 174,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Citidal of Old Town.mkv",
+					"bytes": 21486509
+				},
+				{
+					"file_id": 175,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Dragon Pit.mkv",
+					"bytes": 25064931
+				},
+				{
+					"file_id": 176,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Golden Company.mkv",
+					"bytes": 23628309
+				},
+				{
+					"file_id": 177,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Hand of the King.mkv",
+					"bytes": 32388171
+				},
+				{
+					"file_id": 178,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Huntsman then the Lion.mkv",
+					"bytes": 29697442
+				},
+				{
+					"file_id": 179,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Maesters.mkv",
+					"bytes": 33687168
+				},
+				{
+					"file_id": 180,
+					"path": "/EXTRAS/Season 07/Histories & Lore/The Rhynes of Casmire.mkv",
+					"bytes": 46029972
+				},
+				{
+					"file_id": 181,
+					"path": "/EXTRAS/Season 07/Inside the Art Department part 1.mkv",
+					"bytes": 196411514
+				},
+				{
+					"file_id": 182,
+					"path": "/EXTRAS/Season 07/Inside the Art Department part 2.mkv",
+					"bytes": 176919984
+				},
+				{
+					"file_id": 183,
+					"path": "/EXTRAS/Season 07/Title Menu.mkv",
+					"bytes": 18976357
+				},
+				{
+					"file_id": 184,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Deleted Scenes.mkv",
+					"bytes": 39490429
+				},
+				{
+					"file_id": 185,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Duty is the Death of Love.mkv",
+					"bytes": 222729302
+				},
+				{
+					"file_id": 186,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Game of Thrones - The Last Watch.mkv",
+					"bytes": 849821554
+				},
+				{
+					"file_id": 187,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 01 - King's Landing.mkv",
+					"bytes": 25602708
+				},
+				{
+					"file_id": 188,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 02 - The Greyjoy Rebellion.mkv",
+					"bytes": 54277336
+				},
+				{
+					"file_id": 189,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 03 - The Blackfyres.mkv",
+					"bytes": 29665653
+				},
+				{
+					"file_id": 190,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 04 - The South.mkv",
+					"bytes": 14853074
+				},
+				{
+					"file_id": 191,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 05 - The Defiance of Duskendale.mkv",
+					"bytes": 26667118
+				},
+				{
+					"file_id": 192,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/Histories & Lore - 06 - Maegor the Cruel.mkv",
+					"bytes": 54221510
+				},
+				{
+					"file_id": 193,
+					"path": "/EXTRAS/Season 08/Blu-ray Featurettes/When Winters Fall.mkv",
+					"bytes": 208772437
+				},
+				{
+					"file_id": 194,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Florence + the Machine - ''Jenny of Oldstones'' Lyric Video - Game of Thrones  (1080p x265 10bit Joy).mkv",
+					"bytes": 32190526
+				},
+				{
+					"file_id": 195,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 1 Game Revealed  (1080p x265 10bit Joy).mkv",
+					"bytes": 127205297
+				},
+				{
+					"file_id": 196,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 1 Inside the Episode  (1080p x265 10bit Joy).mkv",
+					"bytes": 48014016
+				},
+				{
+					"file_id": 197,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 2 Game Revealed  (1080p x265 10bit Joy).mkv",
+					"bytes": 144729990
+				},
+				{
+					"file_id": 198,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 2 Inside the Episode  (1080p x265 10bit Joy).mkv",
+					"bytes": 53926207
+				},
+				{
+					"file_id": 199,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 3 Game Revealed  (1080p x265 10bit Joy).mkv",
+					"bytes": 293039306
+				},
+				{
+					"file_id": 200,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 3 Inside the Episode  (1080p x265 10bit Joy).mkv",
+					"bytes": 79088504
+				},
+				{
+					"file_id": 201,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 4 Game Revealed  (1080p x265 10bit Joy).mkv",
+					"bytes": 136150630
+				},
+				{
+					"file_id": 202,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 4 Inside the Episode  (1080p x265 10bit Joy).mkv",
+					"bytes": 62157267
+				},
+				{
+					"file_id": 203,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 5 Game Revealed  (1080p x265 10bit Joy).mkv",
+					"bytes": 214928014
+				},
+				{
+					"file_id": 204,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 Episode 5 Inside the Episode  (1080p x265 10bit Joy).mkv",
+					"bytes": 71098856
+				},
+				{
+					"file_id": 205,
+					"path": "/EXTRAS/Season 08/Web Featurettes/Game of Thrones S08 First Day on Set  (1080p x265 10bit Joy).mkv",
+					"bytes": 6444590
+				},
+				{
+					"file_id": 206,
+					"path": "/EXTRAS/Season 08/Web Featurettes/SZA, The Weeknd, Travis Scott - “Power Is Power” Lyric Video - Game Of Thrones  (1080p x265 10bit Joy).mkv",
+					"bytes": 36269091
+				},
+				{
+					"file_id": 207,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 4381007000
+				},
+				{
+					"file_id": 208,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E02.The.Kingsroad.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3741286981
+				},
+				{
+					"file_id": 209,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E03.Lord.Snow.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3630760792
+				},
+				{
+					"file_id": 210,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E04.Cripples.Bastards.and.Broken.Things.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3328267520
+				},
+				{
+					"file_id": 211,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E05.The.Wolf.and.the.Lion.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3267224431
+				},
+				{
+					"file_id": 212,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E06.A.Golden.Crown.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3465354521
+				},
+				{
+					"file_id": 213,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E07.You.Win.or.You.Die.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3748799690
+				},
+				{
+					"file_id": 214,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E08.The.Pointy.End.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3993099319
+				},
+				{
+					"file_id": 215,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E09.Baelor.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3442507047
+				},
+				{
+					"file_id": 216,
+					"path": "/Game.of.Thrones.S01.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S01E10.Fire.and.Blood.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3096972906
+				},
+				{
+					"file_id": 217,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E01.The.North.Remembers.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2867421443
+				},
+				{
+					"file_id": 218,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E02.The.Night.Lands.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2810884084
+				},
+				{
+					"file_id": 219,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E03.What.Is.Dead.May.Never.Die.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2660774137
+				},
+				{
+					"file_id": 220,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E04.Garden.of.Bones.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2802737330
+				},
+				{
+					"file_id": 221,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E05.The.Ghost.of.Harrenhal.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 3294917592
+				},
+				{
+					"file_id": 222,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E06.The.Old.Gods.and.the.New.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 3149633093
+				},
+				{
+					"file_id": 223,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E07.A.Man.Without.Honor.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2964198961
+				},
+				{
+					"file_id": 224,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E08.The.Prince.of.Winterfell.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 2997488145
+				},
+				{
+					"file_id": 225,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E09.Blackwater.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 3042559920
+				},
+				{
+					"file_id": 226,
+					"path": "/Game.of.Thrones.S02.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S02E10.Valar.Morghulis.1080p.BluRay.HEVC.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 3539675487
+				},
+				{
+					"file_id": 227,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E01.Valar.Dohaeris.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4444314837
+				},
+				{
+					"file_id": 228,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E02.Dark.Wings.Dark.Words.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 5579608149
+				},
+				{
+					"file_id": 229,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E03.Walk.of.Punishment.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4336081052
+				},
+				{
+					"file_id": 230,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E04.And.Now.His.Watch.Is.Ended.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4305793557
+				},
+				{
+					"file_id": 231,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E05.Kissed.by.Fire.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4730440043
+				},
+				{
+					"file_id": 232,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E06.The.Climb.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4399944969
+				},
+				{
+					"file_id": 233,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E07.The.Bear.and.the.Maiden.Fair.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4875821176
+				},
+				{
+					"file_id": 234,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E08.Second.Sons.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4181783436
+				},
+				{
+					"file_id": 235,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E09.The.Rains.of.Castamere.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4095330837
+				},
+				{
+					"file_id": 236,
+					"path": "/Game.of.Thrones.S03.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S03E10.Mhysa.1080p.Bluray.10bit.x265.TrueHD.Atmos.7.1-UTR-HD.mkv",
+					"bytes": 4418847377
+				},
+				{
+					"file_id": 237,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E01.Two.Swords.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4537992164
+				},
+				{
+					"file_id": 238,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E02.The.Lion.and.the.Rose.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4834120744
+				},
+				{
+					"file_id": 239,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E03.Breaker.of.Chains.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4033611023
+				},
+				{
+					"file_id": 240,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E04.Oathkeeper.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4023346718
+				},
+				{
+					"file_id": 241,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E05.First.of.His.Name.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4088157404
+				},
+				{
+					"file_id": 242,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E06.The.Laws.of.Gods.and.Men.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4348201047
+				},
+				{
+					"file_id": 243,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E07.Mockingbird.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4150902252
+				},
+				{
+					"file_id": 244,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E08.The.Mountain.and.the.Viper.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4118929965
+				},
+				{
+					"file_id": 245,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E09.The.Watchers.On.the.Wall.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 4480820070
+				},
+				{
+					"file_id": 246,
+					"path": "/Game.of.Thrones.S04.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S04E10.The.Children.1080p.Bluray.HEVC.x265.TrueHD.Atmos.7.1-Absinth.mkv",
+					"bytes": 5226948386
+				},
+				{
+					"file_id": 247,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E01.The.Wars.to.Come.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 2672162200
+				},
+				{
+					"file_id": 248,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E02.The.House.of.Black.and.White.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3272497642
+				},
+				{
+					"file_id": 249,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E03.High.Sparrow.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3046034595
+				},
+				{
+					"file_id": 250,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E04.Sons.of.the.Harpy.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 2903986685
+				},
+				{
+					"file_id": 251,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E05.Kill.the.Boy.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 2726991297
+				},
+				{
+					"file_id": 252,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E06.Unbowed.Unbent.Unbroken.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 2731721186
+				},
+				{
+					"file_id": 253,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E07.The.Gift.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3024134059
+				},
+				{
+					"file_id": 254,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E08.Hardhome.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3403362413
+				},
+				{
+					"file_id": 255,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E09.The.Dance.of.Dragons.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3225567457
+				},
+				{
+					"file_id": 256,
+					"path": "/Game.of.Thrones.S05.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S05E10.Mother's.Mercy.S05E10.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Absinth.mkv",
+					"bytes": 3149521547
+				},
+				{
+					"file_id": 257,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E01.The.Red.Woman.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3946462930
+				},
+				{
+					"file_id": 258,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E02.Home.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3294679758
+				},
+				{
+					"file_id": 259,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E03.Oathbreaker.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3173718740
+				},
+				{
+					"file_id": 260,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E04.Book.of.the.Stranger.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3710146327
+				},
+				{
+					"file_id": 261,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E05.The.Door.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 4108145976
+				},
+				{
+					"file_id": 262,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E06.Blood.of.My.Blood.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3546956483
+				},
+				{
+					"file_id": 263,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E07.The.Broken.Man.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3974931754
+				},
+				{
+					"file_id": 264,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E08.No.One.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 3914762545
+				},
+				{
+					"file_id": 265,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E09.Battle...Bastards.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 4395366730
+				},
+				{
+					"file_id": 266,
+					"path": "/Game.of.Thrones.S06.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.Of.Thrones.S06E10.The.Winds.of.Winter.1080p.BluRay.HEVC.TrueHD.ATMOS.7.1-Qman.mkv",
+					"bytes": 4293167657
+				},
+				{
+					"file_id": 267,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E01.Dragonstone.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 3921558491
+				},
+				{
+					"file_id": 268,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E02.Stormborn.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 3799126944
+				},
+				{
+					"file_id": 269,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E03.Queen's.Justice.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 4561072758
+				},
+				{
+					"file_id": 270,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E04...Spoils.of.War.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 3871063241
+				},
+				{
+					"file_id": 271,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E05.Eastwatch.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 3935990462
+				},
+				{
+					"file_id": 272,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E06.Beyond...Wall.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 5372747599
+				},
+				{
+					"file_id": 273,
+					"path": "/Game.of.Thrones.S07.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S07E07...Dragon...Wolf.1080p.BluRay.x265.10bit.TrueHD.7.1-Aegon[UTR-HD].mkv",
+					"bytes": 5631747183
+				},
+				{
+					"file_id": 274,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E01.Winterfell.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 3593523811
+				},
+				{
+					"file_id": 275,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E02.A.Knight.of.the.Seven.Kingdoms.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 3602588501
+				},
+				{
+					"file_id": 276,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E03.The.Long.Night.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 5288111753
+				},
+				{
+					"file_id": 277,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E04.The.Last.of.the.Starks.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 4739300747
+				},
+				{
+					"file_id": 278,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E05.The.Bells.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 5791495691
+				},
+				{
+					"file_id": 279,
+					"path": "/Game.of.Thrones.S08.1080p.BluRay.HEVC.TrueHD.Atmos.7.1/Game.of.Thrones.S08E06.The.Iron.Throne.1080p.BluRay.x265.10bit.TrueHD.7.1-Balerion[UTR].mkv",
+					"bytes": 5126426340
+				}
+			]
+		},
+		{
+			"hash": "4526d31ce422a541d01548e193a886ecc079d0a6",
+			"title": "Game.of.Thrones.S01.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX",
+			"bytes": 24387919918,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 3042292834
+				},
+				{
+					"file_id": 2,
+					"path": "/Game.of.Thrones.S01E02.The.Kingsroad.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2717042122
+				},
+				{
+					"file_id": 3,
+					"path": "/Game.of.Thrones.S01E03.Lord.Snow.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2427563031
+				},
+				{
+					"file_id": 4,
+					"path": "/Game.of.Thrones.S01E04.Cripples.Bastards.and.Broken.Things.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2186208195
+				},
+				{
+					"file_id": 5,
+					"path": "/Game.of.Thrones.S01E05.The.Wolf.and.the.Lion.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2086777569
+				},
+				{
+					"file_id": 6,
+					"path": "/Game.of.Thrones.S01E06.A.Golden.Crown.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2325018360
+				},
+				{
+					"file_id": 7,
+					"path": "/Game.of.Thrones.S01E07.You.Win.or.You.Die.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2675153314
+				},
+				{
+					"file_id": 8,
+					"path": "/Game.of.Thrones.S01E08.The.Pointy.End.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2759579237
+				},
+				{
+					"file_id": 9,
+					"path": "/Game.of.Thrones.S01E09.Baelor.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 2270135120
+				},
+				{
+					"file_id": 10,
+					"path": "/Game.of.Thrones.S01E10.Fire.and.Blood.1080p.MAX.WEB-DL.DDP5.1.Atmos.H.264-FLUX.mkv",
+					"bytes": 1898150136
+				}
+			]
+		}
+	]
+}

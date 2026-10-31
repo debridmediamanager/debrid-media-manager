@@ -1,5 +1,7 @@
 import { checkCachedStatus } from '@/services/torbox';
+import gameOfThrones from '@/test/fixtures/sortByMedian/game-of-thrones-s01-2026-10-31.json';
 import tatami from '@/test/fixtures/sortByMedian/tatami-galaxy-s01-2026-10-31.json';
+import lastOfUs from '@/test/fixtures/sortByMedian/the-last-of-us-s02-2026-10-31.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	checkAvailability,
@@ -224,4 +226,44 @@ describe('missing fileSize backfill', () => {
 			'The.Tatami.Galaxy.S01.MULTI.VFF.1080p.BluRay.REMUX.LPCM.2.0.AVC-S0L0PURE',
 		]);
 	});
+
+	// Each first pack holds far more extras than episodes, so its plain median is an
+	// extra: 32 MB for the UTR complete series (episodes 3.5-5.5 GB) and 403 MB for
+	// MeM.GP (episodes 12-23 GB). The median of the season's largest N videos is the
+	// episode size.
+	it.each([
+		{ fixture: gameOfThrones, imdbId: 'tt0944947', episodes: 10 },
+		{ fixture: lastOfUs, imdbId: 'tt3581920', episodes: 7 },
+	])(
+		'ranks $imdbId packs on their largest $episodes videos, so extras do not sink them',
+		async ({ fixture, imdbId, episodes }) => {
+			mockCheckAvailability.mockResolvedValue({ available: fixture.available } as any);
+			const { setter, getState } = createStateHarness(
+				fixture.available.map((t) => ({
+					hash: t.hash,
+					title: t.title,
+					noVideos: false,
+					rdAvailable: false,
+					files: [],
+					fileSize: t.bytes / MB,
+					medianFileSize: 0,
+					biggestFileSize: 0,
+					videoCount: 0,
+				})) as any[]
+			);
+
+			await checkDatabaseAvailabilityRd(
+				'problem',
+				'solution',
+				imdbId,
+				fixture.available.map((t) => t.hash),
+				setter,
+				identity
+			);
+
+			expect(sortByMedian([...getState()], episodes).map((r) => r.title)).toEqual(
+				fixture.available.map((t) => t.title)
+			);
+		}
+	);
 });

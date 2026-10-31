@@ -4,7 +4,15 @@ import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
 import { reporterIdFor } from '@/utils/reporterId';
-import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
+import {
+	borderColor,
+	btnColor,
+	btnIcon,
+	btnLabel,
+	episodeSize,
+	fileSize,
+	totalFileSize,
+} from '@/utils/results';
 import {
 	getBiggestVideoFile,
 	openWatch,
@@ -50,6 +58,8 @@ const addButtonClass = (avail: boolean, noVideos: boolean) =>
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
 	expectedEpisodeCount: number;
+	// The season's real episode count, 0 when unknown (see episodeSize).
+	seasonEpisodes?: number;
 	onlyShowCached: boolean;
 	episodeMaxSize: string;
 	rdKey: string | null;
@@ -112,6 +122,7 @@ type TvSearchResultsProps = {
 const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	filteredResults,
 	expectedEpisodeCount,
+	seasonEpisodes = 0,
 	onlyShowCached,
 	episodeMaxSize,
 	rdKey,
@@ -465,7 +476,10 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							return null;
 						if (
 							episodeMaxSize !== '0' &&
-							(r.medianFileSize ?? r.fileSize) > parseFloat(episodeMaxSize) * 1024 &&
+							(r.medianFileSize
+								? episodeSize(r, seasonEpisodes)
+								: (r.medianFileSize ?? r.fileSize)) >
+								parseFloat(episodeMaxSize) * 1024 &&
 							!inYourLibrary
 						)
 							return null;
@@ -543,11 +557,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											/>
 											<span
 												className="ml-2"
-												title={`Total: ${fileSize(totalFileSize(r))} GB; Median: ${fileSize(r.medianFileSize)} GB per episode`}
+												title={`Total: ${fileSize(totalFileSize(r))} GB; Median: ${fileSize(episodeSize(r, seasonEpisodes))} GB per episode`}
 											>
 												{fileSize(totalFileSize(r))} GB
 												{r.videoCount > 1 &&
-													` · ${fileSize(r.medianFileSize)} GB/ep`}
+													` · ${fileSize(episodeSize(r, seasonEpisodes))} GB/ep`}
 												{r.trackerStats &&
 													!r.rdAvailable &&
 													!r.adAvailable &&

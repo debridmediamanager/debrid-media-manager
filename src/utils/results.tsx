@@ -1,4 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
+import { isVideo } from '@/utils/selectable';
 import { Download, Zap } from 'lucide-react';
 
 export const borderColor = (downloaded: boolean, downloading: boolean) =>
@@ -97,6 +98,23 @@ const medianVideoSize = (result: SearchResult) => {
 };
 
 /**
+ * The episode size of a cached season pack, in MB: the median of its largest
+ * `episodes` videos. A pack can hold more extras than episodes, and then its plain
+ * median is an extra (32 MB for a Game of Thrones complete series whose episodes
+ * are 3.5-5.5 GB). With no episode count, or no more videos than episodes, it is
+ * the median of every video.
+ */
+export const episodeSize = (result: SearchResult, episodes = 0) => {
+	const videos = (result.files ?? [])
+		.filter((f) => isVideo({ path: f.filename }))
+		.map((f) => f.filesize / 1024 / 1024)
+		.sort((a, b) => b - a);
+	if (episodes <= 0 || videos.length <= episodes) return medianVideoSize(result);
+	const mid = Math.floor(episodes / 2);
+	return episodes % 2 ? videos[mid] : (videos[mid - 1] + videos[mid]) / 2;
+};
+
+/**
  * Cached rows come first, then uncached, both biggest to smallest.
  *
  * The two groups rank on different measures on purpose: a cached row is one the
@@ -117,9 +135,10 @@ const compareBySize = (
 	return sizeOf(b) - sizeOf(a);
 };
 
-export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
+export const sortByMedian = (searchResults: SearchResult[], episodes = 0): SearchResult[] => {
+	const sizes = new Map(searchResults.map((r) => [r, episodeSize(r, episodes)]));
 	searchResults.sort((a, b) => {
-		const bySize = compareBySize(a, b, medianVideoSize);
+		const bySize = compareBySize(a, b, (r) => sizes.get(r)!);
 		if (bySize !== 0) return bySize;
 
 		// If sizes are equal, sort by video count

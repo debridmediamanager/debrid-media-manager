@@ -1,0 +1,209 @@
+{
+	"_source": "DMM's Available/AvailableFile rows for The Last of Us season 2 (tt3581920), whose page counts 7 episodes, read from dmmdb on 2026-10-31; files are exactly what /api/availability/check answers for these hashes",
+	"available": [
+		{
+			"hash": "0f2aa1c80c74cc324bd0e23410afa76cf8341ffd",
+			"title": "The.Last.Of.Us.S02.2160p.UHD.BluRay.x265-MeM.GP",
+			"bytes": 137081979458,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/The.last.of.Us.S02E04.Giorno.Uno.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 23980801169
+				},
+				{
+					"file_id": 2,
+					"path": "/The.last.of.Us.S02E02.Through.the.Valley.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 15661338529
+				},
+				{
+					"file_id": 3,
+					"path": "/The.last.of.Us.S02E03.Il.Percorso.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 12915088994
+				},
+				{
+					"file_id": 4,
+					"path": "/The.last.of.Us.S02E01.Giorni.Futuri.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 14096809249
+				},
+				{
+					"file_id": 5,
+					"path": "/The.last.of.Us.S02E05.Accogli.il.suo.amore.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 18910824617
+				},
+				{
+					"file_id": 6,
+					"path": "/The.last.of.Us.S02E06.Il.Prezzo.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 23808000750
+				},
+				{
+					"file_id": 7,
+					"path": "/The.last.of.Us.S02E07.Convergenza.ITA.ENG.2160p.UHD.Bluray.x265-MeM.GP.mkv",
+					"bytes": 19834429677
+				},
+				{
+					"file_id": 8,
+					"path": "/Extra.Disc1/Battle.of.Jackson,.Deconstructed.mkv",
+					"bytes": 687706791
+				},
+				{
+					"file_id": 9,
+					"path": "/Extra.Disc1/Growing.the.World.of.The.Last.of.Us.mkv",
+					"bytes": 132552028
+				},
+				{
+					"file_id": 10,
+					"path": "/Extra.Disc1/Making.of.The.Last.of.Us.S02E01.mkv",
+					"bytes": 422592040
+				},
+				{
+					"file_id": 11,
+					"path": "/Extra.Disc1/Making.of.The.Last.of.Us.S02E02.mkv",
+					"bytes": 509012606
+				},
+				{
+					"file_id": 12,
+					"path": "/Extra.Disc1/Making.of.The.Last.of.Us.S02E03.mkv",
+					"bytes": 578519736
+				},
+				{
+					"file_id": 13,
+					"path": "/Extra.Disc1/Welcome.to.Jackson.(Set.Tour).mkv",
+					"bytes": 180699282
+				},
+				{
+					"file_id": 14,
+					"path": "/Extra.Disc2/Character.Featurettes.Abby.mkv",
+					"bytes": 50822440
+				},
+				{
+					"file_id": 15,
+					"path": "/Extra.Disc2/Character.Featurettes.Dina.mkv",
+					"bytes": 39778815
+				},
+				{
+					"file_id": 16,
+					"path": "/Extra.Disc2/Character.Featurettes.Ellie.mkv",
+					"bytes": 36014706
+				},
+				{
+					"file_id": 17,
+					"path": "/Extra.Disc2/Character.Featurettes.Joel.mkv",
+					"bytes": 35832196
+				},
+				{
+					"file_id": 18,
+					"path": "/Extra.Disc2/Ellie.s.Journey.to.Season.2.mkv",
+					"bytes": 160464805
+				},
+				{
+					"file_id": 19,
+					"path": "/Extra.Disc2/Joel.s.Journey.to.Season.2.mkv",
+					"bytes": 183761922
+				},
+				{
+					"file_id": 20,
+					"path": "/Extra.Disc2/Making.of.The.Last.of.Us.S02E04.mkv",
+					"bytes": 544176788
+				},
+				{
+					"file_id": 21,
+					"path": "/Extra.Disc2/Making.of.The.Last.of.Us.S02E05.mkv",
+					"bytes": 387886067
+				},
+				{
+					"file_id": 22,
+					"path": "/Extra.Disc2/Mushroom.Taste.Test.mkv",
+					"bytes": 158948030
+				},
+				{
+					"file_id": 23,
+					"path": "/Extra.Disc3/Beneath.the.Surface.The.Visual.FX.of.The.Last.of.Us.mkv",
+					"bytes": 917471933
+				},
+				{
+					"file_id": 24,
+					"path": "/Extra.Disc3/Camera.Roll.Bella.Ramsey.Isabela.Merced.&.Young.Mazino.mkv",
+					"bytes": 95566158
+				},
+				{
+					"file_id": 25,
+					"path": "/Extra.Disc3/Ellie.s.Path.mkv",
+					"bytes": 745483463
+				},
+				{
+					"file_id": 26,
+					"path": "/Extra.Disc3/In.Action.mkv",
+					"bytes": 315873283
+				},
+				{
+					"file_id": 27,
+					"path": "/Extra.Disc3/Making.of.The.Last.of.Us.S02E06.mkv",
+					"bytes": 503673234
+				},
+				{
+					"file_id": 28,
+					"path": "/Extra.Disc3/Making.of.The.Last.of.Us.S02E07.mkv",
+					"bytes": 607168730
+				},
+				{
+					"file_id": 29,
+					"path": "/Extra.Disc3/Open.Book.Isabela.Merced.and.Young.Mazino.mkv",
+					"bytes": 191988050
+				},
+				{
+					"file_id": 30,
+					"path": "/Extra.Disc3/Pedro.and.Bella.Q&A.mkv",
+					"bytes": 229428925
+				},
+				{
+					"file_id": 31,
+					"path": "/Extra.Disc3/Stalker.Showdown.Deconstructed.mkv",
+					"bytes": 159264445
+				}
+			]
+		},
+		{
+			"hash": "828f6e0e58b6d09acca9919ee0c78645d101a4d2",
+			"title": "The.Last.of.Us.S02.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX",
+			"bytes": 62000403309,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/The.Last.of.Us.S02E01.Future.Days.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 9686455945
+				},
+				{
+					"file_id": 2,
+					"path": "/The.Last.of.Us.S02E02.Through.the.Valley.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 9292479026
+				},
+				{
+					"file_id": 3,
+					"path": "/The.Last.of.Us.S02E03.The.Path.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 9243814744
+				},
+				{
+					"file_id": 4,
+					"path": "/The.Last.of.Us.S02E04.Day.One.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 8696042654
+				},
+				{
+					"file_id": 5,
+					"path": "/The.Last.of.Us.S02E05.Feel.Her.Love.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 7268027454
+				},
+				{
+					"file_id": 6,
+					"path": "/The.Last.of.Us.S02E06.The.Price.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 9737583785
+				},
+				{
+					"file_id": 7,
+					"path": "/The.Last.of.Us.S02E07.Convergence.2160p.MAX.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX.mkv",
+					"bytes": 8075999701
+				}
+			]
+		}
+	]
+}

@@ -203,6 +203,17 @@ const AnimePage: FunctionComponent = () => {
 		setSearchResults
 	);
 
+	// AniDB's episode count, 0 while unknown: a cached pack ranks on its largest that
+	// many videos (see episodeSize). Read through a ref so a running search sorts by
+	// the count that arrives beside it.
+	const animeEpisodes = info?.episodeCount ?? 0;
+	const animeEpisodesRef = useRef(animeEpisodes);
+	animeEpisodesRef.current = animeEpisodes;
+	const sortPacks = useCallback(
+		(results: SearchResult[]) => sortByMedian(results, animeEpisodesRef.current),
+		[]
+	);
+
 	const {
 		isAnyChecking,
 		isHashServiceChecking,
@@ -223,7 +234,7 @@ const AnimePage: FunctionComponent = () => {
 		addAd,
 		deleteRd,
 		deleteAd,
-		sortByMedian
+		sortPacks
 	);
 
 	useEffect(() => {
@@ -293,7 +304,7 @@ const AnimePage: FunctionComponent = () => {
 		const keepOrder = (results: SearchResult[]) => results;
 		const finish = () => {
 			if (pendingChecks > 0 || !isMounted.current) return;
-			setSearchResults((prev) => sortByMedian([...prev]));
+			setSearchResults((prev) => sortPacks([...prev]));
 			const total = cached.rd + cached.ad + cached.tb + cached.pm + cached.oc;
 			if (total > 0) {
 				const parts = (
@@ -359,7 +370,7 @@ const AnimePage: FunctionComponent = () => {
 						(r) => r.hash && !seen.has(r.hash) && hasSubstantialTitle(r.title)
 					);
 					hashesToCheck = fresh.map((r) => r.hash);
-					const next = fresh.length > 0 ? [...prev, ...sortByMedian(fresh)] : prev;
+					const next = fresh.length > 0 ? [...prev, ...sortPacks(fresh)] : prev;
 					resultCount = next.length;
 					// Availability is not in yet, so only a TB transfer can keep a blocked row
 					hiddenCount = hideRdBlockedTorrents
@@ -850,6 +861,7 @@ const AnimePage: FunctionComponent = () => {
 			<TvSearchResults
 				filteredResults={filteredResults}
 				expectedEpisodeCount={expectedEpisodeCount}
+				seasonEpisodes={animeEpisodes}
 				onlyShowCached={false}
 				episodeMaxSize={episodeMaxSize}
 				rdKey={rdKey}

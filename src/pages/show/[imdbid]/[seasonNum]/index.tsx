@@ -314,6 +314,16 @@ const TvSearch: FunctionComponent = () => {
 	const torrentsAsked = !usenetTab && router.query.tab === 'torrents';
 	const seasonLinkSuffix = torrentsAsked ? '?tab=torrents' : tabSuffix;
 	const { imdbid, seasonNum } = router.query;
+	// The season's real episode count, 0 while unknown: a cached pack ranks on its
+	// largest that many videos (see episodeSize). Read through a ref because
+	// fetchData keeps the sort it started with while the show info loads beside it.
+	const seasonEpisodes = showInfo?.season_episode_counts?.[Number(seasonNum)] ?? 0;
+	const seasonEpisodesRef = useRef(seasonEpisodes);
+	seasonEpisodesRef.current = seasonEpisodes;
+	const sortPacks = useCallback(
+		(results: SearchResult[]) => sortByMedian(results, seasonEpisodesRef.current),
+		[]
+	);
 	useEffect(
 		() => () => {
 			episodeSummaryGeneration.current++;
@@ -456,7 +466,7 @@ const TvSearch: FunctionComponent = () => {
 		addAd,
 		deleteRd,
 		deleteAd,
-		sortByMedian
+		sortPacks
 	);
 
 	const reporterKeys = {
@@ -842,7 +852,7 @@ const TvSearch: FunctionComponent = () => {
 			if (!allSourcesCompleted || pendingAvailabilityChecks > 0) return;
 
 			toastShown = true;
-			setSearchResults((prev) => sortByMedian([...prev]));
+			setSearchResults((prev) => sortPacks([...prev]));
 			setSearchCompleteInfo({
 				finalResults: finalResultCount,
 				totalAvailableCount:
@@ -906,7 +916,7 @@ const TvSearch: FunctionComponent = () => {
 
 					// Rows already on screen keep their place while the search runs;
 					// the whole list is sorted once, when every check is in (#370)
-					const sorted = [...prevResults, ...sortByMedian(newUniqueResults)];
+					const sorted = [...prevResults, ...sortPacks(newUniqueResults)];
 
 					hashesToCheck = newUniqueResults
 						.filter(
@@ -2335,6 +2345,7 @@ const TvSearch: FunctionComponent = () => {
 					<TvSearchResults
 						filteredResults={filteredResults}
 						expectedEpisodeCount={expectedEpisodeCount}
+						seasonEpisodes={seasonEpisodes}
 						onlyShowCached={onlyShowCached}
 						episodeMaxSize={episodeMaxSize}
 						rdKey={rdKey}
