@@ -96,6 +96,13 @@ export const RATE_LIMIT_CONFIGS = {
 	// rex's start-up pass reads one season list per season of each show it places.
 	metadata: { name: 'metadata', rateLimit: 300, windowSeconds: 60 },
 	zurgAdmin: { name: 'zurgAdmin', rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
+	// Kodi pairing (/api/kodi/*). A household's Kodis share one address, so starting
+	// a pairing allows a few per minute. Approving is where a code could be guessed,
+	// so it is the tight one: 8 characters of 31 is ~8.5e11 codes alive 10 minutes.
+	// Polling runs every 3 s while the code is on screen.
+	kodiPair: { name: 'kodiPair', rateLimit: 10, windowSeconds: 600 },
+	kodiApprove: { name: 'kodiApprove', rateLimit: 10, windowSeconds: 60 },
+	kodiPoll: { name: 'kodiPoll', rateLimit: 40, windowSeconds: 60 },
 	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Every miss spends a grab from the one indexer account the whole site shares,
 	// so this is paced like a stream rather than like a page fetch.

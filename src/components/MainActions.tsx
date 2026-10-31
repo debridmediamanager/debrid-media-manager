@@ -1,6 +1,6 @@
 import { RealDebridUser } from '@/hooks/auth';
 import { TorBoxUser } from '@/services/types';
-import { BookOpen, HandHeart, Music2, Rocket, Send, Sparkles } from 'lucide-react';
+import { BookOpen, HandHeart, Music2, Rocket, Send, Sparkles, Tv } from 'lucide-react';
 import Link from 'next/link';
 
 interface MainActionsProps {
@@ -176,6 +176,16 @@ export function MainActions({
 						</Link>
 					))}
 				</div>
+			)}
+
+			{castButtons.length > 0 && (
+				<Link
+					href="/kodi"
+					className="haptic flex items-center justify-center gap-2 rounded border-2 border-gray-500 bg-gray-800/30 p-2 text-sm text-gray-100 transition-colors hover:bg-gray-700/50"
+				>
+					<Tv className="h-4 w-4 text-gray-400" />
+					Watch in Kodi
+				</Link>
 			)}
 
 			{/* Transfers and Requests share a row. Transfers is where a Real-Debrid
