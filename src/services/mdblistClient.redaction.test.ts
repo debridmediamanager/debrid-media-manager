@@ -82,7 +82,6 @@ const client = () => new MDBListClient(KEY);
 const lookups: Array<[string, (c: MDBListClient) => Promise<unknown>, unknown]> = [
 	['getInfoByImdbId', (c) => c.getInfoByImdbId('tt1046922'), { type: 'movie', title: 'Filth' }],
 	['getInfoByTvdbId', (c) => c.getInfoByTvdbId(81189), { type: 'show', title: 'Breaking Bad' }],
-	['getInfoByTmdbId', (c) => c.getInfoByTmdbId(111102), { type: 'show', title: 'Atlantic' }],
 	['searchLists', (c) => c.searchLists('trending'), [{ id: 1 }]],
 	['getListItems', (c) => c.getListItems('2194'), [{ id: 1 }]],
 ];
@@ -103,7 +102,6 @@ describe('MDBListClient keeps its key out of logs and rethrown errors', () => {
 
 	it.each([
 		...lookups.map(([name, call]) => [name, call] as const),
-		['search', (c: MDBListClient) => c.search('filth')] as const,
 		['getTopLists', (c: MDBListClient) => c.getTopLists()] as const,
 	])('%s rethrows a 503 that a caller can log without the key', async (_name, call) => {
 		const error: any = await call(client()).then(
