@@ -1,0 +1,525 @@
+{
+	"capturedAt": "2026-10-31T07:04:03Z",
+	"sponsors": [
+		{
+			"count": 5000,
+			"since": "2026-10-27T15:29:27.818Z",
+			"lastPolledAt": "2026-10-31T07:03:52.983Z"
+		},
+		{
+			"count": 5000,
+			"since": "2026-10-30T18:31:54.173Z",
+			"lastPolledAt": "2026-10-31T07:03:06.612Z"
+		},
+		{
+			"count": 1800,
+			"since": "2026-10-27T00:46:34.588Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1273,
+			"since": "2026-10-25T11:53:39.091Z",
+			"lastPolledAt": "2026-10-31T07:03:29.539Z"
+		},
+		{
+			"count": 1211,
+			"since": "2026-10-29T00:24:28.052Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1094,
+			"since": "2026-10-24T20:39:25.349Z",
+			"lastPolledAt": "2026-10-30T20:57:15.837Z"
+		},
+		{
+			"count": 633,
+			"since": "2026-10-26T01:33:15.399Z",
+			"lastPolledAt": "2026-10-31T07:03:37.966Z"
+		},
+		{
+			"count": 195,
+			"since": "2026-10-24T20:20:48.527Z",
+			"lastPolledAt": "2026-10-31T07:03:16.551Z"
+		},
+		{
+			"count": 96,
+			"since": "2026-10-25T23:06:36.803Z",
+			"lastPolledAt": "2026-10-31T07:03:53.357Z"
+		},
+		{
+			"count": 86,
+			"since": "2026-10-25T14:14:00.477Z",
+			"lastPolledAt": "2026-10-31T07:03:21.057Z"
+		},
+		{
+			"count": 70,
+			"since": "2026-10-24T23:21:54.183Z",
+			"lastPolledAt": "2026-10-31T07:04:02.482Z"
+		},
+		{
+			"count": 63,
+			"since": "2026-10-26T15:20:08.259Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 39,
+			"since": "2026-10-26T23:55:05.175Z",
+			"lastPolledAt": "2026-10-31T07:03:19.301Z"
+		},
+		{
+			"count": 38,
+			"since": "2026-10-24T20:29:01.113Z",
+			"lastPolledAt": "2026-10-31T07:03:48.984Z"
+		},
+		{
+			"count": 35,
+			"since": "2026-10-29T14:38:44.170Z",
+			"lastPolledAt": "2026-10-31T07:04:02.421Z"
+		},
+		{
+			"count": 31,
+			"since": "2026-10-30T10:21:49.095Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 31,
+			"since": "2026-10-29T14:02:27.750Z",
+			"lastPolledAt": "2026-10-31T07:03:48.248Z"
+		},
+		{
+			"count": 24,
+			"since": "2026-10-24T22:37:24.206Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 23,
+			"since": "2026-10-25T01:30:25.058Z",
+			"lastPolledAt": "2026-10-31T07:03:32.142Z"
+		},
+		{
+			"count": 22,
+			"since": "2026-10-25T09:24:06.749Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 21,
+			"since": "2026-10-25T01:39:04.650Z",
+			"lastPolledAt": "2026-10-31T07:03:37.833Z"
+		},
+		{
+			"count": 19,
+			"since": "2026-10-28T21:55:12.995Z",
+			"lastPolledAt": "2026-10-31T07:03:14.972Z"
+		},
+		{
+			"count": 18,
+			"since": "2026-10-25T04:04:44.678Z",
+			"lastPolledAt": "2026-10-31T07:03:27.682Z"
+		},
+		{
+			"count": 16,
+			"since": "2026-10-31T00:04:18.284Z",
+			"lastPolledAt": "2026-10-31T07:03:02.728Z"
+		},
+		{
+			"count": 12,
+			"since": "2026-10-29T13:47:05.008Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 11,
+			"since": "2026-10-27T21:31:01.787Z",
+			"lastPolledAt": "2026-10-31T07:03:46.908Z"
+		},
+		{
+			"count": 10,
+			"since": "2026-10-27T23:30:03.833Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 9,
+			"since": "2026-10-25T15:28:14.948Z",
+			"lastPolledAt": "2026-10-31T07:03:18.764Z"
+		},
+		{
+			"count": 8,
+			"since": "2026-10-27T13:24:40.191Z",
+			"lastPolledAt": "2026-10-31T07:03:20.774Z"
+		},
+		{
+			"count": 7,
+			"since": "2026-10-25T10:29:38.193Z",
+			"lastPolledAt": "2026-10-31T07:03:21.890Z"
+		},
+		{
+			"count": 7,
+			"since": "2026-10-26T17:14:29.615Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 7,
+			"since": "2026-10-26T05:43:46.661Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 6,
+			"since": "2026-10-25T13:09:58.186Z",
+			"lastPolledAt": "2026-10-31T07:03:03.531Z"
+		},
+		{
+			"count": 6,
+			"since": "2026-10-27T08:35:56.845Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 5,
+			"since": "2026-10-25T08:08:15.252Z",
+			"lastPolledAt": "2026-10-31T07:03:32.430Z"
+		},
+		{
+			"count": 5,
+			"since": "2026-10-24T18:11:24.183Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 5,
+			"since": "2026-10-29T23:44:33.782Z",
+			"lastPolledAt": "2026-10-31T07:03:52.542Z"
+		},
+		{
+			"count": 5,
+			"since": "2026-10-25T02:34:01.579Z",
+			"lastPolledAt": "2026-10-28T06:17:17.069Z"
+		},
+		{
+			"count": 5,
+			"since": "2026-10-31T01:15:23.170Z",
+			"lastPolledAt": "2026-10-31T05:58:16.761Z"
+		},
+		{
+			"count": 4,
+			"since": "2026-10-24T22:59:04.622Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 4,
+			"since": "2026-10-25T13:03:06.234Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 4,
+			"since": "2026-10-25T18:53:18.912Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 4,
+			"since": "2026-10-30T21:19:51.324Z",
+			"lastPolledAt": "2026-10-31T03:15:41.406Z"
+		},
+		{
+			"count": 3,
+			"since": "2026-10-28T11:05:58.278Z",
+			"lastPolledAt": "2026-10-31T07:03:16.218Z"
+		},
+		{
+			"count": 3,
+			"since": "2026-10-25T07:21:23.172Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 3,
+			"since": "2026-10-25T01:43:35.962Z",
+			"lastPolledAt": "2026-10-31T07:03:20.142Z"
+		},
+		{
+			"count": 3,
+			"since": "2026-10-25T13:03:22.653Z",
+			"lastPolledAt": "2026-10-31T07:03:46.283Z"
+		},
+		{
+			"count": 3,
+			"since": "2026-10-29T19:23:24.872Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-28T00:54:19.810Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-24T20:40:53.769Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-26T10:43:37.661Z",
+			"lastPolledAt": "2026-10-31T07:03:29.939Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-28T23:56:51.126Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-30T22:06:00.094Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-25T00:17:02.661Z",
+			"lastPolledAt": "2026-10-31T07:03:31.972Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-31T02:54:22.476Z",
+			"lastPolledAt": "2026-10-31T07:03:47.166Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-25T02:47:41.370Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-25T04:46:41.800Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-25T11:43:14.038Z",
+			"lastPolledAt": "2026-10-31T07:01:53.655Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-27T19:17:06.251Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-31T01:34:19.973Z",
+			"lastPolledAt": "2026-10-31T07:03:49.016Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-24T15:32:40.766Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-25T02:43:29.189Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 2,
+			"since": "2026-10-28T14:17:23.131Z",
+			"lastPolledAt": "2026-10-31T07:03:52.390Z"
+		},
+		{
+			"count": 2,
+			"since": "2026-10-26T21:48:48.027Z",
+			"lastPolledAt": "2026-10-31T07:03:40.853Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T17:03:40.325Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T03:47:37.068Z",
+			"lastPolledAt": "2026-10-31T07:03:18.611Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T01:43:25.266Z",
+			"lastPolledAt": "2026-10-31T07:03:15.851Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T09:59:11.484Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-24T20:51:18.010Z",
+			"lastPolledAt": "2026-10-25T07:17:25.477Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T22:41:03.529Z",
+			"lastPolledAt": "2026-10-31T07:03:29.948Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T05:07:46.960Z",
+			"lastPolledAt": "2026-10-31T07:03:42.634Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T16:25:09.338Z",
+			"lastPolledAt": "2026-10-31T07:03:52.218Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T21:51:56.444Z",
+			"lastPolledAt": "2026-10-31T07:03:12.747Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-29T03:12:54.775Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T07:20:52.096Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-29T16:39:23.973Z",
+			"lastPolledAt": "2026-10-31T04:27:57.144Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T14:51:10.292Z",
+			"lastPolledAt": "2026-10-31T07:03:40.562Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-30T08:50:39.048Z",
+			"lastPolledAt": "2026-10-31T07:03:49.041Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T01:35:31.244Z",
+			"lastPolledAt": "2026-10-31T07:00:41.537Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T22:44:52.603Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T11:42:50.274Z",
+			"lastPolledAt": "2026-10-31T07:03:18.549Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T00:39:10.213Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-27T20:19:13.612Z",
+			"lastPolledAt": "2026-10-31T07:03:32.462Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T20:51:33.914Z",
+			"lastPolledAt": "2026-10-31T07:03:25.971Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T16:16:53.195Z",
+			"lastPolledAt": "2026-10-31T07:03:34.889Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T11:23:23.001Z",
+			"lastPolledAt": "2026-10-31T07:03:48.848Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-30T20:45:23.466Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T09:47:03.621Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-28T08:23:41.443Z",
+			"lastPolledAt": "2026-10-31T07:03:02.251Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-24T20:42:14.860Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T11:26:11.981Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T02:00:20.557Z",
+			"lastPolledAt": "2026-10-31T07:03:47.232Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T20:50:51.208Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T10:24:01.951Z",
+			"lastPolledAt": "2026-10-31T07:03:19.827Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-31T06:46:11.225Z",
+			"lastPolledAt": "2026-10-31T07:03:35.184Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T16:49:08.372Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T22:05:25.289Z",
+			"lastPolledAt": "2026-10-31T07:03:48.862Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T11:46:57.312Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-31T04:33:06.773Z",
+			"lastPolledAt": null
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T20:38:47.850Z",
+			"lastPolledAt": "2026-10-31T07:03:22.289Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-29T01:22:24.132Z",
+			"lastPolledAt": "2026-10-31T07:03:47.484Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-29T20:15:52.288Z",
+			"lastPolledAt": "2026-10-31T07:03:52.495Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-25T08:26:08.838Z",
+			"lastPolledAt": "2026-10-31T07:02:52.619Z"
+		},
+		{
+			"count": 1,
+			"since": "2026-10-26T13:02:08.927Z",
+			"lastPolledAt": null
+		}
+	]
+}

@@ -1642,6 +1642,10 @@ export class Repository {
 		return this.wantedItemsService.markFulfilled(shortId, id, fulfilled, band);
 	}
 
+	public wantedSummary(shortId: string) {
+		return this.wantedItemsService.summary(shortId);
+	}
+
 	public touchWantedPolled(shortId: string) {
 		return this.wantedItemsService.touchPolled(shortId);
 	}

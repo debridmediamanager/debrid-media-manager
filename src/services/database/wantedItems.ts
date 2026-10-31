@@ -181,6 +181,23 @@ export class WantedItemsService extends DatabaseClient {
 		return true;
 	}
 
+	/** How many titles are wanted, since when, and when a zurg last read the list. */
+	public async summary(
+		shortId: string
+	): Promise<{ count: number; since: Date | null; lastPolledAt: Date | null }> {
+		const r = await this.prisma.wantedItem.aggregate({
+			where: { shortId },
+			_count: { _all: true },
+			_min: { createdAt: true },
+			_max: { lastPolledAt: true },
+		});
+		return {
+			count: r._count._all,
+			since: r._min.createdAt ?? null,
+			lastPolledAt: r._max.lastPolledAt ?? null,
+		};
+	}
+
 	/** Records that the sponsor's zurg read the list, for the page's "last checked". */
 	public async touchPolled(shortId: string): Promise<void> {
 		await this.prisma.wantedItem.updateMany({

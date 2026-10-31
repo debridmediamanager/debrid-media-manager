@@ -6,6 +6,7 @@ import type { WantedImportResponse } from '@/pages/api/wanted/import';
 import type { WantedListResponse } from '@/pages/api/wanted/lists';
 import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
+import { WANTED_GUIDE_URL, wantedUnread } from '@/utils/wantedUnread';
 import { deflatedZipMember } from '@/utils/zipEntry';
 import {
 	BookmarkCheck,
@@ -222,6 +223,14 @@ export default function WantedPage() {
 		.filter((d): d is string => !!d)
 		.sort()
 		.at(-1);
+	const unread =
+		items && items.length > 0
+			? wantedUnread({
+					count: items.length,
+					since: items.map((i) => i.createdAt).sort()[0],
+					lastPolledAt: lastPolled ?? null,
+				})
+			: null;
 	const ofKind = items?.filter((i) => i.kind === tab);
 	const needle = query.trim().toLowerCase();
 	const shown = ofKind
@@ -282,8 +291,26 @@ export default function WantedPage() {
 					</div>
 				) : (
 					<>
-						{/* Only a list zurg never read needs words: zurg is not set up yet. */}
-						{lastPolled ? (
+						{/* A day unread is a warning with the guide; before that, a hint. */}
+						{items && unread ? (
+							<div
+								role="alert"
+								className="mb-3 rounded border-2 border-amber-500 bg-amber-900/30 p-3 text-xs text-amber-50"
+							>
+								<b>Nothing on this list is being fetched.</b>{' '}
+								{unread.never
+									? 'No zurg has read it yet.'
+									: `zurg last read it ${timeAgo(unread.lastPolledAt)}.`}{' '}
+								<a
+									href={WANTED_GUIDE_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline hover:text-white"
+								>
+									Set up zurg for your wanted list
+								</a>
+							</div>
+						) : lastPolled ? (
 							<p className="mb-3 text-xs text-gray-400" title={when(lastPolled)}>
 								zurg read it {timeAgo(lastPolled)}
 							</p>
@@ -292,7 +319,15 @@ export default function WantedPage() {
 								<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
 									Your zurg has not read this list yet. Put your DMM API key in
 									zurg&apos;s <code>config.yml</code> as <code>dmm_api_key</code>{' '}
-									and it reads the list about once a minute.
+									and it reads the list about once a minute.{' '}
+									<a
+										href={WANTED_GUIDE_URL}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="underline hover:text-white"
+									>
+										The guide
+									</a>
 								</div>
 							)
 						)}

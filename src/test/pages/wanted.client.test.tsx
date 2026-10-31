@@ -32,6 +32,9 @@ const film = {
 	lastPolledAt: null,
 };
 
+/** Added an hour ago: a list in its first day, which gets no warning yet. */
+const fresh = { ...film, createdAt: new Date(Date.now() - 3_600_000).toISOString() };
+
 /** `/api/wanted/lists`: the Trakt and MDBList lists followed, none unless given. */
 const listsAnswer = (lists: unknown[] = []) => new Response(JSON.stringify({ lists }));
 
@@ -53,7 +56,7 @@ describe('/wanted', () => {
 		global.fetch = vi.fn(async (url: string) =>
 			url === '/api/wanted/lists'
 				? listsAnswer()
-				: new Response(JSON.stringify({ items: [film] }))
+				: new Response(JSON.stringify({ items: [fresh] }))
 		) as any;
 		render(<WantedPage />);
 		expect(await screen.findByText('The Matrix')).toBeInTheDocument();
@@ -69,9 +72,9 @@ describe('/wanted', () => {
 						JSON.stringify({
 							items: [
 								{
-									...film,
+									...fresh,
 									fulfilledAt: '2026-10-24T11:00:00Z',
-									lastPolledAt: '2026-10-24T11:05:00Z',
+									lastPolledAt: new Date(Date.now() - 60_000).toISOString(),
 								},
 							],
 						})
@@ -80,6 +83,24 @@ describe('/wanted', () => {
 		render(<WantedPage />);
 		expect(await screen.findByText(/^fetched /)).toBeInTheDocument();
 		expect(screen.getByText(/^zurg read it /)).toBeInTheDocument();
+		expect(screen.queryByRole('alert')).toBeNull();
+	});
+
+	// A day with no zurg reading it: nothing is being fetched, and the guide says
+	// how to change that.
+	it('warns, with the guide, once the list has gone a day unread', async () => {
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(JSON.stringify({ items: [film] }))
+		) as any;
+		render(<WantedPage />);
+		const alert = await screen.findByRole('alert');
+		expect(alert).toHaveTextContent(/nothing on this list is being fetched/i);
+		expect(alert).toHaveTextContent(/no zurg has read it yet/i);
+		expect(
+			screen.getByRole('link', { name: /set up zurg for your wanted list/i })
+		).toHaveAttribute('href', 'https://notes.debridmediamanager.com/zurg/guides/dmm-wanted/');
 	});
 
 	it('names the release zurg took and the resolution it still waits for', async () => {

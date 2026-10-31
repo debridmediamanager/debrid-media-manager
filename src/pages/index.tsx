@@ -6,6 +6,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
 import { SiteLinks } from '@/components/SiteLinks';
 import { TraktSection } from '@/components/TraktSection';
+import { WantedUnreadBanner } from '@/components/WantedUnreadBanner';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
@@ -285,6 +286,7 @@ function IndexPage() {
 						<h1 className="text-xl font-bold text-white">Debrid Media Manager</h1>
 					</div>
 
+					<WantedUnreadBanner />
 					<ZurgBanner />
 
 					{/* Search Bar */}
