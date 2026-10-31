@@ -2,6 +2,7 @@ import handler from '@/pages/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeCastGrant } from '@/test/utils/sponsor';
+import { parseSavedLinkMetaId, savedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -105,6 +106,60 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			const payload = (res.json as Mock).mock.calls[0][0];
 			const nonCastStreams = payload.streams.filter((s: any) => !s.externalUrl);
 			expect(nonCastStreams).toHaveLength(1);
+		});
+
+		// A release DMM has seen cached on AllDebrid arrives with no magnet of anyone's, only the
+		// `/f/` link it was recorded with; it plays through the saved-link id the play route reads.
+		const cachedRelease = {
+			url: 'https://alldebrid.com/f/REDACTEDTOKEN1',
+			link: 'https://alldebrid.com/f/REDACTEDTOKEN1',
+			hash: 'f2337b554a945c7f86d8189fa9a8679eb6103f14',
+			size: 58973.3,
+			filename: 'Heat.1995.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.5.1-FGT.mkv',
+			magnetId: null,
+			fileIndex: null,
+			savedLink: 'https://alldebrid.com/f/REDACTEDTOKEN1',
+		};
+
+		it('offers a release DMM has seen cached as a saved-link stream', async () => {
+			setupProfile();
+			mockRepository.getAllDebridUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getAllDebridOtherStreams = vi
+				.fn()
+				.mockResolvedValue([cachedRelease, otherStream]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt0113277' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			const urls = (res.json as Mock).mock.calls[0][0].streams
+				.filter((s: any) => s.url)
+				.map((s: any) => s.url.split('/play/')[1]);
+			expect(urls).toEqual([`${savedLinkMetaId(cachedRelease.savedLink)}:0`, '200:0']);
+			expect(parseSavedLinkMetaId(urls[0].split(':')[0])).toBe(cachedRelease.savedLink);
+		});
+
+		it('leaves out a cached release whose hash was taken down', async () => {
+			const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+			setBlocklistForTests([cachedRelease.hash]);
+			setupProfile();
+			mockRepository.getAllDebridUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getAllDebridOtherStreams = vi
+				.fn()
+				.mockResolvedValue([cachedRelease, otherStream]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt0113277' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+			setBlocklistForTests([]);
+
+			const urls = (res.json as Mock).mock.calls[0][0].streams.filter((s: any) => s.url);
+			expect(urls).toHaveLength(1);
+			expect(urls[0].url).toContain('/play/200:0');
 		});
 
 		it.each([0, 1, 2, 3, 4, 5])('respects otherStreamsLimit=%i', async (limit) => {

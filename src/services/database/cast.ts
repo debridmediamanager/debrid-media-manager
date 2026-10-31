@@ -43,7 +43,7 @@ const SEASON_ONLY_PATTERNS: Array<{ regex: RegExp; captureIndex?: number }> = [
 	{ regex: /(^|[^a-z0-9])s(\d{1,2})(?![a-z0-9])/i, captureIndex: 2 },
 ];
 
-function parseImdbId(imdbId: string): { baseImdbId: string } & EpisodeFilters {
+export function parseImdbId(imdbId: string): { baseImdbId: string } & EpisodeFilters {
 	const [baseImdbId, seasonPart, episodePart] = imdbId.split(':');
 	const season = seasonPart ? parseInt(seasonPart, 10) : undefined;
 	const episode = episodePart ? parseInt(episodePart, 10) : undefined;

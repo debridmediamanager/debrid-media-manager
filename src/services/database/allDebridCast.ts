@@ -1,4 +1,10 @@
+import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
+
+const AD_LOCKED_LINK_PREFIX = 'https://alldebrid.com/f/';
+/** Below this a file is a sample, a .txt or a .nfo, not the release. */
+const MIN_FILE_BYTES = BigInt(10 * 1024 * 1024);
 
 interface LatestCast {
 	url: string;
@@ -402,11 +408,20 @@ export class AllDebridCastService extends DatabaseClient {
 			hash: string;
 			magnetId: number | null;
 			fileIndex: number | null;
+			/** The `/f/` link of a release DMM has seen cached, which any premium key unlocks. */
+			savedLink?: string;
 		}[]
 	> {
 		if (limit <= 0) {
 			return [];
 		}
+
+		const cached = await this.getCachedReleaseStreams(imdbId, limit, maxSize);
+		if (cached.length >= limit) {
+			return cached;
+		}
+		const offered = new Set(cached.map((item) => item.hash));
+		limit -= cached.length;
 
 		const hasMaxSize = typeof maxSize === 'number' && maxSize > 0;
 		const normalizedMaxSizeMb = hasMaxSize ? Math.round(maxSize * 1024) : undefined;
@@ -483,12 +498,60 @@ export class AllDebridCastService extends DatabaseClient {
 				fileIndex: item.fileIndex,
 			}));
 
+		const freshCasts = castStreams.filter((item) => !offered.has(item.hash));
 		console.log('[AllDebridCastService] Stream sources breakdown:', {
 			imdbId,
-			total: castStreams.length,
-			fromCast: castStreams.length,
+			total: cached.length + freshCasts.length,
+			fromAvailable: cached.length,
+			fromCast: freshCasts.length,
 		});
 
-		return castStreams;
+		return [...cached, ...freshCasts];
+	}
+
+	/**
+	 * Releases DMM has seen cached on AllDebrid (`AvailableAd`, recorded from members' libraries),
+	 * offered the way Real-Debrid's cast offers `Available`: nobody has to cast them first. Their
+	 * `/f/` links are not bound to the account that recorded them, and any premium key unlocks them
+	 * (measured 12/12 on links up to 19 days old, 2026-10-31). Biggest file of each release first,
+	 * held to the same freshness bound as RD links; `debridio:` markers carry no link and are skipped.
+	 */
+	private async getCachedReleaseStreams(imdbId: string, limit: number, maxSize?: number) {
+		const { baseImdbId, season, episode } = parseImdbId(imdbId);
+		const maxBytes =
+			typeof maxSize === 'number' && maxSize > 0
+				? BigInt(Math.round(maxSize * 1024)) * BigInt(1024 * 1024)
+				: undefined;
+		const files = await this.prisma.availableAdFile.findMany({
+			where: {
+				availableAd: {
+					imdbId: baseImdbId,
+					status: 'Ready',
+					updatedAt: { gt: rdLinkCutoff() },
+				},
+				link: { startsWith: AD_LOCKED_LINK_PREFIX },
+				bytes: { gt: MIN_FILE_BYTES, ...(maxBytes !== undefined && { lte: maxBytes }) },
+				season,
+				episode,
+			},
+			select: { hash: true, link: true, path: true, bytes: true },
+			orderBy: { bytes: 'desc' },
+			// several files of one release can lead the list; a few spare rows keep `limit` releases
+			take: limit * 3,
+		});
+		const seen = new Set<string>();
+		return files
+			.filter((file) => !seen.has(file.hash) && seen.add(file.hash))
+			.slice(0, limit)
+			.map((file) => ({
+				url: file.link,
+				link: file.link,
+				size: Number(file.bytes) / 1024 / 1024,
+				filename: file.path.split('/').pop() || file.path,
+				hash: file.hash,
+				magnetId: null,
+				fileIndex: null,
+				savedLink: file.link,
+			}));
 	}
 }

@@ -1,3 +1,4 @@
+import fixture from '@/test/fixtures/allDebridAvailable/available-ad-files.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { AllDebridCastService } from './allDebridCast';
 
@@ -6,6 +7,9 @@ const prismaMock = vi.hoisted(() => ({
 		upsert: vi.fn(),
 		findUnique: vi.fn(),
 		updateMany: vi.fn(),
+	},
+	availableAdFile: {
+		findMany: vi.fn(),
 	},
 	allDebridCast: {
 		findFirst: vi.fn(),
@@ -30,6 +34,7 @@ describe('AllDebridCastService', () => {
 		service = new AllDebridCastService();
 		Object.values(prismaMock.allDebridCastProfile).forEach((fn) => (fn as Mock).mockReset());
 		Object.values(prismaMock.allDebridCast).forEach((fn) => (fn as Mock).mockReset());
+		prismaMock.availableAdFile.findMany.mockReset().mockResolvedValue([]);
 	});
 
 	describe('updateCastSettings', () => {
@@ -423,6 +428,94 @@ describe('AllDebridCastService', () => {
 					}),
 				})
 			);
+			consoleSpy.mockRestore();
+		});
+	});
+
+	// Real AvailableAdFile rows (fixture), served by a stand-in for MySQL that applies the
+	// parts of the query that decide what is offered: link prefix, size floor, episode, order.
+	describe('getOtherStreams from releases DMM has seen cached on AllDebrid', () => {
+		type Row = {
+			hash: string;
+			link: string;
+			path: string;
+			bytes: string;
+			season: number | null;
+			episode: number | null;
+		};
+		const serve = (rows: Row[]) =>
+			prismaMock.availableAdFile.findMany.mockImplementation(async ({ where, take }) =>
+				rows
+					.filter((r) => r.link.startsWith(where.link.startsWith))
+					.filter((r) => BigInt(r.bytes) > where.bytes.gt)
+					.filter((r) => where.season === undefined || r.season === where.season)
+					.filter((r) => where.episode === undefined || r.episode === where.episode)
+					.sort((a, b) => (BigInt(b.bytes) > BigInt(a.bytes) ? 1 : -1))
+					.slice(0, take)
+					.map((r) => ({ ...r, bytes: BigInt(r.bytes) }))
+			);
+
+		it('offers them before other casts, one file per release, skipping markers and extras', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			serve(fixture.heat);
+			prismaMock.allDebridCast.groupBy.mockResolvedValue([{ size: BigInt(9000) }]);
+			prismaMock.allDebridCast.findFirst.mockResolvedValue({
+				url: 'https://x.debrid.it/dl/abc/Heat.Cast.mkv',
+				link: 'https://alldebrid.com/f/CAST',
+				size: BigInt(9000),
+				hash: 'cafe0000000000000000000000000000000000cast',
+				magnetId: 7,
+				fileIndex: 0,
+			});
+
+			const result = await service.getOtherStreams('tt0113277', 'u1', 5);
+
+			expect(result.map((r) => [r.hash.slice(0, 8), r.savedLink ?? null])).toEqual([
+				['f2337b55', 'https://alldebrid.com/f/REDACTEDTOKEN1'],
+				['c3d1930e', 'https://alldebrid.com/f/REDACTEDTOKEN3'],
+				['cafe0000', null],
+			]);
+			expect(result[0].filename).toBe(
+				'Heat.1995.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.5.1-FGT.mkv'
+			);
+			expect(Math.round(result[0].size)).toBe(58973);
+			const query = prismaMock.availableAdFile.findMany.mock.calls[0][0];
+			expect(query.where.availableAd).toEqual(
+				expect.objectContaining({ imdbId: 'tt0113277', status: 'Ready' })
+			);
+			expect(query.where.availableAd.updatedAt.gt).toBeInstanceOf(Date);
+			// casts only fill the slots the cached releases left
+			expect(prismaMock.allDebridCast.groupBy).toHaveBeenCalledWith(
+				expect.objectContaining({ take: 3 })
+			);
+			consoleSpy.mockRestore();
+		});
+
+		it('picks the episode out of a season pack', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			serve(fixture.breakingBadS01E01);
+			prismaMock.allDebridCast.groupBy.mockResolvedValue([]);
+
+			const result = await service.getOtherStreams('tt0903747:1:1', 'u1', 5);
+
+			expect(result).toHaveLength(1);
+			expect(result[0].filename).toBe(
+				'Breaking.Bad.S01E01.Pilot.1080p.10bit.BluRay.x265.HEVC.6CH-MRN.mkv'
+			);
+			expect(
+				prismaMock.availableAdFile.findMany.mock.calls[0][0].where.availableAd.imdbId
+			).toBe('tt0903747');
+			consoleSpy.mockRestore();
+		});
+
+		it('fills no cast slot when cached releases took them all', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			serve(fixture.heat);
+
+			const result = await service.getOtherStreams('tt0113277', 'u1', 2);
+
+			expect(result).toHaveLength(2);
+			expect(prismaMock.allDebridCast.groupBy).not.toHaveBeenCalled();
 			consoleSpy.mockRestore();
 		});
 	});

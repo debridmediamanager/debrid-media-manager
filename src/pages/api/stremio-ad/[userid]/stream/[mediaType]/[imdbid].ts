@@ -1,6 +1,8 @@
 import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { withoutBlockedHashes } from '@/services/takedown/blocklist';
+import { savedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import {
@@ -77,7 +79,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		);
 
 		// get urls from db
-		const [userCastItems, otherItems] = await Promise.all([
+		const [userCastItems, otherRows] = await Promise.all([
 			db.getAllDebridUserCastStreams(castKey, userid, 5),
 			db.getAllDebridOtherStreams(
 				castKey,
@@ -86,6 +88,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				maxSize > 0 ? maxSize : undefined
 			),
 		]);
+		// Cached releases play from their `/f/` link alone, so the play route never sees a hash
+		// it could check against takedowns; they are checked here instead.
+		const otherItems = await withoutBlockedHashes(otherRows);
 
 		const allHashes = [
 			...userCastItems.map((item) => item.hash),
@@ -136,8 +141,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		for (let i = 0; i < otherItems.length; i++) {
 			const item = otherItems[i];
 
-			// Skip items without magnetId/fileIndex (should not happen for AllDebrid)
-			if (item.magnetId == null || item.fileIndex == null) {
+			// A release DMM has seen cached has no magnet of anyone's, only its `/f/` link, which
+			// any premium key unlocks; the play route takes it as a saved-link id.
+			const playId = item.savedLink
+				? `${savedLinkMetaId(item.savedLink)}:0`
+				: item.magnetId != null && item.fileIndex != null
+					? `${item.magnetId}:${item.fileIndex}`
+					: null;
+			if (!playId) {
 				continue;
 			}
 
@@ -155,7 +166,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			streams.push({
 				name,
 				title,
-				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${item.magnetId}:${item.fileIndex}`,
+				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${playId}`,
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm-ad', item.hash),
 				},

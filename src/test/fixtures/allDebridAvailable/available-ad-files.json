@@ -1,0 +1,47 @@
+{
+	"_source": "AvailableAdFile rows joined to AvailableAd (status Ready) in production, read 2026-10-31. /f/ tokens replaced: any premium key can unlock a real one.",
+	"breakingBadS01E01": [
+		{
+			"hash": "2927019dbf67eb165347258c1f6d136d644efa4f",
+			"link": "https://alldebrid.com/f/REDACTEDTOKEN4",
+			"path": "Breaking.Bad.Complete.S01-S05.1080p.10bit.BluRay.x265.HEVC.6CH-MRN/Breaking.Bad.S01.1080p.10bit.BluRay.x265.HEVC.6CH-MRN/Breaking.Bad.S01E01.Pilot.1080p.10bit.BluRay.x265.HEVC.6CH-MRN.mkv",
+			"bytes": "884334022",
+			"season": 1,
+			"episode": 1
+		}
+	],
+	"heat": [
+		{
+			"hash": "75e2f0a7418ca09e76513d362e63b62f88c70b54",
+			"link": "debridio:75e2f0a7418ca09e76513d362e63b62f88c70b54",
+			"path": "Heat.1995.MULTI.VFI.2160p.BluRay.4KLight.DV.HDR10.EAC3.7.1.x265-QTZ",
+			"bytes": "7902739825",
+			"season": null,
+			"episode": null
+		},
+		{
+			"hash": "f2337b554a945c7f86d8189fa9a8679eb6103f14",
+			"link": "https://alldebrid.com/f/REDACTEDTOKEN1",
+			"path": "Heat.1995.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.5.1-FGT/Heat.1995.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.5.1-FGT.mkv",
+			"bytes": "61838108782",
+			"season": null,
+			"episode": null
+		},
+		{
+			"hash": "f2337b554a945c7f86d8189fa9a8679eb6103f14",
+			"link": "https://alldebrid.com/f/REDACTEDTOKEN2",
+			"path": "Heat.1995.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.5.1-FGT/RARBG.txt",
+			"bytes": "31",
+			"season": null,
+			"episode": null
+		},
+		{
+			"hash": "c3d1930e436ea12fd7457148e050d75d06893b9d",
+			"link": "https://alldebrid.com/f/REDACTEDTOKEN3",
+			"path": "Heat.1995.Bluray.1080p.TrueHD.x264-Grym@BTNET/Heat.1995.Bluray.1080p.TrueHD.x264-Grym@BTNET.MKV",
+			"bytes": "20421768728",
+			"season": null,
+			"episode": null
+		}
+	]
+}
