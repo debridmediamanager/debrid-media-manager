@@ -1,20 +1,30 @@
-![DMM Logo](./dmm-logo.svg)
+<p align="center"><img src="dmm-logo.svg" width="72" alt="Debrid Media Manager logo"></p>
 
-# Debrid Media Manager
+<h1 align="center">Debrid Media Manager</h1>
 
-Start building your media library with truly unlimited storage size!
+<p align="center"><b>Build your movie and TV show library with truly unlimited storage.</b></p>
+
+<p align="center">
+  <a href="https://debridmediamanager.com/">Website</a> ·
+  <a href="https://notes.debridmediamanager.com/dmm/">Docs</a> ·
+  <a href="https://discord.com/invite/7u4YjMThXP">Discord</a> ·
+  <a href="https://www.reddit.com/r/debridmediamanager/">Reddit</a> ·
+  <a href="https://gatekeeper.debridmediamanager.com/">Sponsor</a>
+</p>
 
 ## What is this?
 
-Do you want a movie and TV show library that has unlimited size? Consider using a Debrid service, like Real-Debrid, AllDebrid, or TorBox. These services work like a shared storage space for downloading torrents. You can download as much as you want without worrying about storage limits, because the files are shared among all users. You only "own" the file when you download it to your account.
+Do you want a movie and TV show library that has unlimited size? Consider using a Debrid service, like Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, or Debrid-Link. These services work like a shared storage space for downloading torrents. You can download as much as you want without worrying about storage limits, because the files are shared among all users. You only "own" the file when you download it to your account.
 
 These Debrid services also offer a WebDAV interface that lets you mount your library as a network drive. You can connect it to media players like [Infuse](https://firecore.com/infuse) (Mac, iPhone, Apple TV, iPad) or media server software like Plex, Emby, or Jellyfin. This way, your media library can be accessed and played from anywhere!
 
 [Debrid Media Manager](https://debridmediamanager.com/) is a **free** and open source web app that makes it easy to download movies and TV shows directly to your Debrid library. Build and curate your media collection without ever worrying about storage limits.
 
+Two sister projects take it from there. [zurg](https://zurg.debridmediamanager.com/) puts every debrid account and Usenet in one folder that Plex and Jellyfin and Emby read like a normal drive. [rex](https://rex.debridmediamanager.com/) is a media server for the Plex apps that owns no files.
+
 ## Features
 
-This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=20475782), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), and [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670).
+This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=20475782), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670), [Premiumize](https://www.premiumize.me/), [Offcloud](https://offcloud.com/), and [Debrid-Link](https://debrid-link.com/id/diG1t).
 
 ### Library management
 
@@ -141,3 +151,7 @@ Account credentials and account identifiers are not included. A shared list cont
 ## License
 
 This project is licensed under the [AGPL-3.0](LICENSE).
+
+---
+
+**More from DMM:** [Debrid Media Manager](https://debridmediamanager.com/) · [zurg](https://zurg.debridmediamanager.com/) · [rex](https://rex.debridmediamanager.com/) · [Docs](https://notes.debridmediamanager.com/) · [Sponsor](https://gatekeeper.debridmediamanager.com/) · [Discord](https://discord.com/invite/7u4YjMThXP) · [Reddit](https://www.reddit.com/r/debridmediamanager/)
