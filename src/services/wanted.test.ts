@@ -219,6 +219,8 @@ describe('film titles', () => {
 		);
 		// In Philippine cinemas 2023-12-25, on Netflix US and in the UK 2024-06-20.
 		expect(item.released).toBe('2024-06-20');
+		// A full film is told from a clip by its length (zurg's YouTube fallback).
+		expect(item.runtime).toBe(130);
 		expect(item.year).toBe(2023);
 		// TMDB knows only cinema dates for these, so nothing is sent.
 		expect(homeRelease(mala)).toBeUndefined();

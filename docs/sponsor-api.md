@@ -184,6 +184,7 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"tmdb": 603,
 			"titles": ["The Matrix", "Matrix", "Матрица"],
 			"released": "1999-09-21",
+			"runtime": 136,
 			"upgrade": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" }
 		},
 		{
@@ -204,6 +205,7 @@ numbers them; specials are never listed. An airing season grows as episodes air 
 carries `"airing": true` while TMDB lists episodes still to come. `aired` is the day
 the season's last listed episode aired, as `2006-01-02`, when it is the newest episode
 the show has aired: a fetcher can search for it often in the hours after.
+`runtime` is a film's length in minutes, as TMDB has it, and absent when TMDB has none.
 `released` is the first day a film could be had at home, as `2006-01-02`: its earliest
 digital, physical or TV release in any country TMDB lists. It is never a cinema date,
 and is absent when TMDB knows none, as it often does not for a film still in cinemas or

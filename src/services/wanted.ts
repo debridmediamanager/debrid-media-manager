@@ -39,6 +39,8 @@ export interface WantedForZurg {
 	 * homeRelease), so zurg searches as it comes out rather than up to a week later.
 	 */
 	released?: string;
+	/** Films only: TMDB's runtime in minutes, absent when TMDB has none. */
+	runtime?: number;
 	/** Shows only. Empty while TMDB knows nothing aired, which zurg reads as nothing to do yet. */
 	seasons?: WantedSeason[];
 	/**
@@ -150,11 +152,14 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 				'alternative_titles,translations,release_dates'
 			);
 			const released = homeRelease(info);
+			const runtime =
+				Number.isInteger(info?.runtime) && info.runtime > 0 ? info.runtime : undefined;
 			return {
 				resolved: {
 					...resolved,
 					titles: filmTitles(info),
 					...(released ? { released } : {}),
+					...(runtime ? { runtime } : {}),
 				},
 				settled: true,
 			};
