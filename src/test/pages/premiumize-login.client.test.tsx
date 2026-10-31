@@ -1,8 +1,9 @@
 import PremiumizeLoginPage from '@/pages/premiumize/login';
+import { savedAccountsKey } from '@/utils/savedAccounts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
@@ -15,9 +16,20 @@ const setStored: Record<string, ReturnType<typeof vi.fn>> = {
 	'pm:apiKey': vi.fn(),
 	'pm:accessToken': vi.fn(),
 };
-vi.mock('@/hooks/localStorage', () => ({
+vi.mock('@/hooks/localStorage', async () => ({
 	__esModule: true,
 	default: (key: string) => [null, setStored[key] ?? vi.fn()],
+	// savedAccounts announces the keys it restores through the real helper
+	notifyLocalStorageChange: (
+		await vi.importActual<typeof import('@/hooks/localStorage')>('@/hooks/localStorage')
+	).notifyLocalStorageChange,
+}));
+
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { clear: vi.fn() };
+	}),
 }));
 
 const requestPremiumizeDeviceCode = vi.fn();
@@ -249,6 +261,102 @@ describe('PremiumizeLoginPage', () => {
 			expect(
 				screen.getByRole('button', { name: /Sign in with Premiumize/ })
 			).toBeInTheDocument();
+		});
+	});
+
+	// "Add another account" and logging out the only active account both land
+	// here with the other login parked; picking it must not need a sign-in.
+	describe('saved accounts', () => {
+		const realLocation = window.location;
+		const assign = vi.fn();
+
+		const park = (keys: Record<string, string>) =>
+			localStorage.setItem(
+				savedAccountsKey('pm:'),
+				JSON.stringify([{ id: '704233992', label: '704233992', keys, savedAt: 1 }])
+			);
+
+		beforeEach(() => {
+			localStorage.clear();
+			assign.mockReset();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: { ...realLocation, assign },
+			});
+		});
+
+		afterEach(() => {
+			localStorage.clear();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: realLocation,
+			});
+		});
+
+		it('continues as a parked OAuth login with a full load to the redirect', async () => {
+			park({ 'pm:accessToken': '"oauth-tok-b"', 'pm:castToken': '"cast-b"' });
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: '/library' },
+			} as any);
+
+			render(<PremiumizeLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: '704233992' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/library'));
+			expect(localStorage.getItem('pm:accessToken')).toBe('"oauth-tok-b"');
+			expect(localStorage.getItem('pm:castToken')).toBe('"cast-b"');
+			expect(localStorage.getItem(savedAccountsKey('pm:'))).toBeNull();
+			// A client-side route change would keep the old auth singleton alive
+			expect(replace).not.toHaveBeenCalled();
+		});
+
+		it('continues as a parked pasted-key login, never to an off-site redirect', async () => {
+			park({ 'pm:apiKey': '"key-b"' });
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: 'https://evil.example/' },
+			} as any);
+
+			render(<PremiumizeLoginPage />);
+			fireEvent.click(await screen.findByRole('button', { name: '704233992' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/'));
+			expect(localStorage.getItem('pm:apiKey')).toBe('"key-b"');
+			expect(localStorage.getItem('pm:accessToken')).toBeNull();
+			expect(localStorage.getItem(savedAccountsKey('pm:'))).toBeNull();
+		});
+
+		it('is not offered while a device code is waiting for approval', async () => {
+			park({ 'pm:apiKey': '"key-b"' });
+			requestPremiumizeDeviceCode.mockResolvedValue({
+				verification_uri: 'https://www.premiumize.me/device',
+				user_code: 'uwu3-67m4',
+				device_code: 'dc123',
+				expires_in: 600,
+				interval: 0,
+			});
+			pollPremiumizeDeviceToken.mockResolvedValue(null);
+
+			render(<PremiumizeLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Premiumize/ }));
+
+			await waitFor(() => expect(screen.getByTestId('pm-user-code')).toBeInTheDocument());
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+		});
+
+		it('looks exactly as before when nothing is saved', () => {
+			// render() flushes the mount effect that reads the saved list
+			render(<PremiumizeLoginPage />);
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+			expect(
+				screen.getByRole('button', { name: /Sign in with Premiumize/ })
+					.previousElementSibling
+			).toBe(screen.getByRole('heading', { name: 'Connect Premiumize' }));
 		});
 	});
 });

@@ -1,3 +1,4 @@
+import { SavedAccountsPicker } from '@/components/SavedAccountsPicker';
 import useLocalStorage from '@/hooks/localStorage';
 import { getPremiumizeAccountInfo, isPremiumizePremium } from '@/services/premiumize';
 import {
@@ -144,6 +145,18 @@ export default function PremiumizeLoginPage() {
 					</div>
 				) : (
 					<>
+						{/* Hidden mid-check: a key validated after the swap would overwrite the restored login. */}
+						{!checking && (
+							<SavedAccountsPicker
+								prefix="pm:"
+								current={null}
+								afterSwitch={() =>
+									window.location.assign(
+										getSafeRedirectPath(router.query.redirect, '/')
+									)
+								}
+							/>
+						)}
 						<button
 							type="button"
 							onClick={startDeviceLogin}
