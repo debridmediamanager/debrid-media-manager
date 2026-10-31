@@ -57,7 +57,8 @@ function upgradeOf(row: WantedItemRow): WantedForZurg['upgrade'] {
 
 /**
  * A sponsor's wanted list, for their zurg to fetch: `{"items": [{id, kind, title,
- * imdb, tmdb?, tvdb?, seasons?: [{season, episodes}], upgrade?}]}`. Films zurg
+ * imdb, year?, tmdb?, tvdb?, titles?, released?, seasons?: [{season, episodes,
+ * airing?, aired?}], upgrade?}]}`. Films zurg
  * already acknowledged are left out unless it wants a better release; shows stay,
  * so new episodes are fetched as they air. With `?bands=` a film is left out only once
  * every band holds a copy zurg wants no better than, and carries `bands` instead of

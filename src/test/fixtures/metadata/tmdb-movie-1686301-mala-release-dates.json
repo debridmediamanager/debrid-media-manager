@@ -1,0 +1,67 @@
+{
+	"adult": false,
+	"alternative_titles": { "titles": [] },
+	"backdrop_path": "/2BX6gNi7Yr1oHJsm4xHCQu6DBhp.jpg",
+	"belongs_to_collection": null,
+	"budget": 0,
+	"genres": [
+		{ "id": 53, "name": "Thriller" },
+		{ "id": 27, "name": "Horror" }
+	],
+	"homepage": "",
+	"id": 1686301,
+	"imdb_id": "tt35884942",
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_title": "Mala",
+	"overview": "Reema inherits an abandoned resort on a remote island, and with her three friends, sets out to uncover the truth behind her inheritance. She soon discovers strange locals, cryptic messages from her late mother, and a familial curse involving tantric rituals and black magic. As tensions rise, Reema and her friends must confront their deepest fears to survive the island’s sinister grip.",
+	"popularity": 1.3103,
+	"poster_path": "/8kvcXOUbqajbCVymdzLrYgrM94.jpg",
+	"production_companies": [],
+	"production_countries": [],
+	"release_date": "2026-07-10",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "en",
+						"note": "",
+						"release_date": "2026-07-10T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 0,
+	"runtime": 96,
+	"softcore": false,
+	"spoken_languages": [],
+	"status": "Released",
+	"tagline": "Upon inheriting an abandoned resort, Reema must confront her dark past full of tantric secrets to discover her true self.",
+	"title": "Mala",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"homepage": "",
+					"overview": "Reema inherits an abandoned resort on a remote island, and with her three friends, sets out to uncover the truth behind her inheritance. She soon discovers strange locals, cryptic messages from her late mother, and a familial curse involving tantric rituals and black magic. As tensions rise, Reema and her friends must confront their deepest fears to survive the island’s sinister grip.",
+					"runtime": 96,
+					"tagline": "Upon inheriting an abandoned resort, Reema must confront her dark past full of tantric secrets to discover her true self.",
+					"title": ""
+				}
+			}
+		]
+	},
+	"video": false,
+	"vote_average": 10.0,
+	"vote_count": 1
+}

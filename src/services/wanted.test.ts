@@ -1,3 +1,6 @@
+import frozenIII from '@/test/fixtures/metadata/tmdb-movie-1024604-frozen-iii-release-dates.json';
+import mallari from '@/test/fixtures/metadata/tmdb-movie-1118824-mallari-release-dates.json';
+import mala from '@/test/fixtures/metadata/tmdb-movie-1686301-mala-release-dates.json';
 import anAffair from '@/test/fixtures/metadata/tmdb-movie-253822-an-affair-titles.json';
 import lesMiserables from '@/test/fixtures/metadata/tmdb-movie-82695-les-miserables-titles.json';
 import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
@@ -7,6 +10,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	airedSeasons,
 	filmTitles,
+	homeRelease,
 	resolveWanted,
 	resolveWantedReused,
 	seasonsTmdbLacks,
@@ -54,6 +58,14 @@ describe('airedSeasons', () => {
 		expect(current.episodes.at(-1)).toBe(106);
 		expect(current.airing).toBe(true);
 		expect(airedSeasons(dailyShow, [30])[0].airing).toBeUndefined();
+	});
+
+	// zurg searches every few minutes in the hours after this day.
+	it("dates a season by the show's newest aired episode, when it is the season's last listed", () => {
+		expect(airedSeasons(dailyShow, [31])[0].aired).toBe('2026-09-24');
+		expect(airedSeasons(dailyShow, [30])[0].aired).toBeUndefined();
+		expect(airedSeasons(thirdRock, [6])[0].aired).toBe('2001-05-22');
+		expect(airedSeasons(thirdRock, [5])[0].aired).toBeUndefined();
 	});
 
 	it('keeps only the seasons asked for', () => {
@@ -193,8 +205,25 @@ describe('film titles', () => {
 		expect(item.titles?.[0]).toBe('An Affair');
 		expect(cache.getTmdbMovieInfo).toHaveBeenCalledWith(
 			253822,
-			'alternative_titles,translations'
+			'alternative_titles,translations,release_dates'
 		);
+	});
+
+	it('sends the day a film first came out at home, never its cinema date', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({
+			movie_results: [{ id: mallari.id, release_date: mallari.release_date }],
+		});
+		cache.getTmdbMovieInfo.mockResolvedValue(mallari);
+		const item = await resolveWanted(
+			row({ imdbId: 'tt29544868', kind: 'movie', title: 'Mallari' })
+		);
+		// In Philippine cinemas 2023-12-25, on Netflix US and in the UK 2024-06-20.
+		expect(item.released).toBe('2024-06-20');
+		expect(item.year).toBe(2023);
+		// TMDB knows only cinema dates for these, so nothing is sent.
+		expect(homeRelease(mala)).toBeUndefined();
+		expect(homeRelease(frozenIII)).toBeUndefined();
+		expect(homeRelease({})).toBeUndefined();
 	});
 
 	it('lists alternatives and translations once each', () => {

@@ -183,6 +183,7 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"year": 1999,
 			"tmdb": 603,
 			"titles": ["The Matrix", "Matrix", "Матрица"],
+			"released": "1999-09-21",
 			"upgrade": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" }
 		},
 		{
@@ -200,7 +201,13 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 
 `seasons` lists, for each season wanted, the episodes aired so far, numbered as TMDB
 numbers them; specials are never listed. An airing season grows as episodes air and
-carries `"airing": true` while TMDB lists episodes still to come.
+carries `"airing": true` while TMDB lists episodes still to come. `aired` is the day
+the season's last listed episode aired, as `2006-01-02`, when it is the newest episode
+the show has aired: a fetcher can search for it often in the hours after.
+`released` is the first day a film could be had at home, as `2006-01-02`: its earliest
+digital, physical or TV release in any country TMDB lists. It is never a cinema date,
+and is absent when TMDB knows none, as it often does not for a film still in cinemas or
+long out.
 `titles` lists every title TMDB knows a film by, its original title, alternatives and
 translations, so a fetcher can refuse a release filed under the film's IMDb id that
 names another film; it is absent when TMDB could not be asked.

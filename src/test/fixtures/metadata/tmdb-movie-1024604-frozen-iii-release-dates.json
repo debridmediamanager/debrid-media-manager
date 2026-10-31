@@ -1,0 +1,407 @@
+{
+	"adult": false,
+	"alternative_titles": { "titles": [{ "iso_3166_1": "US", "title": "Frozen 3", "type": "" }] },
+	"backdrop_path": "/AsoITR3tq9PXk0j0VJyN7dkFkp9.jpg",
+	"belongs_to_collection": {
+		"id": 386382,
+		"name": "Frozen Collection",
+		"poster_path": "/2DdKGQYzE6D7pSvvHvM9FRzTh5r.jpg",
+		"backdrop_path": "/s3vdRkK7KZFUDC8HEJo2GRKyVhW.jpg"
+	},
+	"budget": 0,
+	"genres": [
+		{ "id": 12, "name": "Adventure" },
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10751, "name": "Family" },
+		{ "id": 14, "name": "Fantasy" }
+	],
+	"homepage": "",
+	"id": 1024604,
+	"imdb_id": "tt26680923",
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_title": "Frozen III",
+	"overview": "Third installment in the Disney animated franchise. Plot TBA.",
+	"popularity": 5.7955,
+	"poster_path": "/qzVuYNqRX7rBBuUdobS2SWEni5R.jpg",
+	"production_companies": [
+		{
+			"id": 6125,
+			"logo_path": "/8bH86UPmMP8hlITzXV3XgV9eaAc.png",
+			"name": "Walt Disney Animation Studios",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "US", "name": "United States of America" }],
+	"release_date": "2027-11-24",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "AR",
+				"release_dates": [
+					{
+						"certification": "ATP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ES",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-26T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PH",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-24T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-24T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TH",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-24T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2027-11-24T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 0,
+	"runtime": 0,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "In Production",
+	"tagline": "",
+	"title": "Frozen III",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"homepage": "",
+					"overview": "A sequência está ganhando mais um filme",
+					"runtime": 0,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"homepage": "",
+					"overview": "Third installment in the Disney animated franchise. Plot TBA.",
+					"runtime": 0,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"homepage": "",
+					"overview": "Troisième volet de la franchise de films d'animation La Reine des neiges.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "La Reine des neiges III"
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"homepage": "",
+					"overview": "Третя частина серії \"Крижане серце\"",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Крижане серце 3"
+				}
+			},
+			{
+				"iso_3166_1": "HR",
+				"iso_639_1": "hr",
+				"name": "Hrvatski",
+				"english_name": "Croatian",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Snježno kraljevstvo III"
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Nữ Hoàng Băng Giá 3"
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Ledové království III"
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "겨울왕국 3"
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "冰雪奇缘3"
+				}
+			},
+			{
+				"iso_3166_1": "GE",
+				"iso_639_1": "ka",
+				"name": "ქართული",
+				"english_name": "Georgian",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "გაყინული 3"
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": { "homepage": "", "overview": "", "runtime": 0, "tagline": "", "title": "" }
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Холодное Сердце 3"
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"homepage": "",
+					"overview": "Tercera entrega de la franquicia animada de Disney. Argumento por confirmar.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Frozen III"
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "冰雪奇緣 3"
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Frost III"
+				}
+			},
+			{
+				"iso_3166_1": "IS",
+				"iso_639_1": "is",
+				"name": "Íslenska",
+				"english_name": "Icelandic",
+				"data": {
+					"homepage": "",
+					"overview": "Í þessum nýja kafla verðurðu vitni að brúðkaupi aldarinnar í Arendelle þegar Anna drottning gengur upp altarið og leggur af stað með Elsu í nýtt, töfrandi ferðalag fullt af óþekktum áskorunum. Og það sem er enn spennandi: konungsfjölskyldan er að fara að taka á móti dularfullum nýjum meðlim!",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Frosinn 3"
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Замръзналото кралство III"
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": { "homepage": "", "overview": "", "runtime": 0, "tagline": "", "title": "" }
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"homepage": "",
+					"overview": "",
+					"runtime": 0,
+					"tagline": "",
+					"title": "アナと雪の女王３(仮題)"
+				}
+			}
+		]
+	},
+	"video": false,
+	"vote_average": 0.0,
+	"vote_count": 0
+}

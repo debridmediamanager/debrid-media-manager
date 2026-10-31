@@ -1,0 +1,178 @@
+{
+	"adult": false,
+	"alternative_titles": { "titles": [] },
+	"backdrop_path": "/zz2y87tbNPCw1XYkoZElBcn1WXL.jpg",
+	"belongs_to_collection": null,
+	"budget": 1350000,
+	"genres": [
+		{ "id": 27, "name": "Horror" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 53, "name": "Thriller" }
+	],
+	"homepage": "",
+	"id": 1118824,
+	"imdb_id": "tt29544868",
+	"origin_country": ["PH"],
+	"original_language": "tl",
+	"original_title": "Mallari",
+	"overview": "As Father Severino Mallari, a 19th century priest during the Spanish occupation, descends into madness, his life and work as a parish priest in Pampanga is recounted, where he reportedly murdered 57 people to aid his ailing mother.",
+	"popularity": 2.1652,
+	"poster_path": "/k11utHsPpfYdC5cr53TYe82ddV7.jpg",
+	"production_companies": [
+		{ "id": 184550, "logo_path": null, "name": "Mentorque Productions", "origin_country": "" },
+		{ "id": 144346, "logo_path": null, "name": "Clever Minds Inc.", "origin_country": "" }
+	],
+	"production_countries": [{ "iso_3166_1": "PH", "name": "Philippines" }],
+	"release_date": "2023-12-25",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "AU",
+				"release_dates": [
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-07T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix",
+						"release_date": "2024-06-21T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GB",
+				"release_dates": [
+					{
+						"certification": "18",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix",
+						"release_date": "2024-06-20T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PH",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Metro Manila Film Festival",
+						"release_date": "2023-12-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TH",
+				"release_dates": [
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "th",
+						"note": "",
+						"release_date": "2024-05-01T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "tl",
+						"note": "2024 Manila International Film Festival",
+						"release_date": "2024-01-30T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix",
+						"release_date": "2024-06-20T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			}
+		]
+	},
+	"revenue": 3800000,
+	"runtime": 130,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Tagalog", "iso_639_1": "tl", "name": "" }],
+	"status": "Released",
+	"tagline": "",
+	"title": "Mallari",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"homepage": "",
+					"overview": "As Father Severino Mallari, a 19th century priest during the Spanish occupation, descends into madness, his life and work as a parish priest in Pampanga is recounted, where he reportedly murdered 57 people to aid his ailing mother.",
+					"runtime": 130,
+					"tagline": "",
+					"title": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"homepage": "",
+					"overview": "ฆาตกรต่อเนื่องคนแรกในประวัติศาสตร์ของฟิลิปปินส์ ภาพยนตร์สยองขวัญเรื่องนี้ได้เข้าร่วมเทศกาลภาพยนตร์เมโทรมะนิลา (MMFF) และนำนักแสดง ปิโอโล ปาสกวล หวนคืนสู่เทศกาลเป็นครั้งแรกในรอบ 21 ปี โดยคราวนี้เขารับบทบาทเป็นตัวละครสามตัวที่เล่าเรื่องราวในสามช่วงเวลา ซึ่งจะมาสร้างความสยองขวัญสั่นประสาทให้แก่ผู้ชม",
+					"runtime": 129,
+					"tagline": "",
+					"title": "มัลลารี ตำนานเชือด โลกสะท้าน"
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"homepage": "",
+					"overview": "Một bác sĩ lùng sục quá khứ huyền bí của gia đình mình để tìm cách ngăn chặn cái chết của vị hôn thê, nhưng rồi tìm ra những bí mật liên quan đến hàng loạt án mạng ở thế kỷ 19.",
+					"runtime": 0,
+					"tagline": "",
+					"title": "Lời Nguyền Gia Tộc"
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"homepage": "",
+					"overview": "19世纪西班牙占领期间的神父塞韦里诺·马拉里（Severino Mallari）的可怕故事，他陷入了疯狂。它讲述了马拉里的生活，据报道，他谋杀了 57 人来帮助他生病的母亲。",
+					"runtime": 0,
+					"tagline": "",
+					"title": "缸"
+				}
+			}
+		]
+	},
+	"video": false,
+	"vote_average": 7.1,
+	"vote_count": 9
+}

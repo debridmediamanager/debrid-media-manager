@@ -9,6 +9,12 @@ export interface WantedSeason {
 	episodes: number[];
 	/** Episodes of this season are still to air, so no pack covers it yet. */
 	airing?: boolean;
+	/**
+	 * The day the last of `episodes` aired, as 2006-01-02, when it is the newest
+	 * episode the show has aired: zurg searches for it every few minutes in the
+	 * hours after, when it is posted.
+	 */
+	aired?: string;
 }
 
 /** A wanted title as `/api/sponsor/wanted` answers it. See docs/sponsor-api.md. */
@@ -28,6 +34,11 @@ export interface WantedForZurg {
 	 * not be asked.
 	 */
 	titles?: string[];
+	/**
+	 * Films only: the first day it could be had at home, as 2006-01-02 (see
+	 * homeRelease), so zurg searches as it comes out rather than up to a week later.
+	 */
+	released?: string;
 	/** Shows only. Empty while TMDB knows nothing aired, which zurg reads as nothing to do yet. */
 	seasons?: WantedSeason[];
 	/**
@@ -63,13 +74,44 @@ export function airedSeasons(show: any, only: number[] | null): WantedSeason[] {
 		);
 		const last = unaired === null ? count : Math.min(count, unaired - 1);
 		if (last < 1) continue;
+		const newest = show.last_episode_to_air;
+		const aired =
+			newest?.season_number === season && newest?.episode_number === last
+				? day(newest.air_date)
+				: undefined;
 		out.push({
 			season,
 			episodes: Array.from({ length: last }, (_, i) => i + 1),
 			...(last < count ? { airing: true } : {}),
+			...(aired ? { aired } : {}),
 		});
 	}
 	return out;
+}
+
+/** A TMDB date or timestamp as 2006-01-02, or undefined. */
+function day(value: unknown): string | undefined {
+	const d = typeof value === 'string' ? value.slice(0, 10) : '';
+	return /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : undefined;
+}
+
+/**
+ * TMDB's release types a film can be had at home from: digital, physical, TV.
+ * Not the cinema's (3) or a premiere's (1): a WEB-DL is posted when the digital
+ * release comes out, and Mallari (2023) came out in cinemas six months before it.
+ */
+const HOME_RELEASE_TYPES = new Set([4, 5, 6]);
+
+/** A film's earliest digital, physical or TV release anywhere, as 2006-01-02. */
+export function homeRelease(info: any): string | undefined {
+	let first: string | undefined;
+	for (const country of info?.release_dates?.results ?? []) {
+		for (const r of country?.release_dates ?? []) {
+			const d = HOME_RELEASE_TYPES.has(r?.type) ? day(r?.release_date) : undefined;
+			if (d && (!first || d < first)) first = d;
+		}
+	}
+	return first;
 }
 
 /**
@@ -103,8 +145,19 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 		if (typeof movie?.id !== 'number') return { resolved: base, settled: true };
 		const resolved = { ...base, ...year(movie.release_date), tmdb: movie.id };
 		try {
-			const info = await cache.getTmdbMovieInfo(movie.id, 'alternative_titles,translations');
-			return { resolved: { ...resolved, titles: filmTitles(info) }, settled: true };
+			const info = await cache.getTmdbMovieInfo(
+				movie.id,
+				'alternative_titles,translations,release_dates'
+			);
+			const released = homeRelease(info);
+			return {
+				resolved: {
+					...resolved,
+					titles: filmTitles(info),
+					...(released ? { released } : {}),
+				},
+				settled: true,
+			};
 		} catch {
 			return { resolved, settled: false };
 		}
