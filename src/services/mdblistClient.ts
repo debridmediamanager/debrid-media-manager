@@ -294,75 +294,87 @@ export class MDBListClient {
 	}
 
 	/**
-	 * Search for lists by term
+	 * A list endpoint answers an array. Anything else is an error body served
+	 * with HTTP 200, like the legacy host's {"error":"API Limit Reached!"}:
+	 * it is never cached or returned, because /api/info/browse shuffles the
+	 * result and a non-array there spun each web replica until its health
+	 * check killed it (2026-10-30).
 	 */
-	async searchLists(term: string): Promise<any> {
-		const cacheKey = `list_search_${term}`;
-
-		// Check cache first
-		const cached = await this.cache.getWithMetadata(cacheKey);
-		if (cached && this.isFresh(cached.updatedAt, CACHE_TTL.LIST)) {
-			console.log(`[MDBList] Using cached list search results for: ${term}`);
+	private async cachedList(
+		cacheKey: string,
+		ttl: number,
+		label: string,
+		fetch: () => Promise<any>
+	): Promise<any[]> {
+		const row = await this.cache.getWithMetadata(cacheKey);
+		const cached = row && Array.isArray(row.data) ? row : null;
+		if (cached && this.isFresh(cached.updatedAt, ttl)) {
+			console.log(`[MDBList] Using cached ${label}`);
 			return cached.data;
 		}
 
-		const url = new URL(`${this.baseUrl}/lists/search`);
-		url.searchParams.append('apikey', this.apiKey);
-		url.searchParams.append('s', term);
-
 		let response;
 		try {
-			response = await this.get(url);
+			response = await fetch();
 		} catch (error) {
 			if (cached) {
-				console.error(
-					`[MDBList] Refetch failed for list search ${term}, serving stale`,
-					error
-				);
+				console.error(`[MDBList] Refetch failed for ${label}, serving stale`, error);
 				return cached.data;
 			}
 			throw error;
 		}
 
-		// Cache the response
-		await this.cache.cacheList(cacheKey, response);
-		console.log(`[MDBList] Cached list search results for: ${term}`);
+		if (!Array.isArray(response)) {
+			const reason = response?.error ?? 'not a list';
+			if (cached) {
+				console.error(`[MDBList] Error body for ${label} (${reason}), serving stale`);
+				return cached.data;
+			}
+			throw new Error(`MDBList ${label}: ${reason}`);
+		}
 
+		await this.cache.cacheList(cacheKey, response);
+		console.log(`[MDBList] Cached ${label}`);
 		return response;
 	}
 
 	/**
-	 * Get items from a list by list ID
+	 * Search for lists by term. The legacy host's limit runs out while the
+	 * account's on api.mdblist.com does not (2026-10-31), so lists use the new one.
 	 */
-	async getListItems(listId: string): Promise<any> {
-		const cacheKey = `list_items_${listId}`;
-
-		// Check cache first
-		const cached = await this.cache.getWithMetadata(cacheKey);
-		if (cached && this.isFresh(cached.updatedAt, CACHE_TTL.LIST)) {
-			console.log(`[MDBList] Using cached list items for ID: ${listId}`);
-			return cached.data;
-		}
-
-		const url = new URL(`${this.baseUrl}/lists/${listId}/items`);
+	async searchLists(term: string): Promise<MList[]> {
+		const url = new URL('https://api.mdblist.com/lists/search');
 		url.searchParams.append('apikey', this.apiKey);
+		url.searchParams.append('query', term);
+		return this.cachedList(
+			`list_search_${term}`,
+			CACHE_TTL.LIST,
+			`list search results for: ${term}`,
+			() => this.get(url)
+		);
+	}
 
-		let response;
-		try {
-			response = await this.get(url);
-		} catch (error) {
-			if (cached) {
-				console.error(`[MDBList] Refetch failed for list ${listId}, serving stale`, error);
-				return cached.data;
+	/**
+	 * Get every item of a list by list ID, movies and shows merged back into
+	 * the list's own order.
+	 */
+	async getListItems(listId: string): Promise<MListItem[]> {
+		return this.cachedList(
+			`list_items_${listId}`,
+			CACHE_TTL.LIST,
+			`list items for ID: ${listId}`,
+			async () => {
+				const items: MListItem[] = [];
+				for (let offset = 0; ;) {
+					const page = await this.getListItemsPage(Number(listId), offset);
+					items.push(...page.movies, ...page.shows);
+					const read = page.movies.length + page.shows.length;
+					if (!page.pagination?.has_more || read === 0) break;
+					offset += read;
+				}
+				return items.sort((a, b) => a.rank - b.rank);
 			}
-			throw error;
-		}
-
-		// Cache the response
-		await this.cache.cacheList(cacheKey, response);
-		console.log(`[MDBList] Cached list items for ID: ${listId}`);
-
-		return response;
+		);
 	}
 
 	/**
@@ -406,25 +418,9 @@ export class MDBListClient {
 	 * Get top lists
 	 */
 	async getTopLists(): Promise<MList[]> {
-		const cacheKey = 'top_lists';
-
-		// Check cache first (with 24 hour expiration for top lists)
-		const cached = await this.cache.getWithMetadata(cacheKey);
-		if (cached && this.isFresh(cached.updatedAt, ONE_DAY)) {
-			console.log(`[MDBList] Using cached top lists`);
-			return cached.data;
-		}
-
-		const url = new URL(`${this.baseUrl}/lists/top`);
+		const url = new URL('https://api.mdblist.com/lists/top');
 		url.searchParams.append('apikey', this.apiKey);
-
-		const response = await this.get(url);
-
-		// Cache the response
-		await this.cache.cacheList(cacheKey, response);
-		console.log(`[MDBList] Cached top lists`);
-
-		return response;
+		return this.cachedList('top_lists', ONE_DAY, 'top lists', () => this.get(url));
 	}
 
 	/**

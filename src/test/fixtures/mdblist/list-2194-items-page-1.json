@@ -1,0 +1,58 @@
+{
+	"movies": [],
+	"pagination": {
+		"limit": 2,
+		"offset": 0,
+		"total": 300,
+		"has_more": true,
+		"next_cursor": "eyJzIjogMTY2LCAiaSI6IDQwNjAzMTg5ODg4LCAiciI6IDE2Nn0="
+	},
+	"shows": [
+		{
+			"id": 333533,
+			"mediatype": "show",
+			"imdb_id": "tt44941753",
+			"tvdb_id": 482057,
+			"ids": {
+				"mdblist": "459ll",
+				"imdb": "tt44941753",
+				"tmdb": 333533,
+				"tvdb": 482057
+			},
+			"title": "The One About Matthew Perry",
+			"language": "en",
+			"spoken_language": "en",
+			"country": "us",
+			"release_year": 2026,
+			"adult": 0,
+			"release_date": "2026-10-27",
+			"status": "Ended",
+			"runtime": 183,
+			"added_at": "2026-10-30T03:28:13",
+			"rank": 83
+		},
+		{
+			"id": 321221,
+			"mediatype": "show",
+			"imdb_id": "tt42220724",
+			"tvdb_id": 477407,
+			"ids": {
+				"mdblist": "44wnq",
+				"imdb": "tt42220724",
+				"tmdb": 321221,
+				"tvdb": 477407
+			},
+			"title": "Minimum Wage",
+			"language": "en",
+			"spoken_language": "en",
+			"country": "us",
+			"release_year": 2026,
+			"adult": 0,
+			"release_date": "2026-10-26",
+			"status": "Returning Series",
+			"runtime": 420,
+			"added_at": "2026-10-28T23:40:17",
+			"rank": 166
+		}
+	]
+}

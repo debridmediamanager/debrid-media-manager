@@ -54,7 +54,13 @@ beforeEach(() => {
 	// The client's own requests, through real axios and Node's http adapter, to
 	// a stand-in that replays mdblist's answer byte for byte.
 	vi.spyOn(axios, 'get').mockImplementation((url, config) =>
-		realGet(String(url).replace('https://mdblist.com/api', `${origin}/api`), config)
+		realGet(
+			String(url).replace(
+				/^https:\/\/(mdblist\.com\/api|api\.mdblist\.com)/,
+				`${origin}/api`
+			),
+			config
+		)
 	);
 	cache.getWithMetadata.mockReset().mockResolvedValue(null);
 	cache.set.mockReset().mockResolvedValue(undefined);

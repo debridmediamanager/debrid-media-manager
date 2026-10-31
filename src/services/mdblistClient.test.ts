@@ -1,3 +1,7 @@
+import limitReached from '@/test/fixtures/mdblist/legacy-lists-search-limit-reached.json';
+import itemsLastPage from '@/test/fixtures/mdblist/list-2194-items-last-page.json';
+import itemsPage1 from '@/test/fixtures/mdblist/list-2194-items-page-1.json';
+import crazyLists from '@/test/fixtures/mdblist/lists-search-crazy.json';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getMdblistClient, MDBListClient } from './mdblistClient';
@@ -341,9 +345,41 @@ describe('MDBListClient', () => {
 			await client.searchLists('action');
 
 			const call = vi.mocked(axios.get).mock.calls[0][0];
-			expect(call).toContain('/lists/search');
+			expect(call).toContain('https://api.mdblist.com/lists/search');
 			expect(call).toContain('apikey=test-api-key');
-			expect(call).toContain('s=action');
+			expect(call).toContain('query=action');
+		});
+
+		// The legacy host answered every list search with this body and HTTP 200
+		// on 2026-10-30; cached and handed to /api/info/browse, it spun the web
+		// replicas until Docker killed them.
+		it('rejects a limit body instead of returning or caching it', async () => {
+			vi.mocked(axios.get).mockResolvedValue({ data: limitReached });
+
+			await expect(client.searchLists('crazy')).rejects.toThrow('API Limit Reached!');
+			expect(cacheStub.cacheList).not.toHaveBeenCalled();
+		});
+
+		it('serves the last real result when the refetch is a limit body', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: crazyLists,
+				updatedAt: daysAgo(2),
+			});
+			vi.mocked(axios.get).mockResolvedValue({ data: limitReached });
+
+			await expect(client.searchLists('crazy')).resolves.toEqual(crazyLists);
+			expect(cacheStub.cacheList).not.toHaveBeenCalled();
+		});
+
+		it('refetches past a limit body already in the cache', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: limitReached,
+				updatedAt: minutesAgo(5),
+			});
+			vi.mocked(axios.get).mockResolvedValue({ data: crazyLists });
+
+			await expect(client.searchLists('crazy')).resolves.toEqual(crazyLists);
+			expect(cacheStub.cacheList).toHaveBeenCalledWith('list_search_crazy', crazyLists);
 		});
 
 		it('returns list search results', async () => {
@@ -370,45 +406,52 @@ describe('MDBListClient', () => {
 	});
 
 	describe('getListItems', () => {
-		it('constructs correct URL for list items', async () => {
-			const mockResponse = [{ id: 1, title: 'Movie 1', imdb_id: 'tt123' }];
-			vi.mocked(axios.get).mockResolvedValue({ data: mockResponse });
+		const pages = () =>
+			vi
+				.mocked(axios.get)
+				.mockResolvedValueOnce({ data: itemsPage1 })
+				.mockResolvedValueOnce({ data: itemsLastPage });
 
-			await client.getListItems('123');
+		it('pages through the list on api.mdblist.com', async () => {
+			pages();
 
-			const call = vi.mocked(axios.get).mock.calls[0][0];
-			expect(call).toContain('/lists/123/items');
-			expect(call).toContain('apikey=test-api-key');
+			await client.getListItems('2194');
+
+			const calls = vi.mocked(axios.get).mock.calls.map(([url]) => new URL(url as string));
+			expect(calls.map((u) => u.origin + u.pathname)).toEqual([
+				'https://api.mdblist.com/lists/2194/items',
+				'https://api.mdblist.com/lists/2194/items',
+			]);
+			expect(calls.map((u) => u.searchParams.get('offset'))).toEqual(['0', '2']);
 		});
 
-		it('returns list items', async () => {
-			const mockResponse = [{ id: 1, title: 'Movie 1' }];
-			vi.mocked(axios.get).mockResolvedValue({ data: mockResponse });
+		it('merges movies and shows back into list order', async () => {
+			pages();
 
-			const result = await client.getListItems('123');
+			const result = await client.getListItems('2194');
 
-			expect(result).toEqual(mockResponse);
+			expect(result.map((item) => [item.rank, item.imdb_id])).toEqual([
+				[83, 'tt44941753'],
+				[166, 'tt42220724'],
+				[291000, 'tt35629490'],
+				[292000, 'tt33247080'],
+			]);
+			expect(cacheStub.cacheList).toHaveBeenCalledWith('list_items_2194', result);
 		});
 
 		// Curated lists gain items over time, and the scrapers read them to decide
 		// what to scrape — a frozen list means new titles are never picked up.
 		it('refetches list items older than 24 hours', async () => {
-			const stale = [{ id: 1, title: 'Movie 1' }];
-			cacheStub.getCachedList.mockResolvedValue(stale);
 			cacheStub.getWithMetadata.mockResolvedValue({
-				data: stale,
+				data: [{ id: 1, title: 'Movie 1', rank: 1 }],
 				updatedAt: daysAgo(2),
 			});
-			const fresh = [
-				{ id: 1, title: 'Movie 1' },
-				{ id: 2, title: 'Movie 2' },
-			];
-			vi.mocked(axios.get).mockResolvedValue({ data: fresh });
+			pages();
 
-			const result = await client.getListItems('123');
+			const result = await client.getListItems('2194');
 
 			expect(axios.get).toHaveBeenCalled();
-			expect(result).toEqual(fresh);
+			expect(result).toHaveLength(4);
 		});
 
 		it('serves list items from cache within 24 hours', async () => {
@@ -433,7 +476,7 @@ describe('MDBListClient', () => {
 			await client.getTopLists();
 
 			const call = vi.mocked(axios.get).mock.calls[0][0];
-			expect(call).toContain('/lists/top');
+			expect(call).toContain('https://api.mdblist.com/lists/top');
 			expect(call).toContain('apikey=test-api-key');
 		});
 
@@ -444,6 +487,13 @@ describe('MDBListClient', () => {
 			const result = await client.getTopLists();
 
 			expect(result).toEqual(mockResponse);
+		});
+
+		it('rejects a limit body instead of returning or caching it', async () => {
+			vi.mocked(axios.get).mockResolvedValue({ data: limitReached });
+
+			await expect(client.getTopLists()).rejects.toThrow('API Limit Reached!');
+			expect(cacheStub.cacheList).not.toHaveBeenCalled();
 		});
 	});
 

@@ -1,0 +1,47 @@
+[
+	{
+		"id": 3923,
+		"user_id": 894,
+		"user_name": "hdlists",
+		"user_avatar_url": null,
+		"name": "Crazy Plot Twists",
+		"slug": "crazy-plot-twists",
+		"description": "",
+		"mediatype": "movie",
+		"items": 100,
+		"likes": 228,
+		"private": false,
+		"dynamic": true,
+		"liked": false
+	},
+	{
+		"id": 72850,
+		"user_id": 8980,
+		"user_name": "showtime416",
+		"user_avatar_url": "https://media.trakt.tv/images/users/012/275/049/avatars/large/ffebe2a82d.jpg",
+		"name": "Crazy Plot Twist Movies",
+		"slug": "crazy-plot-twist-movies",
+		"description": "",
+		"mediatype": "movie",
+		"items": 92,
+		"likes": 2,
+		"private": false,
+		"dynamic": true,
+		"liked": false
+	},
+	{
+		"id": 47491,
+		"user_id": 8980,
+		"user_name": "showtime416",
+		"user_avatar_url": "https://media.trakt.tv/images/users/012/275/049/avatars/large/ffebe2a82d.jpg",
+		"name": "crazy plot twists",
+		"slug": "crazy-plot-twists",
+		"description": null,
+		"mediatype": "",
+		"items": 98,
+		"likes": 1,
+		"private": false,
+		"dynamic": false,
+		"liked": false
+	}
+]

@@ -1,0 +1,57 @@
+{
+	"movies": [],
+	"pagination": {
+		"limit": 2,
+		"offset": 298,
+		"total": 300,
+		"has_more": false
+	},
+	"shows": [
+		{
+			"id": 283354,
+			"mediatype": "show",
+			"imdb_id": "tt35629490",
+			"tvdb_id": 459665,
+			"ids": {
+				"mdblist": "3tu41",
+				"imdb": "tt35629490",
+				"tmdb": 283354,
+				"tvdb": 459665
+			},
+			"title": "Katrina: Come Hell and High Water",
+			"language": "en",
+			"spoken_language": "en",
+			"country": "us",
+			"release_year": 2025,
+			"adult": 0,
+			"release_date": "2025-08-27",
+			"status": "Ended",
+			"runtime": 212,
+			"added_at": "2026-05-06T05:14:42",
+			"rank": 291000
+		},
+		{
+			"id": 262375,
+			"mediatype": "show",
+			"imdb_id": "tt33247080",
+			"tvdb_id": 453650,
+			"ids": {
+				"mdblist": "3layr",
+				"imdb": "tt33247080",
+				"tmdb": 262375,
+				"tvdb": 453650
+			},
+			"title": "Long Story Short",
+			"language": "en",
+			"spoken_language": "en",
+			"country": "us",
+			"release_year": 2025,
+			"adult": 0,
+			"release_date": "2025-08-22",
+			"status": "Returning Series",
+			"runtime": 260,
+			"added_at": "2026-05-06T05:14:42",
+			"rank": 292000
+		}
+	]
+}

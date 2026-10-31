@@ -33,7 +33,7 @@ export class ScrapeInput {
 				for (let i = 0; i < lists.length; i++) {
 					const list = lists[i];
 					console.log(`(${searchTerm}:${i}/${lists.length}) ${list.slug}`, list);
-					yield list.id;
+					yield String(list.id);
 				}
 				break;
 			} catch (error) {
