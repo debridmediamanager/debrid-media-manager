@@ -1,0 +1,446 @@
+{
+	"_source": "DMM's Available/AvailableFile rows for two packs on Game of Thrones season 1 (tt0944947), read from dmmdb on 2026-10-31; files are exactly what /api/availability/check answers for these hashes. Season episode counts are /api/info/show's for tt0944947 the same day.",
+	"available": [
+		{
+			"hash": "b51ac4538c2cb23b6623963e23913a77543382f3",
+			"title": "Game.of.Thrones.S01.2160p.BluRay.REMUX.HEVC.TrueHD.7.1.Atmos.SHD13",
+			"bytes": 311140728545,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/Game.of.Thrones.S01E01.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 32690607948
+				},
+				{
+					"file_id": 2,
+					"path": "/Game.of.Thrones.S01E02.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 29776078414
+				},
+				{
+					"file_id": 3,
+					"path": "/Game.of.Thrones.S01E03.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 30865970614
+				},
+				{
+					"file_id": 4,
+					"path": "/Game.of.Thrones.S01E04.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 30331032508
+				},
+				{
+					"file_id": 5,
+					"path": "/Game.of.Thrones.S01E05.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 31227778401
+				},
+				{
+					"file_id": 6,
+					"path": "/Game.of.Thrones.S01E06.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 30294658862
+				},
+				{
+					"file_id": 7,
+					"path": "/Game.of.Thrones.S01E07.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 31489707592
+				},
+				{
+					"file_id": 8,
+					"path": "/Game.of.Thrones.S01E08.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 31775926478
+				},
+				{
+					"file_id": 9,
+					"path": "/Game.of.Thrones.S01E09.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 31389383821
+				},
+				{
+					"file_id": 10,
+					"path": "/Game.of.Thrones.S01E10.UHD.BluRay.REMUX.2160p.TrueHD.Atmos.7.1.SHD13.mkv",
+					"bytes": 31299583907
+				}
+			]
+		},
+		{
+			"hash": "3cb4bc1cbef03051926ca5d7126d355515f2a6a9",
+			"title": "Game.of.Thrones.S01-S08.2160p.UHD.BluRay.REMUX.DV.HDR.HEVC.TrueHD.7.1.Atmos-FraMeSToR",
+			"bytes": 2076555058286,
+			"files": [
+				{
+					"file_id": 1,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E01.Winter.Is.Coming.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28656526272
+				},
+				{
+					"file_id": 2,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E02.The.Kingsroad.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26460453070
+				},
+				{
+					"file_id": 3,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E03.Lord.Snow.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27414700259
+				},
+				{
+					"file_id": 4,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E04.Cripples.Bastards.and.Broken.Things.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27327663081
+				},
+				{
+					"file_id": 5,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E05.The.Wolf.and.the.Lion.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28036564400
+				},
+				{
+					"file_id": 6,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E06.A.Golden.Crown.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27012583258
+				},
+				{
+					"file_id": 7,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E07.You.Win.or.You.Die.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27651413897
+				},
+				{
+					"file_id": 8,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E08.The.Pointy.End.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27890720496
+				},
+				{
+					"file_id": 9,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E09.Baelor.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27739239090
+				},
+				{
+					"file_id": 10,
+					"path": "/Game.of.Thrones.S01.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S01E10.Fire.and.Blood.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28182082805
+				},
+				{
+					"file_id": 11,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E01.The.North.Remembers.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27353020794
+				},
+				{
+					"file_id": 12,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E02.The.Night.Lands.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27302150896
+				},
+				{
+					"file_id": 13,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E03.What.is.Dead.May.Never.Die.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26787754404
+				},
+				{
+					"file_id": 14,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E04.Garden.of.Bones.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26093942476
+				},
+				{
+					"file_id": 15,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E05.The.Ghost.of.Harrenhal.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28295489985
+				},
+				{
+					"file_id": 16,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E06.The.Old.Gods.and.the.New.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27832949564
+				},
+				{
+					"file_id": 17,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E07.A.Man.Without.Honor.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27658891536
+				},
+				{
+					"file_id": 18,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E08.The.Prince.of.Winterfell.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27089528770
+				},
+				{
+					"file_id": 19,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E09.Blackwater.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26886584347
+				},
+				{
+					"file_id": 20,
+					"path": "/Game.of.Thrones.S02.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S02E10.Valar.Morghulis.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 31379307742
+				},
+				{
+					"file_id": 21,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E01.Valar.Dohaeris.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 25473512591
+				},
+				{
+					"file_id": 22,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E02.Dark.Wings.Dark.Words.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27008453125
+				},
+				{
+					"file_id": 23,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E03.Walk.of.Punishment.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27077310177
+				},
+				{
+					"file_id": 24,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E04.And.Now.His.Watch.Is.Ended.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26349066638
+				},
+				{
+					"file_id": 25,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E05.Kissed.by.Fire.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28172686978
+				},
+				{
+					"file_id": 26,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E06.The.Climb.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26148094125
+				},
+				{
+					"file_id": 27,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E07.The.Bear.and.the.Maiden.Fair.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28261323465
+				},
+				{
+					"file_id": 28,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E08.Second.Sons.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26507793254
+				},
+				{
+					"file_id": 29,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E09.The.Rains.of.Castamere.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 23997008390
+				},
+				{
+					"file_id": 30,
+					"path": "/Game.of.Thrones.S03.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S03E10.Mhysa.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 35899806291
+				},
+				{
+					"file_id": 31,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E01.Two.Swords.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28184319026
+				},
+				{
+					"file_id": 32,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E02.The.Lion.and.the.Rose.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 25975860445
+				},
+				{
+					"file_id": 33,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E03.Breaker.of.Chains.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27506355310
+				},
+				{
+					"file_id": 34,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E04.Oathkeeper.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27454725844
+				},
+				{
+					"file_id": 35,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E05.First.of.His.Name.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26350446209
+				},
+				{
+					"file_id": 36,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E06.The.Laws.of.Gods.and.Men.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 24873578848
+				},
+				{
+					"file_id": 37,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E07.Mockingbird.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26374544747
+				},
+				{
+					"file_id": 38,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E08.The.Mountain.and.the.Viper.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27086084643
+				},
+				{
+					"file_id": 39,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E09.The.Watchers.on.the.Wall.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26384633537
+				},
+				{
+					"file_id": 40,
+					"path": "/Game.of.Thrones.S04.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S04E10.The.Children.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 34150786086
+				},
+				{
+					"file_id": 41,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E01.The.Wars.to.Come.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 25027613529
+				},
+				{
+					"file_id": 42,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E02.The.House.of.Black.and.White.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26728101996
+				},
+				{
+					"file_id": 43,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E03.High.Sparrow.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28858426841
+				},
+				{
+					"file_id": 44,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E04.Sons.of.the.Harpy.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 25061334840
+				},
+				{
+					"file_id": 45,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E05.Kill.the.Boy.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28098294000
+				},
+				{
+					"file_id": 46,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E06.Unbowed.Unbent.Unbroken.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26551080261
+				},
+				{
+					"file_id": 47,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E07.The.Gift.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27370953618
+				},
+				{
+					"file_id": 48,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E08.Hardhome.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28695035176
+				},
+				{
+					"file_id": 49,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E09.The.Dance.of.Dragons.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 24802265357
+				},
+				{
+					"file_id": 50,
+					"path": "/Game.of.Thrones.S05.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S05E10.Mother's.Mercy.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 35256435077
+				},
+				{
+					"file_id": 51,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E01.The.Red.Woman.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 24993355970
+				},
+				{
+					"file_id": 52,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E02.Home.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26885224990
+				},
+				{
+					"file_id": 53,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E03.Oathbreaker.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27221858504
+				},
+				{
+					"file_id": 54,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E04.Book.of.the.Stranger.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28940334099
+				},
+				{
+					"file_id": 55,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E05.The.Door.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26808191554
+				},
+				{
+					"file_id": 56,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E06.Blood.of.My.Blood.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 24063777049
+				},
+				{
+					"file_id": 57,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E07.The.Broken.Man.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 23801946411
+				},
+				{
+					"file_id": 58,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E08.No.One.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27380181524
+				},
+				{
+					"file_id": 59,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E09.Battle.of.the.Bastards.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 28783405435
+				},
+				{
+					"file_id": 60,
+					"path": "/Game.of.Thrones.S06.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S06E10.The.Winds.of.Winter.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 34386767217
+				},
+				{
+					"file_id": 61,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E01.Dragonstone.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 27286331556
+				},
+				{
+					"file_id": 62,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E02.Stormborn.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26554560439
+				},
+				{
+					"file_id": 63,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E03.The.Queen's.Justice.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 29015179373
+				},
+				{
+					"file_id": 64,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E04.The.Spoils.of.War.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 23124651314
+				},
+				{
+					"file_id": 65,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E05.Eastwatch.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 26834929943
+				},
+				{
+					"file_id": 66,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E06.Beyond.the.Wall.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 32656702276
+				},
+				{
+					"file_id": 67,
+					"path": "/Game.of.Thrones.S07.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S07E07.The.Dragon.and.the.Wolf.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 41808717503
+				},
+				{
+					"file_id": 68,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E01.Winterfell.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 22417874378
+				},
+				{
+					"file_id": 69,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E02.A.Knight.of.the.Seven.Kingdoms.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 24849406198
+				},
+				{
+					"file_id": 70,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E03.The.Long.Night.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 35189458809
+				},
+				{
+					"file_id": 71,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E04.The.Last.of.the.Starks.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 40408069300
+				},
+				{
+					"file_id": 72,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E05.The.Bells.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 39653577166
+				},
+				{
+					"file_id": 73,
+					"path": "/Game.of.Thrones.S08.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR/Game.of.Thrones.S08E06.The.Iron.Throne.2160p.TrueHD.Atmos.7.1.DV.HEVC.REMUX-FraMeSToR.mkv",
+					"bytes": 54753059712
+				}
+			]
+		}
+	],
+	"imdbId": "tt0944947",
+	"season_episode_counts": {
+		"0": 306,
+		"1": 10,
+		"2": 10,
+		"3": 10,
+		"4": 10,
+		"5": 10,
+		"6": 10,
+		"7": 7,
+		"8": 6
+	}
+}

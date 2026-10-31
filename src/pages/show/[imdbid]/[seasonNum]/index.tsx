@@ -69,7 +69,7 @@ import { quickSearch } from '@/utils/quickSearch';
 import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/utils/rdAddPause';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
-import { sortByMedian } from '@/utils/results';
+import { packEpisodes, sortByMedian } from '@/utils/results';
 import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -314,15 +314,23 @@ const TvSearch: FunctionComponent = () => {
 	const torrentsAsked = !usenetTab && router.query.tab === 'torrents';
 	const seasonLinkSuffix = torrentsAsked ? '?tab=torrents' : tabSuffix;
 	const { imdbid, seasonNum } = router.query;
-	// The season's real episode count, 0 while unknown: a cached pack ranks on its
-	// largest that many videos (see episodeSize). Read through a ref because
-	// fetchData keeps the sort it started with while the show info loads beside it.
-	const seasonEpisodes = showInfo?.season_episode_counts?.[Number(seasonNum)] ?? 0;
-	const seasonEpisodesRef = useRef(seasonEpisodes);
-	seasonEpisodesRef.current = seasonEpisodes;
-	const sortPacks = useCallback(
-		(results: SearchResult[]) => sortByMedian(results, seasonEpisodesRef.current),
+	// How many episodes a cached pack holds, 0 while the show info is unknown: it
+	// ranks on its largest that many videos (see packEpisodes and episodeSize). Read
+	// through a ref because fetchData keeps the sort it started with while the show
+	// info loads beside it.
+	const episodeCountsRef = useRef({ counts: {} as Record<number, number>, season: 0 });
+	episodeCountsRef.current = {
+		counts: showInfo?.season_episode_counts ?? {},
+		season: Number(seasonNum),
+	};
+	const seasonEpisodes = useCallback(
+		(result: SearchResult) =>
+			packEpisodes(result, episodeCountsRef.current.counts, episodeCountsRef.current.season),
 		[]
+	);
+	const sortPacks = useCallback(
+		(results: SearchResult[]) => sortByMedian(results, seasonEpisodes),
+		[seasonEpisodes]
 	);
 	useEffect(
 		() => () => {

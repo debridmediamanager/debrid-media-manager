@@ -58,8 +58,8 @@ const addButtonClass = (avail: boolean, noVideos: boolean) =>
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
 	expectedEpisodeCount: number;
-	// The season's real episode count, 0 when unknown (see episodeSize).
-	seasonEpisodes?: number;
+	// How many episodes a pack holds, 0 when unknown (see packEpisodes and episodeSize).
+	seasonEpisodes?: number | ((result: SearchResult) => number);
 	onlyShowCached: boolean;
 	episodeMaxSize: string;
 	rdKey: string | null;
@@ -159,6 +159,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	imdbId,
 	isHashServiceChecking,
 }) => {
+	const episodesOf = typeof seasonEpisodes === 'number' ? () => seasonEpisodes : seasonEpisodes;
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [sendingToRdHashes, setSendingToRdHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
@@ -477,7 +478,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						if (
 							episodeMaxSize !== '0' &&
 							(r.medianFileSize
-								? episodeSize(r, seasonEpisodes)
+								? episodeSize(r, episodesOf(r))
 								: (r.medianFileSize ?? r.fileSize)) >
 								parseFloat(episodeMaxSize) * 1024 &&
 							!inYourLibrary
@@ -557,11 +558,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											/>
 											<span
 												className="ml-2"
-												title={`Total: ${fileSize(totalFileSize(r))} GB; Median: ${fileSize(episodeSize(r, seasonEpisodes))} GB per episode`}
+												title={`Total: ${fileSize(totalFileSize(r))} GB; Median: ${fileSize(episodeSize(r, episodesOf(r)))} GB per episode`}
 											>
 												{fileSize(totalFileSize(r))} GB
 												{r.videoCount > 1 &&
-													` · ${fileSize(episodeSize(r, seasonEpisodes))} GB/ep`}
+													` · ${fileSize(episodeSize(r, episodesOf(r)))} GB/ep`}
 												{r.trackerStats &&
 													!r.rdAvailable &&
 													!r.adAvailable &&

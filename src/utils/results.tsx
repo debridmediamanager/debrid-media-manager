@@ -1,4 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
+import { namedEpisodes } from '@/utils/seasonNaming';
 import { isVideo } from '@/utils/selectable';
 import { Download, Zap } from 'lucide-react';
 
@@ -135,8 +136,37 @@ const compareBySize = (
 	return sizeOf(b) - sizeOf(a);
 };
 
-export const sortByMedian = (searchResults: SearchResult[], episodes = 0): SearchResult[] => {
-	const sizes = new Map(searchResults.map((r) => [r, episodeSize(r, episodes)]));
+/**
+ * How many episodes a pack holds, for episodeSize: the season's own count, or for
+ * a pack of several seasons the counts of every season its episode files name.
+ * Seinfeld's complete series on the season 1 page otherwise ranks on its largest 5
+ * videos, season 1's count, which are its double episodes; it holds 180. Without
+ * a count for each of those seasons it keeps the season's own.
+ */
+export const packEpisodes = (
+	result: SearchResult,
+	counts: Record<number, number>,
+	season: number
+) => {
+	const seasons = new Set<number>();
+	for (const file of result.files ?? []) {
+		if (!isVideo({ path: file.filename })) continue;
+		for (const pair of namedEpisodes(file.filename.split('/').pop() ?? '')) {
+			const named = Number(pair.split(':')[0]);
+			if (named > 0) seasons.add(named);
+		}
+	}
+	const own = counts[season] ?? 0;
+	if (seasons.size < 2 || ![...seasons].every((s) => counts[s] > 0)) return own;
+	return [...seasons].reduce((total, s) => total + counts[s], 0);
+};
+
+export const sortByMedian = (
+	searchResults: SearchResult[],
+	episodes: number | ((result: SearchResult) => number) = 0
+): SearchResult[] => {
+	const episodesOf = typeof episodes === 'number' ? () => episodes : episodes;
+	const sizes = new Map(searchResults.map((r) => [r, episodeSize(r, episodesOf(r))]));
 	searchResults.sort((a, b) => {
 		const bySize = compareBySize(a, b, (r) => sizes.get(r)!);
 		if (bySize !== 0) return bySize;

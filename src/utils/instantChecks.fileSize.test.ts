@@ -1,7 +1,11 @@
+import type { SearchResult } from '@/services/mediasearch';
 import { checkCachedStatus } from '@/services/torbox';
 import gameOfThrones from '@/test/fixtures/sortByMedian/game-of-thrones-s01-2026-10-31.json';
+import gameOfThronesUhd from '@/test/fixtures/sortByMedian/game-of-thrones-s01-s08-2160p-2026-10-31.json';
+import seinfeld from '@/test/fixtures/sortByMedian/seinfeld-s01-2026-10-31.json';
 import tatami from '@/test/fixtures/sortByMedian/tatami-galaxy-s01-2026-10-31.json';
 import lastOfUs from '@/test/fixtures/sortByMedian/the-last-of-us-s02-2026-10-31.json';
+import officeUs from '@/test/fixtures/sortByMedian/the-office-us-s01-2026-10-31.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	checkAvailability,
@@ -13,7 +17,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from './instantChecks';
-import { sortByMedian } from './results';
+import { episodeSize, packEpisodes, sortByMedian } from './results';
 
 // Kept out of instantChecks.test.ts on purpose: the RD rate limiter keeps
 // module-level timestamps, and that file already runs at its 10-requests-per-10s
@@ -266,4 +270,55 @@ describe('missing fileSize backfill', () => {
 			);
 		}
 	);
+
+	// A pack of several seasons on the season 1 page: its largest few videos are
+	// double episodes and finales, so ranked on season 1's count it outranks a single
+	// season with bigger episodes. The Office's S01-S09 remux read 9.6 GB against the
+	// Extended Cut's 6.4 GB episodes (its own are 4.8 GB); Game of Thrones' S01-S08
+	// UHD remux read 33 GB against SHD13's 29 GB (its own are 26 GB).
+	const checked = async (fixture: { imdbId: string; available: any[] }) => {
+		mockCheckAvailability.mockResolvedValue({ available: fixture.available } as any);
+		const { setter, getState } = createStateHarness(
+			fixture.available.map((t) => ({
+				hash: t.hash,
+				title: t.title,
+				noVideos: false,
+				rdAvailable: false,
+				files: [],
+				fileSize: t.bytes / MB,
+				medianFileSize: 0,
+				biggestFileSize: 0,
+				videoCount: 0,
+			})) as any[]
+		);
+		await checkDatabaseAvailabilityRd(
+			'problem',
+			'solution',
+			fixture.imdbId,
+			fixture.available.map((t) => t.hash),
+			setter,
+			identity
+		);
+		return getState();
+	};
+
+	it.each([{ fixture: officeUs }, { fixture: gameOfThronesUhd }])(
+		'ranks a $fixture.imdbId pack of several seasons on every season it holds',
+		async ({ fixture }) => {
+			const counts = fixture.season_episode_counts as unknown as Record<number, number>;
+			const sorted = sortByMedian(await checked(fixture), (r) => packEpisodes(r, counts, 1));
+			expect(sorted.map((r) => r.title)).toEqual(fixture.available.map((t) => t.title));
+		}
+	);
+
+	// Seinfeld's complete series holds nine double episodes of 17-22 GB; its season 1
+	// episodes are 10.8 GB, the same encode as the season 1 pack beside it.
+	it('shows the episode size of a complete series, not its double episodes', async () => {
+		const counts = seinfeld.season_episode_counts as unknown as Record<number, number>;
+		const [complete, single] = await checked(seinfeld);
+		expect(packEpisodes(complete, counts, 1)).toBe(180);
+		expect(packEpisodes(single, counts, 1)).toBe(5);
+		const gb = (r: SearchResult) => episodeSize(r, packEpisodes(r, counts, 1)) / 1024;
+		expect(gb(complete)).toBeCloseTo(gb(single), 0);
+	});
 });
