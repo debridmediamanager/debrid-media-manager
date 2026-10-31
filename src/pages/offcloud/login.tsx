@@ -1,3 +1,4 @@
+import { SavedAccountsPicker } from '@/components/SavedAccountsPicker';
 import useLocalStorage from '@/hooks/localStorage';
 import { getOffcloudAccountInfo, isOffcloudPremium } from '@/services/offcloud';
 import { getSafeRedirectPath } from '@/utils/router';
@@ -17,6 +18,7 @@ export default function OffcloudLoginPage() {
 	const [inputApiKey, setInputApiKey] = useState('');
 	const [error, setError] = useState('');
 	const [checking, setChecking] = useState(false);
+	const redirectPath = getSafeRedirectPath(router.query.redirect, '/');
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -35,7 +37,7 @@ export default function OffcloudLoginPage() {
 				return;
 			}
 			setApiKey(inputApiKey.trim());
-			await router.replace(getSafeRedirectPath(router.query.redirect, '/'));
+			await router.replace(redirectPath);
 		} catch (err: any) {
 			setError(
 				err?.code === 'NOAUTH'
@@ -54,6 +56,12 @@ export default function OffcloudLoginPage() {
 			<div className="sibling-space-y-4 w-full max-w-md p-4">
 				<h1 className="text-center text-2xl font-bold">Connect Offcloud</h1>
 				{error && <p className="text-center text-red-500">{error}</p>}
+				{/* A full load, as the service card's switch does, so nothing loaded before the swap survives it. */}
+				<SavedAccountsPicker
+					prefix="oc:"
+					current={null}
+					afterSwitch={() => window.location.assign(redirectPath)}
+				/>
 
 				<form onSubmit={handleSubmit} className="sibling-space-y-4">
 					<div>

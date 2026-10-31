@@ -1,8 +1,9 @@
 import OffcloudLoginPage from '@/pages/offcloud/login';
+import { listSavedAccounts, parkCurrentAccount } from '@/utils/savedAccounts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
@@ -15,6 +16,14 @@ const setApiKey = vi.fn();
 vi.mock('@/hooks/localStorage', () => ({
 	__esModule: true,
 	default: () => [null, setApiKey],
+	notifyLocalStorageChange: vi.fn(),
+}));
+
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { clear: vi.fn() };
+	}),
 }));
 
 const getOffcloudAccountInfo = vi.fn();
@@ -28,6 +37,8 @@ vi.mock('@/services/offcloud', async () => {
 });
 
 const replace = vi.fn();
+const realLocation = window.location;
+const assign = vi.fn();
 
 const premiumAccount = {
 	user_id: '100000001',
@@ -47,6 +58,21 @@ beforeEach(() => {
 	getOffcloudAccountInfo.mockReset();
 	replace.mockReset();
 	vi.mocked(useRouter).mockReturnValue({ replace, query: {} } as any);
+	localStorage.clear();
+	assign.mockReset();
+	Object.defineProperty(window, 'location', {
+		configurable: true,
+		writable: true,
+		value: { ...realLocation, assign },
+	});
+});
+
+afterEach(() => {
+	Object.defineProperty(window, 'location', {
+		configurable: true,
+		writable: true,
+		value: realLocation,
+	});
 });
 
 describe('OffcloudLoginPage', () => {
@@ -128,5 +154,55 @@ describe('OffcloudLoginPage', () => {
 
 		expect(screen.getByLabelText('API Key')).toBeInTheDocument();
 		expect(screen.queryByRole('button', { name: /Sign in with/ })).not.toBeInTheDocument();
+	});
+
+	// "Add another account" parks the signed-in Offcloud login and lands here.
+	describe('with a parked account', () => {
+		beforeEach(async () => {
+			localStorage.setItem('oc:apiKey', '"dad-key"');
+			localStorage.setItem('oc:castToken', '"dad-cast"');
+			await parkCurrentAccount('oc:', { id: '100000001', label: 'dad' });
+		});
+
+		it('offers to continue as it, restoring every oc: key and loading the redirect', async () => {
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: '/library' },
+			} as any);
+
+			render(<OffcloudLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: 'dad' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/library'));
+			expect(localStorage.getItem('oc:apiKey')).toBe('"dad-key"');
+			expect(localStorage.getItem('oc:castToken')).toBe('"dad-cast"');
+			expect(listSavedAccounts('oc:')).toEqual([]);
+			// A full load, never a client-side route: nothing from before the swap may survive it.
+			expect(replace).not.toHaveBeenCalled();
+		});
+
+		it('never sends the hard navigation off-site', async () => {
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: 'https://evil.example' },
+			} as any);
+
+			render(<OffcloudLoginPage />);
+			fireEvent.click(await screen.findByRole('button', { name: 'dad' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/'));
+		});
+	});
+
+	it('shows no account row to a single-account user', async () => {
+		render(<OffcloudLoginPage />);
+
+		await waitFor(() => expect(screen.getByLabelText('API Key')).toBeInTheDocument());
+		expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+		expect(screen.getAllByRole('button').map((b) => b.textContent)).toEqual([
+			'Save API Key',
+			'Get API Key from Offcloud',
+		]);
 	});
 });
