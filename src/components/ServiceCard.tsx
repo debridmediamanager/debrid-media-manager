@@ -10,8 +10,10 @@ import { isOffcloudPremium } from '@/services/offcloud';
 import { isPremiumizePremium } from '@/services/premiumize';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
+import { parkCurrentAccount, type AccountIdentity } from '@/utils/savedAccounts';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
+import { SavedAccountsPicker, useSavedAccounts } from './SavedAccountsPicker';
 
 interface ServiceCardProps {
 	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'trakt';
@@ -48,7 +50,77 @@ const SERVICE_PREFIXES: Record<ServiceCardProps['service'], string> = {
 	trakt: 'trakt:',
 };
 
-export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
+/** Where "Add another account" sends the user; the same pages `useDebridLogin` routes to. */
+const SERVICE_LOGIN_PATHS: Partial<Record<ServiceCardProps['service'], string>> = {
+	rd: '/realdebrid/login',
+	ad: '/alldebrid/login',
+	tb: '/torbox/login',
+	pm: '/premiumize/login',
+	oc: '/offcloud/login',
+	dl: '/debridlink/login',
+};
+
+/**
+ * What a saved login is filed under and shown as. The id is the provider's own
+ * stable identifier, so renewing a token overwrites the same saved slot rather
+ * than adding a second copy of the same account.
+ */
+export function accountIdentity(
+	service: ServiceCardProps['service'],
+	user: ServiceCardProps['user']
+): AccountIdentity | null {
+	if (!user) return null;
+	switch (service) {
+		case 'rd':
+			return 'id' in user && 'username' in user
+				? { id: String(user.id), label: user.username }
+				: null;
+		case 'ad':
+			return 'username' in user ? { id: user.username, label: user.username } : null;
+		case 'tb':
+			return 'email' in user && typeof user.email === 'string'
+				? { id: String(user.id ?? user.email), label: user.email.split('@')[0] }
+				: null;
+		case 'pm':
+			return 'customer_id' in user
+				? { id: String(user.customer_id), label: String(user.customer_id) }
+				: null;
+		case 'oc':
+			return 'user_id' in user
+				? {
+						id: String(user.user_id),
+						label:
+							(user.email as string | undefined)?.split('@')[0] ||
+							String(user.user_id),
+					}
+				: null;
+		case 'dl':
+			return 'username' in user ? { id: user.username, label: user.username } : null;
+		default:
+			return null;
+	}
+}
+
+/**
+ * The card plus, only when this browser holds other saved logins for the
+ * service, the row that swaps between them. A single-account user gets the
+ * bare card - the same element as before, no wrapper.
+ */
+export function ServiceCard(props: ServiceCardProps) {
+	const { service, user, error } = props;
+	const prefix = SERVICE_PREFIXES[service];
+	const saved = useSavedAccounts(prefix);
+	const card = <ServiceCardBody {...props} />;
+	if (error || service === 'trakt' || !saved.length) return card;
+	return (
+		<div className="flex flex-col gap-1">
+			{card}
+			<SavedAccountsPicker prefix={prefix} current={accountIdentity(service, user)} />
+		</div>
+	);
+}
+
+function ServiceCardBody({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
 	const formatBytes = (bytes: number) => {
 		const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
 		if (bytes === 0) return '0 B';
@@ -191,6 +263,9 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
       `;
 		}
 
+		const identity = accountIdentity(service as ServiceCardProps['service'], user);
+		const loginPath = SERVICE_LOGIN_PATHS[service as ServiceCardProps['service']];
+		const canAddAccount = !!identity && !!loginPath;
 		Modal.fire({
 			title,
 			html,
@@ -199,7 +274,19 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
 			cancelButtonText: 'Logout',
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-		}).then((result) => {
+			showDenyButton: canAddAccount,
+			denyButtonText: 'Add another account',
+			denyButtonColor: '#4b5563',
+		}).then(async (result) => {
+			if (result.isDenied && canAddAccount) {
+				// Park this login and hand the provider's login page a clean
+				// slate. A hard navigation, not router.push: it also resets
+				// the provider's auth singleton, which would otherwise keep
+				// reporting this account until the next full load.
+				await parkCurrentAccount(prefix, identity);
+				window.location.assign(loginPath);
+				return;
+			}
 			if (result.isDismissed && result.dismiss === Modal.DismissReason.cancel) {
 				Modal.fire({
 					title: 'Confirm Logout',
