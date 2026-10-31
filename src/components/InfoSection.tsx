@@ -29,7 +29,7 @@ export function CommunityLinks() {
 		<>
 			<a
 				className={linkClass}
-				href="https://discord.gg/7u4YjMThXP"
+				href="https://discord.com/invite/7u4YjMThXP"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
@@ -41,7 +41,7 @@ export function CommunityLinks() {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				r/debridmediamanager
+				Reddit
 			</a>
 			<details className="relative">
 				<summary className={`cursor-pointer list-none ${linkClass}`}>Extensions</summary>

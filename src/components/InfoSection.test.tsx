@@ -46,9 +46,9 @@ describe('InfoSection', () => {
 		);
 
 		expect(screen.queryByRole('link', { name: /zurg/i })).toBeNull();
-		expect(
-			screen.getByRole('link', { name: /r\/debridmediamanager/i }).getAttribute('href')
-		).toContain('reddit.com');
+		expect(screen.getByRole('link', { name: 'Reddit' }).getAttribute('href')).toContain(
+			'reddit.com'
+		);
 		expect(screen.getByRole('link', { name: 'gatekeeper' }).getAttribute('href')).toBe(
 			'https://gatekeeper.debridmediamanager.com'
 		);
@@ -58,7 +58,7 @@ describe('InfoSection', () => {
 			);
 		}
 		expect(screen.getByRole('link', { name: /Discord/i }).getAttribute('href')).toContain(
-			'discord.gg'
+			'https://discord.com/invite/7u4YjMThXP'
 		);
 	});
 

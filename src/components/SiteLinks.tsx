@@ -4,7 +4,7 @@
 export const SITE_LINKS = [
 	{ label: 'zurg', href: 'https://zurg.debridmediamanager.com/' },
 	{ label: 'rex', href: 'https://rex.debridmediamanager.com/' },
-	{ label: 'Guides', href: 'https://notes.debridmediamanager.com/' },
+	{ label: 'Docs', href: 'https://notes.debridmediamanager.com/' },
 	{ label: 'Gatekeeper', href: 'https://gatekeeper.debridmediamanager.com/' },
 ];
 

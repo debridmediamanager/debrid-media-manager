@@ -1,3 +1,4 @@
+import { CommunityLinks } from '@/components/InfoSection';
 import { SiteLinks } from '@/components/SiteLinks';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import {
@@ -240,7 +241,9 @@ export default function StartPage() {
 					browser&apos;s local storage, and you can inspect every request.
 				</p>
 				<div className="mt-4">
-					<SiteLinks />
+					<SiteLinks>
+						<CommunityLinks />
+					</SiteLinks>
 				</div>
 				<Link href="/copyright" className="mt-4 text-xs text-slate-400 underline">
 					Report copyright infringement

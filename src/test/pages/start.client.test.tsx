@@ -132,13 +132,21 @@ describe('StartPage', () => {
 		expect(policy).toHaveTextContent(/your browser's local storage/i);
 	});
 
-	it('links to zurg, rex and the guides', () => {
+	it('links to zurg, rex, the docs and the community', () => {
 		render(<StartPage />);
 
 		const nav = screen.getByRole('navigation', { name: 'Other DMM sites' });
-		expect(within(nav).getByRole('link', { name: 'Guides' })).toHaveAttribute(
+		expect(within(nav).getByRole('link', { name: 'Docs' })).toHaveAttribute(
 			'href',
 			'https://notes.debridmediamanager.com/'
+		);
+		expect(within(nav).getByRole('link', { name: 'Discord' })).toHaveAttribute(
+			'href',
+			'https://discord.com/invite/7u4YjMThXP'
+		);
+		expect(within(nav).getByRole('link', { name: 'Reddit' })).toHaveAttribute(
+			'href',
+			'https://www.reddit.com/r/debridmediamanager/'
 		);
 	});
 
