@@ -76,3 +76,6 @@ credentials.txt
 
 AGENTS.md
 CLAUDE.md
+# Kodi addon (kodi/) Python artefacts
+__pycache__/
+.ruff_cache/

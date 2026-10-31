@@ -1,0 +1,47 @@
+{
+	"cacheMaxAge": 0,
+	"streams": [
+		{
+			"name": "DMM Cast PM ✨",
+			"title": "Cast a file inside a torrent",
+			"externalUrl": "https://debridmediamanager.com/movie/tt12042730",
+			"behaviorHints": { "bingeGroup": "dmm-pm:tt12042730:cast" }
+		},
+		{
+			"name": "720p • H264 • 18.68 GB",
+			"title": "Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv\nAAC 2.0 • 🇬🇧 🇮🇳 🇮🇳 🇮🇳\n🎬 DMM Cast PM (Yours)",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/05bf18ea1437e7e800bfc66d21320e847c74b828?file=Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv",
+			"behaviorHints": { "bingeGroup": "dmm-pm:05bf18ea1437e7e800bfc66d21320e847c74b828" }
+		},
+		{
+			"name": "180.18 GB",
+			"title": "Project Hail Mary 2026 2160p USA UHD B-\nlu-ray DV HDR HEVC TrueHD 7 1 Atmos-TMT\n🎬 DMM Cast PM",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/d033aebd4811c04b1d4f5bc7428a7402ac6c36d4",
+			"behaviorHints": { "bingeGroup": "dmm-pm:d033aebd4811c04b1d4f5bc7428a7402ac6c36d4" }
+		},
+		{
+			"name": "4K • HEVC • 87.98 GB",
+			"title": "Project.Hail.Mary.2026.2160p.US-\nA.UHD.DV.HDR.BDRemux.TeamHD.mkv\nDD 5.1 • 🇷🇺 🇺🇦 🇬🇧\n🎬 DMM Cast PM",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/43c818d0d7b723934a4a5a1ff7a3c2c3d66962e7",
+			"behaviorHints": { "bingeGroup": "dmm-pm:43c818d0d7b723934a4a5a1ff7a3c2c3d66962e7" }
+		},
+		{
+			"name": "4K • HEVC • 79.17 GB",
+			"title": "Project Hail Mary 2026 2160p IMAX BluRay R-\nEMUX DV HDR DTS-HD MA 7 1 Atmos-DayLuvVideo\nTrueHD 7.1 • 🇬🇧 🇪🇸\n🎬 DMM Cast PM",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/01ff0b2be8ba60c3dbaef9709865e05e914b1f1c",
+			"behaviorHints": { "bingeGroup": "dmm-pm:01ff0b2be8ba60c3dbaef9709865e05e914b1f1c" }
+		},
+		{
+			"name": "77.18 GB",
+			"title": "Project.Hail.Mary.2026.2160p.SteelBook.U-\nHD.BluRay.Remux.DV.P7.HDR.MULTi.H265-BTM\n🎬 DMM Cast PM",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/17dd8ca9649d09240fd0b8b5954292092bb4ce2f",
+			"behaviorHints": { "bingeGroup": "dmm-pm:17dd8ca9649d09240fd0b8b5954292092bb4ce2f" }
+		},
+		{
+			"name": "77.13 GB",
+			"title": "Project.Hail.Mary.2026.Hybrid.2160p.UHD.Bluray.Remux-\n.DV.HDR10+.HEVC.DDP.5.1.CZ.TrueHD.Atmos.7.1.EN-JOsHUA\n🎬 DMM Cast PM",
+			"url": "https://debridmediamanager.com/api/stremio-pm/TESTUSERID12/play/eae995945168b99506585ae83ded2b39e40bf6dc",
+			"behaviorHints": { "bingeGroup": "dmm-pm:eae995945168b99506585ae83ded2b39e40bf6dc" }
+		}
+	]
+}

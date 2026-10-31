@@ -1,0 +1,123 @@
+{
+	"cacheMaxAge": 86400,
+	"metas": [
+		{
+			"id": "tt10466872",
+			"imdb_id": "tt10466872",
+			"type": "series",
+			"name": "Dune: Prophecy",
+			"poster": "https://m.media-amazon.com/images/M/MV5BOTc2YTFiOTItZmRiNi00OWE5LThhOTEtMmZhMTkzYmRiNjIxXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt10466872/img",
+			"releaseInfo": "2024-",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+		},
+		{
+			"id": "tt0142032",
+			"imdb_id": "tt0142032",
+			"type": "series",
+			"name": "Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNDdjMTliNGQtYzU2OC00NDU3LTgxMjUtYzcyOTcxMGExZDdmXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt0142032/img",
+			"releaseInfo": "2000",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+		},
+		{
+			"id": "tt0287839",
+			"imdb_id": "tt0287839",
+			"type": "series",
+			"name": "Children of Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BMTI3ODIwMTQ5OF5BMl5BanBnXkFtZTYwNTkwNDk5._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt0287839/img",
+			"releaseInfo": "2003",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+		},
+		{
+			"id": "tt38999951",
+			"imdb_id": "tt38999951",
+			"type": "series",
+			"name": "Be Dune Teen",
+			"poster": "https://m.media-amazon.com/images/M/MV5BYmE4YTdjOTgtMGJjMy00MjJiLWJjMGItZjMxOGI3NmI0N2ZlXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt38999951/img",
+			"releaseInfo": "2025",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+		},
+		{
+			"imdb_id": "tt0089059",
+			"awards": "5 wins",
+			"cast": ["Joseph Spano", "Bob Hoskins", "Joseph Fürst"],
+			"description": "At WWII's start, the British arrested Germans in the UK, including Jewish refugees and assimilated citizens. This film depicts a group sent to an Australian POW camp aboard the Dunera.",
+			"director": ["Ben Lewin"],
+			"genre": ["Drama", "War"],
+			"imdbRating": "6.3",
+			"name": "The Dunera Boys",
+			"released": null,
+			"runtime": "200 min",
+			"slug": "series/the-dunera-boys-0089059",
+			"type": "series",
+			"writer": ["Ben Lewin"],
+			"year": "1985",
+			"popularities": { "moviedb": 1.9008, "stremio": 0.06336, "stremio_lib": 0 },
+			"trailers": [],
+			"poster": "https://images.metahub.space/poster/small/tt0089059/img",
+			"background": "https://images.metahub.space/background/medium/tt0089059/img",
+			"status": "Ended",
+			"logo": "https://images.metahub.space/logo/medium/tt0089059/img",
+			"popularity": 0.06336,
+			"id": "tt0089059",
+			"score": 2.5,
+			"genres": ["Drama", "War"],
+			"releaseInfo": "1985",
+			"trailerStreams": [],
+			"links": [
+				{ "name": "6.3", "category": "imdb", "url": "https://imdb.com/title/tt0089059" },
+				{
+					"name": "The Dunera Boys",
+					"category": "share",
+					"url": "https://www.strem.io/s/series/the-dunera-boys-0089059"
+				},
+				{
+					"name": "Drama",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/series/top?genre=Drama"
+				},
+				{
+					"name": "War",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/series/top?genre=War"
+				},
+				{
+					"name": "Joseph Spano",
+					"category": "Cast",
+					"url": "stremio:///search?search=Joseph%20Spano"
+				},
+				{
+					"name": "Bob Hoskins",
+					"category": "Cast",
+					"url": "stremio:///search?search=Bob%20Hoskins"
+				},
+				{
+					"name": "Joseph Fürst",
+					"category": "Cast",
+					"url": "stremio:///search?search=Joseph%20F%C3%BCrst"
+				},
+				{
+					"name": "Ben Lewin",
+					"category": "Writers",
+					"url": "stremio:///search?search=Ben%20Lewin"
+				},
+				{
+					"name": "Ben Lewin",
+					"category": "Directors",
+					"url": "stremio:///search?search=Ben%20Lewin"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": null, "hasScheduledVideos": true }
+		}
+	],
+	"query": "dune",
+	"rank": 6.25
+}

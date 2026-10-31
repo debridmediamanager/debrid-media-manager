@@ -1,0 +1,10 @@
+{
+	"cacheMaxAge": 0,
+	"streams": [
+		{
+			"name": "⚠️ DMM Cast",
+			"title": "Set up DMM Cast for Real-Debrid again",
+			"externalUrl": "https://debridmediamanager.com/stremio"
+		}
+	]
+}

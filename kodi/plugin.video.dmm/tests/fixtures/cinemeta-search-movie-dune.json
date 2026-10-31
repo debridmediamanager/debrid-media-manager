@@ -1,0 +1,631 @@
+{
+	"cacheMaxAge": 86400,
+	"metas": [
+		{
+			"id": "tt1160419",
+			"imdb_id": "tt1160419",
+			"type": "movie",
+			"name": "Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNWIyNmU5MGYtZDZmNi00ZjAwLWJlYjgtZTc0ZGIxMDE4ZGYwXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt1160419/img",
+			"releaseInfo": "2021",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt1160419", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt31378509",
+			"imdb_id": "tt31378509",
+			"type": "movie",
+			"name": "Dune: Part Three",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNDhiOTAwMjktZDc0ZS00MzVmLWFkNzktOGEzZTdlNzcyNDAxXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt31378509/img",
+			"releaseInfo": "2026",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt31378509", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt15239678",
+			"imdb_id": "tt15239678",
+			"type": "movie",
+			"name": "Dune: Part Two",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt15239678/img",
+			"releaseInfo": "2024",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt15239678", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt0087182",
+			"imdb_id": "tt0087182",
+			"type": "movie",
+			"name": "Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BMGJlMGM3NDAtOWNhMy00MWExLWI2MzEtMDQ0ZDIzZDY5ZmQ2XkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt0087182/img",
+			"releaseInfo": "1984",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt0087182", "hasScheduledVideos": false }
+		},
+		{
+			"awards": "12 wins & 27 nominations total",
+			"cast": ["Alejandro Jodorowsky", "Michel Seydoux", "H.R. Giger"],
+			"description": "The story of cult film director Alejandro Jodorowsky's ambitious but ultimately doomed film adaptation of the seminal science fiction novel.",
+			"director": ["Frank Pavich"],
+			"dvdRelease": "2014-07-08T00:00:00.000Z",
+			"genre": ["Documentary"],
+			"imdbRating": "8.0",
+			"imdb_id": "tt1935156",
+			"name": "Jodorowsky's Dune",
+			"popularity": 0.07332000000000001,
+			"poster": "https://images.metahub.space/poster/small/tt1935156/img",
+			"released": "2016-03-16T00:00:00.000Z",
+			"runtime": "87 min",
+			"trailers": [{ "source": "Q-oBEGF7uwE", "type": "Trailer" }],
+			"type": "movie",
+			"writer": null,
+			"year": "2016",
+			"background": "https://images.metahub.space/background/medium/tt1935156/img",
+			"logo": "https://images.metahub.space/logo/medium/tt1935156/img",
+			"popularities": {
+				"moviedb": 2.1996,
+				"stremio": 0.07332000000000001,
+				"trakt": 2,
+				"stremio_lib": 0
+			},
+			"slug": "movie/jodorowskys-dune-1935156",
+			"id": "tt1935156",
+			"score": 4.166666666666666,
+			"genres": ["Documentary"],
+			"releaseInfo": "2016",
+			"trailerStreams": [{ "title": "Jodorowsky's Dune", "ytId": "Q-oBEGF7uwE" }],
+			"links": [
+				{ "name": "8.0", "category": "imdb", "url": "https://imdb.com/title/tt1935156" },
+				{
+					"name": "Jodorowsky's Dune",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/jodorowskys-dune-1935156"
+				},
+				{
+					"name": "Documentary",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Documentary"
+				},
+				{
+					"name": "Alejandro Jodorowsky",
+					"category": "Cast",
+					"url": "stremio:///search?search=Alejandro%20Jodorowsky"
+				},
+				{
+					"name": "Michel Seydoux",
+					"category": "Cast",
+					"url": "stremio:///search?search=Michel%20Seydoux"
+				},
+				{
+					"name": "H.R. Giger",
+					"category": "Cast",
+					"url": "stremio:///search?search=H.R.%20Giger"
+				},
+				{
+					"name": "Frank Pavich",
+					"category": "Directors",
+					"url": "stremio:///search?search=Frank%20Pavich"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt1935156", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt15331462",
+			"imdb_id": "tt15331462",
+			"type": "movie",
+			"name": "Planet Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BOTI3ZDZjMzAtZTkyYi00YTc4LWEyNDctYzNlOTc2ODIwMWNhXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt15331462/img",
+			"releaseInfo": "2021",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt15331462", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt11835714",
+			"imdb_id": "tt11835714",
+			"type": "movie",
+			"name": "Dune Drifter",
+			"poster": "https://m.media-amazon.com/images/M/MV5BZDZkNjFlYzYtMjNkMC00YmJiLWJkZDItZDIxYTU0MWJmNWNkXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt11835714/img",
+			"releaseInfo": "2020",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt11835714", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt14450978",
+			"imdb_id": "tt14450978",
+			"type": "movie",
+			"name": "Dune World",
+			"poster": "https://m.media-amazon.com/images/M/MV5BZGEzZTI2ZDQtZWI1YS00ZjZjLTllMTgtZTM1Y2Y2ODY5Mjk5XkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt14450978/img",
+			"releaseInfo": "2021",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt14450978", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt0099474",
+			"imdb_id": "tt0099474",
+			"type": "movie",
+			"name": "Dune Warriors",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNDk4ZjQzMGQtMDI1OC00NDY3LWFiMmItMmNmNTFjYmQwMDIzXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt0099474/img",
+			"releaseInfo": "1991",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt0099474", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt2251648",
+			"awards": "3 nominations total",
+			"cast": ["Niels Arestrup", "Lior Ashkenazi", "Guy Marchand"],
+			"description": "An israeli man, who recently broke up with his girlfriend, gets to Paris and starts to follow a soon-to-be retired detective for a mysterious reason.",
+			"director": ["Yossi Aviram"],
+			"genre": ["Drama"],
+			"imdbRating": "6.8",
+			"name": "The Dune",
+			"poster": "https://images.metahub.space/poster/small/tt2251648/img",
+			"released": "2014-08-13T00:00:00.000Z",
+			"runtime": "86 min",
+			"slug": "movie/the-dune-2251648",
+			"type": "movie",
+			"writer": ["Yossi Aviram"],
+			"year": "2014",
+			"popularities": { "moviedb": 1.0972, "stremio": 0.03657333333333333, "stremio_lib": 0 },
+			"trailers": [{ "source": "0SIJqwkLuKw", "type": "Trailer" }],
+			"dvdRelease": "2018-05-05T00:00:00.000Z",
+			"background": "https://images.metahub.space/background/medium/tt2251648/img",
+			"logo": "https://images.metahub.space/logo/medium/tt2251648/img",
+			"popularity": 0.03657333333333333,
+			"id": "tt2251648",
+			"score": 5,
+			"genres": ["Drama"],
+			"releaseInfo": "2014",
+			"trailerStreams": [{ "title": "The Dune", "ytId": "0SIJqwkLuKw" }],
+			"links": [
+				{ "name": "6.8", "category": "imdb", "url": "https://imdb.com/title/tt2251648" },
+				{
+					"name": "The Dune",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/the-dune-2251648"
+				},
+				{
+					"name": "Drama",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+				},
+				{
+					"name": "Niels Arestrup",
+					"category": "Cast",
+					"url": "stremio:///search?search=Niels%20Arestrup"
+				},
+				{
+					"name": "Lior Ashkenazi",
+					"category": "Cast",
+					"url": "stremio:///search?search=Lior%20Ashkenazi"
+				},
+				{
+					"name": "Guy Marchand",
+					"category": "Cast",
+					"url": "stremio:///search?search=Guy%20Marchand"
+				},
+				{
+					"name": "Yossi Aviram",
+					"category": "Writers",
+					"url": "stremio:///search?search=Yossi%20Aviram"
+				},
+				{
+					"name": "Yossi Aviram",
+					"category": "Directors",
+					"url": "stremio:///search?search=Yossi%20Aviram"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt2251648", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt0058625",
+			"imdb_id": "tt0058625",
+			"type": "movie",
+			"name": "Woman in the Dunes",
+			"poster": "https://m.media-amazon.com/images/M/MV5BM2E1ZjY5MjItZTUxZS00NTI1LWEwMmEtODhlMDAyMzUyOTRmXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt0058625/img",
+			"releaseInfo": "1964",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt0058625", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt45048320",
+			"imdb_id": "tt45048320",
+			"type": "movie",
+			"name": "Dune - The Real Story",
+			"poster": "https://m.media-amazon.com/images/M/MV5BZDgyNGM3NDEtODNhYy00NWY3LTgwM2UtODE4MDNkYmFhZDNkXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt45048320/img",
+			"releaseInfo": "2026",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt45048320", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt5288532",
+			"imdb_id": "tt5288532",
+			"type": "movie",
+			"name": "The Sand Dune",
+			"poster": "https://m.media-amazon.com/images/M/MV5BMjdiNTA3NjMtZWY1My00OTc1LWI0NzctM2Y1YWYzMWY0ZjNkXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt5288532/img",
+			"releaseInfo": "2018",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt5288532", "hasScheduledVideos": false }
+		},
+		{
+			"id": "tt11018038",
+			"imdb_id": "tt11018038",
+			"type": "movie",
+			"name": "Dune Dreams",
+			"poster": "https://m.media-amazon.com/images/M/MV5BNDk0YTE2ODItMGVhYy00MmU0LWI3Y2MtZGY2ZmU5ZmFhOTlhXkEyXkFqcGc@._V1_SX250.jpg",
+			"background": "https://images.metahub.space/background/medium/tt11018038/img",
+			"releaseInfo": "2021",
+			"links": [],
+			"behaviorHints": { "defaultVideoId": "tt11018038", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt1619490",
+			"name": "Stages - filmen om bandet Dúné",
+			"year": "2009",
+			"runtime": "92 min",
+			"genre": ["Documentary"],
+			"released": "2009-11-12T00:00:00.000Z",
+			"director": ["Uffe Truust"],
+			"writer": ["Uffe Truust"],
+			"cast": ["Malte Aarup-Sørensen", "Cecilie Dyrberg", "Danny Jungslund"],
+			"imdbRating": "7.4",
+			"poster": "https://images.metahub.space/poster/small/tt1619490/img",
+			"awards": "2 nominations",
+			"type": "movie",
+			"trailers": [],
+			"popularities": { "moviedb": 1.6516, "stremio": 0.05505333333333333, "stremio_lib": 0 },
+			"slug": "movie/stages-filmen-om-bandet-dn-1619490",
+			"background": "https://images.metahub.space/background/medium/tt1619490/img",
+			"logo": "https://images.metahub.space/logo/medium/tt1619490/img",
+			"popularity": 0.05505333333333333,
+			"id": "tt1619490",
+			"score": 3.5,
+			"genres": ["Documentary"],
+			"releaseInfo": "2009",
+			"trailerStreams": [],
+			"links": [
+				{ "name": "7.4", "category": "imdb", "url": "https://imdb.com/title/tt1619490" },
+				{
+					"name": "Stages - filmen om bandet Dúné",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/stages-filmen-om-bandet-dn-1619490"
+				},
+				{
+					"name": "Documentary",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Documentary"
+				},
+				{
+					"name": "Malte Aarup-Sørensen",
+					"category": "Cast",
+					"url": "stremio:///search?search=Malte%20Aarup-S%C3%B8rensen"
+				},
+				{
+					"name": "Cecilie Dyrberg",
+					"category": "Cast",
+					"url": "stremio:///search?search=Cecilie%20Dyrberg"
+				},
+				{
+					"name": "Danny Jungslund",
+					"category": "Cast",
+					"url": "stremio:///search?search=Danny%20Jungslund"
+				},
+				{
+					"name": "Uffe Truust",
+					"category": "Writers",
+					"url": "stremio:///search?search=Uffe%20Truust"
+				},
+				{
+					"name": "Uffe Truust",
+					"category": "Directors",
+					"url": "stremio:///search?search=Uffe%20Truust"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt1619490", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt12451788",
+			"name": "Dune",
+			"popularities": {
+				"trakt": 4,
+				"moviedb": 1.3813,
+				"stremio": 0.0046043333333333335,
+				"stremio_lib": 0
+			},
+			"type": "movie",
+			"awards": "2 nominations",
+			"cast": ["Irone Singleton"],
+			"description": "The sounds as witnesses. They blur into memories, half-dreams, it is undecided if they are real or not. Fluctuation between imagination and reality. Rocking pictures in the mind, pulsating dark emotions.",
+			"director": ["Gábor Ulrich"],
+			"genre": ["Animation", "Short"],
+			"imdbRating": "7.7",
+			"poster": "https://images.metahub.space/poster/small/tt12451788/img",
+			"released": "2020-06-15T00:00:00.000Z",
+			"runtime": "4 min",
+			"writer": ["Gábor Ulrich"],
+			"year": "2020",
+			"trailers": [],
+			"slug": "movie/dune-12451788",
+			"background": "https://images.metahub.space/background/medium/tt12451788/img",
+			"logo": "https://images.metahub.space/logo/medium/tt12451788/img",
+			"popularity": 0.0046043333333333335,
+			"id": "tt12451788",
+			"score": 7.5,
+			"genres": ["Animation", "Short"],
+			"releaseInfo": "2020",
+			"trailerStreams": [],
+			"links": [
+				{ "name": "7.7", "category": "imdb", "url": "https://imdb.com/title/tt12451788" },
+				{
+					"name": "Dune",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/dune-12451788"
+				},
+				{
+					"name": "Animation",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Animation"
+				},
+				{
+					"name": "Short",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Short"
+				},
+				{
+					"name": "Irone Singleton",
+					"category": "Cast",
+					"url": "stremio:///search?search=Irone%20Singleton"
+				},
+				{
+					"name": "Gábor Ulrich",
+					"category": "Writers",
+					"url": "stremio:///search?search=G%C3%A1bor%20Ulrich"
+				},
+				{
+					"name": "Gábor Ulrich",
+					"category": "Directors",
+					"url": "stremio:///search?search=G%C3%A1bor%20Ulrich"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt12451788", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt4681432",
+			"cast": ["Ele Bardha", "Barton Bund", "Aidan Callahan"],
+			"director": ["Grant Mohrman"],
+			"genre": ["Drama", "Mystery", "Thriller"],
+			"imdbRating": "3.8",
+			"name": "The Dunes",
+			"released": "2019-12-03T00:00:00.000Z",
+			"slug": "movie/the-dunes-4681432",
+			"type": "movie",
+			"writer": ["Greg Mohrman"],
+			"year": "2019",
+			"popularities": { "moviedb": 2.1237, "stremio": 0.07078999999999999, "stremio_lib": 0 },
+			"trailers": [{ "source": "Mdf9-rSDHwY", "type": "Trailer" }],
+			"description": "When a domestic counselor's ex-wife attempts to move to the other side of the country with their son and new boyfriend, he decides to do whatever is necessary to keep it from happening.",
+			"poster": "https://images.metahub.space/poster/small/tt4681432/img",
+			"runtime": "88 min",
+			"dvdRelease": "2019-10-02T00:00:00.000Z",
+			"background": "https://images.metahub.space/background/medium/tt4681432/img",
+			"logo": "https://images.metahub.space/logo/medium/tt4681432/img",
+			"popularity": 0.07078999999999999,
+			"id": "tt4681432",
+			"score": 2.5,
+			"genres": ["Drama", "Mystery", "Thriller"],
+			"releaseInfo": "2019",
+			"trailerStreams": [{ "title": "The Dunes", "ytId": "Mdf9-rSDHwY" }],
+			"links": [
+				{ "name": "3.8", "category": "imdb", "url": "https://imdb.com/title/tt4681432" },
+				{
+					"name": "The Dunes",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/the-dunes-4681432"
+				},
+				{
+					"name": "Drama",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+				},
+				{
+					"name": "Mystery",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Mystery"
+				},
+				{
+					"name": "Thriller",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Thriller"
+				},
+				{
+					"name": "Ele Bardha",
+					"category": "Cast",
+					"url": "stremio:///search?search=Ele%20Bardha"
+				},
+				{
+					"name": "Barton Bund",
+					"category": "Cast",
+					"url": "stremio:///search?search=Barton%20Bund"
+				},
+				{
+					"name": "Aidan Callahan",
+					"category": "Cast",
+					"url": "stremio:///search?search=Aidan%20Callahan"
+				},
+				{
+					"name": "Greg Mohrman",
+					"category": "Writers",
+					"url": "stremio:///search?search=Greg%20Mohrman"
+				},
+				{
+					"name": "Grant Mohrman",
+					"category": "Directors",
+					"url": "stremio:///search?search=Grant%20Mohrman"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt4681432", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt6910678",
+			"name": "The Dunes",
+			"popularities": {
+				"trakt": 3,
+				"stremio": 0.029606666666666667,
+				"stremio_lib": 0,
+				"moviedb": 0.8882
+			},
+			"type": "movie",
+			"awards": "22 wins & 1 nomination total",
+			"cast": ["Marsha Vassilevskaia", "Tatiana Sokolova", "Alexandra Davies"],
+			"description": "A renowned journalist from the LA Times returns to his hometown of The Dunes. While he's there, a mysterious figure from his past arises and threatens his entire existence.",
+			"director": ["Martin Copping"],
+			"genre": ["Thriller"],
+			"imdbRating": "5.3",
+			"released": "2021-12-11T00:00:00.000Z",
+			"runtime": "84 min",
+			"slug": "movie/the-dunes-6910678",
+			"writer": ["Martin Copping"],
+			"year": "2021",
+			"poster": "https://images.metahub.space/poster/small/tt6910678/img",
+			"trailers": [{ "source": "-NXaz7NrnXk", "type": "Trailer" }],
+			"background": "https://images.metahub.space/background/medium/tt6910678/img",
+			"logo": "https://images.metahub.space/logo/medium/tt6910678/img",
+			"popularity": 0.029606666666666667,
+			"id": "tt6910678",
+			"score": 2.5,
+			"genres": ["Thriller"],
+			"releaseInfo": "2021",
+			"trailerStreams": [{ "title": "The Dunes", "ytId": "-NXaz7NrnXk" }],
+			"links": [
+				{ "name": "5.3", "category": "imdb", "url": "https://imdb.com/title/tt6910678" },
+				{
+					"name": "The Dunes",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/the-dunes-6910678"
+				},
+				{
+					"name": "Thriller",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Thriller"
+				},
+				{
+					"name": "Marsha Vassilevskaia",
+					"category": "Cast",
+					"url": "stremio:///search?search=Marsha%20Vassilevskaia"
+				},
+				{
+					"name": "Tatiana Sokolova",
+					"category": "Cast",
+					"url": "stremio:///search?search=Tatiana%20Sokolova"
+				},
+				{
+					"name": "Alexandra Davies",
+					"category": "Cast",
+					"url": "stremio:///search?search=Alexandra%20Davies"
+				},
+				{
+					"name": "Martin Copping",
+					"category": "Writers",
+					"url": "stremio:///search?search=Martin%20Copping"
+				},
+				{
+					"name": "Martin Copping",
+					"category": "Directors",
+					"url": "stremio:///search?search=Martin%20Copping"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt6910678", "hasScheduledVideos": false }
+		},
+		{
+			"imdb_id": "tt0363788",
+			"popularity": 0.0038453333333333334,
+			"name": "Destination Dune",
+			"year": "1984",
+			"runtime": "7 min",
+			"genre": ["Documentary", "Short"],
+			"released": null,
+			"director": ["Paul Sammon"],
+			"writer": ["Paul Sammon"],
+			"cast": ["Percy Rodrigues", "Frank Herbert", "David Lynch"],
+			"imdbRating": "6.3",
+			"poster": "https://images.metahub.space/poster/small/tt0363788/img",
+			"description": "This 1983 featurette, directed by Paul M. Sammon, was originally produced to promote the film at conventions and publicity events in the lead-up to its release.",
+			"awards": null,
+			"dvdRelease": null,
+			"type": "movie",
+			"popularities": {
+				"PXS_TEST": 0,
+				"EXMD": 0,
+				"ALLIANCE": 0,
+				"EJD": 0,
+				"stremio": 0.0038453333333333334,
+				"stremio_lib": 0,
+				"moviedb": 1.1536
+			},
+			"slug": "movie/destination-dune-0363788",
+			"trailers": [],
+			"background": "https://images.metahub.space/background/medium/tt0363788/img",
+			"logo": "https://images.metahub.space/logo/medium/tt0363788/img",
+			"id": "tt0363788",
+			"score": 5,
+			"genres": ["Documentary", "Short"],
+			"releaseInfo": "1984",
+			"trailerStreams": [],
+			"links": [
+				{ "name": "6.3", "category": "imdb", "url": "https://imdb.com/title/tt0363788" },
+				{
+					"name": "Destination Dune",
+					"category": "share",
+					"url": "https://www.strem.io/s/movie/destination-dune-0363788"
+				},
+				{
+					"name": "Documentary",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Documentary"
+				},
+				{
+					"name": "Short",
+					"category": "Genres",
+					"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Short"
+				},
+				{
+					"name": "Percy Rodrigues",
+					"category": "Cast",
+					"url": "stremio:///search?search=Percy%20Rodrigues"
+				},
+				{
+					"name": "Frank Herbert",
+					"category": "Cast",
+					"url": "stremio:///search?search=Frank%20Herbert"
+				},
+				{
+					"name": "David Lynch",
+					"category": "Cast",
+					"url": "stremio:///search?search=David%20Lynch"
+				},
+				{
+					"name": "Paul Sammon",
+					"category": "Writers",
+					"url": "stremio:///search?search=Paul%20Sammon"
+				},
+				{
+					"name": "Paul Sammon",
+					"category": "Directors",
+					"url": "stremio:///search?search=Paul%20Sammon"
+				}
+			],
+			"behaviorHints": { "defaultVideoId": "tt0363788", "hasScheduledVideos": false }
+		}
+	],
+	"query": "dune",
+	"rank": 6.25
+}

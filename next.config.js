@@ -22,6 +22,8 @@ const nextConfig = {
 			afterFiles: [
 				{ source: '/anticors', destination: '/api/anticors' },
 				{ source: '/api-docs', destination: '/api-docs.html' },
+				// The Kodi repository (scripts/build-kodi-repo.py): Kodi browses it as a file source.
+				{ source: '/repo', destination: '/repo/index.html' },
 			],
 			fallback: [
 				{
