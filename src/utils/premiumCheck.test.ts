@@ -43,7 +43,7 @@ describe('checkPremiumStatus', () => {
 	it('warns users when premium expires soon and throttles warnings', async () => {
 		modalFireMock.mockResolvedValue({ isConfirmed: false });
 		localStorage.setItem(
-			'rd_premium_warning',
+			'rd:premiumWarning',
 			(Date.now() - 2 * 24 * 60 * 60 * 1000).toString()
 		);
 
@@ -56,7 +56,7 @@ describe('checkPremiumStatus', () => {
 		expect(modalFireMock).toHaveBeenCalledWith(
 			expect.objectContaining({ title: 'Premium Expiring Soon' })
 		);
-		expect(localStorage.getItem('rd_premium_warning')).not.toBeNull();
+		expect(localStorage.getItem('rd:premiumWarning')).not.toBeNull();
 	});
 
 	it('does nothing when membership has plenty of time remaining', async () => {

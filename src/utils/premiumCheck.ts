@@ -26,7 +26,7 @@ export async function checkPremiumStatus(rdUser: RealDebridUser) {
 
 	if (daysRemaining <= 7) {
 		const now = Date.now();
-		const lastWarning = parseInt(localStorage.getItem('rd_premium_warning') || '0');
+		const lastWarning = parseInt(localStorage.getItem('rd:premiumWarning') || '0');
 		if (now - lastWarning >= 24 * 60 * 60 * 1000) {
 			// 24 hours in milliseconds
 			const result = await Modal.fire({
@@ -41,7 +41,7 @@ export async function checkPremiumStatus(rdUser: RealDebridUser) {
 			if (result.isConfirmed) {
 				window.open(realDebridPremiumReferralUrl(), '_blank');
 			}
-			localStorage.setItem('rd_premium_warning', now.toString());
+			localStorage.setItem('rd:premiumWarning', now.toString());
 		}
 	}
 

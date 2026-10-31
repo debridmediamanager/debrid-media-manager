@@ -61,6 +61,12 @@ export function saveCurrentAccount(prefix: string, identity: AccountIdentity): v
 	writeSavedAccounts(prefix, [...others, { ...identity, keys, savedAt: Date.now() }]);
 }
 
+/** Whether some login is active under `prefix`, whoever it belongs to. */
+export function hasActiveLogin(prefix: string): boolean {
+	if (typeof window === 'undefined') return false;
+	return prefixedKeys(prefix).length > 0;
+}
+
 function sweep(prefix: string) {
 	for (const key of prefixedKeys(prefix)) {
 		window.localStorage.removeItem(key);
@@ -92,6 +98,10 @@ export async function switchToSavedAccount(
 ): Promise<boolean> {
 	const target = listSavedAccounts(prefix).find((a) => a.id === id);
 	if (!target) return false;
+	// A login page reached with Back, or "Sign in again" from the error card,
+	// still holds a login nobody identified. Sweeping it would lose it, so
+	// refuse rather than guess; the card's Logout clears the way.
+	if (!current && hasActiveLogin(prefix)) return false;
 	if (current) saveCurrentAccount(prefix, current);
 	sweep(prefix);
 	for (const [key, value] of Object.entries(target.keys)) {

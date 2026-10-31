@@ -1,4 +1,5 @@
 import {
+	hasActiveLogin,
 	listSavedAccounts,
 	switchToSavedAccount,
 	type AccountIdentity,
@@ -12,9 +13,17 @@ import { useEffect, useState } from 'react';
  * mismatch the hydrated markup.
  */
 export function useSavedAccounts(prefix: string): SavedAccount[] {
-	const [accounts, setAccounts] = useState<SavedAccount[]>([]);
+	return useSavedAccountsStore(prefix).accounts;
+}
+
+function useSavedAccountsStore(prefix: string) {
+	const [state, setState] = useState<{ accounts: SavedAccount[]; activeLogin: boolean }>({
+		accounts: [],
+		activeLogin: false,
+	});
 	useEffect(() => {
-		const read = () => setAccounts(listSavedAccounts(prefix));
+		const read = () =>
+			setState({ accounts: listSavedAccounts(prefix), activeLogin: hasActiveLogin(prefix) });
 		read();
 		window.addEventListener('storage', read);
 		window.addEventListener('local-storage', read);
@@ -23,7 +32,7 @@ export function useSavedAccounts(prefix: string): SavedAccount[] {
 			window.removeEventListener('local-storage', read);
 		};
 	}, [prefix]);
-	return accounts;
+	return state;
 }
 
 interface Props {
@@ -36,9 +45,11 @@ interface Props {
 
 /** Renders nothing for the single-account majority. */
 export function SavedAccountsPicker({ prefix, current, afterSwitch }: Props) {
-	const accounts = useSavedAccounts(prefix);
+	const { accounts, activeLogin } = useSavedAccountsStore(prefix);
 	const [busy, setBusy] = useState(false);
-	if (!accounts.length) return null;
+	// On a login page (no `current`) an active login is one nobody identified;
+	// offering a swap would sweep it unsaved, so the row waits for a logout.
+	if (!accounts.length || (!current && activeLogin)) return null;
 
 	const pick = async (id: string) => {
 		setBusy(true);

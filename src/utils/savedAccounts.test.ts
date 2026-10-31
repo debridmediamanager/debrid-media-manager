@@ -128,6 +128,20 @@ describe('savedAccounts', () => {
 		expect(localStorage.getItem(savedAccountsKey('rd:'))).toBeNull();
 	});
 
+	// A login page reached with Back still holds the second account's login,
+	// which nobody has identified yet. Sweeping it would lose it.
+	it('refuses to sweep an active login it was not told about', async () => {
+		signInDad();
+		await parkCurrentAccount('rd:', dad);
+		localStorage.setItem('rd:accessToken', '"son-api-key"');
+
+		expect(await switchToSavedAccount('rd:', '1', null)).toBe(false);
+
+		expect(localStorage.getItem('rd:accessToken')).toBe('"son-api-key"');
+		expect(listSavedAccounts('rd:').map((a) => a.id)).toEqual(['1']);
+		expect(clearMock).toHaveBeenCalledTimes(1); // the park only
+	});
+
 	it('refuses an unknown id and changes nothing', async () => {
 		signInDad();
 		expect(await switchToSavedAccount('rd:', 'nope', dad)).toBe(false);

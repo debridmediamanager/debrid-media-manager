@@ -257,7 +257,8 @@ describe('RealDebridLoginPage', () => {
 		it('hides the row while another login is active, which a switch would discard', async () => {
 			localStorage.setItem('rd:accessToken', '"dad-key"');
 			await parkCurrentAccount('rd:', { id: '42', label: 'dad' });
-			stored['rd:accessToken'] = 'son-key';
+			// the picker reads the real store, as production does
+			localStorage.setItem('rd:accessToken', '"son-key"');
 
 			render(<RealDebridLoginPage />);
 

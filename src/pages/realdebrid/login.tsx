@@ -12,7 +12,7 @@ export default function RealDebridLoginPage() {
 	const [, setClientId] = useLocalStorage<string>('rd:clientId');
 	const [, setClientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [, setRefreshToken] = useLocalStorage<string>('rd:refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
+	const [, setAccessToken] = useLocalStorage<string>('rd:accessToken');
 	const [inputApiKey, setInputApiKey] = useState('');
 	const [error, setError] = useState('');
 	const [checking, setChecking] = useState(false);
@@ -147,16 +147,14 @@ export default function RealDebridLoginPage() {
 					</div>
 				) : (
 					<>
-						{/* Hidden while a login is active (Back after signing in): with
-						    current null, a switch would sweep that login unparked. A
-						    full load, not router.replace, so auth state starts over. */}
-						{!accessToken && (
-							<SavedAccountsPicker
-								prefix="rd:"
-								current={null}
-								afterSwitch={() => window.location.assign(redirectTo)}
-							/>
-						)}
+						{/* A full load, not router.replace, so auth state starts over. The
+						    picker hides itself while a login is active (Back after signing
+						    in), since a switch here would sweep that login unparked. */}
+						<SavedAccountsPicker
+							prefix="rd:"
+							current={null}
+							afterSwitch={() => window.location.assign(redirectTo)}
+						/>
 						<button
 							type="button"
 							onClick={startDeviceLogin}

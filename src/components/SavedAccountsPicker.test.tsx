@@ -55,6 +55,18 @@ describe('SavedAccountsPicker', () => {
 		expect(screen.getByRole('button', { name: 'dad' })).toBeInTheDocument();
 	});
 
+	// Back onto the login page after signing in the second account: the row
+	// would offer to sweep that login unparked, so it stays hidden until a logout.
+	it('hides on a login page while a login is still active', async () => {
+		localStorage.setItem('rd:accessToken', '"dad-key"');
+		await parkCurrentAccount('rd:', { id: '1', label: 'dad' });
+		localStorage.setItem('rd:accessToken', '"son-key"');
+
+		const { container } = render(<SavedAccountsPicker prefix="rd:" current={null} />);
+		await new Promise((r) => setTimeout(r, 50));
+		expect(container).toBeEmptyDOMElement();
+	});
+
 	it('follows the store when another part of the page parks an account', async () => {
 		render(<SavedAccountsPicker prefix="rd:" current={null} />);
 		localStorage.setItem('rd:accessToken', '"dad-key"');
