@@ -5,6 +5,7 @@ import {
 	Field,
 	GetKeySteps,
 	SponsorStrip,
+	SupportLine,
 } from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
@@ -241,6 +242,7 @@ export default function NewznabSetupPage() {
 					apiKey={apiKey}
 					needsKeySource={isSponsor && !apiKey}
 				/>
+				<SupportLine forum="dmm-support" />
 			</div>
 		</div>
 	);

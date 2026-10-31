@@ -78,6 +78,17 @@ describe('Torznab setup page, for a sponsor', () => {
 	// A browser that never linked a key, or linked one before it was worth
 	// keeping, has nothing to fill in — so the page has to say where to get one
 	// rather than render an empty box.
+	it('says where to ask when setup did not work', () => {
+		asSponsor(null);
+		render(<TorznabSetupPage />);
+
+		expect(screen.getByText(/Ask in the dmm-support forum/)).toBeTruthy();
+		expect(screen.getByRole('link', { name: 'Discord' })).toHaveAttribute(
+			'href',
+			'https://discord.com/invite/7u4YjMThXP'
+		);
+	});
+
 	it('points at gatekeeper when this browser holds no key', () => {
 		asSponsor(null);
 		render(<TorznabSetupPage />);

@@ -208,3 +208,24 @@ export function BackToDashboard() {
 		</Link>
 	);
 }
+
+/**
+ * Where to ask when a setup page did not get someone there. Help, not the
+ * sponsorship pitch, so it sits on every setup page whoever is reading.
+ */
+export function SupportLine({ forum }: { forum: 'dmm-support' | 'zurg-support' }) {
+	return (
+		<p className="text-center text-xs text-gray-400">
+			Stuck? Ask in the {forum} forum on{' '}
+			<a
+				href="https://discord.com/invite/7u4YjMThXP"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="text-blue-300 underline hover:text-blue-200"
+			>
+				Discord
+			</a>
+			.
+		</p>
+	);
+}

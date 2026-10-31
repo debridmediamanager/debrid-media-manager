@@ -5,6 +5,7 @@ import {
 	Field,
 	GetKeySteps,
 	SponsorStrip,
+	SupportLine,
 } from '@/components/IndexerSetup';
 import { TorznabProviderPanel } from '@/components/TorznabProviderPanel';
 import { useSponsor } from '@/hooks/useSponsor';
@@ -360,6 +361,7 @@ export default function TorznabSetupPage() {
 					apiKey={apiKey}
 					needsKeySource={isSponsor && !apiKey}
 				/>
+				<SupportLine forum="dmm-support" />
 			</div>
 		</div>
 	);

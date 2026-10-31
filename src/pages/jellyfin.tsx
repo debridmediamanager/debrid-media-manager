@@ -1,4 +1,11 @@
-import { BackToDashboard, Card, Field, maskApiKey, SponsorStrip } from '@/components/IndexerSetup';
+import {
+	BackToDashboard,
+	Card,
+	Field,
+	maskApiKey,
+	SponsorStrip,
+	SupportLine,
+} from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
@@ -296,6 +303,7 @@ export default function JellyfinSetupPage() {
 
 				{isSponsor ? null : <SponsorStrip />}
 				<SetupGuide origin={origin} apiKey={apiKey} needsKeySource={isSponsor && !apiKey} />
+				<SupportLine forum="zurg-support" />
 			</div>
 		</div>
 	);

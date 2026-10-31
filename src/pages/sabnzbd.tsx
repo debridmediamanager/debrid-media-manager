@@ -1,4 +1,4 @@
-import { BackToDashboard } from '@/components/IndexerSetup';
+import { BackToDashboard, SupportLine } from '@/components/IndexerSetup';
 import { magicMountRoot, needsUsernameSlot, SAB_DAILY, sabUrlBase } from '@/services/sabnzbdProxy';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { toasterPosition } from '@/utils/toastOptions';
@@ -603,6 +603,7 @@ export default function SabnzbdSetupPage() {
 						</li>
 					</ul>
 				</Card>
+				<SupportLine forum="dmm-support" />
 			</div>
 		</div>
 	);

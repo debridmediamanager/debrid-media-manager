@@ -4,6 +4,7 @@ import {
 	Card,
 	CopyButton,
 	SponsorStrip,
+	SupportLine,
 } from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
@@ -533,6 +534,7 @@ export default function EmbySetupPage() {
 					needsKeySource={isSponsor && !apiKey}
 					published={published}
 				/>
+				<SupportLine forum="zurg-support" />
 			</div>
 		</div>
 	);

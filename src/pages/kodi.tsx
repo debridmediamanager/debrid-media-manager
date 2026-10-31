@@ -1,4 +1,4 @@
-import { BackToDashboard, Card, Field } from '@/components/IndexerSetup';
+import { BackToDashboard, Card, Field, SupportLine } from '@/components/IndexerSetup';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCastToken } from '@/hooks/castToken';
 import { useDebridLinkCastToken } from '@/hooks/debridLinkCastToken';
@@ -251,6 +251,7 @@ function KodiPage() {
 						</li>
 					</ol>
 				</Card>
+				<SupportLine forum="dmm-support" />
 			</div>
 		</div>
 	);
