@@ -2,7 +2,7 @@ import RealDebridLoginPage from '@/pages/realdebrid/login';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: vi.fn() }));
 
@@ -17,9 +17,18 @@ const setStored: Record<string, ReturnType<typeof vi.fn>> = {
 	'rd:clientSecret': vi.fn(),
 	'rd:refreshToken': vi.fn(),
 };
+const stored: Record<string, unknown> = {};
 vi.mock('@/hooks/localStorage', () => ({
 	__esModule: true,
-	default: (key: string) => [null, setStored[key] ?? vi.fn()],
+	default: (key: string) => [stored[key] ?? null, setStored[key] ?? vi.fn()],
+	notifyLocalStorageChange: vi.fn(),
+}));
+
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { clear: vi.fn() };
+	}),
 }));
 
 const getDeviceCode = vi.fn();
@@ -33,6 +42,8 @@ vi.mock('@/services/realDebrid', () => ({
 	getToken: (...args: unknown[]) => getToken(...args),
 	getCurrentUser: (...args: unknown[]) => getCurrentUser(...args),
 }));
+
+import { listSavedAccounts, parkCurrentAccount } from '@/utils/savedAccounts';
 
 const replace = vi.fn();
 
@@ -175,6 +186,99 @@ describe('RealDebridLoginPage', () => {
 				screen.getByRole('button', { name: 'Sign in with Real-Debrid' })
 			).toBeInTheDocument();
 			expect(getDeviceCode).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('saved accounts', () => {
+		const realLocation = window.location;
+		const assign = vi.fn();
+
+		beforeEach(() => {
+			localStorage.clear();
+			delete stored['rd:accessToken'];
+			assign.mockReset();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: { ...realLocation, assign },
+			});
+		});
+
+		afterEach(() => {
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: realLocation,
+			});
+			localStorage.clear();
+		});
+
+		it('continues as a parked account with a full load to the redirect', async () => {
+			const expiring = JSON.stringify({ value: 'dad-token', expiry: Date.now() + 3600_000 });
+			localStorage.setItem('rd:accessToken', expiring);
+			localStorage.setItem('rd:clientId', '"dad-cid"');
+			localStorage.setItem('rd:clientSecret', '"dad-secret"');
+			localStorage.setItem('rd:refreshToken', '"dad-device"');
+			await parkCurrentAccount('rd:', { id: '42', label: 'dad' });
+			expect(localStorage.getItem('rd:accessToken')).toBeNull();
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: '/library' },
+			} as any);
+
+			render(<RealDebridLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: 'dad' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/library'));
+			expect(localStorage.getItem('rd:accessToken')).toBe(expiring);
+			expect(localStorage.getItem('rd:clientId')).toBe('"dad-cid"');
+			expect(localStorage.getItem('rd:clientSecret')).toBe('"dad-secret"');
+			expect(localStorage.getItem('rd:refreshToken')).toBe('"dad-device"');
+			expect(listSavedAccounts('rd:')).toEqual([]);
+			// A client-side route change would keep the signed-out auth singleton.
+			expect(replace).not.toHaveBeenCalled();
+		});
+
+		it('hides the row while a device code is pending', async () => {
+			localStorage.setItem('rd:accessToken', '"dad-key"');
+			await parkCurrentAccount('rd:', { id: '42', label: 'dad' });
+			getDeviceCode.mockResolvedValue(deviceCode);
+			getCredentials.mockRejectedValue(new Error('authorization pending'));
+
+			render(<RealDebridLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: 'Sign in with Real-Debrid' }));
+
+			await waitFor(() => expect(screen.getByTestId('rd-user-code')).toBeInTheDocument());
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+		});
+
+		it('hides the row while another login is active, which a switch would discard', async () => {
+			localStorage.setItem('rd:accessToken', '"dad-key"');
+			await parkCurrentAccount('rd:', { id: '42', label: 'dad' });
+			stored['rd:accessToken'] = 'son-key';
+
+			render(<RealDebridLoginPage />);
+
+			expect(
+				await screen.findByRole('button', { name: 'Sign in with Real-Debrid' })
+			).toBeInTheDocument();
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+		});
+
+		it('leaves the page unchanged when nothing is saved', async () => {
+			render(<RealDebridLoginPage />);
+
+			expect(
+				await screen.findByRole('button', { name: 'Sign in with Real-Debrid' })
+			).toBeInTheDocument();
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+			expect(screen.getAllByRole('button').map((b) => b.textContent)).toEqual([
+				'Sign in with Real-Debrid',
+				'Save API Key',
+				'Get API Key from Real-Debrid',
+			]);
 		});
 	});
 });
