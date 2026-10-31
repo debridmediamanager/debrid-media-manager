@@ -1,0 +1,1942 @@
+{
+	"atom:link": {
+		"_href": "https://drunkenslug.com/api",
+		"_rel": "self",
+		"_type": "application/rss+xml"
+	},
+	"category": "drunkenslug, ds, slug",
+	"description": "DS API Details",
+	"docs": "https://drunkenslug.com/apihelp/",
+	"generator": "nZEDb",
+	"image": {
+		"_url": "https://drunkenslug.com/themes/shared/img/logo.png",
+		"_title": "DS",
+		"_link": "https://drunkenslug.com/",
+		"_description": "Visit DS - DrunkenSlug"
+	},
+	"item": [
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "10095886603"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0089154-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "ytXIPuk1p5ZA@UTdxnpN8.PTI"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0089154"
+				},
+				{
+					"_name": "grabs",
+					"_value": "0"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:40:26 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.sleazemovies"
+				}
+			],
+			"title": "Flesh.and.Bullets.1985.1080p.AMZN.WEB-DL.DD2.0.H.264",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/cf08247d3b8aa181f7b796d934dda23b74425379"
+			},
+			"link": "https://drunkenslug.com/getnzb/cf08247d3b8aa181f7b796d934dda23b74425379.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/cf08247d3b8aa181f7b796d934dda23b74425379#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:42:02 +0000",
+			"category": "Movies > HD",
+			"description": "Flesh.and.Bullets.1985.1080p.AMZN.WEB-DL.DD2.0.H.264",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/cf08247d3b8aa181f7b796d934dda23b74425379.nzb&i=REDACTED&r=REDACTED",
+				"_length": "10095886603",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "7176885792"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/1095404-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "bG2q2vuRKOZz@LJuT42B2.jhG"
+				},
+				{
+					"_name": "imdb",
+					"_value": "1095404"
+				},
+				{
+					"_name": "grabs",
+					"_value": "0"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:39:13 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.sleazemovies"
+				}
+			],
+			"title": "Follow.the.Prophet.2010.1080p.AMZN.WEB-DL.DDP5.1.H.264-CepHeuS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/59cced62549064e21006b78fb3abdc8789971aeb"
+			},
+			"link": "https://drunkenslug.com/getnzb/59cced62549064e21006b78fb3abdc8789971aeb.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/59cced62549064e21006b78fb3abdc8789971aeb#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:41:02 +0000",
+			"category": "Movies > HD",
+			"description": "Follow.the.Prophet.2010.1080p.AMZN.WEB-DL.DDP5.1.H.264-CepHeuS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/59cced62549064e21006b78fb3abdc8789971aeb.nzb&i=REDACTED&r=REDACTED",
+				"_length": "7176885792",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "7867841945"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0132165-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "MuPZ0OWP5RPD@myoRv123.J8m"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0132165"
+				},
+				{
+					"_name": "grabs",
+					"_value": "3"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:37:49 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Flypaper.1999.1080p.HMAX.WEB-DL.DD2.0.H264-Troidex",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/0105ec5112092e9f93320ab1c6a89105ac68d841"
+			},
+			"link": "https://drunkenslug.com/getnzb/0105ec5112092e9f93320ab1c6a89105ac68d841.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/0105ec5112092e9f93320ab1c6a89105ac68d841#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:40:02 +0000",
+			"category": "Movies > HD",
+			"description": "Flypaper.1999.1080p.HMAX.WEB-DL.DD2.0.H264-Troidex",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/0105ec5112092e9f93320ab1c6a89105ac68d841.nzb&i=REDACTED&r=REDACTED",
+				"_length": "7867841945",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "6966221879"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0093042-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "eom9Y7ROjRBS@yFRdnldW.wmt"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0093042"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:36:18 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "Forever.Lulu.1986.1080p.AMZN.WEB-DL.DDP2.0.H.264-Zerc",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/1069d621283bbe143454b9122927823dc89c5e99"
+			},
+			"link": "https://drunkenslug.com/getnzb/1069d621283bbe143454b9122927823dc89c5e99.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/1069d621283bbe143454b9122927823dc89c5e99#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:38:02 +0000",
+			"category": "Movies > HD",
+			"description": "Forever.Lulu.1986.1080p.AMZN.WEB-DL.DDP2.0.H.264-Zerc",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/1069d621283bbe143454b9122927823dc89c5e99.nzb&i=REDACTED&r=REDACTED",
+				"_length": "6966221879",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "5370121537"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/46075371-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "Jwms7plTI1UO@TXI3lp04.m3W"
+				},
+				{
+					"_name": "imdb",
+					"_value": "46075371"
+				},
+				{
+					"_name": "grabs",
+					"_value": "0"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:35:19 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Whos.Coming.for.Christmas.2026.1080p.WEB.h264-NoRBiT",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/8dee1c82945c37ee7dd8690ad6093c78d0797bbf"
+			},
+			"link": "https://drunkenslug.com/getnzb/8dee1c82945c37ee7dd8690ad6093c78d0797bbf.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/8dee1c82945c37ee7dd8690ad6093c78d0797bbf#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:37:01 +0000",
+			"category": "Movies > HD",
+			"description": "Whos.Coming.for.Christmas.2026.1080p.WEB.h264-NoRBiT",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/8dee1c82945c37ee7dd8690ad6093c78d0797bbf.nzb&i=REDACTED&r=REDACTED",
+				"_length": "5370121537",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "16029789892"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0118715-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "112"
+				},
+				{
+					"_name": "poster",
+					"_value": "uKI06qtuzKpPD@ngPost.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0118715"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:34:31 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.hdtv.x264"
+				}
+			],
+			"title": "The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/6b6440fdc833ed29b90954956d7de0d729e17a35"
+			},
+			"link": "https://drunkenslug.com/getnzb/6b6440fdc833ed29b90954956d7de0d729e17a35.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/6b6440fdc833ed29b90954956d7de0d729e17a35#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:39:06 +0000",
+			"category": "Movies > HD",
+			"description": "The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/6b6440fdc833ed29b90954956d7de0d729e17a35.nzb&i=REDACTED&r=REDACTED",
+				"_length": "16029789892",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "2922262918"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/4459134-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "6"
+				},
+				{
+					"_name": "poster",
+					"_value": "0ax0mW0QaTM8@lrhNVkV6.3kU"
+				},
+				{
+					"_name": "imdb",
+					"_value": "4459134"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:33:49 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.sleazemovies"
+				}
+			],
+			"title": "Frank.and.Penelope.2022.m1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/4896e98bd506df872a60f7b45d3443d53c5572e7"
+			},
+			"link": "https://drunkenslug.com/getnzb/4896e98bd506df872a60f7b45d3443d53c5572e7.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/4896e98bd506df872a60f7b45d3443d53c5572e7#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:36:02 +0000",
+			"category": "Movies > HD",
+			"description": "Frank.and.Penelope.2022.m1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/4896e98bd506df872a60f7b45d3443d53c5572e7.nzb&i=REDACTED&r=REDACTED",
+				"_length": "2922262918",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "2461234510"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/no-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "6"
+				},
+				{
+					"_name": "poster",
+					"_value": "yiI7bi9HSIKZ@psxaCAHS.svb"
+				},
+				{
+					"_name": "grabs",
+					"_value": "1"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:31:37 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "Lamborghini.The.Man.Behind.the.Legend.2022.m1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/50c3b4790643b9160389fc51c6828efd823229b9"
+			},
+			"link": "https://drunkenslug.com/getnzb/50c3b4790643b9160389fc51c6828efd823229b9.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/50c3b4790643b9160389fc51c6828efd823229b9#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:33:02 +0000",
+			"category": "Movies > HD",
+			"description": "Lamborghini.The.Man.Behind.the.Legend.2022.m1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/50c3b4790643b9160389fc51c6828efd823229b9.nzb&i=REDACTED&r=REDACTED",
+				"_length": "2461234510",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "2659288532"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0118956-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "6"
+				},
+				{
+					"_name": "poster",
+					"_value": "w0CngkbVuOyG@H60A6yvm.kd3"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0118956"
+				},
+				{
+					"_name": "grabs",
+					"_value": "4"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:25:26 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Deep.Rising.1998.m1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/066a762a051cdf4c4caf0047ffd6f29255fa8a6f"
+			},
+			"link": "https://drunkenslug.com/getnzb/066a762a051cdf4c4caf0047ffd6f29255fa8a6f.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/066a762a051cdf4c4caf0047ffd6f29255fa8a6f#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:27:02 +0000",
+			"category": "Movies > HD",
+			"description": "Deep.Rising.1998.m1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/066a762a051cdf4c4caf0047ffd6f29255fa8a6f.nzb&i=REDACTED&r=REDACTED",
+				"_length": "2659288532",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "12272161148"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0118956-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "Af0dsJTI3408@04nDMIRG.VIo"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0118956"
+				},
+				{
+					"_name": "grabs",
+					"_value": "10"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:24:34 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.alias"
+				}
+			],
+			"title": "Deep.Rising.1998.1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/f5e54bc70aa47c85a9eebb988f5002ca76cf3b16"
+			},
+			"link": "https://drunkenslug.com/getnzb/f5e54bc70aa47c85a9eebb988f5002ca76cf3b16.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/f5e54bc70aa47c85a9eebb988f5002ca76cf3b16#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:27:02 +0000",
+			"category": "Movies > HD",
+			"description": "Deep.Rising.1998.1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/f5e54bc70aa47c85a9eebb988f5002ca76cf3b16.nzb&i=REDACTED&r=REDACTED",
+				"_length": "12272161148",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "13937350135"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/4459134-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "adT0idr3INb4@GHjhyVAh.9NU"
+				},
+				{
+					"_name": "imdb",
+					"_value": "4459134"
+				},
+				{
+					"_name": "grabs",
+					"_value": "20"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:22:50 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "Frank.and.Penelope.2022.1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/3390e38628a355fb46d728d4653ced07859dbbc1"
+			},
+			"link": "https://drunkenslug.com/getnzb/3390e38628a355fb46d728d4653ced07859dbbc1.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/3390e38628a355fb46d728d4653ced07859dbbc1#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:25:03 +0000",
+			"category": "Movies > HD",
+			"description": "Frank.and.Penelope.2022.1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/3390e38628a355fb46d728d4653ced07859dbbc1.nzb&i=REDACTED&r=REDACTED",
+				"_length": "13937350135",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "8369268244"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/14226748-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "18"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "14226748"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=190364df539467ff05172a65377063a56a360921&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "47"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:22:16 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Place.of.Bones.2023.German.DL.1080p.BluRay.x264-NEXUS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/190364df539467ff05172a65377063a56a360921"
+			},
+			"link": "https://drunkenslug.com/getnzb/190364df539467ff05172a65377063a56a360921.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/190364df539467ff05172a65377063a56a360921#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:27:05 +0000",
+			"category": "Movies > Foreign",
+			"description": "Place.of.Bones.2023.German.DL.1080p.BluRay.x264-NEXUS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/190364df539467ff05172a65377063a56a360921.nzb&i=REDACTED&r=REDACTED",
+				"_length": "8369268244",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "18588502982"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/2739338-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "qZQ8GALW0KaZ@vNtGiTK5.ADG"
+				},
+				{
+					"_name": "imdb",
+					"_value": "2739338"
+				},
+				{
+					"_name": "grabs",
+					"_value": "13"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:19:53 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "The.Christmas.Candle.2013.BluRay.1080p.TrueHD.5.1.AVC.REMUX-FraMeSToR",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/5598370a1a13dfd3436ea97ed397d38c1d01a415"
+			},
+			"link": "https://drunkenslug.com/getnzb/5598370a1a13dfd3436ea97ed397d38c1d01a415.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/5598370a1a13dfd3436ea97ed397d38c1d01a415#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:22:02 +0000",
+			"category": "Movies > HD",
+			"description": "The.Christmas.Candle.2013.BluRay.1080p.TrueHD.5.1.AVC.REMUX-FraMeSToR",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/5598370a1a13dfd3436ea97ed397d38c1d01a415.nzb&i=REDACTED&r=REDACTED",
+				"_length": "18588502982",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2060"
+				},
+				{
+					"_name": "size",
+					"_value": "68339692258"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0118715-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "114"
+				},
+				{
+					"_name": "poster",
+					"_value": "QcLatU1UtSzbN@ngPost.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0118715"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:18:57 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1"
+			},
+			"link": "https://drunkenslug.com/getnzb/8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:31:07 +0000",
+			"category": "Movies > BluRay",
+			"description": "The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1.nzb&i=REDACTED&r=REDACTED",
+				"_length": "68339692258",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "12421682812"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/no-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "sShpAnvr0qbq@VmMWekUR.UwM"
+				},
+				{
+					"_name": "grabs",
+					"_value": "5"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:17:48 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Lamborghini.The.Man.Behind.the.Legend.2022.1080p.BluRay.x264-GeneMige",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/d1c98be7172479d2baef97075b901b12e5cc8af3"
+			},
+			"link": "https://drunkenslug.com/getnzb/d1c98be7172479d2baef97075b901b12e5cc8af3.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/d1c98be7172479d2baef97075b901b12e5cc8af3#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:20:02 +0000",
+			"category": "Movies > HD",
+			"description": "Lamborghini.The.Man.Behind.the.Legend.2022.1080p.BluRay.x264-GeneMige",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/d1c98be7172479d2baef97075b901b12e5cc8af3.nzb&i=REDACTED&r=REDACTED",
+				"_length": "12421682812",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "14898549638"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/33586629-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "22"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "33586629"
+				},
+				{
+					"_name": "prematch",
+					"_value": "1"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=4b2b45b67344aa9a2f9e9ec30646a98d9e725b92&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:16:40 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Vivaldi.und.ich.2025.German.AC3.2160p.WEB.H265-NEXUS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/4b2b45b67344aa9a2f9e9ec30646a98d9e725b92"
+			},
+			"link": "https://drunkenslug.com/getnzb/4b2b45b67344aa9a2f9e9ec30646a98d9e725b92.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/4b2b45b67344aa9a2f9e9ec30646a98d9e725b92#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:17:06 +0000",
+			"category": "Movies > Foreign",
+			"description": "Vivaldi.und.ich.2025.German.AC3.2160p.WEB.H265-NEXUS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/4b2b45b67344aa9a2f9e9ec30646a98d9e725b92.nzb&i=REDACTED&r=REDACTED",
+				"_length": "14898549638",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "3286456309"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/33763941-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "14"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "33763941"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=cde9e1c27af49ea0ffcca390aa30070a79f1bd15&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "3"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:14:20 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Passenger.2026.German.720p.WEB.x264-NEXUS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/cde9e1c27af49ea0ffcca390aa30070a79f1bd15"
+			},
+			"link": "https://drunkenslug.com/getnzb/cde9e1c27af49ea0ffcca390aa30070a79f1bd15.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/cde9e1c27af49ea0ffcca390aa30070a79f1bd15#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:19:06 +0000",
+			"category": "Movies > Foreign",
+			"description": "Passenger.2026.German.720p.WEB.x264-NEXUS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/cde9e1c27af49ea0ffcca390aa30070a79f1bd15.nzb&i=REDACTED&r=REDACTED",
+				"_length": "3286456309",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "15591117602"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0985694-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "5r0q2NSSuzP8@gBh6FFkk.7BI"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0985694"
+				},
+				{
+					"_name": "grabs",
+					"_value": "10"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:14:08 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "Machete.2010.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/1c1f6f8407e051d500d9dc86551935fb0ee0be14"
+			},
+			"link": "https://drunkenslug.com/getnzb/1c1f6f8407e051d500d9dc86551935fb0ee0be14.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/1c1f6f8407e051d500d9dc86551935fb0ee0be14#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:17:02 +0000",
+			"category": "Movies > HD",
+			"description": "Machete.2010.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/1c1f6f8407e051d500d9dc86551935fb0ee0be14.nzb&i=REDACTED&r=REDACTED",
+				"_length": "15591117602",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "12131102452"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/19838566-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "xp0I7i04Ebo1@tuTBBIl0.L8K"
+				},
+				{
+					"_name": "imdb",
+					"_value": "19838566"
+				},
+				{
+					"_name": "grabs",
+					"_value": "133"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:12:14 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "Kraken.2026.1080p.BluRay.DD+5.1.x264-SbR",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/bbc04af5f09991a8729f175fb4022d2253eb59a1"
+			},
+			"link": "https://drunkenslug.com/getnzb/bbc04af5f09991a8729f175fb4022d2253eb59a1.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/bbc04af5f09991a8729f175fb4022d2253eb59a1#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:14:02 +0000",
+			"category": "Movies > HD",
+			"description": "Kraken.2026.1080p.BluRay.DD+5.1.x264-SbR",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/bbc04af5f09991a8729f175fb4022d2253eb59a1.nzb&i=REDACTED&r=REDACTED",
+				"_length": "12131102452",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "6489521204"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/29271622-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "17"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "29271622"
+				},
+				{
+					"_name": "prematch",
+					"_value": "1"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=7d82763b32914694bb6b889a5ef5a94808b5c35b&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "2"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:11:11 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Palestine.36.2025.German.AC3.720p.BluRay.x264-NEXUS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/7d82763b32914694bb6b889a5ef5a94808b5c35b"
+			},
+			"link": "https://drunkenslug.com/getnzb/7d82763b32914694bb6b889a5ef5a94808b5c35b.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/7d82763b32914694bb6b889a5ef5a94808b5c35b#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:16:06 +0000",
+			"category": "Movies > Foreign",
+			"description": "Palestine.36.2025.German.AC3.720p.BluRay.x264-NEXUS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/7d82763b32914694bb6b889a5ef5a94808b5c35b.nzb&i=REDACTED&r=REDACTED",
+				"_length": "6489521204",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "14103617466"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0094602-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "qbx7rZ1xp9gn@FHPQRiHP.ofd"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0094602"
+				},
+				{
+					"_name": "grabs",
+					"_value": "5"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:10:36 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Above.The.Law.1988.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/4952e83c81a32289b339ad2ec77a563c64d6ee5a"
+			},
+			"link": "https://drunkenslug.com/getnzb/4952e83c81a32289b339ad2ec77a563c64d6ee5a.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/4952e83c81a32289b339ad2ec77a563c64d6ee5a#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:13:02 +0000",
+			"category": "Movies > HD",
+			"description": "Above.The.Law.1988.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/4952e83c81a32289b339ad2ec77a563c64d6ee5a.nzb&i=REDACTED&r=REDACTED",
+				"_length": "14103617466",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "14041874840"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0452608-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "mLiqg7dfUJ8D@fHvv7yU1.8fk"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0452608"
+				},
+				{
+					"_name": "grabs",
+					"_value": "24"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:08:37 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.sleazemovies"
+				}
+			],
+			"title": "Death.Race.2008.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/2294f144548c96ac823c4a38cd27a9b9d66bdaef"
+			},
+			"link": "https://drunkenslug.com/getnzb/2294f144548c96ac823c4a38cd27a9b9d66bdaef.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/2294f144548c96ac823c4a38cd27a9b9d66bdaef#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:11:04 +0000",
+			"category": "Movies > HD",
+			"description": "Death.Race.2008.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/2294f144548c96ac823c4a38cd27a9b9d66bdaef.nzb&i=REDACTED&r=REDACTED",
+				"_length": "14041874840",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "1825123599"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/no-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "5"
+				},
+				{
+					"_name": "poster",
+					"_value": "QTMgl9ZZ47XD@rfu0hm0v.0lj"
+				},
+				{
+					"_name": "grabs",
+					"_value": "1"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:07:20 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Clown.Motel.2.2026.1080p.WEBRip.x264.AAC-LAMA",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/dae16174173c3ce587c2742cb04bb7d8dd38f181"
+			},
+			"link": "https://drunkenslug.com/getnzb/dae16174173c3ce587c2742cb04bb7d8dd38f181.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/dae16174173c3ce587c2742cb04bb7d8dd38f181#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:09:03 +0000",
+			"category": "Movies > HD",
+			"description": "Clown.Motel.2.2026.1080p.WEBRip.x264.AAC-LAMA",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/dae16174173c3ce587c2742cb04bb7d8dd38f181.nzb&i=REDACTED&r=REDACTED",
+				"_length": "1825123599",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "4978212329"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/no-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "6"
+				},
+				{
+					"_name": "poster",
+					"_value": "GAlFdJ8ApQ20@B1Aqk2fm.F5R"
+				},
+				{
+					"_name": "grabs",
+					"_value": "1"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:06:52 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.sleazemovies"
+				}
+			],
+			"title": "T.G.M.D.1986.1080p.MA.WEB-DL.DDP5.1.H.264-FIEND",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/cc1592fb2d3a3e82fed7c3c0b7835497d4e7cdac"
+			},
+			"link": "https://drunkenslug.com/getnzb/cc1592fb2d3a3e82fed7c3c0b7835497d4e7cdac.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/cc1592fb2d3a3e82fed7c3c0b7835497d4e7cdac#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:09:03 +0000",
+			"category": "Movies > HD",
+			"description": "T.G.M.D.1986.1080p.MA.WEB-DL.DDP5.1.H.264-FIEND",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/cc1592fb2d3a3e82fed7c3c0b7835497d4e7cdac.nzb&i=REDACTED&r=REDACTED",
+				"_length": "4978212329",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "10402432374"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/1904996-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "7"
+				},
+				{
+					"_name": "poster",
+					"_value": "iC8y2b7rhevN@DCW4LWUE.SKO"
+				},
+				{
+					"_name": "imdb",
+					"_value": "1904996"
+				},
+				{
+					"_name": "grabs",
+					"_value": "36"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:05:56 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.aviation"
+				}
+			],
+			"title": "Parker.2013.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/eb44135464c3d48f32118f413f2ddc795772c9a8"
+			},
+			"link": "https://drunkenslug.com/getnzb/eb44135464c3d48f32118f413f2ddc795772c9a8.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/eb44135464c3d48f32118f413f2ddc795772c9a8#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:08:03 +0000",
+			"category": "Movies > HD",
+			"description": "Parker.2013.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/eb44135464c3d48f32118f413f2ddc795772c9a8.nzb&i=REDACTED&r=REDACTED",
+				"_length": "10402432374",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "25811145984"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/27419466-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "29"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "27419466"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=332126520e43a947b9065d4822e9657a26dc1a43&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "32"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:04:32 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Vaiana.2026.German.EAC3.DL.2160p.UHD.BluRay.x265-ANiMA",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/332126520e43a947b9065d4822e9657a26dc1a43"
+			},
+			"link": "https://drunkenslug.com/getnzb/332126520e43a947b9065d4822e9657a26dc1a43.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/332126520e43a947b9065d4822e9657a26dc1a43#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:05:07 +0000",
+			"category": "Movies > Foreign",
+			"description": "Vaiana.2026.German.EAC3.DL.2160p.UHD.BluRay.x265-ANiMA",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/332126520e43a947b9065d4822e9657a26dc1a43.nzb&i=REDACTED&r=REDACTED",
+				"_length": "25811145984",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2010"
+				},
+				{
+					"_name": "size",
+					"_value": "10388266711"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/29271622-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "19"
+				},
+				{
+					"_name": "poster",
+					"_value": "poster@example.com"
+				},
+				{
+					"_name": "imdb",
+					"_value": "29271622"
+				},
+				{
+					"_name": "prematch",
+					"_value": "1"
+				},
+				{
+					"_name": "info",
+					"_value": "https://drunkenslug.com/api?t=info&id=03ea26fe2d131a9bdaf167ab36c22e19f7f3f3d6&r=REDACTED"
+				},
+				{
+					"_name": "grabs",
+					"_value": "8"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:04:19 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.boneless"
+				}
+			],
+			"title": "Palestine.36.2025.German.AC3.1080p.BluRay.x264-NEXUS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/03ea26fe2d131a9bdaf167ab36c22e19f7f3f3d6"
+			},
+			"link": "https://drunkenslug.com/getnzb/03ea26fe2d131a9bdaf167ab36c22e19f7f3f3d6.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/03ea26fe2d131a9bdaf167ab36c22e19f7f3f3d6#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:09:07 +0000",
+			"category": "Movies > Foreign",
+			"description": "Palestine.36.2025.German.AC3.1080p.BluRay.x264-NEXUS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/03ea26fe2d131a9bdaf167ab36c22e19f7f3f3d6.nzb&i=REDACTED&r=REDACTED",
+				"_length": "10388266711",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "29260417247"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0076033-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "9"
+				},
+				{
+					"_name": "poster",
+					"_value": "aq97y7LH5kK0@eOeoViRE.JQd"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0076033"
+				},
+				{
+					"_name": "grabs",
+					"_value": "9"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 09:03:32 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "First.Love.1977.1080p.Remux.AVC.FLAC.2.0-Fabman",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/8b96c9b643bd065283f877fc01d36bd791b5bf13"
+			},
+			"link": "https://drunkenslug.com/getnzb/8b96c9b643bd065283f877fc01d36bd791b5bf13.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/8b96c9b643bd065283f877fc01d36bd791b5bf13#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:07:02 +0000",
+			"category": "Movies > HD",
+			"description": "First.Love.1977.1080p.Remux.AVC.FLAC.2.0-Fabman",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/8b96c9b643bd065283f877fc01d36bd791b5bf13.nzb&i=REDACTED&r=REDACTED",
+				"_length": "29260417247",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "20707382748"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0460780-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "0SngyM0QRq0P@kTlbQXaU.6FH"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0460780"
+				},
+				{
+					"_name": "grabs",
+					"_value": "19"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 08:59:56 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.rail"
+				}
+			],
+			"title": "In.The.Name.Of.The.King.A.Dungeon.Siege.Tale.2007.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/962df6ce073b270e874db64967d4b66ffc45988b"
+			},
+			"link": "https://drunkenslug.com/getnzb/962df6ce073b270e874db64967d4b66ffc45988b.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/962df6ce073b270e874db64967d4b66ffc45988b#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:03:02 +0000",
+			"category": "Movies > HD",
+			"description": "In.The.Name.Of.The.King.A.Dungeon.Siege.Tale.2007.1080p.BluRay-x265_3D_jesterko_FSBS",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/962df6ce073b270e874db64967d4b66ffc45988b.nzb&i=REDACTED&r=REDACTED",
+				"_length": "20707382748",
+				"_type": "application/x-nzb"
+			}
+		},
+		{
+			"newznab:attr": [
+				{
+					"_name": "category",
+					"_value": "2040"
+				},
+				{
+					"_name": "size",
+					"_value": "19382396293"
+				},
+				{
+					"_name": "coverurl",
+					"_value": "https://drunkenslug.com/covers/movies/0078748-cover.jpg"
+				},
+				{
+					"_name": "files",
+					"_value": "8"
+				},
+				{
+					"_name": "poster",
+					"_value": "7QXsAkxlJEH1@XiiDAnXQ.e6I"
+				},
+				{
+					"_name": "imdb",
+					"_value": "0078748"
+				},
+				{
+					"_name": "grabs",
+					"_value": "4"
+				},
+				{
+					"_name": "comments",
+					"_value": "0"
+				},
+				{
+					"_name": "password",
+					"_value": "0"
+				},
+				{
+					"_name": "usenetdate",
+					"_value": "Sat, 31 Oct 2026 08:57:18 +0000"
+				},
+				{
+					"_name": "group",
+					"_value": "alt.binaries.multimedia.alias"
+				}
+			],
+			"title": "Alien.1979.Theatrical.Cut.1080p.UHD.BluRay.DTS.HDR.x265-Geek",
+			"guid": {
+				"_isPermaLink": "true",
+				"text": "https://drunkenslug.com/details/5f63e44de969fcd6141212bb3cd660d4e0f38d0d"
+			},
+			"link": "https://drunkenslug.com/getnzb/5f63e44de969fcd6141212bb3cd660d4e0f38d0d.nzb&i=REDACTED&r=REDACTED",
+			"comments": "https://drunkenslug.com/details/5f63e44de969fcd6141212bb3cd660d4e0f38d0d#comments",
+			"pubDate": "Sat, 31 Oct 2026 09:00:06 +0000",
+			"category": "Movies > HD",
+			"description": "Alien.1979.Theatrical.Cut.1080p.UHD.BluRay.DTS.HDR.x265-Geek",
+			"enclosure": {
+				"_url": "https://drunkenslug.com/getnzb/5f63e44de969fcd6141212bb3cd660d4e0f38d0d.nzb&i=REDACTED&r=REDACTED",
+				"_length": "19382396293",
+				"_type": "application/x-nzb"
+			}
+		}
+	],
+	"language": "en-gb",
+	"link": "https://drunkenslug.com/",
+	"newznab:apilimits": {
+		"_apiCurrent": "12611",
+		"_grabCurrent": "1588"
+	},
+	"newznab:response": {
+		"_offset": "0",
+		"_total": "125000"
+	},
+	"title": "DS",
+	"ttl": "10",
+	"webMaster": "ds@drunkenslug.com DS"
+}

@@ -7,6 +7,7 @@ import {
 	type RequestReconcileResult,
 } from '@/services/contentRequestReconcile';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
+import { sweepFreshPosts } from '@/services/newznab/search';
 import { reconcileNzb2rdMarkers, type MarkerReconcileResult } from '@/services/nzb2rdMarkers';
 import { repository } from '@/services/repository';
 import { deliverFreeRequests } from '@/services/requestDelivery';
@@ -41,6 +42,7 @@ interface CronResponse {
 	contentRequests?: RequestReconcileResult;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
 	wantedLists?: { synced: number; failed: number; lapsed: number };
+	newznabFresh?: { swept: boolean; ids: number };
 	error?: string;
 }
 
@@ -158,6 +160,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Reading followed lists failed:', e);
 		}
 
+		// What is new on the Newznab upstreams, so a cached search by id stands
+		// until a post naming that id appears (see sweepFreshPosts).
+		let newznabFresh: CronResponse['newznabFresh'];
+		try {
+			newznabFresh = await sweepFreshPosts();
+		} catch (e) {
+			console.error('[Cron] Newznab fresh-post sweep failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -180,6 +191,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			contentRequests,
 			freeRequestDeliveries,
 			wantedLists,
+			newznabFresh,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

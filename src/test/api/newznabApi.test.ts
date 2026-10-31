@@ -2,11 +2,16 @@ import handler from '@/pages/api/newznab/api';
 import type { CachedUsenetResult } from '@/services/database/newznabApiCache';
 import { _resetUpstreamIndexersForTest } from '@/services/newznab/indexers';
 import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/opaqueId';
-import { _resetUpstreamLimiterForTest, RSS_TTL_MS } from '@/services/newznab/search';
+import {
+	_resetUpstreamLimiterForTest,
+	RSS_TTL_MS,
+	sweepFreshPosts,
+} from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
+import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb } from '@/utils/nzbSanitize';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -812,5 +817,191 @@ describe('GET /api/newznab/api takedown', () => {
 		);
 		expect(xml).toContain('code="300"');
 		expect(xml).not.toContain('first-article@news');
+	});
+});
+
+// A film search by IMDb id that found nothing used to keep for an hour, so a
+// zurg retrying it a week later always went upstream. Now it stands for as long
+// as the sweep has seen no post naming that film (see sweepFreshPosts).
+describe('GET /api/newznab/api film searches kept until a new post', () => {
+	const HOUR = 60 * 60 * 1000;
+	const film = { t: 'movie', imdbid: 'tt29544868', apikey: SPONSOR_KEY };
+	const cachedNothing = (updatedAt: Date) => {
+		mockRepo.getCachedNewznabApiSearch = vi.fn(async () => ({
+			results: [],
+			updatedAt,
+			isFresh: false,
+		}));
+	};
+	const watching = (at: Date, since: Date) => {
+		mockRepo.newznabSweptAt = vi.fn().mockResolvedValue({ at, since });
+	};
+
+	beforeEach(() => {
+		mockRepo.newznabFreshPosts = vi.fn().mockResolvedValue(new Map());
+	});
+
+	it('answers from the cache, days on, while no post names the film', async () => {
+		cachedNothing(new Date(Date.now() - 3 * 24 * HOUR));
+		watching(new Date(Date.now() - 5 * 60 * 1000), new Date(Date.now() - 10 * 24 * HOUR));
+
+		const res = await run(film);
+
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(itemTitles(res)).toEqual([]);
+		expect(mockRepo.newznabFreshPosts).toHaveBeenCalledWith(['imdb:29544868']);
+	});
+
+	it('asks upstream once a post names the film', async () => {
+		cachedNothing(new Date(Date.now() - 3 * 24 * HOUR));
+		watching(new Date(Date.now() - 5 * 60 * 1000), new Date(Date.now() - 10 * 24 * HOUR));
+		mockRepo.newznabFreshPosts = vi
+			.fn()
+			.mockResolvedValue(new Map([['imdb:29544868', new Date(Date.now() - HOUR)]]));
+
+		await run(film);
+
+		expect(fetchMock).toHaveBeenCalled();
+	});
+
+	it('asks upstream when the sweep has not run for an hour, or began after the answer', async () => {
+		cachedNothing(new Date(Date.now() - 3 * 24 * HOUR));
+		watching(new Date(Date.now() - 2 * HOUR), new Date(Date.now() - 10 * 24 * HOUR));
+		await run(film);
+		expect(fetchMock).toHaveBeenCalled();
+
+		fetchMock.mockClear();
+		watching(new Date(Date.now() - 5 * 60 * 1000), new Date(Date.now() - 24 * HOUR));
+		await run(film);
+		expect(fetchMock).toHaveBeenCalled();
+	});
+
+	it('asks upstream after a week whatever the sweep saw', async () => {
+		cachedNothing(new Date(Date.now() - 8 * 24 * HOUR));
+		watching(new Date(Date.now() - 5 * 60 * 1000), new Date(Date.now() - 30 * 24 * HOUR));
+		await run(film);
+		expect(fetchMock).toHaveBeenCalled();
+	});
+
+	it('leaves show and title searches to their own TTLs', async () => {
+		cachedNothing(new Date(Date.now() - 3 * 24 * HOUR));
+		watching(new Date(Date.now() - 5 * 60 * 1000), new Date(Date.now() - 10 * 24 * HOUR));
+		await run({ t: 'tvsearch', tvdbid: '81189', apikey: SPONSOR_KEY });
+		expect(fetchMock).toHaveBeenCalled();
+		fetchMock.mockClear();
+		await run({ t: 'search', q: 'mallari', apikey: SPONSOR_KEY });
+		expect(fetchMock).toHaveBeenCalled();
+	});
+
+	// An *arr's RSS sync is the same news the sweep reads, for free.
+	it("records the films an RSS sync's posts name", async () => {
+		mockRepo.recordNewznabFreshPosts = vi.fn().mockResolvedValue(undefined);
+		fetchMock.mockImplementation(async () =>
+			jsonResponse({
+				item: [
+					{
+						title: 'Mallari.2023.1080p.NF.WEB-DL.DDP5.1.H.264-DUSKLiGHT',
+						guid: 'https://first-upstream.invalid/details/m1',
+						pubDate: 'Sat, 31 Oct 2026 07:22:05 +0000',
+						'newznab:attr': [
+							{ _name: 'size', _value: '5000000000' },
+							{ _name: 'imdb', _value: '29544868' },
+						],
+					},
+				],
+			})
+		);
+
+		await run({ t: 'movie', apikey: SPONSOR_KEY });
+
+		const recorded = vi.mocked(mockRepo.recordNewznabFreshPosts).mock.calls[0][0] as Map<
+			string,
+			Date
+		>;
+		expect([...recorded.keys()]).toEqual(['imdb:29544868']);
+	});
+});
+
+describe('sweepFreshPosts', () => {
+	const MIN = 60 * 1000;
+	const now = Date.parse('2026-10-31T08:00:00Z');
+
+	beforeEach(() => {
+		mockRepo.recordNewznabFreshPosts = vi.fn().mockResolvedValue(undefined);
+		mockRepo.markNewznabSwept = vi.fn().mockResolvedValue(undefined);
+		fetchMock.mockImplementation(async () => jsonResponse(drunkenslugMovie));
+	});
+
+	it("records the films every upstream's newest posts name, and keeps the watch's start", async () => {
+		const since = new Date(now - 2 * 24 * 60 * MIN);
+		mockRepo.newznabSweptAt = vi
+			.fn()
+			.mockResolvedValue({ at: new Date(now - 20 * MIN), since });
+
+		expect(await sweepFreshPosts(now)).toMatchObject({ swept: true });
+
+		expect(fetchedUrls()).toHaveLength(2);
+		for (const url of fetchedUrls()) expect(url).toContain('t=movie');
+		const recorded = vi.mocked(mockRepo.recordNewznabFreshPosts).mock.calls[0][0] as Map<
+			string,
+			Date
+		>;
+		expect(recorded.get('imdb:76033')).toBeInstanceOf(Date);
+		expect(mockRepo.markNewznabSwept).toHaveBeenCalledWith(new Date(now), since);
+	});
+
+	it('waits a quarter hour between sweeps', async () => {
+		mockRepo.newznabSweptAt = vi
+			.fn()
+			.mockResolvedValue({ at: new Date(now - 5 * MIN), since: new Date(now - 60 * MIN) });
+
+		expect(await sweepFreshPosts(now)).toEqual({ swept: false, ids: 0 });
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('starts the watch afresh after a break of over an hour', async () => {
+		mockRepo.newznabSweptAt = vi
+			.fn()
+			.mockResolvedValue({
+				at: new Date(now - 3 * 60 * MIN),
+				since: new Date(now - 9 * 60 * MIN),
+			});
+
+		await sweepFreshPosts(now);
+
+		expect(mockRepo.markNewznabSwept).toHaveBeenCalledWith(new Date(now), new Date(now));
+	});
+
+	it('reads on while a full page does not reach back to the last sweep', async () => {
+		mockRepo.newznabSweptAt = vi
+			.fn()
+			.mockResolvedValue({ at: new Date(now - 20 * MIN), since: new Date(now - 60 * MIN) });
+		const page = (offset: number) => ({
+			item: Array.from({ length: 100 }, (_, i) => ({
+				title: `Film.${offset + i}.2026.1080p.WEB`,
+				guid: `https://first-upstream.invalid/details/f${offset + i}`,
+				pubDate: new Date(now - (offset + i) * 8 * 1000).toUTCString(),
+				'newznab:attr': [{ _name: 'imdb', _value: String(1000000 + offset + i) }],
+			})),
+		});
+		fetchMock.mockImplementation(async (url: string) =>
+			jsonResponse(page(Number(new URL(url).searchParams.get('offset') ?? 0)))
+		);
+
+		await sweepFreshPosts(now);
+
+		// A post every 8 s: the first page reaches back 13 minutes, the second 26,
+		// past the sweep twenty minutes ago, so no third page is read.
+		const offsets = fetchedUrls().map((url) => new URL(url).searchParams.get('offset'));
+		expect(offsets.filter((o) => o === '100')).toHaveLength(2);
+		expect(offsets).not.toContain('200');
+	});
+
+	it('leaves the watch unmarked when no upstream answers', async () => {
+		mockRepo.newznabSweptAt = vi.fn().mockResolvedValue(null);
+		fetchMock.mockRejectedValue(new Error('down'));
+
+		expect(await sweepFreshPosts(now)).toEqual({ swept: false, ids: 0 });
+		expect(mockRepo.markNewznabSwept).not.toHaveBeenCalled();
 	});
 });

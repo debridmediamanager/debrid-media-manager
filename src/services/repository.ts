@@ -513,6 +513,22 @@ export class Repository {
 	// Newznab aggregation cache. Separate from the one above because the clock is
 	// different: an *arr polls the same searches on a timer, so the TTL scales
 	// with the age of the content rather than being fixed per title.
+	public newznabFreshPosts(ids: string[]) {
+		return this.newznabApiCacheService.freshPosts(ids);
+	}
+
+	public recordNewznabFreshPosts(posts: Map<string, Date>) {
+		return this.newznabApiCacheService.recordFreshPosts(posts);
+	}
+
+	public newznabSweptAt() {
+		return this.newznabApiCacheService.sweptAt();
+	}
+
+	public markNewznabSwept(at: Date, since: Date) {
+		return this.newznabApiCacheService.markSwept(at, since);
+	}
+
 	public getCachedNewznabApiSearch(key: string, maxTtlMs?: number) {
 		return this.newznabApiCacheService.get(key, Date.now(), maxTtlMs);
 	}

@@ -155,6 +155,17 @@ RSS sync — "what's new" — whose results are always freshly posted, so the ag
 alone would hold it for 12h and every sponsor would see new releases half a day late.
 Those reads are capped at 15 minutes (`RSS_TTL_MS`).
 
+A film search by IMDb id is kept longer than its TTL: for up to 7 days
+(`FRESH_ID_TTL_MS`), nothing found included, as long as no post naming that film has
+appeared since it was cached. The cron reads every upstream's newest film posts each
+quarter hour (`sweepFreshPosts`; a page that does not reach back to the last read is
+followed by the next) and records, under `nzbfresh:v1:imdb:<id>`, when a post last named
+each film; RSS syncs from clients add what they see. The watch's start and last read are
+kept under `nzbfresh:v1:swept`: an answer cached before the watch began, or read while it
+is more than an hour late, keeps its ordinary TTL, and a post dated up to two hours before
+an answer still counts as newer than it. Shows are not kept this way: some upstreams name
+no TheTVDB id on their TV posts, so a new episode there would go unseen.
+
 ## Grab flow (`t=get`)
 
 1. Decrypt the token; any tamper or garbage → error 300.

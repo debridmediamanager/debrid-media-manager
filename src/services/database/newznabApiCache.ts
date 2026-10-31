@@ -101,7 +101,84 @@ export function isFresh(updatedAt: Date, ttlMs: number, now: number = Date.now()
 	return now - updatedAt.getTime() <= ttlMs;
 }
 
+/** Where the newest post seen for an id, and the last watch of the feeds, are kept. */
+const FRESH_PREFIX = 'nzbfresh:v1:';
+const SWEPT_KEY = `${FRESH_PREFIX}swept`;
+
 export class NewznabApiCacheService extends DatabaseClient {
+	/**
+	 * When a post naming each of `ids` (`imdb:76033`, `tvdb:81189`) was last
+	 * seen, for those seen at all. A failed read answers nothing, which keeps
+	 * every cached answer to its ordinary TTL.
+	 */
+	async freshPosts(ids: string[]): Promise<Map<string, Date>> {
+		const seen = new Map<string, Date>();
+		if (ids.length === 0) return seen;
+		try {
+			const rows = await this.prisma.cache.findMany({
+				where: { key: { in: ids.map((id) => FRESH_PREFIX + id) } },
+			});
+			for (const row of rows) {
+				const at = Date.parse((row.value as { at?: string })?.at ?? '');
+				if (Number.isFinite(at)) seen.set(row.key.slice(FRESH_PREFIX.length), new Date(at));
+			}
+		} catch (error) {
+			console.error('Error reading Newznab fresh posts:', error);
+		}
+		return seen;
+	}
+
+	/** Records the newest post seen for each id, never moving one back. */
+	async recordFreshPosts(posts: Map<string, Date>): Promise<void> {
+		if (posts.size === 0) return;
+		try {
+			const known = await this.freshPosts([...posts.keys()]);
+			for (const [id, at] of posts) {
+				const before = known.get(id);
+				if (before && before >= at) continue;
+				const value = { at: at.toISOString() } as unknown as object;
+				await this.prisma.cache.upsert({
+					where: { key: FRESH_PREFIX + id },
+					update: { value } as any,
+					create: { key: FRESH_PREFIX + id, value } as any,
+				});
+			}
+		} catch (error) {
+			console.error('Error recording Newznab fresh posts:', error);
+		}
+	}
+
+	/**
+	 * When the feeds of new posts were last read (`at`), and since when they
+	 * have been read without a break (`since`), or null.
+	 */
+	async sweptAt(): Promise<{ at: Date; since: Date } | null> {
+		try {
+			const row = await this.prisma.cache.findUnique({ where: { key: SWEPT_KEY } });
+			const value = row?.value as { at?: string; since?: string } | undefined;
+			const at = Date.parse(value?.at ?? '');
+			const since = Date.parse(value?.since ?? '');
+			return Number.isFinite(at) && Number.isFinite(since)
+				? { at: new Date(at), since: new Date(since) }
+				: null;
+		} catch {
+			return null;
+		}
+	}
+
+	async markSwept(at: Date, since: Date): Promise<void> {
+		const value = { at: at.toISOString(), since: since.toISOString() } as unknown as object;
+		try {
+			await this.prisma.cache.upsert({
+				where: { key: SWEPT_KEY },
+				update: { value } as any,
+				create: { key: SWEPT_KEY, value } as any,
+			});
+		} catch (error) {
+			console.error('Error marking the Newznab feed sweep:', error);
+		}
+	}
+
 	/**
 	 * `maxTtlMs` caps the age-scaled TTL for queries whose freshness matters more
 	 * than their content's age — an *arr RSS sync always carries brand-new

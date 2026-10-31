@@ -18,7 +18,7 @@
 //     so an indexer over budget is skipped for this query rather than asked.
 
 import { CachedUsenetResult } from '@/services/database/newznabApiCache';
-import { dedupeResults, fanOut, Indexer } from '@/services/nzb2rd';
+import { dedupeResults, fanOut, Indexer, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import type { NextApiRequest } from 'next';
@@ -263,6 +263,9 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	const page = async (results: CachedUsenetResult[]) =>
 		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
 	if (cached?.isFresh) return page(cached.results);
+	if (cached && targeted && (await noNewPostSince(key, cached.updatedAt))) {
+		return page(cached.results);
+	}
 
 	const indexers = await pacedIndexers(getUpstreamIndexers());
 	const { ok, lists } = await fanOut(
@@ -281,9 +284,138 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	}
 
 	const merged = dedupeResults(lists) as CachedUsenetResult[];
+	// An *arr's RSS sync is a look at what is new: the ids in it are the same
+	// news the sweep collects, at no extra cost upstream.
+	if (!targeted) await db.recordNewznabFreshPosts(postsById(merged));
 	// Written even when empty: an hour of "nothing found" is the whole point of
 	// the empty TTL, and it is what caps upstream calls for a query nobody can
 	// satisfy. `set` swallows its own failures.
 	await db.setCachedNewznabApiSearch(key, merged);
 	return page(merged);
+}
+
+/**
+ * Searches for a film by id are asked again and again: every sponsor's zurg
+ * retries what it could not find, a week apart, for good, and *arr clients
+ * re-search on their own timers. On 2026-10-31 DMM sent about 6,800 searches a
+ * day upstream, 3,234 of them for films by IMDb id and 928 of those answered
+ * with nothing, and the five accounts it searches with are the ones fun's own
+ * Prowlarr uses, so the daily caps of altHUB and NzbLife ran out every day.
+ *
+ * So DMM reads what is new on every upstream (the sweep, every quarter hour) and
+ * remembers when a post last named each IMDb id. A cached answer to a film search
+ * by IMDb id is then good for FRESH_ID_TTL_MS, nothing found included, for as
+ * long as no post naming that film has appeared: a newer post is the only thing
+ * that could change the answer. Measured on 2026-10-31, the newest 100 movie
+ * posts named an IMDb id on every upstream (DrunkenSlug 89, NZBgeek 91, altHUB,
+ * NzbLife and Treasure Maps 100) and spanned two to six hours. Shows are left to
+ * their TTLs: altHUB and NzbLife name no TheTVDB id on their TV posts, so a new
+ * episode there would go unseen. A film post naming no id is the one thing the
+ * sweep cannot see, which FRESH_ID_TTL_MS bounds.
+ */
+export const FRESH_ID_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+/** A quarter hour, run from the five-minute cron. */
+export const FRESH_SWEEP_EVERY_MS = 14 * 60 * 1000;
+/** A sweep this late means the watch broke, and answers fall back to their TTLs. */
+export const FRESH_WATCH_STALE_MS = 60 * 60 * 1000;
+/**
+ * A post's pubDate can come before the moment it could be found, so one dated
+ * this long before an answer was cached still counts as newer than it.
+ */
+const FRESH_POST_SLACK_MS = 2 * 60 * 60 * 1000;
+/** Pages read per indexer and feed at most, when a page does not reach the last sweep. */
+const FRESH_SWEEP_PAGES = 3;
+
+/** The film a search names by IMDb id, as the posts record it (`imdb:76033`), if any. */
+export function idsOfSearch(key: string): string[] {
+	if (!key.startsWith('movie:')) return [];
+	const imdb = Number(new URLSearchParams(key.slice(key.indexOf(':') + 1)).get('imdbid') ?? '');
+	return imdb > 0 ? [`imdb:${imdb}`] : [];
+}
+
+/** The newest post per IMDb id among `results`. */
+export function postsById(results: CachedUsenetResult[]): Map<string, Date> {
+	const posts = new Map<string, Date>();
+	for (const result of results) {
+		const at = Date.parse(result.pubDate ?? '');
+		if (!result.imdb || !Number.isFinite(at)) continue;
+		const id = `imdb:${result.imdb}`;
+		const before = posts.get(id);
+		if (!before || before.getTime() < at) posts.set(id, new Date(at));
+	}
+	return posts;
+}
+
+/**
+ * Whether an answer cached at `cachedAt` to the search `key` still stands: it
+ * is a film search by IMDb id, the answer is younger than FRESH_ID_TTL_MS, the sweep has
+ * watched without a break since before it was cached, and no post naming the id
+ * has appeared since.
+ */
+export async function noNewPostSince(
+	key: string,
+	cachedAt: Date,
+	now: number = Date.now()
+): Promise<boolean> {
+	const ids = idsOfSearch(key);
+	if (ids.length === 0 || now - cachedAt.getTime() > FRESH_ID_TTL_MS) return false;
+	const watch = await db.newznabSweptAt();
+	if (!watch || now - watch.at.getTime() > FRESH_WATCH_STALE_MS) return false;
+	if (watch.since > cachedAt) return false;
+	const posts = await db.newznabFreshPosts(ids);
+	return ids.every((id) => {
+		const at = posts.get(id);
+		return !at || at.getTime() < cachedAt.getTime() - FRESH_POST_SLACK_MS;
+	});
+}
+
+function oldestPost(results: UsenetResult[]): number {
+	let oldest = Infinity;
+	for (const result of results) {
+		const at = Date.parse(result.pubDate ?? '');
+		if (Number.isFinite(at) && at < oldest) oldest = at;
+	}
+	return oldest;
+}
+
+/**
+ * Reads the newest film posts on every upstream and records the IMDb ids they
+ * name. Runs at most every FRESH_SWEEP_EVERY_MS; a page that does not
+ * reach back to the previous sweep is followed by the next. Nothing answering
+ * leaves the watch unmarked, so answers fall back to their TTLs once it is late.
+ */
+export async function sweepFreshPosts(
+	now: number = Date.now()
+): Promise<{ swept: boolean; ids: number }> {
+	const last = await db.newznabSweptAt();
+	if (last && now - last.at.getTime() < FRESH_SWEEP_EVERY_MS) return { swept: false, ids: 0 };
+	const since = last ? last.at.getTime() : now - FRESH_WATCH_STALE_MS;
+	const indexers = await pacedIndexers(getUpstreamIndexers());
+	const found: UsenetResult[] = [];
+	let answered = false;
+	for (const [t, cat] of [['movie', '2000']]) {
+		let pending = indexers;
+		for (let pageNo = 0; pageNo < FRESH_SWEEP_PAGES && pending.length > 0; pageNo++) {
+			const params = {
+				cat,
+				...(pageNo > 0 ? { offset: String(pageNo * UPSTREAM_LIMIT) } : {}),
+			};
+			const { ok, lists } = await fanOut(
+				(indexer: Indexer) => buildUpstreamUrl(indexer as UpstreamIndexer, t, params),
+				`newznab sweep ${t}`,
+				pending
+			);
+			answered ||= ok;
+			lists.forEach((list) => found.push(...list));
+			pending = pending.filter(
+				(_, i) => lists[i].length >= UPSTREAM_LIMIT && oldestPost(lists[i]) > since
+			);
+		}
+	}
+	if (!answered) return { swept: false, ids: 0 };
+	const posts = postsById(found as CachedUsenetResult[]);
+	await db.recordNewznabFreshPosts(posts);
+	const unbroken = last && now - last.at.getTime() <= FRESH_WATCH_STALE_MS;
+	await db.markNewznabSwept(new Date(now), unbroken ? last.since : new Date(now));
+	return { swept: true, ids: posts.size };
 }

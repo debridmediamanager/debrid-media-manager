@@ -598,6 +598,7 @@ describe('parseNewznabItem on the altHUB shape', () => {
 			id: '059b7d67b61d504fd66ff052be4d8a0f',
 			title: 'The Shawshank Redemption (1994) (1080p BluRay x265)',
 			size: 10481372683,
+			imdb: '111161',
 		});
 	});
 

@@ -126,6 +126,13 @@ export interface UsenetResult {
 	 * are what a Newznab client filters on.
 	 */
 	category?: string[];
+	/**
+	 * The IMDb id the item names (`imdb` or `imdbid` attr), as a plain number in
+	 * a string (`0076033` -> `76033`), when the indexer sent one. A post naming
+	 * it is how DMM learns a film has a new post without searching for it (see
+	 * sweepFreshPosts in newznab/search).
+	 */
+	imdb?: string;
 }
 
 // Episode markers as they actually appear on the indexer: S02E09, S02 E09,
@@ -163,8 +170,7 @@ export function isValidImdbId(value: unknown): value is string {
  * indexer an item came from.
  */
 type NewznabAttr =
-	| { _name?: string; _value?: string }
-	| { '@attributes'?: { name?: string; value?: string } };
+	{ _name?: string; _value?: string } | { '@attributes'?: { name?: string; value?: string } };
 
 function asArray<T>(value: T | T[] | undefined | null): T[] {
 	if (Array.isArray(value)) return value;
@@ -209,9 +215,7 @@ function attrValues(attrs: NewznabAttr[], name: string): string[] {
 
 function enclosureLength(enclosure: unknown): string | undefined {
 	const entry = enclosure as
-		| { _length?: string; '@attributes'?: { length?: string } }
-		| null
-		| undefined;
+		{ _length?: string; '@attributes'?: { length?: string } } | null | undefined;
 	return entry?._length ?? entry?.['@attributes']?.length;
 }
 
@@ -259,8 +263,18 @@ export function parseNewznabItem(item: unknown): UsenetResult | null {
 	if (pubDate) result.pubDate = pubDate;
 	const category = attrValues(attrs, 'category');
 	if (category.length > 0) result.category = category;
+	const imdb = plainId(attrValue(attrs, 'imdb') ?? attrValue(attrs, 'imdbid'));
+	if (imdb) result.imdb = imdb;
 
 	return result;
+}
+
+/** `tt0076033`, `0076033` and `76033` are one id; `0` and junk are none. */
+function plainId(value: string | undefined): string | undefined {
+	const digits = value?.trim().replace(/^tt/i, '');
+	if (!digits || !/^\d+$/.test(digits)) return undefined;
+	const id = String(Number(digits));
+	return id === '0' ? undefined : id;
 }
 
 /**

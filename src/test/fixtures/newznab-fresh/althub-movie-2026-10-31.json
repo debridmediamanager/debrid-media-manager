@@ -1,0 +1,4455 @@
+{
+	"@attributes": {
+		"version": "2.0"
+	},
+	"channel": {
+		"title": "altHUB",
+		"description": "altHUB Feed",
+		"link": "https://api.althub.co.za/",
+		"language": "en-gb",
+		"webMaster": "admin@althub.co.za (altHUB)",
+		"category": {},
+		"image": {
+			"url": "https://api.althub.co.za/templates/Tabler/images/banner.jpg",
+			"title": "altHUB",
+			"link": "https://api.althub.co.za/",
+			"description": "Visit altHUB - The alt.binary hub"
+		},
+		"response": {
+			"@attributes": {
+				"offset": "0",
+				"total": "10000"
+			}
+		},
+		"item": [
+			{
+				"title": "The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS",
+				"guid": "https://api.althub.co.za/details/b12393c9fe8c7f1b109fa030215a5ca2",
+				"link": "https://api.althub.co.za/getnzb/b12393c9fe8c7f1b109fa030215a5ca2.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/b12393c9fe8c7f1b109fa030215a5ca2#comments",
+				"pubDate": "Sat, 31 Oct 2026 09:38:09 +0000",
+				"category": "Movies > HD",
+				"description": "The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/b12393c9fe8c7f1b109fa030215a5ca2.nzb&i=REDACTED&r=REDACTED",
+						"length": "16029789892",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "16029789892"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "b12393c9fe8c7f1b109fa030215a5ca2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "d5125524e1c8adc1ad2c8b463213655697d773f0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "112"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "uKI06qtuzKpPD@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0118715"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Big Lebowski"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Times like these call for a Big Lebowski."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Jeffrey 'The Dude' Lebowski, a Los Angeles slacker who only wants to bowl and drink White Russians, is mistaken for another Jeffrey Lebowski, a wheelchair-bound millionaire, and finds himself dragged into a strange series of events involving nihilists, adult film producers, ferrets, errant toes, and large sums of money."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy, Crime"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1998"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=b12393c9fe8c7f1b109fa030215a5ca2&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 09:38:09 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.hdtv.x264"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL",
+				"guid": "https://api.althub.co.za/details/61bd8e1892dadf84e4a42d1494ba9cef",
+				"link": "https://api.althub.co.za/getnzb/61bd8e1892dadf84e4a42d1494ba9cef.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/61bd8e1892dadf84e4a42d1494ba9cef#comments",
+				"pubDate": "Sat, 31 Oct 2026 09:30:34 +0000",
+				"category": "Movies > UHD",
+				"description": "The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/61bd8e1892dadf84e4a42d1494ba9cef.nzb&i=REDACTED&r=REDACTED",
+						"length": "68339692258",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "68339692258"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "61bd8e1892dadf84e4a42d1494ba9cef"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "e996c1a9d6bfcd4c417d87dd9f3b34b292b78229"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "114"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "QcLatU1UtSzbN@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0118715"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Big Lebowski"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Times like these call for a Big Lebowski."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Jeffrey 'The Dude' Lebowski, a Los Angeles slacker who only wants to bowl and drink White Russians, is mistaken for another Jeffrey Lebowski, a wheelchair-bound millionaire, and finds himself dragged into a strange series of events involving nihilists, adult film producers, ferrets, errant toes, and large sums of money."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy, Crime"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1998"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=61bd8e1892dadf84e4a42d1494ba9cef&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 09:30:34 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Whos.Coming.for.Christmas.2026.720p.AMZN.WEB-DL.DDP5.1.H.264-Kitsune",
+				"guid": "https://api.althub.co.za/details/b25bbcb5bf342f45d137746b92ff1fe9",
+				"link": "https://api.althub.co.za/getnzb/b25bbcb5bf342f45d137746b92ff1fe9.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/b25bbcb5bf342f45d137746b92ff1fe9#comments",
+				"pubDate": "Sat, 31 Oct 2026 09:23:06 +0000",
+				"category": "Movies > HD",
+				"description": "Whos.Coming.for.Christmas.2026.720p.AMZN.WEB-DL.DDP5.1.H.264-Kitsune",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/b25bbcb5bf342f45d137746b92ff1fe9.nzb&i=REDACTED&r=REDACTED",
+						"length": "2751502424",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "2751502424"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "b25bbcb5bf342f45d137746b92ff1fe9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "54a6fa9d0f77d876cfeca68a675b487fe0f39977"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "11"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "cmVsZWFzZXM@YWx0aHViLmNvLnph.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "46075371"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Who's Coming for Christmas?"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "After relocating to a new town, Julie uses pieces inherited from her late grandmother to create a beautiful Christmas Eve dinner table for eight, trusting that the right guests will find their way to it. As she befriends her neighbor Mark and his young daughter, her holiday plans seem complete, until bad weather keeps them away. With only three seats filled, Julie must rely on a series of small Christmas miracles to bring her dream holiday table to life."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Romance, Comedy, TV Movie"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/46075371-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/46075371-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 09:23:06 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.newznzb.tango"
+						}
+					}
+				]
+			},
+			{
+				"title": "Whos.Coming.for.Christmas.2026.1080p.AMZN.WEB-DL.DDP5.1.H.264-Kitsune",
+				"guid": "https://api.althub.co.za/details/4dd5c00b9d384869f8e832d2dc5ff8cb",
+				"link": "https://api.althub.co.za/getnzb/4dd5c00b9d384869f8e832d2dc5ff8cb.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/4dd5c00b9d384869f8e832d2dc5ff8cb#comments",
+				"pubDate": "Sat, 31 Oct 2026 09:22:48 +0000",
+				"category": "Movies > HD",
+				"description": "Whos.Coming.for.Christmas.2026.1080p.AMZN.WEB-DL.DDP5.1.H.264-Kitsune",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/4dd5c00b9d384869f8e832d2dc5ff8cb.nzb&i=REDACTED&r=REDACTED",
+						"length": "5272303854",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "5272303854"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "4dd5c00b9d384869f8e832d2dc5ff8cb"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "4653e1dd240d24cbfa37c4478591bb98a40038e9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "17"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "cmVsZWFzZXM@YWx0aHViLmNvLnph.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "46075371"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Who's Coming for Christmas?"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "After relocating to a new town, Julie uses pieces inherited from her late grandmother to create a beautiful Christmas Eve dinner table for eight, trusting that the right guests will find their way to it. As she befriends her neighbor Mark and his young daughter, her holiday plans seem complete, until bad weather keeps them away. With only three seats filled, Julie must rely on a series of small Christmas miracles to bring her dream holiday table to life."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Romance, Comedy, TV Movie"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/46075371-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/46075371-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "27"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 09:22:48 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.newznzb.yankee"
+						}
+					}
+				]
+			},
+			{
+				"title": "Dastaar.2026.2160p.AMZN.WEB-DL.DDP5.1.H.265-Telly",
+				"guid": "https://api.althub.co.za/details/6ed57303828a9674b256effbd26b7c6f",
+				"link": "https://api.althub.co.za/getnzb/6ed57303828a9674b256effbd26b7c6f.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/6ed57303828a9674b256effbd26b7c6f#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:51:43 +0000",
+				"category": "Movies > Foreign",
+				"description": "Dastaar.2026.2160p.AMZN.WEB-DL.DDP5.1.H.265-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/6ed57303828a9674b256effbd26b7c6f.nzb&i=REDACTED&r=REDACTED",
+						"length": "18324444436",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "18324444436"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "6ed57303828a9674b256effbd26b7c6f"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "beefe4fbdf275cee52c20a38485f756328b323f5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "110"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "RdW8KWb1dQDuH@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "38286460"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Dastaar"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "A Sikh immigrant rises from newcomer to community leader following a devastating racist attack."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "History, Action, Drama"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/38286460-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/38286460-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=6ed57303828a9674b256effbd26b7c6f&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:51:43 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "How.to.Train.Your.Dragon.2.2014.UHD.BluRay.2160p.DDP.7.1.HDR.x265-hallowed",
+				"guid": "https://api.althub.co.za/details/af6165cd4f3e19ac39a547bbea5ca6f2",
+				"link": "https://api.althub.co.za/getnzb/af6165cd4f3e19ac39a547bbea5ca6f2.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/af6165cd4f3e19ac39a547bbea5ca6f2#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:50:33 +0000",
+				"category": "Movies > UHD",
+				"description": "How.to.Train.Your.Dragon.2.2014.UHD.BluRay.2160p.DDP.7.1.HDR.x265-hallowed",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/af6165cd4f3e19ac39a547bbea5ca6f2.nzb&i=REDACTED&r=REDACTED",
+						"length": "14497085682",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "14497085682"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "af6165cd4f3e19ac39a547bbea5ca6f2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "a705a56b0fedf889b15579ce49cccaf0ec7cd8c1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "1646971"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "How to Train Your Dragon 2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Training is over. The adventure begins."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Five years after uniting the dragons and Vikings of Berk, Hiccup and Toothless soar beyond their homeland, charting the vast unknown. During one of their adventures, the pair discover a secret cave that houses hundreds of wild dragons—and a mysterious dragon rider with a startling connection to Hiccup. And as the ruthless conqueror Drago Bludvist rises to seize control of both dragons and people alike, Hiccup must step into his role as a true leader and, alongside his friends and Toothless, protect Berk from a devastating war."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.7"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Fantasy, Action, Adventure, Animation, Family"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2014"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/1646971-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/1646971-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "12"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=af6165cd4f3e19ac39a547bbea5ca6f2&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:50:33 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Deadpool.2.2018.Super.Duper.Cut.Unrated.2160p.UHD.BDRip.HEVC.10bit.HDR.TrueHD.7.1.Atmos-MUSHR00M",
+				"guid": "https://api.althub.co.za/details/025182fe84b2e02d34a3d1acfdc2bebe",
+				"link": "https://api.althub.co.za/getnzb/025182fe84b2e02d34a3d1acfdc2bebe.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/025182fe84b2e02d34a3d1acfdc2bebe#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:45:14 +0000",
+				"category": "Movies > UHD",
+				"description": "Deadpool.2.2018.Super.Duper.Cut.Unrated.2160p.UHD.BDRip.HEVC.10bit.HDR.TrueHD.7.1.Atmos-MUSHR00M",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/025182fe84b2e02d34a3d1acfdc2bebe.nzb&i=REDACTED&r=REDACTED",
+						"length": "30362881652",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "30362881652"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "025182fe84b2e02d34a3d1acfdc2bebe"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "16fd923878f44ede01244827a96dd00e40d16738"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "10"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Septima Octavia"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "5463162"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Deadpool 2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Prepare for the Second Coming."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Wisecracking mercenary Deadpool battles the evil and powerful Cable and other bad guys to save a boy's life."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Action, Comedy, Adventure"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2018"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/5463162-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/5463162-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "27"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=025182fe84b2e02d34a3d1acfdc2bebe&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:45:14 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Deadpool.2016.2160p.UHD.BDRip.HEVC.10bit.HDR.TrueHD.7.1.Atmos-MUSHR00M",
+				"guid": "https://api.althub.co.za/details/1229ac804759f496b2aeb6873bf98812",
+				"link": "https://api.althub.co.za/getnzb/1229ac804759f496b2aeb6873bf98812.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/1229ac804759f496b2aeb6873bf98812#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:44:49 +0000",
+				"category": "Movies > UHD",
+				"description": "Deadpool.2016.2160p.UHD.BDRip.HEVC.10bit.HDR.TrueHD.7.1.Atmos-MUSHR00M",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/1229ac804759f496b2aeb6873bf98812.nzb&i=REDACTED&r=REDACTED",
+						"length": "26974996503",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "26974996503"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "1229ac804759f496b2aeb6873bf98812"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "c0b5763a4972a7dff10cc15119b5abc44ddc6fdf"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "10"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Septima Octavia"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "1431045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Deadpool"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Feel the love."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "The origin story of former Special Forces operative turned mercenary Wade Wilson, who, after being subjected to a rogue experiment that leaves him with accelerated healing powers, adopts the alter ego Deadpool. Armed with his new abilities and a dark, twisted sense of humor, Deadpool hunts down the man who nearly destroyed his life."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.6"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Action, Adventure, Comedy"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2016"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/1431045-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/1431045-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "31"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=1229ac804759f496b2aeb6873bf98812&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:44:49 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Comrade.Kalyan.2026.1080p.AMZN.WEB-DL.MULTi.DDP5.1.H.264-Telly",
+				"guid": "https://api.althub.co.za/details/a2537caeaefd85a66fbf7e7bd628ac81",
+				"link": "https://api.althub.co.za/getnzb/a2537caeaefd85a66fbf7e7bd628ac81.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/a2537caeaefd85a66fbf7e7bd628ac81#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:39:02 +0000",
+				"category": "Movies > Foreign",
+				"description": "Comrade.Kalyan.2026.1080p.AMZN.WEB-DL.MULTi.DDP5.1.H.264-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/a2537caeaefd85a66fbf7e7bd628ac81.nzb&i=REDACTED&r=REDACTED",
+						"length": "9119693924",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "9119693924"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "a2537caeaefd85a66fbf7e7bd628ac81"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "5b155af975be3199c79ec8ad9e7d964c0de53393"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "108"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "nSdYKOkxEBDim@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "32089596"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Comrade Kalyan"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "In a naxal-dominated village on the Andhra-Odisha border, a theatre owner uses communist sentiment to keep his old cinema running. He joins the naxals and kidnaps a leader, setting off a chain of events."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "3.0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Romance, Action, Drama"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/32089596-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/32089596-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "4"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=a2537caeaefd85a66fbf7e7bd628ac81&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:39:02 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.Big.Lebowski.1998.EXTRAS.1080p.BluRay.AC3.VC-1.Remux-decibeL",
+				"guid": "https://api.althub.co.za/details/fe65b4f76ea487a7c0399fa3f1a26d1d",
+				"link": "https://api.althub.co.za/getnzb/fe65b4f76ea487a7c0399fa3f1a26d1d.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/fe65b4f76ea487a7c0399fa3f1a26d1d#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:38:38 +0000",
+				"category": "Movies > HD",
+				"description": "The.Big.Lebowski.1998.EXTRAS.1080p.BluRay.AC3.VC-1.Remux-decibeL",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/fe65b4f76ea487a7c0399fa3f1a26d1d.nzb&i=REDACTED&r=REDACTED",
+						"length": "5573980317",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "5573980317"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "fe65b4f76ea487a7c0399fa3f1a26d1d"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "5b05de74d81e947e19a39239434e7ca691afb940"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "111"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "ppoXYkjVcz6L6@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0118715"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Big Lebowski"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Times like these call for a Big Lebowski."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Jeffrey 'The Dude' Lebowski, a Los Angeles slacker who only wants to bowl and drink White Russians, is mistaken for another Jeffrey Lebowski, a wheelchair-bound millionaire, and finds himself dragged into a strange series of events involving nihilists, adult film producers, ferrets, errant toes, and large sums of money."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy, Crime"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1998"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0118715-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "11"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=fe65b4f76ea487a7c0399fa3f1a26d1d&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:38:38 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.multimedia"
+						}
+					}
+				]
+			},
+			{
+				"title": "Looney Tunes Collector's Vault - Volume 3 2026 1080p USA Blu-ray AVC DTS-HD MA 2.0",
+				"guid": "https://api.althub.co.za/details/ba74363fa57470e3fc02369654772763",
+				"link": "https://api.althub.co.za/getnzb/ba74363fa57470e3fc02369654772763.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/ba74363fa57470e3fc02369654772763#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:36:04 +0000",
+				"category": "Movies > HD",
+				"description": "Looney Tunes Collector's Vault - Volume 3 2026 1080p USA Blu-ray AVC DTS-HD MA 2.0",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/ba74363fa57470e3fc02369654772763.nzb&i=REDACTED&r=REDACTED",
+						"length": "102504655857",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "102504655857"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "ba74363fa57470e3fc02369654772763"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "5ff46c36405dc1aad84831d979ba824174606a78"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "115"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "hFH5feA9oGOeO@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "42329338"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Internal Pleasures 3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Sweet Sinner proudly presents Internal Pleasures Vol. 3, featuring four back-to-back scenes of passionate sex ending with the girls receiving an internal orgasm from their partners. Enjoy stunning couples, and explosive sex at its finest."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "9.0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/42329338-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=ba74363fa57470e3fc02369654772763&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:36:04 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.movies"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.SpongeBob.Movie.Search.for.SquarePants.2025.MULTI.1080p.SKST.WEB-DL.DDP5.1.x264-AndreMor",
+				"guid": "https://api.althub.co.za/details/87475c2dcf6f7bc097a85f65cd8182e0",
+				"link": "https://api.althub.co.za/getnzb/87475c2dcf6f7bc097a85f65cd8182e0.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/87475c2dcf6f7bc097a85f65cd8182e0#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:35:49 +0000",
+				"category": "Movies > HD",
+				"description": "The.SpongeBob.Movie.Search.for.SquarePants.2025.MULTI.1080p.SKST.WEB-DL.DDP5.1.x264-AndreMor",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/87475c2dcf6f7bc097a85f65cd8182e0.nzb&i=REDACTED&r=REDACTED",
+						"length": "11674388500",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "11674388500"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "87475c2dcf6f7bc097a85f65cd8182e0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "2e062b138181ff2ff940ab44aa74a5d050a80526"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "wvrOMflVKE <EVJcJPYBiLSYOuzA@UWtkWkFM.hpn>"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "23572848"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The SpongeBob Movie: Search for SquarePants"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Ship's about to go down."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Desperate to be a big guy, SpongeBob sets out to prove his bravery to Mr. Krabs by following The Flying Dutchman – a mysterious swashbuckling ghost pirate – on a seafaring adventure that takes him to the deepest depths of the deep sea, where no Sponge has gone before."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "6.8"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Adventure, Family, Animation, Comedy, Fantasy"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2025"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/23572848-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/23572848-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "18"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=87475c2dcf6f7bc097a85f65cd8182e0&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:35:49 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.tv"
+						}
+					}
+				]
+			},
+			{
+				"title": "Comrade.Kalyan.2026.2160p.AMZN.WEB-DL.MULTi.DDP5.1.H.265-Telly",
+				"guid": "https://api.althub.co.za/details/1aee84a5c45221394c32bcc010209e9a",
+				"link": "https://api.althub.co.za/getnzb/1aee84a5c45221394c32bcc010209e9a.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/1aee84a5c45221394c32bcc010209e9a#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:32:37 +0000",
+				"category": "Movies > Foreign",
+				"description": "Comrade.Kalyan.2026.2160p.AMZN.WEB-DL.MULTi.DDP5.1.H.265-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/1aee84a5c45221394c32bcc010209e9a.nzb&i=REDACTED&r=REDACTED",
+						"length": "20565299472",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "20565299472"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "1aee84a5c45221394c32bcc010209e9a"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "6ea52ca0361aad460fe678cad76d5cabb4451a4a"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "110"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "KxucUkrdstbR5@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "32089596"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Comrade Kalyan"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "In a naxal-dominated village on the Andhra-Odisha border, a theatre owner uses communist sentiment to keep his old cinema running. He joins the naxals and kidnaps a leader, setting off a chain of events."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "3.0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Romance, Action, Drama"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/32089596-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/32089596-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "4"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=1aee84a5c45221394c32bcc010209e9a&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:32:37 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.Dark.Heaven.2026.720p.AMZN.WEB-DL.DDP5.1.H.264-Telly",
+				"guid": "https://api.althub.co.za/details/6456a6cf2533896aad5ec620daf24792",
+				"link": "https://api.althub.co.za/getnzb/6456a6cf2533896aad5ec620daf24792.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/6456a6cf2533896aad5ec620daf24792#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:16:35 +0000",
+				"category": "Movies > Foreign",
+				"description": "The.Dark.Heaven.2026.720p.AMZN.WEB-DL.DDP5.1.H.264-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/6456a6cf2533896aad5ec620daf24792.nzb&i=REDACTED&r=REDACTED",
+						"length": "1962518416",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "1962518416"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "6456a6cf2533896aad5ec620daf24792"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "e0d7ea4680c8a104b7b6516c637c051eedc3ce10"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "49"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "9FZlp2IcoxLJ3@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "45370533"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Dark Heaven"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "In the Hill Village of Mekkarai, Where It is Customary for Men to Die Every Seven Years During the Month of June, a Newly Appointed Police Inspector Arrives to Investigate a Series of Mysterious Murders. As He Digs Deeper Into the Village's Dark Secrets and Long-standing Beliefs, He Finds Himself Trapped in a Web of Crime, Fear, and Hidden Truths."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Crime, Thriller"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=6456a6cf2533896aad5ec620daf24792&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:16:35 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.Dark.Heaven.2026.1080p.AMZN.WEB-DL.DDP5.1.H.265-Telly",
+				"guid": "https://api.althub.co.za/details/28f88013a483b9a73e9053d9862e2ca3",
+				"link": "https://api.althub.co.za/getnzb/28f88013a483b9a73e9053d9862e2ca3.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/28f88013a483b9a73e9053d9862e2ca3#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:14:15 +0000",
+				"category": "Movies > Foreign",
+				"description": "The.Dark.Heaven.2026.1080p.AMZN.WEB-DL.DDP5.1.H.265-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/28f88013a483b9a73e9053d9862e2ca3.nzb&i=REDACTED&r=REDACTED",
+						"length": "3429599772",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "3429599772"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "28f88013a483b9a73e9053d9862e2ca3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "98d2bda5cf54f1cccf51db2f820718394252ae6a"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "82"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "vdJnToc6CqyFm@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "45370533"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Dark Heaven"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "In the Hill Village of Mekkarai, Where It is Customary for Men to Die Every Seven Years During the Month of June, a Newly Appointed Police Inspector Arrives to Investigate a Series of Mysterious Murders. As He Digs Deeper Into the Village's Dark Secrets and Long-standing Beliefs, He Finds Himself Trapped in a Web of Crime, Fear, and Hidden Truths."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Crime, Thriller"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=28f88013a483b9a73e9053d9862e2ca3&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:14:15 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "The.Dark.Heaven.2026.1080p.AMZN.WEB-DL.DDP5.1.H.264-Telly",
+				"guid": "https://api.althub.co.za/details/52f4dc5d1c17ac601c803b7fedfc79dc",
+				"link": "https://api.althub.co.za/getnzb/52f4dc5d1c17ac601c803b7fedfc79dc.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/52f4dc5d1c17ac601c803b7fedfc79dc#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:11:42 +0000",
+				"category": "Movies > Foreign",
+				"description": "The.Dark.Heaven.2026.1080p.AMZN.WEB-DL.DDP5.1.H.264-Telly",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/52f4dc5d1c17ac601c803b7fedfc79dc.nzb&i=REDACTED&r=REDACTED",
+						"length": "5247854100",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "5247854100"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "52f4dc5d1c17ac601c803b7fedfc79dc"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "60aa331338273bf920356e511a3e6a324620072d"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "108"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "x291k6CERbdPo@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "45370533"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "The Dark Heaven"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "In the Hill Village of Mekkarai, Where It is Customary for Men to Die Every Seven Years During the Month of June, a Newly Appointed Police Inspector Arrives to Investigate a Series of Mysterious Murders. As He Digs Deeper Into the Village's Dark Secrets and Long-standing Beliefs, He Finds Himself Trapped in a Web of Crime, Fear, and Hidden Truths."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Crime, Thriller"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2026"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/45370533-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=52f4dc5d1c17ac601c803b7fedfc79dc&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:11:42 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "Sethu.1999.720p.AMZN.WEB-DL.Tamil.DDP5.1.H.264-JeRi",
+				"guid": "https://api.althub.co.za/details/1d31f3e508c02ea70e5c0ea7edb2ed02",
+				"link": "https://api.althub.co.za/getnzb/1d31f3e508c02ea70e5c0ea7edb2ed02.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/1d31f3e508c02ea70e5c0ea7edb2ed02#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:07:55 +0000",
+				"category": "Movies > Foreign",
+				"description": "Sethu.1999.720p.AMZN.WEB-DL.Tamil.DDP5.1.H.264-JeRi",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/1d31f3e508c02ea70e5c0ea7edb2ed02.nzb&i=REDACTED&r=REDACTED",
+						"length": "2136073392",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "2136073392"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "1d31f3e508c02ea70e5c0ea7edb2ed02"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "5bc331a1e337872950930ff27f53d42425f0b047"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "53"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "lAuW5or6oJvO0@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0265730"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Sethu..."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "A violent college student softens his tough exterior when he falls in love with a shy Brahmin woman. Just as the ice between them begins to melt, he's attacked viciously and loses his mental stability."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "6.6"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Action, Drama, Romance, Thriller"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1999"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0265730-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0265730-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=1d31f3e508c02ea70e5c0ea7edb2ed02&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:07:55 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.misc"
+						}
+					}
+				]
+			},
+			{
+				"title": "True.Romance.1993.Directors.Cut.BluRay.1080p.DDP.5.1.x264-hallowed",
+				"guid": "https://api.althub.co.za/details/3905d618d35bdda502c7ca4c1a35a545",
+				"link": "https://api.althub.co.za/getnzb/3905d618d35bdda502c7ca4c1a35a545.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/3905d618d35bdda502c7ca4c1a35a545#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:05:33 +0000",
+				"category": "Movies > HD",
+				"description": "True.Romance.1993.Directors.Cut.BluRay.1080p.DDP.5.1.x264-hallowed",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/3905d618d35bdda502c7ca4c1a35a545.nzb&i=REDACTED&r=REDACTED",
+						"length": "14163700203",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "14163700203"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "3905d618d35bdda502c7ca4c1a35a545"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "c2b6f57a2c251310a3d57f4749458b32ae1d3bb9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0108399"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "True Romance"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Stealing. Cheating. Killing. Who says romance is dead?"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Clarence marries hooker Alabama, steals cocaine from her pimp, and tries to sell it in Hollywood, while the owners of the coke try to reclaim it."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Action, Crime, Romance"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1993"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0108399-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0108399-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "49"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=3905d618d35bdda502c7ca4c1a35a545&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:05:33 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Hell.House.2001.1080p.Blu-ray.Remux.AVC.FLAC.1.0-CiNEPHiLES",
+				"guid": "https://api.althub.co.za/details/d0b5b5d0478acd6eb6f96a243d001985",
+				"link": "https://api.althub.co.za/getnzb/d0b5b5d0478acd6eb6f96a243d001985.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/d0b5b5d0478acd6eb6f96a243d001985#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:04:17 +0000",
+				"category": "Movies > HD",
+				"description": "Hell.House.2001.1080p.Blu-ray.Remux.AVC.FLAC.1.0-CiNEPHiLES",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/d0b5b5d0478acd6eb6f96a243d001985.nzb&i=REDACTED&r=REDACTED",
+						"length": "24052869095",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "24052869095"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "d0b5b5d0478acd6eb6f96a243d001985"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "30a56d1f126899ece69aa166e7993f0a5b32e16b"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "53"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "c3Jy@YWx0aHViLmNvLnph.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0301235"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Hell House"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "This church wants to scare the Hell out of you."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "A look at the \"Hell House\" performed annually in October by the youth members of Trinity Church (Assemblies of God) in Cedar Hill, Texas (a Dallas suburb) — seen by over 10,000 visitors each year."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "6.3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Documentary"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2001"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0301235-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0301235-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "22"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:04:17 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.the-terminal"
+						}
+					}
+				]
+			},
+			{
+				"title": "Hell.House.2001.1080p.Blu-ray.Remux.AVC.FLAC.1.0-CiNEPHiLES",
+				"guid": "https://api.althub.co.za/details/11a69cda89c294bc2242eb8f9819cd52",
+				"link": "https://api.althub.co.za/getnzb/11a69cda89c294bc2242eb8f9819cd52.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/11a69cda89c294bc2242eb8f9819cd52#comments",
+				"pubDate": "Sat, 31 Oct 2026 08:02:55 +0000",
+				"category": "Movies > HD",
+				"description": "Hell.House.2001.1080p.Blu-ray.Remux.AVC.FLAC.1.0-CiNEPHiLES",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/11a69cda89c294bc2242eb8f9819cd52.nzb&i=REDACTED&r=REDACTED",
+						"length": "24052869095",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "24052869095"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "11a69cda89c294bc2242eb8f9819cd52"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "018021dc7971144ba442379b7b83dd16d3f444f5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "53"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "cmVsZWFzZXM@YWx0aHViLmNvLnph.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0301235"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Hell House"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "This church wants to scare the Hell out of you."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "A look at the \"Hell House\" performed annually in October by the youth members of Trinity Church (Assemblies of God) in Cedar Hill, Texas (a Dallas suburb) — seen by over 10,000 visitors each year."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "6.3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Documentary"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2001"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0301235-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0301235-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 08:02:55 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.newznzb.romeo"
+						}
+					}
+				]
+			},
+			{
+				"title": "True.Romance.1993.Directors.Cut.BluRay.1080p.DDP.5.1.x264-hallowed",
+				"guid": "https://api.althub.co.za/details/de0d2e9ed275e2ae9b3990663e3cb02c",
+				"link": "https://api.althub.co.za/getnzb/de0d2e9ed275e2ae9b3990663e3cb02c.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/de0d2e9ed275e2ae9b3990663e3cb02c#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:57:47 +0000",
+				"category": "Movies > HD",
+				"description": "True.Romance.1993.Directors.Cut.BluRay.1080p.DDP.5.1.x264-hallowed",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/de0d2e9ed275e2ae9b3990663e3cb02c.nzb&i=REDACTED&r=REDACTED",
+						"length": "12107805359",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "12107805359"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "de0d2e9ed275e2ae9b3990663e3cb02c"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "7a769fb38b8fc8a73b168e7c95ab02ce1b3358a7"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "30"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "c3Jy@YWx0aHViLmNvLnph.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0108399"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "True Romance"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "Stealing. Cheating. Killing. Who says romance is dead?"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Clarence marries hooker Alabama, steals cocaine from her pimp, and tries to sell it in Hollywood, while the owners of the coke try to reclaim it."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.5"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Action, Crime, Romance"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1993"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0108399-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0108399-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "57"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:57:47 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.nl"
+						}
+					}
+				]
+			},
+			{
+				"title": "Baskan (2024) Yerli 1080p TVP WEBDL H264 TR AAC20 TSRG",
+				"guid": "https://api.althub.co.za/details/b508cec5b351783a2665aec4ecd726cd",
+				"link": "https://api.althub.co.za/getnzb/b508cec5b351783a2665aec4ecd726cd.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/b508cec5b351783a2665aec4ecd726cd#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:50:19 +0000",
+				"category": "Movies > Foreign",
+				"description": "Baskan (2024) Yerli 1080p TVP WEBDL H264 TR AAC20 TSRG",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/b508cec5b351783a2665aec4ecd726cd.nzb&i=REDACTED&r=REDACTED",
+						"length": "6499455720",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "6499455720"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "b508cec5b351783a2665aec4ecd726cd"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "897a5967f204dd700785559a4d07e5c40515026b"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "29551302"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "President"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Funny experiences of the townspeople who want to change the current mayor in the elections."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "2.0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2024"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/29551302-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/29551302-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=b508cec5b351783a2665aec4ecd726cd&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:50:19 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Stand.Up.Comedy.Mincu.Singur.acasa.2.2026.2160p.WEB-DL.AVC.AAC2.0.H.264-SPWEB",
+				"guid": "https://api.althub.co.za/details/ed6c34d3434e5a36c6c945d499a8ecf6",
+				"link": "https://api.althub.co.za/getnzb/ed6c34d3434e5a36c6c945d499a8ecf6.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/ed6c34d3434e5a36c6c945d499a8ecf6#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:50:07 +0000",
+				"category": "Movies > Foreign",
+				"description": "Stand.Up.Comedy.Mincu.Singur.acasa.2.2026.2160p.WEB-DL.AVC.AAC2.0.H.264-SPWEB",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/ed6c34d3434e5a36c6c945d499a8ecf6.nzb&i=REDACTED&r=REDACTED",
+						"length": "2653376744",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "2653376744"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "ed6c34d3434e5a36c6c945d499a8ecf6"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "f884f256d7a16edd432f1d0fcc301645aba90ee8"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "8"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=ed6c34d3434e5a36c6c945d499a8ecf6&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:50:07 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Stand.Up.Comedy.Maria.Popovici.Stati.sa.va.zic.2026.2160p.WEB-DL.AVC.AAC2.0.H.264-SPWEB",
+				"guid": "https://api.althub.co.za/details/3666b30df0601871f9582dfd34f52e88",
+				"link": "https://api.althub.co.za/getnzb/3666b30df0601871f9582dfd34f52e88.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/3666b30df0601871f9582dfd34f52e88#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:50:04 +0000",
+				"category": "Movies > Foreign",
+				"description": "Stand.Up.Comedy.Maria.Popovici.Stati.sa.va.zic.2026.2160p.WEB-DL.AVC.AAC2.0.H.264-SPWEB",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/3666b30df0601871f9582dfd34f52e88.nzb&i=REDACTED&r=REDACTED",
+						"length": "2084291591",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "2084291591"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "3666b30df0601871f9582dfd34f52e88"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "68bfd6b1b7ddb1d6f8bbe84125564fbe90468dc1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "8"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=3666b30df0601871f9582dfd34f52e88&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:50:04 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Steak.2007.1080poBluray.Remux.AVC.DTS-HD.MA5.1-PTP",
+				"guid": "https://api.althub.co.za/details/9dc6b45e980491d2383b112567460ac4",
+				"link": "https://api.althub.co.za/getnzb/9dc6b45e980491d2383b112567460ac4.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/9dc6b45e980491d2383b112567460ac4#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:49:59 +0000",
+				"category": "Movies > Foreign",
+				"description": "Steak.2007.1080poBluray.Remux.AVC.DTS-HD.MA5.1-PTP",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/9dc6b45e980491d2383b112567460ac4.nzb&i=REDACTED&r=REDACTED",
+						"length": "22927906311",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "22927906311"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "9dc6b45e980491d2383b112567460ac4"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "b5a5eafcc1c56ab8a9a67fdb652cb69ea4cc4d2e"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "12"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "SSyUoWRVGU6Co@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0889665"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Steak"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "George is the scapegoat of his classmates. One day he cracks and shoots them. His best and only friend Blaise is accused in his place and sentenced to 7 years in a psychiatric hospital. At the day of his release, Blaise realizes he only has one family: his best friend George. But he does not want to hear about his childhood friend, as he tries to integrate with the “Chivers” a gang whose members wear red jackets and boots, drink milk, drive sport trucks and play an incomprehensible and violent game that mixes cricket and mental arithmetic."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "5.6"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy, Science Fiction"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2007"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0889665-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0889665-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=9dc6b45e980491d2383b112567460ac4&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:49:59 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.multimedia"
+						}
+					}
+				]
+			},
+			{
+				"title": "Alien.1979.Directors.Cut.480p.BluRay.x264",
+				"guid": "https://api.althub.co.za/details/6a778e8c9610961292b99d1bc9ff44b8",
+				"link": "https://api.althub.co.za/getnzb/6a778e8c9610961292b99d1bc9ff44b8.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/6a778e8c9610961292b99d1bc9ff44b8#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:41:56 +0000",
+				"category": "Movies > BluRay",
+				"description": "Alien.1979.Directors.Cut.480p.BluRay.x264",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/6a778e8c9610961292b99d1bc9ff44b8.nzb&i=REDACTED&r=REDACTED",
+						"length": "2705062756",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2050"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "2705062756"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "6a778e8c9610961292b99d1bc9ff44b8"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "faf676babc3d530fb44595bb270c043f66c25ec3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "7jBOwBMTqNt38@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0078748"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Alien"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "In space no one can hear you scream."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "8.2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Horror, Science Fiction"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1979"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0078748-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0078748-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "10"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=6a778e8c9610961292b99d1bc9ff44b8&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:41:56 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.hdtv.x264"
+						}
+					}
+				]
+			},
+			{
+				"title": "Nine.to.Five.1980.2160p.DSNP.WEB-DL.AAC2.0.DoVi.HDR.H.265-playWEB",
+				"guid": "https://api.althub.co.za/details/ad4872b0e3e8a6effa63b8f1469d7a84",
+				"link": "https://api.althub.co.za/getnzb/ad4872b0e3e8a6effa63b8f1469d7a84.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/ad4872b0e3e8a6effa63b8f1469d7a84#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:40:51 +0000",
+				"category": "Movies > UHD",
+				"description": "Nine.to.Five.1980.2160p.DSNP.WEB-DL.AAC2.0.DoVi.HDR.H.265-playWEB",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/ad4872b0e3e8a6effa63b8f1469d7a84.nzb&i=REDACTED&r=REDACTED",
+						"length": "14344317614",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "14344317614"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "ad4872b0e3e8a6effa63b8f1469d7a84"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "2c47d875a90b1dc6d45143ac0b9cd65b373396b7"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "11"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "qHnltKZIAmt1T@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0080319"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Nine to Five"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "The power behind the throne."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Three female employees of a sexist, egotistical, lying, hypocritical bigot find a way to turn the tables on him."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1980"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0080319-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0080319-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "13"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=ad4872b0e3e8a6effa63b8f1469d7a84&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:40:51 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.movies"
+						}
+					}
+				]
+			},
+			{
+				"title": "How.to.Train.Your.Dragon.2010.UHD.BluRay.2160p.DDP.7.1.HDR.x265-hallowed",
+				"guid": "https://api.althub.co.za/details/1d9bb80e6057f3876960baf73a595e78",
+				"link": "https://api.althub.co.za/getnzb/1d9bb80e6057f3876960baf73a595e78.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/1d9bb80e6057f3876960baf73a595e78#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:35:32 +0000",
+				"category": "Movies > UHD",
+				"description": "How.to.Train.Your.Dragon.2010.UHD.BluRay.2160p.DDP.7.1.HDR.x265-hallowed",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/1d9bb80e6057f3876960baf73a595e78.nzb&i=REDACTED&r=REDACTED",
+						"length": "13962069253",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2045"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "13962069253"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "1d9bb80e6057f3876960baf73a595e78"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "f1c4be08f66dec3fb3a68ff3f7c1985bd4519f83"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "Sunan Pranee"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0892769"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "How to Train Your Dragon"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "What started as fire and fury will become friendship."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "As the son of a Viking leader on the cusp of manhood, shy Hiccup Horrendous Haddock III faces a rite of passage: he must kill a dragon to prove his warrior mettle. But after downing a feared dragon, he realizes that he no longer wants to destroy it, and instead befriends the beast – which he names Toothless – much to the chagrin of his warrior father."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "7.9"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Fantasy, Adventure, Animation, Family"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0892769-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0892769-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "35"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=1d9bb80e6057f3876960baf73a595e78&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:35:32 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.boneless"
+						}
+					}
+				]
+			},
+			{
+				"title": "Alien.1979.Theatrical.Cut.1080p.BluRay.DTS.x264-Geek",
+				"guid": "https://api.althub.co.za/details/fc03acfa2a56ef38056fbf46182c94de",
+				"link": "https://api.althub.co.za/getnzb/fc03acfa2a56ef38056fbf46182c94de.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/fc03acfa2a56ef38056fbf46182c94de#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:35:21 +0000",
+				"category": "Movies > HD",
+				"description": "Alien.1979.Theatrical.Cut.1080p.BluRay.DTS.x264-Geek",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/fc03acfa2a56ef38056fbf46182c94de.nzb&i=REDACTED&r=REDACTED",
+						"length": "20022535600",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2040"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "20022535600"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "fc03acfa2a56ef38056fbf46182c94de"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "35b687ae13efb24655d034f7ee228181ea60020a"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "12"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "2L7Sa5g2iHTdx@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "0078748"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Alien"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtagline",
+							"value": "In space no one can hear you scream."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed."
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "8.2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Horror, Science Fiction"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "1979"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/0078748-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/0078748-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "41"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=fc03acfa2a56ef38056fbf46182c94de&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:35:21 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.multimedia"
+						}
+					}
+				]
+			},
+			{
+				"title": "Aagey.Se.Right.2009.1080p.AMZN.WEB-DL.DDP5.1.H.264-KHN",
+				"guid": "https://api.althub.co.za/details/49380d54c7773f6245ff6efef45855a3",
+				"link": "https://api.althub.co.za/getnzb/49380d54c7773f6245ff6efef45855a3.nzb&i=REDACTED&r=REDACTED",
+				"comments": "https://api.althub.co.za/details/49380d54c7773f6245ff6efef45855a3#comments",
+				"pubDate": "Sat, 31 Oct 2026 07:27:47 +0000",
+				"category": "Movies > Foreign",
+				"description": "Aagey.Se.Right.2009.1080p.AMZN.WEB-DL.DDP5.1.H.264-KHN",
+				"enclosure": {
+					"@attributes": {
+						"url": "https://api.althub.co.za/getnzb/49380d54c7773f6245ff6efef45855a3.nzb&i=REDACTED&r=REDACTED",
+						"length": "9451945890",
+						"type": "application/x-nzb"
+					}
+				},
+				"attr": [
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "category",
+							"value": "2010"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "size",
+							"value": "9451945890"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "guid",
+							"value": "49380d54c7773f6245ff6efef45855a3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "sha1",
+							"value": "7a5b33c391095b1f31fcaa573f7eaf053c3f64d3"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "files",
+							"value": "11"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "poster",
+							"value": "VKwU6j4EyacLO@ngPost.com"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdb",
+							"value": "1479667"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbtitle",
+							"value": "Aagey Se Right"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbplot",
+							"value": "Aage Se Right is the story of chance, co-incidence and real life humor based in the present day Mumbai. The film spans over five days of panic, chaos and mayhem!!!"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbscore",
+							"value": "5.2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "genre",
+							"value": "Comedy"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "imdbyear",
+							"value": "2009"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "coverurl",
+							"value": "https://api.althub.co.za/covers/movies/1479667-cover.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "backdropurl",
+							"value": "https://api.althub.co.za/covers/movies/1479667-backdrop.jpg"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "grabs",
+							"value": "2"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "comments",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "password",
+							"value": "0"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "nfo",
+							"value": "1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "info",
+							"value": "https://api.althub.co.za/api?t=getnfo&id=49380d54c7773f6245ff6efef45855a3&apikey=REDACTED&raw=1"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "usenetdate",
+							"value": "Sat, 31 Oct 2026 07:27:47 +0000"
+						}
+					},
+					{
+						"@attributes": {
+							"name": "group",
+							"value": "alt.binaries.multimedia"
+						}
+					}
+				]
+			}
+		]
+	}
+}
