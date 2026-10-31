@@ -74,13 +74,16 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 					options.willOpen();
 				}
 
+				// An html body always gets the html dialog, third button or not:
+				// the choice dialog has no body, so routing by showDenyButton first
+				// dropped the profile from the service card's popup.
 				let type: ModalState['type'] = 'confirm';
 				if (options.input === 'text') {
 					type = 'input';
-				} else if (options.showDenyButton) {
-					type = 'choice';
 				} else if (options.html && !options.text) {
 					type = 'custom';
+				} else if (options.showDenyButton) {
+					type = 'choice';
 				}
 
 				if (typeof window !== 'undefined') {
@@ -431,6 +434,8 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 	confirmButtonText = 'OK',
 	cancelButtonText = 'Cancel',
 	showConfirmButton = true,
+	showDenyButton = false,
+	denyButtonText,
 	allowOutsideClick = true,
 	allowEscapeKey = true,
 	didOpen,
@@ -482,7 +487,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 			<div className="relative w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
 				{/* A dialog with no buttons otherwise closes only on the backdrop, a thin
 				    strip on a phone; outside the scroller so it stays put. */}
-				{!showConfirmButton && !showCancelButton && (
+				{!showConfirmButton && !showDenyButton && !showCancelButton && (
 					<button
 						type="button"
 						aria-label="Close"
@@ -515,7 +520,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 							dangerouslySetInnerHTML={{ __html: html }}
 						/>
 					)}
-					{(showConfirmButton || showCancelButton) && (
+					{(showConfirmButton || showDenyButton || showCancelButton) && (
 						<div className="sibling-space-x-3 flex justify-center">
 							{showConfirmButton && (
 								<button
@@ -523,6 +528,14 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 									className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:ring-2 focus:ring-cyan-500 focus:outline-hidden"
 								>
 									{confirmButtonText}
+								</button>
+							)}
+							{showDenyButton && (
+								<button
+									onClick={() => onClose({ isConfirmed: false, isDenied: true })}
+									className="rounded bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+								>
+									{denyButtonText}
 								</button>
 							)}
 							{showCancelButton && (

@@ -110,6 +110,42 @@ describe('ModalContext', () => {
 		await expect(resultPromise).resolves.toEqual({ isConfirmed: false, isDenied: true });
 	});
 
+	// The service card's profile popup: an html body plus a third button. It
+	// used to land in the body-less choice dialog, which also reports cancel
+	// without a reason, so the popup lost its content and Logout did nothing.
+	it('keeps the html body when a deny button is asked for', async () => {
+		const modal = await renderWithProvider();
+		const resultPromise = modal.fire({
+			title: 'Real-Debrid',
+			html: '<p>Username: dad</p>',
+			showCancelButton: true,
+			showDenyButton: true,
+			confirmButtonText: 'Close',
+			denyButtonText: 'Add another account',
+			cancelButtonText: 'Logout',
+		});
+
+		expect(await screen.findByText('Username: dad')).toBeInTheDocument();
+		await userEvent.click(screen.getByRole('button', { name: 'Add another account' }));
+		await expect(resultPromise).resolves.toEqual({ isConfirmed: false, isDenied: true });
+	});
+
+	it('reports the html dialog cancel with its reason even beside a deny button', async () => {
+		const modal = await renderWithProvider();
+		const resultPromise = modal.fire({
+			html: '<p>body</p>',
+			showDenyButton: true,
+			denyButtonText: 'Other',
+			cancelButtonText: 'Logout',
+		});
+
+		await userEvent.click(await screen.findByRole('button', { name: 'Logout' }));
+		await expect(resultPromise).resolves.toMatchObject({
+			isDismissed: true,
+			dismiss: 'cancel',
+		});
+	});
+
 	it('opens custom html dialog and resolves with preConfirm result', async () => {
 		const modal = await renderWithProvider();
 		const resultPromise = modal.fire({
