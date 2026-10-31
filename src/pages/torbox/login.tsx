@@ -1,3 +1,4 @@
+import { SavedAccountsPicker } from '@/components/SavedAccountsPicker';
 import useLocalStorage from '@/hooks/localStorage';
 import { getUserData } from '@/services/torbox';
 import { getSafeRedirectPath } from '@/utils/router';
@@ -60,6 +61,13 @@ export default function TorboxLoginPage() {
 			<div className="sibling-space-y-4 w-full max-w-md p-4">
 				<h1 className="text-center text-2xl font-bold">Connect Torbox</h1>
 				{error && <p className="text-center text-red-500">{error}</p>}
+				<SavedAccountsPicker
+					prefix="tb:"
+					current={null}
+					afterSwitch={() =>
+						window.location.assign(getSafeRedirectPath(router.query.redirect, '/'))
+					}
+				/>
 				<form onSubmit={handleSubmit} className="sibling-space-y-4">
 					<div>
 						<label htmlFor="apiKey" className="block text-sm font-medium">
