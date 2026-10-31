@@ -1,0 +1,290 @@
+{
+	"age_rating": 17,
+	"awards": "Won: Best Television Series - Drama (Golden Globes, 2014). Plus 5 more wins & 32 nominations.",
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+	"budget": null,
+	"certification": "TV-MA",
+	"commonsense": true,
+	"commonsense_media": {
+		"common_sense": 17,
+		"common_sense_selection": false,
+		"parental_source": 1,
+		"parental_violence": 4,
+		"parental_nudity": 3,
+		"parental_language": 4,
+		"parental_drinking": 5
+	},
+	"country": "US",
+	"description": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
+	"genres": [
+		{
+			"id": 4,
+			"title": "Crime"
+		},
+		{
+			"id": 6,
+			"title": "Drama"
+		},
+		{
+			"id": 21,
+			"title": "Thriller"
+		}
+	],
+	"ids": {
+		"imdb": "tt0903747",
+		"trakt": 1388,
+		"tmdb": 1396,
+		"tvdb": 81189,
+		"mal": null,
+		"mdblist": "8plj"
+	},
+	"language": "en",
+	"last_episode": {
+		"ids": {
+			"tmdb": 62161,
+			"tvdb": 4553042
+		},
+		"season": 5,
+		"episode": 16,
+		"display_code": "S05E16",
+		"tvdb": null,
+		"tvdb_ids": {
+			"series": 81189,
+			"season": 5,
+			"episode": 16
+		},
+		"title": "Felina",
+		"air_date": "2013-09-30T01:00:00.000Z",
+		"runtime": 56,
+		"is_season_premiere": false,
+		"is_season_finale": true,
+		"is_mid_season_finale": false
+	},
+	"network": "AMC",
+	"next_episode": null,
+	"poster": "https://image.tmdb.org/t/p/original/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
+	"production_companies": [
+		{
+			"id": 11073,
+			"name": "Sony Pictures Television"
+		},
+		{
+			"id": 2605,
+			"name": "Gran Via Productions"
+		},
+		{
+			"id": 33742,
+			"name": "High Bridge Entertainment"
+		}
+	],
+	"ratings": [
+		{
+			"source": "imdb",
+			"value": 9.5,
+			"score": 95,
+			"votes": 2698882,
+			"url": 24
+		},
+		{
+			"source": "metacritic",
+			"value": 87,
+			"score": 87,
+			"votes": 98,
+			"url": "/breaking-bad"
+		},
+		{
+			"source": "metacriticuser",
+			"value": 9.4,
+			"score": 94,
+			"votes": 19499,
+			"url": null
+		},
+		{
+			"source": "trakt",
+			"value": 93,
+			"score": 93,
+			"votes": 74161,
+			"url": null
+		},
+		{
+			"source": "tomatoes",
+			"value": 96,
+			"score": 96,
+			"votes": 250,
+			"url": "/tv/breaking_bad",
+			"fresh": 1
+		},
+		{
+			"source": "popcorn",
+			"value": 97,
+			"score": 97,
+			"votes": null,
+			"url": "/tv/breaking_bad"
+		},
+		{
+			"source": "tmdb",
+			"value": 89,
+			"score": 89,
+			"votes": 18981,
+			"url": null
+		},
+		{
+			"source": "letterboxd",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": null
+		},
+		{
+			"source": "rogerebert",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": null
+		},
+		{
+			"source": "myanimelist",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": null
+		}
+	],
+	"released": "2008-01-20",
+	"released_digital": null,
+	"revenue": null,
+	"runtime": 2995,
+	"score": 93,
+	"score_average": 93,
+	"seasons": [
+		{
+			"id": 21535,
+			"name": "Specials",
+			"tmdbid": 3577,
+			"air_date": "2009-02-17T00:00:00",
+			"overview": null,
+			"poster_path": "/4RaIvSQgHHHPfaI1jFqaMR8UJWM.jpg",
+			"tomatofresh": null,
+			"vote_average": 0,
+			"episode_count": 9,
+			"season_number": 0,
+			"aired_episode_count": 7,
+			"stored_episode_count": 9
+		},
+		{
+			"id": 21536,
+			"name": "Season 1",
+			"tmdbid": 3572,
+			"air_date": "2008-01-20T00:00:00",
+			"overview": "High school chemistry teacher Walter White's life is suddenly transformed by a dire medical diagnosis. Street-savvy former student Jesse Pinkman \"teaches\" Walter a new trade.",
+			"poster_path": "/1BP4xYv9ZG4ZVHkL7ocOziBbSYH.jpg",
+			"tomatofresh": null,
+			"vote_average": 8.4,
+			"episode_count": 7,
+			"season_number": 1,
+			"aired_episode_count": 7,
+			"stored_episode_count": 7
+		},
+		{
+			"id": 21537,
+			"name": "Season 2",
+			"tmdbid": 3573,
+			"air_date": "2009-03-08T00:00:00",
+			"overview": "Walt must deal with the chain reaction of his choice, as he and Jesse face new and severe consequences. When danger and suspicion around Walt escalate, he is pushed to new levels of desperation. Just how much higher will the stakes rise? How far is Walt willing to go to ensure his family's security? Will his grand plan spiral out of control?",
+			"poster_path": "/e3oGYpoTUhOFK0BJfloru5ZmGV.jpg",
+			"tomatofresh": null,
+			"vote_average": 8.5,
+			"episode_count": 13,
+			"season_number": 2,
+			"aired_episode_count": 13,
+			"stored_episode_count": 13
+		},
+		{
+			"id": 21538,
+			"name": "Season 3",
+			"tmdbid": 3575,
+			"air_date": "2010-03-21T00:00:00",
+			"overview": "Walt continues to battle dueling identities: a desperate husband and father trying to provide for his family, and a newly appointed key player in the Albuquerque drug trade. As the danger around him escalates, Walt is now entrenched in the complex worlds of an angst-ridden family on the verge of dissolution, and the ruthless and unrelenting drug cartel.",
+			"poster_path": "/ffP8Q8ew048YofHRnFVM18B2fPG.jpg",
+			"tomatofresh": null,
+			"vote_average": 8.4,
+			"episode_count": 13,
+			"season_number": 3,
+			"aired_episode_count": 13,
+			"stored_episode_count": 13
+		},
+		{
+			"id": 21539,
+			"name": "Season 4",
+			"tmdbid": 3576,
+			"air_date": "2011-07-17T00:00:00",
+			"overview": "Walt and Jesse must cope with the fallout of their previous actions, both personally and professionally. Tension mounts as Walt faces a true standoff with his employer, Gus, with neither side willing or able to back down. Walt must also adjust to a new relationship with Skyler, whom while still reconciling her relationship with Walt, is committed to properly laundering Walt’s money and ensuring her sister Marie and an ailing Hank are financially stable.",
+			"poster_path": "/5ewrnKp4TboU4hTLT5cWO350mHj.jpg",
+			"tomatofresh": null,
+			"vote_average": 8.6,
+			"episode_count": 13,
+			"season_number": 4,
+			"aired_episode_count": 13,
+			"stored_episode_count": 13
+		},
+		{
+			"id": 21540,
+			"name": "Season 5",
+			"tmdbid": 3578,
+			"air_date": "2012-07-15T00:00:00",
+			"overview": "Walt is faced with the prospect of moving on in a world without his enemy. As the pressure of a criminal life starts to build, Skyler struggles to keep Walt’s terrible secrets. Facing resistance from sometime adversary and former Fring lieutenant Mike, Walt tries to keep his world from falling apart even as his DEA Agent brother in law, Hank, finds numerous leads that could blaze a path straight to Walt. ",
+			"poster_path": "/r3z70vunihrAkjILQKWHX0G2xzO.jpg",
+			"tomatofresh": null,
+			"vote_average": 8.9,
+			"episode_count": 16,
+			"season_number": 5,
+			"aired_episode_count": 16,
+			"stored_episode_count": 16
+		}
+	],
+	"spoken_language": "en",
+	"status": "Ended",
+	"streams": [
+		{
+			"id": 1,
+			"name": "Netflix"
+		},
+		{
+			"id": 10,
+			"name": "AMC"
+		}
+	],
+	"tagline": "Change the equation.",
+	"title": "Breaking Bad",
+	"trailer": "https://www.youtube.com/watch?v=VFkjBy2b50Q",
+	"tvdb_order_kind": null,
+	"type": "show",
+	"updated": "2026-10-27T03:20:26.000Z",
+	"watch_providers": [
+		{
+			"id": 2,
+			"name": "Apple TV Store"
+		},
+		{
+			"id": 3,
+			"name": "Google Play Movies"
+		},
+		{
+			"id": 7,
+			"name": "Fandango At Home"
+		},
+		{
+			"id": 8,
+			"name": "Netflix"
+		},
+		{
+			"id": 10,
+			"name": "Amazon Video"
+		},
+		{
+			"id": 1796,
+			"name": "Netflix Standard with Ads"
+		}
+	],
+	"year": 2008
+}

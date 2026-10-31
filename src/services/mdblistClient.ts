@@ -31,9 +31,37 @@ export function isMdblistError(data: any): boolean {
 	return data.response === false || data.response === 'False';
 }
 
+/**
+ * A title from api.mdblist.com in the legacy host's shape, which callers and
+ * every cached row read. The new host keeps the ids under `ids`, gives `commonsense`
+ * as a flag with the age in `commonsense_media`, and dates seasons as local
+ * datetimes. Anything without `ids` is not a title.
+ */
+export function legacyShape(data: any): any {
+	if (!data?.ids) return { response: false, error: data?.error ?? 'Item not found' };
+	const { ids, ...rest } = data;
+	return {
+		...rest,
+		response: true,
+		imdbid: ids.imdb,
+		tmdbid: ids.tmdb,
+		traktid: ids.trakt,
+		// The legacy host gave a TVDB id to shows only; the new one maps movies too.
+		...(data.type === 'show' ? { tvdbid: ids.tvdb } : {}),
+		commonsense: data.commonsense_media?.common_sense ?? null,
+		...(Array.isArray(data.seasons) && {
+			seasons: data.seasons.map((season: any) => ({
+				...season,
+				air_date: season.air_date?.slice(0, 10) ?? null,
+			})),
+		}),
+	};
+}
+
+type MediaType = 'movie' | 'show';
+
 export class MDBListClient {
 	private apiKey: string;
-	private baseUrl = 'https://mdblist.com/api';
 	private cache = getMdblistCacheService();
 
 	private isFresh(updatedAt: Date, maxAge: number): boolean {
@@ -61,9 +89,53 @@ export class MDBListClient {
 	}
 
 	/**
-	 * Get info for a movie or show by IMDB ID
+	 * A title from the legacy host, or from api.mdblist.com when the legacy one
+	 * rate-limits it. Legacy still answers most lookups (some 1,900 an hour on
+	 * 2026-10-31, more than the new host's 25,000 a day) but refuses a few
+	 * percent with "API Limit Reached!" as HTTP 200, or "Rate Limiter Reached!"
+	 * as a 503.
 	 */
-	async getInfoByImdbId(imdbId: string): Promise<MMovie | MShow> {
+	private async getLegacyTitle(params: Record<string, string>, fallback: () => Promise<any>) {
+		const url = new URL('https://mdblist.com/api');
+		url.searchParams.append('apikey', this.apiKey);
+		for (const [key, value] of Object.entries(params)) url.searchParams.append(key, value);
+		const limited = (body: any) => /limit/i.test(body?.error ?? '');
+		let answer;
+		try {
+			answer = await this.get(url);
+		} catch (error) {
+			if (!limited((error as any)?.response?.data)) throw error;
+			return fallback();
+		}
+		return limited(answer) ? fallback() : answer;
+	}
+
+	/**
+	 * A title by `/{provider}/{type}/{id}`, trying each type in turn: the new
+	 * host answers 404 for the wrong one where the legacy `?i=` guessed it. An
+	 * id neither type knows comes back as the legacy not-found body.
+	 */
+	private async getTitle(provider: string, id: string, types: MediaType[]): Promise<any> {
+		for (const type of types) {
+			const url = new URL(
+				`https://api.mdblist.com/${provider}/${type}/${encodeURIComponent(id)}`
+			);
+			url.searchParams.append('apikey', this.apiKey);
+			try {
+				return legacyShape(await this.get(url));
+			} catch (error) {
+				if ((error as any)?.response?.status !== 404) throw error;
+			}
+		}
+		return legacyShape(null);
+	}
+
+	/**
+	 * Get info for a movie or show by IMDB ID. `type` is the caller's guess,
+	 * which api.mdblist.com is asked for first; the other type is still tried
+	 * when it is wrong.
+	 */
+	async getInfoByImdbId(imdbId: string, type?: MediaType): Promise<MMovie | MShow> {
 		const cached = await this.cache.getWithMetadata(imdbId);
 		const cachedIsError = cached ? isMdblistError(cached.data) : false;
 		if (cached) {
@@ -87,13 +159,12 @@ export class MDBListClient {
 			);
 		}
 
-		const url = new URL(this.baseUrl);
-		url.searchParams.append('apikey', this.apiKey);
-		url.searchParams.append('i', imdbId);
-
+		const guess = type ?? (cached?.data.type === 'show' ? 'show' : 'movie');
 		let response;
 		try {
-			response = await this.get(url);
+			response = await this.getLegacyTitle({ i: imdbId }, () =>
+				this.getTitle('imdb', imdbId, [guess, guess === 'movie' ? 'show' : 'movie'])
+			);
 		} catch (error) {
 			// An expired row is still better than none — callers render a failed
 			// lookup as "Unknown", which is a worse page than slightly old metadata.
@@ -118,9 +189,9 @@ export class MDBListClient {
 			return response;
 		}
 
-		const type = response.type === 'movie' ? 'movie' : 'show';
-		await this.cache.set(imdbId, type, response);
-		console.log(`[MDBList] Cached ${type} data for IMDB ID: ${imdbId}`);
+		const kind = response.type === 'movie' ? 'movie' : 'show';
+		await this.cache.set(imdbId, kind, response);
+		console.log(`[MDBList] Cached ${kind} data for IMDB ID: ${imdbId}`);
 
 		return response;
 	}
@@ -149,14 +220,11 @@ export class MDBListClient {
 			}
 		}
 
-		const url = new URL(this.baseUrl);
-		url.searchParams.append('apikey', this.apiKey);
-		url.searchParams.append('tv', tvdbId.toString());
-		url.searchParams.append('m', 'show');
-
 		let response;
 		try {
-			response = await this.get(url);
+			response = await this.getLegacyTitle({ tv: tvdbId.toString(), m: 'show' }, () =>
+				this.getTitle('tvdb', tvdbId.toString(), ['show'])
+			);
 		} catch (error) {
 			if (cached) {
 				console.error(

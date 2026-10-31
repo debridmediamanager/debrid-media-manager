@@ -100,7 +100,7 @@ export async function fetchMovieSources(
 	known: { omdb?: Promise<any>; tmdbId?: number } = {}
 ): Promise<MovieSources> {
 	const cache = getMetadataCache();
-	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId));
+	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId, 'movie'));
 	const cinemetaPromise = settle(() => cache.getCinemetaMovie(imdbId, cinemetaConfig()));
 	const omdbPromise = known.omdb ?? settle(() => getOmdbMetadata(imdbId));
 	const traktPromise = settle(() => cache.getTraktSummary('movies', imdbId));
@@ -132,7 +132,7 @@ export async function fetchShowSources(
 	known: { omdb?: Promise<any>; tmdbId?: number } = {}
 ): Promise<ShowSources> {
 	const cache = getMetadataCache();
-	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId));
+	const mdblistPromise = settle(() => getMdblistClient().getInfoByImdbId(imdbId, 'show'));
 	const cinemetaPromise = settle(() => cache.getCinemetaSeries(imdbId, cinemetaConfig()));
 	const omdbPromise = known.omdb ?? settle(() => getOmdbMetadata(imdbId));
 	const traktPromise = settle(() => cache.getTraktSummary('shows', imdbId));
@@ -236,8 +236,7 @@ export async function getMetadata(imdbId: string): Promise<MetadataRecord | null
 
 /** A title as the sponsor metadata API names it: `imdb:tt0852863`, `tmdb:tv:1877`, `tmdb:movie:603`. */
 export type MetadataId =
-	| { by: 'imdb'; imdb: string }
-	| { by: 'tmdb'; kind: 'movie' | 'tv'; tmdb: number };
+	{ by: 'imdb'; imdb: string } | { by: 'tmdb'; kind: 'movie' | 'tv'; tmdb: number };
 
 export function parseMetadataId(raw: string): MetadataId | null {
 	const imdb = /^imdb:(tt\d{7,})$/.exec(raw);

@@ -24,7 +24,7 @@ export function tvdbIdFrom(info: unknown): number | undefined {
  */
 export async function resolveTvdbId(imdbId: string): Promise<number | undefined> {
 	try {
-		return tvdbIdFrom(await getMdblistClient().getInfoByImdbId(imdbId));
+		return tvdbIdFrom(await getMdblistClient().getInfoByImdbId(imdbId, 'show'));
 	} catch (error) {
 		console.error(`TVDB id lookup failed for ${imdbId} (falling back to IMDb id):`, error);
 		return undefined;

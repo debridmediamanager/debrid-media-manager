@@ -1,0 +1,188 @@
+{
+	"age_rating": 15,
+	"awards": "Nominated: Best Picture (Oscars, 1995). Plus 5 more Oscar nominations & 1 nomination.",
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/pNjh59JSxChQktamG3LMp9ZoQzp.jpg",
+	"budget": 25000000,
+	"certification": "R",
+	"commonsense": true,
+	"commonsense_media": {
+		"common_sense": 15,
+		"common_sense_selection": false,
+		"parental_source": 1,
+		"parental_violence": 4,
+		"parental_nudity": 2,
+		"parental_language": 3,
+		"parental_drinking": 2
+	},
+	"country": "US",
+	"description": "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+	"genres": [
+		{
+			"id": 4,
+			"title": "Crime"
+		},
+		{
+			"id": 6,
+			"title": "Drama"
+		}
+	],
+	"ids": {
+		"imdb": "tt0111161",
+		"trakt": 234,
+		"tmdb": 278,
+		"tvdb": 190,
+		"mal": null,
+		"mdblist": "a0"
+	},
+	"language": "en",
+	"poster": "https://image.tmdb.org/t/p/original/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+	"production_companies": [
+		{
+			"id": 97,
+			"name": "Castle Rock Entertainment"
+		}
+	],
+	"ratings": [
+		{
+			"source": "imdb",
+			"value": 9.3,
+			"score": 93,
+			"votes": 3259427,
+			"url": 50
+		},
+		{
+			"source": "metacritic",
+			"value": 82,
+			"score": 82,
+			"votes": 22,
+			"url": "/the-shawshank-redemption"
+		},
+		{
+			"source": "metacriticuser",
+			"value": 9.2,
+			"score": 92,
+			"votes": 2256,
+			"url": null
+		},
+		{
+			"source": "trakt",
+			"value": 91,
+			"score": 91,
+			"votes": 48761,
+			"url": null
+		},
+		{
+			"source": "tomatoes",
+			"value": 89,
+			"score": 89,
+			"votes": 147,
+			"url": "/m/shawshank_redemption",
+			"fresh": 1
+		},
+		{
+			"source": "popcorn",
+			"value": 98,
+			"score": 98,
+			"votes": 53485,
+			"url": "/m/shawshank_redemption"
+		},
+		{
+			"source": "tmdb",
+			"value": 87,
+			"score": 87,
+			"votes": 31717,
+			"url": null
+		},
+		{
+			"source": "letterboxd",
+			"value": 4.6,
+			"score": 92,
+			"votes": 3211789,
+			"url": "/film/the-shawshank-redemption/"
+		},
+		{
+			"source": "rogerebert",
+			"value": 3.5,
+			"score": null,
+			"votes": null,
+			"url": "the-shawshank-redemption-1994"
+		},
+		{
+			"source": "myanimelist",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": null
+		}
+	],
+	"released": "1994-09-23",
+	"released_digital": "2016-01-07",
+	"revenue": 28341469,
+	"runtime": 142,
+	"score": 89,
+	"score_average": 89,
+	"spoken_language": "en",
+	"status": "Released",
+	"streams": [
+		{
+			"id": 8,
+			"name": "HBO MAX"
+		},
+		{
+			"id": 9,
+			"name": "fuboTV"
+		}
+	],
+	"tagline": "Fear can hold you prisoner. Hope can set you free.",
+	"title": "The Shawshank Redemption",
+	"trailer": "https://www.youtube.com/watch?v=PLl99DlL6b4",
+	"type": "movie",
+	"updated": "2026-10-29T15:55:02.000Z",
+	"watch_providers": [
+		{
+			"id": 2,
+			"name": "Apple TV Store"
+		},
+		{
+			"id": 3,
+			"name": "Google Play Movies"
+		},
+		{
+			"id": 7,
+			"name": "Fandango At Home"
+		},
+		{
+			"id": 10,
+			"name": "Amazon Video"
+		},
+		{
+			"id": 192,
+			"name": "YouTube"
+		},
+		{
+			"id": 363,
+			"name": "TNT"
+		},
+		{
+			"id": 486,
+			"name": "Spectrum On Demand"
+		},
+		{
+			"id": 506,
+			"name": "TBS"
+		},
+		{
+			"id": 507,
+			"name": "tru TV"
+		},
+		{
+			"id": 538,
+			"name": "Plex"
+		},
+		{
+			"id": 636,
+			"name": "MGM Plus Roku Premium Channel"
+		}
+	],
+	"year": 1994
+}

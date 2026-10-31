@@ -1,10 +1,18 @@
+import missing from '@/test/fixtures/mdblist/imdb-movie-404-item-not-found.json';
+import shawshank from '@/test/fixtures/mdblist/imdb-movie-tt0111161-the-shawshank-redemption.json';
+import breakingBad from '@/test/fixtures/mdblist/imdb-show-tt0903747-breaking-bad.json';
 import limitReached from '@/test/fixtures/mdblist/legacy-lists-search-limit-reached.json';
 import itemsLastPage from '@/test/fixtures/mdblist/list-2194-items-last-page.json';
 import itemsPage1 from '@/test/fixtures/mdblist/list-2194-items-page-1.json';
 import crazyLists from '@/test/fixtures/mdblist/lists-search-crazy.json';
+import tvdbBreakingBad from '@/test/fixtures/mdblist/tvdb-show-81189-breaking-bad.json';
+import rateLimiter from '@/test/fixtures/metadata/mdblist-503-invalid-key.json';
+import legacyShawshank from '@/test/fixtures/metadata/mdblist-tt0111161-the-shawshank-redemption.json';
+import legacyBreakingBad from '@/test/fixtures/metadata/mdblist-tt0903747-breaking-bad.json';
+import { mdblistReleaseSignals } from '@/utils/metadataFreshness';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getMdblistClient, MDBListClient } from './mdblistClient';
+import { getMdblistClient, legacyShape, MDBListClient } from './mdblistClient';
 
 vi.mock('axios');
 
@@ -30,6 +38,13 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const daysAgo = (days: number) => new Date(Date.now() - days * DAY_MS);
 const hoursAgo = (hours: number) => new Date(Date.now() - hours * 60 * 60 * 1000);
 const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60 * 1000);
+// How api.mdblist.com answers: a title keeps its ids under `ids`, a miss is a 404.
+const title = ({ imdbid, ...rest }: Record<string, unknown>) => ({
+	...rest,
+	ids: { imdb: imdbid },
+});
+const notFound = () =>
+	Object.assign(new Error('404'), { response: { status: 404, data: missing } });
 
 describe('MDBListClient', () => {
 	let client: MDBListClient;
@@ -38,6 +53,7 @@ describe('MDBListClient', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		Object.values(cacheStub).forEach((fn) => fn.mockReset());
+		vi.mocked(axios.get).mockReset();
 		client = new MDBListClient(apiKey);
 	});
 
@@ -207,6 +223,135 @@ describe('MDBListClient', () => {
 
 			expect(result).toEqual(stale);
 			expect(cacheStub.set).not.toHaveBeenCalled();
+		});
+	});
+
+	// The legacy host rate-limits a few percent of lookups; those, and only
+	// those, go to api.mdblist.com, which needs the type in the path and 404s
+	// the wrong one where the legacy `?i=` found either.
+	describe('getInfoByImdbId when the legacy host is rate limited', () => {
+		const hosts = () =>
+			vi.mocked(axios.get).mock.calls.map(([url]) => {
+				const u = new URL(url as string);
+				return u.origin + u.pathname;
+			});
+
+		it('asks api.mdblist.com instead, for a show after the movie 404s', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockRejectedValueOnce(notFound())
+				.mockResolvedValueOnce({ data: breakingBad });
+
+			const result = await client.getInfoByImdbId('tt0903747');
+
+			expect(hosts()).toEqual([
+				'https://mdblist.com/api',
+				'https://api.mdblist.com/imdb/movie/tt0903747',
+				'https://api.mdblist.com/imdb/show/tt0903747',
+			]);
+			expect(result).toMatchObject({ type: 'show', imdbid: 'tt0903747', tvdbid: 81189 });
+			expect(cacheStub.set).toHaveBeenCalledWith('tt0903747', 'show', result);
+		});
+
+		it('asks api.mdblist.com instead when the legacy host answers a 503', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get)
+				.mockRejectedValueOnce(
+					Object.assign(new Error('503'), {
+						response: { status: 503, data: rateLimiter },
+					})
+				)
+				.mockResolvedValueOnce({ data: shawshank });
+
+			const result = await client.getInfoByImdbId('tt0111161');
+
+			expect(hosts()[1]).toBe('https://api.mdblist.com/imdb/movie/tt0111161');
+			expect(result).toMatchObject({
+				type: 'movie',
+				imdbid: 'tt0111161',
+				title: 'The Shawshank Redemption',
+			});
+		});
+
+		it('asks for the type the caller names first', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockResolvedValueOnce({ data: breakingBad });
+
+			await client.getInfoByImdbId('tt0903747', 'show');
+
+			expect(hosts()).toEqual([
+				'https://mdblist.com/api',
+				'https://api.mdblist.com/imdb/show/tt0903747',
+			]);
+		});
+
+		it('asks for the type of the expired row first', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: { imdbid: 'tt0903747', type: 'show', title: 'Breaking Bad' },
+				updatedAt: daysAgo(8),
+			});
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockResolvedValueOnce({ data: breakingBad });
+
+			await client.getInfoByImdbId('tt0903747');
+
+			expect(hosts()[1]).toBe('https://api.mdblist.com/imdb/show/tt0903747');
+		});
+
+		it('caches an id neither type knows as an error row', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockRejectedValue(notFound());
+
+			const result = await client.getInfoByImdbId('tt43740196');
+
+			expect(axios.get).toHaveBeenCalledTimes(3);
+			expect(result).toEqual({ response: false, error: 'Item not found' });
+			expect(cacheStub.set).toHaveBeenCalledWith('tt43740196', 'error', result);
+		});
+
+		it('keeps the stale title when both hosts refuse', async () => {
+			const stale = { imdbid: 'tt0903747', type: 'show', title: 'Breaking Bad' };
+			cacheStub.getWithMetadata.mockResolvedValue({ data: stale, updatedAt: daysAgo(8) });
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockRejectedValueOnce(
+					Object.assign(new Error('429'), { response: { status: 429, data: {} } })
+				);
+
+			expect(await client.getInfoByImdbId('tt0903747')).toEqual(stale);
+			expect(cacheStub.set).not.toHaveBeenCalled();
+		});
+
+		it('does not ask api.mdblist.com when the legacy host answers', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get).mockResolvedValue({ data: legacyBreakingBad });
+
+			await client.getInfoByImdbId('tt0903747', 'show');
+
+			expect(hosts()).toEqual(['https://mdblist.com/api']);
+		});
+	});
+
+	describe('getInfoByTvdbId when the legacy host is rate limited', () => {
+		it('asks api.mdblist.com for the show instead', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get)
+				.mockResolvedValueOnce({ data: limitReached })
+				.mockResolvedValueOnce({ data: tvdbBreakingBad });
+
+			const result = await client.getInfoByTvdbId(81189);
+
+			const url = new URL(vi.mocked(axios.get).mock.calls[1][0] as string);
+			expect(url.origin + url.pathname).toBe('https://api.mdblist.com/tvdb/show/81189');
+			expect(result).toMatchObject({ type: 'show', imdbid: 'tt0903747', tvdbid: 81189 });
+			expect(cacheStub.set).toHaveBeenCalledWith('tvdb_81189', 'show', result);
+			expect(cacheStub.set).toHaveBeenCalledWith('tt0903747', 'show', result);
 		});
 	});
 
@@ -397,5 +542,40 @@ describe('getMdblistClient', () => {
 		} else {
 			delete process.env.MDBLIST_KEY;
 		}
+	});
+});
+
+// Callers and every cached row read the legacy host's shape; the same titles
+// from both hosts must read the same through it.
+describe('legacyShape', () => {
+	const read = (data: any) => ({
+		...Object.fromEntries(
+			[
+				'response',
+				'type',
+				'title',
+				'year',
+				'released',
+				'imdbid',
+				'tmdbid',
+				'tvdbid',
+				'traktid',
+				'commonsense',
+				'certification',
+			].map((k) => [k, data[k]])
+		),
+		seasons: data.seasons?.map((s: any) => [s.season_number, s.episode_count, s.air_date]),
+		signals: mdblistReleaseSignals(data),
+	});
+
+	it.each([
+		['a movie', shawshank, legacyShawshank],
+		['a show', breakingBad, legacyBreakingBad],
+	])('reads %s from api.mdblist.com as the legacy host gave it', (_kind, fresh, legacy) => {
+		expect(read(legacyShape(fresh))).toEqual(read(legacy));
+	});
+
+	it('reads a 404 body as the legacy not-found body', () => {
+		expect(legacyShape(missing)).toEqual({ response: false, error: 'Item not found' });
 	});
 });

@@ -119,7 +119,7 @@ describe('/api/info/movie', () => {
 
 		await handler(req, res);
 
-		expect(mockMdbClient.getInfoByImdbId).toHaveBeenCalledWith('tt1234567');
+		expect(mockMdbClient.getInfoByImdbId).toHaveBeenCalledWith('tt1234567', 'movie');
 		expect(mockMetadataCache.getCinemetaMovie).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({

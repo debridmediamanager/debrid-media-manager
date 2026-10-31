@@ -24,7 +24,7 @@ const handler: NextApiHandler = async (req, res) => {
 		const metadataCache = getMetadataCache();
 
 		const [mdbResponse, cinemetaResponse] = await Promise.all([
-			mdblistClient.getInfoByImdbId(imdbId),
+			mdblistClient.getInfoByImdbId(imdbId, 'show'),
 			metadataCache.getCinemetaSeries(imdbId, {
 				headers: {
 					accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
