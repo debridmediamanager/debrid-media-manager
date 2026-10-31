@@ -9,6 +9,7 @@
 
 import type { SponsorLookup } from '@/services/database';
 import { repository as db } from '@/services/repository';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import type { NextApiRequest } from 'next';
 
 /**
@@ -22,8 +23,9 @@ export const NEWZNAB_BAD_CREDENTIALS = 100;
 export const NEWZNAB_LAPSED_SPONSORSHIP = 101;
 
 export const NEWZNAB_AUTH_MESSAGES: Record<100 | 101, string> = {
-	100: 'Incorrect user credentials',
-	101: 'Your sponsorship is no longer active',
+	// Prowlarr and the *arrs log the description, so each says where the fix is.
+	100: `Incorrect user credentials. Your DMM API key is on ${GATEKEEPER_URL}`,
+	101: `Your sponsorship is no longer active. Renew it on ${GATEKEEPER_URL}`,
 };
 
 export type NewznabAuthResult = { sponsor: SponsorLookup } | { errorCode: 100 | 101 };
