@@ -68,13 +68,35 @@ class Streams(unittest.TestCase):
 
 
 class Cinemeta(unittest.TestCase):
-    def test_search_puts_the_exact_title_first_and_mixes_kinds(self):
-        movies = fixture('cinemeta-search-movie-dune.json')['metas']
-        shows = fixture('cinemeta-search-series-dune.json')['metas']
-        ranked = dmm.rank_results('dune', movies, shows)
-        self.assertEqual(ranked[0]['name'].lower(), 'dune')
-        self.assertEqual(len(ranked), len({(m['type'], m['id']) for m in movies + shows}))
-        self.assertIn('series', [m['type'] for m in ranked[:6]])
+    def test_search_finds_titles_cinemeta_search_misses(self):
+        # Cinemeta's search answers nothing for Sintel (captured), though its meta has it; DMM's
+        # title search, over every IMDb title, finds it.
+        served = {
+            'https://dmm.test/api/search/title?keyword=sintel': fixture('dmm-search-sintel.json'),
+            dmm.CINEMETA + '/catalog/movie/top/search=sintel.json': fixture('cinemeta-search-movie-sintel.json'),
+            dmm.CINEMETA + '/catalog/series/top/search=sintel.json': {'metas': []},
+        }
+        real = dmm.http_json
+        dmm.http_json = lambda url, **kw: (200, served[url]) if url in served else (200, {'meta': {}})
+        try:
+            results = dmm.search('sintel', 'https://dmm.test')
+        finally:
+            dmm.http_json = real
+        self.assertEqual([(m['id'], m['type'], m['name']) for m in results], [('tt1727587', 'movie', 'Sintel')])
+        self.assertEqual(dmm.title_label(results[0]), 'Sintel (2010)')
+        self.assertIn('/poster/medium/tt1727587/', dmm.art_of(results[0])['poster'])
+
+    def test_search_keeps_dmm_order_and_maps_shows_to_series(self):
+        served = {'https://dmm.test/api/search/title?keyword=x': {'results': [
+            {'id': 'tt0903747', 'type': 'show', 'year': 2008, 'title': 'Breaking Bad'},
+            {'id': 'tt4669580', 'type': 'movie', 'year': 2015, 'title': 'Breaking Bad Movie Deal Gone Bad'}]}}
+        real = dmm.http_json
+        dmm.http_json = lambda url, **kw: (200, served[url]) if url in served else (200, {'meta': {}})
+        try:
+            results = dmm.search('x', 'https://dmm.test')
+        finally:
+            dmm.http_json = real
+        self.assertEqual([(m['id'], m['type']) for m in results], [('tt0903747', 'series'), ('tt4669580', 'movie')])
 
     def test_labels_carry_the_year_and_say_when_unreleased(self):
         today = datetime.date(2026, 10, 31)

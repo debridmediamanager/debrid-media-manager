@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.0.0" provider-name="Debrid Media Manager">
+<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.0.1" provider-name="Debrid Media Manager">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.pyqrcode" version="1.2.1"/>
@@ -15,7 +15,8 @@
     <license>AGPL-3.0-only</license>
     <website>https://debridmediamanager.com/kodi</website>
     <source>https://github.com/debridmediamanager/debrid-media-manager</source>
-    <news>1.0.0: first release.</news>
+    <news>1.0.1: search finds every title DMM knows, not only Cinemeta's popular ones.
+1.0.0: first release.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

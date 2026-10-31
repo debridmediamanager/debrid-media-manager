@@ -94,12 +94,18 @@ def genres(kind):
     return []
 
 
-def search(query):
-    """Films and shows for one query, best matches first across both kinds."""
-    movies, shows = parallel(lambda kind: catalog(kind, 'top', search=query), ['movie', 'series'])
-    movies = movies if isinstance(movies, list) else []
-    shows = shows if isinstance(shows, list) else []
-    return hydrate(rank_results(query, movies, shows))
+def search(query, origin):
+    """Films and shows for one query from DMM's title search, which covers every IMDb title and ranks
+    the popular first. Cinemeta's own search leaves out titles like Sintel that its meta still has."""
+    _, data = http_json('%s/api/search/title?keyword=%s' % (origin, urllib.parse.quote(query)))
+    rows = []
+    for r in (data or {}).get('results') or []:
+        imdb = str(r.get('imdbid') or r.get('id') or '')
+        if imdb.startswith('tt'):
+            rows.append({'id': imdb, 'type': 'series' if r.get('type') == 'show' else 'movie', 'name': r.get('title'),
+                         'year': str(r.get('year') or ''),
+                         'poster': 'https://images.metahub.space/poster/medium/%s/img' % imdb})
+    return hydrate(rows)
 
 
 def hydrate(metas):
@@ -111,26 +117,6 @@ def hydrate(metas):
         got = meta(kind, m['id'])
         return dict(got, **{k: v for k, v in m.items() if v and k not in got}, type=kind) if got else m
     return [m if isinstance(r, Exception) else r for m, r in zip(metas, parallel(full, metas))]
-
-
-def rank_results(query, movies, shows):
-    """Exact title, then title starting with the query, then the rest, alternating films and shows."""
-    q = query.strip().lower()
-
-    def score(m):
-        name = (m.get('name') or '').strip().lower()
-        return 0 if name == q else 1 if name.startswith(q) else 2
-
-    interleaved = []
-    for i in range(max(len(movies), len(shows))):
-        interleaved += [x for x in (movies[i:i + 1] + shows[i:i + 1])]
-    seen, out = set(), []
-    for m in sorted(interleaved, key=score):
-        key = (m.get('type'), m.get('id'))
-        if key not in seen:
-            seen.add(key)
-            out.append(m)
-    return out
 
 
 def bigger(url, size='medium'):

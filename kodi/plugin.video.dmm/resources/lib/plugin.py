@@ -288,7 +288,7 @@ def search_list(p):
             xbmc.executebuiltin('Container.Update(%s)' % url(action='search', q=query))
         return
     try:
-        results = dmm.search(query)
+        results = dmm.search(query, origin())
     except dmm.HttpError as e:
         return fail(e)
     for m in results:
