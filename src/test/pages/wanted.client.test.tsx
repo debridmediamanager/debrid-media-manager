@@ -47,6 +47,12 @@ describe('/wanted', () => {
 		global.fetch = vi.fn() as any;
 		render(<WantedPage />);
 		expect(screen.getByText(/The wanted list is for sponsors/)).toBeInTheDocument();
+		// The Want and Follow buttons send non-sponsors here, so this is where they learn
+		// where a key comes from, not only where it goes.
+		expect(screen.getByRole('link', { name: 'Sponsor on gatekeeper' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
 		expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
 		expect(global.fetch).not.toHaveBeenCalled();
 	});

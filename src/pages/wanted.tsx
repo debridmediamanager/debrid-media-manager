@@ -4,6 +4,7 @@ import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { WantedImportResponse } from '@/pages/api/wanted/import';
 import type { WantedListResponse } from '@/pages/api/wanted/lists';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
 import { WANTED_GUIDE_URL, wantedUnread } from '@/utils/wantedUnread';
@@ -283,7 +284,16 @@ export default function WantedPage() {
 
 				{!isSponsor ? (
 					<div className="rounded border-2 border-rose-700 bg-rose-900/20 p-3 text-sm text-rose-100">
-						The wanted list is for sponsors. Paste your DMM API key on the{' '}
+						The wanted list is for sponsors.{' '}
+						<a
+							href={GATEKEEPER_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="underline"
+						>
+							Sponsor on gatekeeper
+						</a>{' '}
+						to get your DMM API key, then paste it on the{' '}
 						<Link href="/settings" className="underline">
 							Settings
 						</Link>{' '}
