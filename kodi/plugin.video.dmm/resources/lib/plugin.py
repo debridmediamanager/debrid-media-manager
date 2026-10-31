@@ -365,8 +365,8 @@ def casts_list(_):
         failures = [p for p in pages if isinstance(p, Exception)]
         if failures and len(failures) == len(pages):
             return fail(failures[0])
-        empty_note('Nothing cast yet', 'Open a film or episode and play it: if nobody has cast it yet, '
-                                       'DMM lets you pick a release on your phone and it plays here.')
+        empty_note('Nothing cast yet', 'Films and shows you cast on DMM show up here. Anything else plays '
+                                       'too: open it, and DMM lists the cached releases it knows of.')
     end('videos', category='My casts')
 
 
@@ -634,8 +634,8 @@ def play(p):
         if errors and len(errors) == len(accounts()):
             xbmcgui.Dialog().ok(NAME, explain(errors[0]))
             return resolve_failed()
-        if xbmcgui.Dialog().yesno(NAME, 'Nobody has cast %s on DMM yet.\nPick a release on your phone and it '
-                                        'plays here as soon as it is ready.' % title,
+        if xbmcgui.Dialog().yesno(NAME, 'DMM knows of no cached release of %s yet.\nPick a release on your '
+                                        'phone and it plays here as soon as it is ready.' % title,
                                   nolabel='Close', yeslabel='Cast from phone'):
             sources = cast_from_phone(p, title, cast_url)
         if not sources:
@@ -674,15 +674,19 @@ def play_url(stream_url, m=None, ep=None, p=None):
 
 
 def cast_from_phone(p, title, cast_url=None):
-    """QR to DMM's own release picker for this title; returns the sources once a new cast shows up."""
+    """QR to DMM's own release picker for this title. Returns the sources once the member's cast shows up,
+    their new cast first; with nothing listed before, as soon as anything playable appears."""
     target = cast_url or '%s/%s/%s%s' % (origin(), 'show' if p['kind'] == 'series' else 'movie', p['id'],
                                           '/%s' % p['season'] if p['kind'] == 'series' else '')
     sid = dmm.stream_id(p['kind'], p['id'], p.get('season'), p.get('episode'))
-    before = {s['url'] for s in gather(p['kind'], sid)[0]} if p.get('again') else set()
+    before = gather(p['kind'], sid)[0] if p.get('again') else None
 
     def poll():
         sources = gather(p['kind'], sid)[0]
-        return [s for s in sources if s['url'] not in before] and sources
+        if before is None:
+            return sources
+        new = dmm.new_own_casts(before, sources)
+        return new and new + [s for s in sources if s not in new]
 
     return qr_wait('Cast %s from your phone' % title,
                    ['Scan the code with a phone signed in to DMM.',

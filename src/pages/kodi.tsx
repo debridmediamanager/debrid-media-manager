@@ -223,8 +223,8 @@ function KodiPage() {
 						Watch in Kodi
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
-						Browse and search films and shows in Kodi, and play what you and other DMM
-						members have cast, through your own debrid account.
+						Browse and search films and shows in Kodi, and play the cached releases DMM
+						knows of and what members have cast, through your own debrid account.
 					</p>
 				</header>
 

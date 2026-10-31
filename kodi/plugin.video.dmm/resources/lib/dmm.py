@@ -262,6 +262,13 @@ def order_sources(sources):
     return sorted(sources, key=lambda s: not s['yours'])
 
 
+def new_own_casts(before, after):
+    """Sources in `after` that became the member's own cast since `before`. A release DMM already offered
+    as cached keeps its URL once the member casts it, so an unseen URL alone would miss it."""
+    mine_before = {s['url'] for s in before if s['yours']}
+    return [s for s in after if s['yours'] and s['url'] not in mine_before]
+
+
 def source_label(s):
     """No colour here: the row's badge icon carries the service colour, which on text would sink into the
     skin's focus bar (blue on blue in The Loop)."""

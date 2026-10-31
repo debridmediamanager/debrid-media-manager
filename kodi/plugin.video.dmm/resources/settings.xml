@@ -2,7 +2,7 @@
 <settings>
   <category label="Playback">
     <setting id="autoplay" type="bool" label="Play the first source without asking" default="false"/>
-    <setting type="lsep" label="Your own casts come first, then other members' casts. Context menu → Choose source always asks."/>
+    <setting type="lsep" label="Your own casts come first, then cached releases and other members' casts. Context menu → Choose source always asks."/>
   </category>
   <category label="Advanced">
     <setting id="dmm_origin" type="text" label="DMM address (for a self-hosted DMM)" default="https://debridmediamanager.com"/>

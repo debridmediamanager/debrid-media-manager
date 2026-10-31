@@ -63,6 +63,15 @@ class Streams(unittest.TestCase):
         self.assertEqual([s['yours'] for s in ordered], [True, False, False])
         self.assertIs(ordered[1], other)
 
+    def test_a_cast_of_a_listed_cached_release_counts_as_new(self):
+        # Before: the member's release was already offered as a cached one (not theirs). After they cast
+        # it on their phone it is theirs, at the same URL; waiting for an unseen URL would never end.
+        after = self.sources
+        before = [dict(s, yours=False) for s in after]
+        new = dmm.new_own_casts(before, after)
+        self.assertEqual([s['filename'] for s in new], ['Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv'])
+        self.assertEqual(dmm.new_own_casts(after, after), [])
+
     def test_unwrap_leaves_short_lines_alone(self):
         self.assertEqual(dmm.unwrap_filename(['Some-', 'thing']), ['Some-', 'thing'])
 

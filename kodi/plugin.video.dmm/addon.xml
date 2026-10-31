@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.0.1" provider-name="Debrid Media Manager">
+<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.0.2" provider-name="Debrid Media Manager">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.pyqrcode" version="1.2.1"/>
@@ -9,12 +9,13 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Films and shows from Debrid Media Manager, through your own debrid account</summary>
-    <description lang="en_GB">Browse and search films and shows, and play what you and other DMM members have cast with DMM Cast, through your Real-Debrid, TorBox, AllDebrid, Premiumize, Offcloud or Debrid-Link account. Link it by scanning a code with your phone: no keys to type. Sponsors also get their Wanted list.</description>
+    <description lang="en_GB">Browse and search films and shows, and play the cached releases DMM knows of and what DMM members have cast, through your Real-Debrid, TorBox, AllDebrid, Premiumize, Offcloud or Debrid-Link account. Link it by scanning a code with your phone: no keys to type. Sponsors also get their Wanted list.</description>
     <platform>all</platform>
     <license>AGPL-3.0-only</license>
     <website>https://debridmediamanager.com/kodi</website>
     <source>https://github.com/debridmediamanager/debrid-media-manager</source>
-    <news>1.0.1: search finds every title DMM knows, not only Cinemeta's popular ones.
+    <news>1.0.2: casting from your phone a release that was already listed now plays it right away.
+1.0.1: search finds every title DMM knows, not only Cinemeta's popular ones.
 1.0.0: first release.</news>
     <assets>
       <icon>icon.png</icon>
