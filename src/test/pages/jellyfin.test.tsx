@@ -109,6 +109,17 @@ describe('the page', () => {
 		}
 	});
 
+	it('links to the zurg page that compares the plugins with the folder', () => {
+		asVisitor();
+		render(<JellyfinSetupPage />);
+
+		expect(
+			screen.getByRole('link', {
+				name: "When to use the plugins and when to use zurg's folder",
+			})
+		).toHaveAttribute('href', 'https://zurg.debridmediamanager.com/jellyfin/#folder');
+	});
+
 	it('names every account a plugin serves in the introduction', () => {
 		asVisitor();
 		render(<JellyfinSetupPage />);

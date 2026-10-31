@@ -240,6 +240,16 @@ function SetupGuide({
 					Updates arrive the same way anything else in Jellyfin does. When a new version
 					is published the Catalog offers it, so there is nothing to download by hand.
 				</p>
+				<p className="mt-2 text-xs text-gray-400">
+					<a
+						href="https://zurg.debridmediamanager.com/jellyfin/#folder"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="underline decoration-dotted"
+					>
+						When to use the plugins and when to use zurg&apos;s folder
+					</a>
+				</p>
 			</Card>
 		</>
 	);
