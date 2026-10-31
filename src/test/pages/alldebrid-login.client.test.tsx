@@ -1,4 +1,5 @@
 import AllDebridLoginPage from '@/pages/alldebrid/login';
+import { listSavedAccounts, parkCurrentAccount } from '@/utils/savedAccounts';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
@@ -12,9 +13,17 @@ vi.mock('next/head', () => ({
 }));
 
 const setApiKey = vi.fn();
-vi.mock('@/hooks/localStorage', () => ({
+vi.mock('@/hooks/localStorage', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/hooks/localStorage')>()),
 	__esModule: true,
 	default: () => [null, setApiKey],
+}));
+
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { clear: vi.fn() };
+	}),
 }));
 
 const getPin = vi.fn();
@@ -191,6 +200,56 @@ describe('AllDebridLoginPage', () => {
 				screen.getByRole('button', { name: 'Sign in with AllDebrid' })
 			).toBeInTheDocument();
 			expect(getPin).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('saved accounts', () => {
+		const realLocation = window.location;
+		const assign = vi.fn();
+
+		beforeEach(() => {
+			localStorage.clear();
+			assign.mockReset();
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: { ...realLocation, assign },
+			});
+		});
+
+		afterEach(() => {
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				writable: true,
+				value: realLocation,
+			});
+			localStorage.clear();
+		});
+
+		it('continues as a parked account with a full load to the redirect', async () => {
+			localStorage.setItem('ad:apiKey', '"dad-key"');
+			await parkCurrentAccount('ad:', { id: 'dad', label: 'dad' });
+			vi.mocked(useRouter).mockReturnValue({
+				replace,
+				query: { redirect: '/library' },
+			} as any);
+
+			render(<AllDebridLoginPage />);
+			expect(await screen.findByText('Continue as')).toBeInTheDocument();
+			fireEvent.click(screen.getByRole('button', { name: 'dad' }));
+
+			await waitFor(() => expect(assign).toHaveBeenCalledWith('/library'));
+			expect(localStorage.getItem('ad:apiKey')).toBe('"dad-key"');
+			expect(listSavedAccounts('ad:')).toEqual([]);
+			expect(replace).not.toHaveBeenCalled();
+		});
+
+		it('shows nothing extra when no account is saved', () => {
+			render(<AllDebridLoginPage />);
+			expect(screen.queryByText('Continue as')).not.toBeInTheDocument();
+			expect(
+				screen.getByRole('button', { name: 'Sign in with AllDebrid' })
+			).toBeInTheDocument();
 		});
 	});
 });

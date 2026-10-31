@@ -1,3 +1,4 @@
+import { SavedAccountsPicker } from '@/components/SavedAccountsPicker';
 import useLocalStorage from '@/hooks/localStorage';
 import { checkPinOnce, getAllDebridUser, getPin } from '@/services/allDebrid';
 import { ALLDEBRID_APIKEYS_URL } from '@/utils/referrals';
@@ -34,9 +35,10 @@ export default function AllDebridLoginPage() {
 		[]
 	);
 
+	const redirectTarget = getSafeRedirectPath(router.query.redirect, '/');
 	const finish = useCallback(
-		async () => router.replace(getSafeRedirectPath(router.query.redirect, '/')),
-		[router]
+		async () => router.replace(redirectTarget),
+		[router, redirectTarget]
 	);
 
 	/**
@@ -140,6 +142,12 @@ export default function AllDebridLoginPage() {
 					</div>
 				) : (
 					<>
+						{/* A full load, not router.replace: auth state is a module singleton. */}
+						<SavedAccountsPicker
+							prefix="ad:"
+							current={null}
+							afterSwitch={() => window.location.assign(redirectTarget)}
+						/>
 						<button
 							type="button"
 							onClick={startPinLogin}
