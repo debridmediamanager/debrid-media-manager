@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -79,6 +79,7 @@ vi.mock('@/hooks/torboxCastToken', () => ({
 vi.mock('@/hooks/useSponsor', () => ({
 	__esModule: true,
 	useSponsor: () => sponsorMock(),
+	sponsorHeaders: () => ({}),
 }));
 
 vi.mock('@/utils/browseTerms', () => ({
@@ -166,9 +167,9 @@ describe('IndexPage indexer entries', () => {
 		currentUserMock.mockReset();
 		currentUserMock.mockReturnValue(settledFixture);
 		sponsorMock.mockReset();
-		// The page no longer asks. Kept wired up so a reintroduced gate shows up
-		// here as an unused mock rather than as a link that quietly disappears.
+		// Sponsorship only decides whether the fold starts open, never which links exist.
 		sponsorMock.mockReturnValue({ isSponsor: false });
+		window.localStorage.clear();
 	});
 
 	// Both rows used to be hidden from non-sponsors, which meant the one page
@@ -212,18 +213,46 @@ describe('IndexPage indexer entries', () => {
 		expect(indexer.closest('details')?.parentElement).toBe(settings.parentElement);
 	});
 
-	// Four always-open rows pushed the rest of the home page down for everyone,
-	// sponsor or not, so they sit folded under one summary line.
-	it('folds the sponsor features into one closed disclosure', () => {
+	// Four always-open rows pushed the rest of the home page down for everyone, so
+	// a non-sponsor sees them folded under one summary line, as a teaser.
+	it('folds the sponsor features for a non-sponsor', () => {
 		render(<IndexPage />);
 
-		const summary = screen.getByText('Sponsor features');
-		const disclosure = summary.closest('details');
+		const disclosure = screen.getByText('Sponsor features').closest('details');
 		expect(disclosure).not.toBeNull();
 		expect(disclosure?.open).toBe(false);
 		for (const name of [/Torrent Indexer/i, /Usenet Indexer/i, /Jellyfin/i, /Emby/i]) {
 			expect(disclosure).toContainElement(screen.getByRole('link', { name }));
 		}
+	});
+
+	// Sponsors could not find the wanted list behind the fold (Discord, 2026-11-02).
+	it('opens the sponsor features for a sponsor', () => {
+		sponsorMock.mockReturnValue({ isSponsor: true });
+		render(<IndexPage />);
+
+		expect(screen.getByText('Sponsor features').closest('details')?.open).toBe(true);
+	});
+
+	it('remembers the last open or closed choice over the default', () => {
+		sponsorMock.mockReturnValue({ isSponsor: true });
+		const { unmount } = render(<IndexPage />);
+		fireEvent.click(screen.getByText('Sponsor features'));
+		expect(screen.getByText('Sponsor features').closest('details')?.open).toBe(false);
+		unmount();
+
+		render(<IndexPage />);
+		expect(screen.getByText('Sponsor features').closest('details')?.open).toBe(false);
+	});
+
+	it('gives each sponsor feature its own colour', () => {
+		render(<IndexPage />);
+
+		const borders = Array.from(
+			screen.getByText('Sponsor features').closest('details')!.querySelectorAll('a')
+		).map((link) => link.className.match(/border-[a-z]+-500/)?.[0]);
+		expect(borders.every(Boolean)).toBe(true);
+		expect(new Set(borders).size).toBe(borders.length);
 	});
 
 	// Indexers first, torrent before Usenet as everywhere else in DMM, then the

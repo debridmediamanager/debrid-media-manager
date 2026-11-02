@@ -11,7 +11,9 @@ import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
+import useLocalStorage from '@/hooks/localStorage';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
+import { useSponsor } from '@/hooks/useSponsor';
 import { getTerms } from '@/utils/browseTerms';
 import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
@@ -27,6 +29,9 @@ import { Toaster, toast } from 'react-hot-toast';
 
 const PROFILE_WAIT_MS = 5000;
 
+/** The sponsor features fold's last open/closed choice in this browser. */
+export const SPONSOR_FEATURES_OPEN_KEY = 'dmm:sponsorFeaturesOpen';
+
 // Indexers first, torrent before Usenet as everywhere else in DMM, then the
 // media server plugins, then the wanted list zurg fetches.
 const sponsorLinks = [
@@ -34,33 +39,42 @@ const sponsorLinks = [
 		href: '/torznab',
 		label: 'Torrent Indexer',
 		description: "DMM's library as a Torznab indexer, for sponsors",
+		color: 'border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50',
 	},
 	{
 		href: '/newznab',
 		label: 'Usenet Indexer',
 		description: 'Prowlarr-compatible endpoint for sponsors',
+		color: 'border-violet-500 bg-violet-900/30 text-violet-100 hover:bg-violet-800/50',
 	},
 	{
 		href: '/jellyfin',
 		label: 'Jellyfin plugins',
 		description: 'Your library in Jellyfin, for sponsors',
+		color: 'border-fuchsia-500 bg-fuchsia-900/30 text-fuchsia-100 hover:bg-fuchsia-800/50',
 		needsDebrid: true,
 	},
 	{
 		href: '/emby',
 		label: 'Emby plugins',
 		description: 'Your library in Emby, for sponsors',
+		color: 'border-emerald-500 bg-emerald-900/30 text-emerald-100 hover:bg-emerald-800/50',
 		needsDebrid: true,
 	},
 	{
 		href: '/wanted',
 		label: 'Wanted list',
 		description: 'Titles your zurg fetches, for sponsors',
+		color: 'border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50',
 	},
 ];
 
 function IndexPage() {
 	const router = useRouter();
+	const { isSponsor } = useSponsor();
+	const [sponsorFeaturesChoice, setSponsorFeaturesChoice] =
+		useLocalStorage<boolean>(SPONSOR_FEATURES_OPEN_KEY);
+	const sponsorFeaturesOpen = sponsorFeaturesChoice ?? isSponsor;
 	const {
 		rdUser,
 		adUser,
@@ -322,8 +336,9 @@ function IndexPage() {
 							isGuest={isGuest}
 						/>
 						{/* Settings, the API docs and the sponsor features share a row. The
-						    features are folded like the guest-mode debrid cards: four always-open rows
-						    pushed the rest of the page down for everyone, sponsor or not.
+						    features stay folded for non-sponsors, a teaser that does not push the
+						    page down, and open for sponsors, who could not find the wanted list
+						    behind the fold. Either way the reader's last choice wins.
 						    Opened, the disclosure wraps onto a row of its own. */}
 						<div className="flex w-full flex-wrap items-start gap-3">
 							<Link
@@ -340,22 +355,33 @@ function IndexPage() {
 								<FileCode className="mr-2 inline-block h-4 w-4 text-gray-400" />
 								API docs
 							</Link>
-							<details className="flex-1 rounded border-2 border-pink-500/40 bg-gray-800/30 open:basis-full">
-								<summary className="haptic-sm cursor-pointer px-2 py-2 text-center text-sm font-medium whitespace-nowrap text-gray-100 transition-colors hover:bg-gray-700/50">
+							<details
+								open={sponsorFeaturesOpen}
+								className="flex-1 rounded border-2 border-pink-500/40 bg-gray-800/30 open:basis-full"
+							>
+								<summary
+									onClick={(e) => {
+										// Controlled here, not via onToggle: that also fires when the
+										// default flips on isSponsor, which is not the reader's choice.
+										e.preventDefault();
+										setSponsorFeaturesChoice(!sponsorFeaturesOpen);
+									}}
+									className="haptic-sm cursor-pointer px-2 py-2 text-center text-sm font-medium whitespace-nowrap text-gray-100 transition-colors hover:bg-gray-700/50"
+								>
 									Sponsor features
 								</summary>
 								<div className="grid grid-cols-1 gap-3 p-3 pt-0">
 									{/* The plugins show a debrid library, which a guest has none of. */}
 									{sponsorLinks
 										.filter((link) => !(isGuest && link.needsDebrid))
-										.map(({ href, label, description }) => (
+										.map(({ href, label, description, color }) => (
 											<Link
 												key={href}
 												href={href}
-												className="haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+												className={`haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 px-4 py-2 text-sm font-medium transition-colors ${color}`}
 											>
 												<span className="shrink-0">{label}</span>
-												<span className="text-right text-xs text-gray-400">
+												<span className="text-right text-xs opacity-70">
 													{description}
 												</span>
 											</Link>
