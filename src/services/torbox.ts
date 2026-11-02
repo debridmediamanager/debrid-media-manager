@@ -47,21 +47,27 @@ const ENDPOINT_LIMITS: Record<string, number> = {
 	requestdl: 80,
 	createtorrent: 50,
 	createwebdownload: 50,
-	default: 250,
+	// Any other endpoint, counted per path: TorBox allows 100 a minute on each
+	// (x-ratelimit-limit on every response, measured 2026-11-02).
+	default: 90,
 };
 
 // Calls in flight at once for one key. In the browser that is the member's
 // own key; on the server every member's key gets its own (see KeyBudget).
 const MAX_GLOBAL_CONCURRENT = 15;
-const DEFAULT_RETRY_AFTER_MS = 300_000; // 5 minutes
+// Used whenever a 429's Retry-After cannot be read, which in the browser is
+// always: TorBox exposes no headers to CORS. Its window is one minute
+// (Retry-After never above 61 s, measured 2026-11-02); the 5-minute lockout
+// measured 2026-08-02 is gone, and waiting for it held refreshes ~303 s.
+const DEFAULT_RETRY_AFTER_MS = 61_000;
 
 // Rate limiting state
 let globalPausedUntil = 0;
 
 // In the browser this client serves one member's key, and a 429 pauses
 // everything. On the server it serves every member at once, and TorBox's 429
-// is a lockout of one key for its Retry-After (measured 2026-08-02: 300 s, and
-// requests made during it do not extend it). So there a lockout is kept per
+// is a lockout of one key's endpoint for its Retry-After (up to 61 s since
+// 2026-11-02; 300 s when measured 2026-08-02). So there a lockout is kept per
 // key, and a caller - always an HTTP request, cut at 60 s by the proxy and
 // given up on far sooner by a player - never sits one out: it is refused at
 // once, without asking TorBox. Before this, one member's 429 held every
@@ -167,7 +173,7 @@ function getEndpointKey(url?: string): string {
 	if (url.includes('/requestdl')) return 'requestdl';
 	if (url.includes('/createtorrent')) return 'createtorrent';
 	if (url.includes('/createwebdownload')) return 'createwebdownload';
-	return 'default';
+	return url.split('?')[0].split('/').slice(-2).join('/');
 }
 
 /** Waits up to `ms` for a slot to free up; false if none did. */

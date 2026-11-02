@@ -1,3 +1,4 @@
+import tbRateLimit from '@/test/fixtures/torbox/ratelimit-2026-11-02.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TorBoxRateLimitError, _testing } from './torbox';
 
@@ -37,10 +38,16 @@ describe('TorBox rate limiting internals', () => {
 			expect(_testing.getEndpointKey('/v1/api/torrents/createtorrent')).toBe('createtorrent');
 		});
 
-		it('returns "default" for general endpoints', () => {
-			expect(_testing.getEndpointKey('/v1/api/torrents/mylist')).toBe('default');
-			expect(_testing.getEndpointKey('/v1/api/torrents/checkcached')).toBe('default');
-			expect(_testing.getEndpointKey('/v1/api/user/me')).toBe('default');
+		it('keys every other endpoint by its path, as TorBox counts them', () => {
+			expect(_testing.getEndpointKey('/v1/api/torrents/mylist?limit=1000')).toBe(
+				'torrents/mylist'
+			);
+			expect(_testing.getEndpointKey('/v1/api/torrents/checkcached')).toBe(
+				'torrents/checkcached'
+			);
+			expect(_testing.getEndpointKey('https://api.torbox.app/v1/api/user/me')).toBe(
+				'user/me'
+			);
 		});
 
 		it('returns "default" for undefined/empty URLs', () => {
@@ -53,15 +60,17 @@ describe('TorBox rate limiting internals', () => {
 		it('has conservative limits below actual TorBox thresholds', () => {
 			expect(_testing.ENDPOINT_LIMITS.requestdl).toBe(80);
 			expect(_testing.ENDPOINT_LIMITS.createtorrent).toBe(50);
-			expect(_testing.ENDPOINT_LIMITS.default).toBe(250);
+			expect(_testing.ENDPOINT_LIMITS.default).toBe(90);
 		});
 
 		it('requestdl limit is well below the empirical ~100-190 threshold', () => {
 			expect(_testing.ENDPOINT_LIMITS.requestdl).toBeLessThan(100);
 		});
 
-		it('default limit is below the 300/min per-endpoint limit', () => {
-			expect(_testing.ENDPOINT_LIMITS.default).toBeLessThan(300);
+		it('default limit is below the per-endpoint limit TorBox reports', () => {
+			expect(_testing.ENDPOINT_LIMITS.default).toBeLessThan(
+				Number(tbRateLimit.rateLimited.headers['x-ratelimit-limit'])
+			);
 		});
 	});
 
@@ -73,8 +82,15 @@ describe('TorBox rate limiting internals', () => {
 	});
 
 	describe('DEFAULT_RETRY_AFTER_MS', () => {
-		it('matches TorBox 5-minute recovery window', () => {
-			expect(_testing.DEFAULT_RETRY_AFTER_MS).toBe(300_000);
+		it("waits out a browser-side 429 without seeing TorBox's headers, for one window only", () => {
+			// CORS hides every header but the safelisted ones from browser code.
+			const visible = { 'content-type': tbRateLimit.rateLimited.headers['content-type'] };
+			const wait =
+				_testing.parseRetryAfterMs({ response: { status: 429, headers: visible } }) ??
+				_testing.DEFAULT_RETRY_AFTER_MS;
+			const reset = Number(tbRateLimit.rateLimited.headers['x-ratelimit-reset']);
+			expect(wait).toBeGreaterThanOrEqual((reset - tbRateLimit.dateUnix) * 1000);
+			expect(wait).toBeLessThanOrEqual(tbRateLimit.longestRetryAfterSeconds * 1000);
 		});
 	});
 

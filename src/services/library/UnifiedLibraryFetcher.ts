@@ -21,13 +21,11 @@ import { FREE_TORBOX_PLAN_MESSAGE, isTorBoxPlanRestricted } from '@/utils/torbox
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
 
+/** Rows per TorBox mylist page; TorBox serves up to 5000, but large pages can 5xx. */
+export const TORBOX_PAGE_SIZE = 1000;
+
 export type LibraryService =
-	| 'realdebrid'
-	| 'alldebrid'
-	| 'torbox'
-	| 'premiumize'
-	| 'offcloud'
-	| 'debridlink';
+	'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize' | 'offcloud' | 'debridlink';
 
 export interface FetchOptions {
 	forceRefresh?: boolean;
@@ -430,8 +428,10 @@ export class UnifiedLibraryFetcher {
 		}
 
 		// Torbox supports pagination but doesn't return total count reliably
-		// Fetch in batches until we get an empty response
-		const pageSize = 100;
+		// Fetch in batches until we get an empty response. TorBox allows 100
+		// mylist calls a minute, so 100-row pages could not list 10,000+ torrents
+		// without a 429; 1000 rows is ~8 MB and under 2 s (measured 2026-11-02).
+		const pageSize = TORBOX_PAGE_SIZE;
 		const allTorrents: UserTorrent[] = [];
 		let offset = 0;
 		let hasMore = true;
@@ -528,7 +528,7 @@ export class UnifiedLibraryFetcher {
 		options: FetchOptions,
 		alreadyFetched: number
 	): Promise<UserTorrent[]> {
-		const pageSize = 100;
+		const pageSize = TORBOX_PAGE_SIZE;
 		const webDownloads: UserTorrent[] = [];
 		let offset = 0;
 		let hasMore = true;

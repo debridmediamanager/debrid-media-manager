@@ -2,6 +2,7 @@ import { getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import mylistPlanRestricted from '@/test/fixtures/torbox/mylist-plan-restricted-2026-10-09.json';
+import tbRateLimit from '@/test/fixtures/torbox/ratelimit-2026-11-02.json';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
@@ -187,6 +188,28 @@ describe('UnifiedLibraryFetcher', () => {
 			5 * 60 * 1000
 		);
 		expect(result).toEqual([{ id: 'tb:tb1' }]);
+	});
+
+	it("lists a 70,000-torrent TorBox library inside one minute's mylist budget", async () => {
+		const { fetcher, cache } = createFetcher();
+		cache.get.mockResolvedValueOnce(null);
+		const library = Array.from({ length: 70_000 }, (_, i) => ({ id: i }));
+		mockGetTorrentList.mockReset().mockImplementation(async (_key, params) => {
+			const offset = params?.offset ?? 0;
+			return {
+				success: true,
+				data: library.slice(offset, offset + (params?.limit ?? 1000)),
+			} as any;
+		});
+		mockGetWebDownloadList.mockResolvedValue({ success: true, data: [] } as any);
+
+		const result = await fetcher.fetchLibrary('torbox', 'tb-token');
+
+		expect(result).toHaveLength(70_000);
+		expect(mockGetTorrentList.mock.calls.length).toBeLessThan(
+			Number(tbRateLimit.paidAccountMylist.mylist['x-ratelimit-limit'])
+		);
+		mockGetTorrentList.mockReset();
 	});
 
 	it('appends Torbox web downloads to the library', async () => {
