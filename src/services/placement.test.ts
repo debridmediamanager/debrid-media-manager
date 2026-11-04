@@ -14,6 +14,7 @@ import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
+import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
@@ -90,6 +91,7 @@ const recordedSources = (r: any): PlacementSources => ({
 	identifier: async (names) => answered(r, names),
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
 	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
+	namesakeSeries: async (id) => r.namesakeSeries?.[id] ?? null,
 	tvdbSeriesOf: async (id) =>
 		r.tvdbSeriesOf?.[id]
 			? (r.tvdbSeriesOf[id].data ?? []).map((row: any) => row.series.id)
@@ -1184,5 +1186,40 @@ describe('a film id sent for a release of numbered episodes', () => {
 		expect(complete).toBe(true);
 		expect(releases[0].kind).toBeNull();
 		expect(releases[0]).toEqual(secondChance.expect);
+	});
+});
+
+describe('a miniseries sent with its namesake film', () => {
+	// issinoho_23951's zurg (2026-11-03) sent tt0083069, the TV film Shogun, and tt0218390, the 2002
+	// film The Last Place on Earth, for the 1980 and 1985 miniseries, and rex filed every episode as
+	// a film (card 630; see the fixtures README)
+	const [shogun, lastPlace, film, extras] = namesakes.cases;
+	const ask = (cases: (typeof namesakes.cases)[number][]) =>
+		place(
+			cases.map((c) => ({ ...(c.request as PlaceRequest), parts: true as const })),
+			Infinity,
+			recordedSources(namesakes.answers),
+			async (list) =>
+				list.map(({ name }) => (namesakes.answers.identify as any)[name] ?? null)
+		);
+	const numbers = (release: PlacedRelease) => release.files.map((f) => [f.season, f.episode]);
+
+	it('places their episodes on the miniseries IMDb titles as the film', async () => {
+		const { releases, complete } = await ask([shogun, lastPlace]);
+		expect(complete).toBe(true);
+		expect([releases[0].kind, releases[0].imdbId]).toEqual(['tv', 'tt0080274']);
+		expect(numbers(releases[0])).toEqual([1, 2, 3, 4].map((e) => [1, e]));
+		expect([releases[1].kind, releases[1].imdbId]).toEqual(['tv', 'tt0088551']);
+		expect(numbers(releases[1])).toEqual([1, 2, 3, 4, 5, 6, 7].map((e) => [1, e]));
+		expect(releases).toEqual([shogun.expect, lastPlace.expect]);
+	});
+
+	it('keeps a film of one file, and one with its featurettes, a film', async () => {
+		const { releases } = await ask([film, extras]);
+		expect(releases.map((r) => [r.kind, r.imdbId])).toEqual([
+			['movie', 'tt1179933'],
+			['movie', 'tt0101507'],
+		]);
+		expect(releases).toEqual([film.expect, extras.expect]);
 	});
 });

@@ -1,0 +1,545 @@
+{
+	"answers": {
+		"find": {
+			"tt0083069": {
+				"movie_results": [
+					{
+						"id": 1699150,
+						"title": "Shogun",
+						"release_date": "1980-11-08"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0218390": {
+				"movie_results": [
+					{
+						"id": 297807,
+						"title": "The Last Place on Earth",
+						"release_date": "2002-01-01"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1179933": {
+				"movie_results": [
+					{
+						"id": 333371,
+						"title": "10 Cloverfield Lane",
+						"release_date": "2016-03-10"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0101507": {
+				"movie_results": [
+					{
+						"id": 650,
+						"title": "Boyz n the Hood",
+						"release_date": "1991-07-12"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0088551": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 17760,
+						"name": "The Last Place on Earth",
+						"first_air_date": "1985-02-18"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0080274": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 13862,
+						"name": "Shōgun",
+						"first_air_date": "1980-09-15"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"13862": {
+				"id": 13862,
+				"name": "Shōgun",
+				"original_name": "Shōgun",
+				"first_air_date": "1980-09-15",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 16,
+						"air_date": "2011-03-14",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "1980-09-15",
+						"name": "Miniseries"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt0080274",
+					"tvdb_id": 80284
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "James Clavell's Shogun"
+						},
+						{
+							"title": "James Clavell's Shogun"
+						},
+						{
+							"title": "Shogun"
+						},
+						{
+							"title": "James Clavell's Shōgun"
+						}
+					]
+				}
+			},
+			"17760": {
+				"id": 17760,
+				"name": "The Last Place on Earth",
+				"original_name": "The Last Place on Earth",
+				"first_air_date": "1985-02-18",
+				"original_language": "en",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "1985-02-18",
+						"name": "Season 1"
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt0088551",
+					"tvdb_id": 160651
+				},
+				"alternative_titles": {
+					"results": []
+				}
+			}
+		},
+		"season": {
+			"13862/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Part 1",
+						"air_date": "1980-09-15",
+						"id": 1094048
+					},
+					{
+						"episode_number": 2,
+						"name": "Part 2",
+						"air_date": "1980-09-16",
+						"id": 1094049
+					},
+					{
+						"episode_number": 3,
+						"name": "Part 3",
+						"air_date": "1980-09-17",
+						"id": 1094050
+					},
+					{
+						"episode_number": 4,
+						"name": "Part 4",
+						"air_date": "1980-09-18",
+						"id": 1094052
+					},
+					{
+						"episode_number": 5,
+						"name": "Part 5",
+						"air_date": "1980-09-19",
+						"id": 1356826
+					}
+				]
+			},
+			"17760/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"name": "Poles Apart",
+						"air_date": "1985-02-18",
+						"id": 558461
+					},
+					{
+						"episode_number": 2,
+						"name": "Minor Diversions",
+						"air_date": "1985-02-20",
+						"id": 558462
+					},
+					{
+						"episode_number": 3,
+						"name": "Leading Men",
+						"air_date": "1985-02-27",
+						"id": 558463
+					},
+					{
+						"episode_number": 4,
+						"name": "Gentlemen and Players",
+						"air_date": "1985-03-06",
+						"id": 558464
+					},
+					{
+						"episode_number": 5,
+						"name": "The Glories of the Race",
+						"air_date": "1985-03-13",
+						"id": 558465
+					},
+					{
+						"episode_number": 6,
+						"name": "Forgone Conclusion",
+						"air_date": "1985-03-20",
+						"id": 558466
+					},
+					{
+						"episode_number": 7,
+						"name": "Rejoice",
+						"air_date": "1985-03-27",
+						"id": 558467
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0083069": null,
+			"tt0218390": null,
+			"tt1179933": null,
+			"tt0101507": null,
+			"tt0080274": null,
+			"tt0088551": null
+		},
+		"seasonEpisodes": {},
+		"imdbSeries": {
+			"tt0083069": {
+				"titleType": "tvMovie",
+				"title": "Shogun",
+				"episodes": []
+			},
+			"tt0218390": {
+				"titleType": "movie",
+				"title": "The Last Place on Earth",
+				"episodes": []
+			}
+		},
+		"namesakeSeries": {
+			"tt0083069": [
+				{
+					"imdbId": "tt0080274",
+					"startYear": 1980,
+					"endYear": 1980
+				},
+				{
+					"imdbId": "tt2788316",
+					"startYear": 2024,
+					"endYear": 2026
+				}
+			],
+			"tt0218390": [
+				{
+					"imdbId": "tt0088551",
+					"startYear": 1985,
+					"endYear": 1985
+				}
+			]
+		},
+		"identify": {
+			"Shogun 1980 1080p WEBRip x264 [i_c]": {
+				"imdbId": "tt0083069",
+				"title": "Shogun",
+				"year": 1980,
+				"kind": "movie"
+			},
+			"The Last Place on Earth": {
+				"imdbId": "tt0218390",
+				"title": "The Last Place on Earth",
+				"year": 2002,
+				"kind": "movie"
+			}
+		}
+	},
+	"cases": [
+		{
+			"request": {
+				"name": "Shogun 1980 1080p WEBRip x264 [i_c]",
+				"hash": null,
+				"imdbId": "tt0083069",
+				"files": [
+					{
+						"path": "Shogun 1980 Episode 1.mkv",
+						"folder": "Shogun 1980 1080p WEBRip x264 [i_c]"
+					},
+					{
+						"path": "Shogun 1980 Episode 2.mkv",
+						"folder": "Shogun 1980 1080p WEBRip x264 [i_c]"
+					},
+					{
+						"path": "Shogun 1980 Episode 3.mkv",
+						"folder": "Shogun 1980 1080p WEBRip x264 [i_c]"
+					},
+					{
+						"path": "Shogun 1980 Episode 4.mkv",
+						"folder": "Shogun 1980 1080p WEBRip x264 [i_c]"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0080274",
+				"tmdbId": 13862,
+				"files": [
+					{
+						"path": "Shogun 1980 Episode 1.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1094048
+					},
+					{
+						"path": "Shogun 1980 Episode 2.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1094049
+					},
+					{
+						"path": "Shogun 1980 Episode 3.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1094050
+					},
+					{
+						"path": "Shogun 1980 Episode 4.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1094052
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "The Last Place on Earth",
+				"hash": null,
+				"imdbId": "tt0218390",
+				"files": [
+					{
+						"path": "Last Place on Earth 1 Poles Apart.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 2 Minor Diversions.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 3 Leading Men.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 4 Gentlemen & Players.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 5 The Glories of the Race.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 6 Foregone Conclusion.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Last Place on Earth 7 Rejoice.mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0088551",
+				"tmdbId": 17760,
+				"files": [
+					{
+						"path": "Last Place on Earth 1 Poles Apart.mp4",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558461
+					},
+					{
+						"path": "Last Place on Earth 2 Minor Diversions.mp4",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558462
+					},
+					{
+						"path": "Last Place on Earth 3 Leading Men.mp4",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558463
+					},
+					{
+						"path": "Last Place on Earth 4 Gentlemen & Players.mp4",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558464
+					},
+					{
+						"path": "Last Place on Earth 5 The Glories of the Race.mp4",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558465
+					},
+					{
+						"path": "Last Place on Earth 6 Foregone Conclusion.mp4",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 558466
+					},
+					{
+						"path": "Last Place on Earth 7 Rejoice.mp4",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 558467
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "10.Cloverfield.Lane.2016.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv",
+				"hash": "28cf9f6509eb0cd6e537592bfda244a57e0b5479",
+				"imdbId": "tt1179933",
+				"files": [
+					{
+						"path": "10.Cloverfield.Lane.2016.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt1179933",
+				"tmdbId": 333371,
+				"files": [
+					{
+						"path": "10.Cloverfield.Lane.2016.2160p.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "Boyz n the Hood (1991) (2160p BluRay x265 HEVC 10bit HDR AAC 7.1 Tigole)",
+				"hash": "bdaf776ce168c99cb27a9e07b0985dae912ea897",
+				"imdbId": "tt0101507",
+				"files": [
+					{
+						"path": "Behind the Scenes.mkv",
+						"folder": "Featurettes"
+					},
+					{
+						"path": "Boyz n the Hood (1991) (2160p BluRay x265 10bit HDR Tigole).mkv",
+						"folder": ""
+					},
+					{
+						"path": "John Singleton Tribute.mkv",
+						"folder": "Featurettes"
+					},
+					{
+						"path": "Theatrical Press Conference.mkv",
+						"folder": "Featurettes"
+					},
+					{
+						"path": "Trailer.mkv",
+						"folder": "Featurettes"
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0101507",
+				"tmdbId": 650,
+				"files": [
+					{
+						"path": "Behind the Scenes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Boyz n the Hood (1991) (2160p BluRay x265 10bit HDR Tigole).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "John Singleton Tribute.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Theatrical Press Conference.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Trailer.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

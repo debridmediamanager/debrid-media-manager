@@ -365,3 +365,29 @@ describe('getImdbSeries', () => {
 		expect(await new HashImdbService().getImdbSeries('tt0000000')).toBeNull();
 	});
 });
+
+describe('getNamesakeSeries', () => {
+	it('lists the series titled as a TV film, none for a title that is no film', async () => {
+		// dmmdb's rows for tt0083069, the TV film Shogun, 2026-11-04
+		prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+			titleType: 'tvMovie',
+			primaryTitle: 'Shogun',
+		});
+		prismaMock.imdbTitleBasics.findMany.mockResolvedValue([
+			{ tconst: 'tt0080274', startYear: 1980, endYear: 1980 },
+		]);
+		expect(await new HashImdbService().getNamesakeSeries('tt0083069')).toEqual([
+			{ imdbId: 'tt0080274', startYear: 1980, endYear: 1980 },
+		]);
+		expect(prismaMock.imdbTitleBasics.findMany).toHaveBeenCalledWith(
+			expect.objectContaining({
+				where: { primaryTitle: 'Shogun', titleType: { in: ['tvMiniSeries', 'tvSeries'] } },
+			})
+		);
+		prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+			titleType: 'tvSeries',
+			primaryTitle: 'Shogun',
+		});
+		expect(await new HashImdbService().getNamesakeSeries('tt0080274')).toEqual([]);
+	});
+});

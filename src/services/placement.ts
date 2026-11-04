@@ -12,7 +12,7 @@ import {
 	type IdentifierMatch,
 	type IdentifierResult,
 } from '@/services/contentIdentifier';
-import type { ImdbSeries } from '@/services/database/hashImdb';
+import type { ImdbSeries, NamesakeSeries } from '@/services/database/hashImdb';
 import { settle, TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository } from '@/services/repository';
@@ -34,6 +34,7 @@ import {
 	yieldToTitles,
 	type AlignedEpisode,
 	type AnimeIndex,
+	type FileNumbers,
 	type ImdbLookup,
 	type Placement,
 	type PlacementRule,
@@ -52,7 +53,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-01.2';
+export const PLACEMENT_RULES = '2026-11-04.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -141,6 +142,8 @@ export interface PlacementSources {
 	searchTv(query: string): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
 	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
+	/** The series IMDb titles exactly as this film or TV film (dmmdb's imdb_title_basics); absent or null where it cannot be asked. */
+	namesakeSeries?(imdbId: string): Promise<NamesakeSeries[] | null>;
 	/** content-identifier's own answers for these names, unjudged; null when it could not be asked. */
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 	/** TheTVDB's series for an IMDb id (`search/remoteid`); absent or null where TVDB cannot be asked. */
@@ -228,6 +231,7 @@ export async function placeReleases(
 			out[at] = waits
 				? skipped(release)
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
+			if (!waits) out[at] = await seriesLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
@@ -715,6 +719,75 @@ async function secondLook(
 	return placed;
 }
 
+/**
+ * A miniseries whose id names its namesake film: DMM's hash map gave `Shogun 1980 1080p WEBRip
+ * x264 [i_c]` (`Shogun 1980 Episode 1`-`4`) tt0083069, the 1980 TV film, and its name lookup `The
+ * Last Place on Earth` (`Last Place on Earth 1 Poles Apart`-`7 Rejoice`) tt0218390, the 2002
+ * film, where both are IMDb's miniseries of those titles (tt0080274, tt0088551), and rex filed
+ * each episode as a film (2026-11-03). A release of numbered episodes placed as no show goes to
+ * the one series IMDb titles as its film, in the year the release names, where TMDB places files.
+ */
+async function seriesLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind === 'tv' || !placed.imdbId || !sources.namesakeSeries) {
+		return placed;
+	}
+	const episodes = new Set(releaseNumbers(release).map((n) => n?.episode ?? null));
+	episodes.delete(null);
+	if (episodes.size < 2) return placed;
+	const { year } = parseName(release.name);
+	const series = ((await sources.namesakeSeries(placed.imdbId)) ?? []).filter(
+		({ startYear, endYear }) =>
+			year === null ||
+			(startYear !== null && year >= startYear - 1 && year <= (endYear ?? startYear) + 1)
+	);
+	if (series.length !== 1) return placed;
+	const title = await resolve(series[0].imdbId, 'tv', release, sources);
+	if (title?.kind !== 'tv' || (title.tmdbId === null && !title.listed)) return placed;
+	const there = await placeRelease(release, title, sources, anime);
+	return !there.skipped && placesFiles(there) ? there : placed;
+}
+
+// `Last Place on Earth 1 Poles Apart`: the title, then the episode's number and its own title
+const COUNTED = /^(.*?\S)[\s._-]+(\d{1,3})(?:[\s._-]+\S.*)?$/;
+// `Part 2`, `Disc 2` and `cd2` number no episode
+const PARTED = /(?:^|[\s._-])(?:pt|part|prt|cd|disc|disk|vol|volume)$/i;
+
+/**
+ * Episodes a release numbers only beside its title, 1 to n with one file each, where no file's
+ * name numbers it otherwise: `Last Place on Earth 1 Poles Apart`-`7 Rejoice`. Null for any other.
+ */
+function countedRun(release: PlaceRequest): FileNumbers[] | null {
+	const show = letters(parseName(release.name).title);
+	if (release.files.length < 2 || show.length < 4) return null;
+	if (release.files.some((f) => fileNumbers(release.name, f.folder, f.path, false))) return null;
+	const read = release.files.map((f) =>
+		COUNTED.exec((f.path.split('/').pop() ?? f.path).replace(/\.[a-z0-9]{2,4}$/i, ''))
+	);
+	if (read.some((found) => !found || PARTED.test(found[1]))) return null;
+	const heads = new Set(read.map((found) => letters(found![1])));
+	const [head] = heads;
+	if (heads.size !== 1 || head.length < 4 || !(show.includes(head) || head.includes(show))) {
+		return null;
+	}
+	const episodes = read.map((found) => Number(found![2]));
+	if (new Set(episodes).size !== episodes.length) return null;
+	if (Math.min(...episodes) !== 1 || Math.max(...episodes) !== episodes.length) return null;
+	return episodes.map((episode) => ({ season: null, episode, end: null }));
+}
+
+/** Each file's numbers, as its name gives them or a counted run of the release does. */
+function releaseNumbers(release: PlaceRequest): (FileNumbers | null)[] {
+	return (
+		countedRun(release) ??
+		release.files.map((f) => fileNumbers(release.name, f.folder, f.path, false))
+	);
+}
+
 /** The answer zurg reads as "skipped, ask again": nothing known, every file unplaced, in order. */
 function skipped(release: PlaceRequest): PlacedRelease {
 	return {
@@ -748,7 +821,7 @@ async function resolve(
 	// files numbered as a run of episodes are no film either: zurg sent tt0117579, the 1996 film
 	// Second Chance, for `Second.Chance.1995.dvdrip-xpost`'s `Second.Chance.01`-`12`, and rex-fun
 	// showed eleven copies of it (2026-11-01); `Part 2`, `Disc 2` and `cd2` number no episode
-	const numbers = release.files.map((f) => fileNumbers(release.name, f.folder, f.path, false));
+	const numbers = releaseNumbers(release);
 	const episodes = new Set(numbers.map((n) => n?.episode).filter((n) => n != null));
 	const seasons = numbers.some((n) => n?.season != null) || episodes.size > 1;
 	let kind: 'movie' | 'tv' | null = show ? 'tv' : null;
@@ -959,16 +1032,14 @@ async function placeFiles(
 	how: (found: Placement) => PlacementRule | null = (found) => found.how,
 	byTitle = false
 ): Promise<PlacedRelease> {
+	const run = countedRun(release);
 	const numbers = stackedParts(
 		absoluteFolders(
-			release.files.map((file) => ({
+			release.files.map((file, at) => ({
 				folder: file.folder,
-				numbers: fileNumbers(
-					release.name,
-					file.folder,
-					file.path,
-					release.files.length === 1
-				),
+				numbers:
+					run?.[at] ??
+					fileNumbers(release.name, file.folder, file.path, release.files.length === 1),
 			})),
 			placement.seasons
 		)
@@ -1573,6 +1644,7 @@ export const cachedSources: PlacementSources = {
 	seasonEpisodes: (show, season) => repository.getImdbSeasonEpisodeIds(show, season),
 	anime: () => settle(currentAnimeIndex),
 	imdbSeries: (imdbId) => repository.getImdbSeries(imdbId),
+	namesakeSeries: (imdbId) => repository.getNamesakeSeries(imdbId),
 	searchTv: (query) =>
 		getTmdbAuth()
 			? settle(() => getMetadataCache().searchTmdbTitles('tv', query))

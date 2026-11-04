@@ -13,6 +13,13 @@ export interface ImdbSeries {
 	episodes: { season: number | null; episode: number | null; name: string }[];
 }
 
+/** A series or miniseries IMDb titles as a film, with the years it ran. */
+export interface NamesakeSeries {
+	imdbId: string;
+	startYear: number | null;
+	endYear: number | null;
+}
+
 /** The title DMM matched a release hash to. */
 export interface HashIdentity {
 	imdbId: string;
@@ -237,6 +244,31 @@ export class HashImdbService extends DatabaseClient {
 				name: titles.get(row.tconst) ?? '',
 			})),
 		};
+	}
+
+	/**
+	 * The series and miniseries IMDb titles exactly as a film or TV film (idx_primary_title):
+	 * tt0083069, the TV film Shogun, beside tt0080274, the 1980 miniseries. None for another kind
+	 * of title or one IMDb does not have.
+	 */
+	public async getNamesakeSeries(tconst: string): Promise<NamesakeSeries[]> {
+		const film = await this.prisma.imdbTitleBasics.findUnique({
+			where: { tconst },
+			select: { titleType: true, primaryTitle: true },
+		});
+		if (!film?.primaryTitle || !['movie', 'tvMovie'].includes(film.titleType)) return [];
+		const rows = await this.prisma.imdbTitleBasics.findMany({
+			where: {
+				primaryTitle: film.primaryTitle,
+				titleType: { in: ['tvMiniSeries', 'tvSeries'] },
+			},
+			select: { tconst: true, startYear: true, endYear: true },
+		});
+		return rows.map((row) => ({
+			imdbId: row.tconst,
+			startYear: row.startYear,
+			endYear: row.endYear,
+		}));
 	}
 
 	/** IMDb's episode ids for one season of a show, by episode number (idx_season_episode). */
