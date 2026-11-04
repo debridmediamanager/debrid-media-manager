@@ -76,6 +76,17 @@ class Streams(unittest.TestCase):
         self.assertEqual(dmm.unwrap_filename(['Some-', 'thing']), ['Some-', 'thing'])
 
 
+class Trakt(unittest.TestCase):
+    # script.trakt (trakt/script.trakt, kodiUtilities.getInfoLabelDetails) reads these as the movie's ids,
+    # or as the show's for an episode; without them it guesses from the title.
+    def test_names_the_imdb_id_script_trakt_scrobbles_by(self):
+        self.assertEqual(json.loads(dmm.trakt_ids('tt0903747')), {'imdb': 'tt0903747'})
+
+    def test_gives_nothing_for_an_id_that_is_not_imdb(self):
+        for not_imdb in (None, '', 'kitsu:46474:5', 'tt'):
+            self.assertEqual(dmm.trakt_ids(not_imdb), '')
+
+
 class Cinemeta(unittest.TestCase):
     def test_search_finds_titles_cinemeta_search_misses(self):
         # Cinemeta's search answers nothing for Sintel (captured), though its meta has it; DMM's

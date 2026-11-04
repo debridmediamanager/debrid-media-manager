@@ -283,6 +283,12 @@ def source_label2(s):
     return ' · '.join(p for p in (s['filename'], s['details'].replace(' • ', ' · ')) if p)
 
 
+def trakt_ids(imdb_id):
+    """script.trakt scrobbles a plugin's playback by the `script.trakt.ids` window property: the film's id,
+    or for an episode the show's (it adds season and episode from the info labels). '' for anything else."""
+    return json.dumps({'imdb': imdb_id}) if re.match(r'^tt\d+$', imdb_id or '') else ''
+
+
 def stream_id(kind, imdb_id, season=None, episode=None):
     return '%s:%s:%s' % (imdb_id, season, episode) if kind == 'series' else imdb_id
 

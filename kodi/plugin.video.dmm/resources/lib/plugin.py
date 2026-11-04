@@ -667,6 +667,13 @@ def play_url(stream_url, m=None, ep=None, p=None):
                          'plot': ep.get('overview') or info['plot']})
         set_info(li, info)
         li.setArt(dmm.art_of(m))
+    # Read by script.trakt when playback starts and cleared by it on stop; a stale value would scrobble
+    # the previous title, so an unidentified play (a library file) clears it.
+    ids = dmm.trakt_ids((p or {}).get('id') if m else None)
+    if ids:
+        xbmcgui.Window(10000).setProperty('script.trakt.ids', ids)
+    else:
+        xbmcgui.Window(10000).clearProperty('script.trakt.ids')
     if HANDLE >= 0:
         xbmcplugin.setResolvedUrl(HANDLE, True, li)
     else:  # started from a context menu, which gives no handle to resolve
