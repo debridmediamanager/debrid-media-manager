@@ -4,6 +4,7 @@ import { repository } from '@/services/repository';
 import { ProviderCacheMemo, setProviderCacheMemo } from '@/services/torznab/providerCache';
 import verity from '@/test/fixtures/debridlink/seedbox-add-verity-2026-11-04.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { activeCastGrant } from '@/test/utils/sponsor';
 import { getTroveCandidates } from '@/utils/cachedTroveStreams';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
@@ -97,6 +98,23 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 			`https://dmm.test/api/stremio-dl/dl-user/play/${A}?file=${encodeURIComponent('Release/Mine.mkv')}`
 		);
 		expect(JSON.stringify(res._getData())).not.toContain('debrid.link');
+	});
+
+	it('sends a probed release’s audio languages as behaviorHints.audioLanguages', async () => {
+		mockRepository.getDebridLinkUserCastStreams = vi
+			.fn()
+			.mockResolvedValue([row(matrixSnapshotRow.hash, 'Mine.mkv')]);
+		mockRepository.getDebridLinkOtherStreams = vi.fn().mockResolvedValue([row(B, 'Other.mkv')]);
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([matrixSnapshotRow]);
+
+		await handler(request(), res);
+
+		// What the client receives: JSON leaves the key out where no language is known.
+		const { streams } = JSON.parse(JSON.stringify(res._getData()));
+		const hints = (name: string) =>
+			streams.find((s: any) => s.title?.includes(name)).behaviorHints;
+		expect(hints('Mine.mkv').audioLanguages).toEqual(['eng']);
+		expect(hints('Other.mkv')).not.toHaveProperty('audioLanguages');
 	});
 
 	it('offers the cast entry point unless the profile hides it', async () => {

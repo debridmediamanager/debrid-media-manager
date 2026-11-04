@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { activeCastGrant } from '@/test/utils/sponsor';
 import { parseSavedLinkMetaId, savedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
 import type { Mock } from 'vitest';
@@ -378,6 +379,30 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			const payload = (res.json as Mock).mock.calls[0][0];
 			// cast option + 1 user + 1 other = 3
 			expect(payload.streams).toHaveLength(3);
+		});
+
+		it('sends a probed release’s audio languages as behaviorHints.audioLanguages', async () => {
+			setupProfile();
+			mockRepository.getAllDebridUserCastStreams = vi
+				.fn()
+				.mockResolvedValue([{ ...userStream, hash: matrixSnapshotRow.hash }]);
+			mockRepository.getAllDebridOtherStreams = vi.fn().mockResolvedValue([otherStream]);
+			mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([matrixSnapshotRow]);
+			const res = createMockResponse();
+
+			await handler(
+				createMockRequest({
+					query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+				}),
+				res
+			);
+
+			// What the client receives: JSON leaves the key out where no language is known.
+			const { streams } = JSON.parse(JSON.stringify(res._getData()));
+			const hints = (name: string) =>
+				streams.find((s: any) => s.title?.includes(name)).behaviorHints;
+			expect(hints('MyMovie.mkv').audioLanguages).toEqual(['eng']);
+			expect(hints('OtherMovie.mkv')).not.toHaveProperty('audioLanguages');
 		});
 
 		it('skips AD user streams without magnetId/fileIndex', async () => {

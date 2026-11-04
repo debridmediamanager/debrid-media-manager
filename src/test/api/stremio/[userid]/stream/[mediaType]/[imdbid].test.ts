@@ -2,6 +2,7 @@ import { languageEmojis } from '@/components/showInfo/languages';
 import handler from '@/pages/api/stremio/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { activeCastGrant } from '@/test/utils/sponsor';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import type { Mock } from 'vitest';
@@ -190,6 +191,51 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			5,
 			3
 		);
+	});
+
+	it('sends a probed release’s audio languages as behaviorHints.audioLanguages', async () => {
+		mockRepository.getCastProfile = vi.fn().mockResolvedValue({
+			clientId: 'id',
+			clientSecret: 'secret',
+			refreshToken: 'refresh',
+			movieMaxSize: 10,
+			episodeMaxSize: 3,
+			otherStreamsLimit: 5,
+		});
+		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([
+			{
+				url: 'https://files.dmm.test/Matrix.mkv',
+				link: 'https://real-debrid.com/d/ABCDEFGHIJKLMNOP',
+				size: 20480,
+				filename: 'Matrix.mkv',
+				hash: matrixSnapshotRow.hash,
+			},
+		]);
+		mockRepository.getOtherStreams = vi.fn().mockResolvedValue([
+			{
+				url: 'https://files.dmm.test/Other.mkv',
+				link: 'https://real-debrid.com/d/QRSTUVWXYZ123456',
+				size: 512,
+				filename: 'Other.mkv',
+				hash: 'def456',
+			},
+		]);
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([matrixSnapshotRow]);
+		const res = createMockResponse();
+
+		await handler(
+			createMockRequest({
+				query: { userid: 'user123', mediaType: 'movie', imdbid: 'tt0133093' },
+			}),
+			res
+		);
+
+		// What the client receives: JSON leaves the key out where no language is known.
+		const { streams } = JSON.parse(JSON.stringify(res._getData()));
+		const hints = (name: string) =>
+			streams.find((s: any) => s.title?.includes(name)).behaviorHints;
+		expect(hints('Matrix.mkv').audioLanguages).toEqual(['eng']);
+		expect(hints('Other.mkv')).not.toHaveProperty('audioLanguages');
 	});
 
 	it('answers a cast lookup failure with a 503, not a 500', async () => {

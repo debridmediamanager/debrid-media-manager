@@ -2,6 +2,7 @@ import handler from '@/pages/api/stremio-oc/[userid]/stream/[mediaType]/[imdbid]
 import { checkOffcloudCache } from '@/services/offcloud';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/offcloud');
@@ -96,6 +97,27 @@ describe('/api/stremio-oc/[userid]/stream/[mediaType]/[imdbid]', () => {
 		await handler(request(), res);
 
 		expect((res._getData() as any).streams.some((s: any) => s.url)).toBe(true);
+	});
+
+	it('sends a probed release’s audio languages as behaviorHints.audioLanguages', async () => {
+		mockRepository.getOffcloudUserCastStreams = vi
+			.fn()
+			.mockResolvedValue([row(matrixSnapshotRow.hash, 'Mine.mkv')]);
+		mockRepository.getOffcloudOtherStreams = vi.fn().mockResolvedValue([row(B, 'Other.mkv')]);
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([matrixSnapshotRow]);
+		mockCacheCheck.mockResolvedValue([
+			{ hash: matrixSnapshotRow.hash, cached: true },
+			{ hash: B, cached: true },
+		]);
+
+		await handler(request(), res);
+
+		// What the client receives: JSON leaves the key out where no language is known.
+		const { streams } = JSON.parse(JSON.stringify(res._getData()));
+		const hints = (name: string) =>
+			streams.find((s: any) => s.title?.includes(name)).behaviorHints;
+		expect(hints('Mine.mkv').audioLanguages).toEqual(['eng']);
+		expect(hints('Other.mkv')).not.toHaveProperty('audioLanguages');
 	});
 
 	it('points play at the hash and the stored path, never at a stored link', async () => {

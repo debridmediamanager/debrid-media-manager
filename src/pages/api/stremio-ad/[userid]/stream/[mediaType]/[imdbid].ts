@@ -6,6 +6,7 @@ import { savedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import {
+	audioLanguages,
 	extractStreamMetadata,
 	formatStremioStreamTitle,
 	generateStreamName,
@@ -134,6 +135,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${item.magnetId}:${item.fileIndex}`,
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm-ad', item.hash),
+					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
 		}
@@ -169,6 +171,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${playId}`,
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm-ad', item.hash),
+					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
 		}

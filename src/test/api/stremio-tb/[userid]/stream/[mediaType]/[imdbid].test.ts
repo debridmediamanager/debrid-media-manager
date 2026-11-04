@@ -2,6 +2,7 @@ import handler from '@/pages/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]
 import { repository } from '@/services/repository';
 import { checkCachedStatus } from '@/services/torbox';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { activeCastGrant } from '@/test/utils/sponsor';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -345,6 +346,30 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			const payload = (res.json as Mock).mock.calls[0][0];
 			const nonCastStreams = payload.streams.filter((s: any) => !s.externalUrl);
 			expect(nonCastStreams).toHaveLength(1);
+		});
+
+		it('sends a probed release’s audio languages as behaviorHints.audioLanguages', async () => {
+			setupProfile();
+			mockRepository.getTorBoxUserCastStreams = vi
+				.fn()
+				.mockResolvedValue([{ ...userStream, hash: matrixSnapshotRow.hash }]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([otherStream]);
+			mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([matrixSnapshotRow]);
+			const res = createMockResponse();
+
+			await handler(
+				createMockRequest({
+					query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+				}),
+				res
+			);
+
+			// What the client receives: JSON leaves the key out where no language is known.
+			const { streams } = JSON.parse(JSON.stringify(res._getData()));
+			const hints = (name: string) =>
+				streams.find((s: any) => s.title?.includes(name)).behaviorHints;
+			expect(hints('MyMovie.mkv').audioLanguages).toEqual(['eng']);
+			expect(hints('OtherMovie.mkv')).not.toHaveProperty('audioLanguages');
 		});
 
 		it('combines user and other streams correctly', async () => {

@@ -7,6 +7,7 @@ import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import { rdCastPlayId } from '@/utils/rdCastLink';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import {
+	audioLanguages,
 	extractStreamMetadata,
 	formatStremioStreamTitle,
 	generateStreamName,
@@ -154,6 +155,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				url: playUrl(item.link),
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm', item.hash),
+					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
 		}
@@ -176,6 +178,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				url: playUrl(item.link),
 				behaviorHints: {
 					bingeGroup: releaseBingeGroup('dmm', item.hash),
+					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
 		}

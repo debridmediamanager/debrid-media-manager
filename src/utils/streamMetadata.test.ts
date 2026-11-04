@@ -2,6 +2,7 @@ import { languageEmojis } from '@/components/showInfo/languages';
 import matrixWholePass from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-matrix-whole-pass.json';
 import { describe, expect, it } from 'vitest';
 import {
+	audioLanguages,
 	extractStreamMetadata,
 	formatStreamTitle,
 	formatStremioStreamTitle,
@@ -219,6 +220,24 @@ describe('extractStreamMetadata', () => {
 
 		const result = extractStreamMetadata(payload);
 		expect(result?.languages).toEqual(['eng', 'jpn']);
+	});
+});
+
+describe('audioLanguages', () => {
+	it('passes the raw codes through and drops the ones that name no language', () => {
+		const languages = ['eng', 'und', 'fre', 'mul', 'zxx', 'ger'];
+		expect(audioLanguages({ languages })).toEqual(['eng', 'fre', 'ger']);
+	});
+
+	it('is undefined when no language is left, or nothing was probed', () => {
+		expect(audioLanguages({ languages: ['und'] })).toBeUndefined();
+		expect(audioLanguages({ languages: [] })).toBeUndefined();
+		expect(audioLanguages(null)).toBeUndefined();
+	});
+
+	it('reads a recorded snapshot', () => {
+		const stored = toStoredSnapshot(TorrentSnapshot.parse(matrixWholePass));
+		expect(audioLanguages(extractStreamMetadata(stored))).toEqual(['eng']);
 	});
 });
 

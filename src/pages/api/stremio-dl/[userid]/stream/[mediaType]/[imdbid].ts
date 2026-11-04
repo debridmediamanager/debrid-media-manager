@@ -5,6 +5,7 @@ import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import { debridLinkCachedTrove } from '@/utils/debridLinkCastApiHelpers';
 import {
+	audioLanguages,
 	extractStreamMetadata,
 	formatStremioStreamTitle,
 	generateStreamName,
@@ -152,7 +153,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				// a permanent unauthenticated capability, and a stream list is
 				// exactly the sort of thing a client caches.
 				url: `${process.env.DMM_ORIGIN}/api/stremio-dl/${userid}/play/${item.hash}?file=${encodeURIComponent(item.path ?? item.filename ?? '')}`,
-				behaviorHints: { bingeGroup },
+				behaviorHints: { bingeGroup, audioLanguages: audioLanguages(metadata) },
 			} as any);
 		};
 
@@ -172,7 +173,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				name: generateStreamName(item.sizeMb, metadata),
 				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'DL'),
 				url: `${process.env.DMM_ORIGIN}/api/stremio-dl/${userid}/play/${item.hash}`,
-				behaviorHints: { bingeGroup: releaseBingeGroup('dmm-dl', item.hash) },
+				behaviorHints: {
+					bingeGroup: releaseBingeGroup('dmm-dl', item.hash),
+					audioLanguages: audioLanguages(metadata),
+				},
 			} as any);
 		}
 

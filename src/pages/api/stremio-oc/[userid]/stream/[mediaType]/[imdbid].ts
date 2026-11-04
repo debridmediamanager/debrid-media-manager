@@ -5,6 +5,7 @@ import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import {
+	audioLanguages,
 	extractStreamMetadata,
 	formatStremioStreamTitle,
 	generateStreamName,
@@ -163,7 +164,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				// The hash and the stored path, never a link: an Offcloud CDN URL
 				// carries the caster's account token.
 				url: `${process.env.DMM_ORIGIN}/api/stremio-oc/${userid}/play/${item.hash}?file=${encodeURIComponent(item.path ?? item.filename ?? '')}`,
-				behaviorHints: { bingeGroup },
+				behaviorHints: { bingeGroup, audioLanguages: audioLanguages(metadata) },
 			} as any);
 		};
 
@@ -190,7 +191,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				name: generateStreamName(item.sizeMb, metadata),
 				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'OC'),
 				url: `${process.env.DMM_ORIGIN}/api/stremio-oc/${userid}/play/${item.hash}`,
-				behaviorHints: { bingeGroup: releaseBingeGroup('dmm-oc', item.hash) },
+				behaviorHints: {
+					bingeGroup: releaseBingeGroup('dmm-oc', item.hash),
+					audioLanguages: audioLanguages(metadata),
+				},
 			} as any);
 		}
 

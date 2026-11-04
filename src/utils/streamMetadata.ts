@@ -182,6 +182,13 @@ export function extractStreamMetadata(payload: unknown): StreamMetadata | null {
 	return metadata;
 }
 
+// Raw ffprobe codes (eng, fre, ger…) for clients that pick a stream by audio
+// language; und/mul/zxx name no language, so they are dropped.
+export function audioLanguages(metadata: StreamMetadata | null): string[] | undefined {
+	const langs = metadata?.languages.filter((l) => !['und', 'mul', 'zxx'].includes(l));
+	return langs?.length ? langs : undefined;
+}
+
 export function formatStreamTitle(
 	filename: string,
 	size: number,
