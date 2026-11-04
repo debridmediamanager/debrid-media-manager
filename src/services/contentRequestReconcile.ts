@@ -2,6 +2,7 @@ import { lookupJob } from '@/services/debridTransferReconcile';
 import { isAllowedServer } from '@/services/debridUploaderServers';
 import { creditFulfiller } from '@/services/fulfillerRewards';
 import { repository as db } from '@/services/repository';
+import { isTorboxUnservable, TB_UNSERVABLE_MS } from '@/utils/contentRequest';
 
 /**
  * Settling requests whose transfer has ended.
@@ -91,6 +92,9 @@ export async function reconcileContentRequests(
 		if (job?.status === 'completed') {
 			if (await db.settleContentRequestDelivered(row.id, row.jobId)) {
 				result.delivered++;
+				await db
+					.endContentRequestAttempt(row.id, row.jobId, 'delivered')
+					.catch((e) => console.error('Closing a request attempt failed:', e));
 				// A failed credit is recounted on the fulfiller's next send.
 				if (row.fulfillerId) {
 					try {
@@ -109,7 +113,20 @@ export async function reconcileContentRequests(
 				: typeof job?.error === 'string' && job.error
 					? job.error
 					: 'the transfer failed';
-			if (await db.releaseContentRequest(row.id, reason, row.jobId)) result.reopened++;
+			if (await db.releaseContentRequest(row.id, reason, row.jobId)) {
+				result.reopened++;
+				await db
+					.endContentRequestAttempt(row.id, row.jobId, 'failed', reason)
+					.catch((e) => console.error('Closing a request attempt failed:', e));
+				// A real job proved TorBox lists this release but cannot serve it, so
+				// the board stops offering it for a while instead of sending the next
+				// fulfiller into the same wall: one release took 94 tries by 59 people.
+				if (isTorboxUnservable(reason)) {
+					await db
+						.markContentRequestUnservable(row.hash, new Date(now + TB_UNSERVABLE_MS))
+						.catch((e) => console.error('Marking a release unservable failed:', e));
+				}
+			}
 			continue;
 		}
 

@@ -17,8 +17,26 @@ export const REQUEST_STATUSES = [
 	'failed',
 	'cancelled',
 	'stalled',
+	'expired',
 ] as const;
 export type RequestStatus = (typeof REQUEST_STATUSES)[number];
+
+/**
+ * How long an ask stays on the board. 1,629 of 2,597 open rows were older than
+ * this on 2026-11-04, half from askers not seen in a month; re-asking is one click.
+ */
+export const REQUEST_TTL_MS = 60 * 24 * 60 * 60 * 1000;
+
+/**
+ * How long a release stays hidden after a real job found TorBox listing it but
+ * unable to serve it. Not forever: 151 of 801 such releases later served.
+ */
+export const TB_UNSERVABLE_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** The uploader's verdict that TorBox lists a release it cannot serve. */
+export function isTorboxUnservable(error: string | null | undefined): boolean {
+	return /^TorBox reports the release cached but serves \d+/.test(error ?? '');
+}
 
 export const MEDIA_TYPES = ['movie', 'show'] as const;
 export type MediaType = (typeof MEDIA_TYPES)[number];
@@ -203,6 +221,12 @@ export interface PublicRequest {
 	thanked: boolean;
 	/** The caller asked, somebody sent it, and no thanks has gone yet. */
 	canThank: boolean;
+	/** Uploader jobs ever started for this ask. */
+	tries: number;
+	/** A real job found TorBox listing this release but unable to serve it, recently. */
+	tbUnservable: boolean;
+	/** The caller is the one whose transfer is running for this row. */
+	sendingByMe: boolean;
 }
 
 export interface StoredRequest {
@@ -223,8 +247,39 @@ export interface StoredRequest {
 	thankedAt?: Date | string | null;
 	createdAt: Date | string;
 	updatedAt?: Date | string;
+	tries?: number;
+	tbUnservableUntil?: Date | string | null;
 	/** Set on board rows, which stand for every ask of their release. */
 	wantedBy?: number;
+}
+
+export function isUnservableNow(
+	row: Pick<StoredRequest, 'tbUnservableUntil'>,
+	now: number
+): boolean {
+	return row.tbUnservableUntil != null && new Date(row.tbUnservableUntil).getTime() > now;
+}
+
+/**
+ * A fulfiller's own failed send, in plain words. Every line says whether it
+ * counted, because "3 sent" not moving after a send is what a fulfiller sees
+ * first (Lew, 2026-11-03), and most of these were never their fault.
+ */
+export function sendReason(error: string | null | undefined): string {
+	if (isTorboxUnservable(error)) {
+		return "TorBox lists it but couldn't serve it. Not your fault, not counted.";
+	}
+	if (error === 'uncached') return "TorBox didn't have it after all. Not counted.";
+	if (/^All torrent sources failed\b/.test(error ?? '')) {
+		return "The .torrent file couldn't be fetched. Not your fault, not counted.";
+	}
+	if (/stalled/.test(error ?? '')) {
+		return 'Real-Debrid stopped pulling it. Not your fault, not counted.';
+	}
+	if (/^RD credentials rejected|no usable Real-Debrid credentials/i.test(error ?? '')) {
+		return "The asker's Real-Debrid refused it. Not your fault, not counted.";
+	}
+	return `${failureNote(error) ?? 'The transfer failed'}. Not counted.`;
 }
 
 /** What strangers read in place of a reason about the asker's credentials. */
@@ -270,10 +325,17 @@ export function failureNote(error: string | null | undefined): string | null {
 export function toPublicRequest(
 	row: StoredRequest,
 	viewerId: string | null,
-	tbCached: Set<string> | null = null
+	tbCached: Set<string> | null = null,
+	opts: { viewerIds?: string[]; now?: number } = {}
 ): PublicRequest {
 	const mine = viewerId !== null && row.requesterId === viewerId;
 	return {
+		tries: row.tries ?? 0,
+		tbUnservable: isUnservableNow(row, opts.now ?? Date.now()),
+		sendingByMe:
+			row.status === 'claimed' &&
+			row.fulfillerId !== null &&
+			(opts.viewerIds ?? []).includes(row.fulfillerId),
 		id: row.id,
 		hash: row.hash,
 		imdbId: row.imdbId,

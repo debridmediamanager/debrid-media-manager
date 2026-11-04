@@ -2,6 +2,7 @@ import { creditFulfiller, fulfillerStats } from '@/services/fulfillerRewards';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { sendReason } from '@/utils/contentRequest';
 import { torboxUserId } from '@/utils/torboxIdentity';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -17,6 +18,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const RD_TOKEN_HEADER = 'x-rd-access-token';
 const TB_KEY_HEADER = 'x-tb-api-key';
+/** How many of their own tries a fulfiller sees under the totals. */
+const RECENT_SENDS = 8;
 
 function header(req: NextApiRequest, name: string): string | null {
 	const value = req.headers[name];
@@ -65,7 +68,25 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		return res.status(200).json(await fulfillerStats(ids));
+		// Their latest tries alongside the totals, failed ones included: a send
+		// that did not make it used to vanish, leaving a counter that looked stuck.
+		const [stats, attempts, sending] = await Promise.all([
+			fulfillerStats(ids),
+			db.listContentRequestAttemptsBy(ids, RECENT_SENDS),
+			db.countContentRequestsSendingBy(ids),
+		]);
+		return res.status(200).json({
+			...stats,
+			sending,
+			recent: attempts.map((a) => ({
+				title: a.title,
+				hash: a.hash,
+				status: a.status,
+				reason: a.status === 'failed' ? sendReason(a.error) : null,
+				startedAt: new Date(a.createdAt).toISOString(),
+				endedAt: a.endedAt ? new Date(a.endedAt).toISOString() : null,
+			})),
+		});
 	} catch (error) {
 		console.error('Reading fulfiller stats failed:', error);
 		return res.status(500).json({ error: 'Failed to read your sends' });

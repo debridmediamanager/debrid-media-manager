@@ -14,6 +14,7 @@ import { deliverFreeRequests } from '@/services/requestDelivery';
 import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
 import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
 import { syncDueWantedLists } from '@/services/wantedLists';
+import { REQUEST_TTL_MS } from '@/utils/contentRequest';
 import { secretEquals } from '@/utils/secretEquals';
 
 interface CronResponse {
@@ -40,6 +41,7 @@ interface CronResponse {
 	usenetMarkers?: MarkerReconcileResult;
 	writtenBackTrash?: SweepResult;
 	contentRequests?: RequestReconcileResult;
+	contentRequestsExpired?: number;
 	freeRequestDeliveries?: { delivered: number; skipped: number };
 	wantedLists?: { synced: number; failed: number; lapsed: number };
 	newznabFresh?: { swept: boolean; ids: number };
@@ -142,6 +144,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Content request reconciliation failed:', e);
 		}
 
+		// An ask nobody has sent in 60 days leaves the board: 1,629 of 2,597 open
+		// rows were older than that on 2026-11-04, half of them from askers not
+		// seen in a month, and they sat in front of every fulfiller. The asker
+		// can file it again with one click.
+		let contentRequestsExpired: number | undefined;
+		try {
+			contentRequestsExpired = await repository.expireStaleContentRequests(
+				new Date(Date.now() - REQUEST_TTL_MS)
+			);
+		} catch (e) {
+			console.error('[Cron] Expiring stale content requests failed:', e);
+		}
+
 		// Open requests whose release has reached Real-Debrid since they were
 		// filed need no fulfiller, only an add on the asker's account.
 		let freeRequestDeliveries: CronResponse['freeRequestDeliveries'];
@@ -189,6 +204,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			usenetMarkers,
 			writtenBackTrash,
 			contentRequests,
+			contentRequestsExpired,
 			freeRequestDeliveries,
 			wantedLists,
 			newznabFresh,

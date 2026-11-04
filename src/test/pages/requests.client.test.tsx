@@ -5,6 +5,7 @@ import {
 	fetchContentRequests,
 	fetchFulfillerStats,
 	fetchMyContentRequests,
+	fileContentRequest,
 	fulfillContentRequest,
 	thankContentRequest,
 } from '@/utils/contentRequestsApi';
@@ -24,6 +25,7 @@ vi.mock('@/utils/contentRequestsApi', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/contentRequestsApi')>()),
 	fetchContentRequests: vi.fn(),
 	fetchMyContentRequests: vi.fn(),
+	fileContentRequest: vi.fn(),
 	fulfillContentRequest: vi.fn(),
 	cancelContentRequest: vi.fn(),
 	thankContentRequest: vi.fn(),
@@ -47,6 +49,9 @@ const ROW: PublicRequest = {
 	wantedBy: 1,
 	thanked: false,
 	canThank: false,
+	tries: 0,
+	tbUnservable: false,
+	sendingByMe: false,
 };
 
 beforeEach(() => {
@@ -148,6 +153,8 @@ describe('RequestsPage rewards', () => {
 			linked: false,
 			showName: false,
 			earnedUntil: null,
+			sending: 0,
+			recent: [],
 		});
 		render(<RequestsPage />);
 		const bar = await screen.findByRole('progressbar');
@@ -182,5 +189,114 @@ describe('RequestsPage rewards', () => {
 			`/movie/${ROW.imdbId}`
 		);
 		expect(screen.queryByText(ROW.imdbId)).toBeNull();
+	});
+});
+
+// Lew, 2026-11-03: "I have just sent one ... it has added to my torbox but
+// shows I haven't sent it". The send was running, then failed, and nothing on
+// the page ever said so.
+describe('RequestsPage tells a fulfiller what became of their sends', () => {
+	const stats = {
+		sends: 3,
+		thanked: 0,
+		credited: 3,
+		sendsPerBlock: 10,
+		daysPerBlock: 7,
+		linked: false,
+		showName: false,
+		earnedUntil: null,
+		sending: 1,
+		recent: [
+			{
+				title: 'Coyote Vs Acme (2026) 2160p WEBRip',
+				hash: '8'.repeat(40),
+				status: 'sending' as const,
+				reason: null,
+				startedAt: new Date(Date.now() - 12 * 60_000).toISOString(),
+				endedAt: null,
+			},
+			{
+				title: "Earth's Greatest Enemy (2025)",
+				hash: '5'.repeat(40),
+				status: 'failed' as const,
+				reason: 'Real-Debrid stopped pulling it. Not your fault, not counted.',
+				startedAt: new Date(Date.now() - 40 * 60_000).toISOString(),
+				endedAt: new Date(Date.now() - 30 * 60_000).toISOString(),
+			},
+		],
+	};
+
+	beforeEach(() => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue('TB_KEY');
+	});
+
+	it('marks the row they are sending and lists how each send went', async () => {
+		vi.mocked(fetchFulfillerStats).mockResolvedValue(stats);
+		vi.mocked(fetchContentRequests).mockResolvedValue({
+			requests: [{ ...ROW, status: 'claimed', jobId: 'job-1', sendingByMe: true }],
+			authenticated: false,
+			hasMore: false,
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText('Sending — you')).toBeTruthy();
+		expect(await screen.findByText("Didn't make it")).toBeTruthy();
+		expect(screen.getAllByText('Sending').length).toBeGreaterThan(0);
+		expect(
+			screen.getByText('Real-Debrid stopped pulling it. Not your fault, not counted.')
+		).toBeTruthy();
+		expect(screen.getByText('Coyote Vs Acme (2026) 2160p WEBRip')).toBeTruthy();
+	});
+
+	it('says what a send involves before it starts', async () => {
+		render(<RequestsPage />);
+		fireEvent.click(await screen.findByRole('button', { name: /Fulfil/ }));
+		const message = vi.mocked(window.confirm).mock.calls[0][0] as string;
+		expect(message).toMatch(/about half an hour/);
+		expect(message).toMatch(/shows up in your TorBox/);
+		expect(message).toMatch(/counts as a send once it lands/);
+		expect(screen.getByText('Only releases TorBox has cached')).toBeTruthy();
+	});
+
+	// "Alpha (2026) Hindi": 94 tries by 59 people, every one a 404, and the row
+	// still said "TB cached" with a Fulfil button next to it.
+	it('offers no Fulfil for a release TorBox could not serve, and says why', async () => {
+		vi.mocked(fetchContentRequests).mockResolvedValue({
+			requests: [{ ...ROW, tbUnservable: true, tries: 94 }],
+			authenticated: false,
+			hasMore: false,
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText("TorBox can't serve it yet")).toBeTruthy();
+		expect(screen.getByText('tried 94×')).toBeTruthy();
+		expect(screen.queryByRole('button', { name: /Fulfil/ })).toBeNull();
+	});
+});
+
+describe('RequestsPage for an asker whose request expired', () => {
+	it('puts it back on the board with one click', async () => {
+		vi.mocked(useRealDebridAccessToken).mockReturnValue(['RD_KEY', false, false] as any);
+		vi.mocked(useTorBoxAccessToken).mockReturnValue(null as any);
+		vi.mocked(fetchContentRequests).mockResolvedValue({
+			requests: [],
+			authenticated: true,
+			hasMore: false,
+		});
+		vi.mocked(fetchMyContentRequests).mockResolvedValue([
+			{ ...ROW, status: 'expired', mine: true },
+		]);
+		vi.mocked(fileContentRequest).mockResolvedValue({
+			delivered: false,
+			request: { ...ROW, status: 'open', mine: true },
+		});
+		render(<RequestsPage />);
+		expect(await screen.findByText('Expired. Nobody sent it in 60 days')).toBeTruthy();
+		fireEvent.click(screen.getByRole('button', { name: /Ask again/ }));
+		await waitFor(() => expect(fileContentRequest).toHaveBeenCalled());
+		expect(vi.mocked(fileContentRequest).mock.calls[0]).toEqual([
+			'RD_KEY',
+			{ hash: ROW.hash, imdbId: ROW.imdbId, title: ROW.title, mediaType: 'movie' },
+		]);
+		expect(await screen.findByText('Waiting for someone to send it')).toBeTruthy();
 	});
 });

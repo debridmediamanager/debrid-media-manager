@@ -11,6 +11,12 @@ vi.mock('@prisma/client', () => ({
 				updateMany: vi.fn(),
 				groupBy: vi.fn(),
 			},
+			contentRequestAttempt: {
+				create: vi.fn(),
+				updateMany: vi.fn(),
+				findMany: vi.fn(),
+				count: vi.fn(),
+			},
 			fulfillerLink: { upsert: vi.fn(), updateMany: vi.fn(), findMany: vi.fn() },
 			sponsorEarned: { create: vi.fn(), updateMany: vi.fn(), findUnique: vi.fn() },
 			$transaction: vi.fn(),
@@ -154,12 +160,12 @@ describe('ContentRequestService', () => {
 	describe('attachJob', () => {
 		// Marking the row `fulfilled` here is what hid 322 failed transfers: the
 		// job is recorded, and the row waits for it to end.
-		it('records the job and leaves the request claimed', async () => {
+		it('records the job, counts the try and leaves the request claimed', async () => {
 			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
 			await service.attachJob('req-1', 'job-9', 'http://debrid02:3100');
 			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
 				where: { id: 'req-1', status: 'claimed' },
-				data: { jobId: 'job-9', jobHost: 'http://debrid02:3100' },
+				data: { jobId: 'job-9', jobHost: 'http://debrid02:3100', tries: { increment: 1 } },
 			});
 		});
 	});
@@ -295,16 +301,19 @@ describe('ContentRequestService', () => {
 			]);
 		});
 
-		// One send reaches every asker, so the release helping most people leads.
-		it('orders releases by how many want them, then oldest first', async () => {
+		// A release somebody already tried is the one likeliest to fail again, and
+		// oldest-first put exactly those on top (one took 94 tries by 59 people).
+		// Among the untried, one send reaches every asker, so demand leads.
+		it('orders releases never tried first, then by demand, then newest', async () => {
 			await service.listOpenBoard(25, 50, null);
 			expect(prisma.contentRequest.groupBy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					by: ['hash'],
 					where: { status: { in: ['open', 'failed'] } },
 					orderBy: [
+						{ _max: { tries: 'asc' } },
 						{ _count: { hash: 'desc' } },
-						{ _min: { createdAt: 'asc' } },
+						{ _min: { createdAt: 'desc' } },
 						{ hash: 'asc' },
 					],
 					take: 25,
@@ -394,5 +403,104 @@ describe('ContentRequestService', () => {
 				data: { showName: false },
 			});
 		});
+	});
+});
+
+describe('ContentRequestService attempts and expiry', () => {
+	let service: ContentRequestService;
+	let prisma: any;
+	beforeEach(() => {
+		vi.clearAllMocks();
+		service = new ContentRequestService();
+		prisma = (service as any).prisma;
+	});
+
+	it('records a try from the moment its job exists', async () => {
+		const attempt = {
+			requestId: 'req-1',
+			hash: HASH,
+			fulfillerId: 'tb:1',
+			jobId: 'job-9',
+			jobHost: 'http://debrid02:3100',
+		};
+		await service.recordAttempt(attempt);
+		expect(prisma.contentRequestAttempt.create).toHaveBeenCalledWith({ data: attempt });
+	});
+
+	// Matched on the job, so a verdict about an earlier try never closes a later one.
+	it('ends only the try the job belongs to', async () => {
+		prisma.contentRequestAttempt.updateMany.mockResolvedValue({ count: 1 });
+		await service.endAttempt('req-1', 'job-9', 'failed', 'uncached');
+		expect(prisma.contentRequestAttempt.updateMany).toHaveBeenCalledWith({
+			where: { requestId: 'req-1', jobId: 'job-9', status: 'sending' },
+			data: { status: 'failed', error: 'uncached', endedAt: expect.any(Date) },
+		});
+	});
+
+	// One job's verdict is about the release, so every open ask for it moves.
+	it('hides every open ask for an unservable release', async () => {
+		prisma.contentRequest.updateMany.mockResolvedValue({ count: 2 });
+		const until = new Date('2026-11-11T00:00:00Z');
+		await service.markUnservable(HASH, until);
+		expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+			where: { hash: HASH, status: { in: ['open', 'failed'] } },
+			data: { tbUnservableUntil: until },
+		});
+	});
+
+	it('lists a fulfiller’s latest tries with the release each was for', async () => {
+		prisma.contentRequestAttempt.findMany.mockResolvedValue([
+			{
+				requestId: 'req-1',
+				hash: HASH,
+				status: 'failed',
+				error: 'uncached',
+				createdAt: new Date('2026-11-03T22:00:00Z'),
+				endedAt: new Date('2026-11-03T22:01:00Z'),
+			},
+		]);
+		prisma.contentRequest.findMany.mockResolvedValue([{ id: 'req-1', title: 'Some Release' }]);
+		const tries = await service.listAttemptsBy(['tb:1'], 8);
+		expect(tries).toEqual([
+			expect.objectContaining({
+				requestId: 'req-1',
+				title: 'Some Release',
+				status: 'failed',
+			}),
+		]);
+		expect(prisma.contentRequestAttempt.findMany).toHaveBeenCalledWith({
+			where: { fulfillerId: { in: ['tb:1'] } },
+			orderBy: { createdAt: 'desc' },
+			take: 8,
+		});
+	});
+
+	it('asks nothing for nobody', async () => {
+		expect(await service.listAttemptsBy([], 8)).toEqual([]);
+		expect(await service.countSendingBy([])).toBe(0);
+		expect(prisma.contentRequestAttempt.findMany).not.toHaveBeenCalled();
+	});
+
+	it('takes asks older than the cutoff off the board', async () => {
+		prisma.contentRequest.updateMany.mockResolvedValue({ count: 1629 });
+		const before = new Date('2026-09-05T00:00:00Z');
+		expect(await service.expireStale(before)).toBe(1629);
+		expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+			where: { status: { in: ['open', 'failed'] }, createdAt: { lt: before } },
+			data: { status: 'expired' },
+		});
+	});
+
+	// Asking again is the asker saying they still want it.
+	it('puts an expired ask back on the board when it is asked again', async () => {
+		prisma.contentRequest.upsert.mockResolvedValue(row({ status: 'expired' }));
+		prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+		prisma.contentRequest.findUnique.mockResolvedValue(row({ status: 'open' }));
+		const result = await service.createRequest(input);
+		expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+			where: { id: 'req-1', status: 'expired' },
+			data: { status: 'open', fulfillerId: null, error: null },
+		});
+		expect(result.status).toBe('open');
 	});
 });

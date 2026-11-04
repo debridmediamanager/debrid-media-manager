@@ -35,6 +35,8 @@ beforeEach(() => {
 	vi.mocked(generateUserId).mockResolvedValue('rd-id');
 	vi.mocked(torboxUserId).mockResolvedValue('tb:abc');
 	vi.mocked(fulfillerStats).mockResolvedValue({ sends: 3 } as any);
+	mockRepo.listContentRequestAttemptsBy = vi.fn().mockResolvedValue([]);
+	mockRepo.countContentRequestsSendingBy = vi.fn().mockResolvedValue(0);
 	mockRepo.getSponsorByDmmApiKey = vi
 		.fn()
 		.mockResolvedValue({ shortId: 'ZP1M', isSponsor: false });
@@ -71,5 +73,52 @@ describe('/api/requests/fulfiller', () => {
 		const res = await call({ method: 'POST', body: { apiKey: KEY } });
 		expect(statusOf(res)).toBe(404);
 		expect(mockRepo.linkFulfillers).not.toHaveBeenCalled();
+	});
+});
+
+describe('/api/requests/fulfiller — the sends themselves', () => {
+	const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
+
+	// "3 sent" not moving after a send is what a fulfiller sees first; the
+	// failed try has to be there, in plain words, saying it did not count.
+	it('lists the caller’s latest tries with how each went and whether it counted', async () => {
+		mockRepo.countContentRequestsSendingBy = vi.fn().mockResolvedValue(1);
+		mockRepo.listContentRequestAttemptsBy = vi.fn().mockResolvedValue([
+			{
+				requestId: 'req-2',
+				hash: 'b'.repeat(40),
+				title: 'Sending Now',
+				status: 'sending',
+				error: null,
+				createdAt: new Date('2026-11-03T23:12:39Z'),
+				endedAt: null,
+			},
+			{
+				requestId: 'req-1',
+				hash: 'a'.repeat(40),
+				title: "Earth's Greatest Enemy (2025)",
+				status: 'failed',
+				error: 'uploading stalled: no progress for 5 minutes',
+				createdAt: new Date('2026-11-03T22:48:47Z'),
+				endedAt: new Date('2026-11-03T23:00:11Z'),
+			},
+		]);
+		const res = await call();
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.listContentRequestAttemptsBy).toHaveBeenCalledWith(['rd-id', 'tb:abc'], 8);
+		expect(bodyOf(res)).toMatchObject({
+			sends: 3,
+			sending: 1,
+			recent: [
+				{ title: 'Sending Now', status: 'sending', reason: null, endedAt: null },
+				{
+					title: "Earth's Greatest Enemy (2025)",
+					status: 'failed',
+					reason: 'Real-Debrid stopped pulling it. Not your fault, not counted.',
+					startedAt: '2026-11-03T22:48:47.000Z',
+					endedAt: '2026-11-03T23:00:11.000Z',
+				},
+			],
+		});
 	});
 });

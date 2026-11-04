@@ -5,6 +5,7 @@ import {
 	cancelContentRequest,
 	fetchContentRequests,
 	fetchMyContentRequests,
+	fileContentRequest,
 	fulfillContentRequest,
 	thankContentRequest,
 	UncachedError,
@@ -57,6 +58,7 @@ const STATUS_STYLES: Record<string, string> = {
 	fulfilled: 'border-green-500 bg-green-900/30 text-green-100',
 	cancelled: 'border-gray-500 bg-gray-900/30 text-gray-400',
 	stalled: 'border-amber-500 bg-amber-900/30 text-amber-100',
+	expired: 'border-gray-500 bg-gray-900/30 text-gray-400',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -64,10 +66,11 @@ const STATUS_LABELS: Record<string, string> = {
 	// Not "Failed": the row is back on the board and can be taken again, so the
 	// word has to describe the request rather than the attempt that missed.
 	failed: 'Open — last try failed',
-	claimed: 'Being fulfilled',
+	claimed: 'Being sent',
 	fulfilled: 'Sent',
 	cancelled: 'Withdrawn',
 	stalled: 'Paused',
+	expired: 'Expired',
 };
 
 /** The movie or show page a request belongs to. */
@@ -114,6 +117,7 @@ const MINE_LABELS: Record<string, string> = {
 	fulfilled: 'Sent to your library',
 	cancelled: 'Withdrawn',
 	stalled: 'Paused. Sign in to Real-Debrid on DMM again, then request it again',
+	expired: 'Expired. Nobody sent it in 60 days',
 };
 
 function MyRequests({
@@ -121,11 +125,13 @@ function MyRequests({
 	busyIds,
 	onCancel,
 	onThank,
+	onReask,
 }: {
 	rows: PublicRequest[];
 	busyIds: Set<string>;
 	onCancel: (row: PublicRequest) => void;
 	onThank: (row: PublicRequest) => void;
+	onReask: (row: PublicRequest) => void;
 }) {
 	if (rows.length === 0) return null;
 	return (
@@ -175,6 +181,21 @@ function MyRequests({
 									<FailureLine error={row.error} />
 								)}
 							</div>
+							{row.status === 'expired' && (
+								<button
+									onClick={() => onReask(row)}
+									disabled={busy}
+									className={`haptic-sm inline-flex shrink-0 items-center rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1.5 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+									title="Put it back on the board"
+								>
+									{busy ? (
+										<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+									) : (
+										<RefreshCw className="mr-1 h-3 w-3" />
+									)}
+									Ask again
+								</button>
+							)}
 							{row.canThank && (
 								<button
 									onClick={() => onThank(row)}
@@ -362,10 +383,13 @@ export default function RequestsPage() {
 			if (!torboxKey) return;
 			if (
 				!window.confirm(
-					'Fulfil this request using your TorBox account?\n\n' +
+					'Send this with your TorBox account?\n\n' +
 						`${row.title || row.hash}\n\n` +
-						'The release is fetched with your TorBox quota and lands in the ' +
-						"asker's Real-Debrid library, not yours."
+						"It is fetched with your TorBox quota and lands in the asker's " +
+						'Real-Debrid library, not yours. It usually takes about half an hour, ' +
+						'sometimes a couple of hours. It shows up in your TorBox while it is ' +
+						'being sent and is removed afterwards. It counts as a send once it ' +
+						'lands. You can close this page.'
 				)
 			)
 				return;
@@ -380,13 +404,15 @@ export default function RequestsPage() {
 					setRequests((prev) => prev.filter((r) => r.id !== row.id));
 					return;
 				}
-				toast.success('Transfer started. Thank you!');
+				toast.success('Sending. Thank you! Your sends above will say how it went.');
 				// Reflect it in place rather than reloading, so the scroll position
 				// and the rest of the loaded pages survive. `claimed`, not
 				// `fulfilled`: it is only sent once the transfer completes, and it
 				// comes back to the board if it fails.
 				setRequests((prev) =>
-					prev.map((r) => (r.id === row.id ? { ...r, status: 'claimed', jobId } : r))
+					prev.map((r) =>
+						r.id === row.id ? { ...r, status: 'claimed', jobId, sendingByMe: true } : r
+					)
 				);
 			} catch (error) {
 				toast.error(
@@ -402,6 +428,34 @@ export default function RequestsPage() {
 				// Somebody else may have taken it a second ago, so start the board
 				// over rather than leave a row that is no longer takeable.
 				await loadPage(true);
+			}
+		});
+
+	/** Put an expired ask back on the board: the same call that filed it. */
+	const handleReask = (row: PublicRequest) =>
+		withBusy(row.id, async () => {
+			const key = rdKeyRef.current;
+			if (!key) return;
+			try {
+				const filed = await fileContentRequest(key, {
+					hash: row.hash,
+					imdbId: row.imdbId,
+					title: row.title,
+					mediaType: row.mediaType === 'show' ? 'show' : 'movie',
+				});
+				if (filed.delivered) {
+					toast.success('Real-Debrid already had this. It is in your library now.');
+					setMyRequests((prev) =>
+						prev.map((r) => (r.id === row.id ? { ...r, status: 'fulfilled' } : r))
+					);
+					return;
+				}
+				setMyRequests((prev) => prev.map((r) => (r.id === row.id ? filed.request : r)));
+				toast.success('Back on the board.');
+			} catch (error) {
+				toast.error(
+					`Could not ask again: ${error instanceof Error ? error.message : 'unreachable'}`
+				);
 			}
 		});
 
@@ -502,6 +556,7 @@ export default function RequestsPage() {
 						busyIds={busyIds}
 						onCancel={handleCancel}
 						onThank={handleThank}
+						onReask={handleReask}
 					/>
 				)}
 
@@ -509,13 +564,17 @@ export default function RequestsPage() {
 				{loaded && canFulfil && <Leaderboard />}
 
 				{loaded && canFulfil && (
-					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
+					<label
+						className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-gray-300"
+						title="Checked against TorBox's cache, not your library. A release a real send found TorBox unable to serve is left out for a week."
+					>
 						<input
 							type="checkbox"
 							checked={onlyServable}
 							onChange={(e) => setOnlyServable(e.target.checked)}
 						/>
-						Only what TorBox can send now
+						Only releases TorBox has cached
+						<span className="text-gray-500">(its cache, not your library)</span>
 					</label>
 				)}
 
@@ -572,13 +631,25 @@ export default function RequestsPage() {
 														{row.status === 'claimed' && (
 															<Loader2 className="mr-1 h-3 w-3 animate-spin" />
 														)}
-														{lastTryUncached(row)
-															? 'Open — last try: not cached'
-															: (STATUS_LABELS[row.status] ??
-																row.status)}
+														{row.sendingByMe
+															? 'Sending — you'
+															: lastTryUncached(row)
+																? 'Open — last try: not cached'
+																: (STATUS_LABELS[row.status] ??
+																	row.status)}
 													</span>
+													{/* A real send found TorBox listing it but unable to serve it. */}
+													{row.tbUnservable && (
+														<span
+															title="TorBox lists this release but could not serve it when it was last sent. It is offered again after a week."
+															className="inline-flex items-center rounded border-2 border-amber-600 bg-amber-900/20 px-1.5 py-0.5 font-medium text-amber-200"
+														>
+															TorBox can&apos;t serve it yet
+														</span>
+													)}
 													{/* Every row is TorBox-cached while the filter is on. */}
 													{row.tbCached === true &&
+														!row.tbUnservable &&
 														!(canFulfil && onlyServable) && (
 															<span
 																title="You can send it now: TorBox has it cached."
@@ -606,6 +677,11 @@ export default function RequestsPage() {
 														</span>
 													)}
 													<Age at={row.createdAt} />
+													{row.tries > 0 && (
+														<span title="Sends started for this release so far">
+															tried {row.tries}×
+														</span>
+													)}
 												</div>
 												{row.status === 'failed' && (
 													<FailureLine error={row.error} />
@@ -615,6 +691,7 @@ export default function RequestsPage() {
 												{canFulfil &&
 													claimable &&
 													!row.mine &&
+													!row.tbUnservable &&
 													row.tbCached !== false && (
 														<button
 															onClick={() => handleFulfil(row)}

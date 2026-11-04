@@ -42,8 +42,9 @@ export class ContentRequestService extends DatabaseClient {
 		// `cancelled` and `stalled` are the statuses this moves — `open` and
 		// `failed` are already on the board, `claimed` must not be dragged back
 		// under a running transfer, and `fulfilled` has already landed. A stalled
-		// ask is waiting on exactly this: the asker coming back signed in.
-		if (row.status !== 'cancelled' && row.status !== 'stalled') return row;
+		// ask is waiting on exactly this: the asker coming back signed in. An
+		// expired ask is one the asker is saying they still want.
+		if (!['cancelled', 'stalled', 'expired'].includes(row.status)) return row;
 		const { count } = await this.prisma.contentRequest.updateMany({
 			where: { id: row.id, status: row.status },
 			data: { status: 'open', fulfillerId: null, error: null },
@@ -78,8 +79,13 @@ export class ContentRequestService extends DatabaseClient {
 	 * Every ask for a release is its own row, but one transfer serves them all:
 	 * once it lands on Real-Debrid the cron adds it to every other asker's
 	 * library for free. So a fulfiller sees each release once with how many
-	 * people want it, and the release that helps the most people comes first.
-	 * Ties go oldest first so nothing starves, then by hash so pages are stable.
+	 * people want it.
+	 *
+	 * Never-tried releases come first: a release somebody already sent a job
+	 * for and failed is the one most likely to fail again, and oldest-first put
+	 * exactly those at the top for every fulfiller (one took 94 tries). Among
+	 * them the most wanted first, then newest, since an old ask is the one whose
+	 * asker is likeliest gone; then by hash so pages are stable.
 	 *
 	 * The row standing for a release is the viewer's own when they asked for it,
 	 * so a cancel from the board withdraws their ask, and otherwise the oldest.
@@ -95,9 +101,11 @@ export class ContentRequestService extends DatabaseClient {
 			where,
 			_count: { hash: true },
 			_min: { createdAt: true },
+			_max: { tries: true },
 			orderBy: [
+				{ _max: { tries: 'asc' } },
 				{ _count: { hash: 'desc' } },
-				{ _min: { createdAt: 'asc' } },
+				{ _min: { createdAt: 'desc' } },
 				{ hash: 'asc' },
 			],
 			take: limit,
@@ -162,8 +170,97 @@ export class ContentRequestService extends DatabaseClient {
 	public async attachJob(id: string, jobId: string, jobHost: string): Promise<void> {
 		await this.prisma.contentRequest.updateMany({
 			where: { id, status: 'claimed' },
-			data: { jobId, jobHost },
+			data: { jobId, jobHost, tries: { increment: 1 } },
 		});
+	}
+
+	/** A fulfiller's try at a request, from the moment its uploader job exists. */
+	public async recordAttempt(input: {
+		requestId: string;
+		hash: string;
+		fulfillerId: string;
+		jobId: string;
+		jobHost: string;
+	}): Promise<void> {
+		await this.prisma.contentRequestAttempt.create({ data: input });
+	}
+
+	/** How the try ended, matched on the job so a later try is never closed by it. */
+	public async endAttempt(
+		requestId: string,
+		jobId: string,
+		status: 'delivered' | 'failed',
+		error?: string
+	): Promise<void> {
+		await this.prisma.contentRequestAttempt.updateMany({
+			where: { requestId, jobId, status: 'sending' },
+			data: { status, error: error?.slice(0, 500) ?? null, endedAt: new Date() },
+		});
+	}
+
+	/**
+	 * Keep a release off the "can send now" view until `until`. Every open ask
+	 * for it, since one job's verdict is about the release, not the ask.
+	 */
+	public async markUnservable(hash: string, until: Date): Promise<void> {
+		await this.prisma.contentRequest.updateMany({
+			where: { hash, status: { in: ['open', 'failed'] } },
+			data: { tbUnservableUntil: until },
+		});
+	}
+
+	/** A fulfiller's latest tries, newest first, with the release they were for. */
+	public async listAttemptsBy(
+		fulfillerIds: string[],
+		limit: number
+	): Promise<
+		{
+			requestId: string;
+			hash: string;
+			title: string | null;
+			status: string;
+			error: string | null;
+			createdAt: Date;
+			endedAt: Date | null;
+		}[]
+	> {
+		if (fulfillerIds.length === 0) return [];
+		const attempts = await this.prisma.contentRequestAttempt.findMany({
+			where: { fulfillerId: { in: fulfillerIds } },
+			orderBy: { createdAt: 'desc' },
+			take: limit,
+		});
+		if (attempts.length === 0) return [];
+		const rows = await this.prisma.contentRequest.findMany({
+			where: { id: { in: [...new Set(attempts.map((a) => a.requestId))] } },
+			select: { id: true, title: true },
+		});
+		const titles = new Map(rows.map((r) => [r.id, r.title]));
+		return attempts.map((a) => ({
+			requestId: a.requestId,
+			hash: a.hash,
+			title: titles.get(a.requestId) ?? null,
+			status: a.status,
+			error: a.error,
+			createdAt: a.createdAt,
+			endedAt: a.endedAt,
+		}));
+	}
+
+	public async countSendingBy(fulfillerIds: string[]): Promise<number> {
+		if (fulfillerIds.length === 0) return 0;
+		return this.prisma.contentRequestAttempt.count({
+			where: { fulfillerId: { in: fulfillerIds }, status: 'sending' },
+		});
+	}
+
+	/** Take asks nobody has sent since `before` off the board. */
+	public async expireStale(before: Date): Promise<number> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { status: { in: ['open', 'failed'] }, createdAt: { lt: before } },
+			data: { status: 'expired' },
+		});
+		return count;
 	}
 
 	/**

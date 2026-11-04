@@ -268,6 +268,37 @@ export class Repository {
 		return this.contentRequestService.attachJob(id, jobId, jobHost);
 	}
 
+	public recordContentRequestAttempt(
+		input: Parameters<ContentRequestService['recordAttempt']>[0]
+	) {
+		return this.contentRequestService.recordAttempt(input);
+	}
+
+	public endContentRequestAttempt(
+		requestId: string,
+		jobId: string,
+		status: 'delivered' | 'failed',
+		error?: string
+	) {
+		return this.contentRequestService.endAttempt(requestId, jobId, status, error);
+	}
+
+	public markContentRequestUnservable(hash: string, until: Date) {
+		return this.contentRequestService.markUnservable(hash, until);
+	}
+
+	public listContentRequestAttemptsBy(fulfillerIds: string[], limit: number) {
+		return this.contentRequestService.listAttemptsBy(fulfillerIds, limit);
+	}
+
+	public countContentRequestsSendingBy(fulfillerIds: string[]) {
+		return this.contentRequestService.countSendingBy(fulfillerIds);
+	}
+
+	public expireStaleContentRequests(before: Date) {
+		return this.contentRequestService.expireStale(before);
+	}
+
 	public releaseContentRequest(id: string, error: string, jobId?: string) {
 		return this.contentRequestService.releaseRequest(id, error, jobId);
 	}

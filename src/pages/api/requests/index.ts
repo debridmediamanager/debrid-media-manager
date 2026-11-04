@@ -3,8 +3,14 @@ import { repository as db } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
+import {
+	isUnservableNow,
+	parseRequestInput,
+	RequestValidationError,
+	toPublicRequest,
+} from '@/utils/contentRequest';
 import { torboxCachedHashesReusing } from '@/utils/torboxCache';
+import { torboxUserId } from '@/utils/torboxIdentity';
 import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -108,11 +114,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const limit = clampLimit(req.query.limit);
 		const offset = clampOffset(req.query.offset);
 		const tbKey = readTbKey(req);
+		// A fulfiller is known by whichever id they fulfilled under (see the
+		// fulfil route), so both are needed to mark the rows they are sending.
+		const tbId = tbKey ? await torboxUserId(tbKey).catch(() => null) : null;
+		const asViewer = { viewerIds: [viewerId, tbId].filter((id): id is string => Boolean(id)) };
 
 		// `?servable=1`: only what TorBox has cached, across the whole board.
-		// The board is oldest-first and mostly releases TorBox does not have, so
-		// on 2026-09-24 nothing filed after 09-15 had been reached. Only these
-		// rows can be sent by anyone, and here they come first.
+		// The board is mostly releases TorBox does not have, so on 2026-09-24
+		// nothing filed after 09-15 had been reached. Only these rows can be sent
+		// by anyone, and here they come first. A release a real job found TorBox
+		// unable to serve is left out until its week is up.
 		if (req.query.servable === '1') {
 			if (!tbKey) return res.status(400).json({ error: 'a TorBox key is required' });
 			try {
@@ -124,11 +135,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				if (!cached) {
 					return res.status(503).json({ error: 'TorBox did not answer, try again' });
 				}
-				const servable = rows.filter((row) => cached.has(row.hash));
+				const now = Date.now();
+				const servable = rows.filter(
+					(row) => cached.has(row.hash) && !isUnservableNow(row, now)
+				);
 				return res.status(200).json({
 					requests: servable
 						.slice(offset, offset + limit)
-						.map((row) => toPublicRequest(row, viewerId, cached)),
+						.map((row) => toPublicRequest(row, viewerId, cached, asViewer)),
 					authenticated: viewerId !== null,
 					hasMore: servable.length > offset + limit,
 				});
@@ -157,7 +171,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 						)
 					: null;
 			return res.status(200).json({
-				requests: page.map((row) => toPublicRequest(row, viewerId, tbCached)),
+				requests: page.map((row) => toPublicRequest(row, viewerId, tbCached, asViewer)),
 				authenticated: viewerId !== null,
 				hasMore,
 			});

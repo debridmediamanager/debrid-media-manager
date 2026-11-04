@@ -1305,6 +1305,12 @@ model ContentRequest {
   fulfilledAt DateTime?
   /// When the asker thanked whoever sent it.
   thankedAt   DateTime?
+  /// Uploader jobs started for this ask, never reset: the board offers
+  /// never-tried releases first and shows the count on the rest.
+  tries       Int      @default(0)
+  /// Until when TorBox is known unable to serve this release, set when a real
+  /// job found it listed but unservable. The board hides the row until then.
+  tbUnservableUntil DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -1314,6 +1320,27 @@ model ContentRequest {
   @@index([requesterId, status])
   @@index([imdbId])
   @@index([fulfillerId, status])
+}
+
+/// One fulfil attempt: who tried which request with which uploader job, and
+/// how it ended. The request row only holds its latest claim and a failed one
+/// clears the fulfiller, so without this a fulfiller's failed send vanished and
+/// their counter looked stuck (Lew, 2026-11-03).
+model ContentRequestAttempt {
+  id          String    @id @default(uuid())
+  requestId   String
+  hash        String
+  fulfillerId String
+  jobId       String
+  jobHost     String    @db.Text
+  /// sending | delivered | failed
+  status      String    @default("sending")
+  error       String?   @db.Text
+  createdAt   DateTime  @default(now())
+  endedAt     DateTime?
+
+  @@index([fulfillerId, createdAt])
+  @@index([requestId, jobId])
 }
 
 /// A fulfiller's identity on the board, tied to the gatekeeper sponsorship that

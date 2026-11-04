@@ -14,6 +14,7 @@ vi.mock('@/services/requestDelivery', () => ({
 	addHashToRd: vi.fn(async () => true),
 }));
 vi.mock('@/utils/castApiHelpers', () => ({ __esModule: true, generateUserId: vi.fn() }));
+vi.mock('@/utils/torboxIdentity', () => ({ torboxUserId: vi.fn(async () => 'tb:viewer') }));
 
 const mockRepo = vi.mocked(repository);
 const mockUserId = vi.mocked(generateUserId);
@@ -352,5 +353,67 @@ describe('POST /api/requests', () => {
 describe('other methods', () => {
 	it('405s a DELETE', async () => {
 		expect(statusOf(await call({ method: 'DELETE' }))).toBe(405);
+	});
+});
+
+describe('GET /api/requests — what a real send taught the board', () => {
+	const CACHED = '90a7b57357ed0f2ae65ca39336b3bd923684413e';
+	const CACHED_TOO = '0797f40a46469ebfc16b4b0480856e17d15f7333';
+	const DAY = 24 * 60 * 60 * 1000;
+	const withTb = (over: Record<string, unknown> = {}) =>
+		call({ headers: { 'x-rd-access-token': 'tok', 'x-tb-api-key': 'TB' }, ...over });
+
+	// "Alpha (2026) Hindi" sat in the sendable view through 94 failed tries by 59
+	// people. A row a real job found TorBox unable to serve leaves it for a week.
+	it('leaves a release TorBox could not serve out of the sendable view until its week is up', async () => {
+		mockRepo.listContentRequestBoard = vi
+			.fn()
+			.mockResolvedValue([
+				row({
+					id: 'still-hidden',
+					hash: CACHED,
+					tbUnservableUntil: new Date(Date.now() + DAY),
+				}),
+				row({
+					id: 'week-is-up',
+					hash: CACHED_TOO,
+					tbUnservableUntil: new Date(Date.now() - DAY),
+				}),
+			]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([CACHED, CACHED_TOO]));
+		const res = await withTb({ query: { servable: '1' } });
+		expect(bodyOf(res).requests.map((r: any) => [r.id, r.tbUnservable])).toEqual([
+			['week-is-up', false],
+		]);
+	});
+
+	it('marks the row on the full board instead, and says how often it was tried', async () => {
+		mockRepo.listContentRequestBoard = vi
+			.fn()
+			.mockResolvedValue([
+				row({ hash: CACHED, tries: 94, tbUnservableUntil: new Date(Date.now() + DAY) }),
+			]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([CACHED]));
+		const res = await withTb();
+		expect(bodyOf(res).requests[0]).toMatchObject({ tbUnservable: true, tries: 94 });
+	});
+
+	// The fulfiller's own transfer is the one row they are waiting on, and the
+	// fulfil route records them under their TorBox id when they have no RD session.
+	it('tells a fulfiller which running transfer is theirs, by either id', async () => {
+		mockRepo.listContentRequestBoard = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'mine-tb', status: 'claimed', fulfillerId: 'tb:viewer', jobId: 'j1' }),
+				row({ id: 'mine-rd', status: 'claimed', fulfillerId: 'asker', jobId: 'j2' }),
+				row({ id: 'theirs', status: 'claimed', fulfillerId: 'somebody', jobId: 'j3' }),
+			]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set());
+		const res = await withTb();
+		expect(bodyOf(res).requests.map((r: any) => [r.id, r.sendingByMe])).toEqual([
+			['mine-tb', true],
+			['mine-rd', true],
+			['theirs', false],
+		]);
 	});
 });

@@ -5,7 +5,12 @@ import { repository as db } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid, mintRequesterToken } from '@/services/requestDelivery';
 import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
+import {
+	canClaim,
+	isUnservableNow,
+	pickSourceKeys,
+	RequestValidationError,
+} from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
 import { torboxUserId } from '@/utils/torboxIdentity';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
@@ -129,6 +134,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		});
 	}
 
+	// A real job recently found TorBox listing this release but unable to serve
+	// it. Refused like an uncached one: the next try would fail the same way.
+	if (isUnservableNow(request, Date.now())) {
+		return res.status(409).json({
+			error: "TorBox lists this release but couldn't serve it when it was last tried; it is offered again after a week",
+			uncached: true,
+		});
+	}
+
 	// Claim before doing any work. The status is part of the update's `where`,
 	// so if two fulfillers arrive together the database picks one and the other
 	// is told the request is taken — rather than both spending their own quota
@@ -176,6 +190,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// transfers into search.
 			await Promise.all([
 				db.attachContentRequestJob(id, data.id, server),
+				// The fulfiller's own record of this try: the request row forgets
+				// them the moment the job fails.
+				db
+					.recordContentRequestAttempt({
+						requestId: id,
+						hash: request.hash,
+						fulfillerId,
+						jobId: data.id,
+						jobHost: server,
+					})
+					.catch((e) => console.error('Recording a request attempt failed:', e)),
 				db
 					.recordDebridTransferPending(request.hash, data.id, request.imdbId)
 					.catch((e) => console.error('Recording pending transfer failed:', e)),

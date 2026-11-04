@@ -26,3 +26,9 @@ TorBox `GET /v1/api/user/me`, captured 2026-09-26:
   and customer id are replaced. A TorBox-only fulfiller is identified by `id`.
 - `tb-user-me-bad-key.json`: an unknown key. TorBox answers HTTP 403 with
   `AUTH_ERROR`.
+
+`job-failed-tb-unservable.json`: a request fulfilment captured 2026-11-04 from
+debrid02 (job of 2026-11-03 22:04 UTC, one of 25 that evening). The uploader's
+verdict that TorBox listed the release but could not serve it, `TorBox reports
+the release cached but serves 404 for <path>`; 705 such jobs in the preceding 30
+days, one release 94 times for 59 people. User ids are replaced.

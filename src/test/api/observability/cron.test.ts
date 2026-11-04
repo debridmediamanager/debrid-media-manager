@@ -13,6 +13,7 @@ const repositoryMocks = vi.hoisted(() => ({
 		runDailyRollup: vi.fn(),
 		rollupTorBoxOperationalDaily: vi.fn(),
 		rollupTorBoxCdnDaily: vi.fn(),
+		expireStaleContentRequests: vi.fn(async (_before: Date) => 0),
 	},
 }));
 
@@ -349,5 +350,32 @@ describe('API /api/observability/cron', () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res._getData()).toMatchObject({ success: true, writtenBackTrash: undefined });
+	});
+});
+
+describe('API /api/observability/cron — stale asks', () => {
+	// 1,629 of 2,597 open rows were older than 60 days on 2026-11-04, half of them
+	// from askers not seen in a month, and they sat in front of every fulfiller.
+	it('expires asks nobody has sent in 60 days and reports how many', async () => {
+		process.env.CRON_SECRET = 'my-secret';
+		healthMocks.runHealthCheckNow.mockResolvedValue({
+			working: 1,
+			total: 1,
+			rate: 1,
+			avgLatencyMs: 10,
+		});
+		repositoryMocks.repository.expireStaleContentRequests.mockResolvedValue(1629);
+		const before = Date.now();
+		const req = createMockRequest({ method: 'POST', query: { secret: 'my-secret' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		const cutoff = repositoryMocks.repository.expireStaleContentRequests.mock
+			.calls[0]?.[0] as Date;
+		const sixtyDays = 60 * 24 * 60 * 60 * 1000;
+		expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(sixtyDays - 1000);
+		expect(before - cutoff.getTime()).toBeLessThan(sixtyDays + 60_000);
+		expect(res._getData()).toMatchObject({ success: true, contentRequestsExpired: 1629 });
 	});
 });

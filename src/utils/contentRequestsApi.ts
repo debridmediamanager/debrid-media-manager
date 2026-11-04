@@ -166,6 +166,21 @@ export interface FulfillerStats {
 	linked: boolean;
 	showName: boolean;
 	earnedUntil: string | null;
+	/** Tries of theirs whose transfer is still running. */
+	sending: number;
+	/** Their latest tries, newest first, failed ones included. */
+	recent: SendAttempt[];
+}
+
+/** One of the caller's own tries at a request, as the panel lists them. */
+export interface SendAttempt {
+	title: string | null;
+	hash: string;
+	status: 'sending' | 'delivered' | 'failed';
+	/** Plain words on a failed try, always saying whether it counted. */
+	reason: string | null;
+	startedAt: string;
+	endedAt: string | null;
 }
 
 function fulfillerHeaders(rdKey: string | null, tbKey: string | null, json = false) {

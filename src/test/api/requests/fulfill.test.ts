@@ -81,6 +81,7 @@ beforeEach(() => {
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
 	mockRepo.claimContentRequest = vi.fn().mockResolvedValue(request({ status: 'claimed' }));
 	mockRepo.attachContentRequestJob = vi.fn().mockResolvedValue(undefined);
+	mockRepo.recordContentRequestAttempt = vi.fn().mockResolvedValue(undefined);
 	mockRepo.markContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockRepo.releaseContentRequest = vi.fn().mockResolvedValue(undefined);
 	mockRepo.stallContentRequest = vi.fn().mockResolvedValue(true);
@@ -412,5 +413,37 @@ describe('POST /api/requests/[id]/fulfill — a free TorBox account', () => {
 		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 		expect(isFreeTorBoxPlan).toHaveBeenCalledWith('TB_KEY');
 		expect(global.fetch).not.toHaveBeenCalled();
+	});
+});
+
+describe('POST /api/requests/[id]/fulfill — remembering the try', () => {
+	// The request row forgets the fulfiller the moment the job fails, which is
+	// how a failed send vanished from under its sender (Lew, 2026-11-03).
+	it('records the fulfiller’s try once the uploader accepts the job', async () => {
+		await call();
+		expect(mockRepo.recordContentRequestAttempt).toHaveBeenCalledWith({
+			requestId: 'req-1',
+			hash: HASH,
+			fulfillerId: 'helper',
+			jobId: 'job-9',
+			jobHost: 'http://debrid02:3100',
+		});
+	});
+
+	it('refuses a release a real job found TorBox unable to serve, before claiming it', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(request({ tbUnservableUntil: new Date(Date.now() + 60_000) }));
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).uncached).toBe(true);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('offers it again once the week is up', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(request({ tbUnservableUntil: new Date(Date.now() - 60_000) }));
+		expect(statusOf(await call())).toBe(200);
 	});
 });

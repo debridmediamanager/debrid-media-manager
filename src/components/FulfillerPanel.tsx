@@ -5,8 +5,10 @@ import {
 	linkFulfiller,
 	type FulfillerStats,
 	type LeaderboardEntry,
+	type SendAttempt,
 } from '@/utils/contentRequestsApi';
-import { Gift, Heart, Trophy } from 'lucide-react';
+import { timeAgo } from '@/utils/timeAgo';
+import { Gift, Heart, Loader2, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -86,6 +88,12 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 				<span>
 					<span className="font-bold text-white">{stats.sends}</span> sent
 				</span>
+				{stats.sending > 0 && (
+					<span className="flex items-center text-indigo-200">
+						<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+						<span className="font-bold text-white">{stats.sending}</span>&nbsp;sending
+					</span>
+				)}
 				<span className="flex items-center">
 					<Heart className="mr-1 h-3 w-3 text-pink-400" />
 					<span className="font-bold text-white">{stats.thanked}</span>&nbsp;thanked
@@ -120,6 +128,8 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 					{toward} of {stats.sendsPerBlock} toward your next {stats.daysPerBlock} days
 				</div>
 			)}
+
+			{stats.recent.length > 0 && <RecentSends sends={stats.recent} />}
 
 			{!stats.linked && !editing ? (
 				<button
@@ -183,6 +193,59 @@ export function FulfillerPanel({ rdKey, tbKey }: { rdKey: string | null; tbKey: 
 				</form>
 			)}
 		</section>
+	);
+}
+
+const SEND_STYLES: Record<SendAttempt['status'], { label: string; className: string }> = {
+	sending: { label: 'Sending', className: 'border-indigo-500 bg-indigo-900/30 text-indigo-100' },
+	delivered: { label: 'Sent', className: 'border-green-500 bg-green-900/30 text-green-100' },
+	failed: {
+		label: "Didn't make it",
+		className: 'border-amber-500 bg-amber-900/30 text-amber-100',
+	},
+};
+
+/**
+ * A fulfiller's latest tries, the ones that did not make it included. A send
+ * takes about half an hour, so its outcome lands after they have left the page;
+ * this is where they find it, and why a failure never moved their counter.
+ */
+function RecentSends({ sends }: { sends: SendAttempt[] }) {
+	return (
+		<div className="mt-3">
+			<div className="mb-1 font-bold text-white">Your latest sends</div>
+			<ul className="sibling-space-y-1">
+				{sends.map((send) => {
+					const style = SEND_STYLES[send.status] ?? SEND_STYLES.failed;
+					return (
+						<li key={`${send.hash}-${send.startedAt}`} className="min-w-0">
+							<div className="flex min-w-0 items-center gap-2">
+								<span
+									className={`inline-flex shrink-0 items-center rounded border-2 px-1.5 py-0.5 font-medium ${style.className}`}
+								>
+									{send.status === 'sending' && (
+										<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+									)}
+									{style.label}
+								</span>
+								<span className="truncate text-gray-200">
+									{send.title || send.hash}
+								</span>
+								<span
+									className="shrink-0 text-gray-500"
+									title={new Date(
+										send.endedAt ?? send.startedAt
+									).toLocaleString()}
+								>
+									{timeAgo(send.endedAt ?? send.startedAt)}
+								</span>
+							</div>
+							{send.reason && <div className="text-gray-400">{send.reason}</div>}
+						</li>
+					);
+				})}
+			</ul>
+		</div>
 	);
 }
 

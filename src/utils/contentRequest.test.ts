@@ -2,6 +2,7 @@ import {
 	canClaim,
 	failureNote,
 	isClaimable,
+	isTorboxUnservable,
 	normalizeHash,
 	normalizeImdbId,
 	normalizeMediaType,
@@ -10,6 +11,7 @@ import {
 	pickSourceKeys,
 	publicError,
 	RequestValidationError,
+	sendReason,
 	toPublicRequest,
 	type SourceKeys,
 } from '@/utils/contentRequest';
@@ -321,5 +323,41 @@ describe('failureNote', () => {
 
 	it('rewrites only the four noisy shapes in the stored corpus', () => {
 		expect(storedErrors.filter((e) => failureNote(e) !== e)).toHaveLength(4);
+	});
+});
+
+describe('what a fulfiller reads about their own failed send', () => {
+	const tb404 =
+		'TorBox reports the release cached but serves 404 for Some.Release/Some.Release.mkv';
+
+	it('recognises the uploader’s unservable verdict whatever status it names', () => {
+		expect(isTorboxUnservable(tb404)).toBe(true);
+		expect(isTorboxUnservable('TorBox reports the release cached but serves 500 for x')).toBe(
+			true
+		);
+		expect(isTorboxUnservable('uncached')).toBe(false);
+		expect(isTorboxUnservable(null)).toBe(false);
+	});
+
+	// Every line says whether it counted: a counter that does not move is what
+	// a fulfiller notices first, and most of these were never their fault.
+	it('says whose fault it was and that it did not count', () => {
+		expect(sendReason(tb404)).toBe(
+			"TorBox lists it but couldn't serve it. Not your fault, not counted."
+		);
+		expect(sendReason('uncached')).toBe("TorBox didn't have it after all. Not counted.");
+		expect(sendReason('All torrent sources failed for abc: mirrors 403')).toBe(
+			"The .torrent file couldn't be fetched. Not your fault, not counted."
+		);
+		expect(sendReason('uploading stalled: no progress for 5 minutes')).toBe(
+			'Real-Debrid stopped pulling it. Not your fault, not counted.'
+		);
+		expect(sendReason('RD credentials rejected: 403')).toBe(
+			"The asker's Real-Debrid refused it. Not your fault, not counted."
+		);
+		expect(sendReason('No video files found in torrent')).toBe(
+			'No video files found in torrent. Not counted.'
+		);
+		expect(sendReason(null)).toBe('The transfer failed. Not counted.');
 	});
 });

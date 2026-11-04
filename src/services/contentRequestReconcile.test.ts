@@ -2,6 +2,7 @@ import { ORPHANED_CLAIM_MS, reconcileContentRequests } from '@/services/contentR
 import { creditFulfiller } from '@/services/fulfillerRewards';
 import { repository as db } from '@/services/repository';
 import completedJob from '@/test/fixtures/contentRequests/job-completed.json';
+import unservableJob from '@/test/fixtures/contentRequests/job-failed-tb-unservable.json';
 import uncachedJob from '@/test/fixtures/contentRequests/job-failed-uncached.json';
 import claimedOnCancelledJob from '@/test/fixtures/debridUploader/claimed-request-cancelled-job.json';
 import cancelledJob from '@/test/fixtures/debridUploader/job-cancelled-claimed-request.json';
@@ -13,6 +14,8 @@ vi.mock('@/services/fulfillerRewards', () => ({ creditFulfiller: vi.fn() }));
 const mockDb = vi.mocked(db);
 const SERVER = 'http://uploader.example:3100';
 const NOW = Date.parse('2026-09-24T12:00:00Z');
+/** The unservable job's release, as the uploader's `input` magnet names it. */
+const HASH_UNSERVABLE = unservableJob.input.split('btih:')[1];
 
 const claimed = (over: Record<string, unknown> = {}) => ({
 	id: 'req-1',
@@ -49,6 +52,8 @@ beforeEach(() => {
 	mockDb.releaseContentRequest = vi.fn().mockResolvedValue(true);
 	mockDb.settleContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockDb.touchClaimedContentRequest = vi.fn().mockResolvedValue(undefined);
+	mockDb.endContentRequestAttempt = vi.fn().mockResolvedValue(undefined);
+	mockDb.markContentRequestUnservable = vi.fn().mockResolvedValue(undefined);
 });
 
 describe('reconcileContentRequests', () => {
@@ -216,5 +221,62 @@ describe('reconcileContentRequests', () => {
 			const result = await reconcileContentRequests(20, NOW);
 			expect(result.delivered).toBe(1);
 		});
+	});
+});
+
+describe('reconcileContentRequests remembers the try', () => {
+	// The fulfiller's view: a failed send used to vanish with the claim.
+	it('closes the try as delivered when its job completes', async () => {
+		mockDb.listClaimedContentRequests = vi
+			.fn()
+			.mockResolvedValue([claimed({ jobId: completedJob.id })]);
+		uploaderSays({ [completedJob.id]: { body: completedJob } });
+		await reconcileContentRequests(20, NOW);
+		expect(mockDb.endContentRequestAttempt).toHaveBeenCalledWith(
+			'req-1',
+			completedJob.id,
+			'delivered'
+		);
+		expect(mockDb.markContentRequestUnservable).not.toHaveBeenCalled();
+	});
+
+	// Recorded 2026-11-03: TorBox listed the release and could not serve it,
+	// and the board offered the same row to the next fulfiller at once. One
+	// release went round that loop 94 times for 59 different people.
+	it('closes the try as failed and hides the release for a week on an unservable verdict', async () => {
+		mockDb.listClaimedContentRequests = vi
+			.fn()
+			.mockResolvedValue([claimed({ jobId: unservableJob.id, hash: HASH_UNSERVABLE })]);
+		uploaderSays({ [unservableJob.id]: { body: unservableJob } });
+		const result = await reconcileContentRequests(20, NOW);
+		expect(result.reopened).toBe(1);
+		expect(mockDb.releaseContentRequest).toHaveBeenCalledWith(
+			'req-1',
+			unservableJob.error,
+			unservableJob.id
+		);
+		expect(mockDb.endContentRequestAttempt).toHaveBeenCalledWith(
+			'req-1',
+			unservableJob.id,
+			'failed',
+			unservableJob.error
+		);
+		expect(mockDb.markContentRequestUnservable).toHaveBeenCalledWith(
+			HASH_UNSERVABLE,
+			new Date(NOW + 7 * 24 * 60 * 60 * 1000)
+		);
+	});
+
+	it('hides nothing on a failure that says nothing about TorBox serving it', async () => {
+		mockDb.listClaimedContentRequests = vi.fn().mockResolvedValue([claimed()]);
+		uploaderSays({ [uncachedJob.id]: { body: uncachedJob } });
+		await reconcileContentRequests(20, NOW);
+		expect(mockDb.endContentRequestAttempt).toHaveBeenCalledWith(
+			'req-1',
+			uncachedJob.id,
+			'failed',
+			'uncached'
+		);
+		expect(mockDb.markContentRequestUnservable).not.toHaveBeenCalled();
 	});
 });
