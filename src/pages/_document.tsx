@@ -1,3 +1,4 @@
+import { BOOT_GUARD_SCRIPT } from '@/utils/bootGuard';
 import { Head, Html, Main, NextScript } from 'next/document';
 
 export default function Document() {
@@ -5,6 +6,10 @@ export default function Document() {
 		<Html lang="en">
 			<Head>
 				<meta charSet="UTF-8" />
+				<script
+					id="dmm-boot-guard"
+					dangerouslySetInnerHTML={{ __html: BOOT_GUARD_SCRIPT }}
+				/>
 				<meta
 					name="description"
 					content="Debrid Media Manager - Curate an infinite media library"

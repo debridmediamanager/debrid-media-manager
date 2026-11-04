@@ -5,6 +5,7 @@ import { LibraryCacheProvider } from '@/contexts/LibraryCacheContext';
 import { useBrowserStateSync } from '@/hooks/useBrowserStateSync';
 import { runBackgroundCdnCheck } from '@/lib/observability/torboxCdnProbe';
 import '@/styles/globals.css';
+import { markHydrated } from '@/utils/bootGuard';
 import { bridgePageCache } from '@/utils/pageCacheBridge';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -20,6 +21,8 @@ type AppWithProvidersProps = AppProps & {
 export default function App({ Component, pageProps }: AppWithProvidersProps) {
 	const router = useRouter();
 	useBrowserStateSync();
+
+	useEffect(markHydrated, []);
 
 	useEffect(() => {
 		if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;

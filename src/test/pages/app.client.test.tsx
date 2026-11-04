@@ -95,6 +95,20 @@ describe('App', () => {
 		);
 	});
 
+	// Fizzy #587: without this flag the inline boot guard would offer a reload on a healthy load.
+	it('marks the app hydrated after mount and clears the boot guard', () => {
+		sessionStorage.setItem('dmm:chunkReload', '1');
+		const fallback = document.createElement('div');
+		fallback.id = 'dmm-boot-fallback';
+		document.body.appendChild(fallback);
+
+		renderApp(() => <div>Home</div>);
+
+		expect((window as any).__dmmHydrated).toBe(true);
+		expect(sessionStorage.getItem('dmm:chunkReload')).toBeNull();
+		expect(document.getElementById('dmm-boot-fallback')).toBeNull();
+	});
+
 	it('disables the library provider for auth routes and flagged components', () => {
 		const Page = () => <div>Auth</div>;
 		(Page as any).disableLibraryProvider = true;
