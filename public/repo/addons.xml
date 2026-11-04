@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.1.0" provider-name="Debrid Media Manager">
+<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.1.1" provider-name="Debrid Media Manager">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.pyqrcode" version="1.2.1"/>
@@ -15,7 +15,8 @@
     <license>AGPL-3.0-only</license>
     <website>https://debridmediamanager.com/kodi</website>
     <source>https://github.com/debridmediamanager/debrid-media-manager</source>
-    <news>1.1.0: releases with your audio language come first, from the addon's own setting or Kodi's, and the source list names each release's audio languages where DMM knows them; you can also hide releases known to lack it.
+    <news>1.1.1: your library shows each release's poster and the title DMM matched it to, and the source list names audio languages before the filename.
+1.1.0: releases with your audio language come first, from the addon's own setting or Kodi's, and the source list names each release's audio languages where DMM knows them; you can also hide releases known to lack it.
 1.0.3: what you watch scrobbles to Trakt when Kodi's Trakt addon is installed.
 1.0.2: casting from your phone a release that was already listed now plays it right away.
 1.0.1: search finds every title DMM knows, not only Cinemeta's popular ones.

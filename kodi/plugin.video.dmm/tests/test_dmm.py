@@ -237,6 +237,24 @@ class Cinemeta(unittest.TestCase):
         self.assertEqual(sorted(calls), [('movie', 'tt2'), ('series', 'tt1')])
 
 
+class Library(unittest.TestCase):
+    """A page of the shared TorBox library as DMM served it (2026-11-04): DMM matched some releases to a title."""
+
+    def setUp(self):
+        self.metas = {m['name']: m for m in fixture('tb-library-page.json')['metas']}
+
+    def test_an_identified_release_shows_its_title_and_poster(self):
+        m = self.metas['The Funhouse Massacre (2015) [1080p] [YTS.AG]']
+        self.assertEqual(dmm.library_plot(m), 'The Funhouse Massacre (2015)')
+        art = dmm.art_of(m)
+        self.assertEqual(art['poster'], 'https://images.metahub.space/poster/medium/tt4483220/img')
+        self.assertEqual(art['fanart'], 'https://images.metahub.space/background/medium/tt4483220/img')
+
+    def test_an_unidentified_release_has_neither(self):
+        m = self.metas['Big Buck Bunny 480p test']
+        self.assertEqual((dmm.library_plot(m), dmm.art_of(m)), ('', {}))
+
+
 class QrPng(unittest.TestCase):
     def test_draws_modules_black_on_white_with_a_quiet_zone(self):
         png = dmm.qr_png([[1, 0], [0, 1]], scale=2, border=1)

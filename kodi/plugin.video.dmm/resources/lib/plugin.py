@@ -396,7 +396,8 @@ def library_list(p):
             add_action(dmm.strip_emoji(m.get('name', '')), dmm.strip_emoji(m.get('description', '')),
                        url(action='noop'))
             continue
-        add_folder(m.get('name') or m['id'], '', url(action='libitem', service=a['service'], id=m['id']))
+        add_folder(m.get('name') or m['id'], dmm.library_plot(m),
+                   url(action='libitem', service=a['service'], id=m['id']), dmm.art_of(m) or None)
     if (data or {}).get('hasMore'):
         add_folder('Next page (%d)' % (skip // max(len(metas), 1) + 2), '',
                    url(action='library', service=a['service'], skip=skip + len(metas)))

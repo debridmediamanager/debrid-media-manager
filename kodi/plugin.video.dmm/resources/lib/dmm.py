@@ -186,6 +186,13 @@ def art_of(m):
     return {k: v for k, v in art.items() if v}
 
 
+def library_plot(m):
+    """What DMM matched a library release to, 'Sintel (2010)', or ''. The release name stays the label: five
+    releases of one film must still read apart (castLibraryArt.ts puts the title in `description`)."""
+    title, year = m.get('description') or '', str(m.get('releaseInfo') or '')
+    return '%s (%s)' % (title, year) if title and year else title
+
+
 def seasons_of(meta_obj):
     """Season numbers with their episode counts, specials (season 0) last."""
     counts = {}
