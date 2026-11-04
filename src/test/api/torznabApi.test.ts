@@ -719,7 +719,9 @@ describe('provider-backed cache filters', () => {
 		expect(res._getStatusCode()).toBe(200);
 		expect(body(res)).toContain('code="102"');
 		expect(body(res)).toContain('TorBox');
-		expect(body(res)).toContain('DMM Settings');
+		// The link form is on /torznab; Settings on the home page has none (#623).
+		expect(body(res)).toContain('debridmediamanager.com/torznab');
+		expect(body(res)).not.toContain('DMM Settings');
 	});
 
 	it('asks the provider named in the path, with that sponsor own key', async () => {

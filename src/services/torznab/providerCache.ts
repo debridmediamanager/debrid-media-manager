@@ -63,7 +63,7 @@ const MEMORY_MAX_ENTRIES = 50_000;
  * A provider-backed feed was asked for without that provider's key linked.
  *
  * Separate from a probe failure because the fix is different and the caller
- * says so: one is "link your TorBox key in DMM Settings", the other is "TorBox
+ * says so: one is "link your TorBox key on /torznab", the other is "TorBox
  * said no". An *arr shows the description and nothing else.
  */
 export class MissingProviderKeyError extends Error {

@@ -130,7 +130,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				res,
 				200,
 				NO_PROVIDER_KEY,
-				`${error.message}. Link one in DMM Settings to use this feed.`
+				`${error.message}. Link one on DMM's Torznab page (debridmediamanager.com/torznab) to use this feed.`
 			);
 		}
 		if (error instanceof ProviderProbeError) {
