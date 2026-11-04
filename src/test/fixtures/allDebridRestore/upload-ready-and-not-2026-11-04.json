@@ -1,0 +1,46 @@
+{
+	"_comment": "AllDebrid /v4.1/magnet/upload answers captured 2026-11-04 with the AllDebrid test 2 account: Sintel is cached (ready: true), two random 40-hex hashes with no swarm are not (ready: false). Status is the single-id /v4.1/magnet/status answer for Sintel, files and links removed.",
+	"sintelStatus": {
+		"id": 835854377,
+		"filename": "Sintel",
+		"size": 129302391,
+		"hash": "08ada5a7a6183aae1e09d831df6748d566095a10",
+		"status": "Ready",
+		"statusCode": 4,
+		"uploadDate": 1793757404,
+		"completionDate": 1793757404,
+		"type": "m",
+		"notified": false,
+		"version": 2,
+		"nbLinks": 11
+	},
+	"uploads": [
+		{
+			"magnet": "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10",
+			"hash": "08ada5a7a6183aae1e09d831df6748d566095a10",
+			"name": "Sintel",
+			"filename_original": "",
+			"size": 129302391,
+			"ready": true,
+			"id": 835854377
+		},
+		{
+			"magnet": "magnet:?xt=urn:btih:3fa931fa89c26023715b264acf0b3972186ebdf6",
+			"hash": "3fa931fa89c26023715b264acf0b3972186ebdf6",
+			"name": "noname",
+			"filename_original": "",
+			"size": 0,
+			"ready": false,
+			"id": 835994231
+		},
+		{
+			"magnet": "magnet:?xt=urn:btih:6ce14221d11eb27a90707101500350f163aa853b",
+			"hash": "6ce14221d11eb27a90707101500350f163aa853b",
+			"name": "noname",
+			"filename_original": "",
+			"size": 0,
+			"ready": false,
+			"id": 835994228
+		}
+	]
+}

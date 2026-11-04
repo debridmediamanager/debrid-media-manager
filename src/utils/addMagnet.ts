@@ -553,6 +553,9 @@ export const handleReinsertTorrentinRd = async (
 	}
 };
 
+// What became of the hash: only 'added' and 'downloading' leave it on the account.
+export type AdAddOutcome = 'added' | 'downloading' | 'not_cached' | 'no_peers';
+
 export const handleAddAsMagnetInAd = async (
 	adKey: string,
 	hash: string,
@@ -560,7 +563,7 @@ export const handleAddAsMagnetInAd = async (
 	deleteIfNotInstant: boolean = false,
 	keepInLibrary: boolean = false,
 	silent: boolean = false
-) => {
+): Promise<AdAddOutcome> => {
 	try {
 		// Step 1: Upload magnet and check if it's instant
 		const upload = await uploadMagnetAd(adKey, hash);
@@ -587,7 +590,7 @@ export const handleAddAsMagnetInAd = async (
 				}
 
 				if (callback) await callback(null);
-				return;
+				return 'no_peers';
 			}
 
 			// For other errors, throw
@@ -607,7 +610,7 @@ export const handleAddAsMagnetInAd = async (
 				await deleteMagnetAd(adKey, upload.id);
 				if (!silent) toast.error('Torrent not instant; removed.', magnetToastOptions);
 				if (callback) await callback(null);
-				return;
+				return 'not_cached';
 			}
 
 			// User wants to download - keep magnet in AD for peer downloading
@@ -617,7 +620,7 @@ export const handleAddAsMagnetInAd = async (
 					magnetToastOptions
 				);
 			if (callback) await callback(null);
-			return;
+			return 'downloading';
 		}
 
 		// Step 3: Get full status with files (for instant torrents)
@@ -658,6 +661,7 @@ export const handleAddAsMagnetInAd = async (
 				toast.success('Torrent cached and available.', magnetToastOptions);
 			}
 		}
+		return 'added';
 	} catch (error) {
 		console.error(
 			'Error adding hash to AllDebrid:',

@@ -76,6 +76,7 @@ vi.mock('@/hooks/useRelativeTimeLabel', () => ({
 
 const mockHandleAddAsMagnetInRd = vi.fn();
 const mockHandleAddAsMagnetInPm = vi.fn();
+const mockHandleAddAsMagnetInAd = vi.fn();
 
 const mockAddFilesInRd = vi.fn();
 const mockAddHashesInRd = vi.fn();
@@ -93,7 +94,7 @@ vi.mock('@/utils/delay', () => ({ delay: vi.fn(async () => {}) }));
 vi.mock('@/utils/addMagnet', () => ({
 	__esModule: true,
 	handleAddAsMagnetInRd: (...args: unknown[]) => mockHandleAddAsMagnetInRd(...args),
-	handleAddAsMagnetInAd: vi.fn(),
+	handleAddAsMagnetInAd: (...args: unknown[]) => mockHandleAddAsMagnetInAd(...args),
 	handleAddAsMagnetInTb: vi.fn(),
 	handleAddAsMagnetInPm: (...args: unknown[]) => mockHandleAddAsMagnetInPm(...args),
 	handleAddMultipleHashesInRd: (...args: unknown[]) => mockAddHashesInRd(...args),
@@ -112,7 +113,16 @@ vi.mock('@/utils/addMagnet', () => ({
 	handleRestartTorrent: vi.fn(),
 }));
 
-vi.mock('@/services/allDebrid', () => ({
+const mockAd = vi.hoisted(() => ({
+	uploadMagnetAd: vi.fn(),
+	deleteMagnetAd: vi.fn(),
+	getMagnetStatusAd: vi.fn(),
+	getMagnetFiles: vi.fn(),
+}));
+
+vi.mock('@/services/allDebrid', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/allDebrid')>()),
+	...mockAd,
 	__esModule: true,
 	uploadMagnet: vi.fn().mockResolvedValue({
 		magnets: [{ id: 123, hash: 'testhash' }],
@@ -171,6 +181,7 @@ vi.mock('next/link', () => ({
 }));
 
 import LibraryPage from '@/pages/library';
+import adRestore from '@/test/fixtures/allDebridRestore/upload-ready-and-not-2026-11-04.json';
 import check2 from '@/test/fixtures/realdebrid/check2-restore-2026-10-14.json';
 import { mintProblemToken, validateProblemToken } from '@/utils/problemToken';
 import { resetTokenCache } from '@/utils/token';
@@ -549,7 +560,7 @@ describe('Library backup restore to Real-Debrid', () => {
 		});
 		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
 		const processing = mockToast.promise.mock.calls[0][0];
-		await expect(processing).resolves.toEqual({ success: 7499, error: 1 });
+		await expect(processing).resolves.toEqual({ success: 7499, notCached: 0, error: 1 });
 		expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledTimes(7500);
 		expect(new Set(mockHandleAddAsMagnetInRd.mock.calls.map((call) => call[1])).size).toBe(
 			7500
@@ -568,9 +579,92 @@ describe('Library backup restore to Real-Debrid', () => {
 		});
 		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
 		const [processing] = mockToast.promise.mock.calls[0];
-		await expect(processing).resolves.toEqual({ success: 2, error: 0 });
+		await expect(processing).resolves.toEqual({ success: 2, notCached: 0, error: 0 });
 		expect(mockRefreshLibrary).toHaveBeenCalled();
 		expect(mockToast.dismiss).toHaveBeenCalledWith('restore-progress');
+	});
+});
+
+// Restore to AD deleted every magnet AD had not cached and still counted it as
+// restored: "Restored 3; 0 failed" for a backup of which two were thrown away
+// (reproduced live 2026-11-04). Drives the real dialog and the real AD add
+// against AD's captured upload answers.
+describe('Library backup restore to AllDebrid', () => {
+	const backup = adRestore.uploads.map((u) => ({ hash: u.hash, filename: u.name }));
+	const uncachedIds = adRestore.uploads.filter((u) => !u.ready).map((u) => u.id);
+
+	const restoreThroughDialog = async (uncheckCachedOnly: boolean) => {
+		mockModalFire.mockImplementation(async (opts: any) => {
+			document.body.insertAdjacentHTML(
+				'beforeend',
+				`<div id="restore-dialog">${opts.html}</div>`
+			);
+			const input = document.getElementById('restoreFile') as HTMLInputElement;
+			Object.defineProperty(input, 'files', {
+				value: [new File([JSON.stringify(backup)], 'backup.json')],
+			});
+			const cachedOnly = document.getElementById('ad-cached-only') as HTMLInputElement | null;
+			if (cachedOnly && uncheckCachedOnly) cachedOnly.checked = false;
+			const value = await opts.preConfirm();
+			document.getElementById('restore-dialog')?.remove();
+			return { isConfirmed: true, value };
+		});
+		render(<LibraryPage />);
+		await act(async () => {
+			fireEvent.click(await screen.findByRole('button', { name: /AD Restore/ }));
+		});
+		await waitFor(() => expect(mockToast.promise).toHaveBeenCalled());
+		const [processing, messages] = mockToast.promise.mock.calls[0];
+		const result = await processing;
+		vi.useFakeTimers(); // the summary schedules a page reload
+		const summary = messages.success(result);
+		vi.useRealTimers();
+		return { result, summary };
+	};
+
+	beforeEach(async () => {
+		vi.clearAllMocks();
+		mockRouter.query = {};
+		mockCredentials.rd = null;
+		mockCredentials.tb = null;
+		const actual =
+			await vi.importActual<typeof import('@/utils/addMagnet')>('@/utils/addMagnet');
+		mockHandleAddAsMagnetInAd.mockImplementation(actual.handleAddAsMagnetInAd);
+		mockAd.uploadMagnetAd.mockImplementation(async (_key: string, hash: string) =>
+			adRestore.uploads.find((u) => u.hash === hash)
+		);
+		mockAd.getMagnetStatusAd.mockResolvedValue(adRestore.sintelStatus);
+		mockAd.getMagnetFiles.mockResolvedValue({ magnets: [] });
+		mockAd.deleteMagnetAd.mockResolvedValue(undefined);
+	});
+
+	afterEach(() => {
+		mockCredentials.rd = 'test-rd-key';
+		mockCredentials.tb = 'test-tb-key';
+	});
+
+	it('reports titles AD has not cached as skipped, never as restored', async () => {
+		const { result, summary } = await restoreThroughDialog(false);
+
+		expect(result).toEqual({ success: 1, notCached: 2, error: 0 });
+		expect(summary).toBe(
+			'Restored 1, 2 not cached on AllDebrid (skipped); 0 failed in AD library. Refreshing in 10s.'
+		);
+		expect(mockAd.deleteMagnetAd.mock.calls.map((call) => call[1]).sort()).toEqual(
+			[...uncachedIds].sort()
+		);
+		expect(mockToast.error).not.toHaveBeenCalledWith(
+			'Torrent not instant; removed.',
+			expect.anything()
+		);
+	});
+
+	it('keeps uncached titles for AD to download when cached-only is unchecked', async () => {
+		const { result, summary } = await restoreThroughDialog(true);
+
+		expect(result).toEqual({ success: 3, notCached: 0, error: 0 });
+		expect(summary).toBe('Restored 3; 0 failed in AD library. Refreshing in 10s.');
+		expect(mockAd.deleteMagnetAd).not.toHaveBeenCalled();
 	});
 });
 

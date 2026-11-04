@@ -1271,10 +1271,10 @@ function TorrentsPage() {
 						<p>New hashes to restore: <strong id="restore-new" class="text-green-400">0</strong></p>
 					</div>
 					${
-						debridService === 'tb'
+						debridService === 'tb' || debridService === 'ad'
 							? `
 					<label class="flex items-center gap-2 text-gray-300 cursor-pointer mt-4">
-						<input type="checkbox" id="tb-cached-only" checked
+						<input type="checkbox" id="${debridService}-cached-only" checked
 							class="w-4 h-4 rounded accent-cyan-500" />
 						Only restore cached (available) items
 						<span id="cached-status" class="text-gray-500 text-xs"></span>
@@ -1311,7 +1311,7 @@ function TorrentsPage() {
 								.filter((h) => !serviceHashes.has(h));
 							if (newHashes.length === 0) return;
 
-							// Only TorBox's dialog has a #cached-status to show a count in.
+							// Only TorBox can check availability before adding, so only it fills #cached-status.
 							if (debridService === 'tb' && tbKey) {
 								const statusEl = document.getElementById('cached-status');
 								if (statusEl) statusEl.textContent = '(checking availability...)';
@@ -1364,10 +1364,10 @@ function TorrentsPage() {
 								evt.target?.result as string
 							);
 							const cachedOnly =
-								debridService === 'tb'
+								debridService === 'tb' || debridService === 'ad'
 									? ((
 											document.getElementById(
-												'tb-cached-only'
+												`${debridService}-cached-only`
 											) as HTMLInputElement
 										)?.checked ?? true)
 									: false;
@@ -1407,7 +1407,7 @@ function TorrentsPage() {
 					recordedNames.get(hash.toLowerCase()) ?? []
 				);
 			if (adKey && debridService === 'ad')
-				return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
+				return handleAddAsMagnetInAd(adKey, hash, undefined, cachedOnly, true, true);
 			if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
 			if (pmKey && debridService === 'pm')
 				return handleAddAsMagnetInPm(pmKey, hash, undefined, true);
@@ -1427,11 +1427,15 @@ function TorrentsPage() {
 			};
 		}
 
-		const processingPromise = (async (): Promise<{ success: number; error: number }> => {
+		const processingPromise = (async (): Promise<{
+			success: number;
+			notCached: number;
+			error: number;
+		}> => {
 			const newHashes = files.map((f) => f.hash).filter((h) => !serviceHashes.has(h));
 
 			if (newHashes.length === 0) {
-				return { success: 0, error: 0 };
+				return { success: 0, notCached: 0, error: 0 };
 			}
 
 			let availableHashes: string[] = [];
@@ -1524,7 +1528,7 @@ function TorrentsPage() {
 			const totalToAdd = toAddAvailable.length + toAddUnavailable.length;
 
 			if (totalToAdd === 0) {
-				return { success: 0, error: 0 };
+				return { success: 0, notCached: 0, error: 0 };
 			}
 
 			// RD pauses an account's adds after a few in a row, so a restore to RD
@@ -1579,7 +1583,15 @@ function TorrentsPage() {
 					console.error(error);
 				}
 			}
-			return { success: allResults.length, error: allErrors.length };
+			// AD answers these without adding anything, so they are not restored
+			const notCached = allResults.filter(
+				(r) => r === 'not_cached' || r === 'no_peers'
+			).length;
+			return {
+				success: allResults.length - notCached,
+				notCached,
+				error: allErrors.length,
+			};
 		})().finally(() => {
 			toast.dismiss('restore-progress');
 			toast.dismiss('database-check');
@@ -1589,9 +1601,12 @@ function TorrentsPage() {
 			processingPromise,
 			{
 				loading: `Restoring ${files.length} downloads...`,
-				success: ({ success, error }) => {
+				success: ({ success, notCached, error }) => {
 					setTimeout(() => location.reload(), 10000);
-					return `Restored ${success}; ${error} failed in ${debridService.toUpperCase()} library. Refreshing in 10s.`;
+					const skipped = notCached
+						? `, ${notCached} not cached on AllDebrid (skipped)`
+						: '';
+					return `Restored ${success}${skipped}; ${error} failed in ${debridService.toUpperCase()} library. Refreshing in 10s.`;
 				},
 				error: 'Restore failed. Refresh your library before trying again.',
 			},
