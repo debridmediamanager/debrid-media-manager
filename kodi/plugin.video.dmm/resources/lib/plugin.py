@@ -20,6 +20,8 @@ from resources.lib import dmm
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
+# DMM counts installs per addon version from this (castTelemetry.ts); up to 1.1.1 it was a fixed 'DMM-Kodi/1.0'.
+dmm.USER_AGENT = 'DMM-Kodi/%s' % ADDON.getAddonInfo('version')
 NAME = 'DMM'
 ICON = ADDON.getAddonInfo('icon')
 FANART = ADDON.getAddonInfo('fanart')

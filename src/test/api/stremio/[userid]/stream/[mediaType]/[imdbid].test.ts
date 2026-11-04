@@ -1,5 +1,6 @@
 import { languageEmojis } from '@/components/showInfo/languages';
 import handler from '@/pages/api/stremio/[userid]/stream/[mediaType]/[imdbid]';
+import { recordCastUse } from '@/services/castTelemetry';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
@@ -9,6 +10,7 @@ import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/castTelemetry');
 vi.mock('@/utils/castApiHelpers', () => ({
 	isLegacyToken: vi.fn(),
 }));
@@ -136,6 +138,32 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect((res._getData() as any).streams).toEqual([
 			expect.objectContaining({ externalUrl: expect.stringMatching(/\/stremio$/) }),
 		]);
+	});
+
+	it('counts the install with the client it was used from', async () => {
+		mockRepository.getCastProfile = vi.fn().mockResolvedValue({ otherStreamsLimit: 5 });
+		mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+		mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([]);
+		const req = createMockRequest({
+			query: { userid: 'user123', mediaType: 'movie', imdbid: 'tt123.json' },
+			headers: { 'user-agent': 'DMM-Kodi/1.1.2' },
+		});
+
+		await handler(req, createMockResponse());
+
+		expect(recordCastUse).toHaveBeenCalledWith('rd', 'user123', 'DMM-Kodi/1.1.2');
+	});
+
+	it('counts no install for a cast id without a profile', async () => {
+		mockRepository.getCastProfile = vi.fn().mockResolvedValue(null);
+		const req = createMockRequest({
+			query: { userid: 'user123', mediaType: 'movie', imdbid: 'tt123' },
+		});
+
+		await handler(req, createMockResponse());
+
+		expect(recordCastUse).not.toHaveBeenCalled();
 	});
 
 	it('serves cast streams for shows', async () => {

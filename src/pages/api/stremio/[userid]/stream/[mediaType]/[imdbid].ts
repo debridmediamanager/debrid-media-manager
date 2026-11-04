@@ -1,4 +1,5 @@
 import { resolveStreamTarget } from '@/services/anime/stremioAnime';
+import { recordCastUse } from '@/services/castTelemetry';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
@@ -62,6 +63,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		sendStreamFailure(res, 'rd', 'not-connected');
 		return;
 	}
+	recordCastUse('rd', userid, req.headers['user-agent']);
 
 	const imdbidStr = (imdbid as string).replace(/\.json$/, '');
 	// An anime id (`kitsu:46474:5`) resolves to the AniDB key its casts are

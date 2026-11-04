@@ -1,0 +1,47 @@
+{
+	"agents": [
+		{ "requests": 61360, "ua": "", "client": "unknown" },
+		{ "requests": 42251, "ua": "AIOStreams/2.37.0", "client": "aiostreams" },
+		{
+			"requests": 8676,
+			"ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+			"client": "browser"
+		},
+		{
+			"requests": 5520,
+			"ua": "cli_debrid/0.7.80 (+https://github.com/godver3/cli_debrid)",
+			"client": "cli_debrid"
+		},
+		{ "requests": 4078, "ua": "okhttp/5.3.2", "client": "okhttp" },
+		{
+			"requests": 3630,
+			"ua": "Mozilla/5.0 (SMART-TV; LINUX; Tizen 9.0) AppleWebKit/537.36 (KHTML, like Gecko) 120.0.6099.5/9.0 TV Safari/537.36",
+			"client": "browser"
+		},
+		{
+			"requests": 3597,
+			"ua": "Mozilla/5.0 (Web0S; Linux/SmartTV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.270 Safari/537.36 WebAppManager",
+			"client": "browser"
+		},
+		{ "requests": 2785, "ua": "Nuvio/1.0.0", "client": "nuvio" },
+		{
+			"requests": 2093,
+			"ua": "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.15.2 Chrome/83.0.4103.122 Safari/537.36 StremioShell/4.4.173",
+			"client": "stremio"
+		},
+		{
+			"requests": 1256,
+			"ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0.1 Mobile/15E148 Safari/604.1",
+			"client": "browser"
+		},
+		{
+			"requests": 1056,
+			"ua": "Stremio-Apple/0.5.1 (AppleTV14,1; tvOS 27.2)",
+			"client": "stremio"
+		},
+		{ "requests": 856, "ua": "DMM-Kodi/1.0", "client": "kodi/1.0" },
+		{ "requests": 696, "ua": "ktor-client", "client": "ktor-client" },
+		{ "requests": 569, "ua": "Omni/278 CFNetwork/3896.200.61 Darwin/27.2.0", "client": "omni" }
+	],
+	"source": "User-Agents of GET /api/stremio*/<id>/stream/ on dmm-01's Nginx Proxy Manager, 2026-11-02 18:43 to 11-04 23:43 UTC (160,983 requests); requests per agent with versions folded"
+}
