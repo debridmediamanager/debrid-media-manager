@@ -83,6 +83,9 @@ export class ProviderProbeError extends Error {
 	}
 }
 
+/** The memo also answers for Debrid-Link, whose probe the Cast DL stream route owns. */
+type MemoService = TorznabLiveService | 'dl';
+
 interface MemoryEntry {
 	cached: boolean;
 	expiresAt: number;
@@ -124,11 +127,11 @@ export class ProviderCacheMemo {
 		}
 	}
 
-	private key(service: TorznabLiveService, hash: string): string {
+	private key(service: MemoService, hash: string): string {
 		return `${KEY_PREFIX}${service}:${hash}`;
 	}
 
-	private readMemory(service: TorznabLiveService, hashes: string[]): Map<string, boolean> {
+	private readMemory(service: MemoService, hashes: string[]): Map<string, boolean> {
 		const now = Date.now();
 		const known = new Map<string, boolean>();
 		for (const hash of hashes) {
@@ -144,10 +147,7 @@ export class ProviderCacheMemo {
 	}
 
 	/** What is already known, keyed by the normalised hash. Never throws. */
-	public async read(
-		service: TorznabLiveService,
-		hashes: string[]
-	): Promise<Map<string, boolean>> {
+	public async read(service: MemoService, hashes: string[]): Promise<Map<string, boolean>> {
 		if (hashes.length === 0) return new Map();
 
 		const client = this.client();
@@ -168,7 +168,7 @@ export class ProviderCacheMemo {
 	}
 
 	/** Best-effort: a memo that cannot be written costs a re-probe, nothing more. */
-	public async write(service: TorznabLiveService, entries: Map<string, boolean>): Promise<void> {
+	public async write(service: MemoService, entries: Map<string, boolean>): Promise<void> {
 		if (entries.size === 0) return;
 
 		const client = this.client();

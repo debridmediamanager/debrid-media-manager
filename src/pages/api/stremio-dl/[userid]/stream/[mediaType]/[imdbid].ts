@@ -3,6 +3,7 @@ import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
+import { debridLinkCachedTrove } from '@/utils/debridLinkCastApiHelpers';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -13,20 +14,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (Debrid-Link version)
 //
-// Two things this route deliberately does not do, both for the same reason:
-// **Debrid-Link publishes no cache probe.** `GET /seedbox/cached` answers
-// `400 endpointDisabled` for every parameter shape and nothing replaced it, so
-// the only way to ask "is this playable" is a mutating add that costs one of
-// the viewer's 50 daily torrents.
-//
-//  - No cast is filtered out here. Offcloud drops a hash its `/api/cache` probe
-//    no longer holds; there is no equivalent, and a per-stream probe would spend
-//    the viewer's whole daily quota on building a stream list.
-//  - **No scraped-trove releases are offered.** The TorBox, Premiumize and
-//    Offcloud routes fill spare stream slots from DMM's scraped pool because
-//    each of them can verify a hash for free first. Offering unverified releases
-//    here would mean the viewer's player spends a daily torrent per click to
-//    find out, so the list stays exactly what somebody chose to cast.
+// Casts are offered as they are: no cast is filtered by a cache probe. Spare
+// "other streams" slots are filled from DMM's scraped pool, like the TorBox,
+// Premiumize and Offcloud routes do, with only releases Debrid-Link holds
+// cached. Debrid-Link has no read-only cache check (`GET /seedbox/cached`
+// answers `400 endpointDisabled`), so `debridLinkCachedTrove` probes with a
+// bare-hash add from DMM's own account, never the viewer's, and removes what it
+// added. A bare-hash miss is free (measured 2026-09-17), and the shared memo
+// keeps repeat views from probing again.
 //
 // TODO: a transcoded variant per cast. `POST /stream/transcode/add` with a file
 // id answers in about 800 ms with a live HLS playlist
@@ -98,7 +93,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			profile.otherStreamsLimit
 		);
 
-		const [userCastItems, otherItems] = await Promise.all([
+		const [userCastItems, otherItems, troveCandidates] = await Promise.all([
 			db.getDebridLinkUserCastStreams(castKey, userid, 5),
 			db.getDebridLinkOtherStreams(
 				castKey,
@@ -106,16 +101,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
 			),
+			target.trove(maxSize > 0 ? maxSize : undefined),
 		]);
 
+		const offeredHashes = new Set(
+			[...userCastItems, ...otherItems].map((item) => item.hash.toLowerCase())
+		);
+		// A probe hiccup costs the trove streams, never the casts.
+		const playableTrove = await debridLinkCachedTrove(
+			troveCandidates.filter((item) => !offeredHashes.has(item.hash.toLowerCase())),
+			Math.max(0, otherStreamsLimit - otherItems.length)
+		).catch((error) => {
+			console.error(
+				'[Stremio-DL Stream] Trove cache probe failed, skipping trove streams:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+			return [];
+		});
+
 		const uniqueHashes = Array.from(
-			new Set([...userCastItems, ...otherItems].map((item) => item.hash))
+			new Set([...userCastItems, ...otherItems, ...playableTrove].map((item) => item.hash))
 		);
 		const snapshots = await db.getSnapshotsByHashes(uniqueHashes);
 		const snapshotMap = new Map(snapshots.map((s) => [s.hash, s]));
 
 		console.log('[Stremio-DL Stream] Stream stats:', {
 			totalStreams: userCastItems.length + otherItems.length,
+			troveStreams: playableTrove.length,
 			uniqueHashes: uniqueHashes.length,
 			snapshotsFound: snapshots.length,
 		});
@@ -149,6 +161,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 		for (let i = 0; i < otherItems.length; i++) {
 			push(otherItems[i], false, releaseBingeGroup('dmm-dl', otherItems[i].hash));
+		}
+		// No `?file=`: the play route adds the cached torrent to the viewer's
+		// account and plays its biggest file - the feature for a movie, the episode
+		// for a single-episode release.
+		for (const item of playableTrove) {
+			const snapshot = snapshotMap.get(item.hash);
+			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
+			streams.push({
+				name: generateStreamName(item.sizeMb, metadata),
+				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'DL'),
+				url: `${process.env.DMM_ORIGIN}/api/stremio-dl/${userid}/play/${item.hash}`,
+				behaviorHints: { bingeGroup: releaseBingeGroup('dmm-dl', item.hash) },
+			} as any);
 		}
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });

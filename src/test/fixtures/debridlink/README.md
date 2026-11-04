@@ -32,3 +32,16 @@ a re-add after removal came back with its old id and a fresh `created`, and a pa
 the end answered `{page: 5, pages: 1, next: -1, previous: 4}`. On 2026-09-17 a duplicate
 add of a torrent the account held moved it to the top with a fresh `created` (the
 2026-10-03 listing shows the 2026-09-17 time).
+
+`seedbox-add-verity-2026-11-04.json` is the bare-hash `POST /seedbox/add` answer for each
+of DMM's 25 largest Verity (tt32261958) releases, taken on 2026-11-04 in one pass with the
+account that now probes for DMM Cast DL. `candidates` are the releases as DMM's scraped
+pool held them; `adds` keeps each status and body as answered, with every `downloadUrl`
+replaced (those URLs are keyless and permanent). The listing taken before the pass is kept
+as its envelope only (`emptyListing`, verbatim pagination) because the rows were the
+account's own unrelated torrents. What it shows:
+
+- 13 cached, 12 `422 notAddTorrent`: a miss now answers 422 (it was 400 until October).
+- One add is admitted but incomplete: `status: 4`, `downloadPercent: 27`. Admission is not
+  "cached".
+- The 13 created torrents came back from one comma-joined `DELETE /seedbox/<ids>/remove`.

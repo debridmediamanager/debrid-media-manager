@@ -1,0 +1,831 @@
+{
+	"adds": [
+		{
+			"hash": "2e819d2a23e1de79be0eeb22da4ccdd444754029",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "5d6a291865d630dbd5c76d1a1a828decb719e683",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "s4oqg8ogyaapvzksg8g8chqy",
+					"name": "Verity 2026 2160p AMZN WEB-DL DV HDR10  MULTi-Ben The Men",
+					"created": 1793807686,
+					"error": 0,
+					"errorString": "",
+					"hashString": "5d6a291865d630dbd5c76d1a1a828decb719e683",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 22214928676,
+					"files": [
+						{
+							"id": "s4oqg8ogyaapvzksg8g8chqy-1",
+							"name": "Verity 2026 2160p AMZN WEB-DL DV HDR10  MULTi-Ben The Men.mp4",
+							"size": 22214927480,
+							"downloadUrl": "https://redacted.debrid.link/1",
+							"downloaded": false,
+							"downloadPercent": 100
+						},
+						{
+							"id": "s4oqg8ogyaapvzksg8g8chqy-2",
+							"name": "Verity 2026 2160p AMZN WEB-DL DV HDR10  MULTi-Ben The Men.mp4.nfo",
+							"size": 1196,
+							"downloadUrl": "https://redacted.debrid.link/2",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "d3ec75c526d2bb219fed50e7c7f9d1c839459771",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "5397f9bd37426960f1fb4e8441e669fa1baf0040",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sxtpg8ogyaass9sg8ws001sa",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+.MULTi.LAT.FRE.GER.HINDI.POR.Atmos.MP4-BTM",
+					"created": 1793807686,
+					"error": 0,
+					"errorString": "",
+					"hashString": "5397f9bd37426960f1fb4e8441e669fa1baf0040",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 22214927480,
+					"files": [
+						{
+							"id": "sxtpg8ogyaass9sg8ws001sa-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+.MULTi[Ben The Men].mp4",
+							"size": 22214927480,
+							"downloadUrl": "https://redacted.debrid.link/3",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "de3510162069a396a760e904d18b569418e99542",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "0c1cf76efb21a22f5c586f4ea057c31f7a001ed8",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "545a747ab13d60a7f2dbbd20edd74f1248f759fc",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "6fbd7e02e501499ff1c4e1def7237aa09fbf0275",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "094f2dc1b3e7e532402bee6aac119b3c4c0732b5",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sbuig8ogyafbk0ocg4gwss1c",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.DV.H.265-BYNDR.mkv",
+					"created": 1793807686,
+					"error": 0,
+					"errorString": "",
+					"hashString": "094f2dc1b3e7e532402bee6aac119b3c4c0732b5",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 18245030173,
+					"files": [
+						{
+							"id": "sbuig8ogyafbk0ocg4gwss1c-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.DV.H.265-BYNDR.mkv",
+							"size": 18245030173,
+							"downloadUrl": "https://redacted.debrid.link/4",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "a9b55426741d8029b6d1cba8759024c392b3287f",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "5d62e0a09146fcc887d69943e4cc2c2ac52dbde5",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "a737633d41b9c7680e35ae455778a8485d589916",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "syo7g8ogyafw8d4c0c4w8xav",
+					"name": "Verity 2026 REPACK 2160p AMZN WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR.mkv",
+					"created": 1793807687,
+					"error": 0,
+					"errorString": "",
+					"hashString": "a737633d41b9c7680e35ae455778a8485d589916",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14870897703,
+					"files": [
+						{
+							"id": "syo7g8ogyafw8d4c0c4w8xav-1",
+							"name": "Verity 2026 REPACK 2160p AMZN WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR.mkv",
+							"size": 14870897703,
+							"downloadUrl": "https://redacted.debrid.link/5",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "944d042689160db03278a653521579fee4c3d2f2",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sqp3g8ogyagy75s0oo4wcty2",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.DV.HDR.H.265.mkv",
+					"created": 1793807687,
+					"error": 0,
+					"errorString": "",
+					"hashString": "944d042689160db03278a653521579fee4c3d2f2",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14867061088,
+					"files": [
+						{
+							"id": "sqp3g8ogyagy75s0oo4wcty2-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.DV.HDR.H.265.mkv",
+							"size": 14867061088,
+							"downloadUrl": "https://redacted.debrid.link/6",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "a07f75023879f230342239b7c894cfb0899c874d",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "ski0g8ogyah2d2go8oog4dfw",
+					"name": "Verity.2026.2160p.SDR.mkv",
+					"created": 1793807687,
+					"error": 0,
+					"errorString": "",
+					"hashString": "a07f75023879f230342239b7c894cfb0899c874d",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14835852345,
+					"files": [
+						{
+							"id": "ski0g8ogyah2d2go8oog4dfw-1",
+							"name": "Verity.2026.2160p.SDR.mkv",
+							"size": 14835852345,
+							"downloadUrl": "https://redacted.debrid.link/7",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "ae2a26fece71db9577d9ed9c87abef4d93f23cee",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "5dfcabad3a3a9717625ccb3d49c39f50cd1e281a",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "swepg8ogyahox08cogg80jtw",
+					"name": "Verity La sombra de un enga\u00f1o (2026) [4k 2160p][Esp]",
+					"created": 1793807687,
+					"error": 0,
+					"errorString": "",
+					"hashString": "5dfcabad3a3a9717625ccb3d49c39f50cd1e281a",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14832780698,
+					"files": [
+						{
+							"id": "swepg8ogyahox08cogg80jtw-1",
+							"name": "Verity La sombra de un enga\u00f1o (2026) [4k 2160p][Esp].mkv",
+							"size": 14832780454,
+							"downloadUrl": "https://redacted.debrid.link/8",
+							"downloaded": false,
+							"downloadPercent": 100
+						},
+						{
+							"id": "swepg8ogyahox08cogg80jtw-2",
+							"name": "Canal Oficial de Telegram !!!.url",
+							"size": 124,
+							"downloadUrl": "https://redacted.debrid.link/9",
+							"downloaded": false,
+							"downloadPercent": 100
+						},
+						{
+							"id": "swepg8ogyahox08cogg80jtw-3",
+							"name": "WolfTorrent.url",
+							"size": 120,
+							"downloadUrl": "https://redacted.debrid.link/10",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "efb77203a568c5451b327bb273cafa53f0692541",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "s5tpg8ogyaj0y3480koggxpa",
+					"name": "Verity.2026.MULTi.VF2.HDR.DV.2160p.WEB.H265-SUPPLY",
+					"created": 1793807687,
+					"error": 0,
+					"errorString": "",
+					"hashString": "efb77203a568c5451b327bb273cafa53f0692541",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14740692583,
+					"files": [
+						{
+							"id": "s5tpg8ogyaj0y3480koggxpa-1",
+							"name": "Verity.2026.MULTi.VF2.HDR.DV.2160p.WEB.H265-SUPPLY.mkv",
+							"size": 14740687814,
+							"downloadUrl": "https://redacted.debrid.link/11",
+							"downloaded": false,
+							"downloadPercent": 100
+						},
+						{
+							"id": "s5tpg8ogyaj0y3480koggxpa-2",
+							"name": "Verity.2026.MULTi.VF2.HDR.DV.2160p.WEB.H265-SUPPLY.nfo",
+							"size": 4769,
+							"downloadUrl": "https://redacted.debrid.link/12",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "396e3b347344a628a4e05f41c46f0e36b4bdde3b",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "szv1g8ogyajcii8sco8wk9rx",
+					"name": "Verity.2026.MULTi.VF2.HDR.2160p.WEB.H265-SUPPLY.mkv",
+					"created": 1793807688,
+					"error": 0,
+					"errorString": "",
+					"hashString": "396e3b347344a628a4e05f41c46f0e36b4bdde3b",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14700402151,
+					"files": [
+						{
+							"id": "szv1g8ogyajcii8sco8wk9rx-1",
+							"name": "Verity.2026.MULTi.VF2.HDR.2160p.WEB.H265-SUPPLY.mkv",
+							"size": 14700402151,
+							"downloadUrl": "https://redacted.debrid.link/13",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "f55a6a4d903baaa81ae4cf20b87244c2d21c804e",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "4d7151bb1994b51f5d5730fd64f3c568be982b6f",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sgkmg8ogyajm8rccwckc8rib",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+.DDP5.1.Atmos.H265.MP4-BTM",
+					"created": 1793807688,
+					"error": 0,
+					"errorString": "",
+					"hashString": "4d7151bb1994b51f5d5730fd64f3c568be982b6f",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14521197882,
+					"files": [
+						{
+							"id": "sgkmg8ogyajm8rccwckc8rib-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+[Ben The Men].mp4",
+							"size": 14521197882,
+							"downloadUrl": "https://redacted.debrid.link/14",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "66d63e3b2f8208d68ef773a8995e37f535d6c9fa",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "svlwg8ogyalyoigcko0wcb2f",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.SDR.DDP5.1.Atmos.H265-BTM",
+					"created": 1793807688,
+					"error": 0,
+					"errorString": "",
+					"hashString": "66d63e3b2f8208d68ef773a8995e37f535d6c9fa",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14484276598,
+					"files": [
+						{
+							"id": "svlwg8ogyalyoigcko0wcb2f-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.SDR[Ben The Men].mkv",
+							"size": 14484276598,
+							"downloadUrl": "https://redacted.debrid.link/15",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "bfec8d19aedde3f178b8ef6eb4e5a700dd55b6b1",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sgwog8ogyalymj4800wwccvn",
+					"name": "Verity 2026.mkv",
+					"created": 1793807688,
+					"error": 0,
+					"errorString": "",
+					"hashString": "bfec8d19aedde3f178b8ef6eb4e5a700dd55b6b1",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 100,
+					"zip": {},
+					"peersConnected": 0,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 100,
+					"act_progress": false,
+					"totalSize": 14252239863,
+					"files": [
+						{
+							"id": "sgwog8ogyalymj4800wwccvn-1",
+							"name": "Verity 2026.mkv",
+							"size": 14252239863,
+							"downloadUrl": "https://redacted.debrid.link/16",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "2a038e71cf5653b914d9ed92d1ce730ce60fbd3e",
+			"status": 200,
+			"body": {
+				"success": true,
+				"value": {
+					"id": "sxjgg8ogyame2fsc4co0w15e",
+					"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H.265.HUN.ENG-PTHD",
+					"created": 1793807688,
+					"error": 0,
+					"errorString": "",
+					"hashString": "2a038e71cf5653b914d9ed92d1ce730ce60fbd3e",
+					"uploadRatio": 1,
+					"serverId": "",
+					"wait": false,
+					"downloaded": false,
+					"downloadPercent": 27,
+					"zip": {},
+					"peersConnected": 1,
+					"downloadSpeed": 0,
+					"uploadSpeed": 0,
+					"status": 4,
+					"act_progress": false,
+					"totalSize": 14220873606,
+					"files": [
+						{
+							"id": "sxjgg8ogyame2fsc4co0w15e-1",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H.265.HUN.ENG-PTHD.mkv",
+							"size": 14220853862,
+							"downloadUrl": "https://redacted.debrid.link/17",
+							"downloaded": false,
+							"downloadPercent": 27
+						},
+						{
+							"id": "sxjgg8ogyame2fsc4co0w15e-2",
+							"name": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H.265.HUN.ENG-PTHD.nfo",
+							"size": 19744,
+							"downloadUrl": "https://redacted.debrid.link/18",
+							"downloaded": false,
+							"downloadPercent": 100
+						}
+					],
+					"trackers": [],
+					"isZip": false,
+					"srvMaint": false
+				}
+			}
+		},
+		{
+			"hash": "9cb3dda8c4bc65d8ed9a98414cd6c66136e3b909",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		},
+		{
+			"hash": "e1ec7a3f78c2dd4bf4fcd433d106cc0d02bc3ad4",
+			"status": 422,
+			"body": {
+				"success": false,
+				"error": "notAddTorrent",
+				"error_description": "The torrent could not be added."
+			}
+		}
+	],
+	"candidates": [
+		{
+			"hash": "2e819d2a23e1de79be0eeb22da4ccdd444754029",
+			"title": "Verity 2026 1080p Blu-Ray\u2122 Main Feature DDP 5 1-ISO-BitRate",
+			"sizeMb": 22016
+		},
+		{
+			"hash": "5d6a291865d630dbd5c76d1a1a828decb719e683",
+			"title": "Verity 2026 2160p AMZN WEB-DL DV HDR10 MULTi-Ben The Men",
+			"sizeMb": 21197
+		},
+		{
+			"hash": "d3ec75c526d2bb219fed50e7c7f9d1c839459771",
+			"title": "Verity.2026.2160p.AMZN.WEB.DL.DV.HDR10_.MULTi-Ben.The.Men {imdb-tt3226",
+			"sizeMb": 21197
+		},
+		{
+			"hash": "5397f9bd37426960f1fb4e8441e669fa1baf0040",
+			"title": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+.MULTi.LAT.FRE.GER.HINDI.POR.At",
+			"sizeMb": 21197
+		},
+		{
+			"hash": "de3510162069a396a760e904d18b569418e99542",
+			"title": "Verity.2026.1080p.BluRay.REMUX.E-AC-3.5.1",
+			"sizeMb": 20890
+		},
+		{
+			"hash": "0c1cf76efb21a22f5c586f4ea057c31f7a001ed8",
+			"title": "Verity Dunkle Geheimnisse 2026 GERMAN DL DV 2160P WEB H265-WAYNE",
+			"sizeMb": 17920
+		},
+		{
+			"hash": "545a747ab13d60a7f2dbbd20edd74f1248f759fc",
+			"title": "Verity Dunkle Geheimnisse 2026 German DL HDR 2160p WEB h265-W4K",
+			"sizeMb": 17613
+		},
+		{
+			"hash": "6fbd7e02e501499ff1c4e1def7237aa09fbf0275",
+			"title": "Verity 2026 DV 2160p WEB h265-UNLOCKED",
+			"sizeMb": 17408
+		},
+		{
+			"hash": "094f2dc1b3e7e532402bee6aac119b3c4c0732b5",
+			"title": "Verity 2026 2160p AMZN WEB-DL DDP5 1 Atmos DV H 265-BYNDR",
+			"sizeMb": 17408
+		},
+		{
+			"hash": "a9b55426741d8029b6d1cba8759024c392b3287f",
+			"title": "Verity.(2026).WEB-DL.2160p.DV5.Ukr.Eng",
+			"sizeMb": 17306
+		},
+		{
+			"hash": "5d62e0a09146fcc887d69943e4cc2c2ac52dbde5",
+			"title": "Verity 2026 2160p AMZN WEB-DL DDP5.1 DV HDR H.265",
+			"sizeMb": 14234
+		},
+		{
+			"hash": "a737633d41b9c7680e35ae455778a8485d589916",
+			"title": "\u0422\u0430\u0439\u043d\u044b\u0439 \u0434\u043d\u0435\u0432\u043d\u0438\u043a \u0412\u0435\u0440\u0438\u0442\u0438 / Verity (\u041c\u0430\u0439\u043a\u043b \u0428\u043e\u0443\u043e\u043b\u0442\u0435\u0440 / Michael Showalter) [2",
+			"sizeMb": 14131
+		},
+		{
+			"hash": "944d042689160db03278a653521579fee4c3d2f2",
+			"title": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.DV.HDR.H.265.mkv",
+			"sizeMb": 14131
+		},
+		{
+			"hash": "a07f75023879f230342239b7c894cfb0899c874d",
+			"title": "\u0422\u0430\u0439\u043d\u044b\u0439 \u0434\u043d\u0435\u0432\u043d\u0438\u043a \u0412\u0435\u0440\u0438\u0442\u0438 / Verity (2026) WEB-DL 2160p | HEVC | 4\u041a \u00b7 SDR \u00b7",
+			"sizeMb": 14131
+		},
+		{
+			"hash": "ae2a26fece71db9577d9ed9c87abef4d93f23cee",
+			"title": "Verity.2026.MULTi.VF2.2160p.HDR.WEB.H265.mkv",
+			"sizeMb": 14131
+		},
+		{
+			"hash": "5dfcabad3a3a9717625ccb3d49c39f50cd1e281a",
+			"title": "Verity La sombra de un enga\u00f1o (2026) [4k 2160p][Esp]",
+			"sizeMb": 14131
+		},
+		{
+			"hash": "efb77203a568c5451b327bb273cafa53f0692541",
+			"title": "Verity.2026.MULTI.VF2.2160p.WEB.DV.HDR10Plus.EAC3.5.1.H265-SUPPLY",
+			"sizeMb": 14029
+		},
+		{
+			"hash": "396e3b347344a628a4e05f41c46f0e36b4bdde3b",
+			"title": "Verity.2026.MULTi.VF2.HDR.2160p.WEB.H265-SUPPLY.mkv",
+			"sizeMb": 14029
+		},
+		{
+			"hash": "f55a6a4d903baaa81ae4cf20b87244c2d21c804e",
+			"title": "\u0422\u0430\u0439\u043d\u044b\u0439 \u0434\u043d\u0435\u0432\u043d\u0438\u043a \u0412\u0435\u0440\u0438\u0442\u0438 / Verity (2026) UHD WEB-DL 2160p | 4K | HDR10+ |",
+			"sizeMb": 13824
+		},
+		{
+			"hash": "4d7151bb1994b51f5d5730fd64f3c568be982b6f",
+			"title": "Verity.2026.2160p.AMZN.WEB-DL.DV.HDR10+.DDP5.1.Atmos.H265.MP4-BTM",
+			"sizeMb": 13824
+		},
+		{
+			"hash": "66d63e3b2f8208d68ef773a8995e37f535d6c9fa",
+			"title": "Verity.2026.2160p.AMZN.WEB-DL.SDR.DDP5.1.Atmos.H265-BTM",
+			"sizeMb": 13824
+		},
+		{
+			"hash": "bfec8d19aedde3f178b8ef6eb4e5a700dd55b6b1",
+			"title": "Verity 2026.mkv",
+			"sizeMb": 13619
+		},
+		{
+			"hash": "2a038e71cf5653b914d9ed92d1ce730ce60fbd3e",
+			"title": "Verity.2026.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H.265.HUN.ENG-PTHD",
+			"sizeMb": 13517
+		},
+		{
+			"hash": "9cb3dda8c4bc65d8ed9a98414cd6c66136e3b909",
+			"title": "Verity.2026.MULTi.2160p.WEB-DL.SDR.h265-R22",
+			"sizeMb": 13517
+		},
+		{
+			"hash": "e1ec7a3f78c2dd4bf4fcd433d106cc0d02bc3ad4",
+			"title": "\u0422\u0430\u0439\u043d\u044b\u0439 \u0434\u043d\u0435\u0432\u043d\u0438\u043a \u0412\u0435\u0440\u0438\u0442\u0438 / Verity (2026) UHD WEB-DL 2160p | 4K | HDR10+ |",
+			"sizeMb": 13517
+		}
+	],
+	"emptyListing": {
+		"success": true,
+		"value": [],
+		"pagination": {
+			"page": 0,
+			"pages": 1,
+			"next": -1,
+			"previous": -1
+		}
+	},
+	"recorded": "2026-11-04, POST /seedbox/add url=<bare hash> for each of DMM's top 25 Verity (tt32261958) releases by size, Debrid-Link account ymsita",
+	"remove": {
+		"status": 200,
+		"body": {
+			"success": true,
+			"value": [
+				"s4oqg8ogyaapvzksg8g8chqy",
+				"sxtpg8ogyaass9sg8ws001sa",
+				"sbuig8ogyafbk0ocg4gwss1c",
+				"syo7g8ogyafw8d4c0c4w8xav",
+				"sqp3g8ogyagy75s0oo4wcty2",
+				"ski0g8ogyah2d2go8oog4dfw",
+				"swepg8ogyahox08cogg80jtw",
+				"s5tpg8ogyaj0y3480koggxpa",
+				"szv1g8ogyajcii8sco8wk9rx",
+				"sgkmg8ogyajm8rccwckc8rib",
+				"svlwg8ogyalyoigcko0wcb2f",
+				"sgwog8ogyalymj4800wwccvn",
+				"sxjgg8ogyame2fsc4co0w15e"
+			]
+		}
+	}
+}

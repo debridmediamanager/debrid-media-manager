@@ -1,10 +1,13 @@
 import handler from '@/pages/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]';
+import { _testing as dlTesting } from '@/services/debridLink';
 import { repository } from '@/services/repository';
+import { ProviderCacheMemo, setProviderCacheMemo } from '@/services/torznab/providerCache';
+import verity from '@/test/fixtures/debridlink/seedbox-add-verity-2026-11-04.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeCastGrant } from '@/test/utils/sponsor';
 import { getTroveCandidates } from '@/utils/cachedTroveStreams';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/services/rateLimit/withRateLimit', () => ({
@@ -66,9 +69,7 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		]);
 	});
 
-	// Debrid-Link retired `/seedbox/cached` and put nothing in its place, so the
-	// only probe is a mutating add costing one of the viewer's 50 daily torrents.
-	// Filtering a stream list that way would spend the whole day's quota.
+	// Debrid-Link retired `/seedbox/cached`; a probe is an add, so casts are not filtered by one.
 	it('offers every cast unfiltered, because there is no cache probe to filter with', async () => {
 		mockRepository.getDebridLinkUserCastStreams = vi
 			.fn()
@@ -80,19 +81,6 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		const titles = (res._getData() as any).streams.map((s: any) => s.title).join(' ');
 		expect(titles).toContain('Mine.mkv');
 		expect(titles).toContain('Other.mkv');
-	});
-
-	// The sibling routes fill spare slots from DMM's scraped pool because each of
-	// them can verify a hash for free first. Here every click would cost the
-	// viewer a torrent to discover the release is not cached.
-	it('offers no scraped-trove releases at all', async () => {
-		mockTrove.mockResolvedValue([{ hash: B, title: 'Trove.mkv', sizeMb: 900 }]);
-
-		await handler(request(), res);
-
-		expect(mockTrove).not.toHaveBeenCalled();
-		const titles = (res._getData() as any).streams.map((s: any) => s.title ?? '').join(' ');
-		expect(titles).not.toContain('Trove.mkv');
 	});
 
 	// A stream list is exactly the sort of thing a client caches, and a
@@ -151,5 +139,138 @@ describe('/api/stremio-dl/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getDebridLinkUserCastStreams = vi.fn().mockRejectedValue(new Error('boom'));
 		await handler(request(), res);
 		expect(res.status).toHaveBeenCalledWith(503);
+	});
+
+	/**
+	 * Recorded 2026-11-04: DMM's 25 largest Verity releases, 13 of which Debrid-Link
+	 * had cached (one only admitted at 27%), and the route offered none of them.
+	 * The model answers each bare-hash add as recorded and holds what was added
+	 * until it is removed.
+	 */
+	describe("cached releases from DMM's scraped pool", () => {
+		const adds = new Map(verity.adds.map((a) => [a.hash, a]));
+		let calls: { method: string; url: string; auth: string; body: string }[];
+		let held: Map<string, unknown>;
+
+		beforeEach(() => {
+			process.env.DEBRIDLINK_PROBE_KEY = 'dmm-probe-key';
+			setProviderCacheMemo(new ProviderCacheMemo(undefined));
+			dlTesting.resetLibrarySnapshots();
+			dlTesting.resetProbeBudget();
+			dlTesting.resetFloodLockouts();
+			mockTrove.mockResolvedValue(verity.candidates);
+			calls = [];
+			held = new Map();
+			vi.stubGlobal(
+				'fetch',
+				vi.fn(async (url: string, init: RequestInit = {}) => {
+					const method = init.method ?? 'GET';
+					const body = String(init.body ?? '');
+					const auth = String((init.headers as Record<string, string>).Authorization);
+					calls.push({ method, url, auth, body });
+					const json = (status: number, payload: unknown) =>
+						new Response(JSON.stringify(payload), {
+							status,
+							headers: { 'content-type': 'application/json' },
+						});
+					if (url.includes('/seedbox/add')) {
+						const add = adds.get(new URLSearchParams(body).get('url')!)!;
+						if (add.status === 200) {
+							const torrent = (add.body as any).value;
+							held.set(torrent.id, torrent);
+						}
+						return json(add.status, add.body);
+					}
+					if (url.includes('/remove')) {
+						const ids = decodeURIComponent(
+							url.split('/seedbox/')[1].split('/remove')[0]
+						).split(',');
+						ids.forEach((id) => held.delete(id));
+						return json(200, { success: true, value: ids });
+					}
+					if (url.includes('/seedbox/list')) {
+						const ids = new URL(url).searchParams.get('ids')?.split(',');
+						const value = [...held.values()].filter(
+							(t: any) => !ids || ids.includes(t.id)
+						);
+						return json(200, { ...verity.emptyListing, value });
+					}
+					throw new Error(`unexpected Debrid-Link call ${method} ${url}`);
+				})
+			);
+		});
+
+		afterEach(() => {
+			delete process.env.DEBRIDLINK_PROBE_KEY;
+			setProviderCacheMemo(null);
+			vi.unstubAllGlobals();
+		});
+
+		const troveStreams = () =>
+			(res._getData() as any).streams.filter((s: any) => s.url && !s.url.includes('?file='));
+		const completeHits = verity.adds
+			.filter((a) => a.status === 200 && (a.body as any).value.downloadPercent === 100)
+			.map((a) => a.hash);
+
+		it('fills the free slots with releases Debrid-Link has cached, largest first', async () => {
+			await handler(request({ imdbid: 'tt32261958' }), res);
+
+			expect(troveStreams().map((s: any) => s.url)).toEqual(
+				completeHits
+					.slice(0, 5)
+					.map((h) => `https://dmm.test/api/stremio-dl/dl-user/play/${h}`)
+			);
+		});
+
+		it("probes with DMM's own account and leaves it as it found it", async () => {
+			await handler(request({ imdbid: 'tt32261958' }), res);
+
+			expect(calls.length).toBeGreaterThan(0);
+			expect(calls.every((c) => c.auth === 'Bearer dmm-probe-key')).toBe(true);
+			expect(held.size).toBe(0);
+			// Two chunks of eight found the five, so the rest were never asked about.
+			expect(calls.filter((c) => c.url.includes('/seedbox/add'))).toHaveLength(16);
+		});
+
+		it('never offers a release Debrid-Link only admitted', async () => {
+			const partial = verity.adds.find((a) => (a.body as any).value?.downloadPercent === 27)!;
+			const tail = verity.candidates.slice(16);
+			mockTrove.mockResolvedValue(tail);
+			activeCastGrant();
+			mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue({
+				apiKey: 'viewer-token',
+				movieMaxSize: 0,
+				episodeMaxSize: 0,
+				otherStreamsLimit: 10,
+			});
+
+			await handler(request({ imdbid: 'tt32261958' }), res);
+
+			const offered = troveStreams().map((s: any) => s.url.split('/play/')[1]);
+			expect(tail.map((c) => c.hash)).toContain(partial.hash);
+			expect(offered).toEqual(completeHits.filter((h) => tail.some((c) => c.hash === h)));
+			expect(offered).not.toContain(partial.hash);
+			expect(offered.length).toBeGreaterThan(0);
+		});
+
+		it('answers a repeat view from the shared memo without probing', async () => {
+			await handler(request({ imdbid: 'tt32261958' }), res);
+			calls = [];
+			res = createMockResponse();
+
+			await handler(request({ imdbid: 'tt32261958' }), res);
+
+			expect(calls).toEqual([]);
+			expect(troveStreams()).toHaveLength(5);
+		});
+
+		it('offers casts only when DMM has no probe account', async () => {
+			delete process.env.DEBRIDLINK_PROBE_KEY;
+
+			await handler(request({ imdbid: 'tt32261958' }), res);
+
+			expect(calls).toEqual([]);
+			expect(troveStreams()).toEqual([]);
+		});
 	});
 });

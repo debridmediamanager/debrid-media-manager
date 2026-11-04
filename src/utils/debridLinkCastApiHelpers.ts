@@ -1,11 +1,13 @@
 import type { DebridLinkTorrent } from '@/services/debridLink';
 import {
 	addSeedboxTorrent,
+	checkDebridLinkCache,
 	DebridLinkError,
 	getDebridLinkAccountInfo,
 	getSeedboxTorrent,
 	isDlFinished,
 } from '@/services/debridLink';
+import { providerCacheMemo } from '@/services/torznab/providerCache';
 import type { DebridLinkVideoFile } from '@/utils/debridLinkCastFiles';
 import { debridLinkVideoFiles } from '@/utils/debridLinkCastFiles';
 import { toMagnetUri } from '@/utils/extractHashes';
@@ -172,6 +174,65 @@ export const resolveDebridLinkTorrentById = async (
 ): Promise<DebridLinkResolvedRelease | null> => {
 	const torrent = await getSeedboxTorrent(token, torrentId);
 	return torrent ? toResolved(torrent) : null;
+};
+
+/** Probes one stream list may spend; the shared memo answers repeat views. */
+const TROVE_PROBES_PER_LIST = 32;
+/** Probed together, largest first, so a list stops probing once its slots are full. */
+const TROVE_PROBE_CHUNK = 8;
+
+/**
+ * The releases from DMM's scraped pool that Debrid-Link holds cached, at most `wanted`.
+ *
+ * Debrid-Link's only cache probe is the bare-hash add (`checkDebridLinkCache`): a miss
+ * changes nothing, a hit lands the torrent in the account. So the probe runs with DMM's
+ * own account (`DEBRIDLINK_PROBE_KEY`), never the viewer's, and removes what it added.
+ * Its cache is one pool, so an answer is good for every viewer and goes in the shared
+ * provider memo. Measured 2026-11-04: 49 of the top 25 releases of 11 titles cached.
+ * Without the key this offers nothing, which is what the route did before.
+ */
+export const debridLinkCachedTrove = async <T extends { hash: string }>(
+	candidates: T[],
+	wanted: number
+): Promise<T[]> => {
+	const key = process.env.DEBRIDLINK_PROBE_KEY;
+	if (!key || wanted <= 0 || candidates.length === 0) return [];
+
+	const memo = providerCacheMemo();
+	const hashes = candidates.map((item) => item.hash.toLowerCase());
+	const known = await memo.read('dl', hashes);
+	const hits = () => candidates.filter((item) => known.get(item.hash.toLowerCase()) === true);
+
+	let spent = 0;
+	for (
+		let start = 0;
+		start < hashes.length && spent < TROVE_PROBES_PER_LIST && hits().length < wanted;
+		start += TROVE_PROBE_CHUNK
+	) {
+		const unknown = hashes
+			.slice(start, start + TROVE_PROBE_CHUNK)
+			.filter((hash) => !known.has(hash))
+			.slice(0, TROVE_PROBES_PER_LIST - spent);
+		if (unknown.length === 0) continue;
+		spent += unknown.length;
+
+		const sweep = await checkDebridLinkCache(key, unknown, { maxProbes: unknown.length });
+		const learned = new Map<string, boolean>();
+		// An unanswered hash (lockout, budget, unreadable library) is not a miss.
+		for (const result of sweep.results)
+			if (result.checked) learned.set(result.hash, result.cached);
+		await memo.write('dl', learned);
+		for (const [hash, cached] of learned) known.set(hash, cached);
+
+		if (sweep.leftBehindIds.length > 0) {
+			console.error(
+				'[Stremio-DL Stream] Probe torrents left in the probe account:',
+				sweep.leftBehindIds
+			);
+		}
+		if (sweep.floodLockedOut) break;
+	}
+	return hits().slice(0, wanted);
 };
 
 export const _testing = { deriveUserId };
