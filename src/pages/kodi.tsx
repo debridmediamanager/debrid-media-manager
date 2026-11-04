@@ -54,13 +54,42 @@ const SIGN_IN_KEYS = [
 	'dl:apiKey',
 ];
 
-const signedIn = () => {
+/** Signed in to every service when `service` is omitted, to that one otherwise. */
+const signedIn = (service?: string) => {
 	try {
-		return SIGN_IN_KEYS.some((key) => !!localStorage.getItem(key));
+		return SIGN_IN_KEYS.some(
+			(key) => (!service || key.startsWith(`${service}:`)) && !!localStorage.getItem(key)
+		);
 	} catch {
 		return false;
 	}
 };
+
+/**
+ * Every service: the ones Kodi gets as solid chips, the others as sign-ins that come back
+ * to `redirect`. Without it, a browser signed in to one service had no way to add a second.
+ */
+function ServiceChips({ casts, redirect }: { casts: Record<string, string>; redirect: string }) {
+	return (
+		<div className="flex flex-wrap gap-2">
+			{SERVICES.map(({ key, name, chip, login }) =>
+				casts[key] ? (
+					<span key={key} className={`rounded px-2 py-1 text-sm font-semibold ${chip}`}>
+						✓ {name}
+					</span>
+				) : signedIn(key) ? null : (
+					<Link
+						key={key}
+						href={`${login}?redirect=${encodeURIComponent(redirect)}`}
+						className="rounded border border-dashed border-gray-500 px-2 py-1 text-sm text-gray-300 hover:border-gray-300 hover:text-gray-100"
+					>
+						+ Add {name}
+					</Link>
+				)
+			)}
+		</div>
+	);
+}
 
 function useCastIds(): Record<string, string> {
 	// Opening this page enrols each signed-in service in DMM Cast, as its own cast
@@ -94,9 +123,8 @@ function LinkCard() {
 		if (typeof router.query.code === 'string') setCode(formatCode(router.query.code));
 	}, [router.query.code]);
 
-	const services = SERVICES.filter(({ key }) => casts[key]);
 	const sponsorKey = isSponsor ? apiKey : null;
-	const nothingToLink = !services.length && !sponsorKey;
+	const nothingToLink = !Object.keys(casts).length && !sponsorKey;
 
 	async function submit(event: FormEvent, confirmOtherNetwork = false) {
 		event.preventDefault();
@@ -140,6 +168,11 @@ function LinkCard() {
 						close this page.
 					</span>
 				</p>
+				<p className="mt-4 mb-2 text-sm text-gray-400">
+					To add another service, sign in to it here, then choose Account → Link again in
+					Kodi:
+				</p>
+				<ServiceChips casts={casts} redirect="/kodi" />
 			</Card>
 		);
 	}
@@ -189,48 +222,23 @@ function LinkCard() {
 			)}
 
 			<div className="mt-4 text-gray-300">
-				{nothingToLink ? (
-					<>
-						<p className="mb-2">
-							This browser is not signed in to DMM. Sign in with the service Kodi
-							should play through and you come straight back here:
-						</p>
-						<div className="mb-3 flex flex-wrap gap-2">
-							{SERVICES.map(({ key, name, chip, login }) => (
-								<Link
-									key={key}
-									href={`${login}?redirect=${encodeURIComponent(router.asPath)}`}
-									className={`rounded px-2 py-1 text-sm font-medium ${chip}`}
-								>
-									{name}
-								</Link>
-							))}
-						</div>
-						<p className="text-sm text-gray-400">
-							Or open debridmediamanager.com/kodi on a phone or computer where you
-							already use DMM and enter the code there.
-						</p>
-					</>
-				) : (
-					<>
-						<p className="mb-2">Kodi gets:</p>
-						<div className="flex flex-wrap gap-2">
-							{services.map(({ key, name, chip }) => (
-								<span
-									key={key}
-									className={`rounded px-2 py-0.5 text-xs font-semibold ${chip}`}
-								>
-									{name}
-								</span>
-							))}
-							{sponsorKey && (
-								<span className="rounded border border-gray-500 px-2 py-0.5 text-xs text-gray-200">
-									Sponsor{githubUsername ? ` (${githubUsername})` : ''}: Wanted
-									list
-								</span>
-							)}
-						</div>
-					</>
+				<p className="mb-2">
+					{nothingToLink
+						? 'This browser is not signed in to DMM. Sign in with the service Kodi should play through and you come straight back here:'
+						: 'Kodi gets the ticked services. Add another and you come straight back here:'}
+				</p>
+				<ServiceChips casts={casts} redirect={router.asPath} />
+				{sponsorKey && (
+					<p className="mt-2 text-sm text-gray-300">
+						Sponsor{githubUsername ? ` (${githubUsername})` : ''}: Kodi also gets your
+						Wanted list.
+					</p>
+				)}
+				{nothingToLink && (
+					<p className="mt-3 text-sm text-gray-400">
+						Or open debridmediamanager.com/kodi on a phone or computer where you already
+						use DMM and enter the code there.
+					</p>
 				)}
 			</div>
 		</Card>

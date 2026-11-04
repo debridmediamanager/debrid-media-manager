@@ -41,7 +41,8 @@ vi.mock('next/link', () => ({
 	),
 }));
 
-vi.mock('@/hooks/castToken', () => ({ useCastToken: () => undefined }));
+const rdCast = { id: undefined as string | undefined };
+vi.mock('@/hooks/castToken', () => ({ useCastToken: () => rdCast.id }));
 vi.mock('@/hooks/allDebridCastToken', () => ({ useAllDebridCastToken: () => undefined }));
 vi.mock('@/hooks/torboxCastToken', () => ({ useTorBoxCastToken: () => undefined }));
 vi.mock('@/hooks/premiumizeCastToken', () => ({ usePremiumizeCastToken: () => undefined }));
@@ -73,6 +74,7 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 	beforeEach(() => {
 		push.mockClear();
 		localStorage.clear();
+		rdCast.id = undefined;
 	});
 
 	it('stays on the page with the code instead of going to /start', async () => {
@@ -93,7 +95,7 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 			'Offcloud',
 			'Debrid-Link',
 		]) {
-			const href = screen.getByRole('link', { name }).getAttribute('href')!;
+			const href = screen.getByRole('link', { name: `+ Add ${name}` }).getAttribute('href')!;
 			const [path, query] = href.split('?');
 			expect(LOGIN_ROUTES).toContain(path);
 			expect(new URLSearchParams(query).get('redirect')).toBe('/kodi?code=ABCDEFGH');
@@ -106,5 +108,31 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 		await renderPage();
 
 		expect(push).toHaveBeenCalledWith('/start');
+	});
+});
+
+/**
+ * Reported 2026-11-05 (r/Addons4Kodi): signed in with Real-Debrid on the phone, Kodi got only
+ * RD, and once one service was signed in the page offered no way to sign in to another.
+ */
+describe('/kodi?code= on a browser signed in to one service', () => {
+	beforeEach(() => {
+		push.mockClear();
+		localStorage.clear();
+		localStorage.setItem('rd:accessToken', 'token');
+		rdCast.id = 'rd-cast';
+	});
+
+	it('ticks the signed-in service and offers the others, coming back to this code', async () => {
+		await renderPage();
+
+		expect(screen.getByText('✓ Real-Debrid')).toBeInTheDocument();
+		expect(screen.queryByRole('link', { name: '+ Add Real-Debrid' })).toBeNull();
+		for (const name of ['TorBox', 'AllDebrid', 'Premiumize', 'Offcloud', 'Debrid-Link']) {
+			const href = screen.getByRole('link', { name: `+ Add ${name}` }).getAttribute('href')!;
+			expect(new URLSearchParams(href.split('?')[1]).get('redirect')).toBe(
+				'/kodi?code=ABCDEFGH'
+			);
+		}
 	});
 });
