@@ -317,11 +317,12 @@ def source_label(s):
 
 
 def source_label2(s, name_of=None):
-    """Filename and line 2, its flags replaced by language names where DMM knows the codes: a flag names only
-    a country (Hindi, Tamil and Telugu all show IN)."""
+    """Languages, codec, then the filename: Estuary's two-line rows cut the end of a long filename, so the names
+    go first. They replace the flags where DMM knows the codes: a flag names only a country (Hindi, Tamil and
+    Telugu all show IN)."""
     names = audio_names(s, name_of)
-    details = ' • '.join(p for p in (s['audio'], ', '.join(names)) if p) if names else s['details']
-    return ' · '.join(p for p in (s['filename'], details.replace(' • ', ' · ')) if p)
+    details = ' • '.join(p for p in (', '.join(names), s['audio']) if p) if names else s['details']
+    return ' · '.join(p for p in (details.replace(' • ', ' · '), s['filename']) if p)
 
 
 def trakt_ids(imdb_id):

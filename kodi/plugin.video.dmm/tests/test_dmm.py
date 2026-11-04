@@ -48,7 +48,7 @@ class Streams(unittest.TestCase):
         self.assertEqual(dmm.source_label(self.sources[0]),
                          '[B]PM[/B]  720p · H264 · 18.68 GB · your cast')
         self.assertEqual(dmm.source_label2(self.sources[0]),
-                         'Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv · AAC 2.0 · GB IN IN IN')
+                         'AAC 2.0 · GB IN IN IN · Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv')
 
     def test_a_dead_install_is_a_notice_not_a_source(self):
         sources, notices, cast_url = dmm.parse_streams('rd', fixture('rd-notice-not-connected.json'))
@@ -133,15 +133,15 @@ class AudioLanguages(unittest.TestCase):
         self.assertEqual(self.order(''), ([self.mine] + self.sources[1:], False))
         self.assertEqual(self.order('', hide=True), ([self.mine] + self.sources[1:], False))
 
-    def test_picker_names_the_languages_in_place_of_flags(self):
-        self.assertEqual(dmm.source_label2(self.mine, NAMES), 'Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy'
-                         '.mkv · AAC 2.0 · English, Hindi, Tamil, Telugu')
-        self.assertTrue(dmm.source_label2(self.dayluv, NAMES).endswith('Atmos-DayLuvVideo · TrueHD 7.1 · English, '
-                                                                       'French, Spanish'))
-        self.assertTrue(dmm.source_label2(self.btm, NAMES).endswith('H265-BTM · TrueHD 7.1 · English, Spanish, French, '
-                                                                    'German, Italian, Hindi, Russian'))
+    def test_picker_names_the_languages_before_the_filename_estuary_cuts_short(self):
+        self.assertEqual(dmm.source_label2(self.mine, NAMES), 'English, Hindi, Tamil, Telugu · AAC 2.0 · '
+                         'Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy.mkv')
+        self.assertTrue(dmm.source_label2(self.dayluv, NAMES).startswith('English, French, Spanish · TrueHD 7.1 · '
+                                                                         'Project Hail Mary 2026 2160p IMAX'))
+        self.assertTrue(dmm.source_label2(self.btm, NAMES).startswith('English, Spanish, French, German, Italian, '
+                                                                      'Hindi, Russian · TrueHD 7.1 · Project'))
         self.assertEqual(dmm.source_label2(self.tmt, NAMES), dmm.source_label2(self.tmt))
-        self.assertTrue(dmm.source_label2(self.teamhd).endswith('DD 5.1 · RU UA GB'))
+        self.assertTrue(dmm.source_label2(self.teamhd).startswith('DD 5.1 · RU UA GB · Project'))
 
 
 class Trakt(unittest.TestCase):
