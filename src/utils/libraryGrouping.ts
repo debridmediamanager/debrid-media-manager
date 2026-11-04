@@ -1,4 +1,4 @@
-import type { UserTorrent } from '@/torrent/userTorrent';
+import { UserTorrentStatus, type UserTorrent } from '@/torrent/userTorrent';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { normalize } from '@/utils/mediaId';
 
@@ -16,11 +16,16 @@ export interface LibraryGrouping {
 	readonly parsedTitlesById: Readonly<Record<string, string>>;
 	readonly tvTitlesById: Readonly<Record<string, string>>;
 	readonly tvTitleCounts: ReadonlyMap<string, number>;
+	/** Keyed by providerHashKey. */
 	readonly hashCounts: ReadonlyMap<string, number>;
 	readonly duplicateTitleGroups: number;
 	readonly duplicateHashes: number;
 	readonly totalBytes: number;
 }
+
+/** Same-hash identity is per provider (`rd:<hash>`): one copy each on RD and PM is not a duplicate. */
+export const providerHashKey = (torrent: Pick<UserTorrent, 'id' | 'hash'>): string =>
+	torrent.id.slice(0, torrent.id.indexOf(':') + 1) + torrent.hash;
 
 export function buildLibraryGrouping(
 	torrents: readonly UserTorrent[],
@@ -88,8 +93,9 @@ export function buildLibraryGrouping(
 		if (!torrent.hash) {
 			totalBytes += torrent.bytes;
 		} else {
-			const count = (hashCounts.get(torrent.hash) ?? 0) + 1;
-			hashCounts.set(torrent.hash, count);
+			const key = providerHashKey(torrent);
+			const count = (hashCounts.get(key) ?? 0) + 1;
+			hashCounts.set(key, count);
 			if (count === 1) totalBytes += torrent.bytes;
 			if (count === 2) duplicateHashes++;
 		}
@@ -128,4 +134,18 @@ export function duplicateLibraryTorrents(
 		}
 	}
 	return duplicates;
+}
+
+/** Finished rows sharing a hash on one provider; each group's last row is reinserted, the rest deleted. */
+export function sameHashMergeGroups(torrents: readonly UserTorrent[]): Map<string, UserTorrent[]> {
+	const first = new Map<string, UserTorrent>();
+	const groups = new Map<string, UserTorrent[]>();
+	for (const torrent of torrents) {
+		if (torrent.status !== UserTorrentStatus.finished || !torrent.hash) continue;
+		const key = providerHashKey(torrent);
+		const retained = first.get(key);
+		if (!retained) first.set(key, torrent);
+		else groups.set(key, [...(groups.get(key) ?? [retained]), torrent]);
+	}
+	return groups;
 }

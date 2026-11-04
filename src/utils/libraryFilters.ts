@@ -1,5 +1,5 @@
 import { UserTorrent } from '@/torrent/userTorrent';
-import type { LibraryGrouping } from '@/utils/libraryGrouping';
+import { providerHashKey, type LibraryGrouping } from '@/utils/libraryGrouping';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from '@/utils/slow';
 
@@ -85,7 +85,7 @@ export const filterLibraryItems = ({
 	}
 	if (statusValue === 'samehash') {
 		filteredList = filteredList.filter(
-			(torrent) => (grouping.hashCounts.get(torrent.hash) ?? 0) > 1
+			(torrent) => (grouping.hashCounts.get(providerHashKey(torrent)) ?? 0) > 1
 		);
 	}
 	if (titleValue) {

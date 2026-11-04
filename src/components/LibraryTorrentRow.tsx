@@ -18,7 +18,7 @@ import {
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
-import type { LibraryGrouping } from '@/utils/libraryGrouping';
+import { providerHashKey, type LibraryGrouping } from '@/utils/libraryGrouping';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
@@ -410,7 +410,7 @@ function TorrentRow({
 	};
 
 	// Calculate filter texts
-	const hashGroupCount = grouping.hashCounts.get(torrent.hash) ?? 0;
+	const hashGroupCount = grouping.hashCounts.get(providerHashKey(torrent)) ?? 0;
 	const hashFilterText = hashGroupCount > 1 && !hashFilter ? `${hashGroupCount} same hash` : '';
 
 	const titleGroup = grouping.titleGroupsById[torrent.id];

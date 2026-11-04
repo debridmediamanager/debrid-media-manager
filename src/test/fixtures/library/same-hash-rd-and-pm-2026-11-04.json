@@ -1,0 +1,103 @@
+{
+	"_comment": "Card 561: Cosmos Laundromat (c9e15763...) held once on Real-Debrid and once on Premiumize, captured 2026-11-04 from the RD test account rd80bf5c9e72de (GET /torrents) and the Premiumize test account (transfer/list, folder/list, item/listall, job/src), filtered to that release. The PM hash is the sha1 of the info dict job/src returned.",
+	"premiumize": {
+		"transfers": [
+			{
+				"id": "haI022fPtbFULrxxbIYphQ",
+				"name": "Cosmos Laundromat",
+				"message": null,
+				"status": "finished",
+				"progress": null,
+				"folder_id": "AfT3kbkF3YgZVLThltMLgg",
+				"file_id": null,
+				"other_cloud_id": null,
+				"created_at": 1793754845,
+				"src": "https://www.premiumize.me/api/job/src?id=haI022fPtbFULrxxbIYphQ"
+			}
+		],
+		"rootContent": [
+			{
+				"id": "AfT3kbkF3YgZVLThltMLgg",
+				"name": "Cosmos Laundromat",
+				"type": "folder",
+				"created_at": 1793754845
+			}
+		],
+		"items": [
+			{
+				"id": "jUuhTct2doydEvYzhirbnA",
+				"name": "Cosmos Laundromat.en.srt",
+				"created_at": 1793754845,
+				"size": 3945,
+				"mime_type": "text/plain",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/Cosmos Laundromat.en.srt"
+			},
+			{
+				"id": "Qjn32vnyT8ENHCZm-pC3hA",
+				"name": "Cosmos Laundromat.es.srt",
+				"created_at": 1793754845,
+				"size": 3911,
+				"mime_type": "text/plain",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/Cosmos Laundromat.es.srt"
+			},
+			{
+				"id": "M1afA5bMwxRVdoROgbOyFA",
+				"name": "Cosmos Laundromat.fr.srt",
+				"created_at": 1793754845,
+				"size": 4120,
+				"mime_type": "text/plain",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/Cosmos Laundromat.fr.srt"
+			},
+			{
+				"id": "h8GfVvbZapKB1CE5jA3nyQ",
+				"name": "Cosmos Laundromat.it.srt",
+				"created_at": 1793754845,
+				"size": 3945,
+				"mime_type": "text/plain",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/Cosmos Laundromat.it.srt"
+			},
+			{
+				"id": "3lVD72j-FFICyjICUG5WFw",
+				"name": "Cosmos Laundromat.mp4",
+				"created_at": 1793754845,
+				"size": 220087570,
+				"mime_type": "video/mp4",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/Cosmos Laundromat.mp4"
+			},
+			{
+				"id": "SyQXRC4iORMNVBJ77SzcBQ",
+				"name": "poster.jpg",
+				"created_at": 1793754845,
+				"size": 760595,
+				"mime_type": "image/png",
+				"virus_scan": "ok",
+				"path": "Cosmos Laundromat/poster.jpg"
+			}
+		],
+		"hashes": {
+			"haI022fPtbFULrxxbIYphQ": "c9e15763f722f23e98a29decdfae341b98d53056"
+		}
+	},
+	"realdebrid": {
+		"torrents": [
+			{
+				"id": "4KLOV27VHSCUY",
+				"filename": "Cosmos Laundromat",
+				"hash": "c9e15763f722f23e98a29decdfae341b98d53056",
+				"bytes": 220864086,
+				"host": "real-debrid.com",
+				"split": 2000,
+				"progress": 100,
+				"status": "downloaded",
+				"added": "2026-11-04T02:14:44.000Z",
+				"links": [],
+				"ended": "2025-06-01T23:40:07.000Z"
+			}
+		]
+	}
+}

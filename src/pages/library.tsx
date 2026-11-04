@@ -66,7 +66,11 @@ import {
 } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
-import { buildLibraryGrouping, duplicateLibraryTorrents } from '@/utils/libraryGrouping';
+import {
+	buildLibraryGrouping,
+	duplicateLibraryTorrents,
+	sameHashMergeGroups,
+} from '@/utils/libraryGrouping';
 import { identifiable, identifyLibrary, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
@@ -989,20 +993,7 @@ function TorrentsPage() {
 	}
 
 	async function combineSameHash() {
-		const dupeHashes: Map<string, UserTorrent[]> = new Map();
-		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
-			if (cur.status !== UserTorrentStatus.finished) return acc;
-			let key = cur.hash;
-			if (acc[key]) {
-				if (!dupeHashes.has(key)) {
-					dupeHashes.set(key, new Array(acc[key]));
-				}
-				dupeHashes.get(key)?.push(cur);
-			} else {
-				acc[key] = cur;
-			}
-			return acc;
-		}, {});
+		const dupeHashes = sameHashMergeGroups(filteredList);
 		let dupeHashesCount = 0;
 		dupeHashes.forEach((hashes) => {
 			dupeHashesCount += hashes.length;
