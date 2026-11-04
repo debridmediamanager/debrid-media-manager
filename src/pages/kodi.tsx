@@ -33,13 +33,34 @@ const formatCode = (raw: string) => {
 };
 
 const SERVICES = [
-	{ key: 'rd', name: 'Real-Debrid', chip: 'bg-[#b5d496] text-black' },
-	{ key: 'tb', name: 'TorBox', chip: 'bg-[#4f46e5] text-white' },
-	{ key: 'ad', name: 'AllDebrid', chip: 'bg-[#fbc730] text-black' },
-	{ key: 'pm', name: 'Premiumize', chip: 'bg-[#aa0000] text-white' },
-	{ key: 'oc', name: 'Offcloud', chip: 'bg-[#f97316] text-black' },
-	{ key: 'dl', name: 'Debrid-Link', chip: 'bg-[#38bdf8] text-black' },
+	{ key: 'rd', name: 'Real-Debrid', chip: 'bg-[#b5d496] text-black', login: '/realdebrid/login' },
+	{ key: 'tb', name: 'TorBox', chip: 'bg-[#4f46e5] text-white', login: '/torbox/login' },
+	{ key: 'ad', name: 'AllDebrid', chip: 'bg-[#fbc730] text-black', login: '/alldebrid/login' },
+	{ key: 'pm', name: 'Premiumize', chip: 'bg-[#aa0000] text-white', login: '/premiumize/login' },
+	{ key: 'oc', name: 'Offcloud', chip: 'bg-[#f97316] text-black', login: '/offcloud/login' },
+	{ key: 'dl', name: 'Debrid-Link', chip: 'bg-[#38bdf8] text-black', login: '/debridlink/login' },
 ] as const;
+
+/** What withAuth counts as a provider sign-in (src/utils/withAuth.tsx). */
+const SIGN_IN_KEYS = [
+	'rd:accessToken',
+	'rd:refreshToken',
+	'ad:apiKey',
+	'tb:apiKey',
+	'pm:accessToken',
+	'pm:apiKey',
+	'oc:apiKey',
+	'dl:accessToken',
+	'dl:apiKey',
+];
+
+const signedIn = () => {
+	try {
+		return SIGN_IN_KEYS.some((key) => !!localStorage.getItem(key));
+	} catch {
+		return false;
+	}
+};
 
 function useCastIds(): Record<string, string> {
 	// Opening this page enrols each signed-in service in DMM Cast, as its own cast
@@ -169,13 +190,27 @@ function LinkCard() {
 
 			<div className="mt-4 text-gray-300">
 				{nothingToLink ? (
-					<p>
-						Sign in to a debrid service on{' '}
-						<Link href="/" className="text-blue-300 underline hover:text-blue-200">
-							the dashboard
-						</Link>{' '}
-						first. Kodi plays through your account.
-					</p>
+					<>
+						<p className="mb-2">
+							This browser is not signed in to DMM. Sign in with the service Kodi
+							should play through and you come straight back here:
+						</p>
+						<div className="mb-3 flex flex-wrap gap-2">
+							{SERVICES.map(({ key, name, chip, login }) => (
+								<Link
+									key={key}
+									href={`${login}?redirect=${encodeURIComponent(router.asPath)}`}
+									className={`rounded px-2 py-1 text-sm font-medium ${chip}`}
+								>
+									{name}
+								</Link>
+							))}
+						</div>
+						<p className="text-sm text-gray-400">
+							Or open debridmediamanager.com/kodi on a phone or computer where you
+							already use DMM and enter the code there.
+						</p>
+					</>
 				) : (
 					<>
 						<p className="mb-2">Kodi gets:</p>
@@ -257,4 +292,13 @@ function KodiPage() {
 	);
 }
 
-export default dynamic(() => Promise.resolve(withAuth(KodiPage)), { ssr: false });
+const AuthedKodiPage = withAuth(KodiPage);
+
+// A phone that scans the TV's code is often not signed in to DMM (another browser, or Safari
+// clearing storage after 7 idle days). withAuth would send it to /start and lose the code, so
+// such a browser gets the page itself, which says how to sign in and come back.
+function KodiEntry() {
+	return signedIn() ? <AuthedKodiPage /> : <KodiPage />;
+}
+
+export default dynamic(() => Promise.resolve(KodiEntry), { ssr: false });
