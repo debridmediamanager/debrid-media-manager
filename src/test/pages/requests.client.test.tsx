@@ -75,6 +75,14 @@ beforeEach(() => {
 // TorBox and land in the asker's Real-Debrid. The page used to hide Fulfil from
 // anyone without both logins, turning away exactly the people with TorBox and no
 // Real-Debrid that the board needs.
+// The library provider holds the whole cached library in memory on every page
+// it wraps; this page never reads it (31.5 of 42 MB of heap, 2026-11-04).
+it('runs without the library provider', () => {
+	expect((RequestsPage as { disableLibraryProvider?: boolean }).disableLibraryProvider).toBe(
+		true
+	);
+});
+
 describe('RequestsPage for a fulfiller', () => {
 	it('offers Fulfil with TorBox alone and sends no Real-Debrid key', async () => {
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false] as any);

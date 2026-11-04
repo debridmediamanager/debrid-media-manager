@@ -748,3 +748,8 @@ export default function RequestsPage() {
 		</div>
 	);
 }
+
+// Nothing here reads the library, and the provider holds the whole cached library
+// in memory: 31.5 of a 42 MB heap with a mid-sized TorBox library (2026-11-04),
+// more for a big one, which is how this page ran a reporter's tab out of memory.
+RequestsPage.disableLibraryProvider = true;
