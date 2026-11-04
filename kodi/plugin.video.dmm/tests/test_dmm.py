@@ -83,9 +83,8 @@ NAMES = {'eng': 'English', 'hin': 'Hindi', 'tam': 'Tamil', 'tel': 'Telugu', 'rus
 
 
 class AudioLanguages(unittest.TestCase):
-    # pm-streams-tt12042730.json with each release's audioLanguages added from its stored probe on DMM
-    # (/api/torrents/mediainfo, largest file), as the stream endpoint is about to serve them; d033… and eae9…
-    # have no probe. To be replaced by a recording once production serves the field.
+    # The same title recorded from production on 2026-11-04, once it served audioLanguages; d033… and eae9…
+    # have no probe, so no codes.
     def setUp(self):
         self.sources = dmm.parse_streams('pm', fixture('pm-streams-tt12042730-languages.json'))[0]
         self.mine, self.tmt, self.teamhd, self.dayluv, self.btm, self.joshua = self.sources
@@ -139,8 +138,8 @@ class AudioLanguages(unittest.TestCase):
                          '.mkv · AAC 2.0 · English, Hindi, Tamil, Telugu')
         self.assertTrue(dmm.source_label2(self.dayluv, NAMES).endswith('Atmos-DayLuvVideo · TrueHD 7.1 · English, '
                                                                        'French, Spanish'))
-        self.assertTrue(dmm.source_label2(self.btm, NAMES).endswith('H265-BTM · English, Spanish, French, German, '
-                                                                    'Italian, Hindi, Russian'))
+        self.assertTrue(dmm.source_label2(self.btm, NAMES).endswith('H265-BTM · TrueHD 7.1 · English, Spanish, French, '
+                                                                    'German, Italian, Hindi, Russian'))
         self.assertEqual(dmm.source_label2(self.tmt, NAMES), dmm.source_label2(self.tmt))
         self.assertTrue(dmm.source_label2(self.teamhd).endswith('DD 5.1 · RU UA GB'))
 
