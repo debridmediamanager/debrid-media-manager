@@ -48,6 +48,8 @@ vi.mock('react-hot-toast', () => {
 	const fn: any = vi.fn((message: string) => {});
 	fn.success = vi.fn();
 	fn.error = vi.fn();
+	fn.loading = vi.fn();
+	fn.dismiss = vi.fn();
 	return { default: fn };
 });
 
@@ -558,6 +560,35 @@ describe('addMagnet utilities', () => {
 			expect(toast.error).toHaveBeenCalledWith('Failed to add torrent file.');
 			expect(toast).toHaveBeenCalledWith('Added 2 torrent files.', expect.any(Object));
 		});
+
+		// #645: three .torrent files took two minutes on production with no word
+		// between the first and the last, and a reload in between dropped the rest.
+		it('says how far the run is and holds the page until it ends', async () => {
+			const leaveBlocked = () => {
+				const event = new Event('beforeunload', { cancelable: true });
+				window.dispatchEvent(event);
+				return event.defaultPrevented;
+			};
+			const blockedDuringAdd: boolean[] = [];
+			vi.mocked(addTorrentFile).mockImplementation(async () => {
+				blockedDuringAdd.push(leaveBlocked());
+				return 'id';
+			});
+			vi.mocked(getTorrentInfo).mockResolvedValue({ id: 'test', files: [] } as any);
+
+			await handleAddMultipleTorrentFilesInRd(rdKey, files);
+
+			expect(vi.mocked(toast.loading).mock.calls.map(([message]) => message)).toEqual([
+				'Adding torrent files 1/3...',
+				'1/3 torrent files done, next in ~60 s (Real-Debrid pauses accounts that add faster). Keep this page open.',
+				'Adding torrent files 2/3...',
+				'2/3 torrent files done, next in ~60 s (Real-Debrid pauses accounts that add faster). Keep this page open.',
+				'Adding torrent files 3/3...',
+			]);
+			expect(toast.dismiss).toHaveBeenCalledWith('rd-bulk-add-progress');
+			expect(blockedDuringAdd).toEqual([true, true, true]);
+			expect(leaveBlocked()).toBe(false);
+		});
 	});
 
 	describe('handleAddMultipleHashesInRd', () => {
@@ -599,6 +630,30 @@ describe('addMagnet utilities', () => {
 			expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
 			expect(toast.error).toHaveBeenCalledWith('Failed to add hash.');
 			expect(toast).toHaveBeenCalledWith('Added 2 hashes.', expect.any(Object));
+		});
+
+		it('says how far a hash run is and holds the page until it ends', async () => {
+			const leaveBlocked = () => {
+				const event = new Event('beforeunload', { cancelable: true });
+				window.dispatchEvent(event);
+				return event.defaultPrevented;
+			};
+			const blockedDuringAdd: boolean[] = [];
+			vi.mocked(addHashAsMagnet).mockImplementation(async () => {
+				blockedDuringAdd.push(leaveBlocked());
+				return 'id';
+			});
+			vi.mocked(getTorrentInfo).mockResolvedValue({ id: 'test', files: [] } as any);
+
+			await handleAddMultipleHashesInRd(rdKey, hashes.slice(0, 2));
+
+			expect(vi.mocked(toast.loading).mock.calls.map(([message]) => message)).toEqual([
+				'Adding hashes 1/2...',
+				'1/2 hashes done, next in ~60 s (Real-Debrid pauses accounts that add faster). Keep this page open.',
+				'Adding hashes 2/2...',
+			]);
+			expect(blockedDuringAdd).toEqual([true, true]);
+			expect(leaveBlocked()).toBe(false);
 		});
 	});
 

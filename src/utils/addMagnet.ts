@@ -368,14 +368,46 @@ const describeRdBulkAddError = (error: unknown, fallback: string): string => {
 	return rdError ? `RD error: ${rdError}` : fallback;
 };
 
+/**
+ * A spaced RD bulk add runs in this page for a minute per item (#645): say how
+ * far it is and when the next one goes, and ask before a reload or tab close
+ * ends it. Moving inside DMM keeps it running, so only unload is guarded.
+ */
+const runRdBulkAdd = async (noun: string, total: number, addOne: (i: number) => Promise<void>) => {
+	const spacingS = Math.round(RD_BULK_ADD_SPACING_MS / 1000);
+	const progress = { ...magnetToastOptions, id: 'rd-bulk-add-progress' };
+	const holdPage = (event: BeforeUnloadEvent) => {
+		event.preventDefault();
+		// Safari and older Chrome only prompt on a non-empty returnValue.
+		event.returnValue = `Adding ${noun} to Real-Debrid is still running.`;
+	};
+	toast.loading(`Adding ${noun} 1/${total}...`, progress);
+	window.addEventListener('beforeunload', holdPage);
+	try {
+		for (let i = 0; i < total; i++) {
+			if (i > 0) {
+				toast.loading(
+					`${i}/${total} ${noun} done, next in ~${spacingS} s (Real-Debrid pauses accounts that add faster). Keep this page open.`,
+					progress
+				);
+				await delay(BATCH_MAGNET_DELAY);
+				toast.loading(`Adding ${noun} ${i + 1}/${total}...`, progress);
+			}
+			await addOne(i);
+		}
+	} finally {
+		window.removeEventListener('beforeunload', holdPage);
+		toast.dismiss(progress.id);
+	}
+};
+
 export const handleAddMultipleTorrentFilesInRd = async (
 	rdKey: string,
 	files: File[],
 	callback?: () => Promise<void>
 ) => {
 	let errorCount = 0;
-	for (let i = 0; i < files.length; i++) {
-		if (i > 0) await delay(BATCH_MAGNET_DELAY);
+	await runRdBulkAdd('torrent files', files.length, async (i) => {
 		try {
 			// A 451 holds the rest of the batch (inside `addTorrentFile`) and
 			// earns this file one more try once the pause is over.
@@ -392,7 +424,7 @@ export const handleAddMultipleTorrentFilesInRd = async (
 			);
 			toast.error(describeRdBulkAddError(error, 'Failed to add torrent file.'));
 		}
-	}
+	});
 	if (callback) await callback();
 	toast(`Added ${files.length - errorCount} torrent files.`, magnetToastOptions);
 };
@@ -407,8 +439,7 @@ export const handleAddMultipleHashesInRd = async (
 	const namesOnRecord = await fetchRdNamesOnRecord(
 		hashes.flatMap((source) => extractTorrentInputs(source).map(({ hash }) => hash))
 	);
-	for (let i = 0; i < hashes.length; i++) {
-		if (i > 0) await delay(BATCH_MAGNET_DELAY);
+	await runRdBulkAdd('hashes', hashes.length, async (i) => {
 		try {
 			const names = namesOnRecord.get(extractTorrentInputs(hashes[i])[0]?.hash ?? '');
 			// A 451 holds the rest of the batch (inside `addHashAsMagnet`) and
@@ -427,7 +458,7 @@ export const handleAddMultipleHashesInRd = async (
 			);
 			toast.error(describeRdBulkAddError(error, 'Failed to add hash.'));
 		}
-	}
+	});
 	if (callback) await callback();
 	toast(`Added ${hashes.length - errorCount} hashes.`, magnetToastOptions);
 };
