@@ -70,6 +70,7 @@ import { buildLibraryGrouping, duplicateLibraryTorrents } from '@/utils/libraryG
 import { identifiable, identifyLibrary, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
+import { magnetTargets, pickMagnetProvider, type MagnetProvider } from '@/utils/magnetProviderPick';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, toasterPosition } from '@/utils/toastOptions';
@@ -306,9 +307,31 @@ function TorrentsPage() {
 		processingHashRef.current = hash;
 		router.replace('/library?page=1', undefined, { shallow: true });
 
+		const signedIn = (
+			[
+				['rd', rdKey],
+				['ad', adKey],
+				['tb', tbKey],
+				['pm', pmKey],
+				['oc', ocKey],
+				['dl', dlKey],
+			] as const
+		)
+			.filter(([, key]) => key)
+			.map(([provider]) => provider);
+		void (async () => {
+			// Several sign-ins ask first; a cancelled picker adds nowhere.
+			const choice = signedIn.length > 1 ? await pickMagnetProvider(signedIn) : null;
+			await addMagnetTo(new Set(magnetTargets(signedIn, choice)), hash, source);
+			processingHashRef.current = null;
+		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query.addMagnet]);
+
+	const addMagnetTo = async (targets: Set<MagnetProvider>, hash: string, source: string) => {
 		const promises: Promise<void>[] = [];
 
-		if (rdKey) {
+		if (rdKey && targets.has('rd')) {
 			promises.push(
 				(async () => {
 					try {
@@ -334,7 +357,7 @@ function TorrentsPage() {
 				})()
 			);
 		}
-		if (adKey) {
+		if (adKey && targets.has('ad')) {
 			promises.push(
 				(async () => {
 					try {
@@ -360,7 +383,7 @@ function TorrentsPage() {
 				})()
 			);
 		}
-		if (tbKey) {
+		if (tbKey && targets.has('tb')) {
 			promises.push(
 				(async () => {
 					try {
@@ -374,7 +397,7 @@ function TorrentsPage() {
 			);
 		}
 
-		if (pmKey) {
+		if (pmKey && targets.has('pm')) {
 			promises.push(
 				(async () => {
 					try {
@@ -388,7 +411,7 @@ function TorrentsPage() {
 			);
 		}
 
-		if (ocKey) {
+		if (ocKey && targets.has('oc')) {
 			promises.push(
 				(async () => {
 					try {
@@ -402,7 +425,7 @@ function TorrentsPage() {
 			);
 		}
 
-		if (dlKey) {
+		if (dlKey && targets.has('dl')) {
 			promises.push(
 				(async () => {
 					try {
@@ -419,12 +442,8 @@ function TorrentsPage() {
 			);
 		}
 
-		Promise.all(promises).then(() => {
-			processingHashRef.current = null;
-		});
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query.addMagnet]);
+		await Promise.all(promises);
+	};
 
 	const hasNoQueryParamsBut = (...params: string[]) =>
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;

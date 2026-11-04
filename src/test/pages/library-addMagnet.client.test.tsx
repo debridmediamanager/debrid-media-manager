@@ -51,10 +51,11 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 }));
 
 const mockCredentials = vi.hoisted(
-	(): { rd: string | null; ad: string | null; tb: string | null } => ({
+	(): { rd: string | null; ad: string | null; tb: string | null; pm: string | null } => ({
 		rd: 'test-rd-key',
 		ad: 'test-ad-key',
 		tb: 'test-tb-key',
+		pm: null,
 	})
 );
 
@@ -63,7 +64,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => [mockCredentials.rd],
 	useAllDebridApiKey: () => mockCredentials.ad,
 	useTorBoxAccessToken: () => mockCredentials.tb,
-	usePremiumizeCredential: () => null,
+	usePremiumizeCredential: () => mockCredentials.pm,
 	useOffcloudApiKey: () => null,
 	useDebridLinkCredential: () => null,
 }));
@@ -74,6 +75,7 @@ vi.mock('@/hooks/useRelativeTimeLabel', () => ({
 }));
 
 const mockHandleAddAsMagnetInRd = vi.fn();
+const mockHandleAddAsMagnetInPm = vi.fn();
 
 const mockAddFilesInRd = vi.fn();
 const mockAddHashesInRd = vi.fn();
@@ -93,6 +95,7 @@ vi.mock('@/utils/addMagnet', () => ({
 	handleAddAsMagnetInRd: (...args: unknown[]) => mockHandleAddAsMagnetInRd(...args),
 	handleAddAsMagnetInAd: vi.fn(),
 	handleAddAsMagnetInTb: vi.fn(),
+	handleAddAsMagnetInPm: (...args: unknown[]) => mockHandleAddAsMagnetInPm(...args),
 	handleAddMultipleHashesInRd: (...args: unknown[]) => mockAddHashesInRd(...args),
 	handleAddMultipleHashesInAd: vi.fn(),
 	handleAddMultipleHashesInTb: vi.fn(),
@@ -330,6 +333,85 @@ describe('Library Page - addMagnet Query Parameter', () => {
 			mockCredentials.ad = 'test-ad-key';
 			mockCredentials.tb = 'test-tb-key';
 		}
+	});
+});
+
+// Card 359, reproduced live 2026-11-04: signed in to RD and Premiumize, the
+// extension's /library?addMagnet=<hash> landed Cosmos Laundromat on both accounts.
+describe('Library addMagnet with several providers signed in', () => {
+	const COSMOS = 'c9e15763f722f23e98a29decdfae341b98d53056';
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		window.localStorage.clear();
+		mockRouter.query = { addMagnet: COSMOS };
+		mockCredentials.rd = 'test-rd-key';
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
+		mockCredentials.pm = 'test-pm-key';
+		mockHandleAddAsMagnetInRd.mockResolvedValue('success');
+		mockHandleAddAsMagnetInPm.mockResolvedValue(undefined);
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => ({ ok: false, json: async () => ({}) }))
+		);
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		mockCredentials.ad = 'test-ad-key';
+		mockCredentials.tb = 'test-tb-key';
+		mockCredentials.pm = null;
+	});
+
+	// The picker's radio is what preConfirm reads; answer as if the user picked `value`.
+	const answer = (value: string) =>
+		mockModalFire.mockImplementation(async (options: { html: string }) => {
+			expect(options.html).toContain('Real-Debrid');
+			expect(options.html).toContain('Premiumize');
+			return { isConfirmed: true, value };
+		});
+
+	it('asks first and adds only to the provider picked', async () => {
+		answer('pm');
+		render(<LibraryPage />);
+
+		await waitFor(() => expect(mockHandleAddAsMagnetInPm).toHaveBeenCalledTimes(1));
+		expect(mockModalFire).toHaveBeenCalledTimes(1);
+		expect(mockHandleAddAsMagnetInPm.mock.calls[0][0]).toBe('test-pm-key');
+		expect(mockHandleAddAsMagnetInPm.mock.calls[0][1]).toBe(COSMOS);
+		expect(mockHandleAddAsMagnetInRd).not.toHaveBeenCalled();
+		expect(window.localStorage.getItem('settings:addMagnetProvider')).toBe('pm');
+	});
+
+	it('adds nothing when the picker is cancelled', async () => {
+		mockModalFire.mockResolvedValue({ isConfirmed: false, isDismissed: true });
+		render(<LibraryPage />);
+
+		await waitFor(() => expect(mockModalFire).toHaveBeenCalledTimes(1));
+		await act(async () => {});
+		expect(mockHandleAddAsMagnetInRd).not.toHaveBeenCalled();
+		expect(mockHandleAddAsMagnetInPm).not.toHaveBeenCalled();
+	});
+
+	it('keeps adding to every provider when the user picks All', async () => {
+		answer('all');
+		render(<LibraryPage />);
+
+		await waitFor(() => {
+			expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledTimes(1);
+			expect(mockHandleAddAsMagnetInPm).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	it('preselects the last choice', async () => {
+		window.localStorage.setItem('settings:addMagnetProvider', 'pm');
+		answer('pm');
+		render(<LibraryPage />);
+
+		await waitFor(() => expect(mockModalFire).toHaveBeenCalledTimes(1));
+		expect(mockModalFire.mock.calls[0][0].html).toMatch(/value="pm" checked/);
+		expect(mockModalFire.mock.calls[0][0].html).not.toMatch(/value="rd" checked/);
 	});
 });
 
