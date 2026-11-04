@@ -19,6 +19,7 @@ import {
 import { TorBoxTorrentInfo } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import {
+	describeAdAddError,
 	handleAddAsMagnetInDl,
 	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
@@ -737,7 +738,10 @@ function HashlistPage() {
 			const magnetUri = hash.startsWith('magnet:?') ? hash : `magnet:?xt=urn:btih:${hash}`;
 			const resp = await uploadMagnet(adKey!, [magnetUri]);
 			if (resp.magnets.length === 0 || resp.magnets[0].error) {
-				toast.error('Failed to add hash to AD.', genericToastOptions);
+				toast.error(
+					describeAdAddError(resp.magnets[0]?.error, 'Failed to add hash to AD.'),
+					genericToastOptions
+				);
 				return;
 			}
 			if (!resp.magnets[0].ready) {
@@ -759,7 +763,10 @@ function HashlistPage() {
 			}
 		} catch (error) {
 			console.error('Error adding magnet to AllDebrid:', error);
-			toast.error('Failed to add hash to AD.', genericToastOptions);
+			toast.error(
+				describeAdAddError(error, 'Failed to add hash to AD.'),
+				genericToastOptions
+			);
 		}
 	}
 

@@ -55,6 +55,7 @@ import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { fetchRdNamesOnRecord } from './availability';
+import { ALLDEBRID_ACCOUNT_CODES } from './castAddonFailure';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { extractTorrentInputs, toMagnetUri } from './extractHashes';
 import {
@@ -584,6 +585,18 @@ export const handleReinsertTorrentinRd = async (
 	}
 };
 
+/**
+ * The toast for a refused AllDebrid add. AllDebrid names trial and premium
+ * refusals by code (Fizzy #363); any other code shows its own message.
+ */
+export const describeAdAddError = (error: unknown, fallback: string): string => {
+	const { code, message } = (error ?? {}) as { code?: unknown; message?: unknown };
+	if (typeof code !== 'string' || !code) return fallback;
+	if (ALLDEBRID_ACCOUNT_CODES.has(code))
+		return "AllDebrid's free trial or expired plan does not allow this; it works once you subscribe.";
+	return typeof message === 'string' && message ? `AllDebrid error: ${message}` : fallback;
+};
+
 // What became of the hash: only 'added' and 'downloading' leave it on the account.
 export type AdAddOutcome = 'added' | 'downloading' | 'not_cached' | 'no_peers';
 
@@ -625,7 +638,9 @@ export const handleAddAsMagnetInAd = async (
 			}
 
 			// For other errors, throw
-			throw new Error(upload.error.message || 'Upload failed');
+			throw Object.assign(new Error(upload.error.message || 'Upload failed'), {
+				code: upload.error.code,
+			});
 		}
 
 		if (!upload.id) {
@@ -698,7 +713,7 @@ export const handleAddAsMagnetInAd = async (
 			'Error adding hash to AllDebrid:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		if (!silent) toast.error('Failed to add hash. Try again.');
+		if (!silent) toast.error(describeAdAddError(error, 'Failed to add hash. Try again.'));
 		throw error;
 	}
 };
@@ -710,7 +725,8 @@ export const handleAddMultipleHashesInAd = async (
 ) => {
 	try {
 		const resp = await uploadMagnet(adKey, hashes);
-		if (resp.magnets.length === 0 || resp.magnets[0].error) throw new Error('no_magnets');
+		if (resp.magnets.length === 0) throw new Error('no_magnets');
+		if (resp.magnets[0].error) throw resp.magnets[0].error;
 		if (callback) await callback();
 		toast(`Added ${resp.magnets.length} hashes.`, magnetToastOptions);
 	} catch (error) {
@@ -718,7 +734,7 @@ export const handleAddMultipleHashesInAd = async (
 			'Error adding hash:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		toast.error('Failed to add hash. Try again.');
+		toast.error(describeAdAddError(error, 'Failed to add hash. Try again.'));
 	}
 };
 

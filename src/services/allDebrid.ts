@@ -395,7 +395,7 @@ export const uploadMagnet = async (apikey: string, hashes: string[]): Promise<Ma
 		);
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Unknown error');
+			throw allDebridEnvelopeError(response.data.error, 'Unknown error');
 		}
 
 		return response.data.data!;
@@ -701,7 +701,7 @@ export const uploadMagnetAd = async (apiKey: string, hash: string): Promise<Magn
 		);
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Upload failed');
+			throw allDebridEnvelopeError(response.data.error, 'Upload failed');
 		}
 
 		return response.data.data!.magnets[0];

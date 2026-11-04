@@ -926,7 +926,7 @@ describe('addMagnet utilities', () => {
 			} as any);
 
 			await expect(handleAddAsMagnetInAd(adKey, hash)).rejects.toThrow();
-			expect(toast.error).toHaveBeenCalledWith('Failed to add hash. Try again.');
+			expect(toast.error).toHaveBeenCalledWith('AllDebrid error: Invalid magnet');
 		});
 	});
 

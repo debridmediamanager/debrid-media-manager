@@ -20,13 +20,7 @@
  *   well succeed.
  */
 export type CastFailure =
-	| 'not-connected'
-	| 'credential'
-	| 'account'
-	| 'confirm'
-	| 'gone'
-	| 'unplayable'
-	| 'unavailable';
+	'not-connected' | 'credential' | 'account' | 'confirm' | 'gone' | 'unplayable' | 'unavailable';
 
 /**
  * Error codes each provider uses for a key it will not accept, measured against
@@ -230,7 +224,7 @@ export function classifyTorBoxPlayError(error: unknown): CastPlayFailure {
 }
 
 /** AllDebrid codes for an account that cannot unlock anything right now. */
-const ALLDEBRID_ACCOUNT_CODES = new Set([
+export const ALLDEBRID_ACCOUNT_CODES = new Set([
 	'MUST_BE_PREMIUM',
 	'MAGNET_MUST_BE_PREMIUM',
 	'FREE_TRIAL_LIMIT_REACHED',

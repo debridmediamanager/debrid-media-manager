@@ -1,0 +1,70 @@
+{
+	"_provenance": "NOT a capture. AllDebrid's documented v4 shapes for POST /v4/magnet/upload, copied from https://docs.alldebrid.com/ on 2026-11-04: the request-level error envelope ('status': 'error' with error.code/message, section 'Response format') and the per-magnet error object inside data.magnets[] (the 'Upload magnets' example, shown there with MAGNET_INVALID_URI). Codes and messages are the docs' own: MAGNET_MUST_BE_PREMIUM and MAGNET_TOO_MANY_ACTIVE from the magnet/upload endpoint errors, FREE_TRIAL_LIMIT_REACHED from the global error list. No AllDebrid trial account was available to capture which shape a trial gets (Fizzy #363), so every code is recorded in both shapes. Replace with a real trial capture when one exists.",
+	"envelope": {
+		"MAGNET_MUST_BE_PREMIUM": {
+			"status": "error",
+			"error": {
+				"code": "MAGNET_MUST_BE_PREMIUM",
+				"message": "You must be premium to use this feature"
+			}
+		},
+		"FREE_TRIAL_LIMIT_REACHED": {
+			"status": "error",
+			"error": {
+				"code": "FREE_TRIAL_LIMIT_REACHED",
+				"message": "You have reached the free trial limit (7 days / 25GB downloaded or host uneligible for free trial)"
+			}
+		},
+		"MAGNET_TOO_MANY_ACTIVE": {
+			"status": "error",
+			"error": {
+				"code": "MAGNET_TOO_MANY_ACTIVE",
+				"message": "Already have maximum allowed active magnets (30)"
+			}
+		}
+	},
+	"perMagnet": {
+		"MAGNET_MUST_BE_PREMIUM": {
+			"status": "success",
+			"data": {
+				"magnets": [
+					{
+						"magnet": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707",
+						"error": {
+							"code": "MAGNET_MUST_BE_PREMIUM",
+							"message": "You must be premium to use this feature"
+						}
+					}
+				]
+			}
+		},
+		"FREE_TRIAL_LIMIT_REACHED": {
+			"status": "success",
+			"data": {
+				"magnets": [
+					{
+						"magnet": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707",
+						"error": {
+							"code": "FREE_TRIAL_LIMIT_REACHED",
+							"message": "You have reached the free trial limit (7 days / 25GB downloaded or host uneligible for free trial)"
+						}
+					}
+				]
+			}
+		},
+		"MAGNET_TOO_MANY_ACTIVE": {
+			"status": "success",
+			"data": {
+				"magnets": [
+					{
+						"magnet": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707",
+						"error": {
+							"code": "MAGNET_TOO_MANY_ACTIVE",
+							"message": "Already have maximum allowed active magnets (30)"
+						}
+					}
+				]
+			}
+		}
+	}
+}
