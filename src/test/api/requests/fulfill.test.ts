@@ -5,6 +5,7 @@ import { repository } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import tbUserMeBadKey from '@/test/fixtures/contentRequests/tb-user-me-bad-key.json';
 import tbUserMe from '@/test/fixtures/contentRequests/tb-user-me.json';
+import jobLimit429 from '@/test/fixtures/contentRequests/uploader-job-limit-429.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { torboxCachedHashes } from '@/utils/torboxCache';
@@ -79,6 +80,7 @@ beforeEach(() => {
 	mockUserId.mockResolvedValue('helper');
 	mockServers.mockReturnValue(['http://debrid02:3100']);
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
+	mockRepo.contentRequestAskerHasSendInFlight = vi.fn().mockResolvedValue(false);
 	mockRepo.claimContentRequest = vi.fn().mockResolvedValue(request({ status: 'claimed' }));
 	mockRepo.attachContentRequestJob = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordContentRequestAttempt = vi.fn().mockResolvedValue(undefined);
@@ -346,13 +348,39 @@ describe('races and failures', () => {
 		expect(mockRepo.stallContentRequest).toHaveBeenCalled();
 	});
 
-	// The uploader's per-user ceiling answered 429 "job limit reached", and seven
-	// requests carried that as their failure though nothing was wrong with them.
-	it('hands a request back untouched when the uploader is too busy', async () => {
+	// The uploader's job cap is counted on the asker's Real-Debrid account, queued
+	// jobs included, so "try again in a minute" was wrong for hours on
+	// 2026-11-04. The body is debrid's own 429, captured from its app.
+	it('says the asker already has a send on its way when the uploader caps them', async () => {
 		global.fetch = vi.fn().mockResolvedValue({
 			ok: false,
-			status: 429,
-			json: async () => ({ error: 'job limit reached' }),
+			status: jobLimit429.status,
+			json: async () => jobLimit429.body,
+		}) as any;
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).askerBusy).toBe(true);
+		expect(bodyOf(res).error).toMatch(/already has another release on its way/);
+		expect(mockRepo.returnContentRequestClaim).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('refuses before claiming when the asker already has a send on its way', async () => {
+		mockRepo.contentRequestAskerHasSendInFlight = vi.fn().mockResolvedValue(true);
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).askerBusy).toBe(true);
+		expect(mockRepo.contentRequestAskerHasSendInFlight).toHaveBeenCalledWith('asker');
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(torboxCachedHashes).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('hands a request back untouched when the uploader is broken', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			status: 503,
+			json: async () => ({}),
 		}) as any;
 		const res = await call();
 		expect(statusOf(res)).toBe(503);

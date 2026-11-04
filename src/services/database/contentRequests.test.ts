@@ -7,6 +7,7 @@ vi.mock('@prisma/client', () => ({
 			contentRequest: {
 				upsert: vi.fn(),
 				findUnique: vi.fn(),
+				findFirst: vi.fn(),
 				findMany: vi.fn(),
 				updateMany: vi.fn(),
 				groupBy: vi.fn(),
@@ -287,18 +288,20 @@ describe('ContentRequestService', () => {
 
 	describe('listOpenBoard', () => {
 		const H2 = 'b'.repeat(40);
+		const boardRows = [
+			row({ id: 'h2-oldest', hash: H2, requesterId: 'a1' }),
+			row({ id: 'h2-viewer', hash: H2, requesterId: 'viewer' }),
+			row({ id: 'h2-other', hash: H2, requesterId: 'a3' }),
+			row({ id: 'h1', hash: HASH }),
+		];
 
 		beforeEach(() => {
 			prisma.contentRequest.groupBy.mockResolvedValue([
 				{ hash: H2, _count: { hash: 3 }, _min: { createdAt: new Date() } },
 				{ hash: HASH, _count: { hash: 1 }, _min: { createdAt: new Date() } },
 			]);
-			prisma.contentRequest.findMany.mockResolvedValue([
-				row({ id: 'h2-oldest', hash: H2, requesterId: 'a1' }),
-				row({ id: 'h2-viewer', hash: H2, requesterId: 'viewer' }),
-				row({ id: 'h2-other', hash: H2, requesterId: 'a3' }),
-				row({ id: 'h1', hash: HASH }),
-			]);
+			// First read: who has a send on its way (nobody); then the board rows.
+			prisma.contentRequest.findMany.mockResolvedValueOnce([]).mockResolvedValue(boardRows);
 		});
 
 		// A release somebody already tried is the one likeliest to fail again, and
@@ -336,10 +339,36 @@ describe('ContentRequestService', () => {
 			expect(board[0].id).toBe('h2-viewer');
 		});
 
+		// The uploader takes one job per receiving Real-Debrid account, so a
+		// fulfil for somebody with a send already queued failed "busy" for hours:
+		// 306 of 2,044 open asks on 2026-11-04.
+		it('leaves out asks from people who already have a send on its way', async () => {
+			prisma.contentRequest.findMany
+				.mockReset()
+				.mockResolvedValueOnce([{ requesterId: 'a1' }, { requesterId: 'a3' }])
+				.mockResolvedValue(boardRows);
+			await service.listOpenBoard(25, 0, null);
+			expect(prisma.contentRequest.findMany).toHaveBeenNthCalledWith(1, {
+				where: { status: 'claimed' },
+				select: { requesterId: true },
+				distinct: ['requesterId'],
+			});
+			const busyOut = {
+				status: { in: ['open', 'failed'] },
+				requesterId: { notIn: ['a1', 'a3'] },
+			};
+			expect(prisma.contentRequest.groupBy).toHaveBeenCalledWith(
+				expect.objectContaining({ where: busyOut })
+			);
+			expect(prisma.contentRequest.findMany).toHaveBeenLastCalledWith(
+				expect.objectContaining({ where: { ...busyOut, hash: { in: [H2, HASH] } } })
+			);
+		});
+
 		it('reads no rows for an empty page', async () => {
 			prisma.contentRequest.groupBy.mockResolvedValue([]);
 			expect(await service.listOpenBoard(25, 0, null)).toEqual([]);
-			expect(prisma.contentRequest.findMany).not.toHaveBeenCalled();
+			expect(prisma.contentRequest.findMany).toHaveBeenCalledTimes(1);
 		});
 	});
 

@@ -89,13 +89,22 @@ export class ContentRequestService extends DatabaseClient {
 	 *
 	 * The row standing for a release is the viewer's own when they asked for it,
 	 * so a cancel from the board withdraws their ask, and otherwise the oldest.
+	 *
+	 * Asks from somebody who already has a send on its way are left out: the
+	 * uploader takes one job per receiving Real-Debrid account, so every fulfil
+	 * of them failed "busy" for hours (306 of 2,044 open asks on 2026-11-04).
+	 * `wantedBy` then counts only the askers a send can be filed for now.
 	 */
 	public async listOpenBoard(
 		limit: number,
 		offset: number,
 		viewerId: string | null
 	): Promise<(StoredRequest & { wantedBy: number })[]> {
-		const where = { status: { in: ['open', 'failed'] } };
+		const busy = await this.listRequestersWithSendInFlight();
+		const where = {
+			status: { in: ['open', 'failed'] },
+			...(busy.length > 0 ? { requesterId: { notIn: busy } } : {}),
+		};
 		const groups = await this.prisma.contentRequest.groupBy({
 			by: ['hash'],
 			where,
@@ -127,6 +136,24 @@ export class ContentRequestService extends DatabaseClient {
 			const row = byHash.get(g.hash);
 			return row ? [{ ...row, wantedBy: g._count.hash }] : [];
 		});
+	}
+
+	/** Askers with a claimed request, whose uploader job slot is therefore taken. */
+	public async listRequestersWithSendInFlight(): Promise<string[]> {
+		const rows = await this.prisma.contentRequest.findMany({
+			where: { status: 'claimed' },
+			select: { requesterId: true },
+			distinct: ['requesterId'],
+		});
+		return rows.map((r) => r.requesterId);
+	}
+
+	public async hasSendInFlight(requesterId: string): Promise<boolean> {
+		const row = await this.prisma.contentRequest.findFirst({
+			where: { requesterId, status: 'claimed' },
+			select: { id: true },
+		});
+		return row !== null;
 	}
 
 	/** One person's own asks, newest first, whatever state they are in. */

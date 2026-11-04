@@ -33,6 +33,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const RD_TOKEN_HEADER = 'x-rd-access-token';
 
+const ASKER_BUSY_MESSAGE =
+	'this person already has another release on its way to them, so this one can be sent once that lands. Try another request';
+
 function readToken(req: NextApiRequest): string | null {
 	const header = req.headers[RD_TOKEN_HEADER];
 	const token = Array.isArray(header) ? header[0] : header;
@@ -109,6 +112,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			error: 'this release is already being transferred, and will reach the asker when it lands',
 			inProgress: true,
 		});
+	}
+
+	// The uploader takes one job per receiving Real-Debrid account, queued ones
+	// included, so this one would be refused until the asker's other send lands.
+	if (await db.contentRequestAskerHasSendInFlight(request.requesterId)) {
+		return res.status(409).json({ error: ASKER_BUSY_MESSAGE, askerBusy: true });
 	}
 
 	const sizeBytes = request.sizeBytes == null ? undefined : Number(request.sizeBytes);
@@ -227,6 +236,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// recorded as failed that way by 2026-09-24). Hand it back untouched.
 		if (response.status === 429 || response.status >= 500) {
 			await db.returnContentRequestClaim(id);
+			// The cap is counted on the asker's account, so it lasts as long as
+			// their other transfer does, not "a minute". DMM misses the ones it
+			// did not file, such as the asker's own transfers from search.
+			if (response.status === 429 && data?.error === 'job limit reached') {
+				return res.status(409).json({ error: ASKER_BUSY_MESSAGE, askerBusy: true });
+			}
 			return res.status(503).json({
 				error: 'the uploader is busy right now, try again in a minute',
 				busy: true,

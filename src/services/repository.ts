@@ -260,6 +260,10 @@ export class Repository {
 		return this.contentRequestService.listRequestsFor(requesterId, limit);
 	}
 
+	public contentRequestAskerHasSendInFlight(requesterId: string) {
+		return this.contentRequestService.hasSendInFlight(requesterId);
+	}
+
 	public claimContentRequest(id: string, fulfillerId: string) {
 		return this.contentRequestService.claimRequest(id, fulfillerId);
 	}
