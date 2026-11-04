@@ -59,7 +59,7 @@ class Streams(unittest.TestCase):
     def test_own_casts_lead_across_accounts(self):
         other = dict(self.sources[1], service='rd')
         mine = dict(self.sources[0], service='rd')
-        ordered = dmm.order_sources([other, self.sources[2], mine])
+        ordered, _ = dmm.order_sources([other, self.sources[2], mine])
         self.assertEqual([s['yours'] for s in ordered], [True, False, False])
         self.assertIs(ordered[1], other)
 
@@ -74,6 +74,75 @@ class Streams(unittest.TestCase):
 
     def test_unwrap_leaves_short_lines_alone(self):
         self.assertEqual(dmm.unwrap_filename(['Some-', 'thing']), ['Some-', 'thing'])
+
+
+# What Kodi 21.2's xbmc.convertLanguage named these codes on the lab Kodi, through the two-letter code as
+# plugin.language_name asks; 'xyz' named nothing.
+NAMES = {'eng': 'English', 'hin': 'Hindi', 'tam': 'Tamil', 'tel': 'Telugu', 'rus': 'Russian', 'ukr': 'Ukrainian',
+         'spa': 'Spanish', 'fre': 'French', 'fra': 'French', 'ger': 'German', 'deu': 'German', 'ita': 'Italian'}.get
+
+
+class AudioLanguages(unittest.TestCase):
+    # pm-streams-tt12042730.json with each release's audioLanguages added from its stored probe on DMM
+    # (/api/torrents/mediainfo, largest file), as the stream endpoint is about to serve them; d033… and eae9…
+    # have no probe. To be replaced by a recording once production serves the field.
+    def setUp(self):
+        self.sources = dmm.parse_streams('pm', fixture('pm-streams-tt12042730-languages.json'))[0]
+        self.mine, self.tmt, self.teamhd, self.dayluv, self.btm, self.joshua = self.sources
+
+    def order(self, wanted, hide=False, sources=None):
+        return dmm.order_sources(self.sources if sources is None else sources, wanted, NAMES, hide)
+
+    def test_keeps_the_codes_and_none_where_unknown(self):
+        self.assertEqual(self.mine['codes'], ['eng', 'hin', 'tam', 'tel'])
+        self.assertEqual(self.tmt['codes'], [])
+        old = dmm.parse_streams('pm', fixture('pm-streams-tt12042730.json'))[0]
+        self.assertEqual([s['codes'] for s in old], [[]] * 6)
+
+    def test_names_b_and_t_codes_once_and_drops_unknown_ones(self):
+        self.assertEqual(dmm.audio_names(self.dayluv, NAMES), ['English', 'French', 'Spanish'])  # fra
+        self.assertEqual(dmm.audio_names(self.btm, NAMES),
+                         ['English', 'Spanish', 'French', 'German', 'Italian', 'Hindi', 'Russian'])  # fre, ger
+        self.assertEqual(dmm.audio_names({'codes': ['fre', 'xyz', 'fra', 'deu']}, NAMES), ['French', 'German'])
+
+    def test_wanted_first_then_unknown_then_the_rest_with_own_casts_ahead(self):
+        sources, unhidden = self.order('French')
+        self.assertEqual(sources, [self.mine, self.dayluv, self.btm, self.tmt, self.joshua, self.teamhd])
+        self.assertFalse(unhidden)
+        self.assertEqual(self.order('Tamil')[0],
+                         [self.mine, self.tmt, self.joshua, self.teamhd, self.dayluv, self.btm])
+
+    def test_hiding_drops_only_releases_known_to_lack_it(self):
+        self.assertEqual(self.order('French', hide=True),
+                         ([self.mine, self.dayluv, self.btm, self.tmt, self.joshua], False))
+        # Your own cast stays though it has no Thai, and so do releases nobody has probed.
+        self.assertEqual(self.order('Thai', hide=True), ([self.mine, self.tmt, self.joshua], False))
+
+    def test_hiding_everything_falls_back_to_the_whole_list(self):
+        known = [self.teamhd, self.dayluv]
+        self.assertEqual(self.order('Thai', hide=True, sources=known), (known, True))
+        self.assertEqual(self.order('Thai', hide=True, sources=[]), ([], False))
+
+    def test_off_and_kodis_no_language_choices_change_nothing(self):
+        kodi = lambda value: lambda: value  # noqa: E731
+        self.assertEqual(dmm.wanted_language('Off', kodi('German')), '')
+        for value in ('original', 'mediadefault', 'default', '', None):
+            self.assertEqual(dmm.wanted_language(dmm.KODI_LANGUAGE, kodi(value)), '')
+        self.assertEqual(dmm.wanted_language(dmm.KODI_LANGUAGE, kodi('German')), 'German')
+        self.assertEqual(dmm.wanted_language('', kodi('German')), 'German')  # setting not saved yet
+        self.assertEqual(dmm.wanted_language('Tamil', kodi('German')), 'Tamil')
+        self.assertEqual(self.order(''), ([self.mine] + self.sources[1:], False))
+        self.assertEqual(self.order('', hide=True), ([self.mine] + self.sources[1:], False))
+
+    def test_picker_names_the_languages_in_place_of_flags(self):
+        self.assertEqual(dmm.source_label2(self.mine, NAMES), 'Project.Hail.Mary.2026.1080p.WEB-DL.AAC.2.0.H264-EaZy'
+                         '.mkv · AAC 2.0 · English, Hindi, Tamil, Telugu')
+        self.assertTrue(dmm.source_label2(self.dayluv, NAMES).endswith('Atmos-DayLuvVideo · TrueHD 7.1 · English, '
+                                                                       'French, Spanish'))
+        self.assertTrue(dmm.source_label2(self.btm, NAMES).endswith('H265-BTM · English, Spanish, French, German, '
+                                                                    'Italian, Hindi, Russian'))
+        self.assertEqual(dmm.source_label2(self.tmt, NAMES), dmm.source_label2(self.tmt))
+        self.assertTrue(dmm.source_label2(self.teamhd).endswith('DD 5.1 · RU UA GB'))
 
 
 class Trakt(unittest.TestCase):

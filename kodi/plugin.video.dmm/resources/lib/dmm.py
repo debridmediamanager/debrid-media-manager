@@ -239,12 +239,16 @@ def parse_streams(service, data):
             lines = unwrap_filename((s.get('title') or '').split('\n'))
             credit = lines[-1] if lines and 'DMM Cast' in lines[-1] else ''
             body = lines[:-1] if credit else lines
+            line2 = ' '.join(body[1:])
+            codec, _, last = line2.rpartition(' • ')  # '<codec> • <flags>', either one alone
             sources.append({
                 'service': service,
                 'url': s['url'],
                 'quality': strip_emoji(s.get('name') or ''),
                 'filename': body[0] if body else '',
-                'details': strip_emoji(' '.join(body[1:])),
+                'details': strip_emoji(line2),
+                'audio': strip_emoji(codec if _EMOJI.search(last) else line2),
+                'codes': hints.get('audioLanguages') or [],
                 'yours': '(Yours)' in credit,
                 'group': hints.get('bingeGroup', ''),
             })
@@ -257,9 +261,42 @@ def parse_streams(service, data):
     return sources, notices, cast_url
 
 
-def order_sources(sources):
-    """The member's own casts first, then everyone else's, each in DMM's order (stable)."""
-    return sorted(sources, key=lambda s: not s['yours'])
+KODI_LANGUAGE = "Kodi's audio language"
+
+
+def wanted_language(setting, kodi_language):
+    """The audio language to put first, '' for none: the addon's setting, or Kodi's own preferred audio language
+    (read by `kodi_language()`) when the setting defers to it. Kodi's mediadefault, original and default count
+    as none: DMM has no original-language data."""
+    if setting == 'Off':
+        return ''
+    language = (kodi_language() if setting in ('', KODI_LANGUAGE) else setting) or ''
+    return '' if language in ('mediadefault', 'original', 'default') else language
+
+
+def audio_names(s, name_of):
+    """English names of a source's audio languages in DMM's order; codes `name_of` gives no name for are dropped,
+    and a B and a T code for one language (fre, fra) name it once."""
+    names = []
+    for code in s.get('codes') or []:
+        name = name_of(code) if name_of else ''
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def order_sources(sources, wanted='', name_of=None, hide=False):
+    """The member's own casts first, then releases known to have the `wanted` audio language, then those whose
+    audio is unknown, then the rest, each in DMM's order (stable). `hide` drops the rest unless that would leave
+    nothing; the second value says it would have, and the list is then unfiltered."""
+    def band(s):
+        if s['yours']:
+            return 0
+        names = audio_names(s, name_of) if wanted else []
+        return 1 if not wanted or wanted in names else 3 if names else 2
+    ordered = sorted(sources, key=band)
+    kept = [s for s in ordered if not hide or band(s) < 3]
+    return (kept, False) if kept or not ordered else (ordered, True)
 
 
 def new_own_casts(before, after):
@@ -279,8 +316,12 @@ def source_label(s):
     return '%s  %s' % (code, ' · '.join(p for p in parts if p))
 
 
-def source_label2(s):
-    return ' · '.join(p for p in (s['filename'], s['details'].replace(' • ', ' · ')) if p)
+def source_label2(s, name_of=None):
+    """Filename and line 2, its flags replaced by language names where DMM knows the codes: a flag names only
+    a country (Hindi, Tamil and Telugu all show IN)."""
+    names = audio_names(s, name_of)
+    details = ' • '.join(p for p in (s['audio'], ', '.join(names)) if p) if names else s['details']
+    return ' · '.join(p for p in (s['filename'], details.replace(' • ', ' · ')) if p)
 
 
 def trakt_ids(imdb_id):

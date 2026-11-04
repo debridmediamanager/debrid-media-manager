@@ -3,6 +3,9 @@
   <category label="Playback">
     <setting id="autoplay" type="bool" label="Play the first source without asking" default="false"/>
     <setting type="lsep" label="Your own casts come first, then cached releases and other members' casts. Context menu → Choose source always asks."/>
+    <setting id="audio_language" type="select" label="Prefer releases with audio in" values="Off|Kodi's audio language|Arabic|Chinese|Czech|Dutch|English|French|German|Greek|Hebrew|Hindi|Indonesian|Italian|Japanese|Korean|Polish|Portuguese|Russian|Spanish|Swedish|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" default="Kodi's audio language"/>
+    <setting type="lsep" label="Releases whose audio languages DMM doesn't know are always kept."/>
+    <setting id="hide_other_languages" type="bool" label="Hide releases known to lack it" default="false"/>
   </category>
   <category label="Advanced">
     <setting id="dmm_origin" type="text" label="DMM address (for a self-hosted DMM)" default="https://debridmediamanager.com"/>

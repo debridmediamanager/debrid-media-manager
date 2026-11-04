@@ -582,8 +582,24 @@ def describe(p):
     return m, None, dmm.title_label(dict(m, released=None)) if m.get('name') else p['id']
 
 
+def kodi_audio_language():
+    """Kodi's Settings → Player → Language → Preferred audio language: a language name ('German') or
+    mediadefault, original, default."""
+    answer = json.loads(xbmc.executeJSONRPC(json.dumps({
+        'jsonrpc': '2.0', 'id': 1, 'method': 'Settings.GetSettingValue',
+        'params': {'setting': 'locale.audiolanguage'}})))
+    return (answer.get('result') or {}).get('value') or ''
+
+
+def language_name(code):
+    """Kodi's English name for an audio code, through its two-letter code where it has one, so it is spelt as
+    in Kodi's language list: 'gre' and 'ell' alone look up as 'Greek, Modern (1453-)', 'el' as 'Greek'."""
+    return xbmc.convertLanguage(xbmc.convertLanguage(code, xbmc.ISO_639_1) or code, xbmc.ENGLISH_NAME)
+
+
 def gather(kind, sid):
-    """Every linked account's sources for one title, the cast link, and any notice to show."""
+    """Every linked account's sources for one title, the cast link, any notice to show, and the wanted audio
+    language when hiding releases known to lack it would have left nothing, so none were hidden."""
     answers = dmm.parallel(lambda a: (a, dmm.streams(a, kind, sid)), accounts())
     sources, notices, cast_url, errors = [], [], None, []
     for ans in answers:
@@ -595,7 +611,10 @@ def gather(kind, sid):
         sources += s
         notices += n
         cast_url = cast_url or c
-    return dmm.order_sources(sources), notices, cast_url, errors
+    wanted = dmm.wanted_language(ADDON.getSetting('audio_language'), kodi_audio_language)
+    ordered, unhidden = dmm.order_sources(sources, wanted, language_name,
+                                          ADDON.getSetting('hide_other_languages') == 'true')
+    return ordered, notices, cast_url, errors, wanted if unhidden else ''
 
 
 def resolve_failed():
@@ -618,10 +637,10 @@ def play(p):
     progress = xbmcgui.DialogProgressBG()
     progress.create(NAME, 'Finding sources for %s' % title)
     try:
-        sources, notices, cast_url, errors = gather(p['kind'], sid)
+        sources, notices, cast_url, errors, lacking = gather(p['kind'], sid)
         if not sources and any(getattr(e, 'status', 0) == 429 for e in errors):
             xbmc.sleep(5000)  # DMM allows one stream list per title every 5 s
-            sources, notices, cast_url, errors = gather(p['kind'], sid)
+            sources, notices, cast_url, errors, lacking = gather(p['kind'], sid)
     finally:
         progress.close()
 
@@ -643,11 +662,13 @@ def play(p):
 
     for n in notices:  # an account that needs fixing, while another still plays
         notify('%s: %s' % (dict((a['service'], a['name']) for a in accounts()).get(n['service'], NAME), n['text']), 8000)
+    if lacking:
+        notify('No release is known to have %s audio' % lacking)
     chosen = sources[0]
     if p.get('choose') == '1' or (ADDON.getSetting('autoplay') != 'true' and len(sources) > 1):
         rows = []
         for s in sources:
-            li = xbmcgui.ListItem(dmm.source_label(s), dmm.source_label2(s))
+            li = xbmcgui.ListItem(dmm.source_label(s), dmm.source_label2(s, language_name))
             li.setArt({'icon': os.path.join(MEDIA, '%s.png' % s['service'])})
             rows.append(li)
         picked = xbmcgui.Dialog().select('%s · %d sources' % (title, len(sources)), rows, useDetails=True)
