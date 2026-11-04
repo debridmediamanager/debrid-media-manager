@@ -76,8 +76,9 @@ def build(out):
     # Every file Kodi reads from here: once a member has browsed this folder as a source, Kodi treats
     # a file missing from the listing as absent and the repository's checksum read fails unattempted.
     links = '\n'.join('<a href="%s">%s</a><br>' % (n, n) for n in top + ['addons.xml', 'addons.xml.md5'])
+    # The base keeps a browser's links under /repo/: Next.js 308s /repo/ to /repo. Kodi ignores it.
     with open(os.path.join(out, 'index.html'), 'w') as f:
-        f.write('<!doctype html>\n<html><head><meta charset="utf-8"><title>DMM Kodi repository</title>'
+        f.write('<!doctype html>\n<html><head><meta charset="utf-8"><base href="/repo/"><title>DMM Kodi repository</title>'
                 '<meta name="robots" content="noindex, nofollow"></head>\n<body>\n%s\n</body></html>\n' % links)
 
 

@@ -27,6 +27,21 @@ describe('Kodi addon', () => {
 		}
 	});
 
+	// Next.js answers /repo/ with a 308 to /repo, so a browser resolves a relative href against the
+	// site root: /repository.dmm-1.0.0.zip 404ed for every member who downloaded it (2026-11-04).
+	it('links each file under /repo/ for a browser that landed on /repo', () => {
+		const index = readFileSync(path.join(root, 'public/repo/index.html'), 'utf8');
+		const base = new URL(
+			index.match(/<base href="([^"]+)"/)?.[1] ?? '',
+			'https://debridmediamanager.com/repo'
+		);
+		const hrefs = [...index.matchAll(/<a href="([^"]+)"/g)].map((m) => m[1]);
+		expect(hrefs.length).toBeGreaterThan(0);
+		for (const href of hrefs) {
+			expect(new URL(href, base).pathname).toBe(`/repo/${href}`);
+		}
+	});
+
 	it('ships a repository built from the current sources', () => {
 		expect(() => python('scripts/build-kodi-repo.py', '--check')).not.toThrow();
 	});
