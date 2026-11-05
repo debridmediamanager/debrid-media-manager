@@ -55,6 +55,9 @@ and that `/api` is ours to use:
 | `/api/torznab/dl`        | Cache signal read from Debrid-Link only (DMM's record of it)           |
 | `/api/torznab/dl/cached` | Only what Debrid-Link already holds, as DMM has recorded it            |
 
+On all six, a request naming nothing (an \*arr's RSS sync) lists what DMM most recently
+recorded as cached on that scope's provider or providers; see **The untargeted feed**.
+
 A query parameter would have been simpler and does not work: Prowlarr builds the query
 string itself from the caps document and drops whatever a person put in the URL field.
 An unrecognised segment answers error 202 rather than falling back to the plain feed —
@@ -217,14 +220,74 @@ than becoming a pack. Sonarr reads it the same way. Three cases are answered as 
 
 ### The untargeted feed (an \*arr's RSS sync)
 
-A query naming nothing reads the `RECENT_KEYS` (8) most recently refreshed library pages
-and takes `RECENT_PER_KEY` (5) releases from each. A library keyed by title has no
-posting-date stream to offer; what it has is the titles whose release lists changed most
-recently, which is the same set for the same reason.
+A request that names nothing — no `q`, `imdbid` or `tvdbid` — is what Sonarr, Radarr and
+Prowlarr send on a timer as their RSS sync. Real clients send `t=tvsearch&cat=…&limit=100&offset=0`
+(Sonarr), `t=movie&…` (Radarr) and `t=search&…&limit=100&offset=0` (Prowlarr).
 
-This matters more than it looks: Prowlarr tests an indexer with exactly this request and
-reports an empty answer as a **failed** test, so an indexer that answers nothing here
-looks broken on setup. It never triggers a scrape.
+**On the Real-Debrid and AllDebrid scopes** (`/api/torznab`, `/cached`, `/rd`, `/rd/cached`,
+`/ad`, `/ad/cached`) it lists the releases DMM most recently recorded as cached, newest
+first, each dated by that record. An \*arr pages back to the last release it saw and so
+picks up everything that became cached since. From Sonarr's source
+(`HttpIndexerBase.FetchReleases` with `isRecent`, `main` on 2026-11-06): it remembers the
+newest release of its last sync, reads pages newest first, and stops at the first page
+whose oldest `pubDate` is older than that release or that holds its download URL, at a
+short page, or at 1,000 releases. A first sync reads one page.
+
+- **What counts as recorded.** Real-Debrid: an `Available` row with `status = 'downloaded'`,
+  dated by its `createdAt`. AllDebrid: an `AvailableAd` row that is `Ready` with `statusCode`
+  4, dated by its `createdAt`. A row with no `createdAt` is never listed. The combined
+  scopes list a hash both providers hold once, at the earlier of the two times.
+- **Depth.** The newest `NEWLY_CACHED_DEPTH` (3,000) rows per provider, none older than
+  `NEWLY_CACHED_WINDOW_MS` (seven days). When this was built (November 2026) production
+  wrote 2,400 to 3,900 `Available` rows and about 1,000 `AvailableAd` rows on a normal
+  day, and on one day 57,000 and 10,000; after a day like that the list reaches back
+  less than a day.
+- **Titles come from the library only.** A cache row's filename is never used as a title,
+  because an \*arr matches on the title. A row's hash is looked up on its title's movie
+  page, else on its own season page, else on the show's other season pages, and served
+  through the pipeline a search uses: the reported and judged-trash filters, the
+  Cyrillic-led rule and the size guard. A hash on no page of its title is left out. In 150
+  recent production rows per provider on 2026-11-05, 113 RD rows and 134 AD rows had
+  their hash on a page of their title; 56 of 57 RD TV hits and 17 of 21 AD TV hits were
+  on the row's own season page.
+- **Real-Debrid's name rule** applies as on a search: a release RD refuses by name is left
+  off `/rd` and `/rd/cached`, and on the combined scopes it is listed only if AllDebrid
+  holds it.
+- **Kind, then categories.** `t=tvsearch` lists TV only, `t=movie` films only, `t=search`
+  both; then `cat=` as usual. Every item is cached by definition, so `seeders` is 100, no
+  second cache lookup runs, and the `/cached` and plain variants answer the same. `total`
+  is the list's length after the filters; `offset` and `limit` page it.
+- **Built at most every five minutes, once for every instance.** The first request after
+  the interval claims the build (a Redis `SET NX` with a five-minute expiry), builds the
+  list and writes it to Redis; every instance pages that copy, and a failed build leaves
+  the last one in place for up to an hour. Without Redis each instance does the same in
+  its own memory. Each hash's library answer is remembered: a title found for six hours,
+  none found for 30 minutes, so a report or trash verdict reaches the list within hours
+  and a release scraped later is picked up. One build looks up at most
+  `NEWLY_CACHED_RESOLVE_LIMIT` (300) unknown hashes, newest first, and a burst converges
+  over the builds that follow. The database names the page holding each hash (a
+  `JSON_TABLE` scan of that title's pages), and each page is read once per build however
+  many of its hashes are wanted.
+- **Takedowns.** The cache rows are read through the takedown blocklist on every build,
+  so a taken-down hash leaves the list at the next build even while its title is
+  remembered.
+
+When the list has nothing for the request after the kind and category filters, or none
+could be built, the answer is the older one: the `RECENT_KEYS` (8) most recently refreshed
+library pages, `RECENT_PER_KEY` (5) releases from each. That is also the answer on the
+provider-probed feeds (`/tb`, `/pm`, `/oc`), where DMM keeps no cache history. It
+matters: Prowlarr and Sonarr test an indexer with exactly this request and report an
+empty answer as a **failed** test. `Available.createdAt` was added on 2026-11-06 with
+every existing row left `NULL`, so RD's list starts empty and fills from then on.
+
+This request never triggers a scrape, a backfill or an availability refresh.
+
+Known edges, accepted:
+
+- A `user_mapped` placeholder row that later becomes cached keeps the `createdAt` of the
+  placeholder, so it is listed at that earlier time, which an \*arr that has synced since
+  never pages back to.
+- A row deleted and recorded again gets a new `createdAt` and is listed again.
 
 ### Backfill from debridio, Torrentio and Peerflix
 
@@ -308,6 +371,10 @@ library carries no anime flag, so advertising it would only buy empty searches.
 
 ## `pubDate`
 
+On the RSS sync of the Real-Debrid and AllDebrid scopes, `pubDate` is when DMM first
+recorded the release as cached (see **The untargeted feed**), which is what lets an \*arr
+page back to where its last sync stopped. Everywhere else the following applies.
+
 The library records no posting date. The date served is the library page's own
 `updatedAt` — "when DMM last refreshed this title's release list" — which is a real
 timestamp about real data rather than an invention. It cannot be omitted: an RSS parser
@@ -362,13 +429,15 @@ the first would be wrong if the filter were applied after slicing. Lookups are c
 | `src/pages/api/torznab/[...route].ts` | Dispatch, path variants, auth wiring, rate limits          |
 | `src/services/torznab/resolve.ts`     | Query → library page keys (id normalization, TVDB, titles) |
 | `src/services/torznab/search.ts`      | Library reads, backfill fallback, cache signal, paging     |
+| `src/services/torznab/newlyCached.ts` | The RSS sync's shared list and title memo (Redis + memory) |
 | `src/services/torznab/categories.ts`  | Category derivation and `cat=` matching                    |
 | `src/services/torznab/xml.ts`         | Hand-rolled caps / RSS writers                             |
 | `src/pages/torznab.tsx`               | Sponsor setup page (client gate is cosmetic)               |
 
 Supporting additions elsewhere: `getScrapedTrueRow` / `getScrapedTrueSeasonKeys` /
-`getRecentScrapedTrueKeys` (`services/database/scraped.ts`), `filterCachedHashes` /
-`filterCachedHashesAd` (`services/database/availability.ts`), `getInfoByTvdbId`
+`getRecentScrapedTrueKeys` / `getScrapedTruePagesHolding` (`services/database/scraped.ts`),
+`filterCachedHashes` / `filterCachedHashesAd` / `getNewlyCached`
+(`services/database/availability.ts`), `getInfoByTvdbId`
 (`services/mdblistClient.ts`) and `resolveImdbIdFromTvdbId` (`services/tvdbLookup.ts`).
 
 ## Environment
@@ -390,6 +459,14 @@ of Sonarr's paging through the route and the real limiter against
 the proxy log recorded it plus the production library page it paged through, and the same
 fixture checks that the reported S03E10 search returns every release naming that episode
 inside Sonarr's reach; its verdict cases serve a recorded movie page whose trashed releases
-a scraper wrote back, `src/services/scrapedVerdicts/__fixtures__/written-back-trash.json`),
+a scraper wrote back, `src/services/scrapedVerdicts/__fixtures__/written-back-trash.json`;
+its RSS sync cases build the newly cached list from the RD-refusal fixture's pages and RD
+rows and the Sonarr fixture's Silo page, and run a model of Sonarr's RSS paging through
+the route twice, the second time after more than two pages of new rows),
+`src/services/torznab/newlyCached.test.ts` (the shared list and title memo across
+instances, and without Redis), `getNewlyCached` in
+`src/services/database/availability.test.ts`, `getScrapedTruePagesHolding` in
+`src/services/database/scraped.test.ts` and, on MySQL 8.0.36 with production's DDL,
+`src/services/database/scraped.integration.test.ts`,
 `src/test/services/torznab{Resolve,Categories,Xml}.test.ts`,
 `src/test/pages/torznab.test.tsx`.
