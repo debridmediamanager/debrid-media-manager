@@ -474,9 +474,14 @@ export function useTorrentManagement(
 			);
 
 			// Shown cached, and AllDebrid took the magnet but did not have it ready: the row is
-			// wrong for everybody. Only `not_cached` says so; a `no_peers` callback also covers
-			// AD refusing this user's address (NO_SERVER), which says nothing about the release.
-			if (adResult === 'not_cached' && wasMarkedAvailable && !isCheckingAvailability) {
+			// wrong for everybody. `not_cached` (a probe, deleted) and `downloading` (a plain add,
+			// kept) both say so; a `no_peers` callback also covers AD refusing this user's
+			// address (NO_SERVER), which says nothing about the release.
+			if (
+				(adResult === 'not_cached' || adResult === 'downloading') &&
+				wasMarkedAvailable &&
+				!isCheckingAvailability
+			) {
 				try {
 					const [key, solution] = await generateTokenAndHash();
 					await reportAdNotCached(key, solution, hash);

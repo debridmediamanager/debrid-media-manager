@@ -637,6 +637,19 @@ describe('useTorrentManagement', () => {
 		expect(mockReportAdNotCached).toHaveBeenCalledWith('token-ts', 'token-hash', 'hash-ad');
 	});
 
+	// A plain add keeps the magnet, so a miss comes back `downloading`, never `not_cached`
+	// (handleAddAsMagnetInAd only answers that when deleteIfNotInstant): the plain add,
+	// the common case, never corrected the shared row.
+	it('reports a release shown AD-cached that a plain add found downloading', async () => {
+		mockHandleAddAsMagnetInAd.mockResolvedValue('downloading');
+		currentResults = [createSearchResult({ hash: 'hash-ad', adAvailable: true })];
+		const { result } = renderManagementHook();
+		await act(async () => {
+			await result.current.addAd('hash-ad');
+		});
+		expect(mockReportAdNotCached).toHaveBeenCalledWith('token-ts', 'token-hash', 'hash-ad');
+	});
+
 	it('keeps the AD row when the add failed for reasons of the account, not the release', async () => {
 		mockHandleAddAsMagnetInAd.mockResolvedValue('no_peers');
 		currentResults = [createSearchResult({ hash: 'hash-ad', adAvailable: true })];
