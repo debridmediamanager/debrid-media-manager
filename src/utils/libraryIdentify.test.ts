@@ -1,6 +1,6 @@
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { describe, expect, it, vi } from 'vitest';
-import { IDENTIFY_BATCH, identifiable, identifyLibrary } from './libraryIdentify';
+import { IDENTIFY_BATCH, identifiable, identifiedTitle, identifyLibrary } from './libraryIdentify';
 
 const torrent = (id: string, filename: string, mediaType: UserTorrent['mediaType'] = 'movie') =>
 	({ id, filename, hash: `${id}hash`, mediaType }) as unknown as UserTorrent;
@@ -86,5 +86,42 @@ describe('identifyLibrary', () => {
 		);
 		expect(post).toHaveBeenCalledTimes(5);
 		expect(wait).toHaveBeenCalledWith(10_000);
+	});
+});
+
+describe('hashlist rows', () => {
+	const hash = 'a'.repeat(40);
+
+	it('are asked about by hash and answered under it', async () => {
+		const row = {
+			id: hash,
+			hash,
+			filename: 'Mad.Max.Fury.Road.2015.2160p',
+			mediaType: 'movie' as const,
+		};
+		expect(identifiable(row)).toBe(true);
+		const post = vi.fn(async (_url: string, init: RequestInit) => {
+			const { items } = JSON.parse(init.body as string) as { items: { filename: string }[] };
+			return new Response(JSON.stringify({ results: items.map((s) => answer(s.filename)) }));
+		});
+		const onFound = vi.fn();
+
+		await identifyLibrary([row], onFound, post as unknown as typeof fetch);
+
+		expect(JSON.parse(post.mock.calls[0][1].body as string).items).toEqual([
+			{ filename: row.filename, hash },
+		]);
+		expect(onFound).toHaveBeenCalledExactlyOnceWith({ [hash]: answer(row.filename) });
+	});
+});
+
+describe('identifiedTitle', () => {
+	const found = { imdbId: 'tt0903747', title: 'Breaking Bad', year: 2008, kind: 'tv' as const };
+
+	it('names the title and year and keeps the seasons the parsed title ends in', () => {
+		expect(identifiedTitle(found, 'Breaking Bad ➡️ S01 to S05')).toBe(
+			'Breaking Bad (2008) ➡️ S01 to S05'
+		);
+		expect(identifiedTitle({ ...found, year: null }, 'breaking bad')).toBe('Breaking Bad');
 	});
 });

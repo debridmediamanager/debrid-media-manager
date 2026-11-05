@@ -49,6 +49,12 @@ import {
 	checkPlayableAvailabilityRd,
 	wrapLoading,
 } from '@/utils/instantChecks';
+import {
+	identifiable,
+	identifiedTitle,
+	identifyLibrary,
+	type LibraryIdentification,
+} from '@/utils/libraryIdentify';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -77,6 +83,7 @@ import { toast, Toaster } from 'react-hot-toast';
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
 const SEARCH_DEBOUNCE_MS = 200;
+const IDENTIFY_SETTLE_MS = 1000;
 
 interface SortBy {
 	column: 'hash' | 'filename' | 'title' | 'bytes' | 'score';
@@ -526,6 +533,32 @@ function HashlistPage() {
 			(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
 		);
 	}
+
+	// Name the rows on screen only: a list runs to 176k rows and the route takes
+	// 5,000 a minute. The page settles first, since every availability batch
+	// reshuffles it, and each hash is asked about once per visit.
+	const [identifications, setIdentifications] = useState<Record<string, LibraryIdentification>>(
+		{}
+	);
+	const askedIdentify = useRef(new Set<string>());
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			const todo = currentPageData()
+				.filter((t) => t.hash && !askedIdentify.current.has(t.hash))
+				.map((t) => ({
+					id: t.hash,
+					filename: t.filename,
+					hash: t.hash,
+					mediaType: t.mediaType,
+				}))
+				.filter(identifiable);
+			if (todo.length === 0) return;
+			todo.forEach((t) => askedIdentify.current.add(t.id));
+			identifyLibrary(todo, (found) => setIdentifications((prev) => ({ ...prev, ...found })));
+		}, IDENTIFY_SETTLE_MS);
+		return () => clearTimeout(timer);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sortedList, currentPage]);
 
 	const getGroupings = (mediaType: EnrichedHashlistTorrent['mediaType']) =>
 		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
@@ -1348,6 +1381,7 @@ function HashlistPage() {
 						{currentPageData().map((t, i) => {
 							// grouped by title in the aggregate above, so looked up by title
 							const groupCount = getGroupings(t.mediaType)[t.title];
+							const found = identifications[t.hash];
 							const filterText =
 								groupCount > 1 && !router.query.filter
 									? `${groupCount - 1} other file${groupCount === 2 ? '' : 's'}`
@@ -1371,13 +1405,25 @@ function HashlistPage() {
 										{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
 											<>
 												<span className="cursor-pointer">
-													{t.mediaType === 'tv' ? (
+													{(found?.kind ?? t.mediaType) === 'tv' ? (
 														<Tv className="inline-block h-4 w-4 text-cyan-400" />
 													) : (
 														<Film className="inline-block h-4 w-4 text-yellow-400" />
 													)}
 												</span>
-												&nbsp;<strong>{t.title}</strong>
+												&nbsp;
+												{found ? (
+													<Link
+														href={`/${found.kind === 'tv' ? 'show' : 'movie'}/${found.imdbId}`}
+														target="_blank"
+														className="font-bold text-blue-300 hover:text-blue-200"
+														onClick={(e) => e.stopPropagation()}
+													>
+														{identifiedTitle(found, t.title)}
+													</Link>
+												) : (
+													<strong>{t.title}</strong>
+												)}
 												{/* glued to the title so the icon never wraps onto a line alone */}
 												{'\u00a0'}
 												<Link

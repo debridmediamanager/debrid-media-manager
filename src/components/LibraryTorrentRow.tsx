@@ -19,7 +19,7 @@ import {
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
 import { providerHashKey, type LibraryGrouping } from '@/utils/libraryGrouping';
-import type { LibraryIdentification } from '@/utils/libraryIdentify';
+import { identifiedTitle, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { getRealDebridStatusText } from '@/utils/realDebridStatus';
@@ -444,12 +444,7 @@ function TorrentRow({
 		['Invalid Magnet', 'Magnet', 'noname'].includes(torrent.filename) ||
 		torrent.filename === torrent.hash;
 	const displayTitle = identification
-		? `${identification.title}${identification.year ? ` (${identification.year})` : ''}${
-				// a show's parsed title ends in the seasons it holds: "Title ➡️ S01"
-				torrent.title.includes(' ➡️ ')
-					? torrent.title.slice(torrent.title.indexOf(' ➡️ '))
-					: ''
-			}`
+		? identifiedTitle(identification, torrent.title)
 		: torrent.title;
 	const filenameIsTitle = normalizeName(torrent.filename) === normalizeName(displayTitle);
 	const multipleServices = [rdKey, adKey, tbKey, pmKey, ocKey, dlKey].filter(Boolean).length > 1;

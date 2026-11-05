@@ -14,8 +14,11 @@ export const IDENTIFY_BATCH = 500;
 /** Refusals per batch before it is given up; the route allows ten batches a minute. */
 const MAX_REFUSALS = 5;
 
+/** What a page row must carry to be asked about; a hashlist row passes its hash as `id`. */
+export type IdentifyItem = Pick<UserTorrent, 'id' | 'filename' | 'hash' | 'mediaType'>;
+
 /** Library items worth asking about: movies and shows with a real release name. */
-export function identifiable(torrent: UserTorrent): boolean {
+export function identifiable(torrent: IdentifyItem): boolean {
 	return (
 		(torrent.mediaType === 'movie' || torrent.mediaType === 'tv') &&
 		Boolean(torrent.filename) &&
@@ -34,7 +37,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * batch and its rows simply stay unnamed.
  */
 export async function identifyLibrary(
-	torrents: UserTorrent[],
+	torrents: IdentifyItem[],
 	onFound: (found: Record<string, LibraryIdentification>) => void,
 	post: typeof fetch = fetch,
 	wait: (ms: number) => Promise<unknown> = sleep
@@ -73,4 +76,12 @@ export async function identifyLibrary(
 			break;
 		}
 	}
+}
+
+/** "Title (Year)", keeping the seasons a show's parsed title ends in: "Title ➡️ S01". */
+export function identifiedTitle(found: LibraryIdentification, parsedTitle: string): string {
+	const seasons = parsedTitle.includes(' ➡️ ')
+		? parsedTitle.slice(parsedTitle.indexOf(' ➡️ '))
+		: '';
+	return `${found.title}${found.year ? ` (${found.year})` : ''}${seasons}`;
 }
