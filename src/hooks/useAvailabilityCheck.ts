@@ -7,6 +7,7 @@ import {
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
 import { isRdThrottling, RD_BULK_ADD_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
+import { recordDlAvailability } from '@/utils/availability';
 import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay } from '@/utils/delay';
 import {
@@ -363,6 +364,15 @@ export function useAvailabilityCheck(
 									result.hash,
 								]);
 								const probe = sweep.results[0];
+								// a hit is an answer for everyone: Debrid-Link has no read-only one
+								if (probe?.checked && probe.cached) {
+									recordDlAvailability(
+										imdbId,
+										result.hash,
+										result.title,
+										probe.files
+									).catch(() => undefined);
+								}
 								if (sweep.leftBehindIds.length > 0) {
 									toast.error(
 										'Debrid-Link: a probe torrent could not be removed from your library.'
@@ -1026,6 +1036,20 @@ export function useAvailabilityCheck(
 										.filter((probe) => probe.checked && probe.cached)
 										.map((probe) => probe.hash.toLowerCase())
 								);
+								// a hit is an answer for everyone: Debrid-Link has no read-only one
+								for (const probe of sweep.results) {
+									const row = dlTargets.find(
+										(t) => t.hash.toLowerCase() === probe.hash.toLowerCase()
+									);
+									if (row && probe.checked && probe.cached) {
+										recordDlAvailability(
+											imdbId,
+											row.hash,
+											row.title,
+											probe.files
+										).catch(() => undefined);
+									}
+								}
 								checkProgress.DL = {
 									completed: dlTargets.length,
 									total: dlTargets.length,

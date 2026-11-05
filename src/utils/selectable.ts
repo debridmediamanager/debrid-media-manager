@@ -30,6 +30,18 @@ export function isVideo(file: { path: string }) {
 	);
 }
 
+/**
+ * Films and shows only: most of the release's bytes are video. A name can read as a title
+ * without being one; AD's "music" folder came back "Music (2021)", and its one bonus .mpg
+ * among 104 GB of audio is why any single video file is not enough. isVideo also takes the
+ * audio it can play.
+ */
+export function mostlyVideo(files: { path: string; bytes: number }[]): boolean {
+	const bytes = (list: typeof files) => list.reduce((sum, f) => sum + (f.bytes || 0), 0);
+	const video = files.filter((f) => isVideo(f) && !/\.(mp3|flac|m4a)$/i.test(f.path));
+	return bytes(video) * 2 > bytes(files);
+}
+
 // Years and resolutions sit at the same offset across a movie pack just as
 // readily as episode numbers do, so numbers in these ranges don't count as
 // evidence of an episode run

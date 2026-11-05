@@ -133,6 +133,7 @@ vi.mock('@/utils/delay', () => ({
 
 vi.mock('@/utils/instantChecks', () => ({
 	checkDatabaseAvailabilityRd: vi.fn().mockResolvedValue(0),
+	checkDatabaseAvailabilityDl: vi.fn().mockResolvedValue(0),
 	checkDatabaseAvailabilityAd: vi.fn().mockResolvedValue(0),
 	checkDatabaseAvailabilityTb: vi.fn().mockResolvedValue(0),
 	instantCheckInRd: vi.fn().mockResolvedValue(0),

@@ -16,6 +16,7 @@ import {
 	addSeedboxTorrentFile,
 	DebridLinkError,
 	isDlFinished,
+	type DebridLinkTorrent,
 } from '@/services/debridLink';
 import {
 	addOffcloudCloud,
@@ -1364,7 +1365,7 @@ const dlErrorMessage = (error: unknown): string | null => {
 export const handleAddAsMagnetInDl = async (
 	dlKey: string,
 	hash: string,
-	callback?: (torrent: UserTorrent) => Promise<void>,
+	callback?: (torrent: UserTorrent, raw: DebridLinkTorrent) => Promise<void>,
 	silent: boolean = false
 ) => {
 	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? hash.toLowerCase();
@@ -1375,7 +1376,7 @@ export const handleAddAsMagnetInDl = async (
 			return;
 		}
 
-		if (callback) await callback(convertToDlUserTorrent(torrent, sourceHash));
+		if (callback) await callback(convertToDlUserTorrent(torrent, sourceHash), torrent);
 
 		if (!silent) {
 			toast.success(

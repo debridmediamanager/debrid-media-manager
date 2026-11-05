@@ -180,6 +180,7 @@ function TorrentsPage() {
 	const reporting = useRef<Promise<void>>(Promise.resolve());
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
+	const dlKey = useDebridLinkCredential();
 	useEffect(() => {
 		if (cacheLoading || isFetching) return;
 		const todo = cachedLibraryItems.filter(
@@ -191,10 +192,10 @@ function TorrentsPage() {
 			setIdentifications((prev) => ({ ...prev, ...found }));
 			// what the library holds finished is cached: share it with DMM's availability
 			reporting.current = reporting.current.then(() =>
-				reportLibraryAvailability(todo, found, { rd: rdKey, ad: adKey })
+				reportLibraryAvailability(todo, found, { rd: rdKey, ad: adKey, dl: dlKey })
 			);
 		});
-	}, [cacheLoading, isFetching, cachedLibraryItems, rdKey, adKey]);
+	}, [cacheLoading, isFetching, cachedLibraryItems, rdKey, adKey, dlKey]);
 
 	// Use cached items directly instead of duplicating state
 	const userTorrentsList = cachedLibraryItems;
@@ -208,7 +209,6 @@ function TorrentsPage() {
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
-	const dlKey = useDebridLinkCredential();
 
 	const grouping = useMemo(
 		() => buildLibraryGrouping(userTorrentsList, identifications),

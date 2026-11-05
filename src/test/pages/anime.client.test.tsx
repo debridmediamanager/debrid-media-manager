@@ -136,6 +136,7 @@ vi.mock('@/utils/token', () => ({
 }));
 vi.mock('@/utils/instantChecks', () => ({
 	checkDatabaseAvailabilityRd: checkRdMock,
+	checkDatabaseAvailabilityDl: vi.fn().mockResolvedValue(0),
 	checkDatabaseAvailabilityAd: vi.fn().mockResolvedValue(0),
 	checkDatabaseAvailabilityTb: vi.fn().mockResolvedValue(0),
 	checkAvailabilityPm: vi.fn().mockResolvedValue(0),

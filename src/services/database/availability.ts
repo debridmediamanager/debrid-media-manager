@@ -901,4 +901,78 @@ export class AvailabilityService extends DatabaseClient {
 		});
 		return available?.imdbId || null;
 	}
+
+	// ====================================================================
+	// Debrid-Link Availability Methods
+	// ====================================================================
+
+	/** Record a Debrid-Link release seen whole, replacing what an earlier sighting listed. */
+	public async upsertAvailabilityDl({
+		hash,
+		imdbId,
+		filename,
+		files,
+	}: {
+		hash: string;
+		imdbId: string;
+		filename: string;
+		files: Array<{ path: string; bytes: number }>;
+	}) {
+		const normalizedHash = hash.toLowerCase();
+		const episodeInfo = extractEpisodeInfo(filename);
+		const rows = files.map((file, index) => {
+			const fileEpisodeInfo = extractEpisodeInfo(file.path);
+			return {
+				file_id: index,
+				path: file.path,
+				bytes: BigInt(file.bytes),
+				season: fileEpisodeInfo?.season,
+				episode: fileEpisodeInfo?.episode,
+			};
+		});
+		const fields = {
+			imdbId,
+			filename,
+			bytes: BigInt(files.reduce((sum, f) => sum + f.bytes, 0)),
+			season: episodeInfo?.season ?? null,
+			episode: episodeInfo?.episode ?? null,
+		};
+		return this.prisma.availableDl.upsert({
+			where: { hash: normalizedHash },
+			update: { ...fields, files: { deleteMany: {}, create: rows } },
+			create: { hash: normalizedHash, ...fields, files: { create: rows } },
+		});
+	}
+
+	/** Recorded Debrid-Link releases among `hashes`, under `imdbId` when one is given. */
+	public async checkAvailabilityDl(
+		hashes: string[],
+		imdbId?: string
+	): Promise<
+		Array<{ hash: string; files: Array<{ file_id: number; path: string; bytes: number }> }>
+	> {
+		const rows = await this.prisma.availableDl.findMany({
+			where: {
+				...(imdbId ? { imdbId } : {}),
+				hash: { in: hashes.map((h) => h.toLowerCase()) },
+			},
+			select: {
+				hash: true,
+				files: { select: { file_id: true, path: true, bytes: true } },
+			},
+		});
+		return rows.map((row) => ({
+			hash: row.hash,
+			files: row.files.map((file) => ({
+				file_id: file.file_id,
+				path: file.path,
+				bytes: Number(file.bytes),
+			})),
+		}));
+	}
+
+	/** Forget a Debrid-Link release an add found uncached; a hash with no row is no error. */
+	public async removeAvailabilityDl(hash: string): Promise<void> {
+		await this.prisma.availableDl.deleteMany({ where: { hash: hash.toLowerCase() } });
+	}
 }

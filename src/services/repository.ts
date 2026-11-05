@@ -743,6 +743,28 @@ export class Repository {
 		return this.availabilityService.getIMDBIdByHashAd(hash);
 	}
 
+	// Debrid-Link Availability Service Methods
+	public async upsertAvailabilityDl(data: {
+		hash: string;
+		imdbId: string;
+		filename: string;
+		files: Array<{ path: string; bytes: number }>;
+	}) {
+		if (await isHashBlocked(data.hash)) return;
+		return this.availabilityService.upsertAvailabilityDl(data);
+	}
+
+	public async checkAvailabilityDl(hashes: string[], imdbId?: string) {
+		return this.availabilityService.checkAvailabilityDl(
+			await withoutBlockedHashList(hashes),
+			imdbId
+		);
+	}
+
+	public removeAvailabilityDl(hash: string) {
+		return this.availabilityService.removeAvailabilityDl(hash);
+	}
+
 	// Scraped Service Methods
 	// Every read of a scraped page drops what a takedown blocked, and every
 	// save below refuses it, so a crawl cannot put it back either.

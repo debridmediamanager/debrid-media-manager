@@ -1,9 +1,11 @@
 import adFiles from '@/test/fixtures/libraryAvailability/adfiles.json';
 import adStatus from '@/test/fixtures/libraryAvailability/adstatus.json';
+import dlTv from '@/test/fixtures/libraryAvailability/dl_tv.json';
 import musicFiles from '@/test/fixtures/libraryAvailability/music_files.json';
 import musicStatus from '@/test/fixtures/libraryAvailability/music_status.json';
 import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
 import rdTv from '@/test/fixtures/libraryAvailability/rdinfo_tv.json';
+import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { describe, expect, it, vi } from 'vitest';
 import {
 	cachedOn,
@@ -41,6 +43,9 @@ function deps(recorded: string[] = []): ReportDeps {
 		adRecorded: check as any,
 		rdSubmit: vi.fn(async () => ({ success: true })) as any,
 		adSubmit: vi.fn(async () => ({ success: true })) as any,
+		dlTorrent: vi.fn(async () => dlTv) as any,
+		dlRecorded: check as any,
+		dlRecord: vi.fn(async () => true) as any,
 		token: vi.fn(async () => ['key', 'solution'] as [string, string]),
 		wait: vi.fn(async () => undefined),
 	};
@@ -172,4 +177,34 @@ describe('reportLibraryAvailability', () => {
 		expect(d.adSubmit).toHaveBeenCalledTimes(1);
 		expect(d.rdSubmit).toHaveBeenCalledTimes(1);
 	}, 1000);
+
+	it('records a finished Debrid-Link release from its own fetch, which expands a ZIP', async () => {
+		const d = deps();
+		const finished: LibraryItem = {
+			id: `dl:${dlTv.id}`,
+			hash: dlTv.hashString,
+			serviceStatus: '100',
+			status: UserTorrentStatus.finished,
+		};
+		const downloading: LibraryItem = {
+			...finished,
+			id: 'dl:other',
+			hash: 'c'.repeat(40),
+			status: UserTorrentStatus.downloading,
+		};
+		await reportLibraryAvailability(
+			[finished, downloading],
+			{ [finished.id]: named('tt0108778'), 'dl:other': named('tt0108778') },
+			{ dl: 'dlkey' },
+			d
+		);
+		expect(d.dlTorrent).toHaveBeenCalledTimes(1);
+		expect(d.dlTorrent).toHaveBeenCalledWith('dlkey', dlTv.id);
+		expect(d.dlRecord).toHaveBeenCalledWith(
+			'tt0108778',
+			dlTv.hashString,
+			dlTv.name,
+			dlTv.files
+		);
+	});
 });

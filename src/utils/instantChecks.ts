@@ -10,6 +10,7 @@ import {
 	checkAvailabilityAd,
 	checkAvailabilityAdByHashes,
 	checkAvailabilityByHashes,
+	checkAvailabilityDl,
 	checkPlayableCachedHashes,
 	MAX_PLAYABLE_HASHES,
 } from './availability';
@@ -90,7 +91,7 @@ const isArchive = (filename: string) => /\.(zip|rar|7z|r\d{2})$/i.test(filename)
  */
 const applyProviderFiles = <T extends SearchResult | EnrichedHashlistTorrent>(
 	torrent: T,
-	service: 'rd' | 'ad' | 'tb',
+	service: 'rd' | 'ad' | 'tb' | 'dl',
 	files: FileData[],
 	shouldUpdateTitleAndSize = false
 ): boolean => {
@@ -541,6 +542,53 @@ export const checkDatabaseAvailabilityAd = (
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
 ) => processAdInstantCheckDb(dmmProblemKey, solution, imdbId, hashes, 100, setTorrentList, sortFn);
+
+/**
+ * What DMM has recorded as whole on Debrid-Link: the page's read-only answer for it, since
+ * Debrid-Link's only live probe is an add. A row with no record stays unchecked rather than
+ * uncached, and the Check DL button still asks Debrid-Link itself.
+ */
+export const checkDatabaseAvailabilityDl = async (
+	dmmProblemKey: string,
+	solution: string,
+	imdbId: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn?: (searchResults: SearchResult[]) => SearchResult[]
+): Promise<number> => {
+	const available = new Map<string, { file_id: number; path: string; bytes: number }[]>();
+	await runConcurrentFunctions(
+		groupBy(100, hashes).map((group) => async () => {
+			const resp = await checkAvailabilityDl(
+				dmmProblemKey,
+				solution,
+				group,
+				isImdbId(imdbId) ? imdbId : undefined
+			);
+			for (const row of resp.available) available.set(row.hash, row.files);
+		}),
+		4,
+		0
+	);
+	if (available.size === 0) return 0;
+
+	let instantCount = 0;
+	setTorrentList((prev) => {
+		const next = [...prev];
+		for (const torrent of next) {
+			const files = available.get(torrent.hash.toLowerCase());
+			if (!files) continue;
+			torrent.dlAvailable = applyProviderFiles(
+				torrent,
+				'dl',
+				files.map((f) => ({ fileId: f.file_id, filename: f.path, filesize: f.bytes }))
+			);
+			if (torrent.dlAvailable) instantCount += 1;
+		}
+		return sortFn ? sortFn(next) : next;
+	});
+	return instantCount;
+};
 
 export const checkDatabaseAvailabilityTb = (
 	tbKey: string,

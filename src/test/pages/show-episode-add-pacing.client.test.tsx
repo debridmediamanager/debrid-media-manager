@@ -188,6 +188,7 @@ vi.mock('@/utils/instantChecks', () => ({
 	checkAvailabilityDl: vi.fn().mockResolvedValue(0),
 	checkAvailabilityOc: vi.fn().mockResolvedValue(0),
 	checkAvailabilityPm: vi.fn().mockResolvedValue(0),
+	checkDatabaseAvailabilityDl: vi.fn().mockResolvedValue(0),
 	checkDatabaseAvailabilityAd: vi.fn(
 		async (
 			_token: string,

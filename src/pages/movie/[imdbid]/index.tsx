@@ -41,6 +41,7 @@ import {
 	checkAvailabilityOc,
 	checkAvailabilityPm,
 	checkDatabaseAvailabilityAd,
+	checkDatabaseAvailabilityDl,
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
@@ -188,6 +189,7 @@ const MovieSearch: FunctionComponent = () => {
 		tbAvailableCount?: number;
 		pmAvailableCount?: number;
 		ocAvailableCount?: number;
+		dlAvailableCount?: number;
 		allSourcesCompleted: boolean;
 		pendingAvailabilityChecks: number;
 		isAvailabilityOnly?: boolean;
@@ -497,6 +499,7 @@ const MovieSearch: FunctionComponent = () => {
 		let tbAvailableCount = 0;
 		let pmAvailableCount = 0;
 		let ocAvailableCount = 0;
+		let dlAvailableCount = 0;
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
@@ -517,12 +520,14 @@ const MovieSearch: FunctionComponent = () => {
 					adAvailableCount +
 					tbAvailableCount +
 					pmAvailableCount +
-					ocAvailableCount,
+					ocAvailableCount +
+					dlAvailableCount,
 				rdAvailableCount,
 				adAvailableCount,
 				tbAvailableCount,
 				pmAvailableCount,
 				ocAvailableCount,
+				dlAvailableCount,
 				allSourcesCompleted: true,
 				pendingAvailabilityChecks: 0,
 			});
@@ -627,6 +632,23 @@ const MovieSearch: FunctionComponent = () => {
 							keepOrder
 						);
 						adAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (debridLinkKey) {
+					pendingAvailabilityChecks++;
+					generateTokenAndHash().then(async ([tokenWithTimestamp, tokenHash]) => {
+						const count = await checkDatabaseAvailabilityDl(
+							tokenWithTimestamp,
+							tokenHash,
+							imdbId,
+							hashesToCheck,
+							setSearchResults,
+							keepOrder
+						);
+						dlAvailableCount += count;
 						pendingAvailabilityChecks--;
 						checkAndShowFinalToast();
 					});
@@ -822,6 +844,7 @@ const MovieSearch: FunctionComponent = () => {
 			tbAvailableCount,
 			pmAvailableCount,
 			ocAvailableCount,
+			dlAvailableCount,
 			allSourcesCompleted,
 			pendingAvailabilityChecks,
 			isAvailabilityOnly,
@@ -847,6 +870,8 @@ const MovieSearch: FunctionComponent = () => {
 				servicesWithCache.push(`PM: ${pmAvailableCount}`);
 			if (offcloudKey && (ocAvailableCount ?? 0) > 0)
 				servicesWithCache.push(`OC: ${ocAvailableCount}`);
+			if (debridLinkKey && (dlAvailableCount ?? 0) > 0)
+				servicesWithCache.push(`DL: ${dlAvailableCount}`);
 
 			// Show toast for cached torrents if any found
 			if (totalAvailableCount > 0) {
@@ -867,6 +892,7 @@ const MovieSearch: FunctionComponent = () => {
 		torboxKey,
 		premiumizeKey,
 		offcloudKey,
+		debridLinkKey,
 		isAnyChecking,
 		isLibrarySyncing,
 		checkServiceAvailabilityBulk,

@@ -1,5 +1,6 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { flattenMagnetFiles } from '@/services/allDebrid';
+import type { DebridLinkTorrent } from '@/services/debridLink';
 import { SearchResult } from '@/services/mediasearch';
 import { rdAddPauseRemainingMs } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
@@ -34,6 +35,7 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { shareDlAnswer } from '@/utils/dlAvailability';
 import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
 import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
@@ -518,19 +520,33 @@ export function useTorrentManagement(
 		async (hash: string) => {
 			if (!debridLinkKey) return;
 
-			await handleAddAsMagnetInDl(debridLinkKey, hash, async (userTorrent: UserTorrent) => {
-				await torrentDB.add(userTorrent);
-				addToCache(userTorrent);
+			await handleAddAsMagnetInDl(
+				debridLinkKey,
+				hash,
+				async (userTorrent: UserTorrent, raw: DebridLinkTorrent) => {
+					await torrentDB.add(userTorrent);
+					addToCache(userTorrent);
 
-				setHashAndProgress((prev) => ({
-					...prev,
-					[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]: userTorrent.progress,
-				}));
+					setHashAndProgress((prev) => ({
+						...prev,
+						[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
+							userTorrent.progress,
+					}));
 
-				await fetchHashAndProgress();
-			});
+					// Debrid-Link's add is its only cache answer: share what it said
+					shareDlAnswer(
+						debridLinkKey,
+						imdbId,
+						hash,
+						raw,
+						Boolean(searchResults.find((r) => r.hash === hash)?.dlAvailable)
+					).catch(() => undefined);
+
+					await fetchHashAndProgress();
+				}
+			);
 		},
-		[debridLinkKey, fetchHashAndProgress, addToCache]
+		[debridLinkKey, imdbId, searchResults, fetchHashAndProgress, addToCache]
 	);
 
 	// Sends a TorBox-cached search-result torrent into the user's RD account via

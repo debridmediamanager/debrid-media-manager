@@ -1,5 +1,6 @@
 import { TorrentInfoResponse } from '@/services/types';
 import { isValidHash } from './extractHashes';
+import { mostlyVideo } from './selectable';
 import { generateTokenAndHash } from './token';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -372,4 +373,110 @@ export async function checkPlayableCachedHashes(
 	}
 	const { cached } = (await response.json()) as { cached: string[] };
 	return cached;
+}
+
+// ====================================================================
+// Debrid-Link Availability Functions
+// ====================================================================
+
+/** A Debrid-Link file as the seedbox lists it; the route keeps only its name and size. */
+export interface DlAvailabilityFile {
+	name: string;
+	size: number;
+	downloadPercent: number;
+}
+
+/** Record a Debrid-Link release seen whole. The route refuses anything else. */
+export async function submitAvailabilityDl(
+	dmmProblemKey: string,
+	solution: string,
+	data: { hash: string; imdbId: string; filename: string; files: DlAvailabilityFile[] }
+) {
+	const response = await fetch('/api/availability/dl', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			hash: data.hash.toLowerCase(),
+			imdbId: data.imdbId,
+			filename: data.filename,
+			// name, size and completion only: a download URL is the file itself
+			files: data.files.map(({ name, size, downloadPercent }) => ({
+				name,
+				size,
+				downloadPercent,
+			})),
+			dmmProblemKey,
+			solution,
+		}),
+	});
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({}));
+		throw new Error(error.error || 'Failed to submit Debrid-Link availability');
+	}
+	return response.json();
+}
+
+/** The hashes DMM has seen whole on Debrid-Link, under `imdbId` when one is given. */
+export async function checkAvailabilityDl(
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	imdbId?: string
+): Promise<{
+	available: { hash: string; files: { file_id: number; path: string; bytes: number }[] }[];
+}> {
+	const validHashes = (hashes || []).filter(isValidHash);
+	if (validHashes.length === 0) return { available: [] };
+	const response = await postAvailability('/api/availability/dl/check', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ imdbId, hashes: validHashes, dmmProblemKey, solution }),
+	});
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({}));
+		throw new Error(
+			error.error || error.errorMessage || 'Failed to check Debrid-Link availability'
+		);
+	}
+	return response.json();
+}
+
+/** Forget a release an add found uncached on Debrid-Link. */
+export async function removeAvailabilityDl(
+	dmmProblemKey: string,
+	solution: string,
+	hash: string,
+	reason: string
+) {
+	const response = await fetch('/api/availability/dl/remove', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ hash, reason, dmmProblemKey, solution }),
+	});
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({}));
+		throw new Error(error.error || 'Failed to remove Debrid-Link availability');
+	}
+	return response.json();
+}
+
+/**
+ * Record a Debrid-Link torrent seen whole under `imdbId`: every file at 100% and mostly
+ * video. Anything else is left alone, so callers can hand over every hit they get. True
+ * when it was sent.
+ */
+export async function recordDlAvailability(
+	imdbId: string,
+	hash: string,
+	filename: string,
+	files: DlAvailabilityFile[] | undefined
+): Promise<boolean> {
+	if (!/^tt\d+$/.test(imdbId) || !isValidHash(hash) || !filename || !files?.length) {
+		return false;
+	}
+	if (files.some((f) => f.downloadPercent !== 100)) return false;
+	if (!mostlyVideo(files.map((f) => ({ path: f.name, bytes: f.size })))) return false;
+	const [key, solution] = await generateTokenAndHash();
+	await submitAvailabilityDl(key, solution, { hash, imdbId, filename, files });
+	return true;
 }

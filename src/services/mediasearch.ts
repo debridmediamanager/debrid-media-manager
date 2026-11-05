@@ -85,7 +85,7 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 	archiveOnly?: ArchiveOnly;
 }
 
-export type ArchiveOnly = Partial<Record<'rd' | 'ad' | 'tb', true>>;
+export type ArchiveOnly = Partial<Record<'rd' | 'ad' | 'tb' | 'dl', true>>;
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
 

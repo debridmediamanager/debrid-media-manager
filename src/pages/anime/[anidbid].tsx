@@ -35,6 +35,7 @@ import {
 	checkAvailabilityOc,
 	checkAvailabilityPm,
 	checkDatabaseAvailabilityAd,
+	checkDatabaseAvailabilityDl,
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
@@ -298,14 +299,14 @@ const AnimePage: FunctionComponent = () => {
 		let pendingChecks = 0;
 		let resultCount = 0;
 		let hiddenCount = 0;
-		const cached = { rd: 0, ad: 0, tb: 0, pm: 0, oc: 0 };
+		const cached = { rd: 0, ad: 0, tb: 0, pm: 0, oc: 0, dl: 0 };
 		// Availability answers only mark rows; the list is sorted once, when every
 		// check is in, so rows do not jump back and forth while they land (#370)
 		const keepOrder = (results: SearchResult[]) => results;
 		const finish = () => {
 			if (pendingChecks > 0 || !isMounted.current) return;
 			setSearchResults((prev) => sortPacks([...prev]));
-			const total = cached.rd + cached.ad + cached.tb + cached.pm + cached.oc;
+			const total = cached.rd + cached.ad + cached.tb + cached.pm + cached.oc + cached.dl;
 			if (total > 0) {
 				const parts = (
 					[
@@ -314,6 +315,7 @@ const AnimePage: FunctionComponent = () => {
 						['TB', cached.tb],
 						['PM', cached.pm],
 						['OC', cached.oc],
+						['DL', cached.dl],
 					] as const
 				)
 					.filter(([, n]) => n > 0)
@@ -423,6 +425,21 @@ const AnimePage: FunctionComponent = () => {
 							)
 						),
 						'ad'
+					);
+				}
+				if (debridLinkKey) {
+					track(
+						generateTokenAndHash().then(([t, h]) =>
+							checkDatabaseAvailabilityDl(
+								t,
+								h,
+								'',
+								hashesToCheck,
+								setSearchResults,
+								keepOrder
+							)
+						),
+						'dl'
 					);
 				}
 				if (premiumizeKey) {

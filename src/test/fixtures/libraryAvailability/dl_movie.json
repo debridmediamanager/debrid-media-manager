@@ -1,0 +1,33 @@
+{
+	"act_progress": false,
+	"created": 1793836717,
+	"downloadPercent": 100,
+	"downloadSpeed": 0,
+	"downloaded": false,
+	"error": 0,
+	"errorString": "",
+	"files": [
+		{
+			"id": "so2ng8ogy7ccyrcwos8gsjcm-1",
+			"name": "Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+			"size": 92504722961,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		}
+	],
+	"hashString": "10c93a2ad69b9c576a5de6f9495b266fc992c889",
+	"id": "so2ng8ogy7ccyrcwos8gsjcm",
+	"isZip": false,
+	"name": "Inception.2010.2160p.UHD.BDRemux.DTS-HD.MA.5.1.HYBRID.DoVi.P8.by.DVT.mkv",
+	"peersConnected": 0,
+	"serverId": "",
+	"srvMaint": false,
+	"status": 100,
+	"totalSize": 92504722961,
+	"trackers": [],
+	"uploadRatio": 1,
+	"uploadSpeed": 0,
+	"wait": false,
+	"zip": {}
+}

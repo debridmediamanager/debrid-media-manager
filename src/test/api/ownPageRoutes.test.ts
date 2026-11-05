@@ -2,6 +2,7 @@ import adCheck from '@/pages/api/availability/ad/check';
 import adCheck2 from '@/pages/api/availability/ad/check2';
 import check from '@/pages/api/availability/check';
 import check2 from '@/pages/api/availability/check2';
+import dlCheck from '@/pages/api/availability/dl/check';
 import playable from '@/pages/api/availability/playable';
 import libraryIdentify from '@/pages/api/library/identify';
 import sponsorIdentify from '@/pages/api/sponsor/identify';
@@ -38,6 +39,16 @@ const routes: [string, NextApiHandler, Partial<NextApiRequest>][] = [
 	],
 	['availability/ad/check2', adCheck2, { method: 'POST', body: { ...token, hashes: [HASH] } }],
 	[
+		'availability/dl/check',
+		dlCheck,
+		{ method: 'POST', body: { ...token, imdbId: 'tt0133093', hashes: [HASH] } },
+	],
+	[
+		'availability/dl/check (by hash)',
+		dlCheck,
+		{ method: 'POST', body: { ...token, hashes: [HASH] } },
+	],
+	[
 		'availability/playable',
 		playable,
 		{ method: 'POST', body: { ...token, service: 'rd', hashes: [HASH] } },
@@ -73,6 +84,7 @@ describe('routes that serve DMM pages only', () => {
 			checkAvailabilityByHashes: vi.fn().mockResolvedValue([]),
 			checkAvailabilityAd: vi.fn().mockResolvedValue([]),
 			checkAvailabilityAdByHashes: vi.fn().mockResolvedValue([]),
+			checkAvailabilityDl: vi.fn().mockResolvedValue([]),
 			filterPlayableCachedHashes: vi.fn().mockResolvedValue([]),
 			filterPlayableCachedHashesAd: vi.fn().mockResolvedValue([]),
 			getLatestTorrentSnapshot: vi.fn().mockResolvedValue(null),

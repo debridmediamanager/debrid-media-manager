@@ -1,0 +1,217 @@
+{
+	"act_progress": false,
+	"created": 1793836716,
+	"downloadPercent": 100,
+	"downloadSpeed": 0,
+	"downloaded": false,
+	"error": 0,
+	"errorString": "",
+	"files": [
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-1",
+			"name": "Friends.S05E10.The.One.with.the.Inappropriate.Sister.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7443163568,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E10.The.One.with.the.Inappropriate.Sister.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-2",
+			"name": "Friends.S05E02.The.One.with.All.the.Kissing.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7413838893,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E02.The.One.with.All.the.Kissing.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-3",
+			"name": "Friends.S05E03.The.One.Hundredth.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7344353682,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E03.The.One.Hundredth.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-4",
+			"name": "Friends.S05E04.The.One.Where.Phoebe.Hates.PBS.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7361884205,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E04.The.One.Where.Phoebe.Hates.PBS.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-5",
+			"name": "Friends.S05E05.The.One.with.the.Kips.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7348186080,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E05.The.One.with.the.Kips.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-6",
+			"name": "Friends.S05E06.The.One.with.the.Yeti.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7357299809,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E06.The.One.with.the.Yeti.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-7",
+			"name": "Friends.S05E07.The.One.Where.Ross.Moves.In.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7346390820,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E07.The.One.Where.Ross.Moves.In.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-8",
+			"name": "Friends.S05E08.The.One.with.All.the.Thanksgivings.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7368405878,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E08.The.One.with.All.the.Thanksgivings.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-9",
+			"name": "Friends.S05E09.The.One.with.Ross's.Sandwich.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7356960169,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E09.The.One.with.Ross's.Sandwich.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-10",
+			"name": "Friends.S05E01.The.One.After.Ross.Says.Rachel.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7361431126,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E01.The.One.After.Ross.Says.Rachel.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-11",
+			"name": "Friends.S05E11.The.One.with.All.the.Resolutions.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7366778221,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E11.The.One.with.All.the.Resolutions.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-12",
+			"name": "Friends.S05E12.The.One.with.Chandler's.Work Laugh.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7333467333,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E12.The.One.with.Chandler's.Work Laugh.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-13",
+			"name": "Friends.S05E13.The.One.with.Joey's.Bag.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7368937351,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E13.The.One.with.Joey's.Bag.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-14",
+			"name": "Friends.S05E14.The.One.Where.Everybody.Finds.Out.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7422404384,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E14.The.One.Where.Everybody.Finds.Out.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-15",
+			"name": "Friends.S05E15.The One.with.the.Girl.Who.Hits.Joey.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7387441109,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E15.The One.with.the.Girl.Who.Hits.Joey.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-16",
+			"name": "Friends.S05E16.The.One.with.the.Cop.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7361866469,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E16.The.One.with.the.Cop.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-17",
+			"name": "Friends.S05E17.The.One.with.Rachel's.Inadvertent.Kiss.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7383389482,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E17.The.One.with.Rachel's.Inadvertent.Kiss.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-18",
+			"name": "Friends.S05E18.The.One.Where.Rachel.Smokes.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7348506411,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E18.The.One.Where.Rachel.Smokes.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-19",
+			"name": "Friends.S05E19.The.One.Where.Ross.Can't.Flirt.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7372301851,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E19.The.One.Where.Ross.Can't.Flirt.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-20",
+			"name": "Friends.S05E20.The.One.with.The.Ride Along.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7403591980,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E20.The.One.with.The.Ride Along.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-21",
+			"name": "Friends.S05E21.The.One.with.The.Ball.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7375025213,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E21.The.One.with.The.Ball.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-22",
+			"name": "Friends.S05E22.The.One.with.Joey's.Big.Break.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7338232020,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E22.The.One.with.Joey's.Big.Break.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-23",
+			"name": "Friends.S05E23.The.One.In.Vegas.Part.1.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7409000131,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E23.The.One.In.Vegas.Part.1.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		},
+		{
+			"id": "s5geg8otci6ny3kgcwc04s1x-24",
+			"name": "Friends.S05E24.The.One.In.Vegas.Part.2.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"size": 7396181808,
+			"downloadUrl": "https://example.debrid.link/dl/REDACTED/Friends.S05E24.The.One.In.Vegas.Part.2.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI.mkv",
+			"downloaded": false,
+			"downloadPercent": 100
+		}
+	],
+	"hashString": "d9ce10dc915f4b6c2dfe960fb54cab2ecc31b381",
+	"id": "s5geg8otci6ny3kgcwc04s1x",
+	"isZip": false,
+	"name": "Friends.S05.2160p.UHD.Blu-ray.Remux.DV.HEVC.DTS-HD.MA.5.1-SiCFoI",
+	"peersConnected": 0,
+	"serverId": "",
+	"srvMaint": false,
+	"status": 100,
+	"totalSize": 176969037993,
+	"trackers": [],
+	"uploadRatio": 1,
+	"uploadSpeed": 0,
+	"wait": false,
+	"zip": {}
+}
