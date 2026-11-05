@@ -678,11 +678,28 @@ export class AvailabilityService extends DatabaseClient {
 	}
 
 	public async getHashByLink(link: string): Promise<string | null> {
-		const file = await this.prisma.availableFile.findFirst({
-			where: { link: { startsWith: link } },
-			select: { hash: true },
+		const match = link.match(
+			/^https:\/\/real-debrid\.com\/d\/([A-Za-z0-9]{13})(?:[A-Za-z0-9]{3}|[A-Za-z0-9]{13})?$/
+		);
+		if (!match) return null;
+		const prefix = `https://real-debrid.com/d/${match[1]}`;
+		const files = await this.prisma.availableFile.findMany({
+			where: { link: { startsWith: prefix } },
+			select: { hash: true, link: true },
 		});
-		return file?.hash || null;
+		let hash: string | null = null;
+		for (const file of files) {
+			if (
+				!/^https:\/\/real-debrid\.com\/d\/[A-Za-z0-9]{13}(?:[A-Za-z0-9]{3}|[A-Za-z0-9]{13})?$/.test(
+					file.link
+				)
+			)
+				return null;
+			const candidate = file.hash.toLowerCase();
+			if (hash !== null && hash !== candidate) return null;
+			hash = candidate;
+		}
+		return hash;
 	}
 
 	// ====================================================================

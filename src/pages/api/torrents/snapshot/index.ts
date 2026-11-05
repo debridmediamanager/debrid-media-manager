@@ -1,6 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { fileSharedRdLinks } from '@/services/sharedRdLinks';
 import { countFiles, TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -96,11 +95,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 			});
 		}
 		res.status(201).json({ success: true, id });
-		// After answering: Real-Debrid checks each code one at a time, and a pack's
-		// would hold zurg's post open for as many requests as it has episodes.
-		await fileSharedRdLinks(result.value).catch((error) =>
-			console.error('Failed to file shared Real-Debrid links', error)
-		);
+		// Snapshot fields cannot attest the hash or IMDb attribution of RD links.
+		// Store probe metadata only; never publish these links into the shared pool.
 		return;
 	} catch (error) {
 		console.error('Failed to persist torrent snapshot', error);

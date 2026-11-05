@@ -70,16 +70,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const rdLink = `${RD_DOWNLOAD_LINK_PREFIX}${link.substring(0, 13)}`;
 
-	// A stream list handed out before a takedown can outlive it in a client.
-	// The lookup is skipped while nothing is blocked; `link` is the primary
-	// key, so the prefix match is an index range when it runs.
+	// A stale stream must not bypass a takedown through missing, conflicting,
+	// or unreadable attribution. With no active hash blocks, ordinary playback
+	// does not need this lookup.
 	const blocklist = await getBlocklist();
-	if (
-		blocklist.hashes.size > 0 &&
-		isHashBlockedIn(blocklist, await db.getHashByLink(rdLink).catch(() => null))
-	) {
-		res.status(451).json({ error: BLOCKED_MESSAGE });
-		return;
+	if (blocklist.hashes.size > 0) {
+		let hash: string | null;
+		try {
+			hash = await db.getHashByLink(rdLink);
+		} catch (error) {
+			return sendPlayFailure(res, 'rd', 'unavailable', describeRdError(error));
+		}
+		if (!hash || isHashBlockedIn(blocklist, hash)) {
+			res.status(451).json({ error: BLOCKED_MESSAGE });
+			return;
+		}
 	}
 
 	// Only ever called for an error RD has told us is permanent - see

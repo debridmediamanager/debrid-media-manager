@@ -35,6 +35,7 @@ vi.mock('@prisma/client', () => ({
 			availableFile: {
 				findUnique: findUniqueMock,
 				findFirst: findFirstFileMock,
+				findMany: findManyMock,
 				deleteMany: deleteManyFileMock,
 				createMany: createManyFileMock,
 			},
@@ -218,12 +219,14 @@ describe('AvailabilityService', () => {
 	// ever carries the 13-char truncation, so the old exact-match lookup found
 	// nothing - 3,938,603 of 3,939,554 rows are the long form.
 	it('retrieves hash by the 13-char prefix of an RD link', async () => {
-		findFirstFileMock.mockResolvedValue({ hash: 'abc123hash' });
+		findManyMock.mockResolvedValue([
+			{ hash: 'abc123hash', link: 'https://real-debrid.com/d/abcdef1234567abc' },
+		]);
 		const hash = await service.getHashByLink('https://real-debrid.com/d/abcdef1234567');
 		expect(hash).toBe('abc123hash');
-		expect(findFirstFileMock).toHaveBeenCalledWith({
+		expect(findManyMock).toHaveBeenCalledWith({
 			where: { link: { startsWith: 'https://real-debrid.com/d/abcdef1234567' } },
-			select: { hash: true },
+			select: { hash: true, link: true },
 		});
 	});
 
@@ -231,6 +234,23 @@ describe('AvailabilityService', () => {
 		findFirstFileMock.mockResolvedValue(null);
 		const hash = await service.getHashByLink('https://real-debrid.com/d/nonexistent');
 		expect(hash).toBeNull();
+	});
+
+	it('refuses ambiguous RD link attribution rather than choosing the first hash', async () => {
+		findFirstFileMock.mockResolvedValue({ hash: 'allowed' });
+		findManyMock.mockResolvedValue([
+			{ hash: 'allowed', link: 'https://real-debrid.com/d/ABCDEFGHIJKLMabc' },
+			{ hash: 'blocked', link: 'https://real-debrid.com/d/ABCDEFGHIJKLMxyz' },
+		]);
+		expect(await service.getHashByLink('https://real-debrid.com/d/ABCDEFGHIJKLM')).toBeNull();
+	});
+
+	it('does not use a longer malformed prefix match as attribution', async () => {
+		findFirstFileMock.mockResolvedValue({ hash: 'allowed' });
+		findManyMock.mockResolvedValue([
+			{ hash: 'allowed', link: 'https://real-debrid.com/d/ABCDEFGHIJKLMspoof' },
+		]);
+		expect(await service.getHashByLink('https://real-debrid.com/d/ABCDEFGHIJKLM')).toBeNull();
 	});
 
 	it('removes only the file whose link rotted, not the whole torrent', async () => {
