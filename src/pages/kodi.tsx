@@ -21,6 +21,8 @@ import { Toaster } from 'react-hot-toast';
 // Cast addons and, for a sponsor, the DMM API key, so nothing is typed on a TV.
 
 const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
+// The addon talks to debridmediamanager.com until its DMM address setting says otherwise.
+const selfHosted = () => window.location.origin !== PRODUCTION_ORIGIN;
 
 // Text colour on each service's identity colour, as in the UI conventions.
 /** What someone typed or the QR carried, shown the way Kodi shows it: ABCD-EFGH. */
@@ -125,6 +127,8 @@ function LinkCard() {
 
 	const sponsorKey = isSponsor ? apiKey : null;
 	const nothingToLink = !Object.keys(casts).length && !sponsorKey;
+	// Signed in, but Kodi plays through DMM Cast and its setup has not answered, or failed.
+	const castPending = nothingToLink && signedIn();
 
 	async function submit(event: FormEvent, confirmOtherNetwork = false) {
 		event.preventDefault();
@@ -144,7 +148,13 @@ function LinkCard() {
 			const data = await res.json();
 			setOtherNetwork(!!data.otherNetwork);
 			if (!res.ok) {
-				setError(data.error ?? 'Could not link Kodi');
+				setError(
+					`${data.error ?? 'Could not link Kodi'}${
+						res.status === 404 && selfHosted()
+							? ` Is the addon's DMM address set to ${window.location.origin}?`
+							: ''
+					}`
+				);
 				return;
 			}
 			setLinked([
@@ -223,9 +233,11 @@ function LinkCard() {
 
 			<div className="mt-4 text-gray-300">
 				<p className="mb-2">
-					{nothingToLink
-						? 'This browser is not signed in to DMM. Sign in with the service Kodi should play through and you come straight back here:'
-						: 'Kodi gets the ticked services. Add another and you come straight back here:'}
+					{!nothingToLink
+						? 'Kodi gets the ticked services. Add another and you come straight back here:'
+						: castPending
+							? 'Setting up DMM Cast for your sign-in, which Kodi plays through. If this stays, the error DMM showed says why. Or sign in to another service:'
+							: 'This browser is not signed in to DMM. Sign in with the service Kodi should play through and you come straight back here:'}
 				</p>
 				<ServiceChips casts={casts} redirect={router.asPath} />
 				{sponsorKey && (
@@ -234,7 +246,7 @@ function LinkCard() {
 						Wanted list.
 					</p>
 				)}
-				{nothingToLink && (
+				{nothingToLink && !castPending && (
 					<>
 						{/* Only a browser's first login restores, so this helps on this screen alone. */}
 						<p className="mt-3 text-sm text-gray-400">
@@ -243,7 +255,7 @@ function LinkCard() {
 							it.
 						</p>
 						<p className="mt-3 text-sm text-gray-400">
-							Or open debridmediamanager.com/kodi on a phone or computer where you
+							Or open {window.location.host}/kodi on a phone or computer where you
 							already use DMM and enter the code there.
 						</p>
 					</>
@@ -300,6 +312,13 @@ function KodiPage() {
 							<strong>Debrid Media Manager</strong>. Updates arrive by themselves from
 							then on.
 						</li>
+						{origin !== PRODUCTION_ORIGIN && (
+							<li>
+								In the addon&apos;s settings → Advanced, set{' '}
+								<strong>DMM address</strong> to <code>{origin}</code>. Until then it
+								links to debridmediamanager.com, not this server.
+							</li>
+						)}
 					</ol>
 				</Card>
 				<SupportLine forum="dmm-support" />

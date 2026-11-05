@@ -49,7 +49,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const apiKey = typeof req.body?.apiKey === 'string' ? req.body.apiKey.trim() : '';
 
 	try {
-		const origin = process.env.DMM_ORIGIN || 'https://debridmediamanager.com';
 		const accounts: KodiAccount[] = [];
 		for (const [service, addon] of Object.entries(CAST_ADDONS)) {
 			const id = casts[service];
@@ -57,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			accounts.push({
 				service,
 				name: addon.name,
-				addon: `${origin}/api/${addon.prefix}/${id}`,
+				addon: `/api/${addon.prefix}/${id}`,
 			});
 		}
 		const lookup = apiKey ? await db.getSponsorByDmmApiKey(apiKey) : null;

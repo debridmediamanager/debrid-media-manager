@@ -144,3 +144,31 @@ describe('/kodi?code= on a browser signed in to one service', () => {
 		expect(screen.queryByText('Remember across devices')).toBeNull();
 	});
 });
+
+/**
+ * Reported 2026-11-05 (Reddit, self-hosted DMM): signed in with Real-Debrid on the member's own
+ * server, whose DMM Cast setup failed. The page said the browser was not signed in to DMM and,
+ * since it was, offered no Real-Debrid sign-in either: nothing on screen was true or actionable.
+ */
+describe('/kodi on a browser signed in whose DMM Cast setup has not answered', () => {
+	beforeEach(() => {
+		push.mockClear();
+		localStorage.clear();
+		localStorage.setItem('rd:accessToken', 'token');
+		rdCast.id = undefined;
+	});
+
+	it('says DMM Cast is the missing piece, not the sign-in', async () => {
+		await renderPage();
+
+		expect(screen.queryByText(/not signed in to DMM/)).toBeNull();
+		expect(screen.getByText(/Setting up DMM Cast for your sign-in/)).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Link Kodi' })).toBeDisabled();
+	});
+
+	it('tells a self-hosted DMM to point the addon at it', async () => {
+		await renderPage();
+
+		expect(screen.getByText(window.location.origin)).toBeInTheDocument();
+	});
+});

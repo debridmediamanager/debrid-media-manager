@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
+import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCastToken } from './castToken';
 
@@ -16,6 +17,8 @@ vi.mock('react-hot-toast', () => ({
 		error: vi.fn(),
 	},
 }));
+
+vi.mock('@/utils/castApiClient', () => ({ saveCastProfile: vi.fn() }));
 
 // Mock fetch
 global.fetch = vi.fn();
@@ -70,5 +73,32 @@ describe('useCastToken', () => {
 
 		// The hook returns the token value directly, which can be string or null
 		expect(['string', 'object', 'null']).toContain(typeof result.current);
+	});
+
+	/**
+	 * Reported 2026-11-05 (Reddit, self-hosted DMM): /api/stremio/id failed on the member's own
+	 * server, the hook dropped the answer, and /kodi only said the browser was not signed in.
+	 */
+	it('says why the server could not make the cast id instead of dropping it', async () => {
+		localStorage.setItem('rd:accessToken', JSON.stringify('rd-token'));
+		global.fetch = vi.fn().mockResolvedValue({
+			json: () =>
+				Promise.resolve({
+					status: 'error',
+					errorMessage:
+						'Failed to generate user ID: DMMCAST_SALT environment variable is not set',
+				}),
+		});
+
+		const { result } = renderHook(() => useCastToken());
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+
+		expect(result.current).toBeFalsy();
+		expect(toast.error).toHaveBeenCalledWith(
+			'DMM Cast for Real-Debrid: Failed to generate user ID: DMMCAST_SALT environment variable is not set'
+		);
+		localStorage.clear();
 	});
 });

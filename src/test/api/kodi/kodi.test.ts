@@ -16,9 +16,18 @@ import pair from '@/pages/api/kodi/pair';
 import poll from '@/pages/api/kodi/poll';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 
-async function call(handler: typeof pair, body?: unknown, method = 'POST', ip = '203.0.113.7') {
+async function call(
+	handler: typeof pair,
+	body?: unknown,
+	method = 'POST',
+	ip = '203.0.113.7',
+	headers: Record<string, string> = { host: 'dmm.test', 'x-forwarded-proto': 'https' }
+) {
 	const res = createMockResponse();
-	await handler(createMockRequest({ method, body, headers: { 'cf-connecting-ip': ip } }), res);
+	await handler(
+		createMockRequest({ method, body, headers: { 'cf-connecting-ip': ip, ...headers } }),
+		res
+	);
 	const status = vi.mocked(res.status).mock.calls.at(-1)?.[0];
 	const json = vi.mocked(res.json).mock.calls.at(-1)?.[0];
 	return { status, json };
@@ -26,7 +35,7 @@ async function call(handler: typeof pair, body?: unknown, method = 'POST', ip = 
 
 beforeEach(() => {
 	vi.clearAllMocks();
-	process.env.DMM_ORIGIN = 'https://dmm.test';
+	process.env.DMM_ORIGIN = 'https://configured.test';
 	Object.values(db).forEach((fn) => fn.mockResolvedValue(null));
 });
 
@@ -79,6 +88,39 @@ describe('/api/kodi pairing', () => {
 			sponsor: { apiKey: 'k'.repeat(64), githubUsername: 'octo' },
 		});
 		expect((await call(poll, { deviceCode })).status).toBe(410);
+	});
+
+	/**
+	 * Reported 2026-11-05 (Reddit, self-hosted DMM): addon links were built on DMM_ORIGIN, which
+	 * the self-hosting example sets to http://localhost:3000, the TV's own loopback; unset, they
+	 * pointed at debridmediamanager.com, which has no profile for a self-hosted cast id.
+	 */
+	it('hands Kodi addons on the address Kodi paired through, not DMM_ORIGIN', async () => {
+		process.env.DMM_ORIGIN = 'http://localhost:3000';
+		db.getCastProfile.mockResolvedValue({ userId: 'rdUser123' });
+		const lan = { host: '192.168.1.20:3000' };
+
+		const started = await call(pair, {}, 'POST', '192.168.1.50', lan);
+		expect(started.json.verifyUrl).toMatch(/^http:\/\/192\.168\.1\.20:3000\/kodi\?code=/);
+		// The browser on localhost approves the code Kodi got from the LAN address.
+		const approved = await call(
+			approve,
+			{ userCode: started.json.userCode, casts: { rd: 'rdUser123' } },
+			'POST',
+			'192.168.1.50',
+			{ host: 'localhost:3000' }
+		);
+		expect(approved.status).toBe(200);
+		const collected = await call(
+			poll,
+			{ deviceCode: started.json.deviceCode },
+			'POST',
+			'192.168.1.50',
+			lan
+		);
+		expect(collected.json.accounts[0].addon).toBe(
+			'http://192.168.1.20:3000/api/stremio/rdUser123'
+		);
 	});
 
 	it('leaves a lapsed sponsor key out but still links the casts', async () => {

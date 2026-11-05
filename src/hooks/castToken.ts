@@ -67,8 +67,10 @@ export function useCastToken() {
 					headers: { Authorization: `Bearer ${accessToken}` },
 				});
 				const data = await res.json();
-				if (data.status !== 'error') {
+				if (data.status !== 'error' && data.id) {
 					setDmmCastToken(data.id);
+				} else {
+					toast.error(`DMM Cast for Real-Debrid: ${data.errorMessage ?? data.error}`);
 				}
 			} catch (error) {
 				toast.error('Failed to fetch DMM Cast token.');

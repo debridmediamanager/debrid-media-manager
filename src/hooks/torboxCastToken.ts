@@ -50,6 +50,8 @@ export function useTorBoxCastToken() {
 					const data = await res.json();
 					if (data.status !== 'error' && data.id) {
 						setDmmCastToken(data.id);
+					} else {
+						toast.error(`DMM Cast for TorBox: ${data.errorMessage ?? data.error}`);
 					}
 				}
 			} catch (error) {

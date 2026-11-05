@@ -9,8 +9,14 @@ import {
 } from './kodiPairing';
 
 const link = {
-	accounts: [{ service: 'rd', name: 'Real-Debrid', addon: 'x/api/stremio/abc123' }],
+	accounts: [{ service: 'rd', name: 'Real-Debrid', addon: '/api/stremio/abc123' }],
 	sponsor: null,
+};
+const ORIGIN = 'http://192.168.1.20:3000';
+// What Kodi collects: the addon on the address it paired through.
+const collected = {
+	...link,
+	accounts: [{ ...link.accounts[0], addon: `${ORIGIN}/api/stremio/abc123` }],
 };
 const HOME = '203.0.113.7';
 
@@ -18,27 +24,27 @@ afterEach(() => vi.useRealTimers());
 
 describe('kodiPairing (memory store)', () => {
 	it('hands the approved link to the device once, then forgets both codes', async () => {
-		const { userCode, deviceCode } = await createPairing(HOME);
+		const { userCode, deviceCode } = await createPairing(HOME, ORIGIN);
 		expect(normalizeUserCode(formatUserCode(userCode))).toBe(userCode);
 
 		expect(await collectPairing(deviceCode)).toBe('pending');
 		expect(await approvePairing(userCode, link, HOME)).toBe('ok');
 		expect(await approvePairing(userCode, link, HOME)).toBe('used');
-		expect(await collectPairing(deviceCode)).toEqual(link);
+		expect(await collectPairing(deviceCode)).toEqual(collected);
 		expect(await collectPairing(deviceCode)).toBe('expired');
 		expect(await approvePairing(userCode, link, HOME)).toBe('unknown');
 	});
 
 	it('asks before linking a Kodi on another connection, as a phishing link would be', async () => {
-		const { userCode, deviceCode } = await createPairing(HOME);
+		const { userCode, deviceCode } = await createPairing(HOME, ORIGIN);
 		expect(await approvePairing(userCode, link, '198.51.100.9')).toBe('other-network');
 		expect(await collectPairing(deviceCode)).toBe('pending');
 		expect(await approvePairing(userCode, link, '198.51.100.9', true)).toBe('ok');
-		expect(await collectPairing(deviceCode)).toEqual(link);
+		expect(await collectPairing(deviceCode)).toEqual(collected);
 	});
 
 	it('lets only one of two racing approvals and one of two racing polls through', async () => {
-		const { userCode, deviceCode } = await createPairing(HOME);
+		const { userCode, deviceCode } = await createPairing(HOME, ORIGIN);
 		const approvals = await Promise.all([
 			approvePairing(userCode, link, HOME),
 			approvePairing(
@@ -54,7 +60,7 @@ describe('kodiPairing (memory store)', () => {
 
 	it('expires an unapproved code, and approval neither extends nor revives it', async () => {
 		vi.useFakeTimers();
-		const { userCode, deviceCode } = await createPairing(HOME);
+		const { userCode, deviceCode } = await createPairing(HOME, ORIGIN);
 		vi.advanceTimersByTime((PAIRING_TTL_SECONDS - 10) * 1000);
 		expect(await approvePairing(userCode, link, HOME)).toBe('ok');
 		vi.advanceTimersByTime(11 * 1000);

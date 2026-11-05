@@ -64,7 +64,10 @@ export const generateUserId = async (token: string): Promise<string> => {
 		// With 62^12 possible values, collision probability is effectively 0 for millions of users
 		return hmac.slice(0, 12);
 	} catch (error) {
-		throw new Error('Failed to generate user ID');
+		// The reason is the only clue a self-hosted DMM gets, e.g. DMMCAST_SALT unset.
+		throw new Error(
+			`Failed to generate user ID: ${error instanceof Error ? error.message : error}`
+		);
 	}
 };
 

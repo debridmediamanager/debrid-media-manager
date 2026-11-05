@@ -24,7 +24,10 @@ const CODE_LENGTH = 8;
 export interface KodiAccount {
 	service: string;
 	name: string;
-	/** The DMM Cast addon base, `<origin>/api/stremio[-xx]/<userid>`. */
+	/**
+	 * The DMM Cast addon base, `<origin>/api/stremio[-xx]/<userid>`. Approval passes only the
+	 * path; the pairing puts the address Kodi paired through in front of it.
+	 */
 	addon: string;
 }
 
@@ -36,6 +39,8 @@ export interface KodiLink {
 interface Pairing {
 	userCode: string;
 	ip?: string;
+	/** The address Kodi reached DMM at, so its addons are on a server that Kodi can reach. */
+	origin?: string;
 	link?: KodiLink;
 }
 
@@ -116,8 +121,14 @@ function store(): Store {
 	};
 }
 
-/** `ip` is where Kodi asked from, so approval can tell when the browser is somewhere else. */
-export async function createPairing(ip: string): Promise<{ userCode: string; deviceCode: string }> {
+/**
+ * `ip` is where Kodi asked from, so approval can tell when the browser is somewhere else;
+ * `origin` the address it asked at, which its addon links are built on.
+ */
+export async function createPairing(
+	ip: string,
+	origin: string
+): Promise<{ userCode: string; deviceCode: string }> {
 	const s = store();
 	for (;;) {
 		const userCode = Array.from(
@@ -126,7 +137,10 @@ export async function createPairing(ip: string): Promise<{ userCode: string; dev
 		).join('');
 		const deviceCode = randomBytes(32).toString('base64url');
 		if (!(await s.create(codeKey(userCode), deviceCode))) continue; // a live code was drawn again
-		await s.create(deviceKey(deviceCode), JSON.stringify({ userCode, ip } satisfies Pairing));
+		await s.create(
+			deviceKey(deviceCode),
+			JSON.stringify({ userCode, ip, origin } satisfies Pairing)
+		);
 		return { userCode, deviceCode };
 	}
 }
@@ -155,7 +169,13 @@ export async function approvePairing(
 	if (pairing.link) return 'used';
 	if (pairing.ip && pairing.ip !== ip && !confirmedOtherNetwork) return 'other-network';
 	if (!(await s.create(`kodi:pair:approved:${userCode}`, '1'))) return 'used';
-	return (await s.replace(deviceKey(deviceCode), JSON.stringify({ ...pairing, link })))
+	// A pairing started before origins were stored has none: DMM_ORIGIN, as it was then.
+	const origin = pairing.origin ?? process.env.DMM_ORIGIN ?? 'https://debridmediamanager.com';
+	const accounts = link.accounts.map((a) => ({ ...a, addon: origin + a.addon }));
+	return (await s.replace(
+		deviceKey(deviceCode),
+		JSON.stringify({ ...pairing, link: { ...link, accounts } })
+	))
 		? 'ok'
 		: 'unknown';
 }

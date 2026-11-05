@@ -8,6 +8,26 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+/**
+ * The address Kodi asked at, which it can reach by definition. DMM_ORIGIN is often wrong for
+ * a Kodi: the self-hosting example sets it to http://localhost:3000, the TV's own loopback.
+ * A forged Host only changes the forger's own pairing.
+ */
+export function kodiOrigin(req: NextApiRequest): string {
+	const forwarded = req.headers['x-forwarded-proto'];
+	const proto = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0].trim();
+	const scheme =
+		proto === 'https' || proto === 'http'
+			? proto
+			: (req.socket as { encrypted?: boolean } | undefined)?.encrypted
+				? 'https'
+				: 'http';
+	try {
+		if (req.headers.host) return new URL(`${scheme}://${req.headers.host}`).origin;
+	} catch {}
+	return process.env.DMM_ORIGIN || 'https://debridmediamanager.com';
+}
+
 /** Starts a Kodi pairing: the code Kodi shows, and the secret it polls `/api/kodi/poll` with. */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -15,8 +35,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 	try {
-		const { userCode, deviceCode } = await createPairing(getClientIpFromRequest(req));
-		const origin = process.env.DMM_ORIGIN || 'https://debridmediamanager.com';
+		const origin = kodiOrigin(req);
+		const { userCode, deviceCode } = await createPairing(getClientIpFromRequest(req), origin);
 		res.setHeader('Cache-Control', 'no-store');
 		return res.status(200).json({
 			userCode: formatUserCode(userCode),
