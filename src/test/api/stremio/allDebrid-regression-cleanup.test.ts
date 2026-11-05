@@ -14,6 +14,7 @@ const mocks = vi.hoisted(() => {
 		availableAd: { updateMany: vi.fn(), upsert: vi.fn(), deleteMany: vi.fn() },
 		availableAdFile: { deleteMany: vi.fn(), findFirst: vi.fn(), count: vi.fn() },
 		allDebridCast: { deleteMany: vi.fn() },
+		cache: { upsert: vi.fn() },
 		$transaction: vi.fn(async (work: Promise<unknown>[]) => Promise.all(work)),
 	};
 	return {
@@ -156,6 +157,12 @@ describe('AllDebrid dead token cleanup', () => {
 			expect(mocks.prisma.availableAd.deleteMany).toHaveBeenCalledWith({
 				where: { hash: magnet.hash },
 			});
+			// and leaves a tombstone, so a Debridio scrape cannot put it back as cached
+			expect(mocks.prisma.cache.upsert).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { key: `adevicted:${magnet.hash.toLowerCase()}` },
+				})
+			);
 		}
 	);
 	it('invalidates a saved /f/ token without consulting a magnet', async () => {

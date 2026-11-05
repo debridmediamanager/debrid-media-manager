@@ -95,6 +95,8 @@ const AD_LINK_PREFIX = 'https://alldebrid.com/f/';
 
 /** `Cache` keys marking a release removed from `Available`; see `removeAvailability`. */
 const EVICTED_PREFIX = 'avevicted:';
+/** The same for `AvailableAd`, left when its last dead file takes the release with it. */
+export const AD_EVICTED_PREFIX = 'adevicted:';
 
 /**
  * A file's season and episode from its own name first, then its whole path: a folder named
@@ -362,46 +364,52 @@ export class AvailabilityService extends DatabaseClient {
 			select: { hash: true },
 		});
 		const knownHashes = new Set(existing.map((row) => row.hash));
-		const fresh = rows.filter((row) => !knownHashes.has(row.hash));
+		const fresh = await this.notEvicted(
+			rows.filter((row) => !knownHashes.has(row.hash)),
+			EVICTED_PREFIX
+		);
 		if (fresh.length === 0) return 0;
 
 		const now = new Date();
-		await this.prisma.available.createMany({
-			data: fresh.map((row) => {
-				const episodeInfo = extractEpisodeInfo(row.filename);
-				return {
-					hash: row.hash,
-					imdbId,
-					// one name past the column failed the whole batch for that title
-					filename: clipToVarchar(row.filename),
-					originalFilename: clipToVarchar(row.filename),
-					bytes: BigInt(row.bytes),
-					originalBytes: BigInt(row.bytes),
-					host: 'real-debrid.com',
-					progress: 100,
-					status: 'downloaded',
-					ended: now,
-					season: episodeInfo?.season,
-					episode: episodeInfo?.episode,
-				};
+		// one transaction: a release without its marker file reads uncached and is never redone
+		await this.prisma.$transaction([
+			this.prisma.available.createMany({
+				data: fresh.map((row) => {
+					const episodeInfo = extractEpisodeInfo(row.filename);
+					return {
+						hash: row.hash,
+						imdbId,
+						// one name past the column failed the whole batch for that title
+						filename: clipToVarchar(row.filename),
+						originalFilename: clipToVarchar(row.filename),
+						bytes: BigInt(row.bytes),
+						originalBytes: BigInt(row.bytes),
+						host: 'real-debrid.com',
+						progress: 100,
+						status: 'downloaded',
+						ended: now,
+						season: episodeInfo?.season,
+						episode: episodeInfo?.episode,
+					};
+				}),
+				skipDuplicates: true,
 			}),
-			skipDuplicates: true,
-		});
-		await this.prisma.availableFile.createMany({
-			data: fresh.map((row) => {
-				const episodeInfo = extractEpisodeInfo(row.filename);
-				return {
-					link: `debridio:${row.hash}`,
-					file_id: 0,
-					hash: row.hash,
-					path: row.filename,
-					bytes: BigInt(row.bytes),
-					season: episodeInfo?.season,
-					episode: episodeInfo?.episode,
-				};
+			this.prisma.availableFile.createMany({
+				data: fresh.map((row) => {
+					const episodeInfo = extractEpisodeInfo(row.filename);
+					return {
+						link: `debridio:${row.hash}`,
+						file_id: 0,
+						hash: row.hash,
+						path: row.filename,
+						bytes: BigInt(row.bytes),
+						season: episodeInfo?.season,
+						episode: episodeInfo?.episode,
+					};
+				}),
+				skipDuplicates: true,
 			}),
-			skipDuplicates: true,
-		});
+		]);
 		return fresh.length;
 	}
 
@@ -426,48 +434,64 @@ export class AvailabilityService extends DatabaseClient {
 			select: { hash: true },
 		});
 		const knownHashes = new Set(existing.map((row) => row.hash));
-		const fresh = normalized.filter((row) => !knownHashes.has(row.hash));
+		const fresh = await this.notEvicted(
+			normalized.filter((row) => !knownHashes.has(row.hash)),
+			AD_EVICTED_PREFIX
+		);
 		if (fresh.length === 0) return 0;
 
 		const now = new Date();
-		await this.prisma.availableAd.createMany({
-			data: fresh.map((row) => {
-				const episodeInfo = extractEpisodeInfo(row.filename);
-				return {
-					hash: row.hash,
-					imdbId,
-					// one name past the column failed the whole batch for that title
-					filename: clipToVarchar(row.filename),
-					originalFilename: clipToVarchar(row.filename),
-					bytes: BigInt(row.bytes),
-					originalBytes: BigInt(row.bytes),
-					host: 'alldebrid.com',
-					progress: 100,
-					status: 'Ready',
-					statusCode: 4,
-					ended: now,
-					season: episodeInfo?.season,
-					episode: episodeInfo?.episode,
-				};
+		await this.prisma.$transaction([
+			this.prisma.availableAd.createMany({
+				data: fresh.map((row) => {
+					const episodeInfo = extractEpisodeInfo(row.filename);
+					return {
+						hash: row.hash,
+						imdbId,
+						// one name past the column failed the whole batch for that title
+						filename: clipToVarchar(row.filename),
+						originalFilename: clipToVarchar(row.filename),
+						bytes: BigInt(row.bytes),
+						originalBytes: BigInt(row.bytes),
+						host: 'alldebrid.com',
+						progress: 100,
+						status: 'Ready',
+						statusCode: 4,
+						ended: now,
+						season: episodeInfo?.season,
+						episode: episodeInfo?.episode,
+					};
+				}),
+				skipDuplicates: true,
 			}),
-			skipDuplicates: true,
-		});
-		await this.prisma.availableAdFile.createMany({
-			data: fresh.map((row) => {
-				const episodeInfo = extractEpisodeInfo(row.filename);
-				return {
-					link: `debridio:${row.hash}`,
-					file_id: 0,
-					hash: row.hash,
-					path: row.filename,
-					bytes: BigInt(row.bytes),
-					season: episodeInfo?.season,
-					episode: episodeInfo?.episode,
-				};
+			this.prisma.availableAdFile.createMany({
+				data: fresh.map((row) => {
+					const episodeInfo = extractEpisodeInfo(row.filename);
+					return {
+						link: `debridio:${row.hash}`,
+						file_id: 0,
+						hash: row.hash,
+						path: row.filename,
+						bytes: BigInt(row.bytes),
+						season: episodeInfo?.season,
+						episode: episodeInfo?.episode,
+					};
+				}),
+				skipDuplicates: true,
 			}),
-			skipDuplicates: true,
-		});
+		]);
 		return fresh.length;
+	}
+
+	/** `rows` without the releases a tombstone under `prefix` says were removed. */
+	private async notEvicted<T extends { hash: string }>(rows: T[], prefix: string): Promise<T[]> {
+		if (rows.length === 0) return rows;
+		const stones = await this.prisma.cache.findMany({
+			where: { key: { in: rows.map((row) => `${prefix}${row.hash.toLowerCase()}`) } },
+			select: { key: true },
+		});
+		const gone = new Set(stones.map((stone) => stone.key.slice(prefix.length)));
+		return rows.filter((row) => !gone.has(row.hash.toLowerCase()));
 	}
 
 	// Refresh bookkeeping for the debridio integration, one Cache row per

@@ -1,6 +1,7 @@
 import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { isFilmFile } from '@/utils/selectable';
+import { AD_EVICTED_PREFIX } from './availability';
 import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
 
@@ -343,12 +344,21 @@ export class AllDebridCastService extends DatabaseClient {
 			this.prisma.availableAdFile.deleteMany({ where: { link } }),
 			this.prisma.allDebridCast.deleteMany({ where: { link } }),
 		]);
-		// the last dead file takes its release with it, as on Real-Debrid
+		// the last dead file takes its release with it, and a tombstone, as on Real-Debrid
 		if (
 			dead &&
 			(await this.prisma.availableAdFile.count({ where: { hash: dead.hash } })) === 0
 		) {
-			await this.prisma.availableAd.deleteMany({ where: { hash: dead.hash } });
+			const key = `${AD_EVICTED_PREFIX}${dead.hash.toLowerCase()}`;
+			const value = { at: Date.now() };
+			await this.prisma.$transaction([
+				this.prisma.availableAd.deleteMany({ where: { hash: dead.hash } }),
+				this.prisma.cache.upsert({
+					where: { key },
+					update: { value },
+					create: { key, value },
+				}),
+			]);
 		}
 	}
 

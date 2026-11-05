@@ -17,6 +17,8 @@ const createManyAdMock = vi.fn();
 const createManyAdFileMock = vi.fn();
 const deleteManyRowMock = vi.fn();
 const countFileMock = vi.fn();
+const cacheFindManyMock = vi.fn();
+const transactionMock = vi.fn(async (ops: Promise<unknown>[]) => Promise.all(ops));
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(function () {
 		return {
@@ -45,9 +47,10 @@ vi.mock('@prisma/client', () => ({
 			},
 			cache: {
 				findUnique: cacheFindUniqueMock,
+				findMany: cacheFindManyMock,
 				upsert: cacheUpsertMock,
 			},
-			$transaction: vi.fn(async (ops: Promise<unknown>[]) => Promise.all(ops)),
+			$transaction: transactionMock,
 			$disconnect: vi.fn(),
 		};
 	}),
@@ -73,6 +76,9 @@ describe('AvailabilityService', () => {
 		createManyAdFileMock.mockReset();
 		deleteManyRowMock.mockReset();
 		countFileMock.mockReset();
+		cacheFindManyMock.mockReset();
+		cacheFindManyMock.mockResolvedValue([]);
+		transactionMock.mockClear();
 		service = new AvailabilityService();
 	});
 
@@ -383,6 +389,39 @@ describe('AvailabilityService', () => {
 		expect(createManyFileMock).not.toHaveBeenCalled();
 	});
 
+	// A release removed as uncached or dead leaves a tombstone so nothing files it back; the
+	// Debridio scrape, a third party's word, never read it and could put it back for everyone.
+	it('skips a Debridio hash removed as uncached or dead', async () => {
+		const evicted = 'c'.repeat(40);
+		findManyMock.mockResolvedValue([]);
+		cacheFindManyMock.mockResolvedValue([{ key: `avevicted:${evicted}` }]);
+		createManyMock.mockResolvedValue({ count: 1 });
+		createManyFileMock.mockResolvedValue({ count: 1 });
+
+		const saved = await service.saveInstantAvailability('tt0903747', [
+			{ hash: evicted.toUpperCase(), filename: 'Evicted.S01E01.mkv', bytes: 1 },
+			{ hash: 'd'.repeat(40), filename: 'Fresh.S01E01.mkv', bytes: 1 },
+		]);
+
+		expect(saved).toBe(1);
+		expect(createManyMock.mock.calls[0][0].data.map((r: any) => r.hash)).toEqual([
+			'd'.repeat(40),
+		]);
+	});
+
+	// Two separate inserts: a failed file insert left a release with no file, which every
+	// later scrape skipped as already present.
+	it('writes a Debridio release and its marker file in one transaction', async () => {
+		findManyMock.mockResolvedValue([]);
+		createManyMock.mockResolvedValue({ count: 1 });
+		createManyFileMock.mockResolvedValue({ count: 1 });
+		await service.saveInstantAvailability('tt0903747', [
+			{ hash: 'd'.repeat(40), filename: 'Fresh.S01E01.mkv', bytes: 1 },
+		]);
+		expect(transactionMock).toHaveBeenCalledTimes(1);
+		expect(transactionMock.mock.calls[0][0]).toHaveLength(2);
+	});
+
 	it('reads the debridio refresh gate from its cache row', async () => {
 		cacheFindUniqueMock.mockResolvedValue({ updatedAt: new Date('2026-08-01') });
 
@@ -435,6 +474,17 @@ describe('AvailabilityService', () => {
 			file_id: 0,
 			path: 'The.Shawshank.Redemption.1994.MULTI.1080p.BluRay.x265',
 		});
+	});
+
+	it('skips an AllDebrid Debridio hash whose release was removed as dead', async () => {
+		const evicted = 'e'.repeat(40);
+		findManyAdMock.mockResolvedValue([]);
+		cacheFindManyMock.mockResolvedValue([{ key: `adevicted:${evicted}` }]);
+		const saved = await service.saveInstantAvailabilityAd('tt0111161', [
+			{ hash: evicted, filename: 'Dead.mkv', bytes: 1 },
+		]);
+		expect(saved).toBe(0);
+		expect(createManyAdMock).not.toHaveBeenCalled();
 	});
 
 	it('skips alldebrid hashes that already exist', async () => {
