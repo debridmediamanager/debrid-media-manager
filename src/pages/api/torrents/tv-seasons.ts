@@ -170,6 +170,8 @@ const handler: NextApiHandler = async (req, res) => {
 			availabilityAd.map((row) => [row.hash.toLowerCase(), row.files] as const)
 		);
 
+		const playable = (file: { path: string; marker?: true }) =>
+			Boolean(file.marker) || isVideo({ path: file.path });
 		const resolve = (
 			candidate: SeasonPackCandidate | SeasonEpisodeCandidate
 		): ResolvedCandidate => {
@@ -181,8 +183,9 @@ const handler: NextApiHandler = async (req, res) => {
 				hash: candidate.hash,
 				title: candidate.title,
 				sizeMb: candidate.sizeMb,
-				rdAvailable: !!rdFiles,
-				adAvailable: !!adFiles,
+				// the page's rule: a video, or a Debridio marker for one
+				rdAvailable: !!rdFiles?.some(playable),
+				adAvailable: !!adFiles?.some(playable),
 			};
 			if ('seasons' in candidate) resolved.seasons = candidate.seasons;
 			if ('episodes' in candidate) resolved.episodes = candidate.episodes;

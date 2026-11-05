@@ -166,6 +166,28 @@ describe('/api/torrents/tv-seasons', () => {
 		expect(pack.files).toHaveLength(4);
 	});
 
+	// Show pages took any recorded row as cached while the movie and show lists need a video:
+	// 5,636 RD rows in production (2026-11-05) hold only an ISO, an archive, audio or an .exe.
+	it('marks a pack cached only when it holds a video or a Debridio marker', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			row(PACK, 'The.Wire.S03.1080p.BluRay.x264-GROUP'),
+		]);
+		mockCheckAvailability.mockResolvedValue([
+			{ hash: PACK, files: [{ file_id: 1, path: 'The.Wire.S03.iso', bytes: BigInt(1) }] },
+		]);
+		let pack = ((await call(baseQuery))._getData() as any).seasons[0].packs[0];
+		expect(pack.rdAvailable).toBe(false);
+
+		mockCheckAvailability.mockResolvedValue([
+			{
+				hash: PACK,
+				files: [{ file_id: 0, path: 'The Wire S03 1080p', bytes: BigInt(1), marker: true }],
+			},
+		]);
+		pack = ((await call(baseQuery))._getData() as any).seasons[0].packs[0];
+		expect(pack.rdAvailable).toBe(true);
+	});
+
 	it('marks a release RD has never held as unavailable', async () => {
 		mockGetAllScrapedTrueResults.mockResolvedValue([
 			row(PACK, 'The.Wire.S03.1080p.BluRay.x264-GROUP'),

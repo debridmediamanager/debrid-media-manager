@@ -95,6 +95,30 @@ const expectRdPlayableTbArchive = (row: any) => {
 	expect(row.archiveOnly).toEqual({ tb: true });
 };
 
+describe('a Debridio marker without an extension', () => {
+	// production row, 2026-11-05: Debridio named the release, not a file
+	it('marks the row RD-cached, as Torznab already does', async () => {
+		vi.mocked(checkAvailability).mockResolvedValue({
+			available: [
+				{
+					hash: HASH,
+					files: [
+						{
+							file_id: 0,
+							path: 'Lost S05 1080p BluRay REMUX AVC DTS-HD MA 5.1-FraMeSToR',
+							bytes: 1,
+							marker: true,
+						},
+					],
+				},
+			],
+		} as any);
+		const { setter, getState } = createStateHarness([freshRow()]);
+		await runRd(setter);
+		expect(getState()[0].rdAvailable).toBe(true);
+	});
+});
+
 describe('RD and TorBox file lists for the same hash', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();

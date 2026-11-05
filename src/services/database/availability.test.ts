@@ -189,7 +189,14 @@ describe('AvailabilityService', () => {
 		findManyMock.mockResolvedValue([
 			{
 				hash: 'hash',
-				files: [{ file_id: 1, path: 'path', bytes: BigInt(100) }],
+				files: [
+					{
+						file_id: 1,
+						path: 'path',
+						bytes: BigInt(100),
+						link: 'https://real-debrid.com/d/A',
+					},
+				],
 			},
 		]);
 
@@ -205,7 +212,14 @@ describe('AvailabilityService', () => {
 				hash: 'hash',
 				filename: 'Sinners.2025.2160p.WEB-DL.mkv',
 				originalFilename: 'Sinners 2025 2160p iT WEB-DL DDP5 1 Atmos DV HDR H 265-BYNDR',
-				files: [{ file_id: 1, path: 'path', bytes: BigInt(200) }],
+				files: [
+					{
+						file_id: 1,
+						path: 'path',
+						bytes: BigInt(200),
+						link: 'https://real-debrid.com/d/B',
+					},
+				],
 			},
 		]);
 
@@ -499,13 +513,51 @@ describe('AvailabilityService', () => {
 		expect(createManyAdFileMock).not.toHaveBeenCalled();
 	});
 
+	// Production, 2026-11-05: 8,204 RD and 4,432 AD rows hold one Debridio marker named after
+	// the release, with no extension (Debridio gave a stream title, not a file name). Torznab
+	// offered them as cached; title pages and the hashlist filter hid them.
+	describe('a Debridio marker without an extension', () => {
+		const marker = {
+			hash: 'f'.repeat(40),
+			files: [
+				{
+					file_id: 0,
+					path: 'Lost S05 1080p BluRay REMUX AVC DTS-HD MA 5.1-FraMeSToR',
+					bytes: BigInt(1),
+					link: `debridio:${'f'.repeat(40)}`,
+				},
+			],
+		};
+
+		it('counts as playable', async () => {
+			findManyMock.mockResolvedValue([marker]);
+			expect(await service.filterPlayableCachedHashes([marker.hash])).toEqual(
+				new Set([marker.hash])
+			);
+		});
+
+		it('is flagged to the page, without its link', async () => {
+			findManyMock.mockResolvedValue([marker]);
+			const [row] = await service.checkAvailability('tt0411008', [marker.hash]);
+			expect(row.files).toEqual([
+				{ file_id: 0, path: marker.files[0].path, bytes: 1, marker: true },
+			]);
+		});
+	});
+
 	describe('filterPlayableCachedHashes', () => {
 		const rows = [
-			{ hash: 'AAAA', files: [{ path: '/Show/Episode.mkv' }] },
+			{
+				hash: 'AAAA',
+				files: [{ path: '/Show/Episode.mkv', link: 'https://real-debrid.com/d/A' }],
+			},
 			// cached, but nothing in it plays
 			{
 				hash: 'bbbb',
-				files: [{ path: '/Show/Episode.nfo' }, { path: '/Sample/sample.mkv' }],
+				files: [
+					{ path: '/Show/Episode.nfo', link: 'https://real-debrid.com/d/B' },
+					{ path: '/Sample/sample.mkv', link: 'https://real-debrid.com/d/C' },
+				],
 			},
 			{ hash: 'cccc', files: [] },
 		];
@@ -516,7 +568,7 @@ describe('AvailabilityService', () => {
 			expect(cached).toEqual(new Set(['aaaa']));
 			expect(findManyMock).toHaveBeenCalledWith({
 				where: { hash: { in: ['AAAA', 'bbbb', 'cccc'] }, status: 'downloaded' },
-				select: { hash: true, files: { select: { path: true } } },
+				select: { hash: true, files: { select: { path: true, link: true } } },
 			});
 		});
 
@@ -526,7 +578,7 @@ describe('AvailabilityService', () => {
 			expect(cached).toEqual(new Set(['aaaa']));
 			expect(findManyAdMock).toHaveBeenCalledWith({
 				where: { hash: { in: ['aaaa', 'bbbb'] }, status: 'Ready', statusCode: 4 },
-				select: { hash: true, files: { select: { path: true } } },
+				select: { hash: true, files: { select: { path: true, link: true } } },
 			});
 		});
 

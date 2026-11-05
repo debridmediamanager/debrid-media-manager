@@ -77,6 +77,17 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 // the same hash unpacked, and the row says which provider only has the archive.
 const isArchive = (filename: string) => /\.(zip|rar|7z|r\d{2})$/i.test(filename);
 
+/** A video, or a Debridio marker for a cached video whose name carries no extension. */
+const playsAsVideo = (f: FileData) => Boolean(f.marker) || isVideo({ path: f.filename });
+
+type DbFile = { file_id: number; path: string; bytes: number; marker?: true };
+const toFileData = (file: DbFile): FileData => ({
+	fileId: file.file_id,
+	filename: file.path,
+	filesize: file.bytes,
+	...(file.marker ? { marker: true } : {}),
+});
+
 /**
  * Records one provider's file listing for a row and reports whether it holds a
  * playable video.
@@ -98,7 +109,7 @@ const applyProviderFiles = <T extends SearchResult | EnrichedHashlistTorrent>(
 	if (service === 'rd') torrent.rdFiles = files;
 	if (service === 'tb') torrent.tbFiles = files;
 
-	const videoFiles = files.filter((f) => isVideo({ path: f.filename }));
+	const videoFiles = files.filter(playsAsVideo);
 	const archiveOnly = { ...torrent.archiveOnly };
 	if (videoFiles.length === 0 && files.some((f) => isArchive(f.filename))) {
 		archiveOnly[service] = true;
@@ -107,10 +118,7 @@ const applyProviderFiles = <T extends SearchResult | EnrichedHashlistTorrent>(
 	}
 	torrent.archiveOnly = Object.keys(archiveOnly).length ? archiveOnly : undefined;
 
-	if (
-		videoFiles.length === 0 &&
-		(torrent.files ?? []).some((f) => isVideo({ path: f.filename }))
-	) {
+	if (videoFiles.length === 0 && (torrent.files ?? []).some(playsAsVideo)) {
 		return false;
 	}
 
@@ -173,7 +181,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	let instantCount = 0;
 	const allAvailable: {
 		hash: string;
-		files: { file_id: number; path: string; bytes: number }[];
+		files: DbFile[];
 	}[] = [];
 	const funcs = [];
 
@@ -198,11 +206,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 			const availableTorrent = availableMap.get(torrent.hash);
 			if (!availableTorrent) continue;
 
-			const files = availableTorrent.files.map((file) => ({
-				fileId: file.file_id,
-				filename: file.path,
-				filesize: file.bytes,
-			}));
+			const files = availableTorrent.files.map(toFileData);
 			torrent.rdAvailable = applyProviderFiles(
 				torrent,
 				'rd',
@@ -231,7 +235,7 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 	let instantCount = 0;
 	const allAvailable: {
 		hash: string;
-		files: { file_id: number; path: string; bytes: number }[];
+		files: DbFile[];
 	}[] = [];
 	const funcs = [];
 
@@ -279,13 +283,7 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 			const availableTorrent = availableMap.get(torrent.hash);
 			if (!availableTorrent) continue;
 
-			const files = availableTorrent.files.map(
-				(file: { file_id: number; path: string; bytes: number }) => ({
-					fileId: file.file_id,
-					filename: file.path,
-					filesize: file.bytes,
-				})
-			);
+			const files = availableTorrent.files.map(toFileData);
 			torrent.adAvailable = applyProviderFiles(
 				torrent,
 				'ad',

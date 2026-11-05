@@ -4,8 +4,27 @@ import { clipToVarchar } from '../../utils/varchar';
 import { TorrentInfoResponse } from '../types';
 import { DatabaseClient } from './client';
 
-const playableHashes = (rows: { hash: string; files: { path: string }[] }[]) =>
-	new Set(rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase()));
+/**
+ * A Debridio marker stands for a cached video stream, but its path is whatever name Debridio
+ * gave, often a release title with no extension (8,204 RD rows, 2026-11-05), so it counts as
+ * playable on its own. It is flagged to the page rather than its link sent.
+ */
+const isMarker = (link: string) => link.startsWith('debridio:');
+
+const playableHashes = (rows: { hash: string; files: { path: string; link: string }[] }[]) =>
+	new Set(
+		rows
+			.filter((row) => row.files.some((f) => isVideo(f) || isMarker(f.link)))
+			.map((row) => row.hash.toLowerCase())
+	);
+
+/** A file as the title pages read it. */
+const pageFile = (file: { file_id: number; path: string; bytes: bigint; link: string }) => ({
+	file_id: file.file_id,
+	path: file.path,
+	bytes: Number(file.bytes),
+	...(isMarker(file.link) ? { marker: true as const } : {}),
+});
 
 const EXECUTABLE = /\.(exe|scr|msi|bat|cmd|lnk|vbs|pif)$/i;
 
@@ -525,6 +544,7 @@ export class AvailabilityService extends DatabaseClient {
 				file_id: number;
 				path: string;
 				bytes: number;
+				marker?: true;
 			}>;
 		}>
 	> {
@@ -541,6 +561,7 @@ export class AvailabilityService extends DatabaseClient {
 						file_id: true,
 						path: true,
 						bytes: true,
+						link: true,
 					},
 				},
 			},
@@ -548,11 +569,7 @@ export class AvailabilityService extends DatabaseClient {
 
 		return availableHashes.map((record) => ({
 			hash: record.hash,
-			files: record.files.map((file) => ({
-				file_id: file.file_id,
-				path: file.path,
-				bytes: Number(file.bytes),
-			})),
+			files: record.files.map(pageFile),
 		}));
 	}
 
@@ -566,6 +583,7 @@ export class AvailabilityService extends DatabaseClient {
 				file_id: number;
 				path: string;
 				bytes: number;
+				marker?: true;
 			}>;
 		}>
 	> {
@@ -583,6 +601,7 @@ export class AvailabilityService extends DatabaseClient {
 						file_id: true,
 						path: true,
 						bytes: true,
+						link: true,
 					},
 				},
 			},
@@ -592,11 +611,7 @@ export class AvailabilityService extends DatabaseClient {
 			hash: record.hash,
 			filename: record.filename,
 			originalFilename: record.originalFilename,
-			files: record.files.map((file) => ({
-				file_id: file.file_id,
-				path: file.path,
-				bytes: Number(file.bytes),
-			})),
+			files: record.files.map(pageFile),
 		}));
 	}
 
@@ -665,7 +680,7 @@ export class AvailabilityService extends DatabaseClient {
 		if (hashes.length === 0) return new Set();
 		const rows = await this.prisma.available.findMany({
 			where: { hash: { in: hashes }, status: 'downloaded' },
-			select: { hash: true, files: { select: { path: true } } },
+			select: { hash: true, files: { select: { path: true, link: true } } },
 		});
 		return playableHashes(rows);
 	}
@@ -703,7 +718,7 @@ export class AvailabilityService extends DatabaseClient {
 				status: 'Ready',
 				statusCode: 4,
 			},
-			select: { hash: true, files: { select: { path: true } } },
+			select: { hash: true, files: { select: { path: true, link: true } } },
 		});
 		return playableHashes(rows);
 	}
@@ -908,6 +923,7 @@ export class AvailabilityService extends DatabaseClient {
 				file_id: number;
 				path: string;
 				bytes: number;
+				marker?: true;
 			}>;
 		}>
 	> {
@@ -925,6 +941,7 @@ export class AvailabilityService extends DatabaseClient {
 						file_id: true,
 						path: true,
 						bytes: true,
+						link: true,
 					},
 				},
 			},
@@ -932,11 +949,7 @@ export class AvailabilityService extends DatabaseClient {
 
 		return availableHashes.map((record) => ({
 			hash: record.hash,
-			files: record.files.map((file) => ({
-				file_id: file.file_id,
-				path: file.path,
-				bytes: Number(file.bytes),
-			})),
+			files: record.files.map(pageFile),
 		}));
 	}
 
@@ -950,6 +963,7 @@ export class AvailabilityService extends DatabaseClient {
 				file_id: number;
 				path: string;
 				bytes: number;
+				marker?: true;
 			}>;
 		}>
 	> {
@@ -966,6 +980,7 @@ export class AvailabilityService extends DatabaseClient {
 						file_id: true,
 						path: true,
 						bytes: true,
+						link: true,
 					},
 				},
 			},
@@ -973,11 +988,7 @@ export class AvailabilityService extends DatabaseClient {
 
 		return availableHashes.map((record) => ({
 			hash: record.hash,
-			files: record.files.map((file) => ({
-				file_id: file.file_id,
-				path: file.path,
-				bytes: Number(file.bytes),
-			})),
+			files: record.files.map(pageFile),
 		}));
 	}
 

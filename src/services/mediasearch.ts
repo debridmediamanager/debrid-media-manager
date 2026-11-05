@@ -9,6 +9,8 @@ export interface FileData {
 	fileId: number;
 	filename: string;
 	filesize: number;
+	/** A Debridio marker: the release is cached, the name is not a file's. */
+	marker?: boolean;
 }
 
 export type SearchResult = {
