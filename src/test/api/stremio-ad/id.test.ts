@@ -89,36 +89,4 @@ describe('API /api/stremio-ad/id', () => {
 			errorMessage: 'Invalid AllDebrid API key',
 		});
 	});
-
-	it('returns 500 on error with Error instance', async () => {
-		mockHelpers.validateMethod.mockReturnValue(true);
-		mockHelpers.validateApiKey.mockReturnValue('test-key');
-		mockHelpers.resolveAllDebridUser.mockRejectedValue(new Error('API failure'));
-		const req = createMockRequest();
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res._getStatusCode()).toBe(500);
-		expect(res._getData()).toEqual({
-			status: 'error',
-			errorMessage: 'API failure',
-		});
-	});
-
-	it('returns 500 with Unknown error for non-Error throws', async () => {
-		mockHelpers.validateMethod.mockReturnValue(true);
-		mockHelpers.validateApiKey.mockReturnValue('test-key');
-		mockHelpers.resolveAllDebridUser.mockRejectedValue('string error');
-		const req = createMockRequest();
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res._getStatusCode()).toBe(500);
-		expect(res._getData()).toEqual({
-			status: 'error',
-			errorMessage: 'Unknown error',
-		});
-	});
 });

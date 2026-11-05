@@ -4,6 +4,7 @@ import { getOffcloudAccountInfo } from '@/services/offcloud';
 import { getPremiumizeAccountInfo } from '@/services/premiumize';
 import { getCurrentUser } from '@/services/realDebrid';
 import { TAGGED } from '@/services/reporterId';
+import { AllDebridApiError, isInvalidAllDebridCredential } from '@/utils/allDebridApiError';
 import { torboxUserId } from '@/utils/torboxIdentity';
 import { createHmac } from 'crypto';
 
@@ -38,8 +39,14 @@ export async function verifiedReporterId(credential: string): Promise<string | n
 		}
 		if (/^[A-Z0-9]{52}$/.test(credential))
 			return id('rd', (await getCurrentUser(credential)).id);
-		return id('ad', (await getAllDebridUser(credential)).username);
-	} catch {
+		try {
+			return id('ad', (await getAllDebridUser(credential)).username);
+		} catch (error) {
+			if (isInvalidAllDebridCredential(error)) return null;
+			throw new AllDebridApiError(error);
+		}
+	} catch (error) {
+		if (error instanceof AllDebridApiError) throw error;
 		return null;
 	}
 }

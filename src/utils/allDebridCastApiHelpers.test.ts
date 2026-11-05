@@ -102,7 +102,9 @@ describe('allDebridCastApiHelpers', () => {
 		});
 
 		it('reports invalid when AllDebrid rejects the key', async () => {
-			vi.mocked(getAllDebridUser).mockRejectedValue(new Error('bad key'));
+			vi.mocked(getAllDebridUser).mockRejectedValue(
+				Object.assign(new Error('bad key'), { code: 'AUTH_BAD_APIKEY' })
+			);
 
 			expect(await resolveAllDebridUser('key')).toEqual({ valid: false });
 		});
@@ -119,6 +121,19 @@ describe('allDebridCastApiHelpers', () => {
 
 			await expect(resolveAllDebridUser('key')).rejects.toThrow('DMMCAST_SALT');
 		});
+
+		it.each([resolveAllDebridUser, generateAllDebridUserId, validateAllDebridApiKey])(
+			'preserves actionable provider errors in %s',
+			async (resolve) => {
+				for (const error of [
+					Object.assign(new Error('Confirm sign-in'), { code: 'AUTH_BLOCKED' }),
+					{ response: { status: 503, data: '' } },
+				]) {
+					vi.mocked(getAllDebridUser).mockRejectedValue(error);
+					await expect(resolve('key')).rejects.toBe(error);
+				}
+			}
+		);
 	});
 
 	describe('generateAllDebridUserId', () => {
@@ -140,7 +155,7 @@ describe('allDebridCastApiHelpers', () => {
 			vi.mocked(getAllDebridUser).mockResolvedValue({} as any);
 
 			await expect(generateAllDebridUserId('bad-key')).rejects.toThrow(
-				'Failed to generate AllDebrid user ID'
+				'Invalid AllDebrid API key or username not available'
 			);
 		});
 
@@ -148,17 +163,13 @@ describe('allDebridCastApiHelpers', () => {
 			delete process.env.DMMCAST_SALT;
 			vi.mocked(getAllDebridUser).mockResolvedValue({ username: 'user' } as any);
 
-			await expect(generateAllDebridUserId('key')).rejects.toThrow(
-				'Failed to generate AllDebrid user ID'
-			);
+			await expect(generateAllDebridUserId('key')).rejects.toThrow('DMMCAST_SALT');
 		});
 
 		it('throws when getAllDebridUser rejects', async () => {
 			vi.mocked(getAllDebridUser).mockRejectedValue(new Error('API error'));
 
-			await expect(generateAllDebridUserId('key')).rejects.toThrow(
-				'Failed to generate AllDebrid user ID'
-			);
+			await expect(generateAllDebridUserId('key')).rejects.toThrow('API error');
 		});
 	});
 
@@ -182,8 +193,10 @@ describe('allDebridCastApiHelpers', () => {
 			expect(result).toEqual({ valid: false });
 		});
 
-		it('returns invalid on error', async () => {
-			vi.mocked(getAllDebridUser).mockRejectedValue(new Error('fail'));
+		it('returns invalid on known credential failure', async () => {
+			vi.mocked(getAllDebridUser).mockRejectedValue(
+				Object.assign(new Error('fail'), { code: 'AUTH_BAD_APIKEY' })
+			);
 
 			const result = await validateAllDebridApiKey('bad-key');
 
@@ -192,7 +205,7 @@ describe('allDebridCastApiHelpers', () => {
 	});
 
 	describe('handleApiError', () => {
-		it('sends 500 with default message', () => {
+		it('sends 500 without exposing upstream details', () => {
 			const res = createMockResponse();
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -200,7 +213,7 @@ describe('allDebridCastApiHelpers', () => {
 
 			expect(res._getStatusCode()).toBe(500);
 			expect(res._getData()).toEqual({
-				error: 'Internal Server Error: boom',
+				error: 'Internal server error',
 			});
 			consoleSpy.mockRestore();
 		});

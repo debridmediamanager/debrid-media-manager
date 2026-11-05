@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -43,10 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			links,
 		});
 	} catch (error) {
-		console.error('Error fetching AllDebrid casted links:', error);
-		res.status(500).json({
-			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
-		});
+		sendAllDebridApiError(error, res);
 	}
 }

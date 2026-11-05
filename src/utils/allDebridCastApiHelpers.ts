@@ -1,6 +1,7 @@
 import { getAllDebridUser } from '@/services/allDebrid';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { allDebridApiError, isInvalidAllDebridCredential } from './allDebridApiError';
 
 export const validateMethod = (
 	req: NextApiRequest,
@@ -56,8 +57,9 @@ export const resolveAllDebridUser = async (
 	let userData;
 	try {
 		userData = await getAllDebridUser(apiKey);
-	} catch {
-		return { valid: false };
+	} catch (error) {
+		if (isInvalidAllDebridCredential(error)) return { valid: false };
+		throw error;
 	}
 
 	if (!userData?.username) {
@@ -75,16 +77,13 @@ export const resolveAllDebridUser = async (
 };
 
 export const generateAllDebridUserId = async (apiKey: string): Promise<string> => {
-	try {
-		const userData = await getAllDebridUser(apiKey);
-		if (!userData?.username) {
-			throw new Error('Invalid AllDebrid API key or username not available');
-		}
-
-		return deriveUserId(userData.username);
-	} catch (error) {
-		throw new Error('Failed to generate AllDebrid user ID');
+	const userData = await getAllDebridUser(apiKey);
+	if (!userData?.username) {
+		throw Object.assign(new Error('Invalid AllDebrid API key or username not available'), {
+			code: 'AUTH_BAD_APIKEY',
+		});
 	}
+	return deriveUserId(userData.username);
 };
 
 export const validateAllDebridApiKey = async (
@@ -100,15 +99,16 @@ export const validateAllDebridApiKey = async (
 			};
 		}
 		return { valid: false };
-	} catch {
-		return { valid: false };
+	} catch (error) {
+		if (isInvalidAllDebridCredential(error)) return { valid: false };
+		throw error;
 	}
 };
 
 export const handleApiError = (error: any, res: NextApiResponse, customMessage?: string) => {
-	console.error(customMessage || 'AllDebrid API Error:', error);
-	res.status(500).json({
-		error: customMessage || `Internal Server Error: ${error.message || error}`,
+	const { status, errorMessage } = allDebridApiError(error);
+	res.status(status).json({
+		error: status === 500 && customMessage ? customMessage : errorMessage,
 	});
 };
 

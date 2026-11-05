@@ -1,5 +1,6 @@
 import { getMagnetFiles, getMagnetStatusAd, isAdStatusReady } from '@/services/allDebrid';
 import { repository as db } from '@/services/repository';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
 import { selectSortedVideos } from '@/utils/allDebridCastClientPipeline';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
@@ -72,11 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		try {
 			userid = await generateAllDebridUserId(apiKey);
 		} catch (error) {
-			console.error('Failed to generate AllDebrid user ID:', error);
-			res.status(500).json({
-				status: 'error',
-				errorMessage: 'Failed to generate user ID from AllDebrid API key',
-			});
+			sendAllDebridApiError(error, res);
 			return;
 		}
 
@@ -180,10 +177,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			episode: episode || undefined,
 		});
 	} catch (error) {
-		console.error('AllDebrid library cast error:', error);
-		res.status(500).json({
-			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Internal server error',
-		});
+		sendAllDebridApiError(error, res);
 	}
 }

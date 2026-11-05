@@ -1,5 +1,6 @@
 import { getVerifiedAllDebridCastFiles } from '@/services/allDebridCastSelection';
 import { repository as db } from '@/services/repository';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
 import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -95,11 +96,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			status: errorEpisodes.length === 0 ? 'success' : 'partial',
 			errorEpisodes,
 		});
-	} catch {
+	} catch (e) {
 		console.error('Failed to verify or save AllDebrid series cast selection');
-		res.status(500).json({
-			status: 'error',
-			errorMessage: 'Failed to verify or save AllDebrid cast selection',
-		});
+		sendAllDebridApiError(e, res);
 	}
 }

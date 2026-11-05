@@ -1,5 +1,6 @@
 import { getVerifiedAllDebridCastFiles } from '@/services/allDebridCastSelection';
 import { repository as db } from '@/services/repository';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
 import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -56,11 +57,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			message: 'You can now stream the movie in Stremio',
 			filename: verifiedFilename,
 		});
-	} catch {
+	} catch (e) {
 		console.error('Failed to verify or save AllDebrid movie cast selection');
-		res.status(500).json({
-			status: 'error',
-			errorMessage: 'Failed to verify or save AllDebrid cast selection',
-		});
+		sendAllDebridApiError(e, res);
 	}
 }

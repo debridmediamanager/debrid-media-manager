@@ -42,7 +42,9 @@ describe('verifiedReporterId', () => {
 
 	it('refuses made-up keys, so one person cannot be two reporters', async () => {
 		providers.getCurrentUser.mockRejectedValue(new Error('bad_token'));
-		providers.getAllDebridUser.mockRejectedValue(new Error('AUTH_BAD_APIKEY'));
+		providers.getAllDebridUser.mockRejectedValue(
+			Object.assign(new Error('Invalid API key'), { code: 'AUTH_BAD_APIKEY' })
+		);
 		providers.torboxUserId.mockResolvedValue(null);
 
 		expect(await verifiedReporterId(RD_KEY)).toBeNull();

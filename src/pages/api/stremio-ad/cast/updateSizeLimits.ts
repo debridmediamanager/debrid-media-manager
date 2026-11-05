@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { recordOtherStreamsGrant } from '@/utils/castOtherStreamsLimit';
 import { sponsorIdOfRequest } from '@/utils/requireSponsor';
@@ -115,10 +116,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 	} catch (error) {
-		console.error('Error updating AllDebrid size limits:', error);
-		res.status(500).json({
-			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
-		});
+		sendAllDebridApiError(error, res);
 	}
 }

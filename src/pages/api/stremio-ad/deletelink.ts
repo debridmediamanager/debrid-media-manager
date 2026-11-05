@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
-import { generateAllDebridUserId, validateAllDebridApiKey } from '@/utils/allDebridCastApiHelpers';
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
+import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -30,18 +31,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		// Validate the API key
-		const validation = await validateAllDebridApiKey(apiKey);
-		if (!validation.valid) {
+		const { valid, userId } = await resolveAllDebridUser(apiKey);
+		if (!valid || !userId) {
 			res.status(401).json({
 				status: 'error',
 				errorMessage: 'Invalid AllDebrid API key',
 			});
 			return;
 		}
-
-		// Generate user ID
-		const userId = await generateAllDebridUserId(apiKey);
 
 		// Delete the casted link
 		const deleted = await db.deleteAllDebridCastedLink(imdbId, userId, hash);
@@ -58,10 +55,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			message: 'Link deleted successfully',
 		});
 	} catch (error) {
-		console.error('Error deleting AllDebrid casted link:', error);
-		res.status(500).json({
-			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
-		});
+		sendAllDebridApiError(error, res);
 	}
 }

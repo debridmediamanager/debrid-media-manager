@@ -1,3 +1,4 @@
+import { sendAllDebridApiError } from '@/utils/allDebridApiError';
 import {
 	resolveAllDebridUser,
 	validateApiKey,
@@ -28,9 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		res.status(200).json({ id: userId });
 	} catch (error) {
-		res.status(500).json({
-			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
-		});
+		sendAllDebridApiError(error, res);
 	}
 }

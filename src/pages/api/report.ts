@@ -2,6 +2,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import type { ReportType } from '@/services/reporterId';
 import { reviewReportsInBackground } from '@/services/scrapedVerdicts/reports';
 import { verifiedReporterId } from '@/services/verifiedReporterId';
+import { AllDebridApiError } from '@/utils/allDebridApiError';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '../../services/repository';
@@ -50,6 +51,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		return res.status(200).json({ success: true });
 	} catch (error) {
+		if (error instanceof AllDebridApiError) {
+			return res.status(error.status).json({ errorMessage: error.message });
+		}
 		console.error('Report error:', error);
 		return res.status(500).json({ message: 'Internal server error' });
 	}

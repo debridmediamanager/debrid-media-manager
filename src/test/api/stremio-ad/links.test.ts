@@ -111,7 +111,7 @@ describe('API /api/stremio-ad/links', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'DB down',
+			errorMessage: 'Internal server error',
 		});
 	});
 });

@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateAllDebridApiKey: vi.fn(),
-	generateAllDebridUserId: vi.fn(),
+	resolveAllDebridUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
@@ -85,7 +84,7 @@ describe('API /api/stremio-ad/deletelink', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: false });
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'bad-key', imdbId: 'tt123', hash: 'abc' },
@@ -102,8 +101,7 @@ describe('API /api/stremio-ad/deletelink', () => {
 	});
 
 	it('deletes link and returns success', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateAllDebridUserId.mockResolvedValue('user-123');
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: true, userId: 'user-123' });
 		mockDb.deleteAllDebridCastedLink.mockResolvedValue(true);
 		const req = createMockRequest({
 			method: 'DELETE',
@@ -123,7 +121,7 @@ describe('API /api/stremio-ad/deletelink', () => {
 
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateAllDebridApiKey.mockRejectedValue(new Error('Connection lost'));
+		mockHelpers.resolveAllDebridUser.mockRejectedValue(new Error('Connection lost'));
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'valid-key', imdbId: 'tt123', hash: 'abc' },
@@ -135,7 +133,7 @@ describe('API /api/stremio-ad/deletelink', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Connection lost',
+			errorMessage: 'Internal server error',
 		});
 	});
 });
