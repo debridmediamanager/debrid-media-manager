@@ -1,5 +1,4 @@
 import { isValidHash } from './extractHashes';
-import { mostlyVideo } from './selectable';
 import { generateTokenAndHash } from './token';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -393,18 +392,11 @@ export async function checkPlayableCachedHashes(
 // Debrid-Link Availability Functions
 // ====================================================================
 
-/** A Debrid-Link file as the seedbox lists it; the route keeps only its name and size. */
-export interface DlAvailabilityFile {
-	name: string;
-	size: number;
-	downloadPercent: number;
-}
-
-/** Record a Debrid-Link release seen whole. The route refuses anything else. */
+/** Ask DMM to record a release on Debrid-Link; DMM asks Debrid-Link itself. */
 export async function submitAvailabilityDl(
 	dmmProblemKey: string,
 	solution: string,
-	data: { hash: string; imdbId: string; filename: string; files: DlAvailabilityFile[] }
+	data: { hash: string; imdbId: string }
 ) {
 	const response = await fetch('/api/availability/dl', {
 		method: 'POST',
@@ -412,13 +404,6 @@ export async function submitAvailabilityDl(
 		body: JSON.stringify({
 			hash: data.hash.toLowerCase(),
 			imdbId: data.imdbId,
-			filename: data.filename,
-			// name, size and completion only: a download URL is the file itself
-			files: data.files.map(({ name, size, downloadPercent }) => ({
-				name,
-				size,
-				downloadPercent,
-			})),
 			dmmProblemKey,
 			solution,
 		}),
@@ -455,7 +440,7 @@ export async function checkAvailabilityDl(
 	return response.json();
 }
 
-/** Forget a release an add found uncached on Debrid-Link. */
+/** Ask DMM to forget a Debrid-Link release; DMM asks Debrid-Link before it does. */
 export async function removeAvailabilityDl(
 	dmmProblemKey: string,
 	solution: string,
@@ -475,22 +460,13 @@ export async function removeAvailabilityDl(
 }
 
 /**
- * Record a Debrid-Link torrent seen whole under `imdbId`: every file at 100% and mostly
- * video. Anything else is left alone, so callers can hand over every hit they get. True
- * when it was sent.
+ * Offer a Debrid-Link hit to DMM's table under `imdbId`. DMM asks Debrid-Link whether it
+ * holds the release whole and records what Debrid-Link lists, so a page passes no files.
+ * True when it was sent.
  */
-export async function recordDlAvailability(
-	imdbId: string,
-	hash: string,
-	filename: string,
-	files: DlAvailabilityFile[] | undefined
-): Promise<boolean> {
-	if (!/^tt\d+$/.test(imdbId) || !isValidHash(hash) || !filename || !files?.length) {
-		return false;
-	}
-	if (files.some((f) => f.downloadPercent !== 100)) return false;
-	if (!mostlyVideo(files.map((f) => ({ path: f.name, bytes: f.size })))) return false;
+export async function recordDlAvailability(imdbId: string, hash: string): Promise<boolean> {
+	if (!/^tt\d+$/.test(imdbId) || !isValidHash(hash)) return false;
 	const [key, solution] = await generateTokenAndHash();
-	await submitAvailabilityDl(key, solution, { hash, imdbId, filename, files });
+	await submitAvailabilityDl(key, solution, { hash, imdbId });
 	return true;
 }

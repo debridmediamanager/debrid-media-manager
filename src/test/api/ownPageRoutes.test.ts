@@ -14,6 +14,7 @@ import sponsorIdentify from '@/pages/api/sponsor/identify';
 import mediainfo from '@/pages/api/torrents/mediainfo';
 import { validateDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import { identifyFilenames } from '@/services/contentIdentifier';
+import { probeDlRelease } from '@/services/debridLink';
 import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import dlMovie from '@/test/fixtures/libraryAvailability/dl_movie.json';
@@ -30,6 +31,10 @@ vi.mock('@/utils/problemToken');
 vi.mock('@/services/realDebrid', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/realDebrid')>()),
 	getTorrentInfo: vi.fn(),
+}));
+vi.mock('@/services/debridLink', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/debridLink')>()),
+	probeDlRelease: vi.fn(),
 }));
 vi.mock('@/pages/api/zurg/auth');
 
@@ -109,12 +114,6 @@ const routes: [string, NextApiHandler, Partial<NextApiRequest>][] = [
 				...token,
 				hash: dlMovie.hashString,
 				imdbId: 'tt1375666',
-				filename: dlMovie.name,
-				files: dlMovie.files.map(({ name, size, downloadPercent }) => ({
-					name,
-					size,
-					downloadPercent,
-				})),
 			},
 		},
 	],
@@ -145,6 +144,11 @@ describe('routes that serve DMM pages only', () => {
 		vi.mocked(validateProblemToken).mockReturnValue(true);
 		vi.mocked(validateDmmApiKeyHeader).mockResolvedValue(true);
 		vi.mocked(identifyFilenames).mockResolvedValue([]);
+		vi.mocked(probeDlRelease).mockImplementation(async (hash) =>
+			hash === dlMovie.hashString
+				? { cached: true, torrent: dlMovie as any }
+				: { cached: false }
+		);
 		Object.assign(repository, {
 			checkAvailability: vi.fn().mockResolvedValue([]),
 			checkAvailabilityByHashes: vi.fn().mockResolvedValue([]),

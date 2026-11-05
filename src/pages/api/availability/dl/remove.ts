@@ -1,3 +1,4 @@
+import { probeDlRelease } from '@/services/debridLink';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
@@ -6,8 +7,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * POST /api/availability/dl/remove
- * Forget a release an add found uncached on Debrid-Link, as /api/availability/remove does
- * for Real-Debrid.
+ * Forget a Debrid-Link release only when Debrid-Link itself, asked by DMM, no longer holds it
+ * whole; never on a caller's word.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -25,6 +26,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 		if (typeof hash !== 'string' || !/^[a-f0-9]{40}$/i.test(hash)) {
 			return res.status(400).json({ error: 'Invalid torrent hash format' });
+		}
+
+		const answer = await probeDlRelease(hash);
+		if (answer === null) {
+			return res.status(503).json({ error: 'Debrid-Link did not answer for this release' });
+		}
+		if (answer.cached) {
+			return res.status(409).json({ error: 'Debrid-Link still holds this release' });
 		}
 
 		await db.removeAvailabilityDl(hash);

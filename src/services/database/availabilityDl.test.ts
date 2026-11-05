@@ -34,6 +34,10 @@ describe('AvailabilityService Debrid-Link', () => {
 		expect(create.files.create[0]).toMatchObject({ file_id: 0, season: 5, episode: 10 });
 		// a later sighting replaces the file list rather than adding to it
 		expect(update.files.deleteMany).toEqual({});
+		// but keeps the first title, as Real-Debrid and AllDebrid rows do: a sighting from
+		// another title's page must not move the release off this one for everybody
+		expect(create.imdbId).toBe('tt0108778');
+		expect(update).not.toHaveProperty('imdbId');
 	});
 
 	it('scopes a check to the IMDb id only when one is given', async () => {

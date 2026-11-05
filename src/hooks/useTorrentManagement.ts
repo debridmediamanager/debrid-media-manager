@@ -598,7 +598,6 @@ export function useTorrentManagement(
 
 					// Debrid-Link's add is its only cache answer: share what it said
 					shareDlAnswer(
-						debridLinkKey,
 						imdbId,
 						hash,
 						raw,

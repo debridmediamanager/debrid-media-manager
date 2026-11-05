@@ -994,7 +994,6 @@ export class AvailabilityService extends DatabaseClient {
 			};
 		});
 		const fields = {
-			imdbId,
 			filename,
 			bytes: BigInt(files.reduce((sum, f) => sum + f.bytes, 0)),
 			season: episodeInfo?.season ?? null,
@@ -1002,8 +1001,9 @@ export class AvailabilityService extends DatabaseClient {
 		};
 		return this.prisma.availableDl.upsert({
 			where: { hash: normalizedHash },
+			// the first title stays, as for Real-Debrid (`upsertAvailability`)
 			update: { ...fields, files: { deleteMany: {}, create: rows } },
-			create: { hash: normalizedHash, ...fields, files: { create: rows } },
+			create: { hash: normalizedHash, imdbId, ...fields, files: { create: rows } },
 		});
 	}
 

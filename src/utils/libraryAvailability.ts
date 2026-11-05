@@ -1,5 +1,4 @@
 import { flattenMagnetFiles, getMagnetFiles } from '@/services/allDebrid';
-import { getSeedboxTorrent } from '@/services/debridLink';
 import { type UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	checkAvailabilityAdByHashes,
@@ -9,7 +8,6 @@ import {
 	submitAvailability,
 	submitAvailabilityAd,
 } from './availability';
-import { dlWhole } from './dlAvailability';
 import type { LibraryIdentification } from './libraryIdentify';
 import { mostlyVideo } from './selectable';
 import { generateTokenAndHash } from './token';
@@ -34,7 +32,6 @@ export interface ReportDeps {
 	adRecorded: typeof checkAvailabilityAdByHashes;
 	rdSubmit: typeof submitAvailability;
 	adSubmit: typeof submitAvailabilityAd;
-	dlTorrent: typeof getSeedboxTorrent;
 	dlRecorded: (
 		key: string,
 		solution: string,
@@ -51,7 +48,6 @@ const DEFAULT_DEPS: ReportDeps = {
 	adRecorded: checkAvailabilityAdByHashes,
 	rdSubmit: submitAvailability,
 	adSubmit: submitAvailabilityAd,
-	dlTorrent: getSeedboxTorrent,
 	// by hash alone, so a row filed under another title still counts as recorded
 	dlRecorded: (key, solution, hashes) => checkAvailabilityDl(key, solution, hashes),
 	dlRecord: recordDlAvailability,
@@ -111,30 +107,23 @@ export async function reportLibraryAvailability(
 	await Promise.all([
 		reportRd(rd, found, keys.rd!, deps),
 		reportAd(ad, found, keys.ad!, deps),
-		reportDl(dl, found, keys.dl!, deps),
+		reportDl(dl, found, deps),
 	]);
 }
 
-/**
- * Debrid-Link lists a torrent with many files as one ZIP, so each new release is fetched on
- * its own: that expands it, and says again whether it is whole.
- */
+/** DMM asks Debrid-Link itself for each new release (`/api/availability/dl`). */
 async function reportDl(
 	dl: LibraryItem[],
 	found: Record<string, LibraryIdentification>,
-	dlKey: string,
 	deps: ReportDeps
 ): Promise<void> {
 	if (dl.length === 0) return;
 	try {
 		for (const t of await unrecorded(dl, deps.dlRecorded, deps.token)) {
 			try {
-				const torrent = await deps.dlTorrent(dlKey, t.id.slice(3));
-				if (torrent && dlWhole(torrent)) {
-					await deps.dlRecord(found[t.id].imdbId, t.hash, torrent.name, torrent.files);
-				}
+				await deps.dlRecord(found[t.id].imdbId, t.hash);
 			} catch {
-				// a release Debrid-Link no longer answers for stays unrecorded
+				// a release DMM could not confirm stays unrecorded; a later visit asks again
 			}
 			await deps.wait(PACE_MS);
 		}

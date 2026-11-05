@@ -42,7 +42,6 @@ function deps(recorded: string[] = []): ReportDeps {
 			return { success: true };
 		}) as any,
 		adSubmit: vi.fn(async () => ({ success: true })) as any,
-		dlTorrent: vi.fn(async () => dlTv) as any,
 		dlRecorded: check as any,
 		dlRecord: vi.fn(async () => true) as any,
 		token: vi.fn(async () => ['key', 'solution'] as [string, string]),
@@ -201,13 +200,7 @@ describe('reportLibraryAvailability', () => {
 			{ dl: 'dlkey' },
 			d
 		);
-		expect(d.dlTorrent).toHaveBeenCalledTimes(1);
-		expect(d.dlTorrent).toHaveBeenCalledWith('dlkey', dlTv.id);
-		expect(d.dlRecord).toHaveBeenCalledWith(
-			'tt0108778',
-			dlTv.hashString,
-			dlTv.name,
-			dlTv.files
-		);
+		// DMM reads the release from Debrid-Link itself, so the page sends only its hash
+		expect(vi.mocked(d.dlRecord).mock.calls).toEqual([['tt0108778', dlTv.hashString]]);
 	});
 });

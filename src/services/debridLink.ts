@@ -1251,6 +1251,74 @@ export async function checkDebridLinkCache(
 	};
 }
 
+/** What Debrid-Link answers for one hash: held whole (as it lists it), not held, or no answer. */
+export type DlReleaseAnswer =
+	{ cached: true; torrent: DebridLinkTorrent } | { cached: false } | null;
+
+/**
+ * Asks Debrid-Link whether it holds `hash` whole, with DMM's own probe account
+ * (`DEBRIDLINK_PROBE_KEY`), so DMM's availability table records and forgets releases on
+ * Debrid-Link's word rather than a page's. The bare-hash add is the probe (see
+ * `checkDebridLinkCache`): a miss is refused at no cost, a hit lands in the probe account,
+ * is fetched on its own when listed as a ZIP, and is removed again. That account's library is
+ * in use, so a torrent it already holds answers for itself and is never removed (an add of
+ * a held hash answers with that very torrent). Every call spends the
+ * hourly probe budget, which every caller on this server shares, so a run of library
+ * visits cannot bring on the lockout that also stops the account's Cast probes.
+ */
+export async function probeDlRelease(hash: string): Promise<DlReleaseAnswer> {
+	const key = process.env.DEBRIDLINK_PROBE_KEY;
+	const wanted = normalizeHash(hash);
+	if (!key || !wanted || probesLeftThisHour() < 1) return null;
+
+	// What the account holds is read first, as `checkDebridLinkCache` does: a held torrent
+	// answers for itself, listed by id for its files, and is left where it is.
+	let id: string;
+	let ours = false;
+	try {
+		const library = await libraryBeforeProbing(key);
+		if (!library) return null;
+		const held = library.byHash.get(wanted);
+		if (held) {
+			if (!(isDlFinished(held.status) || held.downloadPercent >= 100))
+				return { cached: false };
+			id = held.id;
+		} else {
+			recordProbes(1);
+			let added: DebridLinkTorrent;
+			try {
+				added = await addSeedboxTorrent(key, wanted);
+			} catch (error) {
+				// `notAddTorrent` is a miss on the bare-hash form, and only there
+				return error instanceof DebridLinkError && error.code === 'notAddTorrent'
+					? { cached: false }
+					: null;
+			}
+			id = added.id;
+			ours = !library.ids.has(id);
+			if (!(isDlFinished(added.status) || added.downloadPercent >= 100)) {
+				if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+				return { cached: false };
+			}
+			if (!added.isZip) {
+				if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+				return { cached: true, torrent: added };
+			}
+		}
+	} catch {
+		return null;
+	}
+	// A torrent with many files lists as one ZIP until it is read on its own
+	try {
+		const torrent = await getSeedboxTorrent(key, id);
+		return torrent ? { cached: true, torrent } : null;
+	} catch {
+		return null;
+	} finally {
+		if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+	}
+}
+
 export const _testing = {
 	resetFloodLockouts,
 	resetLibrarySnapshots,

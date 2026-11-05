@@ -368,12 +368,9 @@ export function useAvailabilityCheck(
 								const probe = sweep.results[0];
 								// a hit is an answer for everyone: Debrid-Link has no read-only one
 								if (probe?.checked && probe.cached) {
-									recordDlAvailability(
-										imdbId,
-										result.hash,
-										result.title,
-										probe.files
-									).catch(() => undefined);
+									recordDlAvailability(imdbId, result.hash).catch(
+										() => undefined
+									);
 								}
 								if (sweep.leftBehindIds.length > 0) {
 									toast.error(
@@ -1049,12 +1046,9 @@ export function useAvailabilityCheck(
 										(t) => t.hash.toLowerCase() === probe.hash.toLowerCase()
 									);
 									if (row && probe.checked && probe.cached) {
-										recordDlAvailability(
-											imdbId,
-											row.hash,
-											row.title,
-											probe.files
-										).catch(() => undefined);
+										recordDlAvailability(imdbId, row.hash).catch(
+											() => undefined
+										);
 									}
 								}
 								checkProgress.DL = {

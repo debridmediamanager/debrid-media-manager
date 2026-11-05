@@ -3,10 +3,16 @@ import check from '@/pages/api/availability/dl/check';
 import remove from '@/pages/api/availability/dl/remove';
 import { repository } from '@/services/repository';
 import dlMovie from '@/test/fixtures/libraryAvailability/dl_movie.json';
-import dlTv from '@/test/fixtures/libraryAvailability/dl_tv.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import {
+	stubDlProbeAccount,
+	unstubDlProbeAccount,
+	verityMiss,
+	verityPartial,
+	verityWhole,
+} from '@/test/utils/dlProbeAccount';
 import { validateProblemToken } from '@/utils/problemToken';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/utils/problemToken');
@@ -46,41 +52,105 @@ describe('/api/availability/dl', () => {
 		mockRepository.removeAvailabilityDl = vi.fn().mockResolvedValue(undefined);
 	});
 
-	it('records a whole season pack by path and size only', async () => {
-		const res = await call(submit, { body: body(dlTv, 'tt0108778') });
+	afterEach(unstubDlProbeAccount);
+
+	// Until 2026-11-05 the route recorded whatever files and percentages a page posted, and
+	// forgot any release on request. DMM now asks Debrid-Link itself with its probe account:
+	// the recorded bare-hash adds of DMM's 25 largest Verity releases (2026-11-04).
+	it('records a release Debrid-Link holds whole, from what Debrid-Link lists', async () => {
+		const { held } = stubDlProbeAccount();
+		const hit = verityWhole[0];
+		const listed = (hit.body as any).value;
+		const res = await call(submit, {
+			body: {
+				...token,
+				hash: hit.hash,
+				imdbId: 'tt32261958',
+				filename: 'Forged name',
+				files: [{ name: 'forged.mkv', size: 1, downloadPercent: 100 }],
+			},
+		});
 		expect(res.status).toHaveBeenCalledWith(200);
 		const saved = vi.mocked(mockRepository.upsertAvailabilityDl).mock.calls[0][0];
-		expect(saved).toMatchObject({ hash: dlTv.hashString, imdbId: 'tt0108778' });
-		expect(saved.files).toHaveLength(24);
-		expect(saved.files[0]).toEqual({ path: dlTv.files[0].name, bytes: dlTv.files[0].size });
+		expect(saved).toEqual({
+			hash: hit.hash,
+			imdbId: 'tt32261958',
+			filename: listed.name,
+			files: listed.files.map((f: any) => ({ path: f.name, bytes: f.size })),
+		});
+		expect(held.size).toBe(0); // the probe torrent is removed again
 	});
 
-	it('never stores a download URL, even when one is sent', async () => {
-		const withUrls = body(dlMovie, 'tt1375666', { files: dlMovie.files });
-		await call(submit, { body: withUrls });
-		const saved = vi.mocked(mockRepository.upsertAvailabilityDl).mock.calls[0][0];
-		expect(JSON.stringify(saved)).not.toContain('downloadUrl');
-		expect(JSON.stringify(saved)).not.toContain('debrid.link');
+	it('records nothing Debrid-Link refuses or only admitted part of, whatever the page says', async () => {
+		const { held } = stubDlProbeAccount();
+		for (const add of [verityMiss[0], verityPartial]) {
+			const res = await call(submit, {
+				body: {
+					...body(dlMovie, 'tt32261958'),
+					hash: add.hash,
+				},
+			});
+			expect(res.status).toHaveBeenCalledWith(409);
+		}
+		expect(mockRepository.upsertAvailabilityDl).not.toHaveBeenCalled();
+		expect(held.size).toBe(0);
 	});
 
-	it('refuses a file short of 100%, a release that is not video, and a bad token', async () => {
-		const partial = body(dlMovie, 'tt1375666');
-		partial.files[0].downloadPercent = 97;
-		expect((await call(submit, { body: partial })).status).toHaveBeenCalledWith(400);
+	// DMM's probe account is the main Debrid-Link account, whose library is in use: an add of a
+	// hash it holds answers with that very torrent, which the probe's clean-up must not remove.
+	it('answers from a torrent the probe account already holds and leaves it there', async () => {
+		const mine = (verityWhole[1].body as any).value;
+		const { held, calls } = stubDlProbeAccount([mine]);
+		const res = await call(submit, {
+			body: { ...token, hash: verityWhole[1].hash, imdbId: 'tt32261958' },
+		});
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(held.has(mine.id)).toBe(true);
+		expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+	});
 
-		const audio = body(dlMovie, 'tt1375666');
-		audio.files[0].name = 'Album/01 Track.flac';
-		expect((await call(submit, { body: audio })).status).toHaveBeenCalledWith(400);
+	it('records nothing without an answer from Debrid-Link', async () => {
+		const res = await call(submit, {
+			body: { ...token, hash: verityWhole[0].hash, imdbId: 'tt32261958' },
+		});
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(mockRepository.upsertAvailabilityDl).not.toHaveBeenCalled();
+	});
 
+	it('refuses a bad IMDb id and a bad token before asking Debrid-Link', async () => {
+		const { calls } = stubDlProbeAccount();
 		expect(
-			(await call(submit, { body: body(dlMovie, 'not-imdb') })).status
+			(await call(submit, { body: { ...token, hash: verityWhole[0].hash, imdbId: 'x' } }))
+				.status
 		).toHaveBeenCalledWith(400);
-
 		vi.mocked(validateProblemToken).mockReturnValue(false);
 		expect(
-			(await call(submit, { body: body(dlMovie, 'tt1375666') })).status
+			(await call(submit, { body: { ...token, hash: verityWhole[0].hash, imdbId: 'tt1' } }))
+				.status
 		).toHaveBeenCalledWith(403);
-		expect(mockRepository.upsertAvailabilityDl).not.toHaveBeenCalled();
+		expect(calls).toHaveLength(0);
+	});
+
+	it('forgets a release only when Debrid-Link refuses or only part-admits it', async () => {
+		stubDlProbeAccount();
+		for (const add of [verityMiss[0], verityPartial]) {
+			const res = await call(remove, { body: { ...token, hash: add.hash, reason: 'x' } });
+			expect(res.status).toHaveBeenCalledWith(200);
+		}
+		expect(vi.mocked(mockRepository.removeAvailabilityDl).mock.calls).toEqual([
+			[verityMiss[0].hash],
+			[verityPartial.hash],
+		]);
+
+		const kept = await call(remove, { body: { ...token, hash: verityWhole[0].hash } });
+		expect(kept.status).toHaveBeenCalledWith(409);
+		expect(mockRepository.removeAvailabilityDl).toHaveBeenCalledTimes(2);
+	});
+
+	it('forgets nothing without an answer from Debrid-Link', async () => {
+		const res = await call(remove, { body: { ...token, hash: verityMiss[0].hash } });
+		expect(res.status).toHaveBeenCalledWith(503);
+		expect(mockRepository.removeAvailabilityDl).not.toHaveBeenCalled();
 	});
 
 	it('checks under an IMDb id, or by hash alone without one', async () => {
@@ -100,13 +170,5 @@ describe('/api/availability/dl', () => {
 		expect(
 			(await call(check, { body: { ...token, hashes: tooMany } })).status
 		).toHaveBeenCalledWith(400);
-	});
-
-	it('forgets a release an add found uncached', async () => {
-		const res = await call(remove, {
-			body: { ...token, hash: dlMovie.hashString, reason: 'add did not finish' },
-		});
-		expect(res.status).toHaveBeenCalledWith(200);
-		expect(mockRepository.removeAvailabilityDl).toHaveBeenCalledWith(dlMovie.hashString);
 	});
 });
