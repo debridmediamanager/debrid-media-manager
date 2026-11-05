@@ -82,7 +82,7 @@ describe('RD Cast streams for rows without a Real-Debrid link', () => {
 		);
 		expect(links.length).toBeGreaterThan(0);
 		expect(played.map((s) => s.url)).toEqual(
-			links.map((row) => PLAY + row.link.slice(RD.length))
+			links.map((row) => PLAY + row.link.slice(RD.length, RD.length + 13))
 		);
 		for (const marker of markers) {
 			expect(played.some((s) => marker.hash.includes(s.url!.slice(PLAY.length)))).toBe(false);

@@ -209,18 +209,14 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 		}
 	});
 
-	// Stream lists handed out before the fix offered the tail of a Debridio
-	// marker's infohash as a link id (the live Breaking Bad S01E01 list recorded
-	// on 2026-10-03). The cleanup deletes every AvailableFile and Cast row whose
-	// link starts with what it was given, for every user, so an id that is not a
-	// Real-Debrid one must never reach it - least of all a short one, which only
-	// RD's answer would stand between and a mass delete.
+	// Reject markers and short prefixes before any provider call or cleanup.
+	// An alphanumeric id alone cannot identify the URL it originally came from;
+	// stored-link consumers validate the canonical RD prefix before taking an id.
 	it.each([
 		[
-			'the tail of a debridio marker',
-			rdFixture.episodes[0].otherStreams
-				.find((row) => row.link.startsWith('debridio:'))!
-				.link.substring(26),
+			'a debridio marker',
+			rdFixture.episodes[0].otherStreams.find((row) => row.link.startsWith('debridio:'))!
+				.link,
 		],
 		['a short id', 'FIXTU'],
 	])('refuses %s without asking RD or dropping anything', async (_label, link) => {

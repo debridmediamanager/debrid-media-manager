@@ -35,7 +35,9 @@ describe('/api/stremio/[userid]/watch/[imdbid]/[pingpong]', () => {
 	});
 
 	it('redirects to the cached RD link when available', async () => {
-		mockGetLatestCast.mockResolvedValue({ link: 'https://app.real-debrid.com/d/abc123' });
+		mockGetLatestCast.mockResolvedValue({
+			link: 'https://real-debrid.com/d/FIXTURELINK00ABCDEFGHIJKLM',
+		});
 		const req = createMockRequest({
 			query: { userid: 'user', imdbid: 'tt1', pingpong: 'ping', token: 'tok' },
 		});
@@ -49,7 +51,7 @@ describe('/api/stremio/[userid]/watch/[imdbid]/[pingpong]', () => {
 		// the address bar and in every access log on the way.
 		expect(res.redirect).toHaveBeenCalledWith(
 			302,
-			'https://dmm.test/api/stremio/user/play/m/d/abc123'
+			'https://dmm.test/api/stremio/user/play/FIXTURELINK00'
 		);
 	});
 

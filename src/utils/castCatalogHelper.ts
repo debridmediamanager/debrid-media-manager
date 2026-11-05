@@ -3,6 +3,7 @@ import { repository as db } from '@/services/repository';
 import { retryDroppedConnection } from './castAddonFailure';
 import { libraryArtFor, withLibraryArt } from './castLibraryArt';
 import { castAccessToken } from './castRdToken';
+import { rdCastPlayId } from './rdCastLink';
 
 export const PAGE_SIZE = 12;
 
@@ -106,18 +107,24 @@ export async function getDMMTorrent(userid: string, torrentID: string, token: st
 			status: 200,
 		};
 	}
-	const videos = selectedFiles.map((file, idx) => ({
-		id: `dmm:${torrentID}:${file.id}`,
-		title: `${file.path.startsWith('/') ? file.path.substring(1) : file.path} - ${(file.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
-		streams: [
+	const videos = selectedFiles.flatMap((file, idx) => {
+		const id = rdCastPlayId(info.links[idx]);
+		if (!id) return [];
+		return [
 			{
-				url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${info.links[idx].substring(26)}`,
-				behaviorHints: {
-					bingeGroup: `dmm:${torrentID}`,
-				},
+				id: `dmm:${torrentID}:${file.id}`,
+				title: `${file.path.startsWith('/') ? file.path.substring(1) : file.path} - ${(file.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
+				streams: [
+					{
+						url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${id}`,
+						behaviorHints: {
+							bingeGroup: `dmm:${torrentID}`,
+						},
+					},
+				],
 			},
-		],
-	}));
+		];
+	});
 	// sort videos by title
 	videos.sort((a, b) => a.title.localeCompare(b.title));
 

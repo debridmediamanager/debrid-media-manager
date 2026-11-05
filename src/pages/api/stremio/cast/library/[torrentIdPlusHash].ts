@@ -3,6 +3,7 @@ import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
 import { readProviderKey } from '@/utils/providerKeyHeader';
+import { RD_DOWNLOAD_LINK_PREFIX, rdCastPlayId } from '@/utils/rdCastLink';
 import { rdBlockedCastMessage } from '@/utils/rdFilenameFilter';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -41,6 +42,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			status: 'error',
 			errorMessage: 'Cannot determine file link',
 		});
+		return;
+	}
+	const playIds = tInfo.links.map(rdCastPlayId);
+	if (playIds.some((id) => id === null)) {
+		res.status(400).json({ status: 'error', errorMessage: 'Cannot determine file link' });
 		return;
 	}
 
@@ -148,7 +154,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				userid,
 				tInfo.hash,
 				entry.file.path,
-				tInfo.links[entry.index],
+				`${RD_DOWNLOAD_LINK_PREFIX}${playIds[entry.index]}`,
 				Math.ceil(entry.file.bytes / 1024 / 1024)
 			);
 		} catch (error) {

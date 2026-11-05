@@ -6,15 +6,14 @@
 export const RD_DOWNLOAD_LINK_PREFIX = 'https://real-debrid.com/d/';
 
 /**
- * Whether a play URL's id can be a Real-Debrid download id: 13 characters of
- * content key, optionally followed by the 3-character account tag. On
- * 2026-10-03 every one of the 5.9M links stored in `AvailableFile` and `Cast`
- * had a 13- or 16-character id of letters and digits. Anything shorter would
- * also turn the play route's prefix cleanup into a delete of every link that
- * starts with it.
+ * Whether a play URL can carry an RD download id: a 13-character content key
+ * with an optional alphanumeric account binding. Current links use a 3-character
+ * binding; historical links used 13. Longer IDs are accepted defensively, not
+ * because 26-character links occur in the current DMM database.
+ * Shorter ids are unsafe for the play route's prefix-based cleanup.
  */
 export function isRdLinkId(id: string): boolean {
-	return /^[A-Za-z0-9]{13,16}$/.test(id);
+	return /^[A-Za-z0-9]{13,}$/.test(id);
 }
 
 /**
@@ -30,5 +29,5 @@ export function isRdLinkId(id: string): boolean {
 export function rdCastPlayId(link: string | null | undefined): string | null {
 	if (!link?.startsWith(RD_DOWNLOAD_LINK_PREFIX)) return null;
 	const id = link.slice(RD_DOWNLOAD_LINK_PREFIX.length);
-	return isRdLinkId(id) ? id : null;
+	return isRdLinkId(id) ? id.slice(0, 13) : null;
 }

@@ -153,4 +153,30 @@ describe('castCatalogHelper', () => {
 			/^https:\/\/origin\.example\/api\/stremio\/user-1\/play\//
 		);
 	});
+
+	it.each([
+		['https://real-debrid.com/d/FIXTURELINK00ABCDEFGHIJKLM', 'FIXTURELINK00'],
+		['https://other.example/d/FIXTURELINK00ABCDEFGHIJKLM', null],
+		['debridio:0123456789012345678901234567890123456789', null],
+	])('only exposes a normalized RD play id for %s', async (link, id) => {
+		process.env.DMM_ORIGIN = 'https://origin.example';
+		getTorrentInfoMock.mockResolvedValue({
+			original_filename: 'Movie.mkv',
+			original_bytes: 1,
+			files: [{ id: 1, selected: true, path: '/Movie.mkv', bytes: 1 }],
+			links: [link],
+		});
+		const result = await getDMMTorrent('user-1', 'torrent', 'token');
+		const streams = result.data?.meta.videos.flatMap((video) => video.streams);
+		expect(streams).toEqual(
+			id
+				? [
+						{
+							url: `https://origin.example/api/stremio/user-1/play/${id}`,
+							behaviorHints: { bingeGroup: 'dmm:torrent' },
+						},
+					]
+				: []
+		);
+	});
 });

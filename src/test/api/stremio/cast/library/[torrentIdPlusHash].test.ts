@@ -39,7 +39,7 @@ const makeTorrentInfo = (overrides: Partial<any> = {}) => ({
 		{ id: 1, path: 'Movie.2024.mkv', bytes: 1048576, selected: true },
 		{ id: 2, path: 'EpisodeTitle.mkv', bytes: 2097152, selected: true },
 	],
-	links: ['https://rd/link-1', 'https://rd/link-2'],
+	links: ['https://real-debrid.com/d/FIXTURE000001', 'https://real-debrid.com/d/FIXTURE000002'],
 	original_filename: 'Movie.2024',
 	original_bytes: 4096,
 	...overrides,
@@ -101,7 +101,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		mockGetTorrentInfo.mockResolvedValue(
 			makeTorrentInfo({
 				files: [{ id: 1, path: 'Movie.mkv', bytes: 1, selected: true }],
-				links: ['https://rd/link-1', 'https://rd/link-2'],
+				links: [
+					'https://real-debrid.com/d/FIXTURE000001',
+					'https://real-debrid.com/d/FIXTURE000002',
+				],
 			})
 		);
 
@@ -139,7 +142,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			'user-1',
 			'hash123',
 			'EpisodeTitle.mkv',
-			'https://rd/link-2',
+			'https://real-debrid.com/d/FIXTURE000002',
 			2
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
@@ -160,7 +163,10 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 					{ id: 1, path: 'Show.S01E01.mkv', bytes: 1048576, selected: true },
 					{ id: 2, path: 'Show.S01E02.mkv', bytes: 2097152, selected: true },
 				],
-				links: ['https://rd/link-1', 'https://rd/link-2'],
+				links: [
+					'https://real-debrid.com/d/FIXTURE000001',
+					'https://real-debrid.com/d/FIXTURE000002',
+				],
 			})
 		);
 
@@ -179,7 +185,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			'user-1',
 			'hash123',
 			'Show.S01E01.mkv',
-			'https://rd/link-1',
+			'https://real-debrid.com/d/FIXTURE000001',
 			1
 		);
 		expect(mockDbSaveCast).toHaveBeenNthCalledWith(
@@ -188,7 +194,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			'user-1',
 			'hash123',
 			'Show.S01E02.mkv',
-			'https://rd/link-2',
+			'https://real-debrid.com/d/FIXTURE000002',
 			2
 		);
 	});
@@ -199,7 +205,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		mockGetTorrentInfo.mockResolvedValue(
 			makeTorrentInfo({
 				files: [{ id: 1, path: 'Show.S00E01.mkv', bytes: 1048576, selected: true }],
-				links: ['https://rd/link-1'],
+				links: ['https://real-debrid.com/d/FIXTURE000001'],
 			})
 		);
 
@@ -216,7 +222,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			'user-1',
 			'hash123',
 			'Show.S00E01.mkv',
-			'https://rd/link-1',
+			'https://real-debrid.com/d/FIXTURE000001',
 			1
 		);
 	});
@@ -265,7 +271,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			'user-1',
 			'hash123',
 			'EpisodeTitle.mkv',
-			'https://rd/link-2',
+			'https://real-debrid.com/d/FIXTURE000002',
 			2
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
@@ -376,7 +382,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		mockGetTorrentInfo.mockResolvedValue(
 			makeTorrentInfo({
 				files: [{ id: 1, path, bytes: 1048576, selected: true }],
-				links: ['https://rd/link-1'],
+				links: ['https://real-debrid.com/d/FIXTURE000001'],
 			})
 		);
 		const req = createMockRequest({
@@ -414,6 +420,6 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 
 		expect(mockDbSaveCast).toHaveBeenCalledTimes(1);
 		expect(mockDbSaveCast.mock.calls[0][3]).toBe('Show.S01E02.mkv');
-		expect(mockDbSaveCast.mock.calls[0][4]).toBe('https://rd/link-2');
+		expect(mockDbSaveCast.mock.calls[0][4]).toBe('https://real-debrid.com/d/FIXTURE000002');
 	});
 });

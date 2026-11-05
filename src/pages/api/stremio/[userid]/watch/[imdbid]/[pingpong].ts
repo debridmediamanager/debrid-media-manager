@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { rdCastPlayId } from '@/utils/rdCastLink';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // How many times the ping-pong long poll bounces before it gives up.
@@ -22,14 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	// get the last casted stream url
 	const latestCast = await db.getLatestCast(imdbid, userid);
-	if (latestCast && latestCast.link) {
+	const playId = rdCastPlayId(latestCast?.link);
+	if (playId) {
 		// No token: the play route resolves the user's own stored credentials and
 		// has never read one. Passing it only put an RD token in the address bar
 		// and in every access log on the way.
-		res.redirect(
-			302,
-			`${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${latestCast.link.substring(26)}`
-		);
+		res.redirect(302, `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${playId}`);
 		return;
 	}
 

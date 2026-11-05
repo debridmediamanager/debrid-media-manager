@@ -77,7 +77,7 @@ const providers: Provider[] = [
 		profile: 'getCastProfile',
 		userCasts: 'getUserCastStreams',
 		others: 'getOtherStreams',
-		plays: (url, row) => url.endsWith(`/play/${row.link!.substring(26)}`),
+		plays: (url, row) => url.endsWith(`/play/${row.link!.substring(26, 39)}`),
 	},
 	{
 		name: 'TorBox',

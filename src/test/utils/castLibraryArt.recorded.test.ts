@@ -221,7 +221,7 @@ describe('DMM Cast library art, from a recorded Real-Debrid library', () => {
 		}
 	});
 
-	it('gives the opened release the same art, and changes nothing else', async () => {
+	it('gives the opened release the same art and normalizes only playback ids', async () => {
 		const result = await getDMMTorrent(CAST_USER, 'X2ILDQNYFYOHM', 'rd-api-key');
 
 		expect(result.status).toBe(200);
@@ -229,6 +229,13 @@ describe('DMM Cast library art, from a recorded Real-Debrid library', () => {
 			...recorded.productionMeta,
 			meta: {
 				...recorded.productionMeta.meta,
+				videos: recorded.productionMeta.meta.videos.map((video) => ({
+					...video,
+					streams: video.streams.map((stream) => ({
+						...stream,
+						url: stream.url.replace(/(\/play\/[A-Za-z0-9]{13})[A-Za-z0-9]*$/, '$1'),
+					})),
+				})),
 				poster: poster('tt0816692'),
 				background: 'https://images.metahub.space/background/medium/tt0816692/img',
 				description: 'Interstellar',
