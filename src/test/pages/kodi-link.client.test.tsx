@@ -102,6 +102,12 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 		}
 	});
 
+	it('says one sign-in brings back the rest when Remember across devices is on elsewhere', async () => {
+		await renderPage();
+
+		expect(screen.getByText('Remember across devices')).toBeInTheDocument();
+	});
+
 	it('still goes through withAuth once the browser is signed in', async () => {
 		localStorage.setItem('ad:apiKey', 'key');
 
@@ -134,5 +140,7 @@ describe('/kodi?code= on a browser signed in to one service', () => {
 				'/kodi?code=ABCDEFGH'
 			);
 		}
+		// A browser already signed in never restores again, so the hint would mislead here.
+		expect(screen.queryByText('Remember across devices')).toBeNull();
 	});
 });

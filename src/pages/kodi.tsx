@@ -235,10 +235,18 @@ function LinkCard() {
 					</p>
 				)}
 				{nothingToLink && (
-					<p className="mt-3 text-sm text-gray-400">
-						Or open debridmediamanager.com/kodi on a phone or computer where you already
-						use DMM and enter the code there.
-					</p>
+					<>
+						{/* Only a browser's first login restores, so this helps on this screen alone. */}
+						<p className="mt-3 text-sm text-gray-400">
+							Turned on <strong>Remember across devices</strong> in another browser?
+							Sign in to any one of those services here and the rest come back with
+							it.
+						</p>
+						<p className="mt-3 text-sm text-gray-400">
+							Or open debridmediamanager.com/kodi on a phone or computer where you
+							already use DMM and enter the code there.
+						</p>
+					</>
 				)}
 			</div>
 		</Card>
