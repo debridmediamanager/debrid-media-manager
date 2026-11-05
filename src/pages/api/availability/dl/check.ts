@@ -7,7 +7,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 /**
  * POST /api/availability/dl/check
  * Which of up to 100 hashes DMM has seen whole on Debrid-Link, under `imdbId` when one is
- * given (the title pages) or by hash alone (the hashlist page).
+ * given (the movie and show pages) or by hash alone (anime pages and the library visit).
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {

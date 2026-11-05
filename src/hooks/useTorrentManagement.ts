@@ -200,9 +200,9 @@ export function useTorrentManagement(
 					}
 
 					// Only submit availability for truly available torrents, and only
-					// under an IMDb id. The row is keyed by hash and an upsert rewrites
-					// its imdbId, so an anime page filing one under anything else would
-					// move a shared row off the show page it belongs to.
+					// under an IMDb id: the first title a row is filed under stays, so an
+					// anime page filing one under anything else would keep a shared row
+					// off the show page it belongs to.
 					if (
 						info.status === 'downloaded' &&
 						info.progress === 100 &&

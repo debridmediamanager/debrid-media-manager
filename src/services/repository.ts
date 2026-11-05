@@ -54,7 +54,6 @@ import { TorBoxOperation } from './database/torboxOperational';
 import { ScrapeSearchResult } from './mediasearch';
 import type { ReportType } from './reporterId';
 import { isHashBlocked, withoutBlockedHashList, withoutBlockedHashes } from './takedown/blocklist';
-import { TorrentInfoResponse } from './types';
 
 // Scrapers often strip the dot, so "...H264-DJT exe" counts too.
 const EXECUTABLE_TITLE = /[.\s_-]exe\s*$/i;
@@ -590,15 +589,6 @@ export class Repository {
 		return this.availabilityService.saveIMDBIdMapping(hash, imdbId);
 	}
 
-	public async handleDownloadedTorrent(
-		torrentInfo: TorrentInfoResponse,
-		hash: string,
-		imdbId: string
-	) {
-		if (await isHashBlocked(hash)) return;
-		return this.availabilityService.handleDownloadedTorrent(torrentInfo, hash, imdbId);
-	}
-
 	public async upsertAvailability(data: AvailabilityUpsert) {
 		if (await isHashBlocked(data.hash)) return;
 		return this.availabilityService.upsertAvailability(data);
@@ -740,10 +730,6 @@ export class Repository {
 		return this.availabilityService.checkAvailabilityAdByHashes(
 			await withoutBlockedHashList(hashes)
 		);
-	}
-
-	public removeAvailabilityAd(hash: string) {
-		return this.availabilityService.removeAvailabilityAd(hash);
 	}
 
 	public getIMDBIdByHashAd(hash: string) {

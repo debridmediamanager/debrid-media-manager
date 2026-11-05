@@ -70,10 +70,10 @@ type TvSearchResultsProps = {
 	/**
 	 * Debrid-Link's OAuth token or pasted API token.
 	 *
-	 * Debrid-Link's cache answer comes from `dlAvailable`, which only a Check DL
-	 * the user pressed can set. The probe is a bare-hash add and therefore
-	 * mutates, so it is not run across the page the way Premiumize's and
-	 * Offcloud's read-only probes are.
+	 * Debrid-Link's cache answer comes from `dlAvailable`, set by what DMM has
+	 * recorded and by a Check DL the user pressed. The probe is a bare-hash add
+	 * and therefore mutates, so it is not run across the page the way
+	 * Premiumize's and Offcloud's read-only probes are.
 	 */
 	debridLinkKey?: string | null;
 	player: string;

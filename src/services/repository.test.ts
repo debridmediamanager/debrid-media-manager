@@ -15,7 +15,6 @@ const buildRepository = () => {
 	const availability = createService([
 		'disconnect',
 		'getIMDBIdByHash',
-		'handleDownloadedTorrent',
 		'upsertAvailability',
 		'saveInstantAvailability',
 		'saveInstantAvailabilityAd',
@@ -113,13 +112,6 @@ describe('Repository', () => {
 				serviceMethod: 'getIMDBIdByHash',
 				args: ['hash'],
 				value: 'tt123',
-			},
-			{
-				method: 'handleDownloadedTorrent',
-				service: 'availability',
-				serviceMethod: 'handleDownloadedTorrent',
-				args: [{}, 'hash', 'tt123'],
-				value: undefined,
 			},
 			{
 				method: 'upsertAvailability',

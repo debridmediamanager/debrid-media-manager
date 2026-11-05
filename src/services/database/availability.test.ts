@@ -88,32 +88,6 @@ describe('AvailabilityService', () => {
 		expect(imdbId).toBe('tt1234567');
 	});
 
-	it('handles downloaded torrents and normalizes payload', async () => {
-		const torrentInfo = {
-			id: '1',
-			filename: 'sample.mkv',
-			original_filename: 'Sample Original.mkv',
-			bytes: 2048,
-			original_bytes: 4096,
-			progress: 100,
-			status: 'downloaded',
-			ended: undefined,
-			files: [
-				{ id: 1, path: '/video/file1.mkv', bytes: 1024, selected: 1 },
-				{ id: 2, path: '/video/file2.mkv', bytes: 1024, selected: 0 },
-			],
-			links: [],
-		};
-
-		await service.handleDownloadedTorrent(torrentInfo as any, 'hash', 'tt1234567');
-
-		expect(upsertMock).toHaveBeenCalledTimes(1);
-		const args = upsertMock.mock.calls[0][0];
-		expect(args.where).toEqual({ hash: 'hash' });
-		expect(args.update.status).toBe('partially_downloaded');
-		expect(args.create.files.create).toHaveLength(1);
-	});
-
 	it('upserts availability entries with links', async () => {
 		await service.upsertAvailability({
 			hash: 'hash',

@@ -1,7 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import { isVideo } from '../../utils/selectable';
 import { clipToVarchar } from '../../utils/varchar';
-import { TorrentInfoResponse } from '../types';
 import { DatabaseClient } from './client';
 
 /**
@@ -155,100 +154,6 @@ export class AvailabilityService extends DatabaseClient {
 				progress: 100,
 				status: 'user_mapped',
 				ended: new Date(),
-			},
-		});
-	}
-
-	public async handleDownloadedTorrent(
-		torrentInfo: TorrentInfoResponse,
-		hash: string,
-		imdbId: string
-	): Promise<void> {
-		const selectedFiles = torrentInfo.files?.filter((file) => file.selected === 1) || [];
-
-		if (
-			selectedFiles.length === 0 ||
-			selectedFiles.length !== (torrentInfo.links?.length || 0)
-		) {
-			if (torrentInfo.status === 'downloaded') {
-				torrentInfo.status = 'partially_downloaded';
-			}
-		}
-
-		if (!torrentInfo.ended) {
-			torrentInfo.ended = '0';
-		}
-
-		const candidates = [torrentInfo.filename, torrentInfo.original_filename];
-		if (selectedFiles.length > 0) {
-			candidates.push(selectedFiles[0].path);
-		}
-
-		let episodeInfo: ParsedEpisodeInfo | null = null;
-		for (const candidate of candidates) {
-			if (candidate) {
-				episodeInfo = extractEpisodeInfo(candidate);
-				if (episodeInfo) {
-					break;
-				}
-			}
-		}
-
-		const baseData = {
-			hash,
-			imdbId,
-			filename: torrentInfo.filename,
-			originalFilename: torrentInfo.original_filename,
-			bytes: BigInt(torrentInfo.bytes || 0),
-			originalBytes: BigInt(torrentInfo.original_bytes || 0),
-			host: 'real-debrid.com',
-			progress: torrentInfo.progress,
-			status: torrentInfo.status,
-			ended: new Date(torrentInfo.ended),
-			season: episodeInfo?.season,
-			episode: episodeInfo?.episode,
-		};
-
-		await this.prisma.available.upsert({
-			where: { hash },
-			update: {
-				...baseData,
-				files:
-					selectedFiles.length > 0
-						? {
-								deleteMany: {},
-								create: selectedFiles.map((file, index) => {
-									const fileEpisodeInfo = episodeOfFile(file.path);
-									return {
-										link: torrentInfo.links?.[index] || '',
-										file_id: file.id,
-										path: file.path,
-										bytes: BigInt(file.bytes || 0),
-										season: fileEpisodeInfo?.season,
-										episode: fileEpisodeInfo?.episode,
-									};
-								}),
-							}
-						: undefined,
-			},
-			create: {
-				...baseData,
-				files:
-					selectedFiles.length > 0
-						? {
-								create: selectedFiles.map((file, index) => {
-									const fileEpisodeInfo = episodeOfFile(file.path);
-									return {
-										link: torrentInfo.links?.[index] || '',
-										file_id: file.id,
-										path: file.path,
-										bytes: BigInt(file.bytes || 0),
-										season: fileEpisodeInfo?.season,
-										episode: fileEpisodeInfo?.episode,
-									};
-								}),
-							}
-						: undefined,
 			},
 		});
 	}
@@ -990,12 +895,6 @@ export class AvailabilityService extends DatabaseClient {
 			hash: record.hash,
 			files: record.files.map(pageFile),
 		}));
-	}
-
-	public async removeAvailabilityAd(hash: string): Promise<void> {
-		await this.prisma.availableAd.delete({
-			where: { hash: hash.toLowerCase() },
-		});
 	}
 
 	public async getIMDBIdByHashAd(hash: string): Promise<string | null> {
