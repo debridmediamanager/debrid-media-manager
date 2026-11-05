@@ -24,6 +24,13 @@ CREATE TABLE `Available` (
   KEY `Available_imdbId_status_season_episode_bytes_idx` (`imdbId`,`status`,`season`,`episode`,`bytes`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ;
+-- Then prisma/migrations/20261106_available_created_at, as applied to production.
+ALTER TABLE `Available` ADD COLUMN `createdAt` DATETIME(3) NULL, ALGORITHM=INSTANT
+;
+ALTER TABLE `Available` MODIFY COLUMN `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3), ALGORITHM=INSTANT
+;
+ALTER TABLE `Available` ADD INDEX `Available_createdAt_idx` (`createdAt`), ALGORITHM=INPLACE, LOCK=NONE
+;
 CREATE TABLE `AvailableFile` (
   `link` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `file_id` int NOT NULL,

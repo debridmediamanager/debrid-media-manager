@@ -478,6 +478,8 @@ model Available {
   status           String
   ended            DateTime
   updatedAt        DateTime        @updatedAt
+  /// When DMM first recorded the row; NULL on rows older than the column.
+  createdAt        DateTime?       @default(now())
   season           Int?
   episode          Int?
   files            AvailableFile[]
@@ -486,6 +488,7 @@ model Available {
   @@index([imdbId])
   @@index([imdbId, hash])
   @@index([imdbId, status, season, episode, bytes])
+  @@index([createdAt])
 }
 
 model AvailableFile {
@@ -527,6 +530,7 @@ model AvailableAd {
   @@index([imdbId, hash])
   @@index([imdbId, status, season, episode, bytes])
   @@index([updatedAt])
+  @@index([createdAt])
 }
 
 model AvailableAdFile {
