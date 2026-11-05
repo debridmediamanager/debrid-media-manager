@@ -51,6 +51,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// limiter counts calls, so each budget is 2,500 over the endpoint's batch cap:
 	// 500 filenames per identify call, 100 hashes per availability and mediainfo call.
 	sponsorIdentify: { name: 'sponsorIdentify', rateLimit: 5, windowSeconds: 60 },
+	// scraps' hashlist ingest, all callers together: the sponsor API's 2,500 names a minute,
+	// about a third of one dmm-01 core, while it backfills the hashlists repo.
+	metadataIdentify: { name: 'metadataIdentify', rateLimit: 5, windowSeconds: 60 },
 	sponsorAvailability: { name: 'sponsorAvailability', rateLimit: 25, windowSeconds: 60 },
 	sponsorMediaInfo: { name: 'sponsorMediaInfo', rateLimit: 25, windowSeconds: 60 },
 	// The placement API, per sponsorship: up to 100 releases a call, so a 10,000-release
