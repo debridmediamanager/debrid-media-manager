@@ -4,6 +4,7 @@ import {
 	resolveDebridLinkTorrentById,
 } from '@/utils/debridLinkCastApiHelpers';
 import { matchDebridLinkFile } from '@/utils/debridLinkCastFiles';
+import { withDebridLinkCastToken } from '@/utils/debridLinkCastToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Play one file out of the user's own Debrid-Link seedbox.
@@ -30,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	let profile: { apiKey: string } | null = null;
+	let profile: { apiKey: string; refreshToken?: string | null } | null = null;
 	try {
 		profile = await db.getDebridLinkCastProfile(userid);
 		if (!profile) {
@@ -48,7 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		// One request: the filtered listing carries the file list with a live URL
 		// per file, and it is what expands a torrent that lists as a single ZIP.
-		const resolved = await resolveDebridLinkTorrentById(profile.apiKey, id);
+		const resolved = await withDebridLinkCastToken(userid, profile, (token) =>
+			resolveDebridLinkTorrentById(token, id)
+		);
 		if (!resolved) {
 			throw new Error('Debrid-Link has no such torrent for this account');
 		}

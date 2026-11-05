@@ -76,6 +76,54 @@ describe('/api/stremio-dl/[userid]/play/[hash]', () => {
 		expect(res.redirect).toHaveBeenCalledWith(`${SEED}/tor-1-1/Show.S01E02.mkv`);
 	});
 
+	it('renews an expired viewer credential before considering another member’s stored link', async () => {
+		mockRepository.getDebridLinkCastProfile = vi.fn().mockResolvedValue({
+			apiKey: 'expired-viewer-token',
+			refreshToken: 'viewer-refresh',
+		});
+		mockRepository.saveDebridLinkCastProfile = vi.fn().mockResolvedValue({});
+		mockRepository.getDebridLinkStoredDownloadUrl = vi
+			.fn()
+			.mockResolvedValue('https://example.test/other-member');
+		mockAdd.mockRejectedValueOnce(new DebridLinkError('Expired', 'badToken'));
+		const oauth = vi.fn().mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					access_token: 'renewed-viewer-token',
+					refresh_token: 'renewed-viewer-refresh',
+					token_type: 'Bearer',
+					expires_in: 86400,
+				}),
+				{ headers: { 'Content-Type': 'application/json' } }
+			)
+		);
+		vi.stubGlobal('fetch', oauth);
+		try {
+			await handler(request({ file: 'Show.S01/Show.S01E02.mkv' }), res);
+
+			expect(res.redirect).toHaveBeenCalledWith(`${SEED}/tor-1-1/Show.S01E02.mkv`);
+			expect(mockRepository.getDebridLinkStoredDownloadUrl).not.toHaveBeenCalled();
+			expect(mockAdd).toHaveBeenLastCalledWith(
+				'renewed-viewer-token',
+				`magnet:?xt=urn:btih:${HASH}`
+			);
+			expect(mockRepository.saveDebridLinkCastProfile).toHaveBeenCalledWith(
+				'u',
+				'renewed-viewer-token',
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'renewed-viewer-refresh'
+			);
+			const params = new URLSearchParams(oauth.mock.calls[0][1].body);
+			expect(params.get('grant_type')).toBe('refresh_token');
+			expect(params.get('refresh_token')).toBe('viewer-refresh');
+		} finally {
+			vi.unstubAllGlobals();
+		}
+	});
+
 	it('falls back to the biggest file when no path was stored', async () => {
 		await handler(request(), res);
 		expect(res.redirect).toHaveBeenCalledWith(`${SEED}/tor-1-0/Show.S01E01.mkv`);

@@ -7,6 +7,7 @@ import {
 import { repository as db } from '@/services/repository';
 import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 import { resolveDebridLinkTorrentById } from '@/utils/debridLinkCastApiHelpers';
+import { withDebridLinkCastToken } from '@/utils/debridLinkCastToken';
 
 /** How many library entries one Stremio catalog page carries. */
 export const PAGE_SIZE = 12;
@@ -45,7 +46,7 @@ async function getProfile(userid: string) {
  * account and slicing: `listAllSeedboxTorrents` walks every page, and walking a
  * large library on every catalog scroll is the exact request pattern the
  * hour-long `floodDetected` lockout punishes. One request per catalog page,
- * always.
+ * except for a single credential renewal and replay on `badToken`.
  *
  * The arithmetic is a window inside a Debrid-Link page: Stremio asks in units
  * of 12 and Debrid-Link pages at 100, so the offset picks the Debrid-Link page
@@ -64,10 +65,12 @@ export async function getDebridLinkDMMLibrary(userid: string, page: number) {
 	const dlPage = Math.floor(offset / SEEDBOX_PAGE_SIZE);
 	const windowStart = offset % SEEDBOX_PAGE_SIZE;
 
-	const { torrents, pagination } = await listSeedboxTorrents(profile.apiKey, {
-		page: dlPage,
-		perPage: SEEDBOX_PAGE_SIZE,
-	});
+	const { torrents, pagination } = await withDebridLinkCastToken(userid, profile, (token) =>
+		listSeedboxTorrents(token, {
+			page: dlPage,
+			perPage: SEEDBOX_PAGE_SIZE,
+		})
+	);
 
 	const finished = torrents.filter((torrent: DebridLinkTorrent) => isDlFinished(torrent.status));
 	const pageEntries = finished.slice(windowStart, windowStart + PAGE_SIZE);
@@ -98,7 +101,7 @@ export async function getDebridLinkDMMLibrary(userid: string, page: number) {
 /**
  * The meta for one library entry: its playable files.
  *
- * One request. `seedbox/list?ids=<id>` carries the name, the size and the file
+ * Normally one request. `seedbox/list?ids=<id>` carries the name, size and file
  * list with a live download URL per file - Debrid-Link is the only provider
  * here that needs no second call to turn a library row into a playable listing.
  * It is also the ZIP escape hatch: a torrent with many files lists as a single
@@ -120,7 +123,9 @@ export async function getDebridLinkDMMItem(userid: string, torrentId: string) {
 	const metaId = debridLinkMetaId(torrentId);
 
 	// Errors propagate: the route tells a refused token from an outage.
-	const resolved = await resolveDebridLinkTorrentById(profile.apiKey, torrentId);
+	const resolved = await withDebridLinkCastToken(userid, profile, (token) =>
+		resolveDebridLinkTorrentById(token, torrentId)
+	);
 
 	if (!resolved) {
 		return { error: 'No such Debrid-Link torrent', status: 404 };

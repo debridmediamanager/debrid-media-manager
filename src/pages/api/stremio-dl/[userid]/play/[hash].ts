@@ -4,6 +4,7 @@ import {
 	resolveDebridLinkRelease,
 } from '@/utils/debridLinkCastApiHelpers';
 import { matchDebridLinkFile } from '@/utils/debridLinkCastFiles';
+import { withDebridLinkCastToken } from '@/utils/debridLinkCastToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Play a Debrid-Link cast.
@@ -53,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const wantedPath = typeof file === 'string' && file ? file : undefined;
 
-	let profile: { apiKey: string } | null = null;
+	let profile: { apiKey: string; refreshToken?: string | null } | null = null;
 	try {
 		profile = await db.getDebridLinkCastProfile(userid);
 		if (!profile) {
@@ -85,7 +86,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	};
 
 	try {
-		const release = await resolveDebridLinkRelease(profile.apiKey, hash);
+		const release = await withDebridLinkCastToken(userid, profile, (token) =>
+			resolveDebridLinkRelease(token, hash)
+		);
 
 		if (!release.finished) {
 			// No cheap wait exists. `seedbox/activity` is another request against
