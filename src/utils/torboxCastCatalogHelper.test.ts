@@ -15,7 +15,10 @@ vi.mock('@/services/torbox', () => ({
 
 import { repository as db } from '@/services/repository';
 import { getTorrentList, getUsenetList, getWebDownloadList } from '@/services/torbox';
+import type { TorBoxResponse, TorBoxTorrentInfo, TorBoxWebDownload } from '@/services/types';
 import { getTorBoxDMMLibrary, getTorBoxDMMTorrent, PAGE_SIZE } from './torboxCastCatalogHelper';
+
+const READY = { download_finished: true, download_present: true };
 
 describe('torboxCastCatalogHelper', () => {
 	beforeEach(() => {
@@ -69,8 +72,8 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
 				data: [
-					{ id: 1, name: 'Movie A' },
-					{ id: 2, name: 'Movie B' },
+					{ ...READY, id: 1, name: 'Movie A' },
+					{ ...READY, id: 2, name: 'Movie B' },
 				],
 			} as any);
 
@@ -87,7 +90,7 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
-				data: { id: 99, name: 'Single' },
+				data: { ...READY, id: 99, name: 'Single' },
 			} as any);
 
 			const result = await getTorBoxDMMLibrary('user1', 1);
@@ -98,6 +101,7 @@ describe('torboxCastCatalogHelper', () => {
 
 		it('sets hasMore true when results equal PAGE_SIZE', async () => {
 			const torrents = Array.from({ length: PAGE_SIZE }, (_, i) => ({
+				...READY,
 				id: i,
 				name: `T${i}`,
 			}));
@@ -116,27 +120,12 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
-				data: [{ id: 1, name: 'Only' }],
+				data: [{ ...READY, id: 1, name: 'Only' }],
 			} as any);
 
 			const result = await getTorBoxDMMLibrary('user1', 1);
 
 			expect(result.data!.hasMore).toBe(false);
-		});
-
-		it('calculates correct offset from page number', async () => {
-			vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
-			vi.mocked(getTorrentList).mockResolvedValue({
-				success: true,
-				data: [],
-			} as any);
-
-			await getTorBoxDMMLibrary('user1', 3);
-
-			expect(getTorrentList).toHaveBeenCalledWith('key', {
-				offset: (3 - 1) * PAGE_SIZE,
-				limit: PAGE_SIZE,
-			});
 		});
 	});
 
@@ -198,6 +187,7 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
 				data: {
+					...READY,
 					id: 42,
 					name: 'Test Torrent',
 					files: [
@@ -222,7 +212,7 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
-				data: { id: 10, name: 'Empty', files: [] },
+				data: { ...READY, id: 10, name: 'Empty', files: [] },
 			} as any);
 
 			const result = await getTorBoxDMMTorrent('user1', '10');
@@ -236,6 +226,7 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
 				data: {
+					...READY,
 					id: 5,
 					name: 'Single',
 					files: [{ id: 1, name: 'video.mkv', short_name: 'video', size: 500000000 }],
@@ -253,6 +244,7 @@ describe('torboxCastCatalogHelper', () => {
 			vi.mocked(getTorrentList).mockResolvedValue({
 				success: true,
 				data: {
+					...READY,
 					id: 1,
 					name: 'Show',
 					files: [
@@ -274,11 +266,16 @@ describe('torboxCastCatalogHelper', () => {
 describe('torboxCastCatalogHelper web downloads', () => {
 	const webDownloads = (count: number, offset = 0) =>
 		Array.from({ length: count }, (_, i) => ({
+			...READY,
 			id: 1000 + offset + i,
 			name: `W${offset + i}`,
 		}));
 	const torrents = (count: number, offset = 0) =>
-		Array.from({ length: count }, (_, i) => ({ id: offset + i, name: `T${offset + i}` }));
+		Array.from({ length: count }, (_, i) => ({
+			...READY,
+			id: offset + i,
+			name: `T${offset + i}`,
+		}));
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -307,27 +304,28 @@ describe('torboxCastCatalogHelper web downloads', () => {
 			'dmm-tb:1',
 			'dmm-tb:2',
 		]);
-		// Only the unfilled remainder is asked of the torrent list.
-		expect(getTorrentList).toHaveBeenCalledWith('key', { offset: 0, limit: PAGE_SIZE - 2 });
 	});
 
-	it('continues torrents at the offset the straddling page stopped at', async () => {
-		// 14 web downloads: page 1 is all web, page 2 is the last 2 web + 10 torrents,
-		// page 3 must resume at torrent 10 - not 0, and not 24.
+	it('continues torrents where the straddling page stopped', async () => {
 		vi.mocked(getWebDownloadList).mockResolvedValue({
 			success: true,
 			data: webDownloads(14),
-		} as any);
-		vi.mocked(getTorrentList).mockResolvedValue({ success: true, data: torrents(10) } as any);
+		} as TorBoxResponse<TorBoxWebDownload[]>);
+		vi.mocked(getTorrentList).mockResolvedValue({
+			success: true,
+			data: torrents(30),
+		} as TorBoxResponse<TorBoxTorrentInfo[]>);
 
-		await getTorBoxDMMLibrary('user1', 1);
-		expect(getTorrentList).not.toHaveBeenCalled();
-
-		await getTorBoxDMMLibrary('user1', 2);
-		expect(getTorrentList).toHaveBeenLastCalledWith('key', { offset: 0, limit: 10 });
-
-		await getTorBoxDMMLibrary('user1', 3);
-		expect(getTorrentList).toHaveBeenLastCalledWith('key', { offset: 10, limit: PAGE_SIZE });
+		const second = await getTorBoxDMMLibrary('user1', 2);
+		const third = await getTorBoxDMMLibrary('user1', 3);
+		expect(second.data?.metas.map((m) => m.id)).toEqual([
+			'dmm-tb:w1012',
+			'dmm-tb:w1013',
+			...Array.from({ length: 10 }, (_, i) => `dmm-tb:${i}`),
+		]);
+		expect(third.data?.metas.map((m) => m.id)).toEqual(
+			Array.from({ length: PAGE_SIZE }, (_, i) => `dmm-tb:${10 + i}`)
+		);
 	});
 
 	it('skips the torrent call entirely when web downloads fill the page', async () => {
@@ -358,6 +356,7 @@ describe('torboxCastCatalogHelper web downloads', () => {
 			success: true,
 			data: [
 				{
+					...READY,
 					id: 1599037,
 					name: 'ztest.rar',
 					files: [{ id: 0, short_name: 'ztest.rar', size: 1024 ** 3 }],
@@ -396,15 +395,15 @@ describe('torboxCastCatalogHelper usenet downloads', () => {
 	it('lists usenet downloads after web downloads and before torrents', async () => {
 		vi.mocked(getWebDownloadList).mockResolvedValue({
 			success: true,
-			data: [{ id: 1, name: 'W' }],
+			data: [{ ...READY, id: 1, name: 'W' }],
 		} as any);
 		vi.mocked(getUsenetList).mockResolvedValue({
 			success: true,
-			data: [{ id: 2367148, name: 'Big Buck Bunny' }],
+			data: [{ ...READY, id: 2367148, name: 'Big Buck Bunny' }],
 		} as any);
 		vi.mocked(getTorrentList).mockResolvedValue({
 			success: true,
-			data: [{ id: 9, name: 'T' }],
+			data: [{ ...READY, id: 9, name: 'T' }],
 		} as any);
 
 		const result = await getTorBoxDMMLibrary('user1', 1);
@@ -421,6 +420,7 @@ describe('torboxCastCatalogHelper usenet downloads', () => {
 			success: true,
 			data: [
 				{
+					...READY,
 					id: 2367148,
 					name: 'Big Buck Bunny 480p test',
 					files: [{ id: 0, short_name: 'bbb.mov', size: 1024 ** 3 }],
@@ -443,7 +443,7 @@ describe('torboxCastCatalogHelper usenet downloads', () => {
 		vi.mocked(getUsenetList).mockRejectedValue(new Error('TorBox down'));
 		vi.mocked(getTorrentList).mockResolvedValue({
 			success: true,
-			data: [{ id: 9, name: 'T' }],
+			data: [{ ...READY, id: 9, name: 'T' }],
 		} as any);
 
 		const result = await getTorBoxDMMLibrary('user1', 1);
@@ -476,11 +476,11 @@ describe('torboxCastCatalogHelper library art', () => {
 	it('puts a cover on a torrent DMM knows by hash and leaves a web download bare', async () => {
 		vi.mocked(getWebDownloadList).mockResolvedValue({
 			success: true,
-			data: [{ id: 7, name: 'archive.7z' }],
+			data: [{ ...READY, id: 7, name: 'archive.7z' }],
 		} as any);
 		vi.mocked(getTorrentList).mockResolvedValue({
 			success: true,
-			data: [{ id: 1, name: 'Interstellar (2014).mkv', hash: HASH }],
+			data: [{ ...READY, id: 1, name: 'Interstellar (2014).mkv', hash: HASH }],
 		} as any);
 
 		const result = await getTorBoxDMMLibrary('user1', 1);
@@ -498,6 +498,7 @@ describe('torboxCastCatalogHelper library art', () => {
 			success: true,
 			data: [
 				{
+					...READY,
 					id: 1,
 					name: 'Interstellar (2014).mkv',
 					hash: HASH,
@@ -515,7 +516,7 @@ describe('torboxCastCatalogHelper library art', () => {
 	it('looks nothing up for an opened web download', async () => {
 		vi.mocked(getWebDownloadList).mockResolvedValue({
 			success: true,
-			data: [{ id: 7, name: 'archive.7z', files: [] }],
+			data: [{ ...READY, id: 7, name: 'archive.7z', files: [] }],
 		} as any);
 
 		const result = await getTorBoxDMMTorrent('user1', 'w7');

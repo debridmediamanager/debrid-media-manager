@@ -476,10 +476,11 @@ const buildTbUserTorrent = (
 	const serviceStatus = info.download_state;
 	let status: UserTorrentStatus;
 
-	// Map TorBox status to UserTorrentStatus
-	// Check download_finished flag first, as TorBox can show "uploading" when seeding after completion
-	if (info.download_finished) {
+	// State strings describe seeding too; only finished, present bytes are playable.
+	if (info.download_finished && info.download_present) {
 		status = UserTorrentStatus.finished;
+	} else if (info.download_finished) {
+		status = UserTorrentStatus.error;
 	} else {
 		switch ((info.download_state ?? '').toLowerCase()) {
 			case 'queued':
@@ -489,10 +490,6 @@ const buildTbUserTorrent = (
 			case 'downloading':
 			case 'uploading':
 				status = UserTorrentStatus.downloading;
-				break;
-			case 'finished':
-			case 'seeding':
-				status = UserTorrentStatus.finished;
 				break;
 			default:
 				status = UserTorrentStatus.error;

@@ -47,6 +47,7 @@ function makeTorrent(overrides: Record<string, any> = {}) {
 		id: 42,
 		hash: HASH,
 		download_finished: true,
+		download_present: true,
 		download_state: 'completed',
 		files: [
 			{ id: 1, name: 'Movie.S01E03.mkv', short_name: 'Movie.S01E03.mkv', size: 1073741824 },

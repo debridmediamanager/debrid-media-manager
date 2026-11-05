@@ -52,16 +52,20 @@ async function fetchSideLists(apiKey: string) {
 	]);
 
 	return [
-		...webDownloads.map((item) => ({
-			id: `dmm-tb:w${item.id}`,
-			name: item.name,
-			type: 'other',
-		})),
-		...usenetDownloads.map((item) => ({
-			id: `dmm-tb:u${item.id}`,
-			name: item.name,
-			type: 'other',
-		})),
+		...webDownloads
+			.filter((item) => item.download_finished && item.download_present)
+			.map((item) => ({
+				id: `dmm-tb:w${item.id}`,
+				name: item.name,
+				type: 'other',
+			})),
+		...usenetDownloads
+			.filter((item) => item.download_finished && item.download_present)
+			.map((item) => ({
+				id: `dmm-tb:u${item.id}`,
+				name: item.name,
+				type: 'other',
+			})),
 	];
 }
 
@@ -69,10 +73,8 @@ async function fetchSideLists(apiKey: string) {
  * One page of the user's TorBox library: web and usenet downloads, then torrents.
  *
  * The lists are concatenated rather than interleaved because their ids come from
- * different tables and carry no comparable ordering. With the side-list count
- * `S` known, a page starting at `skip` takes `sideList[skip...]` and tops up
- * from torrent offset 0; once `skip >= S` the torrent offset is exactly
- * `skip - S`, which continues precisely where the straddling page stopped.
+ * different tables and carry no comparable ordering. Torrent offsets count only
+ * playable entries, so expired rows cannot leave a hole that hides later pages.
  */
 export async function getTorBoxDMMLibrary(userid: string, page: number) {
 	const profile = await getProfile(userid);
@@ -89,14 +91,19 @@ export async function getTorBoxDMMLibrary(userid: string, page: number) {
 
 	let torrents: TorBoxTorrentInfo[] = [];
 	if (torrentLimit > 0) {
-		const results = await getTorrentList(profile.apiKey, {
-			offset: torrentOffset,
-			limit: torrentLimit,
-		});
-		if (!results.success) {
-			return { error: 'Failed to get user torrents list', status: 500 };
+		const playable: TorBoxTorrentInfo[] = [];
+		for (let offset = 0; playable.length < torrentOffset + torrentLimit; offset += 1000) {
+			const results = await getTorrentList(profile.apiKey, { offset, limit: 1000 });
+			if (!results.success) {
+				return { error: 'Failed to get user torrents list', status: 500 };
+			}
+			const batch = asList(results.data);
+			playable.push(
+				...batch.filter((torrent) => torrent.download_finished && torrent.download_present)
+			);
+			if (batch.length < 1000) break;
 		}
-		torrents = asList(results.data);
+		torrents = playable.slice(torrentOffset, torrentOffset + torrentLimit);
 	}
 
 	// Only torrents carry an info hash, so only they can be identified.
@@ -144,9 +151,9 @@ export async function getTorBoxDMMTorrent(userid: string, entryId: string) {
 	}
 
 	const item = asList<TorBoxTorrentInfo | TorBoxWebDownload | TorBoxUsenetDownload>(
-		result.data as any
+		result.data
 	)[0];
-	if (!item) {
+	if (!item || !item.download_finished || !item.download_present) {
 		return { error: 'Torrent not found', status: 404 };
 	}
 

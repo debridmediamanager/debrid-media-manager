@@ -32,12 +32,10 @@ async function waitForTorrentReady(
 			continue;
 		}
 
-		// TorBox torrent statuses: downloading, uploading, stalled, paused, completed, cached, metaDL, checkingResumeData
-		if (
-			torrent.download_finished ||
-			torrent.download_state === 'completed' ||
-			torrent.download_state === 'cached'
-		) {
+		if (torrent.download_finished && !torrent.download_present) {
+			throw new CastItemGoneError('Torrent content is no longer present on TorBox');
+		}
+		if (torrent.download_finished && torrent.download_present) {
 			return torrent;
 		}
 
@@ -55,14 +53,21 @@ async function waitForTorrentReady(
 async function findUserTorrentByHash(
 	apiKey: string,
 	hash: string
-): Promise<TorBoxTorrentInfo | null> {
+): Promise<{ torrent: TorBoxTorrentInfo | null; existingIds: Set<number> | null }> {
+	const existingIds = new Set<number>();
 	try {
-		const result = await getTorrentList(apiKey, { limit: 1000 });
-		if (!result.success || !result.data) return null;
-		const list = Array.isArray(result.data) ? result.data : [result.data];
-		return list.find((t) => t.hash?.toLowerCase() === hash.toLowerCase()) ?? null;
+		for (let offset = 0; ; offset += 1000) {
+			const result = await getTorrentList(apiKey, { offset, limit: 1000 });
+			if (!result.success || !result.data) return { torrent: null, existingIds: null };
+			const list = Array.isArray(result.data) ? result.data : [result.data];
+			for (const torrent of list) existingIds.add(torrent.id);
+			const torrent = list.find((t) => t.hash?.toLowerCase() === hash.toLowerCase());
+			if (torrent) return { torrent, existingIds };
+			if (list.length < 1000) return { torrent: null, existingIds };
+		}
 	} catch {
-		return null;
+		// An unavailable page is unknown ownership, never evidence of absence.
+		return { torrent: null, existingIds: null };
 	}
 }
 
@@ -124,18 +129,15 @@ export const getTorBoxStreamUrl = async (
 			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
-		const existing = await findUserTorrentByHash(apiKey, hash);
+		const { torrent: existing, existingIds } = await findUserTorrentByHash(apiKey, hash);
 		let torrent: TorBoxTorrentInfo | null = null;
-		if (
-			existing &&
-			(existing.download_finished ||
-				existing.download_state === 'completed' ||
-				existing.download_state === 'cached')
-		) {
+		if (existing) {
 			torrentId = existing.id;
-			torrent = existing;
+			torrent =
+				existing.download_finished && existing.download_present
+					? existing
+					: await waitForTorrentReady(apiKey, torrentId);
 		} else {
-			addedThisCall = true;
 			const createResult = await createTorrent(apiKey, {
 				magnet: `magnet:?xt=urn:btih:${hash}`,
 			});
@@ -149,6 +151,7 @@ export const getTorBoxStreamUrl = async (
 			}
 
 			torrentId = createResult.data.torrent_id;
+			addedThisCall = existingIds?.has(torrentId) === false;
 			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
@@ -225,18 +228,15 @@ export const getFileByNameTorBoxStreamUrl = async (
 			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
-		const existing = await findUserTorrentByHash(apiKey, hash);
+		const { torrent: existing, existingIds } = await findUserTorrentByHash(apiKey, hash);
 		let torrent: TorBoxTorrentInfo | null = null;
-		if (
-			existing &&
-			(existing.download_finished ||
-				existing.download_state === 'completed' ||
-				existing.download_state === 'cached')
-		) {
+		if (existing) {
 			torrentId = existing.id;
-			torrent = existing;
+			torrent =
+				existing.download_finished && existing.download_present
+					? existing
+					: await waitForTorrentReady(apiKey, torrentId);
 		} else {
-			addedThisCall = true;
 			const createResult = await createTorrent(apiKey, {
 				magnet: `magnet:?xt=urn:btih:${hash}`,
 			});
@@ -250,6 +250,7 @@ export const getFileByNameTorBoxStreamUrl = async (
 			}
 
 			torrentId = createResult.data.torrent_id;
+			addedThisCall = existingIds?.has(torrentId) === false;
 			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
@@ -341,18 +342,15 @@ export const getBiggestFileTorBoxStreamUrl = async (
 			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
-		const existing = await findUserTorrentByHash(apiKey, hash);
+		const { torrent: existing, existingIds } = await findUserTorrentByHash(apiKey, hash);
 		let torrent: TorBoxTorrentInfo | null = null;
-		if (
-			existing &&
-			(existing.download_finished ||
-				existing.download_state === 'completed' ||
-				existing.download_state === 'cached')
-		) {
+		if (existing) {
 			torrentId = existing.id;
-			torrent = existing;
+			torrent =
+				existing.download_finished && existing.download_present
+					? existing
+					: await waitForTorrentReady(apiKey, torrentId);
 		} else {
-			addedThisCall = true;
 			const createResult = await createTorrent(apiKey, {
 				magnet: `magnet:?xt=urn:btih:${hash}`,
 			});
@@ -366,6 +364,7 @@ export const getBiggestFileTorBoxStreamUrl = async (
 			}
 
 			torrentId = createResult.data.torrent_id;
+			addedThisCall = existingIds?.has(torrentId) === false;
 			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
@@ -440,16 +439,14 @@ export const getTorBoxStreamUrlKeepTorrent = async (
 			throw new CastItemGoneError('Torrent not cached on TorBox');
 		}
 
-		const existing = await findUserTorrentByHash(apiKey, hash);
+		const { torrent: existing } = await findUserTorrentByHash(apiKey, hash);
 		let torrent: TorBoxTorrentInfo | null = null;
-		if (
-			existing &&
-			(existing.download_finished ||
-				existing.download_state === 'completed' ||
-				existing.download_state === 'cached')
-		) {
+		if (existing) {
 			torrentId = existing.id;
-			torrent = existing;
+			torrent =
+				existing.download_finished && existing.download_present
+					? existing
+					: await waitForTorrentReady(apiKey, torrentId);
 		} else {
 			const createResult = await createTorrent(apiKey, {
 				magnet: `magnet:?xt=urn:btih:${hash}`,
@@ -532,13 +529,16 @@ export const getWebDownloadStreamUrlByHash = async (
 	hash: string,
 	targetFilename?: string
 ): Promise<string> => {
-	const list = await getWebDownloadList(apiKey, { limit: 1000 });
-	if (!list.success || !list.data) {
-		throw new Error('Failed to list TorBox web downloads');
+	let item;
+	for (let offset = 0; ; offset += 1000) {
+		const list = await getWebDownloadList(apiKey, { offset, limit: 1000 });
+		if (!list.success || !list.data) {
+			throw new Error('Failed to list TorBox web downloads');
+		}
+		const items = Array.isArray(list.data) ? list.data : [list.data];
+		item = items.find((w) => w.hash?.toLowerCase() === hash.toLowerCase());
+		if (item || items.length < 1000) break;
 	}
-
-	const items = Array.isArray(list.data) ? list.data : [list.data];
-	const item = items.find((w) => w.hash?.toLowerCase() === hash.toLowerCase());
 	if (!item) {
 		throw new CastItemGoneError('Web download not found on TorBox');
 	}
@@ -576,9 +576,10 @@ export const getOwnedTorBoxStreamUrl = async (
 	hash: string,
 	targetFilename?: string
 ): Promise<string> => {
-	const torrent = await findUserTorrentByHash(apiKey, hash);
+	const { torrent } = await findUserTorrentByHash(apiKey, hash);
 	const files = torrent?.files ?? [];
-	if (!torrent || files.length === 0) return '';
+	if (!torrent || !torrent.download_finished || !torrent.download_present || files.length === 0)
+		return '';
 
 	const file =
 		(targetFilename ? matchFileByName(files, targetFilename) : undefined) ??

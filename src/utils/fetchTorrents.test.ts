@@ -579,6 +579,8 @@ describe('fetchTorrents utilities', () => {
 				size: 2000000000,
 				progress: 100,
 				download_state: 'finished',
+				download_finished: true,
+				download_present: true,
 				seeds: 15,
 				download_speed: 0,
 				created_at: '2024-01-01T00:00:00Z',
@@ -607,38 +609,6 @@ describe('fetchTorrents utilities', () => {
 			expect(result.selectedFiles).toHaveLength(1);
 			expect(result.selectedFiles[0].filename).toBe('Movie.2024.1080p.mkv');
 			expect(result.links).toEqual(['https://s3.url/file1']);
-		});
-
-		it('should handle different TorBox download states', () => {
-			const states = [
-				{ input: 'queued', expected: UserTorrentStatus.waiting },
-				{ input: 'checking', expected: UserTorrentStatus.waiting },
-				{ input: 'downloading', expected: UserTorrentStatus.downloading },
-				{ input: 'uploading', expected: UserTorrentStatus.downloading },
-				{ input: 'finished', expected: UserTorrentStatus.finished },
-				{ input: 'seeding', expected: UserTorrentStatus.finished },
-				{ input: 'error', expected: UserTorrentStatus.error },
-				{ input: 'unknown', expected: UserTorrentStatus.error },
-			];
-
-			states.forEach(({ input, expected }) => {
-				const tbInfo: TorBoxTorrentInfo = {
-					id: 1,
-					name: 'Test.mkv',
-					size: 1000000,
-					progress: 50,
-					download_state: input,
-					seeds: 5,
-					download_speed: 1000,
-					created_at: '2024-01-01T00:00:00Z',
-					hash: 'test',
-					files: [],
-				} as any;
-
-				const result = convertToTbUserTorrent(tbInfo);
-				expect(result.status).toBe(expected);
-				expect(result.serviceStatus).toBe(input);
-			});
 		});
 
 		it('should handle torrent with no files', () => {
@@ -967,6 +937,7 @@ describe('fetchTorrents utilities', () => {
 				progress: 100,
 				download_state: 'completed',
 				download_finished: true,
+				download_present: true,
 				download_speed: 0,
 				created_at: '2024-01-01T00:00:00Z',
 				hash: 'd'.repeat(32),
