@@ -5,10 +5,9 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 /**
  * Resolves a player intent without putting the debrid key in a URL.
  *
- * The GET routes next door take `token` as a query parameter, so the key ends up
- * in the address bar of the tab that opens and in every access log between here
- * and the browser. This takes it in the body and hands the intent back as JSON
- * for the caller to navigate to.
+ * Credentials belong in the body, not the query string: URLs can appear in the
+ * address bar and in access logs between here and the browser. This hands the
+ * intent back as JSON for the caller to navigate to.
  *
  * Which of the two resolvers runs is decided by whether the caller already holds
  * a service link: a library torrent's row does, a search result does not.

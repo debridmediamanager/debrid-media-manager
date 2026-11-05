@@ -64,6 +64,8 @@ The final Every Episode totals stay visible until dismissed or until you leave t
 
 Use DMM as a Stremio addon to stream your debrid library directly through Stremio. Includes a Cast addon for sharing your library streams.
 
+Browser player launches use `POST /api/watch/resolve/{os}/{player}` with credentials in the JSON body. The obsolete `GET /api/watch/{os}/{player}` query-token resolver has been removed. Its opt-in HTTP regression runs against an isolated instance with `DMM_ISOLATED_TEST_URL=http://127.0.0.1:<port> npx vitest run --config vitest.live.config.ts src/test/api/watch/removed-route.live.test.ts`.
+
 ### Trakt integration
 
 Sync with your Trakt watchlist, collection, and custom lists to easily add content to your library.

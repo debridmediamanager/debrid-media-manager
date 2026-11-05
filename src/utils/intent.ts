@@ -501,7 +501,7 @@ export const getInstantIntent = async (
 	}
 	if (service === 'ad') {
 		return {
-			error: 'AllDebrid magnets must be prepared in the browser; call /api/watch with a link',
+			error: 'AllDebrid magnets must be prepared in the browser; POST to /api/watch/resolve/{os}/{player} with a link',
 		};
 	}
 	return getRdInstantIntent(key, hash, fileId, ipAddress, os, player, fileName);

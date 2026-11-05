@@ -1,14 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const intentMocks = vi.hoisted(() => ({
-	getIntent: vi.fn(),
 	getInstantIntent: vi.fn(),
 	isWatchService: (v: unknown) => v === 'rd' || v === 'ad' || v === 'tb',
 }));
 
 vi.mock('@/utils/intent', () => intentMocks);
 
-import watchHandler from '@/pages/api/watch/[os]/[player]';
 import instantHandler from '@/pages/api/watch/instant/[os]/[player]';
 
 const createRes = () => {
@@ -25,30 +23,6 @@ beforeEach(() => {
 });
 
 describe('API watch intents', () => {
-	it('redirects when a standard intent exists', async () => {
-		intentMocks.getIntent.mockResolvedValue({ intent: 'app://play' });
-		const res = createRes();
-
-		await watchHandler(
-			{
-				query: { token: 'tok', link: 'link', os: 'ios', player: 'infuse' },
-				headers: { 'x-real-ip': '3.3.3.3' },
-				socket: { remoteAddress: '2.2.2.2' },
-			} as any,
-			res
-		);
-
-		expect(intentMocks.getIntent).toHaveBeenCalledWith(
-			'tok',
-			'link',
-			'3.3.3.3',
-			'ios',
-			'infuse',
-			'rd'
-		);
-		expect(res.redirect).toHaveBeenCalledWith(307, 'app://play');
-	});
-
 	it('returns 500 when the instant intent is missing', async () => {
 		intentMocks.getInstantIntent.mockResolvedValue({ error: 'Failed to add magnet: bad hash' });
 		const res = createRes();
