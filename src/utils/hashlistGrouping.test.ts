@@ -4,7 +4,7 @@ import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { describe, expect, it } from 'vitest';
-import { groupHashlist } from './hashlistGrouping';
+import { bestPerTitle, groupHashlist } from './hashlistGrouping';
 
 // parsed the way the hashlist page parses each row
 const rows = fixture.rows.map(({ hash, filename }) => {
@@ -52,5 +52,25 @@ describe('groupHashlist', () => {
 	it('counts titles, not files', () => {
 		expect(grouping.tvCount).toBe(5);
 		expect(grouping.movieCount).toBe(0);
+	});
+});
+
+describe('bestPerTitle', () => {
+	const grouping = groupHashlist(rows, identified);
+	const scored = (name: string, score: number, bytes = 1) => ({ ...row(name), score, bytes });
+
+	it('keeps the best release of each title, in the order given', () => {
+		const list = [
+			scored('Seikatsu - 84', 10),
+			scored('[AnoZu] Bleach S17E48', 1),
+			scored('Seikatsu - 85', 12),
+			scored('Isekai Nonbiri Nouka 2', 5, 2),
+			scored('Farming Life in Another World S02', 5, 1),
+		];
+		expect(bestPerTitle(list, grouping.keyOf).map((r) => r.filename)).toEqual([
+			'[AnoZu] Bleach S17E48 1080p CR WEB-DL AAC 2.0 H.264 | Bleach Thousand-Year Blood War - The Calamity | Bleach Sennen Kessen-hen - Kashin-tan',
+			'[SubsPlease] Re Zero kara Hajimeru Isekai Seikatsu - 85 (1080p) [C0F3B0D6].mkv',
+			'Isekai Nonbiri Nouka 2 [TV-2] [2026] [WEBRip] [1080p] [RUS + JAP]',
+		]);
 	});
 });

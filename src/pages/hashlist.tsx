@@ -40,7 +40,7 @@ import {
 	convertToTbUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
-import { groupHashlist } from '@/utils/hashlistGrouping';
+import { bestPerTitle, groupHashlist } from '@/utils/hashlistGrouping';
 import { HashlistNotPublishedError, readHashlistFragment } from '@/utils/hashlistSource';
 import {
 	checkAvailabilityOc2,
@@ -170,6 +170,7 @@ function HashlistPage() {
 		[filteredList]
 	);
 	const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
+	const [byTitle, setByTitle] = useState(false);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
 
 	const [rdKey] = useRealDebridAccessToken();
@@ -493,7 +494,12 @@ function HashlistPage() {
 	// list again for every page counter it drew.
 	const sortedList = useMemo(() => {
 		const isAsc = sortBy.direction === 'asc';
-		return [...filteredList].sort((a, b) => {
+		// a title's own filter lists every release of it
+		const shown =
+			byTitle && !router.query.filter
+				? bestPerTitle(filteredList, grouping.keyOf)
+				: filteredList;
+		return [...shown].sort((a, b) => {
 			let comparison = 0;
 			if (a[sortBy.column] > b[sortBy.column]) {
 				comparison = 1;
@@ -502,7 +508,7 @@ function HashlistPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
-	}, [filteredList, sortBy]);
+	}, [filteredList, sortBy, byTitle, grouping, router.query.filter]);
 	const pageCount = Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE));
 	// one page needs no pager, unless a narrowed list left the reader past its end
 	const showPager = pageCount > 1 || currentPage > 1;
@@ -1218,6 +1224,21 @@ function HashlistPage() {
 				>
 					{grouping.tvCount} TV Shows
 				</Link>
+				<button
+					className={`mr-2 mb-2 rounded border-2 ${
+						byTitle
+							? 'border-green-500 bg-green-900/30 text-green-100'
+							: 'border-gray-500 bg-gray-900/30 text-gray-100'
+					} px-2 py-1 transition-colors`}
+					aria-pressed={byTitle}
+					title="One row per title, its best release; its other files chip lists the rest"
+					onClick={() => {
+						setByTitle(!byTitle);
+						setCurrentPage(1);
+					}}
+				>
+					One per title
+				</button>
 				{mounted && (rdKey || adKey || tbKey) && (
 					<button
 						className={`mr-2 mb-2 rounded border-2 ${

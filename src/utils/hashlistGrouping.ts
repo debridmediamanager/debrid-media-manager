@@ -60,3 +60,27 @@ export function groupHashlist(
 	}
 	return { keyOf, kindOf, counts, movieCount: movies.size, tvCount: shows.size };
 }
+
+/**
+ * One row per title: the release with the best score, the larger on a tie. Rows
+ * keep their order otherwise, so a later sort decides what is shown first.
+ */
+export function bestPerTitle<T extends { hash: string; score: number; bytes: number }>(
+	rows: readonly T[],
+	keyOf: ReadonlyMap<string, string>
+): T[] {
+	const best = new Map<string, T>();
+	for (const row of rows) {
+		const key = keyOf.get(row.hash) ?? row.hash;
+		const held = best.get(key);
+		if (
+			!held ||
+			row.score > held.score ||
+			(row.score === held.score && row.bytes > held.bytes)
+		) {
+			best.set(key, row);
+		}
+	}
+	const kept = new Set(best.values());
+	return rows.filter((row) => kept.has(row));
+}

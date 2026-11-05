@@ -1,6 +1,6 @@
 import HashlistPage from '@/pages/hashlist';
 import type { Hashlist } from '@/services/mediasearch';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { readFileSync } from 'fs';
 import lzString from 'lz-string';
 import path from 'path';
@@ -148,5 +148,18 @@ describe('HashlistPage "other files" chip', () => {
 			await screen.findAllByRole('link', { name: 'Avengers: Endgame (2019)' })
 		).toHaveLength(2);
 		expect(screen.getByRole('link', { name: '1 Movies' })).toBeInTheDocument();
+	});
+
+	it('shows one release per title when asked', async () => {
+		render(<HashlistPage />);
+		expect(await screen.findAllByRole('link', { name: '1 other file' })).toHaveLength(2);
+
+		fireEvent.click(screen.getByRole('button', { name: 'One per title' }));
+
+		expect(await screen.findAllByRole('link', { name: '1 other file' })).toHaveLength(1);
+		expect(screen.getByRole('button', { name: 'One per title' })).toHaveAttribute(
+			'aria-pressed',
+			'true'
+		);
 	});
 });
