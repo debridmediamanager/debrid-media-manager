@@ -40,6 +40,8 @@ On Real-Debrid, Save Selection leaves a cached torrent intact when a strict subs
 
 Shared progress and error notifications let pointer clicks reach the controls underneath them; dismissible episode summaries remain interactive. Backup restores count provider refusals as failures and finish their progress notification even if the final library refresh fails.
 
+Shared transfer polling exposes public progress, not provider account identities or internal uploader paths. Cancelling a debrid transfer requires the destination owner's verified Real-Debrid credential in `x-rd-api-key`; knowing a job ID is not authorization. Legacy jobs without verifiable ownership cannot be cancelled through this integration.
+
 Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
 
 ### Torrent search

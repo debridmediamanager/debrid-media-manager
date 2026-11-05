@@ -4,6 +4,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { addHashToRd } from '@/services/requestDelivery';
 import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
+import { publicDebridJob } from '@/utils/publicDebridJob';
 import { isSponsorRequest } from '@/utils/requireSponsor';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { safeReturnPath } from '@/utils/transferContext';
@@ -149,7 +150,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					.catch((e) => console.error('Recording transfer context failed:', e)),
 			]);
 		}
-		return res.status(response.status).json(data);
+		return res.status(response.status).json(publicDebridJob(data));
 	}
 
 	return res.status(502).json({

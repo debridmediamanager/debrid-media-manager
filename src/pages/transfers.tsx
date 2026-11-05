@@ -238,7 +238,7 @@ export default function TransfersPage() {
 		try {
 			if (row.source === 'nzb2rd')
 				await deleteNzb2rdJob(row.id, row.releaseId, rdKey ?? undefined);
-			else await deleteDebridUploaderJob(row.id);
+			else await deleteDebridUploaderJob(row.id, rdKey ?? undefined);
 			setTransfers((prev) => prev.filter((t) => t.id !== row.id));
 			toast.success(terminal ? 'Transfer cleared.' : 'Transfer cancelled.');
 		} catch (error) {

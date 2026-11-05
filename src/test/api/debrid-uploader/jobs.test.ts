@@ -195,3 +195,24 @@ describe('POST /api/debrid-uploader/jobs — a release whose last transfer was c
 		);
 	});
 });
+
+describe('POST /api/debrid-uploader/jobs — public payload', () => {
+	it('never returns provider ownership or internal paths from a created job', async () => {
+		global.fetch = vi.fn().mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					id: 'job-1',
+					status: 'pending',
+					rd_user_id: 'rd:123',
+					tb_user_id: 'tb:456',
+					webseed_url: 'http://internal/secret',
+					torrent_path: '/private/torrent',
+				}),
+				{ status: 201 }
+			)
+		);
+		const res = await post(validBody());
+		expect(res._getStatusCode()).toBe(201);
+		expect(res._getData()).toEqual({ id: 'job-1', status: 'pending' });
+	});
+});

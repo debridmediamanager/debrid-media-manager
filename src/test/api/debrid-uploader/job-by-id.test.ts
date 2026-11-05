@@ -1,4 +1,5 @@
 import handler from '@/pages/api/debrid-uploader/jobs/[id]';
+import { getCurrentUser } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import { registerCompletedDebridJob } from '@/services/transferRegistration';
 import cancelledPending from '@/test/fixtures/debridUploader/job-cancelled-pending.json';
@@ -7,6 +8,7 @@ import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/realDebrid', () => ({ getCurrentUser: vi.fn() }));
 vi.mock('@/services/transferRegistration', () => ({
 	registerCompletedDebridJob: vi.fn().mockResolvedValue(true),
 }));
@@ -59,16 +61,30 @@ describe('GET /api/debrid-uploader/jobs/[id] for a cancelled job', () => {
 		expect(res._getData()).toMatchObject({ status: 'uploading', error: null });
 	});
 
-	it('passes the uploader answer to a cancel through untouched', async () => {
-		global.fetch = vi.fn().mockResolvedValue({
-			ok: true,
-			status: 200,
-			json: async () => ({ ok: true }),
-		}) as any;
-		const req = createMockRequest({ method: 'DELETE', query: { id: cancelledUploading.id } });
+	it('allows the destination owner to cancel a job', async () => {
+		vi.mocked(getCurrentUser).mockResolvedValue({
+			id: 123,
+			username: 'owner',
+			email: 'owner@example.invalid',
+			points: 0,
+			locale: 'en',
+			avatar: '',
+			type: 'premium',
+			premium: 1,
+			expiration: '',
+		});
+		global.fetch = vi
+			.fn()
+			.mockResolvedValueOnce(new Response(JSON.stringify({ rd_user_id: 'rd:123' })))
+			.mockResolvedValueOnce(new Response(JSON.stringify({ ok: true })));
+		const req = createMockRequest({
+			method: 'DELETE',
+			query: { id: cancelledUploading.id },
+			headers: { 'x-rd-api-key': 'owner-key' },
+		});
 		const res = createMockResponse();
-		await handler(req as any, res as any);
-
+		await handler(req, res);
+		expect(res._getStatusCode()).toBe(200);
 		expect(res._getData()).toEqual({ ok: true });
 	});
 });

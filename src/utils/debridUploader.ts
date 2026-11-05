@@ -12,19 +12,13 @@ import {
 } from './transferPhase';
 
 export type DebridUploaderJobStatus =
-	| 'pending'
-	| 'downloading'
-	| 'preparing'
-	| 'uploading'
-	| 'completed'
-	| 'failed';
+	'pending' | 'downloading' | 'preparing' | 'uploading' | 'completed' | 'failed';
 
 export interface DebridUploaderJob {
 	id: string;
 	status: DebridUploaderJobStatus;
 	status_message?: string | null;
 	error?: string | null;
-	rd_torrent_id?: string | null;
 	info_hash?: string | null;
 	name?: string | null;
 	/** Place in line, sent only while the job is still waiting to start. */
@@ -96,12 +90,7 @@ export async function createDebridUploaderJob(
 }
 
 export type TransferOutcome =
-	| 'started'
-	| 'completed'
-	| 'duplicate'
-	| 'failed'
-	| 'timeout'
-	| 'error';
+	'started' | 'completed' | 'duplicate' | 'failed' | 'timeout' | 'error';
 
 // A finished transfer lands in the RD account of whoever's key created the job,
 // so joining somebody else's transfer only puts the content in *this* user's RD
@@ -505,9 +494,10 @@ export async function getDebridUploaderJob(
 	return parseJsonResponse(response);
 }
 
-export async function deleteDebridUploaderJob(jobId: string): Promise<void> {
+export async function deleteDebridUploaderJob(jobId: string, rdKey?: string): Promise<void> {
 	const response = await fetch(`/api/debrid-uploader/jobs/${encodeURIComponent(jobId)}`, {
 		method: 'DELETE',
+		headers: rdKey ? { 'x-rd-api-key': rdKey } : undefined,
 	});
 	await parseJsonResponse(response);
 }

@@ -2,6 +2,7 @@ import { toast } from 'react-hot-toast';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	createDebridUploaderJob,
+	deleteDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
 	isDuplicateResponse,
 	isTerminalDebridUploaderStatus,
@@ -46,6 +47,18 @@ beforeEach(() => {
 
 afterEach(() => {
 	vi.unstubAllGlobals();
+});
+
+describe('debridUploader cancellation', () => {
+	it('sends the caller credential in a header, never the URL', async () => {
+		const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true })));
+		vi.stubGlobal('fetch', fetchMock);
+		await deleteDebridUploaderJob('job-1', 'owner-key');
+		expect(fetchMock).toHaveBeenCalledWith('/api/debrid-uploader/jobs/job-1', {
+			method: 'DELETE',
+			headers: { 'x-rd-api-key': 'owner-key' },
+		});
+	});
 });
 
 describe('debridUploader job tracking', () => {
