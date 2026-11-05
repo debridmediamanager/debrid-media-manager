@@ -1,6 +1,12 @@
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { describe, expect, it, vi } from 'vitest';
-import { IDENTIFY_BATCH, identifiable, identifiedTitle, identifyLibrary } from './libraryIdentify';
+import {
+	identifiable,
+	identifiedTitle,
+	IDENTIFY_BATCH,
+	identifyLibrary,
+	STORED_ROUTE,
+} from './libraryIdentify';
 
 const torrent = (id: string, filename: string, mediaType: UserTorrent['mediaType'] = 'movie') =>
 	({ id, filename, hash: `${id}hash`, mediaType }) as unknown as UserTorrent;
@@ -123,5 +129,31 @@ describe('identifiedTitle', () => {
 			'Breaking Bad (2008) ➡️ S01 to S05'
 		);
 		expect(identifiedTitle({ ...found, year: null }, 'breaking bad')).toBe('Breaking Bad');
+	});
+});
+
+describe('the stored-answers route', () => {
+	it('takes a whole list in batches of its own size', async () => {
+		const items = Array.from({ length: STORED_ROUTE.batch + 1 }, (_, i) =>
+			torrent(`rd:${i}`, `M.${i}.2020`)
+		);
+		const post = vi.fn(async () => new Response(JSON.stringify({ results: [] })));
+
+		await identifyLibrary(
+			items,
+			vi.fn(),
+			post as unknown as typeof fetch,
+			undefined,
+			STORED_ROUTE
+		);
+
+		expect(post.mock.calls.map((c) => (c as unknown[])[0])).toEqual([
+			'/api/library/identified',
+			'/api/library/identified',
+		]);
+		const sizes = post.mock.calls.map(
+			(c) => JSON.parse(((c as unknown[])[1] as RequestInit).body as string).items.length
+		);
+		expect(sizes).toEqual([STORED_ROUTE.batch, 1]);
 	});
 });

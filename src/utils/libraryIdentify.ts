@@ -27,10 +27,14 @@ export function identifiable(torrent: IdentifyItem): boolean {
 	);
 }
 
+/** The stored-answers route: the identifier is never asked, so a whole list fits. */
+export const STORED_ROUTE = { url: '/api/library/identified', batch: 5000 };
+const IDENTIFY_ROUTE = { url: '/api/library/identify', batch: IDENTIFY_BATCH };
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Ask /api/library/identify about `torrents` in batches, handing each batch's
+ * Ask /api/library/identify (or `route`) about `torrents` in batches, handing each batch's
  * confident matches (by library id) to `onFound` as it lands. A batch the rate
  * limit refuses waits out its Retry-After and is asked again, so a library past
  * ten batches is named in full rather than cut off; any other failure skips the
@@ -40,13 +44,14 @@ export async function identifyLibrary(
 	torrents: IdentifyItem[],
 	onFound: (found: Record<string, LibraryIdentification>) => void,
 	post: typeof fetch = fetch,
-	wait: (ms: number) => Promise<unknown> = sleep
+	wait: (ms: number) => Promise<unknown> = sleep,
+	route = IDENTIFY_ROUTE
 ): Promise<void> {
-	for (let at = 0; at < torrents.length; at += IDENTIFY_BATCH) {
-		const batch = torrents.slice(at, at + IDENTIFY_BATCH);
+	for (let at = 0; at < torrents.length; at += route.batch) {
+		const batch = torrents.slice(at, at + route.batch);
 		for (let refusals = 0; refusals < MAX_REFUSALS; refusals++) {
 			try {
-				const response = await post('/api/library/identify', {
+				const response = await post(route.url, {
 					method: 'POST',
 					headers: { 'content-type': 'application/json' },
 					body: JSON.stringify({

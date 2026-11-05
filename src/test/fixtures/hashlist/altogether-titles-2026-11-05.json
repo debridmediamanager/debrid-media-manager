@@ -1,0 +1,65 @@
+{
+	"rows": [
+		{
+			"hash": "0e2dabf4c2be286ba6c4e6699c0055d9aa57e582",
+			"filename": "Isekai Nonbiri Nouka 2 [TV-2] [2026] [WEBRip] [1080p] [RUS + JAP]",
+			"identified": {
+				"imdbId": "tt19223420",
+				"title": "Farming Life in Another World",
+				"year": 2023,
+				"kind": "tv"
+			}
+		},
+		{
+			"hash": "fe24b57393a8043d014d528d34550f47db171de3",
+			"filename": "[GapMoe] Farming Life in Another World S02 1080p AMZN WEB-DL Dual-Audio DD+ 2.0 Atmos H.264",
+			"identified": {
+				"imdbId": "tt19223420",
+				"title": "Farming Life in Another World",
+				"year": 2023,
+				"kind": "tv"
+			}
+		},
+		{
+			"hash": "94c444a4bc927632eda82dce51f0e2fe01ccbac8",
+			"filename": "[SubsPlease] Re Zero kara Hajimeru Isekai Seikatsu - 85 (1080p) [C0F3B0D6].mkv",
+			"identified": {
+				"imdbId": "tt5607616",
+				"title": "Re: Zero - Starting Life in Another World",
+				"year": 2016,
+				"kind": "tv"
+			}
+		},
+		{
+			"hash": "2d1bcb4930b86476406ea018137c0a464ee70e15",
+			"filename": "[SubsPlease] Re Zero kara Hajimeru Isekai Seikatsu - 84 (1080p) [5188BBC4].mkv",
+			"identified": null
+		},
+		{
+			"hash": "614bb746504529004ff5b2557bf2f454aad7d6ee",
+			"filename": "Bleach S17E45 Thousand-Year Blood War DEFEND YOU 1080p DSNP WEB-DL AAC2.0 H 264-NTb",
+			"identified": {
+				"imdbId": "tt0434665",
+				"title": "Bleach",
+				"year": 2004,
+				"kind": "tv"
+			}
+		},
+		{
+			"hash": "cf1b24f388ef25b388b0dd36827e415f1dd6969d",
+			"filename": "Bleach S17E39 Thousand Year Blood War The Visible Answer REPACK 1080p DSNP WEB DL AAC2 0 H 264 NTb EZTV",
+			"identified": {
+				"imdbId": "tt14986406",
+				"title": "Bleach: Thousand-Year Blood War",
+				"year": 2022,
+				"kind": "tv"
+			}
+		},
+		{
+			"hash": "43c032134862f15229c0cfac32f1c083d92ace07",
+			"filename": "[AnoZu] Bleach S17E48 1080p CR WEB-DL AAC 2.0 H.264 | Bleach Thousand-Year Blood War - The Calamity | Bleach Sennen Kessen-hen - Kashin-tan",
+			"identified": null
+		}
+	],
+	"source": "debridmediamanager/hashlists lists/b7f79e70-66f1-4ca5-ae12-d8f9a1d2798e.txt; answers stored in HashIdentification 2026-11-05"
+}

@@ -26,9 +26,9 @@ export interface IdentificationItem {
 	titleKey: string;
 }
 
-function parseItems(body: unknown): IdentificationItem[] | null {
+export function parseItems(body: unknown, max = MAX_ITEMS): IdentificationItem[] | null {
 	const items = (body as { items?: unknown } | undefined)?.items;
-	if (!Array.isArray(items) || items.length === 0 || items.length > MAX_ITEMS) return null;
+	if (!Array.isArray(items) || items.length === 0 || items.length > max) return null;
 	const out: IdentificationItem[] = [];
 	for (const item of items) {
 		const { hash, filename, kind } = (item ?? {}) as {
@@ -147,24 +147,15 @@ export async function identifyItems(
 	const toStore: FilenameIdentification[] = [];
 	const results = items.map((item): LibraryIdentification | null => {
 		const row = known(item);
-		if (row) {
-			return row.confident && row.imdbId
-				? {
-						imdbId: row.imdbId,
-						title: row.title ?? '',
-						year: row.year,
-						kind: row.kind === 'tv' ? 'tv' : 'movie',
-					}
-				: null;
-		}
+		if (row) return storedIdentification(row);
 		const answer = fresh.get(item.filename);
 		if (!answer) return null;
 		const top = answer.matches[0];
 		const kind = answer.kind ?? 'movie';
 		const confident = Boolean(
 			top &&
-				!refused(item.filename, answer) &&
-				(answer.confident || (item.hash && agrees(answer, mapped.get(item.hash))))
+			!refused(item.filename, answer) &&
+			(answer.confident || (item.hash && agrees(answer, mapped.get(item.hash))))
 		);
 		if (item.hash) {
 			toStore.push({
@@ -195,6 +186,18 @@ export async function identifyItems(
 	}
 
 	return { results, complete: missing.length === 0 || answers !== null };
+}
+
+/** A stored answer as the page reads it: null unless it was confident. */
+export function storedIdentification(row: FilenameIdentification): LibraryIdentification | null {
+	return row.confident && row.imdbId
+		? {
+				imdbId: row.imdbId,
+				title: row.title ?? '',
+				year: row.year,
+				kind: row.kind === 'tv' ? 'tv' : 'movie',
+			}
+		: null;
 }
 
 /**

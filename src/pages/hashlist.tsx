@@ -40,6 +40,7 @@ import {
 	convertToTbUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { groupHashlist } from '@/utils/hashlistGrouping';
 import { HashlistNotPublishedError, readHashlistFragment } from '@/utils/hashlistSource';
 import {
 	checkAvailabilityOc2,
@@ -53,6 +54,7 @@ import {
 	identifiable,
 	identifiedTitle,
 	identifyLibrary,
+	STORED_ROUTE,
 	type LibraryIdentification,
 } from '@/utils/libraryIdentify';
 import { getMediaId } from '@/utils/mediaId';
@@ -183,13 +185,19 @@ function HashlistPage() {
 	} = useLibraryCache();
 
 	const [currentPage, setCurrentPage] = useState(1);
-	const [movieCount, setMovieCount] = useState<number>(0);
-	const [tvCount, setTvCount] = useState<number>(0);
-	const [movieGrouping] = useState<Record<string, number>>({});
-	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
-	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [hasDupes] = useState<Array<string>>([]);
-	const [totalBytes, setTotalBytes] = useState<number>(0);
+	const totalBytes = useMemo(
+		() => userTorrentsList.reduce((sum, t) => sum + t.bytes, 0),
+		[userTorrentsList]
+	);
+	// Named by hash: the stored answers for the whole list once it loads, then the
+	// identifier for the rows on screen.
+	const [identifications, setIdentifications] = useState<Record<string, LibraryIdentification>>(
+		{}
+	);
+	const grouping = useMemo(
+		() => groupHashlist(userTorrentsList, identifications),
+		[userTorrentsList, identifications]
+	);
 
 	// Hashlist navigation state (for browsing hashlists from /hashlists page)
 	const [navState, setNavState] = useState<{
@@ -394,38 +402,6 @@ function HashlistPage() {
 	const notInLibrary = (service: string, hash: string) =>
 		!(`${service}:${hash}` in hashAndProgress);
 
-	// aggregate metadata
-	useEffect(() => {
-		setMovieCount(0);
-		setTvCount(0);
-		setTotalBytes(0);
-
-		let tmpTotalBytes = 0;
-		clearGroupings(movieGrouping);
-		clearGroupings(tvGroupingByEpisode);
-		for (const t of userTorrentsList) {
-			tmpTotalBytes += t.bytes;
-			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1) hasDupes.push(t.title);
-				getGroupings(t.mediaType)[t.title]++;
-			} else {
-				getGroupings(t.mediaType)[t.title] = 1;
-			}
-			if (t.mediaType === 'tv') {
-				if (t.title in tvGroupingByTitle) {
-					tvGroupingByTitle[t.title]++;
-				} else {
-					tvGroupingByTitle[t.title] = 1;
-				}
-			}
-		}
-
-		setMovieCount(Object.keys(movieGrouping).length);
-		setTvCount(Object.keys(tvGroupingByTitle).length);
-		setTotalBytes(tmpTotalBytes);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userTorrentsList]);
-
 	// set the list you see
 	// The library's hashes, read once and reused until the library changes:
 	// every availability batch re-filters the list, and each read pulls every
@@ -481,11 +457,16 @@ function HashlistPage() {
 		const { filter: titleFilter, mediaType } = router.query;
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
-			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
+			// a title key, or a parsed title from a link made before titles had keys
+			tmpList = tmpList.filter(
+				(t) =>
+					grouping.keyOf.get(t.hash) === decodedTitleFilter ||
+					t.title === decodedTitleFilter
+			);
 			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (mediaType) {
-			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
+			tmpList = tmpList.filter((t) => mediaType === grouping.kindOf.get(t.hash));
 			setFilteredList(applyQuickSearch(tmpList));
 		}
 	}
@@ -496,8 +477,7 @@ function HashlistPage() {
 		searchQuery,
 		libraryFetchTime,
 		userTorrentsList,
-		movieGrouping,
-		tvGroupingByEpisode,
+		grouping,
 		router.query,
 		showOnlyAvailable,
 	]);
@@ -537,10 +517,25 @@ function HashlistPage() {
 	// Name the rows on screen only: a list runs to 176k rows and the route takes
 	// 5,000 a minute. The page settles first, since every availability batch
 	// reshuffles it, and each hash is asked about once per visit.
-	const [identifications, setIdentifications] = useState<Record<string, LibraryIdentification>>(
-		{}
-	);
 	const askedIdentify = useRef(new Set<string>());
+	useEffect(() => {
+		const todo = userTorrentsList
+			.map((t) => ({
+				id: t.hash,
+				filename: t.filename,
+				hash: t.hash,
+				mediaType: t.mediaType,
+			}))
+			.filter(identifiable);
+		if (todo.length === 0) return;
+		const found = (named: Record<string, LibraryIdentification>) => {
+			Object.keys(named).forEach((hash) => askedIdentify.current.add(hash));
+			setIdentifications((prev) => ({ ...prev, ...named }));
+		};
+		identifyLibrary(todo, found, fetch, undefined, STORED_ROUTE);
+		// once per list: listHashes is set when the whole list has loaded
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [listHashes]);
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			const todo = currentPageData()
@@ -559,15 +554,6 @@ function HashlistPage() {
 		return () => clearTimeout(timer);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortedList, currentPage]);
-
-	const getGroupings = (mediaType: EnrichedHashlistTorrent['mediaType']) =>
-		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
-
-	function clearGroupings(frequencyMap: { [x: string]: number }) {
-		for (let key in frequencyMap) {
-			delete frequencyMap[key];
-		}
-	}
 
 	function wrapDownloadFilesInRdFn(t: EnrichedHashlistTorrent) {
 		return async () => {
@@ -1224,13 +1210,13 @@ function HashlistPage() {
 					href="/hashlist?mediaType=movie"
 					className="mr-2 mb-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
-					{movieCount} Movies
+					{grouping.movieCount} Movies
 				</Link>
 				<Link
 					href="/hashlist?mediaType=tv"
 					className="mr-2 mb-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
-					{tvCount} TV Shows
+					{grouping.tvCount} TV Shows
 				</Link>
 				{mounted && (rdKey || adKey || tbKey) && (
 					<button
@@ -1379,8 +1365,8 @@ function HashlistPage() {
 					</thead>
 					<tbody className="max-sm:block">
 						{currentPageData().map((t, i) => {
-							// grouped by title in the aggregate above, so looked up by title
-							const groupCount = getGroupings(t.mediaType)[t.title];
+							const titleKey = grouping.keyOf.get(t.hash) ?? t.title;
+							const groupCount = grouping.counts.get(titleKey) ?? 0;
 							const found = identifications[t.hash];
 							const filterText =
 								groupCount > 1 && !router.query.filter
@@ -1405,7 +1391,7 @@ function HashlistPage() {
 										{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
 											<>
 												<span className="cursor-pointer">
-													{(found?.kind ?? t.mediaType) === 'tv' ? (
+													{grouping.kindOf.get(t.hash) === 'tv' ? (
 														<Tv className="inline-block h-4 w-4 text-cyan-400" />
 													) : (
 														<Film className="inline-block h-4 w-4 text-yellow-400" />
@@ -1445,7 +1431,7 @@ function HashlistPage() {
 												{filterText && (
 													<Link
 														href={`/hashlist?filter=${encodeURIComponent(
-															t.title
+															titleKey
 														)}`}
 														className="inline-block cursor-pointer rounded border-2 border-green-500 bg-green-900/30 px-1 py-0 text-xs text-green-100 transition-colors hover:bg-green-800/50"
 														onClick={(e) => e.stopPropagation()}

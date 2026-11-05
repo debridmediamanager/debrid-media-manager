@@ -47,6 +47,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// costs the identifier about 8 ms of CPU, so this caps an address at 5,000 a
 	// minute.
 	libraryIdentify: { name: 'libraryIdentify', rateLimit: 10, windowSeconds: 60 },
+	// The hashlist page's stored answers only: 5,000 rows a call, 25,000 a minute,
+	// so a 23k-row list is named in one minute and no faster.
+	libraryIdentified: { name: 'libraryIdentified', rateLimit: 5, windowSeconds: 60 },
 	// The sponsor API caps an address at 2,500 items a minute on each endpoint. The
 	// limiter counts calls, so each budget is 2,500 over the endpoint's batch cap:
 	// 500 filenames per identify call, 100 hashes per availability and mediainfo call.

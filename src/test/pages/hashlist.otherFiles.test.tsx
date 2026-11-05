@@ -30,6 +30,15 @@ const FRAGMENT = lzString.compressToEncodedURIComponent(
 	})
 );
 
+// Naming rows is its own concern (libraryIdentify.test.ts); here it never answers.
+const identify = vi.hoisted(() => ({ named: {} as Record<string, unknown> }));
+vi.mock('@/utils/libraryIdentify', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/libraryIdentify')>()),
+	identifyLibrary: vi.fn(async (_rows: unknown, onFound: (found: unknown) => void) => {
+		if (Object.keys(identify.named).length) onFound(identify.named);
+	}),
+}));
+
 vi.mock('next/router', () => ({
 	useRouter: vi.fn(() => ({
 		push: vi.fn(),
@@ -103,6 +112,7 @@ describe('HashlistPage "other files" chip', () => {
 			value: { hash: `#${FRAGMENT}`, reload: vi.fn() },
 		});
 		vi.spyOn(window.sessionStorage.__proto__, 'getItem').mockReturnValue(null);
+		identify.named = {};
 	});
 
 	// The counts were stored by title and read by filename, so the chip never
@@ -118,5 +128,25 @@ describe('HashlistPage "other files" chip', () => {
 				`/hashlist?filter=${encodeURIComponent('Avengers Endgame (2019)')}`
 			);
 		}
+	});
+
+	it('links to the title the identifier names, and counts it once', async () => {
+		const endgame = {
+			imdbId: 'tt4154796',
+			title: 'Avengers: Endgame',
+			year: 2019,
+			kind: 'movie',
+		};
+		identify.named = Object.fromEntries([...ENDGAME].map((hash) => [hash, endgame]));
+		render(<HashlistPage />);
+
+		const chips = await screen.findAllByRole('link', { name: '1 other file' });
+		expect(chips).toHaveLength(2);
+		for (const chip of chips)
+			expect(chip).toHaveAttribute('href', '/hashlist?filter=tt4154796');
+		expect(
+			await screen.findAllByRole('link', { name: 'Avengers: Endgame (2019)' })
+		).toHaveLength(2);
+		expect(screen.getByRole('link', { name: '1 Movies' })).toBeInTheDocument();
 	});
 });

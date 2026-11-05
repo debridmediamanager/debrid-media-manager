@@ -4,6 +4,15 @@ import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import list from '../fixtures/hashlist/fe6e0436-b0c4-4163-9fbd-86a25a274396.json';
 
+// Naming rows is its own concern (libraryIdentify.test.ts); here it never answers.
+const identify = vi.hoisted(() => ({ named: {} as Record<string, unknown> }));
+vi.mock('@/utils/libraryIdentify', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/libraryIdentify')>()),
+	identifyLibrary: vi.fn(async (_rows: unknown, onFound: (found: unknown) => void) => {
+		if (Object.keys(identify.named).length) onFound(identify.named);
+	}),
+}));
+
 vi.mock('next/router', () => ({
 	useRouter: vi.fn(() => ({
 		push: vi.fn(),
