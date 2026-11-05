@@ -2,6 +2,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
+import { mostlyVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 function isValidTorrentHash(hash: string): boolean {
@@ -104,6 +105,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					error: 'Invalid file structure. Each file must have n (name) and s (size)',
 				});
 			}
+		}
+
+		if (
+			statusCode === 4 &&
+			!mostlyVideo(
+				files.map((file: { n: string; s: number }) => ({ path: file.n, bytes: file.s }))
+			)
+		) {
+			return res.status(400).json({ error: 'Only films and shows are recorded' });
 		}
 
 		// Store in database

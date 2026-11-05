@@ -90,6 +90,9 @@ export function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
 	return null;
 }
 
+/** The links AllDebrid hands out for a file; a Debridio marker or a missing link is not one. */
+const AD_LINK_PREFIX = 'https://alldebrid.com/f/';
+
 /** `Cache` keys marking a release removed from `Available`; see `removeAvailability`. */
 const EVICTED_PREFIX = 'avevicted:';
 
@@ -803,6 +806,34 @@ export class AvailabilityService extends DatabaseClient {
 		}
 
 		const episodeInfo = extractEpisodeInfo(filename);
+		// `link` keys the file table, so a file sent without one gets a key of its own
+		const fileRows = files.map((file, index) => {
+			const fileEpisodeInfo = episodeOfFile(file.n);
+			return {
+				link: file.l || `adnolink:${normalizedHash}:${index}`,
+				file_id: index,
+				path: file.n,
+				bytes: BigInt(file.s),
+				season: fileEpisodeInfo?.season,
+				episode: fileEpisodeInfo?.episode,
+			};
+		});
+		// A release already Ready with real links keeps them: AllDebrid cannot be asked from
+		// here, and Stremio serves these links under the release's title, so a sighting may
+		// confirm a release but not swap its links. A regressed magnet's dead links go with
+		// the not-Ready report above, and the next Ready sighting brings fresh ones.
+		const existing = await this.prisma.availableAd.findUnique({
+			where: { hash: normalizedHash },
+			select: {
+				status: true,
+				files: {
+					where: { link: { startsWith: AD_LINK_PREFIX } },
+					select: { link: true },
+					take: 1,
+				},
+			},
+		});
+		const keepFiles = existing?.status === 'Ready' && existing.files.length > 0;
 
 		const name = clipToVarchar(filename);
 		return this.prisma.availableAd.upsert({
@@ -822,20 +853,7 @@ export class AvailabilityService extends DatabaseClient {
 				episode: episodeInfo?.episode,
 				verifiedAt: new Date(),
 				verificationCount: { increment: 1 },
-				files: {
-					deleteMany: {},
-					create: files.map((file, index) => {
-						const fileEpisodeInfo = episodeOfFile(file.n);
-						return {
-							link: file.l,
-							file_id: index,
-							path: file.n,
-							bytes: BigInt(file.s),
-							season: fileEpisodeInfo?.season,
-							episode: fileEpisodeInfo?.episode,
-						};
-					}),
-				},
+				...(keepFiles ? {} : { files: { deleteMany: {}, create: fileRows } }),
 			},
 			create: {
 				hash: normalizedHash,
@@ -851,19 +869,7 @@ export class AvailabilityService extends DatabaseClient {
 				ended: new Date(completionDate * 1000),
 				season: episodeInfo?.season,
 				episode: episodeInfo?.episode,
-				files: {
-					create: files.map((file, index) => {
-						const fileEpisodeInfo = episodeOfFile(file.n);
-						return {
-							link: file.l,
-							file_id: index,
-							path: file.n,
-							bytes: BigInt(file.s),
-							season: fileEpisodeInfo?.season,
-							episode: fileEpisodeInfo?.episode,
-						};
-					}),
-				},
+				files: { create: fileRows },
 			},
 		});
 	}

@@ -31,6 +31,27 @@ describe('/api/availability/ad', () => {
 		mockRepository.upsertAvailabilityAd = vi.fn().mockResolvedValue(undefined);
 	});
 
+	// The library visit refused a release mostly of audio (AD's 104 GB "music" folder, filed
+	// as Music (2021)), but a title-page add sent it straight through and the route took it.
+	it('refuses a Ready release that is not mostly video', async () => {
+		const res = createMockResponse();
+		await handler(
+			createMockRequest({
+				method: 'POST',
+				headers: { 'sec-fetch-site': 'same-origin' },
+				body: buildBody({
+					files: [
+						{ n: 'music/01 Track.flac', s: 90_000_000, l: '' },
+						{ n: 'music/bonus.mpg', s: 10_000_000, l: '' },
+					],
+				}),
+			}),
+			res
+		);
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(mockRepository.upsertAvailabilityAd).not.toHaveBeenCalled();
+	});
+
 	it('rejects non-POST methods', async () => {
 		const req = createMockRequest({ method: 'GET' });
 		const res = createMockResponse();
