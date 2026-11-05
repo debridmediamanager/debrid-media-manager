@@ -105,8 +105,12 @@ const cases = [
 const shapes = ['envelope', 'perMagnet'] as const;
 const matrix = shapes.flatMap((shape) => cases.map(([code, msg]) => [shape, code, msg] as const));
 
-const answer = (shape: (typeof shapes)[number], code: string) =>
-	postMock.mockResolvedValue({ data: (bodies as any)[shape][code] });
+const answer = (shape: (typeof shapes)[number], code: (typeof cases)[number][0]) =>
+	postMock.mockImplementation(async (url: string) => ({
+		data: url.endsWith('/magnet/status')
+			? { status: 'success', data: { magnets: [] } }
+			: bodies[shape][code],
+	}));
 
 describe('AllDebrid refused adds name the reason (Fizzy #363)', () => {
 	beforeEach(() => {

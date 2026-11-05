@@ -128,6 +128,7 @@ vi.mock('@/services/allDebrid', async (importOriginal) => ({
 		magnets: [{ id: 123, hash: 'testhash' }],
 	}),
 	getMagnetStatus: vi.fn().mockResolvedValue({
+		status: 'success',
 		data: {
 			magnets: [
 				{
@@ -665,6 +666,38 @@ describe('Library backup restore to AllDebrid', () => {
 		expect(result).toEqual({ success: 3, notCached: 0, error: 0 });
 		expect(summary).toBe('Restored 3; 0 failed in AD library. Refreshing in 10s.');
 		expect(mockAd.deleteMagnetAd).not.toHaveBeenCalled();
+	});
+	it('skips an AD hash already in the library regardless of hash casing', async () => {
+		const owned = adRestore.uploads.find((upload) => !upload.ready)!;
+		const previousItems = mockLibraryCache.libraryItems;
+		mockLibraryCache.libraryItems = [
+			{
+				id: `ad:${owned.id}`,
+				hash: owned.hash.toUpperCase(),
+				filename: owned.name,
+				title: owned.name,
+				bytes: owned.size,
+				progress: 0,
+				status: UserTorrentStatus.downloading,
+				serviceStatus: 'Downloading',
+				added: new Date('2026-11-05T00:00:00Z'),
+				mediaType: 'other',
+				links: [],
+				selectedFiles: [],
+				seeders: 1,
+				speed: 0,
+			},
+		];
+		try {
+			const { result } = await restoreThroughDialog(false);
+			expect(result).toEqual({ success: 1, notCached: 1, error: 0 });
+			expect(mockAd.uploadMagnetAd.mock.calls.map((call) => call[1])).not.toContain(
+				owned.hash
+			);
+			expect(mockAd.deleteMagnetAd.mock.calls.map((call) => call[1])).not.toContain(owned.id);
+		} finally {
+			mockLibraryCache.libraryItems = previousItems;
+		}
 	});
 });
 

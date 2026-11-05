@@ -1259,7 +1259,9 @@ function TorrentsPage() {
 
 	async function wrapLocalRestoreFn(debridService: string) {
 		const serviceHashes = new Set(
-			userTorrentsList.filter((t) => t.id.startsWith(`${debridService}:`)).map((t) => t.hash)
+			userTorrentsList
+				.filter((t) => t.id.startsWith(`${debridService}:`))
+				.map((t) => t.hash.toLowerCase())
 		);
 
 		const result = await Modal.fire({
@@ -1314,7 +1316,9 @@ function TorrentsPage() {
 								evt.target?.result as string
 							);
 							const total = files.length;
-							const skipped = files.filter((f) => serviceHashes.has(f.hash)).length;
+							const skipped = files.filter((f) =>
+								serviceHashes.has(f.hash.toLowerCase())
+							).length;
 							const newCount = total - skipped;
 							document.getElementById('restore-stats')?.classList.remove('hidden');
 							document.getElementById('restore-total')!.textContent = String(total);
@@ -1324,7 +1328,7 @@ function TorrentsPage() {
 
 							const newHashes = files
 								.map((f) => f.hash)
-								.filter((h) => !serviceHashes.has(h));
+								.filter((h) => !serviceHashes.has(h.toLowerCase()));
 							if (newHashes.length === 0) return;
 
 							// Only TorBox can check availability before adding, so only it fills #cached-status.
@@ -1448,7 +1452,9 @@ function TorrentsPage() {
 			notCached: number;
 			error: number;
 		}> => {
-			const newHashes = files.map((f) => f.hash).filter((h) => !serviceHashes.has(h));
+			const newHashes = files
+				.map((f) => f.hash)
+				.filter((h) => !serviceHashes.has(h.toLowerCase()));
 
 			if (newHashes.length === 0) {
 				return { success: 0, notCached: 0, error: 0 };

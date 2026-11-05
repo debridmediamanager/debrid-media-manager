@@ -1,4 +1,5 @@
 import {
+	getMagnetStatus,
 	getMagnetStatusAd,
 	isAdMagnetInstant,
 	restartMagnet,
@@ -872,6 +873,13 @@ describe('addMagnet utilities', () => {
 	describe('handleAddAsMagnetInAd', () => {
 		const adKey = 'test-ad-key';
 		const hash = 'test-hash';
+
+		beforeEach(() => {
+			vi.mocked(getMagnetStatus).mockResolvedValue({
+				status: 'success',
+				data: { magnets: [] },
+			});
+		});
 
 		it('should successfully add magnet to AllDebrid', async () => {
 			vi.mocked(uploadMagnetAd).mockResolvedValue({

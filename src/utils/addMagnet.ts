@@ -1,6 +1,7 @@
 import {
 	deleteMagnetAd,
 	getMagnetFiles,
+	getMagnetStatus,
 	getMagnetStatusAd,
 	isAdMagnetInstant,
 	isAdStatusReady,
@@ -609,6 +610,24 @@ export const handleAddAsMagnetInAd = async (
 	silent: boolean = false
 ): Promise<AdAddOutcome> => {
 	try {
+		// Uploading a held hash reuses its id, even for in-progress downloads.
+		// Establish ownership before any probe that may delete its upload.
+		const existingIds = new Set<number>();
+		let existingHash = false;
+		if (deleteIfNotInstant || !keepInLibrary) {
+			const baseline = await getMagnetStatus(adKey);
+			if (baseline.status !== 'success' || !Array.isArray(baseline.data?.magnets)) {
+				throw new Error('Unable to check existing AllDebrid downloads');
+			}
+			for (const magnet of baseline.data.magnets) {
+				if (!Number.isSafeInteger(magnet.id) || magnet.id <= 0) {
+					throw new Error('Unable to check existing AllDebrid downloads');
+				}
+				existingIds.add(magnet.id);
+				if (magnet.hash?.toLowerCase() === hash.toLowerCase()) existingHash = true;
+			}
+		}
+
 		// Step 1: Upload magnet and check if it's instant
 		const upload = await uploadMagnetAd(adKey, hash);
 
@@ -649,12 +668,19 @@ export const handleAddAsMagnetInAd = async (
 
 		// Step 2: Check if magnet is instantly available
 		const isInstant = isAdMagnetInstant(upload);
+		const wasAlreadyOwned = existingHash || existingIds.has(upload.id);
 
 		if (!isInstant) {
 			if (deleteIfNotInstant) {
-				// Availability check mode - delete and notify
-				await deleteMagnetAd(adKey, upload.id);
-				if (!silent) toast.error('Torrent not instant; removed.', magnetToastOptions);
+				// Clean up only a new probe, never the member's held download.
+				if (!wasAlreadyOwned) await deleteMagnetAd(adKey, upload.id);
+				if (!silent)
+					toast.error(
+						wasAlreadyOwned
+							? 'Torrent not instant; kept existing download.'
+							: 'Torrent not instant; removed.',
+						magnetToastOptions
+					);
 				if (callback) await callback(null);
 				return 'not_cached';
 			}
@@ -691,7 +717,7 @@ export const handleAddAsMagnetInAd = async (
 		}
 
 		// Step 5: Delete from AllDebrid after storing availability data (only for service checks)
-		if (!keepInLibrary) {
+		if (!keepInLibrary && !wasAlreadyOwned) {
 			try {
 				await delay(1000);
 				await deleteMagnetAd(adKey, upload.id);
