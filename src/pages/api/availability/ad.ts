@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		// Validate required fields
-		if (!hash || !filename || !imdbId) {
+		if (!hash || (statusCode === 4 && (!filename || !imdbId))) {
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
@@ -54,33 +54,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		// Validate IMDb ID format
-		if (!/^tt\d+$/.test(imdbId)) {
+		if (statusCode === 4 && !/^tt\d+$/.test(imdbId)) {
 			return res.status(400).json({ error: 'Invalid IMDb ID format' });
 		}
 
-		// Validate AllDebrid-specific fields
-		if (statusCode !== 4) {
-			return res.status(400).json({
-				error: 'Invalid statusCode. Only instant torrents (statusCode 4) allowed',
-			});
-		}
-
-		if (status !== 'Ready') {
-			return res.status(400).json({ error: 'Invalid status. Must be "Ready"' });
+		// Successful non-Ready observations invalidate a previously cached release.
+		if (
+			typeof status !== 'string' ||
+			!Number.isInteger(statusCode) ||
+			statusCode < 0 ||
+			(statusCode === 4) !== (status === 'Ready')
+		) {
+			return res.status(400).json({ error: 'Invalid AllDebrid status' });
 		}
 
 		// Validate size
-		if (!size || size <= 0) {
+		if (statusCode === 4 && (!size || size <= 0)) {
 			return res.status(400).json({ error: 'Size must be greater than 0' });
 		}
 
 		// Validate completionDate (must be a valid Unix timestamp)
 		if (
-			completionDate === undefined ||
-			completionDate === null ||
-			typeof completionDate !== 'number' ||
-			isNaN(completionDate) ||
-			completionDate < 0
+			statusCode === 4 &&
+			(completionDate === undefined ||
+				completionDate === null ||
+				typeof completionDate !== 'number' ||
+				isNaN(completionDate) ||
+				completionDate < 0)
 		) {
 			return res
 				.status(400)
@@ -88,8 +88,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		// Validate files array
-		if (!Array.isArray(files) || files.length === 0) {
-			return res.status(400).json({ error: 'Files must be a non-empty array' });
+		if (!Array.isArray(files) || (statusCode === 4 && files.length === 0)) {
+			return res
+				.status(400)
+				.json({ error: 'Ready torrents require a non-empty files array' });
 		}
 
 		// Validate file structure (n and s required, l is optional)

@@ -1422,6 +1422,10 @@ export class Repository {
 		return this.allDebridCastService.getCastLink(magnetId, fileIndex);
 	}
 
+	public removeDeadAllDebridLink(link: string) {
+		return this.allDebridCastService.removeDeadLink(link);
+	}
+
 	public getAllDebridUserCastStreams(imdbId: string, userId: string, limit?: number) {
 		return this.allDebridCastService.getUserCastStreams(imdbId, userId, limit);
 	}

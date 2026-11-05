@@ -104,13 +104,12 @@ async function linkFromMagnet(
 }
 
 /**
- * Whether AllDebrid says the account has no premium. Only asked once a link
- * has been refused: a free key is refused every link with the same codes a
- * dead link draws, and the account is the thing the member can fix.
+ * A free key draws the same refusal as a dead token. Only an explicit premium
+ * answer authorizes deleting shared cache records; a failed check proves nothing.
  */
-async function lacksPremium(apiKey: string): Promise<boolean> {
+async function premiumStatus(apiKey: string): Promise<boolean | undefined> {
 	const check = await settleWithin(getAllDebridUser(apiKey), PREMIUM_CHECK_MS).catch(() => null);
-	return !!check && !check.timedOut && check.value?.isPremium === false;
+	return check && !check.timedOut ? check.value?.isPremium : undefined;
 }
 
 // Play an AllDebrid file from an existing magnet
@@ -162,10 +161,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const apiKey = profile.apiKey;
+	// Retain the source token even if a later magnet fallback cannot resolve it.
+	let refusedLink: string | undefined;
 
 	const resolveStreamUrl = async (): Promise<string> => {
 		// A saved link is already the source; there is no magnet to fall back to.
-		if (savedLink) return (await unlockLink(apiKey, savedLink)).link;
+		if (savedLink) {
+			refusedLink = savedLink;
+			return (await unlockLink(apiKey, savedLink)).link;
+		}
 
 		// The stored `/f/` link first: any premium key can unlock it and it
 		// outlives the magnet it came from, so it is the only form that works
@@ -173,9 +177,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		// catalog offers. Resolving through the magnet id instead answers
 		// MAGNET_INVALID_ID for anyone but the caster.
 		const link = await db.getAllDebridCastLink(magnetId, fileIndex);
+		refusedLink = link ?? undefined;
 		if (!link) {
-			return (await unlockLink(apiKey, await linkFromMagnet(apiKey, magnetId, fileIndex)))
-				.link;
+			refusedLink = await linkFromMagnet(apiKey, magnetId, fileIndex);
+			return (await unlockLink(apiKey, refusedLink)).link;
 		}
 
 		try {
@@ -207,7 +212,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return { url: await resolveStreamUrl() };
 		} catch (error) {
 			let failure = classifyAllDebridPlayError(error);
-			if (failure === 'gone' && (await lacksPremium(apiKey))) failure = 'account';
+			if (failure === 'gone') {
+				const premium = await premiumStatus(apiKey);
+				if (premium === false) failure = 'account';
+				const code = (error as { code?: unknown } | null)?.code;
+				if (
+					premium === true &&
+					refusedLink &&
+					(code === 'LINK_HOST_NOT_SUPPORTED' || code === 'LINK_DOWN')
+				) {
+					try {
+						await db.removeDeadAllDebridLink(refusedLink);
+					} catch {
+						// Cache cleanup failing must not replace the playback failure.
+						console.error('[AllDebrid Play] Failed to invalidate a dead token');
+					}
+				}
+			}
 			return { failure, detail: describeAdError(error) };
 		}
 	};

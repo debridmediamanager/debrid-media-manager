@@ -225,11 +225,6 @@ export async function submitAvailabilityAd(
 		files: Array<{ n: string; s: number; l: string }>;
 	}
 ) {
-	// Only submit if statusCode is 4 (Ready/Cached)
-	if (data.statusCode !== 4 || data.status !== 'Ready') {
-		return;
-	}
-
 	try {
 		const response = await fetch('/api/availability/ad', {
 			method: 'POST',

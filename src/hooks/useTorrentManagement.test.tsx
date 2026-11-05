@@ -1,4 +1,5 @@
 import { recordRdAddPause, resetRdThrottleTracking } from '@/services/realDebrid';
+import adRegression from '@/test/fixtures/allDebridAvailable/regressed-magnet-2026-11-05.json';
 import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { findJoinableTransfer, followTransferToRd } from '@/utils/debridUploader';
 import { act, renderHook } from '@testing-library/react';
@@ -1022,6 +1023,32 @@ describe('useTorrentManagement', () => {
 				expect.objectContaining({ hash: 'hash-ad', imdbId: 'tt123' })
 			);
 		});
+	});
+
+	it('submits the recorded regressed AD magnet so the shared Ready row is demoted', async () => {
+		const magnet = adRegression.ad_magnet_status_regressed.body.data.magnets;
+		mockHandleAddAsMagnetInAd.mockImplementation(async (_adKey, _hash, cb) => {
+			await cb({
+				...magnet,
+				files: adRegression.ad_magnet_files_regressed.body.data.magnets[0].files,
+			});
+		});
+		const { result } = renderManagementHook();
+
+		await act(async () => {
+			await result.current.addAd(magnet.hash);
+		});
+
+		expect(mockSubmitAvailabilityAd).toHaveBeenCalledWith(
+			'token-ts',
+			'token-hash',
+			expect.objectContaining({
+				hash: magnet.hash,
+				status: 'Downloading',
+				statusCode: 1,
+				files: [],
+			})
+		);
 	});
 
 	describe('addCached', () => {

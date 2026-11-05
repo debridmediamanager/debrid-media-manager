@@ -1,0 +1,44 @@
+{
+	"_source": "Recorded AllDebrid status, files and unlock responses on 2026-11-05; magnet id and torrent hash replaced with same-shape synthetic values.",
+	"ad_magnet_files_regressed": {
+		"http": 200,
+		"body": { "status": "success", "data": { "magnets": [{ "id": "123456789", "files": [] }] } }
+	},
+	"ad_magnet_status_regressed": {
+		"http": 200,
+		"body": {
+			"status": "success",
+			"data": {
+				"magnets": {
+					"id": 123456789,
+					"filename": "music",
+					"size": 106861357901,
+					"hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+					"status": "Downloading",
+					"statusCode": 1,
+					"uploadDate": 1793830282,
+					"completionDate": 0,
+					"type": "m",
+					"notified": false,
+					"version": 2,
+					"downloaded": 101149780813,
+					"uploaded": 106859454063,
+					"seeders": 1,
+					"downloadSpeed": 2109067,
+					"processingPerc": 0,
+					"uploadSpeed": 0
+				}
+			}
+		}
+	},
+	"ad_unlock_dead_token": {
+		"http": 200,
+		"body": {
+			"status": "error",
+			"error": {
+				"code": "LINK_HOST_NOT_SUPPORTED",
+				"message": "This host or link is not supported"
+			}
+		}
+	}
+}

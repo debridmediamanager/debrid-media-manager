@@ -134,7 +134,7 @@ describe('/api/availability/ad', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'Invalid statusCode. Only instant torrents (statusCode 4) allowed',
+			error: 'Invalid AllDebrid status',
 		});
 	});
 
@@ -145,7 +145,7 @@ describe('/api/availability/ad', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid status. Must be "Ready"' });
+		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid AllDebrid status' });
 	});
 
 	it('returns 400 for size of zero', async () => {
@@ -249,7 +249,9 @@ describe('/api/availability/ad', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Files must be a non-empty array' });
+		expect(res.json).toHaveBeenCalledWith({
+			error: 'Ready torrents require a non-empty files array',
+		});
 	});
 
 	it('returns 400 when files is an empty array', async () => {
@@ -259,7 +261,9 @@ describe('/api/availability/ad', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Files must be a non-empty array' });
+		expect(res.json).toHaveBeenCalledWith({
+			error: 'Ready torrents require a non-empty files array',
+		});
 	});
 
 	it('returns 400 when file is missing n field', async () => {

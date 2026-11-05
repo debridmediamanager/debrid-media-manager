@@ -331,6 +331,15 @@ export class AllDebridCastService extends DatabaseClient {
 		return isAllDebridLockedLink(cast?.link) ? cast.link : null;
 	}
 
+	/** Invalidate one proven-dead token, not its release or anyone's provider library. */
+	public async removeDeadLink(link: string): Promise<void> {
+		if (!/^https:\/\/alldebrid\.com\/f\/[A-Za-z0-9_-]{43}$/.test(link)) return;
+		await this.prisma.$transaction([
+			this.prisma.availableAdFile.deleteMany({ where: { link } }),
+			this.prisma.allDebridCast.deleteMany({ where: { link } }),
+		]);
+	}
+
 	public async getUserCastStreams(
 		imdbId: string,
 		userId: string,

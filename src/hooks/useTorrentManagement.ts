@@ -326,6 +326,19 @@ export function useTorrentManagement(
 
 					const flatFiles = flattenMagnetFiles(magnetStatus.files || []);
 
+					if (magnetStatus.statusCode !== 4) {
+						await submitAvailabilityAd(tokenWithTimestamp, tokenHash, {
+							hash: hash.toLowerCase(),
+							imdbId,
+							filename: magnetStatus.filename,
+							size: magnetStatus.size,
+							status: magnetStatus.status,
+							statusCode: magnetStatus.statusCode,
+							completionDate: magnetStatus.completionDate || 0,
+							files: [],
+						});
+					}
+
 					// Only submit availability for truly cached torrents (statusCode 4 = Ready)
 					if (magnetStatus.statusCode === 4 && magnetStatus.status === 'Ready') {
 						const validFiles = flatFiles

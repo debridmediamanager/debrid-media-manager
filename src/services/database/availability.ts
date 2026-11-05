@@ -727,6 +727,19 @@ export class AvailabilityService extends DatabaseClient {
 	}) {
 		// Normalize hash to lowercase (AllDebrid returns lowercase hashes)
 		const normalizedHash = hash.toLowerCase();
+		// A successful non-Ready observation supersedes an earlier cache hit.
+		// Do not create availability entries for downloads we have never seen Ready.
+		if (statusCode !== 4 || status !== 'Ready') {
+			await this.prisma.$transaction([
+				this.prisma.availableAd.updateMany({
+					where: { hash: normalizedHash },
+					data: { status, statusCode },
+				}),
+				this.prisma.availableAdFile.deleteMany({ where: { hash: normalizedHash } }),
+			]);
+			return;
+		}
+
 		const episodeInfo = extractEpisodeInfo(filename);
 
 		return this.prisma.availableAd.upsert({
