@@ -77,6 +77,7 @@ import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librar
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { magnetTargets, pickMagnetProvider, type MagnetProvider } from '@/utils/magnetProviderPick';
 import { quickSearchLibrary } from '@/utils/quickSearch';
+import { getRdExportLinks } from '@/utils/rdExportLinks';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
@@ -224,7 +225,17 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (typeof window !== 'undefined' && rdKey) {
 			(window as any).generateStrmFiles = async (filename: string, links: string[]) => {
-				for (const link of links) {
+				let playLinks: string[];
+				try {
+					playLinks = await getRdExportLinks(rdKey, links);
+				} catch {
+					toast.error(
+						'Failed to prepare Real-Debrid playback profile.',
+						magnetToastOptions
+					);
+					return;
+				}
+				for (const [index, link] of links.entries()) {
 					try {
 						// Get unrestricted link first
 						const resp = await proxyUnrestrictLink(rdKey, link);
@@ -241,8 +252,8 @@ function TorrentsPage() {
 							? `${nameWithoutExt}.strm`
 							: `${resp.filename}.strm`;
 
-						// Create STRM file with just the direct URL
-						const blob = new Blob([resp.download], { type: 'text/plain' });
+						// Re-resolve through the saved profile on every playback.
+						const blob = new Blob([playLinks[index]], { type: 'text/plain' });
 						const strmLink = document.createElement('a');
 						strmLink.href = URL.createObjectURL(blob);
 						strmLink.download = strmName;
@@ -265,21 +276,17 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (typeof window !== 'undefined' && rdKey) {
 			(window as any).exportLinks = async (filename: string, links: string[]) => {
-				let textContent = '';
-				for (const link of links) {
-					try {
-						const resp = await proxyUnrestrictLink(rdKey, link);
-						textContent += resp.download + '\n';
-					} catch (e) {
-						console.error(e);
-					}
+				try {
+					const textContent = (await getRdExportLinks(rdKey, links)).join('\n') + '\n';
+					const blob = new Blob([textContent], { type: 'text/plain' });
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(blob);
+					link.download = `${filename}.txt`;
+					link.click();
+					URL.revokeObjectURL(link.href);
+				} catch {
+					toast.error('Failed to export playback links.', magnetToastOptions);
 				}
-				const blob = new Blob([textContent], { type: 'text/plain' });
-				const link = document.createElement('a');
-				link.href = URL.createObjectURL(blob);
-				link.download = `${filename}.txt`;
-				link.click();
-				URL.revokeObjectURL(link.href);
 			};
 
 			// Cleanup function to remove global window function

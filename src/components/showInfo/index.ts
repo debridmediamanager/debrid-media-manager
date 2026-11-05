@@ -28,6 +28,7 @@ import { parseOffcloudRowId } from '@/utils/offcloudRow';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { retryRdAddThroughPause } from '@/utils/rdAddPause';
+import { getRdExportLinks } from '@/utils/rdExportLinks';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import { toWebDownloadRowId } from '@/utils/torboxWebDownload';
 import { AxiosError } from 'axios';
@@ -574,15 +575,7 @@ export const showInfoForRD = async (
 				}
 				const toastId = toast.loading('Preparing download links...', magnetToastOptions);
 				try {
-					const lines: string[] = [];
-					for (const link of info.links as string[]) {
-						try {
-							const resp = await proxyUnrestrictLink(rdKey, link);
-							lines.push(resp.download);
-						} catch (e) {
-							console.error(e);
-						}
-					}
+					const lines = await getRdExportLinks(rdKey, info.links);
 					if (!lines.length) {
 						toast.error('Failed to fetch unrestricted links.', magnetToastOptions);
 						return;
@@ -632,7 +625,8 @@ export const showInfoForRD = async (
 				const toastId = toast.loading('Generating STRM files...', magnetToastOptions);
 				let generated = 0;
 				try {
-					for (const link of info.links as string[]) {
+					const playLinks = await getRdExportLinks(rdKey, info.links);
+					for (const [index, link] of (info.links as string[]).entries()) {
 						try {
 							const resp = await proxyUnrestrictLink(rdKey, link);
 							const nameWithoutExt = resp.filename.substring(
@@ -642,7 +636,7 @@ export const showInfoForRD = async (
 							const strmName = resp.streamable
 								? `${nameWithoutExt}.strm`
 								: `${resp.filename}.strm`;
-							const blob = new Blob([resp.download], { type: 'text/plain' });
+							const blob = new Blob([playLinks[index]], { type: 'text/plain' });
 							const a = document.createElement('a');
 							a.href = URL.createObjectURL(blob);
 							a.download = strmName;
