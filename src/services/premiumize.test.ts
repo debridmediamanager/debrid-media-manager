@@ -315,6 +315,49 @@ describe('transfers', () => {
 		expect(hashes).toEqual({ abc: 'ff00' });
 	});
 
+	it.each([100, 101, 201])(
+		'resolves all %i transfer ids in sequential proxy batches of at most 100',
+		async (count) => {
+			const ids = Array.from({ length: count }, (_, index) => `transfer-${index}`);
+			const hash = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
+			let active = 0;
+			let peak = 0;
+			fetchMock.mockImplementation(async (_url, init) => {
+				active++;
+				peak = Math.max(peak, active);
+				await Promise.resolve();
+				active--;
+				const batch = JSON.parse(init.body).ids as string[];
+				if (batch.length > 100) {
+					return jsonResponse(
+						{
+							status: 'error',
+							code: 'invalid_request',
+							message: 'Maximum 100 transfer ids allowed.',
+						},
+						400
+					);
+				}
+				return jsonResponse({
+					status: 'success',
+					hashes: Object.fromEntries(batch.map((id) => [id, hash])),
+				});
+			});
+
+			expect(await resolvePremiumizeTransferHashes('key', ids)).toEqual(
+				Object.fromEntries(ids.map((id) => [id, hash]))
+			);
+			expect(fetchMock).toHaveBeenCalledTimes(Math.ceil(count / 100));
+			expect(
+				fetchMock.mock.calls.flatMap(([url, init]) => {
+					expect(url).toBe('/api/premiumize/transfer/hashes');
+					return JSON.parse(init.body).ids;
+				})
+			).toEqual(ids);
+			expect(peak).toBe(1);
+		}
+	);
+
 	it('skips the hash lookup entirely for an empty id list', async () => {
 		expect(await resolvePremiumizeTransferHashes('key', [])).toEqual({});
 		expect(fetchMock).not.toHaveBeenCalled();

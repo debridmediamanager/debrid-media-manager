@@ -1,4 +1,5 @@
 import {
+	TRANSFER_HASH_CHUNK_SIZE,
 	callPremiumizeDirect,
 	resolvePremiumizeTransferHashesDirect,
 	type PremiumizeEnvelope,
@@ -106,8 +107,25 @@ export async function handlePremiumizeProxyRequest(req: ProxyRequest): Promise<P
 
 	try {
 		if (req.endpoint === HASHES_ENDPOINT) {
+			// Count submitted slots before filtering or deduplication, so repeated
+			// or invalid ids cannot bypass the request budget.
+			if (Array.isArray(params.ids) && params.ids.length > TRANSFER_HASH_CHUNK_SIZE) {
+				return {
+					httpStatus: 400,
+					body: errorEnvelope(
+						'invalid_request',
+						`Maximum ${TRANSFER_HASH_CHUNK_SIZE} transfer ids allowed.`
+					),
+				};
+			}
 			const ids = Array.isArray(params.ids)
-				? params.ids.filter((id): id is string => typeof id === 'string' && id.length > 0)
+				? [
+						...new Set(
+							params.ids.filter(
+								(id): id is string => typeof id === 'string' && id.length > 0
+							)
+						),
+					]
 				: [];
 			const hashes = await resolvePremiumizeTransferHashesDirect(apiKey, ids);
 			return { httpStatus: 200, body: { status: 'success', hashes } };

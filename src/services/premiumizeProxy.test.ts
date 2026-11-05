@@ -162,6 +162,70 @@ describe('handlePremiumizeProxyRequest', () => {
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
+	it.each([
+		['distinct', Array.from({ length: 101 }, (_, index) => `transfer-${index}`)],
+		['duplicate', Array.from({ length: 101 }, () => 'transfer')],
+		['invalid', Array.from({ length: 101 }, () => null)],
+	])('rejects more than 100 submitted ids before upstream calls (%s)', async (_, ids) => {
+		fetchMock.mockResolvedValue({
+			status: 302,
+			headers: { get: () => 'magnet:?xt=urn:btih:DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C' },
+		} as unknown as Response);
+
+		const result = await handlePremiumizeProxyRequest(
+			post({ endpoint: 'transfer/hashes', body: { ids } })
+		);
+
+		expect(result.httpStatus).toBe(400);
+		expect(result.body).toEqual({
+			status: 'error',
+			code: 'invalid_request',
+			message: 'Maximum 100 transfer ids allowed.',
+		});
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('accepts exactly 100 ids with no more than eight concurrent upstream lookups', async () => {
+		const hash = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
+		const ids = Array.from({ length: 100 }, (_, index) => `transfer-${index}`);
+		let active = 0;
+		let peak = 0;
+		fetchMock.mockImplementation(async () => {
+			active++;
+			peak = Math.max(peak, active);
+			await Promise.resolve();
+			active--;
+			return {
+				status: 302,
+				headers: { get: () => `magnet:?xt=urn:btih:${hash}` },
+			} as unknown as Response;
+		});
+
+		const result = await handlePremiumizeProxyRequest(
+			post({ endpoint: 'transfer/hashes', body: { ids } })
+		);
+
+		expect(result.httpStatus).toBe(200);
+		expect(result.body.hashes).toEqual(Object.fromEntries(ids.map((id) => [id, hash])));
+		expect(fetchMock).toHaveBeenCalledTimes(100);
+		expect(peak).toBe(8);
+	});
+
+	it('deduplicates accepted ids after dropping empty strings and non-strings', async () => {
+		fetchMock.mockResolvedValue({
+			status: 302,
+			headers: { get: () => 'magnet:?xt=urn:btih:DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C' },
+		} as unknown as Response);
+
+		const result = await handlePremiumizeProxyRequest(
+			post({ endpoint: 'transfer/hashes', body: { ids: ['abc', '', 42, 'abc'] } })
+		);
+
+		expect(result.httpStatus).toBe(200);
+		expect(result.body.hashes).toEqual({ abc: 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c' });
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
 	it('leaves a transfer out of the hash map when job/src has no magnet', async () => {
 		fetchMock.mockResolvedValue({
 			status: 302,

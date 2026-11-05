@@ -39,6 +39,9 @@ const ENERGY_CDN_SUFFIX = '.energycdn.com';
 /** Virtual proxy endpoint that resolves transfer ids to info hashes. */
 const HASHES_ENDPOINT = 'transfer/hashes';
 
+/** DMM request budget, not a provider limit: each id fans out to one `job/src` call. */
+export const TRANSFER_HASH_CHUNK_SIZE = 100;
+
 // `job/src` is one request per transfer. Premiumize absorbed 640 req/s without
 // throttling, so this cap is politeness rather than a measured limit.
 const HASH_LOOKUP_CONCURRENCY = 8;
@@ -50,12 +53,7 @@ export type PremiumizeEnvelope = Record<string, any> & {
 };
 
 export type PremiumizeTransferStatus =
-	| 'queued'
-	| 'running'
-	| 'finished'
-	| 'seeding'
-	| 'error'
-	| (string & {});
+	'queued' | 'running' | 'finished' | 'seeding' | 'error' | (string & {});
 
 export interface PremiumizeAccountInfo {
 	customer_id: string;
@@ -547,12 +545,18 @@ export async function resolvePremiumizeTransferHashes(
 ): Promise<Record<string, string>> {
 	if (ids.length === 0) return {};
 	if (isServer()) return resolvePremiumizeTransferHashesDirect(apiKey, ids);
-	const body = await pmRequest<PremiumizeEnvelope & { hashes?: Record<string, string> }>(
-		apiKey,
-		HASHES_ENDPOINT,
-		{ ids }
-	);
-	return body.hashes ?? {};
+	const hashes: Record<string, string> = {};
+	// Sequential proxy batches preserve the eight-worker upstream concurrency
+	// bound even when the library has more transfers than one request allows.
+	for (let start = 0; start < ids.length; start += TRANSFER_HASH_CHUNK_SIZE) {
+		const body = await pmRequest<PremiumizeEnvelope & { hashes?: Record<string, string> }>(
+			apiKey,
+			HASHES_ENDPOINT,
+			{ ids: ids.slice(start, start + TRANSFER_HASH_CHUNK_SIZE) }
+		);
+		Object.assign(hashes, body.hashes ?? {});
+	}
+	return hashes;
 }
 
 export const _testing = { toFormBody, toBytes, HASHES_ENDPOINT };
