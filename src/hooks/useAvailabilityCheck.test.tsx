@@ -413,21 +413,32 @@ describe('useAvailabilityCheck', () => {
 			expect(addOrder).toBeLessThan(deleteOrder);
 		});
 
-		it('calls deleteRd before addRd when torrent IS in progress', async () => {
-			const { result } = renderAvailabilityHook({
-				adKey: null,
-				torboxKey: null,
-				hashAndProgress: { 'rd:hash-1': 50 },
-			});
+		// Check RD used to delete the member's own copy before probing: a release still
+		// downloading lost its progress, and one filed under another title (so not marked
+		// cached on this page) left the library. The held torrent is the answer.
+		it.each([
+			[100, true],
+			[50, false],
+		])(
+			'never deletes or re-adds a torrent the user holds at %i%%',
+			async (progress, cached) => {
+				const { result } = renderAvailabilityHook({
+					adKey: null,
+					torboxKey: null,
+					hashAndProgress: { 'rd:hash-1': progress },
+				});
 
-			await act(async () => {
-				await result.current.checkServiceAvailability(searchResults[0], ['RD']);
-			});
+				await act(async () => {
+					await result.current.checkServiceAvailability(searchResults[0], ['RD']);
+				});
 
-			const deleteOrder = deleteRd.mock.invocationCallOrder[0];
-			const addOrder = addRd.mock.invocationCallOrder[0];
-			expect(deleteOrder).toBeLessThan(addOrder);
-		});
+				expect(deleteRd).not.toHaveBeenCalled();
+				expect(addRd).not.toHaveBeenCalled();
+				expect(Boolean(searchResults.find((r) => r.hash === 'hash-1')?.rdAvailable)).toBe(
+					cached
+				);
+			}
+		);
 	});
 
 	// =========================================================================
@@ -537,6 +548,25 @@ describe('useAvailabilityCheck', () => {
 			expect(deleteRd).not.toHaveBeenCalled();
 			// The services that do not judge names are still asked.
 			expect(addAd).toHaveBeenCalledTimes(rows.length);
+		});
+
+		it('leaves a torrent the user holds out of a sweep', async () => {
+			searchResults = [
+				createSearchResult({ hash: 'hash-1' }),
+				createSearchResult({ hash: 'hash-2' }),
+			];
+			const { result } = renderAvailabilityHook({
+				adKey: null,
+				torboxKey: null,
+				hashAndProgress: { 'rd:hash-2': 40 },
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(addRd.mock.calls).toEqual([['hash-1', true]]);
+			expect(deleteRd.mock.calls).toEqual([['hash-1']]);
 		});
 
 		it('is left out of a sweep while the clean rows are probed', async () => {

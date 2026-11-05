@@ -257,13 +257,13 @@ export function useAvailabilityCheck(
 					trackerStatsResult,
 				] = await Promise.allSettled([
 					// RD availability check
-					rdKey && servicesNeedingCheck.includes('RD') && !rdRefusesName(result)
+					// A torrent the user holds answers for itself and is never deleted to probe.
+					rdKey &&
+					servicesNeedingCheck.includes('RD') &&
+					!rdRefusesName(result) &&
+					!(`rd:${result.hash}` in hashAndProgress)
 						? (async () => {
-								let addRdResponse: any;
-								if (`rd:${result.hash}` in hashAndProgress) {
-									await deleteRd(result.hash);
-								}
-								addRdResponse = await addRd(result.hash, true);
+								const addRdResponse: any = await addRd(result.hash, true);
 								await deleteRd(result.hash);
 
 								const isCachedInRD =
@@ -276,7 +276,9 @@ export function useAvailabilityCheck(
 							})()
 						: Promise.resolve({
 								addRdResponse: null,
-								isCachedInRD: Boolean(result.rdAvailable),
+								isCachedInRD:
+									Boolean(result.rdAvailable) ||
+									hashAndProgress[`rd:${result.hash}`] === 100,
 							}),
 
 					// AD availability check
@@ -774,14 +776,19 @@ export function useAvailabilityCheck(
 												throttled: false,
 											};
 										}
+										const held = hashAndProgress[`rd:${result.hash}`];
+										if (held !== undefined) {
+											return {
+												result,
+												isCachedInRD: held === 100,
+												addRdResponse: null,
+												throttled: false,
+											};
+										}
 										if (rdProbesStarted > 0) await delay(rdProbeSpacing);
 										rdProbesStarted++;
 
-										let addRdResponse: any;
-										if (`rd:${result.hash}` in hashAndProgress) {
-											await deleteRd(result.hash);
-										}
-										addRdResponse = await addRd(result.hash, true);
+										const addRdResponse: any = await addRd(result.hash, true);
 										await deleteRd(result.hash);
 
 										const isCachedInRD =
