@@ -1,18 +1,19 @@
 import { AxiosError } from 'axios';
 
 /**
- * RD errors that mean this particular link will never work again.
+ * RD errors the existing cleanup policy treats as dead links.
  *
  * - `hoster_unavailable`: RD-side rot, observed for the owner too even when the
  *   torrent still reads downloaded. Held keys showed no age decay in the
  *   2026-11-05 measurements; retention once nobody holds a torrent is unknown.
  * - `unavailable_file`: the content is unavailable.
  *
- * Everything else is transient and must not be treated as rot. `/unrestrict/link`
- * carries its own tight, undocumented throttle that answers `too_many_requests`
- * (error 34) after only a handful of calls seconds apart - exactly the shape of
- * Stremio resolving several streams at once - and a 5xx is just a bad minute.
- * Deleting a row on either would throw away content that is perfectly alive.
+ * Other failures must not trigger rot cleanup. `/unrestrict/link` carries its
+ * own tight, undocumented throttle that answers `too_many_requests` (error 34)
+ * after only a handful of calls seconds apart, as when Stremio resolves several
+ * streams at once. A 5xx alone does not establish rot: measured dead links can
+ * return `hoster_unavailable` with HTTP 503, but other 5xx failures say nothing
+ * about whether the content is still available.
  *
  * A 401 or 403 is never rot, whatever its body names. Real-Debrid documents 403
  * as "account locked, not premium" and sends its refusal of an address the
