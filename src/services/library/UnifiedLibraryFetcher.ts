@@ -466,7 +466,11 @@ export class UnifiedLibraryFetcher {
 				`[Fetcher] Torbox page received in ${Date.now() - apiStart}ms (success=${result.success})`
 			);
 
-			if (!result.success || !result.data) {
+			if (!result.success) {
+				throw new Error('TorBox torrent list failed');
+			}
+
+			if (!result.data) {
 				console.log('[Fetcher] Torbox response indicated completion', {
 					success: result.success,
 					hasData: Boolean(result.data),

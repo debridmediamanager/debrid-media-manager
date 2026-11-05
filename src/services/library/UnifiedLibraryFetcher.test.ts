@@ -14,7 +14,7 @@ import { AxiosError, AxiosHeaders } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CacheManager } from '../cache/CacheManager';
 import type { UnifiedRateLimiter } from '../rateLimit/UnifiedRateLimiter';
-import { UnifiedLibraryFetcher } from './UnifiedLibraryFetcher';
+import { TORBOX_PAGE_SIZE, UnifiedLibraryFetcher } from './UnifiedLibraryFetcher';
 
 const makeApiTorrent = (id: string) => ({
 	id,
@@ -188,6 +188,98 @@ describe('UnifiedLibraryFetcher', () => {
 			5 * 60 * 1000
 		);
 		expect(result).toEqual([{ id: 'tb:tb1' }]);
+	});
+
+	it('rejects a failed TorBox page without caching a partial library and refetches on retry', async () => {
+		const { fetcher, cache } = createFetcher();
+		const cachedLibraries = new Map<string, unknown>();
+		cache.get.mockImplementation(async (key: string) => cachedLibraries.get(key));
+		cache.set.mockImplementation(async (key: string, value: unknown) => {
+			cachedLibraries.set(key, value);
+		});
+		const fullPage = Array.from({ length: TORBOX_PAGE_SIZE }, (_, id) => ({
+			id,
+			hash: '0'.repeat(40),
+			created_at: new Date(0).toISOString(),
+			updated_at: new Date(0).toISOString(),
+			magnet: '',
+			size: 1,
+			active: false,
+			auth_id: 'synthetic-account',
+			download_state: 'completed',
+			seeds: 0,
+			peers: 0,
+			ratio: 0,
+			progress: 1,
+			download_speed: 0,
+			upload_speed: 0,
+			name: `video-${id}.mkv`,
+			eta: 0,
+			server: 1,
+			torrent_file: false,
+			expires_at: new Date(0).toISOString(),
+			download_present: true,
+			download_finished: true,
+			files: [],
+			inactive_check: 0,
+			availability: 1,
+		}));
+		const successfulPage = {
+			success: true,
+			error: null,
+			detail: 'Torrents retrieved successfully.',
+			data: fullPage,
+		};
+		mockGetTorrentList
+			.mockReset()
+			.mockResolvedValueOnce(successfulPage)
+			.mockResolvedValueOnce({
+				success: false,
+				error: 'DATABASE_ERROR',
+				detail: 'Failed to retrieve torrents.',
+				data: [],
+			})
+			.mockResolvedValueOnce(successfulPage)
+			.mockResolvedValueOnce({
+				...successfulPage,
+				data: [{ ...fullPage[0], id: TORBOX_PAGE_SIZE }],
+			});
+		mockGetWebDownloadList.mockReset().mockResolvedValue({
+			success: true,
+			error: null,
+			detail: 'Web downloads retrieved successfully.',
+			data: [],
+		});
+
+		await expect(fetcher.fetchLibrary('torbox', 'tb-token')).rejects.toThrow(
+			'TorBox torrent list failed'
+		);
+		expect(cache.set).not.toHaveBeenCalled();
+		expect(cachedLibraries.has('tb:library:tb-token')).toBe(false);
+		expect(mockGetWebDownloadList).not.toHaveBeenCalled();
+
+		const result = await fetcher.fetchLibrary('torbox', 'tb-token');
+
+		expect(mockGetTorrentList.mock.calls.map(([, params]) => params?.offset)).toEqual([
+			0,
+			TORBOX_PAGE_SIZE,
+			0,
+			TORBOX_PAGE_SIZE,
+		]);
+		expect(result).toHaveLength(TORBOX_PAGE_SIZE + 1);
+		expect(result[0]).toEqual({ id: 'tb:0' });
+		expect(result[TORBOX_PAGE_SIZE]).toEqual({ id: `tb:${TORBOX_PAGE_SIZE}` });
+		expect(cache.set).toHaveBeenCalledTimes(1);
+		expect(cache.set).toHaveBeenCalledWith(
+			'tb:library:tb-token',
+			result,
+			undefined,
+			5 * 60 * 1000
+		);
+		await expect(fetcher.fetchLibrary('torbox', 'tb-token')).resolves.toEqual(result);
+		expect(mockGetTorrentList).toHaveBeenCalledTimes(4);
+		mockGetTorrentList.mockReset();
+		mockGetWebDownloadList.mockReset();
 	});
 
 	it("lists a 70,000-torrent TorBox library inside one minute's mylist budget", async () => {
