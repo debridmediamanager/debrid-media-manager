@@ -1,4 +1,5 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
+import { flattenMagnetFiles } from '@/services/allDebrid';
 import { SearchResult } from '@/services/mediasearch';
 import { rdAddPauseRemainingMs } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
@@ -39,21 +40,6 @@ import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/ut
 import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-
-import type { MagnetFile } from '@/services/allDebrid';
-
-function flattenMagnetFiles(files: MagnetFile[], parentPath = ''): MagnetFile[] {
-	const result: MagnetFile[] = [];
-	for (const f of files) {
-		const fullPath = parentPath ? `${parentPath}/${f.n}` : f.n;
-		if (f.e) {
-			result.push(...flattenMagnetFiles(f.e, fullPath));
-		} else {
-			result.push({ n: fullPath, s: f.s, l: f.l });
-		}
-	}
-	return result;
-}
 
 const torrentDB = new UserTorrentDB();
 

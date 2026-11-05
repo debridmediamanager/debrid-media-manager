@@ -251,6 +251,20 @@ export interface MagnetFile {
 	e?: MagnetFile[]; // sub-entries (folders)
 }
 
+/** AllDebrid's nested file tree as flat files, each named by its full path. */
+export function flattenMagnetFiles(files: MagnetFile[], parentPath = ''): MagnetFile[] {
+	const result: MagnetFile[] = [];
+	for (const f of files) {
+		const fullPath = parentPath ? `${parentPath}/${f.n}` : f.n;
+		if (f.e) {
+			result.push(...flattenMagnetFiles(f.e, fullPath));
+		} else {
+			result.push({ n: fullPath, s: f.s, l: f.l });
+		}
+	}
+	return result;
+}
+
 interface MagnetFilesData {
 	magnets: Array<{
 		id: string;

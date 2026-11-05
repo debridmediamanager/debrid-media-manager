@@ -1,0 +1,23 @@
+{
+	"added": "2026-11-04T03:22:54.000Z",
+	"bytes": 3425691137,
+	"ended": "2026-11-04T03:37:34.000Z",
+	"filename": "Alpha (2026) Hindi TRUE WEB.DL - 1080p - AVC - (DD+5.1 - 640Kbps & AAC) - 3GB - ESub {imdb-tt28363783}.mkv",
+	"files": [
+		{
+			"id": 1,
+			"path": "/Alpha (2026) Hindi TRUE WEB.DL - 1080p - AVC - (DD+5.1 - 640Kbps & AAC) - 3GB - ESub {imdb-tt28363783}.mkv",
+			"bytes": 3425691137,
+			"selected": 1
+		}
+	],
+	"hash": "0380b3ed6577afdfaaae4ef68bc052b539b89af6",
+	"host": "real-debrid.com",
+	"id": "WHUMIPAAS6WAU",
+	"links": ["https://real-debrid.com/d/REDACTED532885"],
+	"original_bytes": 3425691137,
+	"original_filename": "Alpha (2026) Hindi TRUE WEB.DL - 1080p - AVC - (DD+5.1 - 640Kbps & AAC) - 3GB - ESub {imdb-tt28363783}.mkv",
+	"progress": 100,
+	"split": 2000,
+	"status": "downloaded"
+}

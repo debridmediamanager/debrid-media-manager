@@ -65,6 +65,7 @@ import {
 	getRdStatus,
 } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
+import { reportLibraryAvailability } from '@/utils/libraryAvailability';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
 import {
 	buildLibraryGrouping,
@@ -174,6 +175,10 @@ function TorrentsPage() {
 		{}
 	);
 	const askedIdentify = useRef(new Set<string>());
+	// one report at a time: each identified batch waits for the one before
+	const reporting = useRef<Promise<void>>(Promise.resolve());
+	const [rdKey] = useRealDebridAccessToken();
+	const adKey = useAllDebridApiKey();
 	useEffect(() => {
 		if (cacheLoading || isFetching) return;
 		const todo = cachedLibraryItems.filter(
@@ -181,8 +186,14 @@ function TorrentsPage() {
 		);
 		if (todo.length === 0) return;
 		todo.forEach((t) => askedIdentify.current.add(t.id));
-		identifyLibrary(todo, (found) => setIdentifications((prev) => ({ ...prev, ...found })));
-	}, [cacheLoading, isFetching, cachedLibraryItems]);
+		identifyLibrary(todo, (found) => {
+			setIdentifications((prev) => ({ ...prev, ...found }));
+			// what the library holds finished is cached: share it with DMM's availability
+			reporting.current = reporting.current.then(() =>
+				reportLibraryAvailability(todo, found, { rd: rdKey, ad: adKey })
+			);
+		});
+	}, [cacheLoading, isFetching, cachedLibraryItems, rdKey, adKey]);
 
 	// Use cached items directly instead of duplicating state
 	const userTorrentsList = cachedLibraryItems;
@@ -193,8 +204,6 @@ function TorrentsPage() {
 	const [selectedTorrents, setSelectedTorrents] = useState<Set<string>>(() => new Set());
 
 	// keys
-	const [rdKey] = useRealDebridAccessToken();
-	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();

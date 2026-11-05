@@ -1,0 +1,102 @@
+{
+	"added": "2026-10-15T03:39:54.000Z",
+	"bytes": 32397157962,
+	"ended": "2026-07-05T21:42:51.000Z",
+	"filename": "My.Hero.Academia.S04.P2.CRF-16.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD",
+	"files": [
+		{
+			"id": 1,
+			"path": "/My.Hero.Academia.S04E20.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2518403024,
+			"selected": 1
+		},
+		{
+			"id": 2,
+			"path": "/My.Hero.Academia.S04E18.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2567841628,
+			"selected": 1
+		},
+		{
+			"id": 3,
+			"path": "/My.Hero.Academia.S04E24.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2596938807,
+			"selected": 1
+		},
+		{
+			"id": 4,
+			"path": "/My.Hero.Academia.S04E15.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2609870435,
+			"selected": 1
+		},
+		{
+			"id": 5,
+			"path": "/My.Hero.Academia.S04E17.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2621900656,
+			"selected": 1
+		},
+		{
+			"id": 6,
+			"path": "/My.Hero.Academia.S04E19.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2691105550,
+			"selected": 1
+		},
+		{
+			"id": 7,
+			"path": "/My.Hero.Academia.S04E21.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2691301217,
+			"selected": 1
+		},
+		{
+			"id": 8,
+			"path": "/My.Hero.Academia.S04E16.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2693494670,
+			"selected": 1
+		},
+		{
+			"id": 9,
+			"path": "/My.Hero.Academia.S04E14.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2739348654,
+			"selected": 1
+		},
+		{
+			"id": 10,
+			"path": "/My.Hero.Academia.S04E23.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2790285801,
+			"selected": 1
+		},
+		{
+			"id": 11,
+			"path": "/My.Hero.Academia.S04E22.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2897872211,
+			"selected": 1
+		},
+		{
+			"id": 12,
+			"path": "/My.Hero.Academia.S04E25.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD.mkv",
+			"bytes": 2978795309,
+			"selected": 1
+		}
+	],
+	"hash": "f60f7f182ed92d49a56f07bde918645834e2187f",
+	"host": "real-debrid.com",
+	"id": "4LT5BXQSVWDA6",
+	"links": [
+		"https://real-debrid.com/d/REDACTED380418",
+		"https://real-debrid.com/d/REDACTED909370",
+		"https://real-debrid.com/d/REDACTED66818",
+		"https://real-debrid.com/d/REDACTED623866",
+		"https://real-debrid.com/d/REDACTED752660",
+		"https://real-debrid.com/d/REDACTED9592",
+		"https://real-debrid.com/d/REDACTED576919",
+		"https://real-debrid.com/d/REDACTED550185",
+		"https://real-debrid.com/d/REDACTED17692",
+		"https://real-debrid.com/d/REDACTED510958",
+		"https://real-debrid.com/d/REDACTED841488",
+		"https://real-debrid.com/d/REDACTED875348"
+	],
+	"original_bytes": 32397157962,
+	"original_filename": "My.Hero.Academia.S04.P2.CRF-16.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD",
+	"progress": 100,
+	"split": 2000,
+	"status": "downloaded"
+}
