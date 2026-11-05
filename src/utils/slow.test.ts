@@ -1,3 +1,4 @@
+import rarBundle from '@/test/fixtures/realdebrid/rd-rar-bundle-torrent-info.json';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from './slow';
@@ -14,6 +15,48 @@ describe('slow', () => {
 	});
 
 	describe('isSlowOrNoLinks', () => {
+		it('ages the recorded RD added clock from the real torrent-info response', () => {
+			Date.now = vi.fn(() => Date.parse('2026-11-05T00:50:23Z'));
+			const torrent = {
+				id: `rd:${rarBundle.body.id}`,
+				status: UserTorrentStatus.downloading,
+				added: new Date(rarBundle.body.added),
+				seeders: 0,
+			} as UserTorrent;
+			expect(isSlowOrNoLinks(torrent)).toBe(true);
+		});
+
+		it.each([
+			['winter CET', '2026-01-15T11:20:00Z', '2026-01-15T12:00:00Z', true],
+			['summer CEST', '2026-07-15T10:20:00Z', '2026-07-15T12:00:00Z', true],
+			['recent winter CET', '2026-01-15T11:19:59Z', '2026-01-15T12:00:00Z', false],
+			['recent summer CEST', '2026-07-15T10:19:59Z', '2026-07-15T12:00:00Z', false],
+			['spring DST change', '2026-03-29T01:20:00Z', '2026-03-29T01:00:00Z', true],
+			['autumn DST change', '2026-10-25T02:20:00Z', '2026-10-25T03:00:00Z', true],
+		])('uses Paris wall time for RD added timestamps: %s', (_label, now, added, expected) => {
+			Date.now = vi.fn(() => Date.parse(now));
+			const torrent = {
+				id: 'rd:synthetic',
+				status: UserTorrentStatus.downloading,
+				added: new Date(added),
+				seeders: 0,
+			} as UserTorrent;
+
+			expect(isSlowOrNoLinks(torrent)).toBe(expected);
+		});
+
+		it('keeps other providers added timestamps as real instants', () => {
+			Date.now = vi.fn(() => Date.parse('2026-07-15T12:19:59Z'));
+			const torrent = {
+				id: 'tb:77',
+				status: UserTorrentStatus.downloading,
+				added: new Date('2026-07-15T12:00:00Z'),
+				seeders: 0,
+			} as UserTorrent;
+
+			expect(isSlowOrNoLinks(torrent)).toBe(false);
+		});
+
 		it('returns true for old downloading torrents with no seeders', () => {
 			const now = new Date('2024-01-01T12:00:00');
 			Date.now = vi.fn(() => now.getTime());
