@@ -2,6 +2,7 @@ import handler, { MAX_ITEMS } from '@/pages/api/library/identify';
 import { identifyFilenames, type IdentifierResult } from '@/services/contentIdentifier';
 import { cachedSources } from '@/services/placement';
 import { repository } from '@/services/repository';
+import dateRange from '@/test/fixtures/contentIdentifier/date-range-2026-11-05.json';
 import guards from '@/test/fixtures/contentIdentifier/library-guards-2026-10-12.json';
 import sameTitle from '@/test/fixtures/contentIdentifier/same-title-2026-10-18.json';
 import onePiece from '@/test/fixtures/contentIdentifier/same-title-one-piece-2026-10-18.json';
@@ -353,6 +354,17 @@ describe('/api/library/identify', () => {
 		const { results } = vi.mocked(res.json).mock.calls[0][0];
 		const titled = guards.cases.map((c, n) => [c.filename, results[n] !== null]);
 		expect(titled).toEqual(guards.cases.map((c) => [c.filename, c.titled]));
+	});
+
+	// a shared hashlist's `Frolicme.com 2016-2017 1080p` came back confident as the film
+	// 2016: the service read the year range as the title; films titled by a year keep theirs
+	it('does not take a year range in the name for a film titled by one of its years', async () => {
+		mockIdentify.mockResolvedValue(dateRange.cases.map((c) => c.response as IdentifierResult));
+		const res = await call({ items: dateRange.cases.map((c) => ({ filename: c.filename })) });
+
+		const { results } = vi.mocked(res.json).mock.calls[0][0];
+		const titled = dateRange.cases.map((c, n) => [c.filename, results[n] !== null]);
+		expect(titled).toEqual(dateRange.cases.map((c) => [c.filename, c.titled]));
 	});
 
 	it('does not let the hash map name a box set as one of its films', async () => {

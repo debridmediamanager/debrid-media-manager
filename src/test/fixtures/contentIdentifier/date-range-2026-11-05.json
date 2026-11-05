@@ -1,0 +1,134 @@
+{
+	"capturedAt": "2026-11-05",
+	"cases": [
+		{
+			"filename": "Frolicme.com 2016-2017 1080p",
+			"titled": false,
+			"why": "a site's year range read as the film 2016",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt5157616",
+						"score": -0.5174,
+						"title": "2016",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6953100",
+						"score": -4.0989,
+						"title": "2017",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt7367966",
+						"score": -4.3715,
+						"title": "2016 the End",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Frolicme com 2016-2017",
+				"parsedYear": null,
+				"probability": 0.9127
+			}
+		},
+		{
+			"filename": "1917.2019.1080p.BluRay.x264-SPARKS",
+			"titled": true,
+			"why": "control: the film 1917",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt8579674",
+						"score": 1.842,
+						"title": "1917",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0081991",
+						"score": -3.3114,
+						"title": "Rasputin",
+						"year": 1981
+					},
+					{
+						"imdbId": "tt11960430",
+						"score": -4.3974,
+						"title": "1917: The Real Story",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "1917",
+				"parsedYear": 2019,
+				"probability": 0.9609
+			}
+		},
+		{
+			"filename": "Nineteen.Eighty-Four.1984.1080p.BluRay.Remux.LPCM.1.0",
+			"titled": true,
+			"why": "control: a title spelt out, answered by its AKA",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0087803",
+						"score": 4.4202,
+						"title": "1984",
+						"year": 1984
+					},
+					{
+						"imdbId": "tt14473100",
+						"score": -1.5642,
+						"title": "Nineteen Eighty-Four",
+						"year": 1954
+					},
+					{
+						"imdbId": "tt0088646",
+						"score": -3.3638,
+						"title": "Nineteen Nineteen",
+						"year": 1985
+					}
+				],
+				"parsedTitle": "Nineteen Eighty-Four",
+				"parsedYear": 1984,
+				"probability": 0.9813
+			}
+		},
+		{
+			"filename": "2012.2009.1080p.BluRay.x264",
+			"titled": true,
+			"why": "control: the film 2012",
+			"response": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1190080",
+						"score": 1.2963,
+						"title": "2012",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt1515975",
+						"score": -1.8747,
+						"title": "Yasnovidyashchaya",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt1883119",
+						"score": -2.4389,
+						"title": "2012",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "2012",
+				"parsedYear": 2009,
+				"probability": 0.8501
+			}
+		}
+	],
+	"source": "content-identifier e866e2a on dmm-01, /identify/batch kind auto; Frolicme from a shared hashlist in debridmediamanager/hashlists"
+}

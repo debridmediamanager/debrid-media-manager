@@ -120,6 +120,9 @@ const JAV_CODE = /^(?:[\w.-]+@)?[a-z]{2,6}-\d{3,5}(?:\.\w{2,4})?$/i;
 // A film's festival and release years can be 2-3 apart (Cannibal! The Musical is
 // 1993 on IMDb and 1996 on its releases); remakes the service confuses are decades.
 const MOVIE_YEAR_SLACK = 3;
+// `Frolicme.com 2016-2017 1080p` (a site's pack in a shared hashlist, 2026-11-05) came back
+// confident as the film 2016: the service reads a yearless name's range as its title.
+const YEAR_RANGE = /\b((?:19|20)\d{2})\s*-\s*((?:19|20)\d{2})\b/;
 
 /** Whether no answer for this name should be shown, however sure the service is. */
 export function refused(filename: string, answer: IdentifierResult): boolean {
@@ -130,8 +133,16 @@ export function refused(filename: string, answer: IdentifierResult): boolean {
 		(BOX_SET.test(filename) && !year && !namesItself(answer)) ||
 		(AUDIO.test(filename) && !VIDEO.test(filename)) ||
 		JAV_CODE.test(filename.trim()) ||
+		rangeAsTitle(filename, answer) ||
 		Boolean(year && top?.year && Math.abs(year - top.year) > MOVIE_YEAR_SLACK)
 	);
+}
+
+/** A yearless name's year range, answered with a film titled by one of its years. */
+function rangeAsTitle(filename: string, answer: IdentifierResult): boolean {
+	const range = filename.match(YEAR_RANGE);
+	const title = answer.matches[0]?.title.trim();
+	return Boolean(!answer.parsedYear && range && title && range.slice(1).includes(title));
 }
 
 /**
