@@ -98,7 +98,7 @@ describe('pollDebridLinkDeviceToken', () => {
 			jsonResponse({
 				access_token: 'tok',
 				token_type: 'Bearer',
-				expires_in: 604800,
+				expires_in: 86400,
 				refresh_token: 'rtok',
 			})
 		);
@@ -107,6 +107,7 @@ describe('pollDebridLinkDeviceToken', () => {
 
 		expect(token?.access_token).toBe('tok');
 		expect(token?.refresh_token).toBe('rtok');
+		expect(token?.expires_in).toBe(86400);
 		expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ device_code: 'dc' });
 	});
 
@@ -152,7 +153,7 @@ describe('pollDebridLinkDeviceToken', () => {
 describe('refreshDebridLinkToken', () => {
 	it('sends the refresh token to its own action', async () => {
 		fetchMock.mockResolvedValue(
-			jsonResponse({ access_token: 'fresh', token_type: 'Bearer', expires_in: 604800 })
+			jsonResponse({ access_token: 'fresh', token_type: 'Bearer', expires_in: 86400 })
 		);
 
 		const token = await refreshDebridLinkToken('rtok');

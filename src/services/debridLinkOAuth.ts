@@ -11,15 +11,10 @@
  * the scope list and the two upstream endpoints. This half is only the browser's
  * side of the conversation.
  *
- * **Token lifetime is not yet measured.** plex_debrid mints a token, never
- * refreshes it and keeps working, which suggests a long life, but that is an
- * inference and not a measurement - unlike Premiumize, where `expires_in` was
- * read back as ten years and the refresh machinery was deliberately left out.
- * Debrid-Link does document a refresh token ("For Oauth2, you should try to
- * refresh the access_token if you have a refresh_token"), so the refresh path
- * exists here and the caller stores an absolute expiry when one is offered. If
- * an E2E mint shows a ten-year `expires_in`, delete the refresh path rather than
- * carrying dead machinery; if it shows days, keep it.
+ * Access tokens were measured at one day (2026-11-05). The caller stores the
+ * returned absolute expiry and renews shortly before it when a refresh token
+ * is available. Refresh-token rotation has not been measured; preserve a
+ * replacement refresh token whenever the endpoint supplies one.
  */
 
 const DL_OAUTH_PROXY = '/api/debridlink-oauth';
@@ -46,7 +41,7 @@ export interface DebridLinkDeviceCode {
 export interface DebridLinkTokenResponse {
 	access_token: string;
 	token_type: string;
-	/** Seconds. Unmeasured - see the note at the top of this file. */
+	/** Seconds; measured at 86400, but always honor the returned lifetime. */
 	expires_in?: number;
 	/** Present per the vendor's error documentation; absent would be fine too. */
 	refresh_token?: string;

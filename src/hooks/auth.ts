@@ -6,7 +6,7 @@ import {
 	getDebridLinkAccountInfo,
 	type DebridLinkAccountInfo,
 } from '../services/debridLink';
-import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
+import { refreshDebridLinkToken, type DebridLinkTokenResponse } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
@@ -472,86 +472,70 @@ const useOffcloud = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
-/**
- * How close to expiry a stored Debrid-Link access token has to be before it is
- * renewed. Wide on purpose: the renewal is a single call made once per mount,
- * so being early costs one request and being late costs the session.
- */
-const DL_REFRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
+/** Renew shortly before the measured one-day lifetime, like Real-Debrid. */
+const DL_REFRESH_WINDOW_MS = REFRESH_MARGIN_MS;
 
 const useDebridLink = () => {
 	const [user, setUser] = useState<DebridLinkUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [accessToken, setAccessToken] = useLocalStorage<string>('dl:accessToken');
-	const [refreshToken] = useLocalStorage<string>('dl:refreshToken');
+	const [refreshToken, setRefreshToken] = useLocalStorage<string>('dl:refreshToken');
 	const [tokenExpiry, setTokenExpiry] = useLocalStorage<number>('dl:tokenExpiry');
 	const [apiKey] = useLocalStorage<string>('dl:apiKey');
 	const token = accessToken || apiKey;
 	const refreshAttempted = useRef(false);
+	const renewal = useRef<Promise<DebridLinkTokenResponse> | null>(null);
 
-	/**
-	 * Lazy, single-shot renewal - no timers, no scheduler, no global state.
-	 *
-	 * Debrid-Link's real `expires_in` has not been measured yet (plex_debrid
-	 * never refreshes and keeps working, which hints at a long life but proves
-	 * nothing), so this refreshes only when the token actually carried an
-	 * expiry and that expiry is close. If a device-flow mint turns out to last
-	 * years, `dl:tokenExpiry` is simply never near and this never fires; if it
-	 * lasts days, one call on mount covers it. The alternative - Real-Debrid's
-	 * timer machinery - is what put a 24h token into queues that hold jobs for
-	 * days, and it is not worth importing here on a guess.
-	 */
+	// Lazy renewal and validation are one sequence: an expired profile response
+	// must never clear a refresh credential while renewal is still in flight.
 	useEffect(() => {
-		if (refreshAttempted.current) return;
-		if (!accessToken || !refreshToken || !tokenExpiry) return;
-		if (tokenExpiry - Date.now() > DL_REFRESH_WINDOW_MS) return;
-
-		refreshAttempted.current = true;
-		let isMounted = true;
-		refreshDebridLinkToken(refreshToken)
-			.then((fresh) => {
-				if (!isMounted) return;
-				setAccessToken(fresh.access_token);
-				if (typeof fresh.expires_in === 'number') {
-					setTokenExpiry(Date.now() + fresh.expires_in * 1000);
-				}
-			})
-			.catch((e) => {
-				// Not fatal on its own: the stored token may still be good, and
-				// the profile call below is what settles whether it is.
-				console.error('[Auth] Debrid-Link token refresh failed', e);
-			});
-		return () => {
-			isMounted = false;
-		};
-		// The localStorage setters are new identities on every render; including
-		// them would re-run this effect constantly for nothing.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [accessToken, refreshToken, tokenExpiry]);
-
-	useEffect(() => {
-		if (!token) {
-			return;
-		}
-
+		if (!token) return;
 		let isMounted = true;
 		setLoading(true);
-		getDebridLinkAccountInfo(token)
-			.then((info) => {
+
+		const validate = async () => {
+			let credential = token;
+			if (
+				accessToken &&
+				refreshToken &&
+				tokenExpiry &&
+				tokenExpiry - Date.now() <= DL_REFRESH_WINDOW_MS &&
+				(!refreshAttempted.current || renewal.current)
+			) {
+				refreshAttempted.current = true;
+				// Reuse a pending renewal if an effect is restarted before it settles.
+				renewal.current ??= refreshDebridLinkToken(refreshToken);
+				try {
+					const fresh = await renewal.current;
+					if (!isMounted) return;
+					renewal.current = null;
+					if (fresh.refresh_token) setRefreshToken(fresh.refresh_token);
+					setTokenExpiry(
+						typeof fresh.expires_in === 'number'
+							? Date.now() + fresh.expires_in * 1000
+							: null
+					);
+					setAccessToken(fresh.access_token);
+					credential = fresh.access_token;
+				} catch (e) {
+					if (!isMounted) return;
+					renewal.current = null;
+					// The stored access token may still be valid after a failed renewal.
+					console.error('[Auth] Debrid-Link token refresh failed', e);
+				}
+			}
+
+			try {
+				const info = await getDebridLinkAccountInfo(credential);
 				if (!isMounted) return;
 				setUser(info);
 				setError(null);
 				setLoading(false);
-			})
-			.catch((e) => {
+			} catch (e) {
 				if (!isMounted) return;
-				// `badToken` is returned for an absent, malformed and expired
-				// token alike, and by this point the refresh above has already
-				// had its one chance. Drop the credentials so withAuth routes
-				// the user to the login page instead of leaving a dead session
-				// that fails every call it makes.
-				if ((e as { code?: string })?.code === BAD_TOKEN) {
+				// Renewal has settled before badToken can invalidate the session.
+				if (e && typeof e === 'object' && 'code' in e && e.code === BAD_TOKEN) {
 					clearDlKeys();
 					setUser(null);
 					setError(null);
@@ -560,11 +544,15 @@ const useDebridLink = () => {
 				}
 				setError(e as Error);
 				setLoading(false);
-			});
+			}
+		};
+		void validate();
 		return () => {
 			isMounted = false;
 		};
-	}, [token]);
+		// Storage setters change identity every render, but do not change inputs.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [token, accessToken, refreshToken, tokenExpiry]);
 
 	return { user, error, hasAuth: !!token, loading };
 };

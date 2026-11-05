@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	__resetRealDebridStateForTests,
@@ -489,6 +489,18 @@ describe('useDebridLink via useCurrentUser', () => {
 		expect(result.current.dlError).toBeNull();
 	});
 
+	it('clears a refused manual API key without attempting OAuth renewal', async () => {
+		setStoredValue('dl:apiKey', 'refused-manual-key');
+		mockGetDebridLinkAccountInfo.mockRejectedValue(
+			Object.assign(new Error('expired'), { code: 'badToken' })
+		);
+		const { result } = renderHook(() => useCurrentUser());
+		await waitFor(() => expect(result.current.hasDLAuth).toBe(false));
+		expect(window.localStorage.getItem('dl:apiKey')).toBeNull();
+		expect(mockRefreshDebridLinkToken).not.toHaveBeenCalled();
+		expect(result.current.dlError).toBeNull();
+	});
+
 	it('keeps a non-auth failure as an error rather than signing the user out', async () => {
 		setStoredValue('dl:accessToken', 'dl-oauth-token');
 		mockGetDebridLinkAccountInfo.mockRejectedValue(
@@ -503,10 +515,75 @@ describe('useDebridLink via useCurrentUser', () => {
 	});
 
 	describe('lazy refresh', () => {
+		it('waits for delayed renewal before validating an expired access token', async () => {
+			setStoredValue('dl:accessToken', 'expired');
+			setStoredValue('dl:refreshToken', 'valid-refresh');
+			setStoredValue('dl:tokenExpiry', Date.now() - 1000);
+			const { promise, resolve: finishRefresh } = Promise.withResolvers<unknown>();
+			mockRefreshDebridLinkToken.mockReturnValueOnce(promise);
+			mockGetDebridLinkAccountInfo.mockImplementation((token) =>
+				token === 'expired'
+					? Promise.reject(Object.assign(new Error('expired'), { code: 'badToken' }))
+					: Promise.resolve(account)
+			);
+
+			const { result } = renderHook(() => useCurrentUser());
+			await act(async () => {});
+			expect(window.localStorage.getItem('dl:refreshToken')).toBe(
+				JSON.stringify('valid-refresh')
+			);
+			expect(mockGetDebridLinkAccountInfo).not.toHaveBeenCalled();
+
+			await act(async () => {
+				finishRefresh({ access_token: 'fresh', expires_in: 86400 });
+			});
+			await waitFor(() => expect(result.current.dlUser).toEqual(account));
+			expect(mockGetDebridLinkAccountInfo).toHaveBeenCalledWith('fresh');
+			expect(window.localStorage.getItem('dl:refreshToken')).toBe(
+				JSON.stringify('valid-refresh')
+			);
+		});
+
+		it('persists and uses a returned replacement refresh token on the next renewal', async () => {
+			setStoredValue('dl:accessToken', 'expired');
+			setStoredValue('dl:refreshToken', 'old-refresh');
+			setStoredValue('dl:tokenExpiry', Date.now() - 1000);
+			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
+			mockRefreshDebridLinkToken.mockResolvedValue({
+				access_token: 'fresh',
+				refresh_token: 'replacement-refresh',
+				expires_in: 86400,
+			});
+			const first = renderHook(() => useCurrentUser());
+			await waitFor(() => expect(first.result.current.dlUser).toEqual(account));
+			expect(window.localStorage.getItem('dl:refreshToken')).toBe(
+				JSON.stringify('replacement-refresh')
+			);
+			first.unmount();
+
+			setStoredValue('dl:tokenExpiry', Date.now() - 1000);
+			const second = renderHook(() => useCurrentUser());
+			await waitFor(() => expect(second.result.current.dlUser).toEqual(account));
+			expect(mockRefreshDebridLinkToken).toHaveBeenLastCalledWith('replacement-refresh');
+		});
+
+		it('does not renew a fresh one-day token on mount or remount', async () => {
+			setStoredValue('dl:accessToken', 'fresh');
+			setStoredValue('dl:refreshToken', 'rtok');
+			setStoredValue('dl:tokenExpiry', Date.now() + 86400 * 1000);
+			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
+			const first = renderHook(() => useCurrentUser());
+			await waitFor(() => expect(first.result.current.dlUser).toEqual(account));
+			first.unmount();
+			const second = renderHook(() => useCurrentUser());
+			await waitFor(() => expect(second.result.current.dlUser).toEqual(account));
+			expect(mockRefreshDebridLinkToken).not.toHaveBeenCalled();
+		});
+
 		it('renews a token whose stored expiry is close', async () => {
 			setStoredValue('dl:accessToken', 'stale');
 			setStoredValue('dl:refreshToken', 'rtok');
-			setStoredValue('dl:tokenExpiry', Date.now() + 60 * 60 * 1000);
+			setStoredValue('dl:tokenExpiry', Date.now() + 60 * 1000);
 			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
 			mockRefreshDebridLinkToken.mockResolvedValue({
 				access_token: 'fresh',
@@ -566,7 +643,7 @@ describe('useDebridLink via useCurrentUser', () => {
 		it('still loads the profile when the renewal fails', async () => {
 			setStoredValue('dl:accessToken', 'stale');
 			setStoredValue('dl:refreshToken', 'rtok');
-			setStoredValue('dl:tokenExpiry', Date.now() + 60 * 60 * 1000);
+			setStoredValue('dl:tokenExpiry', Date.now() + 60 * 1000);
 			mockRefreshDebridLinkToken.mockRejectedValue(new Error('invalid_request'));
 			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
 

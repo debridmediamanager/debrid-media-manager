@@ -63,11 +63,8 @@ export default function DebridLinkLoginPage() {
 					// is the whole account, this one carries only the scopes
 					// DMM asked for and can be revoked on its own.
 					setAccessToken(token.access_token);
-					// The real lifetime is unmeasured (see debridLinkOAuth.ts).
-					// Recording an absolute expiry costs nothing and is what
-					// lets `useDebridLink` renew lazily instead of guessing; if
-					// Debrid-Link sends neither field, nothing is stored and
-					// nothing tries to refresh.
+					// Access tokens last one day. Keep the provider's expiry so
+					// the auth hook can renew shortly before it elapses.
 					if (token.refresh_token) setRefreshToken(token.refresh_token);
 					if (typeof token.expires_in === 'number') {
 						setTokenExpiry(Date.now() + token.expires_in * 1000);

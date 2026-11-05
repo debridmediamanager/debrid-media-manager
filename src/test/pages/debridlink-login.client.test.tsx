@@ -245,9 +245,8 @@ describe('DebridLinkLoginPage', () => {
 			expect(replace).toHaveBeenCalledWith('/');
 		});
 
-		// The real lifetime is unmeasured, so the expiry is recorded as an
-		// absolute instant when the server offers one - that is what lets the
-		// hook renew lazily instead of on a timer.
+		// Preserve the provider's expiry rather than hard-coding its current
+		// one-day lifetime into login storage.
 		it('records the refresh token and an absolute expiry when offered', async () => {
 			requestDebridLinkDeviceCode.mockResolvedValue(deviceCode);
 			pollDebridLinkDeviceToken.mockResolvedValue({
