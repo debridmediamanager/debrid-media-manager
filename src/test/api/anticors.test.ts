@@ -81,6 +81,35 @@ describe('/api/anticors', () => {
 		expect(res.send).toHaveBeenCalledWith('Host is not allowed');
 	});
 
+	it.each(['GET', 'POST'])(
+		'rejects AllDebrid %s requests without forwarding credentials',
+		async (method) => {
+			const fetchMock = global.fetch as unknown as Mock;
+			fetchMock.mockResolvedValue(
+				new Response(JSON.stringify({ status: 'success' }), {
+					status: 200,
+					headers: { 'content-type': 'application/json' },
+				})
+			);
+			const req = createMockRequest({
+				method,
+				query: {
+					url: 'https://api.alldebrid.com/v4.1/link/unlock',
+					apikey: 'synthetic-ad-key',
+					link: 'https://alldebrid.com/f/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+				},
+				headers: { authorization: 'Bearer synthetic-ad-key' },
+			});
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.status).toHaveBeenCalledWith(403);
+			expect(res.send).toHaveBeenCalledWith('Host is not allowed');
+			expect(fetchMock).not.toHaveBeenCalled();
+		}
+	);
+
 	it('handles OPTIONS preflight requests', async () => {
 		const req = createMockRequest({
 			method: 'OPTIONS',

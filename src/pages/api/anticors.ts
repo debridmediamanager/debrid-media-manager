@@ -13,12 +13,7 @@ const ALLOWED_ORIGINS = [
 
 const DEFAULT_ORIGIN = 'https://debridmediamanager.com';
 
-const ALLOWED_HOSTS = [
-	'app.real-debrid.com',
-	'api.real-debrid.com',
-	'api.alldebrid.com',
-	'api.torbox.app',
-];
+const ALLOWED_HOSTS = ['app.real-debrid.com', 'api.real-debrid.com', 'api.torbox.app'];
 
 const HEADERS_TO_PROXY = ['authorization', 'content-type'] as const;
 
