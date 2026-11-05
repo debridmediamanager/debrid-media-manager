@@ -1,7 +1,6 @@
 # DMM Cast for TorBox - Implementation Plan
 
-> **Historical plan. Three rows of the comparison table below are stale — corrected inline
-> and listed here so nobody has to spot them.**
+> **Historical plan. The corrections below supersede the original proposals.**
 >
 > - **RD's cached check does not exist.** `GET /torrents/instantAvailability/{hash}` has been
 >   **disabled since 2024-11-22** (`error_code` 37) and nothing replaced it. Real-Debrid has
@@ -13,7 +12,8 @@
 > - **The colour scheme here disagrees with `cast-alldebrid.md`.** Both are superseded by
 >   `AGENTS.md`: RD green `#b5d496`, AD amber `#fbc730`, TB indigo `#4f46e5`.
 >
-> The architecture sections below are still accurate and are why this file is kept.
+> TorBox playback uses a stable DMM play endpoint, not a permanent TorBox delivery URL.
+> The safety requirements in §7.1 and Security Considerations apply to the implementation.
 
 ## Overview
 
@@ -23,17 +23,17 @@ This document outlines a comprehensive plan to create "DMM Cast for TorBox" - a 
 
 ## Key Differences: TorBox vs Real-Debrid
 
-| Feature          | Real-Debrid                                               | TorBox                                                     |
-| ---------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
-| Authentication   | OAuth (clientId, clientSecret, refreshToken, accessToken) | Simple API Key (Bearer token)                              |
-| Link Generation  | `POST /unrestrict/link`                                   | `GET /torrents/requestdl?token=&torrent_id=&file_id=`      |
-| File Selection   | Required: `POST /torrents/selectFiles/{id}`               | Not needed - TorBox downloads all files automatically      |
-| User Info        | `GET /user` returns `username`                            | `GET /user/me` returns `email` (use email hash for userId) |
-| Rate Limits      | 250 req/min; unrestrict ≥5s, addMagnet ~20s               | 5 req/sec (more generous)                                  |
-| Permalinks       | Not available                                             | Supported via `?redirect=true`                             |
-| Torrent Creation | `POST /torrents/addMagnet`                                | `POST /torrents/createtorrent`                             |
-| Torrent Deletion | `DELETE /torrents/delete/{id}`                            | `POST /torrents/controltorrent` with `operation: 'delete'` |
-| Cached Check     | None — `instantAvailability` disabled since 2024-11-22    | `GET /torrents/checkcached?hash=`                          |
+| Feature          | Real-Debrid                                               | TorBox                                                                    |
+| ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Authentication   | OAuth (clientId, clientSecret, refreshToken, accessToken) | Simple API Key (Bearer token)                                             |
+| Link Generation  | `POST /unrestrict/link`                                   | `GET /torrents/requestdl?token=&torrent_id=&file_id=`                     |
+| File Selection   | Required: `POST /torrents/selectFiles/{id}`               | Not needed - TorBox downloads all files automatically                     |
+| User Info        | `GET /user` returns `username`                            | `GET /user/me` returns `email` (use email hash for userId)                |
+| Rate Limits      | 250 req/min; unrestrict ≥5s, addMagnet ~20s               | 5 req/sec (more generous)                                                 |
+| Permalinks       | DMM resolves playback for the caller                      | DMM play endpoint resolves for the caller; `redirect=true` only redirects |
+| Torrent Creation | `POST /torrents/addMagnet`                                | `POST /torrents/createtorrent`                                            |
+| Torrent Deletion | `DELETE /torrents/delete/{id}`                            | `POST /torrents/controltorrent` with `operation: 'delete'`                |
+| Cached Check     | None — `instantAvailability` disabled since 2024-11-22    | `GET /torrents/checkcached?hash=`                                         |
 
 ---
 
@@ -111,10 +111,10 @@ model TorBoxCast {
   imdbId    String           // IMDB ID (format: tt1234567 or tt1234567:S:E)
   userId    String           // 12-character hashed user ID (from TorBox email)
   hash      String           // Torrent hash
-  url       String   @db.Text // Direct stream URL (permalink)
+  url       String   @db.Text // Display filename, not a shareable TorBox URL
   updatedAt DateTime @updatedAt
   size      BigInt   @default(0)  // File size in MB
-  torrentId Int?             // TorBox torrent ID (for cleanup)
+  torrentId Int?             // Owner-scoped TorBox torrent ID; not proof cleanup is safe
   fileId    Int?             // TorBox file ID within torrent
 
   @@unique([imdbId, userId, hash])
@@ -210,11 +210,11 @@ export const getTorBoxStreamUrl = async (
 	fileId: number,
 	mediaType: string
 ): Promise<[string, number, number, number]> => {
-	// 1. Add hash as magnet via createTorrent
-	// 2. Wait for torrent to be ready (poll getTorrentList)
-	// 3. Get download link via requestDownloadLink (use redirect=true for permalink)
+	// 1. Snapshot the complete paginated library before adding a missing hash
+	// 2. Reuse/poll held torrents; require download_finished && download_present
+	// 3. Request a delivery URL with the caller's own key
 	// 4. Parse season/episode from filename if TV
-	// 5. Optionally delete torrent after casting
+	// 5. Cleanup only a torrent proven to have been created by this operation
 	// Returns: [streamUrl, seasonNumber, episodeNumber, fileSize]
 };
 
@@ -227,7 +227,7 @@ export const getBiggestFileTorBoxStreamUrl = async (
 };
 ```
 
-**Key Difference:** TorBox supports permalinks with `?redirect=true`, which can be stored directly without expiration concerns.
+**Key Difference:** A stable DMM play URL resolves the torrent/file and requests a TorBox delivery URL for the caller. `redirect=true` changes the TorBox response into a redirect; it does not make the credential-bearing destination permanent or safe to share.
 
 ---
 
@@ -410,12 +410,12 @@ export default async function handler(req, res) {
 		...userCasts.map((cast) => ({
 			name: 'DMM Cast TB',
 			title: `📺 ${cast.filename} (${cast.size}MB)\n🎬 DMM Cast TB (Yours)`,
-			url: cast.url, // TorBox permalink
+			url: `${baseUrl}/api/stremio-tb/${userid}/play/${cast.hash}?file=${encodeURIComponent(cast.url)}`,
 		})),
 		...otherStreams.map((stream) => ({
 			name: 'DMM Cast TB',
 			title: `👥 ${stream.filename} (${stream.size}MB)\n🎬 DMM Cast TB`,
-			url: stream.url,
+			url: `${baseUrl}/api/stremio-tb/${userid}/play/${stream.hash}?file=${encodeURIComponent(stream.url)}`,
 		})),
 	];
 
@@ -592,15 +592,23 @@ Add TorBox-specific size limit settings:
 
 ### Phase 7: TorBox-Specific Optimizations
 
-#### 7.1 Permalink Support
+#### 7.1 DMM Playback Resolution and Cleanup Safety
 
-TorBox supports permalinks that don't expire. Store these directly:
+Publish stable DMM play endpoints, for example:
 
 ```typescript
-// Instead of storing expiring URLs, store permalinks
-const permalink = `https://api.torbox.app/v1/api/torrents/requestdl?token=${apiKey}&torrent_id=${torrentId}&file_id=${fileId}&redirect=true`;
-await db.saveCast(imdbId, userId, hash, permalink, fileSize, torrentId, fileId);
+const playbackUrl = `${baseUrl}/api/stremio-tb/${userId}/play/${hash}?file=${encodeURIComponent(filename)}`;
 ```
+
+The endpoint resolves or adds the torrent in the caller's TorBox account and requests a delivery URL with that caller's API key. Torrent and file IDs belong to an account; do not reuse another user's IDs or credential-bearing delivery URL. Sharing cast metadata (hash and filename) is distinct from sharing a TorBox URL.
+
+TorBox `requestdl` and CDN URLs carry credentials. Repeated `requestdl` calls may return the same URL, but delivery URLs can become stale (including an “Invalid Presigned Token” refusal); they are not permanent links. Resolve again when needed rather than promising an expiry interval. `redirect=true` is only a redirect option, not a lifetime guarantee.
+
+Before adding, take a complete paginated snapshot of existing torrent IDs. `createtorrent` can return the ID of an existing torrent, so a successful create response alone does not establish ownership for cleanup. Never delete an ID in the pre-add snapshot, or any torrent whose ownership could not be established because listing failed. Reuse and poll a held pending torrent instead of adding it again. Only a torrent proven new to this operation is eligible for temporary cleanup.
+
+Gate playback on both `download_finished` and `download_present`. A finished but absent torrent is not playable, and a state string such as `stalled (no seeds)` does not override these flags.
+
+The unified torrent library fetcher treats `success: false` on any torrent page as a failed refresh, not end-of-list. It must not cache the accumulated partial torrent list for five minutes; the next attempt starts at offset zero.
 
 #### 7.2 Cached Check Optimization
 
@@ -761,11 +769,12 @@ DMMCAST_SALT=...
 - Never expose API key in URLs visible to other users
 - Use user ID hash for all public-facing endpoints
 
-### Permalink Security
+### Playback URL and Error Security
 
-- TorBox permalinks contain the API key
-- Only store permalinks in user's own cast records
-- Never share permalinks with other users (unlike RD URLs)
+- Stable DMM play endpoints resolve with the caller's credentials; do not publish a stored TorBox delivery URL as a shared stream.
+- TorBox `requestdl` and CDN URLs contain the API key and must be treated as full-account credentials, not public permalinks.
+- Never log credential-bearing URLs, API keys, raw Axios errors/configuration, or arbitrary provider response messages.
+- Error reporting uses fixed operation labels and sanitized status/allowlisted error codes; a provider's HTTP 500 message can contain sensitive data too.
 
 ---
 
@@ -804,7 +813,7 @@ This plan creates a complete "DMM Cast for TorBox" feature that:
 
 1. **Maintains Separation**: Uses separate URL paths (`/stremio-tb`), database tables, and localStorage keys
 2. **Preserves Existing URLs**: Real-Debrid addon URLs remain unchanged at `/api/stremio/[userid]/...`
-3. **Leverages TorBox Features**: Uses permalinks for better stream reliability
+3. **Resolves Playback for the Caller**: Uses stable DMM play endpoints rather than sharing permanent TorBox URLs
 4. **Follows Existing Patterns**: Mirrors the RD implementation architecture for consistency
 5. **Provides Clear Branding**: Distinct visual identity (green theme) to differentiate from RD version
 6. **Enables Dual Use**: Users can install and use both addons simultaneously
