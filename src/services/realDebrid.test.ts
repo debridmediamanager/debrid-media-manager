@@ -184,6 +184,33 @@ describe('getUserTorrentsList edge cases', () => {
 });
 
 describe('unrestrictLink edge cases', () => {
+	it.each([
+		['8.8.8.8', '8.8.8.8'],
+		['172.15.255.255', '172.15.255.255'],
+		['172.32.0.0', '172.32.0.0'],
+		['100.63.255.255', '100.63.255.255'],
+		['100.128.0.0', '100.128.0.0'],
+		['192.168.1.1', null],
+		['172.16.0.0', null],
+		['172.31.255.255', null],
+		['100.64.0.0', null],
+		['100.127.255.255', null],
+		['0.0.0.0', null],
+		['::ffff:8.8.8.8', '8.8.8.8'],
+		['::FFFF:172.32.0.1', '172.32.0.1'],
+		['::ffff:172.16.0.1', null],
+		['::ffff:100.64.0.1', null],
+		['2001:4860:4860::8888', '2001:4860:4860::8888'],
+		['8.8.8.999', null],
+	])('sends the appropriate unrestrict client IP for %s', async (input, expected) => {
+		realAxios.post.mockResolvedValue({ data: { link: 'url' }, status: 200 });
+		await unrestrictLink('token', 'https://real-debrid.com/d/ABCDEF1234567', input);
+
+		const body = new URLSearchParams(realAxios.post.mock.calls[0][1]);
+		expect(body.get('ip')).toBe(expected);
+		expect(body.get('link')).toBe('https://real-debrid.com/d/ABCDEF1234567');
+	});
+
 	it('skips IP for 10.x.x.x private range', async () => {
 		realAxios.post.mockResolvedValue({ data: { link: 'url' } });
 		await unrestrictLink('token', 'https://rd.com/d/ABCDEF1234567', '10.0.0.1');

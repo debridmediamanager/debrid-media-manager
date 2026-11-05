@@ -1016,14 +1016,22 @@ export const unrestrictLink = async (
 ): Promise<UnrestrictResponse> => {
 	try {
 		const params = new URLSearchParams();
-		if (
-			/^\d/.test(ipAddress) &&
-			!ipAddress.startsWith('192.168') &&
-			!ipAddress.startsWith('10.') &&
-			!ipAddress.startsWith('127.') &&
-			!ipAddress.startsWith('169.254')
-		) {
-			params.append('ip', ipAddress);
+		const clientIp = ipAddress.replace(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/i, '$1');
+		const octets = clientIp.split('.').map(Number);
+		const isIpv4 =
+			/^\d{1,3}(?:\.\d{1,3}){3}$/.test(clientIp) && octets.every((octet) => octet <= 255);
+		const [first, second] = octets;
+		const isPrivateIpv4 =
+			first === 0 ||
+			first === 10 ||
+			first === 127 ||
+			(first === 169 && second === 254) ||
+			(first === 172 && second >= 16 && second <= 31) ||
+			(first === 192 && second === 168) ||
+			(first === 100 && second >= 64 && second <= 127);
+		// Keep the existing native IPv6 pass-through; do not infer RD's IPv6 policy.
+		if ((isIpv4 && !isPrivateIpv4) || (clientIp.includes(':') && /^\d/.test(clientIp))) {
+			params.append('ip', clientIp);
 		}
 		params.append('link', normalizeRdLink(link));
 		if (password) {
