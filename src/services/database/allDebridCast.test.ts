@@ -467,7 +467,7 @@ describe('AllDebridCastService', () => {
 			serve(fixture.heat);
 			prismaMock.allDebridCast.groupBy.mockResolvedValue([{ size: BigInt(9000) }]);
 			prismaMock.allDebridCast.findFirst.mockResolvedValue({
-				url: 'https://x.debrid.it/dl/abc/Heat.Cast.mkv',
+				url: 'Heat.Cast.mkv',
 				link: 'https://alldebrid.com/f/CAST',
 				size: BigInt(9000),
 				hash: 'cafe0000000000000000000000000000000000cast',

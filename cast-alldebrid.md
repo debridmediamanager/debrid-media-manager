@@ -1,7 +1,7 @@
 # DMM Cast for AllDebrid - Implementation Plan
 
-> **Historical plan. Four rows of the comparison table below are stale — corrected inline
-> and listed here so nobody has to spot them.**
+> **Historical plan. Provider behavior corrections are listed here and inline;
+> the current source and schema, not the illustrative snippets, define the implementation.**
 >
 > - **RD's cached check does not exist.** `GET /torrents/instantAvailability` has been
 >   **disabled since 2024-11-22** (`error_code` 37) and nothing replaced it.
@@ -15,13 +15,26 @@
 >   empty `text/html` body** — never the documented 429.
 > - **The colour scheme here disagrees with `cast-torbox.md`.** Both are superseded by
 >   `AGENTS.md`: RD green `#b5d496`, AD amber `#fbc730`, TB indigo `#4f46e5`.
+> - **AllDebrid's `/magnet/files` links are locked tokens, not delivery URLs.** The same
+>   torrent's `/f/` tokens survive magnet deletion and work across premium accounts.
+>   Unlock for the viewer at playback; no fixed token expiry has been measured.
 >
 > One row worth reading twice rather than correcting: **AllDebrid's cache probe _is_ the
 > upload.** There is no non-mutating probe left — `/magnet/instant` 404s and v4
-> `/magnet/status` is discontinued — so a miss has to be deleted again afterwards or
-> AllDebrid downloads it. `services/allDebrid.ts` already documents this at `isAdMagnetInstant`.
+> `/magnet/status` is discontinued — so a newly created miss has to be deleted again afterwards
+> or AllDebrid downloads it. A duplicate upload can return an existing magnet id:
+> never clean up a magnet the member already held.
 >
-> The architecture sections below are still accurate and are why this file is kept.
+> The architecture sections are historical context, not an API contract.
+
+## Current AllDebrid safeguards (2026-11-05)
+
+- Successful non-Ready magnet observations demote shared availability and remove obsolete file tokens. A failed provider request is not a cache-miss observation.
+- Playback removes a stored `/f/` token from shared files and casts only for `LINK_HOST_NOT_SUPPORTED` or `LINK_DOWN` after the viewer's premium status is confirmed. Maintenance, account failures and unknown premium status preserve shared records.
+- API routes distinguish invalid credentials from `AUTH_BLOCKED` (confirm the sign-in email) and empty HTTP 503/429 throttling (wait and retry).
+- Failed browser-state restores remain retryable and cannot overwrite saved state. Server-side AllDebrid identity verification can still trigger a new-IP sign-in email; removing that verification requires a separate authentication decision, not trusting a browser-supplied username or accepting revoked keys through a stale profile.
+- Destructive availability probes first list existing account magnets and preserve any held hash or returned id. An unavailable ownership baseline aborts the probe. This protects already-held downloads; the provider offers no atomic create-if-absent operation, so independent simultaneous adds remain a race.
+- The stream pools still have differing freshness filters. Those are selection policy, not proof of token expiry; no AllDebrid-specific expiry cutoff has been established.
 
 ## Current cast-save trust boundary
 
@@ -37,19 +50,19 @@ This document outlines a comprehensive plan to create "DMM Cast for AllDebrid" -
 
 ## Key Differences: AllDebrid vs Real-Debrid vs TorBox
 
-| Feature         | Real-Debrid                      | TorBox                          | AllDebrid                             |
-| --------------- | -------------------------------- | ------------------------------- | ------------------------------------- |
-| Authentication  | OAuth (4 tokens)                 | Simple API Key                  | PIN-based flow → API Key              |
-| User ID Source  | Username                         | Email                           | Username                              |
-| Link Generation | `POST /unrestrict/link`          | `GET /torrents/requestdl`       | Links in `/magnet/files` response     |
-| File Selection  | Required                         | Not needed                      | Not needed                            |
-| Rate Limits     | 250 req/min; unrestrict ≥5s      | 5 req/sec                       | 600 req/min binds; throttle is 503    |
-| Permalinks      | No                               | Yes (`?redirect=true`)          | No (links expire)                     |
-| Magnet Upload   | `POST /torrents/addMagnet`       | `POST /torrents/createtorrent`  | `POST /magnet/upload`                 |
-| Magnet Status   | `GET /torrents/info/{id}`        | `GET /torrents/mylist?id=`      | `POST /v4.1/magnet/status`            |
-| Magnet Delete   | `DELETE /torrents/delete/{id}`   | `POST /torrents/controltorrent` | `POST /magnet/delete`                 |
-| Cached Check    | None — disabled since 2024-11-22 | `GET /torrents/checkcached`     | `ready` on upload — the probe mutates |
-| Files Structure | Flat array                       | Flat array                      | Nested tree (folders)                 |
+| Feature         | Real-Debrid                      | TorBox                          | AllDebrid                                                        |
+| --------------- | -------------------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| Authentication  | OAuth (4 tokens)                 | Simple API Key                  | PIN-based flow → API Key                                         |
+| User ID Source  | Username                         | Email                           | Username                                                         |
+| Link Generation | `POST /unrestrict/link`          | `GET /torrents/requestdl`       | `/magnet/files` locked `/f/` tokens; `/link/unlock` for playback |
+| File Selection  | Required                         | Not needed                      | Not needed                                                       |
+| Rate Limits     | 250 req/min; unrestrict ≥5s      | 5 req/sec                       | 600 req/min binds; throttle is 503                               |
+| Permalinks      | No                               | Yes (`?redirect=true`)          | Stable locked `/f/` tokens; fresh delivery URL per unlock        |
+| Magnet Upload   | `POST /torrents/addMagnet`       | `POST /torrents/createtorrent`  | `POST /magnet/upload`                                            |
+| Magnet Status   | `GET /torrents/info/{id}`        | `GET /torrents/mylist?id=`      | `POST /v4.1/magnet/status`                                       |
+| Magnet Delete   | `DELETE /torrents/delete/{id}`   | `POST /torrents/controltorrent` | `POST /magnet/delete`                                            |
+| Cached Check    | None — disabled since 2024-11-22 | `GET /torrents/checkcached`     | `ready` on upload — the probe mutates                            |
+| Files Structure | Flat array                       | Flat array                      | Nested tree (folders)                                            |
 
 ---
 
@@ -193,7 +206,8 @@ model AllDebridCast {
   imdbId    String           // IMDB ID (format: tt1234567 or tt1234567:S:E)
   userId    String           // 12-character hashed user ID (from AD username)
   hash      String           // Torrent hash
-  url       String   @db.Text // Direct stream URL
+  url       String   @db.Text // Filename for display; not a delivery URL
+  link      String?  @db.Text // Locked https://alldebrid.com/f/ token for per-viewer unlock
   updatedAt DateTime @updatedAt
   size      BigInt   @default(0)  // File size in MB
   magnetId  Int?             // AllDebrid magnet ID (for status/cleanup)
@@ -1304,21 +1318,19 @@ src/
 
 AllDebrid returns files in a nested tree format. The `flattenFiles()` utility function recursively traverses this structure to extract all files with their full paths and download links.
 
-### 2. Direct Download Links
+### 2. Locked File Links
 
-Unlike Real-Debrid (which requires unrestricting) or TorBox (which uses `requestdl`), AllDebrid provides direct download links in the `l` field of the `/magnet/files` response. This simplifies the casting flow.
+The `l` field of `/magnet/files` is a locked `/f/` token, not a direct download URL. Store it in `AllDebridCast.link` and unlock it with the viewing member's premium credential at playback. `AllDebridCast.url` stores the filename for display.
 
 ### 3. No File Selection
 
 Like TorBox, AllDebrid downloads all files automatically - no file selection step needed.
 
-### 4. Link Expiration
+### 4. Locked Tokens and Delivery URLs
 
-AllDebrid links do expire (unlike TorBox permalinks). Consider:
+Measurements on 2026-11-05 found the same torrent's `/f/` tokens unchanged across accounts and magnet deletion. Tokens can stop working when AllDebrid loses the content, including when a Ready magnet regresses to Downloading; there is no measured fixed token lifetime.
 
-- Refreshing links on stream request
-- Storing magnet ID for re-fetching links
-- Implementing a refresh mechanism before playback
+Each `/link/unlock` mints a fresh delivery URL. Tested URLs still served at 25 hours; their exact expiry remains unmeasured. Do not store those delivery URLs as durable cast identities. Unlock the stored `/f/` token for each viewer and invalidate confirmed dead tokens rather than assuming age alone proves expiry.
 
 ### 5. PIN-Based Authentication
 
@@ -1517,14 +1529,14 @@ This plan creates a complete "DMM Cast for AllDebrid" feature that:
 2. **Preserves Existing URLs**: Real-Debrid and TorBox addon URLs remain unchanged
 
 3. **Leverages AllDebrid Features**:
-    - Direct download links (no unrestrict step)
+    - Stable locked tokens with per-viewer unlock
     - Instant availability detection
     - PIN-based authentication
 
 4. **Handles AllDebrid Specifics**:
     - Nested file structure parsing
     - PIN authentication flow
-    - Link expiration considerations
+    - Confirmed dead-token invalidation
 
 5. **Provides Clear Branding**: Distinct yellow theme to differentiate from RD (green) and TorBox (purple)
 
