@@ -58,7 +58,7 @@ describe('/api/availability/dl', () => {
 	// forgot any release on request. DMM now asks Debrid-Link itself with its probe account:
 	// the recorded bare-hash adds of DMM's 25 largest Verity releases (2026-11-04).
 	it('records a release Debrid-Link holds whole, from what Debrid-Link lists', async () => {
-		const { held } = stubDlProbeAccount();
+		const { held, calls } = stubDlProbeAccount();
 		const hit = verityWhole[0];
 		const listed = (hit.body as any).value;
 		const res = await call(submit, {
@@ -79,6 +79,9 @@ describe('/api/availability/dl', () => {
 			files: listed.files.map((f: any) => ({ path: f.name, bytes: f.size })),
 		});
 		expect(held.size).toBe(0); // the probe torrent is removed again
+		// and the account is read back, since a remove echoes any id
+		const removeAt = calls.findIndex((c) => c.method === 'DELETE');
+		expect(calls.slice(removeAt + 1).some((c) => c.url.includes('ids='))).toBe(true);
 	});
 
 	it('records nothing Debrid-Link refuses or only admitted part of, whatever the page says', async () => {

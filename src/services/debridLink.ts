@@ -1266,6 +1266,17 @@ export type DlReleaseAnswer =
  * hourly probe budget, which every caller on this server shares, so a run of library
  * visits cannot bring on the lockout that also stops the account's Cast probes.
  */
+/** Removes a probe torrent and reads the account back, since a remove echoes any id. */
+async function removeProbeTorrent(key: string, id: string): Promise<void> {
+	try {
+		await deleteSeedboxTorrents(key, [id]);
+		if (!(await getSeedboxTorrent(key, id))) return;
+	} catch {
+		// unconfirmed: reported below like one still listed
+	}
+	console.error('[Debrid-Link probe] Probe torrent left in the probe account:', id);
+}
+
 export async function probeDlRelease(hash: string): Promise<DlReleaseAnswer> {
 	const key = process.env.DEBRIDLINK_PROBE_KEY;
 	const wanted = normalizeHash(hash);
@@ -1297,11 +1308,11 @@ export async function probeDlRelease(hash: string): Promise<DlReleaseAnswer> {
 			id = added.id;
 			ours = !library.ids.has(id);
 			if (!(isDlFinished(added.status) || added.downloadPercent >= 100)) {
-				if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+				if (ours) await removeProbeTorrent(key, id);
 				return { cached: false };
 			}
 			if (!added.isZip) {
-				if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+				if (ours) await removeProbeTorrent(key, id);
 				return { cached: true, torrent: added };
 			}
 		}
@@ -1315,7 +1326,7 @@ export async function probeDlRelease(hash: string): Promise<DlReleaseAnswer> {
 	} catch {
 		return null;
 	} finally {
-		if (ours) await deleteSeedboxTorrents(key, [id]).catch(() => undefined);
+		if (ours) await removeProbeTorrent(key, id);
 	}
 }
 
