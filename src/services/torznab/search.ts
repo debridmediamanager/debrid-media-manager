@@ -5,8 +5,9 @@
 //
 //   * The library holds `{hash, title, fileSize}` per release and nothing else.
 //     There is no posting date, no swarm, no category — so `pubDate` comes from
-//     the library page's own `updatedAt`, the category is derived from the page
-//     key and the title, and `seeders` is repurposed (see `seedersFor`).
+//     the library page's own `updatedAt` (on the RD and AD feeds' RSS sync, from
+//     when DMM first recorded the release as cached), the category is derived
+//     from the page key and the title, and `seeders` is repurposed.
 //   * Only `ScrapedTrue` is served. The `Scraped` table holds results from
 //     sources that have been measured filing fabricated titles against real
 //     hashes, which a person browsing can see through and an *arr cannot: it
@@ -15,7 +16,7 @@
 //     title nothing has scraped yet is filled on this very request rather than
 //     answered empty — the same trade `/api/torrents/movie` makes for the site.
 
-import type { RdCachedNames } from '@/services/database/availability';
+import type { NewlyCachedRow, RdCachedNames } from '@/services/database/availability';
 import { flattenAndRemoveDuplicates, ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
 import { withoutTrashedResults } from '@/services/scrapedVerdicts/job';
@@ -35,6 +36,15 @@ import {
 	matchesCategoryFilter,
 	parseCategoryFilter,
 } from './categories';
+import {
+	NEWLY_CACHED_DEPTH,
+	NEWLY_CACHED_RESOLVE_LIMIT,
+	NEWLY_CACHED_WINDOW_MS,
+	newlyCachedStore,
+	type NewlyCachedLists,
+	type NewlyCachedRelease,
+	type ResolvedRelease,
+} from './newlyCached';
 import {
 	MissingProviderKeyError,
 	probeProviderCache,
@@ -410,7 +420,8 @@ function targetFromKey(key: string): TorznabTarget | null {
 }
 
 /**
- * The untargeted feed: the most recently refreshed library pages.
+ * The untargeted feed where the newly cached list has nothing to answer with:
+ * the most recently refreshed library pages.
  *
  * An *arr syncs this on a timer and expects newly posted releases. A library
  * keyed by title has no posting-date stream to offer, so what it offers instead
@@ -436,6 +447,174 @@ async function recentReleases(): Promise<LibraryRelease[]> {
 		})
 	);
 	return merge(pages);
+}
+
+const resolvedKey = (row: NewlyCachedRow) => `${row.imdbId}:${row.hash}`;
+
+/**
+ * The page a cache row's release is served from: the title's movie page, else
+ * the row's own season page, else the show's most recently refreshed other one.
+ */
+function pageFor(
+	row: NewlyCachedRow,
+	holders: Array<{ key: string; hash: string }>
+): string | undefined {
+	const keys = holders
+		.filter((holder) => holder.hash === row.hash)
+		.map((holder) => holder.key)
+		.filter((key) => key === `movie:${row.imdbId}` || key.startsWith(`tv:${row.imdbId}:`));
+	return (
+		keys.find((key) => key.startsWith('movie:')) ??
+		keys.find((key) => key === `tv:${row.imdbId}:${row.season}`) ??
+		keys[0]
+	);
+}
+
+/**
+ * What each cache row's hash is in the library, through the pipeline a search
+ * serves: the judged-trash, report, Cyrillic-led and size rules all apply, and
+ * a hash on no page of its title, or filtered off it, is null.
+ *
+ * The answer is memoised either way, and only a bounded slice of the unknown,
+ * newest first, is looked up per build. A page is read once however many of
+ * the wanted hashes it holds.
+ */
+async function resolveCacheRows(
+	rows: NewlyCachedRow[]
+): Promise<Map<string, ResolvedRelease | null>> {
+	const unique = new Map<string, NewlyCachedRow>();
+	for (const row of rows) if (!unique.has(resolvedKey(row))) unique.set(resolvedKey(row), row);
+
+	const known = await newlyCachedStore().readResolved([...unique.keys()]);
+	const wanted = [...unique.values()]
+		.filter((row) => !known.has(resolvedKey(row)))
+		.slice(0, NEWLY_CACHED_RESOLVE_LIMIT);
+	if (wanted.length === 0) return known;
+
+	const holders = await db.getScrapedTruePagesHolding(wanted);
+	const pageKeys = new Map(wanted.map((row) => [resolvedKey(row), pageFor(row, holders)]));
+
+	const pages = new Map<string, LibraryRelease[]>();
+	for (const key of new Set(pageKeys.values())) {
+		const target = key ? targetFromKey(key) : null;
+		if (!key || !target) continue;
+		pages.set(key, await withoutReported(target.imdbId, await readTarget(target)));
+	}
+
+	const learned = new Map<string, ResolvedRelease | null>();
+	for (const row of wanted) {
+		const page = pages.get(pageKeys.get(resolvedKey(row)) ?? '') ?? [];
+		const found = page.find((release) => release.hash.toLowerCase() === row.hash);
+		learned.set(
+			resolvedKey(row),
+			found
+				? {
+						hash: found.hash,
+						title: found.title,
+						size: found.size,
+						categories: found.categories,
+					}
+				: null
+		);
+	}
+	await newlyCachedStore().writeResolved(learned);
+	return new Map([...known, ...learned]);
+}
+
+/**
+ * The releases DMM most recently recorded as cached, per provider, newest
+ * first and dated by that record.
+ *
+ * The cache rows are read fresh on every build, through the repository's
+ * takedown filter, so a takedown leaves the list at the next build even while
+ * the hash's title is memoised. What Real-Debrid refuses by name is left off
+ * its list, judged as the targeted feeds judge it.
+ */
+export async function buildNewlyCached(): Promise<NewlyCachedLists> {
+	const since = new Date(Date.now() - NEWLY_CACHED_WINDOW_MS);
+	const [rdRows, adRows] = await Promise.all([
+		db.getNewlyCached('rd', since, NEWLY_CACHED_DEPTH),
+		db.getNewlyCached('ad', since, NEWLY_CACHED_DEPTH),
+	]);
+	const newestFirst = [...rdRows, ...adRows].sort(
+		(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+	);
+	const resolved = await resolveCacheRows(newestFirst);
+
+	const listOf = (rows: NewlyCachedRow[], rd: boolean): NewlyCachedRelease[] =>
+		rows.flatMap((row) => {
+			const release = resolved.get(resolvedKey(row));
+			if (!release) return [];
+			if (rd && isRefusedByRd(release, row)) return [];
+			return [{ ...release, cachedAt: row.createdAt.getTime() }];
+		});
+	return { rd: listOf(rdRows, true), ad: listOf(adRows, false) };
+}
+
+/**
+ * The shared list, rebuilt by whichever caller claims the build. Everyone else
+ * pages the last copy written. Null when there is none yet, or Redis and the
+ * build both failed: the caller then answers as before the list existed.
+ */
+async function newlyCachedLists(): Promise<NewlyCachedLists | null> {
+	const store = newlyCachedStore();
+	const stored = await store.readLists();
+	if (!(await store.claimBuild())) return stored;
+	try {
+		const built = await buildNewlyCached();
+		await store.writeLists(built);
+		return built;
+	} catch (error) {
+		console.error(
+			'Torznab: newly cached list build failed, serving the last one:',
+			error instanceof Error ? error.message : error
+		);
+		return stored;
+	}
+}
+
+/** Kind first, from `t`, then the client's own `cat=`. */
+const KIND_CATEGORIES: Record<SearchType, number[]> = {
+	search: [],
+	tvsearch: [5000],
+	movie: [2000],
+};
+
+/**
+ * The untargeted feed on the scopes whose cache answer is DMM's own: what was
+ * most recently recorded as cached, dated by that record, so an *arr paging
+ * back to the last release it saw picks up everything cached since. On the
+ * combined scope a hash both providers hold is listed once, at the earlier time.
+ */
+async function newlyCachedReleases(
+	t: SearchType,
+	params: NormalizedQuery,
+	scope: 'any' | 'rd' | 'ad'
+): Promise<LibraryRelease[]> {
+	const lists = await newlyCachedLists();
+	if (!lists) return [];
+
+	let listed = lists[scope === 'ad' ? 'ad' : 'rd'];
+	if (scope === 'any') {
+		const first = new Map<string, NewlyCachedRelease>();
+		for (const release of [...lists.rd, ...lists.ad]) {
+			const seen = first.get(release.hash.toLowerCase());
+			if (!seen || release.cachedAt < seen.cachedAt)
+				first.set(release.hash.toLowerCase(), release);
+		}
+		listed = [...first.values()].sort((a, b) => b.cachedAt - a.cachedAt);
+	}
+
+	return listed
+		.filter(
+			(release) =>
+				matchesCategoryFilter(release.categories, KIND_CATEGORIES[t]) &&
+				matchesCategoryFilter(release.categories, params.categories)
+		)
+		.map(({ cachedAt, ...release }) => ({
+			...release,
+			pubDate: new Date(cachedAt).toUTCString(),
+		}));
 }
 
 /**
@@ -498,7 +677,7 @@ async function cachedRowsFromDb(
  * an entry in a long list; offering one it refuses costs the grab, which an
  * *arr then records as a failed download.
  */
-function isRefusedByRd(release: LibraryRelease, rdNames?: RdCachedNames): boolean {
+function isRefusedByRd(release: { title: string }, rdNames?: RdCachedNames): boolean {
 	const names = rdNames ? [rdNames.originalFilename, rdNames.filename] : [];
 	return isRdBlockedName(release.title, names);
 }
@@ -653,6 +832,25 @@ export async function runSearch(
 	context?: TorznabSearchContext
 ): Promise<TorznabPage> {
 	const params = normalizeSearchQuery(query);
+
+	// Every release on this list is cached by definition, so it skips the cache
+	// lookup and answers the same on the `/cached` variant. An empty one answers
+	// as before: Prowlarr and Sonarr call an indexer that returns nothing broken.
+	const scope = options.cache;
+	if (!params.targeted && (scope === 'any' || scope === 'rd' || scope === 'ad')) {
+		const listed = await newlyCachedReleases(t, params, scope);
+		if (listed.length > 0) {
+			return {
+				items: listed
+					.slice(params.offset, params.offset + params.limit)
+					.map((release) => toRssItem(release, true)),
+				offset: params.offset,
+				total: listed.length,
+				unresolved: 0,
+			};
+		}
+	}
+
 	const releases = params.targeted ? await targetedReleases(t, params) : await recentReleases();
 
 	const matching = releases.filter((release) =>

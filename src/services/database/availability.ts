@@ -49,6 +49,14 @@ export interface RdCachedNames {
 	originalFilename: string;
 }
 
+/** A cache row as the Torznab RSS sync reads it; see `getNewlyCached`. */
+export interface NewlyCachedRow extends RdCachedNames {
+	hash: string;
+	imdbId: string;
+	season: number | null;
+	createdAt: Date;
+}
+
 type ParsedEpisodeInfo = {
 	season?: number;
 	episode?: number;
@@ -554,6 +562,46 @@ export class AvailabilityService extends DatabaseClient {
 				row.hash.toLowerCase(),
 				{ filename: row.filename, originalFilename: row.originalFilename },
 			])
+		);
+	}
+
+	/**
+	 * The rows most recently recorded as cached, newest first, for the Torznab
+	 * RSS sync. Same cached conditions as `getCachedRdNames` and
+	 * `filterCachedHashesAd`. `Available` rows older than its `createdAt`
+	 * column carry NULL there and are never returned. Hashes in lower case.
+	 */
+	public async getNewlyCached(
+		provider: 'rd' | 'ad',
+		since: Date,
+		limit: number
+	): Promise<NewlyCachedRow[]> {
+		const query = {
+			orderBy: { createdAt: 'desc' as const },
+			take: limit,
+			select: {
+				hash: true,
+				imdbId: true,
+				season: true,
+				createdAt: true,
+				filename: true,
+				originalFilename: true,
+			},
+		};
+		const rows =
+			provider === 'rd'
+				? await this.prisma.available.findMany({
+						where: { status: 'downloaded', createdAt: { gte: since } },
+						...query,
+					})
+				: await this.prisma.availableAd.findMany({
+						where: { status: 'Ready', statusCode: 4, createdAt: { gte: since } },
+						...query,
+					});
+		return rows.flatMap((row) =>
+			row.createdAt
+				? [{ ...row, hash: row.hash.toLowerCase(), createdAt: row.createdAt }]
+				: []
 		);
 	}
 

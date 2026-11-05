@@ -561,4 +561,53 @@ describe('AvailabilityService', () => {
 			expect(findManyMock).not.toHaveBeenCalled();
 		});
 	});
+
+	describe('getNewlyCached', () => {
+		const since = new Date('2026-10-30T00:00:00Z');
+		const select = {
+			hash: true,
+			imdbId: true,
+			season: true,
+			createdAt: true,
+			filename: true,
+			originalFilename: true,
+		};
+		const row = {
+			hash: 'ABCD',
+			imdbId: 'tt1',
+			season: 2,
+			createdAt: new Date('2026-11-05T10:00:00Z'),
+			filename: 'f',
+			originalFilename: 'o',
+		};
+
+		it("reads Real-Debrid's downloaded rows, newest first and within the window", async () => {
+			findManyMock.mockResolvedValue([row]);
+			expect(await service.getNewlyCached('rd', since, 3000)).toEqual([
+				{ ...row, hash: 'abcd' },
+			]);
+			expect(findManyMock).toHaveBeenCalledWith({
+				where: { status: 'downloaded', createdAt: { gte: since } },
+				orderBy: { createdAt: 'desc' },
+				take: 3000,
+				select,
+			});
+		});
+
+		it("reads AllDebrid's own ready rows the same way", async () => {
+			findManyAdMock.mockResolvedValue([row]);
+			await service.getNewlyCached('ad', since, 3000);
+			expect(findManyAdMock).toHaveBeenCalledWith({
+				where: { status: 'Ready', statusCode: 4, createdAt: { gte: since } },
+				orderBy: { createdAt: 'desc' },
+				take: 3000,
+				select,
+			});
+		});
+
+		it('never returns a row older than the column', async () => {
+			findManyMock.mockResolvedValue([{ ...row, createdAt: null }]);
+			expect(await service.getNewlyCached('rd', since, 3000)).toEqual([]);
+		});
+	});
 });

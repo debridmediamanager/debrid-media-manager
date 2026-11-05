@@ -497,6 +497,50 @@ describe('ScrapedService', () => {
 		);
 	});
 
+	describe('getScrapedTruePagesHolding', () => {
+		const queryOf = (call: number) => {
+			const query = prismaMock.$queryRaw.mock.calls[call][0] as Prisma.Sql;
+			return { sql: query.sql.replace(/\s+/g, ' '), values: query.values };
+		};
+
+		it("asks for the title's movie page and its season pages, by prefix", async () => {
+			const updatedAt = new Date('2026-11-05T10:00:00Z');
+			prismaMock.$queryRaw.mockResolvedValueOnce([
+				{ pageKey: 'tv:tt1:2', hash: 'abcd', updatedAt },
+			]);
+
+			expect(
+				await service.getScrapedTruePagesHolding([
+					{ imdbId: 'tt1', hash: 'ABCD' },
+					{ imdbId: 'tt1', hash: 'ef01' },
+				])
+			).toEqual([{ key: 'tv:tt1:2', hash: 'abcd', updatedAt }]);
+
+			// Not a `>= 'tv:tt1:' AND < 'tv:tt1;'` range: under utf8mb4_unicode_ci
+			// `;` sorts before `:` and that range matches nothing.
+			const { sql, values } = queryOf(0);
+			expect(sql).toContain('(s.key = ? OR s.key LIKE ?)');
+			expect(sql).toContain('LOWER(jt.hash) IN (?,?)');
+			expect(values).toEqual(['movie:tt1', 'tv:tt1:%', 'abcd', 'ef01']);
+		});
+
+		it('keeps an id that is not an IMDb id out of the pattern', async () => {
+			expect(
+				await service.getScrapedTruePagesHolding([{ imdbId: 'tt%', hash: 'abcd' }])
+			).toEqual([]);
+			expect(prismaMock.$queryRaw).not.toHaveBeenCalled();
+		});
+
+		it('asks about fifty titles per query', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.getScrapedTruePagesHolding(
+				Array.from({ length: 51 }, (_, index) => ({ imdbId: `tt${index}`, hash: 'abcd' }))
+			);
+			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(2);
+			expect(queryOf(1).values).toEqual(['movie:tt50', 'tv:tt50:%', 'abcd']);
+		});
+	});
+
 	it('returns cached counts from raw queries', async () => {
 		prismaMock.$queryRaw
 			.mockResolvedValueOnce([{ contentSize: BigInt(10) }])

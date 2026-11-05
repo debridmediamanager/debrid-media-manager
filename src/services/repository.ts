@@ -672,6 +672,12 @@ export class Repository {
 		return this.availabilityService.filterCachedHashesAd(await withoutBlockedHashList(hashes));
 	}
 
+	public async getNewlyCached(provider: 'rd' | 'ad', since: Date, limit: number) {
+		return withoutBlockedHashes(
+			await this.availabilityService.getNewlyCached(provider, since, limit)
+		);
+	}
+
 	public async filterPlayableCachedHashes(hashes: string[]) {
 		return this.availabilityService.filterPlayableCachedHashes(
 			await withoutBlockedHashList(hashes)
@@ -851,6 +857,10 @@ export class Repository {
 
 	public getRecentScrapedTrueKeys(limit: number) {
 		return this.scrapedService.getRecentScrapedTrueKeys(limit);
+	}
+
+	public getScrapedTruePagesHolding(wanted: Array<{ imdbId: string; hash: string }>) {
+		return this.scrapedService.getScrapedTruePagesHolding(wanted);
 	}
 
 	public async getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {

@@ -24,6 +24,8 @@
  *
  * Needs Docker. Skipped without it, like the other integration tests.
  */
+import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
+import sonarrEpisodeSearch from '@/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json';
 import recorded from '@/test/fixtures/transfers/lost-filings-2026-10-04.json';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
@@ -330,5 +332,49 @@ describe.skipIf(!dockerAvailable)('Library page saves on MySQL 8.0.36 (Integrati
 		const created = (await read('ScrapedTrue', 'tv:tt0074049:2'))!;
 		expect(created.results).toEqual([entryOf(e01)]);
 		expect(created.updatedAt.getTime()).toBeGreaterThanOrEqual(before - 1000);
+	});
+
+	// The Torznab RSS sync asks which page of a cache row's own title holds its
+	// hash, on production pages: Silo season 3 and Dead of Winter (2025).
+	it('names the pages of their own title that hold each hash, in any case', async () => {
+		const silo = sonarrEpisodeSearch.page;
+		const movie = rdRefusedNames.pages[0];
+		const onSilo = silo.results[0].hash;
+		const upper = silo.results[1];
+		const onMovie = rdRefusedNames.reported.hash;
+		await seed('ScrapedTrue', silo.key, silo.results, new Date(silo.updatedAt));
+		await seed('ScrapedTrue', movie.key, movie.results, new Date(movie.updatedAt));
+		// An older season page holding one of them in upper case, and a page of
+		// another title whose id starts with Silo's.
+		await seed(
+			'ScrapedTrue',
+			'tv:tt14688458:2',
+			[{ ...upper, hash: upper.hash.toUpperCase() }],
+			new Date('2025-01-01T00:00:00Z')
+		);
+		await seed('ScrapedTrue', 'tv:tt146884580:1', silo.results.slice(0, 2), new Date());
+
+		const found = await service.getScrapedTruePagesHolding([
+			{ imdbId: 'tt14688458', hash: onSilo.toUpperCase() },
+			{ imdbId: 'tt14688458', hash: upper.hash },
+			{ imdbId: 'tt7574556', hash: onMovie },
+			{ imdbId: 'tt7574556', hash: 'f'.repeat(40) },
+		]);
+
+		// Most recently refreshed page first, in lower case, nothing of tt146884580.
+		expect(found.map(({ key }) => key)).toEqual([
+			movie.key,
+			silo.key,
+			silo.key,
+			'tv:tt14688458:2',
+		]);
+		expect(found.map(({ key, hash }) => `${key} ${hash}`).sort()).toEqual(
+			[
+				`${movie.key} ${onMovie}`,
+				`${silo.key} ${onSilo}`,
+				`${silo.key} ${upper.hash}`,
+				`tv:tt14688458:2 ${upper.hash}`,
+			].sort()
+		);
 	});
 });

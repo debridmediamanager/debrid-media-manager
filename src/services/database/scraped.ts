@@ -44,6 +44,9 @@ const plausibleFileSize = () =>
  */
 const cyrillicLedDropped = () => Prisma.sql`AND jt.title NOT REGEXP '^[А-Яа-яЁё]'`;
 
+/** Titles per `getScrapedTruePagesHolding` query, so the key list stays a plannable range set. */
+const PAGES_HOLDING_CHUNK = 50;
+
 export type ScrapedTrueReadOptions = {
 	/** Keep Cyrillic-led releases. The title pages do, zurg's search does not. */
 	showCyrillicLed?: boolean;
@@ -226,6 +229,54 @@ export class ScrapedService extends DatabaseClient {
 			take: limit,
 			select: { key: true, updatedAt: true },
 		});
+	}
+
+	/**
+	 * Which library pages of their own title hold these hashes, most recently
+	 * refreshed first, for the Torznab RSS sync. The database says which page,
+	 * so a hash is found without transferring every season page of its show.
+	 *
+	 * A constant-prefix `LIKE` rather than a key range: `key` collates
+	 * `utf8mb4_unicode_ci`, where `;` sorts before `:`, so `>= 'tv:tt1:' AND
+	 * < 'tv:tt1;'` matches nothing. Hashes are compared in lower case because
+	 * pages and cache rows disagree on case.
+	 */
+	public async getScrapedTruePagesHolding(
+		wanted: Array<{ imdbId: string; hash: string }>
+	): Promise<Array<{ key: string; hash: string; updatedAt: Date }>> {
+		const byTitle = new Map<string, Set<string>>();
+		for (const { imdbId, hash } of wanted) {
+			// Also what keeps the LIKE pattern free of wildcards.
+			if (!/^tt\d+$/.test(imdbId)) continue;
+			const hashes = byTitle.get(imdbId) ?? new Set<string>();
+			hashes.add(hash.toLowerCase());
+			byTitle.set(imdbId, hashes);
+		}
+
+		const titles = [...byTitle.keys()];
+		const found: Array<{ key: string; hash: string; updatedAt: Date }> = [];
+		for (let start = 0; start < titles.length; start += PAGES_HOLDING_CHUNK) {
+			const chunk = titles.slice(start, start + PAGES_HOLDING_CHUNK);
+			const keys = Prisma.join(
+				chunk.map(
+					(id) => Prisma.sql`s.key = ${`movie:${id}`} OR s.key LIKE ${`tv:${id}:%`}`
+				),
+				' OR '
+			);
+			const hashes = Prisma.join([...new Set(chunk.flatMap((id) => [...byTitle.get(id)!]))]);
+			const rows = await this.prisma.$queryRaw<
+				Array<{ pageKey: string; hash: string; updatedAt: Date }>
+			>(Prisma.sql`
+				SELECT DISTINCT s.key AS pageKey, LOWER(jt.hash) AS hash, s.updatedAt
+				FROM ScrapedTrue s
+				JOIN JSON_TABLE(s.value, '$[*]' COLUMNS (hash VARCHAR(255) PATH '$.hash')) AS jt
+				WHERE (${keys}) AND LOWER(jt.hash) IN (${hashes})
+				ORDER BY s.updatedAt DESC`);
+			for (const row of rows) {
+				found.push({ key: row.pageKey, hash: row.hash, updatedAt: row.updatedAt });
+			}
+		}
+		return found;
 	}
 
 	public async getScrapedTrueResults<T>(
