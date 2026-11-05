@@ -543,10 +543,11 @@ model AvailableAdFile {
   @@index([hash, season, episode])
 }
 
-/// Debrid-Link releases seen whole: a library page's finished torrents, a Check DL hit, an
-/// add that finished at once. Debrid-Link retired its cache check (/seedbox/cached answers
-/// endpointDisabled), so this is the only read-only answer DMM has. File download URLs are
-/// keyless and outlive the torrent, so only paths and sizes are kept.
+/// Debrid-Link releases seen whole. A library page's finished torrents, a Check DL hit and an
+/// add that finished at once offer a hash; DMM asks Debrid-Link itself (`probeDlRelease`)
+/// before it records or forgets one. Debrid-Link retired its cache check (/seedbox/cached
+/// answers endpointDisabled), so this is the only read-only answer DMM has. File download
+/// URLs are keyless and outlive the torrent, so only paths and sizes are kept.
 model AvailableDl {
   hash      String            @id @db.VarChar(40)
   imdbId    String            @db.VarChar(16)
