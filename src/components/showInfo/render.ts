@@ -220,9 +220,9 @@ export interface OffcloudFileRow {
 /**
  * File rows for an Offcloud library item.
  *
- * Offcloud's links come out of `cloud/explore` already playable - keyless, any
- * IP, Range honoured, the same energycdn objects Premiumize serves - so both
- * buttons work off the link itself and neither needs the info hash. "DL" opens
+ * Offcloud's `cloud/explore` URLs are already playable, but contain an
+ * account-scoped token and a per-mint signature: treat them as sensitive.
+ * Both buttons use the URL itself and neither needs the info hash. "DL" opens
  * it directly; "Watch" hands it to `openWatch`, which passes it through as a
  * link rather than resolving a hash.
  *

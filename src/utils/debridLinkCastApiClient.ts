@@ -67,9 +67,8 @@ export interface DebridLinkCastSettings {
 export const saveDebridLinkCastProfile = async (
 	token: string,
 	settings: DebridLinkCastSettings = {},
-	// Only a device-flow login has one. Sent when it exists so the server does
-	// not need a second migration once Debrid-Link's real token lifetime is
-	// measured; omitted otherwise, and omitting it never clears a stored one.
+	// Device-flow access tokens last one day. Send the refresh token so Cast
+	// can renew independently of the browser; omission preserves a stored one.
 	refreshToken?: string | null
 ): Promise<string | null> => {
 	try {

@@ -1402,10 +1402,10 @@ export const showInfoForPM = async (
  *    upstream ever finishes or fails it. An unfinished row is therefore polled
  *    once for a fresher status, and one still sitting in `created` is offered
  *    an explicit way out rather than left to occupy the library forever.
- *  - **The links are already playable.** Keyless, any IP, Range honoured - the
- *    same energycdn objects Premiumize serves. Nothing has to be unrestricted,
- *    so both Watch and DL work straight off the explore URL, and neither needs
- *    the info hash a plain-HTTP row does not have.
+ *  - **The links are already playable, but sensitive.** Explore URLs contain
+ *    an account-scoped token and a per-mint signature. Nothing has to be
+ *    unrestricted, so Watch and DL use the URL directly, without an info hash.
+ *    Keep these account-bearing URLs out of logs and non-playback responses.
  */
 export const showInfoForOC = async (
 	app: string,
@@ -1595,8 +1595,8 @@ export const showInfoForOC = async (
 			document.getElementById('btn-delete-oc')?.addEventListener('click', removeItem);
 			document.getElementById('btn-remove-stuck-oc')?.addEventListener('click', removeItem);
 
-			// The links are already minted and keyless, so this is a plain export
-			// with no per-file request behind it - unlike Premiumize's.
+			// Explore already minted these sensitive, account-bearing URLs.
+			// This explicit export needs no per-file request, unlike Premiumize's.
 			document.getElementById('btn-export-links-oc')?.addEventListener('click', () => {
 				const blob = new Blob([files.map((file) => file.link).join('\n')], {
 					type: 'text/plain',

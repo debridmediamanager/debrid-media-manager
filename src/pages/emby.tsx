@@ -80,7 +80,7 @@ const PLUGINS: EmbyPlugin[] = [
 			label: 'premiumize.me/account',
 			href: 'https://www.premiumize.me/account',
 		},
-		detail: 'Links are made only when you press play, and stream through your server because a Premiumize link bills whoever holds it.',
+		detail: 'Links are made only when you press play, and stream through your server because downloads bill the Premiumize account that made the link.',
 	},
 	{
 		name: 'OC zurg',

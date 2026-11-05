@@ -36,6 +36,10 @@ The library's **Add** buttons accept full magnet links, standalone v1 info hashe
 
 On Debrid-Link, standalone hash lists remain **cached-only**; full magnets and `.torrent` files explicitly request a download and may consume the account's quota. TorBox also accepts direct HTTP(S) download links in its Add dialog.
 
+Debrid-Link's **Watch** action also uses cached-only hash admission: a miss returns an error rather than starting a new torrent download.
+
+Premiumize transfer-hash lookups accept at most 100 submitted IDs per proxy request, with eight concurrent upstream lookups. The library client splits larger lists into sequential batches.
+
 On Real-Debrid, Save Selection leaves a cached torrent intact when a strict subset would download again. Selecting different files remains an explicit replacement, even when the new selection is smaller.
 
 Shared progress and error notifications let pointer clicks reach the controls underneath them; dismissible episode summaries remain interactive. Backup restores count provider refusals as failures and finish their progress notification even if the final library refresh fails.
@@ -65,6 +69,8 @@ The final Every Episode totals stay visible until dismissed or until you leave t
 Use DMM as a Stremio addon to stream your debrid library directly through Stremio. Includes a Cast addon for sharing your library streams.
 
 Browser player launches use `POST /api/watch/resolve/{os}/{player}` with credentials in the JSON body. The obsolete `GET /api/watch/{os}/{player}` query-token resolver has been removed. Its opt-in HTTP regression runs against an isolated instance with `DMM_ISOLATED_TEST_URL=http://127.0.0.1:<port> npx vitest run --config vitest.live.config.ts src/test/api/watch/removed-route.live.test.ts`.
+
+Debrid-Link OAuth access tokens last one day. On mount, the browser renews tokens within five minutes of expiry before validating the account, preserving any replacement refresh token. Cast playback and provider-backed library catalogs independently renew stored OAuth credentials once on `badToken`, persist the result, and retry the viewer's operation before considering a stored playback fallback. Pasted API keys have no refresh token and require sign-in again when rejected. Refresh-token rotation has not been measured.
 
 ### Trakt integration
 
