@@ -1,8 +1,11 @@
+import historicalStoredLink from '@/test/fixtures/realdebrid/historical-stored-link.json';
 import { describe, expect, it } from 'vitest';
 import { isRdLinkId, rdCastPlayId } from './rdCastLink';
 
+const historicalId = historicalStoredLink.storedLink.slice('https://real-debrid.com/d/'.length);
+
 describe('rdCastPlayId', () => {
-	it.each(['FIXTURELINK00', 'FIXTURELINK00ABC', 'FIXTURELINK00ABCDEFGHIJKLM'])(
+	it.each(['FIXTURELINK00', 'FIXTURELINK00ABC', historicalId])(
 		'normalizes the stored RD id %s to its 13-character content key',
 		(id) => {
 			expect(rdCastPlayId(`https://real-debrid.com/d/${id}`)).toBe('FIXTURELINK00');
@@ -27,7 +30,7 @@ describe('isRdLinkId', () => {
 	});
 
 	it('accepts a historical 26-character account-bound id', () => {
-		expect(isRdLinkId('FIXTURELINK00ABCDEFGHIJKLM')).toBe(true);
+		expect(isRdLinkId(historicalId)).toBe(true);
 	});
 
 	it('refuses ids too short to be one, or carrying anything but letters and digits', () => {
