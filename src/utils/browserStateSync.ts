@@ -94,13 +94,13 @@ export function saveBrowserState(
 }
 
 /**
- * The state saved behind this login, or null when there is none (204) or the
- * provider refused the login (401). Throws when there was no answer - offline,
- * rate-limited, a server error - so the caller can ask again later.
+ * The state saved behind this login, or null when there is none (204).
+ * Authentication failures are not evidence that nothing is saved: a blocked
+ * provider or a newly enrolled key may work on the next login event.
  */
 export async function fetchBrowserState(identity: SyncIdentity): Promise<BrowserState | null> {
 	const res = await send('POST', { identity });
-	if (res.status === 204 || res.status === 401) return null;
+	if (res.status === 204) return null;
 	if (res.status !== 200) throw new Error(`browser-state answered ${res.status}`);
 	const { state } = await res.json();
 	return state ?? null;

@@ -9,8 +9,10 @@ import {
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
-/** Set once this browser has asked for a saved state, whatever the answer. Per browser, so not synced. */
+/** Set only after a completed restore (including no saved state). Per browser, never synced. */
 export const RESTORE_TRIED_KEY = 'dmm:syncRestoreTried';
+/** Keeps a failed first-login restore retryable across navigation and reloads. */
+const RESTORE_PENDING_KEY = 'dmm:syncRestorePending';
 const PUSH_DELAY_MS = 1500;
 /** Rewritten by the token refreshers (`writeAccessToken`) without the login changing. */
 const REFRESHED_KEYS = ['rd:accessToken', 'dl:accessToken', 'dl:tokenExpiry'];
@@ -47,6 +49,7 @@ export function useBrowserStateSync(): void {
 			const [identity] = syncIdentities();
 			if (!identity) return;
 			restoreStarted.current = true;
+			localStorage.setItem(RESTORE_PENDING_KEY, '1');
 			let state: BrowserState | null;
 			try {
 				state = await fetchBrowserState(identity);
@@ -56,6 +59,7 @@ export function useBrowserStateSync(): void {
 				return;
 			}
 			localStorage.setItem(RESTORE_TRIED_KEY, '1');
+			localStorage.removeItem(RESTORE_PENDING_KEY);
 			if (state) {
 				applyState(state);
 				toast.success('Welcome back: your logins and settings were restored');
@@ -78,9 +82,14 @@ export function useBrowserStateSync(): void {
 		// A login already here at mount predates this hook: an established browser,
 		// with nothing to restore. Asking anyway would send every logged-in
 		// browser's credential (and a Real-Debrid token mint) right after a deploy.
-		if (!localStorage.getItem(RESTORE_TRIED_KEY) && syncIdentities().length) {
+		if (
+			!localStorage.getItem(RESTORE_TRIED_KEY) &&
+			!localStorage.getItem(RESTORE_PENDING_KEY) &&
+			syncIdentities().length
+		) {
 			localStorage.setItem(RESTORE_TRIED_KEY, '1');
 		}
+		if (localStorage.getItem(RESTORE_PENDING_KEY)) void restore();
 		window.addEventListener('local-storage', onChange);
 		return () => {
 			window.removeEventListener('local-storage', onChange);

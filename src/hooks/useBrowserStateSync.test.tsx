@@ -76,7 +76,8 @@ describe('restore', () => {
 	// Through the real fetchBrowserState, so the status mapping is what is tested.
 	it.each([
 		[204, true],
-		[401, true],
+		[401, false],
+		[403, false],
 		[429, false],
 		[503, false],
 	])('after a %i answer, marks the browser as tried: %s', async (status, tried) => {
@@ -125,6 +126,29 @@ describe('restore', () => {
 		expect(fetchMock).toHaveBeenCalledTimes(2);
 		expect(localStorage.getItem(RESTORE_TRIED_KEY)).not.toBeNull();
 	});
+
+	it.each([401, 503])(
+		'retries a %i restore after remount instead of treating the login as established',
+		async (status) => {
+			const actual = await vi.importActual<typeof import('@/utils/browserStateSync')>(
+				'@/utils/browserStateSync'
+			);
+			fetchMock.mockImplementation(actual.fetchBrowserState);
+			vi.stubGlobal(
+				'fetch',
+				vi.fn().mockResolvedValueOnce({ status }).mockResolvedValueOnce({ status: 204 })
+			);
+			const first = renderHook(() => useBrowserStateSync());
+			write('tb:apiKey', '"tb-key"');
+			await flush();
+			first.unmount();
+
+			renderHook(() => useBrowserStateSync());
+			await flush();
+			expect(fetch).toHaveBeenCalledTimes(2);
+			expect(localStorage.getItem(RESTORE_TRIED_KEY)).toBe('1');
+		}
+	);
 });
 
 describe('push', () => {

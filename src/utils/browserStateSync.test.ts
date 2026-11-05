@@ -160,11 +160,11 @@ describe('requests', () => {
 		expect(JSON.parse(fetchMock.mock.calls[0][1].body as string)).toEqual({ identity });
 	});
 
-	it('returns null when nothing is stored or the login is refused', async () => {
+	it('returns null only when nothing is stored, not when authentication fails', async () => {
 		stubFetch({ status: 204 });
 		expect(await fetchBrowserState(identity)).toBeNull();
 		stubFetch({ status: 401 });
-		expect(await fetchBrowserState(identity)).toBeNull();
+		await expect(fetchBrowserState(identity)).rejects.toThrow('401');
 	});
 
 	// No answer is not "nothing stored": the caller must be able to ask again.
