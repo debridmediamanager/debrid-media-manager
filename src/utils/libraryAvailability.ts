@@ -1,6 +1,5 @@
 import { flattenMagnetFiles, getMagnetFiles } from '@/services/allDebrid';
 import { getSeedboxTorrent } from '@/services/debridLink';
-import { getTorrentInfo } from '@/services/realDebrid';
 import { type UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	checkAvailabilityAdByHashes,
@@ -30,7 +29,6 @@ const PACE_MS = 1000;
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export interface ReportDeps {
-	rdInfo: typeof getTorrentInfo;
 	adFiles: typeof getMagnetFiles;
 	rdRecorded: typeof checkAvailabilityByHashes;
 	adRecorded: typeof checkAvailabilityAdByHashes;
@@ -48,7 +46,6 @@ export interface ReportDeps {
 }
 
 const DEFAULT_DEPS: ReportDeps = {
-	rdInfo: getTorrentInfo,
 	adFiles: getMagnetFiles,
 	rdRecorded: checkAvailabilityByHashes,
 	adRecorded: checkAvailabilityAdByHashes,
@@ -156,14 +153,12 @@ async function reportRd(
 	try {
 		for (const t of await unrecorded(rd, deps.rdRecorded, deps.token)) {
 			try {
-				const info = await deps.rdInfo(rdKey, t.id.slice(3));
-				if (mostlyVideo((info.files ?? []).filter((f) => f.selected === 1))) {
-					const [key, solution] = await deps.token();
-					// the route itself refuses anything not downloaded or partly expired
-					await deps.rdSubmit(key, solution, info, found[t.id].imdbId);
-				}
+				const [key, solution] = await deps.token();
+				// DMM reads the torrent from RD and refuses anything not downloaded, partly
+				// expired or mostly not video
+				await deps.rdSubmit(key, solution, rdKey, t.id.slice(3), found[t.id].imdbId);
 			} catch {
-				// a release RD no longer answers for stays unrecorded
+				// a release RD no longer answers for, or refused, stays unrecorded
 			}
 			await deps.wait(PACE_MS);
 		}

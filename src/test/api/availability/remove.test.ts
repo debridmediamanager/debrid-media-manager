@@ -1,84 +1,116 @@
 import handler from '@/pages/api/availability/remove';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/utils/problemToken');
+vi.mock('@/services/realDebrid', () => ({ getTorrentInfo: vi.fn() }));
 
 const mockRepository = vi.mocked(repository);
-const mockValidate = vi.mocked(validateProblemToken);
-const validHash = 'c'.repeat(40);
+const RD_KEY = 'R'.repeat(52);
+const token = { dmmProblemKey: 'key-3', solution: 'hash-3' };
+// a real torrents/info answer (testacct123, 2026-11-05), download links redacted
+const proof = { rdKey: RD_KEY, torrentId: rdMovie.id };
 
-const buildBody = (overrides: Record<string, unknown> = {}) => ({
-	dmmProblemKey: 'key-3',
-	solution: 'hash-3',
-	hash: validHash,
-	reason: 'user-request',
-	...overrides,
-});
+const post = async (b: object, headers: object = { 'sec-fetch-site': 'same-origin' }) => {
+	const res = createMockResponse();
+	await handler(createMockRequest({ method: 'POST', headers: headers as any, body: b }), res);
+	return res;
+};
 
 describe('/api/availability/remove', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidate.mockReturnValue(true);
+		vi.mocked(validateProblemToken).mockReturnValue(true);
 		mockRepository.removeAvailability = vi.fn().mockResolvedValue(undefined);
+		mockRepository.getCachedRdNames = vi.fn().mockResolvedValue(new Map());
 	});
 
-	it('rejects non-POST methods', async () => {
-		const req = createMockRequest({ method: 'GET' });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(405);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Method not allowed' });
+	// The 2026-11-05 audit: a token from /api/challenge was all it took to delete any row.
+	it('keeps a row when nothing but the request says it is uncached', async () => {
+		mockRepository.getCachedRdNames = vi
+			.fn()
+			.mockResolvedValue(
+				new Map([
+					[
+						rdMovie.hash,
+						{ filename: rdMovie.filename, originalFilename: rdMovie.original_filename },
+					],
+				])
+			);
+		const res = await post({ ...token, hash: rdMovie.hash, reason: 'user-request' });
+		expect(res.status).toHaveBeenCalledWith(409);
+		expect(mockRepository.removeAvailability).not.toHaveBeenCalled();
 	});
 
-	it('requires auth payload', async () => {
-		const body = buildBody();
-		delete (body as any).dmmProblemKey;
-		const req = createMockRequest({ method: 'POST', body });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(403);
-		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication not provided' });
-	});
-
-	it('rejects invalid tokens', async () => {
-		mockValidate.mockReturnValue(false);
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(mockValidate).toHaveBeenCalledWith('key-3', 'hash-3');
-		expect(res.status).toHaveBeenCalledWith(403);
-		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
-	});
-
-	it('validates hash format', async () => {
-		const req = createMockRequest({ method: 'POST', body: buildBody({ hash: 'bad' }) });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid torrent hash format' });
-	});
-
-	it('removes availability when input is valid', async () => {
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(mockRepository.removeAvailability).toHaveBeenCalledWith(validHash);
+	it('removes a row whose recorded name Real-Debrid refuses', async () => {
+		mockRepository.getCachedRdNames = vi
+			.fn()
+			.mockResolvedValue(
+				new Map([
+					[
+						'c'.repeat(40),
+						{ filename: 'Show.S01.WEB-DL.mkv', originalFilename: 'Show.S01.WEB-DL' },
+					],
+				])
+			);
+		const res = await post({ ...token, hash: 'c'.repeat(40), reason: 'RD infringing_file' });
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ success: true });
+		expect(mockRepository.removeAvailability).toHaveBeenCalledWith('c'.repeat(40));
 	});
 
-	it('returns 500 when removal fails', async () => {
-		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockRepository.removeAvailability = vi.fn().mockRejectedValue(new Error('db failure'));
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-		await handler(req, res);
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to remove availability' });
-		consoleSpy.mockRestore();
+	it('removes a row when RD shows the user add downloading', async () => {
+		vi.mocked(getTorrentInfo).mockResolvedValue({
+			...rdMovie,
+			status: 'downloading',
+			progress: 2,
+		} as any);
+		const res = await post({ ...token, hash: rdMovie.hash, ...proof });
+		expect(getTorrentInfo).toHaveBeenCalledWith(RD_KEY, rdMovie.id, true);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockRepository.removeAvailability).toHaveBeenCalledWith(rdMovie.hash);
+	});
+
+	// A selection that failed on a 429 or a dropped connection leaves a cached release
+	// waiting for files; that used to evict it for everybody.
+	it('keeps a row RD holds, or that is waiting for its files, or is another release', async () => {
+		const cases = [
+			rdMovie,
+			{
+				...rdMovie,
+				status: 'waiting_files_selection',
+				files: rdMovie.files.map((f) => ({ ...f, selected: 0 })),
+			},
+			{ ...rdMovie, status: 'downloading', hash: 'b'.repeat(40) },
+		];
+		for (const info of cases) {
+			vi.mocked(getTorrentInfo).mockResolvedValueOnce(info as any);
+			const res = await post({ ...token, hash: rdMovie.hash, ...proof });
+			expect(res.status).not.toHaveBeenCalledWith(200);
+		}
+		vi.mocked(getTorrentInfo).mockRejectedValueOnce(new Error('503'));
+		expect(
+			(await post({ ...token, hash: rdMovie.hash, ...proof })).status
+		).toHaveBeenCalledWith(502);
+		expect(mockRepository.removeAvailability).not.toHaveBeenCalled();
+	});
+
+	it('serves DMM pages only and checks its input', async () => {
+		expect(
+			(
+				await post(
+					{ ...token, hash: rdMovie.hash, ...proof },
+					{ 'sec-fetch-site': 'cross-site' }
+				)
+			).status
+		).toHaveBeenCalledWith(403);
+		expect((await post({ ...token, hash: 'xyz' })).status).toHaveBeenCalledWith(400);
+		vi.mocked(validateProblemToken).mockReturnValue(false);
+		expect((await post({ ...token, hash: rdMovie.hash })).status).toHaveBeenCalledWith(403);
+		expect(mockRepository.removeAvailability).not.toHaveBeenCalled();
 	});
 });

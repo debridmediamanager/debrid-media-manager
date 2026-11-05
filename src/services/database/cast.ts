@@ -1,6 +1,7 @@
 import type { RdCastCredentials } from '@/utils/castRdToken';
 import { RD_DOWNLOAD_LINK_PREFIX } from '@/utils/rdCastLink';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { isFilmFile } from '@/utils/selectable';
 import { DatabaseClient } from './client';
 
 interface LatestCast {
@@ -538,8 +539,9 @@ export class CastService extends DatabaseClient {
 			take: limit * 2,
 		});
 
+		// a stream is a film or an episode: never a sample-sized .rar part, an .exe or an .nfo
 		const fileStreams = availableFileResults
-			.filter((file) => file.link)
+			.filter((file) => file.link && isFilmFile(file.path))
 			.map((file) => ({
 				url: file.link,
 				link: file.link,
@@ -593,6 +595,7 @@ export class CastService extends DatabaseClient {
 				if (item.files.length === 0 || !item.files[0]?.link) {
 					return false;
 				}
+				if (!isFilmFile(item.files[0].path)) return false;
 				const file = item.files[0];
 				if (!hasEpisodeFilters) {
 					return true;

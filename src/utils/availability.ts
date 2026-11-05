@@ -1,4 +1,3 @@
-import { TorrentInfoResponse } from '@/services/types';
 import { isValidHash } from './extractHashes';
 import { mostlyVideo } from './selectable';
 import { generateTokenAndHash } from './token';
@@ -23,36 +22,27 @@ export async function postAvailability(
 	}
 }
 
+/**
+ * Record a torrent of the user's own as cached on Real-Debrid. Only the token and the
+ * torrent's id travel: DMM reads the torrent from RD itself and records what RD says.
+ */
 export async function submitAvailability(
 	dmmProblemKey: string,
 	solution: string,
-	torrentInfo: TorrentInfoResponse,
+	rdKey: string,
+	torrentId: string,
 	imdbId: string
 ) {
-	// filter out any torrents that are not downloaded for now
-	if (torrentInfo.status !== 'downloaded') {
-		return;
-	}
-
 	try {
 		const response = await fetch('/api/availability', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				...torrentInfo,
-				imdbId,
-				dmmProblemKey,
-				solution,
-			}),
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ rdKey, torrentId, imdbId, dmmProblemKey, solution }),
 		});
-
 		if (!response.ok) {
-			const error = await response.json();
+			const error = await response.json().catch(() => ({}));
 			throw new Error(error.error || 'Failed to submit availability');
 		}
-
 		return await response.json();
 	} catch (error) {
 		console.error('Error submitting availability:', error);
@@ -176,31 +166,29 @@ export async function fetchRdNamesOnRecord(hashes: string[]): Promise<Map<string
 	return names;
 }
 
+/**
+ * Ask DMM to forget a Real-Debrid row. With `proof` (the user's add of it), DMM reads the
+ * add from RD and removes the row only if RD is downloading it; without, only if the row's
+ * own name is one RD refuses. A refusal is an answer, not an error.
+ */
 export async function removeAvailability(
 	dmmProblemKey: string,
 	solution: string,
 	hash: string,
-	reason: string
+	reason: string,
+	proof?: { rdKey: string; torrentId: string }
 ) {
 	try {
 		const response = await fetch('/api/availability/remove', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				hash,
-				reason,
-				dmmProblemKey,
-				solution,
-			}),
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ hash, reason, ...proof, dmmProblemKey, solution }),
 		});
-
+		if (response.status === 409) return { success: false };
 		if (!response.ok) {
-			const error = await response.json();
+			const error = await response.json().catch(() => ({}));
 			throw new Error(error.error || 'Failed to remove availability');
 		}
-
 		return await response.json();
 	} catch (error) {
 		console.error('Error removing availability:', error);
@@ -249,6 +237,32 @@ export async function submitAvailabilityAd(
 		console.error('Error submitting AllDebrid availability:', error);
 		throw error;
 	}
+}
+
+/**
+ * Tell DMM AllDebrid did not have a release ready when this user added it: the row stops
+ * reading as cached (status and files cleared), as an add that comes back downloading
+ * already does. AllDebrid cannot be asked from DMM's servers, so this is the page's word,
+ * bounded by the route's rate limit.
+ */
+export async function reportAdNotCached(dmmProblemKey: string, solution: string, hash: string) {
+	const response = await fetch('/api/availability/ad', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			hash: hash.toLowerCase(),
+			status: 'Not instant',
+			statusCode: 0,
+			files: [],
+			dmmProblemKey,
+			solution,
+		}),
+	});
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({}));
+		throw new Error(error.error || 'Failed to report AllDebrid availability');
+	}
+	return response.json();
 }
 
 export async function checkAvailabilityAd(

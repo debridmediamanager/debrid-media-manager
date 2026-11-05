@@ -15,6 +15,8 @@ const cacheUpsertMock = vi.fn();
 const findManyAdMock = vi.fn();
 const createManyAdMock = vi.fn();
 const createManyAdFileMock = vi.fn();
+const deleteManyRowMock = vi.fn();
+const countFileMock = vi.fn();
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(function () {
 		return {
@@ -23,6 +25,7 @@ vi.mock('@prisma/client', () => ({
 				upsert: upsertMock,
 				findMany: findManyMock,
 				delete: deleteMock,
+				deleteMany: deleteManyRowMock,
 				createMany: createManyMock,
 			},
 			availableAd: {
@@ -37,12 +40,14 @@ vi.mock('@prisma/client', () => ({
 				findFirst: findFirstFileMock,
 				findMany: findManyMock,
 				deleteMany: deleteManyFileMock,
+				count: countFileMock,
 				createMany: createManyFileMock,
 			},
 			cache: {
 				findUnique: cacheFindUniqueMock,
 				upsert: cacheUpsertMock,
 			},
+			$transaction: vi.fn(async (ops: Promise<unknown>[]) => Promise.all(ops)),
 			$disconnect: vi.fn(),
 		};
 	}),
@@ -66,6 +71,8 @@ describe('AvailabilityService', () => {
 		findManyAdMock.mockReset();
 		createManyAdMock.mockReset();
 		createManyAdFileMock.mockReset();
+		deleteManyRowMock.mockReset();
+		countFileMock.mockReset();
 		service = new AvailabilityService();
 	});
 
@@ -210,9 +217,16 @@ describe('AvailabilityService', () => {
 		});
 	});
 
-	it('removes availability entries', async () => {
-		await service.removeAvailability('hash');
-		expect(deleteMock).toHaveBeenCalledWith({ where: { hash: 'hash' } });
+	// `delete` threw P2025 when another user had removed the row first, failing the add
+	it('removes a release and its files, and a release already gone is no error', async () => {
+		deleteManyFileMock.mockResolvedValue({ count: 0 });
+		deleteManyRowMock.mockResolvedValue({ count: 0 });
+		await expect(service.removeAvailability('hash')).resolves.toBeUndefined();
+		expect(deleteManyFileMock).toHaveBeenCalledWith({ where: { hash: 'hash' } });
+		expect(deleteManyRowMock).toHaveBeenCalledWith({ where: { hash: 'hash' } });
+		expect(deleteMock).not.toHaveBeenCalled();
+		// the tombstone that keeps the reconcile cron from filing it straight back
+		expect(cacheUpsertMock.mock.calls[0][0].where).toEqual({ key: 'avevicted:hash' });
 	});
 
 	// Regression: links are stored in RD's 16-char form but a play request only
@@ -254,7 +268,9 @@ describe('AvailabilityService', () => {
 	});
 
 	it('removes only the file whose link rotted, not the whole torrent', async () => {
+		findManyMock.mockResolvedValue([{ hash: 'h1' }]);
 		deleteManyFileMock.mockResolvedValue({ count: 1 });
+		countFileMock.mockResolvedValue(3);
 		const removed = await service.removeAvailableFileByLinkPrefix(
 			'https://real-debrid.com/d/abcdef1234567'
 		);
@@ -262,6 +278,47 @@ describe('AvailabilityService', () => {
 		expect(deleteManyFileMock).toHaveBeenCalledWith({
 			where: { link: { startsWith: 'https://real-debrid.com/d/abcdef1234567' } },
 		});
+		expect(deleteManyRowMock).not.toHaveBeenCalled();
+	});
+
+	// A release whose every link died stayed `downloaded` with no file: Torznab /cached,
+	// zurg search and the sponsor API, which only ask whether a row exists, kept saying cached.
+	it('removes the release once its last file is gone', async () => {
+		findManyMock.mockResolvedValue([{ hash: 'h1' }]);
+		deleteManyFileMock.mockResolvedValue({ count: 1 });
+		countFileMock.mockResolvedValue(0);
+		await service.removeAvailableFileByLinkPrefix('https://real-debrid.com/d/abcdef1234567');
+		expect(deleteManyRowMock).toHaveBeenCalledWith({ where: { hash: 'h1' } });
+	});
+
+	// Re-adding a release from another title's page, or a forged post, moved a shared row to
+	// that title for everybody; and a `user_mapped` placeholder never became cached.
+	it('keeps a recorded release on its title, and takes Real-Debrid state on an update', async () => {
+		upsertMock.mockResolvedValue({});
+		await service.upsertAvailability({
+			hash: 'a'.repeat(40),
+			imdbId: 'tt0119099',
+			filename: 'Angel.Has.Fallen.2019.mkv',
+			originalFilename: 'Angel.Has.Fallen.2019',
+			bytes: 10,
+			originalBytes: 10,
+			host: 'real-debrid.com',
+			progress: 100,
+			status: 'downloaded',
+			ended: '2026-01-01T00:00:00Z',
+			selectedFiles: [{ id: 1, path: '/Angel.Has.Fallen.2019.mkv', bytes: 10, selected: 1 }],
+			links: ['https://real-debrid.com/d/ABCDEFGHIJKLM'],
+		});
+		const { update, create } = upsertMock.mock.calls[0][0];
+		expect(update.imdbId).toBeUndefined();
+		expect(update).toMatchObject({ status: 'downloaded', progress: 100, bytes: BigInt(10) });
+		expect(create.imdbId).toBe('tt0119099');
+	});
+
+	it('never moves an existing row to a title typed in a cast', async () => {
+		upsertMock.mockResolvedValue({});
+		await service.saveIMDBIdMapping('a'.repeat(40), 'tt0068646');
+		expect(upsertMock.mock.calls[0][0].update).toEqual({});
 	});
 
 	it('saves instant availability with a synthetic marker file', async () => {
@@ -296,6 +353,22 @@ describe('AvailabilityService', () => {
 			season: 1,
 			episode: 1,
 		});
+	});
+
+	// filename is VARCHAR(191): one longer debridio name failed the createMany for the title
+	it('fits a long debridio name to its column', async () => {
+		findManyMock.mockResolvedValue([]);
+		createManyMock.mockResolvedValue({ count: 1 });
+		createManyFileMock.mockResolvedValue({ count: 1 });
+		const long = `Show.S01E01.${'Very.Long.Title.'.repeat(20)}1080p.mkv`;
+
+		await service.saveInstantAvailability('tt0903747', [
+			{ hash: 'b'.repeat(40), filename: long, bytes: 1 },
+		]);
+
+		const row = createManyMock.mock.calls[0][0].data[0];
+		expect(row.filename.length).toBeLessThanOrEqual(191);
+		expect(row.originalFilename.length).toBeLessThanOrEqual(191);
 	});
 
 	it('skips hashes that already have availability rows', async () => {

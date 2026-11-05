@@ -526,6 +526,50 @@ describe('CastService', () => {
 		expect(userStreams[0].filename).toBe('withlink.mkv');
 	});
 
+	// With a size cap below every real release, the biggest files left were .rar parts, an .exe
+	// fake and an .nfo, and each was offered as a stream (2026-11-05 audit).
+	it('offers only film and episode files as streams', async () => {
+		prismaMock.availableFile.findMany.mockResolvedValueOnce([
+			{
+				link: 'https://real-debrid.com/d/AAAAAAAAAAAAA',
+				path: '/Film.2024.part01.rar',
+				bytes: BigInt(4e9),
+				hash: 'a',
+			},
+			{
+				link: 'https://real-debrid.com/d/BBBBBBBBBBBBB',
+				path: '/Film.2024.1080p.exe',
+				bytes: BigInt(3e9),
+				hash: 'b',
+			},
+			{
+				link: 'https://real-debrid.com/d/CCCCCCCCCCCCC',
+				path: '/Film.2024.1080p.mkv',
+				bytes: BigInt(2e9),
+				hash: 'c',
+			},
+		]);
+		prismaMock.available.findMany.mockResolvedValueOnce([
+			{
+				hash: 'd',
+				filename: 'Film.2024.FLAC',
+				files: [
+					{
+						link: 'https://real-debrid.com/d/DDDDDDDDDDDDD',
+						path: '/Film.2024.OST.flac',
+						bytes: BigInt(1e9),
+						season: null,
+						episode: null,
+					},
+				],
+			},
+		]);
+
+		const streams = await service.getOtherStreams('tt123', 'user1', 5);
+
+		expect(streams.map((s) => s.filename)).toEqual(['Film.2024.1080p.mkv']);
+	});
+
 	it('filters out available items without files in getOtherStreams', async () => {
 		prismaMock.available.findMany.mockResolvedValueOnce([
 			{

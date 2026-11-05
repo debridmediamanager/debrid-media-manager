@@ -1,4 +1,6 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
 import { mostlyVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -10,10 +12,11 @@ const MAX_FILES = 10_000;
  * Record a Debrid-Link release the page saw whole: every file at 100%. Only paths and
  * sizes are taken; a file's download URL is keyless and outlives the torrent.
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	try {
 		const { dmmProblemKey, solution, hash, imdbId, filename, files } = req.body ?? {};
@@ -66,3 +69,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to save Debrid-Link availability' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.availabilityWrite);

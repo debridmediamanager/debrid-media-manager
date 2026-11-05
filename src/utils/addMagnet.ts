@@ -179,7 +179,12 @@ export const handleAddAsMagnetInRd = async (
 	 * on the torrent's root name, which a display title can have lost the dots
 	 * of while the paths inside still carry it — see `isRdBlockedName`.
 	 */
-	filenames: readonly string[] = []
+	filenames: readonly string[] = [],
+	/**
+	 * Called with the torrent's id when it came back not instant, before it is deleted:
+	 * the only moment DMM can still read the add from RD and see it downloading.
+	 */
+	onNotInstant?: (torrentId: string) => Promise<void>
 ): Promise<RdAddResult> => {
 	try {
 		if (!silent && pauseRetryCount === 0) {
@@ -206,6 +211,7 @@ export const handleAddAsMagnetInRd = async (
 			if (!silent) toast.success('Torrent added.', magnetToastOptions);
 			if (callback) await callback(response);
 		} else if (deleteIfNotInstant) {
+			await onNotInstant?.(id).catch(() => undefined);
 			await handleDeleteRdTorrent(rdKey, `rd:${id}`, true);
 			if (!silent) toast.error(`Torrent not instant; removed.`, magnetToastOptions);
 		} else {
@@ -239,7 +245,8 @@ export const handleAddAsMagnetInRd = async (
 				silent,
 				title,
 				pauseRetryCount,
-				filenames
+				filenames,
+				onNotInstant
 			);
 		}
 		if (error instanceof RdNameRefusedError) {
@@ -283,7 +290,8 @@ export const handleAddAsMagnetInRd = async (
 					silent,
 					title,
 					pauseRetryCount + 1,
-					filenames
+					filenames,
+					onNotInstant
 				);
 			}
 			// Refused on every try for five minutes, the longest pause measured,

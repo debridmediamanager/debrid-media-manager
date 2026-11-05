@@ -38,9 +38,11 @@ export function isVideo(file: { path: string }) {
  */
 export function mostlyVideo(files: { path: string; bytes: number }[]): boolean {
 	const bytes = (list: typeof files) => list.reduce((sum, f) => sum + (f.bytes || 0), 0);
-	const video = files.filter((f) => isVideo(f) && !/\.(mp3|flac|m4a)$/i.test(f.path));
-	return bytes(video) * 2 > bytes(files);
+	return bytes(files.filter((f) => isFilmFile(f.path))) * 2 > bytes(files);
 }
+
+/** A film or episode file: `isVideo` without the audio it can also play. */
+export const isFilmFile = (path: string) => isVideo({ path }) && !/\.(mp3|flac|m4a)$/i.test(path);
 
 // Years and resolutions sit at the same offset across a movie pack just as
 // readily as episode numbers do, so numbers in these ranges don't count as

@@ -1,103 +1,82 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
+import { mostlyVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-function isValidTorrentHash(hash: string): boolean {
-	return /^[a-fA-F0-9]{40}$/.test(hash);
-}
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+/**
+ * POST /api/availability
+ * Record a torrent cached on Real-Debrid. The page sends the user's RD token and the
+ * torrent's id, never the torrent itself: DMM reads it from Real-Debrid, so what is
+ * recorded is what RD says, not what a caller claims. The token is used for this one
+ * read, as the RD proxy already uses it, and is not kept.
+ */
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	try {
-		const {
-			dmmProblemKey,
-			solution,
-			filename,
-			original_filename,
-			hash,
-			bytes,
-			original_bytes,
-			host,
-			progress,
-			status,
-			files,
-			links,
-			ended,
-			imdbId,
-		} = req.body;
+		const { dmmProblemKey, solution, rdKey, torrentId, imdbId } = req.body ?? {};
 
-		if (
-			!dmmProblemKey ||
-			!(typeof dmmProblemKey === 'string') ||
-			!solution ||
-			!(typeof solution === 'string')
-		) {
-			res.status(403).json({ errorMessage: 'Authentication not provided' });
-			return;
+		if (typeof dmmProblemKey !== 'string' || typeof solution !== 'string') {
+			return res.status(403).json({ errorMessage: 'Authentication not provided' });
 		} else if (!validateProblemToken(dmmProblemKey, solution)) {
-			res.status(403).json({ errorMessage: 'Authentication error' });
-			return;
+			return res.status(403).json({ errorMessage: 'Authentication error' });
 		}
 
-		// Validate required fields and conditions
-		if (!hash || !filename || !imdbId) {
-			return res.status(400).json({ error: 'Missing required fields' });
+		if (typeof imdbId !== 'string' || !/^tt\d+$/.test(imdbId)) {
+			return res.status(400).json({ error: 'Invalid IMDb ID format' });
+		}
+		if (typeof rdKey !== 'string' || !/^[A-Za-z0-9]{20,}$/.test(rdKey)) {
+			return res.status(400).json({ error: 'Missing Real-Debrid token' });
+		}
+		if (typeof torrentId !== 'string' || !/^[A-Za-z0-9]{1,32}$/.test(torrentId)) {
+			return res.status(400).json({ error: 'Invalid torrent id' });
 		}
 
-		// Validate host
-		if (host !== 'real-debrid.com') {
-			return res.status(400).json({ error: 'Invalid host. Only real-debrid.com is allowed' });
+		let info;
+		try {
+			info = await getTorrentInfo(rdKey, torrentId, true);
+		} catch {
+			return res.status(502).json({ error: 'Real-Debrid did not answer for this torrent' });
 		}
 
-		// Validate progress
-		if (progress !== 100) {
-			return res.status(400).json({ error: 'Invalid progress. Must be 100' });
+		if (info.status !== 'downloaded' || info.progress !== 100) {
+			return res.status(400).json({ error: 'Torrent is not downloaded' });
 		}
-
-		// Validate hash format
-		if (!isValidTorrentHash(hash)) {
+		if (!/^[a-f0-9]{40}$/i.test(info.hash ?? '')) {
 			return res.status(400).json({ error: 'Invalid torrent hash format' });
 		}
-
-		// Validate bytes
-		if (!bytes || bytes <= 0 || !original_bytes || original_bytes <= 0) {
+		if (!(info.bytes > 0) || !(info.original_bytes > 0)) {
 			return res.status(400).json({ error: 'Bytes must be greater than 0' });
 		}
-
-		// Validate files and links
-		if (!Array.isArray(files) || !Array.isArray(links)) {
-			return res.status(400).json({ error: 'Files and links must be arrays' });
-		}
-
-		// Get selected files
-		const selectedFiles = files.filter((file) => file.selected === 1);
-
-		// Validate link distribution
+		const selectedFiles = (info.files ?? []).filter((file) => file.selected === 1);
 		if (selectedFiles.length === 0) {
 			return res.status(400).json({ error: 'Torrent is fully expired' });
-		} else if (selectedFiles.length !== links.length) {
-			return res.status(400).json({
-				error: 'No per-file link mapping; Real-Debrid may have bundled the selection into a RAR archive',
-			});
+		} else if (selectedFiles.length !== (info.links ?? []).length) {
+			return res.status(400).json({ error: 'Torrent is partially expired' });
+		}
+		if (!mostlyVideo(selectedFiles)) {
+			return res.status(400).json({ error: 'Only films and shows are recorded' });
 		}
 
-		// Create available record with only selected files
 		await db.upsertAvailability({
-			hash,
+			hash: info.hash.toLowerCase(),
 			imdbId,
-			filename,
-			originalFilename: original_filename,
-			bytes,
-			originalBytes: original_bytes,
-			host,
-			progress,
-			status,
-			ended,
+			filename: info.filename,
+			originalFilename: info.original_filename,
+			bytes: info.bytes,
+			originalBytes: info.original_bytes,
+			host: 'real-debrid.com',
+			progress: info.progress,
+			status: info.status,
+			ended: info.ended,
 			selectedFiles,
-			links,
+			links: info.links,
 		});
 
 		return res.status(200).json({ success: true });
@@ -106,3 +85,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to save available torrent' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.availabilityWrite);

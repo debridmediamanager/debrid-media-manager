@@ -1,4 +1,6 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -10,10 +12,11 @@ function isValidTorrentHash(hash: string): boolean {
  * POST /api/availability/ad
  * Store AllDebrid cached torrent availability
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	try {
 		const {
@@ -121,3 +124,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to save AllDebrid availability' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.availabilityWrite);

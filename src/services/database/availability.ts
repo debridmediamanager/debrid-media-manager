@@ -42,8 +42,11 @@ const EPISODE_PATTERNS: Array<{
 	seasonIndex: number;
 	episodeIndex: number;
 }> = [
-	{ regex: /s(\d{1,2})e(\d{1,2})/i, seasonIndex: 1, episodeIndex: 2 },
-	{ regex: /(\d{1,2})x(\d{1,2})/i, seasonIndex: 1, episodeIndex: 2 },
+	// `S01E105` is episode 105; two digits read it as 10
+	{ regex: /s(\d{1,2})e(\d{1,4})(?!\d)/i, seasonIndex: 1, episodeIndex: 2 },
+	// `1x05`, never `1920x1080` or `1x264`: a digit before, or a third digit after, makes it a
+	// resolution or a codec
+	{ regex: /(?<!\d)(\d{1,2})x(\d{2})(?!\d)/i, seasonIndex: 1, episodeIndex: 2 },
 	{
 		regex: /season[^\d]{0,6}(\d{1,2}).*episode[^\d]{0,6}(\d{1,2})/i,
 		seasonIndex: 1,
@@ -61,7 +64,7 @@ const SEASON_ONLY_PATTERNS: Array<{ regex: RegExp; captureIndex?: number }> = [
 	{ regex: /(^|[^a-z0-9])s(\d{1,2})(?![a-z0-9])/i, captureIndex: 2 },
 ];
 
-function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
+export function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
 	for (const pattern of EPISODE_PATTERNS) {
 		const match = pattern.regex.exec(text);
 		if (match) {
@@ -87,6 +90,18 @@ function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
 	return null;
 }
 
+/** `Cache` keys marking a release removed from `Available`; see `removeAvailability`. */
+const EVICTED_PREFIX = 'avevicted:';
+
+/**
+ * A file's season and episode from its own name first, then its whole path: a folder named
+ * `Show.S01E01-E10` would otherwise file every episode inside it as E01.
+ */
+export function episodeOfFile(path: string): ParsedEpisodeInfo | null {
+	const name = path.split('/').pop() ?? path;
+	return extractEpisodeInfo(name) ?? extractEpisodeInfo(path);
+}
+
 export class AvailabilityService extends DatabaseClient {
 	public async getIMDBIdByHash(hash: string): Promise<string | null> {
 		const available = await this.prisma.available.findFirst({
@@ -96,10 +111,15 @@ export class AvailabilityService extends DatabaseClient {
 		return available?.imdbId || null;
 	}
 
+	/**
+	 * A title for a hash nobody has recorded yet, typed by a member casting it from a library.
+	 * An existing row keeps its title: a cast from another provider's library must not move a
+	 * Real-Debrid release off the page everybody else finds it on.
+	 */
 	public async saveIMDBIdMapping(hash: string, imdbId: string): Promise<void> {
 		await this.prisma.available.upsert({
 			where: { hash },
-			update: { imdbId },
+			update: {},
 			create: {
 				hash,
 				imdbId,
@@ -174,7 +194,7 @@ export class AvailabilityService extends DatabaseClient {
 						? {
 								deleteMany: {},
 								create: selectedFiles.map((file, index) => {
-									const fileEpisodeInfo = extractEpisodeInfo(file.path);
+									const fileEpisodeInfo = episodeOfFile(file.path);
 									return {
 										link: torrentInfo.links?.[index] || '',
 										file_id: file.id,
@@ -193,7 +213,7 @@ export class AvailabilityService extends DatabaseClient {
 					selectedFiles.length > 0
 						? {
 								create: selectedFiles.map((file, index) => {
-									const fileEpisodeInfo = extractEpisodeInfo(file.path);
+									const fileEpisodeInfo = episodeOfFile(file.path);
 									return {
 										link: torrentInfo.links?.[index] || '',
 										file_id: file.id,
@@ -254,17 +274,24 @@ export class AvailabilityService extends DatabaseClient {
 			where: {
 				hash: hash,
 			},
+			// The first title stays: re-adding a release from another page (a sequel listed on
+			// the original's) or a forged post must not move it for everybody. Everything else
+			// is what Real-Debrid says now, which also turns a `user_mapped` placeholder cached.
 			update: {
-				imdbId,
+				filename,
 				originalFilename,
+				bytes: BigInt(bytes),
 				originalBytes: BigInt(originalBytes),
+				host,
+				progress,
+				status,
 				ended: new Date(ended),
 				season: episodeInfo?.season,
 				episode: episodeInfo?.episode,
 				files: {
 					deleteMany: {},
 					create: selectedFiles.map((file, index) => {
-						const fileEpisodeInfo = extractEpisodeInfo(file.path);
+						const fileEpisodeInfo = episodeOfFile(file.path);
 						return {
 							link: links[index],
 							file_id: file.id,
@@ -291,7 +318,7 @@ export class AvailabilityService extends DatabaseClient {
 				episode: episodeInfo?.episode,
 				files: {
 					create: selectedFiles.map((file, index) => {
-						const fileEpisodeInfo = extractEpisodeInfo(file.path);
+						const fileEpisodeInfo = episodeOfFile(file.path);
 						return {
 							link: links[index],
 							file_id: file.id,
@@ -342,8 +369,9 @@ export class AvailabilityService extends DatabaseClient {
 				return {
 					hash: row.hash,
 					imdbId,
-					filename: row.filename,
-					originalFilename: row.filename,
+					// one name past the column failed the whole batch for that title
+					filename: clipToVarchar(row.filename),
+					originalFilename: clipToVarchar(row.filename),
 					bytes: BigInt(row.bytes),
 					originalBytes: BigInt(row.bytes),
 					host: 'real-debrid.com',
@@ -405,8 +433,9 @@ export class AvailabilityService extends DatabaseClient {
 				return {
 					hash: row.hash,
 					imdbId,
-					filename: row.filename,
-					originalFilename: row.filename,
+					// one name past the column failed the whole batch for that title
+					filename: clipToVarchar(row.filename),
+					originalFilename: clipToVarchar(row.filename),
 					bytes: BigInt(row.bytes),
 					originalBytes: BigInt(row.bytes),
 					host: 'alldebrid.com',
@@ -652,10 +681,36 @@ export class AvailabilityService extends DatabaseClient {
 		return playableHashes(rows);
 	}
 
+	/**
+	 * Forget a release and its files; one already gone (another user's removal) is no error.
+	 * It leaves a tombstone, so filing a finished transfer (the reconcile cron re-files any
+	 * missing from here, forever) cannot bring back a release proven uncached.
+	 */
 	public async removeAvailability(hash: string): Promise<void> {
-		await this.prisma.available.delete({
-			where: { hash },
+		await this.prisma.$transaction([
+			this.prisma.availableFile.deleteMany({ where: { hash } }),
+			this.prisma.available.deleteMany({ where: { hash } }),
+			this.tombstone(hash),
+		]);
+	}
+
+	private tombstone(hash: string) {
+		const key = `${EVICTED_PREFIX}${hash.toLowerCase()}`;
+		const value = { at: Date.now() };
+		return this.prisma.cache.upsert({
+			where: { key },
+			update: { value },
+			create: { key, value },
 		});
+	}
+
+	/** Whether this release was removed as uncached or dead (`removeAvailability`). */
+	public async wasAvailabilityEvicted(hash: string): Promise<boolean> {
+		const row = await this.prisma.cache.findUnique({
+			where: { key: `${EVICTED_PREFIX}${hash.toLowerCase()}` },
+			select: { key: true },
+		});
+		return row !== null;
 	}
 
 	/**
@@ -671,9 +726,16 @@ export class AvailabilityService extends DatabaseClient {
 	 * An exact match would miss those bound links.
 	 */
 	public async removeAvailableFileByLinkPrefix(linkPrefix: string): Promise<number> {
-		const { count } = await this.prisma.availableFile.deleteMany({
-			where: { link: { startsWith: linkPrefix } },
-		});
+		const where = { link: { startsWith: linkPrefix } };
+		const dead = await this.prisma.availableFile.findMany({ where, select: { hash: true } });
+		const { count } = await this.prisma.availableFile.deleteMany({ where });
+		// A release with no file left serves nothing, though readers that only ask whether a
+		// row exists (Torznab /cached, zurg search, the sponsor API) would go on saying cached.
+		for (const hash of new Set(dead.map((file) => file.hash))) {
+			if ((await this.prisma.availableFile.count({ where: { hash } })) === 0) {
+				await this.removeAvailability(hash);
+			}
+		}
 		return count;
 	}
 
@@ -742,12 +804,13 @@ export class AvailabilityService extends DatabaseClient {
 
 		const episodeInfo = extractEpisodeInfo(filename);
 
+		const name = clipToVarchar(filename);
 		return this.prisma.availableAd.upsert({
 			where: { hash: normalizedHash },
+			// the first title stays, as for Real-Debrid (`upsertAvailability`)
 			update: {
-				imdbId,
-				filename,
-				originalFilename: filename,
+				filename: name,
+				originalFilename: name,
 				bytes: BigInt(size),
 				originalBytes: BigInt(size),
 				host: 'alldebrid.com',
@@ -762,7 +825,7 @@ export class AvailabilityService extends DatabaseClient {
 				files: {
 					deleteMany: {},
 					create: files.map((file, index) => {
-						const fileEpisodeInfo = extractEpisodeInfo(file.n);
+						const fileEpisodeInfo = episodeOfFile(file.n);
 						return {
 							link: file.l,
 							file_id: index,
@@ -777,8 +840,8 @@ export class AvailabilityService extends DatabaseClient {
 			create: {
 				hash: normalizedHash,
 				imdbId,
-				filename,
-				originalFilename: filename,
+				filename: name,
+				originalFilename: name,
 				bytes: BigInt(size),
 				originalBytes: BigInt(size),
 				host: 'alldebrid.com',
@@ -790,7 +853,7 @@ export class AvailabilityService extends DatabaseClient {
 				episode: episodeInfo?.episode,
 				files: {
 					create: files.map((file, index) => {
-						const fileEpisodeInfo = extractEpisodeInfo(file.n);
+						const fileEpisodeInfo = episodeOfFile(file.n);
 						return {
 							link: file.l,
 							file_id: index,
@@ -921,7 +984,7 @@ export class AvailabilityService extends DatabaseClient {
 		const normalizedHash = hash.toLowerCase();
 		const episodeInfo = extractEpisodeInfo(filename);
 		const rows = files.map((file, index) => {
-			const fileEpisodeInfo = extractEpisodeInfo(file.path);
+			const fileEpisodeInfo = episodeOfFile(file.path);
 			return {
 				file_id: index,
 				path: file.path,

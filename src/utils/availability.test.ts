@@ -50,23 +50,20 @@ describe('availability client utils', () => {
 		expect(res).toEqual({ available: ['hash2'] });
 	});
 
-	it('submitAvailability posts when status is downloaded', async () => {
+	it('submitAvailability sends the torrent id, not the torrent', async () => {
 		const fetchMock = vi
 			.spyOn(globalThis, 'fetch' as any)
 			.mockResolvedValue(ok({ success: true }));
-		const resp = await submitAvailability(
-			'k',
-			's',
-			{
-				id: '1',
-				status: 'downloaded',
-				progress: 100,
-				files: [{ id: 1, path: 'v.mkv', selected: 1, bytes: 1 }],
-				links: ['l'],
-			} as any,
-			'tt123'
-		);
-		expect(fetchMock).toHaveBeenCalled();
+		const resp = await submitAvailability('k', 's', 'RDKEY', 'TORRENT1', 'tt123');
+		// only the token and the torrent id travel: DMM reads the torrent from RD
+		const sent = JSON.parse((fetchMock.mock.calls[0] as any)[1].body);
+		expect(sent).toEqual({
+			rdKey: 'RDKEY',
+			torrentId: 'TORRENT1',
+			imdbId: 'tt123',
+			dmmProblemKey: 'k',
+			solution: 's',
+		});
 		expect(resp).toEqual({ success: true });
 	});
 

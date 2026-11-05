@@ -14,7 +14,12 @@ import {
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
 } from '@/utils/addMagnet';
-import { removeAvailability, submitAvailability, submitAvailabilityAd } from '@/utils/availability';
+import {
+	removeAvailability,
+	reportAdNotCached,
+	submitAvailability,
+	submitAvailabilityAd,
+} from '@/utils/availability';
 import {
 	createDebridUploaderJob,
 	findJoinableTransfer,
@@ -168,14 +173,20 @@ export function useTorrentManagement(
 
 						if (isFalsePositive) {
 							// Remove false positive from availability database
-							await removeAvailability(
-								tokenWithTimestamp,
-								tokenHash,
-								hash,
-								`Status: ${info.status}, Progress: ${info.progress}%, Selected files: ${
-									info.files?.filter((f) => f.selected === 1).length || 0
-								}`
-							);
+							// DMM reads this add from RD itself before it forgets the row
+							try {
+								await removeAvailability(
+									tokenWithTimestamp,
+									tokenHash,
+									hash,
+									`Status: ${info.status}, Progress: ${info.progress}%, Selected files: ${
+										info.files?.filter((f) => f.selected === 1).length || 0
+									}`,
+									{ rdKey, torrentId: info.id }
+								);
+							} catch {
+								// the row stays; the next add tries again
+							}
 
 							// Update UI
 							setSearchResults((prev) =>
@@ -197,7 +208,17 @@ export function useTorrentManagement(
 						info.progress === 100 &&
 						/^tt\d+$/.test(imdbId)
 					) {
-						await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbId);
+						try {
+							await submitAvailability(
+								tokenWithTimestamp,
+								tokenHash,
+								rdKey,
+								info.id,
+								imdbId
+							);
+						} catch {
+							// DMM refused it (not mostly video, expired) or RD did not answer
+						}
 					}
 
 					const userTorrent = convertToUserTorrent(info);
@@ -221,7 +242,27 @@ export function useTorrentManagement(
 				isCheckingAvailability || !!opts?.silent,
 				torrentResult?.title ?? '',
 				0,
-				knownFilenames
+				knownFilenames,
+				// Shown cached but not instant: DMM checks the add with RD while it still exists
+				!isCheckingAvailability && wasMarkedAvailable
+					? async (torrentId: string) => {
+							const [key, solution] = await generateTokenAndHash();
+							const removed = await removeAvailability(
+								key,
+								solution,
+								hash,
+								'Torrent not instant; deleted from RD',
+								{ rdKey, torrentId }
+							);
+							if (removed?.success) {
+								setSearchResults((prev) =>
+									prev.map((r) =>
+										r.hash === hash ? { ...r, rdAvailable: false } : r
+									)
+								);
+							}
+						}
+					: undefined
 			);
 
 			if (addResult === 'paused') opts?.onPaused?.();
@@ -242,22 +283,27 @@ export function useTorrentManagement(
 			// never added, so it was never shown not to be instant. Telling one
 			// user "try again in a few minutes" costs them a click; evicting the
 			// row costs everybody the release.
+			//
+			// A not-instant add is reported through `onNotInstant` above, while RD can still
+			// be asked about it; what is left here is the blocked name, which DMM checks
+			// against the row's own recorded name.
 			const shouldRemoveAvailability =
 				torrentInfo === null &&
 				wasMarkedAvailable &&
-				(addResult === 'infringing_file'
-					? isRdBlockedName(torrentResult?.title ?? '', knownFilenames)
-					: addResult !== 'error' && addResult !== 'paused' && deleteIfNotInstant);
+				addResult === 'infringing_file' &&
+				isRdBlockedName(torrentResult?.title ?? '', knownFilenames);
 			if (shouldRemoveAvailability) {
 				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-				await removeAvailability(
-					tokenWithTimestamp,
-					tokenHash,
-					hash,
-					addResult === 'infringing_file'
-						? 'RD infringing_file'
-						: 'Torrent not instant; deleted from RD'
-				);
+				try {
+					await removeAvailability(
+						tokenWithTimestamp,
+						tokenHash,
+						hash,
+						'RD infringing_file'
+					);
+				} catch {
+					// the row stays
+				}
 				setSearchResults((prev) =>
 					prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: false } : r))
 				);
@@ -283,7 +329,7 @@ export function useTorrentManagement(
 			let magnetStatusInfo: any = null;
 
 			console.log('[TorrentManagement] addAd start', { hash, isCheckingAvailability });
-			await handleAddAsMagnetInAd(
+			const adResult = await handleAddAsMagnetInAd(
 				adKey,
 				hash,
 				async (magnetStatus) => {
@@ -426,6 +472,18 @@ export function useTorrentManagement(
 				!isCheckingAvailability, // keepInLibrary parameter - keep if not checking service
 				silent
 			);
+
+			// Shown cached, and AllDebrid took the magnet but did not have it ready: the row is
+			// wrong for everybody. Only `not_cached` says so; a `no_peers` callback also covers
+			// AD refusing this user's address (NO_SERVER), which says nothing about the release.
+			if (adResult === 'not_cached' && wasMarkedAvailable && !isCheckingAvailability) {
+				try {
+					const [key, solution] = await generateTokenAndHash();
+					await reportAdNotCached(key, solution, hash);
+				} catch {
+					// the row stays; the next add tries again
+				}
+			}
 
 			console.log('[TorrentManagement] addAd end', { hash });
 			if (isCheckingAvailability) return magnetStatusInfo;

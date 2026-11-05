@@ -620,7 +620,10 @@ export class Repository {
 		entry: ScrapeSearchResult,
 		availability: AvailabilityUpsert
 	) {
-		const blocked = await isHashBlocked(availability.hash);
+		// a release removed as uncached or dead stays out; its page entry still files
+		const blocked =
+			(await isHashBlocked(availability.hash)) ||
+			(await this.availabilityService.wasAvailabilityEvicted(availability.hash));
 		await this.scrapedService.saveScrapedTrueResultsWith(
 			scrapedKey,
 			await withoutBlockedHashes([entry]),
@@ -693,6 +696,10 @@ export class Repository {
 
 	public removeAvailability(hash: string) {
 		return this.availabilityService.removeAvailability(hash);
+	}
+
+	public wasAvailabilityEvicted(hash: string) {
+		return this.availabilityService.wasAvailabilityEvicted(hash);
 	}
 
 	public getHashByLink(link: string) {

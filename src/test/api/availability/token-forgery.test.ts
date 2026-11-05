@@ -1,6 +1,8 @@
 import availabilityHandler from '@/pages/api/availability';
 import removeHandler from '@/pages/api/availability/remove';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { mintProblemToken } from '@/utils/problemToken';
 import { NextApiHandler } from 'next';
@@ -12,6 +14,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // just as happily against the old client-side scheme — and that scheme's salt
 // shipped in the browser bundle, which is the hole this proves closed.
 vi.mock('@/services/repository');
+vi.mock('@/services/realDebrid', () => ({ getTorrentInfo: vi.fn() }));
 
 const mockRepository = vi.mocked(repository);
 
@@ -61,28 +64,20 @@ function forgeFromLeakedSalt(): [string, string] {
 	return [token, combineHashes(legacyHash(token), legacyHash(`${LEAKED_SALT}-${nonce}`))];
 }
 
-const validHash = 'd'.repeat(40);
+const validHash = rdMovie.hash;
 
 const routes = [
 	{
 		name: 'POST /api/availability (write)',
 		handler: availabilityHandler as NextApiHandler,
 		dbCall: () => mockRepository.upsertAvailability,
+		// the server reads the torrent from RD (mocked from a real torrents/info answer)
 		body: (dmmProblemKey: unknown, solution: unknown) => ({
 			dmmProblemKey,
 			solution,
-			filename: 'file.mkv',
-			original_filename: 'original.mkv',
-			hash: validHash,
-			bytes: 1000,
-			original_bytes: 2000,
-			host: 'real-debrid.com',
-			progress: 100,
-			status: 'downloaded',
-			files: [{ id: 1, path: 'movie/file.mkv', bytes: 1000, selected: 1 }],
-			links: ['https://real-debrid.com/download/123'],
-			ended: '2024-01-01T00:00:00Z',
-			imdbId: 'tt1234567',
+			rdKey: 'R'.repeat(52),
+			torrentId: rdMovie.id,
+			imdbId: 'tt28363783',
 		}),
 	},
 	{
@@ -94,6 +89,8 @@ const routes = [
 			solution,
 			hash: validHash,
 			reason: 'user-request',
+			rdKey: 'R'.repeat(52),
+			torrentId: rdMovie.id,
 		}),
 	},
 ];
@@ -108,6 +105,8 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET };
 		mockRepository.upsertAvailability = vi.fn().mockResolvedValue(undefined);
 		mockRepository.removeAvailability = vi.fn().mockResolvedValue(undefined);
+		// downloaded for the write; the remove route reads its own state below
+		vi.mocked(getTorrentInfo).mockResolvedValue(rdMovie as any);
 	});
 
 	afterEach(() => {
@@ -115,7 +114,11 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 	});
 
 	const post = async (dmmProblemKey: unknown, solution: unknown) => {
-		const req = createMockRequest({ method: 'POST', body: body(dmmProblemKey, solution) });
+		const req = createMockRequest({
+			method: 'POST',
+			headers: { 'sec-fetch-site': 'same-origin' },
+			body: body(dmmProblemKey, solution),
+		});
 		const res = createMockResponse();
 		await handler(req, res);
 		return res;
@@ -182,6 +185,14 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 
 	it('accepts a freshly minted token and proceeds to the database', async () => {
 		const [token, hash] = mintProblemToken(SECRET);
+		// the removal needs RD to show the add downloading, not cached
+		if (handler === (removeHandler as NextApiHandler)) {
+			vi.mocked(getTorrentInfo).mockResolvedValue({
+				...rdMovie,
+				status: 'downloading',
+				progress: 3,
+			} as any);
+		}
 
 		const res = await post(token, hash);
 

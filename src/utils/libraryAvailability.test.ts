@@ -29,19 +29,18 @@ const adItem: LibraryItem = {
 const named = (imdbId: string) => ({ imdbId, title: 'x', year: 2026, kind: 'movie' as const });
 
 function deps(recorded: string[] = []): ReportDeps {
-	const infos: Record<string, unknown> = { [rdMovie.id]: rdMovie, [rdTv.id]: rdTv };
 	const check = vi.fn(async (_k: string, _s: string, hashes: string[]) => ({
 		available: hashes.filter((h) => recorded.includes(h)).map((hash) => ({ hash })),
 	}));
 	return {
-		rdInfo: vi.fn(async (_key: string, id: string) => {
-			if (!infos[id]) throw new Error('404');
-			return infos[id];
-		}) as any,
 		adFiles: vi.fn(async () => adFiles.data) as any,
 		rdRecorded: check as any,
 		adRecorded: check as any,
-		rdSubmit: vi.fn(async () => ({ success: true })) as any,
+		// the route reads the torrent from RD; an id it does not know is refused
+		rdSubmit: vi.fn(async (_k: string, _s: string, _key: string, id: string) => {
+			if (![rdMovie.id, rdTv.id].includes(id)) throw new Error('502');
+			return { success: true };
+		}) as any,
 		adSubmit: vi.fn(async () => ({ success: true })) as any,
 		dlTorrent: vi.fn(async () => dlTv) as any,
 		dlRecorded: check as any,
@@ -63,7 +62,7 @@ describe('cachedOn', () => {
 });
 
 describe('reportLibraryAvailability', () => {
-	it('records each named, cached RD release DMM has no row for, from its torrent info', async () => {
+	it('sends each named, cached RD release DMM has no row for by its torrent id', async () => {
 		const d = deps([rdTv.hash]);
 		const unnamed = { ...rdItem(rdMovie), id: 'rd:UNNAMED', hash: 'a'.repeat(40) };
 		await reportLibraryAvailability(
@@ -72,10 +71,15 @@ describe('reportLibraryAvailability', () => {
 			{ rd: 'rdkey' },
 			d
 		);
-		// the TV pack already has a row: never asked about again, never rewritten
-		expect(d.rdInfo).toHaveBeenCalledTimes(1);
-		expect(d.rdInfo).toHaveBeenCalledWith('rdkey', rdMovie.id);
-		expect(d.rdSubmit).toHaveBeenCalledWith('key', 'solution', rdMovie, 'tt28363783');
+		// the TV pack already has a row: never sent again, never rewritten
+		expect(d.rdSubmit).toHaveBeenCalledTimes(1);
+		expect(d.rdSubmit).toHaveBeenCalledWith(
+			'key',
+			'solution',
+			'rdkey',
+			rdMovie.id,
+			'tt28363783'
+		);
 	});
 
 	it('records a Ready AD magnet with its files flattened to full paths', async () => {
@@ -115,7 +119,7 @@ describe('reportLibraryAvailability', () => {
 			{ ad: 'adkey' },
 			d
 		);
-		expect(d.rdInfo).not.toHaveBeenCalled();
+		expect(d.rdSubmit).not.toHaveBeenCalled();
 		expect(d.adFiles).not.toHaveBeenCalled();
 	});
 
@@ -128,8 +132,14 @@ describe('reportLibraryAvailability', () => {
 			{ rd: 'rdkey' },
 			d
 		);
-		expect(d.rdSubmit).toHaveBeenCalledTimes(1);
-		expect(d.rdSubmit).toHaveBeenCalledWith('key', 'solution', rdMovie, 'tt28363783');
+		expect(d.rdSubmit).toHaveBeenCalledTimes(2);
+		expect(d.rdSubmit).toHaveBeenLastCalledWith(
+			'key',
+			'solution',
+			'rdkey',
+			rdMovie.id,
+			'tt28363783'
+		);
 	});
 
 	it('leaves out a release that is mostly not video, whatever title its name was given', async () => {
@@ -143,22 +153,15 @@ describe('reportLibraryAvailability', () => {
 		};
 		const d = deps();
 		d.adFiles = vi.fn(async () => musicFiles.data) as any;
-		const audioOnly = {
-			...rdMovie,
-			files: rdMovie.files.map((f) => ({ ...f, path: '/Album/01 Track.flac' })),
-		};
-		d.rdInfo = vi.fn(async () => audioOnly) as any;
+		// (Real-Debrid's side of this rule is the route's: /api/availability reads the files)
 		await reportLibraryAvailability(
-			[music, rdItem(rdMovie)],
-			{ [music.id]: named('tt7541720'), [`rd:${rdMovie.id}`]: named('tt7541720') },
-			{ rd: 'rdkey', ad: 'adkey' },
+			[music],
+			{ [music.id]: named('tt7541720') },
+			{ ad: 'adkey' },
 			d
 		);
 		expect(d.adFiles).toHaveBeenCalled();
 		expect(d.adSubmit).not.toHaveBeenCalled();
-		expect(d.rdSubmit).not.toHaveBeenCalled();
-		// pacing holds for a skipped release too
-		expect(d.wait).toHaveBeenCalledTimes(1);
 	});
 
 	it('records AD without waiting for the paced RD run', async () => {
@@ -167,7 +170,7 @@ describe('reportLibraryAvailability', () => {
 		let adDone!: () => void;
 		const adSent = new Promise<void>((resolve) => (adDone = resolve));
 		d.adSubmit = vi.fn(async () => (adDone(), { success: true })) as any;
-		d.rdInfo = vi.fn(async () => (await adSent, rdMovie)) as any;
+		d.rdSubmit = vi.fn(async () => (await adSent, { success: true })) as any;
 		await reportLibraryAvailability(
 			[rdItem(rdMovie), adItem],
 			{ [`rd:${rdMovie.id}`]: named('tt28363783'), [adItem.id]: named('tt0000001') },

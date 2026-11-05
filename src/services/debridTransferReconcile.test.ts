@@ -254,6 +254,19 @@ describe('reconcileDebridTransfers', () => {
 			expect(result.refiled).toBe(1);
 		});
 
+		// A release a user's add proved uncached was filed again within minutes, every tick
+		// (2026-11-05 audit): its eviction now leaves a tombstone the cron respects.
+		it('leaves out one removed from Available as uncached', async () => {
+			mockDb.wasAvailabilityEvicted = vi.fn().mockResolvedValue(true);
+			uploaderSays({ 'job-unfiled': { body: { id: 'job-unfiled', status: 'completed' } } });
+
+			const result = await reconcileDebridTransfers();
+
+			expect(mockDb.wasAvailabilityEvicted).toHaveBeenCalledWith('d'.repeat(40));
+			expect(mockRegister).not.toHaveBeenCalled();
+			expect(result.refiled).toBe(0);
+		});
+
 		// The common case by far, and it must not cost an uploader round-trip.
 		it('costs nothing for one already in search', async () => {
 			mockDb.checkAvailabilityByHashes = vi

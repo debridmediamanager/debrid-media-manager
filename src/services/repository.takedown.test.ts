@@ -7,6 +7,7 @@ import { setBlocklistForTests } from './takedown/blocklist';
 
 const BLOCKED = 'a'.repeat(40);
 const KEPT = 'b'.repeat(40);
+const EVICTED = 'e'.repeat(40);
 const row = (hash: string) => ({ hash, title: 'Big.Buck.Bunny.2008', fileSize: 1 });
 
 const build = () => {
@@ -35,6 +36,7 @@ const build = () => {
 		filterPlayableCachedHashesAd: vi.fn(async (hashes: string[]) => new Set(hashes)),
 		upsertAvailability: vi.fn(),
 		saveInstantAvailability: vi.fn(),
+		wasAvailabilityEvicted: vi.fn(async (hash: string) => hash === EVICTED),
 	};
 	const cast = { getOtherStreams: vi.fn(async () => [row(BLOCKED), row(KEPT)]) };
 	const hashSearch = { getHashesByImdbId: vi.fn(async () => [row(BLOCKED), row(KEPT)]) };
@@ -98,6 +100,15 @@ describe('Repository takedown enforcement', () => {
 			{ hash: KEPT },
 			'page transaction'
 		);
+	});
+
+	// The reconcile cron re-files any finished transfer missing from Available, so a release
+	// removed as uncached came back within minutes (2026-11-05 audit).
+	it('files a transfer removed as uncached on its page, but not back into Available', async () => {
+		const { repo, scraped, availability } = build();
+		await repo.fileTransferRelease('movie:tt1', row(EVICTED), { hash: EVICTED } as any);
+		expect(scraped.saveScrapedTrueResultsWith.mock.calls[0][1]).toEqual([row(EVICTED)]);
+		expect(availability.upsertAvailability).not.toHaveBeenCalled();
 	});
 
 	it("drops blocked hashes from other users' streams and zurg's hash search", async () => {

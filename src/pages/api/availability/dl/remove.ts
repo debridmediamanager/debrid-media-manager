@@ -1,4 +1,6 @@
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,10 +9,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
  * Forget a release an add found uncached on Debrid-Link, as /api/availability/remove does
  * for Real-Debrid.
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	if (!validateOwnPageRequest(req, res)) return;
 
 	try {
 		const { dmmProblemKey, solution, hash, reason } = req.body ?? {};
@@ -32,3 +35,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ error: 'Failed to remove Debrid-Link availability' });
 	}
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.availabilityWrite);

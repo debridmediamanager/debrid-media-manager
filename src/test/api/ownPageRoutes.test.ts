@@ -1,15 +1,23 @@
+import rdWrite from '@/pages/api/availability';
+import adWrite from '@/pages/api/availability/ad';
 import adCheck from '@/pages/api/availability/ad/check';
 import adCheck2 from '@/pages/api/availability/ad/check2';
 import check from '@/pages/api/availability/check';
 import check2 from '@/pages/api/availability/check2';
+import dlWrite from '@/pages/api/availability/dl';
 import dlCheck from '@/pages/api/availability/dl/check';
+import dlRemove from '@/pages/api/availability/dl/remove';
 import playable from '@/pages/api/availability/playable';
+import rdRemove from '@/pages/api/availability/remove';
 import libraryIdentify from '@/pages/api/library/identify';
 import sponsorIdentify from '@/pages/api/sponsor/identify';
 import mediainfo from '@/pages/api/torrents/mediainfo';
 import { validateDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import { identifyFilenames } from '@/services/contentIdentifier';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import dlMovie from '@/test/fixtures/libraryAvailability/dl_movie.json';
+import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
 import captured from '@/test/fixtures/publicRoutes/page-and-script-requests.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { validateProblemToken } from '@/utils/problemToken';
@@ -19,6 +27,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/repository');
 vi.mock('@/services/contentIdentifier');
 vi.mock('@/utils/problemToken');
+vi.mock('@/services/realDebrid', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/realDebrid')>()),
+	getTorrentInfo: vi.fn(),
+}));
 vi.mock('@/pages/api/zurg/auth');
 
 const HASH = 'a'.repeat(40);
@@ -53,6 +65,60 @@ const routes: [string, NextApiHandler, Partial<NextApiRequest>][] = [
 		playable,
 		{ method: 'POST', body: { ...token, service: 'rd', hashes: [HASH] } },
 	],
+	// the writes and removals: what a script could forge before 2026-11-05
+	[
+		'availability (RD write)',
+		rdWrite,
+		{
+			method: 'POST',
+			body: { ...token, rdKey: 'R'.repeat(52), torrentId: 'WRITE', imdbId: 'tt28363783' },
+		},
+	],
+	[
+		'availability/remove',
+		rdRemove,
+		{
+			method: 'POST',
+			body: { ...token, hash: rdMovie.hash, rdKey: 'R'.repeat(52), torrentId: 'REMOVE' },
+		},
+	],
+	[
+		'availability/ad (write)',
+		adWrite,
+		{
+			method: 'POST',
+			body: {
+				...token,
+				hash: HASH,
+				imdbId: 'tt0133093',
+				filename: 'The.Matrix.1999.mkv',
+				size: 9,
+				status: 'Ready',
+				statusCode: 4,
+				completionDate: 1,
+				files: [{ n: 'The.Matrix.1999.mkv', s: 9, l: 'https://alldebrid.com/f/x' }],
+			},
+		},
+	],
+	[
+		'availability/dl (write)',
+		dlWrite,
+		{
+			method: 'POST',
+			body: {
+				...token,
+				hash: dlMovie.hashString,
+				imdbId: 'tt1375666',
+				filename: dlMovie.name,
+				files: dlMovie.files.map(({ name, size, downloadPercent }) => ({
+					name,
+					size,
+					downloadPercent,
+				})),
+			},
+		},
+	],
+	['availability/dl/remove', dlRemove, { method: 'POST', body: { ...token, hash: HASH } }],
 	['torrents/mediainfo', mediainfo, { method: 'GET', query: { hash: HASH } }],
 	[
 		'library/identify',
@@ -91,7 +157,16 @@ describe('routes that serve DMM pages only', () => {
 			getFilenameIdentifications: vi.fn().mockResolvedValue([]),
 			getHashTitleIds: vi.fn().mockResolvedValue(new Map()),
 			saveFilenameIdentifications: vi.fn().mockResolvedValue(undefined),
+			upsertAvailability: vi.fn().mockResolvedValue(undefined),
+			upsertAvailabilityAd: vi.fn().mockResolvedValue(undefined),
+			upsertAvailabilityDl: vi.fn().mockResolvedValue(undefined),
+			removeAvailability: vi.fn().mockResolvedValue(undefined),
+			removeAvailabilityDl: vi.fn().mockResolvedValue(undefined),
 		});
+		// a real torrents/info answer: downloaded for the write, downloading for the removal
+		vi.mocked(getTorrentInfo).mockImplementation(async (_key, id) =>
+			id === 'REMOVE' ? ({ ...rdMovie, status: 'downloading' } as any) : (rdMovie as any)
+		);
 	});
 
 	it.each(routes)(

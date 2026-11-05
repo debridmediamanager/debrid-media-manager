@@ -23,6 +23,7 @@ const {
 	mockSubmitAvailability,
 	mockSubmitAvailabilityAd,
 	mockRemoveAvailability,
+	mockReportAdNotCached,
 	mockHandleDeleteRdTorrent,
 	mockHandleDeleteAdTorrent,
 	mockHandleDeleteTbTorrent,
@@ -52,6 +53,7 @@ const {
 	mockSubmitAvailability: vi.fn(),
 	mockSubmitAvailabilityAd: vi.fn(),
 	mockRemoveAvailability: vi.fn(),
+	mockReportAdNotCached: vi.fn(),
 	mockHandleDeleteRdTorrent: vi.fn(),
 	mockHandleDeleteAdTorrent: vi.fn(),
 	mockHandleDeleteTbTorrent: vi.fn(),
@@ -95,6 +97,7 @@ vi.mock('@/utils/availability', () => ({
 	submitAvailability: mockSubmitAvailability,
 	submitAvailabilityAd: mockSubmitAvailabilityAd,
 	removeAvailability: mockRemoveAvailability,
+	reportAdNotCached: mockReportAdNotCached,
 }));
 
 vi.mock('@/utils/deleteTorrent', () => ({
@@ -275,12 +278,15 @@ describe('useTorrentManagement', () => {
 			false,
 			'Sample Torrent',
 			0,
-			[]
+			[],
+			expect.toBeOneOf([undefined, expect.any(Function)])
 		);
+		// the torrent id, not the torrent: DMM reads it from RD itself
 		expect(mockSubmitAvailability).toHaveBeenCalledWith(
 			'token-ts',
 			'token-hash',
-			expect.any(Object),
+			'rd-key',
+			expect.any(String),
 			'tt123'
 		);
 		expect(result.current.hashAndProgress['rd:hash-1']).toBe(100);
@@ -325,7 +331,8 @@ describe('useTorrentManagement', () => {
 			0,
 			// …and so do the filenames, because RD reads the paths inside the
 			// torrent too and a display title can have lost the dots it blocks on.
-			[]
+			[],
+			expect.toBeOneOf([undefined, expect.any(Function)])
 		);
 		expect(returnValue).toBe(true);
 		expect(mockSubmitAvailability).toHaveBeenCalled();
@@ -360,7 +367,8 @@ describe('useTorrentManagement', () => {
 			false,
 			'Sample Torrent',
 			0,
-			['from.files.mkv', 'from.tbFiles.mkv', 'from.rdFiles.mkv']
+			['from.files.mkv', 'from.tbFiles.mkv', 'from.rdFiles.mkv'],
+			expect.toBeOneOf([undefined, expect.any(Function)])
 		);
 	});
 
@@ -391,7 +399,8 @@ describe('useTorrentManagement', () => {
 			false,
 			'Other.Season.Pack',
 			0,
-			['other.season.pack.mkv']
+			['other.season.pack.mkv'],
+			expect.toBeOneOf([undefined, expect.any(Function)])
 		);
 	});
 
@@ -411,14 +420,17 @@ describe('useTorrentManagement', () => {
 		// When deleteIfNotInstant=true and torrent is not instant,
 		// handleAddAsMagnetInRd deletes the torrent and does NOT call the callback.
 		mockHandleAddAsMagnetInRd.mockImplementation(
-			async (_rdKey, _hash, _cb, deleteIfNotInstant) => {
+			async (_rdKey, _hash, _cb, deleteIfNotInstant, ...rest) => {
 				// Simulate: torrent not instant, callback not called when deleteIfNotInstant=true
 				if (!deleteIfNotInstant) {
 					await _cb(makeTorrentInfo(_hash, { status: 'downloading', progress: 50 }));
 				}
-				// When deleteIfNotInstant=true and not instant: callback is skipped
+				// Not instant: the add is reported, by id, before it is deleted
+				const onNotInstant = rest[5];
+				if (deleteIfNotInstant) await onNotInstant?.('RDTORRENT1');
 			}
 		);
+		mockRemoveAvailability.mockResolvedValue({ success: true });
 		currentResults = [createSearchResult({ rdAvailable: true })];
 		const { result } = renderManagementHook();
 
@@ -433,7 +445,8 @@ describe('useTorrentManagement', () => {
 			'token-ts',
 			'token-hash',
 			'hash-1',
-			'Torrent not instant; deleted from RD'
+			'Torrent not instant; deleted from RD',
+			{ rdKey: 'rd-key', torrentId: 'RDTORRENT1' }
 		);
 		// Should update search results to mark as not available
 		expect(setSearchResults).toHaveBeenCalled();
@@ -610,6 +623,34 @@ describe('useTorrentManagement', () => {
 		);
 		// Torrent is added directly in the callback via torrentDB.add
 		expect(mockDb.add).toHaveBeenCalled();
+	});
+
+	// AllDebrid rows were never corrected: a cached-looking row that AD did not have ready
+	// stayed green for everybody (2026-11-05 audit; 6 of 30 sampled rows were not cached).
+	it('reports a release shown AD-cached that AD did not have ready', async () => {
+		mockHandleAddAsMagnetInAd.mockResolvedValue('not_cached');
+		currentResults = [createSearchResult({ hash: 'hash-ad', adAvailable: true })];
+		const { result } = renderManagementHook();
+		await act(async () => {
+			await result.current.addAd('hash-ad');
+		});
+		expect(mockReportAdNotCached).toHaveBeenCalledWith('token-ts', 'token-hash', 'hash-ad');
+	});
+
+	it('keeps the AD row when the add failed for reasons of the account, not the release', async () => {
+		mockHandleAddAsMagnetInAd.mockResolvedValue('no_peers');
+		currentResults = [createSearchResult({ hash: 'hash-ad', adAvailable: true })];
+		const { result } = renderManagementHook();
+		await act(async () => {
+			await result.current.addAd('hash-ad');
+		});
+		mockHandleAddAsMagnetInAd.mockResolvedValue('not_cached');
+		currentResults = [createSearchResult({ hash: 'hash-ad', adAvailable: false })];
+		const second = renderManagementHook();
+		await act(async () => {
+			await second.result.current.addAd('hash-ad');
+		});
+		expect(mockReportAdNotCached).not.toHaveBeenCalled();
 	});
 
 	it('adds TB torrents and persists them', async () => {

@@ -196,6 +196,8 @@ async function refileUnsearchable(
 		try {
 			const available = await db.checkAvailabilityByHashes([record.rewrittenHash]);
 			if (available.length > 0) continue;
+			// removed as uncached or dead: filing it again would undo that every tick
+			if (await db.wasAvailabilityEvicted(record.rewrittenHash)) continue;
 
 			const server = await resolveJobServer(record.jobId, (j) => db.getDebridJobServer(j));
 			if (!server) continue;

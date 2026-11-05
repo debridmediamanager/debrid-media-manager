@@ -1,225 +1,116 @@
 import handler from '@/pages/api/availability';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
+import rdTv from '@/test/fixtures/libraryAvailability/rdinfo_tv.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/utils/problemToken');
+vi.mock('@/services/realDebrid', () => ({ getTorrentInfo: vi.fn() }));
 
 const mockRepository = vi.mocked(repository);
-const mockValidateProblemToken = vi.mocked(validateProblemToken);
+const RD_KEY = 'R'.repeat(52);
 
-const buildBody = (overrides: Record<string, unknown> = {}) => ({
+// real torrents/info answers (testacct123, 2026-11-05), download links redacted
+const body = (overrides: Record<string, unknown> = {}) => ({
 	dmmProblemKey: 'key-1-1234567890',
 	solution: 'solution-hash',
-	filename: 'file.mkv',
-	original_filename: 'original.mkv',
-	hash: 'a'.repeat(40),
-	bytes: 1000,
-	original_bytes: 2000,
-	host: 'real-debrid.com',
-	progress: 100,
-	status: 'downloaded',
-	files: [
-		{ id: 1, path: 'movie/file.mkv', bytes: 1000, selected: 1 },
-		{ id: 2, path: 'extras/sample.txt', bytes: 10, selected: 0 },
-	],
-	links: ['https://real-debrid.com/download/123'],
-	ended: '2024-01-01T00:00:00Z',
-	imdbId: 'tt1234567',
+	rdKey: RD_KEY,
+	torrentId: rdMovie.id,
+	imdbId: 'tt28363783',
 	...overrides,
 });
+
+const post = async (b: object, headers: object = { 'sec-fetch-site': 'same-origin' }) => {
+	const res = createMockResponse();
+	await handler(createMockRequest({ method: 'POST', headers: headers as any, body: b }), res);
+	return res;
+};
 
 describe('/api/availability', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateProblemToken.mockReturnValue(true);
+		vi.mocked(validateProblemToken).mockReturnValue(true);
 		mockRepository.upsertAvailability = vi.fn().mockResolvedValue(undefined);
+		vi.mocked(getTorrentInfo).mockResolvedValue(rdMovie as any);
 	});
 
-	it('rejects non-POST methods', async () => {
-		const req = createMockRequest({ method: 'GET' });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(405);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Method not allowed' });
-	});
-
-	it('requires authentication payload', async () => {
-		const body = buildBody();
-		delete (body as any).dmmProblemKey;
-		const req = createMockRequest({ method: 'POST', body });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(403);
-		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication not provided' });
-	});
-
-	it('rejects invalid auth tokens', async () => {
-		mockValidateProblemToken.mockReturnValue(false);
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(mockValidateProblemToken).toHaveBeenCalledWith('key-1-1234567890', 'solution-hash');
-		expect(res.status).toHaveBeenCalledWith(403);
-		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
-	});
-
-	it('validates required fields', async () => {
-		const body = buildBody();
-		delete (body as any).hash;
-		const req = createMockRequest({ method: 'POST', body });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Missing required fields' });
-	});
-
-	it('validates host', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({ host: 'other-host' }),
+	it('records what Real-Debrid says about the torrent, read with the user token', async () => {
+		const res = await post(body());
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(getTorrentInfo).toHaveBeenCalledWith(RD_KEY, rdMovie.id, true);
+		const saved = vi.mocked(mockRepository.upsertAvailability).mock.calls[0][0];
+		expect(saved).toMatchObject({
+			hash: rdMovie.hash,
+			imdbId: 'tt28363783',
+			filename: rdMovie.filename,
+			bytes: rdMovie.bytes,
+			status: 'downloaded',
+			host: 'real-debrid.com',
 		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Invalid host. Only real-debrid.com is allowed',
-		});
+		expect(saved.selectedFiles).toHaveLength(1);
+		expect(saved.links).toEqual(rdMovie.links);
 	});
 
-	it('validates progress', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({ progress: 50 }),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid progress. Must be 100' });
+	it('keeps only the selected files of a season pack', async () => {
+		vi.mocked(getTorrentInfo).mockResolvedValue(rdTv as any);
+		await post(body({ torrentId: rdTv.id, imdbId: 'tt5626028' }));
+		const saved = vi.mocked(mockRepository.upsertAvailability).mock.calls[0][0];
+		expect(saved.selectedFiles).toHaveLength(rdTv.files.filter((f) => f.selected === 1).length);
 	});
 
-	it('validates hash format', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({ hash: 'invalid-hash' }),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid torrent hash format' });
-	});
-
-	it('validates positive byte counts', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({ bytes: 0 }),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Bytes must be greater than 0' });
-	});
-
-	it('validates files and links shape', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({ files: 'bad', links: 'bad' }),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Files and links must be arrays' });
-	});
-
-	it('rejects when no selected files remain', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({
-				files: [
-					{ id: 1, path: 'movie/file.mkv', bytes: 1000, selected: 0 },
-					{ id: 2, path: 'extras/sample.txt', bytes: 10, selected: 0 },
-				],
-			}),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Torrent is fully expired' });
-	});
-
-	it('rejects when links do not match selected files', async () => {
-		const req = createMockRequest({
-			method: 'POST',
-			body: buildBody({
-				files: [
-					{ id: 1, path: 'movie/file.mkv', bytes: 1000, selected: 1 },
-					{ id: 2, path: 'extras/sample.txt', bytes: 10, selected: 1 },
-				],
-			}),
-		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(400);
-	});
-
-	it('persists selected files with matching links', async () => {
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(mockRepository.upsertAvailability).toHaveBeenCalledWith({
-			hash: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-			imdbId: 'tt1234567',
-			filename: 'file.mkv',
-			originalFilename: 'original.mkv',
-			bytes: 1000,
-			originalBytes: 2000,
+	// The hole the 2026-11-05 audit found: the route stored whatever the caller sent, so a
+	// script could plant a "cached" row with any /d/ link for any title.
+	it('ignores a torrent described in the request body', async () => {
+		const forged = {
+			dmmProblemKey: 'key-1-1234567890',
+			solution: 'solution-hash',
+			hash: 'a'.repeat(40),
+			imdbId: 'tt0111161',
+			filename: 'Film.mkv',
+			original_filename: 'Film.mkv',
+			bytes: 90e9,
+			original_bytes: 90e9,
 			host: 'real-debrid.com',
 			progress: 100,
 			status: 'downloaded',
-			ended: '2024-01-01T00:00:00Z',
-			selectedFiles: [{ id: 1, path: 'movie/file.mkv', bytes: 1000, selected: 1 }],
-			links: ['https://real-debrid.com/download/123'],
-		});
-		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ success: true });
+			files: [{ id: 1, path: 'Film.mkv', bytes: 90e9, selected: 1 }],
+			links: ['https://real-debrid.com/d/ATTACKERLINK1'],
+			ended: '2026-01-01T00:00:00Z',
+		};
+		const res = await post(forged);
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(mockRepository.upsertAvailability).not.toHaveBeenCalled();
+	});
+
+	it('serves DMM pages only', async () => {
+		const res = await post(body(), { 'sec-fetch-site': 'cross-site' });
+		expect(res.status).toHaveBeenCalledWith(403);
+		expect(getTorrentInfo).not.toHaveBeenCalled();
+	});
+
+	it('refuses what RD does not show downloaded, whole and mostly video', async () => {
+		const cases = [
+			{ ...rdMovie, status: 'downloading', progress: 40 },
+			{ ...rdMovie, links: [] },
+			{ ...rdMovie, files: rdMovie.files.map((f) => ({ ...f, selected: 0 })) },
+			{ ...rdMovie, files: rdMovie.files.map((f) => ({ ...f, path: '/Album/01.flac' })) },
+		];
+		for (const info of cases) {
+			vi.mocked(getTorrentInfo).mockResolvedValueOnce(info as any);
+			expect((await post(body())).status).toHaveBeenCalledWith(400);
+		}
+		vi.mocked(getTorrentInfo).mockRejectedValueOnce(new Error('404'));
+		expect((await post(body())).status).toHaveBeenCalledWith(502);
+		expect((await post(body({ imdbId: 'anidb-1' }))).status).toHaveBeenCalledWith(400);
+		expect(mockRepository.upsertAvailability).not.toHaveBeenCalled();
 	});
 
 	it('returns 500 when persistence fails', async () => {
-		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockRepository.upsertAvailability = vi.fn().mockRejectedValue(new Error('db down'));
-		const req = createMockRequest({ method: 'POST', body: buildBody() });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to save available torrent' });
-		consoleSpy.mockRestore();
+		mockRepository.upsertAvailability = vi.fn().mockRejectedValue(new Error('db'));
+		expect((await post(body())).status).toHaveBeenCalledWith(500);
 	});
 });

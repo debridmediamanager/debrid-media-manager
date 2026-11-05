@@ -1,5 +1,6 @@
 import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { isFilmFile } from '@/utils/selectable';
 import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
 
@@ -334,10 +335,21 @@ export class AllDebridCastService extends DatabaseClient {
 	/** Invalidate one proven-dead token, not its release or anyone's provider library. */
 	public async removeDeadLink(link: string): Promise<void> {
 		if (!/^https:\/\/alldebrid\.com\/f\/[A-Za-z0-9_-]{43}$/.test(link)) return;
+		const dead = await this.prisma.availableAdFile.findFirst({
+			where: { link },
+			select: { hash: true },
+		});
 		await this.prisma.$transaction([
 			this.prisma.availableAdFile.deleteMany({ where: { link } }),
 			this.prisma.allDebridCast.deleteMany({ where: { link } }),
 		]);
+		// the last dead file takes its release with it, as on Real-Debrid
+		if (
+			dead &&
+			(await this.prisma.availableAdFile.count({ where: { hash: dead.hash } })) === 0
+		) {
+			await this.prisma.availableAd.deleteMany({ where: { hash: dead.hash } });
+		}
 	}
 
 	public async getUserCastStreams(
@@ -551,6 +563,7 @@ export class AllDebridCastService extends DatabaseClient {
 		});
 		const seen = new Set<string>();
 		return files
+			.filter((file) => isFilmFile(file.path))
 			.filter((file) => !seen.has(file.hash) && seen.add(file.hash))
 			.slice(0, limit)
 			.map((file) => ({

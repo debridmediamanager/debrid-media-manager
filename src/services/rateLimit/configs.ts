@@ -201,6 +201,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// have waited, and the page waits out Retry-After rather than dropping the batch.
 	availability: { name: 'availability', rateLimit: 180, windowSeconds: 60 },
 	availabilityAd: { name: 'availabilityAd', rateLimit: 180, windowSeconds: 60 },
+	// Writes and removals, per address. A library visit records one release a second and a
+	// season add a few dozen; anything faster is a script, which these routes must not serve.
+	availabilityWrite: { name: 'availabilityWrite', rateLimit: 90, windowSeconds: 60 },
 	availabilityDl: { name: 'availabilityDl', rateLimit: 180, windowSeconds: 60 },
 	playable: { name: 'playable', rateLimit: 120, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints

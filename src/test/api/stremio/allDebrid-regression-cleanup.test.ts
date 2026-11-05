@@ -11,8 +11,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => {
 	const prisma = {
-		availableAd: { updateMany: vi.fn(), upsert: vi.fn() },
-		availableAdFile: { deleteMany: vi.fn() },
+		availableAd: { updateMany: vi.fn(), upsert: vi.fn(), deleteMany: vi.fn() },
+		availableAdFile: { deleteMany: vi.fn(), findFirst: vi.fn(), count: vi.fn() },
 		allDebridCast: { deleteMany: vi.fn() },
 		$transaction: vi.fn(async (work: Promise<unknown>[]) => Promise.all(work)),
 	};
@@ -58,6 +58,10 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.prisma.availableAd.updateMany.mockResolvedValue({ count: 1 });
 	mocks.prisma.availableAdFile.deleteMany.mockResolvedValue({ count: 1 });
+	mocks.prisma.availableAdFile.findFirst.mockResolvedValue({ hash: magnet.hash });
+	// the dead file was the release's last
+	mocks.prisma.availableAdFile.count.mockResolvedValue(0);
+	mocks.prisma.availableAd.deleteMany.mockResolvedValue({ count: 1 });
 	mocks.prisma.allDebridCast.deleteMany.mockResolvedValue({ count: 1 });
 	mocks.db.getAllDebridCastProfile.mockResolvedValue({ apiKey: 'synthetic-key' });
 	mocks.db.getAllDebridCastLink.mockResolvedValue(link);
@@ -148,6 +152,10 @@ describe('AllDebrid dead token cleanup', () => {
 				where: { link },
 			});
 			expect(mocks.prisma.allDebridCast.deleteMany).toHaveBeenCalledWith({ where: { link } });
+			// with no file left the release serves nothing, so it stops reading as cached
+			expect(mocks.prisma.availableAd.deleteMany).toHaveBeenCalledWith({
+				where: { hash: magnet.hash },
+			});
 		}
 	);
 	it('invalidates a saved /f/ token without consulting a magnet', async () => {
