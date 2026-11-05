@@ -1,7 +1,7 @@
 import { repository as db } from '@/services/repository';
 import { getTorBoxStreamUrlKeepTorrent } from '@/utils/getTorBoxStreamUrl';
 import { readProviderKey } from '@/utils/providerKeyHeader';
-import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
+import { generateTorBoxUserId, logTorBoxCastError } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // SERIES cast: gets stream URLs for multiple episodes from TorBox and saves them to the database
@@ -67,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					errorEpisodes.push(`File ${fileId}`);
 				}
 			} catch (e) {
-				console.error(`Error casting file ${fileId}:`, e);
+				logTorBoxCastError(`cast file ${fileId}`, e);
 				errorEpisodes.push(`File ${fileId}`);
 			}
 		}
@@ -77,11 +77,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			errorEpisodes,
 		});
 	} catch (e) {
-		console.error(e);
-		const message = e instanceof Error ? e.message : String(e);
+		logTorBoxCastError('series cast', e);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: message,
+			errorMessage: 'Failed to cast series',
 		});
 	}
 }

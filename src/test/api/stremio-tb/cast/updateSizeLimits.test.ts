@@ -1,3 +1,4 @@
+import type * as TorBoxCastHelpers from '@/utils/torboxCastApiHelpers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
@@ -9,7 +10,10 @@ const mockDb = vi.hoisted(() => ({
 	setCastSponsorGrant: vi.fn(),
 }));
 
-vi.mock('@/utils/torboxCastApiHelpers', () => mockHelpers);
+vi.mock('@/utils/torboxCastApiHelpers', async (importOriginal) => ({
+	...(await importOriginal<typeof TorBoxCastHelpers>()),
+	...mockHelpers,
+}));
 vi.mock('@/services/repository', () => ({ repository: mockDb }));
 
 import handler from '@/pages/api/stremio-tb/cast/updateSizeLimits';
@@ -181,7 +185,8 @@ describe('API /api/stremio-tb/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Service unavailable',
+			errorMessage: expect.any(String),
 		});
+		expect(JSON.stringify(res._getData())).not.toContain('Service unavailable');
 	});
 });

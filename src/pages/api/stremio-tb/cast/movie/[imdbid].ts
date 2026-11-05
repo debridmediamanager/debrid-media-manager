@@ -1,7 +1,7 @@
 import { repository as db } from '@/services/repository';
 import { getBiggestFileTorBoxStreamUrl } from '@/utils/getTorBoxStreamUrl';
 import { readProviderKey } from '@/utils/providerKeyHeader';
-import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
+import { generateTorBoxUserId, logTorBoxCastError } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // MOVIE cast: gets a stream URL from TorBox and saves it to the database
@@ -61,11 +61,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			});
 		}
 	} catch (e) {
-		console.error(e);
-		const message = e instanceof Error ? e.message : String(e);
+		logTorBoxCastError('movie cast', e);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: message,
+			errorMessage: 'Failed to cast movie',
 		});
 		return;
 	}

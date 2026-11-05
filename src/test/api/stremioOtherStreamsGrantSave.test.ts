@@ -19,6 +19,7 @@ import rdUpdate from '@/pages/api/stremio/cast/updateSizeLimits';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeSponsor, TEST_SPONSOR_SHORT_ID } from '@/test/utils/sponsor';
+import type * as TorBoxCastHelpers from '@/utils/torboxCastApiHelpers';
 import type { NextApiHandler } from 'next';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
@@ -28,7 +29,10 @@ const resolved = { valid: true, userId: USER };
 vi.mock('@/services/repository');
 vi.mock('@/utils/castRdToken', () => ({ castAccessToken: vi.fn(async () => 'rd-token') }));
 vi.mock('@/utils/castApiHelpers', () => ({ generateUserId: vi.fn(async () => USER) }));
-vi.mock('@/utils/torboxCastApiHelpers', () => ({ resolveTorBoxUser: vi.fn(async () => resolved) }));
+vi.mock('@/utils/torboxCastApiHelpers', async (importOriginal) => ({
+	...(await importOriginal<typeof TorBoxCastHelpers>()),
+	resolveTorBoxUser: vi.fn(async () => resolved),
+}));
 vi.mock('@/utils/allDebridCastApiHelpers', () => ({
 	resolveAllDebridUser: vi.fn(async () => resolved),
 }));

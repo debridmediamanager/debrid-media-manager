@@ -11,7 +11,7 @@ import { delay } from '@/utils/delay';
 import { readProviderKey } from '@/utils/providerKeyHeader';
 import { isVideo } from '@/utils/selectable';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
-import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
+import { generateTorBoxUserId, logTorBoxCastError } from '@/utils/torboxCastApiHelpers';
 import { parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		try {
 			userid = await generateTorBoxUserId(apiKey);
 		} catch (error) {
-			console.error('Failed to generate TorBox user ID:', error);
+			logTorBoxCastError('generate user ID', error);
 			res.status(500).json({
 				status: 'error',
 				errorMessage: 'Failed to generate user ID from TorBox API key',
@@ -104,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		try {
 			imdbid = (await db.getIMDBIdByHash(hash)) || '';
 		} catch (error) {
-			console.error('Failed to retrieve IMDB ID from database:', error);
+			logTorBoxCastError('retrieve IMDB ID', error);
 			res.status(500).json({
 				status: 'error',
 				errorMessage: 'Database error: Failed to retrieve IMDB ID from hash',
@@ -129,7 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				}
 				imdbid = userProvidedImdbId;
 			} catch (error) {
-				console.error('Failed to save IMDB ID mapping:', error);
+				logTorBoxCastError('save IMDB ID mapping', error);
 				res.status(500).json({
 					status: 'error',
 					errorMessage: 'Database error: Failed to save IMDB ID mapping',
@@ -223,10 +223,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			failedFiles: failedFiles.length > 0 ? failedFiles : undefined,
 		});
 	} catch (error) {
-		console.error('TorBox library cast error:', error);
+		logTorBoxCastError('library cast', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Internal server error',
+			errorMessage: 'Failed to cast library item',
 		});
 	}
 }

@@ -92,10 +92,47 @@ export const resolveTorBoxUser = async (
 	return { valid: true, userId: deriveUserId(userData.data.email), email: userData.data.email };
 };
 
-export const handleApiError = (error: any, res: NextApiResponse, customMessage?: string) => {
-	console.error(customMessage || 'TorBox API Error:', error);
+/**
+ * Log only bounded diagnostic fields. Axios config and Prisma messages can
+ * contain API keys or credential-bearing download URLs, including in messages.
+ */
+export const logTorBoxCastError = (operation: string, error: unknown) => {
+	const diagnostic: { status?: number; code?: string } = {};
+	if (error && typeof error === 'object') {
+		const { response, code } = error as { response?: { status?: unknown }; code?: unknown };
+		if (
+			typeof response?.status === 'number' &&
+			Number.isInteger(response.status) &&
+			response.status >= 400 &&
+			response.status <= 599
+		) {
+			diagnostic.status = response.status;
+		}
+		if (
+			typeof code === 'string' &&
+			(/^P\d{4}$/.test(code) ||
+				[
+					'ERR_BAD_REQUEST',
+					'ERR_BAD_RESPONSE',
+					'ERR_NETWORK',
+					'ECONNABORTED',
+					'ETIMEDOUT',
+					'ECONNRESET',
+					'ECONNREFUSED',
+					'ENOTFOUND',
+					'EAI_AGAIN',
+				].includes(code))
+		) {
+			diagnostic.code = code;
+		}
+	}
+	console.error(`[DMM Cast TorBox] ${operation} failed:`, diagnostic);
+};
+
+export const handleApiError = (error: unknown, res: NextApiResponse, customMessage?: string) => {
+	logTorBoxCastError(customMessage || 'API request', error);
 	res.status(500).json({
-		error: customMessage || `Internal Server Error: ${error.message || error}`,
+		error: customMessage || 'Internal Server Error',
 	});
 };
 

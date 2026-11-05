@@ -194,16 +194,16 @@ describe('torboxCastApiHelpers', () => {
 	});
 
 	describe('handleApiError', () => {
-		it('sends 500 with default message', () => {
+		it('sends 500 without exposing the underlying error message', () => {
 			const res = createMockResponse();
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			handleApiError(new Error('boom'), res);
 
 			expect(res._getStatusCode()).toBe(500);
-			expect(res._getData()).toEqual({
-				error: 'Internal Server Error: boom',
-			});
+			expect(res._getData()).toEqual({ error: expect.any(String) });
+			expect(JSON.stringify(res._getData())).not.toContain('boom');
+			expect(JSON.stringify(consoleSpy.mock.calls)).not.toContain('boom');
 			consoleSpy.mockRestore();
 		});
 

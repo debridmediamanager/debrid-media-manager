@@ -2,7 +2,7 @@ import { repository as db } from '@/services/repository';
 import { recordOtherStreamsGrant } from '@/utils/castOtherStreamsLimit';
 import { sponsorIdOfRequest } from '@/utils/requireSponsor';
 import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
-import { resolveTorBoxUser } from '@/utils/torboxCastApiHelpers';
+import { logTorBoxCastError, resolveTorBoxUser } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -78,10 +78,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 	} catch (error) {
-		console.error('Error saving TorBox cast profile:', error);
+		logTorBoxCastError('save profile', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to save TorBox cast profile',
 		});
 	}
 }
