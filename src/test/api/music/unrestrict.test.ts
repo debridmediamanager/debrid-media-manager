@@ -1,3 +1,4 @@
+import rarBundle from '@/test/fixtures/realdebrid/rd-rar-bundle-torrent-info.json';
 import { AxiosError, AxiosHeaders } from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import concurrentErrorInfo from './__fixtures__/rd-info-uncached-concurrent-error.json';
@@ -55,6 +56,50 @@ beforeEach(() => {
 });
 
 describe('API /api/music/unrestrict', () => {
+	it.each([
+		['RAR bundle', rarBundle.body, 6],
+		[
+			'missing file',
+			{
+				...rarBundle.body,
+				files: [rarBundle.body.files[5]],
+				links: ['https://real-debrid.com/d/SINGLE1234567890'],
+			},
+			999,
+		],
+	] as const)('does not unrestrict or return another file for a %s', async (_, info, fileId) => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		vi.spyOn(console, 'log').mockImplementation(() => {});
+		rdMocks.addHashAsMagnet.mockResolvedValue(rarBundle.body.id);
+		rdMocks.getTorrentInfo.mockResolvedValue(info);
+		rdMocks.selectFiles.mockResolvedValue(undefined);
+		rdMocks.deleteTorrent.mockResolvedValue(undefined);
+		rdMocks.unrestrictLink.mockResolvedValue({
+			download: 'https://cdn.example.com/wrong-file.rar',
+			filename: 'Sintel.rar',
+			filesize: rarBundle.body.bytes,
+		});
+		const req = createMockRequest({
+			method: 'POST',
+			body: { accessToken: 'synthetic-token', hash: rarBundle.body.hash, fileId },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(502);
+		expect(res._getData()).not.toHaveProperty('streamUrl');
+		expect(rdMocks.unrestrictLink).not.toHaveBeenCalled();
+		expect(rdMocks.deleteTorrent).toHaveBeenCalledWith(
+			'synthetic-token',
+			rarBundle.body.id,
+			false
+		);
+		expect(prismaMocks.availableMusic.deleteMany).not.toHaveBeenCalled();
+		expect(prismaMocks.availableMusicFile.deleteMany).not.toHaveBeenCalled();
+		expect(prismaMocks.availableMusicFile.updateMany).not.toHaveBeenCalled();
+	});
+
 	it('rejects non-POST requests', async () => {
 		const req = createMockRequest({ method: 'GET' });
 		const res = createMockResponse();
@@ -413,7 +458,7 @@ describe('API /api/music/unrestrict', () => {
 		expect(prismaMocks.availableMusic.deleteMany).not.toHaveBeenCalled();
 	});
 
-	it('replaces stored links RD aged out once the album plays again', async () => {
+	it('replaces failed stored links once the album plays again', async () => {
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		rdMocks.unrestrictLink
 			.mockRejectedValueOnce(rdError(503, 'hoster_unavailable', 19))

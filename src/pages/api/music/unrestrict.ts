@@ -224,10 +224,15 @@ export default async function handler(
 		// Wait for torrent to reach "downloaded" status so links are populated
 		const torrentInfo = await waitForDownloaded(accessToken, torrentId);
 
-		const fileIdx = torrentInfo.files
-			.filter((f) => f.selected)
-			.findIndex((f) => f.id === fileId);
-		const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
+		const selected = torrentInfo.files.filter((f) => f.selected);
+		// A mixed selection can be a single RAR bundle, not per-track links.
+		if (selected.length !== torrentInfo.links.length) {
+			throw new Error(
+				`link count mismatch: ${selected.length} selected files, ${torrentInfo.links.length} links`
+			);
+		}
+		const fileIdx = selected.findIndex((f) => f.id === fileId);
+		const link = fileIdx < 0 ? undefined : torrentInfo.links[fileIdx];
 
 		if (!link) {
 			throw new Error('No download link found for this track');
@@ -244,11 +249,10 @@ export default async function handler(
 
 		await deleteTorrent(accessToken, torrentId, false);
 
-		// RD's /d/ links age out while the album stays cached: keep the fresh
-		// links so the next play takes the fast path. Links pair with the
-		// selected files in order only when RD made one per file.
-		const selected = torrentInfo.files.filter((f) => f.selected);
-		if (storedLinkDead && selected.length === torrentInfo.links.length) {
+		// Held /d/ keys do not expire with age, but some still fail while RD
+		// reports the torrent downloaded. Keep working replacement links for
+		// the next play; only one-per-file selections can be paired in order.
+		if (storedLinkDead) {
 			await Promise.all(
 				selected.map((f, i) =>
 					prisma.availableMusicFile.updateMany({

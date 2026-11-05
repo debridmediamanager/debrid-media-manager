@@ -1,0 +1,86 @@
+{
+	"body": {
+		"id": "SYNTHETIC0001",
+		"filename": "Sintel",
+		"original_filename": "Sintel",
+		"hash": "0123456789abcdef0123456789abcdef01234567",
+		"bytes": 129302391,
+		"original_bytes": 129302391,
+		"host": "real-debrid.com",
+		"split": 2000,
+		"progress": 100,
+		"status": "downloaded",
+		"added": "2026-11-05T01:30:23.000Z",
+		"files": [
+			{
+				"id": 1,
+				"path": "/Sintel.de.srt",
+				"bytes": 1652,
+				"selected": 1
+			},
+			{
+				"id": 2,
+				"path": "/Sintel.en.srt",
+				"bytes": 1514,
+				"selected": 1
+			},
+			{
+				"id": 3,
+				"path": "/Sintel.es.srt",
+				"bytes": 1554,
+				"selected": 1
+			},
+			{
+				"id": 4,
+				"path": "/Sintel.fr.srt",
+				"bytes": 1618,
+				"selected": 1
+			},
+			{
+				"id": 5,
+				"path": "/Sintel.it.srt",
+				"bytes": 1546,
+				"selected": 1
+			},
+			{
+				"id": 6,
+				"path": "/Sintel.mp4",
+				"bytes": 129241752,
+				"selected": 1
+			},
+			{
+				"id": 7,
+				"path": "/Sintel.nl.srt",
+				"bytes": 1537,
+				"selected": 1
+			},
+			{
+				"id": 8,
+				"path": "/Sintel.pl.srt",
+				"bytes": 1536,
+				"selected": 1
+			},
+			{
+				"id": 9,
+				"path": "/Sintel.pt.srt",
+				"bytes": 1551,
+				"selected": 1
+			},
+			{
+				"id": 10,
+				"path": "/Sintel.ru.srt",
+				"bytes": 2016,
+				"selected": 1
+			},
+			{
+				"id": 11,
+				"path": "/poster.jpg",
+				"bytes": 46115,
+				"selected": 1
+			}
+		],
+		"links": ["https://real-debrid.com/d/ABCDEF1234567890"],
+		"ended": "2025-12-28T11:17:19.000Z"
+	},
+	"http": 200
+}

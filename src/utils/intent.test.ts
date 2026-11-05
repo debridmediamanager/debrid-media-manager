@@ -1,5 +1,6 @@
 import type * as DebridLinkModule from '@/services/debridLink';
 import type * as OffcloudModule from '@/services/offcloud';
+import rarBundle from '@/test/fixtures/realdebrid/rd-rar-bundle-torrent-info.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
@@ -214,9 +215,16 @@ describe('pickRdLink', () => {
 		expect(pickRdLink(torrentInfo, 1)).toBe('https://rd/sample');
 	});
 
-	it('falls back to the first link when neither name nor id matches', () => {
-		expect(pickRdLink(torrentInfo, 999, 'not-in-torrent.mkv')).toBe('https://rd/sample');
+	it('does not choose another file when neither name nor id matches', () => {
+		expect(pickRdLink(torrentInfo, 999, 'not-in-torrent.mkv')).toBeUndefined();
 	});
+
+	it.each([rarBundle.body.files[0], rarBundle.body.files[10]])(
+		'refuses a bundled link for selected file $id',
+		(file) => {
+			expect(pickRdLink(rarBundle.body, file.id, file.path)).toBeUndefined();
+		}
+	);
 });
 
 describe('isWatchService', () => {
@@ -236,6 +244,47 @@ describe('isWatchService', () => {
 });
 
 describe('getInstantIntent', () => {
+	it.each([
+		['RAR bundle', rarBundle.body, 6, 'Sintel.mp4'],
+		[
+			'missing file',
+			{
+				...rarBundle.body,
+				files: [rarBundle.body.files[5]],
+				links: ['https://real-debrid.com/d/SINGLE1234567890'],
+			},
+			999,
+			'missing.mp4',
+		],
+	] as const)(
+		'does not unrestrict or play the wrong link for a %s',
+		async (_, info, fileId, name) => {
+			mocks.addHashAsMagnet.mockResolvedValue(rarBundle.body.id);
+			mocks.getTorrentInfo.mockResolvedValue(info);
+			mocks.deleteTorrent.mockResolvedValue(undefined);
+			mocks.unrestrictLink.mockResolvedValue({
+				download: 'https://cdn.example.com/wrong-file.rar',
+				id: 'synthetic',
+			});
+
+			const result = await getInstantIntent(
+				'rd-key',
+				rarBundle.body.hash,
+				fileId,
+				'192.0.2.1',
+				'windows',
+				'vlc',
+				'rd',
+				name
+			);
+
+			expect(result.intent).toBeUndefined();
+			expect(result.error).toEqual(expect.any(String));
+			expect(mocks.unrestrictLink).not.toHaveBeenCalled();
+			expect(mocks.deleteTorrent).toHaveBeenCalledWith('rd-key', rarBundle.body.id, false);
+		}
+	);
+
 	it('resolves a Real-Debrid hash by file name and cleans the torrent up', async () => {
 		mocks.addHashAsMagnet.mockResolvedValue('rd-1');
 		mocks.getTorrentInfo.mockResolvedValue({

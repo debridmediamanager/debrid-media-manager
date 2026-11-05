@@ -131,6 +131,8 @@ export const pickRdLink = (
 	fileName?: string
 ): string | undefined => {
 	const selected = torrentInfo.files.filter((f) => f.selected);
+	// A mixed selection can be one RAR bundle, not one playable link per file.
+	if (selected.length !== torrentInfo.links.length) return undefined;
 
 	let fileIdx = -1;
 	if (fileName) {
@@ -141,7 +143,7 @@ export const pickRdLink = (
 		fileIdx = selected.findIndex((f) => f.id === fileId);
 	}
 
-	return torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
+	return fileIdx < 0 ? undefined : torrentInfo.links[fileIdx];
 };
 
 // TorBox resolves entirely server-side: check cached, add (or reuse) the
@@ -446,7 +448,8 @@ const getRdInstantIntent = async (
 			}
 
 			const link = pickRdLink(torrentInfo, fileId, fileName);
-			const resp = await unrestrictLink(rdKey, link!, ipAddress, false);
+			if (!link) throw new Error('No download link found for this file');
+			const resp = await unrestrictLink(rdKey, link, ipAddress, false);
 			await deleteTorrent(rdKey, id, false);
 			return {
 				intent: buildPlayerIntent(
