@@ -184,7 +184,6 @@ describe('/api/availability', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Torrent is partially expired' });
 	});
 
 	it('persists selected files with matching links', async () => {

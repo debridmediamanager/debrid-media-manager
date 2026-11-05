@@ -666,9 +666,9 @@ export class AvailabilityService extends DatabaseClient {
 	 * no way to tell a dead link from RD's unrestrict throttle. One file's link
 	 * rotting says nothing about its siblings, so only that row goes.
 	 *
-	 * Matched by prefix: links are stored in the 16-char form but a play request
-	 * only ever carries the 13-char truncation, which is why the old exact-match
-	 * lookup found nothing - 3,938,603 of 3,939,554 rows are the long form.
+	 * Matched by prefix: stored links can include an account binding (current
+	 * 16-char or historical longer ids), while playback uses the 13-char key.
+	 * An exact match would miss those bound links.
 	 */
 	public async removeAvailableFileByLinkPrefix(linkPrefix: string): Promise<number> {
 		const { count } = await this.prisma.availableFile.deleteMany({

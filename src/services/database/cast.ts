@@ -175,7 +175,7 @@ export class CastService extends DatabaseClient {
 			where: {
 				imdbId: imdbId,
 				userId: userId,
-				// Unbounded, this happily handed back links minted in 2024
+				// Existing offering-age policy, not a measured RD key expiry.
 				updatedAt: {
 					gt: rdLinkCutoff(),
 				},
@@ -410,8 +410,8 @@ export class CastService extends DatabaseClient {
 	/**
 	 * Drops the cast rows pointing at a link that RD says is gone.
 	 *
-	 * Stored links are the 16-char form or the 13-char truncation of it, and the
-	 * play route only ever knows the 13-char prefix, so the match is by prefix.
+	 * Stored links can carry an account binding (current 16-char or historical
+	 * longer ids); playback uses the shared 13-char key, so match by prefix.
 	 * Every user who cast the same file holds their own row for it, and the link
 	 * is dead for all of them, so this is not scoped to one user.
 	 */
@@ -501,11 +501,9 @@ export class CastService extends DatabaseClient {
 		const maxSizeCastLimit =
 			normalizedMaxSizeMb !== undefined ? BigInt(normalizedMaxSizeMb) : undefined;
 
-		// RD links rot, and nothing here was ever bounded by age: the stream list
-		// was happily offering links minted in 2024. `Available` rows are rewritten
-		// with fresh links every time the hash is re-registered, so `updatedAt` is
-		// a real freshness signal - and `orderBy: bytes desc` below actively
-		// prefers the biggest file, which is often the stalest un-refreshed remux.
+		// Retain the existing offering-age policy. Held RD keys showed no age
+		// decay; rot can affect the owner too, and retention without holders is
+		// unknown. `updatedAt` bounds our pool, not the provider key's lifetime.
 		const linkCutoff = rdLinkCutoff();
 
 		// Only rows with a Real-Debrid link can be played by unrestricting it.
@@ -625,9 +623,7 @@ export class CastService extends DatabaseClient {
 			link: {
 				not: null,
 			},
-			// Same bound `getUserCastStreams` has always had. Without it, 95% of
-			// the cast pool (2.1M of 2.2M rows on 2026-08-24) was older than the
-			// point where most links have already stopped unrestricting.
+			// Same offering-age policy as the user's casts, not provider expiry.
 			updatedAt: {
 				gt: linkCutoff,
 			},

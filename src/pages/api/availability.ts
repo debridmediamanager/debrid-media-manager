@@ -79,7 +79,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (selectedFiles.length === 0) {
 			return res.status(400).json({ error: 'Torrent is fully expired' });
 		} else if (selectedFiles.length !== links.length) {
-			return res.status(400).json({ error: 'Torrent is partially expired' });
+			return res.status(400).json({
+				error: 'No per-file link mapping; Real-Debrid may have bundled the selection into a RAR archive',
+			});
 		}
 
 		// Create available record with only selected files

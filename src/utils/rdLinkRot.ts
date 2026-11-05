@@ -3,10 +3,10 @@ import { AxiosError } from 'axios';
 /**
  * RD errors that mean this particular link will never work again.
  *
- * - `hoster_unavailable`: the link aged out. RD's `/d/` links decay - measured
- *   2026-08-24 over a sample of stored cast links, roughly a quarter were
- *   already dead at 30 days, half by 90, and only 2 of 12 survived 21 months.
- * - `unavailable_file`: RD evicted the content itself, for everyone.
+ * - `hoster_unavailable`: RD-side rot, observed for the owner too even when the
+ *   torrent still reads downloaded. Held keys showed no age decay in the
+ *   2026-11-05 measurements; retention once nobody holds a torrent is unknown.
+ * - `unavailable_file`: the content is unavailable.
  *
  * Everything else is transient and must not be treated as rot. `/unrestrict/link`
  * carries its own tight, undocumented throttle that answers `too_many_requests`
@@ -40,10 +40,9 @@ export const isDeadRdLink = (error: unknown): boolean => {
 /**
  * How long a stored RD link is offered for.
  *
- * `getUserCastStreams` has always used 30 days; the pool of other users' casts
- * and the shared availability tables had no bound at all, which is how a stream
- * list came to offer links minted in 2024. Same number everywhere so there is
- * one thing to change.
+ * This 30-day offering policy is retained, not a measured provider expiry.
+ * Held keys showed no age decay; retention without any holder is unknown.
+ * Changing this cutoff is a separate policy decision.
  */
 export const RD_LINK_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
