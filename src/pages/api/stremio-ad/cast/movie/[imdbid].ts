@@ -1,10 +1,10 @@
+import { getVerifiedAllDebridCastFiles } from '@/services/allDebridCastSelection';
 import { repository as db } from '@/services/repository';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
+import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// MOVIE cast (save): the client (browser) performs the AllDebrid magnet upload +
-// file discovery — AllDebrid blocks `magnet/upload` from datacenter IPs, so the
-// server can't do it. This endpoint just persists the resulting metadata.
+// Upload runs in the browser; verify its selection through authenticated provider reads.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
@@ -32,25 +32,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
+		const files = await getVerifiedAllDebridCastFiles(apiKey, magnetId, hash);
+		const file =
+			Number.isSafeInteger(fileIndex) && fileIndex >= 0 ? files[fileIndex] : undefined;
+		if (!file || !isAllDebridLockedLink(file.link) || file.link !== streamUrl) {
+			res.status(400).json({ status: 'error', errorMessage: 'File does not match magnet' });
+			return;
+		}
+		const verifiedFilename = file.path.split('/').pop()!;
 		const userid = await generateAllDebridUserId(apiKey);
 		await db.saveAllDebridCast(
 			imdbid,
 			userid,
-			hash,
-			filename,
-			streamUrl,
-			fileSize,
+			hash.toLowerCase(),
+			verifiedFilename,
+			file.link,
+			Math.round(file.size / 1024 / 1024),
 			magnetId,
 			fileIndex
 		);
 		res.status(200).json({
 			status: 'success',
 			message: 'You can now stream the movie in Stremio',
-			filename,
+			filename: verifiedFilename,
 		});
-	} catch (e) {
-		console.error(e);
-		const message = e instanceof Error ? e.message : String(e);
-		res.status(500).json({ status: 'error', errorMessage: message });
+	} catch {
+		console.error('Failed to verify or save AllDebrid movie cast selection');
+		res.status(500).json({
+			status: 'error',
+			errorMessage: 'Failed to verify or save AllDebrid cast selection',
+		});
 	}
 }

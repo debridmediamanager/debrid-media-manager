@@ -44,6 +44,8 @@ Shared transfer polling exposes public progress, not provider account identities
 
 Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
 
+DMM's same-origin `/api/anticors` proxy permits the Real-Debrid app/API and TorBox API hosts only. AllDebrid requests are not forwarded through that endpoint.
+
 ### Torrent search
 
 Add content to your library by searching for torrents. It detects what you already have downloaded and currently downloading in your library.

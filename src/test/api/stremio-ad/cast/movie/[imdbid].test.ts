@@ -15,12 +15,24 @@ vi.mock('@/services/repository', () => ({
 	repository: { saveAllDebridCast: mockSaveCast },
 }));
 
+vi.mock('@/services/allDebridCastSelection', () => ({
+	getVerifiedAllDebridCastFiles: vi.fn(async () => [
+		{},
+		{},
+		{
+			path: validBody.filename,
+			link: validBody.streamUrl,
+			size: validBody.fileSize * 1024 * 1024,
+		},
+	]),
+}));
+
 const validBody = {
 	apiKey: 'ad-key',
 	hash: 'e7d4d6a669459da1e0a554b2e867d1cb97b6a00d',
 	magnetId: 12345,
 	fileIndex: 2,
-	streamUrl: 'https://alldebrid.com/dl/abcdef',
+	streamUrl: `https://alldebrid.com/f/${'A'.repeat(43)}`,
 	filename: 'Movie.2024.2160p.mkv',
 	fileSize: 2048,
 };
@@ -50,7 +62,7 @@ describe('/api/stremio-ad/cast/movie/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('saves cast with client-supplied metadata and does not call AD', async () => {
+	it('saves a provider-verified selection', async () => {
 		const req = createMockRequest({
 			method: 'POST',
 			query: { imdbid: 'tt1' },

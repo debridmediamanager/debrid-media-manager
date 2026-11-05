@@ -37,6 +37,13 @@ describe('AllDebridCastService', () => {
 		prismaMock.availableAdFile.findMany.mockReset().mockResolvedValue([]);
 	});
 
+	it('never redeems an arbitrary legacy URL from the shared cast lookup', async () => {
+		prismaMock.allDebridCast.findFirst.mockResolvedValue({
+			link: 'https://attacker.test/file',
+		});
+		expect(await service.getCastLink(123, 0)).toBeNull();
+	});
+
 	describe('updateCastSettings', () => {
 		it('updates settings without touching the stored api key', async () => {
 			prismaMock.allDebridCastProfile.updateMany.mockResolvedValue({ count: 1 });

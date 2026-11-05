@@ -1,5 +1,7 @@
+import { getVerifiedAllDebridCastFiles } from '@/services/allDebridCastSelection';
 import { repository as db } from '@/services/repository';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
+import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface SavedFile {
@@ -11,8 +13,7 @@ interface SavedFile {
 	episode?: number;
 }
 
-// SERIES cast (save): client does the AllDebrid work (see cast/movie handler for
-// context), and POSTs an array of resolved files here to persist them.
+// The browser uploads; provider reads verify each saved file before sharing it.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
@@ -38,6 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
+		const verifiedFiles = await getVerifiedAllDebridCastFiles(apiKey, magnetId, hash);
 		const userid = await generateAllDebridUserId(apiKey);
 		const errorEpisodes: string[] = [];
 
@@ -51,6 +53,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				typeof fileSize !== 'number'
 			) {
 				errorEpisodes.push(`Invalid file entry: ${filename ?? '(unknown)'}`);
+				continue;
+			}
+			const file =
+				Number.isSafeInteger(fileIndex) && fileIndex >= 0
+					? verifiedFiles[fileIndex]
+					: undefined;
+			if (!file || !isAllDebridLockedLink(file.link) || file.link !== link) {
+				errorEpisodes.push(filename);
 				continue;
 			}
 
@@ -68,15 +78,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				await db.saveAllDebridCast(
 					episodeImdbId,
 					userid,
-					hash,
-					filename,
-					link,
-					fileSize,
+					hash.toLowerCase(),
+					file.path.split('/').pop()!,
+					file.link,
+					Math.round(file.size / 1024 / 1024),
 					magnetId,
 					fileIndex
 				);
-			} catch (e) {
-				console.error(`Error saving cast for ${filename}:`, e);
+			} catch {
+				console.error('Failed to save AllDebrid episode cast selection');
 				errorEpisodes.push(filename);
 			}
 		}
@@ -85,9 +95,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			status: errorEpisodes.length === 0 ? 'success' : 'partial',
 			errorEpisodes,
 		});
-	} catch (e) {
-		console.error(e);
-		const message = e instanceof Error ? e.message : String(e);
-		res.status(500).json({ status: 'error', errorMessage: message });
+	} catch {
+		console.error('Failed to verify or save AllDebrid series cast selection');
+		res.status(500).json({
+			status: 'error',
+			errorMessage: 'Failed to verify or save AllDebrid cast selection',
+		});
 	}
 }

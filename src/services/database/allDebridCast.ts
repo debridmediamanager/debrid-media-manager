@@ -1,3 +1,4 @@
+import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
@@ -327,7 +328,7 @@ export class AllDebridCastService extends DatabaseClient {
 			orderBy: { updatedAt: 'desc' },
 			select: { link: true },
 		});
-		return cast?.link ?? null;
+		return isAllDebridLockedLink(cast?.link) ? cast.link : null;
 	}
 
 	public async getUserCastStreams(

@@ -23,6 +23,12 @@
 >
 > The architecture sections below are still accurate and are why this file is kept.
 
+## Current cast-save trust boundary
+
+Movie and series cast saves read the caller's ready magnet and files from AllDebrid before storing a selection. The submitted hash, video index and locked link must match that provider-owned selection; filenames and sizes come from the provider response. Only exact `https://alldebrid.com/f/` tokens are redeemable through the shared cast lookup. IMDb and episode labels remain the user's choices, not claims verified by AllDebrid.
+
+Provider verification failures do not save a cast or expose credential-bearing error details. Uploads still run in the browser; server-side verification adds read-only status and file requests.
+
 ## Overview
 
 This document outlines a comprehensive plan to create "DMM Cast for AllDebrid" - a Stremio addon system for AllDebrid users, following the same architecture as DMM Cast for Real-Debrid and TorBox. The implementation will maintain complete separation while reusing shared patterns.
@@ -905,7 +911,7 @@ export function StremioAllDebridPage() {
 				<strong>Cast from any device to Stremio</strong>
 
 				{dmmCastToken !== 'default' && (
-					<div className="mb-4 mt-4 h-max text-center leading-8">
+					<div className="mt-4 mb-4 h-max text-center leading-8">
 						<Link
 							href={`stremio://${window.location.origin.replace(
 								/^https?:\/\//,
@@ -935,7 +941,7 @@ export function StremioAllDebridPage() {
 							<AlertTriangle className="mr-1 inline-block h-4 w-4 text-red-400" />
 							Warning: Never share this install URL with anyone.
 						</div>
-						<code className="mt-2 block w-full break-all rounded bg-gray-800 p-2 text-sm text-gray-300">
+						<code className="mt-2 block w-full rounded bg-gray-800 p-2 text-sm break-all text-gray-300">
 							{window.location.origin}/api/stremio-ad/{dmmCastToken}/manifest.json
 						</code>
 					</div>

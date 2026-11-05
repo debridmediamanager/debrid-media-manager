@@ -16,14 +16,22 @@ vi.mock('@/services/repository', () => ({
 	repository: { saveAllDebridCast: mockSaveCast },
 }));
 
+vi.mock('@/services/allDebridCastSelection', () => ({
+	getVerifiedAllDebridCastFiles: vi.fn(async () => [
+		{ path: 'Show.S01E01.mkv', link: baseBody.files[0].link, size: 500 * 1024 * 1024 },
+		{},
+		{ path: 'Show.S01E03.mkv', link: baseBody.files[1].link, size: 500 * 1024 * 1024 },
+	]),
+}));
+
 const baseBody = {
 	apiKey: 'ad-key',
-	hash: 'h',
+	hash: 'a'.repeat(40),
 	magnetId: 99,
 	files: [
 		{
 			fileIndex: 0,
-			link: 'https://ad/e01',
+			link: `https://alldebrid.com/f/${'A'.repeat(43)}`,
 			filename: 'Show.S01E01.mkv',
 			fileSize: 500,
 			season: 1,
@@ -31,7 +39,7 @@ const baseBody = {
 		},
 		{
 			fileIndex: 2,
-			link: 'https://ad/e03',
+			link: `https://alldebrid.com/f/${'B'.repeat(43)}`,
 			filename: 'Show.S01E03.mkv',
 			fileSize: 500,
 			season: 1,
@@ -84,9 +92,9 @@ describe('/api/stremio-ad/cast/series/[imdbid]', () => {
 			1,
 			'tt1:1:1',
 			'user-1',
-			'h',
+			baseBody.hash,
 			'Show.S01E01.mkv',
-			'https://ad/e01',
+			baseBody.files[0].link,
 			500,
 			99,
 			0
@@ -95,9 +103,9 @@ describe('/api/stremio-ad/cast/series/[imdbid]', () => {
 			2,
 			'tt1:1:3',
 			'user-1',
-			'h',
+			baseBody.hash,
 			'Show.S01E03.mkv',
-			'https://ad/e03',
+			baseBody.files[1].link,
 			500,
 			99,
 			2
@@ -123,7 +131,7 @@ describe('/api/stremio-ad/cast/series/[imdbid]', () => {
 		const body = {
 			...baseBody,
 			files: [
-				{ fileIndex: 0, link: 'x', filename: 'ok.mkv', fileSize: 1, season: 1, episode: 1 },
+				{ ...baseBody.files[0] },
 				{ fileIndex: 'not-a-number', link: 'y', filename: 'bad.mkv', fileSize: 2 },
 			],
 		};
@@ -141,12 +149,21 @@ describe('/api/stremio-ad/cast/series/[imdbid]', () => {
 		const body = {
 			...baseBody,
 			files: [
-				{ fileIndex: 0, link: 'x', filename: 'Movie.mkv', fileSize: 1 }, // no season/episode
+				{ fileIndex: 0, link: baseBody.files[0].link, filename: 'Movie.mkv', fileSize: 1 },
 			],
 		};
 		const req = createMockRequest({ method: 'POST', query: { imdbid: 'tt1' }, body });
 		const res = createMockResponse();
 		await handler(req, res);
-		expect(mockSaveCast).toHaveBeenCalledWith('tt1', 'user-1', 'h', 'Movie.mkv', 'x', 1, 99, 0);
+		expect(mockSaveCast).toHaveBeenCalledWith(
+			'tt1',
+			'user-1',
+			baseBody.hash,
+			'Show.S01E01.mkv',
+			baseBody.files[0].link,
+			500,
+			99,
+			0
+		);
 	});
 });
