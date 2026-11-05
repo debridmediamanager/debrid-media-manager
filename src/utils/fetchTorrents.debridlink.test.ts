@@ -59,7 +59,7 @@ const seedboxTorrent = (over: Record<string, unknown> = {}) =>
 				name: 'Big Buck Bunny.mp4',
 				size: 276_134_947,
 				downloadUrl:
-					'https://seed41.debrid.link/dl/s37yg6wsgdilpqo80wwssulm-2/Big+Buck+Bunny.mp4',
+					'https://seed41.debrid.link/dl/s0123456789abcdef0123456-2/Big+Buck+Bunny.mp4',
 				downloadPercent: 100,
 			},
 		],

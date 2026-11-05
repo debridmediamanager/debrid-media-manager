@@ -213,9 +213,9 @@ describe('renderTorrentInfoOC', () => {
 		{ link: `${CDN}/readme.txt`, filename: 'readme.txt', filesize: 12 },
 	];
 
-	// An Offcloud CDN link is already playable - keyless, any IP, Range honoured
-	// - so both buttons work off the link and neither needs the info hash a
-	// plain-HTTP row does not have.
+	// An Offcloud explore URL is already playable but carries an account token
+	// and a per-mint signature. Both buttons use that sensitive URL directly,
+	// without needing the info hash a plain-HTTP row does not have.
 	it('carries the explore link on the watch row', () => {
 		const html = renderTorrentInfoOC(files, { canWatch: true });
 
@@ -249,7 +249,7 @@ describe('renderTorrentInfoOC', () => {
 });
 
 describe('renderTorrentInfoDL', () => {
-	const SEED = 'https://seed41.debrid.link/dl/s37yg6wsgdilpqo80wwssulm';
+	const SEED = 'https://seed41.debrid.link/dl/s0123456789abcdef0123456';
 	const files = [
 		{ downloadUrl: `${SEED}-2/Episode.mkv`, filename: 'Episode.mkv', filesize: 2048 },
 		{ downloadUrl: `${SEED}-3/readme.txt`, filename: 'readme.txt', filesize: 12 },

@@ -18,7 +18,6 @@ import {
 } from '@/services/realDebrid';
 import { handleSelectFilesInRd } from './addMagnet';
 import { classifyAllDebridPlayError } from './castAddonFailure';
-import { toMagnetUri } from './extractHashes';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
@@ -286,8 +285,8 @@ const OC_STATUS_POLL_INTERVAL_MS = 1_500;
  * Explore returns a bare array of signed CDN URLs with no names and no sizes, so
  * the file listing comes from a second, non-destructive `/cache/info` call and
  * the two are paired on the filename that sits URL-encoded at the end of the CDN
- * path. The resulting URL is keyless, any-IP and honours Range, so it is handed
- * to the player as-is.
+ * path. The URL is already playable and honours Range, but contains an
+ * account-scoped token and per-mint signature: pass it only to the player.
  */
 const getOcInstantIntent = async (
 	ocKey: string,
@@ -352,24 +351,13 @@ const getOcInstantIntent = async (
 /**
  * Resolves a Debrid-Link hash to a playable URL.
  *
- * Debrid-Link has no cache probe at all — `/seedbox/cached` is disabled and
- * nothing replaced it — so the add *is* the probe, and there is no availability
- * flag anywhere in the app that could have gated this call. That is fine here:
- * the add is idempotent by hash and the torrent id is stable across duplicate
- * adds and even across remove-then-re-add, so replaying a watch costs one
- * request and creates nothing new.
+ * Use a bare-hash add for cached-only admission: a miss is refused with
+ * `notAddTorrent`, whereas a full magnet would start a real download and spend
+ * the user's daily quota and an active slot. A hit still adds to the library,
+ * so this belongs only on an explicit watch action, not an availability sweep.
  *
- * **The full magnet, never the bare hash.** A bare hash is only accepted when
- * the content is already cached, which would turn "play this" into a probe that
- * refuses everything else with `notAddTorrent`. Cached content answers
- * synchronously complete — `status: 100` with live URLs, ~150 ms — so the
- * happy path is still one request, and an uncached one honestly reports that it
- * is downloading rather than sitting in a poll.
- *
- * There is deliberately no poll here, unlike Offcloud's: a Debrid-Link add that
- * is not already finished is a real BitTorrent download, minutes long at best,
- * and holding a watch tab open for it teaches the user nothing they cannot read
- * off the library page.
+ * A cached hit returns files synchronously. Admission can also return an
+ * unfinished torrent, so retain the completion guard and do not poll here.
  *
  * The URL that comes back is the whole capability — no token, no signature, no
  * IP binding — so it is handed to the player exactly as received and belongs
@@ -383,7 +371,7 @@ const getDlInstantIntent = async (
 	fileName?: string
 ): Promise<{ intent?: string; error?: string }> => {
 	try {
-		const torrent = await addSeedboxTorrent(dlKey, toMagnetUri(hash));
+		const torrent = await addSeedboxTorrent(dlKey, hash);
 
 		// `>=`, never `=== 100`: the lower states are flags that combine and the
 		// vendor's own sample carries `status: 6`.
@@ -532,8 +520,8 @@ export const getIntent = async (
 	if (service === 'pm' || service === 'oc' || service === 'dl') {
 		// A Premiumize CDN link is already the playable URL: no auth, no
 		// redemption step, and Range works. There is nothing to unrestrict.
-		// Offcloud's links are the same objects on the same CDN (energycdn),
-		// measured keyless and any-IP the same way, so they take the same path.
+		// Offcloud explore URLs are already playable too, but contain an
+		// account-scoped token and per-mint signature; keep them sensitive.
 		// Debrid-Link's go further still - the torrent id is the entire
 		// capability, and the URL keeps serving after the torrent is deleted -
 		// so there is nothing to redeem there either.

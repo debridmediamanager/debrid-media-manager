@@ -235,8 +235,8 @@ describe('isWatchService', () => {
 		expect(isWatchService('tbw')).toBe(true);
 		expect(isWatchService('pm')).toBe(true);
 		expect(isWatchService('oc')).toBe(true);
-		// Debrid-Link is a watch service even though nothing can ever *pick* it
-		// from an availability flag - the /api/watch routes gate on this.
+		// Debrid-Link supports explicit cached-only watch admission; the
+		// /api/watch routes use this service guard.
 		expect(isWatchService('dl')).toBe(true);
 		expect(isWatchService('bogus')).toBe(false);
 		expect(isWatchService(undefined)).toBe(false);
@@ -824,7 +824,7 @@ describe('Offcloud intents', () => {
 	});
 
 	it('treats an Offcloud link as already playable - there is nothing to unrestrict', async () => {
-		// Same energycdn objects Premiumize serves, measured keyless and any-IP.
+		// The already-playable explore URL contains account-scoped credentials.
 		const { intent } = await getIntent(
 			'oc-key',
 			`${CDN}/Big%20Buck%20Bunny.mp4`,
@@ -846,7 +846,7 @@ describe('Offcloud intents', () => {
 
 describe('Debrid-Link intents', () => {
 	const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
-	const HOST = 'https://seed41.debrid.link/dl/s37yg6wsgdilpqo80wwssulm';
+	const HOST = 'https://seed41.debrid.link/dl/s0123456789abcdef0123456';
 	const FILES = [
 		{ id: 'f0', name: 'poster.jpg', size: 310_380, downloadUrl: `${HOST}-1/poster.jpg` },
 		{
@@ -858,7 +858,7 @@ describe('Debrid-Link intents', () => {
 	];
 
 	const torrent = (status: number, over: Record<string, unknown> = {}) => ({
-		id: 's37yg6wsgdilpqo80wwssulm',
+		id: 's0123456789abcdef0123456',
 		name: 'Big Buck Bunny',
 		hashString: HASH,
 		status,
@@ -868,18 +868,19 @@ describe('Debrid-Link intents', () => {
 		...over,
 	});
 
-	it('adds the FULL magnet, never the bare hash', async () => {
-		// A bare hash is only accepted when the content is already cached, so
-		// sending one here would turn "play this" into a probe that refuses
-		// anything Debrid-Link does not already hold.
-		mocks.addSeedboxTorrent.mockResolvedValue(torrent(100));
+	it('never starts a full-magnet download on a cache miss', async () => {
+		// Model the provider distinction: a bare hash refuses a miss, whereas
+		// a full magnet starts an unfinished download and spends an active slot.
+		mocks.addSeedboxTorrent.mockImplementation(async (_key: string, url: string) => {
+			if (url === HASH) throw new Error('notAddTorrent');
+			return torrent(4);
+		});
 
-		await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+		const result = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
 
-		expect(mocks.addSeedboxTorrent).toHaveBeenCalledWith(
-			'dl-key',
-			`magnet:?xt=urn:btih:${HASH}`
-		);
+		expect(result.intent).toBeUndefined();
+		expect(result.error).toContain('notAddTorrent');
+		expect(mocks.addSeedboxTorrent).toHaveBeenCalledExactlyOnceWith('dl-key', HASH);
 	});
 
 	it('plays a cached hash straight off the add response', async () => {
@@ -890,6 +891,7 @@ describe('Debrid-Link intents', () => {
 		const { intent } = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
 
 		expect(intent).toBe(`${HOST}-2/Big+Buck+Bunny.mp4`);
+		expect(mocks.addSeedboxTorrent).toHaveBeenCalledWith('dl-key', HASH);
 		expect(mocks.addSeedboxTorrent).toHaveBeenCalledTimes(1);
 	});
 
