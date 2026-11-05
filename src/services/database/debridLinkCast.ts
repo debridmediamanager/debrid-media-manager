@@ -1,4 +1,9 @@
+import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { isFilmFile } from '@/utils/selectable';
+import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
+
+const MIN_FILE_BYTES = BigInt(10 * 1024 * 1024);
 
 export interface DebridLinkCastStream {
 	url: string;
@@ -235,6 +240,11 @@ export class DebridLinkCastService extends DatabaseClient {
 			return [];
 		}
 
+		const recorded = await this.getRecordedReleaseStreams(imdbId, limit, maxSize);
+		if (recorded.length >= limit) return recorded;
+		const offered = new Set(recorded.map((item) => item.hash.toLowerCase()));
+		limit -= recorded.length;
+
 		const hasMaxSize = typeof maxSize === 'number' && maxSize > 0;
 		const maxSizeCastLimit = hasMaxSize ? BigInt(Math.round(maxSize * 1024)) : undefined;
 
@@ -265,13 +275,59 @@ export class DebridLinkCastService extends DatabaseClient {
 			)
 		).filter((item): item is NonNullable<typeof item> => item !== null);
 
-		return rows.map((item) => ({
-			url: item.url,
-			size: Number(item.size),
-			filename: item.url.split('/').pop() || 'Unknown',
-			hash: item.hash,
-			path: item.path,
-		}));
+		const casts = rows
+			.filter((item) => !offered.has(item.hash.toLowerCase()))
+			.map((item) => ({
+				url: item.url,
+				size: Number(item.size),
+				filename: item.url.split('/').pop() || 'Unknown',
+				hash: item.hash,
+				path: item.path,
+			}));
+		return [...recorded, ...casts];
+	}
+
+	/**
+	 * Releases DMM has recorded whole on Debrid-Link (`AvailableDl`), offered as AllDebrid's cast
+	 * offers `AvailableAd`: nobody has to cast them first, and a season pack serves the episode
+	 * by its recorded path (`?file=`, matched by the play route against what Debrid-Link lists).
+	 * Nothing stored here is a link, so the viewer's own add resolves it at play time. Biggest
+	 * film file of each release first, held to the same freshness bound as the other pools.
+	 */
+	private async getRecordedReleaseStreams(
+		imdbId: string,
+		limit: number,
+		maxSize?: number
+	): Promise<DebridLinkCastStream[]> {
+		const { baseImdbId, season, episode } = parseImdbId(imdbId);
+		const maxBytes =
+			typeof maxSize === 'number' && maxSize > 0
+				? BigInt(Math.round(maxSize * 1024)) * BigInt(1024 * 1024)
+				: undefined;
+		const files = await this.prisma.availableDlFile.findMany({
+			where: {
+				availableDl: { imdbId: baseImdbId, updatedAt: { gt: rdLinkCutoff() } },
+				bytes: { gt: MIN_FILE_BYTES, ...(maxBytes !== undefined && { lte: maxBytes }) },
+				season,
+				episode,
+			},
+			select: { hash: true, path: true, bytes: true },
+			orderBy: { bytes: 'desc' },
+			// several files of one release can lead the list; a few spare rows keep `limit` releases
+			take: limit * 3,
+		});
+		const seen = new Set<string>();
+		return files
+			.filter((file) => isFilmFile(file.path))
+			.filter((file) => !seen.has(file.hash) && seen.add(file.hash))
+			.slice(0, limit)
+			.map((file) => ({
+				url: '',
+				size: Number(file.bytes) / 1024 / 1024,
+				filename: file.path.split('/').pop() || file.path,
+				hash: file.hash,
+				path: file.path,
+			}));
 	}
 
 	/**

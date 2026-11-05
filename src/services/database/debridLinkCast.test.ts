@@ -1,4 +1,6 @@
+import dlTv from '@/test/fixtures/libraryAvailability/dl_tv.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { episodeOfFile } from './availability';
 import { DebridLinkCastService } from './debridLinkCast';
 
 const prismaMock = vi.hoisted(() => ({
@@ -14,6 +16,7 @@ const prismaMock = vi.hoisted(() => ({
 		upsert: vi.fn(),
 		deleteMany: vi.fn(),
 	},
+	availableDlFile: { findMany: vi.fn() },
 }));
 
 vi.mock('./client', () => ({
@@ -31,6 +34,77 @@ describe('DebridLinkCastService', () => {
 		Object.values(prismaMock.debridLinkCast).forEach((fn) => (fn as Mock).mockReset());
 		prismaMock.debridLinkCast.groupBy.mockResolvedValue([]);
 		prismaMock.debridLinkCast.findFirst.mockResolvedValue(null);
+		prismaMock.availableDlFile.findMany.mockReset();
+		prismaMock.availableDlFile.findMany.mockResolvedValue([]);
+	});
+
+	// Friends S05E10 offered nothing on DL Cast (2026-11-06) while DMM had the whole S05 pack
+	// recorded: DL Cast read only casts and single-episode probe hits, never AvailableDl.
+	describe('releases DMM has recorded on Debrid-Link', () => {
+		// the pack's rows as AvailableDlFile holds them (real listing, 2026-11-05)
+		const packRows = dlTv.files.map((f) => ({
+			hash: dlTv.hashString,
+			path: f.name,
+			bytes: BigInt(f.size),
+			...episodeOfFile(f.name),
+		}));
+		const episode10 = packRows.find((r) => r.season === 5 && r.episode === 10)!;
+
+		it('offers the episode file inside a recorded season pack, first', async () => {
+			prismaMock.availableDlFile.findMany.mockResolvedValue([episode10]);
+			prismaMock.debridLinkCast.groupBy.mockResolvedValue([{ size: BigInt(900) }]);
+			prismaMock.debridLinkCast.findFirst.mockResolvedValue({
+				url: 'https://seed1.debrid.link/dl/x/cast.mkv',
+				size: BigInt(900),
+				hash: 'c'.repeat(40),
+				path: 'cast.mkv',
+			});
+
+			const streams = await service.getOtherStreams('tt0108778:5:10', 'user-1', 5);
+
+			const where = prismaMock.availableDlFile.findMany.mock.calls[0][0].where;
+			expect(where).toMatchObject({
+				availableDl: { imdbId: 'tt0108778' },
+				season: 5,
+				episode: 10,
+			});
+			expect(where.availableDl.updatedAt.gt).toBeInstanceOf(Date);
+			expect(streams[0]).toEqual({
+				url: '',
+				size: Number(episode10.bytes) / 1024 / 1024,
+				filename: episode10.path,
+				hash: dlTv.hashString,
+				path: episode10.path,
+			});
+			// casts fill what the recorded releases leave
+			expect(prismaMock.debridLinkCast.groupBy.mock.calls[0][0].take).toBe(4);
+			expect(streams.map((s) => s.hash)).toEqual([dlTv.hashString, 'c'.repeat(40)]);
+		});
+
+		it('offers each release once, by its biggest film file, within the size cap', async () => {
+			prismaMock.availableDlFile.findMany.mockResolvedValue([
+				{ hash: 'a'.repeat(40), path: 'Film/Film.2010.2160p.mkv', bytes: BigInt(9e9) },
+				{ hash: 'a'.repeat(40), path: 'Film/Extras/Featurette.mkv', bytes: BigInt(2e9) },
+				{ hash: 'b'.repeat(40), path: 'Album/01.flac', bytes: BigInt(1e9) },
+			]);
+			const streams = await service.getOtherStreams('tt1375666', 'user-1', 5, 10);
+			expect(streams.map((s) => s.path)).toEqual(['Film/Film.2010.2160p.mkv']);
+			const where = prismaMock.availableDlFile.findMany.mock.calls[0][0].where;
+			expect(where.bytes.lte).toBe(BigInt(10 * 1024) * BigInt(1024 * 1024));
+		});
+
+		it('does not offer a recorded release twice when someone also cast it', async () => {
+			prismaMock.availableDlFile.findMany.mockResolvedValue([episode10]);
+			prismaMock.debridLinkCast.groupBy.mockResolvedValue([{ size: BigInt(7000) }]);
+			prismaMock.debridLinkCast.findFirst.mockResolvedValue({
+				url: 'https://seed1.debrid.link/dl/x/e10.mkv',
+				size: BigInt(7000),
+				hash: dlTv.hashString,
+				path: episode10.path,
+			});
+			const streams = await service.getOtherStreams('tt0108778:5:10', 'user-1', 5);
+			expect(streams.map((s) => s.hash)).toEqual([dlTv.hashString]);
+		});
 	});
 
 	it('stores a hash, a path and the keyless URL', async () => {

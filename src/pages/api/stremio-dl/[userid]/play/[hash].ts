@@ -1,3 +1,4 @@
+import { probeDlRelease } from '@/services/debridLink';
 import { repository as db } from '@/services/repository';
 import {
 	describeDebridLinkError,
@@ -39,6 +40,26 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // and survives deletion, so it works for anyone; that is exactly why it is also
 // an irrevocable capability, and why it is never logged and never returned in
 // any listing.
+/**
+ * A release DMM recorded on Debrid-Link (and DL Cast offers) that came back unfinished is wrong
+ * for everyone: each viewer's play starts a download and spends one of their daily uncached
+ * adds. DMM asks Debrid-Link itself before it forgets one (`probeDlRelease`), and asks only for
+ * recorded releases, so an ordinary cast still downloading costs no probe. In the background:
+ * the viewer's answer does not wait on it.
+ */
+function forgetIfUncached(hash: string) {
+	(async () => {
+		if ((await db.checkAvailabilityDl([hash])).length === 0) return;
+		const answer = await probeDlRelease(hash);
+		if (answer && !answer.cached) await db.removeAvailabilityDl(hash);
+	})().catch((error) =>
+		console.error(
+			'Debrid-Link recorded-release check failed:',
+			error instanceof Error ? error.message : 'Unknown error'
+		)
+	);
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
@@ -91,6 +112,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		);
 
 		if (!release.finished) {
+			forgetIfUncached(hash);
 			// No cheap wait exists. `seedbox/activity` is another request against
 			// an endpoint whose punishment for a loop is an hour, and the add
 			// response already carries the percent - so this reports and stops.

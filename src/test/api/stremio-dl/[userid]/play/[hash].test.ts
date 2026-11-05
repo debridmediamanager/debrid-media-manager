@@ -1,5 +1,10 @@
 import handler from '@/pages/api/stremio-dl/[userid]/play/[hash]';
-import { addSeedboxTorrent, DebridLinkError, deleteSeedboxTorrents } from '@/services/debridLink';
+import {
+	addSeedboxTorrent,
+	DebridLinkError,
+	deleteSeedboxTorrents,
+	probeDlRelease,
+} from '@/services/debridLink';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -12,12 +17,14 @@ vi.mock('@/services/debridLink', async () => {
 		...actual,
 		addSeedboxTorrent: vi.fn(),
 		deleteSeedboxTorrents: vi.fn(),
+		probeDlRelease: vi.fn(),
 	};
 });
 
 const mockRepository = vi.mocked(repository);
 const mockAdd = vi.mocked(addSeedboxTorrent);
 const mockDelete = vi.mocked(deleteSeedboxTorrents);
+const mockProbe = vi.mocked(probeDlRelease);
 
 const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
 const SEED = 'https://seed41.debrid.link/dl';
@@ -59,6 +66,9 @@ describe('/api/stremio-dl/[userid]/play/[hash]', () => {
 			.mockResolvedValue({ apiKey: 'viewer-token' });
 		mockRepository.getDebridLinkStoredDownloadUrl = vi.fn().mockResolvedValue(null);
 		mockAdd.mockResolvedValue(finishedTorrent);
+		mockRepository.checkAvailabilityDl = vi.fn().mockResolvedValue([]);
+		mockRepository.removeAvailabilityDl = vi.fn().mockResolvedValue(undefined);
+		mockProbe.mockResolvedValue({ cached: false });
 	});
 
 	it('returns 500 when the viewer has no profile', async () => {
@@ -156,6 +166,46 @@ describe('/api/stremio-dl/[userid]/play/[hash]', () => {
 	// Debrid-Link URLs are keyless, IP-agnostic and survive deletion, so a stored
 	// one plays for anybody - which is what makes it a real fallback when the
 	// viewer's own credential cannot resolve the hash.
+	// DL Cast offers releases DMM recorded on Debrid-Link. One Debrid-Link no longer holds would
+	// start a download on every viewer's account (one of their 50 daily uncached adds) until
+	// something forgets it, so the play that finds it unfinished has DMM check and forget it.
+	describe('a recorded release that is no longer cached', () => {
+		const downloading = { ...finishedTorrent, status: 4, downloadPercent: 3 };
+
+		it('is forgotten once DMM confirms it with Debrid-Link', async () => {
+			mockAdd.mockResolvedValue(downloading);
+			mockRepository.checkAvailabilityDl = vi
+				.fn()
+				.mockResolvedValue([{ hash: HASH, files: [] }]);
+			await handler(request(), res);
+			expect(res.status).toHaveBeenCalledWith(504);
+			await vi.waitFor(() =>
+				expect(mockRepository.removeAvailabilityDl).toHaveBeenCalledWith(HASH)
+			);
+			expect(mockProbe).toHaveBeenCalledWith(HASH);
+		});
+
+		it('stays when Debrid-Link still holds it, or nobody can say', async () => {
+			mockAdd.mockResolvedValue(downloading);
+			mockRepository.checkAvailabilityDl = vi
+				.fn()
+				.mockResolvedValue([{ hash: HASH, files: [] }]);
+			for (const answer of [{ cached: true, torrent: finishedTorrent }, null]) {
+				mockProbe.mockResolvedValueOnce(answer as any);
+				await handler(request(), createMockResponse());
+			}
+			await vi.waitFor(() => expect(mockProbe).toHaveBeenCalledTimes(2));
+			expect(mockRepository.removeAvailabilityDl).not.toHaveBeenCalled();
+		});
+
+		it('costs no probe for a release DMM never recorded', async () => {
+			mockAdd.mockResolvedValue(downloading);
+			await handler(request(), res);
+			await vi.waitFor(() => expect(mockRepository.checkAvailabilityDl).toHaveBeenCalled());
+			expect(mockProbe).not.toHaveBeenCalled();
+		});
+	});
+
 	it('serves the stored link when the viewer quota is spent', async () => {
 		mockAdd.mockRejectedValue(new DebridLinkError('quota', 'maxTorrent'));
 		mockRepository.getDebridLinkStoredDownloadUrl = vi

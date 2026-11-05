@@ -16,8 +16,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (Debrid-Link version)
 //
-// Casts are offered as they are: no cast is filtered by a cache probe. Spare
-// "other streams" slots are filled from DMM's scraped pool, like the TorBox,
+// Casts are offered as they are: no cast is filtered by a cache probe. The
+// "other streams" start with releases DMM has recorded whole on Debrid-Link
+// (`AvailableDl`), a season pack serving the episode by its recorded path, as
+// AllDebrid's offer `AvailableAd`. Spare slots are filled from DMM's scraped pool, like the TorBox,
 // Premiumize and Offcloud routes do, with only releases Debrid-Link holds
 // cached. Debrid-Link has no read-only cache check (`GET /seedbox/cached`
 // answers `400 endpointDisabled`), so `debridLinkCachedTrove` probes with a
