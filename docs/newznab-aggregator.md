@@ -175,8 +175,9 @@ no TheTVDB id on their TV posts, so a new episode there would go unseen.
 
 A fan-out leaves an upstream out when it is over its pacing budget, and tolerates one
 that fails, so many sets are cached without one or two upstreams. Measured in production,
-one paced upstream was skipped in about 4 of 5 fan-outs and another answered 429 to every
-call for over an hour. The entry records those upstreams by prefix (`missing`). An
+fan-outs ran at about five times one paced upstream's budget, so it is left out of about 4
+in 5 even with skips taking no slot, and another upstream answered 429 to every call for
+over an hour. The entry records those upstreams by prefix (`missing`). An
 upstream that answered with zero results is not missing.
 
 A read of a fresh entry (or one kept by the fresh-post watch) that is missing upstreams,
