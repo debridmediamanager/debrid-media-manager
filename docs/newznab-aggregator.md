@@ -106,7 +106,8 @@ every guid and enclosure URL the \*arrs have stored.
 
 `runSearch` in `src/services/newznab/search.ts`:
 
-1. Cache check (below). Fresh entry → page and return, zero upstream calls.
+1. Cache check (below). Fresh entry → page and return, zero upstream calls, unless the
+   entry is missing an upstream (see **Sets missing an upstream** below).
 2. Fan out one URL per configured upstream (`NEWZNAB_INDEXERS` env JSON, parsed by
    `src/services/newznab/indexers.ts`) through `fanOut` from `services/nzb2rd.ts` —
    best-effort parallel; one refusal never empties the result. Upstreams are always
@@ -127,7 +128,8 @@ every guid and enclosure URL the \*arrs have stored.
    `category` only, `pubDate` passed through or omitted — never fabricated. The
    enclosure origin comes from `NEWZNAB_PUBLIC_BASE`, never the request's Host header
    (stored and replayed by the \*arr for days; spoofable).
-6. Cache the full merged pre-offset set (even when empty), slice by `offset`/`limit`.
+6. Cache the full merged pre-offset set (even when empty) with the prefixes of the
+   upstreams that gave no answer, slice by `offset`/`limit`.
 
 Total upstream outage falls back to a stale cache entry rather than answering empty —
 an \*arr reads an empty feed as "these releases are gone".
@@ -168,6 +170,31 @@ kept under `nzbfresh:v1:swept`: an answer cached before the watch began, or read
 is more than an hour late, keeps its ordinary TTL, and a post dated up to two hours before
 an answer still counts as newer than it. Shows are not kept this way: some upstreams name
 no TheTVDB id on their TV posts, so a new episode there would go unseen.
+
+### Sets missing an upstream
+
+A fan-out leaves an upstream out when it is over its pacing budget, and tolerates one
+that fails, so many sets are cached without one or two upstreams. Measured in production,
+one paced upstream was skipped in about 4 of 5 fan-outs and another answered 429 to every
+call for over an hour. The entry records those upstreams by prefix (`missing`). An
+upstream that answered with zero results is not missing.
+
+A read of a fresh entry (or one kept by the fresh-post watch) that is missing upstreams,
+more than `REFILL_AFTER_MS` (1 hour) after one was last asked, asks **only those**,
+still through pacing, merges what they answer into the cached set, and writes the entry
+back with whatever is still missing. The write happens even when nothing answered,
+because the row's write time is what dates the next try. That limits a refusing
+upstream to one extra call per entry per hour. The upstreams that already answered are
+never asked again for that entry. A short TTL for partial sets would re-run the whole
+fan-out every hour for most entries and spend the daily allowances of the upstreams that
+already answered.
+
+The merge keeps the fan-out's own time (`cachedAt` in the value) because Prisma moves the
+row's `updatedAt` on every write. TTL and the fresh-post watch read `cachedAt`, so a
+merge extends neither. A missing prefix no longer in `NEWZNAB_INDEXERS` is ignored, and
+dropped at the next write. Entries written before this was recorded carry no `missing`
+and read as complete. An entry that has gone stale is fanned out to every upstream as
+before, and the stale fallback is unchanged.
 
 ## Grab flow (`t=get`)
 

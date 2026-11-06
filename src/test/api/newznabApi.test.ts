@@ -4,6 +4,7 @@ import { _resetUpstreamIndexersForTest } from '@/services/newznab/indexers';
 import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/opaqueId';
 import {
 	_resetUpstreamLimiterForTest,
+	REFILL_AFTER_MS,
 	RSS_TTL_MS,
 	sweepFreshPosts,
 } from '@/services/newznab/search';
@@ -640,6 +641,103 @@ describe('GET /api/newznab/api search', () => {
 		expect(body(res)).toContain('<error code="500"');
 		expect(body(res)).toContain('Request limit reached');
 		expect(Number(res._getHeaders()['Retry-After'])).toBeGreaterThan(0);
+	});
+});
+
+// A set cached while an upstream was skipped for pacing or failing used to keep
+// that hole for its whole TTL, days to weeks. Now the entry records what it
+// lacks, and a later read asks only those upstreams and merges their answer.
+describe('GET /api/newznab/api sets missing an upstream', () => {
+	const HOUR = 60 * 60 * 1000;
+	const query = { t: 'search', q: 'some release', apikey: SPONSOR_KEY };
+	const fromFirst: CachedUsenetResult[] = [
+		{ id: 'ds:first-native-id', title: 'Some.Release.2160p.WEB', size: 1234567 },
+	];
+	const cachedAt = new Date(Date.now() - 2 * HOUR);
+	const cachedMissing = (prefixes: string[], askedAgoMs: number) => {
+		mockRepo.getCachedNewznabApiSearch = vi.fn(async () => ({
+			results: fromFirst,
+			updatedAt: cachedAt,
+			isFresh: true,
+			missing: { prefixes, askedAt: new Date(Date.now() - askedAgoMs) },
+		}));
+	};
+	const missingWritten = () => (mockRepo.setCachedNewznabApiSearch as any).mock.calls[0][2];
+
+	it('records an upstream skipped for pacing as missing', async () => {
+		setIndexers([INDEXERS[0], { ...INDEXERS[1], pacing: { rateLimit: 1, windowSeconds: 60 } }]);
+		await run({ t: 'search', q: 'first query', apikey: SPONSOR_KEY });
+		vi.mocked(mockRepo.setCachedNewznabApiSearch).mockClear();
+
+		await run({ t: 'search', q: 'second query', apikey: SPONSOR_KEY });
+
+		expect(missingWritten()).toEqual(['ah']);
+	});
+
+	it('records a failed upstream as missing, and one with no results as answered', async () => {
+		fetchMock.mockImplementation(async (input: unknown) => {
+			if (String(input).startsWith(SECOND_HOST)) throw new Error('429');
+			return jsonResponse({ item: [] });
+		});
+
+		await run(query);
+
+		expect(missingWritten()).toEqual(['ah']);
+	});
+
+	it('asks only the missing upstream and merges its answer into the set', async () => {
+		cachedMissing(['ah'], 2 * HOUR);
+
+		const res = await run(query);
+
+		// The upstream that already answered is not asked again.
+		expect(fetchedUrls()).toHaveLength(1);
+		expect(fetchedUrls()[0].startsWith(SECOND_HOST)).toBe(true);
+		expect(itemTitles(res)).toEqual(['Some.Release.2160p.WEB', 'Another.Release.1080p']);
+		const [, results, missing, keptAt] = (mockRepo.setCachedNewznabApiSearch as any).mock
+			.calls[0];
+		expect(results).toHaveLength(2);
+		expect(missing).toEqual([]);
+		// The merge keeps the fan-out's time, so it extends neither the TTL nor
+		// the fresh-post watch.
+		expect(keptAt).toEqual(cachedAt);
+	});
+
+	it('waits REFILL_AFTER_MS between asks', async () => {
+		cachedMissing(['ah'], REFILL_AFTER_MS - 60_000);
+
+		expect(itemTitles(await run(query))).toEqual(['Some.Release.2160p.WEB']);
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(mockRepo.setCachedNewznabApiSearch).not.toHaveBeenCalled();
+	});
+
+	it('still dates the try when the missing upstream fails again', async () => {
+		cachedMissing(['ah'], 2 * HOUR);
+		fetchMock.mockRejectedValue(new Error('429'));
+
+		expect(itemTitles(await run(query))).toEqual(['Some.Release.2160p.WEB']);
+		expect(missingWritten()).toEqual(['ah']);
+	});
+
+	it('still respects pacing for the missing upstream', async () => {
+		setIndexers([INDEXERS[0], { ...INDEXERS[1], pacing: { rateLimit: 1, windowSeconds: 60 } }]);
+		await run({ t: 'search', q: 'spends the budget', apikey: SPONSOR_KEY });
+		fetchMock.mockClear();
+		vi.mocked(mockRepo.setCachedNewznabApiSearch).mockClear();
+		cachedMissing(['ah'], 2 * HOUR);
+
+		await run(query);
+
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(missingWritten()).toEqual(['ah']);
+	});
+
+	it('stops waiting for an upstream removed from the config', async () => {
+		cachedMissing(['zz'], 2 * HOUR);
+
+		expect(itemTitles(await run(query))).toEqual(['Some.Release.2160p.WEB']);
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(mockRepo.setCachedNewznabApiSearch).not.toHaveBeenCalled();
 	});
 });
 

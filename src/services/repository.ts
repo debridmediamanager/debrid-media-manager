@@ -573,11 +573,8 @@ export class Repository {
 		return this.newznabApiCacheService.get(key, Date.now(), maxTtlMs);
 	}
 
-	public setCachedNewznabApiSearch(
-		key: string,
-		results: Parameters<NewznabApiCacheService['set']>[1]
-	) {
-		return this.newznabApiCacheService.set(key, results);
+	public setCachedNewznabApiSearch(...args: Parameters<NewznabApiCacheService['set']>) {
+		return this.newznabApiCacheService.set(...args);
 	}
 
 	// Availability Service Methods
