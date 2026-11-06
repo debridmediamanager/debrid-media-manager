@@ -94,9 +94,18 @@ export const UNCACHED_SEEDERS = 1;
  */
 export type TorznabCacheScope = 'any' | 'rd' | 'ad' | 'dl' | TorznabLiveService;
 
+/** A provider a feed path can name. */
+export type TorznabProvider = Exclude<TorznabCacheScope, 'any'>;
+
+const isTorznabProvider = (segment: string): segment is TorznabProvider =>
+	segment === 'rd' || segment === 'ad' || segment === 'dl' || isTorznabLiveService(segment);
+
 export interface TorznabFeedOptions {
+	/** The one provider the path names, or `any` when it names none or several. */
 	cache: TorznabCacheScope;
 	cachedOnly: boolean;
+	/** Two or more providers the path names, in its order: "cached on any of these". */
+	providers?: TorznabProvider[];
 }
 
 /** Who is asking, for the feeds that need that sponsor's own provider key. */
@@ -116,18 +125,24 @@ export const DEFAULT_FEED_OPTIONS: TorznabFeedOptions = { cache: 'any', cachedOn
  * in the URL a sponsor pastes — `/api/torznab/rd/cached` for "only what my
  * Real-Debrid account already holds".
  *
- * An unrecognised segment is rejected rather than ignored: silently serving the
- * default feed for `/api/torznab/realdebrid` would look like a working indexer
- * that quietly answers the wrong question.
+ * Several providers may be named, in any order and each once
+ * (`/api/torznab/rd/tb/cached`), for "cached on any of these"; `cached` comes
+ * last. An unrecognised segment, a repeated one or `cached` elsewhere is
+ * rejected rather than ignored: silently serving the default feed for
+ * `/api/torznab/realdebrid`, or only the last provider of `/rd/ad` as this did
+ * until 2026-11-06, looks like a working indexer that quietly answers the
+ * wrong question.
  */
 export function parseFeedOptions(segments: string[]): TorznabFeedOptions | null {
 	const options = { ...DEFAULT_FEED_OPTIONS };
-	for (const segment of segments) {
-		if (segment === 'rd' || segment === 'ad' || segment === 'dl') options.cache = segment;
-		else if (isTorznabLiveService(segment)) options.cache = segment;
-		else if (segment === 'cached') options.cachedOnly = true;
+	const named: TorznabProvider[] = [];
+	for (const [index, segment] of segments.entries()) {
+		if (segment === 'cached' && index === segments.length - 1) options.cachedOnly = true;
+		else if (isTorznabProvider(segment) && !named.includes(segment)) named.push(segment);
 		else return null;
 	}
+	if (named.length === 1) options.cache = named[0];
+	if (named.length > 1) options.providers = named;
 	return options;
 }
 
@@ -192,6 +207,8 @@ interface LibraryRelease {
 	size: number;
 	categories: number[];
 	pubDate: string;
+	/** Which named providers hold it, where a several-provider path already knows. */
+	cachedOn?: TorznabProvider[];
 }
 
 /**
@@ -670,7 +687,8 @@ const newestListing = (a: NewlyCachedRelease, b: NewlyCachedRelease) =>
 async function newlyCachedReleases(
 	t: SearchType,
 	params: NormalizedQuery,
-	scope: 'any' | 'rd' | 'ad'
+	scope: 'any' | 'rd' | 'ad',
+	providers?: TorznabProvider[]
 ): Promise<LibraryRelease[]> {
 	const lists = await newlyCachedLists();
 	if (!lists) return [];
@@ -695,6 +713,13 @@ async function newlyCachedReleases(
 		.map(({ cachedAt: _cachedAt, listedAt, ...release }) => ({
 			...release,
 			pubDate: new Date(listedAt).toUTCString(),
+			...(providers && {
+				cachedOn: providers.filter((provider) =>
+					lists[provider as 'rd' | 'ad'].some(
+						(on) => on.hash.toLowerCase() === release.hash.toLowerCase()
+					)
+				),
+			}),
 		}));
 }
 
@@ -857,6 +882,35 @@ async function resolveCache(
 	return { ...answer, refusedByRd: new Set() };
 }
 
+/**
+ * The cache answer of a path naming several providers: each provider's own
+ * answer, as its single feed gets it (RD's name rule, Debrid-Link's record, a
+ * live probe with the sponsor's key, which fails the request without one), and
+ * a release is cached when any of them holds it. RD's answer already leaves
+ * out what RD refuses, so such a release counts only where another holds it.
+ */
+async function cacheFromProviders(
+	releases: LibraryRelease[],
+	providers: TorznabProvider[],
+	context?: TorznabSearchContext
+): Promise<CacheAnswer & { cachedOn: Map<string, TorznabProvider[]> }> {
+	const answers = await Promise.all(
+		providers.map((cache) => resolveCache(releases, { cache, cachedOnly: false }, context))
+	);
+	const cachedOn = new Map<string, TorznabProvider[]>();
+	answers.forEach((answer, index) => {
+		for (const hash of answer.cached) {
+			cachedOn.set(hash, [...(cachedOn.get(hash) ?? []), providers[index]]);
+		}
+	});
+	return {
+		cached: new Set(cachedOn.keys()),
+		unresolved: Math.max(...answers.map((answer) => answer.unresolved)),
+		refusedByRd: new Set(),
+		cachedOn,
+	};
+}
+
 function magnetUri(hash: string, title: string): string {
 	// No trackers: every consumer of this feed resolves the hash against a debrid
 	// account, which needs the infohash and nothing else. `dn` is carried because
@@ -865,9 +919,14 @@ function magnetUri(hash: string, title: string): string {
 	return `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(title)}`;
 }
 
-function toRssItem(release: LibraryRelease, cached: boolean): TorznabRssItem {
+function toRssItem(
+	release: LibraryRelease,
+	cached: boolean,
+	cachedOn = release.cachedOn
+): TorznabRssItem {
 	const seeders = cached ? CACHED_SEEDERS : UNCACHED_SEEDERS;
 	return {
+		...(cachedOn && { cachedOn }),
 		title: release.title,
 		infoHash: release.hash,
 		magnetUrl: magnetUri(release.hash, release.title),
@@ -917,9 +976,16 @@ export async function runSearch(
 	// Every release on this list is cached by definition, so it skips the cache
 	// lookup and answers the same on the `/cached` variant. An empty one answers
 	// as before: Prowlarr and Sonarr call an indexer that returns nothing broken.
-	const scope = options.cache;
+	// A path naming several providers uses it only when all of them are RD and
+	// AD, which DMM keeps a cache history for; with any other it answers the
+	// way those providers' own feeds do.
+	const scope = options.providers
+		? options.providers.every((provider) => provider === 'rd' || provider === 'ad')
+			? 'any'
+			: undefined
+		: options.cache;
 	if (!params.targeted && (scope === 'any' || scope === 'rd' || scope === 'ad')) {
-		const listed = await newlyCachedReleases(t, params, scope);
+		const listed = await newlyCachedReleases(t, params, scope, options.providers);
 		if (listed.length > 0) {
 			return {
 				items: listed
@@ -937,7 +1003,10 @@ export async function runSearch(
 	const matching = releases.filter((release) =>
 		matchesCategoryFilter(release.categories, params.categories)
 	);
-	const { cached, unresolved, refusedByRd } = await resolveCache(matching, options, context);
+	const answer: CacheAnswer & { cachedOn?: Map<string, TorznabProvider[]> } = options.providers
+		? await cacheFromProviders(matching, options.providers, context)
+		: await resolveCache(matching, options, context);
+	const { cached, unresolved, refusedByRd, cachedOn } = answer;
 
 	// An `rd` feed is read by a Real-Debrid account, which can never take what RD
 	// refuses by name, so those are left out rather than ranked low. The other
@@ -954,7 +1023,13 @@ export async function runSearch(
 	const page = kept.slice(params.offset, params.offset + params.limit);
 
 	return {
-		items: page.map((release) => toRssItem(release, cached.has(release.hash))),
+		items: page.map((release) =>
+			toRssItem(
+				release,
+				cached.has(release.hash),
+				cachedOn && (cachedOn.get(release.hash) ?? [])
+			)
+		),
 		offset: params.offset,
 		total: kept.length,
 		unresolved,

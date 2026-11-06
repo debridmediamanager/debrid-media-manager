@@ -97,6 +97,11 @@ export interface TorznabRssItem {
 	seeders: number;
 	/** Seeders plus leechers — a client derives leechers by subtracting. */
 	peers: number;
+	/**
+	 * On a path naming several providers, which of them hold it, in the path's
+	 * order. Absent everywhere else, so those feeds keep their exact bytes.
+	 */
+	cachedOn?: string[];
 }
 
 function attr(name: string, value: string | number): string {
@@ -133,6 +138,7 @@ function itemXml(item: TorznabRssItem): string {
 		attr('peers', item.peers),
 		attr('infohash', item.infoHash),
 		attr('magneturl', item.magnetUrl),
+		...(item.cachedOn?.length ? [attr('cachedon', item.cachedOn.join(','))] : []),
 		// Nothing here is metered: the grab is resolved against the client's own
 		// debrid account, so there is no ratio to keep and no download to pay for.
 		attr('downloadvolumefactor', 0),

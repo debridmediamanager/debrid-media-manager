@@ -802,6 +802,187 @@ describe('the debrid cache signal', () => {
 	});
 });
 
+describe('several providers in one path', () => {
+	// The movie page: BIG on RD, CACHED_ON_AD on AllDebrid, SMALL on TorBox
+	// (the probe) and Debrid-Link (its record), and one release nobody holds.
+	const NOBODY = hash('9');
+
+	beforeEach(() => {
+		library
+			.get(`movie:${MOVIE_ID}`)!
+			.results.push(release('Shawshank.1994.480p.DVDRip', 700, NOBODY));
+	});
+
+	const search = (route: string[], query: Record<string, string> = {}) =>
+		run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY, ...query }, { route });
+
+	/** Each item's hash with its `seeders` and `cachedon`, in feed order. */
+	function served(res: MockResponse): Array<[string, string, string | undefined]> {
+		return [...body(res).matchAll(/<item>([\s\S]*?)<\/item>/g)].map(([, item]) => [
+			attrValue(item, 'infohash')[0],
+			attrValue(item, 'seeders')[0],
+			attrValue(item, 'cachedon')[0],
+		]);
+	}
+
+	it('reads every provider named, in any order, each once, with cached last', () => {
+		expect(parseFeedOptions(['rd', 'tb', 'cached'])).toEqual({
+			cache: 'any',
+			cachedOnly: true,
+			providers: ['rd', 'tb'],
+		});
+		expect(parseFeedOptions(['dl', 'ad', 'pm'])?.providers).toEqual(['dl', 'ad', 'pm']);
+		// One provider is the single feed it always was.
+		expect(parseFeedOptions(['rd', 'cached'])).toEqual({ cache: 'rd', cachedOnly: true });
+		for (const refused of [
+			['rd', 'rd'],
+			['rd', 'tb', 'rd'],
+			['cached', 'rd'],
+			['rd', 'cached', 'tb'],
+			['cached', 'cached'],
+		]) {
+			expect(parseFeedOptions(refused), refused.join('/')).toBeNull();
+		}
+	});
+
+	it('refuses a repeated provider or a misplaced cached in the protocol', async () => {
+		for (const route of [
+			['rd', 'rd', 'api'],
+			['cached', 'rd', 'api'],
+		]) {
+			expect(body(await search(route)), route.join('/')).toContain('code="202"');
+		}
+	});
+
+	it('names the providers that hold each release, in the path order', async () => {
+		rdCached.add(SMALL);
+
+		expect(served(await search(['tb', 'rd', 'ad', 'api']))).toEqual([
+			[BIG, '100', 'rd'],
+			[SMALL, '100', 'tb,rd'],
+			[CACHED_ON_AD, '100', 'ad'],
+			[NOBODY, '1', undefined],
+		]);
+		expect(served(await search(['rd', 'dl', 'api']))).toEqual([
+			[BIG, '100', 'rd'],
+			[SMALL, '100', 'rd,dl'],
+			[CACHED_ON_AD, '1', undefined],
+			[NOBODY, '1', undefined],
+		]);
+	});
+
+	it('keeps only what any of them holds on the cached variant', async () => {
+		const res = await search(['rd', 'tb', 'cached', 'api']);
+
+		expect(served(res).map(([h]) => h)).toEqual([BIG, SMALL]);
+		expect(body(res)).toContain('total="2"');
+		expect(probeMock).toHaveBeenCalledWith('tb', 'provider-key', expect.any(Array));
+	});
+
+	it('fails the whole request when a live provider named has no key', async () => {
+		providerKey = null;
+
+		const res = await search(['rd', 'tb', 'cached', 'api']);
+
+		expect(body(res)).toContain('code="102"');
+		expect(body(res)).toContain('TorBox');
+	});
+
+	it('leaves the single and plain feeds as they were', async () => {
+		rdCached.add(SMALL);
+		for (const route of [['api'], ['cached', 'api'], ['rd', 'api'], ['tb', 'cached', 'api']]) {
+			expect(body(await search(route)), route.join('/')).not.toContain('cachedon');
+		}
+	});
+
+	describe('a release RD refuses by name', () => {
+		// The 2026-09-08 report: RD's table holds it, and RD refuses it.
+		const DEAD_OF_WINTER = 'tt7574556';
+		const REFUSED = rdRefusedNames.reported.hash;
+		const refusedOn = async (route: string[]) =>
+			served(
+				await run(
+					{ t: 'movie', imdbid: DEAD_OF_WINTER, limit: '100', apikey: SPONSOR_KEY },
+					{ route }
+				)
+			).find(([h]) => h === REFUSED);
+
+		beforeEach(() => {
+			const page = rdRefusedNames.pages.find((p) => p.key === `movie:${DEAD_OF_WINTER}`)!;
+			library.set(page.key, { results: page.results, updatedAt: new Date(page.updatedAt) });
+			rdCached = new Set(rdRefusedNames.rdCached.map((row) => row.hash));
+			rdNames = new Map(
+				rdRefusedNames.rdCached.map((row) => [
+					row.hash,
+					{ filename: row.filename, originalFilename: row.originalFilename },
+				])
+			);
+			adCached = new Set();
+			providerCached = new Set();
+		});
+
+		it('counts as cached only where another provider named holds it', async () => {
+			expect(await refusedOn(['rd', 'tb', 'cached', 'api'])).toBeUndefined();
+			// Kept, uncached: dropping it is for a path naming RD alone.
+			expect(await refusedOn(['rd', 'tb', 'api'])).toEqual([REFUSED, '1', undefined]);
+			expect(await refusedOn(['rd', 'api'])).toBeUndefined();
+
+			providerCached = new Set([REFUSED]);
+			expect(await refusedOn(['rd', 'tb', 'cached', 'api'])).toEqual([REFUSED, '100', 'tb']);
+		});
+	});
+
+	describe('an RSS sync', () => {
+		it('lists what was newly cached on RD and AD when those are all it names', async () => {
+			const row = (torrentHash: string, at: string) => ({
+				hash: torrentHash,
+				imdbId: MOVIE_ID,
+				season: null,
+				createdAt: new Date(at),
+				filename: torrentHash,
+				originalFilename: torrentHash,
+			});
+			cacheRows.rd = [row(BIG, '2026-11-06T10:00:00Z')];
+			cacheRows.ad = [
+				row(CACHED_ON_AD, '2026-11-06T11:00:00Z'),
+				row(BIG, '2026-11-06T09:00:00Z'),
+			];
+			const store = newlyCachedStore();
+			await store.writeLists(await buildNewlyCached(null));
+
+			const res = await run(
+				{ t: 'movie', apikey: SPONSOR_KEY },
+				{ route: ['ad', 'rd', 'api'] }
+			);
+
+			expect(served(res)).toEqual([
+				[CACHED_ON_AD, '100', 'ad'],
+				[BIG, '100', 'ad,rd'],
+			]);
+			expect(mockRepo.getRecentScrapedTrueKeys).not.toHaveBeenCalled();
+		});
+
+		it('answers the old way when it names any other provider', async () => {
+			mockRepo.getRecentScrapedTrueKeys = vi
+				.fn()
+				.mockResolvedValue([{ key: `movie:${MOVIE_ID}`, updatedAt: PAGE_UPDATED_AT }]);
+
+			const res = await run(
+				{ t: 'search', apikey: SPONSOR_KEY },
+				{ route: ['rd', 'tb', 'api'] }
+			);
+
+			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
+			expect(served(res).map(([h, , on]) => [h, on])).toEqual([
+				[BIG, 'rd'],
+				[SMALL, 'tb'],
+				[CACHED_ON_AD, undefined],
+				[NOBODY, undefined],
+			]);
+		});
+	});
+});
+
 describe('provider-backed cache filters', () => {
 	const feedTitles = async (route: string[]) =>
 		titles(
