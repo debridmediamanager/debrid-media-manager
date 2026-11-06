@@ -13,6 +13,7 @@ import {
 	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
+	handleAddCachedInDl,
 } from '@/utils/addMagnet';
 import {
 	removeAvailability,
@@ -91,8 +92,8 @@ export type AddAdOptions = AddRdOptions & {
 	onlyIfCached?: boolean;
 };
 
-/** The services `addCached` can judge. Debrid-Link has no cache signal at all. */
-export type CachedAddService = 'rd' | 'ad' | 'tb' | 'pm' | 'oc';
+/** The services `addCached` can judge. Debrid-Link's is its bare-hash add, which takes only what it holds. */
+export type CachedAddService = 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
 
 export function useTorrentManagement(
 	rdKey: string | null,
@@ -1003,6 +1004,28 @@ export function useTorrentManagement(
 	 * removing a user's own unfinished transfer: Premiumize and Offcloud hand
 	 * back the existing item when the same magnet is added twice.
 	 */
+	/** A Debrid-Link add that lands only if Debrid-Link holds the release whole (`handleAddCachedInDl`). */
+	const addDlCached = useCallback(
+		async (hash: string): Promise<boolean> => {
+			if (!debridLinkKey) return false;
+			const outcome = await handleAddCachedInDl(
+				debridLinkKey,
+				hash,
+				async (userTorrent: UserTorrent, raw: DebridLinkTorrent) => {
+					await torrentDB.add(userTorrent);
+					addToCache(userTorrent);
+					setHashAndProgress((prev) => ({
+						...prev,
+						[`dl:${userTorrent.hash}`]: userTorrent.progress,
+					}));
+					shareDlAnswer(imdbId, hash, raw, false).catch(() => undefined);
+				}
+			);
+			return outcome === 'added';
+		},
+		[debridLinkKey, imdbId, addToCache]
+	);
+
 	const addCached = useCallback(
 		async (service: CachedAddService, hash: string, opts?: AddRdOptions): Promise<boolean> => {
 			if (`${service}:${hash.toLowerCase()}` in hashAndProgress) return true;
@@ -1012,6 +1035,7 @@ export function useTorrentManagement(
 				if (service === 'ad') {
 					return (await addAd(hash, false, { ...opts, onlyIfCached: true })) === true;
 				}
+				if (service === 'dl') return await addDlCached(hash);
 				return await addVerified(service, hash, opts);
 			} catch {
 				// Every handler has already said why, unless the caller asked for
@@ -1019,7 +1043,7 @@ export function useTorrentManagement(
 				return false;
 			}
 		},
-		[hashAndProgress, addRd, addAd, addVerified]
+		[hashAndProgress, addRd, addAd, addVerified, addDlCached]
 	);
 
 	return {

@@ -17,6 +17,7 @@ const {
 	mockHandleAddAsMagnetInPm,
 	mockHandleAddAsMagnetInOc,
 	mockHandleAddAsMagnetInDl,
+	mockHandleAddCachedInDl,
 	mockFetchAllDebrid,
 	mockConvertToUserTorrent,
 	mockGenerateTokenAndHash,
@@ -47,6 +48,7 @@ const {
 	mockHandleAddAsMagnetInPm: vi.fn(),
 	mockHandleAddAsMagnetInOc: vi.fn(),
 	mockHandleAddAsMagnetInDl: vi.fn(),
+	mockHandleAddCachedInDl: vi.fn(),
 	mockFetchAllDebrid: vi.fn(),
 	mockConvertToUserTorrent: vi.fn(),
 	mockGenerateTokenAndHash: vi.fn(),
@@ -82,6 +84,7 @@ vi.mock('@/utils/addMagnet', () => ({
 	handleAddAsMagnetInPm: mockHandleAddAsMagnetInPm,
 	handleAddAsMagnetInOc: mockHandleAddAsMagnetInOc,
 	handleAddAsMagnetInDl: mockHandleAddAsMagnetInDl,
+	handleAddCachedInDl: mockHandleAddCachedInDl,
 }));
 
 vi.mock('@/utils/fetchTorrents', () => ({
@@ -1176,6 +1179,42 @@ describe('useTorrentManagement', () => {
 				added = await result.current.addCached('pm', 'hash-9', { silent: true });
 			});
 			expect(added).toBe(false);
+		});
+
+		// The season-pack adder could not run on Debrid-Link: it had no cached-only add for it.
+		it('adds to Debrid-Link only what Debrid-Link holds whole', async () => {
+			mockHandleAddCachedInDl.mockImplementation(
+				async (_key: string, hash: string, cb: any) => {
+					await cb(finishedRow('dl', hash), {
+						id: '42',
+						status: 100,
+						downloadPercent: 100,
+					});
+					return 'added';
+				}
+			);
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('dl', 'hash-dl', { silent: true });
+			});
+			expect(added).toBe(true);
+			expect(mockHandleAddCachedInDl).toHaveBeenCalledWith(
+				'dl-key',
+				'hash-dl',
+				expect.any(Function)
+			);
+			expect(mockDb.add).toHaveBeenCalledWith(expect.objectContaining({ id: 'dl:42' }));
+			expect(result.current.hashAndProgress['dl:hash-dl']).toBe(100);
+
+			for (const outcome of ['not_cached', 'partial']) {
+				mockHandleAddCachedInDl.mockResolvedValueOnce(outcome);
+				await act(async () => {
+					added = await result.current.addCached('dl', 'hash-other', { silent: true });
+				});
+				expect(added).toBe(false);
+			}
 		});
 
 		it('keeps an AllDebrid magnet only when AD serves it at once', async () => {

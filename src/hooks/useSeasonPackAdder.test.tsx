@@ -705,6 +705,31 @@ describe('useSeasonPackAdder', () => {
 		expect(addCached.mock.calls[0][2].row.adAvailable).toBe(true);
 	});
 
+	// Debrid-Link had no season run at all: the adder hard-coded it as not cached.
+	it('adds only what DMM has recorded on Debrid-Link', async () => {
+		respondWith({
+			packs: {
+				1: [{ ...candidate(hash('a'), 'The.Wire.S01.1080p', 10), dlAvailable: true }],
+				2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
+				3: [],
+			},
+			episodes: { 2: {}, 3: {} },
+		});
+		const { result } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('dl');
+		});
+		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'gap', 'gap']);
+
+		await act(async () => {
+			await result.current.run(plan!);
+		});
+		expect(addCached.mock.calls.map((c) => [c[0], c[1]])).toEqual([['dl', hash('a')]]);
+		expect(addCached.mock.calls[0][2].row.dlAvailable).toBe(true);
+	});
+
 	it.each([
 		['pm', () => mockCheckPremiumizeCache],
 		['oc', () => mockCheckOffcloudCache],

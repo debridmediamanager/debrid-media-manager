@@ -23,10 +23,10 @@ import axios from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AddRdOptions, CachedAddService } from './useTorrentManagement';
 
-/** Every service with a cache signal. Debrid-Link has none, so it cannot promise "cached only". */
+/** Every service with a cache signal: RD, AD and DL from DMM's tables, TB/PM/OC probed. */
 export type SeasonAdderService = CachedAddService;
 
-/** The per-user keys a cache probe needs. RD and AD are answered from DMM's own tables. */
+/** The per-user keys a cache probe needs. RD, AD and DL are answered from DMM's own tables. */
 export type SeasonAdderKeys = {
 	tb?: string | null;
 	pm?: string | null;
@@ -71,6 +71,7 @@ type ApiCandidate = {
 	sizeMb: number;
 	rdAvailable: boolean;
 	adAvailable?: boolean;
+	dlAvailable?: boolean;
 	videoCount?: number;
 	files?: FileData[];
 	seasons?: number[];
@@ -106,7 +107,7 @@ const asSearchResult = (candidate: ApiCandidate, service: SeasonAdderService): S
 	tbAvailable: service === 'tb',
 	pmAvailable: service === 'pm',
 	ocAvailable: service === 'oc',
-	dlAvailable: false,
+	dlAvailable: service === 'dl',
 	files: candidate.files ?? [],
 	rdFiles: service === 'rd' ? candidate.files : undefined,
 	tbFiles: service === 'tb' ? candidate.files : undefined,
@@ -238,6 +239,7 @@ export function useSeasonPackAdder({
 
 			if (service === 'rd') return narrow((c) => (c.rdAvailable ? c : null));
 			if (service === 'ad') return narrow((c) => (c.adAvailable ? c : null));
+			if (service === 'dl') return narrow((c) => (c.dlAvailable ? c : null));
 
 			const key = keys[service];
 			if (!key) return [];

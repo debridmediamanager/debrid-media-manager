@@ -15,6 +15,7 @@ import {
 	addSeedboxTorrent,
 	addSeedboxTorrentFile,
 	DebridLinkError,
+	deleteSeedboxTorrents,
 	isDlFinished,
 	type DebridLinkTorrent,
 } from '@/services/debridLink';
@@ -1407,6 +1408,37 @@ export const handleAddAsMagnetInDl = async (
 		}
 		throw error;
 	}
+};
+
+/**
+ * Adds a hash to Debrid-Link only if Debrid-Link already holds it whole: the "cached only" add
+ * the season-pack adder runs. The bare hash is what makes it so - Debrid-Link refuses one it
+ * does not hold (`notAddTorrent`, at no cost) - and an admission short of whole (seen at 27%
+ * and 97%) is taken back, since it is not something the viewer can play now.
+ */
+export const handleAddCachedInDl = async (
+	dlKey: string,
+	hash: string,
+	callback?: (torrent: UserTorrent, raw: DebridLinkTorrent) => Promise<void>
+): Promise<'added' | 'not_cached' | 'partial'> => {
+	const bare = (extractTorrentInputs(hash)[0]?.hash ?? hash).toLowerCase();
+	let torrent: DebridLinkTorrent;
+	try {
+		torrent = await addSeedboxTorrent(dlKey, bare);
+	} catch (error) {
+		if (error instanceof DebridLinkError && error.code === 'notAddTorrent') return 'not_cached';
+		throw error;
+	}
+	if (!(isDlFinished(torrent.status) || torrent.downloadPercent >= 100)) {
+		try {
+			await deleteSeedboxTorrents(dlKey, [torrent.id]);
+		} catch {
+			// left in the account; the viewer sees it in their library
+		}
+		return 'partial';
+	}
+	if (callback) await callback(convertToDlUserTorrent(torrent, bare), torrent);
+	return 'added';
 };
 
 /**

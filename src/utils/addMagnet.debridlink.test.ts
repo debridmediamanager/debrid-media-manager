@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const dl = vi.hoisted(() => ({
 	addSeedboxTorrent: vi.fn(),
 	addSeedboxTorrentFile: vi.fn(),
+	deleteSeedboxTorrents: vi.fn(),
 	isDlFinished: (status: number) => status >= 100,
 	// `convertToDlUserTorrent` now lives in `fetchTorrents` and reads the real
 	// status mapping, which needs the enum and the pager binding to exist.
@@ -71,7 +72,12 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import { handleAddAsMagnetInDl, handleAddMultipleHashesInDl } from './addMagnet';
+import verity from '@/test/fixtures/debridlink/seedbox-add-verity-2026-11-04.json';
+import {
+	handleAddAsMagnetInDl,
+	handleAddCachedInDl,
+	handleAddMultipleHashesInDl,
+} from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 const HASH2 = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1D';
@@ -307,5 +313,58 @@ describe('handleAddMultipleHashesInDl', () => {
 			'Added 2 hashes to Debrid-Link.',
 			expect.any(Object)
 		);
+	});
+});
+
+// The season-pack adder's "cached only" add on Debrid-Link: the bare-hash add, which takes only
+// what Debrid-Link already holds. Driven by the recorded Verity adds (2026-11-04).
+describe('handleAddCachedInDl', () => {
+	const recorded = (pick: (a: (typeof verity.adds)[number]) => boolean) =>
+		verity.adds.find(pick)!;
+	const whole = recorded(
+		(a) => a.status === 200 && (a.body as any).value.downloadPercent === 100
+	);
+	const partial = recorded(
+		(a) => a.status === 200 && (a.body as any).value.downloadPercent < 100
+	);
+	const miss = recorded((a) => a.status !== 200);
+
+	beforeEach(() => {
+		dl.addSeedboxTorrent.mockReset();
+		dl.deleteSeedboxTorrents.mockReset();
+	});
+
+	it('adds a cached release by its bare hash and hands it on', async () => {
+		dl.addSeedboxTorrent.mockResolvedValue((whole.body as any).value);
+		const got: unknown[] = [];
+		const outcome = await handleAddCachedInDl(
+			'dl-key',
+			whole.hash.toUpperCase(),
+			async (row, raw) => {
+				got.push(row.id, raw.id);
+			}
+		);
+		expect(outcome).toBe('added');
+		expect(dl.addSeedboxTorrent).toHaveBeenCalledWith('dl-key', whole.hash);
+		expect(got).toEqual([`dl:${(whole.body as any).value.id}`, (whole.body as any).value.id]);
+	});
+
+	it('answers not cached for a refused bare hash, at no cost', async () => {
+		dl.addSeedboxTorrent.mockRejectedValue(
+			new FakeDebridLinkError((miss.body as any).error_description, 'notAddTorrent')
+		);
+		const callback = vi.fn();
+		expect(await handleAddCachedInDl('dl-key', miss.hash, callback)).toBe('not_cached');
+		expect(callback).not.toHaveBeenCalled();
+	});
+
+	it('takes back an add Debrid-Link only admitted part of', async () => {
+		dl.addSeedboxTorrent.mockResolvedValue((partial.body as any).value);
+		const callback = vi.fn();
+		expect(await handleAddCachedInDl('dl-key', partial.hash, callback)).toBe('partial');
+		expect(dl.deleteSeedboxTorrents).toHaveBeenCalledWith('dl-key', [
+			(partial.body as any).value.id,
+		]);
+		expect(callback).not.toHaveBeenCalled();
 	});
 });

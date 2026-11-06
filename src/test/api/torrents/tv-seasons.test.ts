@@ -8,6 +8,7 @@ const {
 	mockGetReportedHashes,
 	mockCheckAvailability,
 	mockCheckAvailabilityAd,
+	mockCheckAvailabilityDl,
 	mockCheckCanary,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
@@ -15,6 +16,7 @@ const {
 	mockGetReportedHashes: vi.fn(),
 	mockCheckAvailability: vi.fn(),
 	mockCheckAvailabilityAd: vi.fn(),
+	mockCheckAvailabilityDl: vi.fn(),
 	mockCheckCanary: vi.fn(),
 }));
 
@@ -28,6 +30,7 @@ vi.mock('@/services/repository', () => ({
 		getReportedHashes: mockGetReportedHashes,
 		checkAvailability: mockCheckAvailability,
 		checkAvailabilityAd: mockCheckAvailabilityAd,
+		checkAvailabilityDl: mockCheckAvailabilityDl,
 	},
 }));
 
@@ -66,6 +69,7 @@ describe('/api/torrents/tv-seasons', () => {
 		mockGetReportedHashes.mockResolvedValue([]);
 		mockCheckAvailability.mockResolvedValue([]);
 		mockCheckAvailabilityAd.mockResolvedValue([]);
+		mockCheckAvailabilityDl.mockResolvedValue([]);
 		mockGetAllScrapedTrueResults.mockResolvedValue([]);
 	});
 
@@ -197,6 +201,29 @@ describe('/api/torrents/tv-seasons', () => {
 		expect(pack.rdAvailable).toBe(false);
 		expect(pack.adAvailable).toBe(false);
 		expect(pack.videoCount).toBeUndefined();
+	});
+
+	// The season-pack adder hard-coded Debrid-Link as not cached, though DMM records its packs.
+	it('marks what DMM has recorded on Debrid-Link, so a Debrid-Link run has candidates', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			row(PACK, 'The.Wire.S03.1080p.BluRay.x264-GROUP'),
+		]);
+		mockCheckAvailabilityDl.mockResolvedValue([
+			{
+				hash: PACK,
+				files: [
+					{ file_id: 0, path: 'The.Wire.S03E01.mkv', bytes: 1 },
+					{ file_id: 1, path: 'The.Wire.S03E02.mkv', bytes: 1 },
+				],
+			},
+		]);
+
+		const res = await call(baseQuery);
+		const [held] = (res._getData() as any).seasons[0].packs;
+		expect(held.dlAvailable).toBe(true);
+		expect(held.rdAvailable).toBe(false);
+		expect(held.videoCount).toBe(2);
+		expect(mockCheckAvailabilityDl).toHaveBeenCalledWith([PACK], 'tt0306414');
 	});
 
 	it('marks what AllDebrid holds, so an AllDebrid run has candidates', async () => {

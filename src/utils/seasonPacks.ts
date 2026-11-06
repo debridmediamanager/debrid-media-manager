@@ -188,7 +188,7 @@ export function getSeasonCoverage(
 	}: {
 		season: number;
 		showTitle: string;
-		servicePrefix: 'rd' | 'ad' | 'tb' | 'pm' | 'oc';
+		servicePrefix: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
 		knownHashes?: Set<string>;
 	}
 ): SeasonCoverage {

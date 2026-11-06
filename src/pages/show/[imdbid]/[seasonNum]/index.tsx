@@ -126,14 +126,20 @@ import toast, { Toaster } from 'react-hot-toast';
 
 /**
  * The services the Instant buttons can promise "cached only" on, and how each
- * one's buttons are drawn. Debrid-Link has no cache signal, so it has none.
+ * one's buttons are drawn. Debrid-Link's is its bare-hash add, which takes only what it holds.
  * Class names are written out whole: the build cannot see an assembled one.
  */
 const INSTANT_SERVICES: {
 	service: SeasonAdderService;
 	short: string;
 	label: string;
-	available: 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable';
+	available:
+		| 'rdAvailable'
+		| 'adAvailable'
+		| 'tbAvailable'
+		| 'pmAvailable'
+		| 'ocAvailable'
+		| 'dlAvailable';
 	button: string;
 	icon: string;
 	/** The provider picker, in the service's identity colour (AGENTS.md). */
@@ -189,6 +195,16 @@ const INSTANT_SERVICES: {
 		icon: 'text-teal-300',
 		picked: 'border-[#f97316] bg-[#f97316] text-black',
 		unpicked: 'border-[#f97316] bg-gray-900/80 text-[#f97316] hover:bg-[#f97316]/20',
+	},
+	{
+		service: 'dl',
+		short: 'DL',
+		label: 'Debrid-Link',
+		available: 'dlAvailable',
+		button: 'border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50',
+		icon: 'text-sky-300',
+		picked: 'border-[#38bdf8] bg-[#38bdf8] text-black',
+		unpicked: 'border-[#38bdf8] bg-gray-900/80 text-[#38bdf8] hover:bg-[#38bdf8]/20',
 	},
 ];
 
@@ -677,6 +693,7 @@ const TvSearch: FunctionComponent = () => {
 				tb: torboxKey,
 				pm: premiumizeKey,
 				oc: offcloudKey,
+				dl: debridLinkKey,
 			})[service]
 	);
 	// With several services the header shows one button per action and a picker
