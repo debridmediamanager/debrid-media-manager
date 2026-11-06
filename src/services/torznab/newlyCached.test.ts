@@ -7,16 +7,22 @@ const redis = vi.hoisted(() => ({
 	values: new Map<string, { value: string; expiresAt: number }>(),
 	down: false,
 	clients: 0,
+	/** Every client's `error` handlers, in the order the clients were made. */
+	errorHandlers: [] as Array<Array<() => void>>,
 }));
 
 vi.mock('ioredis', () => ({
 	default: class {
 		/** A client that has failed once stays closed, as one built not to reconnect does. */
 		private closed = false;
+		private handlers: Array<() => void> = [];
 		constructor() {
 			redis.clients++;
+			redis.errorHandlers.push(this.handlers);
 		}
-		on() {}
+		on(event: string, handler: () => void) {
+			if (event === 'error') this.handlers.push(handler);
+		}
 		disconnect() {
 			this.closed = true;
 		}
@@ -88,6 +94,7 @@ beforeEach(() => {
 	redis.values.clear();
 	redis.down = false;
 	redis.clients = 0;
+	redis.errorHandlers = [];
 	vi.useFakeTimers({ toFake: ['Date'] });
 	vi.setSystemTime(new Date('2026-11-06T12:00:00Z'));
 });
@@ -148,6 +155,24 @@ describe('NewlyCachedStore', () => {
 
 		vi.setSystemTime(Date.now() + 1);
 		await store.writeLists(LISTS);
+		expect(redis.values.has(LISTS_KEY)).toBe(true);
+		expect(redis.clients).toBe(2);
+	});
+
+	it('keeps a new client when the one it replaced reports an error late', async () => {
+		const store = new NewlyCachedStore('redis://x');
+		redis.down = true;
+		await store.claimBuild();
+		redis.down = false;
+		vi.setSystemTime(Date.now() + REDIS_RETRY_MS);
+		await store.writeLists(LISTS);
+		expect(redis.clients).toBe(2);
+
+		// The dropped client's socket closes now and says so.
+		for (const handler of redis.errorHandlers[0]) handler();
+		redis.values.clear();
+		await store.writeLists(LISTS);
+
 		expect(redis.values.has(LISTS_KEY)).toBe(true);
 		expect(redis.clients).toBe(2);
 	});

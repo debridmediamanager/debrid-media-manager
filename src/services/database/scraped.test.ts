@@ -511,8 +511,7 @@ describe('ScrapedService', () => {
 					updatedAt,
 					position: BigInt(3),
 					hash: 'abcd',
-					title: 'Show.S02',
-					fileSize: 12.5,
+					entry: { hash: 'ABCD', title: 'Show.S02', fileSize: '12.5' },
 				},
 			]);
 
@@ -527,8 +526,8 @@ describe('ScrapedService', () => {
 					updatedAt,
 					position: 3,
 					hash: 'abcd',
-					title: 'Show.S02',
-					fileSize: 12.5,
+					// As stored: the reader a search uses decides what it holds.
+					result: { hash: 'ABCD', title: 'Show.S02', fileSize: '12.5' },
 				},
 			]);
 

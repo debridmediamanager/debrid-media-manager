@@ -45,11 +45,15 @@ const plausibleFileSize = () =>
 const cyrillicLedDropped = () => Prisma.sql`AND jt.title NOT REGEXP '^[А-Яа-яЁё]'`;
 
 /** One release on a library page, where it is; see `getScrapedTrueEntriesHolding`. */
-export interface ScrapedTrueEntry extends ScrapeSearchResult {
+export interface ScrapedTrueEntry {
 	key: string;
 	updatedAt: Date;
 	/** 1-based, in page order. */
 	position: number;
+	/** The entry's hash in lower case, which is what it was found by. */
+	hash: string;
+	/** The entry exactly as the page stores it, for the reader a search uses. */
+	result: ScrapeSearchResult;
 }
 
 export type ScrapedTrueReadOptions = {
@@ -238,14 +242,19 @@ export class ScrapedService extends DatabaseClient {
 
 	/**
 	 * The library entries of these hashes on their own title's pages, for the
-	 * Torznab RSS sync: each entry as stored, with its page, the page's
-	 * `updatedAt` and its position there, most recently refreshed page first and
-	 * page order within it. Only the wanted entries leave the database, so a
-	 * hash is found without transferring the pages that hold it.
+	 * Torznab RSS sync: each entry as the page stores it, with its page, the
+	 * page's `updatedAt` and its position there, most recently refreshed page
+	 * first and page order within it. Only the wanted entries leave the
+	 * database, so a hash is found without transferring the pages that hold it.
+	 *
+	 * The database only finds them. Each entry comes back as the stored JSON
+	 * object, unconverted, so the reader a search uses decides what it is: a
+	 * column type here would read a hash, a title or a size differently from
+	 * the way a search serves the same page.
 	 *
 	 * A constant-prefix `LIKE` rather than a key range: `key` collates
 	 * `utf8mb4_unicode_ci`, where `;` sorts before `:`, so `>= 'tv:tt1:' AND
-	 * < 'tv:tt1;'` matches nothing. Hashes are compared in lower case because
+	 * < 'tv:tt1;'` matches nothing. Hashes are matched in lower case because
 	 * pages and cache rows disagree on case. A hash wanted for one title can
 	 * come back from another title's page asked about in the same call; the
 	 * caller matches page and title. Capped at 15 s: the table is large, and a
@@ -269,18 +278,16 @@ export class ScrapedService extends DatabaseClient {
 				updatedAt: Date;
 				position: number | bigint;
 				hash: string;
-				title: string | null;
-				fileSize: number | null;
+				entry: unknown;
 			}>
 		>(Prisma.sql`
 			SELECT /*+ MAX_EXECUTION_TIME(15000) */
-				s.key AS pageKey, s.updatedAt, jt.position, LOWER(jt.hash) AS hash, jt.title, jt.fileSize
+				s.key AS pageKey, s.updatedAt, jt.position, LOWER(jt.hash) AS hash, jt.entry
 			FROM ScrapedTrue s
 			JOIN JSON_TABLE(s.value, '$[*]' COLUMNS (
 				position FOR ORDINALITY,
 				hash VARCHAR(255) PATH '$.hash',
-				title VARCHAR(2048) PATH '$.title',
-				fileSize DOUBLE PATH '$.fileSize'
+				entry JSON PATH '$'
 			)) AS jt
 			WHERE (${keys}) AND LOWER(jt.hash) IN (${hashes})
 			ORDER BY s.updatedAt DESC, s.key, jt.position`);
@@ -289,8 +296,11 @@ export class ScrapedService extends DatabaseClient {
 			updatedAt: row.updatedAt,
 			position: Number(row.position),
 			hash: row.hash,
-			title: row.title ?? '',
-			fileSize: row.fileSize ?? 0,
+			// The driver hands a JSON column back parsed; a string is parsed here
+			// so either way the caller gets the stored object.
+			result: (typeof row.entry === 'string'
+				? JSON.parse(row.entry)
+				: row.entry) as ScrapeSearchResult,
 		}));
 	}
 

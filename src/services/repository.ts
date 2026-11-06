@@ -861,11 +861,11 @@ export class Repository {
 
 	/** Through the same takedown and executable filters as every other library read. */
 	public async getScrapedTrueEntriesHolding(wanted: Array<{ imdbId: string; hash: string }>) {
-		return this.withoutExecutables(
-			await withoutBlockedHashes(
-				await this.scrapedService.getScrapedTrueEntriesHolding(wanted)
-			)
+		const entries = await withoutBlockedHashes(
+			await this.scrapedService.getScrapedTrueEntriesHolding(wanted)
 		);
+		const kept = new Set(await this.withoutExecutables(entries.map((entry) => entry.result)));
+		return entries.filter((entry) => kept.has(entry.result));
 	}
 
 	public async getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {

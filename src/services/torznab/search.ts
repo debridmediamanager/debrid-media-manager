@@ -477,13 +477,17 @@ function entriesFor(row: NewlyCachedRow, entries: ScrapedTrueEntry[]): ScrapedTr
 /**
  * What each cache row's hash is in the library, judged as a targeted search
  * judges it but over the wanted entries only: takedown, executable-only,
- * judged trash, entity decoding and the usable-hash rule, Cyrillic-led, the
- * size guard and reports. A hash on no page of its title, or filtered off it,
- * is null. Where a page holds the hash twice, the first entry wins, as it does
- * in `flattenAndRemoveDuplicates`.
+ * judged trash, then `toReleases` (entity decoding, the usable-hash rule,
+ * Cyrillic-led, the size guard) and reports. The entries are the page's own
+ * objects, so the same reader decides what they hold. A hash on no page of its
+ * title, or filtered off it, is null. Where a page holds the hash twice, the
+ * first entry wins, as it does in `flattenAndRemoveDuplicates`.
  *
- * Both answers are remembered, and only a bounded slice of the unknown, newest
- * first, is looked up per build.
+ * Both answers are remembered, chunk by chunk, and only a bounded slice of the
+ * unknown, newest first, is looked up per build. A chunk that fails (its query
+ * capped at 15 s, say) leaves its rows unknown for a later build rather than
+ * failing the build, which would otherwise retry the same newest rows first
+ * and fail the same way until they aged out.
  */
 async function resolveCacheRows(
 	rows: NewlyCachedRow[]
@@ -491,52 +495,74 @@ async function resolveCacheRows(
 	const unique = new Map<string, NewlyCachedRow>();
 	for (const row of rows) if (!unique.has(resolvedKey(row))) unique.set(resolvedKey(row), row);
 
-	const known = await newlyCachedStore().readResolved([...unique.keys()]);
+	const store = newlyCachedStore();
+	const resolved = await store.readResolved([...unique.keys()]);
 	const wanted = [...unique.values()]
-		.filter((row) => !known.has(resolvedKey(row)))
+		.filter((row) => !resolved.has(resolvedKey(row)))
 		.slice(0, NEWLY_CACHED_RESOLVE_LIMIT);
 
-	const learned = new Map<string, ResolvedRelease | null>();
+	const failures: unknown[] = [];
 	for (let start = 0; start < wanted.length; start += RESOLVE_CHUNK) {
 		const chunk = wanted.slice(start, start + RESOLVE_CHUNK);
-		const entries = await db.getScrapedTrueEntriesHolding(chunk);
-
-		const byPage = new Map<string, ScrapedTrueEntry[]>();
-		for (const row of chunk) {
-			const chosen = entriesFor(row, entries);
-			if (chosen.length > 0)
-				byPage.set(chosen[0].key, [...(byPage.get(chosen[0].key) ?? []), ...chosen]);
+		let learned: Map<string, ResolvedRelease | null>;
+		try {
+			learned = await resolveChunk(chunk);
+		} catch (error) {
+			failures.push(error);
+			continue;
 		}
+		await store.writeResolved(learned);
+		for (const [key, release] of learned) resolved.set(key, release);
+	}
+	if (failures.length > 0) {
+		const [first] = failures;
+		console.error(
+			`Torznab: ${failures.length} newly cached lookup chunk(s) failed, left for a later build:`,
+			first instanceof Error ? first.message : first
+		);
+	}
+	return resolved;
+}
 
-		const found = new Map<string, LibraryRelease>();
-		for (const [key, onPage] of byPage) {
-			const target = targetFromKey(key);
-			if (!target) continue;
-			onPage.sort((a, b) => a.position - b.position);
-			const kept = await withoutJudgedTrash(target, onPage);
-			const releases = toReleases(kept, target.kind, onPage[0].updatedAt);
-			for (const release of await withoutReported(target.imdbId, releases)) {
-				found.set(`${target.imdbId}:${release.hash}`, release);
-			}
-		}
+async function resolveChunk(chunk: NewlyCachedRow[]): Promise<Map<string, ResolvedRelease | null>> {
+	const entries = await db.getScrapedTrueEntriesHolding(chunk);
 
-		for (const row of chunk) {
-			const release = found.get(resolvedKey(row));
-			learned.set(
-				resolvedKey(row),
-				release
-					? {
-							hash: release.hash,
-							title: release.title,
-							size: release.size,
-							categories: release.categories,
-						}
-					: null
-			);
+	const byPage = new Map<string, ScrapedTrueEntry[]>();
+	for (const row of chunk) {
+		const chosen = entriesFor(row, entries);
+		if (chosen.length > 0)
+			byPage.set(chosen[0].key, [...(byPage.get(chosen[0].key) ?? []), ...chosen]);
+	}
+
+	const found = new Map<string, LibraryRelease>();
+	for (const [key, onPage] of byPage) {
+		const target = targetFromKey(key);
+		if (!target) continue;
+		onPage.sort((a, b) => a.position - b.position);
+		const results = onPage.map((entry) => entry.result);
+		const kept = await withoutJudgedTrash(target, results);
+		const releases = toReleases(kept, target.kind, onPage[0].updatedAt);
+		for (const release of await withoutReported(target.imdbId, releases)) {
+			found.set(`${target.imdbId}:${release.hash.toLowerCase()}`, release);
 		}
 	}
-	await newlyCachedStore().writeResolved(learned);
-	return new Map([...known, ...learned]);
+
+	const learned = new Map<string, ResolvedRelease | null>();
+	for (const row of chunk) {
+		const release = found.get(resolvedKey(row));
+		learned.set(
+			resolvedKey(row),
+			release
+				? {
+						hash: release.hash,
+						title: release.title,
+						size: release.size,
+						categories: release.categories,
+					}
+				: null
+		);
+	}
+	return learned;
 }
 
 /**

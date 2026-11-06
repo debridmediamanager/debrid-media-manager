@@ -112,15 +112,19 @@ export class NewlyCachedStore {
 		if (this.redis) return this.redis;
 		if (!this.redisUrl || Date.now() < this.retryAt) return null;
 		try {
-			this.redis = new Redis(this.redisUrl, {
+			const client = new Redis(this.redisUrl, {
 				maxRetriesPerRequest: 1,
 				retryStrategy: () => null,
 				connectTimeout: 2000,
 				commandTimeout: 1000,
 				lazyConnect: true,
 			});
-			this.redis.on('error', () => this.fail());
-			return this.redis;
+			// A late error from a client already dropped must not drop its successor.
+			client.on('error', () => {
+				if (this.redis === client) this.fail();
+			});
+			this.redis = client;
+			return client;
 		} catch {
 			this.fail();
 			return null;

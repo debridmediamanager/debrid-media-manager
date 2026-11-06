@@ -1,6 +1,7 @@
 import handler from '@/pages/api/torznab/[...route]';
 import type { NewlyCachedRow, RdCachedNames } from '@/services/database/availability';
 import { pairKeyOf } from '@/services/database/scrapedVerdict';
+import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import writtenBack from '@/services/scrapedVerdicts/__fixtures__/written-back-trash.json';
@@ -244,10 +245,10 @@ beforeEach(() => {
 			.slice(0, limit)
 	);
 	// What the JSON_TABLE query answers (scraped.integration.test.ts runs it on
-	// MySQL): every entry, in lower case, on a page of any title asked about
-	// whose hash any row asked about, most recently refreshed page first and
-	// page order within it. As in SQL, a hash wanted for one title comes back
-	// from another title's page in the same call.
+	// MySQL): every entry, as stored, on a page of any title asked about whose
+	// hash in lower case any row asked about, most recently refreshed page first
+	// and page order within it. As in SQL, a hash wanted for one title comes
+	// back from another title's page in the same call.
 	mockRepo.getScrapedTrueEntriesHolding = vi.fn(
 		async (wanted: Array<{ imdbId: string; hash: string }>) => {
 			const hashes = new Set(wanted.map((w) => w.hash.toLowerCase()));
@@ -259,14 +260,13 @@ beforeEach(() => {
 				)
 				.sort(([, a], [, b]) => b.updatedAt.getTime() - a.updatedAt.getTime())
 				.flatMap(([key, page]) =>
-					(page.results as Array<{ hash: string; title: string; fileSize: number }>)
-						.map((r, index) => ({
+					(page.results as ScrapeSearchResult[])
+						.map((result, index) => ({
 							key,
 							updatedAt: page.updatedAt,
 							position: index + 1,
-							hash: r.hash.toLowerCase(),
-							title: r.title,
-							fileSize: r.fileSize,
+							hash: result.hash.toLowerCase(),
+							result,
 						}))
 						.filter((entry) => hashes.has(entry.hash))
 				);
@@ -1243,21 +1243,76 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			]);
 		});
 
-		it('takes the first entry of a hash a page holds twice, decoded', async () => {
+		it('lists what a search of the same page serves, when the page holds the hash more than once', async () => {
 			const [row] = siloRows(0, 1, NOW);
 			library.set(SILO.key, {
 				results: [
 					release('', 1, row.hash),
-					release('Silo &amp; Co.S03.1080p', 1_000, row.hash.toUpperCase()),
-					release('Silo.S03.second', 2_000, row.hash),
+					// A search never serves an upper-case hash.
+					release('Silo.S03.upper', 1_000, row.hash.toUpperCase()),
+					release('Silo &amp; Co.S03.1080p', 2_000, row.hash),
+					release('Silo.S03.later', 3_000, row.hash),
 				],
 				updatedAt: new Date(SILO.updatedAt),
 			});
-			cacheRows.rd = [row];
+			cacheRows.ad = [row];
 
-			const { rd } = await build();
+			const { ad } = await build();
+			const searched = items(
+				await sync({ t: 'tvsearch', imdbid: SILO_ID, season: '3', limit: '100' }, ['api'])
+			);
 
-			expect(rd.map((release) => release.title)).toEqual(['Silo & Co.S03.1080p']);
+			expect(ad.map((release) => [release.hash, release.title])).toEqual([
+				[row.hash, 'Silo & Co.S03.1080p'],
+			]);
+			expect(searched.map((item) => item.hash)).toEqual([row.hash]);
+			// The same title, as the feed's XML escapes it.
+			expect(
+				titles(await sync({ t: 'tvsearch', imdbid: SILO_ID, season: '3' }, ['api']))
+			).toEqual(['Silo &amp; Co.S03.1080p']);
+		});
+
+		it('leaves a hash whose only entry is upper case off the list, as a search does', async () => {
+			const [row] = siloRows(0, 1, NOW);
+			library.set(SILO.key, {
+				results: [release('Silo.S03.upper', 1_000, row.hash.toUpperCase())],
+				updatedAt: new Date(SILO.updatedAt),
+			});
+			cacheRows.ad = [row];
+
+			expect((await build()).ad).toEqual([]);
+			expect(
+				items(await sync({ t: 'tvsearch', imdbid: SILO_ID, season: '3' }, ['api']))
+			).toEqual([]);
+		});
+
+		it('keeps every other chunk when one fails, and remembers what those found', async () => {
+			// Three chunks: 40 Silo releases and 10 strays, 50 Silo releases, and 50 more.
+			cacheRows.ad = [...siloRows(0, 140, NOW - 10 * MINUTE), ...strayRows(10, NOW)];
+			const query = mockRepo.getScrapedTrueEntriesHolding;
+			let calls = 0;
+			mockRepo.getScrapedTrueEntriesHolding = vi.fn(
+				async (wanted: Array<{ imdbId: string; hash: string }>) => {
+					if (++calls === 2) throw new Error('Query execution was interrupted');
+					return query(wanted);
+				}
+			);
+			vi.spyOn(console, 'error').mockImplementation(() => {});
+
+			const chunks = newestFirst(cacheRows.ad).map((row) => row.hash);
+			const [first, second, third] = [0, 1, 2].map((n) => chunks.slice(n * 50, n * 50 + 50));
+			const listed = (await build()).ad.map((release) => release.hash);
+
+			expect(listed).toEqual([...first.slice(10), ...third]);
+			expect(console.error).toHaveBeenCalledTimes(1);
+
+			const asked = vi.mocked(mockRepo.getScrapedTrueEntriesHolding);
+			asked.mockClear();
+			await build(NOW + BUILD_INTERVAL);
+			// Only the failed chunk is asked again; the first chunk's strays are remembered.
+			expect(asked.mock.calls.flatMap(([wanted]) => wanted.map((w) => w.hash))).toEqual(
+				second
+			);
 		});
 
 		it('leaves out of the RD list what RD refuses by name', async () => {
@@ -1515,14 +1570,28 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 				}
 			);
 
-			const res = await sync({ t: 'search' });
+			// Raced against a short timer, so a request that waits on the build fails
+			// here by name rather than hanging the suite.
+			let res: MockResponse;
+			try {
+				res = await Promise.race([
+					sync({ t: 'search' }),
+					new Promise<never>((_, reject) =>
+						setTimeout(
+							() => reject(new Error('the request waited on the build')),
+							2_000
+						)
+					),
+				]);
+			} finally {
+				release();
+			}
 
-			// The build is still waiting on its query, and this request answered
+			// The build was still waiting on its query, and this request answered
 			// as before the list existed.
 			expect(mockRepo.getNewlyCached).toHaveBeenCalled();
 			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalled();
 			expect(body(res)).not.toContain(`<guid isPermaLink="false">${SILO_SERVED[0].hash}<`);
-			release();
 			await newlyCachedBuildSettled();
 			expect(items(await sync({ t: 'search', limit: '100' }))).toHaveLength(5);
 		});

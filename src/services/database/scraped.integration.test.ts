@@ -32,7 +32,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import type { ScrapeSearchResult } from '../mediasearch';
+import { flattenAndRemoveDuplicates, type ScrapeSearchResult } from '../mediasearch';
 import { ScrapedService } from './scraped';
 
 let dockerAvailable = false;
@@ -336,59 +336,72 @@ describe.skipIf(!dockerAvailable)('Library page saves on MySQL 8.0.36 (Integrati
 
 	// The Torznab RSS sync asks for the entries of a cache row's hash on its own
 	// title's pages, on production pages: Silo season 3 and Dead of Winter (2025).
-	it('returns the wanted entries of their own title, in any case, where they are', async () => {
+	it('returns the wanted entries of their own title as stored, where they are', async () => {
 		const silo = sonarrEpisodeSearch.page;
 		const movie = rdRefusedNames.pages[0];
 		const onSilo = silo.results[0];
-		const upper = silo.results[1];
 		const onMovie = movie.results.find((r) => r.hash === rdRefusedNames.reported.hash)!;
 		await seed('ScrapedTrue', silo.key, silo.results, new Date(silo.updatedAt));
 		await seed('ScrapedTrue', movie.key, movie.results, new Date(movie.updatedAt));
-		// An older season page holding one of them twice, in upper case, after a
-		// release whose title is longer than any column a page read used to cut
-		// at; and a page of another title whose id starts with Silo's.
-		const long = { hash: 'e'.repeat(40), title: `Silo.${'x'.repeat(600)}`, fileSize: 1 };
-		await seed(
-			'ScrapedTrue',
-			'tv:tt14688458:2',
-			[
-				long,
-				{ ...upper, hash: upper.hash.toUpperCase(), title: 'Silo.S02.first' },
-				{ ...upper, title: 'Silo.S02.second' },
-			],
-			new Date('2025-01-01T00:00:00Z')
-		);
+		// An older season page, and a page of another title whose id starts with Silo's.
+		const upper = { hash: 'e'.repeat(40).toUpperCase(), title: 'Upper.S01', fileSize: 1 };
+		await seed('ScrapedTrue', 'tv:tt14688458:2', [upper], new Date('2025-01-01T00:00:00Z'));
 		await seed('ScrapedTrue', 'tv:tt146884580:1', silo.results.slice(0, 2), new Date());
 
 		const found = await service.getScrapedTrueEntriesHolding([
 			{ imdbId: 'tt14688458', hash: onSilo.hash.toUpperCase() },
-			{ imdbId: 'tt14688458', hash: upper.hash },
-			{ imdbId: 'tt14688458', hash: long.hash },
+			{ imdbId: 'tt14688458', hash: upper.hash.toLowerCase() },
 			{ imdbId: 'tt7574556', hash: onMovie.hash },
 			{ imdbId: 'tt7574556', hash: 'f'.repeat(40) },
 		]);
 
-		// Most recently refreshed page first, page order within it, lower case,
-		// nothing of tt146884580.
-		const entry = (
-			key: string,
-			position: number,
-			r: { hash: string; title: string; fileSize: number | null }
-		) => ({
-			key,
-			position,
-			hash: r.hash.toLowerCase(),
-			title: r.title,
-			fileSize: r.fileSize ?? 0,
-		});
+		// Most recently refreshed page first, page order within it, each entry
+		// as the page stores it, nothing of tt146884580.
 		expect(found.map(({ updatedAt: _updatedAt, ...rest }) => rest)).toEqual([
-			entry(movie.key, movie.results.indexOf(onMovie) + 1, onMovie),
-			entry(silo.key, 1, onSilo),
-			entry(silo.key, 2, upper),
-			entry('tv:tt14688458:2', 1, long),
-			entry('tv:tt14688458:2', 2, { ...upper, title: 'Silo.S02.first' }),
-			entry('tv:tt14688458:2', 3, { ...upper, title: 'Silo.S02.second' }),
+			{
+				key: movie.key,
+				position: movie.results.indexOf(onMovie) + 1,
+				hash: onMovie.hash,
+				result: onMovie,
+			},
+			{ key: silo.key, position: 1, hash: onSilo.hash, result: onSilo },
+			{ key: 'tv:tt14688458:2', position: 1, hash: 'e'.repeat(40), result: upper },
 		]);
 		expect(found[0].updatedAt).toEqual(new Date(movie.updatedAt));
+	});
+
+	// The list must hold what a search of the same page serves. Typed columns
+	// read these differently: an upper-case hash a search never serves, a
+	// numeric title it drops, a string size it reports as unknown, and a title
+	// longer than the column, which it serves whole.
+	it('reads each entry the way a search reads the same page', async () => {
+		const lower = 'e'.repeat(40);
+		const page = [
+			{ hash: lower.toUpperCase(), title: 'Upper.S01', fileSize: 1 },
+			{ hash: lower, title: 'Lower.S01', fileSize: 2 },
+			{ hash: 'a'.repeat(40).toUpperCase(), title: 'OnlyUpper.S01', fileSize: 3 },
+			{ hash: '2'.repeat(40), title: 12345, fileSize: 4 },
+			{ hash: '3'.repeat(40), title: 'StringSize.S01', fileSize: '2048' },
+			{ hash: '4'.repeat(40), title: `Long.S01.${'x'.repeat(2100)}`, fileSize: 5 },
+		];
+		await seed('ScrapedTrue', 'tv:tt1:1', page, new Date('2026-11-06T00:00:00Z'));
+		const wanted = ['e', 'a', '2', '3', '4'].map((c) => c.repeat(40));
+
+		const found = await service.getScrapedTrueEntriesHolding(
+			wanted.map((hash) => ({ imdbId: 'tt1', hash }))
+		);
+		const searched = flattenAndRemoveDuplicates([
+			(await service.getScrapedTrueRow('tv:tt1:1'))!.results,
+		]);
+
+		expect(flattenAndRemoveDuplicates([found.map((entry) => entry.result)])).toEqual(
+			searched.filter((r) => wanted.includes(r.hash.toLowerCase()))
+		);
+		expect(searched.map((r) => r.title)).toEqual([
+			'Lower.S01',
+			'StringSize.S01',
+			page[5].title,
+		]);
+		expect(found.find((e) => e.hash === '3'.repeat(40))!.result.fileSize).toBe('2048');
 	});
 });
