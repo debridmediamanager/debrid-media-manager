@@ -2,14 +2,11 @@
  * The debrid providers a sponsor can link a key for, and how that key is shown
  * back to them.
  *
- * Real-Debrid and AllDebrid are deliberately not here. Their availability is
- * answered from DMM's own `Available` and `AvailableAd` tables, so those feeds
- * need no credential from anyone and must not start asking for one.
- *
- * Debrid-Link is not here either, and not by omission: its API has no
- * non-mutating availability check at all. The only way to learn whether it holds
- * a hash is to add the hash, which spends the caller's quota and changes their
- * library. A feed that did that on every search would be a bill, not a filter.
+ * Real-Debrid, AllDebrid and Debrid-Link are deliberately not here. Their
+ * availability is answered from DMM's own `Available`, `AvailableAd` and
+ * `AvailableDl` tables, so those feeds need no credential from anyone and must not
+ * start asking for one. Debrid-Link in particular must never be probed per search:
+ * its only check is an add, which spends the caller's quota and changes their library.
  *
  * Kept free of any server import so the settings UI can render the list.
  */

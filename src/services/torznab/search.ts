@@ -81,7 +81,7 @@ export const UNCACHED_SEEDERS = 1;
  * is why they are named apart: everything that has to hold a credential, bound
  * a probe or fail loudly keys off this distinction.
  */
-export type TorznabCacheScope = 'any' | 'rd' | 'ad' | TorznabLiveService;
+export type TorznabCacheScope = 'any' | 'rd' | 'ad' | 'dl' | TorznabLiveService;
 
 export interface TorznabFeedOptions {
 	cache: TorznabCacheScope;
@@ -112,7 +112,7 @@ export const DEFAULT_FEED_OPTIONS: TorznabFeedOptions = { cache: 'any', cachedOn
 export function parseFeedOptions(segments: string[]): TorznabFeedOptions | null {
 	const options = { ...DEFAULT_FEED_OPTIONS };
 	for (const segment of segments) {
-		if (segment === 'rd' || segment === 'ad') options.cache = segment;
+		if (segment === 'rd' || segment === 'ad' || segment === 'dl') options.cache = segment;
 		else if (isTorznabLiveService(segment)) options.cache = segment;
 		else if (segment === 'cached') options.cachedOnly = true;
 		else return null;
@@ -544,6 +544,24 @@ async function cacheFromDb(
 }
 
 /**
+ * Debrid-Link's cache answer, from the releases DMM has recorded whole on it (`AvailableDl`).
+ * Debrid-Link's own check is an add, which mutates, so the feed never asks Debrid-Link and
+ * needs no key; like the RD and AD feeds it is exhaustive over what DMM knows.
+ */
+async function cacheFromDlRecord(releases: LibraryRelease[]): Promise<CacheAnswer> {
+	const hashes = releases.map((release) => release.hash);
+	const cached = new Set<string>();
+	for (let start = 0; start < hashes.length; start += CACHE_LOOKUP_CHUNK) {
+		for (const hash of await db.filterCachedHashesDl(
+			hashes.slice(start, start + CACHE_LOOKUP_CHUNK)
+		)) {
+			cached.add(hash);
+		}
+	}
+	return { cached, unresolved: 0, refusedByRd: new Set() };
+}
+
+/**
  * The cache answer for one search, from whichever source the feed names.
  *
  * The two paths are not interchangeable and are deliberately not merged. The
@@ -561,6 +579,7 @@ async function resolveCache(
 	if (scope === 'any' || scope === 'rd' || scope === 'ad') {
 		return cacheFromDb(releases, scope);
 	}
+	if (scope === 'dl') return cacheFromDlRecord(releases);
 
 	// A feed that names a provider is unusable without that provider's key, and
 	// silently falling back to the plain feed would answer a different question

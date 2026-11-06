@@ -78,13 +78,15 @@ const SEARCH_MODES = [
  * The URL's first optional segment: whose cache decides a release's seeder
  * count, and so what `/cached` would filter on.
  *
- * The last three have no table in DMM and no anonymous way to be asked, so each
- * needs that provider's own key linked before its feeds answer at all.
+ * RD, AD and Debrid-Link are read from DMM's own record of them. The last three have no
+ * table in DMM and no anonymous way to be asked, so each needs that provider's own key
+ * linked before its feeds answer at all.
  */
 const CACHE_SOURCES = [
 	{ segment: '', name: 'Real-Debrid or AllDebrid', note: 'the default — either one counts' },
 	{ segment: '/rd', name: 'Real-Debrid', note: '' },
 	{ segment: '/ad', name: 'AllDebrid', note: '' },
+	{ segment: '/dl', name: 'Debrid-Link', note: '' },
 	{ segment: '/tb', name: 'TorBox', note: 'needs your key linked' },
 	{ segment: '/pm', name: 'Premiumize', note: 'needs your key linked' },
 	{ segment: '/oc', name: 'Offcloud', note: 'needs your key linked' },
@@ -100,6 +102,7 @@ const FEED_EXAMPLES = [
 	{ suffix: '/rd', what: 'Everything, with only Real-Debrid deciding the ranking' },
 	{ suffix: '/rd/cached', what: 'Only what Real-Debrid already holds' },
 	{ suffix: '/ad/cached', what: 'Only what AllDebrid already holds' },
+	{ suffix: '/dl/cached', what: 'Only what Debrid-Link already holds' },
 	{ suffix: '/tb/cached', what: 'Only what TorBox already holds' },
 	{ suffix: '/pm/cached', what: 'Only what Premiumize already holds' },
 	{ suffix: '/oc/cached', what: 'Only what Offcloud already holds' },
@@ -248,14 +251,15 @@ function SetupGuide({
 				<div className="mt-4 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
 					<Zap className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
 					<span>
-						Real-Debrid and AllDebrid are answered from DMM&apos;s own library, so those
-						work the moment you paste the URL. TorBox, Premiumize and Offcloud have to
-						be asked directly, so each needs a key of yours — linked below rather than
-						put in this URL, which ends up in config files, forum posts and server logs.
-						Those three answer a few hundred releases per search and remember what they
-						learn, so a title with thousands fills in over the first few searches.
-						Debrid-Link is not offered: its API cannot be asked whether it holds
-						something without adding it, which would spend your quota on every search.
+						Real-Debrid, AllDebrid and Debrid-Link are answered from DMM&apos;s own
+						library, so those work the moment you paste the URL. TorBox, Premiumize and
+						Offcloud have to be asked directly, so each needs a key of yours — linked
+						below rather than put in this URL, which ends up in config files, forum
+						posts and server logs. Those three answer a few hundred releases per search
+						and remember what they learn, so a title with thousands fills in over the
+						first few searches. Debrid-Link is not offered: its API cannot be asked
+						whether it holds something without adding it, which would spend your quota
+						on every search.
 					</span>
 				</div>
 

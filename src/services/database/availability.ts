@@ -974,6 +974,16 @@ export class AvailabilityService extends DatabaseClient {
 		}));
 	}
 
+	/** Which of these hashes DMM has recorded whole on Debrid-Link, lower-cased (Torznab's `/dl`). */
+	public async filterCachedHashesDl(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.availableDl.findMany({
+			where: { hash: { in: hashes.map((hash) => hash.toLowerCase()) } },
+			select: { hash: true },
+		});
+		return new Set(rows.map((row) => row.hash.toLowerCase()));
+	}
+
 	/** The Debrid-Link counterpart of `filterPlayableCachedHashes`: recorded with a video file. */
 	public async filterPlayableCachedHashesDl(hashes: string[]): Promise<Set<string>> {
 		if (hashes.length === 0) return new Set();

@@ -177,6 +177,7 @@ describe('Torznab setup page, for a sponsor', () => {
 		expect(screen.getByTestId('feed-/cached')).toBeTruthy();
 		expect(screen.getByTestId('feed-/rd/cached')).toBeTruthy();
 		expect(screen.getByTestId('feed-/tb/cached')).toBeTruthy();
+		expect(screen.getByTestId('feed-/dl/cached')).toBeTruthy();
 	});
 
 	it('advertises the movie and TV categories', () => {
@@ -244,7 +245,7 @@ describe('Torznab setup page, the feed variants', () => {
 		asSponsor();
 		render(<TorznabSetupPage />);
 
-		for (const segment of ['any', '/rd', '/ad', '/tb', '/pm', '/oc']) {
+		for (const segment of ['any', '/rd', '/ad', '/dl', '/tb', '/pm', '/oc']) {
 			expect(screen.getByTestId(`source-${segment}`)).toBeTruthy();
 		}
 	});
@@ -258,7 +259,7 @@ describe('Torznab setup page, the feed variants', () => {
 				'needs your key linked'
 			);
 		}
-		for (const segment of ['any', '/rd', '/ad']) {
+		for (const segment of ['any', '/rd', '/ad', '/dl']) {
 			expect(screen.getByTestId(`source-${segment}`)).not.toHaveTextContent(
 				'needs your key linked'
 			);

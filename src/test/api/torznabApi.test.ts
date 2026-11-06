@@ -82,6 +82,7 @@ let rdCached: Set<string>;
 /** The names RD's row records for a held hash, where a test cares what they are. */
 let rdNames: Map<string, RdCachedNames>;
 let adCached: Set<string>;
+let dlCached: Set<string>;
 let reported: string[];
 let providerKey: string | null;
 let providerCached: Set<string>;
@@ -112,6 +113,7 @@ function stockLibraryWith(count: number): void {
 	});
 	rdCached = new Set();
 	adCached = new Set();
+	dlCached = new Set();
 }
 
 async function run(
@@ -181,6 +183,7 @@ beforeEach(() => {
 	rdCached = new Set([BIG]);
 	rdNames = new Map();
 	adCached = new Set([CACHED_ON_AD]);
+	dlCached = new Set([SMALL]);
 	reported = [];
 	providerKey = 'provider-key';
 	providerCached = new Set([SMALL]);
@@ -215,6 +218,9 @@ beforeEach(() => {
 	);
 	mockRepo.filterCachedHashesAd = vi.fn(
 		async (hashes: string[]) => new Set(hashes.filter((h) => adCached.has(h)))
+	);
+	mockRepo.filterCachedHashesDl = vi.fn(
+		async (hashes: string[]) => new Set(hashes.filter((h) => dlCached.has(h)))
 	);
 	mockRepo.getSponsorProviderKey = vi.fn(
 		async (_shortId: string, _service: 'tb' | 'pm' | 'oc') => providerKey
@@ -687,6 +693,32 @@ describe('the debrid cache signal', () => {
 		expect(titles(res)).toEqual(['Shawshank.1994.720p.WEB']);
 	});
 
+	// zurg serves Debrid-Link too, and DMM records its releases, but no feed read them.
+	it("reads the Debrid-Link feed from DMM's record of it, with no provider key", async () => {
+		providerKey = null;
+		const xml = body(
+			await run(
+				{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
+				{ route: ['dl', 'api'] }
+			)
+		);
+		expect(mockRepo.getCachedRdNames).not.toHaveBeenCalled();
+		expect(mockRepo.filterCachedHashesAd).not.toHaveBeenCalled();
+		expect(probeMock).not.toHaveBeenCalled();
+		// cached first, as every feed orders
+		expect(attrValue(xml, 'seeders')).toEqual([
+			String(CACHED_SEEDERS),
+			String(UNCACHED_SEEDERS),
+			String(UNCACHED_SEEDERS),
+		]);
+
+		const cached = await run(
+			{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
+			{ route: ['dl', 'cached', 'api'] }
+		);
+		expect(titles(cached)).toEqual(['Shawshank.1994.1080p.WEB']);
+	});
+
 	it('filters before paging, so the second page of a filtered feed is right', async () => {
 		const res = await run(
 			{ t: 'movie', imdbid: MOVIE_ID, offset: '1', apikey: SPONSOR_KEY },
@@ -767,17 +799,19 @@ describe('provider-backed cache filters', () => {
 		expect(body(res)).not.toContain('<item>');
 	});
 
-	// Debrid-Link has no way to ask whether a hash is held without adding it,
-	// which would spend the caller's quota on every search. An unknown segment
-	// is rejected rather than ignored, so this stays a 404-shaped answer.
-	it('does not offer a Debrid-Link feed', async () => {
+	// Debrid-Link's own check is an add, which would spend the caller's quota on every
+	// search, so its feed reads only DMM's record of it and never probes. An unknown segment
+	// is still rejected rather than ignored.
+	it('never probes Debrid-Link, and still rejects an unknown provider', async () => {
+		await feedTitles(['dl', 'cached', 'api']);
+		expect(probeMock).not.toHaveBeenCalled();
+		expect(mockRepo.getSponsorProviderKey).not.toHaveBeenCalled();
+
 		const res = await run(
 			{ t: 'movie', imdbid: MOVIE_ID.slice(2), apikey: SPONSOR_KEY },
-			{ route: ['dl', 'cached', 'api'] }
+			{ route: ['realdebrid', 'api'] }
 		);
-
 		expect(body(res)).toContain('code="202"');
-		expect(probeMock).not.toHaveBeenCalled();
 	});
 
 	it('leaves the database-backed feeds asking nobody for a key', async () => {

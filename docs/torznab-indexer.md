@@ -52,6 +52,8 @@ and that `/api` is ours to use:
 | `/api/torznab/ad`        | Cache signal read from AllDebrid only                                  |
 | `/api/torznab/rd/cached` | Only what Real-Debrid already holds and will hand over                 |
 | `/api/torznab/ad/cached` | Only what AllDebrid already holds                                      |
+| `/api/torznab/dl`        | Cache signal read from Debrid-Link only (DMM's record of it)           |
+| `/api/torznab/dl/cached` | Only what Debrid-Link already holds, as DMM has recorded it            |
 
 A query parameter would have been simpler and does not work: Prowlarr builds the query
 string itself from the caps document and drops whatever a person put in the URL field.
