@@ -106,6 +106,10 @@ const FEED_EXAMPLES = [
 	{ suffix: '/tb/cached', what: 'Only what TorBox already holds' },
 	{ suffix: '/pm/cached', what: 'Only what Premiumize already holds' },
 	{ suffix: '/oc/cached', what: 'Only what Offcloud already holds' },
+	{
+		suffix: '/rd/tb/cached',
+		what: 'Only what Real-Debrid or TorBox already holds; name as many services as you use, each once',
+	},
 ];
 
 /**

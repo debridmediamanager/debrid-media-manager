@@ -44,16 +44,18 @@ the clear.
 An \*arr appends `/api` to whatever URL it is given, so anything between `/api/torznab`
 and that `/api` is ours to use:
 
-| URL a sponsor pastes     | Feed                                                                   |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `/api/torznab`           | Everything in the library, cached or not                               |
-| `/api/torznab/cached`    | Only releases cached on Real-Debrid **or** AllDebrid                   |
-| `/api/torznab/rd`        | Cache signal read from Real-Debrid only, minus what RD refuses by name |
-| `/api/torznab/ad`        | Cache signal read from AllDebrid only                                  |
-| `/api/torznab/rd/cached` | Only what Real-Debrid already holds and will hand over                 |
-| `/api/torznab/ad/cached` | Only what AllDebrid already holds                                      |
-| `/api/torznab/dl`        | Cache signal read from Debrid-Link only (DMM's record of it)           |
-| `/api/torznab/dl/cached` | Only what Debrid-Link already holds, as DMM has recorded it            |
+| URL a sponsor pastes        | Feed                                                                   |
+| --------------------------- | ---------------------------------------------------------------------- |
+| `/api/torznab`              | Everything in the library, cached or not                               |
+| `/api/torznab/cached`       | Only releases cached on Real-Debrid **or** AllDebrid                   |
+| `/api/torznab/rd`           | Cache signal read from Real-Debrid only, minus what RD refuses by name |
+| `/api/torznab/ad`           | Cache signal read from AllDebrid only                                  |
+| `/api/torznab/rd/cached`    | Only what Real-Debrid already holds and will hand over                 |
+| `/api/torznab/ad/cached`    | Only what AllDebrid already holds                                      |
+| `/api/torznab/dl`           | Cache signal read from Debrid-Link only (DMM's record of it)           |
+| `/api/torznab/dl/cached`    | Only what Debrid-Link already holds, as DMM has recorded it            |
+| `/api/torznab/rd/tb`        | Cache signal from each provider named; cached if any of them holds it  |
+| `/api/torznab/rd/tb/cached` | Only what any of the providers named already holds                     |
 
 On the six Real-Debrid and AllDebrid rows, a request naming nothing (an \*arr's RSS sync)
 lists what DMM most recently recorded as cached on that scope's provider or providers; see
@@ -64,6 +66,26 @@ string itself from the caps document and drops whatever a person put in the URL 
 An unrecognised segment answers error 202 rather than falling back to the plain feed —
 `/api/torznab/realdebrid` looking like a working indexer that quietly answers a different
 question is worse than an obvious failure.
+
+### Several providers in one path
+
+A path may name several providers (`rd`, `ad`, `dl`, `tb`, `pm`, `oc`) in any order, each
+once, with `/cached` last: `/api/torznab/rd/tb/cached` is "cached on any of these". A
+repeated provider, or `/cached` anywhere but last, answers 202 like an unknown segment.
+Until 2026-11-06 the last provider named won, so `/rd/ad` was silently an AllDebrid feed.
+
+- Each provider is asked as its own feed asks it: RD and AD from DMM's tables, Debrid-Link
+  from DMM's record of it, TorBox, Premiumize and Offcloud with the sponsor's linked key.
+  A live provider without a key fails the whole request with 102, as its own feed does.
+- `seeders` is 100 when any named provider holds the release. Each such item also carries
+  `<torznab:attr name="cachedon" value="rd,tb"/>`, the named providers that hold it, in
+  the path's order; an uncached item carries none. Only these paths emit the attribute,
+  so the single-provider and plain feeds keep their exact bytes.
+- RD's name rule: a release RD refuses counts as cached only if another named provider
+  holds it, and is dropped only on a path naming RD alone.
+- The RSS sync: a path naming only `rd` and `ad` serves the newly cached list over both
+  (the same list as the plain feed, with `cachedon` from each provider's list). Any other
+  provider in the path answers it the old way, from the most recently refreshed pages.
 
 ## Operations (`t=`)
 

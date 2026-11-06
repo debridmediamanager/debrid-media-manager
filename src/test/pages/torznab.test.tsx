@@ -178,6 +178,7 @@ describe('Torznab setup page, for a sponsor', () => {
 		expect(screen.getByTestId('feed-/rd/cached')).toBeTruthy();
 		expect(screen.getByTestId('feed-/tb/cached')).toBeTruthy();
 		expect(screen.getByTestId('feed-/dl/cached')).toBeTruthy();
+		expect(screen.getByTestId('feed-/rd/tb/cached')).toBeTruthy();
 	});
 
 	it('advertises the movie and TV categories', () => {
