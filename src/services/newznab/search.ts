@@ -332,11 +332,14 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	const targeted =
 		params.q !== undefined || params.imdbid !== undefined || params.tvdbid !== undefined;
 	const cached = await db.getCachedNewznabApiSearch(key, targeted ? undefined : RSS_TTL_MS);
+	// A set that still stands is first completed with the upstreams it lacks.
+	if (cached?.isFresh) cached.results = await completed(t, params, key, cached);
 	// Filtered on the way out rather than before caching, so an approval or a
 	// reversal applies to entries already cached.
 	const page = async (results: CachedUsenetResult[]) =>
 		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
-	if (cached?.isFresh || (cached && targeted && (await noNewPostSince(key, cached.updatedAt)))) {
+	if (cached?.isFresh) return page(cached.results);
+	if (cached && targeted && (await noNewPostSince(key, cached.updatedAt))) {
 		return page(await completed(t, params, key, cached));
 	}
 
