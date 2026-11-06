@@ -2,7 +2,15 @@ import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { reporterIdFor } from '@/utils/reporterId';
-import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
+import {
+	borderColor,
+	btnColor,
+	btnIcon,
+	btnLabel,
+	fileSize,
+	isAvailable,
+	totalFileSize,
+} from '@/utils/results';
 import {
 	getBiggestVideoFile,
 	openWatch,
@@ -542,21 +550,10 @@ const MovieSearchResults = ({
 					isDownloading('tb', r.hash) ||
 					isDownloading('pm', r.hash) ||
 					isDownloading('oc', r.hash) ||
-					// Debrid-Link contributes to the library state but never to the
-					// availability flags beside it - it has no cache probe to set one.
 					isDownloading('dl', r.hash);
 				const inYourLibrary = downloaded || downloading;
 
-				if (
-					onlyShowCached &&
-					!r.rdAvailable &&
-					!r.adAvailable &&
-					!r.tbAvailable &&
-					!r.pmAvailable &&
-					!r.ocAvailable &&
-					!inYourLibrary
-				)
-					return null;
+				if (onlyShowCached && !isAvailable(r) && !inYourLibrary) return null;
 				if (
 					movieMaxSize !== '0' &&
 					(r.biggestFileSize ?? r.fileSize) > parseInt(movieMaxSize) * 1024 &&
@@ -597,7 +594,7 @@ const MovieSearchResults = ({
 				return (
 					<div
 						key={i}
-						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, isAvailable(r))} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 					>
 						<div className="sibling-space-y-2 p-1">
 							<h2 className="line-clamp-2 overflow-hidden text-sm leading-tight font-bold break-words text-ellipsis">
@@ -626,11 +623,7 @@ const MovieSearchResults = ({
 											{fileSize(r.biggestFileSize)} of{' '}
 											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
-												!r.rdAvailable &&
-												!r.adAvailable &&
-												!r.tbAvailable &&
-												!r.pmAvailable &&
-												!r.ocAvailable &&
+												!isAvailable(r) &&
 												(r.trackerStats.seeders > 0 ? (
 													<span className="text-green-400">
 														{' '}
@@ -650,11 +643,7 @@ const MovieSearchResults = ({
 										>
 											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
-												!r.rdAvailable &&
-												!r.adAvailable &&
-												!r.tbAvailable &&
-												!r.pmAvailable &&
-												!r.ocAvailable &&
+												!isAvailable(r) &&
 												(r.trackerStats.seeders > 0 ? (
 													<span className="text-green-400">
 														{' '}
@@ -676,11 +665,7 @@ const MovieSearchResults = ({
 								>
 									{fileSize(totalFileSize(r))} GB
 									{r.trackerStats &&
-										!r.rdAvailable &&
-										!r.adAvailable &&
-										!r.tbAvailable &&
-										!r.pmAvailable &&
-										!r.ocAvailable &&
+										!isAvailable(r) &&
 										(r.trackerStats.seeders > 0 ? (
 											<span className="text-green-400"> • Has seeders</span>
 										) : (

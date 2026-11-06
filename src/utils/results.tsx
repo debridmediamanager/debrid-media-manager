@@ -63,11 +63,10 @@ export const btnLabel = (avail: boolean, debridService: string, archiveOnly = fa
 /**
  * Whether any service the user holds can play this row right now.
  *
- * `dlAvailable` is only ever set by a Check DL the user pressed. Debrid-Link's
- * probe mutates, so it is not in the page sweep, which means an unchecked row
- * reads here exactly like one no check has run against yet rather than as a
- * claim that Debrid-Link lacks it. A row the check could not get an answer for
- * is left unset for the same reason.
+ * `dlAvailable` comes from DMM's record of Debrid-Link releases on page load and from a
+ * Check DL the user pressed. Debrid-Link's own probe mutates, so it is never swept across
+ * the page: an unrecorded, unchecked row reads here like one nobody has asked about yet,
+ * not as a claim that Debrid-Link lacks it.
  */
 export const isAvailable = (result: SearchResult) =>
 	!!(

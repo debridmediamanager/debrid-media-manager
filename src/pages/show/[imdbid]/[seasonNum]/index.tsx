@@ -70,7 +70,7 @@ import { quickSearch } from '@/utils/quickSearch';
 import { RD_ADD_PAUSE_GIVE_UP_MS, RdPauseStreak, addThroughRdPause } from '@/utils/rdAddPause';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { canReportWith } from '@/utils/reporterId';
-import { packEpisodes, sortByMedian } from '@/utils/results';
+import { isAvailable, packEpisodes, sortByMedian } from '@/utils/results';
 import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -1358,15 +1358,7 @@ const TvSearch: FunctionComponent = () => {
 	useEffect(() => {
 		async function loadCachedTrackerStats() {
 			// Find uncached results that don't have tracker stats yet
-			const uncachedResults = searchResults.filter(
-				(r) =>
-					!r.rdAvailable &&
-					!r.adAvailable &&
-					!r.tbAvailable &&
-					!r.pmAvailable &&
-					!r.ocAvailable &&
-					!r.trackerStats
-			);
+			const uncachedResults = searchResults.filter((r) => !isAvailable(r) && !r.trackerStats);
 
 			if (uncachedResults.length === 0) {
 				return;
@@ -2266,17 +2258,8 @@ const TvSearch: FunctionComponent = () => {
 									<span className="ml-1 hidden sm:inline">Reset</span>
 								</span>
 								<span className="text-xs text-gray-400">
-									{
-										filteredResults.filter(
-											(r) =>
-												r.rdAvailable ||
-												r.adAvailable ||
-												r.tbAvailable ||
-												r.pmAvailable ||
-												r.ocAvailable
-										).length
-									}
-									/{filteredResults.length}
+									{filteredResults.filter((r) => isAvailable(r)).length}/
+									{filteredResults.length}
 								</span>
 								{query &&
 									filteredResults.length > 0 &&

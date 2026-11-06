@@ -50,7 +50,7 @@ import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { foundTorrentsMessage, isRdBlockedFilename } from '@/utils/rdFilenameFilter';
-import { sortByBiggest } from '@/utils/results';
+import { isAvailable, sortByBiggest } from '@/utils/results';
 import { opensOnUsenet, usenetRouteFor } from '@/utils/resultsTab';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -396,15 +396,7 @@ const MovieSearch: FunctionComponent = () => {
 	// Load cached tracker stats
 	useEffect(() => {
 		async function loadCachedTrackerStats() {
-			const uncachedResults = searchResults.filter(
-				(r) =>
-					!r.rdAvailable &&
-					!r.adAvailable &&
-					!r.tbAvailable &&
-					!r.pmAvailable &&
-					!r.ocAvailable &&
-					!r.trackerStats
-			);
+			const uncachedResults = searchResults.filter((r) => !isAvailable(r) && !r.trackerStats);
 
 			if (uncachedResults.length === 0) return;
 
@@ -1176,16 +1168,7 @@ const MovieSearch: FunctionComponent = () => {
 						<SearchControls
 							query={query}
 							onQueryChange={setQuery}
-							filteredCount={
-								filteredResults.filter(
-									(r) =>
-										r.rdAvailable ||
-										r.adAvailable ||
-										r.tbAvailable ||
-										r.pmAvailable ||
-										r.ocAvailable
-								).length
-							}
+							filteredCount={filteredResults.filter((r) => isAvailable(r)).length}
 							totalCount={filteredResults.length}
 							showMassReportButtons={showMassReportButtons}
 							rdKey={rdKey}

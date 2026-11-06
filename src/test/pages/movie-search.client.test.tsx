@@ -184,7 +184,8 @@ vi.mock('@/utils/instantChecks', () => ({
 	checkDatabaseAvailabilityTb: vi.fn().mockResolvedValue(0),
 }));
 
-vi.mock('@/utils/results', () => ({
+vi.mock('@/utils/results', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/results')>()),
 	sortByBiggest: (results: any[]) => sortByBiggestMock(results),
 }));
 

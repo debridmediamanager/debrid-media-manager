@@ -136,7 +136,8 @@ vi.mock('@/utils/instantChecks', () => ({
 	instantCheckInTb: vi.fn().mockResolvedValue(0),
 }));
 
-vi.mock('@/utils/results', () => ({
+vi.mock('@/utils/results', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/results')>()),
 	sortByMedian: (results: any[]) => results,
 }));
 

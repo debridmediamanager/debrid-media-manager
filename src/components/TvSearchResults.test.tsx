@@ -525,6 +525,19 @@ describe('TvSearchResults', () => {
 			});
 		});
 
+		// DMM records Debrid-Link releases and marks them on page load, but "only cached" left
+		// them out while the sort put them first: the top row vanished under the filter.
+		it('keeps a row cached only on Debrid-Link when "only cached" is on', () => {
+			renderTv({
+				onlyShowCached: true,
+				rdKey: null,
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseTvResult, rdAvailable: false, dlAvailable: true }],
+			});
+
+			expect(screen.getByText('Sample Show')).toBeTruthy();
+		});
+
 		it('keeps an OC-only cached row when "only cached" is on', () => {
 			renderTv({
 				onlyShowCached: true,

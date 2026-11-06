@@ -11,6 +11,7 @@ import {
 	btnLabel,
 	episodeSize,
 	fileSize,
+	isAvailable,
 	totalFileSize,
 } from '@/utils/results';
 import {
@@ -465,16 +466,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							isDownloading('dl', r.hash);
 						const inYourLibrary = downloaded || downloading;
 
-						if (
-							onlyShowCached &&
-							!r.rdAvailable &&
-							!r.adAvailable &&
-							!r.tbAvailable &&
-							!r.pmAvailable &&
-							!r.ocAvailable &&
-							!inYourLibrary
-						)
-							return null;
+						if (onlyShowCached && !isAvailable(r) && !inYourLibrary) return null;
 						if (
 							episodeMaxSize !== '0' &&
 							(r.medianFileSize
@@ -543,7 +535,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						return (
 							<div
 								key={i}
-								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, isAvailable(r))} overflow-hidden rounded-lg shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 							>
 								<div className="sibling-space-y-2 p-1">
 									<h2 className="line-clamp-2 overflow-hidden text-sm leading-tight font-bold break-words text-ellipsis">
@@ -564,11 +556,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												{r.videoCount > 1 &&
 													` · ${fileSize(episodeSize(r, episodesOf(r)))} GB/ep`}
 												{r.trackerStats &&
-													!r.rdAvailable &&
-													!r.adAvailable &&
-													!r.tbAvailable &&
-													!r.pmAvailable &&
-													!r.ocAvailable &&
+													!isAvailable(r) &&
 													(r.trackerStats.seeders > 0 ? (
 														<span className="text-green-400">
 															{' '}
@@ -589,11 +577,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										>
 											{fileSize(totalFileSize(r))} GB
 											{r.trackerStats &&
-												!r.rdAvailable &&
-												!r.adAvailable &&
-												!r.tbAvailable &&
-												!r.pmAvailable &&
-												!r.ocAvailable &&
+												!isAvailable(r) &&
 												(r.trackerStats.hasActivity ? (
 													<span className="text-green-400">
 														{' '}
