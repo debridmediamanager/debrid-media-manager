@@ -38,13 +38,24 @@ export const isDeadRdLink = (error: unknown): boolean => {
 	return code !== null && PERMANENT_LINK_ERRORS.has(code);
 };
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 /**
- * How long a stored RD link is offered for.
+ * How long a stored RD link is offered for: casts and DMM's RD record alike.
  *
- * This 30-day offering policy is retained, not a measured provider expiry.
- * Held keys showed no age decay; retention without any holder is unknown.
- * Changing this cutoff is a separate policy decision.
+ * Measured 2026-11-06 (`record-link-age-sample-2026-11-06.json`): record links 30-120 days
+ * old played as often as fresh ones, and none past 120 did (name-blocked or gone). The old
+ * 30-day policy hid 87% of the record. A link that dies inside the window is dropped by the
+ * play route on its first failure (`removeAvailableFileByLinkPrefix`).
  */
-export const RD_LINK_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+export const RD_LINK_MAX_AGE_MS = 120 * DAY_MS;
 
 export const rdLinkCutoff = () => new Date(Date.now() - RD_LINK_MAX_AGE_MS);
+
+/**
+ * How long an AllDebrid or Debrid-Link record is offered by Cast without a fresh sighting.
+ * AllDebrid's older links were patchy in the same sample, so these keep 30 days.
+ */
+export const CACHED_RECORD_MAX_AGE_MS = 30 * DAY_MS;
+
+export const cachedRecordCutoff = () => new Date(Date.now() - CACHED_RECORD_MAX_AGE_MS);

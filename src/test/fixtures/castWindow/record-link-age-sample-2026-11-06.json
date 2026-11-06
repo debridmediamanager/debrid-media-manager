@@ -1,0 +1,485 @@
+{
+	"_source": "Production Available/AvailableAd file rows sampled 2026-11-06, 8 per provider and age band (days since the row's updatedAt), each link resolved as Cast resolves it (RD unrestrict with testacct123 paced 5 s with a pause control that never fired; AD link/unlock with the AD test key) and the first 64 KiB checked for a video container. Links are left out: an AD /f/ token plays for any premium key.",
+	"samples": [
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Burial.2022.2160p.4K.WEB.x265.10bit.AAC5.1-[YTS.MX].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Final.Destination.(2009).BluRay.2160p.AI.Upscale.DTS-HD"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "A.Serbian.Film.2010.BluRay.1080p.DTS-HD.MA.5.1.AVC.HYBRID.R"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Downton.Abbey.S03E09.Christmas.Special.1080p.FLAC.2.0.AVC.R"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Downton.Abbey.S03E05.1080p.FLAC.2.0.AVC.REMUX-FraMeSToR.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "hoster_unavailable",
+			"file": "Downton.Abbey.S03E03.1080p.FLAC.2.0.AVC.REMUX-FraMeSToR.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Downton.Abbey.S03E06.1080p.FLAC.2.0.AVC.REMUX-FraMeSToR.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Downton.Abbey.S03E08.1080p.FLAC.2.0.AVC.REMUX-FraMeSToR.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Fast and Furious 6 2013 EXTENDED MULTI 1080p BluRay x264-NE"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Dragon.Ball.Z.The.Return.Of.Cooler.1992.DUBBED.1080p.BluRay"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "no video",
+			"file": "o /Street Fighter 2026.1080p.HQ Pre.Multi.AAC 2.0.x264   .exe"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Legend 2015 BluRay 1080p.H264 Ita Eng AC3 5.1 Sub Ita Eng r"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Sleepy Hollow (1999) MULTi VFF 2160p 10bit 4KLight DV HDR B"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Hollywood.Demons.S01E05.1080p.HEVC.x265-MeGusta[EZTVx.to].m"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Obsession 2025 1080p BluRayRip Opus 7 1 x265-Lootera.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Secrets.of.the.Bees.2026.S01E02.2160p.DSNP.WEB.DL.HDR10.H.2"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Super Troopers (2001) (1080p BluRay x265 10bit Tigole).mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Terminator - Dark Fate (2019) (2160p BluRay x265 10bit HDR "
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Jeopardy.2026.03.31.720p.HDTV.H264-JFF.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Guardians of the Galaxy Vol. 3 (2023) IMAX.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Class.of.07.S01E04.Soul-Crushing-Cycle.2160p.AMZN.WEB.DL.DDP"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "infringing_file",
+			"file": "Now.You.See.Me.2013.1080p.BluRay.x264.YIFY.mp4"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Efectos secundarios [HDTV 1080p][Cap.106](wolfmax4k.com).mk"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "Big.Trouble.in.Little.China.1986.1080p.BluRay.REMUX.AVC.FLA"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "The.Generals.Daughter.1999.1080p.BluRay.x265-RARBG.mp4"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Dr. STONE - Science Future - 28 [WEB 1080p EAC-3] [09"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 08 [DVD 480p AC3] [C932F187].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 14 [DVD 480p AC3] [8AFD9F70].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 16 [DVD 480p AC3] [637BF41C].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 12 [DVD 480p AC3] [59F5D31D].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 17 [DVD 480p AC3] [3CE0C42B].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "[sam] Pandora Hearts - 25 [DVD 480p AC3] [AD4E91D0].mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "infringing_file",
+			"file": "Watcher.2022.720p.BluRay.x264.AAC-[YTS.MX].mp4"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "infringing_file",
+			"file": "Australian Survivor S14E01 720p AMZN WEB-DL DDP2 0 H 264-RA"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "infringing_file",
+			"file": "Young.Sheldon.S01E16.Killer.Asteroids.Oklahoma.and.a.Frizzy"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "hoster_unavailable",
+			"file": "Married.at.First.Sight.S13E14.720p.WEB.h264-KOMPOST.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "hoster_unavailable",
+			"file": "Saturday.Night.Live.UK.S01E04.Jack.Whitehall.1080p.WEB.h264"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "infringing_file",
+			"file": "Survival.Family.2017.1080p.BluRay.x264.DTS-WiKi.mkv"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "infringing_file",
+			"file": "Love Island S08E19 Episode 19 1080p AMZN WEB-DL DDP2 0 H 26"
+		},
+		{
+			"provider": "rd",
+			"ageDays": "120-365",
+			"verdict": "hoster_unavailable",
+			"file": "Elevator.Game.2023.1080p.BluRay.DD.5.1.x264-MegaPeer.mkv"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "Die.Hard.With.A.Vengeance.1995.MULTi.VF2.1080p.HDLight.AC3.5"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "0-7",
+			"verdict": "plays",
+			"file": "The.Good.Doctor.S06.2160p.AMZN.WEB-DL.DDP5.1.H.265-XEBEC/The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "The.All.devouring.Whale.S01E04.1080p.ADN.WEB-DL.AAC2.0.H.264"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "With.Vengeance.Sincerely.Your.Broken.Saintes.S01E01.The.Sain"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Holes.2003.BDRemux.1080p.2xRUS.ENG.mkv"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "HELL.MODE.The.Hardcore.Gamer.Dominates.in.Another.World.with"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "X-Men.97.S02E01.1080p.x265-ELiTE/X-Men.97.S02E01.1080p.x265-"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Que.Justice.Soit.Faite.2009.MULTI.VF2.2160p.UHD.BLURAY.REMUX"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Asako I & II (2018) [BluRay] [1080p] [YTS.AM]/Asako.I.&.II.2"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "7-30",
+			"verdict": "plays",
+			"file": "Baby.2024.1080p.WEB-DL.x264.NACIONAL.5.1/Baby.2024.1080p.WEB"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "The.Good.Place.S03E01E02.1080p.AMZN.WEB-DL.DD5.1.H.264-SiGMA"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "The.Substance.2024.MULTi.TRUEFRENCH.1080p.WEB.H264-SUPPLY/Th"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "The X-Files S01E24 1080p BluRay x265 5.1-RARBG/The X-Files S"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "plays",
+			"file": "In The Heights (2021) [1080p] [WEBRip] [5.1] [YTS.MX]/In.The"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "[Lulu] SukaSuka [BD 1080p HEVC FLAC][Dual-Audio]/[Lulu] Suka"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "[Lulu] SukaSuka [BD 1080p HEVC FLAC][Dual-Audio]/[Lulu] Suka"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "[Lulu] SukaSuka [BD 1080p HEVC FLAC][Dual-Audio]/[Lulu] Suka"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "30-60",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "[Lulu] SukaSuka [BD 1080p HEVC FLAC][Dual-Audio]/[Lulu] Suka"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Los Thunderman Infiltrados [HDTV 1080p][Cap.101]/Los Thunder"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "outer.banks.s05e07.1080p.web.h264-cakes[EZTVx.to].mkv"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "60-120",
+			"verdict": "plays",
+			"file": "Chuck (2007) Season 1-5 S01-S05 (1080p BluRay x265 HEVC 10bi"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "www.UIndex.org    -    Virgin Island S02E05 1080p ALL4 WEB-D"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "Dodes'ka-den (1970) [BluRay] [720p] [YTS.LT]/Dodes'ka-den.19"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "plays",
+			"file": "National Treasure Book of Secrets.2007.2160p.HDR.WebRip.DDP."
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "plays",
+			"file": "Its.Always.Sunny.in.Philadelphia.S15E04.The.Gang.Replaces.De"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "plays",
+			"file": "Gangs.of.New.York.2002.PROPER.BluRay.1080p.DTS-HD.MA.5.1.AVC"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "plays",
+			"file": "Wicked For Good (2025) [2160p] [4K] [WEB] [5.1] [YTS.LT]/Wic"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "plays",
+			"file": "The.Punisher.One.Last.Kill.2026.1080p.WEB-DL.DDP5.1.H.264.mk"
+		},
+		{
+			"provider": "ad",
+			"ageDays": "120-365",
+			"verdict": "LINK_HOST_NOT_SUPPORTED",
+			"file": "www.UIndex.org    -    For All Mankind S05E08 Brave New Worl"
+		}
+	]
+}

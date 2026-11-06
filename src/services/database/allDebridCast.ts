@@ -1,5 +1,5 @@
 import { isAllDebridLockedLink } from '@/utils/allDebridLockedLink';
-import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { cachedRecordCutoff } from '@/utils/rdLinkRot';
 import { isFilmFile } from '@/utils/selectable';
 import { AD_EVICTED_PREFIX } from './availability';
 import { parseImdbId } from './cast';
@@ -546,7 +546,7 @@ export class AllDebridCastService extends DatabaseClient {
 	 * offered the way Real-Debrid's cast offers `Available`: nobody has to cast them first. Their
 	 * `/f/` links are not bound to the account that recorded them, and any premium key unlocks them
 	 * (measured 12/12 on links up to 19 days old, 2026-10-31). Biggest file of each release first,
-	 * held to the same freshness bound as RD links; `debridio:` markers carry no link and are skipped.
+	 * held to 30 days without a fresh sighting (`cachedRecordCutoff`); `debridio:` markers carry no link and are skipped.
 	 */
 	private async getCachedReleaseStreams(imdbId: string, limit: number, maxSize?: number) {
 		const { baseImdbId, season, episode } = parseImdbId(imdbId);
@@ -559,7 +559,7 @@ export class AllDebridCastService extends DatabaseClient {
 				availableAd: {
 					imdbId: baseImdbId,
 					status: 'Ready',
-					updatedAt: { gt: rdLinkCutoff() },
+					updatedAt: { gt: cachedRecordCutoff() },
 				},
 				link: { startsWith: AD_LOCKED_LINK_PREFIX },
 				bytes: { gt: MIN_FILE_BYTES, ...(maxBytes !== undefined && { lte: maxBytes }) },

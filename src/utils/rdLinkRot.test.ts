@@ -1,6 +1,14 @@
+import sample from '@/test/fixtures/castWindow/record-link-age-sample-2026-11-06.json';
 import { AxiosError, AxiosHeaders } from 'axios';
 import { describe, expect, it } from 'vitest';
-import { isDeadRdLink, RD_LINK_MAX_AGE_MS, rdErrorOf, rdLinkCutoff } from './rdLinkRot';
+import {
+	CACHED_RECORD_MAX_AGE_MS,
+	cachedRecordCutoff,
+	isDeadRdLink,
+	RD_LINK_MAX_AGE_MS,
+	rdErrorOf,
+	rdLinkCutoff,
+} from './rdLinkRot';
 
 const rdError = (error: string, status: number) =>
 	new AxiosError('rd', 'ERR', undefined, undefined, {
@@ -45,9 +53,35 @@ describe('isDeadRdLink', () => {
 	});
 });
 
+const DAY = 24 * 60 * 60 * 1000;
+const playRate = (provider: string, band: string) => {
+	const rows = sample.samples.filter((r) => r.provider === provider && r.ageDays === band);
+	return rows.filter((r) => r.verdict === 'plays').length / rows.length;
+};
+
 describe('rdLinkCutoff', () => {
-	it('is 30 days back', () => {
-		expect(RD_LINK_MAX_AGE_MS).toBe(30 * 24 * 60 * 60 * 1000);
+	// Sampled 2026-11-06: RD record links 30-120 days old played as often as fresh ones
+	// (15/16 against 14/16), while past 120 days none did (name-blocked or gone). The 30-day
+	// window hid 87% of DMM's RD record from Cast for no measured reason.
+	it('offers RD links up to 120 days old, the age they were measured to keep playing', () => {
+		for (const band of ['0-7', '7-30', '30-60', '60-120']) {
+			expect(playRate('rd', band)).toBeGreaterThanOrEqual(7 / 8);
+		}
+		expect(playRate('rd', '120-365')).toBe(0);
+		expect(RD_LINK_MAX_AGE_MS).toBe(120 * DAY);
 		expect(Date.now() - rdLinkCutoff().getTime()).toBeCloseTo(RD_LINK_MAX_AGE_MS, -3);
+	});
+});
+
+describe('cachedRecordCutoff', () => {
+	// AllDebrid's older links were patchy in the same sample (10/16 for 30-120 days against
+	// 15/16 inside 30), so AllDebrid and Debrid-Link keep the 30-day window.
+	it('keeps AllDebrid and Debrid-Link records to 30 days', () => {
+		expect(playRate('ad', '30-60') + playRate('ad', '60-120')).toBeLessThan(2 * (7 / 8));
+		expect(CACHED_RECORD_MAX_AGE_MS).toBe(30 * DAY);
+		expect(Date.now() - cachedRecordCutoff().getTime()).toBeCloseTo(
+			CACHED_RECORD_MAX_AGE_MS,
+			-3
+		);
 	});
 });

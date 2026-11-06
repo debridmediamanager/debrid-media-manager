@@ -1,4 +1,4 @@
-import { rdLinkCutoff } from '@/utils/rdLinkRot';
+import { cachedRecordCutoff } from '@/utils/rdLinkRot';
 import { isFilmFile } from '@/utils/selectable';
 import { parseImdbId } from './cast';
 import { DatabaseClient } from './client';
@@ -292,7 +292,7 @@ export class DebridLinkCastService extends DatabaseClient {
 	 * offers `AvailableAd`: nobody has to cast them first, and a season pack serves the episode
 	 * by its recorded path (`?file=`, matched by the play route against what Debrid-Link lists).
 	 * Nothing stored here is a link, so the viewer's own add resolves it at play time. Biggest
-	 * film file of each release first, held to the same freshness bound as the other pools.
+	 * film file of each release first, held to 30 days without a fresh sighting (`cachedRecordCutoff`).
 	 */
 	private async getRecordedReleaseStreams(
 		imdbId: string,
@@ -306,7 +306,7 @@ export class DebridLinkCastService extends DatabaseClient {
 				: undefined;
 		const files = await this.prisma.availableDlFile.findMany({
 			where: {
-				availableDl: { imdbId: baseImdbId, updatedAt: { gt: rdLinkCutoff() } },
+				availableDl: { imdbId: baseImdbId, updatedAt: { gt: cachedRecordCutoff() } },
 				bytes: { gt: MIN_FILE_BYTES, ...(maxBytes !== undefined && { lte: maxBytes }) },
 				season,
 				episode,

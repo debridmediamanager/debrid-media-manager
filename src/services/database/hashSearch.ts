@@ -1,3 +1,4 @@
+import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { DatabaseClient } from './client';
 
 export interface SizeFilters {
@@ -194,9 +195,7 @@ export class HashSearchService extends DatabaseClient {
 				imdbId,
 				link: { not: null },
 				size: sizeCondition, // Filter using MB values
-				updatedAt: {
-					gt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-				},
+				updatedAt: { gt: rdLinkCutoff() },
 			},
 			select: {
 				hash: true,

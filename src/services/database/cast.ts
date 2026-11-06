@@ -202,9 +202,7 @@ export class CastService extends DatabaseClient {
 			where: {
 				imdbId: imdbId,
 				userId: userId,
-				updatedAt: {
-					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), // 30 days
-				},
+				updatedAt: { gt: rdLinkCutoff() },
 			},
 			orderBy: {
 				updatedAt: 'desc',
