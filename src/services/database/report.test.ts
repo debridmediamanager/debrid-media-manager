@@ -42,6 +42,14 @@ describe('ReportService', () => {
 		});
 	});
 
+	it('stores the hash in lower case, the case every reader compares in', async () => {
+		const upper = 'F8EF3C52E093EE9AAF8E7D047596ED96A0A37C40';
+		await service.reportContent(upper, 'tt1', 'user', 'porn');
+		const [{ where, create }] = prismaMock.report.upsert.mock.calls[0];
+		expect(where.hash_userId.hash).toBe(upper.toLowerCase());
+		expect(create.hash).toBe(upper.toLowerCase());
+	});
+
 	it('propagates database errors when saving a report fails', async () => {
 		prismaMock.report.upsert.mockRejectedValue(new Error('db down'));
 		await expect(service.reportContent('hash', 'tt1', 'user', 'porn')).rejects.toThrow(

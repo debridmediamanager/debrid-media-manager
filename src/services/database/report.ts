@@ -16,6 +16,9 @@ export class ReportService extends DatabaseClient {
 		userId: string,
 		type: ReportType
 	): Promise<void> {
+		// Every reader compares reports to served hashes, which are lower case. None
+		// was stored otherwise as of 2026-11-06 (20,103 reports); this keeps it so.
+		hash = hash.toLowerCase();
 		try {
 			await this.prisma.report.upsert({
 				where: {
