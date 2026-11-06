@@ -9,7 +9,8 @@ import {
 	sweepFreshPosts,
 } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
-import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
+import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
+import { RATE_LIMIT_CONFIGS, RedisRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
@@ -28,6 +29,45 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
 });
 
 vi.mock('@/services/repository');
+
+/** Just the sorted-set commands RedisRateLimiter uses, held in memory. */
+function fakeRedis() {
+	const sets = new Map<string, Map<string, number>>();
+	const zset = (key: string) => sets.get(key) ?? sets.set(key, new Map()).get(key)!;
+	return {
+		pipeline() {
+			const ops: (() => unknown)[] = [];
+			const pipe = {
+				zremrangebyscore(key: string, min: number, max: number) {
+					ops.push(() => {
+						for (const [member, score] of zset(key)) {
+							if (score >= min && score <= max) zset(key).delete(member);
+						}
+					});
+					return pipe;
+				},
+				zadd(key: string, score: number, member: string) {
+					ops.push(() => zset(key).set(member, score));
+					return pipe;
+				},
+				zcard(key: string) {
+					ops.push(() => zset(key).size);
+					return pipe;
+				},
+				expire() {
+					return pipe;
+				},
+				async exec() {
+					return ops.map((op) => [null, op()]);
+				},
+			};
+			return pipe;
+		},
+		async zrem(key: string, member: string) {
+			return zset(key).delete(member) ? 1 : 0;
+		},
+	};
+}
 vi.mock('@/services/newznab/store', () => ({
 	getStoredNzb: vi.fn(),
 	putStoredNzb: vi.fn(),
@@ -544,6 +584,37 @@ describe('GET /api/newznab/api search', () => {
 		// query's coverage.
 		expect(fetchedUrls()).toHaveLength(1);
 		expect(fetchedUrls()[0].startsWith(FIRST_HOST)).toBe(true);
+	});
+
+	// Skips used to take slots too, so with demand above the budget the window
+	// never emptied and the paced upstream was never asked again.
+	it('asks a paced upstream again once its admitted calls age out, skips or not', async () => {
+		// The in-memory limiter never counts a refusal, so only the Redis path
+		// can show what a skip costs.
+		const redis = new RedisRateLimiter(fakeRedis() as never);
+		vi.spyOn(getUpstreamLimiter(), 'check').mockImplementation((id, config) =>
+			redis.check(id, config)
+		);
+		setIndexers([INDEXERS[0], { ...INDEXERS[1], pacing: { rateLimit: 2, windowSeconds: 60 } }]);
+		vi.useFakeTimers({ toFake: ['Date'] });
+		const start = Date.now();
+		const askedSecond = async (q: string, atSeconds: number) => {
+			vi.setSystemTime(start + atSeconds * 1000);
+			testIp = `10.201.${atSeconds}.1`;
+			fetchMock.mockClear();
+			await run({ t: 'search', q, apikey: SPONSOR_KEY });
+			return fetchedUrls().some((url) => url.startsWith(SECOND_HOST));
+		};
+		try {
+			expect(await askedSecond('admitted one', 0)).toBe(true);
+			expect(await askedSecond('admitted two', 0)).toBe(true);
+			for (let at = 10; at <= 50; at += 10) {
+				expect(await askedSecond(`skipped at ${at}`, at)).toBe(false);
+			}
+			expect(await askedSecond('admitted again', 61)).toBe(true);
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	it('answers 429 with a Newznab error document once the search budget is spent', async () => {
