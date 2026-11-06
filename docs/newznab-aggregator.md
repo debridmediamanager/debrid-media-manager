@@ -40,9 +40,11 @@ lapsed sponsor doesn't keep re-copying a "working" key forever.
 Query normalization (`normalizeSearchQuery` in `src/services/newznab/search.ts`):
 `imdbid` loses its `tt` prefix unconditionally — some upstreams return zero results for
 the prefixed form and the right ones for bare digits, which reads as a broken indexer
-rather than a malformed query. `limit` caps at 10 (matching caps), malformed params are
-dropped rather than forwarded. The upstreams are still asked for 100 each, so the
-cached merged set stays pageable past the cap with `offset`.
+rather than a malformed query. `limit` caps at 100 (matching caps), malformed params are
+dropped rather than forwarded. The upstreams are asked for 100 each whatever the client's
+`limit`, so the cached merged set stays pageable past the cap with `offset`. The cap was
+10 for a while, on the assumption that every client pages; some ask for `limit` = the caps
+max with paging off, and saw only the first 10 of a merged set that ran to hundreds.
 
 ## Errors — Newznab XML, HTTP 200
 

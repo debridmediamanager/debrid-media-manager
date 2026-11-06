@@ -49,10 +49,12 @@ export function newznabErrorXml(code: number, description: string): string {
  * Lives here rather than beside the handler that enforces it because `capsXml`
  * below is the half a client reads: the two drifting apart makes every page
  * after the first wrong, and a constant one file can only interpolate cannot
- * drift. Ten rather than a hundred — a client reaching past it pages with
- * `offset`, and the response's `total` still names the whole set.
+ * drift. A hundred, the page every upstream is asked for: some clients ask for
+ * `limit` = this max and never page with `offset`, so whatever lies past it is
+ * invisible to them, and the whole merged set is already cached, so a bigger
+ * page costs no upstream call.
  */
-export const MAX_LIMIT = 10;
+export const MAX_LIMIT = 100;
 
 /**
  * The static capabilities document.
