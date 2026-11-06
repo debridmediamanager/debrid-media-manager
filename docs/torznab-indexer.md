@@ -55,8 +55,9 @@ and that `/api` is ours to use:
 | `/api/torznab/dl`        | Cache signal read from Debrid-Link only (DMM's record of it)           |
 | `/api/torznab/dl/cached` | Only what Debrid-Link already holds, as DMM has recorded it            |
 
-On all six, a request naming nothing (an \*arr's RSS sync) lists what DMM most recently
-recorded as cached on that scope's provider or providers; see **The untargeted feed**.
+On the six Real-Debrid and AllDebrid rows, a request naming nothing (an \*arr's RSS sync)
+lists what DMM most recently recorded as cached on that scope's provider or providers; see
+**The untargeted feed**. The Debrid-Link rows answer it as before.
 
 A query parameter would have been simpler and does not work: Prowlarr builds the query
 string itself from the caps document and drops whatever a person put in the URL field.
@@ -261,11 +262,14 @@ short page, or at 1,000 releases. A first sync reads one page.
 - **Titles come from the library only.** A cache row's filename is never used as a title,
   because an \*arr matches on the title. A row's hash is looked up on its title's movie
   page, else on its own season page, else on the show's other season pages. The database
-  returns only the wanted entries (`getScrapedTrueEntriesHolding`, a `JSON_TABLE` scan of
-  those titles' pages capped at 15 s by `MAX_EXECUTION_TIME`), and they go through the
-  filters a search applies, over those entries alone: takedown, executable-only, judged
-  trash, entity decoding and the usable-hash rule, Cyrillic-led, the size guard and
-  reports. No page is read whole. Where a page holds a hash twice, the first entry wins.
+  only finds the wanted entries (`getScrapedTrueEntriesHolding`, a `JSON_TABLE` scan of
+  those titles' pages matching the hash in lower case, capped at 15 s by
+  `MAX_EXECUTION_TIME`) and returns each as the JSON object the page stores, unconverted,
+  so the same code a search uses reads it: takedown, executable-only, judged trash, entity
+  decoding and the usable-hash rule, Cyrillic-led, the size guard and reports, over those
+  entries alone. The list therefore holds what a search of the same page serves: an
+  upper-case hash, a numeric title or a string size is read as a search reads it. No page
+  is read whole. Where a page holds a hash twice, the first entry a search would keep wins.
   A hash on no page of its title is left out. In 150 recent production rows per provider
   on 2026-11-05, 113 RD rows and 134 AD rows had their hash on a page of their title; 56
   of 57 RD TV hits and 17 of 21 AD TV hits were on the row's own season page.
@@ -282,10 +286,14 @@ short page, or at 1,000 releases. A first sync reads one page.
   it without waiting for it; the build writes the new list to Redis, kept for seven days,
   and every instance pages that copy. A failed build is logged and leaves the last list
   in place. One build looks up at most `NEWLY_CACHED_RESOLVE_LIMIT` (1,000) unknown
-  hashes, newest first, 50 per query; the rest wait for the next build. Each answer,
+  hashes, newest first, 50 per query; the rest wait for the next build. A query that
+  fails, the 15 s cap for one, costs only its 50: their rows stay unknown for a later
+  build, and what the other queries found is remembered as each finishes. Each answer,
   found or not, is remembered for six hours, so a release on no page or one RD refuses is
-  not looked up every build, and a report, a trash verdict or a release scraped later
-  reaches the list within hours.
+  not looked up every build. A report or a trash verdict reaches a release not yet listed
+  within those six hours. A listed release is not judged again: it stays until its row
+  leaves the newest 3,000, which at the measured rate is 1.3 to 6 hours on RD and about 12
+  hours to 4 days on AD. A takedown still removes it at the next build.
 - **Without Redis.** Each instance keeps the list, the claim and the remembered answers in
   its own memory, the list and the claim apart from the size-capped answers so the cap
   never drops them; the list is also kept there while Redis is up, so an instance that
@@ -293,14 +301,15 @@ short page, or at 1,000 releases. A first sync reads one page.
   ioredis reports it per command rather than by throwing, which it does for a pipeline
   once the connection is closed. After a failure an instance runs on memory and tries a
   fresh Redis client after `REDIS_RETRY_MS` (30 s), so it returns to the shared list when
-  Redis does. A stored list not of the expected shape is no list, and the key prefix
+  Redis does; a late error from a client it has already dropped does not drop the new one. A stored list not of the expected shape is no list, and the key prefix
   (`torznab:newly:v2:`) carries a version so a future format is a new key.
 
 When the list has nothing for the request after the kind and category filters, or there
 is no list yet (the first request starts the first build and answers without it), the
 answer is the older one: the `RECENT_KEYS` (8) most recently refreshed library pages,
-`RECENT_PER_KEY` (5) releases from each. That is also the answer on the provider-probed
-feeds (`/tb`, `/pm`, `/oc`), where DMM keeps no cache history. It matters: Prowlarr and
+`RECENT_PER_KEY` (5) releases from each. That is also the answer on the Debrid-Link feeds
+(`/dl`) and the provider-probed feeds (`/tb`, `/pm`, `/oc`), which this list does not
+cover. It matters: Prowlarr and
 Sonarr test an indexer with exactly this request and report an empty answer as a
 **failed** test. `Available.createdAt` was added on 2026-11-06 with every existing row
 left `NULL`, so RD's list starts empty and fills from then on.
@@ -313,6 +322,13 @@ Known edges, accepted:
   placeholder. It is listed at the build that sees it cached, but only while that
   `createdAt` is still among the newest rows and inside the window.
 - A row deleted and recorded again gets a new `createdAt` and is listed again.
+- A release filed into the library more than about a depth's worth of time after it was
+  recorded as cached (hours on RD at the measured rate) may never be listed: by the time a
+  page holds it, its row has left the newest 3,000.
+- After a Redis outage an instance may list again, with a new date, releases it listed in
+  its own memory during the outage. An \*arr re-evaluates them; nothing is missed.
+- Instances whose clocks differ by more than a build interval could date one batch behind
+  a bookmark an \*arr took from another instance's batch.
 
 ### Backfill from debridio, Torrentio and Peerflix
 

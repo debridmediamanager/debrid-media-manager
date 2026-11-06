@@ -59,7 +59,7 @@ const SEARCH_MODES = [
 	{
 		mode: 'search',
 		what: 'Free-text search',
-		detail: 'q= anything. With no query at all it lists what DMM most recently found cached on Real-Debrid or AllDebrid, newest first; the TorBox, Premiumize and Offcloud feeds list what was scraped most recently.',
+		detail: 'q= anything. With no query at all it lists what DMM most recently found cached on Real-Debrid or AllDebrid, newest first; the other feeds list what was scraped most recently.',
 	},
 	{
 		mode: 'tvsearch',
