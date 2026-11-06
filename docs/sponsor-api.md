@@ -39,7 +39,7 @@ curl -X POST https://debridmediamanager.com/api/sponsor/availability \
   -d '{"service":"rd","imdbId":"tt0133093","hashes":["<info hash>"]}'
 ```
 
-`service` is `rd` (Real-Debrid) or `ad` (AllDebrid). `imdbId` is optional and
+`service` is `rd` (Real-Debrid), `ad` (AllDebrid) or `dl` (Debrid-Link). `imdbId` is optional and
 limits the answer to that title. `available` lists the hashes DMM users have found
 cached, with their files. A hash missing from it has not been seen cached, which
 does not mean it is not.

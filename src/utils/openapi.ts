@@ -652,14 +652,14 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'checkAvailability',
 				summary: 'Cached availability DMM has seen',
-				description: `Which hashes DMM users have found cached on Real-Debrid (\`rd\`) or AllDebrid (\`ad\`), with their files. \`imdbId\` limits the answer to that title. A hash missing from \`available\` has not been seen cached, which does not mean it is not.\n\n**Limit:** ${per(sponsorAvailability, 'calls')}.`,
+				description: `Which hashes DMM users have found cached on Real-Debrid (\`rd\`), AllDebrid (\`ad\`) or Debrid-Link (\`dl\`), with their files. \`imdbId\` limits the answer to that title. A hash missing from \`available\` has not been seen cached, which does not mean it is not.\n\n**Limit:** ${per(sponsorAvailability, 'calls')}.`,
 				security: sponsorKey,
 				requestBody: body(
 					{
 						type: 'object',
 						required: ['service', 'hashes'],
 						properties: {
-							service: { enum: ['rd', 'ad'] },
+							service: { enum: ['rd', 'ad', 'dl'] },
 							imdbId: { type: 'string', pattern: '^tt\\d+$' },
 							hashes: hashes(100),
 						},

@@ -29,6 +29,7 @@ describe('/api/sponsor/availability', () => {
 		mockRepository.checkAvailabilityByHashes = vi.fn().mockResolvedValue(FOUND);
 		mockRepository.checkAvailabilityAd = vi.fn().mockResolvedValue(FOUND);
 		mockRepository.checkAvailabilityAdByHashes = vi.fn().mockResolvedValue(FOUND);
+		mockRepository.checkAvailabilityDl = vi.fn().mockResolvedValue(FOUND);
 	});
 
 	afterEach(() => {
@@ -46,6 +47,15 @@ describe('/api/sponsor/availability', () => {
 
 		const args = imdbId ? [imdbId, [hashA]] : [[hashA]];
 		expect(mockRepository[method]).toHaveBeenCalledWith(...args);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ available: FOUND });
+	});
+
+	// Sponsors' tools could ask about RD and AD but not the Debrid-Link releases DMM records.
+	it.each([undefined, 'tt0133093'])('asks dl scoped to %s from its own table', async (imdbId) => {
+		const res = createMockResponse();
+		await handler(post({ service: 'dl', imdbId, hashes: [hashA.toUpperCase()] }), res);
+		expect(mockRepository.checkAvailabilityDl).toHaveBeenCalledWith([hashA], imdbId);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ available: FOUND });
 	});
