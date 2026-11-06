@@ -126,6 +126,20 @@ every guid and enclosure URL the \*arrs have stored.
    (stored and replayed by the \*arr for days; spoofable).
 6. Cache the full merged pre-offset set (even when empty), slice by `offset`/`limit`.
 
+A targeted search (`q`, `imdbid` or `tvdbid` present) is paged in an order set by
+`cleanNamesFirst` (`src/services/newznab/order.ts`): clean release names first, then
+reposts, then raw-subject posts, each group in merged order (a stable sort). A raw-subject
+post's title is an unprettified Usenet subject line, told by a part counter (`[01/48]`) or
+a quoted file name; clients parse it badly. A repost carries a reposter tag after the
+group (`-GRP-AsRequested`, `-GRP-FTP`) and counts as one only when the same title without
+the tag, compared by `releaseDedupKey`, is also in the set; otherwise it is the only copy
+and stays among the clean names. The tags are the ones Sonarr and Radarr strip in
+`ReleaseGroupParser.cs` (`CleanReleaseGroupRegex`), plus `FTP`. Nothing is dropped. The
+order is applied at page time, not when the set is cached, so entries cached before it
+existed are served in it too, and it is a pure function of the cached set, so paging with
+`offset` sees each item once. Untargeted queries are RSS syncs, which the \*arrs read as
+"what is new", and keep the merged order.
+
 Total upstream outage falls back to a stale cache entry rather than answering empty —
 an \*arr reads an empty feed as "these releases are gone".
 
@@ -219,6 +233,7 @@ watermark article is.
 | `src/pages/api/newznab/api.ts`             | Dispatch, auth wiring, rate limits, grab flow                          |
 | `src/services/newznab/auth.ts`             | `apikey`/header → sponsor lookup, 100 vs 101                           |
 | `src/services/newznab/search.ts`           | Normalization, cache, fan-out, pacing, item rewrite                    |
+| `src/services/newznab/order.ts`            | Clean names before reposts and raw-subject posts on targeted pages     |
 | `src/services/newznab/indexers.ts`         | `NEWZNAB_INDEXERS` env JSON → upstream list                            |
 | `src/services/newznab/opaqueId.ts`         | Deterministic encrypted release ids                                    |
 | `src/services/newznab/xml.ts`              | Hand-rolled caps / RSS / error writers                                 |
@@ -238,6 +253,6 @@ disabled without them). Documented with rationale in `.env.example`.
 
 `src/test/api/newznabApi.test.ts` (endpoint behavior — including the identity-stripping
 regression that greps a whole response for upstream hostnames, keys and id prefixes),
-`src/test/services/newznab{OpaqueId,Indexers,Xml,RateLimit,Store,ApiCache}.test.ts`,
+`src/test/services/newznab{OpaqueId,Indexers,Xml,RateLimit,Store,ApiCache,Order}.test.ts`,
 `src/test/pages/newznab.test.tsx`, plus the parser/sanitizer additions in
 `src/services/nzb2rd.test.ts` and `src/utils/nzbSanitize.test.ts`.

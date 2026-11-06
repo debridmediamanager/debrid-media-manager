@@ -30,6 +30,7 @@ import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
+import { cleanNamesFirst } from './order';
 import { getUpstreamLimiter } from './upstreamLimiter';
 import { MAX_LIMIT, NewznabRssItem } from './xml';
 
@@ -235,9 +236,10 @@ function toRssItem(result: CachedUsenetResult, apiKey: string): NewznabRssItem |
 function toPage(
 	results: CachedUsenetResult[],
 	apiKey: string,
-	{ limit, offset }: { limit: number; offset: number }
+	{ limit, offset, targeted }: { limit: number; offset: number; targeted: boolean }
 ): SearchPage {
-	const items = results
+	// An RSS sync is read as "what is new", so only a targeted search is reordered.
+	const items = (targeted ? cleanNamesFirst(results) : results)
 		.slice(offset, offset + limit)
 		.flatMap((result) => toRssItem(result, apiKey) ?? []);
 	return { items, offset, total: results.length };
@@ -268,7 +270,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	// Filtered on the way out rather than before caching, so an approval or a
 	// reversal applies to entries already cached.
 	const page = async (results: CachedUsenetResult[]) =>
-		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
+		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset, targeted });
 	if (cached?.isFresh) return page(cached.results);
 	if (cached && targeted && (await noNewPostSince(key, cached.updatedAt))) {
 		return page(cached.results);
