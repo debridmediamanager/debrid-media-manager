@@ -219,21 +219,6 @@ function SetupGuide({
 					the rest: it then fetches up to five pages on a default AIOStreams instance, and
 					each page counts as one of the searches per minute above.
 				</p>
-				<p className="mt-3 text-xs text-gray-400">
-					Your Usenet provider is what streams the release, and most providers resell
-					space on a handful of backbones, the networks that actually store the posts. A
-					release gone from one backbone can still be on another, so a second provider
-					only adds coverage if it sits on a different backbone.{' '}
-					<a
-						href="https://usenet.rexum.space/tree"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="underline decoration-dotted"
-					>
-						Look up a provider&apos;s backbone
-					</a>{' '}
-					before you buy one.
-				</p>
 			</Card>
 		</>
 	);

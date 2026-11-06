@@ -25,8 +25,7 @@ AIOStreams takes URL and API path as one `Newznab URL` (`…/api/newznab/api`, u
 `Custom`). It requests `limit` = the caps max and, unless its `Paginate Results` option
 (Advanced mode only) is on, never asks for a second page; with it on it fetches up to its
 instance's max pages (5 by default), each one a search against the per-key limit. The
-setup page at `/newznab` says this, plus a short note on Usenet backbones linking
-https://usenet.rexum.space/tree.
+setup page at `/newznab` says this.
 
 Auth reads `apikey=` from the query string first (the Newznab convention — every \*arr
 sends it there) and falls back to an `x-api-key` header. The key resolves through

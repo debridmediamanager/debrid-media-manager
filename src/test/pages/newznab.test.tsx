@@ -235,19 +235,6 @@ describe('Newznab setup page, for a sponsor', () => {
 		expect(document.body).toHaveTextContent(`one page of ${MAX_LIMIT} results`);
 	});
 
-	it('explains backbones and links a place to look a provider up', () => {
-		asSponsor();
-		render(<NewznabSetupPage />);
-
-		expect(
-			screen.getByText(/only adds coverage if it sits on a different backbone/)
-		).toBeTruthy();
-		expect(screen.getByRole('link', { name: "Look up a provider's backbone" })).toHaveAttribute(
-			'href',
-			'https://usenet.rexum.space/tree'
-		);
-	});
-
 	it('shows no sponsorship pitch to someone who already sponsors', () => {
 		asSponsor();
 		render(<NewznabSetupPage />);
