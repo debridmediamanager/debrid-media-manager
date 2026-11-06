@@ -23,6 +23,7 @@ const { mockUnrestrictLink, mockGetToken, mockRepository } = vi.hoisted(() => ({
 		removeAvailability: vi.fn(),
 		removeAvailableFileByLinkPrefix: vi.fn(),
 		deleteCastsByLinkPrefix: vi.fn(),
+		touchAvailabilityByLinkPrefix: vi.fn(),
 	},
 }));
 
@@ -52,6 +53,33 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 		mockRepository.removeAvailability.mockResolvedValue(undefined);
 		mockRepository.removeAvailableFileByLinkPrefix.mockResolvedValue(0);
 		mockRepository.deleteCastsByLinkPrefix.mockResolvedValue(0);
+		mockRepository.touchAvailabilityByLinkPrefix.mockResolvedValue(undefined);
+	});
+
+	// Nothing refreshed a recorded release, so one viewers kept playing aged out of Cast like a
+	// dead one. A play that unrestricted is proof it still serves.
+	it('keeps the record of a link that played fresh, and only that', async () => {
+		const play = async () => {
+			const res = createMockResponse();
+			await handler(
+				createMockRequest({
+					query: { userid: 'user', link: 'ABCDEFGHIJKLM' },
+					headers: { 'x-real-ip': '127.0.0.1' },
+				}),
+				res
+			);
+		};
+		await play();
+		await vi.waitFor(() =>
+			expect(mockRepository.touchAvailabilityByLinkPrefix).toHaveBeenCalledWith(
+				'https://real-debrid.com/d/ABCDEFGHIJKLM'
+			)
+		);
+
+		mockRepository.touchAvailabilityByLinkPrefix.mockClear();
+		mockUnrestrictLink.mockRejectedValue(rdErrorResponse('hoster_unavailable', 503));
+		await play();
+		expect(mockRepository.touchAvailabilityByLinkPrefix).not.toHaveBeenCalled();
 	});
 
 	it('validates required query params', async () => {

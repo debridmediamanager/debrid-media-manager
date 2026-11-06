@@ -111,6 +111,8 @@ export function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
 /** The links AllDebrid hands out for a file; a Debridio marker or a missing link is not one. */
 const AD_LINK_PREFIX = 'https://alldebrid.com/f/';
 
+const dayAgo = () => new Date(Date.now() - 24 * 60 * 60 * 1000);
+
 /** `Cache` keys marking a release removed from `Available`; see `removeAvailability`. */
 const EVICTED_PREFIX = 'avevicted:';
 /** The same for `AvailableAd`, left when its last dead file takes the release with it. */
@@ -684,6 +686,45 @@ export class AvailabilityService extends DatabaseClient {
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * A Cast play that unrestricted this link proves its release still serves, so its RD record
+	 * stays in Cast's window (`rdLinkCutoff`). Nothing else refreshes a recorded release.
+	 * At most once a day per record, so plays do not turn into writes.
+	 */
+	public async touchAvailabilityByLinkPrefix(linkPrefix: string): Promise<void> {
+		const files = await this.prisma.availableFile.findMany({
+			where: { link: { startsWith: linkPrefix } },
+			select: { hash: true },
+		});
+		const hashes = [...new Set(files.map((file) => file.hash))];
+		if (hashes.length === 0) return;
+		await this.prisma.available.updateMany({
+			where: { hash: { in: hashes }, status: 'downloaded', updatedAt: { lt: dayAgo() } },
+			data: { updatedAt: new Date() },
+		});
+	}
+
+	/** `touchAvailabilityByLinkPrefix` for AllDebrid: the record whose file is this `/f/` link. */
+	public async touchAvailabilityAdByLink(link: string): Promise<void> {
+		const file = await this.prisma.availableAdFile.findFirst({
+			where: { link },
+			select: { hash: true },
+		});
+		if (!file) return;
+		await this.prisma.availableAd.updateMany({
+			where: { hash: file.hash, status: 'Ready', updatedAt: { lt: dayAgo() } },
+			data: { updatedAt: new Date() },
+		});
+	}
+
+	/** `touchAvailabilityByLinkPrefix` for Debrid-Link, whose records hold no link: by hash. */
+	public async touchAvailabilityDl(hash: string): Promise<void> {
+		await this.prisma.availableDl.updateMany({
+			where: { hash: hash.toLowerCase(), updatedAt: { lt: dayAgo() } },
+			data: { updatedAt: new Date() },
+		});
 	}
 
 	public async getHashByLink(link: string): Promise<string | null> {

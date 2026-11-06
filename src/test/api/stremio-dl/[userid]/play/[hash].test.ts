@@ -68,6 +68,7 @@ describe('/api/stremio-dl/[userid]/play/[hash]', () => {
 		mockAdd.mockResolvedValue(finishedTorrent);
 		mockRepository.checkAvailabilityDl = vi.fn().mockResolvedValue([]);
 		mockRepository.removeAvailabilityDl = vi.fn().mockResolvedValue(undefined);
+		mockRepository.touchAvailabilityDl = vi.fn().mockResolvedValue(undefined);
 		mockProbe.mockResolvedValue({ cached: false });
 	});
 
@@ -166,6 +167,21 @@ describe('/api/stremio-dl/[userid]/play/[hash]', () => {
 	// Debrid-Link URLs are keyless, IP-agnostic and survive deletion, so a stored
 	// one plays for anybody - which is what makes it a real fallback when the
 	// viewer's own credential cannot resolve the hash.
+	// A release a viewer played whole still serves, so its record stays in Cast's window.
+	it('keeps the record of a release that played whole fresh', async () => {
+		await handler(request({ file: 'Show.S01/Show.S01E02.mkv' }), res);
+		await vi.waitFor(() =>
+			expect(mockRepository.touchAvailabilityDl).toHaveBeenCalledWith(HASH)
+		);
+	});
+
+	it('does not refresh a release still downloading', async () => {
+		mockAdd.mockResolvedValue({ ...finishedTorrent, status: 4, downloadPercent: 3 });
+		await handler(request(), res);
+		await vi.waitFor(() => expect(mockRepository.checkAvailabilityDl).toHaveBeenCalled());
+		expect(mockRepository.touchAvailabilityDl).not.toHaveBeenCalled();
+	});
+
 	// DL Cast offers releases DMM recorded on Debrid-Link. One Debrid-Link no longer holds would
 	// start a download on every viewer's account (one of their 50 daily uncached adds) until
 	// something forgets it, so the play that finds it unfinished has DMM check and forget it.

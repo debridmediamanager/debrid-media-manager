@@ -163,12 +163,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const apiKey = profile.apiKey;
 	// Retain the source token even if a later magnet fallback cannot resolve it.
 	let refusedLink: string | undefined;
+	// The stored `/f/` link that unlocked, whose record a working play keeps fresh.
+	let servedLink: string | undefined;
 
 	const resolveStreamUrl = async (): Promise<string> => {
 		// A saved link is already the source; there is no magnet to fall back to.
 		if (savedLink) {
 			refusedLink = savedLink;
-			return (await unlockLink(apiKey, savedLink)).link;
+			const url = (await unlockLink(apiKey, savedLink)).link;
+			servedLink = savedLink;
+			return url;
 		}
 
 		// The stored `/f/` link first: any premium key can unlock it and it
@@ -184,7 +188,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		try {
-			return (await unlockLink(apiKey, link)).link;
+			const url = (await unlockLink(apiKey, link)).link;
+			servedLink = link;
+			return url;
 		} catch (unlockError) {
 			// Only a refusal of the link itself is worth the magnet, which still
 			// works when the caster is the viewer. A refused key or account, or
@@ -246,4 +252,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return sendPlayFailure(res, 'ad', outcome.value.failure, outcome.value.detail);
 	}
 	res.redirect(outcome.value.url);
+	// it still serves, so its record stays in Cast's window; never in the viewer's way
+	if (servedLink) {
+		const link = servedLink;
+		Promise.resolve()
+			.then(() => db.touchAvailabilityAdByLink(link))
+			.catch(() => console.error('[AllDebrid Play] Failed to refresh a played release'));
+	}
 }

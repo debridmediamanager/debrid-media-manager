@@ -143,6 +143,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		// The redirect target is never logged: it is a permanent capability.
 		res.redirect(wanted.link);
+		// it still serves, so its record stays in Cast's window; never in the viewer's way
+		Promise.resolve()
+			.then(() => db.touchAvailabilityDl(hash))
+			.catch(() => console.error('Debrid-Link played-release refresh failed'));
 	} catch (error) {
 		const message = describeDebridLinkError(error);
 

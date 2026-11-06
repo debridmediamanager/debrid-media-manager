@@ -127,6 +127,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		res.redirect(unrestrict.download);
+		// it still serves, so its record stays in Cast's window; never in the viewer's way
+		Promise.resolve()
+			.then(() => db.touchAvailabilityByLinkPrefix(rdLink))
+			.catch((touchError) =>
+				console.error(
+					'Failed to refresh a played release:',
+					touchError instanceof Error ? touchError.message : 'Unknown error'
+				)
+			);
 	} catch (error) {
 		// A throttled unrestrict (error 34) and a 5xx both land here and mean
 		// nothing about the link, and neither does any 401 or 403. Only RD

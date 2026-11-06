@@ -700,6 +700,18 @@ export class Repository {
 		return this.availabilityService.removeAvailableFileByLinkPrefix(linkPrefix);
 	}
 
+	public touchAvailabilityByLinkPrefix(linkPrefix: string) {
+		return this.availabilityService.touchAvailabilityByLinkPrefix(linkPrefix);
+	}
+
+	public touchAvailabilityAdByLink(link: string) {
+		return this.availabilityService.touchAvailabilityAdByLink(link);
+	}
+
+	public touchAvailabilityDl(hash: string) {
+		return this.availabilityService.touchAvailabilityDl(hash);
+	}
+
 	public deleteCastsByLinkPrefix(linkPrefix: string) {
 		return this.castService.deleteCastsByLinkPrefix(linkPrefix);
 	}

@@ -193,7 +193,27 @@ describe('/api/stremio-ad/[userid]/play/[hash] saved links', () => {
 		vi.clearAllMocks();
 		res = createMockResponse();
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		mockRepository.touchAvailabilityAdByLink = vi.fn().mockResolvedValue(undefined);
 		mockGetAllDebridUser.mockResolvedValue({ isPremium: true } as any);
+	});
+
+	// AllDebrid's recorded releases play by their saved /f/ link; one that unlocked still
+	// serves, so its record stays in Cast's window. Nothing refreshed one before.
+	it('keeps the record of a saved link that unlocked, and only that', async () => {
+		mockUnlockLink.mockResolvedValue({ link: 'https://cdn.test/file.mkv' } as any);
+		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), res);
+		await vi.waitFor(() =>
+			expect(mockRepository.touchAvailabilityAdByLink).toHaveBeenCalledWith(LINK)
+		);
+
+		vi.mocked(mockRepository.touchAvailabilityAdByLink).mockClear();
+		mockUnlockLink.mockRejectedValue(adError('LINK_DOWN'));
+		mockRepository.removeDeadAllDebridLink = vi.fn().mockResolvedValue(undefined);
+		await handler(
+			createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }),
+			createMockResponse()
+		);
+		expect(mockRepository.touchAvailabilityAdByLink).not.toHaveBeenCalled();
 	});
 
 	// A saved link is the source itself - there is no magnet id to look up, and
