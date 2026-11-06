@@ -191,6 +191,37 @@ describe('NewznabApiCacheService', () => {
 		expect(call.create.value.results[0].pubDate).toBe('Mon, 05 Aug 2024 12:00:00 +0000');
 	});
 
+	it('records what a set is missing, and keeps the time of its fan-out on a merge', async () => {
+		await service.set('q', [result()], ['ah'], new Date(NOW - DAY));
+		expect(prisma.cache.upsert.mock.calls[0][0].create.value).toEqual({
+			results: [result()],
+			missing: ['ah'],
+			cachedAt: new Date(NOW - DAY).toISOString(),
+		});
+	});
+
+	// A merge rewrites the row, which moves its updatedAt: freshness has to keep
+	// reading the fan-out's own time, while the write time dates the last ask.
+	it('reads freshness from the fan-out time and the last ask from the row', async () => {
+		const recent = result(new Date(NOW - 2 * DAY).toUTCString());
+		prisma.cache.findUnique.mockResolvedValue({
+			key: newznabApiCacheKey('q'),
+			value: { results: [recent], missing: ['ah'], cachedAt: new Date(NOW - 13 * HOUR) },
+			updatedAt: new Date(NOW - HOUR),
+		});
+		const hit = await service.get('q', NOW);
+		expect(hit?.isFresh).toBe(false);
+		expect(hit?.updatedAt).toEqual(new Date(NOW - 13 * HOUR));
+		expect(hit?.missing).toEqual({ prefixes: ['ah'], askedAt: new Date(NOW - HOUR) });
+	});
+
+	it('reads an entry written before missing upstreams were recorded as complete', async () => {
+		prisma.cache.findUnique.mockResolvedValue(row([result()], HOUR));
+		const hit = await service.get('q', NOW);
+		expect(hit?.missing).toBeUndefined();
+		expect(hit?.updatedAt).toEqual(new Date(NOW - HOUR));
+	});
+
 	it('never throws a write failure into the request that triggered it', async () => {
 		prisma.cache.upsert.mockRejectedValue(new Error('db down'));
 		await expect(service.set('q', [result()])).resolves.toBeUndefined();

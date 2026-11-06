@@ -69,10 +69,15 @@ export type CachedUsenetResult = UsenetResult & { pubDate?: string; category?: s
 
 export interface CachedNewznabApiSearch {
 	results: CachedUsenetResult[];
+	/** When the full fan-out behind this set ran. A later merge of missing
+	 *  upstreams keeps it, so it neither extends the TTL nor hides newer posts. */
 	updatedAt: Date;
 	/** False for an entry past its TTL — still returned, so it can be served if
 	 *  the indexers are unreachable rather than failing the request outright. */
 	isFresh: boolean;
+	/** The upstreams this set has no answer from (by prefix), and when one was
+	 *  last asked. Absent for a complete set and for entries written before. */
+	missing?: { prefixes: string[]; askedAt: Date };
 }
 
 export function newznabApiCacheKey(query: string): string {
@@ -195,15 +200,24 @@ export class NewznabApiCacheService extends DatabaseClient {
 			});
 			if (!row) return null;
 
-			const value = row.value as unknown as { results?: unknown };
+			const value = row.value as unknown as {
+				results?: unknown;
+				missing?: string[];
+				cachedAt?: string;
+			};
 			if (!Array.isArray(value?.results)) return null;
 
 			const results = value.results as CachedUsenetResult[];
 			const ttlMs = Math.min(ttlForResults(results, now), maxTtlMs ?? Infinity);
+			const cachedAt = value.cachedAt ? new Date(value.cachedAt) : row.updatedAt;
 			return {
 				results,
-				updatedAt: row.updatedAt,
-				isFresh: isFresh(row.updatedAt, ttlMs, now),
+				updatedAt: cachedAt,
+				isFresh: isFresh(cachedAt, ttlMs, now),
+				// The row's own write time is the last time any upstream was asked.
+				...(value.missing?.length
+					? { missing: { prefixes: value.missing, askedAt: row.updatedAt } }
+					: {}),
 			};
 		} catch (error) {
 			console.error('Error reading Newznab API cache:', error);
@@ -211,8 +225,21 @@ export class NewznabApiCacheService extends DatabaseClient {
 		}
 	}
 
-	async set(key: string, results: CachedUsenetResult[]): Promise<void> {
-		const value = { results } as unknown as object;
+	/**
+	 * `missing` names the upstreams that gave no answer; `cachedAt` is passed
+	 * when merging into an existing set, to keep the time of its fan-out.
+	 */
+	async set(
+		key: string,
+		results: CachedUsenetResult[],
+		missing: string[] = [],
+		cachedAt?: Date
+	): Promise<void> {
+		const value = {
+			results,
+			...(missing.length ? { missing } : {}),
+			...(cachedAt ? { cachedAt: cachedAt.toISOString() } : {}),
+		} as unknown as object;
 		try {
 			await this.prisma.cache.upsert({
 				where: { key: newznabApiCacheKey(key) },

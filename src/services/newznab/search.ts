@@ -17,7 +17,10 @@
 //     `Request limit reached`, and Sonarr turns a refusal into a 24h backoff —
 //     so an indexer over budget is skipped for this query rather than asked.
 
-import { CachedUsenetResult } from '@/services/database/newznabApiCache';
+import type {
+	CachedNewznabApiSearch,
+	CachedUsenetResult,
+} from '@/services/database/newznabApiCache';
 import {
 	dedupeResults,
 	fanOut,
@@ -45,6 +48,9 @@ export function isSearchType(value: string): value is SearchType {
 
 /** Freshness ceiling for untargeted (RSS-sync) queries — see runSearch. */
 export const RSS_TTL_MS = 15 * 60 * 1000;
+
+/** How often a cached set's missing upstreams are asked again — see completed. */
+export const REFILL_AFTER_MS = 60 * 60 * 1000;
 
 /**
  * What every upstream is asked for, regardless of what the client asked for.
@@ -202,6 +208,64 @@ async function pacedIndexers(indexers: UpstreamIndexer[]): Promise<UpstreamIndex
 	return indexers.filter((_, index) => verdicts[index]);
 }
 
+function askUpstreams(t: string, params: Record<string, string>, indexers: UpstreamIndexer[]) {
+	return fanOut(
+		// `fanOut` types its callback on the narrower Indexer; every element it
+		// passes back is one of the UpstreamIndexers handed in.
+		(indexer: Indexer) => buildUpstreamUrl(indexer as UpstreamIndexer, t, params),
+		`newznab ${t}`,
+		indexers
+	);
+}
+
+/**
+ * The prefixes of `wanted` with no answer in a fan-out over `asked`: skipped
+ * for pacing, or failed. Zero results is an answer.
+ */
+function unanswered(
+	wanted: UpstreamIndexer[],
+	asked: UpstreamIndexer[],
+	answered: boolean[]
+): string[] {
+	return wanted.filter((indexer) => !answered[asked.indexOf(indexer)]).map((i) => i.prefix);
+}
+
+/**
+ * A cached set with the upstreams it is missing asked again, at most once per
+ * REFILL_AFTER_MS, and what they answer merged in.
+ *
+ * Only the missing ones are asked: the rest answered within the entry's TTL,
+ * and re-running the whole fan-out would spend their daily allowances again
+ * for the one that was skipped. Pacing still applies. An upstream since removed
+ * from the config is no longer waited for. The merge keeps the entry's own
+ * cache time, so its TTL and the fresh-post watch still date from the fan-out.
+ */
+async function completed(
+	t: string,
+	params: Record<string, string>,
+	key: string,
+	cached: CachedNewznabApiSearch
+): Promise<CachedUsenetResult[]> {
+	const { missing } = cached;
+	if (!missing || Date.now() - missing.askedAt.getTime() < REFILL_AFTER_MS) {
+		return cached.results;
+	}
+	const wanted = getUpstreamIndexers().filter((i) => missing.prefixes.includes(i.prefix));
+	if (wanted.length === 0) return cached.results;
+
+	const asked = await pacedIndexers(wanted);
+	const { lists, answered } = await askUpstreams(t, params, asked);
+	const results = dedupeResults([cached.results, ...lists]) as CachedUsenetResult[];
+	// Written even when nothing answered: the write dates the next try.
+	await db.setCachedNewznabApiSearch(
+		key,
+		results,
+		unanswered(wanted, asked, answered),
+		cached.updatedAt
+	);
+	return results;
+}
+
 /**
  * One merged result as an RSS item, or null when its id cannot be routed back
  * to an indexer (which would make the guid ungrabbable).
@@ -269,19 +333,13 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	// reversal applies to entries already cached.
 	const page = async (results: CachedUsenetResult[]) =>
 		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
-	if (cached?.isFresh) return page(cached.results);
-	if (cached && targeted && (await noNewPostSince(key, cached.updatedAt))) {
-		return page(cached.results);
+	if (cached?.isFresh || (cached && targeted && (await noNewPostSince(key, cached.updatedAt)))) {
+		return page(await completed(t, params, key, cached));
 	}
 
-	const indexers = await pacedIndexers(getUpstreamIndexers());
-	const { ok, lists } = await fanOut(
-		// `fanOut` types its callback on the narrower Indexer; every element it
-		// passes back is one of the UpstreamIndexers handed in just above.
-		(indexer: Indexer) => buildUpstreamUrl(indexer as UpstreamIndexer, t, params),
-		`newznab ${t}`,
-		indexers
-	);
+	const configured = getUpstreamIndexers();
+	const indexers = await pacedIndexers(configured);
+	const { ok, lists, answered } = await askUpstreams(t, params, indexers);
 
 	if (!ok) {
 		// Nothing answered — including the case where every indexer was over its
@@ -296,8 +354,9 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	if (!targeted) await db.recordNewznabFreshPosts(postsById(merged));
 	// Written even when empty: an hour of "nothing found" is the whole point of
 	// the empty TTL, and it is what caps upstream calls for a query nobody can
-	// satisfy. `set` swallows its own failures.
-	await db.setCachedNewznabApiSearch(key, merged);
+	// satisfy. `set` swallows its own failures. What it lacks is recorded, so
+	// a later read can ask just those upstreams (see completed).
+	await db.setCachedNewznabApiSearch(key, merged, unanswered(configured, indexers, answered));
 	return page(merged);
 }
 

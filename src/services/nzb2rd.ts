@@ -456,7 +456,7 @@ export function dedupeResults(lists: UsenetResult[][]): UsenetResult[] {
  * Run one query shape against every indexer at once. Best-effort per indexer:
  * one being down degrades coverage instead of emptying the page. `ok` reports
  * whether *any* indexer answered, so a total outage can still be told apart
- * from a genuine no-results.
+ * from a genuine no-results; `answered` says it per indexer, in input order.
  *
  * `indexers` defaults to the whole configured set, which is what the media
  * pages want. Passing an explicit list is how a caller narrows the fan-out to
@@ -467,7 +467,7 @@ export async function fanOut(
 	toUrl: (indexer: Indexer) => string,
 	label: string,
 	indexers: Indexer[] = getIndexers()
-): Promise<{ ok: boolean; lists: UsenetResult[][] }> {
+): Promise<{ ok: boolean; lists: UsenetResult[][]; answered: boolean[] }> {
 	const settled = await Promise.all(
 		indexers.map((indexer) =>
 			fetchResults(toUrl(indexer), indexer)
@@ -478,7 +478,8 @@ export async function fanOut(
 				})
 		)
 	);
-	return { ok: settled.some((s) => s.ok), lists: settled.map((s) => s.results) };
+	const answered = settled.map((s) => s.ok);
+	return { ok: answered.some(Boolean), lists: settled.map((s) => s.results), answered };
 }
 
 /**

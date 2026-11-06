@@ -960,6 +960,21 @@ describe('fanOut with an explicit indexer list', () => {
 		expect(lists.flat().map((r) => [r.id, r.indexer])).toEqual([['ah:b', 'altHUB']]);
 	});
 
+	// The Newznab cache records which upstreams gave no answer, so a failure has
+	// to be told apart from an empty list per indexer, not just overall.
+	it('says per indexer whether it answered, an empty answer included', async () => {
+		withAlthub();
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce({ ok: true, json: async () => ({ item: [] }) })
+			.mockRejectedValueOnce(new Error('down'));
+		vi.stubGlobal('fetch', fetchMock);
+
+		const { answered } = await fanOut((indexer) => `${indexer.url}?q=x`, 'test');
+
+		expect(answered).toEqual([true, false]);
+	});
+
 	it('still asks every configured indexer when no list is given', async () => {
 		withAlthub();
 		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => body('b') });
