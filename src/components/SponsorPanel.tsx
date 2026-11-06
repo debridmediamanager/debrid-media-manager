@@ -29,22 +29,27 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/torznab',
 		name: 'Torrent indexer',
-		what: "DMM's torrent library as a Torznab indexer",
+		what: "DMM's torrent library as a Torznab indexer, with live cache feeds for TorBox, Premiumize and Offcloud",
 	},
 	{
 		href: '/wanted',
 		name: 'Wanted list',
-		what: 'films and shows your zurg fetches for you, new episodes included, with nothing mounted',
+		what: 'films and shows your zurg fetches for you, new episodes and upgrades included, filled from here, Kodi, Trakt and MDBList lists or a Radarr or Sonarr backup',
+	},
+	{
+		href: 'https://notes.debridmediamanager.com/dmm/seerr/',
+		name: 'Seerr',
+		what: 'requests from Overseerr or Jellyseerr land in your Wanted list',
 	},
 	{
 		href: '/jellyfin',
 		name: 'Jellyfin plugins',
-		what: 'your Real-Debrid, AllDebrid, TorBox and Usenet libraries inside Jellyfin, with nothing mounted',
+		what: 'seven plugins: your Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, Debrid-Link and Usenet libraries inside Jellyfin, with nothing mounted',
 	},
 	{
 		href: '/emby',
 		name: 'Emby plugins',
-		what: 'the same debrid libraries inside Emby, one file per account',
+		what: 'six plugins for the same debrid libraries inside Emby, one file per account',
 	},
 	{
 		name: 'Ten other streams in Stremio Cast',
@@ -52,7 +57,30 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'Skip the queue',
-		what: 'priority on the NZB uploader and a higher job ceiling on the torrent uploader',
+		what: 'priority and 2 TB of Usenet a day instead of 300 GB on the NZB uploader, and three jobs at once instead of one on the torrent uploader',
+	},
+	{
+		href: 'https://zurg.debridmediamanager.com/',
+		name: 'zurg nightly',
+		what: 'every provider, the source code, the Docker image and the Android app',
+	},
+	{
+		name: 'zurg with your key',
+		what: 'set as dmm_api_key, DMM names every release for rex and Plex and sorts the __magic__ folders',
+	},
+	{
+		href: '/api-docs',
+		name: 'Sponsor API',
+		what: 'release identification, cached availability, media details and metadata for your own tools',
+	},
+	{
+		href: 'https://notes.debridmediamanager.com/guides/remote-help/',
+		name: 'Free remote help',
+		what: 'a helper fixes your zurg or rex setup in your own terminal while you watch',
+	},
+	{
+		name: 'Sponsor role on Discord',
+		what: 'connect Discord on gatekeeper',
 	},
 ];
 

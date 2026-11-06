@@ -82,6 +82,36 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
 	});
 
+	// Audited 2026-11-06 against the code: Seerr, the zurg build and the zurg
+	// features on the key, the sponsor API, remote help and the Discord role were
+	// live and missing here, and the plugin and uploader lines had no numbers.
+	it('lists every live perk, with the numbers', () => {
+		render(<SponsorPanel />);
+
+		expect(screen.getByRole('link', { name: 'Seerr' })).toHaveAttribute(
+			'href',
+			'https://notes.debridmediamanager.com/dmm/seerr/'
+		);
+		expect(screen.getByRole('link', { name: 'zurg nightly' })).toHaveAttribute(
+			'href',
+			'https://zurg.debridmediamanager.com/'
+		);
+		expect(screen.getByText('zurg with your key')).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Sponsor API' })).toHaveAttribute(
+			'href',
+			'/api-docs'
+		);
+		expect(screen.getByRole('link', { name: 'Free remote help' })).toHaveAttribute(
+			'href',
+			'https://notes.debridmediamanager.com/guides/remote-help/'
+		);
+		expect(screen.getByText('Sponsor role on Discord')).toBeInTheDocument();
+		expect(screen.getByText(/seven plugins/)).toBeInTheDocument();
+		expect(screen.getByText(/six plugins/)).toBeInTheDocument();
+		expect(screen.getByText(/2 TB of Usenet a day instead of 300 GB/)).toBeInTheDocument();
+		expect(screen.getByText(/three jobs at once instead of one/)).toBeInTheDocument();
+	});
+
 	const perksList = () =>
 		screen
 			.getByText(/What a sponsorship opens \(\d+\)/)
