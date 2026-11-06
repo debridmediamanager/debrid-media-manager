@@ -8,6 +8,7 @@ import {
 	SupportLine,
 } from '@/components/IndexerSetup';
 import { useSponsor } from '@/hooks/useSponsor';
+import { MAX_LIMIT } from '@/services/newznab/xml';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { toasterPosition } from '@/utils/toastOptions';
 import { KeyRound, ShieldCheck } from 'lucide-react';
@@ -197,6 +198,27 @@ function SetupGuide({
 						no per-download watermark reaches the client.
 					</span>
 				</div>
+			</Card>
+
+			<Card title="6. Using it from AIOStreams">
+				<p className="mb-3 text-gray-300">
+					Addons → Marketplace → <strong>Newznab</strong>. Set{' '}
+					<strong>Newznab URL</strong> to <strong>Custom</strong> and paste the line
+					below; <strong>API Key</strong> takes the same DMM API key as above.
+				</p>
+				<div className="rounded bg-gray-900/60 px-3 py-1">
+					<Field
+						label="Newznab URL"
+						value={`${indexerUrl}${API_PATH}`}
+						hint="URL and API path in one"
+					/>
+				</div>
+				<p className="mt-3 text-xs text-gray-400">
+					AIOStreams asks for one page of {MAX_LIMIT} results and stops there. Switch to
+					Advanced mode and turn on <strong>Paginate Results</strong> in the addon to get
+					the rest: it then fetches up to five pages on a default AIOStreams instance, and
+					each page counts as one of the searches per minute above.
+				</p>
 			</Card>
 		</>
 	);
