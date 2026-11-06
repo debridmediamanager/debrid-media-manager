@@ -17,8 +17,9 @@ export type ImdbSearchResult = {
 
 export class ImdbSearchService extends DatabaseClient {
 	/**
-	 * Search IMDB titles using fulltext search on title variants
-	 * Falls back to LIKE search if fulltext returns no results
+	 * Search IMDB titles using fulltext search on title variants, and exact
+	 * equality for titles the fulltext index cannot hold. What neither finds
+	 * is no title: there is no LIKE '%…%' fallback (see the end of this method).
 	 */
 	async searchTitles(
 		keyword: string,
@@ -88,12 +89,11 @@ export class ImdbSearchService extends DatabaseClient {
 			console.warn('Akas fulltext search failed:', error);
 		}
 
-		if (exact.length > 0) {
-			return exact;
-		}
-
-		// Fall back to LIKE search on basics table
-		return this.searchWithLike(cleanKeyword, typeFilter, yearFilter, limit);
+		// No LIKE '%…%' fallback: no index serves it, so it read imdb_title_basics row by
+		// row, ran into its 5 s cap on almost every miss and found nothing even when it
+		// finished. 555 such timeouts in one night ("Lupin III 180", "2014 interstellar movie";
+		// 2026-11-06), none of 65 measured scans and 103 title-route misses returned a title.
+		return exact;
 	}
 
 	/**
@@ -329,75 +329,6 @@ export class ImdbSearchService extends DatabaseClient {
 			votes: r.votes ? Number(r.votes) : null,
 			isOriginalMatch: Boolean(r.isOriginalMatch),
 			matchedTitle: r.matchedTitle ?? undefined,
-		}));
-	}
-
-	/**
-	 * The LIKE fallback reads every title (no index serves LOWER(...) LIKE '%…%'),
-	 * 22-30 s for a movie search on dmmdb's 12.9M (2026-10-19). Past this it gives
-	 * up: what the fulltext searches did not find is almost always no title.
-	 */
-	static readonly LIKE_TIMEOUT_MS = 5000;
-
-	private async searchWithLike(
-		keyword: string,
-		typeFilter: Prisma.Sql,
-		yearFilter: Prisma.Sql,
-		limit: number
-	): Promise<ImdbSearchResult[]> {
-		// Use imdb_title_basics for faster search (smaller table, ~11M rows vs 54M in akas)
-		const likePattern = `%${keyword}%`;
-		const startsWithPattern = `${keyword}%`;
-
-		const query = Prisma.sql`
-			SELECT /*+ MAX_EXECUTION_TIME(${Prisma.raw(String(ImdbSearchService.LIKE_TIMEOUT_MS))}) */
-				b.tconst as imdbId,
-				CASE
-					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
-					ELSE 'show'
-				END as type,
-				b.start_year as year,
-				b.primary_title as title,
-				b.original_title as originalTitle,
-				r.average_rating as rating,
-				r.num_votes as votes,
-				1 as isOriginalMatch,
-				CASE
-					WHEN LOWER(b.primary_title) = LOWER(${keyword}) THEN 3
-					WHEN LOWER(b.primary_title) LIKE LOWER(${startsWithPattern}) THEN 2
-					ELSE 1
-				END as matchQuality
-			FROM imdb_title_basics b
-			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
-			WHERE (LOWER(b.primary_title) LIKE LOWER(${likePattern})
-				OR LOWER(b.original_title) LIKE LOWER(${likePattern}))
-				${typeFilter}
-				${yearFilter}
-				AND b.is_adult = 0
-			ORDER BY r.tconst IS NULL, matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
-			LIMIT ${limit}
-		`;
-
-		let results: any[];
-		try {
-			results = await this.prisma.$queryRaw<any[]>(query);
-		} catch (error) {
-			// ER_QUERY_TIMEOUT (3024): the scan ran out of time, which is no match.
-			if (String((error as Error)?.message).includes('maximum statement execution time')) {
-				return [];
-			}
-			throw error;
-		}
-
-		return results.map((r) => ({
-			imdbId: r.imdbId,
-			type: r.type as 'movie' | 'show',
-			year: r.year,
-			title: r.title || r.originalTitle || '',
-			originalTitle: r.originalTitle,
-			rating: r.rating ? Number(r.rating) : null,
-			votes: r.votes ? Number(r.votes) : null,
-			isOriginalMatch: Boolean(r.isOriginalMatch),
 		}));
 	}
 

@@ -10,15 +10,21 @@
  * queries on dmmdb that day (`imdb-short-titles-2026-10-24.json`), and the
  * tables are dmmdb's own DDL on the server version it runs.
  *
+ * It also runs the searches that fell through to the LIKE '%…%' scan on dmmdb
+ * (`imdb-search-misses-2026-11-06.json`) and reads the plan of every statement
+ * they send.
+ *
  * Needs Docker. Skipped without it, like the other integration tests.
  */
+import type { ImdbSearchService } from '@/services/database/imdbSearch';
+import misses from '@/test/fixtures/imdb-search-misses-2026-11-06.json';
 import recorded from '@/test/fixtures/imdb-short-titles-2026-10-24.json';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 let dockerAvailable = false;
 try {
@@ -44,7 +50,7 @@ const DDL = readFileSync(
 	.filter(Boolean);
 
 describe.skipIf(!dockerAvailable)(
-	'Searching short-word titles on MySQL 8.0.36 (Integration)',
+	'Searching short-word titles and misses on MySQL 8.0.36 (Integration)',
 	() => {
 		let container: StartedTestContainer;
 		let monitor: PrismaClient;
@@ -116,5 +122,38 @@ describe.skipIf(!dockerAvailable)(
 			expect(titles[0]).toBe('20/20');
 			expect(titles.slice(0, lastExact).every((t) => /^20\W20$/.test(t))).toBe(true);
 		});
+
+		// No index serves LIKE '%…%', so dmmdb read those titles one by one: 1.4 s for a show,
+		// the 5 s cap for anything else, and no title found either way (2026-11-06).
+		type SearchArgs = Parameters<ImdbSearchService['searchTitles']>;
+		it.each(misses.misses.map((m) => [m.request, ...(m.search as SearchArgs)] as const))(
+			'finds nothing for %s by index alone',
+			async (_request, keyword, options) => {
+				const { repository } = await import('@/services/repository');
+				const prisma = (repository as any).imdbSearchService.prisma as PrismaClient;
+				const sent = vi.spyOn(prisma, '$queryRaw');
+
+				const results = await repository.searchImdbTitles(keyword, options);
+				const statements = sent.mock.calls.map(([query]) => query as Prisma.Sql);
+				sent.mockRestore();
+
+				expect(results).toEqual([]);
+				expect(statements.length).toBeGreaterThan(0);
+				for (const statement of statements) {
+					const plan = await monitor.$queryRaw<Array<Record<string, unknown>>>(
+						Prisma.sql`EXPLAIN ${statement}`
+					);
+					for (const step of plan) {
+						// Prisma names EXPLAIN's columns f0, f1, …, in MySQL's order: id, select_type, table, partitions, type, possible_keys, key
+						const [, , table, , , , key] = Object.values(step);
+						// The search words' fulltext index, then joins on the primary key; the LIKE scan read b by none of them
+						expect({ table, key }).toEqual({
+							table,
+							key: expect.stringMatching(/^(ft_primary_title|ft_title|PRIMARY)$/),
+						});
+					}
+				}
+			}
+		);
 	}
 );

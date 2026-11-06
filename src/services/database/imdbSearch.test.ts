@@ -1,3 +1,4 @@
+import misses from '@/test/fixtures/imdb-search-misses-2026-11-06.json';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import coverage from './__fixtures__/imdb-coverage-titles.json';
 import futurama from './__fixtures__/imdb-futurama-titles.json';
@@ -84,55 +85,36 @@ describe('ImdbSearchService', () => {
 			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(2);
 		});
 
-		it('falls back to LIKE search when both fulltext searches fail', async () => {
+		it('answers nothing, without scanning, when both fulltext searches fail', async () => {
 			prismaMock.$queryRaw
 				.mockRejectedValueOnce(new Error('fulltext index missing'))
-				.mockRejectedValueOnce(new Error('fulltext index missing'))
-				.mockResolvedValueOnce([
-					{
-						imdbId: 'tt002',
-						type: 'show',
-						year: 2020,
-						title: 'Test Show',
-						originalTitle: null,
-						rating: null,
-						votes: null,
-						isOriginalMatch: 1,
-					},
-				]);
-
+				.mockRejectedValueOnce(new Error('fulltext index missing'));
 			const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
 			const results = await service.searchTitles('Test Show');
 
-			expect(results).toHaveLength(1);
-			expect(results[0].title).toBe('Test Show');
-			expect(results[0].rating).toBeNull();
+			expect(results).toEqual([]);
+			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(2);
 			consoleSpy.mockRestore();
 		});
 
-		it('falls back to LIKE when both fulltext return empty', async () => {
-			prismaMock.$queryRaw
-				.mockResolvedValueOnce([])
-				.mockResolvedValueOnce([])
-				.mockResolvedValueOnce([
-					{
-						imdbId: 'tt003',
-						type: 'movie',
-						year: 2023,
-						title: 'Like Result',
-						originalTitle: 'Like Result',
-						rating: 6.0,
-						votes: 50,
-						isOriginalMatch: 1,
-					},
-				]);
+		// What fulltext could not find went to a LIKE '%…%' scan that no index serves: 1.4 s
+		// for a show, the 5 s cap for anything else, and no title either way. 555 timeouts in
+		// one night of Torznab anime and daily-show searches and title-route misses (2026-11-06).
+		type SearchArgs = Parameters<ImdbSearchService['searchTitles']>;
+		it.each(misses.misses.map((m) => [m.request, ...(m.search as SearchArgs)] as const))(
+			'answers %s from indexes alone',
+			async (_request, keyword, options) => {
+				prismaMock.$queryRaw.mockResolvedValue([]);
 
-			const results = await service.searchTitles('Like Result');
+				const results = await service.searchTitles(keyword, options);
 
-			expect(results).toHaveLength(1);
-			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(3);
-		});
+				expect(results).toEqual([]);
+				for (const [query] of prismaMock.$queryRaw.mock.calls) {
+					expect(query.sql).toMatch(/WHERE (MATCH\(|b\.primary_title IN )/);
+				}
+			}
+		);
 
 		// A zurg-usenet release, 10 Things I Hate About You (1999) Hin-Eng (1080p BluRay 10bit x265
 		// CZaRS) [PMZ], searched as "10 things i hate about you movie": "10" is shorter than
@@ -228,24 +210,6 @@ describe('ImdbSearchService', () => {
 			);
 			expect(ImdbSearchService.exactTitleSpellings('m a s h')).toContain('m*a*s*h');
 			expect(ImdbSearchService.fulltextCannotFind('48 hours')).toBe(false);
-		});
-
-		it('gives up on a LIKE scan that runs out of time', async () => {
-			prismaMock.$queryRaw
-				.mockResolvedValueOnce([])
-				.mockResolvedValueOnce([])
-				.mockRejectedValueOnce(
-					new Error(
-						'Raw query failed. Code: `3024`. Message: `Query execution was interrupted, maximum statement execution time exceeded`'
-					)
-				);
-
-			const results = await service.searchTitles('xf recyclotransformers nfo');
-
-			expect(results).toEqual([]);
-			expect(prismaMock.$queryRaw.mock.calls[2][0].sql).toContain(
-				`MAX_EXECUTION_TIME(${ImdbSearchService.LIKE_TIMEOUT_MS})`
-			);
 		});
 
 		it('skips fulltext for all-stopword queries', async () => {

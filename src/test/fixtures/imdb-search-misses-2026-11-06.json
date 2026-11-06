@@ -1,0 +1,270 @@
+{
+	"misses": [
+		{
+			"request": "/api/torznab t=search q=Lupin III 180",
+			"search": [
+				"Lupin III 180",
+				{
+					"limit": 1
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0119,
+				"akas": 0.0473,
+				"like": 4999.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Lupin III 243",
+			"search": [
+				"Lupin III 243",
+				{
+					"limit": 1
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.00917,
+				"akas": 0.046,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Edens Zero 2nd Season 39 cat=5030,5040,5045,5000",
+			"search": [
+				"Edens Zero 2nd",
+				{
+					"limit": 1,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0117,
+				"akas": 0.0393,
+				"like": 1433.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=LAttaque des titans 49 cat=5030,5040,5045,5000",
+			"search": [
+				"LAttaque des titans 49",
+				{
+					"limit": 1,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0119,
+				"akas": 0.0464,
+				"like": 2520.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=My Hero Academy S3 24 cat=5030,5040,5045,5000",
+			"search": [
+				"My Hero Academy 24",
+				{
+					"limit": 1,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.112,
+				"akas": 0.387,
+				"like": 2376.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Never Mind the Buzzcocks 1996.11.26",
+			"search": [
+				"Never Mind the Buzzcocks 1996 11 26",
+				{
+					"limit": 1
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0124,
+				"akas": 0.0467,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Would I Lie to You? 2018.01.03",
+			"search": [
+				"Would I Lie to You 2018 01 03",
+				{
+					"limit": 1
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0125,
+				"akas": 0.0503,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=tvsearch q=Coronation street 14th Aug 2024 cat=5030,5040,5045,5000",
+			"search": [
+				"Coronation street 14th Aug",
+				{
+					"limit": 1,
+					"year": 2024,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0107,
+				"akas": 0.0476,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=tvsearch q=Owarimonogatari Second Season cat=5030,5040,5045,5000",
+			"search": [
+				"Owarimonogatari Second Season",
+				{
+					"limit": 1,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0103,
+				"akas": 0.0454,
+				"like": 1745.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=It's Always Sunny in Philadelphia Complete cat=5000",
+			"search": [
+				"It s Always Sunny in Philadelphia Complete",
+				{
+					"limit": 1,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0125,
+				"akas": 0.0475,
+				"like": 1674.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Kokoa 2001",
+			"search": [
+				"Kokoa",
+				{
+					"limit": 1,
+					"year": 2001
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0702,
+				"akas": 0.183,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=Snow Cat 1998 cat=2030,2040,2045,2000",
+			"search": [
+				"Snow Cat",
+				{
+					"limit": 1,
+					"year": 1998,
+					"mediaType": "movie"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.296,
+				"akas": 0.585,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/torznab t=search q=New Super Mario Bros Wii PAL",
+			"search": [
+				"New Super Mario Bros Wii PAL",
+				{
+					"limit": 1
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0122,
+				"akas": 0.0512,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/search/title?keyword=2014 interstellar movie",
+			"search": [
+				"2014 interstellar",
+				{
+					"limit": 120,
+					"mediaType": "movie"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0467,
+				"akas": 0.314,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/search/title?keyword=kubko a matko",
+			"search": [
+				"kubko a matko",
+				{
+					"limit": 120
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0753,
+				"akas": 0.152,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/search/title?keyword=greys anatomy show",
+			"search": [
+				"greys anatomy",
+				{
+					"limit": 120,
+					"mediaType": "show"
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0317,
+				"akas": 0.11,
+				"like": 1658.0
+			}
+		},
+		{
+			"request": "/api/search/title?keyword=blueyt",
+			"search": [
+				"blueyt",
+				{
+					"limit": 120
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.0177,
+				"akas": 0.0549,
+				"like": 5000.0
+			}
+		},
+		{
+			"request": "/api/search/title?keyword=Dexter Resurrection S02E02",
+			"search": [
+				"dexter resurrection s02e02",
+				{
+					"limit": 120
+				}
+			],
+			"dmmdbMs": {
+				"basics": 0.00997,
+				"akas": 0.0442,
+				"like": 5000.0
+			}
+		}
+	],
+	"recordedAt": "2026-11-06",
+	"source": "Searches that fell through to the LIKE '%…%' fallback on dmmdb on 2026-11-06, taken from the requests that completed as its 5 s cap fired (555 times that night, in the web logs and the proxy log). `search` is what the search route or the Torznab resolver passed to searchTitles. `dmmdbMs` is EXPLAIN ANALYZE on dmmdb (MySQL 8.0.36) the same day, each statement capped at 5 s: both fulltext statements and the LIKE scan. None found a row."
+}
