@@ -494,15 +494,16 @@ the first would be wrong if the filter were applied after slicing. Lookups are c
 
 ## Module map
 
-| File                                  | Purpose                                                    |
-| ------------------------------------- | ---------------------------------------------------------- |
-| `src/pages/api/torznab/[...route].ts` | Dispatch, path variants, auth wiring, rate limits          |
-| `src/services/torznab/resolve.ts`     | Query → library page keys (id normalization, TVDB, titles) |
-| `src/services/torznab/search.ts`      | Library reads, backfill fallback, cache signal, paging     |
-| `src/services/torznab/newlyCached.ts` | The RSS sync's shared list and title memo (Redis + memory) |
-| `src/services/torznab/categories.ts`  | Category derivation and `cat=` matching                    |
-| `src/services/torznab/xml.ts`         | Hand-rolled caps / RSS writers                             |
-| `src/pages/torznab.tsx`               | Sponsor setup page (client gate is cosmetic)               |
+| File                                      | Purpose                                                         |
+| ----------------------------------------- | --------------------------------------------------------------- |
+| `src/pages/api/torznab/[...route].ts`     | Dispatch, path variants, auth wiring, rate limits               |
+| `src/services/torznab/resolve.ts`         | Query → library page keys (id normalization, TVDB, titles)      |
+| `src/services/torznab/search.ts`          | Library reads, backfill fallback, cache signal, paging          |
+| `src/services/torznab/newlyCached.ts`     | The RSS sync's shared list and title memo (Redis + memory)      |
+| `src/services/torznab/redisWithMemory.ts` | Redis shared by the instances, memory fallback, for both stores |
+| `src/services/torznab/categories.ts`      | Category derivation and `cat=` matching                         |
+| `src/services/torznab/xml.ts`             | Hand-rolled caps / RSS writers                                  |
+| `src/pages/torznab.tsx`                   | Sponsor setup page (client gate is cosmetic)                    |
 
 Supporting additions elsewhere: `getScrapedTrueRow` / `getScrapedTrueSeasonKeys` /
 `getRecentScrapedTrueKeys` / `getScrapedTrueEntriesHolding` (`services/database/scraped.ts`),

@@ -28,7 +28,7 @@ import { checkCachedStatus } from '@/services/torbox';
 import type { TorBoxCachedItem } from '@/services/types';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { LIVE_SERVICE_LABELS } from '@/utils/sponsorProviders';
-import Redis from 'ioredis';
+import { RedisWithMemory } from './redisWithMemory';
 
 /**
  * How many unknown hashes one request may spend on live probes.
@@ -57,7 +57,6 @@ export const HIT_TTL_SECONDS = 6 * 60 * 60;
 export const MISS_TTL_SECONDS = 30 * 60;
 
 const KEY_PREFIX = 'torznab:pcache:';
-const MEMORY_MAX_ENTRIES = 50_000;
 
 /**
  * A provider-backed feed was asked for without that provider's key linked.
@@ -86,118 +85,46 @@ export class ProviderProbeError extends Error {
 /** The memo also answers for Debrid-Link, whose probe the Cast DL stream route owns. */
 type MemoService = TorznabLiveService | 'dl';
 
-interface MemoryEntry {
-	cached: boolean;
-	expiresAt: number;
-}
-
 /**
  * The cross-sponsor memo of provider cache answers.
  *
  * Redis-backed so the four Swarm instances share one memo, with an in-process
  * fallback so a Redis outage costs extra provider calls rather than a broken
- * feed. Modelled on `CanaryStore`, which makes the same trade for the same
- * reason.
+ * feed (`RedisWithMemory`).
  */
 export class ProviderCacheMemo {
-	private redis: Redis | null = null;
-	private redisAvailable = true;
-	private memory = new Map<string, MemoryEntry>();
+	private store: RedisWithMemory;
 
-	constructor(private redisUrl?: string) {}
-
-	private client(): Redis | null {
-		if (this.redis) return this.redis;
-		if (!this.redisUrl || !this.redisAvailable) return null;
-		try {
-			this.redis = new Redis(this.redisUrl, {
-				maxRetriesPerRequest: 1,
-				retryStrategy: () => null,
-				connectTimeout: 2000,
-				commandTimeout: 1000,
-				lazyConnect: true,
-			});
-			this.redis.on('error', () => {
-				this.redisAvailable = false;
-			});
-			return this.redis;
-		} catch {
-			this.redisAvailable = false;
-			return null;
-		}
+	constructor(redisUrl?: string) {
+		this.store = new RedisWithMemory(redisUrl, 1000);
 	}
 
 	private key(service: MemoService, hash: string): string {
 		return `${KEY_PREFIX}${service}:${hash}`;
 	}
 
-	private readMemory(service: MemoService, hashes: string[]): Map<string, boolean> {
-		const now = Date.now();
-		const known = new Map<string, boolean>();
-		for (const hash of hashes) {
-			const entry = this.memory.get(this.key(service, hash));
-			if (!entry) continue;
-			if (entry.expiresAt <= now) {
-				this.memory.delete(this.key(service, hash));
-				continue;
-			}
-			known.set(hash, entry.cached);
-		}
-		return known;
-	}
-
 	/** What is already known, keyed by the normalised hash. Never throws. */
 	public async read(service: MemoService, hashes: string[]): Promise<Map<string, boolean>> {
 		if (hashes.length === 0) return new Map();
-
-		const client = this.client();
-		if (!client) return this.readMemory(service, hashes);
-
-		try {
-			const values = await client.mget(hashes.map((hash) => this.key(service, hash)));
-			const known = new Map<string, boolean>();
-			values.forEach((value, index) => {
-				if (value === '1') known.set(hashes[index], true);
-				else if (value === '0') known.set(hashes[index], false);
-			});
-			return known;
-		} catch {
-			this.redisAvailable = false;
-			return this.readMemory(service, hashes);
-		}
+		const values = await this.store.get(hashes.map((hash) => this.key(service, hash)));
+		const known = new Map<string, boolean>();
+		values.forEach((value, index) => {
+			if (value === '1') known.set(hashes[index], true);
+			else if (value === '0') known.set(hashes[index], false);
+		});
+		return known;
 	}
 
 	/** Best-effort: a memo that cannot be written costs a re-probe, nothing more. */
 	public async write(service: MemoService, entries: Map<string, boolean>): Promise<void> {
 		if (entries.size === 0) return;
-
-		const client = this.client();
-		if (client) {
-			try {
-				const pipeline = client.pipeline();
-				for (const [hash, cached] of entries) {
-					pipeline.set(
-						this.key(service, hash),
-						cached ? '1' : '0',
-						'EX',
-						cached ? HIT_TTL_SECONDS : MISS_TTL_SECONDS
-					);
-				}
-				await pipeline.exec();
-				return;
-			} catch {
-				this.redisAvailable = false;
-			}
-		}
-
-		const now = Date.now();
-		for (const [hash, cached] of entries) {
-			if (this.memory.size >= MEMORY_MAX_ENTRIES) this.memory.clear();
-			this.memory.set(this.key(service, hash), {
-				cached,
-				expiresAt: now + (cached ? HIT_TTL_SECONDS : MISS_TTL_SECONDS) * 1000,
-			});
-		}
+		await this.store.set(
+			[...entries].map(([hash, cached]) => [
+				this.key(service, hash),
+				cached ? '1' : '0',
+				cached ? HIT_TTL_SECONDS : MISS_TTL_SECONDS,
+			])
+		);
 	}
 }
 

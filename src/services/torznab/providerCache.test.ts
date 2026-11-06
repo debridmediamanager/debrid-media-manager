@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fakeRedis } from '@/test/utils/fakeIoredis';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const checkCachedStatus = vi.fn();
 const checkPremiumizeCache = vi.fn();
@@ -9,6 +10,9 @@ vi.mock('@/services/torbox', () => ({
 }));
 vi.mock('@/services/premiumize', () => ({
 	checkPremiumizeCache: (...args: unknown[]) => checkPremiumizeCache(...args),
+}));
+vi.mock('ioredis', async () => ({
+	default: (await import('@/test/utils/fakeIoredis')).FakeIoredis,
 }));
 vi.mock('@/services/offcloud', () => ({
 	checkOffcloudCache: (...args: unknown[]) => checkOffcloudCache(...args),
@@ -22,6 +26,7 @@ import {
 	setProviderCacheMemo,
 	validateProviderKey,
 } from './providerCache';
+import { REDIS_RETRY_MS } from './redisWithMemory';
 
 /** The in-memory half of the real memo, which is what runs with no REDIS_URL. */
 function freshMemo() {
@@ -215,5 +220,74 @@ describe('validateProviderKey', () => {
 			name: 'ProviderProbeError',
 			service: 'pm',
 		});
+	});
+});
+
+describe('ProviderCacheMemo on Redis', () => {
+	const KEY = 'torznab:pcache:tb:';
+	const answers = new Map([
+		[hash(1), true],
+		[hash(2), false],
+	]);
+
+	beforeEach(() => {
+		fakeRedis.reset();
+		vi.useFakeTimers({ toFake: ['Date'] });
+		vi.setSystemTime(new Date('2026-11-06T12:00:00Z'));
+	});
+	afterEach(() => vi.useRealTimers());
+
+	it('shares what one instance learned with another', async () => {
+		await new ProviderCacheMemo('redis://x').write('tb', answers);
+		expect(await new ProviderCacheMemo('redis://x').read('tb', [hash(1), hash(2)])).toEqual(
+			answers
+		);
+	});
+
+	it('keeps answers in memory when a pipelined write fails command by command', async () => {
+		const memo = new ProviderCacheMemo('redis://x');
+		fakeRedis.down = true;
+
+		await memo.write('tb', answers);
+
+		expect(await memo.read('tb', [hash(1), hash(2)])).toEqual(answers);
+	});
+
+	it('goes back to Redis once it is reachable again', async () => {
+		const memo = new ProviderCacheMemo('redis://x');
+		fakeRedis.down = true;
+		await memo.write('tb', answers);
+		fakeRedis.down = false;
+
+		vi.setSystemTime(Date.now() + REDIS_RETRY_MS);
+		await memo.write('tb', answers);
+
+		expect(fakeRedis.values.get(`${KEY}${hash(1)}`)?.value).toBe('1');
+		expect(fakeRedis.clients).toBe(2);
+	});
+
+	it('keeps a new client when the one it replaced reports an error late', async () => {
+		const memo = new ProviderCacheMemo('redis://x');
+		fakeRedis.down = true;
+		await memo.read('tb', [hash(1)]);
+		fakeRedis.down = false;
+		vi.setSystemTime(Date.now() + REDIS_RETRY_MS);
+		await memo.read('tb', [hash(1)]);
+
+		for (const handler of fakeRedis.errorHandlers[0]) handler();
+		await memo.write('tb', answers);
+
+		expect(fakeRedis.values.has(`${KEY}${hash(1)}`)).toBe(true);
+		expect(fakeRedis.clients).toBe(2);
+	});
+
+	it('drops its oldest answer at the memory cap, not all of them', async () => {
+		const memo = new ProviderCacheMemo();
+		const many = new Map(Array.from({ length: 50_001 }, (_, i) => [hash(i), true]));
+
+		await memo.write('tb', many);
+
+		const kept = await memo.read('tb', [hash(0), hash(1), hash(50_000)]);
+		expect([...kept.keys()]).toEqual([hash(1), hash(50_000)]);
 	});
 });
