@@ -182,7 +182,9 @@ function buildUpstreamUrl(
  * An indexer with no measured quota has no `pacing` and is always included — a
  * guessed cap is worse than none. One over its budget is skipped for this query,
  * which costs coverage on one search rather than the day-long backoff an *arr
- * applies when an indexer answers `Request limit reached`.
+ * applies when an indexer answers `Request limit reached`. A skip takes no
+ * slot: one that did kept the window full whenever demand outran the budget,
+ * and the upstream went unasked for weeks.
  */
 async function pacedIndexers(indexers: UpstreamIndexer[]): Promise<UpstreamIndexer[]> {
 	const verdicts = await Promise.all(
@@ -192,6 +194,7 @@ async function pacedIndexers(indexers: UpstreamIndexer[]): Promise<UpstreamIndex
 				name: `upstream-${indexer.prefix}`,
 				rateLimit: indexer.pacing.rateLimit,
 				windowSeconds: indexer.pacing.windowSeconds,
+				countRefused: false,
 			});
 			if (!success) {
 				console.warn(`Newznab: skipping ${indexer.name}, over its configured pacing`);

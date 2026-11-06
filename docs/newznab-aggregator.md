@@ -115,7 +115,10 @@ every guid and enclosure URL the \*arrs have stored.
 3. Per-upstream outbound pacing: an indexer configured with `pacing` is checked against
    its own limiter bucket _before_ being included and skipped for this query when over
    budget — checked before, not after, because some upstreams answer a burst with their
-   own "Request limit reached", which Sonarr turns into a 24h backoff.
+   own "Request limit reached", which Sonarr turns into a 24h backoff. A skip takes no
+   slot (`countRefused: false`, as for `grabLimit`), so the budget reopens as admitted
+   calls age out. Skips used to count, and with fan-outs at several times the budget the
+   window never emptied: one paced upstream received almost no searches for two weeks.
 4. `dedupeResults` (normalized-title-only — measured; size-based dedup false-merges).
 5. Rewrite every item: `guid` = encrypted token (`isPermaLink="false"`), `enclosure`
    pointing at this endpoint's own `t=get` carrying the **caller's** apikey (SAB/NZBGet
