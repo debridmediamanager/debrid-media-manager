@@ -84,7 +84,8 @@ Until 2026-11-06 the last provider named won, so `/rd/ad` was silently an AllDeb
 - RD's name rule: a release RD refuses counts as cached only if another named provider
   holds it, and is dropped only on a path naming RD alone.
 - The RSS sync: a path naming only `rd` and `ad` serves the newly cached list over both
-  (the same list as the plain feed, with `cachedon` from each provider's list). Any other
+  (the same list as the plain feed). Its `cachedon` says what each provider holds now, as
+  on a search: DMM's RD and AD tables are asked about the page served. Any other
   provider in the path answers it the old way, from the most recently refreshed pages.
 
 ## Operations (`t=`)
@@ -334,8 +335,14 @@ short page, or at 1,000 releases. A first sync reads one page.
   in a live run on 2026-11-06 an event loop stalled past the then 1 s command timeout, a
   pipeline Redis had applied was reported timed out, and serving the older shared copy
   took the feed backward. The timeout is now 5 s. A stored list not of the expected shape is no
-  list, and the key prefix (`torznab:newly:v4:`) carries a version so a future format is a
-  new key.
+  list, and the key prefix (`torznab:newly:v3:`) carries a version so a format older readers
+  would misread is a new key. An added optional field is not: items gained `imdbId` on
+  2026-11-06 under the same key, so instances on both sides of a deploy share one list, and
+  a build fills it in on items stored without it.
+- **The provider memo shares this store.** `ProviderCacheMemo` (TorBox, Premiumize and
+  Offcloud answers) uses the same Redis-with-memory store, so it too returns to Redis 30 s
+  after a failure. While Redis stays down, the first live probe after each 30 s window can
+  wait up to the 2 s connect timeout before falling back to memory.
 
 When the list has nothing for the request after the kind and category filters, or there
 is no list yet (the first request starts the first build and answers without it), the

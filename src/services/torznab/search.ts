@@ -207,8 +207,6 @@ interface LibraryRelease {
 	size: number;
 	categories: number[];
 	pubDate: string;
-	/** Which named providers hold it, where a several-provider path already knows. */
-	cachedOn?: TorznabProvider[];
 	/** The title it is filed under, on the newly cached list only. */
 	imdbId?: string;
 }
@@ -621,10 +619,12 @@ export async function buildNewlyCached(
 	const resolved = await resolveCacheRows(unlisted);
 
 	const listOf = (provider: 'rd' | 'ad', rows: NewlyCachedRow[]): NewlyCachedRelease[] => {
-		const current = new Set(rows.map((row) => row.hash));
-		const carried = (previous?.[provider] ?? []).filter((release) =>
-			current.has(release.hash.toLowerCase())
-		);
+		const current = new Map(rows.map((row) => [row.hash, row]));
+		// A list stored before items carried `imdbId` gains it from the item's row.
+		const carried = (previous?.[provider] ?? []).flatMap((release) => {
+			const row = current.get(release.hash.toLowerCase());
+			return row ? [{ ...release, imdbId: release.imdbId ?? row.imdbId }] : [];
+		});
 		const fresh = rows.flatMap((row) => {
 			if (listed[provider].has(row.hash)) return [];
 			const release = resolved.get(resolvedKey(row));
@@ -691,8 +691,7 @@ const newestListing = (a: NewlyCachedRelease, b: NewlyCachedRelease) =>
 async function newlyCachedReleases(
 	t: SearchType,
 	params: NormalizedQuery,
-	scope: 'any' | 'rd' | 'ad',
-	providers?: TorznabProvider[]
+	scope: 'any' | 'rd' | 'ad'
 ): Promise<LibraryRelease[]> {
 	const lists = await newlyCachedLists();
 	if (!lists) return [];
@@ -717,13 +716,6 @@ async function newlyCachedReleases(
 		.map(({ cachedAt: _cachedAt, listedAt, ...release }) => ({
 			...release,
 			pubDate: new Date(listedAt).toUTCString(),
-			...(providers && {
-				cachedOn: providers.filter((provider) =>
-					lists[provider as 'rd' | 'ad'].some(
-						(on) => on.hash.toLowerCase() === release.hash.toLowerCase()
-					)
-				),
-			}),
 		}));
 }
 
@@ -926,7 +918,7 @@ function magnetUri(hash: string, title: string): string {
 function toRssItem(
 	release: LibraryRelease,
 	cached: boolean,
-	cachedOn = release.cachedOn
+	cachedOn?: TorznabProvider[]
 ): TorznabRssItem {
 	const seeders = cached ? CACHED_SEEDERS : UNCACHED_SEEDERS;
 	return {
@@ -992,12 +984,18 @@ export async function runSearch(
 			: undefined
 		: options.cache;
 	if (!params.targeted && (scope === 'any' || scope === 'rd' || scope === 'ad')) {
-		const listed = await newlyCachedReleases(t, params, scope, options.providers);
+		const listed = await newlyCachedReleases(t, params, scope);
 		if (listed.length > 0) {
+			const page = listed.slice(params.offset, params.offset + params.limit);
+			// On a several-provider path `cachedon` says what each provider holds
+			// now, as on a search, asked for this page alone.
+			const cachedOn =
+				options.providers &&
+				(await cacheFromProviders(page, options.providers, context)).cachedOn;
 			return {
-				items: listed
-					.slice(params.offset, params.offset + params.limit)
-					.map((release) => toRssItem(release, true)),
+				items: page.map((release) =>
+					toRssItem(release, true, cachedOn && (cachedOn.get(release.hash) ?? []))
+				),
 				offset: params.offset,
 				total: listed.length,
 				unresolved: 0,

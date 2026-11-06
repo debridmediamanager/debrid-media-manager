@@ -28,8 +28,8 @@ const LISTS = {
 	ad: [],
 };
 const RELEASE = { hash: 'a'.repeat(40), title: 'A', size: 1, categories: [2000] };
-const LISTS_KEY = 'torznab:newly:v4:lists';
-const BUILD_KEY = 'torznab:newly:v4:build';
+const LISTS_KEY = 'torznab:newly:v3:lists';
+const BUILD_KEY = 'torznab:newly:v3:build';
 
 beforeEach(() => {
 	redis.reset();
@@ -125,7 +125,7 @@ describe('NewlyCachedStore', () => {
 		redis.timedOut = true;
 		await store.writeResolved(new Map([['tt1:a', RELEASE]]));
 		redis.timedOut = false;
-		expect(redis.values.has('torznab:newly:v4:title:tt1:a')).toBe(true);
+		expect(redis.values.has('torznab:newly:v3:title:tt1:a')).toBe(true);
 		await store.writeLists(newer);
 		expect(JSON.parse(redis.values.get(LISTS_KEY)!.value).builtAt).toBe(LISTS.builtAt);
 
@@ -145,15 +145,27 @@ describe('NewlyCachedStore', () => {
 		expect(await one.readLists()).toEqual(newer);
 	});
 
+	it('reads a list stored before its items carried an IMDb id', async () => {
+		const store = new NewlyCachedStore('redis://x');
+		const { imdbId: _imdbId, ...withoutId } = LISTS.rd[0];
+		const earlier = { ...LISTS, rd: [withoutId] };
+		redis.values.set(LISTS_KEY, {
+			value: JSON.stringify(earlier),
+			expiresAt: Date.now() + 60_000,
+		});
+
+		expect(await store.readLists()).toEqual(earlier);
+	});
+
 	it('treats a stored list of another shape as none', async () => {
 		const store = new NewlyCachedStore('redis://x');
 		const malformed = [
 			'not json',
 			'{"rd":[],"ad":"x"}',
-			// The previous formats, which had no `listedAt`, then no `builtAt`, then no `imdbId`.
+			// The previous formats, which had no `listedAt`, then no `builtAt`.
 			JSON.stringify({ builtAt: 1, rd: [{ ...RELEASE, cachedAt: 1 }], ad: [] }),
 			JSON.stringify({ rd: LISTS.rd, ad: [] }),
-			JSON.stringify({ builtAt: 1, rd: [{ ...RELEASE, cachedAt: 1, listedAt: 2 }], ad: [] }),
+			JSON.stringify({ ...LISTS, rd: [{ ...LISTS.rd[0], imdbId: 111161 }] }),
 			JSON.stringify({ rd: [{ ...LISTS.rd[0], categories: ['2000'] }], ad: [] }),
 		];
 		for (const value of malformed) {

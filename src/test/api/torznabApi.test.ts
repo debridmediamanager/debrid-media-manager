@@ -933,7 +933,7 @@ describe('several providers in one path', () => {
 	});
 
 	describe('an RSS sync', () => {
-		it('lists what was newly cached on RD and AD when those are all it names', async () => {
+		it('lists what was newly cached on RD and AD, and says what each holds now', async () => {
 			const row = (torrentHash: string, at: string) => ({
 				hash: torrentHash,
 				imdbId: MOVIE_ID,
@@ -942,24 +942,34 @@ describe('several providers in one path', () => {
 				filename: torrentHash,
 				originalFilename: torrentHash,
 			});
+			vi.useFakeTimers({ toFake: ['Date'] });
+			vi.setSystemTime(new Date('2026-11-06T12:00:00Z'));
+			// BIG is newly cached on RD. AllDebrid has held it for weeks, so its AD
+			// row is far past the AD list's reach, and it is still AllDebrid's.
 			cacheRows.rd = [row(BIG, '2026-11-06T10:00:00Z')];
 			cacheRows.ad = [
 				row(CACHED_ON_AD, '2026-11-06T11:00:00Z'),
-				row(BIG, '2026-11-06T09:00:00Z'),
+				row(BIG, '2026-10-01T09:00:00Z'),
 			];
-			const store = newlyCachedStore();
-			await store.writeLists(await buildNewlyCached(null));
+			adCached.add(BIG);
+			try {
+				const lists = await buildNewlyCached(null);
+				expect(lists.ad.map((r) => r.hash)).toEqual([CACHED_ON_AD]);
+				await newlyCachedStore().writeLists(lists);
 
-			const res = await run(
-				{ t: 'movie', apikey: SPONSOR_KEY },
-				{ route: ['ad', 'rd', 'api'] }
-			);
+				const res = await run(
+					{ t: 'movie', apikey: SPONSOR_KEY },
+					{ route: ['rd', 'ad', 'api'] }
+				);
 
-			expect(served(res)).toEqual([
-				[CACHED_ON_AD, '100', 'ad'],
-				[BIG, '100', 'ad,rd'],
-			]);
-			expect(mockRepo.getRecentScrapedTrueKeys).not.toHaveBeenCalled();
+				expect(served(res)).toEqual([
+					[CACHED_ON_AD, '100', 'ad'],
+					[BIG, '100', 'rd,ad'],
+				]);
+				expect(mockRepo.getRecentScrapedTrueKeys).not.toHaveBeenCalled();
+			} finally {
+				vi.useRealTimers();
+			}
 		});
 
 		it('answers the old way when it names any other provider', async () => {
@@ -1596,11 +1606,29 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			expect(rd).toEqual(first.filter((release) => release.hash !== rows[1].hash));
 		});
 
+		it('carries a list stored without IMDb ids, dated as it was, and gives it them', async () => {
+			cacheRows.ad = siloRows(0, 5, NOW - MINUTE);
+			const first = await build();
+			// As the code before `imdbId` stored it.
+			const earlier = {
+				...first,
+				ad: first.ad.map(({ imdbId: _imdbId, ...release }) => release),
+			};
+			await newlyCachedStore().writeLists(earlier);
+
+			const { ad } = await build(NOW + BUILD_INTERVAL);
+
+			expect(ad.map(({ hash, listedAt }) => [hash, listedAt])).toEqual(
+				earlier.ad.map(({ hash, listedAt }) => [hash, listedAt])
+			);
+			expect(ad.every((release) => release.imdbId === SILO_ID)).toBe(true);
+		});
+
 		it('carries from its own newer list when Redis kept an older one', async () => {
 			fakeRedis.reset();
 			setNewlyCachedStore(new NewlyCachedStore('redis://x'));
 			const sharedBuiltAt = () =>
-				JSON.parse(fakeRedis.values.get('torznab:newly:v4:lists')!.value).builtAt;
+				JSON.parse(fakeRedis.values.get('torznab:newly:v3:lists')!.value).builtAt;
 			cacheRows.ad = siloRows(0, 5, NOW - MINUTE);
 			await build();
 

@@ -37,8 +37,11 @@ export const RESOLVED_TTL_SECONDS = 6 * 60 * 60;
 /** As long as the window: the list is the history new items are dated against. */
 const LISTS_TTL_SECONDS = 7 * 24 * 60 * 60;
 
-/** Versioned: a change of format is a new key, never a misread old one. */
-const KEY_PREFIX = 'torznab:newly:v4:';
+/**
+ * Versioned: a format older readers would misread is a new key. An added
+ * optional field is not, so instances on both sides of a deploy share the list.
+ */
+const KEY_PREFIX = 'torznab:newly:v3:';
 const LISTS_KEY = `${KEY_PREFIX}lists`;
 const BUILD_KEY = `${KEY_PREFIX}build`;
 
@@ -56,8 +59,11 @@ export interface NewlyCachedRelease extends ResolvedRelease {
 	cachedAt: number;
 	/** Epoch ms: the build that first listed it, which is its `pubDate`. */
 	listedAt: number;
-	/** The cache row's title as DMM files it (`tt…`; a show's for TV). */
-	imdbId: string;
+	/**
+	 * The cache row's title as DMM files it (`tt…`; a show's for TV). Optional so
+	 * a list stored before it existed is still read; a build fills it in.
+	 */
+	imdbId?: string;
 }
 
 /** Newest listing first. Real-Debrid's leaves out what RD refuses by name. */
@@ -80,7 +86,7 @@ const isRelease = (item: unknown): item is NewlyCachedRelease => {
 		r.categories.every((id) => typeof id === 'number') &&
 		typeof r.cachedAt === 'number' &&
 		typeof r.listedAt === 'number' &&
-		typeof r.imdbId === 'string'
+		(r.imdbId === undefined || typeof r.imdbId === 'string')
 	);
 };
 
