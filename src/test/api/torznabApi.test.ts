@@ -2147,6 +2147,46 @@ describe('rate limits', () => {
 		expect(res429IsXml(refused)).toBe(true);
 	});
 
+	it('gives a sponsor named in TORZNAB_SPONSOR_LIMITS the smaller budget, and only lowers it', async () => {
+		vi.stubEnv('TORZNAB_SPONSOR_LIMITS', `OTHER=1, ${shortId}=3`);
+		try {
+			const statuses: number[] = [];
+			for (let attempt = 0; attempt < 4; attempt++) {
+				const res = await run(
+					{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
+					{ ip: `172.16.2.${attempt}` }
+				);
+				statuses.push(res._getStatusCode());
+			}
+			expect(statuses).toEqual([200, 200, 200, 429]);
+
+			// A value at or above the default never raises anyone's budget.
+			const other = `${shortId}x`;
+			mockRepo.getSponsorByDmmApiKey = vi.fn().mockResolvedValue({
+				isSponsor: true,
+				sources: ['github'],
+				shortId: other,
+				githubUsername: 'someone',
+				keyVersion: 1,
+			});
+			vi.stubEnv('TORZNAB_SPONSOR_LIMITS', `${other}=500`);
+			let last: MockResponse | undefined;
+			for (
+				let attempt = 0;
+				attempt <= RATE_LIMIT_CONFIGS.torznabSearch.rateLimit;
+				attempt++
+			) {
+				last = await run(
+					{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
+					{ ip: `172.16.3.${attempt}` }
+				);
+			}
+			expect(last!._getStatusCode()).toBe(429);
+		} finally {
+			vi.unstubAllEnvs();
+		}
+	});
+
 	it('rejects an unauthenticated flood on the IP budget before any lookup', async () => {
 		let last: MockResponse | undefined;
 		for (let attempt = 0; attempt < 21; attempt++) {

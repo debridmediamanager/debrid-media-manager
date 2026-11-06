@@ -43,6 +43,24 @@ function sendError(res: NextApiResponse, status: number, code: number, descripti
 	return res.status(status).send(torznabErrorXml(code, description));
 }
 
+/**
+ * A smaller per-minute budget for named sponsors, from `TORZNAB_SPONSOR_LIMITS`
+ * (`SHORTID=5,SHORTID2=2`). An operator's lever for one key that sweeps the
+ * library around the clock, kept out of the public code because it names
+ * sponsors. Only ever lowers the budget.
+ */
+function torznabSearchBudget(shortId: string) {
+	const config = RATE_LIMIT_CONFIGS.torznabSearch;
+	for (const entry of (process.env.TORZNAB_SPONSOR_LIMITS ?? '').split(',')) {
+		const [id, perMinute] = entry.split('=').map((part) => part.trim());
+		const limit = Number(perMinute);
+		if (id === shortId && Number.isInteger(limit) && limit > 0 && limit < config.rateLimit) {
+			return { ...config, rateLimit: limit };
+		}
+	}
+	return config;
+}
+
 function firstValue(value: string | string[] | undefined): string {
 	const raw = Array.isArray(value) ? value[0] : value;
 	return typeof raw === 'string' ? raw.trim() : '';
@@ -111,7 +129,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// shares one budget wherever the boxes run from. There is no grab budget
 		// to spend here — a grab never comes back to DMM.
 		const identifier = `sponsor:${auth.sponsor.shortId}`;
-		if (!(await checkRateLimitFor(identifier, RATE_LIMIT_CONFIGS.torznabSearch, res))) {
+		if (
+			!(await checkRateLimitFor(identifier, torznabSearchBudget(auth.sponsor.shortId), res))
+		) {
 			return sendError(res, 429, 500, 'Request limit reached');
 		}
 

@@ -121,6 +121,13 @@ No grab bucket exists, because a grab never comes back to DMM. Keying on `shortI
 than the key string means a gatekeeper key reset does not reset the budget and one
 sponsor's whole \*arr farm shares one budget.
 
+One sponsor's budget can be lowered, never raised, with the optional
+`TORZNAB_SPONSOR_LIMITS` (`SHORTID=5,OTHER=2`, searches a minute). It is for a key that
+sweeps the library around the clock instead of searching like an \*arr: on 2026-11-06 one
+key was sending about 100 searches a minute for a fixed list of about 20,000 titles,
+under a Sonarr user agent that also sent movie searches. It lives in the environment, not
+in this code, because it names sponsors.
+
 Tighter than the Newznab endpoint's 30, because a search here costs DMM considerably
 more: it reads whole library pages out of the database and classifies every hash in them
 against the debrid caches, where a Newznab query is fanned out to upstream indexers.
@@ -525,11 +532,11 @@ Supporting additions elsewhere: `getScrapedTrueRow` / `getScrapedTrueSeasonKeys`
 
 ## Environment
 
-None. The endpoint needs no new configuration — no token secret, no public base, no
+None required. The endpoint needs no new configuration — no token secret, no public base, no
 store — which also means there is no deploy step that can half-enable it. Debridio
 backfill uses the `DEBRIDIO_ADDON_URL` / `DEBRIDIO_ALLDEBRID_URL` the site already sets,
 and cleanly skips debridio when they are unset; Torrentio and Peerflix need nothing. The verdict filter follows the verdicts'
-existing switch, `TYPESAFE_API_KEY`, and passes everything through without it.
+existing switch, `TYPESAFE_API_KEY`, and passes everything through without it. `TORZNAB_SPONSOR_LIMITS` is optional; see **Rate limits**.
 
 ## Tests
 
