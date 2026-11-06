@@ -10,6 +10,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
 	cachedOn,
 	reportLibraryAvailability,
+	resetLibraryRefreshes,
 	type LibraryItem,
 	type ReportDeps,
 } from './libraryAvailability';
@@ -44,6 +45,7 @@ function deps(recorded: string[] = []): ReportDeps {
 		adSubmit: vi.fn(async () => ({ success: true })) as any,
 		dlRecorded: check as any,
 		dlRecord: vi.fn(async () => true) as any,
+		refresh: vi.fn(async () => ({ refreshed: 0 })) as any,
 		token: vi.fn(async () => ['key', 'solution'] as [string, string]),
 		wait: vi.fn(async () => undefined),
 	};
@@ -202,5 +204,22 @@ describe('reportLibraryAvailability', () => {
 		);
 		// DMM reads the release from Debrid-Link itself, so the page sends only its hash
 		expect(vi.mocked(d.dlRecord).mock.calls).toEqual([['tt0108778', dlTv.hashString]]);
+	});
+});
+
+// Cast offers a recorded release only while its row is fresh, and a visit skipped every release
+// DMM already knew, so a member's own releases aged out of Cast. A visit now has DMM refresh
+// them from the provider's own listing: once per provider per page session.
+describe('library refresh', () => {
+	it('asks DMM to refresh RD and Debrid-Link records once per key, AllDebrid never', async () => {
+		resetLibraryRefreshes();
+		const d = deps();
+		for (let run = 0; run < 2; run++) {
+			await reportLibraryAvailability([], {}, { rd: 'rdkey', ad: 'adkey', dl: 'dlkey' }, d);
+		}
+		expect(vi.mocked(d.refresh).mock.calls).toEqual([
+			['key', 'solution', 'rd', 'rdkey'],
+			['key', 'solution', 'dl', 'dlkey'],
+		]);
 	});
 });

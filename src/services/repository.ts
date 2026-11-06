@@ -700,6 +700,14 @@ export class Repository {
 		return this.availabilityService.removeAvailableFileByLinkPrefix(linkPrefix);
 	}
 
+	public refreshAvailability(hashes: string[]) {
+		return this.availabilityService.refreshAvailability(hashes);
+	}
+
+	public refreshAvailabilityDl(hashes: string[]) {
+		return this.availabilityService.refreshAvailabilityDl(hashes);
+	}
+
 	public touchAvailabilityByLinkPrefix(linkPrefix: string) {
 		return this.availabilityService.touchAvailabilityByLinkPrefix(linkPrefix);
 	}

@@ -1,0 +1,185 @@
+{
+	"_source": "GET /rest/1.0/torrents?limit=30&page=1 for the RD test account testacct123, 2026-11-06, kept to the fields DMM reads for a library refresh (links and ids dropped).",
+	"torrents": [
+		{
+			"hash": "0380b3ed6577afdfaaae4ef68bc052b539b89af6",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Alpha (2026) Hindi TRUE WEB.DL - 1080p - AVC - (DD+5.1 - 640Kbps & AAC) - 3GB - ESub {imdb-tt28363783}.mkv"
+		},
+		{
+			"hash": "76b9b5f7472596526360bc00fb5762abbe0c8616",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Pig 2021 1080p BluRay REMUX AVC DTS-HD MA 5.1-BdC.mkv"
+		},
+		{
+			"hash": "60aeb2963f7a6cb1bfbaa1b701aad06bd5ebe2c4",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Palm.Springs.2020.1080p.Remux.AVC.DD5.1-EniaHD.mkv"
+		},
+		{
+			"hash": "5953caef6e71737b59b3ae719bf5b56b9785c6b1",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Los.Renglones.Torcidos.de.Dios.2022.BDRemux.1080p.pk.mkv"
+		},
+		{
+			"hash": "01da5ca1a31bb636a55f9c52e676261a640eb763",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Mudbound.2017.BluRay.1080p.TrueHD.Atmos.7.1.AVC.REMUX-FraMeSToR.mkv"
+		},
+		{
+			"hash": "1468a0ed766c95107aab51d2d97b19e050788291",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Spy.Game.2001.1080p.BluRay.REMUX.VC-1.DTS-HD.MA.5.1-EPSiLON.mkv"
+		},
+		{
+			"hash": "8d3e13f045851b6dcab1794dec8cdfefa0a8a7c8",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Waking.Life.2001.1080p.Remux.AVC.mkv"
+		},
+		{
+			"hash": "c3a826966a961e552d405e3263ebf4270c97e1ff",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "The Quintessential Quintuplets Movie (2022) (BD 1080p HEVC Opus) [Dual-Audio] [P9]"
+		},
+		{
+			"hash": "1fed175c0387d39245fa3be98d1692f046241b28",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Amelie.2001.1080p.CZE.BluRay.REMUX.AVC.DTS-HD.MA.5.1-HDH.mkv"
+		},
+		{
+			"hash": "6bb007bc69fa85038c14c575a9d026f1adad0744",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Children.of.Paradise.1945.Criterion.Collection.BDRemux.1080p"
+		},
+		{
+			"hash": "f60f7f182ed92d49a56f07bde918645834e2187f",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "My.Hero.Academia.S04.P2.CRF-16.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD"
+		},
+		{
+			"hash": "42f37c8ec2f0606dd3a31ef7712c487336394679",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "All.Creatures.Great.And.Small.2020.S01.1080p.BluRay.REMUX.AVC.FLAC.2.0-NOGRP[rartv]"
+		},
+		{
+			"hash": "d569ae5cc49e1da5d96320c978b6c5b34b0bd762",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "The.Boys.S04.Eng.Fre.Ger.Ita.Por.Spa.2160p.WEBMux.HDR10Plus.HDR.HEVC.DDP-SGF"
+		},
+		{
+			"hash": "c9198ab00090b97e5dc6748697fdfcf8bb2f9d38",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "The.Mandalorian.S01.2160p.UHD.Blu-ray.Remux.HEVC.TrueHD.7.1.Atmos-SiCFoI"
+		},
+		{
+			"hash": "e286dfae9e72677745c137608eda7d7b6f0ea153",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Tensei Shitara Slime Datta Ken Season 2 Part 1 (BD 1080p HEVC 10bit FLAC) [Dual Audio] [FLE]"
+		},
+		{
+			"hash": "3c50a9e66077b0132047916f2ee862f4716adf59",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "South Park - Seasons 1 to 25 (S01-S25) Master Collection, The Movie & Extras [1080p-2160p NVEnc 10Bit HEVC][TrueHD+DDP 5.1Ch][English Subs]"
+		},
+		{
+			"hash": "96255f65a5f31efba49f60fd889efdd9ba96c6d9",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Star Wars Rebels Complete Season 3"
+		},
+		{
+			"hash": "8c0f7cb99da63154b6a80af37a4de27f5a2167f6",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "One-Punch.Man.S01.1080p.BluRay..x264-Kametsu[rartv]"
+		},
+		{
+			"hash": "4a1d3730948b1cdb008ca3148babed9265abee44",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Weeds.S01-08.1080p.TrueHD.5.1.AVC.REMUX-FraMeSToR"
+		},
+		{
+			"hash": "48fff3c728bd4f9101a311a66f7f3277863c32e0",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "[Erai-raws] Jujutsu Kaisen 2nd Season - 01 ~ 23 [1080p][Multiple Subtitle]"
+		},
+		{
+			"hash": "e6f50175b1a9f47bc87c7424d440c3af11f0e423",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "[Yuki] Chihayafuru Season 1 (BD 1080p Hi10 FLAC)"
+		},
+		{
+			"hash": "1dca00646bc46718f445a2d170638d8770f824c9",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Fear.the.Walking.Dead.S07.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-FGT"
+		},
+		{
+			"hash": "03d155236353445cdc804a2b25055273696ecf9c",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "The Century of the Self (2002) Season 1 S01 (576p DVD x265 HEVC 10bit AC3 2.0 Silence)"
+		},
+		{
+			"hash": "ddd5ba15597e466715ef3196f2305fe67ab73d78",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Family.Matters.seasons.01-09.AMZN.1080p.10bit.hevc.x265-bearfish"
+		},
+		{
+			"hash": "31da4ff8b61b8f5de619c1c9054c90d06c725e1c",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Cobra Kai S01 1080p Blu-ray Remux AVC DTS-HD MA 5.1 - KRaLiMaRKo"
+		},
+		{
+			"hash": "d83c977e59b34ae363c3244b12990f5e862ff84b",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "A.Confession.S01.1080p.TVShows"
+		},
+		{
+			"hash": "32564a37831a626d04b6e2588cb70df24411264d",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Star.Trek.Strange.New.Worlds.S01.UHD.BluRay.2160p.DTS-HD.MA.5.1.DV.HEVC.REMUX-FraMeSToR"
+		},
+		{
+			"hash": "12585edfcc92f8a3ecae1205443cceacb329273f",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Scorpion.S01.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-EPSiLON"
+		},
+		{
+			"hash": "67a1b44173f0511cd428ad7513a5d4e6b8684341",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "Ted.S01.COMPLETE.2160p.WEB.h265-NHTFS"
+		},
+		{
+			"hash": "46bde674716117187c4272c15d76d4d23204308d",
+			"status": "downloaded",
+			"progress": 100,
+			"filename": "House.S02.1080p.BluRay.REMUX.AVC.DTS.5.1-NOGRP[rartv]"
+		}
+	]
+}

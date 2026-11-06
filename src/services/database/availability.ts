@@ -727,6 +727,42 @@ export class AvailabilityService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * Refresh the RD records of releases a member's own library holds downloaded, read from RD
+	 * by `/api/availability/refresh`, at most daily each. Answers how many it refreshed.
+	 */
+	public async refreshAvailability(hashes: string[]): Promise<number> {
+		let count = 0;
+		for (let at = 0; at < hashes.length; at += 1000) {
+			const result = await this.prisma.available.updateMany({
+				where: {
+					hash: { in: hashes.slice(at, at + 1000) },
+					status: 'downloaded',
+					updatedAt: { lt: dayAgo() },
+				},
+				data: { updatedAt: new Date() },
+			});
+			count += result.count;
+		}
+		return count;
+	}
+
+	/** `refreshAvailability` for Debrid-Link. */
+	public async refreshAvailabilityDl(hashes: string[]): Promise<number> {
+		let count = 0;
+		for (let at = 0; at < hashes.length; at += 1000) {
+			const result = await this.prisma.availableDl.updateMany({
+				where: {
+					hash: { in: hashes.slice(at, at + 1000).map((h) => h.toLowerCase()) },
+					updatedAt: { lt: dayAgo() },
+				},
+				data: { updatedAt: new Date() },
+			});
+			count += result.count;
+		}
+		return count;
+	}
+
 	public async getHashByLink(link: string): Promise<string | null> {
 		const match = link.match(
 			/^https:\/\/real-debrid\.com\/d\/([A-Za-z0-9]{13})(?:[A-Za-z0-9]{3}|[A-Za-z0-9]{13})?$/

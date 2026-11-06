@@ -8,6 +8,7 @@ import dlWrite from '@/pages/api/availability/dl';
 import dlCheck from '@/pages/api/availability/dl/check';
 import dlRemove from '@/pages/api/availability/dl/remove';
 import playable from '@/pages/api/availability/playable';
+import refresh from '@/pages/api/availability/refresh';
 import rdRemove from '@/pages/api/availability/remove';
 import libraryIdentify from '@/pages/api/library/identify';
 import sponsorIdentify from '@/pages/api/sponsor/identify';
@@ -35,6 +36,7 @@ vi.mock('@/services/realDebrid', async (importOriginal) => ({
 vi.mock('@/services/debridLink', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/debridLink')>()),
 	probeDlRelease: vi.fn(),
+	listAllSeedboxTorrents: vi.fn(async () => []),
 }));
 vi.mock('@/pages/api/zurg/auth');
 
@@ -118,6 +120,11 @@ const routes: [string, NextApiHandler, Partial<NextApiRequest>][] = [
 		},
 	],
 	['availability/dl/remove', dlRemove, { method: 'POST', body: { ...token, hash: HASH } }],
+	[
+		'availability/refresh',
+		refresh,
+		{ method: 'POST', body: { ...token, service: 'dl', key: 'dl-token' } },
+	],
 	['torrents/mediainfo', mediainfo, { method: 'GET', query: { hash: HASH } }],
 	[
 		'library/identify',
@@ -166,6 +173,7 @@ describe('routes that serve DMM pages only', () => {
 			upsertAvailabilityDl: vi.fn().mockResolvedValue(undefined),
 			removeAvailability: vi.fn().mockResolvedValue(undefined),
 			removeAvailabilityDl: vi.fn().mockResolvedValue(undefined),
+			refreshAvailabilityDl: vi.fn().mockResolvedValue(0),
 		});
 		// a real torrents/info answer: downloaded for the write, downloading for the removal
 		vi.mocked(getTorrentInfo).mockImplementation(async (_key, id) =>

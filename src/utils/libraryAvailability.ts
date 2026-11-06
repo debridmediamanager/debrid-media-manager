@@ -5,6 +5,7 @@ import {
 	checkAvailabilityByHashes,
 	checkAvailabilityDl,
 	recordDlAvailability,
+	refreshAvailability,
 	submitAvailability,
 	submitAvailabilityAd,
 } from './availability';
@@ -38,6 +39,7 @@ export interface ReportDeps {
 		hashes: string[]
 	) => ReturnType<typeof checkAvailabilityDl>;
 	dlRecord: typeof recordDlAvailability;
+	refresh: typeof refreshAvailability;
 	token: typeof generateTokenAndHash;
 	wait: (ms: number) => Promise<unknown>;
 }
@@ -51,6 +53,7 @@ const DEFAULT_DEPS: ReportDeps = {
 	// by hash alone, so a row filed under another title still counts as recorded
 	dlRecorded: (key, solution, hashes) => checkAvailabilityDl(key, solution, hashes),
 	dlRecord: recordDlAvailability,
+	refresh: refreshAvailability,
 	token: generateTokenAndHash,
 	wait: sleep,
 };
@@ -84,6 +87,34 @@ async function unrecorded(
 	return items.filter((t) => !known.has(t.hash.toLowerCase()));
 }
 
+/** Keys whose library DMM was asked to refresh this page session. */
+const refreshed = new Set<string>();
+
+export const resetLibraryRefreshes = () => refreshed.clear();
+
+/**
+ * Keep the recorded releases this member holds in Cast's window: DMM reads the library from
+ * Real-Debrid or Debrid-Link with the key and refreshes the records of what it holds whole
+ * (`/api/availability/refresh`). Once per key per page session; AllDebrid cannot be read from
+ * DMM's servers, and its records refresh when a Cast play of them works.
+ */
+async function refreshHeld(
+	keys: { rd?: string | null; dl?: string | null },
+	deps: ReportDeps
+): Promise<void> {
+	for (const service of ['rd', 'dl'] as const) {
+		const key = keys[service];
+		if (!key || refreshed.has(`${service}:${key}`)) continue;
+		refreshed.add(`${service}:${key}`);
+		try {
+			const [token, solution] = await deps.token();
+			await deps.refresh(token, solution, service, key);
+		} catch {
+			// a contribution, never something the library waits on
+		}
+	}
+}
+
 /**
  * Record the cached releases of a user's own library in DMM's availability tables, so the
  * movie and show pages list them as available for everyone. Only releases the identifier
@@ -98,6 +129,7 @@ export async function reportLibraryAvailability(
 	keys: { rd?: string | null; ad?: string | null; dl?: string | null },
 	deps: ReportDeps = DEFAULT_DEPS
 ): Promise<void> {
+	await refreshHeld(keys, deps);
 	const named = items.filter((t) => /^tt\d+$/.test(found[t.id]?.imdbId ?? ''));
 	const rd = keys.rd ? named.filter((t) => cachedOn(t) === 'rd') : [];
 	const ad = keys.ad ? named.filter((t) => cachedOn(t) === 'ad') : [];

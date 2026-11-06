@@ -415,6 +415,25 @@ export async function submitAvailabilityDl(
 	return response.json();
 }
 
+/** Ask DMM to refresh the records of what this RD or Debrid-Link library holds whole. */
+export async function refreshAvailability(
+	dmmProblemKey: string,
+	solution: string,
+	service: 'rd' | 'dl',
+	key: string
+): Promise<{ refreshed: number }> {
+	const response = await postAvailability('/api/availability/refresh', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ service, key, dmmProblemKey, solution }),
+	});
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({}));
+		throw new Error(error.error || 'Failed to refresh availability');
+	}
+	return response.json();
+}
+
 /** The hashes DMM has seen whole on Debrid-Link, under `imdbId` when one is given. */
 export async function checkAvailabilityDl(
 	dmmProblemKey: string,
