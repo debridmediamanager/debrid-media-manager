@@ -1,0 +1,19 @@
+{
+	"accountFailures": [
+		{
+			"status": 302,
+			"location": "https://torrentio.strem.fun/videos/failed_access_v3.mp4",
+			"note": "same resolve URL with an invalid Real-Debrid key"
+		}
+	],
+	"served": [{ "status": 302, "location": "https://20-4.download.real-debrid.com/d/<link>" }],
+	"source": "HEAD https://torrentio.strem.fun/resolve/realdebrid/<key>/<hash>/null/<file>/<name>, observed 2026-11-06; download links and keys removed",
+	"titleRefusals": [
+		{
+			"status": 302,
+			"location": "https://torrentio.strem.fun/videos/failed_infringement_v3.mp4"
+		},
+		{ "status": 302, "location": "https://torrentio.strem.fun/videos/failed_opening_v3.mp4" },
+		{ "status": 302, "location": "https://torrentio.strem.fun/videos/downloading_v3.mp4" }
+	]
+}

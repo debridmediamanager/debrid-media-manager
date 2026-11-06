@@ -225,11 +225,21 @@ function buildResolveUrl(rdKey: string, stream: TorrentioStream): string {
 	return `https://torrentio.strem.fun/resolve/realdebrid/${rdKey}/${stream.infoHash}/null/${stream.fileIdx}/${encodedFilename}`;
 }
 
+// Torrentio answers a resolve it cannot serve with a 302 to one of its own
+// videos (static_videos.rs in torrentio-scraper). These name a refusal of that
+// one release - RD's infringement block, not cached yet, too big - so Torrentio
+// and the account are fine. failed_access, blocked_access, limits_exceeded and
+// failed_unexpected stay failures. Counting all of them as Torrentio being down
+// held this check near 0% for a month (2026-11-06).
+const TITLE_REFUSAL =
+	/^https:\/\/torrentio\.strem\.fun\/videos\/(downloading|download_failed|failed_rar|failed_too_big|failed_opening|failed_infringement|failed_unavailable)_v\d+\.mp4$/;
+
 /**
  * Tests a single Torrentio URL with a HEAD request via Tor proxy.
  * Success conditions:
  * - Expected status matches (200 for stream manifests, 302 for resolve URLs)
- * - For 302: location header must contain "real-debrid"
+ * - For 302: location header must contain "real-debrid", or be Torrentio's
+ *   video for a refusal of that one release (TITLE_REFUSAL)
  * - Any 4xx response (service is up, just blocking our IP - not a failure)
  * Failure conditions:
  * - 5xx server errors
@@ -266,7 +276,9 @@ async function testTorrentioUrl(
 		// 2. HTTP 302 with valid real-debrid location for resolve URLs
 		// 3. Any 4xx response means Torrentio is responding (just blocking us)
 		const isExpectedResponse =
-			expectedStatus === 200 ? status === 200 : status === 302 && locationValid;
+			expectedStatus === 200
+				? status === 200
+				: status === 302 && (locationValid || TITLE_REFUSAL.test(location ?? ''));
 		const is4xxResponse = status >= 400 && status < 500;
 		const ok = isExpectedResponse || is4xxResponse;
 

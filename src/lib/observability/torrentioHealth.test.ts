@@ -1,3 +1,4 @@
+import resolveRedirects from '@/test/fixtures/torrentio/resolve-redirects-2026-11-06.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository', () => ({
@@ -203,6 +204,36 @@ describe('testTorrentioUrl', () => {
 		expect(result.hasLocation).toBe(true);
 		expect(result.locationValid).toBe(true);
 	});
+
+	it.each(resolveRedirects.titleRefusals)(
+		'returns ok when Torrentio refuses only the release: $location',
+		async ({ status, location }) => {
+			mockAxiosHead.mockResolvedValue({ status, headers: { location } });
+
+			const result = await testTorrentioUrl(
+				{ url: 'https://example.com/resolve', expectedStatus: 302 },
+				agent
+			);
+
+			expect(result.ok).toBe(true);
+			expect(result.error).toBeNull();
+		}
+	);
+
+	it.each(resolveRedirects.accountFailures)(
+		'returns not ok when Torrentio cannot use the account: $location',
+		async ({ status, location }) => {
+			mockAxiosHead.mockResolvedValue({ status, headers: { location } });
+
+			const result = await testTorrentioUrl(
+				{ url: 'https://example.com/resolve', expectedStatus: 302 },
+				agent
+			);
+
+			expect(result.ok).toBe(false);
+			expect(result.error).toBe('Unexpected response: 302');
+		}
+	);
 
 	it('returns ok for 4xx responses', async () => {
 		mockAxiosHead.mockResolvedValue({
