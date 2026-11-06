@@ -17,6 +17,7 @@ import {
 	NEWLY_CACHED_WINDOW_MS,
 	newlyCachedStore,
 	NewlyCachedStore,
+	REDIS_RETRY_MS,
 	RESOLVED_TTL_SECONDS,
 	setNewlyCachedStore,
 	type NewlyCachedLists,
@@ -35,6 +36,7 @@ import rdNameFilterProbe from '@/test/fixtures/realdebrid/rd-name-filter-2026-10
 import rdRefusedNames from '@/test/fixtures/torznab/rd-refused-names-2026-10-03.json';
 import sonarrEpisodeSearch from '@/test/fixtures/torznab/sonarr-episode-search-2026-09-17.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
+import { fakeRedis } from '@/test/utils/fakeIoredis';
 import { isCyrillicLed } from '@/utils/cyrillicLed';
 import {
 	backfillFromDebridioNow,
@@ -52,6 +54,10 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
 });
 
 vi.mock('@/services/repository');
+// Only a store given a Redis URL uses it; this suite runs without REDIS_URL.
+vi.mock('ioredis', async () => ({
+	default: (await import('@/test/utils/fakeIoredis')).FakeIoredis,
+}));
 
 // The probe itself is covered in providerCache.test.ts. What matters here is
 // the wiring around it: the key lookup, the filter, and how each failure
@@ -1407,6 +1413,39 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			const { rd } = await build(NOW + BUILD_INTERVAL);
 
 			expect(rd).toEqual(first.filter((release) => release.hash !== rows[1].hash));
+		});
+
+		it('carries from its own newer list when Redis kept an older one', async () => {
+			fakeRedis.reset();
+			setNewlyCachedStore(new NewlyCachedStore('redis://x'));
+			const sharedBuiltAt = () =>
+				JSON.parse(fakeRedis.values.get('torznab:newly:v3:lists')!.value).builtAt;
+			cacheRows.ad = siloRows(0, 5, NOW - MINUTE);
+			await build();
+
+			// The build's memo write lands but is reported timed out, so the client
+			// is dropped and the new list reaches this instance's memory only.
+			cacheRows.ad.push(...siloRows(5, 8, NOW));
+			fakeRedis.timedOut = true;
+			let second: NewlyCachedLists;
+			try {
+				second = await build(NOW + BUILD_INTERVAL);
+			} finally {
+				fakeRedis.timedOut = false;
+			}
+			expect(sharedBuiltAt()).toBe(NOW);
+
+			// A fresh client again, and the older shared copy: the build carries
+			// from this instance's newer one, and its write heals the shared one.
+			vi.setSystemTime(NOW + BUILD_INTERVAL + REDIS_RETRY_MS);
+			cacheRows.ad.push(...siloRows(8, 10, NOW + BUILD_INTERVAL));
+			const third = await build(NOW + 2 * BUILD_INTERVAL);
+
+			expect(third.ad.slice(2)).toEqual(second.ad);
+			expect(third.ad.slice(0, 2).every((r) => r.listedAt === NOW + 2 * BUILD_INTERVAL)).toBe(
+				true
+			);
+			expect(sharedBuiltAt()).toBe(NOW + 2 * BUILD_INTERVAL);
 		});
 
 		it('judges a release once: a listed one and a memoised one are not looked up again', async () => {

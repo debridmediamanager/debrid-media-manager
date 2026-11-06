@@ -616,7 +616,7 @@ export async function buildNewlyCached(
 		});
 		return [...fresh, ...carried].slice(0, NEWLY_CACHED_DEPTH);
 	};
-	return { rd: listOf('rd', rdRows), ad: listOf('ad', adRows) };
+	return { builtAt: now, rd: listOf('rd', rdRows), ad: listOf('ad', adRows) };
 }
 
 let building: Promise<void> | null = null;

@@ -1,69 +1,8 @@
+import { fakeRedis as redis } from '@/test/utils/fakeIoredis';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// One Redis shared by every store, as the four Swarm instances share one. Down,
-// it answers as ioredis 5.11.1 does with the store's options: single commands
-// reject, while `pipeline().exec()` resolves with an error per command.
-const redis = vi.hoisted(() => ({
-	values: new Map<string, { value: string; expiresAt: number }>(),
-	down: false,
-	clients: 0,
-	/** Every client's `error` handlers, in the order the clients were made. */
-	errorHandlers: [] as Array<Array<() => void>>,
-}));
-
-vi.mock('ioredis', () => ({
-	default: class {
-		/** A client that has failed once stays closed, as one built not to reconnect does. */
-		private closed = false;
-		private handlers: Array<() => void> = [];
-		constructor() {
-			redis.clients++;
-			redis.errorHandlers.push(this.handlers);
-		}
-		on(event: string, handler: () => void) {
-			if (event === 'error') this.handlers.push(handler);
-		}
-		disconnect() {
-			this.closed = true;
-		}
-		private check() {
-			if (redis.down) this.closed = true;
-			if (this.closed) throw new Error('Connection is closed.');
-		}
-		private read(key: string) {
-			const entry = redis.values.get(key);
-			return entry && entry.expiresAt > Date.now() ? entry.value : null;
-		}
-		async mget(keys: string[]) {
-			this.check();
-			return keys.map((key) => this.read(key));
-		}
-		async set(key: string, value: string, _ex: 'EX', seconds: number, nx?: 'NX') {
-			this.check();
-			if (nx && this.read(key) !== null) return null;
-			redis.values.set(key, { value, expiresAt: Date.now() + seconds * 1000 });
-			return 'OK';
-		}
-		pipeline() {
-			const queued: Array<[string, string, 'EX', number]> = [];
-			const pipeline = {
-				set: (...args: [string, string, 'EX', number]) => {
-					queued.push(args);
-					return pipeline;
-				},
-				exec: async () =>
-					Promise.all(
-						queued.map((args) =>
-							this.set(...args).then(
-								(result) => [null, result],
-								(error) => [error, null]
-							)
-						)
-					),
-			};
-			return pipeline;
-		}
-	},
+vi.mock('ioredis', async () => ({
+	default: (await import('@/test/utils/fakeIoredis')).FakeIoredis,
 }));
 
 import {
@@ -74,6 +13,7 @@ import {
 } from './newlyCached';
 
 const LISTS = {
+	builtAt: 10,
 	rd: [
 		{
 			hash: 'a'.repeat(40),
@@ -87,14 +27,11 @@ const LISTS = {
 	ad: [],
 };
 const RELEASE = { hash: 'a'.repeat(40), title: 'A', size: 1, categories: [2000] };
-const LISTS_KEY = 'torznab:newly:v2:lists';
-const BUILD_KEY = 'torznab:newly:v2:build';
+const LISTS_KEY = 'torznab:newly:v3:lists';
+const BUILD_KEY = 'torznab:newly:v3:build';
 
 beforeEach(() => {
-	redis.values.clear();
-	redis.down = false;
-	redis.clients = 0;
-	redis.errorHandlers = [];
+	redis.reset();
 	vi.useFakeTimers({ toFake: ['Date'] });
 	vi.setSystemTime(new Date('2026-11-06T12:00:00Z'));
 });
@@ -177,13 +114,44 @@ describe('NewlyCachedStore', () => {
 		expect(redis.clients).toBe(2);
 	});
 
+	it('never serves an older list than it built when Redis took a write it reported failed', async () => {
+		const store = new NewlyCachedStore('redis://x');
+		await store.writeLists(LISTS);
+		const newer = { ...LISTS, builtAt: LISTS.builtAt + 1, ad: LISTS.rd };
+
+		// The title memo's write lands, but the client reports it timed out and
+		// is dropped, so the next list goes to memory only.
+		redis.timedOut = true;
+		await store.writeResolved(new Map([['tt1:a', RELEASE]]));
+		redis.timedOut = false;
+		expect(redis.values.has('torznab:newly:v3:title:tt1:a')).toBe(true);
+		await store.writeLists(newer);
+		expect(JSON.parse(redis.values.get(LISTS_KEY)!.value).builtAt).toBe(LISTS.builtAt);
+
+		expect(await store.readLists()).toEqual(newer);
+		// A fresh client reads the older shared copy; this instance's is newer.
+		vi.setSystemTime(Date.now() + REDIS_RETRY_MS);
+		expect(await store.readLists()).toEqual(newer);
+		expect(redis.clients).toBe(2);
+	});
+
+	it('takes the shared list when another instance built it later', async () => {
+		const [one, two] = [new NewlyCachedStore('redis://x'), new NewlyCachedStore('redis://x')];
+		await one.writeLists(LISTS);
+		const newer = { ...LISTS, builtAt: LISTS.builtAt + 1, ad: LISTS.rd };
+		await two.writeLists(newer);
+
+		expect(await one.readLists()).toEqual(newer);
+	});
+
 	it('treats a stored list of another shape as none', async () => {
 		const store = new NewlyCachedStore('redis://x');
 		const malformed = [
 			'not json',
 			'{"rd":[],"ad":"x"}',
-			// The previous format, which had no `listedAt`.
-			JSON.stringify({ rd: [{ ...RELEASE, cachedAt: 1 }], ad: [] }),
+			// The previous formats, which had no `listedAt`, then no `builtAt`.
+			JSON.stringify({ builtAt: 1, rd: [{ ...RELEASE, cachedAt: 1 }], ad: [] }),
+			JSON.stringify({ rd: LISTS.rd, ad: [] }),
 			JSON.stringify({ rd: [{ ...LISTS.rd[0], categories: ['2000'] }], ad: [] }),
 		];
 		for (const value of malformed) {

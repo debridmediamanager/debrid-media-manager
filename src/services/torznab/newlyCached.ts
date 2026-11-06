@@ -39,7 +39,7 @@ const LISTS_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const REDIS_RETRY_MS = 30_000;
 
 /** Versioned: a change of format is a new key, never a misread old one. */
-const KEY_PREFIX = 'torznab:newly:v2:';
+const KEY_PREFIX = 'torznab:newly:v3:';
 const LISTS_KEY = `${KEY_PREFIX}lists`;
 const BUILD_KEY = `${KEY_PREFIX}build`;
 const MEMORY_MAX_ENTRIES = 50_000;
@@ -62,6 +62,8 @@ export interface NewlyCachedRelease extends ResolvedRelease {
 
 /** Newest listing first. Real-Debrid's leaves out what RD refuses by name. */
 export interface NewlyCachedLists {
+	/** Epoch ms: when the build that made it ran, so the later of two copies wins. */
+	builtAt: number;
 	rd: NewlyCachedRelease[];
 	ad: NewlyCachedRelease[];
 }
@@ -86,6 +88,7 @@ const isLists = (value: unknown): value is NewlyCachedLists => {
 	return (
 		typeof lists === 'object' &&
 		lists !== null &&
+		typeof lists.builtAt === 'number' &&
 		Array.isArray(lists.rd) &&
 		Array.isArray(lists.ad) &&
 		lists.rd.every(isRelease) &&
@@ -116,7 +119,8 @@ export class NewlyCachedStore {
 				maxRetriesPerRequest: 1,
 				retryStrategy: () => null,
 				connectTimeout: 2000,
-				commandTimeout: 1000,
+				// A stalled event loop is not a Redis failure, and the list read is over a megabyte.
+				commandTimeout: 5000,
 				lazyConnect: true,
 			});
 			// A late error from a client already dropped must not drop its successor.
@@ -196,21 +200,26 @@ export class NewlyCachedStore {
 	}
 
 	/**
-	 * The last list built by any instance, else by this one. Anything not of
-	 * the list's shape is no list. Never throws.
+	 * The later-built of the shared list and this instance's own copy. A write
+	 * the client reported failed can still have reached Redis, or not, so the
+	 * shared copy may be older than what this instance last built; serving it
+	 * would take the feed backward. Anything not of the list's shape is no
+	 * list. Never throws.
 	 */
 	public async readLists(): Promise<NewlyCachedLists | null> {
 		const [shared] = await this.get([LISTS_KEY]);
+		let newest: NewlyCachedLists | null = null;
 		for (const raw of [shared, this.fromMemory(LISTS_KEY)]) {
 			if (!raw) continue;
 			try {
 				const parsed: unknown = JSON.parse(raw);
-				if (isLists(parsed)) return parsed;
+				if (isLists(parsed) && (!newest || parsed.builtAt > newest.builtAt))
+					newest = parsed;
 			} catch {
 				// Unreadable is no list.
 			}
 		}
-		return null;
+		return newest;
 	}
 
 	/** Kept in memory too, so an instance that loses Redis keeps its history. */

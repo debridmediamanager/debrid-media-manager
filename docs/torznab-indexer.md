@@ -301,8 +301,14 @@ short page, or at 1,000 releases. A first sync reads one page.
   ioredis reports it per command rather than by throwing, which it does for a pipeline
   once the connection is closed. After a failure an instance runs on memory and tries a
   fresh Redis client after `REDIS_RETRY_MS` (30 s), so it returns to the shared list when
-  Redis does; a late error from a client it has already dropped does not drop the new one. A stored list not of the expected shape is no list, and the key prefix
-  (`torznab:newly:v2:`) carries a version so a future format is a new key.
+  Redis does; a late error from a client it has already dropped does not drop the new one.
+  Each list carries when it was built, and an instance serves the later-built of the shared
+  copy and its own, because a write reported failed may still have reached Redis, or not:
+  in a live run on 2026-11-06 an event loop stalled past the then 1 s command timeout, a
+  pipeline Redis had applied was reported timed out, and serving the older shared copy
+  took the feed backward. The timeout is now 5 s. A stored list not of the expected shape is no
+  list, and the key prefix (`torznab:newly:v3:`) carries a version so a future format is a
+  new key.
 
 When the list has nothing for the request after the kind and category filters, or there
 is no list yet (the first request starts the first build and answers without it), the
