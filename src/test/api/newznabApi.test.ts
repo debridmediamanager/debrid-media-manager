@@ -303,7 +303,7 @@ describe('GET /api/newznab/api caps', () => {
 	});
 
 	it('advertises the same limit the search handler caps at', async () => {
-		expect(body(await run({ t: 'caps' }))).toContain('<limits max="10" default="10"/>');
+		expect(body(await run({ t: 'caps' }))).toContain('<limits max="100" default="100"/>');
 	});
 });
 
@@ -499,8 +499,8 @@ describe('GET /api/newznab/api search', () => {
 		// slice of the merged set, so the set itself has to exceed it before a
 		// cap can be observed at all.
 		const many = {
-			item: Array.from({ length: 25 }, (_, index) => ({
-				title: `Bulk.Release.${String(index).padStart(2, '0')}`,
+			item: Array.from({ length: 125 }, (_, index) => ({
+				title: `Bulk.Release.${String(index).padStart(3, '0')}`,
 				guid: `https://first-upstream.invalid/details/bulk-${index}`,
 				pubDate: 'Mon, 17 Nov 2025 22:08:02 +0000',
 				'newznab:attr': [{ _name: 'size', _value: '1000' }],
@@ -512,15 +512,15 @@ describe('GET /api/newznab/api search', () => {
 		);
 
 		const first = await run({ t: 'search', q: 'bulk', apikey: SPONSOR_KEY });
-		expect(itemTitles(first)).toHaveLength(10);
-		expect(body(first)).toContain('<newznab:response offset="0" total="25"/>');
+		expect(itemTitles(first)).toHaveLength(100);
+		expect(body(first)).toContain('<newznab:response offset="0" total="125"/>');
 
 		// Still a full upstream page, so the cap cannot poison the cached set.
 		const upstream = new URL(fetchedUrls()[0]);
 		expect(upstream.searchParams.get('limit')).toBe('100');
 
 		fetchMock.mockClear();
-		const last = await run({ t: 'search', q: 'bulk', apikey: SPONSOR_KEY, offset: '20' });
+		const last = await run({ t: 'search', q: 'bulk', apikey: SPONSOR_KEY, offset: '120' });
 
 		expect(fetchMock).not.toHaveBeenCalled();
 		expect(itemTitles(last)).toHaveLength(5);
