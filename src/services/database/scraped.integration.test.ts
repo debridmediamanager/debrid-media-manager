@@ -334,47 +334,61 @@ describe.skipIf(!dockerAvailable)('Library page saves on MySQL 8.0.36 (Integrati
 		expect(created.updatedAt.getTime()).toBeGreaterThanOrEqual(before - 1000);
 	});
 
-	// The Torznab RSS sync asks which page of a cache row's own title holds its
-	// hash, on production pages: Silo season 3 and Dead of Winter (2025).
-	it('names the pages of their own title that hold each hash, in any case', async () => {
+	// The Torznab RSS sync asks for the entries of a cache row's hash on its own
+	// title's pages, on production pages: Silo season 3 and Dead of Winter (2025).
+	it('returns the wanted entries of their own title, in any case, where they are', async () => {
 		const silo = sonarrEpisodeSearch.page;
 		const movie = rdRefusedNames.pages[0];
-		const onSilo = silo.results[0].hash;
+		const onSilo = silo.results[0];
 		const upper = silo.results[1];
-		const onMovie = rdRefusedNames.reported.hash;
+		const onMovie = movie.results.find((r) => r.hash === rdRefusedNames.reported.hash)!;
 		await seed('ScrapedTrue', silo.key, silo.results, new Date(silo.updatedAt));
 		await seed('ScrapedTrue', movie.key, movie.results, new Date(movie.updatedAt));
-		// An older season page holding one of them in upper case, and a page of
-		// another title whose id starts with Silo's.
+		// An older season page holding one of them twice, in upper case, after a
+		// release whose title is longer than any column a page read used to cut
+		// at; and a page of another title whose id starts with Silo's.
+		const long = { hash: 'e'.repeat(40), title: `Silo.${'x'.repeat(600)}`, fileSize: 1 };
 		await seed(
 			'ScrapedTrue',
 			'tv:tt14688458:2',
-			[{ ...upper, hash: upper.hash.toUpperCase() }],
+			[
+				long,
+				{ ...upper, hash: upper.hash.toUpperCase(), title: 'Silo.S02.first' },
+				{ ...upper, title: 'Silo.S02.second' },
+			],
 			new Date('2025-01-01T00:00:00Z')
 		);
 		await seed('ScrapedTrue', 'tv:tt146884580:1', silo.results.slice(0, 2), new Date());
 
-		const found = await service.getScrapedTruePagesHolding([
-			{ imdbId: 'tt14688458', hash: onSilo.toUpperCase() },
+		const found = await service.getScrapedTrueEntriesHolding([
+			{ imdbId: 'tt14688458', hash: onSilo.hash.toUpperCase() },
 			{ imdbId: 'tt14688458', hash: upper.hash },
-			{ imdbId: 'tt7574556', hash: onMovie },
+			{ imdbId: 'tt14688458', hash: long.hash },
+			{ imdbId: 'tt7574556', hash: onMovie.hash },
 			{ imdbId: 'tt7574556', hash: 'f'.repeat(40) },
 		]);
 
-		// Most recently refreshed page first, in lower case, nothing of tt146884580.
-		expect(found.map(({ key }) => key)).toEqual([
-			movie.key,
-			silo.key,
-			silo.key,
-			'tv:tt14688458:2',
+		// Most recently refreshed page first, page order within it, lower case,
+		// nothing of tt146884580.
+		const entry = (
+			key: string,
+			position: number,
+			r: { hash: string; title: string; fileSize: number | null }
+		) => ({
+			key,
+			position,
+			hash: r.hash.toLowerCase(),
+			title: r.title,
+			fileSize: r.fileSize ?? 0,
+		});
+		expect(found.map(({ updatedAt: _updatedAt, ...rest }) => rest)).toEqual([
+			entry(movie.key, movie.results.indexOf(onMovie) + 1, onMovie),
+			entry(silo.key, 1, onSilo),
+			entry(silo.key, 2, upper),
+			entry('tv:tt14688458:2', 1, long),
+			entry('tv:tt14688458:2', 2, { ...upper, title: 'Silo.S02.first' }),
+			entry('tv:tt14688458:2', 3, { ...upper, title: 'Silo.S02.second' }),
 		]);
-		expect(found.map(({ key, hash }) => `${key} ${hash}`).sort()).toEqual(
-			[
-				`${movie.key} ${onMovie}`,
-				`${silo.key} ${onSilo}`,
-				`${silo.key} ${upper.hash}`,
-				`tv:tt14688458:2 ${upper.hash}`,
-			].sort()
-		);
+		expect(found[0].updatedAt).toEqual(new Date(movie.updatedAt));
 	});
 });

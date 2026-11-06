@@ -1,24 +1,39 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// One Redis shared by every store, as the four Swarm instances share one.
+// One Redis shared by every store, as the four Swarm instances share one. Down,
+// it answers as ioredis 5.11.1 does with the store's options: single commands
+// reject, while `pipeline().exec()` resolves with an error per command.
 const redis = vi.hoisted(() => ({
 	values: new Map<string, { value: string; expiresAt: number }>(),
 	down: false,
+	clients: 0,
 }));
 
 vi.mock('ioredis', () => ({
 	default: class {
+		/** A client that has failed once stays closed, as one built not to reconnect does. */
+		private closed = false;
+		constructor() {
+			redis.clients++;
+		}
 		on() {}
+		disconnect() {
+			this.closed = true;
+		}
+		private check() {
+			if (redis.down) this.closed = true;
+			if (this.closed) throw new Error('Connection is closed.');
+		}
 		private read(key: string) {
 			const entry = redis.values.get(key);
 			return entry && entry.expiresAt > Date.now() ? entry.value : null;
 		}
 		async mget(keys: string[]) {
-			if (redis.down) throw new Error('connection refused');
+			this.check();
 			return keys.map((key) => this.read(key));
 		}
 		async set(key: string, value: string, _ex: 'EX', seconds: number, nx?: 'NX') {
-			if (redis.down) throw new Error('connection refused');
+			this.check();
 			if (nx && this.read(key) !== null) return null;
 			redis.values.set(key, { value, expiresAt: Date.now() + seconds * 1000 });
 			return 'OK';
@@ -30,10 +45,15 @@ vi.mock('ioredis', () => ({
 					queued.push(args);
 					return pipeline;
 				},
-				exec: async () => {
-					for (const args of queued) await this.set(...args);
-					return [];
-				},
+				exec: async () =>
+					Promise.all(
+						queued.map((args) =>
+							this.set(...args).then(
+								(result) => [null, result],
+								(error) => [error, null]
+							)
+						)
+					),
 			};
 			return pipeline;
 		}
@@ -43,19 +63,31 @@ vi.mock('ioredis', () => ({
 import {
 	NEWLY_CACHED_BUILD_SECONDS,
 	NewlyCachedStore,
+	REDIS_RETRY_MS,
 	RESOLVED_TTL_SECONDS,
-	UNRESOLVED_TTL_SECONDS,
 } from './newlyCached';
 
 const LISTS = {
-	rd: [{ hash: 'a'.repeat(40), title: 'A', size: 1, categories: [2000], cachedAt: 1 }],
+	rd: [
+		{
+			hash: 'a'.repeat(40),
+			title: 'A',
+			size: 1,
+			categories: [2000],
+			cachedAt: 1,
+			listedAt: 2,
+		},
+	],
 	ad: [],
 };
 const RELEASE = { hash: 'a'.repeat(40), title: 'A', size: 1, categories: [2000] };
+const LISTS_KEY = 'torznab:newly:v2:lists';
+const BUILD_KEY = 'torznab:newly:v2:build';
 
 beforeEach(() => {
 	redis.values.clear();
 	redis.down = false;
+	redis.clients = 0;
 	vi.useFakeTimers({ toFake: ['Date'] });
 	vi.setSystemTime(new Date('2026-11-06T12:00:00Z'));
 });
@@ -77,35 +109,74 @@ describe('NewlyCachedStore', () => {
 		expect(await one.readLists()).toEqual(LISTS);
 	});
 
-	it('remembers a title for hours and a miss for half an hour', async () => {
+	it('remembers a title, and the absence of one, for six hours', async () => {
 		const store = new NewlyCachedStore('redis://x');
-		await store.writeResolved(
-			new Map([
-				['tt1:a', RELEASE],
-				['tt1:b', null],
-			])
-		);
+		const answers = new Map([
+			['tt1:a', RELEASE],
+			['tt1:b', null],
+		]);
+		await store.writeResolved(answers);
 
-		expect(await store.readResolved(['tt1:a', 'tt1:b', 'tt1:c'])).toEqual(
-			new Map([
-				['tt1:a', RELEASE],
-				['tt1:b', null],
-			])
-		);
-		vi.setSystemTime(Date.now() + UNRESOLVED_TTL_SECONDS * 1000);
-		expect(await store.readResolved(['tt1:a', 'tt1:b'])).toEqual(new Map([['tt1:a', RELEASE]]));
-		vi.setSystemTime(Date.now() + RESOLVED_TTL_SECONDS * 1000);
-		expect(await store.readResolved(['tt1:a'])).toEqual(new Map());
+		vi.setSystemTime(Date.now() + RESOLVED_TTL_SECONDS * 1000 - 1);
+		expect(await store.readResolved(['tt1:a', 'tt1:b', 'tt1:c'])).toEqual(answers);
+		vi.setSystemTime(Date.now() + 1);
+		expect(await store.readResolved(['tt1:a', 'tt1:b'])).toEqual(new Map());
 	});
 
-	it('keeps working in memory when Redis is down', async () => {
-		redis.down = true;
+	it('keeps the list and the titles in memory when a pipelined write fails', async () => {
 		const store = new NewlyCachedStore('redis://x');
-
 		expect(await store.readLists()).toBeNull();
-		expect(await store.claimBuild()).toBe(true);
-		expect(await store.claimBuild()).toBe(false);
+		redis.down = true;
+
 		await store.writeLists(LISTS);
+		await store.writeResolved(new Map([['tt1:a', RELEASE]]));
+
 		expect(await store.readLists()).toEqual(LISTS);
+		expect(await store.readResolved(['tt1:a'])).toEqual(new Map([['tt1:a', RELEASE]]));
+	});
+
+	it('goes back to Redis once it is reachable again', async () => {
+		const store = new NewlyCachedStore('redis://x');
+		redis.down = true;
+		expect(await store.claimBuild()).toBe(true);
+		redis.down = false;
+
+		// Still on memory, whose claim holds, until the retry interval passes.
+		vi.setSystemTime(Date.now() + REDIS_RETRY_MS - 1);
+		expect(await store.claimBuild()).toBe(false);
+		expect(redis.values.has(BUILD_KEY)).toBe(false);
+
+		vi.setSystemTime(Date.now() + 1);
+		await store.writeLists(LISTS);
+		expect(redis.values.has(LISTS_KEY)).toBe(true);
+		expect(redis.clients).toBe(2);
+	});
+
+	it('treats a stored list of another shape as none', async () => {
+		const store = new NewlyCachedStore('redis://x');
+		const malformed = [
+			'not json',
+			'{"rd":[],"ad":"x"}',
+			// The previous format, which had no `listedAt`.
+			JSON.stringify({ rd: [{ ...RELEASE, cachedAt: 1 }], ad: [] }),
+			JSON.stringify({ rd: [{ ...LISTS.rd[0], categories: ['2000'] }], ad: [] }),
+		];
+		for (const value of malformed) {
+			redis.values.set(LISTS_KEY, { value, expiresAt: Date.now() + 60_000 });
+			expect(await store.readLists(), value).toBeNull();
+		}
+	});
+
+	it('never loses the list or the claim to the title memo filling up', async () => {
+		const store = new NewlyCachedStore();
+		await store.writeLists(LISTS);
+		expect(await store.claimBuild()).toBe(true);
+
+		await store.writeResolved(
+			new Map(Array.from({ length: 50_001 }, (_, index) => [`tt1:${index}`, null]))
+		);
+
+		expect(await store.readLists()).toEqual(LISTS);
+		expect(await store.claimBuild()).toBe(false);
 	});
 });

@@ -15,6 +15,10 @@ const build = () => {
 		getScrapedTrueResults: vi.fn(async () => [row(BLOCKED), row(KEPT)]),
 		getScrapedResults: vi.fn(async () => [row(BLOCKED.toUpperCase()), row(KEPT)]),
 		getAllScrapedTrueResults: vi.fn(async () => [row(BLOCKED), row(KEPT)]),
+		getScrapedTrueEntriesHolding: vi.fn(async () => [
+			{ ...row(BLOCKED), key: 'movie:tt1', updatedAt: new Date(0), position: 1 },
+			{ ...row(KEPT), key: 'movie:tt1', updatedAt: new Date(0), position: 2 },
+		]),
 		getScrapedTrueRow: vi.fn(async () => ({
 			results: [row(BLOCKED), row(KEPT)],
 			updatedAt: new Date(0),
@@ -61,6 +65,11 @@ describe('Repository takedown enforcement', () => {
 		expect(await repo.getScrapedResults<any[]>('movie:tt1')).toEqual([row(KEPT)]);
 		expect(await repo.getAllScrapedTrueResults('movie:tt1')).toEqual([row(KEPT)]);
 		expect((await repo.getScrapedTrueRow('movie:tt1'))?.results).toEqual([row(KEPT)]);
+		expect(
+			(await repo.getScrapedTrueEntriesHolding([{ imdbId: 'tt1', hash: KEPT }])).map(
+				(entry) => entry.hash
+			)
+		).toEqual([KEPT]);
 	});
 
 	it('refuses blocked hashes on every scraped save, so a crawl cannot restore them', async () => {

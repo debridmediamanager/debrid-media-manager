@@ -44,8 +44,13 @@ const plausibleFileSize = () =>
  */
 const cyrillicLedDropped = () => Prisma.sql`AND jt.title NOT REGEXP '^[А-Яа-яЁё]'`;
 
-/** Titles per `getScrapedTruePagesHolding` query, so the key list stays a plannable range set. */
-const PAGES_HOLDING_CHUNK = 50;
+/** One release on a library page, where it is; see `getScrapedTrueEntriesHolding`. */
+export interface ScrapedTrueEntry extends ScrapeSearchResult {
+	key: string;
+	updatedAt: Date;
+	/** 1-based, in page order. */
+	position: number;
+}
 
 export type ScrapedTrueReadOptions = {
 	/** Keep Cyrillic-led releases. The title pages do, zurg's search does not. */
@@ -232,51 +237,61 @@ export class ScrapedService extends DatabaseClient {
 	}
 
 	/**
-	 * Which library pages of their own title hold these hashes, most recently
-	 * refreshed first, for the Torznab RSS sync. The database says which page,
-	 * so a hash is found without transferring every season page of its show.
+	 * The library entries of these hashes on their own title's pages, for the
+	 * Torznab RSS sync: each entry as stored, with its page, the page's
+	 * `updatedAt` and its position there, most recently refreshed page first and
+	 * page order within it. Only the wanted entries leave the database, so a
+	 * hash is found without transferring the pages that hold it.
 	 *
 	 * A constant-prefix `LIKE` rather than a key range: `key` collates
 	 * `utf8mb4_unicode_ci`, where `;` sorts before `:`, so `>= 'tv:tt1:' AND
 	 * < 'tv:tt1;'` matches nothing. Hashes are compared in lower case because
-	 * pages and cache rows disagree on case.
+	 * pages and cache rows disagree on case. A hash wanted for one title can
+	 * come back from another title's page asked about in the same call; the
+	 * caller matches page and title. Capped at 15 s: the table is large, and a
+	 * bad plan must fail its caller rather than hold the database.
 	 */
-	public async getScrapedTruePagesHolding(
+	public async getScrapedTrueEntriesHolding(
 		wanted: Array<{ imdbId: string; hash: string }>
-	): Promise<Array<{ key: string; hash: string; updatedAt: Date }>> {
-		const byTitle = new Map<string, Set<string>>();
-		for (const { imdbId, hash } of wanted) {
-			// Also what keeps the LIKE pattern free of wildcards.
-			if (!/^tt\d+$/.test(imdbId)) continue;
-			const hashes = byTitle.get(imdbId) ?? new Set<string>();
-			hashes.add(hash.toLowerCase());
-			byTitle.set(imdbId, hashes);
-		}
-
-		const titles = [...byTitle.keys()];
-		const found: Array<{ key: string; hash: string; updatedAt: Date }> = [];
-		for (let start = 0; start < titles.length; start += PAGES_HOLDING_CHUNK) {
-			const chunk = titles.slice(start, start + PAGES_HOLDING_CHUNK);
-			const keys = Prisma.join(
-				chunk.map(
-					(id) => Prisma.sql`s.key = ${`movie:${id}`} OR s.key LIKE ${`tv:${id}:%`}`
-				),
-				' OR '
-			);
-			const hashes = Prisma.join([...new Set(chunk.flatMap((id) => [...byTitle.get(id)!]))]);
-			const rows = await this.prisma.$queryRaw<
-				Array<{ pageKey: string; hash: string; updatedAt: Date }>
-			>(Prisma.sql`
-				SELECT DISTINCT s.key AS pageKey, LOWER(jt.hash) AS hash, s.updatedAt
-				FROM ScrapedTrue s
-				JOIN JSON_TABLE(s.value, '$[*]' COLUMNS (hash VARCHAR(255) PATH '$.hash')) AS jt
-				WHERE (${keys}) AND LOWER(jt.hash) IN (${hashes})
-				ORDER BY s.updatedAt DESC`);
-			for (const row of rows) {
-				found.push({ key: row.pageKey, hash: row.hash, updatedAt: row.updatedAt });
-			}
-		}
-		return found;
+	): Promise<ScrapedTrueEntry[]> {
+		// The id check is also what keeps the LIKE pattern free of wildcards.
+		const usable = wanted.filter(({ imdbId }) => /^tt\d+$/.test(imdbId));
+		if (usable.length === 0) return [];
+		const titles = [...new Set(usable.map(({ imdbId }) => imdbId))];
+		const keys = Prisma.join(
+			titles.map((id) => Prisma.sql`s.key = ${`movie:${id}`} OR s.key LIKE ${`tv:${id}:%`}`),
+			' OR '
+		);
+		const hashes = Prisma.join([...new Set(usable.map(({ hash }) => hash.toLowerCase()))]);
+		const rows = await this.prisma.$queryRaw<
+			Array<{
+				pageKey: string;
+				updatedAt: Date;
+				position: number | bigint;
+				hash: string;
+				title: string | null;
+				fileSize: number | null;
+			}>
+		>(Prisma.sql`
+			SELECT /*+ MAX_EXECUTION_TIME(15000) */
+				s.key AS pageKey, s.updatedAt, jt.position, LOWER(jt.hash) AS hash, jt.title, jt.fileSize
+			FROM ScrapedTrue s
+			JOIN JSON_TABLE(s.value, '$[*]' COLUMNS (
+				position FOR ORDINALITY,
+				hash VARCHAR(255) PATH '$.hash',
+				title VARCHAR(2048) PATH '$.title',
+				fileSize DOUBLE PATH '$.fileSize'
+			)) AS jt
+			WHERE (${keys}) AND LOWER(jt.hash) IN (${hashes})
+			ORDER BY s.updatedAt DESC, s.key, jt.position`);
+		return rows.map((row) => ({
+			key: row.pageKey,
+			updatedAt: row.updatedAt,
+			position: Number(row.position),
+			hash: row.hash,
+			title: row.title ?? '',
+			fileSize: row.fileSize ?? 0,
+		}));
 	}
 
 	public async getScrapedTrueResults<T>(

@@ -14,13 +14,17 @@ import {
 	NEWLY_CACHED_DEPTH,
 	NEWLY_CACHED_RESOLVE_LIMIT,
 	NEWLY_CACHED_WINDOW_MS,
+	newlyCachedStore,
 	NewlyCachedStore,
+	RESOLVED_TTL_SECONDS,
 	setNewlyCachedStore,
+	type NewlyCachedLists,
 } from '@/services/torznab/newlyCached';
 import { ProviderProbeError } from '@/services/torznab/providerCache';
 import {
 	buildNewlyCached,
 	CACHED_SEEDERS,
+	newlyCachedBuildSettled,
 	parseFeedOptions,
 	runSearch,
 	UNCACHED_SEEDERS,
@@ -169,6 +173,10 @@ function attrValue(xml: string, name: string): string[] {
 	);
 }
 
+// A request may leave a build running in the background; let it finish
+// before the next test resets the mocks it reads.
+afterEach(() => newlyCachedBuildSettled());
+
 beforeAll(() => {
 	// No Redis means the hybrid limiter counts in memory; no whitelist means the
 	// identifiers below are actually counted.
@@ -236,25 +244,33 @@ beforeEach(() => {
 			.slice(0, limit)
 	);
 	// What the JSON_TABLE query answers (scraped.integration.test.ts runs it on
-	// MySQL): the pages of each wanted hash's own title that hold it, most
-	// recently refreshed first.
-	mockRepo.getScrapedTruePagesHolding = vi.fn(
-		async (wanted: Array<{ imdbId: string; hash: string }>) =>
-			[...library]
+	// MySQL): every entry, in lower case, on a page of any title asked about
+	// whose hash any row asked about, most recently refreshed page first and
+	// page order within it. As in SQL, a hash wanted for one title comes back
+	// from another title's page in the same call.
+	mockRepo.getScrapedTrueEntriesHolding = vi.fn(
+		async (wanted: Array<{ imdbId: string; hash: string }>) => {
+			const hashes = new Set(wanted.map((w) => w.hash.toLowerCase()));
+			return [...library]
+				.filter(([key]) =>
+					wanted.some(
+						(w) => key === `movie:${w.imdbId}` || key.startsWith(`tv:${w.imdbId}:`)
+					)
+				)
 				.sort(([, a], [, b]) => b.updatedAt.getTime() - a.updatedAt.getTime())
-				.flatMap(([key, page]) => {
-					const onPage = new Set(
-						(page.results as Array<{ hash: string }>).map((r) => r.hash.toLowerCase())
-					);
-					return wanted
-						.filter(
-							(w) =>
-								(key === `movie:${w.imdbId}` ||
-									key.startsWith(`tv:${w.imdbId}:`)) &&
-								onPage.has(w.hash)
-						)
-						.map((w) => ({ key, hash: w.hash, updatedAt: page.updatedAt }));
-				})
+				.flatMap(([key, page]) =>
+					(page.results as Array<{ hash: string; title: string; fileSize: number }>)
+						.map((r, index) => ({
+							key,
+							updatedAt: page.updatedAt,
+							position: index + 1,
+							hash: r.hash.toLowerCase(),
+							title: r.title,
+							fileSize: r.fileSize,
+						}))
+						.filter((entry) => hashes.has(entry.hash))
+				);
+		}
 	);
 	// A held hash with no entry in `rdNames` is held under its own hash, a name
 	// RD has no reason to refuse.
@@ -984,6 +1000,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 	const CYRILLIC = '15ce0237bc9706bef34fa2d798b847526fb32f35';
 	const NOW = new Date('2026-11-06T12:00:00Z').getTime();
 	const MINUTE = 60_000;
+	const BUILD_INTERVAL = NEWLY_CACHED_BUILD_SECONDS * 1000;
 
 	const titleOf = (torrentHash: string) =>
 		[...rdRefusedNames.pages, SILO]
@@ -1025,6 +1042,18 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 		}));
 	}
 
+	/** Cache rows whose hash no library page holds, the last newest, a second apart. */
+	function strayRows(count: number, newest: number): NewlyCachedRow[] {
+		return Array.from({ length: count }, (_, index) => ({
+			hash: `5${index.toString(16).padStart(39, '0')}`,
+			imdbId: SILO_ID,
+			season: 3,
+			createdAt: new Date(newest - (count - 1 - index) * 1000),
+			filename: 'Stray',
+			originalFilename: 'Stray',
+		}));
+	}
+
 	/** What the list may hold of a row: what the library serves, minus RD's refusals. */
 	const servable = (row: NewlyCachedRow, rd = true) =>
 		!isCyrillicLed(titleOf(row.hash)) &&
@@ -1032,6 +1061,22 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 
 	const newestFirst = (rows: NewlyCachedRow[]) =>
 		[...rows].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+	/** One build, as the instance that claimed it runs it. */
+	async function build(at: number = Date.now()): Promise<NewlyCachedLists> {
+		const store = newlyCachedStore();
+		const lists = await buildNewlyCached(await store.readLists(), at);
+		await store.writeLists(lists);
+		return lists;
+	}
+
+	/** The repository reads that take a whole page, which no build may make. */
+	const wholePageReads = () => [
+		mockRepo.getScrapedTrueRow,
+		mockRepo.getScrapedTrueResults,
+		mockRepo.getAllScrapedTrueResults,
+		mockRepo.getRecentScrapedTrueKeys,
+	];
 
 	interface FeedItem {
 		hash: string;
@@ -1054,6 +1099,14 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 	const sync = (query: Record<string, string>, route = ['rd', 'cached', 'api']) =>
 		run({ apikey: SPONSOR_KEY, ...query }, { route });
 
+	/** A request that claims the build, and the build it starts in the background. */
+	async function buildThroughRoute(): Promise<void> {
+		await sync({ t: 'search' });
+		await newlyCachedBuildSettled();
+	}
+
+	const toSecond = (ms: number) => Math.floor(ms / 1000) * 1000;
+
 	beforeEach(() => {
 		vi.useFakeTimers({ toFake: ['Date'] });
 		vi.setSystemTime(NOW);
@@ -1072,31 +1125,54 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			])
 		);
 		adCached = new Set();
+		// The old answer, so a fallback has something to show.
+		mockRepo.getRecentScrapedTrueKeys = vi
+			.fn()
+			.mockResolvedValue([{ key: `movie:${DEAD_OF_WINTER}`, updatedAt: new Date(NOW) }]);
 	});
 
-	afterEach(() => {
+	afterEach(async () => {
+		await newlyCachedBuildSettled();
 		vi.useRealTimers();
+		vi.unstubAllEnvs();
 		resetBlocklistForTests();
 	});
 
-	describe('the list', () => {
-		it('holds what was recorded as cached, newest first, dated by that record', async () => {
+	describe('a build', () => {
+		it('first lists what was recorded as cached, newest first, dated by that record', async () => {
 			cacheRows.rd = movieRows(NOW - MINUTE);
 
-			const { rd } = await buildNewlyCached();
+			const { rd } = await build();
 
 			const expected = newestFirst(cacheRows.rd).filter((row) => servable(row));
 			expect(rd.map((release) => release.hash)).toEqual(expected.map((row) => row.hash));
-			expect(rd.map((release) => release.cachedAt)).toEqual(
-				expected.map((row) => row.createdAt.getTime())
+			for (const field of ['cachedAt', 'listedAt'] as const) {
+				expect(rd.map((release) => release[field])).toEqual(
+					expected.map((row) => row.createdAt.getTime())
+				);
+			}
+			expect(rd[0].title).toBe(titleOf(expected[0].hash));
+		});
+
+		it('lists what arrives later at its own build, ahead of what was there', async () => {
+			cacheRows.rd = siloRows(0, 10, NOW - MINUTE);
+			const first = await build();
+
+			// Recorded before the first build's newest, but first seen now.
+			const late = siloRows(10, 12, NOW - 2 * MINUTE);
+			cacheRows.rd.push(...late);
+			const at = NOW + BUILD_INTERVAL;
+			const { rd } = await build(at);
+
+			expect(rd.slice(2)).toEqual(first.rd);
+			expect(rd.slice(0, 2).map((release) => [release.hash, release.listedAt])).toEqual(
+				newestFirst(late).map((row) => [row.hash, at])
 			);
-			expect(rd.find((release) => release.hash === expected[0].hash)?.title).toBe(
-				titleOf(expected[0].hash)
-			);
+			expect(rd[0].cachedAt).toBe(newestFirst(late)[0].createdAt.getTime());
 		});
 
 		it('asks for the newest rows of each provider inside the window', async () => {
-			await buildNewlyCached();
+			await build();
 
 			const since = new Date(NOW - NEWLY_CACHED_WINDOW_MS);
 			expect(mockRepo.getNewlyCached).toHaveBeenCalledWith('rd', since, NEWLY_CACHED_DEPTH);
@@ -1106,19 +1182,42 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 		});
 
 		it('leaves out a row whose hash is on no page of its own title', async () => {
-			const [onPage, onOtherTitle] = siloRows(0, 2, NOW);
-			cacheRows.rd = [
+			// Dead of Winter's page holds `onMovie`, asked about for The Crow in the
+			// same query: the answer must not be taken from the other title's page.
+			const [onMovie] = movieRows(NOW).filter((row) => row.imdbId === DEAD_OF_WINTER);
+			const [onPage] = siloRows(0, 1, NOW);
+			cacheRows.ad = [
 				onPage,
-				{ ...onOtherTitle, imdbId: DEAD_OF_WINTER },
-				{
-					...onPage,
-					hash: 'f'.repeat(40),
-				},
+				{ ...onMovie, imdbId: THE_CROW, createdAt: new Date(NOW - 1000) },
+				...strayRows(1, NOW - 2000),
 			];
 
-			const { rd } = await buildNewlyCached();
+			const { ad } = await build();
 
-			expect(rd.map((release) => release.hash)).toEqual([onPage.hash]);
+			expect(ad.map((release) => release.hash)).toEqual([onPage.hash]);
+		});
+
+		it("takes a hash two titles' pages hold from each row's own title", async () => {
+			// One query asks about both; Dead of Winter's page comes back first.
+			const [onMovie] = movieRows(NOW).filter((row) => row.imdbId === DEAD_OF_WINTER);
+			const crow = library.get(`movie:${THE_CROW}`)!;
+			library.set(`movie:${THE_CROW}`, {
+				results: [...crow.results, release('The.Crow.2024.1080p.WEB', 1_000, onMovie.hash)],
+				updatedAt: new Date('2025-01-01T00:00:00Z'),
+			});
+			cacheRows.ad = [onMovie, { ...onMovie, imdbId: THE_CROW }];
+			adCached = new Set();
+
+			await build();
+
+			const memo = await newlyCachedStore().readResolved([
+				`${DEAD_OF_WINTER}:${onMovie.hash}`,
+				`${THE_CROW}:${onMovie.hash}`,
+			]);
+			expect([...memo.values()].map((release) => release?.title)).toEqual([
+				titleOf(onMovie.hash),
+				'The.Crow.2024.1080p.WEB',
+			]);
 		});
 
 		it("serves a TV row from its own season's page, else another season's", async () => {
@@ -1130,14 +1229,13 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 				),
 				updatedAt: new Date(NOW),
 			});
-			library.delete(SILO.key);
 			library.set(SILO.key, {
 				results: SILO.results.filter((result) => result.hash !== elsewhere.hash),
 				updatedAt: new Date(SILO.updatedAt),
 			});
 			cacheRows.rd = [own, elsewhere];
 
-			const { rd } = await buildNewlyCached();
+			const { rd } = await build();
 
 			expect(rd.map((release) => [release.hash, release.title])).toEqual([
 				[elsewhere.hash, `Silo.S02.${elsewhere.hash}`],
@@ -1145,15 +1243,30 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			]);
 		});
 
+		it('takes the first entry of a hash a page holds twice, decoded', async () => {
+			const [row] = siloRows(0, 1, NOW);
+			library.set(SILO.key, {
+				results: [
+					release('', 1, row.hash),
+					release('Silo &amp; Co.S03.1080p', 1_000, row.hash.toUpperCase()),
+					release('Silo.S03.second', 2_000, row.hash),
+				],
+				updatedAt: new Date(SILO.updatedAt),
+			});
+			cacheRows.rd = [row];
+
+			const { rd } = await build();
+
+			expect(rd.map((release) => release.title)).toEqual(['Silo & Co.S03.1080p']);
+		});
+
 		it('leaves out of the RD list what RD refuses by name', async () => {
 			cacheRows.rd = movieRows(NOW);
-			cacheRows.ad = [];
 
-			const { rd, ad } = await buildNewlyCached();
+			const { rd } = await build();
 
 			expect(isRdBlockedName(titleOf(REFUSED))).toBe(true);
 			expect(rd.map((release) => release.hash)).not.toContain(REFUSED);
-			expect(ad).toEqual([]);
 		});
 
 		it('leaves out what is reported, judged not the movie or Cyrillic-led', async () => {
@@ -1186,10 +1299,14 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 				servable(row, false)
 			);
 			reported = [reportedRow.hash];
-			cacheRows.ad = [reportedRow, ...movies, ...trashRows];
-			cacheRows.ad.push(movieRows(NOW).find((row) => row.hash === CYRILLIC)!);
+			cacheRows.ad = [
+				reportedRow,
+				...movies,
+				...trashRows,
+				movieRows(NOW).find((row) => row.hash === CYRILLIC)!,
+			];
 
-			const listed = (await buildNewlyCached()).ad.map((release) => release.hash);
+			const listed = (await build()).ad.map((release) => release.hash);
 
 			expect(listed).not.toContain(reportedRow.hash);
 			expect(listed).not.toContain(CYRILLIC);
@@ -1198,82 +1315,103 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			for (const entry of trashed) expect(listed).not.toContain(entry.hash);
 			expect(listed).toContain(entries.find((e) => e.verdict !== 'trash')!.hash);
 			expect(listed).toContain(movies[0].hash);
-			vi.unstubAllEnvs();
+			// The verdicts were asked about each title's wanted hashes, not its page's.
+			for (const [imdbId, hashes] of trashedPairKeys.mock.calls as Array<
+				[string, string[]]
+			>) {
+				const wanted = cacheRows.ad.filter((r) => r.imdbId === imdbId).map((r) => r.hash);
+				expect(hashes.every((h) => wanted.includes(h))).toBe(true);
+			}
 		});
 
-		it('drops a taken-down hash on the next build, though its title is memoised', async () => {
+		it('never reads a whole page, nor asks a filter about one', async () => {
+			cacheRows.rd = [...movieRows(NOW - MINUTE), ...siloRows(0, 200, NOW)];
+			reported = [];
+
+			await build();
+
+			for (const read of wholePageReads()) expect(read).not.toHaveBeenCalled();
+			expect(mockRepo.getCachedRdNames).not.toHaveBeenCalled();
+			expect(mockRepo.filterCachedHashesAd).not.toHaveBeenCalled();
+			const asked = vi
+				.mocked(mockRepo.getScrapedTrueEntriesHolding)
+				.mock.calls.flatMap(([wanted]) => wanted.map((w) => w.hash));
+			expect(new Set(asked)).toEqual(new Set(cacheRows.rd.map((row) => row.hash)));
+		});
+
+		it('drops a taken-down release at the next build, and its neighbours keep their date', async () => {
 			// The repository's own filter, as `getNewlyCached` applies it.
-			const rows = siloRows(0, 3, NOW);
+			const rows = siloRows(0, 3, NOW - MINUTE);
 			mockRepo.getNewlyCached = vi.fn(async (provider: 'rd' | 'ad') =>
 				provider === 'rd' ? withoutBlockedHashes(newestFirst(rows)) : []
 			);
-			expect((await buildNewlyCached()).rd).toHaveLength(3);
+			const first = (await build()).rd;
+			expect(first).toHaveLength(3);
 
 			setBlocklistForTests([rows[1].hash]);
-			vi.mocked(mockRepo.getScrapedTrueRow).mockClear();
-			const { rd } = await buildNewlyCached();
+			const { rd } = await build(NOW + BUILD_INTERVAL);
 
-			expect(rd.map((release) => release.hash)).toEqual([rows[2].hash, rows[0].hash]);
-			expect(mockRepo.getScrapedTrueRow).not.toHaveBeenCalled();
+			expect(rd).toEqual(first.filter((release) => release.hash !== rows[1].hash));
 		});
 
-		it('reads each page once, and a memoised hash never again', async () => {
-			cacheRows.rd = movieRows(NOW).slice(0, 100);
+		it('judges a release once: a listed one and a memoised one are not looked up again', async () => {
+			cacheRows.rd = [...movieRows(NOW - MINUTE), ...strayRows(5, NOW)];
+			await build();
+			// Two titles' worth of rows, in chunks; never a page.
+			expect(mockRepo.getScrapedTrueEntriesHolding).toHaveBeenCalled();
 
-			await buildNewlyCached();
-			// Two titles, two pages, however many hashes each holds.
-			expect(mockRepo.getScrapedTrueRow).toHaveBeenCalledTimes(2);
-			expect(mockRepo.getScrapedTruePagesHolding).toHaveBeenCalledTimes(1);
-
-			vi.mocked(mockRepo.getScrapedTrueRow).mockClear();
-			vi.mocked(mockRepo.getScrapedTruePagesHolding).mockClear();
-			await buildNewlyCached();
-			expect(mockRepo.getScrapedTrueRow).not.toHaveBeenCalled();
-			expect(mockRepo.getScrapedTruePagesHolding).not.toHaveBeenCalled();
+			vi.mocked(mockRepo.getScrapedTrueEntriesHolding).mockClear();
+			await build(NOW + BUILD_INTERVAL);
+			// What RD refuses and what is on no page are remembered too.
+			expect(mockRepo.getScrapedTrueEntriesHolding).not.toHaveBeenCalled();
 		});
 
-		it('remembers a hash it could not find, and looks again after half an hour', async () => {
-			cacheRows.rd = [{ ...siloRows(0, 1, NOW)[0], hash: 'f'.repeat(40) }];
+		it('asks again about a hash it could not find after six hours, not before', async () => {
+			cacheRows.rd = strayRows(1, NOW);
 
-			await buildNewlyCached();
-			await buildNewlyCached();
-			expect(mockRepo.getScrapedTruePagesHolding).toHaveBeenCalledTimes(1);
-
+			await build();
+			await build(NOW + 31 * MINUTE);
 			vi.setSystemTime(NOW + 31 * MINUTE);
-			await buildNewlyCached();
-			expect(mockRepo.getScrapedTruePagesHolding).toHaveBeenCalledTimes(2);
+			await build();
+			expect(mockRepo.getScrapedTrueEntriesHolding).toHaveBeenCalledTimes(1);
+
+			vi.setSystemTime(NOW + RESOLVED_TTL_SECONDS * 1000);
+			await build();
+			expect(mockRepo.getScrapedTrueEntriesHolding).toHaveBeenCalledTimes(2);
 		});
 
-		it('looks up a bounded slice per build, newest first, and converges', async () => {
-			cacheRows.ad = siloRows(0, 400, NOW);
-			const expected = newestFirst(cacheRows.ad).filter((row) => servable(row, false));
+		it('looks up a bounded slice per build, newest first, and lists the rest later', async () => {
+			// More unknown rows than one build may look up: strays first, newest.
+			cacheRows.ad = [...siloRows(0, 200, NOW - 30 * MINUTE), ...strayRows(900, NOW)];
 
-			const first = (await buildNewlyCached()).ad.map((release) => release.hash);
-			const wanted = vi.mocked(mockRepo.getScrapedTruePagesHolding).mock.calls[0][0];
-			expect(wanted).toHaveLength(NEWLY_CACHED_RESOLVE_LIMIT);
-			expect(wanted.map((row) => row.hash)).toEqual(
+			const first = (await build()).ad;
+			const asked = () =>
+				vi
+					.mocked(mockRepo.getScrapedTrueEntriesHolding)
+					.mock.calls.flatMap(([wanted]) => wanted.map((w) => w.hash));
+			expect(asked()).toHaveLength(NEWLY_CACHED_RESOLVE_LIMIT);
+			expect(asked()).toEqual(
 				newestFirst(cacheRows.ad)
 					.slice(0, NEWLY_CACHED_RESOLVE_LIMIT)
 					.map((row) => row.hash)
 			);
-			expect(first).toEqual(
-				expected
-					.filter((row) => wanted.some((w) => w.hash === row.hash))
-					.map((row) => row.hash)
-			);
+			expect(first).toHaveLength(NEWLY_CACHED_RESOLVE_LIMIT - 900);
 
-			const second = (await buildNewlyCached()).ad.map((release) => release.hash);
-			expect(vi.mocked(mockRepo.getScrapedTruePagesHolding).mock.calls[1][0]).toHaveLength(
-				400 - NEWLY_CACHED_RESOLVE_LIMIT
+			const at = NOW + BUILD_INTERVAL;
+			const { ad } = await build(at);
+			expect(ad).toHaveLength(200);
+			expect(ad.slice(-first.length)).toEqual(first);
+			expect(ad.slice(0, -first.length).every((release) => release.listedAt === at)).toBe(
+				true
 			);
-			expect(second).toEqual(expected.map((row) => row.hash));
 		});
 	});
 
 	describe('through the route', () => {
-		it('answers /rd/cached with the list, every item cached and dated by its record', async () => {
+		it('answers /rd/cached with the list, every item cached and dated by its listing', async () => {
 			cacheRows.rd = movieRows(NOW - MINUTE);
 			const expected = newestFirst(cacheRows.rd).filter((row) => servable(row));
+			await build();
 
 			const res = await sync({ t: 'search', limit: '100' });
 
@@ -1282,9 +1420,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 				expected.slice(0, 100).map((row) => row.hash)
 			);
 			expect(served.map((item) => item.pubDate)).toEqual(
-				expected
-					.slice(0, 100)
-					.map((row) => Math.floor(row.createdAt.getTime() / 1000) * 1000)
+				expected.slice(0, 100).map((row) => toSecond(row.createdAt.getTime()))
 			);
 			expect(served.every((item) => item.seeders === CACHED_SEEDERS)).toBe(true);
 			expect(body(res)).toContain(`total="${expected.length}"`);
@@ -1295,6 +1431,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 
 		it('answers the same on the plain variant of a scope', async () => {
 			cacheRows.rd = movieRows(NOW - MINUTE);
+			await build();
 			const cached = body(await sync({ t: 'search', limit: '100' }));
 			const plain = body(await sync({ t: 'search', limit: '100' }, ['rd', 'api']));
 			expect(plain).toBe(cached);
@@ -1302,6 +1439,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 
 		it('narrows the kind by t=, then by cat=', async () => {
 			cacheRows.rd = [...movieRows(NOW - MINUTE).slice(0, 20), ...siloRows(0, 20, NOW)];
+			await build();
 
 			const kinds = async (query: Record<string, string>) =>
 				new Set(
@@ -1318,9 +1456,8 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 
 		it('pages with offset and limit, and counts what survives the filters', async () => {
 			cacheRows.rd = siloRows(0, 250, NOW);
-			const expected = newestFirst(cacheRows.rd)
-				.filter((row) => servable(row))
-				.map((row) => row.hash);
+			await build();
+			const expected = newestFirst(cacheRows.rd).map((row) => row.hash);
 
 			const pages = [];
 			for (const offset of [0, 100, 200]) {
@@ -1331,28 +1468,30 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			expect(pages).toEqual(expected);
 		});
 
-		it('lists a hash both providers hold once on the combined feed, at the earlier time', async () => {
+		it('lists a hash both providers hold once on the combined feed, at the earlier listing', async () => {
 			const [both, rdOnly] = siloRows(0, 2, NOW - MINUTE);
 			cacheRows.rd = [both, rdOnly];
+			await build();
 			cacheRows.ad = [{ ...both, createdAt: new Date(NOW) }];
+			await build(NOW + BUILD_INTERVAL);
 
 			for (const route of [['api'], ['cached', 'api']]) {
 				const served = items(await sync({ t: 'search' }, route));
 				expect(served.map((item) => item.hash)).toEqual([rdOnly.hash, both.hash]);
-				expect(served[1].pubDate).toBe(both.createdAt.getTime());
+				expect(served[1].pubDate).toBe(toSecond(both.createdAt.getTime()));
 			}
 		});
 
 		it('counts what RD refuses on the combined feed only where AllDebrid holds it', async () => {
 			const refused = movieRows(NOW).find((row) => row.hash === REFUSED)!;
 			cacheRows.rd = [refused, ...siloRows(0, 1, NOW - MINUTE)];
-
+			await build();
 			expect(items(await sync({ t: 'search' }, ['api'])).map((i) => i.hash)).not.toContain(
 				REFUSED
 			);
 
 			cacheRows.ad = [refused];
-			vi.setSystemTime(NOW + NEWLY_CACHED_BUILD_SECONDS * 1000);
+			await build(NOW + BUILD_INTERVAL);
 			expect(items(await sync({ t: 'search' }, ['api'])).map((i) => i.hash)).toContain(
 				REFUSED
 			);
@@ -1364,20 +1503,117 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			]);
 		});
 
-		it('builds the list at most once per interval, and serves it to every scope', async () => {
+		it('answers before the build it starts has finished', async () => {
 			cacheRows.rd = siloRows(0, 5, NOW);
-			await sync({ t: 'search' });
+			let release!: () => void;
+			const held = new Promise<void>((resolve) => (release = resolve));
+			const query = mockRepo.getNewlyCached;
+			mockRepo.getNewlyCached = vi.fn(
+				async (provider: 'rd' | 'ad', since: Date, limit: number) => {
+					await held;
+					return query(provider, since, limit);
+				}
+			);
+
+			const res = await sync({ t: 'search' });
+
+			// The build is still waiting on its query, and this request answered
+			// as before the list existed.
+			expect(mockRepo.getNewlyCached).toHaveBeenCalled();
+			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalled();
+			expect(body(res)).not.toContain(`<guid isPermaLink="false">${SILO_SERVED[0].hash}<`);
+			release();
+			await newlyCachedBuildSettled();
+			expect(items(await sync({ t: 'search', limit: '100' }))).toHaveLength(5);
+		});
+
+		it('builds at most once per interval, and serves the list to every scope', async () => {
+			cacheRows.rd = siloRows(0, 5, NOW);
+			await buildThroughRoute();
 			await sync({ t: 'search' }, ['api']);
 			await sync({ t: 'tvsearch' }, ['ad', 'cached', 'api']);
+			await newlyCachedBuildSettled();
 			expect(mockRepo.getNewlyCached).toHaveBeenCalledTimes(2);
+			expect(items(await sync({ t: 'search' }))).toHaveLength(5);
 
-			// A row recorded now reaches the feed at the next build, not before.
 			cacheRows.rd.push(...siloRows(5, 6, NOW + MINUTE));
 			vi.setSystemTime(NOW + MINUTE);
+			await buildThroughRoute();
 			expect(items(await sync({ t: 'search' }))).toHaveLength(5);
-			vi.setSystemTime(NOW + NEWLY_CACHED_BUILD_SECONDS * 1000);
+			vi.setSystemTime(NOW + BUILD_INTERVAL);
+			await buildThroughRoute();
 			expect(items(await sync({ t: 'search' }))).toHaveLength(6);
 			expect(mockRepo.getNewlyCached).toHaveBeenCalledTimes(4);
+		});
+
+		it('answers as before while another instance holds the claim and no list exists', async () => {
+			const before = body(await sync({ t: 'movie' }, ['api']));
+			await newlyCachedBuildSettled();
+			setNewlyCachedStore(new NewlyCachedStore());
+			cacheRows.rd = movieRows(NOW);
+			vi.spyOn(newlyCachedStore(), 'claimBuild').mockResolvedValue(false);
+			vi.mocked(mockRepo.getNewlyCached).mockClear();
+
+			expect(body(await sync({ t: 'movie' }, ['api']))).toBe(before);
+			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
+		});
+
+		it('keeps serving the last list when a build fails', async () => {
+			cacheRows.rd = siloRows(0, 5, NOW);
+			await build();
+			const served = body(await sync({ t: 'search' }));
+			await newlyCachedBuildSettled();
+
+			mockRepo.getNewlyCached = vi.fn().mockRejectedValue(new Error('database is gone'));
+			vi.spyOn(console, 'error').mockImplementation(() => {});
+			vi.setSystemTime(NOW + BUILD_INTERVAL);
+			await buildThroughRoute();
+			expect(console.error).toHaveBeenCalled();
+
+			vi.setSystemTime(NOW + 2 * BUILD_INTERVAL);
+			expect(body(await sync({ t: 'search' }))).toBe(served);
+			expect(mockRepo.getRecentScrapedTrueKeys).not.toHaveBeenCalled();
+		});
+
+		it('answers as before when the list has nothing for the request', async () => {
+			const before = body(await sync({ t: 'movie' }));
+			await newlyCachedBuildSettled();
+
+			// Only TV on the list, so a movie sync finds nothing on it.
+			cacheRows.rd = siloRows(0, 5, NOW);
+			vi.setSystemTime(NOW + BUILD_INTERVAL);
+			await buildThroughRoute();
+			expect(body(await sync({ t: 'movie' }))).toBe(before);
+			expect(items(await sync({ t: 'tvsearch' }))).toHaveLength(5);
+		});
+
+		it('leaves the provider-probed feeds as they were', async () => {
+			cacheRows.rd = siloRows(0, 5, NOW);
+
+			const res = await sync({ t: 'search' }, ['tb', 'cached', 'api']);
+
+			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
+			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalled();
+			expect(probeMock).toHaveBeenCalled();
+			expect(body(res)).not.toContain('<error');
+		});
+
+		it('leaves a targeted search as it was', async () => {
+			cacheRows.rd = movieRows(NOW);
+			const res = await sync({ t: 'movie', imdbid: THE_CROW });
+
+			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
+			expect(mockRepo.getScrapedTrueRow).toHaveBeenCalledWith(`movie:${THE_CROW}`);
+			expect(mockRepo.getCachedRdNames).toHaveBeenCalled();
+			expect(items(res).length).toBeGreaterThan(0);
+		});
+
+		it('never scrapes or refreshes for an RSS sync', async () => {
+			cacheRows.rd = movieRows(NOW);
+			await buildThroughRoute();
+			await sync({ t: 'search' }, ['api']);
+			expect(mockBackfill).not.toHaveBeenCalled();
+			expect(mockRefresh).not.toHaveBeenCalled();
 		});
 
 		// Sonarr's RSS sync, from its source (`HttpIndexerBase.FetchReleases`
@@ -1397,7 +1633,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 
 			async function sonarrSync(
 				last: Seen | null
-			): Promise<{ found: FeedItem[]; pages: FeedItem[][]; last: Seen }> {
+			): Promise<{ found: FeedItem[]; pages: FeedItem[][]; last: Seen | null }> {
 				const found: FeedItem[] = [];
 				const pages: FeedItem[][] = [];
 				for (let index = 0; index < 30; index++) {
@@ -1423,96 +1659,101 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 					if (page.length < SONARR_PAGE) break;
 				}
 				const newest = [...found].sort((a, b) => b.pubDate - a.pubDate)[0];
-				return { found, pages, last: { pubDate: newest.pubDate, link: newest.link } };
+				return {
+					found,
+					pages,
+					last: newest ? { pubDate: newest.pubDate, link: newest.link } : last,
+				};
 			}
 
-			it('collects everything cached since its last sync, once, and stops there', async () => {
+			it('collects every release once, never one dated behind what it saw', async () => {
+				// Silo's last served release is cached early but scraped only later.
+				const late = SILO_SERVED[SILO_SERVED.length - 1];
+				library.set(SILO.key, {
+					results: SILO.results.filter((result) => result.hash !== late.hash),
+					updatedAt: new Date(SILO.updatedAt),
+				});
+				const lateRow = {
+					...siloRows(0, 1, NOW - 30 * MINUTE)[0],
+					hash: late.hash,
+					filename: late.title,
+					originalFilename: late.title,
+				};
 				// Films are on the list too; Sonarr's tvsearch never sees them.
 				cacheRows.rd = [...movieRows(NOW - 2 * MINUTE), ...siloRows(0, 150, NOW - MINUTE)];
 
-				const first = await sonarrSync(null);
+				const seen = new Map<string, number>();
+				let last: Seen | null = null;
+				let newestSeen = 0;
+				const syncNow = async () => {
+					const result = await sonarrSync(last);
+					const hashes = result.found.map((item) => item.hash);
+					expect(new Set(hashes).size).toBe(hashes.length);
+					for (const item of result.found) {
+						if (seen.has(item.hash)) continue;
+						// Nothing new is ever dated behind what an earlier sync saw.
+						expect(item.pubDate).toBeGreaterThanOrEqual(newestSeen);
+						seen.set(item.hash, item.pubDate);
+					}
+					if (last) {
+						const stop = result.pages.at(-1)!;
+						expect(
+							stop.some((item) => item.link === last!.link) ||
+								Math.min(...stop.map((item) => item.pubDate)) < last.pubDate
+						).toBe(true);
+					}
+					newestSeen = Math.max(newestSeen, ...result.found.map((item) => item.pubDate));
+					last = result.last;
+					return result;
+				};
+
+				await buildThroughRoute();
+				const first = await syncNow();
 				expect(first.pages).toHaveLength(1);
 				expect(first.found).toHaveLength(SONARR_PAGE);
-				expect(first.found.every((item) => item.categories[0] === 5000)).toBe(true);
-
-				// 250 more releases cached before the next sync, more than two pages.
-				const arrived = siloRows(150, 400, NOW + 5 * MINUTE);
-				cacheRows.rd.push(...arrived);
-				vi.setSystemTime(NOW + 15 * MINUTE);
-
-				const second = await sonarrSync(first.last);
-
-				const hashes = second.found.map((item) => item.hash);
-				expect(new Set(hashes).size).toBe(hashes.length);
-				const fresh = arrived.filter((row) => servable(row)).map((row) => row.hash);
-				expect(fresh.length).toBeGreaterThan(2 * SONARR_PAGE);
-				expect(hashes.filter((h) => fresh.includes(h)).sort()).toEqual([...fresh].sort());
-				// It stopped on the page holding what it saw last, and read no further.
-				expect(second.pages.at(-1)!.some((item) => item.link === first.last.link)).toBe(
-					true
+				// A first sync reads one page, so what the first list held below it
+				// is never read; everything listed after it must be.
+				const listedBeforeFirstSync = new Set(
+					(await newlyCachedStore().readLists())!.rd.map((release) => release.hash)
 				);
-				expect(second.pages).toHaveLength(Math.ceil((fresh.length + 1) / SONARR_PAGE));
+				const firstSeen = new Set(seen.keys());
+
+				// More rows than a build may look up arrive, strays newest, so the
+				// rest of Silo waits for the next build; and the late release.
+				cacheRows.rd.push(
+					...siloRows(150, SILO_SERVED.length - 1, NOW + 5 * MINUTE),
+					...strayRows(NEWLY_CACHED_RESOLVE_LIMIT - 100, NOW + 6 * MINUTE),
+					lateRow
+				);
+				let at = NOW + 2 * BUILD_INTERVAL;
+				for (const step of [0, 1, 2]) {
+					vi.setSystemTime(at + step * BUILD_INTERVAL);
+					await buildThroughRoute();
+					await syncNow();
+				}
+
+				// It is scraped, and listed once its miss is forgotten.
+				library.set(SILO.key, {
+					results: SILO.results,
+					updatedAt: new Date(SILO.updatedAt),
+				});
+				at += 3 * BUILD_INTERVAL + RESOLVED_TTL_SECONDS * 1000;
+				vi.setSystemTime(at);
+				await buildThroughRoute();
+				await syncNow();
+
+				const everyTvRelease = cacheRows.rd
+					.filter(
+						(row) => row.filename !== 'Stray' && row.imdbId === SILO_ID && servable(row)
+					)
+					.map((row) => row.hash);
+				expect(everyTvRelease).toContain(late.hash);
+				const listedSince = everyTvRelease.filter(
+					(hash) => !listedBeforeFirstSync.has(hash) || firstSeen.has(hash)
+				);
+				expect(listedSince.length).toBeGreaterThan(NEWLY_CACHED_RESOLVE_LIMIT / 2);
+				expect([...seen.keys()].sort()).toEqual([...listedSince].sort());
 			});
-		});
-
-		it('answers as before when the list has nothing for the request', async () => {
-			mockRepo.getRecentScrapedTrueKeys = vi
-				.fn()
-				.mockResolvedValue([{ key: `movie:${DEAD_OF_WINTER}`, updatedAt: new Date(NOW) }]);
-			const before = body(await sync({ t: 'movie' }));
-			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalledTimes(1);
-
-			// Only TV on the list, so a movie sync finds nothing on it.
-			cacheRows.rd = siloRows(0, 5, NOW);
-			vi.setSystemTime(NOW + NEWLY_CACHED_BUILD_SECONDS * 1000);
-			expect(body(await sync({ t: 'movie' }))).toBe(before);
-			expect(items(await sync({ t: 'tvsearch' }))).toHaveLength(5);
-		});
-
-		it('answers as before when the build fails', async () => {
-			mockRepo.getRecentScrapedTrueKeys = vi
-				.fn()
-				.mockResolvedValue([{ key: `movie:${DEAD_OF_WINTER}`, updatedAt: new Date(NOW) }]);
-			mockRepo.getNewlyCached = vi.fn().mockRejectedValue(new Error('database is gone'));
-			vi.spyOn(console, 'error').mockImplementation(() => {});
-
-			const res = await sync({ t: 'search' }, ['api']);
-
-			expect(body(res)).not.toContain('<error');
-			expect(items(res).length).toBeGreaterThan(0);
-			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalled();
-		});
-
-		it('leaves the provider-probed feeds as they were', async () => {
-			cacheRows.rd = siloRows(0, 5, NOW);
-			mockRepo.getRecentScrapedTrueKeys = vi
-				.fn()
-				.mockResolvedValue([{ key: `movie:${DEAD_OF_WINTER}`, updatedAt: new Date(NOW) }]);
-
-			const res = await sync({ t: 'search' }, ['tb', 'cached', 'api']);
-
-			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
-			expect(mockRepo.getRecentScrapedTrueKeys).toHaveBeenCalled();
-			expect(probeMock).toHaveBeenCalled();
-			expect(body(res)).not.toContain('<error');
-		});
-
-		it('leaves a targeted search as it was', async () => {
-			cacheRows.rd = movieRows(NOW);
-			const res = await sync({ t: 'movie', imdbid: THE_CROW });
-
-			expect(mockRepo.getNewlyCached).not.toHaveBeenCalled();
-			expect(mockRepo.getScrapedTrueRow).toHaveBeenCalledWith(`movie:${THE_CROW}`);
-			expect(mockRepo.getCachedRdNames).toHaveBeenCalled();
-			expect(items(res).length).toBeGreaterThan(0);
-		});
-
-		it('never scrapes or refreshes for an RSS sync', async () => {
-			cacheRows.rd = movieRows(NOW);
-			await sync({ t: 'search' });
-			await sync({ t: 'search' }, ['api']);
-			expect(mockBackfill).not.toHaveBeenCalled();
-			expect(mockRefresh).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -3,10 +3,10 @@
 // hash resolved to in the library.
 //
 // The list is the same for every sponsor, so it is not built per request. One
-// instance claims the build at most every `NEWLY_CACHED_BUILD_SECONDS`, and every
-// instance pages the copy it wrote, so an *arr paging across the four Swarm
-// replicas reads one list. Redis-backed with an in-process fallback, as
-// `ProviderCacheMemo` is: an outage costs a build per instance, never the feed.
+// instance claims the build at most every `NEWLY_CACHED_BUILD_SECONDS`, builds
+// it in the background, and every instance pages the copy it wrote, so an *arr
+// paging across the four Swarm replicas reads one list. Redis-backed with an
+// in-process fallback: an outage costs a build per instance, never the feed.
 
 import Redis from 'ioredis';
 
@@ -18,29 +18,33 @@ export const NEWLY_CACHED_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 export const NEWLY_CACHED_BUILD_SECONDS = 5 * 60;
 
 /**
- * How many hashes one build may look up in the library, newest first. On a
- * normal day a build finds a few dozen new rows; a spike converges over the
- * builds that follow, as `LIVE_PROBE_LIMIT` does for provider probes.
+ * How many unknown hashes one build may look up in the library, newest first.
+ * Since 2026-11-05 `Available` gains 500 to 2,300 rows an hour, so a build
+ * normally finds a few hundred; a burst converges over the builds that follow.
  */
-export const NEWLY_CACHED_RESOLVE_LIMIT = 300;
+export const NEWLY_CACHED_RESOLVE_LIMIT = 1000;
 
 /**
- * A title found is kept long enough to spare the page reads, and short enough
- * that a report or a trash verdict reaches the feed within hours. One not found
- * is asked again sooner, because a scraper may yet file the release.
+ * What a hash resolved to, found or not. Long enough that a release RD refuses,
+ * or one on no page of its title, is not looked up every build; short enough
+ * that a report or a trash verdict, and a release scraped later, reach the list
+ * within hours.
  */
 export const RESOLVED_TTL_SECONDS = 6 * 60 * 60;
-export const UNRESOLVED_TTL_SECONDS = 30 * 60;
 
-/** Outlives the build interval, so a failed build serves the last list. */
-const LISTS_TTL_SECONDS = 60 * 60;
+/** As long as the window: the list is the history new items are dated against. */
+const LISTS_TTL_SECONDS = 7 * 24 * 60 * 60;
 
-const KEY_PREFIX = 'torznab:newly:';
+/** After a Redis failure, how long an instance runs on memory before trying again. */
+export const REDIS_RETRY_MS = 30_000;
+
+/** Versioned: a change of format is a new key, never a misread old one. */
+const KEY_PREFIX = 'torznab:newly:v2:';
 const LISTS_KEY = `${KEY_PREFIX}lists`;
 const BUILD_KEY = `${KEY_PREFIX}build`;
 const MEMORY_MAX_ENTRIES = 50_000;
 
-/** A library release as the feed serves it, minus its date. */
+/** A library release as the feed serves it, minus its dates. */
 export interface ResolvedRelease {
 	hash: string;
 	title: string;
@@ -52,13 +56,42 @@ export interface ResolvedRelease {
 export interface NewlyCachedRelease extends ResolvedRelease {
 	/** Epoch ms: when DMM first recorded the hash as cached on this provider. */
 	cachedAt: number;
+	/** Epoch ms: the build that first listed it, which is its `pubDate`. */
+	listedAt: number;
 }
 
-/** Newest first. Real-Debrid's leaves out what RD refuses by name. */
+/** Newest listing first. Real-Debrid's leaves out what RD refuses by name. */
 export interface NewlyCachedLists {
 	rd: NewlyCachedRelease[];
 	ad: NewlyCachedRelease[];
 }
+
+const isRelease = (item: unknown): item is NewlyCachedRelease => {
+	const r = item as NewlyCachedRelease;
+	return (
+		typeof r === 'object' &&
+		r !== null &&
+		typeof r.hash === 'string' &&
+		typeof r.title === 'string' &&
+		typeof r.size === 'number' &&
+		Array.isArray(r.categories) &&
+		r.categories.every((id) => typeof id === 'number') &&
+		typeof r.cachedAt === 'number' &&
+		typeof r.listedAt === 'number'
+	);
+};
+
+const isLists = (value: unknown): value is NewlyCachedLists => {
+	const lists = value as NewlyCachedLists;
+	return (
+		typeof lists === 'object' &&
+		lists !== null &&
+		Array.isArray(lists.rd) &&
+		Array.isArray(lists.ad) &&
+		lists.rd.every(isRelease) &&
+		lists.ad.every(isRelease)
+	);
+};
 
 interface MemoryEntry {
 	value: string;
@@ -67,14 +100,17 @@ interface MemoryEntry {
 
 export class NewlyCachedStore {
 	private redis: Redis | null = null;
-	private redisAvailable = true;
+	private retryAt = 0;
+	/** The title memo, size-capped. */
 	private memory = new Map<string, MemoryEntry>();
+	/** The list and the build claim, kept apart so the cap never clears them. */
+	private pinned = new Map<string, MemoryEntry>();
 
 	constructor(private redisUrl?: string) {}
 
 	private client(): Redis | null {
 		if (this.redis) return this.redis;
-		if (!this.redisUrl || !this.redisAvailable) return null;
+		if (!this.redisUrl || Date.now() < this.retryAt) return null;
 		try {
 			this.redis = new Redis(this.redisUrl, {
 				maxRetriesPerRequest: 1,
@@ -83,27 +119,46 @@ export class NewlyCachedStore {
 				commandTimeout: 1000,
 				lazyConnect: true,
 			});
-			this.redis.on('error', () => {
-				this.redisAvailable = false;
-			});
+			this.redis.on('error', () => this.fail());
 			return this.redis;
 		} catch {
-			this.redisAvailable = false;
+			this.fail();
 			return null;
 		}
 	}
 
+	/**
+	 * Drops the client and runs on memory for a while. The client is built not
+	 * to reconnect, so a fresh one is the only way back once Redis returns.
+	 */
+	private fail(): void {
+		const broken = this.redis;
+		this.redis = null;
+		this.retryAt = Date.now() + REDIS_RETRY_MS;
+		try {
+			broken?.disconnect();
+		} catch {
+			// Already gone.
+		}
+	}
+
+	private mapFor(key: string): Map<string, MemoryEntry> {
+		return key === LISTS_KEY || key === BUILD_KEY ? this.pinned : this.memory;
+	}
+
 	private fromMemory(key: string): string | null {
-		const entry = this.memory.get(key);
+		const map = this.mapFor(key);
+		const entry = map.get(key);
 		if (!entry) return null;
 		if (entry.expiresAt > Date.now()) return entry.value;
-		this.memory.delete(key);
+		map.delete(key);
 		return null;
 	}
 
 	private toMemory(key: string, value: string, ttlSeconds: number): void {
-		if (this.memory.size >= MEMORY_MAX_ENTRIES) this.memory.clear();
-		this.memory.set(key, { value, expiresAt: Date.now() + ttlSeconds * 1000 });
+		const map = this.mapFor(key);
+		if (map === this.memory && map.size >= MEMORY_MAX_ENTRIES) map.clear();
+		map.set(key, { value, expiresAt: Date.now() + ttlSeconds * 1000 });
 	}
 
 	private async get(keys: string[]): Promise<Array<string | null>> {
@@ -112,7 +167,7 @@ export class NewlyCachedStore {
 			try {
 				return await client.mget(keys);
 			} catch {
-				this.redisAvailable = false;
+				this.fail();
 			}
 		}
 		return keys.map((key) => this.fromMemory(key));
@@ -124,28 +179,41 @@ export class NewlyCachedStore {
 			try {
 				const pipeline = client.pipeline();
 				for (const [key, value, ttl] of entries) pipeline.set(key, value, 'EX', ttl);
-				await pipeline.exec();
+				// With Redis down, ioredis resolves this with an error per command
+				// rather than rejecting, and the write would be lost.
+				const results = await pipeline.exec();
+				if (!results || results.some(([error]) => error)) throw new Error('write failed');
 				return;
 			} catch {
-				this.redisAvailable = false;
+				this.fail();
 			}
 		}
 		for (const [key, value, ttl] of entries) this.toMemory(key, value, ttl);
 	}
 
-	/** The last list built by any instance. Never throws. */
+	/**
+	 * The last list built by any instance, else by this one. Anything not of
+	 * the list's shape is no list. Never throws.
+	 */
 	public async readLists(): Promise<NewlyCachedLists | null> {
-		const [raw] = await this.get([LISTS_KEY]);
-		if (!raw) return null;
-		try {
-			return JSON.parse(raw) as NewlyCachedLists;
-		} catch {
-			return null;
+		const [shared] = await this.get([LISTS_KEY]);
+		for (const raw of [shared, this.fromMemory(LISTS_KEY)]) {
+			if (!raw) continue;
+			try {
+				const parsed: unknown = JSON.parse(raw);
+				if (isLists(parsed)) return parsed;
+			} catch {
+				// Unreadable is no list.
+			}
 		}
+		return null;
 	}
 
+	/** Kept in memory too, so an instance that loses Redis keeps its history. */
 	public async writeLists(lists: NewlyCachedLists): Promise<void> {
-		await this.set([[LISTS_KEY, JSON.stringify(lists), LISTS_TTL_SECONDS]]);
+		const value = JSON.stringify(lists);
+		this.toMemory(LISTS_KEY, value, LISTS_TTL_SECONDS);
+		await this.set([[LISTS_KEY, value, LISTS_TTL_SECONDS]]);
 	}
 
 	/**
@@ -161,7 +229,7 @@ export class NewlyCachedStore {
 					'OK'
 				);
 			} catch {
-				this.redisAvailable = false;
+				this.fail();
 			}
 		}
 		if (this.fromMemory(BUILD_KEY) !== null) return false;
@@ -193,7 +261,7 @@ export class NewlyCachedStore {
 			[...entries].map(([key, release]) => [
 				`${KEY_PREFIX}title:${key}`,
 				release ? JSON.stringify(release) : '0',
-				release ? RESOLVED_TTL_SECONDS : UNRESOLVED_TTL_SECONDS,
+				RESOLVED_TTL_SECONDS,
 			])
 		);
 	}

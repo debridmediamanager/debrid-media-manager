@@ -859,8 +859,13 @@ export class Repository {
 		return this.scrapedService.getRecentScrapedTrueKeys(limit);
 	}
 
-	public getScrapedTruePagesHolding(wanted: Array<{ imdbId: string; hash: string }>) {
-		return this.scrapedService.getScrapedTruePagesHolding(wanted);
+	/** Through the same takedown and executable filters as every other library read. */
+	public async getScrapedTrueEntriesHolding(wanted: Array<{ imdbId: string; hash: string }>) {
+		return this.withoutExecutables(
+			await withoutBlockedHashes(
+				await this.scrapedService.getScrapedTrueEntriesHolding(wanted)
+			)
+		);
 	}
 
 	public async getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
