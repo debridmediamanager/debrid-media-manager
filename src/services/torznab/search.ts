@@ -209,6 +209,8 @@ interface LibraryRelease {
 	pubDate: string;
 	/** Which named providers hold it, where a several-provider path already knows. */
 	cachedOn?: TorznabProvider[];
+	/** The title it is filed under, on the newly cached list only. */
+	imdbId?: string;
 }
 
 /**
@@ -629,7 +631,9 @@ export async function buildNewlyCached(
 			if (!release) return [];
 			if (provider === 'rd' && isRefusedByRd(release, row)) return [];
 			const cachedAt = row.createdAt.getTime();
-			return [{ ...release, cachedAt, listedAt: previous ? now : cachedAt }];
+			return [
+				{ ...release, cachedAt, listedAt: previous ? now : cachedAt, imdbId: row.imdbId },
+			];
 		});
 		return [...fresh, ...carried].slice(0, NEWLY_CACHED_DEPTH);
 	};
@@ -927,6 +931,9 @@ function toRssItem(
 	const seeders = cached ? CACHED_SEEDERS : UNCACHED_SEEDERS;
 	return {
 		...(cachedOn && { cachedOn }),
+		// The digits, padded to seven, as Prowlarr writes it and Sonarr and Radarr
+		// read it (`int.TryParse`, so never with `tt`).
+		...(release.imdbId && { imdb: release.imdbId.replace(/^tt/, '').padStart(7, '0') }),
 		title: release.title,
 		infoHash: release.hash,
 		magnetUrl: magnetUri(release.hash, release.title),

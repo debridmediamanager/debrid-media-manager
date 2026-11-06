@@ -298,6 +298,11 @@ short page, or at 1,000 releases. A first sync reads one page.
 - **Real-Debrid's name rule** applies as on a search: a release RD refuses by name is left
   off `/rd` and `/rd/cached`, and on the combined scopes it is listed only if AllDebrid
   lists it.
+- **Each item names its title.** `<torznab:attr name="imdb" value="0903747"/>` carries the
+  IMDb id the release is filed under (a show's for TV), digits without `tt`, padded to
+  seven, as Prowlarr writes it and Sonarr and Radarr read it. Only this answer carries
+  it, never a search or the fallback below, so its presence tells a client the answer
+  is this list.
 - **Kind, then categories.** `t=tvsearch` lists TV only, `t=movie` films only, `t=search`
   both; then `cat=` as usual. Every item is cached by definition, so `seeders` is 100, no
   second cache lookup runs, and the `/cached` and plain variants answer the same. `total`
@@ -329,7 +334,7 @@ short page, or at 1,000 releases. A first sync reads one page.
   in a live run on 2026-11-06 an event loop stalled past the then 1 s command timeout, a
   pipeline Redis had applied was reported timed out, and serving the older shared copy
   took the feed backward. The timeout is now 5 s. A stored list not of the expected shape is no
-  list, and the key prefix (`torznab:newly:v3:`) carries a version so a future format is a
+  list, and the key prefix (`torznab:newly:v4:`) carries a version so a future format is a
   new key.
 
 When the list has nothing for the request after the kind and category filters, or there

@@ -1600,7 +1600,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 			fakeRedis.reset();
 			setNewlyCachedStore(new NewlyCachedStore('redis://x'));
 			const sharedBuiltAt = () =>
-				JSON.parse(fakeRedis.values.get('torznab:newly:v3:lists')!.value).builtAt;
+				JSON.parse(fakeRedis.values.get('torznab:newly:v4:lists')!.value).builtAt;
 			cacheRows.ad = siloRows(0, 5, NOW - MINUTE);
 			await build();
 
@@ -1683,6 +1683,50 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 	});
 
 	describe('through the route', () => {
+		// zurg tells the list's answer from a search's by this attribute alone.
+		it("carries each list item's IMDb id as Prowlarr writes it, and only there", async () => {
+			const short = { ...siloRows(0, 1, NOW)[0], imdbId: 'tt12345', season: null };
+			const breakingBad = { ...siloRows(1, 2, NOW)[0], imdbId: SHOW_ID, season: 1 };
+			library.set('movie:tt12345', {
+				results: [release('Short.Id.1999.1080p.WEB', 1_000, short.hash)],
+				updatedAt: new Date(NOW),
+			});
+			library.set(`tv:${SHOW_ID}:1`, {
+				results: [release('Breaking.Bad.S01.1080p.WEB', 1_000, breakingBad.hash)],
+				updatedAt: new Date(NOW),
+			});
+			const [film] = movieRows(NOW - MINUTE).filter((row) => servable(row));
+			const [episode] = siloRows(2, 3, NOW - 2 * MINUTE);
+			cacheRows.ad = [short, breakingBad, film, episode];
+			await build();
+
+			const imdbOf = (xml: string) =>
+				Object.fromEntries(
+					[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(([, item]) => [
+						attrValue(item, 'infohash')[0],
+						attrValue(item, 'imdb')[0],
+					])
+				);
+			expect(imdbOf(body(await sync({ t: 'search' }, ['ad', 'api'])))).toEqual({
+				[short.hash]: '0012345',
+				[breakingBad.hash]: '0903747',
+				[film.hash]: film.imdbId.slice(2),
+				[episode.hash]: '14688458',
+			});
+			// Sonarr reads it as `tt{int:D7}`, Radarr as an int: the same title back.
+			expect(`tt${String(Number('0903747')).padStart(7, '0')}`).toBe(SHOW_ID);
+
+			// Not on a search, nor on the answer that stands in for an empty list.
+			const searched = body(
+				await sync({ t: 'tvsearch', imdbid: SILO_ID, season: '3' }, ['ad', 'api'])
+			);
+			expect(searched).toContain('<item>');
+			expect(searched).not.toContain('name="imdb"');
+			const fallback = body(await sync({ t: 'search' }, ['tb', 'api']));
+			expect(fallback).toContain('<item>');
+			expect(fallback).not.toContain('name="imdb"');
+		});
+
 		it('answers /rd/cached with the list, every item cached and dated by its listing', async () => {
 			cacheRows.rd = movieRows(NOW - MINUTE);
 			const expected = newestFirst(cacheRows.rd).filter((row) => servable(row));

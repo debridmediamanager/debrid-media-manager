@@ -38,7 +38,7 @@ export const RESOLVED_TTL_SECONDS = 6 * 60 * 60;
 const LISTS_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 /** Versioned: a change of format is a new key, never a misread old one. */
-const KEY_PREFIX = 'torznab:newly:v3:';
+const KEY_PREFIX = 'torznab:newly:v4:';
 const LISTS_KEY = `${KEY_PREFIX}lists`;
 const BUILD_KEY = `${KEY_PREFIX}build`;
 
@@ -56,6 +56,8 @@ export interface NewlyCachedRelease extends ResolvedRelease {
 	cachedAt: number;
 	/** Epoch ms: the build that first listed it, which is its `pubDate`. */
 	listedAt: number;
+	/** The cache row's title as DMM files it (`tt…`; a show's for TV). */
+	imdbId: string;
 }
 
 /** Newest listing first. Real-Debrid's leaves out what RD refuses by name. */
@@ -77,7 +79,8 @@ const isRelease = (item: unknown): item is NewlyCachedRelease => {
 		Array.isArray(r.categories) &&
 		r.categories.every((id) => typeof id === 'number') &&
 		typeof r.cachedAt === 'number' &&
-		typeof r.listedAt === 'number'
+		typeof r.listedAt === 'number' &&
+		typeof r.imdbId === 'string'
 	);
 };
 

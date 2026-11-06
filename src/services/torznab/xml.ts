@@ -102,6 +102,11 @@ export interface TorznabRssItem {
 	 * order. Absent everywhere else, so those feeds keep their exact bytes.
 	 */
 	cachedOn?: string[];
+	/**
+	 * The IMDb id's digits, on the newly cached list's items only: its presence
+	 * is how a client tells that answer from a search's.
+	 */
+	imdb?: string;
 }
 
 function attr(name: string, value: string | number): string {
@@ -139,6 +144,7 @@ function itemXml(item: TorznabRssItem): string {
 		attr('infohash', item.infoHash),
 		attr('magneturl', item.magnetUrl),
 		...(item.cachedOn?.length ? [attr('cachedon', item.cachedOn.join(','))] : []),
+		...(item.imdb ? [attr('imdb', item.imdb)] : []),
 		// Nothing here is metered: the grab is resolved against the client's own
 		// debrid account, so there is no ratio to keep and no download to pay for.
 		attr('downloadvolumefactor', 0),
