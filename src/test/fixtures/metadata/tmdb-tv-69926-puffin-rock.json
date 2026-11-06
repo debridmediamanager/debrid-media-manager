@@ -1,0 +1,548 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{
+				"iso_3166_1": "AR",
+				"title": "Isla Frailesillo",
+				"type": ""
+			},
+			{
+				"iso_3166_1": "DK",
+				"title": "Soepapegoejernes Oe",
+				"type": ""
+			},
+			{
+				"iso_3166_1": "NO",
+				"title": "Lundefjell",
+				"type": ""
+			}
+		]
+	},
+	"backdrop_path": "/cRTqtQJjYrJnF35D7o2bG5ksFaA.jpg",
+	"content_ratings": {
+		"results": [
+			{
+				"descriptors": [],
+				"iso_3166_1": "US",
+				"rating": "TV-Y"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "KR",
+				"rating": "ALL"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "CA",
+				"rating": "G"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "MX",
+				"rating": "AA"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "AU",
+				"rating": "G"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "PT",
+				"rating": "T"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "IT",
+				"rating": "T"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "IE",
+				"rating": "G"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "PL",
+				"rating": "0"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "HU",
+				"rating": "Unrated"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "CZ",
+				"rating": "0+"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "RO",
+				"rating": "Unrated"
+			},
+			{
+				"descriptors": [],
+				"iso_3166_1": "GB",
+				"rating": "U"
+			}
+		]
+	},
+	"created_by": [
+		{
+			"id": 1964193,
+			"credit_id": "5a63a7880e0a261a010152ff",
+			"name": "Lily Bernard",
+			"original_name": "Lily Bernard",
+			"gender": 1,
+			"profile_path": null
+		},
+		{
+			"id": 1795548,
+			"credit_id": "5a63a7ac9251410b2d0137d7",
+			"name": "Paul Young",
+			"original_name": "Paul Young",
+			"gender": 2,
+			"profile_path": "/7R6FlTyfDmTlTNoMXLkIkq2d7r2.jpg"
+		},
+		{
+			"id": 96676,
+			"credit_id": "5a63a7b80e0a2619f8015575",
+			"name": "Tomm Moore",
+			"original_name": "Tomm Moore",
+			"gender": 2,
+			"profile_path": "/gqUcu5yEtNgnCaA2jtSOs8DV1Gg.jpg"
+		}
+	],
+	"credits": {
+		"cast": [],
+		"crew": []
+	},
+	"episode_run_time": [7],
+	"external_ids": {
+		"imdb_id": "tt3590338",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 299994,
+		"tvrage_id": null,
+		"wikidata_id": "Q20718341",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"first_air_date": "2015-01-12",
+	"genres": [
+		{
+			"id": 16,
+			"name": "Animation"
+		},
+		{
+			"id": 10762,
+			"name": "Kids"
+		}
+	],
+	"homepage": "https://rtejr.rte.ie/puffin-rock/",
+	"id": 69926,
+	"in_production": true,
+	"languages": ["en"],
+	"last_air_date": "2025-09-15",
+	"last_episode_to_air": {
+		"id": 6837529,
+		"name": "Under the Weather",
+		"overview": "When Baba isn’t feeling well, Oona goes to get his favourite things to make him feel better.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2025-09-15",
+		"episode_number": 21,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 7,
+		"season_number": 3,
+		"show_id": 69926,
+		"still_path": "/h1Bk124872iydIV0BNb5n1F3Ty6.jpg"
+	},
+	"name": "Puffin Rock",
+	"networks": [
+		{
+			"id": 1757,
+			"logo_path": "/ik9XikEiXCWipNqCx08G1dip21f.png",
+			"name": "RTÉjr",
+			"origin_country": "IE"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 99,
+	"number_of_seasons": 3,
+	"origin_country": ["IE"],
+	"original_language": "en",
+	"original_name": "Puffin Rock",
+	"overview": "Life is sweet on beautiful Puffin Rock, where puffling Oona, her baby brother Baba and their pals learn about nature, friendship and family. Follow the pufflings on their adventures as they explore the wild island!",
+	"popularity": 6.2381,
+	"poster_path": "/8ZYTNkpubnG8epqlJLjaWbbO30R.jpg",
+	"production_companies": [
+		{
+			"id": 23948,
+			"logo_path": "/uneZYGxTZcwAzmPTTaefmDNWPzN.png",
+			"name": "Cartoon Saloon",
+			"origin_country": "IE"
+		},
+		{
+			"id": 193350,
+			"logo_path": "/vOU4d3XKmMB7NQHqxHCdYA6AZPb.png",
+			"name": "Dog Ears",
+			"origin_country": "GB"
+		},
+		{
+			"id": 292496,
+			"logo_path": null,
+			"name": "Penguin Random House",
+			"origin_country": "GB"
+		}
+	],
+	"production_countries": [
+		{
+			"iso_3166_1": "IE",
+			"name": "Ireland"
+		}
+	],
+	"seasons": [
+		{
+			"air_date": "2016-12-29",
+			"episode_count": 1,
+			"id": 84388,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": null,
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2015-01-12",
+			"episode_count": 39,
+			"id": 84387,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/aY8TZPaNgyAZHUvoWUIA32x0mNe.jpg",
+			"season_number": 1,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2016-02-22",
+			"episode_count": 39,
+			"id": 84389,
+			"name": "Season 2",
+			"overview": "",
+			"poster_path": "/gL4tBcuOW7zFyPqJc62ysZnyjz2.jpg",
+			"season_number": 2,
+			"vote_average": 10.0
+		},
+		{
+			"air_date": "2025-09-15",
+			"episode_count": 21,
+			"id": 494123,
+			"name": "Season 3",
+			"overview": "",
+			"poster_path": null,
+			"season_number": 3,
+			"vote_average": 0.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [
+		{
+			"english_name": "English",
+			"iso_639_1": "en",
+			"name": "English"
+		}
+	],
+	"status": "Returning Series",
+	"tagline": "",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "",
+					"overview": "Life is sweet on beautiful Puffin Rock, where puffling Oona, her baby brother Baba and their pals learn about nature, friendship and family. Follow the pufflings on their adventures as they explore the wild island!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "Het leven is heerlijk op het mooie Puffin Rock, waar de jonge Oona, haar babybroertje Baba en hun vriendjes alles leren over de natuur, vriendschap en familie.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Puffin Rock",
+					"overview": "La vida es dulce en la hermosa Puffin Rock, donde el frailecillo Oona, su hermanito Baba y sus amigos aprenden sobre la naturaleza, la amistad y la familia. ¡Sigue a los frailecillos en sus aventuras mientras exploran la isla salvaje!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "GR",
+				"iso_639_1": "el",
+				"name": "ελληνικά",
+				"english_name": "Greek",
+				"data": {
+					"name": "Πάφιν Ροκ",
+					"overview": "Τα θαλασσοπούλια Όυνα και Μπάμπα ζουν με τους γονείς τους στη βραχονησίδα Πάφιν Ροκ, κάπου στην Ιρλανδία. Μέσα από την καθημερινή περιπλάνηση στην άγρια φύση του απομονωμένου βιότοπου, τα δυο αδέρφια, διδάσκοντα τα μυστικά της επιβίωσης και την αξία της φιλίας.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Oonas und Babas Insel",
+					"overview": "Oona, das kleine Papageientaucher-(engl.: Puffin)Mädchen lebt mit ihrer Familie und Freunden auf einer kleinen Insel vor der Küste Irlands und erlebt allerlei spannende wie lehrreiche Abenteuer.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "",
+					"overview": "La vie s'écoule en toute quiétude sur la jolie île de Puffin Rock où Baba, Oona et leurs copains découvrent les joies de la nature, de l'amitié et de la famille.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "Skála papuchalků",
+					"overview": "Na ostrově kousek od irského pobřeží žije rodina papuchalků…",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"name": "Vtáčí ostrov",
+					"overview": "Na vtáčom ostrove je život sladký. Oona, jej mladší brat Baba a ich kamaráti sa učia o prírode, priateľstvo a rodine.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "",
+					"overview": "La vita è dolce sulla bellissima Puffin Rock, dove la puffin Oona, il suo fratellino Baba ei loro amici imparano a conoscere la natura, l'amicizia e la famiglia. Segui i puffling nelle loro avventure mentre esplorano l'isola selvaggia!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DK",
+				"iso_639_1": "da",
+				"name": "Dansk",
+				"english_name": "Danish",
+				"data": {
+					"name": "Søpapegøjernes Ø",
+					"overview": "Livet er skønt på smukke Puffin Rock, hvor Oona, hendes lillebror Baba og deres kammerater lærer om naturen, venskab og familie.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "",
+					"overview": "Oona é uma simpática filhote de papagaios-do-mar, que vive na incrível ilha irlandesa Puffin Rock. Ao lado de seu irmãozinho Baba e de seus amigos, cada dia da vida de Oona é uma incrível aventura, onde ela não somente se diverte, mas aprende muito sobre natureza, amizade e família.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "행복한 퍼핀 가족",
+					"overview": "아름다운 퍼핀 락에서의 삶은 달콤하다. 바다오리 우나와 남동생 바바, 그리고 그들의 친구들은 자연, 우정, 그리고 가족에 대해 배워 나간다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"name": "Sziklaszirti mesék",
+					"overview": "Valahol az óceánban egy szeles és sziklás szigeten élnek a lundák, ezek az aranyos kis madarak. Remekül repülnek, halásznak, ásnak és még sok mindent csinálnak hogy boldog békességben élhessenek. Lunda mama és Lunda papa két kis csemetét nevelnek, Oonát és Babát, akik figyelik a felnőtteket, hogy megtanulják mindazt, amire egy felnőtt lundának szüksége van.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "欢乐海鹦岛",
+					"overview": "　　《欢乐海鹦岛》是一部主要面向2-6岁的学龄前儿童的系列电视动画节目，故事以一个小海岛为背景，以自然环境和野生动物为中心，具有统一的视觉风格。 故事的主要角色是可爱的海鹦姐弟俩：乌娜和宝宝。她们日常的探险经历促进了孩子们的学习，也反映了学龄前儿童所应对的挑战。 他们有一群好朋友：海豹思琪、猫头鹰奥托，兔子梅和忙忙碌碌的小鼩鼱莫希，每天都会帮他们摆脱各种问题……友情和亲情是海鹦岛的核心。《欢乐海鹦岛》为学龄前儿童提供了全新的体验。节目的独特之处在于，动物的行为和动作就像在现实世界中一样，它们使用自己的喙来拾取东西，住在洞穴里，不了解学校、电视或人类世界，只有核心角色能够对话。用这种更为自然的方式，每一集讲述一个关于自然世界的令人惊奇的新事实。每一集都与学龄前的体验相关，而旁白叙述帮助观众和动物之间建立联系。 无论男孩还是女孩，都会喜欢其中的可爱角色，喜欢观看它们的探险。家长也会喜欢其中的轻松教育方式，帮助儿童发展对外部世界的好奇心和兴趣。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "EE",
+				"iso_639_1": "et",
+				"name": "Eesti",
+				"english_name": "Estonian",
+				"data": {
+					"name": "Lunnisaar",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "",
+					"overview": "Oona e Baba, dois adoráveis irmãos, vivem numa bela ilha na costa da Irlanda juntamente com outros animais de quem são amigos e que os ajudam diariamente a ultrapassar todos os problemas. Com esta vivência estes irmãos aprendem a importância da família e da amizade.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "",
+					"overview": "Las aventuras de Oona y su hermano pequeño Baba en una hermosa y salvaje isla irlandesa.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"name": "Lunneskär",
+					"overview": "Lunneskär är fullt av djur och många äventyr. Där bor också lunnefågeln Oona och hennes lillebror Baba som tillsammans med familj och vänner gillar att utforska både ön och vattnet runt omkring.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "Wyspa Puffinów",
+					"overview": "Na pięknej Wyspie Puffinów czas płynie beztrosko. Oona z rodziny maskonurów, jej braciszek Baba i ich koledzy poznają naturę i uczą się, czym jest przyjaźń i rodzina.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"name": "Lunnisaaren Tarinoita",
+					"overview": "Elämä maittaa Lunnisaarella, kun Oona opettelee pikkuveljensä Baban ja muiden ystäviensä kanssa asioita luonnosta, ystävyydestä ja perheestä.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "歡樂海鸚島",
+					"overview": "《歡樂海鸚島 Puffin Rock》是一部主要面向 2 - 6 歲的學齡前兒童的系列電視動畫節目，故事以一個小海島為背景，以自然環境和野生動物為中心，具有統一的視覺風格。\n\n故事的主要角色是可愛的海鸚姐弟倆：烏娜和寶寶。她們日常的探險經歷促進了孩子們的學習，也反映了學齡前兒童所應對的挑戰。\n\n他們有一群好朋友：海豹思琪、貓頭鷹奧托，兔子梅和忙忙碌碌的小鼩鼱莫希，每天都會幫他們擺脱各種問題……友情和親情是海鸚島的核心。《歡樂海鸚島》為學齡前兒童提供了全新的體驗。節目的獨特之處在於，動物的行為和動作就像在現實世界中一樣，它們使用自己的喙來拾取東西，住在洞穴裏，不瞭解學校、電視或人類世界，只有核心角色能夠對話。用這種更為自然的方式，每一集講述一個關於自然世界的令人驚奇的新事實。每一集都與學齡前的體驗相關，而旁白敘述幫助觀眾和動物之間建立聯系。\n\n無論男孩還是女孩，都會喜歡其中的可愛角色，喜歡觀看它們的探險。家長也會喜歡其中的輕松教育方式，幫助兒童發展對外部世界的好奇心和興趣。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "אי הפאפינים / אי תוכי הים",
+					"overview": "באי תוכי הים היפהפה כולם נהנים מהחיים. תוכית הים אונה ואחיה הצעיר באבא לומדים יחד עם חבריהם על הטבע, על חברות ועל משפחה.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "IVPFZvf9EYc",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "682dc50a2d841d6a612f7ea8",
+				"published_at": "2015-06-03T13:00:01.000Z"
+			}
+		]
+	},
+	"vote_average": 7.7,
+	"vote_count": 10
+}

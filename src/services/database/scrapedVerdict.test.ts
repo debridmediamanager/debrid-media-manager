@@ -1,3 +1,8 @@
+import qosImdb from '@/test/fixtures/metadata/imdb-tt0830515-quantum-of-solace.json';
+import qosFind from '@/test/fixtures/metadata/tmdb-find-tt0830515-quantum-of-solace.json';
+import puffinFind from '@/test/fixtures/metadata/tmdb-find-tt3590338-puffin-rock.json';
+import qosTmdb from '@/test/fixtures/metadata/tmdb-movie-10764-quantum-of-solace.json';
+import puffinTmdb from '@/test/fixtures/metadata/tmdb-tv-69926-puffin-rock.json';
 import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { pairKeyOf, ScrapedVerdictService, titleKeyOf } from './scrapedVerdict';
@@ -28,6 +33,14 @@ const prismaMock = vi.hoisted(() => ({
 	$transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)),
 }));
 
+const tmdbMock = vi.hoisted(() => ({
+	searchTmdbByImdb: vi.fn(),
+	getTmdbTvInfo: vi.fn(),
+	getTmdbMovieInfo: vi.fn(),
+}));
+
+vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => tmdbMock }));
+
 vi.mock('./client', () => ({
 	DatabaseClient: class {
 		prisma = prismaMock;
@@ -41,10 +54,93 @@ describe('ScrapedVerdictService', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		process.env.TMDB_KEY = 'test';
+		tmdbMock.searchTmdbByImdb.mockResolvedValue({ movie_results: [], tv_results: [] });
 		service = new ScrapedVerdictService();
 	});
 
+	describe('getShowTitles', () => {
+		// IMDb's akas for Puffin Rock as dmmdb held them on 2026-11-07, and TMDB's
+		// record that day: "Oonas und Babas Insel", the name German uploads carry,
+		// is only TMDB's German translation.
+		const puffinAkas = [
+			'Puffin Rock',
+			'Lunnisaar',
+			'Wyspa Puffinów',
+			'Πάφιν Ροκ',
+			'ウーナとババの島',
+			'歡樂海鸚島',
+		].map((title) => ({ title }));
+
+		beforeEach(() => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Puffin Rock',
+				originalTitle: 'Puffin Rock',
+				startYear: 2015,
+				titleType: 'tvSeries',
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue(puffinAkas);
+			tmdbMock.searchTmdbByImdb.mockResolvedValue(puffinFind);
+			tmdbMock.getTmdbTvInfo.mockResolvedValue(puffinTmdb);
+		});
+
+		it('adds TMDB translations in the accepted languages to IMDb’s titles', async () => {
+			const show = await service.getShowTitles('tt3590338');
+			expect(tmdbMock.getTmdbTvInfo).toHaveBeenCalledWith(
+				69926,
+				expect.stringContaining('translations')
+			);
+			expect(show?.titles).toEqual(
+				expect.arrayContaining([
+					'Puffin Rock',
+					'Wyspa Puffinów',
+					'Oonas und Babas Insel',
+					'Skála papuchalků',
+					'Sziklaszirti mesék',
+				])
+			);
+			// Korean is not an accepted language
+			expect(show?.titles).not.toContain('행복한 퍼핀 가족');
+		});
+
+		it('fails rather than judging the page without TMDB’s titles', async () => {
+			tmdbMock.getTmdbTvInfo.mockRejectedValue(new Error('TMDB 503'));
+			await expect(service.getShowTitles('tt3590338')).rejects.toThrow('TMDB 503');
+		});
+
+		it('keeps IMDb’s titles alone when TMDB has no record', async () => {
+			tmdbMock.searchTmdbByImdb.mockResolvedValue({ movie_results: [], tv_results: [] });
+			const show = await service.getShowTitles('tt3590338');
+			expect(show?.titles).toHaveLength(6);
+			expect(tmdbMock.getTmdbTvInfo).not.toHaveBeenCalled();
+		});
+	});
+
 	describe('getMovieContext', () => {
+		it('adds TMDB translations in the accepted languages to IMDb’s titles', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Quantum of Solace',
+				originalTitle: 'Quantum of Solace',
+				startYear: 2008,
+				titleType: 'movie',
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue(
+				qosImdb.akas.map((title: string) => ({ title }))
+			);
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			tmdbMock.searchTmdbByImdb.mockResolvedValue(qosFind);
+			tmdbMock.getTmdbMovieInfo.mockResolvedValue(qosTmdb);
+
+			const context = await service.getMovieContext('tt0830515');
+			expect(tmdbMock.getTmdbMovieInfo).toHaveBeenCalledWith(
+				10764,
+				expect.stringContaining('translations')
+			);
+			// IMDb knows "Ein Quantum Trost"; the German release title is TMDB's
+			expect(qosImdb.akas).not.toContain('James Bond 007 - Ein Quantum Trost');
+			expect(context?.titles).toContain('James Bond 007 - Ein Quantum Trost');
+		});
+
 		it('collects every title and flags aliases that are another work’s primary title', async () => {
 			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
 				primaryTitle: 'The Ministry of Ungentlemanly Warfare',

@@ -1,0 +1,86 @@
+[
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt3590338",
+				"plex": {
+					"guid": "5d9c083c1cae62001f74ac9e",
+					"slug": "puffin-rock"
+				},
+				"slug": "puffin-rock",
+				"tmdb": 69926,
+				"tvdb": 299994,
+				"trakt": 101560
+			},
+			"airs": {
+				"day": "Monday",
+				"time": "00:00",
+				"timezone": "Europe/Dublin"
+			},
+			"year": 2015,
+			"title": "Puffin Rock",
+			"votes": 64,
+			"colors": {
+				"poster": ["#ADCAD6", "#9BA657"]
+			},
+			"ending": null,
+			"genres": ["animation", "children"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": ["media.trakt.tv/shows/101560/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/shows/101560/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/shows/101560/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.9843316078186035,
+			"status": "returning series",
+			"country": "ie",
+			"network": "RTÉjr",
+			"runtime": 7,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=IVPFZvf9EYc",
+			"homepage": "https://rtejr.rte.ie/puffin-rock/",
+			"language": "en",
+			"overview": "Life is sweet on beautiful Puffin Rock, where puffling Oona, her baby brother Baba and their pals learn about nature, friendship and family. Follow the pufflings on their adventures as they explore the wild island!",
+			"languages": ["en"],
+			"subgenres": [],
+			"last_aired": "2025-09-14T23:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Puffin_Rock"
+			},
+			"updated_at": "2026-10-28T15:33:25.000Z",
+			"first_aired": "2015-01-12T00:00:00.000Z",
+			"certification": "TV-Y",
+			"comment_count": 0,
+			"total_runtime": 693,
+			"aired_episodes": 99,
+			"original_title": "Puffin Rock",
+			"available_translations": [
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fi",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"sk",
+				"sv",
+				"zh"
+			]
+		}
+	}
+]

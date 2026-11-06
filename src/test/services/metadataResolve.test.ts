@@ -11,19 +11,23 @@ import episodeOmdb from '@/test/fixtures/metadata/omdb-tt21958588-bake-off-episo
 import sawMdblistSearch from '@/test/fixtures/metadata/search-mdblist-saw-iv-2007.json';
 import duneOmdbT from '@/test/fixtures/metadata/search-omdb-t-dune-2021.json';
 import bakeOffOmdbT from '@/test/fixtures/metadata/search-omdb-t-great-british-bake-off-2010.json';
+import oonasOmdbT from '@/test/fixtures/metadata/search-omdb-t-oonas-und-babas-insel.json';
 import sawOmdbT from '@/test/fixtures/metadata/search-omdb-t-saw-iv-2007.json';
 import spiritedOmdbT from '@/test/fixtures/metadata/search-omdb-t-spirited-away-2001.json';
 import duneTmdbSearch from '@/test/fixtures/metadata/search-tmdb-dune-2021.json';
 import bakeOffTmdbSearch from '@/test/fixtures/metadata/search-tmdb-great-british-bake-off-2010.json';
+import oonasTmdbSearch from '@/test/fixtures/metadata/search-tmdb-oonas-und-babas-insel-2015.json';
 import sawTmdbSearch from '@/test/fixtures/metadata/search-tmdb-saw-iv-2007.json';
 import spiritedTmdbSearch from '@/test/fixtures/metadata/search-tmdb-spirited-away-2001.json';
 import duneTraktSearch from '@/test/fixtures/metadata/search-trakt-dune-2021.json';
 import bakeOffTraktSearch from '@/test/fixtures/metadata/search-trakt-great-british-bake-off-2010.json';
+import oonasTraktSearch from '@/test/fixtures/metadata/search-trakt-oonas-und-babas-insel-2015.json';
 import sawTraktSearch from '@/test/fixtures/metadata/search-trakt-saw-iv-2007.json';
 import spiritedTraktSearch from '@/test/fixtures/metadata/search-trakt-spirited-away-2001.json';
 import spiritedTmdb from '@/test/fixtures/metadata/tmdb-movie-129-spirited-away.json';
 import duneTmdb from '@/test/fixtures/metadata/tmdb-movie-438631-dune.json';
 import bakeOffTmdb from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off.json';
+import puffinTmdb from '@/test/fixtures/metadata/tmdb-tv-69926-puffin-rock.json';
 import spiritedTrakt from '@/test/fixtures/metadata/trakt-movie-tt0245429-spirited-away.json';
 import duneTrakt from '@/test/fixtures/metadata/trakt-movie-tt1160419-dune.json';
 import bakeOffTvmaze from '@/test/fixtures/metadata/tvmaze-2950-great-british-bake-off.json';
@@ -56,6 +60,8 @@ const searches: Record<string, { tmdb: any; trakt: any; omdb: any }> = {
 		trakt: bakeOffTraktSearch,
 		omdb: bakeOffOmdbT,
 	},
+	// captured 2026-11-07: Puffin Rock's German title, a TMDB translation only
+	'oonas und babas insel': { tmdb: oonasTmdbSearch, trakt: oonasTraktSearch, omdb: oonasOmdbT },
 };
 
 // TMDB id to IMDb id, as TMDB's external_ids answers for the ids in the searches.
@@ -66,6 +72,7 @@ const tmdbToImdb: Record<string, string> = {
 	'movie:697620': 'tt12451788',
 	'movie:129': 'tt0245429',
 	'tv:34549': 'tt1877368',
+	'tv:69926': 'tt3590338',
 };
 
 // Full records where every provider was captured; for the other candidates, the
@@ -93,6 +100,7 @@ const fullRecords: Record<string, MetadataRecord | null> = {
 		tvmaze: bakeOffTvmaze,
 	}),
 	tt21958588: episodeRecordFromOmdb('tt21958588', episodeOmdb),
+	tt3590338: mergeShowRecord('tt3590338', { tmdb: puffinTmdb }),
 };
 
 function recordFromSearchHit(imdbId: string): MetadataRecord | null {
@@ -189,6 +197,23 @@ describe('resolveTitle, on searches captured 2026-09-26', () => {
 			expect.objectContaining({
 				confidence: 'exact',
 				match: expect.objectContaining({ imdbId: 'tt1877368' }),
+			})
+		);
+	});
+
+	// Trakt proposes Puffin Rock for its German title, but neither IMDb nor TMDB's
+	// alternative titles carry the name; only TMDB's German translation does.
+	it('resolves Oonas und Babas Insel (2015) to Puffin Rock by its German translation', async () => {
+		expect((oonasTraktSearch as any)[0].show.ids.imdb).toBe('tt3590338');
+		const result = await resolveTitle({
+			title: 'Oonas und Babas Insel',
+			year: 2015,
+			type: 'show',
+		});
+		expect(result).toEqual(
+			expect.objectContaining({
+				confidence: 'exact',
+				match: expect.objectContaining({ imdbId: 'tt3590338', title: 'Puffin Rock' }),
 			})
 		);
 	});

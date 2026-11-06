@@ -165,7 +165,7 @@ describe('/api/info/show across all six providers', () => {
 		expect(cache.getCinemetaSeries).toHaveBeenCalled();
 		expect(cache.getTmdbTvInfo).toHaveBeenCalledWith(
 			34549,
-			'videos,external_ids,alternative_titles,credits,content_ratings'
+			'videos,external_ids,alternative_titles,translations,credits,content_ratings'
 		);
 	});
 

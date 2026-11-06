@@ -1,6 +1,10 @@
+import { TMDB_MOVIE_APPEND, TMDB_TV_APPEND } from '@/services/metadata';
+import { getMetadataCache } from '@/services/metadataCache';
 import type { MovieContext, Verdict } from '@/services/scrapedVerdicts/rules';
 import { fold } from '@/services/scrapedVerdicts/rules';
 import { isMovieTitleType } from '@/utils/imdbTitleTypes';
+import { getTmdbAuth } from '@/utils/tmdbAuth';
+import { tmdbTranslatedTitles } from '@/utils/tmdbTranslations';
 import { Prisma } from '@prisma/client';
 import { createHash } from 'crypto';
 import { DatabaseClient } from './client';
@@ -60,6 +64,26 @@ const overflowsFullText = (error: unknown) =>
 /** Boolean-mode fulltext treats these as operators, so they cannot appear in a phrase. */
 const phraseOf = (title: string) => title.replace(/[+\-<>()~*@"]/g, ' ').trim();
 
+/**
+ * The title's TMDB translations in the languages DMM accepts (see
+ * `tmdbTranslatedTitles`): IMDb has no "Oonas und Babas Insel" for Puffin Rock,
+ * so its German uploads were judged nameless. Empty without a TMDB key or
+ * record. A TMDB failure throws, so the page is judged on a later view rather
+ * than without these names.
+ */
+async function tmdbTitlesOf(imdbId: string, kind: 'movie' | 'tv'): Promise<string[]> {
+	if (!getTmdbAuth()) return [];
+	const cache = getMetadataCache();
+	const found = await cache.searchTmdbByImdb(imdbId);
+	const id = (kind === 'movie' ? found?.movie_results : found?.tv_results)?.[0]?.id;
+	if (typeof id !== 'number') return [];
+	const info =
+		kind === 'movie'
+			? await cache.getTmdbMovieInfo(id, TMDB_MOVIE_APPEND)
+			: await cache.getTmdbTvInfo(id, TMDB_TV_APPEND);
+	return tmdbTranslatedTitles(info);
+}
+
 export class ScrapedVerdictService extends DatabaseClient {
 	/**
 	 * Everything the rules need to know about a movie, from the IMDb dataset
@@ -77,14 +101,22 @@ export class ScrapedVerdictService extends DatabaseClient {
 		// filed under movie:tt28959685 (Love Island: All Stars) were all trashed.
 		if (!isMovieTitleType(basics.titleType)) return null;
 
-		const akas = await this.prisma.imdbTitleAkas.findMany({
-			where: { titleId: imdbId },
-			select: { title: true },
-		});
+		const [akas, translated] = await Promise.all([
+			this.prisma.imdbTitleAkas.findMany({
+				where: { titleId: imdbId },
+				select: { title: true },
+			}),
+			tmdbTitlesOf(imdbId, 'movie'),
+		]);
 		// Matching ignores case and accents, so "Sueños de Libertad" next to
 		// "Sueños de libertad" would only add prompt tokens. One spelling each.
 		const byFold = new Map<string, string>();
-		for (const title of [basics.primaryTitle, basics.originalTitle, ...akas.map((a) => a.title)]
+		for (const title of [
+			basics.primaryTitle,
+			basics.originalTitle,
+			...akas.map((a) => a.title),
+			...translated,
+		]
 			.filter((t): t is string => !!t && t.trim().length > 0)
 			.sort()) {
 			const folded = fold(title).trim() || title;
@@ -153,12 +185,20 @@ export class ScrapedVerdictService extends DatabaseClient {
 		if (!basics?.primaryTitle || !basics.startYear || isMovieTitleType(basics.titleType)) {
 			return null;
 		}
-		const akas = await this.prisma.imdbTitleAkas.findMany({
-			where: { titleId: imdbId },
-			select: { title: true },
-		});
+		const [akas, translated] = await Promise.all([
+			this.prisma.imdbTitleAkas.findMany({
+				where: { titleId: imdbId },
+				select: { title: true },
+			}),
+			tmdbTitlesOf(imdbId, 'tv'),
+		]);
 		const byFold = new Map<string, string>();
-		for (const title of [basics.primaryTitle, basics.originalTitle, ...akas.map((a) => a.title)]
+		for (const title of [
+			basics.primaryTitle,
+			basics.originalTitle,
+			...akas.map((a) => a.title),
+			...translated,
+		]
 			.filter((t): t is string => !!t && t.trim().length > 0)
 			.sort()) {
 			const folded = fold(title).trim() || title;

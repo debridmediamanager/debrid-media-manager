@@ -26,6 +26,7 @@ import {
 	viewFromTrakt,
 	viewFromTvmaze,
 } from './showMetadataMerge';
+import { tmdbTranslatedTitles } from './tmdbTranslations';
 
 export type MetadataSource = 'tmdb' | 'trakt' | 'mdblist' | 'cinemeta' | 'omdb' | 'tvmaze';
 
@@ -286,6 +287,7 @@ export function mergeMovieRecord(imdbId: string, s: MovieSources): MovieRecord {
 			str(cinemeta?.name),
 			str(s.omdb?.Title),
 			...tmdbAlternativeTitles(s.tmdb),
+			...tmdbTranslatedTitles(s.tmdb),
 		]),
 		ids: movieIds(imdbId, s),
 		overview: first(
@@ -421,6 +423,7 @@ export function mergeShowRecord(imdbId: string, s: ShowSources): ShowRecord {
 			str(cinemeta?.name),
 			str(s.omdb?.Title),
 			...tmdbAlternativeTitles(s.tmdb),
+			...tmdbTranslatedTitles(s.tmdb),
 		]),
 		ids,
 		overview: first(
