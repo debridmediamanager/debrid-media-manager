@@ -21,6 +21,13 @@ Entry point: `src/pages/api/newznab/api.ts`. Supporting modules under
 | API Path | `/api` (the \*arr default)                   |
 | API Key  | The sponsor's DMM API key from gatekeeper    |
 
+AIOStreams takes URL and API path as one `Newznab URL` (`…/api/newznab/api`, under
+`Custom`). It requests `limit` = the caps max and, unless its `Paginate Results` option
+(Advanced mode only) is on, never asks for a second page; with it on it fetches up to its
+instance's max pages (5 by default), each one a search against the per-key limit. The
+setup page at `/newznab` says this, plus a short note on Usenet backbones linking
+https://usenet.rexum.space/tree.
+
 Auth reads `apikey=` from the query string first (the Newznab convention — every \*arr
 sends it there) and falls back to an `x-api-key` header. The key resolves through
 `Sponsors.dmmApiKey` with a live sponsorship check, mirroring `api/zurg/auth.ts`

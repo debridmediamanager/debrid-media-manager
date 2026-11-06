@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { MAX_LIMIT } from '@/services/newznab/xml';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 
 const sponsorMock = vi.fn();
@@ -217,6 +218,34 @@ describe('Newznab setup page, for a sponsor', () => {
 		expect(
 			screen.getByRole('link', { name: 'SABnzbd download client' }).getAttribute('href')
 		).toBe('/sabnzbd');
+	});
+
+	// AIOStreams takes URL and path as one field and never asks for a second
+	// page unless told to, which a sponsor read as 10 results out of 184.
+	it('gives AIOStreams the whole endpoint and says to turn on pagination', async () => {
+		asSponsor();
+		render(<NewznabSetupPage />);
+
+		await waitFor(() =>
+			expect(
+				within(field('Newznab URL')).getByText(`${window.location.origin}/api/newznab/api`)
+			).toBeTruthy()
+		);
+		expect(screen.getByText('Paginate Results')).toBeTruthy();
+		expect(document.body).toHaveTextContent(`one page of ${MAX_LIMIT} results`);
+	});
+
+	it('explains backbones and links a place to look a provider up', () => {
+		asSponsor();
+		render(<NewznabSetupPage />);
+
+		expect(
+			screen.getByText(/only adds coverage if it sits on a different backbone/)
+		).toBeTruthy();
+		expect(screen.getByRole('link', { name: "Look up a provider's backbone" })).toHaveAttribute(
+			'href',
+			'https://usenet.rexum.space/tree'
+		);
 	});
 
 	it('shows no sponsorship pitch to someone who already sponsors', () => {
