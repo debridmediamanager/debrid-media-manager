@@ -1025,6 +1025,61 @@ describe('RSS-shaped queries get the short cache cap', () => {
 	});
 });
 
+describe('GET /api/newznab/api result order', () => {
+	// In upstream order: a raw subject line, a repost, then the clean names.
+	const UPSTREAM_ORDER = [
+		'[01/48] - "Some.Movie.2026.1080p.BluRay.x265-GRP.mkv.par2"',
+		'Some.Movie.2026.2160p.WEB-DL-GRP-AsRequested',
+		'Some.Movie.2026.2160p.WEB-DL-GRP',
+		'Some.Movie.2026.1080p.BluRay.x265-GRP',
+		'Some.Movie.2026.720p.WEB-DL-OTHER',
+	];
+
+	beforeEach(() => {
+		const items = UPSTREAM_ORDER.map((title, index) => ({
+			title,
+			guid: `https://first-upstream.invalid/details/order-${index}`,
+			'newznab:attr': [{ _name: 'size', _value: '1000' }],
+			enclosure: { _length: '1000' },
+		}));
+		fetchMock.mockImplementation(async (input: unknown) =>
+			jsonResponse(String(input).startsWith(FIRST_HOST) ? { item: items } : { item: [] })
+		);
+	});
+
+	it('pages a targeted search clean names first, each item exactly once', async () => {
+		const seen: string[] = [];
+		for (let offset = 0; offset < UPSTREAM_ORDER.length; offset += 2) {
+			const res = await run({
+				t: 'movie',
+				imdbid: 'tt1418646',
+				apikey: SPONSOR_KEY,
+				limit: '2',
+				offset: String(offset),
+			});
+			expect(body(res)).toContain(`total="${UPSTREAM_ORDER.length}"`);
+			seen.push(...itemTitles(res).map((title) => title.replace(/&quot;/g, '"')));
+		}
+
+		expect(seen).toEqual([
+			'Some.Movie.2026.2160p.WEB-DL-GRP',
+			'Some.Movie.2026.1080p.BluRay.x265-GRP',
+			'Some.Movie.2026.720p.WEB-DL-OTHER',
+			'Some.Movie.2026.2160p.WEB-DL-GRP-AsRequested',
+			'[01/48] - "Some.Movie.2026.1080p.BluRay.x265-GRP.mkv.par2"',
+		]);
+	});
+
+	// An RSS sync is read as "what is new", so its order is the upstreams'.
+	it('leaves an untargeted query in upstream order', async () => {
+		const res = await run({ t: 'movie', cat: '2000', apikey: SPONSOR_KEY });
+
+		expect(itemTitles(res).map((title) => title.replace(/&quot;/g, '"'))).toEqual(
+			UPSTREAM_ORDER
+		);
+	});
+});
+
 describe('GET /api/newznab/api takedown', () => {
 	it('leaves a blocked release out of search results, cached ones included', async () => {
 		setBlocklistForTests([], ['some.release.2160p.web']);
