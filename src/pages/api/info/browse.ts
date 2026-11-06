@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const response: BrowseResponse = {};
 		for (const list of topLists as MList[]) {
-			const itemsResponse = await mdblistClient.getListItems(list.id.toString());
+			const itemsResponse = await mdblistClient.getListItems(list.id.toString(), 50);
 			const defaultMediaType = list.name.toLowerCase().includes('movie') ? 'movie' : 'show';
 			response[list.name] = itemsResponse
 				.filter((item: MListItem) => item.imdb_id)

@@ -324,20 +324,22 @@ export class MDBListClient {
 
 	/**
 	 * Get every item of a list by list ID, movies and shows merged back into
-	 * the list's own order.
+	 * the list's own order. With `first`, only that many from the top, in one
+	 * request: a list like "Drama" holds 51k items, 52 pages and ~26 s to read
+	 * whole, which held /browse/drama on "Loading..." (2026-11-06).
 	 */
-	async getListItems(listId: string): Promise<MListItem[]> {
+	async getListItems(listId: string, first?: number): Promise<MListItem[]> {
 		return this.cachedList(
-			`list_items_${listId}`,
+			first ? `list_items_${listId}_first${first}` : `list_items_${listId}`,
 			CACHE_TTL.LIST,
 			`list items for ID: ${listId}`,
 			async () => {
 				const items: MListItem[] = [];
 				for (let offset = 0; ;) {
-					const page = await this.getListItemsPage(Number(listId), offset);
+					const page = await this.getListItemsPage(Number(listId), offset, first);
 					items.push(...page.movies, ...page.shows);
 					const read = page.movies.length + page.shows.length;
-					if (!page.pagination?.has_more || read === 0) break;
+					if (first || !page.pagination?.has_more || read === 0) break;
 					offset += read;
 				}
 				return items.sort((a, b) => a.rank - b.rank);

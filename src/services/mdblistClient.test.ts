@@ -472,6 +472,19 @@ describe('MDBListClient', () => {
 			expect(result).toHaveLength(4);
 		});
 
+		// /browse shows 24 titles; reading "Drama" whole took 52 pages (~26 s)
+		// and held the page on "Loading..." (2026-11-06).
+		it('reads only the first page when asked for the top of a list', async () => {
+			pages();
+
+			const result = await client.getListItems('2194', 50);
+
+			const calls = vi.mocked(axios.get).mock.calls.map(([url]) => new URL(url as string));
+			expect(calls.map((u) => u.searchParams.get('limit'))).toEqual(['50']);
+			expect(result.map((item) => item.rank)).toEqual([83, 166]);
+			expect(cacheStub.cacheList).toHaveBeenCalledWith('list_items_2194_first50', result);
+		});
+
 		it('serves list items from cache within 24 hours', async () => {
 			const cachedItems = [{ id: 1, title: 'Movie 1' }];
 			cacheStub.getWithMetadata.mockResolvedValue({

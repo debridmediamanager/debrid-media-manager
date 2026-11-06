@@ -55,6 +55,7 @@ describe('/api/browse/top', () => {
 
 		expect(client.getTopLists).toHaveBeenCalled();
 		expect(client.getListItems).toHaveBeenCalledTimes(2);
+		expect(client.getListItems).toHaveBeenCalledWith(expect.anything(), 50);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			'Top Movies': ['movie:tt0001', 'movie:tt0002'],

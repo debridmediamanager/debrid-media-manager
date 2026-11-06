@@ -11,7 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 	const response: Record<string, string[]> = {};
 	for (const list of topLists) {
-		const itemsResponse = await mdblistClient.getListItems(list.id.toString());
+		const itemsResponse = await mdblistClient.getListItems(list.id.toString(), 50);
 		response[list.name] = itemsResponse
 			.filter((item: MListItem) => item.imdb_id)
 			.slice(0, 16)

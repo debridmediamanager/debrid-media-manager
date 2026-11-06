@@ -63,6 +63,7 @@ describe('/api/info/browse', () => {
 		expect(mockClient.getTopLists).toHaveBeenCalled();
 		expect(mockClient.searchLists).not.toHaveBeenCalled();
 		expect(mockClient.getListItems).toHaveBeenCalledTimes(2);
+		expect(mockClient.getListItems).toHaveBeenCalledWith('1', 50);
 		expect(mockShuffle).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
 		const payload = (res.json as Mock).mock.calls[0][0] as Record<string, string[]>;
