@@ -119,6 +119,25 @@ export class TorrentSnapshotService extends DatabaseClient {
 		});
 	}
 
+	/** The probes sponsors' apps sent for files of these torrents (POST /api/sponsor/probes). */
+	public async getContributedProbes(hashes: string[]) {
+		if (hashes.length === 0) return [];
+		return this.prisma.contributedProbe.findMany({ where: { hash: { in: hashes } } });
+	}
+
+	/**
+	 * Keeps each probe whose file (hash and exact size) has none yet: the first one sent stays, so a
+	 * later post can neither replace nor erase it. Answers how many were new.
+	 */
+	public async saveContributedProbes(rows: Prisma.ContributedProbeCreateManyInput[]) {
+		if (rows.length === 0) return 0;
+		const { count } = await this.prisma.contributedProbe.createMany({
+			data: rows,
+			skipDuplicates: true,
+		});
+		return count;
+	}
+
 	public async getLatestSnapshot(hash: string) {
 		return this.prisma.torrentSnapshot.findFirst({
 			where: { hash },

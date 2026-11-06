@@ -1536,6 +1536,21 @@ export class Repository {
 		);
 	}
 
+	public async getContributedProbes(hashes: string[]) {
+		return this.torrentSnapshotService.getContributedProbes(
+			await withoutBlockedHashList(hashes)
+		);
+	}
+
+	public async saveContributedProbes(rows: Prisma.ContributedProbeCreateManyInput[]) {
+		const allowed = new Set(
+			await withoutBlockedHashList([...new Set(rows.map((row) => row.hash))])
+		);
+		return this.torrentSnapshotService.saveContributedProbes(
+			rows.filter((row) => allowed.has(row.hash))
+		);
+	}
+
 	// Hash-IMDB Mapping Methods
 	public async upsertHashImdbBatch(pairs: { hash: string; imdbId: string }[]) {
 		return this.hashImdbService.upsertBatch(await withoutBlockedHashes(pairs));

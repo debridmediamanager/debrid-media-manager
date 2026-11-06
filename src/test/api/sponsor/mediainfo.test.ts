@@ -1,5 +1,6 @@
 import handler from '@/pages/api/sponsor/mediainfo';
 import { repository } from '@/services/repository';
+import sintel from '@/test/fixtures/contributedProbe/rd-sintel-ffprobe-2026-11-06.json';
 import legacyWorker from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
 import partialPack from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-partial-pack.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -32,6 +33,7 @@ describe('/api/sponsor/mediainfo', () => {
 	beforeEach(() => {
 		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
 		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([packRow]);
+		mockRepository.getContributedProbes = vi.fn().mockResolvedValue([]);
 	});
 
 	afterEach(() => {
@@ -103,6 +105,65 @@ describe('/api/sponsor/mediainfo', () => {
 
 		const { releases } = vi.mocked(res.json).mock.calls[0][0];
 		expect(Object.keys(releases[legacyWorker.Hash].files).length).toBeGreaterThan(0);
+	});
+
+	it("answers a probe a sponsor's app sent for a release zurg never posted", async () => {
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([]);
+		mockRepository.getContributedProbes = vi
+			.fn()
+			.mockResolvedValue([
+				{
+					hash: sintel.hash,
+					bytes: BigInt(sintel.bytes),
+					name: sintel.name,
+					mediaInfo: sintel.MediaInfo,
+					sponsor: 'ZP1M',
+				},
+			]);
+		const res = createMockResponse();
+		await handler(post({ hashes: [sintel.hash] }), res);
+
+		const { releases } = vi.mocked(res.json).mock.calls[0][0];
+		expect(Object.values(releases[sintel.hash].files)).toEqual([
+			{
+				path: '/Sintel.mp4',
+				bytes: sintel.bytes,
+				MediaInfo: expect.objectContaining({ streams: sintel.MediaInfo.streams }),
+			},
+		]);
+		expect(JSON.stringify(releases)).not.toContain('REDACTED');
+		expect(JSON.stringify(releases)).not.toContain('ZP1M'); // who sent it is DMM's to know
+	});
+
+	it("keeps zurg's probe of a file and adds what an app sent for the others", async () => {
+		const [key, file] = Object.entries(stored.SelectedFiles)[0];
+		mockRepository.getContributedProbes = vi.fn().mockResolvedValue([
+			{
+				hash: stored.Hash,
+				bytes: BigInt(file.bytes),
+				name: 'other.mkv',
+				mediaInfo: { streams: [], format: {} },
+				sponsor: 'X',
+			},
+			{
+				hash: stored.Hash,
+				bytes: BigInt(123456789),
+				name: null,
+				mediaInfo: sintel.MediaInfo,
+				sponsor: 'X',
+			},
+		]);
+		const res = createMockResponse();
+		await handler(post({ hashes: [stored.Hash] }), res);
+
+		const files = vi.mocked(res.json).mock.calls[0][0].releases[stored.Hash].files;
+		expect(files[key]).toEqual({
+			path: file.path,
+			bytes: file.bytes,
+			MediaInfo: file.MediaInfo,
+		});
+		expect(files['contributed:123456789']).toMatchObject({ path: '', bytes: 123456789 });
+		expect(Object.keys(files)).toHaveLength(Object.keys(stored.SelectedFiles).length + 1);
 	});
 
 	it('requires a DMM API key', async () => {

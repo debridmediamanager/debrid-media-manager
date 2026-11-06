@@ -34,6 +34,7 @@ const {
 	sponsorIdentify,
 	sponsorAvailability,
 	sponsorMediaInfo,
+	sponsorProbes,
 	sponsorPlace,
 	sponsorWanted,
 	animeEntries,
@@ -709,7 +710,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'storedMediaInfo',
 				summary: 'Stored media info',
-				description: `The ffprobe output zurg users have already shared for each release hash: streams, codecs, languages, HDR and duration per file, so your tools need not download anything to read them. \`MediaInfo\` is ffprobe's own JSON (\`-show_format -show_streams\`). A probe describes the file at \`path\` with that exact size, so match on both. Hashes nobody has probed are left out, and so are files inside archives and Usenet releases.\n\n**Limit:** ${per(sponsorMediaInfo, 'calls')}.`,
+				description: `The ffprobe output zurg users and sponsors' apps have already shared for each release hash: streams, codecs, languages, HDR and duration per file, so your tools need not download anything to read them. \`MediaInfo\` is ffprobe's own JSON (\`-show_format -show_streams\`). A probe describes the file at \`path\` with that exact size, so match on both; a probe an app sent (\`/api/sponsor/probes\`) has only the file's name for its path, or an empty one when the app did not know it, so match those on the size. Hashes nobody has probed are left out, and so are files inside archives and Usenet releases.\n\n**Limit:** ${per(sponsorMediaInfo, 'calls')}.`,
 				security: sponsorKey,
 				requestBody: body(
 					{ type: 'object', required: ['hashes'], properties: { hashes: hashes(100) } },
@@ -758,6 +759,78 @@ export const openApiDocument = {
 								},
 							},
 						}
+					),
+					...errors('400', '401', '429'),
+				},
+			},
+		},
+		'/api/sponsor/probes': {
+			post: {
+				tags: ['Sponsors'],
+				operationId: 'shareProbes',
+				summary: 'Share probes',
+				description: `Send the ffprobe output your tool took of single files of torrents, and \`/api/sponsor/mediainfo\` answers it to every sponsor: the next one to meet that file skips its probe. Each probe names the torrent's info hash, the file's exact size in \`bytes\` and, if you know it, the file's \`name\`. \`MediaInfo\` is ffprobe's JSON (\`-show_format -show_streams\`, \`-show_chapters\` welcome), at most 256 KB, with its \`format.size\` equal to \`bytes\` when it has one; the address it read is dropped.\n\nThe first probe sent for a file (hash and size) is kept: a later one is counted in \`known\` and changes nothing, and zurg's own snapshot of a release is answered before any probe an app sent. \`rejected\` names each refused probe by its place in the list, the others are kept.\n\n**Limit:** ${per(sponsorProbes, 'calls')} per key.`,
+				security: sponsorKey,
+				requestBody: body(
+					{
+						type: 'object',
+						required: ['probes'],
+						properties: {
+							probes: {
+								type: 'array',
+								minItems: 1,
+								maxItems: 100,
+								items: {
+									type: 'object',
+									required: ['hash', 'bytes', 'MediaInfo'],
+									properties: {
+										hash: { type: 'string', pattern: '^[a-fA-F0-9]{40}$' },
+										bytes: { type: 'integer', minimum: 1 },
+										name: { type: 'string', maxLength: 512 },
+										MediaInfo: { type: 'object', description: 'ffprobe JSON' },
+									},
+								},
+							},
+						},
+					},
+					{
+						probes: [
+							{
+								hash: HASH,
+								bytes: 129241752,
+								name: 'Sintel.mp4',
+								MediaInfo: { streams: [], format: {} },
+							},
+						],
+					}
+				),
+				responses: {
+					'200': ok(
+						'What was kept',
+						{
+							type: 'object',
+							properties: {
+								saved: {
+									type: 'integer',
+									description: 'Probes of files DMM had none for',
+								},
+								known: {
+									type: 'integer',
+									description: 'Probes of files DMM already holds one for',
+								},
+								rejected: {
+									type: 'array',
+									items: {
+										type: 'object',
+										properties: {
+											index: { type: 'integer' },
+											error: { type: 'string' },
+										},
+									},
+								},
+							},
+						},
+						{ saved: 1, known: 0 }
 					),
 					...errors('400', '401', '429'),
 				},

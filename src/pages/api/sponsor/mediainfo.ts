@@ -1,7 +1,7 @@
 import { validateDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { storedProbes } from '@/utils/torrentSnapshot';
+import { storedProbes, withContributedProbes } from '@/utils/torrentSnapshot';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_HASHES = 100;
@@ -10,8 +10,10 @@ const INFO_HASH = /^[a-f0-9]{40}$/;
 /**
  * The ffprobe output zurg instances have already sent DMM for each release hash,
  * file by file with the path and size it was taken of, so a sponsor's zurg can
- * skip probing what someone has probed before. A hash with no stored probe is
- * absent from the answer.
+ * skip probing what someone has probed before. Then the probes sponsors' apps
+ * sent for single files (POST /api/sponsor/probes), for files zurg's snapshot
+ * does not hold by size; one of those has only a name for its path, or none. A
+ * hash with no stored probe is absent from the answer.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -32,9 +34,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	try {
 		const releases: Record<string, { files: ReturnType<typeof storedProbes> }> = {};
-		for (const snapshot of await db.getSnapshotsByHashes(wanted)) {
-			const files = storedProbes(snapshot.payload);
-			if (Object.keys(files).length) releases[snapshot.hash] = { files };
+		const [snapshots, contributed] = await Promise.all([
+			db.getSnapshotsByHashes(wanted),
+			db.getContributedProbes(wanted),
+		]);
+		const snapshotFiles = new Map(snapshots.map((s) => [s.hash, storedProbes(s.payload)]));
+		for (const hash of wanted) {
+			const files = withContributedProbes(
+				snapshotFiles.get(hash) ?? {},
+				contributed.filter((row) => row.hash === hash)
+			);
+			if (Object.keys(files).length) releases[hash] = { files };
 		}
 		return res.status(200).json({ releases });
 	} catch (error) {

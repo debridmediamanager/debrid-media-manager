@@ -632,6 +632,20 @@ model TorrentSnapshot {
   @@index([hash, addedDate])
 }
 
+/// A probe a sponsor's app sent for one file of a torrent (POST /api/sponsor/probes): the torrent's
+/// hash, the file's exact size and, when the app knows it, its name. The first one sent for a file
+/// is kept. /api/sponsor/mediainfo answers zurg's own snapshot files first and these after them.
+model ContributedProbe {
+  hash      String   @db.VarChar(40)
+  bytes     BigInt
+  name      String?  @db.VarChar(512)
+  mediaInfo Json
+  sponsor   String   @db.VarChar(16)
+  createdAt DateTime @default(now())
+
+  @@id([hash, bytes])
+}
+
 model HashImdb {
   id        String   @id
   hash      String

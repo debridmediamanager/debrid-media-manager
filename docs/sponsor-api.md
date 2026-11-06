@@ -2,8 +2,8 @@
 
 Endpoints for sponsors' own tools. All take your DMM API key in the
 `x-api-key` header and stop working the moment the sponsorship lapses. Identify,
-availability and media info allow 2,500 items a minute per address; placement and the
-wanted list are budgeted per sponsorship. Send full batches.
+availability and media info allow 2,500 items a minute per address; placement, the
+wanted list and shared probes are budgeted per sponsorship. Send full batches.
 
 ## Identify releases by filename
 
@@ -64,8 +64,31 @@ have to download anything to learn it:
 
 `MediaInfo` is ffprobe's own JSON (`-show_format -show_streams`), without the
 address it was read from. A probe describes the file at `path` with that exact
-size, so match on both. Hashes nobody has analysed are left out, and so are
-files inside archives and Usenet releases, which zurg does not share.
+size, so match on both. A probe a sponsor's app shared (below) has only the
+file's name for its `path`, or an empty one when the app did not know it, so
+match those on the size. zurg's own snapshot of a release is answered first.
+Hashes nobody has analysed are left out, and so are files inside archives and
+Usenet releases, which zurg does not share.
+
+## Share probes
+
+`POST /api/sponsor/probes`, up to 100 probes, 25 calls a minute per sponsorship.
+
+```bash
+curl -X POST https://debridmediamanager.com/api/sponsor/probes \
+  -H "x-api-key: $DMM_API_KEY" -H 'Content-Type: application/json' \
+  -d '{"probes":[{"hash":"<info hash>","bytes":129241752,"name":"Sintel.mp4","MediaInfo":{"streams":[...],"format":{...}}}]}'
+```
+
+Send what ffprobe read from single files of torrents, and stored media info
+answers it to every sponsor: the next tool to meet that file skips its probe.
+`bytes` is the file's exact size and `name` its file name, if you know it.
+`MediaInfo` is ffprobe's JSON, at most 256 KB, and its `format.size`, when it has
+one, must be `bytes`. The address ffprobe read is dropped.
+
+The first probe of a file (hash and size) is kept. A later one counts in `known`
+and changes nothing. The answer is `{"saved": 1, "known": 0}`, with `rejected`
+naming each refused probe by its place in the list; the others are kept.
 
 ## Place releases on TMDB
 

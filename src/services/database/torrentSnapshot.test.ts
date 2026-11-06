@@ -13,6 +13,10 @@ describe('TorrentSnapshotService', () => {
 				findFirst: vi.fn(),
 				findMany: vi.fn(),
 			},
+			contributedProbe: {
+				createMany: vi.fn(),
+				findMany: vi.fn(),
+			},
 			$disconnect: vi.fn(),
 		};
 
@@ -270,6 +274,40 @@ describe('TorrentSnapshotService', () => {
 
 				await expect(service.upsertSnapshot(snapshotData)).rejects.toBe(down);
 				expect(mockPrisma.torrentSnapshot.upsert).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
+
+	describe('contributed probes', () => {
+		const row = {
+			hash: 'a'.repeat(40),
+			bytes: BigInt(129241752),
+			name: 'Sintel.mp4',
+			mediaInfo: { streams: [] },
+			sponsor: 'ZP1M',
+		};
+
+		it('keeps the first probe of a file: a later one is skipped, not written over it', async () => {
+			mockPrisma.contributedProbe.createMany.mockResolvedValue({ count: 0 });
+			await expect(service.saveContributedProbes([row])).resolves.toBe(0);
+			expect(mockPrisma.contributedProbe.createMany).toHaveBeenCalledWith({
+				data: [row],
+				skipDuplicates: true,
+			});
+		});
+
+		it('asks nothing for no rows or no hashes', async () => {
+			await expect(service.saveContributedProbes([])).resolves.toBe(0);
+			await expect(service.getContributedProbes([])).resolves.toEqual([]);
+			expect(mockPrisma.contributedProbe.createMany).not.toHaveBeenCalled();
+			expect(mockPrisma.contributedProbe.findMany).not.toHaveBeenCalled();
+		});
+
+		it("reads a hash list's contributed probes", async () => {
+			mockPrisma.contributedProbe.findMany.mockResolvedValue([row]);
+			await expect(service.getContributedProbes([row.hash])).resolves.toEqual([row]);
+			expect(mockPrisma.contributedProbe.findMany).toHaveBeenCalledWith({
+				where: { hash: { in: [row.hash] } },
 			});
 		});
 	});

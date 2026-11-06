@@ -59,6 +59,8 @@ export const RATE_LIMIT_CONFIGS = {
 	metadataIdentify: { name: 'metadataIdentify', rateLimit: 5, windowSeconds: 60 },
 	sponsorAvailability: { name: 'sponsorAvailability', rateLimit: 25, windowSeconds: 60 },
 	sponsorMediaInfo: { name: 'sponsorMediaInfo', rateLimit: 25, windowSeconds: 60 },
+	// Probes a sponsor's app sends back (POST /api/sponsor/probes), per sponsorship, 100 a call.
+	sponsorProbes: { name: 'sponsorProbes', rateLimit: 25, windowSeconds: 60 },
 	// The placement API, per sponsorship: up to 100 releases a call, so a 10,000-release
 	// library backfills in under two minutes and zurg's later calls carry only new releases.
 	sponsorPlace: { name: 'sponsorPlace', rateLimit: 60, windowSeconds: 60 },

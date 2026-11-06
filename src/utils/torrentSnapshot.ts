@@ -314,3 +314,94 @@ export function storedProbes(
 	}
 	return files;
 }
+
+// A probe a sponsor's app sends for one file of a torrent (POST /api/sponsor/probes) is ffprobe's own
+// JSON, which leaves out fields zurg's Go client always fills in, so only what a later match and a
+// player need is required: the container, and each stream's index and type.
+const ContributedStream = v.object({ index: v.number(), codec_type: v.string() }).rest(v.unknown());
+const ContributedFormat = v.object({ format_name: v.string() }).rest(v.unknown());
+const ContributedMediaInfo = v
+	.object({ streams: v.array(ContributedStream), format: ContributedFormat })
+	.rest(v.unknown());
+
+export const MAX_CONTRIBUTED_PROBE_BYTES = 256 * 1024;
+const MAX_CONTRIBUTED_STREAMS = 200;
+
+export type ContributedProbeRow = {
+	hash: string;
+	bytes: bigint;
+	name: string | null;
+	mediaInfo: Prisma.InputJsonObject;
+	sponsor: string;
+};
+
+/** One posted probe as the row to keep, or why it is refused. */
+export function contributedProbe(
+	raw: unknown,
+	sponsor: string
+): { row: ContributedProbeRow } | { error: string } {
+	if (!isRecord(raw)) return { error: 'not an object' };
+	const hash = typeof raw.hash === 'string' ? raw.hash.toLowerCase() : '';
+	if (!/^[a-f0-9]{40}$/.test(hash)) return { error: 'hash must be a 40-character info hash' };
+	const bytes = raw.bytes;
+	if (typeof bytes !== 'number' || !Number.isSafeInteger(bytes) || bytes <= 0) {
+		return { error: 'bytes must be the file size, a positive whole number' };
+	}
+	let name: string | null = null;
+	if (raw.name !== undefined && raw.name !== null) {
+		if (typeof raw.name !== 'string') return { error: 'name must be a string' };
+		// Only the file's own name: a folder the app saw is the app's, not the torrent's.
+		name = raw.name.split(/[\\/]/).pop()?.trim() || null;
+		if (name && name.length > 512) return { error: 'name is longer than 512 characters' };
+	}
+	const parsed = ContributedMediaInfo.try(raw.MediaInfo);
+	if (!parsed.ok) return { error: `MediaInfo is not ffprobe output: ${parsed.message}` };
+	const mediaInfo = parsed.value as Record<string, unknown> & {
+		streams: unknown[];
+		format: Record<string, unknown>;
+	};
+	if (mediaInfo.streams.length === 0 || mediaInfo.streams.length > MAX_CONTRIBUTED_STREAMS) {
+		return { error: `MediaInfo must list 1 to ${MAX_CONTRIBUTED_STREAMS} streams` };
+	}
+	// A probe that names its own size names the file's: one of another size is of another file.
+	const size = mediaInfo.format.size;
+	if (size !== undefined && String(size) !== String(bytes)) {
+		return { error: 'MediaInfo.format.size is not bytes' };
+	}
+	const kept = withoutProbeSource(mediaInfo);
+	if (JSON.stringify(kept).length > MAX_CONTRIBUTED_PROBE_BYTES) {
+		return { error: `MediaInfo is larger than ${MAX_CONTRIBUTED_PROBE_BYTES} bytes` };
+	}
+	return {
+		row: {
+			hash,
+			bytes: BigInt(bytes),
+			name,
+			mediaInfo: kept as Prisma.InputJsonObject,
+			sponsor,
+		},
+	};
+}
+
+/**
+ * Contributed probes as storedProbes answers files, added to `files` for each file it does not
+ * already hold by size: zurg's own snapshot of a release wins over what an app sent for it.
+ */
+export function withContributedProbes(
+	files: ReturnType<typeof storedProbes>,
+	rows: { bytes: bigint | number; name: string | null; mediaInfo: unknown }[]
+): ReturnType<typeof storedProbes> {
+	const merged = { ...files };
+	const held = new Set(Object.values(files).map((file) => file.bytes));
+	for (const row of rows) {
+		const bytes = Number(row.bytes);
+		if (held.has(bytes) || !isRecord(row.mediaInfo)) continue;
+		held.add(bytes);
+		merged[`contributed:${bytes}`] = {
+			path: row.name ? `/${row.name}` : '',
+			bytes,
+			MediaInfo: withoutProbeSource(row.mediaInfo),
+		};
+	}
+	return merged;
+}
