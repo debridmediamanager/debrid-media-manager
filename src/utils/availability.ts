@@ -367,7 +367,7 @@ export const MAX_PLAYABLE_HASHES = 500;
 export async function checkPlayableCachedHashes(
 	dmmProblemKey: string,
 	solution: string,
-	service: 'rd' | 'ad',
+	service: 'rd' | 'ad' | 'dl',
 	hashes: string[]
 ): Promise<string[]> {
 	const validHashes = hashes.filter(isValidHash);

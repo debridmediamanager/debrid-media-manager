@@ -974,6 +974,18 @@ export class AvailabilityService extends DatabaseClient {
 		}));
 	}
 
+	/** The Debrid-Link counterpart of `filterPlayableCachedHashes`: recorded with a video file. */
+	public async filterPlayableCachedHashesDl(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.availableDl.findMany({
+			where: { hash: { in: hashes.map((hash) => hash.toLowerCase()) } },
+			select: { hash: true, files: { select: { path: true } } },
+		});
+		return new Set(
+			rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase())
+		);
+	}
+
 	/** Forget a Debrid-Link release an add found uncached; a hash with no row is no error. */
 	public async removeAvailabilityDl(hash: string): Promise<void> {
 		await this.prisma.availableDl.deleteMany({ where: { hash: hash.toLowerCase() } });

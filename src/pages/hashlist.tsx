@@ -47,6 +47,7 @@ import {
 	checkAvailabilityPm2,
 	checkDatabaseAvailabilityTb2,
 	checkPlayableAvailabilityAd,
+	checkPlayableAvailabilityDl,
 	checkPlayableAvailabilityRd,
 	wrapLoading,
 } from '@/utils/instantChecks';
@@ -376,14 +377,18 @@ function HashlistPage() {
 		// probes stay independent: one vendor being down is not the other's
 		// answer, and a user may hold only one of the two keys.
 		start('OC', ocKey, () => checkAvailabilityOc2(ocKey!, listHashes, setUserTorrentsList));
-		// **No Debrid-Link probe on load, deliberately.** Its probe is a
-		// bare-hash add, which only succeeds when Debrid-Link already holds
-		// the content, so a hit puts the torrent in the user's library. That
-		// is a mutation, and DMM keeps mutating probes behind a button, the
-		// way RD's and AD's already are. There is no per-row check here, so
-		// `dlAvailable` stays unset on this page and `dlKey` is absent from
-		// the filter's OR-chain below for the same reason.
-	}, [listHashes, rdKey, adKey, tbKey, pmKey, ocKey]);
+		// Debrid-Link from DMM's record of it, like RD and AD: its own probe is an add, which
+		// mutates, so the page never probes it.
+		start('DL', dlKey, async () => {
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			return checkPlayableAvailabilityDl(
+				tokenWithTimestamp,
+				tokenHash,
+				listHashes,
+				setUserTorrentsList
+			);
+		});
+	}, [listHashes, rdKey, adKey, tbKey, pmKey, ocKey, dlKey]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -440,14 +445,15 @@ function HashlistPage() {
 		let tmpList = notYetDownloaded;
 
 		// Filter for instantly available torrents if enabled and keys are present
-		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey)) {
+		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey || dlKey)) {
 			tmpList = tmpList.filter(
 				(t) =>
 					t.rdAvailable ||
 					t.adAvailable ||
 					t.tbAvailable ||
 					t.pmAvailable ||
-					t.ocAvailable
+					t.ocAvailable ||
+					t.dlAvailable
 			);
 		}
 

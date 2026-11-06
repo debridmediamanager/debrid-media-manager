@@ -66,10 +66,20 @@ describe('/api/availability/playable', () => {
 		expect(res.json).toHaveBeenCalledWith({ cached: [hashB] });
 	});
 
+	// The hashlist's "Show Instant" read DMM's RD and AD records but never its Debrid-Link ones,
+	// although they are a plain table read like the other two.
+	it("answers from DMM's Debrid-Link records", async () => {
+		mockRepository.filterPlayableCachedHashesDl = vi.fn().mockResolvedValue(new Set([hashB]));
+		const res = await call(buildBody({ service: 'dl' }));
+		expect(mockRepository.filterPlayableCachedHashesDl).toHaveBeenCalledWith([hashA, hashB]);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ cached: [hashB] });
+	});
+
 	it('rejects an unknown service', async () => {
 		const res = await call(buildBody({ service: 'tb' }));
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ error: 'Service must be rd or ad' });
+		expect(res.json).toHaveBeenCalledWith({ error: 'Service must be rd, ad or dl' });
 	});
 
 	it(`takes at most ${MAX_PLAYABLE_HASHES} hashes`, async () => {

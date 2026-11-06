@@ -479,13 +479,13 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
  * batch now lands in the list as soon as it answers.
  */
 const processPlayableCheck = async (
-	service: 'rd' | 'ad',
+	service: 'rd' | 'ad' | 'dl',
 	dmmProblemKey: string,
 	solution: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ): Promise<number> => {
-	const flag = service === 'rd' ? 'rdAvailable' : 'adAvailable';
+	const flag = ({ rd: 'rdAvailable', ad: 'adAvailable', dl: 'dlAvailable' } as const)[service];
 	let instantCount = 0;
 	const funcs = groupBy(MAX_PLAYABLE_HASHES, hashes).map((hashGroup) => async () => {
 		const cached = new Set(
@@ -521,6 +521,13 @@ export const checkPlayableAvailabilityAd = (
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ) => processPlayableCheck('ad', dmmProblemKey, solution, hashes, setTorrentList);
+
+export const checkPlayableAvailabilityDl = (
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processPlayableCheck('dl', dmmProblemKey, solution, hashes, setTorrentList);
 
 // Database availability checks - query local cache
 export const checkDatabaseAvailabilityRd = (

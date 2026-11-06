@@ -754,6 +754,12 @@ export class Repository {
 		);
 	}
 
+	public async filterPlayableCachedHashesDl(hashes: string[]) {
+		return this.availabilityService.filterPlayableCachedHashesDl(
+			await withoutBlockedHashList(hashes)
+		);
+	}
+
 	public removeAvailabilityDl(hash: string) {
 		return this.availabilityService.removeAvailabilityDl(hash);
 	}

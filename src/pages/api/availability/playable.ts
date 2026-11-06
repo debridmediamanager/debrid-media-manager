@@ -5,7 +5,7 @@ import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository as db } from '../../../services/repository';
 
-const SERVICES = ['rd', 'ad'] as const;
+const SERVICES = ['rd', 'ad', 'dl'] as const;
 type Service = (typeof SERVICES)[number];
 
 function isValidTorrentHash(hash: unknown): hash is string {
@@ -37,7 +37,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 
 		if (!SERVICES.includes(service)) {
-			return res.status(400).json({ error: 'Service must be rd or ad' });
+			return res.status(400).json({ error: 'Service must be rd, ad or dl' });
 		}
 		if (!Array.isArray(hashes)) {
 			return res.status(400).json({ error: 'Hashes must be an array' });
@@ -56,7 +56,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const cached =
 			(service as Service) === 'rd'
 				? await db.filterPlayableCachedHashes(hashes)
-				: await db.filterPlayableCachedHashesAd(hashes);
+				: (service as Service) === 'ad'
+					? await db.filterPlayableCachedHashesAd(hashes)
+					: await db.filterPlayableCachedHashesDl(hashes);
 
 		return res.status(200).json({ cached: [...cached] });
 	} catch (error) {

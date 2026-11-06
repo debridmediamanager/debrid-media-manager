@@ -58,4 +58,19 @@ describe('AvailabilityService Debrid-Link', () => {
 		await service.checkAvailabilityDl([dlTv.hashString]);
 		expect(findMany.mock.calls[1][0].where).toEqual({ hash: { in: [dlTv.hashString] } });
 	});
+
+	it('answers a hashlist which recorded releases hold a video', async () => {
+		findMany.mockResolvedValue([
+			{ hash: dlTv.hashString, files: dlTv.files.map((f) => ({ path: f.name })) },
+			{ hash: 'b'.repeat(40), files: [{ path: 'Release/readme.nfo' }] },
+		]);
+		const found = await service.filterPlayableCachedHashesDl([
+			dlTv.hashString.toUpperCase(),
+			'b'.repeat(40),
+		]);
+		expect(found).toEqual(new Set([dlTv.hashString]));
+		expect(findMany.mock.calls[0][0].where).toEqual({
+			hash: { in: [dlTv.hashString, 'b'.repeat(40)] },
+		});
+	});
 });
