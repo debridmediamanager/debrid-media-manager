@@ -21,10 +21,13 @@ describe('easynewsCastApiHelpers', () => {
 	});
 
 	// A changed password must keep the addon URL and every cast.
-	it('keys the id on the username alone, case-insensitively', () => {
-		const id = easynewsCastUserId('Alice');
+	// Easynews logins are case-sensitive (a real one failed in capitals, 2026-11-07),
+	// so Alice and alice may be two accounts and must not share an addon.
+	it('keys the id on the username alone, exactly as typed', () => {
+		const id = easynewsCastUserId('alice');
 		expect(id).toHaveLength(12);
 		expect(easynewsCastUserId('alice')).toBe(id);
+		expect(easynewsCastUserId('Alice')).not.toBe(id);
 		expect(easynewsCastUserId('bob')).not.toBe(id);
 	});
 

@@ -50,7 +50,7 @@ describe('/api/stremio-en/cast', () => {
 		expect(mockResolve).toHaveBeenCalledWith(LOGIN, EPISODE);
 		expect(mockRepository.saveEasynewsCast).toHaveBeenCalledWith(
 			'tt11280740:2:5',
-			easynewsCastUserId('alice'),
+			easynewsCastUserId('Alice'),
 			HASH,
 			'severance.2022.s02e05.multi.2160p.web.h265-higgsboson.mkv',
 			7375,

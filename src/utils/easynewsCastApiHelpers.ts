@@ -8,8 +8,9 @@ import { easynewsCredentialsOf } from './easynewsCastKey';
 
 /**
  * The cast id for an Easynews account: keyed on the username, so a changed
- * password keeps the same addon URL and casts. Easynews usernames are not case
- * sensitive at sign-in, so neither is the id.
+ * password keeps the same addon URL and casts. Exactly as typed: Easynews
+ * refused a real login with its username in capitals (2026-11-07), so two
+ * spellings can be two accounts.
  */
 export function easynewsCastUserId(username: string): string {
 	const salt = process.env.DMMCAST_SALT;
@@ -19,7 +20,7 @@ export function easynewsCastUserId(username: string): string {
 	// Prefixed so the id can never equal another provider's.
 	return crypto
 		.createHmac('sha256', salt)
-		.update(`easynews:${username.toLowerCase()}`)
+		.update(`easynews:${username}`)
 		.digest('base64url')
 		.slice(0, 12);
 }
