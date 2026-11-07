@@ -1,0 +1,61 @@
+{
+	"_source": "dmmdb ScrapedTrue on dmm, read 2026-11-07: executables filed as releases (194 hashes on 85 pages), and real releases from the same pages",
+	"executables": [
+		{
+			"page": "movie:tt33764258",
+			"hash": "c1eb9d5796b7a2baa92b8bfd6a9401bb36c2bea3",
+			"title": "The Odyssey (2026) 2160p FULL HD.exe",
+			"fileSize": 1201.0
+		},
+		{
+			"page": "tv:tt10986410:4",
+			"hash": "3f1d4abeabc76afad75ac8404025f877ca3d51ac",
+			"title": "Ted Lasso S04E04 1080p HEVC x265-MeGusta .exe",
+			"fileSize": 918.0
+		},
+		{
+			"page": "tv:tt13293588:10",
+			"hash": "274aca4a75eb918eff02ced5ac8097a9eef396ce",
+			"title": "[SubsPlease] Mushoku Tensei S3 - 14 (1080p) [EC778232].mkv.exe",
+			"fileSize": 1201.0
+		},
+		{
+			"page": "tv:tt0382501:5",
+			"hash": "da4d8af7a394cd5a59db463d7fd0ac57c60db0cf",
+			"title": "Viva La Bam Season 5; Cradle.eXe",
+			"fileSize": 1382.0
+		},
+		{
+			"page": "movie:tt35538033",
+			"hash": "9c4ac9c553ebba71691e186b36be9776496f48c8",
+			"title": "Resident Evil (2026) 1080p AMZN WEB-DL DDP5 1 H 264-FLUX.exe",
+			"fileSize": 1301.0
+		},
+		{
+			"page": "tv:tt0203259:28",
+			"hash": "59255d40b4a7c598a3296d8fa394ef33d1b0078f",
+			"title": "Law and Order SVU S28E01 Volition 1080p WEB H264-FLUX.exe",
+			"fileSize": 1339.0
+		},
+		{
+			"page": "movie:tt35672862",
+			"hash": "d6f8328826baf7a451d65cca6b7a6e27765a7aa8",
+			"title": "Hokum 2026 1080p HD X26.exe",
+			"fileSize": 1300.0
+		}
+	],
+	"releases": [
+		{
+			"page": "movie:tt33764258",
+			"hash": "39d27fe9662e9dfff25c6b6fa6035843c65403d4",
+			"title": "Odissea.2026.iTALiAN.MD.1080p.HDCAM.x264-WRS",
+			"fileSize": 10915.84
+		},
+		{
+			"page": "movie:tt33764258",
+			"hash": "51090985c585df1a327817b37e9e8f0444c69279",
+			"title": "The Odyssey 2026 1080p AMZN WEB-DL DDP5 1 H 264-Kitsune",
+			"fileSize": 4454.4
+		}
+	]
+}

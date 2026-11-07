@@ -1,6 +1,7 @@
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import executableFixture from './__fixtures__/executable-releases.json';
 import {
 	FAN_OUT_PAGE_LIMIT,
 	isPageWriteConflict,
@@ -283,6 +284,21 @@ describe('ScrapedService', () => {
 		await service.saveScrapedResults('key', [{ hash: HASH_NEW }, { hash: HASH_TWO }] as any);
 
 		expect(lastWrite().value).toEqual([{ hash: HASH_TWO }]);
+	});
+
+	it('drops executables filed as releases on every write path', async () => {
+		// a malware run filed single .exe files as new episodes and films, some cached on RD
+		const strip = ({ page: _page, ...r }: { page: string }) => r;
+		const executables = executableFixture.executables.map(strip);
+		const releases = executableFixture.releases.map(strip);
+
+		storedPage(null);
+		await service.saveScrapedTrueResults('key', [...executables, ...releases] as any);
+		expect(lastWrite().value).toEqual(releases);
+
+		storedPage([{ hash: HASH_ONE }]);
+		await service.saveScrapedResults('key', executables as any, true, true);
+		expect(lastWrite().value).toEqual([]);
 	});
 
 	it('decodes entity-encoded titles on the direct write paths', async () => {
