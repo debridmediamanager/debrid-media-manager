@@ -18,7 +18,11 @@ vi.mock('@/services/anime/stremioAnime', () => ({
 	resolveStreamTarget: vi.fn(async (id: string, mediaType: string, origin: string) => ({
 		castKey: id,
 		typeSlug: mediaType === 'movie' ? 'movie' : 'show',
-		externalUrl: `${origin}/${mediaType}/${id}`,
+		// The real shapes: /movie/<id>, and /show/<id>/<season> for an episode.
+		externalUrl:
+			mediaType === 'movie'
+				? `${origin}/movie/${id}`
+				: `${origin}/show/${id.split(':')[0]}/${id.split(':')[1]}`,
 		trove: async () => [],
 	})),
 }));
@@ -71,6 +75,15 @@ describe('/api/stremio-en/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect((res._getData() as any).streams).toEqual([
 			expect.objectContaining({ externalUrl: 'https://dmm.test/stremio-easynews' }),
 		]);
+	});
+
+	// The phone lands where the Cast button is: Stremio's row and Kodi's cast QR open it.
+	it('opens the Usenet tab, where the Easynews rows are, from the cast row', async () => {
+		const show = createMockResponse();
+		await handler(request(), show);
+		expect((show._getData() as any).streams[0].externalUrl).toBe(
+			'https://dmm.test/show/tt11280740/2/usenet'
+		);
 	});
 
 	it('lists own casts, then other casts, then search hits, each as a play link', async () => {

@@ -70,7 +70,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		res.status(200).json({ streams: [], cacheMaxAge: 0 });
 		return;
 	}
-	const { castKey, typeSlug, externalUrl } = target;
+	const { castKey, typeSlug } = target;
+	// Easynews rows and their Cast button live on the Usenet tab of a title page.
+	const externalUrl = /\/(movie|show)\//.test(target.externalUrl)
+		? `${target.externalUrl}/usenet`
+		: target.externalUrl;
 
 	const streams: any[] = [];
 
