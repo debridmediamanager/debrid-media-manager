@@ -81,6 +81,23 @@ describe('EasynewsAccountPanel', () => {
 		);
 	});
 
+	// Easynews is no debrid account: a browser with only it is a guest that can cast.
+	it('enters guest mode on a sign-in with no debrid account, and not with one', async () => {
+		mockAccountCheck();
+		const { unmount } = render(<EasynewsAccountPanel />);
+		await signIn('pass');
+		await screen.findByText('user');
+		expect(localStorage.getItem('dmm:guest')).toBe('true');
+		unmount();
+
+		localStorage.clear();
+		localStorage.setItem('tb:apiKey', 'tb-key');
+		render(<EasynewsAccountPanel />);
+		await signIn('pass');
+		await screen.findByText('user');
+		expect(localStorage.getItem('dmm:guest')).toBeNull();
+	});
+
 	it('does not save a login Easynews refuses', async () => {
 		mockAccountCheck(401);
 		render(<EasynewsAccountPanel />);

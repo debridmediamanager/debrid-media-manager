@@ -376,6 +376,44 @@ describe('withAuth', () => {
 		});
 	});
 
+	// An Easynews login is no debrid account, but it is a sign-in: Settings, the
+	// title pages and DMM Cast for Easynews work with it, so it must not bounce to
+	// /start. The library still needs a debrid account. Found on a fresh phone
+	// browser (2026-11-07): /settings?redirect=/kodi?code=… landed on /start.
+	describe('signed in to Easynews only', () => {
+		beforeEach(() => {
+			mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+			mockUseAllDebridApiKey.mockReturnValue(null);
+			localStorage.setItem('en:account', JSON.stringify({ username: 'u', password: 'p' }));
+		});
+
+		it.each(['/settings', '/stremio-easynews', '/movie/[imdbid]'])(
+			'keeps %s instead of sending it to /start',
+			async (pathname) => {
+				mockRouter.pathname = pathname;
+				const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+				const WrappedComponent = withAuth(TestComponent);
+				render(<WrappedComponent />);
+				await waitFor(() => {
+					expect(screen.getByTestId('test-component')).toBeInTheDocument();
+				});
+				expect(mockPush).not.toHaveBeenCalledWith('/start');
+			}
+		);
+
+		it('still keeps it out of the library, sending it home', async () => {
+			mockRouter.pathname = '/library';
+			mockRouter.asPath = '/library';
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent, { allowGuest: false });
+			render(<WrappedComponent />);
+			await waitFor(() => {
+				expect(mockPush).toHaveBeenCalledWith('/');
+			});
+			expect(screen.queryByTestId('test-component')).toBeNull();
+		});
+	});
+
 	it('passes props to wrapped component', async () => {
 		mockUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
 		mockUseAllDebridApiKey.mockReturnValue(null);

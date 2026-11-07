@@ -1,11 +1,24 @@
 import { postEasynews } from '@/components/EasynewsResults';
 import useLocalStorage from '@/hooks/localStorage';
 import type { EasynewsCredentials } from '@/services/easynews';
+import { enableGuestMode } from '@/utils/guestMode';
 import { getSafeRedirectPath } from '@/utils/router';
 import { Cast } from 'lucide-react';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useState } from 'react';
+
+const DEBRID_KEYS = [
+	'rd:accessToken',
+	'rd:refreshToken',
+	'ad:apiKey',
+	'tb:apiKey',
+	'pm:accessToken',
+	'pm:apiKey',
+	'oc:apiKey',
+	'dl:accessToken',
+	'dl:apiKey',
+];
 
 // The visitor's own Easynews login, which the Usenet tab searches with. Easynews
 // forbids sharing an account, so DMM has none of its own (see services/easynews).
@@ -27,6 +40,9 @@ export const EasynewsAccountPanel = () => {
 			await postEasynews('/api/easynews/account', credentials);
 			setAccount(credentials);
 			setPassword('');
+			// Easynews is no debrid account: without one, this browser is a guest that
+			// can also cast, so the library and the debrid-only buttons stay away.
+			if (!DEBRID_KEYS.some((key) => localStorage.getItem(key))) enableGuestMode();
 			// A page that sent the visitor here to sign in (DMM Cast, Kodi pairing) gets them back.
 			// Read off the URL, not useRouter: the panel also renders outside a page.
 			const redirect = new URLSearchParams(window.location.search).get('redirect');

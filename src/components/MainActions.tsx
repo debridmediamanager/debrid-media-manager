@@ -125,36 +125,41 @@ export function MainActions({
 	// pushes anyone with no Real-Debrid token into /realdebrid/login (the flow
 	// guest mode exists to skip), every action on a hash list adds to a debrid
 	// service, and cast, transfers and status already wait for a provider user.
-	// Returning nothing also keeps an empty block out of the page's gap.
-	if (isGuest) return null;
+	// Returning nothing also keeps an empty block out of the page's gap. The one
+	// exception is an Easynews login, which casts without a debrid account.
+	if (isGuest && !enUser) return null;
 
 	return (
 		<div className="flex w-full flex-col gap-3">
 			{/* First row: Library, Hash lists, Music. */}
-			<div className="grid w-full grid-cols-3 gap-3">
-				<Link
-					href="/library"
-					className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 py-3 whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50 sm:p-3"
-				>
-					<BookOpen className="mr-1 hidden h-4 w-4 text-cyan-400 sm:inline-block" />
-					Library
-				</Link>
-				<Link
-					href={isLocalDev ? '/hashlists' : 'https://hashlists.debridmediamanager.com'}
-					target={isLocalDev ? undefined : '_blank'}
-					className="haptic flex items-center justify-center gap-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-3 whitespace-nowrap text-indigo-100 transition-colors hover:bg-indigo-800/50 sm:p-3"
-				>
-					<Rocket className="mr-1 hidden h-4 w-4 text-indigo-400 sm:inline-block" />
-					Hash lists
-				</Link>
-				<Link
-					href="/albums"
-					className="haptic flex items-center justify-center gap-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-3 whitespace-nowrap text-green-100 transition-colors hover:bg-green-800/50 sm:p-3"
-				>
-					<Music2 className="mr-1 hidden h-4 w-4 text-green-400 sm:inline-block" />
-					Music
-				</Link>
-			</div>
+			{!isGuest && (
+				<div className="grid w-full grid-cols-3 gap-3">
+					<Link
+						href="/library"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 py-3 whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50 sm:p-3"
+					>
+						<BookOpen className="mr-1 hidden h-4 w-4 text-cyan-400 sm:inline-block" />
+						Library
+					</Link>
+					<Link
+						href={
+							isLocalDev ? '/hashlists' : 'https://hashlists.debridmediamanager.com'
+						}
+						target={isLocalDev ? undefined : '_blank'}
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-3 whitespace-nowrap text-indigo-100 transition-colors hover:bg-indigo-800/50 sm:p-3"
+					>
+						<Rocket className="mr-1 hidden h-4 w-4 text-indigo-400 sm:inline-block" />
+						Hash lists
+					</Link>
+					<Link
+						href="/albums"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-3 whitespace-nowrap text-green-100 transition-colors hover:bg-green-800/50 sm:p-3"
+					>
+						<Music2 className="mr-1 hidden h-4 w-4 text-green-400 sm:inline-block" />
+						Music
+					</Link>
+				</div>
+			)}
 
 			{/* Second row: Cast. One provider keeps its full button; two or more
 			    share one row of provider chips, which used to take up to two

@@ -78,6 +78,12 @@ export const withAuth = <P extends object>(
 		});
 
 		const isGuest = useGuestMode();
+		// An Easynews login is a sign-in without a debrid account: it opens what a
+		// guest may open (Settings, title pages, DMM Cast for Easynews), never the library.
+		const [enAccount] = useState(() =>
+			typeof window !== 'undefined' ? localStorage.getItem('en:account') : null
+		);
+		const actsAsGuest = isGuest || !!enAccount;
 		// gatekeeper's "Open DMM with this key" lands on /settings with nothing stored
 		// yet. Read once, before the sponsor panel scrubs the fragment on mount.
 		const [handoff] = useState(() => hasSponsorHandoff());
@@ -114,14 +120,14 @@ export const withAuth = <P extends object>(
 			// /start would offer a login they already declined, and the return
 			// URL stored on that path would send them straight back here on the
 			// next render - a loop, because guest mode never resolves it.
-			if (isGuest && !allowGuest && !hasCredential && !hasRefreshCredentials) {
+			if (actsAsGuest && !allowGuest && !hasCredential && !hasRefreshCredentials) {
 				router.push(HOME_ROUTE);
 				return;
 			}
 
 			if (
 				!hasCredential &&
-				!isGuest &&
+				!actsAsGuest &&
 				!handoff &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
@@ -146,7 +152,7 @@ export const withAuth = <P extends object>(
 			hasCredential,
 			handoff,
 			hasRefreshCredentials,
-			isGuest,
+			actsAsGuest,
 			adKey,
 			tbKey,
 			pmKey,

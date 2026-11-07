@@ -253,9 +253,10 @@ export default function StartPage() {
 						Enter as Guest
 					</button>
 					<p className="text-center text-xs text-slate-400">
-						Search, settings and the indexer setup pages stay open. Your library,
-						casting and transfers need a debrid account, and you can connect one at any
-						time.
+						Search, settings and the indexer setup pages stay open. Only have Easynews?
+						Enter as Guest and sign in to it under Settings to search it and cast it to
+						Stremio. Your library and transfers need a debrid account, and you can
+						connect one at any time.
 					</p>
 				</div>
 

@@ -191,6 +191,27 @@ describe('MainActions', () => {
 		expect(castLink.getAttribute('href')).toBe('/stremio-easynews');
 	});
 
+	it('gives an Easynews-only guest its Cast button and nothing that needs a debrid account', () => {
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				ocUser={false}
+				dlUser={false}
+				enUser={true}
+				isGuest={true}
+				isLoading={false}
+			/>
+		);
+		expect(screen.getByRole('link', { name: /cast for en/i })).toHaveAttribute(
+			'href',
+			'/stremio-easynews'
+		);
+		expect(screen.queryByRole('link', { name: /library/i })).toBeNull();
+	});
+
 	it('shows OC cast action when only OC user is authenticated', () => {
 		render(
 			<MainActions
