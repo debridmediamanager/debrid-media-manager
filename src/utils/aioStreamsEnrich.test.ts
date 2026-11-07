@@ -87,6 +87,7 @@ describe('enrichFromAioStreams', () => {
 			'[2026.08.21] VA - Pure Space Odyssey, Vol. 1', // another title
 			'The Odyssey XXX Part 1 [Cosplayground 2026] XXX WEB-DL 2160p MP4-P2P [XC]', // banned words
 			'The Odyssey (2026) Official Teaser Trailer 4K.mkv', // 345 MB, under the film floor
+			'Ludwig Goransson - The Odyssey (Orig. Soundtrack) 2026 FLAC (Jamal The Moroccan)', // music
 		]) {
 			expect(savedTitles()).not.toContain(junk);
 		}
@@ -158,6 +159,36 @@ describe('enrichFromAioStreams', () => {
 				: null
 		);
 		expect(await enrichFromAioStreams({ ...ODYSSEY, imdbId: 'tt1', key: 'movie:tt1' })).toBe(0);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('lets one slow title fail without pausing the rest', async () => {
+		fetchMock.mockRejectedValue(new Error('The operation was aborted due to timeout'));
+		await expect(enrichFromAioStreams(ODYSSEY)).rejects.toThrow('timeout');
+		expect(markRefreshed).not.toHaveBeenCalledWith('aiostreams:cooldown');
+	});
+
+	it('pauses on a refused season request too', async () => {
+		titleType.mockResolvedValue('tvSeries');
+		fetchMock.mockResolvedValue({ ok: false, status: 429, json: async () => ({}) });
+		await expect(
+			enrichFromAioStreams({
+				imdbId: 'tt0903747',
+				key: 'tv:tt0903747:2',
+				kind: 'series',
+				season: 2,
+			})
+		).rejects.toThrow('429');
+		expect(markRefreshed).toHaveBeenCalledWith('aiostreams:cooldown');
+	});
+
+	it('leaves a title to the replica that stamped it first', async () => {
+		// Prisma's upsert is not atomic: two replicas both create the row and one
+		// fails on the key - 60 "enrich failed" lines an hour on 2026-11-07.
+		markRefreshed.mockRejectedValueOnce(
+			Object.assign(new Error('Unique constraint failed'), { code: 'P2002' })
+		);
+		expect(await enrichFromAioStreams(ODYSSEY)).toBe(0);
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 

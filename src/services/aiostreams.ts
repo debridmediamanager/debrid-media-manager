@@ -9,7 +9,7 @@ import { ScrapeSearchResult, isUsableHash } from './mediasearch';
  * in 6.8 s, among them four 80+ GB remuxes nothing else DMM reads had.
  *
  * `AIOSTREAMS_URL` is the configuration's addon base,
- * `https://<instance>/stremio/<uuid>/<encrypted password>`. The configuration
+ * `http(s)://<instance>/stremio/<uuid>/<encrypted password>`. The configuration
  * names each stream after its preset (`name` = `{addon.presetId}`) and puts
  * the torrent's folder name, then the file name, in `description`; that is the
  * wire format read here. Its debrid key is a TorBox trial account's and is only
@@ -19,7 +19,8 @@ export function aioStreamsBase(): string | null {
 	const raw = process.env.AIOSTREAMS_URL?.trim();
 	if (!raw) return null;
 	const base = raw.replace(/\/manifest\.json\/?$/i, '').replace(/\/+$/, '');
-	return base.startsWith('https://') ? base : null;
+	// http is for an instance on the tailnet, which is where DMM's own runs.
+	return /^https?:\/\//.test(base) ? base : null;
 }
 
 /**

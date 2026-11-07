@@ -81,8 +81,13 @@ describe('aioStreamsBase', () => {
 		expect(aioStreamsBase()).toBe('https://aio.example/stremio/u/p');
 	});
 
-	it('refuses plain http', () => {
-		vi.stubEnv('AIOSTREAMS_URL', 'http://aio.example/stremio/u/p');
+	it('takes an http address, for an instance on the tailnet', () => {
+		vi.stubEnv('AIOSTREAMS_URL', 'http://100.90.231.66:3310/stremio/u/p');
+		expect(aioStreamsBase()).toBe('http://100.90.231.66:3310/stremio/u/p');
+	});
+
+	it('refuses anything that is not a web address', () => {
+		vi.stubEnv('AIOSTREAMS_URL', 'aio.example/stremio/u/p');
 		expect(aioStreamsBase()).toBeNull();
 	});
 });

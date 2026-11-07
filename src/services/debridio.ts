@@ -238,6 +238,7 @@ export async function scrapeStremioSeason(
 	// limit; a chunk's failures cost their own requests only, the healthy
 	// episodes still land.
 	const payloads: unknown[] = [];
+	let lastFailure: unknown;
 	for (let start = 0; start < list.length; start += EPISODE_CONCURRENCY) {
 		const chunk = list.slice(start, start + EPISODE_CONCURRENCY);
 		const settled = await Promise.allSettled(
@@ -247,6 +248,7 @@ export async function scrapeStremioSeason(
 		);
 		for (const result of settled) {
 			if (result.status === 'fulfilled') payloads.push(result.value);
+			else lastFailure = result.reason;
 		}
 		if (start + EPISODE_CONCURRENCY < list.length) {
 			const { promise, resolve } = Promise.withResolvers<void>();
@@ -255,7 +257,9 @@ export async function scrapeStremioSeason(
 		}
 	}
 	if (payloads.length === 0) {
-		throw new Error(`all ${new URL(base).host} episode requests failed`);
+		// Carries the last reason (`... responded 429`) so a caller can tell a refusal.
+		const reason = lastFailure instanceof Error ? `: ${lastFailure.message}` : '';
+		throw new Error(`all ${new URL(base).host} episode requests failed${reason}`);
 	}
 	return parse(payloads);
 }
