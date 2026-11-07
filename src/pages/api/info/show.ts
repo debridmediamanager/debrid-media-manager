@@ -173,6 +173,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			season_episode_counts: merged.season_episode_counts,
 			trailer,
 			status: merged.status,
+			// ISO codes, e.g. ["US"] for The Office: Easynews keeps The.Office.PL off its page.
+			origin_country: Array.isArray(tmdbData?.origin_country)
+				? (tmdbData.origin_country as string[])
+				: undefined,
 			next_episode_to_air: merged.next_episode_to_air,
 			last_episode_to_air: merged.last_episode_to_air,
 			// Set when the id is an episode's; the season page moves to the series.

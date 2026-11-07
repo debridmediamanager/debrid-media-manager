@@ -1,5 +1,6 @@
 import {
 	EasynewsAuthError,
+	EasynewsGoneError,
 	isEasynewsPath,
 	readCredentials,
 	resolveEasynewsLink,
@@ -42,6 +43,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	} catch (error) {
 		if (error instanceof EasynewsAuthError) {
 			return res.status(401).json({ error: error.message });
+		}
+		if (error instanceof EasynewsGoneError) {
+			return res.status(410).json({ error: error.message });
 		}
 		console.error('Easynews link failed:', error);
 		return res.status(502).json({ error: 'Easynews did not hand out a link' });

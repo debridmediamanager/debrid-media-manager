@@ -14,6 +14,10 @@ const SEARCH_URL = `${EASYNEWS_BASE}/2.0/search/solr-search/`;
 // 443; read downURL/dlFarm/dlPort from the response if that ever varies.
 const DOWNLOAD_BASE = `${EASYNEWS_BASE}/dl/auto/443/`;
 const TIMEOUT_MS = 20_000;
+// Easynews' largest page (pby 5000 still answered 1,000 rows, 2026-11-07). Five pages
+// cover The Office S02's 2,454 hits; past that a title's own name is too common to help.
+const PAGE_SIZE = 1000;
+const MAX_PAGES = 5;
 // A 126 GB remux's NZB measured 16.8 MB (2026-11-07), past what 20 s always fetches.
 const NZB_TIMEOUT_MS = 60_000;
 /** The opaque-id prefix NZBs fetched from Easynews are stored and served under. */
@@ -37,6 +41,8 @@ export interface EasynewsTarget {
 	title: string;
 	year?: string;
 	seasonNum?: number;
+	/** A show's TMDB origin countries (ISO codes), so The.Office.PL stays off The Office (US). */
+	countries?: string[];
 }
 
 /** The caller's own Easynews login, from a POST body so it stays out of URLs and access logs. */
@@ -66,7 +72,10 @@ interface EasynewsRow {
 	virus?: boolean;
 }
 
-export function searchQuery({ title, year, seasonNum }: EasynewsTarget): string {
+export function searchQuery({ title: rawTitle, year, seasonNum }: EasynewsTarget): string {
+	// ":" gets an empty 200 body, "?" no hits and "!" unrelated ones (2026-11-07);
+	// matchesTarget ignores punctuation, so nothing is lost by dropping them.
+	const title = rawTitle.replace(/[:?!]/g, ' ').replace(/\s+/g, ' ').trim();
 	if (seasonNum !== undefined) return `${title} S${String(seasonNum).padStart(2, '0')}`;
 	return year ? `${title} ${year}` : title;
 }
@@ -87,7 +96,10 @@ const words = (s: string) =>
  * Samples are dropped by name: most run 60-70 s, past any runtime cut that keeps
  * short episodes (all of GoT S03 on 2026-10-25 was such samples).
  */
-export function matchesTarget(name: string, { title, year, seasonNum }: EasynewsTarget): boolean {
+export function matchesTarget(
+	name: string,
+	{ title, year, seasonNum, countries }: EasynewsTarget
+): boolean {
 	const n = words(name);
 	const t = words(title);
 	if (!t || !(n === t || n.startsWith(`${t} `))) return false;
@@ -95,8 +107,16 @@ export function matchesTarget(name: string, { title, year, seasonNum }: Easynews
 	if (/\bsample\b/.test(rest)) return false;
 	// Straight after the title, or "Cocaine.Bear.The.True.Story.2023" passes for the film.
 	// A show may carry its year or country first: Severance.2022.S02E01, The.Office.US.S02E01.
+	// Another country's tag is another show (The.Office.PL), so once the show's own are
+	// known only those pass; releases write GB as UK.
 	if (seasonNum !== undefined) {
-		return new RegExp(`^(?: (?:\\d{4}|[a-z]{2}))? s0*${seasonNum}e\\d+`).test(rest);
+		const m = new RegExp(`^(?: (\\d{4}|[a-z]{2}))? s0*${seasonNum}e\\d+`).exec(rest);
+		const tag = m?.[1];
+		if (!m || !tag || /^\d/.test(tag) || !countries?.length) return !!m;
+		return countries.some((c) => {
+			const code = c.toLowerCase();
+			return tag === code || (code === 'gb' && tag === 'uk');
+		});
 	}
 	return !year || new RegExp(`^ ${year}\\b`).test(rest);
 }
@@ -123,6 +143,13 @@ export function toResults(rows: EasynewsRow[], target: EasynewsTarget): Easynews
 	return results;
 }
 
+export class EasynewsGoneError extends Error {
+	constructor() {
+		super('this file is no longer available');
+		this.name = 'EasynewsGoneError';
+	}
+}
+
 export class EasynewsNzbError extends Error {
 	constructor(message: string) {
 		super(message);
@@ -140,8 +167,7 @@ export async function searchEasynews(
 	const params = new URLSearchParams({
 		gps: searchQuery(target),
 		'fty[]': 'VIDEO',
-		pno: '1',
-		pby: '250',
+		pby: String(PAGE_SIZE),
 		s1: 'dsize',
 		s1d: '-',
 		u: '1',
@@ -153,14 +179,28 @@ export async function searchEasynews(
 		chxu: '1',
 		chxgx: '1',
 	});
-	const response = await fetch(`${SEARCH_URL}?${params}`, {
-		headers: { Authorization: authHeader(credentials) },
-		signal: AbortSignal.timeout(TIMEOUT_MS),
-	});
-	if (response.status === 401 || response.status === 403) throw new EasynewsAuthError();
-	if (!response.ok) throw new Error(`Easynews search failed: HTTP ${response.status}`);
-	const body = await response.json();
-	return toResults(Array.isArray(body?.data) ? body.data : [], target);
+	const rows: EasynewsRow[] = [];
+	// One page at a time: an account has two search slots.
+	for (let pno = 1; pno <= MAX_PAGES; pno++) {
+		params.set('pno', String(pno));
+		let body;
+		try {
+			const response = await fetch(`${SEARCH_URL}?${params}`, {
+				headers: { Authorization: authHeader(credentials) },
+				signal: AbortSignal.timeout(TIMEOUT_MS),
+			});
+			if (response.status === 401 || response.status === 403) throw new EasynewsAuthError();
+			if (!response.ok) throw new Error(`Easynews search failed: HTTP ${response.status}`);
+			body = await response.json();
+		} catch (error) {
+			// A later page failing still leaves the larger files already read.
+			if (pno === 1 || error instanceof EasynewsAuthError) throw error;
+			break;
+		}
+		if (Array.isArray(body?.data)) rows.push(...body.data);
+		if (!(Number(body?.numPages) > pno)) break;
+	}
+	return toResults(rows, target);
 }
 
 /**
@@ -206,6 +246,14 @@ export async function resolveEasynewsLink(
 	if (url.protocol !== 'https:' || !/(^|\.)easynews\.com$/i.test(url.hostname)) {
 		throw new Error('Easynews redirected outside easynews.com');
 	}
+	// Easynews still lists some files it can no longer serve, and their signed link
+	// answers 404 (2026-11-07). One byte tells, before a player gets a 404 page.
+	const probe = await fetch(url.toString(), {
+		headers: { Range: 'bytes=0-0' },
+		signal: AbortSignal.timeout(TIMEOUT_MS),
+	});
+	await probe.body?.cancel();
+	if (probe.status === 404 || probe.status === 410) throw new EasynewsGoneError();
 	return url.toString();
 }
 

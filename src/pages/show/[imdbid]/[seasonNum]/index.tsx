@@ -236,6 +236,7 @@ type ShowInfo = {
 	status?: string;
 	next_episode_to_air?: EpisodeAirInfo;
 	last_episode_to_air?: EpisodeAirInfo;
+	origin_country?: string[];
 	series_imdbid?: string;
 	/** Set when the id is a film's. */
 	is_movie?: boolean;
@@ -2233,6 +2234,7 @@ const TvSearch: FunctionComponent = () => {
 						imdbId={imdbId}
 						kind="show"
 						seasonNum={selectedSeason}
+						countries={showInfo.origin_country}
 						rowFilter={usenetRowFilter}
 					/>
 				</>

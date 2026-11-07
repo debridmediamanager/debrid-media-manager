@@ -1,6 +1,7 @@
 import {
 	checkEasynewsLogin,
 	EasynewsAuthError,
+	EasynewsGoneError,
 	EasynewsNzbError,
 	fetchEasynewsNzb,
 	isEasynewsPath,
@@ -14,6 +15,7 @@ import {
 import bear from '@/test/fixtures/easynews/search-cocaine-bear-2023-2026-10-25.json';
 import got from '@/test/fixtures/easynews/search-game-of-thrones-s03-2026-10-25.json';
 import severance from '@/test/fixtures/easynews/search-severance-s02-2026-10-25.json';
+import office from '@/test/fixtures/easynews/search-the-office-s02-pby1000-2026-11-07.json';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -21,6 +23,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 // Recorded from members.easynews.com on 2026-10-25 and trimmed to the fields DMM
 // reads; tokens, signatures and posters were dropped.
 const credentials = { username: 'user', password: 'pass' };
+const gone = readFileSync(
+	path.resolve(
+		__dirname,
+		'../test/fixtures/easynews/dl-gone-severance-s02e01-neurosis-2026-11-07.html'
+	),
+	'utf8'
+);
 
 afterEach(() => {
 	vi.unstubAllGlobals();
@@ -30,6 +39,20 @@ describe('searchQuery', () => {
 	it('adds the year to a film and the season to a show', () => {
 		expect(searchQuery({ title: 'Cocaine Bear', year: '2023' })).toBe('Cocaine Bear 2023');
 		expect(searchQuery({ title: 'Severance', seasonNum: 2 })).toBe('Severance S02');
+	});
+
+	// Measured 2026-11-07: ":" gets an empty 200 body, "?" no hits, "!" hundreds of
+	// unrelated ones. "·" and "-" search fine, and WALL·E finds more with its dot.
+	it('drops the punctuation Easynews cannot search', () => {
+		expect(searchQuery({ title: 'Dune: Part Two', year: '2024' })).toBe('Dune Part Two 2024');
+		expect(searchQuery({ title: 'Who Framed Roger Rabbit?', year: '1988' })).toBe(
+			'Who Framed Roger Rabbit 1988'
+		);
+		expect(searchQuery({ title: 'Star Wars: Andor', seasonNum: 1 })).toBe(
+			'Star Wars Andor S01'
+		);
+		expect(searchQuery({ title: 'WALL·E', year: '2008' })).toBe('WALL·E 2008');
+		expect(searchQuery({ title: 'Spider-Man', year: '2002' })).toBe('Spider-Man 2002');
 	});
 });
 
@@ -94,6 +117,19 @@ describe('matchesTarget', () => {
 		expect(
 			matchesTarget('The.Office.US.S02E01.1080p', { title: 'The Office', seasonNum: 2 })
 		).toBe(true);
+	});
+
+	it("takes only the show's own country once it is known", () => {
+		const us = { title: 'The Office', seasonNum: 2, countries: ['US'] };
+		expect(matchesTarget('The.Office.US.S02E01.1080p', us)).toBe(true);
+		expect(matchesTarget('The.Office.S02E01.1080p', us)).toBe(true);
+		expect(matchesTarget('The.Office.PL.S02E01.POLISH.HLG.2160p.WEB.H265-FLAME', us)).toBe(
+			false
+		);
+		// Releases say UK where TMDB says GB.
+		const gb = { title: 'The Office', seasonNum: 2, countries: ['GB'] };
+		expect(matchesTarget('The.Office.UK.S02E01.1080p', gb)).toBe(true);
+		expect(matchesTarget('The.Office.US.S02E01.1080p', gb)).toBe(false);
 	});
 });
 
@@ -177,6 +213,45 @@ describe('searchEasynews', () => {
 		expect(results).toHaveLength(96);
 	});
 
+	// The Office S02 on 2026-11-07: 2,454 hits over three pages of 1,000. The first
+	// 250 by size were all 2.2 GB and up, so the WEB-DLs never showed.
+	it('reads every page, not only the largest files', async () => {
+		const fetchMock = vi.fn(async (url: string) => {
+			const pno = Number(new URL(url).searchParams.get('pno'));
+			return new Response(JSON.stringify(office.pages[pno - 1]));
+		});
+		vi.stubGlobal('fetch', fetchMock);
+
+		const results = await searchEasynews(credentials, {
+			title: 'The Office',
+			seasonNum: 2,
+			countries: ['US'],
+		});
+
+		expect(fetchMock).toHaveBeenCalledTimes(3);
+		const params = fetchMock.mock.calls.map(([url]) => new URL(url).searchParams);
+		expect(params.map((p) => p.get('pno'))).toEqual(['1', '2', '3']);
+		expect(params.every((p) => p.get('pby') === '1000')).toBe(true);
+		const titles = results.map((r) => r.title);
+		expect(titles).toContain('The.Office.US.S02E18.1080p.WEB-DL.DD5.1.H.264-XEON');
+		expect(titles.some((t) => t.startsWith('The.Office.PL.'))).toBe(false);
+		expect(Math.min(...results.map((r) => r.size))).toBeLessThan(500 * 2 ** 20);
+	});
+
+	it('keeps the pages it has when a later one fails', async () => {
+		const fetchMock = vi.fn(async (url: string) => {
+			const pno = Number(new URL(url).searchParams.get('pno'));
+			return pno === 1
+				? new Response(JSON.stringify(office.pages[0]))
+				: new Response('', { status: 503 });
+		});
+		vi.stubGlobal('fetch', fetchMock);
+
+		const results = await searchEasynews(credentials, { title: 'The Office', seasonNum: 2 });
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+		expect(results.length).toBeGreaterThan(0);
+	});
+
 	it('tells a refused login apart from an outage', async () => {
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 401 })));
 		await expect(searchEasynews(credentials, { title: 'X' })).rejects.toBeInstanceOf(
@@ -226,6 +301,27 @@ describe('resolveEasynewsLink', () => {
 		await expect(resolveEasynewsLink(credentials, path)).rejects.toBeInstanceOf(
 			EasynewsAuthError
 		);
+	});
+
+	// Severance.S02E01.iTALiAN.1080p.WEB.H264-NEUROSiS on 2026-11-07: still in the
+	// search, but its signed link answered this 404 every time.
+	it('says a listed file Easynews can no longer serve is gone', async () => {
+		const signed = 'https://ams-dl-01.easynews.com:443/dl/TOKEN/Cocaine.Bear.2023.mkv';
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce(
+				new Response(null, { status: 302, headers: { Location: signed } })
+			)
+			.mockResolvedValueOnce(new Response(gone, { status: 404 }));
+		vi.stubGlobal('fetch', fetchMock);
+
+		await expect(resolveEasynewsLink(credentials, path)).rejects.toBeInstanceOf(
+			EasynewsGoneError
+		);
+		expect(fetchMock.mock.calls[1][0]).toBe(
+			'https://ams-dl-01.easynews.com/dl/TOKEN/Cocaine.Bear.2023.mkv'
+		);
+		expect(fetchMock.mock.calls[1][1].headers.Range).toBe('bytes=0-0');
 	});
 });
 

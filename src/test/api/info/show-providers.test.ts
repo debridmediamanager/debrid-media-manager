@@ -127,6 +127,8 @@ describe('/api/info/show across all six providers', () => {
 		expect(info.season_names).toHaveLength(17);
 		expect(info.season_episode_counts[17]).toBe(10);
 		expect(info.status).toBe('Returning Series');
+		// Passed on for Easynews, where a two-letter tag after the title names a country.
+		expect(info.origin_country).toEqual(['GB']);
 		expect(info.next_episode_to_air).toEqual({
 			first_aired: '2026-09-29T19:00:00+00:00',
 			season_number: 17,

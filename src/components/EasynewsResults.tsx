@@ -20,6 +20,8 @@ type EasynewsResultsProps = {
 	year?: string;
 	/** Present for a show season, absent for a movie. */
 	seasonNum?: number;
+	/** A show's origin countries, so another country's version (The.Office.PL) stays off. */
+	countries?: string[];
 	/** Keeps only the rows whose title passes, e.g. the season page's episode chip. */
 	rowFilter?: (title: string) => boolean;
 };
@@ -58,6 +60,7 @@ const EasynewsResults = ({
 	kind,
 	year,
 	seasonNum,
+	countries,
 	rowFilter,
 }: EasynewsResultsProps) => {
 	const { isSponsor } = useSponsor();
@@ -86,6 +89,7 @@ const EasynewsResults = ({
 						title,
 						year,
 						seasonNum,
+						countries,
 					}
 				);
 				setResults(Array.isArray(data?.results) ? data.results : []);
@@ -96,13 +100,13 @@ const EasynewsResults = ({
 				setIsLoading(false);
 			}
 		},
-		[title, year, seasonNum]
+		[title, year, seasonNum, countries]
 	);
 
 	useEffect(() => {
 		if (account) search(account);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [account?.username, account?.password, title, year, seasonNum]);
+	}, [account?.username, account?.password, title, year, seasonNum, countries?.join()]);
 
 	// Once per section, as WantedButton does: which rows are pinned already.
 	useEffect(() => {

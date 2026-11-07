@@ -4,6 +4,7 @@ import searchHandler from '@/pages/api/easynews/search';
 import {
 	checkEasynewsLogin,
 	EasynewsAuthError,
+	EasynewsGoneError,
 	resolveEasynewsLink,
 	searchEasynews,
 } from '@/services/easynews';
@@ -62,6 +63,26 @@ describe('POST /api/easynews/search', () => {
 		expect(mockSearch).toHaveBeenCalledWith(login, { title: 'Severance', seasonNum: 2 });
 	});
 
+	it("passes a show's origin countries and refuses anything else", async () => {
+		mockSearch.mockResolvedValue([]);
+		await run(searchHandler, {
+			...login,
+			title: 'The Office',
+			seasonNum: 2,
+			countries: ['US'],
+		});
+		expect(mockSearch).toHaveBeenCalledWith(login, {
+			title: 'The Office',
+			seasonNum: 2,
+			countries: ['US'],
+		});
+		for (const countries of ['US', ['USA'], [1], Array(11).fill('US')]) {
+			const res = await run(searchHandler, { ...login, title: 'X', countries });
+			expect(res.status).toHaveBeenCalledWith(400);
+		}
+		expect(mockSearch).toHaveBeenCalledTimes(1);
+	});
+
 	it('refuses a GET, a missing login and a missing title', async () => {
 		expect((await run(searchHandler, {}, 'GET')).status).toHaveBeenCalledWith(405);
 		expect((await run(searchHandler, { title: 'X' })).status).toHaveBeenCalledWith(400);
@@ -115,6 +136,13 @@ describe('POST /api/easynews/link', () => {
 	it('says 401 when Easynews refuses the login', async () => {
 		mockLink.mockRejectedValue(new EasynewsAuthError());
 		expect((await run(linkHandler, { ...login, path: PATH })).status).toHaveBeenCalledWith(401);
+	});
+
+	it('says 410 with a plain reason when Easynews no longer has the file', async () => {
+		mockLink.mockRejectedValue(new EasynewsGoneError());
+		const res = await run(linkHandler, { ...login, path: PATH });
+		expect(res.status).toHaveBeenCalledWith(410);
+		expect(res._getData()).toEqual({ error: 'this file is no longer available' });
 	});
 });
 

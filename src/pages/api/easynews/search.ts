@@ -20,7 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'Easynews username and password are required' });
 	}
 
-	const { title, year, seasonNum } = req.body ?? {};
+	const { title, year, seasonNum, countries } = req.body ?? {};
 	if (typeof title !== 'string' || !title.trim()) {
 		return res.status(400).json({ error: 'title is required' });
 	}
@@ -34,6 +34,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ error: 'seasonNum must be a non-negative integer' });
 		}
 		target.seasonNum = seasonNum;
+	}
+	if (countries !== undefined && countries !== null) {
+		if (
+			!Array.isArray(countries) ||
+			countries.length > 10 ||
+			!countries.every((c) => typeof c === 'string' && /^[A-Za-z]{2}$/.test(c))
+		) {
+			return res.status(400).json({ error: 'countries must be two-letter country codes' });
+		}
+		target.countries = countries;
 	}
 
 	try {

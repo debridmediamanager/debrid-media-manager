@@ -112,6 +112,7 @@ describe('EasynewsResults', () => {
 				imdbId="tt11280740"
 				kind="show"
 				seasonNum={2}
+				countries={['US']}
 				rowFilter={(title) => title.includes('720p')}
 			/>
 		);
@@ -119,7 +120,11 @@ describe('EasynewsResults', () => {
 		expect(await screen.findByText('Cocaine.Bear.2023.720p')).toBeInTheDocument();
 		expect(screen.queryByText('Cocaine.Bear.2023.2160p')).not.toBeInTheDocument();
 		expect(screen.getByText('(1 of 2)')).toBeInTheDocument();
-		expect(bodyOf(fetchMock.mock.calls[0])).toMatchObject({ title: 'Severance', seasonNum: 2 });
+		expect(bodyOf(fetchMock.mock.calls[0])).toMatchObject({
+			title: 'Severance',
+			seasonNum: 2,
+			countries: ['US'],
+		});
 	});
 
 	it('waits for a real season number', () => {
