@@ -61,4 +61,14 @@ describe('EasynewsAccountPanel', () => {
 		expect(localStorage.getItem('en:account')).toBeNull();
 		expect(screen.getByLabelText('Easynews username')).toBeInTheDocument();
 	});
+
+	it('shows Send to zurg unless it is switched off under the login', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		render(<EasynewsAccountPanel />);
+		const box = screen.getByRole('checkbox', { name: 'Show Send to zurg on Easynews results' });
+		expect(box).toBeChecked();
+		await userEvent.click(box);
+		expect(localStorage.getItem('en:sendToZurg')).toBe('false');
+		expect(box).not.toBeChecked();
+	});
 });

@@ -251,5 +251,23 @@ describe('EasynewsResults', () => {
 			expect(await screen.findByRole('button', { name: 'zurg took it' })).toBeDisabled();
 			expect(screen.getByRole('button', { name: 'Send to zurg' })).toBeEnabled();
 		});
+
+		it('puts Download back as the main button when Send to zurg is switched off', async () => {
+			localStorage.setItem('en:sendToZurg', 'false');
+			mockSponsorApi([]);
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			await screen.findByText('Cocaine.Bear.2023.2160p');
+			expect(screen.queryByRole('button', { name: 'Send to zurg' })).toBeNull();
+			expect(
+				screen.getAllByRole('button', { name: /^Download .* from Easynews$/ })[0]
+			).toHaveTextContent('Download');
+		});
 	});
 });

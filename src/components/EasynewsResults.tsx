@@ -61,6 +61,9 @@ const EasynewsResults = ({
 	const [wanted, setWanted] = useState<WantedItemResponse | null>(null);
 	const [sending, setSending] = useState<string | null>(null);
 	const [account] = useLocalStorage<EasynewsCredentials>('en:account');
+	// Settings' "Show Send to zurg" box: on unless switched off, and off puts Download back as the main button.
+	const [sendToZurg] = useLocalStorage<boolean>('en:sendToZurg');
+	const showSend = sendToZurg !== false;
 	const [results, setResults] = useState<EasynewsResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -231,7 +234,7 @@ const EasynewsResults = ({
 				const taken = sent && kind === 'movie' && !!wanted?.fulfilledAt;
 				return (
 					<>
-						{isSponsor ? (
+						{!showSend ? null : isSponsor ? (
 							<button
 								type="button"
 								onClick={() => send(result)}
@@ -266,13 +269,14 @@ const EasynewsResults = ({
 							disabled={linking !== null}
 							title="Download from Easynews"
 							aria-label={`Download ${result.title} from Easynews`}
-							className={ICON_BUTTON}
+							className={showSend ? ICON_BUTTON : MAIN_BUTTON}
 						>
 							{linking === result.path ? (
 								<Loader2 className="h-3.5 w-3.5 animate-spin" />
 							) : (
 								<Download className="h-3.5 w-3.5" />
 							)}
+							{!showSend && 'Download'}
 						</button>
 						{/* For a player such as VLC, which streams it as it downloads. */}
 						<button

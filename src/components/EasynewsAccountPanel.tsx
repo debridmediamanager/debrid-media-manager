@@ -7,6 +7,7 @@ import { useState } from 'react';
 // forbids sharing an account, so DMM has none of its own (see services/easynews).
 export const EasynewsAccountPanel = () => {
 	const [account, setAccount] = useLocalStorage<EasynewsCredentials>('en:account');
+	const [sendToZurg, setSendToZurg] = useLocalStorage<boolean>('en:sendToZurg');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [checking, setChecking] = useState(false);
@@ -33,18 +34,29 @@ export const EasynewsAccountPanel = () => {
 		<div className="rounded border-2 border-gray-500/30 p-4">
 			<div className="mb-2 text-sm font-semibold text-gray-100">Easynews</div>
 			{account ? (
-				<div className="flex items-center justify-between gap-2">
-					<span className="text-gray-300">
-						Signed in as <span className="font-semibold">{account.username}</span>
-					</span>
-					<button
-						type="button"
-						onClick={() => setAccount(null)}
-						className="haptic rounded border border-gray-500 px-2 py-1 text-xs text-gray-100 hover:bg-gray-700/50"
-					>
-						Sign out
-					</button>
-				</div>
+				<>
+					<div className="flex items-center justify-between gap-2">
+						<span className="text-gray-300">
+							Signed in as <span className="font-semibold">{account.username}</span>
+						</span>
+						<button
+							type="button"
+							onClick={() => setAccount(null)}
+							className="haptic rounded border border-gray-500 px-2 py-1 text-xs text-gray-100 hover:bg-gray-700/50"
+						>
+							Sign out
+						</button>
+					</div>
+					{/* Off puts Download back as the main button on Easynews rows. */}
+					<label className="mt-2 flex items-center gap-2 text-xs text-gray-300">
+						<input
+							type="checkbox"
+							checked={sendToZurg !== false}
+							onChange={(e) => setSendToZurg(e.target.checked)}
+						/>
+						Show Send to zurg on Easynews results
+					</label>
+				</>
 			) : (
 				<form onSubmit={signIn} className="flex flex-col gap-2">
 					<p className="text-xs text-gray-400">
