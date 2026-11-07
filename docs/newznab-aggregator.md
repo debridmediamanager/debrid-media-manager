@@ -250,7 +250,12 @@ before, and the stale fallback is unchanged.
    serves), serve.
 6. Response: `Content-Type: application/x-nzb`, RFC-5987 dual-filename
    `Content-Disposition`, and `X-Nzb-Removed` describing what sanitization stripped
-   (`-` on a store hit). Grab failures answer error 300 with a generic description —
+   (`-` on a store hit). When the release has other postings, the served NZB carries
+   `<meta type="x-dmm-alternates">token1,token2</meta>` in its `<head>` (one is made
+   when absent): their grab tokens, never qualified ids, dead ones last, for nzb2rd's
+   SABnzbd `addfile` to fetch in turn through `/api/nzb2rd/download`, which takes a
+   token as its `id`. It is added after sanitizing and never stored; a sanitize pass
+   drops it. Grab failures answer error 300 with a generic description —
    the underlying error names the upstream, which is exactly what this endpoint
    withholds; the real message is logged server-side.
 

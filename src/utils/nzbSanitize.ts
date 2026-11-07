@@ -391,6 +391,20 @@ function describeStripped(
  * Server code calls `sanitizeNzbAsync` instead: this runs in one go, and a
  * 70 MB NZB takes over a second, which is a second no other request is served.
  */
+/**
+ * A sanitized NZB with `<meta type="x-dmm-alternates">` in its `<head>` (one is
+ * made after `<nzb …>` when there is none), naming the release's other postings
+ * for nzb2rd to fetch in turn when this one's articles are gone. Added on the way
+ * out and never stored: a pass through `sanitizeNzb` drops it again, like every
+ * meta outside its whitelist.
+ */
+export function withAlternatesMeta(xml: string, alternates: string[]): string {
+	if (alternates.length === 0) return xml;
+	const meta = `<meta type="x-dmm-alternates">${escapeText(alternates.join(','))}</meta>`;
+	if (/<\/head>/i.test(xml)) return xml.replace(/<\/head>/i, `\t${meta}\n\t</head>`);
+	return xml.replace(/<nzb\b[^>]*>/i, (open) => `${open}\n\t<head>\n\t\t${meta}\n\t</head>`);
+}
+
 export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): SanitizedNzb {
 	const steps = sanitizeSteps(xml, options);
 	let step = steps.next();

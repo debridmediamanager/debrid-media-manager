@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import path from 'path';
 import { describe, expect, it } from 'vitest';
 import {
 	FALLBACK_GROUP,
@@ -6,6 +8,7 @@ import {
 	sanitizeNzb,
 	sanitizeNzbAsync,
 	SMALL_FILE_THRESHOLD,
+	withAlternatesMeta,
 } from './nzbSanitize';
 
 /**
@@ -620,5 +623,63 @@ describe('sanitizeNzbAsync', () => {
 
 	it('rejects what the synchronous pass rejects', async () => {
 		await expect(sanitizeNzbAsync('<nzb></nzb>')).rejects.toBeInstanceOf(NzbSanitizeError);
+	});
+});
+
+// The other postings of a release ride out to nzb2rd's SABnzbd `addfile` inside
+// the NZB itself. They are added after sanitizing, so the store never holds them.
+describe('withAlternatesMeta', () => {
+	const ALTERNATES = [
+		'ah:b12393c9fe8c7f1b109fa030215a5ca2',
+		'ds:8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1',
+	];
+	/** A real Easynews dl-nzb answer, cut down: no `<head>` at all. */
+	const EASYNEWS = readFileSync(
+		path.resolve(
+			__dirname,
+			'../test/fixtures/easynews/dl-nzb-oppenheimer-2023-head-2026-11-07.nzb'
+		),
+		'latin1'
+	);
+
+	const parse = (xml: string) => new DOMParser().parseFromString(xml, 'application/xml');
+
+	it.each([
+		['adds a <head> after <nzb> when the NZB has none', EASYNEWS],
+		['adds the meta to the <head> the NZB has', GEEK_A],
+	])('%s, and the result still parses and cleans back', (_label, source) => {
+		const cleaned = sanitizeNzb(source).xml;
+
+		const served = withAlternatesMeta(cleaned, ALTERNATES);
+
+		const doc = parse(served);
+		expect(doc.getElementsByTagName('parsererror')).toHaveLength(0);
+		const head = doc.documentElement.firstElementChild!;
+		expect(head.tagName).toBe('head');
+		const meta = [...head.getElementsByTagName('meta')].find(
+			(element) => element.getAttribute('type') === 'x-dmm-alternates'
+		);
+		expect(meta?.textContent).toBe(ALTERNATES.join(','));
+		// The files are untouched, so it is the same download.
+		expect(doc.getElementsByTagName('segment')).toHaveLength(
+			parse(cleaned).getElementsByTagName('segment').length
+		);
+		// A stored copy is always a sanitized one, and that pass drops the meta.
+		expect(sanitizeNzb(served).xml).toBe(cleaned);
+	});
+
+	it('keeps the meta the NZB had', () => {
+		const served = withAlternatesMeta(sanitizeNzb(GEEK_A).xml, ALTERNATES);
+		expect(served).toContain(
+			'\t<head>\n\t\t<meta type="name">Some.Show.S02E10.1080p.WEB.h264-GRP</meta>'
+		);
+		expect(served).toContain(
+			`\t\t<meta type="x-dmm-alternates">${ALTERNATES.join(',')}</meta>\n\t</head>`
+		);
+	});
+
+	it('leaves an NZB with no other postings as it is', () => {
+		const cleaned = sanitizeNzb(GEEK_A).xml;
+		expect(withAlternatesMeta(cleaned, [])).toBe(cleaned);
 	});
 });

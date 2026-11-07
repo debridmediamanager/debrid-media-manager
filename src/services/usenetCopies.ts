@@ -7,6 +7,7 @@
 // keyed by posting id, and anything holding a release id can read it back: the
 // Usenet tab's send, nzb2rd's own fetch of a copy, a Newznab grab.
 
+import { encryptReleaseId } from '@/services/newznab/opaqueId';
 import { parseReleaseId, releaseDedupKey, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 
@@ -88,4 +89,15 @@ export async function orderCopies(id: string): Promise<{ id: string; alternates:
 		...postings.filter(isDead),
 	];
 	return { id: first, alternates };
+}
+
+/**
+ * Postings as Newznab grab tokens, for an NZB an *arr fetched: its download client
+ * may be the user's own SABnzbd, and a qualified id names an upstream DMM uses.
+ * /api/nzb2rd/download takes a token as its `id`.
+ */
+export function asTokens(ids: string[]): string[] {
+	return ids.map((id) =>
+		encryptReleaseId(id.slice(0, id.indexOf(':')), id.slice(id.indexOf(':') + 1))
+	);
 }

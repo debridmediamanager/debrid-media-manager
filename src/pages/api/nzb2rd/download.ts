@@ -1,9 +1,10 @@
-import { fetchNzb } from '@/services/nzb2rd';
+import { decryptReleaseId } from '@/services/newznab/opaqueId';
+import { fetchNzb, qualifyReleaseId } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
-import { orderCopies } from '@/services/usenetCopies';
+import { asTokens, orderCopies } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
-import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
+import { NzbSanitizeError, sanitizeNzbAsync, withAlternatesMeta } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -31,11 +32,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'id must be an indexer result id' });
 	}
 
+	// A Newznab grab names a release's other postings by token (see asTokens), and
+	// nzb2rd fetches them back here.
+	const token = id.includes(':') ? null : decryptReleaseId(id);
+	const releaseId = token ? qualifyReleaseId(token.prefix, token.nativeId) : id;
+
 	// A posting an earlier nzb2rd job found without its articles is swapped for a
 	// copy not known dead. `id` stays the name the caller knows it by.
-	const copies = await orderCopies(id);
-	if (copies.id !== id)
-		console.log(`NZB download: ${id} is known dead, serving its copy ${copies.id}`);
+	const copies = await orderCopies(releaseId);
+	if (copies.id !== releaseId) {
+		console.log(`NZB download: ${releaseId} is known dead, serving its copy ${copies.id}`);
+	}
 
 	let raw: string;
 	try {
@@ -76,7 +83,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	// The cleaned file is byte-identical for every caller, and each miss spends an
 	// indexer grab from one shared account, so the edge is welcome to serve it.
 	res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-	return res.status(200).send(cleaned.xml);
+	// The other postings, dead ones last, for nzb2rd to fall back to; named the
+	// way this one was asked for.
+	const alternates = token ? asTokens(copies.alternates) : copies.alternates;
+	return res.status(200).send(withAlternatesMeta(cleaned.xml, alternates));
 }
 
 /**

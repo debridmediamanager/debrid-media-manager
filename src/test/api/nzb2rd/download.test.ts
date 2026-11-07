@@ -1,4 +1,5 @@
 import handler from '@/pages/api/nzb2rd/download';
+import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/opaqueId';
 import { fetchNzb } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
@@ -48,6 +49,8 @@ const run = async (query: Record<string, string>, method = 'GET') => {
 beforeEach(() => {
 	vi.clearAllMocks();
 	mockFetchNzb.mockResolvedValue(RAW);
+	vi.mocked(repository).getUsenetCopies = vi.fn().mockResolvedValue([]);
+	vi.mocked(repository).getNzb2rdTransfers = vi.fn().mockResolvedValue([]);
 });
 
 describe('GET /api/nzb2rd/download', () => {
@@ -201,5 +204,44 @@ describe('GET /api/nzb2rd/download of a posting known dead', () => {
 		expect(res._getHeaders()['Content-Disposition']).toContain(
 			'filename="My.Release.1080p.nzb"'
 		);
+		// The rest for nzb2rd to fall back to, the dead one last.
+		expect(res._getData()).toContain('<meta type="x-dmm-alternates">ds:c,ds:abc123</meta>');
+	});
+});
+
+describe('GET /api/nzb2rd/download naming the other postings', () => {
+	const mockRepo = vi.mocked(repository);
+
+	it('lists them in a <head> it adds to the NZB', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:b', 'ds:c']);
+
+		const res = await run({ id: 'ds:abc123', title: 'My.Release.1080p' });
+
+		expect(res._getData()).toMatch(
+			/<nzb [^>]*>\n\t<head>\n\t\t<meta type="x-dmm-alternates">ah:b,ds:c<\/meta>\n\t<\/head>\n\t<file /
+		);
+	});
+
+	it('adds nothing for a release posted once', async () => {
+		const res = await run({ id: 'ds:abc123', title: 'My.Release.1080p' });
+		expect(res._getData()).not.toContain('<head>');
+	});
+
+	// The copies a Newznab grab lists are tokens, and nzb2rd fetches them back here.
+	it('takes a Newznab token, and answers with tokens', async () => {
+		vi.stubEnv('NEWZNAB_TOKEN_SECRET', 'a'.repeat(64));
+		_resetTokenSecretForTest();
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:b']);
+
+		const res = await run({ id: encryptReleaseId('ds', 'abc123'), title: 'My.Release.1080p' });
+
+		expect(mockRepo.getUsenetCopies).toHaveBeenCalledWith('ds:abc123');
+		expect(mockFetchNzb).toHaveBeenCalledWith('ds:abc123');
+		expect(res._getData()).toContain(
+			`<meta type="x-dmm-alternates">${encryptReleaseId('ah', 'b')}</meta>`
+		);
+		expect(res._getData()).not.toContain('ah:b');
+		vi.unstubAllEnvs();
+		_resetTokenSecretForTest();
 	});
 });

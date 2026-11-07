@@ -278,6 +278,9 @@ beforeEach(() => {
 
 	mockGetStored.mockResolvedValue(null);
 	mockPutStored.mockResolvedValue(true);
+	// No release has other postings recorded, and no posting is known dead.
+	mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([]);
+	mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([]);
 
 	nzbBody = RAW_NZB;
 	fetchMock = vi.fn(async (input: unknown) => {
@@ -1013,6 +1016,63 @@ describe('GET /api/newznab/api grab of a posting known dead', () => {
 		await run({ t: 'get', id: encryptReleaseId('ds', 'first-native-id'), apikey: SPONSOR_KEY });
 
 		expect(new URL(fetchedUrls()[0]).searchParams.get('id')).toBe('first-native-id');
+	});
+});
+
+// nzb2rd's SABnzbd addfile reads a release's other postings out of the NZB an
+// *arr hands it. They go in as grab tokens, after sanitizing, never into the store.
+describe('GET /api/newznab/api grab naming the other postings', () => {
+	const META = (tokens: string[]) => `<meta type="x-dmm-alternates">${tokens.join(',')}</meta>`;
+	const COPY_TOKEN = () => encryptReleaseId('ah', 'second-native-id');
+
+	beforeEach(() => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:second-native-id']);
+	});
+
+	it('lists them as tokens in the served NZB and stores it without them', async () => {
+		const res = await run({
+			t: 'get',
+			id: encryptReleaseId('ds', 'first-native-id'),
+			apikey: SPONSOR_KEY,
+		});
+
+		const xml = body(res);
+		expect(xml).toContain(`\t\t${META([COPY_TOKEN()])}\n\t</head>`);
+		// An *arr's download client may be the user's own: no upstream is named.
+		expect(xml).not.toContain('ah:');
+		expect(xml).not.toContain('second-native-id');
+		const [, , stored] = mockPutStored.mock.calls[0];
+		expect(stored).not.toContain('x-dmm-alternates');
+		expect(sanitizeNzb(xml).xml).toBe(stored);
+	});
+
+	it('lists them on a store hit too, and writes nothing back', async () => {
+		mockGetStored.mockResolvedValue(CURRENT_STORED_NZB);
+
+		const res = await run({
+			t: 'get',
+			id: encryptReleaseId('ds', 'first-native-id'),
+			apikey: SPONSOR_KEY,
+		});
+
+		expect(body(res)).toContain(META([COPY_TOKEN()]));
+		expect(mockPutStored).not.toHaveBeenCalled();
+	});
+
+	it('lists the posting asked for last when a copy was served in its place', async () => {
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([
+				{ ...recordedMarkers.markers[2], releaseId: 'ds:first-native-id' },
+			]);
+
+		const res = await run({
+			t: 'get',
+			id: encryptReleaseId('ds', 'first-native-id'),
+			apikey: SPONSOR_KEY,
+		});
+
+		expect(body(res)).toContain(META([encryptReleaseId('ds', 'first-native-id')]));
 	});
 });
 

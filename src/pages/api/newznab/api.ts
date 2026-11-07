@@ -13,9 +13,9 @@ import { fetchNzbFrom, nativeReleaseId, qualifyReleaseId } from '@/services/nzb2
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { isNzbBlocked } from '@/services/takedown/blocklist';
-import { orderCopies } from '@/services/usenetCopies';
+import { asTokens, orderCopies } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
-import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
+import { NzbSanitizeError, sanitizeNzbAsync, withAlternatesMeta } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -59,7 +59,13 @@ function asciiFilename(name: string): string {
 	return name.replace(/[\\"]/g, '').replace(/[^\x20-\x7e]/g, '_');
 }
 
-async function sendNzb(res: NextApiResponse, token: string, xml: string, removed: string) {
+async function sendNzb(
+	res: NextApiResponse,
+	token: string,
+	xml: string,
+	removed: string,
+	alternates: string[]
+) {
 	// A grab token names no release, so a takedown is judged on the file itself.
 	// "No such item" is what an *arr reads as gone, and it moves on.
 	if (await isNzbBlocked(xml)) return sendError(res, 200, 300, 'No such item');
@@ -70,7 +76,7 @@ async function sendNzb(res: NextApiResponse, token: string, xml: string, removed
 		'Content-Disposition',
 		`attachment; filename="${asciiFilename(name)}"; filename*=UTF-8''${encodeURIComponent(name)}`
 	);
-	return res.status(200).send(xml);
+	return res.status(200).send(withAlternatesMeta(xml, alternates));
 }
 
 /** HTTP 429 with a body a Newznab client can actually read. */
@@ -145,6 +151,11 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 		release.prefix = served.slice(0, served.indexOf(':'));
 		release.nativeId = served.slice(served.indexOf(':') + 1);
 	}
+	// The other postings, dead ones last, ride out in the NZB for nzb2rd's
+	// SABnzbd addfile to fall back to. Never in what is stored.
+	const alternates = asTokens(
+		[copies.id, ...copies.alternates].filter((posting) => posting !== served)
+	);
 
 	// The store is where a re-grab of the same release costs nothing: an NZB is
 	// immutable once posted, so only the first fetch spends an upstream call.
@@ -181,7 +192,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 					}
 				);
 			}
-			return sendNzb(res, token, recleaned.xml, recleaned.removed.join('; '));
+			return sendNzb(res, token, recleaned.xml, recleaned.removed.join('; '), alternates);
 		}
 	}
 
@@ -237,7 +248,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 		console.error('Newznab NZB store write failed:', error);
 	});
 
-	return sendNzb(res, token, cleaned.xml, cleaned.removed.join('; '));
+	return sendNzb(res, token, cleaned.xml, cleaned.removed.join('; '), alternates);
 }
 
 /** The same header fold `withRateLimit` applies, for the same proxy chain. */

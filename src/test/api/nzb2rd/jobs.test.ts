@@ -56,6 +56,7 @@ beforeEach(() => {
 	mockRepo.addNzb2rdWaiter = vi.fn().mockResolvedValue(undefined);
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: HASH }]);
 	mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([]);
+	mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([]);
 	mockOwnJobs.mockResolvedValue(new Set());
 	mockFetchNzb.mockResolvedValue('<nzb></nzb>');
 	mockSubmit.mockResolvedValue({ status: 201, data: { id: 'job-1', status: 'pending' } });
