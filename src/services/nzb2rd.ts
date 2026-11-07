@@ -233,6 +233,11 @@ export function nativeReleaseId(guid: unknown): string {
 	const raw = typeof guid === 'string' ? guid : ((guid as { text?: string } | null)?.text ?? '');
 	const query = raw.match(/[?&]guid=([^&#]+)/);
 	if (query) return query[1];
+	// Some indexers send the `t=get` URL itself as the guid, API key and all
+	// (`…/api?t=get&id=177872480&apikey=…`). Its last path segment would carry
+	// the key into a release id, so take `id` out of the query instead.
+	const get = /[?&]t=get(&|$)/.test(raw) ? raw.match(/[?&]id=([^&#]+)/) : null;
+	if (get) return get[1];
 	return raw.split('/').filter(Boolean).pop() ?? '';
 }
 
@@ -299,6 +304,59 @@ export function parseNewznabResponse(body: unknown): UsenetResult[] {
 		const parsed = parseNewznabItem(item);
 		return parsed ? [parsed] : [];
 	});
+}
+
+const XML_ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+
+function xmlText(raw: string): string {
+	const cdata = raw.match(/^\s*<!\[CDATA\[([\s\S]*?)\]\]>\s*$/);
+	if (cdata) return cdata[1];
+	return raw.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, entity: string) => {
+		if (entity[0] === '#') {
+			const code =
+				entity[1].toLowerCase() === 'x'
+					? parseInt(entity.slice(2), 16)
+					: Number(entity.slice(1));
+			return Number.isFinite(code) ? String.fromCodePoint(code) : whole;
+		}
+		return XML_ENTITIES[entity.toLowerCase()] ?? whole;
+	});
+}
+
+function xmlAttributes(tag: string): Record<string, string> {
+	const out: Record<string, string> = {};
+	for (const m of tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+		out[m[1]] = xmlText(m[2] ?? m[3] ?? '');
+	}
+	return out;
+}
+
+/**
+ * A Newznab RSS body, in the shape `parseNewznabResponse` reads from the JSON
+ * dialects (`channel.item[]`, attributes under `@attributes`). For servers that
+ * ignore `o=json`. Only the fields `parseNewznabItem` uses are lifted; anything
+ * that is not an RSS document returns null.
+ */
+export function parseNewznabXml(xml: string): { channel: { item: unknown[] } } | null {
+	if (!/<rss[\s>]|<channel[\s>]/i.test(xml.slice(0, 2000))) return null;
+	const item: unknown[] = [];
+	for (const [, body] of xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)) {
+		const text = (name: string) => {
+			const m = body.match(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'i'));
+			return m ? xmlText(m[1]).trim() : undefined;
+		};
+		const enclosure = body.match(/<enclosure\b([^>]*?)\/?>/i);
+		item.push({
+			title: text('title'),
+			guid: text('guid'),
+			pubDate: text('pubDate'),
+			'newznab:attr': [...body.matchAll(/<newznab:attr\b([^>]*?)\/?>/gi)].map((a) => ({
+				'@attributes': xmlAttributes(a[1]),
+			})),
+			...(enclosure ? { enclosure: { '@attributes': xmlAttributes(enclosure[1]) } } : {}),
+		});
+	}
+	return { channel: { item } };
 }
 
 /**
@@ -421,12 +479,21 @@ async function fetchResults(url: string, indexer: Indexer): Promise<UsenetResult
 	// it actually means, since a wrong key would otherwise present as this
 	// indexer being permanently unreachable.
 	let payload: unknown;
-	try {
-		payload = await response.json();
-	} catch {
-		throw new Error(
-			`${indexer.name} returned a non-JSON body — usually a Newznab <error> envelope, so check its API key`
-		);
+	if (/xml/i.test(response.headers?.get?.('content-type') ?? '')) {
+		// Some servers answer RSS XML whatever `o` says; read that the same way.
+		const body = await response.text();
+		const error = newznabError(body);
+		if (error) throw new Error(`${indexer.name} answered ${error}`);
+		payload = parseNewznabXml(body);
+		if (!payload) throw new Error(`${indexer.name} returned XML that is not a Newznab feed`);
+	} else {
+		try {
+			payload = await response.json();
+		} catch {
+			throw new Error(
+				`${indexer.name} returned a non-JSON body — usually a Newznab <error> envelope, so check its API key`
+			);
+		}
 	}
 
 	// Qualify here: this is the only layer that knows which server answered.

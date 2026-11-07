@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/">
+  <channel>
+    <title>IndexerA</title>
+    <description>IndexerA NZB Search</description>
+    <link>https://indexer-a.example</link>
+    <newznab:response offset="0" total="733"/>
+    <item>
+      <title>Sousou no Frieren S01 [1080p VVC xHE-AAC]</title>
+      <guid isPermaLink="true">https://indexer-a.example/api?t=get&amp;id=177872480&amp;apikey=REDACTED</guid>
+      <link>https://indexer-a.example/api?t=get&amp;id=177872480&amp;apikey=REDACTED</link>
+      <comments>https://indexer-a.example/release/177872480</comments>
+      <pubDate>Tue, 29 Sep 2026 15:17:05 +0000</pubDate>
+      <enclosure url="https://indexer-a.example/api?t=get&amp;id=177872480&amp;apikey=REDACTED" length="6421905316" type="application/x-nzb"/>
+      <newznab:attr name="category" value="5070"/>
+      <newznab:attr name="size" value="6421905316"/>
+      <newznab:attr name="guid" value="177872480"/>
+      <newznab:attr name="grabs" value="14"/>
+      <newznab:attr name="comments" value="0"/>
+      <newznab:attr name="files" value="1"/>
+      <newznab:attr name="nzbname" value="Sousou no Frieren S01 [1080p VVC xHE-AAC].nzb"/>
+      <newznab:attr name="resolution" value="1080p"/>
+      <newznab:attr name="season" value="1"/>
+      <newznab:attr name="tvdbid" value="424536"/>
+      <newznab:attr name="tmdbid" value="209867"/>
+      <newznab:attr name="imdb" value="tt22248376"/>
+    </item>
+    <item>
+      <title>Sousou no Frieren 2nd Season - 10 [1080p CR WEB-DL AVC AAC][MultiSub][5A357DEE]</title>
+      <guid isPermaLink="true">https://indexer-a.example/api?t=get&amp;id=177801089&amp;apikey=REDACTED</guid>
+      <link>https://indexer-a.example/api?t=get&amp;id=177801089&amp;apikey=REDACTED</link>
+      <comments>https://indexer-a.example/release/177801089</comments>
+      <pubDate>Wed, 23 Sep 2026 15:24:23 +0000</pubDate>
+      <enclosure url="https://indexer-a.example/api?t=get&amp;id=177801089&amp;apikey=REDACTED" length="195466777" type="application/x-nzb"/>
+      <newznab:attr name="category" value="5070"/>
+      <newznab:attr name="size" value="195466777"/>
+      <newznab:attr name="guid" value="177801089"/>
+      <newznab:attr name="grabs" value="0"/>
+      <newznab:attr name="comments" value="0"/>
+      <newznab:attr name="files" value="1"/>
+      <newznab:attr name="nzbname" value="Sousou no Frieren 2nd Season - 10 [1080p CR WEB-DL AVC AAC][MultiSub][5A357DEE].nzb"/>
+      <newznab:attr name="resolution" value="1080p"/>
+      <newznab:attr name="source" value="WEB-DL"/>
+      <newznab:attr name="season" value="2"/>
+      <newznab:attr name="episode" value="10"/>
+      <newznab:attr name="tvdbid" value="424536"/>
+      <newznab:attr name="tmdbid" value="209867"/>
+      <newznab:attr name="imdb" value="tt22248376"/>
+    </item>
+    <item>
+      <title>[SubsPlease] Sousou no Frieren - 28v2 (1080p) [E7A09882]</title>
+      <guid isPermaLink="true">https://indexer-a.example/api?t=get&amp;id=177597549&amp;apikey=REDACTED</guid>
+      <link>https://indexer-a.example/api?t=get&amp;id=177597549&amp;apikey=REDACTED</link>
+      <comments>https://indexer-a.example/release/177597549</comments>
+      <pubDate>Mon, 14 Sep 2026 13:15:13 +0000</pubDate>
+      <enclosure url="https://indexer-a.example/api?t=get&amp;id=177597549&amp;apikey=REDACTED" length="1684039891" type="application/x-nzb"/>
+      <newznab:attr name="category" value="5070"/>
+      <newznab:attr name="size" value="1684039891"/>
+      <newznab:attr name="guid" value="177597549"/>
+      <newznab:attr name="grabs" value="2"/>
+      <newznab:attr name="comments" value="0"/>
+      <newznab:attr name="files" value="1"/>
+      <newznab:attr name="nzbname" value="[SubsPlease] Sousou no Frieren - 28v2 (1080p) [E7A09882].nzb"/>
+      <newznab:attr name="resolution" value="1080p"/>
+      <newznab:attr name="season" value="1"/>
+      <newznab:attr name="tvdbid" value="424536"/>
+      <newznab:attr name="tmdbid" value="209867"/>
+      <newznab:attr name="imdb" value="tt22248376"/>
+    </item>
+  </channel>
+</rss>
