@@ -2,6 +2,13 @@ import { DatabaseClient } from './client';
 
 export type TakedownStatus = 'pending' | 'approved' | 'rejected';
 
+/**
+ * `BlockedHash.noticeId` for malware rather than a notice: a torrent that is a
+ * program named as a release. No notice row exists for it, so no review can
+ * unblock it; everything that reads the blocklist hides it like a takedown.
+ */
+export const EXECUTABLE_NOTICE_ID = 'malware:executable';
+
 export type NewTakedownNotice = {
 	claimantName: string;
 	claimantEmail: string;

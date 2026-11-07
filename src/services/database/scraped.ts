@@ -8,6 +8,7 @@ import {
 	sortByFileSize,
 } from '../mediasearch';
 import { DatabaseClient } from './client';
+import { EXECUTABLE_NOTICE_ID } from './takedown';
 
 /**
  * A stored size the library cannot mean, read as unknown. Scrapers have written
@@ -500,6 +501,7 @@ export class ScrapedService extends DatabaseClient {
 		replaceOldScrape: boolean,
 		alongside?: (tx: Prisma.TransactionClient) => Promise<unknown>
 	) {
+		await this.blockExecutables(value);
 		value = await this.withoutFannedOutHashes(usableResults(value));
 		await onePageAtATime(`${table}|${key}`, async () => {
 			for (let attempt = 1; ; attempt++) {
@@ -517,6 +519,32 @@ export class ScrapedService extends DatabaseClient {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Puts an executable's hash on the blocklist. The same hash is filed under
+	 * clean names too (`The Odyssey 2160p HD (2026) ENG WEB  EZTV`), on pages this
+	 * write never sees and by writers that bypass it; the blocklist hides it on all.
+	 */
+	private async blockExecutables(value: ScrapeSearchResult[]) {
+		const hashes = value
+			.filter((r) => isUsableHash(r?.hash) && isExecutable(r.title))
+			.map((r) => r.hash.toLowerCase());
+		if (hashes.length === 0) return;
+		try {
+			await this.prisma.blockedHash.createMany({
+				data: [...new Set(hashes)].map((hash) => ({
+					hash,
+					noticeId: EXECUTABLE_NOTICE_ID,
+				})),
+				skipDuplicates: true,
+			});
+		} catch (error) {
+			console.warn(
+				'Blocking executable hashes failed:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+		}
 	}
 
 	private mergeIntoPage(

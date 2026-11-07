@@ -8,6 +8,7 @@ import {
 	PAGE_SAVE_ATTEMPTS,
 	ScrapedService,
 } from './scraped';
+import { EXECUTABLE_NOTICE_ID } from './takedown';
 
 const prismaMock = vi.hoisted(() => ({
 	scrapedTrue: {
@@ -26,6 +27,9 @@ const prismaMock = vi.hoisted(() => ({
 	},
 	hashPageCount: {
 		findMany: vi.fn(),
+	},
+	blockedHash: {
+		createMany: vi.fn(),
 	},
 	$queryRaw: vi.fn(),
 	$transaction: vi.fn(),
@@ -299,6 +303,27 @@ describe('ScrapedService', () => {
 		storedPage([{ hash: HASH_ONE }]);
 		await service.saveScrapedResults('key', executables as any, true, true);
 		expect(lastWrite().value).toEqual([]);
+	});
+
+	it('blocks the hash of an executable, so its clean-named copies are hidden too', async () => {
+		// the same hashes sat in Scraped as `... EZTV`, `... CAKES`, with no .exe to catch
+		const executables = executableFixture.executables.map(({ page: _page, ...r }) => r);
+		(prismaMock.blockedHash.createMany as Mock).mockResolvedValue({ count: 0 });
+		storedPage(null);
+
+		await service.saveScrapedTrueResults('key', executables as any);
+
+		expect(prismaMock.blockedHash.createMany).toHaveBeenCalledWith({
+			data: executables.map((r) => ({ hash: r.hash, noticeId: EXECUTABLE_NOTICE_ID })),
+			skipDuplicates: true,
+		});
+
+		// recording the block must never cost the page its other releases
+		(prismaMock.blockedHash.createMany as Mock).mockRejectedValue(new Error('db busy'));
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
+		const release = executableFixture.releases.map(({ page: _page, ...r }) => r);
+		await service.saveScrapedTrueResults('key', [...executables, ...release] as any);
+		expect(lastWrite().value).toEqual(release);
 	});
 
 	it('decodes entity-encoded titles on the direct write paths', async () => {
