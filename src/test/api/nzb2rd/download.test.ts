@@ -98,10 +98,14 @@ describe('GET /api/nzb2rd/download', () => {
 		expect(/filename="([^"]*)"/.exec(disposition)?.[1]).not.toMatch(/["\\]/);
 	});
 
-	it('lets the edge cache it, since every caller gets the same bytes', async () => {
+	// For ten minutes: a swap for a copy, or a changed meta, must not be served stale
+	// for an hour.
+	it('lets the edge cache it briefly, since every caller gets the same bytes', async () => {
 		const res = await run({ id: 'ds:abc123' });
 
-		expect(res._getHeaders()['Cache-Control']).toContain('s-maxage=3600');
+		expect(res._getHeaders()['Cache-Control']).toBe(
+			'public, s-maxage=600, stale-while-revalidate=86400'
+		);
 	});
 
 	it('rejects anything that is not an indexer result id', async () => {

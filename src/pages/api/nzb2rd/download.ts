@@ -81,8 +81,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		`attachment; filename="${asciiFilename(name)}"; filename*=UTF-8''${encodeURIComponent(name)}`
 	);
 	// The cleaned file is byte-identical for every caller, and each miss spends an
-	// indexer grab from one shared account, so the edge is welcome to serve it.
-	res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+	// indexer grab from one shared account, so the edge is welcome to serve it; for
+	// ten minutes, so a swap for a copy or a changed meta is not an hour stale.
+	res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=86400');
 	// The posting served and the other postings, dead ones last, for nzb2rd to
 	// fall back to; named the way this one was asked for.
 	const [served, ...alternates] = token
