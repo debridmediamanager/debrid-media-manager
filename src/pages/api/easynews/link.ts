@@ -5,6 +5,7 @@ import {
 	readCredentials,
 	resolveEasynewsLink,
 } from '@/services/easynews';
+import { saveEasynewsNzbInBackground } from '@/services/easynewsNzbLibrary';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { buildPlayerIntent } from '@/utils/intent';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -35,6 +36,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	try {
 		const url = await resolveEasynewsLink(credentials, path);
+		// The row's sig and title: its NZB is kept for the title's Usenet table, after this answer.
+		const { sig, imdbId, kind, size } = req.body ?? {};
+		if (
+			typeof sig === 'string' &&
+			sig &&
+			sig.length <= 512 &&
+			typeof imdbId === 'string' &&
+			/^tt\d{7,}$/.test(imdbId) &&
+			(kind === 'movie' || kind === 'show')
+		) {
+			void saveEasynewsNzbInBackground(credentials, path, sig, { imdbId, kind, size });
+		}
 		res.setHeader('Cache-Control', 'private, no-store');
 		if (!player) return res.status(200).json({ url });
 		const [os, app] = player.split('/');

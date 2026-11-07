@@ -8,6 +8,7 @@ import {
 	resolveEasynewsLink,
 	searchEasynews,
 } from '@/services/easynews';
+import { saveEasynewsNzbInBackground } from '@/services/easynewsNzbLibrary';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -21,7 +22,10 @@ vi.mock('@/services/easynews', async (importOriginal) => {
 	};
 });
 
+vi.mock('@/services/easynewsNzbLibrary', () => ({ saveEasynewsNzbInBackground: vi.fn() }));
+
 const mockSearch = vi.mocked(searchEasynews);
+const mockSave = vi.mocked(saveEasynewsNzbInBackground);
 const mockLink = vi.mocked(resolveEasynewsLink);
 const mockCheck = vi.mocked(checkEasynewsLogin);
 const login = { username: 'user', password: 'pass' };
@@ -125,6 +129,36 @@ describe('POST /api/easynews/link', () => {
 		const bad = await run(linkHandler, { ...login, path: PATH, player: 'vlc://x' });
 		expect(bad.status).toHaveBeenCalledWith(400);
 		expect(mockLink).toHaveBeenCalledTimes(1);
+	});
+
+	it("keeps the clicked row's NZB in the background, without holding the link back", async () => {
+		mockLink.mockResolvedValue('https://ams-dl-01.easynews.com/dl/T/x.mkv');
+		mockSave.mockReturnValue(new Promise(() => {}));
+		const row = { sig: 'S'.repeat(143), size: 5, imdbId: 'tt14209916', kind: 'movie' };
+
+		const res = await run(linkHandler, { ...login, path: PATH, ...row });
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockSave).toHaveBeenCalledWith(login, PATH, row.sig, {
+			imdbId: 'tt14209916',
+			kind: 'movie',
+			size: 5,
+		});
+	});
+
+	it('keeps nothing without a sig and title, or for a file Easynews no longer has', async () => {
+		mockLink.mockResolvedValue('https://ams-dl-01.easynews.com/dl/T/x.mkv');
+		await run(linkHandler, { ...login, path: PATH });
+		await run(linkHandler, { ...login, path: PATH, sig: 'S', imdbId: 'nope', kind: 'movie' });
+		mockLink.mockRejectedValue(new EasynewsGoneError());
+		await run(linkHandler, {
+			...login,
+			path: PATH,
+			sig: 'S',
+			imdbId: 'tt14209916',
+			kind: 'movie',
+		});
+		expect(mockSave).not.toHaveBeenCalled();
 	});
 
 	it('refuses a path that is not a result', async () => {

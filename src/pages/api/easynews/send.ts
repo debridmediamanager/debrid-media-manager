@@ -1,20 +1,18 @@
 import { toResponse } from '@/pages/api/wanted';
 import { MAX_WANTED_ITEMS } from '@/services/database/wantedItems';
 import {
-	EASYNEWS_NZB_PREFIX,
 	EasynewsAuthError,
 	EasynewsNzbError,
-	fetchEasynewsNzb,
 	isEasynewsPath,
 	readCredentials,
 	splitEasynewsPath,
 } from '@/services/easynews';
+import { saveEasynewsNzb } from '@/services/easynewsNzbLibrary';
 import { hasTokenSecret } from '@/services/newznab/opaqueId';
-import { isStoreConfigured, putStoredNzb } from '@/services/newznab/store';
+import { isStoreConfigured } from '@/services/newznab/store';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { isNzbBlocked } from '@/services/takedown/blocklist';
-import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
+import { NzbSanitizeError } from '@/utils/nzbSanitize';
 import { requireSponsor } from '@/utils/requireSponsor';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -59,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			error: 'Expected {"path", "sig", "imdbId": "tt…", "kind": "movie"|"show", "title"} with an Easynews login',
 		});
 	}
-	const { hash, name } = splitEasynewsPath(path);
+	const { hash } = splitEasynewsPath(path);
 	const release = path.slice(path.indexOf('/') + 1);
 	// matchesTarget only lets a season's episodes onto a show page; a multi-episode file is pinned to its first.
 	const episode = kind === 'show' ? EPISODE.exec(release) : null;
@@ -71,33 +69,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const raw = await fetchEasynewsNzb(credentials, path, sig);
-		let cleaned;
+		// Awaited: a pin whose NZB is not stored sends zurg to a 300 "No such item".
+		let saved;
 		try {
-			cleaned = await sanitizeNzbAsync(raw);
+			saved = await saveEasynewsNzb(credentials, path, sig, { imdbId, kind, size });
 		} catch (error) {
 			if (error instanceof NzbSanitizeError) {
 				return res.status(422).json({ error: error.message });
 			}
 			throw error;
 		}
-		// By the name the search lists it under, as withoutBlockedReleases judges it.
-		if (await isNzbBlocked(cleaned.xml, name)) {
-			return res.status(404).json({ error: 'No such item' });
-		}
-		// Awaited: a pin whose NZB is not stored sends zurg to a 300 "No such item".
-		try {
-			await putStoredNzb(EASYNEWS_NZB_PREFIX, hash, cleaned.xml);
-		} catch (error) {
-			console.error('Easynews send: NZB store write failed:', error);
+		if (saved === 'blocked') return res.status(404).json({ error: 'No such item' });
+		if (saved === 'unstored') {
 			return res.status(503).json({ error: 'DMM could not store the NZB; try again' });
 		}
-		// Listed with the title's Usenet results from now on, for anyone to send to Real-Debrid.
-		await db.addEasynewsNzb(imdbId, episode ? Number(episode[1]) : undefined, {
-			id: `${EASYNEWS_NZB_PREFIX}:${hash}`,
-			title: name,
-			size: Number.isSafeInteger(size) && (size as number) > 0 ? (size as number) : 0,
-		});
 		const row = await db.pinWanted(
 			payload.shortId,
 			{ imdbId, kind, title: title.trim() },

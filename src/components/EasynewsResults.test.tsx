@@ -165,7 +165,16 @@ describe('EasynewsResults', () => {
 			const linkCall = fetchMock.mock.calls.find((c) =>
 				String(c[0]).includes('/api/easynews/link')
 			)!;
-			expect(bodyOf(linkCall)).toEqual({ ...ACCOUNT, path: PATH, player: 'ios/vlc' });
+			// With the row's sig and title, so the server keeps its NZB for the Usenet table.
+			expect(bodyOf(linkCall)).toEqual({
+				...ACCOUNT,
+				path: PATH,
+				sig: 'S'.repeat(143),
+				size: 44 * 1024 ** 3,
+				imdbId: 'tt14209916',
+				kind: 'movie',
+				player: 'ios/vlc',
+			});
 		} finally {
 			window.open = originalOpen;
 		}

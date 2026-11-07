@@ -154,6 +154,15 @@ const EasynewsResults = ({
 		[results, rowFilter]
 	);
 
+	// What the server needs to keep this row's NZB for the title's Usenet table.
+	const keepNzb = (result: EasynewsResult) => ({
+		path: result.path,
+		sig: result.sig,
+		size: result.size,
+		imdbId,
+		kind,
+	});
+
 	// A fresh signed link per click: it carries no login, and Easynews mints a new
 	// one every time, so there is nothing worth keeping.
 	const withLink = async (
@@ -165,7 +174,7 @@ const EasynewsResults = ({
 		try {
 			const { url } = await postEasynews<{ url: string }>('/api/easynews/link', {
 				...account,
-				path: result.path,
+				...keepNzb(result),
 			});
 			await handle(url);
 		} catch (e) {
@@ -185,7 +194,7 @@ const EasynewsResults = ({
 			await openWatchWith(player, 'Easynews', async () => {
 				const { intent } = await postEasynews<{ intent: string }>('/api/easynews/link', {
 					...account,
-					path: result.path,
+					...keepNzb(result),
 					player,
 				});
 				return intent;
