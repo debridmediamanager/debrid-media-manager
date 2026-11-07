@@ -463,7 +463,7 @@ export default function TransfersPage() {
 											{progress.percent !== null &&
 												progress.phase !== 'completed' && (
 													<div className="mt-2">
-														<div className="mb-1 flex items-center justify-between text-[11px] text-gray-400">
+														<div className="mb-1 flex items-center justify-between gap-2 text-[11px] text-gray-400">
 															<span>
 																{progress.step !== null
 																	? `Step ${progress.step} of ${progress.totalSteps} — ${progress.label}`

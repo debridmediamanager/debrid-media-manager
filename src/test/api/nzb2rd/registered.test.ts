@@ -247,6 +247,25 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 		expect((res.json as any).mock.calls[0][0].transfers[0].progress.queue).toBeNull();
 	});
 
+	// nzb2rd says which posting of the release it is on once a dead one was passed over.
+	it('passes the running copy through only when both numbers are numbers', async () => {
+		const progressFor = async (copy: unknown) => {
+			nzb2rdAnswers({ id: 'job-1', status: 'hashing', copy });
+			return ((await run()).json as any).mock.calls[0][0].transfers[0].progress;
+		};
+
+		expect((await progressFor({ index: 2, total: 3 })).copy).toEqual({ index: 2, total: 3 });
+		const malformed = [
+			{ index: '2', total: 3 },
+			{ index: 2 },
+			{ index: 2, total: null },
+			'copy 2',
+		];
+		for (const copy of malformed) {
+			expect(JSON.stringify(await progressFor(copy))).not.toContain('copy');
+		}
+	});
+
 	// Failing open matters more here than healing: dropping the marker for a job
 	// that is actually running lets a second Usenet fetch start, which is the
 	// whole cost this mechanism exists to avoid.

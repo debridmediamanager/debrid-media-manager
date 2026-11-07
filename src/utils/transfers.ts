@@ -1,6 +1,6 @@
 import { isTerminalDebridUploaderStatus, TrackedDebridUploaderJob } from './debridUploader';
 import { getTrackedNzb2rdJobs, isTerminalNzb2rdStatus } from './nzb2rd';
-import type { QueuePlace, TransferSource } from './transferPhase';
+import type { ProgressFields, QueuePlace, TransferSource } from './transferPhase';
 
 // Both transfer kinds land content in Real-Debrid and are followed the same way,
 // so they share one list. They differ only in where the bytes come from (a
@@ -77,6 +77,8 @@ export interface TransferRow {
 	total_bytes?: number | null;
 	done_bytes?: number | null;
 	queue?: QueuePlace | null;
+	/** `nzb2rd` only: which posting of the release is running, once a dead one was passed over. */
+	copy?: ProgressFields['copy'];
 	/** `debrid` only: which cached provider served it — torbox, alldebrid, qbit. */
 	jobSource?: string | null;
 	/**

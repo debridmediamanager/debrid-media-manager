@@ -153,6 +153,8 @@ export interface ProgressFields {
 	total_bytes?: number | null;
 	done_bytes?: number | null;
 	queue?: QueuePlace | null;
+	/** nzb2rd: which posting of the release is running, sent once a dead one was passed over. */
+	copy?: { index: number; total: number } | null;
 }
 
 /**
@@ -224,11 +226,17 @@ export function queueDetail(place: QueuePlace | null | undefined): string | unde
 	return `${ordinal(place.position)} of ${place.waiting} in line`;
 }
 
+/** "Copy 2 of 3": nzb2rd moved on from a posting whose articles are gone. */
+function copyDetail(copy: ProgressFields['copy']): string | undefined {
+	if (!copy || copy.index < 1 || copy.total < copy.index) return undefined;
+	return `Copy ${copy.index} of ${copy.total}`;
+}
+
 export interface TransferProgress {
 	phase: TransferPhase;
 	/** What to show the user; never a raw service enum. */
 	label: string;
-	/** Extra wording for the phase, e.g. the place in line while queued. */
+	/** Extra wording for the phase: which copy is running, the place in line while queued. */
 	detail?: string;
 	/** 1-based position on this source's ladder, or null once terminal. */
 	step: number | null;
@@ -302,10 +310,16 @@ export function describeTransfer(
 	// answers 0 because the stage has no counter, and printing that as "0%" next
 	// to the stage name would read as stalled rather than unmeasured.
 	const measured = rung.phase === 'downloading' || rung.phase === 'importing';
+	const detail = [
+		copyDetail(job?.copy),
+		rung.phase === 'queued' ? queueDetail(job?.queue) : undefined,
+	]
+		.filter(Boolean)
+		.join(' · ');
 	return {
 		phase: rung.phase,
 		label: PHASE_LABELS[rung.phase],
-		detail: rung.phase === 'queued' ? queueDetail(job?.queue) : undefined,
+		detail: detail || undefined,
 		step: rung.step,
 		totalSteps,
 		percent: Math.round(rung.from + span * fraction),

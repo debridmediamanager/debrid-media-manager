@@ -20,6 +20,7 @@ import {
 	TRANSFER_STEP_TOAST_MS,
 	TRANSFER_TOAST_MS,
 	type TransferPhase,
+	type TransferProgress,
 } from '@/utils/transferPhase';
 import type { TvEpisodeMatch } from '@/utils/tvEpisodes';
 import { Check, Download, FileDown, Loader2, RotateCw, Send } from 'lucide-react';
@@ -63,6 +64,17 @@ export interface SendButtonState {
 	/** Set only for a job whose live state is known, and styles the button. */
 	phase: TransferPhase | null;
 	disabled: boolean;
+}
+
+/**
+ * The running copy, the place in line while queued, otherwise the stage's own
+ * percentage. Only the Usenet pass and RD's pull count anything; `describeTransfer`
+ * leaves the rest at the rung floor, and repeating that as a percentage would read
+ * as stalled progress rather than no progress.
+ */
+function progressDetail(progress: TransferProgress): string | undefined {
+	const stage = progress.stagePercent === null ? undefined : `${progress.stagePercent}%`;
+	return [progress.detail, stage].filter(Boolean).join(' · ') || undefined;
 }
 
 /**
@@ -167,9 +179,7 @@ export function buttonState(
 			const progress = existing.progress
 				? describeTransfer('nzb2rd', existing.progress)
 				: null;
-			const where =
-				progress?.detail ??
-				(progress?.stagePercent == null ? undefined : `${progress.stagePercent}%`);
+			const where = progress ? progressDetail(progress) : undefined;
 			return {
 				kind: 'join',
 				label: 'Get it too',
@@ -196,13 +206,7 @@ export function buttonState(
 		return {
 			kind: 'running',
 			label: progress.label,
-			// The place in line while queued; otherwise the stage's own percentage,
-			// which only the Usenet pass and RD's pull can answer — `describeTransfer`
-			// leaves the rest sitting at the rung floor, and repeating that as a
-			// percentage would read as stalled progress rather than no progress.
-			detail:
-				progress.detail ??
-				(progress.stagePercent === null ? undefined : `${progress.stagePercent}%`),
+			detail: progressDetail(progress),
 			title:
 				progress.phase === 'queued'
 					? 'Waiting in nzb2rd’s queue — you will get it when it lands'

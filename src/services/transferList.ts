@@ -81,6 +81,10 @@ export function nzb2rdRowOf(job: any): TransferRow {
 		total_bytes: job.total_bytes ?? null,
 		done_bytes: job.done_bytes ?? null,
 		queue: job.queue ?? null,
+		copy:
+			Number.isFinite(job.copy?.index) && Number.isFinite(job.copy?.total)
+				? { index: job.copy.index, total: job.copy.total }
+				: undefined,
 		imdbId: typeof job.imdb_id === 'string' ? job.imdb_id : undefined,
 	};
 }

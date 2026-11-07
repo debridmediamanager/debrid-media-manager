@@ -322,6 +322,31 @@ describe('buttonState', () => {
 		});
 	});
 
+	// nzb2rd moved on from a posting whose articles were gone; the row says so.
+	it('names the copy a running job is on', () => {
+		const copy = { index: 2, total: 3 };
+		const queued = { status: 'pending', queue: { position: 479, waiting: 670 }, copy };
+		const downloading = {
+			status: 'hashing',
+			done_bytes: 5_985_088_778,
+			total_bytes: 9_811_477_047,
+			copy,
+		};
+		expect(buttonState('a', none, none, marker({ progress: queued }))).toMatchObject({
+			kind: 'running',
+			label: 'Queued',
+			detail: 'Copy 2 of 3 · 479th of 670 in line',
+		});
+		expect(buttonState('a', none, none, marker({ progress: downloading }))).toMatchObject({
+			kind: 'running',
+			label: 'Downloading',
+			detail: 'Copy 2 of 3 · 61%',
+		});
+		expect(
+			buttonState('a', none, none, marker({ yours: false, progress: downloading }))
+		).toMatchObject({ kind: 'join', detail: 'Downloading · Copy 2 of 3 · 61%' });
+	});
+
 	// Only eight markers are re-checked per request, and nzb2rd can be down, so a
 	// marker without live fields has to stay honest rather than claim a phase.
 	it('falls back to a phase-free label when the job could not be re-checked', () => {

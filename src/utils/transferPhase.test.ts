@@ -336,3 +336,40 @@ describe('a queued job’s place in line', () => {
 		expect(p.percent).toBe(0);
 	});
 });
+
+// nzb2rd moves on to another posting of the release when one's articles are gone,
+// and says which one it is on. Rows without it must read exactly as before.
+describe('which copy of a Usenet release is running', () => {
+	const copy = { index: 2, total: 3 };
+
+	it('leads the detail, ahead of the place in line', () => {
+		const queued = { status: 'pending', queue: { position: 479, waiting: 670 } };
+		expect(describeTransfer('nzb2rd', { ...queued, copy }).detail).toBe(
+			'Copy 2 of 3 · 479th of 670 in line'
+		);
+		expect(describeTransfer('nzb2rd', queued).detail).toBe('479th of 670 in line');
+	});
+
+	it('is the whole detail of a stage that has no other wording', () => {
+		const downloading = { status: 'hashing', done_bytes: 61, total_bytes: 100 };
+		expect(describeTransfer('nzb2rd', { ...downloading, copy })).toMatchObject({
+			detail: 'Copy 2 of 3',
+			stagePercent: 61,
+		});
+		expect(describeTransfer('nzb2rd', downloading).detail).toBeUndefined();
+	});
+
+	it('changes nothing else about the row', () => {
+		const job = { status: 'hashing', done_bytes: 61, total_bytes: 100 };
+		const { detail: _detail, ...withCopy } = describeTransfer('nzb2rd', { ...job, copy });
+		expect(withCopy).toEqual(describeTransfer('nzb2rd', job));
+	});
+
+	it('is left out when it makes no sense', () => {
+		for (const bad of [null, { index: 0, total: 3 }, { index: 4, total: 3 }]) {
+			expect(
+				describeTransfer('nzb2rd', { status: 'hashing', copy: bad }).detail
+			).toBeUndefined();
+		}
+	});
+});

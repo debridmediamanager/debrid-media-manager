@@ -86,6 +86,14 @@ describe('row mapping', () => {
 		expect(row).toMatchObject({ total_bytes: 100, done_bytes: 40 });
 		expect(row.queue).toEqual({ position: 2, waiting: 5 });
 	});
+
+	it('carries the running copy only when both numbers are numbers', () => {
+		const copyOf = (copy: unknown) => nzb2rdRowOf({ id: 'j4', status: 'hashing', copy }).copy;
+		expect(copyOf({ index: 2, total: 3 })).toEqual({ index: 2, total: 3 });
+		expect(copyOf({ index: '2', total: 3 })).toBeUndefined();
+		expect(copyOf({ index: 2 })).toBeUndefined();
+		expect(copyOf(undefined)).toBeUndefined();
+	});
 });
 
 describe('withMeta', () => {

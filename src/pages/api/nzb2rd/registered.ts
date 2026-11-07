@@ -59,6 +59,10 @@ const progressOf = (job: any): ProgressFields => ({
 		typeof job.queue.waiting === 'number'
 			? { position: job.queue.position, waiting: job.queue.waiting }
 			: null,
+	copy:
+		Number.isFinite(job?.copy?.index) && Number.isFinite(job?.copy?.total)
+			? { index: job.copy.index, total: job.copy.total }
+			: undefined,
 });
 
 /**

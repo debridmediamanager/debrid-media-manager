@@ -140,6 +140,31 @@ describe('Transfers page listing', () => {
 		await waitFor(() => expect(screen.getByText('Someone Elses Release')).toBeInTheDocument());
 	});
 
+	it('says which copy of a Usenet release is running', async () => {
+		vi.mocked(fetch as any).mockResolvedValue(
+			listResponse([
+				row({
+					source: 'nzb2rd',
+					id: 'job-copy',
+					status: 'hashing',
+					name: 'Copy Release',
+					copy: { index: 2, total: 3 },
+				}),
+				row({ source: 'nzb2rd', id: 'job-one', status: 'hashing', name: 'Single Release' }),
+			])
+		);
+
+		const { container } = render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('Copy Release')).toBeInTheDocument());
+		// The step line above each bar, without the percentage beside it.
+		const [withCopy, without] = [...container.querySelectorAll('[role="progressbar"]')].map(
+			(bar) => bar.previousElementSibling?.firstElementChild?.textContent
+		);
+		expect(withCopy).toBe('Step 3 of 5 — Downloading · Copy 2 of 3');
+		expect(without).toBe('Step 3 of 5 — Downloading');
+	});
+
 	it('prefers the stored DMM title over the raw release name', async () => {
 		vi.mocked(fetch as any).mockResolvedValue(
 			listResponse([row({ title: 'The Nice Title', name: 'raw.release.2160p.x265' })])
