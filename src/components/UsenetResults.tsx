@@ -11,6 +11,7 @@ import {
 } from '@/utils/nzb2rd';
 import { downloadCleanNzb } from '@/utils/nzbDownload';
 import { readRdOAuthCredentials } from '@/utils/rdTokenStorage';
+import { fetchTorBoxPlan, PRO_PLAN } from '@/utils/torboxPlan';
 import { sendNzbToTorBox } from '@/utils/torboxUsenet';
 import {
 	describeTransfer,
@@ -33,7 +34,7 @@ type UsenetResultsProps = {
 	/** Show title, so whole-season packs can be looked up by name. */
 	title?: string;
 	rdKey: string | null;
-	/** Sends a release to TorBox's hosted Usenet instead (Pro plan). */
+	/** Sends a release to TorBox's hosted Usenet instead, once the key reads as Pro. */
 	torboxKey?: string | null;
 	/** Hears the results once a search lands, so the page can count them with its own rows. */
 	onResults?: (results: UsenetResult[]) => void;
@@ -228,7 +229,7 @@ const UsenetResults = ({
 	seasonNum,
 	title,
 	rdKey,
-	torboxKey = null,
+	torboxKey: torboxLogin = null,
 	onResults,
 	rowFilter,
 	episodeReader,
@@ -243,6 +244,19 @@ const UsenetResults = ({
 	// make a second library entry rather than being absorbed.
 	const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
 	const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
+	// TorBox sells hosted Usenet only on Pro, so the button waits for /user/me
+	// to say plan 2; any other plan, or no answer, keeps it hidden.
+	const [tbPlan, setTbPlan] = useState<number | null>(null);
+	useEffect(() => {
+		setTbPlan(null);
+		if (!torboxLogin) return;
+		let live = true;
+		fetchTorBoxPlan(torboxLogin).then((plan) => live && setTbPlan(plan));
+		return () => {
+			live = false;
+		};
+	}, [torboxLogin]);
+	const torboxKey = tbPlan === PRO_PLAN ? torboxLogin : null;
 	const [tbSending, setTbSending] = useState<Set<string>>(new Set());
 	const [tbSent, setTbSent] = useState<Set<string>>(new Set());
 	// Releases someone has already fetched or is fetching, so the row shows where

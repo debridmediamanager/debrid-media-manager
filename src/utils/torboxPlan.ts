@@ -19,31 +19,42 @@ export const isTorBoxPlanRestricted = (error: unknown): boolean =>
 	(error as { response?: { data?: { error?: unknown } } } | null)?.response?.data?.error ===
 	'PLAN_RESTRICTED_FEATURE';
 
+/** TorBox's Pro plan, the only one that sells hosted Usenet. */
+export const PRO_PLAN = 2;
+
 /**
- * Whether this TorBox key belongs to a free account.
+ * This TorBox key's plan, or null when `/user/me` gave no definite answer.
  *
- * Only a definite answer refuses: `plan: 0`, or `/user/me` itself refusing with
- * `PLAN_RESTRICTED_FEATURE`. Anything else - a timeout, a 429, a bad key, a body
- * that does not parse - returns false and lets the job through, where the
- * uploader reports what actually went wrong. The check exists to save a doomed
- * job, never to become a second way for a paid account's transfer to fail.
+ * Only a definite answer counts: the `plan` field, or `/user/me` itself
+ * refusing with `PLAN_RESTRICTED_FEATURE` (free). Anything else - a timeout, a
+ * 429, a bad key, a body that does not parse - is null.
  *
  * Deliberately a bare fetch rather than `services/torbox`: that client waits
  * out a 429 for up to five minutes, which would hang a submission, and records
  * every response on the public status page, where a free account's 403 would
  * read as a TorBox fault.
  */
-export async function isFreeTorBoxPlan(apiKey: string): Promise<boolean> {
+export async function fetchTorBoxPlan(apiKey: string): Promise<number | null> {
 	try {
 		const res = await fetch(USER_ME_URL, {
 			headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' },
 			signal: AbortSignal.timeout(TIMEOUT_MS),
 		});
 		const body = await res.json().catch(() => null);
-		if (res.status === 403) return body?.error === 'PLAN_RESTRICTED_FEATURE';
-		if (!res.ok || body?.success !== true) return false;
-		return body?.data?.plan === FREE_PLAN;
+		if (res.status === 403) return body?.error === 'PLAN_RESTRICTED_FEATURE' ? FREE_PLAN : null;
+		if (!res.ok || body?.success !== true) return null;
+		return typeof body?.data?.plan === 'number' ? body.data.plan : null;
 	} catch {
-		return false;
+		return null;
 	}
+}
+
+/**
+ * Whether this TorBox key belongs to a free account. Only a definite answer
+ * refuses; anything else lets the job through, where the uploader reports what
+ * actually went wrong. The check exists to save a doomed job, never to become a
+ * second way for a paid account's transfer to fail.
+ */
+export async function isFreeTorBoxPlan(apiKey: string): Promise<boolean> {
+	return (await fetchTorBoxPlan(apiKey)) === FREE_PLAN;
 }

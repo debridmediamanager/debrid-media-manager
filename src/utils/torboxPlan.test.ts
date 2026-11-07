@@ -3,7 +3,7 @@ import badToken from '@/test/fixtures/torbox/user-me-bad-token-2026-09-24.json';
 import freePlan from '@/test/fixtures/torbox/user-me-free-plan-2026-10-09.json';
 import standardPlan from '@/test/fixtures/torbox/user-me-standard-plan-2026-09-24.json';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { isFreeTorBoxPlan } from './torboxPlan';
+import { fetchTorBoxPlan, isFreeTorBoxPlan, PRO_PLAN } from './torboxPlan';
 
 type Captured = { status: number; body: unknown };
 
@@ -59,5 +59,30 @@ describe('isFreeTorBoxPlan', () => {
 	it('admits when TorBox cannot be reached', async () => {
 		global.fetch = vi.fn().mockRejectedValue(new Error('timeout')) as any;
 		expect(await isFreeTorBoxPlan('tb-key')).toBe(false);
+	});
+});
+
+describe('fetchTorBoxPlan', () => {
+	// Recorded on the shared account, which reads plan 2: Pro, despite the
+	// fixture's pre-2026-10-03 name.
+	it('reads a Pro account as plan 2', async () => {
+		answer(standardPlan);
+		expect(await fetchTorBoxPlan('tb-key')).toBe(PRO_PLAN);
+	});
+
+	it('reads a free account, and a PLAN_RESTRICTED_FEATURE refusal, as plan 0', async () => {
+		answer(freePlan);
+		expect(await fetchTorBoxPlan('tb-key')).toBe(0);
+		answer(planRestricted);
+		expect(await fetchTorBoxPlan('tb-key')).toBe(0);
+	});
+
+	it('has no answer for a bad key, a 429 or no connection', async () => {
+		answer(badToken);
+		expect(await fetchTorBoxPlan('tb-key')).toBeNull();
+		answer({ status: 429, body: 'rate limit exceeded' });
+		expect(await fetchTorBoxPlan('tb-key')).toBeNull();
+		global.fetch = vi.fn().mockRejectedValue(new Error('timeout')) as any;
+		expect(await fetchTorBoxPlan('tb-key')).toBeNull();
 	});
 });

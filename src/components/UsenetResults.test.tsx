@@ -16,6 +16,11 @@ const downloadCleanNzbMock = vi.fn();
 vi.mock('@/utils/nzbDownload', () => ({
 	downloadCleanNzb: (...args: unknown[]) => downloadCleanNzbMock(...args),
 }));
+const fetchTorBoxPlanMock = vi.fn();
+vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/torboxPlan')>()),
+	fetchTorBoxPlan: (...args: unknown[]) => fetchTorBoxPlanMock(...args),
+}));
 const sendNzbToTorBoxMock = vi.fn();
 vi.mock('@/utils/torboxUsenet', () => ({
 	sendNzbToTorBox: (...args: unknown[]) => sendNzbToTorBoxMock(...args),
@@ -919,11 +924,14 @@ describe('UsenetResults — TorBox', () => {
 	};
 	const tbButtons = () => screen.queryAllByRole('button', { name: /^send .* to torbox$/i });
 
+	beforeEach(() => fetchTorBoxPlanMock.mockResolvedValue(2));
+
 	it('lets a TorBox-only member send a release, with the row title and their key', async () => {
 		sendNzbToTorBoxMock.mockResolvedValue({ kind: 'started', usenetId: 1 });
 		await openPanel(null, 'tb-key');
 
-		expect(screen.getByText('Send to TorBox')).toBeInTheDocument();
+		expect(fetchTorBoxPlanMock).toHaveBeenCalledWith('tb-key');
+		await waitFor(() => expect(screen.getByText('Send to TorBox')).toBeInTheDocument());
 		expect(screen.queryByText(/log in with real-debrid/i)).not.toBeInTheDocument();
 		await userEvent.click(tbButtons()[0]);
 
@@ -941,6 +949,7 @@ describe('UsenetResults — TorBox', () => {
 
 	it('says a release TorBox already held is ready, and a queued one waits for a slot', async () => {
 		await openPanel(null, 'tb-key');
+		await waitFor(() => expect(tbButtons()).toHaveLength(RESULTS.length));
 		sendNzbToTorBoxMock.mockResolvedValueOnce({ kind: 'cached', usenetId: 1 });
 		await userEvent.click(tbButtons()[0]);
 		await waitFor(() =>
@@ -962,6 +971,7 @@ describe('UsenetResults — TorBox', () => {
 	it('reports a refusal and leaves the row clickable', async () => {
 		sendNzbToTorBoxMock.mockRejectedValue(new Error('TorBox Usenet needs a Pro plan'));
 		await openPanel(null, 'tb-key');
+		await waitFor(() => expect(tbButtons()).toHaveLength(RESULTS.length));
 
 		await userEvent.click(tbButtons()[0]);
 
@@ -976,7 +986,7 @@ describe('UsenetResults — TorBox', () => {
 
 	it('shows both sends to a member logged in to both', async () => {
 		await openPanel('rd-key', 'tb-key');
-		expect(screen.getByText(/or TorBox/)).toBeInTheDocument();
+		await waitFor(() => expect(screen.getByText(/or TorBox/)).toBeInTheDocument());
 		expect(tbButtons()).toHaveLength(RESULTS.length);
 		expect(screen.getAllByRole('button', { name: /^send$/i })).toHaveLength(RESULTS.length);
 	});
@@ -984,6 +994,18 @@ describe('UsenetResults — TorBox', () => {
 	it('offers no TorBox button without a TorBox login', async () => {
 		await openPanel('rd-key', null);
 		expect(tbButtons()).toHaveLength(0);
+		expect(fetchTorBoxPlanMock).not.toHaveBeenCalled();
+	});
+
+	// Essential, Standard and Free have no hosted Usenet; null is TorBox not
+	// answering, which is no proof of Pro either.
+	it.each([0, 1, 3, null])('hides the TorBox button on plan %s', async (plan) => {
+		fetchTorBoxPlanMock.mockResolvedValue(plan);
+		await openPanel(null, 'tb-key');
+		await waitFor(() => expect(fetchTorBoxPlanMock).toHaveBeenCalled());
+		expect(tbButtons()).toHaveLength(0);
+		expect(screen.queryByText('Send to TorBox')).not.toBeInTheDocument();
+		expect(screen.getByText('Download NZB')).toBeInTheDocument();
 	});
 });
 
