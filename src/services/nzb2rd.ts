@@ -782,6 +782,28 @@ export async function submitNzb(args: {
  * `sponsor` is the Sponsorship ID the promotion is for, so nzb2rd can end the
  * tier with that sponsorship, as it does for one granted at submit.
  */
+/**
+ * The ids of the jobs nzb2rd counts as the caller's own, or null when it would
+ * not say. nzb2rd matches by RD account as well as by key, so an OAuth caller
+ * whose token has refreshed since submitting still owns the job.
+ */
+export async function ownNzb2rdJobIds(rdKey: string): Promise<Set<string> | null> {
+	try {
+		// ponytail: newest 500 only (nzb2rd's page cap); an older own job reads as not-own.
+		const response = await fetch(`${getNzb2rdUrl()}/jobs/mine?limit=500`, {
+			headers: { Accept: 'application/json', 'x-rd-api-key': rdKey },
+			signal: AbortSignal.timeout(5000),
+		});
+		if (!response.ok) return null;
+		const data = await response.json();
+		if (!Array.isArray(data)) return null;
+		return new Set(data.map((job) => job?.id).filter((id) => typeof id === 'string'));
+	} catch (error) {
+		console.error('Listing the caller’s nzb2rd jobs failed:', error);
+		return null;
+	}
+}
+
 export async function promoteJob(jobId: string, sponsor: string): Promise<boolean> {
 	try {
 		const response = await fetch(

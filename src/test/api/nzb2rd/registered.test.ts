@@ -1,4 +1,5 @@
 import handler from '@/pages/api/nzb2rd/registered';
+import { ownNzb2rdJobIds } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
 import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
@@ -6,12 +7,17 @@ import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/nzb2rd', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/nzb2rd')>()),
+	ownNzb2rdJobIds: vi.fn(),
+}));
 vi.mock('@/services/transferRegistration', () => ({
 	registerCompletedNzb2rdJob: vi.fn().mockResolvedValue(true),
 }));
 
 const mockRepo = vi.mocked(repository);
 const mockRegister = vi.mocked(registerCompletedNzb2rdJob);
+const mockOwnJobs = vi.mocked(ownNzb2rdJobIds);
 
 const HASH = 'c'.repeat(40);
 
@@ -23,8 +29,8 @@ const pendingRecord = {
 	updatedAt: 1,
 };
 
-const run = async (ids: string[] = ['release-1']) => {
-	const req = createMockRequest({ method: 'POST', body: { ids } });
+const run = async (ids: string[] = ['release-1'], headers: Record<string, string> = {}) => {
+	const req = createMockRequest({ method: 'POST', body: { ids }, headers });
 	const res = createMockResponse();
 	await handler(req as any, res as any);
 	return res;
@@ -45,6 +51,8 @@ beforeEach(() => {
 	mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordNzb2rdTransferFailed = vi.fn().mockResolvedValue(undefined);
 	mockRegister.mockResolvedValue(true);
+	mockOwnJobs.mockResolvedValue(new Set());
+	mockRepo.getNzb2rdWaiters = vi.fn().mockResolvedValue([]);
 });
 
 // A `pending` marker used to be permanent: nothing ever wrote a failure, and the
@@ -365,5 +373,42 @@ describe('POST /api/nzb2rd/registered — jobs nzb2rd deleted', () => {
 			status: 'completed',
 			infoHash: job.info_hash,
 		});
+	});
+});
+
+// "Get it too" may only show to someone a click would actually add: never the
+// submitter (nzb2rd already delivers to them) and never someone already waiting.
+describe('POST /api/nzb2rd/registered — whose running job is it', () => {
+	const KEY = { 'x-rd-api-key': 'rd-key-b' };
+	const yoursOf = (res: any) => res.json.mock.calls[0][0].transfers[0].yours;
+
+	beforeEach(() => nzb2rdAnswers({ id: 'job-1', status: 'fetching' }));
+
+	it('says nothing about ownership without the caller’s key', async () => {
+		const res = await run();
+		expect(yoursOf(res)).toBeUndefined();
+		expect(mockOwnJobs).not.toHaveBeenCalled();
+	});
+
+	it('marks the submitter’s own job as theirs', async () => {
+		mockOwnJobs.mockResolvedValue(new Set(['job-1']));
+		expect(yoursOf(await run(['release-1'], KEY))).toBe(true);
+		expect(mockOwnJobs).toHaveBeenCalledWith('rd-key-b');
+	});
+
+	it('marks a job the caller already joined as theirs', async () => {
+		mockRepo.getNzb2rdWaiters = vi
+			.fn()
+			.mockResolvedValue([{ rdKey: 'rd-key-b', imdbId: 'tt1308738', queuedAt: 1 }]);
+		expect(yoursOf(await run(['release-1'], KEY))).toBe(true);
+	});
+
+	it('marks someone else’s job as joinable', async () => {
+		expect(yoursOf(await run(['release-1'], KEY))).toBe(false);
+	});
+
+	it('leaves it unknown when nzb2rd cannot say', async () => {
+		mockOwnJobs.mockResolvedValue(null);
+		expect(yoursOf(await run(['release-1'], KEY))).toBeUndefined();
 	});
 });

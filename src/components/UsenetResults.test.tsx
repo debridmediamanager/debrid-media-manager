@@ -266,6 +266,53 @@ describe('buttonState', () => {
 		});
 	});
 
+	// The Reddit request of 2026-11-07: a viewer watching someone else's fetch
+	// reach "Real-Debrid downloading 98%" could only wait and add it by hand.
+	it('lets a viewer join someone else’s running job', () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({
+					yours: false,
+					progress: {
+						status: 'uploading',
+						status_message: 'RD: downloading 98% @ 11.6 MB/s',
+					},
+				})
+			)
+		).toMatchObject({
+			kind: 'join',
+			label: 'Get it too',
+			detail: 'Real-Debrid downloading · 98%',
+			disabled: false,
+		});
+	});
+
+	it('lets a viewer join a running job the server could not re-check', () => {
+		expect(buttonState('a', none, none, marker({ yours: false }))).toMatchObject({
+			kind: 'join',
+			detail: 'In progress',
+			disabled: false,
+		});
+	});
+
+	// The submitter, or someone already waiting, gets it when it lands anyway:
+	// their row stays exactly what it was.
+	it('keeps the row locked for whoever already gets it', () => {
+		const progress = { status: 'pending', queue: { position: 200, waiting: 539 } };
+		expect(buttonState('a', none, none, marker({ yours: true, progress }))).toEqual(
+			buttonState('a', none, none, marker({ progress }))
+		);
+		expect(buttonState('a', none, none, marker({ yours: true, progress }))).toMatchObject({
+			kind: 'running',
+			label: 'Queued',
+			detail: '200th of 539 in line',
+			disabled: true,
+		});
+	});
+
 	// Only eight markers are re-checked per request, and nzb2rd can be down, so a
 	// marker without live fields has to stay honest rather than claim a phase.
 	it('falls back to a phase-free label when the job could not be re-checked', () => {

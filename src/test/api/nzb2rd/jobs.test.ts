@@ -1,5 +1,11 @@
 import handler from '@/pages/api/nzb2rd/jobs';
-import { addHashToRdAccount, fetchNzb, promoteJob, submitNzb } from '@/services/nzb2rd';
+import {
+	addHashToRdAccount,
+	fetchNzb,
+	ownNzb2rdJobIds,
+	promoteJob,
+	submitNzb,
+} from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -14,6 +20,7 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 		submitNzb: vi.fn(),
 		addHashToRdAccount: vi.fn(),
 		promoteJob: vi.fn(),
+		ownNzb2rdJobIds: vi.fn(),
 	};
 });
 
@@ -22,6 +29,7 @@ const mockFetchNzb = vi.mocked(fetchNzb);
 const mockSubmit = vi.mocked(submitNzb);
 const mockAddToRd = vi.mocked(addHashToRdAccount);
 const mockPromote = vi.mocked(promoteJob);
+const mockOwnJobs = vi.mocked(ownNzb2rdJobIds);
 
 const HASH = 'a'.repeat(40);
 const body = (over: Record<string, unknown> = {}) => ({
@@ -46,6 +54,7 @@ beforeEach(() => {
 	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
 	mockRepo.addNzb2rdWaiter = vi.fn().mockResolvedValue(undefined);
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: HASH }]);
+	mockOwnJobs.mockResolvedValue(new Set());
 	mockFetchNzb.mockResolvedValue('<nzb></nzb>');
 	mockSubmit.mockResolvedValue({ status: 201, data: { id: 'job-1', status: 'pending' } });
 	global.fetch = vi.fn().mockResolvedValue({
@@ -78,6 +87,7 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 			infoHash: null,
 			jobId: 'job-A',
 			queued: true,
+			mine: false,
 			// No sponsor token on this request, so nothing to promote.
 			promoted: false,
 		});
@@ -105,6 +115,29 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 	it('does not charge B an RD add while the job is still running', async () => {
 		await run();
 		expect(mockAddToRd).not.toHaveBeenCalled();
+	});
+
+	// The row's "Get it too" makes this route reachable from a stale page by the
+	// submitter. nzb2rd delivers to them itself and RD does not dedupe an
+	// addMagnet, so a waiter entry would land the release in their library twice.
+	it('never queues the submitter behind their own job', async () => {
+		mockOwnJobs.mockResolvedValue(new Set(['job-A']));
+		const res = await run();
+
+		expect(mockOwnJobs).toHaveBeenCalledWith('rd-key-b');
+		expect(mockRepo.addNzb2rdWaiter).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ duplicate: 'in_progress', jobId: 'job-A', mine: true })
+		);
+		expect(mockSubmit).not.toHaveBeenCalled();
+	});
+
+	it('still queues B when nzb2rd cannot say whose job it is', async () => {
+		mockOwnJobs.mockResolvedValue(null);
+		const res = await run();
+
+		expect(mockRepo.addNzb2rdWaiter).toHaveBeenCalledTimes(1);
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ mine: false }));
 	});
 });
 

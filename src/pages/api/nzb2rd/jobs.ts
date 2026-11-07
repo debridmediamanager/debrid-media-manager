@@ -5,6 +5,7 @@ import {
 	isCompleteOAuth,
 	isValidImdbId,
 	nzb2rdJobOutcome,
+	ownNzb2rdJobIds,
 	promoteJob,
 	submitNzb,
 } from '@/services/nzb2rd';
@@ -101,9 +102,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// The credentials ride along for the same reason they go to nzb2rd: this
 			// list is drained when the job completes, which is days later, and by
 			// then `rdKey` has expired and the delivery silently fails.
-			await db
-				.addNzb2rdWaiter(id, rdKey, imdbId, isCompleteOAuth(oauth) ? oauth : null)
-				.catch((e) => console.error('Queueing nzb2rd waiter failed:', e));
+			//
+			// Never the submitter: nzb2rd already delivers to them, and RD does not
+			// dedupe an addMagnet, so a waiter entry would land it twice. An
+			// unanswered lookup keeps the join, as this route always did.
+			const mine = (await ownNzb2rdJobIds(rdKey))?.has(existing.jobId) ?? false;
+			if (!mine) {
+				await db
+					.addNzb2rdWaiter(id, rdKey, imdbId, isCompleteOAuth(oauth) ? oauth : null)
+					.catch((e) => console.error('Queueing nzb2rd waiter failed:', e));
+			}
 			// The sponsor perk, which this branch would otherwise skip entirely:
 			// dedup returns before `submitNzb`, so the tier flag a sponsor's own
 			// submission carries is never set and they inherit whatever tier the
@@ -123,6 +131,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				infoHash: null,
 				jobId: existing.jobId,
 				queued: true,
+				mine,
 				promoted,
 			});
 		}

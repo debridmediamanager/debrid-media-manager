@@ -14,6 +14,7 @@ import {
 	isValidImdbId,
 	looksLikeEpisode,
 	newznabError,
+	ownNzb2rdJobIds,
 	parseNewznabItem,
 	parseNewznabResponse,
 	parseReleaseId,
@@ -1138,5 +1139,31 @@ describe('promoteJob', () => {
 	it('answers false rather than throwing when nzb2rd cannot be reached', async () => {
 		vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('down')));
 		expect(await promoteJob('job-A', 'ZP1M')).toBe(false);
+	});
+});
+
+describe('ownNzb2rdJobIds', () => {
+	it('lists the caller’s jobs by presenting their key as a header, never in the URL', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({
+			ok: true,
+			json: async () => [
+				{ id: 'job-1', status: 'pending' },
+				{ id: 'job-2', status: 'completed' },
+			],
+		});
+		vi.stubGlobal('fetch', fetchMock);
+
+		expect(await ownNzb2rdJobIds('user-rd-key')).toEqual(new Set(['job-1', 'job-2']));
+		const [url, init] = fetchMock.mock.calls[0];
+		expect(url).toBe('http://nzb2rd.test:3200/jobs/mine?limit=500');
+		expect(url).not.toContain('user-rd-key');
+		expect(init.headers['x-rd-api-key']).toBe('user-rd-key');
+	});
+
+	it('answers null, not an empty set, when nzb2rd will not say', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 401 }));
+		expect(await ownNzb2rdJobIds('k')).toBeNull();
+		vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('ECONNREFUSED')));
+		expect(await ownNzb2rdJobIds('k')).toBeNull();
 	});
 });

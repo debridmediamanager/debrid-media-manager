@@ -57,6 +57,8 @@ export interface Nzb2rdDuplicate {
 	added?: boolean;
 	/** in_progress: this caller is queued to receive it when the job lands. */
 	queued?: boolean;
+	/** in_progress: the caller submitted this job, so nzb2rd delivers it to them itself. */
+	mine?: boolean;
 }
 
 export function isNzb2rdDuplicate(r: Nzb2rdJob | Nzb2rdDuplicate): r is Nzb2rdDuplicate {
@@ -286,6 +288,12 @@ export interface Nzb2rdTransferSummary {
 	 * something is in progress.
 	 */
 	progress?: ProgressFields;
+	/**
+	 * Unfinished jobs: true when this caller gets it when it lands anyway (they
+	 * submitted or already joined it), false when a click would join it.
+	 * Undefined when unknown, which keeps the row locked.
+	 */
+	yours?: boolean;
 }
 
 /**
@@ -293,12 +301,19 @@ export interface Nzb2rdTransferSummary {
  * "In RD" (someone already fetched it) rather than a Send button that the
  * server would only answer with a duplicate.
  */
-export async function fetchNzb2rdTransfers(ids: string[]): Promise<Nzb2rdTransferSummary[]> {
+export async function fetchNzb2rdTransfers(
+	ids: string[],
+	rdKey?: string | null
+): Promise<Nzb2rdTransferSummary[]> {
 	if (ids.length === 0) return [];
 	try {
 		const response = await fetch('/api/nzb2rd/registered', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			// The key lets the server tell this caller's own jobs from joinable ones.
+			headers: {
+				'Content-Type': 'application/json',
+				...(rdKey ? { 'x-rd-api-key': rdKey } : {}),
+			},
 			body: JSON.stringify({ ids: ids.slice(0, 200) }),
 		});
 		if (!response.ok) return [];

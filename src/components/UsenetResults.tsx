@@ -48,7 +48,7 @@ type UsenetResultsProps = {
 export { formatSize, sortResults } from '@/components/ReleaseSection';
 
 export type SendButtonKind =
-	'send' | 'sending' | 'sent' | 'cached' | 'running' | 'failed' | 'added';
+	'send' | 'sending' | 'sent' | 'cached' | 'running' | 'join' | 'failed' | 'added';
 
 export interface SendButtonState {
 	kind: SendButtonKind;
@@ -155,6 +155,28 @@ export function buttonState(
 		};
 	}
 	if (existing && existing.status !== 'completed') {
+		// Someone else's job, which this caller has not joined: a click parks them
+		// on it, and the release lands in their account too. Only on a definite
+		// `false` — the submitter, a caller already waiting, and anyone the server
+		// could not place keep the locked row below, exactly as before.
+		if (existing.yours === false) {
+			const progress = existing.progress
+				? describeTransfer('nzb2rd', existing.progress)
+				: null;
+			const where =
+				progress?.detail ??
+				(progress?.stagePercent == null ? undefined : `${progress.stagePercent}%`);
+			return {
+				kind: 'join',
+				label: 'Get it too',
+				detail: progress
+					? [progress.label, where].filter(Boolean).join(' · ')
+					: 'In progress',
+				title: 'Someone else is fetching this — get it in your Real-Debrid library too when it lands',
+				phase: null,
+				disabled: false,
+			};
+		}
 		// Nothing came back about the job itself — past the server's re-check cap,
 		// or nzb2rd was unreachable. Say only what is actually known.
 		if (!existing.progress) {
@@ -237,16 +259,17 @@ const UsenetResults = ({
 
 			// Best-effort, and deliberately not awaited into the error path: a
 			// failed lookup should never hide the results themselves.
-			fetchNzb2rdTransfers(found.map((r) => r.id)).then((existing) =>
-				setTransferred(new Map(existing.map((t) => [t.releaseId, t])))
-			);
+			fetchNzb2rdTransfers(
+				found.map((r) => r.id),
+				rdKey
+			).then((existing) => setTransferred(new Map(existing.map((t) => [t.releaseId, t]))));
 		} catch (e) {
 			setError(e instanceof Error ? e.message : 'Usenet search failed');
 			setResults(null);
 		} finally {
 			setIsLoading(false);
 		}
-	}, [imdbId, seasonNum, title, onResults]);
+	}, [imdbId, seasonNum, title, onResults, rdKey]);
 
 	useEffect(() => {
 		if (imdbId) fetchResults();
@@ -346,7 +369,9 @@ const UsenetResults = ({
 					createdAt: Date.now(),
 				});
 				toast.loading(
-					`${label}: already being fetched for someone else — you get it too.`,
+					job.mine
+						? `${label}: this is your transfer — it lands in your library when done.`
+						: `${label}: already being fetched for someone else — you get it too.`,
 					{
 						id: toastId,
 						duration: TRANSFER_STEP_TOAST_MS,

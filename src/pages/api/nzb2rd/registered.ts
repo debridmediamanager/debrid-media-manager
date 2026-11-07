@@ -1,4 +1,5 @@
 import type { Nzb2rdTransferRecord } from '@/services/database/nzb2rdMap';
+import { ownNzb2rdJobIds } from '@/services/nzb2rd';
 import { settleNzb2rdMarker } from '@/services/nzb2rdMarkers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
@@ -28,6 +29,13 @@ type TransferSummary = {
 	 * than guessing.
 	 */
 	progress?: ProgressFields;
+	/**
+	 * Unfinished jobs only, and only when the caller sent their RD key: true when
+	 * this caller gets the release when it lands anyway (they submitted it, or
+	 * already joined it), false when they would have to join. Absent when that
+	 * could not be told, and the row then stays locked as it always was.
+	 */
+	yours?: boolean;
 };
 
 const summaryOf = (r: Nzb2rdTransferRecord): TransferSummary => ({
@@ -109,6 +117,24 @@ async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary 
 	}
 }
 
+/** Sets `yours` on every unfinished transfer, from one nzb2rd lookup. */
+async function markYours(transfers: TransferSummary[], rdKey: string): Promise<void> {
+	const pending = transfers.filter((t) => t.status === 'pending');
+	if (pending.length === 0) return;
+	const own = await ownNzb2rdJobIds(rdKey);
+	if (!own) return;
+	await Promise.all(
+		pending.map(async (t) => {
+			if (own.has(t.jobId)) {
+				t.yours = true;
+				return;
+			}
+			const waiters = await db.getNzb2rdWaiters(t.releaseId).catch(() => null);
+			if (waiters) t.yours = waiters.some((w) => w.rdKey === rdKey);
+		})
+	);
+}
+
 // Given the release ids shown in the Usenet section of a movie/show page, report
 // which already have a transfer — completed (the content is in RD under the
 // returned info hash) or still running. Lets the section show "In RD" / "Sending"
@@ -150,6 +176,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			...records.filter((r) => !staleIds.has(r.releaseId)).map(summaryOf),
 			...settled.filter((s): s is TransferSummary => s !== null),
 		];
+		const rdKey = req.headers['x-rd-api-key'];
+		if (typeof rdKey === 'string' && rdKey) await markYours(transfers, rdKey);
 		return res.status(200).json({ transfers });
 	} catch (error) {
 		console.error('nzb2rd transfer lookup failed:', error);

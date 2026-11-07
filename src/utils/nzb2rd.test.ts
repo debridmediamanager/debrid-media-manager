@@ -221,6 +221,17 @@ describe('fetchNzb2rdTransfers', () => {
 		expect(await fetchNzb2rdTransfers(['a'])).toEqual([]);
 	});
 
+	it('sends the RD key as a header so the server can tell the caller’s own jobs', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ ok: true, json: async () => ({ transfers: [] }) });
+		vi.stubGlobal('fetch', fetchMock);
+		await fetchNzb2rdTransfers(['a'], 'user-rd-key');
+		expect(fetchMock.mock.calls[0][1].headers['x-rd-api-key']).toBe('user-rd-key');
+		await fetchNzb2rdTransfers(['a']);
+		expect(fetchMock.mock.calls[1][1].headers['x-rd-api-key']).toBeUndefined();
+	});
+
 	it('skips the request entirely for an empty list', async () => {
 		const fetchMock = vi.fn();
 		vi.stubGlobal('fetch', fetchMock);
