@@ -1,5 +1,6 @@
 import completeHandler from '@/pages/api/sponsor/wanted/complete';
 import listHandler from '@/pages/api/sponsor/wanted/index';
+import { _resetTokenSecretForTest, decryptReleaseId } from '@/services/newznab/opaqueId';
 import { checkRateLimitFor } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
 import { resolveWantedReused } from '@/services/wanted';
@@ -58,6 +59,99 @@ describe('/api/sponsor/wanted', () => {
 
 	const get = (headers: Record<string, string> = { 'x-api-key': sponsorKey }) =>
 		createMockRequest({ method: 'GET', headers });
+
+	describe('pins', () => {
+		const HASH = '9e26b9f3327b7175604928437b0766cf04ea695054e26';
+		const FILM =
+			'Oppenheimer 2023 2160p BluRay Remux DV HDR10+ DTS-HD MA 5.1 HEVC-tarunk9c.mkv';
+		const filmPin = {
+			id: HASH,
+			release: FILM,
+			size: 91459209764,
+			at: '2026-11-07T10:00:00.000Z',
+		};
+		beforeEach(() => {
+			process.env.NEWZNAB_TOKEN_SECRET = 'a'.repeat(64);
+			_resetTokenSecretForTest();
+		});
+		afterEach(() => {
+			delete process.env.NEWZNAB_TOKEN_SECRET;
+			_resetTokenSecretForTest();
+		});
+
+		it("lists each pin with a grab URL carrying this sponsor's key", async () => {
+			const episode = {
+				...filmPin,
+				id: 'e'.repeat(45),
+				release: 'Show.S02E05.mkv',
+				size: 0,
+				season: 2,
+				episode: 5,
+			};
+			mockRepository.listWanted = vi.fn().mockResolvedValue([
+				row({ id: 'a', pins: [filmPin] }),
+				row({
+					id: 'b',
+					kind: 'show',
+					imdbId: 'tt0115082',
+					seasons: [],
+					pins: [episode],
+				}),
+				row({ id: 'c', imdbId: 'tt0234215' }),
+			]);
+			const res = createMockResponse();
+			await listHandler(get(), res);
+
+			const { items } = vi.mocked(res.json).mock.calls[0][0];
+			const [film] = items[0].pins;
+			expect(film).toEqual({
+				id: HASH,
+				release: FILM,
+				nzb: expect.any(String),
+				size: 91459209764,
+			});
+			const url = new URL(film.nzb);
+			expect(url.origin + url.pathname).toBe(
+				'https://debridmediamanager.com/api/newznab/api'
+			);
+			expect(url.searchParams.get('t')).toBe('get');
+			expect(url.searchParams.get('apikey')).toBe(sponsorKey);
+			expect(decryptReleaseId(url.searchParams.get('id')!)).toEqual({
+				prefix: 'en',
+				nativeId: HASH,
+			});
+			expect(items[1].pins[0]).toMatchObject({
+				season: 2,
+				episode: 5,
+				release: 'Show.S02E05.mkv',
+			});
+			expect(items[1].pins[0]).not.toHaveProperty('at');
+			expect(items[2]).not.toHaveProperty('pins');
+		});
+
+		// A pinned film is the one release zurg was sent for: once it took it, it is done.
+		it('leaves a pinned film out once acknowledged, even with bands asked', async () => {
+			mockRepository.listWanted = vi
+				.fn()
+				.mockResolvedValue([
+					row({ id: 'a', pins: [filmPin], fulfilledAt: new Date(), fulfilled: TOOK }),
+					row({ id: 'b', fulfilledAt: new Date(), fulfilled: TOOK }),
+				]);
+			for (const query of [{ bands: '1080p,2160p' }, {}]) {
+				const res = createMockResponse();
+				await listHandler(
+					createMockRequest({
+						method: 'GET',
+						headers: { 'x-api-key': sponsorKey },
+						query,
+					}),
+					res
+				);
+				const { items } = vi.mocked(res.json).mock.calls[0][0];
+				expect(items.map((i: { id: string }) => i.id)).toEqual(query.bands ? ['b'] : []);
+			}
+		});
+	});
 
 	// zurg acknowledged the film, so it is done; a show is followed for new episodes.
 	it('leaves acknowledged films out and keeps acknowledged shows', async () => {

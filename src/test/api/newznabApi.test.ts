@@ -786,6 +786,24 @@ describe('GET /api/newznab/api grab', () => {
 		expect(mockPutStored).not.toHaveBeenCalled();
 	});
 
+	// "Send to zurg" stores an Easynews NZB under `en`, which no upstream indexer has:
+	// the grab must serve it from the store, and say "No such item" without a copy.
+	it('serves an Easynews pin from the store and answers 300 without a copy', async () => {
+		const id = encryptReleaseId('en', '9e26b9f3327b7175604928437b0766cf04ea695054e26');
+		mockGetStored.mockResolvedValue(CURRENT_STORED_NZB);
+		const hit = await run({ t: 'get', id, apikey: SPONSOR_KEY });
+		expect(mockGetStored).toHaveBeenCalledWith(
+			'en',
+			'9e26b9f3327b7175604928437b0766cf04ea695054e26'
+		);
+		expect(body(hit)).toBe(CURRENT_STORED_NZB);
+
+		mockGetStored.mockResolvedValue(null);
+		const miss = await run({ t: 'get', id, apikey: SPONSOR_KEY });
+		expect(body(miss)).toContain('<error code="300"');
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
 	it('cleans a stored copy written under older rules before serving it', async () => {
 		mockGetStored.mockResolvedValue(STALE_STORED_NZB);
 

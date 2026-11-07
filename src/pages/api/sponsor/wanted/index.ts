@@ -1,5 +1,8 @@
 import { sponsorOfDmmApiKeyHeader } from '@/pages/api/zurg/auth';
 import type { WantedItemRow } from '@/services/database/wantedItems';
+import { EASYNEWS_NZB_PREFIX } from '@/services/easynews';
+import { encryptReleaseId, hasTokenSecret } from '@/services/newznab/opaqueId';
+import { grabUrl } from '@/services/newznab/search';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { resolveWantedReused, type WantedForZurg } from '@/services/wanted';
@@ -55,6 +58,18 @@ function upgradeOf(row: WantedItemRow): WantedForZurg['upgrade'] {
 		: undefined;
 }
 
+/** A row's pins, each with its stored NZB's grab URL carrying this sponsor's key. */
+function pinsOf(row: WantedItemRow, apiKey: string): WantedForZurg['pins'] {
+	if (!row.pins?.length || !hasTokenSecret()) return undefined;
+	return row.pins.map((pin) => ({
+		id: pin.id,
+		release: pin.release,
+		nzb: grabUrl(encryptReleaseId(EASYNEWS_NZB_PREFIX, pin.id), apiKey),
+		size: pin.size,
+		...(pin.season !== undefined && { season: pin.season, episode: pin.episode }),
+	}));
+}
+
 /**
  * A sponsor's wanted list, for their zurg to fetch: `{"items": [{id, kind, title,
  * imdb, year?, tmdb?, tvdb?, titles?, released?, seasons?: [{season, episodes,
@@ -62,7 +77,8 @@ function upgradeOf(row: WantedItemRow): WantedForZurg['upgrade'] {
  * already acknowledged are left out unless it wants a better release; shows stay,
  * so new episodes are fetched as they air. With `?bands=` a film is left out only once
  * every band holds a copy zurg wants no better than, and carries `bands` instead of
- * `upgrade`. See docs/sponsor-api.md.
+ * `upgrade`. A film with `pins` is done once acknowledged, bands or not. See
+ * docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
@@ -87,19 +103,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			.json({ error: '"bands" must list "720p", "1080p" or "2160p", separated by commas' });
 	}
 
+	const apiKey = req.headers['x-api-key'] as string;
 	try {
 		const rows = (await db.listWanted(sponsor.shortId)).filter(
 			(row) =>
 				row.kind === 'show' ||
 				!row.fulfilledAt ||
-				(bands ? !bandsDone(row, bands) : upgradeOf(row))
+				(!row.pins && (bands ? !bandsDone(row, bands) : upgradeOf(row)))
 		);
 		const items: WantedForZurg[] = [];
 		for (let i = 0; i < rows.length; i += RESOLVE_AT_ONCE) {
 			items.push(
 				...(await Promise.all(
 					rows.slice(i, i + RESOLVE_AT_ONCE).map(async (row) => {
-						const resolved = await resolveWantedReused(row);
+						const pins = pinsOf(row, apiKey);
+						const resolved = {
+							...(await resolveWantedReused(row)),
+							...(pins && { pins }),
+						};
 						if (bands) {
 							const held = bandsOf(row, bands);
 							return { ...resolved, ...(held && { bands: held }) };

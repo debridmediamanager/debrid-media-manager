@@ -1075,6 +1075,22 @@ export const openApiDocument = {
 												},
 											},
 											bands: { type: 'object' },
+											pins: {
+												type: 'array',
+												description:
+													'Releases picked with Send to zurg, to take as they are: one for a film, one per episode for a show (with `season`, `episode`). `nzb` carries the key the list was read with. A pinned film leaves the list once acknowledged.',
+												items: {
+													type: 'object',
+													properties: {
+														id: { type: 'string' },
+														release: { type: 'string' },
+														nzb: { type: 'string' },
+														size: { type: 'integer' },
+														season: { type: 'integer' },
+														episode: { type: 'integer' },
+													},
+												},
+											},
 										},
 									},
 								},

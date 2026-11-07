@@ -267,6 +267,30 @@ a copy its fetcher wants no better than, and carries `bands` in place of `upgrad
 A band missing from `bands` has no copy yet. A band with `to` holds one its fetcher wants
 bettered. `bands` takes `720p`, `1080p` and `2160p`, separated by commas.
 
+`pins` lists the releases you picked with **Send to zurg** on a title's Easynews results,
+for a fetcher to take as they are instead of searching. It is absent when there are none:
+
+```json
+"pins": [
+	{
+		"id": "9e26b9f3327b7175604928437b0766cf04ea695054e26",
+		"release": "Show.S02E05.1080p.WEB.H264-GRP.mkv",
+		"nzb": "https://debridmediamanager.com/api/newznab/api?t=get&id=<token>&apikey=<your DMM API key>",
+		"size": 3221225472,
+		"season": 2,
+		"episode": 5
+	}
+]
+```
+
+`id` (up to 64 characters) stays the same for the same release, `release` is its file
+name with the extension, `nzb` is its NZB from DMM's Newznab endpoint, carrying the key
+the list was read with, and `size` is in bytes, `0` when unknown. A film holds at most
+one pin; a new pick replaces it and starts the film over. A show holds one per episode,
+with `season` and `episode` (a multi-episode file's first); a show on the list only for
+its pins follows no season, so its `seasons` is empty. A film with a pin leaves the list
+once acknowledged, `bands` or not.
+
 `POST /api/sponsor/wanted/complete` says the title was fetched:
 
 ```json
