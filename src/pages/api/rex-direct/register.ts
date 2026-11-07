@@ -3,11 +3,14 @@ import { getClientIpFromRequest } from '@/utils/clientIp';
 import { plexServerOwner } from '@/utils/plexServerOwner';
 import { issueRexDirectCert, rexDirectCertCoversLan } from '@/utils/rexDirectAcme';
 import {
+	isGlobalIpv6,
 	isRfc1918Ipv4,
+	removeRexDirectRecords,
 	rexDirectHostname,
 	rexDirectLanHostname,
 	upsertRexDirectRecord,
 } from '@/utils/rexDirectDns';
+import { answersAsMachine } from '@/utils/rexDirectReach';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -34,6 +37,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
  * caller-supplied, which is safe only because it must be an RFC 1918 address: those
  * are not routable, so nobody can aim our domain at a public host through it. A
  * server only ever touches its own hash.
+ *
+ * A claimed server may also send `publicIpv6` and `port`: an AAAA on its public name
+ * reaches it on a connection with no public IPv4 (CGNAT, DS-Lite) but a global IPv6. DMM
+ * is reached over IPv4 only, so that address is caller-supplied; DMM connects back to it
+ * and writes the AAAA only when the same server answers there (`rexDirectReach`). An
+ * empty or unreachable `publicIpv6` drops the AAAA, so a lost address stops attracting
+ * clients. A caller that sends no `publicIpv6` key leaves the AAAA alone.
  */
 const MAX_NAMES_PER_ACCOUNT = 10;
 const RENEW_BEFORE_MS = 30 * 24 * 3600_000;
@@ -123,6 +133,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		await db.rexDirectRecordLanIp(machineIdentifier, lanIp);
 	}
 
+	// Only a claimed server gets an AAAA, and only where it answers as itself.
+	let ipv6: string | null = null;
+	if (plexAccountId && typeof req.body?.publicIpv6 === 'string') {
+		const candidate = req.body.publicIpv6.trim();
+		const port = Number(req.body?.port);
+		const reaches =
+			isGlobalIpv6(candidate) &&
+			Number.isInteger(port) &&
+			port > 0 &&
+			port < 65536 &&
+			(await answersAsMachine(candidate, port, machineIdentifier));
+		if (reaches) {
+			ipv6 = candidate;
+			await upsertRexDirectRecord(hostname, candidate, 'AAAA');
+		} else {
+			await removeRexDirectRecords(hostname, 'AAAA');
+		}
+	}
+
 	if (wildcard) {
 		return res.status(200).json({
 			hostname,
@@ -155,6 +184,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		hostname,
 		hash,
 		ip,
+		...(ipv6 && { ipv6 }),
 		...(coversLan && { lanHostname: rexDirectLanHostname(hash), lanIp }),
 		certificate: cert.certificate,
 		privateKey: cert.privateKey,

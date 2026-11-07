@@ -2,7 +2,8 @@ import handler from '@/pages/api/rex-direct/register';
 import { repository } from '@/services/repository';
 import { plexServerOwner } from '@/utils/plexServerOwner';
 import { issueRexDirectCert } from '@/utils/rexDirectAcme';
-import { upsertRexDirectRecord } from '@/utils/rexDirectDns';
+import { removeRexDirectRecords, upsertRexDirectRecord } from '@/utils/rexDirectDns';
+import { answersAsMachine } from '@/utils/rexDirectReach';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -17,7 +18,9 @@ vi.mock('@/utils/rexDirectAcme', async (importOriginal) => ({
 vi.mock('@/utils/rexDirectDns', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/rexDirectDns')>()),
 	upsertRexDirectRecord: vi.fn(),
+	removeRexDirectRecords: vi.fn(),
 }));
+vi.mock('@/utils/rexDirectReach');
 
 const MACHINE = '45d6b93c3f472650d0a3830d5d3415819ec7bfc1';
 const DAY = 24 * 3600_000;
@@ -286,5 +289,69 @@ describe('rex-direct register, LAN name', () => {
 		expect(res.body).not.toHaveProperty('lanIp');
 		expect(db.rexDirectLastLanIp).not.toHaveBeenCalled();
 		expect(upsertRexDirectRecord).not.toHaveBeenCalled();
+	});
+});
+
+describe('rex-direct register, IPv6 for connections without a public IPv4', () => {
+	const V6 = '2a01:4f8:c012:e7cd::1';
+	const NAME = 'h1.rex-direct.debridmediamanager.com';
+	beforeEach(() => {
+		db.rexDirectServerCert.mockResolvedValue({
+			certificate: 'OWN',
+			privateKey: 'OWNKEY',
+			expiresAt: new Date(Date.now() + 80 * DAY),
+		});
+	});
+
+	it('writes the AAAA when the server answers as itself at that address and port', async () => {
+		vi.mocked(answersAsMachine).mockResolvedValue(true);
+		const res = await call({ 'x-plex-token': 'tok' }, { publicIpv6: V6, port: 32400 });
+		expect(answersAsMachine).toHaveBeenCalledWith(V6, 32400, MACHINE);
+		expect(upsertRexDirectRecord).toHaveBeenCalledWith(NAME, V6, 'AAAA');
+		expect(removeRexDirectRecords).not.toHaveBeenCalled();
+		expect(res.code).toBe(200);
+		expect(res.body.ipv6).toBe(V6);
+	});
+
+	it('drops the AAAA when the address does not reach the server', async () => {
+		vi.mocked(answersAsMachine).mockResolvedValue(false);
+		const res = await call({ 'x-plex-token': 'tok' }, { publicIpv6: V6, port: 32400 });
+		expect(upsertRexDirectRecord).not.toHaveBeenCalledWith(NAME, V6, 'AAAA');
+		expect(removeRexDirectRecords).toHaveBeenCalledWith(NAME, 'AAAA');
+		expect(res.body.ipv6).toBeUndefined();
+	});
+
+	it('drops the AAAA when the server no longer has an IPv6', async () => {
+		await call({ 'x-plex-token': 'tok' }, { publicIpv6: '', port: 32400 });
+		expect(answersAsMachine).not.toHaveBeenCalled();
+		expect(removeRexDirectRecords).toHaveBeenCalledWith(NAME, 'AAAA');
+	});
+
+	it.each(['::1', 'fd00::1', 'fe80::1', '2001:db8::1', '2002:c000:204::1', '203.0.113.7'])(
+		'never connects back to %s, which is not a global IPv6',
+		async (address) => {
+			await call({ 'x-plex-token': 'tok' }, { publicIpv6: address, port: 32400 });
+			expect(answersAsMachine).not.toHaveBeenCalled();
+			expect(removeRexDirectRecords).toHaveBeenCalledWith(NAME, 'AAAA');
+		}
+	);
+
+	it('needs a port to check', async () => {
+		await call({ 'x-plex-token': 'tok' }, { publicIpv6: V6 });
+		expect(answersAsMachine).not.toHaveBeenCalled();
+	});
+
+	it('leaves the AAAA alone for a server that sends no publicIpv6 key', async () => {
+		await call({ 'x-plex-token': 'tok' });
+		expect(answersAsMachine).not.toHaveBeenCalled();
+		expect(removeRexDirectRecords).not.toHaveBeenCalled();
+	});
+
+	it('gives the sponsor-key path no AAAA', async () => {
+		db.getSponsorByDmmApiKey.mockResolvedValue({ shortId: 'S1', isSponsor: true } as any);
+		db.rexDirectGetCert.mockResolvedValue({ fullchain: 'W', privkey: 'WK' } as any);
+		await call({ 'x-api-key': 'k' }, { publicIpv6: V6, port: 32400 });
+		expect(answersAsMachine).not.toHaveBeenCalled();
+		expect(removeRexDirectRecords).not.toHaveBeenCalled();
 	});
 });

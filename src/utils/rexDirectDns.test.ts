@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+	isGlobalIpv6,
 	isRfc1918Ipv4,
 	rexDirectHostname,
 	rexDirectLanHostname,
@@ -154,3 +155,48 @@ describe('rexDirectDns', () => {
 function json(body: any) {
 	return { ok: true, status: 200, json: async () => body } as unknown as Response;
 }
+
+describe('rexDirectDns IPv6', () => {
+	beforeEach(() => {
+		process.env = { ...OLD, REXDIRECT_CF_TOKEN: 'tok', REXDIRECT_CF_ZONE: 'zone1' };
+	});
+	afterEach(() => {
+		process.env = OLD;
+		vi.restoreAllMocks();
+	});
+
+	it.each(['2a01:4f8:c012:e7cd::1', '2003:e5:1f00::1', '2600:1f18::5', '3fff::1'])(
+		'takes %s as a global IPv6',
+		(ip) => expect(isGlobalIpv6(ip)).toBe(true)
+	);
+
+	it.each([
+		'::1',
+		'::',
+		'fd00::1',
+		'fe80::1',
+		'ff02::1',
+		'2001:db8::1',
+		'2001::1',
+		'2001:0:4136:e378::1',
+		'2002:c000:204::1',
+		'::ffff:203.0.113.7',
+		'203.0.113.7',
+		'not an ip',
+	])('refuses %s as a public IPv6', (ip) => expect(isGlobalIpv6(ip)).toBe(false));
+
+	it('writes an AAAA record when asked for one', async () => {
+		const fetchMock = vi
+			.spyOn(globalThis, 'fetch')
+			.mockResolvedValueOnce(json({ success: true, result: [] }))
+			.mockResolvedValueOnce(json({ success: true, result: {} }));
+		await upsertRexDirectRecord('h.rex-direct.debridmediamanager.com', '2a01:4f8::1', 'AAAA');
+		const [lookup, write] = fetchMock.mock.calls.slice(-2);
+		expect(String(lookup[0])).toContain('type=AAAA');
+		expect(JSON.parse(String(write[1]?.body))).toMatchObject({
+			type: 'AAAA',
+			content: '2a01:4f8::1',
+			proxied: false,
+		});
+	});
+});

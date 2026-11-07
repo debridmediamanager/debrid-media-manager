@@ -1,4 +1,4 @@
-import { isIPv4 } from 'node:net';
+import { isIPv4, isIPv6 } from 'node:net';
 
 /**
  * Point `<hash>.rex-direct.debridmediamanager.com` at a rex server's own IP
@@ -46,6 +46,23 @@ export function isRfc1918Ipv4(ip: string): boolean {
 	return a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168);
 }
 
+/**
+ * A global unicast IPv6 (2000::/3) a client anywhere can reach, the only IPv6 we point a
+ * public name at. Not documentation (2001:db8::/32), Teredo (2001::/32) or 6to4 (2002::/16):
+ * the first is never routed and the other two are tunnels to an IPv4 host.
+ */
+export function isGlobalIpv6(ip: string): boolean {
+	if (!isIPv6(ip) || ip.includes('.')) return false;
+	// The first two groups; a missing one sits inside the `::` run of zeros.
+	const groups = ip.split('::')[0].split(':');
+	const first = parseInt(groups[0] || '0', 16);
+	const second = parseInt(groups[1] || '0', 16);
+	if (first < 0x2000 || first > 0x3fff) return false;
+	if (first === 0x2002) return false;
+	if (first === 0x2001 && (second === 0 || second === 0xdb8)) return false;
+	return true;
+}
+
 async function cf(path: string, init: RequestInit, token: string): Promise<any> {
 	const res = await fetch(`${CF}${path}`, {
 		...init,
@@ -64,19 +81,23 @@ async function cf(path: string, init: RequestInit, token: string): Promise<any> 
 }
 
 /**
- * Ensure `name` (a server's `<hash>.rex-direct…`) is a DNS-only A record for `ip`.
+ * Ensure `name` (a server's `<hash>.rex-direct…`) is a DNS-only A (or AAAA) record for `ip`.
  * Grey-cloud (not proxied) on purpose: proxying Plex streaming through Cloudflare
  * violates their free TOS, and TLS terminates at the server.
  */
-export async function upsertRexDirectRecord(name: string, ip: string): Promise<void> {
+export async function upsertRexDirectRecord(
+	name: string,
+	ip: string,
+	type: 'A' | 'AAAA' = 'A'
+): Promise<void> {
 	const { token, zone } = config();
 	const list = await cf(
-		`/zones/${zone}/dns_records?type=A&name=${encodeURIComponent(name)}`,
+		`/zones/${zone}/dns_records?type=${type}&name=${encodeURIComponent(name)}`,
 		{ method: 'GET' },
 		token
 	);
 	const record = Array.isArray(list.result) ? list.result[0] : undefined;
-	const payload = JSON.stringify({ type: 'A', name, content: ip, ttl: 120, proxied: false });
+	const payload = JSON.stringify({ type, name, content: ip, ttl: 120, proxied: false });
 	if (record) {
 		if (record.content !== ip) {
 			await cf(
@@ -87,6 +108,19 @@ export async function upsertRexDirectRecord(name: string, ip: string): Promise<v
 		}
 	} else {
 		await cf(`/zones/${zone}/dns_records`, { method: 'POST', body: payload }, token);
+	}
+}
+
+/** Drop `name`'s records of `type`: an AAAA whose address no longer reaches the server. */
+export async function removeRexDirectRecords(name: string, type: 'AAAA'): Promise<void> {
+	const { token, zone } = config();
+	const list = await cf(
+		`/zones/${zone}/dns_records?type=${type}&name=${encodeURIComponent(name)}`,
+		{ method: 'GET' },
+		token
+	);
+	for (const record of Array.isArray(list.result) ? list.result : []) {
+		await cf(`/zones/${zone}/dns_records/${record.id}`, { method: 'DELETE' }, token);
 	}
 }
 
