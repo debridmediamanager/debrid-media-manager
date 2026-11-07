@@ -11,14 +11,10 @@ const sameRelease = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g
 
 /**
  * The indexers' results plus the Easynews releases visitors sent to zurg for this
- * title (see /api/easynews/send), minus any an indexer already lists under the same name.
+ * title (`stored`, see /api/easynews/send), minus any an indexer already lists under
+ * the same name.
  */
-async function withEasynews(
-	results: UsenetResult[],
-	imdbId: string,
-	season?: number
-): Promise<UsenetResult[]> {
-	const stored = await db.getEasynewsNzbs(imdbId, season);
+function withEasynews(results: UsenetResult[], stored: UsenetResult[]): UsenetResult[] {
 	if (stored.length === 0) return results;
 	const listed = new Set(results.map((r) => sameRelease(r.title)));
 	return [...results, ...stored.filter((r) => !listed.has(sameRelease(r.title)))];
@@ -74,7 +70,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({
 			results: await withoutBlockedReleases(
-				await withEasynews(cached.results, imdbId, season)
+				withEasynews(cached.results, await db.getEasynewsNzbs(imdbId, season))
 			),
 			cached: true,
 		});
@@ -93,10 +89,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			title: showTitle,
 			tvdbId,
 		});
-		await Promise.all([db.setCachedNzbSearch(imdbId, season, results), recordCopies(results)]);
+		// An Easynews release joins the indexer postings of its name as their copy,
+		// and they as its, even where the list below leaves it out for that name.
+		const easynews = await db.getEasynewsNzbs(imdbId, season);
+		await Promise.all([
+			db.setCachedNzbSearch(imdbId, season, results),
+			recordCopies([...results, ...easynews]),
+		]);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({
-			results: await withoutBlockedReleases(await withEasynews(results, imdbId, season)),
+			results: await withoutBlockedReleases(withEasynews(results, easynews)),
 			cached: false,
 		});
 	} catch (error) {
@@ -105,7 +107,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// Serve what we have rather than breaking the section.
 			return res.status(200).json({
 				results: await withoutBlockedReleases(
-					await withEasynews(cached.results, imdbId, season)
+					withEasynews(cached.results, await db.getEasynewsNzbs(imdbId, season))
 				),
 				cached: true,
 				stale: true,

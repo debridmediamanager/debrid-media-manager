@@ -51,19 +51,22 @@ describe('groupCopies', () => {
 	});
 
 	// A Newznab-only upstream's posting cannot be fetched back through
-	// /api/nzb2rd/download, so it is no copy nzb2rd could use.
-	it('leaves out postings nzb2rd cannot fetch back', () => {
+	// /api/nzb2rd/download, so it is no copy nzb2rd could use. An Easynews release a
+	// visitor sent to zurg can: fetchNzb serves it from the NZB store.
+	it('leaves out postings nzb2rd cannot fetch back, and keeps stored Easynews ones', () => {
 		const title = 'The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS';
 		const copies = groupCopies([
 			{ id: 'nl:elsewhere', title },
 			{ id: 'ds:a', title },
-			{ id: 'en:0123456789abcdef0123', title },
+			{ id: 'en:0123456789abcdef0123', title: `${title}.mkv` },
+			{ id: 'en:not-a-hash', title },
 			{ id: 'ah:b', title },
 		]);
 		expect(copies).toEqual(
 			new Map([
-				['ds:a', ['ah:b']],
-				['ah:b', ['ds:a']],
+				['ds:a', ['en:0123456789abcdef0123', 'ah:b']],
+				['en:0123456789abcdef0123', ['ds:a', 'ah:b']],
+				['ah:b', ['ds:a', 'en:0123456789abcdef0123']],
 			])
 		);
 	});

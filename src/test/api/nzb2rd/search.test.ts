@@ -1,7 +1,10 @@
 import handler from '@/pages/api/nzb2rd/search';
+import { splitEasynewsPath, toResults } from '@/services/easynews';
 import { searchUsenet } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { resolveTvdbId } from '@/services/tvdbLookup';
+import bearUsenetTab from '@/test/fixtures/easynews/nzb2rd-search-cocaine-bear-2023-2026-11-08.json';
+import bearEasynews from '@/test/fixtures/easynews/search-cocaine-bear-2023-2026-10-25.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -69,6 +72,49 @@ describe('GET /api/nzb2rd/search other postings', () => {
 				['ah:b', ['ds:a']],
 			])
 		);
+	});
+
+	// Cocaine Bear (2023): the Usenet tab's live answer on 2026-11-08, and every
+	// result of the Easynews search of 2026-10-25 listed the way a Send to zurg lists
+	// it (services/easynewsNzbLibrary). Most Easynews files carry the exact name of an
+	// indexer release, so either is the other's copy.
+	describe('with the Easynews releases sent to zurg for the title', () => {
+		const sent = toResults(bearEasynews.data as never, {
+			title: 'Cocaine Bear',
+			year: '2023',
+		}).map((result) => {
+			const { hash, name } = splitEasynewsPath(result.path);
+			return { id: `en:${hash}`, title: name, size: result.size };
+		});
+		const KNIVES = [
+			'ds:15e6a3b4afa1ce7f0865d6e2e141b525a42ada1f',
+			'ds:bd4fdc79361acb5445d224efdf03d3a9a8cfd745',
+		];
+		const KNIVES_EN = 'en:89ff287df86f44f6eb11b991b2a8666c07bd3d560568b';
+
+		const recorded = async () => {
+			mockSearch.mockResolvedValue(bearUsenetTab.results);
+			mockRepository.getEasynewsNzbs = vi.fn().mockResolvedValue(sent);
+			await run({ imdbId: 'tt14209916' });
+			return vi.mocked(mockRepository.recordUsenetCopies).mock.calls[0][0];
+		};
+
+		it('records each as a copy of the indexer postings of its name, and the other way round', async () => {
+			const copies = await recorded();
+
+			expect(copies.get(KNIVES[0])).toEqual([KNIVES[1], KNIVES_EN]);
+			expect(copies.get(KNIVES[1])).toEqual([KNIVES[0], KNIVES_EN]);
+			expect(copies.get(KNIVES_EN)).toEqual(KNIVES);
+			// Named "Cocaine Bear 2023 720p BluRay x264 DTS-FGT" on Easynews and with
+			// dots on the indexer: one release.
+			expect(copies.get('ds:8ff81669d55dccdfa08d66e3a697ff1019fc1824')).toEqual([
+				'en:d414aeacbab4b4ef284483210e71cdb107d52c25ff940',
+			]);
+			// No indexer lists this file's name, so it has no copy to fall back to.
+			const loner = 'en:7c7de95aedfae247eace80c51699bade043d9febb7823';
+			expect(sent.map((r) => r.id)).toContain(loner);
+			expect(copies.has(loner)).toBe(false);
+		});
 	});
 
 	it('records nothing from a cached one', async () => {

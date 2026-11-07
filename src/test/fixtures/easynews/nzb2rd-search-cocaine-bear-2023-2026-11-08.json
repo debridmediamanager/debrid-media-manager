@@ -1,0 +1,755 @@
+{
+	"cached": false,
+	"results": [
+		{
+			"id": "ds:9dce28dcfab570579a90983313fd7f80a6f84ee8",
+			"title": "Cocaine.Bear.2023.BluRay.1080p.DTS-HD.MA.7.1.AVC.REMUX-FraMeSToR",
+			"size": 27558176028,
+			"pubDate": "Fri, 30 Oct 2026 14:38:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:150784a2e5c4a235b331dfdf45ec8a7eb8d6b21e"]
+		},
+		{
+			"id": "ds:54393b6094d73c83b6738bb61d67da28ab86ed49",
+			"title": "Cocaine.Bear.2023.2160p.UHD.BluRay.TrueHD.Atmos.7.1.DV.HDR10.x265-ATELiER",
+			"size": 24920367371,
+			"pubDate": "Thu, 29 Oct 2026 16:24:07 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:6afbbc9224c2b93fb28606b87129ecadb04b86ab"]
+		},
+		{
+			"id": "ds:f224bd25391bbd3466aaf37cb43f798080fda165",
+			"title": "Cocaine.Bear.2023.1080p.NF.WEB-DL.DDP5.1.Atmos.AV1-Saon",
+			"size": 2409756182,
+			"pubDate": "Mon, 03 Aug 2026 20:19:01 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:d7d93071bd56e8e8d985818d36e01ac7ff45949e"]
+		},
+		{
+			"id": "ds:90d9439c2192b685260f5fa2c4d7382ed69c8f6c",
+			"title": "Cocaine.Bear.2023.720p.HDCAM-C1NEM4",
+			"size": 835022518,
+			"pubDate": "Mon, 27 Jul 2026 13:08:15 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:627e228e0d9850de3c6e18effb4fa76b7afc1d8e"]
+		},
+		{
+			"id": "ds:4cabedb63556ee537b64e5f1cc98e8826f94fd36",
+			"title": "Cocaine.Bear.2023.NORDiC.1080p.WEB-DL.H.264.DDP5.1.Atmos-NoTrace",
+			"size": 5143214651,
+			"pubDate": "Sun, 19 Jul 2026 14:48:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:5f380e7b5e0f872a50738a606726cd6c96527f44"]
+		},
+		{
+			"id": "ds:ec1bdf92b9770ca4fc1852bf08f939ad2d64bb61",
+			"title": "Cocaine.Bear.2023.2160p.UHD.BluRay.DV.HDR10+.DDP.5.1.x265-BiTOR",
+			"size": 20065550730,
+			"pubDate": "Sat, 13 Jun 2026 09:42:02 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:51d1a02570c3ba6fac6b854f0eb38c12386435d7"]
+		},
+		{
+			"id": "ds:024f42d8b87193617a6e85183b637f1ff1f543da",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DDP7.1.x264-PRoDJi",
+			"size": 9681287333,
+			"pubDate": "Mon, 04 May 2026 22:04:08 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:f26ae92a2261d3241546570a520f19270b395194"]
+		},
+		{
+			"id": "ds:26f32bfce2a4880ff0ee7dabf5cb1aa63c764523",
+			"title": "Cocaine Bear 2023 1080p BluRay x264-GeneMige",
+			"size": 12748571047,
+			"pubDate": "Tue, 17 Mar 2026 11:47:03 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:e00d6c04cec6fa69d279517ea66248f7f7c5ef4e",
+			"title": "Cocaine.Bear.2023.2160p.PCOK.WEB.DL.DDP.5.1.H.265.PiRaTeS",
+			"size": 11934985499,
+			"pubDate": "Tue, 17 Mar 2026 06:03:04 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:fad9ecffdf512c60fb9dcf227303497daa56b1c1",
+			"title": "Cocaine.Bear.2023.2160p.PCOK.WEB.DL.DDPA.5.1.DV.HDR.H.265.PiRaTeS",
+			"size": 12190953825,
+			"pubDate": "Tue, 17 Mar 2026 06:01:03 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:c7e11c2acf2741a5500640dd788eece28d47006c",
+			"title": "Cocaine.Bear.2023.2160p.PCOK.WEB.DL.DDPA.5.1.DV.H.265.PiRaTeS",
+			"size": 12199701335,
+			"pubDate": "Tue, 17 Mar 2026 05:57:02 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:57adb6c37c3bfd90140d47e8378489cc084059e2",
+			"title": "Cocaine.Bear.2023.1080p.Blu.ray.Remux.AVC.DTS.HD.MA.7.1.HDT",
+			"size": 27558224717,
+			"pubDate": "Wed, 04 Mar 2026 04:44:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:94193cf9a20f5b1ec86cfaba24a6b9653b841a1d"]
+		},
+		{
+			"id": "ds:f738dc09b53cea6072dd4e33d75cb12887a242d6",
+			"title": "Cocaine.Bear.2023.REPACK2.2160p.UHD.Blu.ray.Remux.DV.HDR.HEVC.TrueHD.Atmos.7.1.CiNEPHiLES",
+			"size": 32435797390,
+			"pubDate": "Mon, 23 Feb 2026 10:23:02 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:054b8e2a3b78bf11c900d578c848fe2b94a2506f"]
+		},
+		{
+			"id": "ds:01b13fe33cb1fe46532f03919e82a8a40ec845b0",
+			"title": "Cocaine.Bear.2023.BluRay.1080p.DDP.Atmos.5.1.x264-hallowed",
+			"size": 8975013330,
+			"pubDate": "Tue, 13 Jan 2026 22:27:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:a3d3b8e348b234410ddee8fed76e69f9c541c4a3",
+			"title": "Cocaine.Bear.2023.UHD.BluRay.2160p.DDP.Atmos.5.1.HDR.x265-hallowed",
+			"size": 15498300826,
+			"pubDate": "Mon, 12 Jan 2026 20:13:02 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:131a63a54f275d34eb13037635e6ec74567bcd6a",
+			"title": "Cocaine.Bear.2023.1080p.Blu-ray.Remux.AVC.TrueHD.Atmos.7.1-CiNEPHiLES",
+			"size": 27083477606,
+			"pubDate": "Sun, 11 Jan 2026 14:32:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:56b41a4f0f500e5474ae4bf5b6b961ff8754bbd8",
+			"title": "Cocaine.Bear.2023.REPACK.2160p.UHD.Blu-ray.Remux.HDR.HEVC.TrueHD.Atmos.7.1-CiNEPHiLES",
+			"size": 42089106436,
+			"pubDate": "Wed, 24 Dec 2025 11:26:02 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:9fe2c4afe68a04c0090bc7c3776862e62cf168be",
+			"title": "Cocaine.Bear.2023.1080p.PCOK.WEB-DL.DDP.5.1.H.264-PiRaTeS",
+			"size": 6658139207,
+			"pubDate": "Sun, 26 Oct 2025 00:27:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:46a2c8c1660a7c96330ac88fff40db27a4269799",
+			"title": "Cocaine.Bear.2023.1080p.FDNG.WEB-DL.DDP.5.1.H.264-PiRaTeS",
+			"size": 3181998445,
+			"pubDate": "Sun, 26 Oct 2025 00:14:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:51dcc791def8e8dea8be1bc1dff3302064cb6779",
+			"title": "Cocaine.Bear.2023.1080P.10bit.Bluray.x265.DTS-HD.MA.7.1",
+			"size": 8487488255,
+			"pubDate": "Mon, 06 Oct 2025 23:18:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:da6a3f2700f059d752dfdaeb777ae39600bd1baf",
+			"title": "Cocaine.Bear.2023.1080p.ATVP.STZ.WEB-DL.DD.5.1.H.264-PiRaTeS",
+			"size": 5659858594,
+			"pubDate": "Mon, 29 Sep 2025 12:39:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:2f6c974a434376a73763e0637a8f85ae96d7bd6c",
+			"title": "(Cocaine Bear) [00/43] - \"Cocaine Bear 2023 1080p h265.nzb\"",
+			"size": 2112061785,
+			"pubDate": "Tue, 05 Aug 2025 05:56:52 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:ff9a9352591c0565fe59204b9469606589ed2dc8",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.REMUX.AVC.DTS-HD.MA.7.1-UnKn0wn",
+			"size": 28591088637,
+			"pubDate": "Mon, 17 Mar 2025 13:24:03 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": [
+				"ds:a97b4453e11763632910b16cdc51751b6e9f778b",
+				"ds:b5f5c9bb1a164c993ec03df2c92e517b407ace0a"
+			]
+		},
+		{
+			"id": "ds:dc613be0f5bbea9077c7464fd39ee9e9d1b166a5",
+			"title": "Cocaine.Bear.2023.1080p.BDRip.DDP7.1.x265.Vialle",
+			"size": 5509280838,
+			"pubDate": "Tue, 11 Feb 2025 15:24:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:8ff81669d55dccdfa08d66e3a697ff1019fc1824",
+			"title": "Cocaine Bear 2023 720p BluRay x264 DTS-FGT",
+			"size": 5666305277,
+			"pubDate": "Thu, 21 Nov 2024 17:20:46 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:98702e8b495edbe97de264f87dab8d5215a19883",
+			"title": "Cocaine Bear 2023 2160p MA WEB-DL TrueHD Atmos 7 1 DV HDR H 265-FLUX",
+			"size": 22235092293,
+			"pubDate": "Thu, 08 Aug 2024 10:03:03 +0100",
+			"category": ["2030"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:54ead87622c12581d948ba34a1f3c818afbc421b"]
+		},
+		{
+			"id": "ds:c3aa45c1dc4f69930281fb9d612265d406bcb793",
+			"title": "Cocaine.Bear.2023.2160p.MA.WEB-DL.TrueHD.Atmos.7.1.H.265-FLUX",
+			"size": 22211668221,
+			"pubDate": "Tue, 06 Aug 2024 21:51:02 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:17019b71bade70343a681c8a165e339c6b1281ec",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DDP5.1.x265.10bit-LAMA",
+			"size": 2456657015,
+			"pubDate": "Mon, 29 Jul 2024 12:03:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:951ca51fcab8e9617570961cd8db121e5ebc82c2",
+			"title": "Cocain.Bear.2023.1080p.BluRay.DTS-HD.MA.7.1.x264-FuzerHD",
+			"size": 16193617970,
+			"pubDate": "Sat, 18 May 2024 15:45:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:48aad34df6d88ff0f5b3e027a2c24c190948b249",
+			"title": "Cocaine Bear 2023 1080p UHD BluRay HDR x265 DDP 5 1-MovieMan",
+			"size": 6439709765,
+			"pubDate": "Wed, 10 Apr 2024 21:51:01 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:3c145b70723a4d474ab03e89ffe9ab7bffc356fd"]
+		},
+		{
+			"id": "ds:c2f6d384e2a89c109ef0280328d1841a168ff5a8",
+			"title": "Cocaine.Bear.2023.REPACK.2160p.UHD.BluRay.REMUX.HDR.HEVC.Atmos-TRiToN",
+			"size": 41797304248,
+			"pubDate": "Wed, 10 Apr 2024 09:51:02 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:8d55304a19410a23b87e8d4a2ba091e4782daca3",
+			"title": "Cocaine.Bear.2023.REPACK.1080p.BluRay.Hybrid.REMUX.AVC.Atmos-TRiToN",
+			"size": 26805882405,
+			"pubDate": "Wed, 10 Apr 2024 09:15:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:1dc22508ecec2008b889ff7fd48a6197dcc6d122",
+			"title": "Cocaine.Bear.2023.BluRay.2160p.UHD.HDR.DTS-HD.AC3.NL-RetailSub.REMUX",
+			"size": 51400238636,
+			"pubDate": "Mon, 08 Apr 2024 07:33:02 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:da78b8ab9e00968bc0a07f1fe54ceca695369dbe",
+			"title": "Cocaine.Bear.2023.Bluray.1080p.AVC.DTS-HD.MA.7.1.EFPG",
+			"size": 19251984905,
+			"pubDate": "Wed, 17 Jan 2024 22:32:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:30b9343e60ab633c73d3e55fc9c55ad8b3d6dca6",
+			"title": "Cocaine.Bear.2023.2160p.UHD.Remux.HEVC.HDR.DTS-HD.MA.7.1-playBD",
+			"size": 51118119339,
+			"pubDate": "Sun, 29 Oct 2023 15:18:05 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:fbf3fd11bd31eea9da11606a823da88edde5d12e"]
+		},
+		{
+			"id": "ds:de76bcf3dcbd2d40409e4f1cc157daf8b7b47a9a",
+			"title": "Cocaine.Bear.2023.UHD.BluRay.2160p.TrueHD.Atmos.7.1.DV.HEVC.HYBRID.REMUX-FraMeSToR",
+			"size": 42118413417,
+			"pubDate": "Sun, 15 Oct 2023 19:02:05 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:0cf173a65083ea26bc236352cc1b1442b93b2a2e",
+			"title": "Cocaine.Bear.2023.HYBRID.2160p.UHD.BluRay.DV.HDR10REMUX.DTS-HD.MA.7.1-BiTOR",
+			"size": 51569509534,
+			"pubDate": "Thu, 05 Oct 2023 09:42:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:6150a726ed1dce8383643fd8c3546675895d71a6",
+			"title": "Cocaine.Bear.2023.2160p.WEB-DL.DDP5.1.Atmos.DV.HDR10.H.265-CMRG",
+			"size": 19418715777,
+			"pubDate": "Sun, 10 Sep 2023 03:46:02 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:91da7fa009adad6b876b779630a2911e0cdaeac7"]
+		},
+		{
+			"id": "ds:d2b94d60fd2443e66adbe2c4cca8b1b70b4f6fdc",
+			"title": "Cocaine.Bear.2023.NORDiCSUBS.1080p.BluRay.DD5.1.x264-PTNK",
+			"size": 9934547163,
+			"pubDate": "Thu, 15 Jun 2023 20:00:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:33c5f61e81c9734d2414dcba4312f9927dfb7018",
+			"title": "Cocaine.Bear.2023.2160p.UHD.BluRay.HDR.DoVi.DTS-HD.MA.7.1.x265-SPHD",
+			"size": 34088898841,
+			"pubDate": "Thu, 15 Jun 2023 12:02:03 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:a6c9aff0809fe1532e6b7dd95c3eee98ff5ce22a"]
+		},
+		{
+			"id": "ds:f31d38530eca41586d625d860b7c69278529d3fa",
+			"title": "Cocaine Bear.2023.2160p.UHD.BluRay.HDR.DoVi.DTS-HD MA 7.1.x265-GP-M-NLsubs",
+			"size": 32985470716,
+			"pubDate": "Tue, 26 Sep 2023 09:27:50 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:c0639a31ab1721c7baad13b37341b7e9a0eb7605",
+			"title": "Cocaine.Bear.2023.2160p.UHD.Blu-ray.Remux.HEVC.HDR.DTS-HD.MA.7.1-HDT",
+			"size": 51119053254,
+			"pubDate": "Tue, 13 Jun 2023 18:32:05 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:eb422572937ecbded874e74504cb34edda4c93bb"]
+		},
+		{
+			"id": "ds:3c8b1a6f94e62897de532af6e42a69055f5f8ddf",
+			"title": "Cocaine.Bear.2023.2160p.UHD.BluRay.Hybrid.REMUX.HDR.HEVC.DTS-HD.MA.7.1-TRiToN",
+			"size": 51115100274,
+			"pubDate": "Mon, 12 Jun 2023 21:04:05 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:076a7caed2cbf67b57fb2b9ac023e9a28675039e",
+			"title": "Cocaine.Bear.2023.Hybrid.2160p.UHD.BluRay.DTS-HD.MA.7.1.HDR10+.DV.x265-LEGi0N",
+			"size": 30476519004,
+			"pubDate": "Sat, 10 Jun 2023 10:02:03 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:c6ae624b8b129fa296977fcaca5606dc94862120",
+			"title": "Cocaine.Bear.2023.NORDiC.2160p.BDRip.HDR10.AV1.DD5.1-DKV",
+			"size": 3340726852,
+			"pubDate": "Fri, 09 Jun 2023 16:58:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:06692d2af13dd051aef5b3d307b810a6f3a6b331",
+			"title": "Cocaine.Bear.2023.BluRay.2160p.UHD.REMUX.HEVC.10bit.HDR.DTS-HD.MA.5.1-LEGi0N",
+			"size": 50268436810,
+			"pubDate": "Fri, 09 Jun 2023 00:12:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:6057c4d57855190bc1acdb4172a6fe84e26b3ca4",
+			"title": "Cocaine.Bear.2023.UHD.BluRay.REMUX.2160p.HEVC.DTS-HD.MA5.1-HDS",
+			"size": 50155546115,
+			"pubDate": "Thu, 08 Jun 2023 06:14:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:0c4fce87dde2b002ad17c925c10429f3b5ec42bd",
+			"title": "Cocaine.Bear.2023.REPACK.UHD.BluRay.2160p.DTS-HD.MA.7.1.HEVC.HYBRID.REMUX-FraMeSToR",
+			"size": 51118280345,
+			"pubDate": "Wed, 07 Jun 2023 22:22:06 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:ec823f7ce72f4ca6ceec59a1dc01ec800bf22c51",
+			"title": "Cocaine.Bear.2023.1080p.AC3",
+			"size": 2220044432,
+			"pubDate": "Wed, 07 Jun 2023 20:48:05 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:5f2082b8800d5cb4650d96c74fc22c1d18ee1dbd",
+			"title": "Cocaine.Bear.2023.2160p.UHD.Blu-ray.Remux.HEVC.DTS-HD.MA.7.1.DoVi.SumVision",
+			"size": 51081278521,
+			"pubDate": "Wed, 07 Jun 2023 18:04:05 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:744200943859e9158617f8c94532781390931149",
+			"title": "Cocaine.Bear.2023.HYBRID.2160p.UHD.BluRay.DV.HDR10+.REMUX.DTS-HD.MA.7.1-BiTOR",
+			"size": 51569536679,
+			"pubDate": "Wed, 07 Jun 2023 17:20:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:3c35b7e9052908ab6f2392fdc63a571b7e29adfc",
+			"title": "Cocaine.Bear.2023.UHD.BluRay.2160p.DTS-HD.MA.7.1.HEVC.HYBRID.REMUX-FraMeSToR",
+			"size": 51118248986,
+			"pubDate": "Wed, 07 Jun 2023 16:54:03 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:41552563e286758928827cb9dad191ef6a45a968",
+			"title": "Cocaine.Bear.2023.2160p.UHD.Bluray.REMUX.HDR10.HEVC.DTS-HD.MA.5.1-GHD",
+			"size": 50256377166,
+			"pubDate": "Wed, 07 Jun 2023 13:20:04 +0100",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:5766deb65f0b3a68626e9760a89c9f52f27a61a4",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.x264.DTS-Leffe",
+			"size": 10577352258,
+			"pubDate": "Sat, 06 May 2023 17:54:04 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:f3865a8c3232ed22e751a3a6b504a17732355fbd",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DD+7.1.x264-playHD",
+			"size": 13353290342,
+			"pubDate": "Mon, 24 Apr 2023 09:20:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:15e6a3b4afa1ce7f0865d6e2e141b525a42ada1f",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.x264-KNiVES",
+			"size": 3364405636,
+			"pubDate": "Sat, 15 Apr 2023 20:52:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:bd4fdc79361acb5445d224efdf03d3a9a8cfd745"]
+		},
+		{
+			"id": "ds:dc3a96c79397276553582313e928be3478bc15c5",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DTS.x264-WiKi",
+			"size": 11837962849,
+			"pubDate": "Wed, 12 Apr 2023 11:04:05 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:1d53a16549f84351e1ea910208fb8887bd133029",
+			"title": "Cocaine.Bear.2023.1080p.Bluray.REMUX.AVC.DTS-HD.MA.7.1-GHD",
+			"size": 27658780829,
+			"pubDate": "Wed, 12 Apr 2023 11:00:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:bb662b7007627bfc55ad5f73aa03e694f803ba8e",
+			"title": "Cocaine.Bear.2023.BluRay.1080p.REMUX.AVC.DTS-HD.MA.7.1-LEGi0N",
+			"size": 27564674431,
+			"pubDate": "Tue, 11 Apr 2023 02:58:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:de568699f776b3887e6ee27c2bddb86ea0ace16b",
+			"title": "Cocaine.Bear.2023.1080p.Bluray.DD+7.1.x264-i9",
+			"size": 13249568555,
+			"pubDate": "Mon, 10 Apr 2023 20:22:05 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:ccfa17c1c7fa3f7ebe09b3a89ca7cf3ec577ad85",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.REMUX.DD5.1.AVC.DTS-HD.MA.7.1/a383eac8-8171-4f7d-9f48-0baa9ad211eb",
+			"size": 28905991469,
+			"pubDate": "Mon, 10 Apr 2023 17:44:06 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:918a0d5afd6d63348abf99f7b637fc7440bc517c",
+			"title": "Cocaine.Bear.2023.1080p.BDRIP.x264.AAC-AOC",
+			"size": 2466534812,
+			"pubDate": "Sun, 09 Apr 2023 15:30:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:c064a2163e20e45bf8da43861935718a9b9c5cd5",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DDP.7.1.x264-BiTOR",
+			"size": 14402574642,
+			"pubDate": "Sun, 09 Apr 2023 13:28:03 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:f0b8e94bc5769ba651ebe5c075cb644cc7ae8149",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.x264-OFT",
+			"size": 5207881595,
+			"pubDate": "Sun, 09 Apr 2023 04:52:06 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:a660aab3361876a4dcfe94217f2c803c9dd65447",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.DDP.7.1.x264-SPHD",
+			"size": 13419632844,
+			"pubDate": "Sat, 08 Apr 2023 20:32:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:1a6b80f96b21b43162274e20ad856e6826524c59",
+			"title": "Cocaine.Bear.2023.1080p.BluRay.10Bit.X265.DD.5.1-Chivaman",
+			"size": 4278450095,
+			"pubDate": "Fri, 07 Apr 2023 03:10:04 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:19b3afab15245120099b151f80fa9e5c2d897b06",
+			"title": "Cocaine.Bear.2023.1080p.Bluray.FLAC7.1.x264-OsC",
+			"size": 6640522912,
+			"pubDate": "Thu, 06 Apr 2023 21:38:04 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:9a1fafeff4acd2b606bf2ea4b5077a129de93c59",
+			"title": "Cocain.Bear.2023.1080p.BluRay.REMUX.AVC.DTS-HD.MA.7.1-xwMaRio",
+			"size": 27564662977,
+			"pubDate": "Thu, 06 Apr 2023 19:00:02 +0100",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:4ee5716cd56dab1639b039f4e960119690167df5",
+			"title": "Cocaine.Bear.2023.1080p.WEB.HLG.HDR10+.DDP.5.1.x265-BiTOR",
+			"size": 17511319228,
+			"pubDate": "Sun, 19 Mar 2023 20:12:07 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:1de9994d704713f883e2e72b0f27e55c2e8877bb",
+			"title": "Cocaine.Bear.2023.1080p.WEB-DL.EAC3.DDP5.1.Atmos.H264.UK.NL.Sub",
+			"size": 7045031475,
+			"pubDate": "Sat, 18 Mar 2023 00:27:39 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:08d68df3613c89535ff100bbd1af52b659bd6c52",
+			"title": "enOS5TOLWnDLh8QAZOVae5lvMQhiWeo5Jydh8Oh4/Cocaine Bear 2023 WEB2DVD DVD 5 NL SubS Retail/Cocaine Bear 2023 WEB2DVD DVD 5 NL SubS Retail",
+			"size": 22278187524,
+			"pubDate": "Fri, 17 Mar 2023 21:45:57 +0000",
+			"category": ["2070"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:b08c0abacaf64d17eff5df0cb5167d04566b27d1",
+			"title": "Cocaine.Bear.2023.720p.MA.WEB-DL.DDP5.1.Atmos.H.264-CMRG",
+			"size": 3846075847,
+			"pubDate": "Wed, 15 Mar 2023 13:42:04 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug",
+			"alternates": ["ds:19cbbeed6262abcaa1a97af8bba40d7a24a1ba36"]
+		},
+		{
+			"id": "ds:e9cb2c804ebcedf3acf52ff64c5cb7b69d1eeaae",
+			"title": "Cocaine.Bear.2023.1080p.WebRip.X264.Will1869",
+			"size": 2250461047,
+			"pubDate": "Tue, 14 Mar 2023 21:20:03 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:584772a914d023fbdd0e1605269f1b13566399a9",
+			"title": "Cocaine.Bear.2023.1080p.MA.Webrip.x265.10bit.EAC3.5.1.DNU.TAoE",
+			"size": 2927589384,
+			"pubDate": "Tue, 14 Mar 2023 17:26:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:a2e2190eed7693bc02474924c806240bc7f1b22b",
+			"title": "Cocaine.Bear.2023.2160p.HDR.WebRip.x265.10Bit.AC3.5.1-JATT",
+			"size": 3409834581,
+			"pubDate": "Tue, 14 Mar 2023 16:34:03 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:7b1a97e93fb77fe633d19189084d77e9fcec7317",
+			"title": "Cocaine.Bear.2023.1080p.WebRip.x265.10Bit.AC3.5.1-JATT",
+			"size": 1888860870,
+			"pubDate": "Tue, 14 Mar 2023 16:34:03 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:44c1c8a7339e594752115002e412d58aa19860a2",
+			"title": "Cocaine.Bear.2023.1080p.WEB-DL.DDP5.1.x264-AOC",
+			"size": 6017947054,
+			"pubDate": "Tue, 14 Mar 2023 15:28:02 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:8141e6484fef992aa097568948e23334de624a0f",
+			"title": "Cocaine.Bear.2023.1080p.MA.WEB-DL.DDP5.1.Atmos.H.264-CMRG",
+			"size": 7044947570,
+			"pubDate": "Tue, 14 Mar 2023 11:42:08 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:2db7ddcdeab9f895783c9ad765b75eb068027da8",
+			"title": "Cocaine.Bear.2023.2160p.AMZN.WEB-DL.DDP5.1.HDR.H.265-TROLL",
+			"size": 12636826363,
+			"pubDate": "Tue, 14 Mar 2023 06:50:06 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:ee291f190134a5dd2d9afc319fe1806f93dd5d7f",
+			"title": "Cocaine.Bear.2023.2160p.AMZN.WEB-DL.DDP5.1.Atmos.H.265-CMRG",
+			"size": 12765935712,
+			"pubDate": "Tue, 14 Mar 2023 06:46:07 +0000",
+			"category": ["2045"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		},
+		{
+			"id": "ds:a44173d2edd0592af7bb2b00791eff1da4493680",
+			"title": "Cocaine.Bear.2023.1080p.AMZN.WEB-DL.DDP5.1.H.264-OKSTOPCRYINGFOR1080p",
+			"size": 6018272931,
+			"pubDate": "Tue, 14 Mar 2023 06:44:03 +0000",
+			"category": ["2040"],
+			"imdb": "14209916",
+			"indexer": "DrunkenSlug"
+		}
+	]
+}

@@ -8,7 +8,7 @@
 // Usenet tab's send, nzb2rd's own fetch of a copy, a Newznab grab.
 
 import { encryptReleaseId } from '@/services/newznab/opaqueId';
-import { parseReleaseId, releaseDedupKey, type UsenetResult } from '@/services/nzb2rd';
+import { EASYNEWS_ID, parseReleaseId, releaseDedupKey, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 
 /** How many other postings of one release nzb2rd accepts. */
@@ -16,9 +16,10 @@ const MAX_COPIES = 8;
 
 /**
  * For each posting nzb2rd can fetch back (through /api/nzb2rd/download, so an
- * indexer `getIndexers` lists), the other such postings of its release, in the
- * order the rows came, at most MAX_COPIES. Rows are grouped by `releaseDedupKey`.
- * A row the Usenet tab already folded brings its `alternates` along.
+ * indexer `getIndexers` lists or an Easynews release in the NZB store), the other
+ * such postings of its release, in the order the rows came, at most MAX_COPIES.
+ * Rows are grouped by `releaseDedupKey`. A row the Usenet tab already folded
+ * brings its `alternates` along.
  */
 export function groupCopies(
 	rows: Pick<UsenetResult, 'id' | 'title' | 'alternates'>[]
@@ -30,7 +31,7 @@ export function groupCopies(
 	}
 	const copies = new Map<string, string[]>();
 	for (const ids of groups.values()) {
-		const group = [...new Set(ids)].filter((id) => parseReleaseId(id));
+		const group = [...new Set(ids)].filter((id) => parseReleaseId(id) || EASYNEWS_ID.test(id));
 		for (const id of group) {
 			const others = group.filter((other) => other !== id).slice(0, MAX_COPIES);
 			if (others.length > 0) copies.set(id, others);

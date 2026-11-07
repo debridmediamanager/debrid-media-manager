@@ -649,7 +649,8 @@ export async function fetchNzbFrom(indexer: Indexer, nativeId: string): Promise<
 	return body;
 }
 
-const EASYNEWS_ID = new RegExp(`^${EASYNEWS_NZB_PREFIX}:([0-9a-f]{20,80})$`);
+/** An Easynews release a visitor sent to zurg (`en:<hash>`), which the NZB store serves. */
+export const EASYNEWS_ID = new RegExp(`^${EASYNEWS_NZB_PREFIX}:([0-9a-f]{20,80})$`);
 
 /**
  * Download one NZB by qualified release id (`ds:abc123`). Returns the raw XML.
