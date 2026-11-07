@@ -16,6 +16,10 @@ const downloadCleanNzbMock = vi.fn();
 vi.mock('@/utils/nzbDownload', () => ({
 	downloadCleanNzb: (...args: unknown[]) => downloadCleanNzbMock(...args),
 }));
+const sendNzbToTorBoxMock = vi.fn();
+vi.mock('@/utils/torboxUsenet', () => ({
+	sendNzbToTorBox: (...args: unknown[]) => sendNzbToTorBoxMock(...args),
+}));
 vi.mock('@/utils/nzb2rd', async (importOriginal) => {
 	// A real partial-module loading boundary: preserve submission and tracking,
 	// but isolate detached polling, which is covered by nzb2rd.test.ts.
@@ -904,6 +908,82 @@ describe('UsenetResults NZB download', () => {
 		expect(downloadButtons()[0]).toBeEnabled();
 		await userEvent.click(downloadButtons()[0]);
 		expect(downloadCleanNzbMock).toHaveBeenCalledWith('b', 'Alpha.Release.2160p');
+	});
+});
+
+describe('UsenetResults — TorBox', () => {
+	const openPanel = async (rdKey: string | null, torboxKey: string | null) => {
+		mockSearch();
+		render(<UsenetResults imdbId="tt1418646" rdKey={rdKey} torboxKey={torboxKey} />);
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+	};
+	const tbButtons = () => screen.queryAllByRole('button', { name: /^send .* to torbox$/i });
+
+	it('lets a TorBox-only member send a release, with the row title and their key', async () => {
+		sendNzbToTorBoxMock.mockResolvedValue({ kind: 'started', usenetId: 1 });
+		await openPanel(null, 'tb-key');
+
+		expect(screen.getByText('Send to TorBox')).toBeInTheDocument();
+		expect(screen.queryByText(/log in with real-debrid/i)).not.toBeInTheDocument();
+		await userEvent.click(tbButtons()[0]);
+
+		expect(sendNzbToTorBoxMock).toHaveBeenCalledWith('tb-key', 'b', 'Alpha.Release.2160p');
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenCalledWith(
+				expect.stringContaining('TorBox is downloading it'),
+				expect.anything()
+			)
+		);
+		// TorBox does not dedupe a second post into nothing: it spends one of
+		// the 60 hourly creates, so the row stays done.
+		expect(tbButtons()[0]).toBeDisabled();
+	});
+
+	it('says a release TorBox already held is ready, and a queued one waits for a slot', async () => {
+		await openPanel(null, 'tb-key');
+		sendNzbToTorBoxMock.mockResolvedValueOnce({ kind: 'cached', usenetId: 1 });
+		await userEvent.click(tbButtons()[0]);
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenLastCalledWith(
+				expect.stringContaining('already had it'),
+				expect.anything()
+			)
+		);
+		sendNzbToTorBoxMock.mockResolvedValueOnce({ kind: 'queued', queuedId: 2 });
+		await userEvent.click(tbButtons()[1]);
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenLastCalledWith(
+				expect.stringContaining('active slots'),
+				expect.anything()
+			)
+		);
+	});
+
+	it('reports a refusal and leaves the row clickable', async () => {
+		sendNzbToTorBoxMock.mockRejectedValue(new Error('TorBox Usenet needs a Pro plan'));
+		await openPanel(null, 'tb-key');
+
+		await userEvent.click(tbButtons()[0]);
+
+		await waitFor(() =>
+			expect(toastError).toHaveBeenCalledWith(
+				'Usenet → TorBox: TorBox Usenet needs a Pro plan',
+				expect.anything()
+			)
+		);
+		expect(tbButtons()[0]).toBeEnabled();
+	});
+
+	it('shows both sends to a member logged in to both', async () => {
+		await openPanel('rd-key', 'tb-key');
+		expect(screen.getByText(/or TorBox/)).toBeInTheDocument();
+		expect(tbButtons()).toHaveLength(RESULTS.length);
+		expect(screen.getAllByRole('button', { name: /^send$/i })).toHaveLength(RESULTS.length);
+	});
+
+	it('offers no TorBox button without a TorBox login', async () => {
+		await openPanel('rd-key', null);
+		expect(tbButtons()).toHaveLength(0);
 	});
 });
 

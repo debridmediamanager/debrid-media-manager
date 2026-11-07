@@ -35,12 +35,15 @@ export function parseRemoved(header: string | null): string[] {
 }
 
 /**
- * Saves a release as an NZB with the indexer's fingerprints off it.
+ * Fetches a release as an NZB with the indexer's fingerprints off it.
  *
  * The cleaning happens server-side — that is where the indexer key lives, and
  * where the file is fetched — so this only has to hand the bytes to the browser.
  */
-export async function downloadCleanNzb(id: string, title: string): Promise<CleanNzbDownload> {
+export async function fetchCleanNzb(
+	id: string,
+	title: string
+): Promise<CleanNzbDownload & { blob: Blob }> {
 	const params = new URLSearchParams({ id });
 	if (title) params.set('title', title);
 
@@ -55,9 +58,14 @@ export async function downloadCleanNzb(id: string, title: string): Promise<Clean
 		filenameFromDisposition(response.headers.get('Content-Disposition')) ??
 		safeNzbName(title || id);
 
-	saveBlob(blob, name);
+	return { blob, name, removed: parseRemoved(response.headers.get('X-Nzb-Removed')) };
+}
 
-	return { name, removed: parseRemoved(response.headers.get('X-Nzb-Removed')) };
+/** Saves a release as a clean NZB, for the user's own SABnzbd or NZBGet. */
+export async function downloadCleanNzb(id: string, title: string): Promise<CleanNzbDownload> {
+	const { blob, name, removed } = await fetchCleanNzb(id, title);
+	saveBlob(blob, name);
+	return { name, removed };
 }
 
 /** Same anchor dance as downloadMagnetFile, which is what the rest of the app does. */

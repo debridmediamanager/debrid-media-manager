@@ -1,0 +1,6 @@
+{
+	"data": null,
+	"detail": "API feature not available on your plan. Please upgrade to a paid plan to access the API.",
+	"error": "PLAN_RESTRICTED_FEATURE",
+	"success": false
+}

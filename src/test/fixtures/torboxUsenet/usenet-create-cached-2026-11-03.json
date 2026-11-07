@@ -1,0 +1,10 @@
+{
+	"data": {
+		"hash": "80600d78ed3e677cb909d876b5da54f1",
+		"usenetdownload_id": 2817586,
+		"auth_id": "00000000-0000-0000-0000-000000000000"
+	},
+	"detail": "Found cached usenet download. Using cached download.",
+	"error": null,
+	"success": true
+}

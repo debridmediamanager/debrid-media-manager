@@ -1141,7 +1141,7 @@ const MovieSearch: FunctionComponent = () => {
 			/>
 			{usenetTab && (
 				<>
-					<UsenetResults imdbId={imdbid as string} rdKey={rdKey} />
+					<UsenetResults imdbId={imdbid as string} rdKey={rdKey} torboxKey={torboxKey} />
 					<EasynewsResults
 						title={movieInfo.title}
 						imdbId={imdbid as string}

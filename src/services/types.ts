@@ -222,6 +222,17 @@ export interface TorBoxCreateTorrentResponse {
 	hash?: string;
 }
 
+// createusenetdownload's answer: a download id when TorBox took it (new, or one
+// it already held), a queued id when no active slot was free. Recorded
+// 2026-11-03, src/test/fixtures/torboxUsenet.
+export interface TorBoxCreateUsenetDownloadResponse {
+	usenetdownload_id?: number;
+	queued_id?: number;
+	auth_id?: string;
+	hash?: string;
+	name?: string;
+}
+
 export interface TorBoxUsenetDownload {
 	id: number;
 	hash: string;

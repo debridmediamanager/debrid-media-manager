@@ -2223,6 +2223,7 @@ const TvSearch: FunctionComponent = () => {
 						seasonNum={selectedSeason}
 						title={showInfo.title}
 						rdKey={rdKey}
+						torboxKey={torboxKey}
 						onResults={handleUsenetResults}
 						rowFilter={usenetRowFilter}
 						episodeReader={episodeReader}

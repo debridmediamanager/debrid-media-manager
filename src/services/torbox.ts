@@ -12,6 +12,7 @@ import type {
 	TorBoxCachedItem,
 	TorBoxCachedResponse,
 	TorBoxCreateTorrentResponse,
+	TorBoxCreateUsenetDownloadResponse,
 	TorBoxCreateWebDownloadResponse,
 	TorBoxResponse,
 	TorBoxTorrentInfo,
@@ -807,6 +808,26 @@ export const getUsenetList = async (
 		elapsedMs: Date.now() - requestStartedAt,
 	});
 	return result;
+};
+
+/**
+ * Posts an NZB to TorBox's hosted Usenet (Pro plan only). TorBox lists the row
+ * under `name`; an NZB it already holds comes back as that row at once.
+ */
+export const createUsenetDownload = async (
+	accessToken: string,
+	params: { file: File; name?: string }
+): Promise<TorBoxResponse<TorBoxCreateUsenetDownloadResponse>> => {
+	const formData = new FormData();
+	formData.append('file', params.file);
+	if (params.name) formData.append('name', params.name);
+
+	const response = await torBoxAxios.post<TorBoxResponse<TorBoxCreateUsenetDownloadResponse>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/usenet/createusenetdownload`,
+		formData,
+		getAxiosConfig(accessToken)
+	);
+	return response.data;
 };
 
 /** A download link for one file of a usenet download. */
