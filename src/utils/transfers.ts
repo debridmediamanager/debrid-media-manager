@@ -91,6 +91,11 @@ export interface TransferRow {
 	returnPath?: string;
 	/** nzb2rd only: the indexer release id, needed by a cancel. */
 	releaseId?: string;
+	/**
+	 * nzb2rd only: someone else's job this account joined with "Get it too". It
+	 * lands in this account when it completes, but only its submitter can cancel it.
+	 */
+	joined?: boolean;
 }
 
 /** What `GET /api/transfers` answers with. */

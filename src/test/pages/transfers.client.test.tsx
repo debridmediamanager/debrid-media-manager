@@ -291,6 +291,23 @@ describe('Transfers page — clearing a terminal row', () => {
 		expect(screen.queryByTitle('Clear transfer')).not.toBeInTheDocument();
 	});
 
+	// nzb2rd refuses a cancel from anyone but the submitter, so a joined row offers none.
+	it('marks a joined Usenet row and offers no cancel on it', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValue(
+					listResponse([{ ...failedNzb, status: 'pending', joined: true }])
+				)
+		);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Pirate For The Sea')).toBeInTheDocument());
+
+		expect(screen.getByText('Joined')).toBeInTheDocument();
+		expect(screen.queryByTitle('Cancel transfer')).not.toBeInTheDocument();
+	});
+
 	it('does nothing when the confirm is declined', async () => {
 		vi.stubGlobal('confirm', vi.fn().mockReturnValue(false));
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([failedNzb])));

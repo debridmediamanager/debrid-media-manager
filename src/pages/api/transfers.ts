@@ -1,10 +1,12 @@
 import { resolveJobServer } from '@/services/debridUploaderServers';
+import { getNzb2rdUrl, nzb2rdJobOutcome } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import {
 	decodeCursor,
 	keyOf,
 	listTransfers,
+	nzb2rdRowOf,
 	RD_KEY_HEADER,
 	type TransferCursor,
 	withMeta,
@@ -120,6 +122,49 @@ async function registerIfCompleted(row: TransferRow, job: any): Promise<void> {
 	await registerCompletedDebridJob(job, context.mediaType, context.seasonNum, server);
 }
 
+/** Waiter lists read per poll. A handful exist at any time (3 on 2026-10-07). */
+const MAX_JOINED_LISTS = 100;
+
+/**
+ * Someone else's Usenet jobs this account joined with "Get it too".
+ *
+ * nzb2rd's own listing has only the jobs the account submitted; a join is
+ * recorded in DMM's waiter list instead, so without this the joiner had to go
+ * back to the title page to see how the job was doing (Reddit 1xq6okb).
+ * Unreadable jobs are left out rather than failing the page.
+ */
+async function joinedNzb2rdTransfers(rdKey: string): Promise<{ row: TransferRow; job: any }[]> {
+	// ponytail: matches the key stored at the join, as `yours` does, so an OAuth
+	// login whose token has refreshed since no longer sees the row (delivery still lands).
+	const lists = await db.listNzb2rdWaiterLists(MAX_JOINED_LISTS);
+	const found = await Promise.all(
+		lists
+			.filter((list) => list.waiters.some((w) => w.rdKey === rdKey))
+			.map(async ({ releaseId }) => {
+				try {
+					const marker = await db.getNzb2rdTransfer(releaseId);
+					if (!marker || marker.status === 'failed') return null;
+					const response = await fetch(
+						`${getNzb2rdUrl()}/jobs/${encodeURIComponent(marker.jobId)}`,
+						{
+							headers: { Accept: 'application/json' },
+							signal: AbortSignal.timeout(5000),
+						}
+					);
+					if (!response.ok) return null;
+					const job = await response.json();
+					if (!job?.id || !job?.status || nzb2rdJobOutcome(job) === 'gone') return null;
+					const row: TransferRow = { ...nzb2rdRowOf(job), releaseId, joined: true };
+					return { row, job };
+				} catch (error) {
+					console.error(`Reading joined Usenet transfer ${releaseId} failed:`, error);
+					return null;
+				}
+			})
+	);
+	return found.filter((f): f is { row: TransferRow; job: any } => f !== null);
+}
+
 async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<TransfersResponse | { error: string }>
@@ -147,7 +192,24 @@ async function handler(
 	}
 
 	try {
-		const { transfers, raw, degraded, next } = await listTransfers(rdKey, limit, cursor);
+		const [listed, joined] = await Promise.all([
+			listTransfers(rdKey, limit, cursor),
+			// First page only: joins are few and recent, and a cursor counts
+			// positions in the services' own lists, which these are not part of.
+			cursor
+				? []
+				: joinedNzb2rdTransfers(rdKey).catch((error) => {
+						console.error('Listing joined Usenet transfers failed:', error);
+						return [];
+					}),
+		]);
+		const { raw, degraded, next } = listed;
+		const seen = new Set(listed.transfers.map(keyOf));
+		const extra = joined.filter(({ row }) => !seen.has(keyOf(row)));
+		for (const { row, job } of extra) raw.set(keyOf(row), job);
+		const transfers = [...listed.transfers, ...extra.map(({ row }) => row)].sort(
+			(a, b) => b.createdAt - a.createdAt
+		);
 
 		// One query for the whole page, not one per row: this is polled every 5
 		// seconds and a page holds up to 200 rows.

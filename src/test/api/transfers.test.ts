@@ -5,6 +5,7 @@ import {
 	registerCompletedDebridJob,
 	registerCompletedNzb2rdJob,
 } from '@/services/transferRegistration';
+import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -55,6 +56,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepo.getTransferMeta = vi.fn().mockResolvedValue(new Map());
 	mockRepo.getDebridJobServer = vi.fn().mockResolvedValue('http://debrid02:3100');
+	mockRepo.listNzb2rdWaiterLists = vi.fn().mockResolvedValue([]);
 	mockList.mockResolvedValue({ transfers: [row()], raw: new Map(), degraded: [], next: null });
 });
 
@@ -398,5 +400,86 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 			undefined,
 			'release-9'
 		);
+	});
+});
+
+// "Get it too" joins someone else's Usenet job through DMM's waiter list, which
+// nzb2rd's own listing knows nothing about, so the joiner had to go back to the
+// title page to follow it (Reddit 1xq6okb, 2026-11-07). These are the three
+// waiter lists stored on 2026-10-07 and nzb2rd's answers for their jobs that day
+// (`fixtures/transfers/waiter-markers-2026-10-07.json`).
+describe('GET /api/transfers — Usenet jobs joined with "Get it too"', () => {
+	const recordedKey = recordedWaiters.waiters['ix:release-3'][0].rdKey;
+
+	beforeEach(() => {
+		mockList.mockResolvedValue({ transfers: [], raw: new Map(), degraded: [], next: null });
+		mockRepo.listNzb2rdWaiterLists = vi.fn().mockResolvedValue(
+			Object.entries(recordedWaiters.waiters).map(([releaseId, waiters]) => ({
+				releaseId,
+				waiters,
+				updatedAt: new Date(recordedWaiters.recordedAt),
+			}))
+		);
+		mockRepo.getNzb2rdTransfer = vi.fn(
+			async (releaseId: string) =>
+				recordedWaiters.markers.find((m) => m.releaseId === releaseId) ?? null
+		) as any;
+		global.fetch = vi.fn(async (url: string) => {
+			const id = decodeURIComponent(String(url).split('/jobs/')[1]);
+			const job = (recordedWaiters.jobs as Record<string, any>)[id];
+			return { ok: !!job, status: job ? 200 : 404, json: async () => job } as Response;
+		}) as any;
+	});
+
+	it('lists the joined job still in line, marked joined, and leaves out the deleted ones', async () => {
+		const res = await run({ headers: { 'x-rd-api-key': recordedKey } });
+
+		const { transfers } = bodyOf(res);
+		expect(transfers).toHaveLength(1);
+		expect(transfers[0]).toMatchObject({
+			source: 'nzb2rd',
+			id: 'nzb2rd-W3',
+			status: 'pending',
+			releaseId: 'ix:release-3',
+			joined: true,
+			queue: { position: 24, waiting: 1188 },
+		});
+	});
+
+	it('shows nothing to an account that joined nothing', async () => {
+		const res = await run();
+
+		expect(bodyOf(res).transfers).toEqual([]);
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('does not list a joined job twice when nzb2rd already lists it', async () => {
+		const own = { ...row({ source: 'nzb2rd', id: 'nzb2rd-W3', status: 'pending' }) };
+		mockList.mockResolvedValue({ transfers: [own], raw: new Map(), degraded: [], next: null });
+
+		const res = await run({ headers: { 'x-rd-api-key': recordedKey } });
+
+		expect(bodyOf(res).transfers).toEqual([own]);
+	});
+
+	it('adds joined jobs to the first page only', async () => {
+		await run({ headers: { 'x-rd-api-key': recordedKey }, query: { cursor: 'nzb2rd.100' } });
+
+		expect(mockRepo.listNzb2rdWaiterLists).not.toHaveBeenCalled();
+	});
+
+	it('still serves the list when the waiter lists cannot be read', async () => {
+		mockRepo.listNzb2rdWaiterLists = vi.fn().mockRejectedValue(new Error('db down'));
+		mockList.mockResolvedValue({
+			transfers: [row()],
+			raw: new Map(),
+			degraded: [],
+			next: null,
+		});
+
+		const res = await run({ headers: { 'x-rd-api-key': recordedKey } });
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(bodyOf(res).transfers).toEqual([row()]);
 	});
 });

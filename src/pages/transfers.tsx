@@ -440,6 +440,14 @@ export default function TransfersPage() {
 													)}
 													{progress.label}
 												</span>
+												{t.joined && (
+													<span
+														className="inline-flex items-center rounded border-2 border-gray-600 px-1.5 py-0.5 font-medium text-gray-300"
+														title="Someone else started this. It lands in your Real-Debrid when it completes."
+													>
+														Joined
+													</span>
+												)}
 												{t.returnPath && (
 													<Link
 														href={t.returnPath}
@@ -515,19 +523,24 @@ export default function TransfersPage() {
 													)}
 												</button>
 											)}
-											<button
-												onClick={() => handleRemove(t, terminal)}
-												className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
-												title={
-													terminal ? 'Clear transfer' : 'Cancel transfer'
-												}
-											>
-												{terminal ? (
-													<Trash2 className="h-4 w-4" />
-												) : (
-													<XCircle className="h-4 w-4" />
-												)}
-											</button>
+											{/* Only the submitter can stop a job; nzb2rd refuses anyone else. */}
+											{!t.joined && (
+												<button
+													onClick={() => handleRemove(t, terminal)}
+													className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
+													title={
+														terminal
+															? 'Clear transfer'
+															: 'Cancel transfer'
+													}
+												>
+													{terminal ? (
+														<Trash2 className="h-4 w-4" />
+													) : (
+														<XCircle className="h-4 w-4" />
+													)}
+												</button>
+											)}
 										</div>
 									</div>
 								</div>
