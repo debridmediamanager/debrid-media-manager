@@ -58,3 +58,34 @@ export async function copiesOf(id: string): Promise<string[]> {
 		return [];
 	}
 }
+
+/** What nzb2rd reports for a posting whose articles no news server still has. */
+const MISSING_ARTICLES = 'missing from every configured news server';
+
+/**
+ * `id` and its copies in the order to try them: postings an earlier nzb2rd job
+ * already found without their articles go last, the rest keep their order. The
+ * first is the one to fetch (`id` itself unless it is known dead and a copy is
+ * not), the others are what nzb2rd falls back to.
+ */
+export async function orderCopies(id: string): Promise<{ id: string; alternates: string[] }> {
+	const postings = [id, ...(await copiesOf(id))];
+	if (postings.length === 1) return { id, alternates: [] };
+	let dead = new Set<string>();
+	try {
+		const markers = await db.getNzb2rdTransfers(postings);
+		dead = new Set(
+			markers
+				.filter((m) => m.status === 'failed' && m.error?.includes(MISSING_ARTICLES))
+				.map((m) => m.releaseId.toLowerCase())
+		);
+	} catch (error) {
+		console.error('Reading which Usenet postings are dead failed:', error);
+	}
+	const isDead = (posting: string) => dead.has(posting.toLowerCase());
+	const [first, ...alternates] = [
+		...postings.filter((posting) => !isDead(posting)),
+		...postings.filter(isDead),
+	];
+	return { id: first, alternates };
+}

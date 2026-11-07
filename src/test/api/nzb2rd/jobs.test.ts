@@ -7,6 +7,7 @@ import {
 	submitNzb,
 } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
+import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import recordedWaiters from '@/test/fixtures/transfers/waiter-markers-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -313,6 +314,28 @@ describe('POST /api/nzb2rd/jobs — other postings of the release', () => {
 		expect(mockRepo.getUsenetCopies).toHaveBeenCalledWith('release-1');
 		expect(mockSubmit).toHaveBeenCalledWith(
 			expect.objectContaining({ alternates: ['ah:b', 'ds:c'] })
+		);
+	});
+
+	// The clicked posting's last job ended with its articles missing from every
+	// news server (the marker as production wrote it on 2026-10-07).
+	it('sends a copy instead of a posting known dead, and keeps the clicked id as the record', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:b', 'ds:c']);
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([{ ...recordedMarkers.markers[2], releaseId: 'release-1' }]);
+
+		await run();
+
+		expect(mockFetchNzb).toHaveBeenCalledWith('ah:b');
+		expect(mockSubmit).toHaveBeenCalledWith(
+			expect.objectContaining({ alternates: ['ds:c', 'release-1'] })
+		);
+		expect(mockRepo.recordNzb2rdTransferPending).toHaveBeenCalledWith(
+			'release-1',
+			'job-1',
+			'tt1418646',
+			'Some.Release.1080p'
 		);
 	});
 

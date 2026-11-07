@@ -227,6 +227,12 @@ before, and the stale fallback is unchanged.
 
 1. Decrypt the token; any tamper or garbage → error 300.
 2. Per-key grab limits (both buckets).
+   Then a posting an nzb2rd job already found without its articles (a `failed` marker
+   saying `missing from every configured news server`) is swapped for the first other
+   posting of the release, as a search recorded it (`services/usenetCopies.ts`), that is
+   not known dead and whose prefix is a configured upstream. The steps below run for that
+   copy (its store key, its indexer's grab cap), and it goes out under the requested
+   token. One log line names both.
 3. **Read-through NZB store** (`src/services/newznab/store.ts`): a hit serves the
    stored, already-cleaned NZB — zero upstream calls, and it works even if the upstream
    indexer is dead or has been removed from the config (which is why the store check

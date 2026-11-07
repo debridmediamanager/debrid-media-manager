@@ -9,10 +9,11 @@ import { isSearchType, runSearch } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
 import { capsXml, newznabErrorXml, searchRssXml } from '@/services/newznab/xml';
-import { fetchNzbFrom, nativeReleaseId } from '@/services/nzb2rd';
+import { fetchNzbFrom, nativeReleaseId, qualifyReleaseId } from '@/services/nzb2rd';
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { isNzbBlocked } from '@/services/takedown/blocklist';
+import { orderCopies } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -126,6 +127,24 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	if (!release) return sendError(res, 200, 300, 'No such item');
 	// Tokens an *arr already holds may carry NZBgeek's old `geekseek.php?guid=<id>`.
 	release.nativeId = nativeReleaseId(release.nativeId);
+
+	// A posting an nzb2rd job already found without its articles is swapped for
+	// the first copy not known dead that this endpoint can serve, and goes out
+	// under the requested token. Everything below (store, grab cap, sanitizing)
+	// then applies to the copy as if it had been asked for.
+	const requested = qualifyReleaseId(release.prefix, release.nativeId);
+	const copies = await orderCopies(requested);
+	const upstreams = new Set(getUpstreamIndexers().map((indexer) => indexer.prefix));
+	const served =
+		[copies.id, ...copies.alternates].find(
+			(posting) =>
+				posting === requested || upstreams.has(posting.slice(0, posting.indexOf(':')))
+		) ?? requested;
+	if (served !== requested) {
+		console.log(`Newznab grab: ${requested} is known dead, serving its copy ${served}`);
+		release.prefix = served.slice(0, served.indexOf(':'));
+		release.nativeId = served.slice(served.indexOf(':') + 1);
+	}
 
 	// The store is where a re-grab of the same release costs nothing: an NZB is
 	// immutable once posted, so only the first fetch spends an upstream call.

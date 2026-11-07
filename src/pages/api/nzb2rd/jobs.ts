@@ -12,7 +12,7 @@ import {
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { BLOCKED_MESSAGE, isNzbBlocked, isReleaseBlocked } from '@/services/takedown/blocklist';
-import { copiesOf } from '@/services/usenetCopies';
+import { orderCopies } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
 import { sponsorIdOfRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
@@ -140,9 +140,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		console.error('nzb2rd transfer dedup check failed (continuing):', error);
 	}
 
+	// The posting to send: the one clicked, unless an earlier job found its
+	// articles gone and a copy is not known dead. Its other postings, as DMM's own
+	// searches recorded them and never from the request, are what nzb2rd falls
+	// back to. The marker stays keyed by the clicked id.
+	const copies = await orderCopies(id);
+	if (copies.id !== id) console.log(`nzb2rd: ${id} is known dead, sending its copy ${copies.id}`);
+
 	let nzbText: string;
 	try {
-		nzbText = await fetchNzb(id);
+		nzbText = await fetchNzb(copies.id);
 	} catch (error) {
 		console.error('NZB download failed:', error);
 		return res.status(502).json({ error: 'Could not download the NZB from the indexer' });
@@ -169,9 +176,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// body — the browser only ever sends the signed token, and this is the
 			// one place that checks its signature.
 			sponsor: await sponsorIdOfRequest(req),
-			// Other postings of the release, as DMM's own searches recorded them and
-			// never from the request: a caller cannot route an arbitrary id in here.
-			alternates: await copiesOf(id),
+			alternates: copies.alternates,
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([

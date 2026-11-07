@@ -1,6 +1,7 @@
 import { fetchNzb } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
+import { orderCopies } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzbAsync } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -30,9 +31,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'id must be an indexer result id' });
 	}
 
+	// A posting an earlier nzb2rd job found without its articles is swapped for a
+	// copy not known dead. `id` stays the name the caller knows it by.
+	const copies = await orderCopies(id);
+	if (copies.id !== id)
+		console.log(`NZB download: ${id} is known dead, serving its copy ${copies.id}`);
+
 	let raw: string;
 	try {
-		raw = await fetchNzb(id);
+		raw = await fetchNzb(copies.id);
 	} catch (error) {
 		console.error('NZB download failed:', error);
 		return res.status(502).json({ error: 'Could not download the NZB from the indexer' });

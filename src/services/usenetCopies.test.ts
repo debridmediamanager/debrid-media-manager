@@ -2,8 +2,9 @@ import { dedupeResults, parseNewznabResponse, qualifyReleaseId } from '@/service
 import { repository } from '@/services/repository';
 import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
+import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { copiesOf, groupCopies, recordCopies } from './usenetCopies';
+import { copiesOf, groupCopies, orderCopies, recordCopies } from './usenetCopies';
 
 vi.mock('@/services/repository');
 const mockRepo = vi.mocked(repository);
@@ -98,5 +99,73 @@ describe('recordCopies and copiesOf', () => {
 	it('answers none when the read fails', async () => {
 		mockRepo.getUsenetCopies = vi.fn().mockRejectedValue(new Error('db down'));
 		expect(await copiesOf('ds:a')).toEqual([]);
+	});
+});
+
+// Failed markers as production wrote them on 2026-10-07: `ix:release-1` failed on
+// a dead Real-Debrid token, `ix:release-2` on zurg's two-hour read limit, and
+// `ix:release-3` on articles missing from every news server. Only the last says
+// the posting itself is dead.
+describe('orderCopies', () => {
+	const [badToken, timedOut, missing] = recordedMarkers.markers;
+
+	beforeEach(() => {
+		mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue(recordedMarkers.markers);
+	});
+
+	it('puts a posting whose articles are gone last, and fetches the first copy instead', async () => {
+		mockRepo.getUsenetCopies = vi
+			.fn()
+			.mockResolvedValue([badToken.releaseId, timedOut.releaseId]);
+
+		expect(await orderCopies(missing.releaseId)).toEqual({
+			id: 'ix:release-1',
+			alternates: ['ix:release-2', 'ix:release-3'],
+		});
+		expect(mockRepo.getNzb2rdTransfers).toHaveBeenCalledWith([
+			'ix:release-3',
+			'ix:release-1',
+			'ix:release-2',
+		]);
+	});
+
+	it('moves only the dead copies, keeping the others in their order', async () => {
+		mockRepo.getUsenetCopies = vi
+			.fn()
+			.mockResolvedValue(['IX:RELEASE-3', 'ds:never-sent', timedOut.releaseId]);
+
+		expect(await orderCopies(badToken.releaseId)).toEqual({
+			id: 'ix:release-1',
+			alternates: ['ds:never-sent', 'ix:release-2', 'IX:RELEASE-3'],
+		});
+	});
+
+	it('keeps the order when every posting is dead', async () => {
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([missing, { ...missing, releaseId: 'ds:other' }]);
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ds:other']);
+
+		expect(await orderCopies('ix:release-3')).toEqual({
+			id: 'ix:release-3',
+			alternates: ['ds:other'],
+		});
+	});
+
+	it('reads no marker for a posting with no copies', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([]);
+
+		expect(await orderCopies('ix:release-3')).toEqual({ id: 'ix:release-3', alternates: [] });
+		expect(mockRepo.getNzb2rdTransfers).not.toHaveBeenCalled();
+	});
+
+	it('keeps the order when the markers cannot be read', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ds:b']);
+		mockRepo.getNzb2rdTransfers = vi.fn().mockRejectedValue(new Error('db down'));
+
+		expect(await orderCopies('ix:release-3')).toEqual({
+			id: 'ix:release-3',
+			alternates: ['ds:b'],
+		});
 	});
 });

@@ -17,6 +17,7 @@ import { setBlocklistForTests } from '@/services/takedown/blocklist';
 import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
+import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb } from '@/utils/nzbSanitize';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -946,6 +947,72 @@ describe('GET /api/newznab/api grab', () => {
 
 		await run({ t: 'get', id: token(), apikey: SPONSOR_KEY });
 		expect(fetchedUrls().filter((url) => url.includes('t=get'))).toHaveLength(1);
+	});
+});
+
+// A posting nzb2rd already found without its articles is dead for the *arr too.
+// The marker is as production wrote it on 2026-10-07; the copy is the same release
+// on the other upstream, as a search recorded it.
+describe('GET /api/newznab/api grab of a posting known dead', () => {
+	const DEAD = 'ds:first-native-id';
+	const COPY = 'ah:second-native-id';
+	const missing = recordedMarkers.markers[2];
+
+	beforeEach(() => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([COPY]);
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([{ ...missing, releaseId: DEAD, title: 'Some.Release.2160p.WEB' }]);
+	});
+
+	it('serves a copy not known dead, under the requested token', async () => {
+		const token = encryptReleaseId('ds', 'first-native-id');
+
+		const res = await run({ t: 'get', id: token, apikey: SPONSOR_KEY });
+
+		const url = new URL(fetchedUrls()[0]);
+		expect(url.origin + url.pathname).toBe(SECOND_HOST);
+		expect(url.searchParams.get('id')).toBe('second-native-id');
+		expect(url.searchParams.get('apikey')).toBe(SECOND_KEY);
+		expect(mockRepo.getNzb2rdTransfers).toHaveBeenCalledWith([DEAD, COPY]);
+		// Stored as what it is, the copy's own NZB.
+		expect(mockGetStored).toHaveBeenCalledWith('ah', 'second-native-id');
+		expect(mockPutStored).toHaveBeenCalledWith('ah', 'second-native-id', expect.any(String));
+		expect(body(res)).toContain('first-article@news');
+		expect(res._getHeaders()['Content-Disposition']).toContain(`filename="${token}.nzb"`);
+	});
+
+	it('spends the grab cap of the upstream the copy comes from', async () => {
+		setIndexers([
+			INDEXERS[0],
+			{ ...INDEXERS[1], grabLimit: { rateLimit: 1, windowSeconds: 60 } },
+		]);
+		const grab = () =>
+			run({ t: 'get', id: encryptReleaseId('ds', 'first-native-id'), apikey: SPONSOR_KEY });
+
+		expect(body(await grab())).toContain('first-article@news');
+		fetchMock.mockClear();
+
+		expect(body(await grab())).toContain('<error code="300"');
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('serves the posting asked for when no copy can be served from here', async () => {
+		setIndexers([INDEXERS[0]]);
+
+		await run({ t: 'get', id: encryptReleaseId('ds', 'first-native-id'), apikey: SPONSOR_KEY });
+
+		expect(new URL(fetchedUrls()[0]).searchParams.get('id')).toBe('first-native-id');
+	});
+
+	it('serves the posting asked for when it failed for another reason', async () => {
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([{ ...recordedMarkers.markers[0], releaseId: DEAD }]);
+
+		await run({ t: 'get', id: encryptReleaseId('ds', 'first-native-id'), apikey: SPONSOR_KEY });
+
+		expect(new URL(fetchedUrls()[0]).searchParams.get('id')).toBe('first-native-id');
 	});
 });
 

@@ -1,8 +1,11 @@
 import handler from '@/pages/api/nzb2rd/download';
 import { fetchNzb } from '@/services/nzb2rd';
+import { repository } from '@/services/repository';
+import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/services/repository');
 vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/nzb2rd')>();
 	return { ...actual, fetchNzb: vi.fn() };
@@ -177,5 +180,26 @@ describe('GET /api/nzb2rd/download', () => {
 		}
 
 		expect(turnsWhileCleaning).toBeGreaterThan(1);
+	});
+});
+
+// nzb2rd fetches a release's next copy here when one's articles are gone. A copy
+// an earlier job already found dead (the marker as production wrote it on
+// 2026-10-07) is swapped for one that is not.
+describe('GET /api/nzb2rd/download of a posting known dead', () => {
+	it('serves its first copy not known dead', async () => {
+		const mockRepo = vi.mocked(repository);
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:b', 'ds:c']);
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([{ ...recordedMarkers.markers[2], releaseId: 'ds:abc123' }]);
+
+		const res = await run({ id: 'ds:abc123', title: 'My.Release.1080p' });
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockFetchNzb).toHaveBeenCalledWith('ah:b');
+		expect(res._getHeaders()['Content-Disposition']).toContain(
+			'filename="My.Release.1080p.nzb"'
+		);
 	});
 });
