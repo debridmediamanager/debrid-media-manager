@@ -1,6 +1,10 @@
 import odyssey from '@/test/fixtures/aiostreams/odyssey-2026-11-07.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { AIOSTREAMS_TTL_MS, enrichFromAioStreams } from './aioStreamsEnrich';
+import {
+	AIOSTREAMS_COOLDOWN_MS,
+	AIOSTREAMS_TTL_MS,
+	enrichFromAioStreams,
+} from './aioStreamsEnrich';
 
 const { getRefreshedAt, markRefreshed, titleType, titleById, saveTrue, cinemeta } = vi.hoisted(
 	() => ({
@@ -109,7 +113,7 @@ describe('enrichFromAioStreams', () => {
 		expect(stampedFirst).toBe(true);
 	});
 
-	it('asks for the one episode a Stremio request wanted, stamped per episode', async () => {
+	it('asks for the one episode a Stremio request wanted, stamped per season', async () => {
 		titleType.mockResolvedValue('tvSeries');
 		await enrichFromAioStreams({
 			imdbId: 'tt0903747',
@@ -123,8 +127,38 @@ describe('enrichFromAioStreams', () => {
 			`${BASE}/stream/series/tt0903747:2:5.json`,
 			expect.anything()
 		);
-		expect(markRefreshed).toHaveBeenCalledWith('aiostreams:refresh:tv:tt0903747:2:5');
+		expect(markRefreshed).toHaveBeenCalledWith('aiostreams:refresh:tv:tt0903747:2');
+	});
+
+	it('asks a season page once, for its first episode', async () => {
+		titleType.mockResolvedValue('tvSeries');
+		await enrichFromAioStreams({
+			imdbId: 'tt0903747',
+			key: 'tv:tt0903747:2',
+			kind: 'series',
+			season: 2,
+		});
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(fetchMock).toHaveBeenCalledWith(
+			`${BASE}/stream/series/tt0903747:2:1.json`,
+			expect.anything()
+		);
 		expect(cinemeta).not.toHaveBeenCalled();
+	});
+
+	it('pauses every title after a refused request', async () => {
+		fetchMock.mockResolvedValue({ ok: false, status: 429, json: async () => ({}) });
+		await expect(enrichFromAioStreams(ODYSSEY)).rejects.toThrow('429');
+		expect(markRefreshed).toHaveBeenCalledWith('aiostreams:cooldown');
+
+		fetchMock.mockClear();
+		getRefreshedAt.mockImplementation(async (key: string) =>
+			key === 'aiostreams:cooldown'
+				? new Date(Date.now() - AIOSTREAMS_COOLDOWN_MS + 60_000)
+				: null
+		);
+		expect(await enrichFromAioStreams({ ...ODYSSEY, imdbId: 'tt1', key: 'movie:tt1' })).toBe(0);
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
 	it('does nothing when unconfigured', async () => {

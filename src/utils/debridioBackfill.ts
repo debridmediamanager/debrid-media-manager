@@ -31,7 +31,7 @@ export type DebridioTarget = {
 const AVAILABILITY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const FALLBACK_EPISODE_COUNT = 12;
 
-export async function seasonEpisodes(imdbId: string, season: number): Promise<number[]> {
+async function seasonEpisodes(imdbId: string, season: number): Promise<number[]> {
 	try {
 		const response = await getMetadataCache().getCinemetaSeries(imdbId);
 		const videos: Array<{ season?: number; episode?: number }> = response?.meta?.videos ?? [];

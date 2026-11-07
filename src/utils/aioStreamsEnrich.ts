@@ -6,17 +6,23 @@ import {
 import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
 import { filterByMovieConditions, hasNoBannedTerms, meetsTitleConditions } from '@/utils/checks';
-import { DebridioTarget, idIsKind, seasonEpisodes } from '@/utils/debridioBackfill';
+import { DebridioTarget, idIsKind } from '@/utils/debridioBackfill';
 
-/** A page's key, or one episode of it when a Stremio stream request asked for that. */
+/** A page, and for a season the episode a Stremio stream request asked for. */
 export type AioStreamsTarget = DebridioTarget & { episode?: number };
 
 // ponytail: one flat day for every title. New releases of a current film can
 // wait up to a day to land; shorten it for recent titles if that shows.
 export const AIOSTREAMS_TTL_MS = 24 * 60 * 60 * 1000;
 
-const stampKeyOf = (target: AioStreamsTarget) =>
-	`aiostreams:refresh:${target.key}` + (target.episode !== undefined ? `:${target.episode}` : '');
+// The instance is a public one: an hour after launch on 2026-11-07, 84 of 225
+// requests failed, 45 of them with 429. Any failure pauses every replica.
+export const AIOSTREAMS_COOLDOWN_MS = 15 * 60 * 1000;
+const COOLDOWN_KEY = 'aiostreams:cooldown';
+
+const stampKeyOf = (target: AioStreamsTarget) => `aiostreams:refresh:${target.key}`;
+
+const within = (at: Date | null, ms: number) => !!at && Date.now() - at.getTime() < ms;
 
 /**
  * The checks DMM's own scrapers put a name-searched release through: the title
@@ -43,31 +49,39 @@ export async function releaseCheck(
 
 /**
  * Adds what AIOStreams knows about a title to its ScrapedTrue page, at most
- * once a day per page (or per episode, from Stremio). Merges, never replaces.
- * The stamp is written before the scrape, so the four web replicas seeing the
- * same title at once send one request, not four; a failed scrape waits for
- * the next day like an empty one. Returns how many releases it handed over.
+ * once a day per page: one request, for a season the episode Stremio asked for
+ * or the first. Merges, never replaces. The stamp is written before the scrape,
+ * so the four web replicas seeing the same title at once send one request, not
+ * four; a failed scrape waits for the next day like an empty one and pauses
+ * every title for the cooldown. Returns how many releases it handed over.
  */
 export async function enrichFromAioStreams(target: AioStreamsTarget): Promise<number> {
 	const base = aioStreamsBase();
 	if (!base) return 0;
+	if (within(await db.getRefreshedAt(COOLDOWN_KEY), AIOSTREAMS_COOLDOWN_MS)) return 0;
 	const stampKey = stampKeyOf(target);
-	const stampedAt = await db.getRefreshedAt(stampKey);
-	if (stampedAt && Date.now() - stampedAt.getTime() < AIOSTREAMS_TTL_MS) return 0;
+	if (within(await db.getRefreshedAt(stampKey), AIOSTREAMS_TTL_MS)) return 0;
 	await db.markRefreshed(stampKey);
 	if (!(await idIsKind(target))) return 0;
 
 	const keep = await releaseCheck(target.imdbId, target.kind);
 	let scrape;
-	if (target.kind === 'movie') {
-		scrape = await scrapeAioStreamsMovie(base, target.imdbId, keep);
-	} else {
-		const season = target.season ?? 1;
-		const episodes =
-			target.episode !== undefined
-				? [target.episode]
-				: await seasonEpisodes(target.imdbId, season);
-		scrape = await scrapeAioStreamsSeason(base, target.imdbId, season, episodes, keep);
+	try {
+		scrape =
+			target.kind === 'movie'
+				? await scrapeAioStreamsMovie(base, target.imdbId, keep)
+				: // ponytail: one episode per season a day - packs and that episode's own
+					// releases. Ask every episode once the instance is our own.
+					await scrapeAioStreamsSeason(
+						base,
+						target.imdbId,
+						target.season ?? 1,
+						[target.episode ?? 1],
+						keep
+					);
+	} catch (error) {
+		await db.markRefreshed(COOLDOWN_KEY);
+		throw error;
 	}
 	if (scrape.torrents.length > 0) {
 		await db.saveScrapedTrueResults(target.key, scrape.torrents, true);
