@@ -1,4 +1,6 @@
 import {
+	EasynewsGoneError,
+	resolveEasynewsLink,
 	searchEasynews,
 	type EasynewsCredentials,
 	type EasynewsResult,
@@ -82,4 +84,25 @@ export async function easynewsStreamResults(
  */
 export function easynewsReleaseOf(name: string): string {
 	return name.toLowerCase().replace(/\bs(\d{1,2})e\d{1,3}(?:-?e\d{1,3})*/, 's$1');
+}
+
+/**
+ * The paths Easynews says it can no longer serve. It lists such files in search
+ * (Severance S02E01 NEUROSiS answered 410 four times in a row, 2026-11-07), so
+ * each one offered is asked for once, in parallel, as play would. Anything but
+ * "gone" keeps the file: a slow or failed check is not a dead file.
+ */
+export async function goneEasynewsPaths(
+	credentials: EasynewsCredentials,
+	paths: string[]
+): Promise<Set<string>> {
+	const gone = new Set<string>();
+	await Promise.all(
+		paths.map((path) =>
+			resolveEasynewsLink(credentials, path).catch((error) => {
+				if (error instanceof EasynewsGoneError) gone.add(path);
+			})
+		)
+	);
+	return gone;
 }

@@ -173,6 +173,24 @@ describe('MainActions', () => {
 		expect(castLink.getAttribute('href')).toBe('/stremio-premiumize');
 	});
 
+	it('shows EN cast action when signed in to Easynews', () => {
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				ocUser={false}
+				dlUser={false}
+				enUser={true}
+				isLoading={false}
+			/>
+		);
+
+		const castLink = screen.getByRole('link', { name: /cast for en/i });
+		expect(castLink.getAttribute('href')).toBe('/stremio-easynews');
+	});
+
 	it('shows OC cast action when only OC user is authenticated', () => {
 		render(
 			<MainActions

@@ -1,3 +1,4 @@
+import { EasynewsGoneError, resolveEasynewsLink } from '@/services/easynews';
 import { fetchMovieSources, fetchShowSources } from '@/services/metadata';
 import bear from '@/test/fixtures/easynews/search-cocaine-bear-2023-2026-10-25.json';
 import severance from '@/test/fixtures/easynews/search-severance-s02-2026-10-25.json';
@@ -7,9 +8,14 @@ import {
 	easynewsReleaseOf,
 	easynewsStreamResults,
 	easynewsTargetFor,
+	goneEasynewsPaths,
 	namesEpisode,
 } from './easynewsCastSearch';
 
+vi.mock('@/services/easynews', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/easynews')>()),
+	resolveEasynewsLink: vi.fn(),
+}));
 vi.mock('@/services/metadata', () => ({
 	fetchMovieSources: vi.fn(),
 	fetchShowSources: vi.fn(),
@@ -118,6 +124,17 @@ describe('easynewsCastSearch', () => {
 		);
 		expect(easynewsReleaseOf('Show.S01E01E02.720p.HDTV.x264-GRP')).toBe(
 			'show.s01.720p.hdtv.x264-grp'
+		);
+	});
+
+	it('counts a file as gone only when Easynews says so', async () => {
+		vi.mocked(resolveEasynewsLink).mockImplementation(async (_, path) => {
+			if (path === 'dead') throw new EasynewsGoneError();
+			if (path === 'flaky') throw new Error('Easynews did not hand out a link: HTTP 502');
+			return 'https://members.easynews.com/signed';
+		});
+		await expect(goneEasynewsPaths(login, ['dead', 'flaky', 'live'])).resolves.toEqual(
+			new Set(['dead'])
 		);
 	});
 });

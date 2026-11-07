@@ -9,6 +9,11 @@ vi.mock('../utils/torboxCastApiClient', () => ({
 	updateTorBoxSizeLimits: vi.fn().mockResolvedValue(undefined),
 }));
 
+vi.mock('../utils/easynewsCastApiClient', () => ({
+	updateEasynewsCastSettings: vi.fn(),
+	saveEasynewsCastProfile: vi.fn().mockResolvedValue('en-user'),
+}));
+
 vi.mock('../utils/browserStorage', () => ({
 	getLocalStorageItemOrDefault: vi.fn((_key: string, fallback: string) => fallback),
 	getLocalStorageBoolean: vi.fn((_key: string, fallback: boolean) => fallback),
@@ -31,6 +36,10 @@ vi.mock('../utils/settings', () => ({
 }));
 
 import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
+import {
+	saveEasynewsCastProfile,
+	updateEasynewsCastSettings,
+} from '../utils/easynewsCastApiClient';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 import { CastSettingsPanel } from './CastSettingsPanel';
 
@@ -226,6 +235,37 @@ describe('CastSettingsPanel', () => {
 				hideCastOption: undefined,
 			});
 		});
+	});
+
+	// The Easynews login stays home: a settings change goes by the cast id alone.
+	it('syncs en settings through the cast token, and only falls back to the login', async () => {
+		mockLocalStorage['en:castToken'] = '"en-user"';
+		mockLocalStorage['en:account'] = JSON.stringify({ username: 'alice', password: 'pw' });
+		vi.mocked(updateEasynewsCastSettings).mockResolvedValue(true);
+
+		render(<CastSettingsPanel service="en" accentColor="blue" />);
+		fireEvent.change(screen.getAllByRole('combobox')[0], { target: { value: '5' } });
+		await waitFor(() =>
+			expect(updateEasynewsCastSettings).toHaveBeenCalledWith('en-user', {
+				movieMaxSize: 5,
+				episodeMaxSize: undefined,
+				otherStreamsLimit: undefined,
+				hideCastOption: undefined,
+			})
+		);
+		expect(saveEasynewsCastProfile).not.toHaveBeenCalled();
+
+		// The profile is gone server-side: saved again with the login as the key.
+		vi.mocked(updateEasynewsCastSettings).mockResolvedValue(false);
+		fireEvent.change(screen.getAllByRole('combobox')[0], { target: { value: '3' } });
+		await waitFor(() =>
+			expect(saveEasynewsCastProfile).toHaveBeenCalledWith(btoa('alice:pw'), {
+				movieMaxSize: 3,
+				episodeMaxSize: undefined,
+				otherStreamsLimit: undefined,
+				hideCastOption: undefined,
+			})
+		);
 	});
 
 	it('applies correct color classes for each accent color', () => {

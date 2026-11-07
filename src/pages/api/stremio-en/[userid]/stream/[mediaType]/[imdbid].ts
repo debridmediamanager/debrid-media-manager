@@ -7,7 +7,11 @@ import { settleWithin } from '@/utils/castAddonFailure';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import { easynewsCredentialsOf } from '@/utils/easynewsCastKey';
-import { easynewsReleaseOf, easynewsStreamResults } from '@/utils/easynewsCastSearch';
+import {
+	easynewsReleaseOf,
+	easynewsStreamResults,
+	goneEasynewsPaths,
+} from '@/utils/easynewsCastSearch';
 import { formatStremioStreamTitle, generateStreamName } from '@/utils/streamMetadata';
 import { releaseBingeGroup } from '@/utils/stremioBingeGroup';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -15,6 +19,10 @@ import ptt from 'parse-torrent-title';
 
 // Stremio waits about 15 s for an addon; a slow search must not cost the casts.
 const SEARCH_BUDGET_MS = 10_000;
+// The dead-file check runs after the search, inside the same ~15 s.
+const PROBE_BUDGET_MS = 4_000;
+// Search hits checked beyond the open slots, so a dead one leaves no gap.
+const SPARE_HITS = 3;
 
 const hashOf = (path: string) => path.slice(0, path.indexOf('.'));
 
@@ -123,13 +131,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 
 		const offered = new Set([...userCastItems, ...otherItems].map((item) => item.hash));
-		const searchItems = found.filter((r) => !offered.has(hashOf(r.path)));
+		const searchItems = found
+			.filter((r) => !offered.has(hashOf(r.path)))
+			.slice(0, Math.max(0, otherStreamsLimit - otherItems.length) + SPARE_HITS);
+
+		// Easynews still lists files it can no longer serve: drop those before
+		// Stremio offers them, as the debrid casts drop uncached hashes.
+		const probe = await settleWithin(
+			goneEasynewsPaths(credentials, [
+				...userCastItems.map((item) => item.path),
+				...otherItems.map((item) => item.path),
+				...searchItems.map((r) => r.path),
+			]),
+			PROBE_BUDGET_MS
+		);
+		const gone = probe.timedOut ? new Set<string>() : probe.value;
+		const live = <T extends { path: string }>(items: T[]) =>
+			items.filter((item) => !gone.has(item.path));
+		const liveUserCasts = live(userCastItems);
+		const liveOtherCasts = live(otherItems);
+		const liveSearch = live(searchItems);
 
 		console.log('[Stremio-EN Stream] Stream stats:', {
 			userCasts: userCastItems.length,
 			otherCasts: otherItems.length,
 			searchHits: found.length,
+			gone: gone.size,
 			searchTimedOut: !!search?.timedOut,
+			probeTimedOut: probe.timedOut,
 		});
 
 		const playUrl = (path: string) =>
@@ -162,12 +191,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			});
 		};
 
-		for (const item of userCastItems) push(item.filename, item.path, item.size, true);
-		for (const item of otherItems) push(item.filename, item.path, item.size, false);
+		for (const item of liveUserCasts) push(item.filename, item.path, item.size, true);
+		for (const item of liveOtherCasts) push(item.filename, item.path, item.size, false);
 		// Search results fill what the cast pool left open, in the same "other
 		// streams" budget the size-limits setting describes.
-		const searchSlots = Math.max(0, otherStreamsLimit - otherItems.length);
-		for (const result of searchItems.slice(0, searchSlots)) {
+		const searchSlots = Math.max(0, otherStreamsLimit - liveOtherCasts.length);
+		for (const result of liveSearch.slice(0, searchSlots)) {
 			push(result.title, result.path, result.size / 1024 / 1024, false);
 		}
 

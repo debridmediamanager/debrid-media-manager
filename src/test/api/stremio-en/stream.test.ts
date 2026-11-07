@@ -3,7 +3,7 @@ import { EasynewsAuthError } from '@/services/easynews';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { easynewsCastKey } from '@/utils/easynewsCastKey';
-import { easynewsStreamResults } from '@/utils/easynewsCastSearch';
+import { easynewsStreamResults, goneEasynewsPaths } from '@/utils/easynewsCastSearch';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -12,6 +12,7 @@ vi.mock('@/services/rateLimit/withRateLimit', () => ({ withRateLimit: (h: unknow
 vi.mock('@/utils/easynewsCastSearch', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/easynewsCastSearch')>()),
 	easynewsStreamResults: vi.fn(),
+	goneEasynewsPaths: vi.fn(),
 }));
 vi.mock('@/services/anime/stremioAnime', () => ({
 	resolveStreamTarget: vi.fn(async (id: string, mediaType: string, origin: string) => ({
@@ -24,6 +25,7 @@ vi.mock('@/services/anime/stremioAnime', () => ({
 
 const mockRepository = vi.mocked(repository);
 const mockSearch = vi.mocked(easynewsStreamResults);
+const mockGone = vi.mocked(goneEasynewsPaths);
 const LOGIN = { username: 'alice', password: 'pw' };
 const A = 'a'.repeat(32);
 const B = 'b'.repeat(32);
@@ -56,6 +58,7 @@ describe('/api/stremio-en/[userid]/stream/[mediaType]/[imdbid]', () => {
 		mockRepository.getEasynewsUserCastStreams = vi.fn().mockResolvedValue([]);
 		mockRepository.getEasynewsOtherStreams = vi.fn().mockResolvedValue([]);
 		mockSearch.mockResolvedValue([]);
+		mockGone.mockResolvedValue(new Set());
 	});
 	afterAll(() => {
 		process.env.DMM_ORIGIN = originalOrigin;
@@ -145,6 +148,35 @@ describe('/api/stremio-en/[userid]/stream/[mediaType]/[imdbid]', () => {
 		await handler(request('tt11280740:2:6'), next);
 		const group = (res: any) => res._getData().streams[1].behaviorHints.bingeGroup;
 		expect(group(first)).toBe(group(next));
+	});
+
+	// Severance S02E01 NEUROSiS: listed by search, 410 on every request (2026-11-07).
+	it('drops a file Easynews no longer serves and fills its slot from the spares', async () => {
+		mockRepository.getEasynewsCastProfile = vi.fn().mockResolvedValue({
+			apiKey: easynewsCastKey(LOGIN),
+			movieMaxSize: 0,
+			episodeMaxSize: 0,
+			otherStreamsLimit: 2,
+			hideCastOption: true,
+		});
+		const own = cast(A, 'Severance.S02E05.1080p.WEB.H264-DEAD');
+		mockRepository.getEasynewsUserCastStreams = vi.fn().mockResolvedValue([own]);
+		const hits = [B, C, 'd'.repeat(32)].map((h, i) => ({
+			path: path(h, `Severance.S02E05.72${i}p.WEB-X`),
+			title: `Severance.S02E05.72${i}p.WEB-X`,
+			size: 1e9,
+		}));
+		mockSearch.mockResolvedValue(hits);
+		mockGone.mockResolvedValue(new Set([own.path, hits[0].path]));
+
+		const res = createMockResponse();
+		await handler(request(), res);
+
+		expect(mockGone).toHaveBeenCalledWith(LOGIN, [own.path, ...hits.map((h) => h.path)]);
+		const urls = (res._getData() as any).streams.map((s: any) => s.url);
+		expect(urls).toHaveLength(2);
+		expect(urls[0]).toContain(encodeURIComponent(hits[1].path));
+		expect(urls[1]).toContain(encodeURIComponent(hits[2].path));
 	});
 
 	it('answers a refused login with the sign-in notice', async () => {
