@@ -650,6 +650,14 @@ export class Repository {
 		return this.availabilityService.markDebridioRefreshed(key);
 	}
 
+	public getRefreshedAt(stampKey: string) {
+		return this.availabilityService.getRefreshedAt(stampKey);
+	}
+
+	public markRefreshed(stampKey: string) {
+		return this.availabilityService.markRefreshed(stampKey);
+	}
+
 	public async saveInstantAvailabilityAd(
 		imdbId: string,
 		rows: Array<{ hash: string; filename: string; bytes: number }>

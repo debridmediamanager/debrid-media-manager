@@ -1,0 +1,316 @@
+{
+	"_comment": "Real AIOStreams answer for The Odyssey (2026), tt33764258, from the DMM scrape configuration on aiostreams.fortheweak.cloud, 2026-11-07: a selection of its 1,277 streams. Unchanged except that the debrid key, the configuration id and password, and encrypted URL segments are replaced by placeholders. name is the source preset, description the folder then the file name.",
+	"streams": [
+		{
+			"name": "comet",
+			"description": "The.Odyssey.2026.2160p.USA.UHD.Blu-ray.HDR.HEVC.DTS-HD.MA.5.1-TMT",
+			"infoHash": "601aff1ef7c1d7023a61ba49d283bc74728ad3f6",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay|TMT",
+				"videoSize": 96913653996,
+				"filename": "The.Odyssey.2026.2160p.USA.UHD.Blu-ray.HDR.HEVC.DTS-HD.MA.5.1-TMT"
+			}
+		},
+		{
+			"name": "comet",
+			"description": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES",
+			"infoHash": "31accef5eda5c473f5c22f1d6f1d9be7a98d8efb",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|CiNEPHiLES",
+				"videoSize": 88246893816,
+				"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES"
+			}
+		},
+		{
+			"name": "comet",
+			"description": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES.mkv",
+			"infoHash": "e6eba29dfb6e11190212e055eac1869c28ef048e",
+			"fileIdx": 0,
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|CiNEPHiLES",
+				"videoSize": 88246893816,
+				"filename": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES.mkv"
+			}
+		},
+		{
+			"name": "comet",
+			"description": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"infoHash": "864a36e5254aeb0db48e9c5ea45e3268c49d115f",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|CiNEPHiLES",
+				"videoSize": 88246893816,
+				"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+			}
+		},
+		{
+			"name": "comet",
+			"description": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-3CooL",
+			"infoHash": "907bef57f04037e0289037bcd41ea15b5609d57e",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|3CooL",
+				"videoSize": 88246895439,
+				"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-3CooL"
+			}
+		},
+		{
+			"name": "meteor",
+			"description": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv",
+			"infoHash": "bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9",
+			"fileIdx": 0,
+			"sources": [
+				"dht:bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9",
+				"tracker:udp://tracker.opentrackr.org:1337/announce",
+				"tracker:udp://open.tracker.cl:1337/announce",
+				"tracker:udp://open.demonii.com:1337/announce",
+				"tracker:udp://tracker.torrent.eu.org:451/announce",
+				"tracker:udp://exodus.desync.com:6969/announce"
+			],
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX",
+				"videoSize": 88950244838,
+				"filename": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv",
+				"folderName": "The Odyssey 2026 BDRemux 2160p HDR",
+				"seeders": 5,
+				"publishDate": "2026-11-07T13:50:29Z"
+			}
+		},
+		{
+			"name": "comet",
+			"description": "The.Odyssey.2026.2160p.USA.UHD.Blu-ray.HDR.HEVC.DTS-HD.MA.5.1-TMT",
+			"url": "https://comet.feels.legal/OPAQUE/playback/601aff1ef7c1d7023a61ba49d283bc74728ad3f6/0/n/n/OPAQUE",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay|TMT",
+				"videoSize": 96913653996,
+				"filename": "The.Odyssey.2026.2160p.USA.UHD.Blu-ray.HDR.HEVC.DTS-HD.MA.5.1-TMT"
+			}
+		},
+		{
+			"name": "torrentio",
+			"description": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES",
+			"url": "https://torrentio.strem.fun/resolve/torbox/TORBOX-KEY/ace6ee112446904ea51a44756caa819153ae242f/OPAQUE/undefined/OPAQUE",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|CiNEPHiLES",
+				"videoSize": 88261577933,
+				"filename": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES"
+			}
+		},
+		{
+			"name": "peerflix",
+			"description": "The.Odyssey.2026.1080p.TELESYNC.HEVC.AAC2.0",
+			"url": "https://addon.peerflix.mov/torbox/TORBOX-KEY/7465986e6ac5c60dd72e940854ff66401795be36/OPAQUE/0/OPAQUE",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|1080p|TS",
+				"videoSize": 5970004541,
+				"filename": "The.Odyssey.2026.1080p.TELESYNC.HEVC.AAC2.0"
+			}
+		},
+		{
+			"name": "mediafusion",
+			"description": "The.Odyssey.2026.2160p.UHD.BluRay.Remux.HDR.LATINO.DTS-HD.MA.H265-BTM",
+			"url": "https://mediafusionfortheweebs.midnightignite.me/streaming_provider/OPAQUE/playback/torbox/d730eb10bb6d4e2bcfa0ff86a39c832284a8c707",
+			"behaviorHints": {
+				"notWebReady": false,
+				"bingeGroup": "aiostreams.viren070.com|2160p|BluRay REMUX|BTM",
+				"videoSize": 89844850399,
+				"filename": "The.Odyssey.2026.2160p.UHD.BluRay.Remux.HDR.LATINO.DTS-HD.MA.H265-BTM"
+			}
+		},
+		{
+			"name": "zilean",
+			"description": "The Odyssey 2026 1080p.mkv",
+			"url": "https://aiostreams.fortheweak.cloud/api/v1/debrid/playback/ENCRYPTED/-/eyJ0eXBlIjoidG9ycmVudCIsInRpdGxlIjoiVGhlIE9keXNzZXkgMjAyNiAxMDgwcCBta3YiLCJoYXNoIjoiYWZlYWQwYTQwMWEyOTAyMzhiZWFjNDAzNGJjNmZhNGFmM2E3YmYyZSIsInByaXZhdGUiOmZhbHNlLCJzb3VyY2VzIjpbXSwiaW5kZXgiOjB9/OPAQUE/The%20Odyssey%202026%201080p.mkv",
+			"behaviorHints": {
+				"videoHash": "a5e89ca992cf3fb8",
+				"videoSize": 8083862221,
+				"filename": "The Odyssey 2026 1080p.mkv",
+				"folderSize": 8083862221,
+				"bingeGroup": "aiostreams.viren070.com|1080p"
+			}
+		},
+		{
+			"name": "torrent-galaxy",
+			"description": "The Odyssey 2026 1080p TELESYNC HEVC [Ukr Dub]\nThe Odyssey 1080.mkv",
+			"url": "https://aiostreams.fortheweak.cloud/api/v1/debrid/playback/ENCRYPTED/-/eyJ0eXBlIjoidG9ycmVudCIsImRvd25sb2FkVXJsIjoiaHR0cHM6Ly9pdG9ycmVudHMub3JnL0IzNjVFNzY4NTU1ODk5RDZGMTQ0NjExODMyNTVFRkU1NDk4MzNDN0UudG9ycmVudD90aXRsZT1UaGUgT2R5c3NleSAyMDI2IDEwODBwIFRFTEVTWU5DIEhFVkMgW1VrciBEdWJdIiwidGl0bGUiOiJUaGUgT2R5c3NleSAyMDI2IDEwODBwIFRFTEVTWU5DIEhFVkMgW1VrciBEdWJdIiwiaGFzaCI6ImIzNjVlNzY4NTU1ODk5ZDZmMTQ0NjExODMyNTVlZmU1NDk4MzNjN2UiLCJzb3VyY2VzIjpbXSwiaW5kZXgiOjB9/OPAQUE/The%20Odyssey%201080.mkv",
+			"behaviorHints": {
+				"videoHash": "c831d4eab750a994",
+				"videoSize": 11301559712,
+				"filename": "The Odyssey 1080.mkv",
+				"folderSize": 11301559712,
+				"bingeGroup": "aiostreams.viren070.com|1080p|TS"
+			}
+		},
+		{
+			"name": "bitmagnet",
+			"description": "The.Odyssey.2026.1080p.WEBRip.x265-INFINITY.mp4",
+			"url": "https://aiostreams.fortheweak.cloud/api/v1/debrid/playback/ENCRYPTED/-/eyJ0eXBlIjoidG9ycmVudCIsInRpdGxlIjoiVGhlLk9keXNzZXkuMjAyNi4xMDgwcC5XRUJSaXAueDI2NS1JTkZJTklUWSIsImhhc2giOiJkM2Q0NTIxMmYyNzI2YmQ5OWQwYmExMGFmZTY4MThiMTk5YjAzYjc1Iiwic291cmNlcyI6W10sImluZGV4IjoxfQ/OPAQUE/OPAQUE",
+			"behaviorHints": {
+				"videoHash": "5910f973b125dca7",
+				"videoSize": 1441094573,
+				"filename": "The.Odyssey.2026.1080p.WEBRip.x265-INFINITY.mp4",
+				"folderSize": 1441094573,
+				"bingeGroup": "aiostreams.viren070.com|1080p|WEBRip|INFINITY"
+			}
+		},
+		{
+			"name": "bitmagnet",
+			"description": "[2026.08.21] VA - Pure Space Odyssey, Vol. 1",
+			"url": "https://aiostreams.fortheweak.cloud/api/v1/debrid/playback/ENCRYPTED/-/eyJ0eXBlIjoidG9ycmVudCIsInRpdGxlIjoiWzIwMjYuMDguMjFdIFZBIC0gUHVyZSBTcGFjZSBPZHlzc2V5LCBWb2wuIDEiLCJoYXNoIjoiOTQyMGI3MzQ3NDZhMThiZGNjYTBmODcxMDM1OTNjZWJkYzhhNWE3NSIsInNvdXJjZXMiOltdLCJpbmRleCI6LTF9/OPAQUE/OPAQUE",
+			"behaviorHints": {
+				"videoSize": 545865129,
+				"filename": "[2026.08.21] VA - Pure Space Odyssey, Vol. 1",
+				"folderSize": 545865129,
+				"bingeGroup": "aiostreams.viren070.com|"
+			}
+		},
+		{
+			"name": "bitmagnet",
+			"description": "The Odyssey (2026) Official Teaser Trailer 4K.mkv",
+			"url": "https://aiostreams.fortheweak.cloud/api/v1/debrid/playback/ENCRYPTED/-/eyJ0eXBlIjoidG9ycmVudCIsInRpdGxlIjoiVGhlIE9keXNzZXkgKDIwMjYpIE9mZmljaWFsIFRlYXNlciBUcmFpbGVyIDRLLm1rdiIsImhhc2giOiI3ZjljM2U0MGE2N2ZhM2ZmOWNkZmY3ZDdhZTE0MTUwZjkwZTNjMmFlIiwic291cmNlcyI6W10sImluZGV4IjowfQ/OPAQUE/OPAQUE",
+			"behaviorHints": {
+				"videoSize": 361881559,
+				"filename": "The Odyssey (2026) Official Teaser Trailer 4K.mkv",
+				"folderSize": 361881559,
+				"bingeGroup": "aiostreams.viren070.com|2160p"
+			}
+		},
+		{
+			"name": "sootio",
+			"description": "The Odyssey XXX Part 1 [Cosplayground 2026] XXX WEB-DL 2160p MP4-P2P [XC]",
+			"url": "https://sooti.click/resolve/torbox/TORBOX-KEY/magnet%3A%3Fxt%3Durn%3Abtih%3A6463fc1a154660b428e47c634edfdc9768945914?cacheKey=torbox-search-v2%3Amovie%3Att33764258%3A&cacheHash=6463fc1a154660b428e47c634edfdc9768945914",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|WEB-DL|P2P",
+				"videoSize": 12777527706,
+				"filename": "The Odyssey XXX Part 1 [Cosplayground 2026] XXX WEB-DL 2160p MP4-P2P [XC]"
+			}
+		},
+		{
+			"name": "sootio",
+			"description": "Ludwig Goransson - The Odyssey (Orig. Soundtrack) 2026 FLAC (Jamal The Moroccan)",
+			"url": "https://sooti.click/resolve/torbox/TORBOX-KEY/magnet%3A%3Fxt%3Durn%3Abtih%3A2da0a2b6cec02ff7da43b4e219bf30a842aa5da0?cacheKey=torbox-search-v2%3Amovie%3Att33764258%3A&cacheHash=2da0a2b6cec02ff7da43b4e219bf30a842aa5da0",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|",
+				"videoSize": 596859945,
+				"filename": "Ludwig Goransson - The Odyssey (Orig. Soundtrack) 2026 FLAC (Jamal The Moroccan)"
+			}
+		},
+		{
+			"name": "sootio",
+			"description": "Одиссея (The Odyssey 2026).mkv",
+			"url": "https://sooti.click/resolve/torbox/TORBOX-KEY/magnet%3A%3Fxt%3Durn%3Abtih%3A832e44125cd1b845a90536a913d94ec9d93aa735?cacheKey=torbox-search-v2%3Amovie%3Att33764258%3A&cacheHash=832e44125cd1b845a90536a913d94ec9d93aa735",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|1080p",
+				"fileName": "Одиссея (The Odyssey 2026).mkv",
+				"videoSize": 4778151117,
+				"filename": "Одиссея (The Odyssey 2026).mkv"
+			}
+		},
+		{
+			"name": "sootio",
+			"description": "The Odyssey 2026 1080p BluRay HEVC x265 5.1 BONE",
+			"url": "https://sooti.click/resolve/torbox/TORBOX-KEY/magnet%3A%3Fxt%3Durn%3Abtih%3Ab6d0745446fb127d45e5dfd5273e0c380ce2e6a9?cacheKey=torbox-search-v2%3Amovie%3Att33764258%3A&cacheHash=b6d0745446fb127d45e5dfd5273e0c380ce2e6a9",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|1080p|BluRay",
+				"videoSize": 4466765988,
+				"filename": "The Odyssey 2026 1080p BluRay HEVC x265 5.1 BONE"
+			}
+		},
+		{
+			"name": "stremthruTorz",
+			"description": "The.Odyssey.Prologue.2025.IMAX.2D.4K.ProRes.4444.5.1.Ch.PCM-hutaoing.mov",
+			"infoHash": "2e8bff7beab796e4a0985b2f11998bc20645ed7a",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|2160p|hutaoing",
+				"videoHash": "93e05abb6ff0de7f",
+				"videoSize": 42222769878,
+				"filename": "The.Odyssey.Prologue.2025.IMAX.2D.4K.ProRes.4444.5.1.Ch.PCM-hutaoing.mov"
+			}
+		},
+		{
+			"name": "jackettio",
+			"description": " Too many requests, please try in 6 minute(s).",
+			"url": "#",
+			"behaviorHints": {
+				"bingeGroup": "aiostreams.viren070.com|",
+				"filename": " Too many requests, please try in 6 minute(s)."
+			}
+		},
+		{
+			"name": "[❌] Brazuca Torrents P2P",
+			"description": "500 - Internal Server Error",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] Brazuca Torrents P2P",
+					"description": "500 - Internal Server Error"
+				},
+				"id": "error.[❌] Brazuca Torrents P2P"
+			}
+		},
+		{
+			"name": "[❌] Knaben",
+			"description": "Knaben API error (403): Forbidden",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] Knaben",
+					"description": "Knaben API error (403): Forbidden"
+				},
+				"id": "error.[❌] Knaben"
+			}
+		},
+		{
+			"name": "[❌] TheRARBG",
+			"description": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] TheRARBG",
+					"description": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+				},
+				"id": "error.[❌] TheRARBG"
+			}
+		},
+		{
+			"name": "[❌] The Pirate Bay",
+			"description": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] The Pirate Bay",
+					"description": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+				},
+				"id": "error.[❌] The Pirate Bay"
+			}
+		},
+		{
+			"name": "[❌] Anime Tosho (ARCHIVED)",
+			"description": "Could not get capabilities: fetch failed",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] Anime Tosho (ARCHIVED)",
+					"description": "Could not get capabilities: fetch failed"
+				},
+				"id": "error.[❌] Anime Tosho (ARCHIVED)"
+			}
+		},
+		{
+			"name": "[❌] nekoBT",
+			"description": "Too Many Requests (retry after 23s)",
+			"externalUrl": "https://github.com/Viren070/AIOStreams",
+			"streamData": {
+				"type": "error",
+				"error": {
+					"title": "[❌] nekoBT",
+					"description": "Too Many Requests (retry after 23s)"
+				},
+				"id": "error.[❌] nekoBT"
+			}
+		}
+	]
+}

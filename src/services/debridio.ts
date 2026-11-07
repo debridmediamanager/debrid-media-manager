@@ -180,8 +180,8 @@ export function parseStreams(
 }
 
 // The error names the host alone: debridio's path carries its provider key.
-async function fetchStreams(url: string): Promise<unknown> {
-	const response = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+async function fetchStreams(url: string, timeoutMs = FETCH_TIMEOUT_MS): Promise<unknown> {
+	const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
 	if (!response.ok) {
 		throw new Error(`${new URL(url).host} responded ${response.status}`);
 	}
@@ -212,9 +212,10 @@ export async function scrapeDebridioSeason(
 export async function scrapeStremioMovie(
 	base: string,
 	imdbId: string,
-	parse: (payloads: unknown[]) => DebridioScrape
+	parse: (payloads: unknown[]) => DebridioScrape,
+	timeoutMs?: number
 ): Promise<DebridioScrape> {
-	return parse([await fetchStreams(`${base}/stream/movie/${imdbId}.json`)]);
+	return parse([await fetchStreams(`${base}/stream/movie/${imdbId}.json`, timeoutMs)]);
 }
 
 /** A season from any Stremio addon, asked one episode at a time. */
@@ -223,7 +224,8 @@ export async function scrapeStremioSeason(
 	imdbId: string,
 	season: number,
 	episodes: number[],
-	parse: (payloads: unknown[]) => DebridioScrape
+	parse: (payloads: unknown[]) => DebridioScrape,
+	timeoutMs?: number
 ): Promise<DebridioScrape> {
 	const list = episodes.slice(0, MAX_EPISODES_PER_SEASON);
 	if (list.length === 0) throw new Error('no episodes to scrape');
@@ -240,7 +242,7 @@ export async function scrapeStremioSeason(
 		const chunk = list.slice(start, start + EPISODE_CONCURRENCY);
 		const settled = await Promise.allSettled(
 			chunk.map((episode) =>
-				fetchStreams(`${base}/stream/series/${imdbId}:${season}:${episode}.json`)
+				fetchStreams(`${base}/stream/series/${imdbId}:${season}:${episode}.json`, timeoutMs)
 			)
 		);
 		for (const result of settled) {

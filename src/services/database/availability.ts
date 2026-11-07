@@ -433,19 +433,28 @@ export class AvailabilityService extends DatabaseClient {
 	// pattern): saveInstantAvailability is create-only, so a refresh that finds
 	// no new cached hashes writes nothing to Available and could never advance a
 	// gate read from those rows - this row is what actually throttles.
-	public async getDebridioRefreshedAt(key: string): Promise<Date | null> {
+	public getDebridioRefreshedAt(key: string): Promise<Date | null> {
+		return this.getRefreshedAt(`debridio:refresh:${key}`);
+	}
+
+	public markDebridioRefreshed(key: string): Promise<void> {
+		return this.markRefreshed(`debridio:refresh:${key}`);
+	}
+
+	/** When the Cache row `stampKey` was last written, or null if it never was. */
+	public async getRefreshedAt(stampKey: string): Promise<Date | null> {
 		const row = await this.prisma.cache.findUnique({
-			where: { key: `debridio:refresh:${key}` },
+			where: { key: stampKey },
 			select: { updatedAt: true },
 		});
 		return row?.updatedAt ?? null;
 	}
 
-	public async markDebridioRefreshed(key: string): Promise<void> {
+	public async markRefreshed(stampKey: string): Promise<void> {
 		await this.prisma.cache.upsert({
-			where: { key: `debridio:refresh:${key}` },
+			where: { key: stampKey },
 			update: { value: {} },
-			create: { key: `debridio:refresh:${key}`, value: {} },
+			create: { key: stampKey, value: {} },
 		});
 	}
 

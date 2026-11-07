@@ -31,7 +31,7 @@ export type DebridioTarget = {
 const AVAILABILITY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const FALLBACK_EPISODE_COUNT = 12;
 
-async function seasonEpisodes(imdbId: string, season: number): Promise<number[]> {
+export async function seasonEpisodes(imdbId: string, season: number): Promise<number[]> {
 	try {
 		const response = await getMetadataCache().getCinemetaSeries(imdbId);
 		const videos: Array<{ season?: number; episode?: number }> = response?.meta?.videos ?? [];
@@ -141,7 +141,7 @@ async function persist(target: DebridioTarget, scrapes: ProviderScrapes): Promis
  * dump. A lookup that fails is not, since a page left to the request queue is
  * better than one filled with another title.
  */
-async function idIsKind(target: DebridioTarget): Promise<boolean> {
+export async function idIsKind(target: DebridioTarget): Promise<boolean> {
 	let titleType: string | null;
 	try {
 		titleType = await db.getImdbTitleType(target.imdbId);

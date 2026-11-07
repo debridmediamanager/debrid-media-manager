@@ -17,6 +17,7 @@
  */
 import type { AnimeIdSource } from '@/services/database/anime';
 import { repository } from '@/services/repository';
+import { enrichFromAioStreamsInBackground } from '@/utils/aioStreamsEnrich';
 import { parseAnimeEpisode } from '@/utils/animeEpisodes';
 import { getTroveCandidates, type TroveStreamCandidate } from '@/utils/cachedTroveStreams';
 import { isCyrillicLed } from '@/utils/cyrillicLed';
@@ -235,8 +236,27 @@ export async function resolveStreamTarget(
 	let externalUrl = `${origin}/${typeSlug}/${videoId}`;
 	if (typeSlug === 'show') {
 		// videoId = imdbid:season:episode, and the page is /show/imdbid/season
-		const [imdbId, season] = videoId.split(':');
+		const [imdbId, season, episode] = videoId.split(':');
 		externalUrl = `${origin}/${typeSlug}/${imdbId}/${season}`;
+		const seasonNum = Number.parseInt(season, 10);
+		const episodeNum = Number.parseInt(episode, 10);
+		if (Number.isInteger(seasonNum) && Number.isInteger(episodeNum)) {
+			enrichFromAioStreamsInBackground({
+				imdbId,
+				key: `tv:${imdbId}:${seasonNum}`,
+				kind: 'series',
+				season: seasonNum,
+				episode: episodeNum,
+			});
+		}
+	} else {
+		// A viewer who only ever uses the addon never opens the page, so the
+		// stream request is what grows the releases its trove draws from.
+		enrichFromAioStreamsInBackground({
+			imdbId: videoId,
+			key: `movie:${videoId}`,
+			kind: 'movie',
+		});
 	}
 	return {
 		castKey: videoId,

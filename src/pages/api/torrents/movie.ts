@@ -5,6 +5,7 @@ import {
 	cleanMovieResultsInBackground,
 	withoutTrashedResults,
 } from '@/services/scrapedVerdicts/job';
+import { enrichFromAioStreamsInBackground } from '@/utils/aioStreamsEnrich';
 import { checkCanary, respondAsNeverScraped } from '@/utils/canaryGuard';
 import type { DebridioTarget } from '@/utils/debridioBackfill';
 import {
@@ -81,6 +82,9 @@ const handler: NextApiHandler = async (req, res) => {
 			key: `movie:${trimmedImdbId}`,
 			kind: 'movie',
 		} satisfies DebridioTarget;
+		// Comet, StremThru, MediaFusion and the rest, through AIOStreams; once a
+		// day per page, in the background, merged into the page for next time.
+		enrichFromAioStreamsInBackground(debridioTarget);
 
 		if (searchResults.length === 0 && isUnfilteredFirstPage) {
 			// Debridio answers in about a second what the heavy scrapers queue
