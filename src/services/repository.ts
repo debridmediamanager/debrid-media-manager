@@ -1592,8 +1592,8 @@ export class Repository {
 		return this.hashImdbService.getFilenameIdentifications(keys);
 	}
 
-	public replaceFilenameIdentifications(rows: FilenameIdentification[]) {
-		return this.hashImdbService.replaceFilenameIdentifications(rows);
+	public confirmFilenameIdentifications(rows: FilenameIdentification[]) {
+		return this.hashImdbService.confirmFilenameIdentifications(rows);
 	}
 
 	public async saveFilenameIdentifications(rows: FilenameIdentification[]) {

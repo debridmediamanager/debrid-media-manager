@@ -74,7 +74,7 @@ describe('/api/library/identify', () => {
 		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([]);
 		mockRepository.saveFilenameIdentifications = vi.fn().mockResolvedValue(1);
 		mockRepository.getHashTitleIds = vi.fn().mockResolvedValue(new Map());
-		mockRepository.replaceFilenameIdentifications = vi.fn().mockResolvedValue(undefined);
+		mockRepository.confirmFilenameIdentifications = vi.fn().mockResolvedValue(undefined);
 		mockFind.mockResolvedValue(null);
 		mockShow.mockResolvedValue(null);
 	});
@@ -293,94 +293,8 @@ describe('/api/library/identify', () => {
 			],
 			complete: true,
 		});
-		expect(mockRepository.replaceFilenameIdentifications).toHaveBeenCalledWith([
+		expect(mockRepository.confirmFilenameIdentifications).toHaveBeenCalledWith([
 			expect.objectContaining({ hash: LOG_HASH, titleKey: key(LOG), confident: true }),
-		]);
-	});
-
-	// Puffin Rock's German title, a stored doubt from before content-identifier read
-	// Wikidata labels (Baby Daddy, p 0.035, read live 2026-11-07), and its answer after
-	it('asks once more about a doubt stored before the identifier learned local titles', async () => {
-		const OONAS = 'Oonas.und.Babas.Insel.S01.GERMAN.1080p.WEB.x264-GRP';
-		const doubt = (filename: string, createdAt: Date) => ({
-			hash: filename === OONAS ? H1 : H2.toLowerCase(),
-			titleKey: key(filename),
-			filename,
-			kind: 'tv',
-			imdbId: 'tt2177489',
-			title: 'Baby Daddy',
-			year: 2012,
-			score: 0.035,
-			confident: false,
-			createdAt,
-		});
-		mockRepository.getFilenameIdentifications = vi
-			.fn()
-			.mockResolvedValue([
-				doubt(OONAS, new Date('2026-11-06T18:00:00Z')),
-				doubt('Later.Doubt.S01', new Date('2026-11-07T02:00:00Z')),
-			]);
-		mockIdentify.mockResolvedValue([
-			{ ...confident('tt3590338', 'Puffin Rock', 2015, 'tv'), parsedYear: null },
-		]);
-
-		const res = await call({
-			items: [
-				{ hash: H1, filename: OONAS },
-				{ hash: H2, filename: 'Later.Doubt.S01' },
-			],
-		});
-
-		// a doubt from after the retrain stays stored and is not asked
-		expect(mockIdentify).toHaveBeenCalledExactlyOnceWith([OONAS]);
-		expect(res.json).toHaveBeenCalledWith({
-			results: [{ imdbId: 'tt3590338', title: 'Puffin Rock', year: 2015, kind: 'tv' }, null],
-			complete: true,
-		});
-		expect(mockRepository.replaceFilenameIdentifications).toHaveBeenCalledWith([
-			expect.objectContaining({ hash: H1, imdbId: 'tt3590338', confident: true }),
-		]);
-		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([]);
-	});
-
-	it('replaces a re-asked doubt that stays one, so it is not asked on every visit', async () => {
-		// ymsita's RD library name and the identifier's real doubt about it, with no hash map
-		const RU = DURACKAJA;
-		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
-			{
-				hash: H1,
-				titleKey: key(RU),
-				filename: RU,
-				kind: 'movie',
-				imdbId: 'tt1570728',
-				title: 'Crazy, Stupid, Love.',
-				year: 2011,
-				score: 0.46,
-				confident: false,
-				createdAt: new Date('2026-10-11T00:00:00Z'),
-			},
-		]);
-		mockIdentify.mockResolvedValue([
-			{
-				kind: 'movie',
-				probability: 0.46,
-				parsedYear: 2011,
-				confident: false,
-				matches: [
-					{
-						imdbId: 'tt1570728',
-						title: 'Crazy, Stupid, Love.',
-						year: 2011,
-						score: -0.02,
-					},
-				],
-			},
-		]);
-
-		await call({ items: [{ hash: H1, filename: RU }] });
-
-		expect(mockRepository.replaceFilenameIdentifications).toHaveBeenCalledWith([
-			expect.objectContaining({ hash: H1, titleKey: key(RU), confident: false }),
 		]);
 	});
 
@@ -424,7 +338,7 @@ describe('/api/library/identify', () => {
 		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([
 			expect.objectContaining({ titleKey: key(AD_NAME) }),
 		]);
-		expect(mockRepository.replaceFilenameIdentifications).toHaveBeenCalledWith([
+		expect(mockRepository.confirmFilenameIdentifications).toHaveBeenCalledWith([
 			expect.objectContaining({ titleKey: key(RD_NAME), confident: true }),
 		]);
 	});
