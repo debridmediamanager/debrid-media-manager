@@ -90,6 +90,21 @@ export function isFresh(
 	return now - updatedAt.getTime() <= ttlMs;
 }
 
+/**
+ * Easynews releases visitors picked ("Send to zurg"), kept as Usenet rows for the
+ * Real-Debrid table of the same title. Their cleaned NZBs live in the NZB store under
+ * the `en` prefix; these rows only list them, in the same `Cache` table as the
+ * searches above (no migration, see the note at the top). Never expire: the NZB
+ * does not either. Newest first, capped per title.
+ */
+const EASYNEWS_KEY_PREFIX = 'easynewsnzb:v1:';
+export const MAX_EASYNEWS_ROWS = 500;
+
+export function easynewsNzbKey(imdbId: string, seasonNum?: number): string {
+	const base = `${EASYNEWS_KEY_PREFIX}${imdbId.toLowerCase()}`;
+	return seasonNum === undefined ? base : `${base}:s${seasonNum}`;
+}
+
 export class NzbSearchCacheService extends DatabaseClient {
 	async get(
 		imdbId: string,
@@ -136,6 +151,45 @@ export class NzbSearchCacheService extends DatabaseClient {
 		} catch (error) {
 			// A cache write failure must never fail the request it came from.
 			console.error('Error writing Usenet search cache:', error);
+		}
+	}
+
+	async getEasynewsNzbs(imdbId: string, seasonNum?: number): Promise<UsenetResult[]> {
+		try {
+			const row = await this.prisma.cache.findUnique({
+				where: { key: easynewsNzbKey(imdbId, seasonNum) },
+			});
+			const results = (row?.value as unknown as { results?: unknown } | undefined)?.results;
+			return Array.isArray(results) ? (results as UsenetResult[]) : [];
+		} catch (error) {
+			console.error('Error reading stored Easynews NZBs:', error);
+			return [];
+		}
+	}
+
+	// ponytail: read-modify-write, so two sends for one title in the same instant can drop
+	// one row (its NZB stays stored). Move to a table of its own if that ever shows.
+	async addEasynewsNzb(
+		imdbId: string,
+		seasonNum: number | undefined,
+		result: UsenetResult
+	): Promise<void> {
+		const key = easynewsNzbKey(imdbId, seasonNum);
+		try {
+			const current = await this.getEasynewsNzbs(imdbId, seasonNum);
+			const results = [result, ...current.filter((r) => r.id !== result.id)].slice(
+				0,
+				MAX_EASYNEWS_ROWS
+			);
+			const value = { results } as unknown as object;
+			await this.prisma.cache.upsert({
+				where: { key },
+				update: { value } as any,
+				create: { key, value } as any,
+			});
+		} catch (error) {
+			// The NZB is stored already; a lost listing must not fail the send.
+			console.error('Error writing stored Easynews NZB row:', error);
 		}
 	}
 }

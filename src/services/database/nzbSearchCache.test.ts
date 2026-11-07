@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import odyssey from './__fixtures__/nzbsearch-odyssey-2026-11-07.json';
 import {
+	easynewsNzbKey,
 	isFresh,
+	MAX_EASYNEWS_ROWS,
 	NZB_SEARCH_EMPTY_TTL_MS,
 	NZB_SEARCH_TTL_MS,
 	nzbSearchCacheKey,
@@ -192,5 +194,52 @@ describe('NzbSearchCacheService', () => {
 			});
 			expect((await service.get('tt27497393', 1))?.isFresh).toBe(true);
 		});
+	});
+});
+
+describe('stored Easynews releases', () => {
+	const row = (n: number) => ({
+		id: `en:${String(n).padStart(45, '0')}`,
+		title: `R${n}`,
+		size: n,
+	});
+
+	it('keys a film apart from each season, apart from the search cache', () => {
+		expect(easynewsNzbKey('TT15398776')).toBe('easynewsnzb:v1:tt15398776');
+		expect(easynewsNzbKey('tt11280740', 2)).toBe('easynewsnzb:v1:tt11280740:s2');
+		expect(easynewsNzbKey('tt11280740', 2)).not.toBe(nzbSearchCacheKey('tt11280740', 2));
+	});
+
+	it('puts the newest first, keeps one row per release, and caps the list', async () => {
+		const service = new NzbSearchCacheService();
+		const prisma = (service as any).prisma;
+		const stored = [
+			row(2),
+			row(1),
+			...Array.from({ length: MAX_EASYNEWS_ROWS }, (_, i) => row(100 + i)),
+		];
+		prisma.cache.findUnique.mockResolvedValue({ value: { results: stored } });
+
+		await service.addEasynewsNzb('tt11280740', 2, row(1));
+
+		const { where, create } = prisma.cache.upsert.mock.calls[0][0];
+		expect(where).toEqual({ key: 'easynewsnzb:v1:tt11280740:s2' });
+		expect(create.value.results).toHaveLength(MAX_EASYNEWS_ROWS);
+		expect(create.value.results.slice(0, 2)).toEqual([row(1), row(2)]);
+		expect(create.value.results.filter((r: { id: string }) => r.id === row(1).id)).toHaveLength(
+			1
+		);
+	});
+
+	it('reads nothing rather than failing when the row is missing or the DB errors', async () => {
+		const service = new NzbSearchCacheService();
+		const prisma = (service as any).prisma;
+		prisma.cache.findUnique.mockResolvedValueOnce(null);
+		await expect(service.getEasynewsNzbs('tt1')).resolves.toEqual([]);
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		prisma.cache.findUnique.mockRejectedValueOnce(new Error('down'));
+		await expect(service.getEasynewsNzbs('tt1')).resolves.toEqual([]);
+		prisma.cache.upsert.mockRejectedValueOnce(new Error('down'));
+		await expect(service.addEasynewsNzb('tt1', undefined, row(1))).resolves.toBeUndefined();
 	});
 });

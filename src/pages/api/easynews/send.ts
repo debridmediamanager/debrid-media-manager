@@ -92,6 +92,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			console.error('Easynews send: NZB store write failed:', error);
 			return res.status(503).json({ error: 'DMM could not store the NZB; try again' });
 		}
+		// Listed with the title's Usenet results from now on, for anyone to send to Real-Debrid.
+		await db.addEasynewsNzb(imdbId, episode ? Number(episode[1]) : undefined, {
+			id: `${EASYNEWS_NZB_PREFIX}:${hash}`,
+			title: name,
+			size: Number.isSafeInteger(size) && (size as number) > 0 ? (size as number) : 0,
+		});
 		const row = await db.pinWanted(
 			payload.shortId,
 			{ imdbId, kind, title: title.trim() },

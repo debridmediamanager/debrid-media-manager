@@ -1,3 +1,4 @@
+import { getStoredNzb } from '@/services/newznab/store';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -37,6 +38,8 @@ afterEach(() => {
 	process.env = { ...ORIGINAL_ENV };
 	vi.restoreAllMocks();
 });
+
+vi.mock('@/services/newznab/store', () => ({ getStoredNzb: vi.fn() }));
 
 describe('isValidImdbId', () => {
 	it('accepts 7-to-9 digit ids and rejects anything else', () => {
@@ -245,6 +248,20 @@ describe('fetchNzb', () => {
 	it('throws when the download fails', async () => {
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 404 }));
 		await expect(fetchNzb('abc123')).rejects.toThrow('404');
+	});
+	// An Easynews release a visitor sent to zurg: stored cleaned, no indexer to ask.
+	it('reads an en: id from the NZB store, never from an indexer', async () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal('fetch', fetchMock);
+		const hash = '087f6a3ae880ec5d81efc65e065067ec084adc52df8a5';
+		vi.mocked(getStoredNzb).mockResolvedValueOnce('<nzb>stored</nzb>');
+
+		await expect(fetchNzb(`en:${hash}`)).resolves.toBe('<nzb>stored</nzb>');
+		expect(getStoredNzb).toHaveBeenCalledWith('en', hash);
+		expect(fetchMock).not.toHaveBeenCalled();
+
+		vi.mocked(getStoredNzb).mockResolvedValueOnce(null);
+		await expect(fetchNzb(`en:${hash}`)).rejects.toThrow('missing');
 	});
 });
 

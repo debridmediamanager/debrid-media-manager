@@ -13,6 +13,8 @@
 //     public vhost forwards only /webseed/*, so the management API answers on
 //     the Tailscale address alone — same arrangement as the debrid uploader.
 
+import { EASYNEWS_NZB_PREFIX } from '@/services/easynews';
+import { getStoredNzb } from '@/services/newznab/store';
 import { isVideo } from '@/utils/selectable';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from './realDebrid';
 
@@ -624,8 +626,20 @@ export async function fetchNzbFrom(indexer: Indexer, nativeId: string): Promise<
 	return body;
 }
 
-/** Download one NZB by qualified release id (`ds:abc123`). Returns the raw XML. */
+const EASYNEWS_ID = new RegExp(`^${EASYNEWS_NZB_PREFIX}:([0-9a-f]{20,80})$`);
+
+/**
+ * Download one NZB by qualified release id (`ds:abc123`). Returns the raw XML.
+ * `en:<hash>` is an Easynews release a visitor sent to zurg: no indexer has it, the
+ * NZB store holds it, already cleaned.
+ */
 export async function fetchNzb(id: string): Promise<string> {
+	const easynews = EASYNEWS_ID.exec(id);
+	if (easynews) {
+		const xml = await getStoredNzb(EASYNEWS_NZB_PREFIX, easynews[1]);
+		if (!xml) throw new Error(`stored Easynews NZB ${id} is missing`);
+		return xml;
+	}
 	const target = parseReleaseId(id);
 	if (!target) throw new Error(`unknown indexer for release id ${id}`);
 	return fetchNzbFrom(target.indexer, target.nativeId);

@@ -70,6 +70,7 @@ describe('POST /api/easynews/send', () => {
 		vi.mocked(putStoredNzb).mockResolvedValue(true as never);
 		vi.mocked(fetchEasynewsNzb).mockResolvedValue(NZB);
 		repository.pinWanted = vi.fn().mockResolvedValue(ROW);
+		repository.addEasynewsNzb = vi.fn().mockResolvedValue(undefined);
 	});
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -108,6 +109,15 @@ describe('POST /api/easynews/send', () => {
 		expect(vi.mocked(putStoredNzb).mock.invocationCallOrder[0]).toBeLessThan(
 			vi.mocked(repository.pinWanted).mock.invocationCallOrder[0]
 		);
+		// Listed with the film's Usenet results, under the id fetchNzb reads from the store.
+		expect(repository.addEasynewsNzb).toHaveBeenCalledWith('tt15398776', undefined, {
+			id: `en:${HASH}`,
+			title: FILM.replace(/\.mkv$/, ''),
+			size: 91459209764,
+		});
+		expect(vi.mocked(putStoredNzb).mock.invocationCallOrder[0]).toBeLessThan(
+			vi.mocked(repository.addEasynewsNzb).mock.invocationCallOrder[0]
+		);
 		expect(vi.mocked(res.json).mock.calls[0][0].item).toMatchObject({
 			imdbId: 'tt15398776',
 			pins: [{ id: HASH, release: FILM }],
@@ -128,6 +138,12 @@ describe('POST /api/easynews/send', () => {
 			season: 2,
 			episode: 5,
 		});
+		// Under its season, as the show page's Usenet table asks for it.
+		expect(repository.addEasynewsNzb).toHaveBeenCalledWith('tt11280740', 2, {
+			id: `en:${HASH}`,
+			title: EPISODE.replace(/\.mkv$/, ''),
+			size: 91459209764,
+		});
 	});
 
 	it('refuses a show file that names no episode, before fetching anything', async () => {
@@ -145,6 +161,8 @@ describe('POST /api/easynews/send', () => {
 		vi.mocked(putStoredNzb).mockRejectedValue(new Error('B2 503'));
 		expect((await run(film)).status).toHaveBeenCalledWith(503);
 		expect(repository.pinWanted).not.toHaveBeenCalled();
+		// Never listed without its NZB: a row nobody can fetch would only fail on click.
+		expect(repository.addEasynewsNzb).not.toHaveBeenCalled();
 	});
 
 	it('refuses a release on the takedown list', async () => {

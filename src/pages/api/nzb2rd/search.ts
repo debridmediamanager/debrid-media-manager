@@ -1,9 +1,27 @@
+import type { UsenetResult } from '@/services/nzb2rd';
 import { getIndexers, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { resolveTvdbId } from '@/services/tvdbLookup';
 import type { NextApiRequest, NextApiResponse } from 'next';
+
+const sameRelease = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+/**
+ * The indexers' results plus the Easynews releases visitors sent to zurg for this
+ * title (see /api/easynews/send), minus any an indexer already lists under the same name.
+ */
+async function withEasynews(
+	results: UsenetResult[],
+	imdbId: string,
+	season?: number
+): Promise<UsenetResult[]> {
+	const stored = await db.getEasynewsNzbs(imdbId, season);
+	if (stored.length === 0) return results;
+	const listed = new Set(results.map((r) => sameRelease(r.title)));
+	return [...results, ...stored.filter((r) => !listed.has(sameRelease(r.title)))];
+}
 
 // Usenet results for one movie or show season, merged across every configured
 // indexer. The server-side hop exists to keep the indexer API keys out of the
@@ -53,9 +71,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	if (cached?.isFresh) {
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
-		return res
-			.status(200)
-			.json({ results: await withoutBlockedReleases(cached.results), cached: true });
+		return res.status(200).json({
+			results: await withoutBlockedReleases(
+				await withEasynews(cached.results, imdbId, season)
+			),
+			cached: true,
+		});
 	}
 
 	// Keyed on TVDB for shows, since that is what the indexer matches TV releases
@@ -73,15 +94,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		});
 		await db.setCachedNzbSearch(imdbId, season, results);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
-		return res
-			.status(200)
-			.json({ results: await withoutBlockedReleases(results), cached: false });
+		return res.status(200).json({
+			results: await withoutBlockedReleases(await withEasynews(results, imdbId, season)),
+			cached: false,
+		});
 	} catch (error) {
 		console.error('Usenet search failed:', error);
 		if (cached) {
 			// Serve what we have rather than breaking the section.
 			return res.status(200).json({
-				results: await withoutBlockedReleases(cached.results),
+				results: await withoutBlockedReleases(
+					await withEasynews(cached.results, imdbId, season)
+				),
 				cached: true,
 				stale: true,
 			});

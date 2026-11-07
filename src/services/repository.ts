@@ -549,6 +549,19 @@ export class Repository {
 		return this.nzbSearchCacheService.set(imdbId, seasonNum, results);
 	}
 
+	// Easynews releases visitors sent to zurg, listed with the Usenet results of their title
+	public getEasynewsNzbs(imdbId: string, seasonNum?: number) {
+		return this.nzbSearchCacheService.getEasynewsNzbs(imdbId, seasonNum);
+	}
+
+	public addEasynewsNzb(
+		imdbId: string,
+		seasonNum: number | undefined,
+		result: Parameters<NzbSearchCacheService['addEasynewsNzb']>[2]
+	) {
+		return this.nzbSearchCacheService.addEasynewsNzb(imdbId, seasonNum, result);
+	}
+
 	// Newznab aggregation cache. Separate from the one above because the clock is
 	// different: an *arr polls the same searches on a timer, so the TTL scales
 	// with the age of the content rather than being fixed per title.

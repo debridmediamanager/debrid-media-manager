@@ -41,6 +41,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepository.getCachedNzbSearch = vi.fn().mockResolvedValue(null);
 	mockRepository.setCachedNzbSearch = vi.fn().mockResolvedValue(undefined);
+	mockRepository.getEasynewsNzbs = vi.fn().mockResolvedValue([]);
 	mockResolveTvdbId.mockResolvedValue(undefined);
 });
 
@@ -185,6 +186,42 @@ describe('GET /api/nzb2rd/search TVDB keying', () => {
 		await run({ imdbId: 'tt27497393', seasonNum: '1', title: 'Stuart Fails' });
 
 		expect(mockResolveTvdbId).not.toHaveBeenCalled();
+		expect(mockSearch).not.toHaveBeenCalled();
+	});
+});
+
+describe('GET /api/nzb2rd/search with Easynews releases visitors sent to zurg', () => {
+	const EN = {
+		id: 'en:087f6a3ae880ec5d81efc65e065067ec084adc52df8a5',
+		title: 'severance.s02e04.1080p.web.h264-successfulcrab',
+		size: 4118243999,
+	};
+
+	it('lists them after the indexers, for that season only, and caches only the indexers', async () => {
+		mockSearch.mockResolvedValue(RESULTS);
+		mockRepository.getEasynewsNzbs = vi.fn().mockResolvedValue([EN]);
+
+		const res = await run({ imdbId: 'tt11280740', seasonNum: '2' });
+
+		expect(mockRepository.getEasynewsNzbs).toHaveBeenCalledWith('tt11280740', 2);
+		expect(res.json).toHaveBeenCalledWith({ results: [...RESULTS, EN], cached: false });
+		expect(mockRepository.setCachedNzbSearch).toHaveBeenCalledWith('tt11280740', 2, RESULTS);
+	});
+
+	it('adds them to a cached answer too, minus one an indexer lists by the same name', async () => {
+		mockRepository.getCachedNzbSearch = vi.fn().mockResolvedValue({
+			results: [
+				{ id: 'ds:1', title: 'Severance.S02E04.1080p.WEB.H264-SuccessfulCrab', size: 1 },
+			],
+			isFresh: true,
+		});
+		mockRepository.getEasynewsNzbs = vi.fn().mockResolvedValue([EN]);
+
+		const res = await run({ imdbId: 'tt11280740', seasonNum: '2' });
+
+		expect(
+			vi.mocked(res.json).mock.calls[0][0].results.map((r: { id: string }) => r.id)
+		).toEqual(['ds:1']);
 		expect(mockSearch).not.toHaveBeenCalled();
 	});
 });
