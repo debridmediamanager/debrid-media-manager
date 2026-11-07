@@ -3,7 +3,7 @@ import { searchUsenet } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { resolveTvdbId } from '@/services/tvdbLookup';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/services/tvdbLookup', () => ({ resolveTvdbId: vi.fn() }));
@@ -43,6 +43,44 @@ beforeEach(() => {
 	mockRepository.setCachedNzbSearch = vi.fn().mockResolvedValue(undefined);
 	mockRepository.getEasynewsNzbs = vi.fn().mockResolvedValue([]);
 	mockResolveTvdbId.mockResolvedValue(undefined);
+});
+
+// What DMM's searches recorded is how a send finds a release's other postings.
+describe('GET /api/nzb2rd/search other postings', () => {
+	const title = 'Some.Release.1080p';
+	const FOLDED = [{ id: 'ds:a', title, size: 100, alternates: ['ah:b'] }];
+
+	beforeEach(() => {
+		vi.stubEnv('NEWZNAB_API_KEY', 'ds-key');
+		vi.stubEnv('ALTHUB_API_KEY', 'ah-key');
+	});
+	afterEach(() => {
+		vi.unstubAllEnvs();
+	});
+
+	it('records them from a fresh answer', async () => {
+		mockSearch.mockResolvedValue(FOLDED);
+
+		await run({ imdbId: 'tt1418646' });
+
+		expect(mockRepository.recordUsenetCopies).toHaveBeenCalledWith(
+			new Map([
+				['ds:a', ['ah:b']],
+				['ah:b', ['ds:a']],
+			])
+		);
+	});
+
+	it('records nothing from a cached one', async () => {
+		mockRepository.getCachedNzbSearch = vi
+			.fn()
+			.mockResolvedValue({ results: FOLDED, isFresh: true, updatedAt: new Date() });
+
+		await run({ imdbId: 'tt1418646' });
+
+		expect(mockSearch).not.toHaveBeenCalled();
+		expect(mockRepository.recordUsenetCopies).not.toHaveBeenCalled();
+	});
 });
 
 describe('GET /api/nzb2rd/search caching', () => {

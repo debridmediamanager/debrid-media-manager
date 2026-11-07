@@ -12,6 +12,7 @@ import {
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { BLOCKED_MESSAGE, isNzbBlocked, isReleaseBlocked } from '@/services/takedown/blocklist';
+import { copiesOf } from '@/services/usenetCopies';
 import { safeNzbName } from '@/utils/nzbName';
 import { sponsorIdOfRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
@@ -47,27 +48,6 @@ async function isTransferStillValid(record: {
 	}
 }
 
-// Other postings of the same release, for nzb2rd to fetch when this one's
-// articles are gone. Read from DMM's own search cache and never from the request,
-// so a caller cannot route an arbitrary release id into the retry. Stale entries
-// count: a week-old list still names real postings.
-async function cachedAlternates(
-	id: string,
-	imdbId: string,
-	seasonNum?: number
-): Promise<string[] | undefined> {
-	try {
-		const cached = await db.getCachedNzbSearch(imdbId, seasonNum);
-		return cached?.results.find((result) => result.id === id)?.alternates;
-	} catch (error) {
-		console.error(
-			'Reading alternates from the Usenet search cache failed (continuing):',
-			error
-		);
-		return undefined;
-	}
-}
-
 // Send one Usenet release to nzb2rd, which fetches it off Usenet, rebuilds it
 // as a webseed torrent and adds it to the caller's Real-Debrid account. The NZB
 // is downloaded here rather than in the browser so the indexer key stays server
@@ -77,7 +57,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { id, title, imdbId, rdKey, oauth, returnPath, seasonNum } = req.body ?? {};
+	const { id, title, imdbId, rdKey, oauth, returnPath } = req.body ?? {};
 
 	// The colon separates the indexer prefix from the native id (`ds:abc123`).
 	if (typeof id !== 'string' || !/^[A-Za-z0-9._:-]{1,128}$/.test(id)) {
@@ -88,10 +68,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 	if (typeof rdKey !== 'string' || !rdKey) {
 		return res.status(400).json({ error: 'rdKey is required' });
-	}
-	// Absent for a movie; names the cached season search the alternates come from.
-	if (seasonNum !== undefined && !(Number.isInteger(seasonNum) && seasonNum >= 0)) {
-		return res.status(400).json({ error: 'seasonNum must be a non-negative integer' });
 	}
 
 	if (typeof title === 'string' && (await isReleaseBlocked(title))) {
@@ -193,7 +169,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// body — the browser only ever sends the signed token, and this is the
 			// one place that checks its signature.
 			sponsor: await sponsorIdOfRequest(req),
-			alternates: await cachedAlternates(id, imdbId, seasonNum),
+			// Other postings of the release, as DMM's own searches recorded them and
+			// never from the request: a caller cannot route an arbitrary id in here.
+			alternates: await copiesOf(id),
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([

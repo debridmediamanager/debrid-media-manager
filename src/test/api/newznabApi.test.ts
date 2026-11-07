@@ -19,7 +19,7 @@ import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-20
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb } from '@/utils/nzbSanitize';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // setup.ts stubs the whole rate limit module out, which would take
 // `checkRateLimitFor` with it. The real limiter is what the 429 path is made of,
@@ -1112,6 +1112,12 @@ describe('GET /api/newznab/api with one release posted on both upstreams', () =>
 		fetchMock.mockImplementation(async (input: unknown) =>
 			jsonResponse(String(input).startsWith(FIRST_HOST) ? drunkenslugMovie : althubMovie)
 		);
+		// The indexers /api/nzb2rd/download fetches from: copies are recorded for them.
+		vi.stubEnv('NEWZNAB_API_KEY', 'ds-key');
+		vi.stubEnv('ALTHUB_API_KEY', 'ah-key');
+	});
+	afterEach(() => {
+		vi.unstubAllEnvs();
 	});
 
 	/** Each `<item>` with the title `title`, as its guid and pubDate. */
@@ -1158,6 +1164,26 @@ describe('GET /api/newznab/api with one release posted on both upstreams', () =>
 		]);
 	});
 
+	it('records the copies of each posting on a fresh answer, never on a cached one', async () => {
+		const query = { t: 'movie', cat: '2000', apikey: SPONSOR_KEY };
+
+		await run(query);
+
+		const [copies] = (mockRepo.recordUsenetCopies as any).mock.calls[0];
+		expect(copies.get('ds:6b6440fdc833ed29b90954956d7de0d729e17a35')).toEqual([
+			'ah:b12393c9fe8c7f1b109fa030215a5ca2',
+		]);
+		expect(copies.get('ah:d0b5b5d0478acd6eb6f96a243d001985')).toEqual([
+			'ah:11a69cda89c294bc2242eb8f9819cd52',
+		]);
+		expect(copies.size).toBe(8);
+
+		vi.mocked(mockRepo.recordUsenetCopies).mockClear();
+		await run(query);
+		expect(fetchedUrls()).toHaveLength(2);
+		expect(mockRepo.recordUsenetCopies).not.toHaveBeenCalled();
+	});
+
 	// A set cached before every posting was listed holds folded rows carrying
 	// `alternates`. The feed is built from a whitelist, so they never show.
 	it('names no folded alternate from a set cached before', async () => {
@@ -1197,6 +1223,11 @@ describe('GET /api/newznab/api with one release posted on both upstreams', () =>
 		expect(postings(body(res), LIMITED)).toHaveLength(2);
 		const [, merged] = (mockRepo.setCachedNewznabApiSearch as any).mock.calls[0];
 		expect(merged).toHaveLength(60);
+		// The cached DrunkenSlug rows and the fresh altHUB ones, grouped together.
+		const [copies] = (mockRepo.recordUsenetCopies as any).mock.calls[0];
+		expect(copies.get('ds:6b6440fdc833ed29b90954956d7de0d729e17a35')).toEqual([
+			'ah:b12393c9fe8c7f1b109fa030215a5ca2',
+		]);
 	});
 });
 

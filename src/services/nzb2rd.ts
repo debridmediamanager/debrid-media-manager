@@ -137,8 +137,9 @@ export interface UsenetResult {
 	imdb?: string;
 	/**
 	 * The ids of other postings of the same release (same `releaseDedupKey`), in
-	 * indexer priority order, at most MAX_ALTERNATES. Sent to nzb2rd so it can
-	 * fetch the next copy when this one's articles are gone.
+	 * indexer priority order, at most MAX_ALTERNATES. Recorded per posting by
+	 * services/usenetCopies, for nzb2rd to fetch next when this one's articles
+	 * are gone.
 	 */
 	alternates?: string[];
 }
@@ -779,7 +780,7 @@ export async function submitNzb(args: {
 	/**
 	 * Other postings of the release (`UsenetResult.alternates`), which nzb2rd
 	 * fetches from `/api/nzb2rd/download` in turn when this NZB's articles are
-	 * missing. Taken from DMM's own search cache, never from the browser.
+	 * missing. Taken from what DMM's own searches recorded, never from the browser.
 	 */
 	alternates?: string[];
 }): Promise<{ status: number; data: any }> {

@@ -4,6 +4,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { resolveTvdbId } from '@/services/tvdbLookup';
+import { recordCopies } from '@/services/usenetCopies';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const sameRelease = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -92,7 +93,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			title: showTitle,
 			tvdbId,
 		});
-		await db.setCachedNzbSearch(imdbId, season, results);
+		await Promise.all([db.setCachedNzbSearch(imdbId, season, results), recordCopies(results)]);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({
 			results: await withoutBlockedReleases(await withEasynews(results, imdbId, season)),

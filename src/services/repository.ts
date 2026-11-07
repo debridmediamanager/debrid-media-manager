@@ -509,6 +509,19 @@ export class Repository {
 		return this.nzb2rdMapService.samplePendingMarkers(limit);
 	}
 
+	// Other postings of a release, by posting id, for nzb2rd's next-copy retry
+	public getUsenetCopies(releaseId: string) {
+		return this.nzb2rdMapService.getCopies(releaseId);
+	}
+
+	public recordUsenetCopies(copies: Map<string, string[]>) {
+		return this.nzb2rdMapService.recordCopies(copies);
+	}
+
+	public pruneUsenetCopies(cutoff: Date) {
+		return this.nzb2rdMapService.pruneCopies(cutoff);
+	}
+
 	// Page context for a transfer — the DMM title and the content page it started
 	// from — which neither uploader service stores and localStorage used to hold.
 	public recordTransferMeta(meta: Omit<TransferMetaRecord, 'updatedAt'>) {

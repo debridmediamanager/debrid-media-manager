@@ -24,6 +24,7 @@ import type {
 import { fanOut, Indexer, nativeReleaseId, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
+import { recordCopies } from '@/services/usenetCopies';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
@@ -269,6 +270,7 @@ async function completed(
 	const asked = await pacedIndexers(wanted);
 	const { lists, answered } = await askUpstreams(t, params, asked);
 	const results = everyPosting([cached.results, ...lists]);
+	if (answered.some(Boolean)) await recordCopies(results);
 	// Written even when nothing answered: the write dates the next try.
 	await db.setCachedNewznabApiSearch(
 		key,
@@ -366,6 +368,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	}
 
 	const merged = everyPosting(lists);
+	await recordCopies(merged);
 	// An *arr's RSS sync is a look at what is new: the ids in it are the same
 	// news the sweep collects, at no extra cost upstream.
 	if (!targeted) await db.recordNewznabFreshPosts(postsById(merged));

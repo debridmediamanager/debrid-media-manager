@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
 /**
@@ -41,6 +42,16 @@ const keyFor = (releaseId: string) => `${KEY_PREFIX}${releaseId.toLowerCase()}`;
 /** Users waiting on someone else's in-flight job for this release. */
 const WAIT_PREFIX = 'nzbwait:';
 const waitKeyFor = (releaseId: string) => `${WAIT_PREFIX}${releaseId.toLowerCase()}`;
+
+/**
+ * Other postings of a release, per posting: what nzb2rd fetches next when this
+ * one's articles are gone. Written from every fresh search, so it is readable by
+ * id from anywhere a release id is (see services/usenetCopies).
+ */
+const COPIES_PREFIX = 'nzbalt:';
+const copiesKeyFor = (releaseId: string) => `${COPIES_PREFIX}${releaseId.toLowerCase()}`;
+/** A posting list this old is no longer read, and the cron deletes it. */
+export const USENET_COPIES_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export interface Nzb2rdWaiter {
 	/**
@@ -224,6 +235,37 @@ export class Nzb2rdMapService extends DatabaseClient {
 		if (existing && existing.jobId !== jobId) return;
 		await this.prisma.cache.deleteMany({ where: { key: keyFor(releaseId) } });
 		await this.clearWaiters(releaseId);
+	}
+
+	// --- other postings of a release ----------------------------------------
+
+	async getCopies(releaseId: string, now: number = Date.now()): Promise<string[]> {
+		const row = await this.prisma.cache.findUnique({ where: { key: copiesKeyFor(releaseId) } });
+		if (!row || now - row.updatedAt.getTime() > USENET_COPIES_TTL_MS) return [];
+		return Array.isArray(row.value) ? row.value.filter((id) => typeof id === 'string') : [];
+	}
+
+	/**
+	 * Replace the lists of these postings, in one statement: a search writes up
+	 * to a few hundred, on every fresh answer.
+	 */
+	async recordCopies(copies: Map<string, string[]>, now: Date = new Date()): Promise<void> {
+		if (copies.size === 0) return;
+		const rows = [...copies].map(
+			([releaseId, others]) =>
+				Prisma.sql`(${copiesKeyFor(releaseId)}, ${JSON.stringify(others)}, ${now})`
+		);
+		await this.prisma.$executeRaw`
+			INSERT INTO Cache (\`key\`, value, updatedAt) VALUES ${Prisma.join(rows)}
+			ON DUPLICATE KEY UPDATE value = VALUES(value), updatedAt = VALUES(updatedAt)`;
+	}
+
+	/** Drop the lists last written before `cutoff`; answers how many went. */
+	async pruneCopies(cutoff: Date): Promise<number> {
+		const { count } = await this.prisma.cache.deleteMany({
+			where: { key: { startsWith: COPIES_PREFIX }, updatedAt: { lt: cutoff } },
+		});
+		return count;
 	}
 
 	// --- waiters -------------------------------------------------------------

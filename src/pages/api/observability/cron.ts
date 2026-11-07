@@ -6,6 +6,7 @@ import {
 	reconcileContentRequests,
 	type RequestReconcileResult,
 } from '@/services/contentRequestReconcile';
+import { USENET_COPIES_TTL_MS } from '@/services/database/nzb2rdMap';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { sweepFreshPosts } from '@/services/newznab/search';
 import { reconcileNzb2rdMarkers, type MarkerReconcileResult } from '@/services/nzb2rdMarkers';
@@ -45,6 +46,7 @@ interface CronResponse {
 	freeRequestDeliveries?: { delivered: number; skipped: number };
 	wantedLists?: { synced: number; failed: number; lapsed: number };
 	newznabFresh?: { swept: boolean; ids: number };
+	usenetCopiesPruned?: number;
 	error?: string;
 }
 
@@ -184,6 +186,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Newznab fresh-post sweep failed:', e);
 		}
 
+		// A release's other postings are read for a week (see services/usenetCopies);
+		// every fresh search writes them again, so older lists are only dead weight.
+		let usenetCopiesPruned: number | undefined;
+		try {
+			usenetCopiesPruned = await repository.pruneUsenetCopies(
+				new Date(Date.now() - USENET_COPIES_TTL_MS)
+			);
+		} catch (e) {
+			console.error('[Cron] Pruning old Usenet copy lists failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -208,6 +221,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			freeRequestDeliveries,
 			wantedLists,
 			newznabFresh,
+			usenetCopiesPruned,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

@@ -353,7 +353,6 @@ const UsenetResults = ({
 				// mint a live token when it actually reaches Real-Debrid.
 				oauth: readRdOAuthCredentials(),
 				returnPath: returnPath(),
-				seasonNum,
 			});
 
 			if (isNzb2rdDuplicate(job)) {

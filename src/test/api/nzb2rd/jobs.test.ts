@@ -54,7 +54,7 @@ beforeEach(() => {
 	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
 	mockRepo.addNzb2rdWaiter = vi.fn().mockResolvedValue(undefined);
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: HASH }]);
-	mockRepo.getCachedNzbSearch = vi.fn().mockResolvedValue(null);
+	mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([]);
 	mockOwnJobs.mockResolvedValue(new Set());
 	mockFetchNzb.mockResolvedValue('<nzb></nzb>');
 	mockSubmit.mockResolvedValue({ status: 201, data: { id: 'job-1', status: 'pending' } });
@@ -302,64 +302,36 @@ describe('POST /api/nzb2rd/jobs — nothing recorded yet', () => {
 });
 
 // nzb2rd tries the release's other postings when this one's articles are gone.
-// Which postings those are comes from DMM's own search cache, never the request:
-// a caller must not be able to route an arbitrary release id into the retry.
+// Which postings those are comes from what DMM's own searches recorded, never the
+// request: a caller must not be able to route an arbitrary release id into it.
 describe('POST /api/nzb2rd/jobs — other postings of the release', () => {
-	const cachedSearch = (results: unknown[]) =>
-		vi.fn().mockResolvedValue({ results, updatedAt: new Date(0), isFresh: false });
+	it('hands nzb2rd the other postings DMM recorded for the release', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ah:b', 'ds:c']);
 
-	it('hands nzb2rd the alternates the cached search holds for the release', async () => {
-		mockRepo.getCachedNzbSearch = cachedSearch([
-			{ id: 'ds:other', title: 'Other.Release', size: 1, alternates: ['ah:nope'] },
-			{ id: 'release-1', title: 'Some.Release.1080p', size: 1, alternates: ['ah:b', 'nl:c'] },
-		]);
+		await run();
 
-		await run({ seasonNum: 2 });
-
-		// A week-old entry still names real postings, so `isFresh: false` is used too.
-		expect(mockRepo.getCachedNzbSearch).toHaveBeenCalledWith('tt1418646', 2);
+		expect(mockRepo.getUsenetCopies).toHaveBeenCalledWith('release-1');
 		expect(mockSubmit).toHaveBeenCalledWith(
-			expect.objectContaining({ alternates: ['ah:b', 'nl:c'] })
+			expect.objectContaining({ alternates: ['ah:b', 'ds:c'] })
 		);
 	});
 
-	it('looks a movie up without a season', async () => {
-		await run();
-		expect(mockRepo.getCachedNzbSearch).toHaveBeenCalledWith('tt1418646', undefined);
-	});
-
 	it.each([
-		['a cache miss', () => vi.fn().mockResolvedValue(null)],
-		[
-			'a release the cached search does not list',
-			() => cachedSearch([{ id: 'ds:x', alternates: ['ah:b'] }]),
-		],
-		['a release posted once', () => cachedSearch([{ id: 'release-1', title: 'T', size: 1 }])],
+		['a release posted once', () => vi.fn().mockResolvedValue([])],
 		['a failed lookup', () => vi.fn().mockRejectedValue(new Error('db down'))],
 	])('submits without alternates on %s', async (_label, lookup) => {
-		mockRepo.getCachedNzbSearch = lookup();
+		mockRepo.getUsenetCopies = lookup();
 
 		const res = await run();
 
 		expect(res.status).toHaveBeenCalledWith(201);
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ alternates: undefined }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ alternates: [] }));
 	});
 
 	it('ignores alternates the caller sends itself', async () => {
 		await run({ alternates: ['ah:smuggled'] });
-		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ alternates: undefined }));
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ alternates: [] }));
 	});
-
-	it.each([-1, 1.5, '2', null])(
-		'refuses seasonNum %s before spending anything',
-		async (seasonNum) => {
-			const res = await run({ seasonNum });
-
-			expect(res.status).toHaveBeenCalledWith(400);
-			expect(mockFetchNzb).not.toHaveBeenCalled();
-			expect(mockSubmit).not.toHaveBeenCalled();
-		}
-	);
 
 	it('does not look anything up for a release that is already being fetched', async () => {
 		mockRepo.getNzb2rdTransfer = vi.fn().mockResolvedValue({
@@ -369,9 +341,9 @@ describe('POST /api/nzb2rd/jobs — other postings of the release', () => {
 			status: 'pending',
 		});
 
-		await run({ seasonNum: 2 });
+		await run();
 
-		expect(mockRepo.getCachedNzbSearch).not.toHaveBeenCalled();
+		expect(mockRepo.getUsenetCopies).not.toHaveBeenCalled();
 		expect(mockSubmit).not.toHaveBeenCalled();
 	});
 });
