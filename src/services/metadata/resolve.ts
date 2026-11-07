@@ -69,7 +69,9 @@ export function normalizeTitle(title: string): string {
 		.toLowerCase()
 		.replace(/&/g, ' and ')
 		.replace(/['’`]/g, '')
-		.replace(/[^a-z0-9]+/g, ' ')
+		// letters of every script: a Cyrillic or Chinese title used to normalize to nothing
+		// and so to match any title with a non-Latin alias
+		.replace(/[^\p{L}\p{N}]+/gu, ' ')
 		.trim()
 		.split(' ')
 		.filter(Boolean)

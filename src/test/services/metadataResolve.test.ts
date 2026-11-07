@@ -8,19 +8,26 @@ import spiritedOmdb from '@/test/fixtures/metadata/omdb-tt0245429-spirited-away.
 import duneOmdb from '@/test/fixtures/metadata/omdb-tt1160419-dune.json';
 import bakeOffOmdb from '@/test/fixtures/metadata/omdb-tt1877368-great-british-bake-off.json';
 import episodeOmdb from '@/test/fixtures/metadata/omdb-tt21958588-bake-off-episode.json';
+import cyrillicRecords from '@/test/fixtures/metadata/records-cyrillic-candidates-2026-11-07.json';
 import sawMdblistSearch from '@/test/fixtures/metadata/search-mdblist-saw-iv-2007.json';
 import duneOmdbT from '@/test/fixtures/metadata/search-omdb-t-dune-2021.json';
+import dushaOmdbT from '@/test/fixtures/metadata/search-omdb-t-dusha-2020.json';
 import bakeOffOmdbT from '@/test/fixtures/metadata/search-omdb-t-great-british-bake-off-2010.json';
+import interstellarRuOmdbT from '@/test/fixtures/metadata/search-omdb-t-interstellar-ru-2014.json';
 import oonasOmdbT from '@/test/fixtures/metadata/search-omdb-t-oonas-und-babas-insel.json';
 import sawOmdbT from '@/test/fixtures/metadata/search-omdb-t-saw-iv-2007.json';
 import spiritedOmdbT from '@/test/fixtures/metadata/search-omdb-t-spirited-away-2001.json';
 import duneTmdbSearch from '@/test/fixtures/metadata/search-tmdb-dune-2021.json';
+import dushaTmdbSearch from '@/test/fixtures/metadata/search-tmdb-dusha-2020.json';
 import bakeOffTmdbSearch from '@/test/fixtures/metadata/search-tmdb-great-british-bake-off-2010.json';
+import interstellarRuTmdbSearch from '@/test/fixtures/metadata/search-tmdb-interstellar-ru-2014.json';
 import oonasTmdbSearch from '@/test/fixtures/metadata/search-tmdb-oonas-und-babas-insel-2015.json';
 import sawTmdbSearch from '@/test/fixtures/metadata/search-tmdb-saw-iv-2007.json';
 import spiritedTmdbSearch from '@/test/fixtures/metadata/search-tmdb-spirited-away-2001.json';
 import duneTraktSearch from '@/test/fixtures/metadata/search-trakt-dune-2021.json';
+import dushaTraktSearch from '@/test/fixtures/metadata/search-trakt-dusha-2020.json';
 import bakeOffTraktSearch from '@/test/fixtures/metadata/search-trakt-great-british-bake-off-2010.json';
+import interstellarRuTraktSearch from '@/test/fixtures/metadata/search-trakt-interstellar-ru-2014.json';
 import oonasTraktSearch from '@/test/fixtures/metadata/search-trakt-oonas-und-babas-insel-2015.json';
 import sawTraktSearch from '@/test/fixtures/metadata/search-trakt-saw-iv-2007.json';
 import spiritedTraktSearch from '@/test/fixtures/metadata/search-trakt-spirited-away-2001.json';
@@ -62,6 +69,13 @@ const searches: Record<string, { tmdb: any; trakt: any; omdb: any }> = {
 	},
 	// captured 2026-11-07: Puffin Rock's German title, a TMDB translation only
 	'oonas und babas insel': { tmdb: oonasTmdbSearch, trakt: oonasTraktSearch, omdb: oonasOmdbT },
+	// captured 2026-11-07: Russian titles, which used to normalize to nothing
+	душа: { tmdb: dushaTmdbSearch, trakt: dushaTraktSearch, omdb: dushaOmdbT },
+	интерстеллар: {
+		tmdb: interstellarRuTmdbSearch,
+		trakt: interstellarRuTraktSearch,
+		omdb: interstellarRuOmdbT,
+	},
 };
 
 // TMDB id to IMDb id, as TMDB's external_ids answers for the ids in the searches.
@@ -101,6 +115,8 @@ const fullRecords: Record<string, MetadataRecord | null> = {
 	}),
 	tt21958588: episodeRecordFromOmdb('tt21958588', episodeOmdb),
 	tt3590338: mergeShowRecord('tt3590338', { tmdb: puffinTmdb }),
+	// DMM's records for the candidates live resolve gave on 2026-11-07
+	...(cyrillicRecords as Record<string, MetadataRecord>),
 };
 
 function recordFromSearchHit(imdbId: string): MetadataRecord | null {
@@ -217,6 +233,19 @@ describe('resolveTitle, on searches captured 2026-09-26', () => {
 			})
 		);
 	});
+
+	// Cyrillic letters normalized to nothing, so the name matched any title with a
+	// non-Latin alias: live, Душа (2020) tied Soul with Pirate's Soul ("Душа пирата")
+	// and Интерстеллар (2014) Interstellar with The Science of Interstellar
+	it.each([
+		['Душа', 2020, 'tt2948372'],
+		['Интерстеллар', 2014, 'tt0816692'],
+	])('resolves the Russian title %s (%i) to its own film', async (title, year, imdbId) => {
+		const result = await resolveTitle({ title, year, type: 'movie' });
+		expect(result.confidence).toBe('exact');
+		expect(result.match?.imdbId).toBe(imdbId);
+		expect(result.candidates.map((c) => c.imdbId)).toEqual([imdbId]);
+	});
 });
 
 // zurg keeps what the resolver answers: a match is written into the torrent and
@@ -290,6 +319,9 @@ describe('normalizeTitle', () => {
 		['Fast & Furious', 'fast and furious'],
 		["Schindler's List", 'schindlers list'],
 		['Dune: Part One', 'dune part one'],
+		['Интерстеллар', 'интерстеллар'],
+		['Душа пирата', 'душа пирата'],
+		['寻梦环游记', '寻梦环游记'],
 	])('%s → %s', (input, expected) => {
 		expect(normalizeTitle(input)).toBe(expected);
 	});

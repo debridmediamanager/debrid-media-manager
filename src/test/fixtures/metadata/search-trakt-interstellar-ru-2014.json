@@ -1,0 +1,182 @@
+[
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0816692",
+				"plex": {
+					"guid": "5d7769cefb0d55001f530acd",
+					"slug": "interstellar"
+				},
+				"slug": "interstellar-2014",
+				"tmdb": 157336,
+				"trakt": 102156
+			},
+			"year": 2014,
+			"title": "Interstellar",
+			"votes": 87311,
+			"colors": {
+				"poster": ["#C9BCAD", "#313F4A"]
+			},
+			"genres": ["science-fiction", "drama", "adventure"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/102156/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/102156/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/102156/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/102156/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/102156/medium/poster.webp"],
+				"clearart": ["media.trakt.tv/movies/102156/medium/clearart.webp"]
+			},
+			"rating": 8.890166282653809,
+			"status": "released",
+			"country": "us",
+			"runtime": 169,
+			"tagline": "Mankind was born on Earth. It was never meant to die here.",
+			"trailer": "https://youtube.com/watch?v=LY19rHKAaAg",
+			"homepage": "https://www.interstellarmovie.net/",
+			"language": "en",
+			"overview": "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
+			"released": "2014-11-04",
+			"languages": ["en"],
+			"subgenres": [
+				"dystopia",
+				"time-travel",
+				"space-travel",
+				"space-opera",
+				"artificial-intelligence-a-i"
+			],
+			"social_ids": {
+				"twitter": "Interstellar",
+				"facebook": "Interstellarmovie",
+				"instagram": "interstellarmovie",
+				"wikipedia": "Interstellar_(film)"
+			},
+			"updated_at": "2026-11-06T11:04:22.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 366,
+			"during_credits": false,
+			"original_title": "Interstellar",
+			"available_translations": [
+				"ar",
+				"as",
+				"az",
+				"be",
+				"bg",
+				"bn",
+				"bs",
+				"ca",
+				"cs",
+				"cv",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"hy",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"kk",
+				"ko",
+				"ky",
+				"lt",
+				"lv",
+				"mk",
+				"ml",
+				"mn",
+				"mr",
+				"ms",
+				"my",
+				"ne",
+				"nl",
+				"no",
+				"pa",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"ta",
+				"te",
+				"th",
+				"tr",
+				"tw",
+				"uk",
+				"ur",
+				"uz",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt4415360",
+				"plex": {
+					"guid": "5d776b9796b655001fe161a1",
+					"slug": "the-science-of-interstellar"
+				},
+				"slug": "the-science-of-interstellar-2014",
+				"tmdb": 336592,
+				"trakt": 217249
+			},
+			"year": 2014,
+			"title": "The Science of Interstellar",
+			"votes": 153,
+			"colors": {
+				"poster": ["#788AAE", "#212533"]
+			},
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/217249/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/217249/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 7.300650119781494,
+			"status": "released",
+			"country": "us",
+			"runtime": 51,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=7yxaUi8LIzE",
+			"homepage": null,
+			"language": "en",
+			"overview": "Matthew McConaughey narrates a fascinating look at Christopher Nolan's sci-fi film, 'Interstellar', including scientific foundations, the work of consulting Scientist Kip Thorne, basic film themes, the science behind the search for planets capable of hosting life, space-time and the theory of relativity, the science of wormholes and black holes, crafting the film's visuals based on real scientific observation, the birth of the universe, the Dust Bowl and the evolution of dust as a toxin, the likelihood of future dust storms, the prospects of escaping a dying or doomed planet and the possibilities of colonizing Mars.",
+			"released": "2014-11-13",
+			"languages": ["en"],
+			"subgenres": ["making-of"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-05-01T08:31:17.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "The Science of Interstellar",
+			"available_translations": ["en", "es", "fr", "ko", "ru", "tr", "zh"]
+		}
+	}
+]

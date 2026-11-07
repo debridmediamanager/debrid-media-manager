@@ -1,0 +1,1607 @@
+[
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt2948372",
+				"plex": {
+					"guid": "5d77702d594b2b001e746263",
+					"slug": "soul-2020"
+				},
+				"slug": "soul-2020",
+				"tmdb": 508442,
+				"trakt": 355959
+			},
+			"year": 2020,
+			"title": "Soul",
+			"votes": 31241,
+			"colors": {
+				"poster": ["#D0E1EC", "#213E66"]
+			},
+			"genres": ["animation", "family", "fantasy", "drama", "music"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/355959/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/355959/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/355959/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/355959/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/355959/medium/poster.webp"],
+				"clearart": ["media.trakt.tv/movies/355959/medium/clearart.webp"]
+			},
+			"rating": 8.337602615356445,
+			"status": "released",
+			"country": "us",
+			"runtime": 101,
+			"tagline": "Everybody has a soul. Joe Gardner is about to find his.",
+			"trailer": "https://youtube.com/watch?v=Gs--6c7Hn_A",
+			"homepage": "https://www.disneyplus.com/movies/soul/77zlWrb9vRYp",
+			"language": "en",
+			"overview": "Joe Gardner is a middle school teacher with a love for jazz music. After a successful audition at the Half Note Club, he suddenly gets into an accident that separates his soul from his body and is transported to the You Seminar, a center in which souls develop and gain passions before being transported to a newborn child. Joe must enlist help from the other souls-in-training, like 22, a soul who has spent eons in the You Seminar, in order to get back to Earth.",
+			"released": "2020-12-25",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": "PixarSoul",
+				"facebook": "pixarsoul",
+				"instagram": "pixarsoul",
+				"wikipedia": "Soul_(2020_film)"
+			},
+			"updated_at": "2026-11-06T11:13:52.000Z",
+			"after_credits": true,
+			"certification": "PG",
+			"comment_count": 134,
+			"during_credits": true,
+			"original_title": "Soul",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"id",
+				"is",
+				"it",
+				"ja",
+				"ka",
+				"kk",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"ug",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0166813",
+				"plex": {
+					"guid": "5d7768327e9a3c0020c6c2ed",
+					"slug": "spirit-stallion-of-the-cimarron"
+				},
+				"slug": "spirit-stallion-of-the-cimarron-2002",
+				"tmdb": 9023,
+				"trakt": 4476
+			},
+			"year": 2002,
+			"title": "Spirit: Stallion of the Cimarron",
+			"votes": 6786,
+			"colors": {
+				"poster": ["#B7B8BB", "#2D3220"]
+			},
+			"genres": ["adventure", "animation", "family", "drama", "western"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/4476/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/4476/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/4476/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/4476/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/4476/medium/poster.webp"],
+				"clearart": ["media.trakt.tv/movies/4476/medium/clearart.webp"]
+			},
+			"rating": 8.068079948425293,
+			"status": "released",
+			"country": "us",
+			"runtime": 83,
+			"tagline": "Some legends can never be tamed.",
+			"trailer": "https://youtube.com/watch?v=4UzmHsy4u8s",
+			"homepage": null,
+			"language": "en",
+			"overview": "Against impossible odds, Spirit, a young mustang, sets out across the majestic wilderness to regain his freedom and save his homeland. Along the way, he forms a friendship with a young Lakota brave, outwits a squadron of soldiers, and ultimately, finds love.",
+			"released": "2002-05-24",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Spirit:_Stallion_of_the_Cimarron"
+			},
+			"updated_at": "2026-11-05T14:19:06.000Z",
+			"after_credits": false,
+			"certification": "G",
+			"comment_count": 20,
+			"during_credits": false,
+			"original_title": "Spirit: Stallion of the Cimarron",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"is",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"lv",
+				"my",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt7955970",
+				"plex": {
+					"guid": "5d77703596b655001fe909f1",
+					"slug": "caravaggio-the-soul-and-the-blood"
+				},
+				"slug": "caravaggio-the-soul-and-the-blood-2018",
+				"tmdb": 505321,
+				"trakt": 352737
+			},
+			"year": 2018,
+			"title": "Caravaggio: The Soul and the Blood",
+			"votes": 20,
+			"colors": {
+				"poster": ["#BF9C77", "#1E160E"]
+			},
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/352737/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/352737/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.900000095367432,
+			"status": "released",
+			"country": "it",
+			"runtime": 90,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=r4Wv898Fgwc",
+			"homepage": null,
+			"language": "it",
+			"overview": "An exciting and unsettling cinematic journey through the life, work and torments of Caravaggio.",
+			"released": "2018-02-19",
+			"languages": ["it"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-28T17:21:56.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Caravaggio - L'anima e il sangue",
+			"available_translations": ["cs", "en", "es", "fr", "it", "ko", "pt", "ru", "sk", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt26656821",
+				"plex": {
+					"guid": "63e3e1469b0ee50078485499",
+					"slug": "bolero-2024"
+				},
+				"slug": "bolero-2024",
+				"tmdb": 1004348,
+				"trakt": 807534
+			},
+			"year": 2024,
+			"title": "Boléro",
+			"votes": 123,
+			"colors": {
+				"poster": ["#AB8A31", "#1F1811"]
+			},
+			"genres": ["history", "music", "drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/807534/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/807534/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.3333001136779785,
+			"status": "released",
+			"country": "fr",
+			"runtime": 120,
+			"tagline": "The Ravel Mystery",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "Boundary-pushing Russian dancer and actress Ida Rubinstein selects renowned French composer Maurice Ravel to compose the music for her next ballet. Ravel ends up creating his greatest success ever: Boléro.",
+			"released": "2024-03-06",
+			"languages": ["fr"],
+			"subgenres": ["historical-drama"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Boléro_(2024_film)"
+			},
+			"updated_at": "2026-11-04T08:12:26.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Boléro",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sl",
+				"sv",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt5619332",
+				"plex": {
+					"guid": "5d776c4547dd6e001f6e9075",
+					"slug": "life-of-the-party-2018"
+				},
+				"slug": "life-of-the-party-2018",
+				"tmdb": 399796,
+				"trakt": 295134
+			},
+			"year": 2018,
+			"title": "Life of the Party",
+			"votes": 3409,
+			"colors": {
+				"poster": ["#8F9486", "#44221E"]
+			},
+			"genres": ["comedy"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/295134/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/295134/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/295134/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/295134/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/295134/medium/poster.webp"],
+				"clearart": ["media.trakt.tv/movies/295134/medium/clearart.webp"]
+			},
+			"rating": 6.646225929260254,
+			"status": "released",
+			"country": "us",
+			"runtime": 105,
+			"tagline": "Give life the old college try.",
+			"trailer": "https://youtube.com/watch?v=tyuPsEdUP94",
+			"homepage": "https://www.lifeoftheparty-movie.com/",
+			"language": "en",
+			"overview": "When her husband suddenly dumps her, longtime dedicated housewife Deanna turns regret into re-set by going back to college... landing in the same class and school as her daughter, who's not entirely sold on the idea. Plunging headlong into the campus experience, the increasingly outspoken Deanna – now Dee Rock – embraces freedom, fun, and frat boys on her own terms, finding her true self in a senior year no one ever expected.",
+			"released": "2018-05-11",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": "LOTPMovie",
+				"facebook": "LifeOfThePartyMovie",
+				"instagram": "LifeofthePartyMovie",
+				"wikipedia": "Life_of_the_Party_(2018_film)"
+			},
+			"updated_at": "2026-10-05T08:20:42.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 21,
+			"during_credits": false,
+			"original_title": "Life of the Party",
+			"available_translations": [
+				"ar",
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt12885852",
+				"plex": {
+					"guid": "5f34f863aa8ad000404485d6",
+					"slug": "batman-soul-of-the-dragon"
+				},
+				"slug": "batman-soul-of-the-dragon-2021",
+				"tmdb": 732450,
+				"trakt": 574318
+			},
+			"year": 2021,
+			"title": "Batman: Soul of the Dragon",
+			"votes": 1230,
+			"colors": {
+				"poster": ["#D47A44", "#451B0C"]
+			},
+			"genres": ["superhero", "animation", "action", "adventure", "crime"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/574318/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/574318/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/574318/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/574318/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/574318/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.712240219116211,
+			"status": "released",
+			"country": "us",
+			"runtime": 83,
+			"tagline": "Get ready for the ultimate showdown.",
+			"trailer": "https://youtube.com/watch?v=eHCAgSuLog4",
+			"homepage": "https://www.warnerbros.com/movies/batman-soul-dragon",
+			"language": "en",
+			"overview": "Bruce Wayne faces a deadly menace from his past, with the help of three former classmates: world-renowned martial artists Richard Dragon, Ben Turner and Lady Shiva.",
+			"released": "2021-01-12",
+			"languages": ["en"],
+			"subgenres": ["martial-arts"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Batman:_Soul_of_the_Dragon"
+			},
+			"updated_at": "2026-10-18T08:08:01.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 14,
+			"during_credits": false,
+			"original_title": "Batman: Soul of the Dragon",
+			"available_translations": [
+				"ar",
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0414951",
+				"plex": {
+					"guid": "5d776833eb5d26001f1e041d",
+					"slug": "the-quiet"
+				},
+				"slug": "the-quiet-2006",
+				"tmdb": 9813,
+				"trakt": 5070
+			},
+			"year": 2006,
+			"title": "The Quiet",
+			"votes": 486,
+			"colors": {
+				"poster": ["#D59E74", "#0D0603"]
+			},
+			"genres": ["drama", "thriller"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/5070/medium/logo.webp"],
+				"thumb": ["media.trakt.tv/movies/5070/medium/thumb.webp"],
+				"banner": ["media.trakt.tv/movies/5070/medium/banner.webp"],
+				"fanart": ["media.trakt.tv/movies/5070/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/5070/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.028769493103027,
+			"status": "released",
+			"country": "us",
+			"runtime": 96,
+			"tagline": "Isn't it time everyone hears your secrets?",
+			"trailer": "https://youtube.com/watch?v=lAXi9ITMpOw",
+			"homepage": null,
+			"language": "en",
+			"overview": "After her widowed father dies, deaf teenager Dot moves in with her godparents, Olivia and Paul Deer. The Deers' daughter, Nina, is openly hostile to Dot, but that does not prevent her from telling her secrets to her silent stepsister, including the fact that she wants to kill her lecherous father.",
+			"released": "2006-08-25",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Quiet"
+			},
+			"updated_at": "2026-11-05T08:14:18.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 5,
+			"during_credits": false,
+			"original_title": "The Quiet",
+			"available_translations": [
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt14837960",
+				"plex": {
+					"guid": "60c7809e879a26002cacc555",
+					"slug": "bright-samurai-soul"
+				},
+				"slug": "bright-samurai-soul-2021",
+				"tmdb": 839100,
+				"trakt": 670177
+			},
+			"year": 2021,
+			"title": "Bright: Samurai Soul",
+			"votes": 263,
+			"colors": {
+				"poster": ["#C3906E", "#312023"]
+			},
+			"genres": ["anime", "action", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/670177/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/670177/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.0836501121521,
+			"status": "released",
+			"country": "jp",
+			"runtime": 80,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=CthU2bsh6Fs",
+			"homepage": "https://www.netflix.com/title/81001990",
+			"language": "ja",
+			"overview": "Izo, a Ronin, and Raiden, an orc, work to bring a young elf girl and the wand she carries to the land of the elves in the north.",
+			"released": "2021-10-12",
+			"languages": ["en", "ja"],
+			"subgenres": ["samurai"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Bright:_Samurai_Soul"
+			},
+			"updated_at": "2026-08-31T17:01:55.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 2,
+			"during_credits": false,
+			"original_title": "ブライト: サムライソウル",
+			"available_translations": [
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt13598976",
+				"plex": {
+					"guid": "5fcfa422639eec002dad924a",
+					"slug": "the-soul-2021"
+				},
+				"slug": "the-soul-2021",
+				"tmdb": 773569,
+				"trakt": 611382
+			},
+			"year": 2021,
+			"title": "The Soul",
+			"votes": 253,
+			"colors": {
+				"poster": ["#9F8F85", "#272832"]
+			},
+			"genres": ["thriller", "mystery", "science-fiction", "drama", "horror"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/611382/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/611382/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.754942417144775,
+			"status": "released",
+			"country": "tw",
+			"runtime": 130,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=bgf4wWrM8Ng",
+			"homepage": null,
+			"language": "zh",
+			"overview": "The founder of a corporation developing a futuristic cancer treatment is brutally murdered, and a prosecutor sidelined by the illness asks to lead the case, assisted by his newly pregnant detective wife.",
+			"released": "2021-01-29",
+			"languages": ["zh"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": "TheSoul.movie",
+				"instagram": null,
+				"wikipedia": "The_Soul_(film)"
+			},
+			"updated_at": "2026-11-01T08:16:05.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "緝魂",
+			"available_translations": [
+				"ar",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"it",
+				"ko",
+				"my",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"th",
+				"tr",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1029241",
+				"plex": {
+					"guid": "5d77683e999c64001ec3143d",
+					"slug": "vinyan"
+				},
+				"slug": "vinyan-2008",
+				"tmdb": 16350,
+				"trakt": 10064
+			},
+			"year": 2008,
+			"title": "Vinyan",
+			"votes": 124,
+			"colors": {
+				"poster": ["#BDC2B6", "#151713"]
+			},
+			"genres": ["horror", "thriller", "drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/10064/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/10064/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 5.096773147583008,
+			"status": "released",
+			"country": "us",
+			"runtime": 96,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=8xjc-Qu0PIQ",
+			"homepage": null,
+			"language": "en",
+			"overview": "Six months after losing her only child in the Southeast Asia tsunami, Jeanne is convinced she sees him in a film about orphans living in the jungles.",
+			"released": "2008-08-30",
+			"languages": ["en", "th"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Vinyan"
+			},
+			"updated_at": "2026-10-30T08:12:42.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Vinyan",
+			"available_translations": [
+				"ar",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"lv",
+				"nl",
+				"pt",
+				"ru",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0329390",
+				"plex": {
+					"guid": "5d77686a2e80df001ebe3738",
+					"slug": "monte-walsh"
+				},
+				"slug": "monte-walsh-2003",
+				"tmdb": 37348,
+				"trakt": 23892
+			},
+			"year": 2003,
+			"title": "Monte Walsh",
+			"votes": 105,
+			"colors": {
+				"poster": ["#CF854E", "#2E1911"]
+			},
+			"genres": ["western"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/23892/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/23892/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.961919784545898,
+			"status": "released",
+			"country": "us",
+			"runtime": 117,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=0r0fBbTjEo8",
+			"homepage": null,
+			"language": "en",
+			"overview": "Monte Walsh and Chet Rollins are long-time cowhands, working whatever ranch work comes their way, but \"nothing they can't do from a horse.\" Their lives are divided between months on the range and the occasional trip into town. Monte has a long-term relationship with prostitute Martine Bernard, while Chet has fallen under the spell of the widow who owns the hardware store. Camaraderie and competition with the other cowboys fill their days, until one of the hands, Shorty Austin, loses his job and gets involved in rustling and killing. Then Monte and Chet find that their lives on the range are inexorably redirected.",
+			"released": "2003-01-17",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Monte_Walsh_(2003_film)"
+			},
+			"updated_at": "2026-11-01T08:10:05.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Monte Walsh",
+			"available_translations": [
+				"ar",
+				"bg",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sv",
+				"uk"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt10613002",
+				"plex": {
+					"guid": "5e1622f277eeed003e84453f",
+					"slug": "roh-2020"
+				},
+				"slug": "roh-2020",
+				"tmdb": 641548,
+				"trakt": 479894
+			},
+			"year": 2020,
+			"title": "Roh",
+			"votes": 85,
+			"colors": {
+				"poster": ["#C98456", "#110605"]
+			},
+			"genres": ["horror", "drama", "mystery"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/479894/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/479894/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.37647008895874,
+			"status": "released",
+			"country": "my",
+			"runtime": 82,
+			"tagline": "All we need to do is whisper.",
+			"trailer": "https://youtube.com/watch?v=RCzo_Wpi3Pw",
+			"homepage": "https://www.filmmovement.com/roh",
+			"language": "ms",
+			"overview": "Cut off from civilisation, a single mother puts her children on high alert when they bring home a young girl caked in clay. She tells of spirits and spirit hunters, but these are not mere superstitions. As more strangers show up on her doorstep, she quickly finds another reason to fear the forest.",
+			"released": "2020-06-26",
+			"languages": ["ms"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Roh_(film)"
+			},
+			"updated_at": "2026-08-31T16:57:01.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 3,
+			"during_credits": false,
+			"original_title": "Roh",
+			"available_translations": ["en", "it", "pt", "ru", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0112319",
+				"plex": {
+					"guid": "5d7768bcd95456001fd259e4",
+					"slug": "alien-nation-body-and-soul"
+				},
+				"slug": "alien-nation-body-and-soul-1995",
+				"tmdb": 77348,
+				"trakt": 57191
+			},
+			"year": 1995,
+			"title": "Alien Nation: Body and Soul",
+			"votes": 66,
+			"colors": {
+				"poster": ["#B26C52", "#2B2426"]
+			},
+			"genres": ["science-fiction"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/57191/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/57191/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.030298709869385,
+			"status": "released",
+			"country": "us",
+			"runtime": 87,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "Sikes and Francisco are called in to a case when a mysterious young girl, who looks part Newcomer, part human, appears. Her huge, brutish counterpart tries to free her from the precinct, and their bizarre relationship turns out to be the result of a slaveship medical experiment. Meanwhile, Cathy and Matt are going to sex school, in preparation of becoming intimate, while Buck distresses his parents by his anti-human opinions.",
+			"released": "1995-10-10",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Alien_Nation:_Body_and_Soul"
+			},
+			"updated_at": "2026-11-01T08:17:20.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Alien Nation: Body and Soul",
+			"available_translations": ["ar", "bg", "de", "en", "es", "fr", "it", "ru", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0368287",
+				"plex": {
+					"guid": "5d77691023d5a3001f4f5384",
+					"slug": "the-soul-of-a-man"
+				},
+				"slug": "the-soul-of-a-man-2003",
+				"tmdb": 103475,
+				"trakt": 73882
+			},
+			"year": 2003,
+			"title": "The Soul of a Man",
+			"votes": 22,
+			"colors": {
+				"poster": ["#CAD0D0", "#131B1B"]
+			},
+			"genres": ["documentary", "music"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/73882/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/73882/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 7.5,
+			"status": "released",
+			"country": "de",
+			"runtime": 100,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.wim-wenders.com/movies/movies_spec/thesoulofaman/the-soul-of-a-man.htm",
+			"language": "en",
+			"overview": "Wim Wenders looks at the dramatic tension in the blues between the sacred and the profane by exploring the music and lives of three of his favorite blues artists: Skip James, Blind Willie Johnson and J. B. Lenoir. Part history, part personal pilgrimage, the film tells the story of these lives in music through an extended fictional film sequence (recreations of '20s and '30s events - shot in silent-film, hand-crank style), rare archival footage, present-day documentary scenes and covers of their songs by contemporary musicians such as Shemekia Copeland, Alvin Youngblood Hart, Garland Jeffreys, Chris Thomas King, Cassandra Wilson, Nick Cave, Los Lobos, Eagle Eye Cherry, Vernon Reid, James \"Blood\" Ulmer, Lou Reed, Bonnie Raitt, Marc Ribot, The Jon Spencer Blues Explosion, Lucinda Williams and T-Bone Burnett.",
+			"released": "2003-05-16",
+			"languages": ["en", "it"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Soul_of_a_Man"
+			},
+			"updated_at": "2026-11-06T11:29:10.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "The Soul of a Man",
+			"available_translations": ["en", "es", "fr", "it", "lv", "ru", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0070721",
+				"plex": {
+					"guid": "5d7768edad5437001f753036",
+					"slug": "the-soul-of-nigger-charley"
+				},
+				"slug": "the-soul-of-nigger-charley-1973",
+				"tmdb": 91284,
+				"trakt": 67735
+			},
+			"year": 1973,
+			"title": "The Soul of Nigger Charley",
+			"votes": 12,
+			"colors": {
+				"poster": ["#D6C4A5", "#221410"]
+			},
+			"genres": ["action", "adventure", "crime", "drama", "western"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/67735/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/67735/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 5.083330154418945,
+			"status": "released",
+			"country": "us",
+			"runtime": 110,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=RaQLUjvOIF4",
+			"homepage": null,
+			"language": "en",
+			"overview": "After the end of the Civil War, Charley fights against a group of Southern soldiers seeking to reignite the Confederacy.",
+			"released": "1973-05-15",
+			"languages": ["en"],
+			"subgenres": ["blaxploitation-cinema"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Soul_of_Nigger_Charley"
+			},
+			"updated_at": "2026-11-02T08:09:00.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "The Soul of Nigger Charley",
+			"available_translations": ["ar", "en", "fr", "ru", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt33030449",
+				"plex": {
+					"guid": "66a2dd34f8c90c5958ca7934",
+					"slug": "miyazaki-spirit-of-nature-2024"
+				},
+				"slug": "miyazaki-spirit-of-nature-2025",
+				"tmdb": 1320480,
+				"trakt": 1079653
+			},
+			"year": 2025,
+			"title": "Miyazaki, Spirit of Nature",
+			"votes": 61,
+			"colors": {
+				"poster": ["#DCE6E5", "#30889C"]
+			},
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/1079653/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/1079653/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 7.491799831390381,
+			"status": "released",
+			"country": "fr",
+			"runtime": 84,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "A documentary that focuses on Hayao Miyazaki’s deep connection to nature and the environmental themes expressed through his films.",
+			"released": "2024-12-20",
+			"languages": ["ja", "fr", "en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Miyazaki,_Spirit_of_Nature"
+			},
+			"updated_at": "2026-08-25T16:52:55.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Miyazaki, l'esprit de la nature",
+			"available_translations": [
+				"de",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"ru",
+				"sv",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0101349",
+				"plex": {
+					"guid": "5d7768947e5fa10020bf22a0",
+					"slug": "anima-mundi"
+				},
+				"slug": "anima-mundi-1991",
+				"tmdb": 54220,
+				"trakt": 38381
+			},
+			"year": 1991,
+			"title": "Anima Mundi",
+			"votes": 32,
+			"colors": {
+				"poster": ["#D9BB5C", "#050303"]
+			},
+			"genres": ["documentary", "music"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/38381/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/38381/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 7.093800067901611,
+			"status": "released",
+			"country": "us",
+			"runtime": 29,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "Image and music are intertwined in this third collaboration between director Godfrey Reggio and composer Philip Glass. The film was produced to celebrate the World Wildlife Fund's Biological Diversity Campaign. The film combines images of nature with pulsing rhythms in a Microcosmos (1996) meets Koyaanisqatsi (1983) spectacle.",
+			"released": "1991-04-24",
+			"languages": ["xx", "en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Anima_Mundi_(film)"
+			},
+			"updated_at": "2025-07-29T08:08:33.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Anima Mundi",
+			"available_translations": ["en", "es", "fr", "ru"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt15341168",
+				"plex": {
+					"guid": "613c7a7394f3530180d94244",
+					"slug": "full-of-grace-2022"
+				},
+				"slug": "full-of-grace-2022",
+				"tmdb": 954748,
+				"trakt": 767503
+			},
+			"year": 2022,
+			"title": "Full of Grace",
+			"votes": 154,
+			"colors": {
+				"poster": ["#B8C2B4", "#49372B"]
+			},
+			"genres": ["comedy", "family"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/767503/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/767503/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.9415998458862305,
+			"status": "released",
+			"country": "es",
+			"runtime": 109,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.filmfactoryentertainment.com/films/full-of-grace/",
+			"language": "es",
+			"overview": "Sister Marina, a very unorthodox nun, is sent during the summer of 1994 to El Parral, a boarding school for boys threatened to be closed soon. Even though the kids welcome Marina with all kinds of pranks, they will, little by little, become something very close to the family they never had.",
+			"released": "2022-06-24",
+			"languages": ["es"],
+			"subgenres": ["coming-of-age"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Full_of_Grace"
+			},
+			"updated_at": "2026-10-18T08:08:31.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Llenos de gracia",
+			"available_translations": [
+				"ar",
+				"ca",
+				"cs",
+				"en",
+				"es",
+				"hu",
+				"it",
+				"my",
+				"pl",
+				"pt",
+				"ru",
+				"sl",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt34498564",
+				"plex": {
+					"guid": "67342a6465f4a0baba4c5be0",
+					"slug": "the-vvaan-force-of-the-forrest"
+				},
+				"slug": "the-vvaan-2026",
+				"tmdb": 1384514,
+				"trakt": 1131389
+			},
+			"year": 2026,
+			"title": "The Vvaan",
+			"votes": 20,
+			"colors": {
+				"poster": ["#B25535", "#1F1A20"]
+			},
+			"genres": ["action", "adventure", "thriller"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/1131389/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/1131389/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 5.250000476837158,
+			"status": "released",
+			"country": "in",
+			"runtime": 136,
+			"tagline": "Force of the Forrest",
+			"trailer": "https://youtube.com/watch?v=wlMykuSzzVM",
+			"homepage": null,
+			"language": "hi",
+			"overview": "A rational urban man defies his ancestral forbidden forest and awakens a divine goddess, only to realise that not only do some powers exist beyond logic but he must rise as the village’s only saviour to protect his people from annihilation.",
+			"released": "2026-09-25",
+			"languages": ["hi"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-11-05T08:11:26.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "द वन",
+			"available_translations": ["de", "en", "hi", "nl", "ru"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt6903382",
+				"plex": {
+					"guid": "5d776d69fb0d55001f59fa3c",
+					"slug": "yuuki-yuuna-wa-yuusha-de-aru-washio-sumi-no-shou-dai-2-shou-tamashii"
+				},
+				"slug": "yuuki-yuuna-is-a-hero-washio-sumi-s-chapter-2-spirit-2017",
+				"tmdb": 450150,
+				"trakt": 296731
+			},
+			"year": 2017,
+			"title": "Yuuki Yuuna is a Hero: Washio Sumi's Chapter 2 - Spirit",
+			"votes": 10,
+			"colors": {
+				"poster": ["#C7D4DA", "#355C9D"]
+			},
+			"genres": ["anime"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/296731/medium/logo.webp"],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/296731/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/296731/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.699999809265137,
+			"status": "released",
+			"country": "jp",
+			"runtime": 47,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://yuyuyu.tv/washio/",
+			"language": "ja",
+			"overview": "In the year 298 of the Divine Era, elementary school girls Washio Sumi, Nogi Sonoko, and Minowa Gin are tasked with an important mission. They are to become heroes and fight Vertex, a mysterious enemy that is attacking Shinju-sama, the god tree that protects Shikoku, the only area in the world that is still habitable. What they don't know, is that this fight will cost them more than they could have ever imagined.",
+			"released": "2017-04-15",
+			"languages": ["ja"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-10-14T08:10:28.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "結城友奈は勇者である -鷲尾須美の章- 第2章 「たましい」",
+			"available_translations": [
+				"en",
+				"es",
+				"fr",
+				"id",
+				"it",
+				"ja",
+				"ko",
+				"pl",
+				"ru",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0076692",
+				"plex": {
+					"guid": "5d77691c9ab54400214efcc7",
+					"slug": "soul-of-the-sword"
+				},
+				"slug": "soul-of-the-sword-1978",
+				"tmdb": 106640,
+				"trakt": 75731
+			},
+			"year": 1978,
+			"title": "Soul of the Sword",
+			"votes": 11,
+			"colors": {
+				"poster": ["#AF998D", "#241E29"]
+			},
+			"genres": ["action"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/75731/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/75731/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 6.545499801635742,
+			"status": "released",
+			"country": "hk",
+			"runtime": 85,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=xb8vfjy12x8",
+			"homepage": null,
+			"language": "zh",
+			"overview": "Ti Lung is the Nameless Swordsman bent on defeating the faceless King of Swords to claim the title, and the glory, for himself. Hordes of fighters lunge from the shadows to cut down the mysterious challenger. Even a cunning seductress takes a stab at him in a revealing bath house assassination. It is said that a man's weapon reflects his utmost dreams, desires and fears. A warrior with no name and one motive has a soul as merciless as cold steel.",
+			"released": "1978-04-21",
+			"languages": ["zh"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-28T16:33:32.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "殺絕",
+			"available_translations": ["cs", "de", "en", "fr", "ko", "pt", "ru", "th", "zh"]
+		}
+	},
+	{
+		"score": 578730089005451300,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt2593392",
+				"plex": {
+					"guid": "5d9f3c20e4fc29001eb6e654",
+					"slug": "alive-inside-a-story-of-music-and-memory"
+				},
+				"slug": "alive-inside-2014",
+				"tmdb": 250643,
+				"trakt": 152041
+			},
+			"year": 2014,
+			"title": "Alive Inside",
+			"votes": 149,
+			"colors": {
+				"poster": ["#F07626", "#B4AFB3"]
+			},
+			"genres": ["documentary"],
+			"images": {
+				"logo": ["media.trakt.tv/movies/152041/medium/logo.webp"],
+				"thumb": [],
+				"banner": [],
+				"fanart": ["media.trakt.tv/movies/152041/medium/fanart.webp"],
+				"poster": ["media.trakt.tv/movies/152041/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 8.208049774169922,
+			"status": "released",
+			"country": "us",
+			"runtime": 74,
+			"tagline": "Music is the strongest form of magic",
+			"trailer": null,
+			"homepage": "https://aliveinside.us/",
+			"language": "en",
+			"overview": "Five million Americans suffer from Alzheimer's disease and dementia—many of them alone in nursing homes. A man with a simple idea discovers that songs embedded deep in memory can ease pain and awaken these fading minds. Joy and life are resuscitated, and our cultural fears over aging are confronted.",
+			"released": "2014-01-18",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Alive_Inside:_A_Story_of_Music_and_Memory"
+			},
+			"updated_at": "2026-11-02T08:14:33.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 2,
+			"during_credits": false,
+			"original_title": "Alive Inside",
+			"available_translations": [
+				"ar",
+				"bg",
+				"cs",
+				"el",
+				"en",
+				"fr",
+				"he",
+				"ja",
+				"nl",
+				"ro",
+				"ru",
+				"sr",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730089005451300,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0382717",
+				"plex": {
+					"guid": "5d77688323d5a3001f4ed5fd",
+					"slug": "life-of-the-party"
+				},
+				"slug": "life-of-the-party-2005",
+				"tmdb": 46901,
+				"trakt": 32275
+			},
+			"year": 2005,
+			"title": "Life of the Party",
+			"votes": 12,
+			"colors": {
+				"poster": ["#EBC15F", "#90715B"]
+			},
+			"genres": ["comedy", "drama", "romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": ["media.trakt.tv/movies/32275/medium/poster.webp"],
+				"clearart": []
+			},
+			"rating": 5.25,
+			"status": "released",
+			"country": "us",
+			"runtime": 87,
+			"tagline": "Rock bottom is just around the corner.",
+			"trailer": "https://youtube.com/watch?v=ula2QXiY7ko",
+			"homepage": null,
+			"language": "en",
+			"overview": "A group of friends plan an intervention to help their pal address his drinking problem. Things go awry when the shrink they hired fails to show up",
+			"released": "2005-01-01",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Life_of_the_Party_(2005_film)"
+			},
+			"updated_at": "2025-11-15T08:08:42.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Life of the Party",
+			"available_translations": ["bg", "en", "fr"]
+		}
+	}
+]
