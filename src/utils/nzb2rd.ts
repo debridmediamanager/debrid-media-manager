@@ -99,6 +99,11 @@ export async function createNzb2rdJob(params: {
 	 * without it a row links nowhere — on every device, not just a new one.
 	 */
 	returnPath?: string;
+	/**
+	 * The show season, absent for a movie. Names the cached search the route
+	 * reads the release's other postings from.
+	 */
+	seasonNum?: number;
 }): Promise<Nzb2rdJob | Nzb2rdDuplicate> {
 	const response = await fetch('/api/nzb2rd/jobs', {
 		method: 'POST',

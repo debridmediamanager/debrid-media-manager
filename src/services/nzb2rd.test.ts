@@ -1,4 +1,6 @@
 import { getStoredNzb } from '@/services/newznab/store';
+import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
+import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -20,6 +22,7 @@ import {
 	parseNewznabResponse,
 	parseReleaseId,
 	promoteJob,
+	qualifyReleaseId,
 	releaseDedupKey,
 	searchSeasonPacks,
 	searchUsenet,
@@ -389,6 +392,31 @@ describe('submitNzb', () => {
 		expect(normal.get('sponsor')).toBeNull();
 	});
 
+	// nzb2rd fetches these from /api/nzb2rd/download in turn when the NZB's articles are gone.
+	it('names the release’s other postings only when there are some', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ status: 201, json: async () => ({ id: 'job-1' }) });
+		vi.stubGlobal('fetch', fetchMock);
+		const send = (alternates?: string[]) =>
+			submitNzb({
+				nzbText: '<nzb></nzb>',
+				nzbName: 'release.nzb',
+				imdbId: 'tt1418646',
+				rdKey: 'user-rd-key',
+				alternates,
+			});
+
+		await send(['ah:b', 'nl:c']);
+		await send([]);
+		await send(undefined);
+
+		const forms = fetchMock.mock.calls.map(([, init]) => init.body as FormData);
+		expect(forms[0].get('alternates')).toBe('["ah:b","nl:c"]');
+		expect(forms[1].has('alternates')).toBe(false);
+		expect(forms[2].has('alternates')).toBe(false);
+	});
+
 	it('passes a non-2xx status through instead of throwing', async () => {
 		vi.stubGlobal(
 			'fetch',
@@ -706,6 +734,83 @@ describe('dedupeResults', () => {
 			[result('ah:b', 'The.Last.of.Us.S02.2160p.UHD.BDRip', 66_520_000_000)],
 		]);
 		expect(merged).toHaveLength(2);
+	});
+});
+
+// The newest film posts DrunkenSlug and altHUB answered on 2026-10-31, qualified
+// the way fetchResults qualifies them. Both carry The Big Lebowski's HDMaNiAcS
+// and TERMiNAL releases, and altHUB lists Hell House and True Romance twice each,
+// as separate postings of one name. A dead posting used to leave nothing to try.
+describe('dedupeResults keeps the other postings of a release', () => {
+	const qualified = (prefix: string, body: unknown) =>
+		parseNewznabResponse(body).map((r) => ({ ...r, id: qualifyReleaseId(prefix, r.id) }));
+	const ds = qualified('ds', drunkenslugMovie);
+	const ah = qualified('ah', althubMovie);
+	const merged = dedupeResults([ds, ah]);
+	const row = (title: string) => merged.find((r) => r.title === title);
+
+	it('names the other indexer’s posting on the row it keeps', () => {
+		expect(row('The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS')).toMatchObject({
+			id: 'ds:6b6440fdc833ed29b90954956d7de0d729e17a35',
+			alternates: ['ah:b12393c9fe8c7f1b109fa030215a5ca2'],
+		});
+		expect(row('The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL')).toMatchObject({
+			id: 'ds:8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1',
+			alternates: ['ah:61bd8e1892dadf84e4a42d1494ba9cef'],
+		});
+	});
+
+	it('names a second posting on the same indexer', () => {
+		expect(row('Hell.House.2001.1080p.Blu-ray.Remux.AVC.FLAC.1.0-CiNEPHiLES')).toMatchObject({
+			id: 'ah:d0b5b5d0478acd6eb6f96a243d001985',
+			alternates: ['ah:11a69cda89c294bc2242eb8f9819cd52'],
+		});
+		expect(
+			row('True.Romance.1993.Directors.Cut.BluRay.1080p.DDP.5.1.x264-hallowed')
+		).toMatchObject({
+			id: 'ah:3905d618d35bdda502c7ca4c1a35a545',
+			alternates: ['ah:de0d2e9ed275e2ae9b3990663e3cb02c'],
+		});
+	});
+
+	it('still shows each release once, and adds nothing to a release posted once', () => {
+		expect(merged).toHaveLength(56); // 30 + 30, less two shared and two repeats
+		expect(merged.filter((r) => r.alternates)).toHaveLength(4);
+		// The input rows are cached sets elsewhere; they must come out as they went in.
+		expect([...ds, ...ah].some((r) => 'alternates' in r)).toBe(false);
+	});
+
+	// The pack search asks three phrasings, and each one answers with the same pack.
+	it('keeps them in priority order, once each, never the kept id, at most eight', () => {
+		const title = 'Show.S01.1080p.WEB-GRP';
+		const post = (id: string) => ({ id, title, size: 1 });
+		const [kept] = dedupeResults([
+			[post('ds:a')],
+			[post('ds:a'), post('ah:b')],
+			[post('ds:c'), post('ah:b')],
+			Array.from({ length: 10 }, (_, i) => post(`nl:${i}`)),
+		]);
+		expect(kept.id).toBe('ds:a');
+		expect(kept.alternates).toEqual([
+			'ah:b',
+			'ds:c',
+			'nl:0',
+			'nl:1',
+			'nl:2',
+			'nl:3',
+			'nl:4',
+			'nl:5',
+		]);
+	});
+
+	// The Newznab aggregator merges a cached set with the upstreams it lacked.
+	it('keeps the alternates a re-merged row already carries', () => {
+		const title = 'Film.2024.2160p.WEB-GRP';
+		const [kept] = dedupeResults([
+			[{ id: 'ds:a', title, size: 1, alternates: ['ah:b'] }],
+			[{ id: 'nl:c', title, size: 1 }],
+		]);
+		expect(kept).toEqual({ id: 'ds:a', title, size: 1, alternates: ['ah:b', 'nl:c'] });
 	});
 });
 

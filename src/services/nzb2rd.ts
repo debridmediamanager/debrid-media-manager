@@ -135,7 +135,16 @@ export interface UsenetResult {
 	 * sweepFreshPosts in newznab/search).
 	 */
 	imdb?: string;
+	/**
+	 * The ids of other postings of the same release (same `releaseDedupKey`), in
+	 * indexer priority order, at most MAX_ALTERNATES. Sent to nzb2rd so it can
+	 * fetch the next copy when this one's articles are gone.
+	 */
+	alternates?: string[];
 }
+
+/** How many other postings of one release nzb2rd accepts. */
+const MAX_ALTERNATES = 8;
 
 // Episode markers as they actually appear on the indexer: S02E09, S02 E09,
 // S02.EP09, 2x09, "Episode 9". The EP and spaced forms matter — without them
@@ -511,12 +520,25 @@ async function fetchResults(url: string, indexer: Indexer): Promise<UsenetResult
  * Callers pass lists in indexer priority order, so "first" means "from the
  * preferred indexer" and the choice is deterministic across requests — the same
  * release always shows the same id, which is what the transfer dedup keys on.
+ *
+ * The other postings are not thrown away: their ids ride on the kept row as
+ * `alternates`, so a send can name a next copy for when the kept one is dead.
  */
 export function dedupeResults(lists: UsenetResult[][]): UsenetResult[] {
 	const byRelease = new Map<string, UsenetResult>();
 	for (const result of lists.flat()) {
 		const key = releaseDedupKey(result.title);
-		if (!byRelease.has(key)) byRelease.set(key, result);
+		const kept = byRelease.get(key);
+		if (!kept) {
+			byRelease.set(key, result);
+			continue;
+		}
+		// A row re-merged from a cached set already carries alternates of its own.
+		const ids = [...(kept.alternates ?? []), result.id, ...(result.alternates ?? [])];
+		const alternates = [...new Set(ids)]
+			.filter((id) => id !== kept.id)
+			.slice(0, MAX_ALTERNATES);
+		if (alternates.length > 0) byRelease.set(key, { ...kept, alternates });
 	}
 	return [...byRelease.values()];
 }
@@ -754,6 +776,12 @@ export async function submitNzb(args: {
 	 * It reorders the wait; it buys no extra concurrency on that host.
 	 */
 	sponsor?: string | null;
+	/**
+	 * Other postings of the release (`UsenetResult.alternates`), which nzb2rd
+	 * fetches from `/api/nzb2rd/download` in turn when this NZB's articles are
+	 * missing. Taken from DMM's own search cache, never from the browser.
+	 */
+	alternates?: string[];
 }): Promise<{ status: number; data: any }> {
 	const form = new FormData();
 	form.append('nzb', new Blob([args.nzbText], { type: 'application/x-nzb' }), args.nzbName);
@@ -763,6 +791,7 @@ export async function submitNzb(args: {
 		form.append('priority', '1');
 		form.append('sponsor', args.sponsor);
 	}
+	if (args.alternates?.length) form.append('alternates', JSON.stringify(args.alternates));
 	if (isCompleteOAuth(args.oauth)) {
 		form.append('rd_client_id', args.oauth.clientId);
 		form.append('rd_client_secret', args.oauth.clientSecret);

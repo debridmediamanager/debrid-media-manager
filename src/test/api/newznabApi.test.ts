@@ -1098,6 +1098,43 @@ describe('GET /api/newznab/api result order', () => {
 	});
 });
 
+// dedupeResults keeps a release's other postings on the row it keeps (for nzb2rd's
+// next-copy retry), and that row is what this endpoint caches. The feed is built
+// from a whitelist of fields, so an *arr must get exactly the feed it got before.
+describe('GET /api/newznab/api with one release posted on both upstreams', () => {
+	it('serves the same feed whether the cached row carries alternates or not', async () => {
+		const repost = {
+			...SECOND_RESPONSE.channel.item,
+			title: 'Some.Release.2160p.WEB',
+			guid: 'second-copy-id',
+		};
+		fetchMock.mockImplementation(async (input: unknown) =>
+			jsonResponse(
+				String(input).startsWith(FIRST_HOST)
+					? FIRST_RESPONSE
+					: { channel: { item: [repost, SECOND_RESPONSE.channel.item] } }
+			)
+		);
+		const query = { t: 'search', q: 'some release', apikey: SPONSOR_KEY };
+
+		const first = await run(query);
+		const fanned = body(first);
+		const [[key, rows]] = [...cacheStore];
+		expect(rows.find((r) => r.title === 'Some.Release.2160p.WEB')?.alternates).toEqual([
+			'ah:second-copy-id',
+		]);
+		cacheStore.set(
+			key,
+			rows.map(({ alternates: _alternates, ...row }) => row)
+		);
+		const plain = body(await run(query));
+
+		expect(fanned).toBe(plain);
+		expect(itemTitles(first)).toEqual(['Some.Release.2160p.WEB', 'Another.Release.1080p']);
+		expect(fanned).not.toContain('second-copy-id');
+	});
+});
+
 describe('GET /api/newznab/api takedown', () => {
 	it('leaves a blocked release out of search results, cached ones included', async () => {
 		setBlocklistForTests([], ['some.release.2160p.web']);
