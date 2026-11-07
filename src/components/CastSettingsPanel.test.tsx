@@ -75,6 +75,15 @@ describe('CastSettingsPanel', () => {
 		expect(screen.getByText(/Hide.*Cast a file inside a torrent.*option/)).toBeInTheDocument();
 	});
 
+	it('names Easynews files, not torrents, on the Easynews Cast page', () => {
+		render(<CastSettingsPanel service="en" accentColor="blue" />);
+		expect(screen.getByText('Hide "Cast a file from Easynews" option')).toBeInTheDocument();
+		expect(
+			screen.getByText("Limits streams from your Easynews search and other users' casts")
+		).toBeInTheDocument();
+		expect(screen.queryByText(/torrent/i)).not.toBeInTheDocument();
+	});
+
 	it('updates movie size and saves to localStorage', () => {
 		render(<CastSettingsPanel service="rd" accentColor="green" />);
 		const selects = screen.getAllByRole('combobox');

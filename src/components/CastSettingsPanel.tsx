@@ -40,6 +40,12 @@ interface CastSettingsPanelProps {
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
+	// Easynews Cast lists files from the member's own Easynews search, not torrents, and
+	// its cast row is titled so in Stremio (stremio-en stream route).
+	const streamSources =
+		service === 'en' ? 'your Easynews search and' : 'available files, torrents, and';
+	const castRowTitle =
+		service === 'en' ? 'Cast a file from Easynews' : 'Cast a file inside a torrent';
 	const { isSponsor } = useSponsor();
 	const [movieMaxSize, setMovieMaxSize] = useState(() =>
 		getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
@@ -368,7 +374,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						)}
 					</select>
 					<p className="mt-1 text-xs text-gray-400">
-						Limits streams from available files, torrents, and other users&apos; casts
+						Limits streams from {streamSources} other users&apos; casts
 					</p>
 					{!isSponsor && (
 						<p className="text-xs text-gray-400">
@@ -394,9 +400,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						checked={hideCastOption}
 						onChange={handleHideCastOptionChange}
 					/>
-					<label className="font-semibold">
-						Hide &quot;Cast a file inside a torrent&quot; option
-					</label>
+					<label className="font-semibold">Hide &quot;{castRowTitle}&quot; option</label>
 				</div>
 				<p className="-mt-2 text-xs text-gray-400">
 					When enabled, the cast option will not appear in Stremio streams
