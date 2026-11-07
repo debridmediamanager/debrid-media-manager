@@ -41,6 +41,8 @@ export interface FilenameIdentification {
 	year: number | null;
 	score: number | null;
 	confident: boolean;
+	/** When it was answered; set on rows read back, not on new answers. */
+	createdAt?: Date;
 }
 
 const INFO_HASH = /^[a-f0-9]{40}$/;
@@ -134,6 +136,7 @@ export class HashImdbService extends DatabaseClient {
 				year: true,
 				score: true,
 				confident: true,
+				createdAt: true,
 			},
 		});
 		return rows.filter((r) => wanted.has(`${r.hash}|${r.titleKey}`));
@@ -284,12 +287,12 @@ export class HashImdbService extends DatabaseClient {
 		);
 	}
 
-	/** Overwrite stored answers that were asked again and are now confident. */
-	public async confirmFilenameIdentifications(rows: FilenameIdentification[]): Promise<void> {
-		for (const { hash, titleKey, ...answer } of rows) {
+	/** Overwrite stored answers that were asked again, dated now, so they are not asked again. */
+	public async replaceFilenameIdentifications(rows: FilenameIdentification[]): Promise<void> {
+		for (const { hash, titleKey, createdAt: _asked, ...answer } of rows) {
 			await this.prisma.hashIdentification.update({
 				where: { hash_titleKey: { hash, titleKey } },
-				data: answer,
+				data: { ...answer, createdAt: new Date() },
 			});
 		}
 	}

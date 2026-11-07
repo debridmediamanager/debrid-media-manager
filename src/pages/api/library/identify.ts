@@ -88,6 +88,13 @@ export async function identifyHandler(req: NextApiRequest, res: NextApiResponse)
 }
 
 /**
+ * When content-identifier started reading Wikidata labels in DMM's twelve local-title
+ * languages, with models retrained on them (content-identifier 88f62d2): "Oonas und Babas
+ * Insel", Puffin Rock's German title, had been a stored doubt (Baby Daddy, p 0.035).
+ */
+export const IDENTIFIER_RETRAINED_AT = new Date('2026-11-07T01:21:47Z');
+
+/**
  * `identifyHandler`'s answers for parsed items, one per item in order: null where nothing
  * is identified. `complete` is false when content-identifier could not be asked.
  */
@@ -118,6 +125,13 @@ export async function identifyItems(
 		: new Map<string, Set<string>>();
 	for (const i of doubted) {
 		if (backing.get(i.hash!)?.has(known(i)!.imdbId!)) stale.add(`${i.hash}|${i.titleKey}`);
+	}
+	// a doubt the identifier gave before it learned local-language titles is asked once more
+	for (const i of items) {
+		const row = known(i);
+		if (row && !row.confident && row.createdAt && row.createdAt < IDENTIFIER_RETRAINED_AT) {
+			stale.add(`${i.hash}|${i.titleKey}`);
+		}
 	}
 
 	const missing = [...new Set(items.filter((i) => !known(i)).map((i) => i.filename))];
@@ -178,11 +192,12 @@ export async function identifyItems(
 	repository
 		.saveFilenameIdentifications(asked.filter((r) => !stale.has(`${r.hash}|${r.titleKey}`)))
 		.catch((error) => console.error('Failed to store library identifications', error));
-	const confirmed = asked.filter((r) => stale.has(`${r.hash}|${r.titleKey}`) && r.confident);
-	if (confirmed.length) {
+	// asked again: replaced either way, so a doubt that stays one is not asked on every visit
+	const replaced = asked.filter((r) => stale.has(`${r.hash}|${r.titleKey}`));
+	if (replaced.length) {
 		repository
-			.confirmFilenameIdentifications(confirmed)
-			.catch((error) => console.error('Failed to confirm library identifications', error));
+			.replaceFilenameIdentifications(replaced)
+			.catch((error) => console.error('Failed to replace library identifications', error));
 	}
 
 	return { results, complete: missing.length === 0 || answers !== null };
