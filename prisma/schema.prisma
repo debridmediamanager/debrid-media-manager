@@ -1158,6 +1158,9 @@ model WantedItem {
   fulfilled    Json?
   /// When zurg last read this sponsor's list.
   lastPolledAt DateTime?
+  /// Releases picked by "Send to zurg": `[{id, release, size, season?, episode?, at}]`,
+  /// one for a film, one per episode for a show. Null when none.
+  pins         Json?
 
   /// Leads with `shortId`, so it also serves reading one sponsor's list.
   @@unique([shortId, imdbId])

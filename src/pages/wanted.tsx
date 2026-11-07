@@ -48,6 +48,11 @@ const SORTS = {
 
 function seasonsLabel(item: WantedItemResponse): string {
 	if (item.seasons === null) return 'All seasons';
+	// A show on the list only for releases sent from its Easynews results.
+	if (!item.seasons.length) {
+		const n = item.pins?.length ?? 0;
+		return `${n} episode${n === 1 ? '' : 's'} sent to zurg`;
+	}
 	return `Season${item.seasons.length > 1 ? 's' : ''} ${item.seasons.join(', ')}`;
 }
 

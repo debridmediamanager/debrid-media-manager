@@ -1786,6 +1786,10 @@ export class Repository {
 		return this.wantedItemsService.want(shortId, item);
 	}
 
+	public pinWanted(...args: Parameters<WantedItemsService['pinWanted']>) {
+		return this.wantedItemsService.pinWanted(...args);
+	}
+
 	public wantMany(shortId: string, items: Parameters<WantedItemsService['wantMany']>[1]) {
 		return this.wantedItemsService.wantMany(shortId, items);
 	}

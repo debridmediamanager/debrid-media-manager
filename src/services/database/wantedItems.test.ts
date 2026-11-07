@@ -65,6 +65,76 @@ describe('WantedItemsService', () => {
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilled).toBe(Prisma.DbNull);
 	});
 
+	describe('pinWanted', () => {
+		const pin = (over: Record<string, unknown> = {}) => ({
+			id: 'a'.repeat(45),
+			release: 'Show.S02E05.1080p.WEB.mkv',
+			size: 1,
+			at: '2026-11-07T10:00:00.000Z',
+			...over,
+		});
+
+		// A new click on a film is a new pick: the old pin goes and zurg starts over.
+		it("replaces a film's pin and clears what zurg took", async () => {
+			prismaMock.wantedItem.findUnique.mockResolvedValue({ id: ROW.id, pins: [pin()] });
+			prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
+			const next = pin({ id: 'b'.repeat(45), release: 'The.Matrix.1999.2160p.mkv' });
+			await service.pinWanted(
+				'ZP1M',
+				{ imdbId: 'tt0133093', kind: 'movie', title: 'x' },
+				next
+			);
+			const { update } = prismaMock.wantedItem.upsert.mock.calls[0][0];
+			expect(update).toEqual({ pins: [next], fulfilledAt: null, fulfilled: Prisma.DbNull });
+		});
+
+		// The sponsor followed seasons 1 and 2 already: a pin must not touch that.
+		it('adds a show pin beside the others, replacing only the same episode', async () => {
+			const other = pin({ id: 'c'.repeat(45), episode: 4, season: 2 });
+			prismaMock.wantedItem.findUnique.mockResolvedValue({
+				id: ROW.id,
+				pins: [other, pin({ season: 2, episode: 5 })],
+			});
+			prismaMock.wantedItem.upsert.mockResolvedValue({
+				...ROW,
+				kind: 'show',
+				seasons: [1, 2],
+			});
+			const next = pin({ id: 'd'.repeat(45), season: 2, episode: 5 });
+			const row = await service.pinWanted(
+				'ZP1M',
+				{ imdbId: 'tt0133093', kind: 'show', title: 'renamed' },
+				next
+			);
+			const { update } = prismaMock.wantedItem.upsert.mock.calls[0][0];
+			expect(update).toEqual({ pins: [other, next] });
+			expect(row?.seasons).toEqual([1, 2]);
+		});
+
+		it('adds a show not wanted yet following no season, and respects the cap', async () => {
+			prismaMock.wantedItem.findUnique.mockResolvedValue(null);
+			prismaMock.wantedItem.count.mockResolvedValue(0);
+			prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
+			await service.pinWanted(
+				'ZP1M',
+				{ imdbId: 'tt0133093', kind: 'show', title: 'x' },
+				pin()
+			);
+			expect(prismaMock.wantedItem.upsert.mock.calls[0][0].create).toMatchObject({
+				kind: 'show',
+				seasons: [],
+				pins: [pin()],
+			});
+
+			prismaMock.wantedItem.upsert.mockClear();
+			prismaMock.wantedItem.count.mockResolvedValue(MAX_WANTED_ITEMS);
+			await expect(
+				service.pinWanted('ZP1M', { imdbId: 'tt0133093', kind: 'show', title: 'x' }, pin())
+			).resolves.toBeNull();
+			expect(prismaMock.wantedItem.upsert).not.toHaveBeenCalled();
+		});
+	});
+
 	// An import from Radarr or Sonarr leaves titles already wanted as they are.
 	it('imports only titles not wanted yet, until the list is full', async () => {
 		prismaMock.wantedItem.findMany.mockResolvedValue([

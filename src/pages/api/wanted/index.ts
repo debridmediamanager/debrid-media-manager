@@ -2,6 +2,7 @@ import {
 	MAX_WANTED_ITEMS,
 	type WantedFulfilled,
 	type WantedItemRow,
+	type WantedPin,
 } from '@/services/database/wantedItems';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
@@ -20,9 +21,11 @@ export interface WantedItemResponse {
 	fulfilledAt: string | null;
 	fulfilled: WantedFulfilled | null;
 	lastPolledAt: string | null;
+	/** Releases picked by "Send to zurg"; absent when none. */
+	pins?: WantedPin[];
 }
 
-const toResponse = (row: WantedItemRow): WantedItemResponse => ({
+export const toResponse = (row: WantedItemRow): WantedItemResponse => ({
 	...row,
 	createdAt: row.createdAt.toISOString(),
 	fulfilledAt: row.fulfilledAt?.toISOString() ?? null,

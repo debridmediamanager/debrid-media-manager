@@ -23,6 +23,24 @@ export type WantedFulfilled = {
 /** What zurg took for one resolution it keeps a copy at. */
 export type WantedTook = Omit<WantedFulfilled, 'bands'>;
 
+/**
+ * One release the sponsor picked for zurg to grab, by "Send to zurg" on an Easynews
+ * result. A film holds one; a show one per episode.
+ */
+export interface WantedPin {
+	/** The Easynews file hash, which the stored NZB is keyed on. */
+	id: string;
+	/** The release's file name, extension included. */
+	release: string;
+	/** Bytes, 0 when unknown. */
+	size: number;
+	/** Shows only. */
+	season?: number;
+	episode?: number;
+	/** When it was picked, as an ISO time. */
+	at: string;
+}
+
 export interface WantedItemRow {
 	id: string;
 	imdbId: string;
@@ -34,6 +52,8 @@ export interface WantedItemRow {
 	fulfilledAt: Date | null;
 	fulfilled: WantedFulfilled | null;
 	lastPolledAt: Date | null;
+	/** Absent when nothing is pinned. */
+	pins?: WantedPin[];
 }
 
 /** At most this many titles a sponsor's zurg is asked to keep fetching. */
@@ -50,6 +70,7 @@ function toRow(row: any): WantedItemRow {
 		fulfilledAt: row.fulfilledAt ?? null,
 		fulfilled: row.fulfilled ?? null,
 		lastPolledAt: row.lastPolledAt ?? null,
+		...(Array.isArray(row.pins) && row.pins.length ? { pins: row.pins } : {}),
 	};
 }
 
@@ -100,6 +121,57 @@ export class WantedItemsService extends DatabaseClient {
 				fulfilled: Prisma.DbNull,
 			},
 			create: { shortId, imdbId: item.imdbId, kind: item.kind, title: item.title, seasons },
+		});
+		return toRow(row);
+	}
+
+	/**
+	 * Pins one release on a title, adding the title when it is not wanted yet: a
+	 * show added this way follows no season (`seasons: []`), only its pins. A
+	 * title already wanted keeps its kind, title and seasons. A film's pin
+	 * replaces the one before and starts over, as `want` does; a show's replaces
+	 * only the pin of the same episode. Null when the list is full.
+	 */
+	public async pinWanted(
+		shortId: string,
+		item: { imdbId: string; kind: WantedKind; title: string },
+		pin: WantedPin
+	): Promise<WantedItemRow | null> {
+		const where = { shortId_imdbId: { shortId, imdbId: item.imdbId } };
+		const existing = await this.prisma.wantedItem.findUnique({
+			where,
+			select: { id: true, pins: true },
+		});
+		if (
+			!existing &&
+			(await this.prisma.wantedItem.count({ where: { shortId } })) >= MAX_WANTED_ITEMS
+		) {
+			return null;
+		}
+		// ponytail: read-then-write, so two episodes pinned in the same instant can lose one; a transaction if that is ever seen
+		const before = Array.isArray(existing?.pins)
+			? (existing.pins as unknown as WantedPin[])
+			: [];
+		const pins = [
+			...(item.kind === 'movie'
+				? []
+				: before.filter((p) => p.season !== pin.season || p.episode !== pin.episode)),
+			pin,
+		] as unknown as Prisma.InputJsonValue;
+		const row = await this.prisma.wantedItem.upsert({
+			where,
+			update:
+				item.kind === 'movie'
+					? { pins, fulfilledAt: null, fulfilled: Prisma.DbNull }
+					: { pins },
+			create: {
+				shortId,
+				imdbId: item.imdbId,
+				kind: item.kind,
+				title: item.title,
+				seasons: item.kind === 'movie' ? Prisma.DbNull : [],
+				pins,
+			},
 		});
 		return toRow(row);
 	}

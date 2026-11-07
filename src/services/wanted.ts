@@ -54,6 +54,18 @@ export interface WantedForZurg {
 	 * resolutions it fetched already, with `to` while it wants a better copy there.
 	 */
 	bands?: Record<string, { grab: string; resolution: string; to?: string }>;
+	/**
+	 * Releases the sponsor picked for zurg to grab as they are, each with the URL
+	 * of its NZB; absent when none. A film holds one, a show one per episode.
+	 */
+	pins?: {
+		id: string;
+		release: string;
+		nzb: string;
+		size: number;
+		season?: number;
+		episode?: number;
+	}[];
 }
 
 /**
