@@ -346,6 +346,34 @@ model PremiumizeCastProfile {
   hideCastOption    Boolean  @default(false)
 }
 
+model EasynewsCast {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  // The Easynews file hash, the first part of `path`
+  hash      String
+  // The release name, as Easynews lists it
+  url       String   @db.Text
+  updatedAt DateTime @updatedAt
+  size      BigInt   @default(0)
+  // `{hash}{ext}/{name}{ext}`: what the play route asks Easynews to sign
+  path      String   @db.Text
+
+  @@unique([imdbId, userId, hash])
+  @@index([imdbId, userId, updatedAt])
+}
+
+model EasynewsCastProfile {
+  userId            String   @id
+  // base64 of `username:password`, the Basic credential every Easynews call sends
+  apiKey            String   @db.Text
+  updatedAt         DateTime @updatedAt
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
+}
+
 model OffcloudCast {
   id        String   @id @default(uuid())
   imdbId    String
@@ -1197,7 +1225,7 @@ model WantedList {
 /// providers rather than a column on each `*CastProfile`, so a missing table
 /// costs sponsors their 10 instead of failing every profile read.
 model CastSponsorGrant {
-  /// `rd`, `tb`, `ad`, `pm`, `oc` or `dl`.
+  /// `rd`, `tb`, `ad`, `pm`, `oc`, `dl` or `en`.
   service   String   @db.VarChar(4)
   /// The `userId` of that provider's `*CastProfile` row.
   userId    String
@@ -1212,7 +1240,7 @@ model CastSponsorGrant {
 /// the provider's cast user id (`generate*UserId`), `state` the JSON the browser
 /// sent, keys filtered through `isSyncedKey` on the way in.
 model BrowserState {
-  /// `rd`, `tb`, `ad`, `pm`, `oc` or `dl`.
+  /// `rd`, `tb`, `ad`, `pm`, `oc`, `dl` or `en`.
   service   String   @db.VarChar(4)
   userId    String
   /// MEDIUMTEXT: `MAX_STATE_BYTES` is 64 KiB, one byte over TEXT's limit before any UTF-8.

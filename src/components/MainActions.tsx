@@ -10,6 +10,8 @@ interface MainActionsProps {
 	pmUser: boolean;
 	ocUser: boolean;
 	dlUser: boolean;
+	/** Signed in to Easynews under Settings. Optional: most callers have no use for it. */
+	enUser?: boolean;
 	isLoading: boolean;
 	/** No debrid account connected: the library has nothing to list. */
 	isGuest?: boolean;
@@ -24,6 +26,7 @@ export function MainActions({
 	pmUser,
 	ocUser,
 	dlUser,
+	enUser = false,
 	isLoading,
 	isGuest = false,
 }: MainActionsProps) {
@@ -93,6 +96,17 @@ export function MainActions({
 			hoverColor: 'hover:bg-sky-800/50',
 			textColor: 'text-sky-100',
 			iconColor: 'text-sky-400',
+		},
+		enUser && {
+			href: '/stremio-easynews',
+			label: 'Cast for EN',
+			code: 'EN',
+			chipClass: 'border-[#2563eb] bg-[#2563eb]/20 text-[#93c5fd] hover:bg-[#2563eb]/40',
+			borderColor: 'border-blue-500',
+			bgColor: 'bg-blue-900/30',
+			hoverColor: 'hover:bg-blue-800/50',
+			textColor: 'text-blue-100',
+			iconColor: 'text-blue-400',
 		},
 	].filter(Boolean) as {
 		href: string;

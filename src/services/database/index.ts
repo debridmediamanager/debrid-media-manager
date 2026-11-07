@@ -6,6 +6,7 @@ import { CastService } from './cast';
 import { ContentRequestService } from './contentRequests';
 import { DebridLinkCastService } from './debridLinkCast';
 import { DebridUploaderMapService } from './debridUploaderMap';
+import { EasynewsCastService } from './easynewsCast';
 import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
 import { HistoryAggregationService } from './historyAggregation';
@@ -42,6 +43,7 @@ export {
 	ContentRequestService,
 	DebridLinkCastService,
 	DebridUploaderMapService,
+	EasynewsCastService,
 	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,

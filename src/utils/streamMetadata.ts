@@ -250,7 +250,7 @@ export function formatStremioStreamTitle(
 	size: number,
 	metadata: StreamMetadata | null,
 	isUserCast: boolean,
-	provider: 'RD' | 'TB' | 'AD' | 'PM' | 'OC' | 'DL' = 'RD'
+	provider: 'RD' | 'TB' | 'AD' | 'PM' | 'OC' | 'DL' | 'EN' = 'RD'
 ): string {
 	let displayFilename = decodeURIComponent(filename);
 	if (displayFilename.length > 60) {

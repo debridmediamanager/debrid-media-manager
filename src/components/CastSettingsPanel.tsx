@@ -19,6 +19,11 @@ import {
 	updateDebridLinkCastSettings,
 } from '../utils/debridLinkCastApiClient';
 import {
+	saveEasynewsCastProfile,
+	updateEasynewsCastSettings,
+} from '../utils/easynewsCastApiClient';
+import { easynewsCastKey } from '../utils/easynewsCastKey';
+import {
 	saveOffcloudCastProfile,
 	updateOffcloudCastSettings,
 } from '../utils/offcloudCastApiClient';
@@ -30,8 +35,8 @@ import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 
 interface CastSettingsPanelProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
-	accentColor: 'green' | 'yellow' | 'purple' | 'red' | 'orange' | 'sky';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'en';
+	accentColor: 'green' | 'yellow' | 'purple' | 'red' | 'orange' | 'sky' | 'blue';
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
@@ -79,6 +84,11 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			border: 'border-sky-500/30',
 			title: 'text-sky-200',
 			icon: 'text-sky-400',
+		},
+		blue: {
+			border: 'border-blue-500/30',
+			title: 'text-blue-200',
+			icon: 'text-blue-400',
 		},
 	};
 
@@ -165,6 +175,25 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						getLocalStorageString('pm:accessToken') ||
 						getLocalStorageString('pm:apiKey');
 					if (pmKey) await savePremiumizeCastProfile(pmKey, settings);
+				}
+			} else if (service === 'en') {
+				// Prefers the cast token, so changing a setting costs no Easynews
+				// call; the login is only the fallback for a profile that no longer
+				// exists server-side.
+				const enCastToken = getLocalStorageString('en:castToken');
+				const settings = {
+					movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+					otherStreamsLimit:
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCastOption: hideCast,
+				};
+				const saved =
+					enCastToken && (await updateEasynewsCastSettings(enCastToken, settings));
+				if (!saved) {
+					const account = JSON.parse(localStorage.getItem('en:account') || 'null');
+					if (account?.username && account?.password)
+						await saveEasynewsCastProfile(easynewsCastKey(account), settings);
 				}
 			} else if (service === 'oc') {
 				// Prefers the cast token, so changing a setting costs no

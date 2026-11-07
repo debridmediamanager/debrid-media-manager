@@ -29,7 +29,7 @@ import { CastPlayVideo, castPlayVideoUrl } from './castPlayVideos';
  *   in again.
  */
 
-export type CastProvider = 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
+export type CastProvider = 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'en';
 
 /**
  * `account` is where a member sees their plan on the provider's own site; a
@@ -74,6 +74,12 @@ const PROVIDERS: Record<
 		idPrefix: 'dmm-dl',
 		page: '/stremio-debridlink',
 		account: 'https://debrid-link.com/webapp/account',
+	},
+	en: {
+		name: 'Easynews',
+		idPrefix: 'dmm-en',
+		page: '/stremio-easynews',
+		account: 'https://members.easynews.com/',
 	},
 };
 

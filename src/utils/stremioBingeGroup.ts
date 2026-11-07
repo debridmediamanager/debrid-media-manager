@@ -20,7 +20,7 @@
  * different release.
  */
 export function releaseBingeGroup(
-	addon: 'dmm' | 'dmm-tb' | 'dmm-ad' | 'dmm-pm' | 'dmm-oc' | 'dmm-dl',
+	addon: 'dmm' | 'dmm-tb' | 'dmm-ad' | 'dmm-pm' | 'dmm-oc' | 'dmm-dl' | 'dmm-en',
 	hash: string | null | undefined
 ): string | undefined {
 	const release = hash?.trim().toLowerCase();

@@ -10,9 +10,17 @@ vi.mock('@/hooks/useSponsor', () => ({
 }));
 
 vi.mock('react-hot-toast', () => {
-	const toastMock = { success: vi.fn(), error: vi.fn(), loading: vi.fn() };
+	const toastMock = {
+		success: vi.fn(),
+		error: vi.fn(),
+		loading: vi.fn(),
+		promise: vi.fn((p: Promise<unknown>) => p),
+	};
 	return { __esModule: true, default: toastMock, toast: toastMock };
 });
+
+const castMock = vi.hoisted(() => vi.fn());
+vi.mock('@/utils/easynewsCastApiClient', () => ({ handleCastEasynews: castMock }));
 
 const PATH = '682d74c4d3e935f0dee9a945a6e1a1d8010fde2f543e8.mkv/Cocaine.Bear.2023.mkv';
 const HASH = '682d74c4d3e935f0dee9a945a6e1a1d8010fde2f543e8';
@@ -177,6 +185,72 @@ describe('EasynewsResults', () => {
 			});
 		} finally {
 			window.open = originalOpen;
+		}
+	});
+
+	it('casts a row to Stremio with the login as one key, then opens Stremio on it', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		mockApi();
+		castMock.mockResolvedValue({ filename: 'x.mkv', key: 'tt14209916:2:5' });
+		const user = userEvent.setup();
+		const originalLocation = window.location;
+		const location = { href: '' };
+		Object.defineProperty(window, 'location', { configurable: true, value: location });
+		try {
+			render(
+				<EasynewsResults title="Severance" imdbId="tt14209916" kind="show" seasonNum={2} />
+			);
+			await user.click(
+				await screen.findByRole('button', {
+					name: 'Cast Cocaine.Bear.2023.2160p to Stremio',
+				})
+			);
+			await waitFor(() =>
+				expect(location.href).toBe('stremio:///detail/series/tt14209916/tt14209916:2:5')
+			);
+			expect(castMock).toHaveBeenCalledWith(
+				'show',
+				'tt14209916',
+				btoa('user:pass'),
+				RESULTS[0]
+			);
+		} finally {
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				value: originalLocation,
+			});
+		}
+	});
+
+	it('stays on the page when a cast fails', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		mockApi();
+		castMock.mockRejectedValue(new Error('this file is no longer available'));
+		const user = userEvent.setup();
+		const originalLocation = window.location;
+		const location = { href: '' };
+		Object.defineProperty(window, 'location', { configurable: true, value: location });
+		try {
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			await user.click(
+				await screen.findByRole('button', {
+					name: 'Cast Cocaine.Bear.2023.2160p to Stremio',
+				})
+			);
+			await waitFor(() => expect(castMock).toHaveBeenCalled());
+			expect(location.href).toBe('');
+		} finally {
+			Object.defineProperty(window, 'location', {
+				configurable: true,
+				value: originalLocation,
+			});
 		}
 	});
 

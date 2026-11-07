@@ -4,9 +4,13 @@ import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
 import { getLocalStorageItemOrDefault } from '@/utils/browserStorage';
+import { handleCastEasynews } from '@/utils/easynewsCastApiClient';
+import { easynewsCastKey } from '@/utils/easynewsCastKey';
 import { defaultPlayer } from '@/utils/settings';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
+import { castToastOptions } from '@/utils/toastOptions';
 import { openWatchWith } from '@/utils/watchService';
-import { Download, Eye, Loader2, Send } from 'lucide-react';
+import { Cast, Download, Eye, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -74,6 +78,7 @@ const EasynewsResults = ({
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [linking, setLinking] = useState<string | null>(null);
+	const [casting, setCasting] = useState<string | null>(null);
 
 	const search = useCallback(
 		async (credentials: EasynewsCredentials) => {
@@ -204,6 +209,36 @@ const EasynewsResults = ({
 		}
 	};
 
+	// DMM Cast for Easynews, as the torrent rows' Cast buttons: keep the file for
+	// Stremio, then open Stremio on the film or the episode it was filed under.
+	const cast = async (result: EasynewsResult) => {
+		if (!account || casting) return;
+		setCasting(result.path);
+		let key: string;
+		try {
+			({ key } = await toast.promise(
+				handleCastEasynews(kind, imdbId, easynewsCastKey(account), result),
+				{
+					loading: 'Starting Easynews cast in Stremio...',
+					success: 'Cast started in Stremio',
+					error: (e) => (e instanceof Error && e.message) || 'Easynews cast failed',
+				},
+				castToastOptions
+			));
+		} catch {
+			return;
+		} finally {
+			setCasting(null);
+		}
+		const [, season, episode] = key.split(':');
+		// After the await the tap no longer counts as a gesture, and iOS Safari
+		// silently blocks window.open; navigating to the deep link still works (#472)
+		window.location.href = getStremioDetailUrl(
+			imdbId,
+			season && episode ? { season, episode } : undefined
+		);
+	};
+
 	if (!title) return null;
 
 	if (!account) {
@@ -324,6 +359,20 @@ const EasynewsResults = ({
 							className={ICON_BUTTON}
 						>
 							<Eye className="h-3.5 w-3.5" />
+						</button>
+						<button
+							type="button"
+							onClick={() => cast(result)}
+							disabled={casting !== null}
+							title="Cast to Stremio (DMM Cast for Easynews)"
+							aria-label={`Cast ${result.title} to Stremio`}
+							className={ICON_BUTTON}
+						>
+							{casting === result.path ? (
+								<Loader2 className="h-3.5 w-3.5 animate-spin" />
+							) : (
+								<Cast className="h-3.5 w-3.5 text-blue-400" />
+							)}
 						</button>
 					</>
 				);

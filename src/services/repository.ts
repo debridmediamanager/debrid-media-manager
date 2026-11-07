@@ -16,6 +16,7 @@ import {
 	ContentRequestService,
 	DebridLinkCastService,
 	DebridUploaderMapService,
+	EasynewsCastService,
 	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,
@@ -66,6 +67,7 @@ export type RepositoryDependencies = Partial<{
 	torboxCastService: TorBoxCastService;
 	allDebridCastService: AllDebridCastService;
 	premiumizeCastService: PremiumizeCastService;
+	easynewsCastService: EasynewsCastService;
 	offcloudCastService: OffcloudCastService;
 	debridLinkCastService: DebridLinkCastService;
 	reportService: ReportService;
@@ -103,6 +105,7 @@ export class Repository {
 	private torboxCastService: TorBoxCastService;
 	private allDebridCastService: AllDebridCastService;
 	private premiumizeCastService: PremiumizeCastService;
+	private easynewsCastService: EasynewsCastService;
 	private offcloudCastService: OffcloudCastService;
 	private debridLinkCastService: DebridLinkCastService;
 	private reportService: ReportService;
@@ -139,6 +142,7 @@ export class Repository {
 		torboxCastService,
 		allDebridCastService,
 		premiumizeCastService,
+		easynewsCastService,
 		offcloudCastService,
 		debridLinkCastService,
 		reportService,
@@ -174,6 +178,7 @@ export class Repository {
 		this.torboxCastService = torboxCastService ?? new TorBoxCastService();
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.premiumizeCastService = premiumizeCastService ?? new PremiumizeCastService();
+		this.easynewsCastService = easynewsCastService ?? new EasynewsCastService();
 		this.offcloudCastService = offcloudCastService ?? new OffcloudCastService();
 		this.debridLinkCastService = debridLinkCastService ?? new DebridLinkCastService();
 		this.reportService = reportService ?? new ReportService();
@@ -1322,6 +1327,85 @@ export class Repository {
 		return withoutBlockedHashes(
 			await this.premiumizeCastService.getOtherStreams(imdbId, userId, limit, maxSize)
 		);
+	}
+
+	// Easynews Cast Methods
+	public saveEasynewsCastProfile(
+		userId: string,
+		apiKey: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.easynewsCastService.saveCastProfile(
+			userId,
+			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public updateEasynewsCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.easynewsCastService.updateCastSettings(
+			userId,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public getEasynewsCastProfile(userId: string) {
+		return this.easynewsCastService.getCastProfile(userId);
+	}
+
+	public saveEasynewsCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		filename: string,
+		fileSize: number,
+		path: string
+	) {
+		return this.easynewsCastService.saveCast(imdbId, userId, hash, filename, fileSize, path);
+	}
+
+	public fetchEasynewsCastedMovies(userId: string) {
+		return this.easynewsCastService.fetchCastedMovies(userId);
+	}
+
+	public fetchEasynewsCastedShows(userId: string) {
+		return this.easynewsCastService.fetchCastedShows(userId);
+	}
+
+	public fetchAllEasynewsCastedLinks(userId: string) {
+		return this.easynewsCastService.fetchAllCastedLinks(userId);
+	}
+
+	public deleteEasynewsCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.easynewsCastService.deleteCastedLink(imdbId, userId, hash);
+	}
+
+	public getEasynewsUserCastStreams(imdbId: string, userId: string, limit?: number) {
+		return this.easynewsCastService.getUserCastStreams(imdbId, userId, limit);
+	}
+
+	public getEasynewsOtherStreams(
+		imdbId: string,
+		userId: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.easynewsCastService.getOtherStreams(imdbId, userId, limit, maxSize);
 	}
 
 	// Offcloud Cast Methods

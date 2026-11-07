@@ -139,6 +139,9 @@ export function classifyCastError(error: unknown): CastFailure {
 
 	if (name === 'RdTokenExpiredError') return 'credential';
 	if (name === 'CastItemGoneError') return 'gone';
+	// Easynews: a refused login, and a listed file it can no longer serve.
+	if (name === 'EasynewsAuthError') return 'credential';
+	if (name === 'EasynewsGoneError') return 'gone';
 	// AllDebrid holding the key for an email confirmation. Read as a temporary
 	// failure, it gave the member an empty library and no reason.
 	if (code === 'AUTH_BLOCKED') return 'confirm';

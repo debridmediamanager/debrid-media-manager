@@ -75,6 +75,7 @@ function IndexPage() {
 	const [sponsorFeaturesChoice, setSponsorFeaturesChoice] =
 		useLocalStorage<boolean>(SPONSOR_FEATURES_OPEN_KEY);
 	const sponsorFeaturesOpen = sponsorFeaturesChoice ?? isSponsor;
+	const [enAccount] = useLocalStorage<{ username?: string }>('en:account');
 	const {
 		rdUser,
 		adUser,
@@ -332,6 +333,7 @@ function IndexPage() {
 							pmUser={!!pmUser}
 							ocUser={!!ocUser}
 							dlUser={!!dlUser}
+							enUser={!!enAccount}
 							isLoading={isLoading}
 							isGuest={isGuest}
 						/>

@@ -1,6 +1,10 @@
 import { postEasynews } from '@/components/EasynewsResults';
 import useLocalStorage from '@/hooks/localStorage';
 import type { EasynewsCredentials } from '@/services/easynews';
+import { getSafeRedirectPath } from '@/utils/router';
+import { Cast } from 'lucide-react';
+import Link from 'next/link';
+import Router from 'next/router';
 import { useState } from 'react';
 
 // The visitor's own Easynews login, which the Usenet tab searches with. Easynews
@@ -23,6 +27,10 @@ export const EasynewsAccountPanel = () => {
 			await postEasynews('/api/easynews/account', credentials);
 			setAccount(credentials);
 			setPassword('');
+			// A page that sent the visitor here to sign in (DMM Cast, Kodi pairing) gets them back.
+			// Read off the URL, not useRouter: the panel also renders outside a page.
+			const redirect = new URLSearchParams(window.location.search).get('redirect');
+			if (redirect) Router.push(getSafeRedirectPath(redirect, '/settings'));
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Could not check the login');
 		} finally {
@@ -56,12 +64,21 @@ export const EasynewsAccountPanel = () => {
 						/>
 						Show Send to zurg on Easynews results
 					</label>
+					<Link
+						href="/stremio-easynews"
+						className="haptic mt-2 inline-flex items-center gap-1 rounded border border-blue-500 bg-blue-900/30 px-2 py-1 text-xs text-blue-100 hover:bg-blue-800/50"
+					>
+						<Cast className="h-3 w-3 text-blue-400" />
+						DMM Cast for Easynews
+					</Link>
 				</>
 			) : (
 				<form onSubmit={signIn} className="flex flex-col gap-2">
 					<p className="text-xs text-gray-400">
 						Sign in with your own Easynews account to search it on the Usenet tab of
-						movies and shows. Your login is kept in this browser only.
+						movies and shows. Your login is kept in this browser only, until you set up
+						DMM Cast for Easynews: its server then keeps it to play your casts in
+						Stremio.
 					</p>
 					<input
 						aria-label="Easynews username"

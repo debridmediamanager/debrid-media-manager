@@ -47,6 +47,7 @@ vi.mock('@/hooks/torboxCastToken', () => ({ useTorBoxCastToken: () => undefined 
 vi.mock('@/hooks/premiumizeCastToken', () => ({ usePremiumizeCastToken: () => undefined }));
 vi.mock('@/hooks/offcloudCastToken', () => ({ useOffcloudCastToken: () => undefined }));
 vi.mock('@/hooks/debridLinkCastToken', () => ({ useDebridLinkCastToken: () => undefined }));
+vi.mock('@/hooks/easynewsCastToken', () => ({ useEasynewsCastToken: () => undefined }));
 
 // The login routes that actually exist, read off the pages directory rather
 // than typed out - a link to a path with no page here is the 404 this guards.
@@ -123,4 +124,23 @@ describe('DMM Cast pages: the "<provider> Required" card', () => {
 			expect(new URLSearchParams(query).get('redirect')).toBe(path);
 		}
 	);
+
+	// Easynews has no login page: its login is the Settings panel, which honours redirect.
+	it('/stremio-easynews sends Easynews sign-in to Settings and back', async () => {
+		const { StremioEasynewsPage } = await import('@/pages/stremio-easynews/index');
+		render(<StremioEasynewsPage />);
+		expect(screen.getByText(/Easynews Required/i)).toBeInTheDocument();
+		const href =
+			screen.getByRole('link', { name: /Login with Easynews/i }).getAttribute('href') ?? '';
+		const [route, query] = href.split('?');
+		expect(route).toBe('/settings');
+		expect(
+			Object.keys(
+				(import.meta as unknown as { glob: (p: string) => Record<string, unknown> }).glob(
+					'/src/pages/settings.tsx'
+				)
+			)
+		).toHaveLength(1);
+		expect(new URLSearchParams(query).get('redirect')).toBe('/stremio-easynews');
+	});
 });

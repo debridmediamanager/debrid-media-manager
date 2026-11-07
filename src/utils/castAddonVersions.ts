@@ -25,4 +25,6 @@ export const CAST_ADDON_VERSIONS = {
 	offcloud: '0.0.2',
 	/** Debrid-Link. 0.0.2: streams anime by `kitsu`, `mal` and `anidb` id. */
 	debridlink: '0.0.2',
+	/** Easynews. 0.0.1: first release. */
+	easynews: '0.0.1',
 } as const;

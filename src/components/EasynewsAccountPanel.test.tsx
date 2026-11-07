@@ -3,6 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EasynewsAccountPanel } from './EasynewsAccountPanel';
 
+const pushMock = vi.hoisted(() => vi.fn());
+vi.mock('next/router', () => ({ __esModule: true, default: { push: pushMock } }));
+
 const ACCOUNT = { username: 'user', password: 'pass' };
 
 function mockAccountCheck(status = 200) {
@@ -25,7 +28,11 @@ async function signIn(password: string) {
 	await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
 }
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+	localStorage.clear();
+	pushMock.mockReset();
+	window.history.replaceState({}, '', '/settings');
+});
 afterEach(() => vi.unstubAllGlobals());
 
 describe('EasynewsAccountPanel', () => {
@@ -40,6 +47,38 @@ describe('EasynewsAccountPanel', () => {
 			ACCOUNT
 		);
 		expect(JSON.parse(localStorage.getItem('en:account')!)).toEqual(ACCOUNT);
+	});
+
+	// DMM Cast for Easynews and Kodi pairing send a visitor here to sign in.
+	it('returns to the page that asked, after a sign-in Easynews accepts', async () => {
+		mockAccountCheck();
+		window.history.replaceState({}, '', '/settings?redirect=%2Fkodi%3Fcode%3DAB12');
+		render(<EasynewsAccountPanel />);
+		await signIn('pass');
+		await screen.findByText('user');
+		expect(pushMock).toHaveBeenCalledWith('/kodi?code=AB12');
+	});
+
+	it('never redirects off DMM, and stays without a redirect', async () => {
+		mockAccountCheck();
+		window.history.replaceState({}, '', '/settings?redirect=https%3A%2F%2Fevil.example');
+		const { unmount } = render(<EasynewsAccountPanel />);
+		await signIn('pass');
+		await screen.findByText('user');
+		expect(pushMock).toHaveBeenCalledWith('/settings');
+		unmount();
+		localStorage.clear();
+		pushMock.mockReset();
+
+		window.history.replaceState({}, '', '/settings');
+		render(<EasynewsAccountPanel />);
+		await signIn('pass');
+		await screen.findByText('user');
+		expect(pushMock).not.toHaveBeenCalled();
+		expect(screen.getByRole('link', { name: /DMM Cast for Easynews/ })).toHaveAttribute(
+			'href',
+			'/stremio-easynews'
+		);
 	});
 
 	it('does not save a login Easynews refuses', async () => {

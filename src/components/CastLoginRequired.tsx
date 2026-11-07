@@ -36,7 +36,15 @@ const STYLES = {
 		accent: 'text-sky-400',
 		button: 'border-sky-500 bg-sky-800/30 text-sky-100 hover:bg-sky-700/50',
 	},
+	easynews: {
+		card: 'border-blue-500 bg-blue-900/20',
+		accent: 'text-blue-400',
+		button: 'border-blue-500 bg-blue-800/30 text-blue-100 hover:bg-blue-700/50',
+	},
 } as const;
+
+// Easynews has no login page: its login is entered in Settings' Easynews panel.
+const LOGIN_PATHS: Partial<Record<keyof typeof STYLES, string>> = { easynews: '/settings' };
 
 export type CastProvider = keyof typeof STYLES;
 
@@ -64,7 +72,7 @@ export function CastLoginRequired({
 					You must be logged in with {name} to manage your casted links.
 				</p>
 				<Link
-					href={`/${provider}/login?redirect=${encodeURIComponent(returnPath)}`}
+					href={`${LOGIN_PATHS[provider] ?? `/${provider}/login`}?redirect=${encodeURIComponent(returnPath)}`}
 					className={`haptic-sm inline-block rounded border-2 px-6 py-2 font-medium transition-colors ${style.button}`}
 				>
 					Login with {name}
