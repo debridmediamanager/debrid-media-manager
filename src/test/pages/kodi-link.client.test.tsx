@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React, { Suspense, type ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -48,6 +48,8 @@ vi.mock('@/hooks/torboxCastToken', () => ({ useTorBoxCastToken: () => undefined 
 vi.mock('@/hooks/premiumizeCastToken', () => ({ usePremiumizeCastToken: () => undefined }));
 vi.mock('@/hooks/offcloudCastToken', () => ({ useOffcloudCastToken: () => undefined }));
 vi.mock('@/hooks/debridLinkCastToken', () => ({ useDebridLinkCastToken: () => undefined }));
+const enCast = { id: undefined as string | undefined };
+vi.mock('@/hooks/easynewsCastToken', () => ({ useEasynewsCastToken: () => enCast.id }));
 vi.mock('@/hooks/useSponsor', () => ({
 	useSponsor: () => ({ isSponsor: false, apiKey: null, githubUsername: null }),
 }));
@@ -75,6 +77,7 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 		push.mockClear();
 		localStorage.clear();
 		rdCast.id = undefined;
+		enCast.id = undefined;
 	});
 
 	it('stays on the page with the code instead of going to /start', async () => {
@@ -100,6 +103,34 @@ describe('/kodi?code= on a browser with no DMM sign-in', () => {
 			expect(LOGIN_ROUTES).toContain(path);
 			expect(new URLSearchParams(query).get('redirect')).toBe('/kodi?code=ABCDEFGH');
 		}
+		// Easynews has no login page: Settings is behind withAuth, so its form opens here.
+		expect(screen.queryByRole('link', { name: '+ Add Easynews' })).toBeNull();
+		expect(screen.queryByLabelText('Easynews username')).toBeNull();
+		fireEvent.click(screen.getByRole('button', { name: '+ Add Easynews' }));
+		expect(screen.getByLabelText('Easynews username')).toBeInTheDocument();
+	});
+
+	/**
+	 * Found on the zen rig, 2026-11-07: "+ Add Easynews" first went to /settings?redirect=, which
+	 * withAuth sends to /start on a phone with no debrid sign-in, and the Kodi code was gone.
+	 */
+	it('signs in to Easynews on the page itself, keeping the code', async () => {
+		const fetchMock = vi
+			.spyOn(globalThis, 'fetch')
+			.mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+		await renderPage();
+
+		fireEvent.click(screen.getByRole('button', { name: '+ Add Easynews' }));
+		fireEvent.change(screen.getByLabelText('Easynews username'), { target: { value: 'u' } });
+		fireEvent.change(screen.getByLabelText('Easynews password'), { target: { value: 'p' } });
+		fireEvent.submit(screen.getByLabelText('Easynews password').closest('form')!);
+
+		await waitFor(() => expect(localStorage.getItem('en:account')).toContain('"u"'));
+		expect(fetchMock.mock.calls[0][0]).toBe('/api/easynews/account');
+		expect(push).not.toHaveBeenCalled();
+		expect(screen.getByDisplayValue('ABCD-EFGH')).toBeInTheDocument();
+		await waitFor(() => expect(screen.queryByLabelText('Easynews username')).toBeNull());
+		fetchMock.mockRestore();
 	});
 
 	it('says one sign-in brings back the rest when Remember across devices is on elsewhere', async () => {
@@ -127,6 +158,7 @@ describe('/kodi?code= on a browser signed in to one service', () => {
 		localStorage.clear();
 		localStorage.setItem('rd:accessToken', 'token');
 		rdCast.id = 'rd-cast';
+		enCast.id = undefined;
 	});
 
 	it('ticks the signed-in service and offers the others, coming back to this code', async () => {
@@ -134,6 +166,7 @@ describe('/kodi?code= on a browser signed in to one service', () => {
 
 		expect(screen.getByText('✓ Real-Debrid')).toBeInTheDocument();
 		expect(screen.queryByRole('link', { name: '+ Add Real-Debrid' })).toBeNull();
+		expect(screen.getByRole('button', { name: '+ Add Easynews' })).toBeInTheDocument();
 		for (const name of ['TorBox', 'AllDebrid', 'Premiumize', 'Offcloud', 'Debrid-Link']) {
 			const href = screen.getByRole('link', { name: `+ Add ${name}` }).getAttribute('href')!;
 			expect(new URLSearchParams(href.split('?')[1]).get('redirect')).toBe(
@@ -156,6 +189,7 @@ describe('/kodi on a browser signed in whose DMM Cast setup has not answered', (
 		localStorage.clear();
 		localStorage.setItem('rd:accessToken', 'token');
 		rdCast.id = undefined;
+		enCast.id = undefined;
 	});
 
 	it('says DMM Cast is the missing piece, not the sign-in', async () => {
@@ -170,5 +204,37 @@ describe('/kodi on a browser signed in whose DMM Cast setup has not answered', (
 		await renderPage();
 
 		expect(screen.getByText(window.location.origin)).toBeInTheDocument();
+	});
+});
+
+/**
+ * An Easynews login alone is no sign-in to withAuth, which would send the browser to /start and
+ * lose the code. The page enrols it in DMM Cast for Easynews, and Kodi plays through that.
+ */
+describe('/kodi?code= on a browser signed in to Easynews alone', () => {
+	beforeEach(() => {
+		push.mockClear();
+		localStorage.clear();
+		localStorage.setItem('en:account', JSON.stringify({ username: 'u', password: 'p' }));
+		rdCast.id = undefined;
+		enCast.id = 'enCast12345a';
+	});
+
+	it('stays on the page, ticks Easynews and can link', async () => {
+		await renderPage();
+
+		expect(push).not.toHaveBeenCalled();
+		expect(screen.getByText('✓ Easynews')).toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: '+ Add Easynews' })).toBeNull();
+		expect(screen.getByRole('link', { name: '+ Add Real-Debrid' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Link Kodi' })).toBeEnabled();
+	});
+
+	it('says DMM Cast is the missing piece while the Easynews enrolment has not answered', async () => {
+		enCast.id = undefined;
+
+		await renderPage();
+
+		expect(screen.getByText(/Setting up DMM Cast for your sign-in/)).toBeInTheDocument();
 	});
 });

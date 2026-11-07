@@ -7,6 +7,7 @@ const db = vi.hoisted(() => ({
 	getPremiumizeCastProfile: vi.fn(),
 	getOffcloudCastProfile: vi.fn(),
 	getDebridLinkCastProfile: vi.fn(),
+	getEasynewsCastProfile: vi.fn(),
 	getSponsorByDmmApiKey: vi.fn(),
 }));
 vi.mock('@/services/repository', () => ({ repository: db }));
@@ -121,6 +122,30 @@ describe('/api/kodi pairing', () => {
 		expect(collected.json.accounts[0].addon).toBe(
 			'http://192.168.1.20:3000/api/stremio/rdUser123'
 		);
+	});
+
+	it('links a browser signed in to Easynews alone, through its Easynews Cast addon', async () => {
+		db.getEasynewsCastProfile.mockResolvedValue({ apiKey: 'dXNlcjpwYXNz' });
+		const started = await call(pair);
+		const approved = await call(approve, {
+			userCode: started.json.userCode,
+			casts: { en: 'enUser12345a' },
+		});
+		expect(approved.status).toBe(200);
+		expect(approved.json).toEqual({
+			accounts: [{ service: 'en', name: 'Easynews' }],
+			sponsor: false,
+		});
+		expect(db.getEasynewsCastProfile).toHaveBeenCalledWith('enUser12345a');
+		const collected = await call(poll, { deviceCode: started.json.deviceCode });
+		// Only the addon URL: the Easynews login stays in DMM's cast profile, never on the Kodi.
+		expect(collected.json.accounts).toEqual([
+			{
+				service: 'en',
+				name: 'Easynews',
+				addon: 'https://dmm.test/api/stremio-en/enUser12345a',
+			},
+		]);
 	});
 
 	it('leaves a lapsed sponsor key out but still links the casts', async () => {

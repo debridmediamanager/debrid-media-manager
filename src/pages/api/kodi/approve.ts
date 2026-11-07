@@ -23,13 +23,14 @@ const CAST_ADDONS: Record<
 		prefix: 'stremio-dl',
 		exists: (id) => db.getDebridLinkCastProfile(id),
 	},
+	en: { name: 'Easynews', prefix: 'stremio-en', exists: (id) => db.getEasynewsCastProfile(id) },
 };
 
 const CAST_ID = /^[A-Za-z0-9_-]{6,64}$/;
 
 /**
  * The signed-in browser approving a Kodi's code with the DMM Cast addons it holds
- * (`casts: {rd: "<userid>", ...}`) and, for a sponsor, the DMM API key.
+ * (`casts: {rd: "<userid>", en: "<userid>", ...}`) and, for a sponsor, the DMM API key.
  *
  * A cast id is the same capability the Stremio install URL carries, so holding it
  * is the proof; each is still checked against its profile so a stale id left in
@@ -66,7 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		if (!accounts.length && !sponsor) {
 			return res.status(400).json({
-				error: 'Nothing to link yet. Sign in to a debrid service on DMM first, then try again.',
+				error: 'Nothing to link yet. Sign in to a debrid service or Easynews on DMM first, then try again.',
 			});
 		}
 

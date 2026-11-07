@@ -1,0 +1,31 @@
+{
+	"cacheMaxAge": 0,
+	"streams": [
+		{
+			"name": "DMM Cast EN ✨",
+			"title": "Cast a file from Easynews",
+			"externalUrl": "https://debridmediamanager.com/show/tt11280740/2/usenet",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:tt11280740:2:1:cast"
+			}
+		},
+		{
+			"name": "2160p • 8.84 GB",
+			"title": "severance.2022.s02e01.multi.dv.2160p.web.h265-higgsboson.mkv\n🎬 DMM Cast EN (Yours)",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/f7634b1de8c7552b2a4f172bd66c9abc0e7d06d3543f7?path=f7634b1de8c7552b2a4f172bd66c9abc0e7d06d3543f7.mkv%2Fseverance.2022.s02e01.multi.dv.2160p.web.h265-higgsboson.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:severance.2022.s02.multi.dv.2160p.web.h265-higgsboson",
+				"filename": "severance.2022.s02e01.multi.dv.2160p.web.h265-higgsboson.mkv"
+			}
+		},
+		{
+			"name": "1080p • 3.43 GB",
+			"title": "Severance.S02E01.iTALiAN.1080p.WEB.H264-NEUROSiS\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/5a978c5e2811f981281eec1d3760c3700174b30e0e452?path=5a978c5e2811f981281eec1d3760c3700174b30e0e452.mkv%2FSeverance.S02E01.iTALiAN.1080p.WEB.H264-NEUROSiS.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:severance.s02.italian.1080p.web.h264-neurosis",
+				"filename": "Severance.S02E01.iTALiAN.1080p.WEB.H264-NEUROSiS.mkv"
+			}
+		}
+	]
+}

@@ -18,7 +18,12 @@ CINEMETA = 'https://v3-cinemeta.strem.io'
 USER_AGENT = 'DMM-Kodi/1.0'
 TIMEOUT = 20
 
-SERVICE_CODES = {'rd': 'RD', 'ad': 'AD', 'tb': 'TB', 'pm': 'PM', 'oc': 'OC', 'dl': 'DL'}
+SERVICE_CODES = {'rd': 'RD', 'ad': 'AD', 'tb': 'TB', 'pm': 'PM', 'oc': 'OC', 'dl': 'DL', 'en': 'EN'}
+
+
+def has_library(service):
+    """Easynews is a search, not a library: its DMM Cast has no casted-other catalogue to list."""
+    return service != 'en'
 
 
 class HttpError(Exception):
@@ -336,6 +341,13 @@ def trakt_ids(imdb_id):
     """script.trakt scrobbles a plugin's playback by the `script.trakt.ids` window property: the film's id,
     or for an episode the show's (it adds season and episode from the info labels). '' for anything else."""
     return json.dumps({'imdb': imdb_id}) if re.match(r'^tt\d+$', imdb_id or '') else ''
+
+
+def cast_page(origin, p, cast_url=None):
+    """Where a phone picks a release to cast: the page the addons name (Easynews Cast names the Usenet tab,
+    where its rows are), else the title's page."""
+    return cast_url or '%s/%s/%s%s' % (origin, 'show' if p['kind'] == 'series' else 'movie', p['id'],
+                                       '/%s' % p['season'] if p['kind'] == 'series' else '')
 
 
 def stream_id(kind, imdb_id, season=None, episode=None):

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.1.2" provider-name="Debrid Media Manager">
+<addon id="plugin.video.dmm" name="Debrid Media Manager" version="1.2.0" provider-name="Debrid Media Manager">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.pyqrcode" version="1.2.1"/>
@@ -8,13 +8,14 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Films and shows from Debrid Media Manager, through your own debrid account</summary>
-    <description lang="en_GB">Browse and search films and shows, and play the cached releases DMM knows of and what DMM members have cast, through your Real-Debrid, TorBox, AllDebrid, Premiumize, Offcloud or Debrid-Link account. Link it by scanning a code with your phone: no keys to type. Sponsors also get their Wanted list.</description>
+    <summary lang="en_GB">Films and shows from Debrid Media Manager, through your own debrid or Easynews account</summary>
+    <description lang="en_GB">Browse and search films and shows, and play the cached releases DMM knows of and what DMM members have cast, through your Real-Debrid, TorBox, AllDebrid, Premiumize, Offcloud or Debrid-Link account, and search your own Easynews account too. Link it by scanning a code with your phone: no keys to type. Sponsors also get their Wanted list.</description>
     <platform>all</platform>
     <license>AGPL-3.0-only</license>
     <website>https://debridmediamanager.com/kodi</website>
     <source>https://github.com/debridmediamanager/debrid-media-manager</source>
-    <news>1.1.2: tells DMM which version of the addon is asking, so DMM can count how many installs have each version. Nothing about you or what you watch is sent.
+    <news>1.2.0: plays from your Easynews account. Sign in to Easynews in DMM's Settings, then choose Account → Link again here; Easynews releases join the source list.
+1.1.2: tells DMM which version of the addon is asking, so DMM can count how many installs have each version. Nothing about you or what you watch is sent.
 1.1.1: your library shows each release's poster and the title DMM matched it to, and the source list names audio languages before the filename.
 1.1.0: releases with your audio language come first, from the addon's own setting or Kodi's, and the source list names each release's audio languages where DMM knows them; you can also hide releases known to lack it.
 1.0.3: what you watch scrobbles to Trakt when Kodi's Trakt addon is installed.

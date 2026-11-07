@@ -255,6 +255,41 @@ class Library(unittest.TestCase):
         self.assertEqual((dmm.library_plot(m), dmm.art_of(m)), ('', {}))
 
 
+class Easynews(unittest.TestCase):
+    """DMM Cast for Easynews answers as the debrid Cast addons do (rig on zen, 2026-11-07), so its releases join
+    the same source list with no Easynews code of their own; only the badge and the missing library differ."""
+
+    def test_a_film_lists_its_releases_under_the_en_badge(self):
+        sources, notices, cast_url = dmm.parse_streams('en', fixture('en-streams-tt15398776.json'))
+        self.assertEqual((len(sources), notices), (6, []))
+        # Cast from phone opens the Usenet tab, where the Easynews rows and their Cast button are.
+        self.assertEqual(cast_url, 'https://debridmediamanager.com/movie/tt15398776/usenet')
+        self.assertEqual(dmm.source_label(sources[1]), '[B]EN[/B]  2160p · 117.89 GB')
+        self.assertEqual(dmm.source_label2(sources[1]),
+                         'Oppenheimer.2023.2160p.PROPER.IMAX.HYBRID.UHD.REMUX.DV.HDR10+.TrueHD.7.1.Atmos-jennaortegaUHD')
+        self.assertTrue(all('/api/stremio-en/TESTUSERID12/play/' in s['url'] for s in sources))
+
+    def test_an_episode_puts_the_members_own_easynews_cast_first(self):
+        sources, _, cast_url = dmm.parse_streams('en', fixture('en-streams-tt11280740-2-1.json'))
+        self.assertEqual(cast_url, 'https://debridmediamanager.com/show/tt11280740/2/usenet')
+        ordered, _ = dmm.order_sources(list(reversed(sources)))
+        self.assertEqual(dmm.source_label(ordered[0]), '[B]EN[/B]  2160p · 8.84 GB · your cast')
+
+    def test_cast_from_phone_opens_the_page_easynews_cast_names(self):
+        # Found on kodilab 2026-11-07: the context menu's "Cast a release from phone" opened the Torrents tab,
+        # where an Easynews-only member has nothing to cast; Easynews Cast names the Usenet tab.
+        _, _, cast_url = dmm.parse_streams('en', fixture('en-streams-tt11280740-2-1.json'))
+        p = {'kind': 'series', 'id': 'tt11280740', 'season': '2', 'episode': '2'}
+        self.assertEqual(dmm.cast_page('https://dmm.test', p, cast_url),
+                         'https://debridmediamanager.com/show/tt11280740/2/usenet')
+        self.assertEqual(dmm.cast_page('https://dmm.test', p), 'https://dmm.test/show/tt11280740/2')
+        self.assertEqual(dmm.cast_page('https://dmm.test', {'kind': 'movie', 'id': 'tt15398776'}),
+                         'https://dmm.test/movie/tt15398776')
+
+    def test_only_easynews_goes_without_a_library_folder(self):
+        self.assertEqual([s for s in dmm.SERVICE_CODES if not dmm.has_library(s)], ['en'])
+
+
 class QrPng(unittest.TestCase):
     def test_draws_modules_black_on_white_with_a_quiet_zone(self):
         png = dmm.qr_png([[1, 0], [0, 1]], scale=2, border=1)

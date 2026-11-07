@@ -218,7 +218,7 @@ def home(_):
     if linked:
         add_folder('My casts', 'Films and shows you cast on DMM, ready to play.', url(action='casts'),
                    icon('DefaultFavourites.png'))
-        for a in linked:
+        for a in filter(lambda a: dmm.has_library(a['service']), linked):
             add_folder('%s library' % a['name'],
                        'Everything in your %s account, file by file, as DMM sees it.' % a['name'],
                        url(action='library', service=a['service']),
@@ -628,11 +628,11 @@ def resolve_failed():
 def play(p):
     if not link():
         if not xbmcgui.Dialog().yesno(
-                NAME, 'Link this Kodi to play. It plays through your debrid account on DMM, and linking takes '
+                NAME, 'Link this Kodi to play. It plays through your debrid or Easynews account on DMM, and linking takes '
                       'a minute with your phone.', nolabel='Not now', yeslabel='Link now') or not do_link():
             return resolve_failed()
     if not accounts():  # linked for the Wanted list alone
-        xbmcgui.Dialog().ok(NAME, 'This Kodi is linked without a debrid account, so it has nothing to play through. '
+        xbmcgui.Dialog().ok(NAME, 'This Kodi is linked without a debrid or Easynews account, so it has nothing to play through. '
                                   'Sign in to one on DMM, then choose Account → Link again.')
         return resolve_failed()
     m, ep, title = describe(p)
@@ -707,10 +707,12 @@ def play_url(stream_url, m=None, ep=None, p=None):
 def cast_from_phone(p, title, cast_url=None):
     """QR to DMM's own release picker for this title. Returns the sources once the member's cast shows up,
     their new cast first; with nothing listed before, as soon as anything playable appears."""
-    target = cast_url or '%s/%s/%s%s' % (origin(), 'show' if p['kind'] == 'series' else 'movie', p['id'],
-                                          '/%s' % p['season'] if p['kind'] == 'series' else '')
     sid = dmm.stream_id(p['kind'], p['id'], p.get('season'), p.get('episode'))
-    before = gather(p['kind'], sid)[0] if p.get('again') else None
+    before = None
+    if p.get('again'):  # the context menu: the sources it lists also carry the addons' own cast page
+        before, _, listed_cast_url, _, _ = gather(p['kind'], sid)
+        cast_url = cast_url or listed_cast_url
+    target = dmm.cast_page(origin(), p, cast_url)
 
     def poll():
         sources = gather(p['kind'], sid)[0]

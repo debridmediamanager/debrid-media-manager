@@ -1,7 +1,9 @@
+import { EasynewsAccountPanel } from '@/components/EasynewsAccountPanel';
 import { BackToDashboard, Card, Field, SupportLine } from '@/components/IndexerSetup';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCastToken } from '@/hooks/castToken';
 import { useDebridLinkCastToken } from '@/hooks/debridLinkCastToken';
+import { useEasynewsCastToken } from '@/hooks/easynewsCastToken';
 import { useOffcloudCastToken } from '@/hooks/offcloudCastToken';
 import { usePremiumizeCastToken } from '@/hooks/premiumizeCastToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
@@ -18,7 +20,7 @@ import { Toaster } from 'react-hot-toast';
 
 // The Kodi addon's two halves on the web: where to install it from, and the page
 // its "Link this Kodi" QR code opens. Linking hands the Kodi this browser's DMM
-// Cast addons and, for a sponsor, the DMM API key, so nothing is typed on a TV.
+// Cast addons, Easynews's included, and, for a sponsor, the DMM API key, so nothing is typed on a TV.
 
 const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
 // The addon talks to debridmediamanager.com until its DMM address setting says otherwise.
@@ -41,6 +43,8 @@ const SERVICES = [
 	{ key: 'pm', name: 'Premiumize', chip: 'bg-[#aa0000] text-white', login: '/premiumize/login' },
 	{ key: 'oc', name: 'Offcloud', chip: 'bg-[#f97316] text-black', login: '/offcloud/login' },
 	{ key: 'dl', name: 'Debrid-Link', chip: 'bg-[#38bdf8] text-black', login: '/debridlink/login' },
+	// No login page: its sign-in opens on this page (ServiceChips), then enrols in DMM Cast like the rest.
+	{ key: 'en', name: 'Easynews', chip: 'bg-[#2563eb] text-white', login: null },
 ] as const;
 
 /** What withAuth counts as a provider sign-in (src/utils/withAuth.tsx). */
@@ -56,10 +60,16 @@ const SIGN_IN_KEYS = [
 	'dl:apiKey',
 ];
 
-/** Signed in to every service when `service` is omitted, to that one otherwise. */
-const signedIn = (service?: string) => {
+/** The Easynews login Settings keeps. Not a sign-in to withAuth, which wants a debrid service. */
+const EASYNEWS_KEY = 'en:account';
+
+/**
+ * Signed in to any service when `service` is omitted, to that one otherwise. `debridOnly`
+ * asks withAuth's question, which an Easynews login alone does not answer.
+ */
+const signedIn = (service?: string, debridOnly = false) => {
 	try {
-		return SIGN_IN_KEYS.some(
+		return [...SIGN_IN_KEYS, ...(debridOnly ? [] : [EASYNEWS_KEY])].some(
 			(key) => (!service || key.startsWith(`${service}:`)) && !!localStorage.getItem(key)
 		);
 	} catch {
@@ -72,24 +82,49 @@ const signedIn = (service?: string) => {
  * to `redirect`. Without it, a browser signed in to one service had no way to add a second.
  */
 function ServiceChips({ casts, redirect }: { casts: Record<string, string>; redirect: string }) {
+	// Easynews signs in on Settings, which withAuth closes to a browser with no debrid sign-in:
+	// that phone would land on /start and lose the code. So its form opens here instead.
+	const [addingEasynews, setAddingEasynews] = useState(false);
+	const addClass =
+		'rounded border border-dashed border-gray-500 px-2 py-1 text-sm text-gray-300 hover:border-gray-300 hover:text-gray-100';
 	return (
-		<div className="flex flex-wrap gap-2">
-			{SERVICES.map(({ key, name, chip, login }) =>
-				casts[key] ? (
-					<span key={key} className={`rounded px-2 py-1 text-sm font-semibold ${chip}`}>
-						✓ {name}
-					</span>
-				) : signedIn(key) ? null : (
-					<Link
-						key={key}
-						href={`${login}?redirect=${encodeURIComponent(redirect)}`}
-						className="rounded border border-dashed border-gray-500 px-2 py-1 text-sm text-gray-300 hover:border-gray-300 hover:text-gray-100"
-					>
-						+ Add {name}
-					</Link>
-				)
+		<>
+			<div className="flex flex-wrap gap-2">
+				{SERVICES.map(({ key, name, chip, login }) =>
+					casts[key] ? (
+						<span
+							key={key}
+							className={`rounded px-2 py-1 text-sm font-semibold ${chip}`}
+						>
+							✓ {name}
+						</span>
+					) : signedIn(key) ? null : login ? (
+						<Link
+							key={key}
+							href={`${login}?redirect=${encodeURIComponent(redirect)}`}
+							className={addClass}
+						>
+							+ Add {name}
+						</Link>
+					) : (
+						<button
+							key={key}
+							type="button"
+							aria-expanded={addingEasynews}
+							onClick={() => setAddingEasynews((open) => !open)}
+							className={`haptic ${addClass}`}
+						>
+							+ Add {name}
+						</button>
+					)
+				)}
+			</div>
+			{addingEasynews && !signedIn('en') && (
+				<div className="mt-3">
+					<EasynewsAccountPanel />
+				</div>
 			)}
-		</div>
+		</>
 	);
 }
 
@@ -103,6 +138,7 @@ function useCastIds(): Record<string, string> {
 		pm: usePremiumizeCastToken({ enroll: true }),
 		oc: useOffcloudCastToken({ enroll: true }),
 		dl: useDebridLinkCastToken({ enroll: true }),
+		en: useEasynewsCastToken({ enroll: true }),
 	};
 	return Object.fromEntries(Object.entries(ids).filter(([, id]) => !!id)) as Record<
 		string,
@@ -287,7 +323,8 @@ function KodiPage() {
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
 						Browse and search films and shows in Kodi, and play the cached releases DMM
-						knows of and what members have cast, through your own debrid account.
+						knows of and what members have cast, through your own debrid account, and
+						search your own Easynews account.
 					</p>
 				</header>
 
@@ -333,7 +370,7 @@ const AuthedKodiPage = withAuth(KodiPage);
 // clearing storage after 7 idle days). withAuth would send it to /start and lose the code, so
 // such a browser gets the page itself, which says how to sign in and come back.
 function KodiEntry() {
-	return signedIn() ? <AuthedKodiPage /> : <KodiPage />;
+	return signedIn(undefined, true) ? <AuthedKodiPage /> : <KodiPage />;
 }
 
 export default dynamic(() => Promise.resolve(KodiEntry), { ssr: false });

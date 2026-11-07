@@ -1,0 +1,67 @@
+{
+	"cacheMaxAge": 0,
+	"streams": [
+		{
+			"name": "DMM Cast EN ✨",
+			"title": "Cast a file from Easynews",
+			"externalUrl": "https://debridmediamanager.com/movie/tt15398776/usenet",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:tt15398776:cast"
+			}
+		},
+		{
+			"name": "2160p • 82.98 GB",
+			"title": "Oppenheimer.2023.UHD.BluRay.2160p.DTS-HD.-\nMA.5.1.DV.HEVC.HYBRID.REMUX-FraMeSToR.mkv\n🎬 DMM Cast EN (Yours)",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/1d13ae523bc2535e577776eae402a94f031f440388dd0?path=1d13ae523bc2535e577776eae402a94f031f440388dd0.mkv%2FOppenheimer.2023.UHD.BluRay.2160p.DTS-HD.MA.5.1.DV.HEVC.HYBRID.REMUX-FraMeSToR.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer.2023.uhd.bluray.2160p.dts-hd.ma.5.1.dv.hevc.hybrid.remux-framestor",
+				"filename": "Oppenheimer.2023.UHD.BluRay.2160p.DTS-HD.MA.5.1.DV.HEVC.HYBRID.REMUX-FraMeSToR.mkv"
+			}
+		},
+		{
+			"name": "2160p • 117.89 GB",
+			"title": "Oppenheimer.2023.2160p.PROPER.IMAX.HYBRID.UHD.-\nREMUX.DV.HDR10+.TrueHD.7.1.Atmos-jennaortegaUHD\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/197829e2250d7ff3f71118eba90ba0c006c5c4d78ac44?path=197829e2250d7ff3f71118eba90ba0c006c5c4d78ac44.mkv%2FOppenheimer.2023.2160p.PROPER.IMAX.HYBRID.UHD.REMUX.DV.HDR10%2B.TrueHD.7.1.Atmos-jennaortegaUHD.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer.2023.2160p.proper.imax.hybrid.uhd.remux.dv.hdr10+.truehd.7.1.atmos-jennaortegauhd",
+				"filename": "Oppenheimer.2023.2160p.PROPER.IMAX.HYBRID.UHD.REMUX.DV.HDR10+.TrueHD.7.1.Atmos-jennaortegaUHD.mkv"
+			}
+		},
+		{
+			"name": "2160p • 85.18 GB",
+			"title": "Oppenheimer 2023 2160p BluRay Remux -\nDV HDR10+ DTS-HD MA 5.1 HEVC-tarunk9c\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/9e26b9f3327b7175604928437b0766cf04ea695054e26?path=9e26b9f3327b7175604928437b0766cf04ea695054e26.mkv%2FOppenheimer%202023%202160p%20BluRay%20Remux%20DV%20HDR10%2B%20DTS-HD%20MA%205.1%20HEVC-tarunk9c.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer 2023 2160p bluray remux dv hdr10+ dts-hd ma 5.1 hevc-tarunk9c",
+				"filename": "Oppenheimer 2023 2160p BluRay Remux DV HDR10+ DTS-HD MA 5.1 HEVC-tarunk9c.mkv"
+			}
+		},
+		{
+			"name": "83.08 GB",
+			"title": "Oppenheimer.2023.BluRay.Remux.DV.-\nHDR10+.HEVC.DTS-HD.MA.5.1-DepraveD\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/35b3272949dd58f047d724e6fc45e0550a72f1bd4d167?path=35b3272949dd58f047d724e6fc45e0550a72f1bd4d167.mkv%2FOppenheimer.2023.BluRay.Remux.DV.HDR10%2B.HEVC.DTS-HD.MA.5.1-DepraveD.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer.2023.bluray.remux.dv.hdr10+.hevc.dts-hd.ma.5.1-depraved",
+				"filename": "Oppenheimer.2023.BluRay.Remux.DV.HDR10+.HEVC.DTS-HD.MA.5.1-DepraveD.mkv"
+			}
+		},
+		{
+			"name": "2160p • 83.07 GB",
+			"title": "Oppenheimer.2023.BluRay.2160p.DV.Hyb-\nrid.Remux.HEVC.DTS-HD.MA.5.1-DepraveD\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/d5fb4ee8eb60afe430f96e5b7a1483b60047b4d5954e7?path=d5fb4ee8eb60afe430f96e5b7a1483b60047b4d5954e7.mkv%2FOppenheimer.2023.BluRay.2160p.DV.Hybrid.Remux.HEVC.DTS-HD.MA.5.1-DepraveD.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer.2023.bluray.2160p.dv.hybrid.remux.hevc.dts-hd.ma.5.1-depraved",
+				"filename": "Oppenheimer.2023.BluRay.2160p.DV.Hybrid.Remux.HEVC.DTS-HD.MA.5.1-DepraveD.mkv"
+			}
+		},
+		{
+			"name": "2160p • 82.53 GB",
+			"title": "Oppenheimer.2023.2160p.Blu-ray.Remu-\nx.HEVC.HDR.DTS-HD.MA.5.1-CiNEPHiLES\n🎬 DMM Cast EN",
+			"url": "https://debridmediamanager.com/api/stremio-en/TESTUSERID12/play/2ed39828ca0943ab0499b259813f96ee0c382b6d29772?path=2ed39828ca0943ab0499b259813f96ee0c382b6d29772.mkv%2FOppenheimer.2023.2160p.Blu-ray.Remux.HEVC.HDR.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"behaviorHints": {
+				"bingeGroup": "dmm-en:oppenheimer.2023.2160p.blu-ray.remux.hevc.hdr.dts-hd.ma.5.1-cinephiles",
+				"filename": "Oppenheimer.2023.2160p.Blu-ray.Remux.HEVC.HDR.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+			}
+		}
+	]
+}
