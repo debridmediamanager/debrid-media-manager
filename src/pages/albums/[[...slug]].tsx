@@ -32,6 +32,7 @@ import { UnrestrictTrackResponse } from '@/pages/api/music/unrestrict';
 import { toasterPosition } from '@/utils/toastOptions';
 import { House, Library, Loader2, Search } from 'lucide-react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MouseEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -111,15 +112,36 @@ const fullScreenSpinner = (
 	</div>
 );
 
+const musicNeedsRealDebrid = (
+	<div className="flex h-dvh flex-col items-center justify-center gap-4 bg-gray-900 px-4 text-center text-gray-100">
+		<Head>
+			<title>Debrid Media Manager - Music</title>
+		</Head>
+		<h1 className="text-xl font-bold">Music plays through Real-Debrid</h1>
+		<p className="max-w-sm text-sm text-gray-400">
+			Connect a Real-Debrid account to listen. A key from TorBox or another service will not
+			work here.
+		</p>
+		<Link
+			href="/realdebrid/login?redirect=/music"
+			className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
+		>
+			Connect Real-Debrid
+		</Link>
+		<Link href="/" className="text-sm text-gray-400 underline hover:text-gray-200">
+			Back to home
+		</Link>
+	</div>
+);
+
 export default function AlbumsPage() {
-	const router = useRouter();
 	const [accessToken, isLoading] = useRealDebridAccessToken();
 	const rdUser = useRealDebrid().user;
 
 	if (!accessToken) {
-		// Redirect if not authenticated
-		if (!isLoading) router.push('/realdebrid/login?redirect=/music');
-		return isLoading ? fullScreenSpinner : null;
+		// Music streams only through Real-Debrid. Sending a TorBox or AllDebrid user
+		// straight to the RD sign-in left them pasting their own key there (Reddit 1xp8m5s).
+		return isLoading ? fullScreenSpinner : musicNeedsRealDebrid;
 	}
 	// The music session belongs to one account: wait to know which.
 	if (!rdUser && isLoading) return fullScreenSpinner;
