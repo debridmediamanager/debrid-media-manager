@@ -247,13 +247,14 @@ export async function resolveEasynewsLink(
 		throw new Error('Easynews redirected outside easynews.com');
 	}
 	// Easynews still lists some files it can no longer serve, and their signed link
-	// answers 404 (2026-11-07). One byte tells, before a player gets a 404 page.
+	// answers 404 or 400 (Severance S02E01 / S02E03 NEUROSiS, 2026-11-07). The link was
+	// signed a moment ago, so any 4xx is the file. One byte tells, before a player gets it.
 	const probe = await fetch(url.toString(), {
 		headers: { Range: 'bytes=0-0' },
 		signal: AbortSignal.timeout(TIMEOUT_MS),
 	});
 	await probe.body?.cancel();
-	if (probe.status === 404 || probe.status === 410) throw new EasynewsGoneError();
+	if (probe.status >= 400 && probe.status < 500) throw new EasynewsGoneError();
 	return url.toString();
 }
 

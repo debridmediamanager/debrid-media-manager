@@ -30,6 +30,13 @@ const gone = readFileSync(
 	),
 	'utf8'
 );
+const gone400 = readFileSync(
+	path.resolve(
+		__dirname,
+		'../test/fixtures/easynews/dl-gone-severance-s02e03-neurosis-400-2026-11-07.html'
+	),
+	'utf8'
+);
 
 afterEach(() => {
 	vi.unstubAllGlobals();
@@ -322,6 +329,27 @@ describe('resolveEasynewsLink', () => {
 			'https://ams-dl-01.easynews.com/dl/TOKEN/Cocaine.Bear.2023.mkv'
 		);
 		expect(fetchMock.mock.calls[1][1].headers.Range).toBe('bytes=0-0');
+	});
+});
+
+// Severance.S02E03.iTALiAN.1080p.WEB.H264-NEUROSiS on 2026-11-07: in the search, its
+// signed link answered this 400 six times in a row (S02E01's answers 404). A cast of it was
+// saved, then its stream list had nothing to play.
+describe('resolveEasynewsLink, a signed link answering 400', () => {
+	it('says the file is gone', async () => {
+		const signed = 'https://ams-dl-01.easynews.com:443/dl/TOKEN/Severance.S02E03.mkv';
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValueOnce(
+					new Response(null, { status: 302, headers: { Location: signed } })
+				)
+				.mockResolvedValueOnce(new Response(gone400, { status: 400 }))
+		);
+		await expect(
+			resolveEasynewsLink({ username: 'u', password: 'p' }, 'a'.repeat(45) + '.mkv/x.mkv')
+		).rejects.toBeInstanceOf(EasynewsGoneError);
 	});
 });
 
