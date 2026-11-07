@@ -10,9 +10,11 @@ import {
 } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
+import { parseNewznabResponse } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, RedisRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
+import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
@@ -1098,40 +1100,103 @@ describe('GET /api/newznab/api result order', () => {
 	});
 });
 
-// dedupeResults keeps a release's other postings on the row it keeps (for nzb2rd's
-// next-copy retry), and that row is what this endpoint caches. The feed is built
-// from a whitelist of fields, so an *arr must get exactly the feed it got before.
+// The newest film posts DrunkenSlug and altHUB answered on 2026-10-31. Both list
+// The Big Lebowski's HDMaNiAcS and TERMiNAL releases, and altHUB lists Hell House
+// and True Romance twice each. Sonarr and Radarr blocklist a failed grab only for
+// the same indexer and the exact same publish date (ReleaseComparer.SameNzb), so
+// every posting listed with its own guid and pubDate is one they can fail over to.
 describe('GET /api/newznab/api with one release posted on both upstreams', () => {
-	it('serves the same feed whether the cached row carries alternates or not', async () => {
-		const repost = {
-			...SECOND_RESPONSE.channel.item,
-			title: 'Some.Release.2160p.WEB',
-			guid: 'second-copy-id',
-		};
+	const LIMITED = 'The.Big.Lebowski.1998.LIMITED.1080p.BluRay.DTS.x264-HDMaNiAcS';
+
+	beforeEach(() => {
 		fetchMock.mockImplementation(async (input: unknown) =>
-			jsonResponse(
-				String(input).startsWith(FIRST_HOST)
-					? FIRST_RESPONSE
-					: { channel: { item: [repost, SECOND_RESPONSE.channel.item] } }
-			)
+			jsonResponse(String(input).startsWith(FIRST_HOST) ? drunkenslugMovie : althubMovie)
 		);
-		const query = { t: 'search', q: 'some release', apikey: SPONSOR_KEY };
+	});
 
-		const first = await run(query);
-		const fanned = body(first);
-		const [[key, rows]] = [...cacheStore];
-		expect(rows.find((r) => r.title === 'Some.Release.2160p.WEB')?.alternates).toEqual([
-			'ah:second-copy-id',
+	/** Each `<item>` with the title `title`, as its guid and pubDate. */
+	const postings = (xml: string, title: string) =>
+		[...xml.matchAll(/<item>[\s\S]*?<\/item>/g)]
+			.map(([item]) => item)
+			.filter((item) => item.includes(`<title>${title}</title>`))
+			.map((item) => ({
+				guid: item.match(/<guid isPermaLink="false">([^<]+)<\/guid>/)?.[1],
+				pubDate: item.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1],
+			}));
+
+	it('lists every posting with its own guid and pubDate', async () => {
+		const res = await run({ t: 'movie', cat: '2000', apikey: SPONSOR_KEY });
+
+		expect(postings(body(res), LIMITED)).toEqual([
+			{
+				guid: encryptReleaseId('ds', '6b6440fdc833ed29b90954956d7de0d729e17a35'),
+				pubDate: 'Sat, 31 Oct 2026 09:39:06 +0000',
+			},
+			{
+				guid: encryptReleaseId('ah', 'b12393c9fe8c7f1b109fa030215a5ca2'),
+				pubDate: 'Sat, 31 Oct 2026 09:38:09 +0000',
+			},
 		]);
-		cacheStore.set(
-			key,
-			rows.map(({ alternates: _alternates, ...row }) => row)
-		);
-		const plain = body(await run(query));
+		expect(
+			postings(body(res), 'The.Big.Lebowski.1998.COMPLETE.UHD.BLURAY-TERMiNAL')
+		).toHaveLength(2);
+		// 30 + 30: nothing folded, the two Lebowskis and altHUB's repeats included.
+		expect(body(res)).toContain('total="60"');
+	});
 
-		expect(fanned).toBe(plain);
-		expect(itemTitles(first)).toEqual(['Some.Release.2160p.WEB', 'Another.Release.1080p']);
-		expect(fanned).not.toContain('second-copy-id');
+	it('keeps them apart on a targeted search and in the cached set', async () => {
+		const res = await run({ t: 'movie', imdbid: 'tt0118715', apikey: SPONSOR_KEY });
+
+		expect(postings(body(res), LIMITED).map((posting) => posting.pubDate)).toEqual([
+			'Sat, 31 Oct 2026 09:39:06 +0000',
+			'Sat, 31 Oct 2026 09:38:09 +0000',
+		]);
+		const [[, rows]] = [...cacheStore];
+		expect(rows.filter((row) => row.title === LIMITED).map((row) => row.id)).toEqual([
+			'ds:6b6440fdc833ed29b90954956d7de0d729e17a35',
+			'ah:b12393c9fe8c7f1b109fa030215a5ca2',
+		]);
+	});
+
+	// A set cached before every posting was listed holds folded rows carrying
+	// `alternates`. The feed is built from a whitelist, so they never show.
+	it('names no folded alternate from a set cached before', async () => {
+		const query = { t: 'search', q: 'some release', apikey: SPONSOR_KEY };
+		cacheStore.set('search:q=some release', [
+			{
+				id: 'ds:first-native-id',
+				title: 'Some.Release.2160p.WEB',
+				size: 1234567,
+				alternates: ['ah:second-copy-id'],
+			},
+		]);
+
+		const res = await run(query);
+
+		expect(itemTitles(res)).toEqual(['Some.Release.2160p.WEB']);
+		expect(body(res)).not.toContain(encryptReleaseId('ah', 'second-copy-id'));
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('merges a missing upstream in by id, never by name', async () => {
+		const cachedAt = new Date(Date.now() - 2 * 60 * 60 * 1000);
+		const fromFirst = parseNewznabResponse(drunkenslugMovie).map((row) => ({
+			...row,
+			id: `ds:${row.id}`,
+		}));
+		mockRepo.getCachedNewznabApiSearch = vi.fn(async () => ({
+			results: fromFirst,
+			updatedAt: cachedAt,
+			isFresh: true,
+			missing: { prefixes: ['ah'], askedAt: cachedAt },
+		}));
+
+		const res = await run({ t: 'movie', cat: '2000', apikey: SPONSOR_KEY });
+
+		expect(fetchedUrls()).toHaveLength(1);
+		expect(postings(body(res), LIMITED)).toHaveLength(2);
+		const [, merged] = (mockRepo.setCachedNewznabApiSearch as any).mock.calls[0];
+		expect(merged).toHaveLength(60);
 	});
 });
 

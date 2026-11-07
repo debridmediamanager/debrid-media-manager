@@ -128,7 +128,11 @@ every guid and enclosure URL the \*arrs have stored.
    slot (`countRefused: false`, as for `grabLimit`), so the budget reopens as admitted
    calls age out. Skips used to count, and with fan-outs at several times the budget the
    window never emptied: one paced upstream received almost no searches for two weeks.
-4. `dedupeResults` (normalized-title-only — measured; size-based dedup false-merges).
+4. Merge by id, first seen kept, **never by name**: every posting of a release stays in
+   the feed with its own guid, pubDate and size. Sonarr and Radarr blocklist a failed
+   grab only for the same indexer and the exact same publish date
+   (`ReleaseComparer.SameNzb`), so a second posting is what they fall back to when the
+   first one's articles are gone. The Usenet tab still folds same-name rows into one.
 5. Rewrite every item: `guid` = encrypted token (`isPermaLink="false"`), `enclosure`
    pointing at this endpoint's own `t=get` carrying the **caller's** apikey (SAB/NZBGet
    fetch enclosures verbatim with no auth of their own; an unauthenticated `t=get`

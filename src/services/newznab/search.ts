@@ -21,13 +21,7 @@ import type {
 	CachedNewznabApiSearch,
 	CachedUsenetResult,
 } from '@/services/database/newznabApiCache';
-import {
-	dedupeResults,
-	fanOut,
-	Indexer,
-	nativeReleaseId,
-	type UsenetResult,
-} from '@/services/nzb2rd';
+import { fanOut, Indexer, nativeReleaseId, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import type { NextApiRequest } from 'next';
@@ -223,6 +217,21 @@ function askUpstreams(t: string, params: Record<string, string>, indexers: Upstr
 }
 
 /**
+ * Every posting once, the first seen of an id kept: a cached set before what its
+ * missing upstreams answered, and upstreams in priority order.
+ *
+ * Never folded by name, unlike the Usenet tab. Sonarr and Radarr blocklist a
+ * failed grab only for the same indexer and the exact same publish date
+ * (`ReleaseComparer.SameNzb`), so each posting listed with its own guid and
+ * pubDate is one an *arr can fall back to when another's articles are gone.
+ */
+function everyPosting(lists: CachedUsenetResult[][]): CachedUsenetResult[] {
+	const byId = new Map<string, CachedUsenetResult>();
+	for (const result of lists.flat()) if (!byId.has(result.id)) byId.set(result.id, result);
+	return [...byId.values()];
+}
+
+/**
  * The prefixes of `wanted` with no answer in a fan-out over `asked`: skipped
  * for pacing, or failed. Zero results is an answer.
  */
@@ -259,7 +268,7 @@ async function completed(
 
 	const asked = await pacedIndexers(wanted);
 	const { lists, answered } = await askUpstreams(t, params, asked);
-	const results = dedupeResults([cached.results, ...lists]) as CachedUsenetResult[];
+	const results = everyPosting([cached.results, ...lists]);
 	// Written even when nothing answered: the write dates the next try.
 	await db.setCachedNewznabApiSearch(
 		key,
@@ -356,7 +365,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 		return { items: [], offset, total: 0 };
 	}
 
-	const merged = dedupeResults(lists) as CachedUsenetResult[];
+	const merged = everyPosting(lists);
 	// An *arr's RSS sync is a look at what is new: the ids in it are the same
 	// news the sweep collects, at no extra cost upstream.
 	if (!targeted) await db.recordNewznabFreshPosts(postsById(merged));
