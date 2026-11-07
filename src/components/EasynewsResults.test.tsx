@@ -28,7 +28,10 @@ function mockApi(searchStatus = 200) {
 			url.includes('/link')
 				? {
 						ok: true,
-						json: async () => ({ url: 'https://ams-dl-01.easynews.com/dl/T/x.mkv' }),
+						json: async () => ({
+							url: 'https://ams-dl-01.easynews.com/dl/T/x.mkv',
+							intent: 'vlc://ams-dl-01.easynews.com/dl/T/x.mkv',
+						}),
 					}
 				: searchStatus === 200
 					? { ok: true, json: async () => ({ results: RESULTS }) }
@@ -128,28 +131,39 @@ describe('EasynewsResults', () => {
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
-	it('copies a freshly signed link', async () => {
+	it('opens the chosen player with a freshly signed link', async () => {
 		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		localStorage.setItem('settings:player', 'ios/vlc');
 		const fetchMock = mockApi();
 		const user = userEvent.setup();
-		const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-		render(
-			<EasynewsResults title="Cocaine Bear" imdbId="tt14209916" kind="movie" year="2023" />
-		);
-
-		await user.click(
-			await screen.findByRole('button', {
-				name: 'Copy Easynews link for Cocaine.Bear.2023.2160p',
-			})
-		);
-
-		await waitFor(() =>
-			expect(writeText).toHaveBeenCalledWith('https://ams-dl-01.easynews.com/dl/T/x.mkv')
-		);
-		const linkCall = fetchMock.mock.calls.find((c) =>
-			String(c[0]).includes('/api/easynews/link')
-		)!;
-		expect(bodyOf(linkCall)).toEqual({ ...ACCOUNT, path: PATH });
+		const tab: any = {
+			location: { href: '' },
+			document: { open: vi.fn(), write: vi.fn(), close: vi.fn() },
+		};
+		const originalOpen = window.open;
+		window.open = vi.fn(() => tab) as any;
+		try {
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			await user.click(
+				await screen.findByRole('button', { name: 'Watch Cocaine.Bear.2023.2160p' })
+			);
+			await waitFor(() =>
+				expect(tab.location.href).toBe('vlc://ams-dl-01.easynews.com/dl/T/x.mkv')
+			);
+			const linkCall = fetchMock.mock.calls.find((c) =>
+				String(c[0]).includes('/api/easynews/link')
+			)!;
+			expect(bodyOf(linkCall)).toEqual({ ...ACCOUNT, path: PATH, player: 'ios/vlc' });
+		} finally {
+			window.open = originalOpen;
+		}
 	});
 
 	it('sends a row to zurg for a non-sponsor via the wanted page', async () => {

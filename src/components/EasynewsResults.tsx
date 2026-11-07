@@ -3,7 +3,10 @@ import useLocalStorage from '@/hooks/localStorage';
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
-import { Copy, Download, Loader2, Send } from 'lucide-react';
+import { getLocalStorageItemOrDefault } from '@/utils/browserStorage';
+import { defaultPlayer } from '@/utils/settings';
+import { openWatchWith } from '@/utils/watchService';
+import { Download, Eye, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -168,6 +171,26 @@ const EasynewsResults = ({
 		}
 	};
 
+	// The torrent rows' Watch, fed a fresh signed link: the server builds the
+	// player intent, so the link never sits in a page URL.
+	const watch = async (result: EasynewsResult) => {
+		if (!account || linking) return;
+		const player = getLocalStorageItemOrDefault('settings:player', defaultPlayer);
+		setLinking(result.path);
+		try {
+			await openWatchWith(player, 'Easynews', async () => {
+				const { intent } = await postEasynews<{ intent: string }>('/api/easynews/link', {
+					...account,
+					path: result.path,
+					player,
+				});
+				return intent;
+			});
+		} finally {
+			setLinking(null);
+		}
+	};
+
 	if (!title) return null;
 
 	if (!account) {
@@ -278,21 +301,16 @@ const EasynewsResults = ({
 							)}
 							{!showSend && 'Download'}
 						</button>
-						{/* For a player such as VLC, which streams it as it downloads. */}
+						{/* The video player chosen under Settings, as the torrent rows' Watch opens it. */}
 						<button
 							type="button"
-							onClick={() =>
-								withLink(result, async (url) => {
-									await navigator.clipboard.writeText(url);
-									toast.success('Easynews link copied');
-								})
-							}
+							onClick={() => watch(result)}
 							disabled={linking !== null}
-							title="Copy a link to play in VLC or another player"
-							aria-label={`Copy Easynews link for ${result.title}`}
+							title="Watch in your video player"
+							aria-label={`Watch ${result.title}`}
 							className={ICON_BUTTON}
 						>
-							<Copy className="h-3.5 w-3.5" />
+							<Eye className="h-3.5 w-3.5" />
 						</button>
 					</>
 				);

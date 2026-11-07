@@ -208,43 +208,24 @@ export type OpenWatchOptions = {
 const osOf = (player: string) => player.split('/')[0];
 
 /**
- * Opens the chosen player for a torrent.
+ * Opens the chosen player on whatever `resolve` answers.
  *
- * The tab is opened synchronously on the click and filled in once the server
- * answers — opening it after the await is what popup blockers reject. It is
+ * The tab is opened synchronously on the click and filled in once the intent
+ * is known — opening it after the await is what popup blockers reject. It is
  * handed a Play link rather than navigated straight at the player: Android
  * Chrome blocks a scripted jump to `intent://`, which left the tab sitting on
- * about:blank forever. See `watchTab` for the whole rule. AllDebrid needs its
- * magnet prepared here first, in the browser, because AllDebrid refuses
- * `magnet/upload` from a datacenter IP.
+ * about:blank forever. See `watchTab` for the whole rule.
  */
-export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
-	const { service, player, hash, keys, fileName, fileId } = opts;
-	const label = WATCH_SERVICE_LABEL[service];
-	const token = watchKeyFor(service, keys);
-	if (!token) {
-		toast.error(`No ${label} key configured.`);
-		return;
-	}
-
+export const openWatchWith = async (
+	player: string,
+	label: string,
+	resolve: () => Promise<string>
+): Promise<void> => {
 	const inWebApp = isInstalledWebApp();
 	const tab = inWebApp ? openWatchOverlay() : window.open('', '_blank');
 	renderWatchTab(tab, { status: 'resolving', label });
 	try {
-		const link =
-			opts.link ||
-			(service === 'ad'
-				? await resolveAdLink(token, hash, fileName, Boolean(opts.adInLibrary))
-				: undefined);
-		const intent = await resolveWatchIntent({
-			service,
-			player,
-			token,
-			hash,
-			fileName,
-			fileId,
-			link,
-		});
+		const intent = await resolve();
 		if (!tab) {
 			window.location.href = intent;
 			return;
@@ -266,4 +247,27 @@ export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 		renderWatchTab(tab, { status: 'error', label, message });
 		toast.error(`${label} watch failed: ${message}`);
 	}
+};
+
+/**
+ * Opens the chosen player for a torrent. AllDebrid needs its magnet prepared
+ * here first, in the browser, because AllDebrid refuses `magnet/upload` from a
+ * datacenter IP.
+ */
+export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
+	const { service, player, hash, keys, fileName, fileId } = opts;
+	const label = WATCH_SERVICE_LABEL[service];
+	const token = watchKeyFor(service, keys);
+	if (!token) {
+		toast.error(`No ${label} key configured.`);
+		return;
+	}
+	await openWatchWith(player, label, async () => {
+		const link =
+			opts.link ||
+			(service === 'ad'
+				? await resolveAdLink(token, hash, fileName, Boolean(opts.adInLibrary))
+				: undefined);
+		return resolveWatchIntent({ service, player, token, hash, fileName, fileId, link });
+	});
 };

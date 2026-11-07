@@ -5,6 +5,7 @@ import {
 	resolveEasynewsLink,
 } from '@/services/easynews';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { buildPlayerIntent } from '@/utils/intent';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // One Easynews result as a signed download link, minted with the caller's own
@@ -21,11 +22,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!isEasynewsPath(path)) {
 		return res.status(400).json({ error: 'path must be an Easynews result path' });
 	}
+	// Settings' video player, "<os>/<package>": with it the answer also carries the
+	// intent the torrent rows' Watch opens, built here so the link never sits in a page URL.
+	const player = req.body?.player;
+	if (
+		player !== undefined &&
+		(typeof player !== 'string' || !/^[a-z0-9]+\/[A-Za-z0-9._-]+$/.test(player))
+	) {
+		return res.status(400).json({ error: 'player must be "<os>/<package>"' });
+	}
 
 	try {
 		const url = await resolveEasynewsLink(credentials, path);
 		res.setHeader('Cache-Control', 'private, no-store');
-		return res.status(200).json({ url });
+		if (!player) return res.status(200).json({ url });
+		const [os, app] = player.split('/');
+		// The signed link is its own fallback: there is no streaming page behind it.
+		return res.status(200).json({ url, intent: buildPlayerIntent(os, app, url, url) });
 	} catch (error) {
 		if (error instanceof EasynewsAuthError) {
 			return res.status(401).json({ error: error.message });

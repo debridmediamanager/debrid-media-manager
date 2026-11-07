@@ -93,6 +93,19 @@ describe('POST /api/easynews/link', () => {
 		expect(res._getData()).toEqual({ url: 'https://ams-dl-01.easynews.com/dl/T/x.mkv' });
 	});
 
+	it('builds the intent of the named player, and refuses one it cannot read', async () => {
+		mockLink.mockResolvedValue('https://ams-dl-01.easynews.com/dl/T/x.mkv');
+		const res = await run(linkHandler, { ...login, path: PATH, player: 'ios/vlc' });
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res._getData()).toEqual({
+			url: 'https://ams-dl-01.easynews.com/dl/T/x.mkv',
+			intent: 'vlc://ams-dl-01.easynews.com/dl/T/x.mkv',
+		});
+		const bad = await run(linkHandler, { ...login, path: PATH, player: 'vlc://x' });
+		expect(bad.status).toHaveBeenCalledWith(400);
+		expect(mockLink).toHaveBeenCalledTimes(1);
+	});
+
 	it('refuses a path that is not a result', async () => {
 		const res = await run(linkHandler, { ...login, path: '../2.0/api/dl-nzb' });
 		expect(res.status).toHaveBeenCalledWith(400);
