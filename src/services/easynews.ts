@@ -6,12 +6,18 @@
 // Its search has no CORS headers, so a browser cannot call it directly and these
 // requests go out from DMM's server, as RD's do.
 
+import { MAX_NZB_BYTES } from '@/services/sabnzbdProxy';
+
 const EASYNEWS_BASE = 'https://members.easynews.com';
 const SEARCH_URL = `${EASYNEWS_BASE}/2.0/search/solr-search/`;
 // ponytail: every search measured on 2026-10-25 answered dlFarm "auto" and port
 // 443; read downURL/dlFarm/dlPort from the response if that ever varies.
 const DOWNLOAD_BASE = `${EASYNEWS_BASE}/dl/auto/443/`;
 const TIMEOUT_MS = 20_000;
+// A 126 GB remux's NZB measured 16.8 MB (2026-11-07), past what 20 s always fetches.
+const NZB_TIMEOUT_MS = 60_000;
+/** The opaque-id prefix NZBs fetched from Easynews are stored and served under. */
+export const EASYNEWS_NZB_PREFIX = 'en';
 
 export interface EasynewsCredentials {
 	username: string;
@@ -23,6 +29,8 @@ export interface EasynewsResult {
 	path: string;
 	title: string;
 	size: number;
+	/** The search row's signature, without which dl-nzb answers an empty NZB. */
+	sig?: string;
 }
 
 export interface EasynewsTarget {
@@ -51,6 +59,7 @@ interface EasynewsRow {
 	'0'?: string;
 	'10'?: string;
 	'11'?: string;
+	sig?: string;
 	rawSize?: number;
 	runtime?: number;
 	passwd?: boolean;
@@ -104,9 +113,21 @@ export function toResults(rows: EasynewsRow[], target: EasynewsTarget): Easynews
 		if (typeof row.runtime === 'number' && row.runtime < 60) continue;
 		if (!matchesTarget(name, target) || seen.has(hash)) continue;
 		seen.add(hash);
-		results.push({ path: `${hash}${ext}/${name}${ext}`, title: name, size: row.rawSize ?? 0 });
+		results.push({
+			path: `${hash}${ext}/${name}${ext}`,
+			title: name,
+			size: row.rawSize ?? 0,
+			sig: row.sig,
+		});
 	}
 	return results;
+}
+
+export class EasynewsNzbError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'EasynewsNzbError';
+	}
 }
 
 const authHeader = ({ username, password }: EasynewsCredentials) =>
@@ -186,4 +207,49 @@ export async function resolveEasynewsLink(
 		throw new Error('Easynews redirected outside easynews.com');
 	}
 	return url.toString();
+}
+
+/** The hash, name and extension a result path is built from. */
+export function splitEasynewsPath(path: string): { hash: string; name: string; ext: string } {
+	const [file, fileName] = path.split('/');
+	const dot = file.indexOf('.');
+	const ext = file.slice(dot);
+	const name = fileName.endsWith(ext) ? fileName.slice(0, -ext.length) : fileName;
+	return { hash: file.slice(0, dot), name, ext };
+}
+
+/**
+ * A result's NZB, as the web app's "NZB" button fetches it (2026-11-07). The form
+ * field's name really is `0&sig=<sig>`. Without a valid sig Easynews answers 200
+ * with an empty `<nzb/>`, so an answer with no `<file>` is refused.
+ */
+export async function fetchEasynewsNzb(
+	credentials: EasynewsCredentials,
+	path: string,
+	sig: string
+): Promise<string> {
+	const { hash, name, ext } = splitEasynewsPath(path);
+	const b64 = (s: string) => Buffer.from(s).toString('base64');
+	const response = await fetch(`${EASYNEWS_BASE}/2.0/api/dl-nzb`, {
+		method: 'POST',
+		headers: {
+			Authorization: authHeader(credentials),
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: new URLSearchParams({
+			autoNZB: '1',
+			[`0&sig=${sig}`]: `${hash}|${b64(name)}:${b64(ext)}`,
+		}).toString(),
+		signal: AbortSignal.timeout(NZB_TIMEOUT_MS),
+	});
+	if (response.status === 401 || response.status === 403) throw new EasynewsAuthError();
+	if (!response.ok) throw new Error(`Easynews NZB failed: HTTP ${response.status}`);
+	const tooLarge = () => new EasynewsNzbError('This NZB is too large to send');
+	if (Number(response.headers.get('content-length')) > MAX_NZB_BYTES) throw tooLarge();
+	const xml = await response.text();
+	if (Buffer.byteLength(xml) > MAX_NZB_BYTES) throw tooLarge();
+	if (!xml.includes('<file')) {
+		throw new EasynewsNzbError('Easynews did not hand out this NZB; search again');
+	}
+	return xml;
 }

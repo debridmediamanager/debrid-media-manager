@@ -1,6 +1,8 @@
 import {
 	checkEasynewsLogin,
 	EasynewsAuthError,
+	EasynewsNzbError,
+	fetchEasynewsNzb,
 	isEasynewsPath,
 	matchesTarget,
 	readCredentials,
@@ -12,6 +14,8 @@ import {
 import bear from '@/test/fixtures/easynews/search-cocaine-bear-2023-2026-10-25.json';
 import got from '@/test/fixtures/easynews/search-game-of-thrones-s03-2026-10-25.json';
 import severance from '@/test/fixtures/easynews/search-severance-s02-2026-10-25.json';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 // Recorded from members.easynews.com on 2026-10-25 and trimmed to the fields DMM
@@ -240,5 +244,83 @@ describe('checkEasynewsLogin', () => {
 
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 503 })));
 		await expect(checkEasynewsLogin(credentials)).rejects.toThrow('HTTP 503');
+	});
+});
+
+describe('toResults keeps the sig', () => {
+	// Real search rows carry a 143-character `sig` (2026-11-07), which dl-nzb needs back.
+	it("passes each row's sig on with its result", () => {
+		const sig = 'S'.repeat(143);
+		const [first] = toResults([{ ...bear.data[0], sig }] as any, {
+			title: 'Cocaine Bear',
+			year: '2023',
+		});
+		expect(first.sig).toBe(sig);
+	});
+});
+
+describe('fetchEasynewsNzb', () => {
+	// The head of a real dl-nzb answer: 3 of its 175 files, 3 segments each.
+	const nzb = readFileSync(
+		path.resolve(
+			__dirname,
+			'../test/fixtures/easynews/dl-nzb-oppenheimer-2023-head-2026-11-07.nzb'
+		),
+		'latin1'
+	);
+	const NAME = 'Oppenheimer 2023 2160p BluRay Remux DV HDR10+ DTS-HD MA 5.1 HEVC-tarunk9c';
+	const PATH = `9e26b9f3327b7175604928437b0766cf04ea695054e26.mkv/${NAME}.mkv`;
+	// What dl-nzb answered for the same file with a wrong sig, byte for byte.
+	const EMPTY =
+		'<?xml version="1.0" encoding="iso-8859-1"?>\n<!DOCTYPE nzb PUBLIC "-//newzBin//DTD NZB 0.9//EN" "http://www.newzbin.com/DTD/nzb/nzb-0.9.dtd">\n<nzb xmlns="http://www.newzbin.com/DTD/2003/nzb"/>\n';
+	const nzbResponse = (body: string) =>
+		new Response(body, { headers: { 'Content-Type': 'text/nzb; charset=UTF-8' } });
+
+	it('posts the hash, name and extension under the sig as the web app does', async () => {
+		const fetchMock = vi.fn().mockResolvedValue(nzbResponse(nzb));
+		vi.stubGlobal('fetch', fetchMock);
+
+		await expect(fetchEasynewsNzb(credentials, PATH, 'a/b+c=')).resolves.toBe(nzb);
+
+		const [url, init] = fetchMock.mock.calls[0];
+		expect(url).toBe('https://members.easynews.com/2.0/api/dl-nzb');
+		expect(init.method).toBe('POST');
+		expect(init.headers.Authorization).toBe(
+			`Basic ${Buffer.from('user:pass').toString('base64')}`
+		);
+		expect(init.headers['Content-Type']).toBe('application/x-www-form-urlencoded');
+		const b64 = (s: string) => Buffer.from(s).toString('base64');
+		// The field name is percent-encoded whole, which is what Easynews took.
+		expect(init.body).toMatch(/^autoNZB=1&0%26sig%3Da%2Fb%2Bc%3D=/);
+		expect([...new URLSearchParams(init.body)]).toEqual([
+			['autoNZB', '1'],
+			[
+				'0&sig=a/b+c=',
+				`9e26b9f3327b7175604928437b0766cf04ea695054e26|${b64(NAME)}:${b64('.mkv')}`,
+			],
+		]);
+	});
+
+	it('refuses the empty NZB Easynews answers without a valid sig', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(nzbResponse(EMPTY)));
+		const sent = fetchEasynewsNzb(credentials, PATH, 'x');
+		await expect(sent).rejects.toBeInstanceOf(EasynewsNzbError);
+		await expect(sent).rejects.toThrow('Easynews did not hand out this NZB; search again');
+	});
+
+	it('names a refused login and refuses an NZB over the cap', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 401 })));
+		await expect(fetchEasynewsNzb(credentials, PATH, 'x')).rejects.toBeInstanceOf(
+			EasynewsAuthError
+		);
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValue(
+					new Response(nzb, { headers: { 'Content-Length': String(33 * 1024 * 1024) } })
+				)
+		);
+		await expect(fetchEasynewsNzb(credentials, PATH, 'x')).rejects.toThrow('too large');
 	});
 });

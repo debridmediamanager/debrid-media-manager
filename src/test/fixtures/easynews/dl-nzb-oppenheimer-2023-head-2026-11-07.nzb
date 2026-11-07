@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE nzb PUBLIC "-//newzBin//DTD NZB 0.9//EN" "http://www.newzbin.com/DTD/nzb/nzb-0.9.dtd">
+<!-- Head of a real members.easynews.com /2.0/api/dl-nzb answer, captured 2026-11-07 for "Oppenheimer 2023 2160p BluRay Remux DV HDR10+ DTS-HD MA 5.1 HEVC-tarunk9c": the first 3 of 175 <file>s, each cut to its first 3 segments. -->
+<nzb xmlns="http://www.newzbin.com/DTD/2003/nzb">
+  <file poster="Q1bhCuwMn4IDY@YWx0aHVi.com" date="1794044062" subject="01d1ff232a0648ee96640f13d937b273">
+    <groups>
+      <group>alt.binaries.big</group>
+    </groups>
+    <segments>
+      <segment bytes="716800" number="1">01d1ff232a0648ee96640f13d937b273@YWx0aHVi</segment>
+      <segment bytes="716800" number="2">6d74c435470b4d778a9854a019fc4c2d@YWx0aHVi</segment>
+      <segment bytes="716800" number="3">e8499a6ea9b144e4b518322f6940a1bc@YWx0aHVi</segment>
+    </segments>
+  </file>
+  <file poster="ORL4eLR6gd0lV@YWx0aHVi.com" date="1794044062" subject="9cd72e4f819e4a00be72c4441a72ad7a">
+    <groups>
+      <group>alt.binaries.boneless</group>
+    </groups>
+    <segments>
+      <segment bytes="716800" number="1">9cd72e4f819e4a00be72c4441a72ad7a@YWx0aHVi</segment>
+      <segment bytes="716800" number="2">caf55546fe874f408503a001f8f852ee@YWx0aHVi</segment>
+      <segment bytes="716800" number="3">50693ae46fb4455ead3f60543234b516@YWx0aHVi</segment>
+    </segments>
+  </file>
+  <file poster="aHoy9sNJLNjQr@YWx0aHVi.com" date="1794044062" subject="fe92307669e94910b960b6e025b2e586">
+    <groups>
+      <group>alt.binaries.triballs</group>
+    </groups>
+    <segments>
+      <segment bytes="716800" number="1">fe92307669e94910b960b6e025b2e586@YWx0aHVi</segment>
+      <segment bytes="716800" number="2">e1520582943a497ab7701823ac19e84b@YWx0aHVi</segment>
+      <segment bytes="716800" number="3">c65ef05e5cb44962b0f86a876637c574@YWx0aHVi</segment>
+    </segments>
+  </file>
+</nzb>
