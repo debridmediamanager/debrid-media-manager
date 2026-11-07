@@ -1,13 +1,18 @@
 import { ReleaseSection } from '@/components/ReleaseSection';
 import useLocalStorage from '@/hooks/localStorage';
+import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
+import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
-import { Copy, Download, Loader2 } from 'lucide-react';
+import { Copy, Download, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 type EasynewsResultsProps = {
+	/** The title searched for, and the wanted-list title "Send to zurg" files a pin under. */
 	title?: string;
+	imdbId: string;
+	kind: 'movie' | 'show';
 	/** A film's year; absent for a show. */
 	year?: string;
 	/** Present for a show season, absent for a movie. */
@@ -16,10 +21,14 @@ type EasynewsResultsProps = {
 	rowFilter?: (title: string) => boolean;
 };
 
-export async function postEasynews<T>(url: string, body: object): Promise<T> {
+export async function postEasynews<T>(
+	url: string,
+	body: object,
+	headers: Record<string, string> = {}
+): Promise<T> {
 	const response = await fetch(url, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: { 'Content-Type': 'application/json', ...headers },
 		body: JSON.stringify(body),
 	});
 	const data = await response.json().catch(() => null);
@@ -31,8 +40,26 @@ export async function postEasynews<T>(url: string, body: object): Promise<T> {
 // Easynews beside the shared indexers, searched with the visitor's own account
 // (signed in under Settings): Easynews forbids sharing one. Its files download
 // straight from Easynews, so unlike the rows above nothing goes through nzb2rd
-// or Real-Debrid.
-const EasynewsResults = ({ title, year, seasonNum, rowFilter }: EasynewsResultsProps) => {
+// or Real-Debrid. "Send to zurg" pins a row on a sponsor's wanted list instead,
+// for their zurg to grab that exact release.
+const ICON_BUTTON =
+	'haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60';
+const MAIN_BUTTON =
+	'haptic flex flex-1 items-center gap-1 rounded border border-gray-500 bg-gray-800/60 px-2 py-1 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60';
+
+const hashOf = (path: string) => path.slice(0, path.indexOf('.'));
+
+const EasynewsResults = ({
+	title,
+	imdbId,
+	kind,
+	year,
+	seasonNum,
+	rowFilter,
+}: EasynewsResultsProps) => {
+	const { isSponsor } = useSponsor();
+	const [wanted, setWanted] = useState<WantedItemResponse | null>(null);
+	const [sending, setSending] = useState<string | null>(null);
 	const [account] = useLocalStorage<EasynewsCredentials>('en:account');
 	const [results, setResults] = useState<EasynewsResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +97,47 @@ const EasynewsResults = ({ title, year, seasonNum, rowFilter }: EasynewsResultsP
 		if (account) search(account);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [account?.username, account?.password, title, year, seasonNum]);
+
+	// Once per section, as WantedButton does: which rows are pinned already.
+	useEffect(() => {
+		if (!isSponsor || !account) return;
+		let cancelled = false;
+		fetch('/api/wanted', { headers: sponsorHeaders() })
+			.then((res) => (res.ok ? res.json() : { items: [] }))
+			.then((data: { items: WantedItemResponse[] }) => {
+				if (!cancelled) setWanted(data.items.find((i) => i.imdbId === imdbId) ?? null);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, [isSponsor, !!account, imdbId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	const send = async (result: EasynewsResult) => {
+		if (!account || !title || sending) return;
+		setSending(result.path);
+		try {
+			const { item } = await postEasynews<{ item: WantedItemResponse }>(
+				'/api/easynews/send',
+				{
+					...account,
+					path: result.path,
+					sig: result.sig,
+					size: result.size,
+					imdbId,
+					kind,
+					title,
+				},
+				sponsorHeaders()
+			);
+			setWanted(item);
+			toast.success('Sent to zurg');
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : 'Could not send to zurg');
+		} finally {
+			setSending(null);
+		}
+	};
 
 	const shown = useMemo(
 		() => (results && rowFilter ? results.filter((r) => rowFilter(r.title)) : (results ?? [])),
@@ -157,39 +225,74 @@ const EasynewsResults = ({ title, year, seasonNum, rowFilter }: EasynewsResultsP
 			}
 			rows={!isLoading && !error ? shown : []}
 			rowKey={(result) => result.path}
-			actions={(result) => (
-				<>
-					<button
-						type="button"
-						onClick={() => withLink(result, (url) => window.location.assign(url))}
-						disabled={linking !== null}
-						className="haptic flex flex-1 items-center gap-1 rounded border border-gray-500 bg-gray-800/60 px-2 py-1 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
-					>
-						{linking === result.path ? (
-							<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+			actions={(result) => {
+				const hash = hashOf(result.path);
+				const sent = !!wanted?.pins?.some((pin) => pin.id === hash);
+				const taken = sent && kind === 'movie' && !!wanted?.fulfilledAt;
+				return (
+					<>
+						{isSponsor ? (
+							<button
+								type="button"
+								onClick={() => send(result)}
+								disabled={sending !== null || taken}
+								title={
+									taken
+										? 'Your zurg grabbed this release'
+										: 'Your zurg grabs this exact release'
+								}
+								className={MAIN_BUTTON}
+							>
+								{sending === result.path ? (
+									<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+								) : (
+									<Send className="h-3 w-3 shrink-0" />
+								)}
+								{taken ? 'zurg took it' : sent ? 'Sent to zurg' : 'Send to zurg'}
+							</button>
 						) : (
-							<Download className="h-3 w-3 shrink-0" />
+							<Link
+								href="/wanted"
+								title="Sponsors' zurg fetches titles from their wanted list"
+								className={MAIN_BUTTON}
+							>
+								<Send className="h-3 w-3 shrink-0" />
+								Send to zurg
+							</Link>
 						)}
-						Download
-					</button>
-					{/* For a player such as VLC, which streams it as it downloads. */}
-					<button
-						type="button"
-						onClick={() =>
-							withLink(result, async (url) => {
-								await navigator.clipboard.writeText(url);
-								toast.success('Easynews link copied');
-							})
-						}
-						disabled={linking !== null}
-						title="Copy a link to play in VLC or another player"
-						aria-label={`Copy Easynews link for ${result.title}`}
-						className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60"
-					>
-						<Copy className="h-3.5 w-3.5" />
-					</button>
-				</>
-			)}
+						<button
+							type="button"
+							onClick={() => withLink(result, (url) => window.location.assign(url))}
+							disabled={linking !== null}
+							title="Download from Easynews"
+							aria-label={`Download ${result.title} from Easynews`}
+							className={ICON_BUTTON}
+						>
+							{linking === result.path ? (
+								<Loader2 className="h-3.5 w-3.5 animate-spin" />
+							) : (
+								<Download className="h-3.5 w-3.5" />
+							)}
+						</button>
+						{/* For a player such as VLC, which streams it as it downloads. */}
+						<button
+							type="button"
+							onClick={() =>
+								withLink(result, async (url) => {
+									await navigator.clipboard.writeText(url);
+									toast.success('Easynews link copied');
+								})
+							}
+							disabled={linking !== null}
+							title="Copy a link to play in VLC or another player"
+							aria-label={`Copy Easynews link for ${result.title}`}
+							className={ICON_BUTTON}
+						>
+							<Copy className="h-3.5 w-3.5" />
+						</button>
+					</>
+				);
+			}}
 		/>
 	);
 };

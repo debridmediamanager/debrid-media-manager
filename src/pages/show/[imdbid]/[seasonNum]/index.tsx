@@ -2229,6 +2229,8 @@ const TvSearch: FunctionComponent = () => {
 					/>
 					<EasynewsResults
 						title={showInfo.title}
+						imdbId={imdbId}
+						kind="show"
 						seasonNum={selectedSeason}
 						rowFilter={usenetRowFilter}
 					/>

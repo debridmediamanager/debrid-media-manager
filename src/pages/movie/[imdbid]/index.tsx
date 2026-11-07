@@ -1142,7 +1142,12 @@ const MovieSearch: FunctionComponent = () => {
 			{usenetTab && (
 				<>
 					<UsenetResults imdbId={imdbid as string} rdKey={rdKey} />
-					<EasynewsResults title={movieInfo.title} year={movieInfo.year} />
+					<EasynewsResults
+						title={movieInfo.title}
+						imdbId={imdbid as string}
+						kind="movie"
+						year={movieInfo.year}
+					/>
 				</>
 			)}
 			{!usenetTab && (
