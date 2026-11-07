@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import fixture from './__fixtures__/exe-fakes.json';
+import live from './database/__fixtures__/executable-releases.json';
 import { AvailabilityService } from './database/availability';
 import { Repository } from './repository';
 import { resetBlocklistForTests, setBlocklistForTests } from './takedown/blocklist';
@@ -53,6 +54,18 @@ describe('Repository drops executable fakes', () => {
 		const got =
 			(await build([...fixture.titleOnly, kept]).getScrapedResults<any[]>('movie:tt1')) ?? [];
 		expect(got).toEqual([kept]);
+		resetBlocklistForTests();
+	});
+
+	it('reads an anime row by its filename, and keeps a series pack titled .EXE', async () => {
+		setBlocklistForTests([]);
+		const strip = ({ page: _page, ...row }: { page: string }) => row;
+		const fake = live.anime.executables.map(strip);
+		const rockman = live.anime.releases.map(strip);
+		const got =
+			(await build([...fake, ...rockman]).getScrapedTrueResults<any[]>('anime:anidb-1')) ??
+			[];
+		expect(got).toEqual(rockman);
 		resetBlocklistForTests();
 	});
 });

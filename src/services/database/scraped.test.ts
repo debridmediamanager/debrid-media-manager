@@ -318,6 +318,18 @@ describe('ScrapedService', () => {
 			skipDuplicates: true,
 		});
 
+		// a 48 GB series pack whose title ends in .EXE is neither dropped nor blocked
+		(prismaMock.blockedHash.createMany as Mock).mockClear();
+		const rockman = executableFixture.anime.releases.map(({ hash, filename, size_bytes }) => ({
+			hash,
+			title: filename,
+			fileSize: size_bytes,
+		}));
+		storedPage(null);
+		await service.saveScrapedTrueResults('key', rockman as any);
+		expect(lastWrite().value).toEqual(rockman);
+		expect(prismaMock.blockedHash.createMany).not.toHaveBeenCalled();
+
 		// recording the block must never cost the page its other releases
 		(prismaMock.blockedHash.createMany as Mock).mockRejectedValue(new Error('db busy'));
 		vi.spyOn(console, 'warn').mockImplementation(() => {});

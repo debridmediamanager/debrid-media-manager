@@ -49,7 +49,10 @@ describe('Repository drops executable fakes only AllDebrid has cached', () => {
 		const got = (await repo.getScrapedResults<any[]>('movie:tt35538033')) ?? [];
 		expect(fixture.results.filter((row) => AD_FAKES.includes(row.hash))).toHaveLength(8);
 		expect(got.filter((row) => AD_FAKES.includes(row.hash))).toEqual([]);
-		expect(got).toHaveLength(fixture.results.length - 8);
+		// and the page's `... H 264-FLUX.scr` (1.1 GB, a screensaver), dropped by name since 2026-11-07
+		const scr = fixture.results.filter((row) => /\.scr$/.test(row.title));
+		expect(scr.map((row) => row.hash)).toEqual(['01e4b50f2736bbc8337e50d7d7be29ac3551aeea']);
+		expect(got).toHaveLength(fixture.results.length - 8 - scr.length);
 		resetBlocklistForTests();
 	});
 });

@@ -1,3 +1,4 @@
+import { isExecutableRelease } from '@/utils/executableRelease';
 import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { Prisma } from '@prisma/client';
 import {
@@ -63,15 +64,6 @@ export type ScrapedTrueReadOptions = {
 };
 
 /**
- * A torrent named like a program is not a release, whatever the rest of the name
- * says. On 2026-11-07, 194 hashes on 85 pages were single 0.9-1.3 GB `.exe` files
- * named as new episodes and films (`Ted Lasso S04E04 1080p HEVC x265-MeGusta .exe`),
- * some of them cached on RD.
- */
-const isExecutable = (title: unknown) =>
-	typeof title === 'string' && /\.(exe|scr|msi|lnk|bat|cmd)\s*$/i.test(title);
-
-/**
  * The append branch below launders results through flattenAndRemoveDuplicates,
  * but the replace and create branches write what they are handed. Both save
  * paths sanitise up front so no branch can be the one that lets a bad hash or an
@@ -79,7 +71,7 @@ const isExecutable = (title: unknown) =>
  */
 const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
 	value
-		.filter((r) => isUsableHash(r?.hash) && !isExecutable(r.title))
+		.filter((r) => isUsableHash(r?.hash) && !isExecutableRelease(r))
 		.map((r) => {
 			const title = decodeTitle(r.title);
 			return title === r.title ? r : { ...r, title };
@@ -528,7 +520,7 @@ export class ScrapedService extends DatabaseClient {
 	 */
 	private async blockExecutables(value: ScrapeSearchResult[]) {
 		const hashes = value
-			.filter((r) => isUsableHash(r?.hash) && isExecutable(r.title))
+			.filter((r) => isUsableHash(r?.hash) && isExecutableRelease(r))
 			.map((r) => r.hash.toLowerCase());
 		if (hashes.length === 0) return;
 		try {

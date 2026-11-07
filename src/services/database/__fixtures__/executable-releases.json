@@ -1,5 +1,23 @@
 {
-	"_source": "dmmdb ScrapedTrue on dmm, read 2026-11-07: executables filed as releases (194 hashes on 85 pages), and real releases from the same pages",
+	"_source": "dmmdb ScrapedTrue on dmm, read 2026-11-07: executables filed as releases (194 hashes on 85 pages), and real releases from the same pages; anime rows (filename/size_bytes shape, size in MB) read 2026-11-07 from anime:anidb-* pages: a fake, and Rockman.EXE, a real 48 GB series pack whose title ends in .EXE",
+	"anime": {
+		"executables": [
+			{
+				"page": "anime:anidb-19621",
+				"hash": "2d7841ee1f861ebab4948d4b8f7618c78b4d55f5",
+				"filename": "[SubsPlease] Hotel Inhumans S2 - 06 (1080p).exe",
+				"size_bytes": 869.27
+			}
+		],
+		"releases": [
+			{
+				"page": "anime:anidb-1144",
+				"hash": "44d876b57aad9bdda0179cdea7ec65ed54ec96d2",
+				"filename": "Rockman.EXE",
+				"size_bytes": 48718.4279460907
+			}
+		]
+	},
 	"executables": [
 		{
 			"page": "movie:tt33764258",

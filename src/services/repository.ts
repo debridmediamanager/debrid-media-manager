@@ -4,6 +4,7 @@ import type { RexDirectOwner } from '@/services/database/rexDirect';
 import type { ScrapedTrueReadOptions } from '@/services/database/scraped';
 import type { SnapshotPost } from '@/services/database/torrentSnapshot';
 import type { RdCastCredentials } from '@/utils/castRdToken';
+import { isExecutableRelease } from '@/utils/executableRelease';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
 import {
@@ -56,8 +57,6 @@ import type { ReportType } from './reporterId';
 import { isHashBlocked, withoutBlockedHashList, withoutBlockedHashes } from './takedown/blocklist';
 
 // Scrapers often strip the dot, so "...H264-DJT exe" counts too.
-const EXECUTABLE_TITLE = /[.\s_-]exe\s*$/i;
-
 export type RepositoryDependencies = Partial<{
 	availabilityService: AvailabilityService;
 	scrapedService: ScrapedService;
@@ -842,9 +841,7 @@ export class Repository {
 			);
 		}
 		return value.filter(
-			(row) =>
-				!EXECUTABLE_TITLE.test(row?.title ?? '') &&
-				!fakes.has(String(row?.hash).toLowerCase())
+			(row) => !isExecutableRelease(row) && !fakes.has(String(row?.hash).toLowerCase())
 		) as T;
 	}
 
