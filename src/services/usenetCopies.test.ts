@@ -111,6 +111,7 @@ describe('orderCopies', () => {
 
 	beforeEach(() => {
 		mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue(recordedMarkers.markers);
+		mockRepo.getUsenetDead = vi.fn().mockResolvedValue([]);
 	});
 
 	it('puts a posting whose articles are gone last, and fetches the first copy instead', async () => {
@@ -157,6 +158,37 @@ describe('orderCopies', () => {
 
 		expect(await orderCopies('ix:release-3')).toEqual({ id: 'ix:release-3', alternates: [] });
 		expect(mockRepo.getNzb2rdTransfers).not.toHaveBeenCalled();
+	});
+
+	// The Big Lebowski's TERMiNAL release, on both indexers (FIXTURE_COPIES). No job
+	// of DMM's failed on the DrunkenSlug posting; nzb2rd or a sponsor's zurg
+	// reported it through /api/usenet/dead.
+	it('puts a posting reported dead last as well', async () => {
+		const [reported, copy] = [...FIXTURE_COPIES].find(([id]) => id.startsWith('ds:6b64'))!;
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(copy);
+		mockRepo.getUsenetDead = vi.fn().mockResolvedValue([reported]);
+
+		expect(await orderCopies(reported.toUpperCase())).toEqual({
+			id: copy[0],
+			alternates: [reported.toUpperCase()],
+		});
+		expect(mockRepo.getUsenetDead).toHaveBeenCalledWith([reported.toUpperCase(), copy[0]]);
+	});
+
+	it('still reads the markers when the reports cannot be read, and the other way round', async () => {
+		mockRepo.getUsenetCopies = vi.fn().mockResolvedValue(['ds:b']);
+		mockRepo.getUsenetDead = vi.fn().mockRejectedValue(new Error('db down'));
+		expect(await orderCopies('ix:release-3')).toEqual({
+			id: 'ds:b',
+			alternates: ['ix:release-3'],
+		});
+
+		mockRepo.getNzb2rdTransfers = vi.fn().mockRejectedValue(new Error('db down'));
+		mockRepo.getUsenetDead = vi.fn().mockResolvedValue(['ix:release-3']);
+		expect(await orderCopies('ix:release-3')).toEqual({
+			id: 'ds:b',
+			alternates: ['ix:release-3'],
+		});
 	});
 
 	it('keeps the order when the markers cannot be read', async () => {

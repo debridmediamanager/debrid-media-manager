@@ -63,26 +63,36 @@ export async function copiesOf(id: string): Promise<string[]> {
 /** What nzb2rd reports for a posting whose articles no news server still has. */
 const MISSING_ARTICLES = 'missing from every configured news server';
 
+/** A read of which postings are dead; one that fails knows of none. */
+async function deadRead<T>(read: () => Promise<T[]>): Promise<T[]> {
+	try {
+		return await read();
+	} catch (error) {
+		console.error('Reading which Usenet postings are dead failed:', error);
+		return [];
+	}
+}
+
 /**
- * `id` and its copies in the order to try them: postings an earlier nzb2rd job
- * already found without their articles go last, the rest keep their order. The
- * first is the one to fetch (`id` itself unless it is known dead and a copy is
- * not), the others are what nzb2rd falls back to.
+ * `id` and its copies in the order to try them: postings known dead go last, the
+ * rest keep their order. Dead is an earlier nzb2rd job of DMM's that found the
+ * articles gone, or a report through /api/usenet/dead from nzb2rd or a sponsor's
+ * zurg. The first is the one to fetch (`id` itself unless it is known dead and a
+ * copy is not), the others are what nzb2rd falls back to.
  */
 export async function orderCopies(id: string): Promise<{ id: string; alternates: string[] }> {
 	const postings = [id, ...(await copiesOf(id))];
 	if (postings.length === 1) return { id, alternates: [] };
-	let dead = new Set<string>();
-	try {
-		const markers = await db.getNzb2rdTransfers(postings);
-		dead = new Set(
-			markers
-				.filter((m) => m.status === 'failed' && m.error?.includes(MISSING_ARTICLES))
-				.map((m) => m.releaseId.toLowerCase())
-		);
-	} catch (error) {
-		console.error('Reading which Usenet postings are dead failed:', error);
-	}
+	const [markers, reported] = await Promise.all([
+		deadRead(() => db.getNzb2rdTransfers(postings)),
+		deadRead(() => db.getUsenetDead(postings)),
+	]);
+	const dead = new Set([
+		...markers
+			.filter((m) => m.status === 'failed' && m.error?.includes(MISSING_ARTICLES))
+			.map((m) => m.releaseId.toLowerCase()),
+		...reported,
+	]);
 	const isDead = (posting: string) => dead.has(posting.toLowerCase());
 	const [first, ...alternates] = [
 		...postings.filter((posting) => !isDead(posting)),

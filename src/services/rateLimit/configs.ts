@@ -114,6 +114,9 @@ export const RATE_LIMIT_CONFIGS = {
 	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Each call verifies up to six provider logins; a restore is one POST and one PUT.
 	browserState: { name: 'browserState', rateLimit: 10, windowSeconds: 60 },
+	// Dead-posting reports (/api/usenet/dead), up to 50 a call: nzb2rd's on one budget,
+	// each sponsor's zurg on its own. One a failed download, so a minute's worth is plenty.
+	usenetDead: { name: 'usenetDead', rateLimit: 60, windowSeconds: 60 },
 	// Every miss spends a grab from the one indexer account the whole site shares,
 	// so this is paced like a stream rather than like a page fetch.
 	nzbDownload: { name: 'nzbDownload', rateLimit: 1, windowSeconds: 5 },

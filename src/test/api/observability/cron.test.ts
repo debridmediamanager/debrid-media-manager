@@ -15,6 +15,7 @@ const repositoryMocks = vi.hoisted(() => ({
 		rollupTorBoxCdnDaily: vi.fn(),
 		expireStaleContentRequests: vi.fn(async (_before: Date) => 0),
 		pruneUsenetCopies: vi.fn(async (_before: Date) => 0),
+		pruneUsenetDead: vi.fn(async (_before: Date) => 0),
 	},
 }));
 
@@ -401,5 +402,28 @@ describe('API /api/observability/cron — other postings of Usenet releases', ()
 		expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(week - 1000);
 		expect(before - cutoff.getTime()).toBeLessThan(week + 60_000);
 		expect(res._getData()).toMatchObject({ success: true, usenetCopiesPruned: 312 });
+	});
+});
+
+describe('API /api/observability/cron — dead-posting reports', () => {
+	it('deletes the reports nobody has repeated in 30 days and reports how many', async () => {
+		process.env.CRON_SECRET = 'my-secret';
+		healthMocks.runHealthCheckNow.mockResolvedValue({
+			working: 1,
+			total: 1,
+			rate: 1,
+			avgLatencyMs: 10,
+		});
+		repositoryMocks.repository.pruneUsenetDead.mockResolvedValue(41);
+		const before = Date.now();
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ method: 'POST', query: { secret: 'my-secret' } }), res);
+
+		const cutoff = repositoryMocks.repository.pruneUsenetDead.mock.calls[0]?.[0] as Date;
+		const month = 30 * 24 * 60 * 60 * 1000;
+		expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(month - 1000);
+		expect(before - cutoff.getTime()).toBeLessThan(month + 60_000);
+		expect(res._getData()).toMatchObject({ success: true, usenetDeadPruned: 41 });
 	});
 });

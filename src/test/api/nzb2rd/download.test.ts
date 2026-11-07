@@ -51,6 +51,7 @@ beforeEach(() => {
 	mockFetchNzb.mockResolvedValue(RAW);
 	vi.mocked(repository).getUsenetCopies = vi.fn().mockResolvedValue([]);
 	vi.mocked(repository).getNzb2rdTransfers = vi.fn().mockResolvedValue([]);
+	vi.mocked(repository).getUsenetDead = vi.fn().mockResolvedValue([]);
 });
 
 describe('GET /api/nzb2rd/download', () => {

@@ -281,6 +281,7 @@ beforeEach(() => {
 	// No release has other postings recorded, and no posting is known dead.
 	mockRepo.getUsenetCopies = vi.fn().mockResolvedValue([]);
 	mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([]);
+	mockRepo.getUsenetDead = vi.fn().mockResolvedValue([]);
 
 	nzbBody = RAW_NZB;
 	fetchMock = vi.fn(async (input: unknown) => {

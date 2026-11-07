@@ -73,7 +73,7 @@ export {
 };
 
 export type { CachedNewznabApiSearch, CachedUsenetResult } from './newznabApiCache';
-export type { Nzb2rdWaiter } from './nzb2rdMap';
+export type { Nzb2rdWaiter, UsenetDeadSource } from './nzb2rdMap';
 export type { SponsorLookup } from './sponsors';
 export type { TransferFilingOutcome, TransferFilingRecord } from './transferFiling';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';

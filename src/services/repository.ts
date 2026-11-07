@@ -43,6 +43,7 @@ import {
 	type TransferMetaRecord,
 	TransferMetaService,
 	type TransferMetaSource,
+	type UsenetDeadSource,
 	WantedItemsService,
 	WantedListsService,
 	ZurgKeysService,
@@ -525,6 +526,19 @@ export class Repository {
 
 	public pruneUsenetCopies(cutoff: Date) {
 		return this.nzb2rdMapService.pruneCopies(cutoff);
+	}
+
+	// Postings nzb2rd or a sponsor's zurg found without their articles
+	public getUsenetDead(releaseIds: string[]) {
+		return this.nzb2rdMapService.getDead(releaseIds);
+	}
+
+	public recordUsenetDead(releaseIds: string[], source: UsenetDeadSource) {
+		return this.nzb2rdMapService.recordDead(releaseIds, source);
+	}
+
+	public pruneUsenetDead(cutoff: Date) {
+		return this.nzb2rdMapService.pruneDead(cutoff);
 	}
 
 	// Page context for a transfer — the DMM title and the content page it started

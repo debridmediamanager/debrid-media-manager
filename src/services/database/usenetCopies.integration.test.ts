@@ -40,6 +40,7 @@ describe.skipIf(!dockerAvailable)('Usenet copy lists against MySQL 8.0.36 (Integ
 	let monitor: PrismaClient;
 	let service: Nzb2rdMapService;
 	let TTL: number;
+	let DEAD_TTL: number;
 
 	beforeAll(async () => {
 		container = await new GenericContainer('mysql:8.0.36')
@@ -57,6 +58,7 @@ describe.skipIf(!dockerAvailable)('Usenet copy lists against MySQL 8.0.36 (Integ
 		const map = await import('./nzb2rdMap');
 		service = new map.Nzb2rdMapService();
 		TTL = map.USENET_COPIES_TTL_MS;
+		DEAD_TTL = map.USENET_DEAD_TTL_MS;
 	}, 240_000);
 
 	afterAll(async () => {
@@ -115,5 +117,33 @@ describe.skipIf(!dockerAvailable)('Usenet copy lists against MySQL 8.0.36 (Integ
 
 		const keys = (await monitor.cache.findMany()).map((row) => row.key).sort();
 		expect(keys).toEqual(['nzbalt:ds:new', 'nzbrd:ds:old']);
+	});
+
+	it('marks postings dead in one statement and reads back the ones within 30 days', async () => {
+		const old = new Date(Date.now() - DEAD_TTL - DAY);
+		await service.recordDead(['ds:stale'], 'zurg', old);
+		await service.recordDead(['DS:ABC', 'en:0123456789abcdef0123'], 'nzb2rd');
+		await service.recordDead(['ds:abc'], 'zurg');
+
+		expect(
+			(
+				await service.getDead(['ds:abc', 'en:0123456789abcdef0123', 'ds:stale', 'ah:x'])
+			).sort()
+		).toEqual(['ds:abc', 'en:0123456789abcdef0123']);
+		const row = await monitor.cache.findUnique({ where: { key: 'nzbdead:ds:abc' } });
+		expect(row?.value).toMatchObject({ source: 'zurg', at: expect.any(Number) });
+		expect(await service.getDead([])).toEqual([]);
+	});
+
+	it('prunes only the reports last made before the cutoff, and nothing else', async () => {
+		const old = new Date(Date.now() - DEAD_TTL - DAY);
+		await service.recordDead(['ds:old'], 'nzb2rd', old);
+		await service.recordDead(['ds:new'], 'nzb2rd');
+		await service.recordCopies(new Map([['ds:old', ['ah:b']]]), old);
+
+		expect(await service.pruneDead(new Date(Date.now() - DEAD_TTL))).toBe(1);
+
+		const keys = (await monitor.cache.findMany()).map((row) => row.key).sort();
+		expect(keys).toEqual(['nzbalt:ds:old', 'nzbdead:ds:new']);
 	});
 });

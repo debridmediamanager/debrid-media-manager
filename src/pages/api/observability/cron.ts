@@ -6,7 +6,7 @@ import {
 	reconcileContentRequests,
 	type RequestReconcileResult,
 } from '@/services/contentRequestReconcile';
-import { USENET_COPIES_TTL_MS } from '@/services/database/nzb2rdMap';
+import { USENET_COPIES_TTL_MS, USENET_DEAD_TTL_MS } from '@/services/database/nzb2rdMap';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { sweepFreshPosts } from '@/services/newznab/search';
 import { reconcileNzb2rdMarkers, type MarkerReconcileResult } from '@/services/nzb2rdMarkers';
@@ -47,6 +47,7 @@ interface CronResponse {
 	wantedLists?: { synced: number; failed: number; lapsed: number };
 	newznabFresh?: { swept: boolean; ids: number };
 	usenetCopiesPruned?: number;
+	usenetDeadPruned?: number;
 	error?: string;
 }
 
@@ -197,6 +198,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Pruning old Usenet copy lists failed:', e);
 		}
 
+		// A dead-posting report is read for 30 days (see /api/usenet/dead), then only
+		// takes up room.
+		let usenetDeadPruned: number | undefined;
+		try {
+			usenetDeadPruned = await repository.pruneUsenetDead(
+				new Date(Date.now() - USENET_DEAD_TTL_MS)
+			);
+		} catch (e) {
+			console.error('[Cron] Pruning old dead-posting reports failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -222,6 +234,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			wantedLists,
 			newznabFresh,
 			usenetCopiesPruned,
+			usenetDeadPruned,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

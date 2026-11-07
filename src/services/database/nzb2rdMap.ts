@@ -53,6 +53,17 @@ const copiesKeyFor = (releaseId: string) => `${COPIES_PREFIX}${releaseId.toLower
 /** A posting list this old is no longer read, and the cron deletes it. */
 export const USENET_COPIES_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
+/**
+ * Postings a downloader found without their articles and reported through
+ * /api/usenet/dead: nzb2rd, or a sponsor's zurg. `orderCopies` hands out a
+ * release's other postings ahead of these.
+ */
+const DEAD_PREFIX = 'nzbdead:';
+const deadKeyFor = (releaseId: string) => `${DEAD_PREFIX}${releaseId.toLowerCase()}`;
+/** A report this old is no longer read, and the cron deletes it. */
+export const USENET_DEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+export type UsenetDeadSource = 'nzb2rd' | 'zurg';
+
 export interface Nzb2rdWaiter {
 	/**
 	 * Real-Debrid access token, held only until the job completes.
@@ -264,6 +275,42 @@ export class Nzb2rdMapService extends DatabaseClient {
 	async pruneCopies(cutoff: Date): Promise<number> {
 		const { count } = await this.prisma.cache.deleteMany({
 			where: { key: { startsWith: COPIES_PREFIX }, updatedAt: { lt: cutoff } },
+		});
+		return count;
+	}
+
+	// --- postings reported dead ---------------------------------------------
+
+	/** Which of these postings were reported dead in the last 30 days, lowercased. */
+	async getDead(releaseIds: string[], now: number = Date.now()): Promise<string[]> {
+		if (releaseIds.length === 0) return [];
+		const rows = await this.prisma.cache.findMany({
+			where: { key: { in: releaseIds.map(deadKeyFor) } },
+			select: { key: true, updatedAt: true },
+		});
+		return rows
+			.filter((row) => now - row.updatedAt.getTime() <= USENET_DEAD_TTL_MS)
+			.map((row) => row.key.slice(DEAD_PREFIX.length));
+	}
+
+	/** Marks these postings dead as of `now`, in one statement; a later report moves the date. */
+	async recordDead(
+		releaseIds: string[],
+		source: UsenetDeadSource,
+		now: Date = new Date()
+	): Promise<void> {
+		if (releaseIds.length === 0) return;
+		const value = JSON.stringify({ at: now.getTime(), source });
+		const rows = releaseIds.map((id) => Prisma.sql`(${deadKeyFor(id)}, ${value}, ${now})`);
+		await this.prisma.$executeRaw`
+			INSERT INTO Cache (\`key\`, value, updatedAt) VALUES ${Prisma.join(rows)}
+			ON DUPLICATE KEY UPDATE value = VALUES(value), updatedAt = VALUES(updatedAt)`;
+	}
+
+	/** Drop the reports last made before `cutoff`; answers how many went. */
+	async pruneDead(cutoff: Date): Promise<number> {
+		const { count } = await this.prisma.cache.deleteMany({
+			where: { key: { startsWith: DEAD_PREFIX }, updatedAt: { lt: cutoff } },
 		});
 		return count;
 	}
