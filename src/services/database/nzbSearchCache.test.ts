@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import odyssey from './__fixtures__/nzbsearch-odyssey-2026-11-07.json';
 import {
 	isFresh,
 	NZB_SEARCH_EMPTY_TTL_MS,
@@ -131,6 +132,38 @@ describe('NzbSearchCacheService', () => {
 	// weekly, and the indexer backfills its id mapping days after a premiere.
 	// Holding it for the full week keeps saying "nothing found" long after the
 	// search would have worked.
+	describe('a title still getting releases is searched again sooner', () => {
+		const searchedAt = new Date(odyssey.updatedAt);
+		const at = (iso: string) => vi.setSystemTime(new Date(iso));
+		const row = (updatedAt: Date) => ({
+			key: 'nzbsearch:v3:tt33764258',
+			value: odyssey.value,
+			updatedAt,
+		});
+		afterEach(() => vi.useRealTimers());
+
+		it('lets the Odyssey search lapse before its Remuxes stayed hidden all week', async () => {
+			vi.useFakeTimers();
+			prisma.cache.findUnique.mockResolvedValue(row(searchedAt));
+
+			at('2026-11-07T06:00:00Z');
+			expect((await service.get('tt33764258'))?.isFresh).toBe(true);
+			// 6 h after the 00:22 search: the 03:34 Remux is found on the next view
+			at('2026-11-07T06:30:00Z');
+			expect(new Date(odyssey.remuxPostedAt) < new Date()).toBe(true);
+			expect((await service.get('tt33764258'))?.isFresh).toBe(false);
+		});
+
+		it('keeps the full week once the newest post is a month old', async () => {
+			vi.useFakeTimers();
+			// the same releases searched on 2026-11-20: newest post 15 Oct, 36 days back
+			const later = new Date('2026-11-20T00:00:00Z');
+			prisma.cache.findUnique.mockResolvedValue(row(later));
+			at('2026-11-26T00:00:00Z');
+			expect((await service.get('tt33764258'))?.isFresh).toBe(true);
+		});
+	});
+
 	describe('empty results age out early', () => {
 		const emptyRow = (ageMs: number) => ({
 			key: 'nzbsearch:v3:tt27497393:s1',

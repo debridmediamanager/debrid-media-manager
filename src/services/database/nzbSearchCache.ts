@@ -33,6 +33,27 @@ export const NZB_SEARCH_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 export const NZB_SEARCH_EMPTY_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 /**
+ * A title still getting releases is searched again after hours, not a week.
+ *
+ * The Odyssey (tt33764258) was searched at 00:22 UTC on 2026-11-07; its 2160p
+ * and 1080p Remuxes were posted from 03:34 and stayed off the page, while the
+ * week ran, until the row was deleted by hand. Its newest cached post was 23 days
+ * old. A post within the last month marks a title in its release window, at
+ * most four searches a day per such title; DrunkenSlug, which most results come
+ * from, does not meter API calls (5,122 in 12 days, no limit errors).
+ */
+export const NZB_SEARCH_RECENT_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+export const NZB_SEARCH_RECENT_POST_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+/** Whether any result was posted within a month before the search. */
+export function hasRecentPost(results: UsenetResult[], searchedAt: Date): boolean {
+	return results.some(
+		// an absent or unparseable pubDate gives NaN, which never counts as recent
+		(r) => searchedAt.getTime() - Date.parse(r.pubDate ?? '') <= NZB_SEARCH_RECENT_POST_MS
+	);
+}
+
+/**
  * Bump when a change alters what a search *returns*, as opposed to how long an
  * answer keeps. Entries written by the previous code are then unreachable rather
  * than merely old, so the change lands on deploy instead of trickling in over a
@@ -86,11 +107,13 @@ export class NzbSearchCacheService extends DatabaseClient {
 			if (!Array.isArray(value?.results)) return null;
 
 			const results = value.results as UsenetResult[];
-			return {
-				results,
-				updatedAt: row.updatedAt,
-				isFresh: isFresh(row.updatedAt, results.length === 0 ? emptyTtlMs : ttlMs),
-			};
+			const ttl =
+				results.length === 0
+					? emptyTtlMs
+					: hasRecentPost(results, row.updatedAt)
+						? Math.min(ttlMs, NZB_SEARCH_RECENT_TTL_MS)
+						: ttlMs;
+			return { results, updatedAt: row.updatedAt, isFresh: isFresh(row.updatedAt, ttl) };
 		} catch (error) {
 			console.error('Error reading Usenet search cache:', error);
 			return null;
