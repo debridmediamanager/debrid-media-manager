@@ -1,0 +1,116 @@
+{
+	"_comment": "The Odyssey (2026), tt33764258, from production on 2026-11-08: the five TorBox casts getTorBoxOtherStreams returns (one per size, biggest first; link column left out, it carries a TorBox download credential), the title's ScrapedTrue releases of 80+ GB, and the hashes TorBox's checkcached answered as cached for them.",
+	"otherCasts": [
+		{
+			"url": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv",
+			"hash": "bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9",
+			"size": 84830,
+			"fileId": 0,
+			"torrentId": 138952404,
+			"filename": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv"
+		},
+		{
+			"url": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"hash": "ace6ee112446904ea51a44756caa819153ae242f",
+			"size": 84159,
+			"fileId": 0,
+			"torrentId": 139204173,
+			"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+		},
+		{
+			"url": "La Odisea (2026) REMUX 1080p Latino WWW.GDRIVELatinoHD.SITE.mkv",
+			"hash": "4af240ba04dcdd9f84c65175c29d27ac",
+			"size": 44218,
+			"fileId": 0,
+			"torrentId": 2234217,
+			"filename": "La Odisea (2026) REMUX 1080p Latino WWW.GDRIVELatinoHD.SITE.mkv"
+		},
+		{
+			"url": "The.Odyssey.2026.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"hash": "8189ac01f29a92e98080616f492c75b0e00db5cd",
+			"size": 41790,
+			"fileId": 0,
+			"torrentId": 138784764,
+			"filename": "The.Odyssey.2026.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+		},
+		{
+			"url": "The Odyssey (2026).mkv",
+			"hash": "4bacab8a3e0f14989225374cbcc1eba9f9df80de",
+			"size": 41694,
+			"fileId": 0,
+			"torrentId": 138861110,
+			"filename": "The Odyssey (2026).mkv"
+		}
+	],
+	"scrapedTrue80Plus": [
+		{
+			"hash": "601aff1ef7c1d7023a61ba49d283bc74728ad3f6",
+			"title": "The.Odyssey.2026.2160p.USA.UHD.Blu-ray.HDR.HEVC.DTS-HD.MA.5.1-TMT",
+			"fileSize": 92424.06
+		},
+		{
+			"hash": "ace6ee112446904ea51a44756caa819153ae242f",
+			"title": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES",
+			"fileSize": 84172.79999923706
+		},
+		{
+			"hash": "a806bd379e5d62dd38731911407d4a4bcb12190d",
+			"title": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES PROPER RELEASE",
+			"fileSize": 84162.56
+		},
+		{
+			"hash": "c6f699c92890981f7525873e497357dc020ac79f",
+			"title": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES {imdb-tt33764258}",
+			"fileSize": 84158.8
+		},
+		{
+			"hash": "e6eba29dfb6e11190212e055eac1869c28ef048e",
+			"title": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5 1-CiNEPHiLES.mkv",
+			"fileSize": 84158.8
+		},
+		{
+			"hash": "864a36e5254aeb0db48e9c5ea45e3268c49d115f",
+			"title": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"fileSize": 84158.8
+		},
+		{
+			"hash": "31accef5eda5c473f5c22f1d6f1d9be7a98d8efb",
+			"title": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES",
+			"fileSize": 84158.8
+		},
+		{
+			"hash": "d730eb10bb6d4e2bcfa0ff86a39c832284a8c707",
+			"title": "The Odyssey 2026 2160p UHD BluRay Remux HDR LATINO DTS-HD MA H265-BTM",
+			"fileSize": 83700.0
+		},
+		{
+			"hash": "bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9",
+			"title": "The Odyssey 2026 BDRemux 2160p HDR",
+			"fileSize": 82800.0
+		},
+		{
+			"hash": "907bef57f04037e0289037bcd41ea15b5609d57e",
+			"title": "The Odyssey 2026 2160p UHD Blu-ray Remux HDR HEVC DTS-HD MA 5.1-3CooL",
+			"fileSize": 82200.0
+		},
+		{
+			"hash": "38e1db1c08b3312238c94813a0bf61104dbaab03",
+			"title": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES",
+			"fileSize": 82190.0
+		},
+		{
+			"hash": "a3b33f58a5c81f6901c5bab217b1688c9f320e7f",
+			"title": "The.Odyssey.2026.2160p.UHD.BluRay.Remux.HDR.MULTi.LAT.FRE.DTS-HD.MA.H265-BTM",
+			"fileSize": 86300.0
+		}
+	],
+	"torboxCached": [
+		"31accef5eda5c473f5c22f1d6f1d9be7a98d8efb",
+		"38e1db1c08b3312238c94813a0bf61104dbaab03",
+		"3de2ea5c8785ac058395f7a73c14f325450fc513",
+		"601aff1ef7c1d7023a61ba49d283bc74728ad3f6",
+		"864a36e5254aeb0db48e9c5ea45e3268c49d115f",
+		"907bef57f04037e0289037bcd41ea15b5609d57e",
+		"e6eba29dfb6e11190212e055eac1869c28ef048e"
+	]
+}

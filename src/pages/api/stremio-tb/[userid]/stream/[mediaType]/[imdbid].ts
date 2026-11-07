@@ -5,6 +5,7 @@ import { repository as db } from '@/services/repository';
 import { checkCachedStatus } from '@/services/torbox';
 import { TroveStreamCandidate } from '@/utils/cachedTroveStreams';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
+import { biggestOtherStreams } from '@/utils/castOtherStreams';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import {
 	audioLanguages,
@@ -213,8 +214,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			} as any);
 		}
 
-		for (let i = 0; i < otherItems.length; i++) {
-			const item = otherItems[i];
+		const pushOther = (item: (typeof otherItems)[number]) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			const title = formatStremioStreamTitle(
@@ -236,16 +236,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
-		}
-		// Cached scraped releases fill whatever the cast pool left open, in the
-		// same "other streams" budget the size-limits setting describes. A bare
-		// hash (sha1, so the torrent path) with no `?file=` re-adds the cached
-		// torrent to the viewer's account at play time and hands back the
-		// biggest file - the feature for a movie, the episode for a
-		// single-episode release.
-		const troveSlots = Math.max(0, otherStreamsLimit - otherItems.length);
-		for (let i = 0; i < Math.min(troveSlots, playableTrove.length); i++) {
-			const item = playableTrove[i];
+		};
+		// A bare hash (sha1, so the torrent path) with no `?file=` re-adds the
+		// cached torrent to the viewer's account at play time and hands back the
+		// biggest file - the feature for a movie, the episode for a single-episode
+		// release.
+		const pushTrove = (item: (typeof playableTrove)[number]) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			streams.push({
@@ -257,6 +253,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
+		};
+		for (const pick of biggestOtherStreams(otherItems, playableTrove, otherStreamsLimit)) {
+			if (pick.cast) pushOther(pick.cast);
+			else pushTrove(pick.trove);
 		}
 
 		res.status(200).json({

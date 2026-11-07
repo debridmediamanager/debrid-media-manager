@@ -3,6 +3,7 @@ import { recordCastUse } from '@/services/castTelemetry';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
+import { biggestOtherStreams } from '@/utils/castOtherStreams';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import { debridLinkCachedTrove } from '@/utils/debridLinkCastApiHelpers';
 import {
@@ -115,7 +116,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// A probe hiccup costs the trove streams, never the casts.
 		const playableTrove = await debridLinkCachedTrove(
 			troveCandidates.filter((item) => !offeredHashes.has(item.hash.toLowerCase())),
-			Math.max(0, otherStreamsLimit - otherItems.length)
+			// As many as the whole budget: a cached release now competes with the
+			// casts on size instead of filling only the slots they left.
+			otherStreamsLimit
 		).catch((error) => {
 			console.error(
 				'[Stremio-DL Stream] Trove cache probe failed, skipping trove streams:',
@@ -164,13 +167,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		for (const item of userCastItems) {
 			push(item, true, releaseBingeGroup('dmm-dl', item.hash));
 		}
-		for (let i = 0; i < otherItems.length; i++) {
-			push(otherItems[i], false, releaseBingeGroup('dmm-dl', otherItems[i].hash));
-		}
-		// No `?file=`: the play route adds the cached torrent to the viewer's
-		// account and plays its biggest file - the feature for a movie, the episode
-		// for a single-episode release.
-		for (const item of playableTrove) {
+		// No `?file=` for a scraped release: the play route adds the cached torrent
+		// to the viewer's account and plays its biggest file - the feature for a
+		// movie, the episode for a single-episode release.
+		const pushTrove = (item: (typeof playableTrove)[number]) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			streams.push({
@@ -182,6 +182,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
+		};
+		for (const pick of biggestOtherStreams(otherItems, playableTrove, otherStreamsLimit)) {
+			if (pick.cast) push(pick.cast, false, releaseBingeGroup('dmm-dl', pick.cast.hash));
+			else pushTrove(pick.trove);
 		}
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });

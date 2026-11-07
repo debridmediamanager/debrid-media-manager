@@ -4,6 +4,7 @@ import { checkPremiumizeCache } from '@/services/premiumize';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { sendStreamError, sendStreamFailure } from '@/utils/castAddonResponses';
+import { biggestOtherStreams } from '@/utils/castOtherStreams';
 import { effectiveOtherStreamsLimit } from '@/utils/castOtherStreamsLimit';
 import {
 	audioLanguages,
@@ -171,20 +172,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		for (const item of playableUserItems) {
 			push(item, true, releaseBingeGroup('dmm-pm', item.hash));
 		}
-		for (let i = 0; i < playableOtherItems.length; i++) {
-			push(
-				playableOtherItems[i],
-				false,
-				releaseBingeGroup('dmm-pm', playableOtherItems[i].hash)
-			);
-		}
-		// Cached scraped releases fill whatever the cast pool left open, in the
-		// same "other streams" budget the size-limits setting describes. No
-		// `?file=`: the play route resolves the release and picks the feature
-		// file, exactly as it does for a cast row without a stored path.
-		const troveSlots = Math.max(0, otherStreamsLimit - playableOtherItems.length);
-		for (let i = 0; i < Math.min(troveSlots, playableTrove.length); i++) {
-			const item = playableTrove[i];
+		// No `?file=` for a scraped release: the play route resolves the release
+		// and picks the feature file, exactly as it does for a cast row without a
+		// stored path.
+		const pushTrove = (item: (typeof playableTrove)[number]) => {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			streams.push({
@@ -196,6 +187,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 					audioLanguages: audioLanguages(metadata),
 				},
 			} as any);
+		};
+		for (const pick of biggestOtherStreams(
+			playableOtherItems,
+			playableTrove,
+			otherStreamsLimit
+		)) {
+			if (pick.cast) push(pick.cast, false, releaseBingeGroup('dmm-pm', pick.cast.hash));
+			else pushTrove(pick.trove);
 		}
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });

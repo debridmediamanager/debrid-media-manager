@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
 import { checkCachedStatus } from '@/services/torbox';
+import odyssey from '@/test/fixtures/castOrder/odyssey-tb-2026-11-08.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { matrixSnapshotRow } from '@/test/utils/snapshotFixtures';
 import { activeCastGrant } from '@/test/utils/sponsor';
@@ -519,6 +520,43 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			const payload = (res.json as Mock).mock.calls[0][0];
 			expect(payload.streams.filter((s: any) => s.url)).toEqual([]);
 			expect(res.status).not.toHaveBeenCalledWith(500);
+		});
+
+		it('ranks cached releases with the casts by size, so a bigger copy is not crowded out', async () => {
+			setup();
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue(odyssey.otherCasts);
+			mockRepository.getAllScrapedTrueResults = vi
+				.fn()
+				.mockResolvedValue(odyssey.scrapedTrue80Plus);
+			mockCheckCachedStatus.mockResolvedValue({
+				success: true,
+				data: Object.fromEntries(odyssey.torboxCached.map((hash) => [hash, { id: 1 }])),
+			} as any);
+
+			const res = createMockResponse();
+			await handler(
+				createMockRequest({
+					query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt33764258' },
+				}),
+				res
+			);
+
+			const urls: string[] = (res.json as Mock).mock.calls[0][0].streams
+				.filter((s: any) => s.url)
+				.map((s: any) => s.url);
+			const hashes = urls.map(
+				(url) => /\/play\/(?:\d+:\d+\?h=)?([0-9a-f]{32,40})/.exec(url)?.[1]
+			);
+			// Five slots: the cached 96.9 GB TMT release first, then the two 2160p
+			// casts and two more cached 2160p remuxes. The 1080p casts drop out.
+			expect(hashes).toEqual([
+				'601aff1ef7c1d7023a61ba49d283bc74728ad3f6',
+				'bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9',
+				'ace6ee112446904ea51a44756caa819153ae242f',
+				'907bef57f04037e0289037bcd41ea15b5609d57e',
+				'38e1db1c08b3312238c94813a0bf61104dbaab03',
+			]);
 		});
 
 		it('never sends cast hashes to the probe', async () => {
