@@ -626,13 +626,15 @@ describe('sanitizeNzbAsync', () => {
 	});
 });
 
-// The other postings of a release ride out to nzb2rd's SABnzbd `addfile` inside
-// the NZB itself. They are added after sanitizing, so the store never holds them.
+// The posting an NZB is, and the other postings of its release, ride out to
+// nzb2rd's SABnzbd `addfile` (and a sponsor's zurg) inside the NZB itself. They
+// are added after sanitizing, so the store never holds them.
 describe('withAlternatesMeta', () => {
 	const ALTERNATES = [
 		'ah:b12393c9fe8c7f1b109fa030215a5ca2',
 		'ds:8ec039dfffc1781aae35f29ea7f35f54bb6fd1c1',
 	];
+	const ID = 'ds:6b6440fdc833ed29b90954956d7de0d729e17a35';
 	/** A real Easynews dl-nzb answer, cut down: no `<head>` at all. */
 	const EASYNEWS = readFileSync(
 		path.resolve(
@@ -650,22 +652,30 @@ describe('withAlternatesMeta', () => {
 	])('%s, and the result still parses and cleans back', (_label, source) => {
 		const cleaned = sanitizeNzb(source).xml;
 
-		const served = withAlternatesMeta(cleaned, ALTERNATES);
+		const served = withAlternatesMeta(cleaned, ALTERNATES, ID);
 
 		const doc = parse(served);
 		expect(doc.getElementsByTagName('parsererror')).toHaveLength(0);
 		const head = doc.documentElement.firstElementChild!;
 		expect(head.tagName).toBe('head');
-		const meta = [...head.getElementsByTagName('meta')].find(
-			(element) => element.getAttribute('type') === 'x-dmm-alternates'
-		);
-		expect(meta?.textContent).toBe(ALTERNATES.join(','));
+		const meta = (type: string) =>
+			[...head.getElementsByTagName('meta')].find(
+				(element) => element.getAttribute('type') === type
+			)?.textContent;
+		expect(meta('x-dmm-alternates')).toBe(ALTERNATES.join(','));
+		expect(meta('x-dmm-id')).toBe(ID);
 		// The files are untouched, so it is the same download.
 		expect(doc.getElementsByTagName('segment')).toHaveLength(
 			parse(cleaned).getElementsByTagName('segment').length
 		);
-		// A stored copy is always a sanitized one, and that pass drops the meta.
+		// A stored copy is always a sanitized one, and that pass drops both metas.
 		expect(sanitizeNzb(served).xml).toBe(cleaned);
+		expect(sanitizeNzb(served).removed).toEqual(
+			expect.arrayContaining([
+				`<meta type="x-dmm-id"> (${ID.slice(0, 40)})`,
+				expect.stringMatching(/^<meta type="x-dmm-alternates">/),
+			])
+		);
 	});
 
 	it('keeps the meta the NZB had', () => {
@@ -678,7 +688,15 @@ describe('withAlternatesMeta', () => {
 		);
 	});
 
-	it('leaves an NZB with no other postings as it is', () => {
+	it('names its own posting when the release has no other', () => {
+		const served = withAlternatesMeta(sanitizeNzb(EASYNEWS).xml, [], ID);
+		expect(served).toMatch(
+			/<nzb [^>]*>\n\t<head>\n\t\t<meta type="x-dmm-id">[^<]+<\/meta>\n\t<\/head>\n\t<file\b/
+		);
+		expect(served).not.toContain('x-dmm-alternates');
+	});
+
+	it('leaves an NZB with no posting to name as it is', () => {
 		const cleaned = sanitizeNzb(GEEK_A).xml;
 		expect(withAlternatesMeta(cleaned, [])).toBe(cleaned);
 	});

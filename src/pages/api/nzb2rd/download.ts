@@ -83,10 +83,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	// The cleaned file is byte-identical for every caller, and each miss spends an
 	// indexer grab from one shared account, so the edge is welcome to serve it.
 	res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-	// The other postings, dead ones last, for nzb2rd to fall back to; named the
-	// way this one was asked for.
-	const alternates = token ? asTokens(copies.alternates) : copies.alternates;
-	return res.status(200).send(withAlternatesMeta(cleaned.xml, alternates));
+	// The posting served and the other postings, dead ones last, for nzb2rd to
+	// fall back to; named the way this one was asked for.
+	const [served, ...alternates] = token
+		? asTokens([copies.id, ...copies.alternates])
+		: [copies.id, ...copies.alternates];
+	return res.status(200).send(withAlternatesMeta(cleaned.xml, alternates, served));
 }
 
 /**

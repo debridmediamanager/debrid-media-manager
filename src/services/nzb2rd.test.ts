@@ -417,6 +417,29 @@ describe('submitNzb', () => {
 		expect(forms[2].has('alternates')).toBe(false);
 	});
 
+	// What nzb2rd names in a dead-posting report (/api/usenet/dead).
+	it('names the posting it sends', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ status: 201, json: async () => ({ id: 'job-1' }) });
+		vi.stubGlobal('fetch', fetchMock);
+		const send = (releaseId?: string) =>
+			submitNzb({
+				nzbText: '<nzb></nzb>',
+				nzbName: 'release.nzb',
+				imdbId: 'tt1418646',
+				rdKey: 'user-rd-key',
+				releaseId,
+			});
+
+		await send('ah:b12393c9fe8c7f1b109fa030215a5ca2');
+		await send(undefined);
+
+		const forms = fetchMock.mock.calls.map(([, init]) => init.body as FormData);
+		expect(forms[0].get('release_id')).toBe('ah:b12393c9fe8c7f1b109fa030215a5ca2');
+		expect(forms[1].has('release_id')).toBe(false);
+	});
+
 	it('passes a non-2xx status through instead of throwing', async () => {
 		vi.stubGlobal(
 			'fetch',

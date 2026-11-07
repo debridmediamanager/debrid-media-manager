@@ -315,7 +315,7 @@ describe('POST /api/nzb2rd/jobs — other postings of the release', () => {
 
 		expect(mockRepo.getUsenetCopies).toHaveBeenCalledWith('release-1');
 		expect(mockSubmit).toHaveBeenCalledWith(
-			expect.objectContaining({ alternates: ['ah:b', 'ds:c'] })
+			expect.objectContaining({ releaseId: 'release-1', alternates: ['ah:b', 'ds:c'] })
 		);
 	});
 
@@ -330,8 +330,9 @@ describe('POST /api/nzb2rd/jobs — other postings of the release', () => {
 		await run();
 
 		expect(mockFetchNzb).toHaveBeenCalledWith('ah:b');
+		// nzb2rd is told which posting it got, so its report names that one.
 		expect(mockSubmit).toHaveBeenCalledWith(
-			expect.objectContaining({ alternates: ['ds:c', 'release-1'] })
+			expect.objectContaining({ releaseId: 'ah:b', alternates: ['ds:c', 'release-1'] })
 		);
 		expect(mockRepo.recordNzb2rdTransferPending).toHaveBeenCalledWith(
 			'release-1',

@@ -177,6 +177,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// one place that checks its signature.
 			sponsor: await sponsorIdOfRequest(req),
 			alternates: copies.alternates,
+			releaseId: copies.id,
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([

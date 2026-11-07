@@ -207,6 +207,8 @@ describe('GET /api/nzb2rd/download of a posting known dead', () => {
 		);
 		// The rest for nzb2rd to fall back to, the dead one last.
 		expect(res._getData()).toContain('<meta type="x-dmm-alternates">ds:c,ds:abc123</meta>');
+		// Named as what it is, so a report of it marks the copy.
+		expect(res._getData()).toContain('<meta type="x-dmm-id">ah:b</meta>');
 	});
 });
 
@@ -219,13 +221,14 @@ describe('GET /api/nzb2rd/download naming the other postings', () => {
 		const res = await run({ id: 'ds:abc123', title: 'My.Release.1080p' });
 
 		expect(res._getData()).toMatch(
-			/<nzb [^>]*>\n\t<head>\n\t\t<meta type="x-dmm-alternates">ah:b,ds:c<\/meta>\n\t<\/head>\n\t<file /
+			/<nzb [^>]*>\n\t<head>\n\t\t<meta type="x-dmm-id">ds:abc123<\/meta>\n\t\t<meta type="x-dmm-alternates">ah:b,ds:c<\/meta>\n\t<\/head>\n\t<file /
 		);
 	});
 
-	it('adds nothing for a release posted once', async () => {
+	it('names only the posting itself for a release posted once', async () => {
 		const res = await run({ id: 'ds:abc123', title: 'My.Release.1080p' });
-		expect(res._getData()).not.toContain('<head>');
+		expect(res._getData()).toContain('<meta type="x-dmm-id">ds:abc123</meta>');
+		expect(res._getData()).not.toContain('x-dmm-alternates');
 	});
 
 	// The copies a Newznab grab lists are tokens, and nzb2rd fetches them back here.
@@ -241,7 +244,11 @@ describe('GET /api/nzb2rd/download naming the other postings', () => {
 		expect(res._getData()).toContain(
 			`<meta type="x-dmm-alternates">${encryptReleaseId('ah', 'b')}</meta>`
 		);
+		expect(res._getData()).toContain(
+			`<meta type="x-dmm-id">${encryptReleaseId('ds', 'abc123')}</meta>`
+		);
 		expect(res._getData()).not.toContain('ah:b');
+		expect(res._getData()).not.toContain('ds:abc123');
 		vi.unstubAllEnvs();
 		_resetTokenSecretForTest();
 	});

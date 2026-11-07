@@ -783,6 +783,11 @@ export async function submitNzb(args: {
 	 * missing. Taken from what DMM's own searches recorded, never from the browser.
 	 */
 	alternates?: string[];
+	/**
+	 * The posting `nzbText` is (`ds:abc123`), which may be a copy of the one clicked:
+	 * what nzb2rd names when it reports the posting dead (/api/usenet/dead).
+	 */
+	releaseId?: string;
 }): Promise<{ status: number; data: any }> {
 	const form = new FormData();
 	form.append('nzb', new Blob([args.nzbText], { type: 'application/x-nzb' }), args.nzbName);
@@ -793,6 +798,7 @@ export async function submitNzb(args: {
 		form.append('sponsor', args.sponsor);
 	}
 	if (args.alternates?.length) form.append('alternates', JSON.stringify(args.alternates));
+	if (args.releaseId) form.append('release_id', args.releaseId);
 	if (isCompleteOAuth(args.oauth)) {
 		form.append('rd_client_id', args.oauth.clientId);
 		form.append('rd_client_secret', args.oauth.clientSecret);

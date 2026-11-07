@@ -19,7 +19,7 @@ import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-20
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
-import { sanitizeNzb } from '@/utils/nzbSanitize';
+import { sanitizeNzb, withAlternatesMeta } from '@/utils/nzbSanitize';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // setup.ts stubs the whole rate limit module out, which would take
@@ -777,7 +777,10 @@ describe('GET /api/newznab/api grab', () => {
 	it('stores what it served, so the next grab of it is free', async () => {
 		const res = await run({ t: 'get', id: token(), apikey: SPONSOR_KEY });
 
-		expect(mockPutStored).toHaveBeenCalledWith('ds', 'first-native-id', body(res));
+		const [prefix, nativeId, stored] = mockPutStored.mock.calls[0];
+		expect([prefix, nativeId]).toEqual(['ds', 'first-native-id']);
+		// All of it but the meta naming the posting, which is added on the way out.
+		expect(body(res)).toBe(withAlternatesMeta(stored, [], token()));
 	});
 
 	it('serves a store hit without touching an upstream', async () => {
@@ -786,9 +789,9 @@ describe('GET /api/newznab/api grab', () => {
 		const res = await run({ t: 'get', id: token(), apikey: SPONSOR_KEY });
 
 		expect(fetchMock).not.toHaveBeenCalled();
-		// Byte-identical, and not rewritten: the re-clean of a current copy must
-		// be free of both an upstream call and a store write.
-		expect(body(res)).toBe(CURRENT_STORED_NZB);
+		// Byte-identical but for the posting's name, and not rewritten: the re-clean
+		// of a current copy must be free of both an upstream call and a store write.
+		expect(body(res)).toBe(withAlternatesMeta(CURRENT_STORED_NZB, [], token()));
 		expect(res._getHeaders()['X-Nzb-Removed']).toBe('-');
 		expect(mockPutStored).not.toHaveBeenCalled();
 	});
@@ -803,7 +806,7 @@ describe('GET /api/newznab/api grab', () => {
 			'en',
 			'9e26b9f3327b7175604928437b0766cf04ea695054e26'
 		);
-		expect(body(hit)).toBe(CURRENT_STORED_NZB);
+		expect(body(hit)).toBe(withAlternatesMeta(CURRENT_STORED_NZB, [], id));
 
 		mockGetStored.mockResolvedValue(null);
 		const miss = await run({ t: 'get', id, apikey: SPONSOR_KEY });
@@ -826,7 +829,8 @@ describe('GET /api/newznab/api grab', () => {
 		expect(xml).toContain('<meta type="name">Some.Release.2160p.WEB</meta>');
 		expect(res._getHeaders()['X-Nzb-Removed']).toContain('newsgroups');
 		// And the stale object is replaced, so the next grab of it is current.
-		expect(mockPutStored).toHaveBeenCalledWith('ds', 'first-native-id', xml);
+		expect(mockPutStored).toHaveBeenCalledWith('ds', 'first-native-id', sanitizeNzb(xml).xml);
+		expect(xml).toBe(withAlternatesMeta(sanitizeNzb(xml).xml, [], token()));
 	});
 
 	it('falls back to the upstream when a stored copy cannot be cleaned at all', async () => {
@@ -946,7 +950,7 @@ describe('GET /api/newznab/api grab', () => {
 
 		mockGetStored.mockResolvedValueOnce(CURRENT_STORED_NZB);
 		expect(body(await run({ t: 'get', id: token(), apikey: SPONSOR_KEY }))).toBe(
-			CURRENT_STORED_NZB
+			withAlternatesMeta(CURRENT_STORED_NZB, [], token())
 		);
 
 		await run({ t: 'get', id: token(), apikey: SPONSOR_KEY });
@@ -984,6 +988,10 @@ describe('GET /api/newznab/api grab of a posting known dead', () => {
 		expect(mockPutStored).toHaveBeenCalledWith('ah', 'second-native-id', expect.any(String));
 		expect(body(res)).toContain('first-article@news');
 		expect(res._getHeaders()['Content-Disposition']).toContain(`filename="${token}.nzb"`);
+		// Named as what it is, so a report of it marks the copy, not the posting asked for.
+		expect(body(res)).toContain(
+			`<meta type="x-dmm-id">${encryptReleaseId('ah', 'second-native-id')}</meta>`
+		);
 	});
 
 	it('spends the grab cap of the upstream the copy comes from', async () => {
@@ -1038,12 +1046,14 @@ describe('GET /api/newznab/api grab naming the other postings', () => {
 		});
 
 		const xml = body(res);
-		expect(xml).toContain(`\t\t${META([COPY_TOKEN()])}\n\t</head>`);
+		expect(xml).toContain(
+			`\t\t<meta type="x-dmm-id">${encryptReleaseId('ds', 'first-native-id')}</meta>\n\t\t${META([COPY_TOKEN()])}\n\t</head>`
+		);
 		// An *arr's download client may be the user's own: no upstream is named.
 		expect(xml).not.toContain('ah:');
 		expect(xml).not.toContain('second-native-id');
 		const [, , stored] = mockPutStored.mock.calls[0];
-		expect(stored).not.toContain('x-dmm-alternates');
+		expect(stored).not.toContain('x-dmm-');
 		expect(sanitizeNzb(xml).xml).toBe(stored);
 	});
 
@@ -1107,7 +1117,10 @@ describe('GET /api/newznab/api NZBgeek guids', () => {
 		const res = await run({ t: 'get', id: feedGuid(feed), apikey: SPONSOR_KEY });
 
 		expect(grabbedId()).toBe(NATIVE);
-		expect(mockPutStored).toHaveBeenCalledWith('ng', NATIVE, body(res));
+		expect(mockPutStored).toHaveBeenCalledWith('ng', NATIVE, sanitizeNzb(body(res)).xml);
+		expect(body(res)).toContain(
+			`<meta type="x-dmm-id">${encryptReleaseId('ng', NATIVE)}</meta>`
+		);
 	});
 
 	it('serves an answer cached with the old id under the token a fresh one gets', async () => {

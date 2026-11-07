@@ -392,17 +392,23 @@ function describeStripped(
  * 70 MB NZB takes over a second, which is a second no other request is served.
  */
 /**
- * A sanitized NZB with `<meta type="x-dmm-alternates">` in its `<head>` (one is
- * made after `<nzb …>` when there is none), naming the release's other postings
- * for nzb2rd to fetch in turn when this one's articles are gone. Added on the way
- * out and never stored: a pass through `sanitizeNzb` drops it again, like every
+ * A sanitized NZB with DMM's metas in its `<head>` (one is made after `<nzb …>`
+ * when there is none): `x-dmm-id`, the posting this NZB is, for a downloader that
+ * finds its articles gone to report (/api/usenet/dead), and `x-dmm-alternates`,
+ * the release's other postings for nzb2rd to fetch in turn. Added on the way out
+ * and never stored: a pass through `sanitizeNzb` drops them again, like every
  * meta outside its whitelist.
  */
-export function withAlternatesMeta(xml: string, alternates: string[]): string {
-	if (alternates.length === 0) return xml;
-	const meta = `<meta type="x-dmm-alternates">${escapeText(alternates.join(','))}</meta>`;
-	if (/<\/head>/i.test(xml)) return xml.replace(/<\/head>/i, `\t${meta}\n\t</head>`);
-	return xml.replace(/<nzb\b[^>]*>/i, (open) => `${open}\n\t<head>\n\t\t${meta}\n\t</head>`);
+export function withAlternatesMeta(xml: string, alternates: string[], id?: string): string {
+	const metas = [
+		...(id ? [`<meta type="x-dmm-id">${escapeText(id)}</meta>`] : []),
+		...(alternates.length > 0
+			? [`<meta type="x-dmm-alternates">${escapeText(alternates.join(','))}</meta>`]
+			: []),
+	].join('\n\t\t');
+	if (!metas) return xml;
+	if (/<\/head>/i.test(xml)) return xml.replace(/<\/head>/i, `\t${metas}\n\t</head>`);
+	return xml.replace(/<nzb\b[^>]*>/i, (open) => `${open}\n\t<head>\n\t\t${metas}\n\t</head>`);
 }
 
 export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): SanitizedNzb {

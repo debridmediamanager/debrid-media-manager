@@ -64,7 +64,8 @@ async function sendNzb(
 	token: string,
 	xml: string,
 	removed: string,
-	alternates: string[]
+	alternates: string[],
+	served: string
 ) {
 	// A grab token names no release, so a takedown is judged on the file itself.
 	// "No such item" is what an *arr reads as gone, and it moves on.
@@ -76,7 +77,7 @@ async function sendNzb(
 		'Content-Disposition',
 		`attachment; filename="${asciiFilename(name)}"; filename*=UTF-8''${encodeURIComponent(name)}`
 	);
-	return res.status(200).send(withAlternatesMeta(xml, alternates));
+	return res.status(200).send(withAlternatesMeta(xml, alternates, served));
 }
 
 /** HTTP 429 with a body a Newznab client can actually read. */
@@ -151,11 +152,13 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 		release.prefix = served.slice(0, served.indexOf(':'));
 		release.nativeId = served.slice(served.indexOf(':') + 1);
 	}
-	// The other postings, dead ones last, ride out in the NZB for nzb2rd's
-	// SABnzbd addfile to fall back to. Never in what is stored.
-	const alternates = asTokens(
-		[copies.id, ...copies.alternates].filter((posting) => posting !== served)
-	);
+	// The posting served and the other postings, dead ones last, ride out in the
+	// NZB for nzb2rd's SABnzbd addfile to report and fall back to. Never in what is
+	// stored.
+	const [servedToken, ...alternates] = asTokens([
+		served,
+		...[copies.id, ...copies.alternates].filter((posting) => posting !== served),
+	]);
 
 	// The store is where a re-grab of the same release costs nothing: an NZB is
 	// immutable once posted, so only the first fetch spends an upstream call.
@@ -192,7 +195,14 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 					}
 				);
 			}
-			return sendNzb(res, token, recleaned.xml, recleaned.removed.join('; '), alternates);
+			return sendNzb(
+				res,
+				token,
+				recleaned.xml,
+				recleaned.removed.join('; '),
+				alternates,
+				servedToken
+			);
 		}
 	}
 
@@ -248,7 +258,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 		console.error('Newznab NZB store write failed:', error);
 	});
 
-	return sendNzb(res, token, cleaned.xml, cleaned.removed.join('; '), alternates);
+	return sendNzb(res, token, cleaned.xml, cleaned.removed.join('; '), alternates, servedToken);
 }
 
 /** The same header fold `withRateLimit` applies, for the same proxy chain. */
