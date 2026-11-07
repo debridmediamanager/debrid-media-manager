@@ -137,20 +137,31 @@ export async function judgeMoviePage(
 
 		let inputTokens = 0;
 		let model = 'none';
+		let modelFailed = false;
 		if (forModel.length > 0) {
-			const result = await classifyFilenames(key, movie, forModel);
-			inputTokens = result.inputTokens;
-			await db.addTokensSpent(utcDay(), inputTokens);
-			model = result.model;
-			forModel.forEach((title, i) => {
-				const { media, titleMatch } = result.answers[i];
-				judged.set(title, {
-					verdict: decide(movie, title, media, titleMatch),
-					rule: 'jev',
-					media,
-					titleMatch,
+			try {
+				const result = await classifyFilenames(key, movie, forModel);
+				inputTokens = result.inputTokens;
+				await db.addTokensSpent(utcDay(), inputTokens);
+				model = result.model;
+				forModel.forEach((title, i) => {
+					const { media, titleMatch } = result.answers[i];
+					judged.set(title, {
+						verdict: decide(movie, title, media, titleMatch),
+						rule: 'jev',
+						media,
+						titleMatch,
+					});
 				});
-			});
+			} catch (error) {
+				// The model's names wait for a later pass; what code settled is applied now.
+				console.warn(
+					`[verdicts] ${imdbId}: model failed, ${forModel.length} names left for later:`,
+					error instanceof Error ? error.message : error
+				);
+				forModel = [];
+				modelFailed = true;
+			}
 		}
 
 		const engine = `${ENGINE}/${model}`;
@@ -180,7 +191,7 @@ export async function judgeMoviePage(
 		}
 		const trashed = await db.trashPairs(pageKey, movie, toTrash, engine);
 
-		if (deferred.size === 0) await db.setCheckpoint(pageKey, ENGINE, startedAt);
+		if (deferred.size === 0 && !modelFailed) await db.setCheckpoint(pageKey, ENGINE, startedAt);
 		console.log(
 			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${identified.size} identified, ${forModel.length} by model), trashed ${trashed}, ${inputTokens} tokens`
 		);
@@ -217,8 +228,7 @@ export async function cleanMovieResultsInBackground(imdbId: string): Promise<voi
 }
 
 export type ShowOutcome =
-	| { status: 'skipped'; reason: string }
-	| { status: 'done'; judged: number; trashed: number };
+	{ status: 'skipped'; reason: string } | { status: 'done'; judged: number; trashed: number };
 
 /**
  * A release on a season page that names only seasons IMDb lists for the show,

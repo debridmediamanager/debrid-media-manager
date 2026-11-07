@@ -160,6 +160,28 @@ describe('judgeMoviePage', () => {
 		expect(db.releaseLock).toHaveBeenCalledWith('movie:tt5177120');
 	});
 
+	it('applies what code settled when Jev refuses, and keeps the page due', async () => {
+		// TypeSafe out of credit from 2026-10-24: every pass on tt33764258 threw this,
+		// so known game repacks under new hashes stayed on the page for two weeks
+		mockClassify.mockRejectedValue(new Error('Jev answered HTTP 402'));
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
+		const db = fakeDb();
+		const outcome = await judgeMoviePage('tt5177120', db);
+
+		const saved = (db.saveVerdicts as any).mock.calls[0][0];
+		expect(saved.map((v: any) => [v.hash, v.verdict, v.rule])).toEqual([
+			['h2', 'trash', 'rules'],
+			['h4', 'trash', 'reused'],
+		]);
+		const trashed = (db.trashPairs as any).mock.calls[0][2];
+		expect(trashed.map((p: any) => p.hash)).toEqual(['h2', 'aaa', 'h4']);
+		expect(outcome).toMatchObject({ status: 'done', modelTitles: 0, trashed: 3 });
+		expect(db.addTokensSpent).not.toHaveBeenCalled();
+		// the movie and the game still need the model, so the next visit asks again
+		expect(db.setCheckpoint).not.toHaveBeenCalled();
+		expect(db.releaseLock).toHaveBeenCalled();
+	});
+
 	it('keeps a release content-identifier names as the movie without asking Jev', async () => {
 		// content-identifier's answers for both filenames, read 2026-10-18
 		const answers = {
@@ -260,16 +282,6 @@ describe('judgeMoviePage', () => {
 		expect(asked.flat()).toHaveLength(names.length);
 		expect(db.setCheckpoint).toHaveBeenCalled();
 		vi.unstubAllGlobals();
-	});
-
-	it('records nothing and keeps the page due when the model fails', async () => {
-		mockClassify.mockRejectedValue(new Error('Jev answered HTTP 503'));
-		const db = fakeDb();
-		await expect(judgeMoviePage('tt5177120', db)).rejects.toThrow('HTTP 503');
-		expect(db.saveVerdicts).not.toHaveBeenCalled();
-		expect(db.trashPairs).not.toHaveBeenCalled();
-		expect(db.setCheckpoint).not.toHaveBeenCalled();
-		expect(db.releaseLock).toHaveBeenCalled();
 	});
 
 	it('checkpoints a page IMDb knows nothing about instead of retrying every view', async () => {
