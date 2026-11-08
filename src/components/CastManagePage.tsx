@@ -49,6 +49,8 @@ export interface CastManageConfig {
 	legacyRdApi?: boolean;
 	// TorBox's links endpoint takes the key as a Bearer header too.
 	bearerLinks?: boolean;
+	// Easynews casts are files picked on a title's Usenet tab, not torrents.
+	usenetTab?: boolean;
 	theme: {
 		checkbox: string;
 		castButton: string;
@@ -66,6 +68,7 @@ export function CastManagePage({
 	apiKeyLoading?: boolean;
 }) {
 	const { theme } = config;
+	const castOtherLabel = config.usenetTab ? 'Cast other files' : 'Cast other torrents';
 	const titleText = `DMM Cast${config.label ? ` ${config.label}` : ''} - Manage Casted Links`;
 	const [groupedLinks, setGroupedLinks] = useState<GroupedLinks>({});
 	const [loading, setLoading] = useState(true);
@@ -481,12 +484,18 @@ export function CastManagePage({
 										</span>
 									</button>
 									<Link
-										href={`/x/${imdbId}`}
+										href={
+											config.usenetTab
+												? isShowGroup
+													? `/show/${imdbId}/${getEpisodeInfo(links[0].imdbId)?.season ?? 1}/usenet`
+													: `/movie/${imdbId}/usenet`
+												: `/x/${imdbId}`
+										}
 										className={`haptic-sm shrink-0 rounded px-3 py-1 text-sm text-white ${theme.castButton}`}
-										title={`Cast other torrents for ${displayTitle}`}
-										aria-label={`Cast other torrents for ${displayTitle}`}
+										title={`${castOtherLabel} for ${displayTitle}`}
+										aria-label={`${castOtherLabel} for ${displayTitle}`}
 									>
-										Cast other torrents
+										{castOtherLabel}
 									</Link>
 								</div>
 								{links.length > 1 && (

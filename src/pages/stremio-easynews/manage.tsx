@@ -13,6 +13,7 @@ const config: CastManageConfig = {
 	apiPrefix: 'stremio-en',
 	castPath: '/stremio-easynews',
 	logTag: 'EasynewsStremioManage',
+	usenetTab: true,
 	theme: {
 		checkbox: 'text-blue-600 focus:ring-blue-500',
 		castButton: 'bg-blue-700 hover:bg-blue-800',
