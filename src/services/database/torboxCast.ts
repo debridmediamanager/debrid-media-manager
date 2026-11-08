@@ -350,6 +350,7 @@ export class TorBoxCastService extends DatabaseClient {
 			hash: string;
 			torrentId: number | null;
 			fileId: number | null;
+			castAt: Date;
 		}[]
 	> {
 		if (limit <= 0) {
@@ -391,23 +392,31 @@ export class TorBoxCastService extends DatabaseClient {
 			take: limit,
 		});
 
-		const otherCastItems = (
-			await Promise.all(
+		const select = {
+			url: true,
+			link: true,
+			size: true,
+			hash: true,
+			torrentId: true,
+			fileId: true,
+			updatedAt: true,
+		};
+		const [biggest, latest] = await Promise.all([
+			Promise.all(
 				sizeGroups.map((group) =>
 					this.prisma.torBoxCast.findFirst({
 						where: { ...where, size: group.size },
-						select: {
-							url: true,
-							link: true,
-							size: true,
-							hash: true,
-							torrentId: true,
-							fileId: true,
-						},
+						select,
 					})
 				)
-			)
-		).filter((item): item is NonNullable<typeof item> => item !== null);
+			),
+			// The newest cast rides along even when it is not among the biggest: the
+			// stream list puts it first (see biggestOtherStreams).
+			this.prisma.torBoxCast.findFirst({ where, orderBy: { updatedAt: 'desc' }, select }),
+		]);
+		const otherCastItems = [...biggest, latest]
+			.filter((item): item is NonNullable<typeof item> => item != null)
+			.filter((item, i, all) => all.findIndex((other) => other.hash === item.hash) === i);
 
 		const castStreams = otherCastItems
 			.filter(
@@ -420,6 +429,7 @@ export class TorBoxCastService extends DatabaseClient {
 					hash: string;
 					torrentId: number | null;
 					fileId: number | null;
+					updatedAt: Date;
 				} => item.link !== null
 			)
 			.map((item) => ({
@@ -430,6 +440,7 @@ export class TorBoxCastService extends DatabaseClient {
 				hash: item.hash,
 				torrentId: item.torrentId,
 				fileId: item.fileId,
+				castAt: item.updatedAt,
 			}));
 
 		console.log('[TorBoxCastService] Stream sources breakdown:', {

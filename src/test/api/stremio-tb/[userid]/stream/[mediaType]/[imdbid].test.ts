@@ -522,10 +522,14 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(res.status).not.toHaveBeenCalledWith(500);
 		});
 
-		it('ranks cached releases with the casts by size, so a bigger copy is not crowded out', async () => {
+		it('puts the newest cast first, then casts and cached releases by size', async () => {
 			setup();
 			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([]);
-			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue(odyssey.otherCasts);
+			mockRepository.getTorBoxOtherStreams = vi
+				.fn()
+				.mockResolvedValue(
+					odyssey.otherCasts.map((c) => ({ ...c, castAt: new Date(c.castAt) }))
+				);
 			mockRepository.getAllScrapedTrueResults = vi
 				.fn()
 				.mockResolvedValue(odyssey.scrapedTrue80Plus);
@@ -548,12 +552,13 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			const hashes = urls.map(
 				(url) => /\/play\/(?:\d+:\d+\?h=)?([0-9a-f]{32,40})/.exec(url)?.[1]
 			);
-			// Five slots: the cached 96.9 GB TMT release first, then the two 2160p
-			// casts and two more cached 2160p remuxes. The 1080p casts drop out.
+			// Five slots: the newest cast (CiNEPHiLES, cast 21:17), then by size the
+			// cached 96.9 GB TMT release, the BDRemux cast and two more cached 2160p
+			// remuxes. The 1080p casts drop out.
 			expect(hashes).toEqual([
+				'ace6ee112446904ea51a44756caa819153ae242f',
 				'601aff1ef7c1d7023a61ba49d283bc74728ad3f6',
 				'bfef33c3eb670dc65dc49c81c6ee41c1dcb7d5b9',
-				'ace6ee112446904ea51a44756caa819153ae242f',
 				'907bef57f04037e0289037bcd41ea15b5609d57e',
 				'38e1db1c08b3312238c94813a0bf61104dbaab03',
 			]);

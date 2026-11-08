@@ -330,6 +330,30 @@ describe('TorBoxCastService', () => {
 			consoleSpy.mockRestore();
 		});
 
+		it('brings the newest cast along even when it is not among the biggest', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			const row = (hash: string, size: number, at: string) => ({
+				url: `${hash}.mkv`,
+				link: 'https://tb.test/dld/x',
+				size: BigInt(size),
+				hash,
+				torrentId: 1,
+				fileId: 0,
+				updatedAt: new Date(at),
+			});
+			prismaMock.torBoxCast.groupBy.mockResolvedValue([{ size: BigInt(84830) }]);
+			prismaMock.torBoxCast.findFirst.mockImplementation((async (args: any) =>
+				args.orderBy
+					? row('newest', 4000, '2026-11-08T01:00:00Z')
+					: row('biggest', 84830, '2026-11-07T16:33:41Z')) as any);
+
+			const result = await service.getOtherStreams('tt33764258', 'u1', 1);
+
+			expect(result.map((r) => r.hash)).toEqual(['biggest', 'newest']);
+			expect(result[1].castAt).toEqual(new Date('2026-11-08T01:00:00Z'));
+			consoleSpy.mockRestore();
+		});
+
 		it('returns nothing and issues no query when the limit is zero', async () => {
 			const result = await service.getOtherStreams('tt123', 'u1', 0);
 

@@ -1,5 +1,5 @@
 {
-	"_comment": "The Odyssey (2026), tt33764258, from production on 2026-11-08: the five TorBox casts getTorBoxOtherStreams returns (one per size, biggest first; link column left out, it carries a TorBox download credential), the title's ScrapedTrue releases of 80+ GB, and the hashes TorBox's checkcached answered as cached for them.",
+	"_comment": "The Odyssey (2026), tt33764258, from production on 2026-11-08: the five TorBox casts getTorBoxOtherStreams returns (one per size, biggest first, with each row's updatedAt as castAt; link column left out, it carries a TorBox download credential), the title's ScrapedTrue releases of 80+ GB, and the hashes TorBox's checkcached answered as cached for them.",
 	"otherCasts": [
 		{
 			"url": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv",
@@ -7,7 +7,8 @@
 			"size": 84830,
 			"fileId": 0,
 			"torrentId": 138952404,
-			"filename": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv"
+			"filename": "The.Odyssey.2026.BDRemux.2160p.HDR.mkv",
+			"castAt": "2026-11-07T16:33:41.458000Z"
 		},
 		{
 			"url": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
@@ -15,7 +16,8 @@
 			"size": 84159,
 			"fileId": 0,
 			"torrentId": 139204173,
-			"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+			"filename": "The.Odyssey.2026.2160p.UHD.Blu-ray.Remux.HDR.HEVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"castAt": "2026-11-07T21:17:42.625000Z"
 		},
 		{
 			"url": "La Odisea (2026) REMUX 1080p Latino WWW.GDRIVELatinoHD.SITE.mkv",
@@ -23,7 +25,8 @@
 			"size": 44218,
 			"fileId": 0,
 			"torrentId": 2234217,
-			"filename": "La Odisea (2026) REMUX 1080p Latino WWW.GDRIVELatinoHD.SITE.mkv"
+			"filename": "La Odisea (2026) REMUX 1080p Latino WWW.GDRIVELatinoHD.SITE.mkv",
+			"castAt": "2026-11-07T20:29:54.174000Z"
 		},
 		{
 			"url": "The.Odyssey.2026.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
@@ -31,7 +34,8 @@
 			"size": 41790,
 			"fileId": 0,
 			"torrentId": 138784764,
-			"filename": "The.Odyssey.2026.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv"
+			"filename": "The.Odyssey.2026.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1-CiNEPHiLES.mkv",
+			"castAt": "2026-11-07T12:33:38.353000Z"
 		},
 		{
 			"url": "The Odyssey (2026).mkv",
@@ -39,7 +43,8 @@
 			"size": 41694,
 			"fileId": 0,
 			"torrentId": 138861110,
-			"filename": "The Odyssey (2026).mkv"
+			"filename": "The Odyssey (2026).mkv",
+			"castAt": "2026-11-07T14:31:13.263000Z"
 		}
 	],
 	"scrapedTrue80Plus": [

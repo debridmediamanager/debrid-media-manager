@@ -6,6 +6,8 @@ export interface OffcloudCastStream {
 	filename: string;
 	hash: string;
 	path: string | null;
+	/** When it was cast; absent on rows that are not casts. */
+	castAt?: Date;
 }
 
 /**
@@ -212,16 +214,23 @@ export class OffcloudCastService extends DatabaseClient {
 			take: limit,
 		});
 
-		const rows = (
-			await Promise.all(
+		const select = { url: true, size: true, hash: true, path: true, updatedAt: true };
+		const [biggest, latest] = await Promise.all([
+			Promise.all(
 				sizeGroups.map((group) =>
 					this.prisma.offcloudCast.findFirst({
 						where: { ...where, size: group.size },
-						select: { url: true, size: true, hash: true, path: true },
+						select,
 					})
 				)
-			)
-		).filter((item): item is NonNullable<typeof item> => item !== null);
+			),
+			// The newest cast rides along even when it is not among the biggest: the
+			// stream list puts it first (see biggestOtherStreams).
+			this.prisma.offcloudCast.findFirst({ where, orderBy: { updatedAt: 'desc' }, select }),
+		]);
+		const rows = [...biggest, latest]
+			.filter((item): item is NonNullable<typeof item> => item != null)
+			.filter((item, i, all) => all.findIndex((other) => other.hash === item.hash) === i);
 
 		return rows.map((item) => ({
 			url: item.url,
@@ -229,6 +238,7 @@ export class OffcloudCastService extends DatabaseClient {
 			filename: item.url.split('/').pop() || 'Unknown',
 			hash: item.hash,
 			path: item.path,
+			castAt: item.updatedAt,
 		}));
 	}
 }
