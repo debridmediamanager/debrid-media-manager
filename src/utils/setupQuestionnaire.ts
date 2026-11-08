@@ -1,0 +1,839 @@
+export const SETUP_GUIDE_URL = 'https://notes.debridmediamanager.com/guides/choose-your-setup/';
+
+export const PLAYER_OPTIONS = [
+	{
+		value: 'stremio',
+		label: 'Stremio',
+		description: 'I want an addon that can play titles on this device.',
+	},
+	{
+		value: 'kodi',
+		label: 'Kodi',
+		description: 'I browse and play from Kodi.',
+	},
+	{
+		value: 'plex',
+		label: 'Plex apps',
+		description: 'I watch through Plex on one or more devices.',
+	},
+	{
+		value: 'jellyfin',
+		label: 'Jellyfin',
+		description: 'Jellyfin is already my media server.',
+	},
+	{
+		value: 'emby',
+		label: 'Emby',
+		description: 'Emby is already my media server.',
+	},
+	{
+		value: 'webdav',
+		label: 'WebDAV or SMB player',
+		description: 'My player reads a network library or share.',
+	},
+	{
+		value: 'external',
+		label: 'An external player',
+		description: 'I usually open one file in a player of my choice.',
+	},
+	{
+		value: 'unsure',
+		label: 'I am not sure yet',
+		description: 'Help me choose a simple starting point.',
+	},
+] as const;
+
+export type Player = (typeof PLAYER_OPTIONS)[number]['value'];
+
+export const SOURCE_OPTIONS = [
+	{
+		value: 'real-debrid',
+		label: 'Real-Debrid',
+		description: 'A debrid account for torrents and cached releases.',
+	},
+	{
+		value: 'all-debrid',
+		label: 'AllDebrid',
+		description: 'A debrid account for torrents and cached releases.',
+	},
+	{
+		value: 'torbox',
+		label: 'TorBox',
+		description: 'A TorBox account for torrents or its supported libraries.',
+	},
+	{
+		value: 'premiumize',
+		label: 'Premiumize',
+		description: 'A Premiumize account for torrents and cloud files.',
+	},
+	{
+		value: 'offcloud',
+		label: 'Offcloud',
+		description: 'An Offcloud account for supported cloud files.',
+	},
+	{
+		value: 'debrid-link',
+		label: 'Debrid-Link',
+		description: 'A Debrid-Link account for supported releases.',
+	},
+	{
+		value: 'easynews',
+		label: 'Easynews',
+		description: 'An Easynews web account for direct HTTP files.',
+	},
+	{
+		value: 'usenet',
+		label: 'My own Usenet / NNTP account',
+		description: 'News-server credentials I control.',
+	},
+	{
+		value: 'torbox-hosted',
+		label: 'TorBox Pro hosted NZBs',
+		description: 'I want TorBox to fetch and repair NZBs for me.',
+	},
+	{
+		value: 'url-addon',
+		label: 'Existing URL stream addons',
+		description: 'Addons that already return playable HTTP streams.',
+	},
+	{
+		value: 'http-local',
+		label: 'HTTP links or files on a disk/NAS',
+		description: 'I already have media bytes somewhere I can reach.',
+	},
+	{
+		value: 'none',
+		label: 'None yet / I am unsure',
+		description: 'I need the route explained before choosing an account.',
+	},
+] as const;
+
+export type SetupSource = (typeof SOURCE_OPTIONS)[number]['value'];
+
+export const HOST_OPTIONS = [
+	{
+		value: 'existing',
+		label: 'An existing server or host',
+		description: 'A machine can stay on while I watch.',
+	},
+	{
+		value: 'willing',
+		label: 'I can run a host',
+		description: 'I am willing to run a small service or server.',
+	},
+	{
+		value: 'android',
+		label: 'The Android / Google TV device itself',
+		description: 'It is a supported device and can stay awake while I watch.',
+	},
+	{
+		value: 'none',
+		label: 'No host',
+		description: 'I want a hosted or direct route with no machine to maintain.',
+	},
+] as const;
+
+export type Host = (typeof HOST_OPTIONS)[number]['value'];
+
+export const PREFERENCE_OPTIONS = [
+	{
+		value: 'on-demand',
+		label: 'Choose and play as I go',
+		description: 'I do not need a library prepared in advance.',
+	},
+	{
+		value: 'managed',
+		label: 'A managed library',
+		description: 'I want titles organised and available across devices.',
+	},
+	{
+		value: 'arr',
+		label: 'Automation with Sonarr/Radarr',
+		description: 'I want quality profiles, monitoring and automatic acquisition.',
+	},
+	{
+		value: 'unsure',
+		label: 'I am not sure yet',
+		description: 'Show me the least complicated route first.',
+	},
+] as const;
+
+export type Preference = (typeof PREFERENCE_OPTIONS)[number]['value'];
+
+export const NEED_OPTIONS = [
+	{
+		value: 'remote',
+		label: 'Watch away from home',
+	},
+	{
+		value: 'family',
+		label: 'Share with family or several homes',
+	},
+	{
+		value: 'offline',
+		label: 'Keep real offline copies',
+	},
+	{
+		value: 'subtitles',
+		label: 'Automatic subtitle help',
+	},
+	{
+		value: 'mixed',
+		label: 'Mix local files with cloud titles',
+	},
+] as const;
+
+export type Need = (typeof NEED_OPTIONS)[number]['value'];
+
+export const PLEX_ROUTE_OPTIONS = [
+	{
+		value: 'existing-server',
+		label: 'Keep my existing Plex Media Server',
+		description: 'Keep its libraries, clients and existing workflow.',
+	},
+	{
+		value: 'rex',
+		label: 'Use rex for Plex apps',
+		description: 'I prefer a library route without a mounted Plex server.',
+	},
+	{
+		value: 'either',
+		label: 'Show me both',
+		description: 'I can choose after I see the tradeoffs.',
+	},
+] as const;
+
+export type PlexRoute = (typeof PLEX_ROUTE_OPTIONS)[number]['value'];
+
+export interface SetupAnswers {
+	player: Player;
+	plexRoute?: PlexRoute;
+	sources: SetupSource[];
+	host: Host;
+	preference: Preference;
+	needs: Need[];
+}
+
+export interface SetupLink {
+	label: string;
+	href: string;
+}
+
+export interface SetupAlternative {
+	title: string;
+	detail: string;
+	links: SetupLink[];
+}
+
+export type HostRequirement = 'none' | 'zurg' | 'server';
+
+export interface SetupSourceCoverage {
+	source: SetupSource;
+	label: string;
+	status: 'integrated' | 'separate' | 'unsupported';
+	integration: string;
+	requirements: string[];
+	setupLinks: SetupLink[];
+}
+
+export interface SetupRecommendation {
+	primaryRoute: {
+		id: string;
+		title: string;
+		summary: string;
+	};
+	whyMatched: string[];
+	components: string[];
+	prerequisites: string[];
+	limits: string[];
+	setupLinks: SetupLink[];
+	alternatives: SetupAlternative[];
+	optionalNeeds: string[];
+	conflicts: string[];
+	sourceNotes: string[];
+	sourceCoverage: SetupSourceCoverage[];
+	hostRequirement: HostRequirement;
+}
+
+const DMM_CAST_LINKS: Record<string, SetupLink> = {
+	'real-debrid': { label: 'DMM Cast for Real-Debrid', href: '/stremio' },
+	'all-debrid': { label: 'DMM Cast for AllDebrid', href: '/stremio-alldebrid' },
+	torbox: { label: 'DMM Cast for TorBox', href: '/stremio-torbox' },
+	premiumize: { label: 'DMM Cast for Premiumize', href: '/stremio-premiumize' },
+	offcloud: { label: 'DMM Cast for Offcloud', href: '/stremio-offcloud' },
+	'debrid-link': { label: 'DMM Cast for Debrid-Link', href: '/stremio-debridlink' },
+	easynews: { label: 'DMM Cast for Easynews', href: '/stremio-easynews' },
+};
+
+const DEBRID_SOURCES: SetupSource[] = [
+	'real-debrid',
+	'all-debrid',
+	'torbox',
+	'premiumize',
+	'offcloud',
+	'debrid-link',
+];
+
+const SOURCE_LABELS = new Map<SetupSource, string>(
+	SOURCE_OPTIONS.map(({ value, label }) => [value, label])
+);
+
+const note = (path: string, label: string): SetupLink => ({
+	label,
+	href: `https://notes.debridmediamanager.com/${path}/`,
+});
+const ZURG = note('zurg/setup', 'zurg setup');
+const REX = note('rex/with-zurg', 'rex with zurg');
+const HTTP = note('rex/any-source', 'rex with any source');
+const ADDON = note('rex/stremio', 'rex with Stremio addons');
+const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
+const JELLYFIN = { label: 'DMM Jellyfin NZB setup', href: '/jellyfin' };
+
+interface SourceRoute {
+	id: string;
+	title: string;
+	summary: string;
+	host: HostRequirement;
+	components: string[];
+	requirements: string[];
+	limits: string[];
+	links: SetupLink[];
+	status: SetupSourceCoverage['status'];
+	zurgNzb?: 'direct' | 'hosted';
+}
+function route(
+	id: string,
+	title: string,
+	summary: string,
+	host: HostRequirement,
+	components: string[],
+	requirements: string[] = [],
+	links: SetupLink[] = [],
+	limits: string[] = []
+): SourceRoute {
+	return {
+		id,
+		title,
+		summary,
+		host,
+		components,
+		requirements,
+		links,
+		limits,
+		status: 'integrated',
+	};
+}
+function zurgRoute(
+	source: SetupSource,
+	player: Player,
+	plexRoute: PlexRoute | undefined
+): SourceRoute {
+	const direct = source === 'usenet';
+	const hosted = source === 'torbox-hosted';
+	const input = direct
+		? 'Your NNTP account'
+		: hosted
+			? 'TorBox Pro hosted NZBs'
+			: SOURCE_LABELS.get(source)!;
+	const server = player === 'plex' || player === 'jellyfin' || player === 'emby';
+	const rex = player === 'plex' && plexRoute !== 'existing-server';
+	const output = rex
+		? 'rex → Plex apps'
+		: player === 'plex'
+			? 'filesystem mount → your existing Plex Media Server → Plex apps'
+			: player === 'jellyfin'
+				? 'filesystem mount → Jellyfin'
+				: player === 'emby'
+					? 'filesystem mount → Emby'
+					: player === 'stremio'
+						? 'Stremio NZB search addon → Stremio'
+						: player === 'kodi'
+							? 'WebDAV → Kodi'
+							: player === 'webdav'
+								? 'WebDAV → your player'
+								: 'playable file → your external player';
+	const id = rex
+		? 'zurg-rex-plex'
+		: player === 'plex'
+			? 'zurg-mounted-plex'
+			: `${player}-zurg-${direct ? 'direct-usenet' : hosted ? 'hosted-nzb' : 'debrid'}`;
+	const r = route(
+		id,
+		`${input} → zurg → ${rex ? 'rex → Plex apps' : player === 'external' ? 'your external player' : player === 'webdav' ? 'your network player' : player === 'plex' ? 'your Plex Media Server' : PLAYER_OPTIONS.find((x) => x.value === player)?.label}`,
+		'zurg supplies files to your chosen player or media server. Keep the source account and serving host available while you watch.',
+		server ? 'server' : 'zurg',
+		[
+			`${input} → zurg ${direct ? 'direct Usenet backend' : hosted ? 'hosted NZB backend' : 'debrid library'} → ${output}`,
+		],
+		[
+			'Current zurg nightlies require an active sponsorship.',
+			...(direct
+				? ['NZB files and your NNTP credentials; an indexer is needed if you want search.']
+				: hosted
+					? ['TorBox Pro and NZB files to submit.']
+					: ['Configure your provider account in zurg.']),
+		],
+		[ZURG, ...(rex ? [REX] : player === 'stremio' ? [STREMIO] : [])],
+		[
+			'zurg serves bytes, not transcoded video; the player or media server handles codec compatibility.',
+			...(direct
+				? [
+						'Direct Usenet reads articles as needed and is distinct from TorBox hosted NZBs.',
+					]
+				: []),
+		]
+	);
+	if (direct || hosted) r.zurgNzb = direct ? 'direct' : 'hosted';
+	if (player === 'stremio')
+		r.requirements.push(
+			'The Stremio NZB search addon needs a configured Newznab indexer; another device needs a reachable HTTPS addon address.'
+		);
+	return r;
+}
+function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player): SourceRoute {
+	const debrid = DEBRID_SOURCES.includes(source);
+	const cast = DMM_CAST_LINKS[source];
+	const rex = player === 'plex' && answers.plexRoute !== 'existing-server';
+	if (source === 'http-local') {
+		if (rex)
+			return route(
+				'rex-http-plex',
+				'HTTP source + rex feed → Plex apps',
+				'Submit media identity and metadata through the rex feed API. The feed producer and HTTP server serving bytes can be separate; no zurg or debrid account is required.',
+				'server',
+				['Your HTTP source + rex feed → rex → Plex apps'],
+				[
+					'A feed producer that submits media identity and metadata, plus a host for rex. Local files must be served over HTTP.',
+				],
+				[HTTP],
+				[
+					'rex does not scan disks or identify files from names; a bare URL does not supply its metadata.',
+				]
+			);
+		if (player === 'stremio') {
+			const r = route(
+				'http-source-needs-player',
+				'Connect your files through a compatible addon',
+				'A bare HTTP URL or disk is not automatically a Stremio library.',
+				'none',
+				[],
+				[
+					'Use a compatible Stremio addon for this source, or open the file in a compatible local/network player.',
+				],
+				[{ label: 'Full setup guide', href: SETUP_GUIDE_URL }]
+			);
+			r.status = 'unsupported';
+			return r;
+		}
+		const server = player === 'plex' || player === 'jellyfin' || player === 'emby';
+		const name =
+			player === 'plex'
+				? 'existing Plex Media Server'
+				: player === 'jellyfin'
+					? 'Jellyfin'
+					: player === 'emby'
+						? 'Emby'
+						: player === 'kodi'
+							? 'Kodi'
+							: player === 'webdav'
+								? 'WebDAV or SMB player'
+								: 'external player';
+		return route(
+			`${player}-existing-library`,
+			`Keep your ${name} for local or HTTP files`,
+			'Use your existing files without adding debrid or zurg. Local files and network media still need a path or protocol your player supports.',
+			server ? 'server' : 'none',
+			[`Local files or a compatible HTTP/network source → ${name}`],
+			[
+				server
+					? 'Keep the media server running with access to the files. Use a supported library adapter for HTTP URLs; a URL is not a filesystem path.'
+					: 'Open a local file, supported HTTP URL or existing network share. A NAS/file server must remain available for remote files.',
+			],
+			[{ label: 'Full setup guide', href: SETUP_GUIDE_URL }],
+			server && player === 'plex'
+				? [
+						'Plex Media Server normally uses library paths, not .strm files; use local/mounted files or a compatible source integration.',
+					]
+				: []
+		);
+	}
+	if (source === 'url-addon') {
+		if (rex)
+			return route(
+				'rex-stremio-plex',
+				'Stremio URL addons → rex → Plex apps',
+				'Use rex-stremio to bring compatible addon catalogs and streams into Plex apps.',
+				'server',
+				['Stremio catalogs + URL stream addons → rex-stremio → rex → Plex apps'],
+				['Run rex and rex-stremio; supply catalog and compatible stream addons.'],
+				[ADDON],
+				[
+					'rex-stremio needs playable URLs; raw torrent streams are incompatible. HLS needs the documented FFmpeg setup.',
+				]
+			);
+		if (player === 'stremio')
+			return route(
+				'existing-url-addon-stremio',
+				'Keep your existing Stremio URL addons',
+				'Your addon already supplies streams to the app you chose.',
+				'none',
+				['Existing Stremio addons → Stremio'],
+				['Keep the addon and any required provider account configured.'],
+				[],
+				['Availability and supported formats depend on the addon and device.']
+			);
+		const r = route(
+			'separate-url-addon',
+			'Keep the addon in its supported player',
+			'Stremio URL addons are not automatically sources for the selected player.',
+			'none',
+			[],
+			['Use Stremio directly, or rex-stremio with a normal host for Plex apps.'],
+			[ADDON]
+		);
+		r.status = 'separate';
+		return r;
+	}
+	if (source === 'easynews' && !['stremio', 'kodi', 'external'].includes(player)) {
+		const r = route(
+			'separate-easynews',
+			'Use Easynews through Cast, Kodi or Watch',
+			'The Easynews web account is a separate HTTP route; it does not configure a news server or media-server plugin.',
+			'none',
+			[],
+			[
+				'Keep Easynews in a compatible player. For rex, a compatible URL addon or feed producer must supply streams and metadata.',
+			],
+			[
+				DMM_CAST_LINKS.easynews,
+				{ label: 'Kodi setup', href: '/kodi' },
+				{ label: 'DMM player settings', href: '/settings' },
+			]
+		);
+		r.status = 'separate';
+		return r;
+	}
+	if (player === 'stremio' && (debrid || source === 'easynews' || source === 'torbox-hosted')) {
+		const hosted = source === 'torbox-hosted';
+		return route(
+			hosted ? 'torbox-hosted-stremio' : 'dmm-cast-stremio',
+			hosted ? 'TorBox hosted NZBs → TorBox Cast → Stremio' : 'DMM Cast → Stremio',
+			hosted
+				? 'Submit NZBs through DMM to TorBox Pro, wait for completion, then use TorBox Cast.'
+				: 'Use your account in Stremio without running zurg, rex or a media server.',
+			'none',
+			['DMM Cast addon → your player', 'Stremio plays the selected provider library.'],
+			hosted
+				? ['TorBox Pro and a way to submit the NZB']
+				: ['A supported provider account or Easynews account'],
+			[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
+			[
+				'The provider must supply a playable file; a catalog entry is not a guarantee of availability.',
+			]
+		);
+	}
+	if (player === 'kodi' && (debrid || source === 'easynews'))
+		return route(
+			'dmm-kodi',
+			'DMM Kodi addon → your account',
+			'Browse, search and play in Kodi with the account you already have.',
+			'none',
+			['DMM Kodi addon → Kodi'],
+			['Pair your provider or Easynews account with the Kodi addon.'],
+			[{ label: 'Kodi setup', href: '/kodi' }]
+		);
+	if (player === 'external' && (debrid || source === 'easynews'))
+		return route(
+			'external-player',
+			'DMM Watch → your external player',
+			'Choose a file in DMM and open it in your supported player.',
+			'none',
+			['DMM Watch → external player'],
+			['Choose a supported player in DMM settings.'],
+			[{ label: 'DMM settings and player choice', href: '/settings' }]
+		);
+	if (player === 'jellyfin' && source === 'usenet' && answers.preference !== 'arr')
+		return route(
+			'jellyfin-nzb-plugin',
+			'Jellyfin NZB plugin → your NNTP account',
+			'Stream NZBs inside Jellyfin without a separate zurg service.',
+			'server',
+			['Jellyfin server + the standalone Jellyfin NZB plugin'],
+			[
+				'NZB files, NNTP credentials, a supported Jellyfin version and active DMM sponsorship for plugin distribution.',
+			],
+			[JELLYFIN],
+			[
+				'Compressed or encrypted archive members are excluded and the plugin does not repair with PAR2.',
+			]
+		);
+	if (['jellyfin', 'emby'].includes(player) && debrid && answers.preference !== 'arr') {
+		const name = player === 'jellyfin' ? 'Jellyfin' : 'Emby';
+		return route(
+			`${player}-provider-plugins`,
+			`Provider plugin inside ${name}`,
+			'Use the provider integration inside your existing media server, without a separate zurg application or mount.',
+			'server',
+			[`${name} + matching DMM provider plugin(s)`],
+			[
+				'A supported server version, provider credentials and active DMM sponsorship for plugin distribution.',
+			],
+			[{ label: `DMM ${name} plugin setup`, href: `/${player}` }],
+			[
+				'Plugins have their own archive/version limits. DMM Emby plugins cover debrid, not direct NNTP or hosted NZBs.',
+			]
+		);
+	}
+	if (player === 'webdav' && debrid && answers.host === 'none' && answers.preference !== 'arr')
+		return route(
+			'provider-webdav-conditional',
+			'Provider WebDAV, if available',
+			'A direct provider endpoint can avoid hosting zurg, but only if your provider and player support it.',
+			'none',
+			['Provider WebDAV → compatible player'],
+			[
+				'Verify the selected provider offers WebDAV for these files. Otherwise choose a host for zurg; an SMB-only player needs an SMB share instead.',
+			],
+			[ZURG],
+			[
+				'This is conditional: not every provider offers WebDAV. zurg needs its own running host.',
+			]
+		);
+	return zurgRoute(source, player, answers.plexRoute);
+}
+export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
+	const selected = [...new Set(answers.sources)].filter((s) => s !== 'none');
+	const player =
+		answers.player === 'unsure'
+			? selected.includes('http-local')
+				? 'external'
+				: 'stremio'
+			: answers.player;
+	const routes = selected.map((source) => ({
+		source,
+		route: sourceRoute(source, answers, player),
+	}));
+	const integrated = routes.filter((x) => x.route.status === 'integrated');
+	const first = (integrated[0] ?? routes[0])?.route;
+	const result: SetupRecommendation = {
+		primaryRoute: first
+			? { id: first.id, title: first.title, summary: first.summary }
+			: {
+					id: 'choose-source-first',
+					title: 'Choose the player, then a source',
+					summary:
+						'Start with files or an account supported by your player. DMM does not supply video bytes by itself.',
+				},
+		whyMatched: [
+			answers.player === 'unsure'
+				? `You have not chosen a player; ${PLAYER_OPTIONS.find((x) => x.value === player)?.label} is a starting option for these sources.`
+				: `You chose ${PLAYER_OPTIONS.find((x) => x.value === player)?.label}.`,
+			`You selected “${PREFERENCE_OPTIONS.find((x) => x.value === answers.preference)?.label}.”`,
+		],
+		components: routes.flatMap((x) => x.route.components),
+		prerequisites: routes.flatMap((x) => x.route.requirements),
+		limits: routes.flatMap((x) => x.route.limits),
+		setupLinks: routes.flatMap((x) => x.route.links),
+		alternatives: [],
+		optionalNeeds: [],
+		conflicts: [],
+		sourceNotes: [],
+		hostRequirement: 'none',
+		sourceCoverage: routes.map(({ source, route: r }) => ({
+			source,
+			label: SOURCE_LABELS.get(source)!,
+			status: r.status,
+			integration: r.status === 'integrated' ? r.title : r.summary,
+			requirements: r.requirements,
+			setupLinks: r.links,
+		})),
+	};
+	const links = (...items: SetupLink[]) => result.setupLinks.push(...items);
+	const host = (required: HostRequirement) => {
+		if (required === 'server' || (required === 'zurg' && result.hostRequirement === 'none'))
+			result.hostRequirement = required;
+	};
+	routes.forEach((x) => host(x.route.host));
+	if (selected.length > 1) {
+		result.sourceNotes.push(
+			'Multiple sources can coexist, but each keeps its own credentials, quota and availability. The source list below shows the route for each.'
+		);
+		if (new Set(integrated.map((x) => x.route.id)).size > 1)
+			result.primaryRoute = {
+				id: 'combined-sources',
+				title: `Combine your sources in ${PLAYER_OPTIONS.find((x) => x.value === player)?.label}`,
+				summary:
+					'Use the routes below together. Each source retains its own requirements; adding one integration does not configure the others.',
+			};
+	}
+	if (!selected.length)
+		result.prerequisites.push(
+			'Choose a provider account, your own news account, an addon or files you already have.'
+		);
+	if (selected.includes('torbox-hosted')) {
+		result.sourceNotes.push(
+			'TorBox hosted NZBs require TorBox Pro; a normal TorBox torrent subscription alone does not provide hosted Usenet.'
+		);
+		result.limits.push(
+			'TorBox must finish and repair a hosted NZB before playback. Active downloads share account slots and retained files can expire.'
+		);
+	}
+	if (selected.includes('easynews'))
+		result.sourceNotes.push(
+			'Easynews is a web account for HTTP files. NNTP credentials, if you have them, are a separate source configuration; an Easynews web login does not configure zurg.'
+		);
+	const backendKinds = new Set(routes.map((x) => x.route.zurgNzb).filter(Boolean));
+	if (backendKinds.size === 2)
+		result.prerequisites.push(
+			'Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.'
+		);
+	const rex = player === 'plex' && answers.plexRoute !== 'existing-server';
+	if (rex) {
+		result.limits.push(
+			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
+		);
+		links(note('rex/faq', 'rex compatibility and limits'));
+		if (selected.includes('http-local'))
+			result.sourceNotes.push(
+				'An HTTP file or local disk needs a feed producer for rex; the program submitting metadata can be separate from the HTTP byte server.'
+			);
+	}
+	if (player === 'webdav')
+		result.alternatives.push({
+			title: 'For an SMB-only player',
+			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the Android zurg app.',
+			links: [ZURG],
+		});
+	if (answers.player === 'plex' && answers.plexRoute === 'either')
+		result.alternatives.push({
+			title: 'Use Plex Media Server instead',
+			detail: 'Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it.',
+			links: [ZURG, note('rex/from-plex', 'Choosing between Plex Media Server and rex')],
+		});
+	if (answers.preference === 'arr') {
+		host('server');
+		result.primaryRoute = {
+			id: 'arr-zurg',
+			title: 'DMM indexers → Sonarr/Radarr → zurg',
+			summary:
+				'Automate acquisition with arr, then keep the playback routes below for your selected player.',
+		};
+		result.components.unshift(
+			'Sonarr or Radarr → zurg qBittorrent-compatible torrent interface or SABnzbd-compatible NZB interface'
+		);
+		result.prerequisites.push(
+			'A normal host for arr and zurg; current zurg and DMM Torznab/Newznab require active sponsorship.'
+		);
+		const debrid = selected.some((s) => DEBRID_SOURCES.includes(s));
+		const nzb = selected.includes('usenet') || selected.includes('torbox-hosted');
+		if (!debrid && !nzb)
+			result.conflicts.push(
+				'Arr acquisition needs a supported debrid or NZB backend. Easynews web access, URL addons and existing files are not download-client backends.'
+			);
+		if (debrid)
+			links(
+				{ label: 'DMM Torznab setup', href: '/torznab' },
+				note('zurg/guides/sonarr-radarr-torrents', 'Sonarr/Radarr torrent setup')
+			);
+		if (nzb)
+			links(
+				{ label: 'DMM Newznab setup', href: '/newznab' },
+				note('zurg/guides/sonarr-radarr', 'Sonarr/Radarr NZB setup')
+			);
+		links(note('zurg/guides/acquisition', 'Acquisition options'));
+		if (player === 'stremio' && selected.includes('usenet'))
+			result.limits.push(
+				'The zurg Stremio addon searches NZBs at playback time; it is not a general arr library catalog. Cast can expose supported provider libraries, while WebDAV or a media server suits browsing an arr-managed library.'
+			);
+		if (
+			selected.includes('usenet') &&
+			selected.includes('torbox-hosted') &&
+			backendKinds.size !== 2
+		)
+			result.prerequisites.push(
+				'For arr acquisition, direct NNTP and hosted TorBox NZBs require separate zurg instances and data directories.'
+			);
+	}
+	if (selected.includes('real-debrid'))
+		result.alternatives.push({
+			title: 'NZBs without your own news account',
+			detail: 'DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.',
+			links: [
+				{ label: 'DMM Transfers', href: '/transfers' },
+				{
+					label: 'Usenet route comparison',
+					href: SETUP_GUIDE_URL + '#usenet-without-a-usenet-account-which-route',
+				},
+			],
+		});
+	if (answers.preference === 'managed' || answers.preference === 'arr')
+		result.alternatives.push({
+			title: 'DMM Wanted or Seerr requests',
+			detail: 'Use Wanted → zurg for automatic acquisition without arr. Seerr can send requests through DMM Wanted. These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.',
+			links: [
+				note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
+				note('dmm/seerr', 'Seerr through DMM'),
+			],
+		});
+	if (
+		result.hostRequirement === 'server' &&
+		(answers.host === 'none' || answers.host === 'android')
+	)
+		result.conflicts.push(
+			answers.host === 'android'
+				? `This route needs a normal host for ${answers.preference === 'arr' ? 'arr' : rex ? 'rex' : PLAYER_OPTIONS.find((x) => x.value === player)?.label}. The supported Android route runs zurg itself, not that whole server stack.`
+				: `${answers.preference === 'arr' ? 'An arr workflow' : rex ? 'rex and its source' : PLAYER_OPTIONS.find((x) => x.value === player)?.label} needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
+		);
+	if (result.hostRequirement === 'zurg' && answers.host === 'none')
+		result.conflicts.push(
+			'zurg needs a host that stays on while you watch. Choose a host or a supported Android device; otherwise use a compatible hosted Cast/direct-player route.'
+		);
+	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
+		result.prerequisites.push(
+			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android.'
+		);
+		links(note('zurg/guides/android', 'zurg Android guide'));
+	}
+	for (const { source, route: r } of routes)
+		if (r.status === 'unsupported')
+			result.conflicts.push(`${SOURCE_LABELS.get(source)}: ${r.summary}`);
+	if (answers.needs.includes('remote'))
+		result.optionalNeeds.push(
+			result.hostRequirement !== 'none'
+				? 'Self-hosted playback needs a securely reachable address; a LAN address works only at home.'
+				: 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
+		);
+	if (answers.needs.includes('family') || answers.needs.includes('remote'))
+		result.optionalNeeds.push(
+			'Check provider IP and concurrency rules. Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.'
+		);
+	if (answers.needs.includes('offline'))
+		result.optionalNeeds.push(
+			'Download or copy complete files and verify playback without the network. Virtual files, .strm links and debrid catalogs are not offline copies.'
+		);
+	if (answers.needs.includes('subtitles')) {
+		result.optionalNeeds.push(
+			rex
+				? 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
+				: 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+		);
+		links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
+	}
+	if (answers.needs.includes('mixed'))
+		result.optionalNeeds.push(
+			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.'
+		);
+	links({ label: 'Read the full setup guide', href: SETUP_GUIDE_URL });
+	result.setupLinks = result.setupLinks.filter(
+		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
+	);
+	for (const key of [
+		'components',
+		'prerequisites',
+		'limits',
+		'conflicts',
+		'sourceNotes',
+	] as const)
+		result[key] = [...new Set(result[key])];
+	return result;
+}

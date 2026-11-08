@@ -12,6 +12,7 @@ describe('SiteLinks', () => {
 			'https://zurg.debridmediamanager.com/',
 			'https://rex.debridmediamanager.com/',
 			'https://notes.debridmediamanager.com/',
+			'/choose-your-setup',
 			'https://gatekeeper.debridmediamanager.com/',
 		]);
 		for (const link of nav.querySelectorAll('a')) {

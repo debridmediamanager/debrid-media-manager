@@ -5,6 +5,7 @@ export const SITE_LINKS = [
 	{ label: 'zurg', href: 'https://zurg.debridmediamanager.com/' },
 	{ label: 'rex', href: 'https://rex.debridmediamanager.com/' },
 	{ label: 'Docs', href: 'https://notes.debridmediamanager.com/' },
+	{ label: 'Choose your setup', href: '/choose-your-setup' },
 	{ label: 'Gatekeeper', href: 'https://gatekeeper.debridmediamanager.com/' },
 ];
 
