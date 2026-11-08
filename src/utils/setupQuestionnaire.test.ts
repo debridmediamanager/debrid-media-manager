@@ -359,3 +359,212 @@ describe('source coverage follows routes, not explanation wording', () => {
 		expect(r.sourceCoverage[0].requirements.join(' ')).not.toMatch(/rex/);
 	});
 });
+
+describe('sponsorship benefits follow the selected route', () => {
+	const ids = (bucket: 'required' | 'optional', result: ReturnType<typeof recommendSetup>) =>
+		result.sponsorship[bucket].map((benefit) => benefit.id);
+
+	it('marks zurg and both arr indexers required, with the other upgrades optional', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['real-debrid', 'usenet'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+
+		expect(ids('required', result)).toEqual(
+			expect.arrayContaining(['zurg-nightly', 'torznab', 'newznab'])
+		);
+		expect(ids('optional', result)).toEqual(
+			expect.arrayContaining([
+				'zurg-api-key',
+				'wanted',
+				'seerr',
+				'uploader-priority',
+				'sponsor-api',
+				'remote-help',
+				'discord-role',
+			])
+		);
+	});
+
+	it('shows Cast as a free route with only optional sponsor upgrades', () => {
+		const result = recommendSetup(answers({ player: 'stremio', sources: ['real-debrid'] }));
+
+		expect(ids('required', result)).toEqual([]);
+		expect(ids('optional', result)).toEqual(
+			expect.arrayContaining(['cast-streams', 'uploader-priority', 'discord-role'])
+		);
+		expect(result.sponsorship.freeFeatures).toContain('cast');
+	});
+
+	it('keeps rex and rex-stremio free when no sponsor-only backend is selected', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'rex',
+				sources: ['url-addon'],
+				host: 'willing',
+			})
+		);
+
+		expect(ids('required', result)).toEqual([]);
+		expect(ids('optional', result)).toEqual(
+			expect.arrayContaining(['sponsor-api', 'remote-help', 'discord-role'])
+		);
+		expect(ids('required', result)).not.toContain('zurg-nightly');
+		expect(result.sponsorship.freeFeatures).toContain('rex');
+	});
+
+	it('markets the standalone Jellyfin and Emby plugin gates as required', () => {
+		const jellyfin = recommendSetup(
+			answers({ player: 'jellyfin', sources: ['usenet'], host: 'existing' })
+		);
+		const emby = recommendSetup(
+			answers({ player: 'emby', sources: ['real-debrid'], host: 'existing' })
+		);
+
+		expect(ids('required', jellyfin)).toContain('jellyfin-plugins');
+		expect(ids('required', jellyfin)).not.toContain('zurg-nightly');
+		expect(ids('optional', jellyfin)).not.toContain('remote-help');
+		expect(ids('required', emby)).toContain('emby-plugins');
+		expect(ids('required', emby)).not.toContain('zurg-nightly');
+		expect(ids('optional', emby)).not.toContain('remote-help');
+	});
+
+	it('offers DMM Newznab as an optional indexer for Stremio direct Usenet search', () => {
+		const result = recommendSetup(
+			answers({ player: 'stremio', sources: ['usenet'], host: 'willing' })
+		);
+
+		expect(ids('required', result)).toEqual(['zurg-nightly']);
+		expect(ids('optional', result)).toContain('newznab');
+	});
+
+	it('surfaces the Easynews to zurg sponsor path as an optional upgrade', () => {
+		const result = recommendSetup(
+			answers({ player: 'external', sources: ['easynews'], host: 'none' })
+		);
+
+		expect(ids('required', result)).toEqual([]);
+		expect(ids('optional', result)).toEqual(
+			expect.arrayContaining(['zurg-nightly', 'zurg-api-key', 'wanted', 'discord-role'])
+		);
+		expect(ids('optional', result)).toEqual(
+			expect.arrayContaining(['sponsor-api', 'remote-help'])
+		);
+		expect(ids('optional', result)).not.toContain('seerr');
+	});
+
+	it('offers Kodi Wanted pinning through a running zurg host, including Easynews', () => {
+		const result = recommendSetup(
+			answers({ player: 'kodi', sources: ['easynews'], host: 'willing' })
+		);
+
+		expect(ids('optional', result)).toContain('wanted-kodi');
+		expect(
+			result.sponsorship.optional.find((benefit) => benefit.id === 'wanted-kodi')?.detail
+		).toMatch(/Easynews.*running zurg host/i);
+	});
+
+	it('offers DMM Newznab to non-arr Usenet routes', () => {
+		const result = recommendSetup(answers({ player: 'external', sources: ['usenet'] }));
+
+		expect(ids('required', result)).toContain('zurg-nightly');
+		expect(ids('optional', result)).toContain('newznab');
+	});
+
+	it('adds Wanted and Seerr alternatives for a family zurg setup', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'webdav',
+				sources: ['real-debrid'],
+				host: 'willing',
+				needs: ['family'],
+			})
+		);
+
+		expect(ids('optional', result)).toEqual(expect.arrayContaining(['wanted', 'seerr']));
+	});
+
+	it('keeps uploader priority limited to Real-Debrid hosted transfers', () => {
+		const rd = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['real-debrid'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+		const usenet = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['usenet'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+		const torbox = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['torbox-hosted'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+
+		expect(ids('optional', rd)).toContain('uploader-priority');
+		expect(ids('optional', usenet)).not.toContain('uploader-priority');
+		expect(ids('optional', torbox)).not.toContain('uploader-priority');
+	});
+
+	it('deduplicates benefits across mixed provider routes', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'jellyfin',
+				sources: ['real-debrid', 'all-debrid'],
+				host: 'existing',
+				preference: 'managed',
+			})
+		);
+		const allIds = [...ids('required', result), ...ids('optional', result)];
+
+		expect(ids('required', result)).toEqual(['jellyfin-plugins']);
+		expect(new Set(allIds).size).toBe(allIds.length);
+	});
+
+	it('does not repeat a required indexer in the optional upgrades list', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'stremio',
+				sources: ['usenet'],
+				preference: 'arr',
+				host: 'willing',
+			})
+		);
+
+		expect(ids('required', result)).toContain('newznab');
+		expect(ids('optional', result)).not.toContain('newznab');
+	});
+
+	it('keeps unsupported and no-source results free of sponsor-only claims', () => {
+		const result = recommendSetup(
+			answers({ player: 'stremio', sources: ['http-local'], host: 'none' })
+		);
+		const noSource = recommendSetup(answers({ player: 'stremio', sources: [] }));
+
+		expect(ids('required', result)).toEqual([]);
+		expect(ids('optional', result)).toEqual(['sponsor-benefits', 'discord-role']);
+		expect(result.sponsorship.routeAvailable).toBe(false);
+		expect(result.sponsorship.freeFeatures).toEqual([]);
+		expect(ids('required', noSource)).toEqual([]);
+		expect(ids('optional', noSource)).toEqual(['sponsor-benefits', 'discord-role']);
+		expect(noSource.sponsorship.routeAvailable).toBe(false);
+	});
+});

@@ -47,9 +47,44 @@ describe('choose your setup page', () => {
 		expect(
 			screen.getAllByRole('link', { name: 'Read the full setup guide' })[0]
 		).toHaveAttribute('href', 'https://notes.debridmediamanager.com/guides/choose-your-setup/');
+		expect(screen.getByTestId('sponsorship-section')).toBeInTheDocument();
+		expect(
+			screen.getByRole('link', { name: 'Connect your key in DMM settings' })
+		).toHaveAttribute('href', '/settings');
+		expect(screen.getByRole('link', { name: 'Sponsor DMM' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
+		expect(
+			screen.getByText(/DMM Cast itself does not require sponsorship/)
+		).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Your answers' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
 		expect(document.activeElement).toHaveTextContent('DMM Cast → Stremio');
+	});
+
+	it('keeps unsupported routes ahead of sponsorship marketing and explains the limit', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /HTTP links or files/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		const warning = screen.getByRole('heading', { name: 'A constraint to resolve' });
+		const sponsorship = screen.getByTestId('sponsorship-section');
+		expect(
+			warning.compareDocumentPosition(sponsorship) & Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+		expect(
+			screen.getByText(
+				'Choose a supported source and resolve the setup requirements above first. Sponsorship does not remove them.'
+			)
+		).toBeInTheDocument();
 	});
 
 	it('moves focus to the next question for keyboard users', () => {

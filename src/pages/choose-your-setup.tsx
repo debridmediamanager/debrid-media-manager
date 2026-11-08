@@ -1,4 +1,5 @@
 import { Logo } from '@/components/Logo';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import {
 	HOST_OPTIONS,
 	NEED_OPTIONS,
@@ -16,8 +17,10 @@ import {
 	type SetupAnswers,
 	type SetupRecommendation,
 	type SetupSource,
+	type SetupSponsorBenefit,
+	type SetupSponsorship,
 } from '@/utils/setupQuestionnaire';
-import { ArrowLeft, Check, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Check, Heart, RotateCcw } from 'lucide-react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -287,6 +290,104 @@ function ResultSection({ title, items }: { title: string; items: string[] }) {
 	);
 }
 
+function SponsorBenefits({ sponsorship }: { sponsorship: SetupSponsorship }) {
+	const benefitList = (benefits: SetupSponsorBenefit[]) => (
+		<ul className="mt-2 space-y-2 text-sm text-gray-200">
+			{benefits.map((benefit) => (
+				<li key={benefit.id} className="flex gap-2">
+					<span className="mt-1 text-pink-300" aria-hidden="true">
+						•
+					</span>
+					<span>
+						{benefit.href ? (
+							<a
+								href={benefit.href}
+								target={benefit.href.startsWith('http') ? '_blank' : undefined}
+								rel={
+									benefit.href.startsWith('http')
+										? 'noopener noreferrer'
+										: undefined
+								}
+								className="text-pink-200 underline decoration-pink-400/60 underline-offset-2 hover:text-white"
+							>
+								{benefit.title}
+							</a>
+						) : (
+							<strong className="font-medium text-gray-100">{benefit.title}</strong>
+						)}{' '}
+						<span className="text-gray-400">{benefit.detail}</span>
+					</span>
+				</li>
+			))}
+		</ul>
+	);
+
+	return (
+		<section
+			data-testid="sponsorship-section"
+			className="rounded border-2 border-pink-500/40 bg-pink-950/20 p-4 sm:p-5"
+		>
+			<div className="flex items-center gap-2">
+				<Heart className="h-4 w-4 text-pink-300" aria-hidden="true" />
+				<h3 className="text-sm font-semibold tracking-wide text-pink-200 uppercase">
+					Sponsor DMM for these benefits
+				</h3>
+			</div>
+			<p className="mt-2 text-sm leading-6 text-gray-300">
+				{sponsorship.routeAvailable
+					? sponsorship.required.length
+						? 'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
+						: 'Sponsorship is optional for the free tools above. Sponsor DMM to unlock the relevant upgrades below.'
+					: 'Choose a supported source and resolve the setup requirements above first. Sponsorship does not remove them.'}
+			</p>
+			<a
+				href={GATEKEEPER_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				data-testid="sponsor-primary-cta"
+				className="mt-3 inline-flex items-center justify-center rounded border-2 border-pink-300 bg-pink-500/20 px-4 py-2 text-sm font-semibold text-pink-100 hover:bg-pink-500/40"
+			>
+				Sponsor DMM
+			</a>
+			<p className="mt-2 text-xs text-gray-400">
+				Already sponsoring?{' '}
+				<Link
+					href="/settings"
+					className="text-pink-200 underline underline-offset-2 hover:text-white"
+				>
+					Connect your key in DMM settings
+				</Link>
+			</p>
+			{sponsorship.freeFeatures.includes('cast') ? (
+				<p className="mt-2 text-xs text-gray-400">
+					DMM Cast itself does not require sponsorship; sponsoring increases the
+					per-profile limit from five to ten other streams.
+				</p>
+			) : null}
+			{sponsorship.freeFeatures.includes('rex') ? (
+				<p className="mt-2 text-xs text-gray-400">
+					rex and rex-stremio do not require sponsorship; any sponsor benefits below apply
+					to the zurg, API or help parts of the setup.
+				</p>
+			) : null}
+			{sponsorship.required.length ? (
+				<div className="mt-4">
+					<h4 className="text-sm font-medium text-pink-100">Required for this route</h4>
+					{benefitList(sponsorship.required)}
+				</div>
+			) : null}
+			<div className="mt-4">
+				<h4 className="text-sm font-medium text-pink-100">
+					{sponsorship.required.length
+						? 'Also included or useful'
+						: 'Optional sponsor benefits'}
+				</h4>
+				{benefitList(sponsorship.optional)}
+			</div>
+		</section>
+	);
+}
+
 function RecommendationView({
 	recommendation,
 	answers,
@@ -328,6 +429,8 @@ function RecommendationView({
 					<ResultSection title="What needs changing" items={recommendation.conflicts} />
 				</section>
 			) : null}
+
+			<SponsorBenefits sponsorship={recommendation.sponsorship} />
 
 			<div className="grid gap-5 rounded border border-gray-700 bg-gray-800/30 p-4 sm:grid-cols-2 sm:p-5">
 				<ResultSection title="Why this matched" items={recommendation.whyMatched} />

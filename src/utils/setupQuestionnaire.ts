@@ -236,6 +236,22 @@ export interface SetupSourceCoverage {
 	setupLinks: SetupLink[];
 }
 
+export interface SetupSponsorBenefit {
+	id: string;
+	title: string;
+	detail: string;
+	href?: string;
+}
+
+export type FreeSponsorFeature = 'cast' | 'rex';
+
+export interface SetupSponsorship {
+	required: SetupSponsorBenefit[];
+	optional: SetupSponsorBenefit[];
+	freeFeatures: FreeSponsorFeature[];
+	routeAvailable: boolean;
+}
+
 export interface SetupRecommendation {
 	primaryRoute: {
 		id: string;
@@ -253,6 +269,7 @@ export interface SetupRecommendation {
 	sourceNotes: string[];
 	sourceCoverage: SetupSourceCoverage[];
 	hostRequirement: HostRequirement;
+	sponsorship: SetupSponsorship;
 }
 
 const DMM_CAST_LINKS: Record<string, SetupLink> = {
@@ -300,6 +317,190 @@ interface SourceRoute {
 	links: SetupLink[];
 	status: SetupSourceCoverage['status'];
 	zurgNzb?: 'direct' | 'hosted';
+	usesZurg?: boolean;
+	usesCast?: boolean;
+	usesRex?: boolean;
+}
+
+const SPONSOR_BENEFITS = {
+	zurg: {
+		id: 'zurg-nightly',
+		title: 'zurg nightly access',
+		detail: 'Access the current zurg nightly builds, source code, Docker image and Android app for this route.',
+		href: 'https://zurg.debridmediamanager.com/',
+	},
+	zurgKey: {
+		id: 'zurg-api-key',
+		title: 'zurg with your DMM API key',
+		detail: 'Use the key from your sponsorship for exact release naming, placement and __magic__ folders.',
+	},
+	torznab: {
+		id: 'torznab',
+		title: 'DMM torrent indexer',
+		detail: 'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with live cache feeds for TorBox, Premiumize and Offcloud.',
+		href: '/torznab',
+	},
+	newznab: {
+		id: 'newznab',
+		title: 'DMM Usenet indexer',
+		detail: 'Search DMM as a Newznab indexer from Prowlarr, Sonarr or Radarr.',
+		href: '/newznab',
+	},
+	wanted: {
+		id: 'wanted',
+		title: 'DMM Wanted list',
+		detail: 'Have zurg fetch requested films, shows, new episodes and upgrades for you, including exact Easynews releases you send.',
+		href: '/wanted',
+	},
+	wantedKodi: {
+		id: 'wanted-kodi',
+		title: 'DMM Wanted from Kodi',
+		detail: 'Pin a title in the DMM Kodi addon, including Easynews, for zurg to fetch; this needs a running zurg host.',
+		href: '/wanted',
+	},
+	seerr: {
+		id: 'seerr',
+		title: 'Seerr through DMM',
+		detail: 'Send Overseerr or Jellyseerr requests to your DMM Wanted list.',
+		href: 'https://notes.debridmediamanager.com/dmm/seerr/',
+	},
+	jellyfin: {
+		id: 'jellyfin-plugins',
+		title: 'Jellyfin plugins',
+		detail: 'Use DMM debrid and Usenet plugins inside Jellyfin without mounting zurg.',
+		href: '/jellyfin',
+	},
+	emby: {
+		id: 'emby-plugins',
+		title: 'Emby plugins',
+		detail: 'Use DMM debrid plugins inside Emby without mounting zurg.',
+		href: '/emby',
+	},
+	cast: {
+		id: 'cast-streams',
+		title: 'Ten other streams in Stremio Cast',
+		detail: 'Raise the other-stream limit from five to ten per Cast profile.',
+		href: '/settings',
+	},
+	queue: {
+		id: 'uploader-priority',
+		title: 'Skip the uploader queue',
+		detail: "For Real-Debrid hosted transfers, get priority in DMM's hosted NZB and torrent uploaders, 2 TB of Usenet a day instead of 300 GB, and three torrent jobs at once instead of one.",
+		href: '/transfers',
+	},
+	api: {
+		id: 'sponsor-api',
+		title: 'Sponsor API',
+		detail: 'Use release identification, cached availability, media details and metadata in your own tools.',
+		href: '/api-docs',
+	},
+	remoteHelp: {
+		id: 'remote-help',
+		title: 'Free remote help',
+		detail: 'A helper can fix your zurg or rex setup in your own terminal while you watch.',
+		href: 'https://notes.debridmediamanager.com/guides/remote-help/',
+	},
+	discord: {
+		id: 'discord-role',
+		title: 'Sponsor role on Discord',
+		detail: 'Connect Discord on gatekeeper to receive the sponsor role.',
+	},
+	sponsorBenefits: {
+		id: 'sponsor-benefits',
+		title: 'All sponsor benefits',
+		detail: 'See the current benefits and connect your sponsorship in DMM settings.',
+		href: '/settings',
+	},
+} satisfies Record<string, SetupSponsorBenefit>;
+
+type SponsorBenefitId = keyof typeof SPONSOR_BENEFITS;
+
+function sponsorshipFor(
+	answers: SetupAnswers,
+	player: Player,
+	routes: { route: SourceRoute }[],
+	routeAvailable: boolean
+): SetupSponsorship {
+	const selected = new Set(answers.sources.filter((source) => source !== 'none'));
+	const debrid = [...selected].some((source) => DEBRID_SOURCES.includes(source));
+	const hasNzb = selected.has('usenet') || selected.has('torbox-hosted');
+	const usesZurg =
+		routes.some(({ route: source }) => source.usesZurg) ||
+		(answers.preference === 'arr' && (debrid || hasNzb));
+	const usesCast = routes.some(({ route: source }) => source.usesCast);
+	const usesRex = routes.some(({ route: source }) => source.usesRex);
+	const required: SetupSponsorBenefit[] = [];
+	const optional: SetupSponsorBenefit[] = [];
+	const add = (list: SetupSponsorBenefit[], id: SponsorBenefitId) =>
+		list.push(SPONSOR_BENEFITS[id]);
+
+	if (usesZurg) add(required, 'zurg');
+	if (answers.preference === 'arr' && debrid) add(required, 'torznab');
+	if (answers.preference === 'arr' && hasNzb) add(required, 'newznab');
+	if (player === 'jellyfin' && answers.preference !== 'arr' && (debrid || selected.has('usenet')))
+		add(required, 'jellyfin');
+	if (player === 'emby' && answers.preference !== 'arr' && debrid) add(required, 'emby');
+
+	if (usesZurg) add(optional, 'zurgKey');
+	if (usesCast) add(optional, 'cast');
+	if (answers.preference === 'managed' && debrid) add(optional, 'torznab');
+	if (hasNzb && answers.preference !== 'arr') add(optional, 'newznab');
+	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
+		add(optional, 'jellyfin');
+	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');
+	if (player === 'kodi' && (debrid || hasNzb || selected.has('easynews')))
+		add(optional, 'wantedKodi');
+	if (
+		(answers.preference === 'managed' || answers.preference === 'arr') &&
+		[...selected].some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
+		)
+	) {
+		add(optional, 'wanted');
+		add(optional, 'seerr');
+	}
+	const familyOrRemote = answers.needs.includes('family') || answers.needs.includes('remote');
+	const supportsRequests = usesZurg || answers.preference === 'managed' || player === 'kodi';
+	if (
+		familyOrRemote &&
+		supportsRequests &&
+		[...selected].some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
+		)
+	) {
+		add(optional, 'wanted');
+		add(optional, 'seerr');
+	}
+	if (selected.has('easynews')) {
+		if (!usesZurg) {
+			add(optional, 'zurg');
+			add(optional, 'zurgKey');
+		}
+		add(optional, player === 'kodi' ? 'wantedKodi' : 'wanted');
+		add(optional, 'api');
+		add(optional, 'remoteHelp');
+	}
+	if (selected.has('real-debrid')) add(optional, 'queue');
+	if (usesZurg || usesRex) add(optional, 'api');
+	if (usesZurg || usesRex) add(optional, 'remoteHelp');
+	if (!routeAvailable || !required.length) add(optional, 'sponsorBenefits');
+	add(optional, 'discord');
+
+	const unique = (list: SetupSponsorBenefit[]) =>
+		list.filter((benefit, index) => list.findIndex((item) => item.id === benefit.id) === index);
+	const requiredBenefits = unique(required);
+	const requiredIds = new Set(requiredBenefits.map((benefit) => benefit.id));
+	return {
+		required: requiredBenefits,
+		optional: unique(optional).filter((benefit) => !requiredIds.has(benefit.id)),
+		freeFeatures: [
+			...(usesCast ? (['cast'] as const) : []),
+			...(usesRex ? (['rex'] as const) : []),
+		],
+		routeAvailable,
+	};
 }
 function route(
 	id: string,
@@ -383,6 +584,8 @@ function zurgRoute(
 				: []),
 		]
 	);
+	r.usesZurg = true;
+	if (rex) r.usesRex = true;
 	if (direct || hosted) r.zurgNzb = direct ? 'direct' : 'hosted';
 	if (player === 'stremio')
 		r.requirements.push(
@@ -396,19 +599,22 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	const rex = player === 'plex' && answers.plexRoute !== 'existing-server';
 	if (source === 'http-local') {
 		if (rex)
-			return route(
-				'rex-http-plex',
-				'HTTP source + rex feed → Plex apps',
-				'Submit media identity and metadata through the rex feed API. The feed producer and HTTP server serving bytes can be separate; no zurg or debrid account is required.',
-				'server',
-				['Your HTTP source + rex feed → rex → Plex apps'],
-				[
-					'A feed producer that submits media identity and metadata, plus a host for rex. Local files must be served over HTTP.',
-				],
-				[HTTP],
-				[
-					'rex does not scan disks or identify files from names; a bare URL does not supply its metadata.',
-				]
+			return Object.assign(
+				route(
+					'rex-http-plex',
+					'HTTP source + rex feed → Plex apps',
+					'Submit media identity and metadata through the rex feed API. The feed producer and HTTP server serving bytes can be separate; no zurg or debrid account is required.',
+					'server',
+					['Your HTTP source + rex feed → rex → Plex apps'],
+					[
+						'A feed producer that submits media identity and metadata, plus a host for rex. Local files must be served over HTTP.',
+					],
+					[HTTP],
+					[
+						'rex does not scan disks or identify files from names; a bare URL does not supply its metadata.',
+					]
+				),
+				{ usesRex: true }
 			);
 		if (player === 'stremio') {
 			const r = route(
@@ -459,17 +665,20 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	}
 	if (source === 'url-addon') {
 		if (rex)
-			return route(
-				'rex-stremio-plex',
-				'Stremio URL addons → rex → Plex apps',
-				'Use rex-stremio to bring compatible addon catalogs and streams into Plex apps.',
-				'server',
-				['Stremio catalogs + URL stream addons → rex-stremio → rex → Plex apps'],
-				['Run rex and rex-stremio; supply catalog and compatible stream addons.'],
-				[ADDON],
-				[
-					'rex-stremio needs playable URLs; raw torrent streams are incompatible. HLS needs the documented FFmpeg setup.',
-				]
+			return Object.assign(
+				route(
+					'rex-stremio-plex',
+					'Stremio URL addons → rex → Plex apps',
+					'Use rex-stremio to bring compatible addon catalogs and streams into Plex apps.',
+					'server',
+					['Stremio catalogs + URL stream addons → rex-stremio → rex → Plex apps'],
+					['Run rex and rex-stremio; supply catalog and compatible stream addons.'],
+					[ADDON],
+					[
+						'rex-stremio needs playable URLs; raw torrent streams are incompatible. HLS needs the documented FFmpeg setup.',
+					]
+				),
+				{ usesRex: true }
 			);
 		if (player === 'stremio')
 			return route(
@@ -515,21 +724,24 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	}
 	if (player === 'stremio' && (debrid || source === 'easynews' || source === 'torbox-hosted')) {
 		const hosted = source === 'torbox-hosted';
-		return route(
-			hosted ? 'torbox-hosted-stremio' : 'dmm-cast-stremio',
-			hosted ? 'TorBox hosted NZBs → TorBox Cast → Stremio' : 'DMM Cast → Stremio',
-			hosted
-				? 'Submit NZBs through DMM to TorBox Pro, wait for completion, then use TorBox Cast.'
-				: 'Use your account in Stremio without running zurg, rex or a media server.',
-			'none',
-			['DMM Cast addon → your player', 'Stremio plays the selected provider library.'],
-			hosted
-				? ['TorBox Pro and a way to submit the NZB']
-				: ['A supported provider account or Easynews account'],
-			[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
-			[
-				'The provider must supply a playable file; a catalog entry is not a guarantee of availability.',
-			]
+		return Object.assign(
+			route(
+				hosted ? 'torbox-hosted-stremio' : 'dmm-cast-stremio',
+				hosted ? 'TorBox hosted NZBs → TorBox Cast → Stremio' : 'DMM Cast → Stremio',
+				hosted
+					? 'Submit NZBs through DMM to TorBox Pro, wait for completion, then use TorBox Cast.'
+					: 'Use your account in Stremio without running zurg, rex or a media server.',
+				'none',
+				['DMM Cast addon → your player', 'Stremio plays the selected provider library.'],
+				hosted
+					? ['TorBox Pro and a way to submit the NZB']
+					: ['A supported provider account or Easynews account'],
+				[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
+				[
+					'The provider must supply a playable file; a catalog entry is not a guarantee of availability.',
+				]
+			),
+			{ usesCast: true }
 		);
 	}
 	if (player === 'kodi' && (debrid || source === 'easynews'))
@@ -639,6 +851,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		conflicts: [],
 		sourceNotes: [],
 		hostRequirement: 'none',
+		sponsorship: { required: [], optional: [], freeFeatures: [], routeAvailable: false },
 		sourceCoverage: routes.map(({ source, route: r }) => ({
 			source,
 			label: SOURCE_LABELS.get(source)!,
@@ -823,6 +1036,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.optionalNeeds.push(
 			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.'
 		);
+	result.sponsorship = sponsorshipFor(answers, player, routes, integrated.length > 0);
 	links({ label: 'Read the full setup guide', href: SETUP_GUIDE_URL });
 	result.setupLinks = result.setupLinks.filter(
 		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
