@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { recommendSetup, type SetupAnswers } from './setupQuestionnaire';
+import {
+	HOST_OPTIONS,
+	NEED_OPTIONS,
+	PLAYER_OPTIONS,
+	PREFERENCE_OPTIONS,
+	SOURCE_OPTIONS,
+	recommendSetup,
+	type Host,
+	type Need,
+	type Player,
+	type PlexRoute,
+	type Preference,
+	type SetupAnswers,
+	type SetupSource,
+} from './setupQuestionnaire';
 
 const answers = (overrides: Partial<SetupAnswers> = {}): SetupAnswers => ({
 	player: 'stremio',
@@ -66,7 +80,7 @@ describe('recommendSetup', () => {
 			answers({ player: 'emby', sources: ['usenet'], host: 'none', preference: 'managed' })
 		);
 
-		expect(result.primaryRoute.id).toBe('emby-zurg-direct-usenet');
+		expect(result.primaryRoute.id).toBe('resolve-constraints');
 		expect(result.conflicts.join(' ')).toMatch(/needs a machine that stays on/i);
 		expect(result.limits.join(' ')).toMatch(/distinct from TorBox hosted NZBs/i);
 	});
@@ -135,8 +149,10 @@ describe('recommendSetup', () => {
 			})
 		);
 
-		expect(result.primaryRoute.id).toBe('arr-zurg');
-		expect(result.conflicts.join(' ')).toMatch(/arr workflow needs a machine/i);
+		expect(result.primaryRoute.id).toBe('resolve-constraints');
+		expect(result.conflicts.join(' ')).toMatch(
+			/arr workflow needs an existing or willing full host/i
+		);
 	});
 
 	it('keeps the selected Stremio playback route when arr is selected', () => {
@@ -316,7 +332,7 @@ describe('recommendSetup', () => {
 			})
 		);
 
-		expect(result.primaryRoute.id).toBe('rex-stremio-plex');
+		expect(result.primaryRoute.id).toBe('resolve-constraints');
 		expect(result.conflicts.join(' ')).toMatch(/rex and its source/i);
 		expect(result.limits.join(' ')).toMatch(/raw torrent streams are incompatible/i);
 	});
@@ -567,4 +583,233 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', noSource)).toEqual(['sponsor-benefits', 'discord-role']);
 		expect(noSource.sponsorship.routeAvailable).toBe(false);
 	});
+});
+
+describe('constraints block unusable starting routes', () => {
+	it('does not present arr as the starting route when the user has no source or host', () => {
+		const result = recommendSetup({
+			player: 'unsure',
+			sources: ['none'],
+			host: 'none',
+			preference: 'arr',
+			needs: ['family'],
+		});
+
+		expect(result.primaryRoute.id).toBe('resolve-constraints');
+		expect(result.primaryRoute.title).toBe('Resolve the setup requirements first');
+		expect(result.conflicts).toEqual(
+			expect.arrayContaining([
+				expect.stringMatching(/arr.*supported debrid or NZB backend/i),
+				expect.stringMatching(/existing or willing full host/i),
+			])
+		);
+		expect(result.sponsorship.routeAvailable).toBe(false);
+	});
+
+	it('blocks arr when the selected sources cannot acquire releases', () => {
+		const result = recommendSetup(
+			answers({
+				sources: ['easynews'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.primaryRoute.id).toBe('resolve-constraints');
+		expect(result.conflicts.join(' ')).toMatch(/arr.*supported debrid or NZB backend/i);
+	});
+
+	it('keeps arr executable when a mixed source set includes a supported backend', () => {
+		const result = recommendSetup(
+			answers({
+				sources: ['real-debrid', 'easynews'],
+				host: 'willing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.primaryRoute.id).toBe('arr-zurg');
+		expect(result.conflicts).toHaveLength(0);
+	});
+});
+
+describe('bounded recommendation compatibility matrix', () => {
+	const sourceValues = SOURCE_OPTIONS.filter(({ value }) => value !== 'none').map(
+		({ value }) => value as SetupSource
+	);
+	const sourceSubsets: SetupSource[][] = [['none']];
+	for (let mask = 0; mask < 1 << sourceValues.length; mask += 1) {
+		sourceSubsets.push(sourceValues.filter((_, index) => (mask & (1 << index)) !== 0));
+	}
+
+	const playerModes: Array<{ player: Player; plexRoute?: PlexRoute }> = [
+		...PLAYER_OPTIONS.filter(({ value }) => value !== 'plex').map(({ value }) => ({
+			player: value as Player,
+		})),
+		{ player: 'plex', plexRoute: 'existing-server' },
+		{ player: 'plex', plexRoute: 'rex' },
+		{ player: 'plex', plexRoute: 'either' },
+	];
+	const hostValues = HOST_OPTIONS.map(({ value }) => value as Host);
+	const preferenceValues = PREFERENCE_OPTIONS.map(({ value }) => value as Preference);
+	const needValues = NEED_OPTIONS.map(({ value }) => value as Need);
+	const structuralCaseCount =
+		sourceSubsets.length * playerModes.length * hostValues.length * preferenceValues.length;
+	const needEvidence: Record<Need, RegExp> = {
+		remote: /securely reachable|Hosted Cast\/direct playback/i,
+		family: /provider IP and concurrency/i,
+		offline: /offline copies/i,
+		subtitles: /subtitle/i,
+		mixed: /local files/i,
+	};
+
+	function assertInvariants(result: ReturnType<typeof recommendSetup>, input: SetupAnswers) {
+		const context = JSON.stringify(input);
+		const fail = (reason: string): never => {
+			throw new Error(`${reason}; case=${context}`);
+		};
+		const selectedSources = [...new Set(input.sources)].filter((source) => source !== 'none');
+		const coveredSources = result.sourceCoverage.map(({ source }) => source);
+		if (
+			coveredSources.length !== selectedSources.length ||
+			new Set(coveredSources).size !== coveredSources.length ||
+			selectedSources.some((source) => !coveredSources.includes(source))
+		)
+			fail('source coverage is not exactly one entry for every selected source');
+
+		const benefitIds = [...result.sponsorship.required, ...result.sponsorship.optional].map(
+			({ id }) => id
+		);
+		if (new Set(benefitIds).size !== benefitIds.length)
+			fail('sponsorship benefits contain a duplicate');
+		const requiredIds = new Set(result.sponsorship.required.map(({ id }) => id));
+		if (result.sponsorship.optional.some(({ id }) => requiredIds.has(id)))
+			fail('a required sponsorship benefit is also optional');
+		if (new Set(result.setupLinks.map(({ href }) => href)).size !== result.setupLinks.length)
+			fail('setup links contain a duplicate href');
+
+		const integrated = result.sourceCoverage.some(({ status }) => status === 'integrated');
+		const expectedAvailable = integrated && result.conflicts.length === 0;
+		if (result.sponsorship.routeAvailable !== expectedAvailable)
+			fail('route availability does not reflect integrated coverage and conflicts');
+		if (result.conflicts.length && result.primaryRoute.id !== 'resolve-constraints')
+			fail('a conflicting recommendation still has an executable starting route');
+		if (!result.conflicts.length && result.primaryRoute.id === 'resolve-constraints')
+			fail('a conflict-free recommendation is blocked');
+
+		if (input.host === 'none' && result.hostRequirement !== 'none' && !result.conflicts.length)
+			fail('a no-host route has a host requirement without a conflict');
+		if (
+			input.host === 'android' &&
+			result.hostRequirement === 'server' &&
+			!result.conflicts.length
+		)
+			fail('an Android route requiring a full server is not blocked');
+		if (
+			input.preference === 'arr' &&
+			input.host !== 'existing' &&
+			input.host !== 'willing' &&
+			!result.conflicts.some((conflict) =>
+				/arr workflow.*existing or willing full host/i.test(conflict)
+			)
+		)
+			fail('arr without a full host has no explicit host conflict');
+	}
+
+	function forEachStructuralCase(
+		callback: (
+			mode: { player: Player; plexRoute?: PlexRoute },
+			sources: SetupSource[],
+			host: Host,
+			preference: Preference
+		) => void
+	) {
+		for (const mode of playerModes) {
+			for (const sources of sourceSubsets) {
+				for (const host of hostValues) {
+					for (const preference of preferenceValues) {
+						callback(mode, sources, host, preference);
+					}
+				}
+			}
+		}
+	}
+
+	it(`preserves route and sponsor invariants across ${structuralCaseCount} player/source/host/workflow cases`, () => {
+		let cases = 0;
+		forEachStructuralCase((mode, sources, host, preference) => {
+			const input: SetupAnswers = {
+				player: mode.player,
+				plexRoute: mode.plexRoute,
+				sources,
+				host,
+				preference,
+				needs: [],
+			};
+			assertInvariants(recommendSetup(input), input);
+			cases += 1;
+		});
+		expect(cases).toBe(structuralCaseCount);
+	});
+
+	it(
+		`keeps the same invariants for every need combination across the structural matrix (${structuralCaseCount * (1 << needValues.length)} cases)`,
+		{ timeout: 360_000 },
+		() => {
+			let cases = 0;
+			forEachStructuralCase((mode, sources, host, preference) => {
+				const baseline = recommendSetup({
+					player: mode.player,
+					plexRoute: mode.plexRoute,
+					sources,
+					host,
+					preference,
+					needs: [],
+				});
+				const baselineStable = JSON.stringify({
+					primaryRoute: baseline.primaryRoute,
+					hostRequirement: baseline.hostRequirement,
+					conflicts: baseline.conflicts,
+					routeAvailable: baseline.sponsorship.routeAvailable,
+					coverage: baseline.sourceCoverage.map(({ source, status }) => [source, status]),
+				});
+				for (let mask = 0; mask < 1 << needValues.length; mask += 1) {
+					const input: SetupAnswers = {
+						player: mode.player,
+						plexRoute: mode.plexRoute,
+						sources,
+						host,
+						preference,
+						needs: needValues.filter((_, index) => (mask & (1 << index)) !== 0),
+					};
+					const result = recommendSetup(input);
+					const resultStable = JSON.stringify({
+						primaryRoute: result.primaryRoute,
+						hostRequirement: result.hostRequirement,
+						conflicts: result.conflicts,
+						routeAvailable: result.sponsorship.routeAvailable,
+						coverage: result.sourceCoverage.map(({ source, status }) => [
+							source,
+							status,
+						]),
+					});
+					if (resultStable !== baselineStable)
+						throw new Error(
+							`optional needs changed route, host or availability; case=${JSON.stringify(input)}`
+						);
+					const optionalNeeds = result.optionalNeeds.join(' ');
+					for (const need of needValues) {
+						const present = input.needs.includes(need);
+						const evidenced = needEvidence[need].test(optionalNeeds);
+						if (present && !evidenced)
+							throw new Error(
+								`need output coverage mismatch for ${need}; case=${JSON.stringify(input)}`
+							);
+					}
+					cases += 1;
+				}
+			});
+			expect(cases).toBe(structuralCaseCount * (1 << needValues.length));
+		}
+	);
 });

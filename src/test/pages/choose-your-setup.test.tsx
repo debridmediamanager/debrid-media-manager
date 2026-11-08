@@ -33,6 +33,7 @@ function reachStremioRecommendation() {
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+	fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -84,6 +85,172 @@ describe('choose your setup page', () => {
 			screen.getByText(
 				'Choose a supported source and resolve the setup requirements above first. Sponsorship does not remove them.'
 			)
+		).toBeInTheDocument();
+	});
+
+	it('disables arr until a full host is selected, with a visible reason', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('button', {
+			name: /Automation with Sonarr\/Radarr/,
+		});
+		expect(arr).toBeDisabled();
+		expect(
+			screen.getByText(/Unavailable: The arr workflow needs an existing or willing full host/)
+		).toBeInTheDocument();
+	});
+
+	it('disables arr until a supported acquisition backend is selected', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Easynews/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('button', {
+			name: /Automation with Sonarr\/Radarr/,
+		});
+		expect(arr).toBeDisabled();
+		expect(
+			screen.getByText(
+				/Unavailable: The arr workflow needs a supported debrid or NZB backend/
+			)
+		).toBeInTheDocument();
+	});
+
+	it('keeps arr enabled for a mixed source set with a supported backend', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: /Easynews/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ })
+		).not.toBeDisabled();
+	});
+
+	it('clears a stale arr choice when editing a valid route to no host', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		const hostRow = screen.getByText('Can a machine stay on while you watch?').parentElement
+			?.parentElement;
+		expect(hostRow).not.toBeNull();
+		fireEvent.click(
+			within(hostRow as HTMLElement).getByRole('button', {
+				name: 'Edit Can a machine stay on while you watch?',
+			})
+		);
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('button', {
+			name: /Automation with Sonarr\/Radarr/,
+		});
+		expect(arr).toBeDisabled();
+		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
+			'aria-pressed',
+			'true'
+		);
+	});
+
+	it('clears a stale arr choice when editing sources to an unsupported set', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		const sourceRow = screen.getByText('What do you already have?').parentElement
+			?.parentElement;
+		expect(sourceRow).not.toBeNull();
+		fireEvent.click(
+			within(sourceRow as HTMLElement).getByRole('button', {
+				name: 'Edit What do you already have?',
+			})
+		);
+		fireEvent.click(screen.getByRole('button', { name: /None yet/ }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('button', {
+			name: /Automation with Sonarr\/Radarr/,
+		});
+		expect(arr).toBeDisabled();
+		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
+			'aria-pressed',
+			'true'
+		);
+	});
+
+	it('keeps arr enabled and executable when a full host is selected', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('button', {
+			name: /Automation with Sonarr\/Radarr/,
+		});
+		expect(arr).not.toBeDisabled();
+		fireEvent.click(arr);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+		expect(
+			screen.getByRole('heading', { name: 'DMM indexers → Sonarr/Radarr → zurg' })
+		).toBeInTheDocument();
+		expect(
+			screen.queryByRole('heading', { name: 'Resolve the setup requirements first' })
+		).not.toBeInTheDocument();
+	});
+
+	it('marks Android as insufficient for a full Plex stack', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const android = screen.getByRole('button', { name: /Android \/ Google TV/ });
+		expect(android).toBeDisabled();
+		expect(
+			screen.getByText(/Unavailable: Plex apps server needs a full server host/)
 		).toBeInTheDocument();
 	});
 

@@ -272,15 +272,15 @@ export interface SetupRecommendation {
 	sponsorship: SetupSponsorship;
 }
 
-const DMM_CAST_LINKS: Record<string, SetupLink> = {
-	'real-debrid': { label: 'DMM Cast for Real-Debrid', href: '/stremio' },
-	'all-debrid': { label: 'DMM Cast for AllDebrid', href: '/stremio-alldebrid' },
-	torbox: { label: 'DMM Cast for TorBox', href: '/stremio-torbox' },
-	premiumize: { label: 'DMM Cast for Premiumize', href: '/stremio-premiumize' },
-	offcloud: { label: 'DMM Cast for Offcloud', href: '/stremio-offcloud' },
-	'debrid-link': { label: 'DMM Cast for Debrid-Link', href: '/stremio-debridlink' },
-	easynews: { label: 'DMM Cast for Easynews', href: '/stremio-easynews' },
-};
+const FULL_HOST_PLAYERS: Player[] = ['plex', 'jellyfin', 'emby'];
+
+export function playerNeedsFullHost(player: Player): boolean {
+	return FULL_HOST_PLAYERS.includes(player);
+}
+
+function playerLabel(player: Player): string {
+	return PLAYER_OPTIONS.find((option) => option.value === player)?.label ?? player;
+}
 
 const DEBRID_SOURCES: SetupSource[] = [
 	'real-debrid',
@@ -290,6 +290,56 @@ const DEBRID_SOURCES: SetupSource[] = [
 	'offcloud',
 	'debrid-link',
 ];
+
+/** Shared by the host choices and defensive recommendation validation. */
+export function hostChoiceReason(
+	answers: Pick<SetupAnswers, 'player' | 'plexRoute'>,
+	host: Host
+): string | undefined {
+	if (host === 'android' && playerNeedsFullHost(answers.player)) {
+		const stack =
+			answers.player === 'plex' &&
+			(answers.plexRoute === 'rex' || answers.plexRoute === 'either')
+				? 'rex'
+				: `${playerLabel(answers.player)} server`;
+		return `${stack} needs a full server host; Android can run zurg, not the ${stack} stack.`;
+	}
+	return undefined;
+}
+
+/** Shared by the workflow choices and defensive recommendation validation. */
+export function preferenceChoiceReason(
+	answers: Pick<SetupAnswers, 'host' | 'sources'>,
+	preference: Preference
+): string | undefined {
+	if (preference !== 'arr') return undefined;
+	const reasons: string[] = [];
+	if (answers.host !== 'existing' && answers.host !== 'willing')
+		reasons.push('an existing or willing full host for Sonarr/Radarr and zurg');
+	if (
+		!answers.sources.some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
+		)
+	)
+		reasons.push('a supported debrid or NZB backend');
+	if (!reasons.length) return undefined;
+	return `The arr workflow needs ${reasons.join(' and ')}.${
+		answers.host !== 'existing' && answers.host !== 'willing'
+			? ' Android and no host cannot run this workflow.'
+			: ''
+	}`;
+}
+
+const DMM_CAST_LINKS: Record<string, SetupLink> = {
+	'real-debrid': { label: 'DMM Cast for Real-Debrid', href: '/stremio' },
+	'all-debrid': { label: 'DMM Cast for AllDebrid', href: '/stremio-alldebrid' },
+	torbox: { label: 'DMM Cast for TorBox', href: '/stremio-torbox' },
+	premiumize: { label: 'DMM Cast for Premiumize', href: '/stremio-premiumize' },
+	offcloud: { label: 'DMM Cast for Offcloud', href: '/stremio-offcloud' },
+	'debrid-link': { label: 'DMM Cast for Debrid-Link', href: '/stremio-debridlink' },
+	easynews: { label: 'DMM Cast for Easynews', href: '/stremio-easynews' },
+};
 
 const SOURCE_LABELS = new Map<SetupSource, string>(
 	SOURCE_OPTIONS.map(({ value, label }) => [value, label])
@@ -537,7 +587,7 @@ function zurgRoute(
 			? 'TorBox Pro hosted NZBs'
 			: SOURCE_LABELS.get(source)!;
 	const server = player === 'plex' || player === 'jellyfin' || player === 'emby';
-	const rex = player === 'plex' && plexRoute !== 'existing-server';
+	const rex = player === 'plex' && (plexRoute === 'rex' || plexRoute === 'either');
 	const output = rex
 		? 'rex → Plex apps'
 		: player === 'plex'
@@ -596,7 +646,8 @@ function zurgRoute(
 function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player): SourceRoute {
 	const debrid = DEBRID_SOURCES.includes(source);
 	const cast = DMM_CAST_LINKS[source];
-	const rex = player === 'plex' && answers.plexRoute !== 'existing-server';
+	const rex =
+		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	if (source === 'http-local') {
 		if (rex)
 			return Object.assign(
@@ -900,7 +951,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.prerequisites.push(
 			'Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.'
 		);
-	const rex = player === 'plex' && answers.plexRoute !== 'existing-server';
+	const rex =
+		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	if (rex) {
 		result.limits.push(
 			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
@@ -941,7 +993,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const nzb = selected.includes('usenet') || selected.includes('torbox-hosted');
 		if (!debrid && !nzb)
 			result.conflicts.push(
-				'Arr acquisition needs a supported debrid or NZB backend. Easynews web access, URL addons and existing files are not download-client backends.'
+				preferenceChoiceReason(answers, 'arr') ??
+					'Arr acquisition needs a supported debrid or NZB backend. Easynews web access, URL addons and existing files are not download-client backends.'
 			);
 		if (debrid)
 			links(
@@ -993,9 +1046,13 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		(answers.host === 'none' || answers.host === 'android')
 	)
 		result.conflicts.push(
-			answers.host === 'android'
-				? `This route needs a normal host for ${answers.preference === 'arr' ? 'arr' : rex ? 'rex' : PLAYER_OPTIONS.find((x) => x.value === player)?.label}. The supported Android route runs zurg itself, not that whole server stack.`
-				: `${answers.preference === 'arr' ? 'An arr workflow' : rex ? 'rex and its source' : PLAYER_OPTIONS.find((x) => x.value === player)?.label} needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
+			answers.preference === 'arr'
+				? (preferenceChoiceReason(answers, 'arr') ??
+						'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg.')
+				: answers.host === 'android'
+					? (hostChoiceReason(answers, answers.host) ??
+						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
+					: `${rex ? 'rex and its source' : playerLabel(player)} needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
@@ -1036,7 +1093,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.optionalNeeds.push(
 			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.'
 		);
-	result.sponsorship = sponsorshipFor(answers, player, routes, integrated.length > 0);
 	links({ label: 'Read the full setup guide', href: SETUP_GUIDE_URL });
 	result.setupLinks = result.setupLinks.filter(
 		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
@@ -1049,5 +1105,19 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		'sourceNotes',
 	] as const)
 		result[key] = [...new Set(result[key])];
+	if (result.conflicts.length) {
+		result.primaryRoute = {
+			id: 'resolve-constraints',
+			title: 'Resolve the setup requirements first',
+			summary:
+				'Change the highlighted answers before using a starting route. Sponsorship does not remove host, source or compatibility requirements.',
+		};
+	}
+	result.sponsorship = sponsorshipFor(
+		answers,
+		player,
+		routes,
+		integrated.length > 0 && result.conflicts.length === 0
+	);
 	return result;
 }

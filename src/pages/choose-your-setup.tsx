@@ -2,10 +2,13 @@ import { Logo } from '@/components/Logo';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import {
 	HOST_OPTIONS,
+	hostChoiceReason,
 	NEED_OPTIONS,
 	PLAYER_OPTIONS,
+	playerNeedsFullHost,
 	PLEX_ROUTE_OPTIONS,
 	PREFERENCE_OPTIONS,
+	preferenceChoiceReason,
 	recommendSetup,
 	SETUP_GUIDE_URL,
 	SOURCE_OPTIONS,
@@ -61,25 +64,43 @@ function selectedClass(selected: boolean) {
 		: 'border-gray-600 bg-gray-800/40 text-gray-200 hover:border-gray-400 hover:bg-gray-700/50';
 }
 
+function arrResetNotice(reason: string) {
+	return `Automation with Sonarr/Radarr was reset to “I am not sure yet”. ${reason}`;
+}
+
+function sourcesAfterSelection(sources: SetupSource[], source: SetupSource): SetupSource[] {
+	const selected = sources.includes(source);
+	if (source === 'none') return selected ? [] : ['none'];
+	return selected
+		? sources.filter((current) => current !== source)
+		: [...sources.filter((current) => current !== 'none'), source];
+}
+
 function ChoiceCard({
 	label,
 	description,
 	selected,
 	onClick,
 	multi = false,
+	disabled = false,
+	disabledReason,
 }: {
 	label: string;
 	description?: string;
 	selected: boolean;
 	onClick: () => void;
 	multi?: boolean;
+	disabled?: boolean;
+	disabledReason?: string;
 }) {
 	return (
 		<button
 			type="button"
 			aria-pressed={selected}
+			aria-disabled={disabled}
+			disabled={disabled}
 			onClick={onClick}
-			className={`flex min-h-20 w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden ${selectedClass(selected)}`}
+			className={`flex min-h-20 w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-65 ${selectedClass(selected)}`}
 		>
 			<span className="flex w-full items-start justify-between gap-3 font-medium">
 				<span>{label}</span>
@@ -88,6 +109,9 @@ function ChoiceCard({
 				) : null}
 			</span>
 			{description ? <span className="text-xs text-gray-400">{description}</span> : null}
+			{disabledReason ? (
+				<span className="text-xs text-amber-200">Unavailable: {disabledReason}</span>
+			) : null}
 			{multi ? (
 				<span className="text-[11px] text-gray-500">Select all that apply</span>
 			) : null}
@@ -127,10 +151,16 @@ function QuestionChoices({
 	keyName,
 	answers,
 	setAnswers,
+	hostAnswered,
+	setHostAnswered,
+	setCompatibilityNotice,
 }: {
 	keyName: QuestionKey;
 	answers: SetupAnswers;
 	setAnswers: React.Dispatch<React.SetStateAction<SetupAnswers>>;
+	hostAnswered: boolean;
+	setHostAnswered: React.Dispatch<React.SetStateAction<boolean>>;
+	setCompatibilityNotice: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
 	if (keyName === 'player') {
 		return (
@@ -141,13 +171,45 @@ function QuestionChoices({
 						label={option.label}
 						description={option.description}
 						selected={answers.player === option.value}
-						onClick={() =>
+						onClick={() => {
+							if (
+								playerNeedsFullHost(option.value as Player) &&
+								answers.host === 'android'
+							) {
+								setHostAnswered(false);
+							}
+							const resetReason =
+								answers.preference === 'arr' &&
+								playerNeedsFullHost(option.value as Player) &&
+								answers.host === 'android'
+									? preferenceChoiceReason(
+											{
+												host: 'none',
+												sources: answers.sources,
+											},
+											'arr'
+										)
+									: undefined;
+							setCompatibilityNotice(
+								resetReason ? arrResetNotice(resetReason) : null
+							);
 							setAnswers((current) => ({
 								...current,
 								player: option.value as Player,
 								plexRoute: option.value === 'plex' ? current.plexRoute : undefined,
-							}))
-						}
+								host:
+									playerNeedsFullHost(option.value as Player) &&
+									current.host === 'android'
+										? 'none'
+										: current.host,
+								preference:
+									playerNeedsFullHost(option.value as Player) &&
+									current.host === 'android' &&
+									current.preference === 'arr'
+										? 'unsure'
+										: current.preference,
+							}));
+						}}
 					/>
 				))}
 			</div>
@@ -185,23 +247,33 @@ function QuestionChoices({
 						description={option.description}
 						selected={answers.sources.includes(option.value)}
 						multi
-						onClick={() =>
-							setAnswers((current) => {
-								const selected = current.sources.includes(option.value);
-								if (option.value === 'none') {
-									return { ...current, sources: selected ? [] : ['none'] };
-								}
-								const sources = selected
-									? current.sources.filter((source) => source !== option.value)
-									: [
-											...current.sources.filter(
-												(source) => source !== 'none'
-											),
-											option.value as SetupSource,
-										];
-								return { ...current, sources };
-							})
-						}
+						onClick={() => {
+							const nextSources = sourcesAfterSelection(
+								answers.sources,
+								option.value as SetupSource
+							);
+							const resetReason =
+								answers.preference === 'arr'
+									? preferenceChoiceReason(
+											{
+												host: answers.host,
+												sources: nextSources,
+											},
+											'arr'
+										)
+									: undefined;
+							setCompatibilityNotice(
+								resetReason ? arrResetNotice(resetReason) : null
+							);
+							setAnswers((current) => ({
+								...current,
+								sources: sourcesAfterSelection(
+									current.sources,
+									option.value as SetupSource
+								),
+								preference: resetReason ? 'unsure' : current.preference,
+							}));
+						}}
 					/>
 				))}
 			</div>
@@ -211,17 +283,43 @@ function QuestionChoices({
 	if (keyName === 'host') {
 		return (
 			<div className="grid gap-3">
-				{HOST_OPTIONS.map((option) => (
-					<ChoiceCard
-						key={option.value}
-						label={option.label}
-						description={option.description}
-						selected={answers.host === option.value}
-						onClick={() =>
-							setAnswers((current) => ({ ...current, host: option.value as Host }))
-						}
-					/>
-				))}
+				{HOST_OPTIONS.map((option) => {
+					const disabledReason = hostChoiceReason(answers, option.value);
+					return (
+						<ChoiceCard
+							key={option.value}
+							label={option.label}
+							description={option.description}
+							selected={hostAnswered && answers.host === option.value}
+							disabled={!!disabledReason}
+							disabledReason={disabledReason}
+							onClick={() => {
+								const resetReason =
+									answers.preference === 'arr'
+										? preferenceChoiceReason(
+												{
+													host: option.value as Host,
+													sources: answers.sources,
+												},
+												'arr'
+											)
+										: undefined;
+								setCompatibilityNotice(
+									resetReason ? arrResetNotice(resetReason) : null
+								);
+								setHostAnswered(true);
+								setAnswers((current) => ({
+									...current,
+									host: option.value as Host,
+									preference:
+										resetReason && current.preference === 'arr'
+											? 'unsure'
+											: current.preference,
+								}));
+							}}
+						/>
+					);
+				})}
 			</div>
 		);
 	}
@@ -229,20 +327,26 @@ function QuestionChoices({
 	if (keyName === 'preference') {
 		return (
 			<div className="grid gap-3 sm:grid-cols-2">
-				{PREFERENCE_OPTIONS.map((option) => (
-					<ChoiceCard
-						key={option.value}
-						label={option.label}
-						description={option.description}
-						selected={answers.preference === option.value}
-						onClick={() =>
-							setAnswers((current) => ({
-								...current,
-								preference: option.value as Preference,
-							}))
-						}
-					/>
-				))}
+				{PREFERENCE_OPTIONS.map((option) => {
+					const disabledReason = preferenceChoiceReason(answers, option.value);
+					return (
+						<ChoiceCard
+							key={option.value}
+							label={option.label}
+							description={option.description}
+							selected={answers.preference === option.value}
+							disabled={!!disabledReason}
+							disabledReason={disabledReason}
+							onClick={() => {
+								setCompatibilityNotice(null);
+								setAnswers((current) => ({
+									...current,
+									preference: option.value as Preference,
+								}));
+							}}
+						/>
+					);
+				})}
 			</div>
 		);
 	}
@@ -546,6 +650,8 @@ function RecommendationView({
 
 const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () => {
 	const [answers, setAnswers] = useState<SetupAnswers>(INITIAL_ANSWERS);
+	const [hostAnswered, setHostAnswered] = useState(false);
+	const [compatibilityNotice, setCompatibilityNotice] = useState<string | null>(null);
 	const [currentStep, setCurrentStep] = useState(0);
 	const [submitted, setSubmitted] = useState(false);
 	const questionHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -573,13 +679,17 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 	const currentHasAnswer =
 		currentQuestion === 'sources'
 			? answers.sources.length > 0
-			: currentQuestion === 'plexRoute'
-				? !!answers.plexRoute
-				: true;
+			: currentQuestion === 'host'
+				? hostAnswered
+				: currentQuestion === 'plexRoute'
+					? !!answers.plexRoute
+					: true;
 	const isLastStep = currentStep === questionKeys.length - 1;
 
 	function reset() {
 		setAnswers(INITIAL_ANSWERS);
+		setHostAnswered(false);
+		setCompatibilityNotice(null);
 		setCurrentStep(0);
 		setSubmitted(false);
 	}
@@ -694,7 +804,19 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 								keyName={currentQuestion}
 								answers={answers}
 								setAnswers={setAnswers}
+								hostAnswered={hostAnswered}
+								setHostAnswered={setHostAnswered}
+								setCompatibilityNotice={setCompatibilityNotice}
 							/>
+							{compatibilityNotice ? (
+								<p
+									role="status"
+									aria-live="polite"
+									className="mt-4 rounded border border-amber-400/60 bg-amber-950/30 p-3 text-sm text-amber-100"
+								>
+									{compatibilityNotice}
+								</p>
+							) : null}
 						</section>
 
 						<div className="flex flex-wrap justify-between gap-3">
