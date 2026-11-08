@@ -498,8 +498,7 @@ function sponsorshipFor(
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
 		add(optional, 'jellyfin');
 	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');
-	if (player === 'kodi' && (debrid || hasNzb || selected.has('easynews')))
-		add(optional, 'wantedKodi');
+	if (player === 'kodi' && (debrid || hasNzb)) add(optional, 'wantedKodi');
 	if (
 		(answers.preference === 'managed' || answers.preference === 'arr') &&
 		[...selected].some(
@@ -523,7 +522,8 @@ function sponsorshipFor(
 		add(optional, 'wanted');
 		add(optional, 'seerr');
 	}
-	if (selected.has('easynews')) {
+	// An Easynews release sent to zurg is an NZB, so zurg needs an NZB backend to fetch it.
+	if (selected.has('easynews') && (hasNzb || usesZurg)) {
 		if (!usesZurg) {
 			add(optional, 'zurg');
 			add(optional, 'zurgKey');

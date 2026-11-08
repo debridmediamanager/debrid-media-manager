@@ -460,9 +460,9 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).toContain('newznab');
 	});
 
-	it('surfaces the Easynews to zurg sponsor path as an optional upgrade', () => {
+	it('surfaces the Easynews to zurg sponsor path once an NZB backend is selected', () => {
 		const result = recommendSetup(
-			answers({ player: 'external', sources: ['easynews'], host: 'none' })
+			answers({ player: 'stremio', sources: ['easynews', 'torbox-hosted'], host: 'none' })
 		);
 
 		expect(ids('required', result)).toEqual([]);
@@ -477,7 +477,7 @@ describe('sponsorship benefits follow the selected route', () => {
 
 	it('offers Kodi Wanted pinning through a running zurg host, including Easynews', () => {
 		const result = recommendSetup(
-			answers({ player: 'kodi', sources: ['easynews'], host: 'willing' })
+			answers({ player: 'kodi', sources: ['real-debrid', 'easynews'], host: 'willing' })
 		);
 
 		expect(ids('optional', result)).toContain('wanted-kodi');
@@ -833,5 +833,29 @@ describe('a source the player cannot use stays beside the route', () => {
 		expect(result.primaryRoute.id).toBe('http-source-needs-player');
 		expect(result.conflicts).toEqual([]);
 		expect(result.sponsorship.routeAvailable).toBe(false);
+	});
+});
+
+describe('Easynews alone is not offered zurg benefits', () => {
+	const optional = (result: ReturnType<typeof recommendSetup>) =>
+		result.sponsorship.optional.map((benefit) => benefit.id);
+
+	it('offers no zurg, Wanted, API or remote help for Stremio with Easynews only', () => {
+		const ids = optional(recommendSetup(answers({ sources: ['easynews'] })));
+
+		for (const id of ['zurg-nightly', 'zurg-api-key', 'wanted', 'sponsor-api', 'remote-help'])
+			expect(ids).not.toContain(id);
+	});
+
+	it('offers no Kodi Wanted pinning for Easynews only', () => {
+		expect(
+			optional(recommendSetup(answers({ player: 'kodi', sources: ['easynews'] })))
+		).not.toContain('wanted-kodi');
+	});
+
+	it('offers Wanted once Easynews has an own Usenet backend', () => {
+		expect(
+			optional(recommendSetup(answers({ sources: ['easynews', 'usenet'], host: 'willing' })))
+		).toContain('wanted');
 	});
 });
