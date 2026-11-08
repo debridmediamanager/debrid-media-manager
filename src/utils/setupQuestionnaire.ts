@@ -230,7 +230,7 @@ export type HostRequirement = 'none' | 'zurg' | 'server';
 export interface SetupSourceCoverage {
 	source: SetupSource;
 	label: string;
-	status: 'integrated' | 'separate' | 'unsupported';
+	status: 'integrated' | 'separate';
 	integration: string;
 	requirements: string[];
 	setupLinks: SetupLink[];
@@ -679,7 +679,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 				],
 				[{ label: 'Full setup guide', href: SETUP_GUIDE_URL }]
 			);
-			r.status = 'unsupported';
+			r.status = 'separate';
 			return r;
 		}
 		const server = player === 'plex' || player === 'jellyfin' || player === 'emby';
@@ -1064,9 +1064,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 		links(note('zurg/guides/android', 'zurg Android guide'));
 	}
-	for (const { source, route: r } of routes)
-		if (r.status === 'unsupported')
-			result.conflicts.push(`${SOURCE_LABELS.get(source)}: ${r.summary}`);
 	if (answers.needs.includes('remote'))
 		result.optionalNeeds.push(
 			result.hostRequirement !== 'none'

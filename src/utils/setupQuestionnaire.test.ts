@@ -813,3 +813,25 @@ describe('bounded recommendation compatibility matrix', () => {
 		}
 	);
 });
+
+describe('a source the player cannot use stays beside the route', () => {
+	it('keeps Cast for Stremio and Real-Debrid when HTTP files are also selected', () => {
+		const result = recommendSetup(answers({ sources: ['real-debrid', 'http-local'] }));
+
+		expect(result.primaryRoute.id).toBe('dmm-cast-stremio');
+		expect(result.sourceCoverage).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ source: 'http-local', status: 'separate' }),
+			])
+		);
+		expect(result.conflicts).toEqual([]);
+	});
+
+	it('shows the separate HTTP route when it is the only source for Stremio', () => {
+		const result = recommendSetup(answers({ sources: ['http-local'] }));
+
+		expect(result.primaryRoute.id).toBe('http-source-needs-player');
+		expect(result.conflicts).toEqual([]);
+		expect(result.sponsorship.routeAvailable).toBe(false);
+	});
+});

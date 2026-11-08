@@ -64,11 +64,11 @@ describe('choose your setup page', () => {
 		expect(document.activeElement).toHaveTextContent('DMM Cast → Stremio');
 	});
 
-	it('keeps unsupported routes ahead of sponsorship marketing and explains the limit', () => {
+	it('keeps a constraint ahead of sponsorship marketing and explains the limit', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /HTTP links or files/ }));
+		fireEvent.click(screen.getByRole('button', { name: /My own Usenet/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
