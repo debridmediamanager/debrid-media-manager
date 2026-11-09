@@ -110,6 +110,12 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText(/six plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/2 TB of Usenet a day instead of 300 GB/)).toBeInTheDocument();
 		expect(screen.getByText(/three jobs at once instead of one/)).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				/cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link/
+			)
+		).toBeInTheDocument();
+		expect(screen.queryByText(/live cache feeds/)).not.toBeInTheDocument();
 	});
 
 	const perksList = () =>

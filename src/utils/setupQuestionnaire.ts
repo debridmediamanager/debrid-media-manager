@@ -325,7 +325,7 @@ export function preferenceChoiceReason(
 	)
 		reasons.push('a supported debrid or NZB backend');
 	if (!reasons.length) return undefined;
-	return `The arr workflow needs ${reasons.join(' and ')}.${
+	return `The arr workflow needs ${reasons.join(', plus ')}.${
 		answers.host !== 'existing' && answers.host !== 'willing'
 			? ' Android and no host cannot run this workflow.'
 			: ''
@@ -415,7 +415,7 @@ const SPONSOR_BENEFITS = {
 	wantedKodi: {
 		id: 'wanted-kodi',
 		title: 'DMM Wanted from Kodi',
-		detail: 'Pin a title in the DMM Kodi addon, including Easynews, for zurg to fetch; this needs a running zurg host.',
+		detail: 'Add a film or show to your DMM Wanted list from the Kodi addon for zurg to fetch; this needs a running zurg host.',
 		href: '/wanted',
 	},
 	seerr: {
@@ -445,7 +445,7 @@ const SPONSOR_BENEFITS = {
 	queue: {
 		id: 'uploader-priority',
 		title: 'Skip the uploader queue',
-		detail: "For Real-Debrid hosted transfers, get priority in DMM's hosted NZB and torrent uploaders, 2 TB of Usenet a day instead of 300 GB, and three torrent jobs at once instead of one.",
+		detail: "Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, and three torrent jobs at once instead of one on the torrent uploader.",
 		href: '/transfers',
 	},
 	api: {

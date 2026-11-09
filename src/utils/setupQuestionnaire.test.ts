@@ -476,7 +476,7 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).not.toContain('seerr');
 	});
 
-	it('offers Kodi Wanted pinning through a running zurg host, including Easynews', () => {
+	it('offers DMM Wanted from Kodi as a title-level add for a running zurg host', () => {
 		const result = recommendSetup(
 			answers({ player: 'kodi', sources: ['real-debrid', 'easynews'], host: 'willing' })
 		);
@@ -484,7 +484,9 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).toContain('wanted-kodi');
 		expect(
 			result.sponsorship.optional.find((benefit) => benefit.id === 'wanted-kodi')?.detail
-		).toMatch(/Easynews.*running zurg host/i);
+		).toBe(
+			'Add a film or show to your DMM Wanted list from the Kodi addon for zurg to fetch; this needs a running zurg host.'
+		);
 	});
 
 	it('offers DMM Newznab to non-arr Usenet routes', () => {
@@ -537,6 +539,11 @@ describe('sponsorship benefits follow the selected route', () => {
 		);
 
 		expect(ids('optional', rd)).toContain('uploader-priority');
+		expect(
+			rd.sponsorship.optional.find((benefit) => benefit.id === 'uploader-priority')?.detail
+		).toBe(
+			"Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, and three torrent jobs at once instead of one on the torrent uploader."
+		);
 		expect(ids('optional', usenet)).not.toContain('uploader-priority');
 		expect(ids('optional', torbox)).not.toContain('uploader-priority');
 	});
@@ -570,7 +577,7 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).not.toContain('newznab');
 	});
 
-	it('keeps unsupported and no-source results free of sponsor-only claims', () => {
+	it('keeps separate-only and no-source results free of sponsor-only claims', () => {
 		const result = recommendSetup(
 			answers({ player: 'stremio', sources: ['http-local'], host: 'none' })
 		);
@@ -587,6 +594,14 @@ describe('sponsorship benefits follow the selected route', () => {
 });
 
 describe('constraints block unusable starting routes', () => {
+	it('lists both missing arr prerequisites in one sentence', () => {
+		const result = recommendSetup(answers({ sources: ['easynews'], preference: 'arr' }));
+
+		expect(result.conflicts).toContain(
+			'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg, plus a supported debrid or NZB backend. Android and no host cannot run this workflow.'
+		);
+	});
+
 	it('does not present arr as the starting route when the user has no source or host', () => {
 		const result = recommendSetup({
 			player: 'unsure',
