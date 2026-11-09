@@ -815,8 +815,10 @@ function zurgRoute(
 			'Current zurg nightlies require an active sponsorship.',
 			...(direct
 				? [
-						// Stremio's own sentence below already says its search addon needs an indexer.
-						`NZB files and your NNTP credentials${player === 'stremio' ? '' : '; an indexer is needed if you want search'}.`,
+						// Stremio's search addon takes NZBs from the indexer its own sentence below names.
+						player === 'stremio'
+							? 'Your NNTP credentials.'
+							: 'NZB files and your NNTP credentials; an indexer is needed if you want search.',
 					]
 				: hosted
 					? ['TorBox Pro and NZB files to submit.']

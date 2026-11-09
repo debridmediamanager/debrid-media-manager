@@ -2156,7 +2156,8 @@ describe('route copy stays on the player and source it is about', () => {
 			'stremio',
 			[
 				'Current zurg nightlies require an active sponsorship.',
-				'NZB files and your NNTP credentials.',
+				// The search addon takes NZBs from the indexer, so the user brings none.
+				'Your NNTP credentials.',
 				'The Stremio NZB search addon needs a configured Newznab indexer; another device needs a reachable HTTPS addon address.',
 			],
 		],
