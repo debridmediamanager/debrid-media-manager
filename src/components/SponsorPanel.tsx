@@ -53,7 +53,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'Ten other streams in Cast',
-		what: 'the limit rises from five to ten per Cast profile, in Stremio and the Kodi addon',
+		what: 'instead of five, set per profile below; the Kodi addon uses the same limit',
 	},
 	{
 		name: 'Skip the queue',

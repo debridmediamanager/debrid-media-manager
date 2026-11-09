@@ -79,10 +79,11 @@ describe('SponsorPanel', () => {
 		);
 		expect(screen.getByRole('link', { name: 'Emby plugins' })).toHaveAttribute('href', '/emby');
 		expect(screen.getByText('Ten other streams in Cast')).toBeInTheDocument();
-		// The Kodi addon reads the same Cast /stream/ endpoint, so the limit covers it too.
+		// The panel sits above Settings' per-profile selector; the Kodi addon reads the same
+		// Cast /stream/ endpoint, so the limit covers it too.
 		expect(
 			screen.getByText(
-				'the limit rises from five to ten per Cast profile, in Stremio and the Kodi addon'
+				'instead of five, set per profile below; the Kodi addon uses the same limit'
 			)
 		).toBeInTheDocument();
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
