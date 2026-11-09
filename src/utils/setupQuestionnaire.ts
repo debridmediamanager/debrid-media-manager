@@ -437,16 +437,24 @@ const SOURCE_LABELS = new Map<SetupSource, string>(
 	SOURCE_OPTIONS.map(({ value, label }) => [value, label])
 );
 
-const note = (path: string, label: string): SetupLink => ({
-	label,
-	href: `https://notes.debridmediamanager.com/${path}/`,
-});
+/** A notes page, with an optional `#section` kept after the page's trailing slash. */
+const note = (path: string, label: string): SetupLink => {
+	const [page, section] = path.split('#');
+	return {
+		label,
+		href: `https://notes.debridmediamanager.com/${page}/${section ? `#${section}` : ''}`,
+	};
+};
 const ZURG = note('zurg/setup', 'zurg setup');
 const REX = note('rex/with-zurg', 'rex with zurg');
 const HTTP = note('rex/any-source', 'rex with any source');
 const ADDON = note('rex/stremio', 'rex with Stremio addons');
 const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
 const TORBOX_NZB = note('zurg/providers/torbox-nzb', 'zurg TorBox hosted NZB setup');
+// Two zurgs with the same dmm_api_key both read the Wanted list and fetch every title twice.
+const TWO_ZURGS = note('zurg/guides/dmm-wanted#two-zurgs-on-one-key', 'Two zurgs on one DMM key');
+const TWO_ZURGS_WANTED =
+	' With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.';
 const JELLYFIN = { label: 'DMM Jellyfin NZB setup', href: '/jellyfin' };
 const GUIDE = { label: 'Read the full setup guide', href: SETUP_GUIDE_URL };
 const NEWZNAB = { label: 'DMM Newznab setup', href: '/newznab' };
@@ -1182,10 +1190,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Easynews is a web account for HTTP files. NNTP credentials, if you have them, are a separate source configuration; an Easynews web login does not configure zurg.'
 		);
 	const backendKinds = new Set(routes.map((x) => x.route.zurgNzb).filter(Boolean));
-	if (backendKinds.size === 2)
+	if (backendKinds.size === 2) {
 		result.prerequisites.push(
-			'Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.'
+			`Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.${TWO_ZURGS_WANTED}`
 		);
+		links(TWO_ZURGS);
+	}
 	if (rex) {
 		result.limits.push(
 			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
@@ -1339,10 +1349,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			selected.includes('usenet') &&
 			selected.includes('torbox-hosted') &&
 			backendKinds.size !== 2
-		)
+		) {
 			result.prerequisites.push(
-				'For arr acquisition, direct NNTP and hosted TorBox NZBs require separate zurg instances and data directories.'
+				`For arr acquisition, direct NNTP and hosted TorBox NZBs require separate zurg instances and data directories.${TWO_ZURGS_WANTED}`
 			);
+			links(TWO_ZURGS);
+		}
 	}
 	if (selected.includes('real-debrid')) {
 		const arr = answers.preference === 'arr';

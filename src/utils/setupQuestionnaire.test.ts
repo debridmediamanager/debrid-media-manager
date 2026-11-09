@@ -1706,6 +1706,44 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 	);
 });
 
+// Two zurgs with the same dmm_api_key both read the Wanted list and fetch every title twice.
+describe('two zurgs on one DMM key keep dmm-wanted on one', () => {
+	const twoZurgs = {
+		label: 'Two zurgs on one DMM key',
+		href: 'https://notes.debridmediamanager.com/zurg/guides/dmm-wanted/#two-zurgs-on-one-key',
+	};
+	const wanted =
+		' With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.';
+
+	it.each([
+		[
+			{ player: 'webdav', host: 'existing' },
+			'Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.',
+		],
+		[
+			{ player: 'stremio', host: 'existing', preference: 'arr' },
+			'For arr acquisition, direct NNTP and hosted TorBox NZBs require separate zurg instances and data directories.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says to turn dmm-wanted off on one of two zurgs (%o)',
+		(overrides, separate) => {
+			const result = recommendSetup(
+				answers({ sources: ['usenet', 'torbox-hosted'], ...overrides })
+			);
+
+			expect(result.prerequisites).toContain(`${separate}${wanted}`);
+			expect(result.setupLinks).toContainEqual(twoZurgs);
+		}
+	);
+
+	it('links the section only when two zurgs are needed', () => {
+		expect(
+			recommendSetup(answers({ player: 'webdav', sources: ['usenet'], host: 'existing' }))
+				.setupLinks
+		).not.toContainEqual(twoZurgs);
+	});
+});
+
 describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 	const zurgSetup = {
 		label: 'zurg setup',

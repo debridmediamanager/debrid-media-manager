@@ -80,6 +80,7 @@ const ALLOWED_HREFS = new Set([
 		'dmm/seerr',
 		'guides/remote-help',
 	].map((path) => `${NOTES}${path}/`),
+	`${NOTES}zurg/guides/dmm-wanted/#two-zurgs-on-one-key`,
 ]);
 
 /** Visits every string and every list in the result, with its path for failure messages. */
@@ -273,6 +274,18 @@ describe('setup copy and benefits for every combination of up to two sources', (
 							...requirements,
 						]),
 					].some((text) => /TorBox WebDAV|webdav\.torbox\.app/.test(text))
+			)
+		).toEqual([]);
+	});
+
+	it('links two zurgs on one DMM key exactly when two zurgs are needed', () => {
+		expect(
+			breaking(
+				(_, result) =>
+					result.prerequisites.some((text) =>
+						text.includes('separate zurg instances')
+					) !==
+					result.setupLinks.some(({ href }) => href.endsWith('#two-zurgs-on-one-key'))
 			)
 		).toEqual([]);
 	});
