@@ -341,7 +341,12 @@ function resolvePlayer({
 				source === 'url-addon' ||
 				source === 'torbox-hosted'
 		);
-	return usenetOnly ? 'webdav' : sources.includes('http-local') ? 'external' : 'stremio';
+	// Anything Cast or a Stremio addon plays starts on Stremio; files alone in an external player.
+	return usenetOnly
+		? 'webdav'
+		: sources.includes('http-local') && sources.every((source) => source === 'http-local')
+			? 'external'
+			: 'stremio';
 }
 
 const ANDROID_HOSTED_NZB =
@@ -629,7 +634,7 @@ function sponsorshipFor(
 	};
 }
 /** A route this player can use with the selected sources and no host; empty when there is none. */
-function noHostClause(player: Player, selected: SetupSource[]): string {
+function noHostClause(player: Player, selected: SetupSource[], undecided: boolean): string {
 	const account = selected.some(
 		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
 	);
@@ -657,7 +662,11 @@ function noHostClause(player: Player, selected: SetupSource[]): string {
 				: '';
 	if (player === 'webdav') {
 		const webdav = selected.find((source) => PROVIDER_WEBDAV[source]);
-		return webdav ? `, or use ${SOURCE_LABELS.get(webdav)} WebDAV, which needs no host` : '';
+		if (webdav) return `, or use ${SOURCE_LABELS.get(webdav)} WebDAV, which needs no host`;
+		// An undecided player started on WebDAV for own Usenet can still pick Stremio.
+		return undecided && usenet
+			? ", or switch to TorBox hosted NZBs through TorBox Cast in Stremio or DMM's Real-Debrid transfer, which need no host"
+			: '';
 	}
 	// Plex Media Server, Jellyfin, Emby and rex always need a host.
 	return '';
@@ -1229,7 +1238,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
-			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected)}.`
+			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
 		result.prerequisites.push(

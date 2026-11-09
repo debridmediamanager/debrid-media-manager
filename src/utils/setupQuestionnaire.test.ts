@@ -1085,6 +1085,17 @@ describe('an undecided player with only an own Usenet account', () => {
 
 		expect(result.primaryRoute.id).toBe('torbox-hosted-stremio');
 	});
+
+	it('starts TorBox hosted NZBs on TorBox Cast beside files too, without zurg', () => {
+		const result = recommendSetup(
+			answers({ player: 'unsure', sources: ['torbox-hosted', 'http-local'], host: 'none' })
+		);
+
+		expect(result.whyMatched[0]).toMatch(/Stremio is a starting option/);
+		expect(result.primaryRoute.id).toBe('torbox-hosted-stremio');
+		expect(result.components.join(' ')).not.toMatch(/zurg/);
+		expect(result.conflicts).toEqual([]);
+	});
 });
 
 describe('Kodi with TorBox hosted NZBs', () => {
@@ -1131,7 +1142,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			`${zurgHost}, or use DMM's Real-Debrid transfer and DMM Watch, which need no host.`,
 		],
 		[{ player: 'webdav' }, `${zurgHost}.`],
-		[{ player: 'unsure' }, `${zurgHost}.`],
+		[
+			{ player: 'unsure' },
+			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio or DMM's Real-Debrid transfer, which need no host.`,
+		],
 		[
 			{ player: 'plex', plexRoute: 'existing-server' },
 			'Plex Media Server needs a machine that stays on. Choose a host.',
