@@ -1111,8 +1111,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		answers.preference !== 'arr' &&
 		selected.some((source) => DEBRID_SOURCES.includes(source)) &&
 		!selected.includes('url-addon');
-	// rex-stremio is on the URL addon route or in the alternative without zurg.
-	const rexStremio = rexWithoutZurg || (rex && selected.includes('url-addon'));
+	// rex-stremio is on the URL addon route, in the alternative without zurg, or, with no source, in the summary.
+	const rexStremio =
+		rexWithoutZurg || (rex && (selected.includes('url-addon') || !selected.length));
 	const chosenPlayer =
 		player === 'webdav'
 			? 'a WebDAV or SMB player'

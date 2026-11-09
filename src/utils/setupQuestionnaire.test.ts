@@ -715,6 +715,8 @@ describe('rex names rex-stremio as free only where it is offered', () => {
 			'rex does not require sponsorship.',
 			['rex'],
 		],
+		// With no source the summary names rex-stremio for Stremio URL addons.
+		[{ sources: ['none'] }, 'rex and rex-stremio do not require sponsorship.', ['rex-stremio']],
 	] satisfies [Partial<SetupAnswers>, string, FreeSponsorFeature[]][])(
 		'says so for %o',
 		(overrides, sentence, freeFeatures) => {
