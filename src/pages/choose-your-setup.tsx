@@ -249,19 +249,6 @@ function QuestionChoices({
 								answers.host === 'android' &&
 								!!hostChoiceReason({ ...answers, sources: nextSources }, 'android');
 							if (androidRejected) setHostAnswered(false);
-							const resetReason =
-								answers.preference === 'arr'
-									? preferenceChoiceReason(
-											{
-												host: answers.host,
-												sources: nextSources,
-											},
-											'arr'
-										)
-									: undefined;
-							setCompatibilityNotice(
-								resetReason ? arrResetNotice(resetReason) : null
-							);
 							setAnswers((current) => ({
 								...current,
 								sources: sourcesAfterSelection(
@@ -269,7 +256,6 @@ function QuestionChoices({
 									option.value as SetupSource
 								),
 								host: androidRejected ? 'none' : current.host,
-								preference: resetReason ? 'unsure' : current.preference,
 							}));
 						}}
 					/>
@@ -292,27 +278,10 @@ function QuestionChoices({
 							disabled={!!disabledReason}
 							disabledReason={disabledReason}
 							onClick={() => {
-								const resetReason =
-									answers.preference === 'arr'
-										? preferenceChoiceReason(
-												{
-													host: option.value as Host,
-													sources: answers.sources,
-												},
-												'arr'
-											)
-										: undefined;
-								setCompatibilityNotice(
-									resetReason ? arrResetNotice(resetReason) : null
-								);
 								setHostAnswered(true);
 								setAnswers((current) => ({
 									...current,
 									host: option.value as Host,
-									preference:
-										resetReason && current.preference === 'arr'
-											? 'unsure'
-											: current.preference,
 								}));
 							}}
 						/>
@@ -734,6 +703,21 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 		event.preventDefault();
 		if (!currentHasAnswer) return;
 		if (!isLastStep) {
+			// Judged on leaving the step, so passing through an invalid pick (untick one debrid, tick another) keeps arr.
+			if (currentQuestion === 'sources' || currentQuestion === 'host') {
+				const resetReason =
+					answers.preference === 'arr'
+						? preferenceChoiceReason(
+								// The host step still follows sources, so only the sources can rule arr out here.
+								currentQuestion === 'sources'
+									? { host: 'existing', sources: answers.sources }
+									: answers,
+								'arr'
+							)
+						: undefined;
+				setCompatibilityNotice(resetReason ? arrResetNotice(resetReason) : null);
+				if (resetReason) setAnswers((current) => ({ ...current, preference: 'unsure' }));
+			}
 			setCurrentStep((step) => step + 1);
 			return;
 		}

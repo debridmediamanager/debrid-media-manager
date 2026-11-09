@@ -27,7 +27,7 @@ beforeEach(() => {
 	window.scrollTo = vi.fn();
 });
 
-function reachStremioRecommendation() {
+function reachStremioRecommendation(workflow: RegExp = /Choose and play as I go/) {
 	render(<ChooseYourSetupPage />);
 	fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -35,7 +35,7 @@ function reachStremioRecommendation() {
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-	fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+	fireEvent.click(screen.getByRole('button', { name: workflow }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 }
@@ -306,72 +306,87 @@ describe('choose your setup page', () => {
 		).not.toBeDisabled();
 	});
 
-	it('clears a stale arr choice when editing a valid route to no host', () => {
-		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+	const ARR = /Automation with Sonarr\/Radarr/;
 
-		const hostRow = screen.getByText('Can a machine stay on while you watch?').parentElement
-			?.parentElement;
-		expect(hostRow).not.toBeNull();
-		fireEvent.click(
-			within(hostRow as HTMLElement).getByRole('button', {
-				name: 'Edit Can a machine stay on while you watch?',
-			})
-		);
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+	function expectArrKept() {
+		expect(
+			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
+		).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: ARR })).toHaveAttribute('aria-pressed', 'true');
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+	}
+
+	function expectArrReset() {
 		expect(screen.getByRole('status')).toHaveTextContent(
 			/Automation with Sonarr\/Radarr was reset to/
 		);
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-
-		const arr = screen.getByRole('button', {
-			name: /Automation with Sonarr\/Radarr/,
-		});
+		const arr = screen.getByRole('button', { name: ARR });
 		expect(arr).toBeDisabled();
+		expect(arr).toHaveAttribute('aria-pressed', 'false');
 		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
 			'aria-pressed',
 			'true'
 		);
+	}
+
+	it('keeps arr when swapping one debrid source for another passes through no source', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('What do you already have?');
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: /AllDebrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectArrKept();
 	});
 
-	it('clears a stale arr choice when editing sources to an unsupported set', () => {
-		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+	it('keeps arr when No host is clicked by mistake before the existing host again', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+
+		expectArrKept();
+	});
+
+	it('keeps arr when going back past the sources step before fixing the host', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
-		const sourceRow = screen.getByText('What do you already have?').parentElement
-			?.parentElement;
-		expect(sourceRow).not.toBeNull();
-		fireEvent.click(
-			within(sourceRow as HTMLElement).getByRole('button', {
-				name: 'Edit What do you already have?',
-			})
-		);
+		expectArrKept();
+	});
+
+	it('resets arr on leaving the host step once no host can run it', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
+		).toBeInTheDocument();
+		expectArrReset();
+	});
+
+	it('resets arr on leaving the sources step once no source can back it', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('What do you already have?');
 		fireEvent.click(screen.getByRole('button', { name: /None yet/ }));
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		expect(screen.getByRole('status')).toHaveTextContent(
 			/Automation with Sonarr\/Radarr was reset to/
 		);
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const arr = screen.getByRole('button', {
-			name: /Automation with Sonarr\/Radarr/,
-		});
+		const arr = screen.getByRole('button', { name: ARR });
 		expect(arr).toBeDisabled();
 		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
 			'aria-pressed',
@@ -395,10 +410,10 @@ describe('choose your setup page', () => {
 
 		editAnswer('Can a machine stay on while you watch?');
 		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		expect(screen.getByRole('status')).toHaveTextContent(
 			/Automation with Sonarr\/Radarr was reset to/
 		);
-		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
