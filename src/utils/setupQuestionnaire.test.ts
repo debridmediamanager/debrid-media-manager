@@ -1251,6 +1251,20 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		expect(ids).not.toContain('seerr');
 	});
 
+	it.each([
+		{ host: 'willing', preference: 'managed' },
+		{ player: 'kodi', host: 'existing' },
+		{ player: 'jellyfin', host: 'existing', preference: 'managed' },
+	] satisfies Partial<SetupAnswers>[])(
+		'offers zurg nightly with Wanted when the route does not run zurg (%o)',
+		(overrides) => {
+			const result = recommendSetup(answers(overrides));
+
+			expect(result.sponsorship.required.map(({ id }) => id)).not.toContain('zurg-nightly');
+			expect(result.sponsorship.optional.map(({ id }) => id)).toContain('zurg-nightly');
+		}
+	);
+
 	it('offers no Kodi Wanted to the Kodi addon with no host', () => {
 		expect(offered(recommendSetup(answers({ player: 'kodi', host: 'none' })))).not.toContain(
 			'wanted-kodi'

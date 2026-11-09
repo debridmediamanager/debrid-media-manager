@@ -308,6 +308,16 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('never offers Wanted or Seerr without the zurg that fetches for them', () => {
+		expect(
+			breaking(
+				(_, result) =>
+					offered(result).some((id) => ['wanted', 'wanted-kodi', 'seerr'].includes(id)) &&
+					!offered(result).includes('zurg-nightly')
+			)
+		).toEqual([]);
+	});
+
 	it('never says AllDebrid has no WebDAV', () => {
 		expect(
 			breaking((_, result) =>
