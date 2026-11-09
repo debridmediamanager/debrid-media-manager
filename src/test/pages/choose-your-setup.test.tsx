@@ -836,6 +836,48 @@ describe('choose your setup page', () => {
 		);
 	});
 
+	it('moves and selects with arrow keys inside a radio group, skipping unavailable cards', async () => {
+		const user = userEvent.setup();
+		render(<ChooseYourSetupPage />);
+		const stremio = screen.getByRole('radio', { name: /Stremio/ });
+		const kodi = screen.getByRole('radio', { name: /Kodi/ });
+		stremio.focus();
+		await user.keyboard('{ArrowRight}');
+		expect(document.activeElement).toBe(kodi);
+		expect(kodi).toHaveAttribute('aria-checked', 'true');
+		await user.keyboard('{ArrowLeft}');
+		expect(document.activeElement).toBe(stremio);
+		expect(stremio).toHaveAttribute('aria-checked', 'true');
+		expect(kodi).toHaveAttribute('aria-checked', 'false');
+
+		await user.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+		await user.click(screen.getByRole('radio', { name: /Use rex for Plex apps/ }));
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+		await user.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+
+		const existing = screen.getByRole('radio', { name: /An existing server or host/ });
+		const willing = screen.getByRole('radio', { name: /I can run a host/ });
+		const android = screen.getByRole('radio', { name: /Android \/ Google TV/ });
+		const noHost = screen.getByRole('radio', { name: /No host/ });
+		expectUnavailable(android);
+		willing.focus();
+		await user.keyboard('{ArrowDown}');
+		expect(document.activeElement).toBe(noHost);
+		expect(noHost).toHaveAttribute('aria-checked', 'true');
+		expect(android).toHaveAttribute('aria-checked', 'false');
+		await user.keyboard('{ArrowDown}');
+		expect(document.activeElement).toBe(existing);
+		await user.keyboard('{ArrowUp}');
+		expect(document.activeElement).toBe(noHost);
+		await user.keyboard('{Home}');
+		expect(document.activeElement).toBe(existing);
+		await user.keyboard('{End}');
+		expect(document.activeElement).toBe(noHost);
+		expect(noHost).toHaveAttribute('aria-checked', 'true');
+	});
+
 	it('gives the question labels under Your answers readable contrast', () => {
 		reachStremioRecommendation();
 

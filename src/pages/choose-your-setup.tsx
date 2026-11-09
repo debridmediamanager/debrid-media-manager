@@ -126,6 +126,30 @@ function ChoiceCard({
 	);
 }
 
+// Radio pattern: arrows move to and select the next/previous enabled card (wrapping); Tab stops stay.
+function moveInRadioGroup(event: React.KeyboardEvent<HTMLElement>) {
+	if (event.altKey || event.ctrlKey || event.metaKey) return;
+	const radios = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]'));
+	const at = radios.indexOf(event.target as HTMLElement);
+	const enabled = radios.filter((radio) => radio.getAttribute('aria-disabled') !== 'true');
+	if (at < 0 || !enabled.length) return;
+	const before = enabled.filter((radio) => radios.indexOf(radio) < at);
+	const after = enabled.filter((radio) => radios.indexOf(radio) > at);
+	const targets: Record<string, HTMLElement | undefined> = {
+		ArrowRight: after[0] ?? enabled[0],
+		ArrowDown: after[0] ?? enabled[0],
+		ArrowLeft: before[before.length - 1] ?? enabled[enabled.length - 1],
+		ArrowUp: before[before.length - 1] ?? enabled[enabled.length - 1],
+		Home: enabled[0],
+		End: enabled[enabled.length - 1],
+	};
+	const target = targets[event.key];
+	if (!target) return;
+	event.preventDefault();
+	target.focus();
+	target.click();
+}
+
 function answerLabel(key: QuestionKey, answers: SetupAnswers) {
 	if (key === 'sources') {
 		if (!answers.sources.length) return 'Nothing selected';
@@ -173,6 +197,7 @@ function QuestionChoices({
 		return (
 			<div
 				role="radiogroup"
+				onKeyDown={moveInRadioGroup}
 				aria-labelledby={QUESTION_HEADING_ID}
 				className="grid gap-3 sm:grid-cols-2"
 			>
@@ -206,7 +231,12 @@ function QuestionChoices({
 
 	if (keyName === 'plexRoute') {
 		return (
-			<div role="radiogroup" aria-labelledby={QUESTION_HEADING_ID} className="grid gap-3">
+			<div
+				role="radiogroup"
+				onKeyDown={moveInRadioGroup}
+				aria-labelledby={QUESTION_HEADING_ID}
+				className="grid gap-3"
+			>
 				{PLEX_ROUTE_OPTIONS.map((option) => (
 					<ChoiceCard
 						key={option.value}
@@ -265,7 +295,12 @@ function QuestionChoices({
 
 	if (keyName === 'host') {
 		return (
-			<div role="radiogroup" aria-labelledby={QUESTION_HEADING_ID} className="grid gap-3">
+			<div
+				role="radiogroup"
+				onKeyDown={moveInRadioGroup}
+				aria-labelledby={QUESTION_HEADING_ID}
+				className="grid gap-3"
+			>
 				{HOST_OPTIONS.map((option) => {
 					const disabledReason = hostChoiceReason(answers, option.value);
 					return (
@@ -294,6 +329,7 @@ function QuestionChoices({
 		return (
 			<div
 				role="radiogroup"
+				onKeyDown={moveInRadioGroup}
 				aria-labelledby={QUESTION_HEADING_ID}
 				className="grid gap-3 sm:grid-cols-2"
 			>
