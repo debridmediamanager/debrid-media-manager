@@ -78,7 +78,13 @@ describe('SponsorPanel', () => {
 			'/jellyfin'
 		);
 		expect(screen.getByRole('link', { name: 'Emby plugins' })).toHaveAttribute('href', '/emby');
-		expect(screen.getByText('Ten other streams in Stremio Cast')).toBeInTheDocument();
+		expect(screen.getByText('Ten other streams in Cast')).toBeInTheDocument();
+		// The Kodi addon reads the same Cast /stream/ endpoint, so the limit covers it too.
+		expect(
+			screen.getByText(
+				'the limit rises from five to ten per Cast profile, in Stremio and the Kodi addon'
+			)
+		).toBeInTheDocument();
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
 	});
 

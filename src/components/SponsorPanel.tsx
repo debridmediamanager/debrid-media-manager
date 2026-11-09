@@ -52,8 +52,8 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: 'six plugins for the same debrid libraries inside Emby, one file per account',
 	},
 	{
-		name: 'Ten other streams in Stremio Cast',
-		what: 'instead of five, set per profile below',
+		name: 'Ten other streams in Cast',
+		what: 'the limit rises from five to ten per Cast profile, in Stremio and the Kodi addon',
 	},
 	{
 		name: 'Skip the queue',
