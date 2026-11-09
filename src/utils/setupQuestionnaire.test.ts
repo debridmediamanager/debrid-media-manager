@@ -1867,6 +1867,31 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(mount({ player: 'emby' })).toBeUndefined();
 	});
 
+	it.each([
+		[
+			{ player: 'emby', sources: ['real-debrid', 'usenet'] },
+			"Add your debrid account to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
+		],
+		[
+			{ player: 'jellyfin', sources: ['real-debrid', 'torbox-hosted'] },
+			"Add your debrid account to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
+		],
+		// No debrid account to add, and one zurg takes either nzb or torbox_nzb, not both.
+		[
+			{ player: 'jellyfin', sources: ['usenet', 'torbox-hosted'] },
+			'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'points the mount alternative at the zurg another source already runs (%o)',
+		(overrides, detail) => {
+			expect(
+				recommendSetup(answers({ host: 'existing', ...overrides })).alternatives.find(
+					({ title }) => title.startsWith('zurg → mount')
+				)?.detail
+			).toBe(detail);
+		}
+	);
+
 	it('mentions the rex feed for separate Easynews only on a rex route', () => {
 		const requirements = (overrides: Partial<SetupAnswers>) =>
 			recommendSetup(answers({ sources: ['easynews'], host: 'existing', ...overrides }))

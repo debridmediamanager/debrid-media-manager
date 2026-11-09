@@ -1208,7 +1208,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	)
 		result.alternatives.push({
 			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
-			detail: 'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+			// Another source already runs zurg; a debrid account joins it, an nzb account cannot.
+			detail: `${routes.some(({ route: r }) => r.usesZurg) && selected.some((source) => DEBRID_SOURCES.includes(source)) ? "Add your debrid account to that zurg's mount" : 'Run zurg with a filesystem mount'} instead of the plugin when Kodi, a WebDAV player or another server must read the same library.`,
 			links: [ZURG],
 		});
 	if (answers.preference === 'arr') {
