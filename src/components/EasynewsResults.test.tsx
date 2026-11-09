@@ -268,8 +268,92 @@ describe('EasynewsResults', () => {
 			"Sponsors' zurg fetches titles from their wanted list"
 		);
 		expect(
-			screen.getByRole('button', { name: 'Download Cocaine.Bear.2023.2160p from Easynews' })
+			screen.getByRole('button', { name: 'Download NZB for Cocaine.Bear.2023.2160p' })
 		).toBeInTheDocument();
+	});
+
+	it("saves the row's NZB, fetched with the login, under the name the server gave it", async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		const fetchMock = mockApi();
+		const search = fetchMock.getMockImplementation()!;
+		fetchMock.mockImplementation((url: string, init?: RequestInit) =>
+			url === '/api/easynews/nzb'
+				? Promise.resolve({
+						ok: true,
+						headers: new Headers({
+							'Content-Disposition':
+								'attachment; filename="Cocaine.Bear.2023.nzb"; filename*=UTF-8\'\'Cocaine.Bear.2023.nzb',
+						}),
+						blob: async () => new Blob(['<nzb/>']),
+					})
+				: search(url, init)
+		);
+		URL.createObjectURL = vi.fn(() => 'blob:nzb');
+		URL.revokeObjectURL = vi.fn();
+		const saved: string[] = [];
+		const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+			this: HTMLAnchorElement
+		) {
+			saved.push(this.download);
+		});
+		try {
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			await userEvent.click(
+				await screen.findByRole('button', {
+					name: 'Download NZB for Cocaine.Bear.2023.2160p',
+				})
+			);
+			await waitFor(() => expect(saved).toEqual(['Cocaine.Bear.2023.nzb']));
+			const nzbCall = fetchMock.mock.calls.find((c) => c[0] === '/api/easynews/nzb')!;
+			expect(bodyOf(nzbCall)).toEqual({
+				...ACCOUNT,
+				path: PATH,
+				sig: 'S'.repeat(143),
+				size: 44 * 1024 ** 3,
+				imdbId: 'tt14209916',
+				kind: 'movie',
+			});
+			// The NZB, never the file itself: no signed link is asked for.
+			expect(fetchMock.mock.calls.some((c) => String(c[0]).includes('/link'))).toBe(false);
+		} finally {
+			click.mockRestore();
+		}
+	});
+
+	it('says why when Easynews hands out no NZB', async () => {
+		localStorage.setItem('en:account', JSON.stringify(ACCOUNT));
+		const fetchMock = mockApi();
+		const search = fetchMock.getMockImplementation()!;
+		fetchMock.mockImplementation((url: string, init?: RequestInit) =>
+			url === '/api/easynews/nzb'
+				? Promise.resolve({
+						ok: false,
+						status: 422,
+						json: async () => ({
+							error: 'Easynews did not hand out this NZB; search again',
+						}),
+					})
+				: search(url, init)
+		);
+		render(
+			<EasynewsResults title="Cocaine Bear" imdbId="tt14209916" kind="movie" year="2023" />
+		);
+		await userEvent.click(
+			await screen.findByRole('button', { name: 'Download NZB for Cocaine.Bear.2023.2160p' })
+		);
+		const toast = (await import('react-hot-toast')).default;
+		await waitFor(() =>
+			expect(toast.error).toHaveBeenCalledWith(
+				'Easynews: Easynews did not hand out this NZB; search again'
+			)
+		);
 	});
 
 	describe('for a sponsor', () => {
@@ -354,7 +438,7 @@ describe('EasynewsResults', () => {
 			expect(screen.getByRole('button', { name: 'Send to zurg' })).toBeEnabled();
 		});
 
-		it('puts Download back as the main button when Send to zurg is switched off', async () => {
+		it('makes Download NZB the main button when Send to zurg is switched off', async () => {
 			localStorage.setItem('en:sendToZurg', 'false');
 			mockSponsorApi([]);
 			render(
@@ -368,8 +452,8 @@ describe('EasynewsResults', () => {
 			await screen.findByText('Cocaine.Bear.2023.2160p');
 			expect(screen.queryByRole('button', { name: 'Send to zurg' })).toBeNull();
 			expect(
-				screen.getAllByRole('button', { name: /^Download .* from Easynews$/ })[0]
-			).toHaveTextContent('Download');
+				screen.getAllByRole('button', { name: /^Download NZB for / })[0]
+			).toHaveTextContent('Download NZB');
 		});
 	});
 });

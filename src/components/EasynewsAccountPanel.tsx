@@ -71,7 +71,7 @@ export const EasynewsAccountPanel = () => {
 							Sign out
 						</button>
 					</div>
-					{/* Off puts Download back as the main button on Easynews rows. */}
+					{/* Off makes Download NZB the main button on Easynews rows. */}
 					<label className="mt-2 flex items-center gap-2 text-xs text-gray-300">
 						<input
 							type="checkbox"
