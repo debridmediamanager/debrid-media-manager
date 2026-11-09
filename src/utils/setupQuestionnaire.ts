@@ -1263,7 +1263,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			title: 'Browse over WebDAV instead',
 			// Own Usenet is the only source Kodi plays through zurg; the addon plays TorBox hosted NZBs.
 			// With no host that zurg is not running yet, so there is none to join.
-			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host and sign in with the WebDAV credentials ${orList(kodiWebdav.map((source) => SOURCE_LABELS.get(source)!))} ${severalWebdav ? 'document for your accounts' : 'documents for your account'}, or ${kodiReadsZurg && answers.host !== 'none' ? `add your ${debridAccounts} to the zurg your Usenet account runs on and browse it over its WebDAV` : 'run zurg → WebDAV → Kodi on a host for exact naming and placement'}.`,
+			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host and sign in with the WebDAV credentials ${orList(kodiWebdav.map((source) => SOURCE_LABELS.get(source)!))} documents for your account${severalWebdav ? 's' : ''}, or ${kodiReadsZurg && answers.host !== 'none' ? `add your ${debridAccounts} to the zurg your Usenet account runs on and browse it over its WebDAV` : 'run zurg → WebDAV → Kodi on a host for exact naming and placement'}.`,
 			links: [ZURG],
 		});
 	}
