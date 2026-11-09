@@ -720,12 +720,13 @@ async function streamedOn(
 
 // A film a show's release carries beside its episodes: `[Movie 02] Heroes Rising`, `One Piece Movie
 // 05 (2004) - The Cursed Holy Sword`, `Mask of The Phantasm (1993 - 1080p BluRay)`, a `Movies` folder.
+// A title's words: a number (`Jujutsu Kaisen 0`), never an article (`Ranma ½: The Movie, Big Trouble…`).
 const titleWords = (text: string) =>
 	text
 		.toLowerCase()
 		.replace(/['’`]/g, '')
 		.split(/[^\p{L}\p{N}]+/u)
-		.filter((word) => word.length > 2);
+		.filter((word) => (word.length > 2 || /^\d+$/.test(word)) && word !== 'the');
 const FILM_WORD = /(?:^|[^a-z])(?:movies?|films?)(?:[^a-z]|$)/i;
 const FILM_YEAR = /[[(]\s*(?:19|20)\d{2}\b/;
 const FILM_FOLDER = /(?:^|\/)[^/]*\b(?:movies?|films?|tv movies)\b[^/]*$/i;
@@ -748,8 +749,12 @@ async function filmLook(
 		if (file.season !== null) return [];
 		const { path, folder } = release.files[at];
 		const stem = (path.split('/').pop() ?? path).replace(/\.[a-z0-9]{2,4}$/i, '');
+		// or a release's one file: `[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm`
 		const shaped =
-			FILM_WORD.test(stem) || FILM_YEAR.test(stem) || FILM_FOLDER.test(folder ?? '');
+			FILM_WORD.test(stem) ||
+			FILM_YEAR.test(stem) ||
+			FILM_FOLDER.test(folder ?? '') ||
+			release.files.length === 1;
 		if (!shaped) return [];
 		const own = stem.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
 		const name = letters(own).includes(letters(show)) ? own : `${show} ${own}`;
@@ -769,9 +774,15 @@ async function filmLook(
 		// the film's own title in the name, the show's words aside: `Beavis and Butt-Head {1995}
 		// Virtual Stupidity` is no Beavis and Butt-Head Do America, and the Six Million Dollar Man's
 		// three pilot films all read as the one titled as the show
-		const own = titleWords(top.title).filter((word) => !titleWords(show).includes(word));
+		// or, the film's words and number left out, as the name may leave them (`Ranma ½: The Movie 2,
+		// Nihao My Concubine` is `Ranma_½_Movie_Nihao_My_Concubine`)
 		const named = titleWords(name);
-		if (!own.length || !own.every((word) => named.includes(word))) continue;
+		const holds = (title: string) => {
+			const own = titleWords(title).filter((word) => !titleWords(show).includes(word));
+			return own.length > 0 && own.every((word) => named.includes(word));
+		};
+		if (!holds(top.title) && !holds(top.title.replace(/\b(?:movie|film)s?\s*\d*/gi, ' ')))
+			continue;
 		const movie = (await sources.find(top.imdbId))?.movie_results?.[0]?.id;
 		if (typeof movie !== 'number') continue;
 		files[at] = { ...files[at], kind: 'movie', imdbId: top.imdbId, tmdbId: movie };

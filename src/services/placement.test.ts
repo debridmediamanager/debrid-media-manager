@@ -20,6 +20,7 @@ import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
+import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
 import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
@@ -2042,5 +2043,38 @@ describe('a part of the episode its title names', () => {
 		);
 		expect(nogrp('S02E01.The.Siege.of.Lothal.Part1')).toEqual([0, 6, null]);
 		expect(nogrp('S02E02.The.Siege.of.Lothal.Part2')).toEqual([null, null, null]);
+	});
+});
+
+describe("a film in a show's release, by the identifier's answer", () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-09): films in releases placed on a show, whose
+	// titles differ from the show's by a number, an article or the film's number in the series
+	const films = async (name: string) => {
+		const c = filmsInShows.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsInShows.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0].files.flatMap((f) => (f.kind ? [[f.imdbId, f.tmdbId]] : []));
+	};
+
+	it('names a film titled as the show and a number', async () => {
+		// JUJUTSU KAISEN 0 (2021), the release's one file, sent with the show's id
+		expect(await films('[RaptoR] Jujutsu Kaisen 0 (2021)')).toEqual([['tt14331144', 810693]]);
+	});
+
+	it('names a film whose title has an article or a number the name leaves out', async () => {
+		// "Ranma ½: The Movie, Big Trouble in Nekonron, China", "Ranma ½: The Movie 2, Nihao My Concubine"
+		expect(await films('[Exiled-Destiny]_Ranma')).toEqual([
+			['tt0101583', 37024],
+			['tt0104604', 37021],
+		]);
+	});
+
+	it("names a release's one file the identifier is sure is a film", async () => {
+		expect(await films('Deadpool')).toEqual([['tt6263850', 533535]]);
 	});
 });
