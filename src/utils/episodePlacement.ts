@@ -1236,6 +1236,8 @@ const TITLE_LEAD = /^-?\d+(?:\.\d+)?(?:[a-z](?:-[a-z])?|-\d{1,2})?\.?\s*(?:-\s+)
 const SCENE_TOKEN =
 	/(?:^|[^a-z0-9])(?:s\d{1,2}[\s._-]*e\d{1,3}|\d{1,2}x\d{1,3}|s?(?:19|20)\d{2}[xe]\d{2})(?![0-9])/i;
 const MORE_EPISODES = /^(?:[\s._-]*-?[\s._-]*e\d{1,3}(?![0-9]))*/i;
+// A half-hour's segment letter joined to its number: `SpongeBob SquarePants S01E01B Reef Blower`.
+const SEGMENT_LETTER = /^[a-d](?=[\s._-]|$)/i;
 
 /** The title a file's name carries after its episode token, its code or its number. */
 export function titleOf(
@@ -1248,7 +1250,10 @@ export function titleOf(
 	const token = SCENE_TOKEN.exec(stem.slice(grouped));
 	const number = new RegExp(`(?<!\\d)0*${numbers.episode}(?!\\d)`).exec(stem);
 	const rest = token
-		? stem.slice(grouped + token.index + token[0].length).replace(MORE_EPISODES, '')
+		? stem
+				.slice(grouped + token.index + token[0].length)
+				.replace(MORE_EPISODES, '')
+				.replace(SEGMENT_LETTER, '')
 		: numbers.coded
 			? stem.replace(SHOW_CODE_LEAD, '').replace(TITLE_LEAD, '')
 			: number

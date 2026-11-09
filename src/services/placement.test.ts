@@ -38,6 +38,7 @@ import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
+import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
@@ -1780,6 +1781,28 @@ describe('an episode number left at the end of a title', () => {
 			releases[0].files[0].season,
 			releases[0].files[0].episode,
 		]).toEqual([12971, 2, 22]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a segment letter joined to the episode number', () => {
+	// zurg on fun (2026-11-09): `SpongeBob SquarePants S01E01B Reef Blower`, a pack numbering the
+	// half-hours and lettering their segments, which TMDB lists one by one (see the fixtures README)
+	it("places each segment on the TMDB episode its title names, never on the half-hour's number", async () => {
+		const [c] = segmentLetters.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(segmentLetters.answers)
+		);
+		const at = (name: string) => {
+			const file = releases[0].files.find((f) => f.path.includes(name))!;
+			return [file.season, file.episode];
+		};
+		expect(at('S01E01B Reef Blower')).toEqual([1, 2]);
+		expect(at('S01E01C Tea at the Treedome')).toEqual([1, 3]);
+		// read as `B Plankton!`, it went to the half-hour's number, TMDB's S1E2 "Reef Blower"
+		expect(at('S01E02B Plankton!')).toEqual([1, 7]);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });
