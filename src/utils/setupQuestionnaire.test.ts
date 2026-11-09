@@ -461,19 +461,14 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).toContain('newznab');
 	});
 
-	it('surfaces the Easynews to zurg sponsor path once an NZB backend is selected', () => {
+	it('offers no zurg benefits for Easynews beside TorBox Cast without a host', () => {
 		const result = recommendSetup(
 			answers({ player: 'stremio', sources: ['easynews', 'torbox-hosted'], host: 'none' })
 		);
 
 		expect(ids('required', result)).toEqual([]);
-		expect(ids('optional', result)).toEqual(
-			expect.arrayContaining(['zurg-nightly', 'zurg-api-key', 'wanted', 'discord-role'])
-		);
-		expect(ids('optional', result)).toEqual(
-			expect.arrayContaining(['sponsor-api', 'remote-help'])
-		);
-		expect(ids('optional', result)).not.toContain('seerr');
+		for (const id of ['zurg-nightly', 'zurg-api-key', 'wanted', 'sponsor-api', 'remote-help'])
+			expect(ids('optional', result)).not.toContain(id);
 	});
 
 	it('offers DMM Wanted from Kodi as a title-level add for a running zurg host', () => {
@@ -867,6 +862,40 @@ describe('Easynews alone is not offered zurg benefits', () => {
 		expect(
 			optional(recommendSetup(answers({ player: 'kodi', sources: ['easynews'] })))
 		).not.toContain('wanted-kodi');
+	});
+
+	it.each(['on-demand', 'managed'] as const)(
+		'never promises Easynews sends to a debrid-only zurg (%s)',
+		(preference) => {
+			const result = recommendSetup(
+				answers({
+					player: 'plex',
+					plexRoute: 'existing-server',
+					sources: ['real-debrid', 'easynews'],
+					host: 'existing',
+					preference,
+				})
+			);
+			const wanted = result.sponsorship.optional.find((benefit) => benefit.id === 'wanted');
+
+			expect(Boolean(wanted)).toBe(preference === 'managed');
+			expect(wanted?.detail ?? '').not.toMatch(/Easynews/);
+		}
+	);
+
+	it('says Easynews sends land in Wanted when zurg has an own Usenet backend', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['usenet', 'easynews'],
+				host: 'existing',
+			})
+		);
+
+		expect(result.sponsorship.optional.find((benefit) => benefit.id === 'wanted')?.detail).toBe(
+			'Have zurg fetch requested films, shows, new episodes and upgrades for you. Easynews releases you send to zurg land here too.'
+		);
 	});
 
 	it('offers Wanted once Easynews has an own Usenet backend', () => {

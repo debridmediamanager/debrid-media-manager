@@ -409,7 +409,7 @@ const SPONSOR_BENEFITS = {
 	wanted: {
 		id: 'wanted',
 		title: 'DMM Wanted list',
-		detail: 'Have zurg fetch requested films, shows, new episodes and upgrades for you, including exact Easynews releases you send.',
+		detail: 'Have zurg fetch requested films, shows, new episodes and upgrades for you.',
 		href: '/wanted',
 	},
 	wantedKodi: {
@@ -489,10 +489,19 @@ function sponsorshipFor(
 		(answers.preference === 'arr' && (debrid || hasNzb));
 	const usesCast = routes.some(({ route: source }) => source.usesCast);
 	const usesRex = routes.some(({ route: source }) => source.usesRex);
+	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
+	const easynewsToZurg =
+		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
+	const wanted = easynewsToZurg
+		? {
+				...SPONSOR_BENEFITS.wanted,
+				detail: `${SPONSOR_BENEFITS.wanted.detail} Easynews releases you send to zurg land here too.`,
+			}
+		: SPONSOR_BENEFITS.wanted;
 	const required: SetupSponsorBenefit[] = [];
 	const optional: SetupSponsorBenefit[] = [];
 	const add = (list: SetupSponsorBenefit[], id: SponsorBenefitId) =>
-		list.push(SPONSOR_BENEFITS[id]);
+		list.push(id === 'wanted' ? wanted : SPONSOR_BENEFITS[id]);
 
 	if (usesZurg) add(required, 'zurg');
 	if (answers.preference === 'arr' && debrid) add(required, 'torznab');
@@ -531,16 +540,8 @@ function sponsorshipFor(
 		add(optional, 'wanted');
 		add(optional, 'seerr');
 	}
-	// An Easynews release sent to zurg is an NZB, so zurg needs an NZB backend to fetch it.
-	if (selected.has('easynews') && (hasNzb || usesZurg)) {
-		if (!usesZurg) {
-			add(optional, 'zurg');
-			add(optional, 'zurgKey');
-		}
-		add(optional, player === 'kodi' ? 'wantedKodi' : 'wanted');
-		add(optional, 'api');
-		add(optional, 'remoteHelp');
-	}
+	// Easynews sends come from DMM's website, whatever the player; the zurg route already adds the rest.
+	if (easynewsToZurg) add(optional, 'wanted');
 	if (selected.has('real-debrid')) add(optional, 'queue');
 	if (usesZurg || usesRex) add(optional, 'api');
 	if (usesZurg || usesRex) add(optional, 'remoteHelp');
