@@ -312,7 +312,7 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 	emby: 'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server. TorBox Pro hosted NZBs work through zurg on a host too.',
 };
 const REX_ACCOUNTS =
-	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer.';
+	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. TorBox Pro hosted NZBs work through zurg on a host too.';
 
 /** "A", "A or B", "A, B or C". */
 const orList = (names: string[]) =>
