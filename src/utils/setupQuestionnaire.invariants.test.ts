@@ -278,6 +278,18 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('never points at a running zurg when there is no host', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'none' &&
+					texts(result).some((text) =>
+						text.includes('the zurg your Usenet account runs on')
+					)
+			)
+		).toEqual([]);
+	});
+
 	it('links two zurgs on one DMM key exactly when two zurgs are needed', () => {
 		expect(
 			breaking(

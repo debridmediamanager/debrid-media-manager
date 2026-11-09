@@ -1111,6 +1111,13 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 		);
 	});
 
+	// With no host, own Usenet's zurg is not running, so there is no zurg to add the account to.
+	it('says to run zurg on a host when there is no host', () => {
+		expect(browse({ sources: ['real-debrid', 'usenet'], host: 'none' })?.detail).toBe(
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
+		);
+	});
+
 	it('names several debrid accounts in the plural', () => {
 		expect(
 			browse({ sources: ['real-debrid', 'all-debrid', 'usenet'], host: 'existing' })?.detail
