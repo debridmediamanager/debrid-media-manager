@@ -2070,9 +2070,10 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		const sab = { label: 'DMM SABnzbd endpoint', href: '/sabnzbd' };
 
 		expect(transfer('arr')?.detail).toBe(
-			"DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid. Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account; Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab."
+			"DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid. Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account. Sends get sponsor priority and allowance only with your DMM API key in that SABnzbd client's Password field. Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab."
 		);
 		expect(transfer('arr')?.links).toContainEqual(sab);
+		// *arr cannot tell DMM who sponsors; the key as the Password is how /sabnzbd recognises one.
 		expect(transfer('managed')?.detail).not.toMatch(/SABnzbd/);
 		expect(transfer('managed')?.links).not.toContainEqual(sab);
 	});

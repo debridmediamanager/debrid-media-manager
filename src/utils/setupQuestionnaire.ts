@@ -1415,7 +1415,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const indexer = arr && !selected.includes('usenet') && !selected.includes('torbox-hosted');
 		result.alternatives.push({
 			title: 'NZBs without your own news account',
-			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account; Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab." : ''}`,
+			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account. Sends get sponsor priority and allowance only with your DMM API key in that SABnzbd client's Password field. Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab." : ''}`,
 			links: [
 				{ label: 'DMM Transfers', href: '/transfers' },
 				...(arr ? [{ label: 'DMM SABnzbd endpoint', href: '/sabnzbd' }] : []),
