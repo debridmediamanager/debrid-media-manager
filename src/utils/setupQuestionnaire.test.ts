@@ -441,11 +441,47 @@ describe('sponsorship benefits follow the selected route', () => {
 				id: 'cast-streams',
 				title: 'Ten other streams in Cast',
 				detail: 'Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon.',
-				href: '/settings',
+				href: '/stremio',
 			});
 			expect(result.sponsorship.freeFeatures).toContain('cast');
 		}
 	);
+
+	// Settings' other-streams selector writes only the Real-Debrid, TorBox and AllDebrid Cast
+	// profiles; every Cast page sets its own, so one Cast source links that page.
+	it.each([
+		['stremio', ['easynews'], '/stremio-easynews'],
+		['kodi', ['premiumize'], '/stremio-premiumize'],
+		['stremio', ['real-debrid'], '/stremio'],
+		['stremio', ['torbox-hosted'], '/stremio-torbox'],
+		['kodi', ['torbox-hosted'], '/stremio-torbox'],
+		['stremio', ['torbox', 'torbox-hosted'], '/stremio-torbox'],
+	] as const)(
+		'links the ten-stream perk for %s with %j to its Cast page',
+		(player, sources, href) => {
+			const cast = recommendSetup(
+				answers({ player, sources: [...sources] })
+			).sponsorship.optional.find(({ id }) => id === 'cast-streams');
+
+			expect(cast?.href).toBe(href);
+			expect(cast?.detail).toBe(
+				'Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon.'
+			);
+		}
+	);
+
+	it('keeps Settings for the ten-stream perk across several Cast pages and says where the rest are set', () => {
+		const cast = recommendSetup(
+			answers({ player: 'stremio', sources: ['real-debrid', 'premiumize'] })
+		).sponsorship.optional.find(({ id }) => id === 'cast-streams');
+
+		expect(cast).toEqual({
+			id: 'cast-streams',
+			title: 'Ten other streams in Cast',
+			detail: "Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon. Set it on each provider's Cast page; Settings covers Real-Debrid, TorBox and AllDebrid.",
+			href: '/settings',
+		});
+	});
 
 	it('offers the ten-stream perk to Kodi debrid and Easynews users, who read the Cast stream list', () => {
 		const kodi = recommendSetup(answers({ player: 'kodi', sources: ['real-debrid'] }));

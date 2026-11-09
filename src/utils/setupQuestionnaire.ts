@@ -597,7 +597,7 @@ function nzbPluginOnly(
 function sponsorshipFor(
 	answers: SetupAnswers,
 	player: Player,
-	routes: { route: SourceRoute }[],
+	routes: { source: SetupSource; route: SourceRoute }[],
 	routeAvailable: boolean,
 	rexStremio: boolean
 ): SetupSponsorship {
@@ -624,10 +624,25 @@ function sponsorshipFor(
 				detail: `${SPONSOR_BENEFITS.wanted.detail} Easynews releases you send to zurg land here too.`,
 			}
 		: SPONSOR_BENEFITS.wanted;
+	// Each Cast page sets its own profile's limit; Settings writes only Real-Debrid, TorBox and AllDebrid.
+	const castPages = new Set(
+		routes
+			.filter(({ route: r }) => r.usesCast)
+			.map(
+				({ source }) => DMM_CAST_LINKS[source === 'torbox-hosted' ? 'torbox' : source].href
+			)
+	);
+	const cast =
+		castPages.size === 1
+			? { ...SPONSOR_BENEFITS.cast, href: [...castPages][0] }
+			: {
+					...SPONSOR_BENEFITS.cast,
+					detail: `${SPONSOR_BENEFITS.cast.detail} Set it on each provider's Cast page; Settings covers Real-Debrid, TorBox and AllDebrid.`,
+				};
+	const benefits = { ...SPONSOR_BENEFITS, wanted, cast };
 	const required: SetupSponsorBenefit[] = [];
 	const optional: SetupSponsorBenefit[] = [];
-	const add = (list: SetupSponsorBenefit[], id: SponsorBenefitId) =>
-		list.push(id === 'wanted' ? wanted : SPONSOR_BENEFITS[id]);
+	const add = (list: SetupSponsorBenefit[], id: SponsorBenefitId) => list.push(benefits[id]);
 
 	if (usesZurg) add(required, 'zurg');
 	if (player === 'jellyfin' && answers.preference !== 'arr' && (debrid || selected.has('usenet')))
