@@ -26,6 +26,7 @@ import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
+import saga from '@/test/fixtures/placement/saga-titles.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -1425,6 +1426,31 @@ describe("a fansub number past every episode of its cour's season", () => {
 		// `Gintama (2017)_-_317_` to `_328_`: TMDB's season 8, Gintama., not season 9, Gintama. (2017)
 		expect(releases[0].files.map((f) => [f.season, f.episode, f.how])).toEqual(
 			Array.from({ length: 12 }, (_, n) => [8, n + 1, 'absolute'])
+		);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title with Saga in it', () => {
+	// zurg on fun (2026-11-09): `[sam] Vinland Saga [BD 1080p FLAC]`, whose title DMM read as
+	// Vinland, so the anime index named nothing and its 24 episodes stayed unplaced (see the fixtures README)
+	it('places the episodes by the anime index', async () => {
+		const [c] = saga.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(saga.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(saga.answers.anime.fribb as FribbAnimeEntry[]),
+						saga.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0].files.slice(0, 24).map((f) => [f.season, f.episode])).toEqual(
+			Array.from({ length: 24 }, (_, n) => [1, n + 1])
 		);
 		expect(releases[0]).toEqual(c.expect);
 	});

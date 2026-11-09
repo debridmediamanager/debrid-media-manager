@@ -4,6 +4,7 @@ import funNumbers from '@/test/fixtures/placement/fun-numbers-2026-11-09.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
+import saga from '@/test/fixtures/placement/saga-titles.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
 import frierenAddons from '@/test/fixtures/seasonEpisodes/addons-tt22248376-s1.json';
 import {
@@ -161,6 +162,13 @@ describe('parseName', () => {
 		const motto = release('[KH] Motto To Love-Ru');
 		expect(parseName(motto.name).title).toBe('Motto To Love-Ru');
 		expect(parseName(motto.files.at(-1)!.path).title).toBe('Motto To Love-Ru');
+	});
+
+	it('keeps Saga in a title, which the parser reads as a collection', () => {
+		// zurg on fun, 2026-11-09: `[sam] Vinland Saga [BD 1080p FLAC]` and its files
+		const { request } = saga.cases[0];
+		expect(parseName(request.name).title).toBe('Vinland Saga');
+		expect(parseName(request.files[0].path).title).toBe('Vinland Saga');
 	});
 
 	it("reads a name all in brackets by the one after the group's", () => {

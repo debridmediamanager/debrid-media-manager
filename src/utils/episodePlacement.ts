@@ -139,12 +139,29 @@ export function parseName(name: string): {
 		stripped = name.replace(FIRST_GROUP, '');
 		parsed = ptt.parse(stripped);
 	}
+	const spaced = stripped.replace(/[._]/g, ' ');
+	// ptt reads `Saga` as a collection's word and ends the title before it (`Vinland Saga - 01` is
+	// Vinland): one it ends right there is read again with the word hidden from it, unless the
+	// name says it is a collection (`Yuru Camp - THE COMPLETE SAGA`)
+	const cut = (parsed.title ?? '').trim();
+	if (
+		cut &&
+		spaced.startsWith(cut) &&
+		!/\bcomplete$/i.test(cut) &&
+		/^[\s-]*saga\b/i.test(spaced.slice(cut.length))
+	) {
+		parsed = ptt.parse(
+			stripped.replace(/saga/gi, (word) => `${word[0]}\u200b${word.slice(1)}`)
+		);
+	}
 	const seasons = parsed.seasons ?? [];
 	// a fansub's version tag is no part of the title: ptt keeps `Mushishi v2.1` and `Mushishi 01v2`
-	const title = (parsed.title ?? '').trim().replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');
+	const title = (parsed.title ?? '')
+		.replace(/\u200b/g, '')
+		.trim()
+		.replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');
 	// ptt reads the `Ru` of `Motto To Love-Ru` as Russian and drops it: a short word joined to
 	// the title by a hyphen is the title's own
-	const spaced = stripped.replace(/[._]/g, ' ');
 	const glued =
 		title && spaced.startsWith(title)
 			? /^-\p{L}{1,3}(?![\p{L}\p{N}])/u.exec(spaced.slice(title.length))
