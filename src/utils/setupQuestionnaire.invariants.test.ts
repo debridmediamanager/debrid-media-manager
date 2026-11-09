@@ -361,6 +361,21 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('labels every link to the setup guide "Read the full setup guide"', () => {
+		expect(
+			breaking((_, result) =>
+				[
+					...result.setupLinks,
+					...result.sourceCoverage.flatMap(({ setupLinks }) => setupLinks),
+					...result.alternatives.flatMap(({ links }) => links),
+				].some(
+					({ label, href }) =>
+						href === SETUP_GUIDE_URL && label !== 'Read the full setup guide'
+				)
+			)
+		).toEqual([]);
+	});
+
 	it('names a no-host route that exists instead of a generic one', () => {
 		expect(
 			breaking((_, result) =>

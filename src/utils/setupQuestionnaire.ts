@@ -433,6 +433,7 @@ const HTTP = note('rex/any-source', 'rex with any source');
 const ADDON = note('rex/stremio', 'rex with Stremio addons');
 const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
 const JELLYFIN = { label: 'DMM Jellyfin NZB setup', href: '/jellyfin' };
+const GUIDE = { label: 'Read the full setup guide', href: SETUP_GUIDE_URL };
 
 interface SourceRoute {
 	id: string;
@@ -796,7 +797,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 				[
 					'Use a compatible Stremio addon for this source, or open the file in a compatible local/network player.',
 				],
-				[{ label: 'Full setup guide', href: SETUP_GUIDE_URL }]
+				[GUIDE]
 			);
 			r.status = 'separate';
 			return r;
@@ -825,7 +826,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 					? 'Keep the media server running with access to the files. Use a supported library adapter for HTTP URLs; a URL is not a filesystem path.'
 					: 'Open a local file, supported HTTP URL or existing network share. A NAS/file server must remain available for remote files.',
 			],
-			[{ label: 'Full setup guide', href: SETUP_GUIDE_URL }],
+			[GUIDE],
 			server && player === 'plex'
 				? [
 						'Plex Media Server normally uses library paths, not .strm files; use local/mounted files or a compatible source integration.',
@@ -1302,7 +1303,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 						? 'Stremio needs a compatible addon for local files; cloud titles come from the routes above.'
 						: 'Local files stay in your player; cloud titles come from the routes above.'
 		);
-	links({ label: 'Read the full setup guide', href: SETUP_GUIDE_URL });
+	links(GUIDE);
 	result.setupLinks = result.setupLinks.filter(
 		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
 	);
