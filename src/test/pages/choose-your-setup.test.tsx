@@ -113,7 +113,7 @@ describe('choose your setup page', () => {
 		).not.toBeInTheDocument();
 		expect(
 			screen.getByText(
-				'Choose a source your player supports first; the sources you selected stay in their own apps.'
+				'Choose a source your player supports first; DMM has no route for the selected sources with this player.'
 			)
 		).toBeInTheDocument();
 	});

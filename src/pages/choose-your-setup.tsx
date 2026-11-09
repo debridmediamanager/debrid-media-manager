@@ -451,7 +451,7 @@ function SponsorBenefits({
 					: hasConflicts
 						? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
 						: hasSources
-							? 'Choose a source your player supports first; the sources you selected stay in their own apps.'
+							? 'Choose a source your player supports first; DMM has no route for the selected sources with this player.'
 							: 'Choose a source first.'}
 			</p>
 			<a
