@@ -1049,6 +1049,22 @@ describe('provider WebDAV follows the chosen provider', () => {
 			])
 		);
 	});
+
+	// TorBox's WebDAV is not known to list hosted NZB downloads, so it cannot replace zurg for them.
+	it('leaves TorBox WebDAV out beside TorBox hosted NZBs', () => {
+		const result = (sources: SetupSource[], host: Host) =>
+			recommendSetup(answers({ player: 'webdav', sources, host }));
+		const skip = (sources: SetupSource[]) =>
+			result(sources, 'existing').alternatives.find(
+				({ title }) => title === 'Skip zurg: TorBox WebDAV'
+			);
+
+		expect(result(['torbox', 'torbox-hosted'], 'none').conflicts).toEqual([
+			'zurg needs a host that stays on while you watch. Choose a host.',
+		]);
+		expect(skip(['torbox', 'torbox-hosted'])).toBeUndefined();
+		expect(skip(['torbox'])).toBeDefined();
+	});
 });
 
 describe('Kodi can browse a provider WebDAV instead of the addon', () => {

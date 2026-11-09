@@ -257,6 +257,19 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('offers no TorBox WebDAV beside TorBox hosted NZBs', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.sources.includes('torbox-hosted') &&
+					[
+						...result.conflicts,
+						...result.alternatives.flatMap(({ title, detail }) => [title, detail]),
+					].some((text) => text.includes('TorBox WebDAV'))
+			)
+		).toEqual([]);
+	});
+
 	it('names players with a lowercase article mid-sentence', () => {
 		expect(
 			breaking((_, result) =>

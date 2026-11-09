@@ -425,6 +425,14 @@ const PROVIDER_WEBDAV: Partial<Record<SetupSource, string>> = {
 	'debrid-link': 'https://webdav.debrid.link/',
 };
 
+/** Selected providers whose own WebDAV can stand in for a route. TorBox's WebDAV is not known to
+ * list hosted NZB downloads, so it cannot stand in beside them. */
+const providerWebdav = (selected: SetupSource[]) =>
+	selected.filter(
+		(source) =>
+			PROVIDER_WEBDAV[source] && (source !== 'torbox' || !selected.includes('torbox-hosted'))
+	);
+
 const SOURCE_LABELS = new Map<SetupSource, string>(
 	SOURCE_OPTIONS.map(({ value, label }) => [value, label])
 );
@@ -727,7 +735,7 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 				? ", or switch to Real-Debrid and use DMM's transfer with DMM Watch, which need no host"
 				: '';
 	if (player === 'webdav') {
-		const webdav = selected.filter((source) => PROVIDER_WEBDAV[source]);
+		const webdav = providerWebdav(selected);
 		if (webdav.length)
 			return `, or use ${orList(webdav.map((source) => SOURCE_LABELS.get(source)!))} WebDAV, which needs no host`;
 		// An undecided player started on WebDAV for own Usenet can still pick Stremio.
@@ -1200,9 +1208,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the Android zurg app.',
 			links: [ZURG],
 		});
+		const skipZurg = providerWebdav(selected);
 		for (const source of selected) {
 			const name = SOURCE_LABELS.get(source)!;
-			const webdav = PROVIDER_WEBDAV[source];
+			const webdav = skipZurg.includes(source) && PROVIDER_WEBDAV[source];
 			if (source === 'offcloud')
 				result.sourceNotes.push(
 					`${name} has no WebDAV of its own, so a WebDAV player needs zurg on a host.`
@@ -1215,12 +1224,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				});
 		}
 	}
-	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg. TorBox's
-	// WebDAV is not known to list the hosted NZB downloads the addon plays, so it cannot replace it.
-	const kodiWebdav = selected.filter(
-		(source) =>
-			PROVIDER_WEBDAV[source] && (source !== 'torbox' || !selected.includes('torbox-hosted'))
-	);
+	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
+	const kodiWebdav = providerWebdav(selected);
 	// Sonarr/Radarr import into zurg's __magic__ folders, which only zurg's own WebDAV shows.
 	if (
 		player === 'kodi' &&
