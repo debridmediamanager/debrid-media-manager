@@ -718,7 +718,7 @@ describe('choose your setup page', () => {
 		expectAndroidKept();
 	});
 
-	it('drops an Android host on leaving the player step for one that would play TorBox hosted NZBs through zurg', () => {
+	it('drops an Android host on leaving the sources step once a new player would play TorBox hosted NZBs through zurg', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -758,7 +758,7 @@ describe('choose your setup page', () => {
 		expectAndroidKept();
 	});
 
-	it('drops an Android host on leaving the player step for Plex apps', () => {
+	it('drops an Android host on leaving the sources step once Plex Media Server would need it', () => {
 		reachStremioRecommendation(/Choose and play as I go/, ANDROID);
 		editAnswer('Where do you want to watch?');
 		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
@@ -770,6 +770,20 @@ describe('choose your setup page', () => {
 		expectAndroidDropped(
 			'Plex Media Server needs a full server host; zurg Android cannot give a server on that device a library.'
 		);
+	});
+
+	// Only leaving the sources step, which the host step follows, judges the host.
+	it('keeps an Android host when Plex apps are picked and left again on the way to the host', () => {
+		reachStremioRecommendation(/Choose and play as I go/, ANDROID);
+		editAnswer('Where do you want to watch?');
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidKept();
 	});
 
 	it('keeps the Plex route when arrowing to another player and back to Plex', async () => {

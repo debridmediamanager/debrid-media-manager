@@ -733,10 +733,10 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 		event.preventDefault();
 		if (!currentHasAnswer) return;
 		if (!isLastStep) {
-			// Dropped on leaving the step, so arrowing or ticking past a player or source that rules
-			// Android out keeps it; the host is then asked again, and leaving that step judges arr.
+			// Dropped on leaving the sources step, which the host step follows, so passing through a
+			// player or source that rules Android out keeps it; the host is then asked again.
 			const dropAndroid =
-				(currentQuestion === 'player' || currentQuestion === 'sources') &&
+				currentQuestion === 'sources' &&
 				answers.host === 'android' &&
 				!!hostChoiceReason(answers, 'android');
 			if (dropAndroid) {
