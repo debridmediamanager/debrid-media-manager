@@ -192,3 +192,94 @@ describe('setup recommendation invariants', () => {
 		expect(cases).toBe(PLAYER_MODES.length * SOURCE_SETS.length * 4 * 4);
 	});
 });
+
+describe('setup copy and benefits for every reachable combination', () => {
+	const cases = PLAYER_MODES.flatMap((mode) =>
+		SOURCE_SETS.flatMap((sources) =>
+			HOST_OPTIONS.flatMap(({ value: host }) =>
+				PREFERENCE_OPTIONS.flatMap(({ value: preference }) =>
+					[[], ALL_NEEDS].map((needs) => {
+						const answers: SetupAnswers = { ...mode, sources, host, preference, needs };
+						return { answers, result: recommendSetup(answers) };
+					})
+				)
+			)
+		)
+	);
+	/** The first few answers that break a rule, so a failure names them. */
+	const breaking = (broken: (answers: SetupAnswers, result: SetupRecommendation) => boolean) =>
+		cases
+			.filter(({ answers, result }) => broken(answers, result))
+			.slice(0, 3)
+			.map(({ answers }) => JSON.stringify(answers));
+	const texts = (result: SetupRecommendation) => {
+		const all: string[] = [];
+		walk(
+			result,
+			'result',
+			(text) => all.push(text),
+			() => undefined
+		);
+		return all;
+	};
+	const offered = (result: SetupRecommendation) =>
+		[...result.sponsorship.required, ...result.sponsorship.optional].map(({ id }) => id);
+
+	it('names players with a lowercase article mid-sentence', () => {
+		expect(
+			breaking((_, result) =>
+				texts(result).some(
+					(text) =>
+						text.includes('An external player') ||
+						text.includes('in WebDAV or SMB player')
+				)
+			)
+		).toEqual([]);
+	});
+
+	it('offers no zurg-only benefit when nothing runs zurg and there is no host', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'none' &&
+					!result.components.some((component) => /zurg/i.test(component)) &&
+					offered(result).some((id) =>
+						['zurg-api-key', 'wanted', 'wanted-kodi', 'seerr'].includes(id)
+					)
+			)
+		).toEqual([]);
+	});
+
+	it('suggests DMM Wanted or Seerr only with a debrid or NZB backend', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					result.alternatives.some(
+						({ title }) => title === 'DMM Wanted or Seerr requests'
+					) &&
+					!answers.sources.some(
+						(source) =>
+							DEBRID.includes(source) ||
+							source === 'usenet' ||
+							source === 'torbox-hosted'
+					)
+			)
+		).toEqual([]);
+	});
+
+	it('never says AllDebrid has no WebDAV', () => {
+		expect(
+			breaking((_, result) =>
+				texts(result).some((text) => /AllDebrid has no WebDAV/.test(text))
+			)
+		).toEqual([]);
+	});
+
+	it('names a no-host route that exists instead of a generic one', () => {
+		expect(
+			breaking((_, result) =>
+				result.conflicts.some((conflict) => conflict.includes('Cast/direct-player'))
+			)
+		).toEqual([]);
+	});
+});
