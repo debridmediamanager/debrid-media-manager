@@ -318,10 +318,10 @@ export function hostChoiceReason(
 			(answers.plexRoute === 'rex' || answers.plexRoute === 'either')
 		)
 			return 'rex needs a full server host; Android can run zurg, not rex.';
-		// A media server can run on Android, but zurg Android has no mount to give it.
+		// zurg Android serves WebDAV and the Files picker, never a mount a server could scan.
 		const server =
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
-		return `${server} needs a mounted library on a full host; zurg Android serves WebDAV only.`;
+		return `${server} needs a full server host; zurg Android cannot give a server on that device a library.`;
 	}
 	return undefined;
 }

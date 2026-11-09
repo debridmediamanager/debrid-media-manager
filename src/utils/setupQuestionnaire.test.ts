@@ -983,9 +983,9 @@ describe('host messages name the server that needs the host', () => {
 		[{ player: 'plex', plexRoute: 'existing-server' }, 'Plex Media Server'],
 		[{ player: 'jellyfin' }, 'Jellyfin'],
 		[{ player: 'emby' }, 'Emby'],
-	] as const)('says zurg Android cannot mount a library for %o', (mode, name) => {
+	] as const)('says zurg Android cannot give %o a library', (mode, name) => {
 		expect(hostChoiceReason(mode, 'android')).toBe(
-			`${name} needs a mounted library on a full host; zurg Android serves WebDAV only.`
+			`${name} needs a full server host; zurg Android cannot give a server on that device a library.`
 		);
 	});
 
@@ -1000,7 +1000,7 @@ describe('host messages name the server that needs the host', () => {
 
 	it('gives the Android conflict the same reason', () => {
 		expect(recommendSetup(answers({ player: 'emby', host: 'android' })).conflicts).toContain(
-			'Emby needs a mounted library on a full host; zurg Android serves WebDAV only.'
+			'Emby needs a full server host; zurg Android cannot give a server on that device a library.'
 		);
 	});
 
