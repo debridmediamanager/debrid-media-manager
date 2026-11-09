@@ -15,6 +15,12 @@ import {
 import type { ImdbSeries, NamesakeSeries } from '@/services/database/hashImdb';
 import { settle, TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
+import {
+	isOnePace,
+	onePaceCatalogue,
+	placeOnePace,
+	type OnePaceCatalogue,
+} from '@/services/onePace';
 import { repository } from '@/services/repository';
 import {
 	absoluteFolders,
@@ -53,7 +59,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-04.1';
+export const PLACEMENT_RULES = '2026-11-09.11';
 
 export interface PlaceRequest {
 	name: string;
@@ -93,6 +99,30 @@ export interface PlacedFile {
 	/** That film's TMDB title and year, which a client names its folder by. */
 	title?: string;
 	year?: number;
+	/** The file's episode of its release's `series`, present only on a file the series numbers. */
+	series?: SeriesEpisode;
+}
+
+/**
+ * A show no TMDB, IMDb or Plex record numbers, which DMM numbers itself (One Pace): a release's
+ * files it numbers are this show's, whichever release holds them, grouped by `key`.
+ */
+export interface PlacedSeries {
+	key: string;
+	title: string;
+	summary: string;
+	poster?: string;
+	art?: string;
+	/** The seasons the release's numbered files are on. */
+	seasons: { season: number; title: string; summary: string; poster?: string }[];
+}
+
+export interface SeriesEpisode {
+	season: number;
+	episode: number;
+	title: string;
+	summary: string;
+	thumb?: string;
 }
 
 export interface PlacedRelease {
@@ -115,6 +145,11 @@ export interface PlacedRelease {
 	 * where the show's TMDB record could not be read.
 	 */
 	anime?: boolean;
+	/**
+	 * The show DMM numbers itself that the release's files are episodes of, with `kind` and the
+	 * ids null; absent for every other release.
+	 */
+	series?: PlacedSeries;
 	files: PlacedFile[];
 	/** Not placed in this request's time budget, or a source could not be asked; ask again. */
 	skipped?: true;
@@ -148,6 +183,10 @@ export interface PlacementSources {
 	anime(): Promise<AnimeIndex | null>;
 	/** TMDB's TV search for a title (`search/tv`). */
 	searchTv(query: string): Promise<any | null>;
+	/** TMDB's movie search for a title in a year (`search/movie`); absent or null where it cannot be asked. */
+	searchMovie?(query: string, year: number): Promise<any | null>;
+	/** TMDB's external ids of a movie (`movie/{id}/external_ids`); absent or null where it cannot be asked. */
+	movieIds?(tmdbId: number): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
 	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
 	/** The series IMDb titles exactly as this film or TV film (dmmdb's imdb_title_basics); absent or null where it cannot be asked. */
@@ -158,6 +197,10 @@ export interface PlacementSources {
 	tvdbSeriesOf?(imdbId: string): Promise<number[] | null>;
 	/** A TheTVDB series' episodes in its default (aired) order, which Plex numbers by, or its DVD order. */
 	tvdbEpisodes?(tvdbId: number, order?: 'dvd'): Promise<any[] | null>;
+	/** TMDB's `/find` for a TheTVDB episode id; absent or null where it cannot be asked. */
+	findTvdbEpisode?(tvdbEpisodeId: number): Promise<any | null>;
+	/** One Pace's list; absent, the list DMM holds now. */
+	onePace?(): OnePaceCatalogue;
 }
 
 /** Releases placed at once; each one's files go one after another, sharing its lookups. */
@@ -200,16 +243,24 @@ export async function placeReleases(
 	deadline: number
 ): Promise<{ releases: PlacedRelease[]; complete: boolean }> {
 	const anime = await sources.anime();
+	// One Pace is numbered by its own list alone: the id zurg holds for it (One Piece's) and its
+	// name would place its files on One Piece's episodes
+	const onePace = releases.map(isOnePace);
 	const titles: (Title | null | undefined)[] = await Promise.all(
-		releases.map((release) =>
-			release.imdbId ? resolve(release.imdbId, null, release, sources) : null
+		releases.map((release, at) =>
+			release.imdbId && !onePace[at] ? resolve(release.imdbId, null, release, sources) : null
 		)
 	);
 	// a series IMDb numbers is the id sent, numbered there, never one its name reads as: the
 	// identifier reads `Digimon.Adventure.02.E03` as TMDB's Digimon: Digital Monsters, whose
 	// season 1 is the 1999 series
 	const ask = releases.flatMap((_, at) =>
-		titles[at] !== undefined && titles[at]?.tmdbId == null && !titles[at]?.listed ? [at] : []
+		!onePace[at] &&
+		titles[at] !== undefined &&
+		titles[at]?.tmdbId == null &&
+		!titles[at]?.listed
+			? [at]
+			: []
 	);
 	if (ask.length) {
 		const answers = await identify(ask.map((at) => releases[at]));
@@ -230,6 +281,10 @@ export async function placeReleases(
 		while (next < releases.length) {
 			const at = next++;
 			const release = releases[at];
+			if (onePace[at]) {
+				out[at] = placeOnePace(release, sources.onePace?.() ?? onePaceCatalogue());
+				continue;
+			}
 			// without the anime index a fansub cour would be placed on its own numbers
 			// (`Hibike Euphonium 3 - 01` as season 1), so it waits for the index instead
 			const waits =
@@ -241,10 +296,12 @@ export async function placeReleases(
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
 			if (!waits) out[at] = await seriesLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await filmByTitle(release, out[at], sources);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
 			if (!waits) out[at] = await tvdbLook(out[at], sources);
+			if (!waits) out[at] = await revivalLook(release, out[at], sources);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -320,6 +377,7 @@ export async function titled(
 }
 
 const letters = (text = '') => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+const unarticled = (text = '') => letters(text.replace(/^\s*(?:the|an?)\s+/i, ''));
 const placesFiles = (answer: PlacedRelease) => answer.files.some((file) => file.season !== null);
 
 /**
@@ -395,6 +453,84 @@ async function tvdbLook(placed: PlacedRelease, sources: PlacementSources): Promi
 				? file
 				: { ...file, season: at[n].seasonNumber, episode: at[n].number, how: 'tvdbSeries' };
 		}),
+	};
+}
+
+/**
+ * A release of a season TVDB lists under the show and TMDB as a show of its own, `tvdbLook` the
+ * other way round: TVDB, and Plex with it, keeps The Wonderfully Weird World of Gumball (2025) as
+ * The Amazing World of Gumball's season 7, which TMDB lists as 291904 with no TVDB id, so
+ * `The.Amazing.World.of.Gumball.S07E01.The.Burger` named a season TMDB's 37606 does not have.
+ * Each such file is found by its TVDB episode through TMDB's find. The release moves only where
+ * it places nothing, every numbered file is of a season the show lacks, and all are found on one
+ * other show TMDB records no TVDB id for: answered as `tvdbSeries`, with TVDB's numbers and TMDB's
+ * episode ids.
+ */
+async function revivalLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (
+		placed.skipped ||
+		placed.kind !== 'tv' ||
+		placed.tmdbId === null ||
+		placesFiles(placed) ||
+		!sources.tvdbEpisodes ||
+		!sources.findTvdbEpisode
+	)
+		return placed;
+	const numbered = releaseNumbers(release).flatMap((numbers, at) =>
+		numbers ? [{ numbers, at }] : []
+	);
+	if (!numbered.length) return placed;
+	const show = await sources.show(placed.tmdbId);
+	const tvdbId = Number(show?.external_ids?.tvdb_id);
+	if (!(tvdbId > 0) || !Array.isArray(show?.seasons)) return placed;
+	const listed = new Set((show.seasons as any[]).map((row) => row?.season_number));
+	// ponytail: a multi-episode file keeps the release where it is; map both ends when one turns up
+	if (
+		numbered.some(
+			({ numbers: n }) =>
+				n.season === null || n.season < 1 || listed.has(n.season) || n.end !== null
+		)
+	)
+		return placed;
+	const episodes: any[] = (await sources.tvdbEpisodes(tvdbId)) ?? [];
+	const found = await Promise.all(
+		numbered.map(async ({ numbers: n }) => {
+			const tvdb = episodes.find(
+				(row) => row?.seasonNumber === n.season && row?.number === n.episode
+			);
+			const hit = Number.isInteger(tvdb?.id)
+				? (await sources.findTvdbEpisode!(tvdb.id))?.tv_episode_results?.[0]
+				: null;
+			return Number.isInteger(hit?.show_id) && Number.isInteger(hit?.id) ? hit : null;
+		})
+	);
+	const shows = new Set(found.map((hit) => hit?.show_id));
+	const [other] = shows;
+	if (found.some((hit) => !hit) || shows.size !== 1 || other === placed.tmdbId) return placed;
+	const there = await sources.show(other);
+	if (!there?.name || there.external_ids?.tvdb_id) return placed;
+	const external = there.external_ids?.imdb_id;
+	const files = [...placed.files];
+	numbered.forEach(({ numbers: n, at }, k) => {
+		files[at] = {
+			...files[at],
+			season: n.season,
+			episode: n.episode,
+			episodeEnd: null,
+			how: 'tvdbSeries',
+			tmdbEpisodeId: found[k].id,
+		};
+	});
+	return {
+		kind: 'tv',
+		imdbId: typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null,
+		tmdbId: other,
+		tvdbId,
+		files,
 	};
 }
 
@@ -645,8 +781,13 @@ async function secondLook(
 		// a title the name only spells, with no other fact behind it, never overrides the id sent:
 		// `Batman - 086 - Holiday Knights` spells the 1966 Batman, whose season 2 has an E52
 		if (!answer.confident && !unnamed) continue;
-		const own = (match: IdentifierMatch) =>
-			letters(match.title) === letters(answer.parsedTitle);
+		// the title as the identifier read the name, or as DMM does where the identifier runs on past
+		// it: `Would.I.Lie.to.You-S16E03-Shirley.Ballas…` is one title to the identifier, and
+		// `[philosophy-raws][Samurai Champloo][26]…` none
+		const spelled = [answer.parsedTitle, parseName(name).title]
+			.map((title) => letters(title))
+			.filter((title) => title.length >= 3);
+		const own = (match: IdentifierMatch) => spelled.includes(letters(match.title));
 		const leading = answer.matches.findIndex((match) => !own(match));
 		const offered = answer.confident
 			? [top]
@@ -665,7 +806,7 @@ async function secondLook(
 		// is an alternative title of TMDB's KONOSUBA - God's blessing on this wonderful world!,
 		// `Teasing Master Takagi-san` TMDB's name for IMDb's Karakai Jouzu no Takagi-san, and `Would I
 		// Lie To You AU` the Australian show's, which the identifier ranks below the British one
-		if (!offered.length && answer.kind === 'tv' && letters(answer.parsedTitle).length >= 3) {
+		if (!offered.length && answer.kind === 'tv' && spelled.length) {
 			for (const match of answer.matches.slice(0, 5)) {
 				const tv = (await sources.find(match.imdbId))?.tv_results?.[0]?.id;
 				const shown = typeof tv === 'number' ? await sources.show(tv) : null;
@@ -676,8 +817,7 @@ async function secondLook(
 						(row) => row?.title
 					),
 				];
-				if (names.some((name) => letters(name) === letters(answer.parsedTitle)))
-					offered.push(match);
+				if (names.some((name) => spelled.includes(letters(name)))) offered.push(match);
 			}
 		}
 		if (answer.kind === 'movie') {
@@ -742,6 +882,48 @@ async function secondLook(
 		if (answer.confident || offered.length) break;
 	}
 	return placed;
+}
+
+/**
+ * A film neither the id sent nor the identifier names, by TMDB's search for the name's title in
+ * the year it gives: the identifier reads Chaplin's `The.Bank.1915…` as the 2018 series The Bank
+ * and `The.Immigrant.1917…` as the 2013 film, where TMDB's search for the title in that year finds
+ * the 1915 and 1917 shorts. Only for a release DMM knows nothing of, with no numbered file, and
+ * only where one film of that year (a year either way, where none is of it) is titled as the name
+ * by letters, under its title or else its original title (`Macbeth.2010` is the English TV film,
+ * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id.
+ */
+async function filmByTitle(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind || placed.imdbId || !sources.searchMovie || !sources.movieIds)
+		return placed;
+	if (releaseNumbers(release).some(Boolean)) return placed;
+	const { title, year } = parseName(release.name);
+	if (!year || letters(title).length < 3) return placed;
+	const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
+	const results: any[] = (await sources.searchMovie(title, year))?.results ?? [];
+	const near = results.filter((row) => Math.abs(yearOf(row) - year) <= 1);
+	const titledAs = (spell: (text: string) => string) =>
+		near.filter((row) =>
+			[row?.title, row?.original_title].some((text) => spell(text) === spell(title))
+		);
+	// a leading article only where nothing is titled as the name: `Burlesque.on.Carmen.1915` is A
+	// Burlesque on Carmen
+	const titled = titledAs(letters).length ? titledAs(letters) : titledAs(unarticled);
+	const exact = titled.filter((row: any) => yearOf(row) === year);
+	let found = exact.length ? exact : titled;
+	if (found.length > 1)
+		found = found.filter((row: any) => letters(row?.original_title) === letters(title));
+	if (found.length !== 1) return placed;
+	const imdbId = (await sources.movieIds(found[0].id))?.imdb_id;
+	if (typeof imdbId !== 'string' || !/^tt\d{7,}$/.test(imdbId)) return placed;
+	const film = await resolve(imdbId, 'movie', release, sources);
+	return film?.kind === 'movie' && film.tmdbId !== null
+		? { ...film, files: release.files.map((file) => unplaced(file.path)) }
+		: placed;
 }
 
 /**
@@ -1674,6 +1856,14 @@ export const cachedSources: PlacementSources = {
 		getTmdbAuth()
 			? settle(() => getMetadataCache().searchTmdbTitles('tv', query))
 			: Promise.resolve(null),
+	searchMovie: (query, year) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().searchTmdbTitles('movie', query, year))
+			: Promise.resolve(null),
+	movieIds: (tmdbId) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().getTmdbExternalIds(tmdbId, 'movie'))
+			: Promise.resolve(null),
 	// asks about at most 300 names it has not answered today: zurg asks again daily
 	identifier: (names) =>
 		settle(() => identifyFilenamesRemembered(names, 300)).then((r) => r?.answers ?? null),
@@ -1685,6 +1875,15 @@ export const cachedSources: PlacementSources = {
 					.map((row: any) => row?.series?.id)
 					.filter((id: unknown) => typeof id === 'number')
 		),
+	onePace: () => onePaceCatalogue(),
+	findTvdbEpisode: (id) =>
+		getTmdbAuth()
+			? settle(() =>
+					getMetadataCache().getTmdbPassthrough(`find/${id}`, {
+						external_source: 'tvdb_id',
+					})
+				)
+			: Promise.resolve(null),
 	tvdbEpisodes: async (tvdbId, order) => {
 		const episodes: any[] = [];
 		// 500 a page: Kitchen Nightmares' 126 episodes are one

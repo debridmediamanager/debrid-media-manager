@@ -118,12 +118,30 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText(/six plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/2 TB of Usenet a day instead of 300 GB/)).toBeInTheDocument();
 		expect(screen.getByText(/three jobs at once instead of one/)).toBeInTheDocument();
-		expect(
-			screen.getByText(
-				/cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link/
-			)
-		).toBeInTheDocument();
 		expect(screen.queryByText(/live cache feeds/)).not.toBeInTheDocument();
+		// Audited 2026-11-09 from every caller of the DMM API key: live and missing here.
+		expect(
+			screen.getByText(/cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox/)
+		).toBeInTheDocument();
+		expect(screen.getByText('Easynews to zurg')).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'SABnzbd for Sonarr and Radarr' })).toHaveAttribute(
+			'href',
+			'/sabnzbd'
+		);
+		expect(screen.getByText(/searches DMM's indexers/)).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'rex-stremio with your key' })).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'request board' })).toHaveAttribute(
+			'href',
+			'/requests'
+		);
+		expect(
+			screen.getByText(/earn the DMM ones: every 10 requests you fill/)
+		).toBeInTheDocument();
+		expect(screen.getByText(/one per person a day/)).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Where to set each one up' })).toHaveAttribute(
+			'href',
+			'https://notes.debridmediamanager.com/guides/sponsorship/'
+		);
 	});
 
 	const perksList = () =>

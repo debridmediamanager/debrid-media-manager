@@ -113,6 +113,10 @@ anime lists' titles when neither names it, when TMDB's Japanese show for the id 
 of its numbers, and when the id is a film's while the release is a fansub cour of numbered
 episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamity's film).
 
+DMM keeps the releases it could not place, to improve its rules: a release's name, hash,
+the paths of its unplaced files and its answer's ids, with how often it was asked. Nothing
+says which sponsor asked. A release is dropped once a request places it whole.
+
 ```json
 {
 	"complete": true,
@@ -147,9 +151,12 @@ Magus' Bride is answered as The Magicians, and a release whose files read as a t
 cannot number answers that title with its files unplaced. A release with no title of its own
 (`Season 3`) is named by its first numbered file. One sent without an id, which the identifier
 is unsure of, is named by a title it offers that IMDb or TMDB spells as the name (`KonoSuba` is
-one of TMDB's titles for KONOSUBA - God's blessing on this wonderful world!); where two shows
+one of TMDB's titles for KONOSUBA - God's blessing on this wonderful world!), read as DMM reads it
+where the identifier reads on past the title (`Would.I.Lie.to.You-S16E03-Shirley.Ballas…`); where two shows
 are named so and both hold the files' numbers (Animaniacs of 1993 and of 2020), by the one
-whose episodes the files' titles name, and by neither where no title does. A release whose titled files mostly name
+whose episodes the files' titles name, and by neither where no title does. A film of no numbered
+file that neither names is TMDB's one film of the year the name gives titled as it (`The.Bank.1915`
+is Chaplin's short). A release whose titled files mostly name
 episodes of another show is placed on that show: one TMDB lists under the same name, one the
 identifier ranked beside it, or a franchise show holding it as a season (Power Rangers Dino
 Charge is TMDB's Power Rangers season 22).
@@ -184,18 +191,78 @@ DMM cannot place have `season` and `episode` `null`. A file naming the show's ru
 number beside its season and episode (`Détective Conan S11E01 - 286`) is placed only where
 TMDB's count of the show's episodes reaches that number. `how` says which rule placed a file:
 
-| `how`        | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tmdb`       | The TMDB episode a file's title names, when the release numbers in another order than TMDB (`Firefly.S01E01.Serenity` from a DVD-ordered pack is TMDB's S1E11; packs of shows TMDB lists by segment, `102a-b - The Fast and the Phineas`; year-numbered seasons, `MythBusters.S2004E18.Exploding.House`); otherwise the numbers as the name gives them (`S03E04`, `3x04`, a season folder), where TMDB lists them.                                                                                                                                                                                                                                                               |
-| `anime`      | An anime cour mapped to TMDB: `Hibike Euphonium 3 - 01` is Sound! Euphonium S3E1, a scene `Jujutsu.Kaisen.S03E03` (TVDB's numbering) is TMDB's S1E50.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `imdb`       | IMDb's episode by those numbers, where TMDB has no such episode and files IMDb's under the same show; inside a season TMDB has, only when the file's title agrees, and never where it would put a release's files out of their order. Also every file of a series TMDB cannot use (its find knows nothing by the id, or it has deleted the show) that IMDb lists by season and episode: placed on IMDb's own seasons, `tmdbId` null, by the file's title where it has one (Dragon Ball Z Abridged, `DBZ Abridged - 025 - Nail Is Piccolo, And So Can You!`, is IMDb's S2E15), counted only through a series of one season.                                                       |
-| `tvdb`       | TVDB's season and episode where TMDB has no such episode, by the show's TVDB Order episode group on TMDB: TMDB numbers One Piece's seasons by absolute episode, so Crunchyroll's `One.Piece.1999.S23E25` is TMDB's S23E1180.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `tvdbSeries` | TVDB's season and episode of the series TVDB files a show under, for a show TMDB lists on its own with no TVDB id, found by each episode's air date (title where two share a date): TMDB's Kitchen Nightmares 2023 numbers `S02E03 Voleos` its S2E3, TVDB and Plex keep the revival as the 2007 series' seasons 7-9, where it is S8E3 (`tvdbId` 80552). Only when every placed file is found on one series at other numbers.                                                                                                                                                                                                                                                     |
-| `aligned`    | TVDB's season and episode, as release groups number them, where TVDB lists the season otherwise than TMDB: the two lists are paired episode by episode, by title first (letters alone, so a week's difference in air dates moves nothing), then by air date within a day, and an episode TMDB lists as long as two of TVDB's is their two parts. TVDB's `Friends.S06E17` is TMDB's S6E16, since TMDB lists "The One That Could Have Been" as one episode; TVDB's aired order is used, its DVD order for a season the release numbers past both lists (HiQVE's Lost BluRay `S01E25`). A release whose titled files name TMDB's episodes at their own numbers is numbered as TMDB. |
-| `dub`        | An English dub's season and episode, for a release named as dubbed, by the show's Dub Order episode group on TMDB: `[Rillant] Medabots S01-03 (English Dubbed)`'s S03E01 is TMDB's S2E1, the dub's third season being TMDB's second.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `group`      | A pack numbered in one of the show's TMDB episode groups rather than as TMDB aired it: the group whose seasons hold exactly as many episodes as the pack's, in more seasons than TMDB's own list, used for the seasons TMDB's list does not match. `Futurama HD PL` numbers seasons 7-10 by 13 as TMDB's "Digital Order" does, so its `s07e01` is TMDB's S6E1.                                                                                                                                                                                                                                                                                                                   |
-| `absolute`   | A number with no season (`One Piece - 1100`), counted through TMDB's seasons; never for a fansub title the anime lists do not know, of a show they map season by season (`Pocket Monsters - Aim to be a Pokémon Master 10` is no tenth episode of Pokémon).                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `airdate`    | A daily show's file named by the day it aired and no episode (`WWE.RAW.2026.10.05`, `WWE Monday Night RAW 2026 10 12`, or the day and month before the year), as the one episode TMDB lists as aired that day: Raw's S34E40. A name with an episode as well is placed by its numbers.                                                                                                                                                                                                                                                                                                                                                                                            |
+| `how`        | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tmdb`       | The TMDB episode a file's title names, when the release numbers in another order than TMDB (`Firefly.S01E01.Serenity` from a DVD-ordered pack is TMDB's S1E11; packs of shows TMDB lists by segment, `102a-b - The Fast and the Phineas`; year-numbered seasons, `MythBusters.S2004E18.Exploding.House`); otherwise the numbers as the name gives them (`S03E04`, `3x04`, a season folder), where TMDB lists them.                                                                                                                                                                                                                                                                                                              |
+| `anime`      | An anime cour mapped to TMDB: `Hibike Euphonium 3 - 01` is Sound! Euphonium S3E1, a scene `Jujutsu.Kaisen.S03E03` (TVDB's numbering) is TMDB's S1E50.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `imdb`       | IMDb's episode by those numbers, where TMDB has no such episode and files IMDb's under the same show; inside a season TMDB has, only when the file's title agrees, and never where it would put a release's files out of their order. Also every file of a series TMDB cannot use (its find knows nothing by the id, or it has deleted the show) that IMDb lists by season and episode: placed on IMDb's own seasons, `tmdbId` null, by the file's title where it has one (Dragon Ball Z Abridged, `DBZ Abridged - 025 - Nail Is Piccolo, And So Can You!`, is IMDb's S2E15), counted only through a series of one season.                                                                                                      |
+| `tvdb`       | TVDB's season and episode where TMDB has no such episode, by the show's TVDB Order episode group on TMDB: TMDB numbers One Piece's seasons by absolute episode, so Crunchyroll's `One.Piece.1999.S23E25` is TMDB's S23E1180.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `tvdbSeries` | TVDB's season and episode of the series TVDB files a show under, for a show TMDB lists on its own with no TVDB id, found by each episode's air date (title where two share a date): TMDB's Kitchen Nightmares 2023 numbers `S02E03 Voleos` its S2E3, TVDB and Plex keep the revival as the 2007 series' seasons 7-9, where it is S8E3 (`tvdbId` 80552). Only when every placed file is found on one series at other numbers. A release named as the older series, of a season TMDB's show of it lacks, is answered the same way on TMDB's own show: `The.Amazing.World.of.Gumball.S07E01.The.Burger` is TVDB's S7E1 and TMDB's The Wonderfully Weird World of Gumball (291904) S1E1, found by TMDB's find for the TVDB episode. |
+| `aligned`    | TVDB's season and episode, as release groups number them, where TVDB lists the season otherwise than TMDB: the two lists are paired episode by episode, by title first (letters alone, so a week's difference in air dates moves nothing), then by air date within a day, and an episode TMDB lists as long as two of TVDB's is their two parts. TVDB's `Friends.S06E17` is TMDB's S6E16, since TMDB lists "The One That Could Have Been" as one episode; TVDB's aired order is used, its DVD order for a season the release numbers past both lists (HiQVE's Lost BluRay `S01E25`). A release whose titled files name TMDB's episodes at their own numbers is numbered as TMDB.                                                |
+| `dub`        | An English dub's season and episode, for a release named as dubbed, by the show's Dub Order episode group on TMDB: `[Rillant] Medabots S01-03 (English Dubbed)`'s S03E01 is TMDB's S2E1, the dub's third season being TMDB's second.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `group`      | A pack numbered in one of the show's TMDB episode groups rather than as TMDB aired it: the group whose seasons hold exactly as many episodes as the pack's, in more seasons than TMDB's own list, used for the seasons TMDB's list does not match. `Futurama HD PL` numbers seasons 7-10 by 13 as TMDB's "Digital Order" does, so its `s07e01` is TMDB's S6E1.                                                                                                                                                                                                                                                                                                                                                                  |
+| `absolute`   | A number with no season (`One Piece - 1100`), counted through TMDB's seasons; never for a fansub title the anime lists do not know, of a show they map season by season (`Pocket Monsters - Aim to be a Pokémon Master 10` is no tenth episode of Pokémon). A fansub number of a later cour the anime lists know is counted only where it runs past every episode of that cour's season: `[DB]Gintama (2017)_-_317_` is TMDB's S8E1.                                                                                                                                                                                                                                                                                            |
+| `airdate`    | A daily show's file named by the day it aired and no episode (`WWE.RAW.2026.10.05`, `WWE Monday Night RAW 2026 10 12`, or the day and month before the year), as the one episode TMDB lists as aired that day: Raw's S34E40. A name with an episode as well is placed by its numbers.                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+
+One Pace (onepace.net), the fan re-edit of One Piece, is a show no TMDB, IMDb or Plex record
+numbers, so DMM numbers it by One Pace's own list. A release whose name, or every file's name,
+starts `[One Pace]` is answered with `kind`, `imdbId`, `tmdbId` and every file's `season`,
+`episode`, `how` and `tmdbEpisodeId` `null`, as a release DMM cannot place, so a tool that does
+not read the fields below keeps it unplaced, never on One Piece's episodes. Beside them:
+
+```json
+{
+	"anime": true,
+	"files": [
+		{
+			"path": "[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv",
+			"season": null,
+			"episode": null,
+			"episodeEnd": null,
+			"how": null,
+			"tmdbEpisodeId": null,
+			"series": {
+				"season": 16,
+				"episode": 8,
+				"title": "…",
+				"summary": "…",
+				"thumb": "https://onepace.net/…"
+			}
+		}
+	],
+	"imdbId": null,
+	"kind": null,
+	"series": {
+		"key": "onepace",
+		"title": "One Pace",
+		"summary": "One Pace is a fan project that recuts the One Piece anime…",
+		"poster": "https://onepace.net/_next/static/media/….jpg",
+		"art": "https://onepace.net/_next/static/media/….jpg",
+		"seasons": [
+			{
+				"season": 16,
+				"title": "Water Seven",
+				"summary": "…",
+				"poster": "https://onepace.net/…"
+			}
+		]
+	},
+	"tmdbId": null
+}
+```
+
+`series` names the show: `key` is the same for every release of it, so files of different
+releases are episodes of one show, and `seasons` describes each season the release's numbered
+files are on, an arc of One Pace's. Each main arc is a season in One Pace's order (Romance Dawn
+1 to Egghead 33, as One Pace numbers its arcs); its cover-story arcs and specials are season 0,
+in the list's order (The Adventures of Buggy's Crew is S00E01). A file's `series` is its episode,
+with One Pace's title, summary and still; a file without one is unplaced. A file is matched by
+the manga chapters its name covers (`[340-342]`, `Chapter 700-701` in a release named for its
+arc), which are unique to an episode, and its arc and number must agree: a file of a cut One
+Pace has since re-edited onto other chapters or numbers matches nothing. A release none of whose
+files is matched answers without `series` and `anime`. Artwork is onepace.net's own. DMM reads
+One Pace's list off onepace.net once a day, keeping the list it has when the page cannot be
+read, so a new episode is placed within a day of One Pace publishing it.
 
 `rules` names the placement rules the answer was made by. DMM changes it whenever it places releases differently; an answer you keep from other rules is worth asking about again, which is how zurg picks up DMM's fixes for releases it has already placed.
 

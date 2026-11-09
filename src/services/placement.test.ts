@@ -1,6 +1,8 @@
 import { buildFranchiseIndex } from '@/services/anime/animeFranchise';
 import type { FribbAnimeEntry } from '@/services/anime/animeMapping';
 import { getMetadataCache } from '@/services/metadataCache';
+import type { OnePaceCatalogue } from '@/services/onePace';
+import onePaceList from '@/services/onePaceCatalogue.json';
 import {
 	cachedSources,
 	placeReleases,
@@ -9,18 +11,25 @@ import {
 	type PlacementSources,
 	type PlaceRequest,
 } from '@/services/placement';
+import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
+import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
+import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
+import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import cases from '@/test/fixtures/placement/releases.json';
+import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
+import saga from '@/test/fixtures/placement/saga-titles.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -90,6 +99,8 @@ const recordedSources = (r: any): PlacementSources => ({
 	anime: async () => anime,
 	identifier: async (names) => answered(r, names),
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
+	searchMovie: async (query, year) => r.searchMovie?.[`${query}|${year}`] ?? null,
+	movieIds: async (id) => r.movieIds?.[id] ?? null,
 	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
 	namesakeSeries: async (id) => r.namesakeSeries?.[id] ?? null,
 	tvdbSeriesOf: async (id) =>
@@ -98,6 +109,7 @@ const recordedSources = (r: any): PlacementSources => ({
 			: null,
 	tvdbEpisodes: async (id, order) =>
 		r.tvdbEpisodes?.[order ? `${id}/${order}` : id]?.data.episodes ?? null,
+	findTvdbEpisode: async (id) => r.findTvdbEpisode?.[id] ?? null,
 });
 
 describe('a daily show named by its air date', () => {
@@ -1230,5 +1242,259 @@ describe('a miniseries sent with its namesake film', () => {
 			['movie', 'tt0101507'],
 		]);
 		expect(releases).toEqual([film.expect, extras.expect]);
+	});
+});
+
+describe('a film neither the id sent nor the identifier names', () => {
+	// zurg-usenet on fun (2026-11-09): Chaplin's shorts and other films the identifier reads as
+	// other titles, which TMDB's search for the name's title in its year finds (see the fixtures README)
+	const ask = (name: string) => {
+		const c = filmsByTitle.cases.find((c) => c.request.name === name)!;
+		return place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsByTitle.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsByTitle.answers.identify as any)[name] ?? null)
+		).then(({ releases }) => [releases[0], c.expect] as const);
+	};
+
+	it.each([
+		['The.Bank.1915.1080p.BluRay.x265.Garshasp', 'tt0004936', 53410],
+		// a file named by a hash, as the release
+		['The.Immigrant.1917.1080p.BluRay.REMUX.AVC.DD.2.0-BHD', 'tt0008133', 47653],
+		// TMDB spells it with an article the name leaves out: A Burlesque on Carmen
+		['Burlesque.on.Carmen.1915.720p.BluRay.x264', 'tt0005077', 53415],
+		// and with an apostrophe: Entr'acte
+		['Entracte 1924 1080p BluRay AAC2.0 x264-CALiGARi', 'tt0014872', 44473],
+		['Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON', 'tt0020530', 626],
+		// two films of 2024 TMDB titles The Kingdom: the one whose original title is it, not Le Royaume
+		['The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA', 'tt34798877', 1379922],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual(['movie', imdbId, tmdbId]);
+		expect(placed).toEqual(expected);
+	});
+
+	it.each([
+		// TMDB lists two films of 1922 titled Pay Day
+		'Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD',
+		// TMDB's film names an IMDb episode of Live from Lincoln Center and Great Performances
+		'Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ',
+		'Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee',
+	])('leaves %s unnamed where TMDB names no one film of it', async (name) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual([null, null, null]);
+		expect(placed).toEqual(expected);
+	});
+});
+
+describe('a fansub name written all in brackets', () => {
+	// zurg-usenet on fun (2026-11-09): philosophy-raws' Samurai Champloo, its title the name's second
+	// bracket, which DMM read as no title, so the anime index never named it (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(bracketed.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(bracketed.answers.anime.fribb as FribbAnimeEntry[]),
+				bracketed.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (bracketed.answers.identify as any)[name] ?? null);
+
+	it.each(bracketed.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			from,
+			ask
+		);
+		expect(complete).toBe(true);
+		expect([releases[0].imdbId, releases[0].tmdbId]).toEqual(['tt0423731', 1063]);
+		expect(releases[0].files[0].season).toBe(1);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('titles the identifier offers, spelled as DMM reads the name', () => {
+	// zurg-usenet on fun (2026-11-09): names the identifier reads on past their title, so none of the
+	// titles it offers was spelled as the name (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(spelled.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(spelled.answers.anime.fribb as FribbAnimeEntry[]),
+				spelled.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (spelled.answers.identify as any)[name] ?? null);
+	const placedAs = async (name: string) => {
+		const c = spelled.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			from,
+			ask
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const [file] = releases[0].files;
+		return [releases[0].tmdbId, file.season, file.episode, file.episodeEnd];
+	};
+
+	it('reads a hyphen-joined episode code as no part of the title', async () => {
+		// `Would I Lie to You-S16E03-Shirley Ballas…` to the identifier; the British show, which alone
+		// of the two Would I Lie to You? holds a season 16
+		expect(await placedAs('Would.I.Lie.to.You-S16E03')).toEqual([4775, 16, 3, null]);
+		expect(await placedAs('Would.I.Lie.to.You-S16E10')).toEqual([4775, 16, 10, null]);
+	});
+
+	it('reads the titles after a run of episodes as no part of the title', async () => {
+		expect(await placedAs('SpongeBob.SquarePants.S05E22E23E24')).toEqual([387, 5, 22, 24]);
+	});
+
+	it("takes a show TMDB titles as DMM reads the file's name", async () => {
+		// TMDB's alternative title for Digimon: Digital Monsters; the anime index makes Zero Two its
+		// season 2
+		expect(await placedAs('Digimon.Adventure.Zero.Two.Episode.08')).toEqual([
+			31654,
+			2,
+			8,
+			null,
+		]);
+	});
+});
+
+describe('a season TVDB lists under the show and TMDB as a show of its own', () => {
+	// zurg-usenet on fun (2026-11-09): TVDB keeps The Wonderfully Weird World of Gumball (2025) as
+	// The Amazing World of Gumball's season 7, TMDB as 291904 with no TVDB id (see the fixtures README)
+	const ask = (name: string) => {
+		const c = revival.cases.find((c) => c.request.name.startsWith(name))!;
+		return place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(revival.answers),
+			async () => [null]
+		).then(({ releases }) => [releases[0], c.expect] as const);
+	};
+
+	it.each([
+		['The.Amazing.World.of.Gumball.S07E01.The.Burger', 1, 6247731],
+		['The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy', 26, 6710497],
+	])("places %s on TMDB's own show by TVDB's numbers", async (name, episode, id) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.tmdbId, placed.imdbId, placed.tvdbId]).toEqual([
+			291904,
+			'tt36985473',
+			248482,
+		]);
+		const [file] = placed.files;
+		expect([file.season, file.episode, file.how, file.tmdbEpisodeId]).toEqual([
+			7,
+			episode,
+			'tvdbSeries',
+			id,
+		]);
+		expect(placed).toEqual(expected);
+	});
+
+	it('leaves a number neither lists where it was', async () => {
+		// TVDB's season 6 ends at E44, as TMDB's does
+		const [placed, expected] = await ask('The.Amazing.World.of.Gumball.S06E45');
+		expect([placed.tmdbId, placed.files[0].season]).toEqual([37606, null]);
+		expect(placed).toEqual(expected);
+	});
+});
+
+describe("a fansub number past every episode of its cour's season", () => {
+	// zurg-usenet on fun (2026-11-09): [DB]'s Gintama numbers its files by the show's run, and names
+	// the year of the cour after the one they are (see the fixtures README)
+	it("counts it through the show's seasons", async () => {
+		const [c] = pastCour.cases;
+		const { releases, complete } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(pastCour.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(pastCour.answers.anime.fribb as FribbAnimeEntry[]),
+						pastCour.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(complete).toBe(true);
+		// `Gintama (2017)_-_317_` to `_328_`: TMDB's season 8, Gintama., not season 9, Gintama. (2017)
+		expect(releases[0].files.map((f) => [f.season, f.episode, f.how])).toEqual(
+			Array.from({ length: 12 }, (_, n) => [8, n + 1, 'absolute'])
+		);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title with Saga in it', () => {
+	// zurg on fun (2026-11-09): `[sam] Vinland Saga [BD 1080p FLAC]`, whose title DMM read as
+	// Vinland, so the anime index named nothing and its 24 episodes stayed unplaced (see the fixtures README)
+	it('places the episodes by the anime index', async () => {
+		const [c] = saga.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(saga.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(saga.answers.anime.fribb as FribbAnimeEntry[]),
+						saga.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0].files.slice(0, 24).map((f) => [f.season, f.episode])).toEqual(
+			Array.from({ length: 24 }, (_, n) => [1, n + 1])
+		);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('One Pace', () => {
+	// fun's zurg held One Piece's IMDb id for its One Pace releases (DMM's hash list), and DMM
+	// placed them as One Piece: `[One Pace][101-105] Reverse Mountain`'s two files on One Piece's
+	// S1E1 and S1E2 (fun, 2026-11-09). One Pace is its own show, numbered by its own list.
+	const asked = (onePaceFun.releases as PlaceRequest[]).filter((r) => r.imdbId === 'tt0388629');
+
+	it('is numbered by its own list, never as the One Piece its id names', async () => {
+		const find = vi.fn(sources.find);
+		const ask = vi.fn(identify);
+		const { releases, complete } = await place(
+			asked,
+			Infinity,
+			{ ...sources, find, onePace: () => onePaceList as OnePaceCatalogue },
+			ask
+		);
+		expect(complete).toBe(true);
+		expect(find).not.toHaveBeenCalled();
+		expect(ask).not.toHaveBeenCalled();
+		const reverse = releases[asked.findIndex((r) => r.name.includes('Reverse Mountain'))];
+		expect(reverse).toMatchObject({ kind: null, imdbId: null, tmdbId: null, anime: true });
+		expect(reverse.series).toMatchObject({ key: 'onepace', title: 'One Pace' });
+		expect(reverse.series!.seasons.map((s) => [s.season, s.title])).toEqual([
+			[8, 'Reverse Mountain'],
+		]);
+		// its 01 covers 101-103, a cut One Pace has since redone as 101-102: that file stays unplaced
+		expect(
+			reverse.files.map((f) => [f.season, f.episode, f.series?.season, f.series?.episode])
+		).toEqual([
+			[null, null, undefined, undefined],
+			[null, null, 8, 2],
+		]);
+		expect(releases.every((r) => r.kind === null && r.tmdbId === null)).toBe(true);
+		expect(
+			releases
+				.flatMap((r) => r.files)
+				.every((f) => f.season === null && f.tmdbEpisodeId === null)
+		).toBe(true);
 	});
 });

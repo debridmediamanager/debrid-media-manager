@@ -1,0 +1,844 @@
+{
+	"answers": {
+		"find": {
+			"tt10233448": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 88803,
+						"name": "Vinland Saga",
+						"first_air_date": "2019-07-08"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"88803": {
+				"id": 88803,
+				"name": "Vinland Saga",
+				"original_name": "ヴィンランド・サガ",
+				"first_air_date": "2019-07-08",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10768,
+						"name": "War & Politics"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 1400,
+							"name": "swordplay"
+						},
+						{
+							"id": 2016,
+							"name": "vandalism"
+						},
+						{
+							"id": 3070,
+							"name": "mercenary"
+						},
+						{
+							"id": 4759,
+							"name": "exploration"
+						},
+						{
+							"id": 5895,
+							"name": "vikings (norsemen)"
+						},
+						{
+							"id": 9748,
+							"name": "revenge"
+						},
+						{
+							"id": 9935,
+							"name": "travel"
+						},
+						{
+							"id": 10292,
+							"name": "gore"
+						},
+						{
+							"id": 10349,
+							"name": "survival"
+						},
+						{
+							"id": 10617,
+							"name": "disaster"
+						},
+						{
+							"id": 12988,
+							"name": "pirate"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 14546,
+							"name": "massacre"
+						},
+						{
+							"id": 15126,
+							"name": "historical"
+						},
+						{
+							"id": 161257,
+							"name": "medieval"
+						},
+						{
+							"id": 179101,
+							"name": "norse mythology"
+						},
+						{
+							"id": 195668,
+							"name": "seinen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 220025,
+							"name": "drastic change of life"
+						},
+						{
+							"id": 244663,
+							"name": "time skip"
+						},
+						{
+							"id": 321464,
+							"name": "intense"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						},
+						{
+							"id": 325842,
+							"name": "powerful"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt10233448",
+					"tvdb_id": 359274
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "海盗战记",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "冰海战记",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Έπος του Βίνλαντ",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "VINLAND SAGA",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ヴィンランドサガ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ヴィンランド・サガ SEASON2",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Saga Winlandzka",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Сага о Винланде",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "ملحمة فينلاند",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "海盜戰記",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Сага про Вінланд",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Bản hùng ca Viking",
+							"iso_3166_1": "VN"
+						},
+						{
+							"title": "Hải Tặc Chiến Ký",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 2,
+						"air_date": "2023-02-14",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 24,
+						"air_date": "2019-07-08",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 24,
+						"air_date": "2023-01-10",
+						"name": "Season 2"
+					}
+				]
+			}
+		},
+		"season": {
+			"88803/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Somewhere Not Here",
+						"air_date": "2019-07-08",
+						"id": 1771403
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Sword",
+						"air_date": "2019-07-08",
+						"id": 1814428
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Troll",
+						"air_date": "2019-07-08",
+						"id": 1814429
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "A True Warrior",
+						"air_date": "2019-07-29",
+						"id": 1814430
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The Troll's Son",
+						"air_date": "2019-08-05",
+						"id": 1814431
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Journey Begins",
+						"air_date": "2019-08-12",
+						"id": 1814432
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Normanni",
+						"air_date": "2019-08-19",
+						"id": 1814433
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Beyond the Edge of the Sea",
+						"air_date": "2019-08-26",
+						"id": 1814434
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Battle of London Bridge",
+						"air_date": "2019-09-02",
+						"id": 1814435
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Ragnarok",
+						"air_date": "2019-09-16",
+						"id": 1814436
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "A Gamble",
+						"air_date": "2019-09-23",
+						"id": 1814437
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Land on the Far Bank",
+						"air_date": "2019-09-30",
+						"id": 1814438
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Child of a Hero",
+						"air_date": "2019-10-07",
+						"id": 1872424
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "The Light of Dawn",
+						"air_date": "2019-10-14",
+						"id": 1872425
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "After Yule",
+						"air_date": "2019-10-21",
+						"id": 1872426
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "History of Beasts",
+						"air_date": "2019-10-28",
+						"id": 1947235
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Servant",
+						"air_date": "2019-11-04",
+						"id": 1947236
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Out of the Cradle",
+						"air_date": "2019-11-18",
+						"id": 1947237
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "United Front",
+						"air_date": "2019-11-25",
+						"id": 1947238
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Crown",
+						"air_date": "2019-12-02",
+						"id": 1947239
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Reunion",
+						"air_date": "2019-12-09",
+						"id": 1947240
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Lone Wolf",
+						"air_date": "2019-12-16",
+						"id": 1947241
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Miscalculation",
+						"air_date": "2019-12-23",
+						"id": 1947242
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "End of the Prologue",
+						"air_date": "2019-12-30",
+						"id": 1947243
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt10529408": "tt10233448"
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 13945,
+					"anilist_id": 101348,
+					"animecountdown_id": 784557,
+					"animenewsnetwork_id": 20778,
+					"anime-planet_id": "vinland-saga",
+					"anisearch_id": 13486,
+					"imdb_id": ["tt10233448"],
+					"kitsu_id": 41084,
+					"livechart_id": 3169,
+					"mal_id": 37521,
+					"simkl_id": 784557,
+					"themoviedb_id": {
+						"tv": 88803
+					},
+					"tvdb_id": 359274,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16426,
+					"anilist_id": 136430,
+					"animecountdown_id": 1681241,
+					"animenewsnetwork_id": 24508,
+					"anime-planet_id": "vinland-saga-season-2",
+					"anisearch_id": 16485,
+					"imdb_id": ["tt10233448"],
+					"kitsu_id": 44875,
+					"livechart_id": 10618,
+					"mal_id": 49387,
+					"simkl_id": 1681241,
+					"themoviedb_id": {
+						"tv": 88803
+					},
+					"tvdb_id": 359274,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 13945,
+					"names": [
+						"Vinland Saga",
+						"فينلاند ساغا",
+						"סאגת וינלנד",
+						"ヴィンランド・サガ",
+						"빈란드 사가",
+						"SAGA VINLAND",
+						"Сага о Винланде",
+						"สงครามคนทมิฬ",
+						"VINLAND SAGA",
+						"VINLAND SAGA: Bản hùng ca Viking",
+						"海盗战记",
+						"海盜戰記",
+						"vinsa",
+						"Сага за Винланд",
+						"Винландская сага",
+						"ملحمة فينلاند"
+					]
+				},
+				{
+					"anidbId": 16426,
+					"names": [
+						"Vinland Saga Season 2",
+						"ヴィンランド・サガ SEASON2",
+						"冰海战记 第二季",
+						"Vinsa s2",
+						"Сага за Винланд Сезон 2",
+						"VINLAND SAGA SEASON 2",
+						"Vinland Saga 2nd Season",
+						"Vinland Saga : Saison 2",
+						"Vinland Saga: Season 2",
+						"Vinland Saga: Staffel 2",
+						"Vinland Saga: Stagione 2",
+						"Vinland Saga: Temporada 2",
+						"Сага о Винланде 2",
+						"ヴィンランド・サガ SEASON 2",
+						"ヴィンランド・サガ Season2"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (Real-Debrid), 2026-11-09: the .zurgtorrent's name, hash, IMDb id, video files and folders as zurg asks",
+			"request": {
+				"name": "[sam] Vinland Saga [BD 1080p FLAC]",
+				"hash": "bee9786dad7816119a0c2b2d1f75925d7b362e0e",
+				"imdbId": "tt10529408",
+				"files": [
+					{
+						"path": "[sam] Vinland Saga - 01 [BD 1080p FLAC] [B78ACE46].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 02 [BD 1080p FLAC] [509A2045].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 03 [BD 1080p FLAC] [AAC21E9E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 04 [BD 1080p FLAC] [22FE1988].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 05 [BD 1080p FLAC] [137B241A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 06 [BD 1080p FLAC] [265DB3DD].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 07 [BD 1080p FLAC] [2D25E30A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 08 [BD 1080p FLAC] [CB979B66].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 09 [BD 1080p FLAC] [5872D122].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 10 [BD 1080p FLAC] [F9BBB2B3].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 11 [BD 1080p FLAC] [10D97A6E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 12 [BD 1080p FLAC] [A733892D].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 13 [BD 1080p FLAC] [84A562A5].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 14 [BD 1080p FLAC] [2B34C6C2].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 15 [BD 1080p FLAC] [78359891].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 16 [BD 1080p FLAC] [E41C37B5].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 17 [BD 1080p FLAC] [11C75AF8].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 18 [BD 1080p FLAC] [64A0F3F9].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 19 [BD 1080p FLAC] [3EF3F526].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 20 [BD 1080p FLAC] [9051E8C2].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 21 [BD 1080p FLAC] [E2B18567].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 22 [BD 1080p FLAC] [41D499F0].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 23 [BD 1080p FLAC] [344D43F6].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - 24 [BD 1080p FLAC] [6696F95B].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[sam] Vinland Saga - NCED 1 [BD 1080p FLAC] [615CDB10].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[sam] Vinland Saga - NCED 2 [BD 1080p FLAC] [B32AC265].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[sam] Vinland Saga - NCOP 1 [BD 1080p FLAC] [9EC548B3].mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "[sam] Vinland Saga - NCOP 2 [BD 1080p FLAC] [DF56FB4B].mkv",
+						"folder": "Extras"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt10233448",
+				"tmdbId": 88803,
+				"files": [
+					{
+						"path": "[sam] Vinland Saga - 01 [BD 1080p FLAC] [B78ACE46].mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1771403
+					},
+					{
+						"path": "[sam] Vinland Saga - 02 [BD 1080p FLAC] [509A2045].mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814428
+					},
+					{
+						"path": "[sam] Vinland Saga - 03 [BD 1080p FLAC] [AAC21E9E].mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814429
+					},
+					{
+						"path": "[sam] Vinland Saga - 04 [BD 1080p FLAC] [22FE1988].mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814430
+					},
+					{
+						"path": "[sam] Vinland Saga - 05 [BD 1080p FLAC] [137B241A].mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814431
+					},
+					{
+						"path": "[sam] Vinland Saga - 06 [BD 1080p FLAC] [265DB3DD].mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814432
+					},
+					{
+						"path": "[sam] Vinland Saga - 07 [BD 1080p FLAC] [2D25E30A].mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814433
+					},
+					{
+						"path": "[sam] Vinland Saga - 08 [BD 1080p FLAC] [CB979B66].mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814434
+					},
+					{
+						"path": "[sam] Vinland Saga - 09 [BD 1080p FLAC] [5872D122].mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814435
+					},
+					{
+						"path": "[sam] Vinland Saga - 10 [BD 1080p FLAC] [F9BBB2B3].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814436
+					},
+					{
+						"path": "[sam] Vinland Saga - 11 [BD 1080p FLAC] [10D97A6E].mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814437
+					},
+					{
+						"path": "[sam] Vinland Saga - 12 [BD 1080p FLAC] [A733892D].mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1814438
+					},
+					{
+						"path": "[sam] Vinland Saga - 13 [BD 1080p FLAC] [84A562A5].mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1872424
+					},
+					{
+						"path": "[sam] Vinland Saga - 14 [BD 1080p FLAC] [2B34C6C2].mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1872425
+					},
+					{
+						"path": "[sam] Vinland Saga - 15 [BD 1080p FLAC] [78359891].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1872426
+					},
+					{
+						"path": "[sam] Vinland Saga - 16 [BD 1080p FLAC] [E41C37B5].mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947235
+					},
+					{
+						"path": "[sam] Vinland Saga - 17 [BD 1080p FLAC] [11C75AF8].mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947236
+					},
+					{
+						"path": "[sam] Vinland Saga - 18 [BD 1080p FLAC] [64A0F3F9].mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947237
+					},
+					{
+						"path": "[sam] Vinland Saga - 19 [BD 1080p FLAC] [3EF3F526].mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947238
+					},
+					{
+						"path": "[sam] Vinland Saga - 20 [BD 1080p FLAC] [9051E8C2].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947239
+					},
+					{
+						"path": "[sam] Vinland Saga - 21 [BD 1080p FLAC] [E2B18567].mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947240
+					},
+					{
+						"path": "[sam] Vinland Saga - 22 [BD 1080p FLAC] [41D499F0].mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947241
+					},
+					{
+						"path": "[sam] Vinland Saga - 23 [BD 1080p FLAC] [344D43F6].mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947242
+					},
+					{
+						"path": "[sam] Vinland Saga - 24 [BD 1080p FLAC] [6696F95B].mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1947243
+					},
+					{
+						"path": "[sam] Vinland Saga - NCED 1 [BD 1080p FLAC] [615CDB10].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Vinland Saga - NCED 2 [BD 1080p FLAC] [B32AC265].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Vinland Saga - NCOP 1 [BD 1080p FLAC] [9EC548B3].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Vinland Saga - NCOP 2 [BD 1080p FLAC] [DF56FB4B].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

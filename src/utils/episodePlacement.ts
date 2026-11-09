@@ -120,8 +120,10 @@ export function normalizeTitle(title: string): string {
 
 // `[Erai-raws] …`, `[SubsPlease] …`, `… [8FAE9300].mkv`: what fansubs name and scene releases do not.
 const SHAPED = /^\s*\[[^\]]+\]|[[(][0-9A-F]{8}[\])]/i;
+const CRC32 = /[[(][0-9A-F]{8}[\])]/gi;
 export const fansubShaped = (name: string) => SHAPED.test(name);
 const LEADING_GROUPS = /^\s*(?:\[[^\]]*\][\s._-]*)+/;
+const FIRST_GROUP = /^\s*\[[^\]]*\][\s._-]*/;
 
 /** A name's title, year and single season, the release group left off. */
 export function parseName(name: string): {
@@ -129,14 +131,37 @@ export function parseName(name: string): {
 	year: number | null;
 	season: number | null;
 } {
-	const stripped = name.replace(LEADING_GROUPS, '');
-	const parsed = ptt.parse(stripped);
+	let stripped = name.replace(LEADING_GROUPS, '');
+	let parsed = ptt.parse(stripped);
+	// a name all in brackets has its title in the one after the group's:
+	// `[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080]`
+	if (!parsed.title?.trim() && stripped !== name) {
+		stripped = name.replace(FIRST_GROUP, '');
+		parsed = ptt.parse(stripped);
+	}
+	const spaced = stripped.replace(/[._]/g, ' ');
+	// ptt reads `Saga` as a collection's word and ends the title before it (`Vinland Saga - 01` is
+	// Vinland): one it ends right there is read again with the word hidden from it, unless the
+	// name says it is a collection (`Yuru Camp - THE COMPLETE SAGA`)
+	const cut = (parsed.title ?? '').trim();
+	if (
+		cut &&
+		spaced.startsWith(cut) &&
+		!/\bcomplete$/i.test(cut) &&
+		/^[\s-]*saga\b/i.test(spaced.slice(cut.length))
+	) {
+		parsed = ptt.parse(
+			stripped.replace(/saga/gi, (word) => `${word[0]}\u200b${word.slice(1)}`)
+		);
+	}
 	const seasons = parsed.seasons ?? [];
 	// a fansub's version tag is no part of the title: ptt keeps `Mushishi v2.1` and `Mushishi 01v2`
-	const title = (parsed.title ?? '').trim().replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');
+	const title = (parsed.title ?? '')
+		.replace(/\u200b/g, '')
+		.trim()
+		.replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');
 	// ptt reads the `Ru` of `Motto To Love-Ru` as Russian and drops it: a short word joined to
 	// the title by a hyphen is the title's own
-	const spaced = stripped.replace(/[._]/g, ' ');
 	const glued =
 		title && spaced.startsWith(title)
 			? /^-\p{L}{1,3}(?![\p{L}\p{N}])/u.exec(spaced.slice(title.length))
@@ -185,8 +210,15 @@ const JAPANESE_NUMERALS = ['Ni', 'San', 'Shi', 'Go', 'Roku', 'Nana', 'Hachi', 'K
 const JAPANESE_SEASON = new RegExp(
 	`[\\s._](${JAPANESE_NUMERALS.join('|')})[\\s._]+(\\d{2,3})(?:v\\d)?(?:[\\s._(\\[]|$)`
 );
+// A fansub's name posted with dots for spaces, its episode joined to the title by a hyphen:
+// `[SubsPlease].Bungou.Stray.Dogs-38.1080p` is `[SubsPlease] Bungou Stray Dogs - 38 (1080p)`.
+const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
+// `Title - 07`, `Title - 17v2`: a fansub's episode.
+const DASHED_NUMBER = /\s-\s\d{1,4}(?:v\d)?(?=\s|$)/g;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
+// `Fairy Tail - 023 - 15 Minutes`: the number before a title that starts with one of its own.
+const NUMBERED_TITLE = /\s-\s(\d{2,4})(?:v\d)?\s-\s(?=\d)/;
 // `Détective Conan S11E01 - 286 [MULTI]`: the running number after the episode, nothing but tags after it.
 const SCENE_RUNNING = /s\d{1,2}[\s._-]*e\d{1,3}\s+-\s+(\d{2,4})\s*(?=[[(]|$)/i;
 // `Carl.Sagans.Cosmos.10of13`.
@@ -280,6 +312,9 @@ function sceneNumbers(name: string): FileNumbers | null {
 
 /** Fansub and loose numbering: `Oshi no Ko S2 - 05`, `Kingdom 4th Season - 21`, `- 05`, `[05]`, `10of13`. */
 function looseNumbers(stem: string): FileNumbers | null {
+	if (fansubShaped(stem) && !/\s/.test(stem.replace(LEADING_GROUPS, ''))) {
+		stem = stem.replace(DOTTED_EPISODE, ' - $1 ');
+	}
 	// the words before the number only: after it is the episode's own title, `One Piece - 0700 -
 	// The Ultimate Power! The Secret of the Op-Op Fruit!`, `- 0918 - … The Special Operation …`,
 	// `One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan`
@@ -298,11 +333,12 @@ function looseNumbers(stem: string): FileNumbers | null {
 		const season = JAPANESE_NUMERALS.indexOf(japanese[1]) + 2;
 		if (episode) return { season, episode, end: null };
 	}
-	const padded = positive(ZERO_PADDED.exec(stem)?.[1]);
+	const padded = positive((ZERO_PADDED.exec(stem) ?? NUMBERED_TITLE.exec(stem))?.[1]);
 	if (padded) return { season: null, episode: padded, end: null };
 	const anime = parseAnimeEpisode(stem);
 	if (anime?.kind === 'episode' && anime.episode > 0) {
-		const seasons = namedSeasons(stem.replace(BRACKETS, ' '));
+		// the episode's own number is no season: `Monogatari Series - Off & Monster Season - 07`
+		const seasons = namedSeasons(stem.replace(BRACKETS, ' ').replace(DASHED_NUMBER, ' '));
 		return {
 			season: seasons.size === 1 ? [...seasons][0] : null,
 			episode: anime.episode,
@@ -372,7 +408,7 @@ function releaseSeason(release: string): number | null {
 	if (SEVERAL_SEASONS.test(release)) return null;
 	const fansub = FANSUB_SEASON.exec(release);
 	if (fansub) return Number(fansub[1] ?? fansub[2]);
-	const seasons = namedSeasons(release);
+	const seasons = namedSeasons(release.replace(DASHED_NUMBER, ' '));
 	return seasons.size === 1 ? [...seasons][0] : null;
 }
 
@@ -408,9 +444,11 @@ export function fileNumbers(
 		...(from === null ? {} : { borrowed: true }),
 	});
 
-	const scene = sceneNumbers(stem.replace(LEADING_GROUPS, ''));
+	// a CRC is no year-numbered episode: `One Piece (1999) - s21e1082 - [Erai-raws][1080p][HEVC][1900E31E]`
+	const unchecked = stem.replace(LEADING_GROUPS, '').replace(CRC32, ' ');
+	const scene = sceneNumbers(unchecked);
 	if (scene) {
-		const part = partToken(stem.replace(LEADING_GROUPS, ''));
+		const part = partToken(unchecked);
 		return withSeason(part ? { ...scene, part } : scene);
 	}
 	// Suits' `Extras/Season 03/Episode 16 Alternate Opening`
@@ -851,8 +889,18 @@ async function placeByRules(
 		// Nor is a title the index does not know, of a show the dataset files cour by cour in
 		// several TMDB seasons: `[Some-Stuffs] Pocket Monsters - Aim to be a Pokémon Master 10`
 		// is a series of its own, numbered from its own first, not Pokémon's tenth episode.
+		// unless its number runs past every episode of the cour's season, which no cour's own number
+		// does: [DB]'s `Gintama (2017)_-_317_` counts the show's run to TMDB's S8E1, though its year
+		// names Gintama. (2017), TMDB's 13-episode season 9
+		const past =
+			hit?.numbered &&
+			hit.target.tmdb === show.tmdbId &&
+			hit.target.season > 0 &&
+			season === null &&
+			episode > (counts.get(hit.target.season) ?? Infinity);
 		counted = hit
-			? !(
+			? past ||
+				!(
 					hit.numbered &&
 					(hit.target.season === 0 || hit.target.season > 1 || hit.target.offset > 0)
 				)

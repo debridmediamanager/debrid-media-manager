@@ -1334,12 +1334,12 @@ describe('the Torznab benefit matches the Torznab page', () => {
 		expect(result.sponsorship.optional.map((benefit) => benefit.id)).not.toContain('torznab');
 	});
 
-	it('offers Torznab for Sonarr/Radarr and describes where its cached status comes from', () => {
+	it('offers Torznab for Sonarr/Radarr and names its cached-only feeds as the Sponsor panel does', () => {
 		const result = recommendSetup(answers({ host: 'willing', preference: 'arr' }));
 		const torznab = result.sponsorship.optional.find((benefit) => benefit.id === 'torznab');
 
 		expect(torznab?.detail).toBe(
-			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
+			'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud; the last three answer once your key is linked.'
 		);
 		expect(torznab?.detail).not.toMatch(/live cache feeds/);
 	});

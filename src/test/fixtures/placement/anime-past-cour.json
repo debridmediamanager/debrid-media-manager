@@ -1,0 +1,3665 @@
+{
+	"answers": {
+		"find": {
+			"tt0988818": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 57041,
+						"name": "Gintama",
+						"first_air_date": "2006-04-04"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"57041": {
+				"id": 57041,
+				"name": "Gintama",
+				"original_name": "銀魂",
+				"first_air_date": "2006-04-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 1462,
+							"name": "samurai"
+						},
+						{
+							"id": 1908,
+							"name": "katana"
+						},
+						{
+							"id": 1938,
+							"name": "sword"
+						},
+						{
+							"id": 6968,
+							"name": "space invasion"
+						},
+						{
+							"id": 9253,
+							"name": "slapstick comedy"
+						},
+						{
+							"id": 9713,
+							"name": "friends"
+						},
+						{
+							"id": 9725,
+							"name": "sword fight"
+						},
+						{
+							"id": 9755,
+							"name": "parody"
+						},
+						{
+							"id": 9882,
+							"name": "space"
+						},
+						{
+							"id": 9951,
+							"name": "alien"
+						},
+						{
+							"id": 10278,
+							"name": "ninja"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 18431,
+							"name": "female ninja"
+						},
+						{
+							"id": 155242,
+							"name": "shogun"
+						},
+						{
+							"id": 190446,
+							"name": "edo period"
+						},
+						{
+							"id": 206199,
+							"name": "shinsengumi"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 259376,
+							"name": "playful"
+						},
+						{
+							"id": 322268,
+							"name": "comedy"
+						},
+						{
+							"id": 325832,
+							"name": "joyful"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0988818",
+					"tvdb_id": 79895
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "银魂",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "銀魂 愛染香篇",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "よりぬき銀魂さん",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Gintama': Enchousen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Gintama.: Porori-hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Gintama.: Shirogane no Tamashii-hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Gintama.: Shirogane no Tamashii-hen - Kouhan-sen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "은혼",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Гінтама",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Gintama",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Gin Tama",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Gintama'",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Gintama°",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 11,
+						"air_date": "2005-09-24",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 49,
+						"air_date": "2006-04-04",
+						"name": "Gintama Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 50,
+						"air_date": "2007-04-05",
+						"name": "Gintama Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 51,
+						"air_date": "2008-04-03",
+						"name": "Gintama Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 51,
+						"air_date": "2009-04-02",
+						"name": "Gintama Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 51,
+						"air_date": "2011-04-04",
+						"name": "Gintama'"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "2012-10-04",
+						"name": "Gintama': Enchousen"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 51,
+						"air_date": "2015-04-08",
+						"name": "Gintama°"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 12,
+						"air_date": "2017-01-09",
+						"name": "Gintama."
+					},
+					{
+						"season_number": 9,
+						"episode_count": 13,
+						"air_date": "2017-10-02",
+						"name": "Gintama. - Slip Arc"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 12,
+						"air_date": "2018-01-08",
+						"name": "Gintama. - Silver Soul Arc"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 14,
+						"air_date": "2018-07-09",
+						"name": "Gintama. - Silver Soul Arc 2"
+					}
+				]
+			}
+		},
+		"season": {
+			"57041/8": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 8,
+						"name": "The Monster and the Monster's Child",
+						"air_date": "2017-01-09",
+						"id": 1254813
+					},
+					{
+						"episode_number": 2,
+						"season_number": 8,
+						"name": "Leave Letter",
+						"air_date": "2017-01-16",
+						"id": 1254814
+					},
+					{
+						"episode_number": 3,
+						"season_number": 8,
+						"name": "The Song of a Samurai",
+						"air_date": "2017-01-23",
+						"id": 1259575
+					},
+					{
+						"episode_number": 4,
+						"season_number": 8,
+						"name": "Zura",
+						"air_date": "2017-01-30",
+						"id": 1259576
+					},
+					{
+						"episode_number": 5,
+						"season_number": 8,
+						"name": "The Two Fools",
+						"air_date": "2017-02-06",
+						"id": 1267178
+					},
+					{
+						"episode_number": 6,
+						"season_number": 8,
+						"name": "Ten Years",
+						"air_date": "2017-02-13",
+						"id": 1269027
+					},
+					{
+						"episode_number": 7,
+						"season_number": 8,
+						"name": "Path",
+						"air_date": "2017-02-20",
+						"id": 1273718
+					},
+					{
+						"episode_number": 8,
+						"season_number": 8,
+						"name": "Master of Kouan",
+						"air_date": "2017-02-27",
+						"id": 1278167
+					},
+					{
+						"episode_number": 9,
+						"season_number": 8,
+						"name": "The Lost Rabbit",
+						"air_date": "2017-03-06",
+						"id": 1281632
+					},
+					{
+						"episode_number": 10,
+						"season_number": 8,
+						"name": "Siblings",
+						"air_date": "2017-03-13",
+						"id": 1287101
+					},
+					{
+						"episode_number": 11,
+						"season_number": 8,
+						"name": "First Student",
+						"air_date": "2017-03-20",
+						"id": 1289878
+					},
+					{
+						"episode_number": 12,
+						"season_number": 8,
+						"name": "Hope",
+						"air_date": "2017-03-27",
+						"id": 1296228
+					}
+				]
+			},
+			"57041/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "You Guys!! Do You Even Have a Gintama?! (1)",
+						"air_date": "2006-04-04",
+						"id": 940325
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "You Guys!! Do You Even Have a Gintama?! (2)",
+						"air_date": "2006-04-04",
+						"id": 940324
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Nobody with Naturally Wavy Hair Can be That Bad!",
+						"air_date": "2006-04-11",
+						"id": 940277
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Watch Out! Weekly Shonen JUMP Sometimes Comes Out on Saturdays!",
+						"air_date": "2006-04-25",
+						"id": 940278
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Make Friends You Can Call by Their Nicknames, Even When You're an Old Fart!",
+						"air_date": "2006-05-02",
+						"id": 940279
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Keep Your Promise Even If It Kills You",
+						"air_date": "2006-05-09",
+						"id": 940280
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Responsible Owners Should Clean Up After Their Pets!",
+						"air_date": "2006-05-16",
+						"id": 940281
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "There Is Butt a Fine Line Between Persistence and Stubbornness",
+						"air_date": "2006-05-23",
+						"id": 940282
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Fighting Should Be Done With Fists!",
+						"air_date": "2006-05-30",
+						"id": 940283
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Eat Something Sour When You're Tired!",
+						"air_date": "2006-06-06",
+						"id": 940284
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Look, Overly Sticky Sweet Dumplings Are Not Real Dumplings, You Idiot!",
+						"air_date": "2006-06-13",
+						"id": 940285
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "People Who Make Good First Impressions Usually Suck!",
+						"air_date": "2006-06-13",
+						"id": 940286
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "If You're Going to Cosplay, Go All Out!",
+						"air_date": "2006-06-20",
+						"id": 940287
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Boys Have a Weird Ritual that Makes Them Think They Turn Into Men When They Touch Frogs! / You Only Gotta Wash Under Your Armpits - Just the Armpits",
+						"air_date": "2006-07-04",
+						"id": 940288
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Pets Resemble Their Owners!",
+						"air_date": "2006-07-11",
+						"id": 940289
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "If You Stop and Think About It, Your Life’s a Lot Longer as an Old Guy Than a Kid! Whoa, Scary!!",
+						"air_date": "2006-07-18",
+						"id": 940290
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Sons Only Take After Their Fathers' Negative Attributes",
+						"air_date": "2006-07-25",
+						"id": 940291
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Oh Yeah! Our Crib is Number One!",
+						"air_date": "2006-08-01",
+						"id": 940292
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Why is the Sea So Salty? Because You City Folk Pee Whenever You Go Swimming!",
+						"air_date": "2006-08-08",
+						"id": 940293
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Watch Out For Conveyor Belts!",
+						"air_date": "2006-08-15",
+						"id": 940294
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "If You're a Man, Try the Swordfish / If You Go to Sleep With the Fan On, You'll Get a Stomachache, So Be Careful",
+						"air_date": "2006-08-22",
+						"id": 940295
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Marriage is Prolonging an Illusion for Your Whole Life",
+						"air_date": "2006-09-05",
+						"id": 940296
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "When You're In a Fix, Keep On Laughing, Laughing...",
+						"air_date": "2006-09-12",
+						"id": 940297
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Cute Faces Are Always Hiding Something",
+						"air_date": "2006-09-19",
+						"id": 940298
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "A Shared Soup Pot is a Microcosm of Life",
+						"air_date": "2006-10-05",
+						"id": 940322
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Don't Be Shy - Just Raise Your Hand and Say It",
+						"air_date": "2006-10-12",
+						"id": 940299
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Some Things Can’t Be Cut with a Sword",
+						"air_date": "2006-10-19",
+						"id": 940321
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Good Things Never Come in Twos (But Bad Things Do)",
+						"air_date": "2006-10-25",
+						"id": 940300
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Don’t Panic – There’s a Return Policy! / I Told You to Pay Attention to the News!",
+						"air_date": "2006-11-02",
+						"id": 940301
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Even Teen Idols Act Like You Guys",
+						"air_date": "2006-11-09",
+						"id": 940303
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "You Always Remember the Things that Matter the Least",
+						"air_date": "2006-11-16",
+						"id": 940302
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Life Moves on Like a Conveyor Belt",
+						"air_date": "2006-11-23",
+						"id": 940320
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Mistaking Someone’s Name is Rude!",
+						"air_date": "2006-11-30",
+						"id": 940305
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Love Doesn’t Require a Manual (1)",
+						"air_date": "2006-12-07",
+						"id": 940304
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Love Doesn’t Require a Manual (2) / You Can't Judge a Person by His Appearance, Either",
+						"air_date": "2006-12-14",
+						"id": 940323
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "People with Dark Pasts Can't Shut Up",
+						"air_date": "2006-12-21",
+						"id": 940306
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "People Who Say that Santa Doesn’t Really Exist Actually Want to Believe in Him / Prayer Won't Make Your Worldly Desires Go Away! Control Yourself",
+						"air_date": "2006-12-28",
+						"id": 940307
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "Only Children Play in the Snow / Eating Ice Cream In Winter Is Awesome",
+						"air_date": "2007-01-11",
+						"id": 940308
+					},
+					{
+						"episode_number": 39,
+						"season_number": 1,
+						"name": "Ramen Shops with Long Menus Never Do Well",
+						"air_date": "2007-01-18",
+						"id": 940309
+					},
+					{
+						"episode_number": 40,
+						"season_number": 1,
+						"name": "Give a Thought to Planned Pregnancy",
+						"air_date": "2007-01-25",
+						"id": 940310
+					},
+					{
+						"episode_number": 41,
+						"season_number": 1,
+						"name": "You Can't Judge a Movie by Its Title",
+						"air_date": "2007-02-01",
+						"id": 940311
+					},
+					{
+						"episode_number": 42,
+						"season_number": 1,
+						"name": "You Know What Happens if You Pee on a Worm",
+						"air_date": "2007-02-08",
+						"id": 940312
+					},
+					{
+						"episode_number": 43,
+						"season_number": 1,
+						"name": "Make Characters So Anybody Can Tell Who They Are by Just Their Silhouettes / Since It Ended a Bit Early, We're Starting the Next One",
+						"air_date": "2007-02-15",
+						"id": 940314
+					},
+					{
+						"episode_number": 44,
+						"season_number": 1,
+						"name": "Mom’s Busy, Too, So Quit Complaining About What’s for Dinner",
+						"air_date": "2007-02-22",
+						"id": 940315
+					},
+					{
+						"episode_number": 45,
+						"season_number": 1,
+						"name": "Walk Your Dog at an Appropriate Speed",
+						"air_date": "2007-03-01",
+						"id": 940313
+					},
+					{
+						"episode_number": 46,
+						"season_number": 1,
+						"name": "Adults Only. We Wouldn’t Want Anyone Immature in Here",
+						"air_date": "2007-03-08",
+						"id": 940317
+					},
+					{
+						"episode_number": 47,
+						"season_number": 1,
+						"name": "Do Cherries Come from Cherry Trees?",
+						"air_date": "2007-03-15",
+						"id": 940316
+					},
+					{
+						"episode_number": 48,
+						"season_number": 1,
+						"name": "The More You're Alike, the More You Fight / Whatever You Play, Play to Win",
+						"air_date": "2007-03-22",
+						"id": 940319
+					},
+					{
+						"episode_number": 49,
+						"season_number": 1,
+						"name": "A Life Without Gambling is Like Sushi Without Wasabi",
+						"air_date": "2007-03-29",
+						"id": 940318
+					}
+				]
+			},
+			"57041/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Pending Means Pending, It's Not Final",
+						"air_date": "2007-04-05",
+						"id": 940366
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Milk Should Be Served at Body Temperature",
+						"air_date": "2007-04-12",
+						"id": 940326
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "If You Want to See Someone, Make an Appo First",
+						"air_date": "2007-04-19",
+						"id": 940367
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Stress Makes You Bald, but It's Stressful to Avoid Stress, So You End Up Stressed Out Anyway, So in the End There's Nothing You Can Do",
+						"air_date": "2007-04-26",
+						"id": 940327
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Mothers Everywhere Are All the Same",
+						"air_date": "2007-05-03",
+						"id": 940328
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Don't Make Munching Noises When You Eat",
+						"air_date": "2007-05-10",
+						"id": 940329
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Keep an Eye on the Chief for the Day",
+						"air_date": "2007-05-17",
+						"id": 940332
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "When Looking For Things You've Lost, Remember What You Were Doing On The Day You Lost It",
+						"air_date": "2007-05-24",
+						"id": 940331
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Croquette Sandwiches Are Always the Most Popular Food Sold at the Stalls",
+						"air_date": "2007-05-31",
+						"id": 940368
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Be Careful Not to Leave Your Umbrella Somewhere",
+						"air_date": "2007-06-07",
+						"id": 940369
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Sun Will Rise Again",
+						"air_date": "2007-06-14",
+						"id": 940330
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "On a Moonless Night, Insects Are Drawn to the Light",
+						"air_date": "2007-06-21",
+						"id": 940333
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Even Mummy Hunters Sometimes Turn into Mummys",
+						"air_date": "2007-06-28",
+						"id": 940336
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "The Preview Section in JUMP is Always Unreliable",
+						"air_date": "2007-07-05",
+						"id": 940334
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Eating Nmaibo Can Make You Full in No Time!",
+						"air_date": "2007-07-12",
+						"id": 940335
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Rhinoceros Beetles Teach Boys that Life is Precious",
+						"air_date": "2007-07-19",
+						"id": 940338
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Dango Over Flowers",
+						"air_date": "2007-07-26",
+						"id": 940370
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "For the Wind Is the Life / The Ideal Girlfriend Is Always Minami",
+						"air_date": "2007-08-02",
+						"id": 940339
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Like a Haunted House, Life is Filled with Horrors",
+						"air_date": "2007-08-09",
+						"id": 940371
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Please Help by Separating Your Trash",
+						"air_date": "2007-08-16",
+						"id": 940372
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Too Many Cuties Can Make You Sick",
+						"air_date": "2007-08-23",
+						"id": 940373
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Some Data Cannot Be Erased",
+						"air_date": "2007-08-30",
+						"id": 940374
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "A Dog's Paws Smell Fragrant / Drive With a \"Might\" Attitude",
+						"air_date": "2007-09-06",
+						"id": 940337
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Think for a Minute Now, Do Matsutake Mushrooms Really Taste All that Good?",
+						"air_date": "2007-09-13",
+						"id": 940375
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "The Manga Writer Becomes a Pro, After Doing a Stock of Manuscripts",
+						"air_date": "2007-09-20",
+						"id": 940340
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Don’t Complain About Your Job at Home, Do It Somewhere Else",
+						"air_date": "2007-09-27",
+						"id": 940343
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "In Those Situations, Keep Quiet and Cook Red Rice With Beans",
+						"air_date": "2007-10-04",
+						"id": 940341
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "Yesterday’s Enemy, After All Is Said and Done, Is Still the Enemy",
+						"air_date": "2007-10-11",
+						"id": 940342
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "People Who Are Picky About Food Are Also Picky About People, Too",
+						"air_date": "2007-10-18",
+						"id": 940344
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "Four Heads are Better than One",
+						"air_date": "2007-10-25",
+						"id": 940365
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "When Someone Who Wears Glasses Takes Them Off, It Looks Like Something’s Missing",
+						"air_date": "2007-11-08",
+						"id": 940346
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "A Woman's Best Make-up Is Her Smile",
+						"air_date": "2007-11-15",
+						"id": 940345
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "You Don't Stand in Line for the Ramen, You Stand in Line for the Self-Satisfaction / You Say Kawaii So Often, You Must Really Think You're Cute Stuff",
+						"air_date": "2007-11-22",
+						"id": 940348
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "Rank Has Nothing to Do with Luck",
+						"air_date": "2007-11-29",
+						"id": 940347
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Hard-boiled Egg on a Man's Heart",
+						"air_date": "2007-12-06",
+						"id": 940349
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "Hard-Boiled Eggs Don't Crack",
+						"air_date": "2007-12-13",
+						"id": 940351
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "It's Often Difficult to Sleep When You're Engrossed With Counting Sheep",
+						"air_date": "2007-12-20",
+						"id": 940350
+					},
+					{
+						"episode_number": 38,
+						"season_number": 2,
+						"name": "Perform a German Suplex on a Woman Who Asks If She or the Job Is More Important",
+						"air_date": "2007-12-27",
+						"id": 940352
+					},
+					{
+						"episode_number": 39,
+						"season_number": 2,
+						"name": "The Most Exciting Part of a Group Date is Before it Starts",
+						"air_date": "2008-01-10",
+						"id": 940355
+					},
+					{
+						"episode_number": 40,
+						"season_number": 2,
+						"name": "What Happens Twice, Happens Thrice",
+						"air_date": "2008-01-17",
+						"id": 940353
+					},
+					{
+						"episode_number": 41,
+						"season_number": 2,
+						"name": "The More Delicious the Food, the Nastier It Is When It Goes Bad",
+						"air_date": "2008-01-24",
+						"id": 940354
+					},
+					{
+						"episode_number": 42,
+						"season_number": 2,
+						"name": "If You Want To Lose Weight, Then Stop Eating and Start Moving",
+						"air_date": "2008-01-31",
+						"id": 940356
+					},
+					{
+						"episode_number": 43,
+						"season_number": 2,
+						"name": "Be a Person Who Can See People's Strong Points and Not Their Weak Points",
+						"air_date": "2008-02-07",
+						"id": 940358
+					},
+					{
+						"episode_number": 44,
+						"season_number": 2,
+						"name": "Even a Hero Has Issues",
+						"air_date": "2008-02-14",
+						"id": 940357
+					},
+					{
+						"episode_number": 45,
+						"season_number": 2,
+						"name": "When Riding A Train, Make Sure You Grab the Straps With Both Hands",
+						"air_date": "2008-02-21",
+						"id": 940360
+					},
+					{
+						"episode_number": 46,
+						"season_number": 2,
+						"name": "Men, Be a Madao",
+						"air_date": "2008-02-28",
+						"id": 940359
+					},
+					{
+						"episode_number": 47,
+						"season_number": 2,
+						"name": "If You're a Man, Don't Give Up",
+						"air_date": "2008-03-06",
+						"id": 940362
+					},
+					{
+						"episode_number": 48,
+						"season_number": 2,
+						"name": "Exaggerate the Tales of Your Exploits by a Third, So Everyone Has a Good Time / Men Have a Weakness for Girls Who Sell Flowers and Work in Pastry Shops",
+						"air_date": "2008-03-13",
+						"id": 940361
+					},
+					{
+						"episode_number": 49,
+						"season_number": 2,
+						"name": "Play Video Games for Only an Hour a Day",
+						"air_date": "2008-03-20",
+						"id": 940363
+					},
+					{
+						"episode_number": 50,
+						"season_number": 2,
+						"name": "Life and Video Games are Full of Bugs",
+						"air_date": "2008-03-27",
+						"id": 940364
+					}
+				]
+			},
+			"57041/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The More Something Is Disliked, the More Lovely It Is",
+						"air_date": "2008-04-03",
+						"id": 940486
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Rules Are Made to be Broken",
+						"air_date": "2008-04-10",
+						"id": 940487
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Otaku Are Talkative",
+						"air_date": "2008-04-17",
+						"id": 940488
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "There's a Thin Line Between Strengths and Weaknesses",
+						"air_date": "2008-04-24",
+						"id": 940489
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Important Things Are Hard To See",
+						"air_date": "2008-05-01",
+						"id": 940491
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "It’s All About the Beat and Timing",
+						"air_date": "2008-05-08",
+						"id": 940490
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Love Is Often Played Out In Sudden Death",
+						"air_date": "2008-05-15",
+						"id": 940492
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Kids Don’t Understand How Their Parents Feel",
+						"air_date": "2008-05-22",
+						"id": 940493
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Some Things Are Better Left Unsaid",
+						"air_date": "2008-05-29",
+						"id": 940494
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Life is a test",
+						"air_date": "2008-06-05",
+						"id": 940523
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "People Are All Escapees of Their Own Inner Prisons",
+						"air_date": "2008-06-12",
+						"id": 940495
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Definitely Do Not Let Your Girlfriend See the Things You Use for Cross-Dressing / There's Almost a 100% Chance You’ll Forget Your Umbrella and Hate Yourself For It",
+						"air_date": "2008-06-19",
+						"id": 940496
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "A Birthday in Your Twenties Has No Deep Meaning / Lucky Is a Man Who Gets Up and Goes to Work",
+						"air_date": "2008-06-26",
+						"id": 940498
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Cleaning the Toilet Cleanses the Soul",
+						"air_date": "2008-07-03",
+						"id": 940497
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "They Say Soy Sauce On Pudding Tastes Like Sea Urchin, But Soy Sauce On Pudding Only Tastes Like Pudding and Soy Sauce",
+						"air_date": "2008-07-10",
+						"id": 940499
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Summer Vacation is the Most Fun Right Before It Begins",
+						"air_date": "2008-07-17",
+						"id": 940500
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "The Older, the Wiser",
+						"air_date": "2008-07-24",
+						"id": 940524
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Beauty Is Like a Summer Fruit",
+						"air_date": "2008-07-31",
+						"id": 940501
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Even if Your Back is Bent, Go Straight Forward",
+						"air_date": "2008-08-07",
+						"id": 940502
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Within Each Box of Cigarettes, Are One or Two Cigarettes That Smell Like Horse Dung",
+						"air_date": "2008-08-14",
+						"id": 940503
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Japanese Restaurants Abroad Taste Pretty Much Like School Cafeteria Lunches / Once You've Taken a Dish, You Can't Put It Back",
+						"air_date": "2008-08-21",
+						"id": 940505
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "Novices Only Need a Flathead and a Phillips",
+						"air_date": "2008-08-28",
+						"id": 940506
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "Imagination Is Nurtured In the 8th Grade",
+						"air_date": "2008-09-04",
+						"id": 940525
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "Always Keep a Screwdriver In Your Heart",
+						"air_date": "2008-09-11",
+						"id": 940526
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "When Nagging Goes Too Far It Becomes Intimidating",
+						"air_date": "2008-09-18",
+						"id": 940504
+					},
+					{
+						"episode_number": 26,
+						"season_number": 3,
+						"name": "Entering the Final Chapter!",
+						"air_date": "2008-09-25",
+						"id": 940527
+					},
+					{
+						"episode_number": 27,
+						"season_number": 3,
+						"name": "Some Things Can Only Be Conveyed Through the Written Word",
+						"air_date": "2008-10-02",
+						"id": 940507
+					},
+					{
+						"episode_number": 28,
+						"season_number": 3,
+						"name": "Sometimes You Must Meet to Understand",
+						"air_date": "2008-10-09",
+						"id": 940508
+					},
+					{
+						"episode_number": 29,
+						"season_number": 3,
+						"name": "Sometimes You Can’t Tell Just By Meeting Someone",
+						"air_date": "2008-10-16",
+						"id": 940509
+					},
+					{
+						"episode_number": 30,
+						"season_number": 3,
+						"name": "Beware of Food You Pick Up Off the Ground",
+						"air_date": "2008-10-23",
+						"id": 940510
+					},
+					{
+						"episode_number": 31,
+						"season_number": 3,
+						"name": "Cat Lovers and Dog Lovers Are Mutually Exclusive",
+						"air_date": "2008-10-30",
+						"id": 940511
+					},
+					{
+						"episode_number": 32,
+						"season_number": 3,
+						"name": "Fights Often Ensue During Trips",
+						"air_date": "2008-11-06",
+						"id": 940512
+					},
+					{
+						"episode_number": 33,
+						"season_number": 3,
+						"name": "Briefs Will Unavoidably Get Skidmarks",
+						"air_date": "2008-11-13",
+						"id": 940513
+					},
+					{
+						"episode_number": 34,
+						"season_number": 3,
+						"name": "Gin and His Excellency's Good-for-Nothings",
+						"air_date": "2008-11-20",
+						"id": 940514
+					},
+					{
+						"episode_number": 35,
+						"season_number": 3,
+						"name": "Be Very Careful When Using Ghost Stories",
+						"air_date": "2008-11-27",
+						"id": 940528
+					},
+					{
+						"episode_number": 36,
+						"season_number": 3,
+						"name": "Before Thinking About the Earth, Think About the More Endangered Gintaman’s Future!",
+						"air_date": "2008-12-04",
+						"id": 940515
+					},
+					{
+						"episode_number": 37,
+						"season_number": 3,
+						"name": "It's Your House, You Build It",
+						"air_date": "2008-12-11",
+						"id": 940516
+					},
+					{
+						"episode_number": 38,
+						"season_number": 3,
+						"name": "99% of Men Aren't Confident in Confessing Their Love / People Who Don't Believe in Santa Are the Very Ones Who Want to Believe, You Contentious Bastard",
+						"air_date": "2008-12-18",
+						"id": 940529
+					},
+					{
+						"episode_number": 39,
+						"season_number": 3,
+						"name": "Let's Talk About the Old Days Once in a While",
+						"air_date": "2008-12-25",
+						"id": 940530
+					},
+					{
+						"episode_number": 40,
+						"season_number": 3,
+						"name": "Don't Put Your Wallet In Your Back Pocket",
+						"air_date": "2009-01-08",
+						"id": 940531
+					},
+					{
+						"episode_number": 41,
+						"season_number": 3,
+						"name": "Beware of Those Who Use an Umbrella on a Sunny Day!",
+						"air_date": "2009-01-15",
+						"id": 940532
+					},
+					{
+						"episode_number": 42,
+						"season_number": 3,
+						"name": "Butting Into a Fight is Dangerous",
+						"air_date": "2009-01-22",
+						"id": 940533
+					},
+					{
+						"episode_number": 43,
+						"season_number": 3,
+						"name": "Life Is About Making Consecutive Decisions",
+						"air_date": "2009-01-29",
+						"id": 940517
+					},
+					{
+						"episode_number": 44,
+						"season_number": 3,
+						"name": "Those Who Stand On Four Legs Are Beasts. Those Who Stand on Two Legs, Guts, and Glory, Are Men",
+						"air_date": "2009-02-05",
+						"id": 940520
+					},
+					{
+						"episode_number": 45,
+						"season_number": 3,
+						"name": "Don’t Trust Bedtime Stories",
+						"air_date": "2009-02-12",
+						"id": 940534
+					},
+					{
+						"episode_number": 46,
+						"season_number": 3,
+						"name": "The Color for Each Person’s Bond Comes in Various Colors",
+						"air_date": "2009-02-19",
+						"id": 940519
+					},
+					{
+						"episode_number": 47,
+						"season_number": 3,
+						"name": "The Taste of Drinking Under Broad Daylight Is Something Special",
+						"air_date": "2009-02-26",
+						"id": 940535
+					},
+					{
+						"episode_number": 48,
+						"season_number": 3,
+						"name": "All Adults are Instructors for All Children",
+						"air_date": "2009-03-05",
+						"id": 940518
+					},
+					{
+						"episode_number": 49,
+						"season_number": 3,
+						"name": "Zip Up Your Fly Nice and Slowly",
+						"air_date": "2009-03-12",
+						"id": 940536
+					},
+					{
+						"episode_number": 50,
+						"season_number": 3,
+						"name": "When Breaking a Chuubert in Half, the End with the Knob Should Be Better. It's Also Tasty to Drink from There",
+						"air_date": "2009-03-19",
+						"id": 940521
+					},
+					{
+						"episode_number": 51,
+						"season_number": 3,
+						"name": "If You Can’t Beat Them, Join Them",
+						"air_date": "2009-03-26",
+						"id": 940522
+					}
+				]
+			},
+			"57041/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "A Conversation With a Barber During a Haircut is The Most Pointless Thing in The World",
+						"air_date": "2009-04-02",
+						"id": 940437
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "The Heavens Created Chonmage Above Man Instead of Another Man",
+						"air_date": "2009-04-09",
+						"id": 940439
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Sleep Helps a Child Grow",
+						"air_date": "2009-04-16",
+						"id": 940438
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "That Person Looks Different from Usual During a Birthday Party",
+						"air_date": "2009-04-23",
+						"id": 940435
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "The Other Side of the Other Side of the Other Side Would Be the Other Side",
+						"air_date": "2009-04-30",
+						"id": 940436
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "It Takes a Bit of Courage to Enter a Street Vendor's Stand",
+						"air_date": "2009-05-07",
+						"id": 940441
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Any Place Can Become a Battlefield When Men Gather",
+						"air_date": "2009-05-14",
+						"id": 940440
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "If a Friend Gets Injured, Take Him to the Hospital, Stat!",
+						"air_date": "2009-05-21",
+						"id": 940443
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "If One Orange in the Box Is Rotten, the Rest of Them Will Become Rotten Before You Realize It",
+						"air_date": "2009-05-28",
+						"id": 940442
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "From a Foreigner's Perspective, You're the Foreigner. From an Alien's Perspective, You're the Alien",
+						"air_date": "2009-06-04",
+						"id": 940445
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Laputa's Still Good After Seeing It So Many Times",
+						"air_date": "2009-06-11",
+						"id": 940444
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Love Is Unconditional",
+						"air_date": "2009-06-18",
+						"id": 940447
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "The Black Ships Even Make A Scene When They Sink",
+						"air_date": "2009-06-25",
+						"id": 940446
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "That Matsutake Soup Stuff Tastes Better than the Real Deal / If a Person Is Dead, They Can't Come Back to Life",
+						"air_date": "2009-07-02",
+						"id": 940449
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "If It Works Once, It'll Work Over And Over Again",
+						"air_date": "2009-07-09",
+						"id": 940470
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Two Is Better Than One. Two People Are Better Than One",
+						"air_date": "2009-07-16",
+						"id": 940471
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "Smooth Polygons Smooth Men's Hearts Too",
+						"air_date": "2009-07-23",
+						"id": 940448
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "The Human Body Is Like a Little Universe",
+						"air_date": "2009-07-30",
+						"id": 940472
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "The Chosen Idiots",
+						"air_date": "2009-08-06",
+						"id": 940473
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "And into the Legend...",
+						"air_date": "2009-08-13",
+						"id": 940450
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "If You Keep Copying, They Will Retaliate / A Loss Opens Your Eyes to the Love You Have",
+						"air_date": "2009-08-20",
+						"id": 940453
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Using the Carrot and the Stick Method Depends on the Situation",
+						"air_date": "2009-08-27",
+						"id": 940451
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "It's What's On The Inside That Counts / It's What's On The Inside That Counts, But Only To A Certain Extent",
+						"air_date": "2009-09-03",
+						"id": 940452
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "Are There Still People Who Go to the Ocean and Yell \"Bakayaro!\"? / When a Person Is Trapped, Their Inner Door Opens",
+						"air_date": "2009-09-10",
+						"id": 940475
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "No Matter How Old You Get, You Still Hate the Dentist",
+						"air_date": "2009-09-17",
+						"id": 940455
+					},
+					{
+						"episode_number": 26,
+						"season_number": 4,
+						"name": "Countdown Begins",
+						"air_date": "2009-09-24",
+						"id": 940454
+					},
+					{
+						"episode_number": 27,
+						"season_number": 4,
+						"name": "It's Bad Luck to See a Spider at Night",
+						"air_date": "2009-10-01",
+						"id": 940457
+					},
+					{
+						"episode_number": 28,
+						"season_number": 4,
+						"name": "Once You’re Entangled in a Spiderweb, It’s Hard to Get It Off",
+						"air_date": "2009-10-08",
+						"id": 940456
+					},
+					{
+						"episode_number": 29,
+						"season_number": 4,
+						"name": "It's the Irresponsible One Who's Scary When Pissed",
+						"air_date": "2009-10-15",
+						"id": 940458
+					},
+					{
+						"episode_number": 30,
+						"season_number": 4,
+						"name": "The More Precious the Burden, The Heavier and More Difficult it is to Shoulder",
+						"air_date": "2009-10-22",
+						"id": 940460
+					},
+					{
+						"episode_number": 31,
+						"season_number": 4,
+						"name": "Watch Out For A Set of Women and A Drink",
+						"air_date": "2009-10-29",
+						"id": 940474
+					},
+					{
+						"episode_number": 32,
+						"season_number": 4,
+						"name": "Screw Popularity Votes",
+						"air_date": "2009-11-05",
+						"id": 940459
+					},
+					{
+						"episode_number": 33,
+						"season_number": 4,
+						"name": "Popularity Polls Can Burn in Hell",
+						"air_date": "2009-11-12",
+						"id": 940476
+					},
+					{
+						"episode_number": 34,
+						"season_number": 4,
+						"name": "Popularity Polls Can...",
+						"air_date": "2009-11-19",
+						"id": 940477
+					},
+					{
+						"episode_number": 35,
+						"season_number": 4,
+						"name": "Hometowns and Boobs Are Best Thought of from Afar / The Whole Peeing on a Bee Sting Is a Myth. You’ll Get Germs, So Don’t Do It!!",
+						"air_date": "2009-11-26",
+						"id": 940462
+					},
+					{
+						"episode_number": 36,
+						"season_number": 4,
+						"name": "Beware of Foreshadows",
+						"air_date": "2009-12-03",
+						"id": 940485
+					},
+					{
+						"episode_number": 37,
+						"season_number": 4,
+						"name": "It’s Goodbye Once a Flag Is Set",
+						"air_date": "2009-12-10",
+						"id": 940461
+					},
+					{
+						"episode_number": 38,
+						"season_number": 4,
+						"name": "An Observation Journal Should Be Seen Through To The Very End",
+						"air_date": "2009-12-17",
+						"id": 940463
+					},
+					{
+						"episode_number": 39,
+						"season_number": 4,
+						"name": "We Know It’s Best to Finish Yearly Tasks Before the End of the Year, But then You Put It Off Till Next Year for a Fresh Start. That’s How the End of the Year Goes / Radio Exercises are Socials for Boys and Girls",
+						"air_date": "2009-12-24",
+						"id": 940464
+					},
+					{
+						"episode_number": 40,
+						"season_number": 4,
+						"name": "When Looking For Something, Try Using its Perspective",
+						"air_date": "2010-01-07",
+						"id": 940484
+					},
+					{
+						"episode_number": 41,
+						"season_number": 4,
+						"name": "Freedom Means to Live True to Yourself, not Without Law!",
+						"air_date": "2010-01-14",
+						"id": 940465
+					},
+					{
+						"episode_number": 42,
+						"season_number": 4,
+						"name": "Kabukicho Stray Cat Blues",
+						"air_date": "2010-01-21",
+						"id": 940466
+					},
+					{
+						"episode_number": 43,
+						"season_number": 4,
+						"name": "Cooking is About Guts",
+						"air_date": "2010-01-28",
+						"id": 940478
+					},
+					{
+						"episode_number": 44,
+						"season_number": 4,
+						"name": "Whenever I Hear Leviathan, I Think of Sazae-san. Stupid Me!!",
+						"air_date": "2010-02-04",
+						"id": 940467
+					},
+					{
+						"episode_number": 45,
+						"season_number": 4,
+						"name": "Not Losing to the Rain",
+						"air_date": "2010-02-11",
+						"id": 940468
+					},
+					{
+						"episode_number": 46,
+						"season_number": 4,
+						"name": "Not Losing to the Wind",
+						"air_date": "2010-02-18",
+						"id": 940482
+					},
+					{
+						"episode_number": 47,
+						"season_number": 4,
+						"name": "Not Losing to the Storm",
+						"air_date": "2010-02-25",
+						"id": 940483
+					},
+					{
+						"episode_number": 48,
+						"season_number": 4,
+						"name": "Never Losing that Smile",
+						"air_date": "2010-03-04",
+						"id": 940479
+					},
+					{
+						"episode_number": 49,
+						"season_number": 4,
+						"name": "That’s How I Wish to Be, Beautiful and Strong",
+						"air_date": "2010-03-11",
+						"id": 940480
+					},
+					{
+						"episode_number": 50,
+						"season_number": 4,
+						"name": "Santa Claus Red Is Blood Red",
+						"air_date": "2010-03-18",
+						"id": 940469
+					},
+					{
+						"episode_number": 51,
+						"season_number": 4,
+						"name": "Everybody's a Santa!",
+						"air_date": "2010-03-25",
+						"id": 940481
+					}
+				]
+			},
+			"57041/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Everyone Looks a Little Grown Up After Spring Break",
+						"air_date": "2011-04-04",
+						"id": 940376
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Everyone Looks Pretty Grown Up After Summer Break",
+						"air_date": "2011-04-11",
+						"id": 940378
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Use a Calligraphy Pen for New Year Cards / The Heart Comes Before Chocolate",
+						"air_date": "2011-04-18",
+						"id": 940377
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "Meals Should Be Balanced / We Are All Warriors in the Battle Against Fate",
+						"air_date": "2011-04-25",
+						"id": 940379
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "It's Too Confusing When Talking About the Poster Girl for a Poster Store, So Call Her a Sandwich Board",
+						"air_date": "2011-05-02",
+						"id": 940380
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Glasses Are Part of the Soul",
+						"air_date": "2011-05-09",
+						"id": 940381
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "Glasses Prevent You From Seeing Certain Things",
+						"air_date": "2011-05-16",
+						"id": 940382
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Nothing Lasts Forever, Including Parents, Money, Youth, Your Room, Dress Shirts, Me, You and the Gintama Anime",
+						"air_date": "2011-05-23",
+						"id": 940383
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "A Lawless Town Tend To Attract a Bunch of Whoohooey Fo",
+						"air_date": "2011-05-30",
+						"id": 940384
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Ghosts Aren't The Only Ones Who Run Wild Around Graveyards",
+						"air_date": "2011-06-06",
+						"id": 940385
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Chains Of a Warrior",
+						"air_date": "2011-06-13",
+						"id": 940388
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Iron Town",
+						"air_date": "2011-06-20",
+						"id": 940386
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "'Tis An Honor!",
+						"air_date": "2011-06-27",
+						"id": 940387
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "Odds or Even",
+						"air_date": "2011-07-04",
+						"id": 940390
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "I Can't Remember a Damn Thing About the Factory Tour",
+						"air_date": "2011-07-11",
+						"id": 940389
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "What Happen Twice Can Happen Thrice",
+						"air_date": "2011-07-18",
+						"id": 940392
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "The Pincers of Crab Can Snip Through a Friendship",
+						"air_date": "2011-07-25",
+						"id": 940391
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "People Forget to Return Stuff All The Time Without Even Realizing It.",
+						"air_date": "2011-08-01",
+						"id": 940395
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "The Bathhouse , Where You're Naked In Body And Soul",
+						"air_date": "2011-08-08",
+						"id": 940393
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "Jugem",
+						"air_date": "2011-08-15",
+						"id": 940394
+					},
+					{
+						"episode_number": 21,
+						"season_number": 5,
+						"name": "The Name Reveals the Person",
+						"air_date": "2011-08-22",
+						"id": 940398
+					},
+					{
+						"episode_number": 22,
+						"season_number": 5,
+						"name": "The Man's Household Situation Is Hard , His Heart Is Soft",
+						"air_date": "2011-08-29",
+						"id": 940396
+					},
+					{
+						"episode_number": 23,
+						"season_number": 5,
+						"name": "Blue And Red Ecstasy",
+						"air_date": "2011-09-05",
+						"id": 940397
+					},
+					{
+						"episode_number": 24,
+						"season_number": 5,
+						"name": "So In The Second Season Of Prison Break , They Already Broke Out Of Prison , But The Name Works When You Realize That Society Is A Prison",
+						"air_date": "2011-09-12",
+						"id": 940400
+					},
+					{
+						"episode_number": 25,
+						"season_number": 5,
+						"name": "Everybody Loves Pajamas",
+						"air_date": "2011-09-19",
+						"id": 940399
+					},
+					{
+						"episode_number": 26,
+						"season_number": 5,
+						"name": "Speaking Of Crossovers , Don't Forget About Alien Vs Predator",
+						"air_date": "2011-09-26",
+						"id": 940401
+					},
+					{
+						"episode_number": 27,
+						"season_number": 5,
+						"name": "Love is Neither Plus Nor Minus",
+						"air_date": "2011-10-03",
+						"id": 940402
+					},
+					{
+						"episode_number": 28,
+						"season_number": 5,
+						"name": "Making It Through Love",
+						"air_date": "2011-10-10",
+						"id": 940403
+					},
+					{
+						"episode_number": 29,
+						"season_number": 5,
+						"name": "It Would Take Too Much Effort to Make This Title Sound Like a Text Message Subject",
+						"air_date": "2011-10-17",
+						"id": 940404
+					},
+					{
+						"episode_number": 30,
+						"season_number": 5,
+						"name": "When You Go to a Funeral for the First Time, You're Surprised By How Happy the People Are",
+						"air_date": "2011-10-24",
+						"id": 940405
+					},
+					{
+						"episode_number": 31,
+						"season_number": 5,
+						"name": "The People You Tend to Forget Tend to Show Up After You Forget Them",
+						"air_date": "2011-10-31",
+						"id": 940407
+					},
+					{
+						"episode_number": 32,
+						"season_number": 5,
+						"name": "The Legendary Mercenary Tribe, Renho.  Elizabeth Was in Fact, One of Those White Demons",
+						"air_date": "2011-11-07",
+						"id": 940408
+					},
+					{
+						"episode_number": 33,
+						"season_number": 5,
+						"name": "Piggy Banks and Trash Cans",
+						"air_date": "2011-11-14",
+						"id": 940406
+					},
+					{
+						"episode_number": 34,
+						"season_number": 5,
+						"name": "Empty Planet",
+						"air_date": "2011-11-21",
+						"id": 940410
+					},
+					{
+						"episode_number": 35,
+						"season_number": 5,
+						"name": "Goodbye Lionel, Why Don't You Say Something!",
+						"air_date": "2011-11-28",
+						"id": 940409
+					},
+					{
+						"episode_number": 36,
+						"season_number": 5,
+						"name": "Please Take Me Skiing",
+						"air_date": "2011-12-05",
+						"id": 940411
+					},
+					{
+						"episode_number": 37,
+						"season_number": 5,
+						"name": "A Vacation in Disorientation",
+						"air_date": "2011-12-12",
+						"id": 940412
+					},
+					{
+						"episode_number": 38,
+						"season_number": 5,
+						"name": "There are Some Things You Should Not Forget When Drinking away the Past Year at Year-end Parties",
+						"air_date": "2011-12-19",
+						"id": 940413
+					},
+					{
+						"episode_number": 39,
+						"season_number": 5,
+						"name": "People Can Only Live By Forgetting the Bad",
+						"air_date": "2011-12-26",
+						"id": 940414
+					},
+					{
+						"episode_number": 40,
+						"season_number": 5,
+						"name": "We Are All Hosts, In Capital Letters",
+						"air_date": "2012-01-09",
+						"id": 940415
+					},
+					{
+						"episode_number": 41,
+						"season_number": 5,
+						"name": "Girls like Vegeta, Guys like Piccolo",
+						"air_date": "2012-01-16",
+						"id": 940416
+					},
+					{
+						"episode_number": 42,
+						"season_number": 5,
+						"name": "Draw Your Life on the Canvas We Call Manga",
+						"air_date": "2012-01-23",
+						"id": 940418
+					},
+					{
+						"episode_number": 43,
+						"season_number": 5,
+						"name": "Check It Out!",
+						"air_date": "2012-01-30",
+						"id": 940417
+					},
+					{
+						"episode_number": 44,
+						"season_number": 5,
+						"name": "Thorny and Rosy",
+						"air_date": "2012-02-06",
+						"id": 940419
+					},
+					{
+						"episode_number": 45,
+						"season_number": 5,
+						"name": "Festival of Thornies",
+						"air_date": "2012-02-13",
+						"id": 940420
+					},
+					{
+						"episode_number": 46,
+						"season_number": 5,
+						"name": "Letter From Thorny",
+						"air_date": "2012-02-20",
+						"id": 940421
+					},
+					{
+						"episode_number": 47,
+						"season_number": 5,
+						"name": "Madaodog Madaonaire",
+						"air_date": "2012-02-27",
+						"id": 940422
+					},
+					{
+						"episode_number": 48,
+						"season_number": 5,
+						"name": "Presents Are Meant To Be Given Early",
+						"air_date": "2012-03-05",
+						"id": 940423
+					},
+					{
+						"episode_number": 49,
+						"season_number": 5,
+						"name": "New Year's Envelopes Are Perfect for Dirty Jokes",
+						"air_date": "2012-03-12",
+						"id": 940426
+					},
+					{
+						"episode_number": 50,
+						"season_number": 5,
+						"name": "When Sleeping Under a Kotatsu, Make Sure You Don't Burn Your Balls",
+						"air_date": "2012-03-19",
+						"id": 940425
+					},
+					{
+						"episode_number": 51,
+						"season_number": 5,
+						"name": "We're Sorry",
+						"air_date": "2012-03-26",
+						"id": 940424
+					}
+				]
+			},
+			"57041/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "Nobody with Natural Straight Hair Can Be That Bad",
+						"air_date": "2012-10-04",
+						"id": 940537
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Kintoki and Gintoki",
+						"air_date": "2012-10-11",
+						"id": 940540
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "Kin-san's Kintama",
+						"air_date": "2012-10-18",
+						"id": 940539
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "The Meaning of a Main Character",
+						"air_date": "2012-10-25",
+						"id": 940541
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "Courtesan Turns the Tables",
+						"air_date": "2013-01-10",
+						"id": 940538
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "Inside the Palace!!",
+						"air_date": "2013-01-17",
+						"id": 940546
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Five Pinkies",
+						"air_date": "2013-01-24",
+						"id": 940542
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "Pinky Swear",
+						"air_date": "2013-01-31",
+						"id": 940545
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "Unsetting Moon",
+						"air_date": "2013-02-07",
+						"id": 940543
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "The Sound of a Beam Can Pierce Every Heart",
+						"air_date": "2013-03-07",
+						"id": 940544
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "Two Brothers",
+						"air_date": "2013-03-14",
+						"id": 940547
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Liquor and Gasoline, Smiles and Tears",
+						"air_date": "2013-03-21",
+						"id": 940548
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "Dog Food Doesn't Taste Like You Think",
+						"air_date": "2013-03-28",
+						"id": 940549
+					}
+				]
+			},
+			"57041/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "You Can Never Pause at the Perfect Time",
+						"air_date": "2015-04-08",
+						"id": 1163757
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "Even a Matsui Stick Can't Handle Some Kinds of Dirt",
+						"air_date": "2015-04-15",
+						"id": 1163758
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "An Inspector's Love Begins With an Inspection",
+						"air_date": "2015-04-22",
+						"id": 1163759
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "Forget Dates, Remember People / You Can Hide Your Porn Mags, But You Can't Hide Your ***",
+						"air_date": "2015-04-29",
+						"id": 1163760
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "A Mirror Provides a Frozen Reflection of Both Your Beautiful and Ugly Sides / Nobody Likes the Photo on Their License",
+						"air_date": "2015-05-06",
+						"id": 1163761
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "Arriving Late to a Reunion Makes it Hard to Enter",
+						"air_date": "2015-05-13",
+						"id": 1163762
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "A Reunion Also Brings to the Surface Things You Don't Want to Remember",
+						"air_date": "2015-05-20",
+						"id": 1163763
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "When Compared to Time in the Heavens, Fifty Years of Human Life Resembles Naught but Dreams and Lottery Tickets",
+						"air_date": "2015-05-27",
+						"id": 1163764
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "Guys With Big Nostrils Also Have Big Imaginations / You Never Accept a New Sentai Series at the Start, But By the Final Episode, You Don't Want It to End",
+						"air_date": "2015-06-03",
+						"id": 1163765
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "9 + 1 = Yagyu Jyubei",
+						"air_date": "2015-06-10",
+						"id": 1163766
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "Calories Come Back to Bite You Just When You've Forgotten About Them",
+						"air_date": "2015-06-17",
+						"id": 1163767
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "10 - 1 =",
+						"air_date": "2015-06-24",
+						"id": 1163768
+					},
+					{
+						"episode_number": 13,
+						"season_number": 7,
+						"name": "All Mothers Pack Too Much Food Into a Lunch Box and Ruin the Shape",
+						"air_date": "2015-07-01",
+						"id": 1163769
+					},
+					{
+						"episode_number": 14,
+						"season_number": 7,
+						"name": "The Reaper by Day and the Reaper by Night",
+						"air_date": "2015-07-08",
+						"id": 1163770
+					},
+					{
+						"episode_number": 15,
+						"season_number": 7,
+						"name": "Human or Demon?",
+						"air_date": "2015-07-15",
+						"id": 1163771
+					},
+					{
+						"episode_number": 16,
+						"season_number": 7,
+						"name": "Farewell, Reaper",
+						"air_date": "2015-07-22",
+						"id": 1163772
+					},
+					{
+						"episode_number": 17,
+						"season_number": 7,
+						"name": "A Phoenix Rises from the Ashes  Over and Over",
+						"air_date": "2015-07-29",
+						"id": 1163773
+					},
+					{
+						"episode_number": 18,
+						"season_number": 7,
+						"name": "Amen",
+						"air_date": "2015-08-05",
+						"id": 1163774
+					},
+					{
+						"episode_number": 19,
+						"season_number": 7,
+						"name": "Being a Leader is Tough",
+						"air_date": "2015-08-12",
+						"id": 1163775
+					},
+					{
+						"episode_number": 20,
+						"season_number": 7,
+						"name": "Love is a Roach Motel",
+						"air_date": "2015-08-19",
+						"id": 1163776
+					},
+					{
+						"episode_number": 21,
+						"season_number": 7,
+						"name": "A Sizzle Summer / A Nothing Summer 2015",
+						"air_date": "2015-08-26",
+						"id": 1163777
+					},
+					{
+						"episode_number": 22,
+						"season_number": 7,
+						"name": "He's the Sweet Tooth, and I'm the Mayo Guy",
+						"air_date": "2015-09-02",
+						"id": 1163778
+					},
+					{
+						"episode_number": 23,
+						"season_number": 7,
+						"name": "I'm a Failure as a Leader, and He's Also a Failure as a Leader",
+						"air_date": "2015-09-09",
+						"id": 1163779
+					},
+					{
+						"episode_number": 24,
+						"season_number": 7,
+						"name": "I'm Odd Jobs, and He's Shinsengumi",
+						"air_date": "2015-09-16",
+						"id": 1163780
+					},
+					{
+						"episode_number": 25,
+						"season_number": 7,
+						"name": "Always Leave Enough Room for Fifty Million in Your Bag",
+						"air_date": "2015-09-23",
+						"id": 1163781
+					},
+					{
+						"episode_number": 26,
+						"season_number": 7,
+						"name": "Always Leave Enough Room for Pebbles in Your Bag",
+						"air_date": "2015-09-30",
+						"id": 1163782
+					},
+					{
+						"episode_number": 27,
+						"season_number": 7,
+						"name": "Style Goes Out of Fashion the Moment It's Put Into Words / There Are Two Types of People In This World: Those Who Yell Out Their Attack Names, and Those Who Don't",
+						"air_date": "2015-10-07",
+						"id": 1163783
+					},
+					{
+						"episode_number": 28,
+						"season_number": 7,
+						"name": "The Two Apes",
+						"air_date": "2015-10-14",
+						"id": 1163784
+					},
+					{
+						"episode_number": 29,
+						"season_number": 7,
+						"name": "Afros of Life and Death",
+						"air_date": "2015-10-21",
+						"id": 1163785
+					},
+					{
+						"episode_number": 30,
+						"season_number": 7,
+						"name": "Afuro and Wolfro",
+						"air_date": "2015-10-28",
+						"id": 1163786
+					},
+					{
+						"episode_number": 31,
+						"season_number": 7,
+						"name": "Take the Initial Premise Lightly, and It'll Cost You",
+						"air_date": "2015-11-04",
+						"id": 1163787
+					},
+					{
+						"episode_number": 32,
+						"season_number": 7,
+						"name": "Keep Your Farewells Short",
+						"air_date": "2015-11-11",
+						"id": 1163788
+					},
+					{
+						"episode_number": 33,
+						"season_number": 7,
+						"name": "One Editor Is Enough / The G-Pen Is Capricious and the Maru Pen Is Stubborn",
+						"air_date": "2015-11-18",
+						"id": 1163789
+					},
+					{
+						"episode_number": 34,
+						"season_number": 7,
+						"name": "Strike When the Sword and Overlord are Hot / Oil Rain",
+						"air_date": "2015-11-25",
+						"id": 1163790
+					},
+					{
+						"episode_number": 35,
+						"season_number": 7,
+						"name": "Shoguns of Light and Shadow",
+						"air_date": "2015-12-02",
+						"id": 1163791
+					},
+					{
+						"episode_number": 36,
+						"season_number": 7,
+						"name": "Ninja Village",
+						"air_date": "2015-12-09",
+						"id": 1163792
+					},
+					{
+						"episode_number": 37,
+						"season_number": 7,
+						"name": "Ninja Soul",
+						"air_date": "2015-12-16",
+						"id": 1163793
+					},
+					{
+						"episode_number": 38,
+						"season_number": 7,
+						"name": "And Then There Were Five",
+						"air_date": "2015-12-23",
+						"id": 1163794
+					},
+					{
+						"episode_number": 39,
+						"season_number": 7,
+						"name": "Those Who Protect Against All Odds",
+						"air_date": "2016-01-06",
+						"id": 1163795
+					},
+					{
+						"episode_number": 40,
+						"season_number": 7,
+						"name": "Sworn Enemy",
+						"air_date": "2016-01-13",
+						"id": 1163796
+					},
+					{
+						"episode_number": 41,
+						"season_number": 7,
+						"name": "The Crows Caw After the Battle Ends",
+						"air_date": "2016-01-20",
+						"id": 1163797
+					},
+					{
+						"episode_number": 42,
+						"season_number": 7,
+						"name": "Farewell, Buddy",
+						"air_date": "2016-01-27",
+						"id": 1163798
+					},
+					{
+						"episode_number": 43,
+						"season_number": 7,
+						"name": "The Day the Demon Cried",
+						"air_date": "2016-02-03",
+						"id": 1163799
+					},
+					{
+						"episode_number": 44,
+						"season_number": 7,
+						"name": "Heroes Always Arrive Fashionably Late",
+						"air_date": "2016-02-10",
+						"id": 1163800
+					},
+					{
+						"episode_number": 45,
+						"season_number": 7,
+						"name": "Lost and Found",
+						"air_date": "2016-02-17",
+						"id": 1163801
+					},
+					{
+						"episode_number": 46,
+						"season_number": 7,
+						"name": "Prison Break",
+						"air_date": "2016-02-24",
+						"id": 1163802
+					},
+					{
+						"episode_number": 47,
+						"season_number": 7,
+						"name": "Stray Dogs",
+						"air_date": "2016-03-02",
+						"id": 1163803
+					},
+					{
+						"episode_number": 48,
+						"season_number": 7,
+						"name": "Undelivered Mail",
+						"air_date": "2016-03-09",
+						"id": 1163804
+					},
+					{
+						"episode_number": 49,
+						"season_number": 7,
+						"name": "Karma",
+						"air_date": "2016-03-16",
+						"id": 1163805
+					},
+					{
+						"episode_number": 50,
+						"season_number": 7,
+						"name": "Nobume",
+						"air_date": "2016-03-23",
+						"id": 1163806
+					},
+					{
+						"episode_number": 51,
+						"season_number": 7,
+						"name": "Farewell Shinsengumi",
+						"air_date": "2016-03-30",
+						"id": 1174930
+					}
+				]
+			},
+			"57041/9": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 9,
+						"name": "The Stairs to Adulthood May Not Always Lead Up",
+						"air_date": "2017-10-02",
+						"id": 1373990
+					},
+					{
+						"episode_number": 2,
+						"season_number": 9,
+						"name": "My Bald Dad, My Light-Haired Dad, and My Dad's Glasses",
+						"air_date": "2017-10-09",
+						"id": 1377843
+					},
+					{
+						"episode_number": 3,
+						"season_number": 9,
+						"name": "A Bowl of Ramen",
+						"air_date": "2017-10-16",
+						"id": 1377844
+					},
+					{
+						"episode_number": 4,
+						"season_number": 9,
+						"name": "A Family",
+						"air_date": "2017-10-23",
+						"id": 1377845
+					},
+					{
+						"episode_number": 5,
+						"season_number": 9,
+						"name": "Life, Death, and Shades / All the Answers Can Be Found in the Field",
+						"air_date": "2017-10-30",
+						"id": 1377846
+					},
+					{
+						"episode_number": 6,
+						"season_number": 9,
+						"name": "3000 Leagues in Search of a Scabbard",
+						"air_date": "2017-11-06",
+						"id": 1390020
+					},
+					{
+						"episode_number": 7,
+						"season_number": 9,
+						"name": "The Super Sadist and the Super Sadist",
+						"air_date": "2017-11-13",
+						"id": 1390140
+					},
+					{
+						"episode_number": 8,
+						"season_number": 9,
+						"name": "The Strongest Sword, and the Dullest Ass",
+						"air_date": "2017-11-20",
+						"id": 1390141
+					},
+					{
+						"episode_number": 9,
+						"season_number": 9,
+						"name": "Wash Your Hands Before a Handshake",
+						"air_date": "2017-11-27",
+						"id": 1398022
+					},
+					{
+						"episode_number": 10,
+						"season_number": 9,
+						"name": "Diamonds are Unscratchable",
+						"air_date": "2017-12-04",
+						"id": 1398023
+					},
+					{
+						"episode_number": 11,
+						"season_number": 9,
+						"name": "An Idol's Badge of Honor",
+						"air_date": "2017-12-11",
+						"id": 1404189
+					},
+					{
+						"episode_number": 12,
+						"season_number": 9,
+						"name": "The Line Between Godlike Games and Shitty Games is Paper-Thin",
+						"air_date": "2017-12-18",
+						"id": 1404190
+					},
+					{
+						"episode_number": 13,
+						"season_number": 9,
+						"name": "Guardian Spirits Are Also a Part of the Soul",
+						"air_date": "2017-12-25",
+						"id": 1409509
+					}
+				]
+			},
+			"57041/10": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 10,
+						"name": "Try As You Might to Make a Natural Perm Go Away, It Will Always Return",
+						"air_date": "2018-01-08",
+						"id": 1416874
+					},
+					{
+						"episode_number": 2,
+						"season_number": 10,
+						"name": "Flavoring is Best in Small Quantities",
+						"air_date": "2018-01-15",
+						"id": 1419308
+					},
+					{
+						"episode_number": 3,
+						"season_number": 10,
+						"name": "A Delinquent's Kid Has Long Neck Hair",
+						"air_date": "2018-01-22",
+						"id": 1422140
+					},
+					{
+						"episode_number": 4,
+						"season_number": 10,
+						"name": "The Line Between Tenacious and Annoying Is Paper-Thin",
+						"air_date": "2018-01-29",
+						"id": 1422229
+					},
+					{
+						"episode_number": 5,
+						"season_number": 10,
+						"name": "Geezers Carve the Things They Shouldn't Forget into Their Wrinkles",
+						"air_date": "2018-02-05",
+						"id": 1428456
+					},
+					{
+						"episode_number": 6,
+						"season_number": 10,
+						"name": "Machines That Pick Up Useless Habits Are Called People",
+						"air_date": "2018-02-12",
+						"id": 1431383
+					},
+					{
+						"episode_number": 7,
+						"season_number": 10,
+						"name": "Men Must Live Not Long or Thick, but Hard",
+						"air_date": "2018-02-19",
+						"id": 1434702
+					},
+					{
+						"episode_number": 8,
+						"season_number": 10,
+						"name": "Ogres Are Weak Against Tiny Heroes Like the Inch-High Samurai",
+						"air_date": "2018-02-26",
+						"id": 1434703
+					},
+					{
+						"episode_number": 9,
+						"season_number": 10,
+						"name": "Bragging About Your Own Heroic Deeds Will Make People Hate You, So Make Others Do It For You",
+						"air_date": "2018-03-05",
+						"id": 1434704
+					},
+					{
+						"episode_number": 10,
+						"season_number": 10,
+						"name": "Jump and Power Creep Go Hand-in-Hand",
+						"air_date": "2018-03-12",
+						"id": 1452248
+					},
+					{
+						"episode_number": 11,
+						"season_number": 10,
+						"name": "Peace and Destruction Are Two Sides of the Same Coin",
+						"air_date": "2018-03-19",
+						"id": 1452249
+					},
+					{
+						"episode_number": 12,
+						"season_number": 10,
+						"name": "Bushido Is Found One Second Before Death",
+						"air_date": "2018-03-26",
+						"id": 1452250
+					}
+				]
+			},
+			"57041/11": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 11,
+						"name": "The Evildoers Who Do Good",
+						"air_date": "2018-07-09",
+						"id": 1516792
+					},
+					{
+						"episode_number": 2,
+						"season_number": 11,
+						"name": "Rabbits Jump High on Moonlit Nights",
+						"air_date": "2018-07-15",
+						"id": 1523058
+					},
+					{
+						"episode_number": 3,
+						"season_number": 11,
+						"name": "Making a Dull World Interesting",
+						"air_date": "2018-07-22",
+						"id": 1523059
+					},
+					{
+						"episode_number": 4,
+						"season_number": 11,
+						"name": "Do Something Uncharacteristic, and Something Uncharacteristic Will Happen",
+						"air_date": "2018-07-29",
+						"id": 1523060
+					},
+					{
+						"episode_number": 5,
+						"season_number": 11,
+						"name": "Countless Kings",
+						"air_date": "2018-08-05",
+						"id": 1523061
+					},
+					{
+						"episode_number": 6,
+						"season_number": 11,
+						"name": "The Unemployed Cannot Be Stained By Anything",
+						"air_date": "2018-08-12",
+						"id": 1547516
+					},
+					{
+						"episode_number": 7,
+						"season_number": 11,
+						"name": "Always Hold On to Your Trump Cards",
+						"air_date": "2018-08-19",
+						"id": 1553930
+					},
+					{
+						"episode_number": 8,
+						"season_number": 11,
+						"name": "The Creatures Known as Humanity",
+						"air_date": "2018-08-26",
+						"id": 1558930
+					},
+					{
+						"episode_number": 9,
+						"season_number": 11,
+						"name": "Sign",
+						"air_date": "2018-09-02",
+						"id": 1558931
+					},
+					{
+						"episode_number": 10,
+						"season_number": 11,
+						"name": "Specter",
+						"air_date": "2018-09-09",
+						"id": 1558932
+					},
+					{
+						"episode_number": 11,
+						"season_number": 11,
+						"name": "Two in Girl Years Is Equal to Ten in Man Years",
+						"air_date": "2018-09-17",
+						"id": 1573672
+					},
+					{
+						"episode_number": 12,
+						"season_number": 11,
+						"name": "Salvation",
+						"air_date": "2018-09-24",
+						"id": 1577347
+					},
+					{
+						"episode_number": 13,
+						"season_number": 11,
+						"name": "Dun Dun",
+						"air_date": "2018-10-01",
+						"id": 1582134
+					},
+					{
+						"episode_number": 14,
+						"season_number": 11,
+						"name": "There Are Lines Even Villains Can't Cross",
+						"air_date": "2018-10-08",
+						"id": 1589310
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0988818": null
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 3468,
+					"anilist_id": 918,
+					"animecountdown_id": 37474,
+					"animenewsnetwork_id": 6236,
+					"anime-planet_id": "gintama",
+					"anisearch_id": 3585,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 818,
+					"livechart_id": 3591,
+					"mal_id": 918,
+					"simkl_id": 37474,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 7177,
+					"anilist_id": 7472,
+					"animecountdown_id": 39078,
+					"animenewsnetwork_id": 11152,
+					"anime-planet_id": "gintama-shinyaku-benizakura-hen",
+					"anisearch_id": 5828,
+					"imdb_id": ["tt1636780"],
+					"kitsu_id": 4989,
+					"livechart_id": 3815,
+					"mal_id": 7472,
+					"simkl_id": 39078,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 8126,
+					"anilist_id": 9969,
+					"animecountdown_id": 39573,
+					"animenewsnetwork_id": 12835,
+					"anime-planet_id": "gintama-2011",
+					"anisearch_id": 6715,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 5971,
+					"livechart_id": 1523,
+					"mal_id": 9969,
+					"simkl_id": 39573,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 5,
+						"tmdb": 5
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 9384,
+					"anilist_id": 15335,
+					"animecountdown_id": 44970,
+					"animenewsnetwork_id": 14996,
+					"anime-planet_id": "gintama-kanketsu-hen-yorozuya-yo-eien-nare",
+					"anisearch_id": 8019,
+					"imdb_id": ["tt2374144"],
+					"kitsu_id": 7241,
+					"livechart_id": 43,
+					"mal_id": 15335,
+					"simkl_id": 44970,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 9427,
+					"anilist_id": 15417,
+					"animecountdown_id": 38526,
+					"animenewsnetwork_id": 15223,
+					"anime-planet_id": "gintama-enchousen",
+					"anisearch_id": 8075,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 7253,
+					"livechart_id": 937,
+					"mal_id": 15417,
+					"simkl_id": 38526,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 6,
+						"tmdb": 6
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 10405,
+					"anilist_id": 20760,
+					"animecountdown_id": 47312,
+					"animenewsnetwork_id": 32332,
+					"anime-planet_id": "gintama-yorinuki-gintama-san-on-theater-2d",
+					"anisearch_id": 9441,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 8608,
+					"livechart_id": 4331,
+					"mal_id": 21899,
+					"simkl_id": 47312,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 10917,
+					"anilist_id": 20882,
+					"animecountdown_id": 433226,
+					"animenewsnetwork_id": 23120,
+					"anime-planet_id": "gintama-jump-festa-2014",
+					"anisearch_id": 9902,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 8627,
+					"livechart_id": 696,
+					"mal_id": 25313,
+					"simkl_id": 433226,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10993,
+					"anilist_id": 20996,
+					"animecountdown_id": 452622,
+					"animenewsnetwork_id": 16644,
+					"anime-planet_id": "gintama-2015",
+					"anisearch_id": 10067,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 10083,
+					"livechart_id": 1340,
+					"mal_id": 28977,
+					"simkl_id": 452622,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 7,
+						"tmdb": 7
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 11850,
+					"anilist_id": 21588,
+					"animecountdown_id": 545452,
+					"anime-planet_id": "gintama-aizome-kaori-hen",
+					"anisearch_id": 11318,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 11759,
+					"livechart_id": 1968,
+					"mal_id": 32366,
+					"simkl_id": 545452,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 12,
+						"tmdb": 12
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 12419,
+					"anilist_id": 97889,
+					"animecountdown_id": 619029,
+					"animenewsnetwork_id": 18901,
+					"anime-planet_id": "gintama-2017",
+					"anisearch_id": 11789,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 12553,
+					"livechart_id": 2336,
+					"mal_id": 34096,
+					"simkl_id": 619029,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 8,
+						"tmdb": 8
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13263,
+					"animecountdown_id": 699045,
+					"animenewsnetwork_id": 20160,
+					"imdb_id": ["tt0988818"],
+					"simkl_id": 699045,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 9,
+						"tmdb": 9
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13917,
+					"anilist_id": 101925,
+					"animecountdown_id": 782275,
+					"animenewsnetwork_id": 20917,
+					"anime-planet_id": "gintama-shirogane-no-tamashii-hen-2",
+					"anisearch_id": 13488,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 41079,
+					"livechart_id": 3160,
+					"mal_id": 37491,
+					"simkl_id": 782275,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 10,
+						"tmdb": 10
+					},
+					"episode_offset": {
+						"tvdb": 12
+					}
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 15902,
+					"anilist_id": 126819,
+					"animecountdown_id": 1493999,
+					"animenewsnetwork_id": 23827,
+					"anime-planet_id": "gintama-the-semi-final",
+					"anisearch_id": 15390,
+					"imdb_id": ["tt0988818"],
+					"kitsu_id": 43829,
+					"livechart_id": 10036,
+					"mal_id": 44087,
+					"simkl_id": 1493999,
+					"themoviedb_id": {
+						"tv": 57041
+					},
+					"tvdb_id": 79895,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 17,
+						"tmdb": 17
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 3468,
+					"names": [
+						"Gintama",
+						"銀魂[ぎんたま]",
+						"은혼",
+						"กินทามะ",
+						"银魂",
+						"銀魂",
+						"جينتاما",
+						"Гинтама",
+						"Gintama: Season 1",
+						"Gintama: Series 1",
+						"Silver Soul",
+						"gintama tv",
+						"Gin Tama",
+						"Yorinuki Gintama-san",
+						"גינטאמה"
+					]
+				},
+				{
+					"anidbId": 7177,
+					"names": [
+						"Gekijouban Gintama: Shin`yaku Benizakura Hen",
+						"Gintama: The Movie",
+						"劇場版 銀魂 新訳紅桜篇",
+						"银魂剧场版 新译红樱篇",
+						"Гинтама: Новата арка за Бенизакура",
+						"Gintama Movie 1",
+						"Gintama: A New Retelling Benizakura Arc",
+						"Gintama: Shinyaku Benizakura Hen",
+						"Gintama Movie 1: Shinyaku Benizakura-hen",
+						"Gekijouban Gintama: Shinyaku Benizakura Hen",
+						"Gekijouban Gintama: Shin’yaku Benizakura Hen",
+						"Gekijōban Gintama: Shin’yaku Benizakura Hen",
+						"Gintama - The Movie",
+						"Gintama Movie: Crimson Sakura Chapter New Edition",
+						"Gintama the Motion Picture",
+						"Gintama the Movie: A New Translation - Il Capitolo di Benizakura",
+						"Gintama: Benizakura Arc - A New Retelling",
+						"Gintama: Der Film",
+						"Gintama: Shin-yaku Benizakura-hen",
+						"Gintama: Shinyaku Benizakura-Hen",
+						"Gintama: Shinyaku Benizakura-hen",
+						"Gintama: The Movie - A new Translation, Capitolo di Benizakura",
+						"銀魂 新訳紅桜篇",
+						"銀魂劇場版：新譯紅櫻篇"
+					]
+				},
+				{
+					"anidbId": 8126,
+					"names": [
+						"Gintama`",
+						"銀魂´",
+						"银魂`",
+						"gintama (2011)",
+						"Гинтама`",
+						"Gintama Season 2",
+						"Gintama 2011",
+						"Gintama` (2011)",
+						"gintama2",
+						"Gintama'",
+						"Gintama (2011)",
+						"Gintama (Episodes 202-252)",
+						"Gintama 2",
+						"Gintama Saison 2",
+						"Gintama Staffel 2",
+						"Gintama Temporada 2",
+						"Gintama: Stagione 2",
+						"銀魂'",
+						"銀魂’",
+						"银魂'",
+						"은혼'"
+					]
+				},
+				{
+					"anidbId": 9384,
+					"names": [
+						"Gekijouban Gintama Kanketsuhen: Yorozuya yo Eien Nare",
+						"Gintama - The Movie 2 - Das letzte Kapitel: Für immer die Alles-Agentur",
+						"Gintama: The Movie: The Final Chapter: Be Forever Yorozuya",
+						"劇場版 銀魂 完結篇 万事屋よ永遠なれ",
+						"Гинтама: Финальная глава - Йородзуя навсегда",
+						"银魂剧场版 完结篇 永远的万事屋",
+						"Сребърна душа: Краят - Йородзуя завинаги",
+						"Gintama Movie 2",
+						"Gintama: The Movie: The Final Chapter: Be Forever Odd Jobs",
+						"Gekijouban Gintama: Kanketsuhen - Yorozuya yo Eien Nare",
+						"Gintama: Kanketsuhen - Yorozuya yo Eien Nare",
+						"Gintama Movie 2: Kanketsu-hen - Yorozuya yo Eien Nare",
+						"Gekijōban Gintama Kanketsu-hen: Yorozuya yo Eien Nare",
+						"Gekijōban Gintama Kanketsuhen: Yorozuya yo Eien Nare",
+						"Gintama Kanketsu-hen: Yorozuya yo Eien Nare",
+						"Gintama The Movie : The Final Chapter - Be Forever Yorozuya",
+						"Gintama The Movie: Capitolo Finale - Tuttofare per sempre.",
+						"Gintama the Final Movie",
+						"Gintama the Movie 2",
+						"Gintama the Movie: Capitolo Finale - Tuttofare Per Sempre",
+						"Gintama the Movie: The Final Chapter - Be Forever Yorozuya",
+						"Gintama: Kanketsu-hen - Yorozuya yo Eien Nare",
+						"Gintama: Rompiendo las Reglas",
+						"Gintama: The Final Chapter - Be Forever Yorozuya",
+						"Gintama: The Final Movie",
+						"Gintama: The Movie 2",
+						"극장판 은혼 완결편: 해결사여 영원하라"
+					]
+				},
+				{
+					"anidbId": 9427,
+					"names": [
+						"Gintama` (2012)",
+						"銀魂´(2012)",
+						"银魂`(第三期)",
+						"gintama3",
+						"gintama (2012)",
+						"Gintama 3",
+						"Gintama: Season 2",
+						"金魂´",
+						"銀魂` 延長戦",
+						"Gintama` Enchousen",
+						"Kintama",
+						"Mantama",
+						"Gintama': Enchousen",
+						"Gintama (Episodes 253-265)",
+						"Gintama Season 2 Part 2",
+						"Gintama Season 3",
+						"Gintama' (2012)",
+						"Gintama' Overdrive",
+						"Gintama: Enchousen",
+						"Gintama: Stagione 3",
+						"Gintama’ (2012)",
+						"Gintama’ Enchousen",
+						"Gintama’ Enchōsen",
+						"Gintama’ Overdrive",
+						"銀魂' 延長戦",
+						"銀魂'延長戦",
+						"銀魂´",
+						"銀魂’延長戦"
+					]
+				},
+				{
+					"anidbId": 10405,
+					"names": [
+						"Yorinuki Gintama-san on Theater 2D",
+						"よりぬき銀魂さんオンシアター2D",
+						"银魂精选集2D影院",
+						"銀魂精選集2D影院",
+						"Yorinuke Gintama",
+						"Gintama: Yorinuki Gintama-san on Theater 2D",
+						"Gintama: The Best of Gintama on Theater 2D",
+						"Kabuki Chou Shitennou Hen",
+						"Kabuki-chou Devas Hen",
+						"Kabuki-chou Devas-hen",
+						"Shinsengumi Douran Hen",
+						"Shinsengumi Douran-hen, Kabuki Chou Shitennou-hen",
+						"よりぬき銀魂さんオンシアター2D かぶき町四天王篇",
+						"よりぬき銀魂さんオンシアター2D 真選組動乱篇",
+						"銀魂 よりぬき銀魂さんオンシアター2D"
+					]
+				},
+				{
+					"anidbId": 10917,
+					"names": [
+						"Gintama` (2014)",
+						"銀魂´ (2014)",
+						"銀魂ジャンプフェスタアニメツアー’ 2014",
+						"Gintama: Jump Festa 2014 Special",
+						"Gintama': Futon ni Haitte kara Buki Nokoshi ni Kizuite Neru ni Nerenai Toki mo Aru",
+						"Gintama (2015)",
+						"Gintama OAD",
+						"Gintama OVA",
+						"Gintama'",
+						"Gintama' OVA",
+						"Gintama: Jump Festa 2014",
+						"Gintama: Jump Festa Anime Tour 2014",
+						"銀魂",
+						"銀魂 OAD",
+						"銀魂 〜布団に入ってから拭き残しに気付いて寝るに寝れない時もある〜",
+						"銀魂'",
+						"銀魂´"
+					]
+				},
+				{
+					"anidbId": 10993,
+					"names": [
+						"Gintama (2015)",
+						"銀魂゜",
+						"银魂°",
+						"銀魂°",
+						"gintama4",
+						"Gintama: Season 3",
+						"銀魂° さらば真選組篇",
+						"銀魂° 将軍暗殺篇",
+						"Gintama 4",
+						"Gintama°",
+						"Gintama° Saraba Shinsengumi Hen",
+						"Gintama° Shougun Ansatsu Hen",
+						"Gintama",
+						"Gintama (Episoden 266-316)",
+						"Gintama (Episodes 266-316)",
+						"Gintama (Episodios 266-316)",
+						"Gintama (Épisodes 266-316)",
+						"Gintama Maru",
+						"Gintama Saison 4",
+						"Gintama Season 3",
+						"Gintama Season 4",
+						"Gintama Temporada 4",
+						"Gintama' (2015)",
+						"銀魂'",
+						"은혼"
+					]
+				},
+				{
+					"anidbId": 11850,
+					"names": [
+						"Gintama (2016)",
+						"銀魂゜(2016)",
+						"Gintama: Love Incense Arc",
+						"銀魂° (2016)",
+						"Gintama OVA: Aizome Kaori Hen",
+						"Gintama° (2016)",
+						"Gintama°: Aizome Kaori-hen",
+						"Gintama: Aizome Kaori-hen",
+						"Gintama: Love Potion Arc",
+						"Gintama° OVA",
+						"Gintamaº: Aizome Kaori-hen",
+						"銀魂",
+						"銀魂 愛染香篇",
+						"銀魂° （2016）",
+						"銀魂　愛染香篇",
+						"銀魂　第295.5話　愛染香篇・後編",
+						"銀魂゜"
+					]
+				},
+				{
+					"anidbId": 12419,
+					"names": [
+						"Gintama.",
+						"Gintama Season 4",
+						"銀魂.",
+						"Gintama: The Battle on Rakuyo",
+						"银魂.",
+						"gintama5",
+						"Gintama 2017",
+						"Gintama (2017)",
+						"Gintama (Episoden 317-328)",
+						"Gintama (Episodes 317-328)",
+						"Gintama (Episodi 317-328)",
+						"Gintama (Episodios 317-328)",
+						"Gintama (Épisodes 317-328)",
+						"Gintama Period",
+						"Gintama Season 5",
+						"Gintama. (2017)",
+						"Gintama: Battle on Rakuyo Arc",
+						"銀魂",
+						"銀魂 (新作)",
+						"銀魂。",
+						"은혼"
+					]
+				},
+				{
+					"anidbId": 13263,
+					"names": [
+						"Gintama. (2017)",
+						"Gintama Season 4 (2017)",
+						"銀魂. (2017)",
+						"银魂. 走光篇",
+						"gintama6",
+						"Гинтама. (2017)",
+						"Gintama: Silver Soul",
+						"Gintama: Slip Arc",
+						"銀魂. ポロリ編",
+						"Gintama. Porori Hen",
+						"Gintama. Porori-hen",
+						"Gintama. Slip Arc",
+						"銀魂."
+					]
+				},
+				{
+					"anidbId": 13917,
+					"names": [
+						"Gintama. (2018)",
+						"Gintama Season 4 (2018)",
+						"銀魂. (2018)",
+						"은혼 (2018)",
+						"银魂. (2018)",
+						"Gintama: Silver Soul Arc",
+						"Gintama: Shirogane no Tamashii Hen",
+						"Gintama.: Shirogane no Tamashii Hen - Kouhan-sen",
+						"Gintama.: Shirogane no Tamashii Hen 2nd Part",
+						"银魂. 银之魂篇 第二季",
+						"Gintama. Shirogane no Tamashii-hen - Kouhan-sen",
+						"Gintama",
+						"Gintama (Episoden 354-367)",
+						"Gintama (Episodes 354-367)",
+						"Gintama (Episodi 354-367)",
+						"Gintama (Épisodes 354-367)",
+						"Gintama. Gin no Tamashii-hen 2nd Season",
+						"Gintama. Silver Soul Arc - Second Half War",
+						"Gintama. Silver Soul Arc 2",
+						"Gintama. Silver Soul Arc 2nd Season",
+						"Gintama. Silver Soul Arc Season 2",
+						"Gintama.: Shirogane no Tamashii-hen - Kouhan-sen",
+						"Gintama.: Shirogane no Tamashii-hen 2",
+						"Gintama.: Shirogane no Tamashii-hen Season 2",
+						"Gintama.: Shirogane no Tamashī-hen - Kōhan-sen",
+						"Gintama.: Silver Soul Arc - Second Half War",
+						"Gintama.: Silver Soul Arc 2",
+						"Gintama: Shirogane no Tamashii-hen 2",
+						"Gintama: Silver Soul Arc 2",
+						"銀魂.",
+						"銀魂. (銀ノ魂篇 後半戦)",
+						"銀魂. 銀ノ魂篇 2",
+						"銀魂. 銀ノ魂篇 後半戦",
+						"銀魂. 銀ノ魂篇2",
+						"銀魂。 銀ノ魂篇 後半戦"
+					]
+				},
+				{
+					"anidbId": 15902,
+					"names": [
+						"Gintama: The Semi-Final",
+						"銀魂 THE SEMI-FINAL",
+						"#銀魂ザファイナル",
+						"Gintama Net Anime Special",
+						"Gintama The Semi-Final",
+						"Gintama: THE SEMI-FINAL"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name, IMDb id and video files (RAR members' base names and folders) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "[DB] Gintama.   Gintama Season 5 [10bit 1080p] [HEVC-x265]",
+				"hash": null,
+				"imdbId": "tt0988818",
+				"files": [
+					{
+						"path": "[DB]Gintama (2017)_-_317_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_318_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_319_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_320_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_321_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_322_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_323_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_324_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_325_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_326_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_327_(10bit_1080p_x265).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_328_(10bit_1080p_x265).mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0988818",
+				"tmdbId": 57041,
+				"files": [
+					{
+						"path": "[DB]Gintama (2017)_-_317_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1254813
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_318_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1254814
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_319_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1259575
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_320_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1259576
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_321_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1267178
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_322_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1269027
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_323_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1273718
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_324_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1278167
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_325_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1281632
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_326_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1287101
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_327_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1289878
+					},
+					{
+						"path": "[DB]Gintama (2017)_-_328_(10bit_1080p_x265).mkv",
+						"season": 8,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1296228
+					}
+				]
+			}
+		}
+	]
+}

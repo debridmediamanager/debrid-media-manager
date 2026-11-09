@@ -1,0 +1,98 @@
+{
+	"files": [
+		{
+			"release": "[SubsPlease].Bungou.Stray.Dogs-38.1080p",
+			"folder": "",
+			"file": "be433369464748cd957d3d0c93393f73.mkv",
+			"single": true,
+			"season": null,
+			"episode": 38,
+			"shape": "dotted"
+		},
+		{
+			"release": "[LoliHouse].Bungou.Stray.Dogs-51.[WebRip.1080p.HEVC-10bit.AAC]",
+			"folder": "",
+			"file": "dd26a4648bd64b7f8bc8f7d8531519cd.mkv",
+			"single": true,
+			"season": null,
+			"episode": 51,
+			"shape": "dotted"
+		},
+		{
+			"release": "[Erai-raws].Youjo.Senki.II-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][C8539E93]",
+			"folder": "",
+			"file": "[Erai-raws].Youjo.Senki.II-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][C8539E93].mkv",
+			"single": true,
+			"season": null,
+			"episode": 9,
+			"shape": "dotted"
+		},
+		{
+			"release": "[SubsPlease] Monogatari Series - Off & Monster Season - 07 (1080p) [B47A2F0A].mkv",
+			"folder": "",
+			"file": "[SubsPlease] Monogatari Series - Off & Monster Season - 07 (1080p) [B47A2F0A].mkv",
+			"single": true,
+			"season": null,
+			"episode": 7,
+			"shape": "seasondash"
+		},
+		{
+			"release": "[SubsPlease] Monogatari Series - Off & Monster Season - 09v2 (1080p) [EA216671].mkv",
+			"folder": "",
+			"file": "[SubsPlease] Monogatari Series - Off & Monster Season - 09v2 (1080p) [EA216671].mkv",
+			"single": true,
+			"season": null,
+			"episode": 9,
+			"shape": "seasondash"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 01",
+			"file": "[Anime Time] Fairy Tail - 023 - 15 Minutes.mkv",
+			"season": 1,
+			"episode": 23,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 06",
+			"file": "[Anime Time] Fairy Tail - 167 - 100 Against 1.mkv",
+			"season": 6,
+			"episode": 167,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 07",
+			"file": "[Anime Time] Fairy Tail - 220 - 413 Days.mkv",
+			"season": 7,
+			"episode": 220,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 01",
+			"file": "[Anime Time] Fairy Tail - 024 - To Keep From Seeing Those Tears.mkv",
+			"season": 1,
+			"episode": 24,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][BATCH][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]",
+			"folder": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][Multiple Subtitle]",
+			"file": "One Piece (1999) - s21e1082 - [Erai-raws][1080p][HEVC][1900E31E].mkv",
+			"season": 21,
+			"episode": 1082,
+			"shape": "crc"
+		},
+		{
+			"release": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][BATCH][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]",
+			"folder": "[Erai-raws] One Piece - 0892 ~ 1089 [1080p][HEVC][Multiple Subtitle]",
+			"file": "One Piece (1999) - s21e1081 - [Erai-raws][1080p][HEVC][400F85F9].mkv",
+			"season": 21,
+			"episode": 1081,
+			"shape": "crc"
+		}
+	],
+	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"
+}

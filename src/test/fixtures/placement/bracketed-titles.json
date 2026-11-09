@@ -1,0 +1,399 @@
+{
+	"answers": {
+		"show": {
+			"1063": {
+				"id": 1063,
+				"name": "Samurai Champloo",
+				"original_name": "サムライチャンプルー",
+				"first_air_date": "2004-05-20",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 898,
+							"name": "hip-hop"
+						},
+						{
+							"id": 1462,
+							"name": "samurai"
+						},
+						{
+							"id": 155198,
+							"name": "ronin"
+						},
+						{
+							"id": 189092,
+							"name": "journey"
+						},
+						{
+							"id": 201950,
+							"name": "anachronism"
+						},
+						{
+							"id": 206711,
+							"name": "obsessive quest"
+						},
+						{
+							"id": 207372,
+							"name": "quest"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 229749,
+							"name": "changing era"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0423731",
+					"tvdb_id": 79089
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Samurai Champloo",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Samurai Chanpurū",
+							"iso_3166_1": "JP"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2004-05-20",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"1063/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Tempestuous Temperaments",
+						"air_date": "2004-05-20",
+						"id": 55652
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Redeye Reprisal",
+						"air_date": "2004-06-03",
+						"id": 55653
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Hellhounds for Hire (1)",
+						"air_date": "2004-06-10",
+						"id": 55654
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Hellhounds for Hire (2)",
+						"air_date": "2004-06-17",
+						"id": 55655
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Artistic Anarchy",
+						"air_date": "2004-06-24",
+						"id": 55656
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Stranger Searching",
+						"air_date": "2004-07-01",
+						"id": 55657
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "A Risky Racket",
+						"air_date": "2004-07-08",
+						"id": 55658
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Art of Altercation",
+						"air_date": "2004-07-15",
+						"id": 55659
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Beatbox Bandits",
+						"air_date": "2004-07-22",
+						"id": 55660
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Lethal Lunacy",
+						"air_date": "2004-07-29",
+						"id": 55661
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Gamblers and Gallantry",
+						"air_date": "2004-08-05",
+						"id": 55662
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Disorder Diaries",
+						"air_date": "2004-08-12",
+						"id": 55663
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Misguided Miscreants (1)",
+						"air_date": "2004-08-26",
+						"id": 1028918
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Misguided Miscreants (2)",
+						"air_date": "2004-09-02",
+						"id": 1028920
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Bogus Booty",
+						"air_date": "2004-09-09",
+						"id": 1028922
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Lullabies of the Lost (1)",
+						"air_date": "2004-09-16",
+						"id": 1028925
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Lullabies of the Lost (2)",
+						"air_date": "2004-09-23",
+						"id": 1028928
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "War of the Words",
+						"air_date": "2005-01-22",
+						"id": 1028931
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Unholy Union",
+						"air_date": "2005-01-22",
+						"id": 1028932
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Elegy of Entrapment (1)",
+						"air_date": "2005-02-05",
+						"id": 1028933
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Elegy of Entrapment (2)",
+						"air_date": "2005-02-12",
+						"id": 1028934
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Cosmic Collisions",
+						"air_date": "2005-02-19",
+						"id": 1028935
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Baseball Blues",
+						"air_date": "2005-02-26",
+						"id": 1028936
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Evanescent Encounter (1)",
+						"air_date": "2005-03-05",
+						"id": 1028937
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Evanescent Encounter (2)",
+						"air_date": "2005-03-12",
+						"id": 1028938
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Evanescent Encounter (3)",
+						"air_date": "2005-03-19",
+						"id": 1028939
+					}
+				]
+			}
+		},
+		"identify": {
+			"[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080]": null,
+			"[philosophy-raws][Samurai Champloo][08][BDRIP][Hi10P FLAC][1920X1080]": null
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 1543,
+					"anilist_id": 205,
+					"animecountdown_id": 38839,
+					"animenewsnetwork_id": 2636,
+					"anime-planet_id": "samurai-champloo",
+					"anisearch_id": 2919,
+					"imdb_id": ["tt0423731"],
+					"kitsu_id": 181,
+					"livechart_id": 3599,
+					"mal_id": 205,
+					"simkl_id": 38839,
+					"themoviedb_id": {
+						"tv": 1063
+					},
+					"tvdb_id": 79089
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 1543,
+					"names": [
+						"Samurai Champloo",
+						"サムライチャンプルー",
+						"사무라이 참프루",
+						"Самурай Чамплу",
+						"混沌武士",
+						"Champloo",
+						"SamCham",
+						"SC",
+						"ساموراي تشامبلو",
+						"סמוראי צ`מפלו",
+						"Paslaptingas Samurajus",
+						"Tajemniczy samuraj",
+						"Samuray Champloo",
+						"Самурай Чямплу",
+						"琉球狂侍",
+						"SAMURAI CHAMPLOO",
+						"Samurai chanpurû",
+						"Самурай чамплу"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is inside one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080]",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0423731",
+				"tmdbId": 1063,
+				"files": [
+					{
+						"path": "[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080].mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 1028939
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is inside one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "[philosophy-raws][Samurai Champloo][08][BDRIP][Hi10P FLAC][1920X1080]",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[philosophy-raws][Samurai Champloo][08][BDRIP][Hi10P FLAC][1920X1080].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0423731",
+				"tmdbId": 1063,
+				"files": [
+					{
+						"path": "[philosophy-raws][Samurai Champloo][08][BDRIP][Hi10P FLAC][1920X1080].mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 55659
+					}
+				]
+			}
+		}
+	]
+}

@@ -1,7 +1,10 @@
 import debridLinkSeedbox from '@/test/fixtures/debridlink/seedbox-list-2026-09-06.json';
+import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import funNumbers from '@/test/fixtures/placement/fun-numbers-2026-11-09.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
+import saga from '@/test/fixtures/placement/saga-titles.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
 import frierenAddons from '@/test/fixtures/seasonEpisodes/addons-tt22248376-s1.json';
 import {
@@ -143,11 +146,36 @@ describe('airDates', () => {
 	});
 });
 
+describe("fileNumbers on files fun's zurg held unplaced on 2026-11-09", () => {
+	// numbers read by hand from each name (see the fixtures README)
+	it.each(funNumbers.files.map((c) => [`${c.shape}: ${c.release} / ${c.file}`, c] as const))(
+		'%s',
+		(_, c) => {
+			const got = fileNumbers(c.release, c.folder, c.file, Boolean((c as any).single));
+			expect(got && [got.season, got.episode]).toEqual([c.season, c.episode]);
+		}
+	);
+});
+
 describe('parseName', () => {
 	it('keeps a short word the title joins with a hyphen, which the parser reads as a language', () => {
 		const motto = release('[KH] Motto To Love-Ru');
 		expect(parseName(motto.name).title).toBe('Motto To Love-Ru');
 		expect(parseName(motto.files.at(-1)!.path).title).toBe('Motto To Love-Ru');
+	});
+
+	it('keeps Saga in a title, which the parser reads as a collection', () => {
+		// zurg on fun, 2026-11-09: `[sam] Vinland Saga [BD 1080p FLAC]` and its files
+		const { request } = saga.cases[0];
+		expect(parseName(request.name).title).toBe('Vinland Saga');
+		expect(parseName(request.files[0].path).title).toBe('Vinland Saga');
+	});
+
+	it("reads a name all in brackets by the one after the group's", () => {
+		// zurg-usenet on fun, 2026-11-09: `[philosophy-raws][Samurai Champloo][26][BDRIP]…`
+		for (const { request } of bracketed.cases) {
+			expect(parseName(request.name).title).toBe('Samurai Champloo');
+		}
 	});
 });
 

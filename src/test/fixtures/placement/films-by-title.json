@@ -1,0 +1,2896 @@
+{
+	"answers": {
+		"find": {
+			"tt8943574": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 115023,
+						"name": "The Bank",
+						"first_air_date": "2018-10-17"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0005077": {
+				"movie_results": [
+					{
+						"id": 53415,
+						"title": "A Burlesque on Carmen",
+						"release_date": "1915-12-18"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0008133": {
+				"movie_results": [
+					{
+						"id": 47653,
+						"title": "The Immigrant",
+						"release_date": "1917-06-17"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt34798877": {
+				"movie_results": [
+					{
+						"id": 1379922,
+						"title": "The Kingdom",
+						"release_date": "2024-12-25"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0004936": {
+				"movie_results": [
+					{
+						"id": 53410,
+						"title": "The Bank",
+						"release_date": "1915-08-09"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0386950": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 90,
+						"name": "Mayday",
+						"first_air_date": "2003-09-03"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt12782386": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt16163746": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 219064,
+						"name": "Who Were We Running From?",
+						"first_air_date": "2023-03-24"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt3002598": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 54486,
+						"name": "Payday: The Web Series",
+						"first_air_date": "2013-06-05"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt5704366": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 69870,
+						"name": "You're My Pet",
+						"first_air_date": "2017-02-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0090390": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 4658,
+						"name": "ALF",
+						"first_air_date": "1986-09-22"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt10285166": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 104663,
+						"name": "Your Honor (IN)",
+						"first_air_date": "2020-06-18"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt16549788": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 157285,
+						"name": "The Guardians of Justice",
+						"first_air_date": "2022-03-01"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt7020608": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 72374,
+						"name": "School 2017",
+						"first_air_date": "2017-07-17"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0020530": {
+				"movie_results": [
+					{
+						"id": 626,
+						"title": "Un Chien Andalou",
+						"release_date": "1929-06-05"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0094446": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 9775,
+						"name": "Day by Day",
+						"first_air_date": "1988-02-29"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt15477488": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 132117,
+						"name": "Farzi",
+						"first_air_date": "2023-02-10"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0014872": {
+				"movie_results": [
+					{
+						"id": 44473,
+						"title": "Entr'acte",
+						"release_date": "1924-12-04"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0159876": {
+				"movie_results": [
+					{
+						"id": 1424864,
+						"title": "Patsy Cline: Walkin' After Midnight",
+						"release_date": ""
+					}
+				],
+				"tv_results": [
+					{
+						"id": 10029,
+						"name": "Great Performances",
+						"first_air_date": "1971-01-28"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0165042": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 10278,
+						"name": "Live from Lincoln Center",
+						"first_air_date": "1976-01-30"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"90": {
+				"id": 90,
+				"name": "Mayday",
+				"original_name": "Mayday",
+				"first_air_date": "2003-09-03",
+				"original_language": "en",
+				"origin_country": ["CA"],
+				"genres": [
+					{
+						"id": 99,
+						"name": "Documentary"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 10617,
+							"name": "disaster"
+						},
+						{
+							"id": 10812,
+							"name": "airplane accident"
+						},
+						{
+							"id": 11116,
+							"name": "airplane wreck"
+						},
+						{
+							"id": 12617,
+							"name": "airplane crash"
+						},
+						{
+							"id": 160879,
+							"name": "crash landing"
+						},
+						{
+							"id": 182185,
+							"name": "exploding airplane"
+						},
+						{
+							"id": 208489,
+							"name": "mayday"
+						},
+						{
+							"id": 249530,
+							"name": "plane crash"
+						},
+						{
+							"id": 325770,
+							"name": "approving"
+						},
+						{
+							"id": 344050,
+							"name": "plane accidents"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0386950",
+					"tvdb_id": 79771
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "AU"
+						},
+						{
+							"title": "Air Crash Investigations",
+							"iso_3166_1": "AU"
+						},
+						{
+							"title": "Mayday! Desastres Aéreos",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "Crash Scene Investigation",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Danger dans les airs",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Mayday: Air Disaster",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Air Disasters",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Mayday",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "空中浩劫",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Vyšetřování leteckých neštěstí",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Vyšetřování míst neštěstí",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Letecké katastrofy",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Flugzeug-Katastrophen: Die Unfall-Ermittler",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Mayday - Alarm im Cockpit",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Undersøgelse af flystyrt",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Mayday: Catástrofes aéreas",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Mayday Catástrofes Aéreas",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Catástrofes aéreas",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Lentoturmatutkinta",
+							"iso_3166_1": "FI"
+						},
+						{
+							"title": "Air Crash",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Dangers dans le ciel",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Mayday : Dangers dans le ciel",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Mayday : Alerte maximum",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "Mayday (Air Crash Investigation)",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "Mayday Air disaster",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "Τραγωδία στον Αέρα",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "Istrage zrakoplovnih nesreća",
+							"iso_3166_1": "HR"
+						},
+						{
+							"title": "Légikatasztrófák",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "Indagini ad alta quota",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "メーデー!:航空機事故の真実と真相",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "항공사고 수사대",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "항공 사고 수사대",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Aviokatastrofu izmeklētāji",
+							"iso_3166_1": "LV"
+						},
+						{
+							"title": "May day",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "NL"
+						},
+						{
+							"title": "Flyhavarikommisjonen",
+							"iso_3166_1": "NO"
+						},
+						{
+							"title": "Mayday: Air Disaster",
+							"iso_3166_1": "NZ"
+						},
+						{
+							"title": "Katastrofa w przestworzach",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Mayday, Desastres Aéreos",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Несреће у ваздуху",
+							"iso_3166_1": "RS"
+						},
+						{
+							"title": "Расследования авиакатастроф",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "التحليق إلى المجهول",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "Haverikommissionen",
+							"iso_3166_1": "SE"
+						},
+						{
+							"title": "Det bästa av Haverikommissionen",
+							"iso_3166_1": "SE"
+						},
+						{
+							"title": "Letecké katastrofy",
+							"iso_3166_1": "SK"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Uçak Kazası Raporu",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "空中浩劫",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Air Emergency",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Air Disasters",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Mayday: Air Disaster",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Air Crash Investigation",
+							"iso_3166_1": "ZA"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 59,
+						"air_date": "2004-06-26",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2003-09-03",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2005-01-23",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 13,
+						"air_date": "2005-09-14",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 10,
+						"air_date": "2007-04-15",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 10,
+						"air_date": "2008-04-09",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 3,
+						"air_date": "2007-12-16",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 8,
+						"air_date": "2009-11-04",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 2,
+						"air_date": "2009-06-10",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 8,
+						"air_date": "2010-09-08",
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 6,
+						"air_date": "2011-02-28",
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 13,
+						"air_date": "2011-08-12",
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 13,
+						"air_date": "2012-08-03",
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 10,
+						"air_date": "2013-12-16",
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 11,
+						"air_date": "2015-01-05",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 10,
+						"air_date": "2016-01-02",
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 10,
+						"air_date": "2016-06-07",
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 10,
+						"air_date": "2017-02-20",
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 10,
+						"air_date": "2018-02-13",
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 10,
+						"air_date": "2019-01-02",
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 10,
+						"air_date": "2020-01-09",
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 10,
+						"air_date": "2021-04-04",
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 10,
+						"air_date": "2022-01-10",
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 10,
+						"air_date": "2023-02-13",
+						"name": "Season 23"
+					},
+					{
+						"season_number": 24,
+						"episode_count": 10,
+						"air_date": "2024-02-18",
+						"name": "Season 24"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 11,
+						"air_date": "2025-02-03",
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 10,
+						"air_date": "2026-02-02",
+						"name": "Season 26"
+					}
+				]
+			},
+			"4658": {
+				"id": 4658,
+				"name": "ALF",
+				"original_name": "ALF",
+				"first_air_date": "1986-09-22",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 4862,
+							"name": "alien life-form"
+						},
+						{
+							"id": 9739,
+							"name": "extraterrestrial"
+						},
+						{
+							"id": 9951,
+							"name": "alien"
+						},
+						{
+							"id": 10235,
+							"name": "family relationships"
+						},
+						{
+							"id": 193171,
+							"name": "sitcom"
+						},
+						{
+							"id": 252634,
+							"name": "outer space"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0090390",
+					"tvdb_id": 78020
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Alf, o E. Teimoso",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "アルフ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Alf, Uma Coisa do Outro Mundo",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Альф",
+							"iso_3166_1": "RU"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 12,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "1986-09-22",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 25,
+						"air_date": "1987-09-21",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 26,
+						"air_date": "1988-10-03",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 24,
+						"air_date": "1989-09-18",
+						"name": "Season 4"
+					}
+				]
+			},
+			"9775": {
+				"id": 9775,
+				"name": "Day by Day",
+				"original_name": "Day by Day",
+				"first_air_date": "1988-02-29",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 11093,
+							"name": "parenthood"
+						},
+						{
+							"id": 33794,
+							"name": "daycare"
+						},
+						{
+							"id": 193171,
+							"name": "sitcom"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0094446",
+					"tvdb_id": 77083
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1988-02-29",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "1988-10-30",
+						"name": "Season 2"
+					}
+				]
+			},
+			"10029": {
+				"id": 10029,
+				"name": "Great Performances",
+				"original_name": "Great Performances",
+				"first_air_date": "1971-01-28",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 99,
+						"name": "Documentary"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 10181,
+							"name": "based on play or musical"
+						},
+						{
+							"id": 186849,
+							"name": "literary adaptation"
+						},
+						{
+							"id": 246884,
+							"name": "filmed theater"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0159876",
+					"tvdb_id": 76548
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "GREAT PERFORMANCES | PBS",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Playhouse New York",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "2017-01-20",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "1971-01-28",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 3,
+						"air_date": "1972-11-04",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "1974-01-23",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 7,
+						"air_date": "1975-01-05",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 9,
+						"air_date": "1976-01-01",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 4,
+						"air_date": "1977-01-12",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 4,
+						"air_date": "1978-01-25",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 1,
+						"air_date": "1979-06-20",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 3,
+						"air_date": "1980-01-01",
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 6,
+						"air_date": "1981-01-05",
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 1,
+						"air_date": "1982-12-06",
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 9,
+						"air_date": "1983-03-07",
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 7,
+						"air_date": "1985-10-11",
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 7,
+						"air_date": "1985-03-22",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 6,
+						"air_date": "1986-02-07",
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 11,
+						"air_date": "1987-01-01",
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 6,
+						"air_date": "1988-01-01",
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 9,
+						"air_date": "1989-01-01",
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 6,
+						"air_date": "1990-01-01",
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 7,
+						"air_date": "1991-01-25",
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 9,
+						"air_date": "1992-01-01",
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 18,
+						"air_date": "1993-09-08",
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 15,
+						"air_date": "1993-01-06",
+						"name": "Season 23"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 9,
+						"air_date": "1994-01-01",
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 11,
+						"air_date": "1995-01-01",
+						"name": "Season 26"
+					},
+					{
+						"season_number": 27,
+						"episode_count": 5,
+						"air_date": "1996-01-01",
+						"name": "Season 27"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 10,
+						"air_date": "1997-01-01",
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 13,
+						"air_date": "1998-01-01",
+						"name": "Season 29"
+					},
+					{
+						"season_number": 30,
+						"episode_count": 12,
+						"air_date": "1999-01-01",
+						"name": "Season 30"
+					},
+					{
+						"season_number": 31,
+						"episode_count": 7,
+						"air_date": "2000-01-01",
+						"name": "Season 31"
+					},
+					{
+						"season_number": 32,
+						"episode_count": 14,
+						"air_date": "2001-01-01",
+						"name": "Season 32"
+					},
+					{
+						"season_number": 33,
+						"episode_count": 9,
+						"air_date": "2002-01-01",
+						"name": "Season 33"
+					},
+					{
+						"season_number": 34,
+						"episode_count": 12,
+						"air_date": "2005-10-05",
+						"name": "Season 34"
+					},
+					{
+						"season_number": 35,
+						"episode_count": 15,
+						"air_date": "2004-01-01",
+						"name": "Season 35"
+					},
+					{
+						"season_number": 36,
+						"episode_count": 12,
+						"air_date": "2008-09-10",
+						"name": "Season 36"
+					},
+					{
+						"season_number": 37,
+						"episode_count": 14,
+						"air_date": "2009-10-21",
+						"name": "Season 37"
+					},
+					{
+						"season_number": 38,
+						"episode_count": 22,
+						"air_date": "2010-10-27",
+						"name": "Season 38"
+					},
+					{
+						"season_number": 39,
+						"episode_count": 24,
+						"air_date": "2011-09-30",
+						"name": "Season 39"
+					},
+					{
+						"season_number": 40,
+						"episode_count": 18,
+						"air_date": "2012-09-07",
+						"name": "Season 40"
+					},
+					{
+						"season_number": 41,
+						"episode_count": 32,
+						"air_date": "2013-09-20",
+						"name": "Season 41"
+					},
+					{
+						"season_number": 42,
+						"episode_count": 23,
+						"air_date": "2014-09-13",
+						"name": "Season 42"
+					},
+					{
+						"season_number": 43,
+						"episode_count": 16,
+						"air_date": "2015-10-23",
+						"name": "Season 43"
+					},
+					{
+						"season_number": 44,
+						"episode_count": 27,
+						"air_date": "2016-10-14",
+						"name": "Season 44"
+					},
+					{
+						"season_number": 45,
+						"episode_count": 28,
+						"air_date": "2017-10-06",
+						"name": "Season 45"
+					},
+					{
+						"season_number": 46,
+						"episode_count": 29,
+						"air_date": "2018-10-05",
+						"name": "Season 46"
+					},
+					{
+						"season_number": 47,
+						"episode_count": 30,
+						"air_date": "2019-09-20",
+						"name": "Season 47"
+					},
+					{
+						"season_number": 48,
+						"episode_count": 31,
+						"air_date": "2020-09-11",
+						"name": "Season 48"
+					},
+					{
+						"season_number": 49,
+						"episode_count": 33,
+						"air_date": "2021-09-03",
+						"name": "Season 49"
+					},
+					{
+						"season_number": 50,
+						"episode_count": 24,
+						"air_date": "2022-09-16",
+						"name": "Season 50"
+					},
+					{
+						"season_number": 51,
+						"episode_count": 22,
+						"air_date": "2023-09-10",
+						"name": "Season 51"
+					},
+					{
+						"season_number": 52,
+						"episode_count": 24,
+						"air_date": "2024-10-25",
+						"name": "Season 52"
+					},
+					{
+						"season_number": 53,
+						"episode_count": 24,
+						"air_date": "2025-10-03",
+						"name": "Season 53"
+					},
+					{
+						"season_number": 54,
+						"episode_count": 6,
+						"air_date": "2026-09-13",
+						"name": "Season 54"
+					},
+					{
+						"season_number": 55,
+						"episode_count": 6,
+						"air_date": "2026-09-13",
+						"name": "Season 55"
+					}
+				]
+			},
+			"10278": {
+				"id": 10278,
+				"name": "Live from Lincoln Center",
+				"original_name": "Live from Lincoln Center",
+				"first_air_date": "1976-01-30",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 99,
+						"name": "Documentary"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 246884,
+							"name": "filmed theater"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0165042",
+					"tvdb_id": 195211
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 1,
+						"air_date": "1976-01-30",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 1,
+						"air_date": "1990-11-07",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 23"
+					},
+					{
+						"season_number": 24,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 24"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 26"
+					},
+					{
+						"season_number": 27,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 27"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 29"
+					},
+					{
+						"season_number": 30,
+						"episode_count": 1,
+						"air_date": "2005-03-31",
+						"name": "Season 30"
+					},
+					{
+						"season_number": 31,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 31"
+					},
+					{
+						"season_number": 32,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 32"
+					},
+					{
+						"season_number": 33,
+						"episode_count": 4,
+						"air_date": "2008-09-17",
+						"name": "Season 33"
+					},
+					{
+						"season_number": 34,
+						"episode_count": 2,
+						"air_date": null,
+						"name": "Season 34"
+					},
+					{
+						"season_number": 35,
+						"episode_count": 6,
+						"air_date": "2010-01-21",
+						"name": "Season 35"
+					},
+					{
+						"season_number": 36,
+						"episode_count": 6,
+						"air_date": "2011-02-13",
+						"name": "Season 36"
+					},
+					{
+						"season_number": 37,
+						"episode_count": 4,
+						"air_date": "2012-04-06",
+						"name": "Season 37"
+					},
+					{
+						"season_number": 38,
+						"episode_count": 7,
+						"air_date": "2013-02-15",
+						"name": "Season 38"
+					},
+					{
+						"season_number": 39,
+						"episode_count": 6,
+						"air_date": "2014-01-10",
+						"name": "Season 39"
+					},
+					{
+						"season_number": 40,
+						"episode_count": 3,
+						"air_date": "2015-01-23",
+						"name": "Season 40"
+					},
+					{
+						"season_number": 41,
+						"episode_count": 3,
+						"air_date": "2016-02-05",
+						"name": "Season 41"
+					},
+					{
+						"season_number": 42,
+						"episode_count": 3,
+						"air_date": "2017-02-03",
+						"name": "Season 42"
+					},
+					{
+						"season_number": 43,
+						"episode_count": 5,
+						"air_date": "2018-04-20",
+						"name": "Season 43"
+					},
+					{
+						"season_number": 44,
+						"episode_count": 6,
+						"air_date": "2019-02-08",
+						"name": "Season 44"
+					}
+				]
+			},
+			"54486": {
+				"id": 54486,
+				"name": "Payday: The Web Series",
+				"original_name": "Payday: The Web Series",
+				"first_air_date": "2013-06-05",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt3002598",
+					"tvdb_id": 271001
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2013-06-05",
+						"name": "Miniseries"
+					}
+				]
+			},
+			"69870": {
+				"id": 69870,
+				"name": "You're My Pet",
+				"original_name": "きみはペット",
+				"first_air_date": "2017-02-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 233,
+							"name": "japan"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 157799,
+							"name": "older woman younger man relationship"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5704366",
+					"tvdb_id": 323130
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Kimi wa Petto",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kimi Wa Pet",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "きみはペット：2017",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "너는 펫(드라마)",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "2017寵物情人",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Tramps Like Us",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2017-02-06",
+						"name": "Season 1"
+					}
+				]
+			},
+			"72374": {
+				"id": 72374,
+				"name": "School 2017",
+				"original_name": "학교 2017",
+				"first_air_date": "2017-07-17",
+				"original_language": "ko",
+				"origin_country": ["KR"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 10683,
+							"name": "coming of age"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt7020608",
+					"tvdb_id": 328768
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Hakgyo 2017",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Hakgyo 2017",
+							"iso_3166_1": "KR"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2017-07-17",
+						"name": "Season 1"
+					}
+				]
+			},
+			"104663": {
+				"id": 104663,
+				"name": "Your Honor (IN)",
+				"original_name": "योर हॉनर",
+				"first_air_date": "2020-06-18",
+				"original_language": "hi",
+				"origin_country": ["IN"],
+				"genres": [
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt10285166",
+					"tvdb_id": null
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Your Honor (IN)",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Your Honor (SonyLiv)",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2020-06-18",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 10,
+						"air_date": "2021-11-19",
+						"name": "Season 2"
+					}
+				]
+			},
+			"115023": {
+				"id": 115023,
+				"name": "The Bank",
+				"original_name": "Pank",
+				"first_air_date": "2018-10-17",
+				"original_language": "et",
+				"origin_country": ["EE"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 272255,
+							"name": "korruption"
+						},
+						{
+							"id": 287795,
+							"name": "geld"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt8943574",
+					"tvdb_id": 354644
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2018-10-17",
+						"name": "Season 1"
+					}
+				]
+			},
+			"132117": {
+				"id": 132117,
+				"name": "Farzi",
+				"original_name": "फर्जी",
+				"first_air_date": "2023-02-10",
+				"original_language": "hi",
+				"origin_country": ["IN"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 180996,
+							"name": "counterfeit money"
+						},
+						{
+							"id": 314730,
+							"name": "suspenseful"
+						},
+						{
+							"id": 321464,
+							"name": "intense"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt15477488",
+					"tvdb_id": 429133
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "假钞",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "法尔齐",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "金钱骗局",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Farzi",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "Falso",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "กลเฉือนคม",
+							"iso_3166_1": "TH"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2023-02-10",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 2"
+					}
+				]
+			},
+			"157285": {
+				"id": 157285,
+				"name": "The Guardians of Justice",
+				"original_name": "The Guardians of Justice",
+				"first_air_date": "2022-03-01",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9715,
+							"name": "superhero"
+						},
+						{
+							"id": 155030,
+							"name": "superhero team"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt16549788",
+					"tvdb_id": 416794
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "가디언스 오브 저스티스",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "The Guardians of Justice (Will Save You!)",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "adi shankar guardians of justice",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "2022-03-01",
+						"name": "Season 1"
+					}
+				]
+			},
+			"219064": {
+				"id": 219064,
+				"name": "Who Were We Running From?",
+				"original_name": "Biz Kimden Kaçıyorduk Anne?",
+				"first_air_date": "2023-03-24",
+				"original_language": "tr",
+				"origin_country": ["TR"],
+				"genres": [
+					{
+						"id": 80,
+						"name": "Crime"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt16163746",
+					"tvdb_id": 430458
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "ممن كنا نهرب يا امي",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "แม่ขา... เราหนีใคร",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Who Were We Running From?",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "2023-03-24",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt8943574": null,
+			"tt0005077": null,
+			"tt0008133": null,
+			"tt34798877": null,
+			"tt0004936": null,
+			"tt12782386": null,
+			"tt0020530": null,
+			"tt0014872": null,
+			"tt1570337": "tt0159876",
+			"tt7140738": "tt0165042"
+		},
+		"imdbSeries": {
+			"tt12782386": {
+				"titleType": "tvSeries",
+				"title": "Entracte",
+				"episodes": []
+			}
+		},
+		"identifier": {
+			"The.Bank.1915.1080p.BluRay.x265.Garshasp": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt8943574",
+						"score": 0.2638,
+						"title": "The Bank",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt14735612",
+						"score": -3.4945,
+						"title": "The Bank Hacker",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt3609090",
+						"score": -3.775,
+						"title": "The Bank",
+						"year": null
+					},
+					{
+						"imdbId": "tt0083508",
+						"score": -5.4532,
+						"title": "1915",
+						"year": 1982
+					},
+					{
+						"imdbId": "tt0077082",
+						"score": -5.4538,
+						"title": "The South Bank Show",
+						"year": 1978
+					}
+				],
+				"parsedTitle": "The Bank",
+				"parsedYear": 1915,
+				"probability": 0.4018
+			},
+			"The.Immigrant.1917.1080p.BluRay.REMUX.AVC.DD.2.0-BHD": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1951181",
+						"score": 0.4108,
+						"title": "The Immigrant",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0194169",
+						"score": -1.8374,
+						"title": "The Immigrant",
+						"year": 1990
+					},
+					{
+						"imdbId": "tt0005535",
+						"score": -1.8679,
+						"title": "The Immigrant",
+						"year": 1915
+					},
+					{
+						"imdbId": "tt18289534",
+						"score": -2.8772,
+						"title": "The immigrant",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt6594436",
+						"score": -2.8961,
+						"title": "The Immigrant",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "The Immigrant",
+				"parsedYear": 1917,
+				"probability": 0.4174
+			},
+			"The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt32086032",
+						"score": 3.1713,
+						"title": "The Kingdom",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt34798877",
+						"score": 2.889,
+						"title": "The Kingdom",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0431197",
+						"score": 1.1865,
+						"title": "The Kingdom",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt11773426",
+						"score": -0.0007,
+						"title": "Kingdom",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt31457736",
+						"score": -1.4593,
+						"title": "Kingdom 4: Return of the Great General",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "The Kingdom",
+				"parsedYear": 2024,
+				"probability": 0.5453
+			},
+			"Burlesque.on.Carmen.1915.720p.BluRay.x264": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt1126591",
+						"score": -1.7857,
+						"title": "Burlesque",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0005061",
+						"score": -1.8751,
+						"title": "Carmen",
+						"year": 1915
+					},
+					{
+						"imdbId": "tt0321553",
+						"score": -5.1014,
+						"title": "Burlesque",
+						"year": 1980
+					},
+					{
+						"imdbId": "tt0019798",
+						"score": -5.2524,
+						"title": "The Dance of Life",
+						"year": 1929
+					},
+					{
+						"imdbId": "tt1586713",
+						"score": -5.4499,
+						"title": "Burlesque",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "Burlesque on Carmen",
+				"parsedYear": 1915,
+				"probability": 0.0694
+			},
+			"Entracte 1924 1080p BluRay AAC2.0 x264-CALiGARi": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt12782386",
+						"score": -4.2052,
+						"title": "Entracte",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt14243086",
+						"score": -4.2665,
+						"title": "Contract",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt34877015",
+						"score": -4.5662,
+						"title": "Extracted",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt8682948",
+						"score": -6.6025,
+						"title": "The Act",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt38973895",
+						"score": -7.4546,
+						"title": "Contracted Love",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "Entracte",
+				"parsedYear": 1924,
+				"probability": 0.0089
+			},
+			"Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0386950",
+						"score": -3.4048,
+						"title": "Air Crash Investigation",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt3002598",
+						"score": -3.8115,
+						"title": "Payday",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0090390",
+						"score": -5.2717,
+						"title": "ALF",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt16549788",
+						"score": -5.714,
+						"title": "The Guardians of Justice (Will Save You!)",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt0094446",
+						"score": -5.9085,
+						"title": "Day by Day",
+						"year": 1988
+					}
+				],
+				"parsedTitle": "Pay Day",
+				"parsedYear": 1922,
+				"probability": 0.0321
+			},
+			"Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt16163746",
+						"score": -2.4782,
+						"title": "Who Were We Running From?",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt5704366",
+						"score": -4.4012,
+						"title": "You're My Pet",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt10285166",
+						"score": -5.805,
+						"title": "Your Honor",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt7020608",
+						"score": -5.9301,
+						"title": "School 2017",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt15477488",
+						"score": -6.4358,
+						"title": "Farzi",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Falsettos",
+				"parsedYear": 2017,
+				"probability": 0.0135
+			},
+			"Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11252248",
+						"score": -3.9251,
+						"title": "Dog",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt12578730",
+						"score": -5.871,
+						"title": "Avant Garde Cinema",
+						"year": 1960
+					},
+					{
+						"imdbId": "tt6147954",
+						"score": -6.0596,
+						"title": "Dog",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt31896775",
+						"score": -6.2033,
+						"title": "Perro Perro",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt6014370",
+						"score": -6.4959,
+						"title": "Der Hund begraben",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Un Chien Andalou",
+				"parsedYear": 1929,
+				"probability": 0.0245
+			},
+			"Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2884018",
+						"score": 1.1544,
+						"title": "Macbeth",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0067372",
+						"score": -0.2354,
+						"title": "Macbeth",
+						"year": 1971
+					},
+					{
+						"imdbId": "tt0040558",
+						"score": -1.9337,
+						"title": "Macbeth",
+						"year": 1948
+					},
+					{
+						"imdbId": "tt0434541",
+						"score": -2.0008,
+						"title": "Macbeth",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0379370",
+						"score": -2.0501,
+						"title": "Maqbool",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "Macbeth",
+				"parsedYear": 2010,
+				"probability": 0.3825
+			}
+		},
+		"identify": {
+			"The.Bank.1915.1080p.BluRay.x265.Garshasp": null,
+			"The.Immigrant.1917.1080p.BluRay.REMUX.AVC.DD.2.0-BHD": null,
+			"Burlesque.on.Carmen.1915.720p.BluRay.x264": null,
+			"The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA": null,
+			"Entracte 1924 1080p BluRay AAC2.0 x264-CALiGARi": null,
+			"Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON": null,
+			"Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD": null,
+			"Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ": null,
+			"Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee": null
+		},
+		"searchMovie": {
+			"Burlesque on Carmen|1915": {
+				"results": [
+					{
+						"id": 53415,
+						"title": "A Burlesque on Carmen",
+						"original_title": "A Burlesque on Carmen",
+						"release_date": "1915-12-18"
+					}
+				]
+			},
+			"The Kingdom|2024": {
+				"results": [
+					{
+						"id": 572802,
+						"title": "Aquaman and the Lost Kingdom",
+						"original_title": "Aquaman and the Lost Kingdom",
+						"release_date": "2023-12-20"
+					},
+					{
+						"id": 653346,
+						"title": "Kingdom of the Planet of the Apes",
+						"original_title": "Kingdom of the Planet of the Apes",
+						"release_date": "2024-05-08"
+					},
+					{
+						"id": 1729,
+						"title": "The Forbidden Kingdom",
+						"original_title": "The Forbidden Kingdom",
+						"release_date": "2008-04-17"
+					},
+					{
+						"id": 893345,
+						"title": "The Secret Kingdom",
+						"original_title": "The Secret Kingdom",
+						"release_date": "2023-04-27"
+					},
+					{
+						"id": 1079311,
+						"title": "The Kingdom",
+						"original_title": "Le Royaume",
+						"release_date": "2024-11-13"
+					},
+					{
+						"id": 943134,
+						"title": "The Animal Kingdom",
+						"original_title": "Le Règne animal",
+						"release_date": "2023-10-04"
+					},
+					{
+						"id": 1014505,
+						"title": "OVERLORD: The Sacred Kingdom",
+						"original_title": "劇場版「オーバーロード」聖王国編",
+						"release_date": "2024-09-20"
+					},
+					{
+						"id": 1379922,
+						"title": "The Kingdom",
+						"original_title": "The Kingdom",
+						"release_date": "2024-12-25"
+					},
+					{
+						"id": 643215,
+						"title": "Asterix & Obelix: The Middle Kingdom",
+						"original_title": "Astérix & Obélix : L'Empire du Milieu",
+						"release_date": "2023-02-01"
+					},
+					{
+						"id": 856289,
+						"title": "Creation of the Gods I: Kingdom of Storms",
+						"original_title": "封神第一部：朝歌风云",
+						"release_date": "2023-07-15"
+					},
+					{
+						"id": 22137,
+						"title": "The Kingdom",
+						"original_title": "Riget",
+						"release_date": "1994-11-24"
+					},
+					{
+						"id": 1297915,
+						"title": "The Kingdom by the Sea",
+						"original_title": "The Kingdom by the Sea",
+						"release_date": "2024-10-30"
+					},
+					{
+						"id": 1218257,
+						"title": "Riki Rhino: The Bird Kingdom",
+						"original_title": "Riki Rhino: The Bird Kingdom",
+						"release_date": "2024-03-07"
+					},
+					{
+						"id": 22140,
+						"title": "The Kingdom II",
+						"original_title": "Riget II",
+						"release_date": "1998-07-17"
+					},
+					{
+						"id": 1241320,
+						"title": "Kingdom: Return of the Great General",
+						"original_title": "キングダム 大将軍の帰還",
+						"release_date": "2024-07-12"
+					},
+					{
+						"id": 676696,
+						"title": "Sirocco and the Kingdom of Winds",
+						"original_title": "Sirocco et le Royaume des courants d'air",
+						"release_date": "2023-12-13"
+					},
+					{
+						"id": 1061181,
+						"title": "Kingdom III: The Flame of Destiny",
+						"original_title": "キングダム 運命の炎",
+						"release_date": "2023-07-28"
+					},
+					{
+						"id": 1335822,
+						"title": "The Kingdom of Humor and Fun",
+						"original_title": "The Kingdom of Humor and Fun",
+						"release_date": "2024-08-24"
+					},
+					{
+						"id": 967265,
+						"title": "Rabbits Kingdom the Movie",
+						"original_title": "「ツキウタ。」劇場版 ラビッツキングダム",
+						"release_date": "2024-06-14"
+					},
+					{
+						"id": 1379683,
+						"title": "The Historical Park - The Kingdom of the Liberator",
+						"original_title": "Исторически Парк - Царството на Освободителя",
+						"release_date": "2024-10-09"
+					}
+				]
+			},
+			"The Immigrant|1917": {
+				"results": [
+					{
+						"id": 47653,
+						"title": "The Immigrant",
+						"original_title": "The Immigrant",
+						"release_date": "1917-06-17"
+					}
+				]
+			},
+			"The Bank|1915": {
+				"results": [
+					{
+						"id": 53410,
+						"title": "The Bank",
+						"original_title": "The Bank",
+						"release_date": "1915-08-09"
+					},
+					{
+						"id": 1228901,
+						"title": "On the Banks of the Viege",
+						"original_title": "De oevers der 'Viège' (Zwitserland)",
+						"release_date": "1915-01-01"
+					}
+				]
+			},
+			"Un Chien Andalou|1929": {
+				"results": [
+					{
+						"id": 626,
+						"title": "Un Chien Andalou",
+						"original_title": "Un chien andalou",
+						"release_date": "1929-06-05"
+					}
+				]
+			},
+			"Entracte|1924": {
+				"results": [
+					{
+						"id": 44473,
+						"title": "Entr'acte",
+						"original_title": "Entr'acte",
+						"release_date": "1924-12-04"
+					}
+				]
+			},
+			"Pay Day|1922": {
+				"results": [
+					{
+						"id": 53429,
+						"title": "Pay Day",
+						"original_title": "Pay Day",
+						"release_date": "1922-04-02"
+					},
+					{
+						"id": 1005039,
+						"title": "Pay Day",
+						"original_title": "Pay Day",
+						"release_date": "1922-07-08"
+					}
+				]
+			},
+			"Macbeth|2010": {
+				"results": [
+					{
+						"id": 840248,
+						"title": "Macbeth",
+						"original_title": "Makbet",
+						"release_date": "2010-05-25"
+					},
+					{
+						"id": 133448,
+						"title": "Macbeth",
+						"original_title": "Macbeth",
+						"release_date": "2010-12-12"
+					}
+				]
+			},
+			"Falsettos|2017": {
+				"results": [
+					{
+						"id": 609261,
+						"title": "Falsettos",
+						"original_title": "Falsettos",
+						"release_date": "2017-07-12"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"626": {
+				"id": 626,
+				"imdb_id": "tt0020530"
+			},
+			"44473": {
+				"id": 44473,
+				"imdb_id": "tt0014872"
+			},
+			"47653": {
+				"id": 47653,
+				"imdb_id": "tt0008133"
+			},
+			"53410": {
+				"id": 53410,
+				"imdb_id": "tt0004936"
+			},
+			"53415": {
+				"id": 53415,
+				"imdb_id": "tt0005077"
+			},
+			"133448": {
+				"id": 133448,
+				"imdb_id": "tt1570337"
+			},
+			"609261": {
+				"id": 609261,
+				"imdb_id": "tt7140738"
+			},
+			"1379922": {
+				"id": 1379922,
+				"imdb_id": "tt34798877"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Bank.1915.1080p.BluRay.x265.Garshasp",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "The.Bank.1915.1080p.BluRay.x265.Garshasp.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0004936",
+				"tmdbId": 53410,
+				"files": [
+					{
+						"path": "The.Bank.1915.1080p.BluRay.x265.Garshasp.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Immigrant.1917.1080p.BluRay.REMUX.AVC.DD.2.0-BHD",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "3b1c8d60dbb14c1e8a4ff5389e385c94.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0008133",
+				"tmdbId": 47653,
+				"files": [
+					{
+						"path": "3b1c8d60dbb14c1e8a4ff5389e385c94.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Burlesque.on.Carmen.1915.720p.BluRay.x264",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "b18038c7902c6621cc38d4ebb91da451.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0005077",
+				"tmdbId": 53415,
+				"files": [
+					{
+						"path": "b18038c7902c6621cc38d4ebb91da451.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt34798877",
+				"tmdbId": 1379922,
+				"files": [
+					{
+						"path": "The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Entracte 1924 1080p BluRay AAC2.0 x264-CALiGARi",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Entr'acte 1924 1080p BluRay AAC2.0 x264-CALiGARi.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0014872",
+				"tmdbId": 44473,
+				"files": [
+					{
+						"path": "Entr'acte 1924 1080p BluRay AAC2.0 x264-CALiGARi.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0020530",
+				"tmdbId": 626,
+				"files": [
+					{
+						"path": "Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "66653026bf4348bab5c32ded4a085b2f.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "66653026bf4348bab5c32ded4a085b2f.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

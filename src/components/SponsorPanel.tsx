@@ -1,4 +1,5 @@
 import { SPONSOR_TOKEN_KEY, useSponsor } from '@/hooks/useSponsor';
+import { DAYS_PER_BLOCK, SENDS_PER_BLOCK } from '@/utils/fulfillerRewards';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { enableGuestMode } from '@/utils/guestMode';
 import { takeSponsorHandoffKey } from '@/utils/sponsorHandoff';
@@ -29,7 +30,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/torznab',
 		name: 'Torrent indexer',
-		what: "DMM's torrent library as a Torznab indexer; cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link, and the TorBox, Premiumize and Offcloud feeds answer once your key is linked",
+		what: "DMM's torrent library as a Torznab indexer, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud, the last three with your key for them linked",
 	},
 	{
 		href: '/wanted',
@@ -40,6 +41,10 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		href: 'https://notes.debridmediamanager.com/dmm/seerr/',
 		name: 'Seerr',
 		what: 'requests from Overseerr or Jellyseerr land in your Wanted list',
+	},
+	{
+		name: 'Easynews to zurg',
+		what: "send any Easynews result on a film's or show's page to your zurg in one click",
 	},
 	{
 		href: '/jellyfin',
@@ -60,13 +65,23 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: 'priority and 2 TB of Usenet a day instead of 300 GB on the NZB uploader, and three jobs at once instead of one on the torrent uploader',
 	},
 	{
+		href: '/sabnzbd',
+		name: 'SABnzbd for Sonarr and Radarr',
+		what: 'the same priority and allowance for what they send, with your key as the Password',
+	},
+	{
 		href: 'https://zurg.debridmediamanager.com/',
 		name: 'zurg nightly',
 		what: 'every provider, the source code, the Docker image and the Android app',
 	},
 	{
 		name: 'zurg with your key',
-		what: 'set as dmm_api_key, DMM names every release for rex and Plex and sorts the __magic__ folders',
+		what: "set as dmm_api_key, DMM names every release for rex and Plex, sorts the __magic__ folders when you turn them on, and zurg searches DMM's indexers for your Wanted list when you have none of your own",
+	},
+	{
+		href: 'https://notes.debridmediamanager.com/rex/stremio/',
+		name: 'rex-stremio with your key',
+		what: 'titles DMM already knows reach rex in seconds instead of being probed one by one',
 	},
 	{
 		href: '/api-docs',
@@ -184,6 +199,21 @@ export const SponsorPanel: FC = () => {
 					</li>
 				))}
 			</ul>
+			<p className="mt-2">
+				Or earn the DMM ones: every {SENDS_PER_BLOCK} requests you fill on the{' '}
+				<Link href="/requests" className="text-blue-400 hover:underline">
+					request board
+				</Link>{' '}
+				give {DAYS_PER_BLOCK} days, counting one per person a day.{' '}
+				<a
+					href="https://notes.debridmediamanager.com/guides/sponsorship/"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-blue-400 hover:underline"
+				>
+					Where to set each one up
+				</a>
+			</p>
 		</details>
 	);
 
