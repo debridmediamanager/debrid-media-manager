@@ -343,6 +343,16 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('never answers remote playback with hosted Cast for a media server or rex', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					['plex', 'jellyfin', 'emby'].includes(answers.player) &&
+					result.optionalNeeds.some((need) => need.startsWith('Hosted Cast'))
+			)
+		).toEqual([]);
+	});
+
 	it('names a no-host route that exists instead of a generic one', () => {
 		expect(
 			breaking((_, result) =>

@@ -1246,15 +1246,21 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 		links(note('zurg/guides/android', 'zurg Android guide'));
 	}
-	if (answers.needs.includes('remote'))
+	if (answers.needs.includes('remote')) {
+		const selfHosted =
+			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.';
 		result.optionalNeeds.push(
-			// The arr download client's host does not serve playback.
-			!routes.some(({ route: r }) => r.host !== 'none')
-				? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
-				: answers.host === 'android' && !routes.some(({ route: r }) => r.host === 'server')
-					? 'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.'
-					: 'Self-hosted playback needs a securely reachable address; a LAN address works only at home.'
+			// A media server or rex is always self-hosted; the arr download client's host does not serve playback.
+			playerNeedsFullHost(player)
+				? selfHosted
+				: !routes.some(({ route: r }) => r.host !== 'none')
+					? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
+					: answers.host === 'android' &&
+						  !routes.some(({ route: r }) => r.host === 'server')
+						? 'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.'
+						: selfHosted
 		);
+	}
 	if (answers.needs.includes('family') || answers.needs.includes('remote'))
 		result.optionalNeeds.push(
 			`Check provider IP and concurrency rules.${selected.includes('real-debrid') ? ' Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.' : ''}`

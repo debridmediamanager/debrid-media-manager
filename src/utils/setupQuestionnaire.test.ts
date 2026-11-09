@@ -1660,6 +1660,19 @@ describe('route copy stays on the player and source it is about', () => {
 			{ player: 'kodi', sources: ['usenet'], host: 'android' },
 			'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.',
 		],
+		[
+			{
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['easynews'],
+				host: 'existing',
+			},
+			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex', sources: ['none'], host: 'willing' },
+			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.',
+		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says what remote playback needs for %o',
 		(overrides, text) => {
