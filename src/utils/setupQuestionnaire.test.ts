@@ -1554,6 +1554,16 @@ describe('route copy stays on the player and source it is about', () => {
 		);
 	});
 
+	it('warns about Real-Debrid’s one public IP only when Real-Debrid is selected', () => {
+		const needs = (sources: SetupSource[]) =>
+			recommendSetup(answers({ sources, needs: ['family'] })).optionalNeeds;
+
+		expect(needs(['all-debrid'])).toContain('Check provider IP and concurrency rules.');
+		expect(needs(['real-debrid'])).toContain(
+			'Check provider IP and concurrency rules. Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.'
+		);
+	});
+
 	const bazarr = 'https://notes.debridmediamanager.com/zurg/guides/subtitles/';
 
 	it.each([{}, { player: 'webdav', host: 'willing' }] satisfies Partial<SetupAnswers>[])(

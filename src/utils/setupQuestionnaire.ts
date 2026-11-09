@@ -1231,7 +1231,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 	if (answers.needs.includes('family') || answers.needs.includes('remote'))
 		result.optionalNeeds.push(
-			'Check provider IP and concurrency rules. Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.'
+			`Check provider IP and concurrency rules.${selected.includes('real-debrid') ? ' Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.' : ''}`
 		);
 	if (answers.needs.includes('offline'))
 		result.optionalNeeds.push(

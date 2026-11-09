@@ -318,6 +318,16 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('warns about Real-Debrid’s one public IP only when Real-Debrid is selected', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					!answers.sources.includes('real-debrid') &&
+					texts(result).some((text) => text.includes('Real-Debrid use must stay on one'))
+			)
+		).toEqual([]);
+	});
+
 	it('never says AllDebrid has no WebDAV', () => {
 		expect(
 			breaking((_, result) =>
