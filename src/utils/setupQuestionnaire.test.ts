@@ -2104,6 +2104,8 @@ describe('players read naturally mid-sentence', () => {
 	it.each([
 		[['http-local', 'none'], 'for this source'],
 		[['http-local', 'url-addon'], 'for these sources'],
+		// TorBox Pro hosted NZBs belong to the TorBox account.
+		[['torbox', 'torbox-hosted'], 'for this source'],
 	] satisfies [SetupSource[], string][])(
 		'counts the sources an undecided user selected in %o',
 		(sources, phrase) => {

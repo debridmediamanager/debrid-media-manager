@@ -1126,6 +1126,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}));
 	const integrated = routes.filter((x) => x.route.status === 'integrated');
 	const first = (integrated[0] ?? routes[0])?.route;
+	// TorBox Pro hosted NZBs belong to the TorBox account, so the pair is one source.
+	const accounts =
+		selected.length -
+		(selected.includes('torbox') && selected.includes('torbox-hosted') ? 1 : 0);
 	const result: SetupRecommendation = {
 		primaryRoute: first
 			? { id: first.id, title: first.title, summary: first.summary }
@@ -1136,7 +1140,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				},
 		whyMatched: [
 			answers.player === 'unsure'
-				? `You have not chosen a player; ${chosenPlayer} is a starting option${selected.length > 1 ? ' for these sources' : selected.length ? ' for this source' : ''}.`
+				? `You have not chosen a player; ${chosenPlayer} is a starting option${accounts > 1 ? ' for these sources' : accounts ? ' for this source' : ''}.`
 				: `You chose ${chosenPlayer}.`,
 			`You selected “${PREFERENCE_OPTIONS.find((x) => x.value === answers.preference)?.label}.”`,
 		],
@@ -1172,10 +1176,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			result.hostRequirement = required;
 	};
 	routes.forEach((x) => host(x.route.host));
-	// TorBox Pro hosted NZBs belong to the TorBox account, so the pair is one source.
-	const accounts =
-		selected.length -
-		(selected.includes('torbox') && selected.includes('torbox-hosted') ? 1 : 0);
 	if (accounts > 1)
 		result.sourceNotes.push(
 			'Multiple sources can coexist, but each keeps its own credentials, quota and availability. The source list below shows the route for each.'
