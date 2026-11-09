@@ -295,6 +295,19 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('names no TorBox Cast to Kodi and no no-host route to a media server', () => {
+		expect(
+			breaking((answers, result) =>
+				result.conflicts.some(
+					(conflict) =>
+						(answers.player === 'kodi' && conflict.includes('TorBox Cast')) ||
+						(['plex', 'jellyfin', 'emby'].includes(answers.player) &&
+							/which needs? no host/.test(conflict))
+				)
+			)
+		).toEqual([]);
+	});
+
 	it('never says AllDebrid has no WebDAV', () => {
 		expect(
 			breaking((_, result) =>

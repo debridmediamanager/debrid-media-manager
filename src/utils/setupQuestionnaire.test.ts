@@ -1010,7 +1010,7 @@ describe('host messages name the server that needs the host', () => {
 		);
 
 		expect(result.conflicts).toContain(
-			'Plex Media Server needs a machine that stays on. Choose a host, or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host.'
+			'Plex Media Server needs a machine that stays on. Choose a host.'
 		);
 	});
 
@@ -1080,63 +1080,86 @@ describe('Kodi with TorBox hosted NZBs', () => {
 	);
 });
 
-describe('a no-host conflict names a route that exists for the sources', () => {
+describe('a no-host conflict names a route the player can use', () => {
+	const zurgHost =
+		'zurg needs a host that stays on while you watch. Choose a host or a supported Android device';
+	const conflicts = (overrides: Partial<SetupAnswers>) =>
+		recommendSetup(answers({ host: 'none', ...overrides })).conflicts;
+
 	it.each([
-		{ player: 'stremio' },
-		{ player: 'kodi' },
-		{ player: 'plex', plexRoute: 'existing-server' },
-		{ player: 'plex', plexRoute: 'rex' },
-		{ player: 'plex', plexRoute: 'either' },
-		{ player: 'jellyfin' },
-		{ player: 'emby' },
-		{ player: 'webdav' },
-		{ player: 'external' },
-		{ player: 'unsure' },
-	] as const)('points own Usenet without a host at hosted routes (%o)', (mode) => {
-		const conflicts = recommendSetup(
-			answers({ ...mode, sources: ['usenet'], host: 'none' })
-		).conflicts.join(' ');
+		[
+			{ player: 'stremio' },
+			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast or DMM's Real-Debrid transfer, which need no host.`,
+		],
+		[
+			{ player: 'kodi' },
+			`${zurgHost}, or switch to TorBox hosted NZBs through the Kodi addon or DMM's Real-Debrid transfer, which need no host.`,
+		],
+		[
+			{ player: 'external' },
+			`${zurgHost}, or use DMM's Real-Debrid transfer and DMM Watch, which need no host.`,
+		],
+		[{ player: 'webdav' }, `${zurgHost}.`],
+		[{ player: 'unsure' }, `${zurgHost}.`],
+		[
+			{ player: 'plex', plexRoute: 'existing-server' },
+			'Plex Media Server needs a machine that stays on. Choose a host.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex' },
+			'rex and its source need a machine that stays on. Choose a host.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'either' },
+			'rex and its source need a machine that stays on. Choose a host.',
+		],
+		[{ player: 'jellyfin' }, 'Jellyfin needs a machine that stays on. Choose a host.'],
+		[{ player: 'emby' }, 'Emby needs a machine that stays on. Choose a host.'],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'answers own Usenet without a host per player (%o)',
+		(mode, conflict) => {
+			expect(conflicts({ ...mode, sources: ['usenet'] })).toEqual([conflict]);
+		}
+	);
 
-		expect(conflicts).toContain(
-			", or switch to TorBox hosted NZBs or DMM's Real-Debrid transfer, which need no host."
-		);
-		expect(conflicts).not.toContain('Cast/direct-player');
-	});
-
-	it('points TorBox hosted NZBs at TorBox Cast', () => {
-		const result = recommendSetup(
-			answers({
-				player: 'plex',
-				plexRoute: 'existing-server',
-				sources: ['torbox-hosted'],
-				host: 'none',
-			})
-		);
-
-		expect(result.conflicts).toContain(
-			'Plex Media Server needs a machine that stays on. Choose a host, or use TorBox Cast, which needs no host.'
-		);
-	});
-
-	it('names no hosted route when none fits the sources', () => {
-		const result = recommendSetup(
-			answers({ player: 'plex', plexRoute: 'rex', sources: ['url-addon'], host: 'none' })
-		);
-
-		expect(result.conflicts).toContain(
-			'rex and its source need a machine that stays on. Choose a host.'
-		);
-	});
-
-	it('names the hosted routes in the zurg host conflict for a debrid account', () => {
-		const result = recommendSetup(
-			answers({ player: 'webdav', sources: ['offcloud'], host: 'none' })
-		);
-
-		expect(result.conflicts).toContain(
-			'zurg needs a host that stays on while you watch. Choose a host or a supported Android device, or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host.'
-		);
-	});
+	it.each([
+		[
+			{ player: 'stremio', sources: ['real-debrid', 'usenet'] },
+			`${zurgHost}, or use DMM Cast with that account, which needs no host.`,
+		],
+		[
+			{ player: 'stremio', sources: ['torbox-hosted', 'usenet'] },
+			`${zurgHost}, or use TorBox Cast, which needs no host.`,
+		],
+		[
+			{ player: 'kodi', sources: ['usenet', 'torbox-hosted'] },
+			`${zurgHost}, or use the Kodi addon with that account, which needs no host.`,
+		],
+		[
+			{ player: 'external', sources: ['easynews', 'usenet'] },
+			`${zurgHost}, or use DMM Watch with that account, which needs no host.`,
+		],
+		[{ player: 'external', sources: ['torbox-hosted'] }, `${zurgHost}.`],
+		[
+			{ player: 'webdav', sources: ['usenet', 'real-debrid'] },
+			`${zurgHost}, or use Real-Debrid WebDAV, which needs no host.`,
+		],
+		[{ player: 'webdav', sources: ['offcloud'] }, `${zurgHost}.`],
+		[{ player: 'webdav', sources: ['offcloud', 'usenet'] }, `${zurgHost}.`],
+		[
+			{ player: 'plex', plexRoute: 'existing-server', sources: ['torbox-hosted'] },
+			'Plex Media Server needs a machine that stays on. Choose a host.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex', sources: ['url-addon'] },
+			'rex and its source need a machine that stays on. Choose a host.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'names only a route the player has (%o)',
+		(overrides, conflict) => {
+			expect(conflicts(overrides)).toEqual([conflict]);
+		}
+	);
 });
 
 describe('a free Plex route for debrid accounts', () => {

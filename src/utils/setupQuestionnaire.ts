@@ -578,6 +578,40 @@ function sponsorshipFor(
 		routeAvailable,
 	};
 }
+/** A route this player can use with the selected sources and no host; empty when there is none. */
+function noHostClause(player: Player, selected: SetupSource[]): string {
+	const account = selected.some(
+		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
+	);
+	const hosted = selected.includes('torbox-hosted');
+	const usenet = selected.includes('usenet');
+	if (player === 'stremio')
+		return account
+			? ', or use DMM Cast with that account, which needs no host'
+			: hosted
+				? ', or use TorBox Cast, which needs no host'
+				: usenet
+					? ", or switch to TorBox hosted NZBs through TorBox Cast or DMM's Real-Debrid transfer, which need no host"
+					: '';
+	if (player === 'kodi')
+		return account || hosted
+			? ', or use the Kodi addon with that account, which needs no host'
+			: usenet
+				? ", or switch to TorBox hosted NZBs through the Kodi addon or DMM's Real-Debrid transfer, which need no host"
+				: '';
+	if (player === 'external')
+		return account
+			? ', or use DMM Watch with that account, which needs no host'
+			: usenet
+				? ", or use DMM's Real-Debrid transfer and DMM Watch, which need no host"
+				: '';
+	if (player === 'webdav') {
+		const webdav = selected.find((source) => PROVIDER_WEBDAV[source]);
+		return webdav ? `, or use ${SOURCE_LABELS.get(webdav)} WebDAV, which needs no host` : '';
+	}
+	// Plex Media Server, Jellyfin, Emby and rex always need a host.
+	return '';
+}
 function route(
 	id: string,
 	title: string,
@@ -1142,16 +1176,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			],
 		});
 	}
-	// Only a route the selected sources can actually use without a host.
-	const noHostRoute = selected.some(
-		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
-	)
-		? ', or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host'
-		: selected.includes('torbox-hosted')
-			? ', or use TorBox Cast, which needs no host'
-			: selected.includes('usenet')
-				? ", or switch to TorBox hosted NZBs or DMM's Real-Debrid transfer, which need no host"
-				: '';
 	if (
 		result.hostRequirement === 'server' &&
 		(answers.host === 'none' || answers.host === 'android')
@@ -1163,11 +1187,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
-					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${noHostRoute}.`
+					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
-			`zurg needs a host that stays on while you watch. Choose a host or a supported Android device${noHostRoute}.`
+			`zurg needs a host that stays on while you watch. Choose a host or a supported Android device${noHostClause(player, selected)}.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
 		result.prerequisites.push(
