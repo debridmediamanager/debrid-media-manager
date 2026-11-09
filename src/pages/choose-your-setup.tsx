@@ -556,10 +556,13 @@ function RecommendationView({
 				<ResultSection title="Source notes" items={recommendation.sourceNotes} />
 				<ResultSection
 					title="How each source fits"
-					items={recommendation.sourceCoverage.map((coverage) => {
-						const requirements = coverage.requirements.join(' ');
-						return `${coverage.label}: ${coverage.integration}${requirements ? ` ${requirements}` : ''}`;
-					})}
+					items={recommendation.sourceCoverage.map((coverage) =>
+						[
+							// A route title has no period; a separate route's summary already ends with one.
+							`${coverage.label}: ${coverage.integration.replace(/\.?$/, '.')}`,
+							...coverage.requirements,
+						].join(' ')
+					)}
 				/>
 				<ResultSection title="Useful for your needs" items={recommendation.optionalNeeds} />
 			</div>

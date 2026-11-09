@@ -64,6 +64,16 @@ describe('choose your setup page', () => {
 		expect(document.activeElement).toHaveTextContent('DMM Cast → Stremio');
 	});
 
+	it('writes each source line as sentences', () => {
+		reachStremioRecommendation();
+
+		expect(
+			screen.getByText(
+				'Real-Debrid: DMM Cast → Stremio. A supported provider account or Easynews account.'
+			)
+		).toBeInTheDocument();
+	});
+
 	it('keeps a constraint ahead of sponsorship marketing and explains the limit', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

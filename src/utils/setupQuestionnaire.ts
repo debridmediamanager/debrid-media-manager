@@ -871,8 +871,8 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 						: 'Stremio plays the selected provider library.',
 				],
 				hosted
-					? ['TorBox Pro and a way to submit the NZB']
-					: ['A supported provider account or Easynews account'],
+					? ['TorBox Pro and a way to submit the NZB.']
+					: ['A supported provider account or Easynews account.'],
 				[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
 				[
 					'The provider must supply a playable file; a catalog entry is not a guarantee of availability.',

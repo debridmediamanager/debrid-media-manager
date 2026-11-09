@@ -123,6 +123,11 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 	if (covered.length !== selected.length || selected.some((source) => !covered.includes(source)))
 		fail('source coverage is not one entry per selected source');
 
+	for (const { source, requirements } of result.sourceCoverage)
+		for (const requirement of requirements)
+			if (!requirement.endsWith('.'))
+				fail(`the ${source} requirement "${requirement}" is not a full sentence`);
+
 	walk(
 		result,
 		'result',
