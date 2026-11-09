@@ -4,6 +4,8 @@ Recorded answers that drive `test_dmm.py` and `test_trackers.py`. The `cinemeta-
 `rd-*` and `tb-*` files are captures from the live services (dated in the tests that use them).
 `cinemeta-meta-theoffice-s1-2.json` and `cinemeta-meta-bluey-s3.json` were captured on 2026-11-09 and keep only
 those seasons' `videos`; Cinemeta dates every episode of The Office 2001-01-31.
+`kodi-addon-conditions.json` (drives `test_plugin.py`) is what Kodi 21.2 answered to `XBMC.GetInfoBooleans` on
+2026-11-09 with `script.trakt` and `script.simkl` installed, then with both disabled.
 
 ## Trakt and Simkl
 

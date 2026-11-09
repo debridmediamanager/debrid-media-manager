@@ -1,0 +1,15 @@
+{
+	"disabled": {
+		"System.AddonIsEnabled(script.simkl)": false,
+		"System.AddonIsEnabled(script.trakt)": false,
+		"System.HasAddon(script.simkl)": true,
+		"System.HasAddon(script.trakt)": true
+	},
+	"enabled": {
+		"System.AddonIsEnabled(script.simkl)": true,
+		"System.AddonIsEnabled(script.trakt)": true,
+		"System.HasAddon(script.simkl)": true,
+		"System.HasAddon(script.trakt)": true
+	},
+	"kodi": "21.2 Debian package version: 2:21.2+dfsg-4"
+}

@@ -298,7 +298,8 @@ def home(_):
         add_folder('Wanted', 'Titles your zurg fetches for you. Add from any film or show: '
                              'Context menu → Add to DMM Wanted.', url(action='wanted'), icon('DefaultPlaylist.png'))
     for service in trackers.NAMES:  # offered here to those who use that tracker's Kodi addon, until linked
-        if not grant(service) and xbmc.getCondVisibility('System.HasAddon(%s)' % TRACKER_ADDONS[service]):
+        # Not System.HasAddon: it stays true for a disabled addon (Kodi 21.2, 2026-11-09).
+        if not grant(service) and xbmc.getCondVisibility('System.AddonIsEnabled(%s)' % TRACKER_ADDONS[service]):
             add_link_tracker(service)
     if link() or any(map(grant, trackers.NAMES)):
         add_folder('Account', 'What this Kodi is linked to, link more accounts, or unlink it.',
