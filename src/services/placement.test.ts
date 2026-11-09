@@ -13,6 +13,7 @@ import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
+import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
@@ -1306,5 +1307,54 @@ describe('a fansub name written all in brackets', () => {
 		expect([releases[0].imdbId, releases[0].tmdbId]).toEqual(['tt0423731', 1063]);
 		expect(releases[0].files[0].season).toBe(1);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('titles the identifier offers, spelled as DMM reads the name', () => {
+	// zurg-usenet on fun (2026-11-09): names the identifier reads on past their title, so none of the
+	// titles it offers was spelled as the name (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(spelled.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(spelled.answers.anime.fribb as FribbAnimeEntry[]),
+				spelled.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (spelled.answers.identify as any)[name] ?? null);
+	const placedAs = async (name: string) => {
+		const c = spelled.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			from,
+			ask
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const [file] = releases[0].files;
+		return [releases[0].tmdbId, file.season, file.episode, file.episodeEnd];
+	};
+
+	it('reads a hyphen-joined episode code as no part of the title', async () => {
+		// `Would I Lie to You-S16E03-Shirley Ballas…` to the identifier; the British show, which alone
+		// of the two Would I Lie to You? holds a season 16
+		expect(await placedAs('Would.I.Lie.to.You-S16E03')).toEqual([4775, 16, 3, null]);
+		expect(await placedAs('Would.I.Lie.to.You-S16E10')).toEqual([4775, 16, 10, null]);
+	});
+
+	it('reads the titles after a run of episodes as no part of the title', async () => {
+		expect(await placedAs('SpongeBob.SquarePants.S05E22E23E24')).toEqual([387, 5, 22, 24]);
+	});
+
+	it("takes a show TMDB titles as DMM reads the file's name", async () => {
+		// TMDB's alternative title for Digimon: Digital Monsters; the anime index makes Zero Two its
+		// season 2
+		expect(await placedAs('Digimon.Adventure.Zero.Two.Episode.08')).toEqual([
+			31654,
+			2,
+			8,
+			null,
+		]);
 	});
 });

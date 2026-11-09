@@ -53,7 +53,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-09.2';
+export const PLACEMENT_RULES = '2026-11-09.3';
 
 export interface PlaceRequest {
 	name: string;
@@ -651,8 +651,13 @@ async function secondLook(
 		// a title the name only spells, with no other fact behind it, never overrides the id sent:
 		// `Batman - 086 - Holiday Knights` spells the 1966 Batman, whose season 2 has an E52
 		if (!answer.confident && !unnamed) continue;
-		const own = (match: IdentifierMatch) =>
-			letters(match.title) === letters(answer.parsedTitle);
+		// the title as the identifier read the name, or as DMM does where the identifier runs on past
+		// it: `Would.I.Lie.to.You-S16E03-Shirley.Ballas…` is one title to the identifier, and
+		// `[philosophy-raws][Samurai Champloo][26]…` none
+		const spelled = [answer.parsedTitle, parseName(name).title]
+			.map((title) => letters(title))
+			.filter((title) => title.length >= 3);
+		const own = (match: IdentifierMatch) => spelled.includes(letters(match.title));
 		const leading = answer.matches.findIndex((match) => !own(match));
 		const offered = answer.confident
 			? [top]
@@ -671,7 +676,7 @@ async function secondLook(
 		// is an alternative title of TMDB's KONOSUBA - God's blessing on this wonderful world!,
 		// `Teasing Master Takagi-san` TMDB's name for IMDb's Karakai Jouzu no Takagi-san, and `Would I
 		// Lie To You AU` the Australian show's, which the identifier ranks below the British one
-		if (!offered.length && answer.kind === 'tv' && letters(answer.parsedTitle).length >= 3) {
+		if (!offered.length && answer.kind === 'tv' && spelled.length) {
 			for (const match of answer.matches.slice(0, 5)) {
 				const tv = (await sources.find(match.imdbId))?.tv_results?.[0]?.id;
 				const shown = typeof tv === 'number' ? await sources.show(tv) : null;
@@ -682,8 +687,7 @@ async function secondLook(
 						(row) => row?.title
 					),
 				];
-				if (names.some((name) => letters(name) === letters(answer.parsedTitle)))
-					offered.push(match);
+				if (names.some((name) => spelled.includes(letters(name)))) offered.push(match);
 			}
 		}
 		if (answer.kind === 'movie') {

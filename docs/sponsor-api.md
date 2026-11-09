@@ -151,7 +151,8 @@ Magus' Bride is answered as The Magicians, and a release whose files read as a t
 cannot number answers that title with its files unplaced. A release with no title of its own
 (`Season 3`) is named by its first numbered file. One sent without an id, which the identifier
 is unsure of, is named by a title it offers that IMDb or TMDB spells as the name (`KonoSuba` is
-one of TMDB's titles for KONOSUBA - God's blessing on this wonderful world!); where two shows
+one of TMDB's titles for KONOSUBA - God's blessing on this wonderful world!), read as DMM reads it
+where the identifier reads on past the title (`Would.I.Lie.to.You-S16E03-Shirley.Ballas…`); where two shows
 are named so and both hold the files' numbers (Animaniacs of 1993 and of 2020), by the one
 whose episodes the files' titles name, and by neither where no title does. A film of no numbered
 file that neither names is TMDB's one film of the year the name gives titled as it (`The.Bank.1915`
