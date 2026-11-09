@@ -79,11 +79,12 @@ describe('SponsorPanel', () => {
 		);
 		expect(screen.getByRole('link', { name: 'Emby plugins' })).toHaveAttribute('href', '/emby');
 		expect(screen.getByText('Ten other streams in Cast')).toBeInTheDocument();
-		// The panel sits above Settings' per-profile selector; the Kodi addon reads the same
-		// Cast /stream/ endpoint, so the limit covers it too.
+		// Settings' selector below writes only the Real-Debrid, TorBox and AllDebrid Cast profiles;
+		// the others are set on their own Cast page. The Kodi addon reads the same Cast /stream/
+		// endpoint, so the limit covers it too.
 		expect(
 			screen.getByText(
-				'instead of five, set per profile below; the Kodi addon uses the same limit'
+				"instead of five; set it below for Real-Debrid, TorBox and AllDebrid, or on each provider's Cast page; the Kodi addon uses the same limit"
 			)
 		).toBeInTheDocument();
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();

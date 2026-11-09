@@ -53,7 +53,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'Ten other streams in Cast',
-		what: 'instead of five, set per profile below; the Kodi addon uses the same limit',
+		what: "instead of five; set it below for Real-Debrid, TorBox and AllDebrid, or on each provider's Cast page; the Kodi addon uses the same limit",
 	},
 	{
 		name: 'Skip the queue',
