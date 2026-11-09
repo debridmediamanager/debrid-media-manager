@@ -403,7 +403,7 @@ const SPONSOR_BENEFITS = {
 	newznab: {
 		id: 'newznab',
 		title: 'DMM Usenet indexer',
-		detail: 'Search DMM as a Newznab indexer from Prowlarr, Sonarr or Radarr.',
+		detail: "Search DMM as a Newznab indexer from Prowlarr, Sonarr, Radarr or zurg's Stremio addon.",
 		href: '/newznab',
 	},
 	wanted: {
@@ -506,15 +506,19 @@ function sponsorshipFor(
 		list.push(id === 'wanted' ? wanted : SPONSOR_BENEFITS[id]);
 
 	if (usesZurg) add(required, 'zurg');
-	if (answers.preference === 'arr' && debrid) add(required, 'torznab');
-	if (answers.preference === 'arr' && hasNzb) add(required, 'newznab');
 	if (player === 'jellyfin' && answers.preference !== 'arr' && (debrid || selected.has('usenet')))
 		add(required, 'jellyfin');
 	if (player === 'emby' && answers.preference !== 'arr' && debrid) add(required, 'emby');
 
 	if (usesZurg) add(optional, 'zurgKey');
 	if (usesCast) add(optional, 'cast');
-	if (hasNzb && answers.preference !== 'arr') add(optional, 'newznab');
+	if (answers.preference === 'arr' && debrid) add(optional, 'torznab');
+	// Outside arr only own Usenet through zurg searches an indexer; TorBox Cast does not.
+	if (
+		(answers.preference === 'arr' && hasNzb) ||
+		routes.some(({ route: source }) => source.zurgNzb === 'direct')
+	)
+		add(optional, 'newznab');
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
 		add(optional, 'jellyfin');
 	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');

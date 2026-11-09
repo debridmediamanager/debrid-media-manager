@@ -381,7 +381,7 @@ describe('sponsorship benefits follow the selected route', () => {
 	const ids = (bucket: 'required' | 'optional', result: ReturnType<typeof recommendSetup>) =>
 		result.sponsorship[bucket].map((benefit) => benefit.id);
 
-	it('marks zurg and both arr indexers required, with the other upgrades optional', () => {
+	it('requires only zurg for arr and offers both DMM indexers with the other upgrades', () => {
 		const result = recommendSetup(
 			answers({
 				player: 'plex',
@@ -392,11 +392,11 @@ describe('sponsorship benefits follow the selected route', () => {
 			})
 		);
 
-		expect(ids('required', result)).toEqual(
-			expect.arrayContaining(['zurg-nightly', 'torznab', 'newznab'])
-		);
+		expect(ids('required', result)).toEqual(['zurg-nightly']);
 		expect(ids('optional', result)).toEqual(
 			expect.arrayContaining([
+				'torznab',
+				'newznab',
 				'zurg-api-key',
 				'wanted',
 				'seerr',
@@ -558,7 +558,7 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(new Set(allIds).size).toBe(allIds.length);
 	});
 
-	it('does not repeat a required indexer in the optional upgrades list', () => {
+	it('offers DMM Newznab to an arr user as an optional indexer', () => {
 		const result = recommendSetup(
 			answers({
 				player: 'stremio',
@@ -568,8 +568,8 @@ describe('sponsorship benefits follow the selected route', () => {
 			})
 		);
 
-		expect(ids('required', result)).toContain('newznab');
-		expect(ids('optional', result)).not.toContain('newznab');
+		expect(ids('required', result)).not.toContain('newznab');
+		expect(ids('optional', result)).toContain('newznab');
 	});
 
 	it('keeps separate-only and no-source results free of sponsor-only claims', () => {
@@ -966,9 +966,9 @@ describe('the Torznab benefit matches the Torznab page', () => {
 		expect(result.sponsorship.optional.map((benefit) => benefit.id)).not.toContain('torznab');
 	});
 
-	it('requires Torznab for Sonarr/Radarr and describes where its cached status comes from', () => {
+	it('offers Torznab for Sonarr/Radarr and describes where its cached status comes from', () => {
 		const result = recommendSetup(answers({ host: 'willing', preference: 'arr' }));
-		const torznab = result.sponsorship.required.find((benefit) => benefit.id === 'torznab');
+		const torznab = result.sponsorship.optional.find((benefit) => benefit.id === 'torznab');
 
 		expect(torznab?.detail).toBe(
 			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
@@ -1213,4 +1213,33 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		expect(alternative(['easynews'])).toBe(false);
 		expect(alternative(['real-debrid'])).toBe(true);
 	});
+});
+
+describe('DMM Newznab follows the routes that search an indexer', () => {
+	const newznab = (overrides: Partial<SetupAnswers>) =>
+		recommendSetup(answers(overrides)).sponsorship.optional.find(
+			(benefit) => benefit.id === 'newznab'
+		);
+
+	it("names zurg's Stremio addon for own Usenet through zurg", () => {
+		expect(newznab({ sources: ['usenet'], host: 'willing' })?.detail).toBe(
+			"Search DMM as a Newznab indexer from Prowlarr, Sonarr, Radarr or zurg's Stremio addon."
+		);
+	});
+
+	it.each([
+		{ sources: ['torbox-hosted'], host: 'none' },
+		{
+			player: 'plex',
+			plexRoute: 'existing-server',
+			sources: ['torbox-hosted'],
+			host: 'willing',
+		},
+		{ player: 'jellyfin', sources: ['usenet'], host: 'existing' },
+	] satisfies Partial<SetupAnswers>[])(
+		'is not offered without a direct zurg NZB route (%o)',
+		(overrides) => {
+			expect(newznab(overrides)).toBeUndefined();
+		}
+	);
 });
