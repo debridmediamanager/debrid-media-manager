@@ -267,6 +267,17 @@ describe('Torznab setup page, the feed variants', () => {
 		}
 	});
 
+	// The /dl feed answers from DMM's record; the page once said Debrid-Link was not offered.
+	it('says Debrid-Link is answered from what DMM recorded, not left out', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(document.body).toHaveTextContent(
+			'Debrid-Link is answered from the releases DMM has recorded as complete on it, because its own check would add the torrent and spend your quota.'
+		);
+		expect(document.body).not.toHaveTextContent('Debrid-Link is not offered');
+	});
+
 	// The point most readers need is that they probably need no suffix at all.
 	it('explains that the plain feed already ranks cached releases first', () => {
 		asSponsor();
