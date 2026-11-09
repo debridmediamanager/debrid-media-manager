@@ -658,7 +658,7 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 		return account
 			? ', or use DMM Watch with that account, which needs no host'
 			: usenet
-				? ", or use DMM's Real-Debrid transfer and DMM Watch, which need no host"
+				? ", or switch to Real-Debrid and use DMM's transfer with DMM Watch, which need no host"
 				: '';
 	if (player === 'webdav') {
 		const webdav = selected.find((source) => PROVIDER_WEBDAV[source]);

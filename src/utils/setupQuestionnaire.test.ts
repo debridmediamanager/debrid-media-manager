@@ -1139,7 +1139,7 @@ describe('a no-host conflict names a route the player can use', () => {
 		],
 		[
 			{ player: 'external' },
-			`${zurgHost}, or use DMM's Real-Debrid transfer and DMM Watch, which need no host.`,
+			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with DMM Watch, which need no host.`,
 		],
 		[{ player: 'webdav' }, `${zurgHost}.`],
 		[
