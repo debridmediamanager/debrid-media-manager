@@ -53,7 +53,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-04.1';
+export const PLACEMENT_RULES = '2026-11-09.1';
 
 export interface PlaceRequest {
 	name: string;
@@ -148,6 +148,10 @@ export interface PlacementSources {
 	anime(): Promise<AnimeIndex | null>;
 	/** TMDB's TV search for a title (`search/tv`). */
 	searchTv(query: string): Promise<any | null>;
+	/** TMDB's movie search for a title in a year (`search/movie`); absent or null where it cannot be asked. */
+	searchMovie?(query: string, year: number): Promise<any | null>;
+	/** TMDB's external ids of a movie (`movie/{id}/external_ids`); absent or null where it cannot be asked. */
+	movieIds?(tmdbId: number): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
 	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
 	/** The series IMDb titles exactly as this film or TV film (dmmdb's imdb_title_basics); absent or null where it cannot be asked. */
@@ -241,6 +245,7 @@ export async function placeReleases(
 				: await placeRelease(release, titles[at] ?? null, sources, anime);
 			if (!waits) out[at] = await seriesLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await filmByTitle(release, out[at], sources);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
@@ -320,6 +325,7 @@ export async function titled(
 }
 
 const letters = (text = '') => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+const unarticled = (text = '') => letters(text.replace(/^\s*(?:the|an?)\s+/i, ''));
 const placesFiles = (answer: PlacedRelease) => answer.files.some((file) => file.season !== null);
 
 /**
@@ -742,6 +748,48 @@ async function secondLook(
 		if (answer.confident || offered.length) break;
 	}
 	return placed;
+}
+
+/**
+ * A film neither the id sent nor the identifier names, by TMDB's search for the name's title in
+ * the year it gives: the identifier reads Chaplin's `The.Bank.1915…` as the 2018 series The Bank
+ * and `The.Immigrant.1917…` as the 2013 film, where TMDB's search for the title in that year finds
+ * the 1915 and 1917 shorts. Only for a release DMM knows nothing of, with no numbered file, and
+ * only where one film of that year (a year either way, where none is of it) is titled as the name
+ * by letters, under its title or else its original title (`Macbeth.2010` is the English TV film,
+ * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id.
+ */
+async function filmByTitle(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.kind || placed.imdbId || !sources.searchMovie || !sources.movieIds)
+		return placed;
+	if (releaseNumbers(release).some(Boolean)) return placed;
+	const { title, year } = parseName(release.name);
+	if (!year || letters(title).length < 3) return placed;
+	const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
+	const results: any[] = (await sources.searchMovie(title, year))?.results ?? [];
+	const near = results.filter((row) => Math.abs(yearOf(row) - year) <= 1);
+	const titledAs = (spell: (text: string) => string) =>
+		near.filter((row) =>
+			[row?.title, row?.original_title].some((text) => spell(text) === spell(title))
+		);
+	// a leading article only where nothing is titled as the name: `Burlesque.on.Carmen.1915` is A
+	// Burlesque on Carmen
+	const titled = titledAs(letters).length ? titledAs(letters) : titledAs(unarticled);
+	const exact = titled.filter((row: any) => yearOf(row) === year);
+	let found = exact.length ? exact : titled;
+	if (found.length > 1)
+		found = found.filter((row: any) => letters(row?.original_title) === letters(title));
+	if (found.length !== 1) return placed;
+	const imdbId = (await sources.movieIds(found[0].id))?.imdb_id;
+	if (typeof imdbId !== 'string' || !/^tt\d{7,}$/.test(imdbId)) return placed;
+	const film = await resolve(imdbId, 'movie', release, sources);
+	return film?.kind === 'movie' && film.tmdbId !== null
+		? { ...film, files: release.files.map((file) => unplaced(file.path)) }
+		: placed;
 }
 
 /**
@@ -1673,6 +1721,14 @@ export const cachedSources: PlacementSources = {
 	searchTv: (query) =>
 		getTmdbAuth()
 			? settle(() => getMetadataCache().searchTmdbTitles('tv', query))
+			: Promise.resolve(null),
+	searchMovie: (query, year) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().searchTmdbTitles('movie', query, year))
+			: Promise.resolve(null),
+	movieIds: (tmdbId) =>
+		getTmdbAuth()
+			? settle(() => getMetadataCache().getTmdbExternalIds(tmdbId, 'movie'))
 			: Promise.resolve(null),
 	// asks about at most 300 names it has not answered today: zurg asks again daily
 	identifier: (names) =>

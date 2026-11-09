@@ -10,6 +10,7 @@ import {
 	type PlaceRequest,
 } from '@/services/placement';
 import answers from '@/test/fixtures/placement/answers.json';
+import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
@@ -90,6 +91,8 @@ const recordedSources = (r: any): PlacementSources => ({
 	anime: async () => anime,
 	identifier: async (names) => answered(r, names),
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
+	searchMovie: async (query, year) => r.searchMovie?.[`${query}|${year}`] ?? null,
+	movieIds: async (id) => r.movieIds?.[id] ?? null,
 	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
 	namesakeSeries: async (id) => r.namesakeSeries?.[id] ?? null,
 	tvdbSeriesOf: async (id) =>
@@ -1230,5 +1233,49 @@ describe('a miniseries sent with its namesake film', () => {
 			['movie', 'tt0101507'],
 		]);
 		expect(releases).toEqual([film.expect, extras.expect]);
+	});
+});
+
+describe('a film neither the id sent nor the identifier names', () => {
+	// zurg-usenet on fun (2026-11-09): Chaplin's shorts and other films the identifier reads as
+	// other titles, which TMDB's search for the name's title in its year finds (see the fixtures README)
+	const ask = (name: string) => {
+		const c = filmsByTitle.cases.find((c) => c.request.name === name)!;
+		return place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsByTitle.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsByTitle.answers.identify as any)[name] ?? null)
+		).then(({ releases }) => [releases[0], c.expect] as const);
+	};
+
+	it.each([
+		['The.Bank.1915.1080p.BluRay.x265.Garshasp', 'tt0004936', 53410],
+		// a file named by a hash, as the release
+		['The.Immigrant.1917.1080p.BluRay.REMUX.AVC.DD.2.0-BHD', 'tt0008133', 47653],
+		// TMDB spells it with an article the name leaves out: A Burlesque on Carmen
+		['Burlesque.on.Carmen.1915.720p.BluRay.x264', 'tt0005077', 53415],
+		// and with an apostrophe: Entr'acte
+		['Entracte 1924 1080p BluRay AAC2.0 x264-CALiGARi', 'tt0014872', 44473],
+		['Un.Chien.Andalou.1929.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSILON', 'tt0020530', 626],
+		// two films of 2024 TMDB titles The Kingdom: the one whose original title is it, not Le Royaume
+		['The.Kingdom.2024.2160p.NF.WEB-DL.AAC2.0.H.265-YODA', 'tt34798877', 1379922],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual(['movie', imdbId, tmdbId]);
+		expect(placed).toEqual(expected);
+	});
+
+	it.each([
+		// TMDB lists two films of 1922 titled Pay Day
+		'Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD',
+		// TMDB's film names an IMDb episode of Live from Lincoln Center and Great Performances
+		'Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ',
+		'Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee',
+	])('leaves %s unnamed where TMDB names no one film of it', async (name) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual([null, null, null]);
+		expect(placed).toEqual(expected);
 	});
 });
