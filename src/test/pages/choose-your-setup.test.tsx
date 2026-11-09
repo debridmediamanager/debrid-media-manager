@@ -273,7 +273,7 @@ describe('choose your setup page', () => {
 		expect(android).toBeDisabled();
 		expect(
 			screen.getByText(
-				'Unavailable: Plex Media Server needs a full server host; Android can run zurg, not Plex Media Server.'
+				'Unavailable: Plex Media Server needs a mounted library on a full host; zurg Android serves WebDAV only.'
 			)
 		).toBeInTheDocument();
 	});

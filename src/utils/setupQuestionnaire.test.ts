@@ -980,13 +980,26 @@ describe('the Torznab benefit matches the Torznab page', () => {
 describe('host messages name the server that needs the host', () => {
 	it.each([
 		[{ player: 'plex', plexRoute: 'existing-server' }, 'Plex Media Server'],
-		[{ player: 'plex', plexRoute: 'rex' }, 'rex'],
-		[{ player: 'plex', plexRoute: 'either' }, 'rex'],
 		[{ player: 'jellyfin' }, 'Jellyfin'],
 		[{ player: 'emby' }, 'Emby'],
-	] as const)('says Android cannot run the server for %o', (mode, name) => {
+	] as const)('says zurg Android cannot mount a library for %o', (mode, name) => {
 		expect(hostChoiceReason(mode, 'android')).toBe(
-			`${name} needs a full server host; Android can run zurg, not ${name}.`
+			`${name} needs a mounted library on a full host; zurg Android serves WebDAV only.`
+		);
+	});
+
+	it.each([
+		{ player: 'plex', plexRoute: 'rex' },
+		{ player: 'plex', plexRoute: 'either' },
+	] as const)('says Android cannot run rex for %o', (mode) => {
+		expect(hostChoiceReason(mode, 'android')).toBe(
+			'rex needs a full server host; Android can run zurg, not rex.'
+		);
+	});
+
+	it('gives the Android conflict the same reason', () => {
+		expect(recommendSetup(answers({ player: 'emby', host: 'android' })).conflicts).toContain(
+			'Emby needs a mounted library on a full host; zurg Android serves WebDAV only.'
 		);
 	});
 
