@@ -1,0 +1,7211 @@
+{
+	"answers": {
+		"find": {
+			"tt1942683": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 37606,
+						"name": "The Amazing World of Gumball",
+						"first_air_date": "2011-05-03"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"37606": {
+				"id": 37606,
+				"name": "The Amazing World of Gumball",
+				"original_name": "The Amazing World of Gumball",
+				"first_air_date": "2011-05-03",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 15284,
+							"name": "cartoon cat"
+						},
+						{
+							"id": 297139,
+							"name": "absurdist humor"
+						},
+						{
+							"id": 325844,
+							"name": "ridiculous"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt1942683",
+					"tvdb_id": 248482
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Гъмбол",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "Великолепният чуден свят на Гъмбол",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "口香糖的奇妙世界",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Дивовижний світ Ґамбола",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "The Wonderfully Weird World of Gumball",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 14,
+						"air_date": "2008-05-09",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 36,
+						"air_date": "2011-05-03",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 40,
+						"air_date": "2012-08-07",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 40,
+						"air_date": "2014-06-05",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 40,
+						"air_date": "2015-07-07",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 40,
+						"air_date": "2016-09-01",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 44,
+						"air_date": "2018-01-05",
+						"name": "Season 6"
+					}
+				]
+			},
+			"104987": {
+				"id": 104987,
+				"name": "Darwin's Yearbook",
+				"original_name": "Darwin's Yearbook",
+				"first_air_date": "2019-12-02",
+				"original_language": "en",
+				"origin_country": ["GB", "US"],
+				"genres": [
+					{
+						"id": 10762,
+						"name": "Kids"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 269710,
+							"name": "anthropomorphic animal"
+						},
+						{
+							"id": 278823,
+							"name": "3d animation"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt11715250",
+					"tvdb_id": 384123
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "El asombroso mundo de Gumball: El anuario de Darwin",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Gumball csodálatos világa: Darwin évkönyve",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "The Amazing World of Gumball: Darwin's Yearbook",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Niên Giám Của Darwin",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2019-12-02",
+						"name": "Darwin's Yearbook"
+					}
+				]
+			},
+			"133529": {
+				"id": 133529,
+				"name": "The Gumball Chronicles",
+				"original_name": "The Gumball Chronicles",
+				"first_air_date": "2020-10-05",
+				"original_language": "en",
+				"origin_country": ["GB", "US"],
+				"genres": [
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt13980732",
+					"tvdb_id": 389511
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Gumball csodálatos világa: Gumball krónikái",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "The Amazing World of Gumball: The Gumball Chronicles",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2020-10-05",
+						"name": "The Gumball Chronicles"
+					}
+				]
+			},
+			"291904": {
+				"id": 291904,
+				"name": "The Wonderfully Weird World of Gumball",
+				"original_name": "The Wonderfully Weird World of Gumball",
+				"first_air_date": "2025-10-06",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 15284,
+							"name": "cartoon cat"
+						},
+						{
+							"id": 297139,
+							"name": "absurdist humor"
+						},
+						{
+							"id": 355253,
+							"name": "child"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt36985473",
+					"tvdb_id": null
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Удивительно странный мир Гамбола",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Дивовижний дивний світ Гамболла",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "The Amazing World of Gumbal",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "El Maravillosamente Extraño Mundo de Gumball",
+							"iso_3166_1": "VE"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 20,
+						"air_date": "2025-10-06",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "2025-12-22",
+						"name": "Season 2"
+					}
+				]
+			}
+		},
+		"season": {
+			"37606/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Early Reel",
+						"air_date": "2008-05-09",
+						"id": 1033320
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Cool To Be Felt",
+						"air_date": "2017-10-08",
+						"id": 2665343
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Pineapple",
+						"air_date": "2017-10-08",
+						"id": 2665344
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Infinite Loop",
+						"air_date": "2017-10-08",
+						"id": 2665345
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Weird Food",
+						"air_date": "2017-10-08",
+						"id": 2665346
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Waiting for Gumball: BirdPlaneBird",
+						"air_date": "2017-10-08",
+						"id": 2665347
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Gnomes",
+						"air_date": "2017-10-08",
+						"id": 2665348
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Insulting Voices",
+						"air_date": "2017-10-08",
+						"id": 2665349
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Beards",
+						"air_date": "2017-10-08",
+						"id": 2665350
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Grump",
+						"air_date": "2017-10-08",
+						"id": 2665351
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Spoons",
+						"air_date": "2017-10-08",
+						"id": 2665352
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Telly",
+						"air_date": "2017-10-08",
+						"id": 2665353
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Cleaning Up",
+						"air_date": "2017-10-08",
+						"id": 2665354
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Waiting for Gumball: Bored",
+						"air_date": "2017-10-08",
+						"id": 2665355
+					}
+				]
+			},
+			"37606/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The DVD",
+						"air_date": "2011-05-03",
+						"id": 850202
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Responsible",
+						"air_date": "2011-05-09",
+						"id": 850203
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Third",
+						"air_date": "2011-05-16",
+						"id": 850204
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Debt",
+						"air_date": "2011-05-16",
+						"id": 850205
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The End",
+						"air_date": "2011-05-23",
+						"id": 850206
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Dress",
+						"air_date": "2011-05-23",
+						"id": 850207
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Quest",
+						"air_date": "2011-05-30",
+						"id": 850208
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Spoon",
+						"air_date": "2011-05-30",
+						"id": 850209
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Pressure",
+						"air_date": "2011-06-06",
+						"id": 850210
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Painting",
+						"air_date": "2011-06-13",
+						"id": 850211
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Laziest",
+						"air_date": "2011-06-20",
+						"id": 850212
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Ghost",
+						"air_date": "2011-06-27",
+						"id": 850213
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Mystery",
+						"air_date": "2011-07-11",
+						"id": 850214
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "The Prank",
+						"air_date": "2011-07-18",
+						"id": 850215
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "The Gi",
+						"air_date": "2011-07-25",
+						"id": 850216
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "The Kiss",
+						"air_date": "2011-08-01",
+						"id": 850217
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The Party",
+						"air_date": "2011-08-08",
+						"id": 850218
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "The Refund",
+						"air_date": "2011-08-15",
+						"id": 850219
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "The Robot",
+						"air_date": "2011-08-22",
+						"id": 850220
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "The Picnic",
+						"air_date": "2011-08-29",
+						"id": 850221
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "The Goons",
+						"air_date": "2011-09-05",
+						"id": 850222
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "The Secret",
+						"air_date": "2011-09-26",
+						"id": 850223
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "The Sock",
+						"air_date": "2011-10-03",
+						"id": 850224
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "The Genius",
+						"air_date": "2011-10-10",
+						"id": 850225
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "The Poltergeist",
+						"air_date": "2011-10-17",
+						"id": 850226
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "The Mustache",
+						"air_date": "2011-11-21",
+						"id": 850227
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "The Date",
+						"air_date": "2011-11-28",
+						"id": 850228
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "The Club",
+						"air_date": "2011-12-05",
+						"id": 850229
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "The Wand",
+						"air_date": "2012-01-24",
+						"id": 850230
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "The Ape",
+						"air_date": "2012-01-31",
+						"id": 850231
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "The Car",
+						"air_date": "2012-02-07",
+						"id": 850232
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "The Curse",
+						"air_date": "2012-02-14",
+						"id": 850233
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "The Microwave",
+						"air_date": "2012-02-21",
+						"id": 850234
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "The Meddler",
+						"air_date": "2012-02-28",
+						"id": 850235
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "The Helmet",
+						"air_date": "2012-03-06",
+						"id": 850236
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "The Fight",
+						"air_date": "2012-03-13",
+						"id": 850237
+					}
+				]
+			},
+			"37606/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Remote",
+						"air_date": "2012-08-07",
+						"id": 850238
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "The Colossus",
+						"air_date": "2012-08-14",
+						"id": 850239
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "The Knights",
+						"air_date": "2012-08-21",
+						"id": 850240
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "The Fridge",
+						"air_date": "2012-09-04",
+						"id": 850241
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Flower",
+						"air_date": "2012-09-11",
+						"id": 850242
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "The Banana",
+						"air_date": "2012-09-11",
+						"id": 850243
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Phone",
+						"air_date": "2012-09-18",
+						"id": 850244
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Job",
+						"air_date": "2012-09-18",
+						"id": 850245
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Halloween",
+						"air_date": "2012-10-23",
+						"id": 850246
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Treasure",
+						"air_date": "2012-10-30",
+						"id": 850247
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Apology",
+						"air_date": "2012-11-06",
+						"id": 850249
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "The Words",
+						"air_date": "2012-11-13",
+						"id": 850248
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Skull",
+						"air_date": "2012-11-20",
+						"id": 850251
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "The Bet",
+						"air_date": "2012-11-27",
+						"id": 850250
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Christmas",
+						"air_date": "2012-12-04",
+						"id": 850252
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "The Watch",
+						"air_date": "2013-01-22",
+						"id": 850255
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "The Bumpkin",
+						"air_date": "2013-01-29",
+						"id": 850254
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Flakers",
+						"air_date": "2013-02-05",
+						"id": 850253
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "The Authority",
+						"air_date": "2013-02-12",
+						"id": 850256
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "The Virus",
+						"air_date": "2013-06-05",
+						"id": 850257
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "The Pony",
+						"air_date": "2013-06-12",
+						"id": 850258
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "The Hero",
+						"air_date": "2013-06-19",
+						"id": 850259
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "The Dream",
+						"air_date": "2013-06-26",
+						"id": 850260
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "The Sidekick",
+						"air_date": "2013-07-03",
+						"id": 850262
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "The Photo",
+						"air_date": "2013-07-17",
+						"id": 850264
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "The Tag",
+						"air_date": "2013-07-24",
+						"id": 850263
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "The Storm",
+						"air_date": "2013-07-31",
+						"id": 850261
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "The Lesson",
+						"air_date": "2013-08-07",
+						"id": 850265
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "The Game",
+						"air_date": "2013-08-21",
+						"id": 850267
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "The Limit",
+						"air_date": "2013-08-28",
+						"id": 850266
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "The Voice",
+						"air_date": "2013-09-10",
+						"id": 850268
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "The Promise",
+						"air_date": "2013-09-17",
+						"id": 850269
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "The Castle",
+						"air_date": "2013-10-01",
+						"id": 850270
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "The Boombox",
+						"air_date": "2013-10-08",
+						"id": 850271
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "The Tape",
+						"air_date": "2013-10-15",
+						"id": 850272
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "The Sweaters",
+						"air_date": "2013-11-05",
+						"id": 969926
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "The Internet",
+						"air_date": "2013-11-12",
+						"id": 969507
+					},
+					{
+						"episode_number": 38,
+						"season_number": 2,
+						"name": "The Plan",
+						"air_date": "2013-11-19",
+						"id": 969508
+					},
+					{
+						"episode_number": 39,
+						"season_number": 2,
+						"name": "The World",
+						"air_date": "2013-11-26",
+						"id": 969509
+					},
+					{
+						"episode_number": 40,
+						"season_number": 2,
+						"name": "The Finale",
+						"air_date": "2013-12-03",
+						"id": 969530
+					}
+				]
+			},
+			"37606/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The Kids",
+						"air_date": "2014-06-05",
+						"id": 1023524
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "The Fan",
+						"air_date": "2014-06-05",
+						"id": 1023525
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "The Coach",
+						"air_date": "2014-06-12",
+						"id": 1023526
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Joy",
+						"air_date": "2014-06-19",
+						"id": 1023527
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "The Puppy",
+						"air_date": "2014-06-26",
+						"id": 1023528
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "The Recipe",
+						"air_date": "2014-07-03",
+						"id": 1023529
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "The Name",
+						"air_date": "2014-07-10",
+						"id": 1023530
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "The Extras",
+						"air_date": "2014-07-17",
+						"id": 1023531
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "The Gripes",
+						"air_date": "2014-07-24",
+						"id": 1023532
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Vacation",
+						"air_date": "2014-07-31",
+						"id": 1023533
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "The Fraud",
+						"air_date": "2014-08-07",
+						"id": 1023534
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "The Void",
+						"air_date": "2014-08-14",
+						"id": 1023535
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "The Boss",
+						"air_date": "2014-08-21",
+						"id": 1023536
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "The Move",
+						"air_date": "2014-08-28",
+						"id": 1023537
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "The Law",
+						"air_date": "2014-09-04",
+						"id": 1023538
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "The Allergy",
+						"air_date": "2014-09-11",
+						"id": 1023539
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "The Mothers",
+						"air_date": "2014-09-18",
+						"id": 1023540
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "The Password",
+						"air_date": "2014-09-25",
+						"id": 1023541
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "The Procrastinators",
+						"air_date": "2014-10-02",
+						"id": 1023542
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "The Shell",
+						"air_date": "2014-10-09",
+						"id": 1023543
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "The Burden",
+						"air_date": "2014-10-16",
+						"id": 1023544
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "The Bros",
+						"air_date": "2014-10-23",
+						"id": 1023545
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "The Mirror",
+						"air_date": "2014-10-30",
+						"id": 1023546
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "The Man",
+						"air_date": "2014-10-30",
+						"id": 1023547
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "The Pizza",
+						"air_date": "2014-11-13",
+						"id": 1023548
+					},
+					{
+						"episode_number": 26,
+						"season_number": 3,
+						"name": "The Lie",
+						"air_date": "2014-11-20",
+						"id": 1023549
+					},
+					{
+						"episode_number": 27,
+						"season_number": 3,
+						"name": "The Butterfly",
+						"air_date": "2015-01-08",
+						"id": 1034623
+					},
+					{
+						"episode_number": 28,
+						"season_number": 3,
+						"name": "The Question",
+						"air_date": "2015-01-08",
+						"id": 1034624
+					},
+					{
+						"episode_number": 29,
+						"season_number": 3,
+						"name": "The Saint",
+						"air_date": "2015-01-15",
+						"id": 1038236
+					},
+					{
+						"episode_number": 30,
+						"season_number": 3,
+						"name": "The Friend",
+						"air_date": "2015-01-22",
+						"id": 1038460
+					},
+					{
+						"episode_number": 31,
+						"season_number": 3,
+						"name": "The Oracle",
+						"air_date": "2015-01-29",
+						"id": 1038540
+					},
+					{
+						"episode_number": 32,
+						"season_number": 3,
+						"name": "The Safety",
+						"air_date": "2015-02-05",
+						"id": 1038541
+					},
+					{
+						"episode_number": 33,
+						"season_number": 3,
+						"name": "The Society",
+						"air_date": "2015-02-12",
+						"id": 1042981
+					},
+					{
+						"episode_number": 34,
+						"season_number": 3,
+						"name": "The Spoiler",
+						"air_date": "2015-02-19",
+						"id": 1042982
+					},
+					{
+						"episode_number": 35,
+						"season_number": 3,
+						"name": "The Countdown",
+						"air_date": "2015-02-26",
+						"id": 1043839
+					},
+					{
+						"episode_number": 36,
+						"season_number": 3,
+						"name": "The Nobody",
+						"air_date": "2015-03-05",
+						"id": 1046556
+					},
+					{
+						"episode_number": 37,
+						"season_number": 3,
+						"name": "The Downer",
+						"air_date": "2015-04-05",
+						"id": 1054006
+					},
+					{
+						"episode_number": 38,
+						"season_number": 3,
+						"name": "The Egg",
+						"air_date": "2015-04-05",
+						"id": 1054007
+					},
+					{
+						"episode_number": 39,
+						"season_number": 3,
+						"name": "The Triangle",
+						"air_date": "2015-04-12",
+						"id": 1054008
+					},
+					{
+						"episode_number": 40,
+						"season_number": 3,
+						"name": "The Money",
+						"air_date": "2015-04-12",
+						"id": 1061422
+					}
+				]
+			},
+			"37606/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "The Return",
+						"air_date": "2015-07-07",
+						"id": 1090161
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "The Nemesis",
+						"air_date": "2015-07-10",
+						"id": 1090162
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "The Crew",
+						"air_date": "2015-08-13",
+						"id": 1097053
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "The Others",
+						"air_date": "2015-08-20",
+						"id": 1097601
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "The Signature",
+						"air_date": "2015-08-27",
+						"id": 1097602
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "The Check",
+						"air_date": "2015-08-31",
+						"id": 1102468
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "The Pest",
+						"air_date": "2015-09-01",
+						"id": 1105707
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "The Sale",
+						"air_date": "2015-09-02",
+						"id": 1103918
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "The Gift",
+						"air_date": "2015-09-03",
+						"id": 1105708
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "The Parking",
+						"air_date": "2015-09-04",
+						"id": 1106267
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "The Routine",
+						"air_date": "2015-10-05",
+						"id": 1140360
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "The Upgrade",
+						"air_date": "2015-10-06",
+						"id": 1140361
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "The Comic",
+						"air_date": "2015-10-07",
+						"id": 1140362
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "The Romantic",
+						"air_date": "2015-10-08",
+						"id": 1140363
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "The Uploads",
+						"air_date": "2015-10-09",
+						"id": 1393713
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "The Apprentice",
+						"air_date": "2016-01-07",
+						"id": 1393714
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "The Hug",
+						"air_date": "2016-01-14",
+						"id": 1393715
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "The Wicked",
+						"air_date": "2016-01-21",
+						"id": 1393716
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "The Traitor",
+						"air_date": "2016-01-28",
+						"id": 1393717
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "The Origins (1)",
+						"air_date": "2016-02-15",
+						"id": 1393718
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "The Origins (2)",
+						"air_date": "2016-02-15",
+						"id": 1393719
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "The Girlfriend",
+						"air_date": "2016-03-31",
+						"id": 1393720
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "The Advice",
+						"air_date": "2016-04-21",
+						"id": 1393721
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "The Signal",
+						"air_date": "2016-04-28",
+						"id": 1393722
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "The Parasite",
+						"air_date": "2016-05-05",
+						"id": 1393723
+					},
+					{
+						"episode_number": 26,
+						"season_number": 4,
+						"name": "The Love",
+						"air_date": "2016-05-12",
+						"id": 1393724
+					},
+					{
+						"episode_number": 27,
+						"season_number": 4,
+						"name": "The Awkwardness",
+						"air_date": "2016-05-19",
+						"id": 1393725
+					},
+					{
+						"episode_number": 28,
+						"season_number": 4,
+						"name": "The Nest",
+						"air_date": "2016-05-26",
+						"id": 1393726
+					},
+					{
+						"episode_number": 29,
+						"season_number": 4,
+						"name": "The Points",
+						"air_date": "2016-06-02",
+						"id": 1393727
+					},
+					{
+						"episode_number": 30,
+						"season_number": 4,
+						"name": "The Bus",
+						"air_date": "2016-06-09",
+						"id": 1393728
+					},
+					{
+						"episode_number": 31,
+						"season_number": 4,
+						"name": "The Night",
+						"air_date": "2016-06-16",
+						"id": 1393729
+					},
+					{
+						"episode_number": 32,
+						"season_number": 4,
+						"name": "The Misunderstandings",
+						"air_date": "2016-06-23",
+						"id": 1393730
+					},
+					{
+						"episode_number": 33,
+						"season_number": 4,
+						"name": "The Roots",
+						"air_date": "2016-08-15",
+						"id": 1393738
+					},
+					{
+						"episode_number": 34,
+						"season_number": 4,
+						"name": "The Blame",
+						"air_date": "2016-08-16",
+						"id": 1393739
+					},
+					{
+						"episode_number": 35,
+						"season_number": 4,
+						"name": "The Slap",
+						"air_date": "2016-08-17",
+						"id": 1393740
+					},
+					{
+						"episode_number": 36,
+						"season_number": 4,
+						"name": "The Detective",
+						"air_date": "2016-08-18",
+						"id": 1393741
+					},
+					{
+						"episode_number": 37,
+						"season_number": 4,
+						"name": "The Fury",
+						"air_date": "2016-08-19",
+						"id": 1216307
+					},
+					{
+						"episode_number": 38,
+						"season_number": 4,
+						"name": "The Compilation",
+						"air_date": "2016-08-25",
+						"id": 1217196
+					},
+					{
+						"episode_number": 39,
+						"season_number": 4,
+						"name": "The Scam",
+						"air_date": "2016-10-27",
+						"id": 1218957
+					},
+					{
+						"episode_number": 40,
+						"season_number": 4,
+						"name": "The Disaster",
+						"air_date": "2016-09-05",
+						"id": 1220719
+					}
+				]
+			},
+			"37606/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "The Stories",
+						"air_date": "2016-09-01",
+						"id": 1227318
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "The Re-Run",
+						"air_date": "2016-09-05",
+						"id": 1227317
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "The Guy",
+						"air_date": "2016-09-08",
+						"id": 1227319
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "The Boredom",
+						"air_date": "2016-09-15",
+						"id": 1227320
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "The Vision",
+						"air_date": "2016-10-06",
+						"id": 1233034
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "The Choices",
+						"air_date": "2016-10-13",
+						"id": 1237267
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "The Code",
+						"air_date": "2016-10-20",
+						"id": 1237268
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "The Test",
+						"air_date": "2016-11-03",
+						"id": 1238909
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "The Slide",
+						"air_date": "2016-11-10",
+						"id": 1241316
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "The Loophole",
+						"air_date": "2016-11-17",
+						"id": 1266357
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "The Potato",
+						"air_date": "2017-02-06",
+						"id": 1267209
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "The Fuss",
+						"air_date": "2017-02-07",
+						"id": 1266358
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "The Copycats",
+						"air_date": "2017-02-08",
+						"id": 1266359
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "The Outside",
+						"air_date": "2017-02-09",
+						"id": 1267672
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "The Vase",
+						"air_date": "2017-02-13",
+						"id": 1267673
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "The Matchmaker",
+						"air_date": "2017-02-14",
+						"id": 1267674
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "The Box",
+						"air_date": "2017-02-15",
+						"id": 1267675
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "The Console",
+						"air_date": "2017-02-16",
+						"id": 1267676
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "The Ollie",
+						"air_date": "2017-02-20",
+						"id": 1267677
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "The Catfish",
+						"air_date": "2017-02-21",
+						"id": 1267678
+					},
+					{
+						"episode_number": 21,
+						"season_number": 5,
+						"name": "The Cycle",
+						"air_date": "2017-02-22",
+						"id": 1267679
+					},
+					{
+						"episode_number": 22,
+						"season_number": 5,
+						"name": "The Stars",
+						"air_date": "2017-02-23",
+						"id": 1267680
+					},
+					{
+						"episode_number": 23,
+						"season_number": 5,
+						"name": "The Grades",
+						"air_date": "2017-02-27",
+						"id": 1267681
+					},
+					{
+						"episode_number": 24,
+						"season_number": 5,
+						"name": "The Diet",
+						"air_date": "2017-02-28",
+						"id": 1279092
+					},
+					{
+						"episode_number": 25,
+						"season_number": 5,
+						"name": "The Ex",
+						"air_date": "2017-03-01",
+						"id": 1279113
+					},
+					{
+						"episode_number": 26,
+						"season_number": 5,
+						"name": "The Sorcerer",
+						"air_date": "2017-03-02",
+						"id": 1281735
+					},
+					{
+						"episode_number": 27,
+						"season_number": 5,
+						"name": "The Menu",
+						"air_date": "2017-03-06",
+						"id": 1281736
+					},
+					{
+						"episode_number": 28,
+						"season_number": 5,
+						"name": "The Uncle",
+						"air_date": "2017-03-07",
+						"id": 1285029
+					},
+					{
+						"episode_number": 29,
+						"season_number": 5,
+						"name": "The Weirdo",
+						"air_date": "2017-03-08",
+						"id": 1285030
+					},
+					{
+						"episode_number": 30,
+						"season_number": 5,
+						"name": "The Heist",
+						"air_date": "2017-03-09",
+						"id": 1360382
+					},
+					{
+						"episode_number": 31,
+						"season_number": 5,
+						"name": "The Singing",
+						"air_date": "2017-09-01",
+						"id": 1360383
+					},
+					{
+						"episode_number": 32,
+						"season_number": 5,
+						"name": "The Best",
+						"air_date": "2017-09-08",
+						"id": 1398467
+					},
+					{
+						"episode_number": 33,
+						"season_number": 5,
+						"name": "The Worst",
+						"air_date": "2017-09-15",
+						"id": 1398468
+					},
+					{
+						"episode_number": 34,
+						"season_number": 5,
+						"name": "The Deal",
+						"air_date": "2017-09-22",
+						"id": 1398469
+					},
+					{
+						"episode_number": 35,
+						"season_number": 5,
+						"name": "The Petals",
+						"air_date": "2017-09-29",
+						"id": 1398470
+					},
+					{
+						"episode_number": 36,
+						"season_number": 5,
+						"name": "The Puppets",
+						"air_date": "2017-10-06",
+						"id": 1398475
+					},
+					{
+						"episode_number": 37,
+						"season_number": 5,
+						"name": "The Nuisance",
+						"air_date": "2017-10-13",
+						"id": 1398471
+					},
+					{
+						"episode_number": 38,
+						"season_number": 5,
+						"name": "The Line",
+						"air_date": "2017-10-20",
+						"id": 1398472
+					},
+					{
+						"episode_number": 39,
+						"season_number": 5,
+						"name": "The List",
+						"air_date": "2017-11-03",
+						"id": 1398473
+					},
+					{
+						"episode_number": 40,
+						"season_number": 5,
+						"name": "The News",
+						"air_date": "2017-11-10",
+						"id": 1398474
+					}
+				]
+			},
+			"37606/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "The Rival",
+						"air_date": "2018-01-05",
+						"id": 1559211
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "The Lady",
+						"air_date": "2018-01-05",
+						"id": 1559212
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "The Sucker",
+						"air_date": "2018-01-12",
+						"id": 1559213
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "The Vegging",
+						"air_date": "2018-01-15",
+						"id": 1559214
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "The One",
+						"air_date": "2018-01-19",
+						"id": 1559215
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "The Father",
+						"air_date": "2018-01-26",
+						"id": 1559216
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "The Cringe",
+						"air_date": "2018-02-02",
+						"id": 1559217
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "The Cage",
+						"air_date": "2018-02-09",
+						"id": 1559218
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "The Faith",
+						"air_date": "2018-02-23",
+						"id": 1559221
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "The Candidate",
+						"air_date": "2018-03-02",
+						"id": 1559222
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "The Anybody",
+						"air_date": "2018-03-09",
+						"id": 1559220
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "The Pact",
+						"air_date": "2018-04-09",
+						"id": 1559223
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "The Neighbor",
+						"air_date": "2018-04-13",
+						"id": 1559219
+					},
+					{
+						"episode_number": 14,
+						"season_number": 6,
+						"name": "The Shippening",
+						"air_date": "2018-04-20",
+						"id": 1559224
+					},
+					{
+						"episode_number": 15,
+						"season_number": 6,
+						"name": "The Brain",
+						"air_date": "2018-06-18",
+						"id": 1559225
+					},
+					{
+						"episode_number": 16,
+						"season_number": 6,
+						"name": "The Parents",
+						"air_date": "2018-06-18",
+						"id": 1559226
+					},
+					{
+						"episode_number": 17,
+						"season_number": 6,
+						"name": "The Founder",
+						"air_date": "2018-06-18",
+						"id": 1559227
+					},
+					{
+						"episode_number": 18,
+						"season_number": 6,
+						"name": "The Schooling",
+						"air_date": "2018-06-18",
+						"id": 1559228
+					},
+					{
+						"episode_number": 19,
+						"season_number": 6,
+						"name": "The Intelligence",
+						"air_date": "2018-06-18",
+						"id": 1559229
+					},
+					{
+						"episode_number": 20,
+						"season_number": 6,
+						"name": "The Potion",
+						"air_date": "2018-07-16",
+						"id": 1559230
+					},
+					{
+						"episode_number": 21,
+						"season_number": 6,
+						"name": "The Spinoffs",
+						"air_date": "2018-07-16",
+						"id": 1559231
+					},
+					{
+						"episode_number": 22,
+						"season_number": 6,
+						"name": "The Transformation",
+						"air_date": "2018-07-16",
+						"id": 1559232
+					},
+					{
+						"episode_number": 23,
+						"season_number": 6,
+						"name": "The Understanding",
+						"air_date": "2018-07-16",
+						"id": 1559233
+					},
+					{
+						"episode_number": 24,
+						"season_number": 6,
+						"name": "The Ad",
+						"air_date": "2018-07-16",
+						"id": 1559234
+					},
+					{
+						"episode_number": 25,
+						"season_number": 6,
+						"name": "The Ghouls",
+						"air_date": "2018-10-19",
+						"id": 1559235
+					},
+					{
+						"episode_number": 26,
+						"season_number": 6,
+						"name": "The Stink",
+						"air_date": "2018-11-05",
+						"id": 1559236
+					},
+					{
+						"episode_number": 27,
+						"season_number": 6,
+						"name": "The Awareness",
+						"air_date": "2018-11-06",
+						"id": 1559237
+					},
+					{
+						"episode_number": 28,
+						"season_number": 6,
+						"name": "The Slip",
+						"air_date": "2018-11-07",
+						"id": 1604693
+					},
+					{
+						"episode_number": 29,
+						"season_number": 6,
+						"name": "The Drama",
+						"air_date": "2018-11-08",
+						"id": 1604694
+					},
+					{
+						"episode_number": 30,
+						"season_number": 6,
+						"name": "The Buddy",
+						"air_date": "2018-11-09",
+						"id": 1604695
+					},
+					{
+						"episode_number": 31,
+						"season_number": 6,
+						"name": "The Possession",
+						"air_date": "2019-04-15",
+						"id": 1668515
+					},
+					{
+						"episode_number": 32,
+						"season_number": 6,
+						"name": "The Master",
+						"air_date": "2019-04-22",
+						"id": 1784879
+					},
+					{
+						"episode_number": 33,
+						"season_number": 6,
+						"name": "The Silence",
+						"air_date": "2019-04-29",
+						"id": 1784881
+					},
+					{
+						"episode_number": 34,
+						"season_number": 6,
+						"name": "The Future",
+						"air_date": "2019-05-06",
+						"id": 1784882
+					},
+					{
+						"episode_number": 35,
+						"season_number": 6,
+						"name": "The Wish",
+						"air_date": "2019-05-13",
+						"id": 1784883
+					},
+					{
+						"episode_number": 36,
+						"season_number": 6,
+						"name": "The Factory",
+						"air_date": "2019-05-20",
+						"id": 1784884
+					},
+					{
+						"episode_number": 37,
+						"season_number": 6,
+						"name": "The Agent",
+						"air_date": "2019-05-27",
+						"id": 1814554
+					},
+					{
+						"episode_number": 38,
+						"season_number": 6,
+						"name": "The Web",
+						"air_date": "2019-06-03",
+						"id": 1814555
+					},
+					{
+						"episode_number": 39,
+						"season_number": 6,
+						"name": "The Mess",
+						"air_date": "2019-06-10",
+						"id": 1814556
+					},
+					{
+						"episode_number": 40,
+						"season_number": 6,
+						"name": "The Heart",
+						"air_date": "2019-06-10",
+						"id": 1814557
+					},
+					{
+						"episode_number": 41,
+						"season_number": 6,
+						"name": "The Revolt",
+						"air_date": "2019-06-17",
+						"id": 1814558
+					},
+					{
+						"episode_number": 42,
+						"season_number": 6,
+						"name": "The Decisions",
+						"air_date": "2019-06-17",
+						"id": 1814559
+					},
+					{
+						"episode_number": 43,
+						"season_number": 6,
+						"name": "The BFFs",
+						"air_date": "2019-06-24",
+						"id": 1977438
+					},
+					{
+						"episode_number": 44,
+						"season_number": 6,
+						"name": "The Inquisition",
+						"air_date": "2019-06-24",
+						"id": 1977439
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"37606": {
+				"id": 37606,
+				"results": [
+					{
+						"id": "6a7aa35695c7c6b5c303bbed",
+						"name": "DVD Order (PAL)",
+						"type": 3,
+						"network": null,
+						"description": "DVD Order as presented in the UK and AU DVDs",
+						"group_count": 1,
+						"episode_count": 36
+					},
+					{
+						"id": "622be98c12c604001cedeacd",
+						"name": "Netflix (JP)",
+						"type": 4,
+						"network": {
+							"id": 213,
+							"name": "Netflix",
+							"logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+							"origin_country": ""
+						},
+						"description": "",
+						"group_count": 3,
+						"episode_count": 116
+					},
+					{
+						"id": "639d4b6eb54002007f0859ea",
+						"name": "Max (US)",
+						"type": 4,
+						"network": null,
+						"description": "",
+						"group_count": 6,
+						"episode_count": 254
+					},
+					{
+						"id": "639d44c02f3b1700ba030a32",
+						"name": "iTunes (US)",
+						"type": 4,
+						"network": {
+							"id": 1377,
+							"name": "iTunes Store",
+							"logo_path": "/h7YSa1EqKYtz5ouFRguyb1dzCHA.png",
+							"origin_country": ""
+						},
+						"description": "",
+						"group_count": 12,
+						"episode_count": 240
+					},
+					{
+						"id": "6ae722389ada68b7b5081a01",
+						"name": "HBO Max (EU)",
+						"type": 4,
+						"network": null,
+						"description": "",
+						"group_count": 6,
+						"episode_count": 240
+					},
+					{
+						"id": "692d31b0fe5170fd8c398bd5",
+						"name": "Joined Order",
+						"type": 7,
+						"network": null,
+						"description": "",
+						"group_count": 8,
+						"episode_count": 28
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt1942683": null
+		},
+		"seasonEpisodes": {
+			"tt1942683/7": {},
+			"tt1942683/6": {
+				"1": "tt7809772",
+				"2": "tt7674210",
+				"3": "tt6355622",
+				"4": "tt7674220",
+				"5": "tt7674224",
+				"6": "tt8044902",
+				"7": "tt8044916",
+				"8": "tt7674226",
+				"9": "tt8288078",
+				"10": "tt8083468",
+				"11": "tt8055100",
+				"12": "tt8058672",
+				"13": "tt8289172",
+				"14": "tt8314190",
+				"15": "tt8318070",
+				"16": "tt8463220",
+				"17": "tt8463224",
+				"18": "tt8463228",
+				"19": "tt8463232",
+				"20": "tt8463234",
+				"21": "tt8550776",
+				"22": "tt8550780",
+				"23": "tt8550782",
+				"24": "tt8550784",
+				"25": "tt8550786",
+				"26": "tt9155064",
+				"27": "tt9196596",
+				"28": "tt9196590",
+				"29": "tt9196586",
+				"30": "tt9196580",
+				"31": "tt10086500",
+				"32": "tt10080860",
+				"33": "tt9590632",
+				"34": "tt10273286",
+				"35": "tt10273302",
+				"36": "tt10273314",
+				"37": "tt10273330",
+				"38": "tt10273370",
+				"39": "tt10273356",
+				"40": "tt10273350",
+				"41": "tt10273344",
+				"42": "tt10408502",
+				"43": "tt10273364",
+				"44": "tt10408504"
+			}
+		},
+		"searchTv": {
+			"The Amazing World Of Gumball": {
+				"results": [
+					{
+						"id": 37606,
+						"name": "The Amazing World of Gumball",
+						"original_name": "The Amazing World of Gumball",
+						"first_air_date": "2011-05-03"
+					},
+					{
+						"id": 133529,
+						"name": "The Gumball Chronicles",
+						"original_name": "The Gumball Chronicles",
+						"first_air_date": "2020-10-05"
+					},
+					{
+						"id": 291904,
+						"name": "The Wonderfully Weird World of Gumball",
+						"original_name": "The Wonderfully Weird World of Gumball",
+						"first_air_date": "2025-10-06"
+					},
+					{
+						"id": 104987,
+						"name": "Darwin's Yearbook",
+						"original_name": "Darwin's Yearbook",
+						"first_air_date": "2019-12-02"
+					}
+				]
+			},
+			"The Amazing World of Gumball": {
+				"results": [
+					{
+						"id": 37606,
+						"name": "The Amazing World of Gumball",
+						"original_name": "The Amazing World of Gumball",
+						"first_air_date": "2011-05-03"
+					},
+					{
+						"id": 133529,
+						"name": "The Gumball Chronicles",
+						"original_name": "The Gumball Chronicles",
+						"first_air_date": "2020-10-05"
+					},
+					{
+						"id": 291904,
+						"name": "The Wonderfully Weird World of Gumball",
+						"original_name": "The Wonderfully Weird World of Gumball",
+						"first_air_date": "2025-10-06"
+					},
+					{
+						"id": 104987,
+						"name": "Darwin's Yearbook",
+						"original_name": "Darwin's Yearbook",
+						"first_air_date": "2019-12-02"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1942683",
+						"score": 4.384,
+						"title": "The Amazing World of Gumball",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1079959",
+						"score": -1.1497,
+						"title": "The Color of Magic",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt11715250",
+						"score": -1.9037,
+						"title": "The Amazing World of Gumball: Darwin's Yearbook",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt9319014",
+						"score": -4.7195,
+						"title": "Amazing World of Radio",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt36985473",
+						"score": -4.7897,
+						"title": "The Wonderfully Weird World of Gumball",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "The Amazing World Of Gumball",
+				"parsedYear": null,
+				"probability": 0.9487
+			},
+			"The.Amazing.World.of.Gumball.S06E45.MULTI.MULTI.1080p.MAX.WEB-DL.DDP2.0.H.264-AndreMor": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1942683",
+						"score": 3.9757,
+						"title": "The Amazing World of Gumball",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt1079959",
+						"score": -1.6203,
+						"title": "The Color of Magic",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt11715250",
+						"score": -1.8309,
+						"title": "The Amazing World of Gumball: Darwin's Yearbook",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt15469266",
+						"score": -4.4136,
+						"title": "The Amazing World of Gumball: The Series",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt0823638",
+						"score": -5.2002,
+						"title": "A*mazing",
+						"year": 1994
+					}
+				],
+				"parsedTitle": "The Amazing World of Gumball",
+				"parsedYear": null,
+				"probability": 0.9732
+			},
+			"The.Amazing.World.of.Gumball.S07E01.The.Burger.1080p.DSNP.WEB-DL.DDP5.1.H.264-Kitsune": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1942683",
+						"score": 4.087,
+						"title": "The Amazing World of Gumball",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt11715250",
+						"score": -1.7673,
+						"title": "The Amazing World of Gumball: Darwin's Yearbook",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt1079959",
+						"score": -1.9755,
+						"title": "The Color of Magic",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt15469266",
+						"score": -4.6648,
+						"title": "The Amazing World of Gumball: The Series",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt9319014",
+						"score": -4.9648,
+						"title": "Amazing World of Radio",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "The Amazing World of Gumball",
+				"parsedYear": null,
+				"probability": 0.9863
+			}
+		},
+		"tvdbEpisodes": {
+			"248482": {
+				"data": {
+					"episodes": [
+						{
+							"id": 5088682,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Early Reel",
+							"aired": "2008-05-09",
+							"runtime": 1
+						},
+						{
+							"id": 6376792,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Waiting for Gumball: Cool To Be Felt",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376793,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Waiting for Gumball: Pineapple",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376795,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Waiting for Gumball: Infinite Loop",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376796,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Waiting for Gumball: Weird Food",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376797,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Waiting for Gumball: BirdPlaneBird",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376798,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "Waiting for Gumball: Gnomes",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376799,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "Waiting for Gumball: Insulting Voices",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376800,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "Waiting for Gumball: Beards",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379547,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "Waiting for Gumball: Grump",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379548,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "Waiting for Gumball: Spoons",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379549,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "Waiting for Gumball: Telly",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379550,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "Waiting for Gumball: Cleaning Up",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379551,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "Waiting for Gumball: Bored",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 7496665,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "Darwin's Yearbook: Banana Joe",
+							"aired": "2019-12-14",
+							"runtime": 10
+						},
+						{
+							"id": 7496667,
+							"seasonNumber": 0,
+							"number": 16,
+							"name": "Darwin's Yearbook: Clayton",
+							"aired": "2019-12-14",
+							"runtime": 10
+						},
+						{
+							"id": 7496668,
+							"seasonNumber": 0,
+							"number": 17,
+							"name": "Darwin's Yearbook: Carrie",
+							"aired": "2019-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 7496680,
+							"seasonNumber": 0,
+							"number": 18,
+							"name": "Darwin's Yearbook: Alan",
+							"aired": "2019-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 7496688,
+							"seasonNumber": 0,
+							"number": 19,
+							"name": "Darwin's Yearbook: Sarah",
+							"aired": "2019-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 7496694,
+							"seasonNumber": 0,
+							"number": 20,
+							"name": "Darwin's Yearbook: Teachers",
+							"aired": "2019-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 7982137,
+							"seasonNumber": 0,
+							"number": 21,
+							"name": "The Gumball Chronicles: The Curse of Elmore",
+							"aired": "2020-10-05",
+							"runtime": 11
+						},
+						{
+							"id": 8172276,
+							"seasonNumber": 0,
+							"number": 22,
+							"name": "The Gumball Chronicles: Vote Gumball... and Penny?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172277,
+							"seasonNumber": 0,
+							"number": 23,
+							"name": "The Gumball Chronicles: Vote Gumball... and Leslie?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172278,
+							"seasonNumber": 0,
+							"number": 24,
+							"name": "The Gumball Chronicles: Vote Gumball... and Bobert?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172279,
+							"seasonNumber": 0,
+							"number": 25,
+							"name": "The Gumball Chronicles: Vote Gumball... and Anyone?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172280,
+							"seasonNumber": 0,
+							"number": 26,
+							"name": "The Gumball Chronicles: Ancestor Act",
+							"aired": "2020-11-21",
+							"runtime": 10
+						},
+						{
+							"id": 8172281,
+							"seasonNumber": 0,
+							"number": 27,
+							"name": "The Gumball Chronicles: Mother's Day",
+							"aired": "2021-05-08",
+							"runtime": 10
+						},
+						{
+							"id": 8172282,
+							"seasonNumber": 0,
+							"number": 28,
+							"name": "The Gumball Chronicles: Elmore's Most Wanted",
+							"aired": "2021-06-20",
+							"runtime": 10
+						},
+						{
+							"id": 4093699,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The DVD",
+							"aired": "2011-05-03",
+							"runtime": 10
+						},
+						{
+							"id": 4093700,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "The Responsible",
+							"aired": "2011-05-09",
+							"runtime": 10
+						},
+						{
+							"id": 4098040,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "The Third",
+							"aired": "2011-05-16",
+							"runtime": 10
+						},
+						{
+							"id": 4098429,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "The Debt",
+							"aired": "2011-05-16",
+							"runtime": 10
+						},
+						{
+							"id": 4098430,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "The End",
+							"aired": "2011-05-23",
+							"runtime": 10
+						},
+						{
+							"id": 4100307,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Dress",
+							"aired": "2011-05-23",
+							"runtime": 10
+						},
+						{
+							"id": 4100308,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "The Quest",
+							"aired": "2011-05-30",
+							"runtime": 10
+						},
+						{
+							"id": 4100309,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "The Spoon",
+							"aired": "2011-05-30",
+							"runtime": 10
+						},
+						{
+							"id": 4100310,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "The Pressure",
+							"aired": "2011-06-06",
+							"runtime": 10
+						},
+						{
+							"id": 4107393,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Painting",
+							"aired": "2011-06-13",
+							"runtime": 10
+						},
+						{
+							"id": 4107394,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "The Laziest",
+							"aired": "2011-06-20",
+							"runtime": 10
+						},
+						{
+							"id": 4107395,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "The Ghost",
+							"aired": "2011-06-27",
+							"runtime": 10
+						},
+						{
+							"id": 4107396,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "The Mystery",
+							"aired": "2011-07-11",
+							"runtime": 10
+						},
+						{
+							"id": 4137016,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "The Prank",
+							"aired": "2011-07-18",
+							"runtime": 10
+						},
+						{
+							"id": 4139912,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "The Gi",
+							"aired": "2011-07-25",
+							"runtime": 10
+						},
+						{
+							"id": 4143999,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "The Kiss",
+							"aired": "2011-08-01",
+							"runtime": 10
+						},
+						{
+							"id": 4144000,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "The Party",
+							"aired": "2011-08-08",
+							"runtime": 10
+						},
+						{
+							"id": 4144001,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "The Refund",
+							"aired": "2011-08-15",
+							"runtime": 10
+						},
+						{
+							"id": 4144002,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "The Robot",
+							"aired": "2011-08-22",
+							"runtime": 10
+						},
+						{
+							"id": 4144003,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "The Picnic",
+							"aired": "2011-08-29",
+							"runtime": 10
+						},
+						{
+							"id": 4162834,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "The Goons",
+							"aired": "2011-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 4162835,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "The Secret",
+							"aired": "2011-09-26",
+							"runtime": 10
+						},
+						{
+							"id": 4184646,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "The Sock",
+							"aired": "2011-10-03",
+							"runtime": 10
+						},
+						{
+							"id": 4184647,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "The Genius",
+							"aired": "2011-10-10",
+							"runtime": 10
+						},
+						{
+							"id": 4184648,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "The Poltergeist",
+							"aired": "2011-10-17",
+							"runtime": 10
+						},
+						{
+							"id": 4213754,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "The Mustache",
+							"aired": "2011-11-21",
+							"runtime": 10
+						},
+						{
+							"id": 4213755,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "The Date",
+							"aired": "2011-11-28",
+							"runtime": 10
+						},
+						{
+							"id": 4220686,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "The Club",
+							"aired": "2011-12-05",
+							"runtime": 10
+						},
+						{
+							"id": 4262015,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "The Wand",
+							"aired": "2012-01-24",
+							"runtime": 10
+						},
+						{
+							"id": 4262016,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "The Ape",
+							"aired": "2012-01-31",
+							"runtime": 10
+						},
+						{
+							"id": 4270300,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "The Car",
+							"aired": "2012-02-07",
+							"runtime": 10
+						},
+						{
+							"id": 4270301,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "The Curse",
+							"aired": "2012-02-14",
+							"runtime": 10
+						},
+						{
+							"id": 4270303,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "The Microwave",
+							"aired": "2012-02-21",
+							"runtime": 10
+						},
+						{
+							"id": 4270304,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "The Meddler",
+							"aired": "2012-02-28",
+							"runtime": 10
+						},
+						{
+							"id": 4282856,
+							"seasonNumber": 1,
+							"number": 35,
+							"name": "The Helmet",
+							"aired": "2012-03-06",
+							"runtime": 10
+						},
+						{
+							"id": 4282857,
+							"seasonNumber": 1,
+							"number": 36,
+							"name": "The Fight",
+							"aired": "2012-03-13",
+							"runtime": 10
+						},
+						{
+							"id": 4376379,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Remote",
+							"aired": "2012-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4376380,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Colossus",
+							"aired": "2012-08-14",
+							"runtime": 10
+						},
+						{
+							"id": 4376381,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "The Knights",
+							"aired": "2012-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4376390,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "The Fridge",
+							"aired": "2012-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 4391586,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Flower",
+							"aired": "2012-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4397435,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "The Banana",
+							"aired": "2012-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4397437,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Phone",
+							"aired": "2012-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4401512,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "The Job",
+							"aired": "2012-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4423447,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Halloween",
+							"aired": "2012-10-23",
+							"runtime": 10
+						},
+						{
+							"id": 4423448,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "The Treasure",
+							"aired": "2012-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 4434115,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Apology",
+							"aired": "2012-11-06",
+							"runtime": 10
+						},
+						{
+							"id": 4435475,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "The Words",
+							"aired": "2012-11-13",
+							"runtime": 10
+						},
+						{
+							"id": 4440416,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "The Skull",
+							"aired": "2012-11-20",
+							"runtime": 10
+						},
+						{
+							"id": 4440451,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "The Bet",
+							"aired": "2012-11-27",
+							"runtime": 10
+						},
+						{
+							"id": 4448687,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Christmas",
+							"aired": "2012-12-04",
+							"runtime": 10
+						},
+						{
+							"id": 4481751,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "The Watch",
+							"aired": "2013-01-22",
+							"runtime": 10
+						},
+						{
+							"id": 4481754,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "The Bumpkin",
+							"aired": "2013-01-29",
+							"runtime": 10
+						},
+						{
+							"id": 4495365,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "The Flakers",
+							"aired": "2013-02-05",
+							"runtime": 10
+						},
+						{
+							"id": 4495433,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "The Authority",
+							"aired": "2013-02-12",
+							"runtime": 10
+						},
+						{
+							"id": 4576433,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "The Virus",
+							"aired": "2013-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4576434,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "The Pony",
+							"aired": "2013-06-12",
+							"runtime": 10
+						},
+						{
+							"id": 4576435,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "The Hero",
+							"aired": "2013-06-19",
+							"runtime": 10
+						},
+						{
+							"id": 4576437,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "The Dream",
+							"aired": "2013-06-26",
+							"runtime": 10
+						},
+						{
+							"id": 4576438,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "The Sidekick",
+							"aired": "2013-07-03",
+							"runtime": 10
+						},
+						{
+							"id": 4576439,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "The Photo",
+							"aired": "2013-07-17",
+							"runtime": 10
+						},
+						{
+							"id": 4605767,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "The Tag",
+							"aired": "2013-07-24",
+							"runtime": 10
+						},
+						{
+							"id": 4576436,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "The Storm",
+							"aired": "2013-07-31",
+							"runtime": 10
+						},
+						{
+							"id": 4630212,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "The Lesson",
+							"aired": "2013-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4630213,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "The Game",
+							"aired": "2013-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4630214,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "The Limit",
+							"aired": "2013-08-28",
+							"runtime": 10
+						},
+						{
+							"id": 4655742,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "The Voice",
+							"aired": "2013-09-10",
+							"runtime": 10
+						},
+						{
+							"id": 4655743,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "The Promise",
+							"aired": "2013-09-17",
+							"runtime": 10
+						},
+						{
+							"id": 4655744,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "The Castle",
+							"aired": "2013-10-01",
+							"runtime": 10
+						},
+						{
+							"id": 4680887,
+							"seasonNumber": 2,
+							"number": 34,
+							"name": "The Boombox",
+							"aired": "2013-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 4680888,
+							"seasonNumber": 2,
+							"number": 35,
+							"name": "The Tape",
+							"aired": "2013-10-15",
+							"runtime": 10
+						},
+						{
+							"id": 4704703,
+							"seasonNumber": 2,
+							"number": 36,
+							"name": "The Sweaters",
+							"aired": "2013-11-05",
+							"runtime": 10
+						},
+						{
+							"id": 4704704,
+							"seasonNumber": 2,
+							"number": 37,
+							"name": "The Internet",
+							"aired": "2013-11-12",
+							"runtime": 10
+						},
+						{
+							"id": 4704705,
+							"seasonNumber": 2,
+							"number": 38,
+							"name": "The Plan",
+							"aired": "2013-11-19",
+							"runtime": 10
+						},
+						{
+							"id": 4704706,
+							"seasonNumber": 2,
+							"number": 39,
+							"name": "The World",
+							"aired": "2013-11-26",
+							"runtime": 10
+						},
+						{
+							"id": 4704707,
+							"seasonNumber": 2,
+							"number": 40,
+							"name": "The Finale",
+							"aired": "2013-12-03",
+							"runtime": 10
+						},
+						{
+							"id": 4887871,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "The Kids",
+							"aired": "2014-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4901712,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "The Fan",
+							"aired": "2014-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4901713,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "The Coach",
+							"aired": "2014-06-12",
+							"runtime": 10
+						},
+						{
+							"id": 4901714,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "The Joy",
+							"aired": "2014-06-19",
+							"runtime": 10
+						},
+						{
+							"id": 4901715,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "The Puppy",
+							"aired": "2014-06-26",
+							"runtime": 10
+						},
+						{
+							"id": 4901716,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "The Recipe",
+							"aired": "2014-07-03",
+							"runtime": 10
+						},
+						{
+							"id": 4930443,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "The Name",
+							"aired": "2014-07-10",
+							"runtime": 10
+						},
+						{
+							"id": 4930529,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "The Extras",
+							"aired": "2014-07-17",
+							"runtime": 10
+						},
+						{
+							"id": 4930530,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "The Gripes",
+							"aired": "2014-07-24",
+							"runtime": 10
+						},
+						{
+							"id": 4930531,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "The Vacation",
+							"aired": "2014-07-31",
+							"runtime": 10
+						},
+						{
+							"id": 4955552,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "The Fraud",
+							"aired": "2014-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4964008,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "The Void",
+							"aired": "2014-08-14",
+							"runtime": 10
+						},
+						{
+							"id": 4964010,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "The Boss",
+							"aired": "2014-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4964011,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "The Move",
+							"aired": "2014-08-28",
+							"runtime": 10
+						},
+						{
+							"id": 4976675,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "The Law",
+							"aired": "2014-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 4976676,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "The Allergy",
+							"aired": "2014-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4996803,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "The Mothers",
+							"aired": "2014-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4997002,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "The Password",
+							"aired": "2014-09-25",
+							"runtime": 10
+						},
+						{
+							"id": 4997003,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "The Procrastinators",
+							"aired": "2014-10-02",
+							"runtime": 10
+						},
+						{
+							"id": 4997004,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "The Shell",
+							"aired": "2014-10-09",
+							"runtime": 10
+						},
+						{
+							"id": 5019166,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "The Burden",
+							"aired": "2014-10-16",
+							"runtime": 10
+						},
+						{
+							"id": 5019167,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "The Bros",
+							"aired": "2014-10-23",
+							"runtime": 10
+						},
+						{
+							"id": 5019168,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "The Mirror",
+							"aired": "2014-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 5019169,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "The Man",
+							"aired": "2014-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 5036561,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "The Pizza",
+							"aired": "2014-11-13",
+							"runtime": 10
+						},
+						{
+							"id": 5045551,
+							"seasonNumber": 3,
+							"number": 26,
+							"name": "The Lie",
+							"aired": "2014-11-20",
+							"runtime": 10
+						},
+						{
+							"id": 5096626,
+							"seasonNumber": 3,
+							"number": 27,
+							"name": "The Butterfly",
+							"aired": "2015-01-08",
+							"runtime": 10
+						},
+						{
+							"id": 5096628,
+							"seasonNumber": 3,
+							"number": 28,
+							"name": "The Question",
+							"aired": "2015-01-08",
+							"runtime": 10
+						},
+						{
+							"id": 5100910,
+							"seasonNumber": 3,
+							"number": 29,
+							"name": "The Saint",
+							"aired": "2015-01-15",
+							"runtime": 10
+						},
+						{
+							"id": 5100911,
+							"seasonNumber": 3,
+							"number": 30,
+							"name": "The Friend",
+							"aired": "2015-01-22",
+							"runtime": 10
+						},
+						{
+							"id": 5109984,
+							"seasonNumber": 3,
+							"number": 31,
+							"name": "The Oracle",
+							"aired": "2015-01-29",
+							"runtime": 10
+						},
+						{
+							"id": 5109985,
+							"seasonNumber": 3,
+							"number": 32,
+							"name": "The Safety",
+							"aired": "2015-02-05",
+							"runtime": 10
+						},
+						{
+							"id": 5125120,
+							"seasonNumber": 3,
+							"number": 33,
+							"name": "The Society",
+							"aired": "2015-02-12",
+							"runtime": 10
+						},
+						{
+							"id": 5125121,
+							"seasonNumber": 3,
+							"number": 34,
+							"name": "The Spoiler",
+							"aired": "2015-02-19",
+							"runtime": 10
+						},
+						{
+							"id": 5137258,
+							"seasonNumber": 3,
+							"number": 35,
+							"name": "The Countdown",
+							"aired": "2015-02-26",
+							"runtime": 10
+						},
+						{
+							"id": 5137259,
+							"seasonNumber": 3,
+							"number": 36,
+							"name": "The Nobody",
+							"aired": "2015-03-05",
+							"runtime": 10
+						},
+						{
+							"id": 5195950,
+							"seasonNumber": 3,
+							"number": 37,
+							"name": "The Downer",
+							"aired": "2015-04-05",
+							"runtime": 10
+						},
+						{
+							"id": 5274512,
+							"seasonNumber": 3,
+							"number": 38,
+							"name": "The Egg",
+							"aired": "2015-04-05",
+							"runtime": 10
+						},
+						{
+							"id": 5195952,
+							"seasonNumber": 3,
+							"number": 39,
+							"name": "The Triangle",
+							"aired": "2015-04-12",
+							"runtime": 10
+						},
+						{
+							"id": 5198453,
+							"seasonNumber": 3,
+							"number": 40,
+							"name": "The Money",
+							"aired": "2015-04-12",
+							"runtime": 10
+						},
+						{
+							"id": 5195951,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "The Return",
+							"aired": "2015-07-07",
+							"runtime": 10
+						},
+						{
+							"id": 5274513,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "The Nemesis",
+							"aired": "2015-07-10",
+							"runtime": 10
+						},
+						{
+							"id": 5272816,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "The Crew",
+							"aired": "2015-08-13",
+							"runtime": 10
+						},
+						{
+							"id": 5300163,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "The Others",
+							"aired": "2015-08-20",
+							"runtime": 10
+						},
+						{
+							"id": 5300164,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "The Signature",
+							"aired": "2015-08-27",
+							"runtime": 10
+						},
+						{
+							"id": 5300165,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "The Check",
+							"aired": "2015-08-31",
+							"runtime": 10
+						},
+						{
+							"id": 5321491,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "The Pest",
+							"aired": "2015-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 5321492,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "The Sale",
+							"aired": "2015-09-02",
+							"runtime": 10
+						},
+						{
+							"id": 5321494,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "The Gift",
+							"aired": "2015-09-03",
+							"runtime": 10
+						},
+						{
+							"id": 5321495,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "The Parking",
+							"aired": "2015-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 5325188,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "The Routine",
+							"aired": "2015-10-05",
+							"runtime": 10
+						},
+						{
+							"id": 5325189,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "The Upgrade",
+							"aired": "2015-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 5325190,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "The Comic",
+							"aired": "2015-10-07",
+							"runtime": 10
+						},
+						{
+							"id": 5325191,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "The Romantic",
+							"aired": "2015-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 5325192,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "The Uploads",
+							"aired": "2015-10-09",
+							"runtime": 10
+						},
+						{
+							"id": 5394326,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "The Apprentice",
+							"aired": "2016-01-07",
+							"runtime": 10
+						},
+						{
+							"id": 5394327,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "The Hug",
+							"aired": "2016-01-14",
+							"runtime": 10
+						},
+						{
+							"id": 5411932,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "The Wicked",
+							"aired": "2016-01-21",
+							"runtime": 10
+						},
+						{
+							"id": 5454769,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "The Traitor",
+							"aired": "2016-01-28",
+							"runtime": 10
+						},
+						{
+							"id": 5506241,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "The Origins: Part 1",
+							"aired": "2016-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5506242,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "The Origins: Part 2",
+							"aired": "2016-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5539761,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "The Girlfriend",
+							"aired": "2016-03-31",
+							"runtime": 10
+						},
+						{
+							"id": 5493752,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "The Advice",
+							"aired": "2016-04-21",
+							"runtime": 10
+						},
+						{
+							"id": 5484653,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "The Signal",
+							"aired": "2016-04-28",
+							"runtime": 10
+						},
+						{
+							"id": 5545428,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "The Parasite",
+							"aired": "2016-05-05",
+							"runtime": 10
+						},
+						{
+							"id": 5553704,
+							"seasonNumber": 4,
+							"number": 26,
+							"name": "The Love",
+							"aired": "2016-05-12",
+							"runtime": 10
+						},
+						{
+							"id": 5561089,
+							"seasonNumber": 4,
+							"number": 27,
+							"name": "The Awkwardness",
+							"aired": "2016-05-19",
+							"runtime": 10
+						},
+						{
+							"id": 5577563,
+							"seasonNumber": 4,
+							"number": 28,
+							"name": "The Nest",
+							"aired": "2016-05-26",
+							"runtime": 10
+						},
+						{
+							"id": 5577562,
+							"seasonNumber": 4,
+							"number": 29,
+							"name": "The Points",
+							"aired": "2016-06-02",
+							"runtime": 10
+						},
+						{
+							"id": 5577564,
+							"seasonNumber": 4,
+							"number": 30,
+							"name": "The Bus",
+							"aired": "2016-06-09",
+							"runtime": 10
+						},
+						{
+							"id": 5642710,
+							"seasonNumber": 4,
+							"number": 31,
+							"name": "The Night",
+							"aired": "2016-06-16",
+							"runtime": 10
+						},
+						{
+							"id": 5642711,
+							"seasonNumber": 4,
+							"number": 32,
+							"name": "The Misunderstandings",
+							"aired": "2016-06-23",
+							"runtime": 10
+						},
+						{
+							"id": 5642719,
+							"seasonNumber": 4,
+							"number": 33,
+							"name": "The Roots",
+							"aired": "2016-08-15",
+							"runtime": 10
+						},
+						{
+							"id": 5642713,
+							"seasonNumber": 4,
+							"number": 34,
+							"name": "The Blame",
+							"aired": "2016-08-16",
+							"runtime": 10
+						},
+						{
+							"id": 5642714,
+							"seasonNumber": 4,
+							"number": 35,
+							"name": "The Slap",
+							"aired": "2016-08-17",
+							"runtime": 10
+						},
+						{
+							"id": 5642715,
+							"seasonNumber": 4,
+							"number": 36,
+							"name": "The Detective",
+							"aired": "2016-08-18",
+							"runtime": 10
+						},
+						{
+							"id": 5642716,
+							"seasonNumber": 4,
+							"number": 37,
+							"name": "The Fury",
+							"aired": "2016-08-19",
+							"runtime": 10
+						},
+						{
+							"id": 5642717,
+							"seasonNumber": 4,
+							"number": 38,
+							"name": "The Compilation",
+							"aired": "2016-08-25",
+							"runtime": 10
+						},
+						{
+							"id": 5702707,
+							"seasonNumber": 4,
+							"number": 39,
+							"name": "The Scam",
+							"aired": "2016-10-27",
+							"runtime": 10
+						},
+						{
+							"id": 5642718,
+							"seasonNumber": 4,
+							"number": 40,
+							"name": "The Disaster",
+							"aired": "2016-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 5744102,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "The Stories",
+							"aired": "2016-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 5741657,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "The Re-Run",
+							"aired": "2016-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 5744103,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "The Guy",
+							"aired": "2016-09-08",
+							"runtime": 10
+						},
+						{
+							"id": 5749344,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "The Boredom",
+							"aired": "2016-09-15",
+							"runtime": 10
+						},
+						{
+							"id": 5749345,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "The Vision",
+							"aired": "2016-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 5781782,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "The Choices",
+							"aired": "2016-10-13",
+							"runtime": 10
+						},
+						{
+							"id": 5814475,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "The Code",
+							"aired": "2016-10-20",
+							"runtime": 10
+						},
+						{
+							"id": 5781783,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "The Test",
+							"aired": "2016-11-03",
+							"runtime": 10
+						},
+						{
+							"id": 5827181,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "The Slide",
+							"aired": "2016-11-10",
+							"runtime": 10
+						},
+						{
+							"id": 5827182,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "The Loophole",
+							"aired": "2016-11-17",
+							"runtime": 10
+						},
+						{
+							"id": 5956573,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "The Copycats",
+							"aired": "2017-02-06",
+							"runtime": 10
+						},
+						{
+							"id": 5956574,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "The Potato",
+							"aired": "2017-02-07",
+							"runtime": 10
+						},
+						{
+							"id": 5956594,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "The Fuss",
+							"aired": "2017-02-08",
+							"runtime": 10
+						},
+						{
+							"id": 5956595,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "The Outside",
+							"aired": "2017-02-09",
+							"runtime": 10
+						},
+						{
+							"id": 5956596,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "The Vase",
+							"aired": "2017-02-13",
+							"runtime": 10
+						},
+						{
+							"id": 5956598,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "The Matchmaker",
+							"aired": "2017-02-14",
+							"runtime": 10
+						},
+						{
+							"id": 5956599,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "The Box",
+							"aired": "2017-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5956601,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "The Console",
+							"aired": "2017-02-16",
+							"runtime": 10
+						},
+						{
+							"id": 5956602,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "The Ollie",
+							"aired": "2017-02-20",
+							"runtime": 10
+						},
+						{
+							"id": 5956604,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "The Catfish",
+							"aired": "2017-02-21",
+							"runtime": 10
+						},
+						{
+							"id": 5956605,
+							"seasonNumber": 5,
+							"number": 21,
+							"name": "The Cycle",
+							"aired": "2017-02-22",
+							"runtime": 10
+						},
+						{
+							"id": 5956606,
+							"seasonNumber": 5,
+							"number": 22,
+							"name": "The Stars",
+							"aired": "2017-02-23",
+							"runtime": 10
+						},
+						{
+							"id": 5956608,
+							"seasonNumber": 5,
+							"number": 23,
+							"name": "The Grades",
+							"aired": "2017-02-27",
+							"runtime": 10
+						},
+						{
+							"id": 5956610,
+							"seasonNumber": 5,
+							"number": 24,
+							"name": "The Diet",
+							"aired": "2017-02-28",
+							"runtime": 10
+						},
+						{
+							"id": 5956612,
+							"seasonNumber": 5,
+							"number": 25,
+							"name": "The Ex",
+							"aired": "2017-03-01",
+							"runtime": 10
+						},
+						{
+							"id": 5956615,
+							"seasonNumber": 5,
+							"number": 26,
+							"name": "The Sorcerer",
+							"aired": "2017-03-02",
+							"runtime": 10
+						},
+						{
+							"id": 5956625,
+							"seasonNumber": 5,
+							"number": 27,
+							"name": "The Menu",
+							"aired": "2017-03-06",
+							"runtime": 10
+						},
+						{
+							"id": 5956626,
+							"seasonNumber": 5,
+							"number": 28,
+							"name": "The Uncle",
+							"aired": "2017-03-07",
+							"runtime": 10
+						},
+						{
+							"id": 5992232,
+							"seasonNumber": 5,
+							"number": 29,
+							"name": "The Weirdo",
+							"aired": "2017-03-08",
+							"runtime": 10
+						},
+						{
+							"id": 5992233,
+							"seasonNumber": 5,
+							"number": 30,
+							"name": "The Heist",
+							"aired": "2017-03-09",
+							"runtime": 10
+						},
+						{
+							"id": 6219740,
+							"seasonNumber": 5,
+							"number": 31,
+							"name": "The Singing",
+							"aired": "2017-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 6219731,
+							"seasonNumber": 5,
+							"number": 32,
+							"name": "The Best",
+							"aired": "2017-09-08",
+							"runtime": 10
+						},
+						{
+							"id": 6219733,
+							"seasonNumber": 5,
+							"number": 33,
+							"name": "The Worst",
+							"aired": "2017-09-15",
+							"runtime": 10
+						},
+						{
+							"id": 6219738,
+							"seasonNumber": 5,
+							"number": 34,
+							"name": "The Deal",
+							"aired": "2017-09-22",
+							"runtime": 10
+						},
+						{
+							"id": 5956623,
+							"seasonNumber": 5,
+							"number": 35,
+							"name": "The Petals",
+							"aired": "2017-09-29",
+							"runtime": 10
+						},
+						{
+							"id": 6219741,
+							"seasonNumber": 5,
+							"number": 36,
+							"name": "The Puppets",
+							"aired": "2017-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 6219728,
+							"seasonNumber": 5,
+							"number": 37,
+							"name": "The Nuisance",
+							"aired": "2017-10-13",
+							"runtime": 10
+						},
+						{
+							"id": 6219739,
+							"seasonNumber": 5,
+							"number": 38,
+							"name": "The Line",
+							"aired": "2017-10-20",
+							"runtime": 10
+						},
+						{
+							"id": 6219735,
+							"seasonNumber": 5,
+							"number": 39,
+							"name": "The List",
+							"aired": "2017-11-03",
+							"runtime": 10
+						},
+						{
+							"id": 5956622,
+							"seasonNumber": 5,
+							"number": 40,
+							"name": "The News",
+							"aired": "2017-11-10",
+							"runtime": 10
+						},
+						{
+							"id": 6404516,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "The Rival",
+							"aired": "2018-01-05",
+							"runtime": 10
+						},
+						{
+							"id": 6404512,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "The Lady",
+							"aired": "2018-01-05",
+							"runtime": 10
+						},
+						{
+							"id": 6404513,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "The Sucker",
+							"aired": "2018-01-12",
+							"runtime": 10
+						},
+						{
+							"id": 6404514,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "The Vegging",
+							"aired": "2018-01-15",
+							"runtime": 10
+						},
+						{
+							"id": 6404515,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "The One",
+							"aired": "2018-01-19",
+							"runtime": 10
+						},
+						{
+							"id": 6443557,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "The Father",
+							"aired": "2018-01-26",
+							"runtime": 10
+						},
+						{
+							"id": 6514323,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "The Cringe",
+							"aired": "2018-02-02",
+							"runtime": 10
+						},
+						{
+							"id": 6497858,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "The Cage",
+							"aired": "2018-02-09",
+							"runtime": 10
+						},
+						{
+							"id": 6497859,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "The Faith",
+							"aired": "2018-02-23",
+							"runtime": 10
+						},
+						{
+							"id": 6497860,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "The Candidate",
+							"aired": "2018-03-02",
+							"runtime": 10
+						},
+						{
+							"id": 6497861,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "The Anybody",
+							"aired": "2018-03-09",
+							"runtime": 10
+						},
+						{
+							"id": 6497862,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "The Pact",
+							"aired": "2018-04-09",
+							"runtime": 10
+						},
+						{
+							"id": 6572225,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "The Neighbor",
+							"aired": "2018-04-13",
+							"runtime": 10
+						},
+						{
+							"id": 6572224,
+							"seasonNumber": 6,
+							"number": 14,
+							"name": "The Shippening",
+							"aired": "2018-04-20",
+							"runtime": 10
+						},
+						{
+							"id": 6714969,
+							"seasonNumber": 6,
+							"number": 15,
+							"name": "The Brain",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714971,
+							"seasonNumber": 6,
+							"number": 16,
+							"name": "The Parents",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714972,
+							"seasonNumber": 6,
+							"number": 17,
+							"name": "The Founder",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714973,
+							"seasonNumber": 6,
+							"number": 18,
+							"name": "The Schooling",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714978,
+							"seasonNumber": 6,
+							"number": 19,
+							"name": "The Intelligence",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714979,
+							"seasonNumber": 6,
+							"number": 20,
+							"name": "The Potion",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714980,
+							"seasonNumber": 6,
+							"number": 21,
+							"name": "The Spinoffs",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714981,
+							"seasonNumber": 6,
+							"number": 22,
+							"name": "The Transformation",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714982,
+							"seasonNumber": 6,
+							"number": 23,
+							"name": "The Understanding",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714983,
+							"seasonNumber": 6,
+							"number": 24,
+							"name": "The Ad",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6846099,
+							"seasonNumber": 6,
+							"number": 25,
+							"name": "The Ghouls",
+							"aired": "2018-10-19",
+							"runtime": 10
+						},
+						{
+							"id": 6714984,
+							"seasonNumber": 6,
+							"number": 26,
+							"name": "The Stink",
+							"aired": "2018-11-05",
+							"runtime": 10
+						},
+						{
+							"id": 6572226,
+							"seasonNumber": 6,
+							"number": 27,
+							"name": "The Awareness",
+							"aired": "2018-11-06",
+							"runtime": 10
+						},
+						{
+							"id": 6666317,
+							"seasonNumber": 6,
+							"number": 28,
+							"name": "The Slip",
+							"aired": "2018-11-07",
+							"runtime": 10
+						},
+						{
+							"id": 6679910,
+							"seasonNumber": 6,
+							"number": 29,
+							"name": "The Drama",
+							"aired": "2018-11-08",
+							"runtime": 10
+						},
+						{
+							"id": 6830991,
+							"seasonNumber": 6,
+							"number": 30,
+							"name": "The Buddy",
+							"aired": "2018-11-09",
+							"runtime": 10
+						},
+						{
+							"id": 7054765,
+							"seasonNumber": 6,
+							"number": 31,
+							"name": "The Possession",
+							"aired": "2019-04-15",
+							"runtime": 10
+						},
+						{
+							"id": 7106038,
+							"seasonNumber": 6,
+							"number": 32,
+							"name": "The Master",
+							"aired": "2019-04-22",
+							"runtime": 10
+						},
+						{
+							"id": 6939732,
+							"seasonNumber": 6,
+							"number": 33,
+							"name": "The Silence",
+							"aired": "2019-04-29",
+							"runtime": 10
+						},
+						{
+							"id": 7149557,
+							"seasonNumber": 6,
+							"number": 34,
+							"name": "The Future",
+							"aired": "2019-05-06",
+							"runtime": 10
+						},
+						{
+							"id": 7155798,
+							"seasonNumber": 6,
+							"number": 35,
+							"name": "The Wish",
+							"aired": "2019-05-13",
+							"runtime": 10
+						},
+						{
+							"id": 7155800,
+							"seasonNumber": 6,
+							"number": 36,
+							"name": "The Factory",
+							"aired": "2019-05-20",
+							"runtime": 10
+						},
+						{
+							"id": 7155802,
+							"seasonNumber": 6,
+							"number": 37,
+							"name": "The Agent",
+							"aired": "2019-05-27",
+							"runtime": 10
+						},
+						{
+							"id": 7208615,
+							"seasonNumber": 6,
+							"number": 38,
+							"name": "The Web",
+							"aired": "2019-06-03",
+							"runtime": 10
+						},
+						{
+							"id": 7212662,
+							"seasonNumber": 6,
+							"number": 39,
+							"name": "The Mess",
+							"aired": "2019-06-10",
+							"runtime": 10
+						},
+						{
+							"id": 7165658,
+							"seasonNumber": 6,
+							"number": 40,
+							"name": "The Heart",
+							"aired": "2019-06-10",
+							"runtime": 10
+						},
+						{
+							"id": 7212665,
+							"seasonNumber": 6,
+							"number": 41,
+							"name": "The Revolt",
+							"aired": "2019-06-17",
+							"runtime": 10
+						},
+						{
+							"id": 7212666,
+							"seasonNumber": 6,
+							"number": 42,
+							"name": "The Decisions",
+							"aired": "2019-06-17",
+							"runtime": 10
+						},
+						{
+							"id": 7212678,
+							"seasonNumber": 6,
+							"number": 43,
+							"name": "The BFFS",
+							"aired": "2019-06-24",
+							"runtime": 10
+						},
+						{
+							"id": 7212679,
+							"seasonNumber": 6,
+							"number": 44,
+							"name": "The Inquisition",
+							"aired": "2019-06-24",
+							"runtime": 10
+						},
+						{
+							"id": 10542074,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "The Burger",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658647,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "The Assistant",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658648,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "The Distance",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658649,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "The Thing",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658650,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "The Butts",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658654,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "The Traffic",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658655,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "The Astrological",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658656,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "The Cheerleader",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658657,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "The Boring",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658661,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "The Teacher",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658662,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "The App",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658663,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "The Entrance",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658664,
+							"seasonNumber": 7,
+							"number": 13,
+							"name": "The Letter",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658666,
+							"seasonNumber": 7,
+							"number": 14,
+							"name": "The Gut",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658668,
+							"seasonNumber": 7,
+							"number": 15,
+							"name": "The Wrinkle",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658673,
+							"seasonNumber": 7,
+							"number": 16,
+							"name": "The Gourmet",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658676,
+							"seasonNumber": 7,
+							"number": 17,
+							"name": "The Pool",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658677,
+							"seasonNumber": 7,
+							"number": 18,
+							"name": "The Portrait",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658678,
+							"seasonNumber": 7,
+							"number": 19,
+							"name": "The Climb",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658683,
+							"seasonNumber": 7,
+							"number": 20,
+							"name": "The Amadain",
+							"aired": "2025-07-28",
+							"runtime": 11
+						},
+						{
+							"id": 10658684,
+							"seasonNumber": 7,
+							"number": 21,
+							"name": "The Summoning",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10658685,
+							"seasonNumber": 7,
+							"number": 22,
+							"name": "The Unfollow",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10658690,
+							"seasonNumber": 7,
+							"number": 23,
+							"name": "The Promposal",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10658692,
+							"seasonNumber": 7,
+							"number": 24,
+							"name": "The Trumpet",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10658694,
+							"seasonNumber": 7,
+							"number": 25,
+							"name": "The Synthesis",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10658695,
+							"seasonNumber": 7,
+							"number": 26,
+							"name": "The Cheapmas",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661518,
+							"seasonNumber": 7,
+							"number": 27,
+							"name": "The Score",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661519,
+							"seasonNumber": 7,
+							"number": 28,
+							"name": "The Diary",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661520,
+							"seasonNumber": 7,
+							"number": 29,
+							"name": "The Punishment",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661521,
+							"seasonNumber": 7,
+							"number": 30,
+							"name": "The Roast",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661522,
+							"seasonNumber": 7,
+							"number": 31,
+							"name": "The Survivalists",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661523,
+							"seasonNumber": 7,
+							"number": 32,
+							"name": "The Labels",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661524,
+							"seasonNumber": 7,
+							"number": 33,
+							"name": "The Fools",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661525,
+							"seasonNumber": 7,
+							"number": 34,
+							"name": "The Homework",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661526,
+							"seasonNumber": 7,
+							"number": 35,
+							"name": "The Sonder",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661527,
+							"seasonNumber": 7,
+							"number": 36,
+							"name": "The Mister",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661528,
+							"seasonNumber": 7,
+							"number": 37,
+							"name": "The Tracking",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661529,
+							"seasonNumber": 7,
+							"number": 38,
+							"name": "The Pants",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661530,
+							"seasonNumber": 7,
+							"number": 39,
+							"name": "The Necroprancer",
+							"aired": "2025-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 10661532,
+							"seasonNumber": 7,
+							"number": 40,
+							"name": "The Rewrite",
+							"aired": "2025-12-22",
+							"runtime": 11
+						}
+					]
+				}
+			},
+			"248482/dvd": {
+				"data": {
+					"episodes": [
+						{
+							"id": 5088682,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Early Reel",
+							"aired": "2008-05-09",
+							"runtime": 1
+						},
+						{
+							"id": 6376792,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Waiting for Gumball: Cool To Be Felt",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376793,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Waiting for Gumball: Pineapple",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376795,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Waiting for Gumball: Infinite Loop",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376796,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Waiting for Gumball: Weird Food",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376797,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Waiting for Gumball: BirdPlaneBird",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376798,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "Waiting for Gumball: Gnomes",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376799,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "Waiting for Gumball: Insulting Voices",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6376800,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "Waiting for Gumball: Beards",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379547,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "Waiting for Gumball: Grump",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379548,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "Waiting for Gumball: Spoons",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379549,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "Waiting for Gumball: Telly",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379550,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "Waiting for Gumball: Cleaning Up",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 6379551,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "Waiting for Gumball: Bored",
+							"aired": "2017-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 7496665,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "Darwin's Yearbook: Banana Joe",
+							"aired": "2019-12-14",
+							"runtime": 10
+						},
+						{
+							"id": 7496667,
+							"seasonNumber": 0,
+							"number": 16,
+							"name": "Darwin's Yearbook: Clayton",
+							"aired": "2019-12-14",
+							"runtime": 10
+						},
+						{
+							"id": 7496668,
+							"seasonNumber": 0,
+							"number": 17,
+							"name": "Darwin's Yearbook: Carrie",
+							"aired": "2019-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 7496680,
+							"seasonNumber": 0,
+							"number": 18,
+							"name": "Darwin's Yearbook: Alan",
+							"aired": "2019-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 7496688,
+							"seasonNumber": 0,
+							"number": 19,
+							"name": "Darwin's Yearbook: Sarah",
+							"aired": "2019-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 7496694,
+							"seasonNumber": 0,
+							"number": 20,
+							"name": "Darwin's Yearbook: Teachers",
+							"aired": "2019-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 7982137,
+							"seasonNumber": 0,
+							"number": 21,
+							"name": "The Gumball Chronicles: The Curse of Elmore",
+							"aired": "2020-10-05",
+							"runtime": 11
+						},
+						{
+							"id": 8172276,
+							"seasonNumber": 0,
+							"number": 22,
+							"name": "The Gumball Chronicles: Vote Gumball... and Penny?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172277,
+							"seasonNumber": 0,
+							"number": 23,
+							"name": "The Gumball Chronicles: Vote Gumball... and Leslie?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172278,
+							"seasonNumber": 0,
+							"number": 24,
+							"name": "The Gumball Chronicles: Vote Gumball... and Bobert?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172279,
+							"seasonNumber": 0,
+							"number": 25,
+							"name": "The Gumball Chronicles: Vote Gumball... and Anyone?",
+							"aired": "2020-11-02",
+							"runtime": 10
+						},
+						{
+							"id": 8172280,
+							"seasonNumber": 0,
+							"number": 26,
+							"name": "The Gumball Chronicles: Ancestor Act",
+							"aired": "2020-11-21",
+							"runtime": 10
+						},
+						{
+							"id": 8172281,
+							"seasonNumber": 0,
+							"number": 27,
+							"name": "The Gumball Chronicles: Mother's Day",
+							"aired": "2021-05-08",
+							"runtime": 10
+						},
+						{
+							"id": 8172282,
+							"seasonNumber": 0,
+							"number": 28,
+							"name": "The Gumball Chronicles: Elmore's Most Wanted",
+							"aired": "2021-06-20",
+							"runtime": 10
+						},
+						{
+							"id": 4093700,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The Responsible",
+							"aired": "2011-05-09",
+							"runtime": 10
+						},
+						{
+							"id": 4093699,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "The DVD",
+							"aired": "2011-05-03",
+							"runtime": 10
+						},
+						{
+							"id": 4098040,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "The Third",
+							"aired": "2011-05-16",
+							"runtime": 10
+						},
+						{
+							"id": 4098429,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "The Debt",
+							"aired": "2011-05-16",
+							"runtime": 10
+						},
+						{
+							"id": 4098430,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "The End",
+							"aired": "2011-05-23",
+							"runtime": 10
+						},
+						{
+							"id": 4100307,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Dress",
+							"aired": "2011-05-23",
+							"runtime": 10
+						},
+						{
+							"id": 4100308,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "The Quest",
+							"aired": "2011-05-30",
+							"runtime": 10
+						},
+						{
+							"id": 4100309,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "The Spoon",
+							"aired": "2011-05-30",
+							"runtime": 10
+						},
+						{
+							"id": 4100310,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "The Pressure",
+							"aired": "2011-06-06",
+							"runtime": 10
+						},
+						{
+							"id": 4107393,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Painting",
+							"aired": "2011-06-13",
+							"runtime": 10
+						},
+						{
+							"id": 4107394,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "The Laziest",
+							"aired": "2011-06-20",
+							"runtime": 10
+						},
+						{
+							"id": 4107395,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "The Ghost",
+							"aired": "2011-06-27",
+							"runtime": 10
+						},
+						{
+							"id": 4107396,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "The Mystery",
+							"aired": "2011-07-11",
+							"runtime": 10
+						},
+						{
+							"id": 4137016,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "The Prank",
+							"aired": "2011-07-18",
+							"runtime": 10
+						},
+						{
+							"id": 4139912,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "The Gi",
+							"aired": "2011-07-25",
+							"runtime": 10
+						},
+						{
+							"id": 4143999,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "The Kiss",
+							"aired": "2011-08-01",
+							"runtime": 10
+						},
+						{
+							"id": 4144000,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "The Party",
+							"aired": "2011-08-08",
+							"runtime": 10
+						},
+						{
+							"id": 4144001,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "The Refund",
+							"aired": "2011-08-15",
+							"runtime": 10
+						},
+						{
+							"id": 4144002,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "The Robot",
+							"aired": "2011-08-22",
+							"runtime": 10
+						},
+						{
+							"id": 4144003,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "The Picnic",
+							"aired": "2011-08-29",
+							"runtime": 10
+						},
+						{
+							"id": 4162834,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "The Goons",
+							"aired": "2011-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 4162835,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "The Secret",
+							"aired": "2011-09-26",
+							"runtime": 10
+						},
+						{
+							"id": 4184648,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "The Poltergeist",
+							"aired": "2011-10-17",
+							"runtime": 10
+						},
+						{
+							"id": 4184647,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "The Genius",
+							"aired": "2011-10-10",
+							"runtime": 10
+						},
+						{
+							"id": 4184646,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "The Sock",
+							"aired": "2011-10-03",
+							"runtime": 10
+						},
+						{
+							"id": 4213754,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "The Mustache",
+							"aired": "2011-11-21",
+							"runtime": 10
+						},
+						{
+							"id": 4213755,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "The Date",
+							"aired": "2011-11-28",
+							"runtime": 10
+						},
+						{
+							"id": 4220686,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "The Club",
+							"aired": "2011-12-05",
+							"runtime": 10
+						},
+						{
+							"id": 4262015,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "The Wand",
+							"aired": "2012-01-24",
+							"runtime": 10
+						},
+						{
+							"id": 4262016,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "The Ape",
+							"aired": "2012-01-31",
+							"runtime": 10
+						},
+						{
+							"id": 4270300,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "The Car",
+							"aired": "2012-02-07",
+							"runtime": 10
+						},
+						{
+							"id": 4270301,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "The Curse",
+							"aired": "2012-02-14",
+							"runtime": 10
+						},
+						{
+							"id": 4270303,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "The Microwave",
+							"aired": "2012-02-21",
+							"runtime": 10
+						},
+						{
+							"id": 4270304,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "The Meddler",
+							"aired": "2012-02-28",
+							"runtime": 10
+						},
+						{
+							"id": 4282856,
+							"seasonNumber": 1,
+							"number": 35,
+							"name": "The Helmet",
+							"aired": "2012-03-06",
+							"runtime": 10
+						},
+						{
+							"id": 4282857,
+							"seasonNumber": 1,
+							"number": 36,
+							"name": "The Fight",
+							"aired": "2012-03-13",
+							"runtime": 10
+						},
+						{
+							"id": 4376381,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Knights",
+							"aired": "2012-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4376380,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Colossus",
+							"aired": "2012-08-14",
+							"runtime": 10
+						},
+						{
+							"id": 4376390,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "The Fridge",
+							"aired": "2012-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 4391586,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "The Flower",
+							"aired": "2012-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4397437,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Phone",
+							"aired": "2012-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4401512,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "The Job",
+							"aired": "2012-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4397435,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Banana",
+							"aired": "2012-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4376379,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "The Remote",
+							"aired": "2012-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4423447,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Halloween",
+							"aired": "2012-10-23",
+							"runtime": 10
+						},
+						{
+							"id": 4423448,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "The Treasure",
+							"aired": "2012-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 4435475,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Words",
+							"aired": "2012-11-13",
+							"runtime": 10
+						},
+						{
+							"id": 4434115,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "The Apology",
+							"aired": "2012-11-06",
+							"runtime": 10
+						},
+						{
+							"id": 4440416,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "The Skull",
+							"aired": "2012-11-20",
+							"runtime": 10
+						},
+						{
+							"id": 4440451,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "The Bet",
+							"aired": "2012-11-27",
+							"runtime": 10
+						},
+						{
+							"id": 4481751,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "The Watch",
+							"aired": "2013-01-22",
+							"runtime": 10
+						},
+						{
+							"id": 4481754,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "The Bumpkin",
+							"aired": "2013-01-29",
+							"runtime": 10
+						},
+						{
+							"id": 4448687,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Christmas",
+							"aired": "2012-12-04",
+							"runtime": 10
+						},
+						{
+							"id": 4495365,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "The Flakers",
+							"aired": "2013-02-05",
+							"runtime": 10
+						},
+						{
+							"id": 4495433,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "The Authority",
+							"aired": "2013-02-12",
+							"runtime": 10
+						},
+						{
+							"id": 4576433,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "The Virus",
+							"aired": "2013-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4576434,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "The Pony",
+							"aired": "2013-06-12",
+							"runtime": 10
+						},
+						{
+							"id": 4576435,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "The Hero",
+							"aired": "2013-06-19",
+							"runtime": 10
+						},
+						{
+							"id": 4576437,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "The Dream",
+							"aired": "2013-06-26",
+							"runtime": 10
+						},
+						{
+							"id": 4576438,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "The Sidekick",
+							"aired": "2013-07-03",
+							"runtime": 10
+						},
+						{
+							"id": 4576439,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "The Photo",
+							"aired": "2013-07-17",
+							"runtime": 10
+						},
+						{
+							"id": 4605767,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "The Tag",
+							"aired": "2013-07-24",
+							"runtime": 10
+						},
+						{
+							"id": 4576436,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "The Storm",
+							"aired": "2013-07-31",
+							"runtime": 10
+						},
+						{
+							"id": 4630212,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "The Lesson",
+							"aired": "2013-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4630213,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "The Game",
+							"aired": "2013-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4630214,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "The Limit",
+							"aired": "2013-08-28",
+							"runtime": 10
+						},
+						{
+							"id": 4655743,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "The Promise",
+							"aired": "2013-09-17",
+							"runtime": 10
+						},
+						{
+							"id": 4655742,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "The Voice",
+							"aired": "2013-09-10",
+							"runtime": 10
+						},
+						{
+							"id": 4655744,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "The Castle",
+							"aired": "2013-10-01",
+							"runtime": 10
+						},
+						{
+							"id": 4680887,
+							"seasonNumber": 2,
+							"number": 34,
+							"name": "The Boombox",
+							"aired": "2013-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 4680888,
+							"seasonNumber": 2,
+							"number": 35,
+							"name": "The Tape",
+							"aired": "2013-10-15",
+							"runtime": 10
+						},
+						{
+							"id": 4704703,
+							"seasonNumber": 2,
+							"number": 36,
+							"name": "The Sweaters",
+							"aired": "2013-11-05",
+							"runtime": 10
+						},
+						{
+							"id": 4704704,
+							"seasonNumber": 2,
+							"number": 37,
+							"name": "The Internet",
+							"aired": "2013-11-12",
+							"runtime": 10
+						},
+						{
+							"id": 4704705,
+							"seasonNumber": 2,
+							"number": 38,
+							"name": "The Plan",
+							"aired": "2013-11-19",
+							"runtime": 10
+						},
+						{
+							"id": 4704706,
+							"seasonNumber": 2,
+							"number": 39,
+							"name": "The World",
+							"aired": "2013-11-26",
+							"runtime": 10
+						},
+						{
+							"id": 4704707,
+							"seasonNumber": 2,
+							"number": 40,
+							"name": "The Finale",
+							"aired": "2013-12-03",
+							"runtime": 10
+						},
+						{
+							"id": 4887871,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "The Kids",
+							"aired": "2014-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4901712,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "The Fan",
+							"aired": "2014-06-05",
+							"runtime": 10
+						},
+						{
+							"id": 4901713,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "The Coach",
+							"aired": "2014-06-12",
+							"runtime": 10
+						},
+						{
+							"id": 4901714,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "The Joy",
+							"aired": "2014-06-19",
+							"runtime": 10
+						},
+						{
+							"id": 4901715,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "The Puppy",
+							"aired": "2014-06-26",
+							"runtime": 10
+						},
+						{
+							"id": 4901716,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "The Recipe",
+							"aired": "2014-07-03",
+							"runtime": 10
+						},
+						{
+							"id": 4930443,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "The Name",
+							"aired": "2014-07-10",
+							"runtime": 10
+						},
+						{
+							"id": 4930529,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "The Extras",
+							"aired": "2014-07-17",
+							"runtime": 10
+						},
+						{
+							"id": 4930530,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "The Gripes",
+							"aired": "2014-07-24",
+							"runtime": 10
+						},
+						{
+							"id": 4930531,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "The Vacation",
+							"aired": "2014-07-31",
+							"runtime": 10
+						},
+						{
+							"id": 4955552,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "The Fraud",
+							"aired": "2014-08-07",
+							"runtime": 10
+						},
+						{
+							"id": 4964008,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "The Void",
+							"aired": "2014-08-14",
+							"runtime": 10
+						},
+						{
+							"id": 4964010,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "The Boss",
+							"aired": "2014-08-21",
+							"runtime": 10
+						},
+						{
+							"id": 4964011,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "The Move",
+							"aired": "2014-08-28",
+							"runtime": 10
+						},
+						{
+							"id": 4976675,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "The Law",
+							"aired": "2014-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 4976676,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "The Allergy",
+							"aired": "2014-09-11",
+							"runtime": 10
+						},
+						{
+							"id": 4996803,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "The Mothers",
+							"aired": "2014-09-18",
+							"runtime": 10
+						},
+						{
+							"id": 4997002,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "The Password",
+							"aired": "2014-09-25",
+							"runtime": 10
+						},
+						{
+							"id": 4997003,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "The Procrastinators",
+							"aired": "2014-10-02",
+							"runtime": 10
+						},
+						{
+							"id": 4997004,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "The Shell",
+							"aired": "2014-10-09",
+							"runtime": 10
+						},
+						{
+							"id": 5019166,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "The Burden",
+							"aired": "2014-10-16",
+							"runtime": 10
+						},
+						{
+							"id": 5019167,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "The Bros",
+							"aired": "2014-10-23",
+							"runtime": 10
+						},
+						{
+							"id": 5019168,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "The Mirror",
+							"aired": "2014-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 5019169,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "The Man",
+							"aired": "2014-10-30",
+							"runtime": 10
+						},
+						{
+							"id": 5036561,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "The Pizza",
+							"aired": "2014-11-13",
+							"runtime": 10
+						},
+						{
+							"id": 5045551,
+							"seasonNumber": 3,
+							"number": 26,
+							"name": "The Lie",
+							"aired": "2014-11-20",
+							"runtime": 10
+						},
+						{
+							"id": 5096626,
+							"seasonNumber": 3,
+							"number": 27,
+							"name": "The Butterfly",
+							"aired": "2015-01-08",
+							"runtime": 10
+						},
+						{
+							"id": 5096628,
+							"seasonNumber": 3,
+							"number": 28,
+							"name": "The Question",
+							"aired": "2015-01-08",
+							"runtime": 10
+						},
+						{
+							"id": 5100910,
+							"seasonNumber": 3,
+							"number": 29,
+							"name": "The Saint",
+							"aired": "2015-01-15",
+							"runtime": 10
+						},
+						{
+							"id": 5100911,
+							"seasonNumber": 3,
+							"number": 30,
+							"name": "The Friend",
+							"aired": "2015-01-22",
+							"runtime": 10
+						},
+						{
+							"id": 5109984,
+							"seasonNumber": 3,
+							"number": 31,
+							"name": "The Oracle",
+							"aired": "2015-01-29",
+							"runtime": 10
+						},
+						{
+							"id": 5109985,
+							"seasonNumber": 3,
+							"number": 32,
+							"name": "The Safety",
+							"aired": "2015-02-05",
+							"runtime": 10
+						},
+						{
+							"id": 5125120,
+							"seasonNumber": 3,
+							"number": 33,
+							"name": "The Society",
+							"aired": "2015-02-12",
+							"runtime": 10
+						},
+						{
+							"id": 5125121,
+							"seasonNumber": 3,
+							"number": 34,
+							"name": "The Spoiler",
+							"aired": "2015-02-19",
+							"runtime": 10
+						},
+						{
+							"id": 5137258,
+							"seasonNumber": 3,
+							"number": 35,
+							"name": "The Countdown",
+							"aired": "2015-02-26",
+							"runtime": 10
+						},
+						{
+							"id": 5137259,
+							"seasonNumber": 3,
+							"number": 36,
+							"name": "The Nobody",
+							"aired": "2015-03-05",
+							"runtime": 10
+						},
+						{
+							"id": 5195950,
+							"seasonNumber": 3,
+							"number": 37,
+							"name": "The Downer",
+							"aired": "2015-04-05",
+							"runtime": 10
+						},
+						{
+							"id": 5195951,
+							"seasonNumber": 3,
+							"number": 38,
+							"name": "The Return",
+							"aired": "2015-07-07",
+							"runtime": 10
+						},
+						{
+							"id": 5195952,
+							"seasonNumber": 3,
+							"number": 39,
+							"name": "The Triangle",
+							"aired": "2015-04-12",
+							"runtime": 10
+						},
+						{
+							"id": 5198453,
+							"seasonNumber": 3,
+							"number": 40,
+							"name": "The Money",
+							"aired": "2015-04-12",
+							"runtime": 10
+						},
+						{
+							"id": 5274513,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "The Nemesis",
+							"aired": "2015-07-10",
+							"runtime": 10
+						},
+						{
+							"id": 5274512,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "The Egg",
+							"aired": "2015-04-05",
+							"runtime": 10
+						},
+						{
+							"id": 5272816,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "The Crew",
+							"aired": "2015-08-13",
+							"runtime": 10
+						},
+						{
+							"id": 5300163,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "The Others",
+							"aired": "2015-08-20",
+							"runtime": 10
+						},
+						{
+							"id": 5300164,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "The Signature",
+							"aired": "2015-08-27",
+							"runtime": 10
+						},
+						{
+							"id": 5300165,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "The Check",
+							"aired": "2015-08-31",
+							"runtime": 10
+						},
+						{
+							"id": 5321491,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "The Pest",
+							"aired": "2015-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 5321492,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "The Sale",
+							"aired": "2015-09-02",
+							"runtime": 10
+						},
+						{
+							"id": 5321494,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "The Gift",
+							"aired": "2015-09-03",
+							"runtime": 10
+						},
+						{
+							"id": 5321495,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "The Parking",
+							"aired": "2015-09-04",
+							"runtime": 10
+						},
+						{
+							"id": 5325188,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "The Routine",
+							"aired": "2015-10-05",
+							"runtime": 10
+						},
+						{
+							"id": 5325189,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "The Upgrade",
+							"aired": "2015-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 5325190,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "The Comic",
+							"aired": "2015-10-07",
+							"runtime": 10
+						},
+						{
+							"id": 5325191,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "The Romantic",
+							"aired": "2015-10-08",
+							"runtime": 10
+						},
+						{
+							"id": 5325192,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "The Uploads",
+							"aired": "2015-10-09",
+							"runtime": 10
+						},
+						{
+							"id": 5394326,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "The Apprentice",
+							"aired": "2016-01-07",
+							"runtime": 10
+						},
+						{
+							"id": 5394327,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "The Hug",
+							"aired": "2016-01-14",
+							"runtime": 10
+						},
+						{
+							"id": 5411932,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "The Wicked",
+							"aired": "2016-01-21",
+							"runtime": 10
+						},
+						{
+							"id": 5506241,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "The Origins: Part 1",
+							"aired": "2016-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5506242,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "The Origins: Part 2",
+							"aired": "2016-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5454769,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "The Traitor",
+							"aired": "2016-01-28",
+							"runtime": 10
+						},
+						{
+							"id": 5539761,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "The Girlfriend",
+							"aired": "2016-03-31",
+							"runtime": 10
+						},
+						{
+							"id": 5493752,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "The Advice",
+							"aired": "2016-04-21",
+							"runtime": 10
+						},
+						{
+							"id": 5484653,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "The Signal",
+							"aired": "2016-04-28",
+							"runtime": 10
+						},
+						{
+							"id": 5545428,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "The Parasite",
+							"aired": "2016-05-05",
+							"runtime": 10
+						},
+						{
+							"id": 5553704,
+							"seasonNumber": 4,
+							"number": 26,
+							"name": "The Love",
+							"aired": "2016-05-12",
+							"runtime": 10
+						},
+						{
+							"id": 5561089,
+							"seasonNumber": 4,
+							"number": 27,
+							"name": "The Awkwardness",
+							"aired": "2016-05-19",
+							"runtime": 10
+						},
+						{
+							"id": 5577563,
+							"seasonNumber": 4,
+							"number": 28,
+							"name": "The Nest",
+							"aired": "2016-05-26",
+							"runtime": 10
+						},
+						{
+							"id": 5577562,
+							"seasonNumber": 4,
+							"number": 29,
+							"name": "The Points",
+							"aired": "2016-06-02",
+							"runtime": 10
+						},
+						{
+							"id": 5577564,
+							"seasonNumber": 4,
+							"number": 30,
+							"name": "The Bus",
+							"aired": "2016-06-09",
+							"runtime": 10
+						},
+						{
+							"id": 5642710,
+							"seasonNumber": 4,
+							"number": 31,
+							"name": "The Night",
+							"aired": "2016-06-16",
+							"runtime": 10
+						},
+						{
+							"id": 5642711,
+							"seasonNumber": 4,
+							"number": 32,
+							"name": "The Misunderstandings",
+							"aired": "2016-06-23",
+							"runtime": 10
+						},
+						{
+							"id": 5642719,
+							"seasonNumber": 4,
+							"number": 33,
+							"name": "The Roots",
+							"aired": "2016-08-15",
+							"runtime": 10
+						},
+						{
+							"id": 5642713,
+							"seasonNumber": 4,
+							"number": 34,
+							"name": "The Blame",
+							"aired": "2016-08-16",
+							"runtime": 10
+						},
+						{
+							"id": 5642714,
+							"seasonNumber": 4,
+							"number": 35,
+							"name": "The Slap",
+							"aired": "2016-08-17",
+							"runtime": 10
+						},
+						{
+							"id": 5642715,
+							"seasonNumber": 4,
+							"number": 36,
+							"name": "The Detective",
+							"aired": "2016-08-18",
+							"runtime": 10
+						},
+						{
+							"id": 5642716,
+							"seasonNumber": 4,
+							"number": 37,
+							"name": "The Fury",
+							"aired": "2016-08-19",
+							"runtime": 10
+						},
+						{
+							"id": 5642717,
+							"seasonNumber": 4,
+							"number": 38,
+							"name": "The Compilation",
+							"aired": "2016-08-25",
+							"runtime": 10
+						},
+						{
+							"id": 5744102,
+							"seasonNumber": 4,
+							"number": 39,
+							"name": "The Stories",
+							"aired": "2016-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 5642718,
+							"seasonNumber": 4,
+							"number": 40,
+							"name": "The Disaster",
+							"aired": "2016-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 5741657,
+							"seasonNumber": 4,
+							"number": 41,
+							"name": "The Re-Run",
+							"aired": "2016-09-05",
+							"runtime": 10
+						},
+						{
+							"id": 5744103,
+							"seasonNumber": 4,
+							"number": 42,
+							"name": "The Guy",
+							"aired": "2016-09-08",
+							"runtime": 10
+						},
+						{
+							"id": 5749344,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "The Boredom",
+							"aired": "2016-09-15",
+							"runtime": 10
+						},
+						{
+							"id": 5749345,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "The Vision",
+							"aired": "2016-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 5781782,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "The Choices",
+							"aired": "2016-10-13",
+							"runtime": 10
+						},
+						{
+							"id": 5814475,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "The Code",
+							"aired": "2016-10-20",
+							"runtime": 10
+						},
+						{
+							"id": 5702707,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "The Scam",
+							"aired": "2016-10-27",
+							"runtime": 10
+						},
+						{
+							"id": 5781783,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "The Test",
+							"aired": "2016-11-03",
+							"runtime": 10
+						},
+						{
+							"id": 5827181,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "The Slide",
+							"aired": "2016-11-10",
+							"runtime": 10
+						},
+						{
+							"id": 5827182,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "The Loophole",
+							"aired": "2016-11-17",
+							"runtime": 10
+						},
+						{
+							"id": 5956573,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "The Copycats",
+							"aired": "2017-02-06",
+							"runtime": 10
+						},
+						{
+							"id": 5956574,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "The Potato",
+							"aired": "2017-02-07",
+							"runtime": 10
+						},
+						{
+							"id": 5956594,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "The Fuss",
+							"aired": "2017-02-08",
+							"runtime": 10
+						},
+						{
+							"id": 5956595,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "The Outside",
+							"aired": "2017-02-09",
+							"runtime": 10
+						},
+						{
+							"id": 5956596,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "The Vase",
+							"aired": "2017-02-13",
+							"runtime": 10
+						},
+						{
+							"id": 5956598,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "The Matchmaker",
+							"aired": "2017-02-14",
+							"runtime": 10
+						},
+						{
+							"id": 5956599,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "The Box",
+							"aired": "2017-02-15",
+							"runtime": 10
+						},
+						{
+							"id": 5956601,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "The Console",
+							"aired": "2017-02-16",
+							"runtime": 10
+						},
+						{
+							"id": 5956602,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "The Ollie",
+							"aired": "2017-02-20",
+							"runtime": 10
+						},
+						{
+							"id": 5956604,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "The Catfish",
+							"aired": "2017-02-21",
+							"runtime": 10
+						},
+						{
+							"id": 5956605,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "The Cycle",
+							"aired": "2017-02-22",
+							"runtime": 10
+						},
+						{
+							"id": 5956606,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "The Stars",
+							"aired": "2017-02-23",
+							"runtime": 10
+						},
+						{
+							"id": 5956608,
+							"seasonNumber": 5,
+							"number": 21,
+							"name": "The Grades",
+							"aired": "2017-02-27",
+							"runtime": 10
+						},
+						{
+							"id": 5956610,
+							"seasonNumber": 5,
+							"number": 22,
+							"name": "The Diet",
+							"aired": "2017-02-28",
+							"runtime": 10
+						},
+						{
+							"id": 5956612,
+							"seasonNumber": 5,
+							"number": 23,
+							"name": "The Ex",
+							"aired": "2017-03-01",
+							"runtime": 10
+						},
+						{
+							"id": 5956615,
+							"seasonNumber": 5,
+							"number": 24,
+							"name": "The Sorcerer",
+							"aired": "2017-03-02",
+							"runtime": 10
+						},
+						{
+							"id": 5956625,
+							"seasonNumber": 5,
+							"number": 25,
+							"name": "The Menu",
+							"aired": "2017-03-06",
+							"runtime": 10
+						},
+						{
+							"id": 5956626,
+							"seasonNumber": 5,
+							"number": 26,
+							"name": "The Uncle",
+							"aired": "2017-03-07",
+							"runtime": 10
+						},
+						{
+							"id": 5992232,
+							"seasonNumber": 5,
+							"number": 27,
+							"name": "The Weirdo",
+							"aired": "2017-03-08",
+							"runtime": 10
+						},
+						{
+							"id": 5992233,
+							"seasonNumber": 5,
+							"number": 28,
+							"name": "The Heist",
+							"aired": "2017-03-09",
+							"runtime": 10
+						},
+						{
+							"id": 6219740,
+							"seasonNumber": 5,
+							"number": 29,
+							"name": "The Singing",
+							"aired": "2017-09-01",
+							"runtime": 10
+						},
+						{
+							"id": 6219731,
+							"seasonNumber": 5,
+							"number": 30,
+							"name": "The Best",
+							"aired": "2017-09-08",
+							"runtime": 10
+						},
+						{
+							"id": 6219733,
+							"seasonNumber": 5,
+							"number": 31,
+							"name": "The Worst",
+							"aired": "2017-09-15",
+							"runtime": 10
+						},
+						{
+							"id": 6219738,
+							"seasonNumber": 5,
+							"number": 32,
+							"name": "The Deal",
+							"aired": "2017-09-22",
+							"runtime": 10
+						},
+						{
+							"id": 5956623,
+							"seasonNumber": 5,
+							"number": 33,
+							"name": "The Petals",
+							"aired": "2017-09-29",
+							"runtime": 10
+						},
+						{
+							"id": 6219741,
+							"seasonNumber": 5,
+							"number": 34,
+							"name": "The Puppets",
+							"aired": "2017-10-06",
+							"runtime": 10
+						},
+						{
+							"id": 6219728,
+							"seasonNumber": 5,
+							"number": 35,
+							"name": "The Nuisance",
+							"aired": "2017-10-13",
+							"runtime": 10
+						},
+						{
+							"id": 6219739,
+							"seasonNumber": 5,
+							"number": 36,
+							"name": "The Line",
+							"aired": "2017-10-20",
+							"runtime": 10
+						},
+						{
+							"id": 6219735,
+							"seasonNumber": 5,
+							"number": 37,
+							"name": "The List",
+							"aired": "2017-11-03",
+							"runtime": 10
+						},
+						{
+							"id": 5956622,
+							"seasonNumber": 5,
+							"number": 38,
+							"name": "The News",
+							"aired": "2017-11-10",
+							"runtime": 10
+						},
+						{
+							"id": 6404516,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "The Rival",
+							"aired": "2018-01-05",
+							"runtime": 10
+						},
+						{
+							"id": 6404512,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "The Lady",
+							"aired": "2018-01-05",
+							"runtime": 10
+						},
+						{
+							"id": 6404513,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "The Sucker",
+							"aired": "2018-01-12",
+							"runtime": 10
+						},
+						{
+							"id": 6404514,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "The Vegging",
+							"aired": "2018-01-15",
+							"runtime": 10
+						},
+						{
+							"id": 6404515,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "The One",
+							"aired": "2018-01-19",
+							"runtime": 10
+						},
+						{
+							"id": 6443557,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "The Father",
+							"aired": "2018-01-26",
+							"runtime": 10
+						},
+						{
+							"id": 6514323,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "The Cringe",
+							"aired": "2018-02-02",
+							"runtime": 10
+						},
+						{
+							"id": 6497858,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "The Cage",
+							"aired": "2018-02-09",
+							"runtime": 10
+						},
+						{
+							"id": 6497859,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "The Faith",
+							"aired": "2018-02-23",
+							"runtime": 10
+						},
+						{
+							"id": 6497860,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "The Candidate",
+							"aired": "2018-03-02",
+							"runtime": 10
+						},
+						{
+							"id": 6497861,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "The Anybody",
+							"aired": "2018-03-09",
+							"runtime": 10
+						},
+						{
+							"id": 6497862,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "The Pact",
+							"aired": "2018-04-09",
+							"runtime": 10
+						},
+						{
+							"id": 6572225,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "The Neighbor",
+							"aired": "2018-04-13",
+							"runtime": 10
+						},
+						{
+							"id": 6572224,
+							"seasonNumber": 6,
+							"number": 14,
+							"name": "The Shippening",
+							"aired": "2018-04-20",
+							"runtime": 10
+						},
+						{
+							"id": 6714969,
+							"seasonNumber": 6,
+							"number": 15,
+							"name": "The Brain",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714971,
+							"seasonNumber": 6,
+							"number": 16,
+							"name": "The Parents",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714972,
+							"seasonNumber": 6,
+							"number": 17,
+							"name": "The Founder",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714973,
+							"seasonNumber": 6,
+							"number": 18,
+							"name": "The Schooling",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714978,
+							"seasonNumber": 6,
+							"number": 19,
+							"name": "The Intelligence",
+							"aired": "2018-06-18",
+							"runtime": 10
+						},
+						{
+							"id": 6714979,
+							"seasonNumber": 6,
+							"number": 20,
+							"name": "The Potion",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714980,
+							"seasonNumber": 6,
+							"number": 21,
+							"name": "The Spinoffs",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714981,
+							"seasonNumber": 6,
+							"number": 22,
+							"name": "The Transformation",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714982,
+							"seasonNumber": 6,
+							"number": 23,
+							"name": "The Understanding",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6714983,
+							"seasonNumber": 6,
+							"number": 24,
+							"name": "The Ad",
+							"aired": "2018-07-16",
+							"runtime": 10
+						},
+						{
+							"id": 6846099,
+							"seasonNumber": 6,
+							"number": 25,
+							"name": "The Ghouls",
+							"aired": "2018-10-19",
+							"runtime": 10
+						},
+						{
+							"id": 6714984,
+							"seasonNumber": 6,
+							"number": 26,
+							"name": "The Stink",
+							"aired": "2018-11-05",
+							"runtime": 10
+						},
+						{
+							"id": 6572226,
+							"seasonNumber": 6,
+							"number": 27,
+							"name": "The Awareness",
+							"aired": "2018-11-06",
+							"runtime": 10
+						},
+						{
+							"id": 6666317,
+							"seasonNumber": 6,
+							"number": 28,
+							"name": "The Slip",
+							"aired": "2018-11-07",
+							"runtime": 10
+						},
+						{
+							"id": 6679910,
+							"seasonNumber": 6,
+							"number": 29,
+							"name": "The Drama",
+							"aired": "2018-11-08",
+							"runtime": 10
+						},
+						{
+							"id": 6830991,
+							"seasonNumber": 6,
+							"number": 30,
+							"name": "The Buddy",
+							"aired": "2018-11-09",
+							"runtime": 10
+						},
+						{
+							"id": 7054765,
+							"seasonNumber": 6,
+							"number": 31,
+							"name": "The Possession",
+							"aired": "2019-04-15",
+							"runtime": 10
+						},
+						{
+							"id": 7106038,
+							"seasonNumber": 6,
+							"number": 32,
+							"name": "The Master",
+							"aired": "2019-04-22",
+							"runtime": 10
+						},
+						{
+							"id": 6939732,
+							"seasonNumber": 6,
+							"number": 33,
+							"name": "The Silence",
+							"aired": "2019-04-29",
+							"runtime": 10
+						},
+						{
+							"id": 7149557,
+							"seasonNumber": 6,
+							"number": 34,
+							"name": "The Future",
+							"aired": "2019-05-06",
+							"runtime": 10
+						},
+						{
+							"id": 7155798,
+							"seasonNumber": 6,
+							"number": 35,
+							"name": "The Wish",
+							"aired": "2019-05-13",
+							"runtime": 10
+						},
+						{
+							"id": 7155800,
+							"seasonNumber": 6,
+							"number": 36,
+							"name": "The Factory",
+							"aired": "2019-05-20",
+							"runtime": 10
+						},
+						{
+							"id": 7155802,
+							"seasonNumber": 6,
+							"number": 37,
+							"name": "The Agent",
+							"aired": "2019-05-27",
+							"runtime": 10
+						},
+						{
+							"id": 7208615,
+							"seasonNumber": 6,
+							"number": 38,
+							"name": "The Web",
+							"aired": "2019-06-03",
+							"runtime": 10
+						},
+						{
+							"id": 7212662,
+							"seasonNumber": 6,
+							"number": 39,
+							"name": "The Mess",
+							"aired": "2019-06-10",
+							"runtime": 10
+						},
+						{
+							"id": 7165658,
+							"seasonNumber": 6,
+							"number": 40,
+							"name": "The Heart",
+							"aired": "2019-06-10",
+							"runtime": 10
+						},
+						{
+							"id": 7212665,
+							"seasonNumber": 6,
+							"number": 41,
+							"name": "The Revolt",
+							"aired": "2019-06-17",
+							"runtime": 10
+						},
+						{
+							"id": 7212666,
+							"seasonNumber": 6,
+							"number": 42,
+							"name": "The Decisions",
+							"aired": "2019-06-17",
+							"runtime": 10
+						},
+						{
+							"id": 7212678,
+							"seasonNumber": 6,
+							"number": 43,
+							"name": "The BFFS",
+							"aired": "2019-06-24",
+							"runtime": 10
+						},
+						{
+							"id": 7212679,
+							"seasonNumber": 6,
+							"number": 44,
+							"name": "The Inquisition",
+							"aired": "2019-06-24",
+							"runtime": 10
+						}
+					]
+				}
+			}
+		},
+		"findTvdbEpisode": {
+			"10542074": {
+				"movie_results": [],
+				"person_results": [],
+				"tv_results": [],
+				"tv_episode_results": [
+					{
+						"id": 6247731,
+						"name": "The Burger",
+						"overview": "Gumball and Darwin want to find a healthy dinner option for their family because they are hooked on Joyful Burger, but an evil food consortium has monopolized the food industry.",
+						"media_type": "tv_episode",
+						"vote_average": 8.7,
+						"vote_count": 26,
+						"air_date": "2025-10-06",
+						"episode_number": 1,
+						"episode_type": "standard",
+						"production_code": "",
+						"runtime": 12,
+						"season_number": 1,
+						"show_id": 291904,
+						"still_path": "/rxzgZnxuplBSrT4mbexWgVnOeUR.jpg"
+					}
+				],
+				"tv_season_results": []
+			},
+			"10658695": {
+				"movie_results": [],
+				"person_results": [],
+				"tv_results": [],
+				"tv_episode_results": [
+					{
+						"id": 6710497,
+						"name": "The Cheapmas",
+						"overview": "After finding out Christmas is cancelled because Elmore is broke, Gumball and Darwin vow to save Christmas.",
+						"media_type": "tv_episode",
+						"vote_average": 7,
+						"vote_count": 3,
+						"air_date": "2025-12-22",
+						"episode_number": 6,
+						"episode_type": "standard",
+						"production_code": "",
+						"runtime": 12,
+						"season_number": 2,
+						"show_id": 291904,
+						"still_path": "/oCSePPe1FnhzfIE41qxD3P8SkEu.jpg"
+					}
+				],
+				"tv_season_results": []
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is inside one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy",
+				"hash": null,
+				"imdbId": "tt1942683",
+				"files": [
+					{
+						"path": "The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt36985473",
+				"tmdbId": 291904,
+				"tvdbId": 248482,
+				"files": [
+					{
+						"path": "The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy.mkv",
+						"season": 7,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tvdbSeries",
+						"tmdbEpisodeId": 6710497
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is inside one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Amazing.World.of.Gumball.S06E45.MULTI.MULTI.1080p.MAX.WEB-DL.DDP2.0.H.264-AndreMor",
+				"hash": null,
+				"imdbId": "tt1942683",
+				"files": [
+					{
+						"path": "The.Amazing.World.of.Gumball.S06E45.MULTI.MULTI.1080p.MAX.WEB-DL.DDP2.0.H.264-AndreMor.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1942683",
+				"tmdbId": 37606,
+				"files": [
+					{
+						"path": "The.Amazing.World.of.Gumball.S06E45.MULTI.MULTI.1080p.MAX.WEB-DL.DDP2.0.H.264-AndreMor.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is inside one) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Amazing.World.of.Gumball.S07E01.The.Burger.1080p.DSNP.WEB-DL.DDP5.1.H.264-Kitsune",
+				"hash": null,
+				"imdbId": "tt1942683",
+				"files": [
+					{
+						"path": "The.Amazing.World.of.Gumball.S07E01.The.Burger.1080p.DSNP.WEB-DL.DDP5.1.H.264-Kitsune.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt36985473",
+				"tmdbId": 291904,
+				"tvdbId": 248482,
+				"files": [
+					{
+						"path": "The.Amazing.World.of.Gumball.S07E01.The.Burger.1080p.DSNP.WEB-DL.DDP5.1.H.264-Kitsune.mkv",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tvdbSeries",
+						"tmdbEpisodeId": 6247731
+					}
+				]
+			}
+		}
+	]
+}

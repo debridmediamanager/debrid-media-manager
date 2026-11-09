@@ -53,7 +53,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-09.3';
+export const PLACEMENT_RULES = '2026-11-09.4';
 
 export interface PlaceRequest {
 	name: string;
@@ -162,6 +162,8 @@ export interface PlacementSources {
 	tvdbSeriesOf?(imdbId: string): Promise<number[] | null>;
 	/** A TheTVDB series' episodes in its default (aired) order, which Plex numbers by, or its DVD order. */
 	tvdbEpisodes?(tvdbId: number, order?: 'dvd'): Promise<any[] | null>;
+	/** TMDB's `/find` for a TheTVDB episode id; absent or null where it cannot be asked. */
+	findTvdbEpisode?(tvdbEpisodeId: number): Promise<any | null>;
 }
 
 /** Releases placed at once; each one's files go one after another, sharing its lookups. */
@@ -250,6 +252,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
 			if (!waits) out[at] = await tvdbLook(out[at], sources);
+			if (!waits) out[at] = await revivalLook(release, out[at], sources);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -401,6 +404,84 @@ async function tvdbLook(placed: PlacedRelease, sources: PlacementSources): Promi
 				? file
 				: { ...file, season: at[n].seasonNumber, episode: at[n].number, how: 'tvdbSeries' };
 		}),
+	};
+}
+
+/**
+ * A release of a season TVDB lists under the show and TMDB as a show of its own, `tvdbLook` the
+ * other way round: TVDB, and Plex with it, keeps The Wonderfully Weird World of Gumball (2025) as
+ * The Amazing World of Gumball's season 7, which TMDB lists as 291904 with no TVDB id, so
+ * `The.Amazing.World.of.Gumball.S07E01.The.Burger` named a season TMDB's 37606 does not have.
+ * Each such file is found by its TVDB episode through TMDB's find. The release moves only where
+ * it places nothing, every numbered file is of a season the show lacks, and all are found on one
+ * other show TMDB records no TVDB id for: answered as `tvdbSeries`, with TVDB's numbers and TMDB's
+ * episode ids.
+ */
+async function revivalLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	if (
+		placed.skipped ||
+		placed.kind !== 'tv' ||
+		placed.tmdbId === null ||
+		placesFiles(placed) ||
+		!sources.tvdbEpisodes ||
+		!sources.findTvdbEpisode
+	)
+		return placed;
+	const numbered = releaseNumbers(release).flatMap((numbers, at) =>
+		numbers ? [{ numbers, at }] : []
+	);
+	if (!numbered.length) return placed;
+	const show = await sources.show(placed.tmdbId);
+	const tvdbId = Number(show?.external_ids?.tvdb_id);
+	if (!(tvdbId > 0) || !Array.isArray(show?.seasons)) return placed;
+	const listed = new Set((show.seasons as any[]).map((row) => row?.season_number));
+	// ponytail: a multi-episode file keeps the release where it is; map both ends when one turns up
+	if (
+		numbered.some(
+			({ numbers: n }) =>
+				n.season === null || n.season < 1 || listed.has(n.season) || n.end !== null
+		)
+	)
+		return placed;
+	const episodes: any[] = (await sources.tvdbEpisodes(tvdbId)) ?? [];
+	const found = await Promise.all(
+		numbered.map(async ({ numbers: n }) => {
+			const tvdb = episodes.find(
+				(row) => row?.seasonNumber === n.season && row?.number === n.episode
+			);
+			const hit = Number.isInteger(tvdb?.id)
+				? (await sources.findTvdbEpisode!(tvdb.id))?.tv_episode_results?.[0]
+				: null;
+			return Number.isInteger(hit?.show_id) && Number.isInteger(hit?.id) ? hit : null;
+		})
+	);
+	const shows = new Set(found.map((hit) => hit?.show_id));
+	const [other] = shows;
+	if (found.some((hit) => !hit) || shows.size !== 1 || other === placed.tmdbId) return placed;
+	const there = await sources.show(other);
+	if (!there?.name || there.external_ids?.tvdb_id) return placed;
+	const external = there.external_ids?.imdb_id;
+	const files = [...placed.files];
+	numbered.forEach(({ numbers: n, at }, k) => {
+		files[at] = {
+			...files[at],
+			season: n.season,
+			episode: n.episode,
+			episodeEnd: null,
+			how: 'tvdbSeries',
+			tmdbEpisodeId: found[k].id,
+		};
+	});
+	return {
+		kind: 'tv',
+		imdbId: typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null,
+		tmdbId: other,
+		tvdbId,
+		files,
 	};
 }
 
@@ -1745,6 +1826,14 @@ export const cachedSources: PlacementSources = {
 					.map((row: any) => row?.series?.id)
 					.filter((id: unknown) => typeof id === 'number')
 		),
+	findTvdbEpisode: (id) =>
+		getTmdbAuth()
+			? settle(() =>
+					getMetadataCache().getTmdbPassthrough(`find/${id}`, {
+						external_source: 'tvdb_id',
+					})
+				)
+			: Promise.resolve(null),
 	tvdbEpisodes: async (tvdbId, order) => {
 		const episodes: any[] = [];
 		// 500 a page: Kitchen Nightmares' 126 episodes are one

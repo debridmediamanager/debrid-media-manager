@@ -19,6 +19,7 @@ import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import cases from '@/test/fixtures/placement/releases.json';
+import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
 import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
@@ -103,6 +104,7 @@ const recordedSources = (r: any): PlacementSources => ({
 			: null,
 	tvdbEpisodes: async (id, order) =>
 		r.tvdbEpisodes?.[order ? `${id}/${order}` : id]?.data.episodes ?? null,
+	findTvdbEpisode: async (id) => r.findTvdbEpisode?.[id] ?? null,
 });
 
 describe('a daily show named by its air date', () => {
@@ -1356,5 +1358,46 @@ describe('titles the identifier offers, spelled as DMM reads the name', () => {
 			8,
 			null,
 		]);
+	});
+});
+
+describe('a season TVDB lists under the show and TMDB as a show of its own', () => {
+	// zurg-usenet on fun (2026-11-09): TVDB keeps The Wonderfully Weird World of Gumball (2025) as
+	// The Amazing World of Gumball's season 7, TMDB as 291904 with no TVDB id (see the fixtures README)
+	const ask = (name: string) => {
+		const c = revival.cases.find((c) => c.request.name.startsWith(name))!;
+		return place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(revival.answers),
+			async () => [null]
+		).then(({ releases }) => [releases[0], c.expect] as const);
+	};
+
+	it.each([
+		['The.Amazing.World.of.Gumball.S07E01.The.Burger', 1, 6247731],
+		['The.Amazing.World.Of.Gumball.S07E26.1080p.WEB.h264-iVy', 26, 6710497],
+	])("places %s on TMDB's own show by TVDB's numbers", async (name, episode, id) => {
+		const [placed, expected] = await ask(name);
+		expect([placed.tmdbId, placed.imdbId, placed.tvdbId]).toEqual([
+			291904,
+			'tt36985473',
+			248482,
+		]);
+		const [file] = placed.files;
+		expect([file.season, file.episode, file.how, file.tmdbEpisodeId]).toEqual([
+			7,
+			episode,
+			'tvdbSeries',
+			id,
+		]);
+		expect(placed).toEqual(expected);
+	});
+
+	it('leaves a number neither lists where it was', async () => {
+		// TVDB's season 6 ends at E44, as TMDB's does
+		const [placed, expected] = await ask('The.Amazing.World.of.Gumball.S06E45');
+		expect([placed.tmdbId, placed.files[0].season]).toEqual([37606, null]);
+		expect(placed).toEqual(expected);
 	});
 });
