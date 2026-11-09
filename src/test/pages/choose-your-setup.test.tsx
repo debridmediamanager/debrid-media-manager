@@ -459,7 +459,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			screen.getByText(
-				'Only the Sonarr/Radarr choice changes the route; the others change the notes and sponsor benefits.'
+				'Only the Sonarr/Radarr choice changes the route; a managed library adds Wanted notes and benefits.'
 			)
 		).toBeInTheDocument();
 	});

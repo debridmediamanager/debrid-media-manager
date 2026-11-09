@@ -54,7 +54,7 @@ const QUESTION_HINTS: Record<QuestionKey, string> = {
 		'Select the sources you want connected separately. If an addon already uses your debrid account, choose the addon alone unless you also want that account’s library connected separately.',
 	host: 'A host is only needed for routes that run zurg, rex, arr or a media server.',
 	preference:
-		'Only the Sonarr/Radarr choice changes the route; the others change the notes and sponsor benefits.',
+		'Only the Sonarr/Radarr choice changes the route; a managed library adds Wanted notes and benefits.',
 	needs: 'These answers add practical limits and optional next steps. You can skip this.',
 };
 
