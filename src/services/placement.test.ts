@@ -30,6 +30,7 @@ import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
 import office from '@/test/fixtures/placement/office-tvdb-order.json';
+import releaseTags from '@/test/fixtures/placement/release-tags.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
@@ -1850,5 +1851,28 @@ describe("TVDB's segments of one TMDB episode", () => {
 		const { release } = await placed('Freakazoid! (1995)', false);
 		expect(at(release, '1x01 - Five Day Forecast')).toEqual([1, 1, null, null]);
 		expect(at(release, '1x02 - Dance of Doom')).toEqual([null, null, null, null]);
+	});
+});
+
+describe("a release's SD tag after a title", () => {
+	// zurg on fun (2026-11-09): Animaniacs' `5x13 - Punchline - The Chicken or the Egg - SD DVD`, a
+	// pack numbered otherwise than TMDB, whose titles name its episodes (see the fixtures README)
+	it('places each file on the episode its title names, the tag left out of the title', async () => {
+		const [c] = releaseTags.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(releaseTags.answers)
+		);
+		const at = (name: string) => {
+			const file = releases[0].files.find((f) => f.path.includes(name))!;
+			return [file.season, file.episode];
+		};
+		expect(at('5x13 - Punchline - The Chicken or the Egg')).toEqual([5, 18]);
+		expect(at('5x15 - Hooray for North Hollywood (1)')).toEqual([5, 11]);
+		// read with `sd` as their titles' last word, these went by their numbers
+		expect(at('5x12 - Punchline - Why did the Chicken Cross the Road')).toEqual([5, 16]);
+		expect(at('5x16 - Hooray for North Hollywood (2)')).toEqual([5, 12]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });

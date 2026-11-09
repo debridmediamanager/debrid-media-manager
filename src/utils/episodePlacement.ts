@@ -1132,7 +1132,7 @@ const RELEASE_WORDS =
 	/^(?:proper|repack|rerip|real|internal|extended|uncut|uncensored|remastered|dubbed|subbed|multi|dual|end|fin|final)$/;
 const SCENE_WORDS = /^(?:proper|repack|rerip|internal)$/;
 const TAGS =
-	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
+	/^(?:\d{3,4}[pi]|[248]k|sd|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
 // What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
 // Olga Gets Engaged`, `One of Us; Vanishing Act`, `Pup Pup Boogie + Pups in a Fog`, `The Magic
 // Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
