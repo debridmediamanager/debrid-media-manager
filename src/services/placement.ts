@@ -59,7 +59,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-09.11';
+export const PLACEMENT_RULES = '2026-11-09.12';
 
 export interface PlaceRequest {
 	name: string;
@@ -891,18 +891,19 @@ async function secondLook(
  * the 1915 and 1917 shorts. Only for a release DMM knows nothing of, with no numbered file, and
  * only where one film of that year (a year either way, where none is of it) is titled as the name
  * by letters, under its title or else its original title (`Macbeth.2010` is the English TV film,
- * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id.
+ * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id. A release placed
+ * on a show that first aired after that year is no episode of it either (`laterShow`).
  */
 async function filmByTitle(
 	release: PlaceRequest,
 	placed: PlacedRelease,
 	sources: PlacementSources
 ): Promise<PlacedRelease> {
-	if (placed.skipped || placed.kind || placed.imdbId || !sources.searchMovie || !sources.movieIds)
-		return placed;
+	if (placed.skipped || !sources.searchMovie || !sources.movieIds) return placed;
 	if (releaseNumbers(release).some(Boolean)) return placed;
 	const { title, year } = parseName(release.name);
 	if (!year || letters(title).length < 3) return placed;
+	if ((placed.kind || placed.imdbId) && !(await laterShow(placed, year, sources))) return placed;
 	const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
 	const results: any[] = (await sources.searchMovie(title, year))?.results ?? [];
 	const near = results.filter((row) => Math.abs(yearOf(row) - year) <= 1);
@@ -924,6 +925,21 @@ async function filmByTitle(
 	return film?.kind === 'movie' && film.tmdbId !== null
 		? { ...film, files: release.files.map((file) => unplaced(file.path)) }
 		: placed;
+}
+
+/**
+ * Whether a release of no numbered file was placed on a show that first aired after the year its
+ * name gives, and holds none of it: the ids zurg sent with `Wings.1927…`, `The.Great.Train.Robbery.1903…`
+ * and `Behind.The.Screen.1916…` name the 1990 sitcom, the 2013 miniseries and the 1981 soap.
+ */
+async function laterShow(
+	placed: PlacedRelease,
+	year: number,
+	sources: PlacementSources
+): Promise<boolean> {
+	if (placed.kind !== 'tv' || placed.tmdbId === null || placesFiles(placed)) return false;
+	const aired = (await sources.show(placed.tmdbId))?.first_air_date;
+	return Number(String(aired ?? '').slice(0, 4)) > year + 1;
 }
 
 /**

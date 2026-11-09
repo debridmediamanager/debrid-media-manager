@@ -1,0 +1,429 @@
+{
+	"answers": {
+		"find": {
+			"tt0081830": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 21213,
+						"name": "Behind the Screen",
+						"first_air_date": "1981-10-09"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2763296": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 64257,
+						"name": "The Great Train Robbery",
+						"first_air_date": "2013-12-18"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0098948": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2506,
+						"name": "Wings",
+						"first_air_date": "1990-04-19"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0000439": {
+				"movie_results": [
+					{
+						"id": 5698,
+						"title": "The Great Train Robbery",
+						"release_date": "1903-12-07"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0018578": {
+				"movie_results": [
+					{
+						"id": 28966,
+						"title": "Wings",
+						"release_date": "1927-08-12"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0006414": {
+				"movie_results": [
+					{
+						"id": 53419,
+						"title": "Behind the Screen",
+						"release_date": "1916-11-13"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"2506": {
+				"id": 2506,
+				"name": "Wings",
+				"original_name": "Wings",
+				"first_air_date": "1990-04-19",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 380,
+							"name": "sibling relationship"
+						},
+						{
+							"id": 822,
+							"name": "airport"
+						},
+						{
+							"id": 1700,
+							"name": "massachusetts"
+						},
+						{
+							"id": 3203,
+							"name": "pilot"
+						},
+						{
+							"id": 180076,
+							"name": "airline"
+						},
+						{
+							"id": 193171,
+							"name": "sitcom"
+						},
+						{
+							"id": 223212,
+							"name": "nantucket"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0098948",
+					"tvdb_id": 71962
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Skrzydła",
+							"iso_3166_1": "PL"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "1990-04-19",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 22,
+						"air_date": "1990-09-28",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 22,
+						"air_date": "1991-09-19",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 22,
+						"air_date": "1992-09-24",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 24,
+						"air_date": "1993-09-16",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 26,
+						"air_date": "1994-09-20",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 26,
+						"air_date": "1995-09-19",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 24,
+						"air_date": "1996-09-18",
+						"name": "Season 8"
+					}
+				]
+			},
+			"21213": {
+				"id": 21213,
+				"name": "Behind the Screen",
+				"original_name": "Behind the Screen",
+				"first_air_date": "1981-10-09",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt0081830",
+					"tvdb_id": null
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 4,
+						"air_date": "1981-10-09",
+						"name": "Season 1"
+					}
+				]
+			},
+			"64257": {
+				"id": 64257,
+				"name": "The Great Train Robbery",
+				"original_name": "The Great Train Robbery",
+				"first_air_date": "2013-12-18",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9672,
+							"name": "based on true story"
+						},
+						{
+							"id": 11162,
+							"name": "miniseries"
+						},
+						{
+							"id": 14905,
+							"name": "britain"
+						},
+						{
+							"id": 156120,
+							"name": "train robbery"
+						},
+						{
+							"id": 208992,
+							"name": "1960s"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2763296",
+					"tvdb_id": 272804
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Der grosse Eisenbahnraub 1963",
+							"iso_3166_1": "CH"
+						},
+						{
+							"title": "Wielki Napad na Pociąg",
+							"iso_3166_1": "PL"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 2,
+						"air_date": "2013-12-18",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0081830": null,
+			"tt2763296": null,
+			"tt0098948": null,
+			"tt0000439": null,
+			"tt0018578": null,
+			"tt0006414": null
+		},
+		"searchMovie": {
+			"The Great Train Robbery|1903": {
+				"results": [
+					{
+						"id": 5698,
+						"title": "The Great Train Robbery",
+						"original_title": "The Great Train Robbery",
+						"release_date": "1903-12-07"
+					}
+				]
+			},
+			"Wings|1927": {
+				"results": [
+					{
+						"id": 28966,
+						"title": "Wings",
+						"original_title": "Wings",
+						"release_date": "1927-08-12"
+					},
+					{
+						"id": 271418,
+						"title": "Many Wings",
+						"original_title": "Many Wings",
+						"release_date": "1927-11-21"
+					}
+				]
+			},
+			"Behind The Screen|1916": {
+				"results": [
+					{
+						"id": 53419,
+						"title": "Behind the Screen",
+						"original_title": "Behind the Screen",
+						"release_date": "1916-11-13"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"5698": {
+				"id": 5698,
+				"imdb_id": "tt0000439"
+			},
+			"28966": {
+				"id": 28966,
+				"imdb_id": "tt0018578"
+			},
+			"53419": {
+				"id": 53419,
+				"imdb_id": "tt0006414"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name, IMDb id and video file as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Behind.The.Screen.1916.1080p.Bluray.REMUX.AVC.LPCM.2.0-Atomic",
+				"hash": null,
+				"imdbId": "tt0081830",
+				"files": [
+					{
+						"path": "Behind.The.Screen.1916.1080p.Bluray.REMUX.AVC.LPCM.2.0-Atomic.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0006414",
+				"tmdbId": 53419,
+				"files": [
+					{
+						"path": "Behind.The.Screen.1916.1080p.Bluray.REMUX.AVC.LPCM.2.0-Atomic.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name, IMDb id and video file as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "The.Great.Train.Robbery.1903.1080p.BluRay-LAMA",
+				"hash": null,
+				"imdbId": "tt2763296",
+				"files": [
+					{
+						"path": "The.Great.Train.Robbery.1903.1080p.BluRay-LAMA.mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0000439",
+				"tmdbId": 5698,
+				"files": [
+					{
+						"path": "The.Great.Train.Robbery.1903.1080p.BluRay-LAMA.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name, IMDb id and video file as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "[1+9] - Wings.1927.1080p.BluRay.REMUX.AVC.DTS.HD.MA.5.1.PTer.par2",
+				"hash": null,
+				"imdbId": "tt0098948",
+				"files": [
+					{
+						"path": "Wings.1927.1080p.BluRay.REMUX.AVC.DTS.HD.MA.5.1.PTer.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0018578",
+				"tmdbId": 28966,
+				"files": [
+					{
+						"path": "Wings.1927.1080p.BluRay.REMUX.AVC.DTS.HD.MA.5.1.PTer.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

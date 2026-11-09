@@ -15,6 +15,7 @@ import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
@@ -1496,5 +1497,29 @@ describe('One Pace', () => {
 				.flatMap((r) => r.files)
 				.every((f) => f.season === null && f.tmdbEpisodeId === null)
 		).toBe(true);
+	});
+});
+
+describe('a film named by a show that first aired later', () => {
+	// zurg-usenet on fun (2026-11-09): the ids zurg sent with three silent films name shows of the
+	// same title from decades later, which hold none of them (see the fixtures README)
+	it.each([
+		['[1+9] - Wings.1927.1080p.BluRay.REMUX.AVC.DTS.HD.MA.5.1.PTer.par2', 'tt0018578', 28966],
+		['The.Great.Train.Robbery.1903.1080p.BluRay-LAMA', 'tt0000439', 5698],
+		['Behind.The.Screen.1916.1080p.Bluray.REMUX.AVC.LPCM.2.0-Atomic', 'tt0006414', 53419],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const c = filmsBeforeShows.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsBeforeShows.answers),
+			async () => [null]
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });

@@ -156,7 +156,8 @@ where the identifier reads on past the title (`Would.I.Lie.to.You-S16E03-Shirley
 are named so and both hold the files' numbers (Animaniacs of 1993 and of 2020), by the one
 whose episodes the files' titles name, and by neither where no title does. A film of no numbered
 file that neither names is TMDB's one film of the year the name gives titled as it (`The.Bank.1915`
-is Chaplin's short). A release whose titled files mostly name
+is Chaplin's short), and so is one whose id names a show that first aired after that year (the id
+sent with `Wings.1927` names the 1990 sitcom). A release whose titled files mostly name
 episodes of another show is placed on that show: one TMDB lists under the same name, one the
 identifier ranked beside it, or a franchise show holding it as a season (Power Rangers Dino
 Charge is TMDB's Power Rangers season 22).
