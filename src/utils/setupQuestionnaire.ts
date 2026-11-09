@@ -1192,6 +1192,14 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				});
 		}
 	}
+	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
+	const kodiWebdav = selected.filter((source) => PROVIDER_WEBDAV[source]);
+	if (player === 'kodi' && answers.preference !== 'arr' && kodiWebdav.length)
+		result.alternatives.push({
+			title: 'Browse over WebDAV instead',
+			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.`,
+			links: [ZURG],
+		});
 	if (answers.player === 'plex' && answers.plexRoute === 'either')
 		result.alternatives.push({
 			title: 'Use Plex Media Server instead',

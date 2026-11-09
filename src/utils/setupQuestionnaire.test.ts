@@ -1009,6 +1009,41 @@ describe('provider WebDAV follows the chosen provider', () => {
 	});
 });
 
+describe('Kodi can browse a provider WebDAV instead of the addon', () => {
+	const browse = (overrides: Partial<SetupAnswers>) =>
+		recommendSetup(answers({ player: 'kodi', ...overrides })).alternatives.find(
+			({ title }) => title === 'Browse over WebDAV instead'
+		);
+
+	it('names the provider WebDAV and zurg on a host', () => {
+		expect(browse({ sources: ['real-debrid'], host: 'none' })).toEqual({
+			title: 'Browse over WebDAV instead',
+			detail: 'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.',
+			links: [
+				{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
+			],
+		});
+	});
+
+	it('lists every selected provider WebDAV', () => {
+		expect(browse({ sources: ['real-debrid', 'all-debrid'], host: 'existing' })?.detail).toBe(
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) or AllDebrid WebDAV (https://webdav.debrid.it/) with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
+		);
+	});
+
+	it.each([
+		{ sources: ['offcloud'] },
+		{ sources: ['torbox-hosted'] },
+		{ sources: ['real-debrid'], host: 'existing', preference: 'arr' },
+		{ player: 'stremio', sources: ['real-debrid'] },
+	] satisfies Partial<SetupAnswers>[])(
+		'is not offered without a provider WebDAV for Kodi (%o)',
+		(overrides) => {
+			expect(browse(overrides)).toBeUndefined();
+		}
+	);
+});
+
 describe('the Torznab benefit matches the Torznab page', () => {
 	it('does not offer Torznab to a managed library without Sonarr or Radarr', () => {
 		const result = recommendSetup(answers({ preference: 'managed' }));
