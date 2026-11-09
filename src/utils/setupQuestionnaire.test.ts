@@ -5,6 +5,7 @@ import {
 	PLAYER_OPTIONS,
 	PREFERENCE_OPTIONS,
 	SOURCE_OPTIONS,
+	hostChoiceReason,
 	recommendSetup,
 	type Host,
 	type Need,
@@ -926,5 +927,37 @@ describe('the Torznab benefit matches the Torznab page', () => {
 			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
 		);
 		expect(torznab?.detail).not.toMatch(/live cache feeds/);
+	});
+});
+
+describe('host messages name the server that needs the host', () => {
+	it.each([
+		[{ player: 'plex', plexRoute: 'existing-server' }, 'Plex Media Server'],
+		[{ player: 'plex', plexRoute: 'rex' }, 'rex'],
+		[{ player: 'plex', plexRoute: 'either' }, 'rex'],
+		[{ player: 'jellyfin' }, 'Jellyfin'],
+		[{ player: 'emby' }, 'Emby'],
+	] as const)('says Android cannot run the server for %o', (mode, name) => {
+		expect(hostChoiceReason(mode, 'android')).toBe(
+			`${name} needs a full server host; Android can run zurg, not ${name}.`
+		);
+	});
+
+	it('says Plex Media Server needs a machine that stays on', () => {
+		const result = recommendSetup(
+			answers({ player: 'plex', plexRoute: 'existing-server', host: 'none' })
+		);
+
+		expect(result.conflicts).toContain(
+			'Plex Media Server needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.'
+		);
+	});
+
+	it('says rex and its source need a machine that stays on', () => {
+		const result = recommendSetup(answers({ player: 'plex', plexRoute: 'rex', host: 'none' }));
+
+		expect(result.conflicts.join(' ')).toMatch(
+			/^rex and its source need a machine that stays on\./
+		);
 	});
 });

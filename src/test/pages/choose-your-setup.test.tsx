@@ -250,7 +250,25 @@ describe('choose your setup page', () => {
 		const android = screen.getByRole('button', { name: /Android \/ Google TV/ });
 		expect(android).toBeDisabled();
 		expect(
-			screen.getByText(/Unavailable: Plex apps server needs a full server host/)
+			screen.getByText(
+				'Unavailable: Plex Media Server needs a full server host; Android can run zurg, not Plex Media Server.'
+			)
+		).toBeInTheDocument();
+	});
+
+	it('says only the Sonarr/Radarr choice changes the route', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByText(
+				'Only the Sonarr/Radarr choice changes the route; the others change the notes and sponsor benefits.'
+			)
 		).toBeInTheDocument();
 	});
 

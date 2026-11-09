@@ -297,12 +297,13 @@ export function hostChoiceReason(
 	host: Host
 ): string | undefined {
 	if (host === 'android' && playerNeedsFullHost(answers.player)) {
-		const stack =
-			answers.player === 'plex' &&
-			(answers.plexRoute === 'rex' || answers.plexRoute === 'either')
-				? 'rex'
-				: `${playerLabel(answers.player)} server`;
-		return `${stack} needs a full server host; Android can run zurg, not the ${stack} stack.`;
+		const server =
+			answers.player !== 'plex'
+				? playerLabel(answers.player)
+				: answers.plexRoute === 'rex' || answers.plexRoute === 'either'
+					? 'rex'
+					: 'Plex Media Server';
+		return `${server} needs a full server host; Android can run zurg, not ${server}.`;
 	}
 	return undefined;
 }
@@ -1075,7 +1076,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
-					: `${rex ? 'rex and its source' : playerLabel(player)} needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
+					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
