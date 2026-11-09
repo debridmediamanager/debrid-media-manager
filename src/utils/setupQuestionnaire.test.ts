@@ -1355,7 +1355,9 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 		expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain('seerr');
 		expect(wanted).toEqual({
 			title: 'DMM Wanted requests',
-			detail: 'Use Wanted → zurg for automatic acquisition without arr. These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.',
+			detail: expect.stringMatching(
+				/^Use Wanted → zurg for automatic acquisition without arr\. These need sponsorship and a running zurg host/
+			),
 			links: [
 				{
 					label: 'DMM Wanted setup',
@@ -1364,6 +1366,32 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 			],
 		});
 	});
+
+	it.each([
+		[{ player: 'plex', plexRoute: 'existing-server' }, false],
+		[{ player: 'plex', plexRoute: 'rex' }, false],
+		[{ player: 'plex', plexRoute: 'either' }, false],
+		[{ player: 'jellyfin' }, false],
+		[{ player: 'emby' }, false],
+		[{ player: 'webdav' }, false],
+		[{ player: 'stremio' }, true],
+		[{ player: 'kodi' }, true],
+		[{ player: 'external' }, true],
+	] satisfies [Partial<SetupAnswers>, boolean][])(
+		'mentions browsing hosted Cast libraries only where the player has them (%o)',
+		(mode, cast) => {
+			const detail = managed(mode).alternatives.find(({ title }) =>
+				title.startsWith('DMM Wanted')
+			)?.detail;
+
+			expect(detail).toMatch(/These need sponsorship and a running zurg host[;.]/);
+			expect(
+				detail?.endsWith(
+					'; hosted Cast libraries do not need your own server just to browse them.'
+				)
+			).toBe(cast);
+		}
+	);
 });
 
 describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
