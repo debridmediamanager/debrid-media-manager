@@ -1812,6 +1812,29 @@ describe('route copy stays on the player and source it is about', () => {
 
 	it.each([
 		[
+			{ player: 'kodi' },
+			'Local files stay in your player; cloud titles come from the route you choose.',
+		],
+		[
+			{ player: 'external' },
+			'Local files stay in your player; cloud titles come from the route you choose.',
+		],
+		[
+			{ player: 'stremio' },
+			'Stremio needs a compatible addon for local files; cloud titles come from the route you choose.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'points at the route still to choose when no source is selected (%o)',
+		(overrides, text) => {
+			expect(
+				recommendSetup(answers({ ...overrides, sources: ['none'], needs: ['mixed'] }))
+					.optionalNeeds
+			).toEqual([text]);
+		}
+	);
+
+	it.each([
+		[
 			{ host: 'existing', preference: 'arr' },
 			'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.',
 		],

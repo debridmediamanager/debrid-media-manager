@@ -1331,16 +1331,18 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
 	}
-	if (answers.needs.includes('mixed'))
+	if (answers.needs.includes('mixed')) {
+		const cloud = `cloud titles come from ${selected.length ? 'the routes above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
 			rex
 				? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
 				: playerNeedsFullHost(player)
 					? 'Keep local files in your existing media server alongside cloud integrations.'
 					: player === 'stremio'
-						? 'Stremio needs a compatible addon for local files; cloud titles come from the routes above.'
-						: 'Local files stay in your player; cloud titles come from the routes above.'
+						? `Stremio needs a compatible addon for local files; ${cloud}`
+						: `Local files stay in your player; ${cloud}`
 		);
+	}
 	links(GUIDE);
 	result.setupLinks = result.setupLinks.filter(
 		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
