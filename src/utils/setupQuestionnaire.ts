@@ -298,9 +298,6 @@ const PLAYER_PHRASES: Record<Exclude<Player, 'unsure'>, string> = {
 	external: 'your external player',
 };
 
-const SERVER_ACCOUNTS =
-	'Any debrid account or your own Usenet account works through zurg on a host (Jellyfin and Emby also have provider plugins); files you already have stay in the server.';
-
 /** The accounts each player can use, for someone who has none yet. */
 const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 	stremio:
@@ -309,9 +306,10 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 	external:
 		'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host.',
 	webdav: 'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host.',
-	plex: SERVER_ACCOUNTS,
-	jellyfin: SERVER_ACCOUNTS,
-	emby: SERVER_ACCOUNTS,
+	plex: 'Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.',
+	jellyfin:
+		'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.',
+	emby: 'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server.',
 };
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer.';

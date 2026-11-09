@@ -1527,8 +1527,10 @@ describe('"None yet" shows which accounts work with the player', () => {
 		);
 	});
 
-	const server =
-		'Any debrid account or your own Usenet account works through zurg on a host (Jellyfin and Emby also have provider plugins); files you already have stay in the server. DMM does not supply video bytes by itself.';
+	const bytes = ' DMM does not supply video bytes by itself.';
+	const plex = `Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.${bytes}`;
+	const jellyfin = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.${bytes}`;
+	const emby = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server.${bytes}`;
 	const rex =
 		'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. DMM does not supply video bytes by itself.';
 
@@ -1553,9 +1555,9 @@ describe('"None yet" shows which accounts work with the player', () => {
 			'Choose a source for your external player',
 			'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. DMM does not supply video bytes by itself.',
 		],
-		[{ player: 'plex', plexRoute: 'existing-server' }, 'Choose a source for Plex apps', server],
-		[{ player: 'jellyfin' }, 'Choose a source for Jellyfin', server],
-		[{ player: 'emby' }, 'Choose a source for Emby', server],
+		[{ player: 'plex', plexRoute: 'existing-server' }, 'Choose a source for Plex apps', plex],
+		[{ player: 'jellyfin' }, 'Choose a source for Jellyfin', jellyfin],
+		[{ player: 'emby' }, 'Choose a source for Emby', emby],
 		[{ player: 'plex', plexRoute: 'rex' }, 'Choose a source for Plex apps', rex],
 		[{ player: 'plex', plexRoute: 'either' }, 'Choose a source for Plex apps', rex],
 	] satisfies [Partial<SetupAnswers>, string, string][])(
