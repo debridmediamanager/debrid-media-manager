@@ -558,6 +558,20 @@ function hostRunsZurg({ host, sources }: Pick<SetupAnswers, 'host' | 'sources'>)
 	);
 }
 
+/** Jellyfin's NZB plugin alone: it reads only its own NZB directory, never the zurg library Wanted fetches into. */
+function nzbPluginOnly(
+	player: Player,
+	sources: SetupSource[],
+	routes: { route: SourceRoute }[]
+): boolean {
+	return (
+		player === 'jellyfin' &&
+		sources.includes('usenet') &&
+		!sources.some((source) => DEBRID_SOURCES.includes(source)) &&
+		!routes.some(({ route: r }) => r.usesZurg)
+	);
+}
+
 function sponsorshipFor(
 	answers: SetupAnswers,
 	player: Player,
@@ -572,8 +586,9 @@ function sponsorshipFor(
 		(answers.preference === 'arr' && (debrid || hasNzb));
 	const usesCast = routes.some(({ route: source }) => source.usesCast);
 	const usesRex = routes.some(({ route: source }) => source.usesRex);
-	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere.
-	const zurgRuns = usesZurg || hostRunsZurg(answers);
+	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere the player reads.
+	const zurgRuns =
+		(usesZurg || hostRunsZurg(answers)) && !nzbPluginOnly(player, answers.sources, routes);
 	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
 	const easynewsToZurg =
 		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
@@ -1281,14 +1296,21 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const browsable =
 			routes.some(({ route: r }) => r.usesCast) ||
 			selected.some((source) => DEBRID_SOURCES.includes(source));
-		result.alternatives.push({
-			title: seerr ? 'DMM Wanted or Seerr requests' : 'DMM Wanted requests',
-			detail: `Use Wanted → zurg for automatic acquisition without arr.${seerr ? ' Seerr can send requests through DMM Wanted.' : ''} These need sponsorship and a running zurg host${browsable && (player === 'stremio' || player === 'kodi') ? '; hosted Cast libraries do not need your own server just to browse them.' : browsable && player === 'external' ? "; DMM's library pages do not need your own server just to browse them." : '.'}`,
-			links: [
-				note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
-				...(seerr ? [note('dmm/seerr', 'Seerr through DMM')] : []),
-			],
-		});
+		if (nzbPluginOnly(player, selected, routes))
+			result.alternatives.push({
+				title: 'Wanted and Seerr need the zurg mount route',
+				detail: 'zurg fetches Wanted and Seerr requests into its own library, which the NZB plugin does not read; use zurg → mount → Jellyfin for them.',
+				links: [ZURG],
+			});
+		else
+			result.alternatives.push({
+				title: seerr ? 'DMM Wanted or Seerr requests' : 'DMM Wanted requests',
+				detail: `Use Wanted → zurg for automatic acquisition without arr.${seerr ? ' Seerr can send requests through DMM Wanted.' : ''} These need sponsorship and a running zurg host${browsable && (player === 'stremio' || player === 'kodi') ? '; hosted Cast libraries do not need your own server just to browse them.' : browsable && player === 'external' ? "; DMM's library pages do not need your own server just to browse them." : '.'}`,
+				links: [
+					note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
+					...(seerr ? [note('dmm/seerr', 'Seerr through DMM')] : []),
+				],
+			});
 	}
 	if (
 		result.hostRequirement === 'server' &&

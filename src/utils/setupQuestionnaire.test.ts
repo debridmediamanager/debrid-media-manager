@@ -1388,6 +1388,52 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		expect(alternative(['easynews'])).toBe(false);
 		expect(alternative(['real-debrid'])).toBe(true);
 	});
+
+	// The NZB plugin builds its library from its own NZB directory; Wanted lands in zurg's library.
+	it('points the Jellyfin NZB plugin alone at the zurg mount for Wanted and Seerr', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'jellyfin',
+				sources: ['usenet'],
+				host: 'existing',
+				preference: 'managed',
+			})
+		);
+		const ids = offered(result);
+
+		for (const id of ['wanted', 'seerr', 'zurg-nightly', 'zurg-api-key'])
+			expect(ids).not.toContain(id);
+		expect(result.alternatives.map(({ title }) => title)).not.toContain(
+			'DMM Wanted or Seerr requests'
+		);
+		expect(result.alternatives).toContainEqual({
+			title: 'Wanted and Seerr need the zurg mount route',
+			detail: 'zurg fetches Wanted and Seerr requests into its own library, which the NZB plugin does not read; use zurg → mount → Jellyfin for them.',
+			links: [
+				{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
+			],
+		});
+	});
+
+	// A debrid plugin reads the provider account, where zurg's torrent fetches land.
+	it('keeps Wanted for Jellyfin with a debrid plugin beside the NZB plugin', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'jellyfin',
+				sources: ['real-debrid', 'usenet'],
+				host: 'existing',
+				preference: 'managed',
+			})
+		);
+
+		expect(offered(result)).toContain('wanted');
+		expect(result.alternatives.map(({ title }) => title)).toContain(
+			'DMM Wanted or Seerr requests'
+		);
+		expect(result.alternatives.map(({ title }) => title)).not.toContain(
+			'Wanted and Seerr need the zurg mount route'
+		);
+	});
 });
 
 describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () => {
