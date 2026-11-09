@@ -1,35 +1,62 @@
 {
 	"body": {
 		"user": {
-			"email": "sean@example.com",
-			"username": "sean",
+			"username": "yowmamasita",
+			"name": "yowmamasita",
 			"private": false,
-			"name": "Sean Rudford",
-			"vip": true,
-			"vip_ep": false,
-			"director": false,
+			"vip": false,
 			"ids": {
-				"slug": "sean",
-				"trakt": 1,
-				"uuid": "b6589fc6ab0dc82cf12099d1c2d40ab994e8410c"
+				"slug": "yowmamasita",
+				"uuid": "e066c8b4b41f8cc26cde1f85cd1f65be047c25fc"
 			},
-			"joined_at": "2010-09-25T17:49:25.000Z",
-			"location": "SF",
-			"about": "I have all your cassette tapes.",
-			"gender": "male",
-			"age": 35,
-			"images": {
-				"avatar": {
-					"full": "https://walter.trakt.tv/images/users/000/000/001/avatars/large/cf1f6e4f8d.jpg"
-				}
-			},
-			"vip_og": true,
-			"vip_years": 5
+			"joined_at": "2013-11-20T02:23:04.000Z"
 		},
-		"permissions": {
-			"commenting": true,
-			"liking": true,
-			"following": true
+		"account": {
+			"timezone": "Europe/London",
+			"date_format": "mdy",
+			"time_24hr": false
+		},
+		"connections": {
+			"facebook": false,
+			"twitter": false,
+			"mastodon": false,
+			"google": false,
+			"tumblr": false,
+			"medium": false,
+			"slack": false,
+			"apple": false,
+			"dropbox": false,
+			"microsoft": false
+		},
+		"limits": {
+			"list": {
+				"count": 13,
+				"item_count": 1000
+			},
+			"watchlist": {
+				"item_count": 1000
+			},
+			"favorites": {
+				"item_count": 100
+			},
+			"search": {
+				"recent_count": 5
+			},
+			"collection": {
+				"item_count": 1000
+			},
+			"notes": {
+				"item_count": 100
+			},
+			"saved_filters": {
+				"count": 5
+			},
+			"streaming": {
+				"connection_count": 1
+			},
+			"recommendations": {
+				"item_count": 100
+			}
 		}
 	},
 	"status": 200

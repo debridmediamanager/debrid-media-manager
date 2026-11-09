@@ -67,7 +67,7 @@ const SERVICES = {
 		],
 		approved: 'trakt-device-token-approved',
 		settings: 'trakt-users-settings',
-		user: { name: 'sean', slug: 'sean' },
+		user: { name: 'yowmamasita', slug: 'yowmamasita' },
 		refreshed: 'trakt-refresh-ok',
 		relink: 'trakt-refresh-invalid-grant',
 		invalidClient: 'trakt-device-code-invalid-client',
