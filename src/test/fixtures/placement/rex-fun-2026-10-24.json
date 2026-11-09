@@ -97086,19 +97086,19 @@
 					},
 					{
 						"path": "436-7 - Phineas and Ferb- Last Day of Summer.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 48,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1075438
 					},
 					{
 						"path": "440 - Phineas and Ferb- Musical Cliptastic Countdown, Hosted by Kelly Osbourne.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 15,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 115249
 					},
 					{
 						"path": "O.W.C.A. Files.mkv",

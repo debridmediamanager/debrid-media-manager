@@ -41,6 +41,7 @@ import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
+import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
@@ -1965,5 +1966,44 @@ describe('a special named by its title', () => {
 		expect(darkness('OVA - 01 - Prologue - Pollen Plan - Body touch')).toEqual([0, 7]);
 		expect(darkness('OVA - 02 - Nostalgia - The Changing Heart - Flower')).toEqual([0, 8]);
 		expect(darkness('OVA - 03 - Exchange - It feels')).toEqual([0, 9]);
+	});
+});
+
+describe("TMDB's title with the show's name before it", () => {
+	// zurg on fun (2026-11-09): files titled without the show's name TMDB titles them with, or with
+	// the show's name TMDB titles them without (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = showNamedTitles.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(showNamedTitles.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it('places a file on the episode titled as it with the show named first', async () => {
+		// TMDB's S0E13 "Ed, Edd n Eddy's Big Picture Show"
+		expect(
+			(await placed('Ed, Edd n Eddy (1999) Season 6'))('S00E05 - Big Picture Show')
+		).toEqual([0, 13]);
+		// TMDB's S0E1 "Odd Taxi Picture Drama", the title in brackets after the number
+		expect((await placed('[Anime Time] Odd Taxi'))('S00E14 [Picture Drama]')).toEqual([0, 1]);
+	});
+
+	it("places a file titled with the show's name on the episode titled without it", async () => {
+		const dark = await placed('Are You Afraid Of The Dark Complete Series');
+		// TMDB's S1E1 "The Tale of the Phantom Cab"
+		expect(dark('-01 Are You Afraid of the Dark - The Tale of the Phantom Cab')).toEqual([
+			1, 1,
+		]);
+		expect(dark('-13 Are You Afraid of the Dark - The Tale of the Pinball Wizard')).toEqual([
+			1, 13,
+		]);
 	});
 });

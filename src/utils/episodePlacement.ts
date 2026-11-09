@@ -1293,7 +1293,11 @@ function titleRest(file: string, numbers: FileNumbers): string {
 			: number
 				? stem.slice(number.index + number[0].length)
 				: '';
-	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`
+	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`,
+	// nor one of two words or more in brackets: `ODDTAXI - S00E14 [Picture Drama]`
+	const bracketed = /^[\s._-]*\[([^[\]]*\p{L}[^[\]]*)\][\s._-]*$/u.exec(rest);
+	if (bracketed && (titleText(bracketed[1])?.whole.split(' ').length ?? 0) >= 2)
+		return ` ${bracketed[1]}`;
 	return rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1');
 }
 
@@ -1433,7 +1437,30 @@ async function byName(
 			)
 	);
 	const anywhere = titled(title, others.flat());
-	return anywhere ? [anywhere.season, anywhere.episode] : null;
+	if (anywhere) return [anywhere.season, anywhere.episode];
+	// TMDB's title with the show's name before it: Ed, Edd n Eddy's `S00E05 - Big Picture Show` is
+	// "Ed, Edd n Eddy's Big Picture Show", ODDTAXI's `S00E14 [Picture Drama]` "Odd Taxi Picture Drama"
+	const shows = show.names.map((name) => words(name).join('')).filter((name) => name.length >= 3);
+	const unshown = (text: string) => {
+		const list = words(text);
+		for (let k = 1; k < list.length; k++) {
+			const head = list.slice(0, k).join('');
+			if (
+				shows.some(
+					(name) => head === name || (head === `${name}s` && list[k - 1].endsWith('s'))
+				)
+			)
+				return list.slice(k).join('');
+		}
+		return list.join('');
+	};
+	const own = unshown(title.whole);
+	const all = [...(listed ?? []).map((row) => ({ ...row, season: season! })), ...others.flat()];
+	const shown =
+		own.length >= 6 && numbers.end === null
+			? all.filter((row) => unshown(row.name) === own)
+			: [];
+	return shown.length === 1 ? [shown[0].season, shown[0].episode] : null;
 }
 
 // What names a special as one beside its title: `- OVA - Water Slide`, `DC Comics Special II`.
