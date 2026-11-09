@@ -326,6 +326,10 @@ function KodiPage() {
 						knows of and what members have cast, through your own debrid account, and
 						search your own Easynews account.
 					</p>
+					<p className="mt-2 text-sm text-gray-400">
+						Link Trakt or Simkl from the addon&apos;s Account menu to see what
+						you&apos;ve already watched; scrobbling works through their own Kodi addons.
+					</p>
 				</header>
 
 				<LinkCard />
