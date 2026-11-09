@@ -1251,7 +1251,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (answers.needs.includes('mixed'))
 		result.optionalNeeds.push(
-			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.'
+			playerNeedsFullHost(player)
+				? `Keep local files in your existing media server alongside cloud integrations.${rex ? ' For rex, each source supplies its own metadata and reachable HTTP bytes.' : ''}`
+				: 'Local files stay in your player; cloud titles come from the routes above.'
 		);
 	links({ label: 'Read the full setup guide', href: SETUP_GUIDE_URL });
 	result.setupLinks = result.setupLinks.filter(

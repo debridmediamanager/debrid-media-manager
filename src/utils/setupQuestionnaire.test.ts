@@ -1564,6 +1564,35 @@ describe('route copy stays on the player and source it is about', () => {
 		);
 	});
 
+	it.each([
+		[{}, 'Local files stay in your player; cloud titles come from the routes above.'],
+		[
+			{ player: 'webdav' },
+			'Local files stay in your player; cloud titles come from the routes above.',
+		],
+		[
+			{ player: 'jellyfin' },
+			'Keep local files in your existing media server alongside cloud integrations.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'existing-server' },
+			'Keep local files in your existing media server alongside cloud integrations.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex' },
+			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says where local files stay for %o',
+		(overrides, text) => {
+			const result = recommendSetup(
+				answers({ host: 'existing', ...overrides, needs: ['mixed'] })
+			);
+
+			expect(result.optionalNeeds).toEqual([text]);
+		}
+	);
+
 	const bazarr = 'https://notes.debridmediamanager.com/zurg/guides/subtitles/';
 
 	it.each([{}, { player: 'webdav', host: 'willing' }] satisfies Partial<SetupAnswers>[])(
