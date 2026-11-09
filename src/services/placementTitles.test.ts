@@ -1,5 +1,9 @@
+import cyberpunkEdgerunners from '@/test/fixtures/metadata/tmdb-tv-105248-cyberpunk-edgerunners.json';
 import aliceInBorderland from '@/test/fixtures/metadata/tmdb-tv-110316-alice-in-borderland.json';
+import linkClick from '@/test/fixtures/metadata/tmdb-tv-123542-link-click.json';
+import roosterFighter from '@/test/fixtures/metadata/tmdb-tv-259819-rooster-fighter.json';
 import detectiveConan from '@/test/fixtures/metadata/tmdb-tv-30983-detective-conan.json';
+import onePieceLog from '@/test/fixtures/metadata/tmdb-tv-334601-one-piece-log-fish-man-island-saga.json';
 import theSimpsons from '@/test/fixtures/metadata/tmdb-tv-456-the-simpsons.json';
 import { describe, expect, it } from 'vitest';
 import titles from '../test/fixtures/placement/titles.json';
@@ -90,7 +94,12 @@ describe('titled', () => {
 	});
 
 	it('leaves a release TMDB cannot name, or one still waiting, as it was', async () => {
-		const unnamed: PlacedRelease = { kind: 'movie', imdbId: 'tt0000001', tmdbId: 1, files: [] };
+		const unnamed: PlacedRelease = {
+			kind: 'movie',
+			imdbId: 'tt33086804',
+			tmdbId: 1,
+			files: [],
+		};
 		expect(await titled(unnamed, sources)).toEqual(unnamed);
 		const waiting: PlacedRelease = {
 			kind: null,
@@ -104,11 +113,16 @@ describe('titled', () => {
 });
 
 describe('anime', () => {
-	// TMDB's `/tv/{id}` records with DMM's appends, captured 2026-11-09: what placement already reads
+	// TMDB's `/tv/{id}` records with DMM's appends, keywords included, captured 2026-11-09: what
+	// placement already reads
 	const shows: Record<number, unknown> = {
 		30983: detectiveConan,
 		456: theSimpsons,
 		110316: aliceInBorderland,
+		334601: onePieceLog,
+		105248: cyberpunkEdgerunners,
+		259819: roosterFighter,
+		123542: linkClick,
 	};
 	const captured = {
 		show: async (id: number) => shows[id] ?? null,
@@ -125,11 +139,32 @@ describe('anime', () => {
 		expect((await titled(show('tt0131179', 30983), captured)).anime).toBe(true);
 	});
 
+	// a real library's misses under the three fields alone (2026-11-09), each tagged `anime` on TMDB
+	it('answers true for a show TMDB tags with the keyword anime, whatever its genres or origin', async () => {
+		// One Piece Log: Fish-Man Island Saga: ja, JP, but Action & Adventure (10759) alone
+		expect((await titled(show('tt33992229', 334601), captured)).anime).toBe(true);
+		// Cyberpunk: Edgerunners: Animation, but en, from JP, PL and US
+		expect((await titled(show('tt12590266', 105248), captured)).anime).toBe(true);
+		// Rooster Fighter: Animation, en, US
+		expect((await titled(show('tt33086804', 259819), captured)).anime).toBe(true);
+	});
+
 	it('answers false for animation from elsewhere and for Japanese live action', async () => {
-		// The Simpsons: Animation, en, US
+		// The Simpsons: Animation, en, US, no anime keyword
 		expect(await titled(show('tt0096697', 456), captured)).toHaveProperty('anime', false);
-		// Alice in Borderland: ja, JP, no Animation
+		// Alice in Borderland: ja, JP, no Animation, no anime keyword
 		expect(await titled(show('tt10795658', 110316), captured)).toHaveProperty('anime', false);
+		// LINK CLICK: Chinese animation (zh, CN), no anime keyword
+		expect(await titled(show('tt14976292', 123542), captured)).toHaveProperty('anime', false);
+	});
+
+	it('reads the three fields alone from a record without keywords', async () => {
+		const unkeyed = {
+			...captured,
+			show: async (id: number) => ({ ...(shows[id] as object), keywords: undefined }),
+		} as PlacementSources;
+		expect(await titled(show('tt0131179', 30983), unkeyed)).toHaveProperty('anime', true);
+		expect(await titled(show('tt33992229', 334601), unkeyed)).toHaveProperty('anime', false);
 	});
 
 	it('leaves it out where the show is unknown or its record could not be read', async () => {

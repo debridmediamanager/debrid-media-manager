@@ -469,6 +469,15 @@ describe('a release whose IMDb id names a show TMDB no longer has', () => {
 		getTmdbTvInfo.mockRejectedValueOnce(new Error('timeout of 10000ms exceeded'));
 		expect(await cachedSources.show(335660)).toBeNull();
 	});
+
+	// `anime` reads TMDB's keywords off the show record placement already asks for, in that one call
+	it("asks for a show's record with its keywords", async () => {
+		const getTmdbTvInfo = vi.fn().mockResolvedValue({});
+		vi.mocked(getMetadataCache).mockReturnValue({ getTmdbTvInfo } as any);
+		await cachedSources.show(30983);
+		expect(getTmdbTvInfo).toHaveBeenCalledTimes(1);
+		expect(getTmdbTvInfo.mock.calls[0][1].split(',')).toContain('keywords');
+	});
 });
 
 describe('a scene release no IMDb id or identifier names', () => {

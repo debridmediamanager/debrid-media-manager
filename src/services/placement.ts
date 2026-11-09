@@ -108,9 +108,11 @@ export interface PlacedRelease {
 	/** The show's TheTVDB id as TMDB records it, which Plex's show rows carry as `tvdb://`; absent for a movie or where TMDB has none. */
 	tvdbId?: number;
 	/**
-	 * Whether the show is Japanese animation, which zurg files under `__anime__`: TMDB's record
-	 * lists the Animation genre (16), `original_language` `ja` and `JP` among `origin_country`, all
-	 * three. Absent for a movie, or where the show's TMDB record could not be read.
+	 * Whether the show is anime, which zurg files under `__anime__`: TMDB lists it as Japanese
+	 * animation (the Animation genre, 16, `original_language` `ja` and `JP` among
+	 * `origin_country`, all three), or tags it with the keyword `anime` (Cyberpunk: Edgerunners,
+	 * `en`; One Piece Log: Fish-Man Island Saga, no Animation genre). Absent for a movie, or
+	 * where the show's TMDB record could not be read.
 	 */
 	anime?: boolean;
 	files: PlacedFile[];
@@ -272,14 +274,21 @@ async function tmdbTitle(
 		String((kind === 'tv' ? record?.first_air_date : record?.release_date) ?? '').slice(0, 4)
 	);
 	const tvdbId = kind === 'tv' ? Number(record?.external_ids?.tvdb_id) : 0;
-	// all three, no fewer: The Simpsons is Animation from the US, Alice in Borderland Japanese live
-	// action; a record without `genres` (unread, or TMDB's 404 for a deleted show) answers nothing
+	// all three fields, or the keyword: The Simpsons is Animation from the US, Alice in Borderland
+	// Japanese live action, and neither is tagged anime; a record without `genres` (unread, or
+	// TMDB's 404 for a deleted show) answers nothing
 	const anime =
 		kind === 'tv' && Array.isArray(record?.genres)
-			? record.genres.some((genre: any) => genre?.id === 16) &&
-				record.original_language === 'ja' &&
-				Array.isArray(record.origin_country) &&
-				record.origin_country.includes('JP')
+			? (record.genres.some((genre: any) => genre?.id === 16) &&
+					record.original_language === 'ja' &&
+					Array.isArray(record.origin_country) &&
+					record.origin_country.includes('JP')) ||
+				(Array.isArray(record.keywords?.results) &&
+					record.keywords.results.some(
+						(keyword: any) =>
+							typeof keyword?.name === 'string' &&
+							keyword.name.trim().toLowerCase() === 'anime'
+					))
 			: undefined;
 	return {
 		...(typeof title === 'string' && title.trim()

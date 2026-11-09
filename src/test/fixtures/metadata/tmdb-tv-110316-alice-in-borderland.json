@@ -211,6 +211,25 @@
 	"homepage": "https://www.netflix.com/title/80200575",
 	"id": 110316,
 	"in_production": false,
+	"keywords": {
+		"results": [
+			{ "name": "dystopia", "id": 4565 },
+			{ "name": "supernatural", "id": 6152 },
+			{ "name": "survival", "id": 10349 },
+			{ "name": "tokyo, japan", "id": 12369 },
+			{ "name": "psychological thriller", "id": 12565 },
+			{ "name": "based on manga", "id": 13141 },
+			{ "name": "game", "id": 18249 },
+			{ "name": "survival horror", "id": 50009 },
+			{ "name": "wonder", "id": 240422 },
+			{ "name": "suspense", "id": 288394 },
+			{ "name": "death game", "id": 295702 },
+			{ "name": "suspenseful", "id": 314730 },
+			{ "name": "horror", "id": 315058 },
+			{ "name": "brisk", "id": 325779 },
+			{ "name": "urgent", "id": 325855 }
+		]
+	},
 	"languages": ["ja"],
 	"last_air_date": "2025-09-25",
 	"last_episode_to_air": {

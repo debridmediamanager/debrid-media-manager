@@ -1,0 +1,713 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "CN", "title": "Shi Guang Dai Li Ren", "type": "" },
+			{ "iso_3166_1": "CN", "title": "Shiguang Dailiren", "type": "" },
+			{ "iso_3166_1": "CN", "title": "时光代理人 第二季", "type": "season 2" },
+			{ "iso_3166_1": "CN", "title": "时光代理人 英都篇", "type": "season 3" },
+			{ "iso_3166_1": "CN", "title": "时光代理人 第三季", "type": "season 4" },
+			{ "iso_3166_1": "CN", "title": "时光代理人 第一季", "type": "season 1" },
+			{ "iso_3166_1": "JP", "title": "時光代理人 - LINK CLICK- Ⅱ", "type": "season 2" },
+			{ "iso_3166_1": "JP", "title": "时光代理人", "type": "season 1" },
+			{ "iso_3166_1": "JP", "title": "Jikou Dairinin", "type": "" },
+			{ "iso_3166_1": "KR", "title": "시광대리인 -Link Click-", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Агенты времени", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Агент времени", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Агенты времени: Глава Инду", "type": "" },
+			{ "iso_3166_1": "UA", "title": "Агенти часу", "type": "" },
+			{ "iso_3166_1": "US", "title": "Link Click", "type": "season 1" },
+			{ "iso_3166_1": "US", "title": "Link Click II", "type": "season 2" },
+			{ "iso_3166_1": "US", "title": "Link Click III", "type": "season 3" },
+			{ "iso_3166_1": "US", "title": "Link Click: Bridon Arc", "type": "specials" },
+			{ "iso_3166_1": "VN", "title": "Người Đại Diện Thời Gian", "type": "" }
+		]
+	},
+	"backdrop_path": "/w3agwUSMpJ4X9t1jGrDtqqRPjDQ.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "14" },
+			{ "descriptors": [], "iso_3166_1": "AT", "rating": "14" },
+			{ "descriptors": [], "iso_3166_1": "IE", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "PL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "HU", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "CZ", "rating": "15+" },
+			{ "descriptors": [], "iso_3166_1": "RO", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "M" },
+			{ "descriptors": ["Violence / Horror"], "iso_3166_1": "TR", "rating": "Genel İzleyici" }
+		]
+	},
+	"created_by": [
+		{
+			"id": 2004912,
+			"credit_id": "6906840597f1b8571e597f3b",
+			"name": "Li Haoling",
+			"original_name": "李豪凌",
+			"gender": 2,
+			"profile_path": "/zsux0GhDJxf7KP08TCiEl2LGEHc.jpg"
+		}
+	],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1674213,
+				"known_for_department": "Acting",
+				"name": "Su Shangqing",
+				"original_name": "苏尚卿",
+				"popularity": 2.6913,
+				"profile_path": "/mbTikaoO6lPtiHwJB1PzAqxYE27.jpg",
+				"character": "Cheng Xiaoshi (voice)",
+				"credit_id": "608c8c972495ab0040704236",
+				"order": 0
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2185754,
+				"known_for_department": "Acting",
+				"name": "Yang Tianxiang",
+				"original_name": "杨天翔",
+				"popularity": 2.1042,
+				"profile_path": "/jEwKu9VEtl0ecc6oA264U3iJV08.jpg",
+				"character": "Lu Guang (voice)",
+				"credit_id": "608c8c5e20af770029262fb0",
+				"order": 1
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 2463716,
+				"known_for_department": "Acting",
+				"name": "Li Shimeng",
+				"original_name": "李詩萌",
+				"popularity": 1.5419,
+				"profile_path": "/i7hKjBsuxiMHuj3v68yWhbLXNbi.jpg",
+				"character": "Qiao Ling (voice)",
+				"credit_id": "608c8cb771ffdf007775aaa4",
+				"order": 2
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2004912,
+				"known_for_department": "Directing",
+				"name": "Li Haoling",
+				"original_name": "李豪凌",
+				"popularity": 1.9964,
+				"profile_path": "/zsux0GhDJxf7KP08TCiEl2LGEHc.jpg",
+				"credit_id": "64f1c973caa508014c8c21c4",
+				"department": "Directing",
+				"job": "Director"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5493227,
+				"known_for_department": "Visual Effects",
+				"name": "INPLICK",
+				"original_name": "INPLICK",
+				"popularity": 0.0541,
+				"profile_path": null,
+				"credit_id": "684637f3640159de78292d37",
+				"department": "Visual Effects",
+				"job": "Character Designer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2004912,
+				"known_for_department": "Directing",
+				"name": "Li Haoling",
+				"original_name": "李豪凌",
+				"popularity": 1.9964,
+				"profile_path": "/zsux0GhDJxf7KP08TCiEl2LGEHc.jpg",
+				"credit_id": "684638042479c24073292c06",
+				"department": "Writing",
+				"job": "Screenplay"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5493227,
+				"known_for_department": "Visual Effects",
+				"name": "INPLICK",
+				"original_name": "INPLICK",
+				"popularity": 0.0541,
+				"profile_path": null,
+				"credit_id": "6846383b5c84d6d731fd5db3",
+				"department": "Art",
+				"job": "Original Series Design"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2004912,
+				"known_for_department": "Directing",
+				"name": "Li Haoling",
+				"original_name": "李豪凌",
+				"popularity": 1.9964,
+				"profile_path": "/zsux0GhDJxf7KP08TCiEl2LGEHc.jpg",
+				"credit_id": "6906841c7bd1bb6e0e597f36",
+				"department": "Writing",
+				"job": "Original Concept"
+			}
+		]
+	},
+	"episode_run_time": [23],
+	"external_ids": {
+		"imdb_id": "tt14976292",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 402033,
+		"tvrage_id": null,
+		"wikidata_id": "Q107012574",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": "sgdlr_offical"
+	},
+	"first_air_date": "2021-04-30",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 18, "name": "Drama" }
+	],
+	"homepage": "https://www.bilibili.com/bangumi/media/md28230742/",
+	"id": 123542,
+	"in_production": true,
+	"keywords": {
+		"results": [
+			{ "name": "time travel", "id": 4379 },
+			{ "name": "supernatural", "id": 6152 },
+			{ "name": "bromance", "id": 12648 },
+			{ "name": "super power", "id": 33637 },
+			{ "name": "time-manipulation", "id": 220800 },
+			{ "name": "suspense", "id": 288394 },
+			{ "name": "urban fantasy", "id": 298549 },
+			{ "name": "donghua", "id": 315535 },
+			{ "name": "original net animation (ona)", "id": 323096 }
+		]
+	},
+	"languages": ["zh"],
+	"last_air_date": "2026-10-22",
+	"last_episode_to_air": {
+		"id": 7681180,
+		"name": "Welcome Home",
+		"overview": "Trapped between memories and photographs, Cheng Xiaoshi searches for a way back.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-10-22",
+		"episode_number": 12,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 23,
+		"season_number": 4,
+		"show_id": 123542,
+		"still_path": "/qwTb5iFpjXbUNLWKm9iv4wKJRi3.jpg"
+	},
+	"name": "LINK CLICK",
+	"networks": [
+		{
+			"id": 1605,
+			"logo_path": "/cdRh1NZIUaqDUhwjgqWbp6zhWHK.png",
+			"name": "bilibili",
+			"origin_country": "CN"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 41,
+	"number_of_seasons": 5,
+	"origin_country": ["CN"],
+	"original_language": "zh",
+	"original_name": "时光代理人",
+	"overview": "Using superpowers to enter their clientele’s photos one by one, Cheng Xiaoshi and Lu Guang take their work seriously at “Time Photo Studio,” a small photography shop set in the backdrop of a modern metropolis. Each job can be full of danger, but nothing is more important than fulfilling every order, no matter the scale…or peril involved!",
+	"popularity": 19.9931,
+	"poster_path": "/hCt2bLRGTCjHGqtV5FP3Img6w1h.jpg",
+	"production_companies": [
+		{
+			"id": 87874,
+			"logo_path": "/9zuMeFMDUba1gRIZDBEAcCUIoaA.png",
+			"name": "Haoliners Animation",
+			"origin_country": "CN"
+		},
+		{
+			"id": 123270,
+			"logo_path": "/4KxfGr13VXMr44og11hzpdwfQDQ.png",
+			"name": "bilibili",
+			"origin_country": "CN"
+		},
+		{
+			"id": 109472,
+			"logo_path": "/uYhbAVOWwruODFgzR7yZGHMmtAK.png",
+			"name": "LAN STUDIO",
+			"origin_country": "CN"
+		},
+		{ "id": 153541, "logo_path": null, "name": "BeDream", "origin_country": "CN" },
+		{
+			"id": 206585,
+			"logo_path": "/cOTrEmmwcPR31qCt4PDrppo1E5.png",
+			"name": "Shanghai Phantom Animation",
+			"origin_country": "CN"
+		},
+		{ "id": 234045, "logo_path": null, "name": "后生动漫", "origin_country": "" },
+		{ "id": 234046, "logo_path": null, "name": "MIAO'S ANIMATION", "origin_country": "CN" },
+		{
+			"id": 244222,
+			"logo_path": "/gxwM9iwZrTSob5Sau4QnyUKfpmt.png",
+			"name": "Pb Animation",
+			"origin_country": "CN"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "CN", "name": "China" }],
+	"seasons": [
+		{
+			"air_date": "2021-05-28",
+			"episode_count": 28,
+			"id": 197171,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": "/k9PAr5xPi3g2lrJrML8lWuA3RAx.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2021-04-30",
+			"episode_count": 11,
+			"id": 191014,
+			"name": "Link Click",
+			"overview": "At Time Photo Studio, Cheng Xiaoshi and Lu Guang use their complementary powers to enter photographs and fulfil their clients’ unresolved requests. Each mission draws them into lives shaped by regret, loss and difficult choices, while Cheng’s compassion repeatedly tests the rule against changing the past. When their cases become connected to a dangerous mystery, the consequences reach the studio itself.",
+			"poster_path": "/wo9jwu5qMvXzhW2cyy5E6hOVs92.jpg",
+			"season_number": 1,
+			"vote_average": 8.6
+		},
+		{
+			"air_date": "2023-07-14",
+			"episode_count": 12,
+			"id": 220399,
+			"name": "Link Click 2",
+			"overview": "Following the attack on Time Photo Studio, Cheng Xiaoshi and Qiao Ling become entangled in a dangerous investigation while Lu Guang fights to recover. As a mysterious enemy uses photographs to control others, the group uncovers a tragic family history and a conspiracy surrounding their powers, forcing them into a desperate struggle to protect one another and expose the mastermind behind the escalating violence.",
+			"poster_path": "/5qCBrEU56pERyQofLl4ULVJ5Bhw.jpg",
+			"season_number": 2,
+			"vote_average": 8.8
+		},
+		{
+			"air_date": "2024-12-27",
+			"episode_count": 6,
+			"id": 358607,
+			"name": "Bridon Arc",
+			"overview": "When a photograph connected to Cheng Xiaoshi’s missing parents is discovered, he and Lu Guang travel to Bridon in search of answers. Their investigation leads them into the aftermath of a devastating academy fire and the lives of several strangers hiding conflicting motives. As buried connections gradually emerge, Lu Guang quietly struggles against the fate he fears may be awaiting Cheng.",
+			"poster_path": "/qSx4HzDBhmZQScGnI3r0X0GP9Us.jpg",
+			"season_number": 3,
+			"vote_average": 8.8
+		},
+		{
+			"air_date": "2026-08-13",
+			"episode_count": 12,
+			"id": 454061,
+			"name": "Link Click 3",
+			"overview": "After the Li Tianchen incident came to an end, the Time Photo Studio returned to a superficial calm. However, the news of Xia Fei's disappearance once again plunged everyone into the crossroads of fate. With Vein's return and Qiao Ling's awakening powers, Cheng Xiaoshi and Lu Guang gradually uncover the secrets of the Bahati fire case. Cheng Xiaoshi's father, Cheng Weimin, and mother, Shao Yuanyuan, also seemed to have intricate connections to it. As the investigation deepens, Liu Xiao, from a mysterious organization, begins his actions, and the intervention of Bridon police officer Jae adds uncertainty to this quest for the truth.",
+			"poster_path": "/cMazXfkmzoTEIqdVmnDZnAZWgFD.jpg",
+			"season_number": 4,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": null,
+			"episode_count": 0,
+			"id": 544019,
+			"name": "Season 5",
+			"overview": "",
+			"poster_path": null,
+			"season_number": 5,
+			"vote_average": 0.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Mandarin", "iso_639_1": "zh", "name": "普通话" }],
+	"status": "Returning Series",
+	"tagline": "Past or future, just let them be.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "时光代理人",
+					"overview": "在繁华都市的某个角落，有一家叫做“时光照相馆”的小店还在照常营业。虽然门庭冷落，但它背后其实由两个具有特殊能力的男人——程小时和陆光经营着。为了完成顾客的委托，陆光和程小时组队配合使用超能力进入照片，然而事情的发展却没能按他们所想的那样。",
+					"homepage": "",
+					"tagline": "无论过去 不问将来"
+				}
+			},
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "LINK CLICK",
+					"overview": "Using superpowers to enter their clientele’s photos one by one, Cheng Xiaoshi and Lu Guang take their work seriously at “Time Photo Studio,” a small photography shop set in the backdrop of a modern metropolis. Each job can be full of danger, but nothing is more important than fulfilling every order, no matter the scale…or peril involved!",
+					"homepage": "",
+					"tagline": "Past or future, just let them be."
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Link Click",
+					"overview": "Em uma metrópole moderna, há uma pequena loja chamada \"Time Photo Studio\". Embora apenas alguns clientes venham visitá-lo, na verdade ele é administrado por Cheng Xiaoshi e Lu Guang, dois homens com poderes especiais. Eles cooperam e usam seus superpoderes para entrar nas fotos a fim de atender ao pedido do cliente. Porém, as coisas sempre fogem de seu controle...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Link Click",
+					"overview": "Dans leur petit magasin de photo, deux hommes utilisent un étrange pouvoir pour mener des enquêtes. Lu Guang et Cheng Xiaoshi entrent dans les souvenirs de leurs clients à travers leurs photos. Plongés dans le passé, ils tiennent l'avenir entre leurs mains. Mais les choses ne se passent pas toujours comme ils le souhaitent…",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Link Click",
+					"overview": "Cheng Xiaoshi und Lu Guang arbeiten im Fotostudio Time Photo Studio. Um die Anfragen ihrer Kunden zu bearbeiten, benutzen sie besondere Fähigkeiten, um in deren Fotos hineinzuschlüpfen. Jedoch ziehen die zwei Männer das Chaos nur so an, was ihre Arbeit nicht gerade leichter macht.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "Người Đại Diện Thời Gian",
+					"overview": "Ở một góc nào đó trong đô thị sầm uất, có một cửa hiệu tên là \"Tiệm chụp ảnh Thời Quang\" vẫn ngày ngày chăm chỉ hoạt động. Tuy trước sân trông lúc nào cũng vắng vẻ nhưng thật ra hai cậu chủ tiệm lại là người có năng lực đặc biệt - Trình Tiểu Thời và Lục Quang. Để hoàn thành yêu cầu của khách hàng, Lục Quang và Trình Tiểu Thời lập nhóm phối hợp với nhau, sử dụng siêu năng lực để tiến vào trong ảnh chụp. Thế nhưng sự việc lại không đơn giản như bọn họ nghĩ.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "Агенты времени",
+					"overview": "В одном из уголков процветающей столицы всё ещё работает маленькое фотоателье под названием «Время». Пусть там немноголюдно, но им управляют два мужчины с необычными способностями — Чэн Сяоши и Лу Гуан. По просьбе одного из клиентов Лу Гуан и Чэн Сяоши при помощи суперспособностей попадают внутрь фотографии, но затем дела принимают совершенно неожиданный оборот...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "時光代理人 -LINK CLICK-",
+					"overview": "繁華街の一角に佇む「時光写真館」。そのさびれたドアの奥には、特殊な能力を持った２人の男がいた——。写真館を経営するのはトキ(程小時)とヒカル(陸光)。トキの幼馴染・リン(喬苓)を通じて顧客から舞い込む依頼を遂行すべく、「撮影者の意識にリンクし、写真の世界に入ることができる能力」を持つトキと、「その写真の撮影後12時間の出来事を把握できる能力」を持つヒカルはコンビを組み、過去を引きずるクライアントからの依頼を解決していく。『絶対に過去の改変をしてはならない』ルールのもと依頼を遂行していた二人だが、正義感の強いトキはつい過去に干渉してしまい、その行動はやがて少しずつ未来を変えていく——。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "시광대리인",
+					"overview": "번화가의 일각에 서 있는 「시광 사진관」. 그 쓸쓸한 문 안쪽에는 특수한 능력을 가진 두 남자가 있었다. 사진관을 운영하는 곳은 (토키)와 (히카루)가 있다. 토키의 소꿉친구 (린)을 통해 고객의 날아드는 의뢰를 수행하기 위해 「촬영자의 의식에 링크 해, 사진의 세계에 들어갈 수 있는 능력」을 가지는 토키와, 「그 사진의 촬영 후 12시간의 사건을 파악할 수 있는 능력」을 가진 히카루는 콤비를 이루어, 과거를 질질 끄는 클라이언트의 의뢰를 해결해 나간다. \"절대로 과거의 개변을 해서는 안 된다\"라는 규칙 아래 의뢰를 수행하고 있던 두 명이지만, 정의감이 강한 토키는 과거에 간섭해 버리고, 그 행동은 이윽고 조금씩 미래를 바꾸어 간다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "時光代理人",
+					"overview": "在繁華都市的某個角落，有一家叫做「時光照相館」的小店還在照常營業。雖然門庭冷落，但它背後其實由兩個具有特殊能力的男人——程小時和陸光經營著。為了完成顧客的委託，陸光和程小時組隊配合使用超能力進入照片，然而事情的發展卻沒能按他們所想的那樣……",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "Link Click",
+					"overview": "In un angolo di una metropoli moderna, c'è un piccolo negozio chiamato \"Time Photo Studio\". L'ingresso sembra abbandonato e due uomini gestiscono lo studio fotografico. Essi si chiamano Cheng Xiaoshi e Lu Guang. Entrambi hanno una sorta di potere soprannaturale, che permette loro di entrare nelle foto per soddisfare le richieste dei loro clienti; ma non sempre le cose vanno per il meglio.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Link Click",
+					"overview": "Se dice que una imagen vale más que mil palabras. En este caso, guarda una cantidad infinita de secretos. Estos son secretos que solo Cheng Xiaoshi y Lu Guang pueden encontrar. En una pequeña tienda llamada \"Time Photo Studio\", los dos amigos brindan un servicio especial: usando sus extraordinarios poderes que les permiten ingresar fotografías, saltan a las imágenes que les traen los clientes para cumplir sus deseos. A través de los ojos del fotógrafo, viven los hechos que rodean la imagen e intentan descifrar cómo resolver la solicitud de su cliente.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"name": "Ательє часу",
+					"overview": "Кажуть, що фотографія зберігає безліч секретів. Ці секрети здатні розгадати лише Чен Сяоши та Лу Ґуан. У маленькому фотоательє під назвою «Фотостудія часу» ці двоє друзів надають особливу послугу: використовуючи свої незвичайні здібності, що дозволяють їм входити у фотографії, вони стрибають у знімки, які приносять їм клієнти, щоб виконати їхні бажання. Очима фотографа вони проживають події, пов'язані з фотографією, і намагаються зрозуміти, як вирішити прохання клієнта.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "לינק קליק",
+					"overview": "בחנות קטנה, צ'נג שיאושי ולו גואנג מספקים שירות מיוחד: באמצעות כוחותיהם יוצאי הדופן המאפשרים להם להכנס לתצלומים, הם קופצים לתמונות שהביאו להם לקוחות על מנת להגשים את רצונותיהם. דרך עיניו של הצלם, הם חיים את האירועים סביב התמונה ומנסים לפענח כיצד לפתור את בקשת הלקוח שלהם. אבל בכל פעם שהם קופצים לתמונה, הם לוקחים סיכון גדול. צעד אחד שגוי והם יכולים לשנות את עתידו של האדם שצילם את התמונה... ואולי גם אינספור אירועים אחרים. אז כשהאירועים שהם נאלצים לעבור בתמונות האלה יתחילו להיות אישיים, יידרש את מירב הכוח כדי לדחוק את רגשותיהם הצידה ולהתמקד בביצוע המשימה ששילמו להם לעשות.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "Link Click",
+					"overview": "Cheng Xiaoshi, Lu Guang oraz Qiao Ling wykonują wszelakie misje, które zmieniają przyszłość. Landlady znajduje zleceniodawców, a Lu używa swojej mocy do przeniesienia Chenga „w zdjęcie”. W praktyce oznacza to, że chłopak trafia w ciało osoby, która wykonała fotografię, w dodatku w czasie, kiedy to zdjęcie zostało dopiero co zrobione — ważne dla misji jest jednak, aby obraz był „świeży”.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "",
+					"overview": "Čeng Siao-ši a Lu Kuang, kteří používají superschopnosti k postupnému zadávání fotografií svých klientů, berou svou práci v malém fotografickém studiu \"Time Photo Studio\" v kulisách moderní metropole vážně. Každá zakázka může být plná nebezpečí, ale nic není důležitější než splnit každou objednávku, bez ohledu na její rozsah... nebo nebezpečí s ní spojené!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "LINK CLICK",
+					"overview": "Usando superpoderes para ingresar las fotos de sus clientes una por una, Cheng Xiaoshi y Lu Guang toman en serio su trabajo en «Time Photo Studio», una pequeña tienda de fotografía ubicada en el contexto de una metrópolis moderna.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "Cheng Xiaoshi en Lu Guang gebruiken superkrachten om de foto's van hun klanten één voor één in te voeren en nemen hun werk serieus bij 'Time Photo Studio', een kleine fotowinkel in de achtergrond van een moderne metropool. Elke klus kan vol gevaren zijn, maar niets is belangrijker dan het uitvoeren van elke opdracht, ongeacht de omvang... of het gevaar dat ermee gemoeid is!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ID",
+				"iso_639_1": "id",
+				"name": "Bahasa indonesia",
+				"english_name": "Indonesian",
+				"data": {
+					"name": "LINK CLICK",
+					"overview": "Dalam sebuah studio foto biasa, dua orang lelaki dengan kemampuan khusus mampu masuk ke dalam foto untuk memenuhi keinginan setiap pelanggan mereka. Namun ternyata, hal tidak berjalan sesuai dengan keinginan mereka.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "ข้ามเวลาพิชิตภารกิจ",
+					"overview": "ในเมืองหลวงที่วุ่นวาย มีร้านเล็ก ๆ ชื่อว่า “ร้านถ่ายรูปแห่งกาลเวลา” ซึ่งมีเจ้าของร้านคือเฉิงเซียวสือกับลู่กวาง ชายหนุ่มผู้มีพลังพิเศษ พวกเขาทำงานเป็นทีม ใช้พลังพิเศษเดินทางเข้าไปในรูปถ่าย เพื่อปฏิบัติภารกิจที่ลูกค้าว่าจ้างให้สำเร็จ แต่ทว่าเรื่องราวกลับไม่ได้ดำเนินไปตามอย่างที่พวกเขาคิดไว้ซะนี่……",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "時光代理人",
+					"overview": "在繁華都市的某個角落，有一家叫做「時光照相館」的小店還在照常營業。雖然門庭冷落，但它背後其實由兩個具有特殊能力的男人——程小時和陸光經營著。為了完成顧客的委託，陸光和程小時組隊配合使用超能力進入照片，然而事情的發展卻沒能按他們所想的那樣……",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "انقر الرابط",
+					"overview": "باستخدام القوى الخارقة لإدخال صور عملائهم واحدة تلو الأخرى ، يأخذ كل من \"تشنغ شياوشي\" ولو غوانغ عملهما على محمل الجد في \"تايم فوتو ستوديو\" وهو متجر تصوير صغير يقع في خلفية مدينة حديثة.. يمكن أن تكون كل وظيفة مليئة بالمخاطر، ولكن ليس هناك ما هو أكثر أهمية من تلبية كل طلب بغض النظر عن الحجم .. أو الخطر الذي ينطوي عليه الأمر",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SG",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": { "name": "时光代理人", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "MY",
+				"iso_639_1": "ms",
+				"name": "Bahasa melayu",
+				"english_name": "Malay",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "Shiguang Dailiren",
+					"overview": "Müşterilerinin fotoğraflarına birer birer girmek için güçlerini kullanan Cheng Xiaoshi ve Lu Guang işlerini modern bir şehirin arkalarında bir fotoğraf dükkânı olan \"Zaman Fotoğraf Stüdyosu\"nda yürütüyorlar. Her iş tehlike dolu olabilir, ancak hiçbir şey verilenleri yapmaktan daha önemli değil, isterse büyük olsun isterse can alsın.",
+					"homepage": "",
+					"tagline": "Geçmişi değiştirme, geleceği sorma."
+				}
+			},
+			{
+				"iso_3166_1": "CA",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "",
+					"overview": "Usando superpoderes para entrar, uma a uma, nas fotografias dos seus clientes, Cheng Xiaoshi e Lu Guang levam o seu trabalho muito a sério no \"Time Photo Studio\", um pequeno estúdio fotográfico situado no cenário de uma metrópole moderna. Cada trabalho pode estar repleto de perigo, mas nada é mais importante do que cumprir todas as encomendas, independentemente da dimensão… ou do perigo envolvido!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": {
+					"name": "کلیک لینک",
+					"overview": "چنگ شیائوشی و لو گوانگ با استفاده از ابرقدرت‌ها برای وارد کردن عکس‌های مشتریان خود به صورت یک به یک، کار خود را در \"استودیوی عکس زمان\"، یک کارگاه عکاسی کوچک در پس‌زمینه یک کلان‌شهر مدرن، جدی می‌گیرند. هر کار می‌تواند پر از خطر باشد، اما هیچ چیز مهم‌تر از انجام هر سفارش، صرف نظر از مقیاس یا خطر مربوطه، نیست!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"name": "ЛИНК-КЛИК",
+					"overview": "Използвайки суперсили, за да проникват в снимките на клиентите си една по една, Ченг Сяоши и Лу Гуанг приемат работата си сериозно в „Time Photo Studio“ – малко фотографско студио, разположено на фона на модерен метрополис. Всяка работа може да бъде пълна с опасности, но нищо не е по-важно от изпълнението на всяка поръчка, независимо от мащаба... или опасността!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "AT",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Link Click",
+					"overview": "Cheng Xiaoshi und Lu Guang arbeiten im Fotostudio Time Photo Studio. Um die Anfragen ihrer Kunden zu bearbeiten, benutzen sie besondere Fähigkeiten, um in deren Fotos hineinzuschlüpfen. Jedoch ziehen die zwei Männer das Chaos nur so an, was ihre Arbeit nicht gerade leichter macht.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Link Click Opening | Dive Back in Time by the JAWS",
+				"key": "ZLohm-ccthY",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Opening Credits",
+				"official": false,
+				"id": "67e128511c3663cb814d7856",
+				"published_at": "2021-06-24T16:00:30.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "HxoR_7jVBCM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "60a16874596a910057a05cb4",
+				"published_at": "2021-05-12T02:00:02.000Z"
+			}
+		]
+	},
+	"vote_average": 8.016,
+	"vote_count": 152
+}

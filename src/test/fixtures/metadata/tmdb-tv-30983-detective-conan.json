@@ -262,6 +262,25 @@
 	"homepage": "http://www.ytv.co.jp/conan",
 	"id": 30983,
 	"in_production": true,
+	"keywords": {
+		"results": [
+			{ "name": "japan", "id": 233 },
+			{ "name": "detective", "id": 703 },
+			{ "name": "secret identity", "id": 1308 },
+			{ "name": "secret organization", "id": 3271 },
+			{ "name": "cop", "id": 8015 },
+			{ "name": "whodunit", "id": 12570 },
+			{ "name": "based on manga", "id": 13141 },
+			{ "name": "vexed", "id": 205276 },
+			{ "name": "shounen", "id": 207826 },
+			{ "name": "anime", "id": 210024 },
+			{ "name": "japanese high school", "id": 235790 },
+			{ "name": "age change", "id": 255338 },
+			{ "name": "gang solves mysteries", "id": 317576 },
+			{ "name": "deduction", "id": 321911 },
+			{ "name": "adventure", "id": 322942 }
+		]
+	},
 	"languages": ["ja"],
 	"last_air_date": "2026-10-31",
 	"last_episode_to_air": {

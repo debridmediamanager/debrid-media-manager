@@ -354,6 +354,25 @@
 	"homepage": "http://www.thesimpsons.com/",
 	"id": 456,
 	"in_production": true,
+	"keywords": {
+		"results": [
+			{ "name": "nuclear power plant", "id": 4368 },
+			{ "name": "middle class", "id": 6071 },
+			{ "name": "cartoon", "id": 6513 },
+			{ "name": "satire", "id": 8201 },
+			{ "name": "parody", "id": 9755 },
+			{ "name": "dysfunctional family", "id": 10041 },
+			{ "name": "school", "id": 10873 },
+			{ "name": "adult humor", "id": 11192 },
+			{ "name": "social satire", "id": 11514 },
+			{ "name": "family", "id": 18035 },
+			{ "name": "family conflict", "id": 155294 },
+			{ "name": "adult animation", "id": 161919 },
+			{ "name": "sitcom", "id": 193171 },
+			{ "name": "kids", "id": 208349 },
+			{ "name": "farce", "id": 283953 }
+		]
+	},
 	"languages": ["en"],
 	"last_air_date": "2026-11-01",
 	"last_episode_to_air": {
@@ -393,7 +412,7 @@
 		"runtime": 21,
 		"season_number": 38,
 		"show_id": 456,
-		"still_path": null
+		"still_path": "/rtA0EdOnOOonMcWFTghDrEG4eBs.jpg"
 	},
 	"number_of_episodes": 816,
 	"number_of_seasons": 38,
@@ -1431,5 +1450,5 @@
 		]
 	},
 	"vote_average": 8.027,
-	"vote_count": 11156
+	"vote_count": 11157
 }
