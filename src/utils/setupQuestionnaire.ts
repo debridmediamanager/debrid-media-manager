@@ -632,12 +632,17 @@ function sponsorshipFor(
 				({ source }) => DMM_CAST_LINKS[source === 'torbox-hosted' ? 'torbox' : source].href
 			)
 	);
+	const settingsCovers = ['real-debrid', 'torbox', 'all-debrid'].some((source) =>
+		castPages.has(DMM_CAST_LINKS[source].href)
+	);
 	const cast =
 		castPages.size === 1
 			? { ...SPONSOR_BENEFITS.cast, href: [...castPages][0] }
 			: {
 					...SPONSOR_BENEFITS.cast,
-					detail: `${SPONSOR_BENEFITS.cast.detail} Set it on each provider's Cast page; Settings covers Real-Debrid, TorBox and AllDebrid.`,
+					// Routes come in SOURCE_OPTIONS order, so the first page is the first Cast source.
+					href: settingsCovers ? SPONSOR_BENEFITS.cast.href : [...castPages][0],
+					detail: `${SPONSOR_BENEFITS.cast.detail} Set it on each provider's Cast page${settingsCovers ? '; Settings covers Real-Debrid, TorBox and AllDebrid' : ''}.`,
 				};
 	const benefits = { ...SPONSOR_BENEFITS, wanted, cast };
 	const required: SetupSponsorBenefit[] = [];

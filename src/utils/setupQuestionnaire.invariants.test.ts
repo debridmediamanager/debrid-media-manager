@@ -314,6 +314,32 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('links Settings for the ten-stream perk only when a Cast page is Real-Debrid, TorBox or AllDebrid', () => {
+		// Settings' other-streams selector writes only these Cast profiles; TorBox Pro uses TorBox's.
+		const settingsProfiles: SetupSource[] = [
+			'real-debrid',
+			'torbox',
+			'all-debrid',
+			'torbox-hosted',
+		];
+		const castRoute =
+			/^(?:DMM Cast → Stremio|TorBox hosted NZBs → TorBox Cast → Stremio|DMM Kodi addon → your account)$/;
+		expect(
+			breaking(
+				(_, result) =>
+					[...result.sponsorship.required, ...result.sponsorship.optional].some(
+						({ id, href }) => id === 'cast-streams' && href === '/settings'
+					) &&
+					!result.sourceCoverage.some(
+						({ source, status, integration }) =>
+							status === 'integrated' &&
+							castRoute.test(integration) &&
+							settingsProfiles.includes(source)
+					)
+			)
+		).toEqual([]);
+	});
+
 	it('says no DMM tool is used when every route only reaches what the user already has', () => {
 		// The titles of provider-webdav, *-existing-library and existing-url-addon-stremio routes.
 		const noTool =

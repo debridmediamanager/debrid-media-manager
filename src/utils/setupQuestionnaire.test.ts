@@ -485,6 +485,22 @@ describe('sponsorship benefits follow the selected route', () => {
 		});
 	});
 
+	// Settings writes no Premiumize, Offcloud, Debrid-Link or Easynews profile, so with none of
+	// Real-Debrid, TorBox or AllDebrid the perk links the first Cast page and leaves Settings out.
+	it.each(['stremio', 'kodi'] as const)(
+		'links the first Cast page for the ten-stream perk in %s when Settings covers none of them',
+		(player) => {
+			const cast = recommendSetup(
+				answers({ player, sources: ['premiumize', 'offcloud'] })
+			).sponsorship.optional.find(({ id }) => id === 'cast-streams');
+
+			expect(cast?.href).toBe('/stremio-premiumize');
+			expect(cast?.detail).toBe(
+				"Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon. Set it on each provider's Cast page."
+			);
+		}
+	);
+
 	it('offers the ten-stream perk to Kodi debrid and Easynews users, who read the Cast stream list', () => {
 		const kodi = recommendSetup(answers({ player: 'kodi', sources: ['real-debrid'] }));
 		expect(ids('optional', kodi)).toContain('cast-streams');
