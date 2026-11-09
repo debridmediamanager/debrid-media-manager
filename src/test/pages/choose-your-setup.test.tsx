@@ -28,13 +28,16 @@ beforeEach(() => {
 	window.scrollTo = vi.fn();
 });
 
-function reachStremioRecommendation(workflow: RegExp = /Choose and play as I go/) {
+function reachStremioRecommendation(
+	workflow: RegExp = /Choose and play as I go/,
+	host: RegExp = /An existing server or host/
+) {
 	render(<ChooseYourSetupPage />);
 	fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-	fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
+	fireEvent.click(screen.getByRole('radio', { name: host }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('radio', { name: workflow }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -579,17 +582,36 @@ describe('choose your setup page', () => {
 		);
 	}
 
-	function expectAndroidDropped() {
-		expectUnavailable(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
+	const ANDROID = /Android \/ Google TV/;
+
+	function expectAndroidDropped(
+		reason = 'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.'
+	) {
+		const group = screen.getByRole('radiogroup', {
+			name: 'Can a machine stay on while you watch?',
+		});
 		expect(
-			screen.getByText(
-				'Unavailable: zurg Android has no TorBox hosted NZB backend; that route needs a normal host.'
-			)
-		).toBeInTheDocument();
+			within(group)
+				.getAllByRole('radio')
+				.filter((radio) => radio.getAttribute('aria-checked') === 'true')
+		).toEqual([]);
 		expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+		expectUnavailable(screen.getByRole('radio', { name: ANDROID }));
+		expect(screen.getByText(`Unavailable: ${reason}`)).toBeInTheDocument();
 	}
 
-	it('drops an Android host when added TorBox hosted NZBs would need zurg on it', () => {
+	function expectAndroidKept() {
+		expect(
+			screen.getByRole('heading', { name: 'Can a machine stay on while you watch?' })
+		).toBeInTheDocument();
+		expect(screen.getByRole('radio', { name: ANDROID })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+		expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
+	}
+
+	it('drops an Android host on leaving the sources step once TorBox hosted NZBs would need zurg on it', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -607,7 +629,26 @@ describe('choose your setup page', () => {
 		expectAndroidDropped();
 	});
 
-	it('drops an Android host when a new player would play TorBox hosted NZBs through zurg', () => {
+	it('keeps an Android host when TorBox hosted NZBs are ticked and unticked again', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: ANDROID }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('What do you already have?');
+		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
+		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidKept();
+	});
+
+	it('drops an Android host on leaving the player step for one that would play TorBox hosted NZBs through zurg', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -624,6 +665,76 @@ describe('choose your setup page', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expectAndroidDropped();
+	});
+
+	it('keeps an Android host when arrowing across Plex apps and back', async () => {
+		const user = userEvent.setup();
+		reachStremioRecommendation(/Choose and play as I go/, ANDROID);
+		editAnswer('Where do you want to watch?');
+		screen.getByRole('radio', { name: /Stremio/ }).focus();
+		await user.keyboard('{ArrowDown}{ArrowDown}');
+		expect(screen.getByRole('radio', { name: /Plex apps/ })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+		await user.keyboard('{ArrowUp}{ArrowUp}');
+		expect(screen.getByRole('radio', { name: /Stremio/ })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidKept();
+	});
+
+	it('drops an Android host on leaving the player step for Plex apps', () => {
+		reachStremioRecommendation(/Choose and play as I go/, ANDROID);
+		editAnswer('Where do you want to watch?');
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidDropped(
+			'Plex Media Server needs a full server host; zurg Android cannot give a server on that device a library.'
+		);
+	});
+
+	it('keeps the Plex route when arrowing to another player and back to Plex', async () => {
+		const user = userEvent.setup();
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Use rex for Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /A managed library/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('Where do you want to watch?');
+		screen.getByRole('radio', { name: /Plex apps/ }).focus();
+		await user.keyboard('{ArrowDown}');
+		expect(screen.getByRole('radio', { name: /^Jellyfin/ })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+		await user.keyboard('{ArrowUp}');
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'How should Plex get the library?' })
+		).toBeInTheDocument();
+		expect(screen.getByRole('radio', { name: /Use rex for Plex apps/ })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+		expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
 	});
 
 	it('says only the Sonarr/Radarr choice changes the route', () => {

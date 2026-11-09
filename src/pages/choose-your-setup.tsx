@@ -207,22 +207,12 @@ function QuestionChoices({
 						label={option.label}
 						description={option.description}
 						selected={answers.player === option.value}
-						onClick={() => {
-							const androidRejected =
-								answers.host === 'android' &&
-								!!hostChoiceReason(
-									{ ...answers, player: option.value as Player },
-									'android'
-								);
-							// The host is asked again after this step, and leaving it judges arr.
-							if (androidRejected) setHostAnswered(false);
+						onClick={() =>
 							setAnswers((current) => ({
 								...current,
 								player: option.value as Player,
-								plexRoute: option.value === 'plex' ? current.plexRoute : undefined,
-								host: androidRejected ? 'none' : current.host,
-							}));
-						}}
+							}))
+						}
 					/>
 				))}
 			</div>
@@ -269,24 +259,15 @@ function QuestionChoices({
 						description={option.description}
 						selected={answers.sources.includes(option.value)}
 						multi
-						onClick={() => {
-							const nextSources = sourcesAfterSelection(
-								answers.sources,
-								option.value as SetupSource
-							);
-							const androidRejected =
-								answers.host === 'android' &&
-								!!hostChoiceReason({ ...answers, sources: nextSources }, 'android');
-							if (androidRejected) setHostAnswered(false);
+						onClick={() =>
 							setAnswers((current) => ({
 								...current,
 								sources: sourcesAfterSelection(
 									current.sources,
 									option.value as SetupSource
 								),
-								host: androidRejected ? 'none' : current.host,
-							}));
-						}}
+							}))
+						}
 					/>
 				))}
 			</div>
@@ -752,6 +733,16 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 		event.preventDefault();
 		if (!currentHasAnswer) return;
 		if (!isLastStep) {
+			// Dropped on leaving the step, so arrowing or ticking past a player or source that rules
+			// Android out keeps it; the host is then asked again, and leaving that step judges arr.
+			const dropAndroid =
+				(currentQuestion === 'player' || currentQuestion === 'sources') &&
+				answers.host === 'android' &&
+				!!hostChoiceReason(answers, 'android');
+			if (dropAndroid) {
+				setHostAnswered(false);
+				setAnswers((current) => ({ ...current, host: 'none' }));
+			}
 			// Judged on leaving the step, so passing through an invalid pick (untick one debrid, tick another) keeps arr.
 			if (currentQuestion === 'sources' || currentQuestion === 'host') {
 				const resetReason =
@@ -772,7 +763,9 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 					setAnswers((current) => ({ ...current, preference: 'unsure' }));
 				} else {
 					const reason = preferenceChoiceReason(
-						hostAnswered ? answers : { host: 'existing', sources: answers.sources },
+						hostAnswered && !dropAndroid
+							? answers
+							: { host: 'existing', sources: answers.sources },
 						'arr'
 					);
 					setCompatibilityNotice((notice) =>
