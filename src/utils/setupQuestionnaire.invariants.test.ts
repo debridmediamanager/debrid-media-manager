@@ -325,6 +325,20 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('never offers Wanted or Seerr on Android without a source zurg Android can fetch with', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					!result.components.some((component) => /zurg/i.test(component)) &&
+					!answers.sources.some(
+						(source) => DEBRID.includes(source) || source === 'usenet'
+					) &&
+					offered(result).some((id) => ['wanted', 'wanted-kodi', 'seerr'].includes(id))
+			)
+		).toEqual([]);
+	});
+
 	it('warns about Real-Debrid’s one public IP only when Real-Debrid is selected', () => {
 		expect(
 			breaking(

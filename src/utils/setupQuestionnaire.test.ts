@@ -1311,6 +1311,27 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		);
 	});
 
+	it.each([
+		{ sources: ['torbox-hosted'], host: 'android', preference: 'managed' },
+		{ player: 'kodi', sources: ['torbox-hosted'], host: 'android', needs: ['family'] },
+	] satisfies Partial<SetupAnswers>[])(
+		'offers no Wanted to zurg Android, which cannot fetch TorBox hosted NZBs (%o)',
+		(overrides) => {
+			const ids = offered(recommendSetup(answers(overrides)));
+
+			for (const id of ['wanted', 'wanted-kodi', 'zurg-nightly', 'zurg-api-key'])
+				expect(ids).not.toContain(id);
+		}
+	);
+
+	it('keeps Kodi Wanted on Android when zurg there can fetch with a debrid account', () => {
+		expect(
+			offered(
+				recommendSetup(answers({ player: 'kodi', host: 'android', preference: 'managed' }))
+			)
+		).toContain('wanted-kodi');
+	});
+
 	it('suggests the Wanted route only with a debrid or NZB backend', () => {
 		const alternative = (sources: SetupSource[]) =>
 			recommendSetup(

@@ -558,8 +558,13 @@ function sponsorshipFor(
 		(answers.preference === 'arr' && (debrid || hasNzb));
 	const usesCast = routes.some(({ route: source }) => source.usesCast);
 	const usesRex = routes.some(({ route: source }) => source.usesRex);
-	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere.
-	const zurgRuns = usesZurg || answers.host !== 'none';
+	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere; zurg Android
+	// fetches Wanted only with a debrid account or own Usenet, having no torbox_nzb backend.
+	const zurgRuns =
+		usesZurg ||
+		answers.host === 'existing' ||
+		answers.host === 'willing' ||
+		(answers.host === 'android' && (debrid || selected.has('usenet')));
 	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
 	const easynewsToZurg =
 		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
