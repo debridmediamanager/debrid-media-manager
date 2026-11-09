@@ -282,6 +282,17 @@ function playerLabel(player: Player): string {
 	return PLAYER_OPTIONS.find((option) => option.value === player)?.label ?? player;
 }
 
+/** How each player reads in the middle of a sentence. */
+const PLAYER_PHRASES: Record<Exclude<Player, 'unsure'>, string> = {
+	stremio: 'Stremio',
+	kodi: 'Kodi',
+	plex: 'Plex apps',
+	jellyfin: 'Jellyfin',
+	emby: 'Emby',
+	webdav: 'your WebDAV or SMB player',
+	external: 'your external player',
+};
+
 const DEBRID_SOURCES: SetupSource[] = [
 	'real-debrid',
 	'all-debrid',
@@ -896,6 +907,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: selected.includes('http-local')
 					? 'external'
 					: 'stremio';
+	const chosenPlayer =
+		player === 'webdav'
+			? 'a WebDAV or SMB player'
+			: player === 'external'
+				? 'an external player'
+				: PLAYER_PHRASES[player];
 	const routes = selected.map((source) => ({
 		source,
 		route: sourceRoute(source, answers, player),
@@ -907,14 +924,14 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			? { id: first.id, title: first.title, summary: first.summary }
 			: {
 					id: 'choose-source-first',
-					title: 'Choose the player, then a source',
+					title: `Choose a source for ${PLAYER_PHRASES[player]}`,
 					summary:
 						'Start with files or an account supported by your player. DMM does not supply video bytes by itself.',
 				},
 		whyMatched: [
 			answers.player === 'unsure'
-				? `You have not chosen a player; ${PLAYER_OPTIONS.find((x) => x.value === player)?.label} is a starting option for these sources.`
-				: `You chose ${PLAYER_OPTIONS.find((x) => x.value === player)?.label}.`,
+				? `You have not chosen a player; ${chosenPlayer} is a starting option for these sources.`
+				: `You chose ${chosenPlayer}.`,
 			`You selected “${PREFERENCE_OPTIONS.find((x) => x.value === answers.preference)?.label}.”`,
 		],
 		components: routes.flatMap((x) => x.route.components),
@@ -946,10 +963,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.sourceNotes.push(
 			'Multiple sources can coexist, but each keeps its own credentials, quota and availability. The source list below shows the route for each.'
 		);
-		if (new Set(integrated.map((x) => x.route.id)).size > 1)
+		if (new Set(integrated.map((x) => x.route.title)).size > 1)
 			result.primaryRoute = {
 				id: 'combined-sources',
-				title: `Combine your sources in ${PLAYER_OPTIONS.find((x) => x.value === player)?.label}`,
+				title: `Combine your sources in ${PLAYER_PHRASES[player]}`,
 				summary:
 					'Use the routes below together. Each source retains its own requirements; adding one integration does not configure the others.',
 			};

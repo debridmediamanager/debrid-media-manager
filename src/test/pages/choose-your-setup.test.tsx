@@ -315,7 +315,7 @@ describe('choose your setup page', () => {
 			screen.queryByRole('heading', { name: 'DMM Cast → Stremio' })
 		).not.toBeInTheDocument();
 		expect(
-			screen.getByRole('heading', { name: 'Choose the player, then a source' })
+			screen.getByRole('heading', { name: 'Choose a source for Stremio' })
 		).toBeInTheDocument();
 	});
 

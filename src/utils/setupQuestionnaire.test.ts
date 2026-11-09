@@ -1243,3 +1243,61 @@ describe('DMM Newznab follows the routes that search an indexer', () => {
 		}
 	);
 });
+
+describe('players read naturally mid-sentence', () => {
+	it.each([
+		['stremio', 'You chose Stremio.'],
+		['external', 'You chose an external player.'],
+		['webdav', 'You chose a WebDAV or SMB player.'],
+	] as const)('says the user chose %s', (player, sentence) => {
+		expect(recommendSetup(answers({ player, host: 'willing' })).whyMatched[0]).toBe(sentence);
+	});
+
+	it('names the starting player for an undecided user', () => {
+		expect(
+			recommendSetup(answers({ player: 'unsure', sources: ['http-local'] })).whyMatched[0]
+		).toBe(
+			'You have not chosen a player; an external player is a starting option for these sources.'
+		);
+	});
+
+	it('combines sources in your external player', () => {
+		expect(
+			recommendSetup(
+				answers({ player: 'external', sources: ['real-debrid', 'usenet'], host: 'willing' })
+			).primaryRoute.title
+		).toBe('Combine your sources in your external player');
+	});
+
+	it('combines two providers that share a route id but not a title', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['real-debrid', 'all-debrid'],
+				host: 'existing',
+			})
+		);
+
+		expect(result.primaryRoute).toEqual(
+			expect.objectContaining({
+				id: 'combined-sources',
+				title: 'Combine your sources in Plex apps',
+			})
+		);
+	});
+
+	it.each([
+		['stremio', 'Choose a source for Stremio'],
+		['webdav', 'Choose a source for your WebDAV or SMB player'],
+	] as const)('asks %s users for a source', (player, title) => {
+		const result = recommendSetup(answers({ player, sources: [] }));
+
+		expect(result.primaryRoute).toEqual({
+			id: 'choose-source-first',
+			title,
+			summary:
+				'Start with files or an account supported by your player. DMM does not supply video bytes by itself.',
+		});
+	});
+});
