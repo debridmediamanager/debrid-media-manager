@@ -1041,3 +1041,27 @@ describe('an undecided player with only an own Usenet account', () => {
 		expect(result.primaryRoute.id).toBe('torbox-hosted-stremio');
 	});
 });
+
+describe('Kodi with TorBox hosted NZBs', () => {
+	it.each(['none', 'existing'] as const)(
+		'plays them from the Kodi addon’s TorBox library (host %s)',
+		(host) => {
+			const result = recommendSetup(
+				answers({ player: 'kodi', sources: ['torbox-hosted'], host })
+			);
+
+			expect(result.primaryRoute.id).toBe('dmm-kodi');
+			expect(result.conflicts).toEqual([]);
+			expect(result.sponsorship.required.map((benefit) => benefit.id)).not.toContain(
+				'zurg-nightly'
+			);
+			expect(result.prerequisites).toContain(
+				"TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
+			);
+			expect(result.sourceNotes.join(' ')).toMatch(
+				/normal TorBox torrent subscription alone/
+			);
+			expect(result.limits.join(' ')).toMatch(/finish and repair/);
+		}
+	);
+});

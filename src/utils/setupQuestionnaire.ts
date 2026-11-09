@@ -805,14 +805,18 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			{ usesCast: true }
 		);
 	}
-	if (player === 'kodi' && (debrid || source === 'easynews'))
+	if (player === 'kodi' && (debrid || source === 'easynews' || source === 'torbox-hosted'))
 		return route(
 			'dmm-kodi',
 			'DMM Kodi addon → your account',
 			'Browse, search and play in Kodi with the account you already have.',
 			'none',
 			['DMM Kodi addon → Kodi'],
-			['Pair your provider or Easynews account with the Kodi addon.'],
+			[
+				source === 'torbox-hosted'
+					? "TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
+					: 'Pair your provider or Easynews account with the Kodi addon.',
+			],
 			[{ label: 'Kodi setup', href: '/kodi' }]
 		);
 	if (player === 'external' && (debrid || source === 'easynews'))
