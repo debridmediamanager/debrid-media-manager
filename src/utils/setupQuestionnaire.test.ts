@@ -658,6 +658,31 @@ describe('the sponsor box knows when no route uses a DMM tool', () => {
 	);
 });
 
+describe('the sponsor box knows when an account is selected', () => {
+	// Benefits such as uploader priority apply to an account even on a route with no DMM tool.
+	it.each([
+		[{ sources: ['url-addon'] }, false],
+		[
+			{
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['http-local'],
+				host: 'existing',
+			},
+			false,
+		],
+		[{ player: 'webdav', sources: ['real-debrid'], host: 'none' }, true],
+		[{ sources: ['easynews'] }, true],
+		[{ sources: ['torbox-hosted'] }, true],
+		[{ sources: ['usenet'], host: 'existing' }, true],
+	] satisfies [Partial<SetupAnswers>, boolean][])(
+		'says whether %o selects one',
+		(overrides, hasAccount) => {
+			expect(recommendSetup(answers(overrides)).sponsorship.hasAccount).toBe(hasAccount);
+		}
+	);
+});
+
 describe('constraints block unusable starting routes', () => {
 	it('lists both missing arr prerequisites in one sentence', () => {
 		const result = recommendSetup(answers({ sources: ['easynews'], preference: 'arr' }));

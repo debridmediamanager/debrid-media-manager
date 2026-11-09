@@ -252,6 +252,8 @@ export interface SetupSponsorship {
 	routeAvailable: boolean;
 	/** A route uses DMM, zurg or rex, not only files, addons or provider WebDAV the user already has. */
 	usesDmmTools: boolean;
+	/** A debrid, Easynews or NZB account is selected, which benefits such as uploader priority apply to. */
+	hasAccount: boolean;
 }
 
 export interface SetupRecommendation {
@@ -698,6 +700,7 @@ function sponsorshipFor(
 				r.id !== 'existing-url-addon-stremio' &&
 				r.id !== 'provider-webdav'
 		),
+		hasAccount: debrid || hasNzb || selected.has('easynews'),
 	};
 }
 /** A route this player can use with the selected sources and no host; empty when there is none. */
@@ -1137,6 +1140,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			freeFeatures: [],
 			routeAvailable: false,
 			usesDmmTools: false,
+			hasAccount: false,
 		},
 		sourceCoverage: routes.map(({ source, route: r }) => ({
 			source,

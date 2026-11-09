@@ -151,12 +151,12 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
+				'Sponsorship is optional here; the benefits below are for other routes.'
 			)
 		).toBeInTheDocument();
 	});
 
-	it("says sponsorship is for other routes for a provider's own WebDAV", () => {
+	it("says sponsorship is for your accounts or other routes for a provider's own WebDAV", () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
