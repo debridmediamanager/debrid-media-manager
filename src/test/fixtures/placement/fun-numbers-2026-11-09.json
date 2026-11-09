@@ -26,6 +26,24 @@
 			"season": null,
 			"episode": 9,
 			"shape": "dotted"
+		},
+		{
+			"release": "[SubsPlease] Monogatari Series - Off & Monster Season - 07 (1080p) [B47A2F0A].mkv",
+			"folder": "",
+			"file": "[SubsPlease] Monogatari Series - Off & Monster Season - 07 (1080p) [B47A2F0A].mkv",
+			"single": true,
+			"season": null,
+			"episode": 7,
+			"shape": "seasondash"
+		},
+		{
+			"release": "[SubsPlease] Monogatari Series - Off & Monster Season - 09v2 (1080p) [EA216671].mkv",
+			"folder": "",
+			"file": "[SubsPlease] Monogatari Series - Off & Monster Season - 09v2 (1080p) [EA216671].mkv",
+			"single": true,
+			"season": null,
+			"episode": 9,
+			"shape": "seasondash"
 		}
 	],
 	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"

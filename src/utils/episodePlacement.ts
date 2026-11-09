@@ -195,6 +195,8 @@ const JAPANESE_SEASON = new RegExp(
 // A fansub's name posted with dots for spaces, its episode joined to the title by a hyphen:
 // `[SubsPlease].Bungou.Stray.Dogs-38.1080p` is `[SubsPlease] Bungou Stray Dogs - 38 (1080p)`.
 const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
+// `Title - 07`, `Title - 17v2`: a fansub's episode.
+const DASHED_NUMBER = /\s-\s\d{1,4}(?:v\d)?(?=\s|$)/g;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
 // `Détective Conan S11E01 - 286 [MULTI]`: the running number after the episode, nothing but tags after it.
@@ -315,7 +317,8 @@ function looseNumbers(stem: string): FileNumbers | null {
 	if (padded) return { season: null, episode: padded, end: null };
 	const anime = parseAnimeEpisode(stem);
 	if (anime?.kind === 'episode' && anime.episode > 0) {
-		const seasons = namedSeasons(stem.replace(BRACKETS, ' '));
+		// the episode's own number is no season: `Monogatari Series - Off & Monster Season - 07`
+		const seasons = namedSeasons(stem.replace(BRACKETS, ' ').replace(DASHED_NUMBER, ' '));
 		return {
 			season: seasons.size === 1 ? [...seasons][0] : null,
 			episode: anime.episode,
@@ -385,7 +388,7 @@ function releaseSeason(release: string): number | null {
 	if (SEVERAL_SEASONS.test(release)) return null;
 	const fansub = FANSUB_SEASON.exec(release);
 	if (fansub) return Number(fansub[1] ?? fansub[2]);
-	const seasons = namedSeasons(release);
+	const seasons = namedSeasons(release.replace(DASHED_NUMBER, ' '));
 	return seasons.size === 1 ? [...seasons][0] : null;
 }
 
