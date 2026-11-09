@@ -1283,7 +1283,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		)
 	) {
 		// Another source already runs zurg; a debrid account joins it, an nzb account cannot.
+		// With no host that zurg is not running yet, so there is none to join.
 		const join =
+			answers.host !== 'none' &&
 			routes.some(({ route: r }) => r.usesZurg) &&
 			selected.some((source) => DEBRID_SOURCES.includes(source));
 		// TorBox hosted NZBs hold that zurg's one NZB account, so the plugin's own Usenet needs another.

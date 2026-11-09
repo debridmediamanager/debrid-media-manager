@@ -2208,6 +2208,21 @@ describe('route copy stays on the player and source it is about', () => {
 		}
 	);
 
+	// With no host the zurg own Usenet or TorBox hosted NZBs would run is not running yet.
+	it('runs zurg with a mount rather than naming that zurg when there is no host', () => {
+		expect(
+			recommendSetup(
+				answers({
+					player: 'emby',
+					sources: ['real-debrid', 'usenet', 'torbox-hosted'],
+					host: 'none',
+				})
+			).alternatives.find(({ title }) => title.startsWith('zurg → mount'))?.detail
+		).toBe(
+			'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.'
+		);
+	});
+
 	// Both zurgs read the Wanted list when they carry the same dmm_api_key.
 	it('links two zurgs on one DMM key from the second zurg beside the Jellyfin NZB plugin', () => {
 		expect(

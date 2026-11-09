@@ -284,7 +284,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 				(answers, result) =>
 					answers.host === 'none' &&
 					texts(result).some((text) =>
-						text.includes('the zurg your Usenet account runs on')
+						/the zurg your Usenet account runs on|that zurg|those zurgs/.test(text)
 					)
 			)
 		).toEqual([]);
