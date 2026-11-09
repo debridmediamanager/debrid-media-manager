@@ -109,7 +109,7 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText(/seven plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/six plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/2 TB of Usenet a day instead of 300 GB/)).toBeInTheDocument();
-		expect(screen.getByText(/three jobs at once instead of one/)).toBeInTheDocument();
+		expect(screen.getByText(/three torrent jobs at once instead of one/)).toBeInTheDocument();
 		// Audited 2026-11-09 from every caller of the DMM API key: live and missing here.
 		expect(
 			screen.getByText(/cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox/)

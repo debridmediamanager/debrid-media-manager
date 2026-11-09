@@ -14,13 +14,9 @@
 
 ## What is this?
 
-Do you want a movie and TV show library that has unlimited size? Consider using a Debrid service, like Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, or Debrid-Link. These services work like a shared storage space for downloading torrents. You can download as much as you want without worrying about storage limits, because the files are shared among all users. You only "own" the file when you download it to your account.
+[Debrid Media Manager](https://debridmediamanager.com/) is a free open source web app for building a movie and TV library without filling a hard drive. It adds torrents to Real-Debrid and AllDebrid and TorBox and Premiumize and Offcloud and Debrid-Link. It also helps you keep the collection tidy.
 
-These Debrid services also offer a WebDAV interface that lets you mount your library as a network drive. You can connect it to media players like [Infuse](https://firecore.com/infuse) (Mac, iPhone, Apple TV, iPad) or media server software like Plex, Emby, or Jellyfin. This way, your media library can be accessed and played from anywhere!
-
-[Debrid Media Manager](https://debridmediamanager.com/) is a **free** and open source web app that makes it easy to download movies and TV shows directly to your Debrid library. Build and curate your media collection without ever worrying about storage limits.
-
-Two sister projects take it from there. [zurg](https://zurg.debridmediamanager.com/) puts every debrid account and Usenet in one folder that Plex and Jellyfin and Emby read like a normal drive. [rex](https://rex.debridmediamanager.com/) is a media server for the Plex apps that owns no files.
+Two sister projects take it further. [zurg](https://zurg.debridmediamanager.com/) puts every debrid account and Usenet in one folder that Plex and Jellyfin and Emby read like a normal drive. [rex](https://rex.debridmediamanager.com/) is a media server for the Plex apps that owns no files.
 
 ## Features
 
@@ -28,65 +24,48 @@ This builds on top of the amazing service brought by [Real-Debrid](https://real-
 
 ### Library management
 
-See all your torrents in one page, sort them by name, size, status, or date added. It groups torrents by title and helps you delete duplicates. It can show you failed or slow downloads and delete them.
+See your torrents in one place. Sort them by name, size, status or date added. Group them by title and remove duplicates, failed downloads and slow downloads.
 
-Duplicate badges, filters, and size/date cleanup share one title grouping. Known IMDb IDs keep different films separate; unidentified film releases join a known title only when the parsed name has a single known match. Parsed-title links keep working while identification finishes.
-
-The library's **Add** buttons accept full magnet links, standalone v1 info hashes, and native `.torrent` files for Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, and Debrid-Link. Pasted magnets retain their names, duplicate trackers, webseeds, and other parameters. Hexadecimal and base32 exact topics are recognized, including percent-encoded query parameters, and normalized to literal hexadecimal `urn:btih:` topics at provider boundaries for compatibility. Files are uploaded as-is rather than reduced to a hash, and mixed submissions run their file and magnet batches sequentially.
-
-On Debrid-Link, standalone hash lists remain **cached-only**; full magnets and `.torrent` files explicitly request a download and may consume the account's quota. TorBox also accepts direct HTTP(S) download links in its Add dialog.
-
-Debrid-Link's **Watch** action also uses cached-only hash admission: a miss returns an error rather than starting a new torrent download.
-
-Premiumize transfer-hash lookups accept at most 100 submitted IDs per proxy request, with eight concurrent upstream lookups. The library client splits larger lists into sequential batches.
-
-On Real-Debrid, Save Selection leaves a cached torrent intact when a strict subset would download again. Selecting different files remains an explicit replacement, even when the new selection is smaller.
-
-Shared progress and error notifications let pointer clicks reach the controls underneath them; dismissible episode summaries remain interactive. Backup restores count provider refusals as failures and finish their progress notification even if the final library refresh fails.
-
-Shared transfer polling exposes public progress, not provider account identities or internal uploader paths. Cancelling a debrid transfer requires the destination owner's verified Real-Debrid credential in `x-rd-api-key`; knowing a job ID is not authorization. Legacy jobs without verifiable ownership cannot be cancelled through this integration.
-
-Native uploads routed through anticors require its byte-preserving request streaming (`c4159f5` or later). Deploy and probe that Worker before deploying DMM; decoding multipart bodies as text corrupts binary torrent pieces. Premiumize uploads instead stream through DMM's same-origin `/api/premiumize/upload` endpoint.
-
-DMM's same-origin `/api/anticors` proxy permits the Real-Debrid app/API and TorBox API hosts only. AllDebrid requests are not forwarded through that endpoint.
+**Add** accepts full magnets standalone v1 info hashes and `.torrent` files for Real-Debrid AllDebrid TorBox
+Premiumize Offcloud and Debrid-Link. Debrid-Link hash lists stay **cached-only**. Full magnets and `.torrent`
+files can start a download. TorBox also accepts direct HTTP(S) links. Debrid-Link **Watch** stays cached-only
+and returns an error on a miss.
 
 ### Torrent search
 
-Add content to your library by searching for torrents. It detects what you already have downloaded and currently downloading in your library.
-
-The hashlist's bulk RD Download action targets only releases marked available in Real-Debrid, including with Show All enabled. Its count reflects those eligible releases; individual release downloads remain separate. Nameless stored release rows are omitted rather than crashing a title page.
-
-Filename parsing enriches display without deciding whether a shared release belongs in the list; yearless releases remain searchable and available for checking.
+Search for torrents and see what your library already has or is downloading. Hashlist bulk downloads include
+only releases marked available in Real-Debrid. Individual downloads stay separate.
 
 ### Movie and TV show info pages
 
-Browse detailed information about movies and TV shows including cast, crew, trailers, and related content. View comprehensive person filmography pages to explore an actor's or director's complete work.
-
-The final Every Episode totals stay visible until dismissed or until you leave the title/season. An older in-flight action may finish its provider work, but cannot bring its summary back on another page.
+Browse movie and TV details with cast crew trailers related titles and full person filmographies.
 
 ### Stremio integration
 
-Use DMM as a Stremio addon to stream your debrid library directly through Stremio. Includes a Cast addon for sharing your library streams.
-
-Browser player launches use `POST /api/watch/resolve/{os}/{player}` with credentials in the JSON body. The obsolete `GET /api/watch/{os}/{player}` query-token resolver has been removed. Its opt-in HTTP regression runs against an isolated instance with `DMM_ISOLATED_TEST_URL=http://127.0.0.1:<port> npx vitest run --config vitest.live.config.ts src/test/api/watch/removed-route.live.test.ts`.
-
-Debrid-Link OAuth access tokens last one day. On mount, the browser renews tokens within five minutes of expiry before validating the account, preserving any replacement refresh token. Cast playback and provider-backed library catalogs independently renew stored OAuth credentials once on `badToken`, persist the result, and retry the viewer's operation before considering a stored playback fallback. Pasted API keys have no refresh token and require sign-in again when rejected. Refresh-token rotation has not been measured.
+Use DMM as a Stremio addon to stream your debrid library. Cast lets you share those streams.
 
 ### Trakt integration
 
-Sync with your Trakt watchlist, collection, and custom lists to easily add content to your library.
-
-Custom-list selection is stored in the URL, so opening a title and using Back returns to the selected list. Choosing the empty list-picker option clears that selection.
+Sync your Trakt watchlist collection and custom lists with your library.
 
 ### Share your library and mirror other libraries
 
-Share your whole collection or select specific items. Head over to [r/debridmediamanager](https://www.reddit.com/r/debridmediamanager/) to see other people's media collections and easily mirror their content to yours.
-
-If the browser blocks the new tab after publishing a library share, DMM opens the resulting list in the current tab instead.
+Share your whole collection or selected items. Browse other public lists in
+[r/debridmediamanager](https://www.reddit.com/r/debridmediamanager/) and mirror them into your library.
 
 ### Sponsor features
 
-DMM is free and stays free. A sponsorship on [gatekeeper](https://gatekeeper.debridmediamanager.com/) pays its hosting and opens more. You get a wanted list that zurg fetches for you from DMM, Kodi, Trakt and MDBList lists, a Radarr or Sonarr backup or Seerr. Any Easynews result goes to zurg in one click. DMM works as a Newznab and Torznab indexer for Prowlarr, Sonarr and Radarr, and zurg searches it on its own when you have no indexer. You get the Jellyfin and Emby plugins and ten other streams per title in Stremio Cast and Kodi. Your Usenet uploads go first with a bigger daily allowance, also when Sonarr and Radarr send them through DMM's SABnzbd client, and the torrent uploader runs more of your jobs at once. zurg names and sorts your files with DMM's help, rex-stremio adds titles DMM already knows to rex without probing them, and the DMM API is open to your own tools. Filling requests on the request board earns the DMM perks without paying (the zurg nightly, which the zurg features run on, still needs a paid sponsorship). [What a sponsorship gives you](https://notes.debridmediamanager.com/guides/sponsorship/) lists every one and where to set it up.
+DMM is free and stays free. Sponsorship through [gatekeeper](https://gatekeeper.debridmediamanager.com/) pays for
+hosting and unlocks:
+
+- A wanted list for zurg and one-click Easynews handoff.
+- Newznab and Torznab feeds for Prowlarr Sonarr and Radarr. Torznab feeds are cached-only. Linked keys unlock TorBox Premiumize and Offcloud.
+- Seven Jellyfin plugins for debrid and Usenet libraries. Six Emby plugins for debrid libraries.
+- Ten other streams per title in Stremio Cast and Kodi instead of five.
+- Priority NZB uploads with 2 TB a day instead of 300 GB and three torrent jobs instead of one.
+- DMM naming and sorting in zurg. Known titles reach rex faster with rex-stremio. The DMM API for your tools.
+
+Every 10 filled requests earns 7 days of DMM perks. One fill per person per day counts. Earned time does not include zurg nightlies source remote help or the Discord role. Paid sponsorship includes them. [See every perk and setup step](https://notes.debridmediamanager.com/guides/sponsorship/).
 
 ## Setup
 

@@ -30,12 +30,12 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/torznab',
 		name: 'Torrent indexer',
-		what: "DMM's torrent library as a Torznab indexer, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud, the last three with your key for them linked",
+		what: "DMM's torrent library as a Torznab indexer. It has cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud. The last three need your linked service key",
 	},
 	{
 		href: '/wanted',
 		name: 'Wanted list',
-		what: 'films and shows your zurg fetches for you, new episodes and upgrades included, filled from here, Kodi, Trakt and MDBList lists or a Radarr or Sonarr backup',
+		what: 'films and shows zurg fetches for you, including new episodes and upgrades, from DMM, Kodi, Trakt, MDBList, Radarr or Sonarr',
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/dmm/seerr/',
@@ -49,12 +49,12 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/jellyfin',
 		name: 'Jellyfin plugins',
-		what: 'seven plugins: your Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, Debrid-Link and Usenet libraries inside Jellyfin, with nothing mounted',
+		what: 'seven plugins for Real-Debrid, AllDebrid, TorBox, Premiumize, Offcloud, Debrid-Link and Usenet libraries inside Jellyfin, with nothing mounted',
 	},
 	{
 		href: '/emby',
 		name: 'Emby plugins',
-		what: 'six plugins for the same debrid libraries inside Emby, one file per account',
+		what: 'six plugins for the debrid libraries inside Emby, one file per account',
 	},
 	{
 		name: 'Ten other streams in Stremio Cast and Kodi',
@@ -62,36 +62,36 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'Skip the queue',
-		what: 'priority and 2 TB of Usenet a day instead of 300 GB on the NZB uploader, and three jobs at once instead of one on the torrent uploader',
+		what: 'priority and 2 TB of Usenet a day instead of 300 GB, plus three torrent jobs at once instead of one',
 	},
 	{
 		href: '/sabnzbd',
 		name: 'SABnzbd for Sonarr and Radarr',
-		what: 'the same priority and allowance for what they send, with your key as the Password',
+		what: 'the same priority and allowance for their uploads, with your key as the Password',
 	},
 	{
 		href: 'https://zurg.debridmediamanager.com/',
 		name: 'zurg nightly',
-		what: 'every provider, the source code, the Docker image and the Android app',
+		what: 'every provider, the source code, Docker and the Android app',
 	},
 	{
 		name: 'zurg with your key',
-		what: "set as dmm_api_key, DMM names every release for rex and Plex, sorts the __magic__ folders when you turn them on, and zurg searches DMM's indexers for your Wanted list when you have none of your own",
+		what: "with dmm_api_key, DMM names releases for rex and Plex, sorts __magic__ folders when enabled, and when you have no indexer zurg searches DMM's indexers for your Wanted list if it has Usenet or a debrid account that can add torrents",
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',
 		name: 'rex-stremio with your key',
-		what: 'titles DMM already knows reach rex in seconds instead of being probed one by one',
+		what: 'titles DMM already knows reach rex in seconds instead of one-by-one probes',
 	},
 	{
 		href: '/api-docs',
 		name: 'Sponsor API',
-		what: 'release identification, cached availability, media details and metadata for your own tools',
+		what: 'release names, cache checks, media details and metadata for your own tools',
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/guides/remote-help/',
 		name: 'Free remote help',
-		what: 'a helper fixes your zurg or rex setup in your own terminal while you watch',
+		what: 'a helper fixes your zurg or rex setup in your terminal while you watch',
 	},
 	{
 		name: 'Sponsor role on Discord',
