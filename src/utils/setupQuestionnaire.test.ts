@@ -1701,6 +1701,32 @@ describe('route copy stays on the player and source it is about', () => {
 		]);
 	});
 
+	it.each([
+		[
+			'stremio',
+			[
+				'Current zurg nightlies require an active sponsorship.',
+				'NZB files and your NNTP credentials.',
+				'The Stremio NZB search addon needs a configured Newznab indexer; another device needs a reachable HTTPS addon address.',
+			],
+		],
+		[
+			'webdav',
+			[
+				'Current zurg nightlies require an active sponsorship.',
+				'NZB files and your NNTP credentials; an indexer is needed if you want search.',
+			],
+		],
+	] satisfies [Player, string[]][])(
+		'says once what own Usenet needs to search in %s',
+		(player, requirements) => {
+			expect(
+				recommendSetup(answers({ player, sources: ['usenet'], host: 'willing' }))
+					.sourceCoverage[0].requirements
+			).toEqual(requirements);
+		}
+	);
+
 	it('says Stremio searches Easynews rather than a provider library', () => {
 		const components = recommendSetup(answers({ sources: ['easynews'] })).components;
 
