@@ -2657,9 +2657,7 @@ describe('route copy stays on the player and source it is about', () => {
 		(overrides) => {
 			const result = recommendSetup(answers({ ...overrides, needs: ['subtitles'] }));
 
-			expect(result.optionalNeeds).toContain(
-				'Check embedded/player subtitle support in your player.'
-			);
+			expect(result.optionalNeeds).toContain('Check embedded or player subtitle support.');
 			expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
 		}
 	);
@@ -2711,7 +2709,7 @@ describe('route copy stays on the player and source it is about', () => {
 		);
 
 		expect(result.optionalNeeds).toContain(
-			'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+			'Check embedded or player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
 		);
 		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
 	});
@@ -2734,7 +2732,7 @@ describe('route copy stays on the player and source it is about', () => {
 			);
 
 			expect(result.optionalNeeds).toContain(
-				`Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles. They do not reach ${routes}.`
+				`Check embedded or player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles. They do not reach ${routes}.`
 			);
 			expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
 		}
@@ -2748,7 +2746,7 @@ describe('route copy stays on the player and source it is about', () => {
 					answers({ sources, host: 'existing', preference: 'arr', needs: ['subtitles'] })
 				).optionalNeeds
 			).toContain(
-				"Bazarr sidecars live beside zurg's files and do not reach DMM Cast or zurg's Stremio addon; check embedded/player subtitle support."
+				"Bazarr sidecars live beside zurg's files and do not reach DMM Cast or zurg's Stremio addon; check embedded or player subtitle support."
 			);
 		}
 	);
@@ -2771,7 +2769,7 @@ describe('route copy stays on the player and source it is about', () => {
 			);
 
 			expect(result.optionalNeeds).toContain(
-				`Bazarr sidecars live beside zurg's files and do not reach ${routes}; check embedded/player subtitle support.`
+				`Bazarr sidecars live beside zurg's files and do not reach ${routes}; check embedded or player subtitle support.`
 			);
 			expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
 		}
