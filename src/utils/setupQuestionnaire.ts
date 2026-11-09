@@ -1316,7 +1316,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 					? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
 					: answers.host === 'android' &&
 						  !routes.some(({ route: r }) => r.host === 'server')
-						? 'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.'
+						? 'zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server.'
 						: selfHosted
 		);
 	}

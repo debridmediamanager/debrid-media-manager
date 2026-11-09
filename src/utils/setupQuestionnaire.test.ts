@@ -1887,7 +1887,7 @@ describe('route copy stays on the player and source it is about', () => {
 		],
 		[
 			{ player: 'kodi', sources: ['usenet'], host: 'android' },
-			'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.',
+			'zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server.',
 		],
 		[
 			{
