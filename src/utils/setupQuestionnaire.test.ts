@@ -2525,6 +2525,19 @@ describe('route copy stays on the player and source it is about', () => {
 		}
 	);
 
+	it.each([[['real-debrid', 'usenet']], [['usenet', 'real-debrid']]] satisfies SetupSource[][][])(
+		'names the routes Bazarr sidecars miss in one order whatever the source order (%o)',
+		(sources) => {
+			expect(
+				recommendSetup(
+					answers({ sources, host: 'existing', preference: 'arr', needs: ['subtitles'] })
+				).optionalNeeds
+			).toContain(
+				"Bazarr sidecars live beside zurg's files and do not reach DMM Cast or zurg's Stremio addon; check embedded/player subtitle support."
+			);
+		}
+	);
+
 	it.each([
 		[{}, 'DMM Cast'],
 		// The Sonarr/Radarr zurg WebDAV alternative puts zurg's files in Kodi.

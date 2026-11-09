@@ -1475,6 +1475,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const arr = answers.preference === 'arr';
 		const bazarr =
 			arr && (rex || (player !== 'stremio' && routes.some(({ route: r }) => r.usesZurg)));
+		// Sorted, so the order sources were picked in does not change the sentence.
 		const unreached = [
 			...new Set(
 				routes.flatMap(({ route: r }) =>
@@ -1489,7 +1490,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 									: []
 				)
 			),
-		];
+		].sort();
 		// Kodi still reads zurg's files, sidecars included, over a zurg WebDAV source.
 		const unreachedRoutes = unreached.length
 			? `${orList(unreached)}${kodiReadsZurg || arrZurgWebdav ? '; they do reach Kodi as a zurg WebDAV source' : ''}`
