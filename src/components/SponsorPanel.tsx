@@ -52,7 +52,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: 'six plugins for the same debrid libraries inside Emby, one file per account',
 	},
 	{
-		name: 'Ten other streams in Stremio Cast',
+		name: 'Ten other streams in Stremio Cast and Kodi',
 		what: 'instead of five, set per profile below',
 	},
 	{

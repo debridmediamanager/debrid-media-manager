@@ -428,8 +428,8 @@ const SPONSOR_BENEFITS = {
 	},
 	cast: {
 		id: 'cast-streams',
-		title: 'Ten other streams in Stremio Cast',
-		detail: 'Raise the other-stream limit from five to ten per Cast profile.',
+		title: 'Ten other streams in Stremio Cast and Kodi',
+		detail: 'Raise the other-stream limit from five to ten per Cast profile; the Kodi addon uses the same limit.',
 		href: '/settings',
 	},
 	queue: {
@@ -492,7 +492,7 @@ function sponsorshipFor(
 	if (player === 'emby' && answers.preference !== 'arr' && debrid) add(required, 'emby');
 
 	if (usesZurg) add(optional, 'zurgKey');
-	if (usesCast) add(optional, 'cast');
+	if (usesCast || (player === 'kodi' && debrid)) add(optional, 'cast');
 	if (answers.preference === 'managed' && debrid) add(optional, 'torznab');
 	if (hasNzb && answers.preference !== 'arr') add(optional, 'newznab');
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))

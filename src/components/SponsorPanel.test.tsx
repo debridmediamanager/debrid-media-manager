@@ -78,7 +78,7 @@ describe('SponsorPanel', () => {
 			'/jellyfin'
 		);
 		expect(screen.getByRole('link', { name: 'Emby plugins' })).toHaveAttribute('href', '/emby');
-		expect(screen.getByText('Ten other streams in Stremio Cast')).toBeInTheDocument();
+		expect(screen.getByText('Ten other streams in Stremio Cast and Kodi')).toBeInTheDocument();
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
 	});
 
