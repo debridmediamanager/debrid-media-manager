@@ -717,8 +717,9 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 				? ", or switch to Real-Debrid and use DMM's transfer with DMM Watch, which need no host"
 				: '';
 	if (player === 'webdav') {
-		const webdav = selected.find((source) => PROVIDER_WEBDAV[source]);
-		if (webdav) return `, or use ${SOURCE_LABELS.get(webdav)} WebDAV, which needs no host`;
+		const webdav = selected.filter((source) => PROVIDER_WEBDAV[source]);
+		if (webdav.length)
+			return `, or use ${orList(webdav.map((source) => SOURCE_LABELS.get(source)!))} WebDAV, which needs no host`;
 		// An undecided player started on WebDAV for own Usenet can still pick Stremio.
 		return undecided && usenet
 			? ", or switch to TorBox hosted NZBs through TorBox Cast in Stremio or DMM's Real-Debrid transfer, which need no host"

@@ -1218,6 +1218,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			{ player: 'webdav', sources: ['usenet', 'real-debrid'] },
 			`${zurgHost}, or use Real-Debrid WebDAV, which needs no host.`,
 		],
+		[
+			{ player: 'webdav', sources: ['real-debrid', 'all-debrid', 'offcloud'] },
+			`${zurgHost}, or use Real-Debrid or AllDebrid WebDAV, which needs no host.`,
+		],
 		[{ player: 'webdav', sources: ['offcloud'] }, `${zurgHost}.`],
 		[{ player: 'webdav', sources: ['offcloud', 'usenet'] }, `${zurgHost}.`],
 		[
