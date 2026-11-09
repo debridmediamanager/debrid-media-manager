@@ -2,12 +2,13 @@
 
     python3 -m unittest discover -s kodi/plugin.video.dmm/tests
 
-The trakt-* and simkl-* fixtures follow the trackers' documented answers until record_trackers.py captures real
-ones (fixtures/README.md).
+The trakt-* and simkl-* fixtures are live answers of 2026-11-09 cut to three rows per list (record_trackers.py,
+fixtures/README.md); the two accounts hold the same person's history, so most titles are on both.
 """
 import datetime
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -23,53 +24,77 @@ def fixture(name):
         return json.load(f)
 
 
+def page_of(service, name, page):
+    """One page of an answer as recorded, [] past the last."""
+    path = '%s-%s%s.json' % (service, name, '-%d' % page if page > 1 else '')
+    return fixture(path) if os.path.exists(os.path.join(HERE, 'fixtures', path)) else []
+
+
+def answer(service, name):
+    """The whole answer, Trakt's pages joined as the addon joins them."""
+    data, page = page_of(service, name, 1), 2
+    while service == 'trakt' and page_of(service, name, page):
+        data, page = data + page_of(service, name, page), page + 1
+    return data
+
+
 def history(service):
-    return trackers.parse(service, fixture('%s-movies.json' % service), fixture('%s-shows.json' % service))
+    return trackers.parse(service, answer(service, 'movies'), answer(service, 'shows'))
 
 
 GRANT = {'accessToken': 'access', 'refreshToken': 'refresh', 'expiresAt': '2026-11-10T12:00:00.000Z',
          'user': {'name': 'Ben', 'slug': 'ben'}}
 EXPIRES = trackers.seconds(GRANT['expiresAt'])
+BLUEY, OFFICE, QUEEN_OF_TEARS, HEIMSENDIR = 'tt7678620', 'tt0386676', 'tt27668559', 'tt2354851'
+WRECK_IT_RALPH, DARK_KNIGHT, ALITA = 'tt1772341', 'tt0468569', 'tt0437086'
 
 
-def tracker(service, calls, fail=None, answers=None):
-    """dmm.http_json answering the tracker's requests from its fixtures, recording each; `fail` maps a request's
-    name in trackers.PATHS to the error it raises, `answers` to another answer."""
-    def http_json(url, data=None, headers=None, **_):
+def tracker(service, calls, fail=None, answers=None, paged=True):
+    """dmm.http_json answering the tracker's requests from its fixtures, page by page with Trakt's recorded
+    pagination headers (none when not `paged`), recording each request; `fail` maps a request's name in
+    trackers.PATHS to the error it raises, `answers` to another first page."""
+    def http_json(url, data=None, headers=None, response_headers=None, **_):
         calls.append((url, headers))
         for name, path in trackers.PATHS[service].items():
             if url.startswith(trackers.API[service] + path):
                 if name in (fail or {}):
                     raise fail[name]
-                return 200, (answers or {}).get(name) or fixture('%s-%s.json' % (service, name))
+                page = int((re.search(r'[?&]page=(\d+)', url) or [0, 1])[1])
+                if paged and response_headers is not None and service == 'trakt' and name != 'activity':
+                    response_headers.update(fixture('trakt-pages.json')[name][page - 1])
+                if page == 1 and name in (answers or {}):
+                    return 200, answers[name]
+                return 200, page_of(service, name, page)
         raise AssertionError('unexpected request %s' % url)
     return http_json
 
 
 class Parse(unittest.TestCase):
-    def test_trakt_films_by_imdb_id_with_when_last_watched(self):
+    def test_trakt_films_from_every_page_by_imdb_id(self):
         movies = history('trakt')['movies']
-        self.assertEqual(movies, {'tt0468569': '2026-11-07T20:41:13.000Z', 'tt0372784': '2014-10-11T17:00:54.000Z'})
+        self.assertEqual(len(movies), 6)
+        self.assertEqual(movies[ALITA], '2025-04-13T12:20:00.000Z')  # page 1
+        self.assertEqual(movies[WRECK_IT_RALPH], '2022-02-12T23:18:00.000Z')  # page 2
 
     def test_trakt_shows_with_their_aired_count_and_each_watched_episode(self):
         shows = history('trakt')['shows']
-        bb = shows['tt0903747']
-        self.assertEqual(bb['aired'], 62)
-        self.assertEqual(sorted(bb['episodes']), ['0:1'] + ['1:%d' % e for e in range(1, 8)] + ['2:1', '2:2'])
-        self.assertEqual(bb['episodes']['2:2'], '2026-11-08T19:02:55.000Z')
-        self.assertEqual(shows['tt7366338']['aired'], 5)
+        self.assertEqual((shows[BLUEY]['aired'], len(shows[BLUEY]['episodes'])), (153, 54))
+        self.assertEqual(shows[BLUEY]['episodes']['0:27'], '2024-04-20T11:31:00.000Z')  # a special
+        self.assertEqual(shows[OFFICE]['episodes']['4:14'], '2023-04-09T08:50:00.000Z')
+        self.assertEqual((shows[QUEEN_OF_TEARS]['aired'], len(shows[QUEEN_OF_TEARS]['episodes'])), (16, 16))
 
-    def test_simkl_counts_aired_episodes_without_those_yet_to_air(self):
-        shows = history('simkl')['shows']
-        self.assertEqual(shows['tt0149460']['aired'], 165 - 11)
-        self.assertEqual(shows['tt0149460']['episodes'], {'8:1': '2026-05-04T19:40:59Z', '8:2': '2026-05-04T19:40:59Z'})
-        self.assertEqual(history('simkl')['movies'], {'tt0068646': '1994-09-01T16:00:00Z',
-                                                      'tt0372784': '2026-05-14T06:43:15Z'})
+    def test_simkl_counts_aired_episodes_and_skips_a_film_without_an_imdb_id(self):
+        h = history('simkl')
+        self.assertEqual(h['movies'], {DARK_KNIGHT: '2023-10-26T02:04:16Z', WRECK_IT_RALPH: '2022-02-12T23:18:27Z'})
+        self.assertEqual([m['movie']['title'] for m in answer('simkl', 'movies')['movies']
+                          if not m['movie']['ids'].get('imdb')], ['Episode 1'])
+        self.assertEqual({imdb: (s['aired'], len(s['episodes'])) for imdb, s in h['shows'].items()},
+                         {OFFICE: (195, 21), HEIMSENDIR: (9, 9), BLUEY: (154, 53)})
 
     def test_trakt_activity_moves_with_a_watched_film_or_episode(self):
         data = fixture('trakt-activity.json')
         token = trackers.activity('trakt', data)
-        self.assertEqual(token, '2026-11-07T20:41:13.000Z|2026-11-08T19:02:55.000Z')
+        self.assertEqual(token, '2025-04-13T12:20:43.000Z|2026-10-26T15:55:28.000Z')
         data['movies']['paused_at'] = data['all'] = '2026-11-09T00:00:00.000Z'
         self.assertEqual(trackers.activity('trakt', data), token)
         data['episodes']['watched_at'] = '2026-11-09T00:00:00.000Z'
@@ -91,50 +116,53 @@ class Marks(unittest.TestCase):
 
     def setUp(self):
         self.watched = trackers.union([history('trakt'), history('simkl')])
-        self.bb = fixture('cinemeta-meta-breakingbad-s0-2.json')['meta']
 
-    def marks(self, **info):
-        return trackers.marks(self.watched, info, self.bb['videos'], info.pop('today', None))
+    def marks(self, videos=None, today=None, **info):
+        return trackers.marks(self.watched, info, videos, today)
 
     def test_a_film_watched_on_either_tracker_is_ticked_with_the_latest_date(self):
-        self.assertEqual(self.marks(mediatype='movie', imdb='tt0468569'),
-                         {'playcount': 1, 'lastplayed': '2026-11-07 20:41:13'})  # Trakt only
-        self.assertEqual(self.marks(mediatype='movie', imdb='tt0068646')['playcount'], 1)  # Simkl only
-        self.assertEqual(self.marks(mediatype='movie', imdb='tt0372784')['lastplayed'], '2026-05-14 06:43:15')
+        self.assertEqual(self.marks(mediatype='movie', imdb=ALITA),
+                         {'playcount': 1, 'lastplayed': '2025-04-13 12:20:00'})  # Trakt only
+        self.assertEqual(self.marks(mediatype='movie', imdb=DARK_KNIGHT)['playcount'], 1)  # Simkl only
+        self.assertEqual(self.marks(mediatype='movie', imdb=WRECK_IT_RALPH)['lastplayed'], '2022-02-12 23:18:27')
 
     def test_anything_unwatched_is_left_to_kodi(self):
         # Never playcount 0: it would hide what Kodi itself recorded as played on this TV.
-        self.assertEqual(self.marks(mediatype='movie', imdb='tt9999999'), {})
-        self.assertEqual(self.marks(mediatype='tvshow', imdb='tt9999999'), {})
-        self.assertEqual(self.marks(mediatype='episode', imdb='tt0903747', season=2, episode=5), {})
+        self.assertEqual(self.marks(mediatype='movie', imdb='tt0903747'), {})
+        self.assertEqual(self.marks(mediatype='tvshow', imdb='tt0903747'), {})
+        self.assertEqual(self.marks(mediatype='episode', imdb=BLUEY, season=3, episode=18), {})
         self.assertEqual(self.marks(mediatype='video', imdb=''), {})
-        self.assertEqual(trackers.marks(trackers.union([]), {'mediatype': 'movie', 'imdb': 'tt0468569'}), {})
+        self.assertEqual(trackers.marks(trackers.union([]), {'mediatype': 'movie', 'imdb': ALITA}), {})
 
     def test_episodes_watched_on_either_tracker(self):
-        self.assertEqual(self.marks(mediatype='episode', imdb='tt0903747', season=2, episode=3),
-                         {'playcount': 1, 'lastplayed': '2026-05-04 19:40:58'})  # Simkl
-        self.assertEqual(self.marks(mediatype='episode', imdb='tt0903747', season=1, episode=1)['lastplayed'],
-                         '2026-05-01 20:00:00')  # both: the later
+        self.assertEqual(self.marks(mediatype='episode', imdb=OFFICE, season=4, episode=14),
+                         {'playcount': 1, 'lastplayed': '2023-04-09 08:50:16'})  # both: the later, Simkl's
+        self.assertEqual(self.marks(mediatype='episode', imdb=HEIMSENDIR, season=1, episode=1)['playcount'], 1)
 
-    def test_a_part_watched_show_counts_its_regular_episodes_against_those_aired(self):
-        # Trakt: 1x01-1x07, 2x01-2x02 and a special; Simkl adds 2x03.
-        self.assertEqual(self.marks(mediatype='tvshow', imdb='tt0903747'), {'episodes': (10, 62)})
-        self.assertEqual(self.marks(mediatype='tvshow', imdb='tt0149460'), {'episodes': (2, 154)})
+    def test_a_part_watched_show_counts_its_regular_episodes_against_the_most_aired(self):
+        # Trakt counts 153 aired and has a special watched; Simkl counts 154. The special stays out.
+        self.assertEqual(self.marks(mediatype='tvshow', imdb=BLUEY), {'episodes': (53, 154)})
+        self.assertEqual(self.marks(mediatype='tvshow', imdb=OFFICE), {'episodes': (21, 195)})
 
     def test_a_show_with_every_aired_episode_watched_is_ticked(self):
-        self.assertEqual(self.marks(mediatype='tvshow', imdb='tt7366338'), {'playcount': 1})
+        self.assertEqual(self.marks(mediatype='tvshow', imdb=QUEEN_OF_TEARS), {'playcount': 1})  # Trakt
+        self.assertEqual(self.marks(mediatype='tvshow', imdb=HEIMSENDIR), {'playcount': 1})  # Simkl, completed
 
     def test_seasons_count_cinemetas_episodes(self):
-        self.assertEqual(self.marks(mediatype='season', imdb='tt0903747', season=1), {'playcount': 1})
-        self.assertEqual(self.marks(mediatype='season', imdb='tt0903747', season=2), {'episodes': (3, 13)})
-        self.assertEqual(self.marks(mediatype='season', imdb='tt0903747', season=0), {'episodes': (1, 5)})
+        # Cinemeta dates every episode of The Office 2001-01-31, so both seasons count as aired.
+        office = fixture('cinemeta-meta-theoffice-s1-2.json')['meta']['videos']
+        self.assertEqual(self.marks(office, mediatype='season', imdb=OFFICE, season=1), {'playcount': 1})
+        self.assertEqual(self.marks(office, mediatype='season', imdb=OFFICE, season=2), {'episodes': (8, 22)})
+        bluey = fixture('cinemeta-meta-bluey-s3.json')['meta']['videos']
+        self.assertEqual(self.marks(bluey, mediatype='season', imdb=BLUEY, season=3), {'episodes': (35, 50)})
 
     def test_a_season_still_airing_counts_only_its_aired_episodes(self):
-        # On 2009-03-31 Cinemeta lists all 13 of season 2, four of them aired; 2x01-2x03 are watched.
-        today = datetime.date(2009, 3, 31)
-        self.assertEqual(self.marks(mediatype='season', imdb='tt0903747', season=2, today=today), {'episodes': (3, 4)})
-        today = datetime.date(2009, 3, 24)
-        self.assertEqual(self.marks(mediatype='season', imdb='tt0903747', season=2, today=today), {'playcount': 1})
+        # Bluey's third season aired a day at a time from late November 2021; 3x18 is the first one not watched.
+        bluey = fixture('cinemeta-meta-bluey-s3.json')['meta']['videos']
+        self.assertEqual(self.marks(bluey, datetime.date(2021, 12, 7), mediatype='season', imdb=BLUEY, season=3),
+                         {'playcount': 1})
+        self.assertEqual(self.marks(bluey, datetime.date(2021, 12, 10), mediatype='season', imdb=BLUEY, season=3),
+                         {'episodes': (19, 20)})
 
 
 class Grants(unittest.TestCase):
@@ -165,6 +193,10 @@ class Grants(unittest.TestCase):
 
 class History(unittest.TestCase):
     NOW = 1_800_000_000
+    TRAKT = ['https://api.trakt.tv/sync/last_activities',
+             'https://api.trakt.tv/sync/watched/movies?page=1&limit=250',
+             'https://api.trakt.tv/sync/watched/movies?page=2&limit=250',
+             'https://api.trakt.tv/sync/watched/shows?extended=progress&page=1&limit=250']
 
     def setUp(self):
         self.dir = tempfile.TemporaryDirectory()
@@ -180,24 +212,30 @@ class History(unittest.TestCase):
             got = trackers.history(service, grant, self.path, now, self.logged.append)
         return got, [url for url, _ in calls], calls
 
-    def test_the_first_read_pulls_everything_and_keeps_it(self):
+    def test_the_first_read_pulls_every_page_and_keeps_it(self):
         got, urls, calls = self.read(self.NOW)
-        self.assertEqual(urls, ['https://api.trakt.tv/sync/last_activities', 'https://api.trakt.tv/sync/watched/movies',
-                                'https://api.trakt.tv/sync/watched/shows?extended=full'])
+        self.assertEqual(urls, self.TRAKT)
         self.assertEqual(calls[0][1], {'Authorization': 'Bearer access', 'Content-Type': 'application/json',
                                        'trakt-api-version': '2', 'trakt-api-key': trackers.TRAKT_CLIENT_ID})
         self.assertEqual(got, dict(history('trakt'), checked=self.NOW,
-                                   activity='2026-11-07T20:41:13.000Z|2026-11-08T19:02:55.000Z'))
+                                   activity='2025-04-13T12:20:43.000Z|2026-10-26T15:55:28.000Z'))
         with open(self.path, encoding='utf-8') as f:
             self.assertEqual(json.load(f), got)
         self.assertEqual(self.logged, [])
+
+    def test_trakt_pages_end_at_an_empty_page_when_the_count_is_missing(self):
+        # Trakt (trakt/trakt-api#775) asks apps to stop at [] too; the recorded films span two pages.
+        got, urls, _ = self.read(self.NOW, paged=False)
+        self.assertEqual([u for u in urls if '/movies' in u], self.TRAKT[1:3] + [
+            'https://api.trakt.tv/sync/watched/movies?page=3&limit=250'])
+        self.assertIn(WRECK_IT_RALPH, got['movies'])
 
     def test_asks_nothing_for_five_minutes_then_only_whether_anything_moved(self):
         first = self.read(self.NOW)[0]
         got, urls, _ = self.read(self.NOW + 299)
         self.assertEqual((got, urls), (first, []))
         got, urls, _ = self.read(self.NOW + 301)
-        self.assertEqual(urls, ['https://api.trakt.tv/sync/last_activities'])
+        self.assertEqual(urls, self.TRAKT[:1])
         self.assertEqual(got, dict(first, checked=self.NOW + 301))
 
     def test_pulls_again_once_the_activity_moved(self):
@@ -205,11 +243,12 @@ class History(unittest.TestCase):
         moved = fixture('trakt-activity.json')
         moved['episodes']['watched_at'] = '2026-11-09T20:00:00.000Z'
         shows = fixture('trakt-shows.json')
-        shows[0]['seasons'][2]['episodes'].append({'number': 3, 'plays': 1,
-                                                   'last_watched_at': '2026-11-09T20:00:00.000Z'})
+        office = next(s for s in shows if s['show']['ids']['imdb'] == OFFICE)
+        office['seasons'][-1]['episodes'].append({'number': 15, 'plays': 1,
+                                                  'last_watched_at': '2026-11-09T20:00:00.000Z'})
         got, urls, _ = self.read(self.NOW + 301, answers={'activity': moved, 'shows': shows})
-        self.assertEqual(len(urls), 3)
-        self.assertEqual(got['shows']['tt0903747']['episodes']['2:3'], '2026-11-09T20:00:00.000Z')
+        self.assertEqual(urls, self.TRAKT)
+        self.assertEqual(got['shows'][OFFICE]['episodes']['4:15'], '2026-11-09T20:00:00.000Z')
         self.assertTrue(got['activity'].endswith('2026-11-09T20:00:00.000Z'))
 
     def test_a_failed_pull_keeps_the_old_history_and_tries_again_later(self):
@@ -222,12 +261,12 @@ class History(unittest.TestCase):
         self.assertEqual(self.logged, ['DMM: Trakt history not read: HTTP 502'])
         self.assertEqual(self.read(self.NOW + 400)[1], [])
         got, urls, _ = self.read(self.NOW + 602, answers={'activity': moved})
-        self.assertEqual((len(urls), got['activity'][:24]), (3, '2026-11-09T20:00:00.000Z'))
+        self.assertEqual((len(urls), got['activity'][:24]), (4, '2026-11-09T20:00:00.000Z'))
 
     def test_an_unreachable_tracker_on_the_first_read_leaves_no_marks(self):
-        got, _, _ = self.read(self.NOW, fail={'activity': dmm.HttpError(0, 'timed out')})
+        got, _, _ = self.read(self.NOW, fail={'activity': dmm.HttpError(429, 'HTTP 429')})
         self.assertEqual(got, {'checked': self.NOW})
-        self.assertEqual(trackers.marks(trackers.union([got]), {'mediatype': 'movie', 'imdb': 'tt0468569'}), {})
+        self.assertEqual(trackers.marks(trackers.union([got]), {'mediatype': 'movie', 'imdb': ALITA}), {})
 
     def test_simkl_is_asked_with_the_app_identity_its_api_requires(self):
         grant = dict(GRANT, clientId='simkl-client')
@@ -235,10 +274,14 @@ class History(unittest.TestCase):
             got, urls, calls = self.read(self.NOW, 'simkl', grant)
         self.assertEqual(urls[0], 'https://api.simkl.com/sync/activities?client_id=simkl-client&app-name=DMM+Kodi'
                                   '&app-version=1.3.0')
+        self.assertEqual(urls[1], 'https://api.simkl.com/sync/all-items/movies/completed?client_id=simkl-client'
+                                  '&app-name=DMM+Kodi&app-version=1.3.0')
         self.assertTrue(urls[2].startswith('https://api.simkl.com/sync/all-items/shows?extended=full&'
                                            'include_all_episodes=yes&episode_watched_at=yes&client_id=simkl-client'))
+        self.assertEqual(len(urls), 3)  # not paged
         self.assertEqual(calls[0][1], {'Authorization': 'Bearer access'})
-        self.assertEqual(got['movies'], history('simkl')['movies'])
+        self.assertEqual(got, dict(history('simkl'), checked=self.NOW, activity=trackers.activity(
+            'simkl', fixture('simkl-activity.json'))))
 
     def test_simkl_without_a_client_id_is_logged_not_asked(self):
         got, urls, _ = self.read(self.NOW, 'simkl')

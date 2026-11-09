@@ -1,32 +1,62 @@
 [
 	{
-		"plays": 1,
-		"last_watched_at": "2026-11-07T20:41:13.000Z",
-		"last_updated_at": "2026-11-07T20:41:13.000Z",
+		"last_updated_at": "2025-04-13T12:20:43.000Z",
+		"last_watched_at": "2025-04-13T12:20:00.000Z",
 		"movie": {
-			"title": "The Dark Knight",
-			"year": 2008,
-			"ids": { "trakt": 4, "slug": "the-dark-knight-2008", "imdb": "tt0468569", "tmdb": 155 }
-		}
-	},
-	{
-		"plays": 4,
-		"last_watched_at": "2014-10-11T17:00:54.000Z",
-		"last_updated_at": "2014-10-11T17:00:54.000Z",
-		"movie": {
-			"title": "Batman Begins",
-			"year": 2005,
-			"ids": { "trakt": 6, "slug": "batman-begins-2005", "imdb": "tt0372784", "tmdb": 272 }
-		}
-	},
-	{
-		"plays": 1,
-		"last_watched_at": "2019-02-02T12:00:00.000Z",
-		"last_updated_at": "2019-02-02T12:00:00.000Z",
-		"movie": {
-			"title": "A film Trakt knows no IMDb id for",
+			"ids": {
+				"imdb": "tt0437086",
+				"plex": {
+					"guid": "5d776c459ab5440021514cad",
+					"slug": "alita-battle-angel"
+				},
+				"slug": "alita-battle-angel-2019",
+				"tmdb": 399579,
+				"trakt": 243128
+			},
 			"year": 2019,
-			"ids": { "trakt": 999999, "slug": "no-imdb-2019", "imdb": null, "tmdb": 999999 }
-		}
+			"title": "Alita: Battle Angel"
+		},
+		"plays": 2,
+		"total_count": 165
+	},
+	{
+		"last_updated_at": "2024-12-20T15:00:05.000Z",
+		"last_watched_at": "2024-12-20T15:00:00.000Z",
+		"movie": {
+			"ids": {
+				"imdb": "tt35222633",
+				"plex": {
+					"guid": null,
+					"slug": null
+				},
+				"slug": "camcorder-sony-dcr-trv265e-digital8-2024",
+				"tmdb": 1360526,
+				"trakt": 1110663
+			},
+			"year": 2024,
+			"title": "camcorder sony dcr-trv265e digital8"
+		},
+		"plays": 1,
+		"total_count": 165
+	},
+	{
+		"last_updated_at": "2023-04-23T10:36:00.000Z",
+		"last_watched_at": "2023-04-23T10:36:00.000Z",
+		"movie": {
+			"ids": {
+				"imdb": "tt15494038",
+				"plex": {
+					"guid": "61507fdb18874911f7d1e9dd",
+					"slug": "drifting-home"
+				},
+				"slug": "drifting-home-2022",
+				"tmdb": 877957,
+				"trakt": 702765
+			},
+			"year": 2022,
+			"title": "Drifting Home"
+		},
+		"plays": 1,
+		"total_count": 165
 	}
 ]

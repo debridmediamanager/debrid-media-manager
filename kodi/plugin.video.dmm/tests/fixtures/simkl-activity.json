@@ -1,44 +1,46 @@
 {
-	"all": "2026-05-14T07:12:20Z",
+	"all": "2025-05-14T22:40:13Z",
 	"anime": {
-		"all": "2026-05-14T06:50:38Z",
-		"rated_at": "2026-04-10T05:34:55Z",
-		"playback": "2026-05-14T06:50:38Z",
-		"plantowatch": "2026-05-14T06:41:53Z",
-		"watching": "2026-05-14T06:43:00Z",
-		"completed": "2026-05-14T06:42:42Z",
-		"hold": "2026-05-14T06:42:05Z",
-		"dropped": "2026-05-14T06:49:56Z",
-		"removed_from_list": "2026-04-10T05:34:55Z"
+		"all": "2025-05-14T22:40:13Z",
+		"rated_at": null,
+		"playback": null,
+		"plantowatch": null,
+		"watching": "2025-05-14T22:40:13Z",
+		"completed": "2025-05-14T22:40:13Z",
+		"hold": null,
+		"dropped": null,
+		"removed_from_list": null
 	},
 	"custom_lists": {
 		"lists": {
-			"all": "2026-05-14T07:12:20Z",
-			"regular": "2026-05-14T07:12:20Z",
-			"favorites": "2026-05-14T06:58:02Z",
-			"recommendations": "2026-05-13T21:04:39Z",
-			"auto": "2026-05-14T07:05:11Z"
+			"all": null,
+			"regular": null,
+			"favorites": null,
+			"recommendations": null,
+			"auto": null
 		}
 	},
 	"movies": {
-		"all": "2026-05-14T06:50:38Z",
-		"rated_at": "2026-05-14T06:43:20Z",
-		"playback": "2026-05-14T06:50:38Z",
-		"plantowatch": "2026-05-14T06:43:11Z",
-		"completed": "2026-05-14T06:43:15Z",
-		"dropped": "2026-05-14T06:49:56Z",
-		"removed_from_list": "2026-04-10T05:34:55Z"
+		"all": "2025-05-14T22:40:13Z",
+		"rated_at": "2025-05-14T22:40:13Z",
+		"playback": null,
+		"plantowatch": "2025-05-14T22:40:13Z",
+		"completed": "2025-05-14T22:40:13Z",
+		"dropped": null,
+		"removed_from_list": null
 	},
-	"settings": { "all": "2026-02-15T22:53:03Z" },
+	"settings": {
+		"all": null
+	},
 	"tv_shows": {
-		"all": "2026-05-14T06:49:56Z",
-		"rated_at": "2026-04-10T05:34:55Z",
-		"playback": "2026-04-11T10:36:01Z",
-		"plantowatch": "2026-04-10T05:42:42Z",
-		"watching": "2026-05-04T19:40:58Z",
-		"completed": "2026-04-11T11:50:21Z",
-		"hold": "2026-05-14T06:49:56Z",
-		"dropped": "2026-05-14T06:49:56Z",
-		"removed_from_list": "2026-04-10T05:34:55Z"
+		"all": "2025-05-14T22:40:13Z",
+		"rated_at": null,
+		"playback": null,
+		"plantowatch": null,
+		"watching": "2025-05-14T22:40:13Z",
+		"completed": "2025-05-14T22:40:13Z",
+		"hold": null,
+		"dropped": null,
+		"removed_from_list": null
 	}
 }

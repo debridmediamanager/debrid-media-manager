@@ -1,8 +1,8 @@
 {
 	"movies": [
 		{
-			"added_to_watchlist_at": "2026-04-10T20:13:02Z",
-			"last_watched_at": "1994-09-01T16:00:00Z",
+			"added_to_watchlist_at": "2023-10-26T02:04:16Z",
+			"last_watched_at": "2023-10-26T02:04:16Z",
 			"user_rated_at": null,
 			"user_rating": null,
 			"status": "completed",
@@ -10,20 +10,24 @@
 			"total_episodes_count": 0,
 			"not_aired_episodes_count": 0,
 			"movie": {
-				"title": "The Godfather",
-				"poster": "10/102447562f6b49ff3a",
-				"year": 1972,
+				"title": "The Dark Knight",
+				"poster": "78/78195185129f87e6a",
+				"year": 2008,
 				"ids": {
-					"simkl": 53434,
-					"slug": "the-godfather",
-					"imdb": "tt0068646",
-					"tmdb": "238"
+					"simkl": 53282,
+					"slug": "the-dark-knight",
+					"imdb": "tt0468569",
+					"tmdb": "155",
+					"tvdb": "116",
+					"tvdbslug": "the-dark-knight",
+					"traktslug": "the-dark-knight-2008",
+					"letterboxd": "the-dark-knight"
 				}
 			}
 		},
 		{
-			"added_to_watchlist_at": "2026-05-14T06:43:15Z",
-			"last_watched_at": "2026-05-14T06:43:15Z",
+			"added_to_watchlist_at": "2022-02-12T23:18:27Z",
+			"last_watched_at": "2022-02-12T23:18:27Z",
 			"user_rated_at": null,
 			"user_rating": null,
 			"status": "completed",
@@ -31,14 +35,40 @@
 			"total_episodes_count": 0,
 			"not_aired_episodes_count": 0,
 			"movie": {
-				"title": "Batman Begins",
-				"poster": "11/1123456789abcdef",
-				"year": 2005,
+				"title": "Wreck-It Ralph",
+				"poster": "94/94136081453fbdbf6",
+				"year": 2012,
 				"ids": {
-					"simkl": 53441,
-					"slug": "batman-begins",
-					"imdb": "tt0372784",
-					"tmdb": "272"
+					"simkl": 172768,
+					"slug": "wreck-it-ralph",
+					"imdb": "tt1772341",
+					"tmdb": "82690",
+					"tvdb": "237",
+					"tvdbslug": "wreck-it-ralph",
+					"traktslug": "wreck-it-ralph-2012",
+					"letterboxd": "wreck-it-ralph"
+				}
+			}
+		},
+		{
+			"added_to_watchlist_at": "2023-10-09T22:12:04Z",
+			"last_watched_at": "2023-10-09T22:12:04Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "Episode 1",
+				"poster": null,
+				"year": 2003,
+				"ids": {
+					"simkl": 1441972,
+					"slug": "episode-1",
+					"tmdb": "497784",
+					"traktslug": "episode-1-2003",
+					"letterboxd": "episode-1"
 				}
 			}
 		}

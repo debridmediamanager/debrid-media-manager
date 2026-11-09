@@ -18,22 +18,25 @@ API = {'trakt': 'https://api.trakt.tv', 'simkl': 'https://api.simkl.com'}
 # DMM's own Trakt app, public by nature: the website ships it in its browser bundle. DMM's poll may name another.
 TRAKT_CLIENT_ID = '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0'
 CHECK_EVERY = 300
-# Trakt's access tokens live 24 hours, so a day's margin would renew on every listing.
+# A live Trakt token lasted 7 days (2026-11-09) though Trakt's docs say 24 hours; an hour's margin suits both.
 REFRESH_WITHIN = 3600
+# Trakt's most per page; it may send fewer (100 with extended=progress) and says how many pages there are.
+TRAKT_PAGE = 250
 
 # What each tracker is asked, by name; the recorded fixtures are named '<service>-<name>.json'.
 PATHS = {
     'trakt': {
         'activity': '/sync/last_activities',
         'movies': '/sync/watched/movies',
-        # extended=full adds show.aired_episodes.
-        'shows': '/sync/watched/shows?extended=full',
+        # Since 2026-06-30 only extended=progress brings the seasons (trakt/trakt-api#775); show.aired_episodes
+        # comes either way.
+        'shows': '/sync/watched/shows?extended=progress',
     },
     'simkl': {
         'activity': '/sync/activities',
-        # The default extent carries movie.ids.imdb and last_watched_at; ids_only would drop the date.
+        # The default extent carries movie.ids.imdb and last_watched_at (live, 2026-11-09); ids_only drops the date.
         'movies': '/sync/all-items/movies/completed',
-        # The docs' extended=full examples (2026-11) carry show.ids.imdb, so no ids_only call to join on ids.simkl.
+        # extended=full carries show.ids.imdb (live, 2026-11-09), so no ids_only call to join on ids.simkl.
         # Anime is left out: Simkl numbers its episodes per anime entry, not by IMDb's seasons.
         'shows': '/sync/all-items/shows?extended=full&include_all_episodes=yes&episode_watched_at=yes',
     },
@@ -67,7 +70,22 @@ def client(service, grant):
     if service == 'trakt':
         headers = {'Authorization': token, 'Content-Type': 'application/json', 'trakt-api-version': '2',
                    'trakt-api-key': grant.get('clientId') or TRAKT_CLIENT_ID}
-        return lambda path: dmm.http_json(API[service] + path, headers=headers)[1]
+
+        def trakt(path):
+            if not path.startswith('/sync/watched/'):
+                return dmm.http_json(API[service] + path, headers=headers)[1]
+            # Paged since 2026-06-30: asked without page and limit, Trakt sends the first 100 alone.
+            rows = []
+            for page in range(1, 201):  # ponytail: stops at 50,000 films or shows, far past any history seen
+                seen = {}
+                url = '%s%s%spage=%d&limit=%d' % (API[service], path, '&' if '?' in path else '?', page, TRAKT_PAGE)
+                data = dmm.http_json(url, headers=headers, response_headers=seen)[1] or []
+                rows += data
+                # Trakt asks apps to stop at an empty page too, in case the count is ever missing.
+                if not data or page >= int(seen.get('x-pagination-page-count') or page + 1):
+                    break
+            return rows
+        return trakt
     if not grant.get('clientId'):
         raise ValueError('no Simkl client id: DMM sent none and the simkl_client_id setting is empty')
     query = urllib.parse.urlencode({'client_id': grant['clientId'], 'app-name': 'DMM Kodi',

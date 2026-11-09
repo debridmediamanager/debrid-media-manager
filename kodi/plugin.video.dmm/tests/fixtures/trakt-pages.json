@@ -1,0 +1,24 @@
+{
+	"movies": [
+		{
+			"x-pagination-item-count": "165",
+			"x-pagination-limit": "100",
+			"x-pagination-page": "1",
+			"x-pagination-page-count": "2"
+		},
+		{
+			"x-pagination-item-count": "165",
+			"x-pagination-limit": "100",
+			"x-pagination-page": "2",
+			"x-pagination-page-count": "2"
+		}
+	],
+	"shows": [
+		{
+			"x-pagination-item-count": "52",
+			"x-pagination-limit": "100",
+			"x-pagination-page": "1",
+			"x-pagination-page-count": "1"
+		}
+	]
+}
