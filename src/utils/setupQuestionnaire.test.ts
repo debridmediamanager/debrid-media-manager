@@ -2360,6 +2360,16 @@ describe('route copy stays on the player and source it is about', () => {
 		}
 	);
 
+	// In Stremio, TorBox and its hosted NZBs are one addon, /stremio-torbox.
+	it('counts the Stremio TorBox addon once for local files', () => {
+		expect(
+			recommendSetup(answers({ sources: ['torbox', 'torbox-hosted'], needs: ['mixed'] }))
+				.optionalNeeds
+		).toEqual([
+			'Stremio needs a compatible addon for local files; cloud titles come from the route above.',
+		]);
+	});
+
 	it.each([
 		[
 			{ host: 'existing', preference: 'arr' },

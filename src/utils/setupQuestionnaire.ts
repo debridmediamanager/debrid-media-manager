@@ -1502,11 +1502,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (answers.needs.includes('mixed')) {
 		// Local files and an addon the player cannot use bring no cloud titles; two accounts in
-		// one route (the Kodi addon, say) are still one route.
+		// one route (the Kodi addon, say) are still one route, as is Stremio's one TorBox addon.
 		const cloudRoutes = new Set(
-			routes
+			integrated
 				.filter(
-					({ source, route: r }) => source !== 'http-local' && r.status === 'integrated'
+					({ source }) => source !== 'http-local' && (!torboxAddon || source !== 'torbox')
 				)
 				.map(({ route: r }) => r.title)
 		).size;
