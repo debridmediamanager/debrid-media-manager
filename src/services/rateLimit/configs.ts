@@ -111,6 +111,10 @@ export const RATE_LIMIT_CONFIGS = {
 	kodiPair: { name: 'kodiPair', rateLimit: 10, windowSeconds: 600 },
 	kodiApprove: { name: 'kodiApprove', rateLimit: 10, windowSeconds: 60 },
 	kodiPoll: { name: 'kodiPoll', rateLimit: 40, windowSeconds: 60 },
+	// DMM Mobile on a TV pairs the same way (/api/tv/*), on budgets of its own.
+	tvPair: { name: 'tvPair', rateLimit: 10, windowSeconds: 600 },
+	tvApprove: { name: 'tvApprove', rateLimit: 10, windowSeconds: 60 },
+	tvPoll: { name: 'tvPoll', rateLimit: 40, windowSeconds: 60 },
 	// Trakt/Simkl linking from Kodi (/api/kodi/tracker/*), same household reasoning. Each
 	// call spends DMM's app quota at the tracker; trackers ask for a poll every 5-6 s,
 	// and a link refreshes once a week, so refreshes are rare.

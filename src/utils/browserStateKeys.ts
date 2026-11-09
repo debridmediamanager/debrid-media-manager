@@ -34,6 +34,22 @@ export const SYNCED_KEYS = [
 	'en:account',
 ] as const;
 
+/**
+ * The provider sign-ins among them, as withAuth counts them (src/utils/withAuth.tsx).
+ * Easynews alone is not one: withAuth wants a debrid service.
+ */
+export const SIGN_IN_KEYS = [
+	'rd:accessToken',
+	'rd:refreshToken',
+	'ad:apiKey',
+	'tb:apiKey',
+	'pm:accessToken',
+	'pm:apiKey',
+	'oc:apiKey',
+	'dl:accessToken',
+	'dl:apiKey',
+] as const;
+
 /** Prefixes: every `settings:*` flag and the parked logins of the account switcher. */
 export const SYNCED_PREFIXES = ['settings:', 'dmm:accounts:'] as const;
 
