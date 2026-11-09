@@ -1,6 +1,6 @@
 import { approvePairing, normalizeUserCode } from '@/services/devicePairing';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { BrowserState, isSyncedKey, MAX_STATE_BYTES, SIGN_IN_KEYS } from '@/utils/browserStateKeys';
+import { MAX_STATE_BYTES, pickSyncedState, signedInServices } from '@/utils/browserStateKeys';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,22 +19,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!userCode) {
 		return res.status(400).json({ error: 'That is not a TV code. It looks like ABCD-EFGH.' });
 	}
-	const sent: Record<string, unknown> =
-		req.body?.state && typeof req.body.state === 'object' ? req.body.state : {};
-	const state: BrowserState = Object.fromEntries(
-		Object.entries(sent).filter(
-			(entry): entry is [string, string] =>
-				isSyncedKey(entry[0]) && typeof entry[1] === 'string'
-		)
-	);
+	const state = pickSyncedState(req.body?.state);
 	if (Buffer.byteLength(JSON.stringify(state)) > MAX_STATE_BYTES) {
 		return res.status(413).json({
 			error: 'This browser holds more DMM settings than a TV can be sent. Try again from another browser.',
 		});
 	}
-	const services = [
-		...new Set(SIGN_IN_KEYS.filter((key) => state[key]).map((key) => key.split(':')[0])),
-	];
+	const services = signedInServices(state);
 	if (!services.length) {
 		return res.status(400).json({
 			error: 'Nothing to link yet. Sign in to a debrid service on DMM first, then try again.',

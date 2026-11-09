@@ -115,6 +115,9 @@ export const RATE_LIMIT_CONFIGS = {
 	tvPair: { name: 'tvPair', rateLimit: 10, windowSeconds: 600 },
 	tvApprove: { name: 'tvApprove', rateLimit: 10, windowSeconds: 60 },
 	tvPoll: { name: 'tvPoll', rateLimit: 40, windowSeconds: 60 },
+	// DMM Mobile opening a page in the browser signed in (/api/handoff): one per tap.
+	handoff: { name: 'handoff', rateLimit: 30, windowSeconds: 60 },
+	handoffRedeem: { name: 'handoffRedeem', rateLimit: 30, windowSeconds: 60 },
 	// Trakt/Simkl linking from Kodi (/api/kodi/tracker/*), same household reasoning. Each
 	// call spends DMM's app quota at the tracker; trackers ask for a poll every 5-6 s,
 	// and a link refreshes once a week, so refreshes are rare.

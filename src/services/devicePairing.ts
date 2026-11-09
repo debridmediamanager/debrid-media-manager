@@ -1,3 +1,4 @@
+import type { BrowserState } from '@/utils/browserStateKeys';
 import { randomBytes, randomInt } from 'crypto';
 import Redis from 'ioredis';
 
@@ -54,7 +55,7 @@ export function formatUserCode(code: string): string {
 interface Store {
 	get(key: string): Promise<string | null>;
 	/** SET NX EX: false when the key already exists. */
-	create(key: string, value: string): Promise<boolean>;
+	create(key: string, value: string, ttlSeconds?: number): Promise<boolean>;
 	/** SET XX KEEPTTL: false when the key has already expired. */
 	replace(key: string, value: string): Promise<boolean>;
 	/** How many of the keys existed. */
@@ -74,9 +75,9 @@ const memoryStore: Store = {
 	async get(key) {
 		return memoryGet(key)?.value ?? null;
 	},
-	async create(key, value) {
+	async create(key, value, ttlSeconds = PAIRING_TTL_SECONDS) {
 		if (memoryGet(key)) return false;
-		memory.set(key, { value, expiresAt: Date.now() + PAIRING_TTL_SECONDS * 1000 });
+		memory.set(key, { value, expiresAt: Date.now() + ttlSeconds * 1000 });
 		return true;
 	},
 	async replace(key, value) {
@@ -103,8 +104,8 @@ function store(): Store {
 	const client = redis;
 	return {
 		get: (key) => client.get(key),
-		create: async (key, value) =>
-			(await client.set(key, value, 'EX', PAIRING_TTL_SECONDS, 'NX')) === 'OK',
+		create: async (key, value, ttlSeconds = PAIRING_TTL_SECONDS) =>
+			(await client.set(key, value, 'EX', ttlSeconds, 'NX')) === 'OK',
 		replace: async (key, value) => (await client.set(key, value, 'KEEPTTL', 'XX')) === 'OK',
 		del: (...keys) => client.del(...keys),
 	};
@@ -187,4 +188,29 @@ export async function collectPairing<L>(
 	if (!(await s.del(deviceKey(kind, deviceCode)))) return 'expired';
 	await s.del(codeKey(kind, pairing.userCode));
 	return pairing.link;
+}
+
+/**
+ * The other direction: DMM Mobile opening a DMM page in the phone's browser, signed in as
+ * the app is. The app leaves its synced state here behind a one-time code it puts in the
+ * link's fragment, and the page takes it once. The browser asks within seconds.
+ */
+export const HANDOFF_TTL_SECONDS = 120;
+
+const handoffKey = (code: string) => `handoff:${code}`;
+
+export async function createHandoff(state: BrowserState): Promise<string> {
+	const code = randomBytes(32).toString('base64url');
+	if (!(await store().create(handoffKey(code), JSON.stringify(state), HANDOFF_TTL_SECONDS))) {
+		throw new Error('handoff code collision');
+	}
+	return code;
+}
+
+/** The state once; null when the code is unknown, expired or already taken. */
+export async function takeHandoff(code: string): Promise<BrowserState | null> {
+	const s = store();
+	const raw = await s.get(handoffKey(code));
+	// Only the request whose delete removed the key gets the state.
+	return raw && (await s.del(handoffKey(code))) ? (JSON.parse(raw) as BrowserState) : null;
 }

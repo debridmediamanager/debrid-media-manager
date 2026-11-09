@@ -16,6 +16,7 @@ import { Logo } from '@/components/Logo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
+import { hasBrowserHandoff } from './browserHandoff';
 import { disableGuestMode, useGuestMode } from './guestMode';
 import { supportsLookbehind } from './lookbehind';
 import { hasSponsorHandoff } from './sponsorHandoff';
@@ -85,8 +86,9 @@ export const withAuth = <P extends object>(
 		);
 		const actsAsGuest = isGuest || !!enAccount;
 		// gatekeeper's "Open DMM with this key" lands on /settings with nothing stored
-		// yet. Read once, before the sponsor panel scrubs the fragment on mount.
-		const [handoff] = useState(() => hasSponsorHandoff());
+		// yet. Read once, before the sponsor panel scrubs the fragment on mount. DMM Mobile's
+		// `#handoff=` is the same: _app takes the logins and reloads the page.
+		const [handoff] = useState(() => hasSponsorHandoff() || hasBrowserHandoff());
 
 		// Check for refresh credentials
 		const [hasRefreshCredentials] = useState(() => {
