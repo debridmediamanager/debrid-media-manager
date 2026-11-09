@@ -395,7 +395,7 @@ const SPONSOR_BENEFITS = {
 	torznab: {
 		id: 'torznab',
 		title: 'DMM torrent indexer',
-		detail: 'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with live cache feeds for TorBox, Premiumize and Offcloud.',
+		detail: "Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked.",
 		href: '/torznab',
 	},
 	newznab: {
@@ -501,7 +501,6 @@ function sponsorshipFor(
 
 	if (usesZurg) add(optional, 'zurgKey');
 	if (usesCast) add(optional, 'cast');
-	if (answers.preference === 'managed' && debrid) add(optional, 'torznab');
 	if (hasNzb && answers.preference !== 'arr') add(optional, 'newznab');
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
 		add(optional, 'jellyfin');

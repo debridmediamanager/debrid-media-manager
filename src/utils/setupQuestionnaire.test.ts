@@ -910,3 +910,21 @@ describe('provider WebDAV follows the chosen provider', () => {
 		);
 	});
 });
+
+describe('the Torznab benefit matches the Torznab page', () => {
+	it('does not offer Torznab to a managed library without Sonarr or Radarr', () => {
+		const result = recommendSetup(answers({ preference: 'managed' }));
+
+		expect(result.sponsorship.optional.map((benefit) => benefit.id)).not.toContain('torznab');
+	});
+
+	it('requires Torznab for Sonarr/Radarr and describes where its cached status comes from', () => {
+		const result = recommendSetup(answers({ host: 'willing', preference: 'arr' }));
+		const torznab = result.sponsorship.required.find((benefit) => benefit.id === 'torznab');
+
+		expect(torznab?.detail).toBe(
+			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
+		);
+		expect(torznab?.detail).not.toMatch(/live cache feeds/);
+	});
+});
