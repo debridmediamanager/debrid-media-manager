@@ -203,8 +203,9 @@ const PAIRED_CODES = /(?:^|\s-\s)(\d{3}),\s*(\d{3})\s-\s/;
 // production code of a season, a half hour and its segment (`- 105 -` alone is Yu-Gi-Oh!'s
 // absolute 105th)
 const SHOW_CODE = /^(.*?\S)\s+-\s+([1-9])(\d{2})([ab])\s+-\s+\S/i;
-// `aaf-wilty.302` in `Would.I.Lie.To.You.S03E01`: the season and episode as one number.
-const SCENE_SHORTHAND = /(?:^|[\s._-])(\d)(\d{2})(?:[\s._-]|$)/;
+// `aaf-wilty.302` in `Would.I.Lie.To.You.S03E01`, `Family.Guy.2301` in a season 23 pack: the
+// season and episode as one number.
+const SCENE_SHORTHAND = /(?:^|[\s._-])(\d{1,2})(\d{2})(?=[\s._-]|$)/g;
 // `[CyC] Natsume Yuujinchou Shi 03`: a season as a Japanese numeral (shi, four), capitalised.
 const JAPANESE_NUMERALS = ['Ni', 'San', 'Shi', 'Go', 'Roku', 'Nana', 'Hachi', 'Kyuu', 'Juu'];
 const JAPANESE_SEASON = new RegExp(
@@ -476,11 +477,14 @@ export function fileNumbers(
 			return coded(Number(code[2]), folderSeason);
 		}
 	}
-	const shorthand = SCENE_SHORTHAND.exec(stem);
-	if (season !== null && season <= 9 && shorthand && Number(shorthand[1]) === season) {
-		const episode = positive(shorthand[2]);
-		if (episode) return { season, episode, end: null };
-	}
+	// any number of the name that starts with its season: a year may come first
+	const shorthand =
+		season === null
+			? undefined
+			: [...stem.matchAll(SCENE_SHORTHAND)].find(
+					(found) => Number(found[1]) === season && positive(found[2])
+				);
+	if (shorthand) return { season: season!, episode: Number(shorthand[2]), end: null };
 	const leading = positive(LEADING.exec(stem)?.[1]);
 	if (season !== null && leading) return coded(leading, season);
 	if (season === null && !SEVERAL_SEASONS.test(release)) {

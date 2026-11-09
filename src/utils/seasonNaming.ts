@@ -53,7 +53,8 @@ const SEASON_WORD = new RegExp(SEASON_WORDS, 'gi');
 /** `3ª Temporada`, `2nd Season` - the number leads the word instead of following it. */
 const LEADING_NUMBER = new RegExp(`(\\d{1,2})(?:st|nd|rd|th|ª|°)?${SEP}(?:${SEASON_WORDS})`, 'gi');
 
-const NUMBER_RUN = new RegExp(`^${SEP}(\\d{1,2})(?:st|nd|rd|th|ª|°)?(?![0-9])`, 'i');
+// `Season #23`: a number sign may lead the number
+const NUMBER_RUN = new RegExp(`^${SEP}#?(\\d{1,2})(?:st|nd|rd|th|ª|°)?(?![0-9])`, 'i');
 /**
  * What may join two numbers in a list. A bare space or dot counts, because
  * `Seasons 1.2.3.4.5` and `Season 1 2 3 4 5 6 7 8 9 10` are both real - and a

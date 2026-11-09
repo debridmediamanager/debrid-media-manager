@@ -76,6 +76,8 @@ describe('namedSeasons', () => {
 		expect(seasonsOf('The Wire - saison 3 - MULTI')).toEqual([3]);
 		expect(seasonsOf('Black Mirror - Чёрное зеркало. Сезон 3. NewStudio. 1080p')).toEqual([3]);
 		expect(seasonsOf('GOT 4K SEASON 03')).toEqual([3]);
+		// a South Park pack on a Discord user's zurg, 2026-11-09
+		expect(seasonsOf('Season #23')).toEqual([23]);
 	});
 
 	it('reads a number that leads the word', () => {
