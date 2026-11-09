@@ -878,9 +878,17 @@ async function placeByRules(
 
 	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
 	const titledAt = byTitle ? await byName(show, numbers, file) : null;
+	// a later part only for a caller that reads `part`: one that does not files it as a copy
+	const part = titledAt?.[3];
+	if (part && part > 1 && !show.parts) return null;
 	const named = titledAt && (await placed([titledAt[0], titledAt[1]], 'tmdb'));
 	if (named)
-		return { ...named, ...(titledAt[2] ? { episodeEnd: titledAt[2] } : {}), titled: true };
+		return {
+			...named,
+			...(titledAt[2] ? { episodeEnd: titledAt[2] } : {}),
+			...(part && show.parts ? { part } : {}),
+			titled: true,
+		};
 
 	// a dub's own seasons are TMDB's only through its Dub Order: Medabots' English dub season 3
 	// is TMDB's season 2 (Damashii), its season 2 episodes TMDB files out of order in season 1
@@ -1408,7 +1416,7 @@ async function byName(
 	show: PlacementShow,
 	numbers: FileNumbers,
 	file: string
-): Promise<[number, number, number?] | null> {
+): Promise<[number, number, number?, number?] | null> {
 	const title = titleOf(file, numbers);
 	if (!title) return null;
 	const { season, episode } = numbers;
@@ -1460,7 +1468,14 @@ async function byName(
 		own.length >= 6 && numbers.end === null
 			? all.filter((row) => unshown(row.name) === own)
 			: [];
-	return shown.length === 1 ? [shown[0].season, shown[0].episode] : null;
+	if (shown.length === 1) return [shown[0].season, shown[0].episode];
+	// a title TMDB gives one episode, and the part of it a file holds: Star Wars Rebels'
+	// `S02E01.The.Siege.of.Lothal.Part2` is the second part of TMDB's S0E6 "The Siege of Lothal"
+	const parted = /^(.*\S) (?:part|pt) ?(\d{1,2})$/.exec(title.whole);
+	const whole = parted && titled({ whole: parted[1], first: parted[1] }, all, [0, 2]);
+	return whole && numbers.end === null && !PART.test(words(whole.name).join(' '))
+		? [whole.season, whole.episode, undefined, Number(parted[2])]
+		: null;
 }
 
 // What names a special as one beside its title: `- OVA - Water Slide`, `DC Comics Special II`.

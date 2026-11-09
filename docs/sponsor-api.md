@@ -189,7 +189,7 @@ Files placed by `how` `tvdbSeries` carry TVDB's numbering of the series `tvdbId`
 of a request that sent `"parts": true`, is the file's part of TMDB's episode, from 1, where it
 holds only that part, else `null`: TVDB numbers Lost's season 4 finale as two episodes, E13 and
 E14, and TMDB as one 85-minute E13, so `Lost.S04E13` answers S4E13 `part` 1 and `Lost.S04E14`
-S4E13 `part` 2, with the same `tmdbEpisodeId`. A file is also a part where its name says so right
+S4E13 `part` 2, with the same `tmdbEpisodeId`. A file is also a part where its title is one TMDB gives one episode with a part after it (`Star.Wars.Rebels.S02E02.The.Siege.of.Lothal.Part2` is S0E6 "The Siege of Lothal" `part` 2), and where its name says so right
 after its episode (`Lost.S01E24.Part.2`, `- pt2`, `cd2`, `disc2`) and another file of the release
 is of the same episode, which is then its part 1; `Twin.Peaks.S03E05.Part.5` alone is that
 episode's title. Without `"parts": true` a later part is left unplaced, as before, since a tool

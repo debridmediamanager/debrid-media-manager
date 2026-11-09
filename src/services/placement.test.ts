@@ -47,6 +47,7 @@ import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
+import titleParts from '@/test/fixtures/placement/title-parts.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import tvdbSegments from '@/test/fixtures/placement/tvdb-segments.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
@@ -2005,5 +2006,41 @@ describe("TMDB's title with the show's name before it", () => {
 		expect(dark('-13 Are You Afraid of the Dark - The Tale of the Pinball Wizard')).toEqual([
 			1, 13,
 		]);
+	});
+});
+
+describe('a part of the episode its title names', () => {
+	// zurg on fun (2026-11-09): two Star Wars Rebels season 2 packs, each with `The.Siege.of.Lothal`
+	// in two files (`Part1`, `Part2`), TMDB's one 44-minute special S0E6 (see the fixtures README)
+	const placed = async (name: string, parts: boolean) => {
+		const c = titleParts.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), ...(parts ? { parts: true as const } : {}) }],
+			Infinity,
+			recordedSources(titleParts.answers),
+			async () => [null]
+		);
+		if (parts) expect(releases[0]).toEqual(c.expect);
+		return (name: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(name))!;
+			return [f.season, f.episode, f.part ?? null];
+		};
+	};
+
+	it("places each file as its part of TMDB's episode", async () => {
+		const nogrp = await placed('Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP', true);
+		expect(nogrp('S02E01.The.Siege.of.Lothal.Part1')).toEqual([0, 6, 1]);
+		expect(nogrp('S02E02.The.Siege.of.Lothal.Part2')).toEqual([0, 6, 2]);
+		const privatehd = await placed('Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD.5.1', true);
+		expect(privatehd('S02E01.The.Siege.of.Lothal.Part2')).toEqual([0, 6, 2]);
+	});
+
+	it('leaves a later part unplaced for a caller that does not read parts', async () => {
+		const nogrp = await placed(
+			'Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP',
+			false
+		);
+		expect(nogrp('S02E01.The.Siege.of.Lothal.Part1')).toEqual([0, 6, null]);
+		expect(nogrp('S02E02.The.Siege.of.Lothal.Part2')).toEqual([null, null, null]);
 	});
 });

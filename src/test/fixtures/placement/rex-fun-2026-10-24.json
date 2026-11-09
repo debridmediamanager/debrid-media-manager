@@ -87374,11 +87374,11 @@
 				"files": [
 					{
 						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102
 					},
 					{
 						"path": "Star.Wars.Rebels.S02E02.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",

@@ -1,0 +1,4709 @@
+{
+	"answers": {
+		"find": {
+			"tt2930604": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 60554,
+						"name": "Star Wars Rebels",
+						"first_air_date": "2014-10-13"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"60554": {
+				"id": 60554,
+				"name": "Star Wars Rebels",
+				"original_name": "Star Wars Rebels",
+				"first_air_date": "2014-10-13",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 161176,
+							"name": "space opera"
+						},
+						{
+							"id": 278823,
+							"name": "3d animation"
+						},
+						{
+							"id": 325811,
+							"name": "excited"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2930604",
+					"tvdb_id": 283468
+				},
+				"networks": [
+					{
+						"id": 44,
+						"name": "Disney XD"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "星球大战：义军崛起",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Star Wars: Povstalci",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Star Wars : Rebels",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Star Wars: Rebels",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "Ο Πόλεμος των Άστρων: Οι Επαναστάτες",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "星球大战：反抗军起义",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "Zvjezdani ratovi: Pobunjenici",
+							"iso_3166_1": "HR"
+						},
+						{
+							"title": "סטאר וורס: מורדים",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Gwiezdne Wojny: Rebelianci",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Звёздные войны: Повстанцы",
+							"iso_3166_1": "RU"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "2014-08-11",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2014-10-13",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 19,
+						"air_date": "2015-10-14",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 21,
+						"air_date": "2016-09-24",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 16,
+						"air_date": "2017-10-16",
+						"name": "Season 4"
+					}
+				]
+			}
+		},
+		"season": {
+			"60554/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "The Machine in the Ghost",
+						"air_date": "2014-08-11",
+						"id": 1010974
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Art Attack",
+						"air_date": "2014-08-18",
+						"id": 1010975
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Entanglement",
+						"air_date": "2014-08-25",
+						"id": 1010976
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Property of Ezra Bridger",
+						"air_date": "2014-09-01",
+						"id": 1010977
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Spark of Rebellion",
+						"air_date": "2014-10-03",
+						"id": 1152428
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "The Siege of Lothal",
+						"air_date": "2015-06-20",
+						"id": 1164102
+					}
+				]
+			},
+			"60554/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Droids in Distress",
+						"air_date": "2014-10-13",
+						"id": 1053815
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Fighter Flight",
+						"air_date": "2014-10-20",
+						"id": 1053814
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Rise of the Old Masters",
+						"air_date": "2014-10-27",
+						"id": 1010972
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Breaking Ranks",
+						"air_date": "2014-11-03",
+						"id": 1014544
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Out of Darkness",
+						"air_date": "2014-11-10",
+						"id": 1014545
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Empire Day",
+						"air_date": "2014-11-17",
+						"id": 1014546
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Gathering Forces",
+						"air_date": "2014-11-24",
+						"id": 1014547
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Path of the Jedi",
+						"air_date": "2015-01-05",
+						"id": 1033050
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Idiot's Array",
+						"air_date": "2015-01-19",
+						"id": 1034914
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Vision of Hope",
+						"air_date": "2015-02-02",
+						"id": 1041354
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Call to Action",
+						"air_date": "2015-02-09",
+						"id": 1041355
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Rebel Resolve",
+						"air_date": "2015-02-23",
+						"id": 1044679
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Fire Across the Galaxy",
+						"air_date": "2015-03-02",
+						"id": 1044678
+					}
+				]
+			},
+			"60554/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Lost Commanders",
+						"air_date": "2015-10-14",
+						"id": 1117686
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Relics of the Old Republic",
+						"air_date": "2015-10-21",
+						"id": 1131589
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Always Two There Are",
+						"air_date": "2015-10-28",
+						"id": 1132041
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Brothers of the Broken Horn",
+						"air_date": "2015-11-04",
+						"id": 1134614
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Wings of the Master",
+						"air_date": "2015-11-11",
+						"id": 1135846
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Blood Sisters",
+						"air_date": "2015-11-18",
+						"id": 1135847
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Stealth Strike",
+						"air_date": "2015-11-25",
+						"id": 1135848
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Future of the Force",
+						"air_date": "2015-12-02",
+						"id": 1142189
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Legacy",
+						"air_date": "2015-12-09",
+						"id": 1145354
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "A Princess on Lothal",
+						"air_date": "2016-01-20",
+						"id": 1158129
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Protector of Concord Dawn",
+						"air_date": "2016-01-27",
+						"id": 1161488
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Legends of the Lasat",
+						"air_date": "2016-02-03",
+						"id": 1162960
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Call",
+						"air_date": "2016-02-10",
+						"id": 1164926
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Homecoming",
+						"air_date": "2016-02-17",
+						"id": 1166342
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "The Honorable Ones",
+						"air_date": "2016-02-24",
+						"id": 1167094
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Shroud of Darkness",
+						"air_date": "2016-03-02",
+						"id": 1173281
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "The Forgotten Droid",
+						"air_date": "2016-03-16",
+						"id": 1174483
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Mystery of Chopper Base",
+						"air_date": "2016-03-23",
+						"id": 1174484
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Twilight of the Apprentice",
+						"air_date": "2016-03-30",
+						"id": 1183161
+					}
+				]
+			},
+			"60554/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Steps Into Shadow",
+						"air_date": "2016-09-24",
+						"id": 1224349
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "The Holocrons of Fate",
+						"air_date": "2016-10-01",
+						"id": 1228085
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "The Antilles Extraction",
+						"air_date": "2016-10-08",
+						"id": 1231820
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Hera's Heroes",
+						"air_date": "2016-10-15",
+						"id": 1228438
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "The Last Battle",
+						"air_date": "2016-10-22",
+						"id": 1233356
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Imperial Supercommandos",
+						"air_date": "2016-11-05",
+						"id": 1236897
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Iron Squadron",
+						"air_date": "2016-11-19",
+						"id": 1241553
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "The Wynkahthu Job",
+						"air_date": "2016-11-26",
+						"id": 1236945
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "An Inside Man",
+						"air_date": "2016-12-03",
+						"id": 1240560
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Visions and Voices",
+						"air_date": "2016-12-10",
+						"id": 1244907
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Ghosts of Geonosis (1)",
+						"air_date": "2017-01-07",
+						"id": 1248327
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Ghosts of Geonosis (2)",
+						"air_date": "2017-01-07",
+						"id": 1253948
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Warhead",
+						"air_date": "2017-01-14",
+						"id": 1253953
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Trials of the Darksaber",
+						"air_date": "2017-01-21",
+						"id": 1256394
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Legacy of Mandalore",
+						"air_date": "2017-02-18",
+						"id": 1258930
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Through Imperial Eyes",
+						"air_date": "2017-02-25",
+						"id": 1263034
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Secret Cargo",
+						"air_date": "2017-03-04",
+						"id": 1275774
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Double Agent Droid",
+						"air_date": "2017-03-11",
+						"id": 1275775
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Twin Suns",
+						"air_date": "2017-03-18",
+						"id": 1275776
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Zero Hour (1)",
+						"air_date": "2017-03-25",
+						"id": 1275777
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Zero Hour (2)",
+						"air_date": "2017-03-25",
+						"id": 1275778
+					}
+				]
+			},
+			"60554/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Heroes of Mandalore (1)",
+						"air_date": "2017-10-16",
+						"id": 1380327
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Heroes of Mandalore (2)",
+						"air_date": "2017-10-16",
+						"id": 1380328
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "In the Name of the Rebellion (1)",
+						"air_date": "2017-10-23",
+						"id": 1382170
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "In the Name of the Rebellion (2)",
+						"air_date": "2017-10-23",
+						"id": 1382171
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "The Occupation",
+						"air_date": "2017-10-30",
+						"id": 1382172
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Flight of the Defender",
+						"air_date": "2017-10-30",
+						"id": 1382173
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Kindred",
+						"air_date": "2017-11-06",
+						"id": 1382174
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Crawler Commandeers",
+						"air_date": "2017-11-06",
+						"id": 1382175
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Rebel Assault",
+						"air_date": "2017-11-13",
+						"id": 1382176
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Jedi Night",
+						"air_date": "2018-02-19",
+						"id": 1435272
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "DUME",
+						"air_date": "2018-02-19",
+						"id": 1435378
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Wolves and a Door",
+						"air_date": "2018-02-26",
+						"id": 1439924
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "A World Between Worlds",
+						"air_date": "2018-02-26",
+						"id": 1442879
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "A Fool's Hope",
+						"air_date": "2018-03-05",
+						"id": 1447560
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Family Reunion - and Farewell (1)",
+						"air_date": "2018-03-05",
+						"id": 1447561
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Family Reunion - and Farewell (2)",
+						"air_date": "2018-03-05",
+						"id": 1952809
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"60554": {
+				"id": 60554,
+				"results": [
+					{
+						"id": "5ff25f9cfab3fa003a75a89c",
+						"name": "Alternate order",
+						"type": 2,
+						"network": null,
+						"description": "",
+						"group_count": 1,
+						"episode_count": 7
+					},
+					{
+						"id": "5b57d247c3a3685c85041004",
+						"name": "Blu-ray Order",
+						"type": 3,
+						"network": null,
+						"description": "List of episodes on Blu-ray and DVD",
+						"group_count": 4,
+						"episode_count": 70
+					},
+					{
+						"id": "6887503d5acf69a81f52b42a",
+						"name": "DVD Release",
+						"type": 3,
+						"network": null,
+						"description": "https://www.tvmaze.com/alternatelists/457/star-wars-rebels-dvd-release",
+						"group_count": 4,
+						"episode_count": 0
+					},
+					{
+						"id": "69fba997dc1e08bd5bc47e80",
+						"name": "DVD",
+						"type": 3,
+						"network": null,
+						"description": "DVD Release",
+						"group_count": 1,
+						"episode_count": 0
+					},
+					{
+						"id": "62fe123974d6c0009ec28d49",
+						"name": "Disney+",
+						"type": 4,
+						"network": {
+							"id": 2739,
+							"name": "Disney+",
+							"logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+							"origin_country": ""
+						},
+						"description": "",
+						"group_count": 4,
+						"episode_count": 71
+					},
+					{
+						"id": "675758059bc20eaa4968145b",
+						"name": "Disney+ (2024)",
+						"type": 4,
+						"network": null,
+						"description": "",
+						"group_count": 4,
+						"episode_count": 0
+					}
+				]
+			}
+		},
+		"episodeGroup": {
+			"5b57d247c3a3685c85041004": {
+				"id": "5b57d247c3a3685c85041004",
+				"name": "Blu-ray Order",
+				"type": 3,
+				"groups": [
+					{
+						"id": "5b57d2fcc3a3685c820464b3",
+						"name": "Season 1",
+						"order": 1,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 1152428,
+								"name": "Spark of Rebellion",
+								"order": 0,
+								"runtime": 45,
+								"show_id": 60554,
+								"air_date": "2014-10-03",
+								"overview": "It is a dark time. The Jedi are no more, and the Empire rules the galaxy with an iron fist -- bringing tyranny to the Outer Rim world of Lothal. Their ominous presence is a cloud over the planet, squashing any hope of freedom or a better life, especially for 14-year-old orphan Ezra Bridger. But the young con artist soon finds that destiny has other plans for him, as he encounters a small band of rebels who dare to strike back against the Empire.",
+								"still_path": "/gEy0UB95qFjWtItlNH0gowTYGtG.jpg",
+								"vote_count": 8,
+								"episode_type": "standard",
+								"vote_average": 7,
+								"season_number": 0,
+								"episode_number": 5,
+								"production_code": "101-102"
+							},
+							{
+								"id": 1053815,
+								"name": "Droids in Distress",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-13",
+								"overview": "The rebel group intercepts an Imperial weapon shipment and unintentionally take on an android duo.",
+								"still_path": "/3loObxHLVVAanahyfkTEhBXBc2R.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 6.975,
+								"season_number": 1,
+								"episode_number": 1,
+								"production_code": "103"
+							},
+							{
+								"id": 1053814,
+								"name": "Fighter Flight",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-20",
+								"overview": "Ezra and Zeb go to Lothal's market for provisions and to work on their relationship.",
+								"still_path": "/xFAk8Wh1dMWJ2eOLCQ1C1J2aNSI.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 6.939,
+								"season_number": 1,
+								"episode_number": 2,
+								"production_code": "104"
+							},
+							{
+								"id": 1010972,
+								"name": "Rise of the Old Masters",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-27",
+								"overview": "The rebel crew undergoes a rescue mission only to face a powerful foe.",
+								"still_path": "/17lyd9hbILhBGVlKbKYMJVCMm3k.jpg",
+								"vote_count": 42,
+								"episode_type": "standard",
+								"vote_average": 7.762,
+								"season_number": 1,
+								"episode_number": 3,
+								"production_code": "105"
+							},
+							{
+								"id": 1014544,
+								"name": "Breaking Ranks",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-03",
+								"overview": "The Rebels send Ezra on an undercover mission into the Imperial Academy to steal a decoder.",
+								"still_path": "/6IGNd5V7zapN3xp2g5ZKr0LPx2G.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.514,
+								"season_number": 1,
+								"episode_number": 4,
+								"production_code": "106"
+							},
+							{
+								"id": 1014545,
+								"name": "Out of Darkness",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-10",
+								"overview": "While on a supply run, Hera and Sabine find themselves stranded but not alone in a seemingly abandoned locale.",
+								"still_path": "/kel8CpsZBufLj5ERLWEQNsahgwe.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.229,
+								"season_number": 1,
+								"episode_number": 5,
+								"production_code": "107"
+							},
+							{
+								"id": 1014546,
+								"name": "Empire Day",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-17",
+								"overview": "While disrupting Empire Day festivities in order to destroy a prototype TIE fighter, the crew learns a refugee has important information and must get him off-planet before the Imperials find him.",
+								"still_path": "/83DDEc3mo1kZGE8SdsHWuWo0iF9.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 7.722,
+								"season_number": 1,
+								"episode_number": 6,
+								"production_code": "108"
+							},
+							{
+								"id": 1014547,
+								"name": "Gathering Forces",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-24",
+								"overview": "Kanan and Ezra try to protect an Imperial deserter by distracting the Imperial forces.",
+								"still_path": "/tqCSo3ALIZ0U3lE9iUnJiFuBJVA.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.083,
+								"season_number": 1,
+								"episode_number": 7,
+								"production_code": "109"
+							},
+							{
+								"id": 1033050,
+								"name": "Path of the Jedi",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-01-05",
+								"overview": "Ezra must face a great challenge as part of his growth as a member of the team.",
+								"still_path": "/jFGeHNLszkAwj8Xu9b5Cxg2LGAV.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.417,
+								"season_number": 1,
+								"episode_number": 8,
+								"production_code": "110"
+							},
+							{
+								"id": 1034914,
+								"name": "Idiot's Array",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-01-19",
+								"overview": "The crew are forced into transporting some unusual cargo after an issue with a new acquaintance.",
+								"still_path": "/e6KvCum2UpFeNMTbgTcM8wK96AZ.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.486,
+								"season_number": 1,
+								"episode_number": 9,
+								"production_code": "111"
+							},
+							{
+								"id": 1041354,
+								"name": "Vision of Hope",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-02",
+								"overview": "While attending a gathering for those who would oppose the Empire, the crew finds out something unexpected.",
+								"still_path": "/95BJbgJfcB3HzCHRuOMDOvfpEzi.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.543,
+								"season_number": 1,
+								"episode_number": 10,
+								"production_code": "112"
+							},
+							{
+								"id": 1041355,
+								"name": "Call to Action",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-09",
+								"overview": "As public awareness increases around Rebel activity, they target an important Imperial network.",
+								"still_path": "/o8NSDWoFwT6XdDCTdeFhd3BNatW.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.194,
+								"season_number": 1,
+								"episode_number": 11,
+								"production_code": "113"
+							},
+							{
+								"id": 1044679,
+								"name": "Rebel Resolve",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-23",
+								"overview": "The team tries to get Kanan's location to free him.",
+								"still_path": "/5wsNsZU5Uy2RsVzySbGm7Ctjahu.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.914,
+								"season_number": 1,
+								"episode_number": 12,
+								"production_code": "114"
+							},
+							{
+								"id": 1044678,
+								"name": "Fire Across the Galaxy",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-03-02",
+								"overview": "The crew has to go through many obstacles to save Kanan.",
+								"still_path": "/zRXqj6ziU6p21rnIhWcTTd8x0C4.jpg",
+								"vote_count": 40,
+								"episode_type": "finale",
+								"vote_average": 8.85,
+								"season_number": 1,
+								"episode_number": 13,
+								"production_code": "115"
+							}
+						]
+					},
+					{
+						"id": "5b57d3e5c3a3685c8804acc1",
+						"name": "Season 2",
+						"order": 2,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 1164102,
+								"name": "The Siege of Lothal",
+								"order": 0,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2015-06-20",
+								"overview": "The Inquisitor is dead. The Ghost crew has connected with other rebel cells. And a new ally named Ahsoka Tano has emerged. Despite these successes and developments, the fight against the Empire takes a deadly turn, as the evil Sith Lord Darth Vader comes to Lothal.",
+								"still_path": "/p8Ld46Kw6nB6EzHIFVosbVxDj8i.jpg",
+								"vote_count": 10,
+								"episode_type": "standard",
+								"vote_average": 8.2,
+								"season_number": 0,
+								"episode_number": 6,
+								"production_code": "201-202"
+							},
+							{
+								"id": 1117686,
+								"name": "The Lost Commanders",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-14",
+								"overview": "Ahsoka sends the Rebel crew to find and recruit a war hero to their cause, but when they discover it is Captain Rex, trust issues put the mission at risk.",
+								"still_path": "/fCZDEVcOF2pFUzAPaikHK8uvAF7.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.083,
+								"season_number": 2,
+								"episode_number": 1,
+								"production_code": "203"
+							},
+							{
+								"id": 1131589,
+								"name": "Relics of the Old Republic",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-21",
+								"overview": "Ezra and the others are starting to form friendships with the old Clone Troopers, but Kanan can't seem to bring himself to trust them. Will he feel differently when pressure from the Empire forces them to work together?",
+								"still_path": "/g6Bps9OOvYscLdl4Cn1IyK7Eju7.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.038,
+								"season_number": 2,
+								"episode_number": 2,
+								"production_code": "204"
+							},
+							{
+								"id": 1132041,
+								"name": "Always Two There Are",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-28",
+								"overview": "Ezra, Zeb, Sabine, and Chopper are on a mission to an abandoned medistation in search of supplies when an attack by two of Darth Vader's Inquisitors divides the team.",
+								"still_path": "/eJWKSUorHIEhX9Crd8MIiCcu68I.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.763,
+								"season_number": 2,
+								"episode_number": 3,
+								"production_code": "205"
+							},
+							{
+								"id": 1134614,
+								"name": "Brothers of the Broken Horn",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-04",
+								"overview": "In order to flee the pressure of the responsibility of being a rebel and a Jedi, Ezra goes on a rescue mission together with Chopper after they received a distress call. They are surprised to find out the ship in need belongs to Hondo Ohnaka. Hondo offers Ezra to join him.",
+								"still_path": "/jjSKgPJplbyQqZvLHAS6iGwBz1N.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.225,
+								"season_number": 2,
+								"episode_number": 4,
+								"production_code": "206"
+							},
+							{
+								"id": 1135846,
+								"name": "Wings of the Master",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-11",
+								"overview": "Since the rebels are in need of a new ship in order to overcome an Imperial blockade, Hera embarks on a dangerous mission to meet an eccentric starship engineer and manages to gain his trust. But will that be enough to get a ship from him?",
+								"still_path": "/mCfYLQ0Y6S0ZxziecEqmogcRETo.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.425,
+								"season_number": 2,
+								"episode_number": 5,
+								"production_code": "207"
+							},
+							{
+								"id": 1135847,
+								"name": "Blood Sisters",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-18",
+								"overview": "On a mission to escort a courier with secret information vital to the rebel cause to a rendezvous point, Sabine must face off against her old friend and partner.",
+								"still_path": "/4u8DYA6UWT3sxzEHuDKZX9bdSTC.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.064,
+								"season_number": 2,
+								"episode_number": 6,
+								"production_code": "208"
+							},
+							{
+								"id": 1135848,
+								"name": "Stealth Strike",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-25",
+								"overview": "A new Imperial ship captures Ezra, Commander Sato, and his crew, forcing Kanan and the clone to go undercover as stormtroopers to free the rebels.",
+								"still_path": "/lNsf1raBWms1qMMSWBnoFU6mBDh.jpg",
+								"vote_count": 41,
+								"episode_type": "standard",
+								"vote_average": 7.829,
+								"season_number": 2,
+								"episode_number": 7,
+								"production_code": "209"
+							},
+							{
+								"id": 1142189,
+								"name": "The Future of the Force",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-12-02",
+								"overview": "The rebels learn that the Inquisitors are seeking out Force-sensitive children, and they work together to protect the young ones from the Inquisitors' pursuit.",
+								"still_path": "/27ONParPxPgjZw1WJrG4z2RU9Oz.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.25,
+								"season_number": 2,
+								"episode_number": 8,
+								"production_code": "210"
+							},
+							{
+								"id": 1145354,
+								"name": "Legacy",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-12-09",
+								"overview": "As the Empire attacks the rebel fleet on Garel, Kanan, and Ezra return to Lothal and find a former prisoner with knowledge about Ezra's parents.",
+								"still_path": "/kHrwqiHEkrBDK2fumQDOcJB62pZ.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.628,
+								"season_number": 2,
+								"episode_number": 9,
+								"production_code": "211"
+							},
+							{
+								"id": 1158129,
+								"name": "A Princess on Lothal",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-01-20",
+								"overview": "During the early rebellion against the rule of the Galactic Empire, Princess Leia Organa of Alderaan is sent to the planet Lothal on a mission to provide ships for the rebel fleet. When the Empire initiates a lockdown, her plan is thrown into jeopardy",
+								"still_path": "/14qs5viLvfL3vtkDcqtffMmcO49.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.833,
+								"season_number": 2,
+								"episode_number": 10,
+								"production_code": "212"
+							},
+							{
+								"id": 1161488,
+								"name": "The Protector of Concord Dawn",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-01-27",
+								"overview": "In need of new hyperspace routes due to Imperial pressure, the rebels find a shortcut but must first gain permission to use it.",
+								"still_path": "/ql8PxEmYnYX7n7UdgrqLHXFaFk6.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.579,
+								"season_number": 2,
+								"episode_number": 11,
+								"production_code": "213"
+							},
+							{
+								"id": 1162960,
+								"name": "Legends of the Lasat",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-03",
+								"overview": "When the crew of the Ghost agrees to help two refugees who are revealed to be surviving Lasat, Zeb must come to terms with his past to help his people reach their new home.",
+								"still_path": "/A88A4CZL8hXblm9ymOxW8tt5XWp.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.41,
+								"season_number": 2,
+								"episode_number": 12,
+								"production_code": "214"
+							},
+							{
+								"id": 1164926,
+								"name": "The Call",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-10",
+								"overview": "While on a mission to obtain fuel for the rebel fleet, the crew works to protect space creatures from the Mining Guild asteroid mining operation that threatens the creatures' lives.",
+								"still_path": "/e4gF4n6G5AiygXwZCP2Ey8JIS7z.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.438,
+								"season_number": 2,
+								"episode_number": 13,
+								"production_code": "215"
+							},
+							{
+								"id": 1166342,
+								"name": "Homecoming",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-17",
+								"overview": "The rebels contact freedom fighter Cham Syndulla, who needs help to fight off the Imperial bombing attack on his planet. While coordinating a plan to overtake and steal the carrier that houses these Imperial bombers, the rebels discover that Cham may have a plan of his own.",
+								"still_path": "/rWyd3G6q7niDj9lUITge7JFLdKq.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.263,
+								"season_number": 2,
+								"episode_number": 14,
+								"production_code": "216"
+							},
+							{
+								"id": 1167094,
+								"name": "The Honorable Ones",
+								"order": 15,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-24",
+								"overview": "Zeb and Agent Kallus find themselves stranded on an ice planet after a failed Imperial ambush of the rebels. With Kallus injured from the escape pod crash, he and Zeb must work together to survive the harsh conditions.",
+								"still_path": "/fCOMbSbDFtyh4nMEH1bUFNwukG5.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.846,
+								"season_number": 2,
+								"episode_number": 15,
+								"production_code": "217"
+							},
+							{
+								"id": 1173281,
+								"name": "Shroud of Darkness",
+								"order": 16,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-02",
+								"overview": "Kanan, Ezra, and Ahsoka return to the Jedi Temple on Lothal, seeking answers from Yoda about the Inquisitors’ ability to continually track the rebels.",
+								"still_path": "/iCE44rUGQL5p2gvH9Q7mk5RnQrJ.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.4,
+								"season_number": 2,
+								"episode_number": 16,
+								"production_code": "218"
+							},
+							{
+								"id": 1174483,
+								"name": "The Forgotten Droid",
+								"order": 17,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-16",
+								"overview": "When Chopper gets left behind at an Imperial outpost, he forms an unlikely friendship with an Imperial droid, and discovers a base location for the rebels.",
+								"still_path": "/vsA5f4j6oumKg36vIN7aDX1Xztu.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.077,
+								"season_number": 2,
+								"episode_number": 17,
+								"production_code": "219"
+							},
+							{
+								"id": 1174484,
+								"name": "The Mystery of Chopper Base",
+								"order": 18,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-23",
+								"overview": "Kanan, Ezra, and Ahsoka prepare to depart to unravel Vader’s secret, while the rebels find a way to fend off the predatory creatures that occupy the planet.",
+								"still_path": "/fOvqJU3r7fmJK6Qj7zX679ezM44.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.135,
+								"season_number": 2,
+								"episode_number": 18,
+								"production_code": "220"
+							},
+							{
+								"id": 1183161,
+								"name": "Twilight of the Apprentice",
+								"order": 19,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2016-03-30",
+								"overview": "After gaining information about the Sith, Kanan, Ezra, and Ahsoka battle the Inquisitors with the help of a new ally, but are overmatched when Vader arrives.",
+								"still_path": "/7g8wa7PrhVa2CsGkEGWE7qXj8JQ.jpg",
+								"vote_count": 49,
+								"episode_type": "finale",
+								"vote_average": 9.082,
+								"season_number": 2,
+								"episode_number": 19,
+								"production_code": "221"
+							}
+						]
+					},
+					{
+						"id": "5b57d4080e0a2673d6045c70",
+						"name": "Season 3",
+						"order": 3,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 1224349,
+								"name": "Steps Into Shadow",
+								"order": 0,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2016-09-24",
+								"overview": "Ezra, Sabine, Zeb, Chopper and Hera sets out to rescue Hondo Ohnaka, while Kanan finds an ancient force creature know as The Bendu.",
+								"still_path": "/qRWrLjrnAPvID7LxcFlZ5SwlRvg.jpg",
+								"vote_count": 30,
+								"episode_type": "standard",
+								"vote_average": 7.867,
+								"season_number": 3,
+								"episode_number": 1,
+								"production_code": "301-302"
+							},
+							{
+								"id": 1228085,
+								"name": "The Holocrons of Fate",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-01",
+								"overview": "When Maul takes the crew of the Ghost hostage, Ezra and Kanan must pass a trial in order to recover an ancient Sith artifact to save them.",
+								"still_path": "/t8QRYKtTdVvMOnqrXFqHcc7PUUl.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.306,
+								"season_number": 3,
+								"episode_number": 2,
+								"production_code": "303"
+							},
+							{
+								"id": 1231820,
+								"name": "The Antilles Extraction",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-08",
+								"overview": "With the rebellion in desperate need of pilots, Sabine goes undercover as an Imperial cadet to recruit defectors -- including the confident and gifted Wedge Antilles.",
+								"still_path": "/A4M4FY7dzBZl6nmtOk2dtQJ1lPo.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.243,
+								"season_number": 3,
+								"episode_number": 3,
+								"production_code": "304"
+							},
+							{
+								"id": 1228438,
+								"name": "Hera's Heroes",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-15",
+								"overview": "Hera's rebel supply mission to Ryloth becomes personal when she and the Ghost crew brave overwhelming Imperial forces to recover a memento from her ancestral home.",
+								"still_path": "/9ih28BwUu5tRrStey3Ab7ZisOPw.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.5,
+								"season_number": 3,
+								"episode_number": 4,
+								"production_code": "305"
+							},
+							{
+								"id": 1233356,
+								"name": "The Last Battle",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-22",
+								"overview": "On a salvage mission led by Captain Rex, the Ghost crew is captured by a unit of old battle droids determined to fight one last battle to end the Clone Wars.",
+								"still_path": "/gueyvMhtKYlbDQUmMzRgASmLIUi.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.838,
+								"season_number": 3,
+								"episode_number": 5,
+								"production_code": "306"
+							},
+							{
+								"id": 1236897,
+								"name": "Imperial Supercommandos",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-05",
+								"overview": "Having lost contact with the Protectors of Concord Dawn, Sabine, Ezra, and Fenn Rau investigate and find the base occupied by Imperial Mandalorians.",
+								"still_path": "/h0ZbQtb5bjWnptrRI99ykYTf6h4.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 7.389,
+								"season_number": 3,
+								"episode_number": 6,
+								"production_code": "307"
+							},
+							{
+								"id": 1241553,
+								"name": "Iron Squadron",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-19",
+								"overview": "Ezra and Sabine team up to tame a rogue, young hotshot pilot and his crew who recklessly risk their lives in a fight to defend their home world from Imperial occupation.",
+								"still_path": "/fJLxhpo2MKytgMtWEnWcsEeiKai.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 6.189,
+								"season_number": 3,
+								"episode_number": 7,
+								"production_code": "308"
+							},
+							{
+								"id": 1236945,
+								"name": "The Wynkahthu Job",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-26",
+								"overview": "The rebels team with a pair of unscrupulous pirates to salvage a freighter full of weapons for the rebellion, but the mission ends up being far more dangerous than anticipated.",
+								"still_path": "/oDqzj7TJHNMdLiMGkLI1QHyyag3.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 6.405,
+								"season_number": 3,
+								"episode_number": 8,
+								"production_code": "309"
+							},
+							{
+								"id": 1240560,
+								"name": "An Inside Man",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-12-03",
+								"overview": "Seeking information on a new Imperial weapon, Ezra and Kanan infiltrate the Imperial factory on Lothal, but must trust an unlikely ally to escape a lockdown.",
+								"still_path": "/cIy5xKTv0c5KL5vw3xZPVsv0Vmw.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.629,
+								"season_number": 3,
+								"episode_number": 9,
+								"production_code": "310"
+							},
+							{
+								"id": 1244907,
+								"name": "Visions and Voices",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-12-10",
+								"overview": "Maul returns, looking to finally unlock the secrets that he and Ezra desire.",
+								"still_path": "/dsOEs7DVLStpeqz3EyqzqHF3FXk.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 8.2,
+								"season_number": 3,
+								"episode_number": 10,
+								"production_code": "311"
+							},
+							{
+								"id": 1248327,
+								"name": "Ghosts of Geonosis (1)",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-07",
+								"overview": "The crew returns to Geonosis in search of a missing rebel team sent to investigate suspicious activity there, and are surprised by what they find.",
+								"still_path": "/hh36iv3Xsj3IptwDQhPyfLZ4wrT.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.594,
+								"season_number": 3,
+								"episode_number": 11,
+								"production_code": "312"
+							},
+							{
+								"id": 1253948,
+								"name": "Ghosts of Geonosis (2)",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-07",
+								"overview": "After finding a missing rebel team member, the Ghost crew discovers another surprise on Geonosis, and work to conceal it from Imperial Forces.",
+								"still_path": "/edCZ7r1Cs4tgKSbiPj1qr0UdCwQ.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.594,
+								"season_number": 3,
+								"episode_number": 12,
+								"production_code": "313"
+							},
+							{
+								"id": 1253953,
+								"name": "Warhead",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-14",
+								"overview": "Zeb and Chopper bring a damaged droid found in the Atollon wilderness back to base, only to discover that the droid is a new Imperial probe programmed to spy on and destroy rebels.",
+								"still_path": "/kj0bp7p56DUgHWyr59btmx7DMD3.jpg",
+								"vote_count": 29,
+								"episode_type": "standard",
+								"vote_average": 7.069,
+								"season_number": 3,
+								"episode_number": 13,
+								"production_code": "314"
+							},
+							{
+								"id": 1256394,
+								"name": "Trials of the Darksaber",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-21",
+								"overview": "To help recruit her people to join the rebels, Sabine reluctantly agrees to learn to wield an ancient Mandalorian weapon but finds the challenge more difficult than expected.",
+								"still_path": "/qmohTJamaSHgS1SH0hFrq0VIpEl.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.323,
+								"season_number": 3,
+								"episode_number": 14,
+								"production_code": "315"
+							},
+							{
+								"id": 1258930,
+								"name": "Legacy of Mandalore",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-02-18",
+								"overview": "Hoping to get her family to help the rebels, Sabine returns home with Kanan and Ezra, and finds herself embroiled in her family's power struggle for Mandalore.",
+								"still_path": "/wl0o3dgpXOnMpiLn3YvX2Rx7uyH.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.161,
+								"season_number": 3,
+								"episode_number": 15,
+								"production_code": "316"
+							},
+							{
+								"id": 1263034,
+								"name": "Through Imperial Eyes",
+								"order": 15,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-02-25",
+								"overview": "Fearing that the identity of a rebel spy will soon be discovered by the Empire, the Rebels launch a plan to rescue him before he is caught.",
+								"still_path": "/ipsjnYI0ooKPDI6ztOpg5vT50HI.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.355,
+								"season_number": 3,
+								"episode_number": 16,
+								"production_code": "317"
+							},
+							{
+								"id": 1275774,
+								"name": "Secret Cargo",
+								"order": 16,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-04",
+								"overview": "The Ghost crew must escort Senator Mon Mothma, now wanted by the Empire, to a meeting that can change the galaxy.",
+								"still_path": "/939CVcXzNWtK0PEVry4zsWf5m6l.jpg",
+								"vote_count": 30,
+								"episode_type": "standard",
+								"vote_average": 7.967,
+								"season_number": 3,
+								"episode_number": 17,
+								"production_code": "318"
+							},
+							{
+								"id": 1275775,
+								"name": "Double Agent Droid",
+								"order": 17,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-11",
+								"overview": "Chopper and AP-5 team up to infiltrate an Imperial station to steal needed codes, but an Imperial specialist turns the droids against the crew to cause chaos.",
+								"still_path": "/kyfLEtpwVxcaW3qZDEAnLSAhpxH.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 6.938,
+								"season_number": 3,
+								"episode_number": 18,
+								"production_code": "319"
+							},
+							{
+								"id": 1275776,
+								"name": "Twin Suns",
+								"order": 18,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-18",
+								"overview": "Reacting to a vision of Maul, Ezra defies Hera and Kanan to travel to a remote planet in hopes of stopping the former Sith lord from carrying out his plans.",
+								"still_path": "/AiURHBDFUsAjJajQzJ1rhRQJozh.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 9.088,
+								"season_number": 3,
+								"episode_number": 19,
+								"production_code": "320"
+							},
+							{
+								"id": 1275777,
+								"name": "Zero Hour (1)",
+								"order": 19,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-25",
+								"overview": "In final preparations for their attack on Lothal, Phoenix Squadron's plans are disrupted when Grand Admiral Thrawn discovers their location.",
+								"still_path": "/10iM5XjFNp24yuvuPFxHrXigRyp.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.645,
+								"season_number": 3,
+								"episode_number": 20,
+								"production_code": "321"
+							},
+							{
+								"id": 1275778,
+								"name": "Zero Hour (2)",
+								"order": 20,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-25",
+								"overview": "Trapped on Atollon with the rebel base under siege, Hera and Kanan fight to keep the squadron alive, as Ezra attempts to rally help from an unexpected source.",
+								"still_path": "/g3sSvLKOVg8S0BNC6CJ8aJeso8O.jpg",
+								"vote_count": 30,
+								"episode_type": "finale",
+								"vote_average": 8.633,
+								"season_number": 3,
+								"episode_number": 21,
+								"production_code": "322"
+							}
+						]
+					},
+					{
+						"id": "5b57d40fc3a3685c93045c94",
+						"name": "Season 4",
+						"order": 4,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 1380327,
+								"name": "Heroes of Mandalore (1)",
+								"order": 0,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-16",
+								"overview": "Sabine leads Ezra, Kanan and an army of her fellow Mandalorians back to her home world to rescue her father from the clutches of the Empire.",
+								"still_path": "/js5C9otCjzHex9HIZOatoemGyPc.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 7.735,
+								"season_number": 4,
+								"episode_number": 1,
+								"production_code": ""
+							},
+							{
+								"id": 1380328,
+								"name": "Heroes of Mandalore (2)",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-16",
+								"overview": "When Sabine discovers the Empire has resurrected a devastating weapon she created and plans to use it against her people, she must decide whether to destroy it or use it herself.",
+								"still_path": "/16CjEy2UehcBr98wnrm5zNdynvU.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.909,
+								"season_number": 4,
+								"episode_number": 2,
+								"production_code": ""
+							},
+							{
+								"id": 1382170,
+								"name": "In the Name of the Rebellion (1)",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-23",
+								"overview": "As members of the Rebel Alliance, Ezra and the Ghost crew must accept a mission to spy on an Imperial outpost they would rather destroy.",
+								"still_path": "/6Fkkkj4D7yrJbxYab4XVjmta0NC.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.563,
+								"season_number": 4,
+								"episode_number": 3,
+								"production_code": ""
+							},
+							{
+								"id": 1382171,
+								"name": "In the Name of the Rebellion (2)",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-23",
+								"overview": "After being separated from Hera and Kanan, Ezra and Sabine join the desperate quest of Saw Gerrera to hunt down the Empire's elusive secret super weapon.",
+								"still_path": "/vMWbpADF0C4QvZh7OOJHw0lX3rm.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.75,
+								"season_number": 4,
+								"episode_number": 4,
+								"production_code": ""
+							},
+							{
+								"id": 1382172,
+								"name": "The Occupation",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-30",
+								"overview": "Ezra and the Ghost crew are called back to Lothal when a new Imperial threat rises.",
+								"still_path": "/ohX6gCEBSFnFzDFcbmEkWvoDHac.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.424,
+								"season_number": 4,
+								"episode_number": 5,
+								"production_code": ""
+							},
+							{
+								"id": 1382173,
+								"name": "Flight of the Defender",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-30",
+								"overview": "Ezra and Sabine steal an Imperial prototype TIE fighter but must rely on some unexpected help to escape from Thrawn.",
+								"still_path": "/qnHpOsdyXVRoKRgZisCNfoFJrLW.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.727,
+								"season_number": 4,
+								"episode_number": 6,
+								"production_code": ""
+							},
+							{
+								"id": 1382174,
+								"name": "Kindred",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-06",
+								"overview": "Tracked back to their hidden base by a mysterious Imperial agent, the rebels must trust some seemingly dangerous native creatures, who are far more than meets the eye.",
+								"still_path": "/qURpDGe5lLd7pepWcvdQaWPf2FD.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.875,
+								"season_number": 4,
+								"episode_number": 7,
+								"production_code": ""
+							},
+							{
+								"id": 1382175,
+								"name": "Crawler Commandeers",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-06",
+								"overview": "Desperate to contact Rebel command, the Ghost crew pirates a mining vehicle with long range communications gear, but the Empire arrives to spoil their plans.",
+								"still_path": "/hWWW3UBvgkC5Tq7o43oKRpy8IJP.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.156,
+								"season_number": 4,
+								"episode_number": 8,
+								"production_code": ""
+							},
+							{
+								"id": 1382176,
+								"name": "Rebel Assault",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-13",
+								"overview": "Hera leads a courageous attack against Grand Admiral Thrawn's forces, but when things go awry, her battle to win must become a daring escape if she is to survive.",
+								"still_path": "/mvxU8aaDDtx0D7cbWzD6ohYjU3D.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 8,
+								"season_number": 4,
+								"episode_number": 9,
+								"production_code": ""
+							},
+							{
+								"id": 1435272,
+								"name": "Jedi Night",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-19",
+								"overview": "The Ghost Crew infiltrates the Imperial headquarters on Lothal to save one of their own.",
+								"still_path": "/lnfO34uD6zG8AreL351Z2nyoTM0.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 8.765,
+								"season_number": 4,
+								"episode_number": 10,
+								"production_code": ""
+							},
+							{
+								"id": 1435378,
+								"name": "DUME",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-19",
+								"overview": "Reeling from a devastating loss, the Ghost crew rallies together to find a new purpose and resolve.",
+								"still_path": "/4z5dGIXeyPYPGxgrfdyAtQnjxox.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.226,
+								"season_number": 4,
+								"episode_number": 11,
+								"production_code": ""
+							},
+							{
+								"id": 1439924,
+								"name": "Wolves and a Door",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-26",
+								"overview": "Ezra leads the Ghost crew back to the Jedi temple on Lothal where they discover that the Empire has diabolical plans for the powerful secrets it holds.",
+								"still_path": "/nqjCzJCmKt6AVXJ4EOQ6qcIS3EE.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 8.156,
+								"season_number": 4,
+								"episode_number": 12,
+								"production_code": ""
+							},
+							{
+								"id": 1442879,
+								"name": "A World Between Worlds",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-26",
+								"overview": "While the other rebels engage the Imperial forces outside the Jedi temple, Ezra gains access inside and experiences a revelation.",
+								"still_path": "/nPK3AZcba5WLL0KXeKl50V5e4AZ.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.528,
+								"season_number": 4,
+								"episode_number": 13,
+								"production_code": ""
+							},
+							{
+								"id": 1447560,
+								"name": "A Fool's Hope",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-03-05",
+								"overview": "The Ghost hatches a plan to free Lothal, though a traitor may be in their midst.",
+								"still_path": "/5DwgoAoK797Pt70cLIyochp9dec.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 8.121,
+								"season_number": 4,
+								"episode_number": 14,
+								"production_code": ""
+							},
+							{
+								"id": 1447561,
+								"name": "Family Reunion - and Farewell (1)",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-03-05",
+								"overview": "Ezra and the Ghost crew look to complete their ultimate mission: to liberate Lothal from the clutches of the Empire.",
+								"still_path": "/xG4i4cY6LYOK3YY4MAkJzcufBtI.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 8.622,
+								"season_number": 4,
+								"episode_number": 15,
+								"production_code": ""
+							}
+						]
+					}
+				],
+				"network": null,
+				"description": "List of episodes on Blu-ray and DVD",
+				"group_count": 4,
+				"episode_count": 70
+			},
+			"6887503d5acf69a81f52b42a": {
+				"id": "6887503d5acf69a81f52b42a",
+				"name": "DVD Release",
+				"type": 3,
+				"groups": [
+					{
+						"id": "688750564a27e542aed9b6b0",
+						"name": "Season 1",
+						"order": 1,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "6887506181c1232eb18a7413",
+						"name": "Season 2",
+						"order": 2,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "68875065da3bd92a1a55f8b6",
+						"name": "Season 3",
+						"order": 3,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "6887506a096e0ed3fb72f345",
+						"name": "Season 4",
+						"order": 4,
+						"locked": false,
+						"episodes": []
+					}
+				],
+				"network": null,
+				"description": "https://www.tvmaze.com/alternatelists/457/star-wars-rebels-dvd-release",
+				"group_count": 4,
+				"episode_count": 0
+			},
+			"69fba997dc1e08bd5bc47e80": {
+				"id": "69fba997dc1e08bd5bc47e80",
+				"name": "DVD",
+				"type": 3,
+				"groups": [
+					{
+						"id": "69fbaa3535e2a8f911a64393",
+						"name": "Season 01",
+						"order": 1,
+						"locked": false,
+						"episodes": []
+					}
+				],
+				"network": null,
+				"description": "DVD Release",
+				"group_count": 1,
+				"episode_count": 0
+			},
+			"62fe123974d6c0009ec28d49": {
+				"id": "62fe123974d6c0009ec28d49",
+				"name": "Disney+",
+				"type": 4,
+				"groups": [
+					{
+						"id": "62fe124474d6c0009ec28d50",
+						"name": "Season 1",
+						"order": 1,
+						"locked": false,
+						"episodes": [
+							{
+								"id": 1152428,
+								"name": "Spark of Rebellion",
+								"order": 0,
+								"runtime": 45,
+								"show_id": 60554,
+								"air_date": "2014-10-03",
+								"overview": "It is a dark time. The Jedi are no more, and the Empire rules the galaxy with an iron fist -- bringing tyranny to the Outer Rim world of Lothal. Their ominous presence is a cloud over the planet, squashing any hope of freedom or a better life, especially for 14-year-old orphan Ezra Bridger. But the young con artist soon finds that destiny has other plans for him, as he encounters a small band of rebels who dare to strike back against the Empire.",
+								"still_path": "/gEy0UB95qFjWtItlNH0gowTYGtG.jpg",
+								"vote_count": 8,
+								"episode_type": "standard",
+								"vote_average": 7,
+								"season_number": 0,
+								"episode_number": 5,
+								"production_code": "101-102"
+							},
+							{
+								"id": 1053815,
+								"name": "Droids in Distress",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-13",
+								"overview": "The rebel group intercepts an Imperial weapon shipment and unintentionally take on an android duo.",
+								"still_path": "/3loObxHLVVAanahyfkTEhBXBc2R.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 6.975,
+								"season_number": 1,
+								"episode_number": 1,
+								"production_code": "103"
+							},
+							{
+								"id": 1053814,
+								"name": "Fighter Flight",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-20",
+								"overview": "Ezra and Zeb go to Lothal's market for provisions and to work on their relationship.",
+								"still_path": "/xFAk8Wh1dMWJ2eOLCQ1C1J2aNSI.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 6.939,
+								"season_number": 1,
+								"episode_number": 2,
+								"production_code": "104"
+							},
+							{
+								"id": 1010972,
+								"name": "Rise of the Old Masters",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-10-27",
+								"overview": "The rebel crew undergoes a rescue mission only to face a powerful foe.",
+								"still_path": "/17lyd9hbILhBGVlKbKYMJVCMm3k.jpg",
+								"vote_count": 42,
+								"episode_type": "standard",
+								"vote_average": 7.762,
+								"season_number": 1,
+								"episode_number": 3,
+								"production_code": "105"
+							},
+							{
+								"id": 1014544,
+								"name": "Breaking Ranks",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-03",
+								"overview": "The Rebels send Ezra on an undercover mission into the Imperial Academy to steal a decoder.",
+								"still_path": "/6IGNd5V7zapN3xp2g5ZKr0LPx2G.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.514,
+								"season_number": 1,
+								"episode_number": 4,
+								"production_code": "106"
+							},
+							{
+								"id": 1014545,
+								"name": "Out of Darkness",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-10",
+								"overview": "While on a supply run, Hera and Sabine find themselves stranded but not alone in a seemingly abandoned locale.",
+								"still_path": "/kel8CpsZBufLj5ERLWEQNsahgwe.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.229,
+								"season_number": 1,
+								"episode_number": 5,
+								"production_code": "107"
+							},
+							{
+								"id": 1014546,
+								"name": "Empire Day",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-17",
+								"overview": "While disrupting Empire Day festivities in order to destroy a prototype TIE fighter, the crew learns a refugee has important information and must get him off-planet before the Imperials find him.",
+								"still_path": "/83DDEc3mo1kZGE8SdsHWuWo0iF9.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 7.722,
+								"season_number": 1,
+								"episode_number": 6,
+								"production_code": "108"
+							},
+							{
+								"id": 1014547,
+								"name": "Gathering Forces",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2014-11-24",
+								"overview": "Kanan and Ezra try to protect an Imperial deserter by distracting the Imperial forces.",
+								"still_path": "/tqCSo3ALIZ0U3lE9iUnJiFuBJVA.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.083,
+								"season_number": 1,
+								"episode_number": 7,
+								"production_code": "109"
+							},
+							{
+								"id": 1033050,
+								"name": "Path of the Jedi",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-01-05",
+								"overview": "Ezra must face a great challenge as part of his growth as a member of the team.",
+								"still_path": "/jFGeHNLszkAwj8Xu9b5Cxg2LGAV.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.417,
+								"season_number": 1,
+								"episode_number": 8,
+								"production_code": "110"
+							},
+							{
+								"id": 1034914,
+								"name": "Idiot's Array",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-01-19",
+								"overview": "The crew are forced into transporting some unusual cargo after an issue with a new acquaintance.",
+								"still_path": "/e6KvCum2UpFeNMTbgTcM8wK96AZ.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.486,
+								"season_number": 1,
+								"episode_number": 9,
+								"production_code": "111"
+							},
+							{
+								"id": 1041354,
+								"name": "Vision of Hope",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-02",
+								"overview": "While attending a gathering for those who would oppose the Empire, the crew finds out something unexpected.",
+								"still_path": "/95BJbgJfcB3HzCHRuOMDOvfpEzi.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.543,
+								"season_number": 1,
+								"episode_number": 10,
+								"production_code": "112"
+							},
+							{
+								"id": 1041355,
+								"name": "Call to Action",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-09",
+								"overview": "As public awareness increases around Rebel activity, they target an important Imperial network.",
+								"still_path": "/o8NSDWoFwT6XdDCTdeFhd3BNatW.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.194,
+								"season_number": 1,
+								"episode_number": 11,
+								"production_code": "113"
+							},
+							{
+								"id": 1044679,
+								"name": "Rebel Resolve",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-02-23",
+								"overview": "The team tries to get Kanan's location to free him.",
+								"still_path": "/5wsNsZU5Uy2RsVzySbGm7Ctjahu.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.914,
+								"season_number": 1,
+								"episode_number": 12,
+								"production_code": "114"
+							},
+							{
+								"id": 1044678,
+								"name": "Fire Across the Galaxy",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-03-02",
+								"overview": "The crew has to go through many obstacles to save Kanan.",
+								"still_path": "/zRXqj6ziU6p21rnIhWcTTd8x0C4.jpg",
+								"vote_count": 40,
+								"episode_type": "finale",
+								"vote_average": 8.85,
+								"season_number": 1,
+								"episode_number": 13,
+								"production_code": "115"
+							}
+						]
+					},
+					{
+						"id": "62fe1e26963864007b2af430",
+						"name": "Season 2",
+						"order": 2,
+						"locked": false,
+						"episodes": [
+							{
+								"id": 1164102,
+								"name": "The Siege of Lothal",
+								"order": 0,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2015-06-20",
+								"overview": "The Inquisitor is dead. The Ghost crew has connected with other rebel cells. And a new ally named Ahsoka Tano has emerged. Despite these successes and developments, the fight against the Empire takes a deadly turn, as the evil Sith Lord Darth Vader comes to Lothal.",
+								"still_path": "/p8Ld46Kw6nB6EzHIFVosbVxDj8i.jpg",
+								"vote_count": 10,
+								"episode_type": "standard",
+								"vote_average": 8.2,
+								"season_number": 0,
+								"episode_number": 6,
+								"production_code": "201-202"
+							},
+							{
+								"id": 1117686,
+								"name": "The Lost Commanders",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-14",
+								"overview": "Ahsoka sends the Rebel crew to find and recruit a war hero to their cause, but when they discover it is Captain Rex, trust issues put the mission at risk.",
+								"still_path": "/fCZDEVcOF2pFUzAPaikHK8uvAF7.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.083,
+								"season_number": 2,
+								"episode_number": 1,
+								"production_code": "203"
+							},
+							{
+								"id": 1131589,
+								"name": "Relics of the Old Republic",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-21",
+								"overview": "Ezra and the others are starting to form friendships with the old Clone Troopers, but Kanan can't seem to bring himself to trust them. Will he feel differently when pressure from the Empire forces them to work together?",
+								"still_path": "/g6Bps9OOvYscLdl4Cn1IyK7Eju7.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.038,
+								"season_number": 2,
+								"episode_number": 2,
+								"production_code": "204"
+							},
+							{
+								"id": 1132041,
+								"name": "Always Two There Are",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-10-28",
+								"overview": "Ezra, Zeb, Sabine, and Chopper are on a mission to an abandoned medistation in search of supplies when an attack by two of Darth Vader's Inquisitors divides the team.",
+								"still_path": "/eJWKSUorHIEhX9Crd8MIiCcu68I.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.763,
+								"season_number": 2,
+								"episode_number": 3,
+								"production_code": "205"
+							},
+							{
+								"id": 1134614,
+								"name": "Brothers of the Broken Horn",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-04",
+								"overview": "In order to flee the pressure of the responsibility of being a rebel and a Jedi, Ezra goes on a rescue mission together with Chopper after they received a distress call. They are surprised to find out the ship in need belongs to Hondo Ohnaka. Hondo offers Ezra to join him.",
+								"still_path": "/jjSKgPJplbyQqZvLHAS6iGwBz1N.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.225,
+								"season_number": 2,
+								"episode_number": 4,
+								"production_code": "206"
+							},
+							{
+								"id": 1135846,
+								"name": "Wings of the Master",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-11",
+								"overview": "Since the rebels are in need of a new ship in order to overcome an Imperial blockade, Hera embarks on a dangerous mission to meet an eccentric starship engineer and manages to gain his trust. But will that be enough to get a ship from him?",
+								"still_path": "/mCfYLQ0Y6S0ZxziecEqmogcRETo.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.425,
+								"season_number": 2,
+								"episode_number": 5,
+								"production_code": "207"
+							},
+							{
+								"id": 1135847,
+								"name": "Blood Sisters",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-18",
+								"overview": "On a mission to escort a courier with secret information vital to the rebel cause to a rendezvous point, Sabine must face off against her old friend and partner.",
+								"still_path": "/4u8DYA6UWT3sxzEHuDKZX9bdSTC.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.064,
+								"season_number": 2,
+								"episode_number": 6,
+								"production_code": "208"
+							},
+							{
+								"id": 1135848,
+								"name": "Stealth Strike",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-11-25",
+								"overview": "A new Imperial ship captures Ezra, Commander Sato, and his crew, forcing Kanan and the clone to go undercover as stormtroopers to free the rebels.",
+								"still_path": "/lNsf1raBWms1qMMSWBnoFU6mBDh.jpg",
+								"vote_count": 41,
+								"episode_type": "standard",
+								"vote_average": 7.829,
+								"season_number": 2,
+								"episode_number": 7,
+								"production_code": "209"
+							},
+							{
+								"id": 1142189,
+								"name": "The Future of the Force",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-12-02",
+								"overview": "The rebels learn that the Inquisitors are seeking out Force-sensitive children, and they work together to protect the young ones from the Inquisitors' pursuit.",
+								"still_path": "/27ONParPxPgjZw1WJrG4z2RU9Oz.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.25,
+								"season_number": 2,
+								"episode_number": 8,
+								"production_code": "210"
+							},
+							{
+								"id": 1145354,
+								"name": "Legacy",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2015-12-09",
+								"overview": "As the Empire attacks the rebel fleet on Garel, Kanan, and Ezra return to Lothal and find a former prisoner with knowledge about Ezra's parents.",
+								"still_path": "/kHrwqiHEkrBDK2fumQDOcJB62pZ.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.628,
+								"season_number": 2,
+								"episode_number": 9,
+								"production_code": "211"
+							},
+							{
+								"id": 1158129,
+								"name": "A Princess on Lothal",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-01-20",
+								"overview": "During the early rebellion against the rule of the Galactic Empire, Princess Leia Organa of Alderaan is sent to the planet Lothal on a mission to provide ships for the rebel fleet. When the Empire initiates a lockdown, her plan is thrown into jeopardy",
+								"still_path": "/14qs5viLvfL3vtkDcqtffMmcO49.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.833,
+								"season_number": 2,
+								"episode_number": 10,
+								"production_code": "212"
+							},
+							{
+								"id": 1161488,
+								"name": "The Protector of Concord Dawn",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-01-27",
+								"overview": "In need of new hyperspace routes due to Imperial pressure, the rebels find a shortcut but must first gain permission to use it.",
+								"still_path": "/ql8PxEmYnYX7n7UdgrqLHXFaFk6.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.579,
+								"season_number": 2,
+								"episode_number": 11,
+								"production_code": "213"
+							},
+							{
+								"id": 1162960,
+								"name": "Legends of the Lasat",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-03",
+								"overview": "When the crew of the Ghost agrees to help two refugees who are revealed to be surviving Lasat, Zeb must come to terms with his past to help his people reach their new home.",
+								"still_path": "/A88A4CZL8hXblm9ymOxW8tt5XWp.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.41,
+								"season_number": 2,
+								"episode_number": 12,
+								"production_code": "214"
+							},
+							{
+								"id": 1164926,
+								"name": "The Call",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-10",
+								"overview": "While on a mission to obtain fuel for the rebel fleet, the crew works to protect space creatures from the Mining Guild asteroid mining operation that threatens the creatures' lives.",
+								"still_path": "/e4gF4n6G5AiygXwZCP2Ey8JIS7z.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 7.438,
+								"season_number": 2,
+								"episode_number": 13,
+								"production_code": "215"
+							},
+							{
+								"id": 1166342,
+								"name": "Homecoming",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-17",
+								"overview": "The rebels contact freedom fighter Cham Syndulla, who needs help to fight off the Imperial bombing attack on his planet. While coordinating a plan to overtake and steal the carrier that houses these Imperial bombers, the rebels discover that Cham may have a plan of his own.",
+								"still_path": "/rWyd3G6q7niDj9lUITge7JFLdKq.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.263,
+								"season_number": 2,
+								"episode_number": 14,
+								"production_code": "216"
+							},
+							{
+								"id": 1167094,
+								"name": "The Honorable Ones",
+								"order": 15,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-02-24",
+								"overview": "Zeb and Agent Kallus find themselves stranded on an ice planet after a failed Imperial ambush of the rebels. With Kallus injured from the escape pod crash, he and Zeb must work together to survive the harsh conditions.",
+								"still_path": "/fCOMbSbDFtyh4nMEH1bUFNwukG5.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.846,
+								"season_number": 2,
+								"episode_number": 15,
+								"production_code": "217"
+							},
+							{
+								"id": 1173281,
+								"name": "Shroud of Darkness",
+								"order": 16,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-02",
+								"overview": "Kanan, Ezra, and Ahsoka return to the Jedi Temple on Lothal, seeking answers from Yoda about the Inquisitors’ ability to continually track the rebels.",
+								"still_path": "/iCE44rUGQL5p2gvH9Q7mk5RnQrJ.jpg",
+								"vote_count": 40,
+								"episode_type": "standard",
+								"vote_average": 8.4,
+								"season_number": 2,
+								"episode_number": 16,
+								"production_code": "218"
+							},
+							{
+								"id": 1174483,
+								"name": "The Forgotten Droid",
+								"order": 17,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-16",
+								"overview": "When Chopper gets left behind at an Imperial outpost, he forms an unlikely friendship with an Imperial droid, and discovers a base location for the rebels.",
+								"still_path": "/vsA5f4j6oumKg36vIN7aDX1Xztu.jpg",
+								"vote_count": 39,
+								"episode_type": "standard",
+								"vote_average": 7.077,
+								"season_number": 2,
+								"episode_number": 17,
+								"production_code": "219"
+							},
+							{
+								"id": 1174484,
+								"name": "The Mystery of Chopper Base",
+								"order": 18,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-03-23",
+								"overview": "Kanan, Ezra, and Ahsoka prepare to depart to unravel Vader’s secret, while the rebels find a way to fend off the predatory creatures that occupy the planet.",
+								"still_path": "/fOvqJU3r7fmJK6Qj7zX679ezM44.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.135,
+								"season_number": 2,
+								"episode_number": 18,
+								"production_code": "220"
+							},
+							{
+								"id": 1183161,
+								"name": "Twilight of the Apprentice",
+								"order": 19,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2016-03-30",
+								"overview": "After gaining information about the Sith, Kanan, Ezra, and Ahsoka battle the Inquisitors with the help of a new ally, but are overmatched when Vader arrives.",
+								"still_path": "/7g8wa7PrhVa2CsGkEGWE7qXj8JQ.jpg",
+								"vote_count": 49,
+								"episode_type": "finale",
+								"vote_average": 9.082,
+								"season_number": 2,
+								"episode_number": 19,
+								"production_code": "221"
+							}
+						]
+					},
+					{
+						"id": "62fe1e6b25cd850083a3fa26",
+						"name": "Season 3",
+						"order": 3,
+						"locked": false,
+						"episodes": [
+							{
+								"id": 1224349,
+								"name": "Steps Into Shadow",
+								"order": 0,
+								"runtime": 44,
+								"show_id": 60554,
+								"air_date": "2016-09-24",
+								"overview": "Ezra, Sabine, Zeb, Chopper and Hera sets out to rescue Hondo Ohnaka, while Kanan finds an ancient force creature know as The Bendu.",
+								"still_path": "/qRWrLjrnAPvID7LxcFlZ5SwlRvg.jpg",
+								"vote_count": 30,
+								"episode_type": "standard",
+								"vote_average": 7.867,
+								"season_number": 3,
+								"episode_number": 1,
+								"production_code": "301-302"
+							},
+							{
+								"id": 1228085,
+								"name": "The Holocrons of Fate",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-01",
+								"overview": "When Maul takes the crew of the Ghost hostage, Ezra and Kanan must pass a trial in order to recover an ancient Sith artifact to save them.",
+								"still_path": "/t8QRYKtTdVvMOnqrXFqHcc7PUUl.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.306,
+								"season_number": 3,
+								"episode_number": 2,
+								"production_code": "303"
+							},
+							{
+								"id": 1231820,
+								"name": "The Antilles Extraction",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-08",
+								"overview": "With the rebellion in desperate need of pilots, Sabine goes undercover as an Imperial cadet to recruit defectors -- including the confident and gifted Wedge Antilles.",
+								"still_path": "/A4M4FY7dzBZl6nmtOk2dtQJ1lPo.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.243,
+								"season_number": 3,
+								"episode_number": 3,
+								"production_code": "304"
+							},
+							{
+								"id": 1228438,
+								"name": "Hera's Heroes",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-15",
+								"overview": "Hera's rebel supply mission to Ryloth becomes personal when she and the Ghost crew brave overwhelming Imperial forces to recover a memento from her ancestral home.",
+								"still_path": "/9ih28BwUu5tRrStey3Ab7ZisOPw.jpg",
+								"vote_count": 38,
+								"episode_type": "standard",
+								"vote_average": 7.5,
+								"season_number": 3,
+								"episode_number": 4,
+								"production_code": "305"
+							},
+							{
+								"id": 1233356,
+								"name": "The Last Battle",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-10-22",
+								"overview": "On a salvage mission led by Captain Rex, the Ghost crew is captured by a unit of old battle droids determined to fight one last battle to end the Clone Wars.",
+								"still_path": "/gueyvMhtKYlbDQUmMzRgASmLIUi.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 7.838,
+								"season_number": 3,
+								"episode_number": 5,
+								"production_code": "306"
+							},
+							{
+								"id": 1236897,
+								"name": "Imperial Supercommandos",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-05",
+								"overview": "Having lost contact with the Protectors of Concord Dawn, Sabine, Ezra, and Fenn Rau investigate and find the base occupied by Imperial Mandalorians.",
+								"still_path": "/h0ZbQtb5bjWnptrRI99ykYTf6h4.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 7.389,
+								"season_number": 3,
+								"episode_number": 6,
+								"production_code": "307"
+							},
+							{
+								"id": 1241553,
+								"name": "Iron Squadron",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-19",
+								"overview": "Ezra and Sabine team up to tame a rogue, young hotshot pilot and his crew who recklessly risk their lives in a fight to defend their home world from Imperial occupation.",
+								"still_path": "/fJLxhpo2MKytgMtWEnWcsEeiKai.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 6.189,
+								"season_number": 3,
+								"episode_number": 7,
+								"production_code": "308"
+							},
+							{
+								"id": 1236945,
+								"name": "The Wynkahthu Job",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-11-26",
+								"overview": "The rebels team with a pair of unscrupulous pirates to salvage a freighter full of weapons for the rebellion, but the mission ends up being far more dangerous than anticipated.",
+								"still_path": "/oDqzj7TJHNMdLiMGkLI1QHyyag3.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 6.405,
+								"season_number": 3,
+								"episode_number": 8,
+								"production_code": "309"
+							},
+							{
+								"id": 1240560,
+								"name": "An Inside Man",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-12-03",
+								"overview": "Seeking information on a new Imperial weapon, Ezra and Kanan infiltrate the Imperial factory on Lothal, but must trust an unlikely ally to escape a lockdown.",
+								"still_path": "/cIy5xKTv0c5KL5vw3xZPVsv0Vmw.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 7.629,
+								"season_number": 3,
+								"episode_number": 9,
+								"production_code": "310"
+							},
+							{
+								"id": 1244907,
+								"name": "Visions and Voices",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2016-12-10",
+								"overview": "Maul returns, looking to finally unlock the secrets that he and Ezra desire.",
+								"still_path": "/dsOEs7DVLStpeqz3EyqzqHF3FXk.jpg",
+								"vote_count": 35,
+								"episode_type": "standard",
+								"vote_average": 8.2,
+								"season_number": 3,
+								"episode_number": 10,
+								"production_code": "311"
+							},
+							{
+								"id": 1248327,
+								"name": "Ghosts of Geonosis (1)",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-07",
+								"overview": "The crew returns to Geonosis in search of a missing rebel team sent to investigate suspicious activity there, and are surprised by what they find.",
+								"still_path": "/hh36iv3Xsj3IptwDQhPyfLZ4wrT.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.594,
+								"season_number": 3,
+								"episode_number": 11,
+								"production_code": "312"
+							},
+							{
+								"id": 1253948,
+								"name": "Ghosts of Geonosis (2)",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-07",
+								"overview": "After finding a missing rebel team member, the Ghost crew discovers another surprise on Geonosis, and work to conceal it from Imperial Forces.",
+								"still_path": "/edCZ7r1Cs4tgKSbiPj1qr0UdCwQ.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.594,
+								"season_number": 3,
+								"episode_number": 12,
+								"production_code": "313"
+							},
+							{
+								"id": 1253953,
+								"name": "Warhead",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-14",
+								"overview": "Zeb and Chopper bring a damaged droid found in the Atollon wilderness back to base, only to discover that the droid is a new Imperial probe programmed to spy on and destroy rebels.",
+								"still_path": "/kj0bp7p56DUgHWyr59btmx7DMD3.jpg",
+								"vote_count": 29,
+								"episode_type": "standard",
+								"vote_average": 7.069,
+								"season_number": 3,
+								"episode_number": 13,
+								"production_code": "314"
+							},
+							{
+								"id": 1256394,
+								"name": "Trials of the Darksaber",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-01-21",
+								"overview": "To help recruit her people to join the rebels, Sabine reluctantly agrees to learn to wield an ancient Mandalorian weapon but finds the challenge more difficult than expected.",
+								"still_path": "/qmohTJamaSHgS1SH0hFrq0VIpEl.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.323,
+								"season_number": 3,
+								"episode_number": 14,
+								"production_code": "315"
+							},
+							{
+								"id": 1258930,
+								"name": "Legacy of Mandalore",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-02-18",
+								"overview": "Hoping to get her family to help the rebels, Sabine returns home with Kanan and Ezra, and finds herself embroiled in her family's power struggle for Mandalore.",
+								"still_path": "/wl0o3dgpXOnMpiLn3YvX2Rx7uyH.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.161,
+								"season_number": 3,
+								"episode_number": 15,
+								"production_code": "316"
+							},
+							{
+								"id": 1263034,
+								"name": "Through Imperial Eyes",
+								"order": 15,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-02-25",
+								"overview": "Fearing that the identity of a rebel spy will soon be discovered by the Empire, the Rebels launch a plan to rescue him before he is caught.",
+								"still_path": "/ipsjnYI0ooKPDI6ztOpg5vT50HI.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.355,
+								"season_number": 3,
+								"episode_number": 16,
+								"production_code": "317"
+							},
+							{
+								"id": 1275774,
+								"name": "Secret Cargo",
+								"order": 16,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-04",
+								"overview": "The Ghost crew must escort Senator Mon Mothma, now wanted by the Empire, to a meeting that can change the galaxy.",
+								"still_path": "/939CVcXzNWtK0PEVry4zsWf5m6l.jpg",
+								"vote_count": 30,
+								"episode_type": "standard",
+								"vote_average": 7.967,
+								"season_number": 3,
+								"episode_number": 17,
+								"production_code": "318"
+							},
+							{
+								"id": 1275775,
+								"name": "Double Agent Droid",
+								"order": 17,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-11",
+								"overview": "Chopper and AP-5 team up to infiltrate an Imperial station to steal needed codes, but an Imperial specialist turns the droids against the crew to cause chaos.",
+								"still_path": "/kyfLEtpwVxcaW3qZDEAnLSAhpxH.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 6.938,
+								"season_number": 3,
+								"episode_number": 18,
+								"production_code": "319"
+							},
+							{
+								"id": 1275776,
+								"name": "Twin Suns",
+								"order": 18,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-18",
+								"overview": "Reacting to a vision of Maul, Ezra defies Hera and Kanan to travel to a remote planet in hopes of stopping the former Sith lord from carrying out his plans.",
+								"still_path": "/AiURHBDFUsAjJajQzJ1rhRQJozh.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 9.088,
+								"season_number": 3,
+								"episode_number": 19,
+								"production_code": "320"
+							},
+							{
+								"id": 1275777,
+								"name": "Zero Hour (1)",
+								"order": 19,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-25",
+								"overview": "In final preparations for their attack on Lothal, Phoenix Squadron's plans are disrupted when Grand Admiral Thrawn discovers their location.",
+								"still_path": "/10iM5XjFNp24yuvuPFxHrXigRyp.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.645,
+								"season_number": 3,
+								"episode_number": 20,
+								"production_code": "321"
+							},
+							{
+								"id": 1275778,
+								"name": "Zero Hour (2)",
+								"order": 20,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-03-25",
+								"overview": "Trapped on Atollon with the rebel base under siege, Hera and Kanan fight to keep the squadron alive, as Ezra attempts to rally help from an unexpected source.",
+								"still_path": "/g3sSvLKOVg8S0BNC6CJ8aJeso8O.jpg",
+								"vote_count": 30,
+								"episode_type": "finale",
+								"vote_average": 8.633,
+								"season_number": 3,
+								"episode_number": 21,
+								"production_code": "322"
+							}
+						]
+					},
+					{
+						"id": "62fe1e92ab1bc7007e0035ab",
+						"name": "Season 4",
+						"order": 4,
+						"locked": false,
+						"episodes": [
+							{
+								"id": 1380327,
+								"name": "Heroes of Mandalore (1)",
+								"order": 0,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-16",
+								"overview": "Sabine leads Ezra, Kanan and an army of her fellow Mandalorians back to her home world to rescue her father from the clutches of the Empire.",
+								"still_path": "/js5C9otCjzHex9HIZOatoemGyPc.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 7.735,
+								"season_number": 4,
+								"episode_number": 1,
+								"production_code": ""
+							},
+							{
+								"id": 1380328,
+								"name": "Heroes of Mandalore (2)",
+								"order": 1,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-16",
+								"overview": "When Sabine discovers the Empire has resurrected a devastating weapon she created and plans to use it against her people, she must decide whether to destroy it or use it herself.",
+								"still_path": "/16CjEy2UehcBr98wnrm5zNdynvU.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.909,
+								"season_number": 4,
+								"episode_number": 2,
+								"production_code": ""
+							},
+							{
+								"id": 1382170,
+								"name": "In the Name of the Rebellion (1)",
+								"order": 2,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-23",
+								"overview": "As members of the Rebel Alliance, Ezra and the Ghost crew must accept a mission to spy on an Imperial outpost they would rather destroy.",
+								"still_path": "/6Fkkkj4D7yrJbxYab4XVjmta0NC.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.563,
+								"season_number": 4,
+								"episode_number": 3,
+								"production_code": ""
+							},
+							{
+								"id": 1382171,
+								"name": "In the Name of the Rebellion (2)",
+								"order": 3,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-23",
+								"overview": "After being separated from Hera and Kanan, Ezra and Sabine join the desperate quest of Saw Gerrera to hunt down the Empire's elusive secret super weapon.",
+								"still_path": "/vMWbpADF0C4QvZh7OOJHw0lX3rm.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.75,
+								"season_number": 4,
+								"episode_number": 4,
+								"production_code": ""
+							},
+							{
+								"id": 1382172,
+								"name": "The Occupation",
+								"order": 4,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-30",
+								"overview": "Ezra and the Ghost crew are called back to Lothal when a new Imperial threat rises.",
+								"still_path": "/ohX6gCEBSFnFzDFcbmEkWvoDHac.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.424,
+								"season_number": 4,
+								"episode_number": 5,
+								"production_code": ""
+							},
+							{
+								"id": 1382173,
+								"name": "Flight of the Defender",
+								"order": 5,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-10-30",
+								"overview": "Ezra and Sabine steal an Imperial prototype TIE fighter but must rely on some unexpected help to escape from Thrawn.",
+								"still_path": "/qnHpOsdyXVRoKRgZisCNfoFJrLW.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 7.727,
+								"season_number": 4,
+								"episode_number": 6,
+								"production_code": ""
+							},
+							{
+								"id": 1382174,
+								"name": "Kindred",
+								"order": 6,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-06",
+								"overview": "Tracked back to their hidden base by a mysterious Imperial agent, the rebels must trust some seemingly dangerous native creatures, who are far more than meets the eye.",
+								"still_path": "/qURpDGe5lLd7pepWcvdQaWPf2FD.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.875,
+								"season_number": 4,
+								"episode_number": 7,
+								"production_code": ""
+							},
+							{
+								"id": 1382175,
+								"name": "Crawler Commandeers",
+								"order": 7,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-06",
+								"overview": "Desperate to contact Rebel command, the Ghost crew pirates a mining vehicle with long range communications gear, but the Empire arrives to spoil their plans.",
+								"still_path": "/hWWW3UBvgkC5Tq7o43oKRpy8IJP.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 7.156,
+								"season_number": 4,
+								"episode_number": 8,
+								"production_code": ""
+							},
+							{
+								"id": 1382176,
+								"name": "Rebel Assault",
+								"order": 8,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2017-11-13",
+								"overview": "Hera leads a courageous attack against Grand Admiral Thrawn's forces, but when things go awry, her battle to win must become a daring escape if she is to survive.",
+								"still_path": "/mvxU8aaDDtx0D7cbWzD6ohYjU3D.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 8,
+								"season_number": 4,
+								"episode_number": 9,
+								"production_code": ""
+							},
+							{
+								"id": 1435272,
+								"name": "Jedi Night",
+								"order": 9,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-19",
+								"overview": "The Ghost Crew infiltrates the Imperial headquarters on Lothal to save one of their own.",
+								"still_path": "/lnfO34uD6zG8AreL351Z2nyoTM0.jpg",
+								"vote_count": 34,
+								"episode_type": "standard",
+								"vote_average": 8.765,
+								"season_number": 4,
+								"episode_number": 10,
+								"production_code": ""
+							},
+							{
+								"id": 1435378,
+								"name": "DUME",
+								"order": 10,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-19",
+								"overview": "Reeling from a devastating loss, the Ghost crew rallies together to find a new purpose and resolve.",
+								"still_path": "/4z5dGIXeyPYPGxgrfdyAtQnjxox.jpg",
+								"vote_count": 31,
+								"episode_type": "standard",
+								"vote_average": 8.226,
+								"season_number": 4,
+								"episode_number": 11,
+								"production_code": ""
+							},
+							{
+								"id": 1439924,
+								"name": "Wolves and a Door",
+								"order": 11,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-26",
+								"overview": "Ezra leads the Ghost crew back to the Jedi temple on Lothal where they discover that the Empire has diabolical plans for the powerful secrets it holds.",
+								"still_path": "/nqjCzJCmKt6AVXJ4EOQ6qcIS3EE.jpg",
+								"vote_count": 32,
+								"episode_type": "standard",
+								"vote_average": 8.156,
+								"season_number": 4,
+								"episode_number": 12,
+								"production_code": ""
+							},
+							{
+								"id": 1442879,
+								"name": "A World Between Worlds",
+								"order": 12,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-02-26",
+								"overview": "While the other rebels engage the Imperial forces outside the Jedi temple, Ezra gains access inside and experiences a revelation.",
+								"still_path": "/nPK3AZcba5WLL0KXeKl50V5e4AZ.jpg",
+								"vote_count": 36,
+								"episode_type": "standard",
+								"vote_average": 8.528,
+								"season_number": 4,
+								"episode_number": 13,
+								"production_code": ""
+							},
+							{
+								"id": 1447560,
+								"name": "A Fool's Hope",
+								"order": 13,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-03-05",
+								"overview": "The Ghost hatches a plan to free Lothal, though a traitor may be in their midst.",
+								"still_path": "/5DwgoAoK797Pt70cLIyochp9dec.jpg",
+								"vote_count": 33,
+								"episode_type": "standard",
+								"vote_average": 8.121,
+								"season_number": 4,
+								"episode_number": 14,
+								"production_code": ""
+							},
+							{
+								"id": 1447561,
+								"name": "Family Reunion - and Farewell (1)",
+								"order": 14,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-03-05",
+								"overview": "Ezra and the Ghost crew look to complete their ultimate mission: to liberate Lothal from the clutches of the Empire.",
+								"still_path": "/xG4i4cY6LYOK3YY4MAkJzcufBtI.jpg",
+								"vote_count": 37,
+								"episode_type": "standard",
+								"vote_average": 8.622,
+								"season_number": 4,
+								"episode_number": 15,
+								"production_code": ""
+							},
+							{
+								"id": 1952809,
+								"name": "Family Reunion - and Farewell (2)",
+								"order": 15,
+								"runtime": 24,
+								"show_id": 60554,
+								"air_date": "2018-03-05",
+								"overview": "Ezra and the Ghost crew look to complete their ultimate mission: to liberate Lothal from the clutches of the Empire.",
+								"still_path": "/qH5jfUdhlQwaCV6fm9yz87SxKNe.jpg",
+								"vote_count": 12,
+								"episode_type": "finale",
+								"vote_average": 8.6,
+								"season_number": 4,
+								"episode_number": 16,
+								"production_code": ""
+							}
+						]
+					}
+				],
+				"network": {
+					"id": 2739,
+					"name": "Disney+",
+					"logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+					"origin_country": ""
+				},
+				"description": "",
+				"group_count": 4,
+				"episode_count": 71
+			},
+			"675758059bc20eaa4968145b": {
+				"id": "675758059bc20eaa4968145b",
+				"name": "Disney+ (2024)",
+				"type": 4,
+				"groups": [
+					{
+						"id": "675758969bc20eaa496814cd",
+						"name": "Season 1",
+						"order": 1,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "675758c0cf1801968f030460",
+						"name": "Season 2",
+						"order": 2,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "675758c8cf1801968f030462",
+						"name": "Season 3",
+						"order": 3,
+						"locked": false,
+						"episodes": []
+					},
+					{
+						"id": "675758d09bc20eaa496814f9",
+						"name": "Season 4",
+						"order": 4,
+						"locked": false,
+						"episodes": []
+					}
+				],
+				"network": null,
+				"description": "",
+				"group_count": 4,
+				"episode_count": 0
+			}
+		},
+		"episodeShow": {
+			"tt3999226": "tt2930604"
+		},
+		"tvdbEpisodes": {
+			"283468": {
+				"data": {
+					"episodes": [
+						{
+							"id": 4961226,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "The Machine in the Ghost",
+							"aired": "2014-08-11",
+							"runtime": 3
+						},
+						{
+							"id": 4961227,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Art Attack",
+							"aired": "2014-08-18",
+							"runtime": 3
+						},
+						{
+							"id": 4961229,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Entanglement",
+							"aired": "2014-08-25",
+							"runtime": 3
+						},
+						{
+							"id": 4961228,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Property of Ezra Bridger",
+							"aired": "2014-09-01",
+							"runtime": 3
+						},
+						{
+							"id": 7460333,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Spark of Rebellion (1)",
+							"aired": "2014-10-03",
+							"runtime": 23
+						},
+						{
+							"id": 7460334,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Spark of Rebellion (2)",
+							"aired": "2014-10-03",
+							"runtime": 22
+						},
+						{
+							"id": 7460328,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "The Siege of Lothal (1)",
+							"aired": "2015-06-20",
+							"runtime": 22
+						},
+						{
+							"id": 7460329,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "The Siege of Lothal (2)",
+							"aired": "2015-06-20",
+							"runtime": 22
+						},
+						{
+							"id": 7563238,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "HoloNet News Report: Imperial Registration Program",
+							"aired": "2014-07-23",
+							"runtime": null
+						},
+						{
+							"id": 7563241,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "HoloNet News Report: Wookiee Revolt Quelled on Kashyyyk",
+							"aired": "2014-07-23",
+							"runtime": null
+						},
+						{
+							"id": 7563246,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "HoloNet News Special Report: Lothal Jobless Rates Hit All-Time Low",
+							"aired": "2014-07-23",
+							"runtime": null
+						},
+						{
+							"id": 7563248,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "HoloNet News Special Report: Controversial Statue Finally Destroyed",
+							"aired": "2014-09-05",
+							"runtime": null
+						},
+						{
+							"id": 7563250,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "HoloNet News Special Report: Rise in Citizen Reporting Results in Captured Criminals",
+							"aired": "2014-09-11",
+							"runtime": null
+						},
+						{
+							"id": 7563255,
+							"seasonNumber": 0,
+							"number": 16,
+							"name": "HoloNet News Special Report: Empire Ensures New Affordable Housing on Lothal",
+							"aired": "2014-09-12",
+							"runtime": null
+						},
+						{
+							"id": 7563256,
+							"seasonNumber": 0,
+							"number": 17,
+							"name": "HoloNet News Special Report: Famed Imperial Pilot Moves to Lothal",
+							"aired": "2014-09-19",
+							"runtime": null
+						},
+						{
+							"id": 7563257,
+							"seasonNumber": 0,
+							"number": 18,
+							"name": "HoloNet News Special Report: Journalists Across Galaxy Join Press Corps",
+							"aired": "2014-09-22",
+							"runtime": null
+						},
+						{
+							"id": 7563258,
+							"seasonNumber": 0,
+							"number": 19,
+							"name": "HoloNet Breaking News: Unauthorized Mining Operation Halted",
+							"aired": "2014-09-24",
+							"runtime": null
+						},
+						{
+							"id": 7563264,
+							"seasonNumber": 0,
+							"number": 20,
+							"name": "HoloNet News Special Report: Community Leaders Discuss Capital City Improvements",
+							"aired": "2014-09-26",
+							"runtime": null
+						},
+						{
+							"id": 7563265,
+							"seasonNumber": 0,
+							"number": 21,
+							"name": "HoloNet News Exclusive: Mas Amedda Receives Governor Arihnda Pryce for Lothal Report",
+							"aired": "2014-10-01",
+							"runtime": null
+						},
+						{
+							"id": 4925601,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Droids in Distress",
+							"aired": "2014-10-13",
+							"runtime": 22
+						},
+						{
+							"id": 4925602,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Fighter Flight",
+							"aired": "2014-10-20",
+							"runtime": 22
+						},
+						{
+							"id": 4961295,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Rise of the Old Masters",
+							"aired": "2014-10-27",
+							"runtime": 22
+						},
+						{
+							"id": 5012845,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Breaking Ranks",
+							"aired": "2014-11-03",
+							"runtime": 22
+						},
+						{
+							"id": 5017575,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Out of Darkness",
+							"aired": "2014-11-10",
+							"runtime": 22
+						},
+						{
+							"id": 5017576,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Empire Day (1)",
+							"aired": "2014-11-17",
+							"runtime": 22
+						},
+						{
+							"id": 5019505,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Gathering Forces (2)",
+							"aired": "2014-11-24",
+							"runtime": 22
+						},
+						{
+							"id": 5034448,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Path of the Jedi",
+							"aired": "2015-01-05",
+							"runtime": 22
+						},
+						{
+							"id": 5027371,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Idiot's Array",
+							"aired": "2015-01-19",
+							"runtime": 22
+						},
+						{
+							"id": 5025351,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Vision of Hope",
+							"aired": "2015-02-02",
+							"runtime": 22
+						},
+						{
+							"id": 5100894,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Call to Action",
+							"aired": "2015-02-09",
+							"runtime": 22
+						},
+						{
+							"id": 5054037,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Rebel Resolve (1)",
+							"aired": "2015-02-23",
+							"runtime": 22
+						},
+						{
+							"id": 5128570,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Fire Across the Galaxy (2)",
+							"aired": "2015-03-02",
+							"runtime": 22
+						},
+						{
+							"id": 5318870,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Lost Commanders (1)",
+							"aired": "2015-10-14",
+							"runtime": 22
+						},
+						{
+							"id": 5369302,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Relics of the Old Republic (2)",
+							"aired": "2015-10-21",
+							"runtime": 22
+						},
+						{
+							"id": 5369303,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Always Two There Are",
+							"aired": "2015-10-28",
+							"runtime": 22
+						},
+						{
+							"id": 5392176,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Brothers of the Broken Horn",
+							"aired": "2015-11-04",
+							"runtime": 22
+						},
+						{
+							"id": 5392177,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Wings of the Master",
+							"aired": "2015-11-11",
+							"runtime": 22
+						},
+						{
+							"id": 5392178,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Blood Sisters",
+							"aired": "2015-11-18",
+							"runtime": 22
+						},
+						{
+							"id": 5392179,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Stealth Strike",
+							"aired": "2015-11-25",
+							"runtime": 22
+						},
+						{
+							"id": 5420833,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "The Future of the Force",
+							"aired": "2015-12-02",
+							"runtime": 22
+						},
+						{
+							"id": 5420834,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Legacy",
+							"aired": "2015-12-09",
+							"runtime": 22
+						},
+						{
+							"id": 5482707,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "A Princess on Lothal",
+							"aired": "2016-01-20",
+							"runtime": 22
+						},
+						{
+							"id": 5482708,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Protector of Concord Dawn",
+							"aired": "2016-01-27",
+							"runtime": 22
+						},
+						{
+							"id": 5482710,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Legends of the Lasat",
+							"aired": "2016-02-03",
+							"runtime": 22
+						},
+						{
+							"id": 5482711,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "The Call",
+							"aired": "2016-02-10",
+							"runtime": 22
+						},
+						{
+							"id": 5482712,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Homecoming",
+							"aired": "2016-02-17",
+							"runtime": 22
+						},
+						{
+							"id": 5482713,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "The Honorable Ones",
+							"aired": "2016-02-24",
+							"runtime": 22
+						},
+						{
+							"id": 5509606,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Shroud of Darkness",
+							"aired": "2016-03-02",
+							"runtime": 22
+						},
+						{
+							"id": 5510070,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "The Forgotten Droid",
+							"aired": "2016-03-16",
+							"runtime": 22
+						},
+						{
+							"id": 5510068,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "The Mystery of Chopper Base",
+							"aired": "2016-03-23",
+							"runtime": 22
+						},
+						{
+							"id": 5510071,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Twilight of the Apprentice  (1)",
+							"aired": "2016-03-30",
+							"runtime": 22
+						},
+						{
+							"id": 5510069,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "Twilight of the Apprentice (2)",
+							"aired": "2016-03-30",
+							"runtime": 22
+						},
+						{
+							"id": 5686002,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Steps Into Shadow",
+							"aired": "2016-09-24",
+							"runtime": 44
+						},
+						{
+							"id": 5744513,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "The Holocrons of Fate",
+							"aired": "2016-10-01",
+							"runtime": 22
+						},
+						{
+							"id": 5744515,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "The Antilles Extraction",
+							"aired": "2016-10-08",
+							"runtime": 22
+						},
+						{
+							"id": 5744766,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Hera's Heroes",
+							"aired": "2016-10-15",
+							"runtime": 22
+						},
+						{
+							"id": 5744767,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "The Last Battle",
+							"aired": "2016-10-22",
+							"runtime": 22
+						},
+						{
+							"id": 5760944,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "Imperial Supercommandos",
+							"aired": "2016-11-05",
+							"runtime": 22
+						},
+						{
+							"id": 5791335,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Iron Squadron",
+							"aired": "2016-11-19",
+							"runtime": 22
+						},
+						{
+							"id": 5791336,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "The Wynkahthu Job",
+							"aired": "2016-11-26",
+							"runtime": 22
+						},
+						{
+							"id": 5831492,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "An Inside Man",
+							"aired": "2016-12-03",
+							"runtime": 22
+						},
+						{
+							"id": 5831493,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Visions and Voices",
+							"aired": "2016-12-10",
+							"runtime": 22
+						},
+						{
+							"id": 5865652,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "Ghosts of Geonosis (1)",
+							"aired": "2017-01-07",
+							"runtime": 22
+						},
+						{
+							"id": 5865653,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "Ghosts of Geonosis (2)",
+							"aired": "2017-01-07",
+							"runtime": 22
+						},
+						{
+							"id": 5878490,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "Warhead",
+							"aired": "2017-01-14",
+							"runtime": 22
+						},
+						{
+							"id": 5878491,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "Trials of the Darksaber",
+							"aired": "2017-01-21",
+							"runtime": 22
+						},
+						{
+							"id": 5911073,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "Legacy of Mandalore",
+							"aired": "2017-02-18",
+							"runtime": 22
+						},
+						{
+							"id": 5911074,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "Through Imperial Eyes",
+							"aired": "2017-02-25",
+							"runtime": 22
+						},
+						{
+							"id": 5963053,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "Secret Cargo",
+							"aired": "2017-03-04",
+							"runtime": 22
+						},
+						{
+							"id": 5963056,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "Double Agent Droid",
+							"aired": "2017-03-11",
+							"runtime": 22
+						},
+						{
+							"id": 5963058,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "Twin Suns",
+							"aired": "2017-03-18",
+							"runtime": 22
+						},
+						{
+							"id": 5963059,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "Zero Hour (1)",
+							"aired": "2017-03-25",
+							"runtime": 22
+						},
+						{
+							"id": 5963060,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "Zero Hour (2)",
+							"aired": "2017-03-25",
+							"runtime": 22
+						},
+						{
+							"id": 6292285,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "Heroes of Mandalore (1)",
+							"aired": "2017-10-16",
+							"runtime": 22
+						},
+						{
+							"id": 6292286,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "Heroes of Mandalore (2)",
+							"aired": "2017-10-16",
+							"runtime": 22
+						},
+						{
+							"id": 6310591,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "In the Name of the Rebellion (1)",
+							"aired": "2017-10-23",
+							"runtime": 22
+						},
+						{
+							"id": 6310592,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "In the Name of the Rebellion (2)",
+							"aired": "2017-10-23",
+							"runtime": 22
+						},
+						{
+							"id": 6310593,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "The Occupation",
+							"aired": "2017-10-30",
+							"runtime": 22
+						},
+						{
+							"id": 6310594,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "Flight of the Defender",
+							"aired": "2017-10-30",
+							"runtime": 22
+						},
+						{
+							"id": 6324326,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "Kindred",
+							"aired": "2017-11-06",
+							"runtime": 22
+						},
+						{
+							"id": 6324327,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "Crawler Commandeers",
+							"aired": "2017-11-06",
+							"runtime": 22
+						},
+						{
+							"id": 6324328,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "Rebel Assault",
+							"aired": "2017-11-13",
+							"runtime": 22
+						},
+						{
+							"id": 6392856,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "Jedi Night",
+							"aired": "2018-02-19",
+							"runtime": 23
+						},
+						{
+							"id": 6392858,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "DUME",
+							"aired": "2018-02-19",
+							"runtime": 22
+						},
+						{
+							"id": 6400940,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "Wolves and a Door",
+							"aired": "2018-02-26",
+							"runtime": 22
+						},
+						{
+							"id": 6511779,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "A World Between Worlds",
+							"aired": "2018-02-26",
+							"runtime": 23
+						},
+						{
+							"id": 6513870,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "A Fool's Hope",
+							"aired": "2018-03-05",
+							"runtime": 22
+						},
+						{
+							"id": 6513871,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "Family Reunion – and Farewell (1)",
+							"aired": "2018-03-05",
+							"runtime": 25
+						},
+						{
+							"id": 6514635,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "Family Reunion – and Farewell (2)",
+							"aired": "2018-03-05",
+							"runtime": 25
+						}
+					]
+				}
+			}
+		},
+		"seasonEpisodes": {}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD",
+				"hash": "0b37697deec726a7a0b455f0736e89b6b4a12ab6",
+				"imdbId": "tt3999226",
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.Easter.Eggs.and.Hidden.Stories.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Lets.Talk.About.It.with.Executive.Producer.Dave.Filoni.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.A.Princess.on.Lothal.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Always.Two.There.Are.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Blood.Sisters.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Brothers.of.the.Broken.Horn.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Homecoming.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Legacy.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Legends.of.the.Lasat.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Relics.of.the.Old.Republic.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Shroud.of.Darkness.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Siege.of.Lothal.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Stealth.Strike.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Call.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Forgotten.Droid.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Future.of.The.Force.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Honorable.Ones.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Lost.Commanders.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Mystery.of.Chopper.Base.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Protector.of.Concord.Dawn.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Twilight.of.the.Apprentice.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Wings.of.the.Master.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"folder": "Extras"
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E02.The.Lost.Commanders.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E03.Relics.of.the.Old.Republic.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E04.Always.Two.There.Are.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E05.Brothers.of.the.Broken.Horn.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E06.Wings.of.the.Master.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E07.Blood.Sisters.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E08.Stealth.Strike.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E09.The.Future.of.the.Force.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E10.Legacy.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E11.A.Princess.on.Lothal.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E12.The.Protector.of.Concord.Dawn.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E13.Legends.of.the.Lasat.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E14.The.Call.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E15.Homecoming.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E16.The.Honorable.Ones.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E17.Shroud.of.Darkness.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E18.The.Forgotten.Droid.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E19.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2930604",
+				"tmdbId": 60554,
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.Easter.Eggs.and.Hidden.Stories.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Lets.Talk.About.It.with.Executive.Producer.Dave.Filoni.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.A.Princess.on.Lothal.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Always.Two.There.Are.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Blood.Sisters.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Brothers.of.the.Broken.Horn.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Homecoming.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Legacy.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Legends.of.the.Lasat.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Relics.of.the.Old.Republic.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Shroud.of.Darkness.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Siege.of.Lothal.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Stealth.Strike.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Call.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Forgotten.Droid.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Future.of.The.Force.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Honorable.Ones.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Lost.Commanders.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Mystery.of.Chopper.Base.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.The.Protector.of.Concord.Dawn.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Twilight.of.the.Apprentice.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.Recon.Wings.of.the.Master.EXTRAS.1080p.BluRay.REMUX.AVC.DD.2.0-PrivateHD.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 0,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102,
+						"part": 1
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 0,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102,
+						"part": 2
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E02.The.Lost.Commanders.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1117686
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E03.Relics.of.the.Old.Republic.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1131589
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E04.Always.Two.There.Are.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1132041
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E05.Brothers.of.the.Broken.Horn.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1134614
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E06.Wings.of.the.Master.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135846
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E07.Blood.Sisters.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135847
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E08.Stealth.Strike.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135848
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E09.The.Future.of.the.Force.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1142189
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E10.Legacy.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1145354
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E11.A.Princess.on.Lothal.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158129
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E12.The.Protector.of.Concord.Dawn.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1161488
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E13.Legends.of.the.Lasat.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1162960
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E14.The.Call.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164926
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E15.Homecoming.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1166342
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E16.The.Honorable.Ones.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1167094
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E17.Shroud.of.Darkness.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173281
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E18.The.Forgotten.Droid.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1174483
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E19.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD.5.1-PrivateHD.mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1174484
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP[rartv]",
+				"hash": "10ec3cdd5ad4d98dd46bc14e320678759e0adafa",
+				"imdbId": "tt3999226",
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E02.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E03.The.Lost.Commanders.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E04.Relics.of.the.Old.Republic.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E05.Always.Two.There.Are.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E06.Brothers.of.the.Broken.Horn.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E07.Wings.of.the.Master.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E08.Blood.Sisters.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E09.Stealth.Strike.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E10.The.Future.of.the.Force.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E11.Legacy.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E12.A.Princess.on.Lothal.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E13.The.Protector.of.Concord.Dawn.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E14.Legends.of.the.Lasat.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E15.The.Call.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E16.Homecoming.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E17.The.Honorable.Ones.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E18.Shroud.of.Darkness.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E19.The.Forgotten.Droid.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E20.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2930604",
+				"tmdbId": 60554,
+				"files": [
+					{
+						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 0,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102,
+						"part": 1
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E02.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 0,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102,
+						"part": 2
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E03.The.Lost.Commanders.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1117686
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E04.Relics.of.the.Old.Republic.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1131589
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E05.Always.Two.There.Are.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1132041
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E06.Brothers.of.the.Broken.Horn.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1134614
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E07.Wings.of.the.Master.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135846
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E08.Blood.Sisters.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135847
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E09.Stealth.Strike.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1135848
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E10.The.Future.of.the.Force.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1142189
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E11.Legacy.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1145354
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E12.A.Princess.on.Lothal.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158129
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E13.The.Protector.of.Concord.Dawn.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1161488
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E14.Legends.of.the.Lasat.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1162960
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E15.The.Call.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164926
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E16.Homecoming.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1166342
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E17.The.Honorable.Ones.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1167094
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E18.Shroud.of.Darkness.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173281
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E19.The.Forgotten.Droid.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1174483
+					},
+					{
+						"path": "Star.Wars.Rebels.S02E20.The.Mystery.of.Chopper.Base.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1174484
+					}
+				]
+			}
+		}
+	]
+}
