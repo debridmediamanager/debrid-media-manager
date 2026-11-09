@@ -894,6 +894,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	}
 	if (player === 'stremio' && (debrid || source === 'easynews' || source === 'torbox-hosted')) {
 		const hosted = source === 'torbox-hosted';
+		const label = SOURCE_LABELS.get(source)!;
 		return Object.assign(
 			route(
 				hosted ? 'torbox-hosted-stremio' : 'dmm-cast-stremio',
@@ -910,7 +911,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 				],
 				hosted
 					? ['TorBox Pro and a way to submit the NZB.']
-					: ['A supported provider account or Easynews account.'],
+					: [`${/^[AEIOU]/.test(label) ? 'An' : 'A'} ${label} account.`],
 				[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
 				[
 					'The provider must supply a playable file; a catalog entry is not a guarantee of availability.',

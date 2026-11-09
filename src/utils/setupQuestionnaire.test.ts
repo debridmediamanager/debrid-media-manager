@@ -1772,3 +1772,19 @@ describe('zurg Android has no TorBox hosted NZB backend', () => {
 		);
 	});
 });
+
+describe('Cast names the account each source needs', () => {
+	it.each([
+		['real-debrid', 'A Real-Debrid account.'],
+		['all-debrid', 'An AllDebrid account.'],
+		['torbox', 'A TorBox account.'],
+		['premiumize', 'A Premiumize account.'],
+		['offcloud', 'An Offcloud account.'],
+		['debrid-link', 'A Debrid-Link account.'],
+		['easynews', 'An Easynews account.'],
+	] as const)('asks Stremio with %s for %s', (source, sentence) => {
+		expect(
+			recommendSetup(answers({ sources: [source] })).sourceCoverage[0].requirements
+		).toEqual([sentence]);
+	});
+});

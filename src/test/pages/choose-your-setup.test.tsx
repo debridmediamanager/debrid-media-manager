@@ -68,9 +68,7 @@ describe('choose your setup page', () => {
 		reachStremioRecommendation();
 
 		expect(
-			screen.getByText(
-				'Real-Debrid: DMM Cast → Stremio. A supported provider account or Easynews account.'
-			)
+			screen.getByText('Real-Debrid: DMM Cast → Stremio. A Real-Debrid account.')
 		).toBeInTheDocument();
 	});
 

@@ -353,6 +353,14 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('names the account a Cast route needs instead of a generic one', () => {
+		expect(
+			breaking((_, result) =>
+				texts(result).includes('A supported provider account or Easynews account.')
+			)
+		).toEqual([]);
+	});
+
 	it('names a no-host route that exists instead of a generic one', () => {
 		expect(
 			breaking((_, result) =>
