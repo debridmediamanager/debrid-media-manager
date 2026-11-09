@@ -418,6 +418,21 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(result.sponsorship.freeFeatures).toContain('cast');
 	});
 
+	it.each(['stremio', 'kodi'] as const)(
+		'offers ten other streams to %s, whose streams come from Cast',
+		(player) => {
+			const result = recommendSetup(answers({ player, sources: ['real-debrid'] }));
+
+			expect(result.sponsorship.optional).toContainEqual({
+				id: 'cast-streams',
+				title: 'Ten other streams in Cast',
+				detail: 'Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon.',
+				href: '/settings',
+			});
+			expect(result.sponsorship.freeFeatures).toContain('cast');
+		}
+	);
+
 	it('keeps rex and rex-stremio free when no sponsor-only backend is selected', () => {
 		const result = recommendSetup(
 			answers({

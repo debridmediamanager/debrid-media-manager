@@ -474,8 +474,8 @@ const SPONSOR_BENEFITS = {
 	},
 	cast: {
 		id: 'cast-streams',
-		title: 'Ten other streams in Stremio Cast',
-		detail: 'Raise the other-stream limit from five to ten per Cast profile.',
+		title: 'Ten other streams in Cast',
+		detail: 'Raise the other-stream limit from five to ten per Cast profile, in Stremio and the Kodi addon.',
 		href: '/settings',
 	},
 	queue: {
@@ -878,19 +878,23 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			{ usesCast: true }
 		);
 	}
+	// The Kodi addon reads Cast's stream endpoint, so the Cast profile's limits apply.
 	if (player === 'kodi' && (debrid || source === 'easynews' || source === 'torbox-hosted'))
-		return route(
-			'dmm-kodi',
-			'DMM Kodi addon → your account',
-			'Browse, search and play in Kodi with the account you already have.',
-			'none',
-			['DMM Kodi addon → Kodi'],
-			[
-				source === 'torbox-hosted'
-					? "TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
-					: 'Pair your provider or Easynews account with the Kodi addon.',
-			],
-			[{ label: 'Kodi setup', href: '/kodi' }]
+		return Object.assign(
+			route(
+				'dmm-kodi',
+				'DMM Kodi addon → your account',
+				'Browse, search and play in Kodi with the account you already have.',
+				'none',
+				['DMM Kodi addon → Kodi'],
+				[
+					source === 'torbox-hosted'
+						? "TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
+						: 'Pair your provider or Easynews account with the Kodi addon.',
+				],
+				[{ label: 'Kodi setup', href: '/kodi' }]
+			),
+			{ usesCast: true }
 		);
 	if (player === 'external' && (debrid || source === 'easynews'))
 		return route(
