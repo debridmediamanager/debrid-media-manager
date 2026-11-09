@@ -2093,11 +2093,23 @@ describe('players read naturally mid-sentence', () => {
 		}
 	);
 
+	it.each([
+		[['http-local', 'none'], 'for this source'],
+		[['http-local', 'url-addon'], 'for these sources'],
+	] satisfies [SetupSource[], string][])(
+		'counts the sources an undecided user selected in %o',
+		(sources, phrase) => {
+			expect(recommendSetup(answers({ player: 'unsure', sources })).whyMatched[0]).toMatch(
+				` is a starting option ${phrase}.`
+			);
+		}
+	);
+
 	it('names the starting player for an undecided user', () => {
 		expect(
 			recommendSetup(answers({ player: 'unsure', sources: ['http-local'] })).whyMatched[0]
 		).toBe(
-			'You have not chosen a player; an external player is a starting option for these sources.'
+			'You have not chosen a player; an external player is a starting option for this source.'
 		);
 	});
 
