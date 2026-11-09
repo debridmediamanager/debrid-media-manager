@@ -169,7 +169,8 @@ Charge is TMDB's Power Rangers season 22).
 
 `releases` lines up with the request, and each `files` with its release's. `kind` is
 `movie`, `tv` or `null` when DMM cannot tell; `imdbId` and `tmdbId` are the movie's or
-the show's, never an episode's. `title` and `year` are TMDB's title and first year for that
+the show's, never an episode's, except a film's IMDb id that IMDb lists as an episode, which is
+the one TMDB records for the film (`Falsettos.2017`'s tt7140738). `title` and `year` are TMDB's title and first year for that
 movie or show, for naming a folder after it (`Sound! Euphonium (2015)`); both are absent where
 `tmdbId` is `null` or TMDB gives none. `tvdbId` is a show's TheTVDB id as TMDB records it, which
 Plex's show rows carry as `tvdb://<id>`; it is absent for a movie and where TMDB records none, except for a show TVDB files under another series (`how` `tvdbSeries`).
