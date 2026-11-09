@@ -1180,3 +1180,37 @@ describe('a free Plex route for debrid accounts', () => {
 		).toBeUndefined();
 	});
 });
+
+describe('Wanted and Seerr need a zurg that can run', () => {
+	const offered = (result: ReturnType<typeof recommendSetup>) =>
+		[...result.sponsorship.required, ...result.sponsorship.optional].map(({ id }) => id);
+
+	it('offers neither to Stremio Cast with no host', () => {
+		const ids = offered(recommendSetup(answers({ host: 'none', preference: 'managed' })));
+
+		expect(ids).not.toContain('wanted');
+		expect(ids).not.toContain('seerr');
+	});
+
+	it('offers both to Stremio Cast once a host can run zurg', () => {
+		const ids = offered(recommendSetup(answers({ host: 'willing', preference: 'managed' })));
+
+		expect(ids).toEqual(expect.arrayContaining(['wanted', 'seerr']));
+	});
+
+	it('offers no Kodi Wanted to the Kodi addon with no host', () => {
+		expect(offered(recommendSetup(answers({ player: 'kodi', host: 'none' })))).not.toContain(
+			'wanted-kodi'
+		);
+	});
+
+	it('suggests the Wanted or Seerr route only with a debrid or NZB backend', () => {
+		const alternative = (sources: SetupSource[]) =>
+			recommendSetup(
+				answers({ sources, host: 'willing', preference: 'managed' })
+			).alternatives.some(({ title }) => title === 'DMM Wanted or Seerr requests');
+
+		expect(alternative(['easynews'])).toBe(false);
+		expect(alternative(['real-debrid'])).toBe(true);
+	});
+});

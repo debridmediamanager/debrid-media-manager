@@ -489,6 +489,8 @@ function sponsorshipFor(
 		(answers.preference === 'arr' && (debrid || hasNzb));
 	const usesCast = routes.some(({ route: source }) => source.usesCast);
 	const usesRex = routes.some(({ route: source }) => source.usesRex);
+	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere.
+	const zurgRuns = usesZurg || answers.host !== 'none';
 	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
 	const easynewsToZurg =
 		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
@@ -516,27 +518,18 @@ function sponsorshipFor(
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
 		add(optional, 'jellyfin');
 	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');
-	if (player === 'kodi' && (debrid || hasNzb)) add(optional, 'wantedKodi');
+	if (player === 'kodi' && (debrid || hasNzb) && zurgRuns) add(optional, 'wantedKodi');
 	if (
+		zurgRuns &&
 		(answers.preference === 'managed' || answers.preference === 'arr') &&
-		[...selected].some(
-			(source) =>
-				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
-		)
+		(debrid || hasNzb)
 	) {
 		add(optional, 'wanted');
 		add(optional, 'seerr');
 	}
 	const familyOrRemote = answers.needs.includes('family') || answers.needs.includes('remote');
 	const supportsRequests = usesZurg || answers.preference === 'managed' || player === 'kodi';
-	if (
-		familyOrRemote &&
-		supportsRequests &&
-		[...selected].some(
-			(source) =>
-				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
-		)
-	) {
+	if (zurgRuns && familyOrRemote && supportsRequests && (debrid || hasNzb)) {
 		add(optional, 'wanted');
 		add(optional, 'seerr');
 	}
@@ -1083,7 +1076,13 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				},
 			],
 		});
-	if (answers.preference === 'managed' || answers.preference === 'arr')
+	if (
+		(answers.preference === 'managed' || answers.preference === 'arr') &&
+		selected.some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
+		)
+	)
 		result.alternatives.push({
 			title: 'DMM Wanted or Seerr requests',
 			detail: 'Use Wanted → zurg for automatic acquisition without arr. Seerr can send requests through DMM Wanted. These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.',
