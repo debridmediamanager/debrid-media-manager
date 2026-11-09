@@ -1468,7 +1468,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				)
 			),
 		];
-		const unreachedRoutes = orList(unreached);
+		// Kodi still reads zurg's files, sidecars included, over a zurg WebDAV source.
+		const unreachedRoutes = unreached.length
+			? `${orList(unreached)}${kodiReadsZurg || arrZurgWebdav ? '; they do reach Kodi as a zurg WebDAV source' : ''}`
+			: '';
 		result.optionalNeeds.push(
 			rex
 				? bazarr

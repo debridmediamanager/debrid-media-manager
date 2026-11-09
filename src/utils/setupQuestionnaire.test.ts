@@ -2418,7 +2418,8 @@ describe('route copy stays on the player and source it is about', () => {
 	});
 
 	it.each([
-		[{ player: 'kodi' }, 'the Kodi addon'],
+		// Own Usenet plays through zurg → WebDAV → Kodi, where the sidecars sit beside the files.
+		[{ player: 'kodi' }, 'the Kodi addon; they do reach Kodi as a zurg WebDAV source'],
 		[{ player: 'external' }, 'DMM Watch'],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says which routes Bazarr sidecars miss when another source plays through zurg (%o)',
@@ -2442,7 +2443,10 @@ describe('route copy stays on the player and source it is about', () => {
 
 	it.each([
 		[{}, 'DMM Cast'],
-		[{ player: 'kodi' }, 'the Kodi addon'],
+		// The Sonarr/Radarr zurg WebDAV alternative puts zurg's files in Kodi.
+		[{ player: 'kodi' }, 'the Kodi addon; they do reach Kodi as a zurg WebDAV source'],
+		// Without a debrid account that alternative is not offered.
+		[{ player: 'kodi', sources: ['torbox-hosted'] }, 'the Kodi addon'],
 		[{ player: 'external' }, 'DMM Watch'],
 		// zurg's Stremio addon hands the player /strm/e/ links and serves no subtitles.
 		[{ sources: ['usenet'] }, "zurg's Stremio addon"],
