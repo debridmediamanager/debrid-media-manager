@@ -421,7 +421,7 @@ const SPONSOR_BENEFITS = {
 	newznab: {
 		id: 'newznab',
 		title: 'DMM Usenet indexer',
-		detail: "Search DMM as a Newznab indexer from Prowlarr, Sonarr, Radarr or zurg's Stremio addon.",
+		detail: "Search DMM as a Newznab indexer from Prowlarr, Sonarr or Radarr, zurg's Stremio addon, or zurg acquisition for Wanted and watchlists.",
 		href: '/newznab',
 	},
 	wanted: {
@@ -531,10 +531,10 @@ function sponsorshipFor(
 	if (usesZurg) add(optional, 'zurgKey');
 	if (usesCast) add(optional, 'cast');
 	if (answers.preference === 'arr' && debrid) add(optional, 'torznab');
-	// Outside arr only own Usenet through zurg searches an indexer; TorBox Cast does not.
+	// zurg acquisition searches Newznab with either NZB backend; TorBox Cast and the Kodi addon do not.
 	if (
 		(answers.preference === 'arr' && hasNzb) ||
-		routes.some(({ route: source }) => source.zurgNzb === 'direct')
+		routes.some(({ route: source }) => source.zurgNzb)
 	)
 		add(optional, 'newznab');
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))

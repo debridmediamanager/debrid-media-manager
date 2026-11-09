@@ -1359,23 +1359,34 @@ describe('DMM Newznab follows the routes that search an indexer', () => {
 			(benefit) => benefit.id === 'newznab'
 		);
 
-	it("names zurg's Stremio addon for own Usenet through zurg", () => {
+	it("names zurg's Stremio addon and zurg acquisition for own Usenet through zurg", () => {
 		expect(newznab({ sources: ['usenet'], host: 'willing' })?.detail).toBe(
-			"Search DMM as a Newznab indexer from Prowlarr, Sonarr, Radarr or zurg's Stremio addon."
+			"Search DMM as a Newznab indexer from Prowlarr, Sonarr or Radarr, zurg's Stremio addon, or zurg acquisition for Wanted and watchlists."
 		);
 	});
 
 	it.each([
-		{ sources: ['torbox-hosted'], host: 'none' },
 		{
 			player: 'plex',
 			plexRoute: 'existing-server',
 			sources: ['torbox-hosted'],
 			host: 'willing',
 		},
+		{ player: 'webdav', sources: ['torbox-hosted'], host: 'existing' },
+		{ player: 'kodi', sources: ['torbox-hosted'], host: 'existing', preference: 'arr' },
+	] satisfies Partial<SetupAnswers>[])(
+		'is offered when zurg searches for TorBox hosted NZBs (%o)',
+		(overrides) => {
+			expect(newznab(overrides)?.id).toBe('newznab');
+		}
+	);
+
+	it.each([
+		{ sources: ['torbox-hosted'], host: 'none' },
+		{ player: 'kodi', sources: ['torbox-hosted'], host: 'existing' },
 		{ player: 'jellyfin', sources: ['usenet'], host: 'existing' },
 	] satisfies Partial<SetupAnswers>[])(
-		'is not offered without a direct zurg NZB route (%o)',
+		'is not offered without a zurg NZB route or Sonarr/Radarr (%o)',
 		(overrides) => {
 			expect(newznab(overrides)).toBeUndefined();
 		}
