@@ -1047,7 +1047,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 				['DMM Kodi addon → Kodi'],
 				[
 					source === 'torbox-hosted'
-						? "TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
+						? "TorBox Pro, paired with the Kodi addon. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
 						: 'Pair your provider or Easynews account with the Kodi addon.',
 				],
 				[{ label: 'Kodi setup', href: '/kodi' }]

@@ -1429,8 +1429,9 @@ describe('Kodi with TorBox hosted NZBs', () => {
 			expect(result.sponsorship.required.map((benefit) => benefit.id)).not.toContain(
 				'zurg-nightly'
 			);
+			// Kodi pairing hands the addon TorBox Cast only from a TorBox cast token.
 			expect(result.prerequisites).toContain(
-				"TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
+				"TorBox Pro, paired with the Kodi addon. Submit NZBs from DMM's Usenet tab; finished downloads appear in the addon's TorBox library."
 			);
 			expect(result.sourceNotes.join(' ')).toMatch(
 				/normal TorBox torrent subscription alone/
