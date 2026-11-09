@@ -193,7 +193,7 @@ describe('setup recommendation invariants', () => {
 	});
 });
 
-describe('setup copy and benefits for every reachable combination', () => {
+describe('setup copy and benefits for every combination of up to two sources', () => {
 	const cases = PLAYER_MODES.flatMap((mode) =>
 		SOURCE_SETS.flatMap((sources) =>
 			HOST_OPTIONS.flatMap(({ value: host }) =>
