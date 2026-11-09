@@ -1094,7 +1094,7 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 	// Own Usenet already reaches Kodi through zurg's WebDAV, so the debrid account can join that zurg.
 	it('points at the zurg another source already runs', () => {
 		expect(browse({ sources: ['real-debrid', 'usenet'], host: 'existing' })?.detail).toBe(
-			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or add your debrid account to that zurg and browse it over its WebDAV.'
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or add your debrid account to the zurg your Usenet account runs on and browse it over its WebDAV.'
 		);
 	});
 

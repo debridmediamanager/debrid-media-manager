@@ -1244,7 +1244,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	else if (player === 'kodi' && answers.preference !== 'arr' && kodiWebdav.length)
 		result.alternatives.push({
 			title: 'Browse over WebDAV instead',
-			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host and sign in with the WebDAV credentials ${orList(kodiWebdav.map((source) => SOURCE_LABELS.get(source)!))} documents for your account, or ${routes.some(({ route: r }) => r.usesZurg) ? 'add your debrid account to that zurg and browse it over its WebDAV' : 'run zurg → WebDAV → Kodi on a host for exact naming and placement'}.`,
+			// Own Usenet is the only source Kodi plays through zurg; the addon plays TorBox hosted NZBs.
+			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host and sign in with the WebDAV credentials ${orList(kodiWebdav.map((source) => SOURCE_LABELS.get(source)!))} documents for your account, or ${kodiReadsZurg ? 'add your debrid account to the zurg your Usenet account runs on and browse it over its WebDAV' : 'run zurg → WebDAV → Kodi on a host for exact naming and placement'}.`,
 			links: [ZURG],
 		});
 	if (answers.player === 'plex' && answers.plexRoute === 'either')
