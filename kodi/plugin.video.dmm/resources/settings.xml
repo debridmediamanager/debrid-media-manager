@@ -13,5 +13,8 @@
     <setting id="sponsor_token" type="text" label="" default="" visible="false"/>
     <setting id="sponsor_token_exp" type="text" label="" default="" visible="false"/>
     <setting id="last_search" type="text" label="" default="" visible="false"/>
+    <setting id="trakt" type="text" label="" default="" visible="false"/>
+    <setting id="simkl" type="text" label="" default="" visible="false"/>
+    <setting id="simkl_client_id" type="text" label="" default="" visible="false"/>
   </category>
 </settings>

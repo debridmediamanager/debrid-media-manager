@@ -1,0 +1,167 @@
+[
+	{
+		"plays": 10,
+		"last_watched_at": "2026-11-08T19:02:55.000Z",
+		"last_updated_at": "2026-11-08T19:02:55.000Z",
+		"reset_at": null,
+		"show": {
+			"title": "Breaking Bad",
+			"year": 2008,
+			"ids": {
+				"trakt": 1,
+				"slug": "breaking-bad",
+				"tvdb": 81189,
+				"imdb": "tt0903747",
+				"tmdb": 1396
+			},
+			"overview": "A high school chemistry teacher turns to making meth.",
+			"first_aired": "2008-01-21T02:00:00.000Z",
+			"runtime": 50,
+			"certification": "TV-MA",
+			"network": null,
+			"country": "us",
+			"updated_at": "2026-11-08T19:02:55.000Z",
+			"trailer": null,
+			"homepage": null,
+			"status": "ended",
+			"rating": 9.0,
+			"votes": 100,
+			"comment_count": 0,
+			"languages": ["en"],
+			"genres": ["drama"],
+			"aired_episodes": 62
+		},
+		"seasons": [
+			{
+				"number": 0,
+				"episodes": [
+					{
+						"number": 1,
+						"plays": 1,
+						"last_watched_at": "2014-10-01T17:00:54.000Z"
+					}
+				]
+			},
+			{
+				"number": 1,
+				"episodes": [
+					{
+						"number": 1,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 2,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 3,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 4,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 5,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 6,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					},
+					{
+						"number": 7,
+						"plays": 1,
+						"last_watched_at": "2014-10-11T17:00:54.000Z"
+					}
+				]
+			},
+			{
+				"number": 2,
+				"episodes": [
+					{
+						"number": 1,
+						"plays": 1,
+						"last_watched_at": "2026-11-08T19:02:55.000Z"
+					},
+					{
+						"number": 2,
+						"plays": 1,
+						"last_watched_at": "2026-11-08T19:02:55.000Z"
+					}
+				]
+			}
+		]
+	},
+	{
+		"plays": 5,
+		"last_watched_at": "2020-05-02T21:00:00.000Z",
+		"last_updated_at": "2020-05-02T21:00:00.000Z",
+		"reset_at": null,
+		"show": {
+			"title": "Chernobyl",
+			"year": 2019,
+			"ids": {
+				"trakt": 145124,
+				"slug": "chernobyl",
+				"tvdb": 360893,
+				"imdb": "tt7366338",
+				"tmdb": 87108
+			},
+			"overview": "The 1986 nuclear accident.",
+			"first_aired": "2019-05-07T01:00:00.000Z",
+			"runtime": 50,
+			"certification": "TV-MA",
+			"network": null,
+			"country": "us",
+			"updated_at": "2020-05-02T21:00:00.000Z",
+			"trailer": null,
+			"homepage": null,
+			"status": "ended",
+			"rating": 9.0,
+			"votes": 100,
+			"comment_count": 0,
+			"languages": ["en"],
+			"genres": ["drama"],
+			"aired_episodes": 5
+		},
+		"seasons": [
+			{
+				"number": 1,
+				"episodes": [
+					{
+						"number": 1,
+						"plays": 1,
+						"last_watched_at": "2020-05-02T21:00:00.000Z"
+					},
+					{
+						"number": 2,
+						"plays": 1,
+						"last_watched_at": "2020-05-02T21:00:00.000Z"
+					},
+					{
+						"number": 3,
+						"plays": 1,
+						"last_watched_at": "2020-05-02T21:00:00.000Z"
+					},
+					{
+						"number": 4,
+						"plays": 1,
+						"last_watched_at": "2020-05-02T21:00:00.000Z"
+					},
+					{
+						"number": 5,
+						"plays": 1,
+						"last_watched_at": "2020-05-02T21:00:00.000Z"
+					}
+				]
+			}
+		]
+	}
+]

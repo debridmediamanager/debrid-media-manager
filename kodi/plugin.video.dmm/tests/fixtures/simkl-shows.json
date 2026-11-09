@@ -1,0 +1,126 @@
+{
+	"shows": [
+		{
+			"added_to_watchlist_at": "2026-04-10T05:42:42Z",
+			"last_watched_at": "2026-05-04T19:40:58Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "watching",
+			"last_watched": "S02E03",
+			"next_to_watch": "S02E04",
+			"watched_episodes_count": 2,
+			"total_episodes_count": 62,
+			"not_aired_episodes_count": 0,
+			"show": {
+				"title": "Breaking Bad",
+				"poster": "68/68173e0ed0b3a5e",
+				"year": 2008,
+				"runtime": 47,
+				"ids": {
+					"simkl": 11121,
+					"slug": "breaking-bad",
+					"imdb": "tt0903747",
+					"tvdb": "81189"
+				}
+			},
+			"seasons": [
+				{
+					"number": 1,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2026-05-01T20:00:00Z"
+						}
+					]
+				},
+				{
+					"number": 2,
+					"episodes": [
+						{
+							"number": 3,
+							"watched_at": "2026-05-04T19:40:58Z"
+						}
+					]
+				}
+			]
+		},
+		{
+			"added_to_watchlist_at": "2026-04-10T05:42:42Z",
+			"last_watched_at": "2026-05-04T19:40:59Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "watching",
+			"last_watched": "S08E02",
+			"next_to_watch": "S08E03",
+			"watched_episodes_count": 2,
+			"total_episodes_count": 165,
+			"not_aired_episodes_count": 11,
+			"show": {
+				"title": "Futurama",
+				"poster": "18/18421459bbf0f06beb",
+				"year": 1999,
+				"runtime": 22,
+				"ids": {
+					"simkl": 3407,
+					"slug": "futurama",
+					"imdb": "tt0149460",
+					"tvdb": "73871"
+				}
+			},
+			"seasons": [
+				{
+					"number": 8,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2026-05-04T19:40:59Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2026-05-04T19:40:59Z"
+						}
+					]
+				}
+			]
+		},
+		{
+			"added_to_watchlist_at": "2026-04-10T05:42:42Z",
+			"last_watched_at": "2026-05-15T00:35:15Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "watching",
+			"last_watched": "S01E03",
+			"next_to_watch": "S01E04",
+			"watched_episodes_count": 2,
+			"total_episodes_count": 177,
+			"not_aired_episodes_count": 0,
+			"show": {
+				"title": "The Walking Dead",
+				"poster": "16/16913426086fc13",
+				"year": 2010,
+				"runtime": 43,
+				"ids": {
+					"simkl": 2090,
+					"slug": "the-walking-dead",
+					"imdb": "tt1520211",
+					"tvdb": "153021"
+				}
+			},
+			"seasons": [
+				{
+					"number": 1,
+					"episodes": [
+						{
+							"number": 2,
+							"watched_at": "2026-05-15T00:32:20Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2026-05-15T00:32:20Z"
+						}
+					]
+				}
+			]
+		}
+	]
+}

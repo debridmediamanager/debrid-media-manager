@@ -1,0 +1,46 @@
+{
+	"movies": [
+		{
+			"added_to_watchlist_at": "2026-04-10T20:13:02Z",
+			"last_watched_at": "1994-09-01T16:00:00Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "The Godfather",
+				"poster": "10/102447562f6b49ff3a",
+				"year": 1972,
+				"ids": {
+					"simkl": 53434,
+					"slug": "the-godfather",
+					"imdb": "tt0068646",
+					"tmdb": "238"
+				}
+			}
+		},
+		{
+			"added_to_watchlist_at": "2026-05-14T06:43:15Z",
+			"last_watched_at": "2026-05-14T06:43:15Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "Batman Begins",
+				"poster": "11/1123456789abcdef",
+				"year": 2005,
+				"ids": {
+					"simkl": 53441,
+					"slug": "batman-begins",
+					"imdb": "tt0372784",
+					"tmdb": "272"
+				}
+			}
+		}
+	]
+}

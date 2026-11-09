@@ -16,7 +16,7 @@ import xbmcgui
 import xbmcplugin
 import xbmcvfs
 
-from resources.lib import dmm
+from resources.lib import dmm, trackers
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -59,6 +59,62 @@ def sponsor():
 def save_link(value):
     ADDON.setSetting('link', json.dumps(value) if value else '')
     ADDON.setSetting('sponsor_token', '')
+
+
+def grant(service, addon=None):
+    """This Kodi's own read-only grant for a tracker, {} when it isn't linked."""
+    try:
+        return json.loads((addon or ADDON).getSetting(service) or 'null') or {}
+    except ValueError:
+        return {}
+
+
+def save_grant(service, value):
+    ADDON.setSetting(service, json.dumps(value) if value else '')
+
+
+def forget(service):
+    """Unlink a tracker here, with the watched marks read through it."""
+    save_grant(service, None)
+    try:
+        os.remove(history_file(service))
+    except OSError:
+        pass
+
+
+def history_file(service):
+    return os.path.join(PROFILE, 'watched-%s.json' % service)
+
+
+def tracker_history(service):
+    g = grant(service)
+    if not g:
+        return {}
+    fresh = trackers.fresh_grant(service, g, origin())
+    if fresh is None:
+        # Widgets list at once: another listing's renewal can spend the refresh token this one sent.
+        fresh = grant(service, xbmcaddon.Addon())
+        if fresh.get('refreshToken') in (None, g.get('refreshToken')):
+            forget(service)
+            return {}
+    if fresh is not g:
+        save_grant(service, fresh)
+    if service == 'simkl' and not fresh.get('clientId'):
+        fresh = dict(fresh, clientId=ADDON.getSetting('simkl_client_id'))
+    os.makedirs(PROFILE, exist_ok=True)
+    return trackers.history(service, fresh, history_file(service), log=lambda m: xbmc.log(m, xbmc.LOGWARNING))
+
+
+_watched = None
+
+
+def with_marks(info, videos=None):
+    """`info` with what the member watched on Trakt or Simkl; their history is read once per listing (Kodi runs
+    each listing in a fresh interpreter: addon.xml sets no reuselanguageinvoker)."""
+    global _watched
+    if _watched is None:
+        _watched = trackers.union(map(tracker_history, trackers.NAMES))
+    return dict(info, **trackers.marks(_watched, info, videos))
 
 
 def url(**params):
@@ -119,12 +175,24 @@ def set_info(li, info):
         if info.get('imdb'):
             tag.setUniqueIDs({'imdb': info['imdb']}, 'imdb')
             tag.setIMDBNumber(info['imdb'])
+        # Only ever 1 (trackers.marks): a 0 would hide what Kodi itself recorded as played on this TV.
+        if info.get('playcount'):
+            tag.setPlaycount(info['playcount'])
+        if info.get('lastplayed'):
+            tag.setLastPlayed(info['lastplayed'])
     else:
-        legacy = {k: v for k, v in info.items() if k not in ('imdb', 'cast')}
+        legacy = {k: v for k, v in info.items() if k not in ('imdb', 'cast', 'episodes')}
         legacy['castandrole'] = [(n, '') for n in info.get('cast') or []]
         if info.get('imdb'):
             legacy['imdbnumber'] = info['imdb']
         li.setInfo('video', legacy)
+    if info.get('episodes'):  # a part-watched show or season, as Kodi's own library marks one for skins
+        watched, total = info['episodes']
+        li.setProperty('WatchedEpisodes', str(watched))
+        if total:
+            li.setProperty('TotalEpisodes', str(total))
+            li.setProperty('UnWatchedEpisodes', str(max(total - watched, 0)))
+            li.setProperty('WatchedEpisodePercent', str(watched * 100 // total))
 
 
 def icon(name):
@@ -189,7 +257,7 @@ def title_menu(m):
 
 def add_title(m):
     li = xbmcgui.ListItem(dmm.title_label(m))
-    set_info(li, dmm.info_of(m))
+    set_info(li, with_marks(dmm.info_of(m)))
     li.setArt(dmm.art_of(m))
     li.addContextMenuItems(title_menu(m))
     if m.get('type') == 'series':
@@ -200,6 +268,9 @@ def add_title(m):
 
 
 # ---------------------------------------------------------------- menus
+
+TRACKER_ADDONS = {'trakt': 'script.trakt', 'simkl': 'script.simkl'}
+
 
 def home(_):
     linked = accounts()
@@ -226,10 +297,20 @@ def home(_):
     if sponsor():
         add_folder('Wanted', 'Titles your zurg fetches for you. Add from any film or show: '
                              'Context menu → Add to DMM Wanted.', url(action='wanted'), icon('DefaultPlaylist.png'))
-    if link():
+    for service in trackers.NAMES:  # offered here to those who use that tracker's Kodi addon, until linked
+        if not grant(service) and xbmc.getCondVisibility('System.HasAddon(%s)' % TRACKER_ADDONS[service]):
+            add_link_tracker(service)
+    if link() or any(map(grant, trackers.NAMES)):
         add_folder('Account', 'What this Kodi is linked to, link more accounts, or unlink it.',
                    url(action='account'), icon('DefaultUser.png'))
     end(cache=False)
+
+
+def add_link_tracker(service):
+    name = trackers.NAMES[service]
+    add_action('Link %s' % name, "See what you've already watched on %s. Scan a code with your phone; "
+                                 'nothing to type here.' % name, url(action='track', service=service),
+               icon('DefaultAddonService.png'))
 
 
 def kind_menu(p):
@@ -311,7 +392,7 @@ def show_seasons(p):
         li = xbmcgui.ListItem(label, '%d episodes' % count)
         info = dmm.info_of(m)
         info.update({'mediatype': 'season', 'season': season, 'tvshowtitle': m.get('name', ''), 'title': label})
-        set_info(li, info)
+        set_info(li, with_marks(info, m.get('videos')))
         li.setArt(art)
         xbmcplugin.addDirectoryItem(HANDLE, url(action='season', id=p['id'], season=season), li, isFolder=True)
     if not dmm.seasons_of(m):
@@ -329,11 +410,11 @@ def season_episodes(p):
     for v in dmm.episodes_of(m, season):
         num = v.get('episode') or v.get('number') or 0
         li = xbmcgui.ListItem(dmm.episode_label(v))
-        set_info(li, {
+        set_info(li, with_marks({
             'mediatype': 'episode', 'title': v.get('name') or v.get('title') or '', 'tvshowtitle': m.get('name', ''),
             'season': season, 'episode': num, 'plot': v.get('overview') or v.get('description') or '',
             'premiered': (v.get('released') or v.get('firstAired') or '')[:10], 'imdb': p['id'],
-        })
+        }))
         li.setArt(dict(art, thumb=v.get('thumbnail') or art.get('poster', '')))
         li.setProperty('IsPlayable', 'true')
         play = dict(action='play', kind='series', id=p['id'], season=season, episode=num)
@@ -439,10 +520,20 @@ def account_menu(_):
     if sp:
         add_action('Sponsor · %s' % sp.get('githubUsername', ''), 'Thank you. Your sponsorship adds the Wanted list.',
                    url(action='noop'), icon('DefaultUser.png'))
-    add_action('Link again', 'Run linking again to add accounts you have since signed in to on DMM.',
-               url(action='link'), icon('DefaultAddonService.png'))
-    add_action('Unlink this Kodi', 'Forget the linked accounts on this Kodi. Your casts stay on DMM.',
-               url(action='unlink'), icon('DefaultIconError.png'))
+    for service, name in trackers.NAMES.items():
+        g = grant(service)
+        if not g:
+            add_link_tracker(service)
+            continue
+        who = (g.get('user') or {}).get('name') or (g.get('user') or {}).get('slug')
+        add_action('%s · linked%s' % (name, ' as %s' % who if who else ''),
+                   "Watched marks in DMM's lists come from your %s history. Press to unlink." % name,
+                   url(action='untrack', service=service), icon('DefaultAddonService.png'))
+    if lk:
+        add_action('Link again', 'Run linking again to add accounts you have since signed in to on DMM.',
+                   url(action='link'), icon('DefaultAddonService.png'))
+        add_action('Unlink this Kodi', 'Forget the linked accounts on this Kodi. Your casts stay on DMM.',
+                   url(action='unlink'), icon('DefaultIconError.png'))
     add_action('Settings', 'Playback and server options.', url(action='settings'), icon('DefaultScript.png'))
     end(cache=False, category='Account')
 
@@ -565,10 +656,57 @@ def do_link(_=None):
 
 
 def unlink(_):
-    if xbmcgui.Dialog().yesno(NAME, 'Unlink this Kodi? Your casts stay on DMM; you can link again any time.',
+    names = [name for service, name in trackers.NAMES.items() if grant(service)]
+    also = ' %s %s unlinked here too.' % (' and '.join(names), 'are' if len(names) > 1 else 'is') if names else ''
+    if xbmcgui.Dialog().yesno(NAME, 'Unlink this Kodi? Your casts stay on DMM; you can link again any time.' + also,
                               nolabel='Keep', yeslabel='Unlink'):
         save_link(None)
+        for service in trackers.NAMES:
+            forget(service)
         xbmc.executebuiltin('Container.Update(%s,replace)' % BASE)
+
+
+def link_tracker(p):
+    """Link Trakt or Simkl as Link this Kodi does: DMM asks the tracker for a code, the phone approves it."""
+    service = p['service']
+    name = trackers.NAMES[service]
+    try:
+        _, start = dmm.http_json(origin() + '/api/kodi/tracker/start', data={'service': service})
+    except dmm.HttpError as e:
+        # A 503 says in DMM's words that this DMM has no app set up with the tracker, or can't reach it.
+        return xbmcgui.Dialog().ok(NAME, str(e) if e.status == 503 else explain(e))
+
+    def poll():
+        try:
+            status, body = dmm.http_json(origin() + '/api/kodi/tracker/poll',
+                                         data={'service': service, 'deviceCode': start['deviceCode']})
+        except dmm.HttpError as e:
+            if e.status == 410:
+                return {'expired': True}
+            raise
+        return body if status == 200 else None
+
+    result = qr_wait(
+        'Link %s' % name,
+        ['Scan the code with your phone, or open', '[B]%s[/B]' % trackers.ACTIVATE[service], 'and enter:'],
+        start['userCode'], start['verifyUrl'], poll, start.get('interval', 5), start.get('expiresIn', 600))
+    if not result:
+        return
+    if result.get('expired'):
+        return xbmcgui.Dialog().ok(NAME, 'That code expired. Choose Link %s again for a new one.' % name)
+    forget(service)  # marks read with an account linked before
+    save_grant(service, {k: v for k, v in result.items() if k != 'status'})
+    who = (result.get('user') or {}).get('name') or (result.get('user') or {}).get('slug')
+    notify('Linked %s as %s' % (name, who) if who else 'Linked %s' % name, 6000)
+    xbmc.executebuiltin('Container.Refresh')
+
+
+def unlink_tracker(p):
+    name = trackers.NAMES[p['service']]
+    if xbmcgui.Dialog().yesno(NAME, 'Unlink %s? Watched marks from %s disappear from this Kodi.' % (name, name),
+                              nolabel='Keep', yeslabel='Unlink'):
+        forget(p['service'])
+        xbmc.executebuiltin('Container.Refresh')
 
 
 # ---------------------------------------------------------------- playback
@@ -783,7 +921,7 @@ def wanted_list(_):
     for w, m in zip(items, rows):
         state = 'fetched' if w.get('fulfilledAt') else 'waiting for zurg' if not w.get('lastPolledAt') else 'wanted'
         li = xbmcgui.ListItem('%s · %s' % (dmm.title_label(m), state))
-        set_info(li, dmm.info_of(m))
+        set_info(li, with_marks(dmm.info_of(m)))
         li.setArt(dmm.art_of(m))
         li.addContextMenuItems([('Remove from DMM Wanted', 'RunPlugin(%s)' % url(action='unwant', id=w['imdbId'],
                                                                                  title=w['title']))])
@@ -823,6 +961,7 @@ ROUTES = {
     'libitem': library_item, 'account': account_menu, 'link': do_link, 'unlink': unlink, 'play': play,
     'playurl': lambda p: play_url(p['u']), 'cast': cast_action, 'wanted': wanted_list, 'want': want,
     'unwant': unwant, 'settings': lambda p: ADDON.openSettings(), 'noop': lambda p: None,
+    'track': link_tracker, 'untrack': unlink_tracker,
 }
 
 
