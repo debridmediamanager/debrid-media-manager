@@ -1582,6 +1582,51 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		}
 	);
 
+	const torboxNzb = {
+		label: 'zurg TorBox hosted NZB setup',
+		href: 'https://notes.debridmediamanager.com/zurg/providers/torbox-nzb/',
+	};
+
+	it('links the zurg TorBox hosted NZB page beside the Kodi addon', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'kodi',
+				sources: ['torbox-hosted'],
+				host: 'existing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.setupLinks).toContainEqual(torboxNzb);
+	});
+
+	it.each([
+		{ player: 'webdav' },
+		{ player: 'external' },
+		{ player: 'plex', plexRoute: 'existing-server' },
+		{ player: 'plex', plexRoute: 'rex' },
+		{ player: 'jellyfin' },
+		{ player: 'emby' },
+	] satisfies Partial<SetupAnswers>[])(
+		'links the zurg TorBox hosted NZB page on a hosted NZB zurg route (%o)',
+		(mode) => {
+			const result = recommendSetup(
+				answers({ ...mode, sources: ['torbox-hosted'], host: 'existing' })
+			);
+
+			expect(result.sourceCoverage[0].setupLinks).toContainEqual(torboxNzb);
+			expect(result.setupLinks).toContainEqual(torboxNzb);
+		}
+	);
+
+	it('leaves the TorBox hosted NZB page off own Usenet', () => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: ['usenet'], host: 'existing', preference: 'arr' })
+		);
+
+		expect(result.setupLinks).not.toContainEqual(torboxNzb);
+	});
+
 	it('says to give zurg an nzb account for own Usenet', () => {
 		const result = recommendSetup(
 			answers({

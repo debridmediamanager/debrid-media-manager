@@ -436,6 +436,7 @@ const REX = note('rex/with-zurg', 'rex with zurg');
 const HTTP = note('rex/any-source', 'rex with any source');
 const ADDON = note('rex/stremio', 'rex with Stremio addons');
 const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
+const TORBOX_NZB = note('zurg/providers/torbox-nzb', 'zurg TorBox hosted NZB setup');
 const JELLYFIN = { label: 'DMM Jellyfin NZB setup', href: '/jellyfin' };
 const GUIDE = { label: 'Read the full setup guide', href: SETUP_GUIDE_URL };
 
@@ -801,7 +802,11 @@ function zurgRoute(
 					? ['TorBox Pro and NZB files to submit.']
 					: ['Configure your provider account in zurg.']),
 		],
-		[ZURG, ...(rex ? [REX] : player === 'stremio' ? [STREMIO] : [])],
+		[
+			ZURG,
+			...(hosted ? [TORBOX_NZB] : []),
+			...(rex ? [REX] : player === 'stremio' ? [STREMIO] : []),
+		],
 		[
 			'zurg serves bytes, not transcoded video; the player or media server handles codec compatibility.',
 			...(direct
@@ -1239,10 +1244,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			result.prerequisites.push(
 				'Give zurg an nzb account with your NNTP credentials; Sonarr/Radarr hand NZBs to it.'
 			);
-		if (selected.includes('torbox-hosted'))
+		if (selected.includes('torbox-hosted')) {
 			result.prerequisites.push(
 				'Give zurg a torbox_nzb account (TorBox Pro); Sonarr/Radarr hand NZBs to it.'
 			);
+			links(TORBOX_NZB);
+		}
 		if (debrid)
 			links(
 				{ label: 'DMM Torznab setup', href: '/torznab' },

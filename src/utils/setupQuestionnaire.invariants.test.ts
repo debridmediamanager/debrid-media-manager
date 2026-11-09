@@ -64,6 +64,7 @@ const ALLOWED_HREFS = new Set([
 	...[
 		'zurg/setup',
 		'zurg/guides/stremio',
+		'zurg/providers/torbox-nzb',
 		'zurg/guides/sonarr-radarr-torrents',
 		'zurg/guides/sonarr-radarr',
 		'zurg/guides/acquisition',
