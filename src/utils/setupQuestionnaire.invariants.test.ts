@@ -270,6 +270,21 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('says no DMM tool is used when every route only reaches what the user already has', () => {
+		// The titles of provider-webdav, *-existing-library and existing-url-addon-stremio routes.
+		const noTool =
+			/^(?:[\w-]+ WebDAV → your WebDAV or SMB player|Keep .+ for local or HTTP files|Keep your existing Stremio URL addons)$/;
+		expect(
+			breaking(
+				(_, result) =>
+					result.sponsorship.usesDmmTools &&
+					result.sourceCoverage
+						.filter(({ status }) => status === 'integrated')
+						.every(({ integration }) => noTool.test(integration))
+			)
+		).toEqual([]);
+	});
+
 	it('names players with a lowercase article mid-sentence', () => {
 		expect(
 			breaking((_, result) =>

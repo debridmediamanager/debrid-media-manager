@@ -156,6 +156,25 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
+	it("says sponsorship is for other routes for a provider's own WebDAV", () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(
+				'Sponsorship is optional here; the benefits below are for other routes.'
+			)
+		).toBeInTheDocument();
+	});
+
 	it('disables arr until a full host is selected, with a visible reason', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

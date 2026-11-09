@@ -643,6 +643,8 @@ describe('the sponsor box knows when no route uses a DMM tool', () => {
 			},
 			false,
 		],
+		// A provider's own WebDAV serves the player directly.
+		[{ player: 'webdav', sources: ['real-debrid'], host: 'none' }, false],
 		[{ sources: ['url-addon', 'real-debrid'] }, true],
 		[{ player: 'plex', plexRoute: 'rex', sources: ['http-local'], host: 'existing' }, true],
 	] satisfies [Partial<SetupAnswers>, boolean][])(

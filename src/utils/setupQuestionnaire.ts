@@ -250,7 +250,7 @@ export interface SetupSponsorship {
 	optional: SetupSponsorBenefit[];
 	freeFeatures: FreeSponsorFeature[];
 	routeAvailable: boolean;
-	/** A route uses DMM, zurg or rex, not only files or addons the user already has. */
+	/** A route uses DMM, zurg or rex, not only files, addons or provider WebDAV the user already has. */
 	usesDmmTools: boolean;
 }
 
@@ -687,7 +687,8 @@ function sponsorshipFor(
 			({ route: r }) =>
 				r.status === 'integrated' &&
 				!r.id.endsWith('-existing-library') &&
-				r.id !== 'existing-url-addon-stremio'
+				r.id !== 'existing-url-addon-stremio' &&
+				r.id !== 'provider-webdav'
 		),
 	};
 }
