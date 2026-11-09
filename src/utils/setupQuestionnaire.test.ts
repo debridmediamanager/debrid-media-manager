@@ -944,6 +944,21 @@ describe('Easynews alone is not offered zurg benefits', () => {
 		);
 	});
 
+	// TorBox Cast plays the hosted NZBs, but Sonarr/Radarr's zurg holds a torbox_nzb account.
+	it("says Easynews sends land in Wanted when Sonarr/Radarr's zurg has an NZB account", () => {
+		const result = recommendSetup(
+			answers({
+				sources: ['easynews', 'torbox-hosted'],
+				host: 'existing',
+				preference: 'arr',
+			})
+		);
+
+		expect(
+			result.sponsorship.optional.find((benefit) => benefit.id === 'wanted')?.detail
+		).toMatch(/Easynews releases you send to zurg land here too\.$/);
+	});
+
 	it('offers Wanted once Easynews has an own Usenet backend', () => {
 		expect(
 			optional(recommendSetup(answers({ sources: ['easynews', 'usenet'], host: 'willing' })))

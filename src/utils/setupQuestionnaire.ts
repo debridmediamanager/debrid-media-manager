@@ -590,9 +590,12 @@ function sponsorshipFor(
 	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere the player reads.
 	const zurgRuns =
 		(usesZurg || hostRunsZurg(answers)) && !nzbPluginOnly(player, answers.sources, routes);
+	// A zurg with an NZB account: on the playback route, or the one Sonarr/Radarr hand NZBs to.
+	const zurgNzb =
+		routes.some(({ route: source }) => source.zurgNzb) ||
+		(answers.preference === 'arr' && hasNzb);
 	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
-	const easynewsToZurg =
-		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
+	const easynewsToZurg = selected.has('easynews') && zurgNzb;
 	const wanted = easynewsToZurg
 		? {
 				...SPONSOR_BENEFITS.wanted,
@@ -614,10 +617,7 @@ function sponsorshipFor(
 	if (answers.preference === 'arr' && debrid) add(optional, 'torznab');
 	// zurg acquisition searches Newznab with either NZB backend; TorBox Cast and the Kodi addon do not.
 	// Sonarr/Radarr handing NZBs to DMM's SABnzbd endpoint for Real-Debrid still search an indexer.
-	if (
-		(answers.preference === 'arr' && (hasNzb || selected.has('real-debrid'))) ||
-		routes.some(({ route: source }) => source.zurgNzb)
-	)
+	if (zurgNzb || (answers.preference === 'arr' && selected.has('real-debrid')))
 		add(optional, 'newznab');
 	if (player === 'jellyfin' && answers.preference === 'arr' && (debrid || selected.has('usenet')))
 		add(optional, 'jellyfin');
