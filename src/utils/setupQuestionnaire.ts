@@ -304,8 +304,8 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 		'A debrid or Easynews account works through DMM Cast with no host; TorBox Pro hosted NZBs through TorBox Cast; your own Usenet account needs zurg on a host.',
 	kodi: 'A debrid, Easynews or TorBox Pro account works through the Kodi addon with no host; your own Usenet account needs zurg on a host.',
 	external:
-		'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host.',
-	webdav: 'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host.',
+		'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android.',
+	webdav: 'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android.',
 	plex: 'Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.',
 	jellyfin:
 		'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.',

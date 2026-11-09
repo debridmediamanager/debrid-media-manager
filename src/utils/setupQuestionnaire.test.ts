@@ -1644,7 +1644,7 @@ describe('"None yet" shows which accounts work with the player', () => {
 		[
 			{ player: 'webdav' },
 			'Choose a source for your WebDAV or SMB player',
-			'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host. DMM does not supply video bytes by itself.',
+			'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android. DMM does not supply video bytes by itself.',
 		],
 		[
 			{ player: 'kodi' },
@@ -1654,7 +1654,7 @@ describe('"None yet" shows which accounts work with the player', () => {
 		[
 			{ player: 'external' },
 			'Choose a source for your external player',
-			'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. DMM does not supply video bytes by itself.',
+			'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android. DMM does not supply video bytes by itself.',
 		],
 		[{ player: 'plex', plexRoute: 'existing-server' }, 'Choose a source for Plex apps', plex],
 		[{ player: 'jellyfin' }, 'Choose a source for Jellyfin', jellyfin],
