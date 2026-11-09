@@ -1188,7 +1188,7 @@ describe('a no-host conflict names a route the player can use', () => {
 	it.each([
 		[
 			{ player: 'stremio', sources: ['real-debrid', 'usenet'] },
-			`${zurgHost}, or use DMM Cast with that account, which needs no host.`,
+			`${zurgHost}, or use DMM Cast with your Real-Debrid account, which needs no host.`,
 		],
 		[
 			{ player: 'stremio', sources: ['torbox-hosted', 'usenet'] },
@@ -1196,11 +1196,15 @@ describe('a no-host conflict names a route the player can use', () => {
 		],
 		[
 			{ player: 'kodi', sources: ['usenet', 'torbox-hosted'] },
-			`${zurgHost}, or use the Kodi addon with that account, which needs no host.`,
+			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
+		],
+		[
+			{ player: 'kodi', sources: ['real-debrid', 'easynews', 'usenet'] },
+			`${zurgHost}, or use the Kodi addon with your Real-Debrid or Easynews accounts, which needs no host.`,
 		],
 		[
 			{ player: 'external', sources: ['easynews', 'usenet'] },
-			`${zurgHost}, or use DMM Watch with that account, which needs no host.`,
+			`${zurgHost}, or use DMM Watch with your Easynews account, which needs no host.`,
 		],
 		[
 			{ player: 'external', sources: ['torbox-hosted'] },

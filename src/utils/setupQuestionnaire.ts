@@ -644,28 +644,43 @@ function sponsorshipFor(
 }
 /** A route this player can use with the selected sources and no host; empty when there is none. */
 function noHostClause(player: Player, selected: SetupSource[], undecided: boolean): string {
-	const account = selected.some(
+	const accounts = selected.filter(
 		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
 	);
+	const account = accounts.length > 0;
 	const hosted = selected.includes('torbox-hosted');
 	const usenet = selected.includes('usenet');
+	/** "your Real-Debrid account", or "your Real-Debrid or Easynews accounts" for several. */
+	const yours = (sources: SetupSource[]) => {
+		const names = sources.map((source) =>
+			source === 'torbox-hosted' ? 'TorBox Pro' : SOURCE_LABELS.get(source)!
+		);
+		return names.length > 1
+			? `your ${names.slice(0, -1).join(', ')} or ${names[names.length - 1]} accounts`
+			: `your ${names[0]} account`;
+	};
 	if (player === 'stremio')
 		return account
-			? ', or use DMM Cast with that account, which needs no host'
+			? `, or use DMM Cast with ${yours(accounts)}, which needs no host`
 			: hosted
 				? ', or use TorBox Cast, which needs no host'
 				: usenet
 					? ", or switch to TorBox hosted NZBs through TorBox Cast or DMM's Real-Debrid transfer, which need no host"
 					: '';
-	if (player === 'kodi')
-		return account || hosted
-			? ', or use the Kodi addon with that account, which needs no host'
+	if (player === 'kodi') {
+		// The Kodi addon also plays TorBox Pro hosted NZBs from the TorBox library.
+		const kodi = selected.filter(
+			(source) => accounts.includes(source) || source === 'torbox-hosted'
+		);
+		return kodi.length
+			? `, or use the Kodi addon with ${yours(kodi)}, which needs no host`
 			: usenet
 				? ", or switch to TorBox hosted NZBs through the Kodi addon or DMM's Real-Debrid transfer, which need no host"
 				: '';
+	}
 	if (player === 'external')
 		return account
-			? ', or use DMM Watch with that account, which needs no host'
+			? `, or use DMM Watch with ${yours(accounts)}, which needs no host`
 			: usenet
 				? ", or switch to Real-Debrid and use DMM's transfer with DMM Watch, which need no host"
 				: '';
