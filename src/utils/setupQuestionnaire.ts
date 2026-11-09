@@ -1166,6 +1166,17 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			detail: 'Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it.',
 			links: [ZURG, note('rex/from-plex', 'Choosing between Plex Media Server and rex')],
 		});
+	// The provider plugin serves only that server; a mount serves every consumer on the host.
+	if (
+		(player === 'jellyfin' || player === 'emby') &&
+		answers.preference !== 'arr' &&
+		selected.some((source) => DEBRID_SOURCES.includes(source))
+	)
+		result.alternatives.push({
+			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
+			detail: 'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+			links: [ZURG],
+		});
 	if (answers.preference === 'arr') {
 		host('server');
 		result.primaryRoute = {

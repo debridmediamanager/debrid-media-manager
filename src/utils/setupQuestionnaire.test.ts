@@ -1685,6 +1685,26 @@ describe('route copy stays on the player and source it is about', () => {
 		);
 	});
 
+	it.each([
+		['jellyfin', 'Jellyfin'],
+		['emby', 'Emby'],
+	] as const)('offers a zurg mount beside the %s plugin for other consumers', (player, name) => {
+		const mount = (overrides: Partial<SetupAnswers>) =>
+			recommendSetup(answers({ player, host: 'existing', ...overrides })).alternatives.find(
+				({ title }) => title.startsWith('zurg → mount')
+			);
+
+		expect(mount({})).toEqual({
+			title: `zurg → mount → ${name} when other consumers need the files`,
+			detail: 'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+			links: [
+				{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
+			],
+		});
+		expect(mount({ preference: 'arr' })).toBeUndefined();
+		expect(mount({ sources: ['easynews'] })).toBeUndefined();
+	});
+
 	it('mentions the rex feed for separate Easynews only on a rex route', () => {
 		const requirements = (overrides: Partial<SetupAnswers>) =>
 			recommendSetup(answers({ sources: ['easynews'], host: 'existing', ...overrides }))
