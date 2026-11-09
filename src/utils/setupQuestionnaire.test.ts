@@ -7,6 +7,7 @@ import {
 	SOURCE_OPTIONS,
 	hostChoiceReason,
 	recommendSetup,
+	type FreeSponsorFeature,
 	type Host,
 	type Need,
 	type Player,
@@ -689,6 +690,40 @@ describe('the sponsor box knows when a benefit for your accounts is listed', () 
 		'says whether %o lists one',
 		(overrides, hasAccount) => {
 			expect(recommendSetup(answers(overrides)).sponsorship.hasAccount).toBe(hasAccount);
+		}
+	);
+});
+
+describe('rex names rex-stremio as free only where it is offered', () => {
+	const rexLimit =
+		'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility.';
+	it.each([
+		[{ sources: ['usenet'] }, 'rex does not require sponsorship.', ['rex']],
+		[
+			{ sources: ['url-addon'] },
+			'rex and rex-stremio do not require sponsorship.',
+			['rex', 'rex-stremio'],
+		],
+		// Offered as "Without zurg: rex-stremio with a debrid stream addon".
+		[
+			{ sources: ['real-debrid'] },
+			'rex and rex-stremio do not require sponsorship.',
+			['rex', 'rex-stremio'],
+		],
+		[
+			{ sources: ['real-debrid'], preference: 'arr' },
+			'rex does not require sponsorship.',
+			['rex'],
+		],
+	] satisfies [Partial<SetupAnswers>, string, FreeSponsorFeature[]][])(
+		'says so for %o',
+		(overrides, sentence, freeFeatures) => {
+			const result = recommendSetup(
+				answers({ player: 'plex', plexRoute: 'rex', host: 'existing', ...overrides })
+			);
+
+			expect(result.limits).toContain(`${rexLimit} ${sentence}`);
+			expect(result.sponsorship.freeFeatures).toEqual(freeFeatures);
 		}
 	);
 });

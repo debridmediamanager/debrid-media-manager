@@ -243,7 +243,7 @@ export interface SetupSponsorBenefit {
 	href?: string;
 }
 
-export type FreeSponsorFeature = 'cast' | 'rex';
+export type FreeSponsorFeature = 'cast' | 'rex' | 'rex-stremio';
 
 export interface SetupSponsorship {
 	required: SetupSponsorBenefit[];
@@ -598,7 +598,8 @@ function sponsorshipFor(
 	answers: SetupAnswers,
 	player: Player,
 	routes: { route: SourceRoute }[],
-	routeAvailable: boolean
+	routeAvailable: boolean,
+	rexStremio: boolean
 ): SetupSponsorship {
 	const selected = new Set(answers.sources.filter((source) => source !== 'none'));
 	const debrid = [...selected].some((source) => DEBRID_SOURCES.includes(source));
@@ -692,6 +693,7 @@ function sponsorshipFor(
 		freeFeatures: [
 			...(usesCast ? (['cast'] as const) : []),
 			...(usesRex ? (['rex'] as const) : []),
+			...(rexStremio ? (['rex-stremio'] as const) : []),
 		],
 		routeAvailable,
 		usesDmmTools: routes.some(
@@ -1102,6 +1104,14 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	const player = resolvePlayer({ player: answers.player, sources: selected });
 	const rex =
 		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
+	// Under Sonarr/Radarr zurg is the download client, so a route without zurg does not fit.
+	const rexWithoutZurg =
+		rex &&
+		answers.preference !== 'arr' &&
+		selected.some((source) => DEBRID_SOURCES.includes(source)) &&
+		!selected.includes('url-addon');
+	// rex-stremio is on the URL addon route or in the alternative without zurg.
+	const rexStremio = rexWithoutZurg || (rex && selected.includes('url-addon'));
 	const chosenPlayer =
 		player === 'webdav'
 			? 'a WebDAV or SMB player'
@@ -1209,15 +1219,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (rex) {
 		result.limits.push(
-			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
+			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
-		// Under Sonarr/Radarr zurg is the download client, so a route without zurg does not fit.
-		if (
-			answers.preference !== 'arr' &&
-			selected.some((source) => DEBRID_SOURCES.includes(source)) &&
-			!selected.includes('url-addon')
-		)
+		if (rexWithoutZurg)
 			result.alternatives.push({
 				title: 'Without zurg: rex-stremio with a debrid stream addon',
 				detail: `Run rex and rex-stremio with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
@@ -1562,7 +1567,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		answers,
 		player,
 		routes,
-		integrated.length > 0 && result.conflicts.length === 0
+		integrated.length > 0 && result.conflicts.length === 0,
+		rexStremio
 	);
 	return result;
 }

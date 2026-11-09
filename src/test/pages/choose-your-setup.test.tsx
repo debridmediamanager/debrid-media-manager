@@ -472,6 +472,34 @@ describe('choose your setup page', () => {
 		expect(document.activeElement).toHaveTextContent('What do you already have?');
 	});
 
+	it.each([
+		[
+			/My own Usenet/,
+			'rex does not require sponsorship; any sponsor benefits below apply to the zurg, API or help parts of the setup.',
+		],
+		[
+			/Existing Stremio URL addons/,
+			'rex and rex-stremio do not require sponsorship; any sponsor benefits below apply to the zurg, API or help parts of the setup.',
+		],
+	])('names rex-stremio as free only where it is offered (%s)', (source, footnote) => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Use rex for Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: source }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(footnote)
+		).toBeInTheDocument();
+	});
+
 	it('requires the conditional Plex choice before continuing', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));

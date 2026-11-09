@@ -488,8 +488,11 @@ function SponsorBenefits({
 			) : null}
 			{sponsorship.freeFeatures.includes('rex') ? (
 				<p className="mt-2 text-xs text-gray-400">
-					rex and rex-stremio do not require sponsorship; any sponsor benefits below apply
-					to the zurg, API or help parts of the setup.
+					{sponsorship.freeFeatures.includes('rex-stremio')
+						? 'rex and rex-stremio do not'
+						: 'rex does not'}{' '}
+					require sponsorship; any sponsor benefits below apply to the zurg, API or help
+					parts of the setup.
 				</p>
 			) : null}
 			{sponsorship.required.length ? (
