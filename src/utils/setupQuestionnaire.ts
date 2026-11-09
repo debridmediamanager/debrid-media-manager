@@ -616,7 +616,13 @@ function sponsorshipFor(
 	if (easynewsToZurg) add(optional, 'wanted');
 	// Wanted and Seerr requests are fetched by a zurg with your DMM API key, which this playback route may not run.
 	if (!usesZurg && optional.some(({ id }) => ['wanted', 'wanted-kodi', 'seerr'].includes(id))) {
-		add(optional, 'zurg');
+		const requests = optional.some(({ id }) => id === 'seerr')
+			? 'Wanted and Seerr requests'
+			: 'Wanted requests';
+		optional.push({
+			...SPONSOR_BENEFITS.zurg,
+			detail: SPONSOR_BENEFITS.zurg.detail.replace('this route', requests),
+		});
 		add(optional, 'zurgKey');
 	}
 	if (selected.has('real-debrid')) add(optional, 'queue');

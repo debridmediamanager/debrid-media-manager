@@ -1321,6 +1321,25 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		}
 	);
 
+	it.each([
+		[{ host: 'willing', preference: 'managed' }, 'for Wanted requests.'],
+		[
+			{ player: 'jellyfin', host: 'existing', preference: 'managed' },
+			'for Wanted and Seerr requests.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says zurg nightly is for the requests when the route runs no zurg (%o)',
+		(overrides, ending) => {
+			expect(
+				recommendSetup(answers(overrides)).sponsorship.optional.find(
+					({ id }) => id === 'zurg-nightly'
+				)?.detail
+			).toBe(
+				`Access the current zurg nightly builds, source code, Docker image and Android app ${ending}`
+			);
+		}
+	);
+
 	it('offers no Kodi Wanted to the Kodi addon with no host', () => {
 		expect(offered(recommendSetup(answers({ player: 'kodi', host: 'none' })))).not.toContain(
 			'wanted-kodi'
