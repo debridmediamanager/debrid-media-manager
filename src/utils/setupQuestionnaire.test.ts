@@ -1518,6 +1518,24 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		);
 	});
 
+	it.each([
+		[['real-debrid'], 'Sonarr or Radarr → zurg qBittorrent-compatible torrent interface'],
+		[['usenet'], 'Sonarr or Radarr → zurg SABnzbd-compatible NZB interface'],
+		[['torbox-hosted'], 'Sonarr or Radarr → zurg SABnzbd-compatible NZB interface'],
+		[
+			['real-debrid', 'usenet'],
+			'Sonarr or Radarr → zurg qBittorrent-compatible torrent interface or SABnzbd-compatible NZB interface',
+		],
+	] satisfies [SetupSource[], string][])(
+		'names only the zurg interface the sources use (%o)',
+		(sources, component) => {
+			expect(
+				recommendSetup(answers({ sources, host: 'existing', preference: 'arr' }))
+					.components[0]
+			).toBe(component);
+		}
+	);
+
 	it('says to give zurg an nzb account for own Usenet', () => {
 		const result = recommendSetup(
 			answers({

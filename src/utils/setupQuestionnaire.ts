@@ -1198,14 +1198,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			summary:
 				'Automate acquisition with arr, then keep the playback routes below for your selected player.',
 		};
+		const debrid = selected.some((s) => DEBRID_SOURCES.includes(s));
+		const nzb = selected.includes('usenet') || selected.includes('torbox-hosted');
+		const torrents = 'qBittorrent-compatible torrent interface';
+		const nzbs = 'SABnzbd-compatible NZB interface';
 		result.components.unshift(
-			'Sonarr or Radarr → zurg qBittorrent-compatible torrent interface or SABnzbd-compatible NZB interface'
+			`Sonarr or Radarr → zurg ${debrid === nzb ? `${torrents} or ${nzbs}` : debrid ? torrents : nzbs}`
 		);
 		result.prerequisites.push(
 			'A normal host for arr and zurg; current zurg and DMM Torznab/Newznab require active sponsorship.'
 		);
-		const debrid = selected.some((s) => DEBRID_SOURCES.includes(s));
-		const nzb = selected.includes('usenet') || selected.includes('torbox-hosted');
 		if (!debrid && !nzb)
 			result.conflicts.push(
 				preferenceChoiceReason(answers, 'arr') ??
