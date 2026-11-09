@@ -215,6 +215,10 @@ const JAPANESE_SEASON = new RegExp(
 const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
 // `Title - 07`, `Title - 17v2`: a fansub's episode.
 const DASHED_NUMBER = /\s-\s\d{1,4}(?:v\d)?(?=\s|$)/g;
+// A file of two to four of a run's episodes: `Swiss Family Robinson - 07+08 - English dub`,
+// `Detective_Conan_-_701-704_(Special)_-_The_Jet-Black_Mystery_Train`.
+const EPISODE_RANGE =
+	/(?:^|[\s_])-[\s_]+(\d{2,4})[\s_]*[-+][\s_]*(\d{2,4})(?=[\s_]+-[\s_]|[\s_]*[[(]|$)/;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
 // `Fairy Tail - 023 - 15 Minutes`: the number before a title that starts with one of its own.
@@ -332,6 +336,12 @@ function looseNumbers(stem: string): FileNumbers | null {
 		const episode = positive(japanese[2]);
 		const season = JAPANESE_NUMERALS.indexOf(japanese[1]) + 2;
 		if (episode) return { season, episode, end: null };
+	}
+	const range = EPISODE_RANGE.exec(stem);
+	if (range) {
+		const [first, last] = [Number(range[1]), Number(range[2])];
+		if (first > 0 && first < 1900 && last > first && last - first <= 3)
+			return { season: null, episode: first, end: last };
 	}
 	const padded = positive((ZERO_PADDED.exec(stem) ?? NUMBERED_TITLE.exec(stem))?.[1]);
 	if (padded) return { season: null, episode: padded, end: null };

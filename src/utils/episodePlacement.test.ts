@@ -153,6 +153,8 @@ describe("fileNumbers on files fun's zurg held unplaced on 2026-11-09", () => {
 		(_, c) => {
 			const got = fileNumbers(c.release, c.folder, c.file, Boolean((c as any).single));
 			expect(got && [got.season, got.episode]).toEqual([c.season, c.episode]);
+			// a file of several episodes, its last
+			if ('end' in c) expect(got?.end).toBe(c.end);
 		}
 	);
 });

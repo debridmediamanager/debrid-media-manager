@@ -92,6 +92,25 @@
 			"season": 21,
 			"episode": 1081,
 			"shape": "crc"
+		},
+		{
+			"release": "家族ロビンソン漂流記 ふしぎな島のフローネ",
+			"folder": "Swiss Family Robinson - English dub [ATTKC]",
+			"file": "Swiss Family Robinson - 07+08 - English dub [1080p][ATTKC][D5926EBF].mkv",
+			"season": null,
+			"episode": 7,
+			"end": 8,
+			"shape": "range"
+		},
+		{
+			"release": "Detective Conan - 701-704 (Special) - The Jet-Black Mystery Train [M-L][720p][D76EBEA2]",
+			"folder": "",
+			"file": "Detective_Conan_-_701-704_(Special)_-_The_Jet-Black_Mystery_Train_[M-L][720p][D76EBEA2].mkv",
+			"single": true,
+			"season": null,
+			"episode": 701,
+			"end": 704,
+			"shape": "range"
 		}
 	],
 	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"
