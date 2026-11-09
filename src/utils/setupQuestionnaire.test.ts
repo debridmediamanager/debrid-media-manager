@@ -1033,7 +1033,7 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 	it('names the provider WebDAV and zurg on a host', () => {
 		expect(browse({ sources: ['real-debrid'], host: 'none' })).toEqual({
 			title: 'Browse over WebDAV instead',
-			detail: 'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.',
+			detail: 'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or run zurg → WebDAV → Kodi on a host for exact naming and placement.',
 			links: [
 				{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
 			],
@@ -1042,14 +1042,14 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 
 	it('lists every selected provider WebDAV', () => {
 		expect(browse({ sources: ['real-debrid', 'all-debrid'], host: 'existing' })?.detail).toBe(
-			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) or AllDebrid WebDAV (https://webdav.debrid.it/) with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) or AllDebrid WebDAV (https://webdav.debrid.it/) with no host and sign in with the WebDAV credentials Real-Debrid or AllDebrid documents for your account, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
 		);
 	});
 
 	// Own Usenet already reaches Kodi through zurg's WebDAV, so the debrid account can join that zurg.
 	it('points at the zurg another source already runs', () => {
 		expect(browse({ sources: ['real-debrid', 'usenet'], host: 'existing' })?.detail).toBe(
-			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host, or add your debrid account to that zurg and browse it over its WebDAV.'
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or add your debrid account to that zurg and browse it over its WebDAV.'
 		);
 	});
 
