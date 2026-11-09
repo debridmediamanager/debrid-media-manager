@@ -10,6 +10,7 @@ import {
 	type PlaceRequest,
 } from '@/services/placement';
 import answers from '@/test/fixtures/placement/answers.json';
+import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
@@ -1277,5 +1278,33 @@ describe('a film neither the id sent nor the identifier names', () => {
 		const [placed, expected] = await ask(name);
 		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual([null, null, null]);
 		expect(placed).toEqual(expected);
+	});
+});
+
+describe('a fansub name written all in brackets', () => {
+	// zurg-usenet on fun (2026-11-09): philosophy-raws' Samurai Champloo, its title the name's second
+	// bracket, which DMM read as no title, so the anime index never named it (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(bracketed.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(bracketed.answers.anime.fribb as FribbAnimeEntry[]),
+				bracketed.answers.anime.titles
+			),
+	};
+	const ask: Identify = async (list) =>
+		list.map(({ name }) => (bracketed.answers.identify as any)[name] ?? null);
+
+	it.each(bracketed.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		const { releases, complete } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			from,
+			ask
+		);
+		expect(complete).toBe(true);
+		expect([releases[0].imdbId, releases[0].tmdbId]).toEqual(['tt0423731', 1063]);
+		expect(releases[0].files[0].season).toBe(1);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });

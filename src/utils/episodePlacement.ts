@@ -122,6 +122,7 @@ export function normalizeTitle(title: string): string {
 const SHAPED = /^\s*\[[^\]]+\]|[[(][0-9A-F]{8}[\])]/i;
 export const fansubShaped = (name: string) => SHAPED.test(name);
 const LEADING_GROUPS = /^\s*(?:\[[^\]]*\][\s._-]*)+/;
+const FIRST_GROUP = /^\s*\[[^\]]*\][\s._-]*/;
 
 /** A name's title, year and single season, the release group left off. */
 export function parseName(name: string): {
@@ -129,8 +130,14 @@ export function parseName(name: string): {
 	year: number | null;
 	season: number | null;
 } {
-	const stripped = name.replace(LEADING_GROUPS, '');
-	const parsed = ptt.parse(stripped);
+	let stripped = name.replace(LEADING_GROUPS, '');
+	let parsed = ptt.parse(stripped);
+	// a name all in brackets has its title in the one after the group's:
+	// `[philosophy-raws][Samurai Champloo][26][BDRIP][Hi10P FLAC][1920X1080]`
+	if (!parsed.title?.trim() && stripped !== name) {
+		stripped = name.replace(FIRST_GROUP, '');
+		parsed = ptt.parse(stripped);
+	}
 	const seasons = parsed.seasons ?? [];
 	// a fansub's version tag is no part of the title: ptt keeps `Mushishi v2.1` and `Mushishi 01v2`
 	const title = (parsed.title ?? '').trim().replace(/(?:\s+|(?<=\d))v\d+(?:\.\d+)?$/i, '');

@@ -1,4 +1,5 @@
 import debridLinkSeedbox from '@/test/fixtures/debridlink/seedbox-list-2026-09-06.json';
+import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
@@ -148,6 +149,13 @@ describe('parseName', () => {
 		const motto = release('[KH] Motto To Love-Ru');
 		expect(parseName(motto.name).title).toBe('Motto To Love-Ru');
 		expect(parseName(motto.files.at(-1)!.path).title).toBe('Motto To Love-Ru');
+	});
+
+	it("reads a name all in brackets by the one after the group's", () => {
+		// zurg-usenet on fun, 2026-11-09: `[philosophy-raws][Samurai Champloo][26][BDRIP]…`
+		for (const { request } of bracketed.cases) {
+			expect(parseName(request.name).title).toBe('Samurai Champloo');
+		}
 	});
 });
 
