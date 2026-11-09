@@ -342,9 +342,10 @@ const DMM_CAST_LINKS: Record<string, SetupLink> = {
 	easynews: { label: 'DMM Cast for Easynews', href: '/stremio-easynews' },
 };
 
-/** Providers that serve their own WebDAV. AllDebrid and Offcloud have none. */
+/** Providers that serve their own WebDAV. Offcloud has none. */
 const PROVIDER_WEBDAV: Partial<Record<SetupSource, string>> = {
 	'real-debrid': 'https://dav.real-debrid.com/',
+	'all-debrid': 'https://webdav.debrid.it/',
 	premiumize: 'https://webdav.premiumize.me/',
 	torbox: 'https://webdav.torbox.app/',
 	'debrid-link': 'https://webdav.debrid.link/',
@@ -993,7 +994,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		for (const source of selected) {
 			const name = SOURCE_LABELS.get(source)!;
 			const webdav = PROVIDER_WEBDAV[source];
-			if (source === 'all-debrid' || source === 'offcloud')
+			if (source === 'offcloud')
 				result.sourceNotes.push(
 					`${name} has no WebDAV of its own, so a WebDAV player needs zurg on a host.`
 				);
