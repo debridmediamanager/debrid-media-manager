@@ -44,6 +44,38 @@
 			"season": null,
 			"episode": 9,
 			"shape": "seasondash"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 01",
+			"file": "[Anime Time] Fairy Tail - 023 - 15 Minutes.mkv",
+			"season": 1,
+			"episode": 23,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 06",
+			"file": "[Anime Time] Fairy Tail - 167 - 100 Against 1.mkv",
+			"season": 6,
+			"episode": 167,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 07",
+			"file": "[Anime Time] Fairy Tail - 220 - 413 Days.mkv",
+			"season": 7,
+			"episode": 220,
+			"shape": "sandwich"
+		},
+		{
+			"release": "[Anime Time] Fairy Tail Complete Series (Season 01 to 09+Movies+OVAs+OST) [Dual Audio][BD][1080p][HEVC 10bit x265][AC3][Eng Sub]",
+			"folder": "Season 01",
+			"file": "[Anime Time] Fairy Tail - 024 - To Keep From Seeing Those Tears.mkv",
+			"season": 1,
+			"episode": 24,
+			"shape": "sandwich"
 		}
 	],
 	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"

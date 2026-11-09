@@ -199,6 +199,8 @@ const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
 const DASHED_NUMBER = /\s-\s\d{1,4}(?:v\d)?(?=\s|$)/g;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
+// `Fairy Tail - 023 - 15 Minutes`: the number before a title that starts with one of its own.
+const NUMBERED_TITLE = /\s-\s(\d{2,4})(?:v\d)?\s-\s(?=\d)/;
 // `Détective Conan S11E01 - 286 [MULTI]`: the running number after the episode, nothing but tags after it.
 const SCENE_RUNNING = /s\d{1,2}[\s._-]*e\d{1,3}\s+-\s+(\d{2,4})\s*(?=[[(]|$)/i;
 // `Carl.Sagans.Cosmos.10of13`.
@@ -313,7 +315,7 @@ function looseNumbers(stem: string): FileNumbers | null {
 		const season = JAPANESE_NUMERALS.indexOf(japanese[1]) + 2;
 		if (episode) return { season, episode, end: null };
 	}
-	const padded = positive(ZERO_PADDED.exec(stem)?.[1]);
+	const padded = positive((ZERO_PADDED.exec(stem) ?? NUMBERED_TITLE.exec(stem))?.[1]);
 	if (padded) return { season: null, episode: padded, end: null };
 	const anime = parseAnimeEpisode(stem);
 	if (anime?.kind === 'episode' && anime.episode > 0) {
