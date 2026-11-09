@@ -1619,7 +1619,10 @@ describe('route copy stays on the player and source it is about', () => {
 	});
 
 	it.each([
-		[{}, 'Local files stay in your player; cloud titles come from the routes above.'],
+		[
+			{},
+			'Stremio needs a compatible addon for local files; cloud titles come from the routes above.',
+		],
 		[
 			{ player: 'webdav' },
 			'Local files stay in your player; cloud titles come from the routes above.',
@@ -1634,7 +1637,19 @@ describe('route copy stays on the player and source it is about', () => {
 		],
 		[
 			{ player: 'plex', plexRoute: 'rex' },
-			'Keep local files in your existing media server alongside cloud integrations. For rex, each source supplies its own metadata and reachable HTTP bytes.',
+			'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'either' },
+			'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.',
+		],
+		[
+			{ player: 'emby' },
+			'Keep local files in your existing media server alongside cloud integrations.',
+		],
+		[
+			{ player: 'kodi' },
+			'Local files stay in your player; cloud titles come from the routes above.',
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says where local files stay for %o',
