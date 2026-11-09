@@ -701,17 +701,20 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 							)
 						: undefined;
 				// Only a reset sets the notice. It stays through later steps until arr is
-				// allowed again, judged on the host too once it has been answered.
+				// allowed again, judged on the host too once it has been answered, and gives
+				// the reason that rules arr out now, as the disabled arr card does.
 				if (resetReason) {
 					setCompatibilityNotice(arrResetNotice(resetReason));
 					setAnswers((current) => ({ ...current, preference: 'unsure' }));
-				} else if (
-					!preferenceChoiceReason(
+				} else {
+					const reason = preferenceChoiceReason(
 						hostAnswered ? answers : { host: 'existing', sources: answers.sources },
 						'arr'
-					)
-				)
-					setCompatibilityNotice(null);
+					);
+					setCompatibilityNotice((notice) =>
+						notice && reason ? arrResetNotice(reason) : null
+					);
+				}
 			}
 			setCurrentStep((step) => step + 1);
 			return;

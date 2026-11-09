@@ -448,6 +448,31 @@ describe('choose your setup page', () => {
 		);
 	});
 
+	// A showing notice gives the reason that rules arr out now, the one the disabled arr card shows.
+	it('updates a showing arr reset notice to the reason that still rules arr out', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('status')).toHaveTextContent(/full host/);
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const reason = 'The arr workflow needs a supported debrid or NZB backend.';
+		expect(screen.getByRole('status').textContent).toBe(
+			`Automation with Sonarr/Radarr was reset to “I am not sure yet”. ${reason}`
+		);
+		expect(screen.getByRole('button', { name: ARR })).toHaveTextContent(
+			`Unavailable: ${reason}`
+		);
+		expectArrReset();
+	});
+
 	it('keeps arr when a new player drops the Android host that is asked again later', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
