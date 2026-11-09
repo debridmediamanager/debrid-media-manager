@@ -838,8 +838,13 @@ describe('bounded recommendation compatibility matrix', () => {
 							`optional needs changed route, host or availability; case=${JSON.stringify(input)}`
 						);
 					const optionalNeeds = result.optionalNeeds.join(' ');
+					// Provider IP rules apply only to a provider account, so family can add nothing.
+					const provider = sources.some(
+						(source) => !['none', 'url-addon', 'http-local'].includes(source)
+					);
 					for (const need of needValues) {
-						const present = input.needs.includes(need);
+						const present =
+							input.needs.includes(need) && (need !== 'family' || provider);
 						const evidenced = needEvidence[need].test(optionalNeeds);
 						if (present && !evidenced)
 							throw new Error(
@@ -1658,6 +1663,25 @@ describe('route copy stays on the player and source it is about', () => {
 			'Check provider IP and concurrency rules. Real-Debrid use must stay on one public IP; direct playback from different homes can violate that even with a central catalog.'
 		);
 	});
+
+	it.each([
+		[['url-addon'], ['family'], false],
+		[['http-local'], ['remote'], false],
+		[['none'], ['family', 'remote'], false],
+		[['easynews'], ['family'], true],
+		[['usenet'], ['remote'], true],
+		[['torbox-hosted'], ['family'], true],
+		[['offcloud'], ['family'], true],
+	] satisfies [SetupSource[], Need[], boolean][])(
+		'checks provider IP rules only with a provider source (%o, %o)',
+		(sources, needs, provider) => {
+			const result = recommendSetup(answers({ sources, needs, host: 'willing' }));
+
+			expect(result.optionalNeeds.some((need) => need.includes('provider IP'))).toBe(
+				provider
+			);
+		}
+	);
 
 	it.each([
 		[
