@@ -120,6 +120,23 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
+	it('asks for a source first in the sponsor box when none is selected', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /None yet/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText('Choose a source first.')
+		).toBeInTheDocument();
+	});
+
 	it('disables arr until a full host is selected, with a visible reason', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

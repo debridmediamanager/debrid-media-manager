@@ -398,9 +398,11 @@ function ResultSection({ title, items }: { title: string; items: string[] }) {
 function SponsorBenefits({
 	sponsorship,
 	hasConflicts,
+	hasSources,
 }: {
 	sponsorship: SetupSponsorship;
 	hasConflicts: boolean;
+	hasSources: boolean;
 }) {
 	const benefitList = (benefits: SetupSponsorBenefit[]) => (
 		<ul className="mt-2 space-y-2 text-sm text-gray-200">
@@ -451,7 +453,9 @@ function SponsorBenefits({
 						: 'Sponsorship is optional for the free tools above. Sponsor DMM to unlock the relevant upgrades below.'
 					: hasConflicts
 						? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
-						: 'Choose a source your player supports first; the sources you selected stay in their own apps.'}
+						: hasSources
+							? 'Choose a source your player supports first; the sources you selected stay in their own apps.'
+							: 'Choose a source first.'}
 			</p>
 			<a
 				href={GATEKEEPER_URL}
@@ -546,6 +550,7 @@ function RecommendationView({
 			<SponsorBenefits
 				sponsorship={recommendation.sponsorship}
 				hasConflicts={recommendation.conflicts.length > 0}
+				hasSources={recommendation.sourceCoverage.length > 0}
 			/>
 
 			<div className="grid gap-5 rounded border border-gray-700 bg-gray-800/30 p-4 sm:grid-cols-2 sm:p-5">
