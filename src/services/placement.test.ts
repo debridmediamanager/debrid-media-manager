@@ -29,6 +29,7 @@ import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
+import office from '@/test/fixtures/placement/office-tvdb-order.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
@@ -269,6 +270,34 @@ describe('a season TVDB lists otherwise than TMDB (Lost, 2026-11-01)', () => {
 			const before = await placed(lost.requests[season], false, withoutTvdb);
 			expect(await placed(lost.requests[season], true)).toEqual(before);
 			expect(await placed(lost.requests[season], false)).toEqual(before);
+		}
+	);
+});
+
+describe('a multi-episode file in a season TVDB lists otherwise than TMDB (The Office, 2026-11-09)', () => {
+	// TMDB's S4E14 "Goodbye Toby" and S7E11 "Classy Christmas" are one episode each; TVDB, and
+	// HiQVE's BluRay, number their halves S04E18E19 and S07E11E12. S04E18E19 came back unplaced
+	// and S07E11E12 landed on TMDB's S7E11-E12, taking "Ultimatum" with it
+	const recorded = recordedSources(office.answers);
+	const placed = async (parts: boolean) =>
+		(
+			await place(
+				[{ ...(office.requests.hiqve as PlaceRequest), ...(parts ? { parts: true } : {}) }],
+				Infinity,
+				recorded
+			)
+		).releases[0].files.map((f) => [f.season, f.episode, f.episodeEnd, f.tmdbEpisodeId, f.how]);
+
+	it.each([true, false])(
+		"places both halves on TMDB's one episode (parts: %s)",
+		async (parts) => {
+			expect(await placed(parts)).toEqual([
+				[4, 13, null, 170236, 'aligned'],
+				[4, 14, null, 170233, 'aligned'],
+				[7, 10, null, 170274, 'tmdb'],
+				[7, 11, null, 170285, 'aligned'],
+				[7, 12, null, 170277, 'aligned'],
+			]);
 		}
 	);
 });

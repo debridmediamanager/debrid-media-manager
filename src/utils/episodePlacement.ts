@@ -943,9 +943,28 @@ async function placeByRules(
 	}
 	if (season !== null) {
 		// a release numbers as TVDB does, which may list the season otherwise than TMDB: Lost's
-		// S04E14 is the second half of TMDB's S4E13. A part the name says is TMDB's numbering.
-		// ponytail: a multi-episode file keeps its numbers; map both ends when one turns up
-		// and a season numbered by its year is `ofYear`'s, whose releases disagree with TVDB's
+		// S04E14 is the second half of TMDB's S4E13. A part the name says is TMDB's numbering,
+		// and a season numbered by its year is `ofYear`'s, whose releases disagree with TVDB's.
+		// A multi-episode file spans TMDB's episodes from its first number's to its last's: HiQVE's
+		// The Office `S04E18E19`, TVDB's two halves of "Goodbye, Toby", is TMDB's one S4E14
+		if (show.aligned && numbers.end !== null && numbers.part === undefined && season < 1900) {
+			const [first, last] = await Promise.all([
+				show.aligned(season, episode),
+				show.aligned(season, numbers.end),
+			]);
+			const end = last ? (last.episodeEnd ?? last.episode) : 0;
+			if (
+				first &&
+				last &&
+				first.season === last.season &&
+				end >= first.episode &&
+				(first.season !== season || first.episode !== episode || end !== numbers.end) &&
+				(await fits(first.season, end))
+			) {
+				const found = await placed([first.season, first.episode], 'aligned');
+				if (found) return { ...found, episodeEnd: end > first.episode ? end : null };
+			}
+		}
 		const aligned =
 			show.aligned && numbers.part === undefined && numbers.end === null && season < 1900
 				? await show.aligned(season, episode)
