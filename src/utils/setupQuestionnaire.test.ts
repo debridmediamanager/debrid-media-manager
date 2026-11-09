@@ -1124,3 +1124,59 @@ describe('a no-host conflict names a route that exists for the sources', () => {
 		);
 	});
 });
+
+describe('a free Plex route for debrid accounts', () => {
+	const freeRoute = (result: ReturnType<typeof recommendSetup>) =>
+		result.alternatives.find(
+			({ title }) => title === 'Without zurg: rex-stremio with a debrid stream addon'
+		);
+
+	it.each(['rex', 'either'] as const)('offers rex-stremio for Plex apps (%s)', (plexRoute) => {
+		const alternative = freeRoute(
+			recommendSetup(
+				answers({ player: 'plex', plexRoute, sources: ['real-debrid'], host: 'willing' })
+			)
+		);
+
+		expect(alternative).toEqual({
+			title: 'Without zurg: rex-stremio with a debrid stream addon',
+			detail: 'Run rex and rex-stremio with a Stremio stream addon that returns links through your debrid account; no zurg and no sponsorship needed.',
+			links: [
+				{
+					label: 'rex with Stremio addons',
+					href: 'https://notes.debridmediamanager.com/rex/stremio/',
+				},
+			],
+		});
+	});
+
+	it('leaves it out when URL addons are already the route', () => {
+		expect(
+			freeRoute(
+				recommendSetup(
+					answers({
+						player: 'plex',
+						plexRoute: 'rex',
+						sources: ['real-debrid', 'url-addon'],
+						host: 'willing',
+					})
+				)
+			)
+		).toBeUndefined();
+	});
+
+	it('leaves it out for an existing Plex Media Server', () => {
+		expect(
+			freeRoute(
+				recommendSetup(
+					answers({
+						player: 'plex',
+						plexRoute: 'existing-server',
+						sources: ['real-debrid'],
+						host: 'willing',
+					})
+				)
+			)
+		).toBeUndefined();
+	});
+});

@@ -985,6 +985,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
+		if (
+			selected.some((source) => DEBRID_SOURCES.includes(source)) &&
+			!selected.includes('url-addon')
+		)
+			result.alternatives.push({
+				title: 'Without zurg: rex-stremio with a debrid stream addon',
+				detail: 'Run rex and rex-stremio with a Stremio stream addon that returns links through your debrid account; no zurg and no sponsorship needed.',
+				links: [ADDON],
+			});
 		if (selected.includes('http-local'))
 			result.sourceNotes.push(
 				'An HTTP file or local disk needs a feed producer for rex; the program submitting metadata can be separate from the HTTP byte server.'
