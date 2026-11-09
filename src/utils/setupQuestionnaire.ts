@@ -1195,7 +1195,18 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
 	const kodiWebdav = selected.filter((source) => PROVIDER_WEBDAV[source]);
-	if (player === 'kodi' && answers.preference !== 'arr' && kodiWebdav.length)
+	// Sonarr/Radarr import into zurg's __magic__ folders, which only zurg's own WebDAV shows.
+	if (
+		player === 'kodi' &&
+		answers.preference === 'arr' &&
+		selected.some((source) => DEBRID_SOURCES.includes(source))
+	)
+		result.alternatives.push({
+			title: "Browse the Sonarr/Radarr library over zurg's WebDAV",
+			detail: "Sonarr/Radarr imports land in zurg's __magic__ folders, which the Kodi addon does not show; add zurg's WebDAV as a Kodi source to browse them.",
+			links: [ZURG],
+		});
+	else if (player === 'kodi' && answers.preference !== 'arr' && kodiWebdav.length)
 		result.alternatives.push({
 			title: 'Browse over WebDAV instead',
 			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host, or run zurg → WebDAV → Kodi on a host for exact naming and placement.`,

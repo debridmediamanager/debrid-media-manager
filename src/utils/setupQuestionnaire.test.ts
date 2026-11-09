@@ -1049,12 +1049,36 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 	it.each([
 		{ sources: ['offcloud'] },
 		{ sources: ['torbox-hosted'] },
-		{ sources: ['real-debrid'], host: 'existing', preference: 'arr' },
 		{ player: 'stremio', sources: ['real-debrid'] },
 	] satisfies Partial<SetupAnswers>[])(
 		'is not offered without a provider WebDAV for Kodi (%o)',
 		(overrides) => {
 			expect(browse(overrides)).toBeUndefined();
+		}
+	);
+
+	// Sonarr/Radarr imports sit in zurg's __magic__ folders, which neither the addon nor a provider WebDAV shows.
+	it.each([['real-debrid'], ['offcloud']] satisfies SetupSource[][])(
+		'points Sonarr/Radarr users at zurg WebDAV instead (%o)',
+		(...sources) => {
+			const arr: Partial<SetupAnswers> = { sources, host: 'existing', preference: 'arr' };
+			const zurgWebdav = recommendSetup(
+				answers({ player: 'kodi', ...arr })
+			).alternatives.find(({ title }) =>
+				title.startsWith('Browse the Sonarr/Radarr library')
+			);
+
+			expect(zurgWebdav).toEqual({
+				title: "Browse the Sonarr/Radarr library over zurg's WebDAV",
+				detail: "Sonarr/Radarr imports land in zurg's __magic__ folders, which the Kodi addon does not show; add zurg's WebDAV as a Kodi source to browse them.",
+				links: [
+					{
+						label: 'zurg setup',
+						href: 'https://notes.debridmediamanager.com/zurg/setup/',
+					},
+				],
+			});
+			expect(browse(arr)).toBeUndefined();
 		}
 	);
 });
