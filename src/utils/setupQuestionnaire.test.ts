@@ -1435,20 +1435,56 @@ describe('players read naturally mid-sentence', () => {
 			})
 		);
 	});
+});
+
+describe('"None yet" shows which accounts work with the player', () => {
+	it('describes the option that way', () => {
+		expect(SOURCE_OPTIONS.find(({ value }) => value === 'none')?.description).toBe(
+			'Show me which accounts work with my player.'
+		);
+	});
+
+	const server =
+		'Any debrid account or your own Usenet account works through zurg on a host (Jellyfin and Emby also have provider plugins); files you already have stay in the server. DMM does not supply video bytes by itself.';
+	const rex =
+		'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. DMM does not supply video bytes by itself.';
 
 	it.each([
-		['stremio', 'Choose a source for Stremio'],
-		['webdav', 'Choose a source for your WebDAV or SMB player'],
-	] as const)('asks %s users for a source', (player, title) => {
-		const result = recommendSetup(answers({ player, sources: [] }));
-
-		expect(result.primaryRoute).toEqual({
-			id: 'choose-source-first',
-			title,
-			summary:
-				'Start with files or an account supported by your player. DMM does not supply video bytes by itself.',
-		});
-	});
+		[
+			{ player: 'stremio' },
+			'Choose a source for Stremio',
+			'A debrid or Easynews account works through DMM Cast with no host; TorBox Pro hosted NZBs through TorBox Cast; your own Usenet account needs zurg on a host. DMM does not supply video bytes by itself.',
+		],
+		[
+			{ player: 'webdav' },
+			'Choose a source for your WebDAV or SMB player',
+			'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host. DMM does not supply video bytes by itself.',
+		],
+		[
+			{ player: 'kodi' },
+			'Choose a source for Kodi',
+			'A debrid, Easynews or TorBox Pro account works through the Kodi addon with no host; your own Usenet account needs zurg on a host. DMM does not supply video bytes by itself.',
+		],
+		[
+			{ player: 'external' },
+			'Choose a source for your external player',
+			'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. DMM does not supply video bytes by itself.',
+		],
+		[{ player: 'plex', plexRoute: 'existing-server' }, 'Choose a source for Plex apps', server],
+		[{ player: 'jellyfin' }, 'Choose a source for Jellyfin', server],
+		[{ player: 'emby' }, 'Choose a source for Emby', server],
+		[{ player: 'plex', plexRoute: 'rex' }, 'Choose a source for Plex apps', rex],
+		[{ player: 'plex', plexRoute: 'either' }, 'Choose a source for Plex apps', rex],
+	] satisfies [Partial<SetupAnswers>, string, string][])(
+		'lists the accounts that work for %o',
+		(mode, title, summary) => {
+			expect(recommendSetup(answers({ ...mode, sources: ['none'] })).primaryRoute).toEqual({
+				id: 'choose-source-first',
+				title,
+				summary,
+			});
+		}
+	);
 });
 
 describe('route copy stays on the player and source it is about', () => {

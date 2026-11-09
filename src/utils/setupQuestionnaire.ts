@@ -104,7 +104,7 @@ export const SOURCE_OPTIONS = [
 	{
 		value: 'none',
 		label: 'None yet / I am unsure',
-		description: 'I need the route explained before choosing an account.',
+		description: 'Show me which accounts work with my player.',
 	},
 ] as const;
 
@@ -297,6 +297,24 @@ const PLAYER_PHRASES: Record<Exclude<Player, 'unsure'>, string> = {
 	webdav: 'your WebDAV or SMB player',
 	external: 'your external player',
 };
+
+const SERVER_ACCOUNTS =
+	'Any debrid account or your own Usenet account works through zurg on a host (Jellyfin and Emby also have provider plugins); files you already have stay in the server.';
+
+/** The accounts each player can use, for someone who has none yet. */
+const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
+	stremio:
+		'A debrid or Easynews account works through DMM Cast with no host; TorBox Pro hosted NZBs through TorBox Cast; your own Usenet account needs zurg on a host.',
+	kodi: 'A debrid, Easynews or TorBox Pro account works through the Kodi addon with no host; your own Usenet account needs zurg on a host.',
+	external:
+		'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host.',
+	webdav: 'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host.',
+	plex: SERVER_ACCOUNTS,
+	jellyfin: SERVER_ACCOUNTS,
+	emby: SERVER_ACCOUNTS,
+};
+const REX_ACCOUNTS =
+	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer.';
 
 const DEBRID_SOURCES: SetupSource[] = [
 	'real-debrid',
@@ -954,6 +972,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: selected.includes('http-local')
 					? 'external'
 					: 'stremio';
+	const rex =
+		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	const chosenPlayer =
 		player === 'webdav'
 			? 'a WebDAV or SMB player'
@@ -972,8 +992,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			: {
 					id: 'choose-source-first',
 					title: `Choose a source for ${PLAYER_PHRASES[player]}`,
-					summary:
-						'Start with files or an account supported by your player. DMM does not supply video bytes by itself.',
+					summary: `${rex ? REX_ACCOUNTS : ACCOUNTS_FOR_PLAYER[player]} DMM does not supply video bytes by itself.`,
 				},
 		whyMatched: [
 			answers.player === 'unsure'
@@ -1039,8 +1058,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.prerequisites.push(
 			'Direct NNTP and TorBox hosted NZBs need separate zurg instances and separate data directories; one instance cannot enable both backends.'
 		);
-	const rex =
-		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	if (rex) {
 		result.limits.push(
 			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
