@@ -1359,6 +1359,14 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		}
 	);
 
+	it('suggests no Wanted route to zurg Android, which cannot fetch TorBox hosted NZBs', () => {
+		const result = recommendSetup(
+			answers({ sources: ['torbox-hosted'], host: 'android', preference: 'managed' })
+		);
+
+		expect(result.alternatives.map(({ title }) => title)).not.toContain('DMM Wanted requests');
+	});
+
 	it('keeps Kodi Wanted on Android when zurg there can fetch with a debrid account', () => {
 		expect(
 			offered(

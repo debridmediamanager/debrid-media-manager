@@ -548,6 +548,16 @@ const SPONSOR_BENEFITS = {
 
 type SponsorBenefitId = keyof typeof SPONSOR_BENEFITS;
 
+/** A host a zurg can fetch Wanted on; zurg Android has no torbox_nzb backend, so it needs a debrid account or own Usenet. */
+function hostRunsZurg({ host, sources }: Pick<SetupAnswers, 'host' | 'sources'>): boolean {
+	return (
+		host === 'existing' ||
+		host === 'willing' ||
+		(host === 'android' &&
+			sources.some((source) => DEBRID_SOURCES.includes(source) || source === 'usenet'))
+	);
+}
+
 function sponsorshipFor(
 	answers: SetupAnswers,
 	player: Player,
@@ -562,13 +572,8 @@ function sponsorshipFor(
 		(answers.preference === 'arr' && (debrid || hasNzb));
 	const usesCast = routes.some(({ route: source }) => source.usesCast);
 	const usesRex = routes.some(({ route: source }) => source.usesRex);
-	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere; zurg Android
-	// fetches Wanted only with a debrid account or own Usenet, having no torbox_nzb backend.
-	const zurgRuns =
-		usesZurg ||
-		answers.host === 'existing' ||
-		answers.host === 'willing' ||
-		(answers.host === 'android' && (debrid || selected.has('usenet')));
+	// Wanted, Seerr and Kodi Wanted only do something once a zurg runs somewhere.
+	const zurgRuns = usesZurg || hostRunsZurg(answers);
 	// An Easynews release sent to zurg is an NZB, so only a zurg with an NZB backend can fetch it.
 	const easynewsToZurg =
 		selected.has('easynews') && routes.some(({ route: source }) => source.zurgNzb);
@@ -1253,12 +1258,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				},
 			],
 		});
+	// The same zurg the Wanted benefit waits for: on the route, Sonarr/Radarr's host or one that can run it.
 	if (
 		(answers.preference === 'managed' || answers.preference === 'arr') &&
 		selected.some(
 			(source) =>
 				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
-		)
+		) &&
+		(answers.preference === 'arr' ||
+			routes.some(({ route: r }) => r.usesZurg) ||
+			hostRunsZurg(answers))
 	) {
 		const seerr = seerrFits(player, answers.plexRoute);
 		result.alternatives.push({

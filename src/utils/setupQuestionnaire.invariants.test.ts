@@ -334,7 +334,10 @@ describe('setup copy and benefits for every combination of up to two sources', (
 					!answers.sources.some(
 						(source) => DEBRID.includes(source) || source === 'usenet'
 					) &&
-					offered(result).some((id) => ['wanted', 'wanted-kodi', 'seerr'].includes(id))
+					(offered(result).some((id) =>
+						['wanted', 'wanted-kodi', 'seerr'].includes(id)
+					) ||
+						result.alternatives.some(({ title }) => title.startsWith('DMM Wanted')))
 			)
 		).toEqual([]);
 	});
