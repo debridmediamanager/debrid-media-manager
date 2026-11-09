@@ -1759,6 +1759,24 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
 	});
 
+	it('tells rex users with Sonarr/Radarr that Bazarr subtitles reach rex too', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'rex',
+				sources: ['real-debrid'],
+				host: 'willing',
+				preference: 'arr',
+				needs: ['subtitles'],
+			})
+		);
+
+		expect(result.optionalNeeds).toContain(
+			'rex offers Search Subtitles without Bazarr; with Sonarr/Radarr, Bazarr sidecar subtitles reach rex too.'
+		);
+		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+	});
+
 	it('keeps the Bazarr note for Sonarr/Radarr, whose imports Bazarr works from', () => {
 		const result = recommendSetup(
 			answers({ host: 'willing', preference: 'arr', needs: ['subtitles'] })

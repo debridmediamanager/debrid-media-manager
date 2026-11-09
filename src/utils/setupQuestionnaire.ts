@@ -1274,7 +1274,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const bazarr = answers.preference === 'arr';
 		result.optionalNeeds.push(
 			rex
-				? 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
+				? bazarr
+					? 'rex offers Search Subtitles without Bazarr; with Sonarr/Radarr, Bazarr sidecar subtitles reach rex too.'
+					: 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
 				: bazarr
 					? 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
 					: 'Check embedded/player subtitle support in your player.'
