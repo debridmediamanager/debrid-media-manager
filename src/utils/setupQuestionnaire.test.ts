@@ -2185,7 +2185,7 @@ describe('route copy stays on the player and source it is about', () => {
 				})
 			).optionalNeeds[0]
 		).toBe(
-			'zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server. A NAS or file server at home still needs a secure reachable connection.'
+			'zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server. A NAS or file server at home needs one too.'
 		);
 	});
 
