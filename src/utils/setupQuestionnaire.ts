@@ -608,9 +608,11 @@ function sponsorshipFor(
 	}
 	// Easynews sends come from DMM's website, whatever the player; the zurg route already adds the rest.
 	if (easynewsToZurg) add(optional, 'wanted');
-	// Wanted and Seerr requests are fetched by zurg, which this playback route may not run.
-	if (!usesZurg && optional.some(({ id }) => ['wanted', 'wanted-kodi', 'seerr'].includes(id)))
+	// Wanted and Seerr requests are fetched by a zurg with your DMM API key, which this playback route may not run.
+	if (!usesZurg && optional.some(({ id }) => ['wanted', 'wanted-kodi', 'seerr'].includes(id))) {
 		add(optional, 'zurg');
+		add(optional, 'zurgKey');
+	}
 	if (selected.has('real-debrid')) add(optional, 'queue');
 	if (usesZurg || usesRex) add(optional, 'api');
 	if (usesZurg || usesRex) add(optional, 'remoteHelp');

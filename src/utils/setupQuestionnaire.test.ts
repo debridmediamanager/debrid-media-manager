@@ -1290,12 +1290,13 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		{ player: 'kodi', host: 'existing' },
 		{ player: 'jellyfin', host: 'existing', preference: 'managed' },
 	] satisfies Partial<SetupAnswers>[])(
-		'offers zurg nightly with Wanted when the route does not run zurg (%o)',
+		'offers zurg nightly and the DMM API key with Wanted when the route does not run zurg (%o)',
 		(overrides) => {
 			const result = recommendSetup(answers(overrides));
 
 			expect(result.sponsorship.required.map(({ id }) => id)).not.toContain('zurg-nightly');
 			expect(result.sponsorship.optional.map(({ id }) => id)).toContain('zurg-nightly');
+			expect(result.sponsorship.optional.map(({ id }) => id)).toContain('zurg-api-key');
 		}
 	);
 
