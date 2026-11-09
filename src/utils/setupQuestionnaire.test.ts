@@ -947,7 +947,8 @@ describe('provider WebDAV follows the chosen provider', () => {
 		);
 
 		expect(result.primaryRoute.id).toBe('provider-webdav');
-		expect(result.primaryRoute.title).toBe(`${label} WebDAV → your player`);
+		expect(result.primaryRoute.title).toBe(`${label} WebDAV → your WebDAV or SMB player`);
+		expect(result.components).toEqual([`${label} WebDAV → your WebDAV or SMB player`]);
 		expect(result.prerequisites.join(' ')).toContain(address);
 		expect(result.limits.join(' ')).toMatch(/zurg is not involved/);
 		expect(result.conflicts).toEqual([]);

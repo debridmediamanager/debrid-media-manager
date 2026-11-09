@@ -983,10 +983,10 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 		const name = SOURCE_LABELS.get(source)!;
 		return route(
 			'provider-webdav',
-			`${name} WebDAV → your player`,
+			`${name} WebDAV → your WebDAV or SMB player`,
 			`Add ${name}'s own WebDAV server to your player. No host or zurg is needed.`,
 			'none',
-			[`${name} WebDAV → your player`],
+			[`${name} WebDAV → your WebDAV or SMB player`],
 			[
 				`Add ${webdav} to your player and sign in with the WebDAV credentials ${name} documents for your account.`,
 			],
