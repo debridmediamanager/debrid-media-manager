@@ -489,8 +489,8 @@ function SponsorBenefits({
 						: player === 'stremio'
 							? 'DMM Cast does not'
 							: 'DMM Cast and the Kodi addon do not'}{' '}
-					require sponsorship; sponsoring raises the per-profile limit from five to ten
-					other streams.
+					require sponsorship; sponsoring lets you raise the per-profile limit from five
+					to ten other streams.
 				</p>
 			) : null}
 			{sponsorship.freeFeatures.includes('rex') ? (

@@ -58,7 +58,7 @@ describe('choose your setup page', () => {
 		);
 		expect(
 			screen.getByText(
-				'DMM Cast does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.'
+				'DMM Cast does not require sponsorship; sponsoring lets you raise the per-profile limit from five to ten other streams.'
 			)
 		).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Your answers' })).toBeInTheDocument();
@@ -69,15 +69,15 @@ describe('choose your setup page', () => {
 	it.each([
 		[
 			/^Kodi/,
-			'The Kodi addon does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+			'The Kodi addon does not require sponsorship; sponsoring lets you raise the per-profile limit from five to ten other streams.',
 		],
 		[
 			/^Stremio/,
-			'DMM Cast does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+			'DMM Cast does not require sponsorship; sponsoring lets you raise the per-profile limit from five to ten other streams.',
 		],
 		[
 			/^I am not sure yet/,
-			'DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+			'DMM Cast and the Kodi addon do not require sponsorship; sponsoring lets you raise the per-profile limit from five to ten other streams.',
 		],
 	])('words the free Cast footnote for the chosen player (%s)', (player, footnote) => {
 		render(<ChooseYourSetupPage />);
