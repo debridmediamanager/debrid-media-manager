@@ -15,6 +15,7 @@ import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
 import accented from '@/test/fixtures/placement/accented-titles.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
+import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
@@ -1661,6 +1662,32 @@ describe('a title TMDB writes with an accent', () => {
 		);
 		const file = releases[0].files.find((f) => f.path.startsWith('S25E53'))!;
 		expect([file.season, file.episode, file.how]).toEqual([25, 57, 'tmdb']);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('files between two files their titles placed', () => {
+	// zurg on fun (2026-11-09): [bonkai77]'s Bleach pack numbers on through the show under `(Season 2)`,
+	// and six files' titles are not TMDB's (see the fixtures README)
+	it('places them between the episodes those titles name', async () => {
+		const [c] = betweenTitled.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(betweenTitled.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(betweenTitled.answers.anime.fribb as FribbAnimeEntry[]),
+						betweenTitled.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		// `Episode.21` to `Episode.41`: TMDB's S1E21 to S1E41, `32`, `33` and `35`-`38` among them
+		expect(releases[0].files.map((f) => [f.season, f.episode])).toEqual(
+			Array.from({ length: 21 }, (_, n) => [1, n + 21])
+		);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });

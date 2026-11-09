@@ -16940,11 +16940,11 @@
 					},
 					{
 						"path": "Smyth S2004E15 Explosive Jawbreaker.mp4",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 12,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65251
 					},
 					{
 						"path": "Smyth S2004E16 Ping Pong Rescue.mp4",
@@ -17268,19 +17268,19 @@
 					},
 					{
 						"path": "Smyth S2006E13 Killer Whirlpool.mp4",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 13,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65302
 					},
 					{
 						"path": "Smyth S2006E14 Diet Coke and Mentos.mp4",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 14,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65298
 					},
 					{
 						"path": "Smyth S2006E15 Shattering Subwoofer.mp4",
@@ -17508,19 +17508,19 @@
 					},
 					{
 						"path": "Smyth S2007E15 Viewer Special.mp4",
-						"season": null,
-						"episode": null,
+						"season": 5,
+						"episode": 15,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65324
 					},
 					{
 						"path": "Smyth S2007E16 Red Rag to a Bull.mp4",
-						"season": null,
-						"episode": null,
+						"season": 5,
+						"episode": 16,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65336
 					},
 					{
 						"path": "Smyth S2007E17 Superhero Hour.mp4",
@@ -17860,11 +17860,11 @@
 					},
 					{
 						"path": "Smyth S2009E14 Dirty vs. Clean Car.mp4",
-						"season": null,
-						"episode": null,
+						"season": 7,
+						"episode": 14,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65358
 					},
 					{
 						"path": "Smyth S2009E15 Greased Lightning.mp4",
@@ -17972,11 +17972,11 @@
 					},
 					{
 						"path": "Smyth S2010E05 Bottle Bash.mp4",
-						"season": null,
-						"episode": null,
+						"season": 8,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65383
 					},
 					{
 						"path": "Smyth S2010E06 No Pain No Gain, Propane Tank Rocket.mp4",

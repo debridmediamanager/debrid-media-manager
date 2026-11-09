@@ -17929,10 +17929,10 @@
 					},
 					{
 						"path": "DBZ Abridged - 019 - 到着を恐怖!! ギニュー特は、敬礼!! [phantop].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 9,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
@@ -17985,18 +17985,18 @@
 					},
 					{
 						"path": "DBZ Abridged - 026 - Alien vs. Piccolo [phantop].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 16,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
 						"path": "DBZ Abridged - 027 - The Saiyan Formally Known as Prince [phantop].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 17,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
@@ -18033,18 +18033,18 @@
 					},
 					{
 						"path": "DBZ Abridged - 034 - News From Future Past [iKaos].mkv",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{
 						"path": "DBZ Abridged - 035 - The Island of Dr. Gero [iKaos].mkv",
-						"season": null,
-						"episode": null,
+						"season": 3,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
+						"how": "imdb",
 						"tmdbEpisodeId": null
 					},
 					{

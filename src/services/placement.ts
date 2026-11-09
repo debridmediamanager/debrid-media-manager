@@ -1385,40 +1385,44 @@ async function placeFiles(
 	const dropped = yielded.map((found, at) =>
 		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
 	);
-	// a file its title and numbers placed nowhere, between the files numbered just before and after
-	// it that their titles placed one episode apart from it: Hell's Paradise's `S02E06.Conflict.and.
-	// Growing.Together` is TMDB's S1E19 "Hindering and Restoration", `S02E05` and `S02E07` S1E18 and
-	// S1E20 by their titles
+	// a file its title and numbers placed nowhere, between the nearest files numbered before and after
+	// it that their titles placed as many episodes apart as their numbers are: Hell's Paradise's
+	// `S02E06.Conflict.and.Growing.Together` is TMDB's S1E19 "Hindering and Restoration", `S02E05` and
+	// `S02E07` S1E18 and S1E20 by their titles; [bonkai77]'s `Bleach.Episode.35`-`38` lie between
+	// `Episode.34` and `Episode.39`, S1E34 and S1E39 by theirs
 	const taken = new Set(dropped.flatMap((p) => (p ? [`${p.season}|${p.episode}`] : [])));
-	const titledAt = (season: number | null, episode: number) => {
-		const at = numbers.findIndex(
-			(n, i) =>
-				n &&
-				n.season === season &&
-				n.episode === episode &&
-				n.end === null &&
-				dropped[i]?.titled
-		);
-		return at < 0 ? null : dropped[at];
+	const titledAt = new Map<string, Placement>();
+	numbers.forEach((n, i) => {
+		const found = dropped[i];
+		const key = `${n?.season}|${n?.episode}`;
+		if (n && n.end === null && found?.titled && !titledAt.has(key)) titledAt.set(key, found);
+	});
+	// ponytail: a gap of up to a cour's episodes; widen it when a longer one turns up
+	const nearest = (season: number | null, episode: number, step: 1 | -1) => {
+		for (let k = 1; k <= 13; k++) {
+			const found = titledAt.get(`${season}|${episode + step * k}`);
+			if (found) return { found, k };
+		}
+		return null;
 	};
 	const kept = dropped.map((found, at) => {
 		const own = numbers[at];
 		if (found || !own || own.end !== null) return found;
 		const [before, after] = [
-			titledAt(own.season, own.episode - 1),
-			titledAt(own.season, own.episode + 1),
+			nearest(own.season, own.episode, -1),
+			nearest(own.season, own.episode, 1),
 		];
 		if (
 			!before ||
 			!after ||
-			before.season !== after.season ||
-			after.episode !== before.episode + 2
+			before.found.season !== after.found.season ||
+			after.found.episode - before.found.episode !== before.k + after.k
 		)
 			return found;
-		const between = { season: before.season, episode: before.episode + 1 };
+		const between = { season: before.found.season, episode: before.found.episode + before.k };
 		return taken.has(`${between.season}|${between.episode}`)
 			? found
-			: { ...between, episodeEnd: null, how: before.how };
+			: { ...between, episodeEnd: null, how: before.found.how };
 	});
 	// the one file of an episode beside a later part of it named so is its first: `Lost.S01E24`
 	// beside `Lost.S01E24.Part.2`

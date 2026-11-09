@@ -1,0 +1,7339 @@
+{
+	"answers": {
+		"find": {
+			"tt0434665": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 30984,
+						"name": "Bleach",
+						"first_air_date": "2004-10-05"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"30984": {
+				"id": 30984,
+				"name": "Bleach",
+				"original_name": "BLEACH",
+				"first_air_date": "2004-10-05",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 1400,
+							"name": "swordplay"
+						},
+						{
+							"id": 1908,
+							"name": "katana"
+						},
+						{
+							"id": 1938,
+							"name": "sword"
+						},
+						{
+							"id": 4613,
+							"name": "training"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 33910,
+							"name": "high school student"
+						},
+						{
+							"id": 34079,
+							"name": "death"
+						},
+						{
+							"id": 40884,
+							"name": "blade"
+						},
+						{
+							"id": 170362,
+							"name": "fantasy world"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 235790,
+							"name": "japanese high school"
+						},
+						{
+							"id": 242145,
+							"name": "shinigami"
+						},
+						{
+							"id": 243230,
+							"name": "parallel universe"
+						},
+						{
+							"id": 290492,
+							"name": "supernatural ability"
+						},
+						{
+							"id": 291980,
+							"name": "multiple realms"
+						},
+						{
+							"id": 298549,
+							"name": "urban fantasy"
+						},
+						{
+							"id": 319837,
+							"name": "exciting"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						},
+						{
+							"id": 325762,
+							"name": "adoring"
+						},
+						{
+							"id": 333977,
+							"name": "ghosts"
+						},
+						{
+							"id": 336530,
+							"name": "teen fantasy"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0434665",
+					"tvdb_id": 74796
+				},
+				"networks": [
+					{
+						"id": 98,
+						"name": "TV Tokyo"
+					},
+					{
+						"id": 252,
+						"name": "TV Aichi"
+					},
+					{
+						"id": 822,
+						"name": "TVQ"
+					},
+					{
+						"id": 824,
+						"name": "TV Osaka"
+					},
+					{
+						"id": 938,
+						"name": "TVh"
+					},
+					{
+						"id": 2064,
+						"name": "TSC"
+					},
+					{
+						"id": 3471,
+						"name": "BS TV Tokyo"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Блийч",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "Блиич",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "Белина",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "死神-BLEACH",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "BLEACH 千年血戦編",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "死神 千年血战篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "BLEACH 千年血战篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "BLEACH 死神 千年血战篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "死神千年血战诀别谭",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "死神 千年血战篇 第二季",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Bleach : Thousand-Year Blood War",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "ბლიჩი",
+							"iso_3166_1": "GE"
+						},
+						{
+							"title": "მათეთრებელი",
+							"iso_3166_1": "GE"
+						},
+						{
+							"title": "漂灵",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "בליץ’: מלחמת הדם בת אלף השנים",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Bleach Sennen Kessen Hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "BLEACH 千年血戦篇",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Burīchi: Sennen Kessen-hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ブリーチ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Bleach - Sennen Kessen-hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Bleach Sennen Kessen-hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Bleach - Sennen Kessen hen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "BLEACH 千年血戦篇ー相剋譚ー",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "BLEACH Sennen Kessen-hen: Kakahjuu-tan",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "BLEACH 千年血戦篇-禍進譚-",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "블리치 천년혈전 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 천년혈전 편: 결별담",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 사신대행 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 소울 소사이어티 잠입 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 소울 소사이어티 구출 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 바운트 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 바운트 소울 소사이어티 습격 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 아란칼 출현 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 웨코문도 돌입 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 신임 대장 아마가이 슈스케 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 아란칼 VS 사신 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 과거 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 아란칼 카라쿠라 결전 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 참백도 이문 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 도수(刀獣) 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 아란칼 멸망 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 호정 13대 침군 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 사신대행 소실 편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "블리치 천년혈전 편: 화진담",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Izbeljivač",
+							"iso_3166_1": "RS"
+						},
+						{
+							"title": "المطهر",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "เทพมรณะออนไลน์",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "บลีช",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "BLEACH 死神",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "BLEACH 死神 千年血戰篇-訣別譚-",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "BLEACH 死神 千年血戰篇",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Bleach: Thousand-Year Blood War",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Bleach: Thousand-Year Blood War - The Conflict",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Bleach: Thousand-Year Blood War - The Separation",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Bleach: TYBW",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Bleach: Thousand-Year Blood War - The Calamity",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 4,
+						"air_date": "2004-12-18",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 366,
+						"air_date": "2004-10-05",
+						"name": "Bleach"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 50,
+						"air_date": "2022-10-11",
+						"name": "Thousand-Year Blood War"
+					}
+				]
+			}
+		},
+		"season": {
+			"30984/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Memories in the Rain",
+						"air_date": "2004-12-18",
+						"id": 2584829
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "13 Court Guard Squads Omake",
+						"air_date": "2005-12-06",
+						"id": 3798000
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "The Sealed Sword Frenzy",
+						"air_date": "2006-03-23",
+						"id": 1845007
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "The Blood Warfare, Separation (Interlude)",
+						"air_date": "2023-09-02",
+						"id": 4694294
+					}
+				]
+			},
+			"30984/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Day I Became a Shinigami",
+						"air_date": "2004-10-05",
+						"id": 750573
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "A Shinigami's Work",
+						"air_date": "2004-10-12",
+						"id": 750575
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Older Brother's Wish, the Younger Sister's Wish",
+						"air_date": "2004-10-19",
+						"id": 750574
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Cursed Parakeet",
+						"air_date": "2004-10-26",
+						"id": 750576
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Beat the Invisible Enemy!",
+						"air_date": "2004-11-02",
+						"id": 750578
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Fight to the Death! Ichigo vs. Ichigo",
+						"air_date": "2004-11-09",
+						"id": 750577
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Greetings from a Stuffed Lion",
+						"air_date": "2004-11-16",
+						"id": 750579
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "June 17, Memories in the Rain",
+						"air_date": "2004-11-23",
+						"id": 750580
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Unbeatable Enemy",
+						"air_date": "2004-11-30",
+						"id": 750562
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Assault on Trip at Sacred Ground!",
+						"air_date": "2004-12-07",
+						"id": 750560
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Legendary Quincy",
+						"air_date": "2004-12-14",
+						"id": 750581
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "A Gentle Right Arm",
+						"air_date": "2004-12-21",
+						"id": 750582
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Flower and Hollow",
+						"air_date": "2004-12-28",
+						"id": 750583
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Back to Back, a Fight to the Death!",
+						"air_date": "2005-01-11",
+						"id": 750559
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Kon's Great Plan",
+						"air_date": "2005-01-18",
+						"id": 750564
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "The Encounter, Abarai Renji!",
+						"air_date": "2005-01-25",
+						"id": 750563
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Ichigo Dies!",
+						"air_date": "2005-02-01",
+						"id": 750561
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Reclaim! The Power of the Shinigami!",
+						"air_date": "2005-02-08",
+						"id": 750571
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Ichigo Becomes a Hollow!",
+						"air_date": "2005-02-15",
+						"id": 750567
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Ichimaru Gin's Shadow",
+						"air_date": "2005-02-22",
+						"id": 750572
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Enter! The World of the Shinigami",
+						"air_date": "2005-03-01",
+						"id": 1517137
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "The Man who Hates Shinigami",
+						"air_date": "2005-03-08",
+						"id": 1517138
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "14 Days Before Rukia's Execution",
+						"air_date": "2005-03-15",
+						"id": 1517139
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Assemble! The 13 Divisions",
+						"air_date": "2005-03-22",
+						"id": 1517140
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Penetrate the Center with an Enormous Bombshell?",
+						"air_date": "2005-03-29",
+						"id": 1517141
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Formation! The Worst Tag",
+						"air_date": "2005-04-05",
+						"id": 1517143
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Release the Death Blow!",
+						"air_date": "2005-04-12",
+						"id": 1517145
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Orihime Targeted",
+						"air_date": "2005-04-19",
+						"id": 1517146
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Breakthrough! The Shinigami's Encompassing Net",
+						"air_date": "2005-04-26",
+						"id": 1517147
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Renji's Confrontation",
+						"air_date": "2005-05-03",
+						"id": 1517149
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "The Resolution to Kill",
+						"air_date": "2005-05-10",
+						"id": 1517150
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Stars and the Stray",
+						"air_date": "2005-05-17",
+						"id": 1517151
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Miracle! The Mysterious New Hero",
+						"air_date": "2005-05-26",
+						"id": 1517152
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Tragedy of Dawn",
+						"air_date": "2005-06-01",
+						"id": 1517153
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Aizen Assassinated! The Darkness which Approaches",
+						"air_date": "2005-06-07",
+						"id": 1517155
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "Zaraki Kenpachi Approaches!",
+						"air_date": "2005-06-14",
+						"id": 1517157
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "Motive of the Fist",
+						"air_date": "2005-06-21",
+						"id": 1517160
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "Desperation! The Broken Zangetsu",
+						"air_date": "2005-06-28",
+						"id": 1517163
+					},
+					{
+						"episode_number": 39,
+						"season_number": 1,
+						"name": "The Immortal Man",
+						"air_date": "2005-07-05",
+						"id": 1517165
+					},
+					{
+						"episode_number": 40,
+						"season_number": 1,
+						"name": "The Shinigami whom Ganju Met",
+						"air_date": "2005-07-12",
+						"id": 1517166
+					},
+					{
+						"episode_number": 41,
+						"season_number": 1,
+						"name": "Reunion, Ichigo and Rukia",
+						"air_date": "2005-07-19",
+						"id": 1517167
+					},
+					{
+						"episode_number": 42,
+						"season_number": 1,
+						"name": "Yoruichi, Goddess of Flash, Dances!",
+						"air_date": "2005-07-26",
+						"id": 1517168
+					},
+					{
+						"episode_number": 43,
+						"season_number": 1,
+						"name": "The Despicable Shinigami",
+						"air_date": "2005-08-02",
+						"id": 1517169
+					},
+					{
+						"episode_number": 44,
+						"season_number": 1,
+						"name": "Ishida Ultimate Power!",
+						"air_date": "2005-08-09",
+						"id": 1517170
+					},
+					{
+						"episode_number": 45,
+						"season_number": 1,
+						"name": "Overcome Your Limits!",
+						"air_date": "2005-08-16",
+						"id": 1517171
+					},
+					{
+						"episode_number": 46,
+						"season_number": 1,
+						"name": "Authentic Records! School of Shinigami",
+						"air_date": "2005-08-23",
+						"id": 1517172
+					},
+					{
+						"episode_number": 47,
+						"season_number": 1,
+						"name": "The Avengers",
+						"air_date": "2005-08-30",
+						"id": 1517176
+					},
+					{
+						"episode_number": 48,
+						"season_number": 1,
+						"name": "Hitsugaya Roars!",
+						"air_date": "2005-09-06",
+						"id": 1517179
+					},
+					{
+						"episode_number": 49,
+						"season_number": 1,
+						"name": "Rukia's Nightmare",
+						"air_date": "2005-09-13",
+						"id": 1517180
+					},
+					{
+						"episode_number": 50,
+						"season_number": 1,
+						"name": "The Reviving Lion",
+						"air_date": "2005-09-20",
+						"id": 1517181
+					},
+					{
+						"episode_number": 51,
+						"season_number": 1,
+						"name": "Morning of the Sentence",
+						"air_date": "2005-09-27",
+						"id": 1517182
+					},
+					{
+						"episode_number": 52,
+						"season_number": 1,
+						"name": "Renji, Oath of the Soul! Death Match with Byakuya",
+						"air_date": "2005-10-04",
+						"id": 1517183
+					},
+					{
+						"episode_number": 53,
+						"season_number": 1,
+						"name": "Ichimaru Gin's Temptation, Resolution Shattered",
+						"air_date": "2005-10-04",
+						"id": 1517185
+					},
+					{
+						"episode_number": 54,
+						"season_number": 1,
+						"name": "An Accomplished Oath! Get back Rukia!",
+						"air_date": "2005-10-18",
+						"id": 1517186
+					},
+					{
+						"episode_number": 55,
+						"season_number": 1,
+						"name": "The Strongest Shinigami! Ultimate Confrontation Between Teacher and Students",
+						"air_date": "2005-10-25",
+						"id": 1517188
+					},
+					{
+						"episode_number": 56,
+						"season_number": 1,
+						"name": "Supersonic Battle! Determine the Goddess of Battle",
+						"air_date": "2005-11-01",
+						"id": 1517189
+					},
+					{
+						"episode_number": 57,
+						"season_number": 1,
+						"name": "Senbonzakura, Crushed! Zangetsu Thrusts through the Sky",
+						"air_date": "2005-11-08",
+						"id": 1517190
+					},
+					{
+						"episode_number": 58,
+						"season_number": 1,
+						"name": "Unseal! The Black Blade, the Miraculous Power",
+						"air_date": "2005-11-15",
+						"id": 1517191
+					},
+					{
+						"episode_number": 59,
+						"season_number": 1,
+						"name": "Conclusion of the Death Match! White Pride and Black Desire",
+						"air_date": "2005-11-22",
+						"id": 1517192
+					},
+					{
+						"episode_number": 60,
+						"season_number": 1,
+						"name": "Reality of the Despair, the Assassin's Dagger is Swung",
+						"air_date": "2005-12-06",
+						"id": 1517193
+					},
+					{
+						"episode_number": 61,
+						"season_number": 1,
+						"name": "Aizen Stands! Horrible Ambitions",
+						"air_date": "2005-12-13",
+						"id": 1517194
+					},
+					{
+						"episode_number": 62,
+						"season_number": 1,
+						"name": "Gather Together! Group of the Strongest Shinigami!",
+						"air_date": "2005-12-20",
+						"id": 1517195
+					},
+					{
+						"episode_number": 63,
+						"season_number": 1,
+						"name": "Rukia's Resolution, Ichigo's Feelings",
+						"air_date": "2006-01-10",
+						"id": 1517196
+					},
+					{
+						"episode_number": 64,
+						"season_number": 1,
+						"name": "New School Term, Renji Has Come to the Material World?!",
+						"air_date": "2006-01-17",
+						"id": 1517197
+					},
+					{
+						"episode_number": 65,
+						"season_number": 1,
+						"name": "Creeping Terror, the Second Victim",
+						"air_date": "2006-01-24",
+						"id": 1517198
+					},
+					{
+						"episode_number": 66,
+						"season_number": 1,
+						"name": "Breakthrough! The Trap Hidden in the Labyrinth",
+						"air_date": "2006-01-31",
+						"id": 1517199
+					},
+					{
+						"episode_number": 67,
+						"season_number": 1,
+						"name": "Death Game! The Missing Classmate",
+						"air_date": "2006-02-07",
+						"id": 1517200
+					},
+					{
+						"episode_number": 68,
+						"season_number": 1,
+						"name": "True Identity of the Devil, the Secret which Is Revealed",
+						"air_date": "2006-02-14",
+						"id": 1517201
+					},
+					{
+						"episode_number": 69,
+						"season_number": 1,
+						"name": "Bount! The Ones Who Hunt Souls",
+						"air_date": "2006-02-14",
+						"id": 1517202
+					},
+					{
+						"episode_number": 70,
+						"season_number": 1,
+						"name": "Rukia's Return! Revival of the Substitute Team!",
+						"air_date": "2006-02-21",
+						"id": 1517203
+					},
+					{
+						"episode_number": 71,
+						"season_number": 1,
+						"name": "The Moment of Collision! An Evil Hand Draws Near to the Quincy",
+						"air_date": "2006-03-07",
+						"id": 1517204
+					},
+					{
+						"episode_number": 72,
+						"season_number": 1,
+						"name": "Water Attack! Escape from the Shutdown Hospital",
+						"air_date": "2006-03-14",
+						"id": 1517205
+					},
+					{
+						"episode_number": 73,
+						"season_number": 1,
+						"name": "Gathering Bounts! The Man Who Makes His Move",
+						"air_date": "2006-03-28",
+						"id": 1517206
+					},
+					{
+						"episode_number": 74,
+						"season_number": 1,
+						"name": "Memories of an Eternally Living Clan",
+						"air_date": "2006-03-28",
+						"id": 1517207
+					},
+					{
+						"episode_number": 75,
+						"season_number": 1,
+						"name": "Earth-Shattering Event at 11th Squad! The Shinigami Who Rises Again",
+						"air_date": "2006-04-04",
+						"id": 1517208
+					},
+					{
+						"episode_number": 76,
+						"season_number": 1,
+						"name": "Crashing Force! Fried vs. Zangetsu",
+						"air_date": "2006-04-04",
+						"id": 1517209
+					},
+					{
+						"episode_number": 77,
+						"season_number": 1,
+						"name": "Unfading Grudge! The Shinigami whom Kenpachi Killed",
+						"air_date": "2006-04-11",
+						"id": 1517210
+					},
+					{
+						"episode_number": 78,
+						"season_number": 1,
+						"name": "Shocking Revelations for the 13 Divisions!! The Truth Buried in History",
+						"air_date": "2006-05-02",
+						"id": 1517211
+					},
+					{
+						"episode_number": 79,
+						"season_number": 1,
+						"name": "Yoshino's Decision of Death",
+						"air_date": "2006-05-09",
+						"id": 1517212
+					},
+					{
+						"episode_number": 80,
+						"season_number": 1,
+						"name": "Assault from a Formidable Enemy! A Tiny Final Line of Defense?!",
+						"air_date": "2006-05-16",
+						"id": 1517213
+					},
+					{
+						"episode_number": 81,
+						"season_number": 1,
+						"name": "Hitsugaya Moves! The Attacked City",
+						"air_date": "2006-05-23",
+						"id": 1517214
+					},
+					{
+						"episode_number": 82,
+						"season_number": 1,
+						"name": "Ichigo vs. Dalk! Appearance of the Faded Darkness",
+						"air_date": "2006-05-30",
+						"id": 1517215
+					},
+					{
+						"episode_number": 83,
+						"season_number": 1,
+						"name": "Grey Shadow, the Secret of the Dolls",
+						"air_date": "2006-06-06",
+						"id": 1517216
+					},
+					{
+						"episode_number": 84,
+						"season_number": 1,
+						"name": "Dissension in the Substitute Team? Rukia's Betrayal",
+						"air_date": "2006-06-13",
+						"id": 1517217
+					},
+					{
+						"episode_number": 85,
+						"season_number": 1,
+						"name": "Deadly Battle of Tears! Rukia vs. Orihime",
+						"air_date": "2006-06-13",
+						"id": 1517218
+					},
+					{
+						"episode_number": 86,
+						"season_number": 1,
+						"name": "Rangiku Dances! Slice the Invisible Enemy!",
+						"air_date": "2006-06-20",
+						"id": 1517219
+					},
+					{
+						"episode_number": 87,
+						"season_number": 1,
+						"name": "Byakuya is summoned! The Gotei 13 start to move!",
+						"air_date": "2006-07-04",
+						"id": 1517220
+					},
+					{
+						"episode_number": 88,
+						"season_number": 1,
+						"name": "Annihilation of the Lieutenants!? Trap in the Underground Cave",
+						"air_date": "2006-07-11",
+						"id": 1517221
+					},
+					{
+						"episode_number": 89,
+						"season_number": 1,
+						"name": "Rematch?! Ishida vs. Nemu",
+						"air_date": "2006-07-18",
+						"id": 1517222
+					},
+					{
+						"episode_number": 90,
+						"season_number": 1,
+						"name": "Renji Abarai, Bankai of the Soul!",
+						"air_date": "2006-07-25",
+						"id": 1517223
+					},
+					{
+						"episode_number": 91,
+						"season_number": 1,
+						"name": "Shinigami and Quincy, the Reviving Power",
+						"air_date": "2006-08-01",
+						"id": 1517224
+					},
+					{
+						"episode_number": 92,
+						"season_number": 1,
+						"name": "Invasion of the Shinigami World, Again",
+						"air_date": "2006-08-08",
+						"id": 1517225
+					},
+					{
+						"episode_number": 93,
+						"season_number": 1,
+						"name": "The Bount Assault! The Gotei 13 of Destructive Earthquake",
+						"air_date": "2006-08-15",
+						"id": 1517226
+					},
+					{
+						"episode_number": 94,
+						"season_number": 1,
+						"name": "Hitsugaya's Decision! The Clash Approaches",
+						"air_date": "2006-08-22",
+						"id": 1517227
+					},
+					{
+						"episode_number": 95,
+						"season_number": 1,
+						"name": "Byakuya Takes the Field! Dance of the Wind-Splitting Cherry Blossoms",
+						"air_date": "2006-09-05",
+						"id": 1517228
+					},
+					{
+						"episode_number": 96,
+						"season_number": 1,
+						"name": "Ichigo, Byakuya, Kariya, The Battle of the Three Extremes!",
+						"air_date": "2006-09-12",
+						"id": 1517229
+					},
+					{
+						"episode_number": 97,
+						"season_number": 1,
+						"name": "Hitsugaya Strikes! Slice the Enemy in the Middle of the Forest",
+						"air_date": "2006-09-19",
+						"id": 1517230
+					},
+					{
+						"episode_number": 98,
+						"season_number": 1,
+						"name": "Clash! Kenpachi Zaraki vs. Maki Ichinose",
+						"air_date": "2006-10-04",
+						"id": 1517231
+					},
+					{
+						"episode_number": 99,
+						"season_number": 1,
+						"name": "Shinigami vs. Shinigami! The Uncontrollable Power",
+						"air_date": "2006-10-11",
+						"id": 1517232
+					},
+					{
+						"episode_number": 100,
+						"season_number": 1,
+						"name": "Suì-Fēng Dies? The Last of the Special Forces",
+						"air_date": "2006-10-18",
+						"id": 1517233
+					},
+					{
+						"episode_number": 101,
+						"season_number": 1,
+						"name": "Mayuri's Bankai!! Sawatari: Clash of the Demon",
+						"air_date": "2006-11-01",
+						"id": 1517234
+					},
+					{
+						"episode_number": 102,
+						"season_number": 1,
+						"name": "The Last Quincy! The Exploding Power",
+						"air_date": "2006-11-08",
+						"id": 1517235
+					},
+					{
+						"episode_number": 103,
+						"season_number": 1,
+						"name": "Ishida, Exceeding the Limits to Attack!",
+						"air_date": "2006-11-15",
+						"id": 1517236
+					},
+					{
+						"episode_number": 104,
+						"season_number": 1,
+						"name": "10th Division's Death Struggle! The Release of Hyōrinmaru",
+						"air_date": "2006-11-22",
+						"id": 1517237
+					},
+					{
+						"episode_number": 105,
+						"season_number": 1,
+						"name": "Kariya! Countdown to the Detonation",
+						"air_date": "2006-11-29",
+						"id": 1517238
+					},
+					{
+						"episode_number": 106,
+						"season_number": 1,
+						"name": "Life and Revenge! Ishida, the Ultimate Choice",
+						"air_date": "2006-12-06",
+						"id": 1517239
+					},
+					{
+						"episode_number": 107,
+						"season_number": 1,
+						"name": "The Swung-Down Edge! The Moment of Ruin",
+						"air_date": "2006-12-13",
+						"id": 1517240
+					},
+					{
+						"episode_number": 108,
+						"season_number": 1,
+						"name": "The Wailing Bount! The Last Clash",
+						"air_date": "2006-12-20",
+						"id": 1517241
+					},
+					{
+						"episode_number": 109,
+						"season_number": 1,
+						"name": "Ichigo and Rukia, Thoughts in the Revolving Around Heaven",
+						"air_date": "2007-01-04",
+						"id": 1517242
+					},
+					{
+						"episode_number": 110,
+						"season_number": 1,
+						"name": "Reopening of the Substitute Business! The Terrifying Transfer Student",
+						"air_date": "2007-01-10",
+						"id": 1517243
+					},
+					{
+						"episode_number": 111,
+						"season_number": 1,
+						"name": "Shock! The Father's True Identity",
+						"air_date": "2007-01-17",
+						"id": 1517244
+					},
+					{
+						"episode_number": 112,
+						"season_number": 1,
+						"name": "The Commencement of War, Vizards and the Arrancars",
+						"air_date": "2007-01-24",
+						"id": 1517245
+					},
+					{
+						"episode_number": 113,
+						"season_number": 1,
+						"name": "Prelude to the Apocalypse, The Arrancar's Offensive",
+						"air_date": "2007-01-31",
+						"id": 1517246
+					},
+					{
+						"episode_number": 114,
+						"season_number": 1,
+						"name": "Reunion, Ichigo and Rukia and Soul Reapers",
+						"air_date": "2007-02-07",
+						"id": 1517247
+					},
+					{
+						"episode_number": 115,
+						"season_number": 1,
+						"name": "Mission! The Soul Reapers Have Come",
+						"air_date": "2007-02-14",
+						"id": 1517248
+					},
+					{
+						"episode_number": 116,
+						"season_number": 1,
+						"name": "The Evil Eye, Aizen Returns",
+						"air_date": "2007-02-21",
+						"id": 1517249
+					},
+					{
+						"episode_number": 117,
+						"season_number": 1,
+						"name": "Rukia's Battle Commences! The Freezing White Blade",
+						"air_date": "2007-02-28",
+						"id": 1517250
+					},
+					{
+						"episode_number": 118,
+						"season_number": 1,
+						"name": "Ikkaku's Bankai! The Power That Breaks Everything",
+						"air_date": "2007-03-07",
+						"id": 1517251
+					},
+					{
+						"episode_number": 119,
+						"season_number": 1,
+						"name": "Zaraki Division's Secret Story! The Lucky Men",
+						"air_date": "2007-03-21",
+						"id": 1517252
+					},
+					{
+						"episode_number": 120,
+						"season_number": 1,
+						"name": "Hitsugaya Scatters! The Broken Hyōrinmaru",
+						"air_date": "2007-03-28",
+						"id": 1517253
+					},
+					{
+						"episode_number": 121,
+						"season_number": 1,
+						"name": "Clash! The Protector vs. The Bearer",
+						"air_date": "2007-04-11",
+						"id": 1517255
+					},
+					{
+						"episode_number": 122,
+						"season_number": 1,
+						"name": "Vizard! The Power of the Awakened",
+						"air_date": "2007-04-18",
+						"id": 1517258
+					},
+					{
+						"episode_number": 123,
+						"season_number": 1,
+						"name": "Ichigo, Complete Hollowification!?",
+						"air_date": "2007-04-25",
+						"id": 1517261
+					},
+					{
+						"episode_number": 124,
+						"season_number": 1,
+						"name": "Collision! Black Bankai and the White Bankai",
+						"air_date": "2007-05-02",
+						"id": 1517264
+					},
+					{
+						"episode_number": 125,
+						"season_number": 1,
+						"name": "Urgent Report! Aizen's Terrifying Plan!",
+						"air_date": "2007-05-09",
+						"id": 1517266
+					},
+					{
+						"episode_number": 126,
+						"season_number": 1,
+						"name": "Uryū vs. Ryūken! Clash of the Parent-Child Quincys",
+						"air_date": "2007-05-16",
+						"id": 1517268
+					},
+					{
+						"episode_number": 127,
+						"season_number": 1,
+						"name": "Urahara's Decision, Orihime's Thoughts",
+						"air_date": "2007-05-30",
+						"id": 1517269
+					},
+					{
+						"episode_number": 128,
+						"season_number": 1,
+						"name": "The Nightmare Arrancar! Team Hitsugaya Moves Out",
+						"air_date": "2007-06-06",
+						"id": 1517270
+					},
+					{
+						"episode_number": 129,
+						"season_number": 1,
+						"name": "The Swooping Descent of the Dark Emissary! The Propagation of Malice",
+						"air_date": "2007-06-13",
+						"id": 1517271
+					},
+					{
+						"episode_number": 130,
+						"season_number": 1,
+						"name": "The Invisible Enemy! Hitsugaya's Merciless Decision",
+						"air_date": "2007-06-20",
+						"id": 1517272
+					},
+					{
+						"episode_number": 131,
+						"season_number": 1,
+						"name": "Rangiku's Tears, the Sorrowful Parting of Brother and Sister",
+						"air_date": "2007-06-27",
+						"id": 1517273
+					},
+					{
+						"episode_number": 132,
+						"season_number": 1,
+						"name": "Hitsugaya, Karin, and Soccer Ball",
+						"air_date": "2007-07-04",
+						"id": 1517275
+					},
+					{
+						"episode_number": 133,
+						"season_number": 1,
+						"name": "Ikkaku: The Hot-Blooded Kendo Tale",
+						"air_date": "2007-07-11",
+						"id": 1517277
+					},
+					{
+						"episode_number": 134,
+						"season_number": 1,
+						"name": "The Beautiful Patissier, Yumichika!",
+						"air_date": "2007-07-18",
+						"id": 1517279
+					},
+					{
+						"episode_number": 135,
+						"season_number": 1,
+						"name": "Kon is Deceived! Rangiku on the Lookout...",
+						"air_date": "2007-07-25",
+						"id": 1517281
+					},
+					{
+						"episode_number": 136,
+						"season_number": 1,
+						"name": "Civil War in Hueco Mundo! Ulquiorra's Death",
+						"air_date": "2007-08-08",
+						"id": 1517282
+					},
+					{
+						"episode_number": 137,
+						"season_number": 1,
+						"name": "The Malicious Battle, Aizen's Trap",
+						"air_date": "2007-08-22",
+						"id": 1517283
+					},
+					{
+						"episode_number": 138,
+						"season_number": 1,
+						"name": "Hueco Mundo moves again! Hitsugaya vs. Yammy",
+						"air_date": "2007-08-29",
+						"id": 1517284
+					},
+					{
+						"episode_number": 139,
+						"season_number": 1,
+						"name": "Ichigo vs. Grimmjow, the 11-second battle!",
+						"air_date": "2007-09-05",
+						"id": 1517285
+					},
+					{
+						"episode_number": 140,
+						"season_number": 1,
+						"name": "Ulquiorra's Scheme, the Moment when the Sun Sets!",
+						"air_date": "2007-09-12",
+						"id": 1517288
+					},
+					{
+						"episode_number": 141,
+						"season_number": 1,
+						"name": "Goodbye..., Kurosaki!",
+						"air_date": "2007-09-19",
+						"id": 1517289
+					},
+					{
+						"episode_number": 142,
+						"season_number": 1,
+						"name": "Strict Order! The Forbidden Rescue of Orihime Inoue",
+						"air_date": "2007-09-26",
+						"id": 1517291
+					},
+					{
+						"episode_number": 143,
+						"season_number": 1,
+						"name": "Grimmjow Revived",
+						"air_date": "2007-10-03",
+						"id": 1517292
+					},
+					{
+						"episode_number": 144,
+						"season_number": 1,
+						"name": "Ishida and Chad, The Quickening of a New Power",
+						"air_date": "2007-10-17",
+						"id": 1517293
+					},
+					{
+						"episode_number": 145,
+						"season_number": 1,
+						"name": "The Espada Gather! Aizen's Royal Assembly",
+						"air_date": "2007-10-24",
+						"id": 1517294
+					},
+					{
+						"episode_number": 146,
+						"season_number": 1,
+						"name": "The Name's Nel! The Appearance of a Strange Arrancar",
+						"air_date": "2007-10-31",
+						"id": 1517295
+					},
+					{
+						"episode_number": 147,
+						"season_number": 1,
+						"name": "Forest of Menos! Search for the Missing Rukia",
+						"air_date": "2007-11-07",
+						"id": 1517296
+					},
+					{
+						"episode_number": 148,
+						"season_number": 1,
+						"name": "Ashido, The Soul Reaper Who Came from the Past",
+						"air_date": "2007-11-14",
+						"id": 1517297
+					},
+					{
+						"episode_number": 149,
+						"season_number": 1,
+						"name": "Through the Crumbling Forest, a Million Menos",
+						"air_date": "2007-11-21",
+						"id": 1517298
+					},
+					{
+						"episode_number": 150,
+						"season_number": 1,
+						"name": "Oath! Back Here Alive Again",
+						"air_date": "2007-11-28",
+						"id": 1517299
+					},
+					{
+						"episode_number": 151,
+						"season_number": 1,
+						"name": "The Raging Storm! Encounter with the Dancing Arrancar",
+						"air_date": "2007-12-05",
+						"id": 1517300
+					},
+					{
+						"episode_number": 152,
+						"season_number": 1,
+						"name": "Ichigo Strikes Back! This Is My Bankai",
+						"air_date": "2007-12-12",
+						"id": 1517302
+					},
+					{
+						"episode_number": 153,
+						"season_number": 1,
+						"name": "The Devilish Research! Szayelaporro's Plan",
+						"air_date": "2007-12-19",
+						"id": 1517303
+					},
+					{
+						"episode_number": 154,
+						"season_number": 1,
+						"name": "Rukia and Kaien, the Sorrowful Reunion",
+						"air_date": "2007-12-26",
+						"id": 1517304
+					},
+					{
+						"episode_number": 155,
+						"season_number": 1,
+						"name": "Rukia Retaliates! Release the Desperate Kidō",
+						"air_date": "2008-01-09",
+						"id": 1517306
+					},
+					{
+						"episode_number": 156,
+						"season_number": 1,
+						"name": "Ishida & Pesche, the United Attack of Friendship",
+						"air_date": "2008-01-16",
+						"id": 1517307
+					},
+					{
+						"episode_number": 157,
+						"season_number": 1,
+						"name": "Ishida's Trump Card, Seele Schneider",
+						"air_date": "2008-01-23",
+						"id": 1517308
+					},
+					{
+						"episode_number": 158,
+						"season_number": 1,
+						"name": "Right Arm of the Giant, Left Arm of the Devil",
+						"air_date": "2008-01-30",
+						"id": 1517309
+					},
+					{
+						"episode_number": 159,
+						"season_number": 1,
+						"name": "Yasutora Sado Dies! Orihime's Tears",
+						"air_date": "2008-02-06",
+						"id": 1517310
+					},
+					{
+						"episode_number": 160,
+						"season_number": 1,
+						"name": "Testament, Your Heart is Right Here...",
+						"air_date": "2008-02-13",
+						"id": 1517311
+					},
+					{
+						"episode_number": 161,
+						"season_number": 1,
+						"name": "The Cruel Arrancar, Ulquiorra's Provocation",
+						"air_date": "2008-02-20",
+						"id": 1517312
+					},
+					{
+						"episode_number": 162,
+						"season_number": 1,
+						"name": "Szayelaporro Laughs, The Net Trapping Renji is Complete",
+						"air_date": "2008-02-27",
+						"id": 1517313
+					},
+					{
+						"episode_number": 163,
+						"season_number": 1,
+						"name": "Shinigami and Quincy, The Battle with Madness",
+						"air_date": "2008-03-05",
+						"id": 1517314
+					},
+					{
+						"episode_number": 164,
+						"season_number": 1,
+						"name": "Ishida's Strategy, 20-Second Offense and Defense",
+						"air_date": "2008-03-12",
+						"id": 1517315
+					},
+					{
+						"episode_number": 165,
+						"season_number": 1,
+						"name": "The Murderous Intent Boils! The Joyful Grimmjow",
+						"air_date": "2008-03-19",
+						"id": 1517316
+					},
+					{
+						"episode_number": 166,
+						"season_number": 1,
+						"name": "Desperate Effort vs. Desperate Effort! Hollowfied Ichigo",
+						"air_date": "2008-04-09",
+						"id": 1517318
+					},
+					{
+						"episode_number": 167,
+						"season_number": 1,
+						"name": "The Moment of Conclusion, The End of Grimmjow",
+						"air_date": "2008-04-16",
+						"id": 1517319
+					},
+					{
+						"episode_number": 168,
+						"season_number": 1,
+						"name": "The New Captain Appears! His Name Is Shūsuke Amagai",
+						"air_date": "2008-04-23",
+						"id": 1517321
+					},
+					{
+						"episode_number": 169,
+						"season_number": 1,
+						"name": "New Development, the Dangerous Transfer Student Appears!",
+						"air_date": "2008-05-07",
+						"id": 1517322
+					},
+					{
+						"episode_number": 170,
+						"season_number": 1,
+						"name": "Desperate Struggle Under the Moonlit Night, the Mysterious Assassin and Zanpakutō",
+						"air_date": "2008-05-14",
+						"id": 1517323
+					},
+					{
+						"episode_number": 171,
+						"season_number": 1,
+						"name": "Kenryū, the Profusion of Blooming Crimson Flowers",
+						"air_date": "2008-05-21",
+						"id": 1517324
+					},
+					{
+						"episode_number": 172,
+						"season_number": 1,
+						"name": "Kibune Goes to War! The Violent Wind that Rages",
+						"air_date": "2008-05-28",
+						"id": 1517325
+					},
+					{
+						"episode_number": 173,
+						"season_number": 1,
+						"name": "The Appearance of the Great Evil! The Darkness in the House of Kasumiōji",
+						"air_date": "2008-06-04",
+						"id": 1517326
+					},
+					{
+						"episode_number": 174,
+						"season_number": 1,
+						"name": "Break the Mirror's Boundary! Ichigo's Captivity",
+						"air_date": "2008-06-11",
+						"id": 1517327
+					},
+					{
+						"episode_number": 175,
+						"season_number": 1,
+						"name": "The Revenging Assassin, Ichigo is Targeted",
+						"air_date": "2008-06-18",
+						"id": 1517328
+					},
+					{
+						"episode_number": 176,
+						"season_number": 1,
+						"name": "Mystery! The Sword-Consuming Assassin",
+						"air_date": "2008-06-25",
+						"id": 1517329
+					},
+					{
+						"episode_number": 177,
+						"season_number": 1,
+						"name": "The Reversal of Rukia! The Rampaging Blade",
+						"air_date": "2008-06-25",
+						"id": 1517330
+					},
+					{
+						"episode_number": 178,
+						"season_number": 1,
+						"name": "The Nightmare Which is Shown, Ichigo's Inside the Mirror",
+						"air_date": "2008-07-02",
+						"id": 1517331
+					},
+					{
+						"episode_number": 179,
+						"season_number": 1,
+						"name": "Confrontation!? Amagai vs. Gotei 13",
+						"air_date": "2008-07-09",
+						"id": 1517332
+					},
+					{
+						"episode_number": 180,
+						"season_number": 1,
+						"name": "The Princess's Decision, the Sorrowful Bride",
+						"air_date": "2008-07-16",
+						"id": 1517333
+					},
+					{
+						"episode_number": 181,
+						"season_number": 1,
+						"name": "The 2nd Division Sorties! Ichigo is Surrounded",
+						"air_date": "2008-07-23",
+						"id": 1517334
+					},
+					{
+						"episode_number": 182,
+						"season_number": 1,
+						"name": "Amagai's True Strength, the Released Zanpakuto!",
+						"air_date": "2008-07-30",
+						"id": 1517335
+					},
+					{
+						"episode_number": 183,
+						"season_number": 1,
+						"name": "The Darkness Which Moves! Kibune's True Colors",
+						"air_date": "2008-08-06",
+						"id": 1517336
+					},
+					{
+						"episode_number": 184,
+						"season_number": 1,
+						"name": "Kira and Kibune, Offense and Defense of the 3rd Division",
+						"air_date": "2008-08-20",
+						"id": 1517337
+					},
+					{
+						"episode_number": 185,
+						"season_number": 1,
+						"name": "Ice and Flame! Fierce Fight of Amagai vs. Hitsugaya",
+						"air_date": "2008-08-27",
+						"id": 1517338
+					},
+					{
+						"episode_number": 186,
+						"season_number": 1,
+						"name": "Sortie Orders! Suppress the House of Kasumiōji",
+						"air_date": "2008-09-03",
+						"id": 1517339
+					},
+					{
+						"episode_number": 187,
+						"season_number": 1,
+						"name": "Ichigo Rages! The Assassin's Secret",
+						"air_date": "2008-09-10",
+						"id": 1517340
+					},
+					{
+						"episode_number": 188,
+						"season_number": 1,
+						"name": "Duel! Amagai vs. Ichigo",
+						"air_date": "2008-09-17",
+						"id": 1517341
+					},
+					{
+						"episode_number": 189,
+						"season_number": 1,
+						"name": "The Fallen Shinigami's Pride",
+						"air_date": "2008-10-07",
+						"id": 1517342
+					},
+					{
+						"episode_number": 190,
+						"season_number": 1,
+						"name": "Hueco Mundo Chapter, Restart!",
+						"air_date": "2008-10-14",
+						"id": 1517343
+					},
+					{
+						"episode_number": 191,
+						"season_number": 1,
+						"name": "The Frightening Banquet, Szayelaporro Theater",
+						"air_date": "2008-10-21",
+						"id": 1517344
+					},
+					{
+						"episode_number": 192,
+						"season_number": 1,
+						"name": "Nel's Secret, A Busty Beauty Joins the Battle!?",
+						"air_date": "2008-10-28",
+						"id": 1517345
+					},
+					{
+						"episode_number": 193,
+						"season_number": 1,
+						"name": "Irresistible, Puppet Show of Terror",
+						"air_date": "2008-11-04",
+						"id": 1517346
+					},
+					{
+						"episode_number": 194,
+						"season_number": 1,
+						"name": "Neliel's Past",
+						"air_date": "2008-11-11",
+						"id": 1517347
+					},
+					{
+						"episode_number": 195,
+						"season_number": 1,
+						"name": "The Ultimate Union! Pesche's Seriousness",
+						"air_date": "2008-11-18",
+						"id": 1517348
+					},
+					{
+						"episode_number": 196,
+						"season_number": 1,
+						"name": "Joining the Battle! The Strongest Soul Reaper Army Appears",
+						"air_date": "2008-11-25",
+						"id": 1517349
+					},
+					{
+						"episode_number": 197,
+						"season_number": 1,
+						"name": "Byakuya's Bankai, The Quiet Anger",
+						"air_date": "2008-12-02",
+						"id": 1517350
+					},
+					{
+						"episode_number": 198,
+						"season_number": 1,
+						"name": "The Two Scientists, Mayuri's Trap",
+						"air_date": "2008-12-09",
+						"id": 1517351
+					},
+					{
+						"episode_number": 199,
+						"season_number": 1,
+						"name": "Holy Birth, The Resurrected Szayel Aporro",
+						"air_date": "2008-12-16",
+						"id": 1517352
+					},
+					{
+						"episode_number": 200,
+						"season_number": 1,
+						"name": "The Hardest Body!? Cut Down Nnoitra",
+						"air_date": "2008-12-23",
+						"id": 1517353
+					},
+					{
+						"episode_number": 201,
+						"season_number": 1,
+						"name": "Nnoitra Released! Multiplying Arms",
+						"air_date": "2009-01-06",
+						"id": 1517354
+					},
+					{
+						"episode_number": 202,
+						"season_number": 1,
+						"name": "Fierce Fighting Conclusion! Who's the Strongest?",
+						"air_date": "2009-01-13",
+						"id": 1517355
+					},
+					{
+						"episode_number": 203,
+						"season_number": 1,
+						"name": "Karakura Town Gathers! Aizen Versus the Soul Reapers",
+						"air_date": "2009-01-20",
+						"id": 1517356
+					},
+					{
+						"episode_number": 204,
+						"season_number": 1,
+						"name": "Ichigo's Seppuku Persuasion Strategy ☆",
+						"air_date": "2009-01-27",
+						"id": 1517357
+					},
+					{
+						"episode_number": 205,
+						"season_number": 1,
+						"name": "Thump! A Kemari Tournament Filled with Hollows",
+						"air_date": "2009-02-03",
+						"id": 1517358
+					},
+					{
+						"episode_number": 206,
+						"season_number": 1,
+						"name": "The Past Chapter Begins! The Truth from 110 Years Ago",
+						"air_date": "2009-02-10",
+						"id": 1517359
+					},
+					{
+						"episode_number": 207,
+						"season_number": 1,
+						"name": "12th Division's New Captain, Urahara Kisuke",
+						"air_date": "2009-02-17",
+						"id": 1517360
+					},
+					{
+						"episode_number": 208,
+						"season_number": 1,
+						"name": "Aizen and the Genius Boy",
+						"air_date": "2009-02-24",
+						"id": 1517361
+					},
+					{
+						"episode_number": 209,
+						"season_number": 1,
+						"name": "Muguruma 9th Division, Moves Out",
+						"air_date": "2009-03-03",
+						"id": 1517362
+					},
+					{
+						"episode_number": 210,
+						"season_number": 1,
+						"name": "Hiyori Dies? The Beginning of Tragedy",
+						"air_date": "2009-03-10",
+						"id": 1517363
+					},
+					{
+						"episode_number": 211,
+						"season_number": 1,
+						"name": "Betrayal! Aizen's Secret Maneuvers",
+						"air_date": "2009-03-17",
+						"id": 1517364
+					},
+					{
+						"episode_number": 212,
+						"season_number": 1,
+						"name": "Rescue Hirako! Aizen vs. Urahara",
+						"air_date": "2009-03-24",
+						"id": 1517365
+					},
+					{
+						"episode_number": 213,
+						"season_number": 1,
+						"name": "The Konso Cop Karakuraizer is Born",
+						"air_date": "2009-03-31",
+						"id": 1517366
+					},
+					{
+						"episode_number": 214,
+						"season_number": 1,
+						"name": "Karakuraizer's Last Day",
+						"air_date": "2009-04-07",
+						"id": 1517367
+					},
+					{
+						"episode_number": 215,
+						"season_number": 1,
+						"name": "Defend Karakura Town! Entire Appearance of the Shinigami",
+						"air_date": "2009-04-14",
+						"id": 1517368
+					},
+					{
+						"episode_number": 216,
+						"season_number": 1,
+						"name": "Elite! The Four Shinigami",
+						"air_date": "2009-04-21",
+						"id": 1517369
+					},
+					{
+						"episode_number": 217,
+						"season_number": 1,
+						"name": "Beautiful Little Devil Charlotte",
+						"air_date": "2009-04-28",
+						"id": 1517370
+					},
+					{
+						"episode_number": 218,
+						"season_number": 1,
+						"name": "Kira, The Battle Within Despair",
+						"air_date": "2009-05-05",
+						"id": 1517371
+					},
+					{
+						"episode_number": 219,
+						"season_number": 1,
+						"name": "Hisagi's Shikai! The Name is...",
+						"air_date": "2009-05-12",
+						"id": 1517372
+					},
+					{
+						"episode_number": 220,
+						"season_number": 1,
+						"name": "Ikkaku Falls! The Shinigami's Crisis",
+						"air_date": "2009-05-19",
+						"id": 1517373
+					},
+					{
+						"episode_number": 221,
+						"season_number": 1,
+						"name": "The Full Showdown! Soul Reapers vs. Espada",
+						"air_date": "2009-05-26",
+						"id": 1517374
+					},
+					{
+						"episode_number": 222,
+						"season_number": 1,
+						"name": "The Most Evil Tag!? Suì-Fēng & Ōmaeda",
+						"air_date": "2009-06-02",
+						"id": 1517375
+					},
+					{
+						"episode_number": 223,
+						"season_number": 1,
+						"name": "A Miraculous Body! Ggio Releases",
+						"air_date": "2009-06-09",
+						"id": 1517376
+					},
+					{
+						"episode_number": 224,
+						"season_number": 1,
+						"name": "3 vs. 1 Battle! Rangiku's Crisis",
+						"air_date": "2009-06-16",
+						"id": 1517377
+					},
+					{
+						"episode_number": 225,
+						"season_number": 1,
+						"name": "Vice-Captains Annihilated! The Terrifying Demonic Beast",
+						"air_date": "2009-06-23",
+						"id": 1517378
+					},
+					{
+						"episode_number": 226,
+						"season_number": 1,
+						"name": "Fierce Fighting Concludes? Towards a New Battle!",
+						"air_date": "2009-06-30",
+						"id": 1517379
+					},
+					{
+						"episode_number": 227,
+						"season_number": 1,
+						"name": "Wonderful Error",
+						"air_date": "2009-07-07",
+						"id": 1517380
+					},
+					{
+						"episode_number": 228,
+						"season_number": 1,
+						"name": "Summer! Sea! Swimsuit Festival!!",
+						"air_date": "2009-07-14",
+						"id": 1517381
+					},
+					{
+						"episode_number": 229,
+						"season_number": 1,
+						"name": "Cry of the Soul? The Rug Shinigami is Born!",
+						"air_date": "2009-07-21",
+						"id": 1517382
+					},
+					{
+						"episode_number": 230,
+						"season_number": 1,
+						"name": "A New Enemy! The Materialization of Zanpakutō",
+						"air_date": "2009-07-28",
+						"id": 1517383
+					},
+					{
+						"episode_number": 231,
+						"season_number": 1,
+						"name": "Byakuya, Disappearing with the Cherry Blossoms",
+						"air_date": "2009-08-04",
+						"id": 1517384
+					},
+					{
+						"episode_number": 232,
+						"season_number": 1,
+						"name": "Sode no Shirayuki vs. Rukia! Confused Heart",
+						"air_date": "2009-08-11",
+						"id": 1517385
+					},
+					{
+						"episode_number": 233,
+						"season_number": 1,
+						"name": "Zangetsu Becomes an Enemy",
+						"air_date": "2009-08-18",
+						"id": 1517386
+					},
+					{
+						"episode_number": 234,
+						"season_number": 1,
+						"name": "Renji Surprised?! The Two Zabimarus",
+						"air_date": "2009-08-25",
+						"id": 1517387
+					},
+					{
+						"episode_number": 235,
+						"season_number": 1,
+						"name": "Clash! Hisagi vs. Kazeshini",
+						"air_date": "2009-09-01",
+						"id": 1517388
+					},
+					{
+						"episode_number": 236,
+						"season_number": 1,
+						"name": "Release! The New Getsuga Tenshō",
+						"air_date": "2009-09-08",
+						"id": 1517389
+					},
+					{
+						"episode_number": 237,
+						"season_number": 1,
+						"name": "Suì-Fēng, Surrounding the Zanpakutō",
+						"air_date": "2009-09-15",
+						"id": 1517390
+					},
+					{
+						"episode_number": 238,
+						"season_number": 1,
+						"name": "Friendship? Hatred? Haineko & Tobiume",
+						"air_date": "2009-09-22",
+						"id": 1517391
+					},
+					{
+						"episode_number": 239,
+						"season_number": 1,
+						"name": "The Awakening Hyōrinmaru! Hitsugaya's Fierce Fight",
+						"air_date": "2009-09-29",
+						"id": 1517392
+					},
+					{
+						"episode_number": 240,
+						"season_number": 1,
+						"name": "Byakuya's Betrayal",
+						"air_date": "2009-10-06",
+						"id": 1517393
+					},
+					{
+						"episode_number": 241,
+						"season_number": 1,
+						"name": "For the Sake of Pride! Byakuya vs. Renji",
+						"air_date": "2009-10-13",
+						"id": 1517394
+					},
+					{
+						"episode_number": 242,
+						"season_number": 1,
+						"name": "Shinigami and Zanpakutō, Total Sortie",
+						"air_date": "2009-10-20",
+						"id": 1517396
+					},
+					{
+						"episode_number": 243,
+						"season_number": 1,
+						"name": "One-to-One Fight! Ichigo vs. Senbonzakura",
+						"air_date": "2009-10-27",
+						"id": 1517397
+					},
+					{
+						"episode_number": 244,
+						"season_number": 1,
+						"name": "The Long Awaited... Kenpachi Appears!",
+						"air_date": "2009-11-03",
+						"id": 1517398
+					},
+					{
+						"episode_number": 245,
+						"season_number": 1,
+						"name": "Pursue Byakuya! The Confused Gotei Divisions",
+						"air_date": "2009-11-10",
+						"id": 1517399
+					},
+					{
+						"episode_number": 246,
+						"season_number": 1,
+						"name": "Special Mission! Rescue Captain Commander Yamamoto!",
+						"air_date": "2009-11-17",
+						"id": 1517400
+					},
+					{
+						"episode_number": 247,
+						"season_number": 1,
+						"name": "Deceived Shinigami! The World Collapse Crisis",
+						"air_date": "2009-11-24",
+						"id": 1517402
+					},
+					{
+						"episode_number": 248,
+						"season_number": 1,
+						"name": "Dragon of Ice and Dragon of Flame! The Strongest Showdown!",
+						"air_date": "2009-12-01",
+						"id": 1517403
+					},
+					{
+						"episode_number": 249,
+						"season_number": 1,
+						"name": "Senbonzakura's Bankai! Offense and Defense of the Living World",
+						"air_date": "2009-12-08",
+						"id": 1517404
+					},
+					{
+						"episode_number": 250,
+						"season_number": 1,
+						"name": "That Man, for the Sake of the Kuchiki",
+						"air_date": "2009-12-15",
+						"id": 1517405
+					},
+					{
+						"episode_number": 251,
+						"season_number": 1,
+						"name": "Dark History! The Worst Shinigami Is Born",
+						"air_date": "2009-12-22",
+						"id": 1517407
+					},
+					{
+						"episode_number": 252,
+						"season_number": 1,
+						"name": "Byakuya, the Truth Behind His Betrayal",
+						"air_date": "2010-01-05",
+						"id": 1517408
+					},
+					{
+						"episode_number": 253,
+						"season_number": 1,
+						"name": "Muramasa's True Identity Revealed",
+						"air_date": "2010-01-12",
+						"id": 1517409
+					},
+					{
+						"episode_number": 254,
+						"season_number": 1,
+						"name": "Byakuya and Renji, the 6th Division Returns",
+						"air_date": "2010-01-19",
+						"id": 1517410
+					},
+					{
+						"episode_number": 255,
+						"season_number": 1,
+						"name": "Final Chapter - Zanpakutō The Alternate Tale",
+						"air_date": "2010-01-26",
+						"id": 1517412
+					},
+					{
+						"episode_number": 256,
+						"season_number": 1,
+						"name": "The Angered Byakuya! The Collapse of the Kuchiki House",
+						"air_date": "2010-02-02",
+						"id": 1517413
+					},
+					{
+						"episode_number": 257,
+						"season_number": 1,
+						"name": "A New Enemy! The True Nature of the Sword Beasts",
+						"air_date": "2010-02-09",
+						"id": 1517414
+					},
+					{
+						"episode_number": 258,
+						"season_number": 1,
+						"name": "Stray Snake, Tortured Monkey",
+						"air_date": "2010-02-16",
+						"id": 1517415
+					},
+					{
+						"episode_number": 259,
+						"season_number": 1,
+						"name": "Terror! The Monster That Lurks Underground",
+						"air_date": "2010-02-23",
+						"id": 1517416
+					},
+					{
+						"episode_number": 260,
+						"season_number": 1,
+						"name": "Conclusion!? Hisagi vs. Kazeshini",
+						"air_date": "2010-03-02",
+						"id": 1517417
+					},
+					{
+						"episode_number": 261,
+						"season_number": 1,
+						"name": "The Person with the Unknown Ability! Orihime Is Targeted",
+						"air_date": "2010-03-09",
+						"id": 1517418
+					},
+					{
+						"episode_number": 262,
+						"season_number": 1,
+						"name": "Haineko Cries! The Tragic Sword Beast!",
+						"air_date": "2010-03-16",
+						"id": 1517419
+					},
+					{
+						"episode_number": 263,
+						"season_number": 1,
+						"name": "Imprisonment?! Senbonzakura & Zabimaru",
+						"air_date": "2010-03-23",
+						"id": 1517420
+					},
+					{
+						"episode_number": 264,
+						"season_number": 1,
+						"name": "Battle of the Females? Katen Kyōkotsu vs. Nanao!",
+						"air_date": "2010-03-30",
+						"id": 1517421
+					},
+					{
+						"episode_number": 265,
+						"season_number": 1,
+						"name": "Evolution?! The Menace of the Final Sword Beast",
+						"air_date": "2010-04-06",
+						"id": 1517423
+					},
+					{
+						"episode_number": 266,
+						"season_number": 1,
+						"name": "Ichigo vs. Ulquiorra, Resume",
+						"air_date": "2010-04-13",
+						"id": 1517427
+					},
+					{
+						"episode_number": 267,
+						"season_number": 1,
+						"name": "Connected Hearts! The Left Fist of Certain Death",
+						"air_date": "2010-04-20",
+						"id": 1517428
+					},
+					{
+						"episode_number": 268,
+						"season_number": 1,
+						"name": "Hatred and Jealousy, Orihime's Dilemma",
+						"air_date": "2010-04-27",
+						"id": 1517429
+					},
+					{
+						"episode_number": 269,
+						"season_number": 1,
+						"name": "Ichigo and Uryū, Bonded Back to Back",
+						"air_date": "2010-05-04",
+						"id": 1517430
+					},
+					{
+						"episode_number": 270,
+						"season_number": 1,
+						"name": "Beginning of Despair... Ichigo, the Unreachable Blade",
+						"air_date": "2010-05-11",
+						"id": 1517432
+					},
+					{
+						"episode_number": 271,
+						"season_number": 1,
+						"name": "Ichigo Dies! Orihime, the Cry of Sorrow!",
+						"air_date": "2010-05-18",
+						"id": 1517433
+					},
+					{
+						"episode_number": 272,
+						"season_number": 1,
+						"name": "Ichigo vs. Ulquiorra, Conclusion!",
+						"air_date": "2010-05-25",
+						"id": 1517434
+					},
+					{
+						"episode_number": 273,
+						"season_number": 1,
+						"name": "Fury of the Shark! Halibel's Release",
+						"air_date": "2010-06-01",
+						"id": 1517436
+					},
+					{
+						"episode_number": 274,
+						"season_number": 1,
+						"name": "Hitsugaya, the Desperate Hyōten Hyakkasō!",
+						"air_date": "2010-06-08",
+						"id": 1517437
+					},
+					{
+						"episode_number": 275,
+						"season_number": 1,
+						"name": "The Approaching Breath of Death, the King Who Rules Over Death!",
+						"air_date": "2010-06-15",
+						"id": 1517438
+					},
+					{
+						"episode_number": 276,
+						"season_number": 1,
+						"name": "One Hit Kill, Suì-Fēng, Bankai!",
+						"air_date": "2010-06-22",
+						"id": 1517439
+					},
+					{
+						"episode_number": 277,
+						"season_number": 1,
+						"name": "Climax! Kyōraku vs. Stark!",
+						"air_date": "2010-06-29",
+						"id": 1517440
+					},
+					{
+						"episode_number": 278,
+						"season_number": 1,
+						"name": "The Nightmare Returns... Revival of the Espada",
+						"air_date": "2010-07-06",
+						"id": 1517442
+					},
+					{
+						"episode_number": 279,
+						"season_number": 1,
+						"name": "Hirako and Aizen...the Reunion of Fate!",
+						"air_date": "2010-07-13",
+						"id": 1517443
+					},
+					{
+						"episode_number": 280,
+						"season_number": 1,
+						"name": "Hisagi and Tōsen, the Moment of Parting",
+						"air_date": "2010-07-20",
+						"id": 1517444
+					},
+					{
+						"episode_number": 281,
+						"season_number": 1,
+						"name": "Crown of Lies, Baraggan's Grudge",
+						"air_date": "2010-07-27",
+						"id": 1517445
+					},
+					{
+						"episode_number": 282,
+						"season_number": 1,
+						"name": "Power of the Soul! Los Lobos, Attack!",
+						"air_date": "2010-08-03",
+						"id": 1517446
+					},
+					{
+						"episode_number": 283,
+						"season_number": 1,
+						"name": "Stark, the Lone Battle",
+						"air_date": "2010-08-10",
+						"id": 1517448
+					},
+					{
+						"episode_number": 284,
+						"season_number": 1,
+						"name": "Chain of Sacrifice, Halibel's Past",
+						"air_date": "2010-08-17",
+						"id": 1517449
+					},
+					{
+						"episode_number": 285,
+						"season_number": 1,
+						"name": "The Hundred-Year Grudge! Hiyori's Revenge",
+						"air_date": "2010-08-24",
+						"id": 1517450
+					},
+					{
+						"episode_number": 286,
+						"season_number": 1,
+						"name": "Ichigo's Return! Protect Karakura Town",
+						"air_date": "2010-08-31",
+						"id": 1517451
+					},
+					{
+						"episode_number": 287,
+						"season_number": 1,
+						"name": "Side Story! Ichigo and the Magic Lamp",
+						"air_date": "2010-09-07",
+						"id": 1517453
+					},
+					{
+						"episode_number": 288,
+						"season_number": 1,
+						"name": "The Final Trump Card! Ichigo, Towards the Decisive Battle",
+						"air_date": "2010-09-14",
+						"id": 1517454
+					},
+					{
+						"episode_number": 289,
+						"season_number": 1,
+						"name": "Byakuya vs. Kenpachi?! The Melee Commences",
+						"air_date": "2010-09-21",
+						"id": 1517455
+					},
+					{
+						"episode_number": 290,
+						"season_number": 1,
+						"name": "For the Sake of Justice?! The Man Who Deserted the Shinigami",
+						"air_date": "2010-09-28",
+						"id": 1517456
+					},
+					{
+						"episode_number": 291,
+						"season_number": 1,
+						"name": "Desperate Struggle with Aizen! Hirako, Shikai!",
+						"air_date": "2010-10-05",
+						"id": 1517457
+					},
+					{
+						"episode_number": 292,
+						"season_number": 1,
+						"name": "All Out War! Aizen vs. Shinigami",
+						"air_date": "2010-10-12",
+						"id": 1517458
+					},
+					{
+						"episode_number": 293,
+						"season_number": 1,
+						"name": "Hitsugaya, Enraged! Blade of Hatred!",
+						"air_date": "2010-10-19",
+						"id": 1517459
+					},
+					{
+						"episode_number": 294,
+						"season_number": 1,
+						"name": "Impossible to Attack? The Sealed Genryūsai!",
+						"air_date": "2010-10-26",
+						"id": 1517461
+					},
+					{
+						"episode_number": 295,
+						"season_number": 1,
+						"name": "It's All a Trap... Engineered Bonds!",
+						"air_date": "2010-11-02",
+						"id": 1517462
+					},
+					{
+						"episode_number": 296,
+						"season_number": 1,
+						"name": "The Shocking Truth...The Mysterious Power Within Ichigo!",
+						"air_date": "2010-11-09",
+						"id": 1517463
+					},
+					{
+						"episode_number": 297,
+						"season_number": 1,
+						"name": "The Extending Blade?! Ichigo vs. Gin!",
+						"air_date": "2010-11-16",
+						"id": 1517464
+					},
+					{
+						"episode_number": 298,
+						"season_number": 1,
+						"name": "Film! Festival! Shinigami Film Festival!",
+						"air_date": "2010-11-23",
+						"id": 1517466
+					},
+					{
+						"episode_number": 299,
+						"season_number": 1,
+						"name": "Theatre Opening Commemoration! The Hell Verse: Prologue",
+						"air_date": "2010-11-30",
+						"id": 1517467
+					},
+					{
+						"episode_number": 300,
+						"season_number": 1,
+						"name": "Urahara Appears! Stop Aizen!",
+						"air_date": "2010-12-07",
+						"id": 1517468
+					},
+					{
+						"episode_number": 301,
+						"season_number": 1,
+						"name": "Ichigo Loses His Fighting Spirit!? Gin's Expectation!",
+						"air_date": "2010-12-14",
+						"id": 1517469
+					},
+					{
+						"episode_number": 302,
+						"season_number": 1,
+						"name": "The Final Getsuga Tenshō!? Ichigo's Training!",
+						"air_date": "2010-12-21",
+						"id": 1517470
+					},
+					{
+						"episode_number": 303,
+						"season_number": 1,
+						"name": "Real World and Shinigami! The New Year Special!",
+						"air_date": "2011-01-04",
+						"id": 1517471
+					},
+					{
+						"episode_number": 304,
+						"season_number": 1,
+						"name": "Another Side Story! This Time's Enemy Is a Monster!?",
+						"air_date": "2011-01-11",
+						"id": 1517472
+					},
+					{
+						"episode_number": 305,
+						"season_number": 1,
+						"name": "Delusion Roars! Hisagi, Towards the Hot Springs Inn!",
+						"air_date": "2011-01-18",
+						"id": 1517473
+					},
+					{
+						"episode_number": 306,
+						"season_number": 1,
+						"name": "For the Sake of Protecting! Ichigo vs. Tensa Zangetsu!",
+						"air_date": "2011-01-25",
+						"id": 1517474
+					},
+					{
+						"episode_number": 307,
+						"season_number": 1,
+						"name": "Emergency Situation! Aizen, New Evolution!",
+						"air_date": "2011-02-01",
+						"id": 1517475
+					},
+					{
+						"episode_number": 308,
+						"season_number": 1,
+						"name": "Goodbye...Rangiku",
+						"air_date": "2011-02-08",
+						"id": 1517476
+					},
+					{
+						"episode_number": 309,
+						"season_number": 1,
+						"name": "Fierce Fighting Conclusion! Release, the Final Getsuga Tenshō!",
+						"air_date": "2011-02-15",
+						"id": 1517477
+					},
+					{
+						"episode_number": 310,
+						"season_number": 1,
+						"name": "Ichigo's Resolution! The Price of the Fierce Battle",
+						"air_date": "2011-02-22",
+						"id": 1517478
+					},
+					{
+						"episode_number": 311,
+						"season_number": 1,
+						"name": "The Soul Detective: Karakuraizer Takes Off Again!",
+						"air_date": "2011-03-01",
+						"id": 1517479
+					},
+					{
+						"episode_number": 312,
+						"season_number": 1,
+						"name": "Inauguration! The Brand New 2nd Division Captain!",
+						"air_date": "2011-03-08",
+						"id": 1517480
+					},
+					{
+						"episode_number": 313,
+						"season_number": 1,
+						"name": "The Man Who Risks His Life in the 11th Division!",
+						"air_date": "2011-03-15",
+						"id": 1517481
+					},
+					{
+						"episode_number": 314,
+						"season_number": 1,
+						"name": "Kon Saw It! The Secret of a Beautiful Office Lady",
+						"air_date": "2011-03-22",
+						"id": 1517482
+					},
+					{
+						"episode_number": 315,
+						"season_number": 1,
+						"name": "Yachiru's Friend! The Shinigami of Justice Appears!",
+						"air_date": "2011-03-29",
+						"id": 1517483
+					},
+					{
+						"episode_number": 316,
+						"season_number": 1,
+						"name": "Toshirō Hitsugaya's Holiday!",
+						"air_date": "2011-04-05",
+						"id": 1517484
+					},
+					{
+						"episode_number": 317,
+						"season_number": 1,
+						"name": "Unusual Incident in Seireitei?! Gotei 13 Invading Army Arc!",
+						"air_date": "2011-04-12",
+						"id": 1517485
+					},
+					{
+						"episode_number": 318,
+						"season_number": 1,
+						"name": "Renji vs. Rukia?! Battle With Comrades!",
+						"air_date": "2011-04-19",
+						"id": 1517486
+					},
+					{
+						"episode_number": 319,
+						"season_number": 1,
+						"name": "Ichigo's Capture Net! Escape From Soul Society!",
+						"air_date": "2011-04-26",
+						"id": 1517487
+					},
+					{
+						"episode_number": 320,
+						"season_number": 1,
+						"name": "Gotei 13, Gathering in the Real World!",
+						"air_date": "2011-05-03",
+						"id": 1517488
+					},
+					{
+						"episode_number": 321,
+						"season_number": 1,
+						"name": "Showdown of Mutual Self, Ikkaku vs. Ikkaku!",
+						"air_date": "2011-05-10",
+						"id": 1517489
+					},
+					{
+						"episode_number": 322,
+						"season_number": 1,
+						"name": "Clash! Rukia vs. Rukia!",
+						"air_date": "2011-05-17",
+						"id": 1517490
+					},
+					{
+						"episode_number": 323,
+						"season_number": 1,
+						"name": "Protect Ichigo! Nozomi's Determination",
+						"air_date": "2011-05-24",
+						"id": 1517491
+					},
+					{
+						"episode_number": 324,
+						"season_number": 1,
+						"name": "Recapture Seireitei! The Captains Move!",
+						"air_date": "2011-05-31",
+						"id": 1517492
+					},
+					{
+						"episode_number": 325,
+						"season_number": 1,
+						"name": "For the Sake of the Believers! Byakuya vs. Hitsugaya!",
+						"air_date": "2011-06-07",
+						"id": 1517493
+					},
+					{
+						"episode_number": 326,
+						"season_number": 1,
+						"name": "The Two Hinamori, Hitsugaya's Resolution",
+						"air_date": "2011-06-14",
+						"id": 1517494
+					},
+					{
+						"episode_number": 327,
+						"season_number": 1,
+						"name": "Pride of the Kuchiki Family! Byakuya vs. Byakuya!",
+						"air_date": "2011-06-21",
+						"id": 1517496
+					},
+					{
+						"episode_number": 328,
+						"season_number": 1,
+						"name": "Defeat Kageroza! Shinigami, All-Out War!",
+						"air_date": "2011-06-28",
+						"id": 1517497
+					},
+					{
+						"episode_number": 329,
+						"season_number": 1,
+						"name": "The Forbidden Research...Nozomi's Hidden Secret!",
+						"air_date": "2011-07-05",
+						"id": 1517498
+					},
+					{
+						"episode_number": 330,
+						"season_number": 1,
+						"name": "I Want to Live...! Nozomi's Zanpakutō",
+						"air_date": "2011-07-12",
+						"id": 1517499
+					},
+					{
+						"episode_number": 331,
+						"season_number": 1,
+						"name": "For the Sake of Fighting! The Awakened Nozomi!",
+						"air_date": "2011-07-19",
+						"id": 1517500
+					},
+					{
+						"episode_number": 332,
+						"season_number": 1,
+						"name": "The Most Evil Reigai, Appearing in the Real World!",
+						"air_date": "2011-07-26",
+						"id": 1517501
+					},
+					{
+						"episode_number": 333,
+						"season_number": 1,
+						"name": "Destroy Nozomi!? Genryusai's Decision!",
+						"air_date": "2011-08-02",
+						"id": 1517502
+					},
+					{
+						"episode_number": 334,
+						"season_number": 1,
+						"name": "The Depleting Reiatsu! Ichigo, Death Struggle of the Soul!",
+						"air_date": "2011-08-09",
+						"id": 1517503
+					},
+					{
+						"episode_number": 335,
+						"season_number": 1,
+						"name": "Hiding in the Dangai? Another Ichigo?!",
+						"air_date": "2011-08-16",
+						"id": 1517504
+					},
+					{
+						"episode_number": 336,
+						"season_number": 1,
+						"name": "Pursue Kageroza! Technological Development Department, Infiltration!",
+						"air_date": "2011-08-23",
+						"id": 1517505
+					},
+					{
+						"episode_number": 337,
+						"season_number": 1,
+						"name": "The Developer of the Modified Souls",
+						"air_date": "2011-08-30",
+						"id": 1517506
+					},
+					{
+						"episode_number": 338,
+						"season_number": 1,
+						"name": "Kon's Thoughts, Nozomi's Thoughts",
+						"air_date": "2011-09-06",
+						"id": 1517507
+					},
+					{
+						"episode_number": 339,
+						"season_number": 1,
+						"name": "Protect Ichigo! The Bonds of Friends!",
+						"air_date": "2011-09-13",
+						"id": 1517508
+					},
+					{
+						"episode_number": 340,
+						"season_number": 1,
+						"name": "Reigai vs. Original, The Fierce Fighting for Gambled Pride!",
+						"air_date": "2011-09-20",
+						"id": 1517509
+					},
+					{
+						"episode_number": 341,
+						"season_number": 1,
+						"name": "Invading Army Arc, Final Conclusion!",
+						"air_date": "2011-09-27",
+						"id": 1517510
+					},
+					{
+						"episode_number": 342,
+						"season_number": 1,
+						"name": "Thank You",
+						"air_date": "2011-10-04",
+						"id": 1517511
+					},
+					{
+						"episode_number": 343,
+						"season_number": 1,
+						"name": "3rd Year High School Student! Dressed Up, and a New Chapter Begins!",
+						"air_date": "2011-10-11",
+						"id": 1517512
+					},
+					{
+						"episode_number": 344,
+						"season_number": 1,
+						"name": "A Dispute in School!? Ichigo and Uryū, Fight Together!",
+						"air_date": "2011-10-18",
+						"id": 1517513
+					},
+					{
+						"episode_number": 345,
+						"season_number": 1,
+						"name": "Uryū is Attacked, A Threat Draws Near the Friends!",
+						"air_date": "2011-10-25",
+						"id": 1517514
+					},
+					{
+						"episode_number": 346,
+						"season_number": 1,
+						"name": "The Man with the Fullbring Ability: Kūgo Ginjō",
+						"air_date": "2011-11-01",
+						"id": 1517515
+					},
+					{
+						"episode_number": 347,
+						"season_number": 1,
+						"name": "A Crisis Sneaking up on the Kurosaki Family!? Ichigo's Confusion!",
+						"air_date": "2011-11-08",
+						"id": 1517525
+					},
+					{
+						"episode_number": 348,
+						"season_number": 1,
+						"name": "Power of the Substitute Badge, Ichigo's 'Pride'!",
+						"air_date": "2011-11-15",
+						"id": 1517533
+					},
+					{
+						"episode_number": 349,
+						"season_number": 1,
+						"name": "Next Target, The Devil's Hand Aims at Orihime!",
+						"air_date": "2011-11-22",
+						"id": 1517534
+					},
+					{
+						"episode_number": 350,
+						"season_number": 1,
+						"name": "The Man Who Killed the Shinigami Substitute!? Tsukishima Makes His Move",
+						"air_date": "2011-11-29",
+						"id": 1517535
+					},
+					{
+						"episode_number": 351,
+						"season_number": 1,
+						"name": "Fullbring, The Detested Power!",
+						"air_date": "2011-12-06",
+						"id": 1517536
+					},
+					{
+						"episode_number": 352,
+						"season_number": 1,
+						"name": "Tsukishima Attacks! The Training Has Been Thwarted",
+						"air_date": "2011-12-13",
+						"id": 1517537
+					},
+					{
+						"episode_number": 353,
+						"season_number": 1,
+						"name": "Ichigo, Mastering the Fullbring!",
+						"air_date": "2011-12-20",
+						"id": 1517538
+					},
+					{
+						"episode_number": 354,
+						"season_number": 1,
+						"name": "Ichigo vs. Ginjō! To the Game's Space",
+						"air_date": "2011-12-27",
+						"id": 1517539
+					},
+					{
+						"episode_number": 355,
+						"season_number": 1,
+						"name": "Shinigami at War! New Year in Seireitei Special!",
+						"air_date": "2012-01-10",
+						"id": 1517540
+					},
+					{
+						"episode_number": 356,
+						"season_number": 1,
+						"name": "Friend or Foe!? Ginjō's True Intentions!",
+						"air_date": "2012-01-17",
+						"id": 1517541
+					},
+					{
+						"episode_number": 357,
+						"season_number": 1,
+						"name": "Tsukishima's Ability, the Danger is Drawing Near!",
+						"air_date": "2012-01-24",
+						"id": 1517542
+					},
+					{
+						"episode_number": 358,
+						"season_number": 1,
+						"name": "Clash!? Xcution attacks Ginjō",
+						"air_date": "2012-01-31",
+						"id": 1517543
+					},
+					{
+						"episode_number": 359,
+						"season_number": 1,
+						"name": "The Sorrowful Battle! Ichigo vs. Sado & Orihime",
+						"air_date": "2012-02-07",
+						"id": 1517544
+					},
+					{
+						"episode_number": 360,
+						"season_number": 1,
+						"name": "Ichigo vs Uryū!? Who is the Traitor!?",
+						"air_date": "2012-02-14",
+						"id": 1517545
+					},
+					{
+						"episode_number": 361,
+						"season_number": 1,
+						"name": "A New Appearance! The Gotei 13, Arrives!",
+						"air_date": "2012-02-21",
+						"id": 1517546
+					},
+					{
+						"episode_number": 362,
+						"season_number": 1,
+						"name": "Revival! Substitute Shinigami: Ichigo Kurosaki!",
+						"air_date": "2012-02-28",
+						"id": 1517557
+					},
+					{
+						"episode_number": 363,
+						"season_number": 1,
+						"name": "Fierce Fight! Shinigami vs. XCUTION!",
+						"air_date": "2012-03-06",
+						"id": 1517559
+					},
+					{
+						"episode_number": 364,
+						"season_number": 1,
+						"name": "Desperate Struggle!? Byakuya's Troubled Memories",
+						"air_date": "2012-03-13",
+						"id": 1517560
+					},
+					{
+						"episode_number": 365,
+						"season_number": 1,
+						"name": "Ichigo vs. Ginjō! Secret of the Substitute Badge",
+						"air_date": "2012-03-20",
+						"id": 1517561
+					},
+					{
+						"episode_number": 366,
+						"season_number": 1,
+						"name": "Changing History, Unchanging Heart",
+						"air_date": "2012-03-27",
+						"id": 1517562
+					}
+				]
+			},
+			"30984/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Blood Warfare",
+						"air_date": "2022-10-11",
+						"id": 3754381
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Foundation Stones",
+						"air_date": "2022-10-18",
+						"id": 3997306
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "March of the Starcross",
+						"air_date": "2022-10-25",
+						"id": 3997307
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Kill the Shadow",
+						"air_date": "2022-11-01",
+						"id": 3997308
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Wrath as a Lightning",
+						"air_date": "2022-11-08",
+						"id": 3997309
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "The Fire",
+						"air_date": "2022-11-15",
+						"id": 3997310
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Born in the Dark",
+						"air_date": "2022-11-22",
+						"id": 3997311
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Shooting Star Project [Zero Mix]",
+						"air_date": "2022-11-29",
+						"id": 3997313
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "The Drop",
+						"air_date": "2022-12-06",
+						"id": 3997314
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Battle",
+						"air_date": "2022-12-13",
+						"id": 3997315
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Everything but the Rain",
+						"air_date": "2022-12-20",
+						"id": 3997316
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Everything but the Rain: June Truth",
+						"air_date": "2022-12-27",
+						"id": 3997317
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Blade Is Me",
+						"air_date": "2022-12-27",
+						"id": 3997318
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "The Last 9 Days",
+						"air_date": "2023-07-08",
+						"id": 4486962
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "PEACE FROM SHADOWS",
+						"air_date": "2023-07-15",
+						"id": 4572496
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "THE FUNDAMENTAL VIRULENCE",
+						"air_date": "2023-07-22",
+						"id": 4584166
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "HEART OF WOLF",
+						"air_date": "2023-07-29",
+						"id": 4584668
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "RAGES AT RINGSIDE",
+						"air_date": "2023-08-05",
+						"id": 4584669
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "THE WHITE HAZE",
+						"air_date": "2023-08-12",
+						"id": 4584670
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "I AM THE EDGE",
+						"air_date": "2023-08-19",
+						"id": 4584671
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "THE HEADLESS STAR",
+						"air_date": "2023-08-26",
+						"id": 4584672
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "MARCHING OUT THE ZOMBIES",
+						"air_date": "2023-09-09",
+						"id": 4584673
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "MARCHING OUT THE ZOMBIES 2",
+						"air_date": "2023-09-16",
+						"id": 4584674
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "TOO EARLY TO WIN TOO LATE TO KNOW",
+						"air_date": "2023-09-23",
+						"id": 4584675
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "THE MASTER",
+						"air_date": "2023-09-30",
+						"id": 4584676
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "BLACK",
+						"air_date": "2023-09-30",
+						"id": 4584677
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "A",
+						"air_date": "2024-10-05",
+						"id": 5545060
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "KILL THE KING",
+						"air_date": "2024-10-12",
+						"id": 5649783
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "THE DARK ARM",
+						"air_date": "2024-10-19",
+						"id": 5651935
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "THE BETRAYER",
+						"air_date": "2024-10-26",
+						"id": 5651938
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "AGAINST THE JUDGEMENT",
+						"air_date": "2024-11-02",
+						"id": 5694467
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "THE HOLY NEWBORN",
+						"air_date": "2024-11-09",
+						"id": 5694468
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "GATE OF THE SUN",
+						"air_date": "2024-11-16",
+						"id": 5694469
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "BABY, HOLD YOUR HAND",
+						"air_date": "2024-11-23",
+						"id": 5694470
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "DON'T CHASE A SHADOW",
+						"air_date": "2024-11-30",
+						"id": 5694471
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "BABY, HOLD YOUR HAND 2 [NEVER ENDING MY DREAM]",
+						"air_date": "2024-12-07",
+						"id": 5694472
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "SHADOWS GONE",
+						"air_date": "2024-12-14",
+						"id": 5694473
+					},
+					{
+						"episode_number": 38,
+						"season_number": 2,
+						"name": "FRIEND",
+						"air_date": "2024-12-21",
+						"id": 5694474
+					},
+					{
+						"episode_number": 39,
+						"season_number": 2,
+						"name": "THE VISIBLE ANSWER",
+						"air_date": "2024-12-28",
+						"id": 5694476
+					},
+					{
+						"episode_number": 40,
+						"season_number": 2,
+						"name": "MY LAST WORDS",
+						"air_date": "2024-12-29",
+						"id": 5837774
+					},
+					{
+						"episode_number": 41,
+						"season_number": 2,
+						"name": "GOD OF THUNDER",
+						"air_date": "2026-07-25",
+						"id": 7338204
+					},
+					{
+						"episode_number": 42,
+						"season_number": 2,
+						"name": "SON OF DARKNESS",
+						"air_date": "2026-08-01",
+						"id": 7470569
+					},
+					{
+						"episode_number": 43,
+						"season_number": 2,
+						"name": "BLOOD FOR MY BONE",
+						"air_date": "2026-08-08",
+						"id": 7470571
+					},
+					{
+						"episode_number": 44,
+						"season_number": 2,
+						"name": "THE PERFECT CRIMSON",
+						"air_date": "2026-08-15",
+						"id": 7470573
+					},
+					{
+						"episode_number": 45,
+						"season_number": 2,
+						"name": "DEFEND YOU",
+						"air_date": "2026-08-22",
+						"id": 7470575
+					},
+					{
+						"episode_number": 46,
+						"season_number": 2,
+						"name": "THE END",
+						"air_date": "2026-08-29",
+						"id": 7470576
+					},
+					{
+						"episode_number": 47,
+						"season_number": 2,
+						"name": "THE END 2",
+						"air_date": "2026-09-05",
+						"id": 7470577
+					},
+					{
+						"episode_number": 48,
+						"season_number": 2,
+						"name": "THE END TWO WORLD",
+						"air_date": "2026-09-12",
+						"id": 7470579
+					},
+					{
+						"episode_number": 49,
+						"season_number": 2,
+						"name": "THE BLADE",
+						"air_date": "2026-10-20",
+						"id": 7470583
+					},
+					{
+						"episode_number": 50,
+						"season_number": 2,
+						"name": "DEATH & STRAWBERRY",
+						"air_date": "2026-10-27",
+						"id": 7470587
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0434665": null
+		},
+		"tvdbEpisodes": {
+			"74796": {
+				"data": {
+					"episodes": [
+						{
+							"id": 339330,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": null,
+							"aired": "2005-06-12",
+							"runtime": 25
+						},
+						{
+							"id": 354675,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": null,
+							"aired": "2006-03-23",
+							"runtime": 25
+						},
+						{
+							"id": 354676,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "劇場版BLEACH MEMORIES OF NOBODY",
+							"aired": "2006-12-16",
+							"runtime": 93
+						},
+						{
+							"id": 354677,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "劇場版BLEACH The DiamondDust Rebellion もう一つの氷輪丸",
+							"aired": "2007-12-22",
+							"runtime": 93
+						},
+						{
+							"id": 401879,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "劇場版BLEACH Fade to Black 君の名を呼ぶ",
+							"aired": "2008-12-13",
+							"runtime": 95
+						},
+						{
+							"id": 2468451,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "劇場版BLEACH 地獄篇",
+							"aired": "2010-12-04",
+							"runtime": 94
+						},
+						{
+							"id": 2183871,
+							"seasonNumber": 0,
+							"number": 99,
+							"name": null,
+							"aired": "2004-10-03",
+							"runtime": 2
+						},
+						{
+							"id": 155071,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "死神になっちゃった日",
+							"aired": "2004-10-05",
+							"runtime": 23
+						},
+						{
+							"id": 155072,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "死神のお仕事",
+							"aired": "2004-10-12",
+							"runtime": 23
+						},
+						{
+							"id": 155073,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "兄の想い、妹の想い",
+							"aired": "2004-10-19",
+							"runtime": 23
+						},
+						{
+							"id": 155074,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "呪いのインコ",
+							"aired": "2004-10-26",
+							"runtime": 23
+						},
+						{
+							"id": 155075,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "見えない敵を殴れ!",
+							"aired": "2004-11-02",
+							"runtime": 23
+						},
+						{
+							"id": 155076,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "死闘！一護VSイチゴ",
+							"aired": "2004-11-09",
+							"runtime": 23
+						},
+						{
+							"id": 155077,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "ぬいぐるみからコンにちは",
+							"aired": "2004-11-16",
+							"runtime": 23
+						},
+						{
+							"id": 155078,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "6月17日、雨の記憶",
+							"aired": "2004-11-23",
+							"runtime": 23
+						},
+						{
+							"id": 155079,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "倒せない敵",
+							"aired": "2004-11-30",
+							"runtime": 23
+						},
+						{
+							"id": 155080,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "ぶらり霊場突撃の旅！",
+							"aired": "2004-12-07",
+							"runtime": 23
+						},
+						{
+							"id": 155081,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "伝説のクインシー",
+							"aired": "2004-12-14",
+							"runtime": 23
+						},
+						{
+							"id": 155082,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "やさしい右腕",
+							"aired": "2004-12-21",
+							"runtime": 23
+						},
+						{
+							"id": 155083,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "花とホロウ",
+							"aired": "2004-12-28",
+							"runtime": 23
+						},
+						{
+							"id": 155084,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "背中合わせの死闘！",
+							"aired": "2005-01-11",
+							"runtime": 23
+						},
+						{
+							"id": 155085,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "コンのウハウハ大作戦",
+							"aired": "2005-01-18",
+							"runtime": 23
+						},
+						{
+							"id": 155086,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "阿散井恋次、見参！",
+							"aired": "2005-01-25",
+							"runtime": 23
+						},
+						{
+							"id": 155087,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "一護、死す！",
+							"aired": "2005-02-01",
+							"runtime": 23
+						},
+						{
+							"id": 155088,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "取り戻せ！死神の力！",
+							"aired": "2005-02-08",
+							"runtime": 23
+						},
+						{
+							"id": 155089,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "一護、ホロウに墜ちる！",
+							"aired": "2005-02-15",
+							"runtime": 23
+						},
+						{
+							"id": 155090,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "市丸ギンの影",
+							"aired": "2005-02-22",
+							"runtime": 23
+						},
+						{
+							"id": 155091,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "突入！死神の世界",
+							"aired": "2005-03-01",
+							"runtime": 23
+						},
+						{
+							"id": 155092,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "死神を憎む男",
+							"aired": "2005-03-08",
+							"runtime": 23
+						},
+						{
+							"id": 155093,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "ルキア処刑、14日前",
+							"aired": "2005-03-15",
+							"runtime": 23
+						},
+						{
+							"id": 155094,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "結集！護廷13隊",
+							"aired": "2005-03-22",
+							"runtime": 23
+						},
+						{
+							"id": 155095,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "巨大砲弾で中央突破？",
+							"aired": "2005-03-29",
+							"runtime": 23
+						},
+						{
+							"id": 313413,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "結成！最悪のタッグ",
+							"aired": "2005-04-05",
+							"runtime": 23
+						},
+						{
+							"id": 313414,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "必殺の一撃を放て！",
+							"aired": "2005-04-12",
+							"runtime": 23
+						},
+						{
+							"id": 313415,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "狙われた織姫",
+							"aired": "2005-04-19",
+							"runtime": 23
+						},
+						{
+							"id": 313416,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "突破せよ！死神包囲網",
+							"aired": "2005-04-26",
+							"runtime": 23
+						},
+						{
+							"id": 313417,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "立ちはだかる恋次",
+							"aired": "2005-05-03",
+							"runtime": 23
+						},
+						{
+							"id": 313418,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "斬る為の覚悟",
+							"aired": "2005-05-10",
+							"runtime": 23
+						},
+						{
+							"id": 313419,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "星と野良犬",
+							"aired": "2005-05-17",
+							"runtime": 23
+						},
+						{
+							"id": 313420,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "奇跡！謎の新ヒーロー",
+							"aired": "2005-05-24",
+							"runtime": 23
+						},
+						{
+							"id": 313421,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "夜明けの惨劇",
+							"aired": "2005-05-31",
+							"runtime": 23
+						},
+						{
+							"id": 313422,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "藍染暗殺！忍び寄る闇",
+							"aired": "2005-06-07",
+							"runtime": 23
+						},
+						{
+							"id": 313423,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "更木剣八、迫る！",
+							"aired": "2005-06-14",
+							"runtime": 23
+						},
+						{
+							"id": 313424,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "拳の理由",
+							"aired": "2005-06-21",
+							"runtime": 23
+						},
+						{
+							"id": 313425,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "絶対絶命！折られた斬月",
+							"aired": "2005-06-28",
+							"runtime": 23
+						},
+						{
+							"id": 313426,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "不死身の男",
+							"aired": "2005-07-05",
+							"runtime": 23
+						},
+						{
+							"id": 313427,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "ガンジュの見た死神",
+							"aired": "2005-07-12",
+							"runtime": 23
+						},
+						{
+							"id": 313428,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "再会、一護とルキア",
+							"aired": "2005-07-19",
+							"runtime": 23
+						},
+						{
+							"id": 313429,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "瞬神夜一、舞う！",
+							"aired": "2005-07-26",
+							"runtime": 23
+						},
+						{
+							"id": 313430,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "卑劣な死神",
+							"aired": "2005-08-02",
+							"runtime": 23
+						},
+						{
+							"id": 313431,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "石田、極限の力!",
+							"aired": "2005-08-09",
+							"runtime": 23
+						},
+						{
+							"id": 313432,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "限界を超えろ!",
+							"aired": "2005-08-16",
+							"runtime": 23
+						},
+						{
+							"id": 313433,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "実録! 死神の学校",
+							"aired": "2005-08-23",
+							"runtime": 23
+						},
+						{
+							"id": 313434,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "仇討つ者たち",
+							"aired": "2005-08-30",
+							"runtime": 23
+						},
+						{
+							"id": 313435,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "日番谷、吼える",
+							"aired": "2005-09-06",
+							"runtime": 23
+						},
+						{
+							"id": 313436,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "ルキアの悪夢",
+							"aired": "2005-09-13",
+							"runtime": 23
+						},
+						{
+							"id": 313437,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "よみがえる獅子",
+							"aired": "2005-09-20",
+							"runtime": 23
+						},
+						{
+							"id": 313438,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "処刑の朝",
+							"aired": "2005-09-27",
+							"runtime": 23
+						},
+						{
+							"id": 318423,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "恋次、魂の誓い! 白哉との死闘",
+							"aired": "2005-10-04",
+							"runtime": 25
+						},
+						{
+							"id": 318424,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "市丸ギンの誘惑、崩された覚悟",
+							"aired": "2005-10-04",
+							"runtime": 25
+						},
+						{
+							"id": 318425,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "果たされる誓い! ルキア奪還なるか!",
+							"aired": "2005-10-18",
+							"runtime": 25
+						},
+						{
+							"id": 318426,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "最強の死神! 究極の師弟対決",
+							"aired": "2005-10-25",
+							"runtime": 25
+						},
+						{
+							"id": 318427,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "超速の戦い! 武の女神、決す",
+							"aired": "2005-11-01",
+							"runtime": 25
+						},
+						{
+							"id": 318428,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "千本桜、粉砕! 天を衝く斬月",
+							"aired": "2005-11-08",
+							"runtime": 25
+						},
+						{
+							"id": 318429,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "開放! 黒き刃、奇跡の力",
+							"aired": "2005-11-15",
+							"runtime": 25
+						},
+						{
+							"id": 318430,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "死闘決着! 白き誇りと黒き想い",
+							"aired": "2005-11-22",
+							"runtime": 25
+						},
+						{
+							"id": 318431,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "絶望の真実、振り下ろされた凶刃",
+							"aired": "2005-12-06",
+							"runtime": 25
+						},
+						{
+							"id": 318432,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "藍染、立つ! 恐るべき野望",
+							"aired": "2005-12-13",
+							"runtime": 25
+						},
+						{
+							"id": 318433,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "集結せよ! 最強の死神軍団",
+							"aired": "2005-12-20",
+							"runtime": 25
+						},
+						{
+							"id": 318434,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "ルキアの決意、一護の想い",
+							"aired": "2006-01-10",
+							"runtime": 25
+						},
+						{
+							"id": 318435,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "新学期、現世に恋次がやって来た!?",
+							"aired": "2006-01-17",
+							"runtime": 25
+						},
+						{
+							"id": 318436,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "忍び寄る恐怖、2番目の犠牲者",
+							"aired": "2006-01-24",
+							"runtime": 25
+						},
+						{
+							"id": 318437,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "突破せよ! 迷宮に潜む罠",
+							"aired": "2006-01-31",
+							"runtime": 25
+						},
+						{
+							"id": 318438,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "死のゲーム! 消えるクラスメイト",
+							"aired": "2006-02-07",
+							"runtime": 25
+						},
+						{
+							"id": 318439,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "悪魔の正体、明かされた秘密",
+							"aired": "2006-02-14",
+							"runtime": 25
+						},
+						{
+							"id": 318440,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "その名はバウント! 魂を狩る者たち",
+							"aired": "2006-02-14",
+							"runtime": 25
+						},
+						{
+							"id": 318441,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "ルキアの帰還! 代行チーム復活",
+							"aired": "2006-02-21",
+							"runtime": 25
+						},
+						{
+							"id": 318442,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "激突の時! クインシーに迫る魔の手",
+							"aired": "2006-03-07",
+							"runtime": 25
+						},
+						{
+							"id": 318443,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "水の攻撃! 閉ざされた病院からの脱出",
+							"aired": "2006-03-14",
+							"runtime": 25
+						},
+						{
+							"id": 318444,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "バウント集結! 動き出す男",
+							"aired": "2006-03-28",
+							"runtime": 25
+						},
+						{
+							"id": 318445,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "永遠を生きる一族の記憶",
+							"aired": "2006-03-28",
+							"runtime": 25
+						},
+						{
+							"id": 318400,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "十一番隊激震! よみがえった死神",
+							"aired": "2006-04-04",
+							"runtime": 25
+						},
+						{
+							"id": 318401,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "力の激突! フリードVS斬月",
+							"aired": "2006-04-04",
+							"runtime": 25
+						},
+						{
+							"id": 318402,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "消えぬ怨念! 剣八が斬った死神",
+							"aired": "2006-04-11",
+							"runtime": 25
+						},
+						{
+							"id": 318403,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "護廷十三隊驚愕!! 歴史に埋もれた真実",
+							"aired": "2006-05-02",
+							"runtime": 25
+						},
+						{
+							"id": 318404,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "芳野、死をかけた想い",
+							"aired": "2006-05-09",
+							"runtime": 25
+						},
+						{
+							"id": 318405,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "強敵の急襲! 小さな最終防衛戦!?",
+							"aired": "2006-05-16",
+							"runtime": 25
+						},
+						{
+							"id": 318406,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "日番谷動く! 襲われた街",
+							"aired": "2006-05-23",
+							"runtime": 25
+						},
+						{
+							"id": 318407,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "一護VSダルク! 白き闇の出現",
+							"aired": "2006-05-30",
+							"runtime": 25
+						},
+						{
+							"id": 318408,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "灰色の影、ドールの秘密",
+							"aired": "2006-06-06",
+							"runtime": 25
+						},
+						{
+							"id": 318409,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "代行チーム分裂? 裏切ったルキア",
+							"aired": "2006-06-13",
+							"runtime": 25
+						},
+						{
+							"id": 318410,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "涙の死闘! ルキアVS織姫",
+							"aired": "2006-06-13",
+							"runtime": 25
+						},
+						{
+							"id": 318411,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "乱菊舞う! 見えない敵を斬れ",
+							"aired": "2006-06-20",
+							"runtime": 25
+						},
+						{
+							"id": 318412,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "白哉召集! 動き出す護廷十三隊",
+							"aired": "2006-07-04",
+							"runtime": 25
+						},
+						{
+							"id": 318413,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "副隊長全滅!? 地下洞窟の罠",
+							"aired": "2006-07-11",
+							"runtime": 25
+						},
+						{
+							"id": 318414,
+							"seasonNumber": 4,
+							"number": 26,
+							"name": "再戦!? 石田VSネム",
+							"aired": "2006-07-18",
+							"runtime": 25
+						},
+						{
+							"id": 318415,
+							"seasonNumber": 4,
+							"number": 27,
+							"name": "阿散井恋次、魂の卍解",
+							"aired": "2006-07-25",
+							"runtime": 25
+						},
+						{
+							"id": 318416,
+							"seasonNumber": 4,
+							"number": 28,
+							"name": "死神とクインシー、よみがえる力",
+							"aired": "2006-08-01",
+							"runtime": 25
+						},
+						{
+							"id": 318417,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "死神世界への突入、再び",
+							"aired": "2006-08-08",
+							"runtime": 25
+						},
+						{
+							"id": 318418,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "バウント強襲! 激震の護廷十三隊",
+							"aired": "2006-08-15",
+							"runtime": 25
+						},
+						{
+							"id": 318419,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "日番谷の決意! 激突の時迫る",
+							"aired": "2006-08-22",
+							"runtime": 25
+						},
+						{
+							"id": 318420,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "白哉出陣! 風を裂く桜の舞",
+							"aired": "2006-09-05",
+							"runtime": 25
+						},
+						{
+							"id": 318421,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "一護・白哉・狩矢、三極の戦い!",
+							"aired": "2006-09-12",
+							"runtime": 25
+						},
+						{
+							"id": 318422,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "日番谷出撃! 森の中の敵を斬れ",
+							"aired": "2006-09-19",
+							"runtime": 25
+						},
+						{
+							"id": 318386,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "激突! 更木剣八VS一之瀬真樹",
+							"aired": "2006-10-04",
+							"runtime": 24
+						},
+						{
+							"id": 318387,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "死神VS死神! 暴走する力",
+							"aired": "2006-10-11",
+							"runtime": 24
+						},
+						{
+							"id": 318388,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "砕蜂死す? 隠密機動の最後",
+							"aired": "2006-10-18",
+							"runtime": 24
+						},
+						{
+							"id": 318389,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "マユリ卍解!! 沢渡・悪魔の激突",
+							"aired": "2006-10-25",
+							"runtime": 24
+						},
+						{
+							"id": 318390,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "最後のクインシー! 暴発する力",
+							"aired": "2006-11-08",
+							"runtime": 24
+						},
+						{
+							"id": 318391,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "石田、限界を超えて撃て!",
+							"aired": "2006-11-15",
+							"runtime": 24
+						},
+						{
+							"id": 318392,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "死闘十番隊! 氷輪丸を放て",
+							"aired": "2006-11-22",
+							"runtime": 24
+						},
+						{
+							"id": 318393,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "狩矢! 爆発へのカウントダウン",
+							"aired": "2006-11-29",
+							"runtime": 24
+						},
+						{
+							"id": 318394,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "命と復讐! 石田、究極の選択",
+							"aired": "2006-12-06",
+							"runtime": 24
+						},
+						{
+							"id": 318395,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "振り下ろされた刃! 破滅の瞬間",
+							"aired": "2006-12-13",
+							"runtime": 24
+						},
+						{
+							"id": 318396,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "慟哭のバウント! 最後の激突",
+							"aired": "2006-12-20",
+							"runtime": 24
+						},
+						{
+							"id": 318397,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "一護とルキア、廻天する想い",
+							"aired": "2007-01-04",
+							"runtime": 24
+						},
+						{
+							"id": 318398,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "代行業再開! 恐怖の転校生",
+							"aired": "2007-01-10",
+							"runtime": 24
+						},
+						{
+							"id": 318399,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "驚愕! 親父達の正体",
+							"aired": "2007-01-17",
+							"runtime": 24
+						},
+						{
+							"id": 318446,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "戦いの始まり、仮面の軍勢と破面",
+							"aired": "2007-01-24",
+							"runtime": 24
+						},
+						{
+							"id": 318447,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "世界崩壊への序曲、アランカル来襲!",
+							"aired": "2007-01-31",
+							"runtime": 24
+						},
+						{
+							"id": 318448,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "再会、一護とルキアと死神たち",
+							"aired": "2007-02-07",
+							"runtime": 24
+						},
+						{
+							"id": 320568,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "特命! やってきた死神たち",
+							"aired": "2007-02-14",
+							"runtime": 24
+						},
+						{
+							"id": 320569,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "悪しき瞳、藍染再び",
+							"aired": "2007-02-21",
+							"runtime": 24
+						},
+						{
+							"id": 320570,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "ルキア戦闘開始! 凍りつく白き刃",
+							"aired": "2007-02-28",
+							"runtime": 24
+						},
+						{
+							"id": 320571,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "一角卍解! 全てを砕く力",
+							"aired": "2007-03-07",
+							"runtime": 24
+						},
+						{
+							"id": 325093,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "更木隊秘話! ツイている男たち",
+							"aired": "2007-03-21",
+							"runtime": 24
+						},
+						{
+							"id": 326733,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "日番谷散る! 砕けた氷輪丸",
+							"aired": "2007-03-28",
+							"runtime": 24
+						},
+						{
+							"id": 327599,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "激突! 護る者VS被る者",
+							"aired": "2007-04-11",
+							"runtime": 24
+						},
+						{
+							"id": 327600,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "ヴァイザード! 目覚めし者たちの力",
+							"aired": "2007-04-18",
+							"runtime": 24
+						},
+						{
+							"id": 327601,
+							"seasonNumber": 6,
+							"number": 14,
+							"name": "一護、完全ホロウ化!?",
+							"aired": "2007-04-25",
+							"runtime": 24
+						},
+						{
+							"id": 327602,
+							"seasonNumber": 6,
+							"number": 15,
+							"name": "激突! 黒い卍解と白い卍解",
+							"aired": "2007-05-02",
+							"runtime": 24
+						},
+						{
+							"id": 327603,
+							"seasonNumber": 6,
+							"number": 16,
+							"name": "緊急報告! 藍染の恐るべき計画",
+							"aired": "2007-05-09",
+							"runtime": 24
+						},
+						{
+							"id": 328929,
+							"seasonNumber": 6,
+							"number": 17,
+							"name": "雨竜VS竜弦! 激突クインシー親子",
+							"aired": "2007-05-16",
+							"runtime": 24
+						},
+						{
+							"id": 328930,
+							"seasonNumber": 6,
+							"number": 18,
+							"name": "浦原の決断、織姫の想い",
+							"aired": "2007-05-30",
+							"runtime": 24
+						},
+						{
+							"id": 328931,
+							"seasonNumber": 6,
+							"number": 19,
+							"name": "悪夢のアランカル! 日番谷隊出撃",
+							"aired": "2007-06-06",
+							"runtime": 24
+						},
+						{
+							"id": 329896,
+							"seasonNumber": 6,
+							"number": 20,
+							"name": "舞い降りた闇の使者! 増殖する悪意",
+							"aired": "2007-06-13",
+							"runtime": 24
+						},
+						{
+							"id": 329897,
+							"seasonNumber": 6,
+							"number": 21,
+							"name": "見えない敵! 日番谷、非情な決断",
+							"aired": "2007-06-20",
+							"runtime": 24
+						},
+						{
+							"id": 329898,
+							"seasonNumber": 6,
+							"number": 22,
+							"name": "乱菊の涙、哀しき兄妹の別れ",
+							"aired": "2007-06-27",
+							"runtime": 24
+						},
+						{
+							"id": 331624,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "日番谷と夏梨とサッカーボール",
+							"aired": "2007-07-04",
+							"runtime": 24
+						},
+						{
+							"id": 331625,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "一角、熱血剣道物語",
+							"aired": "2007-07-11",
+							"runtime": 24
+						},
+						{
+							"id": 331626,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "美しきパティシエ、弓親!",
+							"aired": "2007-07-18",
+							"runtime": 24
+						},
+						{
+							"id": 332442,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "はかられたコン! 乱菊は見ていた…",
+							"aired": "2007-07-25",
+							"runtime": 24
+						},
+						{
+							"id": 332443,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "ウェコムンドの内乱! ウルキオラの死",
+							"aired": "2007-08-08",
+							"runtime": 24
+						},
+						{
+							"id": 332444,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "悪意の戦い、藍染の罠",
+							"aired": "2007-08-22",
+							"runtime": 24
+						},
+						{
+							"id": 334605,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "ウェコムンド再動! 日番谷VSヤミー",
+							"aired": "2007-08-29",
+							"runtime": 24
+						},
+						{
+							"id": 334606,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "一護VSグリムジョー、11秒の戦い!",
+							"aired": "2007-09-05",
+							"runtime": 24
+						},
+						{
+							"id": 334607,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "策謀のウルキオラ、太陽が沈む時",
+							"aired": "2007-09-12",
+							"runtime": 24
+						},
+						{
+							"id": 334608,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "さようなら…、黒崎くん",
+							"aired": "2007-09-19",
+							"runtime": 24
+						},
+						{
+							"id": 336769,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "厳命! 井上織姫ノ救出ヲ禁ズ",
+							"aired": "2007-09-26",
+							"runtime": 24
+						},
+						{
+							"id": 338982,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "復活のグリムジョー",
+							"aired": "2007-10-03",
+							"runtime": 24
+						},
+						{
+							"id": 336770,
+							"seasonNumber": 7,
+							"number": 13,
+							"name": "石田・チャド、新しき力の胎動",
+							"aired": "2007-10-17",
+							"runtime": 24
+						},
+						{
+							"id": 336771,
+							"seasonNumber": 7,
+							"number": 14,
+							"name": "エスパーダ集結! 藍染の御前会議",
+							"aired": "2007-10-24",
+							"runtime": 24
+						},
+						{
+							"id": 336772,
+							"seasonNumber": 7,
+							"number": 15,
+							"name": "その名はネル! 不思議なアランカル登場",
+							"aired": "2007-10-31",
+							"runtime": 24
+						},
+						{
+							"id": 336773,
+							"seasonNumber": 7,
+							"number": 16,
+							"name": "メノスの森! 消えたルキアを探せ",
+							"aired": "2007-11-07",
+							"runtime": 24
+						},
+						{
+							"id": 341258,
+							"seasonNumber": 7,
+							"number": 17,
+							"name": "アシド、過去から来た死神",
+							"aired": "2007-11-14",
+							"runtime": 24
+						},
+						{
+							"id": 341259,
+							"seasonNumber": 7,
+							"number": 18,
+							"name": "崩れ行く森、百万のメノス",
+							"aired": "2007-11-21",
+							"runtime": 24
+						},
+						{
+							"id": 341260,
+							"seasonNumber": 7,
+							"number": 19,
+							"name": "誓い! 再び生きてこの場所へ",
+							"aired": "2007-11-28",
+							"runtime": 24
+						},
+						{
+							"id": 342935,
+							"seasonNumber": 7,
+							"number": 20,
+							"name": "吹き荒れる暴風! 踊るアランカルとの遭遇",
+							"aired": "2007-12-05",
+							"runtime": 24
+						},
+						{
+							"id": 342936,
+							"seasonNumber": 8,
+							"number": 1,
+							"name": "一護反撃! こいつが俺の卍解だ",
+							"aired": "2007-12-12",
+							"runtime": 24
+						},
+						{
+							"id": 345082,
+							"seasonNumber": 8,
+							"number": 2,
+							"name": "悪魔の研究! ザエルアポロの企み",
+							"aired": "2007-12-19",
+							"runtime": 24
+						},
+						{
+							"id": 345083,
+							"seasonNumber": 8,
+							"number": 3,
+							"name": "ルキアと海燕、哀しみの再会",
+							"aired": "2007-12-26",
+							"runtime": 24
+						},
+						{
+							"id": 345084,
+							"seasonNumber": 8,
+							"number": 4,
+							"name": "ルキア反撃! 決死の鬼道を放て",
+							"aired": "2008-01-09",
+							"runtime": 24
+						},
+						{
+							"id": 346787,
+							"seasonNumber": 8,
+							"number": 5,
+							"name": "石田&ペッシェ、友情の合体攻撃",
+							"aired": "2008-01-16",
+							"runtime": 24
+						},
+						{
+							"id": 346788,
+							"seasonNumber": 8,
+							"number": 6,
+							"name": "石田の切り札、魂を切り裂くもの",
+							"aired": "2008-01-23",
+							"runtime": 24
+						},
+						{
+							"id": 346789,
+							"seasonNumber": 8,
+							"number": 7,
+							"name": "巨人の右腕、悪魔の左腕",
+							"aired": "2008-01-30",
+							"runtime": 24
+						},
+						{
+							"id": 351173,
+							"seasonNumber": 8,
+							"number": 8,
+							"name": "茶渡泰虎死す! 織姫の涙",
+							"aired": "2008-02-06",
+							"runtime": 24
+						},
+						{
+							"id": 353152,
+							"seasonNumber": 8,
+							"number": 9,
+							"name": "遺言、心は此処に…",
+							"aired": "2008-02-13",
+							"runtime": 24
+						},
+						{
+							"id": 353153,
+							"seasonNumber": 8,
+							"number": 10,
+							"name": "残酷な破面、ウルキオラの挑発",
+							"aired": "2008-02-20",
+							"runtime": 24
+						},
+						{
+							"id": 353154,
+							"seasonNumber": 8,
+							"number": 11,
+							"name": "笑うザエルアポロ、恋次包囲網完成",
+							"aired": "2008-02-27",
+							"runtime": 24
+						},
+						{
+							"id": 353155,
+							"seasonNumber": 8,
+							"number": 12,
+							"name": "死神とクインシー、狂気との戦い",
+							"aired": "2008-03-05",
+							"runtime": 24
+						},
+						{
+							"id": 353156,
+							"seasonNumber": 8,
+							"number": 13,
+							"name": "石田の作戦! 攻防の20秒",
+							"aired": "2008-03-12",
+							"runtime": 24
+						},
+						{
+							"id": 353157,
+							"seasonNumber": 8,
+							"number": 14,
+							"name": "殺意沸騰! 歓喜のグリムジョー",
+							"aired": "2008-03-19",
+							"runtime": 24
+						},
+						{
+							"id": 360742,
+							"seasonNumber": 8,
+							"number": 15,
+							"name": "死力VS死力! ホロウ化した一護",
+							"aired": "2008-04-09",
+							"runtime": 24
+						},
+						{
+							"id": 360744,
+							"seasonNumber": 8,
+							"number": 16,
+							"name": "決着の時、グリムジョーの最期",
+							"aired": "2008-04-16",
+							"runtime": 24
+						},
+						{
+							"id": 363100,
+							"seasonNumber": 9,
+							"number": 1,
+							"name": "新隊長登場! その名は天貝繍助",
+							"aired": "2008-04-23",
+							"runtime": 24
+						},
+						{
+							"id": 363101,
+							"seasonNumber": 9,
+							"number": 2,
+							"name": "新展開、危険な転校生現る!",
+							"aired": "2008-05-07",
+							"runtime": 24
+						},
+						{
+							"id": 366320,
+							"seasonNumber": 9,
+							"number": 3,
+							"name": "月夜の死闘! 謎の刺客と斬魄刀",
+							"aired": "2008-05-14",
+							"runtime": 24
+						},
+						{
+							"id": 366321,
+							"seasonNumber": 9,
+							"number": 4,
+							"name": "犬龍、咲き乱れる紅の華",
+							"aired": "2008-05-21",
+							"runtime": 24
+						},
+						{
+							"id": 366322,
+							"seasonNumber": 9,
+							"number": 5,
+							"name": "貴船出陣! 吹き荒れる烈風",
+							"aired": "2008-05-28",
+							"runtime": 24
+						},
+						{
+							"id": 367340,
+							"seasonNumber": 9,
+							"number": 6,
+							"name": "巨悪の登場! 霞大路家の闇",
+							"aired": "2008-06-04",
+							"runtime": 24
+						},
+						{
+							"id": 371129,
+							"seasonNumber": 9,
+							"number": 7,
+							"name": "囚われた一護、鏡の結界を破れ!",
+							"aired": "2008-06-11",
+							"runtime": 24
+						},
+						{
+							"id": 371130,
+							"seasonNumber": 9,
+							"number": 8,
+							"name": "復讐の刺客、狙われた一護",
+							"aired": "2008-06-18",
+							"runtime": 24
+						},
+						{
+							"id": 372110,
+							"seasonNumber": 9,
+							"number": 9,
+							"name": "怪奇! 刀を喰う暗殺者",
+							"aired": "2008-06-25",
+							"runtime": 24
+						},
+						{
+							"id": 372111,
+							"seasonNumber": 9,
+							"number": 10,
+							"name": "逆転のルキア! 暴走する刀",
+							"aired": "2008-06-25",
+							"runtime": 24
+						},
+						{
+							"id": 372112,
+							"seasonNumber": 9,
+							"number": 11,
+							"name": "見せられた悪夢! 鏡の中の一護",
+							"aired": "2008-07-02",
+							"runtime": 24
+						},
+						{
+							"id": 372113,
+							"seasonNumber": 9,
+							"number": 12,
+							"name": "対立!? 天貝VS護廷十三隊",
+							"aired": "2008-07-09",
+							"runtime": 24
+						},
+						{
+							"id": 375105,
+							"seasonNumber": 9,
+							"number": 13,
+							"name": "姫の決意、哀しき花嫁",
+							"aired": "2008-07-16",
+							"runtime": 24
+						},
+						{
+							"id": 375106,
+							"seasonNumber": 9,
+							"number": 14,
+							"name": "二番隊出撃! 包囲された一護",
+							"aired": "2008-07-23",
+							"runtime": 24
+						},
+						{
+							"id": 375107,
+							"seasonNumber": 9,
+							"number": 15,
+							"name": "天貝の実力、斬魄刀解放!",
+							"aired": "2008-07-30",
+							"runtime": 24
+						},
+						{
+							"id": 375108,
+							"seasonNumber": 9,
+							"number": 16,
+							"name": "動き出した闇! 貴船の正体",
+							"aired": "2008-08-06",
+							"runtime": 24
+						},
+						{
+							"id": 377819,
+							"seasonNumber": 9,
+							"number": 17,
+							"name": "吉良と貴船、三番隊の攻防",
+							"aired": "2008-08-20",
+							"runtime": 24
+						},
+						{
+							"id": 383602,
+							"seasonNumber": 9,
+							"number": 18,
+							"name": "氷と炎! 天貝VS日番谷の激闘",
+							"aired": "2008-08-27",
+							"runtime": 24
+						},
+						{
+							"id": 385238,
+							"seasonNumber": 9,
+							"number": 19,
+							"name": "出撃指令! 霞大路家を制圧せよ",
+							"aired": "2008-09-03",
+							"runtime": 24
+						},
+						{
+							"id": 387148,
+							"seasonNumber": 9,
+							"number": 20,
+							"name": "一護激怒! 暗殺者の秘密",
+							"aired": "2008-09-10",
+							"runtime": 24
+						},
+						{
+							"id": 388867,
+							"seasonNumber": 9,
+							"number": 21,
+							"name": "決闘! 天貝VS一護",
+							"aired": "2008-09-17",
+							"runtime": 24
+						},
+						{
+							"id": 395450,
+							"seasonNumber": 9,
+							"number": 22,
+							"name": "堕ちた死神の誇り",
+							"aired": "2008-10-07",
+							"runtime": 24
+						},
+						{
+							"id": 395458,
+							"seasonNumber": 10,
+							"number": 1,
+							"name": "ウェコムンド編、再開!",
+							"aired": "2008-10-14",
+							"runtime": 24
+						},
+						{
+							"id": 395459,
+							"seasonNumber": 10,
+							"number": 2,
+							"name": "狂宴、ザエルアポロ劇場",
+							"aired": "2008-10-21",
+							"runtime": 24
+						},
+						{
+							"id": 395460,
+							"seasonNumber": 10,
+							"number": 3,
+							"name": "ネルの秘密、巨乳美女参戦!?",
+							"aired": "2008-10-28",
+							"runtime": 24
+						},
+						{
+							"id": 403498,
+							"seasonNumber": 10,
+							"number": 4,
+							"name": "抵抗不能、恐怖の人形劇",
+							"aired": "2008-11-04",
+							"runtime": 24
+						},
+						{
+							"id": 403851,
+							"seasonNumber": 10,
+							"number": 5,
+							"name": "ネリエルの過去",
+							"aired": "2008-11-11",
+							"runtime": 24
+						},
+						{
+							"id": 403852,
+							"seasonNumber": 10,
+							"number": 6,
+							"name": "究極合体! ペッシェの本気",
+							"aired": "2008-11-18",
+							"runtime": 24
+						},
+						{
+							"id": 405996,
+							"seasonNumber": 10,
+							"number": 7,
+							"name": "参戦! 最強死神軍団登場",
+							"aired": "2008-11-25",
+							"runtime": 24
+						},
+						{
+							"id": 405997,
+							"seasonNumber": 10,
+							"number": 8,
+							"name": "白哉卍解、静かなる怒り",
+							"aired": "2008-12-02",
+							"runtime": 24
+						},
+						{
+							"id": 405998,
+							"seasonNumber": 10,
+							"number": 9,
+							"name": "2人の科学者、マユリの罠",
+							"aired": "2008-12-09",
+							"runtime": 24
+						},
+						{
+							"id": 412398,
+							"seasonNumber": 10,
+							"number": 10,
+							"name": "聖誕、蘇るザエルアポロ",
+							"aired": "2008-12-16",
+							"runtime": 24
+						},
+						{
+							"id": 412399,
+							"seasonNumber": 10,
+							"number": 11,
+							"name": "最硬の体!? ノイトラを斬れ",
+							"aired": "2008-12-23",
+							"runtime": 24
+						},
+						{
+							"id": 416351,
+							"seasonNumber": 10,
+							"number": 12,
+							"name": "ノイトラ解放! 増殖した腕",
+							"aired": "2009-01-06",
+							"runtime": 24
+						},
+						{
+							"id": 422056,
+							"seasonNumber": 10,
+							"number": 13,
+							"name": "激闘決着! 最強は誰だ",
+							"aired": "2009-01-13",
+							"runtime": 24
+						},
+						{
+							"id": 422057,
+							"seasonNumber": 10,
+							"number": 14,
+							"name": "空座町に集結! 藍染対死神",
+							"aired": "2009-01-20",
+							"runtime": 24
+						},
+						{
+							"id": 422058,
+							"seasonNumber": 10,
+							"number": 15,
+							"name": "一護の切腹説得大作戦☆",
+							"aired": "2009-01-27",
+							"runtime": 24
+						},
+						{
+							"id": 424948,
+							"seasonNumber": 10,
+							"number": 16,
+							"name": "ドキ! 虚だらけの蹴鞠大会",
+							"aired": "2009-02-03",
+							"runtime": 24
+						},
+						{
+							"id": 424949,
+							"seasonNumber": 11,
+							"number": 1,
+							"name": "過去編開始! 110年前の真実",
+							"aired": "2009-02-10",
+							"runtime": 24
+						},
+						{
+							"id": 430423,
+							"seasonNumber": 11,
+							"number": 2,
+							"name": "十二番隊新隊長、浦原喜助",
+							"aired": "2009-02-17",
+							"runtime": 24
+						},
+						{
+							"id": 430424,
+							"seasonNumber": 11,
+							"number": 3,
+							"name": "藍染と天才少年",
+							"aired": "2009-02-24",
+							"runtime": 24
+						},
+						{
+							"id": 430425,
+							"seasonNumber": 11,
+							"number": 4,
+							"name": "六車九番隊、出動せよ",
+							"aired": "2009-03-03",
+							"runtime": 24
+						},
+						{
+							"id": 438264,
+							"seasonNumber": 11,
+							"number": 5,
+							"name": "ひよ里死す? 悲劇の始まり",
+							"aired": "2009-03-10",
+							"runtime": 24
+						},
+						{
+							"id": 442374,
+							"seasonNumber": 11,
+							"number": 6,
+							"name": "裏切り! 暗躍の藍染",
+							"aired": "2009-03-17",
+							"runtime": 24
+						},
+						{
+							"id": 442375,
+							"seasonNumber": 11,
+							"number": 7,
+							"name": "平子を救え! 藍染vs浦原",
+							"aired": "2009-03-24",
+							"runtime": 24
+						},
+						{
+							"id": 442376,
+							"seasonNumber": 12,
+							"number": 1,
+							"name": "魂葬刑事カラクライザー誕生",
+							"aired": "2009-03-31",
+							"runtime": 24
+						},
+						{
+							"id": 443911,
+							"seasonNumber": 12,
+							"number": 2,
+							"name": "カラクライザー最後の日",
+							"aired": "2009-04-07",
+							"runtime": 24
+						},
+						{
+							"id": 500831,
+							"seasonNumber": 12,
+							"number": 3,
+							"name": "空座町を護れ! 死神総登場",
+							"aired": "2009-04-14",
+							"runtime": 24
+						},
+						{
+							"id": 500841,
+							"seasonNumber": 12,
+							"number": 4,
+							"name": "精鋭! 四人の死神!!",
+							"aired": "2009-04-21",
+							"runtime": 24
+						},
+						{
+							"id": 500851,
+							"seasonNumber": 12,
+							"number": 5,
+							"name": "美しき小悪魔シャルロッテ",
+							"aired": "2009-04-28",
+							"runtime": 24
+						},
+						{
+							"id": 538141,
+							"seasonNumber": 12,
+							"number": 6,
+							"name": "吉良、絶望の中での戦い",
+							"aired": "2009-05-05",
+							"runtime": 24
+						},
+						{
+							"id": 603741,
+							"seasonNumber": 12,
+							"number": 7,
+							"name": "檜佐木始解! その名は…",
+							"aired": "2009-05-12",
+							"runtime": 24
+						},
+						{
+							"id": 603751,
+							"seasonNumber": 12,
+							"number": 8,
+							"name": "一角倒れる!? 死神の危機",
+							"aired": "2009-05-19",
+							"runtime": 24
+						},
+						{
+							"id": 641481,
+							"seasonNumber": 12,
+							"number": 9,
+							"name": "全面対決! 死神vs十刃",
+							"aired": "2009-05-26",
+							"runtime": 24
+						},
+						{
+							"id": 689581,
+							"seasonNumber": 12,
+							"number": 10,
+							"name": "最凶タッグ!? 砕蜂&大前田",
+							"aired": "2009-06-02",
+							"runtime": 24
+						},
+						{
+							"id": 689591,
+							"seasonNumber": 12,
+							"number": 11,
+							"name": "驚異の肉体! ジオ解放",
+							"aired": "2009-06-09",
+							"runtime": 24
+						},
+						{
+							"id": 693111,
+							"seasonNumber": 12,
+							"number": 12,
+							"name": "3vs1の戦闘! ピンチの乱菊",
+							"aired": "2009-06-16",
+							"runtime": 24
+						},
+						{
+							"id": 693121,
+							"seasonNumber": 12,
+							"number": 13,
+							"name": "副隊長全滅! 恐怖の妖獣",
+							"aired": "2009-06-23",
+							"runtime": 24
+						},
+						{
+							"id": 693131,
+							"seasonNumber": 12,
+							"number": 14,
+							"name": "激闘終結? 新たなる戦いへ!",
+							"aired": "2009-06-30",
+							"runtime": 24
+						},
+						{
+							"id": 753861,
+							"seasonNumber": 12,
+							"number": 15,
+							"name": "ワンダフル・エラー",
+							"aired": "2009-07-07",
+							"runtime": 24
+						},
+						{
+							"id": 823271,
+							"seasonNumber": 12,
+							"number": 16,
+							"name": "夏だ! 海だ! 水着祭!!",
+							"aired": "2009-07-14",
+							"runtime": 24
+						},
+						{
+							"id": 823281,
+							"seasonNumber": 12,
+							"number": 17,
+							"name": "魂の叫び? ヅラ死神誕生!",
+							"aired": "2009-07-21",
+							"runtime": 24
+						},
+						{
+							"id": 823291,
+							"seasonNumber": 13,
+							"number": 1,
+							"name": "新たなる敵! 斬魄刀実体化",
+							"aired": "2009-07-28",
+							"runtime": 24
+						},
+						{
+							"id": 946431,
+							"seasonNumber": 13,
+							"number": 2,
+							"name": "白哉、桜と共に消ゆ",
+							"aired": "2009-08-04",
+							"runtime": 24
+						},
+						{
+							"id": 952541,
+							"seasonNumber": 13,
+							"number": 3,
+							"name": "袖白雪vsルキア! 心の惑い",
+							"aired": "2009-08-11",
+							"runtime": 24
+						},
+						{
+							"id": 952551,
+							"seasonNumber": 13,
+							"number": 4,
+							"name": "敵となった斬月",
+							"aired": "2009-08-18",
+							"runtime": 24
+						},
+						{
+							"id": 952561,
+							"seasonNumber": 13,
+							"number": 5,
+							"name": "恋次驚愕!? 2人の蛇尾丸",
+							"aired": "2009-08-25",
+							"runtime": 24
+						},
+						{
+							"id": 952571,
+							"seasonNumber": 13,
+							"number": 6,
+							"name": "激突! 檜佐木vs風死",
+							"aired": "2009-09-01",
+							"runtime": 24
+						},
+						{
+							"id": 952581,
+							"seasonNumber": 13,
+							"number": 7,
+							"name": "放て! 新たなる月牙天衝",
+							"aired": "2009-09-08",
+							"runtime": 24
+						},
+						{
+							"id": 1079151,
+							"seasonNumber": 13,
+							"number": 8,
+							"name": "砕蜂、斬魄刀を包囲せよ!",
+							"aired": "2009-09-15",
+							"runtime": 24
+						},
+						{
+							"id": 1079161,
+							"seasonNumber": 13,
+							"number": 9,
+							"name": "友情? 嫌悪? 灰猫&飛梅",
+							"aired": "2009-09-22",
+							"runtime": 24
+						},
+						{
+							"id": 1079171,
+							"seasonNumber": 13,
+							"number": 10,
+							"name": "目覚めよ氷輪丸! 日番谷激闘",
+							"aired": "2009-09-29",
+							"runtime": 24
+						},
+						{
+							"id": 1079181,
+							"seasonNumber": 13,
+							"number": 11,
+							"name": "裏切りの白哉",
+							"aired": "2009-10-06",
+							"runtime": 24
+						},
+						{
+							"id": 1179131,
+							"seasonNumber": 13,
+							"number": 12,
+							"name": "誇りのために! 白哉VS恋次",
+							"aired": "2009-10-13",
+							"runtime": 24
+						},
+						{
+							"id": 1179141,
+							"seasonNumber": 13,
+							"number": 13,
+							"name": "死神&斬魄刀、総出撃",
+							"aired": "2009-10-20",
+							"runtime": 24
+						},
+						{
+							"id": 1179151,
+							"seasonNumber": 13,
+							"number": 14,
+							"name": "一騎打ち! 一護VS千本桜",
+							"aired": "2009-10-27",
+							"runtime": 24
+						},
+						{
+							"id": 1247671,
+							"seasonNumber": 13,
+							"number": 15,
+							"name": "満を持して･･･剣八登場!",
+							"aired": "2009-11-03",
+							"runtime": 24
+						},
+						{
+							"id": 1247681,
+							"seasonNumber": 13,
+							"number": 16,
+							"name": "白哉を追え! 混乱の護廷隊",
+							"aired": "2009-11-10",
+							"runtime": 24
+						},
+						{
+							"id": 1304201,
+							"seasonNumber": 13,
+							"number": 17,
+							"name": "特務! 山本総隊長を救出せよ!",
+							"aired": "2009-11-17",
+							"runtime": 24
+						},
+						{
+							"id": 1305641,
+							"seasonNumber": 13,
+							"number": 18,
+							"name": "騙された死神! 世界崩壊の危機",
+							"aired": "2009-11-24",
+							"runtime": 24
+						},
+						{
+							"id": 1305651,
+							"seasonNumber": 13,
+							"number": 19,
+							"name": "氷の龍と炎の龍! 最強対決!",
+							"aired": "2009-12-01",
+							"runtime": 24
+						},
+						{
+							"id": 1305661,
+							"seasonNumber": 13,
+							"number": 20,
+							"name": "千本桜卍解! 現世の攻防",
+							"aired": "2009-12-08",
+							"runtime": 24
+						},
+						{
+							"id": 1384171,
+							"seasonNumber": 13,
+							"number": 21,
+							"name": "その男・朽木家ゆえに･･･",
+							"aired": "2009-12-15",
+							"runtime": 24
+						},
+						{
+							"id": 1499981,
+							"seasonNumber": 13,
+							"number": 22,
+							"name": "闇の歴史! 最凶の死神、誕生",
+							"aired": "2009-12-22",
+							"runtime": 24
+						},
+						{
+							"id": 1390461,
+							"seasonNumber": 13,
+							"number": 23,
+							"name": "白哉、裏切りに隠された真実",
+							"aired": "2010-01-05",
+							"runtime": 24
+						},
+						{
+							"id": 1437361,
+							"seasonNumber": 13,
+							"number": 24,
+							"name": "虚閃!? 明かされた村正の正体",
+							"aired": "2010-01-12",
+							"runtime": 24
+						},
+						{
+							"id": 1437371,
+							"seasonNumber": 13,
+							"number": 25,
+							"name": "白哉と恋次、六番隊再び!",
+							"aired": "2010-01-19",
+							"runtime": 24
+						},
+						{
+							"id": 1437381,
+							"seasonNumber": 13,
+							"number": 26,
+							"name": "終章・斬魄刀異聞編",
+							"aired": "2010-01-26",
+							"runtime": 24
+						},
+						{
+							"id": 1581391,
+							"seasonNumber": 13,
+							"number": 27,
+							"name": "怒りの白哉! 朽木家崩壊!",
+							"aired": "2010-02-02",
+							"runtime": 24
+						},
+						{
+							"id": 1596611,
+							"seasonNumber": 13,
+							"number": 28,
+							"name": "新たな敵! 刀獣の正体",
+							"aired": "2010-02-09",
+							"runtime": 24
+						},
+						{
+							"id": 1613711,
+							"seasonNumber": 13,
+							"number": 29,
+							"name": "迷子の蛇、受難の猿",
+							"aired": "2010-02-16",
+							"runtime": 24
+						},
+						{
+							"id": 1630701,
+							"seasonNumber": 13,
+							"number": 30,
+							"name": "恐怖! 地下に潜む怪物",
+							"aired": "2010-02-23",
+							"runtime": 24
+						},
+						{
+							"id": 1686731,
+							"seasonNumber": 13,
+							"number": 31,
+							"name": "決着!? 檜佐木vs風死",
+							"aired": "2010-03-02",
+							"runtime": 24
+						},
+						{
+							"id": 1686741,
+							"seasonNumber": 13,
+							"number": 32,
+							"name": "未知なる能力者! 狙われた織姫",
+							"aired": "2010-03-09",
+							"runtime": 24
+						},
+						{
+							"id": 1791791,
+							"seasonNumber": 13,
+							"number": 33,
+							"name": "悲劇の刀獣! 灰猫、号泣!",
+							"aired": "2010-03-16",
+							"runtime": 24
+						},
+						{
+							"id": 1791801,
+							"seasonNumber": 13,
+							"number": 34,
+							"name": "幽閉!? 千本桜&蛇尾丸",
+							"aired": "2010-03-23",
+							"runtime": 24
+						},
+						{
+							"id": 1791811,
+							"seasonNumber": 13,
+							"number": 35,
+							"name": "女の戦い? 花天狂骨vs七緒!",
+							"aired": "2010-03-30",
+							"runtime": 24
+						},
+						{
+							"id": 1837161,
+							"seasonNumber": 13,
+							"number": 36,
+							"name": "進化!? 最後の刀獣の脅威!",
+							"aired": "2010-04-06",
+							"runtime": 24
+						},
+						{
+							"id": 1968591,
+							"seasonNumber": 14,
+							"number": 1,
+							"name": "一護vsウルキオラ、再開!",
+							"aired": "2010-04-13",
+							"runtime": 24
+						},
+						{
+							"id": 1968601,
+							"seasonNumber": 14,
+							"number": 2,
+							"name": "繋がる心! 決死の左拳!",
+							"aired": "2010-04-20",
+							"runtime": 24
+						},
+						{
+							"id": 1968611,
+							"seasonNumber": 14,
+							"number": 3,
+							"name": "嫉妬と憎悪・・・窮地の織姫!",
+							"aired": "2010-04-27",
+							"runtime": 24
+						},
+						{
+							"id": 1968621,
+							"seasonNumber": 14,
+							"number": 4,
+							"name": "一護と雨竜、背中合わせの絆!",
+							"aired": "2010-05-04",
+							"runtime": 24
+						},
+						{
+							"id": 1968631,
+							"seasonNumber": 14,
+							"number": 5,
+							"name": "絶望の始まり・・・一護、届かぬ刃",
+							"aired": "2010-05-11",
+							"runtime": 24
+						},
+						{
+							"id": 1968641,
+							"seasonNumber": 14,
+							"number": 6,
+							"name": "一護死す! 織姫、悲痛の叫び!",
+							"aired": "2010-05-18",
+							"runtime": 24
+						},
+						{
+							"id": 1968651,
+							"seasonNumber": 14,
+							"number": 7,
+							"name": "一護vsウルキオラ、決着!",
+							"aired": "2010-05-25",
+							"runtime": 24
+						},
+						{
+							"id": 1968661,
+							"seasonNumber": 14,
+							"number": 8,
+							"name": "鮫の猛威! ハリベル解放",
+							"aired": "2010-06-01",
+							"runtime": 24
+						},
+						{
+							"id": 1968671,
+							"seasonNumber": 14,
+							"number": 9,
+							"name": "日番谷、捨て身の氷天百華葬!",
+							"aired": "2010-06-08",
+							"runtime": 24
+						},
+						{
+							"id": 1968681,
+							"seasonNumber": 14,
+							"number": 10,
+							"name": "迫る死の息吹・・・死を司る王!",
+							"aired": "2010-06-15",
+							"runtime": 24
+						},
+						{
+							"id": 1968691,
+							"seasonNumber": 14,
+							"number": 11,
+							"name": "一撃決殺! 砕蜂、卍解!",
+							"aired": "2010-06-22",
+							"runtime": 24
+						},
+						{
+							"id": 1968701,
+							"seasonNumber": 14,
+							"number": 12,
+							"name": "白熱! 京楽vsスターク!",
+							"aired": "2010-06-29",
+							"runtime": 24
+						},
+						{
+							"id": 2351241,
+							"seasonNumber": 14,
+							"number": 13,
+							"name": "悪夢再び・・・復活の十刃",
+							"aired": "2010-07-06",
+							"runtime": 24
+						},
+						{
+							"id": 2410681,
+							"seasonNumber": 14,
+							"number": 14,
+							"name": "平子と藍染・・・因縁の再会!",
+							"aired": "2010-07-13",
+							"runtime": 24
+						},
+						{
+							"id": 2410691,
+							"seasonNumber": 14,
+							"number": 15,
+							"name": "檜佐木と東仙、訣別の時",
+							"aired": "2010-07-20",
+							"runtime": 24
+						},
+						{
+							"id": 2410701,
+							"seasonNumber": 14,
+							"number": 16,
+							"name": "偽りの王冠・・・バラガンの怨恨!",
+							"aired": "2010-07-27",
+							"runtime": 24
+						},
+						{
+							"id": 2423461,
+							"seasonNumber": 14,
+							"number": 17,
+							"name": "魂の力! 群狼、襲来!",
+							"aired": "2010-08-03",
+							"runtime": 24
+						},
+						{
+							"id": 2423471,
+							"seasonNumber": 14,
+							"number": 18,
+							"name": "スターク、たった独りの戦い",
+							"aired": "2010-08-10",
+							"runtime": 24
+						},
+						{
+							"id": 2423481,
+							"seasonNumber": 14,
+							"number": 19,
+							"name": "犠牲の連鎖・・・ハリベルの過去",
+							"aired": "2010-08-17",
+							"runtime": 24
+						},
+						{
+							"id": 2423491,
+							"seasonNumber": 14,
+							"number": 20,
+							"name": "百年の怨恨・・・ひよ里の復讐!",
+							"aired": "2010-08-24",
+							"runtime": 24
+						},
+						{
+							"id": 2423501,
+							"seasonNumber": 14,
+							"number": 21,
+							"name": "空座町を護れ! 一護、現世へ!",
+							"aired": "2010-08-31",
+							"runtime": 24
+						},
+						{
+							"id": 2423511,
+							"seasonNumber": 14,
+							"number": 22,
+							"name": "外伝! 一護と魔法のランプ!",
+							"aired": "2010-09-07",
+							"runtime": 24
+						},
+						{
+							"id": 2423521,
+							"seasonNumber": 14,
+							"number": 23,
+							"name": "最後の切り札! 一護、決戦へ!",
+							"aired": "2010-09-14",
+							"runtime": 24
+						},
+						{
+							"id": 2423531,
+							"seasonNumber": 14,
+							"number": 24,
+							"name": "白哉vs剣八!? 乱戦開始!",
+							"aired": "2010-09-21",
+							"runtime": 24
+						},
+						{
+							"id": 2423541,
+							"seasonNumber": 14,
+							"number": 25,
+							"name": "正義の為に!? 死神を捨てた男",
+							"aired": "2010-09-28",
+							"runtime": 24
+						},
+						{
+							"id": 2770131,
+							"seasonNumber": 14,
+							"number": 26,
+							"name": "藍染との死闘! 平子、始解!",
+							"aired": "2010-10-05",
+							"runtime": 24
+						},
+						{
+							"id": 2900801,
+							"seasonNumber": 14,
+							"number": 27,
+							"name": "全面戦争! 藍染vs死神!",
+							"aired": "2010-10-12",
+							"runtime": 24
+						},
+						{
+							"id": 2900811,
+							"seasonNumber": 14,
+							"number": 28,
+							"name": "日番谷、激昂! 憎しみの刃!",
+							"aired": "2010-10-19",
+							"runtime": 24
+						},
+						{
+							"id": 2900821,
+							"seasonNumber": 14,
+							"number": 29,
+							"name": "攻撃不能!? 封じられた元柳斎!",
+							"aired": "2010-10-26",
+							"runtime": 24
+						},
+						{
+							"id": 2900831,
+							"seasonNumber": 14,
+							"number": 30,
+							"name": "全ては罠･･･仕組まれた絆!",
+							"aired": "2010-11-02",
+							"runtime": 24
+						},
+						{
+							"id": 2900841,
+							"seasonNumber": 14,
+							"number": 31,
+							"name": "衝撃の真実･･･一護に秘められた力!",
+							"aired": "2010-11-09",
+							"runtime": 24
+						},
+						{
+							"id": 2900851,
+							"seasonNumber": 14,
+							"number": 32,
+							"name": "伸びる刃!? 一護vsギン!",
+							"aired": "2010-11-16",
+							"runtime": 24
+						},
+						{
+							"id": 2900861,
+							"seasonNumber": 14,
+							"number": 33,
+							"name": "映画だ! 祭だ! 死神映画祭!",
+							"aired": "2010-11-23",
+							"runtime": 24
+						},
+						{
+							"id": 2900871,
+							"seasonNumber": 14,
+							"number": 34,
+							"name": "劇場公開記念! 地獄篇・序章",
+							"aired": "2010-11-30",
+							"runtime": 24
+						},
+						{
+							"id": 2900881,
+							"seasonNumber": 14,
+							"number": 35,
+							"name": "浦原登場! 藍染を阻止せよ!",
+							"aired": "2010-12-07",
+							"runtime": 24
+						},
+						{
+							"id": 2900891,
+							"seasonNumber": 14,
+							"number": 36,
+							"name": "一護、戦意喪失!? ギンの思惑!",
+							"aired": "2010-12-14",
+							"runtime": 24
+						},
+						{
+							"id": 2900901,
+							"seasonNumber": 14,
+							"number": 37,
+							"name": "最後の月牙天衝!? 一護の修行!",
+							"aired": "2010-12-21",
+							"runtime": 24
+						},
+						{
+							"id": 2900911,
+							"seasonNumber": 14,
+							"number": 38,
+							"name": "現世も死神も! お正月スペシャル!",
+							"aired": "2011-01-04",
+							"runtime": 24
+						},
+						{
+							"id": 3341781,
+							"seasonNumber": 14,
+							"number": 39,
+							"name": "外伝再び! 今度の敵はモンスター!?",
+							"aired": "2011-01-11",
+							"runtime": 24
+						},
+						{
+							"id": 3341791,
+							"seasonNumber": 14,
+							"number": 40,
+							"name": "妄想爆走! 檜佐木、温泉旅館へ!",
+							"aired": "2011-01-18",
+							"runtime": 24
+						},
+						{
+							"id": 3341801,
+							"seasonNumber": 14,
+							"number": 41,
+							"name": "護るために! 一護vs天鎖斬月!",
+							"aired": "2011-01-25",
+							"runtime": 24
+						},
+						{
+							"id": 3341811,
+							"seasonNumber": 14,
+							"number": 42,
+							"name": "緊急事態! 藍染、更なる進化!",
+							"aired": "2011-02-01",
+							"runtime": 24
+						},
+						{
+							"id": 3341821,
+							"seasonNumber": 14,
+							"number": 43,
+							"name": "さよなら･･･乱菊",
+							"aired": "2011-02-08",
+							"runtime": 24
+						},
+						{
+							"id": 3341831,
+							"seasonNumber": 14,
+							"number": 44,
+							"name": "激闘決着! 放て、最後の月牙天衝!",
+							"aired": "2011-02-15",
+							"runtime": 24
+						},
+						{
+							"id": 3341841,
+							"seasonNumber": 14,
+							"number": 45,
+							"name": "一護の覚悟! 激闘の代償",
+							"aired": "2011-02-22",
+							"runtime": 24
+						},
+						{
+							"id": 3341851,
+							"seasonNumber": 14,
+							"number": 46,
+							"name": "魂葬刑事・カラクライザー再発進!",
+							"aired": "2011-03-01",
+							"runtime": 24
+						},
+						{
+							"id": 3341861,
+							"seasonNumber": 14,
+							"number": 47,
+							"name": "就任! 新たなる二番隊隊長!",
+							"aired": "2011-03-08",
+							"runtime": 24
+						},
+						{
+							"id": 3341871,
+							"seasonNumber": 14,
+							"number": 48,
+							"name": "十一番隊に命を賭けた男!",
+							"aired": "2011-03-15",
+							"runtime": 24
+						},
+						{
+							"id": 3341881,
+							"seasonNumber": 14,
+							"number": 49,
+							"name": "コンは見た! 美人OLの秘密",
+							"aired": "2011-03-22",
+							"runtime": 24
+						},
+						{
+							"id": 3341891,
+							"seasonNumber": 14,
+							"number": 50,
+							"name": "やちるの友! 正義の死神登場!",
+							"aired": "2011-03-29",
+							"runtime": 24
+						},
+						{
+							"id": 3892821,
+							"seasonNumber": 14,
+							"number": 51,
+							"name": "日番谷冬獅郎の休日!",
+							"aired": "2011-04-05",
+							"runtime": 24
+						},
+						{
+							"id": 4013841,
+							"seasonNumber": 15,
+							"number": 1,
+							"name": "瀞霊廷に異変! 護廷十三隊侵軍篇",
+							"aired": "2011-04-12",
+							"runtime": 24
+						},
+						{
+							"id": 4013851,
+							"seasonNumber": 15,
+							"number": 2,
+							"name": "恋次vsルキア!? 仲間との戦い!",
+							"aired": "2011-04-19",
+							"runtime": 24
+						},
+						{
+							"id": 4013861,
+							"seasonNumber": 15,
+							"number": 3,
+							"name": "一護捕縛網! 尸魂界を脱出せよ!",
+							"aired": "2011-04-26",
+							"runtime": 24
+						},
+						{
+							"id": 4013871,
+							"seasonNumber": 15,
+							"number": 4,
+							"name": "護廷十三隊、現世に集結!",
+							"aired": "2011-05-03",
+							"runtime": 24
+						},
+						{
+							"id": 4013881,
+							"seasonNumber": 15,
+							"number": 5,
+							"name": "一角vs一角! 自分同士の戦い!",
+							"aired": "2011-05-10",
+							"runtime": 24
+						},
+						{
+							"id": 4013891,
+							"seasonNumber": 15,
+							"number": 6,
+							"name": "激突! ルキアvsルキア!",
+							"aired": "2011-05-17",
+							"runtime": 24
+						},
+						{
+							"id": 4013901,
+							"seasonNumber": 15,
+							"number": 7,
+							"name": "護れ一護! 望実の決意!",
+							"aired": "2011-05-24",
+							"runtime": 24
+						},
+						{
+							"id": 4013911,
+							"seasonNumber": 15,
+							"number": 8,
+							"name": "瀞霊廷奪還へ! 隊長たち、動く!",
+							"aired": "2011-05-31",
+							"runtime": 24
+						},
+						{
+							"id": 4013921,
+							"seasonNumber": 15,
+							"number": 9,
+							"name": "信ずるものの為に! 白哉vs日番谷!",
+							"aired": "2011-06-07",
+							"runtime": 24
+						},
+						{
+							"id": 4013931,
+							"seasonNumber": 15,
+							"number": 10,
+							"name": "ふたりの雛森、日番谷の覚悟",
+							"aired": "2011-06-14",
+							"runtime": 24
+						},
+						{
+							"id": 4013941,
+							"seasonNumber": 15,
+							"number": 11,
+							"name": "朽木家の誇り! 白哉vs白哉!",
+							"aired": "2011-06-21",
+							"runtime": 24
+						},
+						{
+							"id": 4013951,
+							"seasonNumber": 15,
+							"number": 12,
+							"name": "影狼佐を倒せ! 死神、総力戦!",
+							"aired": "2011-06-28",
+							"runtime": 24
+						},
+						{
+							"id": 4115704,
+							"seasonNumber": 15,
+							"number": 13,
+							"name": "禁断の研究･･･望実に隠された秘密!",
+							"aired": "2011-07-05",
+							"runtime": 24
+						},
+						{
+							"id": 4128886,
+							"seasonNumber": 15,
+							"number": 14,
+							"name": "生きたい･･･! 望実の斬魄刀",
+							"aired": "2011-07-12",
+							"runtime": 24
+						},
+						{
+							"id": 4131349,
+							"seasonNumber": 15,
+							"number": 15,
+							"name": "戦うために! 目覚めよ望実!",
+							"aired": "2011-07-19",
+							"runtime": 24
+						},
+						{
+							"id": 4131350,
+							"seasonNumber": 15,
+							"number": 16,
+							"name": "最凶の霊骸、現世に現る!",
+							"aired": "2011-07-26",
+							"runtime": 24
+						},
+						{
+							"id": 4131351,
+							"seasonNumber": 15,
+							"number": 17,
+							"name": "望実を消す!?　元柳斎の決断！",
+							"aired": "2011-08-02",
+							"runtime": 24
+						},
+						{
+							"id": 4131352,
+							"seasonNumber": 15,
+							"number": 18,
+							"name": "失われる霊圧！　一護、魂の死闘！",
+							"aired": "2011-08-09",
+							"runtime": 24
+						},
+						{
+							"id": 4147882,
+							"seasonNumber": 15,
+							"number": 19,
+							"name": "断界に潜伏?　もう一人の一護!?",
+							"aired": "2011-08-16",
+							"runtime": 24
+						},
+						{
+							"id": 4147883,
+							"seasonNumber": 15,
+							"number": 20,
+							"name": "影狼佐を追え! 技術開発局、潜入!",
+							"aired": "2011-08-23",
+							"runtime": 24
+						},
+						{
+							"id": 4147884,
+							"seasonNumber": 15,
+							"number": 21,
+							"name": "改造魂魄の開発者",
+							"aired": "2011-08-30",
+							"runtime": 24
+						},
+						{
+							"id": 4147885,
+							"seasonNumber": 15,
+							"number": 22,
+							"name": "コンの想い、望実の想い",
+							"aired": "2011-09-06",
+							"runtime": 24
+						},
+						{
+							"id": 4159272,
+							"seasonNumber": 15,
+							"number": 23,
+							"name": "一護を護れ! 仲間たちの絆!",
+							"aired": "2011-09-13",
+							"runtime": 24
+						},
+						{
+							"id": 4159273,
+							"seasonNumber": 15,
+							"number": 24,
+							"name": "霊骸vs原種、誇りを賭けた激闘!",
+							"aired": "2011-09-20",
+							"runtime": 24
+						},
+						{
+							"id": 4167072,
+							"seasonNumber": 15,
+							"number": 25,
+							"name": "侵軍篇、最終決着!",
+							"aired": "2011-09-27",
+							"runtime": 24
+						},
+						{
+							"id": 4167073,
+							"seasonNumber": 15,
+							"number": 26,
+							"name": "ありがとう",
+							"aired": "2011-10-04",
+							"runtime": 24
+						},
+						{
+							"id": 4182929,
+							"seasonNumber": 16,
+							"number": 1,
+							"name": "高校3年生! 装い新たに新章開始!",
+							"aired": "2011-10-11",
+							"runtime": 24
+						},
+						{
+							"id": 4186347,
+							"seasonNumber": 16,
+							"number": 2,
+							"name": "学校間抗争!? 一護と雨竜、共闘!",
+							"aired": "2011-10-18",
+							"runtime": 24
+						},
+						{
+							"id": 4186348,
+							"seasonNumber": 16,
+							"number": 3,
+							"name": "襲われた雨竜、仲間達に迫る脅威!",
+							"aired": "2011-10-25",
+							"runtime": 24
+						},
+						{
+							"id": 4186349,
+							"seasonNumber": 16,
+							"number": 4,
+							"name": "完現術の能力者・銀城空吾",
+							"aired": "2011-11-01",
+							"runtime": 24
+						},
+						{
+							"id": 4186350,
+							"seasonNumber": 16,
+							"number": 5,
+							"name": "黒崎家に忍び寄る危機!? 一護の迷い!",
+							"aired": "2011-11-08",
+							"runtime": 24
+						},
+						{
+							"id": 4201529,
+							"seasonNumber": 16,
+							"number": 6,
+							"name": "代行証の力、一護の\"誇り\"!",
+							"aired": "2011-11-15",
+							"runtime": 24
+						},
+						{
+							"id": 4209238,
+							"seasonNumber": 16,
+							"number": 7,
+							"name": "次の標的、織姫を襲う魔の手!",
+							"aired": "2011-11-22",
+							"runtime": 24
+						},
+						{
+							"id": 4211505,
+							"seasonNumber": 16,
+							"number": 8,
+							"name": "死神代行を殺した男!? 動き出す月島",
+							"aired": "2011-11-29",
+							"runtime": 24
+						},
+						{
+							"id": 4211506,
+							"seasonNumber": 16,
+							"number": 9,
+							"name": "フルブリング、忌み嫌われた力!",
+							"aired": "2011-12-06",
+							"runtime": 24
+						},
+						{
+							"id": 4218374,
+							"seasonNumber": 16,
+							"number": 10,
+							"name": "月島、急襲!妨害された修業!",
+							"aired": "2011-12-13",
+							"runtime": 24
+						},
+						{
+							"id": 4223480,
+							"seasonNumber": 16,
+							"number": 11,
+							"name": "激闘へ!一護、完現術を使いこなせ!",
+							"aired": "2011-12-20",
+							"runtime": 24
+						},
+						{
+							"id": 4223567,
+							"seasonNumber": 16,
+							"number": 12,
+							"name": "一護vs銀城、ゲームの空間へ!",
+							"aired": "2011-12-27",
+							"runtime": 24
+						},
+						{
+							"id": 4237845,
+							"seasonNumber": 16,
+							"number": 13,
+							"name": "死神参戦! 瀞霊廷もお正月SP!",
+							"aired": "2012-01-10",
+							"runtime": 24
+						},
+						{
+							"id": 4237846,
+							"seasonNumber": 16,
+							"number": 14,
+							"name": "敵か味方か!? 銀城の見えない心!",
+							"aired": "2012-01-17",
+							"runtime": 24
+						},
+						{
+							"id": 4237847,
+							"seasonNumber": 16,
+							"number": 15,
+							"name": "忍び寄る脅威…月島の能力!",
+							"aired": "2012-01-24",
+							"runtime": 24
+						},
+						{
+							"id": 4237848,
+							"seasonNumber": 16,
+							"number": 16,
+							"name": "激突!? 銀城を襲うXCUTION!",
+							"aired": "2012-01-31",
+							"runtime": 24
+						},
+						{
+							"id": 4249004,
+							"seasonNumber": 16,
+							"number": 17,
+							"name": "哀しみの戦い!一護vs茶渡&織姫!",
+							"aired": "2012-02-07",
+							"runtime": 24
+						},
+						{
+							"id": 4258083,
+							"seasonNumber": 16,
+							"number": 18,
+							"name": "一護vs雨竜!?裏切り者は誰だ!",
+							"aired": "2012-02-14",
+							"runtime": 24
+						},
+						{
+							"id": 4258084,
+							"seasonNumber": 16,
+							"number": 19,
+							"name": "新たな姿!護廷十三隊、見参!",
+							"aired": "2012-02-21",
+							"runtime": 24
+						},
+						{
+							"id": 4258085,
+							"seasonNumber": 16,
+							"number": 20,
+							"name": "復活! 死神代行・黒崎一護",
+							"aired": "2012-02-28",
+							"runtime": 24
+						},
+						{
+							"id": 4260392,
+							"seasonNumber": 16,
+							"number": 21,
+							"name": "激闘!死神vsXCUTION!",
+							"aired": "2012-03-06",
+							"runtime": 24
+						},
+						{
+							"id": 4281569,
+							"seasonNumber": 16,
+							"number": 22,
+							"name": "絶体絶命!? 過去を挟まれた白哉",
+							"aired": "2012-03-13",
+							"runtime": 24
+						},
+						{
+							"id": 4281570,
+							"seasonNumber": 16,
+							"number": 23,
+							"name": "一護vs銀城!代行証の秘密",
+							"aired": "2012-03-20",
+							"runtime": 24
+						},
+						{
+							"id": 4281571,
+							"seasonNumber": 16,
+							"number": 24,
+							"name": "変わりゆく歴史、変わらぬ心",
+							"aired": "2012-03-27",
+							"runtime": 24
+						},
+						{
+							"id": 9340509,
+							"seasonNumber": 17,
+							"number": 1,
+							"name": "THE BLOOD WARFARE",
+							"aired": "2022-10-11",
+							"runtime": 24
+						},
+						{
+							"id": 9360908,
+							"seasonNumber": 17,
+							"number": 2,
+							"name": "FOUNDATION STONES",
+							"aired": "2022-10-18",
+							"runtime": 24
+						},
+						{
+							"id": 9360909,
+							"seasonNumber": 17,
+							"number": 3,
+							"name": "MARCH OF THE STARCROSS",
+							"aired": "2022-10-25",
+							"runtime": 24
+						},
+						{
+							"id": 9360910,
+							"seasonNumber": 17,
+							"number": 4,
+							"name": "KILL THE SHADOW",
+							"aired": "2022-11-01",
+							"runtime": 24
+						},
+						{
+							"id": 9360911,
+							"seasonNumber": 17,
+							"number": 5,
+							"name": "WRATH AS A LIGHTNING",
+							"aired": "2022-11-08",
+							"runtime": 24
+						},
+						{
+							"id": 9360912,
+							"seasonNumber": 17,
+							"number": 6,
+							"name": "THE FIRE",
+							"aired": "2022-11-15",
+							"runtime": 24
+						},
+						{
+							"id": 9360913,
+							"seasonNumber": 17,
+							"number": 7,
+							"name": "BORN IN THE DARK",
+							"aired": "2022-11-22",
+							"runtime": 24
+						},
+						{
+							"id": 9360914,
+							"seasonNumber": 17,
+							"number": 8,
+							"name": "THE SHOOTING STAR PROJECT 〔ZERO MIX〕",
+							"aired": "2022-11-29",
+							"runtime": 24
+						},
+						{
+							"id": 9360915,
+							"seasonNumber": 17,
+							"number": 9,
+							"name": "THE DROP",
+							"aired": "2022-12-06",
+							"runtime": 24
+						},
+						{
+							"id": 9360916,
+							"seasonNumber": 17,
+							"number": 10,
+							"name": "THE BATTLE",
+							"aired": "2022-12-13",
+							"runtime": 24
+						},
+						{
+							"id": 9360917,
+							"seasonNumber": 17,
+							"number": 11,
+							"name": "EVERYTHING BUT THE RAIN",
+							"aired": "2022-12-20",
+							"runtime": 24
+						},
+						{
+							"id": 9360918,
+							"seasonNumber": 17,
+							"number": 12,
+							"name": "EVERYTHING BUT THE RAIN JUNE TRUTH",
+							"aired": "2022-12-27",
+							"runtime": 24
+						},
+						{
+							"id": 9477211,
+							"seasonNumber": 17,
+							"number": 13,
+							"name": "THE BLADE IS ME",
+							"aired": "2022-12-27",
+							"runtime": 24
+						},
+						{
+							"id": 9813955,
+							"seasonNumber": 17,
+							"number": 14,
+							"name": "THE LAST 9DAYS",
+							"aired": "2023-07-08",
+							"runtime": 24
+						},
+						{
+							"id": 9865594,
+							"seasonNumber": 17,
+							"number": 15,
+							"name": "PEACE FROM SHADOWS",
+							"aired": "2023-07-15",
+							"runtime": 24
+						},
+						{
+							"id": 9865595,
+							"seasonNumber": 17,
+							"number": 16,
+							"name": "THE FUNDAMENTAL VIRULENCE",
+							"aired": "2023-07-22",
+							"runtime": 24
+						},
+						{
+							"id": 9865596,
+							"seasonNumber": 17,
+							"number": 17,
+							"name": "HEART OF WOLF",
+							"aired": "2023-07-29",
+							"runtime": 24
+						},
+						{
+							"id": 9865597,
+							"seasonNumber": 17,
+							"number": 18,
+							"name": "RAGES AT RINGSIDE",
+							"aired": "2023-08-05",
+							"runtime": 24
+						},
+						{
+							"id": 9865598,
+							"seasonNumber": 17,
+							"number": 19,
+							"name": "THE WHITE HAZE",
+							"aired": "2023-08-12",
+							"runtime": 24
+						},
+						{
+							"id": 9865599,
+							"seasonNumber": 17,
+							"number": 20,
+							"name": "I AM THE EDGE",
+							"aired": "2023-08-19",
+							"runtime": 24
+						},
+						{
+							"id": 9865600,
+							"seasonNumber": 17,
+							"number": 21,
+							"name": "THE HEADLESS STAR",
+							"aired": "2023-08-26",
+							"runtime": 24
+						},
+						{
+							"id": 9865601,
+							"seasonNumber": 17,
+							"number": 22,
+							"name": "MARCHING OUT THE ZOMBIES",
+							"aired": "2023-09-09",
+							"runtime": 24
+						},
+						{
+							"id": 9865602,
+							"seasonNumber": 17,
+							"number": 23,
+							"name": "MARCHING OUT THE ZOMBIES 2",
+							"aired": "2023-09-16",
+							"runtime": 24
+						},
+						{
+							"id": 9865603,
+							"seasonNumber": 17,
+							"number": 24,
+							"name": "TOO EARLY TO WIN TOO LATE TO KNOW",
+							"aired": "2023-09-23",
+							"runtime": 24
+						},
+						{
+							"id": 9865604,
+							"seasonNumber": 17,
+							"number": 25,
+							"name": "THE MASTER",
+							"aired": "2023-09-30",
+							"runtime": 24
+						},
+						{
+							"id": 9866063,
+							"seasonNumber": 17,
+							"number": 26,
+							"name": "BLACK",
+							"aired": "2023-09-30",
+							"runtime": 24
+						},
+						{
+							"id": 10733782,
+							"seasonNumber": 17,
+							"number": 27,
+							"name": "A",
+							"aired": "2024-10-05",
+							"runtime": 24
+						},
+						{
+							"id": 10733783,
+							"seasonNumber": 17,
+							"number": 28,
+							"name": "KILL THE KING",
+							"aired": "2024-10-12",
+							"runtime": 24
+						},
+						{
+							"id": 10733784,
+							"seasonNumber": 17,
+							"number": 29,
+							"name": "THE DARK ARM",
+							"aired": "2024-10-19",
+							"runtime": 24
+						},
+						{
+							"id": 10733785,
+							"seasonNumber": 17,
+							"number": 30,
+							"name": "THE BETRAYER",
+							"aired": "2024-10-26",
+							"runtime": 24
+						},
+						{
+							"id": 10754400,
+							"seasonNumber": 17,
+							"number": 31,
+							"name": "AGAINST THE JUDGEMENT",
+							"aired": "2024-11-02",
+							"runtime": 25
+						},
+						{
+							"id": 10754401,
+							"seasonNumber": 17,
+							"number": 32,
+							"name": "THE HOLY NEWBORN",
+							"aired": "2024-11-09",
+							"runtime": 24
+						},
+						{
+							"id": 10754402,
+							"seasonNumber": 17,
+							"number": 33,
+							"name": "GATE OF THE SUN",
+							"aired": "2024-11-16",
+							"runtime": 24
+						},
+						{
+							"id": 10754403,
+							"seasonNumber": 17,
+							"number": 34,
+							"name": "BABY, HOLD YOUR HAND",
+							"aired": "2024-11-23",
+							"runtime": 24
+						},
+						{
+							"id": 10754404,
+							"seasonNumber": 17,
+							"number": 35,
+							"name": "DON'T CHASE A SHADOW",
+							"aired": "2024-11-30",
+							"runtime": 24
+						},
+						{
+							"id": 10754405,
+							"seasonNumber": 17,
+							"number": 36,
+							"name": "BABY,HOLD YOUR HAND 2 [NEVER ENDING MY DREAM]",
+							"aired": "2024-12-07",
+							"runtime": 24
+						},
+						{
+							"id": 10754406,
+							"seasonNumber": 17,
+							"number": 37,
+							"name": "SHADOWS GONE",
+							"aired": "2024-12-14",
+							"runtime": 24
+						},
+						{
+							"id": 10754407,
+							"seasonNumber": 17,
+							"number": 38,
+							"name": "FRIEND",
+							"aired": "2024-12-21",
+							"runtime": 25
+						},
+						{
+							"id": 10857652,
+							"seasonNumber": 17,
+							"number": 39,
+							"name": "THE VISIBLE ANSWER",
+							"aired": "2024-12-28",
+							"runtime": 24
+						},
+						{
+							"id": 10857653,
+							"seasonNumber": 17,
+							"number": 40,
+							"name": "MY LAST WORDS",
+							"aired": "2024-12-28",
+							"runtime": 23
+						},
+						{
+							"id": 11897318,
+							"seasonNumber": 17,
+							"number": 41,
+							"name": "GOD OF THUNDER",
+							"aired": "2026-07-25",
+							"runtime": 24
+						},
+						{
+							"id": 11897319,
+							"seasonNumber": 17,
+							"number": 42,
+							"name": "SON OF DARKNESS",
+							"aired": "2026-08-01",
+							"runtime": 25
+						},
+						{
+							"id": 11897320,
+							"seasonNumber": 17,
+							"number": 43,
+							"name": "BLOOD FOR MY BONE",
+							"aired": "2026-08-08",
+							"runtime": 24
+						},
+						{
+							"id": 11897321,
+							"seasonNumber": 17,
+							"number": 44,
+							"name": "THE PERFECT CRIMSON",
+							"aired": "2026-08-15",
+							"runtime": 24
+						},
+						{
+							"id": 11897322,
+							"seasonNumber": 17,
+							"number": 45,
+							"name": "DEFEND YOU",
+							"aired": "2026-08-22",
+							"runtime": 27
+						},
+						{
+							"id": 11897323,
+							"seasonNumber": 17,
+							"number": 46,
+							"name": "THE END",
+							"aired": "2026-08-29",
+							"runtime": 24
+						},
+						{
+							"id": 11897324,
+							"seasonNumber": 17,
+							"number": 47,
+							"name": "THE END 2",
+							"aired": "2026-09-05",
+							"runtime": 24
+						},
+						{
+							"id": 11897325,
+							"seasonNumber": 17,
+							"number": 48,
+							"name": "THE END TWO WORLD",
+							"aired": "2026-09-12",
+							"runtime": 24
+						},
+						{
+							"id": 11897326,
+							"seasonNumber": 17,
+							"number": 49,
+							"name": "THE BLADE",
+							"aired": "2026-10-19",
+							"runtime": 27
+						},
+						{
+							"id": 11897327,
+							"seasonNumber": 17,
+							"number": 50,
+							"name": "DEATH & STRAWBERRY",
+							"aired": "2026-10-26",
+							"runtime": 23
+						}
+					]
+				}
+			}
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 2369,
+					"anilist_id": 269,
+					"animecountdown_id": 41066,
+					"animenewsnetwork_id": 4240,
+					"anime-planet_id": "bleach",
+					"anisearch_id": 1078,
+					"imdb_id": ["tt0434665"],
+					"kitsu_id": 244,
+					"livechart_id": 3340,
+					"mal_id": 269,
+					"simkl_id": 41066,
+					"themoviedb_id": {
+						"tv": 30984
+					},
+					"tvdb_id": 74796,
+					"season": {
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15449,
+					"anilist_id": 116674,
+					"animecountdown_id": 1300367,
+					"animenewsnetwork_id": 25066,
+					"anime-planet_id": "bleach-thousand-year-blood-war",
+					"anisearch_id": 15085,
+					"imdb_id": ["tt0434665"],
+					"kitsu_id": 43078,
+					"livechart_id": 9844,
+					"mal_id": 41467,
+					"simkl_id": 1300367,
+					"themoviedb_id": {
+						"tv": 30984
+					},
+					"tvdb_id": 74796,
+					"season": {
+						"tvdb": 17,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17765,
+					"anilist_id": 159322,
+					"animecountdown_id": 2056522,
+					"animenewsnetwork_id": 26771,
+					"anime-planet_id": "bleach-thousand-year-blood-war-part-ii-the-separation",
+					"anisearch_id": 17934,
+					"imdb_id": ["tt0434665"],
+					"kitsu_id": 46903,
+					"livechart_id": 11467,
+					"mal_id": 53998,
+					"simkl_id": 2056522,
+					"themoviedb_id": {
+						"tv": 30984
+					},
+					"tvdb_id": 74796,
+					"season": {
+						"tvdb": 17,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 13,
+						"tmdb": 13
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18220,
+					"anilist_id": 169755,
+					"animecountdown_id": 2268810,
+					"animenewsnetwork_id": 30131,
+					"anime-planet_id": "bleach-thousand-year-blood-war-part-iii-the-conflict",
+					"anisearch_id": 18732,
+					"imdb_id": ["tt0434665"],
+					"kitsu_id": 48015,
+					"livechart_id": 11468,
+					"mal_id": 56784,
+					"simkl_id": 2268810,
+					"themoviedb_id": {
+						"tv": 30984
+					},
+					"tvdb_id": 74796,
+					"season": {
+						"tvdb": 17,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 26,
+						"tmdb": 26
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 19079,
+					"anilist_id": 185874,
+					"animecountdown_id": 2671730,
+					"animenewsnetwork_id": 34242,
+					"anime-planet_id": "bleach-thousand-year-blood-war-part-iv-the-calamity",
+					"anisearch_id": 20029,
+					"imdb_id": ["tt0434665"],
+					"kitsu_id": 49444,
+					"livechart_id": 11469,
+					"mal_id": 60636,
+					"simkl_id": 2671730,
+					"themoviedb_id": {
+						"tv": 30984
+					},
+					"tvdb_id": 74796,
+					"season": {
+						"tvdb": 17,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 40,
+						"tmdb": 40
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 2369,
+					"names": [
+						"Bleach",
+						"بليتش",
+						"بلیچ",
+						"`בליץ",
+						"BLEACH",
+						"블리치",
+						"Блич",
+						"Izbeljivač",
+						"บลีช เทพมรณะ",
+						"死神",
+						"Белина",
+						"BTV",
+						"境·界",
+						"Блиич",
+						"Блийч",
+						"ブリーチ",
+						"Отбеливатель",
+						"Бліч",
+						"bleach tv",
+						"'בליץ",
+						"BLEACH - ブリーチ -",
+						"بليچ - Persian",
+						"เทพมรณะ",
+						"漂靈"
+					]
+				},
+				{
+					"anidbId": 15449,
+					"names": [
+						"Bleach: Sennen Kessen Hen",
+						"Bleach: Thousand-Year Blood War",
+						"BLEACH 千年血戦篇",
+						"死神 千年血战篇",
+						"BLEACH 死神 千年血戰篇",
+						"btv (2022)",
+						"Bleach: Хилядолетната кървава война",
+						"Bleach 2",
+						"블리치 천년혈전",
+						"Bleach: Sennen Kessen-hen",
+						"BLEACH - ブリーチ - 千年血戦篇",
+						"BLEACH TYBW",
+						"BLEACH: Sennen Kessen-hen",
+						"BLEACH: The Blood Warfare",
+						"BLEACH: Thousand-Year Blood War",
+						"BLEACH: Thousand-Year Blood War Part 1 - The Blood Warfare",
+						"Bleach : Thousand-Year Blood War",
+						"Bleach Season 2",
+						"Bleach Sennen Kessen-hen",
+						"Bleach2",
+						"Bleach: Chitose Kessen Hen",
+						"Bleach: La guerre sanglante de mille ans",
+						"Bleach: Thousand-Year Blood War Arc",
+						"بليتش: حرب الألف سنة الدموية",
+						"บลีช เทพมรณะ สงครามเลือดพันปี"
+					]
+				},
+				{
+					"anidbId": 17765,
+					"names": [
+						"Bleach: Sennen Kessen Hen - Ketsubetsu Tan",
+						"Bleach: Thousand-Year Blood War - The Separation",
+						"BLEACH 千年血戦篇-訣別譚-",
+						"BLEACH 死神 千年血战篇-诀别谭-",
+						"BLEACH 死神 千年血戰篇-訣別譚-",
+						"Bleach: Sennen Kessen-hen - Ketsubetsu-tan",
+						"BLEACH TYBW",
+						"BLEACH 千年血戦篇",
+						"BLEACH 千年血戦篇 2クール",
+						"BLEACH 千年血戦篇 第2クール",
+						"BLEACH: Sennen Kessen-hen - Ketsubetsu-tan",
+						"BLEACH: Sennen Kessen-hen - Ketsubetsu-tan -",
+						"BLEACH: Thousand Year Blood War Part 2",
+						"BLEACH: Thousand-Year Blood War - The Separation",
+						"BLEACH: Thousand-Year Blood War - The Separation -",
+						"BLEACH: Thousand-Year Blood War Part 2",
+						"BLEACH: Thousand-Year Blood War Part 2 - The Separation",
+						"Bleach 2 Part 2",
+						"Bleach : Thousand-Year Blood War - Partie 2",
+						"Bleach Season 3",
+						"Bleach Sennen Kessen-hen Ketsubetsutan",
+						"Bleach3",
+						"Bleach: Sennen Kessen Hen Part 2",
+						"Bleach: Sennen Kessen-hen - Ketsubetsu Tan",
+						"Bleach: Thousand-Year Blood War",
+						"Bleach: Thousand-Year Blood War (2023)",
+						"Bleach: Thousand-Year Blood War - Part 2",
+						"Bleach: Thousand-Year Blood War - Parte 2",
+						"Bleach: Thousand-Year Blood War - Teil 2",
+						"Bleach: Thousand-Year Blood War Arc Part 2",
+						"Bleach: Thousand-Year Blood War Part 2",
+						"Bleach: Thousand-Year Blood War: Part II - The Separation",
+						"บลีช เทพมรณะ สงครามเลือดพันปี – การแยกจาก"
+					]
+				},
+				{
+					"anidbId": 18220,
+					"names": [
+						"Bleach: Sennen Kessen Hen - Soukoku Tan",
+						"Bleach: Thousand-Year Blood War - The Conflict",
+						"BLEACH 千年血戦篇-相剋譚-",
+						"BLEACH 死神 千年血战篇 -相克谭-",
+						"BLEACH 死神 千年血戰篇 -相剋譚-",
+						"Bleach: Sennen Kessen-hen - Soukoku-tan",
+						"BLEACH TYBW",
+						"BLEACH 千年血戦篇 3クール",
+						"BLEACH 千年血戦篇 第3クール",
+						"BLEACH: Sennen Kessen-hen - Soukoku-tan",
+						"BLEACH: Sennen Kessen-hen - Soukoku-tan -",
+						"BLEACH: Thousand Year Blood War Part 3",
+						"BLEACH: Thousand-Year Blood War - The Conflict",
+						"BLEACH: Thousand-Year Blood War - The Conflict -",
+						"BLEACH: Thousand-Year Blood War Part 3",
+						"BLEACH: Thousand-Year Blood War Part 3 - The Conflict",
+						"BLEACH千年血戦篇-相剋譚-",
+						"Bleach 4",
+						"Bleach Season 4",
+						"Bleach Sennen Kessen-hen Sōkokutan",
+						"Bleach: Sennen Kessen Hen Part 3",
+						"Bleach: Sennen Kessen-hen - Sōkoku-tan",
+						"Bleach: Sennen Kessen-hen Part 3",
+						"Bleach: Thousand-Year Blood War - Saison 3",
+						"Bleach: Thousand-Year Blood War - Staffel 3",
+						"Bleach: Thousand-Year Blood War - Stagione 3",
+						"Bleach: Thousand-Year Blood War - Temporada 3",
+						"Bleach: Thousand-Year Blood War Arc Part 3",
+						"Bleach: Thousand-Year Blood War Part 3",
+						"Bleach: Thousand-Year Blood War Part 3 - The Conflict",
+						"Bleach: Thousand-Year Blood War: Part III - The Conflict",
+						"บลีช เทพมรณะ สงครามเลือดพันปี – ความขัดแย้ง"
+					]
+				},
+				{
+					"anidbId": 19079,
+					"names": [
+						"Bleach: Sennen Kessen Hen - Kashin Tan",
+						"Bleach: Thousand-Year Blood War - The Calamity",
+						"BLEACH 千年血戦篇-禍進譚-",
+						"BLEACH 千年血戦篇 最終クール",
+						"Bleach: Sennen Kessen Hen Saishuu Cour",
+						"Bleach: Sennen Kessen-hen - Kashin-tan",
+						"Bleach: Thousand-Year Blood War - The Calamity Arc",
+						"Bleach: Thousand-Year Blood War Final Part",
+						"BLEACH TYBW",
+						"BLEACH 千年血戦篇 第4クール",
+						"BLEACH 千年血戦篇-相剋譚-",
+						"BLEACH 千年血戦篇ー禍進譚ー",
+						"BLEACH: Sennen Kessen-hen - Kashin-tan",
+						"BLEACH: Sennen Kessen-hen - Kashin-tan -",
+						"BLEACH: Thousand-Year Blood War - The Calamity",
+						"BLEACH: Thousand-Year Blood War - The Calamity -",
+						"BLEACH: Thousand-Year Blood War Final Part - The Calamity",
+						"BLEACH: Thousand-Year Blood War Part 4",
+						"BLEACH: Thousand-Year Blood War Part 4 - The Calamity",
+						"BLEACH: Thousand-Year Blood War The Final Part",
+						"BLEACH: Thousand-Year Blood War The Final Season",
+						"Bleach: Sennen Kessen-hen - Kashin Tan",
+						"Bleach: Sennen Kessen-hen Part 4",
+						"Bleach: Sennen Kessen-hen: Part IV - Wazawai Suzumu-tan",
+						"Bleach: Thousand-Year Blood War Part 4 - The Calamity",
+						"Bleach: Thousand-Year Blood War: Part IV - The Calamity"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun, 2026-11-09: the .zurgtorrent's name, hash, the IMDb id zurg sent and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "[bonkai77] Bleach (Season 2) [1080P] [DUAL-AUDIO] [x265] [HEVC] [AAC] [10bit]",
+				"hash": "12473feeadd29f8af5537162a52be51227852f29",
+				"imdbId": "tt0434665",
+				"files": [
+					{
+						"path": "[bonkai77].Bleach.Episode.21.Enter!.The.World.of.the.Shinigami.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.22.The.Man.who.Hates.Shinigami.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.23.14.Days.Before.Rukia`s.Execution.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.24.Assemble!.The.13.Divisions.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.25.Penetrate.the.Center.with.an.Enormous.Bombshell.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.26.Formation!.The.Worst.Tag.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.27.Release.the.Death.Blow!.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.28.Orihime.Targeted.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.29.Breakthrough!.The.Shinigami`s.Encompassing.Net.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.30.Renji`s.Confrontation.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.31.The.Resolution.to.Kill.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.32.The.Star.and.the.Stray.Dog.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.33.Miracle!.New.Hero.of.Enigma.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.34.Tragedy.of.Dawn.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.35.Aizen.Assassination!.The.Creeping.Darkness.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.36.Zaraki.Kenpachi,.drawing.close!.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.37.The.Reason.for.Fists.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.38.Driven.into.a.Corner!.Broken.Zangetsu.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.39.Immortal.Man.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.40.The.Shinigami.Ganju.Saw.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.41.Reunion,.Ichigo.and.Rukia.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0434665",
+				"tmdbId": 30984,
+				"files": [
+					{
+						"path": "[bonkai77].Bleach.Episode.21.Enter!.The.World.of.the.Shinigami.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517137
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.22.The.Man.who.Hates.Shinigami.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517138
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.23.14.Days.Before.Rukia`s.Execution.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517139
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.24.Assemble!.The.13.Divisions.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517140
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.25.Penetrate.the.Center.with.an.Enormous.Bombshell.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517141
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.26.Formation!.The.Worst.Tag.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517143
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.27.Release.the.Death.Blow!.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517145
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.28.Orihime.Targeted.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517146
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.29.Breakthrough!.The.Shinigami`s.Encompassing.Net.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517147
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.30.Renji`s.Confrontation.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517149
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.31.The.Resolution.to.Kill.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517150
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.32.The.Star.and.the.Stray.Dog.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517151
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.33.Miracle!.New.Hero.of.Enigma.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517152
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.34.Tragedy.of.Dawn.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517153
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.35.Aizen.Assassination!.The.Creeping.Darkness.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517155
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.36.Zaraki.Kenpachi,.drawing.close!.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517157
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.37.The.Reason.for.Fists.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 37,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517160
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.38.Driven.into.a.Corner!.Broken.Zangetsu.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517163
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.39.Immortal.Man.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 39,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517165
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.40.The.Shinigami.Ganju.Saw.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 40,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517166
+					},
+					{
+						"path": "[bonkai77].Bleach.Episode.41.Reunion,.Ichigo.and.Rukia.1080p.Dual.Audio..Bluray.10bit.mkv",
+						"season": 1,
+						"episode": 41,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1517167
+					}
+				]
+			}
+		}
+	]
+}
