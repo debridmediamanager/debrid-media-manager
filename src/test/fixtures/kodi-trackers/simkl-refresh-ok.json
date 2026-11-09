@@ -1,8 +1,8 @@
 {
 	"body": {
-		"access_token": "simkl_at_REPLACEDACCESSTOKEN00000000000001",
+		"access_token": "simkl_at_REDACTED",
 		"expires_in": 604800,
-		"refresh_token": "simkl_rt_REPLACEDREFRESHTOKEN0000000000000",
+		"refresh_token": "simkl_rt_REDACTED",
 		"scope": "media:read",
 		"token_type": "Bearer"
 	},
