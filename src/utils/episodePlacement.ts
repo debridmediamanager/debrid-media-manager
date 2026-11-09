@@ -363,6 +363,12 @@ function looseNumbers(stem: string): FileNumbers | null {
 }
 
 /**
+ * A zero-padded episode number the name parser leaves at the end of a title, which no title ends
+ * in: `Dragonball.Z.061.1080p.BluRay…` is Dragonball Z's 61st.
+ */
+export const TITLE_EPISODE = /\s(0\d{2})$/;
+
+/**
  * `Lovely Runner 14`, `[Zurako]_Mawaru_Penguindrum_08_…`: the release's own title, then a
  * number, so `To LOVE-Ru OVA 04` or `Room 104` never reads as an episode. A file at the top of
  * a one-folder release is an episode of it whatever it calls the show (`[EG]Cowbop_Bebop_01`).
@@ -500,8 +506,13 @@ export function fileNumbers(
 	const titled = titleNumber(release, folder, stem);
 	if (titled) return withSeason({ season: null, episode: titled, end: null });
 	if (single) {
+		const padded = positive(TITLE_EPISODE.exec(parseName(release).title)?.[1]);
 		return withSeason(
-			sceneNumbers(release) ?? (airDates(release).length ? null : looseNumbers(release))
+			sceneNumbers(release) ??
+				(airDates(release).length
+					? null
+					: (looseNumbers(release) ??
+						(padded ? { season: null, episode: padded, end: null } : null)))
 		);
 	}
 	return null;

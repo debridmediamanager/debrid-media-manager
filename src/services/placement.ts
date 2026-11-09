@@ -36,6 +36,7 @@ import {
 	placeFile,
 	specialOf,
 	stackedParts,
+	TITLE_EPISODE,
 	titleOf,
 	yieldToTitles,
 	type AlignedEpisode,
@@ -822,6 +823,7 @@ async function secondLook(
 		// it: `Would.I.Lie.to.You-S16E03-Shirley.Ballas…` is one title to the identifier, and
 		// `[philosophy-raws][Samurai Champloo][26]…` none
 		const spelled = [answer.parsedTitle, parseName(name).title]
+			.flatMap((title = '') => [title, title.replace(TITLE_EPISODE, '')])
 			.map((title) => letters(title))
 			.filter((title) => title.length >= 3);
 		const own = (match: IdentifierMatch) => spelled.includes(letters(match.title));

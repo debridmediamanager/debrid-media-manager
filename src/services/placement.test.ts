@@ -40,6 +40,7 @@ import saga from '@/test/fixtures/placement/saga-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
+import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
@@ -1729,5 +1730,27 @@ describe('an episode TVDB and TMDB date apart, between two they pair', () => {
 		const placed = await ask('Diners Drive-Ins and Dives Collection');
 		const file = placed.files.find((f) => f.path.includes('From Pork to Tofu'))!;
 		expect(file.season).toBe(null);
+	});
+});
+
+describe('an episode number left at the end of a title', () => {
+	// zurg-usenet on fun (2026-11-09): `Dragonball.Z.061.1080p.BluRay…`, its one file named by a hash;
+	// the name parser reads the title as Dragonball Z 061 (see the fixtures README)
+	it("places the file on the show the identifier offers, by the title's number", async () => {
+		const [c] = titleEpisodes.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(titleEpisodes.answers),
+			async (list) =>
+				list.map(({ name }) => (titleEpisodes.answers.identify as any)[name] ?? null)
+		);
+		// Dragon Ball Z's 61st episode: TMDB's S2E22, its season 1 holding 39
+		expect([
+			releases[0].tmdbId,
+			releases[0].files[0].season,
+			releases[0].files[0].episode,
+		]).toEqual([12971, 2, 22]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });

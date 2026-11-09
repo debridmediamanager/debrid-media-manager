@@ -111,6 +111,15 @@
 			"episode": 701,
 			"end": 704,
 			"shape": "range"
+		},
+		{
+			"release": "Dragonball.Z.061.1080p.BluRay.x264-DHD-AsRequested",
+			"folder": "",
+			"file": "5a81a0d75a564831baa8108bef4e6bd9.mkv",
+			"single": true,
+			"season": null,
+			"episode": 61,
+			"shape": "padded"
 		}
 	],
 	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"
