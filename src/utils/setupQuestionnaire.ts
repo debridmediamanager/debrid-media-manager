@@ -1120,7 +1120,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			result.hostRequirement = required;
 	};
 	routes.forEach((x) => host(x.route.host));
-	if (selected.length > 1) {
+	// TorBox Pro hosted NZBs belong to the TorBox account, so the pair is one source.
+	const accounts =
+		selected.length -
+		(selected.includes('torbox') && selected.includes('torbox-hosted') ? 1 : 0);
+	if (accounts > 1) {
 		result.sourceNotes.push(
 			'Multiple sources can coexist, but each keeps its own credentials, quota and availability. The source list below shows the route for each.'
 		);

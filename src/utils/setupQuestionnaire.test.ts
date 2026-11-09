@@ -1898,6 +1898,18 @@ describe('players read naturally mid-sentence', () => {
 			})
 		);
 	});
+
+	// TorBox Pro hosted NZBs are the TorBox account's own downloads, not another source.
+	it('counts TorBox and its hosted NZBs as one account', () => {
+		const torbox = recommendSetup(answers({ sources: ['torbox', 'torbox-hosted'] }));
+
+		expect(torbox.primaryRoute.id).toBe('dmm-cast-stremio');
+		expect(torbox.sourceNotes.join(' ')).not.toMatch(/Multiple sources can coexist/);
+		expect(
+			recommendSetup(answers({ sources: ['torbox', 'torbox-hosted', 'real-debrid'] }))
+				.primaryRoute.id
+		).toBe('combined-sources');
+	});
 });
 
 describe('"None yet" shows which accounts work with the player', () => {
