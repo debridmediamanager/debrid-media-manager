@@ -1,0 +1,637 @@
+{
+	"answers": {
+		"find": {
+			"tt0312097": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 11904,
+						"name": "Berlin, Berlin",
+						"first_air_date": "2002-03-05"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt16288804": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 146176,
+						"name": "Berlin",
+						"first_air_date": "2023-12-29"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt5191110": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 66282,
+						"name": "Berlin Station",
+						"first_air_date": "2016-10-16"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2055864": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt28529513": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 239362,
+						"name": "Berlin ER",
+						"first_air_date": "2025-02-26"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt9856680": {
+				"movie_results": [
+					{
+						"id": 523427,
+						"title": "Puffs: Filmed Live Off Broadway",
+						"release_date": "2018-05-09"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0017668": {
+				"movie_results": [
+					{
+						"id": 222,
+						"title": "Berlin: Symphony of a Great City",
+						"release_date": "1927-09-23"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"11904": {
+				"id": 11904,
+				"name": "Berlin, Berlin",
+				"original_name": "Berlin, Berlin",
+				"first_air_date": "2002-03-05",
+				"original_language": "de",
+				"origin_country": ["DE"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 236874,
+							"name": "young romance"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0312097",
+					"tvdb_id": 80249
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2002-03-05",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "2003-04-22",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 20,
+						"air_date": "2004-03-02",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 20,
+						"air_date": "2005-03-08",
+						"name": "Season 4"
+					}
+				]
+			},
+			"66282": {
+				"id": 66282,
+				"name": "Berlin Station",
+				"original_name": "Berlin Station",
+				"first_air_date": "2016-10-16",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 220,
+							"name": "berlin, germany"
+						},
+						{
+							"id": 470,
+							"name": "spy"
+						},
+						{
+							"id": 591,
+							"name": "central intelligence agency (cia)"
+						},
+						{
+							"id": 201200,
+							"name": "clandestine"
+						},
+						{
+							"id": 209799,
+							"name": "whistleblower"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5191110",
+					"tvdb_id": 314995
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Берлинската гара",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "柏林情报站",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "柏林谍影",
+							"iso_3166_1": "CN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2016-10-16",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 9,
+						"air_date": "2017-10-15",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2018-12-02",
+						"name": "Season 3"
+					}
+				]
+			},
+			"146176": {
+				"id": 146176,
+				"name": "Berlin",
+				"original_name": "Berlín",
+				"first_air_date": "2023-12-29",
+				"original_language": "es",
+				"origin_country": ["ES"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9675,
+							"name": "prequel"
+						},
+						{
+							"id": 10726,
+							"name": "gang"
+						},
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 159413,
+							"name": "jewelry heist"
+						},
+						{
+							"id": 293572,
+							"name": "criminals"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt16288804",
+					"tvdb_id": 413033
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "La Casa de Papel: Berlim",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "Berlim e as Joias de Paris",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "纸钞屋：柏林",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "柏林",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "纸房子：柏林（第一季）",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "柏林：巴黎皇家珠宝",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Berlín",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Berlín a pařížské klenoty",
+							"iso_3166_1": "CZ"
+						},
+						{
+							"title": "Haus des Geldes: Berlin",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Berlin und die Juwelen von Paris",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "La casa de papel: Berlín",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Rahapaja - Berliini",
+							"iso_3166_1": "FI"
+						},
+						{
+							"title": "Berlin et les joyaux de Paris",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Η Τέλεια Ληστεία: Βερολίνο",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "برلین",
+							"iso_3166_1": "IR"
+						},
+						{
+							"title": "종이의 집: 베를린",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "베를린과 파리의 보석들",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Papirhuset: Berlin",
+							"iso_3166_1": "NO"
+						},
+						{
+							"title": "Бумажный дом: Берлин",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Берлін і паризькі коштовності",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Money Heist: Berlin",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Money Heist: Berlin and the Jewels of Paris",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Berlin and the Jewels of Paris",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2023-12-29",
+						"name": "Season 1"
+					}
+				]
+			},
+			"239362": {
+				"id": 239362,
+				"name": "Berlin ER",
+				"original_name": "KRANK Berlin",
+				"first_air_date": "2025-02-26",
+				"original_language": "de",
+				"origin_country": ["DE"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 177127,
+							"name": "emergency room"
+						},
+						{
+							"id": 208788,
+							"name": "medical drama"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt28529513",
+					"tvdb_id": 451585
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "KRANK",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "KRANK Berlin",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "טיפול נמרץ: ברלין",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Berlin ER",
+							"iso_3166_1": "NL"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2025-02-26",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt9856680": null,
+			"tt16288804": null,
+			"tt0017668": null
+		},
+		"identifier": {
+			"Puffs.2018.1080p.AMZN.WEBRip.DDP5.1.x264-QOQ": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt11773160",
+						"score": -1.9275,
+						"title": "3 Puffs",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt9856680",
+						"score": -4.1563,
+						"title": "Puffs: Filmed Live Off Broadway",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt9006564",
+						"score": -4.4106,
+						"title": "2018",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt6258232",
+						"score": -4.7093,
+						"title": "Doomsday Device",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt0082203",
+						"score": -5.2946,
+						"title": "Cream Horn",
+						"year": 1981
+					}
+				],
+				"parsedTitle": "Puffs",
+				"parsedYear": 2018,
+				"probability": 0.1586
+			},
+			"Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0312097",
+						"score": -0.2135,
+						"title": "Berlin, Berlin",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt16288804",
+						"score": -1.6264,
+						"title": "Berlin and the Jewels of Paris",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt5191110",
+						"score": -3.299,
+						"title": "Berlin Station",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt2055864",
+						"score": -3.5014,
+						"title": "Berlin",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt28529513",
+						"score": -3.5447,
+						"title": "Krank: Berlin",
+						"year": 2025
+					}
+				],
+				"parsedTitle": "Berlin",
+				"parsedYear": 1927,
+				"probability": 0.1637
+			}
+		},
+		"identify": {
+			"Puffs.2018.1080p.AMZN.WEBRip.DDP5.1.x264-QOQ": null,
+			"Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0": null
+		},
+		"searchMovie": {
+			"Puffs|2018": {
+				"results": [
+					{
+						"id": 523427,
+						"title": "Puffs: Filmed Live Off Broadway",
+						"original_title": "Puffs: Filmed Live Off Broadway",
+						"release_date": "2018-05-09"
+					}
+				]
+			},
+			"Berlin|1927": {
+				"results": [
+					{
+						"id": 222,
+						"title": "Berlin: Symphony of a Great City",
+						"original_title": "Berlin, Die Sinfonie der Großstadt",
+						"release_date": "1927-09-23"
+					},
+					{
+						"id": 1551685,
+						"title": "The Steel Helmet in Berlin",
+						"original_title": "Der Stahlhelm in Berlin",
+						"release_date": "1927-01-01"
+					},
+					{
+						"id": 189654,
+						"title": "Walking from Munich to Berlin",
+						"original_title": "München-Berlin Wanderung",
+						"release_date": "1927-04-28"
+					},
+					{
+						"id": 529668,
+						"title": "Die schönsten Beine von Berlin",
+						"original_title": "Die schönsten Beine von Berlin",
+						"release_date": "1927-07-28"
+					},
+					{
+						"id": 515966,
+						"title": "Die raffinierteste Frau Berlins",
+						"original_title": "Die raffinierteste Frau Berlins",
+						"release_date": "1927-11-22"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"222": {
+				"id": 222,
+				"imdb_id": "tt0017668"
+			},
+			"523427": {
+				"id": 523427,
+				"imdb_id": "tt9856680"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a file named by a hash, as the release) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Puffs.2018.1080p.AMZN.WEBRip.DDP5.1.x264-QOQ",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "1746b7ea233ab1593e3ce2c608f0699e.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt9856680",
+				"tmdbId": 523427,
+				"files": [
+					{
+						"path": "1746b7ea233ab1593e3ce2c608f0699e.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a file named by a hash, as the release) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0017668",
+				"tmdbId": 222,
+				"files": [
+					{
+						"path": "Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

@@ -156,7 +156,7 @@ where the identifier reads on past the title (`Would.I.Lie.to.You-S16E03-Shirley
 are named so and both hold the files' numbers (Animaniacs of 1993 and of 2020), by the one
 whose episodes the files' titles name, and by neither where no title does. A film of no numbered
 file that neither names is TMDB's one film of the year the name gives titled as it (`The.Bank.1915`
-is Chaplin's short), and so is one whose id names a show that first aired after that year (the id
+is Chaplin's short), or else titled so before a colon (`Berlin.1927` is Berlin: Symphony of a Great City), and so is one whose id names a show that first aired after that year (the id
 sent with `Wings.1927` names the 1990 sitcom). Such a film is TMDB's even where IMDb lists its id as an
 episode (`Falsettos.2017` of Live from Lincoln Center). A release whose titled files mostly name
 episodes of another show is placed on that show: one TMDB lists under the same name, one the

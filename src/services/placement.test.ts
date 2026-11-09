@@ -18,6 +18,7 @@ import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
+import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
@@ -1542,6 +1543,31 @@ describe('a film TMDB lists under an id IMDb lists as an episode', () => {
 			recordedSources(filmsOfEpisodes.answers),
 			async (list) =>
 				list.map(({ name }) => (filmsOfEpisodes.answers.identify as any)[name] ?? null)
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a film named by its title before a colon', () => {
+	// zurg-usenet on fun (2026-11-09): names that leave out the subtitle TMDB titles the film with
+	// (see the fixtures README)
+	it.each([
+		['Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0', 'tt0017668', 222],
+		// a file named by a hash, as the release
+		['Puffs.2018.1080p.AMZN.WEBRip.DDP5.1.x264-QOQ', 'tt9856680', 523427],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const c = filmsBeforeColons.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsBeforeColons.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsBeforeColons.answers.identify as any)[name] ?? null)
 		);
 		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
 			'movie',

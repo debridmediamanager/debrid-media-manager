@@ -912,8 +912,12 @@ async function filmByTitle(
 			[row?.title, row?.original_title].some((text) => spell(text) === spell(title))
 		);
 	// a leading article only where nothing is titled as the name: `Burlesque.on.Carmen.1915` is A
-	// Burlesque on Carmen
-	const titled = titledAs(letters).length ? titledAs(letters) : titledAs(unarticled);
+	// Burlesque on Carmen; the title before its colon only where neither is: `Berlin.1927` is Berlin:
+	// Symphony of a Great City, `Puffs.2018` Puffs: Filmed Live Off Broadway
+	const titled =
+		[letters, unarticled, (text = '') => letters(text.split(':')[0])]
+			.map(titledAs)
+			.find((rows) => rows.length) ?? [];
 	const exact = titled.filter((row: any) => yearOf(row) === year);
 	let found = exact.length ? exact : titled;
 	if (found.length > 1)
