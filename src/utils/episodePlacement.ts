@@ -120,6 +120,7 @@ export function normalizeTitle(title: string): string {
 
 // `[Erai-raws] …`, `[SubsPlease] …`, `… [8FAE9300].mkv`: what fansubs name and scene releases do not.
 const SHAPED = /^\s*\[[^\]]+\]|[[(][0-9A-F]{8}[\])]/i;
+const CRC32 = /[[(][0-9A-F]{8}[\])]/gi;
 export const fansubShaped = (name: string) => SHAPED.test(name);
 const LEADING_GROUPS = /^\s*(?:\[[^\]]*\][\s._-]*)+/;
 const FIRST_GROUP = /^\s*\[[^\]]*\][\s._-]*/;
@@ -426,9 +427,11 @@ export function fileNumbers(
 		...(from === null ? {} : { borrowed: true }),
 	});
 
-	const scene = sceneNumbers(stem.replace(LEADING_GROUPS, ''));
+	// a CRC is no year-numbered episode: `One Piece (1999) - s21e1082 - [Erai-raws][1080p][HEVC][1900E31E]`
+	const unchecked = stem.replace(LEADING_GROUPS, '').replace(CRC32, ' ');
+	const scene = sceneNumbers(unchecked);
 	if (scene) {
-		const part = partToken(stem.replace(LEADING_GROUPS, ''));
+		const part = partToken(unchecked);
 		return withSeason(part ? { ...scene, part } : scene);
 	}
 	// Suits' `Extras/Season 03/Episode 16 Alternate Opening`
