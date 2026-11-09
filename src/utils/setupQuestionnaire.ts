@@ -1074,6 +1074,21 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				preferenceChoiceReason(answers, 'arr') ??
 					'Arr acquisition needs a supported debrid or NZB backend. Easynews web access, URL addons and existing files are not download-client backends.'
 			);
+		// The playback route may not run zurg, so say what the download client needs.
+		if (debrid || nzb) links(ZURG);
+		for (const source of selected)
+			if (DEBRID_SOURCES.includes(source))
+				result.prerequisites.push(
+					`Configure your ${SOURCE_LABELS.get(source)} account in zurg; Sonarr/Radarr hand torrents to it.`
+				);
+		if (selected.includes('usenet'))
+			result.prerequisites.push(
+				'Give zurg an nzb account with your NNTP credentials; Sonarr/Radarr hand NZBs to it.'
+			);
+		if (selected.includes('torbox-hosted'))
+			result.prerequisites.push(
+				'Give zurg a torbox_nzb account (TorBox Pro); Sonarr/Radarr hand NZBs to it.'
+			);
 		if (debrid)
 			links(
 				{ label: 'DMM Torznab setup', href: '/torznab' },

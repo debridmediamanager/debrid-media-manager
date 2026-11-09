@@ -1280,6 +1280,56 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 	});
 });
 
+describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
+	const zurgSetup = {
+		label: 'zurg setup',
+		href: 'https://notes.debridmediamanager.com/zurg/setup/',
+	};
+
+	it('links zurg setup and its debrid account step beside Stremio Cast', () => {
+		const result = recommendSetup(answers({ host: 'existing', preference: 'arr' }));
+
+		expect(result.setupLinks).toContainEqual(zurgSetup);
+		expect(result.prerequisites).toContain(
+			'Configure your Real-Debrid account in zurg; Sonarr/Radarr hand torrents to it.'
+		);
+	});
+
+	it('says to give zurg a torbox_nzb account beside the Kodi addon', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'kodi',
+				sources: ['torbox-hosted'],
+				host: 'existing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.setupLinks).toContainEqual(zurgSetup);
+		expect(result.prerequisites).toContain(
+			'Give zurg a torbox_nzb account (TorBox Pro); Sonarr/Radarr hand NZBs to it.'
+		);
+	});
+
+	it('says to give zurg an nzb account for own Usenet', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'jellyfin',
+				sources: ['usenet', 'all-debrid'],
+				host: 'existing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.prerequisites).toEqual(
+			expect.arrayContaining([
+				'Give zurg an nzb account with your NNTP credentials; Sonarr/Radarr hand NZBs to it.',
+				'Configure your AllDebrid account in zurg; Sonarr/Radarr hand torrents to it.',
+			])
+		);
+	});
+});
+
 describe('DMM Newznab follows the routes that search an indexer', () => {
 	const newznab = (overrides: Partial<SetupAnswers>) =>
 		recommendSetup(answers(overrides)).sponsorship.optional.find(
