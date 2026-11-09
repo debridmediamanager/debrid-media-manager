@@ -301,9 +301,9 @@ def home(_):
         # Not System.HasAddon: it stays true for a disabled addon (Kodi 21.2, 2026-11-09).
         if not grant(service) and xbmc.getCondVisibility('System.AddonIsEnabled(%s)' % TRACKER_ADDONS[service]):
             add_link_tracker(service)
-    if link() or any(map(grant, trackers.NAMES)):
-        add_folder('Account', 'What this Kodi is linked to, link more accounts, or unlink it.',
-                   url(action='account'), icon('DefaultUser.png'))
+    # Always there: it is the one place to link Trakt or Simkl on a Kodi with neither tracker addon.
+    add_folder('Account', 'What this Kodi is linked to, link Trakt or Simkl, or unlink it.',
+               url(action='account'), icon('DefaultUser.png'))
     end(cache=False)
 
 
