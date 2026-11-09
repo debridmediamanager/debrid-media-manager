@@ -254,8 +254,8 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		expect(
 			breaking(
 				(answers, result) =>
-					result.alternatives.some(
-						({ title }) => title === 'DMM Wanted or Seerr requests'
+					result.alternatives.some(({ title }) =>
+						/^DMM Wanted( or Seerr)? requests$/.test(title)
 					) &&
 					!answers.sources.some(
 						(source) =>
@@ -264,6 +264,22 @@ describe('setup copy and benefits for every combination of up to two sources', (
 							source === 'torbox-hosted'
 					)
 			)
+		).toEqual([]);
+	});
+
+	it('offers Seerr only with a Plex, Jellyfin or Emby server', () => {
+		expect(
+			breaking((answers, result) => {
+				const server =
+					(answers.player === 'plex' && answers.plexRoute !== 'rex') ||
+					answers.player === 'jellyfin' ||
+					answers.player === 'emby';
+				return (
+					!server &&
+					(offered(result).includes('seerr') ||
+						texts(result).some((text) => /seerr/i.test(text)))
+				);
+			})
 		).toEqual([]);
 	});
 

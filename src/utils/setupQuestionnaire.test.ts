@@ -491,7 +491,7 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', result)).toContain('newznab');
 	});
 
-	it('adds Wanted and Seerr alternatives for a family zurg setup', () => {
+	it('adds Wanted but not Seerr for a family zurg setup without a media server', () => {
 		const result = recommendSetup(
 			answers({
 				player: 'webdav',
@@ -501,7 +501,8 @@ describe('sponsorship benefits follow the selected route', () => {
 			})
 		);
 
-		expect(ids('optional', result)).toEqual(expect.arrayContaining(['wanted', 'seerr']));
+		expect(ids('optional', result)).toContain('wanted');
+		expect(ids('optional', result)).not.toContain('seerr');
 	});
 
 	it('keeps uploader priority limited to Real-Debrid hosted transfers', () => {
@@ -1205,10 +1206,11 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		expect(ids).not.toContain('seerr');
 	});
 
-	it('offers both to Stremio Cast once a host can run zurg', () => {
+	it('offers Wanted, not Seerr, to Stremio Cast once a host can run zurg', () => {
 		const ids = offered(recommendSetup(answers({ host: 'willing', preference: 'managed' })));
 
-		expect(ids).toEqual(expect.arrayContaining(['wanted', 'seerr']));
+		expect(ids).toContain('wanted');
+		expect(ids).not.toContain('seerr');
 	});
 
 	it('offers no Kodi Wanted to the Kodi addon with no host', () => {
@@ -1217,14 +1219,64 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		);
 	});
 
-	it('suggests the Wanted or Seerr route only with a debrid or NZB backend', () => {
+	it('suggests the Wanted route only with a debrid or NZB backend', () => {
 		const alternative = (sources: SetupSource[]) =>
 			recommendSetup(
 				answers({ sources, host: 'willing', preference: 'managed' })
-			).alternatives.some(({ title }) => title === 'DMM Wanted or Seerr requests');
+			).alternatives.some(({ title }) => title === 'DMM Wanted requests');
 
 		expect(alternative(['easynews'])).toBe(false);
 		expect(alternative(['real-debrid'])).toBe(true);
+	});
+});
+
+describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () => {
+	const managed = (overrides: Partial<SetupAnswers>) =>
+		recommendSetup(
+			answers({ host: 'willing', preference: 'managed', needs: ['family'], ...overrides })
+		);
+	const seerrLink = 'https://notes.debridmediamanager.com/dmm/seerr/';
+
+	it.each([
+		{ player: 'plex', plexRoute: 'existing-server' },
+		{ player: 'plex', plexRoute: 'either' },
+		{ player: 'jellyfin' },
+		{ player: 'emby' },
+	] satisfies Partial<SetupAnswers>[])('offers Seerr with a media server (%o)', (mode) => {
+		const result = managed(mode);
+
+		expect(result.sponsorship.optional.map(({ id }) => id)).toContain('seerr');
+		expect(result.alternatives).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					title: 'DMM Wanted or Seerr requests',
+					links: expect.arrayContaining([expect.objectContaining({ href: seerrLink })]),
+				}),
+			])
+		);
+	});
+
+	it.each([
+		{ player: 'plex', plexRoute: 'rex' },
+		{ player: 'stremio' },
+		{ player: 'kodi' },
+		{ player: 'webdav' },
+		{ player: 'external' },
+	] satisfies Partial<SetupAnswers>[])('leaves Seerr out without a media server (%o)', (mode) => {
+		const result = managed(mode);
+		const wanted = result.alternatives.find(({ title }) => title.startsWith('DMM Wanted'));
+
+		expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain('seerr');
+		expect(wanted).toEqual({
+			title: 'DMM Wanted requests',
+			detail: 'Use Wanted → zurg for automatic acquisition without arr. These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.',
+			links: [
+				{
+					label: 'DMM Wanted setup',
+					href: 'https://notes.debridmediamanager.com/zurg/guides/dmm-wanted/',
+				},
+			],
+		});
 	});
 });
 

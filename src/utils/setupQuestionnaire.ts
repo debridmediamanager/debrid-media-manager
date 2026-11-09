@@ -278,6 +278,11 @@ export function playerNeedsFullHost(player: Player): boolean {
 	return FULL_HOST_PLAYERS.includes(player);
 }
 
+/** Seerr is set up against a Plex, Jellyfin or Emby server; rex is not one. */
+function seerrFits(player: Player, plexRoute: PlexRoute | undefined): boolean {
+	return player === 'plex' ? plexRoute !== 'rex' : player === 'jellyfin' || player === 'emby';
+}
+
 function playerLabel(player: Player): string {
 	return PLAYER_OPTIONS.find((option) => option.value === player)?.label ?? player;
 }
@@ -536,19 +541,20 @@ function sponsorshipFor(
 		add(optional, 'jellyfin');
 	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');
 	if (player === 'kodi' && (debrid || hasNzb) && zurgRuns) add(optional, 'wantedKodi');
+	const seerr = seerrFits(player, answers.plexRoute);
 	if (
 		zurgRuns &&
 		(answers.preference === 'managed' || answers.preference === 'arr') &&
 		(debrid || hasNzb)
 	) {
 		add(optional, 'wanted');
-		add(optional, 'seerr');
+		if (seerr) add(optional, 'seerr');
 	}
 	const familyOrRemote = answers.needs.includes('family') || answers.needs.includes('remote');
 	const supportsRequests = usesZurg || answers.preference === 'managed' || player === 'kodi';
 	if (zurgRuns && familyOrRemote && supportsRequests && (debrid || hasNzb)) {
 		add(optional, 'wanted');
-		add(optional, 'seerr');
+		if (seerr) add(optional, 'seerr');
 	}
 	// Easynews sends come from DMM's website, whatever the player; the zurg route already adds the rest.
 	if (easynewsToZurg) add(optional, 'wanted');
@@ -1110,15 +1116,17 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			(source) =>
 				DEBRID_SOURCES.includes(source) || source === 'usenet' || source === 'torbox-hosted'
 		)
-	)
+	) {
+		const seerr = seerrFits(player, answers.plexRoute);
 		result.alternatives.push({
-			title: 'DMM Wanted or Seerr requests',
-			detail: 'Use Wanted → zurg for automatic acquisition without arr. Seerr can send requests through DMM Wanted. These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.',
+			title: seerr ? 'DMM Wanted or Seerr requests' : 'DMM Wanted requests',
+			detail: `Use Wanted → zurg for automatic acquisition without arr.${seerr ? ' Seerr can send requests through DMM Wanted.' : ''} These need sponsorship and a running zurg host; hosted Cast libraries do not need your own server just to browse them.`,
 			links: [
 				note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
-				note('dmm/seerr', 'Seerr through DMM'),
+				...(seerr ? [note('dmm/seerr', 'Seerr through DMM')] : []),
 			],
 		});
+	}
 	// Only a route the selected sources can actually use without a host.
 	const noHostRoute = selected.some(
 		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
