@@ -961,8 +961,11 @@ describe('provider WebDAV follows the chosen provider', () => {
 			);
 
 			expect(result.sourceCoverage[0].integration).toBe(
-				`${label} → zurg → your network player`
+				`${label} → zurg → your WebDAV or SMB player`
 			);
+			expect(result.components).toEqual([
+				`${label} → zurg debrid library → WebDAV → your WebDAV or SMB player`,
+			]);
 			expect(result.hostRequirement).toBe('zurg');
 			expect(result.conflicts.join(' ')).toMatch(/zurg needs a host/);
 			expect(result.sourceNotes).toContain(
@@ -1443,6 +1446,27 @@ describe('players read naturally mid-sentence', () => {
 	] as const)('says the user chose %s', (player, sentence) => {
 		expect(recommendSetup(answers({ player, host: 'willing' })).whyMatched[0]).toBe(sentence);
 	});
+
+	it.each([
+		[{ player: 'plex', plexRoute: 'existing-server' }, 'your existing Plex Media Server'],
+		[{ player: 'jellyfin' }, 'Jellyfin'],
+		[{ player: 'emby' }, 'Emby'],
+		[{ player: 'kodi' }, 'Kodi'],
+		[{ player: 'webdav' }, 'your WebDAV or SMB player'],
+		[{ player: 'external' }, 'your external player'],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'keeps local files in %o without "your" before a product name',
+		(mode, name) => {
+			const result = recommendSetup(
+				answers({ ...mode, sources: ['http-local'], host: 'existing' })
+			);
+
+			expect(result.primaryRoute.title).toBe(`Keep ${name} for local or HTTP files`);
+			expect(result.components).toEqual([
+				`Local files or a compatible HTTP/network source → ${name}`,
+			]);
+		}
+	);
 
 	it('names the starting player for an undecided user', () => {
 		expect(

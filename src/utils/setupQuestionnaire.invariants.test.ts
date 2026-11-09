@@ -236,7 +236,9 @@ describe('setup copy and benefits for every combination of up to two sources', (
 				texts(result).some(
 					(text) =>
 						text.includes('An external player') ||
-						text.includes('in WebDAV or SMB player')
+						text.includes('in WebDAV or SMB player') ||
+						text.includes('your network player') ||
+						/\byour (Kodi|Jellyfin|Emby)\b/.test(text)
 				)
 			)
 		).toEqual([]);

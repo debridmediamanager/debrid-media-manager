@@ -682,7 +682,7 @@ function zurgRoute(
 						: player === 'kodi'
 							? 'WebDAV → Kodi'
 							: player === 'webdav'
-								? 'WebDAV → your player'
+								? 'WebDAV → your WebDAV or SMB player'
 								: 'playable file → your external player';
 	const id = rex
 		? 'zurg-rex-plex'
@@ -691,7 +691,7 @@ function zurgRoute(
 			: `${player}-zurg-${direct ? 'direct-usenet' : hosted ? 'hosted-nzb' : 'debrid'}`;
 	const r = route(
 		id,
-		`${input} → zurg → ${rex ? 'rex → Plex apps' : player === 'external' ? 'your external player' : player === 'webdav' ? 'your network player' : player === 'plex' ? 'your Plex Media Server' : PLAYER_OPTIONS.find((x) => x.value === player)?.label}`,
+		`${input} → zurg → ${rex ? 'rex → Plex apps' : player === 'external' ? 'your external player' : player === 'webdav' ? 'your WebDAV or SMB player' : player === 'plex' ? 'your Plex Media Server' : PLAYER_OPTIONS.find((x) => x.value === player)?.label}`,
 		'zurg supplies files to your chosen player or media server. Keep the source account and serving host available while you watch.',
 		server ? 'server' : 'zurg',
 		[
@@ -766,7 +766,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 		const server = player === 'plex' || player === 'jellyfin' || player === 'emby';
 		const name =
 			player === 'plex'
-				? 'existing Plex Media Server'
+				? 'your existing Plex Media Server'
 				: player === 'jellyfin'
 					? 'Jellyfin'
 					: player === 'emby'
@@ -774,11 +774,11 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 						: player === 'kodi'
 							? 'Kodi'
 							: player === 'webdav'
-								? 'WebDAV or SMB player'
-								: 'external player';
+								? 'your WebDAV or SMB player'
+								: 'your external player';
 		return route(
 			`${player}-existing-library`,
-			`Keep your ${name} for local or HTTP files`,
+			`Keep ${name} for local or HTTP files`,
 			'Use your existing files without adding debrid or zurg. Local files and network media still need a path or protocol your player supports.',
 			server ? 'server' : 'none',
 			[`Local files or a compatible HTTP/network source → ${name}`],
