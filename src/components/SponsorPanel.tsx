@@ -81,7 +81,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',
 		name: 'rex-stremio with your key',
-		what: 'titles DMM already knows reach rex in seconds instead of being probed one by one',
+		what: 'debrid streams of torrents DMM already holds a probe of reach rex in seconds instead of being probed one by one',
 	},
 	{
 		href: '/api-docs',

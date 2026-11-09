@@ -130,6 +130,9 @@ describe('SponsorPanel', () => {
 		);
 		expect(screen.getByText(/searches DMM's indexers/)).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'rex-stremio with your key' })).toBeInTheDocument();
+		expect(
+			screen.getByText(/debrid streams of torrents DMM already holds a probe of reach rex/)
+		).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'request board' })).toHaveAttribute(
 			'href',
 			'/requests'
