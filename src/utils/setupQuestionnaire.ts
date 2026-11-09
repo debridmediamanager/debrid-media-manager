@@ -358,27 +358,32 @@ function resolvePlayer({
 const ANDROID_HOSTED_NZB =
 	'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
 
+/** zurg+rex Android runs zurg and the rex zurg feeds, never a mounted server, rex-stremio or another feed. */
+function runsOnAndroid(r: SourceRoute): boolean {
+	return r.host !== 'server' || (!!r.usesZurg && !!r.usesRex);
+}
+
 /** Shared by the host choices and defensive recommendation validation. */
 export function hostChoiceReason(
 	answers: Pick<SetupAnswers, 'player' | 'plexRoute' | 'sources'>,
 	host: Host
 ): string | undefined {
 	if (host !== 'android') return undefined;
-	if (playerNeedsFullHost(answers.player)) {
-		if (
-			answers.player === 'plex' &&
-			(answers.plexRoute === 'rex' || answers.plexRoute === 'either')
-		)
-			return 'rex needs a full server host; Android can run zurg, not rex.';
+	const rex =
+		answers.player === 'plex' &&
+		(answers.plexRoute === 'rex' || answers.plexRoute === 'either');
+	if (playerNeedsFullHost(answers.player) && !rex) {
 		// zurg Android serves WebDAV and the Files picker, never a mount a server could scan.
 		const server =
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
 		return `${server} needs a full server host; zurg Android cannot give a server on that device a library.`;
 	}
-	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV and external players need it.
+	if (rex && answers.sources.some((source) => source === 'url-addon' || source === 'http-local'))
+		return 'zurg+rex Android feeds rex from zurg only; Stremio URL addons and HTTP files need rex on a normal host.';
+	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV, external players and rex need it.
 	if (
 		answers.sources.includes('torbox-hosted') &&
-		['webdav', 'external'].includes(resolvePlayer(answers))
+		(rex || ['webdav', 'external'].includes(resolvePlayer(answers)))
 	)
 		return ANDROID_HOSTED_NZB;
 	return undefined;
@@ -704,7 +709,7 @@ function sponsorshipFor(
 	if (usesZurg || usesRex) add(optional, 'api');
 	// Remote help runs in a terminal, which an Android device running zurg itself does not have.
 	const terminal =
-		answers.host !== 'android' || routes.some(({ route: source }) => source.host === 'server');
+		answers.host !== 'android' || routes.some(({ route: source }) => !runsOnAndroid(source));
 	if ((usesZurg || usesRex) && terminal) add(optional, 'remoteHelp');
 	if (!routeAvailable || !required.length) add(optional, 'sponsorBenefits');
 	add(optional, 'discord');
@@ -1258,7 +1263,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		if (rexWithoutZurg)
 			result.alternatives.push({
 				title: 'Without zurg: rex-stremio with a debrid stream addon',
-				detail: `Run rex and rex-stremio with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
+				detail: `Run rex and rex-stremio${answers.host === 'android' ? ' on a normal host' : ''} with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
 				links: [ADDON],
 			});
 		if (selected.includes('http-local'))
@@ -1317,7 +1322,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	if (answers.player === 'plex' && answers.plexRoute === 'either')
 		result.alternatives.push({
 			title: 'Use Plex Media Server instead',
-			detail: 'Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it.',
+			detail: `Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it.${answers.host === 'android' ? ' Plex Media Server itself still needs a normal host; zurg+rex Android does not run it.' : ''}`,
 			links: [ZURG, note('rex/from-plex', 'Choosing between Plex Media Server and rex')],
 		});
 	// A provider or NZB plugin serves only that server; a mount serves every consumer on the host.
@@ -1460,9 +1465,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				],
 			});
 	}
+	// zurg+rex Android runs zurg and the rex zurg feeds, but no arr, mounted server or other rex feed.
+	const androidRex =
+		result.hostRequirement === 'server' &&
+		answers.host === 'android' &&
+		answers.preference !== 'arr' &&
+		routes.every(({ route: r }) => runsOnAndroid(r));
 	if (
 		result.hostRequirement === 'server' &&
-		(answers.host === 'none' || answers.host === 'android')
+		(answers.host === 'none' || (answers.host === 'android' && !androidRex))
 	)
 		result.conflicts.push(
 			answers.preference === 'arr'
@@ -1470,7 +1481,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 						'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg.')
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
-						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
+						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. zurg+rex Android runs zurg and the rex zurg feeds, not that whole server stack.`)
 					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host.`
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
@@ -1479,9 +1490,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.conflicts.push(
 			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
-	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
+	if (answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex)) {
 		result.prerequisites.push(
-			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
+			androidRex
+				? 'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
+				: 'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		links(note('zurg/guides/android', 'zurg Android guide'));
 	}

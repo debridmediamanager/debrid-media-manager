@@ -574,6 +574,21 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
+	it('offers Android for rex, which zurg+rex Android runs on the device', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Use rex for Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const android = screen.getByRole('radio', { name: /Android \/ Google TV/ });
+		expect(android).toHaveAttribute('aria-disabled', 'false');
+		fireEvent.click(android);
+		expect(android).toHaveAttribute('aria-checked', 'true');
+	});
+
 	function editAnswer(question: string) {
 		const row = screen.getByText(question).parentElement?.parentElement;
 		expect(row).not.toBeNull();
@@ -963,7 +978,7 @@ describe('choose your setup page', () => {
 
 		await user.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		await user.click(screen.getByRole('button', { name: 'Next' }));
-		await user.click(screen.getByRole('radio', { name: /Use rex for Plex apps/ }));
+		await user.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
 		await user.click(screen.getByRole('button', { name: 'Next' }));
 		await user.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		await user.click(screen.getByRole('button', { name: 'Next' }));

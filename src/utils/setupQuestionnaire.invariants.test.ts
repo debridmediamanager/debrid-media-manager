@@ -115,12 +115,25 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 		fail('a route without a host requirement has a host conflict');
 	if (result.hostRequirement !== 'none' && answers.host === 'none' && !result.conflicts.length)
 		fail('a route that needs a host has no conflict for "No host"');
+	// zurg+rex Android runs zurg and the rex zurg feeds, never arr, a mounted server or another rex feed.
+	const zurgRex =
+		answers.player === 'plex' &&
+		(answers.plexRoute === 'rex' || answers.plexRoute === 'either') &&
+		answers.preference !== 'arr' &&
+		!selected.some((source) => source === 'url-addon' || source === 'http-local');
 	if (
 		result.hostRequirement === 'server' &&
 		answers.host === 'android' &&
-		!result.conflicts.length
+		!result.conflicts.length &&
+		!zurgRex
 	)
 		fail('a full-server route has no conflict for Android');
+	if (
+		answers.host === 'android' &&
+		zurgRex &&
+		result.conflicts.some((conflict) => /full server host|normal host for rex/.test(conflict))
+	)
+		fail('zurg+rex Android has a conflict as if it could not run rex');
 
 	const covered = result.sourceCoverage.map(({ source }) => source);
 	if (covered.length !== selected.length || selected.some((source) => !covered.includes(source)))

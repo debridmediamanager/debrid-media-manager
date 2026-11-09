@@ -945,12 +945,27 @@ describe('bounded recommendation compatibility matrix', () => {
 
 		if (input.host === 'none' && result.hostRequirement !== 'none' && !result.conflicts.length)
 			fail('a no-host route has a host requirement without a conflict');
+		// zurg+rex Android runs zurg and the rex zurg feeds, never arr, a mounted server or another rex feed.
+		const zurgRex =
+			input.player === 'plex' &&
+			(input.plexRoute === 'rex' || input.plexRoute === 'either') &&
+			input.preference !== 'arr' &&
+			!input.sources.some((source) => source === 'url-addon' || source === 'http-local');
 		if (
 			input.host === 'android' &&
 			result.hostRequirement === 'server' &&
-			!result.conflicts.length
+			!result.conflicts.length &&
+			!zurgRex
 		)
 			fail('an Android route requiring a full server is not blocked');
+		if (
+			input.host === 'android' &&
+			zurgRex &&
+			result.conflicts.some((conflict) =>
+				/full server host|normal host for rex/.test(conflict)
+			)
+		)
+			fail('zurg+rex Android is blocked as if it could not run rex');
 		if (
 			input.preference === 'arr' &&
 			input.host !== 'existing' &&
@@ -1400,11 +1415,24 @@ describe('host messages name the server that needs the host', () => {
 	it.each([
 		{ player: 'plex', plexRoute: 'rex' },
 		{ player: 'plex', plexRoute: 'either' },
-	] as const)('says Android cannot run rex for %o', (mode) => {
-		expect(hostChoiceReason({ ...mode, sources: [] }, 'android')).toBe(
-			'rex needs a full server host; Android can run zurg, not rex.'
-		);
+	] as const)('lets zurg+rex Android feed rex from zurg for %o', (mode) => {
+		expect(hostChoiceReason({ ...mode, sources: [] }, 'android')).toBeUndefined();
+		expect(
+			hostChoiceReason({ ...mode, sources: ['real-debrid', 'usenet'] }, 'android')
+		).toBeUndefined();
 	});
+
+	it.each(['url-addon', 'http-local'] as const)(
+		'keeps Android off rex fed by %s, which zurg+rex Android does not run',
+		(source) => {
+			const input = answers({ player: 'plex', plexRoute: 'rex', sources: [source] });
+			const reason =
+				'zurg+rex Android feeds rex from zurg only; Stremio URL addons and HTTP files need rex on a normal host.';
+
+			expect(hostChoiceReason(input, 'android')).toBe(reason);
+			expect(recommendSetup({ ...input, host: 'android' }).conflicts).toEqual([reason]);
+		}
+	);
 
 	it('gives the Android conflict the same reason', () => {
 		expect(recommendSetup(answers({ player: 'emby', host: 'android' })).conflicts).toContain(
@@ -2881,8 +2909,78 @@ describe('route copy stays on the player and source it is about', () => {
 	);
 });
 
+describe('zurg+rex Android serves the Plex apps', () => {
+	const onAndroid = (overrides: Partial<SetupAnswers> = {}) =>
+		recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'rex',
+				sources: ['real-debrid'],
+				host: 'android',
+				...overrides,
+			})
+		);
+
+	it.each(['rex', 'either'] as const)(
+		'recommends zurg → rex on the device with no host conflict (%s)',
+		(plexRoute) => {
+			const result = onAndroid({ plexRoute });
+
+			expect(result.conflicts).toEqual([]);
+			expect(result.primaryRoute.id).toBe('zurg-rex-plex');
+			expect(result.prerequisites).toContain(
+				'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
+			);
+			expect(result.setupLinks).toContainEqual({
+				label: 'zurg Android guide',
+				href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+			});
+		}
+	);
+
+	it('says Plex Media Server itself still needs a normal host when shown both', () => {
+		expect(
+			onAndroid({ plexRoute: 'either' }).alternatives.find(
+				({ title }) => title === 'Use Plex Media Server instead'
+			)?.detail
+		).toBe(
+			'Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it. Plex Media Server itself still needs a normal host; zurg+rex Android does not run it.'
+		);
+	});
+
+	it('runs rex-stremio, which the device does not, on a normal host', () => {
+		expect(
+			onAndroid().alternatives.find(({ title }) => title.startsWith('Without zurg'))?.detail
+		).toBe(
+			'Run rex and rex-stremio on a normal host with a Stremio stream addon that returns links through your debrid account; no zurg and no sponsorship needed.'
+		);
+	});
+
+	it('offers no remote help, which runs in a terminal the device does not have', () => {
+		expect(onAndroid().sponsorship.optional.map(({ id }) => id)).not.toContain('remote-help');
+	});
+
+	it('keeps the arr conflict, which zurg+rex Android cannot run', () => {
+		expect(onAndroid({ preference: 'arr' }).conflicts).toEqual([
+			'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg. Android and no host cannot run this workflow.',
+		]);
+	});
+});
+
 describe('zurg Android has no TorBox hosted NZB backend', () => {
 	const reason = 'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
+
+	it('blocks Android when rex plays TorBox hosted NZBs through zurg', () => {
+		const input = answers({
+			player: 'plex',
+			plexRoute: 'rex',
+			sources: ['torbox-hosted'],
+			host: 'android',
+		});
+
+		expect(hostChoiceReason(input, 'android')).toBe(reason);
+		expect(recommendSetup(input).conflicts).toEqual([reason]);
+	});
 
 	it.each(['webdav', 'external'] as const)(
 		'blocks Android when %s plays TorBox hosted NZBs through zurg',
