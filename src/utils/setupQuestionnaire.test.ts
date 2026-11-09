@@ -1631,6 +1631,21 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		expect(result.setupLinks).not.toContainEqual(torboxNzb);
 	});
 
+	it("offers DMM's SABnzbd endpoint to Sonarr/Radarr users with Real-Debrid", () => {
+		const transfer = (preference: Preference) =>
+			recommendSetup(answers({ host: 'existing', preference })).alternatives.find(
+				({ title }) => title === 'NZBs without your own news account'
+			);
+		const sab = { label: 'DMM SABnzbd endpoint', href: '/sabnzbd' };
+
+		expect(transfer('arr')?.detail).toBe(
+			"DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid. Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account."
+		);
+		expect(transfer('arr')?.links).toContainEqual(sab);
+		expect(transfer('managed')?.detail).not.toMatch(/SABnzbd/);
+		expect(transfer('managed')?.links).not.toContainEqual(sab);
+	});
+
 	it('says to give zurg an nzb account for own Usenet', () => {
 		const result = recommendSetup(
 			answers({

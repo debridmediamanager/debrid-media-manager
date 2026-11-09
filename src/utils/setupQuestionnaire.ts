@@ -1276,18 +1276,21 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				'For arr acquisition, direct NNTP and hosted TorBox NZBs require separate zurg instances and data directories.'
 			);
 	}
-	if (selected.includes('real-debrid'))
+	if (selected.includes('real-debrid')) {
+		const arr = answers.preference === 'arr';
 		result.alternatives.push({
 			title: 'NZBs without your own news account',
-			detail: 'DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.',
+			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account." : ''}`,
 			links: [
 				{ label: 'DMM Transfers', href: '/transfers' },
+				...(arr ? [{ label: 'DMM SABnzbd endpoint', href: '/sabnzbd' }] : []),
 				{
 					label: 'Usenet route comparison',
 					href: SETUP_GUIDE_URL + '#usenet-without-a-usenet-account-which-route',
 				},
 			],
 		});
+	}
 	// The same zurg the Wanted benefit waits for: on the route, Sonarr/Radarr's host or one that can run it.
 	if (
 		(answers.preference === 'managed' || answers.preference === 'arr') &&

@@ -52,6 +52,7 @@ const ALLOWED_HREFS = new Set([
 	'/transfers',
 	'/torznab',
 	'/newznab',
+	'/sabnzbd',
 	'/kodi',
 	'/jellyfin',
 	'/emby',
