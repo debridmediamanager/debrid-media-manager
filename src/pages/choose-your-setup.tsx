@@ -447,7 +447,9 @@ function SponsorBenefits({
 				{sponsorship.routeAvailable
 					? sponsorship.required.length
 						? 'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
-						: 'Sponsorship is optional for the free tools above. Sponsor DMM to unlock the relevant upgrades below.'
+						: sponsorship.usesDmmTools
+							? 'Sponsorship is optional for the free tools above. Sponsor DMM to unlock the relevant upgrades below.'
+							: 'Sponsorship is optional here; the benefits below are for other routes.'
 					: hasConflicts
 						? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
 						: hasSources

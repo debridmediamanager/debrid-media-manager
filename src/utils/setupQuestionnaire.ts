@@ -250,6 +250,8 @@ export interface SetupSponsorship {
 	optional: SetupSponsorBenefit[];
 	freeFeatures: FreeSponsorFeature[];
 	routeAvailable: boolean;
+	/** A route uses DMM, zurg or rex, not only files or addons the user already has. */
+	usesDmmTools: boolean;
 }
 
 export interface SetupRecommendation {
@@ -673,6 +675,12 @@ function sponsorshipFor(
 			...(usesRex ? (['rex'] as const) : []),
 		],
 		routeAvailable,
+		usesDmmTools: routes.some(
+			({ route: r }) =>
+				r.status === 'integrated' &&
+				!r.id.endsWith('-existing-library') &&
+				r.id !== 'existing-url-addon-stremio'
+		),
 	};
 }
 /** A route this player can use with the selected sources and no host; empty when there is none. */
@@ -1104,7 +1112,13 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		conflicts: [],
 		sourceNotes: [],
 		hostRequirement: 'none',
-		sponsorship: { required: [], optional: [], freeFeatures: [], routeAvailable: false },
+		sponsorship: {
+			required: [],
+			optional: [],
+			freeFeatures: [],
+			routeAvailable: false,
+			usesDmmTools: false,
+		},
 		sourceCoverage: routes.map(({ source, route: r }) => ({
 			source,
 			label: SOURCE_LABELS.get(source)!,

@@ -137,6 +137,25 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
+	it('says sponsorship is for other routes when the route uses no DMM tool', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(
+				'Sponsorship is optional here; the benefits below are for other routes.'
+			)
+		).toBeInTheDocument();
+	});
+
 	it('disables arr until a full host is selected, with a visible reason', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

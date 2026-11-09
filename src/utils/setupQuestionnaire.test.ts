@@ -629,6 +629,33 @@ describe('sponsorship benefits follow the selected route', () => {
 	});
 });
 
+describe('the sponsor box knows when no route uses a DMM tool', () => {
+	// Files and addons the user already has run without DMM, zurg or rex.
+	it.each([
+		[{ sources: ['url-addon'] }, false],
+		[{ sources: ['url-addon', 'http-local'] }, false],
+		[
+			{
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['http-local'],
+				host: 'existing',
+			},
+			false,
+		],
+		[{ sources: ['url-addon', 'real-debrid'] }, true],
+		[{ player: 'plex', plexRoute: 'rex', sources: ['http-local'], host: 'existing' }, true],
+	] satisfies [Partial<SetupAnswers>, boolean][])(
+		'says whether %o uses one',
+		(overrides, usesDmmTools) => {
+			const { sponsorship } = recommendSetup(answers(overrides));
+
+			expect(sponsorship.routeAvailable).toBe(true);
+			expect(sponsorship.usesDmmTools).toBe(usesDmmTools);
+		}
+	);
+});
+
 describe('constraints block unusable starting routes', () => {
 	it('lists both missing arr prerequisites in one sentence', () => {
 		const result = recommendSetup(answers({ sources: ['easynews'], preference: 'arr' }));
