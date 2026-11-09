@@ -781,8 +781,8 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
+	// submit cleared the notice on the way to the result, the only view that offers Edit.
 	function edit(key: QuestionKey) {
-		setCompatibilityNotice(null);
 		setSubmitted(false);
 		setCurrentStep(questionKeys.indexOf(key));
 		window.scrollTo({ top: 0, behavior: 'smooth' });
