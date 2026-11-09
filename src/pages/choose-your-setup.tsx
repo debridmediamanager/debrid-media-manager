@@ -396,10 +396,12 @@ function SponsorBenefits({
 	sponsorship,
 	hasConflicts,
 	hasSources,
+	player,
 }: {
 	sponsorship: SetupSponsorship;
 	hasConflicts: boolean;
 	hasSources: boolean;
+	player: Player;
 }) {
 	const benefitList = (benefits: SetupSponsorBenefit[]) => (
 		<ul className="mt-2 space-y-2 text-sm text-gray-200">
@@ -482,8 +484,13 @@ function SponsorBenefits({
 			</p>
 			{sponsorship.freeFeatures.includes('cast') ? (
 				<p className="mt-2 text-xs text-gray-400">
-					DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the
-					per-profile limit from five to ten other streams.
+					{player === 'kodi'
+						? 'The Kodi addon does not'
+						: player === 'stremio'
+							? 'DMM Cast does not'
+							: 'DMM Cast and the Kodi addon do not'}{' '}
+					require sponsorship; sponsoring raises the per-profile limit from five to ten
+					other streams.
 				</p>
 			) : null}
 			{sponsorship.freeFeatures.includes('rex') ? (
@@ -559,6 +566,7 @@ function RecommendationView({
 				sponsorship={recommendation.sponsorship}
 				hasConflicts={recommendation.conflicts.length > 0}
 				hasSources={recommendation.sourceCoverage.length > 0}
+				player={answers.player}
 			/>
 
 			<div className="grid gap-5 rounded border border-gray-700 bg-gray-800/30 p-4 sm:grid-cols-2 sm:p-5">

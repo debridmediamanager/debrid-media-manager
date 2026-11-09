@@ -58,12 +58,42 @@ describe('choose your setup page', () => {
 		);
 		expect(
 			screen.getByText(
-				'DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.'
+				'DMM Cast does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.'
 			)
 		).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Your answers' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
 		expect(document.activeElement).toHaveTextContent('DMM Cast → Stremio');
+	});
+
+	it.each([
+		[
+			/^Kodi/,
+			'The Kodi addon does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+		],
+		[
+			/^Stremio/,
+			'DMM Cast does not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+		],
+		[
+			/^I am not sure yet/,
+			'DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.',
+		],
+	])('words the free Cast footnote for the chosen player (%s)', (player, footnote) => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: player }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(footnote)
+		).toBeInTheDocument();
 	});
 
 	it('names the upgrades below when the free tools have some', () => {
