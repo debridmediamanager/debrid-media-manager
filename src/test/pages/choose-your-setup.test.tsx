@@ -394,6 +394,42 @@ describe('choose your setup page', () => {
 		);
 	});
 
+	it('keeps the sources-step arr reset notice on the workflow step', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('What do you already have?');
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
+		).toBeInTheDocument();
+		expectArrReset();
+	});
+
+	it('keeps arr when a new player drops the Android host that is asked again later', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectArrKept();
+	});
+
 	it('drops the arr reset notice once the setup is submitted and edited again', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));

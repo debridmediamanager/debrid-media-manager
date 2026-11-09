@@ -178,29 +178,13 @@ function QuestionChoices({
 									{ ...answers, player: option.value as Player },
 									'android'
 								);
+							// The host is asked again after this step, and leaving it judges arr.
 							if (androidRejected) setHostAnswered(false);
-							const resetReason =
-								answers.preference === 'arr' && androidRejected
-									? preferenceChoiceReason(
-											{
-												host: 'none',
-												sources: answers.sources,
-											},
-											'arr'
-										)
-									: undefined;
-							setCompatibilityNotice(
-								resetReason ? arrResetNotice(resetReason) : null
-							);
 							setAnswers((current) => ({
 								...current,
 								player: option.value as Player,
 								plexRoute: option.value === 'plex' ? current.plexRoute : undefined,
 								host: androidRejected ? 'none' : current.host,
-								preference:
-									androidRejected && current.preference === 'arr'
-										? 'unsure'
-										: current.preference,
 							}));
 						}}
 					/>
@@ -715,8 +699,11 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 								'arr'
 							)
 						: undefined;
-				setCompatibilityNotice(resetReason ? arrResetNotice(resetReason) : null);
-				if (resetReason) setAnswers((current) => ({ ...current, preference: 'unsure' }));
+				// Only a reset sets the notice; a later step's Next must not clear it.
+				if (resetReason) {
+					setCompatibilityNotice(arrResetNotice(resetReason));
+					setAnswers((current) => ({ ...current, preference: 'unsure' }));
+				}
 			}
 			setCurrentStep((step) => step + 1);
 			return;
