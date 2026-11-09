@@ -451,11 +451,11 @@ function SponsorBenefits({
 							? sponsorship.optional.some(
 									({ id }) => id !== 'sponsor-benefits' && id !== 'discord-role'
 								)
-								? 'Sponsorship is optional for the free tools above. Sponsor DMM for the upgrades below.'
-								: 'Sponsorship is optional for the free tools above.'
+								? 'Sponsorship is optional for the free tools in this setup. Sponsor DMM for the upgrades below.'
+								: 'Sponsorship is optional for the free tools in this setup.'
 							: sponsorship.hasAccount
 								? 'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
-								: 'Sponsorship is optional here; the benefits below are for other routes.'
+								: 'Sponsorship is optional here.'
 					: hasConflicts
 						? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
 						: hasSources

@@ -71,7 +71,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional for the free tools above. Sponsor DMM for the upgrades below.'
+				'Sponsorship is optional for the free tools in this setup. Sponsor DMM for the upgrades below.'
 			)
 		).toBeInTheDocument();
 	});
@@ -90,7 +90,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional for the free tools above.'
+				'Sponsorship is optional for the free tools in this setup.'
 			)
 		).toBeInTheDocument();
 	});
@@ -166,7 +166,7 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
-	it('says sponsorship is for other routes when the route uses no DMM tool', () => {
+	it('says only that sponsorship is optional when the route uses no DMM tool and no account', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -180,7 +180,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional here; the benefits below are for other routes.'
+				'Sponsorship is optional here.'
 			)
 		).toBeInTheDocument();
 	});
@@ -204,7 +204,7 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
-	it("says sponsorship is for other routes for AllDebrid's own WebDAV, which no benefit is for", () => {
+	it("says only that sponsorship is optional for AllDebrid's own WebDAV, which no benefit is for", () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -218,7 +218,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional here; the benefits below are for other routes.'
+				'Sponsorship is optional here.'
 			)
 		).toBeInTheDocument();
 	});
