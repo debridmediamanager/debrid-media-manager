@@ -1026,7 +1026,9 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 						: 'Stremio plays the selected provider library.',
 				],
 				hosted
-					? ['TorBox Pro and a way to submit the NZB.']
+					? [
+							"TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in TorBox Cast.",
+						]
 					: [`${/^[AEIOU]/.test(label) ? 'An' : 'A'} ${label} account.`],
 				[hosted ? { label: 'TorBox Cast setup', href: '/stremio-torbox' } : cast],
 				[

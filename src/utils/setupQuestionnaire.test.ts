@@ -45,7 +45,9 @@ describe('recommendSetup', () => {
 		);
 
 		expect(result.primaryRoute.id).toBe('torbox-hosted-stremio');
-		expect(result.prerequisites).toContain('TorBox Pro and a way to submit the NZB.');
+		expect(result.prerequisites).toContain(
+			"TorBox Pro. Submit NZBs from DMM's Usenet tab; finished downloads appear in TorBox Cast."
+		);
 		expect(result.sourceNotes.join(' ')).toMatch(/normal TorBox torrent subscription alone/i);
 		expect(result.limits.join(' ')).toMatch(/finish and repair/i);
 	});
