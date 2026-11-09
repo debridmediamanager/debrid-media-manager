@@ -961,3 +961,36 @@ describe('host messages name the server that needs the host', () => {
 		);
 	});
 });
+
+describe('an undecided player with only an own Usenet account', () => {
+	it('starts with zurg and a WebDAV player, which needs no indexer', () => {
+		const result = recommendSetup(
+			answers({ player: 'unsure', sources: ['usenet'], host: 'willing' })
+		);
+
+		expect(result.primaryRoute.id).toBe('webdav-zurg-direct-usenet');
+		expect(result.conflicts).toEqual([]);
+	});
+
+	it('still starts with Stremio Cast when a debrid account is also selected', () => {
+		const result = recommendSetup(
+			answers({ player: 'unsure', sources: ['usenet', 'real-debrid'], host: 'willing' })
+		);
+
+		expect(result.whyMatched[0]).toMatch(/Stremio is a starting option/);
+		expect(result.sourceCoverage).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					source: 'real-debrid',
+					integration: 'DMM Cast → Stremio',
+				}),
+			])
+		);
+	});
+
+	it('still starts with TorBox Cast for TorBox hosted NZBs', () => {
+		const result = recommendSetup(answers({ player: 'unsure', sources: ['torbox-hosted'] }));
+
+		expect(result.primaryRoute.id).toBe('torbox-hosted-stremio');
+	});
+});

@@ -875,12 +875,24 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 }
 export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	const selected = [...new Set(answers.sources)].filter((s) => s !== 'none');
+	// Own Usenet alone: zurg → a WebDAV player needs no indexer, unlike the Stremio NZB search addon.
+	const usenetOnly =
+		selected.includes('usenet') &&
+		!selected.some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) ||
+				source === 'easynews' ||
+				source === 'url-addon' ||
+				source === 'torbox-hosted'
+		);
 	const player =
-		answers.player === 'unsure'
-			? selected.includes('http-local')
-				? 'external'
-				: 'stremio'
-			: answers.player;
+		answers.player !== 'unsure'
+			? answers.player
+			: usenetOnly
+				? 'webdav'
+				: selected.includes('http-local')
+					? 'external'
+					: 'stremio';
 	const routes = selected.map((source) => ({
 		source,
 		route: sourceRoute(source, answers, player),
