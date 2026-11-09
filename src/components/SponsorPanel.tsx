@@ -204,7 +204,15 @@ export const SponsorPanel: FC = () => {
 				<Link href="/requests" className="text-blue-400 hover:underline">
 					request board
 				</Link>{' '}
-				give {DAYS_PER_BLOCK} days.
+				give {DAYS_PER_BLOCK} days.{' '}
+				<a
+					href="https://notes.debridmediamanager.com/guides/sponsorship/"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-blue-400 hover:underline"
+				>
+					Where to set each one up
+				</a>
 			</p>
 		</details>
 	);

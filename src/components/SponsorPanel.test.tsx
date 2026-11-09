@@ -126,6 +126,10 @@ describe('SponsorPanel', () => {
 			'/requests'
 		);
 		expect(screen.getByText(/every 10 requests you fill/)).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Where to set each one up' })).toHaveAttribute(
+			'href',
+			'https://notes.debridmediamanager.com/guides/sponsorship/'
+		);
 	});
 
 	const perksList = () =>
