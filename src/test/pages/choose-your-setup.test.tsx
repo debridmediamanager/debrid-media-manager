@@ -83,7 +83,29 @@ describe('choose your setup page', () => {
 		).toBeTruthy();
 		expect(
 			screen.getByText(
-				'Choose a supported source and resolve the setup requirements above first. Sponsorship does not remove them.'
+				'Resolve the setup requirements above first. Sponsorship does not remove them.'
+			)
+		).toBeInTheDocument();
+	});
+
+	it('asks for a supported source when the player cannot use the selected ones', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /HTTP links or files/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			screen.queryByRole('heading', { name: 'A constraint to resolve' })
+		).not.toBeInTheDocument();
+		expect(
+			screen.getByText(
+				'Choose a source your player supports first; the sources you selected stay in their own apps.'
 			)
 		).toBeInTheDocument();
 	});
