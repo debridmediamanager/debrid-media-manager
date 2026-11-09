@@ -157,6 +157,13 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 	if (zurgRequired !== (usesZurg || acquires))
 		fail(`zurg-nightly required=${zurgRequired} but zurg route=${usesZurg}, arr=${acquires}`);
 
+	const rexStremioKey = [...result.sponsorship.required, ...result.sponsorship.optional].some(
+		({ id }) => id === 'rex-stremio-key'
+	);
+	const rexStremioFree = result.sponsorship.freeFeatures.includes('rex-stremio');
+	if (rexStremioKey !== rexStremioFree)
+		fail(`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree}`);
+
 	if (selected.length === 1 && selected[0] === 'easynews') {
 		const offered = [...result.sponsorship.required, ...result.sponsorship.optional].map(
 			({ id }) => id

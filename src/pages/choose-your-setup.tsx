@@ -451,8 +451,9 @@ function SponsorBenefits({
 					{sponsorship.freeFeatures.includes('rex-stremio')
 						? 'rex and rex-stremio do not'
 						: 'rex does not'}{' '}
-					require sponsorship; any sponsor benefits below apply to the zurg, API or help
-					parts of the setup.
+					require sponsorship; any sponsor benefits below apply to the zurg,{' '}
+					{sponsorship.freeFeatures.includes('rex-stremio') ? 'rex-stremio, ' : ''}API or
+					help parts of the setup.
 				</p>
 			) : null}
 			{sponsorship.required.length ? (

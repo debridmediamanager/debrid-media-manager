@@ -543,6 +543,12 @@ const SPONSOR_BENEFITS = {
 		detail: "Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, and three torrent jobs at once instead of one on the torrent uploader.",
 		href: '/transfers',
 	},
+	rexStremio: {
+		id: 'rex-stremio-key',
+		title: 'rex-stremio with your DMM API key',
+		detail: 'Torrent streams DMM already holds a probe of skip ffprobe, so titles DMM knows reach rex in seconds.',
+		href: 'https://notes.debridmediamanager.com/rex/stremio/',
+	},
 	api: {
 		id: 'sponsor-api',
 		title: 'Sponsor API',
@@ -694,6 +700,7 @@ function sponsorshipFor(
 		add(optional, 'zurgKey');
 	}
 	if (selected.has('real-debrid')) add(optional, 'queue');
+	if (rexStremio) add(optional, 'rexStremio');
 	if (usesZurg || usesRex) add(optional, 'api');
 	// Remote help runs in a terminal, which an Android device running zurg itself does not have.
 	const terminal =

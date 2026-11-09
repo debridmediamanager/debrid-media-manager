@@ -592,7 +592,7 @@ describe('choose your setup page', () => {
 		],
 		[
 			/Existing Stremio URL addons/,
-			'rex and rex-stremio do not require sponsorship; any sponsor benefits below apply to the zurg, API or help parts of the setup.',
+			'rex and rex-stremio do not require sponsorship; any sponsor benefits below apply to the zurg, rex-stremio, API or help parts of the setup.',
 		],
 	])('names rex-stremio as free only where it is offered (%s)', (source, footnote) => {
 		render(<ChooseYourSetupPage />);

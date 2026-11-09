@@ -792,6 +792,33 @@ describe('rex names rex-stremio as free only where it is offered', () => {
 	);
 });
 
+describe('rex-stremio with a DMM API key is offered wherever rex-stremio is', () => {
+	const rexStremioKey = {
+		id: 'rex-stremio-key',
+		title: 'rex-stremio with your DMM API key',
+		detail: 'Torrent streams DMM already holds a probe of skip ffprobe, so titles DMM knows reach rex in seconds.',
+		href: 'https://notes.debridmediamanager.com/rex/stremio/',
+	};
+	it.each([
+		[{ sources: ['url-addon'] }, true],
+		[{ sources: ['real-debrid'] }, true],
+		[{ sources: ['none'] }, true],
+		[{ sources: ['usenet'] }, false],
+		[{ sources: ['real-debrid'], preference: 'arr' }, false],
+	] satisfies [Partial<SetupAnswers>, boolean][])('for %o: %s', (overrides, offered) => {
+		const result = recommendSetup(
+			answers({ player: 'plex', plexRoute: 'rex', host: 'existing', ...overrides })
+		);
+
+		expect(result.sponsorship.freeFeatures.includes('rex-stremio')).toBe(offered);
+		if (offered) expect(result.sponsorship.optional).toContainEqual(rexStremioKey);
+		else
+			expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain(
+				'rex-stremio-key'
+			);
+	});
+});
+
 describe('constraints block unusable starting routes', () => {
 	it('lists both missing arr prerequisites in one sentence', () => {
 		const result = recommendSetup(answers({ sources: ['easynews'], preference: 'arr' }));
