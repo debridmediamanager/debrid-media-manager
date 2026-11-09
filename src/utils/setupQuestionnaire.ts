@@ -1227,12 +1227,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
 	const kodiWebdav = providerWebdav(selected);
+	// A zurg route for Kodi already ends in WebDAV → Kodi.
+	const kodiReadsZurg = player === 'kodi' && routes.some(({ route: r }) => r.usesZurg);
 	// Sonarr/Radarr import into zurg's __magic__ folders, which only zurg's own WebDAV shows.
-	if (
+	const arrZurgWebdav =
 		player === 'kodi' &&
 		answers.preference === 'arr' &&
-		selected.some((source) => DEBRID_SOURCES.includes(source))
-	)
+		!kodiReadsZurg &&
+		selected.some((source) => DEBRID_SOURCES.includes(source));
+	if (arrZurgWebdav)
 		result.alternatives.push({
 			title: "Browse the Sonarr/Radarr library over zurg's WebDAV",
 			detail: "Sonarr/Radarr imports land in zurg's __magic__ folders, which the Kodi addon does not show; add zurg's WebDAV as a Kodi source to browse them.",

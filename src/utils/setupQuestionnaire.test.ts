@@ -1143,6 +1143,19 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 			expect(browse(arr)).toBeUndefined();
 		}
 	);
+
+	// Own Usenet already plays through zurg → WebDAV → Kodi, so Kodi already reads that WebDAV.
+	it('skips the zurg WebDAV pointer when a route already ends in WebDAV → Kodi', () => {
+		const zurgWebdav = (sources: SetupSource[]) =>
+			recommendSetup(
+				answers({ player: 'kodi', sources, host: 'existing', preference: 'arr' })
+			).alternatives.find(({ title }) =>
+				title.startsWith('Browse the Sonarr/Radarr library')
+			);
+
+		expect(zurgWebdav(['real-debrid', 'usenet'])).toBeUndefined();
+		expect(zurgWebdav(['real-debrid'])).toBeDefined();
+	});
 });
 
 describe('the Torznab benefit matches the Torznab page', () => {
