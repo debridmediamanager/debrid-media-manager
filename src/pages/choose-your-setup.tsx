@@ -5,7 +5,6 @@ import {
 	hostChoiceReason,
 	NEED_OPTIONS,
 	PLAYER_OPTIONS,
-	playerNeedsFullHost,
 	PLEX_ROUTE_OPTIONS,
 	PREFERENCE_OPTIONS,
 	preferenceChoiceReason,
@@ -173,16 +172,15 @@ function QuestionChoices({
 						description={option.description}
 						selected={answers.player === option.value}
 						onClick={() => {
-							if (
-								playerNeedsFullHost(option.value as Player) &&
-								answers.host === 'android'
-							) {
-								setHostAnswered(false);
-							}
+							const androidRejected =
+								answers.host === 'android' &&
+								!!hostChoiceReason(
+									{ ...answers, player: option.value as Player },
+									'android'
+								);
+							if (androidRejected) setHostAnswered(false);
 							const resetReason =
-								answers.preference === 'arr' &&
-								playerNeedsFullHost(option.value as Player) &&
-								answers.host === 'android'
+								answers.preference === 'arr' && androidRejected
 									? preferenceChoiceReason(
 											{
 												host: 'none',
@@ -198,15 +196,9 @@ function QuestionChoices({
 								...current,
 								player: option.value as Player,
 								plexRoute: option.value === 'plex' ? current.plexRoute : undefined,
-								host:
-									playerNeedsFullHost(option.value as Player) &&
-									current.host === 'android'
-										? 'none'
-										: current.host,
+								host: androidRejected ? 'none' : current.host,
 								preference:
-									playerNeedsFullHost(option.value as Player) &&
-									current.host === 'android' &&
-									current.preference === 'arr'
+									androidRejected && current.preference === 'arr'
 										? 'unsure'
 										: current.preference,
 							}));
@@ -253,6 +245,10 @@ function QuestionChoices({
 								answers.sources,
 								option.value as SetupSource
 							);
+							const androidRejected =
+								answers.host === 'android' &&
+								!!hostChoiceReason({ ...answers, sources: nextSources }, 'android');
+							if (androidRejected) setHostAnswered(false);
 							const resetReason =
 								answers.preference === 'arr'
 									? preferenceChoiceReason(
@@ -272,6 +268,7 @@ function QuestionChoices({
 									current.sources,
 									option.value as SetupSource
 								),
+								host: androidRejected ? 'none' : current.host,
 								preference: resetReason ? 'unsure' : current.preference,
 							}));
 						}}

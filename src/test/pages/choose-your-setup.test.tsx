@@ -305,6 +305,63 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 	});
 
+	function editAnswer(question: string) {
+		const row = screen.getByText(question).parentElement?.parentElement;
+		expect(row).not.toBeNull();
+		fireEvent.click(
+			within(row as HTMLElement).getByRole('button', { name: `Edit ${question}` })
+		);
+	}
+
+	function expectAndroidDropped() {
+		const android = screen.getByRole('button', { name: /Android \/ Google TV/ });
+		expect(android).toBeDisabled();
+		expect(android).toHaveAttribute('aria-pressed', 'false');
+		expect(
+			screen.getByText(
+				'Unavailable: zurg Android has no TorBox hosted NZB backend; that route needs a normal host.'
+			)
+		).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+	}
+
+	it('drops an Android host when added TorBox hosted NZBs would need zurg on it', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('What do you already have?');
+		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidDropped();
+	});
+
+	it('drops an Android host when a new player would play TorBox hosted NZBs through zurg', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('Where do you want to watch?');
+		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expectAndroidDropped();
+	});
+
 	it('says only the Sonarr/Radarr choice changes the route', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

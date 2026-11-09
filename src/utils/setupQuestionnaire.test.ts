@@ -1015,7 +1015,7 @@ describe('host messages name the server that needs the host', () => {
 		[{ player: 'jellyfin' }, 'Jellyfin'],
 		[{ player: 'emby' }, 'Emby'],
 	] as const)('says zurg Android cannot give %o a library', (mode, name) => {
-		expect(hostChoiceReason(mode, 'android')).toBe(
+		expect(hostChoiceReason({ ...mode, sources: [] }, 'android')).toBe(
 			`${name} needs a full server host; zurg Android cannot give a server on that device a library.`
 		);
 	});
@@ -1024,7 +1024,7 @@ describe('host messages name the server that needs the host', () => {
 		{ player: 'plex', plexRoute: 'rex' },
 		{ player: 'plex', plexRoute: 'either' },
 	] as const)('says Android cannot run rex for %o', (mode) => {
-		expect(hostChoiceReason(mode, 'android')).toBe(
+		expect(hostChoiceReason({ ...mode, sources: [] }, 'android')).toBe(
 			'rex needs a full server host; Android can run zurg, not rex.'
 		);
 	});
@@ -1170,7 +1170,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			{ player: 'external', sources: ['easynews', 'usenet'] },
 			`${zurgHost}, or use DMM Watch with that account, which needs no host.`,
 		],
-		[{ player: 'external', sources: ['torbox-hosted'] }, `${zurgHost}.`],
+		[
+			{ player: 'external', sources: ['torbox-hosted'] },
+			'zurg needs a host that stays on while you watch. Choose a host.',
+		],
 		[
 			{ player: 'webdav', sources: ['usenet', 'real-debrid'] },
 			`${zurgHost}, or use Real-Debrid WebDAV, which needs no host.`,
@@ -1692,5 +1695,38 @@ describe('route copy stays on the player and source it is about', () => {
 			'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
 		);
 		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+	});
+});
+
+describe('zurg Android has no TorBox hosted NZB backend', () => {
+	const reason = 'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
+
+	it.each(['webdav', 'external'] as const)(
+		'blocks Android when %s plays TorBox hosted NZBs through zurg',
+		(player) => {
+			const input = answers({ player, sources: ['torbox-hosted'], host: 'android' });
+
+			expect(hostChoiceReason(input, 'android')).toBe(reason);
+			expect(recommendSetup(input).conflicts).toContain(reason);
+		}
+	);
+
+	it.each(['stremio', 'kodi'] as const)(
+		'keeps Android open when %s plays TorBox hosted NZBs without zurg',
+		(player) => {
+			const input = answers({ player, sources: ['torbox-hosted'], host: 'android' });
+
+			expect(hostChoiceReason(input, 'android')).toBeUndefined();
+			expect(recommendSetup(input).conflicts).toEqual([]);
+		}
+	);
+
+	it('says TorBox hosted NZBs are not available in the Android prerequisite', () => {
+		expect(
+			recommendSetup(answers({ player: 'kodi', sources: ['usenet'], host: 'android' }))
+				.prerequisites
+		).toContain(
+			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and TorBox hosted NZBs are not available on Android.'
+		);
 	});
 });

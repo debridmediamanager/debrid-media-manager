@@ -325,12 +325,35 @@ const DEBRID_SOURCES: SetupSource[] = [
 	'debrid-link',
 ];
 
+/** The player a route is built for; an undecided player gets a starting option. */
+function resolvePlayer({
+	player,
+	sources,
+}: Pick<SetupAnswers, 'player' | 'sources'>): Exclude<Player, 'unsure'> {
+	if (player !== 'unsure') return player;
+	// Own Usenet alone: zurg → a WebDAV player needs no indexer, unlike the Stremio NZB search addon.
+	const usenetOnly =
+		sources.includes('usenet') &&
+		!sources.some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) ||
+				source === 'easynews' ||
+				source === 'url-addon' ||
+				source === 'torbox-hosted'
+		);
+	return usenetOnly ? 'webdav' : sources.includes('http-local') ? 'external' : 'stremio';
+}
+
+const ANDROID_HOSTED_NZB =
+	'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
+
 /** Shared by the host choices and defensive recommendation validation. */
 export function hostChoiceReason(
-	answers: Pick<SetupAnswers, 'player' | 'plexRoute'>,
+	answers: Pick<SetupAnswers, 'player' | 'plexRoute' | 'sources'>,
 	host: Host
 ): string | undefined {
-	if (host === 'android' && playerNeedsFullHost(answers.player)) {
+	if (host !== 'android') return undefined;
+	if (playerNeedsFullHost(answers.player)) {
 		if (
 			answers.player === 'plex' &&
 			(answers.plexRoute === 'rex' || answers.plexRoute === 'either')
@@ -341,6 +364,12 @@ export function hostChoiceReason(
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
 		return `${server} needs a full server host; zurg Android cannot give a server on that device a library.`;
 	}
+	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV and external players need it.
+	if (
+		answers.sources.includes('torbox-hosted') &&
+		['webdav', 'external'].includes(resolvePlayer(answers))
+	)
+		return ANDROID_HOSTED_NZB;
 	return undefined;
 }
 
@@ -961,24 +990,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 }
 export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	const selected = [...new Set(answers.sources)].filter((s) => s !== 'none');
-	// Own Usenet alone: zurg → a WebDAV player needs no indexer, unlike the Stremio NZB search addon.
-	const usenetOnly =
-		selected.includes('usenet') &&
-		!selected.some(
-			(source) =>
-				DEBRID_SOURCES.includes(source) ||
-				source === 'easynews' ||
-				source === 'url-addon' ||
-				source === 'torbox-hosted'
-		);
-	const player =
-		answers.player !== 'unsure'
-			? answers.player
-			: usenetOnly
-				? 'webdav'
-				: selected.includes('http-local')
-					? 'external'
-					: 'stremio';
+	const player = resolvePlayer({ player: answers.player, sources: selected });
 	const rex =
 		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	const chosenPlayer =
@@ -1213,13 +1225,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
 					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host.`
 		);
+	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
+	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
-			`zurg needs a host that stays on while you watch. Choose a host or a supported Android device${noHostClause(player, selected)}.`
+			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected)}.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
 		result.prerequisites.push(
-			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android.'
+			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and TorBox hosted NZBs are not available on Android.'
 		);
 		links(note('zurg/guides/android', 'zurg Android guide'));
 	}
