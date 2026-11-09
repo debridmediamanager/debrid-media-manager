@@ -90,7 +90,8 @@ export function InfoSection() {
 						<Link href="/settings" className={linkClass}>
 							Settings
 						</Link>{' '}
-						to unlock the indexers and the raised cast limits.
+						to unlock the Wanted list, the indexers, the Jellyfin and Emby plugins and
+						the rest of the sponsor perks listed there.
 					</div>
 				</div>
 			)}
