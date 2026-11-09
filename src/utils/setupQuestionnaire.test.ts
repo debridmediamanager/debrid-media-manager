@@ -1523,6 +1523,15 @@ describe('players read naturally mid-sentence', () => {
 		);
 	});
 
+	it.each([[[]], [['none']]] satisfies [SetupSource[]][])(
+		'offers Stremio to an undecided user with no sources (%o)',
+		(sources) => {
+			expect(recommendSetup(answers({ player: 'unsure', sources })).whyMatched[0]).toBe(
+				'You have not chosen a player; Stremio is a starting option.'
+			);
+		}
+	);
+
 	it('combines sources in your external player', () => {
 		expect(
 			recommendSetup(

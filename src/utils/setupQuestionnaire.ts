@@ -1025,7 +1025,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				},
 		whyMatched: [
 			answers.player === 'unsure'
-				? `You have not chosen a player; ${chosenPlayer} is a starting option for these sources.`
+				? `You have not chosen a player; ${chosenPlayer} is a starting option${selected.length ? ' for these sources' : ''}.`
 				: `You chose ${chosenPlayer}.`,
 			`You selected “${PREFERENCE_OPTIONS.find((x) => x.value === answers.preference)?.label}.”`,
 		],
