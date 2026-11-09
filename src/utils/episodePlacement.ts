@@ -878,8 +878,9 @@ async function placeByRules(
 
 	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
 	const titledAt = byTitle ? await byName(show, numbers, file) : null;
-	const named = titledAt && (await placed(titledAt, 'tmdb'));
-	if (named) return { ...named, titled: true };
+	const named = titledAt && (await placed([titledAt[0], titledAt[1]], 'tmdb'));
+	if (named)
+		return { ...named, ...(titledAt[2] ? { episodeEnd: titledAt[2] } : {}), titled: true };
 
 	// a dub's own seasons are TMDB's only through its Dub Order: Medabots' English dub season 3
 	// is TMDB's season 2 (Damashii), its season 2 episodes TMDB files out of order in season 1
@@ -1183,7 +1184,8 @@ export function titleText(raw: string): { whole: string; first: string } | null 
  */
 function titled<T extends { name: string }>(
 	title: { whole: string; first: string },
-	candidates: T[]
+	candidates: T[],
+	forms = [0, 1, 2]
 ): T | null {
 	const keys = candidates.map((item) => {
 		if (!wordsOf.has(item)) wordsOf.set(item, words(item.name).join(' '));
@@ -1201,7 +1203,7 @@ function titled<T extends { name: string }>(
 	const part = (text: string) => / (?:part |pt )?(\d{1,2})$/.exec(words(text).join(' '))?.[1];
 	const own = part(title.whole);
 	for (const text of new Set([title.whole, title.first])) {
-		for (const form of [0, 1, 2]) {
+		for (const form of forms) {
 			const key = form === 2 ? plain(text) : text.replace(/ /g, '');
 			const found = candidates.filter((_, n) => keys[n][form] === key);
 			const other =
@@ -1271,6 +1273,11 @@ export function titleOf(
 	file: string,
 	numbers: FileNumbers
 ): { whole: string; first: string } | null {
+	return titleText(titleRest(file, numbers));
+}
+
+/** What follows a file's episode token, its code or its number, where its title is. */
+function titleRest(file: string, numbers: FileNumbers): string {
 	const stem = file.replace(EXTENSION, '');
 	// a group's bracket is no episode token (`[0x539]`); it can be the number (`[Episode 19] …`)
 	const grouped = stem.match(LEADING_GROUPS)?.[0].length ?? 0;
@@ -1287,7 +1294,73 @@ export function titleOf(
 				? stem.slice(number.index + number[0].length)
 				: '';
 	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`
-	return titleText(rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1'));
+	return rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1');
+}
+
+// What separates the titles of the segments a file holds: `Tutoring Torvald + Gerald Comes Over`,
+// `Saftey First; Crime Sheen Investigation`, `Robin Brain, The Mummy`.
+const SEGMENTS = /\s+[-+]\s+|;|,\s|\.\s|__|--/;
+
+/**
+ * The run of TMDB episodes a file holds, where its title names the segments TMDB lists one by one:
+ * Hey Arnold's `S01E14 - Tutoring Torvald + Gerald Comes Over` is TMDB's S1E26-E27 ("Arnold the
+ * Tutor", "Gerald Comes Over"), Pinky and the Brain's `S2E5 E6 - Robin Brain, The Mummy` its
+ * S2E10-E11. Each segment titled as one episode alone, the rest the episodes their places in the
+ * file say, and every episode of the run aired within a day of the others.
+ */
+async function bySegments(
+	show: PlacementShow,
+	numbers: FileNumbers,
+	file: string,
+	candidates: { season: number; episode: number; name: string; airDate: string | null }[]
+): Promise<[number, number, number] | null> {
+	// what a title says in parentheses is no segment of its own: `Идеально (англ. Perfect)`
+	const rest = titleRest(file, numbers).replace(/\([^()]*\)/g, ' ');
+	const whole = titleText(rest)?.whole;
+	if (!whole) return null;
+	// the segments before the release's tags
+	const parts: string[] = [];
+	for (const raw of rest.split(SEGMENTS)) {
+		if (parts.join(' ') === whole) break;
+		const part = titleText(raw)?.whole;
+		if (part) parts.push(part);
+	}
+	if (parts.length < 2 || parts.join(' ') !== whole) return null;
+	// a title TMDB gives one episode is that one's, commas and all: Johnny Bravo's "Welcome Back, Bravo"
+	if (
+		parts.some((part) => part.replace(/ /g, '').length < 3) ||
+		titled({ whole, first: whole }, candidates)
+	)
+		return null;
+	// each segment titled as it, never as a part TMDB numbers (`Bravo` is no "Bravo 13")
+	const hits = parts.flatMap((part, at) => {
+		const found = titled({ whole: part, first: part }, candidates, [0, 2]);
+		return found ? [{ at, found }] : [];
+	});
+	if (!hits.length || new Set(hits.map((hit) => hit.found.season)).size > 1) return null;
+	const { season } = hits[0].found;
+	const episodes = hits.map((hit) => hit.found.episode);
+	const lowest = Math.min(...episodes);
+	const start =
+		hits.length === parts.length
+			? Math.max(...episodes) - lowest === parts.length - 1 &&
+				new Set(episodes).size === parts.length
+				? lowest
+				: null
+			: new Set(hits.map((hit) => hit.found.episode - hit.at)).size === 1
+				? hits[0].found.episode - hits[0].at
+				: null;
+	if (start === null) return null;
+	const listed = (await show.episodes(season)) ?? [];
+	const run = Array.from({ length: parts.length }, (_, n) =>
+		listed.find((row) => row.episode === start + n)
+	);
+	// a day apart at most: TMDB dates Mickey Mouse Works' "Vending Machine" a day after the rest
+	const days = run.map((row) => dayOf(row?.airDate ?? null));
+	return days.every((day) => day !== null) &&
+		Math.max(...(days as number[])) - Math.min(...(days as number[])) <= 1
+		? [season, start, start + parts.length - 1]
+		: null;
 }
 
 /**
@@ -1331,13 +1404,22 @@ async function byName(
 	show: PlacementShow,
 	numbers: FileNumbers,
 	file: string
-): Promise<[number, number] | null> {
+): Promise<[number, number, number?] | null> {
 	const title = titleOf(file, numbers);
 	if (!title) return null;
 	const { season, episode } = numbers;
 	const listed = season === null ? null : await show.episodes(season);
 	const at = listed?.find((row) => row.episode === episode);
 	if (at && agrees(title, at.name)) return [season!, episode];
+	const run =
+		listed &&
+		(await bySegments(
+			show,
+			numbers,
+			file,
+			listed.map((row) => ({ ...row, season: season! }))
+		));
+	if (run) return run;
 	const inSeason = listed && titled(title, listed);
 	if (inSeason) return [season!, inSeason.episode];
 	const others = await Promise.all(

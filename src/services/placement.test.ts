@@ -40,6 +40,7 @@ import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
+import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
@@ -1874,5 +1875,53 @@ describe("a release's SD tag after a title", () => {
 		expect(at('5x12 - Punchline - Why did the Chicken Cross the Road')).toEqual([5, 16]);
 		expect(at('5x16 - Hooray for North Hollywood (2)')).toEqual([5, 12]);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a file holding segments TMDB lists one by one', () => {
+	// zurg on fun (2026-11-09): half-hours of two segments, titled by both (`Tutoring Torvald +
+	// Gerald Comes Over`, `Robin Brain, The Mummy`), of shows TMDB lists by segment
+	const placed = async (name: string) => {
+		const c = segmentTitles.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(segmentTitles.answers),
+			async () => [null]
+		);
+		return { release: releases[0], expect: c.expect };
+	};
+	const at = (release: PlacedRelease, name: string) => {
+		const f = release.files.find((f) => f.path.includes(name))!;
+		return [f.season, f.episode, f.episodeEnd];
+	};
+
+	it('places the file on the run of episodes its segments name', async () => {
+		const arnold = await placed('Hey Arnold! Season 1 1080p');
+		// "6th Grade Girls" is titled otherwise; "The Baseball" is TMDB's S1E10, aired the same day
+		expect(at(arnold.release, 'S01E05 - Sixth Grade Girls - The Baseball')).toEqual([1, 9, 10]);
+		expect(arnold.release).toEqual(arnold.expect);
+		const brain = await placed('Pinky and the Brain Complete collection');
+		// TMDB's S2E10 "The Mummy" and S2E11 "Robin Brain"
+		expect(at(brain.release, 'S2E5 E6 - Robin Brain, The Mummy')).toEqual([2, 10, 11]);
+		// placed by its numbers on S2E10-E11 before, which its titles are not
+		expect(at(brain.release, 'A Little Off the Top, Megalomaniacs Anonymous')).toEqual([
+			2, 8, 9,
+		]);
+		expect(brain.release).toEqual(brain.expect);
+		const jimmy = await placed('The Adventures of Jimmy Neutron - Boy Genius');
+		expect(at(jimmy.release, 'S01E11 - Saftey First; Crime Sheen Investigation')).toEqual([
+			1, 20, 21,
+		]);
+		// "Journey to the Center of Carl" is S1E22, "Professor Calamitous, I Presume" S1E27: no run
+		expect(at(jimmy.release, 'S01E12 - Professor Calamitous')).toEqual([null, null, null]);
+		expect(jimmy.release).toEqual(jimmy.expect);
+	});
+
+	it('reads no segment out of a title in parentheses', async () => {
+		// `Блуи S3E01 - Идеально (англ. Perfect)`: the English title is no second segment
+		const bluey = await placed('Bluey season 3');
+		expect(at(bluey.release, 'S3E01 - Идеально')).toEqual([3, 1, null]);
+		expect(bluey.release).toEqual(bluey.expect);
 	});
 });
