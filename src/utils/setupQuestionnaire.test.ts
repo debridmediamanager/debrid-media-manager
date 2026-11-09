@@ -1954,16 +1954,26 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
 	});
 
-	it('tells Sonarr/Radarr users on Cast that Bazarr sidecars do not reach it', () => {
-		const result = recommendSetup(
-			answers({ host: 'existing', preference: 'arr', needs: ['subtitles'] })
-		);
+	it.each([
+		[{}, 'DMM Cast'],
+		[{ player: 'kodi' }, 'the Kodi addon'],
+		[{ player: 'external' }, 'DMM Watch'],
+		// zurg's Stremio addon hands the player /strm/e/ links and serves no subtitles.
+		[{ sources: ['usenet'] }, "zurg's Stremio addon"],
+		[{ sources: ['real-debrid', 'usenet'] }, "DMM Cast or zurg's Stremio addon"],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'tells Sonarr/Radarr users that Bazarr sidecars do not reach their route (%o)',
+		(overrides, routes) => {
+			const result = recommendSetup(
+				answers({ host: 'existing', preference: 'arr', needs: ['subtitles'], ...overrides })
+			);
 
-		expect(result.optionalNeeds).toContain(
-			"Bazarr sidecars live beside zurg's files and do not reach DMM Cast, the Kodi addon or DMM Watch; check embedded/player subtitle support."
-		);
-		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
-	});
+			expect(result.optionalNeeds).toContain(
+				`Bazarr sidecars live beside zurg's files and do not reach ${routes}; check embedded/player subtitle support.`
+			);
+			expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
+		}
+	);
 });
 
 describe('zurg Android has no TorBox hosted NZB backend', () => {

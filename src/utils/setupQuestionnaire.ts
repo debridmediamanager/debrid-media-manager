@@ -314,6 +314,10 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer.';
 
+/** "A", "A or B", "A, B or C". */
+const orList = (names: string[]) =>
+	names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names[names.length - 1]}` : names[0];
+
 const DEBRID_SOURCES: SetupSource[] = [
 	'real-debrid',
 	'all-debrid',
@@ -1323,12 +1327,27 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Download or copy complete files and verify playback without the network. Virtual files, .strm links and debrid catalogs are not offline copies.'
 		);
 	if (answers.needs.includes('subtitles')) {
-		// Bazarr works off Sonarr/Radarr imports; its sidecars sit in zurg's folders, read only by zurg or rex playback.
+		// Bazarr works off Sonarr/Radarr imports; its sidecars sit in zurg's folders, read only by
+		// zurg or rex playback. zurg's Stremio addon hands out /strm/e/ links and serves no subtitles.
 		const arr = answers.preference === 'arr';
-		const bazarr = arr && (rex || routes.some(({ route: r }) => r.usesZurg));
-		const fromProvider = routes.some(
-			({ route: r }) => r.usesCast || r.id === 'external-player'
-		);
+		const bazarr =
+			arr && (rex || (player !== 'stremio' && routes.some(({ route: r }) => r.usesZurg)));
+		const unreached = [
+			...new Set(
+				routes.flatMap(({ route: r }) =>
+					r.id === 'dmm-kodi'
+						? ['the Kodi addon']
+						: r.usesCast
+							? ['DMM Cast']
+							: r.id === 'external-player'
+								? ['DMM Watch']
+								: player === 'stremio' && r.usesZurg
+									? ["zurg's Stremio addon"]
+									: []
+				)
+			),
+		];
+		const unreachedRoutes = orList(unreached);
 		result.optionalNeeds.push(
 			rex
 				? bazarr
@@ -1336,8 +1355,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 					: 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
 				: bazarr
 					? 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
-					: arr && fromProvider
-						? "Bazarr sidecars live beside zurg's files and do not reach DMM Cast, the Kodi addon or DMM Watch; check embedded/player subtitle support."
+					: arr && unreachedRoutes
+						? `Bazarr sidecars live beside zurg's files and do not reach ${unreachedRoutes}; check embedded/player subtitle support.`
 						: 'Check embedded/player subtitle support in your player.'
 		);
 		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
