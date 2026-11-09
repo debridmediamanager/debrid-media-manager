@@ -2,7 +2,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { verifyIdentity } from '@/utils/browserStateIdentity';
 import { isSyncedKey, MAX_STATE_BYTES, type SyncIdentity } from '@/utils/browserStateKeys';
-import { validateOwnPageRequest } from '@/utils/ownPageRequest';
+import { isNativeAppRequest, validateOwnPageRequest } from '@/utils/ownPageRequest';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -32,8 +32,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'PUT' && req.method !== 'POST' && req.method !== 'DELETE') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
-	// It hands credentials back, so another site's script must never reach it.
-	if (!validateOwnPageRequest(req, res)) return;
+	// It hands credentials back, so another site's script must never reach it. The
+	// DMM Library app (a native client, always syncing) proves the same logins.
+	if (!isNativeAppRequest(req) && !validateOwnPageRequest(req, res)) return;
 
 	const body = req.body ?? {};
 
