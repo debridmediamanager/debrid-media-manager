@@ -1463,6 +1463,24 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 			expect(detail?.slice(-ending.length)).toBe(ending);
 		}
 	);
+
+	it.each([
+		[{ player: 'stremio', sources: ['usenet'] }, `${host}.`],
+		[{ player: 'external', sources: ['usenet'] }, `${host}.`],
+		[{ player: 'external', sources: ['torbox-hosted'] }, `${host}.`],
+		[{ player: 'stremio', sources: ['real-debrid'] }, cast],
+		[{ player: 'stremio', sources: ['torbox-hosted'] }, cast],
+		[{ player: 'kodi', sources: ['torbox-hosted'] }, cast],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'mentions browsing without a server only with a Cast route or a debrid account (%o)',
+		(overrides, ending) => {
+			const detail = managed(overrides).alternatives.find(({ title }) =>
+				title.startsWith('DMM Wanted')
+			)?.detail;
+
+			expect(detail?.slice(-ending.length)).toBe(ending);
+		}
+	);
 });
 
 describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
