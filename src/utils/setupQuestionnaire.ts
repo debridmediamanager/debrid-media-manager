@@ -755,10 +755,11 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 		const webdav = providerWebdav(selected);
 		if (webdav.length)
 			return `, or use ${orList(webdav.map((source) => SOURCE_LABELS.get(source)!))} WebDAV, which needs no host`;
+		if (!usenet) return '';
 		// An undecided player started on WebDAV for own Usenet can still pick Stremio.
-		return undecided && usenet
+		return undecided
 			? ", or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host"
-			: '';
+			: ", or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host";
 	}
 	// Plex Media Server, Jellyfin, Emby and rex always need a host.
 	return '';

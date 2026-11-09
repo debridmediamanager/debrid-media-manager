@@ -1413,7 +1413,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			{ player: 'external' },
 			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with DMM Watch, which needs no host.`,
 		],
-		[{ player: 'webdav' }, `${zurgHost}.`],
+		[
+			{ player: 'webdav' },
+			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
+		],
 		[
 			{ player: 'unsure' },
 			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host.`,
@@ -1477,7 +1480,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			`${zurgHost}, or use Real-Debrid or AllDebrid WebDAV, which needs no host.`,
 		],
 		[{ player: 'webdav', sources: ['offcloud'] }, `${zurgHost}.`],
-		[{ player: 'webdav', sources: ['offcloud', 'usenet'] }, `${zurgHost}.`],
+		[
+			{ player: 'webdav', sources: ['offcloud', 'usenet'] },
+			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
+		],
 		[
 			{ player: 'plex', plexRoute: 'existing-server', sources: ['torbox-hosted'] },
 			'Plex Media Server needs a machine that stays on. Choose a host.',
